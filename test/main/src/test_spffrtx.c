@@ -112,7 +112,7 @@ void fla_test_spffrtx_experiment(test_params_t *params, integer datatype, intege
     n = p_cur;
     pn = n * (n + 1) / 2;
     /* Create the matrices for the current operation*/
-    create_matrix(datatype, &A, n, n);
+    create_matrix(datatype, matrix_layout, n, n, &A, n);
     create_vector(datatype, &AP, pn);
     if(g_ext_fptr != NULL)
     {

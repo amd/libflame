@@ -28,6 +28,7 @@ extern float s_zero, s_one, s_n_one;
 extern double d_zero, d_one, d_n_one;
 extern scomplex c_zero, c_one, c_n_one;
 extern dcomplex z_zero, z_one, z_n_one;
+extern integer matrix_layout;
 
 #define DRAND() ((double)rand() / ((double)RAND_MAX / 2.0F)) - 1.0F
 #define SRAND() (float)((double)rand() / ((double)RAND_MAX / 2.0F)) - 1.0F
@@ -81,7 +82,9 @@ void swap_row_col(integer datatype, integer *m, void *A, integer lda, integer *i
 void copy_realtype_vector(integer datatype, integer M, void *A, integer LDA, void *B, integer LDB);
 
 /* matrix functions*/
-void create_matrix(integer datatype, void **A, integer M, integer N);
+/* Allocate memory for a matrix of given type */
+void create_matrix(integer datatype, integer matrix_layout, integer M, integer N, void **A,
+                   integer lda);
 void create_realtype_matrix(integer datatype, void **A, integer M, integer N);
 integer get_datatype(char stype);
 integer get_realtype(integer datatype);

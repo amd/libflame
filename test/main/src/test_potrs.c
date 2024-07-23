@@ -134,11 +134,11 @@ void fla_test_potrs_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Create input matrix parameters */
-    create_matrix(datatype, &A, lda, n);
-    create_matrix(datatype, &A_test, lda, n);
-    create_matrix(datatype, &B, ldb, nrhs);
-    create_matrix(datatype, &X, n, nrhs);
-    create_matrix(datatype, &B_test, ldb, nrhs);
+    create_matrix(datatype, matrix_layout, n, n, &A, lda);
+    create_matrix(datatype, matrix_layout, n, n, &A_test, lda);
+    create_matrix(datatype, matrix_layout, n, nrhs, &B, ldb);
+    create_matrix(datatype, matrix_layout, n, nrhs, &X, ldb);
+    create_matrix(datatype, matrix_layout, n, nrhs, &B_test, ldb);
 
     /* Initialize input symmetric positive definite matrix A */
     reset_matrix(datatype, n, n, A, lda);
@@ -203,8 +203,8 @@ void prepare_potrs_run(char *uplo, integer n, integer nrhs, void *A, integer lda
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
-    create_matrix(datatype, &A_save, lda, n);
-    create_matrix(datatype, &B_test, ldb, nrhs);
+    create_matrix(datatype, matrix_layout, n, n, &A_save, lda);
+    create_matrix(datatype, matrix_layout, n, nrhs, &B_test, ldb);
 
     *info = 0;
     for(i = 0; i < n_repeats && *info == 0; ++i)

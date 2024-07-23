@@ -23,8 +23,8 @@ void validate_stedc(char compz, integer n, void *D_test, void *Z_input, void *Z,
     if(compz == 'N')
         return;
 
-    create_matrix(datatype, &lambda, n, n);
-    create_matrix(datatype, &zlambda, n, n);
+    create_matrix(datatype, matrix_layout, n, n, &lambda, n);
+    create_matrix(datatype, matrix_layout, n, n, &zlambda, n);
     reset_matrix(datatype, n, n, zlambda, n);
     diagonalize_realtype_vector(datatype, D_test, lambda, n, n, n);
 

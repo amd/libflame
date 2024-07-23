@@ -172,9 +172,9 @@ void fla_test_gesvd_experiment(test_params_t *params, integer datatype, integer 
         }
     }
     /* Create input matrix parameters. */
-    create_matrix(datatype, &A, lda, n);
-    create_matrix(datatype, &U, ldu, m);
-    create_matrix(datatype, &V, ldvt, n);
+    create_matrix(datatype, matrix_layout, m, n, &A, lda);
+    create_matrix(datatype, matrix_layout, m, m, &U, ldu);
+    create_matrix(datatype, matrix_layout, n, n, &V, ldvt);
     create_realtype_vector(datatype, &s, fla_min(m, n));
     create_realtype_vector(datatype, &s_test, fla_min(m, n));
 
@@ -197,7 +197,7 @@ void fla_test_gesvd_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Make a copy of input matrix A. This is required to validate the API functionality. */
-    create_matrix(datatype, &A_test, lda, n);
+    create_matrix(datatype, matrix_layout, m, n, &A_test, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
     prepare_gesvd_run(&jobu, &jobvt, m, n, A_test, lda, s, U, ldu, V, ldvt, datatype, n_repeats,
@@ -277,7 +277,7 @@ void prepare_gesvd_run(char *jobu, char *jobvt, integer m_A, integer n_A, void *
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
-    create_matrix(datatype, &A_save, lda, n_A);
+    create_matrix(datatype, matrix_layout, m_A, n_A, &A_save, lda);
     copy_matrix(datatype, "full", m_A, n_A, A, lda, A_save, lda);
 
     /* Get rwork array size since it is not depedent on internal blocks*/
@@ -311,8 +311,8 @@ void prepare_gesvd_run(char *jobu, char *jobvt, integer m_A, integer n_A, void *
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
         copy_matrix(datatype, "full", m_A, n_A, A_save, lda, A, lda);
-        create_matrix(datatype, &U_test, ldu, m_A);
-        create_matrix(datatype, &V_test, ldvt, n_A);
+        create_matrix(datatype, matrix_layout, m_A, m_A, &U_test, ldu);
+        create_matrix(datatype, matrix_layout, n_A, n_A, &V_test, ldvt);
         create_realtype_vector(datatype, &s_test, min_m_n);
         create_vector(datatype, &work, lwork);
 

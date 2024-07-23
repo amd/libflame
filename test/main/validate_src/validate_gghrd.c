@@ -20,8 +20,8 @@ void validate_gghrd(char *compq, char *compz, integer n, void *A, void *A_test, 
     void *work = NULL, *lambda = NULL, *alambda = NULL;
     *info = 0;
 
-    create_matrix(datatype, &lambda, n, n);
-    create_matrix(datatype, &alambda, n, n);
+    create_matrix(datatype, matrix_layout, n, n, &lambda, n);
+    create_matrix(datatype, matrix_layout, n, n, &alambda, n);
 
     switch(datatype)
     {

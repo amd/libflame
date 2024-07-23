@@ -128,13 +128,13 @@ void fla_test_geqp3_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Create input matrix parameters */
-    create_matrix(datatype, &A, lda, n);
+    create_matrix(datatype, matrix_layout, m, n, &A, lda);
     create_vector(datatype, &T, fla_min(m, n));
 
     init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
 
     /* Make a copy of input matrix A,required for validation. */
-    create_matrix(datatype, &A_test, lda, n);
+    create_matrix(datatype, matrix_layout, m, n, &A_test, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
     /* Create pivot array */
@@ -191,7 +191,7 @@ void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion. */
-    create_matrix(datatype, &A_save, lda, n_A);
+    create_matrix(datatype, matrix_layout, m_A, n_A, &A_save, lda);
     copy_matrix(datatype, "full", m_A, n_A, A, lda, A_save, lda);
 
     /* Make a workspace query the first time. This will provide us with
@@ -236,7 +236,7 @@ void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *
         create_vector(datatype, &T_test, min_A);
 
         /* Create work buffer */
-        create_matrix(datatype, &work, lwork, 1);
+        create_vector(datatype, &work, lwork);
 
         exe_time = fla_test_clock();
 

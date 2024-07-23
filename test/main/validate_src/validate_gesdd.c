@@ -17,9 +17,9 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
     void *sigma = NULL, *Usigma = NULL;
     void *work = NULL;
     *info = 0;
+    create_matrix(datatype, matrix_layout, m, n, &sigma, m);
+    create_matrix(datatype, matrix_layout, m, n, &Usigma, m);
 
-    create_matrix(datatype, &sigma, m, n);
-    create_matrix(datatype, &Usigma, m, n);
     reset_matrix(datatype, m, n, Usigma, m);
 
     diagonalize_realtype_vector(datatype, s, sigma, m, n, m);

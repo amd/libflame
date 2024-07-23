@@ -124,7 +124,7 @@ void fla_test_potrf_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Create input matrix parameters */
-    create_matrix(datatype, &A, lda, m);
+    create_matrix(datatype, matrix_layout, m, m, &A, lda);
 
     if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST && !FLA_OVERFLOW_UNDERFLOW_TEST))
     {
@@ -151,7 +151,7 @@ void fla_test_potrf_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Make a copy of input matrix A. This is required to validate the API functionality */
-    create_matrix(datatype, &A_test, lda, m);
+    create_matrix(datatype, matrix_layout, m, m, &A_test, lda);
     copy_matrix(datatype, "full", m, m, A, lda, A_test, lda);
 
     prepare_potrf_run(&uplo, m, A_test, lda, datatype, n_repeats, time_min, &info);
@@ -187,7 +187,7 @@ void prepare_potrf_run(char *uplo, integer m, void *A, integer lda, integer data
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
-    create_matrix(datatype, &A_save, lda, m);
+    create_matrix(datatype, matrix_layout, m, m, &A_save, lda);
     copy_matrix(datatype, "full", m, m, A, lda, A_save, lda);
 
     *info = 0;

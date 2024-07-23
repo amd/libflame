@@ -135,7 +135,7 @@ void fla_test_org2r_experiment(test_params_t *params, integer datatype, integer 
     if(m >= n)
     {
         /* Create input matrix parameters */
-        create_matrix(datatype, &A, lda, n);
+        create_matrix(datatype, matrix_layout, m, n, &A, lda);
 
         /* create tau vector */
         create_vector(datatype, &T_test, fla_min(m, n));
@@ -148,11 +148,11 @@ void fla_test_org2r_experiment(test_params_t *params, integer datatype, integer 
 
         /* Make a copy of input matrix A.
            This is required to validate the API functionality.*/
-        create_matrix(datatype, &A_test, lda, n);
+        create_matrix(datatype, matrix_layout, m, n, &A_test, lda);
         copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
         /* create Q matrix to check orthogonality */
-        create_matrix(datatype, &Q, lda, n);
+        create_matrix(datatype, matrix_layout, m, n, &Q, lda);
         reset_matrix(datatype, m, n, Q, lda);
 
         /* Make a workspace query the first time. This will provide us with
@@ -177,13 +177,13 @@ void fla_test_org2r_experiment(test_params_t *params, integer datatype, integer 
         }
 
         /* create work buffer */
-        create_matrix(datatype, &work, lwork, 1);
+        create_vector(datatype, &work, lwork);
         create_vector(datatype, &work_test, n);
 
         /* QR Factorisation on matrix A to generate Q and R */
         invoke_geqrf(datatype, &m, &n, A_test, &lda, T_test, work, &lwork, &info);
 
-        create_matrix(datatype, &R, n, n);
+        create_matrix(datatype, matrix_layout, n, n, &R, n);
         reset_matrix(datatype, n, n, R, n);
         copy_matrix(datatype, "Upper", n, n, A_test, lda, R, n);
 
@@ -233,7 +233,7 @@ void prepare_org2r_run(integer m, integer n, void *A, integer lda, void *T, void
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
-    create_matrix(datatype, &A_save, lda, n);
+    create_matrix(datatype, matrix_layout, m, n, &A_save, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_save, lda);
 
     *info = 0;

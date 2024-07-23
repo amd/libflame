@@ -145,10 +145,10 @@ void fla_test_steqr_experiment(test_params_t *params, integer datatype, integer 
     realtype = get_realtype(datatype);
 
     /* Create input matrix parameters */
-    create_matrix(datatype, &Z, ldz, n);
-    create_matrix(datatype, &A, lda, n);
-    create_matrix(datatype, &Q, lda, n);
-    create_matrix(datatype, &Z_test, ldz, n);
+    create_matrix(datatype, matrix_layout, n, n, &Z, ldz);
+    create_matrix(datatype, matrix_layout, n, n, &A, lda);
+    create_matrix(datatype, matrix_layout, n, n, &Q, lda);
+    create_matrix(datatype, matrix_layout, n, n, &Z_test, ldz);
 
     reset_matrix(datatype, n, n, Z, ldz);
     reset_matrix(datatype, n, n, A, lda);
@@ -283,7 +283,7 @@ void prepare_steqr_run(char *compz, integer n, void *Z, integer ldz, void *D, vo
        each itertaion.*/
     if(*compz != 'N')
     {
-        create_matrix(datatype, &Z_save, ldz, n);
+        create_matrix(datatype, matrix_layout, n, n, &Z_save, ldz);
         copy_matrix(datatype, "full", n, n, Z, ldz, Z_save, ldz);
     }
     realtype = get_realtype(datatype);

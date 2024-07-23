@@ -151,13 +151,13 @@ void fla_test_stevd_experiment(test_params_t *params, integer datatype, integer 
     lda = fla_max(n, ldz);
 
     /* Create input matrix parameters */
-    create_matrix(datatype, &Z, ldz, n);
+    create_matrix(datatype, matrix_layout, n, n, &Z, ldz);
     create_vector(datatype, &D, n);
     create_vector(datatype, &E, n - 1);
 
-    create_matrix(datatype, &Q, lda, n);
+    create_matrix(datatype, matrix_layout, n, n, &Q, lda);
     reset_matrix(datatype, n, n, Q, lda);
-    create_matrix(datatype, &A, lda, n);
+    create_matrix(datatype, matrix_layout, n, n, &A, lda);
     reset_matrix(datatype, n, n, A, lda);
 
     if(g_ext_fptr != NULL || params->imatrix_char)
@@ -176,7 +176,7 @@ void fla_test_stevd_experiment(test_params_t *params, integer datatype, integer 
     // Get symmetric tridiagonal matrix from D, E and use for validation.
     copy_sym_tridiag_matrix(datatype, D, E, n, n, Z, ldz);
 
-    create_matrix(datatype, &Z_test, ldz, n);
+    create_matrix(datatype, matrix_layout, n, n, &Z_test, ldz);
     create_vector(datatype, &D_test, n);
     create_vector(datatype, &E_test, n - 1);
     copy_vector(datatype, n, D, 1, D_test, 1);
@@ -242,7 +242,7 @@ void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, voi
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
-    create_matrix(datatype, &Z_save, ldz, n);
+    create_matrix(datatype, matrix_layout, n, n, &Z_save, ldz);
     create_vector(datatype, &D_save, n);
     create_vector(datatype, &E_save, n - 1);
 
@@ -300,13 +300,11 @@ void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, voi
 
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);
-
-        /* Free up the output buffers */
-        
     }
 
     *time_min_ = time_min;
 
+    /* Free up the output buffers */
     free_matrix(Z_save);
     free_matrix(D_save);
     free_matrix(E_save);

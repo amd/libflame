@@ -151,8 +151,8 @@ void fla_test_hseqr_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Create input matrix parameters*/
-    create_matrix(datatype, &H, ldh, n);
-    create_matrix(datatype, &Z, ldz, n);
+    create_matrix(datatype, matrix_layout, n, n, &H, ldh);
+    create_matrix(datatype, matrix_layout, n, n, &Z, ldz);
 
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
     {
@@ -185,8 +185,8 @@ void fla_test_hseqr_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Make copy of matrix H and Z. This is required to validate the API functionality */
-    create_matrix(datatype, &H_test, ldh, n);
-    create_matrix(datatype, &Z_Test, ldz, n);
+    create_matrix(datatype, matrix_layout, n, n, &H_test, ldh);
+    create_matrix(datatype, matrix_layout, n, n, &Z_Test, ldz);
     copy_matrix(datatype, "full", n, n, H, ldh, H_test, ldh);
     copy_matrix(datatype, "full", n, n, Z, ldz, Z_Test, ldz);
 
@@ -262,8 +262,8 @@ void prepare_hseqr_run(char *job, char *compz, integer n, integer *ilo, integer 
 
     /* Make a copy of the input matrix H and Z. Same input values will be passed in each
      * itertaion.*/
-    create_matrix(datatype, &H_save, ldh, n);
-    create_matrix(datatype, &Z_save, ldz, n);
+    create_matrix(datatype, matrix_layout, n, n, &H_save, ldh);
+    create_matrix(datatype, matrix_layout, n, n, &Z_save, ldz);
     copy_matrix(datatype, "full", n, n, H, ldh, H_save, ldh);
     copy_matrix(datatype, "full", n, n, Z, ldz, Z_save, ldz);
 

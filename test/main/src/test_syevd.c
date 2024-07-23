@@ -140,7 +140,7 @@ void fla_test_syevd_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Create input matrix parameters */
-    create_matrix(datatype, &A, lda, n);
+    create_matrix(datatype, matrix_layout, n, n, &A, lda);
     create_realtype_vector(datatype, &w, n);
 
     if(g_ext_fptr != NULL || (params->imatrix_char))
@@ -156,7 +156,7 @@ void fla_test_syevd_experiment(test_params_t *params, integer datatype, integer 
         generate_matrix_from_EVs(datatype, *range, n, A, lda, L, NULL, NULL);
     }
     /* Make a copy of input matrix A. This is required to validate the API functionality.*/
-    create_matrix(datatype, &A_test, lda, n);
+    create_matrix(datatype, matrix_layout, n, n, &A_test, lda);
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
 
     prepare_syevd_run(&jobz, &uplo, n, A_test, lda, w, datatype, n_repeats, time_min, &info);
@@ -204,7 +204,7 @@ void prepare_syevd_run(char *jobz, char *uplo, integer n, void *A, integer lda, 
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
-    create_matrix(datatype, &A_save, lda, n);
+    create_matrix(datatype, matrix_layout, n, n, &A_save, lda);
     copy_matrix(datatype, "full", n, n, A, lda, A_save, lda);
 
     /* Make a workspace query the first time through. This will provide us with

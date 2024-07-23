@@ -166,9 +166,9 @@ void fla_test_geev_experiment(test_params_t *params, integer datatype, integer p
     }
 
     /* Create input matrix parameters */
-    create_matrix(datatype, &A, lda, n);
-    create_matrix(datatype, &VL, ldvl, n);
-    create_matrix(datatype, &VR, ldvr, n);
+    create_matrix(datatype, matrix_layout, n, n, &A, lda);
+    create_matrix(datatype, matrix_layout, n, n, &VL, ldvl);
+    create_matrix(datatype, matrix_layout, n, n, &VR, ldvr);
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
     {
         create_vector(datatype, &w, n);
@@ -188,7 +188,7 @@ void fla_test_geev_experiment(test_params_t *params, integer datatype, integer p
         if(FLA_OVERFLOW_UNDERFLOW_TEST)
             create_vector(get_realtype(datatype), &scal, 1);
          /*  Creating input matrix A by generating random eigen values */
-        create_matrix(datatype, &L, n, n);
+        create_matrix(datatype, matrix_layout, n, n, &L, n);
         generate_asym_matrix_from_EVs(datatype, n, A, lda, L, params->imatrix_char, scal);
 
         /* Diagonal and sub-diagonals(upper and lower sub-diagonal together
@@ -206,7 +206,7 @@ void fla_test_geev_experiment(test_params_t *params, integer datatype, integer p
     }
 
     /* Make a copy of input matrix A. This is required to validate the API functionality. */
-    create_matrix(datatype, &A_test, lda, n);
+    create_matrix(datatype, matrix_layout, n, n, &A_test, lda);
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
 
     prepare_geev_run(&jobvl, &jobvr, n, A_test, lda, wr, wi, w, VL, ldvl, VR, ldvr, datatype,
@@ -268,7 +268,7 @@ void prepare_geev_run(char *jobvl, char *jobvr, integer m_A, void *A, integer ld
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
-    create_matrix(datatype, &A_save, lda, m_A);
+    create_matrix(datatype, matrix_layout, m_A, m_A, &A_save, lda);
     copy_matrix(datatype, "full", m_A, m_A, A, lda, A_save, lda);
 
     /* Get rwork and iwork array size since it is not depedent on internal blocks*/

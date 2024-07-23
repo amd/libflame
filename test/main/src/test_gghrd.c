@@ -169,10 +169,10 @@ void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Create input matrix parameters*/
-    create_matrix(datatype, &A, lda, n);
-    create_matrix(datatype, &B, ldb, n);
-    create_matrix(datatype, &Q, ldq, n);
-    create_matrix(datatype, &Z, ldz, n);
+    create_matrix(datatype, matrix_layout, n, n, &A, lda);
+    create_matrix(datatype, matrix_layout, n, n, &B, ldb);
+    create_matrix(datatype, matrix_layout, n, n, &Q, ldq);
+    create_matrix(datatype, matrix_layout, n, n, &Z, ldz);
 
     if(g_ext_fptr != NULL)
     {
@@ -192,10 +192,10 @@ void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Make copy of matrix A,B,Q and Z. This is required to validate the API functionality */
-    create_matrix(datatype, &A_test, lda, n);
-    create_matrix(datatype, &B_test, ldb, n);
-    create_matrix(datatype, &Q_test, ldq, n);
-    create_matrix(datatype, &Z_test, ldq, n);
+    create_matrix(datatype, matrix_layout, n, n, &A_test, lda);
+    create_matrix(datatype, matrix_layout, n, n, &B_test, ldb);
+    create_matrix(datatype, matrix_layout, n, n, &Q_test, ldq);
+    create_matrix(datatype, matrix_layout, n, n, &Z_test, ldq);
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
     copy_matrix(datatype, "full", n, n, B, ldb, B_test, ldb);
     copy_matrix(datatype, "full", n, n, Q, ldq, Q_test, ldq);
@@ -263,10 +263,10 @@ void prepare_gghrd_run(char *compq, char *compz, integer n, integer *ilo, intege
 
     /* Make a copy of the input matrix A,B,Q and Z. Same input values will be passed in each
      * itertaion.*/
-    create_matrix(datatype, &A_save, lda, n);
-    create_matrix(datatype, &B_save, ldb, n);
-    create_matrix(datatype, &Q_save, ldq, n);
-    create_matrix(datatype, &Z_save, ldz, n);
+    create_matrix(datatype, matrix_layout, n, n, &A_save, lda);
+    create_matrix(datatype, matrix_layout, n, n, &B_save, ldb);
+    create_matrix(datatype, matrix_layout, n, n, &Q_save, ldq);
+    create_matrix(datatype, matrix_layout, n, n, &Z_save, ldz);
     copy_matrix(datatype, "full", n, n, A, lda, A_save, lda);
     copy_matrix(datatype, "full", n, n, B, ldb, B_save, ldb);
     copy_matrix(datatype, "full", n, n, Q, ldq, Q_save, ldq);

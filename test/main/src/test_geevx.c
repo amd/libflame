@@ -180,10 +180,10 @@ void fla_test_geevx_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Create input matrix parameters */
-    create_matrix(datatype, &A, lda, m);
+    create_matrix(datatype, matrix_layout, m, m, &A, lda);
 
-    create_matrix(datatype, &VL, ldvl, m);
-    create_matrix(datatype, &VR, ldvr, m);
+    create_matrix(datatype, matrix_layout, m, m, &VL, ldvl);
+    create_matrix(datatype, matrix_layout, m, m, &VR, ldvr);
     create_realtype_vector(datatype, &scale, m);
     create_realtype_vector(datatype, &abnrm, 1);
     create_realtype_vector(datatype, &rconde, m);
@@ -206,7 +206,7 @@ void fla_test_geevx_experiment(test_params_t *params, integer datatype, integer 
     else
     {
         /*  Creating input matrix A by generating random eigen values */
-        create_matrix(datatype, &L, m, m);
+        create_matrix(datatype, matrix_layout, m, m, &L, m);
         generate_asym_matrix_from_EVs(datatype, m, A, lda, L, params->imatrix_char, scal);
 
         /* Diagonal and sub-diagonals(upper and lower sub-diagonal together
@@ -224,7 +224,7 @@ void fla_test_geevx_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Make a copy of input matrix A. This is required to validate the API functionality. */
-    create_matrix(datatype, &A_test, lda, m);
+    create_matrix(datatype, matrix_layout, m, m, &A_test, lda);
     copy_matrix(datatype, "full", m, m, A, lda, A_test, lda);
 
     prepare_geevx_run(&balanc, &jobvl, &jobvr, &sense, m, A_test, lda, wr, wi, w, VL, ldvl, VR,
@@ -300,7 +300,7 @@ void prepare_geevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, inte
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
-    create_matrix(datatype, &A_save, lda, m_A);
+    create_matrix(datatype, matrix_layout, m_A, m_A, &A_save, lda);
     copy_matrix(datatype, "full", m_A, m_A, A, lda, A_save, lda);
 
     /* Get rwork and iwork array size since it is not depedent on internal blocks*/

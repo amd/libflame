@@ -19,9 +19,9 @@ void validate_syevd(char *jobz, integer n, void *A, void *A_test, integer lda, v
         void *lambda = NULL, *zlambda = NULL, *Z = NULL;
         void *work = NULL;
 
-        create_matrix(datatype, &lambda, n, n);
-        create_matrix(datatype, &zlambda, n, n);
-        create_matrix(datatype, &Z, lda, n);
+        create_matrix(datatype, matrix_layout, n, n, &lambda, n);
+        create_matrix(datatype, matrix_layout, n, n, &zlambda, n);
+        create_matrix(datatype, matrix_layout, lda, n, &Z, n);
 
         reset_matrix(datatype, n, n, zlambda, n);
         reset_matrix(datatype, n, n, Z, lda);

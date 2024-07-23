@@ -128,7 +128,7 @@ void fla_test_getrf_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Create the matrices for the current operation*/
-    create_matrix(datatype, &A, lda, n);
+    create_matrix(datatype, matrix_layout, m, n, &A, lda);
     create_vector(INTEGER, &IPIV, fla_min(m, n));
     create_realtype_vector(datatype, &s_test, fla_min(m, n));
 
@@ -148,7 +148,7 @@ void fla_test_getrf_experiment(test_params_t *params, integer datatype, integer 
         }
     }
     /* Save the original matrix*/
-    create_matrix(datatype, &A_test, lda, n);
+    create_matrix(datatype, matrix_layout, m, n, &A_test, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
     /* call to API */
@@ -205,7 +205,7 @@ void prepare_getrf_run(integer m_A, integer n_A, void *A, integer lda, integer *
     double time_min = 1e9, exe_time;
 
     /* Save the original matrix */
-    create_matrix(datatype, &A_save, lda, n_A);
+    create_matrix(datatype, matrix_layout, m_A, n_A, &A_save, lda);
     copy_matrix(datatype, "full", m_A, n_A, A, lda, A_save, lda);
 
     *info = 0;

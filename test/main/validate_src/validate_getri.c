@@ -18,7 +18,7 @@ void validate_getri(integer m_A, integer n_A, void *A, void *A_inv, integer lda,
     *info = 0;
 
     /* Create Identity matrix */
-    create_matrix(datatype, &a_temp, n_A, n_A);
+    create_matrix(datatype, matrix_layout, n_A, n_A, &a_temp, n_A);
     create_vector(datatype, &work, 2 * m_A);
 
     switch(datatype)

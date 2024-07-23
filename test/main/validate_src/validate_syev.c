@@ -63,11 +63,11 @@ void validate_syev(char* jobz, char* range, integer n, void* A, void* A_test,
             integer i;
             integer *buff = (integer *)ifail;
 
-            create_matrix(datatype, &Z, lda, n);
+            create_matrix(datatype, matrix_layout, n, n, &Z, lda);
             reset_matrix(datatype, n, n, Z, lda);
             copy_matrix(datatype, "full", n, n, A_test, lda, Z, lda);
 
-            create_matrix(datatype, &Q, lda, n);
+            create_matrix(datatype, matrix_layout, n, n, &Q, lda);
             reset_matrix(datatype, n, n, Q, lda);
             copy_matrix(datatype, "full", n, n, A_test, lda, Q, lda);
 

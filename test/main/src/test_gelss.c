@@ -156,10 +156,10 @@ void fla_test_gelss_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Create the matrices for the current operation */
-    create_matrix(datatype, &A, lda, n);
-    create_matrix(datatype, &A_test, lda, n);
-    create_matrix(datatype, &B, ldb, nrhs);
-    create_matrix(datatype, &B_test, ldb, nrhs);
+    create_matrix(datatype, matrix_layout, m, n, &A, lda);
+    create_matrix(datatype, matrix_layout, m, n, &A_test, lda);
+    create_matrix(datatype, matrix_layout, fla_max(m, n), nrhs, &B, ldb);
+    create_matrix(datatype, matrix_layout, fla_max(m, n), nrhs, &B_test, ldb);
     create_realtype_vector(datatype, &s, fla_min(m, n));
     create_realtype_vector(datatype, &rwork, 5 * fla_min(m, n));
     create_realtype_vector(datatype, &s_test, fla_min(m, n));
@@ -233,8 +233,8 @@ void prepare_gelss_run(integer datatype, integer m, integer n, integer nrhs, voi
     void *A_save = NULL, *B_save = NULL;
     double time_min_ = 1e9, exe_time;
 
-    create_matrix(datatype, &A_save, lda, n);
-    create_matrix(datatype, &B_save, ldb, nrhs);
+    create_matrix(datatype, matrix_layout, m, n, &A_save, lda);
+    create_matrix(datatype, matrix_layout, fla_max(m, n), nrhs, &B_save, ldb);
 
     if(g_lwork <= 0)
     {

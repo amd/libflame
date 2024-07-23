@@ -24,7 +24,7 @@ void validate_gtsv(integer datatype, integer n, integer nrhs, void *B, integer l
     inc = lda + 1;
 
     create_vector(INTEGER, &ipiv, n);
-    create_matrix(datatype, &A, ldb, n);
+    create_matrix(datatype, matrix_layout, n, n, &A, ldb);
     /* A matrix consist of the tridiagonal input vectors */
     copy_tridiag_matrix(datatype, dl, d, du, n, n, A, ldb);
     switch(datatype)

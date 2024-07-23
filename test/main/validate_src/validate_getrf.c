@@ -37,10 +37,13 @@ void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
         n_U = n_A;
         k = m_A;
     }
-    create_matrix(datatype, &L, m_L, n_L);
-    create_matrix(datatype, &U, m_U, n_U);
+    create_matrix(datatype, matrix_layout, m_L, n_L, &L, m_L);
+    create_matrix(datatype, matrix_layout, m_U, n_U, &U, m_L);
+    create_matrix(datatype, matrix_layout, m_A, n_A, &T, m_A);
+    // Create matrix of A(MxN) for subtracting in Test 2 (T-A).
+    create_matrix(datatype, matrix_layout, m_A, n_A, &A_save, m_A);
+
     reset_matrix(datatype, m_U, n_U, U, m_U);
-    create_matrix(datatype, &T, m_A, n_A);
     create_vector(datatype, &work, 2 * m_A);
 
     rand_vector(datatype, m_A, X, 1, d_zero, d_zero, 'R');
@@ -50,8 +53,6 @@ void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
     copy_matrix(datatype, "Lower", m_L, n_L, A_test, lda, L, m_L);
     copy_matrix(datatype, "Upper", m_U, n_U, A_test, lda, U, m_U);
 
-    // Create matrix of A(MxN) for subtracting in Test 2 (T-A).
-    create_matrix(datatype, &A_save, m_A, n_A);
     copy_matrix(datatype, "Full", m_A, n_A, A, lda, A_save, m_A);
 
     switch(datatype)

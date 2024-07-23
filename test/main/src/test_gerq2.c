@@ -126,7 +126,7 @@ void fla_test_gerq2_experiment(test_params_t *params, integer datatype, integer 
     }
 
     // Create input matrix parameters
-    create_matrix(datatype, &A, lda, n);
+    create_matrix(datatype, matrix_layout, m, n, &A, lda);
     create_vector(datatype, &T, fla_min(m, n));
 
     init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
@@ -136,7 +136,7 @@ void fla_test_gerq2_experiment(test_params_t *params, integer datatype, integer 
     }
 
     // Make a copy of input matrix A. This is required to validate the API functionality.
-    create_matrix(datatype, &A_test, lda, n);
+    create_matrix(datatype, matrix_layout, m, n, &A_test, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
     prepare_gerq2_run(m, n, A_test, lda, T, datatype, n_repeats, &time_min, &info);
@@ -186,7 +186,7 @@ void prepare_gerq2_run(integer m_A, integer n_A, void *A, integer lda, void *T, 
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
-    create_matrix(datatype, &A_save, lda, n_A);
+    create_matrix(datatype, matrix_layout, m_A, n_A, &A_save, lda);
     copy_matrix(datatype, "full", m_A, n_A, A, lda, A_save, lda);
 
     *info = 0;

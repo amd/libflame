@@ -21,8 +21,8 @@ void validate_geevx(char *jobvl, char *jobvr, char *sense, char *balanc, integer
     void *lambda = NULL, *Vlambda = NULL;
     *info = 0;
 
-    create_matrix(datatype, &lambda, m, m);
-    create_matrix(datatype, &Vlambda, m, m);
+    create_matrix(datatype, matrix_layout, m, m, &lambda, m);
+    create_matrix(datatype, matrix_layout, m, m, &Vlambda, m);
 
     reset_matrix(datatype, m, m, lambda, m);
     reset_matrix(datatype, m, m, Vlambda, m);

@@ -125,7 +125,7 @@ void fla_test_gehrd_experiment(test_params_t *params, integer datatype, integer 
     ihi = params->lin_solver_paramslist[pci].ihi;
 
     /* Create input matrix parameters*/
-    create_matrix(datatype, &A, lda, n);
+    create_matrix(datatype, matrix_layout, n, n, &A, lda);
     create_vector(datatype, &tau, n - 1);
 
     if(g_ext_fptr != NULL)
@@ -139,7 +139,7 @@ void fla_test_gehrd_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Make copy of matrix A. This is required to validate the API functionality */
-    create_matrix(datatype, &A_Test, lda, n);
+    create_matrix(datatype, matrix_layout, n, n, &A_Test, lda);
     copy_matrix(datatype, "full", n, n, A, lda, A_Test, lda);
 
     prepare_gehrd_run(n, &ilo, &ihi, A_Test, lda, tau, datatype, n_repeats, time_min, &info);
@@ -175,7 +175,7 @@ void prepare_gehrd_run(integer n, integer *ilo, integer *ihi, void *A, integer l
     double time_min = 1e9, exe_time;
 
     /* Make a copy of the input matrix A. Same input values will be passed in each itertaion.*/
-    create_matrix(datatype, &A_save, lda, n);
+    create_matrix(datatype, matrix_layout, n, n, &A_save, lda);
     copy_matrix(datatype, "full", n, n, A, lda, A_save, lda);
 
     /* Make a workspace query the first time through. This will provide us with

@@ -173,14 +173,14 @@ void fla_test_hgeqz_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Create input matrix */
-    create_matrix(datatype, &H, ldh, n);
-    create_matrix(datatype, &T, ldt, n);
-    create_matrix(datatype, &Q, ldq, n);
-    create_matrix(datatype, &Z, ldz, n);
-    create_matrix(datatype, &A, ldh, n);
-    create_matrix(datatype, &B, ldt, n);
-    create_matrix(datatype, &Q_A, ldq, n);
-    create_matrix(datatype, &Z_A, ldz, n);
+    create_matrix(datatype, matrix_layout, n, n, &H, ldh);
+    create_matrix(datatype, matrix_layout, n, n, &T, ldt);
+    create_matrix(datatype, matrix_layout, n, n, &Q, ldq);
+    create_matrix(datatype, matrix_layout, n, n, &Z, ldz);
+    create_matrix(datatype, matrix_layout, n, n, &A, ldh);
+    create_matrix(datatype, matrix_layout, n, n, &B, ldt);
+    create_matrix(datatype, matrix_layout, n, n, &Q_A, ldq);
+    create_matrix(datatype, matrix_layout, n, n, &Z_A, ldz);
     if(datatype == FLOAT || datatype == DOUBLE)
     {
         create_vector(datatype, &alphar, n);
@@ -208,7 +208,7 @@ void fla_test_hgeqz_experiment(test_params_t *params, integer datatype, integer 
         /* Decompose matrix B in to QR and store orthogonal matrix in Q and R in B */
         if(compq == 'N')
         {
-            create_matrix(datatype, &Q_temp, ldt, n);
+            create_matrix(datatype, matrix_layout, n, n, &Q_temp, ldt);
             get_orthogonal_matrix_from_QR(datatype, n, B, ldt, Q_temp, ldt, &info);
             free_matrix(Q_temp);
         }
@@ -236,10 +236,10 @@ void fla_test_hgeqz_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Make copy of matrix H,T,Q and Z. This is required to validate the API functionality */
-    create_matrix(datatype, &H_test, ldh, n);
-    create_matrix(datatype, &T_test, ldt, n);
-    create_matrix(datatype, &Q_test, ldq, n);
-    create_matrix(datatype, &Z_test, ldz, n);
+    create_matrix(datatype, matrix_layout, n, n, &H_test, ldh);
+    create_matrix(datatype, matrix_layout, n, n, &T_test, ldt);
+    create_matrix(datatype, matrix_layout, n, n, &Q_test, ldq);
+    create_matrix(datatype, matrix_layout, n, n, &Z_test, ldz);
     copy_matrix(datatype, "full", n, n, H, ldh, H_test, ldh);
     copy_matrix(datatype, "full", n, n, T, ldt, T_test, ldt);
     copy_matrix(datatype, "full", n, n, Q, ldq, Q_test, ldq);
@@ -320,10 +320,10 @@ void prepare_hgeqz_run(char *job, char *compq, char *compz, integer n, integer *
 
     /* Make a copy of the input matrix H,T,Q and Z. Same input values will be passed in each
      * itertaion.*/
-    create_matrix(datatype, &H_save, ldh, n);
-    create_matrix(datatype, &T_save, ldt, n);
-    create_matrix(datatype, &Q_save, ldq, n);
-    create_matrix(datatype, &Z_save, ldz, n);
+    create_matrix(datatype, matrix_layout, n, n, &H_save, ldh);
+    create_matrix(datatype, matrix_layout, n, n, &T_save, ldt);
+    create_matrix(datatype, matrix_layout, n, n, &Q_save, ldq);
+    create_matrix(datatype, matrix_layout, n, n, &Z_save, ldz);
     create_realtype_vector(datatype, &rwork, n);
     copy_matrix(datatype, "full", n, n, H, ldh, H_save, ldh);
     copy_matrix(datatype, "full", n, n, T, ldt, T_save, ldt);

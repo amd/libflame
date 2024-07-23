@@ -11,7 +11,7 @@
 void fla_test_getri_experiment(test_params_t *params, integer datatype, integer p_cur,
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
                                double *perf, double *t, double *residual);
-void prepare_getri_run(integer m_A, integer n_A, void *A, integer lda, integer *ipiv,
+void prepare_getri_run(integer n_A, void *A, integer lda, integer *ipiv,
                        integer datatype, integer n_repeats, double *time_min_, integer *info);
 void invoke_getri(integer datatype, integer *n, void *a, integer *lda, integer *ipiv, void *work,
                   integer *lwork, integer *info);
@@ -128,7 +128,7 @@ void fla_test_getri_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Create the matrices for the current operation*/
-    create_matrix(datatype, &A, lda, n);
+    create_matrix(datatype, matrix_layout, n, n, &A, lda);
     create_vector(INTEGER, &IPIV, n);
     create_realtype_vector(datatype, &s_test, n);
 
@@ -145,11 +145,11 @@ void fla_test_getri_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Save the original matrix*/
-    create_matrix(datatype, &A_test, lda, n);
+    create_matrix(datatype, matrix_layout, n, n, &A_test, lda);
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
 
     /* call to API */
-    prepare_getri_run(n, n, A_test, lda, IPIV, datatype, n_repeats, &time_min, &info);
+    prepare_getri_run(n, A_test, lda, IPIV, datatype, n_repeats, &time_min, &info);
 
     /* execution time */
     *t = time_min;
@@ -182,8 +182,8 @@ void fla_test_getri_experiment(test_params_t *params, integer datatype, integer 
     free_vector(s_test);
 }
 
-void prepare_getri_run(integer m_A, integer n_A, void *A, integer lda, integer *IPIV,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info)
+void prepare_getri_run(integer n_A, void *A, integer lda, integer *IPIV, integer datatype,
+                       integer n_repeats, double *time_min_, integer *info)
 {
     integer lwork;
     integer i;
@@ -192,8 +192,8 @@ void prepare_getri_run(integer m_A, integer n_A, void *A, integer lda, integer *
     lwork = i_n_one;
 
     /* Save the original matrix */
-    create_matrix(datatype, &A_save, lda, n_A);
-    copy_matrix(datatype, "full", m_A, n_A, A, lda, A_save, lda);
+    create_matrix(datatype, matrix_layout, n_A, n_A, &A_save, lda);
+    copy_matrix(datatype, "full", n_A, n_A, A, lda, A_save, lda);
     if(g_lwork <= 0)
     {
         lwork = -1;
@@ -221,13 +221,13 @@ void prepare_getri_run(integer m_A, integer n_A, void *A, integer lda, integer *
     {
 
         /* Copy original input data */
-        copy_matrix(datatype, "full", m_A, n_A, A, lda, A_save, lda);
+        copy_matrix(datatype, "full", n_A, n_A, A, lda, A_save, lda);
         // create work buffer
-        create_matrix(datatype, &work, lwork, 1);
+        create_vector(datatype, &work, lwork);
         exe_time = fla_test_clock();
 
         /*  call to API getrf to get AFACT */
-        invoke_getrf(datatype, &m_A, &n_A, A_save, &lda, IPIV, info);
+        invoke_getrf(datatype, &n_A, &n_A, A_save, &lda, IPIV, info);
 
         /*  call  getri API with AFACT to get A INV */
         invoke_getri(datatype, &n_A, A_save, &lda, IPIV, work, &lwork, info);
@@ -242,7 +242,7 @@ void prepare_getri_run(integer m_A, integer n_A, void *A, integer lda, integer *
 
     *time_min_ = time_min;
     /*  Save the final result to A matrix*/
-    copy_matrix(datatype, "full", m_A, n_A, A_save, lda, A, lda);
+    copy_matrix(datatype, "full", n_A, n_A, A_save, lda, A, lda);
     free_matrix(A_save);
 }
 

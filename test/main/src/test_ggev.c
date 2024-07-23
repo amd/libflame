@@ -173,10 +173,10 @@ void fla_test_ggev_experiment(test_params_t *params, integer datatype, integer p
     }
 
     /* Create input matrix parameters */
-    create_matrix(datatype, &A, lda, m);
-    create_matrix(datatype, &B, ldb, m);
-    create_matrix(datatype, &VL, ldvl, m);
-    create_matrix(datatype, &VR, ldvr, m);
+    create_matrix(datatype, matrix_layout, m, m, &A, lda);
+    create_matrix(datatype, matrix_layout, m, m, &B, ldb);
+    create_matrix(datatype, matrix_layout, m, m, &VL, ldvl);
+    create_matrix(datatype, matrix_layout, m, m, &VR, ldvr);
     if(datatype == FLOAT || datatype == DOUBLE)
     {
         create_vector(datatype, &alphar, m);
@@ -192,8 +192,8 @@ void fla_test_ggev_experiment(test_params_t *params, integer datatype, integer p
     init_matrix(datatype, B, m, m, lda, g_ext_fptr, params->imatrix_char);
 
     /* Make a copy of input matrix A. This is required to validate the API functionality */
-    create_matrix(datatype, &A_test, lda, m);
-    create_matrix(datatype, &B_test, ldb, m);
+    create_matrix(datatype, matrix_layout, m, m, &A_test, lda);
+    create_matrix(datatype, matrix_layout, m, m, &B_test, ldb);
     copy_matrix(datatype, "full", m, m, A, lda, A_test, lda);
     copy_matrix(datatype, "full", m, m, B, ldb, B_test, ldb);
 
@@ -228,9 +228,9 @@ void fla_test_ggev_experiment(test_params_t *params, integer datatype, integer p
                 double time_min_copy = 1e9;
 
                 g_lwork = -1;
-                create_matrix(datatype, &VL_copy, m, m);
-                create_matrix(datatype, &A_copy, lda, m);
-                create_matrix(datatype, &B_copy, ldb, m);
+                create_matrix(datatype, matrix_layout, m, m, &VL_copy, m);
+                create_matrix(datatype, matrix_layout, m, m, &A_copy, lda);
+                create_matrix(datatype, matrix_layout, m, m, &B_copy, ldb);
                 if(datatype == FLOAT || datatype == DOUBLE)
                 {
                     create_vector(datatype, &alphar_copy, m);
@@ -314,9 +314,9 @@ void prepare_ggev_run(char *jobvl, char *jobvr, integer n_A, void *A, integer ld
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
-    create_matrix(datatype, &A_save, lda, n_A);
+    create_matrix(datatype, matrix_layout, n_A, n_A, &A_save, lda);
     copy_matrix(datatype, "full", n_A, n_A, A, lda, A_save, lda);
-    create_matrix(datatype, &B_save, ldb, n_A);
+    create_matrix(datatype, matrix_layout, n_A, n_A, &B_save, ldb);
     copy_matrix(datatype, "full", n_A, n_A, B, ldb, B_save, ldb);
 
     /* Make a workspace query the first time through. This will provide us with

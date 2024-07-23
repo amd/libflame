@@ -14,9 +14,9 @@ void invoke_gels(integer datatype, char *trans, integer *m, integer *n, integer 
 void fla_test_gels_experiment(test_params_t *params, integer datatype, integer p_cur, integer q_cur,
                               integer pci, integer n_repeats, integer einfo, double *perf,
                               double *t, double *residual);
-void prepare_gels_run(integer datatype, char trans, integer m, integer n, integer nrhs, void *A,
-                      integer lda, void *B, integer ldb, void *work, integer lwork,
-                      integer n_repeats, double *time_min_, integer *info);
+void prepare_gels_run(integer datatype, char trans, integer m, integer n, integer m_b,
+                      integer nrhs, void *A, integer lda, void *B, integer ldb, void *work,
+                      integer lwork, integer n_repeats, double *time_min, integer *info);
 void fla_test_gels(integer argc, char **argv, test_params_t *params)
 {
     srand(4);
@@ -163,10 +163,10 @@ void fla_test_gels_experiment(test_params_t *params, integer datatype, integer p
     }
 
     /* Create the matrices for the current operation */
-    create_matrix(datatype, &A, lda, n);
-    create_matrix(datatype, &A_test, lda, n);
-    create_matrix(datatype, &B, ldb, nrhs);
-    create_matrix(datatype, &B_test, ldb, nrhs);
+    create_matrix(datatype, matrix_layout, m, n, &A, lda);
+    create_matrix(datatype, matrix_layout, m, n, &A_test, lda);
+    create_matrix(datatype, matrix_layout, m_b, nrhs, &B, ldb);
+    create_matrix(datatype, matrix_layout, m_b, nrhs, &B_test, ldb);
     create_realtype_vector(datatype, &s_test, fla_min(m, n));
 
     /* Initialize the test matrices */
@@ -193,7 +193,7 @@ void fla_test_gels_experiment(test_params_t *params, integer datatype, integer p
     copy_matrix(datatype, "full", ldb, nrhs, B, ldb, B_test, ldb);
 
     /* call to API */
-    prepare_gels_run(datatype, trans, m, n, nrhs, A_test, lda, B_test, ldb, work, lwork, n_repeats,
+    prepare_gels_run(datatype, trans, m, n, m_b, nrhs, A_test, lda, B_test, ldb, work, lwork, n_repeats,
                      t, &info);
 
     /* Performance computation */
@@ -234,16 +234,16 @@ void fla_test_gels_experiment(test_params_t *params, integer datatype, integer p
     free_vector(s_test);
 }
 
-void prepare_gels_run(integer datatype, char trans, integer m, integer n, integer nrhs, void *A,
-                      integer lda, void *B, integer ldb, void *work, integer lwork,
-                      integer n_repeats, double *time_min, integer *info)
+void prepare_gels_run(integer datatype, char trans, integer m, integer n, integer m_b,
+                      integer nrhs, void *A, integer lda, void *B, integer ldb, void *work,
+                      integer lwork, integer n_repeats, double *time_min, integer *info)
 {
     integer i;
     void *A_save = NULL, *B_save = NULL;
     double time_min_ = 1e9, exe_time;
 
-    create_matrix(datatype, &A_save, lda, n);
-    create_matrix(datatype, &B_save, ldb, nrhs);
+    create_matrix(datatype, matrix_layout, m, n, &A_save, lda);
+    create_matrix(datatype, matrix_layout, m_b, nrhs, &B_save, ldb);
 
     if(g_lwork <= 0)
     {

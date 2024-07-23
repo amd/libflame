@@ -26,8 +26,9 @@ void validate_gerqf(integer m_A, integer n_A, void *A, void *A_test, integer lda
         diff_A = m_A - n_A;
 
     // Create R and Q matrices.
-    create_matrix(datatype, &R, m_A, n_A);
-    create_matrix(datatype, &Q, n_A, n_A);
+     create_matrix(datatype, matrix_layout, m_A, n_A, &R, m_A);
+
+    create_matrix(datatype, matrix_layout, n_A, n_A, &Q, n_A);
     reset_matrix(datatype, m_A, n_A, R, m_A);
     reset_matrix(datatype, n_A, n_A, Q, n_A);
 

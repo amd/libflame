@@ -138,12 +138,12 @@ void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Create the matrices for the current operation*/
-    create_matrix(datatype, &A, lda, n);
+    create_matrix(datatype, matrix_layout, n, n, &A, lda);
     create_vector(INTEGER, &IPIV, n);
-    create_matrix(datatype, &B, ldb, NRHS);
-    create_matrix(datatype, &B_save, ldb, NRHS);
-    create_matrix(datatype, &X, ldb, NRHS);
-    create_matrix(datatype, &A_test, lda, n);
+    create_matrix(datatype, matrix_layout, n, NRHS, &B, ldb);
+    create_matrix(datatype, matrix_layout, n, NRHS, &B_save, ldb);
+    create_matrix(datatype, matrix_layout, n, NRHS, &X, ldb);
+    create_matrix(datatype, matrix_layout, n, n, &A_test, lda);
     create_realtype_vector(datatype, &s_test, n);
 
     /* Initialize the test matrices*/
@@ -213,9 +213,9 @@ void prepare_getrs_run(char *TRANS, integer n_A, integer nrhs, void *A, integer 
     double time_min = 1e9, exe_time;
 
     /* Save the original matrix */
-    create_matrix(datatype, &A_save, lda, n_A);
+    create_matrix(datatype, matrix_layout, n_A, n_A, &A_save, lda);
     copy_matrix(datatype, "full", n_A, n_A, A, lda, A_save, lda);
-    create_matrix(datatype, &B_test, ldb, nrhs);
+    create_matrix(datatype, matrix_layout, n_A, nrhs, &B_test, ldb);
 
     *info = 0;
     for(i = 0; i < n_repeats && *info == 0; ++i)

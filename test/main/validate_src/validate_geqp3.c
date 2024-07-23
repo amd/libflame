@@ -21,8 +21,9 @@ void validate_geqp3(integer m_A, integer n_A, void *A, void *A_test, integer lda
     min_A = fla_min(m_A, n_A);
 
     // Create Q and R matrices.
-    create_matrix(datatype, &Q, m_A, m_A);
-    create_matrix(datatype, &R, m_A, n_A);
+    create_matrix(datatype, matrix_layout, m_A, m_A, &Q, m_A);
+    create_matrix(datatype, matrix_layout, m_A, n_A, &R, m_A);
+
     reset_matrix(datatype, m_A, m_A, Q, m_A);
     reset_matrix(datatype, m_A, n_A, R, m_A);
 

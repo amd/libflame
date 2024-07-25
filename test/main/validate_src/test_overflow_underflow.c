@@ -1240,3 +1240,80 @@ void scale_matrix_overflow_underflow_ggev(integer datatype, integer m, void *A, 
     free_vector(max_min);
     free_vector(scal);
 }
+
+/* Scaling matrix with values around overflow underflow for syevx */
+void scale_matrix_underflow_overflow_syevx(integer datatype, integer n, void *A, integer lda,
+                                           char imatrix_char, void *scal)
+{
+    void *max_min = NULL;
+    double tuning_val = 1.0;
+    create_vector(get_realtype(datatype), &max_min, 1);
+    if(imatrix_char == 'O')
+    {
+        get_max_from_matrix(datatype, A, max_min, n, n, lda);
+        if(n < 10)
+        {
+            tuning_val = 4.2;
+        }
+        else if(n < 40)
+        {
+            tuning_val = 5.0;
+        }
+        else if(n < 100)
+        {
+            tuning_val = 7.0;
+        }
+        else if(n < 250)
+        {
+            tuning_val = 10.0;
+        }
+        else if(n < 450)
+        {
+            tuning_val = 12.0;
+        }
+        else if(n < 700)
+        {
+            tuning_val = 15.0;
+        }
+        else
+        {
+            tuning_val = 30.0;
+        }
+    }
+    if(imatrix_char == 'U')
+    {
+        get_min_from_matrix(datatype, A, max_min, n, n, lda);
+
+        if(datatype == FLOAT && n < 50)
+        {
+            tuning_val = 1.0e-6;
+        }
+        else if(datatype == FLOAT)
+        {
+            tuning_val = 0.7;
+        }
+        else if(datatype == DOUBLE && n < 30)
+        {
+            tuning_val = 1.0e-14;
+        }
+        else if(datatype == DOUBLE)
+        {
+            tuning_val = 1.0e-10;
+        }
+        else if(datatype == DOUBLE_COMPLEX && n < 10)
+        {
+            tuning_val = 1.0e-13;
+        }
+        else
+        {
+            tuning_val = 1.0;
+        }
+    }
+    calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
+
+    /* Scaling the matrix A with scal */
+    scal_matrix(datatype, scal, A, n, n, lda, i_one);
+
+    /* free vectors */
+    free_vector(max_min);
+}

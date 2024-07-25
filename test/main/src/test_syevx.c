@@ -121,9 +121,9 @@ void fla_test_syevx(integer argc, char **argv, test_params_t *params)
     {
         printf("\nIllegal arguments for syevx/heevx\n");
         printf("./<EXE> syevx <precisions - sd> <JOBZ> <RANGE> <UPLO>"
-               "<N> <LDA> <VL> <VU> <IL> <IU> <ABSTOL> <LDZ> <LWORK> <repeats>\n");
+               " <N> <LDA> <VL> <VU> <IL> <IU> <ABSTOL> <LDZ> <LWORK> <repeats>\n");
         printf("./<EXE> heevx <precisions - cz> <JOBZ> <RANGE> <UPLO>"
-               "<N> <LDA> <VL> <VU> <IL> <IU> <ABSTOL> <LDZ> <LWORK> <repeats>\n");
+               " <N> <LDA> <VL> <VU> <IL> <IU> <ABSTOL> <LDZ> <LWORK> <repeats>\n");
     }
     if(invalid_dtype)
     {
@@ -142,7 +142,7 @@ void fla_test_syevx_experiment(test_params_t *params, integer datatype, integer 
 {
     integer n, lda, ldz, il, iu, info = 0;
     char jobz, uplo, range;
-    void *A = NULL, *w = NULL, *A_test = NULL, *L = NULL, *ifail = NULL;
+    void *A = NULL, *w = NULL, *A_test = NULL, *L = NULL, *ifail = NULL, *scal = NULL;
     void *vl, *vu, *abstol;
 
     /* Get input matrix dimensions.*/
@@ -222,6 +222,12 @@ void fla_test_syevx_experiment(test_params_t *params, integer datatype, integer 
         create_realtype_vector(datatype, &L, n);
         generate_matrix_from_EVs(datatype, range, n, A, lda, L, get_realtype_value(datatype, vl),
                                  get_realtype_value(datatype, vu));
+
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            create_vector(get_realtype(datatype), &scal, 1);
+            scale_matrix_underflow_overflow_syevx(datatype, n, A, lda, params->imatrix_char, scal);
+        }
     }
     else
     {
@@ -251,7 +257,7 @@ void fla_test_syevx_experiment(test_params_t *params, integer datatype, integer 
     if((info == 0) && (!FLA_EXTREME_CASE_TEST))
     {
         validate_syev(&jobz, &range, n, A, A_test, lda, il, iu, L, w, ifail, datatype, residual,
-                      params->imatrix_char, NULL);
+                      params->imatrix_char, scal);
     }
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
@@ -275,7 +281,13 @@ void fla_test_syevx_experiment(test_params_t *params, integer datatype, integer 
     free_matrix(A_test);
     free_vector(w);
     if(g_ext_fptr == NULL)
+    {
         free_vector(L);
+    }
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
+    {
+        free_vector(scal);
+    }
 }
 
 void prepare_syevx_run(char *jobz, char *range, char *uplo, integer n, void *A, integer lda,

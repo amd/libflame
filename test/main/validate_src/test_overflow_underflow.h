@@ -102,4 +102,7 @@ void scale_matrix_underflow_overflow_steqr(integer datatype, integer n, void *A,
 /* Scale matrix with values around overflow underflow for ggev */
 void scale_matrix_overflow_underflow_ggev(integer datatype, integer m, void *A, integer lda,
                                            char imatrix);
+/* Scaling matrix with values around overflow underflow for syevx */
+void scale_matrix_underflow_overflow_syevx(integer datatype, integer n, void *A, integer lda,
+                                           char imatrix_char, void *scal);
 #endif // TEST_OVERFLOW_UNDERFLOW_H

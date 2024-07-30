@@ -190,6 +190,10 @@ void fla_test_ggev_experiment(test_params_t *params, integer datatype, integer p
 
     init_matrix(datatype, A, m, m, lda, g_ext_fptr, params->imatrix_char);
     init_matrix(datatype, B, m, m, lda, g_ext_fptr, params->imatrix_char);
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
+    {
+        scale_matrix_overflow_underflow_ggev(datatype, m, A, lda, params->imatrix_char);
+    }
 
     /* Make a copy of input matrix A. This is required to validate the API functionality */
     create_matrix(datatype, matrix_layout, m, m, &A_test, lda);
@@ -211,7 +215,7 @@ void fla_test_ggev_experiment(test_params_t *params, integer datatype, integer p
         *perf *= 4.0;
 
     /* output validation */
-    if(!params->imatrix_char && info == 0)
+    if((!FLA_EXTREME_CASE_TEST) && info == 0)
     {
         if(JOBVL == 'V' || JOBVR == 'V')
         {

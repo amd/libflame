@@ -6050,12 +6050,14 @@ void add_negative_values(integer datatype, void *vect, integer n)
     }
 }
 
-/* Convert the given matrix from column major layout to row major layout and vice versa */
+/* Convert the given matrix from column major layout to row major layout and vice versa
+   NOTE: matrix_layout is the existing layout of the given input matrix 'a' */
 void convert_matrix_layout(integer matrix_layout, integer datatype, integer m, integer n, void *a,
-                           integer lda, integer *lda_t)
+                           integer lda, void *a_t, integer lda_t)
 {
     integer i, j, cs, rs;
-    void *a_t = NULL;
+    if(a == NULL || a_t == NULL)
+        return;
 
     if(matrix_layout == LAPACK_COL_MAJOR)
     {
@@ -6073,18 +6075,7 @@ void convert_matrix_layout(integer matrix_layout, integer datatype, integer m, i
         printf("\n Invalid matrix layout for matrix_transpose");
         return;
     }
-    *lda_t = cs;
-    if(matrix_layout == LAPACK_ROW_MAJOR)
-    {
-        create_matrix(datatype, matrix_layout, rs, cs, &a_t, *lda_t);
-    }
-    else
-    {
-        create_matrix(datatype, matrix_layout, rs, cs, &a_t, lda);
-    }
 
-    if(a == NULL || a_t == NULL)
-        return;
     switch(datatype)
     {
         case FLOAT:
@@ -6093,7 +6084,7 @@ void convert_matrix_layout(integer matrix_layout, integer datatype, integer m, i
             {
                 for(j = 0; j < cs; j++)
                 {
-                    ((float *)a_t)[i * (*lda_t) + j] = ((float *)a)[j * lda + i];
+                    ((float *)a_t)[i * (lda_t) + j] = ((float *)a)[i + j * lda];
                 }
             }
             break;
@@ -6104,7 +6095,7 @@ void convert_matrix_layout(integer matrix_layout, integer datatype, integer m, i
             {
                 for(j = 0; j < cs; j++)
                 {
-                    ((double *)a_t)[i * (*lda_t) + j] = ((double *)a)[i + j * lda];
+                    ((double *)a_t)[i * (lda_t) + j] = ((double *)a)[i + j * lda];
                 }
             }
             break;
@@ -6115,8 +6106,8 @@ void convert_matrix_layout(integer matrix_layout, integer datatype, integer m, i
             {
                 for(j = 0; j < cs; j++)
                 {
-                    ((scomplex *)a_t)[i * (*lda_t) + j].real = ((scomplex *)a)[i + j * lda].real;
-                    ((scomplex *)a_t)[i * (*lda_t) + j].imag = ((scomplex *)a)[i + j * lda].imag;
+                    ((scomplex *)a_t)[i * lda_t + j].real = ((scomplex *)a)[i + j * lda].real;
+                    ((scomplex *)a_t)[i * lda_t + j].imag = ((scomplex *)a)[i + j * lda].imag;
                 }
             }
             break;
@@ -6127,16 +6118,12 @@ void convert_matrix_layout(integer matrix_layout, integer datatype, integer m, i
             {
                 for(j = 0; j < cs; j++)
                 {
-                    ((dcomplex *)a_t)[i * (*lda_t) + j].real = ((dcomplex *)a)[i + j * lda].real;
-                    ((dcomplex *)a_t)[i * (*lda_t) + j].imag = ((dcomplex *)a)[i + j * lda].imag;
+                    ((dcomplex *)a_t)[i * lda_t + j].real = ((dcomplex *)a)[i + j * lda].real;
+                    ((dcomplex *)a_t)[i * lda_t + j].imag = ((dcomplex *)a)[i + j * lda].imag;
                 }
             }
             break;
         }
     }
-    reset_matrix(datatype, lda, n, a, lda);
-    copy_matrix(datatype, "full", *lda_t, rs, a_t, *lda_t, a, *lda_t);
-
-    free_matrix(a_t);
     return;
 }

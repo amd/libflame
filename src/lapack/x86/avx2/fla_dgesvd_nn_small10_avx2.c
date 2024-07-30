@@ -24,6 +24,7 @@ void fla_dgesvd_xx_small10_avx2(integer wntus, integer wntvs, integer *m, intege
     doublereal *tau, *tauq, *taup;
     doublereal *e;
     doublereal stau;
+    doublereal cosu = 0., sinu = 0.;
 
     integer ncvt, nru;
     integer c__1 = 1;
@@ -53,26 +54,19 @@ void fla_dgesvd_xx_small10_avx2(integer wntus, integer wntvs, integer *m, intege
     if(*m == 2 && *n == 2)
     {
         /* 2x2 matrix Bi-Diag using Givens */
-        doublereal s0, cosr, sinr;
+        doublereal s0;
 
-        dlartg_(&a[1 + *lda], &a[2 + *lda], &cosr, &sinr, &s0);
+        dlartg_(&a[1 + *lda], &a[2 + *lda], &cosu, &sinu, &s0);
         s[1] = s0;
 
         /* Update 2nd columns of A */
-        dtmp = cosr * a[1 + 2 * *lda] + sinr * a[2 + 2 * *lda];
-        a[2 + 2 * *lda] = cosr * a[2 + 2 * *lda] - sinr * a[1 + 2 * *lda];
+        dtmp = cosu * a[1 + 2 * *lda] + sinu * a[2 + 2 * *lda];
+        a[2 + 2 * *lda] = cosu * a[2 + 2 * *lda] - sinu * a[1 + 2 * *lda];
         a[1 + 2 * *lda] = dtmp;
 
         /* Update Singular values and vectors */
         s[2] = a[2 + 2 * *lda];
         e[1] = a[1 + 2 * *lda];
-        if(wntus)
-        {
-            u[1 + 1 * *ldu] = cosr;
-            u[2 + 1 * *ldu] = -sinr;
-            u[1 + 2 * *ldu] = sinr;
-            u[2 + 2 * *ldu] = cosr;
-        }
     }
     else
     {
@@ -146,14 +140,25 @@ void fla_dgesvd_xx_small10_avx2(integer wntus, integer wntvs, integer *m, intege
         if(ncvt > 0)
         {
             vt[1 + *ldvt] = scl1 * cosr;
-            vt[2 + *ldvt] = scl1 * sinr;
+            vt[2 + *ldvt] = scl1 * -sinr;
 
-            vt[1 + 2 * *ldvt] = scl2 * -sinr;
+            vt[1 + 2 * *ldvt] = scl2 * sinr;
             vt[2 + 2 * *ldvt] = scl2 * cosr;
         }
         if(nru > 0)
         {
-            fla_drot_avx2(&nru, &u[1 + *ldu], &c__1, &u[1 + 2 * *ldu], &c__1, &cosl, &sinl);
+            doublereal p0, p1, p2, p3;
+
+            p0 = cosl * cosu;
+            p1 = sinl * sinu;
+            p2 = sinl * cosu;
+            p3 = cosl * sinu;
+
+            u[1 + *ldu] = p0 - p1;
+            u[2 + *ldu] = p2 + p3;
+
+            u[1 + 2 * *ldu] = -(p3 + p2);
+            u[2 + 2 * *ldu] = p0 - p1;
         }
     }
     else

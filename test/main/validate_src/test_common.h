@@ -311,5 +311,5 @@ void add_negative_values(integer datatype, void *vect, integer n);
 void add_negative_values_ilo_ihi(integer datatype, void *vect, integer ilo, integer ihi);
 /* Convert the given matrix from column major layout to row major layout and vice versa */
 void convert_matrix_layout(integer matrix_layout, integer datatype, integer m, integer n, void *a,
-                           integer lda, integer *lda_t);
+                           integer lda, void *a_t, integer lda_t);
 #endif // TEST_COMMON_H

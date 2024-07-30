@@ -27,10 +27,10 @@ double prepare_lapacke_hgeqz_run(integer datatype, int matrix_layout, char *job,
                                  integer ldh, void *t, integer ldt, void *alpha, void *alphar,
                                  void *alphai, void *beta, void *q, integer ldq, void *z,
                                  integer ldz, integer *info);
-integer invoke_lapacke_hgeqz(integer datatype, int matrix_layout, char job, char compq,
-                             char compz, integer n, integer ilo, integer ihi, void *h, integer ldh,
-                             void *t, integer ldt, void *alpha, void *alphar, void *alphai,
-                             void *beta, void *q, integer ldq, void *z, integer ldz);
+integer invoke_lapacke_hgeqz(integer datatype, int matrix_layout, char job, char compq, char compz,
+                             integer n, integer ilo, integer ihi, void *h, integer ldh, void *t,
+                             integer ldt, void *alpha, void *alphar, void *alphai, void *beta,
+                             void *q, integer ldq, void *z, integer ldz);
 
 void fla_test_hgeqz(integer argc, char **argv, test_params_t *params)
 {
@@ -73,17 +73,17 @@ void fla_test_hgeqz(integer argc, char **argv, test_params_t *params)
             row_major_hgeqz_ldt = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
             row_major_hgeqz_ldq = strtoimax(argv[11], &endptr, CLI_DECIMAL_BASE);
             row_major_hgeqz_ldz = strtoimax(argv[12], &endptr, CLI_DECIMAL_BASE);
-            params->lin_solver_paramslist[0].lda = N;
-            params->lin_solver_paramslist[0].ldb = N;
-            params->lin_solver_paramslist[0].ldq = N;
-            params->lin_solver_paramslist[0].ldz = N;
+            params->eig_sym_paramslist[0].lda = N;
+            params->eig_sym_paramslist[0].ldb = N;
+            params->eig_sym_paramslist[0].ldq = N;
+            params->eig_sym_paramslist[0].ldz = N;
         }
         else
         {
-            params->lin_solver_paramslist[0].lda = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
-            params->lin_solver_paramslist[0].ldb = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
-            params->lin_solver_paramslist[0].ldq = strtoimax(argv[11], &endptr, CLI_DECIMAL_BASE);
-            params->lin_solver_paramslist[0].ldz = strtoimax(argv[12], &endptr, CLI_DECIMAL_BASE);
+            params->eig_sym_paramslist[0].lda = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
+            params->eig_sym_paramslist[0].ldb = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
+            params->eig_sym_paramslist[0].ldq = strtoimax(argv[11], &endptr, CLI_DECIMAL_BASE);
+            params->eig_sym_paramslist[0].ldz = strtoimax(argv[12], &endptr, CLI_DECIMAL_BASE);
         }
         g_lwork = strtoimax(argv[13], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[14], &endptr, CLI_DECIMAL_BASE);
@@ -146,7 +146,7 @@ void fla_test_hgeqz_experiment(test_params_t *params, integer datatype, integer 
     integer n, ldz, ldh, ldt, ldq;
     integer ilo, ihi, info = 0, vinfo = 0;
     void *H = NULL, *Z = NULL, *Q = NULL, *T = NULL, *H_test = NULL, *T_test = NULL, *A = NULL;
-    void *B = NULL, *Z_A = NULL, *Q_test = NULL, *Z_test = NULL, *Q_temp = NULL;
+    void *B = NULL, *Z_A = NULL, *Q_test = NULL, *Z_test = NULL, *Q_temp = NULL, *tmp = NULL;
     void *alpha = NULL, *alphar = NULL, *alphai = NULL, *beta = NULL, *scale = NULL, *Q_A = NULL;
     char compz, compq, job;
 
@@ -250,13 +250,24 @@ void fla_test_hgeqz_experiment(test_params_t *params, integer datatype, integer 
         {
             get_orthogonal_matrix_from_QR(datatype, n, B, ldt, Q, ldq, &info);
         }
+
+        /* Create the orthogonal Z matrix */
+        if(compz == 'V')
+        {
+            create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &tmp, n);
+            rand_matrix(datatype, tmp, n, n, n);
+            get_orthogonal_matrix_from_QR(datatype, n, tmp, n, Z, ldz, &info);
+            free_matrix(tmp);
+        }
+
         info = 0;
         /* Make copy of matrix A and B. This is required to validate the API functionality */
         copy_matrix(datatype, "full", n, n, A, ldh, H, ldh);
         copy_matrix(datatype, "full", n, n, B, ldt, T, ldt);
         if(compq == 'I')
             set_identity_matrix(datatype, n, n, Q, ldq);
-        set_identity_matrix(datatype, n, n, Z, ldz);
+        if(compz == 'I')
+            set_identity_matrix(datatype, n, n, Z, ldz);
         /* Make copy of matrix Q and Z. This is required to validate the API functionality */
         copy_matrix(datatype, "full", n, n, Q, ldq, Q_A, ldq);
         copy_matrix(datatype, "full", n, n, Z, ldz, Z_A, ldz);
@@ -279,7 +290,7 @@ void fla_test_hgeqz_experiment(test_params_t *params, integer datatype, integer 
     copy_matrix(datatype, "full", n, n, Q, ldq, Q_test, ldq);
     copy_matrix(datatype, "full", n, n, Z, ldz, Z_test, ldz);
 
-    prepare_hgeqz_run(&job, &compq, &compq, n, &ilo, &ihi, H_test, ldh, T_test, ldt, alpha, alphar,
+    prepare_hgeqz_run(&job, &compq, &compz, n, &ilo, &ihi, H_test, ldh, T_test, ldt, alpha, alphar,
                       alphai, beta, Q_test, ldq, Z_test, ldz, datatype, n_repeats, time_min, &info,
                       test_lapacke_interface, layout);
 
@@ -434,11 +445,11 @@ void prepare_hgeqz_run(char *job, char *compq, char *compz, integer n, integer *
     free_vector(rwork);
 }
 
-double prepare_lapacke_hgeqz_run(integer datatype, int layout, char *job, char *compq,
-                                 char *compz, integer n, integer *ilo, integer *ihi, void *H,
-                                 integer ldh, void *T, integer ldt, void *alpha, void *alphar,
-                                 void *alphai, void *beta, void *Q, integer ldq, void *Z,
-                                 integer ldz, integer *info)
+double prepare_lapacke_hgeqz_run(integer datatype, int layout, char *job, char *compq, char *compz,
+                                 integer n, integer *ilo, integer *ihi, void *H, integer ldh,
+                                 void *T, integer ldt, void *alpha, void *alphar, void *alphai,
+                                 void *beta, void *Q, integer ldq, void *Z, integer ldz,
+                                 integer *info)
 {
     double exe_time;
     integer ldh_t = ldh;

@@ -2153,10 +2153,12 @@ void get_hessenberg_matrix_from_EVs(integer datatype, integer n, void *A, intege
                                     integer ldz, integer *ilo, integer *ihi, integer *info,
                                     bool AInitialized, void *wr_in, void *wi_in)
 {
-    void *A_sub = NULL, *L = NULL, *wr_sub_in = NULL, *wi_sub_in = NULL;
+    void *A_sub = NULL, *L = NULL, *wr_sub_in = NULL, *wi_sub_in = NULL, *L_tmp = NULL;
 
-    /* Initialize A with random values */
-    rand_matrix(datatype, A, n, n, lda);
+    /* Initialize matrix A */
+    create_matrix(datatype, matrix_layout, n, n, &L_tmp, n);
+    generate_asym_matrix_from_EVs(datatype, n, A, lda, L_tmp, NULL, NULL);
+    free_matrix(L_tmp);
 
     /* Get diagonal elements of A into wr_in as initial eigen values */
     get_diagonal(datatype, A, n, n, lda, wr_in);

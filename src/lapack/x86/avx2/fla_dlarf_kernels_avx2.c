@@ -7,7 +7,7 @@
 #include "fla_lapack_avx2_kernels.h"
 
 #if FLA_ENABLE_AMD_OPT
-void fla_dlarf_left_apply_incv1_avx2(integer m, integer n, doublereal *r, integer ldr,
+void fla_dlarf_left_apply_incv1_avx2(integer m, integer n, doublereal *a_buff, integer ldr,
                                      doublereal *v, doublereal ntau, doublereal *work)
 {
     integer acols, arows;
@@ -17,12 +17,11 @@ void fla_dlarf_left_apply_incv1_avx2(integer m, integer n, doublereal *r, intege
     __m256d vd4_dtmp, vd4_inp, vd4_vj;
     __m128d vd2_ltmp, vd2_htmp;
 
-    /* Part 2: Apply the Householder rotation              */
+    /* Apply the Householder rotation                      */
     /* on the rest of the matrix                           */
     /*    A = A - tau * v * v**T * A                       */
     /*      = A - v * tau * (A**T * v)**T                  */
     /* DGEMV and DGER operations are combined              */
-
     arows = m;
     acols = n;
     vd2_ntau = _mm_set1_pd(ntau);
@@ -37,7 +36,7 @@ void fla_dlarf_left_apply_incv1_avx2(integer m, integer n, doublereal *r, intege
         for(k = 1; k <= (arows - 3); k += 4)
         {
             /* load column elements of A and v */
-            vd4_inp = _mm256_loadu_pd((const doublereal *)&r[k + j * ldr]);
+            vd4_inp = _mm256_loadu_pd((const doublereal *)&a_buff[k + j * ldr]);
 
             vd4_vj = _mm256_loadu_pd((const doublereal *)&v[k]);
 
@@ -47,7 +46,7 @@ void fla_dlarf_left_apply_incv1_avx2(integer m, integer n, doublereal *r, intege
         if(k < arows)
         {
             /* load column elements of A and v */
-            vd2_inp = _mm_loadu_pd((const doublereal *)&r[k + j * ldr]);
+            vd2_inp = _mm_loadu_pd((const doublereal *)&a_buff[k + j * ldr]);
             vd2_vj1 = _mm_loadu_pd((const doublereal *)&v[k]);
 
             /* take dot product */
@@ -57,7 +56,7 @@ void fla_dlarf_left_apply_incv1_avx2(integer m, integer n, doublereal *r, intege
         if(k == arows)
         {
             /* load single remaining element from c_A and v */
-            vd2_inp = _mm_load_sd((const doublereal *)&r[k + j * ldr]);
+            vd2_inp = _mm_load_sd((const doublereal *)&a_buff[k + j * ldr]);
             vd2_vj1 = _mm_load_sd((const doublereal *)&v[k]);
 
             /* take dot product */
@@ -71,7 +70,7 @@ void fla_dlarf_left_apply_incv1_avx2(integer m, integer n, doublereal *r, intege
         vd2_dtmp = _mm_add_pd(vd2_dtmp, vd2_htmp);
         vd2_dtmp = _mm_hadd_pd(vd2_dtmp, vd2_dtmp);
         _mm_storel_pd((doublereal *)&work[j], vd2_dtmp);
-
+        
         /* Compute tmp = - tau * tmp */
         vd2_dtmp = _mm_mul_pd(vd2_dtmp, vd2_ntau);
         vd4_dtmp = _mm256_castpd128_pd256(vd2_dtmp);
@@ -86,34 +85,35 @@ void fla_dlarf_left_apply_incv1_avx2(integer m, integer n, doublereal *r, intege
         for(k = 1; k <= (arows - 3); k += 4)
         {
             /* load column elements of c_A and v */
-            vd4_inp = _mm256_loadu_pd((const doublereal *)&r[k + j * ldr]);
+            vd4_inp = _mm256_loadu_pd((const doublereal *)&a_buff[k + j * ldr]);
             vd4_vj = _mm256_loadu_pd((const doublereal *)&v[k]);
 
             /* mul by dtmp, add and store */
             vd4_inp = _mm256_fmadd_pd(vd4_dtmp, vd4_vj, vd4_inp);
-            _mm256_storeu_pd((doublereal *)&r[k + j * ldr], vd4_inp);
+            _mm256_storeu_pd((doublereal *)&a_buff[k + j * ldr], vd4_inp);
         }
         if(k < arows)
         {
             /* load column elements of c_A and v */
-            vd2_inp = _mm_loadu_pd((const doublereal *)&r[k + j * ldr]);
+            vd2_inp = _mm_loadu_pd((const doublereal *)&a_buff[k + j * ldr]);
             vd2_vj1 = _mm_loadu_pd((const doublereal *)&v[k]);
 
             /* mul by dtmp, add and store */
             vd2_inp = _mm_fmadd_pd(vd2_dtmp, vd2_vj1, vd2_inp);
-            _mm_storeu_pd((doublereal *)&r[k + j * ldr], vd2_inp);
+            _mm_storeu_pd((doublereal *)&a_buff[k + j * ldr], vd2_inp);
             k += 2;
         }
         if(k == arows)
         {
             /* load single remaining element from c_A and v */
-            vd2_inp = _mm_load_sd((const doublereal *)&r[k + j * ldr]);
+            vd2_inp = _mm_load_sd((const doublereal *)&a_buff[k + j * ldr]);
             vd2_vj1 = _mm_load_sd((const doublereal *)&v[k]);
 
             /* mul by dtmp, add and store */
             vd2_inp = _mm_fmadd_pd(vd2_dtmp, vd2_vj1, vd2_inp);
-            _mm_storel_pd((doublereal *)&r[k + j * ldr], vd2_inp);
+            _mm_storel_pd((doublereal *)&a_buff[k + j * ldr], vd2_inp);
         }
     }
 }
+
 #endif

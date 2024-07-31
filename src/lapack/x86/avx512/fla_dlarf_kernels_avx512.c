@@ -1,5 +1,5 @@
 /******************************************************************************
- * * Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
+ * * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
  *   Portions of this file consist of AI-generated content
  * *******************************************************************************/
 
@@ -7,17 +7,18 @@
 #include "fla_lapack_avx2_kernels.h"
 
 #if FLA_ENABLE_AMD_OPT
-void fla_dlarf_left_apply_incv1_avx512(aocl_int64_t m, aocl_int64_t n, doublereal *a_buff, aocl_int64_t ldr,
-                                       doublereal *v, doublereal ntau, doublereal *work)
+void fla_dlarf_left_apply_incv1_avx512(integer m, integer n, doublereal *a_buff, integer ldr,
+                                        doublereal *v, doublereal ntau, doublereal *work)
 {
-    aocl_int64_t acols, arows;
-    aocl_int64_t k, j;
-    __m128d vd2_inp, vd2_ntau, vd2_ltmp, vd2_htmp;
-    __m128d vd2_dtmp, vd2_vj1, vd2_dtmp2;
-    __m256d vd4_inp, vd4_dtmp, vd4_vj, vd4_dtmp2;
+    integer acols, arows;
+    integer k, j;
+    __m128d vd2_inp;
+    __m128d vd2_ntau, vd2_dtmp, vd2_vj1;
+    __m128d vd2_ltmp, vd2_htmp;
+    __m256d vd4_inp, vd4_dtmp, vd4_vj;
+    __m512d vd8_dtmp, vd8_inp, vd8_vj;
     __m256d vd4_ltmp, vd4_htmp;
-    __m512d vd8_dtmp, vd8_inp, vd8_vj, vd8_dtmp2;
-
+ 
     /* Apply the Householder rotation                      */
     /* on the rest of the matrix                           */
     /*    A = A - tau * v * v**T * A                       */
@@ -44,8 +45,7 @@ void fla_dlarf_left_apply_incv1_avx512(aocl_int64_t m, aocl_int64_t n, doublerea
             vd8_vj = _mm512_loadu_pd((const doublereal *)&v[k]);
 
             /* take dot product */
-            vd8_dtmp2 = _mm512_mul_pd(vd8_inp, vd8_vj);
-            vd8_dtmp = _mm512_add_pd(vd8_dtmp, vd8_dtmp2);
+            vd8_dtmp = _mm512_fmadd_pd(vd8_inp, vd8_vj, vd8_dtmp);
         }
         if(k <= (arows - 3))
         {
@@ -55,8 +55,7 @@ void fla_dlarf_left_apply_incv1_avx512(aocl_int64_t m, aocl_int64_t n, doublerea
             vd4_vj = _mm256_loadu_pd((const doublereal *)&v[k]);
 
             /* take dot product */
-            vd4_dtmp2 = _mm256_mul_pd(vd4_inp, vd4_vj);
-            vd4_dtmp = _mm256_add_pd(vd4_dtmp, vd4_dtmp2);
+            vd4_dtmp = _mm256_fmadd_pd(vd4_inp, vd4_vj, vd4_dtmp);
 
             k += 4;
         }
@@ -67,8 +66,7 @@ void fla_dlarf_left_apply_incv1_avx512(aocl_int64_t m, aocl_int64_t n, doublerea
             vd2_vj1 = _mm_loadu_pd((const doublereal *)&v[k]);
 
             /* take dot product */
-            vd2_dtmp2 = _mm_mul_pd(vd2_inp, vd2_vj1);
-            vd2_dtmp = _mm_add_pd(vd2_dtmp, vd2_dtmp2);
+            vd2_dtmp = _mm_fmadd_pd(vd2_inp, vd2_vj1, vd2_dtmp);
             k += 2;
         }
         if(k == arows)
@@ -78,8 +76,7 @@ void fla_dlarf_left_apply_incv1_avx512(aocl_int64_t m, aocl_int64_t n, doublerea
             vd2_vj1 = _mm_load_sd((const doublereal *)&v[k]);
 
             /* take dot product */
-            vd2_dtmp2 = _mm_mul_pd(vd2_inp, vd2_vj1);
-            vd2_dtmp = _mm_add_pd(vd2_dtmp, vd2_dtmp2);
+            vd2_dtmp = _mm_fmadd_pd(vd2_inp, vd2_vj1, vd2_dtmp);
         }
 
         /* Reduce add the values in vd8_dtmp, vd4_dtmp and vd2_dtmp*/
@@ -114,7 +111,7 @@ void fla_dlarf_left_apply_incv1_avx512(aocl_int64_t m, aocl_int64_t n, doublerea
         vd4_dtmp = _mm256_castpd128_pd256(vd2_dtmp);
         vd4_dtmp = _mm256_insertf128_pd(vd4_dtmp, vd2_dtmp, 0x1);
 
-        vd8_dtmp = _mm512_castpd256_pd512(vd4_dtmp);
+        vd8_dtmp = _mm512_castpd256_pd512(vd4_dtmp); 
         vd8_dtmp = _mm512_insertf64x4(vd8_dtmp, vd4_dtmp, 0x1);
 
         /* Compute c_A + tmp * v */
@@ -125,8 +122,7 @@ void fla_dlarf_left_apply_incv1_avx512(aocl_int64_t m, aocl_int64_t n, doublerea
             vd8_vj = _mm512_loadu_pd((const doublereal *)&v[k]);
 
             /* mul by dtmp, add and store */
-            vd8_dtmp2 = _mm512_mul_pd(vd8_dtmp, vd8_vj);
-            vd8_inp = _mm512_add_pd(vd8_dtmp2, vd8_inp);
+            vd8_inp = _mm512_fmadd_pd(vd8_dtmp, vd8_vj, vd8_inp);
             _mm512_storeu_pd((doublereal *)&a_buff[k + j * ldr], vd8_inp);
         }
         if(k <= (arows - 3))
@@ -136,8 +132,7 @@ void fla_dlarf_left_apply_incv1_avx512(aocl_int64_t m, aocl_int64_t n, doublerea
             vd4_vj = _mm256_loadu_pd((const doublereal *)&v[k]);
 
             /* mul by dtmp, add and store */
-            vd4_dtmp2 = _mm256_mul_pd(vd4_dtmp, vd4_vj);
-            vd4_inp = _mm256_add_pd(vd4_dtmp2, vd4_inp);
+            vd4_inp = _mm256_fmadd_pd(vd4_dtmp, vd4_vj, vd4_inp);
             _mm256_storeu_pd((doublereal *)&a_buff[k + j * ldr], vd4_inp);
             k += 4;
         }
@@ -148,8 +143,7 @@ void fla_dlarf_left_apply_incv1_avx512(aocl_int64_t m, aocl_int64_t n, doublerea
             vd2_vj1 = _mm_loadu_pd((const doublereal *)&v[k]);
 
             /* mul by dtmp, add and store */
-            vd2_dtmp2 = _mm_mul_pd(vd2_dtmp,vd2_vj1);
-            vd2_inp = _mm_add_pd(vd2_dtmp2, vd2_inp);
+            vd2_inp = _mm_fmadd_pd(vd2_dtmp, vd2_vj1, vd2_inp);
             _mm_storeu_pd((doublereal *)&a_buff[k + j * ldr], vd2_inp);
             k += 2;
         }
@@ -160,8 +154,7 @@ void fla_dlarf_left_apply_incv1_avx512(aocl_int64_t m, aocl_int64_t n, doublerea
             vd2_vj1 = _mm_load_sd((const doublereal *)&v[k]);
 
             /* mul by dtmp, add and store */
-            vd2_dtmp2 = _mm_mul_pd(vd2_dtmp, vd2_vj1);
-            vd2_inp = _mm_add_pd(vd2_dtmp2, vd2_inp);
+            vd2_inp = _mm_fmadd_pd(vd2_dtmp, vd2_vj1, vd2_inp);
             _mm_storel_pd((doublereal *)&a_buff[k + j * ldr], vd2_inp);
         }
     }

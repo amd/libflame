@@ -37,11 +37,11 @@ void fla_dtranspose(integer *m, integer *n, doublereal *a, integer *lda, doubler
 /* 3x3 Householder Rotation */
 int fla_dhrot3(integer *n, doublereal *a, integer *lda, doublereal *v, doublereal *tau)
 {
-    if(FLA_IS_ARCH_ID(FLA_ARCH_AVX512))
+    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
     {
         fla_dhrot3_avx512(n, a, lda, v, tau);
     }
-    else if(FLA_IS_ARCH_ID(FLA_ARCH_AVX2))
+    else if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
         fla_dhrot3_avx2(n, a, lda, v, tau);
     }
@@ -51,11 +51,11 @@ int fla_dhrot3(integer *n, doublereal *a, integer *lda, doublereal *v, doublerea
 int fla_drot(integer *n, doublereal *dx, integer *incx, doublereal *dy, integer *incy,
              doublereal *c__, doublereal *s)
 {
-    if(FLA_IS_ARCH_ID(FLA_ARCH_AVX512))
+    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
     {
         fla_drot_avx512(n, dx, incx, dy, incy, c__, s);
     }
-    else if(FLA_IS_ARCH_ID(FLA_ARCH_AVX2))
+    else if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
         fla_drot_avx2(n, dx, incx, dy, incy, c__, s);
     }
@@ -64,11 +64,11 @@ int fla_drot(integer *n, doublereal *dx, integer *incx, doublereal *dy, integer 
 void fla_zrot(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy,
               doublereal *c__, doublecomplex *s)
 {
-    if(FLA_IS_ARCH_ID(FLA_ARCH_AVX512))
+    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
     {
         fla_zrot_avx512(n, cx, incx, cy, incy, c__, s);
     }
-    else if(FLA_IS_ARCH_ID(FLA_ARCH_AVX2))
+    else if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
         fla_zrot_avx2(n, cx, incx, cy, incy, c__, s);
     }
@@ -110,7 +110,7 @@ void fla_dscal(integer *n, doublereal *da, doublereal *dx, integer *incx)
 
     if(*incx == 1 && *da != 0 && *n >= 1 && *n <= FLA_DSCAL_INLINE_SMALL && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
-        if(FLA_IS_ARCH_ID(FLA_ARCH_AVX512))
+        if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
         {
            fla_dscal_ix1_avx512(n, da, dx, incx);
         }
@@ -169,7 +169,7 @@ void fla_sscal(integer *n, real *alpha, real *x, integer *incx)
     /* Take AVX path only for increment equal to 1 */
     if(*incx == 1 &&  *alpha != 0 && *n >= 1 && *n <= FLA_SSCAL_INLINE_SMALL && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
-        if(FLA_IS_ARCH_ID(FLA_ARCH_AVX512))
+        if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
         {
             fla_sscal_ix1_avx512(n, alpha, x);
         }
@@ -201,11 +201,11 @@ void fla_sger(integer *m, integer *n, real *alpha, real *x, integer *incx, real 
 int fla_dgetrf_small_simd(integer *m, integer *n, doublereal *a, integer *lda, integer *ipiv,
                           integer *info)
 {
-    if(FLA_IS_ARCH_ID(FLA_ARCH_AVX512))
+    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
     {
         fla_dgetrf_small_avx512(m, n, a, lda, ipiv, info);
     }
-    else if(FLA_IS_ARCH_ID(FLA_ARCH_AVX2))
+    else if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
         fla_dgetrf_small_avx2(m, n, a, lda, ipiv, info);
     }
@@ -218,11 +218,11 @@ int fla_dgetrf_small_simd(integer *m, integer *n, doublereal *a, integer *lda, i
 int fla_zgetrf_small_simd(integer *m, integer *n, dcomplex *a, integer *lda, integer *ipiv,
                           integer *info)
 {
-    if(FLA_IS_ARCH_ID(FLA_ARCH_AVX512))
+    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
     {
         fla_zgetrf_small_avx512(m, n, a, lda, ipiv, info);
     }
-    else if(FLA_IS_ARCH_ID(FLA_ARCH_AVX2))
+    else if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
         fla_zgetrf_small_avx2(m, n, a, lda, ipiv, info);
     }
@@ -317,11 +317,11 @@ doublereal fla_get_max_abs_element_vector(integer m, doublereal *a, integer a_di
     integer i__;
 
     // Path when AVX512 ISA is supported
-    if(FLA_IS_ARCH_ID(FLA_ARCH_AVX512))
+    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
     {
         value = fla_get_max_abs_element_vector_avx512(m, a, a_dim);
     }
-    else if(FLA_IS_ARCH_ID(FLA_ARCH_AVX2))
+    else if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
         // Path when AVX2 ISA is supported
         value = fla_get_max_abs_element_vector_avx2(m, a, a_dim);
@@ -341,4 +341,23 @@ doublereal fla_get_max_abs_element_vector(integer m, doublereal *a, integer a_di
 
     return value;
 }
+
+/* DLARF for small sizes 
+ * To be used only when vectorized code via avx2/avx512 is enabled
+ * */
+void fla_dlarf_small_incv1_simd(integer m, integer n, doublereal *a_buff, integer ldr,
+                                        doublereal *v, doublereal ntau, doublereal *work)
+{
+    /* Select AVX512 kernel based on preset threshold and ISA support  */
+    if(m > FLA_DGEMV_DGER_SIMD_AVX512_THRESH_M && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
+    {
+        fla_dlarf_left_apply_incv1_avx512(m, n, a_buff, ldr, v, ntau, work);
+    }
+    else if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
+    {
+        fla_dlarf_left_apply_incv1_avx2(m, n, a_buff, ldr, v, ntau, work);
+    }
+    return;
+}
+
 #endif

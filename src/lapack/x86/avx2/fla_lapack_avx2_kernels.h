@@ -54,7 +54,7 @@ void fla_dgesvd_xs_small10T_avx2(integer *m, integer *n, doublereal *a, integer 
                                  doublereal *u, integer *ldu, doublereal *vt, integer *ldvt,
                                  doublereal *work, integer *info);
 doublereal fla_get_max_abs_element_vector_avx2(integer m, doublereal *a, integer a_dim);
-void fla_dlarf_left_apply_incv1_avx2(integer m, integer n, doublereal *r, integer ldr,
+void fla_dlarf_left_apply_incv1_avx2(integer m, integer n, doublereal *a_buff, integer ldr,
                                      doublereal *v, doublereal tau, doublereal *work);
 #endif /* FLA_ENABLE_AMD_OPT */
 #endif /* FLA_LAPACK_AVX2_KERNELS_DEFS_H */

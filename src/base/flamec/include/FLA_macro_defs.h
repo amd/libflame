@@ -1,4 +1,4 @@
-/*
+			/*
 
     Copyright (C) 2014, The University of Texas at Austin
 
@@ -269,6 +269,7 @@
 // ORGQR , threshold numbers to chose paths for performance
 #define FLA_DGEMV_DGER_SIMD_SMALL_THRESH   (100)
 #define FLA_DGEMV_DGER_SIMD_SMALL_THRESH_M (8)
+#define FLA_DGEMV_DGER_SIMD_AVX512_THRESH_M (25)
 #define FLA_SSCAL_INLINE_SMALL          (512)
 #define FLA_DSCAL_INLINE_SMALL          (512)
 #define FLA_ZGERC_INLINE_SMALL_THRESH0  (128)

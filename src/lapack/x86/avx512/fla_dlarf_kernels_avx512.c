@@ -7,21 +7,24 @@
 #include "fla_lapack_avx2_kernels.h"
 
 #if FLA_ENABLE_AMD_OPT
-void fla_dlarf_left_apply_incv1_avx2(integer m, integer n, doublereal *a_buff, integer ldr,
-                                     doublereal *v, doublereal ntau, doublereal *work)
+void fla_dlarf_left_apply_incv1_avx512(integer m, integer n, doublereal *a_buff, integer ldr,
+                                        doublereal *v, doublereal ntau, doublereal *work)
 {
     integer acols, arows;
     integer k, j;
     __m128d vd2_inp;
     __m128d vd2_ntau, vd2_dtmp, vd2_vj1;
-    __m256d vd4_dtmp, vd4_inp, vd4_vj;
     __m128d vd2_ltmp, vd2_htmp;
-
+    __m256d vd4_inp, vd4_dtmp, vd4_vj;
+    __m512d vd8_dtmp, vd8_inp, vd8_vj;
+    __m256d vd4_ltmp, vd4_htmp;
+ 
     /* Apply the Householder rotation                      */
     /* on the rest of the matrix                           */
     /*    A = A - tau * v * v**T * A                       */
     /*      = A - v * tau * (A**T * v)**T                  */
     /* DGEMV and DGER operations are combined              */
+
     arows = m;
     acols = n;
     vd2_ntau = _mm_set1_pd(ntau);
@@ -31,9 +34,20 @@ void fla_dlarf_left_apply_incv1_avx2(integer m, integer n, doublereal *a_buff, i
     {
         vd2_dtmp = _mm_setzero_pd();
         vd4_dtmp = _mm256_setzero_pd();
+        vd8_dtmp = _mm512_setzero_pd();
 
         /* Compute tmp = c_A**T . v */
-        for(k = 1; k <= (arows - 3); k += 4)
+        for(k = 1; k <= (arows - 7); k += 8)
+        {
+            /* load column elements of A and v */
+            vd8_inp = _mm512_loadu_pd((const doublereal *)&a_buff[k + j * ldr]);
+
+            vd8_vj = _mm512_loadu_pd((const doublereal *)&v[k]);
+
+            /* take dot product */
+            vd8_dtmp = _mm512_fmadd_pd(vd8_inp, vd8_vj, vd8_dtmp);
+        }
+        if(k <= (arows - 3))
         {
             /* load column elements of A and v */
             vd4_inp = _mm256_loadu_pd((const doublereal *)&a_buff[k + j * ldr]);
@@ -42,6 +56,8 @@ void fla_dlarf_left_apply_incv1_avx2(integer m, integer n, doublereal *a_buff, i
 
             /* take dot product */
             vd4_dtmp = _mm256_fmadd_pd(vd4_inp, vd4_vj, vd4_dtmp);
+
+            k += 4;
         }
         if(k < arows)
         {
@@ -62,27 +78,54 @@ void fla_dlarf_left_apply_incv1_avx2(integer m, integer n, doublereal *a_buff, i
             /* take dot product */
             vd2_dtmp = _mm_fmadd_pd(vd2_inp, vd2_vj1, vd2_dtmp);
         }
+
+        /* Reduce add the values in vd8_dtmp, vd4_dtmp and vd2_dtmp*/
+
+        /* Etract Upper and lower 256 bits of vd8_dtmp*/
+        vd4_ltmp = _mm512_castpd512_pd256(vd8_dtmp);
+        vd4_htmp = _mm512_extractf64x4_pd(vd8_dtmp, 0x1);
+
+        /* Add the lower and upper 256 bits with vd4_dtmp */
+        vd4_dtmp = _mm256_add_pd(vd4_dtmp, vd4_ltmp);
+        vd4_dtmp = _mm256_add_pd(vd4_dtmp, vd4_htmp);
+
         /* Horizontal add of dtmp */
+        vd4_dtmp = _mm256_hadd_pd(vd4_dtmp, vd4_dtmp);
+
+        /* Etract Upper and lower 128 bits of vd4_dtmp*/
         vd2_ltmp = _mm256_castpd256_pd128(vd4_dtmp);
         vd2_htmp = _mm256_extractf128_pd(vd4_dtmp, 0x1);
+        /* Add the lower and upper 128 bits and store in vd2_ltmp */
+        vd2_ltmp = _mm_add_pd(vd2_htmp, vd2_ltmp);
+
+        /* Horizontal add of vd2_ltmp and vd2_dtmp */
+        vd2_dtmp = _mm_hadd_pd(vd2_dtmp, vd2_dtmp);
 
         vd2_dtmp = _mm_add_pd(vd2_dtmp, vd2_ltmp);
-        vd2_dtmp = _mm_add_pd(vd2_dtmp, vd2_htmp);
-        vd2_dtmp = _mm_hadd_pd(vd2_dtmp, vd2_dtmp);
+
+        /* Store the result in work */
         _mm_storel_pd((doublereal *)&work[j], vd2_dtmp);
-        
+
         /* Compute tmp = - tau * tmp */
         vd2_dtmp = _mm_mul_pd(vd2_dtmp, vd2_ntau);
         vd4_dtmp = _mm256_castpd128_pd256(vd2_dtmp);
         vd4_dtmp = _mm256_insertf128_pd(vd4_dtmp, vd2_dtmp, 0x1);
 
-        /* alternate for above 2 instructions which do not  */
-        /* compile for older gcc versions (7 and below).    */
-        /* Both will be same in terms of latency though     */
-        /* vd4_dtmp = _mm256_set_m128d(vd2_dtmp, vd2_dtmp); */
+        vd8_dtmp = _mm512_castpd256_pd512(vd4_dtmp); 
+        vd8_dtmp = _mm512_insertf64x4(vd8_dtmp, vd4_dtmp, 0x1);
 
         /* Compute c_A + tmp * v */
-        for(k = 1; k <= (arows - 3); k += 4)
+        for(k = 1; k <= (arows - 7); k += 8)
+        {
+            /* load column elements of c_A and v */
+            vd8_inp = _mm512_loadu_pd((const doublereal *)&a_buff[k + j * ldr]);
+            vd8_vj = _mm512_loadu_pd((const doublereal *)&v[k]);
+
+            /* mul by dtmp, add and store */
+            vd8_inp = _mm512_fmadd_pd(vd8_dtmp, vd8_vj, vd8_inp);
+            _mm512_storeu_pd((doublereal *)&a_buff[k + j * ldr], vd8_inp);
+        }
+        if(k <= (arows - 3))
         {
             /* load column elements of c_A and v */
             vd4_inp = _mm256_loadu_pd((const doublereal *)&a_buff[k + j * ldr]);
@@ -91,6 +134,7 @@ void fla_dlarf_left_apply_incv1_avx2(integer m, integer n, doublereal *a_buff, i
             /* mul by dtmp, add and store */
             vd4_inp = _mm256_fmadd_pd(vd4_dtmp, vd4_vj, vd4_inp);
             _mm256_storeu_pd((doublereal *)&a_buff[k + j * ldr], vd4_inp);
+            k += 4;
         }
         if(k < arows)
         {
@@ -115,5 +159,4 @@ void fla_dlarf_left_apply_incv1_avx2(integer m, integer n, doublereal *a_buff, i
         }
     }
 }
-
 #endif

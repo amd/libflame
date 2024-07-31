@@ -141,7 +141,7 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
     integer i__;
     logical applyleft;
 #ifdef FLA_ENABLE_AMD_OPT
-    extern void fla_dlarf_left_apply_incv1_avx2( integer lastv, integer lastc, double *c__, integer ldc, double *v, double tau, double *work);
+    extern void fla_dlarf_small_incv1_simd( integer lastv, integer lastc, double *c__, integer ldc, double *v, double tau, double *work);
 #endif
     extern /* Subroutine */
         void
@@ -246,7 +246,7 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
             if(min_lastc_lastv && *incv == c__1 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
             {
                 /* Call optimized routine */
-                fla_dlarf_left_apply_incv1_avx2( lastv, lastc, c__, *ldc, v, d__1, work);
+                fla_dlarf_small_incv1_simd( lastv, lastc, c__, *ldc, v, d__1, work);
             }
             else
             {

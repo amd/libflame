@@ -23,5 +23,7 @@ int fla_dscal_ix1_avx512(integer *n, doublereal *da, doublereal *dx, integer *in
 int fla_sscal_ix1_avx512(integer *n, real *alpha, real *x);
 int fla_zscal_ix1_avx512(integer *n, doublecomplex *alpha, doublecomplex *x);
 doublereal fla_get_max_abs_element_vector_avx512(integer m, doublereal *a, integer a_dim);
+void fla_dlarf_left_apply_incv1_avx512(integer m, integer n, doublereal *a_buff, integer ldr,
+                                        doublereal *v, doublereal ntau, doublereal *work);
 
 #endif

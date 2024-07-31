@@ -108,13 +108,13 @@ void fla_test_larf_experiment(test_params_t *params, integer datatype, integer p
 {
     integer m, n;
     double time_min = 1e9;
-    void *tau;
-    int v_length;
-    void *work;
-    void *v;
-    void *v_tmp;
-    void *c__;
-    void *c__out;
+    void *tau = NULL;
+    integer v_length;
+    void *work = NULL;
+    void *v = NULL;
+    void *v_tmp = NULL;
+    void *c__ = NULL;
+    void *c__out = NULL;
 
     char side = params->aux_paramslist[pci].side;
     integer incv = params->aux_paramslist[pci].incv;
@@ -123,7 +123,7 @@ void fla_test_larf_experiment(test_params_t *params, integer datatype, integer p
     m = p_cur;
     n = q_cur;
 
-    integer incv_abs = abs(incv);
+    integer incv_abs = fla_i_abs(&incv);
     integer v_num_elements;
     integer work_num_elements;
 

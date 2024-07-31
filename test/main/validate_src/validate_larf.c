@@ -25,14 +25,14 @@ void validate_larf(integer datatype, char side, integer m, integer n, void *v, i
     3. Compute residual using c__tmp and out_validate
     */
 
-    void *v_tmp;
-    void *H;
-    void *c__out_tmp;
-    void *out_validate;
-    void *work;
-    void *c__tmp;
+    void *v_tmp = NULL;
+    void *H = NULL;
+    void *c__out_tmp = NULL;
+    void *out_validate = NULL;
+    void *work = NULL;
+    void *c__tmp = NULL;
 
-    int m_H;
+    integer m_H;
     if(side == 'L')
     {
         m_H = m;

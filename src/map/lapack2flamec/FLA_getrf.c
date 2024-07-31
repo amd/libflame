@@ -71,17 +71,17 @@ extern void DTL_Trace(uint8 ui8LogLevel, uint8 ui8LogType, const int8 *pi8FileNa
     {                                                                               \
         /* Initialize global context data */                                        \
         aocl_fla_init();                                                            \
-        if(FLA_IS_ARCH_ID(FLA_ARCH_AVX512) && *m < FLA_DGETRF_SMALL_AVX512_THRESH0  \
+        if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2) && *m < FLA_DGETRF_SMALL_AVX2_THRESH0  \
+           && *n < FLA_DGETRF_SMALL_AVX2_THRESH0)                                   \
+        {                                                                           \
+          /* Calling vectorized code when avx2 supported architecture detected */ \
+            fla_dgetrf_small_avx2(m, n, buff_A, ldim_A, buff_p, info);              \
+        }                                                                           \
+        else if(FLA_IS_ARCH_ID(FLA_ARCH_AVX512) && *m < FLA_DGETRF_SMALL_AVX512_THRESH0 \
            && *n < FLA_DGETRF_SMALL_AVX512_THRESH0)                                 \
         {                                                                           \
           /* Calling vectorized code when avx512 supported architecture detected */ \
             fla_dgetrf_small_avx512(m, n, buff_A, ldim_A, buff_p, info);            \
-        }                                                                           \
-        else if(FLA_IS_ARCH_ID(FLA_ARCH_AVX2) && *m < FLA_DGETRF_SMALL_AVX2_THRESH0 \
-           && *n < FLA_DGETRF_SMALL_AVX2_THRESH0)                                   \
-        {                                                                           \
-            /* Calling vectorized code when avx2 supported architecture detected */ \
-            fla_dgetrf_small_avx2(m, n, buff_A, ldim_A, buff_p, info);              \
         }                                                                           \
         else                                                                        \
         {                                                                           \

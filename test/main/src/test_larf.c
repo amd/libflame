@@ -123,6 +123,9 @@ void fla_test_larf_experiment(test_params_t *params, integer datatype, integer p
     m = p_cur;
     n = q_cur;
 
+    if(m == 0 || n == 0)
+        return;
+
     integer incv_abs = fla_i_abs(&incv);
     integer v_num_elements;
     integer work_num_elements;
@@ -157,7 +160,13 @@ void fla_test_larf_experiment(test_params_t *params, integer datatype, integer p
     copy_vector(datatype, v_num_elements, v_tmp, incv_abs, v, incv);
 
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &c__, ldc);
-    rand_matrix(datatype, c__, m, n, ldc);
+
+    init_matrix(datatype, c__, m, n, ldc, g_ext_fptr, params->imatrix_char);
+
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
+    {
+        scale_matrix_underflow_overflow_larf(datatype, m, n, c__, ldc, params->imatrix_char);
+    }
 
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &c__out, ldc);
 
@@ -178,7 +187,17 @@ void fla_test_larf_experiment(test_params_t *params, integer datatype, integer p
         *perf *= 4.0;
     }
     /* Output Validation */
-    validate_larf(datatype, side, m, n, v, incv, c__, ldc, c__out, ldc, tau, residual);
+    if(!FLA_EXTREME_CASE_TEST)
+    {
+        validate_larf(datatype, side, m, n, v, incv, c__, ldc, c__out, ldc, tau, residual);
+    }
+    else
+    {
+        if(!check_extreme_value(datatype, m, n, c__out, ldc, params->imatrix_char))
+        {
+            *residual = DBL_MAX;
+        }
+    }
 
     /* Free up the buffers */
     free_matrix(c__);

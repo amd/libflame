@@ -1122,6 +1122,14 @@ set(EXTREMEVALUE_TEST_CASES "gesv sdcz 4 4 4 4 1 --imatrix=A"
             "heevx cz N A U 100 155 10 20 1 3 -1 128 -1 1 --imatrix=I"
             "heevx cz V V U 23 35 5 10 1 3 -1 40 -1 1 --imatrix=I"
             "heevx cz V I L 152 160 12 30 5 15 -1 160 -1 1 --imatrix=I"
+            "larf sdcz L 150 100 1 150 1 --imatrix=N"
+            "larf sdcz R 150 100 1 150 1 --imatrix=I"
+            "larf sdcz L 150 100 1 150 1 --imatrix=A"
+            "larf sdcz R 150 100 1 150 1 --imatrix=F"
+            "larf sdcz R 150 100 1 150 1 --imatrix=N"
+            "larf sdcz L 150 100 1 150 1 --imatrix=I"
+            "larf sdcz R 150 100 1 150 1 --imatrix=A"
+            "larf sdcz L 150 100 1 150 1 --imatrix=F"
             )
 
 set(TEST_NUM 1)

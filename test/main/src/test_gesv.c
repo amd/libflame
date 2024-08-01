@@ -116,7 +116,7 @@ void fla_test_gesv_experiment(test_params_t *params, integer datatype, integer p
                               double *t, double *residual)
 {
     integer n, lda, ldb, NRHS, info = 0, vinfo = 0;
-    void *IPIV = NULL, *A = NULL, *A_save = NULL, *B = NULL, *B_save = NULL, *s_test = NULL;
+    void *IPIV = NULL, *A = NULL, *A_save = NULL, *B = NULL, *B_save = NULL, *s_test = NULL, *scal = NULL;
     double time_min = 1e9;
     char range = 'U';
     integer test_lapacke_interface = params->test_lapacke_interface;
@@ -151,7 +151,7 @@ void fla_test_gesv_experiment(test_params_t *params, integer datatype, integer p
     create_realtype_vector(datatype, &s_test, n);
 
     /* Initialize the test matrices*/
-    if(params->imatrix_char == NULL && g_ext_fptr == NULL)
+    if((!FLA_EXTREME_CASE_TEST) && g_ext_fptr == NULL)
     {
         /* Generate input matrix with condition number <= 100 */
         create_svd_matrix(datatype, range, n, n, A, lda, s_test, GESV_VL, GESV_VU, i_zero, i_zero,
@@ -162,6 +162,12 @@ void fla_test_gesv_experiment(test_params_t *params, integer datatype, integer p
         init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
     }
     init_matrix(datatype, B, n, NRHS, ldb, g_ext_fptr, params->imatrix_char);
+    /* Initialize the scaling factor only for overflow/underflow test */
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
+    {
+        create_vector(get_realtype(datatype), &scal, 1);
+        scale_matrix_underflow_overflow_gesv(datatype, n, A, lda, params->imatrix_char, scal);
+    }
 
     /* Save the original matrix*/
     copy_matrix(datatype, "full", n, n, A, lda, A_save, lda);
@@ -181,8 +187,8 @@ void fla_test_gesv_experiment(test_params_t *params, integer datatype, integer p
         *perf *= 4.0;
 
     /* output validation */
-    if(!params->imatrix_char && info == 0)
-        validate_gesv(n, NRHS, A, lda, B, ldb, B_save, datatype, residual, &vinfo);
+    if(FLA_OVERFLOW_UNDERFLOW_TEST && info == 0)
+        validate_gesv(n, NRHS, A, lda, B, ldb, B_save, datatype, residual, &vinfo, params->imatrix_char, scal);
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
     {
@@ -202,6 +208,10 @@ void fla_test_gesv_experiment(test_params_t *params, integer datatype, integer p
     free_matrix(B);
     free_matrix(B_save);
     free_vector(s_test);
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
+    {
+        free_vector(scal);
+    }
 }
 
 void prepare_gesv_run(integer n_A, integer nrhs, void *A, integer lda, void *B, integer ldb,

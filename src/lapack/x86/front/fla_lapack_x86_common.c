@@ -51,6 +51,10 @@ int fla_dhrot3(integer *n, doublereal *a, integer *lda, doublereal *v, doublerea
 int fla_drot(integer *n, doublereal *dx, integer *incx, doublereal *dy, integer *incy,
              doublereal *c__, doublereal *s)
 {
+#ifndef FLA_ENABLE_AOCL_BLAS
+    extern void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
+#endif
+
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
     {
         fla_drot_avx512(n, dx, incx, dy, incy, c__, s);
@@ -58,6 +62,10 @@ int fla_drot(integer *n, doublereal *dx, integer *incx, doublereal *dy, integer 
     else if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
         fla_drot_avx2(n, dx, incx, dy, incy, c__, s);
+    }
+    else
+    {
+        drot_(n, dx, incx, dy, incy, c__, s);
     }
     return 0;
 }
@@ -191,6 +199,10 @@ void fla_sger(integer *m, integer *n, real *alpha, real *x, integer *incx, real 
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
         fla_sger_avx2(m, n, alpha, x, incx, y, incy, a, lda);
+    }
+    else
+    {
+        sger_(m, n, alpha, x, incx, y, incy, a, lda);
     }
     return;
 }

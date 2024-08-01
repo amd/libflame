@@ -137,11 +137,11 @@ typedef lapack_logical (*LAPACK_Z_SELECT2)
 #define LAPACK_lsame_base LAPACK_GLOBAL(lsame,LSAME)
 lapack_logical LAPACK_lsame_base( const char* ca,  const char* cb,
                               lapack_int lca, lapack_int lcb
-#ifdef LAPACK_FORTRAN_STRLEN_END
+#ifdef LAPACK_LSAME_FORTRAN_STRLEN_END
     , size_t, size_t
 #endif
 );
-#ifdef LAPACK_FORTRAN_STRLEN_END
+#ifdef LAPACK_LSAME_FORTRAN_STRLEN_END
     #define LAPACK_lsame(...) LAPACK_lsame_base(__VA_ARGS__, 1, 1)
 #else
     #define LAPACK_lsame(...) LAPACK_lsame_base(__VA_ARGS__)

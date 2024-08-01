@@ -844,15 +844,15 @@ void scale_matrix_underflow_overflow_gbtrs(integer datatype, integer m, integer 
         }
         else if(m < 600)
         {
-            tuning_val = 400.0;
+            tuning_val = 700.0;
         }
         else if (m < 1000)
         {
-            tuning_val = 700.0;
+            tuning_val = 1000.0;
         }
         else
         {
-            tuning_val = 900.0;
+            tuning_val = 1200.0;
         }
     }
     if(imatrix_char == 'U')
@@ -1230,7 +1230,7 @@ void scale_matrix_overflow_underflow_ggev(integer datatype, integer m, void *A, 
         }
         else
         {
-            calculate_scale_value(datatype, scal, max_min, 40.0, imatrix_char);
+            calculate_scale_value(datatype, scal, max_min, 50.0, imatrix_char);
         }
     }
     /* Scaling the matrix A with scal */
@@ -1308,6 +1308,38 @@ void scale_matrix_underflow_overflow_syevx(integer datatype, integer n, void *A,
         {
             tuning_val = 1.0;
         }
+    }
+    calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
+
+    /* Scaling the matrix A with scal */
+    scal_matrix(datatype, scal, A, n, n, lda, i_one);
+
+    /* free vectors */
+    free_vector(max_min);
+}
+/* Scaling matrix with values around overflow underflow for gesv */
+void scale_matrix_underflow_overflow_gesv(integer datatype, integer n, void *A, integer lda,
+                                           char imatrix_char, void *scal)
+{
+    void *max_min = NULL;
+    double tuning_val = 1.0;
+    create_vector(get_realtype(datatype), &max_min, 1);
+    if(imatrix_char == 'O')
+    {
+        get_max_from_matrix(datatype, A, max_min, n, n, lda);
+        if(n < 100)
+        {
+            tuning_val = 100.0;
+        }
+        else
+        {
+            tuning_val = 800.0;
+        }
+    }
+    if(imatrix_char == 'U')
+    {
+        get_min_from_matrix(datatype, A, max_min, n, n, lda);
+        calculate_scale_value(datatype, scal, max_min, 1.0, imatrix_char);
     }
     calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
 

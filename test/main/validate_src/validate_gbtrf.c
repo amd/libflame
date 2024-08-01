@@ -1,6 +1,5 @@
 /*
-    Copyright (C) 2024 Advanced Micro Devices, Inc.  All rights reserved. Portions of this file
-   consist of AI-generated content.
+    Copyright (C) 2024 Advanced Micro Devices, Inc.
 */
 
 /*! @file validate_gbtrf.c

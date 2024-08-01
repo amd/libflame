@@ -169,6 +169,9 @@ void init_matrix_from_file(integer datatype, void *A, integer m, integer n, inte
 void init_vector_from_file(integer datatype, void *A, integer m, integer inc, FILE *fptr);
 /* Intialize vector with special values */
 void init_vector_spec_in(integer datatype, void *A, integer M, integer incx, char type);
+/* Intialize matrix with special values in random locations of band matrix */
+void init_matrix_spec_rand_band_matrix_in(integer datatype, void *A, integer M, integer N, integer LDA,
+                              integer kl, integer ku, char type);
 /* Allocate dynamic memory. If FLA_MEM_UNALIGNED is set, unaligned memory is allocated */
 char *fla_mem_alloc(size_t size);
 /* Generate Hessenberg matrix */

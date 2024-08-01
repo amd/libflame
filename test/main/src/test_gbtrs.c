@@ -116,7 +116,7 @@ void fla_test_gbtrs_experiment(test_params_t *params, integer datatype, integer 
     char trans;
     void *IPIV;
     void *AB, *AB_test;
-    void *B, *X, *A;
+    void *B, *X, *A = NULL;
     double time_min = 1e9;
 
     /* Determine the dimensions*/
@@ -151,7 +151,7 @@ void fla_test_gbtrs_experiment(test_params_t *params, integer datatype, integer 
     create_matrix(datatype, matrix_layout, n, nrhs, &X, ldb);
 
     /* Initialize the test matrices*/
-    if(g_ext_fptr != NULL || FLA_EXTREME_CASE_TEST)
+    if(g_ext_fptr != NULL)
     {
         /* Initialize input matrix with custom data from file */
         init_matrix(datatype, AB, n, n, ldab, g_ext_fptr, params->imatrix_char);
@@ -163,11 +163,30 @@ void fla_test_gbtrs_experiment(test_params_t *params, integer datatype, integer 
     }
     else
     {
-        /* Initialize & convert random band matrix into band storage as per API need */
-        rand_band_storage_matrix(datatype, n, n, kl, ku, AB, ldab);
-
-        /* Initialize random B matrix */
-        rand_matrix(datatype, B, n, nrhs, ldb);
+        if(FLA_EXTREME_CASE_TEST)
+        {
+            create_matrix(datatype, matrix_layout, n, n, &A, n);
+            if((params->imatrix_char == 'A') || (params->imatrix_char == 'F'))
+            {
+                init_matrix_spec_rand_band_matrix_in(datatype, A, n, n, n, kl, ku, params->imatrix_char);
+            }
+            else
+            {
+                init_matrix_spec_in(datatype, A, n, n, n, params->imatrix_char);
+            }
+            /* Initialize input matrix with extreme values */
+            init_matrix(datatype, B, n, nrhs, ldb, NULL, params->imatrix_char);
+            
+            get_band_storage_matrix(datatype, n, n, kl, ku, A, n, AB, ldab);
+            free_matrix(A);
+        }
+        else
+        {
+            /* Initialize & convert random band matrix into band storage as per API need */
+            rand_band_storage_matrix(datatype, n, n, kl, ku, AB, ldab);
+            /* Initialize random B matrix */
+            rand_matrix(datatype, B, n, nrhs, ldb);
+        }
 
         /* Oveflow or underflow test initialization */
         if(FLA_OVERFLOW_UNDERFLOW_TEST)
@@ -186,7 +205,6 @@ void fla_test_gbtrs_experiment(test_params_t *params, integer datatype, integer 
     /* call to API */
     prepare_gbtrs_run(trans, n, kl, ku, nrhs, AB_test, ldab, IPIV, X, ldb, datatype, n_repeats,
                       &time_min, &info);
-
     /* execution time */
     *t = time_min;
 
@@ -197,7 +215,7 @@ void fla_test_gbtrs_experiment(test_params_t *params, integer datatype, integer 
         *perf *= 4.0;
     }
     /* output validation */
-    if((!FLA_EXTREME_CASE_TEST) && info == 0)
+    if((!FLA_EXTREME_CASE_TEST) && (info == 0))
     {
         create_matrix(datatype, matrix_layout, n, n, &A, n);
         reset_matrix(datatype, n, n, A, n);
@@ -207,8 +225,18 @@ void fla_test_gbtrs_experiment(test_params_t *params, integer datatype, integer 
         validate_getrs(&trans, n, nrhs, A, n, B, ldb, X, datatype, residual, &info, params->imatrix_char, NULL);
         free_matrix(A);
     }
-
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    /* check for output matrix when inputs as extreme values */
+    else if(FLA_EXTREME_CASE_TEST)
+    {
+        if((info == 0) && !check_extreme_value(datatype, n, nrhs, X, ldb, params->imatrix_char))
+        {
+            *residual = DBL_MAX;
+        }
+    }
+    else
+    {
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    }
 
     /* Free up the buffers */
     free_matrix(AB);
@@ -234,7 +262,6 @@ void prepare_gbtrs_run(char trans, integer n_A, integer kl, integer ku, integer 
     {
         /* Copy original input data */
         copy_matrix(datatype, "full", n_A, nrhs, B, ldb, B_save, ldb);
-
         exe_time = fla_test_clock();
 
         /*  call to API */

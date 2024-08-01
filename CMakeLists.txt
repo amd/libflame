@@ -140,6 +140,7 @@ option (ENABLE_BLAS_EXT_GEMMT "Enable BLAS GEMMT Usage" ON)
 set(ENABLE_AOCL_DTL OFF CACHE STRING "Enable DTL Usage. USE with Option ALL to Enable both Trace and Log, TRACE to enable Trace, and LOG to ENABLE only Input Logging ")
 set_property(CACHE ENABLE_AOCL_DTL PROPERTY STRINGS TRACE_AND_LOG TRACE LOG OFF )
 option (ENABLE_EMBED_AOCLUTILS "Enables embedding aocl-utils library in AOCL-LAPACK" OFF)
+option (ENABLE_LAPACKE_LSAME_FORTRAN_STRLEN " For LAPACKE interface enables lsame arguments length based on Fortran interface " OFF)
 
 message(STATUS "CMAKE_BUILD_TYPE : ${CMAKE_BUILD_TYPE}")
 if(WIN32)
@@ -496,6 +497,10 @@ if(ENABLE_ILP64)
 	set(FLA_ENABLE_ILP64 TRUE)
 	add_definitions(-DFLA_ENABLE_ILP64=1)
 	message(STATUS "Enabled FLA_ENABLE_ILP64 : ${ENABLE_ILP64} ")
+endif()
+
+if(ENABLE_LAPACKE_LSAME_FORTRAN_STRLEN)
+    add_definitions(-DLAPACK_LSAME_FORTRAN_STRLEN_END)
 endif()
 
 # AOCL-BLAS library linking option. If ENABLE_AOCL_BLAS is set, then the AOCL-BLAS library will be linked.

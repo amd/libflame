@@ -83,10 +83,18 @@ int fla_zscal(integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx)
 {
     /* Initialize global context data */
     aocl_fla_init();
+
     /* Take AVX path only for increment equal to 1 and particular threshold size*/
-    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2) && *incx == 1 && *n <= FLA_ZSCAL_INLINE_SMALL)
+    if(*incx == 1 && *n >= 1 && *n <= FLA_ZSCAL_INLINE_SMALL && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
-        fla_zscal_ix1_avx2(n, alpha, x);
+        if(FLA_IS_ARCH_ID(FLA_ARCH_AVX512))
+        {
+            fla_zscal_ix1_avx512(n, alpha, x);
+        }
+        else
+        {
+            fla_zscal_ix1_avx2(n, alpha, x);
+        }
     }
     else
     {

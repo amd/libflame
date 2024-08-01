@@ -109,7 +109,7 @@ void fla_test_gbtrf_experiment(test_params_t *params, integer datatype, integer 
     integer m, n, kl, ku, ldab;
     integer info = 0, vinfo = 0;
     void *IPIV;
-    void *AB, *AB_test;
+    void *AB, *AB_test, *A;
     double time_min = 1e9;
 
     /* Determine the dimensions*/
@@ -137,10 +137,25 @@ void fla_test_gbtrf_experiment(test_params_t *params, integer datatype, integer 
     reset_vector(INTEGER, IPIV, fla_min(m, n), 1);
 
     /* Initialize the test matrices*/
-    if((g_ext_fptr != NULL) || (FLA_EXTREME_CASE_TEST && !FLA_OVERFLOW_UNDERFLOW_TEST))
+    if(g_ext_fptr != NULL)
     {
-        /* Initialize input matrix with custom data from file */
-        init_matrix(datatype, AB, ldab, n, ldab, g_ext_fptr, params->imatrix_char);
+        /* Initialize input matrix with custom data from file or extreme values */
+        init_matrix(datatype, AB, m, n, ldab, g_ext_fptr, params->imatrix_char);
+    }
+    else if(FLA_EXTREME_CASE_TEST)
+    {
+        create_matrix(datatype, matrix_layout, m, n, &A, m);
+        if((params->imatrix_char == 'A') || (params->imatrix_char == 'F'))
+        {
+            init_matrix_spec_rand_band_matrix_in(datatype, A, m, n, m, kl, ku, params->imatrix_char);
+        }
+        else
+        {
+            init_matrix_spec_in(datatype, A, m, n, m, params->imatrix_char);
+        }
+
+        get_band_storage_matrix(datatype, m, n, kl, ku, A, m, AB, ldab);
+        free_matrix(A);
     }
     else
     {
@@ -177,13 +192,15 @@ void fla_test_gbtrf_experiment(test_params_t *params, integer datatype, integer 
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
     {
-        if(!check_extreme_value(datatype, m, n, AB_test, ldab, params->imatrix_char))
+        if((info == 0) && !check_extreme_value(datatype, m, n, AB_test, ldab, params->imatrix_char))
         {
             *residual = DBL_MAX;
         }
     }
     else
+    {
         FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    }
 
     /* Free up the buffers */
     free_matrix(AB);

@@ -1,6 +1,5 @@
 /*
-    Copyright (C) 2022-2024, Advanced Micro Devices, Inc.  All rights reserved. Portions of this
-   file consist of AI-generated content.
+    Copyright (C) 2022-2024, Advanced Micro Devices, Inc.
 */
 
 #include "test_common.h"
@@ -4340,6 +4339,265 @@ void get_band_storage_matrix(integer datatype, integer M, integer N, integer kl,
                             = ((dcomplex *)A)[i + j * LDA].imag;
                     }
                 }
+            }
+            break;
+        }
+    }
+}
+
+/* Intialize matrix with special values in random locations of band matrix */
+void init_matrix_spec_rand_band_matrix_in(integer datatype, void *A, integer M, integer N, integer LDA,
+                              integer kl, integer ku, char type)
+{
+    integer rows, cols, upspan, lowspan, span, min_m_n, i;
+    if(LDA < M)
+        return;
+    rand_matrix(datatype, A, M, N, LDA);
+    /* when M*N less than 2 there is no need of randomness*/
+    if(M * N < 2)
+    {
+        char type_;
+        type_ = (type == 'A') ? 'N' : 'I';
+        init_matrix_spec_in(datatype, A, M, N, LDA, type_);
+        return;
+    }
+    min_m_n = fla_min(M, N);
+    /*
+    Add random extreme values:
+    for small size matrices, when M*N less than 10 adding one extreme value in upper triangular
+    matrix, other one extreme value in lower triangular matrix
+    for medium/large sizes, when M*N greater than 10 adding 10% of input values as extreme values
+    in upper triangular matrix, other 10% of input values as exterme values in lower triangular
+    matrix
+    */
+    if(M * N > 10)
+    {
+        /* Calculates values based on kl, ku in band matrix and takes 10% of input values.*/
+        lowspan = (kl*(N-1) - 2)* 0.1;
+        upspan = (ku*(N-1) - 2)* 0.1;
+        if(lowspan <= 0)
+        {
+            lowspan = 1;
+        }
+        if(upspan <= 0)
+        {
+            upspan = 1;
+        }
+    }
+    else
+    {
+        lowspan = 1;
+        upspan = 1;
+    }
+    /* Skip lowspan if M=1 and upspan if N=1.*/
+    if(M == 1)
+    {
+        lowspan = 0;
+    }
+    else if(N == 1)
+    {
+        upspan = 0;
+    }
+
+    span = lowspan + upspan;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            float value = 0.f;
+            if(type == 'F')
+                value = INFINITY;
+            else if(type == 'A')
+                value = NAN;
+            while(span > 0)
+            {
+                rows = rand() % min_m_n;
+                cols = rand() % fla_min(min_m_n, rows + ku + 1);
+                for(i = 0; i < min_m_n; i++)
+                {
+                    while(cols < fla_max(0, i - kl))
+                    {
+                        cols = rand() % fla_min(min_m_n, i + ku + 1);
+                    }
+                    if(cols >= fla_max(0, i - kl))
+                    {
+                        break;
+                    }
+                }
+
+                /* Replace 10 percent of special values in upper triangular matrix */
+                if(upspan > 0)
+                {
+                    if(rows <= cols)
+                    {
+                        if(!isnan(((float *)A)[cols * LDA + rows]))
+                        {
+                            ((float *)A)[cols * LDA + rows] = value;
+                            upspan = upspan - 1;
+                        }
+                    }
+                }
+                /* Replace 10 percent of special values in lower triangular matrix */
+                else if(lowspan > 0)
+                {
+                    if(rows >= cols)
+                    {
+                        if(!isnan(((float *)A)[cols * LDA + rows]))
+                        {
+                            ((float *)A)[cols * LDA + rows] = value;
+                            lowspan = lowspan - 1;
+                        }
+                    }
+                }
+                span = lowspan + upspan;
+            }
+            break;
+        }
+        case DOUBLE:
+        {
+            double value = 0.;
+            if(type == 'F')
+                value = INFINITY;
+            else if(type == 'A')
+                value = NAN;
+            while(span > 0)
+            {
+                rows = rand() % min_m_n;
+                cols = rand() % fla_min(min_m_n, rows + ku + 1);
+                for(i = 0; i < min_m_n; i++)
+                {
+                    while(cols < fla_max(0, i - kl))
+                    {
+                        cols = rand() % fla_min(min_m_n, rows + ku + 1);
+                    }
+                    if(cols >= fla_max(0, i - kl))
+                    {
+                        break;
+                    }
+                }
+                if(upspan > 0)
+                {
+                    if(rows <= cols)
+                    {
+                        if(!isnan(((double *)A)[cols * LDA + rows]))
+                        {
+                            ((double *)A)[cols * LDA + rows] = value;
+                            upspan = upspan - 1;
+                        }
+                    }
+                }
+                else if(lowspan > 0)
+                {
+                    if(rows >= cols)
+                    {
+                        if(!isnan(((double *)A)[cols * LDA + rows]))
+                        {
+                            ((double *)A)[cols * LDA + rows] = value;
+                            lowspan = lowspan - 1;
+                        }
+                    }
+                }
+                span = lowspan + upspan;
+            }
+            break;
+        }
+        case COMPLEX:
+        {
+            float value = 0.f;
+            if(type == 'F')
+                value = INFINITY;
+            else if(type == 'A')
+                value = NAN;
+            while(span > 0)
+            {
+                rows = rand() % min_m_n;
+                cols = rand() % fla_min(min_m_n, rows + ku + 1);
+                for(i = 0; i < min_m_n; i++)
+                {
+                    while(cols < fla_max(0, i - kl))
+                    {
+                        cols = rand() % fla_min(min_m_n, rows + ku + 1);
+                    }
+                    if(cols >= fla_max(0, i - kl))
+                    {
+                        break;
+                    }
+                }
+                if(upspan > 0)
+                {
+                    if(rows <= cols)
+                    {
+                        if(!isnan(((scomplex *)A)[cols * LDA + rows].real))
+                        {
+                            ((scomplex *)A)[cols * LDA + rows].real = value;
+                            ((scomplex *)A)[cols * LDA + rows].imag = value;
+                            upspan = upspan - 1;
+                        }
+                    }
+                }
+                else if(lowspan > 0)
+                {
+                    if(rows >= cols)
+                    {
+                        if(!isnan(((scomplex *)A)[cols * LDA + rows].real))
+                        {
+                            ((scomplex *)A)[cols * LDA + rows].real = value;
+                            ((scomplex *)A)[cols * LDA + rows].imag = value;
+                            lowspan = lowspan - 1;
+                        }
+                    }
+                }
+                span = lowspan + upspan;
+            }
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            double value = 0.;
+            if(type == 'F')
+                value = INFINITY;
+            else if(type == 'A')
+                value = NAN;
+            while(span > 0)
+            {
+                rows = rand() % min_m_n;
+                cols = rand() % fla_min(min_m_n, rows + ku + 1);
+                for(i = 0; i < min_m_n; i++)
+                {
+                    while(cols < fla_max(0, i - kl))
+                    {
+                        cols = rand() % fla_min(min_m_n, rows + ku + 1);
+                    }
+                    if(cols >= fla_max(0, i - kl))
+                    {
+                        break;
+                    }
+                }
+                if(upspan > 0)
+                {
+                    if(rows <= cols)
+                    {
+                        if(!isnan(((dcomplex *)A)[cols * LDA + rows].real))
+                        {
+                            ((dcomplex *)A)[cols * LDA + rows].real = value;
+                            ((dcomplex *)A)[cols * LDA + rows].imag = value;
+                            upspan = upspan - 1;
+                        }
+                    }
+                }
+                else if(lowspan > 0)
+                {
+                    if(rows >= cols)
+                    {
+                        if(!isnan(((dcomplex *)A)[cols * LDA + rows].real))
+                        {
+                            ((dcomplex *)A)[cols * LDA + rows].real = value;
+                            ((dcomplex *)A)[cols * LDA + rows].imag = value;
+                            lowspan = lowspan - 1;
+                        }
+                    }
+                }
+                span = lowspan + upspan;
             }
             break;
         }

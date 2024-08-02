@@ -112,7 +112,7 @@ void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer 
     integer info = 0, vinfo = 0;
     void *IPIV, *s_test = NULL;
     char range = 'U';
-    void *A, *A_test, *B, *B_save, *X;
+    void *A, *A_test, *B, *B_save, *X, *scal = NULL;
     double time_min = 1e9;
     char TRANS = params->lin_solver_paramslist[pci].transr;
     *residual = params->lin_solver_paramslist[pci].solver_threshold;
@@ -147,15 +147,20 @@ void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer 
     create_realtype_vector(datatype, &s_test, n);
 
     /* Initialize the test matrices*/
-    if(params->imatrix_char == NULL && g_ext_fptr == NULL)
+    if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
+    {
+        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+    }
+    else
     {
         /* Generate input matrix with condition number <= 100 */
         create_svd_matrix(datatype, range, n, n, A, lda, s_test, GETRS_VL, GETRS_VU, i_zero, i_zero,
                           info);
-    }
-    else
-    {
-        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            create_realtype_vector(get_datatype(datatype), &scal, n);
+            scale_matrix_underflow_overflow_getrs(datatype, &TRANS, n, n, A, lda, params->imatrix_char, scal);
+        }
     }
     init_matrix(datatype, B, n, NRHS, ldb, g_ext_fptr, params->imatrix_char);
 
@@ -181,8 +186,8 @@ void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer 
         *perf *= 4.0;
 
     /* output validation */
-    if(!params->imatrix_char && info == 0)
-        validate_getrs(&TRANS, n, NRHS, A, lda, B_save, ldb, X, datatype, residual, &vinfo);
+    if(info == 0 && !FLA_EXTREME_CASE_TEST)
+        validate_getrs(&TRANS, n, NRHS, A, lda, B_save, ldb, X, datatype, residual, &vinfo, params->imatrix_char, scal);
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
     {
@@ -202,6 +207,10 @@ void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer 
     free_matrix(X);
     free_matrix(B_save);
     free_vector(s_test);
+    if (FLA_OVERFLOW_UNDERFLOW_TEST)
+    {
+        free_vector(scal);
+    }
 }
 
 void prepare_getrs_run(char *TRANS, integer n_A, integer nrhs, void *A, integer lda, void *B,

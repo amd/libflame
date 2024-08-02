@@ -204,7 +204,7 @@ void fla_test_gbtrs_experiment(test_params_t *params, integer datatype, integer 
         /* Get original Band matrix from AB*/
         get_band_matrix_from_band_storage(datatype, n, n, kl, ku, AB, ldab, A, n);
         /* Call validate_getrs() to validate the output*/
-        validate_getrs(&trans, n, nrhs, A, n, B, ldb, X, datatype, residual, &info);
+        validate_getrs(&trans, n, nrhs, A, n, B, ldb, X, datatype, residual, &info, params->imatrix_char, NULL);
         free_matrix(A);
     }
 

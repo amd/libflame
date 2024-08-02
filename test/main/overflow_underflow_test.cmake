@@ -237,6 +237,18 @@ set(OVERFLOW_UNDERFLOW_VALUES_TEST_CASES "gesvd sdcz A A 1 10 1 1 10 -1 1 --imat
             "geevx sdcz B V V B 500 500 500 500 -1 1 --imatrix=O"
             "geevx sdcz B V V B 100 100 100 100 -1 1 --imatrix=U"
             "geevx sdcz B V V B 500 500 500 500 -1 1 --imatrix=U"
+            "getrs sdcz N 110 3 115 120 1 --imatrix=U"
+            "getrs sdcz N 110 3 115 120 1 --imatrix=O"
+            "getrs sdcz T 53 5 55 60 1 --imatrix=U"
+            "getrs sdcz T 121 2 130 140 1 --imatrix=O"
+            "getrs sdcz C 89 4 95 98 1 --imatrix=U"
+            "getrs sdcz C 132 3 140 150 1 --imatrix=O"
+            "getrs sdcz N 56 4 60 70 1 --imatrix=U"
+            "getrs sdcz N 212 3 250 260 1 --imatrix=O"
+            "getrs sdcz T 101 2 102 105 1 --imatrix=U"
+            "getrs sdcz T 68 5 99 100 1 --imatrix=O"
+            "getrs sdcz C 98 3 156 160 1 --imatrix=U"
+            "getrs sdcz C 20 5 21 23 1 --imatrix=O"
 )
 
 foreach(ou_vals_test_cases IN LISTS OVERFLOW_UNDERFLOW_VALUES_TEST_CASES)

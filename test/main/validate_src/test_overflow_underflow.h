@@ -105,5 +105,7 @@ void scale_matrix_underflow_overflow_syevx(integer datatype, integer n, void *A,
 /* Scale matrix with values around overflow underflow for gesv */
 void scale_matrix_underflow_overflow_gesv(integer datatype, integer n, void *A, integer lda,
                                           char imatrix_char, void *scal);
-
+/* Scaling matrix with values around overflow, underflow for GETRS */
+void scale_matrix_underflow_overflow_getrs(integer datatype, char *trans, integer m, integer n,
+                                           void *A, integer lda, char imatrix_char, void *scal);
 #endif // TEST_OVERFLOW_UNDERFLOW_H

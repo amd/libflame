@@ -6127,3 +6127,28 @@ void convert_matrix_layout(integer matrix_layout, integer datatype, integer m, i
     }
     return;
 }
+
+/* To find reciprocal of each number in real vector X and store it in Y */
+void get_reciprocal_real_vector(integer datatype, void *X, integer n, void *Y, integer inx)
+{
+    integer i = 0;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            for(i = 0; i < n; i++)
+            {
+                ((float *)Y)[i * inx] = 1.0 / ((float *)X)[i * inx];
+            }
+            break;
+        }
+        case DOUBLE:
+        {
+            for(i = 0; i < n; i++)
+            {
+                ((double *)Y)[i * inx] = 1.0 / ((double *)X)[i * inx];
+            }
+            break;
+        }
+    }
+}

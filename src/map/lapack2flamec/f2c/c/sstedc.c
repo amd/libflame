@@ -3,6 +3,9 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+
+/* Modifications Copyright (C) 2024 Advanced Micro Devices, Inc. All rights reserved. */
+
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__9 = 9;
 static integer c__0 = 0;
@@ -249,6 +252,7 @@ void sstedc_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ld
         void
         ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
     integer storez, strtrw;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -351,7 +355,7 @@ void sstedc_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ld
                 liwmin = *n * 5 + 3;
             }
         }
-        work[1] = (real)lwmin;
+        work[1] = sroundup_lwork(&lwmin);
         iwork[1] = liwmin;
         if(*lwork < lwmin && !lquery)
         {
@@ -553,7 +557,7 @@ void sstedc_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ld
         }
     }
 L50:
-    work[1] = (real)lwmin;
+    work[1] = sroundup_lwork(&lwmin);
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

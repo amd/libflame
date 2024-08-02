@@ -312,4 +312,6 @@ void add_negative_values_ilo_ihi(integer datatype, void *vect, integer ilo, inte
 /* Convert the given matrix from column major layout to row major layout and vice versa */
 void convert_matrix_layout(integer matrix_layout, integer datatype, integer m, integer n, void *a,
                            integer lda, void *a_t, integer lda_t);
+/* To find reciprocal of each number in real vector X and store it in Y */
+void get_reciprocal_real_vector(integer datatype, void *X, integer n, void *Y, integer inx);
 #endif // TEST_COMMON_H

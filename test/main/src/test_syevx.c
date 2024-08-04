@@ -213,7 +213,7 @@ void fla_test_syevx_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Create input matrix parameters */
-    create_matrix(datatype, matrix_layout, n, n, &A, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
     create_realtype_vector(datatype, &w, n);
     if((!FLA_EXTREME_CASE_TEST) && (g_ext_fptr == NULL))
     {
@@ -236,7 +236,7 @@ void fla_test_syevx_experiment(test_params_t *params, integer datatype, integer 
     }
     /* Make a copy of input matrix A.
        This is required to validate the API functionality.*/
-    create_matrix(datatype, matrix_layout, n, n, &A_test, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
     create_vector(INTEGER, &ifail, n);
 
@@ -308,7 +308,7 @@ void prepare_syevx_run(char *jobz, char *range, char *uplo, integer n, void *A, 
 
     /* Make a copy of the input matrix A.
        Same input values will be passed in eaach itertaion.*/
-    create_matrix(datatype, matrix_layout, n, n, &A_save, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_save, lda);
     copy_matrix(datatype, "full", n, n, A, lda, A_save, lda);
     create_vector(INTEGER, &iwork, 5 * n);
 
@@ -347,7 +347,7 @@ void prepare_syevx_run(char *jobz, char *range, char *uplo, integer n, void *A, 
 
         create_realtype_vector(datatype, &w_test, n);
         create_vector(datatype, &work, lwork);
-        create_matrix(datatype, matrix_layout, fla_max(1, n), fla_max(1, m), &z__, ldz);
+        create_matrix(datatype, LAPACK_COL_MAJOR, fla_max(1, n), fla_max(1, m), &z__, ldz);
 
         exe_time = fla_test_clock();
 

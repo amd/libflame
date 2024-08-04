@@ -11,10 +11,16 @@
 void fla_test_getri_experiment(test_params_t *params, integer datatype, integer p_cur,
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
                                double *perf, double *t, double *residual);
-void prepare_getri_run(integer n_A, void *A, integer lda, integer *ipiv,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info);
+void prepare_getri_run(integer n_A, void *A, integer lda, integer *ipiv, integer datatype,
+                       integer n_repeats, double *time_min_, integer *info,
+                       integer test_lapacke_interface, int matrix_layout);
 void invoke_getri(integer datatype, integer *n, void *a, integer *lda, integer *ipiv, void *work,
                   integer *lwork, integer *info);
+double prepare_lapacke_getri_run(integer datatype, int matrix_layout, integer m_A, integer n_A,
+                                 void *A, integer lda, integer *ipiv, integer *info);
+integer invoke_lapacke_getri(integer datatype, int matrix_layout, integer n, void *a,
+                             integer lda, const integer *ipiv);
+
 void fla_test_getri(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "Inverse through LU factorization";
@@ -112,6 +118,9 @@ void fla_test_getri_experiment(test_params_t *params, integer datatype, integer 
     char range = 'U';
     double time_min = 1e9;
 
+    integer test_lapacke_interface = params->test_lapacke_interface;
+    int layout = params->matrix_major;
+
     /* Determine the dimensions*/
     n = p_cur;
     lda = params->lin_solver_paramslist[pci].lda;
@@ -128,7 +137,7 @@ void fla_test_getri_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Create the matrices for the current operation*/
-    create_matrix(datatype, matrix_layout, n, n, &A, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
     create_vector(INTEGER, &IPIV, n);
     create_realtype_vector(datatype, &s_test, n);
 
@@ -145,11 +154,12 @@ void fla_test_getri_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Save the original matrix*/
-    create_matrix(datatype, matrix_layout, n, n, &A_test, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
 
     /* call to API */
-    prepare_getri_run(n, A_test, lda, IPIV, datatype, n_repeats, &time_min, &info);
+    prepare_getri_run(n, A_test, lda, IPIV, datatype, n_repeats, &time_min, &info,
+                      test_lapacke_interface, layout);
 
     /* execution time */
     *t = time_min;
@@ -183,7 +193,8 @@ void fla_test_getri_experiment(test_params_t *params, integer datatype, integer 
 }
 
 void prepare_getri_run(integer n_A, void *A, integer lda, integer *IPIV, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info)
+                       integer n_repeats, double *time_min_, integer *info,
+                       integer test_lapacke_interface, int layout)
 {
     integer lwork;
     integer i;
@@ -192,9 +203,13 @@ void prepare_getri_run(integer n_A, void *A, integer lda, integer *IPIV, integer
     lwork = i_n_one;
 
     /* Save the original matrix */
-    create_matrix(datatype, matrix_layout, n_A, n_A, &A_save, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n_A, n_A, &A_save, lda);
     copy_matrix(datatype, "full", n_A, n_A, A, lda, A_save, lda);
-    if(g_lwork <= 0)
+
+    /* Make a workspace query the first time through. This will provide us with
+     and ideal workspace size based on an internal block size.
+     NOTE: LAPACKE interface handles workspace query internally */
+    if((test_lapacke_interface == 0) && (g_lwork <= 0))
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
@@ -224,15 +239,22 @@ void prepare_getri_run(integer n_A, void *A, integer lda, integer *IPIV, integer
         copy_matrix(datatype, "full", n_A, n_A, A, lda, A_save, lda);
         // create work buffer
         create_vector(datatype, &work, lwork);
-        exe_time = fla_test_clock();
-
-        /*  call to API getrf to get AFACT */
+        /*  call to API getrf to get AFACT,
+            call  getri API with AFACT to get A INV */
         invoke_getrf(datatype, &n_A, &n_A, A_save, &lda, IPIV, info);
-
-        /*  call  getri API with AFACT to get A INV */
-        invoke_getri(datatype, &n_A, A_save, &lda, IPIV, work, &lwork, info);
-
-        exe_time = fla_test_clock() - exe_time;
+        /* Check if LAPACKE interface is enabled */
+        if(test_lapacke_interface == 1)
+        {
+            exe_time
+                = prepare_lapacke_getri_run(datatype, layout, n_A, n_A, A_save, lda, IPIV, info);
+        }
+        else
+        {
+            exe_time = fla_test_clock();
+            /* Call LAPACK getri API */
+            invoke_getri(datatype, &n_A, A_save, &lda, IPIV, work, &lwork, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
 
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);
@@ -244,6 +266,41 @@ void prepare_getri_run(integer n_A, void *A, integer lda, integer *IPIV, integer
     /*  Save the final result to A matrix*/
     copy_matrix(datatype, "full", n_A, n_A, A_save, lda, A, lda);
     free_matrix(A_save);
+}
+
+double prepare_lapacke_getri_run(integer datatype, int layout, integer m_A, integer n_A,
+                                 void *A, integer lda, integer *ipiv, integer *info)
+{
+    double exe_time;
+    integer lda_t = lda;
+    void *A_t = NULL;
+    A_t = A;
+
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        lda_t = fla_max(1, n_A);
+        /* Create temporary buffers for converting matrix layout */
+        create_matrix(datatype, layout, m_A, n_A, &A_t, lda_t);
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, m_A, n_A, A, lda, A_t, lda_t);
+    }
+
+    exe_time = fla_test_clock();
+
+    /* Call LAPACKE getri API */
+    *info = invoke_lapacke_getri(datatype, layout, n_A, A_t, lda_t, ipiv);
+
+    exe_time = fla_test_clock() - exe_time;
+
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        /* In case of row_major matrix layout, convert output matrices
+           to column_major layout */
+        convert_matrix_layout(layout, datatype, m_A, n_A, A_t, lda_t, A, lda);
+        /* free temporary buffers */
+        free_matrix(A_t);
+    }
+
+    return exe_time;
 }
 
 /*
@@ -279,4 +336,37 @@ void invoke_getri(integer datatype, integer *n, void *a, integer *lda, integer *
             break;
         }
     }
+}
+
+integer invoke_lapacke_getri(integer datatype, int layout, integer n, void *a, integer lda,
+                             const integer *ipiv)
+{
+    integer info = 0;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            info = LAPACKE_sgetri(layout, n, a, lda, ipiv);
+            break;
+        }
+
+        case DOUBLE:
+        {
+            info = LAPACKE_dgetri(layout, n, a, lda, ipiv);
+            break;
+        }
+
+        case COMPLEX:
+        {
+            info = LAPACKE_cgetri(layout, n, a, lda, ipiv);
+            break;
+        }
+
+        case DOUBLE_COMPLEX:
+        {
+            info = LAPACKE_zgetri(layout, n, a, lda, ipiv);
+            break;
+        }
+    }
+    return info;
 }

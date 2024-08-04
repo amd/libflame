@@ -179,7 +179,7 @@ void fla_check_lapacke_interface(integer *arg_count, char **argv, test_params_t 
     char *row_major = "row_major";
     char *column_major = "column_major";
     char *major = NULL;
-    integer lapacke_major = LAPACK_COL_MAJOR;
+    int lapacke_major = LAPACK_COL_MAJOR;
     integer enable_lapacke = 0;
     integer len_lapacke_test = strlen(lapacke_test);
     integer len_row_major = strlen(row_major);

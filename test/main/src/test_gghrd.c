@@ -11,10 +11,17 @@ void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer 
 void prepare_gghrd_run(char *compq, char *compz, integer n, integer *ilo, integer *ihi, void *a,
                        integer lda, void *b, integer ldb, void *q, integer ldq, void *z,
                        integer ldz, integer datatype, integer n_repeats, double *time_min_,
-                       integer *info);
+                       integer *info, integer test_lapacke_interface, int matrix_layout);
 void invoke_gghrd(integer datatype, char *compq, char *compz, integer *n, integer *ilo,
                   integer *ihi, void *a, integer *lda, void *b, integer *ldb, void *q, integer *ldq,
                   void *z, integer *ldz, integer *info);
+double prepare_lapacke_gghrd_run(integer datatype, int matrix_layout, char *compq, char *compz,
+                                 integer n, integer *ilo, integer *ihi, void *a, integer lda,
+                                 void *b, integer ldb, void *q, integer ldq, void *z, integer ldz,
+                                 integer *info);
+integer invoke_lapacke_gghrd(integer datatype, int matrix_layout, char compq, char compz,
+                             integer n, integer ilo, integer ihi, void *a, integer lda, void *b,
+                             integer ldb, void *q, integer ldq, void *z, integer ldz);
 
 void fla_test_gghrd(integer argc, char **argv, test_params_t *params)
 {
@@ -116,6 +123,9 @@ void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer 
          *Z_test = NULL;
     char compz, compq;
 
+    integer test_lapacke_interface = params->test_lapacke_interface;
+    int layout = params->matrix_major;
+
     /* Get input matrix dimensions. */
     n = p_cur;
     lda = params->lin_solver_paramslist[pci].lda;
@@ -169,10 +179,10 @@ void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Create input matrix parameters*/
-    create_matrix(datatype, matrix_layout, n, n, &A, lda);
-    create_matrix(datatype, matrix_layout, n, n, &B, ldb);
-    create_matrix(datatype, matrix_layout, n, n, &Q, ldq);
-    create_matrix(datatype, matrix_layout, n, n, &Z, ldz);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &B, ldb);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Q, ldq);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z, ldz);
 
     if(g_ext_fptr != NULL)
     {
@@ -192,17 +202,17 @@ void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Make copy of matrix A,B,Q and Z. This is required to validate the API functionality */
-    create_matrix(datatype, matrix_layout, n, n, &A_test, lda);
-    create_matrix(datatype, matrix_layout, n, n, &B_test, ldb);
-    create_matrix(datatype, matrix_layout, n, n, &Q_test, ldq);
-    create_matrix(datatype, matrix_layout, n, n, &Z_test, ldq);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &B_test, ldb);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Q_test, ldq);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z_test, ldq);
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
     copy_matrix(datatype, "full", n, n, B, ldb, B_test, ldb);
     copy_matrix(datatype, "full", n, n, Q, ldq, Q_test, ldq);
     copy_matrix(datatype, "full", n, n, Z, ldz, Z_test, ldz);
 
     prepare_gghrd_run(&compq, &compz, n, &ilo, &ihi, A_test, lda, B_test, ldb, Q_test, ldq, Z_test,
-                      ldz, datatype, n_repeats, time_min, &info);
+                      ldz, datatype, n_repeats, time_min, &info, test_lapacke_interface, layout);
 
     /* Performance computation
        (7)n^3 flops for eigen vectors for real
@@ -255,7 +265,7 @@ void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer 
 void prepare_gghrd_run(char *compq, char *compz, integer n, integer *ilo, integer *ihi, void *A,
                        integer lda, void *B, integer ldb, void *Q, integer ldq, void *Z,
                        integer ldz, integer datatype, integer n_repeats, double *time_min_,
-                       integer *info)
+                       integer *info, integer test_lapacke_interface, int layout)
 {
     void *A_save = NULL, *B_save = NULL, *Q_save = NULL, *Z_save = NULL;
     integer i;
@@ -263,10 +273,10 @@ void prepare_gghrd_run(char *compq, char *compz, integer n, integer *ilo, intege
 
     /* Make a copy of the input matrix A,B,Q and Z. Same input values will be passed in each
      * itertaion.*/
-    create_matrix(datatype, matrix_layout, n, n, &A_save, lda);
-    create_matrix(datatype, matrix_layout, n, n, &B_save, ldb);
-    create_matrix(datatype, matrix_layout, n, n, &Q_save, ldq);
-    create_matrix(datatype, matrix_layout, n, n, &Z_save, ldz);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_save, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &B_save, ldb);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Q_save, ldq);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z_save, ldz);
     copy_matrix(datatype, "full", n, n, A, lda, A_save, lda);
     copy_matrix(datatype, "full", n, n, B, ldb, B_save, ldb);
     copy_matrix(datatype, "full", n, n, Q, ldq, Q_save, ldq);
@@ -282,13 +292,21 @@ void prepare_gghrd_run(char *compq, char *compz, integer n, integer *ilo, intege
         copy_matrix(datatype, "full", n, n, Q_save, ldq, Q, ldq);
         copy_matrix(datatype, "full", n, n, Z_save, ldz, Z, ldz);
 
-        exe_time = fla_test_clock();
+        /* Check if LAPACKE interface is enabled */
+        if(test_lapacke_interface == 1)
+        {
+            exe_time = prepare_lapacke_gghrd_run(datatype, layout, compq, compz, n, ilo, ihi, A,
+                                                 lda, B, ldb, Q, ldq, Z, ldz, info);
+        }
+        else
+        {
+            exe_time = fla_test_clock();
+            /* Call LAPACK gghrd API */
+            invoke_gghrd(datatype, compq, compz, &n, ilo, ihi, A, &lda, B, &ldb, Q, &ldq, Z, &ldz,
+                         info);
 
-        /* Call to gghrd API */
-        invoke_gghrd(datatype, compq, compz, &n, ilo, ihi, A, &lda, B, &ldb, Q, &ldq, Z, &ldz,
-                     info);
-
-        exe_time = fla_test_clock() - exe_time;
+            exe_time = fla_test_clock() - exe_time;
+        }
 
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);
@@ -299,6 +317,77 @@ void prepare_gghrd_run(char *compq, char *compz, integer n, integer *ilo, intege
     free_matrix(B_save);
     free_matrix(Q_save);
     free_matrix(Z_save);
+}
+
+double prepare_lapacke_gghrd_run(integer datatype, int layout, char *compq, char *compz,
+                                 integer n, integer *ilo, integer *ihi, void *A, integer lda,
+                                 void *B, integer ldb, void *Q, integer ldq, void *Z, integer ldz,
+                                 integer *info)
+{
+    double exe_time;
+    integer lda_t = lda;
+    integer ldb_t = ldb;
+    integer ldq_t = ldq;
+    integer ldz_t = ldz;
+    void *A_t = NULL, *B_t = NULL, *Q_t = NULL, *Z_t = NULL;
+    A_t = A;
+    B_t = B;
+    Q_t = Q;
+    Z_t = Z;
+    /* In case of row_major matrix layout,
+       convert input matrices to row_major */
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        lda_t = fla_max(1, n);
+        ldb_t = fla_max(1, n);
+        ldq_t = fla_max(1, n);
+        ldz_t = fla_max(1, n);
+        /* Create temporary buffers for converting matrix layout */
+        create_matrix(datatype, layout, n, n, &A_t, lda_t);
+        create_matrix(datatype, layout, n, n, &B_t, ldb_t);
+
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, A, lda, A_t, lda_t);
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, B, ldb, B_t, ldb_t);
+        if(*compq != 'N')
+        {
+            create_matrix(datatype, layout, n, n, &Q_t, ldq_t);
+            convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, Q, ldq, Q_t, ldq_t);
+        }
+        if(*compz != 'N')
+        {
+            create_matrix(datatype, layout, n, n, &Z_t, ldz_t);
+            convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, Z, ldz, Z_t, ldz_t);
+        }
+    }
+    exe_time = fla_test_clock();
+
+    /* Call to LAPACKE gghrd API */
+    *info = invoke_lapacke_gghrd(datatype, layout, *compq, *compz, n, *ilo, *ihi, A_t, lda_t, B_t,
+                                 ldb_t, Q_t, ldq_t, Z_t, ldz_t);
+    exe_time = fla_test_clock() - exe_time;
+
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        /* In case of row_major matrix layout, convert output matrices
+           to column_major layout */
+        convert_matrix_layout(layout, datatype, n, n, A_t, lda_t, A, lda);
+        convert_matrix_layout(layout, datatype, n, n, B_t, ldb_t, B, ldb);
+
+        if(*compq != 'N')
+        {
+            convert_matrix_layout(layout, datatype, n, n, Q_t, ldq_t, Q, ldq);
+            free_matrix(Q_t);
+        }
+        if(*compz != 'N')
+        {
+            convert_matrix_layout(layout, datatype, n, n, Z_t, ldz_t, Z, ldz);
+            free_matrix(Z_t);
+        }
+        /* free temporary buffers */
+        free_matrix(A_t);
+        free_matrix(B_t);
+    }
+    return exe_time;
 }
 
 void invoke_gghrd(integer datatype, char *compq, char *compz, integer *n, integer *ilo,
@@ -331,4 +420,42 @@ void invoke_gghrd(integer datatype, char *compq, char *compz, integer *n, intege
             break;
         }
     }
+}
+
+integer invoke_lapacke_gghrd(integer datatype, int layout, char compq, char compz, integer n,
+                             integer ilo, integer ihi, void *a, integer lda, void *b, integer ldb,
+                             void *q, integer ldq, void *z, integer ldz)
+{
+    integer info = 0;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            info
+                = LAPACKE_sgghrd(layout, compq, compz, n, ilo, ihi, a, lda, b, ldb, q, ldq, z, ldz);
+            break;
+        }
+
+        case DOUBLE:
+        {
+            info
+                = LAPACKE_dgghrd(layout, compq, compz, n, ilo, ihi, a, lda, b, ldb, q, ldq, z, ldz);
+            break;
+        }
+
+        case COMPLEX:
+        {
+            info
+                = LAPACKE_cgghrd(layout, compq, compz, n, ilo, ihi, a, lda, b, ldb, q, ldq, z, ldz);
+            break;
+        }
+
+        case DOUBLE_COMPLEX:
+        {
+            info
+                = LAPACKE_zgghrd(layout, compq, compz, n, ilo, ihi, a, lda, b, ldb, q, ldq, z, ldz);
+            break;
+        }
+    }
+    return info;
 }

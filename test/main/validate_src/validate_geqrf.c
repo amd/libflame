@@ -21,8 +21,8 @@ void validate_geqrf(integer m_A, integer n_A, void *A, void *A_test, integer lda
     min_A = fla_min(m_A, n_A);
 
     // Create Q and R matrices.
-    create_matrix(datatype, matrix_layout, m_A, m_A, &Q, m_A);
-    create_matrix(datatype, matrix_layout, m_A, n_A, &R, m_A);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m_A, m_A, &Q, m_A);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_A, &R, m_A);
 
     reset_matrix(datatype, m_A, m_A, Q, m_A);
     reset_matrix(datatype, m_A, n_A, R, m_A);

@@ -22,8 +22,8 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
     n_U = (*jobz != 'A') ? ns : m;
     m_V = (*jobz != 'A') ? ns : n;
     *info = 0;
-    create_matrix(datatype, matrix_layout, m, n, &sigma, m);
-    create_matrix(datatype, matrix_layout, m, n, &Usigma, m);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &sigma, m);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &Usigma, m);
 
     reset_matrix(datatype, m, n, Usigma, m);
 

@@ -13,14 +13,13 @@ void fla_test_gesv_experiment(test_params_t *params, integer datatype, integer p
                               double *t, double *residual);
 void prepare_gesv_run(integer n_A, integer nrhs, void *A, integer lda, void *B, integer ldb,
                       integer *ipiv, integer datatype, integer n_repeats, double *time_min_,
-                      integer *info, integer test_lapacke_interface, integer matrix_layout);
-
+                      integer *info, integer test_lapacke_interface, int matrix_layout);
 void invoke_gesv(integer datatype, integer *nrhs, integer *n, void *a, integer *lda, integer *ipiv,
                  void *b, integer *ldb, integer *info);
-double prepare_lapacke_gesv_run(integer datatype, integer matrix_layout, integer n_A, integer nrhs,
+double prepare_lapacke_gesv_run(integer datatype, int matrix_layout, integer n_A, integer nrhs,
                                 void *A, integer lda, void *B, integer ldb, integer *ipiv,
                                 integer *info);
-integer invoke_lapacke_gesv(integer datatype, integer matrix_layout, integer n, integer nrhs,
+integer invoke_lapacke_gesv(integer datatype, int matrix_layout, integer n, integer nrhs,
                             void *a, integer lda, integer *ipiv, void *b, integer ldb);
 
 void fla_test_gesv(integer argc, char **argv, test_params_t *params)
@@ -120,8 +119,10 @@ void fla_test_gesv_experiment(test_params_t *params, integer datatype, integer p
          *scal = NULL;
     double time_min = 1e9;
     char range = 'U';
+
     integer test_lapacke_interface = params->test_lapacke_interface;
-    integer layout = params->matrix_major;
+    int layout = params->matrix_major;
+
     *residual = params->lin_solver_paramslist[pci].solver_threshold;
     NRHS = params->lin_solver_paramslist[pci].nrhs;
     /* Determine the dimensions*/
@@ -144,11 +145,11 @@ void fla_test_gesv_experiment(test_params_t *params, integer datatype, integer p
     }
 
     /* Create the matrices for the current operation*/
-    create_matrix(datatype, matrix_layout, n, n, &A, lda);
-    create_matrix(datatype, matrix_layout, n, n, &A_save, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_save, lda);
     create_vector(INTEGER, &IPIV, n);
-    create_matrix(datatype, matrix_layout, n, NRHS, &B, ldb);
-    create_matrix(datatype, matrix_layout, n, NRHS, &B_save, ldb);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, NRHS, &B, ldb);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, NRHS, &B_save, ldb);
     create_realtype_vector(datatype, &s_test, n);
 
     /* Initialize the test matrices*/
@@ -218,15 +219,15 @@ void fla_test_gesv_experiment(test_params_t *params, integer datatype, integer p
 
 void prepare_gesv_run(integer n_A, integer nrhs, void *A, integer lda, void *B, integer ldb,
                       integer *IPIV, integer datatype, integer n_repeats, double *time_min_,
-                      integer *info, integer test_lapacke_interface, integer layout)
+                      integer *info, integer test_lapacke_interface, int layout)
 {
     integer i;
     void *A_test, *B_test;
     double time_min = 1e9, exe_time;
 
     /* Save the original matrix */
-    create_matrix(datatype, matrix_layout, n_A, n_A, &A_test, lda);
-    create_matrix(datatype, matrix_layout, n_A, nrhs, &B_test, ldb);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n_A, n_A, &A_test, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n_A, nrhs, &B_test, ldb);
 
     *info = 0;
     for(i = 0; i < n_repeats && *info == 0; ++i)
@@ -260,7 +261,7 @@ void prepare_gesv_run(integer n_A, integer nrhs, void *A, integer lda, void *B, 
     free_matrix(B_test);
 }
 
-double prepare_lapacke_gesv_run(integer datatype, integer layout, integer n_A, integer nrhs,
+double prepare_lapacke_gesv_run(integer datatype, int layout, integer n_A, integer nrhs,
                                 void *A, integer lda, void *B, integer ldb, integer *ipiv,
                                 integer *info)
 {
@@ -337,33 +338,33 @@ void invoke_gesv(integer datatype, integer *n, integer *nrhs, void *a, integer *
     }
 }
 
-integer invoke_lapacke_gesv(integer datatype, integer matrix_layout, integer n, integer nrhs,
-                            void *a, integer lda, integer *ipiv, void *b, integer ldb)
+integer invoke_lapacke_gesv(integer datatype, int layout, integer n, integer nrhs, void *a,
+                            integer lda, integer *ipiv, void *b, integer ldb)
 {
     integer info = 0;
     switch(datatype)
     {
         case FLOAT:
         {
-            info = LAPACKE_sgesv(matrix_layout, n, nrhs, a, lda, ipiv, b, ldb);
+            info = LAPACKE_sgesv(layout, n, nrhs, a, lda, ipiv, b, ldb);
             break;
         }
 
         case DOUBLE:
         {
-            info = LAPACKE_dgesv(matrix_layout, n, nrhs, a, lda, ipiv, b, ldb);
+            info = LAPACKE_dgesv(layout, n, nrhs, a, lda, ipiv, b, ldb);
             break;
         }
 
         case COMPLEX:
         {
-            info = LAPACKE_cgesv(matrix_layout, n, nrhs, a, lda, ipiv, b, ldb);
+            info = LAPACKE_cgesv(layout, n, nrhs, a, lda, ipiv, b, ldb);
             break;
         }
 
         case DOUBLE_COMPLEX:
         {
-            info = LAPACKE_zgesv(matrix_layout, n, nrhs, a, lda, ipiv, b, ldb);
+            info = LAPACKE_zgesv(layout, n, nrhs, a, lda, ipiv, b, ldb);
             break;
         }
     }

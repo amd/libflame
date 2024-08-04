@@ -25,7 +25,7 @@ void validate_gels(char *trans, integer m, integer n, integer nrhs, void *A, int
         NORM = 'I';
     }
 
-    create_matrix(datatype, matrix_layout, nrhs, n1, &C, n1);
+    create_matrix(datatype, LAPACK_COL_MAJOR, nrhs, n1, &C, n1);
     create_vector(datatype, &work, m);
 
     if(m == 0 || n == 0)

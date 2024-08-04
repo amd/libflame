@@ -20,11 +20,11 @@ void validate_hgeqz(char *job, char *compq, char *compz, integer n, void *H, voi
          *Ilambda = NULL;
     *info = 0;
 
-    create_matrix(datatype, matrix_layout, n, n, &lambda, n);
-    create_matrix(datatype, matrix_layout, n, n, &alambda, n);
-    create_matrix(datatype, matrix_layout, n, n, &h_input, ldh);
-    create_matrix(datatype, matrix_layout, n, n, &t_input, ldt);
-    create_matrix(datatype, matrix_layout, n, n, &Ilambda, n);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &lambda, n);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &alambda, n);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &h_input, ldh);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &t_input, ldt);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Ilambda, n);
     set_identity_matrix(datatype, n, n, Ilambda, n);
 
     switch(datatype)

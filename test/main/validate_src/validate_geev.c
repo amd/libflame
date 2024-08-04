@@ -20,8 +20,8 @@ void validate_geev(char *jobvl, char *jobvr, integer m, void *A, void *A_test, i
     *info = 0;
     integer incr = m + 1;
 
-    create_matrix(datatype, matrix_layout, m, m, &lambda, m);
-    create_matrix(datatype, matrix_layout, m, m, &Vlambda, m);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &lambda, m);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &Vlambda, m);
 
     reset_matrix(datatype, m, m, lambda, m);
     reset_matrix(datatype, m, m, Vlambda, m);

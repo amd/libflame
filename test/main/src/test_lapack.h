@@ -449,7 +449,7 @@ typedef struct
     integer p_nfact;
     char imatrix_char;
     integer test_lapacke_interface;
-    integer matrix_major;
+    int matrix_major;
 
     struct SVD_paramlist_t svd_paramslist[NUM_SUB_TESTS];
     struct EIG_Non_symmetric_paramlist_t eig_non_sym_paramslist[NUM_SUB_TESTS];

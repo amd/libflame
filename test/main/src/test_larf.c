@@ -156,10 +156,10 @@ void fla_test_larf_experiment(test_params_t *params, integer datatype, integer p
     create_vector(datatype, &v, v_length);
     copy_vector(datatype, v_num_elements, v_tmp, incv_abs, v, incv);
 
-    create_matrix(datatype, matrix_layout, m, n, &c__, ldc);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &c__, ldc);
     rand_matrix(datatype, c__, m, n, ldc);
 
-    create_matrix(datatype, matrix_layout, m, n, &c__out, ldc);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &c__out, ldc);
 
     /* call to API */
     prepare_larf_run(datatype, side, m, n, v, incv, tau, c__, ldc, c__out, ldc, work, n_repeats,

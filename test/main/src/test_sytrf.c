@@ -128,9 +128,9 @@ void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Create the matrices for the current operation */
-    create_matrix(datatype, matrix_layout, n, n, &A, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
     create_vector(INTEGER, &ipiv, n);
-    create_matrix(datatype, matrix_layout, n, n, &A_test, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
 
     /* Initialize the test matrices */
     if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST && !FLA_OVERFLOW_UNDERFLOW_TEST))
@@ -196,7 +196,7 @@ void prepare_sytrf_run(integer datatype, integer n, void *A, char uplo, integer 
     void *A_save = NULL;
     double time_min = 1e9, exe_time;
 
-    create_matrix(datatype, matrix_layout, n, n, &A_save, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_save, lda);
 
     if(g_lwork == -1)
     {

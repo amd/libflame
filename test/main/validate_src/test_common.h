@@ -13,6 +13,7 @@
 #include "test_prototype.h"
 #include "validate_common.h"
 #include "test_overflow_underflow.h"
+#include "lapacke.h"
 
 #include <limits.h>
 #include <stdint.h>
@@ -28,7 +29,7 @@ extern float s_zero, s_one, s_n_one;
 extern double d_zero, d_one, d_n_one;
 extern scomplex c_zero, c_one, c_n_one;
 extern dcomplex z_zero, z_one, z_n_one;
-extern integer matrix_layout;
+extern int matrix_layout;
 
 #define DRAND() ((double)rand() / ((double)RAND_MAX / 2.0F)) - 1.0F
 #define SRAND() (float)((double)rand() / ((double)RAND_MAX / 2.0F)) - 1.0F
@@ -83,7 +84,7 @@ void copy_realtype_vector(integer datatype, integer M, void *A, integer LDA, voi
 
 /* matrix functions*/
 /* Allocate memory for a matrix of given type */
-void create_matrix(integer datatype, integer matrix_layout, integer M, integer N, void **A,
+void create_matrix(integer datatype, int matrix_layout, integer M, integer N, void **A,
                    integer lda);
 void create_realtype_matrix(integer datatype, void **A, integer M, integer N);
 integer get_datatype(char stype);
@@ -170,8 +171,8 @@ void init_vector_from_file(integer datatype, void *A, integer m, integer inc, FI
 /* Intialize vector with special values */
 void init_vector_spec_in(integer datatype, void *A, integer M, integer incx, char type);
 /* Intialize matrix with special values in random locations of band matrix */
-void init_matrix_spec_rand_band_matrix_in(integer datatype, void *A, integer M, integer N, integer LDA,
-                              integer kl, integer ku, char type);
+void init_matrix_spec_rand_band_matrix_in(integer datatype, void *A, integer M, integer N,
+                                          integer LDA, integer kl, integer ku, char type);
 /* Allocate dynamic memory. If FLA_MEM_UNALIGNED is set, unaligned memory is allocated */
 char *fla_mem_alloc(size_t size);
 /* Generate Hessenberg matrix */
@@ -313,7 +314,7 @@ void diagonalize_vector(integer datatype, void *s, void *sigma, integer m, integ
 void add_negative_values(integer datatype, void *vect, integer n);
 void add_negative_values_ilo_ihi(integer datatype, void *vect, integer ilo, integer ihi);
 /* Convert the given matrix from column major layout to row major layout and vice versa */
-void convert_matrix_layout(integer matrix_layout, integer datatype, integer m, integer n, void *a,
+void convert_matrix_layout(int matrix_layout, integer datatype, integer m, integer n, void *a,
                            integer lda, void *a_t, integer lda_t);
 /* To find reciprocal of each number in real vector X and store it in Y */
 void get_reciprocal_real_vector(integer datatype, void *X, integer n, void *Y, integer inx);

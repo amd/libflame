@@ -12,9 +12,13 @@ void fla_test_orgqr_experiment(test_params_t *params, integer datatype, integer 
                                double *perf, double *t, double *residual);
 void prepare_orgqr_run(integer m, integer n, void *A, integer lda, void *T, void *work,
                        integer *lwork, integer datatype, integer n_repeats, double *time_min_,
-                       integer *info);
+                       integer *info, integer test_lapacke_interface, int matrix_layout);
 void invoke_orgqr(integer datatype, integer *m, integer *n, integer *min_A, void *a, integer *lda,
                   void *tau, void *work, integer *lwork, integer *info);
+double prepare_lapacke_orgqr_run(integer datatype, int matrix_layout, integer m, integer n,
+                                 void *A, integer lda, void *T, integer *info);
+integer invoke_lapacke_orgqr(integer datatype, int matrix_layout, integer m, integer n,
+                             integer k, void *a, integer lda, const void *tau);
 
 void fla_test_orgqr(integer argc, char **argv, test_params_t *params)
 {
@@ -115,6 +119,9 @@ void fla_test_orgqr_experiment(test_params_t *params, integer datatype, integer 
     void *Q = NULL, *R = NULL;
     integer lwork = -1, info = 0, vinfo = 0;
 
+    integer test_lapacke_interface = params->test_lapacke_interface;
+    int layout = params->matrix_major;
+
     /* Get input matrix dimensions.*/
     m = p_cur;
     n = q_cur;
@@ -136,7 +143,7 @@ void fla_test_orgqr_experiment(test_params_t *params, integer datatype, integer 
     if(m >= n)
     {
         /* Create input matrix parameters */
-        create_matrix(datatype, matrix_layout, m, n, &A, lda);
+        create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
 
         /* create tau vector */
         create_vector(datatype, &T_test, fla_min(m, n));
@@ -144,11 +151,11 @@ void fla_test_orgqr_experiment(test_params_t *params, integer datatype, integer 
         init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
 
         /* Make a copy of input matrix A. This is required to validate the API functionality.*/
-        create_matrix(datatype, matrix_layout, m, n, &A_test, lda);
+        create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
         copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
         /* create Q matrix to check orthogonality */
-        create_matrix(datatype, matrix_layout, m, n, &Q, lda);
+        create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &Q, lda);
         reset_matrix(datatype, m, n, Q, lda);
 
         /* Make a workspace query the first time. This will provide us with
@@ -183,7 +190,7 @@ void fla_test_orgqr_experiment(test_params_t *params, integer datatype, integer 
         /* QR Factorisation on matrix A to generate Q and R */
         invoke_geqrf(datatype, &m, &n, A_test, &lda, T_test, work, &lwork, &info);
 
-        create_matrix(datatype, matrix_layout, n, n, &R, n);
+        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &R, n);
         reset_matrix(datatype, n, n, R, n);
         copy_matrix(datatype, "Upper", n, n, A_test, lda, R, n);
 
@@ -191,7 +198,7 @@ void fla_test_orgqr_experiment(test_params_t *params, integer datatype, integer 
 
         /*invoke orgqr API */
         prepare_orgqr_run(m, n, Q, lda, T_test, work_test, &lwork, datatype, n_repeats, time_min,
-                          &info);
+                          &info, test_lapacke_interface, layout);
 
         /* performance computation
            (2/3)*n2*(3m - n) */
@@ -227,7 +234,7 @@ void fla_test_orgqr_experiment(test_params_t *params, integer datatype, integer 
 
 void prepare_orgqr_run(integer m, integer n, void *A, integer lda, void *T, void *work,
                        integer *lwork, integer datatype, integer n_repeats, double *time_min_,
-                       integer *info)
+                       integer *info, integer test_lapacke_interface, int layout)
 {
     integer i;
     void *A_save = NULL;
@@ -235,7 +242,7 @@ void prepare_orgqr_run(integer m, integer n, void *A, integer lda, void *T, void
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
-    create_matrix(datatype, matrix_layout, m, n, &A_save, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_save, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_save, lda);
 
     *info = 0;
@@ -245,12 +252,19 @@ void prepare_orgqr_run(integer m, integer n, void *A, integer lda, void *T, void
            for each iteration*/
         copy_matrix(datatype, "full", m, n, A_save, lda, A, lda);
 
-        exe_time = fla_test_clock();
+        /* Check if LAPACKE interface is enabled */
+        if(test_lapacke_interface == 1)
+        {
+            exe_time = prepare_lapacke_orgqr_run(datatype, layout, m, n, A, lda, T, info);
+        }
+        else
+        {
+            exe_time = fla_test_clock();
+            /* Call LAPACK orgqr API */
+            invoke_orgqr(datatype, &m, &n, &n, A, &lda, T, work, lwork, info);
 
-        /* Call to  orgqr API */
-        invoke_orgqr(datatype, &m, &n, &n, A, &lda, T, work, lwork, info);
-
-        exe_time = fla_test_clock() - exe_time;
+            exe_time = fla_test_clock() - exe_time;
+        }
 
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);
@@ -259,6 +273,41 @@ void prepare_orgqr_run(integer m, integer n, void *A, integer lda, void *T, void
     *time_min_ = time_min;
 
     free_matrix(A_save);
+}
+
+double prepare_lapacke_orgqr_run(integer datatype, int layout, integer m, integer n, void *A,
+                                 integer lda, void *T, integer *info)
+{
+    double exe_time;
+    integer lda_t = lda;
+    void *A_t = NULL;
+    A_t = A;
+
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        lda_t = fla_max(1, n);
+        /* Create temporary buffers for converting matrix layout */
+        create_matrix(datatype, layout, m, n, &A_t, lda_t);
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, m, n, A, lda, A_t, lda_t);
+    }
+
+    exe_time = fla_test_clock();
+
+    /* Call to LAPACKE orgqr API */
+    *info = invoke_lapacke_orgqr(datatype, layout, m, n, n, A_t, lda_t, T);
+
+    exe_time = fla_test_clock() - exe_time;
+
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        /* In case of row_major matrix layout, convert output matrices
+           to column_major layout */
+        convert_matrix_layout(layout, datatype, m, n, A_t, lda_t, A, lda);
+        /* free temporary buffers */
+        free_matrix(A_t);
+    }
+
+    return exe_time;
 }
 
 void invoke_orgqr(integer datatype, integer *m, integer *n, integer *min_A, void *a, integer *lda,
@@ -290,4 +339,37 @@ void invoke_orgqr(integer datatype, integer *m, integer *n, integer *min_A, void
             break;
         }
     }
+}
+
+integer invoke_lapacke_orgqr(integer datatype, int layout, integer m, integer n, integer k,
+                             void *a, integer lda, const void *tau)
+{
+    integer info = 0;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            info = LAPACKE_sorgqr(layout, m, n, n, a, lda, tau);
+            break;
+        }
+
+        case DOUBLE:
+        {
+            info = LAPACKE_dorgqr(layout, m, n, n, a, lda, tau);
+            break;
+        }
+
+        case COMPLEX:
+        {
+            info = LAPACKE_cungqr(layout, m, n, n, a, lda, tau);
+            break;
+        }
+
+        case DOUBLE_COMPLEX:
+        {
+            info = LAPACKE_zungqr(layout, m, n, n, a, lda, tau);
+            break;
+        }
+    }
+    return info;
 }

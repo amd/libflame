@@ -22,8 +22,8 @@ void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void
     n_U = (*jobu != 'A') ? ns : m;
     m_V = (*jobvt != 'A') ? ns : n;
 
-    create_matrix(datatype, matrix_layout, m, n, &sigma, m);
-    create_matrix(datatype, matrix_layout, m, n, &Usigma, m);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &sigma, m);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &Usigma, m);
     reset_matrix(datatype, m, n, Usigma, m);
 
     diagonalize_realtype_vector(datatype, s, sigma, m, n, m);

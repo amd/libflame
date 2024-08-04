@@ -19,8 +19,8 @@ void validate_gesvdx(char *jobu, char *jobvt, char range, integer m, integer n, 
     void *work = NULL;
     *info = 0;
     integer min_m_n = fla_min(m, n);
-    create_matrix(datatype, matrix_layout, m, n, &sigma, m);
-    create_matrix(datatype, matrix_layout, m, n, &U_A, m);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &sigma, m);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &U_A, m);
     reset_matrix(datatype, m, n, U_A, m);
 
     diagonalize_realtype_vector(datatype, s, sigma, min_m_n, n, min_m_n);

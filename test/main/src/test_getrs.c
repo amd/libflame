@@ -12,9 +12,16 @@ void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer 
                                double *perf, double *t, double *residual);
 void prepare_getrs_run(char *trans, integer m_A, integer n_A, void *A, integer lda, void *B,
                        integer ldb, integer *ipiv, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info);
+                       double *time_min_, integer *info, integer test_lapacke_interface,
+                       int matrix_layout);
 void invoke_getrs(integer datatype, char *trans, integer *nrhs, integer *n, void *a, integer *lda,
                   integer *ipiv, void *b, integer *ldb, integer *info);
+double prepare_lapacke_getrs_run(integer datatype, int matrix_layout, char *trans, integer n,
+                                 integer nrhs, void *A, integer lda, void *B, integer ldb,
+                                 integer *ipiv, integer *info);
+integer invoke_lapacke_getrs(integer datatype, int matrix_layout, char trans, integer n,
+                             integer nrhs, const void *a, integer lda, const integer *ipiv, void *b,
+                             integer ldb);
 
 void fla_test_getrs(integer argc, char **argv, test_params_t *params)
 {
@@ -115,6 +122,10 @@ void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer 
     void *A, *A_test, *B, *B_save, *X, *scal = NULL;
     double time_min = 1e9;
     char TRANS = params->lin_solver_paramslist[pci].transr;
+
+    integer test_lapacke_interface = params->test_lapacke_interface;
+    int layout = params->matrix_major;
+
     *residual = params->lin_solver_paramslist[pci].solver_threshold;
     NRHS = params->lin_solver_paramslist[pci].nrhs;
 
@@ -138,12 +149,12 @@ void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Create the matrices for the current operation*/
-    create_matrix(datatype, matrix_layout, n, n, &A, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
     create_vector(INTEGER, &IPIV, n);
-    create_matrix(datatype, matrix_layout, n, NRHS, &B, ldb);
-    create_matrix(datatype, matrix_layout, n, NRHS, &B_save, ldb);
-    create_matrix(datatype, matrix_layout, n, NRHS, &X, ldb);
-    create_matrix(datatype, matrix_layout, n, n, &A_test, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, NRHS, &B, ldb);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, NRHS, &B_save, ldb);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, NRHS, &X, ldb);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
     create_realtype_vector(datatype, &s_test, n);
 
     /* Initialize the test matrices*/
@@ -159,7 +170,8 @@ void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer 
         if(FLA_OVERFLOW_UNDERFLOW_TEST)
         {
             create_realtype_vector(get_datatype(datatype), &scal, n);
-            scale_matrix_underflow_overflow_getrs(datatype, &TRANS, n, n, A, lda, params->imatrix_char, scal);
+            scale_matrix_underflow_overflow_getrs(datatype, &TRANS, n, n, A, lda,
+                                                  params->imatrix_char, scal);
         }
     }
     init_matrix(datatype, B, n, NRHS, ldb, g_ext_fptr, params->imatrix_char);
@@ -174,7 +186,7 @@ void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer 
 
     /* call to API */
     prepare_getrs_run(&TRANS, n, NRHS, A_test, lda, B, ldb, IPIV, datatype, n_repeats, &time_min,
-                      &info);
+                      &info, test_lapacke_interface, layout);
     copy_matrix(datatype, "full", n, NRHS, B, ldb, X, ldb);
     /* execution time */
     *t = time_min;
@@ -187,7 +199,8 @@ void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer 
 
     /* output validation */
     if(info == 0 && !FLA_EXTREME_CASE_TEST)
-        validate_getrs(&TRANS, n, NRHS, A, lda, B_save, ldb, X, datatype, residual, &vinfo, params->imatrix_char, scal);
+        validate_getrs(&TRANS, n, NRHS, A, lda, B_save, ldb, X, datatype, residual, &vinfo,
+                       params->imatrix_char, scal);
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
     {
@@ -207,7 +220,7 @@ void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer 
     free_matrix(X);
     free_matrix(B_save);
     free_vector(s_test);
-    if (FLA_OVERFLOW_UNDERFLOW_TEST)
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
     {
         free_vector(scal);
     }
@@ -215,16 +228,17 @@ void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer 
 
 void prepare_getrs_run(char *TRANS, integer n_A, integer nrhs, void *A, integer lda, void *B,
                        integer ldb, integer *IPIV, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info)
+                       double *time_min_, integer *info, integer test_lapacke_interface,
+                       int layout)
 {
     integer i;
     void *A_save, *B_test;
     double time_min = 1e9, exe_time;
 
     /* Save the original matrix */
-    create_matrix(datatype, matrix_layout, n_A, n_A, &A_save, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n_A, n_A, &A_save, lda);
     copy_matrix(datatype, "full", n_A, n_A, A, lda, A_save, lda);
-    create_matrix(datatype, matrix_layout, n_A, nrhs, &B_test, ldb);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n_A, nrhs, &B_test, ldb);
 
     *info = 0;
     for(i = 0; i < n_repeats && *info == 0; ++i)
@@ -233,12 +247,20 @@ void prepare_getrs_run(char *TRANS, integer n_A, integer nrhs, void *A, integer 
         copy_matrix(datatype, "full", n_A, n_A, A, lda, A_save, lda);
         copy_matrix(datatype, "full", n_A, nrhs, B, ldb, B_test, ldb);
 
-        exe_time = fla_test_clock();
+        /* Check if LAPACKE interface is enabled */
+        if(test_lapacke_interface == 1)
+        {
+            exe_time = prepare_lapacke_getrs_run(datatype, layout, TRANS, n_A, nrhs, A_save, lda,
+                                                 B_test, ldb, IPIV, info);
+        }
+        else
+        {
+            exe_time = fla_test_clock();
+            /* Call LAPACK getrs API */
+            invoke_getrs(datatype, TRANS, &n_A, &nrhs, A_save, &lda, IPIV, B_test, &ldb, info);
 
-        /*  call  getrs API with AFACT */
-        invoke_getrs(datatype, TRANS, &n_A, &nrhs, A_save, &lda, IPIV, B_test, &ldb, info);
-
-        exe_time = fla_test_clock() - exe_time;
+            exe_time = fla_test_clock() - exe_time;
+        }
 
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);
@@ -250,6 +272,49 @@ void prepare_getrs_run(char *TRANS, integer n_A, integer nrhs, void *A, integer 
 
     free_matrix(A_save);
     free_vector(B_test);
+}
+
+double prepare_lapacke_getrs_run(integer datatype, int layout, char *trans, integer n_A,
+                                 integer nrhs, void *A, integer lda, void *B, integer ldb,
+                                 integer *ipiv, integer *info)
+{
+    double exe_time;
+    integer lda_t = lda;
+    integer ldb_t = ldb;
+    void *A_t = NULL, *B_t = NULL;
+    A_t = A;
+    B_t = B;
+    /* In case of row_major matrix layout,
+       convert input matrix to row_major */
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        lda_t = fla_max(1, n_A);
+        ldb_t = fla_max(1, nrhs);
+        /* Create temporary buffers for converting matrix layout */
+        create_matrix(datatype, layout, n_A, n_A, &A_t, lda_t);
+        create_matrix(datatype, layout, n_A, nrhs, &B_t, ldb_t);
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n_A, n_A, A, lda, A_t, lda_t);
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n_A, nrhs, B, ldb, B_t, ldb_t);
+    }
+
+    exe_time = fla_test_clock();
+
+    /* Call LAPACKE getrs API */
+    *info = invoke_lapacke_getrs(datatype, layout, *trans, n_A, nrhs, A_t, lda_t, ipiv, B_t, ldb_t);
+
+    exe_time = fla_test_clock() - exe_time;
+
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        /* In case of row_major matrix layout, convert output matrices
+           to column_major layout */
+        convert_matrix_layout(layout, datatype, n_A, n_A, A_t, lda_t, A, lda);
+        convert_matrix_layout(layout, datatype, n_A, nrhs, B_t, ldb_t, B, ldb);
+        /* free temporary buffers */
+        free_matrix(A_t);
+        free_matrix(B_t);
+    }
+    return exe_time;
 }
 
 /*
@@ -285,4 +350,37 @@ void invoke_getrs(integer datatype, char *trans, integer *n, integer *nrhs, void
             break;
         }
     }
+}
+
+integer invoke_lapacke_getrs(integer datatype, int layout, char trans, integer n, integer nrhs,
+                             const void *a, integer lda, const integer *ipiv, void *b, integer ldb)
+{
+    integer info = 0;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            info = LAPACKE_sgetrs(layout, trans, n, nrhs, a, lda, ipiv, b, ldb);
+            break;
+        }
+
+        case DOUBLE:
+        {
+            info = LAPACKE_dgetrs(layout, trans, n, nrhs, a, lda, ipiv, b, ldb);
+            break;
+        }
+
+        case COMPLEX:
+        {
+            info = LAPACKE_cgetrs(layout, trans, n, nrhs, a, lda, ipiv, b, ldb);
+            break;
+        }
+
+        case DOUBLE_COMPLEX:
+        {
+            info = LAPACKE_zgetrs(layout, trans, n, nrhs, a, lda, ipiv, b, ldb);
+            break;
+        }
+    }
+    return info;
 }

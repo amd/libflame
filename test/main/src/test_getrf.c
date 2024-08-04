@@ -12,9 +12,15 @@ void fla_test_getrf_experiment(test_params_t *params, integer datatype, integer 
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
                                double *perf, double *t, double *residual);
 void prepare_getrf_run(integer m_A, integer n_A, void *A, integer lda, integer *ipiv,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info);
+                       integer datatype, integer n_repeats, double *time_min_, integer *info,
+                       integer test_lapacke_interface, int matrix_layout);
 void invoke_getrf(integer datatype, integer *m, integer *n, void *a, integer *lda, integer *ipiv,
                   integer *info);
+double prepare_lapacke_getrf_run(integer datatype, int matrix_layout, integer m_A, integer n_A,
+                                 void *A, integer lda, integer *ipiv, integer *info);
+integer invoke_lapacke_getrf(integer datatype, int matrix_layout, integer m, integer n, void *a,
+                             integer lda, integer *ipiv);
+
 void fla_test_getrf(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "LU factorization";
@@ -111,6 +117,9 @@ void fla_test_getrf_experiment(test_params_t *params, integer datatype, integer 
     char range = 'U';
     double time_min = 1e9;
 
+    integer test_lapacke_interface = params->test_lapacke_interface;
+    int layout = params->matrix_major;
+
     /* Determine the dimensions*/
     m = p_cur;
     n = q_cur;
@@ -128,7 +137,7 @@ void fla_test_getrf_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Create the matrices for the current operation*/
-    create_matrix(datatype, matrix_layout, m, n, &A, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
     create_vector(INTEGER, &IPIV, fla_min(m, n));
     create_realtype_vector(datatype, &s_test, fla_min(m, n));
 
@@ -148,11 +157,12 @@ void fla_test_getrf_experiment(test_params_t *params, integer datatype, integer 
         }
     }
     /* Save the original matrix*/
-    create_matrix(datatype, matrix_layout, m, n, &A_test, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
     /* call to API */
-    prepare_getrf_run(m, n, A_test, lda, IPIV, datatype, n_repeats, &time_min, &info);
+    prepare_getrf_run(m, n, A_test, lda, IPIV, datatype, n_repeats, &time_min, &info,
+                      test_lapacke_interface, layout);
 
     /* execution time */
     *t = time_min;
@@ -198,14 +208,15 @@ void fla_test_getrf_experiment(test_params_t *params, integer datatype, integer 
 }
 
 void prepare_getrf_run(integer m_A, integer n_A, void *A, integer lda, integer *IPIV,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info)
+                       integer datatype, integer n_repeats, double *time_min_, integer *info,
+                       integer test_lapacke_interface, int layout)
 {
     integer i;
     void *A_save;
     double time_min = 1e9, exe_time;
 
     /* Save the original matrix */
-    create_matrix(datatype, matrix_layout, m_A, n_A, &A_save, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_A, &A_save, lda);
     copy_matrix(datatype, "full", m_A, n_A, A, lda, A_save, lda);
 
     *info = 0;
@@ -215,12 +226,19 @@ void prepare_getrf_run(integer m_A, integer n_A, void *A, integer lda, integer *
         /* Copy original input data */
         copy_matrix(datatype, "full", m_A, n_A, A, lda, A_save, lda);
 
-        exe_time = fla_test_clock();
-
-        /*  call to API */
-        invoke_getrf(datatype, &m_A, &n_A, A_save, &lda, IPIV, info);
-
-        exe_time = fla_test_clock() - exe_time;
+        /* Check if LAPACKE interface is enabled */
+        if(test_lapacke_interface == 1)
+        {
+            exe_time
+                = prepare_lapacke_getrf_run(datatype, layout, m_A, n_A, A_save, lda, IPIV, info);
+        }
+        else
+        {
+            exe_time = fla_test_clock();
+            /* Call LAPACK getrf API */
+            invoke_getrf(datatype, &m_A, &n_A, A_save, &lda, IPIV, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
 
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);
@@ -230,6 +248,40 @@ void prepare_getrf_run(integer m_A, integer n_A, void *A, integer lda, integer *
     /*  Save the AFACT to matrix A */
     copy_matrix(datatype, "full", m_A, n_A, A_save, lda, A, lda);
     free_matrix(A_save);
+}
+
+double prepare_lapacke_getrf_run(integer datatype, int layout, integer m_A, integer n_A,
+                                 void *A, integer lda, integer *ipiv, integer *info)
+{
+    double exe_time;
+    integer lda_t = lda;
+    void *A_t = NULL;
+    A_t = A;
+
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        lda_t = fla_max(1, n_A);
+        /* Create temporary buffers for converting matrix layout */
+        create_matrix(datatype, layout, m_A, n_A, &A_t, lda_t);
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, m_A, n_A, A, lda, A_t, lda_t);
+    }
+
+    exe_time = fla_test_clock();
+
+    /*  call LAPACKE getrf API */
+    *info = invoke_lapacke_getrf(datatype, layout, m_A, n_A, A_t, lda_t, ipiv);
+
+    exe_time = fla_test_clock() - exe_time;
+
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        /* In case of row_major matrix layout, convert output matrices
+           to column_major layout */
+        convert_matrix_layout(layout, datatype, m_A, n_A, A_t, lda_t, A, lda);
+        /* free temporary buffers */
+        free_matrix(A_t);
+    }
+    return exe_time;
 }
 
 /*
@@ -265,4 +317,37 @@ void invoke_getrf(integer datatype, integer *m, integer *n, void *a, integer *ld
             break;
         }
     }
+}
+
+integer invoke_lapacke_getrf(integer datatype, int layout, integer m, integer n, void *a,
+                             integer lda, integer *ipiv)
+{
+    integer info = 0;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            info = LAPACKE_sgetrf(layout, m, n, a, lda, ipiv);
+            break;
+        }
+
+        case DOUBLE:
+        {
+            info = LAPACKE_dgetrf(layout, m, n, a, lda, ipiv);
+            break;
+        }
+
+        case COMPLEX:
+        {
+            info = LAPACKE_cgetrf(layout, m, n, a, lda, ipiv);
+            break;
+        }
+
+        case DOUBLE_COMPLEX:
+        {
+            info = LAPACKE_zgetrf(layout, m, n, a, lda, ipiv);
+            break;
+        }
+    }
+    return info;
 }

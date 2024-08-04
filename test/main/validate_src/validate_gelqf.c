@@ -21,8 +21,8 @@ void validate_gelqf(integer m_A, integer n_A, void *A, void *A_test, integer lda
     min_A = fla_min(m_A, n_A);
 
     /* Create Q and L matrices. */
-    create_matrix(datatype, matrix_layout, n_A, n_A, &Q, n_A);
-    create_matrix(datatype, matrix_layout, m_A, n_A, &L, m_A);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n_A, n_A, &Q, n_A);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_A, &L, m_A);
 
 
     reset_matrix(datatype, n_A, n_A, Q, n_A);

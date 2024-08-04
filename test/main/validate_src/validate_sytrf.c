@@ -22,10 +22,10 @@ void validate_sytrf(char *uplo, integer n, integer lda, void *A_res, integer dat
     void *X = NULL;
     void *B = NULL;
 
-    create_matrix(datatype, matrix_layout, n, n, &D, n);
-    create_matrix(datatype, matrix_layout, n, n, &A_val, n);
-    create_matrix(datatype, matrix_layout, n, n, &work, n);
-    create_matrix(datatype, matrix_layout, n, n, &temp, n);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &D, n);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_val, n);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &work, n);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &temp, n);
 
     create_vector(datatype, &X, n);
     create_vector(datatype, &B, n);

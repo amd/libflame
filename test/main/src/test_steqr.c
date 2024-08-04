@@ -11,9 +11,14 @@ void fla_test_steqr_experiment(test_params_t *params, integer datatype, integer 
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
                                double *perf, double *t, double *residual);
 void prepare_steqr_run(char *compz, integer n, void *Z, integer ldz, void *D, void *E,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info);
+                       integer datatype, integer n_repeats, double *time_min_, integer *info,
+                       integer test_lapacke_interface, int matrix_layout);
 void invoke_steqr(integer datatype, char *compz, integer *n, void *z, integer *ldz, void *d,
                   void *e, void *work, integer *info);
+double prepare_lapacke_steqr_run(integer datatype, int matrix_layout, char *compz, integer n,
+                                 void *Z, integer ldz, void *D, void *E, integer *info);
+integer invoke_lapacke_steqr(integer datatype, int matrix_layout, char compz, integer n,
+                             void *d, void *e, void *z, integer ldz);
 
 #define STEQR_VL 0.1
 #define STEQR_VU 1000
@@ -116,6 +121,9 @@ void fla_test_steqr_experiment(test_params_t *params, integer datatype, integer 
     void *L = NULL, *scal = NULL;
     double resid;
 
+    integer test_lapacke_interface = params->test_lapacke_interface;
+    int layout = params->matrix_major;
+
     /* Get input matrix dimensions.*/
     compz = params->eig_sym_paramslist[pci].compz;
     *residual = params->eig_sym_paramslist[pci].threshold_value;
@@ -131,7 +139,7 @@ void fla_test_steqr_experiment(test_params_t *params, integer datatype, integer 
     {
         if(ldz == -1)
         {
-            if(compz == 'N')
+            if((compz == 'N') && (layout != LAPACK_ROW_MAJOR))
             {
                 ldz = 1;
             }
@@ -146,10 +154,10 @@ void fla_test_steqr_experiment(test_params_t *params, integer datatype, integer 
     realtype = get_realtype(datatype);
 
     /* Create input matrix parameters */
-    create_matrix(datatype, matrix_layout, n, n, &Z, ldz);
-    create_matrix(datatype, matrix_layout, n, n, &A, lda);
-    create_matrix(datatype, matrix_layout, n, n, &Q, lda);
-    create_matrix(datatype, matrix_layout, n, n, &Z_test, ldz);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z, ldz);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Q, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z_test, ldz);
 
     reset_matrix(datatype, n, n, Z, ldz);
     reset_matrix(datatype, n, n, A, lda);
@@ -215,7 +223,8 @@ void fla_test_steqr_experiment(test_params_t *params, integer datatype, integer 
     copy_vector(realtype, n, D, 1, D_test, 1);
     copy_vector(realtype, n - 1, E, 1, E_test, 1);
 
-    prepare_steqr_run(&compz, n, Z_test, ldz, D_test, E_test, datatype, n_repeats, time_min, &info);
+    prepare_steqr_run(&compz, n, Z_test, ldz, D_test, E_test, datatype, n_repeats, time_min, &info,
+                      test_lapacke_interface, layout);
 
     /* performance computation
        24 n^2 flops for eigen vectors of Z, compz = 'N'
@@ -260,7 +269,8 @@ void fla_test_steqr_experiment(test_params_t *params, integer datatype, integer 
 }
 
 void prepare_steqr_run(char *compz, integer n, void *Z, integer ldz, void *D, void *E,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info)
+                       integer datatype, integer n_repeats, double *time_min_, integer *info,
+                       integer test_lapacke_interface, int layout)
 {
     void *Z_save = NULL, *D_save = NULL, *E_save = NULL, *work = NULL;
     integer i, realtype;
@@ -270,7 +280,7 @@ void prepare_steqr_run(char *compz, integer n, void *Z, integer ldz, void *D, vo
        each itertaion.*/
     if(*compz != 'N')
     {
-        create_matrix(datatype, matrix_layout, n, n, &Z_save, ldz);
+        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z_save, ldz);
         copy_matrix(datatype, "full", n, n, Z, ldz, Z_save, ldz);
     }
     realtype = get_realtype(datatype);
@@ -292,12 +302,19 @@ void prepare_steqr_run(char *compz, integer n, void *Z, integer ldz, void *D, vo
         copy_vector(realtype, n - 1, E_save, 1, E, 1);
 
         create_vector(realtype, &work, 2 * (n - 1));
-        exe_time = fla_test_clock();
+        if(test_lapacke_interface == 1)
+        {
+            exe_time = prepare_lapacke_steqr_run(datatype, layout, compz, n, Z, ldz, D, E, info);
+        }
+        else
+        {
+            exe_time = fla_test_clock();
 
-        /* call to API */
-        invoke_steqr(datatype, compz, &n, Z, &ldz, D, E, work, info);
+            /* call to API */
+            invoke_steqr(datatype, compz, &n, Z, &ldz, D, E, work, info);
 
-        exe_time = fla_test_clock() - exe_time;
+            exe_time = fla_test_clock() - exe_time;
+        }
 
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);
@@ -314,6 +331,40 @@ void prepare_steqr_run(char *compz, integer n, void *Z, integer ldz, void *D, vo
     }
     free_matrix(D_save);
     free_matrix(E_save);
+}
+
+double prepare_lapacke_steqr_run(integer datatype, int layout, char *compz, integer n, void *Z,
+                                 integer ldz, void *D, void *E, integer *info)
+{
+    double exe_time;
+    integer ldz_t = ldz;
+    void *Z_t = NULL;
+    Z_t = Z;
+
+    if((*compz != 'N') && (layout == LAPACK_ROW_MAJOR))
+    {
+        ldz_t = fla_max(1, n);
+        /* Create temporary buffers for converting matrix layout */
+        create_matrix(datatype, layout, n, n, &Z_t, ldz_t);
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, Z, ldz, Z_t, ldz_t);
+    }
+
+    exe_time = fla_test_clock();
+
+    /* call to LAPACKE steqr API */
+    *info = invoke_lapacke_steqr(datatype, layout, *compz, n, D, E, Z_t, ldz_t);
+
+    exe_time = fla_test_clock() - exe_time;
+    if((*compz != 'N') && (layout == LAPACK_ROW_MAJOR))
+    {
+        /* In case of row_major matrix layout, convert output matrices
+           to column_major layout */
+        convert_matrix_layout(layout, datatype, n, n, Z_t, ldz_t, Z, ldz);
+        /* free temporary buffers */
+        free_matrix(Z_t);
+    }
+
+    return exe_time;
 }
 
 void invoke_steqr(integer datatype, char *compz, integer *n, void *z, integer *ldz, void *d,
@@ -342,4 +393,34 @@ void invoke_steqr(integer datatype, char *compz, integer *n, void *z, integer *l
             break;
         }
     }
+}
+
+integer invoke_lapacke_steqr(integer datatype, int layout, char compz, integer n, void *d,
+                             void *e, void *z, integer ldz)
+{
+    integer info = 0;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            info = LAPACKE_ssteqr(layout, compz, n, d, e, z, ldz);
+            break;
+        }
+        case DOUBLE:
+        {
+            info = LAPACKE_dsteqr(layout, compz, n, d, e, z, ldz);
+            break;
+        }
+        case COMPLEX:
+        {
+            info = LAPACKE_csteqr(layout, compz, n, d, e, z, ldz);
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            info = LAPACKE_zsteqr(layout, compz, n, d, e, z, ldz);
+            break;
+        }
+    }
+    return info;
 }

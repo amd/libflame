@@ -11,11 +11,20 @@ void fla_test_ggev_experiment(test_params_t *params, integer datatype, integer p
 void prepare_ggev_run(char *jobvl, char *jobvr, integer n, void *a, integer lda, void *b,
                       integer ldb, void *alpha, void *alphar, void *alphai, void *beta, void *vl,
                       integer ldvl, void *vr, integer ldvr, integer datatype, integer n_repeats,
-                      double *time_min_, integer *info);
+                      double *time_min_, integer *info, integer test_lapacke_interface,
+                      int matrix_layout);
 void invoke_ggev(integer datatype, char *jobvl, char *jobvr, integer *n, void *a, integer *lda,
                  void *b, integer *ldb, void *alpha, void *alphar, void *alphai, void *beta,
                  void *vl, integer *ldvl, void *vr, integer *ldvr, void *work, integer *lwork,
                  void *rwork, integer *info);
+double prepare_lapacke_ggev_run(integer datatype, int matrix_layout, char *jobvl, char *jobvr,
+                                integer n, void *a, integer lda, void *b, integer ldb, void *alpha,
+                                void *alphar, void *alphai, void *beta, void *vl, integer ldvl,
+                                void *vr, integer ldvr, integer *info);
+integer invoke_lapacke_ggev(integer datatype, int matrix_layout, char jobvl, char jobvr,
+                            integer n, void *a, integer lda, void *b, integer ldb, void *alpha,
+                            void *alphar, void *alphai, void *beta, void *vl, integer ldvl,
+                            void *vr, integer ldvr);
 
 void fla_test_ggev(integer argc, char **argv, test_params_t *params)
 {
@@ -124,6 +133,9 @@ void fla_test_ggev_experiment(test_params_t *params, integer datatype, integer p
     char JOBVL = params->eig_non_sym_paramslist[pci].jobvsl;
     char JOBVR = params->eig_non_sym_paramslist[pci].jobvsr;
 
+    integer test_lapacke_interface = params->test_lapacke_interface;
+    int layout = params->matrix_major;
+
     /* Get input matrix dimensions */
     m = p_cur;
 
@@ -173,10 +185,10 @@ void fla_test_ggev_experiment(test_params_t *params, integer datatype, integer p
     }
 
     /* Create input matrix parameters */
-    create_matrix(datatype, matrix_layout, m, m, &A, lda);
-    create_matrix(datatype, matrix_layout, m, m, &B, ldb);
-    create_matrix(datatype, matrix_layout, m, m, &VL, ldvl);
-    create_matrix(datatype, matrix_layout, m, m, &VR, ldvr);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &A, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &B, ldb);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &VL, ldvl);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &VR, ldvr);
     if(datatype == FLOAT || datatype == DOUBLE)
     {
         create_vector(datatype, &alphar, m);
@@ -196,13 +208,14 @@ void fla_test_ggev_experiment(test_params_t *params, integer datatype, integer p
     }
 
     /* Make a copy of input matrix A. This is required to validate the API functionality */
-    create_matrix(datatype, matrix_layout, m, m, &A_test, lda);
-    create_matrix(datatype, matrix_layout, m, m, &B_test, ldb);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &A_test, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &B_test, ldb);
     copy_matrix(datatype, "full", m, m, A, lda, A_test, lda);
     copy_matrix(datatype, "full", m, m, B, ldb, B_test, ldb);
 
     prepare_ggev_run(&JOBVL, &JOBVR, m, A_test, lda, B_test, ldb, alpha, alphar, alphai, beta, VL,
-                     ldvl, VR, ldvr, datatype, n_repeats, &time_min, &info);
+                     ldvl, VR, ldvr, datatype, n_repeats, &time_min, &info, test_lapacke_interface,
+                     layout);
 
     /* execution time */
     *t = time_min;
@@ -232,9 +245,9 @@ void fla_test_ggev_experiment(test_params_t *params, integer datatype, integer p
                 double time_min_copy = 1e9;
 
                 g_lwork = -1;
-                create_matrix(datatype, matrix_layout, m, m, &VL_copy, m);
-                create_matrix(datatype, matrix_layout, m, m, &A_copy, lda);
-                create_matrix(datatype, matrix_layout, m, m, &B_copy, ldb);
+                create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &VL_copy, m);
+                create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &A_copy, lda);
+                create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &B_copy, ldb);
                 if(datatype == FLOAT || datatype == DOUBLE)
                 {
                     create_vector(datatype, &alphar_copy, m);
@@ -250,7 +263,7 @@ void fla_test_ggev_experiment(test_params_t *params, integer datatype, integer p
 
                 prepare_ggev_run("V", &JOBVR, m, A_copy, lda, B_copy, ldb, alpha_copy, alphar_copy,
                                  alphai_copy, beta_copy, VL_copy, m, NULL, ldvr, datatype,
-                                 n_repeats, &time_min_copy, &info);
+                                 n_repeats, &time_min_copy, &info, test_lapacke_interface, layout);
                 /* Valdiate eigen values from both the runs
                   (JOBVL = JOBVR = N with that of JOBVL = V and JOBVR = N)*/
                 if(info == 0)
@@ -309,7 +322,8 @@ void fla_test_ggev_experiment(test_params_t *params, integer datatype, integer p
 void prepare_ggev_run(char *jobvl, char *jobvr, integer n_A, void *A, integer lda, void *B,
                       integer ldb, void *alpha, void *alphar, void *alphai, void *beta, void *VL,
                       integer ldvl, void *VR, integer ldvr, integer datatype, integer n_repeats,
-                      double *time_min_, integer *info)
+                      double *time_min_, integer *info, integer test_lapacke_interface,
+                      int layout)
 {
     void *A_save = NULL, *B_save = NULL, *work = NULL, *rwork = NULL;
     integer i;
@@ -318,14 +332,15 @@ void prepare_ggev_run(char *jobvl, char *jobvr, integer n_A, void *A, integer ld
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
-    create_matrix(datatype, matrix_layout, n_A, n_A, &A_save, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n_A, n_A, &A_save, lda);
     copy_matrix(datatype, "full", n_A, n_A, A, lda, A_save, lda);
-    create_matrix(datatype, matrix_layout, n_A, n_A, &B_save, ldb);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n_A, n_A, &B_save, ldb);
     copy_matrix(datatype, "full", n_A, n_A, B, ldb, B_save, ldb);
 
     /* Make a workspace query the first time through. This will provide us with
-     and ideal workspace size based on an internal block size. */
-    if(g_lwork <= 0)
+       and ideal workspace size based on an internal block size.
+       NOTE: LAPACKE interface handles workspace query internally */
+    if((test_lapacke_interface == 0) && (g_lwork <= 0))
     {
         lwork = -1;
         create_vector(datatype, &work, 8 * n_A);
@@ -359,14 +374,21 @@ void prepare_ggev_run(char *jobvl, char *jobvr, integer n_A, void *A, integer ld
         {
             create_realtype_vector(datatype, &rwork, 8 * n_A);
         }
-        exe_time = fla_test_clock();
-
-        /* call to API */
-
-        invoke_ggev(datatype, jobvl, jobvr, &n_A, A, &lda, B, &ldb, alpha, alphar, alphai, beta, VL,
-                    &ldvl, VR, &ldvr, work, &lwork, rwork, info);
-
-        exe_time = fla_test_clock() - exe_time;
+        /* Check if LAPACKE interface is enabled */
+        if(test_lapacke_interface == 1)
+        {
+            exe_time
+                = prepare_lapacke_ggev_run(datatype, layout, jobvl, jobvr, n_A, A, lda, B, ldb,
+                                           alpha, alphar, alphai, beta, VL, ldvl, VR, ldvr, info);
+        }
+        else
+        {
+            exe_time = fla_test_clock();
+            /* Call LAPACK ggev API */
+            invoke_ggev(datatype, jobvl, jobvr, &n_A, A, &lda, B, &ldb, alpha, alphar, alphai, beta,
+                        VL, &ldvl, VR, &ldvr, work, &lwork, rwork, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
 
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);
@@ -385,6 +407,76 @@ void prepare_ggev_run(char *jobvl, char *jobvr, integer n_A, void *A, integer ld
 
     free_matrix(A_save);
     free_matrix(B_save);
+}
+
+double prepare_lapacke_ggev_run(integer datatype, int layout, char *jobvl, char *jobvr,
+                                integer n_A, void *A, integer lda, void *B, integer ldb,
+                                void *alpha, void *alphar, void *alphai, void *beta, void *vl,
+                                integer ldvl, void *vr, integer ldvr, integer *info)
+{
+    double exe_time;
+    integer lda_t = lda;
+    integer ldb_t = ldb;
+    integer ldvl_t = ldvl;
+    integer ldvr_t = ldvr;
+    void *A_t = NULL, *B_t = NULL, *vl_t = NULL, *vr_t = NULL;
+    A_t = A;
+    B_t = B;
+    vl_t = vl;
+    vr_t = vr;
+    /* In case of row_major matrix layout,
+       convert input matrix to row_major */
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        lda_t = fla_max(1, n_A);
+        ldb_t = fla_max(1, n_A);
+        ldvl_t = fla_max(1, n_A);
+        ldvr_t = fla_max(1, n_A);
+        /* Create temporary buffers for converting matrix layout */
+        create_matrix(datatype, layout, n_A, n_A, &A_t, lda_t);
+        create_matrix(datatype, layout, n_A, n_A, &B_t, ldb_t);
+        if(*jobvl == 'V')
+        {
+            create_matrix(datatype, layout, n_A, n_A, &vl_t, ldvl_t);
+        }
+        if(*jobvr == 'V')
+        {
+            create_matrix(datatype, layout, n_A, n_A, &vr_t, ldvr_t);
+        }
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n_A, n_A, A, lda, A_t, lda_t);
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n_A, n_A, B, ldb, B_t, ldb_t);
+    }
+
+    exe_time = fla_test_clock();
+
+    /* call LAPACKE ggev API */
+    *info = invoke_lapacke_ggev(datatype, layout, *jobvl, *jobvr, n_A, A_t, lda_t, B_t, ldb_t,
+                                alpha, alphar, alphai, beta, vl_t, ldvl_t, vr_t, ldvr_t);
+
+    exe_time = fla_test_clock() - exe_time;
+
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        /* In case of row_major matrix layout, convert output matrices
+           to column_major layout */
+        convert_matrix_layout(layout, datatype, n_A, n_A, A_t, lda_t, A, lda);
+        convert_matrix_layout(layout, datatype, n_A, n_A, B_t, ldb_t, B, ldb);
+
+        if(*jobvl == 'V')
+        {
+            convert_matrix_layout(layout, datatype, n_A, n_A, vl_t, ldvl_t, vl, ldvl);
+            free_matrix(vl_t);
+        }
+        if(*jobvr == 'V')
+        {
+            convert_matrix_layout(layout, datatype, n_A, n_A, vr_t, ldvr_t, vr, ldvr);
+            free_matrix(vr_t);
+        }
+        /* free temporary buffers */
+        free_matrix(A_t);
+        free_matrix(B_t);
+    }
+    return exe_time;
 }
 
 void invoke_ggev(integer datatype, char *jobvl, char *jobvr, integer *n, void *a, integer *lda,
@@ -422,4 +514,43 @@ void invoke_ggev(integer datatype, char *jobvl, char *jobvr, integer *n, void *a
             break;
         }
     }
+}
+
+integer invoke_lapacke_ggev(integer datatype, int layout, char jobvl, char jobvr, integer n,
+                            void *a, integer lda, void *b, integer ldb, void *alpha, void *alphar,
+                            void *alphai, void *beta, void *vl, integer ldvl, void *vr,
+                            integer ldvr)
+{
+    integer info = 0;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            info = LAPACKE_sggev(layout, jobvl, jobvr, n, a, lda, b, ldb, alphar, alphai, beta, vl,
+                                 ldvl, vr, ldvr);
+            break;
+        }
+
+        case DOUBLE:
+        {
+            info = LAPACKE_dggev(layout, jobvl, jobvr, n, a, lda, b, ldb, alphar, alphai, beta, vl,
+                                 ldvl, vr, ldvr);
+            break;
+        }
+
+        case COMPLEX:
+        {
+            info = LAPACKE_cggev(layout, jobvl, jobvr, n, a, lda, b, ldb, alpha, beta, vl, ldvl, vr,
+                                 ldvr);
+            break;
+        }
+
+        case DOUBLE_COMPLEX:
+        {
+            info = LAPACKE_zggev(layout, jobvl, jobvr, n, a, lda, b, ldb, alpha, beta, vl, ldvl, vr,
+                                 ldvr);
+            break;
+        }
+    }
+    return info;
 }

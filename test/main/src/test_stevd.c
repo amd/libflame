@@ -11,9 +11,14 @@ void fla_test_stevd_experiment(test_params_t *params, integer datatype, integer 
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
                                double *perf, double *t, double *residual);
 void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, void *E,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info);
+                       integer datatype, integer n_repeats, double *time_min_, integer *info,
+                       integer test_lapacke_interface, int matrix_layout);
 void invoke_stevd(integer datatype, char *jobz, integer *n, void *z, integer *ldz, void *d, void *e,
                   void *work, integer *lwork, void *iwork, integer *liwork, integer *info);
+double prepare_lapacke_stevd_run(integer datatype, int matrix_layout, char *jobz, integer n,
+                                 void *Z, integer ldz, void *D, void *E, integer *info);
+integer invoke_lapacke_stevd(integer datatype, int matrix_layout, char jobz, integer n, void *d,
+                             void *e, void *z, integer ldz);
 
 #define STEVD_VL 0.1
 #define STEVD_VU 1000
@@ -121,6 +126,9 @@ void fla_test_stevd_experiment(test_params_t *params, integer datatype, integer 
     void *Q = NULL, *A = NULL, *L = NULL, *scal = NULL;
     char range = 'V', uplo = 'U';
 
+    integer test_lapacke_interface = params->test_lapacke_interface;
+    int layout = params->matrix_major;
+
     /* Get input matrix dimensions.*/
     jobz = params->eig_sym_paramslist[pci].jobz;
     ldz = params->eig_sym_paramslist[pci].ldz;
@@ -139,7 +147,7 @@ void fla_test_stevd_experiment(test_params_t *params, integer datatype, integer 
     {
         if(ldz == -1)
         {
-            if(jobz == 'N')
+            if((jobz == 'N') && (matrix_layout == LAPACK_ROW_MAJOR))
             {
                 ldz = 1;
             }
@@ -153,13 +161,13 @@ void fla_test_stevd_experiment(test_params_t *params, integer datatype, integer 
     lda = fla_max(n, ldz);
 
     /* Create input matrix parameters */
-    create_matrix(datatype, matrix_layout, n, n, &Z, ldz);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z, ldz);
     create_vector(datatype, &D, n);
     create_vector(datatype, &E, n - 1);
 
-    create_matrix(datatype, matrix_layout, n, n, &Q, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Q, lda);
     reset_matrix(datatype, n, n, Q, lda);
-    create_matrix(datatype, matrix_layout, n, n, &A, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
     reset_matrix(datatype, n, n, A, lda);
 
     if(g_ext_fptr != NULL || FLA_EXTREME_CASE_TEST)
@@ -183,13 +191,14 @@ void fla_test_stevd_experiment(test_params_t *params, integer datatype, integer 
     /* Get symmetric tridiagonal matrix from D, E and use for validation.*/
     copy_sym_tridiag_matrix(datatype, D, E, n, n, Z, ldz);
 
-    create_matrix(datatype, matrix_layout, n, n, &Z_test, ldz);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z_test, ldz);
     create_vector(datatype, &D_test, n);
     create_vector(datatype, &E_test, n - 1);
     copy_vector(datatype, n, D, 1, D_test, 1);
     copy_vector(datatype, n - 1, E, 1, E_test, 1);
 
-    prepare_stevd_run(&jobz, n, Z_test, ldz, D_test, E_test, datatype, n_repeats, time_min, &info);
+    prepare_stevd_run(&jobz, n, Z_test, ldz, D_test, E_test, datatype, n_repeats, time_min, &info,
+                      test_lapacke_interface, layout);
 
     /* performance computation
         6 * n^3 + n^2 flops for eigen vectors
@@ -245,7 +254,8 @@ void fla_test_stevd_experiment(test_params_t *params, integer datatype, integer 
 }
 
 void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, void *E,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info)
+                       integer datatype, integer n_repeats, double *time_min_, integer *info,
+                       integer test_lapacke_interface, int layout)
 {
     void *Z_save, *D_save, *E_save, *work, *iwork;
     integer lwork, liwork;
@@ -254,7 +264,7 @@ void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, voi
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
-    create_matrix(datatype, matrix_layout, n, n, &Z_save, ldz);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z_save, ldz);
     create_vector(datatype, &D_save, n);
     create_vector(datatype, &E_save, n - 1);
 
@@ -263,8 +273,9 @@ void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, voi
     copy_vector(datatype, n - 1, E, 1, E_save, 1);
 
     /* Make a workspace query the first time through. This will provide us with
-       and ideal workspace size based on an internal block size.*/
-    if(g_lwork <= 0 || g_liwork <= 0)
+       and ideal workspace size based on an internal block size.
+       NOTE: LAPACKE interface handles workspace query internally */
+    if((test_lapacke_interface == 0) && (g_lwork <= 0 || g_liwork <= 0))
     {
         lwork = -1;
         liwork = -1;
@@ -304,10 +315,19 @@ void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, voi
         reset_vector(datatype, work, lwork, 1);
         reset_vector(INTEGER, iwork, liwork, 1);
 
-        exe_time = fla_test_clock();
-        /* call to API */
-        invoke_stevd(datatype, jobz, &n, Z, &ldz, D, E, work, &lwork, iwork, &liwork, info);
-        exe_time = fla_test_clock() - exe_time;
+        /* Check if LAPACKE interface is enabled */
+        if(test_lapacke_interface == 1)
+        {
+            exe_time = prepare_lapacke_stevd_run(datatype, layout, jobz, n, Z, ldz, D, E, info);
+        }
+        else
+        {
+            exe_time = fla_test_clock();
+            /* Call LAPACK stevd API*/
+            invoke_stevd(datatype, jobz, &n, Z, &ldz, D, E, work, &lwork, iwork, &liwork, info);
+
+            exe_time = fla_test_clock() - exe_time;
+        }
 
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);
@@ -321,6 +341,37 @@ void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, voi
     free_matrix(E_save);
     free_vector(work);
     free_vector(iwork);
+}
+
+double prepare_lapacke_stevd_run(integer datatype, int layout, char *jobz, integer n, void *Z,
+                                 integer ldz, void *D, void *E, integer *info)
+{
+    double exe_time;
+    integer ldz_t = ldz;
+    void *Z_t = NULL;
+    Z_t = Z;
+
+    if((*jobz != 'N') && (layout == LAPACK_ROW_MAJOR))
+    {
+        ldz_t = fla_max(1, n);
+        /* Create temporary buffers for converting matrix layout */
+        create_matrix(datatype, layout, n, n, &Z_t, ldz_t);
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, Z, ldz, Z_t, ldz_t);
+    }
+    exe_time = fla_test_clock();
+    /* call LAPACKE stevd API */
+    *info = invoke_lapacke_stevd(datatype, layout, *jobz, n, D, E, Z_t, ldz_t);
+
+    exe_time = fla_test_clock() - exe_time;
+    if((*jobz != 'N') && (layout == LAPACK_ROW_MAJOR))
+    {
+        /* In case of row_major matrix layout, convert output matrices
+           to column_major layout */
+        convert_matrix_layout(layout, datatype, n, n, Z_t, ldz_t, Z, ldz);
+        /* free temporary buffers */
+        free_matrix(Z_t);
+    }
+    return exe_time;
 }
 
 void invoke_stevd(integer datatype, char *jobz, integer *n, void *z, integer *ldz, void *d, void *e,
@@ -339,4 +390,24 @@ void invoke_stevd(integer datatype, char *jobz, integer *n, void *z, integer *ld
             break;
         }
     }
+}
+
+integer invoke_lapacke_stevd(integer datatype, int layout, char jobz, integer n, void *d,
+                             void *e, void *z, integer ldz)
+{
+    integer info = 0;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            info = LAPACKE_sstevd(layout, jobz, n, d, e, z, ldz);
+            break;
+        }
+        case DOUBLE:
+        {
+            info = LAPACKE_dstevd(layout, jobz, n, d, e, z, ldz);
+            break;
+        }
+    }
+    return info;
 }

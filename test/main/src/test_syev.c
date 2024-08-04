@@ -11,9 +11,14 @@ void fla_test_syev_experiment(test_params_t *params, integer datatype, integer p
                               integer pci, integer n_repeats, integer einfo, double *perf,
                               double *t, double *residual);
 void prepare_syev_run(char *jobz, char *uplo, integer n, void *A, integer lda, void *w,
-                      integer datatype, integer n_repeats, double *time_min_, integer *info);
+                      integer datatype, integer n_repeats, double *time_min_, integer *info,
+                      integer test_lapacke_interface, int matrix_layout);
 void invoke_syev(integer datatype, char *jobz, char *uplo, integer *n, void *a, integer *lda,
                  void *w, void *work, integer *lwork, void *rwork, integer *info);
+double prepare_lapacke_syev_run(integer datatype, int matrix_layout, char *jobz, char *uplo,
+                                integer n, void *A, integer lda, void *w, integer *info);
+integer invoke_lapacke_syev(integer datatype, int matrix_layout, char jobz, char uplo,
+                            integer n, void *a, integer lda, void *w);
 
 #define SYEV_VL 0.1
 #define SYEV_VU 1000
@@ -113,6 +118,9 @@ void fla_test_syev_experiment(test_params_t *params, integer datatype, integer p
     char jobz, uplo, range = 'V';
     void *A = NULL, *w = NULL, *A_test = NULL, *L = NULL, *scal = NULL;
 
+    integer test_lapacke_interface = params->test_lapacke_interface;
+    int layout = params->matrix_major;
+
     /* Get input matrix dimensions.*/
     jobz = params->eig_sym_paramslist[pci].jobz;
     uplo = params->eig_sym_paramslist[pci].uplo;
@@ -132,7 +140,7 @@ void fla_test_syev_experiment(test_params_t *params, integer datatype, integer p
     }
 
     /* Create input matrix parameters */
-    create_matrix(datatype, matrix_layout, n, n, &A, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
     create_realtype_vector(datatype, &w, n);
     if(g_ext_fptr != NULL)
     {
@@ -152,10 +160,11 @@ void fla_test_syev_experiment(test_params_t *params, integer datatype, integer p
         }
     }
     /* Make a copy of input matrix A. This is required to validate the API functionality.*/
-    create_matrix(datatype, matrix_layout, n, n, &A_test, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
 
-    prepare_syev_run(&jobz, &uplo, n, A_test, lda, w, datatype, n_repeats, time_min, &info);
+    prepare_syev_run(&jobz, &uplo, n, A_test, lda, w, datatype, n_repeats, time_min, &info,
+                     test_lapacke_interface, layout);
 
     /* performance computation
        (8/3)n^3 flops for eigen vectors
@@ -193,7 +202,8 @@ void fla_test_syev_experiment(test_params_t *params, integer datatype, integer p
 }
 
 void prepare_syev_run(char *jobz, char *uplo, integer n, void *A, integer lda, void *w,
-                      integer datatype, integer n_repeats, double *time_min_, integer *info)
+                      integer datatype, integer n_repeats, double *time_min_, integer *info,
+                      integer test_lapacke_interface, int layout)
 {
     void *A_save = NULL, *work = NULL, *rwork = NULL, *w_test = NULL;
     integer i, lwork;
@@ -201,13 +211,13 @@ void prepare_syev_run(char *jobz, char *uplo, integer n, void *A, integer lda, v
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
-    create_matrix(datatype, matrix_layout, n, n, &A_save, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_save, lda);
     copy_matrix(datatype, "full", n, n, A, lda, A_save, lda);
 
     /* Make a workspace query the first time through. This will provide us with
-       and ideal workspace size based on an internal block size.*/
-
-    if(g_lwork <= 0)
+       and ideal workspace size based on an internal block size.
+       NOTE: LAPACKE interface handles workspace query internally */
+    if((test_lapacke_interface == 0) && (g_lwork <= 0))
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
@@ -240,12 +250,20 @@ void prepare_syev_run(char *jobz, char *uplo, integer n, void *A, integer lda, v
         else
             rwork = NULL;
 
-        exe_time = fla_test_clock();
+        /* Check if LAPACKE interface is enabled */
+        if(test_lapacke_interface == 1)
+        {
+            exe_time
+                = prepare_lapacke_syev_run(datatype, layout, jobz, uplo, n, A, lda, w_test, info);
+        }
+        else
+        {
+            exe_time = fla_test_clock();
+            /* Call LAPACK syev API */
+            invoke_syev(datatype, jobz, uplo, &n, A, &lda, w_test, work, &lwork, rwork, info);
 
-        /* call to API */
-        invoke_syev(datatype, jobz, uplo, &n, A, &lda, w_test, work, &lwork, rwork, info);
-
-        exe_time = fla_test_clock() - exe_time;
+            exe_time = fla_test_clock() - exe_time;
+        }
 
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);
@@ -265,6 +283,39 @@ void prepare_syev_run(char *jobz, char *uplo, integer n, void *A, integer lda, v
     *time_min_ = time_min;
 
     free_matrix(A_save);
+}
+
+double prepare_lapacke_syev_run(integer datatype, int layout, char *jobz, char *uplo, integer n,
+                                void *A, integer lda, void *w_test, integer *info)
+{
+    double exe_time;
+    integer lda_t = lda;
+    void *A_t = NULL;
+    A_t = A;
+
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        lda_t = fla_max(1, n);
+        /* Create temporary buffers for converting matrix layout */
+        create_matrix(datatype, layout, n, n, &A_t, lda_t);
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, A, lda, A_t, lda_t);
+    }
+    exe_time = fla_test_clock();
+
+    /* call LAPACKE syev API */
+    *info = invoke_lapacke_syev(datatype, layout, *jobz, *uplo, n, A_t, lda_t, w_test);
+
+    exe_time = fla_test_clock() - exe_time;
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        /* In case of row_major matrix layout, convert output matrices
+           to column_major layout */
+        convert_matrix_layout(layout, datatype, n, n, A_t, lda_t, A, lda);
+        /* free temporary buffers */
+        free_matrix(A_t);
+    }
+
+    return exe_time;
 }
 
 void invoke_syev(integer datatype, char *jobz, char *uplo, integer *n, void *a, integer *lda,
@@ -293,4 +344,34 @@ void invoke_syev(integer datatype, char *jobz, char *uplo, integer *n, void *a, 
             break;
         }
     }
+}
+
+integer invoke_lapacke_syev(integer datatype, int layout, char jobz, char uplo, integer n,
+                            void *a, integer lda, void *w)
+{
+    integer info = 0;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            info = LAPACKE_ssyev(layout, jobz, uplo, n, a, lda, w);
+            break;
+        }
+        case DOUBLE:
+        {
+            info = LAPACKE_dsyev(layout, jobz, uplo, n, a, lda, w);
+            break;
+        }
+        case COMPLEX:
+        {
+            info = LAPACKE_cheev(layout, jobz, uplo, n, a, lda, w);
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            info = LAPACKE_zheev(layout, jobz, uplo, n, a, lda, w);
+            break;
+        }
+    }
+    return info;
 }

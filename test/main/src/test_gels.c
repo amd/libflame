@@ -163,10 +163,10 @@ void fla_test_gels_experiment(test_params_t *params, integer datatype, integer p
     }
 
     /* Create the matrices for the current operation */
-    create_matrix(datatype, matrix_layout, m, n, &A, lda);
-    create_matrix(datatype, matrix_layout, m, n, &A_test, lda);
-    create_matrix(datatype, matrix_layout, m_b, nrhs, &B, ldb);
-    create_matrix(datatype, matrix_layout, m_b, nrhs, &B_test, ldb);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m_b, nrhs, &B, ldb);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m_b, nrhs, &B_test, ldb);
     create_realtype_vector(datatype, &s_test, fla_min(m, n));
 
     /* Initialize the test matrices */
@@ -242,8 +242,8 @@ void prepare_gels_run(integer datatype, char trans, integer m, integer n, intege
     void *A_save = NULL, *B_save = NULL;
     double time_min_ = 1e9, exe_time;
 
-    create_matrix(datatype, matrix_layout, m, n, &A_save, lda);
-    create_matrix(datatype, matrix_layout, m_b, nrhs, &B_save, ldb);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_save, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m_b, nrhs, &B_save, ldb);
 
     if(g_lwork <= 0)
     {

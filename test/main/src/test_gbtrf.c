@@ -131,8 +131,8 @@ void fla_test_gbtrf_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Create the matrices for the current operation*/
-    create_matrix(datatype, matrix_layout, m, n, &AB, ldab);
-    create_matrix(datatype, matrix_layout, m, n, &AB_test, ldab);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &AB, ldab);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &AB_test, ldab);
     create_vector(INTEGER, &IPIV, fla_min(m, n));
     reset_vector(INTEGER, IPIV, fla_min(m, n), 1);
 
@@ -144,7 +144,7 @@ void fla_test_gbtrf_experiment(test_params_t *params, integer datatype, integer 
     }
     else if(FLA_EXTREME_CASE_TEST)
     {
-        create_matrix(datatype, matrix_layout, m, n, &A, m);
+        create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, m);
         if((params->imatrix_char == 'A') || (params->imatrix_char == 'F'))
         {
             init_matrix_spec_rand_band_matrix_in(datatype, A, m, n, m, kl, ku, params->imatrix_char);
@@ -217,7 +217,7 @@ void prepare_gbtrf_run(integer m_A, integer n_A, integer kl, integer ku, void *A
     double time_min = 1e9, exe_time;
 
     /* Save the original matrix */
-    create_matrix(datatype, matrix_layout, m_A, n_A, &AB_save, ldab);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_A, &AB_save, ldab);
     copy_matrix(datatype, "full", ldab, n_A, AB, ldab, AB_save, ldab);
 
     *info = 0;

@@ -144,11 +144,11 @@ void fla_test_gbtrs_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Create the matrices for the current operation*/
-    create_matrix(datatype, matrix_layout, n, n, &AB, ldab);
-    create_matrix(datatype, matrix_layout, n, n, &AB_test, ldab);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &AB, ldab);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &AB_test, ldab);
     create_vector(INTEGER, &IPIV, n);
-    create_matrix(datatype, matrix_layout, n, nrhs, &B, ldb);
-    create_matrix(datatype, matrix_layout, n, nrhs, &X, ldb);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, nrhs, &B, ldb);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, nrhs, &X, ldb);
 
     /* Initialize the test matrices*/
     if(g_ext_fptr != NULL)
@@ -165,7 +165,7 @@ void fla_test_gbtrs_experiment(test_params_t *params, integer datatype, integer 
     {
         if(FLA_EXTREME_CASE_TEST)
         {
-            create_matrix(datatype, matrix_layout, n, n, &A, n);
+            create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, n);
             if((params->imatrix_char == 'A') || (params->imatrix_char == 'F'))
             {
                 init_matrix_spec_rand_band_matrix_in(datatype, A, n, n, n, kl, ku, params->imatrix_char);
@@ -176,7 +176,7 @@ void fla_test_gbtrs_experiment(test_params_t *params, integer datatype, integer 
             }
             /* Initialize input matrix with extreme values */
             init_matrix(datatype, B, n, nrhs, ldb, NULL, params->imatrix_char);
-            
+
             get_band_storage_matrix(datatype, n, n, kl, ku, A, n, AB, ldab);
             free_matrix(A);
         }
@@ -217,7 +217,7 @@ void fla_test_gbtrs_experiment(test_params_t *params, integer datatype, integer 
     /* output validation */
     if((!FLA_EXTREME_CASE_TEST) && (info == 0))
     {
-        create_matrix(datatype, matrix_layout, n, n, &A, n);
+        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, n);
         reset_matrix(datatype, n, n, A, n);
         /* Get original Band matrix from AB*/
         get_band_matrix_from_band_storage(datatype, n, n, kl, ku, AB, ldab, A, n);
@@ -255,7 +255,7 @@ void prepare_gbtrs_run(char trans, integer n_A, integer kl, integer ku, integer 
     double time_min = 1e9, exe_time;
 
     /* Save the original matrix */
-    create_matrix(datatype, matrix_layout, n_A, nrhs, &B_save, ldb);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n_A, nrhs, &B_save, ldb);
 
     *info = 0;
     for(i = 0; i < n_repeats && *info == 0; ++i)

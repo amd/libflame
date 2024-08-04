@@ -11,11 +11,21 @@ void fla_test_hgeqz_experiment(test_params_t *params, integer datatype, integer 
 void prepare_hgeqz_run(char *job, char *compq, char *compz, integer n, integer *ilo, integer *ihi,
                        void *h, integer ldh, void *t, integer ldt, void *alpha, void *alphar,
                        void *alphai, void *beta, void *q, integer ldq, void *z, integer ldz,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info);
+                       integer datatype, integer n_repeats, double *time_min_, integer *info,
+                       integer test_lapacke_interface, int matrix_layout);
 void invoke_hgeqz(integer datatype, char *job, char *compq, char *compz, integer *n, integer *ilo,
                   integer *ihi, void *h, integer *ldh, void *t, integer *ldt, void *alpha,
                   void *alphar, void *alphai, void *beta, void *q, integer *ldq, void *z,
                   integer *ldz, void *work, integer *lwork, void *rwork, integer *info);
+double prepare_lapacke_hgeqz_run(integer datatype, int matrix_layout, char *job, char *compq,
+                                 char *compz, integer n, integer *ilo, integer *ihi, void *h,
+                                 integer ldh, void *t, integer ldt, void *alpha, void *alphar,
+                                 void *alphai, void *beta, void *q, integer ldq, void *z,
+                                 integer ldz, integer *info);
+integer invoke_lapacke_hgeqz(integer datatype, int matrix_layout, char job, char compq,
+                             char compz, integer n, integer ilo, integer ihi, void *h, integer ldh,
+                             void *t, integer ldt, void *alpha, void *alphar, void *alphai,
+                             void *beta, void *q, integer ldq, void *z, integer ldz);
 
 void fla_test_hgeqz(integer argc, char **argv, test_params_t *params)
 {
@@ -119,6 +129,9 @@ void fla_test_hgeqz_experiment(test_params_t *params, integer datatype, integer 
     void *alpha = NULL, *alphar = NULL, *alphai = NULL, *beta = NULL, *scale = NULL, *Q_A = NULL;
     char compz, compq, job;
 
+    integer test_lapacke_interface = params->test_lapacke_interface;
+    int layout = params->matrix_major;
+
     /* Get input matrix dimensions. */
     n = p_cur;
     ldh = params->eig_sym_paramslist[pci].lda;
@@ -173,14 +186,14 @@ void fla_test_hgeqz_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Create input matrix */
-    create_matrix(datatype, matrix_layout, n, n, &H, ldh);
-    create_matrix(datatype, matrix_layout, n, n, &T, ldt);
-    create_matrix(datatype, matrix_layout, n, n, &Q, ldq);
-    create_matrix(datatype, matrix_layout, n, n, &Z, ldz);
-    create_matrix(datatype, matrix_layout, n, n, &A, ldh);
-    create_matrix(datatype, matrix_layout, n, n, &B, ldt);
-    create_matrix(datatype, matrix_layout, n, n, &Q_A, ldq);
-    create_matrix(datatype, matrix_layout, n, n, &Z_A, ldz);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &H, ldh);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &T, ldt);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Q, ldq);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z, ldz);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, ldh);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &B, ldt);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Q_A, ldq);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z_A, ldz);
     if(datatype == FLOAT || datatype == DOUBLE)
     {
         create_vector(datatype, &alphar, n);
@@ -208,7 +221,7 @@ void fla_test_hgeqz_experiment(test_params_t *params, integer datatype, integer 
         /* Decompose matrix B in to QR and store orthogonal matrix in Q and R in B */
         if(compq == 'N')
         {
-            create_matrix(datatype, matrix_layout, n, n, &Q_temp, ldt);
+            create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Q_temp, ldt);
             get_orthogonal_matrix_from_QR(datatype, n, B, ldt, Q_temp, ldt, &info);
             free_matrix(Q_temp);
         }
@@ -236,17 +249,18 @@ void fla_test_hgeqz_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Make copy of matrix H,T,Q and Z. This is required to validate the API functionality */
-    create_matrix(datatype, matrix_layout, n, n, &H_test, ldh);
-    create_matrix(datatype, matrix_layout, n, n, &T_test, ldt);
-    create_matrix(datatype, matrix_layout, n, n, &Q_test, ldq);
-    create_matrix(datatype, matrix_layout, n, n, &Z_test, ldz);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &H_test, ldh);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &T_test, ldt);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Q_test, ldq);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z_test, ldz);
     copy_matrix(datatype, "full", n, n, H, ldh, H_test, ldh);
     copy_matrix(datatype, "full", n, n, T, ldt, T_test, ldt);
     copy_matrix(datatype, "full", n, n, Q, ldq, Q_test, ldq);
     copy_matrix(datatype, "full", n, n, Z, ldz, Z_test, ldz);
 
     prepare_hgeqz_run(&job, &compq, &compq, n, &ilo, &ihi, H_test, ldh, T_test, ldt, alpha, alphar,
-                      alphai, beta, Q_test, ldq, Z_test, ldz, datatype, n_repeats, time_min, &info);
+                      alphai, beta, Q_test, ldq, Z_test, ldz, datatype, n_repeats, time_min, &info,
+                      test_lapacke_interface, layout);
 
     /* Performance computation
        (7)n^3 flops for eigen vectors for real
@@ -312,7 +326,8 @@ void fla_test_hgeqz_experiment(test_params_t *params, integer datatype, integer 
 void prepare_hgeqz_run(char *job, char *compq, char *compz, integer n, integer *ilo, integer *ihi,
                        void *H, integer ldh, void *T, integer ldt, void *alpha, void *alphar,
                        void *alphai, void *beta, void *Q, integer ldq, void *Z, integer ldz,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info)
+                       integer datatype, integer n_repeats, double *time_min_, integer *info,
+                       integer test_lapacke_interface, int layout)
 {
     void *H_save = NULL, *T_save = NULL, *Q_save = NULL, *Z_save = NULL, *work = NULL, *rwork;
     integer i, lwork;
@@ -320,10 +335,10 @@ void prepare_hgeqz_run(char *job, char *compq, char *compz, integer n, integer *
 
     /* Make a copy of the input matrix H,T,Q and Z. Same input values will be passed in each
      * itertaion.*/
-    create_matrix(datatype, matrix_layout, n, n, &H_save, ldh);
-    create_matrix(datatype, matrix_layout, n, n, &T_save, ldt);
-    create_matrix(datatype, matrix_layout, n, n, &Q_save, ldq);
-    create_matrix(datatype, matrix_layout, n, n, &Z_save, ldz);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &H_save, ldh);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &T_save, ldt);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Q_save, ldq);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z_save, ldz);
     create_realtype_vector(datatype, &rwork, n);
     copy_matrix(datatype, "full", n, n, H, ldh, H_save, ldh);
     copy_matrix(datatype, "full", n, n, T, ldt, T_save, ldt);
@@ -331,8 +346,9 @@ void prepare_hgeqz_run(char *job, char *compq, char *compz, integer n, integer *
     copy_matrix(datatype, "full", n, n, Z, ldz, Z_save, ldz);
 
     /* Make a workspace query the first time through. This will provide us with
-     and ideal workspace size based on an internal block size.*/
-    if(g_lwork <= 0)
+     and ideal workspace size based on an internal block size.
+     NOTE: LAPACKE interface handles workspace query internally */
+    if((test_lapacke_interface == 0) && (g_lwork <= 0))
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
@@ -366,13 +382,21 @@ void prepare_hgeqz_run(char *job, char *compq, char *compz, integer n, integer *
         copy_matrix(datatype, "full", n, n, Z_save, ldz, Z, ldz);
         create_vector(datatype, &work, lwork);
 
-        exe_time = fla_test_clock();
-
-        /* Call to hgeqz API */
-        invoke_hgeqz(datatype, job, compq, compz, &n, ilo, ihi, H, &ldh, T, &ldt, alpha, alphar,
-                     alphai, beta, Q, &ldq, Z, &ldz, work, &lwork, rwork, info);
-
-        exe_time = fla_test_clock() - exe_time;
+        /* Check if LAPACKE interface is enabled */
+        if(test_lapacke_interface == 1)
+        {
+            exe_time = prepare_lapacke_hgeqz_run(datatype, layout, job, compq, compz, n, ilo, ihi,
+                                                 H, ldh, T, ldt, alpha, alphar, alphai, beta, Q,
+                                                 ldq, Z, ldz, info);
+        }
+        else
+        {
+            exe_time = fla_test_clock();
+            /* Call LAPACK hgeqz API */
+            invoke_hgeqz(datatype, job, compq, compz, &n, ilo, ihi, H, &ldh, T, &ldt, alpha, alphar,
+                         alphai, beta, Q, &ldq, Z, &ldz, work, &lwork, rwork, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
 
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);
@@ -387,6 +411,79 @@ void prepare_hgeqz_run(char *job, char *compq, char *compz, integer n, integer *
     free(Q_save);
     free(T_save);
     free_vector(rwork);
+}
+
+double prepare_lapacke_hgeqz_run(integer datatype, int layout, char *job, char *compq,
+                                 char *compz, integer n, integer *ilo, integer *ihi, void *H,
+                                 integer ldh, void *T, integer ldt, void *alpha, void *alphar,
+                                 void *alphai, void *beta, void *Q, integer ldq, void *Z,
+                                 integer ldz, integer *info)
+{
+    double exe_time;
+    integer ldh_t = ldh;
+    integer ldt_t = ldt;
+    integer ldq_t = ldq;
+    integer ldz_t = ldz;
+    void *H_t = NULL, *T_t = NULL, *Q_t = NULL, *Z_t = NULL;
+    H_t = H;
+    T_t = T;
+    Q_t = Q;
+    Z_t = Z;
+    /* In case of row_major matrix layout,
+       convert input matrices to row_major */
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        ldh_t = fla_max(1, n);
+        ldt_t = fla_max(1, n);
+        ldq_t = fla_max(1, n);
+        ldz_t = fla_max(1, n);
+        /* Create temporary buffers for converting matrix layout */
+        create_matrix(datatype, layout, n, n, &H_t, ldh_t);
+        create_matrix(datatype, layout, n, n, &T_t, ldt_t);
+
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, H, ldh, H_t, ldh_t);
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, T, ldt, T_t, ldt_t);
+        if(*compq != 'N')
+        {
+            create_matrix(datatype, layout, n, n, &Q_t, ldq_t);
+            convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, Q, ldq, Q_t, ldq_t);
+        }
+        if(*compz != 'N')
+        {
+            create_matrix(datatype, layout, n, n, &Z_t, ldz_t);
+            convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, Z, ldz, Z_t, ldz_t);
+        }
+    }
+    exe_time = fla_test_clock();
+
+    /* Call to hgeqz API */
+    *info = invoke_lapacke_hgeqz(datatype, layout, *job, *compq, *compz, n, *ilo, *ihi, H_t, ldh_t,
+                                 T_t, ldt_t, alpha, alphar, alphai, beta, Q_t, ldq_t, Z_t, ldz_t);
+
+    exe_time = fla_test_clock() - exe_time;
+
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        /* In case of row_major matrix layout, convert output matrices
+           to column_major layout */
+        convert_matrix_layout(layout, datatype, n, n, H_t, ldh_t, H, ldh);
+        convert_matrix_layout(layout, datatype, n, n, T_t, ldt_t, T, ldt);
+
+        if(*compq != 'N')
+        {
+            convert_matrix_layout(layout, datatype, n, n, Q_t, ldq_t, Q, ldq);
+            free_matrix(Q_t);
+        }
+        if(*compz != 'N')
+        {
+            convert_matrix_layout(layout, datatype, n, n, Z_t, ldz_t, Z, ldz);
+            free_matrix(Z_t);
+        }
+        /* free temporary buffers */
+        free_matrix(H_t);
+        free_matrix(T_t);
+    }
+    return exe_time;
 }
 
 void invoke_hgeqz(integer datatype, char *job, char *compq, char *compz, integer *n, integer *ilo,
@@ -424,4 +521,43 @@ void invoke_hgeqz(integer datatype, char *job, char *compq, char *compz, integer
             break;
         }
     }
+}
+
+integer invoke_lapacke_hgeqz(integer datatype, int layout, char job, char compq, char compz,
+                             integer n, integer ilo, integer ihi, void *h, integer ldh, void *t,
+                             integer ldt, void *alpha, void *alphar, void *alphai, void *beta,
+                             void *q, integer ldq, void *z, integer ldz)
+{
+    integer info = 0;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            info = LAPACKE_shgeqz(layout, job, compq, compz, n, ilo, ihi, h, ldh, t, ldt, alphar,
+                                  alphai, beta, q, ldq, z, ldz);
+            break;
+        }
+
+        case DOUBLE:
+        {
+            info = LAPACKE_dhgeqz(layout, job, compq, compz, n, ilo, ihi, h, ldh, t, ldt, alphar,
+                                  alphai, beta, q, ldq, z, ldz);
+            break;
+        }
+
+        case COMPLEX:
+        {
+            info = LAPACKE_chgeqz(layout, job, compq, compz, n, ilo, ihi, h, ldh, t, ldt, alpha,
+                                  beta, q, ldq, z, ldz);
+            break;
+        }
+
+        case DOUBLE_COMPLEX:
+        {
+            info = LAPACKE_zhgeqz(layout, job, compq, compz, n, ilo, ihi, h, ldh, t, ldt, alpha,
+                                  beta, q, ldq, z, ldz);
+            break;
+        }
+    }
+    return info;
 }

@@ -9,10 +9,15 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
                                double *perf, double *t, double *residual);
 void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, integer ldz,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info);
+                       integer datatype, integer n_repeats, double *time_min_, integer *info,
+                       integer test_lapacke_interface, int matrix_layout);
 void invoke_stedc(integer datatype, char *compz, integer *n, void *D, void *E, void *Z,
                   integer *ldz, void *work, integer *lwork, void *rwork, integer *lrwork,
                   integer *iwork, integer *liwork, integer *info);
+double prepare_lapacke_stedc_run(integer datatype, int matrix_layout, char *compz, integer n,
+                                 void *D, void *E, void *Z, integer ldz, integer *info);
+integer invoke_lapacke_stedc(integer datatype, int matrix_layout, char compz, integer n,
+                             void *d, void *e, void *z, integer ldz);
 
 #define STEDC_VL 0.1
 #define STEDC_VU 1000
@@ -120,6 +125,9 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
     char compz, uplo, range = 'V';
     double resid;
 
+    integer test_lapacke_interface = params->test_lapacke_interface;
+    int layout = params->matrix_major;
+
     /* Get input matrix dimensions. */
     n = q_cur;
 
@@ -134,7 +142,7 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
     {
         if(ldz == -1)
         {
-            if(compz == 'N')
+            if((compz == 'N') && (layout != LAPACK_ROW_MAJOR))
             {
                 ldz = 1;
             }
@@ -147,10 +155,10 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
 
     lda = fla_max(ldz, n);
 
-    create_matrix(datatype, matrix_layout, n, n, &A, lda);
-    create_matrix(datatype, matrix_layout, n, n, &Z, ldz);
-    create_matrix(datatype, matrix_layout, n, n, &Z_test, ldz);
-    create_matrix(datatype, matrix_layout, n, n, &Q, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z, ldz);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z_test, ldz);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Q, lda);
 
     reset_matrix(datatype, lda, n, A, lda);
     reset_matrix(datatype, ldz, n, Z, ldz);
@@ -228,8 +236,8 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
     create_vector(realtype, &E_test, n - 1);
     copy_vector(realtype, n - 1, E, 1, E_test, 1);
 
-    prepare_stedc_run(&compz, n, D_test, E_test, Z_test, ldz, datatype, n_repeats, &time_min,
-                      &info);
+    prepare_stedc_run(&compz, n, D_test, E_test, Z_test, ldz, datatype, n_repeats, &time_min, &info,
+                      test_lapacke_interface, layout);
 
     /* Execution time. */
     *t = time_min;
@@ -296,7 +304,8 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
 }
 
 void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, integer ldz,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info)
+                       integer datatype, integer n_repeats, double *time_min_, integer *info,
+                       integer test_lapacke_interface, int layout)
 {
     integer index, lwork, liwork, lrwork, realtype;
     void *D_save = NULL, *E_save = NULL, *E_test = NULL, *Z_save = NULL;
@@ -307,7 +316,7 @@ void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, intege
        each itertaion.*/
     if(*compz == 'V')
     {
-        create_matrix(datatype, matrix_layout, n, n, &Z_save, ldz);
+        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z_save, ldz);
         copy_matrix(datatype, "full", n, n, Z, ldz, Z_save, ldz);
     }
     realtype = get_realtype(datatype);
@@ -316,9 +325,11 @@ void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, intege
     create_vector(realtype, &E_save, n - 1);
     copy_vector(realtype, n - 1, E, 1, E_save, 1);
 
-    /* Call to STEDC() API to get work buffers size. */
-    if(g_lwork == -1 || g_liwork == -1
-       || ((datatype == COMPLEX || datatype == DOUBLE_COMPLEX) && g_lrwork == -1))
+    /* Call to STEDC() API to get work buffers size.
+       NOTE: LAPACKE interface handles workspace query internally */
+    if((test_lapacke_interface == 0)
+       && (g_lwork == -1 || g_liwork == -1
+           || ((datatype == COMPLEX || datatype == DOUBLE_COMPLEX) && g_lrwork == -1)))
     {
         /* Make a workspace query the first time. This will provide us with
         and ideal workspace size based on internal block size.*/
@@ -384,13 +395,21 @@ void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, intege
         }
         reset_vector(INTEGER, iwork, liwork, 1);
 
-        exe_time = fla_test_clock();
+        /* Check if LAPACKE interface is enabled */
+        if(test_lapacke_interface == 1)
+        {
+            exe_time
+                = prepare_lapacke_stedc_run(datatype, layout, compz, n, D, E_test, Z, ldz, info);
+        }
+        else
+        {
+            exe_time = fla_test_clock();
+            /* Call LAPACK stedc API */
+            invoke_stedc(datatype, compz, &n, D, E_test, Z, &ldz, work, &lwork, rwork, &lrwork,
+                         iwork, &liwork, info);
 
-        /* Call to STEDC() API. */
-        invoke_stedc(datatype, compz, &n, D, E_test, Z, &ldz, work, &lwork, rwork, &lrwork, iwork,
-                     &liwork, info);
-
-        exe_time = fla_test_clock() - exe_time;
+            exe_time = fla_test_clock() - exe_time;
+        }
 
         /* Get the best execution time. */
         time_min = fla_min(time_min, exe_time);
@@ -411,6 +430,40 @@ void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, intege
         free_vector(rwork);
     }
     free_vector(iwork);
+}
+
+double prepare_lapacke_stedc_run(integer datatype, int layout, char *compz, integer n, void *D,
+                                 void *E, void *Z, integer ldz, integer *info)
+{
+    double exe_time;
+    integer ldz_t = ldz;
+    void *Z_t = NULL;
+    Z_t = Z;
+
+    if((*compz != 'N') && (layout == LAPACK_ROW_MAJOR))
+    {
+        ldz_t = fla_max(1, n);
+        /* Create temporary buffers for converting matrix layout */
+        create_matrix(datatype, layout, n, n, &Z_t, ldz_t);
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, Z, ldz, Z_t, ldz_t);
+    }
+
+    exe_time = fla_test_clock();
+
+    /* Call LAPACKE STEDC() API. */
+    *info = invoke_lapacke_stedc(datatype, layout, *compz, n, D, E, Z_t, ldz_t);
+
+    exe_time = fla_test_clock() - exe_time;
+    if((*compz != 'N') && (layout == LAPACK_ROW_MAJOR))
+    {
+        /* In case of row_major matrix layout, convert output matrices
+           to column_major layout */
+        convert_matrix_layout(layout, datatype, n, n, Z_t, ldz_t, Z, ldz);
+        /* free temporary buffers */
+        free_matrix(Z_t);
+    }
+
+    return exe_time;
 }
 
 void invoke_stedc(integer datatype, char *compz, integer *n, void *D, void *E, void *Z,
@@ -442,4 +495,34 @@ void invoke_stedc(integer datatype, char *compz, integer *n, void *D, void *E, v
             break;
         }
     }
+}
+
+integer invoke_lapacke_stedc(integer datatype, int layout, char compz, integer n, void *D,
+                             void *E, void *Z, integer ldz)
+{
+    integer info = 0;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            info = LAPACKE_sstedc(layout, compz, n, D, E, Z, ldz);
+            break;
+        }
+        case DOUBLE:
+        {
+            info = LAPACKE_dstedc(layout, compz, n, D, E, Z, ldz);
+            break;
+        }
+        case COMPLEX:
+        {
+            info = LAPACKE_cstedc(layout, compz, n, D, E, Z, ldz);
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            info = LAPACKE_zstedc(layout, compz, n, D, E, Z, ldz);
+            break;
+        }
+    }
+    return info;
 }

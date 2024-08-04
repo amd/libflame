@@ -10,10 +10,17 @@ void fla_test_hseqr_experiment(test_params_t *params, integer datatype, integer 
                                double *perf, double *t, double *residual);
 void prepare_hseqr_run(char *job, char *compz, integer n, integer *ilo, integer *ihi, void *h,
                        integer ldh, void *w, void *wr, void *wi, void *z, integer ldz,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info);
+                       integer datatype, integer n_repeats, double *time_min_, integer *info,
+                       integer test_lapacke_interface, int matrix_layout);
 void invoke_hseqr(integer datatype, char *job, char *compz, integer *n, integer *ilo, integer *ihi,
                   void *h, integer *ldh, void *w, void *wr, void *wi, void *z, integer *ldz,
                   void *work, integer *lwork, integer *info);
+double prepare_lapacke_hseqr_run(integer datatype, int matrix_layout, char *job, char *compz,
+                                 integer n, integer *ilo, integer *ihi, void *h, integer ldh,
+                                 void *w, void *wr, void *wi, void *z, integer ldz, integer *info);
+integer invoke_lapacke_hseqr(integer datatype, int matrix_layout, char job, char compz,
+                             integer n, integer ilo, integer ihi, void *h, integer ldh, void *w,
+                             void *wr, void *wi, void *z, integer ldz);
 
 void fla_test_hseqr(integer argc, char **argv, test_params_t *params)
 {
@@ -114,6 +121,9 @@ void fla_test_hseqr_experiment(test_params_t *params, integer datatype, integer 
     char job;
     char compz;
 
+    integer test_lapacke_interface = params->test_lapacke_interface;
+    int layout = params->matrix_major;
+
     /* Get input matrix dimensions. */
     n = p_cur;
 
@@ -151,8 +161,8 @@ void fla_test_hseqr_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Create input matrix parameters*/
-    create_matrix(datatype, matrix_layout, n, n, &H, ldh);
-    create_matrix(datatype, matrix_layout, n, n, &Z, ldz);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &H, ldh);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z, ldz);
 
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
     {
@@ -185,13 +195,13 @@ void fla_test_hseqr_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Make copy of matrix H and Z. This is required to validate the API functionality */
-    create_matrix(datatype, matrix_layout, n, n, &H_test, ldh);
-    create_matrix(datatype, matrix_layout, n, n, &Z_Test, ldz);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &H_test, ldh);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z_Test, ldz);
     copy_matrix(datatype, "full", n, n, H, ldh, H_test, ldh);
     copy_matrix(datatype, "full", n, n, Z, ldz, Z_Test, ldz);
 
     prepare_hseqr_run(&job, &compz, n, &ilo, &ihi, H_test, ldh, w, wr, wi, Z_Test, ldz, datatype,
-                      n_repeats, time_min, &info);
+                      n_repeats, time_min, &info, test_lapacke_interface, layout);
 
     /* Performance computation
        (7)n^3 flops for eigen vectors for real
@@ -254,7 +264,8 @@ void fla_test_hseqr_experiment(test_params_t *params, integer datatype, integer 
 
 void prepare_hseqr_run(char *job, char *compz, integer n, integer *ilo, integer *ihi, void *H,
                        integer ldh, void *w, void *wr, void *wi, void *Z, integer ldz,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info)
+                       integer datatype, integer n_repeats, double *time_min_, integer *info,
+                       integer test_lapacke_interface, int layout)
 {
     void *H_save = NULL, *work = NULL, *Z_save = NULL;
     integer i, lwork;
@@ -262,14 +273,15 @@ void prepare_hseqr_run(char *job, char *compz, integer n, integer *ilo, integer 
 
     /* Make a copy of the input matrix H and Z. Same input values will be passed in each
      * itertaion.*/
-    create_matrix(datatype, matrix_layout, n, n, &H_save, ldh);
-    create_matrix(datatype, matrix_layout, n, n, &Z_save, ldz);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &H_save, ldh);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z_save, ldz);
     copy_matrix(datatype, "full", n, n, H, ldh, H_save, ldh);
     copy_matrix(datatype, "full", n, n, Z, ldz, Z_save, ldz);
 
     /* Make a workspace query the first time through. This will provide us with
-     and ideal workspace size based on an internal block size.*/
-    if(g_lwork <= 0)
+     and ideal workspace size based on an internal block size.
+     NOTE: LAPACKE interface handles workspace query internally */
+    if((test_lapacke_interface == 0) && (g_lwork <= 0))
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
@@ -302,13 +314,21 @@ void prepare_hseqr_run(char *job, char *compz, integer n, integer *ilo, integer 
         copy_matrix(datatype, "full", n, n, Z_save, ldz, Z, ldz);
         create_vector(datatype, &work, lwork);
 
-        exe_time = fla_test_clock();
+        /* Check if LAPACKE interface is enabled */
+        if(test_lapacke_interface == 1)
+        {
+            exe_time = prepare_lapacke_hseqr_run(datatype, layout, job, compz, n, ilo, ihi, H, ldh,
+                                                 w, wr, wi, Z, ldz, info);
+        }
+        else
+        {
+            exe_time = fla_test_clock();
+            /* Call LAPACK hseqr API */
+            invoke_hseqr(datatype, job, compz, &n, ilo, ihi, H, &ldh, w, wr, wi, Z, &ldz, work,
+                         &lwork, info);
 
-        /* Call to hseqr API */
-        invoke_hseqr(datatype, job, compz, &n, ilo, ihi, H, &ldh, w, wr, wi, Z, &ldz, work, &lwork,
-                     info);
-
-        exe_time = fla_test_clock() - exe_time;
+            exe_time = fla_test_clock() - exe_time;
+        }
 
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);
@@ -320,6 +340,55 @@ void prepare_hseqr_run(char *job, char *compz, integer n, integer *ilo, integer 
 
     free(H_save);
     free(Z_save);
+}
+
+double prepare_lapacke_hseqr_run(integer datatype, int layout, char *job, char *compz,
+                                 integer n, integer *ilo, integer *ihi, void *H, integer ldh,
+                                 void *w, void *wr, void *wi, void *Z, integer ldz, integer *info)
+{
+    double exe_time;
+    integer ldh_t = ldh;
+    integer ldz_t = ldz;
+    void *H_t = NULL, *Z_t = NULL;
+    H_t = H;
+    Z_t = Z;
+    /* In case of row_major matrix layout,
+       convert input matrices to row_major */
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        ldh_t = fla_max(1, n);
+        ldz_t = fla_max(1, n);
+        /* Create temporary buffers for converting matrix layout */
+        create_matrix(datatype, layout, n, n, &H_t, ldh_t);
+
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, H, ldh, H_t, ldh_t);
+        if(*compz != 'N')
+        {
+            create_matrix(datatype, layout, n, n, &Z_t, ldz_t);
+            convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, Z, ldz, Z_t, ldz_t);
+        }
+    }
+    exe_time = fla_test_clock();
+
+    /* Call LAPACKE hseqr API */
+    *info = invoke_lapacke_hseqr(datatype, layout, *job, *compz, n, *ilo, *ihi, H_t, ldh_t, w, wr,
+                                 wi, Z_t, ldz_t);
+    exe_time = fla_test_clock() - exe_time;
+
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        /* In case of row_major matrix layout, convert output matrices
+           to column_major layout */
+        convert_matrix_layout(layout, datatype, n, n, H_t, ldh_t, H, ldh);
+        if(*compz != 'N')
+        {
+            convert_matrix_layout(layout, datatype, n, n, Z_t, ldz_t, Z, ldz);
+            free_matrix(Z_t);
+        }
+        /* free temporary buffers */
+        free_matrix(H_t);
+    }
+    return exe_time;
 }
 
 void invoke_hseqr(integer datatype, char *job, char *compz, integer *n, integer *ilo, integer *ihi,
@@ -352,4 +421,38 @@ void invoke_hseqr(integer datatype, char *job, char *compz, integer *n, integer 
             break;
         }
     }
+}
+
+integer invoke_lapacke_hseqr(integer datatype, int layout, char job, char compz, integer n,
+                             integer ilo, integer ihi, void *h, integer ldh, void *w, void *wr,
+                             void *wi, void *z, integer ldz)
+{
+    integer info = 0;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            info = LAPACKE_shseqr(layout, job, compz, n, ilo, ihi, h, ldh, wr, wi, z, ldz);
+            break;
+        }
+
+        case DOUBLE:
+        {
+            info = LAPACKE_dhseqr(layout, job, compz, n, ilo, ihi, h, ldh, wr, wi, z, ldz);
+            break;
+        }
+
+        case COMPLEX:
+        {
+            info = LAPACKE_chseqr(layout, job, compz, n, ilo, ihi, h, ldh, w, z, ldz);
+            break;
+        }
+
+        case DOUBLE_COMPLEX:
+        {
+            info = LAPACKE_zhseqr(layout, job, compz, n, ilo, ihi, h, ldh, w, z, ldz);
+            break;
+        }
+    }
+    return info;
 }

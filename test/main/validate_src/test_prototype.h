@@ -7,61 +7,6 @@
 
 #include "FLAME.h"
 
-/* Header files and macros for LAPACKE prototypes - start */
-/* Todo: Include lapacke header file instead of redeclaring the macros */
-#ifndef LAPACK_COMPLEX_CUSTOM
-
-/* Complex type (single precision) */
-#ifndef lapack_complex_float
-#ifndef __cplusplus
-#include <complex.h>
-#else
-#include <complex>
-#endif
-#define lapack_complex_float float _Complex
-#endif
-
-#ifndef lapack_complex_float_real
-#define lapack_complex_float_real(z) (creal(z))
-#endif
-
-#ifndef lapack_complex_float_imag
-#define lapack_complex_float_imag(z) (cimag(z))
-#endif
-
-/* Complex type (double precision) */
-#ifndef lapack_complex_double
-#ifndef __cplusplus
-#include <complex.h>
-#else
-#include <complex>
-#endif
-#define lapack_complex_double double _Complex
-#endif
-
-#ifndef lapack_complex_double_real
-#define lapack_complex_double_real(z) (creal(z))
-#endif
-
-#ifndef lapack_complex_double_imag
-#define lapack_complex_double_imag(z) (cimag(z))
-#endif
-
-#endif /* LAPACK_COMPLEX_CUSTOM */
-
-#if FLA_ENABLE_ILP64
-#define LAPACK_ILP64
-#endif
-
-#ifndef lapack_int
-#if defined(LAPACK_ILP64)
-#define lapack_int int64_t
-#else
-#define lapack_int int32_t
-#endif
-#endif
-/* Header files and macros for LAPACKE prototypes - end*/
-
 /* Rename API as per API_CALLING_CONVENTION */
 #if(UPPER_)
 
@@ -1216,7 +1161,10 @@ extern void invoke_potrf(char *uplo, integer datatype, integer *m, void *a, inte
                          integer *info);
 extern void invoke_geqrf(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau,
                          void *work, integer *lwork, integer *info);
-extern void invoke_geev(integer datatype, char *jobvl, char *jobvr, integer *n, void *a, integer *lda, void *wr, void *wi, void *w, void *vl, integer *ldvl, void *vr, integer *ldvr, void *work, integer *lwork, void *rwork, integer *info);
+extern void invoke_geev(integer datatype, char *jobvl, char *jobvr, integer *n, void *a,
+                        integer *lda, void *wr, void *wi, void *w, void *vl, integer *ldvl,
+                        void *vr, integer *ldvr, void *work, integer *lwork, void *rwork,
+                        integer *info);
 /* Generates Orthogonal matrix from ORGTR() after SYTRD() call. */
 extern void invoke_sytrd(integer datatype, char *uplo, char compz, integer n, void *A, integer lda,
                          void *D, void *E, integer *info);
@@ -1227,15 +1175,4 @@ extern void invoke_gghrd(integer datatype, char *compq, char *compz, integer *n,
 /* Used for GBTRS(), GBCON()*/
 extern void invoke_gbtrf(integer datatype, integer *m, integer *n, integer *kl, integer *ku,
                          void *ab, integer *ldab, integer *ipiv, integer *info);
-/* LAPACKE prototypes */
-/* Todo: Include lapacke header file instead of declaring the lapacke prototypes */
-lapack_int LAPACKE_sgesv(int matrix_layout, lapack_int n, lapack_int nrhs, float *a, lapack_int lda,
-                         lapack_int *ipiv, float *b, lapack_int ldb);
-lapack_int LAPACKE_dgesv(int matrix_layout, lapack_int n, lapack_int nrhs, double *a,
-                         lapack_int lda, lapack_int *ipiv, double *b, lapack_int ldb);
-lapack_int LAPACKE_cgesv(int matrix_layout, lapack_int n, lapack_int nrhs, lapack_complex_float *a,
-                         lapack_int lda, lapack_int *ipiv, lapack_complex_float *b, lapack_int ldb);
-lapack_int LAPACKE_zgesv(int matrix_layout, lapack_int n, lapack_int nrhs, lapack_complex_double *a,
-                         lapack_int lda, lapack_int *ipiv, lapack_complex_double *b,
-                         lapack_int ldb);
 #endif // TEST_PROTOTYPE_H

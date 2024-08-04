@@ -17,9 +17,9 @@ void validate_spffrtx(integer n, integer ncolm, void *A, void *AP, integer datat
     void *work = NULL;
     void *L = NULL, *D = NULL, *T = NULL;
 
-    create_matrix(datatype, matrix_layout, n, n, &L, n);
-    create_matrix(datatype, matrix_layout, n, n, &D, n);
-    create_matrix(datatype, matrix_layout, n, n, &T, n);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &L, n);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &D, n);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &T, n);
     /* Creating work buffer */
     create_vector(datatype, &work, 2 * n);
     set_identity_matrix(datatype, n, n, L, n);

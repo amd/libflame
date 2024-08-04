@@ -37,11 +37,11 @@ void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
         n_U = n_A;
         k = m_A;
     }
-    create_matrix(datatype, matrix_layout, m_L, n_L, &L, m_L);
-    create_matrix(datatype, matrix_layout, m_U, n_U, &U, m_L);
-    create_matrix(datatype, matrix_layout, m_A, n_A, &T, m_A);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m_L, n_L, &L, m_L);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m_U, n_U, &U, m_L);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_A, &T, m_A);
     // Create matrix of A(MxN) for subtracting in Test 2 (T-A).
-    create_matrix(datatype, matrix_layout, m_A, n_A, &A_save, m_A);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_A, &A_save, m_A);
 
     reset_matrix(datatype, m_U, n_U, U, m_U);
     create_vector(datatype, &work, 2 * m_A);

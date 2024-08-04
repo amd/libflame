@@ -157,10 +157,10 @@ void fla_test_gelsd_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Create the matrices for the current operation*/
-    create_matrix(datatype, matrix_layout, m, n, &A, lda);
-    create_matrix(datatype, matrix_layout, m, n, &A_save, lda);
-    create_matrix(datatype, matrix_layout, fla_max(m, n), NRHS, &B, ldb);
-    create_matrix(datatype, matrix_layout, fla_max(m, n), NRHS, &B_save, ldb);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_save, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, fla_max(m, n), NRHS, &B, ldb);
+    create_matrix(datatype, LAPACK_COL_MAJOR, fla_max(m, n), NRHS, &B_save, ldb);
     create_realtype_vector(datatype, &s_test, fla_min(m, n));
 
     /* Initialize the test matrices */
@@ -240,8 +240,8 @@ void prepare_gelsd_run(integer m_A, integer n_A, integer nrhs, void *A, integer 
     double time_min = 1e9, exe_time;
 
     /* Save the original matrix */
-    create_matrix(datatype, matrix_layout, m_A, n_A, &A_test, lda);
-    create_matrix(datatype, matrix_layout, fla_max(m_A, n_A), nrhs, &B_test, ldb);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_A, &A_test, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, fla_max(m_A, n_A), nrhs, &B_test, ldb);
     realtype = get_realtype(datatype);
 
     /* Make a workspace query the first time through. This will provide us with

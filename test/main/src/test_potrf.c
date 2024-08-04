@@ -11,7 +11,13 @@ void fla_test_potrf_experiment(test_params_t *params, integer datatype, integer 
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
                                double *perf, double *time_min, double *residual);
 void prepare_potrf_run(char *uplo, integer m, void *A, integer lda, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info);
+                       integer n_repeats, double *time_min_, integer *info,
+                       integer test_lapacke_interface, int matrix_layout);
+void invoke_potrf(char *uplo, integer datatype, integer *m, void *a, integer *lda, integer *info);
+double prepare_lapacke_potrf_run(integer datatype, int matrix_layout, char *uplo, integer m,
+                                 void *A, integer lda, integer *info);
+integer invoke_lapacke_potrf(integer datatype, int matrix_layout, char uplo, integer n, void *a,
+                             integer lda);
 
 void fla_test_potrf(integer argc, char **argv, test_params_t *params)
 {
@@ -107,6 +113,10 @@ void fla_test_potrf_experiment(test_params_t *params, integer datatype, integer 
     integer info = 0, vinfo = 0;
     void *A = NULL, *A_test = NULL;
     char uplo = params->lin_solver_paramslist[pci].Uplo;
+
+    integer test_lapacke_interface = params->test_lapacke_interface;
+    int layout = params->matrix_major;
+
     *residual = params->lin_solver_paramslist[pci].solver_threshold;
 
     /* Get input matrix dimensions */
@@ -124,7 +134,7 @@ void fla_test_potrf_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Create input matrix parameters */
-    create_matrix(datatype, matrix_layout, m, m, &A, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &A, lda);
 
     if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST && !FLA_OVERFLOW_UNDERFLOW_TEST))
     {
@@ -151,10 +161,11 @@ void fla_test_potrf_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Make a copy of input matrix A. This is required to validate the API functionality */
-    create_matrix(datatype, matrix_layout, m, m, &A_test, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &A_test, lda);
     copy_matrix(datatype, "full", m, m, A, lda, A_test, lda);
 
-    prepare_potrf_run(&uplo, m, A_test, lda, datatype, n_repeats, time_min, &info);
+    prepare_potrf_run(&uplo, m, A_test, lda, datatype, n_repeats, time_min, &info,
+                      test_lapacke_interface, layout);
 
     /* Compute the performance of the best experiment repeat */
     /* (1/3)m^3 for real and (4/3)m^3 for complex*/
@@ -179,7 +190,8 @@ void fla_test_potrf_experiment(test_params_t *params, integer datatype, integer 
 }
 
 void prepare_potrf_run(char *uplo, integer m, void *A, integer lda, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info)
+                       integer n_repeats, double *time_min_, integer *info,
+                       integer test_lapacke_interface, int layout)
 {
     void *A_save = NULL;
     double time_min = 1e9, exe_time;
@@ -187,7 +199,7 @@ void prepare_potrf_run(char *uplo, integer m, void *A, integer lda, integer data
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
-    create_matrix(datatype, matrix_layout, m, m, &A_save, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &A_save, lda);
     copy_matrix(datatype, "full", m, m, A, lda, A_save, lda);
 
     *info = 0;
@@ -196,15 +208,58 @@ void prepare_potrf_run(char *uplo, integer m, void *A, integer lda, integer data
         /* Restore input matrix A value and allocate memory to output buffers
         for each iteration */
         copy_matrix(datatype, "full", m, m, A_save, lda, A, lda);
-        exe_time = fla_test_clock();
-        invoke_potrf(uplo, datatype, &m, A, &lda, info);
-        exe_time = fla_test_clock() - exe_time;
+        /* Check if LAPACKE interface is enabled */
+        if(test_lapacke_interface == 1)
+        {
+            exe_time = prepare_lapacke_potrf_run(datatype, layout, uplo, m, A, lda, info);
+        }
+        else
+        {
+            exe_time = fla_test_clock();
+            /* Call LAPACK potrf API */
+            invoke_potrf(uplo, datatype, &m, A, &lda, info);
+
+            exe_time = fla_test_clock() - exe_time;
+        }
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);
     }
 
     *time_min_ = time_min;
     free_matrix(A_save);
+}
+
+double prepare_lapacke_potrf_run(integer datatype, int layout, char *uplo, integer m, void *A,
+                                 integer lda, integer *info)
+{
+    double exe_time;
+    integer lda_t = lda;
+    void *A_t = NULL;
+    A_t = A;
+
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        lda_t = fla_max(1, m);
+        /* Create temporary buffers for converting matrix layout */
+        create_matrix(datatype, layout, m, m, &A_t, lda_t);
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, m, m, A, lda, A_t, lda_t);
+    }
+
+    exe_time = fla_test_clock();
+
+    *info = invoke_lapacke_potrf(datatype, layout, *uplo, m, A_t, lda_t);
+
+    exe_time = fla_test_clock() - exe_time;
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        /* In case of row_major matrix layout, convert output matrices
+           to column_major layout */
+        convert_matrix_layout(layout, datatype, m, m, A_t, lda_t, A, lda);
+        /* free temporary buffers */
+        free_matrix(A_t);
+    }
+
+    return exe_time;
 }
 
 void invoke_potrf(char *uplo, integer datatype, integer *m, void *a, integer *lda, integer *info)
@@ -232,4 +287,34 @@ void invoke_potrf(char *uplo, integer datatype, integer *m, void *a, integer *ld
             break;
         }
     }
+}
+
+integer invoke_lapacke_potrf(integer datatype, int layout, char uplo, integer n, void *a,
+                             integer lda)
+{
+    integer info = 0;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            info = LAPACKE_spotrf(layout, uplo, n, a, lda);
+            break;
+        }
+        case DOUBLE:
+        {
+            info = LAPACKE_dpotrf(layout, uplo, n, a, lda);
+            break;
+        }
+        case COMPLEX:
+        {
+            info = LAPACKE_cpotrf(layout, uplo, n, a, lda);
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            info = LAPACKE_zpotrf(layout, uplo, n, a, lda);
+            break;
+        }
+    }
+    return info;
 }

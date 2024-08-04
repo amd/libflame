@@ -196,10 +196,10 @@ void fla_test_gesvdx_experiment(test_params_t *params, integer datatype, integer
     assign_value(get_realtype(datatype), vu, d_vu, d_zero);
 
     /* Create input matrix parameters. */
-    create_matrix(datatype, matrix_layout, m, n, &A, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
     create_realtype_vector(datatype, &s_test, min_m_n);
-    create_matrix(datatype, matrix_layout, m, m, &U, ldu);
-    create_matrix(datatype, matrix_layout, n, n, &V, ldvt);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &U, ldu);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &V, ldvt);
     create_realtype_vector(datatype, &s, min_m_n);
 
     if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
@@ -227,7 +227,7 @@ void fla_test_gesvdx_experiment(test_params_t *params, integer datatype, integer
     }
 
     /* Make a copy of input matrix A. This is required to validate the API functionality. */
-    create_matrix(datatype, matrix_layout, m, n, &A_test, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
     prepare_gesvdx_run(&jobu, &jobvt, &range, m, n, A_test, lda, vl, vu, il, iu, &ns, s, U, ldu, V,
                        ldvt, datatype, n_repeats, time_min, &info);
@@ -309,7 +309,7 @@ void prepare_gesvdx_run(char *jobu, char *jobvt, char *range, integer m_A, integ
     max_m_n = fla_max(m_A, n_A);
 
     /* Make a copy of the input matrix A. Same input values will be passed in each itertaion */
-    create_matrix(datatype, matrix_layout, m_A, n_A, &A_save, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_A, &A_save, lda);
     copy_matrix(datatype, "full", m_A, n_A, A, lda, A_save, lda);
 
     /* Get rwork array size since it is not depedent on internal blocks */
@@ -342,8 +342,8 @@ void prepare_gesvdx_run(char *jobu, char *jobvt, char *range, integer m_A, integ
     {
         /* Restore input matrix A value and allocate memory to output buffers for each iteration */
         copy_matrix(datatype, "full", m_A, n_A, A_save, lda, A, lda);
-        create_matrix(datatype, matrix_layout, m_A, m_A, &U_test, ldu);
-        create_matrix(datatype, matrix_layout, n_A, n_A, &V_test, ldvt);
+        create_matrix(datatype, LAPACK_COL_MAJOR, m_A, m_A, &U_test, ldu);
+        create_matrix(datatype, LAPACK_COL_MAJOR, n_A, n_A, &V_test, ldvt);
         create_realtype_vector(datatype, &s_test, min_m_n);
         create_vector(datatype, &work, lwork);
 

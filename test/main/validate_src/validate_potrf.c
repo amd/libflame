@@ -23,14 +23,14 @@ void validate_potrf(char *uplo, integer m, void *A, void *A_test, integer lda, i
     *info = 0;
 
     /* Create Matrix buff_A and buff_B for computing LL'*/
-    create_matrix(datatype, matrix_layout, m, m, &buff_A, m);
-    create_matrix(datatype, matrix_layout, m, m, &buff_B, m);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &buff_A, m);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &buff_B, m);
 
     /* Reset the matrix to avoid junk entries */
     reset_matrix(datatype, m, m, buff_A, m);
     reset_matrix(datatype, m, m, buff_B, m);
 
-    create_matrix(datatype, matrix_layout, m, m, &A_save, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &A_save, lda);
 
     /* Create vector to compute Ax-b */
     create_vector(datatype, &b, m);

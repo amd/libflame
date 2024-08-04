@@ -9,7 +9,14 @@ void fla_test_geqrf_experiment(test_params_t *params, integer datatype, integer 
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
                                double *perf, double *t, double *residual);
 void prepare_geqrf_run(integer m_A, integer n_A, void *A, integer lda, void *T, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info);
+                       integer n_repeats, double *time_min_, integer *info,
+                       integer test_lapacke_interface, int matrix_layout);
+void invoke_geqrf(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau,
+                  void *work, integer *lwork, integer *info);
+double prepare_lapacke_geqrf_run(integer datatype, int matrix_layout, integer m_A, integer n_A,
+                                 void *A, integer lda, void *T, integer *info);
+integer invoke_lapacke_geqrf(integer datatype, int matrix_layout, integer m, integer n, void *a,
+                             integer lda, void *tau);
 
 void fla_test_geqrf(integer argc, char **argv, test_params_t *params)
 {
@@ -109,6 +116,9 @@ void fla_test_geqrf_experiment(test_params_t *params, integer datatype, integer 
     void *A = NULL, *A_test = NULL, *T = NULL;
     double time_min = 1e9;
 
+    integer test_lapacke_interface = params->test_lapacke_interface;
+    int layout = params->matrix_major;
+
     // Get input matrix dimensions.
     m = p_cur;
     n = q_cur;
@@ -126,7 +136,7 @@ void fla_test_geqrf_experiment(test_params_t *params, integer datatype, integer 
     }
 
     // Create input matrix parameters
-    create_matrix(datatype, matrix_layout, m, n, &A, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
     create_vector(datatype, &T, fla_min(m, n));
 
     init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
@@ -136,10 +146,11 @@ void fla_test_geqrf_experiment(test_params_t *params, integer datatype, integer 
     }
 
     // Make a copy of input matrix A. This is required to validate the API functionality.
-    create_matrix(datatype, matrix_layout, m, n, &A_test, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
-    prepare_geqrf_run(m, n, A_test, lda, T, datatype, n_repeats, &time_min, &info);
+    prepare_geqrf_run(m, n, A_test, lda, T, datatype, n_repeats, &time_min, &info,
+                      test_lapacke_interface, layout);
 
     // execution time
     *t = time_min;
@@ -176,7 +187,8 @@ void fla_test_geqrf_experiment(test_params_t *params, integer datatype, integer 
 }
 
 void prepare_geqrf_run(integer m_A, integer n_A, void *A, integer lda, void *T, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info)
+                       integer n_repeats, double *time_min_, integer *info,
+                       integer test_lapacke_interface, int layout)
 {
     integer min_A, i;
     void *A_save = NULL, *T_test = NULL, *work = NULL;
@@ -187,12 +199,13 @@ void prepare_geqrf_run(integer m_A, integer n_A, void *A, integer lda, void *T, 
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
-    create_matrix(datatype, matrix_layout, m_A, n_A, &A_save, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_A, &A_save, lda);
     copy_matrix(datatype, "full", m_A, n_A, A, lda, A_save, lda);
 
     /* Make a workspace query the first time. This will provide us with
-       and ideal workspace size based on internal block size.*/
-    if(g_lwork <= 0)
+       and ideal workspace size based on internal block size.
+       NOTE: LAPACKE interface handles workspace query internally */
+    if((test_lapacke_interface == 0) && (g_lwork <= 0))
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
@@ -225,13 +238,18 @@ void prepare_geqrf_run(integer m_A, integer n_A, void *A, integer lda, void *T, 
 
         // Create work buffer
         create_vector(datatype, &work, lwork);
+        if(test_lapacke_interface == 1)
+        {
+            exe_time = prepare_lapacke_geqrf_run(datatype, layout, m_A, n_A, A, lda, T_test, info);
+        }
+        else
+        {
+            exe_time = fla_test_clock();
+            /* Call LAPACK geqrf API */
+            invoke_geqrf(datatype, &m_A, &n_A, A, &lda, T_test, work, &lwork, info);
 
-        exe_time = fla_test_clock();
-
-        // Call to  gerqf API
-        invoke_geqrf(datatype, &m_A, &n_A, A, &lda, T_test, work, &lwork, info);
-
-        exe_time = fla_test_clock() - exe_time;
+            exe_time = fla_test_clock() - exe_time;
+        }
 
         // Get the best execution time
         time_min = fla_min(time_min, exe_time);
@@ -247,6 +265,40 @@ void prepare_geqrf_run(integer m_A, integer n_A, void *A, integer lda, void *T, 
     *time_min_ = time_min;
 
     free_matrix(A_save);
+}
+
+double prepare_lapacke_geqrf_run(integer datatype, int layout, integer m_A, integer n_A,
+                                 void *A, integer lda, void *T, integer *info)
+{
+    double exe_time;
+    integer lda_t = lda;
+    void *A_t = NULL;
+    A_t = A;
+
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        lda_t = fla_max(1, n_A);
+        /* Create temporary buffers for converting matrix layout */
+        create_matrix(datatype, layout, m_A, n_A, &A_t, lda_t);
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, m_A, n_A, A, lda, A_t, lda_t);
+    }
+
+    exe_time = fla_test_clock();
+
+    /* Call LAPACKE geqrf API */
+    *info = invoke_lapacke_geqrf(datatype, layout, m_A, n_A, A_t, lda_t, T);
+
+    exe_time = fla_test_clock() - exe_time;
+
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        /* In case of row_major matrix layout, convert output matrices
+           to column_major layout */
+        convert_matrix_layout(layout, datatype, m_A, n_A, A_t, lda_t, A, lda);
+        /* free temporary buffers */
+        free_matrix(A_t);
+    }
+    return exe_time;
 }
 
 void invoke_geqrf(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau,
@@ -278,4 +330,37 @@ void invoke_geqrf(integer datatype, integer *m, integer *n, void *a, integer *ld
             break;
         }
     }
+}
+
+integer invoke_lapacke_geqrf(integer datatype, int layout, integer m, integer n, void *a,
+                             integer lda, void *tau)
+{
+    integer info = 0;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            info = LAPACKE_sgeqrf(layout, m, n, a, lda, tau);
+            break;
+        }
+
+        case DOUBLE:
+        {
+            info = LAPACKE_dgeqrf(layout, m, n, a, lda, tau);
+            break;
+        }
+
+        case COMPLEX:
+        {
+            info = LAPACKE_cgeqrf(layout, m, n, a, lda, tau);
+            break;
+        }
+
+        case DOUBLE_COMPLEX:
+        {
+            info = LAPACKE_zgeqrf(layout, m, n, a, lda, tau);
+            break;
+        }
+    }
+    return info;
 }

@@ -9,9 +9,14 @@ void fla_test_geqp3_experiment(test_params_t *params, integer datatype, integer 
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
                                double *perf, double *t, double *residual);
 void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *jpvt, void *T,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info);
+                       integer datatype, integer n_repeats, double *time_min_, integer *info,
+                       integer test_lapacke_interface, int matrix_layout);
 void invoke_geqp3(integer datatype, integer *m, integer *n, void *a, integer *lda, integer *jpvt,
                   void *tau, void *work, integer *lwork, void *rwork, integer *info);
+double prepare_lapacke_geqp3_run(integer datatype, int layout, integer m_A, integer n_A,
+                                 void *A, integer lda, integer *jpvt, void *T, integer *info);
+integer invoke_lapacke_geqp3(integer datatype, int matrix_layout, integer m, integer n, void *a,
+                             integer lda, integer *jpvt, void *tau);
 
 void fla_test_geqp3(integer argc, char **argv, test_params_t *params)
 {
@@ -110,6 +115,10 @@ void fla_test_geqp3_experiment(test_params_t *params, integer datatype, integer 
     void *A = NULL, *A_test = NULL, *T = NULL;
     integer *jpvt;
     double time_min = 1e9;
+
+    integer test_lapacke_interface = params->test_lapacke_interface;
+    int layout = params->matrix_major;
+
     *residual = params->lin_solver_paramslist[pci].solver_threshold;
 
     /* Get input matrix dimensions */
@@ -128,19 +137,20 @@ void fla_test_geqp3_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Create input matrix parameters */
-    create_matrix(datatype, matrix_layout, m, n, &A, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
     create_vector(datatype, &T, fla_min(m, n));
 
     init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
 
     /* Make a copy of input matrix A,required for validation. */
-    create_matrix(datatype, matrix_layout, m, n, &A_test, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
     /* Create pivot array */
     create_vector(INTEGER, (void **)&jpvt, n);
 
-    prepare_geqp3_run(m, n, A_test, lda, jpvt, T, datatype, n_repeats, &time_min, &info);
+    prepare_geqp3_run(m, n, A_test, lda, jpvt, T, datatype, n_repeats, &time_min, &info,
+                      test_lapacke_interface, layout);
 
     /* execution time */
     *t = time_min;
@@ -179,7 +189,8 @@ void fla_test_geqp3_experiment(test_params_t *params, integer datatype, integer 
 }
 
 void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *jpvt, void *T,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info)
+                       integer datatype, integer n_repeats, double *time_min_, integer *info,
+                       integer test_lapacke_interface, int layout)
 {
     integer min_A, i;
     void *A_save = NULL, *T_test = NULL, *work = NULL;
@@ -191,12 +202,13 @@ void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion. */
-    create_matrix(datatype, matrix_layout, m_A, n_A, &A_save, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_A, &A_save, lda);
     copy_matrix(datatype, "full", m_A, n_A, A, lda, A_save, lda);
 
     /* Make a workspace query the first time. This will provide us with
-       and ideal workspace size based on internal block size. */
-    if(g_lwork <= 0)
+       and ideal workspace size based on internal block size.
+       NOTE: LAPACKE interface handles workspace query internally */
+    if((test_lapacke_interface == 0) && (g_lwork <= 0))
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
@@ -238,12 +250,20 @@ void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *
         /* Create work buffer */
         create_vector(datatype, &work, lwork);
 
-        exe_time = fla_test_clock();
+        /* Check if LAPACKE interface is enabled */
+        if(test_lapacke_interface == 1)
+        {
+            exe_time
+                = prepare_lapacke_geqp3_run(datatype, layout, m_A, n_A, A, lda, jpvt, T_test, info);
+        }
+        else
+        {
+            exe_time = fla_test_clock();
+            /* Call LAPACK geqp3 API */
+            invoke_geqp3(datatype, &m_A, &n_A, A, &lda, jpvt, T_test, work, &lwork, rwork, info);
 
-        /* Call to  gerqf API */
-        invoke_geqp3(datatype, &m_A, &n_A, A, &lda, jpvt, T_test, work, &lwork, rwork, info);
-
-        exe_time = fla_test_clock() - exe_time;
+            exe_time = fla_test_clock() - exe_time;
+        }
 
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);
@@ -261,6 +281,41 @@ void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *
     free_matrix(A_save);
     if(datatype >= COMPLEX)
         free_vector(rwork);
+}
+
+double prepare_lapacke_geqp3_run(integer datatype, int layout, integer m_A, integer n_A,
+                                 void *A, integer lda, integer *jpvt, void *T, integer *info)
+{
+    double exe_time;
+    integer lda_t = lda;
+    void *A_t = NULL;
+    A_t = A;
+
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        lda_t = fla_max(1, n_A);
+        /* Create temporary buffers for converting matrix layout */
+        create_matrix(datatype, layout, m_A, n_A, &A_t, lda_t);
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, m_A, n_A, A, lda, A_t, lda_t);
+    }
+
+    exe_time = fla_test_clock();
+
+    /* Call to LAPACKE geqp3 API */
+    *info = invoke_lapacke_geqp3(datatype, layout, m_A, n_A, A_t, lda_t, jpvt, T);
+
+    exe_time = fla_test_clock() - exe_time;
+
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        /* In case of row_major matrix layout, convert output matrices
+           to column_major layout */
+        convert_matrix_layout(layout, datatype, m_A, n_A, A_t, lda_t, A, lda);
+        /* free temporary buffers */
+        free_matrix(A_t);
+    }
+
+    return exe_time;
 }
 
 void invoke_geqp3(integer datatype, integer *m, integer *n, void *a, integer *lda, integer *jpvt,
@@ -292,4 +347,37 @@ void invoke_geqp3(integer datatype, integer *m, integer *n, void *a, integer *ld
             break;
         }
     }
+}
+
+integer invoke_lapacke_geqp3(integer datatype, int layout, integer m, integer n, void *a,
+                             integer lda, integer *jpvt, void *tau)
+{
+    integer info = 0;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            info = LAPACKE_sgeqp3(layout, m, n, a, lda, jpvt, tau);
+            break;
+        }
+
+        case DOUBLE:
+        {
+            info = LAPACKE_dgeqp3(layout, m, n, a, lda, jpvt, tau);
+            break;
+        }
+
+        case COMPLEX:
+        {
+            info = LAPACKE_cgeqp3(layout, m, n, a, lda, jpvt, tau);
+            break;
+        }
+
+        case DOUBLE_COMPLEX:
+        {
+            info = LAPACKE_zgeqp3(layout, m, n, a, lda, jpvt, tau);
+            break;
+        }
+    }
+    return info;
 }

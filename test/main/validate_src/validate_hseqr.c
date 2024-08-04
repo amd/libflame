@@ -123,9 +123,9 @@ void validate_hseqr(char *job, char *compz, integer n, void *H, void *H_test, in
     void *zlambda = NULL, *work = NULL, *lambda = NULL;
     *info = 0;
 
-    create_matrix(datatype, matrix_layout, n, n, &zlambda, n);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &zlambda, n);
     reset_matrix(datatype, n, n, zlambda, n);
-    create_matrix(datatype, matrix_layout, n, n, &lambda, n);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &lambda, n);
     reset_matrix(datatype, n, n, lambda, n);
 
     switch(datatype)

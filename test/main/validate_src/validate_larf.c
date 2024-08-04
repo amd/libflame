@@ -43,7 +43,7 @@ void validate_larf(integer datatype, char side, integer m, integer n, void *v, i
     }
 
     create_vector(datatype, &v_tmp, m_H);
-    create_matrix(datatype, matrix_layout, m_H, m_H, &H, m_H);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m_H, m_H, &H, m_H);
     set_identity_matrix(datatype, m_H, m_H, H, m_H);
     copy_vector(datatype, m_H, v, incv, v_tmp, 1);
 
@@ -56,8 +56,8 @@ void validate_larf(integer datatype, char side, integer m, integer n, void *v, i
             sger_(&m_H, &m_H, tau, v_tmp, &i_one, v_tmp, &i_one, H, &m_H);
 
             /* 2. Compute out_validate = H * c__out_tmp(side = L) or c_out_tmp * H(side = R)*/
-            create_matrix(datatype, matrix_layout, m, n, &c__out_tmp, m);
-            create_matrix(datatype, matrix_layout, m, n, &out_validate, m);
+            create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &c__out_tmp, m);
+            create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &out_validate, m);
 
             copy_matrix(datatype, "full", m, n, c__out, ldc__out, c__out_tmp, m);
 
@@ -73,7 +73,7 @@ void validate_larf(integer datatype, char side, integer m, integer n, void *v, i
             }
 
             /* 3. Compute residual using c__tmp and out_validate */
-            create_matrix(datatype, matrix_layout, m, n, &c__tmp, m);
+            create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &c__tmp, m);
 
             copy_matrix(datatype, "full", m, n, c__, ldc__, c__tmp, m);
             create_vector(datatype, &work, m);
@@ -96,8 +96,8 @@ void validate_larf(integer datatype, char side, integer m, integer n, void *v, i
             dger_(&m_H, &m_H, tau, v_tmp, &i_one, v_tmp, &i_one, H, &m_H);
 
             /* 2. Compute out_validate = H * c__out_tmp(side = L) or c_out_tmp * H(side = R) */
-            create_matrix(datatype, matrix_layout, m, n, &c__out_tmp, m);
-            create_matrix(datatype, matrix_layout, m, n, &out_validate, m);
+            create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &c__out_tmp, m);
+            create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &out_validate, m);
 
             copy_matrix(datatype, "full", m, n, c__out, ldc__out, c__out_tmp, m);
 
@@ -113,7 +113,7 @@ void validate_larf(integer datatype, char side, integer m, integer n, void *v, i
             }
 
             /* 3. Compute residual using c__tmp and out_validate */
-            create_matrix(datatype, matrix_layout, m, n, &c__tmp, m);
+            create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &c__tmp, m);
 
             copy_matrix(datatype, "full", m, n, c__, ldc__, c__tmp, m);
             create_vector(datatype, &work, m);
@@ -138,8 +138,8 @@ void validate_larf(integer datatype, char side, integer m, integer n, void *v, i
 
             /* 2. Compute out_validate = H-hermitian-transpose * c__out_tmp(when side = L) or
              * c_out_tmp * H-hermitian-transpose(when side = R) */
-            create_matrix(datatype, matrix_layout, m, n, &c__out_tmp, m);
-            create_matrix(datatype, matrix_layout, m, n, &out_validate, m);
+            create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &c__out_tmp, m);
+            create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &out_validate, m);
 
             copy_matrix(datatype, "full", m, n, c__out, ldc__out, c__out_tmp, m);
 
@@ -155,7 +155,7 @@ void validate_larf(integer datatype, char side, integer m, integer n, void *v, i
             }
 
             /* 3. Compute residual using c__tmp and out_validate */
-            create_matrix(datatype, matrix_layout, m, n, &c__tmp, m);
+            create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &c__tmp, m);
 
             copy_matrix(datatype, "full", m, n, c__, ldc__, c__tmp, m);
             create_vector(datatype, &work, m);
@@ -180,8 +180,8 @@ void validate_larf(integer datatype, char side, integer m, integer n, void *v, i
 
             /* 2. Compute out_validate = H-hermitian-transpose * c__out_tmp(when side = L) or
              * c_out_tmp * H-hermitian-transpose(when side = R) */
-            create_matrix(datatype, matrix_layout, m, n, &c__out_tmp, m);
-            create_matrix(datatype, matrix_layout, m, n, &out_validate, m);
+            create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &c__out_tmp, m);
+            create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &out_validate, m);
 
             copy_matrix(datatype, "full", m, n, c__out, ldc__out, c__out_tmp, m);
 
@@ -197,7 +197,7 @@ void validate_larf(integer datatype, char side, integer m, integer n, void *v, i
             }
 
             /* 3. Compute residual using c__tmp and out_validate */
-            create_matrix(datatype, matrix_layout, m, n, &c__tmp, m);
+            create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &c__tmp, m);
 
             copy_matrix(datatype, "full", m, n, c__, ldc__, c__tmp, m);
             create_vector(datatype, &work, m);

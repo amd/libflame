@@ -188,8 +188,10 @@ int lapack_dormlq(char *side, char *trans, integer *m, integer *n, integer *k, d
     char transt[1];
     integer lwkopt;
     logical lquery;
+#ifdef FLA_OPENMP_MULTITHREADING
     int thread_id, actual_num_threads;
     integer index, mi_sub, ni_sub;
+#endif
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

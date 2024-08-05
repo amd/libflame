@@ -9,7 +9,6 @@
 */
 
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__0 = 0;
 static integer c_n1 = -1;
 static integer c__1 = 1;
 static logical c_false = FALSE_;

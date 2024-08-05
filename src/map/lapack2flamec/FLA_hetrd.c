@@ -201,8 +201,8 @@ LAPACK_hetrd(d, sy)
         }
     }
 #if !FLA_ENABLE_AMD_OPT // Code below is unreachable if FLA_ENABLE_AMD_OPT is true
+    int fla_error = LAPACK_SUCCESS;
     {
-        int fla_error = LAPACK_SUCCESS; 
         LAPACK_RETURN_CHECK_VAR1(
             dsytrd_check(uplo, m, buff_A, ldim_A, buff_d, buff_e, buff_t, buff_w, lwork, info),
             fla_error)

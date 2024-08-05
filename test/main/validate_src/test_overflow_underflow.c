@@ -70,8 +70,8 @@ void calculate_svd_scale_value(integer datatype, integer m, integer n, void *A, 
         /* The ratio is modified w.r.t dimension, to avoid inf in output */
         if(fla_max(m, n) <= 50)
         {
-            flt_ratio = flt_ratio / 7.00;
-            dbl_ratio = dbl_ratio / 10.00;
+            flt_ratio = flt_ratio / 25.00;
+            dbl_ratio = dbl_ratio / 25.00;
         }
         else if(fla_max(m, n) <= 500)
         {

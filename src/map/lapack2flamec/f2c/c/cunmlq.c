@@ -228,8 +228,10 @@ void fla_cunmlq(char *side, char *trans, integer *m, integer *n, integer *k, com
     char transt[1];
     integer lwkopt;
     logical lquery;
+#if FLA_OPENMP_MULTITHREADING
     int thread_id, actual_num_threads;
     integer index, mi_sub, ni_sub;
+#endif
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

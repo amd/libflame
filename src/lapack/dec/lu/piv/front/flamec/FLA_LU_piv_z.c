@@ -12,11 +12,12 @@
 #define FLA_LU_SMALL_BLOCK_SIZE 4096
 #define FLA_LU_SMALL_DIM 32
 
+#ifdef FLA_ENABLE_AMD_OPT
 static dcomplex z__1 = { -1, 0};
 static dcomplex c_b1 = {1.,0.};
 static integer c__1 = 1;
 
-#ifdef FLA_ENABLE_AMD_OPT
+
 
 void FLA_get_optimum_params_zgetrf(integer m, integer n, integer *nb, int *n_threads)
 {

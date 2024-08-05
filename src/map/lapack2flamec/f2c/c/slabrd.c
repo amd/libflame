@@ -234,10 +234,14 @@ void fla_slabrd(integer *m, integer *n, integer *nb, real *a, integer *lda, real
                 real *tauq, real *taup, real *x, integer *ldx, real *y, integer *ldy)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, x_dim1, x_offset, y_dim1, y_offset, i__1, i__2, i__3, i__4, i__5;
+    integer a_dim1, a_offset, x_dim1, x_offset, y_dim1, y_offset, i__1, i__2, i__3;
     /* Local variables */
     integer i__;
-    int thread_id, actual_num_threads;
+    int thread_id;
+#if FLA_OPENMP_MULTITHREADING
+    integer i__4, i__5;
+    int actual_num_threads;
+#endif
     extern /* Subroutine */
         void
         sscal_(integer *, real *, real *, integer *),

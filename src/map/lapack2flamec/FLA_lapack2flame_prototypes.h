@@ -1243,6 +1243,9 @@ int dgesc2_check(integer *n, double *a, integer *lda, double *rhs, integer *ipiv
 int dgesdd_check(char *jobz, integer *m, integer *n, double *a, integer *lda, double *s, double *u,
                  integer *ldu, double *vt, integer *ldvt, double *work, integer *lwork,
                  integer *iwork, integer *info);
+int dgesdd_fla_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, integer *lda,
+                     double *s, double *u, integer *ldu, double *vt, integer *ldvt, double *work,
+                     integer *lwork, integer *info);
 int dgesv_check(integer *n, integer *nrhs, double *a, integer *lda, integer *ipiv, double *b,
                 integer *ldb, integer *info);
 int dgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, integer *lda,

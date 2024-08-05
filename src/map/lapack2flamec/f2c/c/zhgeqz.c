@@ -412,8 +412,9 @@ void fla_zhgeqz(char *job, char *compq, char *compz, integer *n, integer *ilo, i
                 integer *);
     integer istart;
     logical lquery;
+#if FLA_OPENMP_MULTITHREADING
     int num_threads, tid;
-
+#endif
     /* Initialize global context data */
     aocl_fla_init();
 

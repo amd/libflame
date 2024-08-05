@@ -9,8 +9,8 @@
 */
 
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c_n1 = -1;
-static aocl_int64_t c__1 = 1;
+static integer c_n1 = -1;
+static integer c__1 = 1;
 static logical c_false = FALSE_;
 /* > \brief \b SORCSD2BY1 */
 /* =========== DOCUMENTATION =========== */

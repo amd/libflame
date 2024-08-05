@@ -221,11 +221,13 @@ void dgetri_(integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal 
     }
     /* Form inv(U). If INFO > 0 from DTRTRI, then U is singular, */
     /* and the inverse is not computed. */
+#if FLA_ENABLE_AMD_OPT
     if(*n > 0 && *n <= 16)
     {
         lapack_getri_small_d(n, a, lda, ipiv, work, info);
     }
     else
+#endif
     {
         dtrtri_("Upper", "Non-unit", n, &a[a_offset], lda, info);
 

@@ -250,12 +250,16 @@ void fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, r
                 complex *tauq, complex *taup, complex *x, integer *ldx, complex *y, integer *ldy)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, x_dim1, x_offset, y_dim1, y_offset, i__1, i__2, i__3, i__4, i__5;
+    integer a_dim1, a_offset, x_dim1, x_offset, y_dim1, y_offset, i__1, i__2, i__3;
     complex q__1;
     /* Local variables */
     integer i__;
+    int thread_id;
     complex alpha;
-    int thread_id, actual_num_threads;
+#if FLA_OPENMP_MULTITHREADING
+    integer  i__4, i__5;
+    int actual_num_threads;
+#endif
     extern /* Subroutine */
         void
         cscal_(integer *, complex *, complex *, integer *),

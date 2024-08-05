@@ -191,8 +191,10 @@ int lapack_sormqr(char *side, char *trans, integer *m, integer *n, integer *k, r
     integer ldwork, lwkopt;
     logical lquery;
     integer iwt;
+#if FLA_OPENMP_MULTITHREADING
     int thread_id, actual_num_threads;
     integer index, mi_sub, ni_sub;
+#endif
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

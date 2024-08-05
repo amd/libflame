@@ -187,7 +187,6 @@ LAPACK_hetrd(s, sy)
 }
 LAPACK_hetrd(d, sy)
 {
-    int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("hetrd-dsytrd inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *m,
                       *ldim_A);
@@ -203,6 +202,7 @@ LAPACK_hetrd(d, sy)
     }
 #if !FLA_ENABLE_AMD_OPT // Code below is unreachable if FLA_ENABLE_AMD_OPT is true
     {
+        int fla_error = LAPACK_SUCCESS; 
         LAPACK_RETURN_CHECK_VAR1(
             dsytrd_check(uplo, m, buff_A, ldim_A, buff_d, buff_e, buff_t, buff_w, lwork, info),
             fla_error)

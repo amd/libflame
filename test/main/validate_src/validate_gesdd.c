@@ -59,12 +59,12 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
 
             /* Test 2
                compute norm(I - U'*U) / (N * EPS)*/
-            if(*jobz == 'A')
+            if(*jobz == 'A' || *jobz == 'S')
                 resid2 = (float)check_orthogonal_matrix('T', datatype, U, ns, m, ns, ldu);
 
             /* Test 3
                compute norm(I - V*V') / (N * EPS)*/
-            if(*jobz == 'A')
+            if(*jobz == 'A' || *jobz == 'S')
                 resid3 = (float)check_orthogonal_matrix('N', datatype, V, ns, n, ns, ldvt);
 
             /* Test 4
@@ -104,12 +104,12 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
 
             /* Test 2
                compute norm(I - U'*U) / (N * EPS)*/
-            if(*jobz == 'A')
+            if(*jobz == 'A' || *jobz == 'S')
                 resid2 = check_orthogonal_matrix('T', datatype, U, ns, m, ns, ldu);
 
             /* Test 3
                compute norm(I - V*V') / (N * EPS)*/
-            if(*jobz == 'A')
+            if(*jobz == 'A' || *jobz == 'S')
                 resid3 = check_orthogonal_matrix('N', datatype, V, ns, n, ns, ldvt);
 
             /* Test 4
@@ -149,12 +149,12 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
 
             /* Test 2
                compute norm(I - U'*U) / (N * EPS)*/
-                if(*jobz == 'A')
+                if(*jobz == 'A' || *jobz == 'S')
                     resid2 = (float)check_orthogonal_matrix('C', datatype, U, ns, m, ns, ldu);
 
             /* Test 3
                compute norm(I - V*V') / (N * EPS)*/
-               if(*jobz == 'A')
+               if(*jobz == 'A' || *jobz == 'S')
                     resid3 = (float)check_orthogonal_matrix('N', datatype, V, ns, n, ns, ldvt);
 
             /* Test 4
@@ -194,12 +194,12 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
 
             /* Test 2
                compute norm(I - U'*U) / (N * EPS)*/
-            if(*jobz == 'A')
+            if(*jobz == 'A' || *jobz == 'S')
                 resid2 = check_orthogonal_matrix('C', datatype, U, ns, m, ns, ldu);
 
             /* Test 3
                compute norm(I - V*V') / (N * EPS)*/
-            if(*jobz == 'A')
+            if(*jobz == 'A' || *jobz == 'S')
                 resid3 = check_orthogonal_matrix('N', datatype, V, ns, n, ns, ldvt);
 
             /* Test 4

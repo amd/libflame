@@ -283,10 +283,10 @@ void zhetrd_hb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     extern /* Function */
         int
         fla_thread_get_num_threads();
+    int nthreads;
 #endif
     logical lquery, afters1;
     integer ceiltmp, sweepid, nbtiles, sizetau, thgrsiz;
-    int nthreads;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -580,8 +580,8 @@ void zhetrd_hb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     zlaset_("A", kd, n, &c_b1, &c_b1, &work[awpos], &lda);
 
     /* openMP parallelisation start here */
-    nthreads = 1;
 #ifdef FLA_OPENMP_MULTITHREADING
+    nthreads = 1;
     nthreads = fla_thread_get_num_threads();
 #pragma omp parallel num_threads(nthreads) private(tid, thgrid, blklastind) private(             \
     thed, i__, m, k, st, ed, stt, sweepid, myid, ttype, colpt, stind, edind)                     \

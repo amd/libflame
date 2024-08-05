@@ -6,6 +6,7 @@
 /*
  *  Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
  */
+#if FLA_ENABLE_AMD_OPT
 #include "FLAME.h"
 #if FLA_ENABLE_AOCL_BLAS
 #include "blis.h"
@@ -863,4 +864,4 @@ L220:
     return 0;
     /* End of DBDSQR */
 }
-
+#endif

@@ -5,8 +5,6 @@
 #include "FLA_f2c.h" /* Table of constant values */
 #include "fla_lapack_x86_common.h"
 #ifndef FLA_ENABLE_AMD_OPT
- static doublereal c_d0 = 0.;
- static doublereal c_d1 = 1.;
  static integer c__1 = 1;
 #endif
 static integer c_n1 = -1;

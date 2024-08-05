@@ -315,7 +315,7 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
   integer ldwrkr, minwrk, ldwrku, maxwrk;
   static doublereal bignum, smlnum, eps;
   logical lquery, wntuas, wntvas;
-  integer lwork_dorgbrp, lwork_dorgbrq, lwork_dorglqm, lwork_dorglqn,
+  integer lwork_dorgbrp=0, lwork_dorgbrq, lwork_dorglqm, lwork_dorglqn,
       lwork_dorgqrm, lwork_dorgqrn;
   /* -- LAPACK driver routine -- */
   /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

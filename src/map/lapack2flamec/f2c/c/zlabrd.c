@@ -243,12 +243,16 @@ void fla_zlabrd(integer *m, integer *n, integer *nb, doublecomplex *a, integer *
                 doublecomplex *x, integer *ldx, doublecomplex *y, integer *ldy)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, x_dim1, x_offset, y_dim1, y_offset, i__1, i__2, i__3, i__4, i__5;
+    integer a_dim1, a_offset, x_dim1, x_offset, y_dim1, y_offset, i__1, i__2, i__3;
     doublecomplex z__1;
     /* Local variables */
     integer i__;
     doublecomplex alpha;
-    int thread_id, actual_num_threads;
+    int thread_id;
+#if FLA_OPENMP_MULTITHREADING
+    integer i__4, i__5;
+    int actual_num_threads;
+#endif
     extern /* Subroutine */
         void
         zscal_(integer *, doublecomplex *, doublecomplex *, integer *),

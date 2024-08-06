@@ -108,4 +108,7 @@ void scale_matrix_underflow_overflow_gesv(integer datatype, integer n, void *A, 
 /* Scaling matrix with values around overflow, underflow for GETRS */
 void scale_matrix_underflow_overflow_getrs(integer datatype, char *trans, integer m, integer n,
                                            void *A, integer lda, char imatrix_char, void *scal);
+/* Scaling matrix with values around overflow underflow for getri */
+void scale_matrix_underflow_overflow_getri(integer datatype, integer m, integer n, void *A,
+                                           integer lda, char imatrix_char);
 #endif // TEST_OVERFLOW_UNDERFLOW_H

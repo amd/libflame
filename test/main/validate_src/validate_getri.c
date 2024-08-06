@@ -9,13 +9,14 @@
 #include "test_common.h"
 
 void validate_getri(integer m_A, integer n_A, void *A, void *A_inv, integer lda, integer *IPIV,
-                    integer datatype, double *residual, integer *info)
+                    integer datatype, double *residual, integer *info, char imatrix)
 {
     if(m_A == 0 || n_A == 0)
         return;
     /* System generated locals */
     void *a_temp, *work;
     *info = 0;
+    char NORM = '1';
 
     /* Create Identity matrix */
     create_matrix(datatype, LAPACK_COL_MAJOR, n_A, n_A, &a_temp, n_A);
@@ -34,7 +35,8 @@ void validate_getri(integer m_A, integer n_A, void *A, void *A_inv, integer lda,
             /* compute I - A' * A */
             sgemm_("N", "N", &m_A, &n_A, &m_A, &s_n_one, A_inv, &lda, A, &lda, &s_one, a_temp,
                    &m_A);
-            norm = fla_lapack_slange("F", &m_A, &m_A, a_temp, &m_A, work);
+
+            compute_matrix_norm(datatype, NORM, m_A, m_A, a_temp, m_A, &norm, imatrix, work);
             /* Compute norm(I - A'*A) / (N * norm(A) * norm(AINV) * EPS)*/
             *residual = (double)(norm / (norm_I * eps * n_A));
             break;
@@ -52,7 +54,7 @@ void validate_getri(integer m_A, integer n_A, void *A, void *A_inv, integer lda,
             dgemm_("N", "N", &m_A, &n_A, &m_A, &d_n_one, A_inv, &lda, A, &lda, &d_one, a_temp,
                    &m_A);
 
-            norm = fla_lapack_dlange("F", &m_A, &m_A, a_temp, &m_A, work);
+            compute_matrix_norm(datatype, NORM, m_A, m_A, a_temp, m_A, &norm, imatrix, work);
             /* Compute norm(I - A'*A) / (N * norm(A) * norm(AINV) * EPS)*/
             *residual = (double)(norm / (norm_I * eps * n_A));
             break;
@@ -69,7 +71,7 @@ void validate_getri(integer m_A, integer n_A, void *A, void *A_inv, integer lda,
             cgemm_("N", "N", &m_A, &n_A, &m_A, &c_n_one, A_inv, &lda, A, &lda, &c_one, a_temp,
                    &m_A);
 
-            norm = fla_lapack_clange("F", &m_A, &m_A, a_temp, &m_A, work);
+            compute_matrix_norm(datatype, NORM, m_A, m_A, a_temp, m_A, &norm, imatrix, work);
             /* Compute norm(I - A'*A) / (N * norm(A) * norm(AINV) * EPS)*/
             *residual = (double)(norm / (norm_I * eps * n_A));
             break;
@@ -86,7 +88,7 @@ void validate_getri(integer m_A, integer n_A, void *A, void *A_inv, integer lda,
             zgemm_("N", "N", &m_A, &n_A, &m_A, &z_n_one, A_inv, &lda, A, &lda, &z_one, a_temp,
                    &m_A);
 
-            norm = fla_lapack_zlange("F", &m_A, &m_A, a_temp, &m_A, work);
+            compute_matrix_norm(datatype, NORM, m_A, m_A, a_temp, m_A, &norm, imatrix, work);
             /* Compute norm(I - A'*A) / (N * norm(A) * norm(AINV) * EPS)*/
             *residual = (double)(norm / (norm_I * eps * n_A));
             break;

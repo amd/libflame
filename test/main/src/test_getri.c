@@ -142,15 +142,19 @@ void fla_test_getri_experiment(test_params_t *params, integer datatype, integer 
     create_realtype_vector(datatype, &s_test, n);
 
     /* Initialize the test matrices*/
-    if(params->imatrix_char == NULL && g_ext_fptr == NULL)
+    if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
+    {
+        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+    }
+    else
     {
         /* Generate input matrix with condition number <= 10 */
         create_svd_matrix(datatype, range, n, n, A, lda, s_test, GETRI_VL, GETRI_VU, i_zero, i_zero,
                           info);
-    }
-    else
-    {
-        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            scale_matrix_underflow_overflow_getri(datatype, n, n, A, lda, params->imatrix_char);
+        }
     }
 
     /* Save the original matrix*/
@@ -172,8 +176,8 @@ void fla_test_getri_experiment(test_params_t *params, integer datatype, integer 
         *perf *= 4.0;
 
     /* output validation */
-    if(!params->imatrix_char && info == 0)
-        validate_getri(n, n, A, A_test, lda, IPIV, datatype, residual, &vinfo);
+    if(info == 0 && !FLA_EXTREME_CASE_TEST)
+        validate_getri(n, n, A, A_test, lda, IPIV, datatype, residual, &vinfo, params->imatrix_char);
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
     {

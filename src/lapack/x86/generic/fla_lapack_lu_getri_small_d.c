@@ -5,10 +5,11 @@
  *  @brief getri kernals for small inputs
  *         to choose optimized paths
  *  *  */
-#if FLA_ENABLE_AMD_OPT
+
 #include "FLA_f2c.h"
 #include "fla_lapack_lu_small_kernals_d.h"
 
+#if FLA_ENABLE_AMD_OPT
 void lapack_getri_small_d(integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *work,
                           integer *info)
 {

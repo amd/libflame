@@ -1405,3 +1405,57 @@ void scale_matrix_underflow_overflow_getrs(integer datatype, char *trans, intege
     /* free vectors */
     free_vector(max_min);
 }
+
+/* Scaling matrix with values around overflow underflow for getri */
+void scale_matrix_underflow_overflow_getri(integer datatype, integer m, integer n, void *A,
+                                           integer lda, char imatrix_char)
+{
+    void *max_min = NULL, *scal = NULL;
+    double tuning_val = 1.0;
+    create_vector(get_realtype(datatype), &max_min, 1);
+    create_vector(get_realtype(datatype), &scal, 1);
+    if(imatrix_char == 'O')
+    {
+        get_max_from_matrix(datatype, A, max_min, m, n, lda);
+        if(n < 100)
+        {
+            tuning_val = 12.0;
+        }
+        else if(n < 200)
+        {
+            tuning_val = 35.0;
+        }
+        else if(n < 300)
+        {
+            tuning_val = 65.0;
+        }
+        else if(n < 600)
+        {
+            tuning_val = 95.0;
+        }
+        else
+        {
+            tuning_val = 130.0;
+        }
+    }
+    if(imatrix_char == 'U')
+    {
+        get_min_from_matrix(datatype, A, max_min, m, n, lda);
+        if (n == 2)
+        {
+            tuning_val = 0.5;
+        }
+        else
+        {
+            tuning_val = 1.0;
+        }
+    }
+    calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
+
+    /* Scaling the matrix A with scal */
+    scal_matrix(datatype, scal, A, m, n, lda, i_one);
+
+    /* free vectors */
+    free_vector(max_min);
+    free_vector(scal);
+}

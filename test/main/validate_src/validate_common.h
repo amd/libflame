@@ -35,7 +35,7 @@ void validate_getrf(integer m_A, integer n_A, void *A, void *A_test, integer lda
                     integer datatype, double *residual, integer *info, char imatrix);
 
 void validate_getri(integer m_A, integer n_A, void *A, void *A_inv, integer lda, integer *IPIV,
-                    integer datatype, double *residual, integer *info);
+                    integer datatype, double *residual, integer *info, char imatrix);
 
 void validate_getrs(char *trans, integer n, integer nrhs, void *A, integer lda, void *B,
                     integer ldb, void *X, integer datatype, double *residual, integer *info,

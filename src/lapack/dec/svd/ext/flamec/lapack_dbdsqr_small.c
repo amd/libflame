@@ -6,7 +6,6 @@
 /*
  *  Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
  */
-#if FLA_ENABLE_AMD_OPT
 #include "FLAME.h"
 #if FLA_ENABLE_AOCL_BLAS
 #include "blis.h"
@@ -14,6 +13,7 @@
 #include "FLA_f2c.h" /* Table of constant values */
 #include "fla_dgeqrf_small_avx2.h"
 
+#if FLA_ENABLE_AMD_OPT
 static doublereal c_b15 = -.125;
 static integer c__1 = 1;
 static doublereal c_b49 = 1.;

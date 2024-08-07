@@ -6,6 +6,8 @@
 #include "test_lapack.h"
 #include "test_prototype.h"
 
+integer row_major_steqr_ldz;
+
 /* Local prototypes.*/
 void fla_test_steqr_experiment(test_params_t *params, integer datatype, integer p_cur,
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
@@ -55,7 +57,17 @@ void fla_test_steqr(integer argc, char **argv, test_params_t *params)
         num_types = strlen(argv[2]);
         params->eig_sym_paramslist[0].compz = argv[3][0];
         N = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
-        params->eig_sym_paramslist[0].ldz = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
+        /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
+        if((g_ext_fptr == NULL) && params->test_lapacke_interface
+           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        {
+            row_major_steqr_ldz = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
+            params->eig_sym_paramslist[0].ldz = N;
+        }
+        else
+        {
+            params->eig_sym_paramslist[0].ldz = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
+        }
         n_repeats = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
 
         if(n_repeats > 0)
@@ -339,13 +351,18 @@ double prepare_lapacke_steqr_run(integer datatype, int layout, char *compz, inte
     double exe_time;
     integer ldz_t = ldz;
     void *Z_t = NULL;
+
+    /* Configure leading dimensions as per the input matrix layout */
+    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_steqr_ldz, ldz_t);
+
     Z_t = Z;
 
+    /* In case of row_major matrix layout,
+       convert input matrix to row_major */
     if((*compz != 'N') && (layout == LAPACK_ROW_MAJOR))
     {
-        ldz_t = fla_max(1, n);
         /* Create temporary buffers for converting matrix layout */
-        create_matrix(datatype, layout, n, n, &Z_t, ldz_t);
+        create_matrix(datatype, layout, n, n, &Z_t, fla_max(n, ldz_t));
         convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, Z, ldz, Z_t, ldz_t);
     }
 

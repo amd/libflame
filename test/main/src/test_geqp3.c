@@ -4,6 +4,8 @@
 
 #include "test_lapack.h"
 
+integer row_major_geqp3_lda;
+
 /* Local prototypes */
 void fla_test_geqp3_experiment(test_params_t *params, integer datatype, integer p_cur,
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
@@ -50,8 +52,17 @@ void fla_test_geqp3(integer argc, char **argv, test_params_t *params)
         num_types = strlen(argv[2]);
         M = strtoimax(argv[3], &endptr, CLI_DECIMAL_BASE);
         N = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
-        params->lin_solver_paramslist[0].lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
-
+        /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
+        if((g_ext_fptr == NULL) && params->test_lapacke_interface
+           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        {
+            row_major_geqp3_lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
+            params->lin_solver_paramslist[0].lda = N;
+        }
+        else
+        {
+            params->lin_solver_paramslist[0].lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
+        }
         g_lwork = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
 
@@ -289,13 +300,16 @@ double prepare_lapacke_geqp3_run(integer datatype, int layout, integer m_A, inte
     double exe_time;
     integer lda_t = lda;
     void *A_t = NULL;
+
+    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_geqp3_lda, lda_t);
+
     A_t = A;
 
+    /* Configure leading dimensions as per the input matrix layout */
     if(layout == LAPACK_ROW_MAJOR)
     {
-        lda_t = fla_max(1, n_A);
         /* Create temporary buffers for converting matrix layout */
-        create_matrix(datatype, layout, m_A, n_A, &A_t, lda_t);
+        create_matrix(datatype, layout, m_A, n_A, &A_t, fla_max(n_A, lda_t));
         convert_matrix_layout(LAPACK_COL_MAJOR, datatype, m_A, n_A, A, lda, A_t, lda_t);
     }
 

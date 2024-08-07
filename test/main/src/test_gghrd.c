@@ -4,6 +4,11 @@
 
 #include "test_lapack.h"
 
+integer row_major_gghrd_lda;
+integer row_major_gghrd_ldb;
+integer row_major_gghrd_ldq;
+integer row_major_gghrd_ldz;
+
 /* Local prototypes */
 void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer p_cur,
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
@@ -55,10 +60,26 @@ void fla_test_gghrd(integer argc, char **argv, test_params_t *params)
         N = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].ilo = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].ihi = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
-        params->lin_solver_paramslist[0].lda = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
-        params->lin_solver_paramslist[0].ldb = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
-        params->lin_solver_paramslist[0].ldq = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
-        params->lin_solver_paramslist[0].ldz = strtoimax(argv[11], &endptr, CLI_DECIMAL_BASE);
+        /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
+        if((g_ext_fptr == NULL) && params->test_lapacke_interface
+           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        {
+            row_major_gghrd_lda = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
+            row_major_gghrd_ldb = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
+            row_major_gghrd_ldq = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
+            row_major_gghrd_ldz = strtoimax(argv[11], &endptr, CLI_DECIMAL_BASE);
+            params->lin_solver_paramslist[0].lda = N;
+            params->lin_solver_paramslist[0].ldb = N;
+            params->lin_solver_paramslist[0].ldq = N;
+            params->lin_solver_paramslist[0].ldz = N;
+        }
+        else
+        {
+            params->lin_solver_paramslist[0].lda = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
+            params->lin_solver_paramslist[0].ldb = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
+            params->lin_solver_paramslist[0].ldq = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
+            params->lin_solver_paramslist[0].ldz = strtoimax(argv[11], &endptr, CLI_DECIMAL_BASE);
+        }
         n_repeats = strtoimax(argv[12], &endptr, CLI_DECIMAL_BASE);
 
         if(n_repeats > 0)
@@ -330,32 +351,35 @@ double prepare_lapacke_gghrd_run(integer datatype, int layout, char *compq, char
     integer ldq_t = ldq;
     integer ldz_t = ldz;
     void *A_t = NULL, *B_t = NULL, *Q_t = NULL, *Z_t = NULL;
+
+    /* Configure leading dimensions as per the input matrix layout */
+    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_gghrd_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_gghrd_ldb, ldb_t);
+    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_gghrd_ldq, ldq_t);
+    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_gghrd_ldz, ldz_t);
+
     A_t = A;
     B_t = B;
     Q_t = Q;
     Z_t = Z;
     /* In case of row_major matrix layout,
-       convert input matrices to row_major */
+       convert input matrix to row_major */
     if(layout == LAPACK_ROW_MAJOR)
     {
-        lda_t = fla_max(1, n);
-        ldb_t = fla_max(1, n);
-        ldq_t = fla_max(1, n);
-        ldz_t = fla_max(1, n);
         /* Create temporary buffers for converting matrix layout */
-        create_matrix(datatype, layout, n, n, &A_t, lda_t);
-        create_matrix(datatype, layout, n, n, &B_t, ldb_t);
+        create_matrix(datatype, layout, n, n, &A_t, fla_max(n, lda_t));
+        create_matrix(datatype, layout, n, n, &B_t, fla_max(n, ldb_t));
 
         convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, A, lda, A_t, lda_t);
         convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, B, ldb, B_t, ldb_t);
         if(*compq != 'N')
         {
-            create_matrix(datatype, layout, n, n, &Q_t, ldq_t);
+            create_matrix(datatype, layout, n, n, &Q_t, fla_max(n, ldq_t));
             convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, Q, ldq, Q_t, ldq_t);
         }
         if(*compz != 'N')
         {
-            create_matrix(datatype, layout, n, n, &Z_t, ldz_t);
+            create_matrix(datatype, layout, n, n, &Z_t, fla_max(n, ldz_t));
             convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, Z, ldz, Z_t, ldz_t);
         }
     }

@@ -6,6 +6,8 @@
 #include "test_lapack.h"
 #include "test_prototype.h"
 
+integer row_major_potrf_lda;
+
 /* Local prototypes.*/
 void fla_test_potrf_experiment(test_params_t *params, integer datatype, integer p_cur,
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
@@ -50,8 +52,17 @@ void fla_test_potrf(integer argc, char **argv, test_params_t *params)
         num_types = strlen(argv[2]);
         params->lin_solver_paramslist[0].Uplo = argv[3][0];
         N = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
-        params->lin_solver_paramslist[0].lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
-
+        /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
+        if((g_ext_fptr == NULL) && params->test_lapacke_interface
+           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        {
+            row_major_potrf_lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
+            params->lin_solver_paramslist[0].lda = N;
+        }
+        else
+        {
+            params->lin_solver_paramslist[0].lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
+        }
         n_repeats = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
 
         if(n_repeats > 0)
@@ -235,13 +246,18 @@ double prepare_lapacke_potrf_run(integer datatype, int layout, char *uplo, integ
     double exe_time;
     integer lda_t = lda;
     void *A_t = NULL;
+
+    /* Configure leading dimensions as per the input matrix layout */
+    SELECT_LDA(g_ext_fptr, config_data, layout, m, row_major_potrf_lda, lda_t);
+
     A_t = A;
 
+    /* In case of row_major matrix layout,
+       convert input matrix to row_major */
     if(layout == LAPACK_ROW_MAJOR)
     {
-        lda_t = fla_max(1, m);
         /* Create temporary buffers for converting matrix layout */
-        create_matrix(datatype, layout, m, m, &A_t, lda_t);
+        create_matrix(datatype, layout, m, m, &A_t, fla_max(m, lda_t));
         convert_matrix_layout(LAPACK_COL_MAJOR, datatype, m, m, A, lda, A_t, lda_t);
     }
 

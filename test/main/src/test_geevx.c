@@ -6,6 +6,10 @@
 #include "test_lapack.h"
 #include "test_prototype.h"
 
+integer row_major_geevx_lda;
+integer row_major_geevx_ldvl;
+integer row_major_geevx_ldvr;
+
 /* Local prototypes.*/
 void fla_test_geevx_experiment(test_params_t *params, integer datatype, integer p_cur,
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
@@ -69,9 +73,23 @@ void fla_test_geevx(integer argc, char **argv, test_params_t *params)
         params->eig_non_sym_paramslist[0].jobvsr = argv[5][0];
         params->eig_non_sym_paramslist[0].sense_ggevx = argv[6][0];
         N = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
-        params->eig_non_sym_paramslist[0].lda = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
-        params->eig_non_sym_paramslist[0].ldvl = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
-        params->eig_non_sym_paramslist[0].ldvr = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
+        /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
+        if((g_ext_fptr == NULL) && params->test_lapacke_interface
+           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        {
+            row_major_geevx_lda = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
+            row_major_geevx_ldvl = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
+            row_major_geevx_ldvr = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
+            params->eig_non_sym_paramslist[0].lda = N;
+            params->eig_non_sym_paramslist[0].ldvl = N;
+            params->eig_non_sym_paramslist[0].ldvr = N;
+        }
+        else
+        {
+            params->eig_non_sym_paramslist[0].lda = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
+            params->eig_non_sym_paramslist[0].ldvl = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
+            params->eig_non_sym_paramslist[0].ldvr = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
+        }
         g_lwork = strtoimax(argv[11], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[12], &endptr, CLI_DECIMAL_BASE);
 
@@ -426,6 +444,12 @@ double prepare_lapacke_geevx_run(integer datatype, int layout, char *balanc, cha
     integer ldvl_t = ldvl;
     integer ldvr_t = ldvr;
     void *a_t = NULL, *vl_t = NULL, *vr_t = NULL;
+
+    /* Configure leading dimensions as per the input matrix layout */
+    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_geevx_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_geevx_ldvl, ldvl_t);
+    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_geevx_ldvr, ldvr_t);
+
     a_t = a;
     vl_t = vl;
     vr_t = vr;
@@ -434,17 +458,14 @@ double prepare_lapacke_geevx_run(integer datatype, int layout, char *balanc, cha
        convert input matrix to row_major */
     if(layout == LAPACK_ROW_MAJOR)
     {
-        lda_t = fla_max(1, n);
         /* Create temporary buffers for converting matrix layout */
         create_matrix(datatype, layout, n, n, &a_t, lda_t);
         if(*jobvl == 'V')
         {
-            ldvr_t = fla_max(1, n);
             create_matrix(datatype, layout, n, n, &vl_t, ldvl_t);
         }
         if(*jobvr == 'V')
         {
-            ldvl_t = fla_max(1, n);
             create_matrix(datatype, layout, n, n, &vr_t, ldvr_t);
         }
         convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, a, lda, a_t, lda_t);
@@ -461,7 +482,7 @@ double prepare_lapacke_geevx_run(integer datatype, int layout, char *balanc, cha
 
     /* In case of row_major matrix layout, convert output matrices
        to column_major layout */
-    if((layout == LAPACK_ROW_MAJOR))
+    if(layout == LAPACK_ROW_MAJOR)
     {
         convert_matrix_layout(layout, datatype, n, n, a_t, lda_t, a, lda);
         if(*jobvl == 'V')

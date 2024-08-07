@@ -7,6 +7,10 @@
 #include "test_overflow_underflow.h"
 #include "test_prototype.h"
 
+integer row_major_gesvd_lda;
+integer row_major_gesvd_ldu;
+integer row_major_gesvd_ldvt;
+
 /* Local prototypes */
 void fla_test_gesvd_experiment(test_params_t *params, integer datatype, integer p_cur,
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
@@ -60,10 +64,23 @@ void fla_test_gesvd(integer argc, char **argv, test_params_t *params)
         params->svd_paramslist[0].jobvt_gesvd = argv[4][0];
         M = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
         N = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
-        params->svd_paramslist[0].lda = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
-        params->svd_paramslist[0].ldu = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
-        params->svd_paramslist[0].ldvt = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
-
+        /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
+        if((g_ext_fptr == NULL) && params->test_lapacke_interface
+           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        {
+            row_major_gesvd_lda = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
+            row_major_gesvd_ldu = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
+            row_major_gesvd_ldvt = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
+            params->svd_paramslist[0].lda = N;
+            params->svd_paramslist[0].ldu = N;
+            params->svd_paramslist[0].ldvt = N;
+        }
+        else
+        {
+            params->svd_paramslist[0].lda = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
+            params->svd_paramslist[0].ldu = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
+            params->svd_paramslist[0].ldvt = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
+        }
         g_lwork = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[11], &endptr, CLI_DECIMAL_BASE);
 
@@ -382,24 +399,29 @@ double prepare_lapacke_gesvd_run(integer datatype, int layout, char *jobu, char 
     integer ldu_t = ldu;
     integer ldvt_t = ldvt;
     void *A_t = NULL, *U_t = NULL, *V_t = NULL;
+
+    /* Configure leading dimensions as per the input matrix layout */
+    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_gesvd_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, config_data, layout, m_A, row_major_gesvd_ldu, ldu_t);
+    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_gesvd_ldvt, ldvt_t);
+
     A_t = A;
     U_t = U;
     V_t = V;
 
+    /* In case of row_major matrix layout,
+       convert input matrix to row_major */
     if(layout == LAPACK_ROW_MAJOR)
     {
-        lda_t = fla_max(1, n_A);
-        ldu_t = fla_max(1, m_A);
-        ldvt_t = fla_max(1, n_A);
         /* Create temporary buffers for converting matrix layout */
-        create_matrix(datatype, layout, m_A, n_A, &A_t, lda_t);
+        create_matrix(datatype, layout, m_A, n_A, &A_t, fla_max(n_A, lda_t));
         if((*jobu != 'N') && (*jobu != 'O'))
         {
-            create_matrix(datatype, layout, m_A, m_A, &U_t, ldu_t);
+            create_matrix(datatype, layout, m_A, m_A, &U_t, fla_max(m_A, ldu_t));
         }
         if((*jobvt != 'N') && (*jobvt != 'O'))
         {
-            create_matrix(datatype, layout, n_A, n_A, &V_t, ldvt_t);
+            create_matrix(datatype, layout, n_A, n_A, &V_t, fla_max(n_A, ldvt_t));
         }
         convert_matrix_layout(LAPACK_COL_MAJOR, datatype, m_A, n_A, A, lda, A_t, lda_t);
     }

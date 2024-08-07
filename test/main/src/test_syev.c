@@ -6,6 +6,8 @@
 #include "test_lapack.h"
 #include "test_prototype.h"
 
+integer row_major_syev_lda;
+
 /* Local prototypes.*/
 void fla_test_syev_experiment(test_params_t *params, integer datatype, integer p_cur, integer q_cur,
                               integer pci, integer n_repeats, integer einfo, double *perf,
@@ -55,7 +57,17 @@ void fla_test_syev(integer argc, char **argv, test_params_t *params)
         params->eig_sym_paramslist[0].jobz = argv[3][0];
         params->eig_sym_paramslist[0].uplo = argv[4][0];
         N = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
-        params->eig_sym_paramslist[0].lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
+        /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
+        if((g_ext_fptr == NULL) && params->test_lapacke_interface
+           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        {
+            row_major_syev_lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
+            params->eig_sym_paramslist[0].lda = N;
+        }
+        else
+        {
+            params->eig_sym_paramslist[0].lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
+        }
         g_lwork = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
 
@@ -291,13 +303,18 @@ double prepare_lapacke_syev_run(integer datatype, int layout, char *jobz, char *
     double exe_time;
     integer lda_t = lda;
     void *A_t = NULL;
+
+    /* Configure leading dimensions as per the input matrix layout */
+    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_syev_lda, lda_t);
+
     A_t = A;
 
+    /* In case of row_major matrix layout,
+       convert input matrix to row_major */
     if(layout == LAPACK_ROW_MAJOR)
     {
-        lda_t = fla_max(1, n);
         /* Create temporary buffers for converting matrix layout */
-        create_matrix(datatype, layout, n, n, &A_t, lda_t);
+        create_matrix(datatype, layout, n, n, &A_t, fla_max(n, lda_t));
         convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, A, lda, A_t, lda_t);
     }
     exe_time = fla_test_clock();

@@ -6315,7 +6315,7 @@ void convert_matrix_layout(int matrix_layout, integer datatype, integer m, integ
                            integer lda, void *a_t, integer lda_t)
 {
     integer i, j, cs, rs;
-    if(a == NULL || a_t == NULL)
+    if(a == NULL || a_t == NULL || lda <= 0 || lda_t <= 0)
         return;
 
     if(matrix_layout == LAPACK_COL_MAJOR)

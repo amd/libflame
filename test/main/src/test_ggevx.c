@@ -4,6 +4,11 @@
 
 #include "test_lapack.h"
 
+integer row_major_ggevx_lda;
+integer row_major_ggevx_ldb;
+integer row_major_ggevx_ldvl;
+integer row_major_ggevx_ldvr;
+
 /* Local prototypes */
 void fla_test_ggevx_experiment(test_params_t *params, integer datatype, integer p_cur,
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
@@ -71,10 +76,26 @@ void fla_test_ggevx(integer argc, char **argv, test_params_t *params)
         params->eig_non_sym_paramslist[0].jobvsr = argv[5][0];
         params->eig_non_sym_paramslist[0].sense_ggevx = argv[6][0];
         N = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
-        params->eig_non_sym_paramslist[0].lda = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
-        params->eig_non_sym_paramslist[0].ldb = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
-        params->eig_non_sym_paramslist[0].ldvl = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
-        params->eig_non_sym_paramslist[0].ldvr = strtoimax(argv[11], &endptr, CLI_DECIMAL_BASE);
+        /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
+        if((g_ext_fptr == NULL) && params->test_lapacke_interface
+           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        {
+            row_major_ggevx_lda = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
+            row_major_ggevx_ldb = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
+            row_major_ggevx_ldvl = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
+            row_major_ggevx_ldvr = strtoimax(argv[11], &endptr, CLI_DECIMAL_BASE);
+            params->eig_non_sym_paramslist[0].lda = N;
+            params->eig_non_sym_paramslist[0].ldb = N;
+            params->eig_non_sym_paramslist[0].ldvl = N;
+            params->eig_non_sym_paramslist[0].ldvr = N;
+        }
+        else
+        {
+            params->eig_non_sym_paramslist[0].lda = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
+            params->eig_non_sym_paramslist[0].ldb = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
+            params->eig_non_sym_paramslist[0].ldvl = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
+            params->eig_non_sym_paramslist[0].ldvr = strtoimax(argv[11], &endptr, CLI_DECIMAL_BASE);
+        }
         g_lwork = strtoimax(argv[12], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[13], &endptr, CLI_DECIMAL_BASE);
 
@@ -403,6 +424,13 @@ double prepare_lapacke_ggevx_run(integer datatype, int layout, char *balanc, cha
     integer ldvl_t = ldvl;
     integer ldvr_t = ldvr;
     void *A_t = NULL, *B_t = NULL, *VL_t = NULL, *VR_t = NULL;
+
+    /* Configure leading dimensions as per the input matrix layout */
+    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_ggevx_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_ggevx_ldb, ldb_t);
+    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_ggevx_ldvl, ldvl_t);
+    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_ggevx_ldvr, ldvr_t);
+
     A_t = A;
     B_t = B;
     VL_t = VL;
@@ -411,20 +439,16 @@ double prepare_lapacke_ggevx_run(integer datatype, int layout, char *balanc, cha
        convert input matrix to row_major */
     if(layout == LAPACK_ROW_MAJOR)
     {
-        lda_t = fla_max(1, n_A);
-        ldb_t = fla_max(1, n_A);
-        ldvl_t = fla_max(1, n_A);
-        ldvr_t = fla_max(1, n_A);
         /* Create temporary buffers for converting matrix layout */
-        create_matrix(datatype, layout, n_A, n_A, &A_t, lda_t);
-        create_matrix(datatype, layout, n_A, n_A, &B_t, ldb_t);
+        create_matrix(datatype, layout, n_A, n_A, &A_t, fla_max(n_A, lda_t));
+        create_matrix(datatype, layout, n_A, n_A, &B_t, fla_max(n_A, ldb_t));
         if(*jobvl == 'V')
         {
-            create_matrix(datatype, layout, n_A, n_A, &VL_t, ldvl_t);
+            create_matrix(datatype, layout, n_A, n_A, &VL_t, fla_max(n_A, ldvl_t));
         }
         if(*jobvr == 'V')
         {
-            create_matrix(datatype, layout, n_A, n_A, &VR_t, ldvr_t);
+            create_matrix(datatype, layout, n_A, n_A, &VR_t, fla_max(n_A, ldvr_t));
         }
         convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n_A, n_A, A, lda, A_t, lda_t);
         convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n_A, n_A, B, ldb, B_t, ldb_t);

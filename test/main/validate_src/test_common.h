@@ -13,7 +13,6 @@
 #include "test_prototype.h"
 #include "validate_common.h"
 #include "test_overflow_underflow.h"
-#include "lapacke.h"
 
 #include <limits.h>
 #include <stdint.h>

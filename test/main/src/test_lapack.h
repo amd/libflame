@@ -171,6 +171,20 @@ extern FILE *g_ext_fptr;
         ? TRUE                                                                               \
         : FALSE
 
+/* Assign leading dimension value based on matrix layout and cmdline/config inputs */
+#define SELECT_LDA(g_ext_fptr, config_data, layout, n, rm_lda, lda_t) \
+       if((g_ext_fptr == NULL) && (layout == LAPACK_ROW_MAJOR))       \
+       {                                                              \
+           if(config_data)                                            \
+           {                                                          \
+               lda_t = fla_max(1, n);                                 \
+           }                                                          \
+           else                                                       \
+           {                                                          \
+                lda_t = rm_lda;                                       \
+           }                                                          \
+       }
+
 typedef struct Lin_solver_paramlist_t
 {
     integer num_ranges; // number of ranges to run

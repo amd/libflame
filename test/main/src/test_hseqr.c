@@ -4,6 +4,9 @@
 
 #include "test_lapack.h"
 
+integer row_major_hseqr_ldh;
+integer row_major_hseqr_ldz;
+
 /* Local prototypes */
 void fla_test_hseqr_experiment(test_params_t *params, integer datatype, integer p_cur,
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
@@ -54,8 +57,20 @@ void fla_test_hseqr(integer argc, char **argv, test_params_t *params)
         N = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
         params->eig_sym_paramslist[0].ilo = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
         params->eig_sym_paramslist[0].ihi = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
-        params->eig_sym_paramslist[0].lda = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
-        params->eig_sym_paramslist[0].ldz = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
+        /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
+        if((g_ext_fptr == NULL) && params->test_lapacke_interface
+           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        {
+            row_major_hseqr_ldh = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
+            row_major_hseqr_ldz = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
+            params->lin_solver_paramslist[0].lda = N;
+            params->lin_solver_paramslist[0].ldz = N;
+        }
+        else
+        {
+            params->eig_sym_paramslist[0].lda = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
+            params->eig_sym_paramslist[0].ldz = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
+        }
         g_lwork = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[11], &endptr, CLI_DECIMAL_BASE);
 
@@ -350,21 +365,24 @@ double prepare_lapacke_hseqr_run(integer datatype, int layout, char *job, char *
     integer ldh_t = ldh;
     integer ldz_t = ldz;
     void *H_t = NULL, *Z_t = NULL;
+
+    /* Configure leading dimensions as per the input matrix layout */
+    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_hseqr_ldh, ldh_t);
+    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_hseqr_ldz, ldz_t);
+
     H_t = H;
     Z_t = Z;
     /* In case of row_major matrix layout,
        convert input matrices to row_major */
     if(layout == LAPACK_ROW_MAJOR)
     {
-        ldh_t = fla_max(1, n);
-        ldz_t = fla_max(1, n);
         /* Create temporary buffers for converting matrix layout */
-        create_matrix(datatype, layout, n, n, &H_t, ldh_t);
+        create_matrix(datatype, layout, n, n, &H_t, fla_max(n, ldh_t));
 
         convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, H, ldh, H_t, ldh_t);
         if(*compz != 'N')
         {
-            create_matrix(datatype, layout, n, n, &Z_t, ldz_t);
+            create_matrix(datatype, layout, n, n, &Z_t, fla_max(n, ldz_t));
             convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, Z, ldz, Z_t, ldz_t);
         }
     }

@@ -7,6 +7,9 @@
 #define GESV_VL 0.1
 #define GESV_VU 10
 
+integer row_major_gesv_lda;
+integer row_major_gesv_ldb;
+
 /* Local prototypes */
 void fla_test_gesv_experiment(test_params_t *params, integer datatype, integer p_cur, integer q_cur,
                               integer pci, integer n_repeats, integer einfo, double *perf,
@@ -53,9 +56,20 @@ void fla_test_gesv(integer argc, char **argv, test_params_t *params)
         num_types = strlen(argv[2]);
         N = strtoimax(argv[3], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].nrhs = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
-        params->lin_solver_paramslist[0].lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
-        params->lin_solver_paramslist[0].ldb = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
-
+        /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
+        if((g_ext_fptr == NULL) && params->test_lapacke_interface
+           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        {
+            row_major_gesv_lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
+            row_major_gesv_ldb = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
+            params->lin_solver_paramslist[0].lda = N;
+            params->lin_solver_paramslist[0].ldb = N;
+        }
+        else
+        {
+            params->lin_solver_paramslist[0].lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
+            params->lin_solver_paramslist[0].ldb = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
+        }
         n_repeats = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
 
         if(n_repeats > 0)
@@ -269,17 +283,20 @@ double prepare_lapacke_gesv_run(integer datatype, int layout, integer n_A, integ
     integer lda_t = lda;
     integer ldb_t = ldb;
     void *A_t = NULL, *B_t = NULL;
+
+    /* Configure leading dimensions as per the input matrix layout */
+    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_gesv_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, config_data, layout, nrhs, row_major_gesv_ldb, ldb_t);
+
     A_t = A;
     B_t = B;
     /* In case of row_major matrix layout,
        convert input matrix to row_major */
     if(layout == LAPACK_ROW_MAJOR)
     {
-        lda_t = fla_max(1, n_A);
-        ldb_t = fla_max(1, nrhs);
         /* Create temporary buffers for converting matrix layout */
-        create_matrix(datatype, layout, n_A, n_A, &A_t, lda_t);
-        create_matrix(datatype, layout, n_A, nrhs, &B_t, ldb_t);
+        create_matrix(datatype, layout, n_A, n_A, &A_t, fla_max(n_A, lda_t));
+        create_matrix(datatype, layout, n_A, nrhs, &B_t, fla_max(nrhs, ldb_t));
         convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n_A, n_A, A, lda, A_t, lda_t);
         convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n_A, nrhs, B, ldb, B_t, ldb_t);
     }

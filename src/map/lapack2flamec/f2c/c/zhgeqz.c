@@ -412,13 +412,10 @@ void fla_zhgeqz(char *job, char *compq, char *compz, integer *n, integer *ilo, i
                 integer *);
     integer istart;
     logical lquery;
-#if FLA_OPENMP_MULTITHREADING
+#ifdef FLA_ENABLE_AMD_OPT
     int num_threads, tid;
-#endif
     /* Initialize global context data */
     aocl_fla_init();
-
-#ifdef FLA_ENABLE_AMD_OPT
     doublereal c1;
     doublecomplex s1;
     integer max_swps = QZ_MAX_SWEEPS;

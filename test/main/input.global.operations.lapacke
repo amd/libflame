@@ -29,3 +29,8 @@
 1   stevd   Eigen Decomposition                           (0 = disable; 1 = enable; 2 = enable only this)
 1   syev    Eigen Values and Vectors                      (0 = disable; 1 = enable; 2 = enable only this)
 1   syevd   Eigen Decomposition                           (0 = disable; 1 = enable; 2 = enable only this)
+1   sytrf   LDLT factorization                            (0 = disable; 1 = enable; 2 = enable only this)
+1   gels    Solves Linear systems for GE matrices         (0 = disable; 1 = enable; 2 = enable only this)
+1   gelss   Solves Linear systems for GE matrices         (0 = disable; 1 = enable; 2 = enable only this)
+1   gelsd   Solves linear least squares of a GE matrix    (0 = disable; 1 = enable; 2 = enable only this)
+1   gtsv    Linear Solve for General Tridiagonal Matrix   (0 = disable; 1 = enable; 2 = enable only this)

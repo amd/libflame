@@ -9,17 +9,27 @@
 #define GELS_VL 0.1
 #define GELS_VU 10
 
+integer row_major_gels_lda;
+integer row_major_gels_ldb;
+
 void invoke_gels(integer datatype, char *trans, integer *m, integer *n, integer *nrhs, void *A,
                  integer *lda, void *B, integer *ldb, void *work, integer *lwork, integer *info);
 void fla_test_gels_experiment(test_params_t *params, integer datatype, integer p_cur, integer q_cur,
                               integer pci, integer n_repeats, integer einfo, double *perf,
                               double *t, double *residual);
-void prepare_gels_run(integer datatype, char trans, integer m, integer n, integer m_b,
-                      integer nrhs, void *A, integer lda, void *B, integer ldb, void *work,
-                      integer lwork, integer n_repeats, double *time_min, integer *info);
+void prepare_gels_run(integer datatype, char trans, integer m, integer n, integer m_b, integer nrhs,
+                      void *A, integer lda, void *B, integer ldb, void *work, integer lwork,
+                      integer n_repeats, double *time_min, integer *info,
+                      integer test_lapacke_interface, integer layout);
+integer invoke_lapacke_gels(integer datatype, integer layout, char trans, integer m, integer n,
+                            integer nrhs, void *A, integer lda, void *B, integer ldb);
+double prepare_lapacke_gels_run(integer datatype, integer layout, char trans, integer m, integer n,
+                                integer nrhs, integer m_b, void *A, integer lda, void *B,
+                                integer ldb, integer *info);
+
 void fla_test_gels(integer argc, char **argv, test_params_t *params)
 {
-    srand(4);
+    srand(14);
     char *op_str = "Solves overdetermined or underdetermined systems for GE matrices";
     char *front_str = "GELS";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
@@ -52,8 +62,19 @@ void fla_test_gels(integer argc, char **argv, test_params_t *params)
         N = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].nrhs = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].transr = argv[3][0];
-        params->lin_solver_paramslist[0].lda = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
-        params->lin_solver_paramslist[0].ldb = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
+        if((g_ext_fptr == NULL) && params->test_lapacke_interface
+           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        {
+            row_major_gels_lda = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
+            row_major_gels_ldb = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
+            params->lin_solver_paramslist[0].lda = M;
+            params->lin_solver_paramslist[0].ldb = fla_max(M, N);
+        }
+        else
+        {
+            params->lin_solver_paramslist[0].lda = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
+            params->lin_solver_paramslist[0].ldb = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
+        }
         g_lwork = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
 
@@ -116,6 +137,8 @@ void fla_test_gels_experiment(test_params_t *params, integer datatype, integer p
     integer m, n, m_b, nrhs, lda, ldb, lwork = -1, info = 0;
     void *A = NULL, *A_test = NULL, *B = NULL, *B_test = NULL, *work = NULL, *s_test = NULL;
     char trans, range = 'U';
+    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer layout = params->matrix_major;
 
     /* Determine the dimensions */
     m = p_cur;
@@ -167,6 +190,8 @@ void fla_test_gels_experiment(test_params_t *params, integer datatype, integer p
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
     create_matrix(datatype, LAPACK_COL_MAJOR, m_b, nrhs, &B, ldb);
     create_matrix(datatype, LAPACK_COL_MAJOR, m_b, nrhs, &B_test, ldb);
+    reset_matrix(datatype, ldb, nrhs, B, ldb);
+    reset_matrix(datatype, ldb, nrhs, B_test, ldb);
     create_realtype_vector(datatype, &s_test, fla_min(m, n));
 
     /* Initialize the test matrices */
@@ -193,8 +218,8 @@ void fla_test_gels_experiment(test_params_t *params, integer datatype, integer p
     copy_matrix(datatype, "full", ldb, nrhs, B, ldb, B_test, ldb);
 
     /* call to API */
-    prepare_gels_run(datatype, trans, m, n, m_b, nrhs, A_test, lda, B_test, ldb, work, lwork, n_repeats,
-                     t, &info);
+    prepare_gels_run(datatype, trans, m, n, m_b, nrhs, A_test, lda, B_test, ldb, work, lwork,
+                     n_repeats, t, &info, test_lapacke_interface, layout);
 
     /* Performance computation */
     if(m >= n)
@@ -234,9 +259,10 @@ void fla_test_gels_experiment(test_params_t *params, integer datatype, integer p
     free_vector(s_test);
 }
 
-void prepare_gels_run(integer datatype, char trans, integer m, integer n, integer m_b,
-                      integer nrhs, void *A, integer lda, void *B, integer ldb, void *work,
-                      integer lwork, integer n_repeats, double *time_min, integer *info)
+void prepare_gels_run(integer datatype, char trans, integer m, integer n, integer m_b, integer nrhs,
+                      void *A, integer lda, void *B, integer ldb, void *work, integer lwork,
+                      integer n_repeats, double *time_min, integer *info,
+                      integer test_lapacke_interface, integer layout)
 {
     integer i;
     void *A_save = NULL, *B_save = NULL;
@@ -245,7 +271,10 @@ void prepare_gels_run(integer datatype, char trans, integer m, integer n, intege
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_save, lda);
     create_matrix(datatype, LAPACK_COL_MAJOR, m_b, nrhs, &B_save, ldb);
 
-    if(g_lwork <= 0)
+    /* Make a workspace query the first time through. This will provide us with
+     and ideal workspace size based on an internal block size.
+     NOTE: LAPACKE interface handles workspace query internally */
+    if((test_lapacke_interface == 0) && (g_lwork <= 0))
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
@@ -272,14 +301,21 @@ void prepare_gels_run(integer datatype, char trans, integer m, integer n, intege
 
         /* Create work buffer */
         create_vector(datatype, &work, lwork);
+        if(test_lapacke_interface == 1)
+        {
+            exe_time = prepare_lapacke_gels_run(datatype, layout, trans, m, n, nrhs, m_b, A_save,
+                                                lda, B_save, ldb, info);
+        }
+        else
+        {
+            exe_time = fla_test_clock();
 
-        exe_time = fla_test_clock();
+            /*  call to API */
+            invoke_gels(datatype, &trans, &m, &n, &nrhs, A_save, &lda, B_save, &ldb, work, &lwork,
+                        info);
 
-        /*  call to API */
-        invoke_gels(datatype, &trans, &m, &n, &nrhs, A_save, &lda, B_save, &ldb, work, &lwork,
-                    info);
-
-        exe_time = fla_test_clock() - exe_time;
+            exe_time = fla_test_clock() - exe_time;
+        }
 
         /* Get the best execution time */
         time_min_ = fla_min(time_min_, exe_time);
@@ -291,10 +327,68 @@ void prepare_gels_run(integer datatype, char trans, integer m, integer n, intege
     /* Save the output to vector A */
     copy_matrix(datatype, "full", lda, n, A_save, lda, A, lda);
     copy_matrix(datatype, "full", ldb, nrhs, B_save, ldb, B, ldb);
+
+    /* Free up buffers */
     free_matrix(A_save);
     free_matrix(B_save);
 }
 
+double prepare_lapacke_gels_run(integer datatype, integer layout, char trans, integer m, integer n,
+                                integer nrhs, integer m_b, void *A, integer lda, void *B,
+                                integer ldb, integer *info)
+{
+    double exe_time = 0;
+    void *A_t = NULL, *B_t = NULL;
+    integer lda_t = lda, ldb_t = ldb, m_x = m;
+    A_t = A;
+    B_t = B;
+
+    if(trans == 'N')
+    {
+        m_x = n;
+    }
+
+    /* Configure leading dimensions as per the input matrix layout */
+    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_gels_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, config_data, layout, nrhs, row_major_gels_ldb, ldb_t);
+
+    /* In case of row_major matrix layout,
+       convert input matrix to row_major */
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        /* Create temporary buffers for converting matrix layout */
+        create_matrix(datatype, layout, m, n, &A_t, fla_max(n, lda_t));
+        create_matrix(datatype, layout, fla_max(m, n), nrhs, &B_t, fla_max(nrhs, ldb_t));
+        reset_matrix(datatype, fla_max(m, n), nrhs, B_t, fla_max(m, n));
+
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, m, n, A, lda, A_t, lda_t);
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, m_b, nrhs, B, ldb, B_t, ldb_t);
+    }
+
+    exe_time = fla_test_clock();
+
+    /* call to LAPACKE gels API */
+    *info = invoke_lapacke_gels(datatype, layout, trans, m, n, nrhs, A_t, lda_t, B_t, ldb_t);
+
+    exe_time = fla_test_clock() - exe_time;
+
+    /* In case of row_major matrix layout, convert output matrices
+       to column_major layout */
+
+    if((layout == LAPACK_ROW_MAJOR))
+    {
+        convert_matrix_layout(layout, datatype, m, n, A_t, lda_t, A, lda);
+        convert_matrix_layout(layout, datatype, m_x, nrhs, B_t, ldb_t, B, ldb);
+
+        free_matrix(A_t);
+        free_matrix(B_t);
+    }
+    return exe_time;
+}
+
+/*
+LAPACK GELS API invoke function
+*/
 void invoke_gels(integer datatype, char *trans, integer *m, integer *n, integer *nrhs, void *A,
                  integer *lda, void *B, integer *ldb, void *work, integer *lwork, integer *info)
 {
@@ -321,4 +415,40 @@ void invoke_gels(integer datatype, char *trans, integer *m, integer *n, integer 
             break;
         }
     }
+}
+
+/*
+LAPACKE GELS API invoke function
+*/
+integer invoke_lapacke_gels(integer datatype, integer layout, char trans, integer m, integer n,
+                            integer nrhs, void *A, integer lda, void *B, integer ldb)
+{
+    integer info = 0;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            info = LAPACKE_sgels(layout, trans, m, n, nrhs, A, lda, B, ldb);
+            break;
+        }
+
+        case DOUBLE:
+        {
+            info = LAPACKE_dgels(layout, trans, m, n, nrhs, A, lda, B, ldb);
+            break;
+        }
+
+        case COMPLEX:
+        {
+            info = LAPACKE_cgels(layout, trans, m, n, nrhs, A, lda, B, ldb);
+            break;
+        }
+
+        case DOUBLE_COMPLEX:
+        {
+            info = LAPACKE_zgels(layout, trans, m, n, nrhs, A, lda, B, ldb);
+            break;
+        }
+    }
+    return info;
 }

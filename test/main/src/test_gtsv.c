@@ -4,14 +4,21 @@
 
 #include "test_lapack.h"
 
+integer row_major_gtsv_ldb;
+
 /* Local prototypes */
 void fla_test_gtsv_experiment(test_params_t *params, integer datatype, integer p_cur, integer q_cur,
                               integer pci, integer n_repeats, integer einfo, double *perf,
                               double *t, double *residual);
 void prepare_gtsv_run(integer n_A, integer nrhs, void *dl, void *d, void *du, void *B, integer ldb,
-                      integer datatype, integer n_repeats, double *time_min_, integer *info);
+                      integer datatype, integer n_repeats, double *time_min_, integer *info,
+                      integer test_lapacke_interface, integer layout);
 void invoke_gtsv(integer datatype, integer *nrhs, integer *n, void *dl, void *d, void *du, void *b,
                  integer *ldb, integer *info);
+integer invoke_lapacke_gtsv(integer datatype, integer layout, integer n, integer nrhs, void *dl,
+                            void *d, void *du, void *B, integer ldb);
+double prepare_lapacke_gtsv_run(integer datatype, integer layout, integer n, integer nrhs, void *dl,
+                                void *d, void *du, void *B, integer ldb, integer *info);
 
 void fla_test_gtsv(integer argc, char **argv, test_params_t *params)
 {
@@ -45,8 +52,16 @@ void fla_test_gtsv(integer argc, char **argv, test_params_t *params)
         num_types = strlen(argv[2]);
         N = strtoimax(argv[3], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].nrhs = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
-        params->lin_solver_paramslist[0].ldb = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
-
+        if((g_ext_fptr == NULL) && params->test_lapacke_interface
+           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        {
+            row_major_gtsv_ldb = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
+            params->lin_solver_paramslist[0].ldb = N;
+        }
+        else
+        {
+            params->lin_solver_paramslist[0].ldb = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
+        }
         n_repeats = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
 
         if(n_repeats > 0)
@@ -111,6 +126,8 @@ void fla_test_gtsv_experiment(test_params_t *params, integer datatype, integer p
     void *dl_save, *d_save, *du_save, *B_save;
     void *A = NULL, *scal = NULL;
     double time_min = 1e9;
+    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer layout = params->matrix_major;
     *residual = params->lin_solver_paramslist[pci].solver_threshold;
     /* Determine the dimensions*/
     n = p_cur;
@@ -171,7 +188,7 @@ void fla_test_gtsv_experiment(test_params_t *params, integer datatype, integer p
     copy_matrix(datatype, "full", n, NRHS, B, ldb, B_save, ldb);
 
     prepare_gtsv_run(n, NRHS, dl_save, d_save, du_save, B_save, ldb, datatype, n_repeats, &time_min,
-                     &info);
+                     &info, test_lapacke_interface, layout);
 
     /* Execution time */
     *t = time_min;
@@ -217,7 +234,8 @@ void fla_test_gtsv_experiment(test_params_t *params, integer datatype, integer p
 }
 
 void prepare_gtsv_run(integer n_A, integer nrhs, void *dl, void *d, void *du, void *B, integer ldb,
-                      integer datatype, integer n_repeats, double *time_min_, integer *info)
+                      integer datatype, integer n_repeats, double *time_min_, integer *info,
+                      integer test_lapacke_interface, integer layout)
 {
     integer i;
     void *dl_test, *d_test, *du_test, *B_test;
@@ -240,12 +258,20 @@ void prepare_gtsv_run(integer n_A, integer nrhs, void *dl, void *d, void *du, vo
         copy_vector(datatype, n_A - 1, du, i_one, du_test, i_one);
         copy_matrix(datatype, "full", n_A, nrhs, B, ldb, B_test, ldb);
 
-        exe_time = fla_test_clock();
+        if(test_lapacke_interface == 1)
+        {
+            exe_time = prepare_lapacke_gtsv_run(datatype, layout, n_A, nrhs, dl_test, d_test,
+                                                du_test, B_test, ldb, info);
+        }
+        else
+        {
+            exe_time = fla_test_clock();
 
-        /* call  to gtsv API */
-        invoke_gtsv(datatype, &n_A, &nrhs, dl_test, d_test, du_test, B_test, &ldb, info);
+            /* call  to gtsv API */
+            invoke_gtsv(datatype, &n_A, &nrhs, dl_test, d_test, du_test, B_test, &ldb, info);
 
-        exe_time = fla_test_clock() - exe_time;
+            exe_time = fla_test_clock() - exe_time;
+        }
 
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);
@@ -263,6 +289,65 @@ void prepare_gtsv_run(integer n_A, integer nrhs, void *dl, void *d, void *du, vo
     free_vector(d_test);
     free_vector(du_test);
     free_matrix(B_test);
+}
+
+double prepare_lapacke_gtsv_run(integer datatype, integer layout, integer n, integer nrhs, void *dl,
+                                void *d, void *du, void *B, integer ldb, integer *info)
+{
+    double exe_time = 0;
+    void *dl_t = NULL, *d_t = NULL, *du_t = NULL, *B_t = NULL;
+    integer ldb_t = ldb;
+    dl_t = dl;
+    d_t = d;
+    du_t = du;
+    B_t = B;
+
+    /* Configure leading dimensions as per the input matrix layout */
+    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_gtsv_ldb, ldb_t);
+
+    /* In case of row_major matrix layout,
+       convert input matrix to row_major */
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        /* Create temporary buffers for converting matrix layout */
+        create_matrix(datatype, layout, n - 1, i_one, &dl_t, i_one);
+        create_matrix(datatype, layout, n, i_one, &d_t, i_one);
+        create_matrix(datatype, layout, n - 1, i_one, &du_t, i_one);
+        create_matrix(datatype, layout, n, nrhs, &B_t, fla_max(nrhs, ldb_t));
+
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n - 1, i_one, dl, n - 1, dl_t, i_one);
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, i_one, d, n, d_t, i_one);
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n - 1, i_one, du, n - 1, du_t, i_one);
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, nrhs, B, ldb, B_t,
+                              fla_max(nrhs, ldb_t));
+    }
+
+    exe_time = fla_test_clock();
+
+    /* call to LAPACKE gels API */
+
+    *info = invoke_lapacke_gtsv(datatype, layout, n, nrhs, dl_t, d_t, du_t, B_t, ldb_t);
+
+    exe_time = fla_test_clock() - exe_time;
+
+    /* In case of row_major matrix layout, convert output matrices
+       to column_major layout */
+
+    if((layout == LAPACK_ROW_MAJOR))
+    {
+
+        convert_matrix_layout(layout, datatype, n - 1, i_one, dl_t, i_one, dl, i_one);
+        convert_matrix_layout(layout, datatype, n, i_one, d_t, i_one, d, i_one);
+        convert_matrix_layout(layout, datatype, n - 1, i_one, du_t, i_one, du, i_one);
+        convert_matrix_layout(layout, datatype, n, nrhs, B_t, ldb_t, B, ldb);
+
+        free_matrix(dl_t);
+        free_matrix(d_t);
+        free_matrix(du_t);
+        free_matrix(B_t);
+    }
+
+    return exe_time;
 }
 
 /* LARFG API call interface - Linear Solve for General Tridiagonal Matrix */
@@ -295,4 +380,40 @@ void invoke_gtsv(integer datatype, integer *n, integer *nrhs, void *dl, void *d,
             break;
         }
     }
+}
+
+/*
+LAPACKE GTSV API invoke function
+*/
+integer invoke_lapacke_gtsv(integer datatype, integer layout, integer n, integer nrhs, void *dl,
+                            void *d, void *du, void *B, integer ldb)
+{
+    integer info = 0;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            info = LAPACKE_sgtsv(layout, n, nrhs, dl, d, du, B, ldb);
+            break;
+        }
+
+        case DOUBLE:
+        {
+            info = LAPACKE_dgtsv(layout, n, nrhs, dl, d, du, B, ldb);
+            break;
+        }
+
+        case COMPLEX:
+        {
+            info = LAPACKE_cgtsv(layout, n, nrhs, dl, d, du, B, ldb);
+            break;
+        }
+
+        case DOUBLE_COMPLEX:
+        {
+            info = LAPACKE_zgtsv(layout, n, nrhs, dl, d, du, B, ldb);
+            break;
+        }
+    }
+    return info;
 }

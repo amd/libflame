@@ -1625,4 +1625,78 @@ lapack_int LAPACKE_cheevd( int matrix_layout, char jobz, char uplo, lapack_int n
 lapack_int LAPACKE_zheevd( int matrix_layout, char jobz, char uplo, lapack_int n,
                            lapack_complex_double* a, lapack_int lda,
                            double* w );
+lapack_int LAPACKE_sgels( int matrix_layout, char trans, lapack_int m,
+                          lapack_int n, lapack_int nrhs, float* a,
+                          lapack_int lda, float* b, lapack_int ldb );
+lapack_int LAPACKE_dgels( int matrix_layout, char trans, lapack_int m,
+                          lapack_int n, lapack_int nrhs, double* a,
+                          lapack_int lda, double* b, lapack_int ldb );
+lapack_int LAPACKE_cgels( int matrix_layout, char trans, lapack_int m,
+                          lapack_int n, lapack_int nrhs,
+                          lapack_complex_float* a, lapack_int lda,
+                          lapack_complex_float* b, lapack_int ldb );
+lapack_int LAPACKE_zgels( int matrix_layout, char trans, lapack_int m,
+                          lapack_int n, lapack_int nrhs,
+                          lapack_complex_double* a, lapack_int lda,
+                          lapack_complex_double* b, lapack_int ldb );
+lapack_int LAPACKE_ssytrf( int matrix_layout, char uplo, lapack_int n, float* a,
+                           lapack_int lda, lapack_int* ipiv );
+lapack_int LAPACKE_dsytrf( int matrix_layout, char uplo, lapack_int n, double* a,
+                           lapack_int lda, lapack_int* ipiv );
+lapack_int LAPACKE_csytrf( int matrix_layout, char uplo, lapack_int n,
+                           lapack_complex_float* a, lapack_int lda,
+                           lapack_int* ipiv );
+lapack_int LAPACKE_zsytrf( int matrix_layout, char uplo, lapack_int n,
+                           lapack_complex_double* a, lapack_int lda,
+                           lapack_int* ipiv );
+lapack_int LAPACKE_sgelss( int matrix_layout, lapack_int m, lapack_int n,
+                           lapack_int nrhs, float* a, lapack_int lda, float* b,
+                           lapack_int ldb, float* s, float rcond,
+                           lapack_int* rank );
+lapack_int LAPACKE_dgelss( int matrix_layout, lapack_int m, lapack_int n,
+                           lapack_int nrhs, double* a, lapack_int lda,
+                           double* b, lapack_int ldb, double* s, double rcond,
+                           lapack_int* rank );
+lapack_int LAPACKE_cgelss( int matrix_layout, lapack_int m, lapack_int n,
+                           lapack_int nrhs, lapack_complex_float* a,
+                           lapack_int lda, lapack_complex_float* b,
+                           lapack_int ldb, float* s, float rcond,
+                           lapack_int* rank );
+lapack_int LAPACKE_zgelss( int matrix_layout, lapack_int m, lapack_int n,
+                           lapack_int nrhs, lapack_complex_double* a,
+                           lapack_int lda, lapack_complex_double* b,
+                           lapack_int ldb, double* s, double rcond,
+                           lapack_int* rank );
+lapack_int LAPACKE_sgelsd( int matrix_layout, lapack_int m, lapack_int n,
+                           lapack_int nrhs, float* a, lapack_int lda, float* b,
+                           lapack_int ldb, float* s, float rcond,
+                           lapack_int* rank );
+lapack_int LAPACKE_dgelsd( int matrix_layout, lapack_int m, lapack_int n,
+                           lapack_int nrhs, double* a, lapack_int lda,
+                           double* b, lapack_int ldb, double* s, double rcond,
+                           lapack_int* rank );
+lapack_int LAPACKE_cgelsd( int matrix_layout, lapack_int m, lapack_int n,
+                           lapack_int nrhs, lapack_complex_float* a,
+                           lapack_int lda, lapack_complex_float* b,
+                           lapack_int ldb, float* s, float rcond,
+                           lapack_int* rank );
+lapack_int LAPACKE_zgelsd( int matrix_layout, lapack_int m, lapack_int n,
+                           lapack_int nrhs, lapack_complex_double* a,
+                           lapack_int lda, lapack_complex_double* b,
+                           lapack_int ldb, double* s, double rcond,
+                           lapack_int* rank );
+lapack_int LAPACKE_sgtsv( int matrix_layout, lapack_int n, lapack_int nrhs,
+                          float* dl, float* d, float* du, float* b,
+                          lapack_int ldb );
+lapack_int LAPACKE_dgtsv( int matrix_layout, lapack_int n, lapack_int nrhs,
+                          double* dl, double* d, double* du, double* b,
+                          lapack_int ldb );
+lapack_int LAPACKE_cgtsv( int matrix_layout, lapack_int n, lapack_int nrhs,
+                          lapack_complex_float* dl, lapack_complex_float* d,
+                          lapack_complex_float* du, lapack_complex_float* b,
+                          lapack_int ldb );
+lapack_int LAPACKE_zgtsv( int matrix_layout, lapack_int n, lapack_int nrhs,
+                          lapack_complex_double* dl, lapack_complex_double* d,
+                          lapack_complex_double* du, lapack_complex_double* b,
+                          lapack_int ldb );
 #endif // TEST_PROTOTYPE_H

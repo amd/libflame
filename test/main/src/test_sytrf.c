@@ -9,6 +9,8 @@
 #define SYTRF_VU 10.0 // Maximum eigen value for condition number.
 #define SYTRF_VL 0.01 // Minimum eigen value for condition number.
 
+integer row_major_sytrf_lda;
+
 void invoke_sytrf(integer datatype, char *uplo, integer *n, void *a, integer *lda, integer *ipiv,
                   void *work, integer *lwork, integer *info);
 void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer p_cur,
@@ -16,7 +18,11 @@ void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer 
                                double *perf, double *t, double *residual);
 void prepare_sytrf_run(integer datatype, integer n, void *A, char uplo, integer lda, integer *ipiv,
                        void *work, integer lwork, integer n_repeats, double *time_min_,
-                       integer *info);
+                       integer *info, integer test_lapacke_interface, integer mlayout);
+double prepare_lapacke_sytrf_run(integer datatype, integer layout, char uplo, integer n, void *A,
+                                 integer lda, void *ipiv, integer *info);
+integer invoke_lapacke_sytrf(integer datatype, integer layout, char uplo, integer n, void *a,
+                             integer lda, integer *ipiv);
 
 void fla_test_sytrf(integer argc, char **argv, test_params_t *params)
 {
@@ -49,7 +55,16 @@ void fla_test_sytrf(integer argc, char **argv, test_params_t *params)
         num_types = strlen(argv[2]);
         N = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].Uplo = argv[3][0];
-        params->lin_solver_paramslist[0].lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
+        if((g_ext_fptr == NULL) && params->test_lapacke_interface
+           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        {
+            row_major_sytrf_lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
+            params->lin_solver_paramslist[0].lda = N;
+        }
+        else
+        {
+            params->lin_solver_paramslist[0].lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
+        }
         n_repeats = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
         g_lwork = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
 
@@ -110,6 +125,8 @@ void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer 
     integer n, lda, lwork = -1, info = 0;
     void *A = NULL, *A_test = NULL, *ipiv = NULL, *work = NULL, *L = NULL;
     char uplo;
+    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer layout = params->matrix_major;
 
     /* Determine the dimensions */
     n = p_cur;
@@ -159,7 +176,8 @@ void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer 
     copy_matrix(datatype, "full", lda, n, A, lda, A_test, lda);
 
     /* call to API */
-    prepare_sytrf_run(datatype, n, A_test, uplo, lda, ipiv, work, lwork, n_repeats, t, &info);
+    prepare_sytrf_run(datatype, n, A_test, uplo, lda, ipiv, work, lwork, n_repeats, t, &info,
+                      test_lapacke_interface, layout);
 
     /* Performance computation */
     *perf = (double)(n * n * n) * (1.0 / 3.0) / *t / FLOPS_PER_UNIT_PERF;
@@ -190,7 +208,7 @@ void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer 
 
 void prepare_sytrf_run(integer datatype, integer n, void *A, char uplo, integer lda, integer *ipiv,
                        void *work, integer lwork, integer n_repeats, double *time_min_,
-                       integer *info)
+                       integer *info, integer test_lapacke_interface, integer layout)
 {
     integer i;
     void *A_save = NULL;
@@ -198,7 +216,10 @@ void prepare_sytrf_run(integer datatype, integer n, void *A, char uplo, integer 
 
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_save, lda);
 
-    if(g_lwork == -1)
+    /* Make a workspace query the first time through. This will provide us with
+     and ideal workspace size based on an internal block size.
+     NOTE: LAPACKE interface handles workspace query internally */
+    if((test_lapacke_interface == 0) && (g_lwork == -1))
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
@@ -224,14 +245,20 @@ void prepare_sytrf_run(integer datatype, integer n, void *A, char uplo, integer 
 
         /* Create work buffer */
         create_vector(datatype, &work, lwork);
+        if(test_lapacke_interface == 1)
+        {
+            exe_time
+                = prepare_lapacke_sytrf_run(datatype, layout, uplo, n, A_save, lda, ipiv, info);
+        }
+        else
+        {
+            exe_time = fla_test_clock();
 
-        exe_time = fla_test_clock();
+            /*  call to API */
+            invoke_sytrf(datatype, &uplo, &n, A_save, &lda, ipiv, work, &lwork, info);
 
-        /*  call to API */
-        invoke_sytrf(datatype, &uplo, &n, A_save, &lda, ipiv, work, &lwork, info);
-
-        exe_time = fla_test_clock() - exe_time;
-
+            exe_time = fla_test_clock() - exe_time;
+        }
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);
 
@@ -243,6 +270,43 @@ void prepare_sytrf_run(integer datatype, integer n, void *A, char uplo, integer 
     /* Save the output to vector A */
     copy_matrix(datatype, "full", lda, n, A_save, lda, A, lda);
     free_matrix(A_save);
+}
+
+double prepare_lapacke_sytrf_run(integer datatype, integer layout, char uplo, integer n, void *A,
+                                 integer lda, void *ipiv, integer *info)
+{
+    double exe_time = 0;
+    integer lda_t = lda;
+    void *A_t = NULL;
+    A_t = A;
+
+    /* Configure leading dimensions as per the input matrix layout */
+    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_sytrf_lda, lda_t);
+
+    /* In case of row_major matrix layout,
+       convert input matrix to row_major */
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        create_matrix(datatype, layout, n, n, &A_t, fla_max(lda_t, n));
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, A, lda, A_t, fla_max(lda_t, n));
+    }
+
+    exe_time = fla_test_clock();
+
+    /* call to LAPACKE sytrf API */
+    *info = invoke_lapacke_sytrf(datatype, layout, uplo, n, A_t, lda_t, ipiv);
+
+    exe_time = fla_test_clock() - exe_time;
+
+    /* In case of row_major matrix layout, convert output matrices
+       to column_major layout */
+    if((layout == LAPACK_ROW_MAJOR))
+    {
+        convert_matrix_layout(layout, datatype, n, n, A_t, lda_t, A, lda);
+        free_matrix(A_t);
+    }
+
+    return exe_time;
 }
 
 /*
@@ -279,4 +343,40 @@ void invoke_sytrf(integer datatype, char *uplo, integer *n, void *a, integer *ld
             break;
         }
     }
+}
+
+/*
+LAPACKE SYTRF API invoke function
+*/
+integer invoke_lapacke_sytrf(integer datatype, integer layout, char uplo, integer n, void *a,
+                             integer lda, integer *ipiv)
+{
+    integer info = 0;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            info = LAPACKE_ssytrf(layout, uplo, n, a, lda, ipiv);
+            break;
+        }
+
+        case DOUBLE:
+        {
+            info = LAPACKE_dsytrf(layout, uplo, n, a, lda, ipiv);
+            break;
+        }
+
+        case COMPLEX:
+        {
+            info = LAPACKE_csytrf(layout, uplo, n, a, lda, ipiv);
+            break;
+        }
+
+        case DOUBLE_COMPLEX:
+        {
+            info = LAPACKE_zsytrf(layout, uplo, n, a, lda, ipiv);
+            break;
+        }
+    }
+    return info;
 }

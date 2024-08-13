@@ -65,7 +65,7 @@ void validate_geev(char *jobvl, char *jobvr, integer m, void *A, void *A_test, i
                    void *wr_in, void *wi_in);
 
 void validate_geqp3(integer m_A, integer n_A, void *A, void *A_test, integer lda, integer *jpvt,
-                    void *T_test, integer datatype, double *residual, integer *info);
+                    void *T_test, integer datatype, double *residual, integer *info, char imatrix);
 
 void validate_gesv(integer n, integer nrhs, void *A, integer lda, void *B, integer ldb, void *X,
                    integer datatype, double *residual, integer *info, char imatrix, void *scal);

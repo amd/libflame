@@ -21,9 +21,9 @@ void invoke_hseqr(integer datatype, char *job, char *compz, integer *n, integer 
 double prepare_lapacke_hseqr_run(integer datatype, int matrix_layout, char *job, char *compz,
                                  integer n, integer *ilo, integer *ihi, void *h, integer ldh,
                                  void *w, void *wr, void *wi, void *z, integer ldz, integer *info);
-integer invoke_lapacke_hseqr(integer datatype, int matrix_layout, char job, char compz,
-                             integer n, integer ilo, integer ihi, void *h, integer ldh, void *w,
-                             void *wr, void *wi, void *z, integer ldz);
+integer invoke_lapacke_hseqr(integer datatype, int matrix_layout, char job, char compz, integer n,
+                             integer ilo, integer ihi, void *h, integer ldh, void *w, void *wr,
+                             void *wi, void *z, integer ldz);
 
 void fla_test_hseqr(integer argc, char **argv, test_params_t *params)
 {
@@ -132,7 +132,7 @@ void fla_test_hseqr_experiment(test_params_t *params, integer datatype, integer 
     integer n, ldz, ldh;
     integer ilo, ihi, info = 0, vinfo = 0;
     void *H = NULL, *w = NULL, *wr = NULL, *wi = NULL, *Z = NULL, *H_test = NULL, *Z_Test = NULL,
-         *wr_in = NULL, *wi_in = NULL, *wr_sub_in = NULL, *wi_sub_in = NULL;
+         *wr_in = NULL, *wi_in = NULL, *scal_H = NULL;
     char job;
     char compz;
 
@@ -205,6 +205,12 @@ void fla_test_hseqr_experiment(test_params_t *params, integer datatype, integer 
 
         get_hessenberg_matrix_from_EVs(datatype, n, H, ldh, Z, ldz, &ilo, &ihi, &info, true, wr_in,
                                        wi_in);
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            create_realtype_vector(datatype, &scal_H, n);
+            scale_matrix_overflow_underflow_hseqr(datatype, n, H, ldh, params->imatrix_char,
+                                                  scal_H);
+        }
         if(compz == 'I')
             set_identity_matrix(datatype, n, n, Z, ldz);
     }
@@ -251,7 +257,7 @@ void fla_test_hseqr_experiment(test_params_t *params, integer datatype, integer 
     /* Output Validation */
     if(info == 0)
         validate_hseqr(&job, &compz, n, H, H_test, ldh, Z, Z_Test, ldz, wr, wr_in, wi, wi_in, w,
-                       datatype, residual, &vinfo, &ilo, &ihi);
+                       datatype, residual, &vinfo, &ilo, &ihi, params->imatrix_char, scal_H);
 
     /* test info only for negative test cases */
     if(info < 0)
@@ -263,7 +269,6 @@ void fla_test_hseqr_experiment(test_params_t *params, integer datatype, integer 
     free_matrix(H_test);
     free_matrix(Z_Test);
     free_vector(wr_in);
-    free_vector(wr_sub_in);
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
     {
         free_vector(w);
@@ -273,7 +278,10 @@ void fla_test_hseqr_experiment(test_params_t *params, integer datatype, integer 
         free_vector(wr);
         free_vector(wi);
         free_vector(wi_in);
-        free_vector(wi_sub_in);
+    }
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
+    {
+        free_vector(scal_H);
     }
 }
 
@@ -357,9 +365,9 @@ void prepare_hseqr_run(char *job, char *compz, integer n, integer *ilo, integer 
     free(Z_save);
 }
 
-double prepare_lapacke_hseqr_run(integer datatype, int layout, char *job, char *compz,
-                                 integer n, integer *ilo, integer *ihi, void *H, integer ldh,
-                                 void *w, void *wr, void *wi, void *Z, integer ldz, integer *info)
+double prepare_lapacke_hseqr_run(integer datatype, int layout, char *job, char *compz, integer n,
+                                 integer *ilo, integer *ihi, void *H, integer ldh, void *w,
+                                 void *wr, void *wi, void *Z, integer ldz, integer *info)
 {
     double exe_time;
     integer ldh_t = ldh;

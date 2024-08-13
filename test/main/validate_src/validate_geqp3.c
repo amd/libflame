@@ -9,11 +9,12 @@
 #include "test_common.h"
 
 void validate_geqp3(integer m_A, integer n_A, void *A, void *A_test, integer lda, integer *jpvt,
-                    void *T_test, integer datatype, double *residual, integer *info)
+                    void *T_test, integer datatype, double *residual, integer *info, char imatrix)
 {
     if(m_A == 0 || n_A == 0)
         return;
     void *Q = NULL, *R = NULL, *work = NULL;
+    char NORM = '1';
     integer min_A;
     integer lwork = -1, FLA_TRUE = 1;
     *info = 0;
@@ -41,7 +42,7 @@ void validate_geqp3(integer m_A, integer n_A, void *A, void *A_test, integer lda
 
             /* permute A using the permuted vector jpvt to get (A * P) */
             fla_lapack_slapmt(&FLA_TRUE, &m_A, &n_A, A, &lda, jpvt);
-            norm_A = fla_lapack_slange("1", &m_A, &n_A, A, &lda, work);
+            compute_matrix_norm(datatype, NORM, m_A, n_A, A, lda, &norm_A, imatrix, work);
 
             /* sorgrq api generates the Q martrix using the elementary reflectors and scalar
                factor values*/
@@ -57,7 +58,7 @@ void validate_geqp3(integer m_A, integer n_A, void *A, void *A_test, integer lda
             /* Test 1
                compute norm(((Q * R) - (A * P)) / (N * norm(A) * EPS)*/
             sgemm_("N", "N", &m_A, &n_A, &m_A, &s_one, Q, &m_A, R, &m_A, &s_n_one, A, &lda);
-            norm = fla_lapack_slange("1", &m_A, &n_A, A, &lda, work);
+            compute_matrix_norm(datatype, NORM, m_A, n_A, A, lda, &norm, imatrix, work);
 
             resid1 = norm / (eps * norm_A * (float)n_A);
 
@@ -76,7 +77,7 @@ void validate_geqp3(integer m_A, integer n_A, void *A, void *A_test, integer lda
             eps = fla_lapack_dlamch("P");
             /* permute A using the permuted vector jpvt to get (A * P) */
             fla_lapack_dlapmt(&FLA_TRUE, &m_A, &n_A, A, &lda, jpvt);
-            norm_A = fla_lapack_dlange("1", &m_A, &n_A, A, &lda, work);
+            compute_matrix_norm(datatype, NORM, m_A, n_A, A, lda, &norm_A, imatrix, work);
 
             /* dorgrq api generates the Q martrix using the elementary reflectors and scalar
                factor values*/
@@ -94,7 +95,7 @@ void validate_geqp3(integer m_A, integer n_A, void *A, void *A_test, integer lda
                compute norm((Q * R) - (A * P)) / (N * norm(A) * EPS)*/
             dgemm_("N", "N", &m_A, &n_A, &m_A, &d_one, Q, &m_A, R, &m_A, &d_n_one, A, &lda);
 
-            norm = fla_lapack_dlange("1", &m_A, &n_A, A, &lda, work);
+            compute_matrix_norm(datatype, NORM, m_A, n_A, A, lda, &norm, imatrix, work);
             resid1 = norm / (eps * norm_A * (double)n_A);
 
             /* Test 2
@@ -112,7 +113,7 @@ void validate_geqp3(integer m_A, integer n_A, void *A, void *A_test, integer lda
             eps = fla_lapack_slamch("P");
             /* permute A using the permuted vector jpvt to get (A * P) */
             fla_lapack_clapmt(&FLA_TRUE, &m_A, &n_A, A, &lda, jpvt);
-            norm_A = fla_lapack_clange("1", &m_A, &n_A, A, &lda, work);
+            compute_matrix_norm(datatype, NORM, m_A, n_A, A, lda, &norm_A, imatrix, work);
 
             /* corgrq api generates the Q martrix using the elementary reflectors and scalar
                factor values*/
@@ -131,7 +132,7 @@ void validate_geqp3(integer m_A, integer n_A, void *A, void *A_test, integer lda
                compute norm((Q * R) - (A * P)) / (N * norm(A) * EPS)*/
             cgemm_("N", "N", &m_A, &n_A, &m_A, &c_one, Q, &m_A, R, &m_A, &c_n_one, A, &lda);
 
-            norm = fla_lapack_clange("1", &m_A, &n_A, A, &lda, work);
+            compute_matrix_norm(datatype, NORM, m_A, n_A, A, lda, &norm, imatrix, work);
             resid1 = norm / (eps * norm_A * (float)n_A);
 
             /* Test 2
@@ -149,7 +150,7 @@ void validate_geqp3(integer m_A, integer n_A, void *A, void *A_test, integer lda
             eps = fla_lapack_dlamch("P");
             /* permute A using the permuted vector jpvt to get (A * P) */
             fla_lapack_zlapmt(&FLA_TRUE, &m_A, &n_A, A, &lda, jpvt);
-            norm_A = fla_lapack_zlange("1", &m_A, &n_A, A, &lda, work);
+            compute_matrix_norm(datatype, NORM, m_A, n_A, A, lda, &norm_A, imatrix, work);
 
             /* zorgrq api generates the Q martrix using the elementary reflectors and scalar
                factor values*/
@@ -168,7 +169,7 @@ void validate_geqp3(integer m_A, integer n_A, void *A, void *A_test, integer lda
                compute norm((Q * R) - (A * P)) / (N * norm(A) * EPS)*/
             zgemm_("N", "N", &m_A, &n_A, &m_A, &z_n_one, Q, &m_A, R, &m_A, &z_one, A, &lda);
 
-            norm = fla_lapack_zlange("1", &m_A, &n_A, A, &lda, work);
+            compute_matrix_norm(datatype, NORM, m_A, n_A, A, lda, &norm, imatrix, work);
             resid1 = norm / (eps * norm_A * (double)n_A);
 
             /* Test 2

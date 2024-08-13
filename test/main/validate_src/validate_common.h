@@ -88,12 +88,12 @@ void validate_stedc(char compz, integer n, void *D_test, void *Z_input, void *Z,
 void validate_hgeqz(char *job, char *compq, char *compz, integer n, void *H, void *H_test, void *A,
                     integer ldh, void *T, void *T_test, void *B, integer ldt, void *Q, void *Q_test,
                     void *Q_A, integer ldq, void *Z, void *Z_test, void *Z_A, integer ldz,
-                    integer datatype, double *residual, integer *info);
+                    integer datatype, double *residual, char imatrix, integer *info);
 
 void validate_hseqr(char *job, char *compz, integer n, void *H, void *H_test, integer ldh, void *Z,
                     void *Z_test, integer ldz, void *wr, void *wr_in, void *wi, void *wi_in,
                     void *w, integer datatype, double *residual, integer *info, integer *ilo,
-                    integer *ihi);
+                    integer *ihi, char imatrix, void *scal_H);
 
 void validate_spffrt2(integer n, integer ncolm, void *A, void *AP, integer datatype,
                       double *residual);

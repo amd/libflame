@@ -174,10 +174,21 @@ void init_matrix_spec_rand_band_matrix_in(integer datatype, void *A, integer M, 
                                           integer LDA, integer kl, integer ku, char type);
 /* Allocate dynamic memory. If FLA_MEM_UNALIGNED is set, unaligned memory is allocated */
 char *fla_mem_alloc(size_t size);
-/* Generate Hessenberg matrix */
+/* Generate Hessenberg matrix.
+   On input: If AInitialized is false, then A is initialized with random matrix.
+             Else, A is initialized by caller.
+   On output: A has upper hessenberg matrix
+              Z has orthogonal matrix */
 void get_hessenberg_matrix(integer datatype, integer n, void *A, integer lda, void *Z, integer ldz,
                            integer *ilo, integer *ihi, integer *info, bool AInitialized);
-/* Generate Hessenberg matrix from eigen values */
+/* Generate Hessenberg matrix from eigen values.
+   On input: If AInitialized is false, then A will be initialized with random matrix.
+             Else, A has initialized by caller.
+   On output: A has upper hessenberg matrix.
+              Z has orthogonal matrix.
+              wr_in has eigen values.
+              wi_in has eigen values for imaginary parts of complex conjugate pairs
+              for real/double datatypes. */
 void get_hessenberg_matrix_from_EVs(integer datatype, integer n, void *A, integer lda, void *Z,
                                     integer ldz, integer *ilo, integer *ihi, integer *info,
                                     bool AInitialized, void *wr_in, void *wi_in);
@@ -295,8 +306,7 @@ void sort_vector(integer datatype, char *order, integer vect_len, void *w, integ
    2 * 2 blocks along the diagonal. This is used for generating asymmetric matrix */
 void create_realtype_block_diagonal_matrix(integer datatype, void *A, integer n, integer lda);
 /* Create input matrix A(Asymmetric) by randomly generating eigen values(EVs) */
-void generate_asym_matrix_from_EVs(integer datatype, integer n, void *A, integer lda, void *L,
-                                   char *imatrix, void *scal);
+void generate_asym_matrix_from_EVs(integer datatype, integer n, void *A, integer lda, void *L);
 /* Generate asymmetric square matrix of size n x n using Eigen decomposition(ED) */
 void generate_asym_matrix_from_ED(integer datatype, integer n, void *A, integer lda, void *Q,
                                   void *lambda);

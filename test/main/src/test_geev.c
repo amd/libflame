@@ -213,13 +213,16 @@ void fla_test_geev_experiment(test_params_t *params, integer datatype, integer p
     }
     else
     {
-        /* Initialize the scaling factor only for overflow/underflow test */
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
-            create_vector(get_realtype(datatype), &scal, 1);
         /*  Creating input matrix A by generating random eigen values */
         create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &L, n);
-        generate_asym_matrix_from_EVs(datatype, n, A, lda, L, &params->imatrix_char, scal);
+        generate_asym_matrix_from_EVs(datatype, n, A, lda, L);
 
+        /* Overflow/underflow initialization */
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            create_vector(get_realtype(datatype), &scal, 1);
+            init_matrix_overflow_underflow_asym(datatype, n, n, A, lda, params->imatrix_char, scal);
+        }
         /* Diagonal and sub-diagonals(upper and lower sub-diagonal together
            contains imaginary parts) contain real and imaginary parts
            of eigen values respectively. Storing them for valiation purpose */

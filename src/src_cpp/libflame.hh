@@ -7048,7 +7048,7 @@ inline double la_gercond_x(char *trans, integer *n, dcomplex *a, integer *lda, d
 }
 inline float la_gercond_c(char *trans, integer *n, scomplex *a, integer *lda, scomplex *af, integer *ldaf, integer *ipiv, float *c, logical *capply, integer *info, scomplex *work, float *rwork)
 {
-  cla_gercond_c_(trans, n, a, lda, af, ldaf, ipiv, c, capply, info, work, rwork); 
+  return cla_gercond_c_(trans, n, a, lda, af, ldaf, ipiv, c, capply, info, work, rwork); 
 }
 inline double la_gercond_c(char *trans, integer *n, dcomplex *a, integer *lda, dcomplex *af, integer *ldaf, integer *ipiv, double *c, logical *capply, integer *info, dcomplex *work, double *rwork)
 {

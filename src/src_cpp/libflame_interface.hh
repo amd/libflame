@@ -12945,7 +12945,6 @@ normwise error bounds \endverbatim
     }
     /** @}*/ // end of lahef_aa
 
-
     /** @defgroup hetrs_aa hetrs_aa
      * @ingroup LDL_computation LDL_computation
      * @{
@@ -19414,63 +19413,6 @@ normwise error bounds \endverbatim
         lasv2(f, g, h, ssmin, ssmax, snr, csr, snl, csl);
     }
     /** @}*/ // end of lasv2
-
-    /** @defgroup lartg_svd lartg
-     * @ingroup SVD
-     * @{
-     */
-    /*! @brief LARTG generates a plane rotation with real cosine and real sine
-
- * @details
- * \b Purpose:
-    \verbatim
-    LARTG generate a plane rotation so that
-
-       [  CS  SN  ]  .  [ F ]  =  [ R ]   where CS**2 + SN**2 = 1.
-       [ -SN  CS  ]     [ G ]     [ 0 ]
-
-    This is a slower, more accurate version of the BLAS1 routine SROTG,
-    with the following other differences:
-       F and G are unchanged on   return.
-       If G=0, then CS=1 and SN=0.
-       If F=0 and (G .ne. 0), then CS=0 and SN=1 without doing any
-          floating point operations (saves work in SBDSQR when
-          there are zeros on the diagonal).
-
-    If F exceeds G in magnitude, CS will be positive.
-    \endverbatim
-
- * @param[in] F
-          F is REAL \n
-          The first component of vector to be rotated. \n
- * @param[in] G
-          G is REAL \n
-          The second component of vector to be rotated. \n
- * @param[out] CS
-          CS is REAL \n
-          The cosine of the rotation. \n
- * @param[out] SN
-          SN is REAL \n
-          The sine of the rotation. \n
- * @param[out] R
-          R is REAL \n
-          The nonzero component of the rotated vector. \n
- \n
-  This version has a few statements commented out for thread safety
-  (machine parameters are computed on each entry). 10 feb 03, SJH.
-
- *  * */
-    template <typename T>
-    void lartg(T f, T g, T *cs, T *sn, T *r__)
-    {
-        lartg(f, g, cs, sn, r__);
-    }
-    template <typename T, typename Ta>
-    void lartg(T f, T g, Ta *cs, T *sn, T *r__)
-    {
-        lartg(f, g, cs, sn, r__);
-    }
-    /** @}*/ // end of lartg_svd
 
     /** @defgroup ggsvp3 ggsvp3
      * @ingroup SVD
@@ -49916,3 +49858,4 @@ determined by sgerqf
     /** @}*/ // end of LAPACK
     /** @} */ // end of AOCL_LAPACK
 }
+#endif

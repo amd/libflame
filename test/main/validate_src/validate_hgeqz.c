@@ -11,7 +11,7 @@
 void validate_hgeqz(char *job, char *compq, char *compz, integer n, void *H, void *H_test, void *A,
                     integer ldh, void *T, void *T_test, void *B, integer ldt, void *Q, void *Q_test,
                     void *Q_A, integer ldq, void *Z, void *Z_test, void *Z_A, integer ldz,
-                    integer datatype, double *residual, integer *info)
+                    integer datatype, double *residual, char imatrix, integer *info)
 {
     if((*job == 'E') || (*compz == 'N') || (*compq == 'N') || (n <= 0))
         return;
@@ -19,6 +19,7 @@ void validate_hgeqz(char *job, char *compq, char *compz, integer n, void *H, voi
     void *work = NULL, *lambda = NULL, *alambda = NULL, *h_input = NULL, *t_input = NULL,
          *Ilambda = NULL;
     *info = 0;
+    char NORM = '1';
 
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &lambda, n);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &alambda, n);
@@ -39,50 +40,51 @@ void validate_hgeqz(char *job, char *compq, char *compz, integer n, void *H, voi
             {
                 /* Test 1
                     | A - Q S Z**T  | / ( |A| n ulp ) */
-                norm_H = fla_lapack_slange("1", &n, &n, A, &ldh, work);
+                compute_matrix_norm(datatype, NORM, n, n, A, ldh, &norm_H, imatrix, work);
                 sgemm_("N", "N", &n, &n, &n, &s_one, Q_test, &ldq, H_test, &ldh, &s_zero, lambda,
                        &n);
                 sgemm_("N", "T", &n, &n, &n, &s_one, lambda, &n, Z_test, &ldz, &s_zero, alambda,
                        &n);
                 sgemm_("T", "N", &n, &n, &n, &s_one, Q_A, &ldq, alambda, &n, &s_zero, lambda, &n);
                 sgemm_("N", "N", &n, &n, &n, &s_one, lambda, &n, Z_A, &ldz, &s_n_one, A, &ldh);
-                norm = fla_lapack_slange("1", &n, &n, A, &ldh, work);
+                compute_matrix_norm(datatype, NORM, n, n, A, ldh, &norm, imatrix, work);
+
                 resid1 = norm / (eps * norm_H * (float)n);
 
                 /* Test 2
                     | B - Q P Z**T  | / ( |B| n ulp ) */
-                norm_T = fla_lapack_slange("1", &n, &n, B, &ldt, work);
+                compute_matrix_norm(datatype, NORM, n, n, B, ldt, &norm_T, imatrix, work);
                 sgemm_("N", "N", &n, &n, &n, &s_one, Q_test, &ldq, T_test, &ldt, &s_zero, lambda,
                        &n);
                 sgemm_("N", "T", &n, &n, &n, &s_one, lambda, &n, Z_test, &ldz, &s_zero, alambda,
                        &n);
                 sgemm_("T", "N", &n, &n, &n, &s_one, Q_A, &ldq, alambda, &n, &s_zero, lambda, &n);
                 sgemm_("N", "N", &n, &n, &n, &s_one, lambda, &n, Z_A, &ldz, &s_n_one, B, &ldt);
-                norm = fla_lapack_slange("1", &n, &n, B, &ldt, work);
+                compute_matrix_norm(datatype, NORM, n, n, B, ldt, &norm, imatrix, work);
                 resid2 = norm / (eps * norm_T * (float)n);
             }
             if(*compq == 'I' && *compz == 'I')
             {
                 /* Test 1
                     | H - Q S Z**T  | / ( |H| n ulp ) */
-                norm_H = fla_lapack_slange("1", &n, &n, H, &ldh, work);
+                compute_matrix_norm(datatype, NORM, n, n, H, ldh, &norm_H, imatrix, work);
                 sgemm_("N", "N", &n, &n, &n, &s_one, Q_test, &ldq, H_test, &ldh, &s_zero, lambda,
                        &n);
                 sgemm_("N", "T", &n, &n, &n, &s_one, lambda, &n, Z_test, &ldz, &s_zero, h_input,
                        &ldh);
                 sgemm_("N", "N", &n, &n, &n, &s_one, h_input, &ldh, Ilambda, &n, &s_n_one, H, &ldh);
-                norm = fla_lapack_slange("1", &n, &n, H, &ldh, work);
+                compute_matrix_norm(datatype, NORM, n, n, H, ldh, &norm, imatrix, work);
                 resid1 = norm / (eps * norm_H * (float)n);
 
                 /* Test 2
                     | T - Q P Z**T  | / ( |T| n ulp ) */
-                norm_T = fla_lapack_slange("1", &n, &n, T, &ldt, work);
+                compute_matrix_norm(datatype, NORM, n, n, T, ldt, &norm_T, imatrix, work);
                 sgemm_("N", "N", &n, &n, &n, &s_one, Q_test, &ldq, T_test, &ldt, &s_zero, lambda,
                        &n);
                 sgemm_("N", "T", &n, &n, &n, &s_one, lambda, &n, Z_test, &ldz, &s_zero, t_input,
                        &ldt);
                 sgemm_("N", "N", &n, &n, &n, &s_one, t_input, &ldt, Ilambda, &n, &s_n_one, T, &ldt);
-                norm = fla_lapack_slange("1", &n, &n, T, &ldt, work);
+                compute_matrix_norm(datatype, NORM, n, n, T, ldt, &norm, imatrix, work);
                 resid2 = norm / (eps * norm_T * (float)n);
 
                 /* Test 3 */
@@ -117,50 +119,50 @@ void validate_hgeqz(char *job, char *compq, char *compz, integer n, void *H, voi
             {
                 /* Test 1
                     | A - Q S Z**T  | / ( |A| n ulp ) */
-                norm_H = fla_lapack_dlange("1", &n, &n, A, &ldh, work);
+                compute_matrix_norm(datatype, NORM, n, n, A, ldh, &norm_H, imatrix, work);
                 dgemm_("N", "N", &n, &n, &n, &d_one, Q_test, &ldq, H_test, &ldh, &d_zero, lambda,
                        &n);
                 dgemm_("N", "T", &n, &n, &n, &d_one, lambda, &n, Z_test, &ldz, &d_zero, alambda,
                        &n);
                 dgemm_("T", "N", &n, &n, &n, &d_one, Q_A, &ldq, alambda, &n, &d_zero, lambda, &n);
                 dgemm_("N", "N", &n, &n, &n, &d_one, lambda, &n, Z_A, &ldz, &d_n_one, A, &ldh);
-                norm = fla_lapack_dlange("1", &n, &n, A, &ldh, work);
+                compute_matrix_norm(datatype, NORM, n, n, A, ldh, &norm, imatrix, work);
                 resid1 = norm / (eps * norm_H * (float)n);
 
                 /* Test 2
                     | B - Q P Z**T  | / ( |B| n ulp ) */
-                norm_T = fla_lapack_dlange("1", &n, &n, B, &ldt, work);
+                compute_matrix_norm(datatype, NORM, n, n, B, ldt, &norm_T, imatrix, work);
                 dgemm_("N", "N", &n, &n, &n, &d_one, Q_test, &ldq, T_test, &ldt, &d_zero, lambda,
                        &n);
                 dgemm_("N", "T", &n, &n, &n, &d_one, lambda, &n, Z_test, &ldz, &d_zero, alambda,
                        &n);
                 dgemm_("T", "N", &n, &n, &n, &d_one, Q_A, &ldq, alambda, &n, &d_zero, lambda, &n);
                 dgemm_("N", "N", &n, &n, &n, &d_one, lambda, &n, Z_A, &ldz, &d_n_one, B, &ldt);
-                norm = fla_lapack_dlange("1", &n, &n, B, &ldt, work);
+                compute_matrix_norm(datatype, NORM, n, n, B, ldt, &norm, imatrix, work);
                 resid2 = norm / (eps * norm_T * (float)n);
             }
             if(*compq == 'I' && *compz == 'I')
             {
                 /* Test 1
                     | H - Q S Z**T  | / ( |H| n ulp ) */
-                norm_H = fla_lapack_dlange("1", &n, &n, H, &ldh, work);
+                compute_matrix_norm(datatype, NORM, n, n, H, ldh, &norm_H, imatrix, work);
                 dgemm_("N", "N", &n, &n, &n, &d_one, Q_test, &ldq, H_test, &ldh, &d_zero, lambda,
                        &n);
                 dgemm_("N", "T", &n, &n, &n, &d_one, lambda, &n, Z_test, &ldz, &d_zero, h_input,
                        &ldh);
                 dgemm_("N", "N", &n, &n, &n, &d_one, h_input, &ldh, Ilambda, &n, &d_n_one, H, &ldh);
-                norm = fla_lapack_dlange("1", &n, &n, H, &ldh, work);
+                compute_matrix_norm(datatype, NORM, n, n, H, ldh, &norm, imatrix, work);
                 resid1 = norm / (eps * norm_H * (float)n);
 
                 /* Test 2
                     | T - Q P Z**T  | / ( |T| n ulp ) */
-                norm_T = fla_lapack_dlange("1", &n, &n, T, &ldt, work);
+                compute_matrix_norm(datatype, NORM, n, n, T, ldt, &norm_T, imatrix, work);
                 dgemm_("N", "N", &n, &n, &n, &d_one, Q_test, &ldq, T_test, &ldt, &d_zero, lambda,
                        &n);
                 dgemm_("N", "T", &n, &n, &n, &d_one, lambda, &n, Z_test, &ldz, &d_zero, t_input,
                        &ldt);
                 dgemm_("N", "N", &n, &n, &n, &d_one, t_input, &ldt, Ilambda, &n, &d_n_one, T, &ldt);
-                norm = fla_lapack_dlange("1", &n, &n, T, &ldt, work);
+                compute_matrix_norm(datatype, NORM, n, n, T, ldt, &norm, imatrix, work);
                 resid2 = norm / (eps * norm_T * (float)n);
 
                 /* Test 3 */
@@ -195,26 +197,26 @@ void validate_hgeqz(char *job, char *compq, char *compz, integer n, void *H, voi
             {
                 /* Test 1
                     | A - Q H Z**T  | / ( |A| n ulp ) */
-                norm_H = fla_lapack_clange("1", &n, &n, A, &ldh, work);
+                compute_matrix_norm(datatype, NORM, n, n, A, ldh, &norm_H, imatrix, work);
                 cgemm_("N", "N", &n, &n, &n, &c_one, Q_test, &ldq, H_test, &ldh, &c_zero, lambda,
                        &n);
                 cgemm_("N", "C", &n, &n, &n, &c_one, lambda, &n, Z_test, &ldz, &c_zero, alambda,
                        &n);
                 cgemm_("C", "N", &n, &n, &n, &c_one, Q_A, &ldq, alambda, &n, &c_zero, lambda, &n);
                 cgemm_("N", "N", &n, &n, &n, &c_one, lambda, &n, Z_A, &ldz, &c_n_one, A, &ldh);
-                norm = fla_lapack_clange("1", &n, &n, A, &ldh, work);
+                compute_matrix_norm(datatype, NORM, n, n, A, ldh, &norm, imatrix, work);
                 resid1 = norm / (eps * norm_H * (float)n);
 
                 /* Test 2
                     | B - Q T Z**T  | / ( |B| n ulp ) */
-                norm_T = fla_lapack_clange("1", &n, &n, B, &ldt, work);
+                compute_matrix_norm(datatype, NORM, n, n, B, ldt, &norm_T, imatrix, work);
                 cgemm_("N", "N", &n, &n, &n, &c_one, Q_test, &ldq, T_test, &ldt, &c_zero, lambda,
                        &n);
                 cgemm_("N", "C", &n, &n, &n, &c_one, lambda, &n, Z_test, &ldz, &c_zero, alambda,
                        &n);
                 cgemm_("C", "N", &n, &n, &n, &c_one, Q_A, &ldq, alambda, &n, &c_zero, lambda, &n);
                 cgemm_("N", "N", &n, &n, &n, &c_one, lambda, &n, Z_A, &ldz, &c_n_one, B, &ldt);
-                norm = fla_lapack_clange("1", &n, &n, B, &ldt, work);
+                compute_matrix_norm(datatype, NORM, n, n, B, ldt, &norm, imatrix, work);
                 resid2 = norm / (eps * norm_T * (float)n);
             }
 
@@ -222,24 +224,24 @@ void validate_hgeqz(char *job, char *compq, char *compz, integer n, void *H, voi
             {
                 /* Test 1
                     | H - Q S Z**T  | / ( |H| n ulp ) */
-                norm_H = fla_lapack_clange("1", &n, &n, H, &ldh, work);
+                compute_matrix_norm(datatype, NORM, n, n, H, ldh, &norm_H, imatrix, work);
                 cgemm_("N", "N", &n, &n, &n, &c_one, Q_test, &ldq, H_test, &ldh, &c_zero, lambda,
                        &n);
                 cgemm_("N", "C", &n, &n, &n, &c_one, lambda, &n, Z_test, &ldz, &c_zero, h_input,
                        &ldh);
                 cgemm_("N", "N", &n, &n, &n, &c_one, h_input, &ldh, Ilambda, &n, &c_n_one, H, &ldh);
-                norm = fla_lapack_clange("1", &n, &n, H, &ldh, work);
+                compute_matrix_norm(datatype, NORM, n, n, H, ldh, &norm, imatrix, work);
                 resid1 = norm / (eps * norm_H * (float)n);
 
                 /* Test 2
                     | T - Q P Z**T  | / ( |T| n ulp ) */
-                norm_T = fla_lapack_clange("1", &n, &n, T, &ldt, work);
+                compute_matrix_norm(datatype, NORM, n, n, T, ldt, &norm_T, imatrix, work);
                 cgemm_("N", "N", &n, &n, &n, &c_one, Q_test, &ldq, T_test, &ldt, &c_zero, lambda,
                        &n);
                 cgemm_("N", "C", &n, &n, &n, &c_one, lambda, &n, Z_test, &ldz, &c_zero, t_input,
                        &ldt);
                 cgemm_("N", "N", &n, &n, &n, &c_one, t_input, &ldt, Ilambda, &n, &c_n_one, T, &ldt);
-                norm = fla_lapack_clange("1", &n, &n, T, &ldt, work);
+                compute_matrix_norm(datatype, NORM, n, n, T, ldt, &norm, imatrix, work);
                 resid2 = norm / (eps * norm_T * (float)n);
 
                 /* Test 3 */
@@ -274,26 +276,26 @@ void validate_hgeqz(char *job, char *compq, char *compz, integer n, void *H, voi
             {
                 /* Test 1
                     | A - Q S Z**T  | / ( |A| n ulp ) */
-                norm_H = fla_lapack_zlange("1", &n, &n, A, &ldh, work);
+                compute_matrix_norm(datatype, NORM, n, n, A, ldh, &norm_H, imatrix, work);
                 zgemm_("N", "N", &n, &n, &n, &z_one, Q_test, &ldq, H_test, &ldh, &z_zero, lambda,
                        &n);
                 zgemm_("N", "C", &n, &n, &n, &z_one, lambda, &n, Z_test, &ldz, &z_zero, alambda,
                        &n);
                 zgemm_("C", "N", &n, &n, &n, &z_one, Q_A, &ldq, alambda, &n, &z_zero, lambda, &n);
                 zgemm_("N", "N", &n, &n, &n, &z_one, lambda, &n, Z_A, &ldz, &z_n_one, A, &ldh);
-                norm = fla_lapack_zlange("1", &n, &n, A, &ldh, work);
+                compute_matrix_norm(datatype, NORM, n, n, A, ldh, &norm, imatrix, work);
                 resid1 = norm / (eps * norm_H * (float)n);
 
                 /* Test 2
                     | B - Q P Z**T  | / ( |B| n ulp ) */
-                norm_T = fla_lapack_zlange("1", &n, &n, B, &ldt, work);
+                compute_matrix_norm(datatype, NORM, n, n, B, ldt, &norm_T, imatrix, work);
                 zgemm_("N", "N", &n, &n, &n, &z_one, Q_test, &ldq, T_test, &ldt, &z_zero, lambda,
                        &n);
                 zgemm_("N", "C", &n, &n, &n, &z_one, lambda, &n, Z_test, &ldz, &z_zero, alambda,
                        &n);
                 zgemm_("C", "N", &n, &n, &n, &z_one, Q_A, &ldq, alambda, &n, &z_zero, lambda, &n);
                 zgemm_("N", "N", &n, &n, &n, &z_one, lambda, &n, Z_A, &ldz, &z_n_one, B, &ldt);
-                norm = fla_lapack_zlange("1", &n, &n, B, &ldt, work);
+                compute_matrix_norm(datatype, NORM, n, n, B, ldt, &norm, imatrix, work);
                 resid2 = norm / (eps * norm_T * (float)n);
             }
 
@@ -301,24 +303,24 @@ void validate_hgeqz(char *job, char *compq, char *compz, integer n, void *H, voi
             {
                 /* Test 1
                     | H - Q S Z**T  | / ( |H| n ulp ) */
-                norm_H = fla_lapack_zlange("1", &n, &n, H, &ldh, work);
+                compute_matrix_norm(datatype, NORM, n, n, H, ldh, &norm_H, imatrix, work);
                 zgemm_("N", "N", &n, &n, &n, &z_one, Q_test, &ldq, H_test, &ldh, &z_zero, lambda,
                        &n);
                 zgemm_("N", "C", &n, &n, &n, &z_one, lambda, &n, Z_test, &ldz, &z_zero, h_input,
                        &ldh);
                 zgemm_("N", "N", &n, &n, &n, &z_one, h_input, &ldh, Ilambda, &n, &z_n_one, H, &ldh);
-                norm = fla_lapack_zlange("1", &n, &n, H, &ldh, work);
+                compute_matrix_norm(datatype, NORM, n, n, H, ldh, &norm, imatrix, work);
                 resid1 = norm / (eps * norm_H * (float)n);
 
                 /* Test 2
                     | T - Q P Z**T  | / ( |T| n ulp ) */
-                norm_T = fla_lapack_zlange("1", &n, &n, T, &ldt, work);
+                compute_matrix_norm(datatype, NORM, n, n, T, ldt, &norm_T, imatrix, work);
                 zgemm_("N", "N", &n, &n, &n, &z_one, Q_test, &ldq, T_test, &ldt, &z_zero, lambda,
                        &n);
                 zgemm_("N", "C", &n, &n, &n, &z_one, lambda, &n, Z_test, &ldz, &z_zero, t_input,
                        &ldt);
                 zgemm_("N", "N", &n, &n, &n, &z_one, t_input, &ldt, Ilambda, &n, &z_n_one, T, &ldt);
-                norm = fla_lapack_zlange("1", &n, &n, T, &ldt, work);
+                compute_matrix_norm(datatype, NORM, n, n, T, ldt, &norm, imatrix, work);
                 resid2 = norm / (eps * norm_T * (float)n);
 
                 /* Test 3 */

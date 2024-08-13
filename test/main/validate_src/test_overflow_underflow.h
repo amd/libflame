@@ -127,6 +127,15 @@ void scale_matrix_underflow_overflow_gesdd(integer datatype, integer m, integer 
 void scale_matrix_underflow_overflow_orgqr(integer datatype, integer m, integer n, void *A,
                                            integer lda, char imatrix_char);
 /* Scaling matrix with values around overflow, underflow for POTRS */
-void scale_matrix_underflow_overflow_potrs(integer datatype, integer n, void *A,
-                                           integer lda, char imatrix_char, void *scal);
+void scale_matrix_underflow_overflow_potrs(integer datatype, integer n, void *A, integer lda,
+                                           char imatrix_char, void *scal);
+/* Scale matrix with values around overflow underflow for hgeqz A matrix */
+void scale_matrix_overflow_underflow_hgeqz_A(integer datatype, integer n, void *A, integer lda,
+                                             char imatrix_char, void *scal);
+/* Scale matrix with values around overflow underflow for hgeqz B matrix */
+void scale_matrix_overflow_underflow_hgeqz_B(integer datatype, integer n, void *A, integer lda,
+                                             char imatrix_char, void *scal);
+/* Scale matrix with values around overflow underflow for hseqr */
+void scale_matrix_overflow_underflow_hseqr(integer datatype, integer n, void *A, integer lda,
+                                           char imatrix_char, void *scal);
 #endif // TEST_OVERFLOW_UNDERFLOW_H

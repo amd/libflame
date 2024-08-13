@@ -2148,6 +2148,14 @@ void get_generic_triangular_matrix(integer datatype, integer N, void *A, integer
     }
 }
 
+/* Generate Hessenberg matrix from eigen values.
+   On input: If AInitialized is false, then A will be initialized with random matrix.
+             Else, A has initialized by caller.
+   On output: A has upper hessenberg matrix.
+              Z has orthogonal matrix.
+              wr_in has eigen values.
+              wi_in has eigen values for imaginary parts of complex conjugate pairs
+              for real/double datatypes. */
 void get_hessenberg_matrix_from_EVs(integer datatype, integer n, void *A, integer lda, void *Z,
                                     integer ldz, integer *ilo, integer *ihi, integer *info,
                                     bool AInitialized, void *wr_in, void *wi_in)
@@ -2156,7 +2164,7 @@ void get_hessenberg_matrix_from_EVs(integer datatype, integer n, void *A, intege
 
     /* Initialize matrix A */
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &L_tmp, n);
-    generate_asym_matrix_from_EVs(datatype, n, A, lda, L_tmp, NULL, NULL);
+    generate_asym_matrix_from_EVs(datatype, n, A, lda, L_tmp);
     free_matrix(L_tmp);
 
     /* Get diagonal elements of A into wr_in as initial eigen values */
@@ -2166,7 +2174,7 @@ void get_hessenberg_matrix_from_EVs(integer datatype, integer n, void *A, intege
     create_matrix(datatype, LAPACK_COL_MAJOR, *ihi - *ilo + 1, *ihi - *ilo + 1, &A_sub,
                   *ihi - *ilo + 1);
     create_matrix(datatype, LAPACK_COL_MAJOR, *ihi - *ilo + 1, *ihi - *ilo + 1, &L, *ihi - *ilo + 1);
-    generate_asym_matrix_from_EVs(datatype, *ihi - *ilo + 1, A_sub, *ihi - *ilo + 1, L, NULL, NULL);
+    generate_asym_matrix_from_EVs(datatype, *ihi - *ilo + 1, A_sub, *ihi - *ilo + 1, L);
 
     /* Get the diagonal elements of L into wr_sub_in and copy them into wr_in */
     create_vector(datatype, &wr_sub_in, *ihi - *ilo + 1);
@@ -2197,7 +2205,7 @@ void get_hessenberg_matrix_from_EVs(integer datatype, integer n, void *A, intege
     }
 
     /* Generate Hessenberg matrix */
-    get_hessenberg_matrix(datatype, n, A, lda, Z, ldz, ilo, ihi, info, true);
+    get_hessenberg_matrix(datatype, n, A, lda, Z, ldz, ilo, ihi, info, AInitialized);
 
     free_matrix(A_sub);
     free_matrix(L);
@@ -2205,7 +2213,11 @@ void get_hessenberg_matrix_from_EVs(integer datatype, integer n, void *A, intege
     free_vector(wi_sub_in);
 }
 
-/* Generate Hessenberg matrix */
+/* Generate Hessenberg matrix.
+   On input: If AInitialized is false, then A will be initialized with random matrix.
+             Else, A has initialized by caller.
+   On output: A has upper hessenberg matrix
+              Z has orthogonal matrix */
 void get_hessenberg_matrix(integer datatype, integer n, void *A, integer lda, void *Z, integer ldz,
                            integer *ilo, integer *ihi, integer *info, bool AInitialized)
 {
@@ -6054,8 +6066,7 @@ void create_realtype_block_diagonal_matrix(integer datatype, void *A, integer n,
  */
 #define ASYM_EV_VL 1
 #define ASYM_EV_VU 1500
-void generate_asym_matrix_from_EVs(integer datatype, integer n, void *A, integer lda, void *L,
-                                   char *imatrix, void *scal)
+void generate_asym_matrix_from_EVs(integer datatype, integer n, void *A, integer lda, void *L)
 {
     void *X = NULL, *Q = NULL;
     integer info = 0;
@@ -6088,11 +6099,6 @@ void generate_asym_matrix_from_EVs(integer datatype, integer n, void *A, integer
        and Q(Eigen vectors) obtained above using reverse
        Eigen decompostion */
     generate_asym_matrix_from_ED(datatype, n, A, lda, Q, L);
-
-    if((imatrix != NULL) && (*imatrix == 'O' || *imatrix == 'U'))
-    {
-        init_matrix_overflow_underflow_asym(datatype, n, n, A, lda, *imatrix, scal);
-    }
 
     /* Free up the buffers */
     free_matrix(X);

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -143,15 +143,15 @@ void fla_test_hgeqz_experiment(test_params_t *params, integer datatype, integer 
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
                                double *perf, double *time_min, double *residual)
 {
-    integer n, ldz, ldh, ldt, ldq;
-    integer ilo, ihi, info = 0, vinfo = 0;
-    void *H = NULL, *Z = NULL, *Q = NULL, *T = NULL, *H_test = NULL, *T_test = NULL, *A = NULL;
-    void *B = NULL, *Z_A = NULL, *Q_test = NULL, *Z_test = NULL, *Q_temp = NULL, *tmp = NULL;
-    void *alpha = NULL, *alphar = NULL, *alphai = NULL, *beta = NULL, *scale = NULL, *Q_A = NULL;
+    integer n, ldz, ldh, ldt, ldq, ilo, ihi, info = 0, vinfo = 0;
+    void *H = NULL, *Z = NULL, *Q = NULL, *T = NULL, *H_test = NULL, *T_test = NULL, *A = NULL,
+         *B = NULL, *Z_A = NULL, *Q_test = NULL, *Z_test = NULL, *Q_temp = NULL, *scal_A = NULL,
+         *tmp = NULL, *alpha = NULL, *alphar = NULL, *alphai = NULL, *beta = NULL, *scal_B = NULL,
+         *Q_A = NULL;
     char compz, compq, job;
 
     integer test_lapacke_interface = params->test_lapacke_interface;
-    int layout = params->matrix_major;
+    integer layout = params->matrix_major;
 
     /* Get input matrix dimensions. */
     n = p_cur;
@@ -239,6 +239,15 @@ void fla_test_hgeqz_experiment(test_params_t *params, integer datatype, integer 
         get_generic_triangular_matrix(datatype, n, A, ldh, ilo, ihi, false);
         /* Initialize matrix with random values */
         rand_matrix(datatype, B, n, n, ldt);
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            create_realtype_vector(datatype, &scal_A, n);
+            create_realtype_vector(datatype, &scal_B, n);
+            scale_matrix_overflow_underflow_hgeqz_A(datatype, n, A, ldh, params->imatrix_char,
+                                                    scal_A);
+            scale_matrix_overflow_underflow_hgeqz_B(datatype, n, B, ldt, params->imatrix_char,
+                                                    scal_B);
+        }
         /* Decompose matrix B in to QR and store orthogonal matrix in Q and R in B */
         if(compq == 'N')
         {
@@ -327,12 +336,12 @@ void fla_test_hgeqz_experiment(test_params_t *params, integer datatype, integer 
     /* Output Validation */
     if(info == 0)
         validate_hgeqz(&job, &compq, &compz, n, H, H_test, A, ldh, T, T_test, B, ldt, Q, Q_test,
-                       Q_A, ldq, Z, Z_test, Z_A, ldz, datatype, residual, &vinfo);
+                       Q_A, ldq, Z, Z_test, Z_A, ldz, datatype, residual, params->imatrix_char,
+                       &vinfo);
 
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up the buffers */
-    free_vector(scale);
     free_vector(beta);
     free_matrix(H);
     free_matrix(T);
@@ -352,7 +361,14 @@ void fla_test_hgeqz_experiment(test_params_t *params, integer datatype, integer 
         free_vector(alphai);
     }
     else
+    {
         free_vector(alpha);
+    }
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
+    {
+        free_vector(scal_A);
+        free_vector(scal_B);
+    }
 }
 
 void prepare_hgeqz_run(char *job, char *compq, char *compz, integer n, integer *ilo, integer *ihi,

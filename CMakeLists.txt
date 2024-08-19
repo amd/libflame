@@ -2,10 +2,16 @@
 
 cmake_minimum_required(VERSION 3.22.0)
 
+# Reading program version from file
+file(STRINGS "so_version" VERSION_DATA)
+list(JOIN VERSION_DATA "." PROJ_VERSION)
+
+string(APPEND LIBS_LINK_FLAGS "-lpthread ")
+
 if(WIN32)
-	project(AOCL-LibFLAME-Win)
+	project(AOCL-LibFLAME-Win VERSION ${PROJ_VERSION})
 elseif(UNIX)
-	project(flame)
+	project(flame VERSION ${PROJ_VERSION})
 else()
 	message( FATAL_ERROR "OS Undetected")
 endif()
@@ -970,13 +976,17 @@ if(ENABLE_OPENMP)
 
 		find_library(LIBIOMP ${EXT_OPENMP_LIB} ${EXT_OPENMP_PATH} NO_DEFAULT_PATH)
         	message("User provided OpenMP library path ${LIBIOMP}")
-
+		
 		target_link_libraries(${PROJECT_NAME}  ${LIBIOMP})
+
+		string(APPEND LIBS_LINK_FLAGS "-L${EXT_OPENMP_PATH} -l${EXT_OPENMP_LIB} ")
+
 		if(UNIX)
 	        	target_link_libraries(${PROJECT_NAME} -Wl,--as-needed -ldl)
 		endif()
 	else()
 		target_link_libraries(${PROJECT_NAME}  OpenMP::OpenMP_CXX)
+		string(APPEND LIBS_LINK_FLAGS "-fopenmp ")
 	endif()
 endif ()
 
@@ -1211,6 +1221,19 @@ endif()
 if(BUILD_LAPACKE_TEST)
 	add_subdirectory(test/lapacke)
 endif()
+
+
+
+# Configuration for pkg-config
+if(BUILD_SHARED_LIBS)
+	# Get the path of directory containing the aoclutils lib
+	cmake_path(GET LIBAOCLUTILS_LIBRARY_PATH PARENT_PATH LIBAOCLUTILS_LIBRARY_DIR)
+	string(APPEND LIBS_LINK_FLAGS "-L${LIBAOCLUTILS_LIBRARY_DIR} -laoclutils ")
+endif()
+
+set(flamelib ${PROJECT_NAME})
+configure_file(flame.pc.in flame.pc @ONLY)
+install(FILES ${CMAKE_BINARY_DIR}/flame.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pkgconfig)
 
 # To View Added Definitions and C Flags
 get_directory_property( DirDefs COMPILE_DEFINITIONS )

@@ -1,6 +1,6 @@
 ##Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.##
 
-cmake_minimum_required(VERSION 3.15.0)
+cmake_minimum_required(VERSION 3.22.0)
 
 if(WIN32)
 	project(AOCL-LibFLAME-Win)

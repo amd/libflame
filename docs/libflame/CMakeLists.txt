@@ -31,7 +31,7 @@
 #
 
 
-cmake_minimum_required(VERSION 3.15.0)
+cmake_minimum_required(VERSION 3.22.0)
 
 project(aocllapack-doc)
 

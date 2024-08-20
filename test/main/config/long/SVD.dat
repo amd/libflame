@@ -19,7 +19,7 @@ p  12  40  100  150
 n  15  40  110  130
 tola 1.0  2.0  3.0
 tolb 2.0  2.0  1.0
-jobu_gesvd   N A S A
+jobu_gesvd   N A S O
 jobvt_gesvd  O A S N
 joba_gejsv C E F G
 jobu_gejsv U F W N

@@ -205,8 +205,8 @@ void fla_test_gesdd_experiment(test_params_t *params, integer datatype, integer 
 
     /* output validation */
     if(!params->imatrix_char && (jobz == 'A' || jobz == 'S' || jobz == 'O') && info == 0)
-        validate_gesdd(&jobz, m, n, A, A_test, lda, s, s_in, U, ldu, V, ldvt, datatype,
-                       residual, &vinfo);
+        validate_gesdd(&jobz, m, n, A, A_test, lda, s, s_in, U, ldu, V, ldvt, datatype, residual,
+                       &vinfo);
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
     {
@@ -321,9 +321,6 @@ void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer ld
         free_matrix(V_test);
         free_vector(s_test);
     }
-
-    if(*jobz == 'O')
-        copy_matrix(datatype, "full", m_A, m_A, A, lda, U, ldu);
 
     *time_min_ = time_min;
 

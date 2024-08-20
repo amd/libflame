@@ -35,7 +35,11 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
                  of V**T (the right singular vectors, stored rowwise) */
     if(*jobz == 'O' && m >= n)
     {
-        copy_matrix(datatype, "FULL", n, n, A_test, lda, U, ldu);
+        copy_matrix(datatype, "FULL", m, m, A_test, lda, U, ldu);
+    }
+    else if(*jobz == 'O' && m < n)
+    {
+        copy_matrix(datatype, "FULL", m, n, A_test, lda, V, ldvt);
     }
 
     switch(datatype)
@@ -125,8 +129,7 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
                 norm = fla_lapack_dlange("1", &ns, &i_one, s_in, &i_one, work);
                 resid5 = norm / (eps * norm_A * ns);
             }
-            *residual = fla_max(fla_max(fla_max(resid1, fla_max(resid2, resid3)), resid4),
-                                        resid5);
+            *residual = fla_max(fla_max(fla_max(resid1, fla_max(resid2, resid3)), resid4), resid5);
             break;
         }
 
@@ -149,17 +152,17 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
 
             /* Test 2
                compute norm(I - U'*U) / (N * EPS)*/
-                if(*jobz == 'A' || *jobz == 'S')
-                    resid2 = (float)check_orthogonal_matrix('C', datatype, U, ns, m, ns, ldu);
+            if(*jobz == 'A' || *jobz == 'S')
+                resid2 = (float)check_orthogonal_matrix('C', datatype, U, ns, m, ns, ldu);
 
             /* Test 3
                compute norm(I - V*V') / (N * EPS)*/
-               if(*jobz == 'A' || *jobz == 'S')
-                    resid3 = (float)check_orthogonal_matrix('N', datatype, V, ns, n, ns, ldvt);
+            if(*jobz == 'A' || *jobz == 'S')
+                resid3 = (float)check_orthogonal_matrix('N', datatype, V, ns, n, ns, ldvt);
 
             /* Test 4
                Test to Check order of Singular values of SVD (positive and non-decreasing) */
-                resid4 = (float)svd_check_order(datatype, s, m, n, *residual);
+            resid4 = (float)svd_check_order(datatype, s, m, n, *residual);
 
             /* Test 5: In case of specific input generation, compare input and
                output singular values */
@@ -215,8 +218,7 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
                 norm = fla_lapack_dlange("1", &ns, &i_one, s_in, &i_one, work);
                 resid5 = norm / (eps * norm_A * ns);
             }
-            *residual = fla_max(fla_max(fla_max(resid1, fla_max(resid2, resid3)), resid4),
-                                        resid5);
+            *residual = fla_max(fla_max(fla_max(resid1, fla_max(resid2, resid3)), resid4), resid5);
             break;
         }
     }

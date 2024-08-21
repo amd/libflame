@@ -1526,3 +1526,63 @@ void scale_matrix_underflow_overflow_geqp3(integer datatype, integer m, integer 
     free_vector(max_min);
     free_vector(scal);
 }
+
+/* Scaling matrix with values around overflow, underflow for SYEVD/HEEVD */
+void scale_matrix_underflow_overflow_syevd(integer datatype, integer n, void *A, integer lda,
+                                          char *imatrix_char, void *scal)
+{
+    float flt_ratio;
+    double dbl_ratio;
+
+    if(*imatrix_char == 'O')
+    {
+        /*Intialize the ratios with maximum of datatype value*/
+        flt_ratio = FLT_MAX;
+        dbl_ratio = DBL_MAX;
+        void *max;
+        create_vector(get_realtype(datatype), &max, 1);
+        get_max_from_matrix(datatype, A, max, n, n, lda);
+        /* The ratio is modified w.r.t dimension, to avoid inf in output */
+        if(n <= 50)
+        {
+            flt_ratio = FLT_MAX / 6.0;
+            dbl_ratio = DBL_MAX / 6.0;
+        }
+        else if(n <= 100)
+        {
+            flt_ratio = flt_ratio / 7.0;
+            dbl_ratio = dbl_ratio / 7.0;
+        }
+        else if(n <= 500)
+        {
+            flt_ratio = flt_ratio / 13.0;
+            dbl_ratio = dbl_ratio / 13.0;
+        }
+        else if(n <= 1000)
+        {
+            flt_ratio = flt_ratio / 17.0;
+            dbl_ratio = dbl_ratio / 17.0;
+        }
+        else
+        {
+            flt_ratio = flt_ratio / 50.0;
+            dbl_ratio = dbl_ratio / 50.0;
+        }
+        compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, max);
+        free_vector(max);
+    }
+    else if(*imatrix_char == 'U')
+    {
+        void *min;
+        create_vector(get_realtype(datatype), &min, 1);
+        /* Get minimum value from matrix */
+        get_min_from_matrix(datatype, A, min, n, n, lda);
+        /* Intialize with minimum of datatype value */
+        flt_ratio = FLT_MIN;
+        dbl_ratio = DBL_MIN;
+        compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, min);
+        free_vector(min);
+    }
+    /* Scaling the matrix A by X scalar */
+    scal_matrix(datatype, scal, A, n, n, lda, i_one);
+}

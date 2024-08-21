@@ -135,7 +135,7 @@ void fla_test_syevd_experiment(test_params_t *params, integer datatype, integer 
 {
     integer n, lda, info = 0;
     char jobz, uplo, range = 'R';
-    void *A = NULL, *w = NULL, *A_test = NULL, *L = NULL;
+    void *A = NULL, *w = NULL, *A_test = NULL, *L = NULL, *scal = NULL;
 
     integer test_lapacke_interface = params->test_lapacke_interface;
     int layout = params->matrix_major;
@@ -162,7 +162,7 @@ void fla_test_syevd_experiment(test_params_t *params, integer datatype, integer 
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
     create_realtype_vector(datatype, &w, n);
 
-    if(g_ext_fptr != NULL || (params->imatrix_char))
+    if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
     {
         /* Initialize input matrix with custom data */
         init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
@@ -173,6 +173,11 @@ void fla_test_syevd_experiment(test_params_t *params, integer datatype, integer 
             When range = V, generate EVs in given range (vl,vu)  */
         create_realtype_vector(datatype, &L, n);
         generate_matrix_from_EVs(datatype, range, n, A, lda, L, 0.0, 0.0);
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            create_realtype_vector(get_datatype(datatype), &scal, 1);
+            scale_matrix_underflow_overflow_syevd(datatype, n, A, lda, &params->imatrix_char, scal);
+        }
     }
     /* Make a copy of input matrix A. This is required to validate the API functionality.*/
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
@@ -195,7 +200,7 @@ void fla_test_syevd_experiment(test_params_t *params, integer datatype, integer 
     if((info == 0) && (!FLA_EXTREME_CASE_TEST))
     {
         validate_syev(&jobz, &range, n, A, A_test, lda, 0, 0, L, w, NULL, datatype, residual,
-                      params->imatrix_char, NULL);
+                      params->imatrix_char, scal);
     }
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
@@ -215,6 +220,10 @@ void fla_test_syevd_experiment(test_params_t *params, integer datatype, integer 
     free_vector(w);
     if((g_ext_fptr == NULL) && !(params->imatrix_char))
         free_vector(L);
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
+    {
+        free_vector(scal);
+    }
 }
 
 void prepare_syevd_run(char *jobz, char *uplo, integer n, void *A, integer lda, void *w,

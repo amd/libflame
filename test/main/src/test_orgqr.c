@@ -17,10 +17,10 @@ void prepare_orgqr_run(integer m, integer n, void *A, integer lda, void *T, void
                        integer *info, integer test_lapacke_interface, int matrix_layout);
 void invoke_orgqr(integer datatype, integer *m, integer *n, integer *min_A, void *a, integer *lda,
                   void *tau, void *work, integer *lwork, integer *info);
-double prepare_lapacke_orgqr_run(integer datatype, int matrix_layout, integer m, integer n,
-                                 void *A, integer lda, void *T, integer *info);
-integer invoke_lapacke_orgqr(integer datatype, int matrix_layout, integer m, integer n,
-                             integer k, void *a, integer lda, const void *tau);
+double prepare_lapacke_orgqr_run(integer datatype, int matrix_layout, integer m, integer n, void *A,
+                                 integer lda, void *T, integer *info);
+integer invoke_lapacke_orgqr(integer datatype, int matrix_layout, integer m, integer n, integer k,
+                             void *a, integer lda, const void *tau);
 
 void fla_test_orgqr(integer argc, char **argv, test_params_t *params)
 {
@@ -162,6 +162,12 @@ void fla_test_orgqr_experiment(test_params_t *params, integer datatype, integer 
 
         init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
 
+        /* Scaling matrix with values around overflow, underflow for ORGQR/UNGQR */
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            scale_matrix_underflow_overflow_orgqr(datatype, m, n, A, lda, params->imatrix_char);
+        }
+
         /* Make a copy of input matrix A. This is required to validate the API functionality.*/
         create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
         copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
@@ -221,7 +227,8 @@ void fla_test_orgqr_experiment(test_params_t *params, integer datatype, integer 
 
         /* output validation */
         if((info == 0) && (!FLA_EXTREME_CASE_TEST))
-            validate_orgqr(m, n, A, lda, Q, R, work_test, datatype, residual, &vinfo);
+            validate_orgqr(m, n, A, lda, Q, R, work_test, datatype, residual, &vinfo,
+                           params->imatrix_char);
         /* check for output matrix when inputs as extreme values */
         else if(FLA_EXTREME_CASE_TEST)
         {
@@ -358,8 +365,8 @@ void invoke_orgqr(integer datatype, integer *m, integer *n, integer *min_A, void
     }
 }
 
-integer invoke_lapacke_orgqr(integer datatype, int layout, integer m, integer n, integer k,
-                             void *a, integer lda, const void *tau)
+integer invoke_lapacke_orgqr(integer datatype, int layout, integer m, integer n, integer k, void *a,
+                             integer lda, const void *tau)
 {
     integer info = 0;
     switch(datatype)

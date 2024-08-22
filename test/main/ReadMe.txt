@@ -43,7 +43,7 @@ Alternatively, you may set the `make` variable `LIB_PATH` on the command line as
 execute `make`:
 
    $ make LIBFLAME=lapack.a LIB_PATH=/usr/local
-	  BLAS_HEADER_PATH=<path to BLAS API prototypes header file>
+          BLAS_HEADER_PATH=<path to BLAS API prototypes header file>
           LIBBLAS=<full path to BLAS library including library file>
           LIBAOCLUTILS_LIBRARY_PATH=<full path to AOCL-Utils library including library file>
 
@@ -311,5 +311,5 @@ NOTE:
    1) Default layout is set to Column_major. In case user specifies
       anything other than row_major/column_major, matrix layout is
       considered to be column_major.
-   2) LAPACKE interface testing is only added for GESV API.
+   2) LAPACKE interface testing is only supported for config based tests.
 

@@ -42,7 +42,7 @@ void validate_getrs(char *trans, integer n, integer nrhs, void *A, integer lda, 
                     char imatrix, void *scal);
 
 void validate_orgqr(integer m, integer n, void *A, integer lda, void *Q, void *R, void *work,
-                    integer datatype, double *residual, integer *info);
+                    integer datatype, double *residual, integer *info, char imatrix);
 
 void validate_potrf(char *uplo, integer m, void *A, void *A_test, integer lda, integer datatype,
                     double *residual, integer *info);

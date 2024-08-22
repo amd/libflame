@@ -123,4 +123,7 @@ void scale_matrix_underflow_overflow_syevd(integer datatype, integer n, void *A,
 /* Scale matrix with values around overflow underflow for gesv */
 void scale_matrix_underflow_overflow_gesdd(integer datatype, integer m, integer n, void *A,
                                            integer lda, char imatrix_char, void *scal);
+/* Scaling matrix with values around overflow, underflow for ORGQR/UNGQR */
+void scale_matrix_underflow_overflow_orgqr(integer datatype, integer m, integer n, void *A,
+                                           integer lda, char imatrix_char);
 #endif // TEST_OVERFLOW_UNDERFLOW_H

@@ -53,7 +53,6 @@ SVD Computational Routines
 * :ref:`gesvj1`
 * :ref:`las2`
 * :ref:`lasv2`
-* :ref:`lartg_svd`
 * :ref:`ggsvp3`
 * :ref:`tgsja`
 * :ref:`lags2`

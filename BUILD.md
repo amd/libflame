@@ -106,11 +106,11 @@ Recomended to use AOCL-BLAS sharedlib with AOCL-LAPACK sharedlib
         1. python >= 3.9
         2. doxygen >= 1.9.6
         3. sphinx >= 7.3.7
-            python3 -m pip install sphinx==7.3.0
+            python -m pip install sphinx==7.3.7
         4. rocm-docs-core == 0.30.0
-            python3 -m pip install rocm-docs-core==0.30.0
+            python -m pip install rocm-docs-core==0.30.0
         5. breathe >= 4.30.0
-            python3 -m pip install breathe==4.35.0
+            python -m pip install breathe==4.30.0
 
     # To build the documentation in /libflame/docs/libflame/sphinx/html directory use
      -DBUILD_DOC=ON

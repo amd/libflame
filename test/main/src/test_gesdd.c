@@ -116,7 +116,7 @@ void fla_test_gesdd_experiment(test_params_t *params, integer datatype, integer 
     integer m, n, lda, ldu, ldvt;
     integer info = 0, vinfo = 0;
     char jobz;
-    void *A = NULL, *U = NULL, *V = NULL, *s = NULL, *A_test = NULL, *s_in = NULL;
+    void *A = NULL, *U = NULL, *V = NULL, *s = NULL, *A_test = NULL, *s_in = NULL, *scal = NULL;
 
     /* Get input matrix dimensions.*/
     jobz = params->svd_paramslist[pci].jobu_gesvd;
@@ -185,6 +185,12 @@ void fla_test_gesdd_experiment(test_params_t *params, integer datatype, integer 
         create_realtype_vector(datatype, &s_in, fla_min(m, n));
         /* Generate matrix A from known singular values */
         create_svd_matrix(datatype, 'A', m, n, A, lda, s_in, s_one, s_one, i_one, i_one, info);
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            create_vector(get_realtype(datatype), &scal, 1);
+            scale_matrix_underflow_overflow_gesdd(datatype, m, n, A, lda, params->imatrix_char,
+                                                  scal);
+        }
     }
 
     /* Make a copy of input matrix A. This is required to validate the API functionality.*/
@@ -204,9 +210,9 @@ void fla_test_gesdd_experiment(test_params_t *params, integer datatype, integer 
         *perf *= 4.0;
 
     /* output validation */
-    if(!params->imatrix_char && (jobz == 'A' || jobz == 'S' || jobz == 'O') && info == 0)
+    if(FLA_OVERFLOW_UNDERFLOW_TEST && (jobz == 'A' || jobz == 'S' || jobz == 'O') && info == 0)
         validate_gesdd(&jobz, m, n, A, A_test, lda, s, s_in, U, ldu, V, ldvt, datatype, residual,
-                       &vinfo);
+                       &vinfo, params->imatrix_char, scal);
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
     {
@@ -226,6 +232,10 @@ void fla_test_gesdd_experiment(test_params_t *params, integer datatype, integer 
     free_vector(s);
     if((g_ext_fptr == NULL) && !(params->imatrix_char))
         free_vector(s_in);
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
+    {
+        free_vector(scal);
+    }
 }
 
 void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer lda, void *s, void *U,

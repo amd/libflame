@@ -226,16 +226,6 @@ LASV2
 .. doxygengroup:: lasv2
    :members:
 
-
-.. _lartg_svd:
-
-LARTG
-------
-
-.. doxygengroup:: lartg_svd
-   :members:
-
-
 .. _ggsvp3:
 
 GGSVP3

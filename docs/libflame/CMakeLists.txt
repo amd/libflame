@@ -51,22 +51,22 @@ endif()
 
 function(check_rocm_docs_version)
 
-    execute_process(COMMAND python3 -m pip list
-        RESULT_VARIABLE     PIP3_EXIT_CODE
-        OUTPUT_VARIABLE     PIP3_LIST
-        ERROR_VARIABLE      PIP3_ERROR)
+    execute_process(COMMAND ${Python_EXECUTABLE} -m pip list
+        RESULT_VARIABLE     PIP_EXIT_CODE
+        OUTPUT_VARIABLE     PIP_LIST
+        ERROR_VARIABLE      PIP_ERROR)
 
-    if(PIP3_EXIT_CODE)
+    if(PIP_EXIT_CODE)
         if(WIN32)
-            find_program(PIP3_EXECUTABLE pip3)
-            if(NOT PIP3_EXECUTABLE)
-                message(FATAL_ERROR "pip3 not found")
+            find_program(PIP_EXECUTABLE pip)
+            if(NOT PIP_EXECUTABLE)
+                message(FATAL_ERROR "pip not found")
             endif()
         endif()
-        message(FATAL_ERROR "${PIP3_ERROR}")
+        message(FATAL_ERROR "${PIP_ERROR}")
     endif()
-    # Filter rocm-docs-core among list of python3 libraries
-    string(REGEX MATCH "rocm-docs-core[ \t\r]*[0-9]+[\.]?[0-9]*[\.]?[0-9]*" ROCM_DOCS_CORE_FILTERED "${PIP3_LIST}")
+    # Filter rocm-docs-core among list of python libraries
+    string(REGEX MATCH "rocm-docs-core[ \t\r]*[0-9]+[\.]?[0-9]*[\.]?[0-9]*" ROCM_DOCS_CORE_FILTERED "${PIP_LIST}")
     # Extract version of rocm-docs-core and save it in ROCM_DOCS_VERSION
     string(REGEX REPLACE "rocm-docs-core[ \t\r]*" "" ROCM_DOCS_VERSION "${ROCM_DOCS_CORE_FILTERED}")
 
@@ -90,26 +90,31 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/doxygen/html/index.html)
 # - Sphinx
 # - rocm-docs-core
 # - breathe
+    if(WIN32)
+        find_package(Python REQUIRED COMPONENTS Interpreter)
+    else()
+        find_package(Python3 REQUIRED COMPONENTS Interpreter)
+        set(Python_EXECUTABLE ${Python3_EXECUTABLE})
+    endif()
 
-    find_package(Python3 REQUIRED COMPONENTS Interpreter)
     execute_process(
-      COMMAND ${Python3_EXECUTABLE} -c "import sphinx"
+      COMMAND ${Python_EXECUTABLE} -c "import sphinx"
       RESULT_VARIABLE EXIT_CODE
       OUTPUT_QUIET)
     if(NOT ${EXIT_CODE} EQUAL 0)
       message(
         FATAL_ERROR
-          "Python3 package sphinx is required to build the documentation\n   Use: ${Python3_EXECUTABLE} -m pip3 install sphinx"
+          "Python package sphinx is required to build the documentation\n   Use: ${Python_EXECUTABLE} -m pip install sphinx"
       )
     endif()
     execute_process(
-      COMMAND ${Python3_EXECUTABLE} -c "from rocm_docs import ROCmDocs"
+      COMMAND ${Python_EXECUTABLE} -c "from rocm_docs import ROCmDocs"
       RESULT_VARIABLE EXIT_CODE
       OUTPUT_QUIET)
     if(NOT ${EXIT_CODE} EQUAL 0)
       message(
         FATAL_ERROR
-          "Python3 package rocm_docs is required to build the documentation\n   Use: ${Python3_EXECUTABLE} -m pip3 install rocm-docs-core==0.30.0"
+          "Python package rocm_docs is required to build the documentation\n   Use: ${Python_EXECUTABLE} -m pip install rocm-docs-core==0.30.0"
       )
     endif()
 
@@ -117,13 +122,13 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/doxygen/html/index.html)
     check_rocm_docs_version()
 
     execute_process(
-      COMMAND ${Python3_EXECUTABLE} -c "import breathe"
+      COMMAND ${Python_EXECUTABLE} -c "import breathe"
       RESULT_VARIABLE EXIT_CODE
       OUTPUT_QUIET)
     if(NOT ${EXIT_CODE} EQUAL 0)
       message(
         FATAL_ERROR
-          "Python3 package breathe is required to build the documentation\n   Use: ${Python3_EXECUTABLE} -m pip3 install breathe"
+          "Python package breathe is required to build the documentation\n   Use: ${Python_EXECUTABLE} -m pip install breathe"
       )
     endif()
 

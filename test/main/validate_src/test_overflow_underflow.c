@@ -1466,7 +1466,7 @@ void scale_matrix_underflow_overflow_getri(integer datatype, integer m, integer 
     if(imatrix_char == 'U')
     {
         get_min_from_matrix(datatype, A, max_min, m, n, lda);
-        if (n == 2)
+        if(n == 2)
         {
             tuning_val = 0.5;
         }
@@ -1529,7 +1529,7 @@ void scale_matrix_underflow_overflow_geqp3(integer datatype, integer m, integer 
 
 /* Scaling matrix with values around overflow, underflow for SYEVD/HEEVD */
 void scale_matrix_underflow_overflow_syevd(integer datatype, integer n, void *A, integer lda,
-                                          char *imatrix_char, void *scal)
+                                           char *imatrix_char, void *scal)
 {
     float flt_ratio;
     double dbl_ratio;
@@ -1585,4 +1585,36 @@ void scale_matrix_underflow_overflow_syevd(integer datatype, integer n, void *A,
     }
     /* Scaling the matrix A by X scalar */
     scal_matrix(datatype, scal, A, n, n, lda, i_one);
+}
+
+/* Scaling matrix with values around overflow underflow for gesdd */
+void scale_matrix_underflow_overflow_gesdd(integer datatype, integer m, integer n, void *A,
+                                           integer lda, char imatrix_char, void *scal)
+{
+    void *max_min = NULL;
+    double tuning_val = 1.0;
+    create_vector(get_realtype(datatype), &max_min, 1);
+    if(imatrix_char == 'O')
+    {
+        get_max_from_matrix(datatype, A, max_min, m, n, lda);
+        if((m <= 50) && (n <= 50))
+        {
+            tuning_val = 400.0;
+        }
+        else
+        {
+            tuning_val = 800.0;
+        }
+    }
+    if(imatrix_char == 'U')
+    {
+        get_min_from_matrix(datatype, A, max_min, m, n, lda);
+    }
+    calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
+
+    /* Scaling the matrix A with scal */
+    scal_matrix(datatype, scal, A, m, n, lda, i_one);
+
+    /* free vectors */
+    free_vector(max_min);
 }

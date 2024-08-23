@@ -10,7 +10,7 @@
 
 void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, integer lda, void *s,
                     void *s_in, void *U, integer ldu, void *V, integer ldvt, integer datatype,
-                    double *residual, integer *info)
+                    double *residual, integer *info, char imatrix, void *scal)
 {
     if(m == 0 || n == 0)
         return;
@@ -79,6 +79,10 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
                output singular values */
             if(s_in != NULL)
             {
+                if((imatrix == 'O' || imatrix == 'U') && (scal != NULL))
+                {
+                    sscal_(&ns, scal, s_in, &i_one);
+                }
                 norm_A = fla_lapack_slange("1", &ns, &i_one, s_in, &i_one, work);
                 saxpy_(&ns, &s_n_one, s, &i_one, s_in, &i_one);
                 norm = fla_lapack_slange("1", &ns, &i_one, s_in, &i_one, work);
@@ -124,6 +128,10 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
                output singular values */
             if(s_in != NULL)
             {
+                if((imatrix == 'O' || imatrix == 'U') && (scal != NULL))
+                {
+                    dscal_(&ns, scal, s_in, &i_one);
+                }
                 norm_A = fla_lapack_dlange("1", &ns, &i_one, s_in, &i_one, work);
                 daxpy_(&ns, &d_n_one, s, &i_one, s_in, &i_one);
                 norm = fla_lapack_dlange("1", &ns, &i_one, s_in, &i_one, work);
@@ -168,6 +176,10 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
                output singular values */
             if(s_in != NULL)
             {
+                if((imatrix == 'O' || imatrix == 'U') && (scal != NULL))
+                {
+                    sscal_(&ns, scal, s_in, &i_one);
+                }
                 norm_A = fla_lapack_slange("1", &ns, &i_one, s_in, &i_one, work);
                 saxpy_(&ns, &s_n_one, s, &i_one, s_in, &i_one);
                 norm = fla_lapack_slange("1", &ns, &i_one, s_in, &i_one, work);
@@ -213,6 +225,10 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
                output singular values */
             if(s_in != NULL)
             {
+                if((imatrix == 'O' || imatrix == 'U') && (scal != NULL))
+                {
+                    dscal_(&ns, scal, s_in, &i_one);
+                }
                 norm_A = fla_lapack_dlange("1", &ns, &i_one, s_in, &i_one, work);
                 daxpy_(&ns, &d_n_one, s, &i_one, s_in, &i_one);
                 norm = fla_lapack_dlange("1", &ns, &i_one, s_in, &i_one, work);

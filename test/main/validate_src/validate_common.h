@@ -24,7 +24,7 @@ void validate_gelqf(integer m_A, integer n_A, void *A, void *A_test, integer lda
 
 void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, integer lda, void *s,
                     void *s_in, void *U, integer ldu, void *V, integer ldvt, integer datatype,
-                    double *residual, integer *info);
+                    double *residual, integer *info, char imatrix, void *scal);
 
 void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void *A_test,
                     integer lda, void *s, void *s_test, void *U, integer ldu, void *V, integer ldvt,

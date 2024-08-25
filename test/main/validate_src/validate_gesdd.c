@@ -47,7 +47,7 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
         case FLOAT:
         {
             float norm, norm_A, eps, resid1, resid2, resid3, resid4, resid5;
-            norm = norm_A = resid1 = resid2 = resid3 = resid4 = resid5 = FLT_MIN;
+            norm = norm_A = resid1 = resid2 = resid3 = resid4 = resid5 = 0.f;
             eps = fla_lapack_slamch("P");
 
             /* Test 1
@@ -96,7 +96,7 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
         case DOUBLE:
         {
             double norm, norm_A, eps, resid1, resid2, resid3, resid4, resid5;
-            norm = norm_A = resid1 = resid2 = resid3 = resid4 = resid5 = DBL_MIN;
+            norm = norm_A = resid1 = resid2 = resid3 = resid4 = resid5 = 0.;
             eps = fla_lapack_dlamch("P");
 
             /* Test 1
@@ -144,7 +144,7 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
         case COMPLEX:
         {
             float norm, norm_A, eps, resid1, resid2, resid3, resid4, resid5;
-            norm = norm_A = resid1 = resid2 = resid3 = resid4 = resid5 = FLT_MIN;
+            norm = norm_A = resid1 = resid2 = resid3 = resid4 = resid5 = 0.f;
             eps = fla_lapack_slamch("P");
 
             /* Test 1
@@ -193,7 +193,7 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
         case DOUBLE_COMPLEX:
         {
             double norm, norm_A, eps, resid1, resid2, resid3, resid4, resid5;
-            norm = norm_A = resid1 = resid2 = resid3 = resid4 = resid5 = DBL_MIN;
+            norm = norm_A = resid1 = resid2 = resid3 = resid4 = resid5 = 0.;
             eps = fla_lapack_dlamch("P");
 
             /* Test 1

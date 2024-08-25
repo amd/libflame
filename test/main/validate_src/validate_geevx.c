@@ -45,7 +45,7 @@ void validate_geevx(char *jobvl, char *jobvr, char *sense, char *balanc, integer
         case FLOAT:
         {
             float norm, norm_A, norm_W, resid1, resid2, eps;
-            norm = norm_A = norm_W = resid1 = resid2 = FLT_MIN;
+            norm = norm_A = norm_W = resid1 = resid2 = 0.f;
             eps = fla_lapack_slamch("P");
             if(*jobvr == 'V')
             {
@@ -99,7 +99,7 @@ void validate_geevx(char *jobvl, char *jobvr, char *sense, char *balanc, integer
         case DOUBLE:
         {
             double norm, norm_A, norm_W, eps, resid1, resid2;
-            norm = norm_A = norm_W = resid1 = resid2 = DBL_MIN;
+            norm = norm_A = norm_W = resid1 = resid2 = 0.;
             eps = fla_lapack_dlamch("P");
 
             if(*jobvr == 'V')
@@ -155,7 +155,7 @@ void validate_geevx(char *jobvl, char *jobvr, char *sense, char *balanc, integer
         case COMPLEX:
         {
             float norm, norm_A, norm_W, eps, resid1, resid2, resid3;
-            norm = norm_A = norm_W = resid1 = resid2 = resid3 = FLT_MIN;
+            norm = norm_A = norm_W = resid1 = resid2 = resid3 = 0.f;
             eps = fla_lapack_slamch("P");
             /* Scaleup the output during underflow to avoid
              the very least values during validation*/
@@ -211,7 +211,7 @@ void validate_geevx(char *jobvl, char *jobvr, char *sense, char *balanc, integer
         case DOUBLE_COMPLEX:
         {
             double norm, norm_A, norm_W, eps, resid1, resid2, resid3;
-            norm = norm_A = norm_W = resid1 = resid2 = DBL_MIN;
+            norm = norm_A = norm_W = resid1 = resid2 = 0.;
             eps = fla_lapack_dlamch("P");
             /* Scaleup the output during underflow to avoid
              the very least values during validation*/

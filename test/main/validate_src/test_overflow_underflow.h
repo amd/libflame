@@ -126,4 +126,7 @@ void scale_matrix_underflow_overflow_gesdd(integer datatype, integer m, integer 
 /* Scaling matrix with values around overflow, underflow for ORGQR/UNGQR */
 void scale_matrix_underflow_overflow_orgqr(integer datatype, integer m, integer n, void *A,
                                            integer lda, char imatrix_char);
+/* Scaling matrix with values around overflow, underflow for POTRS */
+void scale_matrix_underflow_overflow_potrs(integer datatype, integer n, void *A,
+                                           integer lda, char imatrix_char, void *scal);
 #endif // TEST_OVERFLOW_UNDERFLOW_H

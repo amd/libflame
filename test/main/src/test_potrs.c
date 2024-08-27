@@ -128,7 +128,7 @@ void fla_test_potrs_experiment(test_params_t *params, integer datatype, integer 
                                double *perf, double *t, double *residual)
 {
     integer n, info = 0, nrhs, lda, ldb, vinfo = 0;
-    void *A = NULL, *A_test = NULL;
+    void *A = NULL, *A_test = NULL, *scal = NULL;
     void *B = NULL, *X = NULL;
     void *B_test = NULL;
     double time_min = 1e9;
@@ -172,6 +172,13 @@ void fla_test_potrs_experiment(test_params_t *params, integer datatype, integer 
         rand_spd_matrix(datatype, &uplo, A, n, lda);
         /* Initialize input matrix with random numbers */
         rand_matrix(datatype, B, n, nrhs, ldb);
+
+        /* Scaling matrix with values around overflow, underflow for POTRS */
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            create_realtype_vector(get_datatype(datatype), &scal, 1);
+            scale_matrix_underflow_overflow_potrs(datatype, n, A, lda, params->imatrix_char, scal);
+        }
     }
     else
     {
@@ -200,7 +207,8 @@ void fla_test_potrs_experiment(test_params_t *params, integer datatype, integer 
 
     /* Validate potrs call by computing Ax-b */
     if((info == 0) && (!FLA_EXTREME_CASE_TEST))
-        validate_potrs(n, nrhs, A_test, lda, X, B, ldb, datatype, residual, &vinfo);
+        validate_potrs(n, nrhs, A_test, lda, X, B, ldb, datatype, residual, &vinfo,
+                       params->imatrix_char);
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
     {
@@ -217,6 +225,10 @@ void fla_test_potrs_experiment(test_params_t *params, integer datatype, integer 
     free_matrix(B_test);
     free_matrix(B);
     free_matrix(X);
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
+    {
+        free_vector(scal);
+    }
 }
 
 void prepare_potrs_run(char *uplo, integer n, integer nrhs, void *A, integer lda, integer datatype,

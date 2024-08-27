@@ -1655,3 +1655,35 @@ void scale_matrix_underflow_overflow_orgqr(integer datatype, integer m, integer 
     free_vector(max_min);
     free_vector(scal);
 }
+
+/* Scaling matrix with values around overflow, underflow for POTRS */
+void scale_matrix_underflow_overflow_potrs(integer datatype, integer n, void *A,
+                                           integer lda, char imatrix_char, void *scal)
+{
+    void *max_min = NULL;
+    double tuning_val = 1.0;
+    create_vector(get_realtype(datatype), &max_min, 1);
+    if(imatrix_char == 'O')
+    {
+        get_max_from_matrix(datatype, A, max_min, n, n, lda);
+        if(n < 1000)
+        {
+            tuning_val = 1.5;
+        }
+        else
+        {
+            tuning_val = 5.0;
+        }
+    }
+    if(imatrix_char == 'U')
+    {
+        get_min_from_matrix(datatype, A, max_min, n, n, lda);
+    }
+    calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
+
+    /* Scaling the matrix A with scal */
+    scal_matrix(datatype, scal, A, n, n, lda, i_one);
+
+    /* free vectors */
+    free_vector(max_min);
+}

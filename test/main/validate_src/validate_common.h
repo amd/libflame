@@ -48,7 +48,7 @@ void validate_potrf(char *uplo, integer m, void *A, void *A_test, integer lda, i
                     double *residual, integer *info);
 
 void validate_potrs(integer n, integer nrhs, void *A, integer lda, void *X, void *B, integer ldb,
-                    integer datatype, double *residual, integer *info);
+                    integer datatype, double *residual, integer *info, char imatrix);
 
 void validate_syevd(char *jobz, integer n, void *A, void *A_test, integer lda, void *w,
                     integer datatype, double *residual, integer *info);

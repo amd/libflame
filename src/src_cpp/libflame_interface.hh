@@ -698,9 +698,9 @@ namespace libflame
            normwise relative error, which is defined as follows: \n
  \n
            Normwise relative error in the ith solution vector: \n
-                   max_j (abs(XTRUE(j,i) - X(j,i))) \n
-                  ------------------------------ \n
-                        max_j abs(X(j,i)) \n
+
+           \f[ {\frac{{max\_j}\ {(abs(XTRUE(j,i)} - X(j,i)))}{{max\_j}\ {abs(X(j,i))}}}\f] \n
+
            The array is indexed by the type of error information as described
            below. There currently are up to three pieces of information
            returned. \n
@@ -738,9 +738,9 @@ namespace libflame
            componentwise relative error, which is defined as follows: \n
  \n
            Componentwise relative error in the ith solution vector: \n
-                          abs(XTRUE(j,i) - X(j,i)) \n
-                   max_j ---------------------- \n
-                               abs(X(j,i)) \n
+
+           \f[{max\_j}\  \frac{abs(XTRUE(j,i) - X(j,i))}{abs(X(j,i))}\f] \n
+
  \n
            The array is indexed by the right-hand side i (on which the
            componentwise relative error depends), and the type of error
@@ -2915,9 +2915,9 @@ namespace libflame
           normwise relative error, which is defined as follows: \n
  \n
           Normwise relative error in the ith solution vector: \n
-                 max_j (abs(XTRUE(j,i) - X(j,i))) \n
-                ------------------------------ \n
-                      max_j abs(X(j,i)) \n
+
+          \f[\frac{{max\_j}\  (abs(XTRUE(j,i) - X(j,i)))} {{max\_j}\ abs(X(j,i))} \f] \n
+
  \n
           The array is indexed by the type of error information as described
           below. There currently are up to three pieces of information
@@ -2956,10 +2956,9 @@ namespace libflame
           componentwise relative error, which is defined as follows: \n
  \n
           Componentwise relative error in the ith solution vector: \n
-                        abs(XTRUE(j,i) - X(j,i)) \n
-                 max_j ---------------------- \n
-                             abs(X(j,i)) \n
- \n
+
+          \f[{max\_j}\  \frac{abs(XTRUE(j,i) - X(j,i))}{abs(X(j,i))} \f] \n
+
           The array is indexed by the right-hand side i (on which the
           componentwise relative error depends), and the type of error
           information as described below. There currently are up to three
@@ -3602,9 +3601,9 @@ along with error bounds
         normwise relative error, which is defined as follows: \n
  \n
         Normwise relative error in the ith solution vector: \n
-               max_j (abs(XTRUE(j,i) - X(j,i))) \n
-              ------------------------------ \n
-                    max_j abs(X(j,i)) \n
+
+        \f[\frac{{max\_j}\  (abs(XTRUE(j,i) - X(j,i)))} {{max\_j}\ abs(X(j,i))} \f] \n
+
  \n
         The array is indexed by the type of error information as described
         below. There currently are up to three pieces of information
@@ -3643,9 +3642,9 @@ along with error bounds
         componentwise relative error, which is defined as follows: \n
  \n
         Componentwise relative error in the ith solution vector: \n
-                      abs(XTRUE(j,i) - X(j,i)) \n
-               max_j ---------------------- \n
-                           abs(X(j,i)) \n
+
+        \f[{max\_j}\  \frac{abs(XTRUE(j,i) - X(j,i))}{abs(X(j,i))} \f] \n
+
  \n
         The array is indexed by the right-hand side i (on which the
         componentwise relative error depends), and the type of error
@@ -4627,9 +4626,9 @@ along with error bounds
           normwise relative error, which is defined as follows: \n
  \n
           Normwise relative error in the ith solution vector: \n
-                 max_j (abs(XTRUE(j,i) - X(j,i))) \n
-                ------------------------------ \n
-                      max_j abs(X(j,i)) \n
+
+          \f[ \frac{{max\_j}\ abs(XTRUE(j,i) - X(j,i))}{{max\_j}\ abs(X(j,i))}\f] \n
+
  \n
           The array is indexed by the type of error information as described
           below. There currently are up to three pieces of information
@@ -4668,9 +4667,9 @@ along with error bounds
           componentwise relative error, which is defined as follows: \n
  \n
           Componentwise relative error in the ith solution vector: \n
-                        abs(XTRUE(j,i) - X(j,i)) \n
-                 max_j ---------------------- \n
-                             abs(X(j,i)) \n
+
+          \f[{max\_j}\  \frac{abs(XTRUE(j,i) - X(j,i))}{abs(X(j,i))} \f] \n
+
  \n
           The array is indexed by the right-hand side i (on which the
           componentwise relative error depends), and the type of error
@@ -5476,9 +5475,9 @@ along with error bounds
           normwise relative error, which is defined as follows: \n
  \n
           Normwise relative error in the ith solution vector: \n
-                 max_j (abs(XTRUE(j,i) - X(j,i))) \n
-                ------------------------------ \n
-                      max_j abs(X(j,i)) \n
+
+          \f[ \frac{{max\_j}\  abs(XTRUE(j,i) - X(j,i))}{{max\_j}\ abs(X(j,i))} \f] \n
+
  \n
           The array is indexed by the type of error information as described
           below. There currently are up to three pieces of information
@@ -5519,9 +5518,9 @@ along with error bounds
           componentwise relative error, which is defined as follows: \n
  \n
           Componentwise relative error in the ith solution vector: \n
-                        abs(XTRUE(j,i) - X(j,i)) \n
-                 max_j ---------------------- \n
-                             abs(X(j,i)) \n
+
+          \f[{max\_j}\  \frac{abs(XTRUE(j,i) - X(j,i))}{abs(X(j,i))} \f] \n
+
  \n
           The array is indexed by the right-hand side i (on which the
           componentwise relative error depends), and the type of error
@@ -6175,9 +6174,9 @@ normwise error bounds \endverbatim
         normwise relative error, which is defined as follows: \n
  \n
         Normwise relative error in the ith solution vector: \n
-               max_j (abs(XTRUE(j,i) - X(j,i))) \n
-              ------------------------------ \n
-                    max_j abs(X(j,i)) \n
+
+        \f[ \frac{{max\_j}\  abs(XTRUE(j,i) - X(j,i))}{{max\_j}\ abs(X(j,i))} \f] \n
+
  \n
         The array is indexed by the type of error information as described
         below. There currently are up to three pieces of information
@@ -6213,9 +6212,9 @@ normwise error bounds \endverbatim
         componentwise relative error, which is defined as follows: \n
  \n
         Componentwise relative error in the ith solution vector: \n
-                      abs(XTRUE(j,i) - X(j,i)) \n
-               max_j ---------------------- \n
-                           abs(X(j,i)) \n
+
+        \f[{max\_j} \frac{abs(XTRUE(j,i) - X(j,i))}{abs(X(j,i))} \f] \n
+
  \n
         The array is indexed by the right-hand side i (on which the
         componentwise relative error depends), and the type of error
@@ -6874,9 +6873,9 @@ normwise error bounds \endverbatim
           normwise relative error, which is defined as follows: \n
  \n
           Normwise relative error in the ith solution vector: \n
-                 max_j (abs(XTRUE(j,i) - X(j,i))) \n
-                ------------------------------ \n
-                      max_j abs(X(j,i)) \n
+
+          \f[ \frac{{max\_j}\  abs(XTRUE(j,i) - X(j,i))}{{max\_j}\ abs(X(j,i))} \f] \n
+
  \n
           The array is indexed by the type of error information as described
           below. There currently are up to three pieces of information
@@ -6917,9 +6916,9 @@ normwise error bounds \endverbatim
           componentwise relative error, which is defined as follows: \n
  \n
           Componentwise relative error in the ith solution vector: \n
-                        abs(XTRUE(j,i) - X(j,i)) \n
-                 max_j ---------------------- \n
-                             abs(X(j,i)) \n
+
+          \f[{max\_j}\  \frac{abs(XTRUE(j,i) - X(j,i))}{abs(X(j,i))} \f] \n
+
  \n
           The array is indexed by the right-hand side i (on which the
           componentwise relative error depends), and the type of error
@@ -8218,9 +8217,9 @@ normwise error bounds \endverbatim
           normwise relative error, which is defined as follows: \n
  \n
           Normwise relative error in the ith solution vector: \n
-                 max_j (abs(XTRUE(j,i) - X(j,i))) \n
-                ------------------------------ \n
-                      max_j abs(X(j,i)) \n
+
+          \f[ \frac{{max\_j}\  abs(XTRUE(j,i) - X(j,i))}{{max\_j}\ abs(X(j,i))} \f] \n
+
  \n
           The array is indexed by the type of error information as described
           below. There currently are up to three pieces of information
@@ -8259,9 +8258,9 @@ normwise error bounds \endverbatim
           componentwise relative error, which is defined as follows: \n
  \n
           Componentwise relative error in the ith solution vector: \n
-                        abs(XTRUE(j,i) - X(j,i)) \n
-                 max_j ---------------------- \n
-                             abs(X(j,i)) \n
+
+          \f[{max\_j}\  \frac{abs(XTRUE(j,i) - X(j,i))}{abs(X(j,i))} \f] \n
+
  \n
           The array is indexed by the right-hand side i (on which the
           componentwise relative error depends), and the type of error
@@ -9608,9 +9607,9 @@ normwise error bounds \endverbatim
           normwise relative error, which is defined as follows: \n
  \n
           Normwise relative error in the ith solution vector: \n
-                 max_j (abs(XTRUE(j,i) - X(j,i))) \n
-                ------------------------------ \n
-                      max_j abs(X(j,i)) \n
+
+          \f[ \frac{{max\_j}\  abs(XTRUE(j,i) - X(j,i))}{{max\_j}\ abs(X(j,i))} \f] \n
+
  \n
           The array is indexed by the type of error information as described
           below. There currently are up to three pieces of information
@@ -9649,9 +9648,9 @@ normwise error bounds \endverbatim
           componentwise relative error, which is defined as follows: \n
  \n
           Componentwise relative error in the ith solution vector: \n
-                        abs(XTRUE(j,i) - X(j,i)) \n
-                 max_j ---------------------- \n
-                             abs(X(j,i)) \n
+
+          \f[{max\_j}\  \frac{abs(XTRUE(j,i) - X(j,i))}{abs(X(j,i))} \f] \n
+
  \n
           The array is indexed by the right-hand side i (on which the
           componentwise relative error depends), and the type of error
@@ -10745,9 +10744,9 @@ normwise error bounds \endverbatim
           normwise relative error, which is defined as follows: \n
  \n
           Normwise relative error in the ith solution vector: \n
-                 max_j (abs(XTRUE(j,i) - X(j,i))) \n
-                ------------------------------ \n
-                      max_j abs(X(j,i)) \n
+
+          \f[ \frac{{max\_j}\  abs(XTRUE(j,i) - X(j,i))}{{max\_j}\ abs(X(j,i))} \f] \n
+
  \n
           The array is indexed by the type of error information as described
           below. There currently are up to three pieces of information
@@ -10788,9 +10787,9 @@ normwise error bounds \endverbatim
           componentwise relative error, which is defined as follows: \n
  \n
           Componentwise relative error in the ith solution vector: \n
-                        abs(XTRUE(j,i) - X(j,i)) \n
-                 max_j ---------------------- \n
-                             abs(X(j,i)) \n
+
+          \f[{max\_j}\  \frac{abs(XTRUE(j,i) - X(j,i))}{abs(X(j,i))} \f] \n
+
  \n
           The array is indexed by the right-hand side i (on which the
           componentwise relative error depends), and the type of error

@@ -1584,3 +1584,9 @@ GENERATE_LEGEND        = YES
 # the various graphs.
 
 DOT_CLEANUP            = YES
+
+# Enable the USE_MATHJAX option to render LATEX formulas using MathJax
+# which uses client side JavaScript for the rendering instead of using
+# pre-rendered bitmaps
+
+USE_MATHJAX = YES

@@ -23,6 +23,9 @@ double prepare_lapacke_syevd_run(integer datatype, int matrix_layout, char *jobz
 integer invoke_lapacke_syevd(integer datatype, int matrix_layout, char jobz, char uplo,
                              integer n, void *a, integer lda, void *w);
 
+#define SYEVD_VL 1
+#define SYEVD_VU 5
+
 void fla_test_syevd(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "Eigen Decomposition";
@@ -172,7 +175,7 @@ void fla_test_syevd_experiment(test_params_t *params, integer datatype, integer 
         /*  Creating input matrix A by generating random eigen values.
             When range = V, generate EVs in given range (vl,vu)  */
         create_realtype_vector(datatype, &L, n);
-        generate_matrix_from_EVs(datatype, range, n, A, lda, L, 0.0, 0.0);
+        generate_matrix_from_EVs(datatype, range, n, A, lda, L, SYEVD_VL, n * SYEVD_VU);
         if(FLA_OVERFLOW_UNDERFLOW_TEST)
         {
             create_realtype_vector(get_datatype(datatype), &scal, 1);

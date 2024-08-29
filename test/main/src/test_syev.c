@@ -20,8 +20,8 @@ double prepare_lapacke_syev_run(integer datatype, int matrix_layout, char *jobz,
 integer invoke_lapacke_syev(integer datatype, int matrix_layout, char jobz, char uplo,
                             integer n, void *a, integer lda, void *w);
 
-#define SYEV_VL 0.1
-#define SYEV_VU 1000
+#define SYEV_VL 1
+#define SYEV_VU 5
 
 void fla_test_syev(integer argc, char **argv, test_params_t *params)
 {
@@ -152,7 +152,7 @@ void fla_test_syev_experiment(test_params_t *params, integer datatype, integer p
         /*  Creating input matrix A by generating random eigen values.
             When range = V, generate EVs in given range (vl,vu)  */
         create_realtype_vector(datatype, &L, n);
-        generate_matrix_from_EVs(datatype, range, n, A, lda, L, SYEV_VL, SYEV_VU);
+        generate_matrix_from_EVs(datatype, range, n, A, lda, L, SYEV_VL, n * SYEV_VU);
         if(FLA_OVERFLOW_UNDERFLOW_TEST)
         {
             create_realtype_vector(get_datatype(datatype), &scal, n);

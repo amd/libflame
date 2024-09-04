@@ -143,12 +143,17 @@ void fla_test_hgeqz_experiment(test_params_t *params, integer datatype, integer 
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
                                double *perf, double *time_min, double *residual)
 {
-    integer n, ldz, ldh, ldt, ldq, ilo, ihi, info = 0, vinfo = 0;
-    void *H = NULL, *Z = NULL, *Q = NULL, *T = NULL, *H_test = NULL, *T_test = NULL, *A = NULL,
-         *B = NULL, *Z_A = NULL, *Q_test = NULL, *Z_test = NULL, *Q_temp = NULL, *scal_A = NULL,
-         *tmp = NULL, *alpha = NULL, *alphar = NULL, *alphai = NULL, *beta = NULL, *scal_B = NULL,
-         *Q_A = NULL;
+    integer n, ldz, ldh, ldt, ldq;
+    integer ilo, ihi, info = 0, vinfo = 0;
+    void *H = NULL, *Z = NULL, *Q = NULL, *T = NULL, *H_test = NULL, *T_test = NULL, *A = NULL;
+    void *B = NULL, *Z_A = NULL, *Q_test = NULL, *Z_test = NULL, *Q_temp = NULL, *tmp = NULL,
+         *Q_ntest = NULL, *Z_ntest = NULL;
+    void *alpha = NULL, *alphar = NULL, *alphai = NULL, *beta = NULL, *scal_A = NULL,
+         *scal_B = NULL, *Q_A = NULL;
     char compz, compq, job;
+    void *alphae = NULL, *alphaer = NULL, *alphaei = NULL, *betae = NULL;
+    void *H_ntest = NULL, *T_ntest = NULL;
+    void *alphan = NULL, *alphanr = NULL, *alphani = NULL, *betan = NULL;
 
     integer test_lapacke_interface = params->test_lapacke_interface;
     integer layout = params->matrix_major;
@@ -303,6 +308,75 @@ void fla_test_hgeqz_experiment(test_params_t *params, integer datatype, integer 
                       alphai, beta, Q_test, ldq, Z_test, ldz, datatype, n_repeats, time_min, &info,
                       test_lapacke_interface, layout);
 
+    /* if job=E, in addition to the first api, also execute the api with jobe=S, compeq=N and
+     * compez=N */
+    if(job == 'E')
+    {
+        char jobe = 'S';
+        char compeq = 'N';
+        char compez = 'N';
+        double time_mine;
+
+        if(datatype == FLOAT || datatype == DOUBLE)
+        {
+            create_vector(datatype, &alphaer, n);
+            create_vector(datatype, &alphaei, n);
+        }
+        else
+        {
+            create_vector(datatype, &alphae, n);
+        }
+        create_vector(datatype, &betae, n);
+
+        /* Call the API */
+        prepare_hgeqz_run(&jobe, &compeq, &compez, n, &ilo, &ihi, H_test, ldh, T_test, ldt, alphae,
+                          alphaer, alphaei, betae, Q_test, ldq, Z_test, ldz, datatype, n_repeats,
+                          &time_mine, &info, test_lapacke_interface, layout);
+    }
+    /* If compq=N or/and compz=N, also execute the api with compnq=I and compnz=I */
+    else if(compq == 'N' || compz == 'N')
+    {
+        char compnq = 'I';
+        char compnz = 'I';
+        double time_minn;
+
+        integer ldqn = fla_max(ldq, n);
+        integer ldzn = fla_max(ldz, n);
+
+        /* Create a copy of H and T and send it to the API. H_ntest and T_ntest are used during
+         * validation */
+        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &H_ntest, ldh);
+        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &T_ntest, ldt);
+        copy_matrix(datatype, "full", n, n, H, ldh, H_ntest, ldh);
+        copy_matrix(datatype, "full", n, n, T, ldt, T_ntest, ldt);
+
+        if(datatype == FLOAT || datatype == DOUBLE)
+        {
+            create_vector(datatype, &alphanr, n);
+            create_vector(datatype, &alphani, n);
+        }
+        else
+        {
+            create_vector(datatype, &alphan, n);
+        }
+        create_vector(datatype, &betan, n);
+
+        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Q_ntest, ldqn);
+        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z_ntest, ldzn);
+
+        /* Set Q_ntest and Z_ntest matrices to identity matrices for compnq=I and compnz=I */
+        set_identity_matrix(datatype, n, n, Q_ntest, ldqn);
+        set_identity_matrix(datatype, n, n, Z_ntest, ldzn);
+
+        /* Call the API */
+        prepare_hgeqz_run(&job, &compnq, &compnz, n, &ilo, &ihi, H_ntest, ldh, T_ntest, ldt, alphan,
+                          alphanr, alphani, betan, Q_ntest, ldqn, Z_ntest, ldzn, datatype,
+                          n_repeats, &time_minn, &info, test_lapacke_interface, layout);
+        /* Free the matrices */
+        free_matrix(Q_ntest);
+        free_matrix(Z_ntest);
+    }
+
     /* Performance computation
        (7)n^3 flops for eigen vectors for real
        (25)n^3 flops for eigen vectors for complex
@@ -335,9 +409,27 @@ void fla_test_hgeqz_experiment(test_params_t *params, integer datatype, integer 
 
     /* Output Validation */
     if(info == 0)
-        validate_hgeqz(&job, &compq, &compz, n, H, H_test, A, ldh, T, T_test, B, ldt, Q, Q_test,
-                       Q_A, ldq, Z, Z_test, Z_A, ldz, datatype, residual, params->imatrix_char,
-                       &vinfo);
+    {
+        /* If job=E, validate eigen values from the first and second api calls */
+        if(job == 'E')
+        {
+            validate_hgeqz_eigen_values(datatype, n, alpha, alphar, alphai, beta, alphae, alphaer,
+                                        alphaei, betae, residual);
+        }
+        /* If compq=N or compz=N, validate eigen values from the first and second api
+           calls. Then validate H_test and T_test matrices */
+        else if(compq == 'N' || compz == 'N')
+        {
+            validate_hgeqz_comp_n(datatype, n, H_test, H_ntest, ldh, T_test, T_ntest, ldt, alpha,
+                                  alphar, alphai, beta, alphan, alphanr, alphani, betan, residual);
+        }
+        else
+        {
+            validate_hgeqz(&job, &compq, &compz, n, H, H_test, A, ldh, T, T_test, B, ldt, Q, Q_test,
+                           Q_A, ldq, Z, Z_test, Z_A, ldz, datatype, residual, params->imatrix_char,
+                           &vinfo);
+        }
+    }
 
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
@@ -359,15 +451,39 @@ void fla_test_hgeqz_experiment(test_params_t *params, integer datatype, integer 
     {
         free_vector(alphar);
         free_vector(alphai);
+        if(job == 'E')
+        {
+            free_vector(alphaer);
+            free_vector(alphaei);
+        }
+
+        if(compq == 'N' || compz == 'N')
+        {
+            free_vector(alphanr);
+            free_vector(alphani);
+        }
     }
     else
     {
         free_vector(alpha);
+        if(job == 'E')
+            free_vector(alphae);
+        if(compq == 'N' || compz == 'N')
+            free_vector(alphan);
     }
     if(FLA_OVERFLOW_UNDERFLOW_TEST)
     {
         free_vector(scal_A);
         free_vector(scal_B);
+    }
+
+    if(job == 'E')
+        free_vector(betae);
+    if(compq == 'N' || compz == 'N')
+    {
+        free_vector(betan);
+        free_matrix(H_ntest);
+        free_matrix(T_ntest);
     }
 }
 

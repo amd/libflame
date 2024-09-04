@@ -10,13 +10,103 @@
 
 void validate_gghrd(char *compq, char *compz, integer n, void *A, void *A_test, integer lda,
                     void *B, void *B_test, integer ldb, void *Q, void *Q_test, integer ldq, void *Z,
-                    void *Z_test, integer ldz, integer datatype, double *residual, integer *info)
+                    void *Z_test, integer ldz, integer datatype, double *residual)
 {
-    if(n == 0 || *compq == 'N' || *compz == 'N')
+    if(n == 0)
         return;
 
+    /* If compq=N or/and compz=N, just compare A/A_test and B/B_test matrices and return */
+    if(*compq == 'N' || *compz == 'N')
+    {
+        void *work = NULL;
+        switch(datatype)
+        {
+            case FLOAT:
+            {
+                /* Compare A and A_test matrices */
+                float eps, norm_H, norm, resid1, norm_T, resid2;
+                eps = fla_lapack_slamch("P");
+                create_vector(datatype, &work, n);
+                norm_H = fla_lapack_slange("1", &n, &n, A, &lda, work);
+                matrix_difference(datatype, n, n, A, lda, A_test, lda);
+                norm = fla_lapack_slange("1", &n, &n, A, &lda, work);
+                resid1 = norm / (float)n / norm_H / eps;
+
+                /* Compare B and B_test matrices */
+                norm_T = fla_lapack_slange("1", &n, &n, B, &ldb, work);
+                matrix_difference(datatype, n, n, B, lda, B_test, lda);
+                norm = fla_lapack_slange("1", &n, &n, B, &ldb, work);
+                resid2 = norm / (float)n / norm_T / eps;
+
+                *residual = (double)fla_max(resid1, resid2);
+                break;
+            }
+            case DOUBLE:
+            {
+                /* Compare A and A_test matrices */
+                double eps, norm_H, norm, resid1, norm_T, resid2;
+                eps = fla_lapack_dlamch("P");
+                create_vector(datatype, &work, n);
+                norm_H = fla_lapack_dlange("1", &n, &n, A, &lda, work);
+                matrix_difference(datatype, n, n, A, lda, A_test, lda);
+                norm = fla_lapack_dlange("1", &n, &n, A, &lda, work);
+                resid1 = norm / (double)n / norm_H / eps;
+
+                /* Compare B and B_test matrices */
+                norm_T = fla_lapack_dlange("1", &n, &n, B, &ldb, work);
+                matrix_difference(datatype, n, n, B, lda, B_test, lda);
+                norm = fla_lapack_dlange("1", &n, &n, B, &ldb, work);
+                resid2 = norm / (double)n / norm_T / eps;
+
+                *residual = (double)fla_max(resid1, resid2);
+                break;
+            }
+            case COMPLEX:
+            {
+                /* Compare A and A_test matrices */
+                float eps, norm_H, norm, resid1, norm_T, resid2;
+                eps = fla_lapack_slamch("P");
+                create_vector(datatype, &work, n);
+                norm_H = fla_lapack_clange("1", &n, &n, A, &lda, work);
+                matrix_difference(datatype, n, n, A, lda, A_test, lda);
+                norm = fla_lapack_clange("1", &n, &n, A, &lda, work);
+                resid1 = norm / (float)n / norm_H / eps;
+
+                /* Compare B and B_test matrices */
+                norm_T = fla_lapack_clange("1", &n, &n, B, &ldb, work);
+                matrix_difference(datatype, n, n, B, lda, B_test, lda);
+                norm = fla_lapack_clange("1", &n, &n, B, &ldb, work);
+                resid2 = norm / (float)n / norm_T / eps;
+
+                *residual = (double)fla_max(resid1, resid2);
+                break;
+            }
+            case DOUBLE_COMPLEX:
+            {
+                /* Compare A and A_test matrices */
+                double eps, norm_H, norm, resid1, norm_T, resid2;
+                eps = fla_lapack_dlamch("P");
+                create_vector(datatype, &work, n);
+                norm_H = fla_lapack_zlange("1", &n, &n, A, &lda, work);
+                matrix_difference(datatype, n, n, A, lda, A_test, lda);
+                norm = fla_lapack_zlange("1", &n, &n, A, &lda, work);
+                resid1 = norm / (double)n / norm_H / eps;
+
+                /* Compare B and B_test matrices */
+                norm_T = fla_lapack_zlange("1", &n, &n, B, &ldb, work);
+                matrix_difference(datatype, n, n, B, lda, B_test, lda);
+                norm = fla_lapack_zlange("1", &n, &n, B, &ldb, work);
+                resid2 = norm / (double)n / norm_T / eps;
+
+                *residual = (double)fla_max(resid1, resid2);
+                break;
+            }
+        }
+        free_vector(work);
+        return;
+    }
+
     void *work = NULL, *lambda = NULL, *alambda = NULL, *Q_tmp = NULL, *Z_tmp = NULL;
-    *info = 0;
 
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &lambda, n);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &alambda, n);

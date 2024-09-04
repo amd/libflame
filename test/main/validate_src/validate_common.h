@@ -84,7 +84,13 @@ void validate_ggevx(char *balanc, char *jobvl, char *jobvr, char *sense, integer
    if compz = N.*/
 void validate_stedc(char compz, integer n, void *D_test, void *Z_input, void *Z, integer ldz,
                     integer datatype, double *residual, integer *info);
-
+void validate_hgeqz_comp_n(integer datatype, integer n, void *H_test, void *H_ntest, integer ldh,
+                           void *T_test, void *T_ntest, integer ldt, void *alpha, void *alphar,
+                           void *alphai, void *beta, void *alphan, void *alphanr, void *alphani,
+                           void *betan, double *residual);
+void validate_hgeqz_eigen_values(integer datatype, integer n, void *alpha, void *alphar,
+                                 void *alphai, void *beta, void *alphae, void *alphaer,
+                                 void *alphaei, void *betae, double *residual);
 void validate_hgeqz(char *job, char *compq, char *compz, integer n, void *H, void *H_test, void *A,
                     integer ldh, void *T, void *T_test, void *B, integer ldt, void *Q, void *Q_test,
                     void *Q_A, integer ldq, void *Z, void *Z_test, void *Z_A, integer ldz,
@@ -103,7 +109,7 @@ void validate_spffrtx(integer n, integer ncolm, void *A, void *AP, integer datat
 
 void validate_gghrd(char *compq, char *compz, integer n, void *A, void *A_test, integer lda,
                     void *B, void *B_test, integer ldb, void *Q, void *Q_test, integer ldq, void *Z,
-                    void *Z_test, integer ldz, integer datatype, double *residual, integer *info);
+                    void *Z_test, integer ldz, integer datatype, double *residual);
 
 void validate_gehrd(integer n, integer ilo, integer ihi, void *A, void *A_test, integer lda,
                     void *tau, integer datatype, double *residual, integer *info);

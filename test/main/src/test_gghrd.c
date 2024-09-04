@@ -139,9 +139,10 @@ void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer 
                                double *perf, double *time_min, double *residual)
 {
     integer n, ldz, lda, ldb, ldq;
-    integer ilo, ihi, info = 0, vinfo = 0;
+    integer ilo, ihi, info = 0;
     void *A = NULL, *Z = NULL, *Q = NULL, *B = NULL, *A_test = NULL, *B_test = NULL, *Q_test = NULL,
-         *Z_test = NULL, *tmp = NULL, *Q_tmp = NULL;
+         *Z_test = NULL, *tmp = NULL, *Q_tmp = NULL, *A_ntest = NULL, *B_ntest = NULL,
+         *Q_ntest = NULL, *Z_ntest = NULL;
     char compz, compq;
 
     integer test_lapacke_interface = params->test_lapacke_interface;
@@ -248,19 +249,46 @@ void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer 
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &B_test, ldb);
     if(compq != 'N')
+    {
         create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Q_test, ldq);
+        copy_matrix(datatype, "full", n, n, Q, ldq, Q_test, ldq);
+    }
     if(compz != 'N')
+    {
         create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z_test, ldz);
+        copy_matrix(datatype, "full", n, n, Z, ldz, Z_test, ldz);
+    }
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
     copy_matrix(datatype, "full", n, n, B, ldb, B_test, ldb);
-    if(compq != 'N')
-        copy_matrix(datatype, "full", n, n, Q, ldq, Q_test, ldq);
-    if(compz != 'N')
-        copy_matrix(datatype, "full", n, n, Z, ldz, Z_test, ldz);
 
     prepare_gghrd_run(&compq, &compz, n, &ilo, &ihi, A_test, lda, B_test, ldb, Q_test, ldq, Z_test,
                       ldz, datatype, n_repeats, time_min, &info, test_lapacke_interface, layout);
 
+    /* If compq=N or/and compz=N, in addition to the first api call, also execute
+       second api call with compq=I and compz=I. And validate the H and T matrices from
+       the two calls */
+    if(compq == 'N' || compz == 'N')
+    {
+        char compnq = 'I';
+        char compnz = 'I';
+        double time_minn;
+        integer ldqn = fla_max(ldq, n);
+        integer ldzn = fla_max(ldz, n);
+
+        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_ntest, lda);
+        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &B_ntest, ldb);
+        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Q_ntest, ldqn);
+        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z_ntest, ldzn);
+        copy_matrix(datatype, "full", n, n, A, lda, A_ntest, lda);
+        copy_matrix(datatype, "full", n, n, B, ldb, B_ntest, ldb);
+        set_identity_matrix(datatype, n, n, Q_ntest, ldqn);
+        set_identity_matrix(datatype, n, n, Z_ntest, ldzn);
+        prepare_gghrd_run(&compnq, &compnz, n, &ilo, &ihi, A_ntest, lda, B_ntest, ldb, Q_ntest,
+                          ldqn, Z_ntest, ldzn, datatype, n_repeats, &time_minn, &info,
+                          test_lapacke_interface, layout);
+        free_matrix(Q_ntest);
+        free_matrix(Z_ntest);
+    }
     /* Performance computation
        (7)n^3 flops for eigen vectors for real
        (25)n^3 flops for eigen vectors for complex
@@ -293,8 +321,20 @@ void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer 
 
     /* Output Validation */
     if(info == 0)
-        validate_gghrd(&compq, &compz, n, A, A_test, lda, B, B_test, ldb, Q, Q_test, ldq, Z, Z_test,
-                       ldz, datatype, residual, &vinfo);
+    {
+        if(compq == 'N' || compz == 'N')
+        {
+            /* Validation for compq=N or/and compz=N case */
+            validate_gghrd(&compq, &compz, n, A_test, A_ntest, lda, B_test, B_ntest, ldb, Q, Q_test,
+                           ldq, Z, Z_test, ldz, datatype, residual);
+        }
+        else
+        {
+            /* Validation for other cases */
+            validate_gghrd(&compq, &compz, n, A, A_test, lda, B, B_test, ldb, Q, Q_test, ldq, Z,
+                           Z_test, ldz, datatype, residual);
+        }
+    }
 
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
@@ -305,8 +345,15 @@ void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer 
     free_matrix(Z);
     free_matrix(A_test);
     free_matrix(B_test);
-    free_matrix(Q_test);
-    free_matrix(Z_test);
+    if(compq != 'N')
+        free_matrix(Q_test);
+    if(compz != 'N')
+        free_matrix(Z_test);
+    if(compq == 'N' || compz == 'N')
+    {
+        free_matrix(A_ntest);
+        free_matrix(B_ntest);
+    }
 }
 
 void prepare_gghrd_run(char *compq, char *compz, integer n, integer *ilo, integer *ihi, void *A,

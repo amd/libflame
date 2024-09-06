@@ -180,10 +180,9 @@ char *fla_mem_alloc(size_t size);
    On output: A has upper hessenberg matrix
               Z has orthogonal matrix */
 void get_hessenberg_matrix(integer datatype, integer n, void *A, integer lda, void *Z, integer ldz,
-                           integer *ilo, integer *ihi, integer *info, bool AInitialized);
+                           integer *ilo, integer *ihi, integer *info, integer AInitialized);
 /* Generate Hessenberg matrix from eigen values.
-   On input: If AInitialized is false, then A will be initialized with random matrix.
-             Else, A has initialized by caller.
+   On input: A and Z need to be allocated by caller.
    On output: A has upper hessenberg matrix.
               Z has orthogonal matrix.
               wr_in has eigen values.
@@ -191,7 +190,7 @@ void get_hessenberg_matrix(integer datatype, integer n, void *A, integer lda, vo
               for real/double datatypes. */
 void get_hessenberg_matrix_from_EVs(integer datatype, integer n, void *A, integer lda, void *Z,
                                     integer ldz, integer *ilo, integer *ihi, integer *info,
-                                    bool AInitialized, void *wr_in, void *wi_in);
+                                    void *wr_in, void *wi_in);
 /* Convert matrix to upper hessenberg form */
 void convert_upper_hessenberg(integer datatype, integer n, void *A, integer lda);
 /* Pack a symmetric matrix in column first order */
@@ -200,7 +199,7 @@ void pack_matrix_lt(integer datatype, void *A, void *B, integer N, integer lda);
 void extract_upper_hessenberg_matrix(integer datatype, integer n, void *A, integer lda);
 /* Convert matrix according to ILO and IHI values */
 void get_generic_triangular_matrix(integer datatype, integer N, void *A, integer LDA, integer ilo,
-                                   integer ihi, bool AInitialized);
+                                   integer ihi, integer AInitialized);
 /* Decompose matrix A in to QR and store orthogonal matrix in Q and R in A*/
 void get_orthogonal_matrix_from_QR(integer datatype, integer n, void *A, integer lda, void *Q,
                                    integer ldq, integer *info);
@@ -209,9 +208,11 @@ void get_orthogonal_matrix_from_QR(integer datatype, integer n, void *A, integer
    else if order == 'R' matrix will be printed in rows first order*/
 void print_matrix(char *desc, char *order, integer datatype, integer M, integer N, void *A,
                   integer lda);
-/* Get upper triangular matrix or lower triangular matrix based on UPLO */
-void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, void *A,
-                           integer lda);
+/* Get upper triangular matrix or lower triangular matrix based on UPLO.
+   If A_init is false, initialize A with random values.
+   Else A is already initialized by caller. */
+void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, void *A, integer lda,
+                           integer A_init);
 /*To Check order of Singular values of SVD (positive and non-decreasing)*/
 double svd_check_order(integer datatype, void *s, integer m, integer n, double residual);
 /*Generate Matrix for SVD*/
@@ -228,7 +229,8 @@ void init_matrix(integer datatype, void *A, integer M, integer N, integer LDA, F
 void init_matrix_spec_rand_in(integer datatype, void *A, integer M, integer N, integer LDA,
                               char type);
 /*Test to check the extreme values propagation in output matrix */
-bool check_extreme_value(integer datatype, integer M, integer N, void *A, integer LDA, char type);
+integer check_extreme_value(integer datatype, integer M, integer N, void *A, integer LDA,
+                            char type);
 /*Intialize vector according to given input*/
 void init_vector(integer datatype, void *A, integer M, integer incx, FILE *g_ext_fptr,
                  char ivector_char);

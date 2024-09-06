@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -82,35 +82,39 @@ void fla_test_gghrd(integer argc, char **argv, test_params_t *params)
         }
         n_repeats = strtoimax(argv[12], &endptr, CLI_DECIMAL_BASE);
 
-        if(n_repeats > 0)
+        /* Skip if imatrix is I or F as API doesnot support the INF inputs. */
+        if((params->imatrix_char != 'I') && (params->imatrix_char != 'F'))
         {
-            params->lin_solver_paramslist[0].solver_threshold = CLI_NORM_THRESH;
-
-            for(i = 0; i < num_types; i++)
+            if(n_repeats > 0)
             {
-                stype = argv[2][i];
-                datatype = get_datatype(stype);
+                params->lin_solver_paramslist[0].solver_threshold = CLI_NORM_THRESH;
 
-                /* Check for invalide dataype */
-                if(datatype == INVALID_TYPE)
+                for(i = 0; i < num_types; i++)
                 {
-                    invalid_dtype = 1;
-                    continue;
+                    stype = argv[2][i];
+                    datatype = get_datatype(stype);
+
+                    /* Check for invalide dataype */
+                    if(datatype == INVALID_TYPE)
+                    {
+                        invalid_dtype = 1;
+                        continue;
+                    }
+
+                    /* Check for duplicate datatype presence */
+                    if(type_flag[datatype - FLOAT] == 1)
+                        continue;
+                    type_flag[datatype - FLOAT] = 1;
+
+                    /* Call the test code */
+                    fla_test_gghrd_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
+                                              &time_min, &residual);
+                    /* Print the results */
+                    fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
+                                          params->lin_solver_paramslist[0].solver_threshold,
+                                          time_min, perf);
+                    tests_not_run = 0;
                 }
-
-                /* Check for duplicate datatype presence */
-                if(type_flag[datatype - FLOAT] == 1)
-                    continue;
-                type_flag[datatype - FLOAT] = 1;
-
-                /* Call the test code */
-                fla_test_gghrd_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
-                                          &time_min, &residual);
-                /* Print the results */
-                fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
-                                      params->lin_solver_paramslist[0].solver_threshold, time_min,
-                                      perf);
-                tests_not_run = 0;
             }
         }
     }
@@ -121,6 +125,10 @@ void fla_test_gghrd(integer argc, char **argv, test_params_t *params)
         printf("\nIllegal arguments for GGHRD\n");
         printf("./<EXE> gghrd <precisions - sdcz> <compq> <compz> <N> <ILO> <IHI> <LDA> <LDB> "
                "<LDQ> <LDZ> <repeats>\n");
+        if((params->imatrix_char != 'N') || (params->imatrix_char != 'A'))
+        {
+            printf("imatrix should be N or A, as API does not support INF as inputs.\n");
+        }
     }
     if(invalid_dtype)
     {
@@ -131,7 +139,6 @@ void fla_test_gghrd(integer argc, char **argv, test_params_t *params)
         fclose(g_ext_fptr);
         g_ext_fptr = NULL;
     }
-    return;
 }
 
 void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer p_cur,
@@ -139,10 +146,10 @@ void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer 
                                double *perf, double *time_min, double *residual)
 {
     integer n, ldz, lda, ldb, ldq;
-    integer ilo, ihi, info = 0;
+    integer ilo, ihi, info = 0, ABInitialized = 0;
     void *A = NULL, *Z = NULL, *Q = NULL, *B = NULL, *A_test = NULL, *B_test = NULL, *Q_test = NULL,
-         *Z_test = NULL, *tmp = NULL, *Q_tmp = NULL, *A_ntest = NULL, *B_ntest = NULL,
-         *Q_ntest = NULL, *Z_ntest = NULL;
+         *Z_test = NULL, *temp = NULL, *A_ntest = NULL, *B_ntest = NULL, *Q_ntest = NULL,
+         *Z_ntest = NULL;
     char compz, compq;
 
     integer test_lapacke_interface = params->test_lapacke_interface;
@@ -218,36 +225,53 @@ void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer 
     }
     else
     {
-        /* Generate upper triangular matrix B */
-        rand_matrix(datatype, B, n, n, ldb);
-        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Q_tmp, n);
-        get_orthogonal_matrix_from_QR(datatype, n, B, ldb, Q_tmp, n, &info);
-
-        /* Set Q matrix from the QR factorization of initial B */
-        if(compq != 'N')
-            copy_matrix(datatype, "full", n, n, Q_tmp, n, Q, ldq);
-        free_matrix(Q_tmp);
-
-        /* Generate orthogonal matrix Z */
-        if(compz == 'V')
+        /* Initialize A, B matrices. */
+        if((params->imatrix_char == 'N') || (params->imatrix_char == 'A'))
         {
-            create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &tmp, n);
-            rand_matrix(datatype, tmp, n, n, n);
-            get_orthogonal_matrix_from_QR(datatype, n, tmp, n, Z, ldz, &info);
-            free_matrix(tmp);
+            init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+            init_matrix(datatype, B, n, n, ldb, g_ext_fptr, params->imatrix_char);
+            ABInitialized = 1;
+        }
+        else if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            rand_matrix(datatype, A, n, n, lda);
+            rand_matrix(datatype, B, n, n, ldb);
+            scale_matrix_underflow_overflow_gghrd(datatype, n, A, lda, params->imatrix_char);
+            scale_matrix_underflow_overflow_gghrd(datatype, n, B, ldb, params->imatrix_char);
+            ABInitialized = 1;
+        }
+        get_triangular_matrix("U", datatype, n, n, B, ldb, ABInitialized);
+        get_generic_triangular_matrix(datatype, n, A, lda, ilo, ihi, ABInitialized);
+
+        /* Initialize Q matrix. */
+        if(compq == 'I')
+        {
+            set_identity_matrix(datatype, n, n, Q, ldq);
+        }
+        else if(compq == 'V')
+        {
+            get_orthogonal_matrix_from_QR(datatype, n, B, ldb, Q, ldq, &info);
         }
 
-        /* If compq = I, set Q to identity matrix. If compz = I, set Z to identity matrix */
-        if(compq == 'I')
-            set_identity_matrix(datatype, n, n, Q, ldq);
+        /* Initialize Z matrix. */
         if(compz == 'I')
+        {
             set_identity_matrix(datatype, n, n, Z, ldz);
-        get_generic_triangular_matrix(datatype, n, A, lda, ilo, ihi, false);
+        }
+        else if(compz == 'V')
+        {
+            create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &temp, n);
+            rand_matrix(datatype, temp, n, n, n);
+            get_orthogonal_matrix_from_QR(datatype, n, temp, n, Z, ldz, &info);
+            free_matrix(temp);
+        }
     }
 
     /* Make copy of matrix A,B,Q and Z. This is required to validate the API functionality */
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &B_test, ldb);
+    copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
+    copy_matrix(datatype, "full", n, n, B, ldb, B_test, ldb);
     if(compq != 'N')
     {
         create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Q_test, ldq);
@@ -258,8 +282,6 @@ void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer 
         create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z_test, ldz);
         copy_matrix(datatype, "full", n, n, Z, ldz, Z_test, ldz);
     }
-    copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
-    copy_matrix(datatype, "full", n, n, B, ldb, B_test, ldb);
 
     prepare_gghrd_run(&compq, &compz, n, &ilo, &ihi, A_test, lda, B_test, ldb, Q_test, ldq, Z_test,
                       ldz, datatype, n_repeats, time_min, &info, test_lapacke_interface, layout);
@@ -322,21 +344,34 @@ void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer 
     /* Output Validation */
     if(info == 0)
     {
-        if(compq == 'N' || compz == 'N')
+        if(!FLA_EXTREME_CASE_TEST)
         {
-            /* Validation for compq=N or/and compz=N case */
-            validate_gghrd(&compq, &compz, n, A_test, A_ntest, lda, B_test, B_ntest, ldb, Q, Q_test,
-                           ldq, Z, Z_test, ldz, datatype, residual);
+            if(compq == 'N' || compz == 'N')
+            {
+                /* Validation for compq=N or/and compz=N case */
+                validate_gghrd(&compq, &compz, n, A_test, A_ntest, lda, B_test, B_ntest, ldb, Q,
+                               Q_test, ldq, Z, Z_test, ldz, datatype, residual);
+            }
+            else
+            {
+                /* Validation for other cases */
+                validate_gghrd(&compq, &compz, n, A, A_test, lda, B, B_test, ldb, Q, Q_test, ldq, Z,
+                               Z_test, ldz, datatype, residual);
+            }
         }
-        else
+        else if((params->imatrix_char == 'N') || (params->imatrix_char == 'A'))
         {
-            /* Validation for other cases */
-            validate_gghrd(&compq, &compz, n, A, A_test, lda, B, B_test, ldb, Q, Q_test, ldq, Z,
-                           Z_test, ldz, datatype, residual);
+            if((!check_extreme_value(datatype, n, n, A_test, lda, params->imatrix_char))
+               && (!check_extreme_value(datatype, n, n, B_test, ldb, params->imatrix_char)))
+            {
+                *residual = DBL_MAX;
+            }
         }
     }
-
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    else
+    {
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    }
 
     /* Free up the buffers */
     free_matrix(A);
@@ -346,9 +381,13 @@ void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer 
     free_matrix(A_test);
     free_matrix(B_test);
     if(compq != 'N')
+    {
         free_matrix(Q_test);
+    }
     if(compz != 'N')
+    {
         free_matrix(Z_test);
+    }
     if(compq == 'N' || compz == 'N')
     {
         free_matrix(A_ntest);

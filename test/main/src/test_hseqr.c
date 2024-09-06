@@ -203,7 +203,7 @@ void fla_test_hseqr_experiment(test_params_t *params, integer datatype, integer 
             reset_vector(datatype, wi_in, n, 1);
         }
 
-        get_hessenberg_matrix_from_EVs(datatype, n, H, ldh, Z, ldz, &ilo, &ihi, &info, true, wr_in,
+        get_hessenberg_matrix_from_EVs(datatype, n, H, ldh, Z, ldz, &ilo, &ihi, &info, wr_in,
                                        wi_in);
         if(FLA_OVERFLOW_UNDERFLOW_TEST)
         {

@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 
 /*! @file validate_gghrd.c
@@ -12,13 +12,14 @@ void validate_gghrd(char *compq, char *compz, integer n, void *A, void *A_test, 
                     void *B, void *B_test, integer ldb, void *Q, void *Q_test, integer ldq, void *Z,
                     void *Z_test, integer ldz, integer datatype, double *residual)
 {
+    void *work = NULL, *lambda = NULL, *alambda = NULL, *Q_tmp = NULL, *Z_tmp = NULL;
+
     if(n == 0)
         return;
 
     /* If compq=N or/and compz=N, just compare A/A_test and B/B_test matrices and return */
     if(*compq == 'N' || *compz == 'N')
     {
-        void *work = NULL;
         switch(datatype)
         {
             case FLOAT:
@@ -105,8 +106,6 @@ void validate_gghrd(char *compq, char *compz, integer n, void *A, void *A_test, 
         free_vector(work);
         return;
     }
-
-    void *work = NULL, *lambda = NULL, *alambda = NULL, *Q_tmp = NULL, *Z_tmp = NULL;
 
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &lambda, n);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &alambda, n);

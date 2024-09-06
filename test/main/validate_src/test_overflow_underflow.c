@@ -1892,3 +1892,87 @@ void scale_matrix_overflow_underflow_hseqr(integer datatype, integer n, void *A,
     /* Free vectors */
     free_vector(max_min);
 }
+
+/* Scaling matrix with values around overflow underflow for GEHRD */
+void scale_matrix_underflow_overflow_gehrd(integer datatype, integer n, void *A,
+                                           integer lda, char imatrix_char)
+{
+    void *max_min = NULL, *scal = NULL;
+    double tuning_val = 1.0;
+    create_vector(get_realtype(datatype), &max_min, 1);
+    create_vector(get_realtype(datatype), &scal, 1);
+    if(imatrix_char == 'O')
+    {
+        if(n < 50)
+        {
+            tuning_val = 7.0;
+        }
+        else if(n < 100)
+        {
+            tuning_val = 10.0;
+        }
+        else if(n < 200)
+        {
+            tuning_val = 14.0;
+        }
+        else
+        {
+            tuning_val = 20.0;
+        }
+        get_max_from_matrix(datatype, A, max_min, n, n, lda);
+    }
+    else if(imatrix_char == 'U')
+    {
+        get_min_from_matrix(datatype, A, max_min, n, n, lda);
+    }
+    calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
+
+    /* Scaling the matrix A with scal */
+    scal_matrix(datatype, scal, A, n, n, lda, i_one);
+
+    /* free vectors */
+    free_vector(max_min);
+    free_vector(scal);
+}
+
+/* Scaling matrix with values around overflow underflow for GGHRD */
+void scale_matrix_underflow_overflow_gghrd(integer datatype, integer n, void *A,
+                                           integer lda, char imatrix_char)
+{
+    void *max_min = NULL, *scal = NULL;
+    double tuning_val = 1.0;
+    create_vector(get_realtype(datatype), &max_min, 1);
+    create_vector(get_realtype(datatype), &scal, 1);
+    if(imatrix_char == 'O')
+    {
+        if(n < 50)
+        {
+            tuning_val = 5.0;
+        }
+        else if(n < 100)
+        {
+            tuning_val = 9.0;
+        }
+        else if(n < 200)
+        {
+            tuning_val = 13.0;
+        }
+        else
+        {
+            tuning_val = 20.0;
+        }
+        get_max_from_matrix(datatype, A, max_min, n, n, lda);
+    }
+    else if(imatrix_char == 'U')
+    {
+        get_min_from_matrix(datatype, A, max_min, n, n, lda);
+    }
+    calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
+
+    /* Scaling the matrix A with scal */
+    scal_matrix(datatype, scal, A, n, n, lda, i_one);
+
+    /* free vectors */
+    free_vector(max_min);
+    free_vector(scal);
+}

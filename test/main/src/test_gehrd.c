@@ -118,7 +118,7 @@ void fla_test_gehrd_experiment(test_params_t *params, integer datatype, integer 
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
                                double *perf, double *time_min, double *residual)
 {
-    integer n, lda;
+    integer n, lda, AInitialized = 0;
     integer ilo, ihi, info = 0, vinfo = 0;
     void *A = NULL, *A_Test = NULL, *tau = NULL;
 
@@ -154,8 +154,19 @@ void fla_test_gehrd_experiment(test_params_t *params, integer datatype, integer 
     }
     else
     {
+        if(FLA_EXTREME_CASE_TEST)
+        {
+            init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+            AInitialized = 1;
+        }
+        else if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            rand_matrix(datatype, A, n, n, lda);
+            scale_matrix_underflow_overflow_gehrd(datatype, n, A, lda, params->imatrix_char);
+            AInitialized = 1;
+        }
         /* Intialize matrix H with ILO and IHI conditions to generate hessenberg matrix */
-        get_generic_triangular_matrix(datatype, n, A, lda, ilo, ihi, false);
+        get_generic_triangular_matrix(datatype, n, A, lda, ilo, ihi, AInitialized);
     }
 
     /* Make copy of matrix A. This is required to validate the API functionality */
@@ -178,9 +189,23 @@ void fla_test_gehrd_experiment(test_params_t *params, integer datatype, integer 
 
     /* Output Validation */
     if(info == 0)
-        validate_gehrd(n, ilo, ihi, A, A_Test, lda, tau, datatype, residual, &vinfo);
-
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    {
+        if(!FLA_EXTREME_CASE_TEST)
+        {
+            validate_gehrd(n, ilo, ihi, A, A_Test, lda, tau, datatype, residual, &vinfo);
+        }
+        else
+        {
+            if((!check_extreme_value(datatype, n, n, A_Test, lda, params->imatrix_char)))
+            {
+                *residual = DBL_MAX;
+            }
+        }
+    }
+    else
+    {
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    }
 
     /* Free up the buffers */
     free_matrix(A);

@@ -377,8 +377,7 @@ void copy_realtype_vector(integer datatype, integer M, void *A, integer LDA, voi
 }
 
 /* create matrix of given datatype */
-void create_matrix(integer datatype, int matrix_layout, integer M, integer N, void **A,
-                   integer lda)
+void create_matrix(integer datatype, int matrix_layout, integer M, integer N, void **A, integer lda)
 {
     integer rs, cs;
     *A = NULL;
@@ -2066,7 +2065,7 @@ void init_vector_from_file(integer datatype, void *A, integer m, integer inc, FI
 
 /* Convert matrix according to ILO and IHI values */
 void get_generic_triangular_matrix(integer datatype, integer N, void *A, integer LDA, integer ilo,
-                                   integer ihi, bool AInitialized)
+                                   integer ihi, integer AInitialized)
 {
     integer i;
 
@@ -2149,8 +2148,7 @@ void get_generic_triangular_matrix(integer datatype, integer N, void *A, integer
 }
 
 /* Generate Hessenberg matrix from eigen values.
-   On input: If AInitialized is false, then A will be initialized with random matrix.
-             Else, A has initialized by caller.
+   On input: A and Z need to be allocated by caller.
    On output: A has upper hessenberg matrix.
               Z has orthogonal matrix.
               wr_in has eigen values.
@@ -2158,9 +2156,10 @@ void get_generic_triangular_matrix(integer datatype, integer N, void *A, integer
               for real/double datatypes. */
 void get_hessenberg_matrix_from_EVs(integer datatype, integer n, void *A, integer lda, void *Z,
                                     integer ldz, integer *ilo, integer *ihi, integer *info,
-                                    bool AInitialized, void *wr_in, void *wi_in)
+                                    void *wr_in, void *wi_in)
 {
     void *A_sub = NULL, *L = NULL, *wr_sub_in = NULL, *wi_sub_in = NULL, *L_tmp = NULL;
+    integer AInitialized = 1;
 
     /* Initialize matrix A */
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &L_tmp, n);
@@ -2173,7 +2172,8 @@ void get_hessenberg_matrix_from_EVs(integer datatype, integer n, void *A, intege
     /* Generate a square matrix A_sub of size *ihi-*ilo+1 with known eigen values in L */
     create_matrix(datatype, LAPACK_COL_MAJOR, *ihi - *ilo + 1, *ihi - *ilo + 1, &A_sub,
                   *ihi - *ilo + 1);
-    create_matrix(datatype, LAPACK_COL_MAJOR, *ihi - *ilo + 1, *ihi - *ilo + 1, &L, *ihi - *ilo + 1);
+    create_matrix(datatype, LAPACK_COL_MAJOR, *ihi - *ilo + 1, *ihi - *ilo + 1, &L,
+                  *ihi - *ilo + 1);
     generate_asym_matrix_from_EVs(datatype, *ihi - *ilo + 1, A_sub, *ihi - *ilo + 1, L);
 
     /* Get the diagonal elements of L into wr_sub_in and copy them into wr_in */
@@ -2219,7 +2219,7 @@ void get_hessenberg_matrix_from_EVs(integer datatype, integer n, void *A, intege
    On output: A has upper hessenberg matrix
               Z has orthogonal matrix */
 void get_hessenberg_matrix(integer datatype, integer n, void *A, integer lda, void *Z, integer ldz,
-                           integer *ilo, integer *ihi, integer *info, bool AInitialized)
+                           integer *ilo, integer *ihi, integer *info, integer AInitialized)
 {
     static integer g_lwork;
     void *A_save = NULL;
@@ -2746,11 +2746,22 @@ void print_matrix(char *desc, char *order, integer datatype, integer M, integer 
     }
 }
 
-/* Get upper triangular matrix or lower triangular matrix based on UPLO */
-void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, void *A, integer lda)
+/* Get upper triangular matrix or lower triangular matrix based on UPLO.
+   If A_init is 0, initialize A with random values.
+   Else A is already initialized by caller. */
+void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, void *A, integer lda,
+                           integer A_init)
 {
     integer i;
-    rand_matrix(datatype, A, m, n, lda);
+
+    if(lda < m)
+    {
+        return;
+    }
+    if(!A_init)
+    {
+        rand_matrix(datatype, A, m, n, lda);
+    }
 
     switch(datatype)
     {
@@ -3203,7 +3214,7 @@ void init_matrix_spec_rand_in(integer datatype, void *A, integer M, integer N, i
 }
 
 /* Test to check the extreme values propagation in output matrix */
-bool check_extreme_value(integer datatype, integer M, integer N, void *A, integer LDA, char type)
+integer check_extreme_value(integer datatype, integer M, integer N, void *A, integer LDA, char type)
 {
     if(!A)
         return false;
@@ -3220,7 +3231,7 @@ bool check_extreme_value(integer datatype, integer M, integer N, void *A, intege
                     {
                         if(isnan(((float *)A)[i * LDA + j]))
                         {
-                            return true;
+                            return 1;
                         }
                     }
                 }
@@ -3234,7 +3245,7 @@ bool check_extreme_value(integer datatype, integer M, integer N, void *A, intege
                     {
                         if((isinf(((float *)A)[i * LDA + j])) || (isnan(((float *)A)[i * LDA + j])))
                         {
-                            return true;
+                            return 1;
                         }
                     }
                 }
@@ -3252,7 +3263,7 @@ bool check_extreme_value(integer datatype, integer M, integer N, void *A, intege
                     {
                         if(isnan(((double *)A)[i * LDA + j]))
                         {
-                            return true;
+                            return 1;
                         }
                     }
                 }
@@ -3267,7 +3278,7 @@ bool check_extreme_value(integer datatype, integer M, integer N, void *A, intege
                         if((isinf(((double *)A)[i * LDA + j]))
                            || (isnan(((double *)A)[i * LDA + j])))
                         {
-                            return true;
+                            return 1;
                         }
                     }
                 }
@@ -3286,7 +3297,7 @@ bool check_extreme_value(integer datatype, integer M, integer N, void *A, intege
                         if(isnan(((scomplex *)A)[i * LDA + j].real)
                            || isnan(((scomplex *)A)[i * LDA + j].imag))
                         {
-                            return true;
+                            return 1;
                         }
                     }
                 }
@@ -3303,7 +3314,7 @@ bool check_extreme_value(integer datatype, integer M, integer N, void *A, intege
                            || (isnan(((scomplex *)A)[i * LDA + j].real)
                                || isnan(((scomplex *)A)[i * LDA + j].imag)))
                         {
-                            return true;
+                            return 1;
                         }
                     }
                 }
@@ -3322,7 +3333,7 @@ bool check_extreme_value(integer datatype, integer M, integer N, void *A, intege
                         if(isnan(((dcomplex *)A)[i * LDA + j].real)
                            || isnan(((dcomplex *)A)[i * LDA + j].imag))
                         {
-                            return true;
+                            return 1;
                         }
                     }
                 }
@@ -3339,7 +3350,7 @@ bool check_extreme_value(integer datatype, integer M, integer N, void *A, intege
                            || (isnan(((dcomplex *)A)[i * LDA + j].real)
                                || isnan(((dcomplex *)A)[i * LDA + j].imag)))
                         {
-                            return true;
+                            return 1;
                         }
                     }
                 }

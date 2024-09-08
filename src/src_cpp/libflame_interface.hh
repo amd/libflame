@@ -45983,12 +45983,12 @@ determined by sgerqf
 
  *  * */
     template <typename T>
-    void lartg(T f, T g, T *cs, T *sn, T *r__)
+    void lartg(T *f, T *g, T *cs, T *sn, T *r__)
     {
         lartg(f, g, cs, sn, r__);
     }
     template <typename T, typename Ta>
-    void lartg(T f, T g, Ta *cs, T *sn, T *r__)
+    void lartg(T *f, T *g, Ta *cs, T *sn, T *r__)
     {
         lartg(f, g, cs, sn, r__);
     }

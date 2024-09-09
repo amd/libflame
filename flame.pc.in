@@ -1,7 +1,7 @@
-prefix="@CMAKE_INSTALL_PREFIX@"
-exec_prefix="${prefix}"
-libdir="${prefix}/lib"
-includedir="${prefix}/include"
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
 
 Name: @PROJECT_NAME@
 Description: AOCL-LAPACK is a high performant implementation of Linear Algebra PACKage(LAPACK)

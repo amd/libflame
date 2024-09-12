@@ -20,8 +20,8 @@ void invoke_syevd(integer datatype, char *jobz, char *uplo, integer *n, void *a,
                   integer *liwork, integer *info);
 double prepare_lapacke_syevd_run(integer datatype, int matrix_layout, char *jobz, char *uplo,
                                  integer n, void *A, integer lda, void *w, integer *info);
-integer invoke_lapacke_syevd(integer datatype, int matrix_layout, char jobz, char uplo,
-                             integer n, void *a, integer lda, void *w);
+integer invoke_lapacke_syevd(integer datatype, int matrix_layout, char jobz, char uplo, integer n,
+                             void *a, integer lda, void *w);
 
 #define SYEVD_VL 1
 #define SYEVD_VU 5
@@ -243,6 +243,9 @@ void prepare_syevd_run(char *jobz, char *uplo, integer n, void *A, integer lda, 
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_save, lda);
     copy_matrix(datatype, "full", n, n, A, lda, A_save, lda);
 
+    /* Make a workspace query the first time through. This will provide us with
+       and ideal workspace size based on an internal block size.
+       NOTE: LAPACKE interface handles workspace query internally */
     if((test_lapacke_interface == 0)
        && (g_lwork <= 0 || ((datatype == COMPLEX || datatype == DOUBLE_COMPLEX) && g_lrwork <= 0)
            || g_liwork <= 0))
@@ -329,8 +332,8 @@ void prepare_syevd_run(char *jobz, char *uplo, integer n, void *A, integer lda, 
     free_matrix(A_save);
 }
 
-double prepare_lapacke_syevd_run(integer datatype, int layout, char *jobz, char *uplo,
-                                 integer n, void *A, integer lda, void *w, integer *info)
+double prepare_lapacke_syevd_run(integer datatype, int layout, char *jobz, char *uplo, integer n,
+                                 void *A, integer lda, void *w, integer *info)
 {
     double exe_time;
     integer lda_t = lda;
@@ -398,8 +401,8 @@ void invoke_syevd(integer datatype, char *jobz, char *uplo, integer *n, void *a,
     }
 }
 
-integer invoke_lapacke_syevd(integer datatype, int layout, char jobz, char uplo, integer n,
-                             void *a, integer lda, void *w)
+integer invoke_lapacke_syevd(integer datatype, int layout, char jobz, char uplo, integer n, void *a,
+                             integer lda, void *w)
 {
     integer info = 0;
     switch(datatype)

@@ -6,16 +6,27 @@
 #include "test_lapack.h"
 #include "test_prototype.h"
 
+integer row_major_gesdd_lda;
+integer row_major_gesdd_ldu;
+integer row_major_gesdd_ldvt;
+
 /* Local prototypes.*/
 void fla_test_gesdd_experiment(test_params_t *params, integer datatype, integer p_cur,
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
                                double *perf, double *t, double *residual);
 void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer lda, void *s, void *U,
                        integer ldu, void *V, integer ldvt, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info);
+                       double *time_min_, integer *info, integer test_lapacke_interface,
+                       int matrix_layout);
 void invoke_gesdd(integer datatype, char *jobz, integer *m, integer *n, void *a, integer *lda,
                   void *s, void *u, integer *ldu, void *vt, integer *ldvt, void *work,
                   integer *lwork, void *rwork, integer *iwork, integer *info);
+double prepare_lapacke_gesdd_run(integer datatype, int matrix_layout, char *jobz, integer m_A,
+                                 integer n_A, void *A, integer lda, void *s, void *U, integer ldu,
+                                 void *V, integer ldvt, integer *info);
+integer invoke_lapacke_gesdd(integer datatype, int matrix_layout, char jobz, integer m, integer n,
+                             void *a, integer lda, void *s, void *u, integer ldu, void *vt,
+                             integer ldvt);
 
 void fla_test_gesdd(integer argc, char **argv, test_params_t *params)
 {
@@ -50,9 +61,23 @@ void fla_test_gesdd(integer argc, char **argv, test_params_t *params)
         params->svd_paramslist[0].jobu_gesvd = argv[3][0];
         M = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
         N = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
-        params->svd_paramslist[0].lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
-        params->svd_paramslist[0].ldu = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
-        params->svd_paramslist[0].ldvt = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
+        /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
+        if((g_ext_fptr == NULL) && params->test_lapacke_interface
+           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        {
+            row_major_gesdd_lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
+            row_major_gesdd_ldu = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
+            row_major_gesdd_ldvt = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
+            params->svd_paramslist[0].lda = N;
+            params->svd_paramslist[0].ldu = N;
+            params->svd_paramslist[0].ldvt = N;
+        }
+        else
+        {
+            params->svd_paramslist[0].lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
+            params->svd_paramslist[0].ldu = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
+            params->svd_paramslist[0].ldvt = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
+        }
 
         g_lwork = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
 
@@ -117,6 +142,9 @@ void fla_test_gesdd_experiment(test_params_t *params, integer datatype, integer 
     integer info = 0, vinfo = 0;
     char jobz;
     void *A = NULL, *U = NULL, *V = NULL, *s = NULL, *A_test = NULL, *s_in = NULL, *scal = NULL;
+
+    integer test_lapacke_interface = params->test_lapacke_interface;
+    int layout = params->matrix_major;
 
     /* Get input matrix dimensions.*/
     jobz = params->svd_paramslist[pci].jobu_gesvd;
@@ -198,7 +226,7 @@ void fla_test_gesdd_experiment(test_params_t *params, integer datatype, integer 
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
     prepare_gesdd_run(&jobz, m, n, A_test, lda, s, U, ldu, V, ldvt, datatype, n_repeats, time_min,
-                      &info);
+                      &info, test_lapacke_interface, layout);
 
     /* performance computation
        6mn^2 + 8n^3 flops */
@@ -210,7 +238,7 @@ void fla_test_gesdd_experiment(test_params_t *params, integer datatype, integer 
         *perf *= 4.0;
 
     /* output validation */
-    if(FLA_OVERFLOW_UNDERFLOW_TEST && (jobz == 'A' || jobz == 'S' || jobz == 'O') && info == 0)
+    if(info == 0 && (FLA_OVERFLOW_UNDERFLOW_TEST || (!FLA_EXTREME_CASE_TEST)))
         validate_gesdd(&jobz, m, n, A, A_test, lda, s, s_in, U, ldu, V, ldvt, datatype, residual,
                        &vinfo, params->imatrix_char, scal);
     /* check for output matrix when inputs as extreme values */
@@ -240,7 +268,7 @@ void fla_test_gesdd_experiment(test_params_t *params, integer datatype, integer 
 
 void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer lda, void *s, void *U,
                        integer ldu, void *V, integer ldvt, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info)
+                       double *time_min_, integer *info, integer test_lapacke_interface, int layout)
 {
     integer min_m_n, max_m_n;
     void *A_save, *s_test, *work, *iwork, *rwork;
@@ -263,8 +291,9 @@ void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer ld
     liwork = 8 * min_m_n;
 
     /* Make a workspace query the first time through. This will provide us with
-       and ideal workspace size based on an internal block size.*/
-    if(g_lwork <= 0)
+     and ideal workspace size based on an internal block size.
+     NOTE: LAPACKE interface handles workspace query internally */
+    if((test_lapacke_interface == 0) && (g_lwork <= 0))
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
@@ -305,13 +334,21 @@ void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer ld
         else
             rwork = NULL;
 
-        exe_time = fla_test_clock();
+        /* Check if LAPACKE interface is enabled */
+        if(test_lapacke_interface == 1)
+        {
+            exe_time = prepare_lapacke_gesdd_run(datatype, layout, jobz, m_A, n_A, A, lda, s_test,
+                                                 U_test, ldu, V_test, ldvt, info);
+        }
+        else
+        {
+            exe_time = fla_test_clock();
+            /* call to API */
+            invoke_gesdd(datatype, jobz, &m_A, &n_A, A, &lda, s_test, U_test, &ldu, V_test, &ldvt,
+                         work, &lwork, rwork, iwork, info);
 
-        /* call to API */
-        invoke_gesdd(datatype, jobz, &m_A, &n_A, A, &lda, s_test, U_test, &ldu, V_test, &ldvt, work,
-                     &lwork, rwork, iwork, info);
-
-        exe_time = fla_test_clock() - exe_time;
+            exe_time = fla_test_clock() - exe_time;
+        }
 
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);
@@ -335,6 +372,120 @@ void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer ld
     *time_min_ = time_min;
 
     free_matrix(A_save);
+}
+
+double prepare_lapacke_gesdd_run(integer datatype, int layout, char *jobz, integer m_A, integer n_A,
+                                 void *A, integer lda, void *s, void *U, integer ldu, void *V,
+                                 integer ldvt, integer *info)
+{
+    double exe_time;
+    integer lda_t = lda;
+    integer ldu_t = ldu;
+    integer ldvt_t = ldvt;
+    void *A_t = NULL, *U_t = NULL, *V_t = NULL;
+
+    /* Configure leading dimensions as per the input matrix layout */
+    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_gesdd_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, config_data, layout, m_A, row_major_gesdd_ldu, ldu_t);
+    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_gesdd_ldvt, ldvt_t);
+
+    A_t = A;
+    U_t = U;
+    V_t = V;
+
+    /* In case of row_major matrix layout,
+       convert input matrix to row_major */
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        /* Create temporary buffers for converting matrix layout */
+        create_matrix(datatype, layout, m_A, n_A, &A_t, fla_max(n_A, lda_t));
+        switch(*jobz)
+        {
+            case 'A':
+            {
+                create_matrix(datatype, layout, m_A, m_A, &U_t, fla_max(m_A, ldu_t));
+                create_matrix(datatype, layout, n_A, n_A, &V_t, fla_max(n_A, ldvt_t));
+                break;
+            }
+            case 'S':
+            {
+                create_matrix(datatype, layout, m_A, fla_min(m_A, n_A), &U_t, fla_max(m_A, ldu_t));
+                create_matrix(datatype, layout, fla_min(m_A, n_A), n_A, &V_t, fla_max(n_A, ldvt_t));
+                break;
+            }
+            case 'O':
+            {
+                if(m_A < n_A)
+                {
+                    create_matrix(datatype, layout, m_A, m_A, &U_t, fla_max(m_A, ldu_t));
+                }
+                else
+                {
+                    create_matrix(datatype, layout, n_A, n_A, &V_t, fla_max(n_A, ldvt_t));
+                }
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, m_A, n_A, A, lda, A_t, lda_t);
+    }
+
+    exe_time = fla_test_clock();
+
+    /* call LAPACKE gesdd API */
+    *info = invoke_lapacke_gesdd(datatype, layout, *jobz, m_A, n_A, A_t, lda_t, s, U_t, ldu_t, V_t,
+                                 ldvt_t);
+
+    exe_time = fla_test_clock() - exe_time;
+    /* In case of row_major matrix layout, convert output matrices
+       to column_major layout */
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        switch(*jobz)
+        {
+            case 'A':
+            {
+                convert_matrix_layout(layout, datatype, m_A, m_A, U_t, ldu_t, U, ldu);
+                convert_matrix_layout(layout, datatype, n_A, n_A, V_t, ldvt_t, V, ldvt);
+                free_matrix(U_t);
+                free_matrix(V_t);
+                break;
+            }
+            case 'S':
+            {
+                convert_matrix_layout(layout, datatype, m_A, fla_min(m_A, n_A), U_t, ldu_t, U, ldu);
+                convert_matrix_layout(layout, datatype, fla_min(m_A, n_A), n_A, V_t, ldvt_t, V,
+                                      ldvt);
+                free_matrix(U_t);
+                free_matrix(V_t);
+                break;
+            }
+            case 'O':
+            {
+                convert_matrix_layout(layout, datatype, m_A, n_A, A_t, lda_t, A, lda);
+                if(m_A < n_A)
+                {
+                    convert_matrix_layout(layout, datatype, m_A, m_A, U_t, fla_max(m_A, ldu_t), U,
+                                          ldu);
+                    free_matrix(U_t);
+                }
+                else
+                {
+                    convert_matrix_layout(layout, datatype, n_A, n_A, V_t, fla_max(n_A, ldvt_t), V,
+                                          ldvt);
+                    free_matrix(V_t);
+                }
+                break;
+            }
+            default:
+                break;
+        }
+        free_matrix(A_t);
+    }
+    return exe_time;
 }
 
 void invoke_gesdd(integer datatype, char *jobz, integer *m, integer *n, void *a, integer *lda,
@@ -369,4 +520,37 @@ void invoke_gesdd(integer datatype, char *jobz, integer *m, integer *n, void *a,
             break;
         }
     }
+}
+
+integer invoke_lapacke_gesdd(integer datatype, int layout, char jobz, integer m, integer n, void *a,
+                             integer lda, void *s, void *u, integer ldu, void *vt, integer ldvt)
+{
+    integer info = 0;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            info = LAPACKE_sgesdd(layout, jobz, m, n, a, lda, s, u, ldu, vt, ldvt);
+            break;
+        }
+
+        case DOUBLE:
+        {
+            info = LAPACKE_dgesdd(layout, jobz, m, n, a, lda, s, u, ldu, vt, ldvt);
+            break;
+        }
+
+        case COMPLEX:
+        {
+            info = LAPACKE_cgesdd(layout, jobz, m, n, a, lda, s, u, ldu, vt, ldvt);
+            break;
+        }
+
+        case DOUBLE_COMPLEX:
+        {
+            info = LAPACKE_zgesdd(layout, jobz, m, n, a, lda, s, u, ldu, vt, ldvt);
+            break;
+        }
+    }
+    return info;
 }

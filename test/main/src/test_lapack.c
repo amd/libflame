@@ -195,6 +195,10 @@ void fla_check_lapacke_interface(integer *arg_count, char **argv, test_params_t 
             enable_lapacke = 1;
             major = argv[index] + len_lapacke_test;
 
+            for(int i = 0; i < strlen(argv[index]); i++)
+            {
+                major[i] = tolower(major[i]);
+            }
             /* Check user input is row/column major*/
             if(!(strncmp(major, row_major, len_row_major)))
                 lapacke_major = LAPACK_ROW_MAJOR;

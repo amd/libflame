@@ -26,9 +26,9 @@ double prepare_lapacke_gesvd_run(integer datatype, int matrix_layout, char *jobu
                                  integer m_A, integer n_A, void *A, integer lda, void *s, void *U,
                                  integer ldu, void *V, integer ldvt, integer *info, void *work,
                                  void *rwork);
-integer invoke_lapacke_gesvd(integer datatype, int matrix_layout, char jobu, char jobvt,
-                             integer m, integer n, void *a, integer lda, void *s, void *u,
-                             integer ldu, void *vt, integer ldvt, void *work, void *rwork);
+integer invoke_lapacke_gesvd(integer datatype, int matrix_layout, char jobu, char jobvt, integer m,
+                             integer n, void *a, integer lda, void *s, void *u, integer ldu,
+                             void *vt, integer ldvt, void *work, void *rwork);
 
 void fla_test_gesvd(integer argc, char **argv, test_params_t *params)
 {
@@ -389,10 +389,9 @@ void prepare_gesvd_run(char *jobu, char *jobvt, integer m_A, integer n_A, void *
     free_matrix(A_save);
 }
 
-double prepare_lapacke_gesvd_run(integer datatype, int layout, char *jobu, char *jobvt,
-                                 integer m_A, integer n_A, void *A, integer lda, void *s, void *U,
-                                 integer ldu, void *V, integer ldvt, integer *info, void *work,
-                                 void *rwork)
+double prepare_lapacke_gesvd_run(integer datatype, int layout, char *jobu, char *jobvt, integer m_A,
+                                 integer n_A, void *A, integer lda, void *s, void *U, integer ldu,
+                                 void *V, integer ldvt, integer *info, void *work, void *rwork)
 {
     double exe_time;
     integer lda_t = lda;

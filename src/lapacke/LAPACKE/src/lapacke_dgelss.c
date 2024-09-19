@@ -51,7 +51,7 @@ lapack_int LAPACKE_dgelss( int matrix_layout, lapack_int m, lapack_int n,
         if( LAPACKE_dge_nancheck( matrix_layout, m, n, a, lda ) ) {
             return -5;
         }
-        if( LAPACKE_dge_nancheck( matrix_layout, MAX(m,n), nrhs, b, ldb ) ) {
+        if( LAPACKE_dge_nancheck( matrix_layout, m, nrhs, b, ldb ) ) {
             return -7;
         }
         if( LAPACKE_d_nancheck( 1, &rcond, 1 ) ) {

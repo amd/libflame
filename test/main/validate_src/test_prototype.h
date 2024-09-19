@@ -1657,4 +1657,26 @@ lapack_int LAPACKE_chegvd(int matrix_layout, lapack_int itype, char jobz, char u
 lapack_int LAPACKE_zhegvd(int matrix_layout, lapack_int itype, char jobz, char uplo, lapack_int n,
                           lapack_complex_double *a, lapack_int lda, lapack_complex_double *b,
                           lapack_int ldb, double *w);
+lapack_int LAPACKE_sgbtrf(int matrix_layout, lapack_int m, lapack_int n, lapack_int kl,
+                          lapack_int ku, float *ab, lapack_int ldab, lapack_int *ipiv);
+lapack_int LAPACKE_dgbtrf(int matrix_layout, lapack_int m, lapack_int n, lapack_int kl,
+                          lapack_int ku, double *ab, lapack_int ldab, lapack_int *ipiv);
+lapack_int LAPACKE_cgbtrf(int matrix_layout, lapack_int m, lapack_int n, lapack_int kl,
+                          lapack_int ku, lapack_complex_float *ab, lapack_int ldab,
+                          lapack_int *ipiv);
+lapack_int LAPACKE_zgbtrf(int matrix_layout, lapack_int m, lapack_int n, lapack_int kl,
+                          lapack_int ku, lapack_complex_double *ab, lapack_int ldab,
+                          lapack_int *ipiv);
+lapack_int LAPACKE_sgbtrs(int matrix_layout, char trans, lapack_int n, lapack_int kl, lapack_int ku,
+                          lapack_int nrhs, float *ab, lapack_int ldab, lapack_int *ipiv, float *b,
+                          lapack_int ldb);
+lapack_int LAPACKE_dgbtrs(int matrix_layout, char trans, lapack_int n, lapack_int kl, lapack_int ku,
+                          lapack_int nrhs, const double *ab, lapack_int ldab,
+                          const lapack_int *ipiv, double *b, lapack_int ldb);
+lapack_int LAPACKE_cgbtrs(int matrix_layout, char trans, lapack_int n, lapack_int kl, lapack_int ku,
+                          lapack_int nrhs, const lapack_complex_float *ab, lapack_int ldab,
+                          const lapack_int *ipiv, lapack_complex_float *b, lapack_int ldb);
+lapack_int LAPACKE_zgbtrs(int matrix_layout, char trans, lapack_int n, lapack_int kl, lapack_int ku,
+                          lapack_int nrhs, const lapack_complex_double *ab, lapack_int ldab,
+                          const lapack_int *ipiv, lapack_complex_double *b, lapack_int ldb);
 #endif // TEST_PROTOTYPE_H

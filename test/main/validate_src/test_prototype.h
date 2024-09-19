@@ -1208,6 +1208,11 @@
 #define fla_lapack_csytrf csytrf_
 #define fla_lapack_zsytrf zsytrf_
 
+#define fla_lapack_ssygvd ssygvd_
+#define fla_lapack_dsygvd dsygvd_
+#define fla_lapack_chegvd chegvd_
+#define fla_lapack_zhegvd zhegvd_
+
 #endif /*if UPPER_*/
 
 /* These functions are API invoking functions used in other API test codes */
@@ -1642,4 +1647,14 @@ lapack_int LAPACKE_clarfg(lapack_int n, lapack_complex_float *alpha, lapack_comp
                           lapack_int incx, lapack_complex_float *tau);
 lapack_int LAPACKE_zlarfg(lapack_int n, lapack_complex_double *alpha, lapack_complex_double *x,
                           lapack_int incx, lapack_complex_double *tau);
+lapack_int LAPACKE_ssygvd(int matrix_layout, lapack_int itype, char jobz, char uplo, lapack_int n,
+                          float *a, lapack_int lda, float *b, lapack_int ldb, float *w);
+lapack_int LAPACKE_dsygvd(int matrix_layout, lapack_int itype, char jobz, char uplo, lapack_int n,
+                          double *a, lapack_int lda, double *b, lapack_int ldb, double *w);
+lapack_int LAPACKE_chegvd(int matrix_layout, lapack_int itype, char jobz, char uplo, lapack_int n,
+                          lapack_complex_float *a, lapack_int lda, lapack_complex_float *b,
+                          lapack_int ldb, float *w);
+lapack_int LAPACKE_zhegvd(int matrix_layout, lapack_int itype, char jobz, char uplo, lapack_int n,
+                          lapack_complex_double *a, lapack_int lda, lapack_complex_double *b,
+                          lapack_int ldb, double *w);
 #endif // TEST_PROTOTYPE_H

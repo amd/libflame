@@ -160,4 +160,9 @@ void validate_sytrf(char *uplo, integer n, integer lda, void *A_res, integer dat
 void validate_ggev_EVs(integer m, void *alpha, void *alphar, void *alphai, void *beta,
                        void *alpha_copy, void *alphar_copy, void *alphai_copy, void *beta_copy,
                        integer datatype, double *residual);
+
+void validate_sygvd(integer itype, char *jobz, char *range, char *uplo, integer n, void *A,
+                    void *A_test, integer lda, void *B, void *B_test, integer ldb, void *Q,
+                    integer ldq, integer il, integer iu, void *lambda_orig, void *lambda_out,
+                    void *ifail, integer datatype, double *residual, char imatrix, void *scal);
 #endif // VALIDATE_COMMON_H

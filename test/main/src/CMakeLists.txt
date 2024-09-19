@@ -50,4 +50,5 @@ ${CMAKE_CURRENT_SOURCE_DIR}/test_lapack.h
 ${CMAKE_CURRENT_SOURCE_DIR}/test_routines.h
 ${CMAKE_CURRENT_SOURCE_DIR}/test_gelss.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_sytrf.c
-${CMAKE_CURRENT_SOURCE_DIR}/test_larf.c)
+${CMAKE_CURRENT_SOURCE_DIR}/test_larf.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_sygvd.c)

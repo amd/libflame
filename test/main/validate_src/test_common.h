@@ -329,4 +329,29 @@ void convert_matrix_layout(int matrix_layout, integer datatype, integer m, integ
                            integer lda, void *a_t, integer lda_t);
 /* To find reciprocal of each number in real vector X and store it in Y */
 void get_reciprocal_real_vector(integer datatype, void *X, integer n, void *Y, integer inx);
+/* Solves one of the matrix equations op( A )*X = B,  or   X*op( A ) = B
+ * where A is a unit, or non-unit,  upper or lower triangular matrix
+ */
+void fla_invoke_trsm(integer datatype, char *side, char *uplo, char *transa, char *diag, integer *m,
+                     integer *n, void *a, integer *lda, void *b, integer *ldb);
+/* Performs B := op( A )*B,   or   B := B*op( A )
+ * where A is a unit or non-unit, upper or lower triangular matrix
+ */
+void fla_invoke_trmm(integer datatype, char *side, char *uplo, char *transa, char *diag, integer *m,
+                     integer *n, void *a, integer *lda, void *b, integer *ldb);
+/* Randomly generated triangular matrices have bad condition number.
+   This function genreates comparatively well conditioned triangular matrices
+   by multiplying a randim matrix with itself and then making it triangular
+
+   The genreated matrix will be non singular matrix and the matrix is scaled
+   such that the determinant is not too large or too small
+ */
+void get_well_conditioned_triangular_matrix(integer datatype, char *uplo, integer n, void *A,
+                                            integer lda);
+/* Get the mean of absolute values of diagonal elements of the matrix
+   K = SUM(ABS(A(i, i))) / n  for 0 <= i < n
+   For comple matrices,
+   K = (SUM(ABS(Re(A(i, i))) / n)  + (SUM(ABS(Im(A(i, i))) / n)  for 0 <= i < n
+ */
+void get_mean_of_absolutes_of_diag(integer datatype, integer n, void *A, integer lda, void *mean);
 #endif // TEST_COMMON_H

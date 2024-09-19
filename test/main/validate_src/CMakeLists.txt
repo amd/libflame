@@ -43,5 +43,6 @@ ${CMAKE_CURRENT_SOURCE_DIR}/validate_gesvdx.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_gelsd.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_sytrf.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_larf.c
+${CMAKE_CURRENT_SOURCE_DIR}/validate_sygvd.c
 )
 

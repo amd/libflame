@@ -10,9 +10,14 @@ void fla_test_gbtrf_experiment(test_params_t *params, integer datatype, integer 
                                double *perf, double *t, double *residual);
 void prepare_gbtrf_run(integer m_A, integer n_A, integer kl, integer ku, void *ab, integer ldab,
                        integer *ipiv, integer datatype, integer n_repeats, double *time_min_,
-                       integer *info);
+                       integer *info, integer test_lapacke_interface, integer matrix_layout);
 void invoke_gbtrf(integer datatype, integer *m, integer *n, integer *kl, integer *ku, void *ab,
                   integer *ldab, integer *ipiv, integer *info);
+double prepare_lapacke_gbtrf_run(integer datatype, integer matrix_layout, integer m_A, integer n_A,
+                                 integer kl, integer ku, void *ab, integer ldab, integer *ipiv,
+                                 integer *info);
+integer invoke_lapacke_gbtrf(integer datatype, int matrix_layout, integer m, integer n, integer kl,
+                             integer ku, void *ab, integer ldab, integer *ipiv);
 
 void fla_test_gbtrf(integer argc, char **argv, test_params_t *params)
 {
@@ -112,6 +117,9 @@ void fla_test_gbtrf_experiment(test_params_t *params, integer datatype, integer 
     void *AB, *AB_test, *A;
     double time_min = 1e9;
 
+    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer layout = params->matrix_major;
+
     /* Determine the dimensions*/
     m = p_cur;
     n = q_cur;
@@ -147,7 +155,8 @@ void fla_test_gbtrf_experiment(test_params_t *params, integer datatype, integer 
         create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, m);
         if((params->imatrix_char == 'A') || (params->imatrix_char == 'F'))
         {
-            init_matrix_spec_rand_band_matrix_in(datatype, A, m, n, m, kl, ku, params->imatrix_char);
+            init_matrix_spec_rand_band_matrix_in(datatype, A, m, n, m, kl, ku,
+                                                 params->imatrix_char);
         }
         else
         {
@@ -172,7 +181,8 @@ void fla_test_gbtrf_experiment(test_params_t *params, integer datatype, integer 
     copy_matrix(datatype, "full", ldab, n, AB, ldab, AB_test, ldab);
 
     /* call to API */
-    prepare_gbtrf_run(m, n, kl, ku, AB_test, ldab, IPIV, datatype, n_repeats, &time_min, &info);
+    prepare_gbtrf_run(m, n, kl, ku, AB_test, ldab, IPIV, datatype, n_repeats, &time_min, &info,
+                      test_lapacke_interface, layout);
 
     /* execution time */
     *t = time_min;
@@ -210,7 +220,7 @@ void fla_test_gbtrf_experiment(test_params_t *params, integer datatype, integer 
 
 void prepare_gbtrf_run(integer m_A, integer n_A, integer kl, integer ku, void *AB, integer ldab,
                        integer *IPIV, integer datatype, integer n_repeats, double *time_min_,
-                       integer *info)
+                       integer *info, integer test_lapacke_interface, integer layout)
 {
     integer i;
     void *AB_save;
@@ -226,12 +236,21 @@ void prepare_gbtrf_run(integer m_A, integer n_A, integer kl, integer ku, void *A
         /* Copy original input data */
         copy_matrix(datatype, "full", ldab, n_A, AB, ldab, AB_save, ldab);
 
-        exe_time = fla_test_clock();
+        /* Check if LAPACKE interface is enabled */
+        if(test_lapacke_interface == 1)
+        {
+            exe_time = prepare_lapacke_gbtrf_run(datatype, layout, m_A, n_A, kl, ku, AB_save, ldab,
+                                                 IPIV, info);
+        }
+        else
+        {
+            exe_time = fla_test_clock();
 
-        /*  call to API */
-        invoke_gbtrf(datatype, &m_A, &n_A, &kl, &ku, AB_save, &ldab, IPIV, info);
+            /* Call LAPACK getrf API */
+            invoke_gbtrf(datatype, &m_A, &n_A, &kl, &ku, AB_save, &ldab, IPIV, info);
 
-        exe_time = fla_test_clock() - exe_time;
+            exe_time = fla_test_clock() - exe_time;
+        }
 
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);
@@ -241,6 +260,46 @@ void prepare_gbtrf_run(integer m_A, integer n_A, integer kl, integer ku, void *A
     /*  Save the ABFACT to matrix AB */
     copy_matrix(datatype, "full", ldab, n_A, AB_save, ldab, AB, ldab);
     free_matrix(AB_save);
+}
+
+double prepare_lapacke_gbtrf_run(integer datatype, integer layout, integer m_A, integer n_A,
+                                 integer kl, integer ku, void *ab, integer ldab, integer *ipiv,
+                                 integer *info)
+{
+    double exe_time;
+    integer ldab_t = ldab;
+    void *ab_t = NULL;
+
+    ab_t = ab;
+
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        ldab_t = n_A;
+        /* Create temporary buffers for converting matrix layout */
+        create_matrix(datatype, layout, ldab, n_A, &ab_t, ldab_t);
+
+        /* Convert column_major matrix layout to row_major matrix layout */
+        convert_banded_matrix_layout(LAPACK_COL_MAJOR, datatype, m_A, n_A, ab, ldab, ab_t, ldab_t);
+    }
+
+    exe_time = fla_test_clock();
+
+    /*  call LAPACKE gbtrf API */
+    *info = invoke_lapacke_gbtrf(datatype, layout, m_A, n_A, kl, ku, ab_t, ldab_t, ipiv);
+
+    exe_time = fla_test_clock() - exe_time;
+
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        /* In case of row_major matrix layout, convert output matrices
+           to column_major layout */
+        convert_banded_matrix_layout(LAPACK_ROW_MAJOR, datatype, m_A, n_A, ab_t, ldab_t, ab, ldab);
+
+        /* free temporary buffers */
+        free_matrix(ab_t);
+    }
+
+    return exe_time;
 }
 
 /*
@@ -276,4 +335,37 @@ void invoke_gbtrf(integer datatype, integer *m, integer *n, integer *kl, integer
             break;
         }
     }
+}
+
+integer invoke_lapacke_gbtrf(integer datatype, int layout, integer m, integer n, integer kl,
+                             integer ku, void *ab, integer ldab, integer *ipiv)
+{
+    integer info = 0;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            info = LAPACKE_sgbtrf(layout, m, n, kl, ku, ab, ldab, ipiv);
+            break;
+        }
+
+        case DOUBLE:
+        {
+            info = LAPACKE_dgbtrf(layout, m, n, kl, ku, ab, ldab, ipiv);
+            break;
+        }
+
+        case COMPLEX:
+        {
+            info = LAPACKE_cgbtrf(layout, m, n, kl, ku, ab, ldab, ipiv);
+            break;
+        }
+
+        case DOUBLE_COMPLEX:
+        {
+            info = LAPACKE_zgbtrf(layout, m, n, kl, ku, ab, ldab, ipiv);
+            break;
+        }
+    }
+    return info;
 }

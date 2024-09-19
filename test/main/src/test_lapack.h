@@ -163,27 +163,29 @@ extern FILE *g_ext_fptr;
             func_str = "UNGQR";                               \
         else if(strcmp(func_str, "ORG2R") == 0)               \
             func_str = "UNG2R";                               \
+        else if(strcmp(func_str, "SYGVD") == 0)               \
+            func_str = "HEGVD";                               \
     }
 
 /* Macro to skip complex and double complex tests of not supported APIs */
-#define FLA_SKIP_TEST(datatype_char, func_str)                                               \
-    (((datatype_char == 'c') || (datatype_char == 'z')) && (strcmp(func_str, "STEVD") == 0)) \
-        ? TRUE                                                                               \
-        : FALSE
+#define FLA_SKIP_TEST(datatype_char, func_str)                                                \
+    ((((datatype_char == 'c') || (datatype_char == 'z')) && (strcmp(func_str, "STEVD") == 0)) \
+         ? TRUE                                                                               \
+         : FALSE)
 
 /* Assign leading dimension value based on matrix layout and cmdline/config inputs */
 #define SELECT_LDA(g_ext_fptr, config_data, layout, n, rm_lda, lda_t) \
-       if((g_ext_fptr == NULL) && (layout == LAPACK_ROW_MAJOR))       \
-       {                                                              \
-           if(config_data)                                            \
-           {                                                          \
-               lda_t = fla_max(1, n);                                 \
-           }                                                          \
-           else                                                       \
-           {                                                          \
-                lda_t = rm_lda;                                       \
-           }                                                          \
-       }
+    if((g_ext_fptr == NULL) && (layout == LAPACK_ROW_MAJOR))          \
+    {                                                                 \
+        if(config_data)                                               \
+        {                                                             \
+            lda_t = fla_max(1, n);                                    \
+        }                                                             \
+        else                                                          \
+        {                                                             \
+            lda_t = rm_lda;                                           \
+        }                                                             \
+    }
 
 typedef struct Lin_solver_paramlist_t
 {

@@ -6603,3 +6603,87 @@ void get_mean_of_absolutes_of_diag(integer datatype, integer n, void *A, integer
         break;
     }
 }
+
+/* Convert the given banded storage matrix from column major layout to row major layout and vice
+   versa NOTE: matrix_layout is the existing layout of the given input matrix 'AB' */
+void convert_banded_matrix_layout(int matrix_layout, integer datatype, integer m, integer n,
+                                  void *AB, integer ldab, void *AB_trans, integer ldab_trans)
+{
+    integer i, j;
+    integer cs, rs;
+
+    if(AB == NULL || AB_trans == NULL)
+        return;
+
+    if(matrix_layout == LAPACK_COL_MAJOR)
+    {
+        cs = fla_min(ldab_trans, n);
+        rs = ldab;
+    }
+    else if(matrix_layout == LAPACK_ROW_MAJOR)
+    {
+        cs = ldab_trans;
+        rs = fla_min(n, ldab);
+    }
+    else
+    {
+        /* invalid input layout */
+        printf("\n Invalid matrix layout for matrix_transpose");
+        return;
+    }
+
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            for(j = 0; j < cs; j++)
+            {
+                for(i = 0; i < rs; i++)
+                {
+                    ((float *)AB_trans)[i * ldab_trans + j] = ((float *)AB)[i + j * ldab];
+                }
+            }
+            break;
+        }
+        case DOUBLE:
+        {
+            for(j = 0; j < cs; j++)
+            {
+                for(i = 0; i < rs; i++)
+                {
+                    ((double *)AB_trans)[i * ldab_trans + j] = ((double *)AB)[i + j * ldab];
+                }
+            }
+            break;
+        }
+        case COMPLEX:
+        {
+            for(j = 0; j < cs; j++)
+            {
+                for(i = 0; i < rs; i++)
+                {
+                    ((scomplex *)AB_trans)[i * ldab_trans + j].real
+                        = ((scomplex *)AB)[i + j * ldab].real;
+                    ((scomplex *)AB_trans)[i * ldab_trans + j].imag
+                        = ((scomplex *)AB)[i + j * ldab].imag;
+                }
+            }
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            for(j = 0; j < cs; j++)
+            {
+                for(i = 0; i < rs; i++)
+                {
+                    ((dcomplex *)AB_trans)[i * ldab_trans + j].real
+                        = ((dcomplex *)AB)[i + j * ldab].real;
+                    ((dcomplex *)AB_trans)[i * ldab_trans + j].imag
+                        = ((dcomplex *)AB)[i + j * ldab].imag;
+                }
+            }
+            break;
+        }
+    }
+    return;
+}

@@ -10,12 +10,19 @@ void fla_test_gbtrs_experiment(test_params_t *params, integer datatype, integer 
                                double *perf, double *t, double *residual);
 void prepare_gbtrs_run(char trans, integer n_A, integer kl, integer ku, integer nrhs, void *ab,
                        integer ldab, integer *ipiv, void *b, integer ldb, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info);
+                       integer n_repeats, double *time_min_, integer *info,
+                       integer test_lapacke_interface, integer matrix_layout);
 void invoke_gbtrs(integer datatype, char *trans, integer *n, integer *kl, integer *ku,
                   integer *nrhs, void *ab, integer *ldab, integer *ipiv, void *b, integer *ldb,
                   integer *info);
 void invoke_gbtrf(integer datatype, integer *m, integer *n, integer *kl, integer *ku, void *ab,
                   integer *ldab, integer *ipiv, integer *info);
+double prepare_lapacke_gbtrs_run(integer datatype, integer matrix_layout, char trans, integer n_A,
+                                 integer kl, integer ku, integer nrhs, void *ab, integer ldab,
+                                 integer *ipiv, void *b, integer ldb, integer *info);
+integer invoke_lapacke_gbtrs(integer datatype, int matrix_layout, char trans, integer n, integer kl,
+                             integer ku, integer nrhs, void *ab, integer ldab, integer *ipiv,
+                             void *b, integer ldb);
 
 void fla_test_gbtrs(integer argc, char **argv, test_params_t *params)
 {
@@ -118,6 +125,9 @@ void fla_test_gbtrs_experiment(test_params_t *params, integer datatype, integer 
     void *AB, *AB_test;
     void *B, *X, *A = NULL;
     double time_min = 1e9;
+    
+    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer layout = params->matrix_major;
 
     /* Determine the dimensions*/
     trans = params->lin_solver_paramslist[pci].transr;
@@ -168,7 +178,8 @@ void fla_test_gbtrs_experiment(test_params_t *params, integer datatype, integer 
             create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, n);
             if((params->imatrix_char == 'A') || (params->imatrix_char == 'F'))
             {
-                init_matrix_spec_rand_band_matrix_in(datatype, A, n, n, n, kl, ku, params->imatrix_char);
+                init_matrix_spec_rand_band_matrix_in(datatype, A, n, n, n, kl, ku,
+                                                     params->imatrix_char);
             }
             else
             {
@@ -204,7 +215,7 @@ void fla_test_gbtrs_experiment(test_params_t *params, integer datatype, integer 
 
     /* call to API */
     prepare_gbtrs_run(trans, n, kl, ku, nrhs, AB_test, ldab, IPIV, X, ldb, datatype, n_repeats,
-                      &time_min, &info);
+                      &time_min, &info, test_lapacke_interface, layout);
     /* execution time */
     *t = time_min;
 
@@ -222,7 +233,8 @@ void fla_test_gbtrs_experiment(test_params_t *params, integer datatype, integer 
         /* Get original Band matrix from AB*/
         get_band_matrix_from_band_storage(datatype, n, n, kl, ku, AB, ldab, A, n);
         /* Call validate_getrs() to validate the output*/
-        validate_getrs(&trans, n, nrhs, A, n, B, ldb, X, datatype, residual, &info, params->imatrix_char, NULL);
+        validate_getrs(&trans, n, nrhs, A, n, B, ldb, X, datatype, residual, &info,
+                       params->imatrix_char, NULL);
         free_matrix(A);
     }
     /* check for output matrix when inputs as extreme values */
@@ -248,7 +260,8 @@ void fla_test_gbtrs_experiment(test_params_t *params, integer datatype, integer 
 
 void prepare_gbtrs_run(char trans, integer n_A, integer kl, integer ku, integer nrhs, void *AB,
                        integer ldab, integer *IPIV, void *B, integer ldb, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info)
+                       integer n_repeats, double *time_min_, integer *info,
+                       integer test_lapacke_interface, integer layout)
 {
     integer i;
     void *B_save;
@@ -262,12 +275,23 @@ void prepare_gbtrs_run(char trans, integer n_A, integer kl, integer ku, integer 
     {
         /* Copy original input data */
         copy_matrix(datatype, "full", n_A, nrhs, B, ldb, B_save, ldb);
-        exe_time = fla_test_clock();
 
-        /*  call to API */
-        invoke_gbtrs(datatype, &trans, &n_A, &kl, &ku, &nrhs, AB, &ldab, IPIV, B_save, &ldb, info);
+        /* Check if LAPACKE interface is enabled */
+        if(test_lapacke_interface == 1)
+        {
+            exe_time = prepare_lapacke_gbtrs_run(datatype, layout, trans, n_A, kl, ku, nrhs, AB,
+                                                 ldab, IPIV, B_save, ldb, info);
+        }
+        else
+        {
+            exe_time = fla_test_clock();
 
-        exe_time = fla_test_clock() - exe_time;
+            /* Call LAPACK getrf API */
+            invoke_gbtrs(datatype, &trans, &n_A, &kl, &ku, &nrhs, AB, &ldab, IPIV, B_save, &ldb,
+                         info);
+
+            exe_time = fla_test_clock() - exe_time;
+        }
 
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);
@@ -277,6 +301,54 @@ void prepare_gbtrs_run(char trans, integer n_A, integer kl, integer ku, integer 
     /*  Save the final result to B matrix*/
     copy_matrix(datatype, "full", n_A, nrhs, B_save, ldb, B, ldb);
     free_matrix(B_save);
+}
+
+double prepare_lapacke_gbtrs_run(integer datatype, integer layout, char trans, integer n_A,
+                                 integer kl, integer ku, integer nrhs, void *ab, integer ldab,
+                                 integer *ipiv, void *b, integer ldb, integer *info)
+{
+    double exe_time;
+    integer ldab_t = ldab, ldb_t = ldb;
+    void *ab_t = NULL, *b_t = NULL;
+
+    ab_t = ab;
+    b_t = b;
+
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        ldab_t = n_A;
+        ldb_t = nrhs;
+
+        /* Create temporary buffers for converting matrix layout */
+        create_matrix(datatype, layout, ldab, n_A, &ab_t, ldab_t);
+        create_matrix(datatype, layout, n_A, nrhs, &b_t, ldb_t);
+
+        /* Convert column_major matrix layout to row_major matrix layout */
+        convert_banded_matrix_layout(LAPACK_COL_MAJOR, datatype, n_A, n_A, ab, ldab, ab_t, ldab_t);
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n_A, nrhs, b, ldb, b_t, ldb_t);
+    }
+
+    exe_time = fla_test_clock();
+
+    /*  call LAPACKE gbtrs API */
+    *info = invoke_lapacke_gbtrs(datatype, layout, trans, n_A, kl, ku, nrhs, ab_t, ldab_t, ipiv,
+                                 b_t, ldb_t);
+
+    exe_time = fla_test_clock() - exe_time;
+
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        /* In case of row_major matrix layout, convert output matrices
+           to column_major layout */
+        convert_banded_matrix_layout(LAPACK_ROW_MAJOR, datatype, n_A, n_A, ab_t, ldab_t, ab, ldab);
+        convert_matrix_layout(LAPACK_ROW_MAJOR, datatype, n_A, nrhs, b_t, ldb_t, b, ldb);
+
+        /* free temporary buffers */
+        free_matrix(ab_t);
+        free_matrix(b_t);
+    }
+
+    return exe_time;
 }
 
 /*
@@ -313,4 +385,38 @@ void invoke_gbtrs(integer datatype, char *trans, integer *n, integer *kl, intege
             break;
         }
     }
+}
+
+integer invoke_lapacke_gbtrs(integer datatype, int layout, char trans, integer n, integer kl,
+                             integer ku, integer nrhs, void *ab, integer ldab, integer *ipiv,
+                             void *b, integer ldb)
+{
+    integer info = 0;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            info = LAPACKE_sgbtrs(layout, trans, n, kl, ku, nrhs, ab, ldab, ipiv, b, ldb);
+            break;
+        }
+
+        case DOUBLE:
+        {
+            info = LAPACKE_dgbtrs(layout, trans, n, kl, ku, nrhs, ab, ldab, ipiv, b, ldb);
+            break;
+        }
+
+        case COMPLEX:
+        {
+            info = LAPACKE_cgbtrs(layout, trans, n, kl, ku, nrhs, ab, ldab, ipiv, b, ldb);
+            break;
+        }
+
+        case DOUBLE_COMPLEX:
+        {
+            info = LAPACKE_zgbtrs(layout, trans, n, kl, ku, nrhs, ab, ldab, ipiv, b, ldb);
+            break;
+        }
+    }
+    return info;
 }

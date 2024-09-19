@@ -327,6 +327,10 @@ void add_negative_values_ilo_ihi(integer datatype, void *vect, integer ilo, inte
 /* Convert the given matrix from column major layout to row major layout and vice versa */
 void convert_matrix_layout(int matrix_layout, integer datatype, integer m, integer n, void *a,
                            integer lda, void *a_t, integer lda_t);
+/* Convert the given banded storage matrix from column major layout to row major layout and vice
+ * versa */
+void convert_banded_matrix_layout(int matrix_layout, integer datatype, integer m, integer n,
+                                  void *AB, integer ldab, void *AB_trans, integer ldab_trans);
 /* To find reciprocal of each number in real vector X and store it in Y */
 void get_reciprocal_real_vector(integer datatype, void *X, integer n, void *Y, integer inx);
 /* Solves one of the matrix equations op( A )*X = B,  or   X*op( A ) = B

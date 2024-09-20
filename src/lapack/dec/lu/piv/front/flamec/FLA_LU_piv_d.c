@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2024-2025 Advanced Micro Devices, Inc.  All rights reserved.
+    Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
 */
 
 #include "FLAME.h"
@@ -10,21 +10,71 @@
 #include "fla_lapack_x86_common.h"
 
 #ifdef FLA_ENABLE_AMD_OPT
-
 static doublereal d__1 = -1;
 static doublereal c_b1 = 1;
 extern int fla_thread_get_num_threads(void);
-extern void FLA_get_optimum_params_getrf(fla_dim_t m, fla_dim_t n, fla_dim_t *nb, int *n_threads);
-    /* LU factorization blocked varaiant */
-int FLA_LU_piv_d_parallel(fla_dim_t *m, fla_dim_t *n, doublereal *a, fla_dim_t *lda, aocl_int_t *ipiv,
-                          fla_dim_t *info)
+
+void FLA_get_optimum_params_dgetrf(integer m, integer n, integer *nb, int *n_threads)
+{
+    int available_n_threads;
+
+    /* Get maximum thread available*/
+    available_n_threads = fla_thread_get_num_threads();
+
+#ifdef FLA_OPENMP_MULTITHREADING
+
+    if(m <= 512 || n <= 512)
+    {
+        *nb = 15;
+        *n_threads = 8;
+    }
+    else if(m <= 1024 || n <= 1024)
+    {
+        *nb = 32;
+        *n_threads = 16;
+    }
+    else if(m <= 2048 || n <= 2048)
+    {
+        *nb = 64;
+        *n_threads = 24;
+    }
+    else if(m <= 6500 || n <= 6500)
+    {
+        *nb = 128;
+        *n_threads = 32;
+    }
+    else if(m <= 12000 || n <= 12000)
+    {
+        *nb = 128;
+        *n_threads = 32;
+    }
+    else
+    {
+        *nb = 128;
+        *n_threads = 64;
+    }
+
+    if(*n_threads > available_n_threads)
+        *n_threads = available_n_threads;
+
+#else
+    *nb = 64;
+    *n_threads = 1;
+#endif
+
+    return;
+}
+
+/* LU factorization blocked varaiant */
+int FLA_LU_piv_d_parallel(integer *m, integer *n, doublereal *a, integer *lda, integer *ipiv,
+                          integer *info)
 {
 #ifdef FLA_OPENMP_MULTITHREADING
     /* System generated locals */
-    fla_dim_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8;
-    fla_dim_t i__, j, s, iinfo;
-    fla_dim_t jb, jb_prev, jb_offset, nb;
-    fla_dim_t c__1 = 1;
+    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8;
+    integer i__, j, s, iinfo;
+    integer jb, jb_prev, jb_offset, nb;
+    integer c__1 = 1;
 #define a_subscr(a_1, a_2) (a_2) * a_dim1 + a_1
 #define a_ref(a_1, a_2) a[a_subscr(a_1, a_2)]
     int threads_id, n_threads;
@@ -49,17 +99,17 @@ int FLA_LU_piv_d_parallel(fla_dim_t *m, fla_dim_t *n, doublereal *a, fla_dim_t *
         return *info;
     }
 
-    /* Quick return if possible */
+    // Quick return if possible
     if(*m == 0 || *n == 0)
         return 0;
 
-    /* Determine optimum block and thread size for this environment */
-    FLA_get_optimum_params_getrf(*m, *n, &nb, &n_threads);
+    // Determine optimum block and thread size for this environment
+    FLA_get_optimum_params_dgetrf(*m, *n, &nb, &n_threads);
 
     /* call sequencial algorithm for single thread*/
     if(n_threads == 1)
     {
-        aocl_lapack_dgetrf2(m, n, a, lda, ipiv, info);
+        dgetrf2_(m, n, a, lda, ipiv, info);
         return *info;
     }
 
@@ -97,19 +147,19 @@ int FLA_LU_piv_d_parallel(fla_dim_t *m, fla_dim_t *n, doublereal *a, fla_dim_t *
     i__3 = fla_min(*m, *n) - j + 1;
     jb = fla_min(i__3, nb);
 
-    /* Compute L00 and U00 of diagonal blocks */
+    // Compute L00 and U00 of diagonal blocks
     i__3 = *m - j + 1;
-    aocl_lapack_dgetrf2(&i__3, &jb, M_PTR(a, j, j, a_dim1), lda, &ipiv[j], &iinfo);
+    dgetrf2_(&i__3, &jb, (doublereal *)&a_ref(j, j), lda, &ipiv[j], &iinfo);
 
     if(*info == 0 && iinfo > 0)
         *info = iinfo + j - 1;
 
-    /* Computing MIN */
+    // Computing MIN
     i__4 = *m, i__5 = j + jb - 1;
     i__3 = fla_min(i__4, i__5);
     for(i__ = j; i__ <= i__3; ++i__)
     {
-        ipiv[i__] = (aocl_int_t)(j - 1 + ipiv[i__]);
+        ipiv[i__] = j - 1 + ipiv[i__];
     }
 
 #pragma omp parallel num_threads(n_threads) private(i__3, i__4, i__5, i__6, i__7, i__8, j, s, jb, \
@@ -122,88 +172,88 @@ int FLA_LU_piv_d_parallel(fla_dim_t *m, fla_dim_t *n, doublereal *a, fla_dim_t *
             /* Factorize the next block while the rest of the matrix is being updated */
             if(threads_id == 0)
             {
-                /* Computing MIN */
+                // Computing MIN
                 i__3 = fla_min(*m, *n) - j + 1;
                 jb_prev = fla_min(i__3, nb);
-                /* Apply interchanges to columns J+JB:N */
+                // Apply interchanges to columns J+JB:N
                 i__3 = *n - j - jb_prev + 1;
                 i__4 = j + jb_prev - 1;
                 i__3 = fla_min(i__3, jb_prev);
-                aocl_lapack_dlaswp(&i__3, M_PTR(a, 1, j + jb_prev, a_dim1), lda, &j, &i__4, &ipiv[1],
+                dlaswp_(&i__3, (doublereal *)&a_ref(1, j + jb_prev), lda, &j, &i__4, &ipiv[1],
                         &c__1);
-                /* compute U10 */
+                // compute U10
                 i__3 = *n - j - jb_prev + 1;
                 i__3 = fla_min(i__3, jb_prev);
-                aocl_blas_dtrsm("Left", "Lower", "No transpose", "Unit", &jb_prev, &i__3, &c_b1,
-                       M_PTR(a, j, j, a_dim1), lda, M_PTR(a, j, j + jb_prev, a_dim1), lda);
-                /* compute L11 * U11 */
+                dtrsm_("Left", "Lower", "No transpose", "Unit", &jb_prev, &i__3, &c_b1,
+                       (doublereal *)&a_ref(j, j), lda, (doublereal *)&a_ref(j, j + jb_prev), lda);
+                // compute L11 * U11
                 if(j + jb_prev <= *m)
                 {
                     /* Update trailing submatrix. */
                     i__3 = *m - j - jb_prev + 1;
                     i__4 = *n - j - jb_prev + 1;
                     i__4 = fla_min(i__4, jb_prev);
-                    aocl_blas_dgemm("No transpose", "No transpose", &i__3, &i__4, &jb_prev, &d__1,
-                           M_PTR(a, j + jb_prev, j, a_dim1), lda,
-                           M_PTR(a, j, j + jb_prev, a_dim1), lda, &c_b1,
-                           M_PTR(a, j + jb_prev, j + jb_prev, a_dim1), lda);
+                    dgemm_("No transpose", "No transpose", &i__3, &i__4, &jb_prev, &d__1,
+                           (doublereal *)&a_ref(j + jb_prev, j), lda,
+                           (doublereal *)&a_ref(j, j + jb_prev), lda, &c_b1,
+                           (doublereal *)&a_ref(j + jb_prev, j + jb_prev), lda);
                 }
 
                 if(s <= i__1)
                 {
-                    /* Computing MIN */
+                    // Computing MIN
                     i__3 = fla_min(*m, *n) - s + 1;
                     jb = fla_min(i__3, nb);
 
-                    /* Compute L00 and U00 of diagonal blocks */
+                    // Compute L00 and U00 of diagonal blocks
                     i__3 = *m - s + 1;
-                    aocl_lapack_dgetrf2(&i__3, &jb, M_PTR(a, s, s, a_dim1), lda, &ipiv[s], &iinfo);
+                    dgetrf2_(&i__3, &jb, (doublereal *)&a_ref(s, s), lda, &ipiv[s], &iinfo);
 
                     if(*info == 0 && iinfo > 0)
                         *info = iinfo + s - 1;
-                    /* Computing MIN */
+                    // Computing MIN
                     i__4 = *m, i__5 = s + jb - 1;
                     i__3 = fla_min(i__4, i__5);
                     for(i__ = s; i__ <= i__3; ++i__)
                     {
-                        ipiv[i__] = (aocl_int_t)(s - 1 + ipiv[i__]);
+                        ipiv[i__] = s - 1 + ipiv[i__];
                     }
                 }
             }
             else
             {
-                /* Computing MIN */
+                // Computing MIN
                 i__3 = fla_min(*m, *n) - j + 1;
                 jb_prev = fla_min(i__3, nb);
                 jb_offset = jb_prev * 2;
 
                 if(j + jb_prev <= *n)
                 {
-                    /* Apply interchanges to columns J+JB:N */
+                    // Apply interchanges to columns J+JB:N
                     i__3 = *n - j - jb_prev + 1 - jb_prev;
                     i__4 = j + jb_prev - 1;
                     FLA_Thread_get_subrange(threads_id - 1, n_threads - 1, i__3, &i__5, &i__6);
-                    aocl_lapack_dlaswp(&i__5, M_PTR(a, 1, j + jb_offset + i__6, a_dim1), lda, &j, &i__4,
+                    dlaswp_(&i__5, (doublereal *)&a_ref(1, j + jb_offset + i__6), lda, &j, &i__4,
                             &ipiv[1], &c__1);
 
-                    /* compute U10 */
+                    // compute U10
                     i__3 = *n - j - jb_prev + 1 - jb_prev;
                     FLA_Thread_get_subrange(threads_id - 1, n_threads - 1, i__3, &i__5, &i__6);
-                    aocl_blas_dtrsm("Left", "Lower", "No transpose", "Unit", &jb_prev, &i__5, &c_b1,
-                           M_PTR(a, j, j, a_dim1), lda,
-                           M_PTR(a, j, j + jb_offset + i__6, a_dim1), lda);
+                    dtrsm_("Left", "Lower", "No transpose", "Unit", &jb_prev, &i__5, &c_b1,
+                           (doublereal *)&a_ref(j, j), lda,
+                           (doublereal *)&a_ref(j, j + jb_offset + i__6), lda);
 
-                    /* compute L11 * U11 */
+                    // compute L11 * U11
                     if(j + jb_prev <= *m)
                     {
                         /* Update trailing submatrix. */
                         i__3 = *m - j - jb_prev + 1;
                         i__4 = *n - j - jb_prev + 1 - jb_prev;
                         FLA_Thread_get_subrange(threads_id - 1, n_threads - 1, i__4, &i__7, &i__8);
-                        aocl_blas_dgemm("No transpose", "No transpose", &i__3, &i__7, &jb_prev, &d__1,
-                               M_PTR(a, j + jb_prev, j, a_dim1), lda,
-                               M_PTR(a, j, j + jb_offset + i__8, a_dim1), lda, &c_b1,
-                               M_PTR(a, j + jb_prev, j + jb_offset + i__8, a_dim1), lda);
+                        dgemm_("No transpose", "No transpose", &i__3, &i__7, &jb_prev, &d__1,
+                               (doublereal *)&a_ref(j + jb_prev, j), lda,
+                               (doublereal *)&a_ref(j, j + jb_offset + i__8), lda, &c_b1,
+                               (doublereal *)&a_ref(j + jb_prev, j + jb_offset + i__8), lda);
                     }
                 }
             }
@@ -216,20 +266,20 @@ int FLA_LU_piv_d_parallel(fla_dim_t *m, fla_dim_t *n, doublereal *a, fla_dim_t *
         threads_id = omp_get_thread_num();
         for(j = 1; j <= i__1; j += i__2)
         {
-            /* Computing MIN */
+            // Computing MIN
             i__3 = fla_min(*m, *n) - j + 1;
             jb = fla_min(i__3, nb);
 
             i__3 = j - 1;
             i__4 = j + jb - 1;
             FLA_Thread_get_subrange(threads_id, n_threads, i__3, &i__5, &i__6);
-            aocl_lapack_dlaswp(&i__5, (doublereal *)&a[a_offset + (i__6 * a_dim1)], lda, &j, &i__4, &ipiv[1],
+            dlaswp_(&i__5, (doublereal *)&a[a_offset + (i__6 * a_dim1)], lda, &j, &i__4, &ipiv[1],
                     &c__1);
 #pragma omp barrier
         }
     }
 #else
-    aocl_lapack_dgetrf2(m, n, a, lda, ipiv,info);
+    dgetrf2_(m, n, a, lda, ipiv,info);
 #endif
 
     return *info;

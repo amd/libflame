@@ -34,7 +34,7 @@ integer   FLA_LU_piv_small_s_var0( integer *m, integer *n, real *a, integer *lda
                                    integer *ipiv, integer *info );
 integer   FLA_LU_piv_small_s_var1( integer *m, integer *n, real *a, integer *lda,
                                    integer *ipiv, integer *info );
-
+int FLA_LU_piv_d_parallel( integer *m, integer *n, doublereal *a, integer *lda, integer *ipiv, integer *info);
 
 FLA_Error FLA_LU_piv_solve( FLA_Obj A, FLA_Obj p, FLA_Obj B, FLA_Obj X );
 
@@ -44,8 +44,6 @@ integer lapack_cgetf2(integer *m, integer *n, scomplex *a, integer *lda,
 	 integer *ipiv, integer *info);
 integer lapack_cgetrf(integer *m, integer *n, scomplex *a, integer *lda,
 	 integer *ipiv, integer *info);
-integer lapack_dgetf2(integer *m, integer *n, doublereal *a, integer *
-	lda, integer *ipiv, integer *info);
 integer lapack_dgetrf(integer *m, integer *n, doublereal *a, integer *
 	lda, integer *ipiv, integer *info);
 integer lapack_sgetf2(integer *m, integer *n, real *a, integer *lda,

@@ -48,45 +48,45 @@ extern void DTL_Trace(uint8 ui8LogLevel, uint8 ui8LogType, const int8 *pi8FileNa
 
 #if FLA_ENABLE_AMD_OPT /* FLA_ENABLE_AMD_OPT */
 /* FLA_ENABLE_AMD_OPT enables the code which selects algorithm variants based on size */
-#define LAPACK_getrf_body_d(prefix)                                                 \
-    extern fla_context fla_global_context;                                          \
-    integer i = 0;                                                                  \
-    if(*m == 2 && *n == 2)                                                          \
-    {                                                                               \
-        FLA_LU_PIV_SMALL_D_2x2(i, n, buff_A, ldim_A, buff_p, info);                 \
-    }                                                                               \
-    else if(*m == 3 && *n == 3)                                                     \
-    {                                                                               \
-        FLA_LU_PIV_SMALL_D_3x3(i, n, buff_A, ldim_A, buff_p, info);                 \
-    }                                                                               \
-    else if(*m == 4 && *n == 4)                                                     \
-    {                                                                               \
-        FLA_LU_PIV_SMALL_D_4x4(i, n, buff_A, ldim_A, buff_p, info);                 \
-    }                                                                               \
-    else if(*m <= FLA_DGETRF_SMALL_THRESH0 && *n <= FLA_DGETRF_SMALL_THRESH0)       \
-    {                                                                               \
-        FLA_LU_piv_small_d_var0(m, n, buff_A, ldim_A, buff_p, info);                \
-    }                                                                               \
-    else                                                                            \
-    {                                                                               \
-        /* Initialize global context data */                                        \
-        aocl_fla_init();                                                            \
-        if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2) && *m < FLA_DGETRF_SMALL_AVX2_THRESH0  \
-           && *n < FLA_DGETRF_SMALL_AVX2_THRESH0)                                   \
-        {                                                                           \
-          /* Calling vectorized code when avx2 supported architecture detected */ \
-            fla_dgetrf_small_avx2(m, n, buff_A, ldim_A, buff_p, info);              \
-        }                                                                           \
-	else if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512) && *m < FLA_DGETRF_SMALL_AVX512_THRESH0  \
-           && *n < FLA_DGETRF_SMALL_AVX512_THRESH0)                                 \
-        {                                                                           \
-          /* Calling vectorized code when avx512 supported architecture detected */ \
-            fla_dgetrf_small_avx512(m, n, buff_A, ldim_A, buff_p, info);            \
-        }                                                                           \
-        else                                                                        \
-        {                                                                           \
-            dgetrf2_(m, n, buff_A, ldim_A, buff_p, info);                           \
-        }                                                                           \
+#define LAPACK_getrf_body_d(prefix)                                                         \
+    extern fla_context fla_global_context;                                                  \
+    integer i = 0;                                                                          \
+    if(*m == 2 && *n == 2)                                                                  \
+    {                                                                                       \
+        FLA_LU_PIV_SMALL_D_2x2(i, n, buff_A, ldim_A, buff_p, info);                         \
+    }                                                                                       \
+    else if(*m == 3 && *n == 3)                                                             \
+    {                                                                                       \
+        FLA_LU_PIV_SMALL_D_3x3(i, n, buff_A, ldim_A, buff_p, info);                         \
+    }                                                                                       \
+    else if(*m == 4 && *n == 4)                                                             \
+    {                                                                                       \
+        FLA_LU_PIV_SMALL_D_4x4(i, n, buff_A, ldim_A, buff_p, info);                         \
+    }                                                                                       \
+    else if(*m <= FLA_DGETRF_SMALL_THRESH0 && *n <= FLA_DGETRF_SMALL_THRESH0)               \
+    {                                                                                       \
+        FLA_LU_piv_small_d_var0(m, n, buff_A, ldim_A, buff_p, info);                        \
+    }                                                                                       \
+    else                                                                                    \
+    {                                                                                       \
+        /* Initialize global context data */                                                \
+        aocl_fla_init();                                                                    \
+        if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2) && *m < FLA_DGETRF_SMALL_AVX2_THRESH0          \
+           && *n < FLA_DGETRF_SMALL_AVX2_THRESH0)                                           \
+        {                                                                                   \
+            /* Calling vectorized code when avx2 supported architecture detected */         \
+            fla_dgetrf_small_avx2(m, n, buff_A, ldim_A, buff_p, info);                      \
+        }                                                                                   \
+        else if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512) && *m < FLA_DGETRF_SMALL_AVX512_THRESH0 \
+                && *n < FLA_DGETRF_SMALL_AVX512_THRESH0)                                    \
+        {                                                                                   \
+            /* Calling vectorized code when avx512 supported architecture detected */       \
+            fla_dgetrf_small_avx512(m, n, buff_A, ldim_A, buff_p, info);                    \
+        }                                                                                   \
+        else                                                                                \
+        {                                                                                   \
+            FLA_LU_piv_d_parallel(m, n, buff_A, ldim_A, buff_p, info);                      \
+        }                                                                                   \
     }
 
 #ifdef FLA_OPENMP_MULTITHREADING
@@ -278,7 +278,7 @@ extern void DTL_Trace(uint8 ui8LogLevel, uint8 ui8LogType, const int8 *pi8FileNa
     FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);   \
     FLA_Obj A, p, AH, ph;                                    \
     integer min_m_n = fla_min(*m, *n);                       \
-    fla_dim_t nth, b_flash;                                      \
+    fla_dim_t nth, b_flash;                                  \
     FLA_Error e_val;                                         \
     FLA_Error init_result;                                   \
                                                              \

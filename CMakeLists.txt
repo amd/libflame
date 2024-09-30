@@ -147,6 +147,7 @@ set(ENABLE_AOCL_DTL OFF CACHE STRING "Enable DTL Usage. USE with Option ALL to E
 set_property(CACHE ENABLE_AOCL_DTL PROPERTY STRINGS TRACE_AND_LOG TRACE LOG OFF )
 option (ENABLE_EMBED_AOCLUTILS "Enables embedding aocl-utils library in AOCL-LAPACK" OFF)
 option (ENABLE_LAPACKE_LSAME_FORTRAN_STRLEN " For LAPACKE interface enables lsame arguments length based on Fortran interface " OFF)
+option (ENABLE_ASAN "Enable Address Sanitizer (Debug build)" OFF)
 
 message(STATUS "CMAKE_BUILD_TYPE : ${CMAKE_BUILD_TYPE}")
 if(WIN32)
@@ -191,6 +192,20 @@ if(ENABLE_GCOV)
 	add_definitions(--coverage)
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fprofile-arcs -ftest-coverage")
+endif()
+
+# Address Sanitizer
+if(WIN32)
+    if(ENABLE_ASAN)
+       message(STATUS "Address Sanitizer is not supported")
+    endif()
+elseif(UNIX)
+    if(ENABLE_ASAN)
+        message(STATUS "Enabled ENABLE_ASAN : ${ENABLE_ASAN}")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address")
+    else()
+        message(STATUS "Enabled ENABLE_ASAN : ${ENABLE_ASAN}")
+    endif()
 endif()
 
 #Adding PIC flag and other flags

@@ -210,9 +210,6 @@ void prepare_larfg_run(integer datatype, integer n_A, integer incx, void *x, voi
 
             exe_time = fla_test_clock() - exe_time;
         }
-        /*  call  larfg API */
-
-        exe_time = fla_test_clock() - exe_time;
 
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);

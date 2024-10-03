@@ -1,0 +1,322 @@
+{
+    "version": 6,
+    "configurePresets": [
+        {
+            "name": "lp64",
+            "hidden": true,
+            "cacheVariables": {
+                "ENABLE_ILP64": "OFF"
+            }
+        },
+        {
+            "name": "ilp64",
+            "hidden": true,
+            "cacheVariables": {
+                "ENABLE_ILP64": "ON"
+            }
+        },
+        {
+            "name": "st",
+            "hidden": true,
+            "cacheVariables": {
+                "ENABLE_MULTITHREADING": "OFF"
+            }
+        },
+        {
+            "name": "mt",
+            "hidden": true,
+            "cacheVariables": {
+                "ENABLE_MULTITHREADING": "ON"
+            }
+        },
+        {
+            "name": "static",
+            "hidden": true,
+            "cacheVariables": {
+                "BUILD_SHARED_LIBS": "OFF"
+            }
+        },
+        {
+            "name": "shared",
+            "hidden": true,
+            "cacheVariables": {
+                "BUILD_SHARED_LIBS": "ON"
+            }
+        },
+        {
+            "name": "autoisa",
+            "hidden": true,
+            "cacheVariables": {
+                "LF_ISA_CONFIG": "auto"
+            }
+        },
+        {
+            "name": "avx",
+            "hidden": true,
+            "cacheVariables": {
+                "LF_ISA_CONFIG": "avx"
+            }
+        },
+        {
+            "name": "avx2",
+            "hidden": true,
+            "cacheVariables": {
+                "LF_ISA_CONFIG": "avx2"
+            }
+        },
+        {
+            "name": "avx512",
+            "hidden": true,
+            "cacheVariables": {
+                "LF_ISA_CONFIG": "avx512"
+            }
+        },
+        {
+            "name": "aoclblas",
+            "hidden": true,
+            "cacheVariables": {
+                "ENABLE_AOCL_BLAS": "ON"
+            }
+        },
+        {
+            "name": "amdaoccopt",
+            "hidden": true,
+            "cacheVariables": {
+                "ENABLE_AMD_AOCC_FLAGS": "ON"
+            }
+        },
+        {
+            "name": "amdgccopt",
+            "hidden": true,
+            "cacheVariables": {
+                "ENABLE_AMD_FLAGS": "ON"
+            }
+        },
+        {
+            "name": "test",
+            "hidden": true,
+            "cacheVariables": {
+                "BUILD_TEST": "ON",
+                "BUILD_LEGACY_TEST": "ON"
+            }
+        },
+        {
+            "name": "test-main",
+            "hidden": true,
+            "cacheVariables": {
+                "BUILD_TEST": "ON"
+            }
+        },
+        {
+            "name": "test-netlib",
+            "hidden": true,
+            "cacheVariables": {
+                "BUILD_NETLIB_TEST": "ON"
+            }
+        },
+        {
+            "name": "base",
+            "hidden": true,
+            "binaryDir": "${sourceDir}/build-${presetName}"
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "base",
+            "configurePreset": "base",
+            "configuration": "Release",
+            "hidden": true,
+            "jobs": 0
+        },
+        {
+            "name": "install",
+            "inherits": "base",
+            "hidden": true,
+            "targets": "install"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "base",
+            "hidden": true,
+            "configurePreset": "base",
+            "configuration": "Release",
+            "environment": {
+                "BLIS_NUM_THREADS": "8"
+            },
+            "output": {
+                "verbosity": "verbose"
+            }
+        },
+        {
+            "name": "main_short",
+            "inherits": "base",
+            "hidden": true,
+            "filter": {
+                "include": {
+                    "name": "main_test_short"
+                }
+            }
+        },
+        {
+            "name": "main_micro",
+            "inherits": "base",
+            "hidden": true,
+            "filter": {
+                "include": {
+                    "name": "main_test_micro"
+                }
+            }
+        },
+        {
+            "name": "main_medium",
+            "inherits": "base",
+            "hidden": true,
+            "filter": {
+                "include": {
+                    "name": "main_test_medium"
+                }
+            }
+        },
+        {
+            "name": "main_long",
+            "inherits": "base",
+            "hidden": true,
+            "filter": {
+                "include": {
+                    "name": "main_test_long"
+                }
+            }
+        },
+        {
+            "name": "lapacke_col_major_short",
+            "inherits": "base",
+            "hidden": true,
+            "filter": {
+                "include": {
+                    "name": "lapacke_test_col_major_short"
+                }
+            }
+        },
+        {
+            "name": "lapacke_col_major_micro",
+            "inherits": "base",
+            "hidden": true,
+            "filter": {
+                "include": {
+                    "name": "lapacke_test_col_major_micro"
+                }
+            }
+        },
+        {
+            "name": "lapacke_col_major_medium",
+            "inherits": "base",
+            "hidden": true,
+            "filter": {
+                "include": {
+                    "name": "lapacke_test_col_major_medium"
+                }
+            }
+        },
+        {
+            "name": "lapacke_col_major_long",
+            "inherits": "base",
+            "hidden": true,
+            "filter": {
+                "include": {
+                    "name": "lapacke_test_col_major_long"
+                }
+            }
+        },
+        {
+            "name": "lapacke_row_major_short",
+            "inherits": "base",
+            "hidden": true,
+            "filter": {
+                "include": {
+                    "name": "lapacke_test_row_major_short"
+                }
+            }
+        },
+        {
+            "name": "lapacke_row_major_micro",
+            "inherits": "base",
+            "hidden": true,
+            "filter": {
+                "include": {
+                    "name": "lapacke_test_row_major_micro"
+                }
+            }
+        },
+        {
+            "name": "lapacke_row_major_medium",
+            "inherits": "base",
+            "hidden": true,
+            "filter": {
+                "include": {
+                    "name": "lapacke_test_row_major_medium"
+                }
+            }
+        },
+        {
+            "name": "lapacke_row_major_long",
+            "inherits": "base",
+            "hidden": true,
+            "filter": {
+                "include": {
+                    "name": "lapacke_test_row_major_long"
+                }
+            }
+        },
+        {
+            "name": "main",
+            "inherits": "main_short",
+            "hidden": true,
+            "output": {
+                "outputLogFile": "main_test_output.log"
+            }
+        },
+        {
+            "name": "lapacke_col_major",
+            "inherits": "lapacke_col_major_short",
+            "hidden": true,
+            "output": {
+                "outputLogFile": "lapacke_test_col_major.log"
+            }
+        },
+        {
+            "name": "lapacke_row_major",
+            "inherits": "lapacke_row_major_short",
+            "hidden": true,
+            "output": {
+                "outputLogFile": "lapacke_test_row_major.log"
+            }
+        },
+        {
+            "name": "netlib",
+            "inherits": "base",
+            "hidden": true,
+            "filter": {
+                "include": {
+                    "name": "netlib-test"
+                }
+            },
+            "output": {
+                "outputLogFile": "netlib_test.log"
+            }
+        },
+        {
+            "name": "legacy",
+            "inherits": "base",
+            "hidden": true,
+            "filter": {
+                "include": {
+                    "name": "legacy_flame_test"
+                }
+            },
+            "output": {
+                "outputLogFile": "legacy_flame_test.log"
+            }
+        }
+    ]
+}

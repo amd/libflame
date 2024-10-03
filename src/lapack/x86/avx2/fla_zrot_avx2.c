@@ -20,6 +20,7 @@ int fla_zrot_avx2(integer *n, doublecomplex *cx, integer *incx, doublecomplex *c
     doublecomplex z__1, z__2, z__3;
     /* Local variables */
     integer i__, ix, iy;
+    integer aix, aiy;
     doublereal lc, sr, si, msi;
 
     __m256d vd4_cmm, vd4_srmm, vd4_simm, vd4_sinm;
@@ -83,21 +84,17 @@ int fla_zrot_avx2(integer *n, doublecomplex *cx, integer *incx, doublecomplex *c
     vd2_msirm = _mm_shuffle_pd(vd2_srm, vd2_sin, 0x2);
     vd2_msrim = _mm_shuffle_pd(vd2_sin, vd2_srm, 0x1);
 
-    if(*incx == 1 && *incy == 1)
+    aix = f2c_abs(*incx);
+    aiy = f2c_abs(*incy);
+
+    if(aix == 1 && aiy == 1)
     {
         goto L20;
     }
+
     /* Code for unequal increments or equal increments not equal to 1 */
     ix = 1;
     iy = 1;
-    if(*incx < 0)
-    {
-        ix = (-(*n) + 1) * *incx + 1;
-    }
-    if(*incy < 0)
-    {
-        iy = (-(*n) + 1) * *incy + 1;
-    }
 
     i__1 = *n;
     if(*incx != *incy)
@@ -120,8 +117,8 @@ int fla_zrot_avx2(integer *n, doublecomplex *cx, integer *incx, doublecomplex *c
             cy[iy].i = z__2.i - z__3.i; // , expr subst
             cx[ix].r = z__1.r;
             cx[ix].i = z__1.i; // , expr subst
-            ix += *incx;
-            iy += *incy;
+            ix += aix;
+            iy += aiy;
         }
     }
     else
@@ -130,9 +127,9 @@ int fla_zrot_avx2(integer *n, doublecomplex *cx, integer *incx, doublecomplex *c
         {
             /* load complex inputs from x & y */
             vd4_xmm0 = _mm256_loadu_pd((double const *)&cx[ix]);
-            vd2_hxmm1 = _mm_loadu_pd((double const *)&cx[ix + *incx]);
+            vd2_hxmm1 = _mm_loadu_pd((double const *)&cx[ix + aix]);
             vd4_ymm0 = _mm256_loadu_pd((double const *)&cy[ix]);
-            vd2_hymm1 = _mm_loadu_pd((double const *)&cy[ix + *incx]);
+            vd2_hymm1 = _mm_loadu_pd((double const *)&cy[ix + aix]);
 
             /* pack the inputs into 256-bit registers */
             vd4_xmm0 = _mm256_insertf128_pd(vd4_xmm0, vd2_hxmm1, 0x1);
@@ -162,11 +159,11 @@ int fla_zrot_avx2(integer *n, doublecomplex *cx, integer *incx, doublecomplex *c
 
             /* store the results */
             _mm_storeu_pd((double *)&cx[ix], vd2_hxmm0);
-            _mm_storeu_pd((double *)&cx[ix + *incx], vd2_hxmm1);
+            _mm_storeu_pd((double *)&cx[ix + aix], vd2_hxmm1);
             _mm_storeu_pd((double *)&cy[ix], vd2_hymm0);
-            _mm_storeu_pd((double *)&cy[ix + *incx], vd2_hymm1);
+            _mm_storeu_pd((double *)&cy[ix + aix], vd2_hymm1);
 
-            ix += 2 * *incx;
+            ix += 2 * aix;
         }
         for(; i__ <= i__1; ++i__)
         {
@@ -194,7 +191,7 @@ int fla_zrot_avx2(integer *n, doublecomplex *cx, integer *incx, doublecomplex *c
             _mm_storeu_pd((double *)&cx[ix], vd2_oxm);
             _mm_storeu_pd((double *)&cy[ix], vd2_oym);
 
-            ix += *incx;
+            ix += aix;
         }
     }
     return 0;

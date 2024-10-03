@@ -1,21 +1,31 @@
-/* ../netlib/dgegs.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dgegs.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
 static doublereal c_b36 = 0.;
 static doublereal c_b37 = 1.;
-/* > \brief <b> DGEEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors for GE mat rices</b> */
+/* > \brief <b> DGEEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors
+ * for GE mat rices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DGEGS + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgegs.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgegs.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgegs.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgegs.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgegs.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgegs.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -63,7 +73,7 @@ static doublereal c_b37 = 1.;
 /* > \verbatim */
 /* > JOBVSL is CHARACTER*1 */
 /* > = 'N': do not compute the left Schur vectors;
-*/
+ */
 /* > = 'V': compute the left Schur vectors (returned in VSL). */
 /* > \endverbatim */
 /* > */
@@ -71,7 +81,7 @@ static doublereal c_b37 = 1.;
 /* > \verbatim */
 /* > JOBVSR is CHARACTER*1 */
 /* > = 'N': do not compute the right Schur vectors;
-*/
+ */
 /* > = 'V': compute the right Schur vectors (returned in VSR). */
 /* > \endverbatim */
 /* > */
@@ -220,45 +230,73 @@ the routine */
 /* > \ingroup doubleGEeigen */
 /* ===================================================================== */
 /* Subroutine */
-int dgegs_(char *jobvsl, char *jobvsr, integer *n, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal * alphar, doublereal *alphai, doublereal *beta, doublereal *vsl, integer *ldvsl, doublereal *vsr, integer *ldvsr, doublereal *work, integer *lwork, integer *info)
+void dgegs_(char *jobvsl, char *jobvsr, integer *n, doublereal *a, integer *lda, doublereal *b,
+            integer *ldb, doublereal *alphar, doublereal *alphai, doublereal *beta, doublereal *vsl,
+            integer *ldvsl, doublereal *vsr, integer *ldvsr, doublereal *work, integer *lwork,
+            integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgegs inputs: jobvsl %c, jobvsr %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldvsl %" FLA_IS ", ldvsr %" FLA_IS ", lwork %" FLA_IS "",*jobvsl, *jobvsr, *n, *lda, *ldb, *ldvsl, *ldvsr, *lwork);
+    AOCL_DTL_SNPRINTF("dgegs inputs: jobvsl %c, jobvsr %c, n %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS ", ldvsl %" FLA_IS ", ldvsr %" FLA_IS ", lwork %" FLA_IS "",
+                      *jobvsl, *jobvsr, *n, *lda, *ldb, *ldvsl, *ldvsr, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, vsl_dim1, vsl_offset, vsr_dim1, vsr_offset, i__1, i__2;
+    integer a_dim1, a_offset, b_dim1, b_offset, vsl_dim1, vsl_offset, vsr_dim1, vsr_offset, i__1,
+        i__2;
     /* Local variables */
     integer nb, nb1, nb2, nb3, ihi, ilo;
     doublereal eps, anrm, bnrm;
     integer itau, lopt;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer ileft, iinfo, icols;
     logical ilvsl;
     integer iwork;
     logical ilvsr;
     integer irows;
     extern /* Subroutine */
-    int dggbak_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), dggbal_(char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
-    extern doublereal dlamch_(char *), dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
+        void
+        dggbak_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
+                integer *, doublereal *, integer *, integer *),
+        dggbal_(char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *,
+                integer *, doublereal *, doublereal *, doublereal *, integer *);
+    extern doublereal dlamch_(char *),
+        dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */
-    int dgghrd_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+        void
+        dgghrd_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, integer *, doublereal *, integer *, doublereal *, integer *,
+                integer *),
+        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublereal *, integer *, integer *);
     logical ilascl, ilbscl;
     extern /* Subroutine */
-    int dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                integer *, integer *),
+        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal safmin;
     extern /* Subroutine */
-    int dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     doublereal bignum;
     extern /* Subroutine */
-    int dhgeqz_(char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dhgeqz_(char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
+                integer *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer ijobvl, iright, ijobvr;
     extern /* Subroutine */
-    int dorgqr_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
+        void
+        dorgqr_(integer *, integer *, integer *, doublereal *, integer *, doublereal *,
+                doublereal *, integer *, integer *);
     doublereal anrmto;
     integer lwkmin;
     doublereal bnrmto;
     extern /* Subroutine */
-    int dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     doublereal smlnum;
     integer lwkopt;
     logical lquery;
@@ -301,12 +339,12 @@ int dgegs_(char *jobvsl, char *jobvsr, integer *n, doublereal *a, integer *lda, 
     vsr -= vsr_offset;
     --work;
     /* Function Body */
-    if (lsame_(jobvsl, "N"))
+    if(lsame_(jobvsl, "N", 1, 1))
     {
         ijobvl = 1;
         ilvsl = FALSE_;
     }
-    else if (lsame_(jobvsl, "V"))
+    else if(lsame_(jobvsl, "V", 1, 1))
     {
         ijobvl = 2;
         ilvsl = TRUE_;
@@ -316,12 +354,12 @@ int dgegs_(char *jobvsl, char *jobvsr, integer *n, doublereal *a, integer *lda, 
         ijobvl = -1;
         ilvsl = FALSE_;
     }
-    if (lsame_(jobvsr, "N"))
+    if(lsame_(jobvsr, "N", 1, 1))
     {
         ijobvr = 1;
         ilvsr = FALSE_;
     }
-    else if (lsame_(jobvsr, "V"))
+    else if(lsame_(jobvsr, "V", 1, 1))
     {
         ijobvr = 2;
         ilvsr = TRUE_;
@@ -334,71 +372,71 @@ int dgegs_(char *jobvsl, char *jobvsr, integer *n, doublereal *a, integer *lda, 
     /* Test the input arguments */
     /* Computing MAX */
     i__1 = *n << 2;
-    lwkmin = fla_max(i__1,1);
+    lwkmin = fla_max(i__1, 1);
     lwkopt = lwkmin;
-    work[1] = (doublereal) lwkopt;
+    work[1] = (doublereal)lwkopt;
     lquery = *lwork == -1;
     *info = 0;
-    if (ijobvl <= 0)
+    if(ijobvl <= 0)
     {
         *info = -1;
     }
-    else if (ijobvr <= 0)
+    else if(ijobvr <= 0)
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldvsl < 1 || ilvsl && *ldvsl < *n)
+    else if(*ldvsl < 1 || ilvsl && *ldvsl < *n)
     {
         *info = -12;
     }
-    else if (*ldvsr < 1 || ilvsr && *ldvsr < *n)
+    else if(*ldvsr < 1 || ilvsr && *ldvsr < *n)
     {
         *info = -14;
     }
-    else if (*lwork < lwkmin && ! lquery)
+    else if(*lwork < lwkmin && !lquery)
     {
         *info = -16;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
         nb1 = ilaenv_(&c__1, "DGEQRF", " ", n, n, &c_n1, &c_n1);
         nb2 = ilaenv_(&c__1, "DORMQR", " ", n, n, n, &c_n1);
         nb3 = ilaenv_(&c__1, "DORGQR", " ", n, n, n, &c_n1);
         /* Computing MAX */
-        i__1 = fla_max(nb1,nb2);
-        nb = fla_max(i__1,nb3);
+        i__1 = fla_max(nb1, nb2);
+        nb = fla_max(i__1, nb3);
         lopt = (*n << 1) + *n * (nb + 1);
-        work[1] = (doublereal) lopt;
+        work[1] = (doublereal)lopt;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DGEGS ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants */
     eps = dlamch_("E") * dlamch_("B");
@@ -408,47 +446,47 @@ int dgegs_(char *jobvsl, char *jobvsr, integer *n, doublereal *a, integer *lda, 
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
     anrm = dlange_("M", n, n, &a[a_offset], lda, &work[1]);
     ilascl = FALSE_;
-    if (anrm > 0. && anrm < smlnum)
+    if(anrm > 0. && anrm < smlnum)
     {
         anrmto = smlnum;
         ilascl = TRUE_;
     }
-    else if (anrm > bignum)
+    else if(anrm > bignum)
     {
         anrmto = bignum;
         ilascl = TRUE_;
     }
-    if (ilascl)
+    if(ilascl)
     {
-        dlascl_("G", &c_n1, &c_n1, &anrm, &anrmto, n, n, &a[a_offset], lda, & iinfo);
-        if (iinfo != 0)
+        dlascl_("G", &c_n1, &c_n1, &anrm, &anrmto, n, n, &a[a_offset], lda, &iinfo);
+        if(iinfo != 0)
         {
             *info = *n + 9;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     /* Scale B if max element outside range [SMLNUM,BIGNUM] */
     bnrm = dlange_("M", n, n, &b[b_offset], ldb, &work[1]);
     ilbscl = FALSE_;
-    if (bnrm > 0. && bnrm < smlnum)
+    if(bnrm > 0. && bnrm < smlnum)
     {
         bnrmto = smlnum;
         ilbscl = TRUE_;
     }
-    else if (bnrm > bignum)
+    else if(bnrm > bignum)
     {
         bnrmto = bignum;
         ilbscl = TRUE_;
     }
-    if (ilbscl)
+    if(ilbscl)
     {
-        dlascl_("G", &c_n1, &c_n1, &bnrm, &bnrmto, n, n, &b[b_offset], ldb, & iinfo);
-        if (iinfo != 0)
+        dlascl_("G", &c_n1, &c_n1, &bnrm, &bnrmto, n, n, &b[b_offset], ldb, &iinfo);
+        if(iinfo != 0)
         {
             *info = *n + 9;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     /* Permute the matrix to make it more nearly triangular */
@@ -457,8 +495,9 @@ int dgegs_(char *jobvsl, char *jobvsr, integer *n, doublereal *a, integer *lda, 
     ileft = 1;
     iright = *n + 1;
     iwork = iright + *n;
-    dggbal_("P", n, &a[a_offset], lda, &b[b_offset], ldb, &ilo, &ihi, &work[ ileft], &work[iright], &work[iwork], &iinfo);
-    if (iinfo != 0)
+    dggbal_("P", n, &a[a_offset], lda, &b[b_offset], ldb, &ilo, &ihi, &work[ileft], &work[iright],
+            &work[iwork], &iinfo);
+    if(iinfo != 0)
     {
         *info = *n + 1;
         goto L10;
@@ -471,61 +510,65 @@ int dgegs_(char *jobvsl, char *jobvsr, integer *n, doublereal *a, integer *lda, 
     itau = iwork;
     iwork = itau + irows;
     i__1 = *lwork + 1 - iwork;
-    dgeqrf_(&irows, &icols, &b[ilo + ilo * b_dim1], ldb, &work[itau], &work[ iwork], &i__1, &iinfo);
-    if (iinfo >= 0)
+    dgeqrf_(&irows, &icols, &b[ilo + ilo * b_dim1], ldb, &work[itau], &work[iwork], &i__1, &iinfo);
+    if(iinfo >= 0)
     {
         /* Computing MAX */
         i__1 = lwkopt;
-        i__2 = (integer) work[iwork] + iwork - 1; // , expr subst
-        lwkopt = fla_max(i__1,i__2);
+        i__2 = (integer)work[iwork] + iwork - 1; // , expr subst
+        lwkopt = fla_max(i__1, i__2);
     }
-    if (iinfo != 0)
+    if(iinfo != 0)
     {
         *info = *n + 2;
         goto L10;
     }
     i__1 = *lwork + 1 - iwork;
-    dormqr_("L", "T", &irows, &icols, &irows, &b[ilo + ilo * b_dim1], ldb, & work[itau], &a[ilo + ilo * a_dim1], lda, &work[iwork], &i__1, & iinfo);
-    if (iinfo >= 0)
+    dormqr_("L", "T", &irows, &icols, &irows, &b[ilo + ilo * b_dim1], ldb, &work[itau],
+            &a[ilo + ilo * a_dim1], lda, &work[iwork], &i__1, &iinfo);
+    if(iinfo >= 0)
     {
         /* Computing MAX */
         i__1 = lwkopt;
-        i__2 = (integer) work[iwork] + iwork - 1; // , expr subst
-        lwkopt = fla_max(i__1,i__2);
+        i__2 = (integer)work[iwork] + iwork - 1; // , expr subst
+        lwkopt = fla_max(i__1, i__2);
     }
-    if (iinfo != 0)
+    if(iinfo != 0)
     {
         *info = *n + 3;
         goto L10;
     }
-    if (ilvsl)
+    if(ilvsl)
     {
         dlaset_("Full", n, n, &c_b36, &c_b37, &vsl[vsl_offset], ldvsl);
         i__1 = irows - 1;
         i__2 = irows - 1;
-        dlacpy_("L", &i__1, &i__2, &b[ilo + 1 + ilo * b_dim1], ldb, &vsl[ilo + 1 + ilo * vsl_dim1], ldvsl);
+        dlacpy_("L", &i__1, &i__2, &b[ilo + 1 + ilo * b_dim1], ldb, &vsl[ilo + 1 + ilo * vsl_dim1],
+                ldvsl);
         i__1 = *lwork + 1 - iwork;
-        dorgqr_(&irows, &irows, &irows, &vsl[ilo + ilo * vsl_dim1], ldvsl, & work[itau], &work[iwork], &i__1, &iinfo);
-        if (iinfo >= 0)
+        dorgqr_(&irows, &irows, &irows, &vsl[ilo + ilo * vsl_dim1], ldvsl, &work[itau],
+                &work[iwork], &i__1, &iinfo);
+        if(iinfo >= 0)
         {
             /* Computing MAX */
             i__1 = lwkopt;
-            i__2 = (integer) work[iwork] + iwork - 1; // , expr subst
-            lwkopt = fla_max(i__1,i__2);
+            i__2 = (integer)work[iwork] + iwork - 1; // , expr subst
+            lwkopt = fla_max(i__1, i__2);
         }
-        if (iinfo != 0)
+        if(iinfo != 0)
         {
             *info = *n + 4;
             goto L10;
         }
     }
-    if (ilvsr)
+    if(ilvsr)
     {
         dlaset_("Full", n, n, &c_b36, &c_b37, &vsr[vsr_offset], ldvsr);
     }
     /* Reduce to generalized Hessenberg form */
-    dgghrd_(jobvsl, jobvsr, n, &ilo, &ihi, &a[a_offset], lda, &b[b_offset], ldb, &vsl[vsl_offset], ldvsl, &vsr[vsr_offset], ldvsr, &iinfo);
-    if (iinfo != 0)
+    dgghrd_(jobvsl, jobvsr, n, &ilo, &ihi, &a[a_offset], lda, &b[b_offset], ldb, &vsl[vsl_offset],
+            ldvsl, &vsr[vsr_offset], ldvsr, &iinfo);
+    if(iinfo != 0)
     {
         *info = *n + 5;
         goto L10;
@@ -535,21 +578,23 @@ int dgegs_(char *jobvsl, char *jobvsr, integer *n, doublereal *a, integer *lda, 
     /* left_permutation, right_permutation, work... */
     iwork = itau;
     i__1 = *lwork + 1 - iwork;
-    dhgeqz_("S", jobvsl, jobvsr, n, &ilo, &ihi, &a[a_offset], lda, &b[ b_offset], ldb, &alphar[1], &alphai[1], &beta[1], &vsl[vsl_offset], ldvsl, &vsr[vsr_offset], ldvsr, &work[iwork], &i__1, &iinfo);
-    if (iinfo >= 0)
+    dhgeqz_("S", jobvsl, jobvsr, n, &ilo, &ihi, &a[a_offset], lda, &b[b_offset], ldb, &alphar[1],
+            &alphai[1], &beta[1], &vsl[vsl_offset], ldvsl, &vsr[vsr_offset], ldvsr, &work[iwork],
+            &i__1, &iinfo);
+    if(iinfo >= 0)
     {
         /* Computing MAX */
         i__1 = lwkopt;
-        i__2 = (integer) work[iwork] + iwork - 1; // , expr subst
-        lwkopt = fla_max(i__1,i__2);
+        i__2 = (integer)work[iwork] + iwork - 1; // , expr subst
+        lwkopt = fla_max(i__1, i__2);
     }
-    if (iinfo != 0)
+    if(iinfo != 0)
     {
-        if (iinfo > 0 && iinfo <= *n)
+        if(iinfo > 0 && iinfo <= *n)
         {
             *info = iinfo;
         }
-        else if (iinfo > *n && iinfo <= *n << 1)
+        else if(iinfo > *n && iinfo <= *n << 1)
         {
             *info = iinfo - *n;
         }
@@ -560,70 +605,72 @@ int dgegs_(char *jobvsl, char *jobvsr, integer *n, doublereal *a, integer *lda, 
         goto L10;
     }
     /* Apply permutation to VSL and VSR */
-    if (ilvsl)
+    if(ilvsl)
     {
-        dggbak_("P", "L", n, &ilo, &ihi, &work[ileft], &work[iright], n, &vsl[ vsl_offset], ldvsl, &iinfo);
-        if (iinfo != 0)
+        dggbak_("P", "L", n, &ilo, &ihi, &work[ileft], &work[iright], n, &vsl[vsl_offset], ldvsl,
+                &iinfo);
+        if(iinfo != 0)
         {
             *info = *n + 7;
             goto L10;
         }
     }
-    if (ilvsr)
+    if(ilvsr)
     {
-        dggbak_("P", "R", n, &ilo, &ihi, &work[ileft], &work[iright], n, &vsr[ vsr_offset], ldvsr, &iinfo);
-        if (iinfo != 0)
+        dggbak_("P", "R", n, &ilo, &ihi, &work[ileft], &work[iright], n, &vsr[vsr_offset], ldvsr,
+                &iinfo);
+        if(iinfo != 0)
         {
             *info = *n + 8;
             goto L10;
         }
     }
     /* Undo scaling */
-    if (ilascl)
+    if(ilascl)
     {
-        dlascl_("H", &c_n1, &c_n1, &anrmto, &anrm, n, n, &a[a_offset], lda, & iinfo);
-        if (iinfo != 0)
+        dlascl_("H", &c_n1, &c_n1, &anrmto, &anrm, n, n, &a[a_offset], lda, &iinfo);
+        if(iinfo != 0)
         {
             *info = *n + 9;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
-        dlascl_("G", &c_n1, &c_n1, &anrmto, &anrm, n, &c__1, &alphar[1], n, & iinfo);
-        if (iinfo != 0)
+        dlascl_("G", &c_n1, &c_n1, &anrmto, &anrm, n, &c__1, &alphar[1], n, &iinfo);
+        if(iinfo != 0)
         {
             *info = *n + 9;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
-        dlascl_("G", &c_n1, &c_n1, &anrmto, &anrm, n, &c__1, &alphai[1], n, & iinfo);
-        if (iinfo != 0)
+        dlascl_("G", &c_n1, &c_n1, &anrmto, &anrm, n, &c__1, &alphai[1], n, &iinfo);
+        if(iinfo != 0)
         {
             *info = *n + 9;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
-    if (ilbscl)
+    if(ilbscl)
     {
-        dlascl_("U", &c_n1, &c_n1, &bnrmto, &bnrm, n, n, &b[b_offset], ldb, & iinfo);
-        if (iinfo != 0)
+        dlascl_("U", &c_n1, &c_n1, &bnrmto, &bnrm, n, n, &b[b_offset], ldb, &iinfo);
+        if(iinfo != 0)
         {
             *info = *n + 9;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
-        dlascl_("G", &c_n1, &c_n1, &bnrmto, &bnrm, n, &c__1, &beta[1], n, & iinfo);
-        if (iinfo != 0)
+        dlascl_("G", &c_n1, &c_n1, &bnrmto, &bnrm, n, &c__1, &beta[1], n, &iinfo);
+        if(iinfo != 0)
         {
             *info = *n + 9;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
 L10:
-    work[1] = (doublereal) lwkopt;
+    work[1] = (doublereal)lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGEGS */
 }
 /* dgegs_ */

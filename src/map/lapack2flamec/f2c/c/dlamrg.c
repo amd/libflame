@@ -1,16 +1,25 @@
-/* ../netlib/dlamrg.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlamrg.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLAMRG creates a permutation list to merge the entries of two independently sorted sets into a single set sorted in ascending order. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLAMRG + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlamrg. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlamrg.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlamrg. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlamrg.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlamrg. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlamrg.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -85,10 +94,13 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dlamrg_(integer *n1, integer *n2, doublereal *a, integer *dtrd1, integer *dtrd2, integer *index)
+void dlamrg_(integer *n1, integer *n2, doublereal *a, integer *dtrd1, integer *dtrd2,
+             integer *index)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlamrg inputs: n1 %" FLA_IS ", n2 %" FLA_IS ", dtrd1 %" FLA_IS ", dtrd2 %" FLA_IS "",*n1, *n2, *dtrd1, *dtrd2);
+    AOCL_DTL_SNPRINTF("dlamrg inputs: n1 %" FLA_IS ", n2 %" FLA_IS ", dtrd1 %" FLA_IS
+                      ", dtrd2 %" FLA_IS "",
+                      *n1, *n2, *dtrd1, *dtrd2);
     /* System generated locals */
     integer i__1;
     /* Local variables */
@@ -111,7 +123,7 @@ int dlamrg_(integer *n1, integer *n2, doublereal *a, integer *dtrd1, integer *dt
     /* Function Body */
     n1sv = *n1;
     n2sv = *n2;
-    if (*dtrd1 > 0)
+    if(*dtrd1 > 0)
     {
         ind1 = 1;
     }
@@ -119,7 +131,7 @@ int dlamrg_(integer *n1, integer *n2, doublereal *a, integer *dtrd1, integer *dt
     {
         ind1 = *n1;
     }
-    if (*dtrd2 > 0)
+    if(*dtrd2 > 0)
     {
         ind2 = *n1 + 1;
     }
@@ -130,9 +142,9 @@ int dlamrg_(integer *n1, integer *n2, doublereal *a, integer *dtrd1, integer *dt
     i__ = 1;
     /* while ( (N1SV > 0) & (N2SV > 0) ) */
 L10:
-    if (n1sv > 0 && n2sv > 0)
+    if(n1sv > 0 && n2sv > 0)
     {
-        if (a[ind1] <= a[ind2])
+        if(a[ind1] <= a[ind2])
         {
             index[i__] = ind1;
             ++i__;
@@ -149,12 +161,10 @@ L10:
         goto L10;
     }
     /* end while */
-    if (n1sv == 0)
+    if(n1sv == 0)
     {
         i__1 = n2sv;
-        for (n1sv = 1;
-                n1sv <= i__1;
-                ++n1sv)
+        for(n1sv = 1; n1sv <= i__1; ++n1sv)
         {
             index[i__] = ind2;
             ++i__;
@@ -166,9 +176,7 @@ L10:
     {
         /* N2SV .EQ. 0 */
         i__1 = n1sv;
-        for (n2sv = 1;
-                n2sv <= i__1;
-                ++n2sv)
+        for(n2sv = 1; n2sv <= i__1; ++n2sv)
         {
             index[i__] = ind1;
             ++i__;
@@ -177,7 +185,7 @@ L10:
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAMRG */
 }
 /* dlamrg_ */

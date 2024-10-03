@@ -1,16 +1,25 @@
-/* ../netlib/dgtts2.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dgtts2.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DGTTS2 solves a system of linear equations with a tridiagonal matrix using the LU factorization computed by sgttrf. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DGTTS2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgtts2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgtts2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgtts2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgtts2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgtts2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgtts2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -116,10 +125,13 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup doubleGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dgtts2_(integer *itrans, integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublereal *du, doublereal *du2, integer *ipiv, doublereal *b, integer *ldb)
+void dgtts2_(integer *itrans, integer *n, integer *nrhs, doublereal *dl, doublereal *d__,
+             doublereal *du, doublereal *du2, integer *ipiv, doublereal *b, integer *ldb)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgtts2 inputs: itrans %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*itrans, *n, *nrhs, *ldb);
+    AOCL_DTL_SNPRINTF("dgtts2 inputs: itrans %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS
+                      ", ldb %" FLA_IS "",
+                      *itrans, *n, *nrhs, *ldb);
     /* System generated locals */
     integer b_dim1, b_offset, i__1, i__2;
     /* Local variables */
@@ -148,23 +160,21 @@ int dgtts2_(integer *itrans, integer *n, integer *nrhs, doublereal *dl, doublere
     b_offset = 1 + b_dim1;
     b -= b_offset;
     /* Function Body */
-    if (*n == 0 || *nrhs == 0)
+    if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    if (*itrans == 0)
+    if(*itrans == 0)
     {
         /* Solve A*X = B using the LU factorization of A, */
         /* overwriting each right hand side vector with its solution. */
-        if (*nrhs <= 1)
+        if(*nrhs <= 1)
         {
             j = 1;
-L10: /* Solve L*x = b. */
+        L10: /* Solve L*x = b. */
             i__1 = *n - 1;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 ip = ipiv[i__];
                 temp = b[i__ + 1 - ip + i__ + j * b_dim1] - dl[i__] * b[ip + j * b_dim1];
@@ -174,18 +184,19 @@ L10: /* Solve L*x = b. */
             }
             /* Solve U*x = b. */
             b[*n + j * b_dim1] /= d__[*n];
-            if (*n > 1)
+            if(*n > 1)
             {
-                b[*n - 1 + j * b_dim1] = (b[*n - 1 + j * b_dim1] - du[*n - 1] * b[*n + j * b_dim1]) / d__[*n - 1];
+                b[*n - 1 + j * b_dim1]
+                    = (b[*n - 1 + j * b_dim1] - du[*n - 1] * b[*n + j * b_dim1]) / d__[*n - 1];
             }
-            for (i__ = *n - 2;
-                    i__ >= 1;
-                    --i__)
+            for(i__ = *n - 2; i__ >= 1; --i__)
             {
-                b[i__ + j * b_dim1] = (b[i__ + j * b_dim1] - du[i__] * b[i__ + 1 + j * b_dim1] - du2[i__] * b[i__ + 2 + j * b_dim1] ) / d__[i__];
+                b[i__ + j * b_dim1] = (b[i__ + j * b_dim1] - du[i__] * b[i__ + 1 + j * b_dim1]
+                                       - du2[i__] * b[i__ + 2 + j * b_dim1])
+                                      / d__[i__];
                 /* L30: */
             }
-            if (j < *nrhs)
+            if(j < *nrhs)
             {
                 ++j;
                 goto L10;
@@ -194,17 +205,13 @@ L10: /* Solve L*x = b. */
         else
         {
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 /* Solve L*x = b. */
                 i__2 = *n - 1;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
-                    if (ipiv[i__] == i__)
+                    if(ipiv[i__] == i__)
                     {
                         b[i__ + 1 + j * b_dim1] -= dl[i__] * b[i__ + j * b_dim1];
                     }
@@ -218,15 +225,16 @@ L10: /* Solve L*x = b. */
                 }
                 /* Solve U*x = b. */
                 b[*n + j * b_dim1] /= d__[*n];
-                if (*n > 1)
+                if(*n > 1)
                 {
-                    b[*n - 1 + j * b_dim1] = (b[*n - 1 + j * b_dim1] - du[*n - 1] * b[*n + j * b_dim1]) / d__[*n - 1];
+                    b[*n - 1 + j * b_dim1]
+                        = (b[*n - 1 + j * b_dim1] - du[*n - 1] * b[*n + j * b_dim1]) / d__[*n - 1];
                 }
-                for (i__ = *n - 2;
-                        i__ >= 1;
-                        --i__)
+                for(i__ = *n - 2; i__ >= 1; --i__)
                 {
-                    b[i__ + j * b_dim1] = (b[i__ + j * b_dim1] - du[i__] * b[ i__ + 1 + j * b_dim1] - du2[i__] * b[i__ + 2 + j * b_dim1]) / d__[i__];
+                    b[i__ + j * b_dim1] = (b[i__ + j * b_dim1] - du[i__] * b[i__ + 1 + j * b_dim1]
+                                           - du2[i__] * b[i__ + 2 + j * b_dim1])
+                                          / d__[i__];
                     /* L50: */
                 }
                 /* L60: */
@@ -236,36 +244,34 @@ L10: /* Solve L*x = b. */
     else
     {
         /* Solve A**T * X = B. */
-        if (*nrhs <= 1)
+        if(*nrhs <= 1)
         {
             /* Solve U**T*x = b. */
             j = 1;
-L70:
+        L70:
             b[j * b_dim1 + 1] /= d__[1];
-            if (*n > 1)
+            if(*n > 1)
             {
                 b[j * b_dim1 + 2] = (b[j * b_dim1 + 2] - du[1] * b[j * b_dim1 + 1]) / d__[2];
             }
             i__1 = *n;
-            for (i__ = 3;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 3; i__ <= i__1; ++i__)
             {
-                b[i__ + j * b_dim1] = (b[i__ + j * b_dim1] - du[i__ - 1] * b[ i__ - 1 + j * b_dim1] - du2[i__ - 2] * b[i__ - 2 + j * b_dim1]) / d__[i__];
+                b[i__ + j * b_dim1] = (b[i__ + j * b_dim1] - du[i__ - 1] * b[i__ - 1 + j * b_dim1]
+                                       - du2[i__ - 2] * b[i__ - 2 + j * b_dim1])
+                                      / d__[i__];
                 /* L80: */
             }
             /* Solve L**T*x = b. */
-            for (i__ = *n - 1;
-                    i__ >= 1;
-                    --i__)
+            for(i__ = *n - 1; i__ >= 1; --i__)
             {
                 ip = ipiv[i__];
-                temp = b[i__ + j * b_dim1] - dl[i__] * b[i__ + 1 + j * b_dim1] ;
+                temp = b[i__ + j * b_dim1] - dl[i__] * b[i__ + 1 + j * b_dim1];
                 b[i__ + j * b_dim1] = b[ip + j * b_dim1];
                 b[ip + j * b_dim1] = temp;
                 /* L90: */
             }
-            if (j < *nrhs)
+            if(j < *nrhs)
             {
                 ++j;
                 goto L70;
@@ -274,36 +280,33 @@ L70:
         else
         {
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 /* Solve U**T*x = b. */
                 b[j * b_dim1 + 1] /= d__[1];
-                if (*n > 1)
+                if(*n > 1)
                 {
                     b[j * b_dim1 + 2] = (b[j * b_dim1 + 2] - du[1] * b[j * b_dim1 + 1]) / d__[2];
                 }
                 i__2 = *n;
-                for (i__ = 3;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 3; i__ <= i__2; ++i__)
                 {
-                    b[i__ + j * b_dim1] = (b[i__ + j * b_dim1] - du[i__ - 1] * b[i__ - 1 + j * b_dim1] - du2[i__ - 2] * b[i__ - 2 + j * b_dim1]) / d__[i__];
+                    b[i__ + j * b_dim1]
+                        = (b[i__ + j * b_dim1] - du[i__ - 1] * b[i__ - 1 + j * b_dim1]
+                           - du2[i__ - 2] * b[i__ - 2 + j * b_dim1])
+                          / d__[i__];
                     /* L100: */
                 }
-                for (i__ = *n - 1;
-                        i__ >= 1;
-                        --i__)
+                for(i__ = *n - 1; i__ >= 1; --i__)
                 {
-                    if (ipiv[i__] == i__)
+                    if(ipiv[i__] == i__)
                     {
                         b[i__ + j * b_dim1] -= dl[i__] * b[i__ + 1 + j * b_dim1];
                     }
                     else
                     {
                         temp = b[i__ + 1 + j * b_dim1];
-                        b[i__ + 1 + j * b_dim1] = b[i__ + j * b_dim1] - dl[ i__] * temp;
+                        b[i__ + 1 + j * b_dim1] = b[i__ + j * b_dim1] - dl[i__] * temp;
                         b[i__ + j * b_dim1] = temp;
                     }
                     /* L110: */
@@ -314,6 +317,6 @@ L70:
     }
     /* End of DGTTS2 */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* dgtts2_ */

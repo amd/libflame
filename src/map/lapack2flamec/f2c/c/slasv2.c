@@ -1,5 +1,8 @@
-/* ../netlib/slasv2.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slasv2.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b3 = 2.f;
 static real c_b4 = 1.f;
@@ -9,11 +12,17 @@ static real c_b4 = 1.f;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLASV2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasv2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasv2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasv2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasv2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasv2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasv2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -127,7 +136,8 @@ static real c_b4 = 1.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slasv2_(real *f, real *g, real *h__, real *ssmin, real * ssmax, real *snr, real *csr, real *snl, real *csl)
+void slasv2_(real *f, real *g, real *h__, real *ssmin, real *ssmax, real *snr, real *csr, real *snl,
+             real *csl)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* System generated locals */
@@ -168,7 +178,7 @@ int slasv2_(real *f, real *g, real *h__, real *ssmin, real * ssmax, real *snr, r
     /* PMAX = 3 if H largest in absolute values */
     pmax = 1;
     swap = ha > fa;
-    if (swap)
+    if(swap)
     {
         pmax = 3;
         temp = ft;
@@ -181,7 +191,7 @@ int slasv2_(real *f, real *g, real *h__, real *ssmin, real * ssmax, real *snr, r
     }
     gt = *g;
     ga = f2c_abs(gt);
-    if (ga == 0.f)
+    if(ga == 0.f)
     {
         /* Diagonal matrix */
         *ssmin = ha;
@@ -194,15 +204,15 @@ int slasv2_(real *f, real *g, real *h__, real *ssmin, real * ssmax, real *snr, r
     else
     {
         gasmal = TRUE_;
-        if (ga > fa)
+        if(ga > fa)
         {
             pmax = 2;
-            if (fa / ga < slamch_("EPS"))
+            if(fa / ga < slamch_("EPS"))
             {
                 /* Case of very large GA */
                 gasmal = FALSE_;
                 *ssmax = ga;
-                if (ha > 1.f)
+                if(ha > 1.f)
                 {
                     *ssmin = fa / (ga / ha);
                 }
@@ -216,11 +226,11 @@ int slasv2_(real *f, real *g, real *h__, real *ssmin, real * ssmax, real *snr, r
                 crt = ft / gt;
             }
         }
-        if (gasmal)
+        if(gasmal)
         {
             /* Normal case */
             d__ = fa - ha;
-            if (d__ == fa)
+            if(d__ == fa)
             {
                 /* Copes with infinite F or H */
                 l = 1.f;
@@ -238,7 +248,7 @@ int slasv2_(real *f, real *g, real *h__, real *ssmin, real * ssmax, real *snr, r
             tt = t * t;
             s = sqrt(tt + mm);
             /* Note that 1 .le. S .le. 1 + 1/macheps */
-            if (l == 0.f)
+            if(l == 0.f)
             {
                 r__ = f2c_abs(m);
             }
@@ -251,10 +261,10 @@ int slasv2_(real *f, real *g, real *h__, real *ssmin, real * ssmax, real *snr, r
             /* Note that 1 .le. A .le. 1 + f2c_abs(M) */
             *ssmin = ha / a;
             *ssmax = fa * a;
-            if (mm == 0.f)
+            if(mm == 0.f)
             {
                 /* Note that M is very tiny */
-                if (l == 0.f)
+                if(l == 0.f)
                 {
                     t = r_sign(&c_b3, &ft) * r_sign(&c_b4, &gt);
                 }
@@ -274,7 +284,7 @@ int slasv2_(real *f, real *g, real *h__, real *ssmin, real * ssmax, real *snr, r
             slt = ht / ft * srt / a;
         }
     }
-    if (swap)
+    if(swap)
     {
         *csl = srt;
         *snl = crt;
@@ -289,15 +299,15 @@ int slasv2_(real *f, real *g, real *h__, real *ssmin, real * ssmax, real *snr, r
         *snr = srt;
     }
     /* Correct signs of SSMAX and SSMIN */
-    if (pmax == 1)
+    if(pmax == 1)
     {
         tsign = r_sign(&c_b4, csr) * r_sign(&c_b4, csl) * r_sign(&c_b4, f);
     }
-    if (pmax == 2)
+    if(pmax == 2)
     {
         tsign = r_sign(&c_b4, snr) * r_sign(&c_b4, csl) * r_sign(&c_b4, g);
     }
-    if (pmax == 3)
+    if(pmax == 3)
     {
         tsign = r_sign(&c_b4, snr) * r_sign(&c_b4, snl) * r_sign(&c_b4, h__);
     }
@@ -305,7 +315,7 @@ int slasv2_(real *f, real *g, real *h__, real *ssmin, real * ssmax, real *snr, r
     r__1 = tsign * r_sign(&c_b4, f) * r_sign(&c_b4, h__);
     *ssmin = r_sign(ssmin, &r__1);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLASV2 */
 }
 /* slasv2_ */

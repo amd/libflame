@@ -102,8 +102,8 @@ void time_Apply_G_rf(
   FLA_Obj_create_conf_to( FLA_NO_TRANSPOSE, G, &G_save );
   FLA_Obj_create( FLA_Obj_datatype_proj_to_real( A ), 1, 1, 0, 0, &norm );
 
-  //dim_t b_flash_m = b_alg;
-  //dim_t b_flash_n = n;
+  //fla_dim_t b_flash_m = b_alg;
+  //fla_dim_t b_flash_n = n;
   //FLASH_Obj_create_hier_copy_of_flat_ext( A, 1, &b_flash_m, &b_flash_n, &AH ); 
 
 //printf ( "flash dims: %d x %d\n", FLA_Obj_length( AH ), FLA_Obj_width( AH ) );

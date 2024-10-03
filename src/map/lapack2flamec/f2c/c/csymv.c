@@ -1,16 +1,25 @@
-/* ../netlib/csymv.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/csymv.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CSYMV computes a matrix-vector product for a complex symmetric matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CSYMV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csymv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csymv.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csymv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csymv.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csymv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csymv.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -143,15 +152,18 @@
 /* > \ingroup complexSYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, complex *x, integer *incx, complex *beta, complex *y, integer *incy)
+void csymv_(char *uplo, integer *n, complex *alpha, complex *a, integer *lda, complex *x,
+            integer *incx, complex *beta, complex *y, integer *incy)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"csymv inputs: uplo %c, n %lld, lda %lld, incx %lld, incy %lld",*uplo, *n, *lda, *incx, *incy);
+    snprintf(buffer, 256, "csymv inputs: uplo %c, n %lld, lda %lld, incx %lld, incy %lld", *uplo,
+             *n, *lda, *incx, *incy);
 #else
-    snprintf(buffer, 256,"csymv inputs: uplo %c, n %d, lda %d, incx %d, incy %d",*uplo, *n, *lda, *incx, *incy);
+    snprintf(buffer, 256, "csymv inputs: uplo %c, n %d, lda %d, incx %d, incy %d", *uplo, *n, *lda,
+             *incx, *incy);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -161,9 +173,10 @@ int csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, co
     /* Local variables */
     integer i__, j, ix, iy, jx, jy, kx, ky, info;
     complex temp1, temp2;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -193,40 +206,40 @@ int csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, co
     --y;
     /* Function Body */
     info = 0;
-    if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         info = 1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         info = 2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         info = 5;
     }
-    else if (*incx == 0)
+    else if(*incx == 0)
     {
         info = 7;
     }
-    else if (*incy == 0)
+    else if(*incy == 0)
     {
         info = 10;
     }
-    if (info != 0)
+    if(info != 0)
     {
         xerbla_("CSYMV ", &info, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
-    if (*n == 0 || alpha->r == 0.f && alpha->i == 0.f && (beta->r == 1.f && beta->i == 0.f))
+    if(*n == 0 || alpha->r == 0.f && alpha->i == 0.f && (beta->r == 1.f && beta->i == 0.f))
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Set up the start points in X and Y. */
-    if (*incx > 0)
+    if(*incx > 0)
     {
         kx = 1;
     }
@@ -234,7 +247,7 @@ int csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, co
     {
         kx = 1 - (*n - 1) * *incx;
     }
-    if (*incy > 0)
+    if(*incy > 0)
     {
         ky = 1;
     }
@@ -246,16 +259,14 @@ int csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, co
     /* accessed sequentially with one pass through the triangular part */
     /* of A. */
     /* First form y := beta*y. */
-    if (beta->r != 1.f || beta->i != 0.f)
+    if(beta->r != 1.f || beta->i != 0.f)
     {
-        if (*incy == 1)
+        if(*incy == 1)
         {
-            if (beta->r == 0.f && beta->i == 0.f)
+            if(beta->r == 0.f && beta->i == 0.f)
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = i__;
                     y[i__2].r = 0.f;
@@ -266,14 +277,12 @@ int csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, co
             else
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = i__;
                     i__3 = i__;
                     q__1.r = beta->r * y[i__3].r - beta->i * y[i__3].i;
-                    q__1.i = beta->r * y[i__3].i + beta->i * y[i__3] .r; // , expr subst
+                    q__1.i = beta->r * y[i__3].i + beta->i * y[i__3].r; // , expr subst
                     y[i__2].r = q__1.r;
                     y[i__2].i = q__1.i; // , expr subst
                     /* L20: */
@@ -283,12 +292,10 @@ int csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, co
         else
         {
             iy = ky;
-            if (beta->r == 0.f && beta->i == 0.f)
+            if(beta->r == 0.f && beta->i == 0.f)
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = iy;
                     y[i__2].r = 0.f;
@@ -300,14 +307,12 @@ int csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, co
             else
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = iy;
                     i__3 = iy;
                     q__1.r = beta->r * y[i__3].r - beta->i * y[i__3].i;
-                    q__1.i = beta->r * y[i__3].i + beta->i * y[i__3] .r; // , expr subst
+                    q__1.i = beta->r * y[i__3].i + beta->i * y[i__3].r; // , expr subst
                     y[i__2].r = q__1.r;
                     y[i__2].i = q__1.i; // , expr subst
                     iy += *incy;
@@ -316,20 +321,18 @@ int csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, co
             }
         }
     }
-    if (alpha->r == 0.f && alpha->i == 0.f)
+    if(alpha->r == 0.f && alpha->i == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (lsame_(uplo, "U"))
+    if(lsame_(uplo, "U", 1, 1))
     {
         /* Form y when A is stored in upper triangle. */
-        if (*incx == 1 && *incy == 1)
+        if(*incx == 1 && *incy == 1)
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j;
                 q__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
@@ -339,15 +342,13 @@ int csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, co
                 temp2.r = 0.f;
                 temp2.i = 0.f; // , expr subst
                 i__2 = j - 1;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__;
                     i__4 = i__;
                     i__5 = i__ + j * a_dim1;
                     q__2.r = temp1.r * a[i__5].r - temp1.i * a[i__5].i;
-                    q__2.i = temp1.r * a[i__5].i + temp1.i * a[i__5] .r; // , expr subst
+                    q__2.i = temp1.r * a[i__5].i + temp1.i * a[i__5].r; // , expr subst
                     q__1.r = y[i__4].r + q__2.r;
                     q__1.i = y[i__4].i + q__2.i; // , expr subst
                     y[i__3].r = q__1.r;
@@ -355,7 +356,7 @@ int csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, co
                     i__3 = i__ + j * a_dim1;
                     i__4 = i__;
                     q__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
-                    q__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[ i__4].r; // , expr subst
+                    q__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
                     q__1.r = temp2.r + q__2.r;
                     q__1.i = temp2.i + q__2.i; // , expr subst
                     temp2.r = q__1.r;
@@ -383,9 +384,7 @@ int csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, co
             jx = kx;
             jy = ky;
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = jx;
                 q__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
@@ -397,15 +396,13 @@ int csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, co
                 ix = kx;
                 iy = ky;
                 i__2 = j - 1;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = iy;
                     i__4 = iy;
                     i__5 = i__ + j * a_dim1;
                     q__2.r = temp1.r * a[i__5].r - temp1.i * a[i__5].i;
-                    q__2.i = temp1.r * a[i__5].i + temp1.i * a[i__5] .r; // , expr subst
+                    q__2.i = temp1.r * a[i__5].i + temp1.i * a[i__5].r; // , expr subst
                     q__1.r = y[i__4].r + q__2.r;
                     q__1.i = y[i__4].i + q__2.i; // , expr subst
                     y[i__3].r = q__1.r;
@@ -413,7 +410,7 @@ int csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, co
                     i__3 = i__ + j * a_dim1;
                     i__4 = ix;
                     q__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
-                    q__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[ i__4].r; // , expr subst
+                    q__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
                     q__1.r = temp2.r + q__2.r;
                     q__1.i = temp2.i + q__2.i; // , expr subst
                     temp2.r = q__1.r;
@@ -444,12 +441,10 @@ int csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, co
     else
     {
         /* Form y when A is stored in lower triangle. */
-        if (*incx == 1 && *incy == 1)
+        if(*incx == 1 && *incy == 1)
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j;
                 q__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
@@ -468,15 +463,13 @@ int csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, co
                 y[i__2].r = q__1.r;
                 y[i__2].i = q__1.i; // , expr subst
                 i__2 = *n;
-                for (i__ = j + 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = j + 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__;
                     i__4 = i__;
                     i__5 = i__ + j * a_dim1;
                     q__2.r = temp1.r * a[i__5].r - temp1.i * a[i__5].i;
-                    q__2.i = temp1.r * a[i__5].i + temp1.i * a[i__5] .r; // , expr subst
+                    q__2.i = temp1.r * a[i__5].i + temp1.i * a[i__5].r; // , expr subst
                     q__1.r = y[i__4].r + q__2.r;
                     q__1.i = y[i__4].i + q__2.i; // , expr subst
                     y[i__3].r = q__1.r;
@@ -484,7 +477,7 @@ int csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, co
                     i__3 = i__ + j * a_dim1;
                     i__4 = i__;
                     q__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
-                    q__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[ i__4].r; // , expr subst
+                    q__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
                     q__1.r = temp2.r + q__2.r;
                     q__1.i = temp2.i + q__2.i; // , expr subst
                     temp2.r = q__1.r;
@@ -507,9 +500,7 @@ int csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, co
             jx = kx;
             jy = ky;
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = jx;
                 q__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
@@ -530,9 +521,7 @@ int csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, co
                 ix = jx;
                 iy = jy;
                 i__2 = *n;
-                for (i__ = j + 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = j + 1; i__ <= i__2; ++i__)
                 {
                     ix += *incx;
                     iy += *incy;
@@ -540,7 +529,7 @@ int csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, co
                     i__4 = iy;
                     i__5 = i__ + j * a_dim1;
                     q__2.r = temp1.r * a[i__5].r - temp1.i * a[i__5].i;
-                    q__2.i = temp1.r * a[i__5].i + temp1.i * a[i__5] .r; // , expr subst
+                    q__2.i = temp1.r * a[i__5].i + temp1.i * a[i__5].r; // , expr subst
                     q__1.r = y[i__4].r + q__2.r;
                     q__1.i = y[i__4].i + q__2.i; // , expr subst
                     y[i__3].r = q__1.r;
@@ -548,7 +537,7 @@ int csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, co
                     i__3 = i__ + j * a_dim1;
                     i__4 = ix;
                     q__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
-                    q__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[ i__4].r; // , expr subst
+                    q__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
                     q__1.r = temp2.r + q__2.r;
                     q__1.i = temp2.i + q__2.i; // , expr subst
                     temp2.r = q__1.r;
@@ -570,7 +559,7 @@ int csymv_(char *uplo, integer *n, complex *alpha, complex * a, integer *lda, co
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSYMV */
 }
 /* csymv_ */

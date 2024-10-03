@@ -1,5 +1,8 @@
-/* ../netlib/v3.9.0/dpotrf2.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/dpotrf2.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b9 = 1.;
 static doublereal c_b11 = -1.;
@@ -47,7 +50,7 @@ static doublereal c_b11 = -1.;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -97,26 +100,31 @@ static doublereal c_b11 = -1.;
 /* > \ingroup doublePOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dpotrf2_(char *uplo, integer *n, doublereal *a, integer * lda, integer *info)
+void dpotrf2_(char *uplo, integer *n, doublereal *a, integer *lda, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dpotrf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
+    AOCL_DTL_SNPRINTF("dpotrf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     integer n1, n2;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
-    int dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
-    int dsyrk_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dsyrk_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *,
+               doublereal *, doublereal *, integer *);
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -144,41 +152,41 @@ int dpotrf2_(char *uplo, integer *n, doublereal *a, integer * lda, integer *info
     a -= a_offset;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DPOTRF2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* N=1 case */
-    if (*n == 1)
+    if(*n == 1)
     {
         /* Test for non-positive-definiteness */
-        if (a[a_dim1 + 1] <= 0. || disnan_(&a[a_dim1 + 1]))
+        if(a[a_dim1 + 1] <= 0. || disnan_(&a[a_dim1 + 1]))
         {
             *info = 1;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* Factor */
         a[a_dim1 + 1] = sqrt(a[a_dim1 + 1]);
@@ -190,46 +198,49 @@ int dpotrf2_(char *uplo, integer *n, doublereal *a, integer * lda, integer *info
         n2 = *n - n1;
         /* Factor A11 */
         dpotrf2_(uplo, &n1, &a[a_dim1 + 1], lda, &iinfo);
-        if (iinfo != 0)
+        if(iinfo != 0)
         {
             *info = iinfo;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* Compute the Cholesky factorization A = U**T*U */
-        if (upper)
+        if(upper)
         {
             /* Update and scale A12 */
-            dtrsm_("L", "U", "T", "N", &n1, &n2, &c_b9, &a[a_dim1 + 1], lda, & a[(n1 + 1) * a_dim1 + 1], lda);
+            dtrsm_("L", "U", "T", "N", &n1, &n2, &c_b9, &a[a_dim1 + 1], lda,
+                   &a[(n1 + 1) * a_dim1 + 1], lda);
             /* Update and factor A22 */
-            dsyrk_(uplo, "T", &n2, &n1, &c_b11, &a[(n1 + 1) * a_dim1 + 1], lda, &c_b9, &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
+            dsyrk_(uplo, "T", &n2, &n1, &c_b11, &a[(n1 + 1) * a_dim1 + 1], lda, &c_b9,
+                   &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
             dpotrf2_(uplo, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &iinfo);
-            if (iinfo != 0)
+            if(iinfo != 0)
             {
                 *info = iinfo + n1;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* Compute the Cholesky factorization A = L*L**T */
         }
         else
         {
             /* Update and scale A21 */
-            dtrsm_("R", "L", "T", "N", &n2, &n1, &c_b9, &a[a_dim1 + 1], lda, & a[n1 + 1 + a_dim1], lda);
+            dtrsm_("R", "L", "T", "N", &n2, &n1, &c_b9, &a[a_dim1 + 1], lda, &a[n1 + 1 + a_dim1],
+                   lda);
             /* Update and factor A22 */
-            dsyrk_(uplo, "N", &n2, &n1, &c_b11, &a[n1 + 1 + a_dim1], lda, & c_b9, &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
+            dsyrk_(uplo, "N", &n2, &n1, &c_b11, &a[n1 + 1 + a_dim1], lda, &c_b9,
+                   &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
             dpotrf2_(uplo, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &iinfo);
-            if (iinfo != 0)
+            if(iinfo != 0)
             {
                 *info = iinfo + n1;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPOTRF2 */
 }
 /* dpotrf2_ */
-

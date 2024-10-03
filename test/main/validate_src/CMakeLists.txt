@@ -1,10 +1,12 @@
 ###############################################################################
-# Copyright (C) 2022, Advanced Micro Devices, Inc. All rights reserved.
+# Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 ###############################################################################
 
 target_sources(${PROJECT_NAME}
      PRIVATE
 ${CMAKE_CURRENT_SOURCE_DIR}/test_common.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_overflow_underflow.c
+${CMAKE_CURRENT_SOURCE_DIR}/validate_gbtrf.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_geqrf.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_gerq2.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_gerqf.c
@@ -33,5 +35,13 @@ ${CMAKE_CURRENT_SOURCE_DIR}/validate_hgeqz.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_gghrd.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_rot.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_lartg.c
+${CMAKE_CURRENT_SOURCE_DIR}/validate_gels.c
+${CMAKE_CURRENT_SOURCE_DIR}/validate_larfg.c
+${CMAKE_CURRENT_SOURCE_DIR}/validate_gtsv.c
+${CMAKE_CURRENT_SOURCE_DIR}/validate_syev.c
+${CMAKE_CURRENT_SOURCE_DIR}/validate_gesvdx.c
+${CMAKE_CURRENT_SOURCE_DIR}/validate_gelsd.c
+${CMAKE_CURRENT_SOURCE_DIR}/validate_sytrf.c
+${CMAKE_CURRENT_SOURCE_DIR}/validate_larf.c
 )
 

@@ -1,5 +1,8 @@
-/* ../netlib/dlarzb.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlarzb.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static doublereal c_b13 = 1.;
@@ -10,11 +13,17 @@ static doublereal c_b23 = -1.;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLARZB + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarzb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarzb.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarzb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarzb.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarzb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarzb.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -151,7 +160,7 @@ if STOREV = 'R', LDV >= K. */
 /* > LDWORK is INTEGER */
 /* > The leading dimension of the array WORK. */
 /* > If SIDE = 'L', LDWORK >= fla_max(1,N);
-*/
+ */
 /* > if SIDE = 'R', LDWORK >= fla_max(1,M). */
 /* > \endverbatim */
 /* Authors: */
@@ -174,19 +183,31 @@ if STOREV = 'R', LDV >= K. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlarzb_(char *side, char *trans, char *direct, char * storev, integer *m, integer *n, integer *k, integer *l, doublereal *v, integer *ldv, doublereal *t, integer *ldt, doublereal *c__, integer * ldc, doublereal *work, integer *ldwork)
+void dlarzb_(char *side, char *trans, char *direct, char *storev, integer *m, integer *n,
+             integer *k, integer *l, doublereal *v, integer *ldv, doublereal *t, integer *ldt,
+             doublereal *c__, integer *ldc, doublereal *work, integer *ldwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlarzb inputs: side %c, trans %c, direct %c, storev %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS ", ldc %" FLA_IS ", ldwork %" FLA_IS "",*side, *trans, *direct, *storev, *m, *n, *k, *l, *ldv, *ldt, *ldc, *ldwork);
+    AOCL_DTL_SNPRINTF("dlarzb inputs: side %c, trans %c, direct %c, storev %c, m %" FLA_IS
+                      ", n %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS
+                      ", ldc %" FLA_IS ", ldwork %" FLA_IS "",
+                      *side, *trans, *direct, *storev, *m, *n, *k, *l, *ldv, *ldt, *ldc, *ldwork);
     /* System generated locals */
-    integer c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1, i__2;
+    integer c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1,
+        i__2;
     /* Local variables */
     integer i__, j, info;
     extern /* Subroutine */
-    int dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+        void
+        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     char transt[1];
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -221,29 +242,29 @@ int dlarzb_(char *side, char *trans, char *direct, char * storev, integer *m, in
     work_offset = 1 + work_dim1;
     work -= work_offset;
     /* Function Body */
-    if (*m <= 0 || *n <= 0)
+    if(*m <= 0 || *n <= 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Check for currently supported options */
     info = 0;
-    if (! lsame_(direct, "B"))
+    if(!lsame_(direct, "B", 1, 1))
     {
         info = -3;
     }
-    else if (! lsame_(storev, "R"))
+    else if(!lsame_(storev, "R", 1, 1))
     {
         info = -4;
     }
-    if (info != 0)
+    if(info != 0)
     {
         i__1 = -info;
         xerbla_("DLARZB", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    if (lsame_(trans, "N"))
+    if(lsame_(trans, "N", 1, 1))
     {
         *(unsigned char *)transt = 'T';
     }
@@ -251,36 +272,32 @@ int dlarzb_(char *side, char *trans, char *direct, char * storev, integer *m, in
     {
         *(unsigned char *)transt = 'N';
     }
-    if (lsame_(side, "L"))
+    if(lsame_(side, "L", 1, 1))
     {
         /* Form H * C or H**T * C */
         /* W( 1:n, 1:k ) = C( 1:k, 1:n )**T */
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             dcopy_(n, &c__[j + c_dim1], ldc, &work[j * work_dim1 + 1], &c__1);
             /* L10: */
         }
         /* W( 1:n, 1:k ) = W( 1:n, 1:k ) + ... */
         /* C( m-l+1:m, 1:n )**T * V( 1:k, 1:l )**T */
-        if (*l > 0)
+        if(*l > 0)
         {
-            dgemm_("Transpose", "Transpose", n, k, l, &c_b13, &c__[*m - *l + 1 + c_dim1], ldc, &v[v_offset], ldv, &c_b13, &work[ work_offset], ldwork);
+            dgemm_("Transpose", "Transpose", n, k, l, &c_b13, &c__[*m - *l + 1 + c_dim1], ldc,
+                   &v[v_offset], ldv, &c_b13, &work[work_offset], ldwork);
         }
         /* W( 1:n, 1:k ) = W( 1:n, 1:k ) * T**T or W( 1:m, 1:k ) * T */
-        dtrmm_("Right", "Lower", transt, "Non-unit", n, k, &c_b13, &t[ t_offset], ldt, &work[work_offset], ldwork);
+        dtrmm_("Right", "Lower", transt, "Non-unit", n, k, &c_b13, &t[t_offset], ldt,
+               &work[work_offset], ldwork);
         /* C( 1:k, 1:n ) = C( 1:k, 1:n ) - W( 1:n, 1:k )**T */
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 c__[i__ + j * c_dim1] -= work[j + i__ * work_dim1];
                 /* L20: */
@@ -289,41 +306,38 @@ int dlarzb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         }
         /* C( m-l+1:m, 1:n ) = C( m-l+1:m, 1:n ) - ... */
         /* V( 1:k, 1:l )**T * W( 1:n, 1:k )**T */
-        if (*l > 0)
+        if(*l > 0)
         {
-            dgemm_("Transpose", "Transpose", l, n, k, &c_b23, &v[v_offset], ldv, &work[work_offset], ldwork, &c_b13, &c__[*m - *l + 1 + c_dim1], ldc);
+            dgemm_("Transpose", "Transpose", l, n, k, &c_b23, &v[v_offset], ldv, &work[work_offset],
+                   ldwork, &c_b13, &c__[*m - *l + 1 + c_dim1], ldc);
         }
     }
-    else if (lsame_(side, "R"))
+    else if(lsame_(side, "R", 1, 1))
     {
         /* Form C * H or C * H**T */
         /* W( 1:m, 1:k ) = C( 1:m, 1:k ) */
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
-            dcopy_(m, &c__[j * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1], & c__1);
+            dcopy_(m, &c__[j * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1], &c__1);
             /* L40: */
         }
         /* W( 1:m, 1:k ) = W( 1:m, 1:k ) + ... */
         /* C( 1:m, n-l+1:n ) * V( 1:k, 1:l )**T */
-        if (*l > 0)
+        if(*l > 0)
         {
-            dgemm_("No transpose", "Transpose", m, k, l, &c_b13, &c__[(*n - * l + 1) * c_dim1 + 1], ldc, &v[v_offset], ldv, &c_b13, & work[work_offset], ldwork);
+            dgemm_("No transpose", "Transpose", m, k, l, &c_b13, &c__[(*n - *l + 1) * c_dim1 + 1],
+                   ldc, &v[v_offset], ldv, &c_b13, &work[work_offset], ldwork);
         }
         /* W( 1:m, 1:k ) = W( 1:m, 1:k ) * T or W( 1:m, 1:k ) * T**T */
-        dtrmm_("Right", "Lower", trans, "Non-unit", m, k, &c_b13, &t[t_offset], ldt, &work[work_offset], ldwork);
+        dtrmm_("Right", "Lower", trans, "Non-unit", m, k, &c_b13, &t[t_offset], ldt,
+               &work[work_offset], ldwork);
         /* C( 1:m, 1:k ) = C( 1:m, 1:k ) - W( 1:m, 1:k ) */
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 c__[i__ + j * c_dim1] -= work[i__ + j * work_dim1];
                 /* L50: */
@@ -332,13 +346,14 @@ int dlarzb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         }
         /* C( 1:m, n-l+1:n ) = C( 1:m, n-l+1:n ) - ... */
         /* W( 1:m, 1:k ) * V( 1:k, 1:l ) */
-        if (*l > 0)
+        if(*l > 0)
         {
-            dgemm_("No transpose", "No transpose", m, l, k, &c_b23, &work[ work_offset], ldwork, &v[v_offset], ldv, &c_b13, &c__[(*n - *l + 1) * c_dim1 + 1], ldc);
+            dgemm_("No transpose", "No transpose", m, l, k, &c_b23, &work[work_offset], ldwork,
+                   &v[v_offset], ldv, &c_b13, &c__[(*n - *l + 1) * c_dim1 + 1], ldc);
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLARZB */
 }
 /* dlarzb_ */

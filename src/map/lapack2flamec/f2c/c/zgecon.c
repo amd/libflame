@@ -1,5 +1,8 @@
-/* ../netlib/zgecon.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zgecon.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b ZGECON */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZGECON + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgecon. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgecon.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgecon. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgecon.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgecon. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgecon.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -49,7 +58,7 @@ static integer c__1 = 1;
 /* > Specifies whether the 1-norm condition number or the */
 /* > infinity-norm condition number is required: */
 /* > = '1' or 'O': 1-norm;
-*/
+ */
 /* > = 'I': Infinity-norm. */
 /* > \endverbatim */
 /* > */
@@ -112,10 +121,11 @@ static integer c__1 = 1;
 /* > \ingroup complex16GEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal *anorm, doublereal *rcond, doublecomplex * work, doublereal *rwork, integer *info)
+void zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal *anorm,
+             doublereal *rcond, doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgecon inputs: norm %c, n %" FLA_IS ", lda %" FLA_IS "",*norm, *n, *lda);
+    AOCL_DTL_SNPRINTF("zgecon inputs: norm %c, n %" FLA_IS ", lda %" FLA_IS "", *norm, *n, *lda);
 
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
@@ -128,22 +138,27 @@ int zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal *
     doublereal su;
     integer kase, kase1;
     doublereal scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
-    int zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
+        void
+        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     extern integer izamax_(integer *, doublecomplex *, integer *);
     logical onenrm;
     extern /* Subroutine */
-    int zdrscl_(integer *, doublereal *, doublecomplex *, integer *);
+        void
+        zdrscl_(integer *, doublereal *, doublecomplex *, integer *);
     char normin[1];
     doublereal smlnum;
     extern /* Subroutine */
-    int zlatrs_(char *, char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *, doublereal *, integer *);
+        void
+        zlatrs_(char *, char *, char *, char *, integer *, doublecomplex *, integer *,
+                doublecomplex *, doublereal *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -179,48 +194,48 @@ int zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal *
     --rwork;
     /* Function Body */
     *info = 0;
-    onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O");
-    if (! onenrm && ! lsame_(norm, "I"))
+    onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
+    if(!onenrm && !lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    else if (*anorm < 0.)
+    else if(*anorm < 0.)
     {
         *info = -5;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZGECON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.;
-    if (*n == 0)
+    if(*n == 0)
     {
         *rcond = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    else if (*anorm == 0.)
+    else if(*anorm == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     smlnum = dlamch_("Safe minimum");
     /* Estimate the norm of inv(A). */
     ainvnm = 0.;
     *(unsigned char *)normin = 'N';
-    if (onenrm)
+    if(onenrm)
     {
         kase1 = 1;
     }
@@ -231,30 +246,37 @@ int zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal *
     kase = 0;
 L10:
     zlacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
-    if (kase != 0)
+    if(kase != 0)
     {
-        if (kase == kase1)
+        if(kase == kase1)
         {
             /* Multiply by inv(L). */
-            zlatrs_("Lower", "No transpose", "Unit", normin, n, &a[a_offset], lda, &work[1], &sl, &rwork[1], info);
+            zlatrs_("Lower", "No transpose", "Unit", normin, n, &a[a_offset], lda, &work[1], &sl,
+                    &rwork[1], info);
             /* Multiply by inv(U). */
-            zlatrs_("Upper", "No transpose", "Non-unit", normin, n, &a[ a_offset], lda, &work[1], &su, &rwork[*n + 1], info);
+            zlatrs_("Upper", "No transpose", "Non-unit", normin, n, &a[a_offset], lda, &work[1],
+                    &su, &rwork[*n + 1], info);
         }
         else
         {
             /* Multiply by inv(U**H). */
-            zlatrs_("Upper", "Conjugate transpose", "Non-unit", normin, n, &a[ a_offset], lda, &work[1], &su, &rwork[*n + 1], info);
+            zlatrs_("Upper", "Conjugate transpose", "Non-unit", normin, n, &a[a_offset], lda,
+                    &work[1], &su, &rwork[*n + 1], info);
             /* Multiply by inv(L**H). */
-            zlatrs_("Lower", "Conjugate transpose", "Unit", normin, n, &a[ a_offset], lda, &work[1], &sl, &rwork[1], info);
+            zlatrs_("Lower", "Conjugate transpose", "Unit", normin, n, &a[a_offset], lda, &work[1],
+                    &sl, &rwork[1], info);
         }
         /* Divide X by 1/(SL*SU) if doing so will not cause overflow. */
         scale = sl * su;
         *(unsigned char *)normin = 'Y';
-        if (scale != 1.)
+        if(scale != 1.)
         {
             ix = izamax_(n, &work[1], &c__1);
             i__1 = ix;
-            if (scale < ((d__1 = work[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(& work[ix]), f2c_dabs(d__2))) * smlnum || scale == 0.)
+            if(scale < ((d__1 = work[i__1].r, f2c_dabs(d__1))
+                        + (d__2 = d_imag(&work[ix]), f2c_dabs(d__2)))
+                           * smlnum
+               || scale == 0.)
             {
                 goto L20;
             }
@@ -263,13 +285,13 @@ L10:
         goto L10;
     }
     /* Compute the estimate of the reciprocal condition number. */
-    if (ainvnm != 0.)
+    if(ainvnm != 0.)
     {
         *rcond = 1. / ainvnm / *anorm;
     }
 L20:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGECON */
 }
 /* zgecon_ */

@@ -1,5 +1,8 @@
-/* ../netlib/slaed0.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slaed0.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__9 = 9;
 static integer c__0 = 0;
@@ -7,17 +10,24 @@ static integer c__2 = 2;
 static real c_b23 = 1.f;
 static real c_b24 = 0.f;
 static integer c__1 = 1;
-/* > \brief \b SLAED0 used by sstedc. Computes all eigenvalues and corresponding eigenvectors of an unreduced symmetric tridiagonal matrix using the divide and conquer method. */
+/* > \brief \b SLAED0 used by sstedc. Computes all eigenvalues and corresponding eigenvectors of an
+ * unreduced symmetric tridiagonal matrix using the divide and conquer method. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLAED0 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaed0. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaed0.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaed0. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaed0.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaed0. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaed0.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -163,7 +173,8 @@ static integer c__1 = 1;
 /* > at Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-int slaed0_(integer *icompq, integer *qsiz, integer *n, real *d__, real *e, real *q, integer *ldq, real *qstore, integer *ldqs, real *work, integer *iwork, integer *info)
+void slaed0_(integer *icompq, integer *qsiz, integer *n, real *d__, real *e, real *q, integer *ldq,
+             real *qstore, integer *ldqs, real *work, integer *iwork, integer *info)
 {
     /* System generated locals */
     integer q_dim1, q_offset, qstore_dim1, qstore_offset, i__1, i__2;
@@ -176,23 +187,34 @@ int slaed0_(integer *icompq, integer *qsiz, integer *n, real *d__, real *e, real
     real temp;
     integer curr;
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+        void
+        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
+               integer *, real *, real *, integer *);
     integer iperm, indxq, iwrem;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *);
     integer iqptr, tlvls;
     extern /* Subroutine */
-    int slaed1_(integer *, real *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *), slaed7_(integer *, integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *, integer *, integer *, real *, real *, integer *, integer *);
+        void
+        slaed1_(integer *, real *, real *, integer *, integer *, real *, integer *, real *,
+                integer *, integer *),
+        slaed7_(integer *, integer *, integer *, integer *, integer *, integer *, real *, real *,
+                integer *, integer *, real *, integer *, real *, integer *, integer *, integer *,
+                integer *, integer *, real *, real *, integer *, integer *);
     integer igivcl;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer igivnm, submat;
     extern /* Subroutine */
-    int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+        void
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     integer curprb, subpbs, igivpt, curlvl, matsiz, iprmpt, smlsiz;
     extern /* Subroutine */
-    int ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
+        void
+        ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -234,36 +256,36 @@ int slaed0_(integer *icompq, integer *qsiz, integer *n, real *d__, real *e, real
     iwrem = 0;
     iperm = 0;
     iq = 0;
-    if (*icompq < 0 || *icompq > 2)
+    if(*icompq < 0 || *icompq > 2)
     {
         *info = -1;
     }
-    else if (*icompq == 1 && *qsiz < fla_max(0,*n))
+    else if(*icompq == 1 && *qsiz < fla_max(0, *n))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*ldq < fla_max(1,*n))
+    else if(*ldq < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldqs < fla_max(1,*n))
+    else if(*ldqs < fla_max(1, *n))
     {
         *info = -9;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SLAED0", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
-        return 0;
+        return;
     }
     smlsiz = ilaenv_(&c__9, "SLAED0", " ", &c__0, &c__0, &c__0, &c__0);
     /* Determine the size and placement of the submatrices, and save in */
@@ -272,11 +294,9 @@ int slaed0_(integer *icompq, integer *qsiz, integer *n, real *d__, real *e, real
     subpbs = 1;
     tlvls = 0;
 L10:
-    if (iwork[subpbs] > smlsiz)
+    if(iwork[subpbs] > smlsiz)
     {
-        for (j = subpbs;
-                j >= 1;
-                --j)
+        for(j = subpbs; j >= 1; --j)
         {
             iwork[j * 2] = (iwork[j] + 1) / 2;
             iwork[(j << 1) - 1] = iwork[j] / 2;
@@ -287,9 +307,7 @@ L10:
         goto L10;
     }
     i__1 = subpbs;
-    for (j = 2;
-            j <= i__1;
-            ++j)
+    for(j = 2; j <= i__1; ++j)
     {
         iwork[j] += iwork[j - 1];
         /* L30: */
@@ -298,9 +316,7 @@ L10:
     /* using rank-1 modifications (cuts). */
     spm1 = subpbs - 1;
     i__1 = spm1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         submat = iwork[i__] + 1;
         smm1 = submat - 1;
@@ -309,17 +325,17 @@ L10:
         /* L40: */
     }
     indxq = (*n << 2) + 3;
-    if (*icompq != 2)
+    if(*icompq != 2)
     {
         /* Set up workspaces for eigenvalues only/accumulate new vectors */
         /* routine */
-        temp = log((real) (*n)) / log(2.f);
-        lgn = (integer) temp;
-        if (pow_ii(&c__2, &lgn) < *n)
+        temp = log((real)(*n)) / log(2.f);
+        lgn = (integer)temp;
+        if(pow_ii(&c__2, &lgn) < *n)
         {
             ++lgn;
         }
-        if (pow_ii(&c__2, &lgn) < *n)
+        if(pow_ii(&c__2, &lgn) < *n)
         {
             ++lgn;
         }
@@ -335,9 +351,7 @@ L10:
         iwrem = iq + i__1 * i__1 + 1;
         /* Initialize pointers */
         i__1 = subpbs;
-        for (i__ = 0;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 0; i__ <= i__1; ++i__)
         {
             iwork[iprmpt + i__] = 1;
             iwork[igivpt + i__] = 1;
@@ -349,11 +363,9 @@ L10:
     /* conquer tree. */
     curr = 0;
     i__1 = spm1;
-    for (i__ = 0;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 0; i__ <= i__1; ++i__)
     {
-        if (i__ == 0)
+        if(i__ == 0)
         {
             submat = 1;
             matsiz = iwork[1];
@@ -363,24 +375,28 @@ L10:
             submat = iwork[i__] + 1;
             matsiz = iwork[i__ + 1] - iwork[i__];
         }
-        if (*icompq == 2)
+        if(*icompq == 2)
         {
-            ssteqr_("I", &matsiz, &d__[submat], &e[submat], &q[submat + submat * q_dim1], ldq, &work[1], info);
-            if (*info != 0)
+            ssteqr_("I", &matsiz, &d__[submat], &e[submat], &q[submat + submat * q_dim1], ldq,
+                    &work[1], info);
+            if(*info != 0)
             {
                 goto L130;
             }
         }
         else
         {
-            ssteqr_("I", &matsiz, &d__[submat], &e[submat], &work[iq - 1 + iwork[iqptr + curr]], &matsiz, &work[1], info);
-            if (*info != 0)
+            ssteqr_("I", &matsiz, &d__[submat], &e[submat], &work[iq - 1 + iwork[iqptr + curr]],
+                    &matsiz, &work[1], info);
+            if(*info != 0)
             {
                 goto L130;
             }
-            if (*icompq == 1)
+            if(*icompq == 1)
             {
-                sgemm_("N", "N", qsiz, &matsiz, &matsiz, &c_b23, &q[submat * q_dim1 + 1], ldq, &work[iq - 1 + iwork[iqptr + curr]], &matsiz, &c_b24, &qstore[submat * qstore_dim1 + 1], ldqs);
+                sgemm_("N", "N", qsiz, &matsiz, &matsiz, &c_b23, &q[submat * q_dim1 + 1], ldq,
+                       &work[iq - 1 + iwork[iqptr + curr]], &matsiz, &c_b24,
+                       &qstore[submat * qstore_dim1 + 1], ldqs);
             }
             /* Computing 2nd power */
             i__2 = matsiz;
@@ -389,9 +405,7 @@ L10:
         }
         k = 1;
         i__2 = iwork[i__ + 1];
-        for (j = submat;
-                j <= i__2;
-                ++j)
+        for(j = submat; j <= i__2; ++j)
         {
             iwork[indxq + j] = k;
             ++k;
@@ -404,15 +418,13 @@ L10:
     /* while ( SUBPBS > 1 ) */
     curlvl = 1;
 L80:
-    if (subpbs > 1)
+    if(subpbs > 1)
     {
         spm2 = subpbs - 2;
         i__1 = spm2;
-        for (i__ = 0;
-                i__ <= i__1;
-                i__ += 2)
+        for(i__ = 0; i__ <= i__1; i__ += 2)
         {
-            if (i__ == 0)
+            if(i__ == 0)
             {
                 submat = 1;
                 matsiz = iwork[2];
@@ -433,15 +445,21 @@ L80:
             /* SLAED7 handles the cases in which eigenvalues only or eigenvalues */
             /* and eigenvectors of a full symmetric matrix (which was reduced to */
             /* tridiagonal form) are desired. */
-            if (*icompq == 2)
+            if(*icompq == 2)
             {
-                slaed1_(&matsiz, &d__[submat], &q[submat + submat * q_dim1], ldq, &iwork[indxq + submat], &e[submat + msd2 - 1], & msd2, &work[1], &iwork[subpbs + 1], info);
+                slaed1_(&matsiz, &d__[submat], &q[submat + submat * q_dim1], ldq,
+                        &iwork[indxq + submat], &e[submat + msd2 - 1], &msd2, &work[1],
+                        &iwork[subpbs + 1], info);
             }
             else
             {
-                slaed7_(icompq, &matsiz, qsiz, &tlvls, &curlvl, &curprb, &d__[ submat], &qstore[submat * qstore_dim1 + 1], ldqs, & iwork[indxq + submat], &e[submat + msd2 - 1], &msd2, & work[iq], &iwork[iqptr], &iwork[iprmpt], &iwork[iperm], &iwork[igivpt], &iwork[igivcl], &work[igivnm], & work[iwrem], &iwork[subpbs + 1], info);
+                slaed7_(icompq, &matsiz, qsiz, &tlvls, &curlvl, &curprb, &d__[submat],
+                        &qstore[submat * qstore_dim1 + 1], ldqs, &iwork[indxq + submat],
+                        &e[submat + msd2 - 1], &msd2, &work[iq], &iwork[iqptr], &iwork[iprmpt],
+                        &iwork[iperm], &iwork[igivpt], &iwork[igivcl], &work[igivnm], &work[iwrem],
+                        &iwork[subpbs + 1], info);
             }
-            if (*info != 0)
+            if(*info != 0)
             {
                 goto L130;
             }
@@ -455,12 +473,10 @@ L80:
     /* end while */
     /* Re-merge the eigenvalues/vectors which were deflated at the final */
     /* merge step. */
-    if (*icompq == 1)
+    if(*icompq == 1)
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             j = iwork[indxq + i__];
             work[i__] = d__[j];
@@ -469,12 +485,10 @@ L80:
         }
         scopy_(n, &work[1], &c__1, &d__[1], &c__1);
     }
-    else if (*icompq == 2)
+    else if(*icompq == 2)
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             j = iwork[indxq + i__];
             work[i__] = d__[j];
@@ -487,9 +501,7 @@ L80:
     else
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             j = iwork[indxq + i__];
             work[i__] = d__[j];
@@ -501,7 +513,7 @@ L80:
 L130:
     *info = submat * (*n + 1) + submat + matsiz - 1;
 L140:
-    return 0;
+    return;
     /* End of SLAED0 */
 }
 /* slaed0_ */

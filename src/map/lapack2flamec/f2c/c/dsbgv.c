@@ -1,16 +1,25 @@
-/* ../netlib/dsbgv.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dsbgv.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DSBGST */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DSBGV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsbgv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsbgv.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsbgv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsbgv.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsbgv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsbgv.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -41,7 +50,7 @@
 /* > \verbatim */
 /* > JOBZ is CHARACTER*1 */
 /* > = 'N': Compute eigenvalues only;
-*/
+ */
 /* > = 'V': Compute eigenvalues and eigenvectors. */
 /* > \endverbatim */
 /* > */
@@ -49,7 +58,7 @@
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangles of A and B are stored;
-*/
+ */
 /* > = 'L': Lower triangles of A and B are stored. */
 /* > \endverbatim */
 /* > */
@@ -81,7 +90,7 @@
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(ka+1+i-j,j) = A(i,j) for fla_max(1,j-ka)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+ka). */
 /* > */
 /* > On exit, the contents of AB are destroyed. */
@@ -101,7 +110,7 @@
 /* > j-th column of B is stored in the j-th column of the array BB */
 /* > as follows: */
 /* > if UPLO = 'U', BB(kb+1+i-j,j) = B(i,j) for fla_max(1,j-kb)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', BB(1+i-j,j) = B(i,j) for j<=i<=fla_min(n,j+kb). */
 /* > */
 /* > On exit, the factor S from the split Cholesky factorization */
@@ -151,7 +160,7 @@
 /* > <= N: the algorithm failed to converge: */
 /* > i off-diagonal elements of an intermediate */
 /* > tridiagonal form did not converge to zero;
-*/
+ */
 /* > > N: if INFO = N + i, for 1 <= i <= N, then DPBSTF */
 /* > returned INFO = i: B is not positive definite. */
 /* > The factorization of B could not be completed and */
@@ -167,23 +176,38 @@
 /* > \ingroup doubleOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-int dsbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, doublereal *ab, integer *ldab, doublereal *bb, integer * ldbb, doublereal *w, doublereal *z__, integer *ldz, doublereal *work, integer *info)
+void dsbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, doublereal *ab,
+            integer *ldab, doublereal *bb, integer *ldbb, doublereal *w, doublereal *z__,
+            integer *ldz, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsbgv inputs: jobz %c, uplo %c, n %" FLA_IS ", ka %" FLA_IS ", kb %" FLA_IS ", ldab %" FLA_IS ", ldbb %" FLA_IS ", ldz %" FLA_IS "",*jobz, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldz);
+    AOCL_DTL_SNPRINTF("dsbgv inputs: jobz %c, uplo %c, n %" FLA_IS ", ka %" FLA_IS ", kb %" FLA_IS
+                      ", ldab %" FLA_IS ", ldbb %" FLA_IS ", ldz %" FLA_IS "",
+                      *jobz, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldz);
     /* System generated locals */
     integer ab_dim1, ab_offset, bb_dim1, bb_offset, z_dim1, z_offset, i__1;
     /* Local variables */
     integer inde;
     char vect[1];
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     logical upper, wantz;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dpbstf_( char *, integer *, integer *, doublereal *, integer *, integer *), dsbtrd_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *), dsbgst_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dsterf_(integer *, doublereal *, doublereal *, integer *);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
+        dpbstf_(char *, integer *, integer *, doublereal *, integer *, integer *),
+        dsbtrd_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *,
+                doublereal *, doublereal *, integer *, doublereal *, integer *),
+        dsbgst_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, integer *, doublereal *, integer *, doublereal *, integer *),
+        dsterf_(integer *, doublereal *, doublereal *, integer *);
     integer indwrk;
     extern /* Subroutine */
-    int dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *,
+                doublereal *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -214,68 +238,69 @@ int dsbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, doubler
     z__ -= z_offset;
     --work;
     /* Function Body */
-    wantz = lsame_(jobz, "V");
-    upper = lsame_(uplo, "U");
+    wantz = lsame_(jobz, "V", 1, 1);
+    upper = lsame_(uplo, "U", 1, 1);
     *info = 0;
-    if (! (wantz || lsame_(jobz, "N")))
+    if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (upper || lsame_(uplo, "L")))
+    else if(!(upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*ka < 0)
+    else if(*ka < 0)
     {
         *info = -4;
     }
-    else if (*kb < 0 || *kb > *ka)
+    else if(*kb < 0 || *kb > *ka)
     {
         *info = -5;
     }
-    else if (*ldab < *ka + 1)
+    else if(*ldab < *ka + 1)
     {
         *info = -7;
     }
-    else if (*ldbb < *kb + 1)
+    else if(*ldbb < *kb + 1)
     {
         *info = -9;
     }
-    else if (*ldz < 1 || wantz && *ldz < *n)
+    else if(*ldz < 1 || wantz && *ldz < *n)
     {
         *info = -12;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DSBGV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Form a split Cholesky factorization of B. */
     dpbstf_(uplo, n, kb, &bb[bb_offset], ldbb, info);
-    if (*info != 0)
+    if(*info != 0)
     {
         *info = *n + *info;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Transform problem to standard eigenvalue problem. */
     inde = 1;
     indwrk = inde + *n;
-    dsbgst_(jobz, uplo, n, ka, kb, &ab[ab_offset], ldab, &bb[bb_offset], ldbb, &z__[z_offset], ldz, &work[indwrk], &iinfo) ;
+    dsbgst_(jobz, uplo, n, ka, kb, &ab[ab_offset], ldab, &bb[bb_offset], ldbb, &z__[z_offset], ldz,
+            &work[indwrk], &iinfo);
     /* Reduce to tridiagonal form. */
-    if (wantz)
+    if(wantz)
     {
         *(unsigned char *)vect = 'U';
     }
@@ -283,18 +308,19 @@ int dsbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, doubler
     {
         *(unsigned char *)vect = 'N';
     }
-    dsbtrd_(vect, uplo, n, ka, &ab[ab_offset], ldab, &w[1], &work[inde], &z__[ z_offset], ldz, &work[indwrk], &iinfo);
+    dsbtrd_(vect, uplo, n, ka, &ab[ab_offset], ldab, &w[1], &work[inde], &z__[z_offset], ldz,
+            &work[indwrk], &iinfo);
     /* For eigenvalues only, call DSTERF. For eigenvectors, call SSTEQR. */
-    if (! wantz)
+    if(!wantz)
     {
         dsterf_(n, &w[1], &work[inde], info);
     }
     else
     {
-        dsteqr_(jobz, n, &w[1], &work[inde], &z__[z_offset], ldz, &work[ indwrk], info);
+        dsteqr_(jobz, n, &w[1], &work[inde], &z__[z_offset], ldz, &work[indwrk], info);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSBGV */
 }
 /* dsbgv_ */

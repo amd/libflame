@@ -1,4 +1,9 @@
 /* ../netlib/sbdsqr.f -- translated by f2c (version 20000121). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
+
+/*
+*     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+*/
+
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b15 = -.125;
 static integer c__1 = 1;
@@ -249,37 +254,37 @@ int lapack_sbdsqr(char *uplo, integer *n, integer *ncvt, integer * nru, integer 
     integer isub, iter;
     real unfl, sinl, cosr, smin, smax, sinr;
     extern /* Subroutine */
-    int srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+    void srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     integer iterdivn;
     extern /* Subroutine */
-    int slas2_(real *, real *, real *, real *, real *) ;
+    void slas2_(real *, real *, real *, real *, real *) ;
     real f, g, h__;
     integer i__, j, m;
     real r__;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real oldcs;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+    void sscal_(integer *, real *, real *, integer *);
     integer oldll;
     real shift, sigmn, oldsn, sminl;
     extern /* Subroutine */
-    int slasr_(char *, char *, char *, integer *, integer *, real *, real *, real *, integer *);
+    void slasr_(char *, char *, char *, integer *, integer *, real *, real *, real *, integer *);
     real sigmx;
     logical lower;
     extern /* Subroutine */
-    int sswap_(integer *, real *, integer *, real *, integer *);
+    void sswap_(integer *, real *, integer *, real *, integer *);
     integer maxitdivn;
     extern /* Subroutine */
-    int slasq1_(integer *, real *, real *, real *, integer *), slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *);
+    void slasq1_(integer *, real *, real *, real *, integer *), slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *);
     real cs;
     integer ll;
     real sn, mu;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real sminoa;
     extern /* Subroutine */
-    int slartg_(real *, real *, real *, real *, real * );
+    void slartg_(real *, real *, real *, real *, real * );
     real thresh;
     logical rotate;
     integer nm1;
@@ -321,8 +326,9 @@ int lapack_sbdsqr(char *uplo, integer *n, integer *ncvt, integer * nru, integer 
     --work;
     /* Function Body */
     *info = 0;
-    lower = lsame_(uplo, "L");
-    if (! lsame_(uplo, "U") && ! lower)
+    oldsn = 0.f;
+    lower = lsame_(uplo, "L", 1, 1);
+    if (! lsame_(uplo, "U", 1, 1) && ! lower)
     {
         *info = -1;
     }

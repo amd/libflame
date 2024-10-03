@@ -1,18 +1,28 @@
-/* dlantr.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dlantr.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b DLANTR returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, or the ele ment of largest absolute value of a trapezoidal or triangular matrix. */
+/* > \brief \b DLANTR returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
+ * or the ele ment of largest absolute value of a trapezoidal or triangular matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLANTR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlantr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlantr.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlantr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlantr.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlantr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlantr.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -127,10 +137,13 @@ otherwise, WORK is not */
 /* > \author NAG Ltd. */
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
-doublereal dlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, doublereal *a, integer *lda, doublereal *work)
+doublereal dlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, doublereal *a,
+                   integer *lda, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlantr inputs: norm %c, uplo %c, diag %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*norm, *uplo, *diag, *m, *n, *lda);
+    AOCL_DTL_SNPRINTF("dlantr inputs: norm %c, uplo %c, diag %c, m %" FLA_IS ", n %" FLA_IS
+                      ", lda %" FLA_IS "",
+                      *norm, *uplo, *diag, *m, *n, *lda);
 
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
@@ -141,10 +154,11 @@ doublereal dlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
     integer i__, j;
     doublereal sum, scale;
     logical udiag;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal value;
     extern /* Subroutine */
-    int dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
+        void
+        dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -171,33 +185,29 @@ doublereal dlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
     --work;
     /* Function Body */
     value = 0.;
-    if (fla_min(*m,*n) == 0)
+    if(fla_min(*m, *n) == 0)
     {
         value = 0.;
     }
-    else if (lsame_(norm, "M"))
+    else if(lsame_(norm, "M", 1, 1))
     {
         /* Find fla_max(abs(A(i,j))). */
-        if (lsame_(diag, "U"))
+        if(lsame_(diag, "U", 1, 1))
         {
             value = 1.;
-            if (lsame_(uplo, "U"))
+            if(lsame_(uplo, "U", 1, 1))
             {
                 i__1 = *n;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     /* Computing MIN */
                     i__3 = *m;
                     i__4 = j - 1; // , expr subst
-                    i__2 = fla_min(i__3,i__4);
-                    for (i__ = 1;
-                            i__ <= i__2;
-                            ++i__)
+                    i__2 = fla_min(i__3, i__4);
+                    for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         sum = (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1));
-                        if (value < sum ||  sum != sum)
+                        if(value < sum || sum != sum)
                         {
                             value = sum;
                         }
@@ -209,17 +219,13 @@ doublereal dlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
             else
             {
                 i__1 = *n;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = *m;
-                    for (i__ = j + 1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = j + 1; i__ <= i__2; ++i__)
                     {
                         sum = (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1));
-                        if (value < sum ||  sum != sum)
+                        if(value < sum || sum != sum)
                         {
                             value = sum;
                         }
@@ -232,20 +238,16 @@ doublereal dlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
         else
         {
             value = 0.;
-            if (lsame_(uplo, "U"))
+            if(lsame_(uplo, "U", 1, 1))
             {
                 i__1 = *n;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
-                    i__2 = fla_min(*m,j);
-                    for (i__ = 1;
-                            i__ <= i__2;
-                            ++i__)
+                    i__2 = fla_min(*m, j);
+                    for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         sum = (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1));
-                        if (value < sum ||  sum != sum)
+                        if(value < sum || sum != sum)
                         {
                             value = sum;
                         }
@@ -257,17 +259,13 @@ doublereal dlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
             else
             {
                 i__1 = *n;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = *m;
-                    for (i__ = j;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = j; i__ <= i__2; ++i__)
                     {
                         sum = (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1));
-                        if (value < sum ||  sum != sum)
+                        if(value < sum || sum != sum)
                         {
                             value = sum;
                         }
@@ -278,25 +276,21 @@ doublereal dlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
             }
         }
     }
-    else if (lsame_(norm, "O") || *(unsigned char *) norm == '1')
+    else if(lsame_(norm, "O", 1, 1) || *(unsigned char *)norm == '1')
     {
         /* Find norm1(A). */
         value = 0.;
-        udiag = lsame_(diag, "U");
-        if (lsame_(uplo, "U"))
+        udiag = lsame_(diag, "U", 1, 1);
+        if(lsame_(uplo, "U", 1, 1))
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
-                if (udiag && j <= *m)
+                if(udiag && j <= *m)
                 {
                     sum = 1.;
                     i__2 = j - 1;
-                    for (i__ = 1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         sum += (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1));
                         /* L90: */
@@ -305,16 +299,14 @@ doublereal dlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
                 else
                 {
                     sum = 0.;
-                    i__2 = fla_min(*m,j);
-                    for (i__ = 1;
-                            i__ <= i__2;
-                            ++i__)
+                    i__2 = fla_min(*m, j);
+                    for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         sum += (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1));
                         /* L100: */
                     }
                 }
-                if (value < sum ||  sum != sum)
+                if(value < sum || sum != sum)
                 {
                     value = sum;
                 }
@@ -324,17 +316,13 @@ doublereal dlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
         else
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
-                if (udiag)
+                if(udiag)
                 {
                     sum = 1.;
                     i__2 = *m;
-                    for (i__ = j + 1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = j + 1; i__ <= i__2; ++i__)
                     {
                         sum += (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1));
                         /* L120: */
@@ -344,15 +332,13 @@ doublereal dlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
                 {
                     sum = 0.;
                     i__2 = *m;
-                    for (i__ = j;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = j; i__ <= i__2; ++i__)
                     {
                         sum += (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1));
                         /* L130: */
                     }
                 }
-                if (value < sum ||  sum != sum)
+                if(value < sum || sum != sum)
                 {
                     value = sum;
                 }
@@ -360,33 +346,27 @@ doublereal dlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
             }
         }
     }
-    else if (lsame_(norm, "I"))
+    else if(lsame_(norm, "I", 1, 1))
     {
         /* Find normI(A). */
-        if (lsame_(uplo, "U"))
+        if(lsame_(uplo, "U", 1, 1))
         {
-            if (lsame_(diag, "U"))
+            if(lsame_(diag, "U", 1, 1))
             {
                 i__1 = *m;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     work[i__] = 1.;
                     /* L150: */
                 }
                 i__1 = *n;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     /* Computing MIN */
                     i__3 = *m;
                     i__4 = j - 1; // , expr subst
-                    i__2 = fla_min(i__3,i__4);
-                    for (i__ = 1;
-                            i__ <= i__2;
-                            ++i__)
+                    i__2 = fla_min(i__3, i__4);
+                    for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         work[i__] += (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1));
                         /* L160: */
@@ -397,22 +377,16 @@ doublereal dlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
             else
             {
                 i__1 = *m;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     work[i__] = 0.;
                     /* L180: */
                 }
                 i__1 = *n;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
-                    i__2 = fla_min(*m,j);
-                    for (i__ = 1;
-                            i__ <= i__2;
-                            ++i__)
+                    i__2 = fla_min(*m, j);
+                    for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         work[i__] += (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1));
                         /* L190: */
@@ -423,33 +397,25 @@ doublereal dlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
         }
         else
         {
-            if (lsame_(diag, "U"))
+            if(lsame_(diag, "U", 1, 1))
             {
-                i__1 = fla_min(*m,*n);
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                i__1 = fla_min(*m, *n);
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     work[i__] = 1.;
                     /* L210: */
                 }
                 i__1 = *m;
-                for (i__ = *n + 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = *n + 1; i__ <= i__1; ++i__)
                 {
                     work[i__] = 0.;
                     /* L220: */
                 }
                 i__1 = *n;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = *m;
-                    for (i__ = j + 1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = j + 1; i__ <= i__2; ++i__)
                     {
                         work[i__] += (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1));
                         /* L230: */
@@ -460,22 +426,16 @@ doublereal dlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
             else
             {
                 i__1 = *m;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     work[i__] = 0.;
                     /* L250: */
                 }
                 i__1 = *n;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = *m;
-                    for (i__ = j;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = j; i__ <= i__2; ++i__)
                     {
                         work[i__] += (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1));
                         /* L260: */
@@ -486,36 +446,32 @@ doublereal dlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
         }
         value = 0.;
         i__1 = *m;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             sum = work[i__];
-            if (value < sum ||  sum != sum)
+            if(value < sum || sum != sum)
             {
                 value = sum;
             }
             /* L280: */
         }
     }
-    else if (lsame_(norm, "F") || lsame_(norm, "E"))
+    else if(lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
     {
         /* Find normF(A). */
-        if (lsame_(uplo, "U"))
+        if(lsame_(uplo, "U", 1, 1))
         {
-            if (lsame_(diag, "U"))
+            if(lsame_(diag, "U", 1, 1))
             {
                 scale = 1.;
-                sum = (doublereal) fla_min(*m,*n);
+                sum = (doublereal)fla_min(*m, *n);
                 i__1 = *n;
-                for (j = 2;
-                        j <= i__1;
-                        ++j)
+                for(j = 2; j <= i__1; ++j)
                 {
                     /* Computing MIN */
                     i__3 = *m;
                     i__4 = j - 1; // , expr subst
-                    i__2 = fla_min(i__3,i__4);
+                    i__2 = fla_min(i__3, i__4);
                     dlassq_(&i__2, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
                     /* L290: */
                 }
@@ -525,11 +481,9 @@ doublereal dlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
                 scale = 0.;
                 sum = 1.;
                 i__1 = *n;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
-                    i__2 = fla_min(*m,j);
+                    i__2 = fla_min(*m, j);
                     dlassq_(&i__2, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
                     /* L300: */
                 }
@@ -537,20 +491,18 @@ doublereal dlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
         }
         else
         {
-            if (lsame_(diag, "U"))
+            if(lsame_(diag, "U", 1, 1))
             {
                 scale = 1.;
-                sum = (doublereal) fla_min(*m,*n);
+                sum = (doublereal)fla_min(*m, *n);
                 i__1 = *n;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = *m - j;
                     /* Computing MIN */
                     i__3 = *m;
                     i__4 = j + 1; // , expr subst
-                    dlassq_(&i__2, &a[fla_min(i__3,i__4) + j * a_dim1], &c__1, & scale, &sum);
+                    dlassq_(&i__2, &a[fla_min(i__3, i__4) + j * a_dim1], &c__1, &scale, &sum);
                     /* L310: */
                 }
             }
@@ -559,9 +511,7 @@ doublereal dlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
                 scale = 0.;
                 sum = 1.;
                 i__1 = *n;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = *m - j + 1;
                     dlassq_(&i__2, &a[j + j * a_dim1], &c__1, &scale, &sum);

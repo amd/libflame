@@ -13,7 +13,7 @@
 FLA_Error FLA_Apply_Q_UT_create_workspace( FLA_Obj T, FLA_Obj B, FLA_Obj* W )
 {
 	FLA_Datatype datatype;
-	dim_t        m_W, n_W;
+	fla_dim_t        m_W, n_W;
 
 	datatype = FLA_Obj_datatype( T );
 	m_W      = FLA_Obj_length( T );
@@ -28,7 +28,7 @@ FLA_Error FLA_Apply_Q_UT_create_workspace( FLA_Obj T, FLA_Obj B, FLA_Obj* W )
 FLA_Error FLA_Apply_Q_UT_create_workspace_side( FLA_Side side, FLA_Obj T, FLA_Obj B, FLA_Obj* W )
 {
 	FLA_Datatype datatype;
-	dim_t        m_W, n_W;
+	fla_dim_t        m_W, n_W;
 
 	datatype = FLA_Obj_datatype( T );
 	m_W      = FLA_Obj_length( T );

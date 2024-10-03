@@ -413,13 +413,6 @@ typedef doublereal E_f;	/* real function with -R not specified */
 #endif
 #endif
 
-#ifdef FLA_ENABLE_EXTRA_SYMBOLS
-#if (defined(_WIN32) || defined(_WIN64))
-#define lsame_ lsame_lf
-#define xerbla_ xerbla_lf
-#endif
-#endif
-
 #ifndef FLA_ENABLE_EXTRA_SYMBOLS
 #if (defined(_WIN32) || defined(_WIN64))
 #ifdef UPPER

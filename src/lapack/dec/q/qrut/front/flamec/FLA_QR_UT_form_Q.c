@@ -16,7 +16,7 @@ FLA_Error FLA_QR_UT_form_Q( FLA_Obj A, FLA_Obj T, FLA_Obj Q )
     FLA_Obj   QTL, QTR,
               QBL, QBR;
     FLA_Obj   W;
-    dim_t     b;
+    fla_dim_t     b;
 
     if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
         FLA_QR_UT_form_Q_check( A, T, Q );
@@ -103,8 +103,8 @@ FLA_Error FLA_QR_UT_form_Q_blk_var1( FLA_Obj A, FLA_Obj T, FLA_Obj W )
 
     FLA_Obj AB1,   AB2;
 
-    dim_t   b, b_alg;
-    dim_t   m_BR, n_BR;
+    fla_dim_t   b, b_alg;
+    fla_dim_t   m_BR, n_BR;
 
     b_alg = FLA_Obj_length( T );
 

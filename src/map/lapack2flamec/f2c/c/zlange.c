@@ -1,21 +1,31 @@
 /*
     Copyright (c) 2019-2023 Advanced Micro Devices, Inc.
 */
-/* zlange.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* zlange.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b ZLANGE returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest absolute value of any element of a general rectangular matrix. */
+/* > \brief \b ZLANGE returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest
+ * absolute value of any element of a general rectangular matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLANGE + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlange. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlange.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlange. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlange.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlange. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlange.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -105,10 +115,12 @@ otherwise, WORK is not */
 /* > \author NAG Ltd. */
 /* > \ingroup complex16GEauxiliary */
 /* ===================================================================== */
-doublereal zlange_(char *norm, integer *m, integer *n, doublecomplex *a, integer *lda, doublereal *work)
+doublereal zlange_(char *norm, integer *m, integer *n, doublecomplex *a, integer *lda,
+                   doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlange inputs: norm %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*norm, *m, *n, *lda);
+    AOCL_DTL_SNPRINTF("zlange inputs: norm %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",
+                      *norm, *m, *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     doublereal ret_val;
@@ -117,10 +129,11 @@ doublereal zlange_(char *norm, integer *m, integer *n, doublecomplex *a, integer
     /* Local variables */
     integer i__, j;
     doublereal sum, temp, scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal value;
     extern /* Subroutine */
-    int zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
+        void
+        zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -147,26 +160,22 @@ doublereal zlange_(char *norm, integer *m, integer *n, doublecomplex *a, integer
     --work;
     /* Function Body */
     value = 0.;
-    if (fla_min(*m,*n) == 0)
+    if(fla_min(*m, *n) == 0)
     {
         value = 0.;
     }
-    else if (lsame_(norm, "M"))
+    else if(lsame_(norm, "M", 1, 1))
     {
         /* Find fla_max(abs(A(i,j))). */
         value = 0.;
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 temp = z_abs(&a[i__ + j * a_dim1]);
-                if (value < temp || temp != temp)
+                if(value < temp || temp != temp)
                 {
                     value = temp;
                 }
@@ -175,51 +184,41 @@ doublereal zlange_(char *norm, integer *m, integer *n, doublecomplex *a, integer
             /* L20: */
         }
     }
-    else if (lsame_(norm, "O") || *(unsigned char *) norm == '1')
+    else if(lsame_(norm, "O", 1, 1) || *(unsigned char *)norm == '1')
     {
         /* Find norm1(A). */
         value = 0.;
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             sum = 0.;
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 sum += z_abs(&a[i__ + j * a_dim1]);
                 /* L30: */
             }
-            if (value < sum || sum != sum)
+            if(value < sum || sum != sum)
             {
                 value = sum;
             }
             /* L40: */
         }
     }
-    else if (lsame_(norm, "I"))
+    else if(lsame_(norm, "I", 1, 1))
     {
         /* Find normI(A). */
         i__1 = *m;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             work[i__] = 0.;
             /* L50: */
         }
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 work[i__] += z_abs(&a[i__ + j * a_dim1]);
                 /* L60: */
@@ -228,27 +227,23 @@ doublereal zlange_(char *norm, integer *m, integer *n, doublecomplex *a, integer
         }
         value = 0.;
         i__1 = *m;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             temp = work[i__];
-            if (value < temp || temp != temp)
+            if(value < temp || temp != temp)
             {
                 value = temp;
             }
             /* L80: */
         }
     }
-    else if (lsame_(norm, "F") || lsame_(norm, "E"))
+    else if(lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
     {
         /* Find normF(A). */
         scale = 0.;
         sum = 1.;
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             zlassq_(m, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
             /* L90: */

@@ -1,5 +1,8 @@
-/* ../netlib/stgexc.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/stgexc.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__2 = 2;
@@ -9,11 +12,17 @@ static integer c__2 = 2;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download STGEXC + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stgexc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stgexc.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stgexc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stgexc.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stgexc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stgexc.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -58,7 +67,7 @@ static integer c__2 = 2;
 /* > \verbatim */
 /* > WANTQ is LOGICAL */
 /* > .TRUE. : update the left transformation matrix Q;
-*/
+ */
 /* > .FALSE.: do not update Q. */
 /* > \endverbatim */
 /* > */
@@ -66,7 +75,7 @@ static integer c__2 = 2;
 /* > \verbatim */
 /* > WANTZ is LOGICAL */
 /* > .TRUE. : update the right transformation matrix Z;
-*/
+ */
 /* > .FALSE.: do not update Z. */
 /* > \endverbatim */
 /* > */
@@ -149,7 +158,7 @@ static integer c__2 = 2;
 /* > sequence of swapping between adjacent blocks. */
 /* > On exit, if IFST pointed on entry to the second row of */
 /* > a 2-by-2 block, it is changed to point to the first row;
-*/
+ */
 /* > ILST always points to the first row of the block in its */
 /* > final position (which may differ from its input value by */
 /* > +1 or -1). 1 <= IFST, ILST <= N. */
@@ -213,12 +222,17 @@ A Direct Method for Reordering Eigenvalues in the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, real *b, integer *ldb, real *q, integer *ldq, real * z__, integer *ldz, integer *ifst, integer *ilst, real *work, integer * lwork, integer *info)
+void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, real *b,
+             integer *ldb, real *q, integer *ldq, real *z__, integer *ldz, integer *ifst,
+             integer *ilst, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"stgexc inputs: n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", ifst %" FLA_IS ", ilst %" FLA_IS "",*n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
+    snprintf(buffer, 256,
+             "stgexc inputs: n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS
+             ", ldz %" FLA_IS ", ifst %" FLA_IS ", ilst %" FLA_IS "",
+             *n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -226,7 +240,11 @@ int stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, r
     /* Local variables */
     integer nbf, nbl, here, lwmin;
     extern /* Subroutine */
-    int stgex2_(logical *, logical *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, integer *, integer *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        stgex2_(logical *, logical *, integer *, real *, integer *, real *, integer *, real *,
+                integer *, real *, integer *, integer *, integer *, integer *, real *, integer *,
+                integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer nbnext;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -265,37 +283,37 @@ int stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, r
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldq < 1 || *wantq && *ldq < fla_max(1,*n))
+    else if(*ldq < 1 || *wantq && *ldq < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (*ldz < 1 || *wantz && *ldz < fla_max(1,*n))
+    else if(*ldz < 1 || *wantz && *ldz < fla_max(1, *n))
     {
         *info = -11;
     }
-    else if (*ifst < 1 || *ifst > *n)
+    else if(*ifst < 1 || *ifst > *n)
     {
         *info = -12;
     }
-    else if (*ilst < 1 || *ilst > *n)
+    else if(*ilst < 1 || *ilst > *n)
     {
         *info = -13;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        if (*n <= 1)
+        if(*n <= 1)
         {
             lwmin = 1;
         }
@@ -303,105 +321,106 @@ int stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, r
         {
             lwmin = (*n << 2) + 16;
         }
-        work[1] = (real) lwmin;
-        if (*lwork < lwmin && ! lquery)
+        work[1] = (real)lwmin;
+        if(*lwork < lwmin && !lquery)
         {
             *info = -15;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("STGEXC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n <= 1)
+    if(*n <= 1)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Determine the first row of the specified block and find out */
     /* if it is 1-by-1 or 2-by-2. */
-    if (*ifst > 1)
+    if(*ifst > 1)
     {
-        if (a[*ifst + (*ifst - 1) * a_dim1] != 0.f)
+        if(a[*ifst + (*ifst - 1) * a_dim1] != 0.f)
         {
             --(*ifst);
         }
     }
     nbf = 1;
-    if (*ifst < *n)
+    if(*ifst < *n)
     {
-        if (a[*ifst + 1 + *ifst * a_dim1] != 0.f)
+        if(a[*ifst + 1 + *ifst * a_dim1] != 0.f)
         {
             nbf = 2;
         }
     }
     /* Determine the first row of the final block */
     /* and find out if it is 1-by-1 or 2-by-2. */
-    if (*ilst > 1)
+    if(*ilst > 1)
     {
-        if (a[*ilst + (*ilst - 1) * a_dim1] != 0.f)
+        if(a[*ilst + (*ilst - 1) * a_dim1] != 0.f)
         {
             --(*ilst);
         }
     }
     nbl = 1;
-    if (*ilst < *n)
+    if(*ilst < *n)
     {
-        if (a[*ilst + 1 + *ilst * a_dim1] != 0.f)
+        if(a[*ilst + 1 + *ilst * a_dim1] != 0.f)
         {
             nbl = 2;
         }
     }
-    if (*ifst == *ilst)
+    if(*ifst == *ilst)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (*ifst < *ilst)
+    if(*ifst < *ilst)
     {
         /* Update ILST. */
-        if (nbf == 2 && nbl == 1)
+        if(nbf == 2 && nbl == 1)
         {
             --(*ilst);
         }
-        if (nbf == 1 && nbl == 2)
+        if(nbf == 1 && nbl == 2)
         {
             ++(*ilst);
         }
         here = *ifst;
-L10: /* Swap with next one below. */
-        if (nbf == 1 || nbf == 2)
+    L10: /* Swap with next one below. */
+        if(nbf == 1 || nbf == 2)
         {
             /* Current block either 1-by-1 or 2-by-2. */
             nbnext = 1;
-            if (here + nbf + 1 <= *n)
+            if(here + nbf + 1 <= *n)
             {
-                if (a[here + nbf + 1 + (here + nbf) * a_dim1] != 0.f)
+                if(a[here + nbf + 1 + (here + nbf) * a_dim1] != 0.f)
                 {
                     nbnext = 2;
                 }
             }
-            stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[ q_offset], ldq, &z__[z_offset], ldz, &here, &nbf, &nbnext, &work[1], lwork, info);
-            if (*info != 0)
+            stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
+                    &z__[z_offset], ldz, &here, &nbf, &nbnext, &work[1], lwork, info);
+            if(*info != 0)
             {
                 *ilst = here;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             here += nbnext;
             /* Test if 2-by-2 block breaks into two 1-by-1 blocks. */
-            if (nbf == 2)
+            if(nbf == 2)
             {
-                if (a[here + 1 + here * a_dim1] == 0.f)
+                if(a[here + 1 + here * a_dim1] == 0.f)
                 {
                     nbf = 3;
                 }
@@ -412,75 +431,80 @@ L10: /* Swap with next one below. */
             /* Current block consists of two 1-by-1 blocks, each of which */
             /* must be swapped individually. */
             nbnext = 1;
-            if (here + 3 <= *n)
+            if(here + 3 <= *n)
             {
-                if (a[here + 3 + (here + 2) * a_dim1] != 0.f)
+                if(a[here + 3 + (here + 2) * a_dim1] != 0.f)
                 {
                     nbnext = 2;
                 }
             }
             i__1 = here + 1;
-            stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[ q_offset], ldq, &z__[z_offset], ldz, &i__1, &c__1, & nbnext, &work[1], lwork, info);
-            if (*info != 0)
+            stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
+                    &z__[z_offset], ldz, &i__1, &c__1, &nbnext, &work[1], lwork, info);
+            if(*info != 0)
             {
                 *ilst = here;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
-            if (nbnext == 1)
+            if(nbnext == 1)
             {
                 /* Swap two 1-by-1 blocks. */
-                stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq, &z__[z_offset], ldz, &here, &c__1, &c__1, &work[1], lwork, info);
-                if (*info != 0)
+                stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
+                        &z__[z_offset], ldz, &here, &c__1, &c__1, &work[1], lwork, info);
+                if(*info != 0)
                 {
                     *ilst = here;
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 ++here;
             }
             else
             {
                 /* Recompute NBNEXT in case of 2-by-2 split. */
-                if (a[here + 2 + (here + 1) * a_dim1] == 0.f)
+                if(a[here + 2 + (here + 1) * a_dim1] == 0.f)
                 {
                     nbnext = 1;
                 }
-                if (nbnext == 2)
+                if(nbnext == 2)
                 {
                     /* 2-by-2 block did not split. */
-                    stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq, &z__[z_offset], ldz, & here, &c__1, &nbnext, &work[1], lwork, info);
-                    if (*info != 0)
+                    stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
+                            ldq, &z__[z_offset], ldz, &here, &c__1, &nbnext, &work[1], lwork, info);
+                    if(*info != 0)
                     {
                         *ilst = here;
                         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                        return 0;
+                        return;
                     }
                     here += 2;
                 }
                 else
                 {
                     /* 2-by-2 block did split. */
-                    stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq, &z__[z_offset], ldz, & here, &c__1, &c__1, &work[1], lwork, info);
-                    if (*info != 0)
+                    stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
+                            ldq, &z__[z_offset], ldz, &here, &c__1, &c__1, &work[1], lwork, info);
+                    if(*info != 0)
                     {
                         *ilst = here;
                         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                        return 0;
+                        return;
                     }
                     ++here;
-                    stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq, &z__[z_offset], ldz, & here, &c__1, &c__1, &work[1], lwork, info);
-                    if (*info != 0)
+                    stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
+                            ldq, &z__[z_offset], ldz, &here, &c__1, &c__1, &work[1], lwork, info);
+                    if(*info != 0)
                     {
                         *ilst = here;
                         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                        return 0;
+                        return;
                     }
                     ++here;
                 }
             }
         }
-        if (here < *ilst)
+        if(here < *ilst)
         {
             goto L10;
         }
@@ -488,31 +512,32 @@ L10: /* Swap with next one below. */
     else
     {
         here = *ifst;
-L20: /* Swap with next one below. */
-        if (nbf == 1 || nbf == 2)
+    L20: /* Swap with next one below. */
+        if(nbf == 1 || nbf == 2)
         {
             /* Current block either 1-by-1 or 2-by-2. */
             nbnext = 1;
-            if (here >= 3)
+            if(here >= 3)
             {
-                if (a[here - 1 + (here - 2) * a_dim1] != 0.f)
+                if(a[here - 1 + (here - 2) * a_dim1] != 0.f)
                 {
                     nbnext = 2;
                 }
             }
             i__1 = here - nbnext;
-            stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[ q_offset], ldq, &z__[z_offset], ldz, &i__1, &nbnext, &nbf, &work[1], lwork, info);
-            if (*info != 0)
+            stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
+                    &z__[z_offset], ldz, &i__1, &nbnext, &nbf, &work[1], lwork, info);
+            if(*info != 0)
             {
                 *ilst = here;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             here -= nbnext;
             /* Test if 2-by-2 block breaks into two 1-by-1 blocks. */
-            if (nbf == 2)
+            if(nbf == 2)
             {
-                if (a[here + 1 + here * a_dim1] == 0.f)
+                if(a[here + 1 + here * a_dim1] == 0.f)
                 {
                     nbf = 3;
                 }
@@ -523,84 +548,89 @@ L20: /* Swap with next one below. */
             /* Current block consists of two 1-by-1 blocks, each of which */
             /* must be swapped individually. */
             nbnext = 1;
-            if (here >= 3)
+            if(here >= 3)
             {
-                if (a[here - 1 + (here - 2) * a_dim1] != 0.f)
+                if(a[here - 1 + (here - 2) * a_dim1] != 0.f)
                 {
                     nbnext = 2;
                 }
             }
             i__1 = here - nbnext;
-            stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[ q_offset], ldq, &z__[z_offset], ldz, &i__1, &nbnext, & c__1, &work[1], lwork, info);
-            if (*info != 0)
+            stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
+                    &z__[z_offset], ldz, &i__1, &nbnext, &c__1, &work[1], lwork, info);
+            if(*info != 0)
             {
                 *ilst = here;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
-            if (nbnext == 1)
+            if(nbnext == 1)
             {
                 /* Swap two 1-by-1 blocks. */
-                stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq, &z__[z_offset], ldz, &here, & nbnext, &c__1, &work[1], lwork, info);
-                if (*info != 0)
+                stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
+                        &z__[z_offset], ldz, &here, &nbnext, &c__1, &work[1], lwork, info);
+                if(*info != 0)
                 {
                     *ilst = here;
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 --here;
             }
             else
             {
                 /* Recompute NBNEXT in case of 2-by-2 split. */
-                if (a[here + (here - 1) * a_dim1] == 0.f)
+                if(a[here + (here - 1) * a_dim1] == 0.f)
                 {
                     nbnext = 1;
                 }
-                if (nbnext == 2)
+                if(nbnext == 2)
                 {
                     /* 2-by-2 block did not split. */
                     i__1 = here - 1;
-                    stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq, &z__[z_offset], ldz, & i__1, &c__2, &c__1, &work[1], lwork, info);
-                    if (*info != 0)
+                    stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
+                            ldq, &z__[z_offset], ldz, &i__1, &c__2, &c__1, &work[1], lwork, info);
+                    if(*info != 0)
                     {
                         *ilst = here;
                         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                        return 0;
+                        return;
                     }
                     here += -2;
                 }
                 else
                 {
                     /* 2-by-2 block did split. */
-                    stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq, &z__[z_offset], ldz, & here, &c__1, &c__1, &work[1], lwork, info);
-                    if (*info != 0)
+                    stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
+                            ldq, &z__[z_offset], ldz, &here, &c__1, &c__1, &work[1], lwork, info);
+                    if(*info != 0)
                     {
                         *ilst = here;
                         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                        return 0;
+                        return;
                     }
                     --here;
-                    stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq, &z__[z_offset], ldz, & here, &c__1, &c__1, &work[1], lwork, info);
-                    if (*info != 0)
+                    stgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
+                            ldq, &z__[z_offset], ldz, &here, &c__1, &c__1, &work[1], lwork, info);
+                    if(*info != 0)
                     {
                         *ilst = here;
                         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                        return 0;
+                        return;
                     }
                     --here;
                 }
             }
         }
-        if (here > *ilst)
+        if(here > *ilst)
         {
             goto L20;
         }
     }
     *ilst = here;
-    work[1] = (real) lwmin;
+    work[1] = (real)lwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of STGEXC */
 }
 /* stgexc_ */

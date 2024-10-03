@@ -1,6 +1,9 @@
 #ifdef FLA_ENABLE_XBLAS
-/* ../netlib/zgbrfsx.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zgbrfsx.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static logical c_true = TRUE_;
 static logical c_false = FALSE_;
@@ -10,11 +13,17 @@ static logical c_false = FALSE_;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZGBRFSX + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgbrfsx .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgbrfsx
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgbrfsx .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgbrfsx
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgbrfsx .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgbrfsx
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -161,7 +170,7 @@ for 1<=i<=N, row i of the */
 /* > multiplied on the left by diag(R);
 if EQUED = 'N' or 'C', R */
 /* > is not accessed. R is an input argument if FACT = 'F';
-*/
+ */
 /* > otherwise, R is an output argument. If FACT = 'F' and */
 /* > EQUED = 'R' or 'B', each element of R must be positive. */
 /* > If R is output, each element of R is a power of the radix. */
@@ -181,7 +190,7 @@ if EQUED = 'N' or 'C', R */
 /* > multiplied on the right by diag(C);
 if EQUED = 'N' or 'R', C */
 /* > is not accessed. C is an input argument if FACT = 'F';
-*/
+ */
 /* > otherwise, C is an output argument. If FACT = 'F' and */
 /* > EQUED = 'C' or 'B', each element of C must be positive. */
 /* > If C is output, each element of C is a power of the radix. */
@@ -436,12 +445,22 @@ defaults */
 /* > \ingroup complex16GBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, integer *nrhs, doublecomplex *ab, integer *ldab, doublecomplex *afb, integer *ldafb, integer *ipiv, doublereal *r__, doublereal *c__, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *berr, integer * n_err_bnds__, doublereal *err_bnds_norm__, doublereal * err_bnds_comp__, integer *nparams, doublereal *params, doublecomplex * work, doublereal *rwork, integer *info)
+void zgbrfsx_(char *trans, char *equed, integer *n, integer *kl, integer *ku, integer *nrhs,
+              doublecomplex *ab, integer *ldab, doublecomplex *afb, integer *ldafb, integer *ipiv,
+              doublereal *r__, doublereal *c__, doublecomplex *b, integer *ldb, doublecomplex *x,
+              integer *ldx, doublereal *rcond, doublereal *berr, integer *n_err_bnds__,
+              doublereal *err_bnds_norm__, doublereal *err_bnds_comp__, integer *nparams,
+              doublereal *params, doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgbrfsx inputs: trans %c, equed %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS ", n_err_bnds__ %" FLA_IS ", nparams %" FLA_IS "",*trans, *equed, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldx, *n_err_bnds__, *nparams);
+    AOCL_DTL_SNPRINTF(
+        "zgbrfsx inputs: trans %c, equed %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
+        ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS
+        ", n_err_bnds__ %" FLA_IS ", nparams %" FLA_IS "",
+        *trans, *equed, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldx, *n_err_bnds__, *nparams);
     /* System generated locals */
-    integer ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset, err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1;
+    integer ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset,
+        err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1;
     doublereal d__1, d__2;
     /* Builtin functions */
     double sqrt(doublereal);
@@ -454,17 +473,34 @@ int zgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, in
     integer prec_type__, trans_type__;
     doublereal cwise_wrong__;
     extern /* Subroutine */
-    int zla_gbrfsx_extended_(integer *, integer *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, logical *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, doublecomplex *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, logical *, integer *);
+        void
+        zla_gbrfsx_extended_(integer *, integer *, integer *, integer *, integer *, integer *,
+                             doublecomplex *, integer *, doublecomplex *, integer *, integer *,
+                             logical *, doublereal *, doublecomplex *, integer *, doublecomplex *,
+                             integer *, doublereal *, integer *, doublereal *, doublereal *,
+                             doublecomplex *, doublereal *, doublecomplex *, doublereal *,
+                             doublereal *, integer *, doublereal *, doublereal *, logical *,
+                             integer *);
     char norm[1];
     logical ignore_cwise__;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal anorm;
-    extern doublereal zla_gbrcond_c_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublereal *, logical *, integer *, doublecomplex *, doublereal *), zla_gbrcond_x_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *), dlamch_(char *);
+    extern doublereal zla_gbrcond_c_(char *, integer *, integer *, integer *, doublecomplex *,
+                                     integer *, doublecomplex *, integer *, integer *, doublereal *,
+                                     logical *, integer *, doublecomplex *, doublereal *),
+        zla_gbrcond_x_(char *, integer *, integer *, integer *, doublecomplex *, integer *,
+                       doublecomplex *, integer *, integer *, doublecomplex *, integer *,
+                       doublecomplex *, doublereal *),
+        dlamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern doublereal zlangb_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublereal *);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern doublereal zlangb_(char *, integer *, integer *, integer *, doublecomplex *, integer *,
+                              doublereal *);
     extern /* Subroutine */
-    int zgbcon_(char *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *);
+        void
+        zgbcon_(char *, integer *, integer *, integer *, doublecomplex *, integer *, integer *,
+                doublereal *, doublereal *, doublecomplex *, doublereal *, integer *);
     logical colequ, notran, rowequ;
     extern integer ilaprec_(char *);
     integer ithresh, n_norms__;
@@ -520,39 +556,39 @@ int zgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, in
     *info = 0;
     trans_type__ = ilatrans_(trans);
     ref_type__ = 1;
-    if (*nparams >= 1)
+    if(*nparams >= 1)
     {
-        if (params[1] < 0.)
+        if(params[1] < 0.)
         {
             params[1] = 1.;
         }
         else
         {
-            ref_type__ = (integer) params[1];
+            ref_type__ = (integer)params[1];
         }
     }
     /* Set default parameters. */
-    illrcond_thresh__ = (doublereal) (*n) * dlamch_("Epsilon");
+    illrcond_thresh__ = (doublereal)(*n) * dlamch_("Epsilon");
     ithresh = 10;
     rthresh = .5;
     unstable_thresh__ = .25;
     ignore_cwise__ = FALSE_;
-    if (*nparams >= 2)
+    if(*nparams >= 2)
     {
-        if (params[2] < 0.)
+        if(params[2] < 0.)
         {
-            params[2] = (doublereal) ithresh;
+            params[2] = (doublereal)ithresh;
         }
         else
         {
-            ithresh = (integer) params[2];
+            ithresh = (integer)params[2];
         }
     }
-    if (*nparams >= 3)
+    if(*nparams >= 3)
     {
-        if (params[3] < 0.)
+        if(params[3] < 0.)
         {
-            if (ignore_cwise__)
+            if(ignore_cwise__)
             {
                 params[3] = 0.;
             }
@@ -566,11 +602,11 @@ int zgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, in
             ignore_cwise__ = params[3] == 0.;
         }
     }
-    if (ref_type__ == 0 || *n_err_bnds__ == 0)
+    if(ref_type__ == 0 || *n_err_bnds__ == 0)
     {
         n_norms__ = 0;
     }
-    else if (ignore_cwise__)
+    else if(ignore_cwise__)
     {
         n_norms__ = 1;
     }
@@ -578,105 +614,101 @@ int zgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, in
     {
         n_norms__ = 2;
     }
-    notran = lsame_(trans, "N");
-    rowequ = lsame_(equed, "R") || lsame_(equed, "B");
-    colequ = lsame_(equed, "C") || lsame_(equed, "B");
+    notran = lsame_(trans, "N", 1, 1);
+    rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
+    colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
     /* Test input parameters. */
-    if (trans_type__ == -1)
+    if(trans_type__ == -1)
     {
         *info = -1;
     }
-    else if (! rowequ && ! colequ && ! lsame_(equed, "N"))
+    else if(!rowequ && !colequ && !lsame_(equed, "N", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*kl < 0)
+    else if(*kl < 0)
     {
         *info = -4;
     }
-    else if (*ku < 0)
+    else if(*ku < 0)
     {
         *info = -5;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -6;
     }
-    else if (*ldab < *kl + *ku + 1)
+    else if(*ldab < *kl + *ku + 1)
     {
         *info = -8;
     }
-    else if (*ldafb < (*kl << 1) + *ku + 1)
+    else if(*ldafb < (*kl << 1) + *ku + 1)
     {
         *info = -10;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -13;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -15;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZGBRFSX", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
-    if (*n == 0 || *nrhs == 0)
+    if(*n == 0 || *nrhs == 0)
     {
         *rcond = 1.;
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             berr[j] = 0.;
-            if (*n_err_bnds__ >= 1)
+            if(*n_err_bnds__ >= 1)
             {
                 err_bnds_norm__[j + err_bnds_norm_dim1] = 1.;
                 err_bnds_comp__[j + err_bnds_comp_dim1] = 1.;
             }
-            if (*n_err_bnds__ >= 2)
+            if(*n_err_bnds__ >= 2)
             {
                 err_bnds_norm__[j + (err_bnds_norm_dim1 << 1)] = 0.;
                 err_bnds_comp__[j + (err_bnds_comp_dim1 << 1)] = 0.;
             }
-            if (*n_err_bnds__ >= 3)
+            if(*n_err_bnds__ >= 3)
             {
                 err_bnds_norm__[j + err_bnds_norm_dim1 * 3] = 1.;
                 err_bnds_comp__[j + err_bnds_comp_dim1 * 3] = 1.;
             }
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Default to failure. */
     *rcond = 0.;
     i__1 = *nrhs;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         berr[j] = 1.;
-        if (*n_err_bnds__ >= 1)
+        if(*n_err_bnds__ >= 1)
         {
             err_bnds_norm__[j + err_bnds_norm_dim1] = 1.;
             err_bnds_comp__[j + err_bnds_comp_dim1] = 1.;
         }
-        if (*n_err_bnds__ >= 2)
+        if(*n_err_bnds__ >= 2)
         {
             err_bnds_norm__[j + (err_bnds_norm_dim1 << 1)] = 1.;
             err_bnds_comp__[j + (err_bnds_comp_dim1 << 1)] = 1.;
         }
-        if (*n_err_bnds__ >= 3)
+        if(*n_err_bnds__ >= 3)
         {
             err_bnds_norm__[j + err_bnds_norm_dim1 * 3] = 0.;
             err_bnds_comp__[j + err_bnds_comp_dim1 * 3] = 0.;
@@ -684,7 +716,7 @@ int zgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, in
     }
     /* Compute the norm of A and the reciprocal of the condition */
     /* number of A. */
-    if (notran)
+    if(notran)
     {
         *(unsigned char *)norm = 'I';
     }
@@ -693,72 +725,87 @@ int zgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, in
         *(unsigned char *)norm = '1';
     }
     anorm = zlangb_(norm, n, kl, ku, &ab[ab_offset], ldab, &rwork[1]);
-    zgbcon_(norm, n, kl, ku, &afb[afb_offset], ldafb, &ipiv[1], &anorm, rcond, &work[1], &rwork[1], info);
+    zgbcon_(norm, n, kl, ku, &afb[afb_offset], ldafb, &ipiv[1], &anorm, rcond, &work[1], &rwork[1],
+            info);
     /* Perform refinement on each right-hand side */
-    if (ref_type__ != 0 && *info == 0)
+    if(ref_type__ != 0 && *info == 0)
     {
         prec_type__ = ilaprec_("E");
-        if (notran)
+        if(notran)
         {
-            zla_gbrfsx_extended_(&prec_type__, &trans_type__, n, kl, ku, nrhs, &ab[ab_offset], ldab, &afb[afb_offset], ldafb, & ipiv[1], &colequ, &c__[1], &b[b_offset], ldb, &x[x_offset], ldx, &berr[1], &n_norms__, &err_bnds_norm__[ err_bnds_norm_offset], &err_bnds_comp__[ err_bnds_comp_offset], &work[1], &rwork[1], &work[*n + 1], &rwork[1], rcond, &ithresh, &rthresh, &unstable_thresh__, &ignore_cwise__, info);
+            zla_gbrfsx_extended_(
+                &prec_type__, &trans_type__, n, kl, ku, nrhs, &ab[ab_offset], ldab,
+                &afb[afb_offset], ldafb, &ipiv[1], &colequ, &c__[1], &b[b_offset], ldb,
+                &x[x_offset], ldx, &berr[1], &n_norms__, &err_bnds_norm__[err_bnds_norm_offset],
+                &err_bnds_comp__[err_bnds_comp_offset], &work[1], &rwork[1], &work[*n + 1],
+                &rwork[1], rcond, &ithresh, &rthresh, &unstable_thresh__, &ignore_cwise__, info);
         }
         else
         {
-            zla_gbrfsx_extended_(&prec_type__, &trans_type__, n, kl, ku, nrhs, &ab[ab_offset], ldab, &afb[afb_offset], ldafb, & ipiv[1], &rowequ, &r__[1], &b[b_offset], ldb, &x[x_offset], ldx, &berr[1], &n_norms__, &err_bnds_norm__[ err_bnds_norm_offset], &err_bnds_comp__[ err_bnds_comp_offset], &work[1], &rwork[1], &work[*n + 1], &rwork[1], rcond, &ithresh, &rthresh, &unstable_thresh__, &ignore_cwise__, info);
+            zla_gbrfsx_extended_(
+                &prec_type__, &trans_type__, n, kl, ku, nrhs, &ab[ab_offset], ldab,
+                &afb[afb_offset], ldafb, &ipiv[1], &rowequ, &r__[1], &b[b_offset], ldb,
+                &x[x_offset], ldx, &berr[1], &n_norms__, &err_bnds_norm__[err_bnds_norm_offset],
+                &err_bnds_comp__[err_bnds_comp_offset], &work[1], &rwork[1], &work[*n + 1],
+                &rwork[1], rcond, &ithresh, &rthresh, &unstable_thresh__, &ignore_cwise__, info);
         }
     }
     /* Computing MAX */
     d__1 = 10.;
-    d__2 = sqrt((doublereal) (*n)); // , expr subst
-    err_lbnd__ = fla_max(d__1,d__2) * dlamch_("Epsilon");
-    if (*n_err_bnds__ >= 1 && n_norms__ >= 1)
+    d__2 = sqrt((doublereal)(*n)); // , expr subst
+    err_lbnd__ = fla_max(d__1, d__2) * dlamch_("Epsilon");
+    if(*n_err_bnds__ >= 1 && n_norms__ >= 1)
     {
         /* Compute scaled normwise condition number cond(A*C). */
-        if (colequ && notran)
+        if(colequ && notran)
         {
-            rcond_tmp__ = zla_gbrcond_c_(trans, n, kl, ku, &ab[ab_offset], ldab, &afb[afb_offset], ldafb, &ipiv[1], &c__[1], &c_true, info, &work[1], &rwork[1]);
+            rcond_tmp__
+                = zla_gbrcond_c_(trans, n, kl, ku, &ab[ab_offset], ldab, &afb[afb_offset], ldafb,
+                                 &ipiv[1], &c__[1], &c_true, info, &work[1], &rwork[1]);
         }
-        else if (rowequ && ! notran)
+        else if(rowequ && !notran)
         {
-            rcond_tmp__ = zla_gbrcond_c_(trans, n, kl, ku, &ab[ab_offset], ldab, &afb[afb_offset], ldafb, &ipiv[1], &r__[1], &c_true, info, &work[1], &rwork[1]);
+            rcond_tmp__
+                = zla_gbrcond_c_(trans, n, kl, ku, &ab[ab_offset], ldab, &afb[afb_offset], ldafb,
+                                 &ipiv[1], &r__[1], &c_true, info, &work[1], &rwork[1]);
         }
         else
         {
-            rcond_tmp__ = zla_gbrcond_c_(trans, n, kl, ku, &ab[ab_offset], ldab, &afb[afb_offset], ldafb, &ipiv[1], &c__[1], & c_false, info, &work[1], &rwork[1]);
+            rcond_tmp__
+                = zla_gbrcond_c_(trans, n, kl, ku, &ab[ab_offset], ldab, &afb[afb_offset], ldafb,
+                                 &ipiv[1], &c__[1], &c_false, info, &work[1], &rwork[1]);
         }
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             /* Cap the error at 1.0. */
-            if (*n_err_bnds__ >= 2 && err_bnds_norm__[j + (err_bnds_norm_dim1 << 1)] > 1.)
+            if(*n_err_bnds__ >= 2 && err_bnds_norm__[j + (err_bnds_norm_dim1 << 1)] > 1.)
             {
                 err_bnds_norm__[j + (err_bnds_norm_dim1 << 1)] = 1.;
             }
             /* Threshold the error (see LAWN). */
-            if (rcond_tmp__ < illrcond_thresh__)
+            if(rcond_tmp__ < illrcond_thresh__)
             {
                 err_bnds_norm__[j + (err_bnds_norm_dim1 << 1)] = 1.;
                 err_bnds_norm__[j + err_bnds_norm_dim1] = 0.;
-                if (*info <= *n)
+                if(*info <= *n)
                 {
                     *info = *n + j;
                 }
             }
-            else if (err_bnds_norm__[j + (err_bnds_norm_dim1 << 1)] < err_lbnd__)
+            else if(err_bnds_norm__[j + (err_bnds_norm_dim1 << 1)] < err_lbnd__)
             {
                 err_bnds_norm__[j + (err_bnds_norm_dim1 << 1)] = err_lbnd__;
                 err_bnds_norm__[j + err_bnds_norm_dim1] = 1.;
             }
             /* Save the condition number. */
-            if (*n_err_bnds__ >= 3)
+            if(*n_err_bnds__ >= 3)
             {
                 err_bnds_norm__[j + err_bnds_norm_dim1 * 3] = rcond_tmp__;
             }
         }
     }
-    if (*n_err_bnds__ >= 1 && n_norms__ >= 2)
+    if(*n_err_bnds__ >= 1 && n_norms__ >= 2)
     {
         /* Compute componentwise condition number cond(A*diag(Y(:,J))) for */
         /* each right-hand side using the current solution as an estimate of */
@@ -769,47 +816,47 @@ int zgbrfsx_(char *trans, char *equed, integer *n, integer * kl, integer *ku, in
         /* cwise error is at least CWISE_WRONG. */
         cwise_wrong__ = sqrt(dlamch_("Epsilon"));
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
-            if (err_bnds_comp__[j + (err_bnds_comp_dim1 << 1)] < cwise_wrong__)
+            if(err_bnds_comp__[j + (err_bnds_comp_dim1 << 1)] < cwise_wrong__)
             {
-                rcond_tmp__ = zla_gbrcond_x_(trans, n, kl, ku, &ab[ab_offset], ldab, &afb[afb_offset], ldafb, &ipiv[1], &x[j * x_dim1 + 1], info, &work[1], &rwork[1]);
+                rcond_tmp__ = zla_gbrcond_x_(trans, n, kl, ku, &ab[ab_offset], ldab,
+                                             &afb[afb_offset], ldafb, &ipiv[1], &x[j * x_dim1 + 1],
+                                             info, &work[1], &rwork[1]);
             }
             else
             {
                 rcond_tmp__ = 0.;
             }
             /* Cap the error at 1.0. */
-            if (*n_err_bnds__ >= 2 && err_bnds_comp__[j + (err_bnds_comp_dim1 << 1)] > 1.)
+            if(*n_err_bnds__ >= 2 && err_bnds_comp__[j + (err_bnds_comp_dim1 << 1)] > 1.)
             {
                 err_bnds_comp__[j + (err_bnds_comp_dim1 << 1)] = 1.;
             }
             /* Threshold the error (see LAWN). */
-            if (rcond_tmp__ < illrcond_thresh__)
+            if(rcond_tmp__ < illrcond_thresh__)
             {
                 err_bnds_comp__[j + (err_bnds_comp_dim1 << 1)] = 1.;
                 err_bnds_comp__[j + err_bnds_comp_dim1] = 0.;
-                if (params[3] == 1. && *info < *n + j)
+                if(params[3] == 1. && *info < *n + j)
                 {
                     *info = *n + j;
                 }
             }
-            else if (err_bnds_comp__[j + (err_bnds_comp_dim1 << 1)] < err_lbnd__)
+            else if(err_bnds_comp__[j + (err_bnds_comp_dim1 << 1)] < err_lbnd__)
             {
                 err_bnds_comp__[j + (err_bnds_comp_dim1 << 1)] = err_lbnd__;
                 err_bnds_comp__[j + err_bnds_comp_dim1] = 1.;
             }
             /* Save the condition number. */
-            if (*n_err_bnds__ >= 3)
+            if(*n_err_bnds__ >= 3)
             {
                 err_bnds_comp__[j + err_bnds_comp_dim1 * 3] = rcond_tmp__;
             }
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGBRFSX */
 }
 /* zgbrfsx_ */

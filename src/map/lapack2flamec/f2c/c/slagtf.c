@@ -1,16 +1,25 @@
-/* ../netlib/slagtf.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slagtf.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLAGTF computes an LU factorization of a matrix T-λI, where T is a general tridiagonal matrix, and λ a scalar, using partial pivoting with row interchanges. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLAGTF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slagtf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slagtf.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slagtf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slagtf.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slagtf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slagtf.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -142,7 +151,8 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int slagtf_(integer *n, real *a, real *lambda, real *b, real *c__, real *tol, real *d__, integer *in, integer *info)
+void slagtf_(integer *n, real *a, real *lambda, real *b, real *c__, real *tol, real *d__,
+             integer *in, integer *info)
 {
     /* System generated locals */
     integer i__1;
@@ -152,7 +162,8 @@ int slagtf_(integer *n, real *a, real *lambda, real *b, real *c__, real *tol, re
     real tl, eps, piv1, piv2, temp, mult, scale1, scale2;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -181,42 +192,40 @@ int slagtf_(integer *n, real *a, real *lambda, real *b, real *c__, real *tol, re
     --a;
     /* Function Body */
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
         i__1 = -(*info);
         xerbla_("SLAGTF", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
-    if (*n == 0)
+    if(*n == 0)
     {
-        return 0;
+        return;
     }
     a[1] -= *lambda;
     in[*n] = 0;
-    if (*n == 1)
+    if(*n == 1)
     {
-        if (a[1] == 0.f)
+        if(a[1] == 0.f)
         {
             in[1] = 1;
         }
-        return 0;
+        return;
     }
     eps = slamch_("Epsilon");
-    tl = fla_max(*tol,eps);
+    tl = fla_max(*tol, eps);
     scale1 = f2c_abs(a[1]) + f2c_abs(b[1]);
     i__1 = *n - 1;
-    for (k = 1;
-            k <= i__1;
-            ++k)
+    for(k = 1; k <= i__1; ++k)
     {
         a[k + 1] -= *lambda;
         scale2 = (r__1 = c__[k], f2c_abs(r__1)) + (r__2 = a[k + 1], f2c_abs(r__2));
-        if (k < *n - 1)
+        if(k < *n - 1)
         {
             scale2 += (r__1 = b[k + 1], f2c_abs(r__1));
         }
-        if (a[k] == 0.f)
+        if(a[k] == 0.f)
         {
             piv1 = 0.f;
         }
@@ -224,12 +233,12 @@ int slagtf_(integer *n, real *a, real *lambda, real *b, real *c__, real *tol, re
         {
             piv1 = (r__1 = a[k], f2c_abs(r__1)) / scale1;
         }
-        if (c__[k] == 0.f)
+        if(c__[k] == 0.f)
         {
             in[k] = 0;
             piv2 = 0.f;
             scale1 = scale2;
-            if (k < *n - 1)
+            if(k < *n - 1)
             {
                 d__[k] = 0.f;
             }
@@ -237,13 +246,13 @@ int slagtf_(integer *n, real *a, real *lambda, real *b, real *c__, real *tol, re
         else
         {
             piv2 = (r__1 = c__[k], f2c_abs(r__1)) / scale2;
-            if (piv2 <= piv1)
+            if(piv2 <= piv1)
             {
                 in[k] = 0;
                 scale1 = scale2;
                 c__[k] /= a[k];
                 a[k + 1] -= c__[k] * b[k];
-                if (k < *n - 1)
+                if(k < *n - 1)
                 {
                     d__[k] = 0.f;
                 }
@@ -255,7 +264,7 @@ int slagtf_(integer *n, real *a, real *lambda, real *b, real *c__, real *tol, re
                 a[k] = c__[k];
                 temp = a[k + 1];
                 a[k + 1] = b[k] - mult * temp;
-                if (k < *n - 1)
+                if(k < *n - 1)
                 {
                     d__[k] = b[k + 1];
                     b[k + 1] = -mult * d__[k];
@@ -264,17 +273,17 @@ int slagtf_(integer *n, real *a, real *lambda, real *b, real *c__, real *tol, re
                 c__[k] = mult;
             }
         }
-        if (fla_max(piv1,piv2) <= tl && in[*n] == 0)
+        if(fla_max(piv1, piv2) <= tl && in[*n] == 0)
         {
             in[*n] = k;
         }
         /* L10: */
     }
-    if ((r__1 = a[*n], f2c_abs(r__1)) <= scale1 * tl && in[*n] == 0)
+    if((r__1 = a[*n], f2c_abs(r__1)) <= scale1 * tl && in[*n] == 0)
     {
         in[*n] = *n;
     }
-    return 0;
+    return;
     /* End of SLAGTF */
 }
 /* slagtf_ */

@@ -1,5 +1,8 @@
-/* ../netlib/dlatzm.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlatzm.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static doublereal c_b5 = 1.;
@@ -9,11 +12,17 @@ static doublereal c_b5 = 1.;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLATZM + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlatzm. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlatzm.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlatzm. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlatzm.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlatzm. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlatzm.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -140,19 +149,28 @@ static doublereal c_b5 = 1.;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dlatzm_(char *side, integer *m, integer *n, doublereal * v, integer *incv, doublereal *tau, doublereal *c1, doublereal *c2, integer *ldc, doublereal *work)
+void dlatzm_(char *side, integer *m, integer *n, doublereal *v, integer *incv, doublereal *tau,
+             doublereal *c1, doublereal *c2, integer *ldc, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlatzm inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS ", ldc %" FLA_IS "",*side, *m, *n, *incv, *ldc);
+    AOCL_DTL_SNPRINTF("dlatzm inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS
+                      ", ldc %" FLA_IS "",
+                      *side, *m, *n, *incv, *ldc);
     /* System generated locals */
     integer c1_dim1, c1_offset, c2_dim1, c2_offset, i__1;
     doublereal d__1;
     /* Local variables */
     extern /* Subroutine */
-    int dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+        void
+        dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+              doublereal *, integer *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *) ;
+        void
+        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
+               integer *, doublereal *, doublereal *, integer *),
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -181,17 +199,18 @@ int dlatzm_(char *side, integer *m, integer *n, doublereal * v, integer *incv, d
     c1 -= c1_offset;
     --work;
     /* Function Body */
-    if (fla_min(*m,*n) == 0 || *tau == 0.)
+    if(fla_min(*m, *n) == 0 || *tau == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    if (lsame_(side, "L"))
+    if(lsame_(side, "L", 1, 1))
     {
         /* w := (C1 + v**T * C2)**T */
         dcopy_(n, &c1[c1_offset], ldc, &work[1], &c__1);
         i__1 = *m - 1;
-        dgemv_("Transpose", &i__1, n, &c_b5, &c2[c2_offset], ldc, &v[1], incv, &c_b5, &work[1], &c__1);
+        dgemv_("Transpose", &i__1, n, &c_b5, &c2[c2_offset], ldc, &v[1], incv, &c_b5, &work[1],
+               &c__1);
         /* [ C1 ] := [ C1 ] - tau* [ 1 ] * w**T */
         /* [ C2 ] [ C2 ] [ v ] */
         d__1 = -(*tau);
@@ -200,12 +219,13 @@ int dlatzm_(char *side, integer *m, integer *n, doublereal * v, integer *incv, d
         d__1 = -(*tau);
         dger_(&i__1, n, &d__1, &v[1], incv, &work[1], &c__1, &c2[c2_offset], ldc);
     }
-    else if (lsame_(side, "R"))
+    else if(lsame_(side, "R", 1, 1))
     {
         /* w := C1 + C2 * v */
         dcopy_(m, &c1[c1_offset], &c__1, &work[1], &c__1);
         i__1 = *n - 1;
-        dgemv_("No transpose", m, &i__1, &c_b5, &c2[c2_offset], ldc, &v[1], incv, &c_b5, &work[1], &c__1);
+        dgemv_("No transpose", m, &i__1, &c_b5, &c2[c2_offset], ldc, &v[1], incv, &c_b5, &work[1],
+               &c__1);
         /* [ C1, C2 ] := [ C1, C2 ] - tau* w * [ 1 , v**T] */
         d__1 = -(*tau);
         daxpy_(m, &d__1, &work[1], &c__1, &c1[c1_offset], &c__1);
@@ -214,7 +234,7 @@ int dlatzm_(char *side, integer *m, integer *n, doublereal * v, integer *incv, d
         dger_(m, &i__1, &d__1, &work[1], &c__1, &v[1], incv, &c2[c2_offset], ldc);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLATZM */
 }
 /* dlatzm_ */

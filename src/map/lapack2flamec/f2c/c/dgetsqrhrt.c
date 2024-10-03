@@ -1,5 +1,8 @@
-/* dgetsqrhrt.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dgetsqrhrt.f -- translated by f2c (version 20160102). You must link the resulting object file
+ with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b DGETSQRHRT */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DGETSQRHRT + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgetsqr hrt.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgetsqr
+ * hrt.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgetsqr hrt.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgetsqr
+ * hrt.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgetsqr hrt.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgetsqr
+ * hrt.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -93,7 +102,7 @@ static integer c__1 = 1;
 /* > a) the elements on and above the diagonal */
 /* > of the array contain the N-by-N upper-triangular */
 /* > matrix R corresponding to the Householder QR;
-*/
+ */
 /* > b) the elements below the diagonal represent Q by */
 /* > the columns of blocked V (compact WY-representation). */
 /* > \endverbatim */
@@ -166,26 +175,39 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2, doublereal *a, integer *lda, doublereal * t, integer *ldt, doublereal *work, integer *lwork, integer *info)
+void dgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2, doublereal *a,
+                 integer *lda, doublereal *t, integer *ldt, doublereal *work, integer *lwork,
+                 integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgetsqrhrt inputs: m %" FLA_IS ", n %" FLA_IS ", mb1 %" FLA_IS ", nb1 %" FLA_IS ", nb2 %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS ", lwork %" FLA_IS "",*m, *n, *mb1, *nb1, *nb2, *lda, *ldt, *lwork);
+    AOCL_DTL_SNPRINTF("dgetsqrhrt inputs: m %" FLA_IS ", n %" FLA_IS ", mb1 %" FLA_IS
+                      ", nb1 %" FLA_IS ", nb2 %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS
+                      ", lwork %" FLA_IS "",
+                      *m, *n, *mb1, *nb1, *nb2, *lda, *ldt, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2;
     /* Local variables */
     integer lworkopt, i__, j;
     extern /* Subroutine */
-    int dorhr_col_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dorhr_col_(integer *, integer *, integer *, doublereal *, integer *, doublereal *,
+                   integer *, doublereal *, integer *);
     integer lw1, lw2, num_all_row_blocks__, lwt, ldwt;
     extern /* Subroutine */
-    int dorgtsqr_row_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dorgtsqr_row_(integer *, integer *, integer *, integer *, doublereal *, integer *,
+                      doublereal *, integer *, doublereal *, integer *, integer *);
     integer iinfo;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
     extern /* Subroutine */
-    int dlatsqr_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dlatsqr_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *,
+                 integer *, doublereal *, integer *, integer *);
     integer nb1local, nb2local;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -216,27 +238,27 @@ int dgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0 || *m < *n)
+    else if(*n < 0 || *m < *n)
     {
         *info = -2;
     }
-    else if (*mb1 <= *n)
+    else if(*mb1 <= *n)
     {
         *info = -3;
     }
-    else if (*nb1 < 1)
+    else if(*nb1 < 1)
     {
         *info = -4;
     }
-    else if (*nb2 < 1)
+    else if(*nb2 < 1)
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -7;
     }
@@ -244,8 +266,8 @@ int dgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2
     {
         /* Computing MAX */
         i__1 = 1;
-        i__2 = fla_min(*nb2,*n); // , expr subst
-        if (*ldt < fla_max(i__1,i__2))
+        i__2 = fla_min(*nb2, *n); // , expr subst
+        if(*ldt < fla_max(i__1, i__2))
         {
             *info = -9;
         }
@@ -254,24 +276,25 @@ int dgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2
             /* Test the input LWORK for the dimension of the array WORK. */
             /* This workspace is used to store array: */
             /* a) Matrix T and WORK for DLATSQR;
-            */
+             */
             /* b) N-by-N upper-triangular factor R_tsqr;
-            */
+             */
             /* c) Matrix T and array WORK for DORGTSQR_ROW;
-            */
+             */
             /* d) Diagonal D for DORHR_COL. */
-            if (*lwork < *n * *n + 1 && ! lquery)
+            if(*lwork < *n * *n + 1 && !lquery)
             {
                 *info = -11;
             }
             else
             {
                 /* Set block size for column blocks */
-                nb1local = fla_min(*nb1,*n);
+                nb1local = fla_min(*nb1, *n);
                 /* Computing MAX */
                 d__1 = 1.;
-                d__2 = ceiling_f90_((doublereal) (*m - *n) / (doublereal) (*mb1 - *n)); // , expr subst
-                num_all_row_blocks__ = (integer) fla_max(d__1,d__2);
+                d__2
+                    = ceiling_f90_((doublereal)(*m - *n) / (doublereal)(*mb1 - *n)); // , expr subst
+                num_all_row_blocks__ = (integer)fla_max(d__1, d__2);
                 /* Length and leading dimension of WORK array to place */
                 /* T array in TSQR. */
                 lwt = num_all_row_blocks__ * *n * nb1local;
@@ -282,15 +305,15 @@ int dgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2
                 /* Computing MAX */
                 i__1 = nb1local;
                 i__2 = *n - nb1local; // , expr subst
-                lw2 = nb1local * fla_max(i__1,i__2);
+                lw2 = nb1local * fla_max(i__1, i__2);
                 /* Computing MAX */
                 /* Computing MAX */
                 i__3 = lwt + *n * *n + lw2;
                 i__4 = lwt + *n * *n + *n; // , expr subst
                 i__1 = lwt + lw1;
-                i__2 = fla_max(i__3,i__4); // , expr subst
-                lworkopt = fla_max(i__1,i__2);
-                if (*lwork < fla_max(1,lworkopt) && ! lquery)
+                i__2 = fla_max(i__3, i__4); // , expr subst
+                lworkopt = fla_max(i__1, i__2);
+                if(*lwork < fla_max(1, lworkopt) && !lquery)
                 {
                     *info = -11;
                 }
@@ -298,45 +321,46 @@ int dgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2
         }
     }
     /* Handle error in the input parameters and return workspace query. */
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DGETSQRHRT", &i__1, (ftnlen)10);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-        work[1] = (doublereal) lworkopt;
+        work[1] = (doublereal)lworkopt;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (fla_min(*m,*n) == 0)
+    if(fla_min(*m, *n) == 0)
     {
-        work[1] = (doublereal) lworkopt;
+        work[1] = (doublereal)lworkopt;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    nb2local = fla_min(*nb2,*n);
+    nb2local = fla_min(*nb2, *n);
     /* (1) Perform TSQR-factorization of the M-by-N matrix A. */
-    dlatsqr_(m, n, mb1, &nb1local, &a[a_offset], lda, &work[1], &ldwt, &work[ lwt + 1], &lw1, &iinfo);
+    dlatsqr_(m, n, mb1, &nb1local, &a[a_offset], lda, &work[1], &ldwt, &work[lwt + 1], &lw1,
+             &iinfo);
     /* (2) Copy the factor R_tsqr stored in the upper-triangular part */
     /* of A into the square matrix in the work array */
     /* WORK(LWT+1:LWT+N*N) column-by-column. */
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
-        dcopy_(&j, &a[j * a_dim1 + 1], &c__1, &work[lwt + *n * (j - 1) + 1], & c__1);
+        dcopy_(&j, &a[j * a_dim1 + 1], &c__1, &work[lwt + *n * (j - 1) + 1], &c__1);
     }
     /* (3) Generate a M-by-N matrix Q with orthonormal columns from */
     /* the result stored below the diagonal in the array A in place. */
-    dorgtsqr_row_(m, n, mb1, &nb1local, &a[a_offset], lda, &work[1], &ldwt, & work[lwt + *n * *n + 1], &lw2, &iinfo);
+    dorgtsqr_row_(m, n, mb1, &nb1local, &a[a_offset], lda, &work[1], &ldwt,
+                  &work[lwt + *n * *n + 1], &lw2, &iinfo);
     /* (4) Perform the reconstruction of Householder vectors from */
     /* the matrix Q (stored in A) in place. */
-    dorhr_col_(m, n, &nb2local, &a[a_offset], lda, &t[t_offset], ldt, &work[ lwt + *n * *n + 1], &iinfo);
+    dorhr_col_(m, n, &nb2local, &a[a_offset], lda, &t[t_offset], ldt, &work[lwt + *n * *n + 1],
+               &iinfo);
     /* (5) Copy the factor R_tsqr stored in the square matrix in the */
     /* work array WORK(LWT+1:LWT+N*N) into the upper-triangular */
     /* part of A. */
@@ -349,16 +373,12 @@ int dgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2
     /* (5) and (6) can be combined in a single loop, so the rows in A */
     /* are accessed only once. */
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if (work[lwt + *n * *n + i__] == -1.)
+        if(work[lwt + *n * *n + i__] == -1.)
         {
             i__2 = *n;
-            for (j = i__;
-                    j <= i__2;
-                    ++j)
+            for(j = i__; j <= i__2; ++j)
             {
                 a[i__ + j * a_dim1] = work[lwt + *n * (j - 1) + i__] * -1.;
             }
@@ -369,10 +389,9 @@ int dgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2
             dcopy_(&i__2, &work[lwt + *n * (i__ - 1) + i__], n, &a[i__ + i__ * a_dim1], lda);
         }
     }
-    work[1] = (doublereal) lworkopt;
+    work[1] = (doublereal)lworkopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGETSQRHRT */
 }
 /* dgetsqrhrt_ */
-

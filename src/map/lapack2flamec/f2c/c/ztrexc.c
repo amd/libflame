@@ -1,5 +1,8 @@
-/* ../netlib/ztrexc.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ztrexc.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b ZTREXC */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZTREXC + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztrexc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztrexc.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztrexc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztrexc.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztrexc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztrexc.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -44,7 +53,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > COMPQ is CHARACTER*1 */
 /* > = 'V': update the matrix Q of Schur vectors;
-*/
+ */
 /* > = 'N': do not update Q. */
 /* > \endverbatim */
 /* > */
@@ -116,10 +125,13 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int ztrexc_(char *compq, integer *n, doublecomplex *t, integer *ldt, doublecomplex *q, integer *ldq, integer *ifst, integer * ilst, integer *info)
+void ztrexc_(char *compq, integer *n, doublecomplex *t, integer *ldt, doublecomplex *q,
+             integer *ldq, integer *ifst, integer *ilst, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztrexc inputs: compq %c, n %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS ", ifst %" FLA_IS ", ilst %" FLA_IS "",*compq, *n, *ldt, *ldq, *ifst, *ilst);
+    AOCL_DTL_SNPRINTF("ztrexc inputs: compq %c, n %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS
+                      ", ifst %" FLA_IS ", ilst %" FLA_IS "",
+                      *compq, *n, *ldt, *ldq, *ifst, *ilst);
     /* System generated locals */
     integer q_dim1, q_offset, t_dim1, t_offset, i__1, i__2, i__3;
     doublecomplex z__1;
@@ -130,11 +142,17 @@ int ztrexc_(char *compq, integer *n, doublecomplex *t, integer *ldt, doublecompl
     doublereal cs;
     doublecomplex t11, t22, sn, temp;
     extern /* Subroutine */
-    int zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
-    extern logical lsame_(char *, char *);
+        void
+        zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
+              doublecomplex *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical wantq;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlartg_( doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
+        zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -163,45 +181,45 @@ int ztrexc_(char *compq, integer *n, doublecomplex *t, integer *ldt, doublecompl
     q -= q_offset;
     /* Function Body */
     *info = 0;
-    wantq = lsame_(compq, "V");
-    if (! lsame_(compq, "N") && ! wantq)
+    wantq = lsame_(compq, "V", 1, 1);
+    if(!lsame_(compq, "N", 1, 1) && !wantq)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*ldt < fla_max(1,*n))
+    else if(*ldt < fla_max(1, *n))
     {
         *info = -4;
     }
-    else if (*ldq < 1 || wantq && *ldq < fla_max(1,*n))
+    else if(*ldq < 1 || wantq && *ldq < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if ((*ifst < 1 || *ifst > *n) && *n > 0)
+    else if((*ifst < 1 || *ifst > *n) && *n > 0)
     {
         *info = -7;
     }
-    else if ((*ilst < 1 || *ilst > *n) && *n > 0)
+    else if((*ilst < 1 || *ilst > *n) && *n > 0)
     {
         *info = -8;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZTREXC", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* Quick return if possible */
-    if (*n <= 1 || *ifst == *ilst)
+    if(*n <= 1 || *ifst == *ilst)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
-    if (*ifst < *ilst)
+    if(*ifst < *ilst)
     {
         /* Move the IFST-th diagonal element forward down the diagonal. */
         m1 = 0;
@@ -217,9 +235,7 @@ int ztrexc_(char *compq, integer *n, doublecomplex *t, integer *ldt, doublecompl
     }
     i__1 = *ilst + m2;
     i__2 = m3;
-    for (k = *ifst + m1;
-            i__2 < 0 ? k >= i__1 : k <= i__1;
-            k += i__2)
+    for(k = *ifst + m1; i__2 < 0 ? k >= i__1 : k <= i__1; k += i__2)
     {
         /* Interchange the k-th and (k+1)-th diagonal elements. */
         i__3 = k + k * t_dim1;
@@ -233,30 +249,31 @@ int ztrexc_(char *compq, integer *n, doublecomplex *t, integer *ldt, doublecompl
         z__1.i = t22.i - t11.i; // , expr subst
         zlartg_(&t[k + (k + 1) * t_dim1], &z__1, &cs, &sn, &temp);
         /* Apply transformation to the matrix T. */
-        if (k + 2 <= *n)
+        if(k + 2 <= *n)
         {
             i__3 = *n - k - 1;
-            zrot_(&i__3, &t[k + (k + 2) * t_dim1], ldt, &t[k + 1 + (k + 2) * t_dim1], ldt, &cs, &sn);
+            zrot_(&i__3, &t[k + (k + 2) * t_dim1], ldt, &t[k + 1 + (k + 2) * t_dim1], ldt, &cs,
+                  &sn);
         }
         i__3 = k - 1;
         d_cnjg(&z__1, &sn);
-        zrot_(&i__3, &t[k * t_dim1 + 1], &c__1, &t[(k + 1) * t_dim1 + 1], & c__1, &cs, &z__1);
+        zrot_(&i__3, &t[k * t_dim1 + 1], &c__1, &t[(k + 1) * t_dim1 + 1], &c__1, &cs, &z__1);
         i__3 = k + k * t_dim1;
         t[i__3].r = t22.r;
         t[i__3].i = t22.i; // , expr subst
         i__3 = k + 1 + (k + 1) * t_dim1;
         t[i__3].r = t11.r;
         t[i__3].i = t11.i; // , expr subst
-        if (wantq)
+        if(wantq)
         {
             /* Accumulate transformation in the matrix Q. */
             d_cnjg(&z__1, &sn);
-            zrot_(n, &q[k * q_dim1 + 1], &c__1, &q[(k + 1) * q_dim1 + 1], & c__1, &cs, &z__1);
+            zrot_(n, &q[k * q_dim1 + 1], &c__1, &q[(k + 1) * q_dim1 + 1], &c__1, &cs, &z__1);
         }
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTREXC */
 }
 /* ztrexc_ */

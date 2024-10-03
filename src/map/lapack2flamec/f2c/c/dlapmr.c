@@ -1,16 +1,25 @@
-/* ../netlib/dlapmr.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlapmr.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLAPMR rearranges rows of a matrix as specified by a permutation vector. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLAPMR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlapmr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlapmr.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlapmr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlapmr.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlapmr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlapmr.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -90,10 +99,12 @@
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlapmr_(logical *forwrd, integer *m, integer *n, doublereal *x, integer *ldx, integer *k)
+void dlapmr_(logical *forwrd, integer *m, integer *n, doublereal *x, integer *ldx, integer *k)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlapmr inputs: forward %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", ldx %" FLA_IS ", k %" FLA_IS "",* forwrd , * m, *n, *ldx, *k);
+    AOCL_DTL_SNPRINTF("dlapmr inputs: forward %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS
+                      ", ldx %" FLA_IS ", k %" FLA_IS "",
+                      *forwrd, *m, *n, *ldx, *k);
     /* System generated locals */
     integer x_dim1, x_offset, i__1, i__2;
     /* Local variables */
@@ -117,43 +128,37 @@ int dlapmr_(logical *forwrd, integer *m, integer *n, doublereal *x, integer *ldx
     x -= x_offset;
     --k;
     /* Function Body */
-    if (*m <= 1)
+    if(*m <= 1)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     i__1 = *m;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         k[i__] = -k[i__];
         /* L10: */
     }
-    if (*forwrd)
+    if(*forwrd)
     {
         /* Forward permutation */
         i__1 = *m;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            if (k[i__] > 0)
+            if(k[i__] > 0)
             {
                 goto L40;
             }
             j = i__;
             k[j] = -k[j];
             in = k[j];
-L20:
-            if (k[in] > 0)
+        L20:
+            if(k[in] > 0)
             {
                 goto L40;
             }
             i__2 = *n;
-            for (jj = 1;
-                    jj <= i__2;
-                    ++jj)
+            for(jj = 1; jj <= i__2; ++jj)
             {
                 temp = x[j + jj * x_dim1];
                 x[j + jj * x_dim1] = x[in + jj * x_dim1];
@@ -164,33 +169,29 @@ L20:
             j = in;
             in = k[in];
             goto L20;
-L40: /* L50: */
-            ;
+        L40: /* L50: */
+             ;
         }
     }
     else
     {
         /* Backward permutation */
         i__1 = *m;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            if (k[i__] > 0)
+            if(k[i__] > 0)
             {
                 goto L80;
             }
             k[i__] = -k[i__];
             j = k[i__];
-L60:
-            if (j == i__)
+        L60:
+            if(j == i__)
             {
                 goto L80;
             }
             i__2 = *n;
-            for (jj = 1;
-                    jj <= i__2;
-                    ++jj)
+            for(jj = 1; jj <= i__2; ++jj)
             {
                 temp = x[i__ + jj * x_dim1];
                 x[i__ + jj * x_dim1] = x[j + jj * x_dim1];
@@ -200,12 +201,12 @@ L60:
             k[j] = -k[j];
             j = k[j];
             goto L60;
-L80: /* L90: */
-            ;
+        L80: /* L90: */
+             ;
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLAPMT */
 }
 /* dlapmr_ */

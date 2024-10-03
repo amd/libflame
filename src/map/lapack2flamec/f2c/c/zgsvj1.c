@@ -1,20 +1,30 @@
-/* ../netlib/v3.9.0/zgsvj1.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/zgsvj1.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__0 = 0;
 static doublereal c_b18 = 1.;
-/* > \brief \b ZGSVJ1 pre-processor for the routine zgesvj, applies Jacobi rotations targeting only particular pivots. */
+/* > \brief \b ZGSVJ1 pre-processor for the routine zgesvj, applies Jacobi rotations targeting only
+ * particular pivots. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZGSVJ1 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgsvj1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgsvj1.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgsvj1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgsvj1.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgsvj1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgsvj1.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -224,10 +234,15 @@ static doublereal c_b18 = 1.;
 /* > Zlatko Drmac (Zagreb, Croatia) */
 /* ===================================================================== */
 /* Subroutine */
-int zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, integer *lda, doublecomplex *d__, doublereal *sva, integer *mv, doublecomplex *v, integer *ldv, doublereal *eps, doublereal *sfmin, doublereal *tol, integer *nsweep, doublecomplex * work, integer *lwork, integer *info)
+void zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, integer *lda,
+             doublecomplex *d__, doublereal *sva, integer *mv, doublecomplex *v, integer *ldv,
+             doublereal *eps, doublereal *sfmin, doublereal *tol, integer *nsweep,
+             doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgsvj1 inputs: jobv %c, m %" FLA_IS ", n %" FLA_IS ", n1 %" FLA_IS ", lda %" FLA_IS ", mv %" FLA_IS ", ldv %" FLA_IS ", nsweep %" FLA_IS "",*jobv, *m, *n, *n1, *lda, *mv, *ldv, *nsweep);
+    AOCL_DTL_SNPRINTF("zgsvj1 inputs: jobv %c, m %" FLA_IS ", n %" FLA_IS ", n1 %" FLA_IS
+                      ", lda %" FLA_IS ", mv %" FLA_IS ", ldv %" FLA_IS ", nsweep %" FLA_IS "",
+                      *jobv, *m, *n, *n1, *lda, *mv, *ldv, *nsweep);
     /* System generated locals */
     integer a_dim1, a_offset, v_dim1, v_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7;
     doublereal d__1, d__2;
@@ -249,27 +264,38 @@ int zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, i
     integer nblr, ierr;
     doublecomplex ompq;
     extern /* Subroutine */
-    int zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *);
+        void
+        zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
+              doublecomplex *);
     doublereal aapp0, aapq1, temp1, apoaq, aqoap;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal theta, small_val;
     logical applv, rsvec;
     extern /* Double Complex */
-    VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        VOID
+        zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
+                   integer *);
     logical rotok;
     extern /* Subroutine */
-    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dznrm2_(integer *, doublecomplex *, integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer ijblsk, swband, blskip;
     doublereal mxaapq;
     extern /* Subroutine */
-    int zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublecomplex *, integer *, integer *);
     doublereal thsign, mxsinj;
     extern /* Subroutine */
-    int zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
+        void
+        zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
     integer emptsw, notrot, iswrot;
     doublereal rootbig, rooteps;
     integer rowskip;
@@ -309,45 +335,45 @@ int zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, i
     v -= v_offset;
     --work;
     /* Function Body */
-    applv = lsame_(jobv, "A");
-    rsvec = lsame_(jobv, "V");
-    if (! (rsvec || applv || lsame_(jobv, "N")))
+    applv = lsame_(jobv, "A", 1, 1);
+    rsvec = lsame_(jobv, "V", 1, 1);
+    if(!(rsvec || applv || lsame_(jobv, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -2;
     }
-    else if (*n < 0 || *n > *m)
+    else if(*n < 0 || *n > *m)
     {
         *info = -3;
     }
-    else if (*n1 < 0)
+    else if(*n1 < 0)
     {
         *info = -4;
     }
-    else if (*lda < *m)
+    else if(*lda < *m)
     {
         *info = -6;
     }
-    else if ((rsvec || applv) && *mv < 0)
+    else if((rsvec || applv) && *mv < 0)
     {
         *info = -9;
     }
-    else if (rsvec && *ldv < *n || applv && *ldv < *mv)
+    else if(rsvec && *ldv < *n || applv && *ldv < *mv)
     {
         *info = -11;
     }
-    else if (*tol <= *eps)
+    else if(*tol <= *eps)
     {
         *info = -14;
     }
-    else if (*nsweep < 0)
+    else if(*nsweep < 0)
     {
         *info = -15;
     }
-    else if (*lwork < *m)
+    else if(*lwork < *m)
     {
         *info = -17;
     }
@@ -356,18 +382,18 @@ int zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, i
         *info = 0;
     }
     /* #:( */
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZGSVJ1", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
-    if (rsvec)
+    if(rsvec)
     {
         mvl = *n;
     }
-    else if (applv)
+    else if(applv)
     {
         mvl = *mv;
     }
@@ -385,15 +411,15 @@ int zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, i
     emptsw = *n1 * (*n - *n1);
     notrot = 0;
     /* .. Row-cyclic pivot strategy with de Rijk's pivoting .. */
-    kbl = fla_min(8,*n);
+    kbl = fla_min(8, *n);
     nblr = *n1 / kbl;
-    if (nblr * kbl != *n1)
+    if(nblr * kbl != *n1)
     {
         ++nblr;
     }
     /* .. the tiling is nblr-by-nblc [tiles] */
     nblc = (*n - *n1) / kbl;
-    if (nblc * kbl != *n - *n1)
+    if(nblc * kbl != *n - *n1)
     {
         ++nblc;
     }
@@ -401,7 +427,7 @@ int zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, i
     i__1 = kbl;
     blskip = i__1 * i__1 + 1;
     /* [TP] BLKSKIP is a tuning parameter that depends on SWBAND and KBL. */
-    rowskip = fla_min(5,kbl);
+    rowskip = fla_min(5, kbl);
     /* [TP] ROWSKIP is a tuning parameter. */
     swband = 0;
     /* [TP] SWBAND is a tuning parameter. It is meaningful and effective */
@@ -414,9 +440,7 @@ int zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, i
     /* |[x] [x] [x] * * * | */
     /* |[x] [x] [x] * * * | */
     i__1 = *nsweep;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* .. go go go ... */
         mxaapq = 0.;
@@ -429,49 +453,41 @@ int zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, i
         /* of the rotations. New implementation, based on block transformations, */
         /* is under development. */
         i__2 = nblr;
-        for (ibr = 1;
-                ibr <= i__2;
-                ++ibr)
+        for(ibr = 1; ibr <= i__2; ++ibr)
         {
             igl = (ibr - 1) * kbl + 1;
             /* ... go to the off diagonal blocks */
             igl = (ibr - 1) * kbl + 1;
             /* DO 2010 jbc = ibr + 1, NBL */
             i__3 = nblc;
-            for (jbc = 1;
-                    jbc <= i__3;
-                    ++jbc)
+            for(jbc = 1; jbc <= i__3; ++jbc)
             {
                 jgl = (jbc - 1) * kbl + *n1 + 1;
                 /* doing the block at ( ibr, jbc ) */
                 ijblsk = 0;
                 /* Computing MIN */
                 i__5 = igl + kbl - 1;
-                i__4 = fla_min(i__5,*n1);
-                for (p = igl;
-                        p <= i__4;
-                        ++p)
+                i__4 = fla_min(i__5, *n1);
+                for(p = igl; p <= i__4; ++p)
                 {
                     aapp = sva[p];
-                    if (aapp > 0.)
+                    if(aapp > 0.)
                     {
                         pskipped = 0;
                         /* Computing MIN */
                         i__6 = jgl + kbl - 1;
-                        i__5 = fla_min(i__6,*n);
-                        for (q = jgl;
-                                q <= i__5;
-                                ++q)
+                        i__5 = fla_min(i__6, *n);
+                        for(q = jgl; q <= i__5; ++q)
                         {
                             aaqq = sva[q];
-                            if (aaqq > 0.)
+                            if(aaqq > 0.)
                             {
                                 aapp0 = aapp;
                                 /* .. M x 2 Jacobi SVD .. */
                                 /* Safe Gram matrix computation */
-                                if (aaqq >= 1.)
+                                if(aaqq >= 1.)
                                 {
-                                    if (aapp >= aaqq)
+                                    if(aapp >= aaqq)
                                     {
                                         rotok = small_val * aapp <= aaqq;
                                     }
@@ -479,9 +495,10 @@ int zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, i
                                     {
                                         rotok = small_val * aaqq <= aapp;
                                     }
-                                    if (aapp < big / aaqq)
+                                    if(aapp < big / aaqq)
                                     {
-                                        zdotc_f2c_(&z__3, m, &a[p * a_dim1 + 1], & c__1, &a[q * a_dim1 + 1], & c__1);
+                                        zdotc_f2c_(&z__3, m, &a[p * a_dim1 + 1], &c__1,
+                                                   &a[q * a_dim1 + 1], &c__1);
                                         z__2.r = z__3.r / aaqq;
                                         z__2.i = z__3.i / aaqq; // , expr subst
                                         z__1.r = z__2.r / aapp;
@@ -491,9 +508,11 @@ int zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, i
                                     }
                                     else
                                     {
-                                        zcopy_(m, &a[p * a_dim1 + 1], &c__1, & work[1], &c__1);
-                                        zlascl_("G", &c__0, &c__0, &aapp, & c_b18, m, &c__1, &work[1], lda, &ierr);
-                                        zdotc_f2c_(&z__2, m, &work[1], &c__1, &a[ q * a_dim1 + 1], &c__1);
+                                        zcopy_(m, &a[p * a_dim1 + 1], &c__1, &work[1], &c__1);
+                                        zlascl_("G", &c__0, &c__0, &aapp, &c_b18, m, &c__1,
+                                                &work[1], lda, &ierr);
+                                        zdotc_f2c_(&z__2, m, &work[1], &c__1, &a[q * a_dim1 + 1],
+                                                   &c__1);
                                         z__1.r = z__2.r / aaqq;
                                         z__1.i = z__2.i / aaqq; // , expr subst
                                         aapq.r = z__1.r;
@@ -502,7 +521,7 @@ int zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, i
                                 }
                                 else
                                 {
-                                    if (aapp >= aaqq)
+                                    if(aapp >= aaqq)
                                     {
                                         rotok = aapp <= aaqq / small_val;
                                     }
@@ -510,13 +529,14 @@ int zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, i
                                     {
                                         rotok = aaqq <= aapp / small_val;
                                     }
-                                    if (aapp > small_val / aaqq)
+                                    if(aapp > small_val / aaqq)
                                     {
-                                        zdotc_f2c_(&z__3, m, &a[p * a_dim1 + 1], & c__1, &a[q * a_dim1 + 1], & c__1);
-                                        d__1 = fla_max(aaqq,aapp);
+                                        zdotc_f2c_(&z__3, m, &a[p * a_dim1 + 1], &c__1,
+                                                   &a[q * a_dim1 + 1], &c__1);
+                                        d__1 = fla_max(aaqq, aapp);
                                         z__2.r = z__3.r / d__1;
                                         z__2.i = z__3.i / d__1; // , expr subst
-                                        d__2 = fla_min(aaqq,aapp);
+                                        d__2 = fla_min(aaqq, aapp);
                                         z__1.r = z__2.r / d__2;
                                         z__1.i = z__2.i / d__2; // , expr subst
                                         aapq.r = z__1.r;
@@ -524,9 +544,11 @@ int zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, i
                                     }
                                     else
                                     {
-                                        zcopy_(m, &a[q * a_dim1 + 1], &c__1, & work[1], &c__1);
-                                        zlascl_("G", &c__0, &c__0, &aaqq, & c_b18, m, &c__1, &work[1], lda, &ierr);
-                                        zdotc_f2c_(&z__2, m, &a[p * a_dim1 + 1], & c__1, &work[1], &c__1);
+                                        zcopy_(m, &a[q * a_dim1 + 1], &c__1, &work[1], &c__1);
+                                        zlascl_("G", &c__0, &c__0, &aaqq, &c_b18, m, &c__1,
+                                                &work[1], lda, &ierr);
+                                        zdotc_f2c_(&z__2, m, &a[p * a_dim1 + 1], &c__1, &work[1],
+                                                   &c__1);
                                         z__1.r = z__2.r / aapp;
                                         z__1.i = z__2.i / aapp; // , expr subst
                                         aapq.r = z__1.r;
@@ -538,9 +560,9 @@ int zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, i
                                 /* Computing MAX */
                                 d__1 = mxaapq;
                                 d__2 = -aapq1; // , expr subst
-                                mxaapq = fla_max(d__1,d__2);
+                                mxaapq = fla_max(d__1, d__2);
                                 /* TO rotate or NOT to rotate, THAT is the question ... */
-                                if (f2c_dabs(aapq1) > *tol)
+                                if(f2c_dabs(aapq1) > *tol)
                                 {
                                     d__1 = z_abs(&aapq);
                                     z__1.r = aapq.r / d__1;
@@ -551,29 +573,32 @@ int zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, i
                                     /* [RTD] ROTATED = ROTATED + 1 */
                                     pskipped = 0;
                                     ++iswrot;
-                                    if (rotok)
+                                    if(rotok)
                                     {
                                         aqoap = aaqq / aapp;
                                         apoaq = aapp / aaqq;
-                                        theta = (d__1 = aqoap - apoaq, f2c_dabs( d__1)) * -.5 / aapq1;
-                                        if (aaqq > aapp0)
+                                        theta
+                                            = (d__1 = aqoap - apoaq, f2c_dabs(d__1)) * -.5 / aapq1;
+                                        if(aaqq > aapp0)
                                         {
                                             theta = -theta;
                                         }
-                                        if (f2c_dabs(theta) > bigtheta)
+                                        if(f2c_dabs(theta) > bigtheta)
                                         {
                                             t = .5 / theta;
                                             cs = 1.;
                                             d_cnjg(&z__2, &ompq);
                                             z__1.r = t * z__2.r;
                                             z__1.i = t * z__2.i; // , expr subst
-                                            zrot_(m, &a[p * a_dim1 + 1], & c__1, &a[q * a_dim1 + 1], &c__1, &cs, &z__1);
-                                            if (rsvec)
+                                            zrot_(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1],
+                                                  &c__1, &cs, &z__1);
+                                            if(rsvec)
                                             {
                                                 d_cnjg(&z__2, &ompq);
                                                 z__1.r = t * z__2.r;
                                                 z__1.i = t * z__2.i; // , expr subst
-                                                zrot_(&mvl, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], &c__1, &cs, &z__1);
+                                                zrot_(&mvl, &v[p * v_dim1 + 1], &c__1,
+                                                      &v[q * v_dim1 + 1], &c__1, &cs, &z__1);
                                             }
                                             /* Computing MAX */
                                             d__1 = 0.;
@@ -582,27 +607,27 @@ int zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, i
                                             /* Computing MAX */
                                             d__1 = 0.;
                                             d__2 = 1. - t * aqoap * aapq1; // , expr subst
-                                            aapp *= sqrt((fla_max(d__1,d__2)));
+                                            aapp *= sqrt((fla_max(d__1, d__2)));
                                             /* Computing MAX */
                                             d__1 = mxsinj;
                                             d__2 = f2c_dabs(t); // , expr subst
-                                            mxsinj = fla_max(d__1,d__2);
+                                            mxsinj = fla_max(d__1, d__2);
                                         }
                                         else
                                         {
                                             /* .. choose correct signum for THETA and rotate */
                                             thsign = -d_sign(&c_b18, &aapq1);
-                                            if (aaqq > aapp0)
+                                            if(aaqq > aapp0)
                                             {
                                                 thsign = -thsign;
                                             }
-                                            t = 1. / (theta + thsign * sqrt( theta * theta + 1.));
+                                            t = 1. / (theta + thsign * sqrt(theta * theta + 1.));
                                             cs = sqrt(1. / (t * t + 1.));
                                             sn = t * cs;
                                             /* Computing MAX */
                                             d__1 = mxsinj;
                                             d__2 = f2c_dabs(sn); // , expr subst
-                                            mxsinj = fla_max(d__1,d__2);
+                                            mxsinj = fla_max(d__1, d__2);
                                             /* Computing MAX */
                                             d__1 = 0.;
                                             d__2 = t * apoaq * aapq1 + 1.; // , expr subst
@@ -610,23 +635,25 @@ int zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, i
                                             /* Computing MAX */
                                             d__1 = 0.;
                                             d__2 = 1. - t * aqoap * aapq1; // , expr subst
-                                            aapp *= sqrt((fla_max(d__1,d__2)));
+                                            aapp *= sqrt((fla_max(d__1, d__2)));
                                             d_cnjg(&z__2, &ompq);
                                             z__1.r = sn * z__2.r;
                                             z__1.i = sn * z__2.i; // , expr subst
-                                            zrot_(m, &a[p * a_dim1 + 1], & c__1, &a[q * a_dim1 + 1], &c__1, &cs, &z__1);
-                                            if (rsvec)
+                                            zrot_(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1],
+                                                  &c__1, &cs, &z__1);
+                                            if(rsvec)
                                             {
                                                 d_cnjg(&z__2, &ompq);
                                                 z__1.r = sn * z__2.r;
                                                 z__1.i = sn * z__2.i; // , expr subst
-                                                zrot_(&mvl, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], &c__1, &cs, &z__1);
+                                                zrot_(&mvl, &v[p * v_dim1 + 1], &c__1,
+                                                      &v[q * v_dim1 + 1], &c__1, &cs, &z__1);
                                             }
                                         }
                                         i__6 = p;
                                         i__7 = q;
                                         z__2.r = -d__[i__7].r;
-                                        z__2.i = -d__[ i__7].i; // , expr subst
+                                        z__2.i = -d__[i__7].i; // , expr subst
                                         z__1.r = z__2.r * ompq.r - z__2.i * ompq.i;
                                         z__1.i = z__2.r * ompq.i + z__2.i * ompq.r; // , expr subst
                                         d__[i__6].r = z__1.r;
@@ -634,37 +661,46 @@ int zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, i
                                     }
                                     else
                                     {
-                                        /* .. have to use modified Gram-Schmidt like transformation */
-                                        if (aapp > aaqq)
+                                        /* .. have to use modified Gram-Schmidt like transformation
+                                         */
+                                        if(aapp > aaqq)
                                         {
-                                            zcopy_(m, &a[p * a_dim1 + 1], & c__1, &work[1], &c__1);
-                                            zlascl_("G", &c__0, &c__0, &aapp, &c_b18, m, &c__1, &work[1], lda, &ierr);
-                                            zlascl_("G", &c__0, &c__0, &aaqq, &c_b18, m, &c__1, &a[q * a_dim1 + 1], lda, &ierr);
+                                            zcopy_(m, &a[p * a_dim1 + 1], &c__1, &work[1], &c__1);
+                                            zlascl_("G", &c__0, &c__0, &aapp, &c_b18, m, &c__1,
+                                                    &work[1], lda, &ierr);
+                                            zlascl_("G", &c__0, &c__0, &aaqq, &c_b18, m, &c__1,
+                                                    &a[q * a_dim1 + 1], lda, &ierr);
                                             z__1.r = -aapq.r;
                                             z__1.i = -aapq.i; // , expr subst
-                                            zaxpy_(m, &z__1, &work[1], &c__1, &a[q * a_dim1 + 1], &c__1) ;
-                                            zlascl_("G", &c__0, &c__0, &c_b18, &aaqq, m, &c__1, &a[q * a_dim1 + 1], lda, &ierr);
+                                            zaxpy_(m, &z__1, &work[1], &c__1, &a[q * a_dim1 + 1],
+                                                   &c__1);
+                                            zlascl_("G", &c__0, &c__0, &c_b18, &aaqq, m, &c__1,
+                                                    &a[q * a_dim1 + 1], lda, &ierr);
                                             /* Computing MAX */
                                             d__1 = 0.;
                                             d__2 = 1. - aapq1 * aapq1; // , expr subst
                                             sva[q] = aaqq * sqrt((fla_max(d__1, d__2)));
-                                            mxsinj = fla_max(mxsinj,*sfmin);
+                                            mxsinj = fla_max(mxsinj, *sfmin);
                                         }
                                         else
                                         {
-                                            zcopy_(m, &a[q * a_dim1 + 1], & c__1, &work[1], &c__1);
-                                            zlascl_("G", &c__0, &c__0, &aaqq, &c_b18, m, &c__1, &work[1], lda, &ierr);
-                                            zlascl_("G", &c__0, &c__0, &aapp, &c_b18, m, &c__1, &a[p * a_dim1 + 1], lda, &ierr);
+                                            zcopy_(m, &a[q * a_dim1 + 1], &c__1, &work[1], &c__1);
+                                            zlascl_("G", &c__0, &c__0, &aaqq, &c_b18, m, &c__1,
+                                                    &work[1], lda, &ierr);
+                                            zlascl_("G", &c__0, &c__0, &aapp, &c_b18, m, &c__1,
+                                                    &a[p * a_dim1 + 1], lda, &ierr);
                                             d_cnjg(&z__2, &aapq);
                                             z__1.r = -z__2.r;
                                             z__1.i = -z__2.i; // , expr subst
-                                            zaxpy_(m, &z__1, &work[1], &c__1, &a[p * a_dim1 + 1], &c__1) ;
-                                            zlascl_("G", &c__0, &c__0, &c_b18, &aapp, m, &c__1, &a[p * a_dim1 + 1], lda, &ierr);
+                                            zaxpy_(m, &z__1, &work[1], &c__1, &a[p * a_dim1 + 1],
+                                                   &c__1);
+                                            zlascl_("G", &c__0, &c__0, &c_b18, &aapp, m, &c__1,
+                                                    &a[p * a_dim1 + 1], lda, &ierr);
                                             /* Computing MAX */
                                             d__1 = 0.;
                                             d__2 = 1. - aapq1 * aapq1; // , expr subst
                                             sva[p] = aapp * sqrt((fla_max(d__1, d__2)));
-                                            mxsinj = fla_max(mxsinj,*sfmin);
+                                            mxsinj = fla_max(mxsinj, *sfmin);
                                         }
                                     }
                                     /* END IF ROTOK THEN ... ELSE */
@@ -672,9 +708,9 @@ int zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, i
                                     /* .. recompute SVA(q), SVA(p) */
                                     /* Computing 2nd power */
                                     d__1 = sva[q] / aaqq;
-                                    if (d__1 * d__1 <= rooteps)
+                                    if(d__1 * d__1 <= rooteps)
                                     {
-                                        if (aaqq < rootbig && aaqq > rootsfmin)
+                                        if(aaqq < rootbig && aaqq > rootsfmin)
                                         {
                                             sva[q] = dznrm2_(m, &a[q * a_dim1 + 1], &c__1);
                                         }
@@ -682,15 +718,15 @@ int zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, i
                                         {
                                             t = 0.;
                                             aaqq = 1.;
-                                            zlassq_(m, &a[q * a_dim1 + 1], & c__1, &t, &aaqq);
+                                            zlassq_(m, &a[q * a_dim1 + 1], &c__1, &t, &aaqq);
                                             sva[q] = t * sqrt(aaqq);
                                         }
                                     }
                                     /* Computing 2nd power */
                                     d__1 = aapp / aapp0;
-                                    if (d__1 * d__1 <= rooteps)
+                                    if(d__1 * d__1 <= rooteps)
                                     {
-                                        if (aapp < rootbig && aapp > rootsfmin)
+                                        if(aapp < rootbig && aapp > rootsfmin)
                                         {
                                             aapp = dznrm2_(m, &a[p * a_dim1 + 1], &c__1);
                                         }
@@ -698,7 +734,7 @@ int zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, i
                                         {
                                             t = 0.;
                                             aapp = 1.;
-                                            zlassq_(m, &a[p * a_dim1 + 1], & c__1, &t, &aapp);
+                                            zlassq_(m, &a[p * a_dim1 + 1], &c__1, &t, &aapp);
                                             aapp = t * sqrt(aapp);
                                         }
                                         sva[p] = aapp;
@@ -719,13 +755,13 @@ int zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, i
                                 ++pskipped;
                                 ++ijblsk;
                             }
-                            if (i__ <= swband && ijblsk >= blskip)
+                            if(i__ <= swband && ijblsk >= blskip)
                             {
                                 sva[p] = aapp;
                                 notrot = 0;
                                 goto L2011;
                             }
-                            if (i__ <= swband && pskipped > rowskip)
+                            if(i__ <= swband && pskipped > rowskip)
                             {
                                 aapp = -aapp;
                                 notrot = 0;
@@ -734,18 +770,18 @@ int zgsvj1_(char *jobv, integer *m, integer *n, integer *n1, doublecomplex *a, i
                             /* L2200: */
                         }
                         /* end of the q-loop */
-L2203:
+                    L2203:
                         sva[p] = aapp;
                     }
                     else
                     {
-                        if (aapp == 0.)
+                        if(aapp == 0.)
                         {
                             /* Computing MIN */
                             i__5 = jgl + kbl - 1;
-                            notrot = notrot + fla_min(i__5,*n) - jgl + 1;
+                            notrot = notrot + fla_min(i__5, *n) - jgl + 1;
                         }
-                        if (aapp < 0.)
+                        if(aapp < 0.)
                         {
                             notrot = 0;
                         }
@@ -756,13 +792,11 @@ L2203:
                 /* L2010: */
             }
             /* end of the jbc-loop */
-L2011: /* 2011 bailed out of the jbc-loop */
+        L2011: /* 2011 bailed out of the jbc-loop */
             /* Computing MIN */
             i__4 = igl + kbl - 1;
-            i__3 = fla_min(i__4,*n);
-            for (p = igl;
-                    p <= i__3;
-                    ++p)
+            i__3 = fla_min(i__4, *n);
+            for(p = igl; p <= i__3; ++p)
             {
                 sva[p] = (d__1 = sva[p], f2c_dabs(d__1));
                 /* L2012: */
@@ -772,7 +806,7 @@ L2011: /* 2011 bailed out of the jbc-loop */
         }
         /* 2000 :: end of the ibr-loop */
         /* .. update SVA(N) */
-        if (sva[*n] < rootbig && sva[*n] > rootsfmin)
+        if(sva[*n] < rootbig && sva[*n] > rootsfmin)
         {
             sva[*n] = dznrm2_(m, &a[*n * a_dim1 + 1], &c__1);
         }
@@ -784,15 +818,16 @@ L2011: /* 2011 bailed out of the jbc-loop */
             sva[*n] = t * sqrt(aapp);
         }
         /* Additional steering devices */
-        if (i__ < swband && (mxaapq <= roottol || iswrot <= *n))
+        if(i__ < swband && (mxaapq <= roottol || iswrot <= *n))
         {
             swband = i__;
         }
-        if (i__ > swband + 1 && mxaapq < sqrt((doublereal) (*n)) * *tol && ( doublereal) (*n) * mxaapq * mxsinj < *tol)
+        if(i__ > swband + 1 && mxaapq < sqrt((doublereal)(*n)) * *tol
+           && (doublereal)(*n) * mxaapq * mxsinj < *tol)
         {
             goto L1994;
         }
-        if (notrot >= emptsw)
+        if(notrot >= emptsw)
         {
             goto L1994;
         }
@@ -808,13 +843,11 @@ L1994: /* #:) Reaching this point means numerical convergence after the i-th */
     /* #:) INFO = 0 confirms successful iterations. */
 L1995: /* Sort the vector SVA() of column norms. */
     i__1 = *n - 1;
-    for (p = 1;
-            p <= i__1;
-            ++p)
+    for(p = 1; p <= i__1; ++p)
     {
         i__2 = *n - p + 1;
         q = idamax_(&i__2, &sva[p], &c__1) + p - 1;
-        if (p != q)
+        if(p != q)
         {
             temp1 = sva[p];
             sva[p] = sva[q];
@@ -830,18 +863,17 @@ L1995: /* Sort the vector SVA() of column norms. */
             d__[i__2].r = aapq.r;
             d__[i__2].i = aapq.i; // , expr subst
             zswap_(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1], &c__1);
-            if (rsvec)
+            if(rsvec)
             {
-                zswap_(&mvl, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], & c__1);
+                zswap_(&mvl, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], &c__1);
             }
         }
         /* L5991: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* .. */
     /* .. END OF ZGSVJ1 */
     /* .. */
 }
 /* zgsvj1_ */
-

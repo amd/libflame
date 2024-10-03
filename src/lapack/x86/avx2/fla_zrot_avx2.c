@@ -1,5 +1,5 @@
 /******************************************************************************
- * * Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
+ * * Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
  * *******************************************************************************/
 
 /*! @file fla_zrot_avx2.c
@@ -12,7 +12,8 @@
 #if FLA_ENABLE_AMD_OPT
 
 /* Application of 2x2 Plane Rotation on two vectors */
-int fla_zrot_avx2(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy, doublereal *c__, doublecomplex *s)
+int fla_zrot_avx2(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy,
+                  doublereal *c__, doublecomplex *s)
 {
     /* System generated locals */
     integer i__1;
@@ -21,19 +22,19 @@ int fla_zrot_avx2(integer *n, doublecomplex *cx, integer *incx, doublecomplex *c
     integer i__, ix, iy;
     doublereal lc, sr, si, msi;
 
-    __m256d cmm, srmm, simm, sinm;
-    __m256d sirmm, srimm, msirmm, msrimm;
-    __m256d xmm0, ymm0, xmm1, ymm1;
-    __m256d xrmm0, yrmm0, ximm0, yimm0;
-    __m256d xrmm1, yrmm1, ximm1, yimm1;
-    __m256d oxm0, oym0, oxm1, oym1;
+    __m256d vd4_cmm, vd4_srmm, vd4_simm, vd4_sinm;
+    __m256d vd4_sirmm, vd4_srimm, vd4_msirmm, vd4_msrimm;
+    __m256d vd4_xmm0, vd4_ymm0, vd4_xmm1, vd4_ymm1;
+    __m256d vd4_xrmm0, vd4_yrmm0, vd4_ximm0, vd4_yimm0;
+    __m256d vd4_xrmm1, vd4_yrmm1, vd4_ximm1, vd4_yimm1;
+    __m256d vd4_oxm0, vd4_oym0, vd4_oxm1, vd4_oym1;
 
-    __m128d cm, srm, sim, sin;
-    __m128d sirm, srim, msirm, msrim;
-    __m128d xmm, ymm;
-    __m128d xrmm, yrmm, ximm, yimm;
-    __m128d oxm, oym;
-    __m128d hxmm0, hxmm1, hymm0, hymm1;
+    __m128d vd2_cm, vd2_srm, vd2_sim, vd2_sin;
+    __m128d vd2_sirm, vd2_srim, vd2_msirm, vd2_msrim;
+    __m128d vd2_xmm, vd2_ymm;
+    __m128d vd2_xrmm, vd2_yrmm, vd2_ximm, vd2_yimm;
+    __m128d vd2_oxm, vd2_oym;
+    __m128d vd2_hxmm0, vd2_hxmm1, vd2_hymm0, vd2_hymm1;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -53,56 +54,55 @@ int fla_zrot_avx2(integer *n, doublecomplex *cx, integer *incx, doublecomplex *c
     --cx;
     /* Function Body */
 
-    if (*n <= 0)
+    if(*n <= 0)
     {
         return 0;
     }
-    lc  = *c__;
-    sr  = s->r;
-    si  = s->i;
+    lc = *c__;
+    sr = s->r;
+    si = s->i;
     msi = -si;
 
-    cmm  = _mm256_broadcast_sd((double const *) &lc);
-    srmm = _mm256_broadcast_sd((double const *) &sr);
-    simm = _mm256_broadcast_sd((double const *) &si);
-    sinm = _mm256_broadcast_sd((double const *) &msi);
+    vd4_cmm = _mm256_broadcast_sd((double const *)&lc);
+    vd4_srmm = _mm256_broadcast_sd((double const *)&sr);
+    vd4_simm = _mm256_broadcast_sd((double const *)&si);
+    vd4_sinm = _mm256_broadcast_sd((double const *)&msi);
 
-    sirmm = _mm256_shuffle_pd(srmm, simm, 0xA);  
-    srimm = _mm256_shuffle_pd(simm, srmm, 0x5);  
-    msirmm = _mm256_shuffle_pd(srmm, sinm, 0xA); 
-    msrimm = _mm256_shuffle_pd(sinm, srmm, 0x5); 
+    vd4_sirmm = _mm256_shuffle_pd(vd4_srmm, vd4_simm, 0xA);
+    vd4_srimm = _mm256_shuffle_pd(vd4_simm, vd4_srmm, 0x5);
+    vd4_msirmm = _mm256_shuffle_pd(vd4_srmm, vd4_sinm, 0xA);
+    vd4_msrimm = _mm256_shuffle_pd(vd4_sinm, vd4_srmm, 0x5);
 
-    cm  = _mm_loaddup_pd ((double const *) &lc);
-    srm = _mm_loaddup_pd ((double const *) &sr);
-    sim = _mm_loaddup_pd ((double const *) &si);
-    sin = _mm_loaddup_pd ((double const *) &msi);
+    vd2_cm = _mm_loaddup_pd((double const *)&lc);
+    vd2_srm = _mm_loaddup_pd((double const *)&sr);
+    vd2_sim = _mm_loaddup_pd((double const *)&si);
+    vd2_sin = _mm_loaddup_pd((double const *)&msi);
 
-    sirm = _mm_shuffle_pd(srm, sim, 0x2); 
-    srim = _mm_shuffle_pd(sim, srm, 0x1);
-    msirm = _mm_shuffle_pd(srm, sin, 0x2);
-    msrim = _mm_shuffle_pd(sin, srm, 0x1);
+    vd2_sirm = _mm_shuffle_pd(vd2_srm, vd2_sim, 0x2);
+    vd2_srim = _mm_shuffle_pd(vd2_sim, vd2_srm, 0x1);
+    vd2_msirm = _mm_shuffle_pd(vd2_srm, vd2_sin, 0x2);
+    vd2_msrim = _mm_shuffle_pd(vd2_sin, vd2_srm, 0x1);
 
-
-    if (*incx == 1 && *incy == 1)
+    if(*incx == 1 && *incy == 1)
     {
         goto L20;
     }
     /* Code for unequal increments or equal increments not equal to 1 */
     ix = 1;
     iy = 1;
-    if (*incx < 0)
+    if(*incx < 0)
     {
         ix = (-(*n) + 1) * *incx + 1;
     }
-    if (*incy < 0)
+    if(*incy < 0)
     {
         iy = (-(*n) + 1) * *incy + 1;
     }
 
     i__1 = *n;
-    if (*incx != *incy)
+    if(*incx != *incy)
     {
-        for (i__ = 1; i__ <= i__1; ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             z__2.r = lc * cx[ix].r;
             z__2.i = lc * cx[ix].i; // , expr subst
@@ -126,73 +126,73 @@ int fla_zrot_avx2(integer *n, doublecomplex *cx, integer *incx, doublecomplex *c
     }
     else
     {
-        for (i__ = 1; i__ <= (i__1 - 1); i__ += 2)
+        for(i__ = 1; i__ <= (i__1 - 1); i__ += 2)
         {
             /* load complex inputs from x & y */
-            xmm0   = _mm256_loadu_pd((double const *) &cx[ix]);
-            hxmm1 = _mm_loadu_pd((double const *) &cx[ix + *incx]);
-            ymm0   = _mm256_loadu_pd((double const *) &cy[ix]);
-            hymm1 = _mm_loadu_pd((double const *) &cy[ix + *incx]);
+            vd4_xmm0 = _mm256_loadu_pd((double const *)&cx[ix]);
+            vd2_hxmm1 = _mm_loadu_pd((double const *)&cx[ix + *incx]);
+            vd4_ymm0 = _mm256_loadu_pd((double const *)&cy[ix]);
+            vd2_hymm1 = _mm_loadu_pd((double const *)&cy[ix + *incx]);
 
             /* pack the inputs into 256-bit registers */
-            xmm0 = _mm256_insertf128_pd(xmm0, hxmm1, 0x1);
-            ymm0 = _mm256_insertf128_pd(ymm0, hymm1, 0x1);
+            vd4_xmm0 = _mm256_insertf128_pd(vd4_xmm0, vd2_hxmm1, 0x1);
+            vd4_ymm0 = _mm256_insertf128_pd(vd4_ymm0, vd2_hymm1, 0x1);
 
             /* shuffle the loaded inputs */
-            xrmm0 = _mm256_movedup_pd(xmm0);
-            ximm0 = _mm256_unpackhi_pd(xmm0, xmm0);
-            yrmm0 = _mm256_movedup_pd(ymm0);
-            yimm0 = _mm256_unpackhi_pd(ymm0, ymm0);
+            vd4_xrmm0 = _mm256_movedup_pd(vd4_xmm0);
+            vd4_ximm0 = _mm256_unpackhi_pd(vd4_xmm0, vd4_xmm0);
+            vd4_yrmm0 = _mm256_movedup_pd(vd4_ymm0);
+            vd4_yimm0 = _mm256_unpackhi_pd(vd4_ymm0, vd4_ymm0);
 
             /* compute x outputs */
-            oxm0 = _mm256_mul_pd(srimm, yimm0);
-            oxm0 = _mm256_fmaddsub_pd(sirmm, yrmm0, oxm0);
-            oxm0 = _mm256_fmadd_pd(cmm, xmm0, oxm0);
+            vd4_oxm0 = _mm256_mul_pd(vd4_srimm, vd4_yimm0);
+            vd4_oxm0 = _mm256_fmaddsub_pd(vd4_sirmm, vd4_yrmm0, vd4_oxm0);
+            vd4_oxm0 = _mm256_fmadd_pd(vd4_cmm, vd4_xmm0, vd4_oxm0);
 
             /* compute y outputs */
-            oym0 = _mm256_mul_pd(msrimm, ximm0);
-            oym0 = _mm256_fmaddsub_pd(msirmm, xrmm0, oym0);
-            oym0 = _mm256_fmsub_pd(cmm, ymm0, oym0);
+            vd4_oym0 = _mm256_mul_pd(vd4_msrimm, vd4_ximm0);
+            vd4_oym0 = _mm256_fmaddsub_pd(vd4_msirmm, vd4_xrmm0, vd4_oym0);
+            vd4_oym0 = _mm256_fmsub_pd(vd4_cmm, vd4_ymm0, vd4_oym0);
 
             /* extract the results */
-            hxmm0 = _mm256_extractf128_pd(oxm0, 0x0);
-            hxmm1 = _mm256_extractf128_pd(oxm0, 0x1);
-            hymm0 = _mm256_extractf128_pd(oym0, 0x0);
-            hymm1 = _mm256_extractf128_pd(oym0, 0x1);
+            vd2_hxmm0 = _mm256_extractf128_pd(vd4_oxm0, 0x0);
+            vd2_hxmm1 = _mm256_extractf128_pd(vd4_oxm0, 0x1);
+            vd2_hymm0 = _mm256_extractf128_pd(vd4_oym0, 0x0);
+            vd2_hymm1 = _mm256_extractf128_pd(vd4_oym0, 0x1);
 
             /* store the results */
-            _mm_storeu_pd((double *) &cx[ix], hxmm0);
-            _mm_storeu_pd((double *) &cx[ix + *incx], hxmm1);
-            _mm_storeu_pd((double *) &cy[ix], hymm0);
-            _mm_storeu_pd((double *) &cy[ix + *incx], hymm1);
+            _mm_storeu_pd((double *)&cx[ix], vd2_hxmm0);
+            _mm_storeu_pd((double *)&cx[ix + *incx], vd2_hxmm1);
+            _mm_storeu_pd((double *)&cy[ix], vd2_hymm0);
+            _mm_storeu_pd((double *)&cy[ix + *incx], vd2_hymm1);
 
             ix += 2 * *incx;
         }
-        for ( ; i__ <= i__1; ++i__)
+        for(; i__ <= i__1; ++i__)
         {
             /* load complex inputs from x & y */
-            xmm  = _mm_loadu_pd((double const *) &cx[ix]);
-            ymm  = _mm_loadu_pd((double const *) &cy[ix]);
+            vd2_xmm = _mm_loadu_pd((double const *)&cx[ix]);
+            vd2_ymm = _mm_loadu_pd((double const *)&cy[ix]);
 
             /* shuffle the loaded inputs */
-            xrmm = _mm_movedup_pd(xmm);
-            ximm = _mm_unpackhi_pd(xmm, xmm);
-            yrmm = _mm_movedup_pd(ymm);
-            yimm = _mm_unpackhi_pd(ymm, ymm);   
+            vd2_xrmm = _mm_movedup_pd(vd2_xmm);
+            vd2_ximm = _mm_unpackhi_pd(vd2_xmm, vd2_xmm);
+            vd2_yrmm = _mm_movedup_pd(vd2_ymm);
+            vd2_yimm = _mm_unpackhi_pd(vd2_ymm, vd2_ymm);
 
             /* compute x outputs */
-            oxm = _mm_mul_pd(srim, yimm);
-            oxm = _mm_fmaddsub_pd(sirm, yrmm, oxm);
-            oxm = _mm_fmadd_pd(cm, xmm, oxm);
+            vd2_oxm = _mm_mul_pd(vd2_srim, vd2_yimm);
+            vd2_oxm = _mm_fmaddsub_pd(vd2_sirm, vd2_yrmm, vd2_oxm);
+            vd2_oxm = _mm_fmadd_pd(vd2_cm, vd2_xmm, vd2_oxm);
 
             /* compute y outputs */
-            oym = _mm_mul_pd(msrim, ximm);
-            oym = _mm_fmaddsub_pd(msirm, xrmm, oym);
-            oym = _mm_fmsub_pd(cm, ymm, oym);
+            vd2_oym = _mm_mul_pd(vd2_msrim, vd2_ximm);
+            vd2_oym = _mm_fmaddsub_pd(vd2_msirm, vd2_xrmm, vd2_oym);
+            vd2_oym = _mm_fmsub_pd(vd2_cm, vd2_ymm, vd2_oym);
 
             /* store the results */
-            _mm_storeu_pd((double *) &cx[ix], oxm);
-            _mm_storeu_pd((double *) &cy[ix], oym);
+            _mm_storeu_pd((double *)&cx[ix], vd2_oxm);
+            _mm_storeu_pd((double *)&cy[ix], vd2_oym);
 
             ix += *incx;
         }
@@ -201,75 +201,102 @@ int fla_zrot_avx2(integer *n, doublecomplex *cx, integer *incx, doublecomplex *c
     /* Code for both increments equal to 1 */
 L20:
     i__1 = *n;
-    for (i__ = 1; i__ <= (i__1 - 3); i__ += 4)
+    for(i__ = 1; i__ <= (i__1 - 3); i__ += 4)
     {
         /* load complex inputs from x & y */
-        xmm0 = _mm256_loadu_pd((double const *) &cx[i__]);
-        ymm0 = _mm256_loadu_pd((double const *) &cy[i__]);
-        xmm1 = _mm256_loadu_pd((double const *) &cx[i__ + 2]);
-        ymm1 = _mm256_loadu_pd((double const *) &cy[i__ + 2]);
+        vd4_xmm0 = _mm256_loadu_pd((double const *)&cx[i__]);
+        vd4_ymm0 = _mm256_loadu_pd((double const *)&cy[i__]);
+        vd4_xmm1 = _mm256_loadu_pd((double const *)&cx[i__ + 2]);
+        vd4_ymm1 = _mm256_loadu_pd((double const *)&cy[i__ + 2]);
 
         /* shuffle the loaded inputs */
-        xrmm0 = _mm256_movedup_pd(xmm0);
-        ximm0 = _mm256_unpackhi_pd(xmm0, xmm0);
-        yrmm0 = _mm256_movedup_pd(ymm0);
-        yimm0 = _mm256_unpackhi_pd(ymm0, ymm0);
+        vd4_xrmm0 = _mm256_movedup_pd(vd4_xmm0);
+        vd4_ximm0 = _mm256_unpackhi_pd(vd4_xmm0, vd4_xmm0);
+        vd4_yrmm0 = _mm256_movedup_pd(vd4_ymm0);
+        vd4_yimm0 = _mm256_unpackhi_pd(vd4_ymm0, vd4_ymm0);
 
-        xrmm1 = _mm256_movedup_pd(xmm1);
-        ximm1 = _mm256_unpackhi_pd(xmm1, xmm1);
-        yrmm1 = _mm256_movedup_pd(ymm1);
-        yimm1 = _mm256_unpackhi_pd(ymm1, ymm1);
+        vd4_xrmm1 = _mm256_movedup_pd(vd4_xmm1);
+        vd4_ximm1 = _mm256_unpackhi_pd(vd4_xmm1, vd4_xmm1);
+        vd4_yrmm1 = _mm256_movedup_pd(vd4_ymm1);
+        vd4_yimm1 = _mm256_unpackhi_pd(vd4_ymm1, vd4_ymm1);
 
         /* compute x outputs */
-        oxm0 = _mm256_mul_pd(srimm, yimm0);
-        oxm0 = _mm256_fmaddsub_pd(sirmm, yrmm0, oxm0);
-        oxm0 = _mm256_fmadd_pd(cmm, xmm0, oxm0);
+        vd4_oxm0 = _mm256_mul_pd(vd4_srimm, vd4_yimm0);
+        vd4_oxm0 = _mm256_fmaddsub_pd(vd4_sirmm, vd4_yrmm0, vd4_oxm0);
+        vd4_oxm0 = _mm256_fmadd_pd(vd4_cmm, vd4_xmm0, vd4_oxm0);
 
-        oxm1 = _mm256_mul_pd(srimm, yimm1);
-        oxm1 = _mm256_fmaddsub_pd(sirmm, yrmm1, oxm1);
-        oxm1 = _mm256_fmadd_pd(cmm, xmm1, oxm1);
+        vd4_oxm1 = _mm256_mul_pd(vd4_srimm, vd4_yimm1);
+        vd4_oxm1 = _mm256_fmaddsub_pd(vd4_sirmm, vd4_yrmm1, vd4_oxm1);
+        vd4_oxm1 = _mm256_fmadd_pd(vd4_cmm, vd4_xmm1, vd4_oxm1);
 
         /* compute y outputs */
-        oym0 = _mm256_mul_pd(msrimm, ximm0);
-        oym0 = _mm256_fmaddsub_pd(msirmm, xrmm0, oym0);
-        oym0 = _mm256_fmsub_pd(cmm, ymm0, oym0);
+        vd4_oym0 = _mm256_mul_pd(vd4_msrimm, vd4_ximm0);
+        vd4_oym0 = _mm256_fmaddsub_pd(vd4_msirmm, vd4_xrmm0, vd4_oym0);
+        vd4_oym0 = _mm256_fmsub_pd(vd4_cmm, vd4_ymm0, vd4_oym0);
 
-        oym1 = _mm256_mul_pd(msrimm, ximm1);
-        oym1 = _mm256_fmaddsub_pd(msirmm, xrmm1, oym1);
-        oym1 = _mm256_fmsub_pd(cmm, ymm1, oym1);
+        vd4_oym1 = _mm256_mul_pd(vd4_msrimm, vd4_ximm1);
+        vd4_oym1 = _mm256_fmaddsub_pd(vd4_msirmm, vd4_xrmm1, vd4_oym1);
+        vd4_oym1 = _mm256_fmsub_pd(vd4_cmm, vd4_ymm1, vd4_oym1);
 
         /* store the results */
-        _mm256_storeu_pd((double *) &cx[i__], oxm0);
-        _mm256_storeu_pd((double *) &cy[i__], oym0);
-        _mm256_storeu_pd((double *) &cx[i__ + 2], oxm1);
-        _mm256_storeu_pd((double *) &cy[i__ + 2], oym1);
+        _mm256_storeu_pd((double *)&cx[i__], vd4_oxm0);
+        _mm256_storeu_pd((double *)&cy[i__], vd4_oym0);
+        _mm256_storeu_pd((double *)&cx[i__ + 2], vd4_oxm1);
+        _mm256_storeu_pd((double *)&cy[i__ + 2], vd4_oym1);
     }
 
-    for ( ; i__ <= i__1; ++i__)
+    for(; i__ <= (i__1 - 1); i__ += 2)
     {
         /* load complex inputs from x & y */
-        xmm  = _mm_loadu_pd((double const *) &cx[i__]);
-        ymm  = _mm_loadu_pd((double const *) &cy[i__]);
+        vd4_xmm0 = _mm256_loadu_pd((double const *)&cx[i__]);
+        vd4_ymm0 = _mm256_loadu_pd((double const *)&cy[i__]);
 
         /* shuffle the loaded inputs */
-        xrmm = _mm_movedup_pd(xmm);
-        ximm = _mm_unpackhi_pd(xmm, xmm);
-        yrmm = _mm_movedup_pd(ymm);
-        yimm = _mm_unpackhi_pd(ymm, ymm);   
+        vd4_xrmm0 = _mm256_movedup_pd(vd4_xmm0);
+        vd4_ximm0 = _mm256_unpackhi_pd(vd4_xmm0, vd4_xmm0);
+        vd4_yrmm0 = _mm256_movedup_pd(vd4_ymm0);
+        vd4_yimm0 = _mm256_unpackhi_pd(vd4_ymm0, vd4_ymm0);
 
         /* compute x outputs */
-        oxm = _mm_mul_pd(srim, yimm);
-        oxm = _mm_fmaddsub_pd(sirm, yrmm, oxm);
-        oxm = _mm_fmadd_pd(cm, xmm, oxm);
+        vd4_oxm0 = _mm256_mul_pd(vd4_srimm, vd4_yimm0);
+        vd4_oxm0 = _mm256_fmaddsub_pd(vd4_sirmm, vd4_yrmm0, vd4_oxm0);
+        vd4_oxm0 = _mm256_fmadd_pd(vd4_cmm, vd4_xmm0, vd4_oxm0);
 
         /* compute y outputs */
-        oym = _mm_mul_pd(msrim, ximm);
-        oym = _mm_fmaddsub_pd(msirm, xrmm, oym);
-        oym = _mm_fmsub_pd(cm, ymm, oym);
+        vd4_oym0 = _mm256_mul_pd(vd4_msrimm, vd4_ximm0);
+        vd4_oym0 = _mm256_fmaddsub_pd(vd4_msirmm, vd4_xrmm0, vd4_oym0);
+        vd4_oym0 = _mm256_fmsub_pd(vd4_cmm, vd4_ymm0, vd4_oym0);
 
         /* store the results */
-        _mm_storeu_pd((double *) &cx[i__], oxm);
-        _mm_storeu_pd((double *) &cy[i__], oym);
+        _mm256_storeu_pd((double *)&cx[i__], vd4_oxm0);
+        _mm256_storeu_pd((double *)&cy[i__], vd4_oym0);
+    }
+
+    for(; i__ <= i__1; ++i__)
+    {
+        /* load complex inputs from x & y */
+        vd2_xmm = _mm_loadu_pd((double const *)&cx[i__]);
+        vd2_ymm = _mm_loadu_pd((double const *)&cy[i__]);
+
+        /* shuffle the loaded inputs */
+        vd2_xrmm = _mm_movedup_pd(vd2_xmm);
+        vd2_ximm = _mm_unpackhi_pd(vd2_xmm, vd2_xmm);
+        vd2_yrmm = _mm_movedup_pd(vd2_ymm);
+        vd2_yimm = _mm_unpackhi_pd(vd2_ymm, vd2_ymm);
+
+        /* compute x outputs */
+        vd2_oxm = _mm_mul_pd(vd2_srim, vd2_yimm);
+        vd2_oxm = _mm_fmaddsub_pd(vd2_sirm, vd2_yrmm, vd2_oxm);
+        vd2_oxm = _mm_fmadd_pd(vd2_cm, vd2_xmm, vd2_oxm);
+
+        /* compute y outputs */
+        vd2_oym = _mm_mul_pd(vd2_msrim, vd2_ximm);
+        vd2_oym = _mm_fmaddsub_pd(vd2_msirm, vd2_xrmm, vd2_oym);
+        vd2_oym = _mm_fmsub_pd(vd2_cm, vd2_ymm, vd2_oym);
+
+        /* store the results */
+        _mm_storeu_pd((double *)&cx[i__], vd2_oxm);
+        _mm_storeu_pd((double *)&cy[i__], vd2_oym);
     }
 
     return 0;

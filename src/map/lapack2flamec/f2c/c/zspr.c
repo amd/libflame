@@ -1,16 +1,25 @@
-/* ../netlib/zspr.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zspr.f -- translated by f2c (version 20100827). You must link the resulting object file
+ with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b ZSPR performs the symmetrical rank-1 update of a complex symmetric packed matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZSPR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zspr.f" > */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zspr.f"
+ * > */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zspr.f" > */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zspr.f"
+ * > */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zspr.f" > */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zspr.f"
+ * > */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -118,10 +127,11 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int zspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx, doublecomplex *ap)
+void zspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx,
+           doublecomplex *ap)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zspr inputs: uplo %c, n %" FLA_IS ", incx %" FLA_IS "",*uplo, *n, *incx);
+    AOCL_DTL_SNPRINTF("zspr inputs: uplo %c, n %" FLA_IS ", incx %" FLA_IS "", *uplo, *n, *incx);
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5;
@@ -129,9 +139,10 @@ int zspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, intege
     /* Local variables */
     integer i__, j, k, kk, ix, jx, kx, info;
     doublecomplex temp;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -157,65 +168,61 @@ int zspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, intege
     /* Function Body */
     info = 0;
     kx = 0;
-    if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         info = 1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         info = 2;
     }
-    else if (*incx == 0)
+    else if(*incx == 0)
     {
         info = 5;
     }
-    if (info != 0)
+    if(info != 0)
     {
         xerbla_("ZSPR ", &info, (ftnlen)5);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
-    if (*n == 0 || alpha->r == 0. && alpha->i == 0.)
+    if(*n == 0 || alpha->r == 0. && alpha->i == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set the start point in X if the increment is not unity. */
-    if (*incx <= 0)
+    if(*incx <= 0)
     {
         kx = 1 - (*n - 1) * *incx;
     }
-    else if (*incx != 1)
+    else if(*incx != 1)
     {
         kx = 1;
     }
     /* Start the operations. In this version the elements of the array AP */
     /* are accessed sequentially with one pass through AP. */
     kk = 1;
-    if (lsame_(uplo, "U"))
+    if(lsame_(uplo, "U", 1, 1))
     {
         /* Form A when upper triangle is stored in AP. */
-        if (*incx == 1)
+        if(*incx == 1)
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j;
-                if (x[i__2].r != 0. || x[i__2].i != 0.)
+                if(x[i__2].r != 0. || x[i__2].i != 0.)
                 {
                     i__2 = j;
                     z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
-                    z__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2] .r; // , expr subst
+                    z__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
                     temp.r = z__1.r;
                     temp.i = z__1.i; // , expr subst
                     k = kk;
                     i__2 = j - 1;
-                    for (i__ = 1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         i__3 = k;
                         i__4 = k;
@@ -254,23 +261,19 @@ int zspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, intege
         {
             jx = kx;
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = jx;
-                if (x[i__2].r != 0. || x[i__2].i != 0.)
+                if(x[i__2].r != 0. || x[i__2].i != 0.)
                 {
                     i__2 = jx;
                     z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
-                    z__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2] .r; // , expr subst
+                    z__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
                     temp.r = z__1.r;
                     temp.i = z__1.i; // , expr subst
                     ix = kx;
                     i__2 = kk + j - 2;
-                    for (k = kk;
-                            k <= i__2;
-                            ++k)
+                    for(k = kk; k <= i__2; ++k)
                     {
                         i__3 = k;
                         i__4 = k;
@@ -310,19 +313,17 @@ int zspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, intege
     else
     {
         /* Form A when lower triangle is stored in AP. */
-        if (*incx == 1)
+        if(*incx == 1)
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j;
-                if (x[i__2].r != 0. || x[i__2].i != 0.)
+                if(x[i__2].r != 0. || x[i__2].i != 0.)
                 {
                     i__2 = j;
                     z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
-                    z__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2] .r; // , expr subst
+                    z__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
                     temp.r = z__1.r;
                     temp.i = z__1.i; // , expr subst
                     i__2 = kk;
@@ -336,9 +337,7 @@ int zspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, intege
                     ap[i__2].i = z__1.i; // , expr subst
                     k = kk + 1;
                     i__2 = *n;
-                    for (i__ = j + 1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = j + 1; i__ <= i__2; ++i__)
                     {
                         i__3 = k;
                         i__4 = k;
@@ -368,16 +367,14 @@ int zspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, intege
         {
             jx = kx;
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = jx;
-                if (x[i__2].r != 0. || x[i__2].i != 0.)
+                if(x[i__2].r != 0. || x[i__2].i != 0.)
                 {
                     i__2 = jx;
                     z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
-                    z__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2] .r; // , expr subst
+                    z__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
                     temp.r = z__1.r;
                     temp.i = z__1.i; // , expr subst
                     i__2 = kk;
@@ -391,9 +388,7 @@ int zspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, intege
                     ap[i__2].i = z__1.i; // , expr subst
                     ix = jx;
                     i__2 = kk + *n - j;
-                    for (k = kk + 1;
-                            k <= i__2;
-                            ++k)
+                    for(k = kk + 1; k <= i__2; ++k)
                     {
                         ix += *incx;
                         i__3 = k;
@@ -422,7 +417,7 @@ int zspr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, intege
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZSPR */
 }
 /* zspr_ */

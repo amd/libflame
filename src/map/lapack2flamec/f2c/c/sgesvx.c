@@ -1,16 +1,25 @@
-/* ../netlib/sgesvx.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sgesvx.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief <b> SGESVX computes the solution to system of linear equations A * X = B for GE matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SGESVX + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgesvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgesvx.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgesvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgesvx.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgesvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgesvx.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -208,7 +217,7 @@ otherwise, it is an */
 /* > multiplied on the left by diag(R);
 if EQUED = 'N' or 'C', R */
 /* > is not accessed. R is an input argument if FACT = 'F';
-*/
+ */
 /* > otherwise, R is an output argument. If FACT = 'F' and */
 /* > EQUED = 'R' or 'B', each element of R must be positive. */
 /* > \endverbatim */
@@ -220,7 +229,7 @@ if EQUED = 'N' or 'C', R */
 /* > multiplied on the right by diag(C);
 if EQUED = 'N' or 'R', C */
 /* > is not accessed. C is an input argument if FACT = 'F';
-*/
+ */
 /* > otherwise, C is an output argument. If FACT = 'F' and */
 /* > EQUED = 'C' or 'B', each element of C must be positive. */
 /* > \endverbatim */
@@ -231,10 +240,10 @@ if EQUED = 'N' or 'R', C */
 /* > On entry, the N-by-NRHS right hand side matrix B. */
 /* > On exit, */
 /* > if EQUED = 'N', B is not modified;
-*/
+ */
 /* > if TRANS = 'N' and EQUED = 'R' or 'B', B is overwritten by */
 /* > diag(R)*B;
-*/
+ */
 /* > if TRANS = 'T' or 'C' and EQUED = 'C' or 'B', B is */
 /* > overwritten by diag(C)*B. */
 /* > \endverbatim */
@@ -340,7 +349,10 @@ if EQUED = 'N' or 'R', C */
 /* > \ingroup realGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-int sgesvx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, integer *lda, real *af, integer *ldaf, integer *ipiv, char *equed, real *r__, real *c__, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *ferr, real *berr, real *work, integer *iwork, integer *info)
+void sgesvx_(char *fact, char *trans, integer *n, integer *nrhs, real *a, integer *lda, real *af,
+             integer *ldaf, integer *ipiv, char *equed, real *r__, real *c__, real *b, integer *ldb,
+             real *x, integer *ldx, real *rcond, real *ferr, real *berr, real *work, integer *iwork,
+             integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2;
@@ -349,26 +361,38 @@ int sgesvx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, intege
     integer i__, j;
     real amax;
     char norm[1];
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real rcmin, rcmax, anorm;
     logical equil;
     real colcnd;
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     logical nofact;
     extern /* Subroutine */
-    int slaqge_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, char *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), sgecon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *);
+        void
+        slaqge_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *,
+                char *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        sgecon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *);
     real bignum;
     integer infequ;
     logical colequ;
     extern /* Subroutine */
-    int sgeequ_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *), sgerfs_( char *, integer *, integer *, real *, integer *, real *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), sgetrf_(integer *, integer *, real *, integer *, integer *, integer *);
+        void
+        sgeequ_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *,
+                integer *),
+        sgerfs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *,
+                real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *),
+        sgetrf_(integer *, integer *, real *, integer *, integer *, integer *);
     real rowcnd;
     extern /* Subroutine */
-    int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+        void
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     logical notran;
     extern real slantr_(char *, char *, char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    int sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+        void
+        sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *,
+                integer *);
     real smlnum;
     logical rowequ;
     real rpvgrw;
@@ -414,12 +438,12 @@ int sgesvx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, intege
     --iwork;
     /* Function Body */
     *info = 0;
-    nofact = lsame_(fact, "N");
-    equil = lsame_(fact, "E");
-    notran = lsame_(trans, "N");
+    nofact = lsame_(fact, "N", 1, 1);
+    equil = lsame_(fact, "E", 1, 1);
+    notran = lsame_(trans, "N", 1, 1);
     smlnum = 0.f;
     bignum = 0.f;
-    if (nofact || equil)
+    if(nofact || equil)
     {
         *(unsigned char *)equed = 'N';
         rowequ = FALSE_;
@@ -427,150 +451,142 @@ int sgesvx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, intege
     }
     else
     {
-        rowequ = lsame_(equed, "R") || lsame_(equed, "B");
-        colequ = lsame_(equed, "C") || lsame_(equed, "B");
+        rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
+        colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
         smlnum = slamch_("Safe minimum");
         bignum = 1.f / smlnum;
     }
     /* Test the input parameters. */
-    if (! nofact && ! equil && ! lsame_(fact, "F"))
+    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T") && ! lsame_(trans, "C"))
+    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -8;
     }
-    else if (lsame_(fact, "F") && ! (rowequ || colequ || lsame_(equed, "N")))
+    else if(lsame_(fact, "F", 1, 1) && !(rowequ || colequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -10;
     }
     else
     {
-        if (rowequ)
+        if(rowequ)
         {
             rcmin = bignum;
             rcmax = 0.f;
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 /* Computing MIN */
                 r__1 = rcmin;
                 r__2 = r__[j]; // , expr subst
-                rcmin = fla_min(r__1,r__2);
+                rcmin = fla_min(r__1, r__2);
                 /* Computing MAX */
                 r__1 = rcmax;
                 r__2 = r__[j]; // , expr subst
-                rcmax = fla_max(r__1,r__2);
+                rcmax = fla_max(r__1, r__2);
                 /* L10: */
             }
-            if (rcmin <= 0.f)
+            if(rcmin <= 0.f)
             {
                 *info = -11;
             }
-            else if (*n > 0)
+            else if(*n > 0)
             {
-                rowcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+                rowcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
             }
             else
             {
                 rowcnd = 1.f;
             }
         }
-        if (colequ && *info == 0)
+        if(colequ && *info == 0)
         {
             rcmin = bignum;
             rcmax = 0.f;
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 /* Computing MIN */
                 r__1 = rcmin;
                 r__2 = c__[j]; // , expr subst
-                rcmin = fla_min(r__1,r__2);
+                rcmin = fla_min(r__1, r__2);
                 /* Computing MAX */
                 r__1 = rcmax;
                 r__2 = c__[j]; // , expr subst
-                rcmax = fla_max(r__1,r__2);
+                rcmax = fla_max(r__1, r__2);
                 /* L20: */
             }
-            if (rcmin <= 0.f)
+            if(rcmin <= 0.f)
             {
                 *info = -12;
             }
-            else if (*n > 0)
+            else if(*n > 0)
             {
-                colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+                colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
             }
             else
             {
                 colcnd = 1.f;
             }
         }
-        if (*info == 0)
+        if(*info == 0)
         {
-            if (*ldb < fla_max(1,*n))
+            if(*ldb < fla_max(1, *n))
             {
                 *info = -14;
             }
-            else if (*ldx < fla_max(1,*n))
+            else if(*ldx < fla_max(1, *n))
             {
                 *info = -16;
             }
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SGESVX", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
-    if (equil)
+    if(equil)
     {
         /* Compute row and column scalings to equilibrate the matrix A. */
-        sgeequ_(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, &colcnd, & amax, &infequ);
-        if (infequ == 0)
+        sgeequ_(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, &colcnd, &amax, &infequ);
+        if(infequ == 0)
         {
             /* Equilibrate the matrix. */
-            slaqge_(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, & colcnd, &amax, equed);
-            rowequ = lsame_(equed, "R") || lsame_(equed, "B");
-            colequ = lsame_(equed, "C") || lsame_(equed, "B");
+            slaqge_(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, &colcnd, &amax, equed);
+            rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
+            colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
         }
     }
     /* Scale the right hand side. */
-    if (notran)
+    if(notran)
     {
-        if (rowequ)
+        if(rowequ)
         {
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = *n;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     b[i__ + j * b_dim1] = r__[i__] * b[i__ + j * b_dim1];
                     /* L30: */
@@ -579,17 +595,13 @@ int sgesvx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, intege
             }
         }
     }
-    else if (colequ)
+    else if(colequ)
     {
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *n;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 b[i__ + j * b_dim1] = c__[i__] * b[i__ + j * b_dim1];
                 /* L50: */
@@ -597,18 +609,18 @@ int sgesvx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, intege
             /* L60: */
         }
     }
-    if (nofact || equil)
+    if(nofact || equil)
     {
         /* Compute the LU factorization of A. */
         slacpy_("Full", n, n, &a[a_offset], lda, &af[af_offset], ldaf);
         sgetrf_(n, n, &af[af_offset], ldaf, &ipiv[1], info);
         /* Return if INFO is non-zero. */
-        if (*info > 0)
+        if(*info > 0)
         {
             /* Compute the reciprocal pivot growth factor of the */
             /* leading rank-deficient INFO columns of A. */
             rpvgrw = slantr_("M", "U", "N", info, info, &af[af_offset], ldaf, &work[1]);
-            if (rpvgrw == 0.f)
+            if(rpvgrw == 0.f)
             {
                 rpvgrw = 1.f;
             }
@@ -618,12 +630,12 @@ int sgesvx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, intege
             }
             work[1] = rpvgrw;
             *rcond = 0.f;
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A and the */
     /* reciprocal pivot growth factor RPVGRW. */
-    if (notran)
+    if(notran)
     {
         *(unsigned char *)norm = '1';
     }
@@ -633,7 +645,7 @@ int sgesvx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, intege
     }
     anorm = slange_(norm, n, n, &a[a_offset], lda, &work[1]);
     rpvgrw = slantr_("M", "U", "N", n, n, &af[af_offset], ldaf, &work[1]);
-    if (rpvgrw == 0.f)
+    if(rpvgrw == 0.f)
     {
         rpvgrw = 1.f;
     }
@@ -648,22 +660,19 @@ int sgesvx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, intege
     sgetrs_(trans, n, nrhs, &af[af_offset], ldaf, &ipiv[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    sgerfs_(trans, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1], &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[ 1], &iwork[1], info);
+    sgerfs_(trans, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1], &b[b_offset], ldb,
+            &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &iwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
-    if (notran)
+    if(notran)
     {
-        if (colequ)
+        if(colequ)
         {
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = *n;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     x[i__ + j * x_dim1] = c__[i__] * x[i__ + j * x_dim1];
                     /* L70: */
@@ -671,26 +680,20 @@ int sgesvx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, intege
                 /* L80: */
             }
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 ferr[j] /= colcnd;
                 /* L90: */
             }
         }
     }
-    else if (rowequ)
+    else if(rowequ)
     {
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *n;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 x[i__ + j * x_dim1] = r__[i__] * x[i__ + j * x_dim1];
                 /* L100: */
@@ -698,21 +701,19 @@ int sgesvx_(char *fact, char *trans, integer *n, integer * nrhs, real *a, intege
             /* L110: */
         }
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             ferr[j] /= rowcnd;
             /* L120: */
         }
     }
     /* Set INFO = N+1 if the matrix is singular to working precision. */
-    if (*rcond < slamch_("Epsilon"))
+    if(*rcond < slamch_("Epsilon"))
     {
         *info = *n + 1;
     }
     work[1] = rpvgrw;
-    return 0;
+    return;
     /* End of SGESVX */
 }
 /* sgesvx_ */

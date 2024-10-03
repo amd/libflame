@@ -1,5 +1,8 @@
-/* ../netlib/zhpcon.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zhpcon.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b ZHPCON */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZHPCON + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhpcon. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhpcon.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhpcon. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhpcon.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhpcon. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhpcon.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -47,7 +56,7 @@ static integer c__1 = 1;
 /* > Specifies whether the details of the factorization are stored */
 /* > as an upper or lower triangular matrix. */
 /* > = 'U': Upper triangular, form is A = U*D*U**H;
-*/
+ */
 /* > = 'L': Lower triangular, form is A = L*D*L**H. */
 /* > \endverbatim */
 /* > */
@@ -107,22 +116,27 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zhpcon_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublereal *anorm, doublereal *rcond, doublecomplex * work, integer *info)
+void zhpcon_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublereal *anorm,
+             doublereal *rcond, doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhpcon inputs: uplo %c, n %" FLA_IS "",*uplo, *n);
+    AOCL_DTL_SNPRINTF("zhpcon inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     /* System generated locals */
     integer i__1, i__2;
     /* Local variables */
     integer i__, ip, kase;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     logical upper;
     extern /* Subroutine */
-    int zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     extern /* Subroutine */
-    int zhptrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zhptrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -150,53 +164,51 @@ int zhpcon_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublereal
     --ap;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*anorm < 0.)
+    else if(*anorm < 0.)
     {
         *info = -5;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZHPCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.;
-    if (*n == 0)
+    if(*n == 0)
     {
         *rcond = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    else if (*anorm <= 0.)
+    else if(*anorm <= 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Check that the diagonal matrix D is nonsingular. */
-    if (upper)
+    if(upper)
     {
         /* Upper triangular storage: examine D from bottom to top */
         ip = *n * (*n + 1) / 2;
-        for (i__ = *n;
-                i__ >= 1;
-                --i__)
+        for(i__ = *n; i__ >= 1; --i__)
         {
             i__1 = ip;
-            if (ipiv[i__] > 0 && (ap[i__1].r == 0. && ap[i__1].i == 0.))
+            if(ipiv[i__] > 0 && (ap[i__1].r == 0. && ap[i__1].i == 0.))
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             ip -= i__;
             /* L10: */
@@ -207,15 +219,13 @@ int zhpcon_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublereal
         /* Lower triangular storage: examine D from top to bottom. */
         ip = 1;
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = ip;
-            if (ipiv[i__] > 0 && (ap[i__2].r == 0. && ap[i__2].i == 0.))
+            if(ipiv[i__] > 0 && (ap[i__2].r == 0. && ap[i__2].i == 0.))
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             ip = ip + *n - i__ + 1;
             /* L20: */
@@ -225,19 +235,19 @@ int zhpcon_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublereal
     kase = 0;
 L30:
     zlacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
-    if (kase != 0)
+    if(kase != 0)
     {
         /* Multiply by inv(L*D*L**H) or inv(U*D*U**H). */
         zhptrs_(uplo, n, &c__1, &ap[1], &ipiv[1], &work[1], n, info);
         goto L30;
     }
     /* Compute the estimate of the reciprocal condition number. */
-    if (ainvnm != 0.)
+    if(ainvnm != 0.)
     {
         *rcond = 1. / ainvnm / *anorm;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHPCON */
 }
 /* zhpcon_ */

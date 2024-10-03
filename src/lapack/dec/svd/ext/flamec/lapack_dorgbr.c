@@ -155,11 +155,12 @@
  integer a_dim1, a_offset, i__1, i__2, i__3;
  /* Local variables */
  integer i__, j, mn;
- extern logical lsame_(char *, char *);
+ extern logical lsame_(char *, char *, integer, integer);
  integer iinfo;
  logical wantq;
  extern /* Subroutine */
- int xerbla_(const char *srname, const integer *info, ftnlen srname_len), lapack_dorglq( integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), lapack_dorgqr( integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
+ void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+ extern int lapack_dorglq( integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), lapack_dorgqr( integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
  integer lwkopt;
  logical lquery;
  /* -- LAPACK computational routine -- */
@@ -190,10 +191,10 @@
  --work;
  /* Function Body */
  *info = 0;
- wantq = lsame_(vect, "Q");
+ wantq = lsame_(vect, "Q", 1, 1);
  mn = fla_min(*m,*n);
  lquery = *lwork == -1;
- if (! wantq && ! lsame_(vect, "P")) {
+ if (! wantq && ! lsame_(vect, "P", 1, 1)) {
  *info = -1;
  }
  else if (*m < 0) {

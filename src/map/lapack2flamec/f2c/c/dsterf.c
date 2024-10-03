@@ -1,5 +1,8 @@
-/* ../netlib/dsterf.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dsterf.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__0 = 0;
 static integer c__1 = 1;
@@ -10,11 +13,17 @@ static doublereal c_b33 = 1.;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DSTERF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsterf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsterf.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsterf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsterf.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsterf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsterf.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -77,10 +86,10 @@ if INFO = i, then i */
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dsterf_(integer *n, doublereal *d__, doublereal *e, integer *info)
+void dsterf_(integer *n, doublereal *d__, doublereal *e, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsterf inputs: n %" FLA_IS "",*n);
+    AOCL_DTL_SNPRINTF("dsterf inputs: n %" FLA_IS "", *n);
     /* System generated locals */
     integer i__1;
     doublereal d__1, d__2, d__3;
@@ -97,19 +106,24 @@ int dsterf_(integer *n, doublereal *d__, doublereal *e, integer *info)
     integer lend;
     integer jtot;
     extern /* Subroutine */
-    int dlae2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dlae2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal gamma, alpha, sigma, anorm;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
     integer iscale;
     extern /* Subroutine */
-    int dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+        void
+        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublereal *, integer *, integer *);
     doublereal oldgam, safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal safmax;
     extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
     extern /* Subroutine */
-    int dlasrt_(char *, integer *, doublereal *, integer *);
+        void
+        dlasrt_(char *, integer *, doublereal *, integer *);
     integer lendsv;
     doublereal ssfmin;
     integer nmaxit;
@@ -141,18 +155,18 @@ int dsterf_(integer *n, doublereal *d__, doublereal *e, integer *info)
     /* Function Body */
     *info = 0;
     /* Quick return if possible */
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
         i__1 = -(*info);
         xerbla_("DSTERF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    if (*n <= 1)
+    if(*n <= 1)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine the unit roundoff for this environment. */
     eps = dlamch_("E");
@@ -172,20 +186,19 @@ int dsterf_(integer *n, doublereal *d__, doublereal *e, integer *info)
     /* element is smaller. */
     l1 = 1;
 L10:
-    if (l1 > *n)
+    if(l1 > *n)
     {
         goto L170;
     }
-    if (l1 > 1)
+    if(l1 > 1)
     {
         e[l1 - 1] = 0.;
     }
     i__1 = *n - 1;
-    for (m = l1;
-            m <= i__1;
-            ++m)
+    for(m = l1; m <= i__1; ++m)
     {
-        if ((d__3 = e[m], f2c_abs(d__3)) <= sqrt((d__1 = d__[m], f2c_abs(d__1))) * sqrt((d__2 = d__[m + 1], f2c_abs(d__2))) * eps)
+        if((d__3 = e[m], f2c_abs(d__3))
+           <= sqrt((d__1 = d__[m], f2c_abs(d__1))) * sqrt((d__2 = d__[m + 1], f2c_abs(d__2))) * eps)
         {
             e[m] = 0.;
             goto L30;
@@ -199,7 +212,7 @@ L30:
     lend = m;
     lendsv = lend;
     l1 = m + 1;
-    if (lend == l)
+    if(lend == l)
     {
         goto L10;
     }
@@ -207,11 +220,11 @@ L30:
     i__1 = lend - l + 1;
     anorm = dlanst_("M", &i__1, &d__[l], &e[l]);
     iscale = 0;
-    if (anorm == 0.)
+    if(anorm == 0.)
     {
         goto L10;
     }
-    if (anorm > ssfmax)
+    if(anorm > ssfmax)
     {
         iscale = 1;
         i__1 = lend - l + 1;
@@ -219,7 +232,7 @@ L30:
         i__1 = lend - l;
         dlascl_("G", &c__0, &c__0, &anorm, &ssfmax, &i__1, &c__1, &e[l], n, info);
     }
-    else if (anorm < ssfmin)
+    else if(anorm < ssfmin)
     {
         iscale = 2;
         i__1 = lend - l + 1;
@@ -228,9 +241,7 @@ L30:
         dlascl_("G", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &e[l], n, info);
     }
     i__1 = lend - 1;
-    for (i__ = l;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = l; i__ <= i__1; ++i__)
     {
         /* Computing 2nd power */
         d__1 = e[i__];
@@ -238,24 +249,23 @@ L30:
         /* L40: */
     }
     /* Choose between QL and QR iteration */
-    if ((d__1 = d__[lend], f2c_abs(d__1)) < (d__2 = d__[l], f2c_abs(d__2)))
+    if((d__1 = d__[lend], f2c_abs(d__1)) < (d__2 = d__[l], f2c_abs(d__2)))
     {
         lend = lsv;
         l = lendsv;
     }
-    if (lend >= l)
+    if(lend >= l)
     {
         /* QL Iteration */
         /* Look for small subdiagonal element. */
-L50:
-        if (l != lend)
+    L50:
+        if(l != lend)
         {
             i__1 = lend - 1;
-            for (m = l;
-                    m <= i__1;
-                    ++m)
+            for(m = l; m <= i__1; ++m)
             {
-                if ((d__2 = e[m], f2c_abs(d__2)) <= eps2 * (d__1 = d__[m] * d__[m + 1], f2c_abs(d__1)))
+                if((d__2 = e[m], f2c_abs(d__2))
+                   <= eps2 * (d__1 = d__[m] * d__[m + 1], f2c_abs(d__1)))
                 {
                     goto L70;
                 }
@@ -263,19 +273,19 @@ L50:
             }
         }
         m = lend;
-L70:
-        if (m < lend)
+    L70:
+        if(m < lend)
         {
             e[m] = 0.;
         }
         p = d__[l];
-        if (m == l)
+        if(m == l)
         {
             goto L90;
         }
         /* If remaining matrix is 2 by 2, use DLAE2 to compute its */
         /* eigenvalues. */
-        if (m == l + 1)
+        if(m == l + 1)
         {
             rte = sqrt(e[l]);
             dlae2_(&d__[l], &rte, &d__[l + 1], &rt1, &rt2);
@@ -283,13 +293,13 @@ L70:
             d__[l + 1] = rt2;
             e[l] = 0.;
             l += 2;
-            if (l <= lend)
+            if(l <= lend)
             {
                 goto L50;
             }
             goto L150;
         }
-        if (jtot == nmaxit)
+        if(jtot == nmaxit)
         {
             goto L150;
         }
@@ -305,13 +315,11 @@ L70:
         p = gamma * gamma;
         /* Inner loop */
         i__1 = l;
-        for (i__ = m - 1;
-                i__ >= i__1;
-                --i__)
+        for(i__ = m - 1; i__ >= i__1; --i__)
         {
             bb = e[i__];
             r__ = p + bb;
-            if (i__ != m - 1)
+            if(i__ != m - 1)
             {
                 e[i__ + 1] = s * r__;
             }
@@ -322,7 +330,7 @@ L70:
             alpha = d__[i__];
             gamma = c__ * (alpha - sigma) - s * oldgam;
             d__[i__ + 1] = oldgam + (alpha - gamma);
-            if (c__ != 0.)
+            if(c__ != 0.)
             {
                 p = gamma * gamma / c__;
             }
@@ -336,10 +344,10 @@ L70:
         d__[l] = sigma + gamma;
         goto L50;
         /* Eigenvalue found. */
-L90:
+    L90:
         d__[l] = p;
         ++l;
-        if (l <= lend)
+        if(l <= lend)
         {
             goto L50;
         }
@@ -349,32 +357,31 @@ L90:
     {
         /* QR Iteration */
         /* Look for small superdiagonal element. */
-L100:
+    L100:
         i__1 = lend + 1;
-        for (m = l;
-                m >= i__1;
-                --m)
+        for(m = l; m >= i__1; --m)
         {
-            if ((d__2 = e[m - 1], f2c_abs(d__2)) <= eps2 * (d__1 = d__[m] * d__[m - 1], f2c_abs(d__1)))
+            if((d__2 = e[m - 1], f2c_abs(d__2))
+               <= eps2 * (d__1 = d__[m] * d__[m - 1], f2c_abs(d__1)))
             {
                 goto L120;
             }
             /* L110: */
         }
         m = lend;
-L120:
-        if (m > lend)
+    L120:
+        if(m > lend)
         {
             e[m - 1] = 0.;
         }
         p = d__[l];
-        if (m == l)
+        if(m == l)
         {
             goto L140;
         }
         /* If remaining matrix is 2 by 2, use DLAE2 to compute its */
         /* eigenvalues. */
-        if (m == l - 1)
+        if(m == l - 1)
         {
             rte = sqrt(e[l - 1]);
             dlae2_(&d__[l], &rte, &d__[l - 1], &rt1, &rt2);
@@ -382,13 +389,13 @@ L120:
             d__[l - 1] = rt2;
             e[l - 1] = 0.;
             l += -2;
-            if (l >= lend)
+            if(l >= lend)
             {
                 goto L100;
             }
             goto L150;
         }
-        if (jtot == nmaxit)
+        if(jtot == nmaxit)
         {
             goto L150;
         }
@@ -404,13 +411,11 @@ L120:
         p = gamma * gamma;
         /* Inner loop */
         i__1 = l - 1;
-        for (i__ = m;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = m; i__ <= i__1; ++i__)
         {
             bb = e[i__];
             r__ = p + bb;
-            if (i__ != m)
+            if(i__ != m)
             {
                 e[i__ - 1] = s * r__;
             }
@@ -421,7 +426,7 @@ L120:
             alpha = d__[i__ + 1];
             gamma = c__ * (alpha - sigma) - s * oldgam;
             d__[i__] = oldgam + (alpha - gamma);
-            if (c__ != 0.)
+            if(c__ != 0.)
             {
                 p = gamma * gamma / c__;
             }
@@ -435,10 +440,10 @@ L120:
         d__[l] = sigma + gamma;
         goto L100;
         /* Eigenvalue found. */
-L140:
+    L140:
         d__[l] = p;
         --l;
-        if (l >= lend)
+        if(l >= lend)
         {
             goto L100;
         }
@@ -446,28 +451,26 @@ L140:
     }
     /* Undo scaling if necessary */
 L150:
-    if (iscale == 1)
+    if(iscale == 1)
     {
         i__1 = lendsv - lsv + 1;
         dlascl_("G", &c__0, &c__0, &ssfmax, &anorm, &i__1, &c__1, &d__[lsv], n, info);
     }
-    if (iscale == 2)
+    if(iscale == 2)
     {
         i__1 = lendsv - lsv + 1;
         dlascl_("G", &c__0, &c__0, &ssfmin, &anorm, &i__1, &c__1, &d__[lsv], n, info);
     }
     /* Check for no convergence to an eigenvalue after a total */
     /* of N*MAXIT iterations. */
-    if (jtot < nmaxit)
+    if(jtot < nmaxit)
     {
         goto L10;
     }
     i__1 = *n - 1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if (e[i__] != 0.)
+        if(e[i__] != 0.)
         {
             ++(*info);
         }
@@ -479,8 +482,7 @@ L170:
     dlasrt_("I", n, &d__[1], info);
     AOCL_DTL_TRACE_LOG_EXIT
 L180:
-    return 0;
+    return;
     /* End of DSTERF */
 }
 /* dsterf_ */
-

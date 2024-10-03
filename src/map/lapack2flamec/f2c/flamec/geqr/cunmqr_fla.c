@@ -1,5 +1,8 @@
-/* ../netlib/cunmqr.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cunmqr.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -11,11 +14,17 @@ static integer c__65 = 65;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CUNMQR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cunmqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cunmqr.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cunmqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cunmqr.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cunmqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cunmqr.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -55,7 +64,7 @@ static integer c__65 = 65;
 /* > \verbatim */
 /* > SIDE is CHARACTER*1 */
 /* > = 'L': apply Q or Q**H from the Left;
-*/
+ */
 /* > = 'R': apply Q or Q**H from the Right. */
 /* > \endverbatim */
 /* > */
@@ -63,7 +72,7 @@ static integer c__65 = 65;
 /* > \verbatim */
 /* > TRANS is CHARACTER*1 */
 /* > = 'N': No transpose, apply Q;
-*/
+ */
 /* > = 'C': Conjugate transpose, apply Q**H. */
 /* > \endverbatim */
 /* > */
@@ -85,7 +94,7 @@ static integer c__65 = 65;
 /* > The number of elementary reflectors whose product defines */
 /* > the matrix Q. */
 /* > If SIDE = 'L', M >= K >= 0;
-*/
+ */
 /* > if SIDE = 'R', N >= K >= 0. */
 /* > \endverbatim */
 /* > */
@@ -102,7 +111,7 @@ static integer c__65 = 65;
 /* > LDA is INTEGER */
 /* > The leading dimension of the array A. */
 /* > If SIDE = 'L', LDA >= fla_max(1,M);
-*/
+ */
 /* > if SIDE = 'R', LDA >= fla_max(1,N). */
 /* > \endverbatim */
 /* > */
@@ -137,7 +146,7 @@ static integer c__65 = 65;
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. */
 /* > If SIDE = 'L', LWORK >= fla_max(1,N);
-*/
+ */
 /* > if SIDE = 'R', LWORK >= fla_max(1,M). */
 /* > For optimum performance LWORK >= N*NB if SIDE = 'L', and */
 /* > LWORK >= M*NB if SIDE = 'R', where NB is the optimal */
@@ -166,7 +175,9 @@ the routine */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cunmqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau, complex *c__, integer *ldc, complex *work, integer *lwork, integer *info)
+void cunmqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, complex *a,
+                integer *lda, complex *tau, complex *c__, integer *ldc, complex *work,
+                integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__4, i__5;
@@ -177,13 +188,20 @@ int cunmqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, comp
     /* Local variables */
     integer i__;
     complex t[4160] /* was [65][64] */
-    ;
+        ;
     integer i1, i2, i3, ib, ic, jc, nb, mi, ni, nq, nw, iws;
     logical left;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer nbmin, iinfo;
     extern /* Subroutine */
-    int cunm2r_fla(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *), clarfb_(char *, char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *), clarft_(char *, char * , integer *, integer *, complex *, integer *, complex *, complex * , integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        cunm2r_fla(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
+                   complex *, integer *, complex *, integer *),
+        clarfb_(char *, char *, char *, char *, integer *, integer *, integer *, complex *,
+                integer *, complex *, integer *, complex *, integer *, complex *, integer *),
+        clarft_(char *, char *, integer *, integer *, complex *, integer *, complex *, complex *,
+                integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     logical notran;
     integer ldwork, lwkopt;
@@ -222,11 +240,11 @@ int cunmqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, comp
     --work;
     /* Function Body */
     *info = 0;
-    left = lsame_(side, "L");
-    notran = lsame_(trans, "N");
+    left = lsame_(side, "L", 1, 1);
+    notran = lsame_(trans, "N", 1, 1);
     lquery = *lwork == -1;
     /* NQ is the order of Q and NW is the minimum dimension of WORK */
-    if (left)
+    if(left)
     {
         nq = *m;
         nw = *n;
@@ -236,94 +254,95 @@ int cunmqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, comp
         nq = *n;
         nw = *m;
     }
-    if (! left && ! lsame_(side, "R"))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "C"))
+    else if(!notran && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*k < 0 || *k > nq)
+    else if(*k < 0 || *k > nq)
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,nq))
+    else if(*lda < fla_max(1, nq))
     {
         *info = -7;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -10;
     }
-    else if (*lwork < fla_max(1,nw) && ! lquery)
+    else if(*lwork < fla_max(1, nw) && !lquery)
     {
         *info = -12;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
         /* Determine the block size. NB may be at most NBMAX, where NBMAX */
         /* is used to define the local array T. */
         /* Computing MIN */
         i__1 = 64;
         i__2 = ilaenv_(&c__1, "CUNMQR", ch__1, m, n, k, &c_n1); // , expr subst
-        nb = fla_min(i__1,i__2);
-        lwkopt = fla_max(1,nw) * nb;
-        work[1].r = (real) lwkopt;
+        nb = fla_min(i__1, i__2);
+        lwkopt = fla_max(1, nw) * nb;
+        work[1].r = (real)lwkopt;
         work[1].i = 0.f; // , expr subst
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CUNMQR", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*m == 0 || *n == 0 || *k == 0)
+    if(*m == 0 || *n == 0 || *k == 0)
     {
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
-        return 0;
+        return;
     }
     nbmin = 2;
     ldwork = nw;
-    if (nb > 1 && nb < *k)
+    if(nb > 1 && nb < *k)
     {
         iws = nw * nb;
-        if (*lwork < iws)
+        if(*lwork < iws)
         {
             nb = *lwork / ldwork;
             /* Computing MAX */
             i__1 = 2;
             i__2 = ilaenv_(&c__2, "CUNMQR", ch__1, m, n, k, &c_n1); // , expr subst
-            nbmin = fla_max(i__1,i__2);
+            nbmin = fla_max(i__1, i__2);
         }
     }
     else
     {
         iws = nw;
     }
-    if (nb < nbmin || nb >= *k)
+    if(nb < nbmin || nb >= *k)
     {
         /* Use unblocked code */
-        cunm2r_fla(side, trans, m, n, k, &a[a_offset], lda, &tau[1], &c__[ c_offset], ldc, &work[1], &iinfo);
+        cunm2r_fla(side, trans, m, n, k, &a[a_offset], lda, &tau[1], &c__[c_offset], ldc, &work[1],
+                   &iinfo);
     }
     else
     {
         /* Use blocked code */
-        if (left && ! notran || ! left && notran)
+        if(left && !notran || !left && notran)
         {
             i1 = 1;
             i2 = *k;
@@ -335,7 +354,7 @@ int cunmqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, comp
             i2 = 1;
             i3 = -nb;
         }
-        if (left)
+        if(left)
         {
             ni = *n;
             jc = 1;
@@ -347,19 +366,18 @@ int cunmqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, comp
         }
         i__1 = i2;
         i__2 = i3;
-        for (i__ = i1;
-                i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
-                i__ += i__2)
+        for(i__ = i1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
         {
             /* Computing MIN */
             i__4 = nb;
             i__5 = *k - i__ + 1; // , expr subst
-            ib = fla_min(i__4,i__5);
+            ib = fla_min(i__4, i__5);
             /* Form the triangular factor of the block reflector */
             /* H = H(i) H(i+1) . . . H(i+ib-1) */
             i__4 = nq - i__ + 1;
-            clarft_("Forward", "Columnwise", &i__4, &ib, &a[i__ + i__ * a_dim1], lda, &tau[i__], t, &c__65) ;
-            if (left)
+            clarft_("Forward", "Columnwise", &i__4, &ib, &a[i__ + i__ * a_dim1], lda, &tau[i__], t,
+                    &c__65);
+            if(left)
             {
                 /* H or H**H is applied to C(i:m,1:n) */
                 mi = *m - i__ + 1;
@@ -372,13 +390,14 @@ int cunmqr_fla(char *side, char *trans, integer *m, integer *n, integer *k, comp
                 jc = i__;
             }
             /* Apply H or H**H */
-            clarfb_(side, trans, "Forward", "Columnwise", &mi, &ni, &ib, &a[ i__ + i__ * a_dim1], lda, t, &c__65, &c__[ic + jc * c_dim1], ldc, &work[1], &ldwork);
+            clarfb_(side, trans, "Forward", "Columnwise", &mi, &ni, &ib, &a[i__ + i__ * a_dim1],
+                    lda, t, &c__65, &c__[ic + jc * c_dim1], ldc, &work[1], &ldwork);
             /* L10: */
         }
     }
-    work[1].r = (real) lwkopt;
+    work[1].r = (real)lwkopt;
     work[1].i = 0.f; // , expr subst
-    return 0;
+    return;
     /* End of CUNMQR */
 }
 /* cunmqr_ */

@@ -210,18 +210,18 @@ int lapack_sgebrd(integer *m, integer *n, real *a, integer *lda, real *d__, real
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     /* Local variables */
-    integer i__, nbmin, iinfo;
+    integer i__, nbmin;
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer minmn;
     extern /* Subroutine */
     int lapack_sgebd2(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *);
     integer nb, nx;
     extern /* Subroutine */
-    int slabrd_(integer *, integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *, real *, integer *);
+    void slabrd_(integer *, integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *, real *, integer *);
     integer ws;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer lwkopt;
     logical lquery;
@@ -397,7 +397,7 @@ Todo: This is a temporary workaround until the issue in the blocked algorithm is
     /* Use unblocked code to reduce the remainder of the matrix */
     i__2 = *m - i__ + 1;
     i__1 = *n - i__ + 1;
-    lapack_sgebd2(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &d__[i__], &e[i__], & tauq[i__], &taup[i__], &work[1], &iinfo);
+    lapack_sgebd2(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &d__[i__], &e[i__], & tauq[i__], &taup[i__], &work[1], info);
 #endif
     work[1] = (real) ws;
     return 0;

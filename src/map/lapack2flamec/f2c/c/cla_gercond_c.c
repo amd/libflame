@@ -1,18 +1,28 @@
-/* ../netlib/cla_gercond_c.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cla_gercond_c.f -- translated by f2c (version 20100827). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b CLA_GERCOND_C computes the infinity norm condition number of op(A)*inv(diag(c)) for general mat rices. */
+/* > \brief \b CLA_GERCOND_C computes the infinity norm condition number of op(A)*inv(diag(c)) for
+ * general mat rices. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLA_GERCOND_C + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cla_ger cond_c.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cla_ger
+ * cond_c.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cla_ger cond_c.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cla_ger
+ * cond_c.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cla_ger cond_c.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cla_ger
+ * cond_c.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -129,15 +139,19 @@ row i of the matrix was interchanged */
 /* > \date September 2012 */
 /* > \ingroup complexGEcomputational */
 /* ===================================================================== */
-real cla_gercond_c_(char *trans, integer *n, complex *a, integer *lda, complex *af, integer *ldaf, integer *ipiv, real *c__, logical *capply, integer *info, complex *work, real *rwork)
+real cla_gercond_c_(char *trans, integer *n, complex *a, integer *lda, complex *af, integer *ldaf,
+                    integer *ipiv, real *c__, logical *capply, integer *info, complex *work,
+                    real *rwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cla_gercond_c inputs: trans %c, n %lld, lda %lld, ldaf %lld",*trans, *n, *lda, *ldaf);
+    snprintf(buffer, 256, "cla_gercond_c inputs: trans %c, n %lld, lda %lld, ldaf %lld", *trans, *n,
+             *lda, *ldaf);
 #else
-    snprintf(buffer, 256,"cla_gercond_c inputs: trans %c, n %d, lda %d, ldaf %d",*trans, *n, *lda, *ldaf);
+    snprintf(buffer, 256, "cla_gercond_c inputs: trans %c, n %d, lda %d, ldaf %d", *trans, *n, *lda,
+             *ldaf);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -151,11 +165,15 @@ real cla_gercond_c_(char *trans, integer *n, complex *a, integer *lda, complex *
     integer i__, j;
     real tmp;
     integer kase;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     real anorm;
     extern /* Subroutine */
-    int clacn2_(integer *, complex *, complex *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cgetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+        void
+        clacn2_(integer *, complex *, complex *, real *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        cgetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *,
+                integer *);
     real ainvnm;
     logical notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
@@ -196,24 +214,24 @@ real cla_gercond_c_(char *trans, integer *n, complex *a, integer *lda, complex *
     /* Function Body */
     ret_val = 0.f;
     *info = 0;
-    notrans = lsame_(trans, "N");
-    if (! notrans && ! lsame_(trans, "T") && ! lsame_( trans, "C"))
+    notrans = lsame_(trans, "N", 1, 1);
+    if(!notrans && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -6;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CLA_GERCOND_C", &i__1, (ftnlen)13);
@@ -222,82 +240,76 @@ real cla_gercond_c_(char *trans, integer *n, complex *a, integer *lda, complex *
     }
     /* Compute norm of op(A)*op2(C). */
     anorm = 0.f;
-    if (notrans)
+    if(notrans)
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             tmp = 0.f;
-            if (*capply)
+            if(*capply)
             {
                 i__2 = *n;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = i__ + j * a_dim1;
-                    tmp += ((r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[ i__ + j * a_dim1]), f2c_abs(r__2))) / c__[j];
+                    tmp += ((r__1 = a[i__3].r, f2c_abs(r__1))
+                            + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)))
+                           / c__[j];
                 }
             }
             else
             {
                 i__2 = *n;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = i__ + j * a_dim1;
-                    tmp += (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[ i__ + j * a_dim1]), f2c_abs(r__2));
+                    tmp += (r__1 = a[i__3].r, f2c_abs(r__1))
+                           + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
                 }
             }
             rwork[i__] = tmp;
-            anorm = fla_max(anorm,tmp);
+            anorm = fla_max(anorm, tmp);
         }
     }
     else
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             tmp = 0.f;
-            if (*capply)
+            if(*capply)
             {
                 i__2 = *n;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = j + i__ * a_dim1;
-                    tmp += ((r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[ j + i__ * a_dim1]), f2c_abs(r__2))) / c__[j];
+                    tmp += ((r__1 = a[i__3].r, f2c_abs(r__1))
+                            + (r__2 = r_imag(&a[j + i__ * a_dim1]), f2c_abs(r__2)))
+                           / c__[j];
                 }
             }
             else
             {
                 i__2 = *n;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = j + i__ * a_dim1;
-                    tmp += (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[ j + i__ * a_dim1]), f2c_abs(r__2));
+                    tmp += (r__1 = a[i__3].r, f2c_abs(r__1))
+                           + (r__2 = r_imag(&a[j + i__ * a_dim1]), f2c_abs(r__2));
                 }
             }
             rwork[i__] = tmp;
-            anorm = fla_max(anorm,tmp);
+            anorm = fla_max(anorm, tmp);
         }
     }
     /* Quick return if possible. */
-    if (*n == 0)
+    if(*n == 0)
     {
         ret_val = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return ret_val;
     }
-    else if (anorm == 0.f)
+    else if(anorm == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return ret_val;
@@ -307,15 +319,13 @@ real cla_gercond_c_(char *trans, integer *n, complex *a, integer *lda, complex *
     kase = 0;
 L10:
     clacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
-    if (kase != 0)
+    if(kase != 0)
     {
-        if (kase == 2)
+        if(kase == 2)
         {
             /* Multiply by R. */
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = i__;
                 i__3 = i__;
@@ -325,21 +335,21 @@ L10:
                 work[i__2].r = q__1.r;
                 work[i__2].i = q__1.i; // , expr subst
             }
-            if (notrans)
+            if(notrans)
             {
-                cgetrs_("No transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[ 1], &work[1], n, info);
+                cgetrs_("No transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n,
+                        info);
             }
             else
             {
-                cgetrs_("Conjugate transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n, info);
+                cgetrs_("Conjugate transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1],
+                        n, info);
             }
             /* Multiply by inv(C). */
-            if (*capply)
+            if(*capply)
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = i__;
                     i__3 = i__;
@@ -354,12 +364,10 @@ L10:
         else
         {
             /* Multiply by inv(C**H). */
-            if (*capply)
+            if(*capply)
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = i__;
                     i__3 = i__;
@@ -370,19 +378,19 @@ L10:
                     work[i__2].i = q__1.i; // , expr subst
                 }
             }
-            if (notrans)
+            if(notrans)
             {
-                cgetrs_("Conjugate transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n, info);
+                cgetrs_("Conjugate transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1],
+                        n, info);
             }
             else
             {
-                cgetrs_("No transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[ 1], &work[1], n, info);
+                cgetrs_("No transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n,
+                        info);
             }
             /* Multiply by R. */
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = i__;
                 i__3 = i__;
@@ -396,7 +404,7 @@ L10:
         goto L10;
     }
     /* Compute the estimate of the reciprocal condition number. */
-    if (ainvnm != 0.f)
+    if(ainvnm != 0.f)
     {
         ret_val = 1.f / ainvnm;
     }

@@ -1,11 +1,10 @@
-/* ../netlib/clarzb.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/clarzb.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {1.f, 0.f};
 static integer c__1 = 1;
 /* > \brief \b CLARZB applies a block reflector or its conjugate-transpose to a general matrix. */
 /* =========== DOCUMENTATION =========== */
@@ -13,11 +12,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLARZB + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clarzb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clarzb.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clarzb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clarzb.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarzb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarzb.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -154,7 +159,7 @@ if STOREV = 'R', LDV >= K. */
 /* > LDWORK is INTEGER */
 /* > The leading dimension of the array WORK. */
 /* > If SIDE = 'L', LDWORK >= fla_max(1,N);
-*/
+ */
 /* > if SIDE = 'R', LDWORK >= fla_max(1,M). */
 /* > \endverbatim */
 /* Authors: */
@@ -177,28 +182,44 @@ if STOREV = 'R', LDV >= K. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int clarzb_(char *side, char *trans, char *direct, char * storev, integer *m, integer *n, integer *k, integer *l, complex *v, integer *ldv, complex *t, integer *ldt, complex *c__, integer *ldc, complex *work, integer *ldwork)
+void clarzb_(char *side, char *trans, char *direct, char *storev, integer *m, integer *n,
+             integer *k, integer *l, complex *v, integer *ldv, complex *t, integer *ldt,
+             complex *c__, integer *ldc, complex *work, integer *ldwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clarzb inputs: side %c, trans %c, direct %c, storev %c, m %lld, n %lld, k %lld, l %lld, ldv %lld, ldt %lld, ldc %lld",*side, *trans, *direct, *storev, *m, *n, *k, *l, *ldv, *ldt, *ldc);
+    snprintf(buffer, 256,
+             "clarzb inputs: side %c, trans %c, direct %c, storev %c, m %lld, n %lld, k %lld, l "
+             "%lld, ldv %lld, ldt %lld, ldc %lld",
+             *side, *trans, *direct, *storev, *m, *n, *k, *l, *ldv, *ldt, *ldc);
 #else
-    snprintf(buffer, 256,"clarzb inputs: side %c, trans %c, direct %c, storev %c, m %d, n %d, k %d, l %d, ldv %d, ldt %d, ldc %d",*side, *trans, *direct, *storev, *m, *n, *k, *l, *ldv, *ldt, *ldc);
+    snprintf(buffer, 256,
+             "clarzb inputs: side %c, trans %c, direct %c, storev %c, m %d, n %d, k %d, l %d, ldv "
+             "%d, ldt %d, ldc %d",
+             *side, *trans, *direct, *storev, *m, *n, *k, *l, *ldv, *ldt, *ldc);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1, i__2, i__3, i__4, i__5;
+    integer c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1,
+        i__2, i__3, i__4, i__5;
     complex q__1;
     /* Local variables */
     integer i__, j, info;
     extern /* Subroutine */
-    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+        void
+        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
+               complex *, integer *, complex *, complex *, integer *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *), ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), clacgv_(integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ccopy_(integer *, complex *, integer *, complex *, integer *),
+        ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
+               integer *, complex *, integer *),
+        clacgv_(integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     char transt[1];
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -233,29 +254,29 @@ int clarzb_(char *side, char *trans, char *direct, char * storev, integer *m, in
     work_offset = 1 + work_dim1;
     work -= work_offset;
     /* Function Body */
-    if (*m <= 0 || *n <= 0)
+    if(*m <= 0 || *n <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Check for currently supported options */
     info = 0;
-    if (! lsame_(direct, "B"))
+    if(!lsame_(direct, "B", 1, 1))
     {
         info = -3;
     }
-    else if (! lsame_(storev, "R"))
+    else if(!lsame_(storev, "R", 1, 1))
     {
         info = -4;
     }
-    if (info != 0)
+    if(info != 0)
     {
         i__1 = -info;
         xerbla_("CLARZB", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (lsame_(trans, "N"))
+    if(lsame_(trans, "N", 1, 1))
     {
         *(unsigned char *)transt = 'C';
     }
@@ -263,36 +284,32 @@ int clarzb_(char *side, char *trans, char *direct, char * storev, integer *m, in
     {
         *(unsigned char *)transt = 'N';
     }
-    if (lsame_(side, "L"))
+    if(lsame_(side, "L", 1, 1))
     {
         /* Form H * C or H**H * C */
         /* W( 1:n, 1:k ) = C( 1:k, 1:n )**H */
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             ccopy_(n, &c__[j + c_dim1], ldc, &work[j * work_dim1 + 1], &c__1);
             /* L10: */
         }
         /* W( 1:n, 1:k ) = W( 1:n, 1:k ) + ... */
         /* C( m-l+1:m, 1:n )**H * V( 1:k, 1:l )**T */
-        if (*l > 0)
+        if(*l > 0)
         {
-            cgemm_("Transpose", "Conjugate transpose", n, k, l, &c_b1, &c__[* m - *l + 1 + c_dim1], ldc, &v[v_offset], ldv, &c_b1, & work[work_offset], ldwork);
+            cgemm_("Transpose", "Conjugate transpose", n, k, l, &c_b1, &c__[*m - *l + 1 + c_dim1],
+                   ldc, &v[v_offset], ldv, &c_b1, &work[work_offset], ldwork);
         }
         /* W( 1:n, 1:k ) = W( 1:n, 1:k ) * T**T or W( 1:m, 1:k ) * T */
-        ctrmm_("Right", "Lower", transt, "Non-unit", n, k, &c_b1, &t[t_offset], ldt, &work[work_offset], ldwork);
+        ctrmm_("Right", "Lower", transt, "Non-unit", n, k, &c_b1, &t[t_offset], ldt,
+               &work[work_offset], ldwork);
         /* C( 1:k, 1:n ) = C( 1:k, 1:n ) - W( 1:n, 1:k )**H */
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * c_dim1;
                 i__4 = i__ + j * c_dim1;
@@ -307,47 +324,44 @@ int clarzb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         }
         /* C( m-l+1:m, 1:n ) = C( m-l+1:m, 1:n ) - ... */
         /* V( 1:k, 1:l )**H * W( 1:n, 1:k )**H */
-        if (*l > 0)
+        if(*l > 0)
         {
             q__1.r = -1.f;
             q__1.i = -0.f; // , expr subst
-            cgemm_("Transpose", "Transpose", l, n, k, &q__1, &v[v_offset], ldv, &work[work_offset], ldwork, &c_b1, &c__[*m - *l + 1 + c_dim1], ldc);
+            cgemm_("Transpose", "Transpose", l, n, k, &q__1, &v[v_offset], ldv, &work[work_offset],
+                   ldwork, &c_b1, &c__[*m - *l + 1 + c_dim1], ldc);
         }
     }
-    else if (lsame_(side, "R"))
+    else if(lsame_(side, "R", 1, 1))
     {
         /* Form C * H or C * H**H */
         /* W( 1:m, 1:k ) = C( 1:m, 1:k ) */
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
-            ccopy_(m, &c__[j * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1], & c__1);
+            ccopy_(m, &c__[j * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1], &c__1);
             /* L40: */
         }
         /* W( 1:m, 1:k ) = W( 1:m, 1:k ) + ... */
         /* C( 1:m, n-l+1:n ) * V( 1:k, 1:l )**H */
-        if (*l > 0)
+        if(*l > 0)
         {
-            cgemm_("No transpose", "Transpose", m, k, l, &c_b1, &c__[(*n - *l + 1) * c_dim1 + 1], ldc, &v[v_offset], ldv, &c_b1, &work[ work_offset], ldwork);
+            cgemm_("No transpose", "Transpose", m, k, l, &c_b1, &c__[(*n - *l + 1) * c_dim1 + 1],
+                   ldc, &v[v_offset], ldv, &c_b1, &work[work_offset], ldwork);
         }
         /* W( 1:m, 1:k ) = W( 1:m, 1:k ) * conjg( T ) or */
         /* W( 1:m, 1:k ) * T**H */
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k - j + 1;
             clacgv_(&i__2, &t[j + j * t_dim1], &c__1);
             /* L50: */
         }
-        ctrmm_("Right", "Lower", trans, "Non-unit", m, k, &c_b1, &t[t_offset], ldt, &work[work_offset], ldwork);
+        ctrmm_("Right", "Lower", trans, "Non-unit", m, k, &c_b1, &t[t_offset], ldt,
+               &work[work_offset], ldwork);
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k - j + 1;
             clacgv_(&i__2, &t[j + j * t_dim1], &c__1);
@@ -355,14 +369,10 @@ int clarzb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         }
         /* C( 1:m, 1:k ) = C( 1:m, 1:k ) - W( 1:m, 1:k ) */
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * c_dim1;
                 i__4 = i__ + j * c_dim1;
@@ -378,30 +388,27 @@ int clarzb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         /* C( 1:m, n-l+1:n ) = C( 1:m, n-l+1:n ) - ... */
         /* W( 1:m, 1:k ) * conjg( V( 1:k, 1:l ) ) */
         i__1 = *l;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             clacgv_(k, &v[j * v_dim1 + 1], &c__1);
             /* L90: */
         }
-        if (*l > 0)
+        if(*l > 0)
         {
             q__1.r = -1.f;
             q__1.i = -0.f; // , expr subst
-            cgemm_("No transpose", "No transpose", m, l, k, &q__1, &work[ work_offset], ldwork, &v[v_offset], ldv, &c_b1, &c__[(*n - *l + 1) * c_dim1 + 1], ldc);
+            cgemm_("No transpose", "No transpose", m, l, k, &q__1, &work[work_offset], ldwork,
+                   &v[v_offset], ldv, &c_b1, &c__[(*n - *l + 1) * c_dim1 + 1], ldc);
         }
         i__1 = *l;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             clacgv_(k, &v[j * v_dim1 + 1], &c__1);
             /* L100: */
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLARZB */
 }
 /* clarzb_ */

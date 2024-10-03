@@ -1,22 +1,33 @@
 #ifdef FLA_ENABLE_XBLAS
-/* ../netlib/sla_porfsx_extended.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sla_porfsx_extended.f -- translated by f2c (version 20100827). You must link the
+ resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
+ Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
+ with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static real c_b9 = -1.f;
 static real c_b11 = 1.f;
-/* > \brief \b SLA_PORFSX_EXTENDED improves the computed solution to a system of linear equations for symmetri c or Hermitian positive-definite matrices by performing extra-precise iterative refinement and provide s error bounds and backward error estimates fo */
+/* > \brief \b SLA_PORFSX_EXTENDED improves the computed solution to a system of linear equations
+ * for symmetri c or Hermitian positive-definite matrices by performing extra-precise iterative
+ * refinement and provide s error bounds and backward error estimates fo */
 /* r the solution. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLA_PORFSX_EXTENDED + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sla_por fsx_extended.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sla_por
+ * fsx_extended.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sla_por fsx_extended.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sla_por
+ * fsx_extended.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sla_por fsx_extended.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sla_por
+ * fsx_extended.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -74,7 +85,7 @@ static real c_b11 = 1.f;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -380,39 +391,60 @@ i+1}
 /* > \ingroup realPOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *af, integer * ldaf, logical *colequ, real *c__, real *b, integer *ldb, real *y, integer *ldy, real *berr_out__, integer *n_norms__, real * err_bnds_norm__, real *err_bnds_comp__, real *res, real *ayb, real * dy, real *y_tail__, real *rcond, integer *ithresh, real *rthresh, real *dz_ub__, logical *ignore_cwise__, integer *info)
+void sla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *nrhs, real *a,
+                          integer *lda, real *af, integer *ldaf, logical *colequ, real *c__,
+                          real *b, integer *ldb, real *y, integer *ldy, real *berr_out__,
+                          integer *n_norms__, real *err_bnds_norm__, real *err_bnds_comp__,
+                          real *res, real *ayb, real *dy, real *y_tail__, real *rcond,
+                          integer *ithresh, real *rthresh, real *dz_ub__, logical *ignore_cwise__,
+                          integer *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, y_dim1, y_offset, err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1, i__2, i__3;
+    integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, y_dim1, y_offset,
+        err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1,
+        i__2, i__3;
     real r__1, r__2;
     /* Local variables */
     real dxratmax, dzratmax;
     integer i__, j;
     logical incr_prec__;
     extern /* Subroutine */
-    int sla_syamv_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+        void
+        sla_syamv_(integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+                   real *, integer *);
     real prev_dz_z__, yk, final_dx_x__, final_dz_z__;
     extern /* Subroutine */
-    int sla_wwaddw_(integer *, real *, real *, real * );
+        void
+        sla_wwaddw_(integer *, real *, real *, real *);
     real prevnormdx;
     integer cnt;
     real dyk, eps, incr_thresh__, dx_x__, dz_z__, ymin;
     extern /* Subroutine */
-    int sla_lin_berr_(integer *, integer *, integer *, real *, real *, real *);
+        void
+        sla_lin_berr_(integer *, integer *, integer *, real *, real *, real *);
     integer y_prec_state__, uplo2;
     extern /* Subroutine */
-    int blas_ssymv_x_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *, integer *);
-    extern logical lsame_(char *, char *);
+        int
+        blas_ssymv_x_(integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+                      real *, integer *, integer *);
+    extern logical lsame_(char *, char *, integer, integer);
     real dxrat, dzrat;
     extern /* Subroutine */
-    int blas_ssymv2_x_(integer *, integer *, real *, real *, integer *, real *, real *, integer *, real *, real *, integer *, integer *), scopy_(integer *, real *, integer *, real *, integer *);
+        int
+        blas_ssymv2_x_(integer *, integer *, real *, real *, integer *, real *, real *, integer *,
+                       real *, real *, integer *, integer *),
+        scopy_(integer *, real *, integer *, real *, integer *);
     real normx, normy;
     extern /* Subroutine */
-    int saxpy_(integer *, real *, real *, integer *, real *, integer *), ssymv_(char *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+        void
+        saxpy_(integer *, real *, real *, integer *, real *, integer *),
+        ssymv_(char *, integer *, real *, real *, integer *, real *, integer *, real *, real *,
+               integer *);
     extern real slamch_(char *);
     real normdx;
     extern /* Subroutine */
-    int spotrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
+        void
+        spotrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
     real hugeval;
     extern integer ilauplo_(char *);
     integer x_state__, z_state__;
@@ -462,17 +494,17 @@ int sla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *
     --dy;
     --y_tail__;
     /* Function Body */
-    if (*info != 0)
+    if(*info != 0)
     {
-        return 0;
+        return;
     }
     eps = slamch_("Epsilon");
     hugeval = slamch_("Overflow");
     /* Force HUGEVAL to Inf */
     hugeval *= hugeval;
     /* Using HUGEVAL may lead to spurious underflows. */
-    incr_thresh__ = (real) (*n) * eps;
-    if (lsame_(uplo, "L"))
+    incr_thresh__ = (real)(*n) * eps;
+    if(lsame_(uplo, "L", 1, 1))
     {
         uplo2 = ilauplo_("L");
     }
@@ -481,17 +513,13 @@ int sla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *
         uplo2 = ilauplo_("U");
     }
     i__1 = *nrhs;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         y_prec_state__ = 1;
-        if (y_prec_state__ == 2)
+        if(y_prec_state__ == 2)
         {
             i__2 = *n;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 y_tail__[i__] = 0.f;
             }
@@ -510,24 +538,25 @@ int sla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *
         z_state__ = 0;
         incr_prec__ = FALSE_;
         i__2 = *ithresh;
-        for (cnt = 1;
-                cnt <= i__2;
-                ++cnt)
+        for(cnt = 1; cnt <= i__2; ++cnt)
         {
             /* Compute residual RES = B_s - op(A_s) * Y, */
             /* op(A) = A, A**T, or A**H depending on TRANS (and type). */
             scopy_(n, &b[j * b_dim1 + 1], &c__1, &res[1], &c__1);
-            if (y_prec_state__ == 0)
+            if(y_prec_state__ == 0)
             {
-                ssymv_(uplo, n, &c_b9, &a[a_offset], lda, &y[j * y_dim1 + 1], &c__1, &c_b11, &res[1], &c__1);
+                ssymv_(uplo, n, &c_b9, &a[a_offset], lda, &y[j * y_dim1 + 1], &c__1, &c_b11,
+                       &res[1], &c__1);
             }
-            else if (y_prec_state__ == 1)
+            else if(y_prec_state__ == 1)
             {
-                blas_ssymv_x_(&uplo2, n, &c_b9, &a[a_offset], lda, &y[j * y_dim1 + 1], &c__1, &c_b11, &res[1], &c__1, prec_type__);
+                blas_ssymv_x_(&uplo2, n, &c_b9, &a[a_offset], lda, &y[j * y_dim1 + 1], &c__1,
+                              &c_b11, &res[1], &c__1, prec_type__);
             }
             else
             {
-                blas_ssymv2_x_(&uplo2, n, &c_b9, &a[a_offset], lda, &y[j * y_dim1 + 1], &y_tail__[1], &c__1, &c_b11, &res[1], & c__1, prec_type__);
+                blas_ssymv2_x_(&uplo2, n, &c_b9, &a[a_offset], lda, &y[j * y_dim1 + 1],
+                               &y_tail__[1], &c__1, &c_b11, &res[1], &c__1, prec_type__);
             }
             /* XXX: RES is no longer needed. */
             scopy_(n, &res[1], &c__1, &dy[1], &c__1);
@@ -539,47 +568,45 @@ int sla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *
             dz_z__ = 0.f;
             ymin = hugeval;
             i__3 = *n;
-            for (i__ = 1;
-                    i__ <= i__3;
-                    ++i__)
+            for(i__ = 1; i__ <= i__3; ++i__)
             {
                 yk = (r__1 = y[i__ + j * y_dim1], f2c_abs(r__1));
                 dyk = (r__1 = dy[i__], f2c_abs(r__1));
-                if (yk != 0.f)
+                if(yk != 0.f)
                 {
                     /* Computing MAX */
                     r__1 = dz_z__;
                     r__2 = dyk / yk; // , expr subst
-                    dz_z__ = fla_max(r__1,r__2);
+                    dz_z__ = fla_max(r__1, r__2);
                 }
-                else if (dyk != 0.f)
+                else if(dyk != 0.f)
                 {
                     dz_z__ = hugeval;
                 }
-                ymin = fla_min(ymin,yk);
-                normy = fla_max(normy,yk);
-                if (*colequ)
+                ymin = fla_min(ymin, yk);
+                normy = fla_max(normy, yk);
+                if(*colequ)
                 {
                     /* Computing MAX */
                     r__1 = normx;
                     r__2 = yk * c__[i__]; // , expr subst
-                    normx = fla_max(r__1,r__2);
+                    normx = fla_max(r__1, r__2);
                     /* Computing MAX */
                     r__1 = normdx;
                     r__2 = dyk * c__[i__]; // , expr subst
-                    normdx = fla_max(r__1,r__2);
+                    normdx = fla_max(r__1, r__2);
                 }
                 else
                 {
                     normx = normy;
-                    normdx = fla_max(normdx,dyk);
+                    normdx = fla_max(normdx, dyk);
                 }
             }
-            if (normx != 0.f)
+            if(normx != 0.f)
             {
                 dx_x__ = normdx / normx;
             }
-            else if (normdx == 0.f)
+            else if(normdx == 0.f)
             {
                 dx_x__ = 0.f;
             }
@@ -590,23 +617,23 @@ int sla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *
             dxrat = normdx / prevnormdx;
             dzrat = dz_z__ / prev_dz_z__;
             /* Check termination criteria. */
-            if (ymin * *rcond < incr_thresh__ * normy && y_prec_state__ < 2)
+            if(ymin * *rcond < incr_thresh__ * normy && y_prec_state__ < 2)
             {
                 incr_prec__ = TRUE_;
             }
-            if (x_state__ == 3 && dxrat <= *rthresh)
+            if(x_state__ == 3 && dxrat <= *rthresh)
             {
                 x_state__ = 1;
             }
-            if (x_state__ == 1)
+            if(x_state__ == 1)
             {
-                if (dx_x__ <= eps)
+                if(dx_x__ <= eps)
                 {
                     x_state__ = 2;
                 }
-                else if (dxrat > *rthresh)
+                else if(dxrat > *rthresh)
                 {
-                    if (y_prec_state__ != 2)
+                    if(y_prec_state__ != 2)
                     {
                         incr_prec__ = TRUE_;
                     }
@@ -617,39 +644,39 @@ int sla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *
                 }
                 else
                 {
-                    if (dxrat > dxratmax)
+                    if(dxrat > dxratmax)
                     {
                         dxratmax = dxrat;
                     }
                 }
-                if (x_state__ > 1)
+                if(x_state__ > 1)
                 {
                     final_dx_x__ = dx_x__;
                 }
             }
-            if (z_state__ == 0 && dz_z__ <= *dz_ub__)
+            if(z_state__ == 0 && dz_z__ <= *dz_ub__)
             {
                 z_state__ = 1;
             }
-            if (z_state__ == 3 && dzrat <= *rthresh)
+            if(z_state__ == 3 && dzrat <= *rthresh)
             {
                 z_state__ = 1;
             }
-            if (z_state__ == 1)
+            if(z_state__ == 1)
             {
-                if (dz_z__ <= eps)
+                if(dz_z__ <= eps)
                 {
                     z_state__ = 2;
                 }
-                else if (dz_z__ > *dz_ub__)
+                else if(dz_z__ > *dz_ub__)
                 {
                     z_state__ = 0;
                     dzratmax = 0.f;
                     final_dz_z__ = hugeval;
                 }
-                else if (dzrat > *rthresh)
+                else if(dzrat > *rthresh)
                 {
-                    if (y_prec_state__ != 2)
+                    if(y_prec_state__ != 2)
                     {
                         incr_prec__ = TRUE_;
                     }
@@ -660,28 +687,26 @@ int sla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *
                 }
                 else
                 {
-                    if (dzrat > dzratmax)
+                    if(dzrat > dzratmax)
                     {
                         dzratmax = dzrat;
                     }
                 }
-                if (z_state__ > 1)
+                if(z_state__ > 1)
                 {
                     final_dz_z__ = dz_z__;
                 }
             }
-            if (x_state__ != 1 && (*ignore_cwise__ || z_state__ != 1))
+            if(x_state__ != 1 && (*ignore_cwise__ || z_state__ != 1))
             {
                 goto L666;
             }
-            if (incr_prec__)
+            if(incr_prec__)
             {
                 incr_prec__ = FALSE_;
                 ++y_prec_state__;
                 i__3 = *n;
-                for (i__ = 1;
-                        i__ <= i__3;
-                        ++i__)
+                for(i__ = 1; i__ <= i__3; ++i__)
                 {
                     y_tail__[i__] = 0.f;
                 }
@@ -689,7 +714,7 @@ int sla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *
             prevnormdx = normdx;
             prev_dz_z__ = dz_z__;
             /* Update soluton. */
-            if (y_prec_state__ < 2)
+            if(y_prec_state__ < 2)
             {
                 saxpy_(n, &c_b11, &dy[1], &c__1, &y[j * y_dim1 + 1], &c__1);
             }
@@ -699,23 +724,23 @@ int sla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *
             }
         }
         /* Target of "IF (Z_STOP .AND. X_STOP)". Sun's f77 won't CALL F90_EXIT. */
-L666: /* Set final_* when cnt hits ithresh. */
-        if (x_state__ == 1)
+    L666: /* Set final_* when cnt hits ithresh. */
+        if(x_state__ == 1)
         {
             final_dx_x__ = dx_x__;
         }
-        if (z_state__ == 1)
+        if(z_state__ == 1)
         {
             final_dz_z__ = dz_z__;
         }
         /* Compute error bounds. */
-        if (*n_norms__ >= 1)
+        if(*n_norms__ >= 1)
         {
-            err_bnds_norm__[j + (err_bnds_norm_dim1 << 1)] = final_dx_x__ / ( 1 - dxratmax);
+            err_bnds_norm__[j + (err_bnds_norm_dim1 << 1)] = final_dx_x__ / (1 - dxratmax);
         }
-        if (*n_norms__ >= 2)
+        if(*n_norms__ >= 2)
         {
-            err_bnds_comp__[j + (err_bnds_comp_dim1 << 1)] = final_dz_z__ / ( 1 - dzratmax);
+            err_bnds_comp__[j + (err_bnds_comp_dim1 << 1)] = final_dz_z__ / (1 - dzratmax);
         }
         /* Compute componentwise relative backward error from formula */
         /* fla_max(i) ( f2c_abs(R(i)) / ( f2c_abs(op(A_s))*f2c_abs(Y) + f2c_abs(B_s) )(i) ) */
@@ -724,20 +749,20 @@ L666: /* Set final_* when cnt hits ithresh. */
         /* Compute residual RES = B_s - op(A_s) * Y, */
         /* op(A) = A, A**T, or A**H depending on TRANS (and type). */
         scopy_(n, &b[j * b_dim1 + 1], &c__1, &res[1], &c__1);
-        ssymv_(uplo, n, &c_b9, &a[a_offset], lda, &y[j * y_dim1 + 1], &c__1, & c_b11, &res[1], &c__1);
+        ssymv_(uplo, n, &c_b9, &a[a_offset], lda, &y[j * y_dim1 + 1], &c__1, &c_b11, &res[1],
+               &c__1);
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             ayb[i__] = (r__1 = b[i__ + j * b_dim1], f2c_abs(r__1));
         }
         /* Compute f2c_abs(op(A_s))*f2c_abs(Y) + f2c_abs(B_s). */
-        sla_syamv_(&uplo2, n, &c_b11, &a[a_offset], lda, &y[j * y_dim1 + 1], &c__1, &c_b11, &ayb[1], &c__1);
+        sla_syamv_(&uplo2, n, &c_b11, &a[a_offset], lda, &y[j * y_dim1 + 1], &c__1, &c_b11, &ayb[1],
+                   &c__1);
         sla_lin_berr_(n, n, &c__1, &res[1], &ayb[1], &berr_out__[j]);
         /* End of loop for each RHS. */
     }
-    return 0;
+    return;
 }
 /* sla_porfsx_extended__ */
 #endif

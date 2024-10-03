@@ -9,7 +9,9 @@ This wiki explains how to use the test suite included with libFLAME.
 The test suite directory has (test/main) the following contents,
    1. config - This folder contains config files to control the input combinations to
       test different set of APIs. See ReadMe under this folder for more information.
-   2. input.global.operations - This file controls the list of APIs to be tested.
+   2. input.global.operations - This file controls the list of LAPACK APIs to be tested.
+      input.global.operations.lapacke - This file controls the list of LAPACKE APIs
+      to be tested.
    3. Makefile - Controls how the test suite executable is compiled and linked.
    4. obj - The object files upon being built are placed in this folder.
    5. src - This folder contains the source code.
@@ -23,10 +25,10 @@ Before running the test suite, we must set BLAS, LAPACK and AOCL-Utils library p
 
 BLAS library and header paths has to be set using 'LIBBLAS' and 'BLAS_HEADER_PATH' flags
 respectively. AOCL-Utils library path has to be set using LIBAOCLUTILS_LIBRARY_PATH flag.
-   $ make BLAS_HEADER_PATH=<path to BLAS API prototypes header file> 
+   $ make BLAS_HEADER_PATH=<path to BLAS API prototypes header file>
           LIBBLAS=<full path to BLAS library including library file>
           LIBAOCLUTILS_LIBRARY_PATH=<full path to AOCL-Utils library including library file>
- 
+
 By default, the make file is programmed to look for libflame.a in `../../lib/
 x86_64-unknown-linux-gnu` directory for LAPACK library. However, if the users
 wish to link different LAPACK library, they must set the envrionment variable `LIB_PATH`
@@ -35,11 +37,13 @@ below.
 
    $ export LIBFLAME=lapack.a LIB_PATH=/usr/local
 
+   NOTE: set LAPACK_INC_PATH=<path to LAPACK include folder>
+
 Alternatively, you may set the `make` variable `LIB_PATH` on the command line as you
 execute `make`:
 
-   $ make LIBFLAME=lapack.a LIB_PATH=/usr/local 
-	  BLAS_HEADER_PATH=<path to BLAS API prototypes header file>
+   $ make LIBFLAME=lapack.a LIB_PATH=/usr/local
+          BLAS_HEADER_PATH=<path to BLAS API prototypes header file>
           LIBBLAS=<full path to BLAS library including library file>
           LIBAOCLUTILS_LIBRARY_PATH=<full path to AOCL-Utils library including library file>
 
@@ -48,10 +52,10 @@ After `make` is complete, an executable named `test_lapack.x` is created.
 There are different ways to use the executable to perform different tests as given
 below.
 
-1. Config file based tests 
+1. Config file based tests
 
    In this method, input parameters to APIs are taken from config files present in
-   'config' folder. The APIs to test are selected from the file 
+   'config' folder. The APIs to test are selected from the file
    'input.general.operations'.
 
    ## Selecting APIs for testing
@@ -73,12 +77,12 @@ below.
 
       The `input.general.operations` file also contains the list of all sub-groups of APIs
       like all LIN,EIG etc. User can enable/disable the testing of a particular sub-group
-      of API's by setting/resetting the corresponding group's flag. Below is the content
+      of APIs by setting/resetting the corresponding group's flag. Below is the content
       in `input.general.operations` corresponding to subgroup testing.
 
-         1   LIN     for testing all LIN API's               (0 = disable; 1 = enable)
-         1   EIG     for testing all Eigen API's             (0 = disable; 1 = enable)
-         1   SVD     for testing all SVD API's               (0 = disable; 1 = enable)
+         1   LIN     for testing all LIN APIs               (0 = disable; 1 = enable)
+         1   EIG     for testing all Eigen APIs             (0 = disable; 1 = enable)
+         1   SVD     for testing all SVD APIs               (0 = disable; 1 = enable)
 
       Note: If any sub-group is enabled then individual API test will not execute.
 
@@ -107,7 +111,7 @@ below.
 
 2. Command line tests
 
-   This method can be used to test a single API with a single set of parameters. To run 
+   This method can be used to test a single API with a single set of parameters. To run
    this mode, name of  the API and corresponding parameters are to be specified as
    command line arguments.
 
@@ -127,6 +131,12 @@ below.
    Command-line options for any supported API can be obtained by giving only the API name
    as the only argument.
 
+   NOTE: Method to pass customised input data:
+         Customised input matrices can be copied to a file and passed(as the last argument)
+         to the API through command line.
+
+      Ex: ./test_lapack.x GGEVX d P N N E 10 10 10 10 10 -1 100 inputdata.txt
+          where inputdata.txt file is in the same location as the test_lapack.x
 
 3. Thread Safety Test
 
@@ -154,7 +164,7 @@ below.
    To execute the test with thread safety, set the environment variable
    FLA_TEST_NUM_THREADS to a value greater than 1.
 
-   For windows system you need to set the environment variable using the set command and 
+   For windows system you need to set the environment variable using the set command and
    then need to execute the script.
 
       > set FLA_TEST_NUM_THREADS=4
@@ -167,9 +177,9 @@ below.
 
 5. Unaligned Memory test
 
-   To enable allocate dynamic memory unaligned we need to set below flags while building main testsuite 
+   To enable allocate dynamic memory unaligned we need to set below flags while building main testsuite
        Windows -- FLA_MEM_UNALIGNED is set, unaligned memory is allocated
-       Linux   -- MEM_UNALN=1 
+       Linux   -- MEM_UNALN=1
 
 ## Enabling non-default API naming convention in testsuite:
 
@@ -177,7 +187,7 @@ below.
     For enabling UPPERCASE w/, w/o underscore and LOWERCASE w/o underscore API naming
     convention, set API_CALLING_CONVENTION to "upper_","upper","lower" strings respectively
     in test/main/Makefile.
-    Testsuite default calling convention is lower_  
+    Testsuite default calling convention is lower_
 
 NOTE:
    To execute test on windows, its recommended to keep the following in same path/folder:
@@ -207,19 +217,43 @@ NOTE:
    All parameter related testing commands are compiled in test/main/scripts run_negative_test_cases.py which
    can be used for this purpose.
 
-7. Tests with special inputs using --imatrix option:
+7. Tests with special inputs using --imatrix option for extreme values test:
 
-   Test the API's by intializing matrix with special input values such as NAN or INFINITY using --imatrix.
+   Test the APIs by intializing matrix with special input values such as NAN or INFINITY using --imatrix.
+   The test-suite checks the propagation of special values and return PASS if the propagation happens and
+   FAIL if they don't.
    This option is available only through command line execution.
 
    Example:
     ./test_lapack.x GETRF d 10 10 10 1 --imatrix=N
     ./test_lapack.x GETRF d 10 10 10 1 --imatrix=I
-   
-   In the above example passing the value of --imatrix as 'N' will intialize the matrix with NAN values
-   and if the value is 'I' then matrix will be intialized with the INFINITY.
+    ./test_lapack.x GESV d 10 10 10 10 1 --imatrix=A
+    ./test_lapack.x GESV d 10 10 10 10 1 --imatrix=F
 
-8. Tests with -1 for leading dimensions from config files
+   Test behaviour for --imatrix=
+   N:intialize the matrix with NAN values in all locations
+   I:intialize the matrix with INFINITY values in all locations
+   A:intialize the matrix with the NAN values in few random locations
+   F:intialize the matrix with the INFINITY values in few random locations
+
+8. Tests with special inputs using --imatrix option for overflow/underflow test:
+
+   Test and validate the APIs for inputs with maximum and minimum values of repective datatypes
+
+   Test Explanation:
+   Step1: The input matrix are created with predefined properties specific to the API
+   Step2: For overflow(O), scale up the input and for underflow(U), scale down the input
+   to sufficiently large / small values
+
+   Example:
+    ./test_lapack.x gesvd sdcz S S 10 10 10 10 10 -1 1 --imatrix=O
+    ./test_lapack.x gesvd sdcz S S 10 10 10 10 10 -1 1 --imatrix=U
+
+   Test behaviour for --imatrix:
+   O: Performs overflow test
+   U: Performs underflow test
+
+9. Tests with -1 for leading dimensions from config files
 
    When -1 is passed as any of the leading dimensions(lda, ldab, ldu, ldvt, ldz etc) from config files,
    least valid value is assigned to the corresponding leading dimension.
@@ -227,10 +261,10 @@ NOTE:
    Example: If lda = -1 passed(from config file) to test_geev API
             then main test-suite sets lda = fla_max(1,n) before calling lapack API geev.
 
-            If lda = -1 is passed through command line, then -1 will be taken as the given lda 
+            If lda = -1 is passed through command line, then -1 will be taken as the given lda
             without any change.
- 
-9. AOCL_FLA_PROGRESS feature test.
+
+10. AOCL_FLA_PROGRESS feature test.
 
    Enable a macro 'AOCL_FLA_SET_PROGRESS_ENABLE' for aocl progress and build libflame main test suite for sequential/multithread and run the
    executable.
@@ -245,9 +279,9 @@ NOTE:
    In AOCL Progress thread  0, at API  DGETRF, progress 40 total threads= 1
    In AOCL Progress thread  0, at API  DGETRF, progress 48 total threads= 1
    In AOCL Progress thread  0, at API  DGETRF, progress 56 total threads= 1
-   
+
    For testing multithread mode: FLA_TEST_NUM_THREADS=4 ./test_lapack.x
-   
+
    output:
    In AOCL Progress thread  1, at API  DGETRF, progress 8 total threads= 4
    In AOCL Progress thread  1, at API  DGETRF, progress 16 total threads= 4
@@ -258,3 +292,24 @@ NOTE:
    In AOCL Progress thread  3, at API  DGETRF, progress 8 total threads= 4
    In AOCL Progress thread  2, at API  DGETRF, progress 24 total threads= 4
    In AOCL Progress thread  0, at API  DGETRF, progress 8 total threads= 4
+
+11. LAPACKE interface support:
+    Test suite supports testing of LAPACKE interface. LAPACKE API testing
+    can be enabled by passing "--lapacke=<matrix layout>" option along with
+    test executable.
+
+   Example: ./test_lapack.x --lapacke=row_major    --> for Row major layout
+            ./test_lapack.x --lapacke=column_major --> for column major layout
+
+   ### `input.global.operations.lapacke`
+
+      For LAPACKE API testing, `input.global.operations.lapacke` file should be used
+      instead of input.global.operations file for enabling/disabling single or
+      a group of APIs.
+
+   Note :
+   1) Default layout is set to Column_major. In case user specifies
+      anything other than row_major/column_major, matrix layout is
+      considered to be column_major.
+   2) LAPACKE interface testing is only supported for config based tests.
+

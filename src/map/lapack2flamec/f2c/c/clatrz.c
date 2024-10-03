@@ -1,16 +1,25 @@
-/* ../netlib/clatrz.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/clatrz.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CLATRZ factors an upper trapezoidal matrix by means of unitary transformations. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLATRZ + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clatrz. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clatrz.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clatrz. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clatrz.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clatrz. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clatrz.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -125,15 +134,16 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int clatrz_(integer *m, integer *n, integer *l, complex *a, integer *lda, complex *tau, complex *work)
+void clatrz_(integer *m, integer *n, integer *l, complex *a, integer *lda, complex *tau,
+             complex *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clatrz inputs: m %lld, n %lld, l %lld, lda %lld",*m, *n, *l, *lda);
+    snprintf(buffer, 256, "clatrz inputs: m %lld, n %lld, l %lld, lda %lld", *m, *n, *l, *lda);
 #else
-    snprintf(buffer, 256,"clatrz inputs: m %d, n %d, l %d, lda %d",*m, *n, *l, *lda);
+    snprintf(buffer, 256, "clatrz inputs: m %d, n %d, l %d, lda %d", *m, *n, *l, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -146,7 +156,11 @@ int clatrz_(integer *m, integer *n, integer *l, complex *a, integer *lda, comple
     integer i__;
     complex alpha;
     extern /* Subroutine */
-    int clarz_(char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex * ), clarfg_(integer *, complex *, complex *, integer *, complex *), clacgv_(integer *, complex *, integer *);
+        void
+        clarz_(char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *,
+               integer *, complex *),
+        clarfg_(integer *, complex *, complex *, integer *, complex *),
+        clacgv_(integer *, complex *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -173,17 +187,15 @@ int clatrz_(integer *m, integer *n, integer *l, complex *a, integer *lda, comple
     --tau;
     --work;
     /* Function Body */
-    if (*m == 0)
+    if(*m == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    else if (*m == *n)
+    else if(*m == *n)
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__;
             tau[i__2].r = 0.f;
@@ -191,11 +203,9 @@ int clatrz_(integer *m, integer *n, integer *l, complex *a, integer *lda, comple
             /* L10: */
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    for (i__ = *m;
-            i__ >= 1;
-            --i__)
+    for(i__ = *m; i__ >= 1; --i__)
     {
         /* Generate elementary reflector H(i) to annihilate */
         /* [ A(i,i) A(i,n-l+1:n) ] */
@@ -204,7 +214,7 @@ int clatrz_(integer *m, integer *n, integer *l, complex *a, integer *lda, comple
         alpha.r = q__1.r;
         alpha.i = q__1.i; // , expr subst
         i__1 = *l + 1;
-        clarfg_(&i__1, &alpha, &a[i__ + (*n - *l + 1) * a_dim1], lda, &tau[ i__]);
+        clarfg_(&i__1, &alpha, &a[i__ + (*n - *l + 1) * a_dim1], lda, &tau[i__]);
         i__1 = i__;
         r_cnjg(&q__1, &tau[i__]);
         tau[i__1].r = q__1.r;
@@ -213,7 +223,8 @@ int clatrz_(integer *m, integer *n, integer *l, complex *a, integer *lda, comple
         i__1 = i__ - 1;
         i__2 = *n - i__ + 1;
         r_cnjg(&q__1, &tau[i__]);
-        clarz_("Right", &i__1, &i__2, l, &a[i__ + (*n - *l + 1) * a_dim1], lda, &q__1, &a[i__ * a_dim1 + 1], lda, &work[1]);
+        clarz_("Right", &i__1, &i__2, l, &a[i__ + (*n - *l + 1) * a_dim1], lda, &q__1,
+               &a[i__ * a_dim1 + 1], lda, &work[1]);
         i__1 = i__ + i__ * a_dim1;
         r_cnjg(&q__1, &alpha);
         a[i__1].r = q__1.r;
@@ -221,7 +232,7 @@ int clatrz_(integer *m, integer *n, integer *l, complex *a, integer *lda, comple
         /* L20: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLATRZ */
 }
 /* clatrz_ */

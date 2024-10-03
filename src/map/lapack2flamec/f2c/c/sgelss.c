@@ -1,5 +1,8 @@
-/* sgelss.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* sgelss.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__6 = 6;
 static integer c_n1 = -1;
@@ -13,11 +16,17 @@ static real c_b83 = 1.f;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SGELSS + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgelss. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgelss.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgelss. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgelss.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgelss. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgelss.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -153,7 +162,7 @@ the routine */
 /* > = 0: successful exit */
 /* > < 0: if INFO = -i, the i-th argument had an illegal value. */
 /* > > 0: the algorithm for computing the SVD failed to converge;
-*/
+ */
 /* > if INFO = i, i off-diagonal elements of an intermediate */
 /* > bidiagonal form did not converge to zero. */
 /* > \endverbatim */
@@ -166,49 +175,79 @@ the routine */
 /* > \ingroup realGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-int sgelss_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb, real *s, real *rcond, integer * rank, real *work, integer *lwork, integer *info)
+void sgelss_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb,
+             real *s, real *rcond, integer *rank, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sgelss inputs: m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", rank %" FLA_IS "",*m, *n, *nrhs, *lda, *ldb, *rank);
+    AOCL_DTL_SNPRINTF("sgelss inputs: m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS ", rank %" FLA_IS "",
+                      *m, *n, *nrhs, *lda, *ldb, *rank);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
     real r__1;
     /* Local variables */
     integer i__, bl, ie, il, mm;
     real dum[1], eps, thr, anrm, bnrm;
-    integer itau, lwork_sgebrd__, lwork_sgeqrf__, lwork_sorgbr__, lwork_sormbr__, lwork_sormlq__, iascl, ibscl, lwork_sormqr__, chunk;
+    integer itau, lwork_sgebrd__, lwork_sgeqrf__, lwork_sorgbr__, lwork_sormbr__, lwork_sormlq__,
+        iascl, ibscl, lwork_sormqr__, chunk;
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+        void
+        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
+               integer *, real *, real *, integer *);
     real sfmin;
     integer minmn, maxmn;
     extern /* Subroutine */
-    int sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+        void
+        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+               real *, integer *);
     integer itaup, itauq;
     extern /* Subroutine */
-    int srscl_(integer *, real *, real *, integer *);
+        void
+        srscl_(integer *, real *, real *, integer *);
     integer mnthr, iwork;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), slabad_(real *, real *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *),
+        slabad_(real *, real *);
     integer bdspac;
     extern /* Subroutine */
-    int sgebrd_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *, integer *);
+        void
+        sgebrd_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *,
+                integer *, integer *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;
     extern /* Subroutine */
-    int sgelqf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *), slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *), sbdsqr_(char *, integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), sorgbr_( char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
+        void
+        sgelqf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *),
+        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
+                integer *, integer *),
+        sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *),
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
+        slaset_(char *, integer *, integer *, real *, real *, real *, integer *),
+        sbdsqr_(char *, integer *, integer *, integer *, integer *, real *, real *, real *,
+                integer *, real *, integer *, real *, integer *, real *, integer *),
+        sorgbr_(char *, integer *, integer *, integer *, real *, integer *, real *, real *,
+                integer *, integer *);
     integer ldwork;
     extern /* Subroutine */
-    int sormbr_(char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
+        void
+        sormbr_(char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *,
+                real *, integer *, real *, integer *, integer *);
     integer minwrk, maxwrk;
     real smlnum;
     extern /* Subroutine */
-    int sormlq_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
+        void
+        sormlq_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
+                integer *, real *, integer *, integer *);
     logical lquery;
     extern /* Subroutine */
-    int sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
+        void
+        sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
+                integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -242,27 +281,27 @@ int sgelss_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *
     --work;
     /* Function Body */
     *info = 0;
-    minmn = fla_min(*m,*n);
-    maxmn = fla_max(*m,*n);
+    minmn = fla_min(*m, *n);
+    maxmn = fla_max(*m, *n);
     lquery = *lwork == -1;
     mnthr = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,maxmn))
+    else if(*ldb < fla_max(1, maxmn))
     {
         *info = -7;
     }
@@ -272,195 +311,200 @@ int sgelss_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *
     /* as well as the preferred amount for good performance. */
     /* NB refers to the optimal block size for the immediately */
     /* following subroutine, as returned by ILAENV.) */
-    if (*info == 0)
+    if(*info == 0)
     {
         minwrk = 1;
         maxwrk = 1;
-        if (minmn > 0)
+        if(minmn > 0)
         {
             mm = *m;
             mnthr = ilaenv_(&c__6, "SGELSS", " ", m, n, nrhs, &c_n1);
-            if (*m >= *n && *m >= mnthr)
+            if(*m >= *n && *m >= mnthr)
             {
                 /* Path 1a - overdetermined, with many more rows than */
                 /* columns */
                 /* Compute space needed for SGEQRF */
                 sgeqrf_(m, n, &a[a_offset], lda, dum, dum, &c_n1, info);
-                lwork_sgeqrf__ = (integer) dum[0];
+                lwork_sgeqrf__ = (integer)dum[0];
                 /* Compute space needed for SORMQR */
-                sormqr_("L", "T", m, nrhs, n, &a[a_offset], lda, dum, &b[ b_offset], ldb, dum, &c_n1, info);
-                lwork_sormqr__ = (integer) dum[0];
+                sormqr_("L", "T", m, nrhs, n, &a[a_offset], lda, dum, &b[b_offset], ldb, dum, &c_n1,
+                        info);
+                lwork_sormqr__ = (integer)dum[0];
                 mm = *n;
                 /* Computing MAX */
                 i__1 = maxwrk;
                 i__2 = *n + lwork_sgeqrf__; // , expr subst
-                maxwrk = fla_max(i__1,i__2);
+                maxwrk = fla_max(i__1, i__2);
                 /* Computing MAX */
                 i__1 = maxwrk;
                 i__2 = *n + lwork_sormqr__; // , expr subst
-                maxwrk = fla_max(i__1,i__2);
+                maxwrk = fla_max(i__1, i__2);
             }
-            if (*m >= *n)
+            if(*m >= *n)
             {
                 /* Path 1 - overdetermined or exactly determined */
                 /* Compute workspace needed for SBDSQR */
                 /* Computing MAX */
                 i__1 = 1;
                 i__2 = *n * 5; // , expr subst
-                bdspac = fla_max(i__1,i__2);
+                bdspac = fla_max(i__1, i__2);
                 /* Compute space needed for SGEBRD */
                 sgebrd_(&mm, n, &a[a_offset], lda, &s[1], dum, dum, dum, dum, &c_n1, info);
-                lwork_sgebrd__ = (integer) dum[0];
+                lwork_sgebrd__ = (integer)dum[0];
                 /* Compute space needed for SORMBR */
-                sormbr_("Q", "L", "T", &mm, nrhs, n, &a[a_offset], lda, dum, & b[b_offset], ldb, dum, &c_n1, info);
-                lwork_sormbr__ = (integer) dum[0];
+                sormbr_("Q", "L", "T", &mm, nrhs, n, &a[a_offset], lda, dum, &b[b_offset], ldb, dum,
+                        &c_n1, info);
+                lwork_sormbr__ = (integer)dum[0];
                 /* Compute space needed for SORGBR */
                 sorgbr_("P", n, n, n, &a[a_offset], lda, dum, dum, &c_n1, info);
-                lwork_sorgbr__ = (integer) dum[0];
+                lwork_sorgbr__ = (integer)dum[0];
                 /* Compute total workspace needed */
                 /* Computing MAX */
                 i__1 = maxwrk;
                 i__2 = *n * 3 + lwork_sgebrd__; // , expr subst
-                maxwrk = fla_max(i__1,i__2);
+                maxwrk = fla_max(i__1, i__2);
                 /* Computing MAX */
                 i__1 = maxwrk;
                 i__2 = *n * 3 + lwork_sormbr__; // , expr subst
-                maxwrk = fla_max(i__1,i__2);
+                maxwrk = fla_max(i__1, i__2);
                 /* Computing MAX */
                 i__1 = maxwrk;
                 i__2 = *n * 3 + lwork_sorgbr__; // , expr subst
-                maxwrk = fla_max(i__1,i__2);
-                maxwrk = fla_max(maxwrk,bdspac);
+                maxwrk = fla_max(i__1, i__2);
+                maxwrk = fla_max(maxwrk, bdspac);
                 /* Computing MAX */
                 i__1 = maxwrk;
                 i__2 = *n * *nrhs; // , expr subst
-                maxwrk = fla_max(i__1,i__2);
+                maxwrk = fla_max(i__1, i__2);
                 /* Computing MAX */
                 i__1 = *n * 3 + mm;
                 i__2 = *n * 3 + *nrhs;
                 i__1 = fla_max(i__1, i__2); // ; expr subst
-                minwrk = fla_max(i__1,bdspac);
-                maxwrk = fla_max(minwrk,maxwrk);
+                minwrk = fla_max(i__1, bdspac);
+                maxwrk = fla_max(minwrk, maxwrk);
             }
-            if (*n > *m)
+            if(*n > *m)
             {
                 /* Compute workspace needed for SBDSQR */
                 /* Computing MAX */
                 i__1 = 1;
                 i__2 = *m * 5; // , expr subst
-                bdspac = fla_max(i__1,i__2);
+                bdspac = fla_max(i__1, i__2);
                 /* Computing MAX */
                 i__1 = *m * 3 + *nrhs;
                 i__2 = *m * 3 + *n;
                 i__1 = fla_max(i__1, i__2); // ; expr subst
-                minwrk = fla_max(i__1,bdspac);
-                if (*n >= mnthr)
+                minwrk = fla_max(i__1, bdspac);
+                if(*n >= mnthr)
                 {
                     /* Path 2a - underdetermined, with many more columns */
                     /* than rows */
                     /* Compute space needed for SGEBRD */
                     sgebrd_(m, m, &a[a_offset], lda, &s[1], dum, dum, dum, dum, &c_n1, info);
-                    lwork_sgebrd__ = (integer) dum[0];
+                    lwork_sgebrd__ = (integer)dum[0];
                     /* Compute space needed for SORMBR */
-                    sormbr_("Q", "L", "T", m, nrhs, n, &a[a_offset], lda, dum, &b[b_offset], ldb, dum, &c_n1, info);
-                    lwork_sormbr__ = (integer) dum[0];
+                    sormbr_("Q", "L", "T", m, nrhs, n, &a[a_offset], lda, dum, &b[b_offset], ldb,
+                            dum, &c_n1, info);
+                    lwork_sormbr__ = (integer)dum[0];
                     /* Compute space needed for SORGBR */
                     sorgbr_("P", m, m, m, &a[a_offset], lda, dum, dum, &c_n1, info);
-                    lwork_sorgbr__ = (integer) dum[0];
+                    lwork_sorgbr__ = (integer)dum[0];
                     /* Compute space needed for SORMLQ */
-                    sormlq_("L", "T", n, nrhs, m, &a[a_offset], lda, dum, &b[ b_offset], ldb, dum, &c_n1, info);
-                    lwork_sormlq__ = (integer) dum[0];
+                    sormlq_("L", "T", n, nrhs, m, &a[a_offset], lda, dum, &b[b_offset], ldb, dum,
+                            &c_n1, info);
+                    lwork_sormlq__ = (integer)dum[0];
                     /* Compute total workspace needed */
-                    maxwrk = *m + *m * ilaenv_(&c__1, "SGELQF", " ", m, n, & c_n1, &c_n1);
+                    maxwrk = *m + *m * ilaenv_(&c__1, "SGELQF", " ", m, n, &c_n1, &c_n1);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = *m * *m + (*m << 2) + lwork_sgebrd__; // , expr subst
-                    maxwrk = fla_max(i__1,i__2);
+                    maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = *m * *m + (*m << 2) + lwork_sormbr__; // , expr subst
-                    maxwrk = fla_max(i__1,i__2);
+                    maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = *m * *m + (*m << 2) + lwork_sorgbr__; // , expr subst
-                    maxwrk = fla_max(i__1,i__2);
+                    maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = *m * *m + *m + bdspac; // , expr subst
-                    maxwrk = fla_max(i__1,i__2);
-                    if (*nrhs > 1)
+                    maxwrk = fla_max(i__1, i__2);
+                    if(*nrhs > 1)
                     {
                         /* Computing MAX */
                         i__1 = maxwrk;
                         i__2 = *m * *m + *m + *m * *nrhs; // , expr subst
-                        maxwrk = fla_max(i__1,i__2);
+                        maxwrk = fla_max(i__1, i__2);
                     }
                     else
                     {
                         /* Computing MAX */
                         i__1 = maxwrk;
                         i__2 = *m * *m + (*m << 1); // , expr subst
-                        maxwrk = fla_max(i__1,i__2);
+                        maxwrk = fla_max(i__1, i__2);
                     }
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = *m + lwork_sormlq__; // , expr subst
-                    maxwrk = fla_max(i__1,i__2);
+                    maxwrk = fla_max(i__1, i__2);
                 }
                 else
                 {
                     /* Path 2 - underdetermined */
                     /* Compute space needed for SGEBRD */
                     sgebrd_(m, n, &a[a_offset], lda, &s[1], dum, dum, dum, dum, &c_n1, info);
-                    lwork_sgebrd__ = (integer) dum[0];
+                    lwork_sgebrd__ = (integer)dum[0];
                     /* Compute space needed for SORMBR */
-                    sormbr_("Q", "L", "T", m, nrhs, m, &a[a_offset], lda, dum, &b[b_offset], ldb, dum, &c_n1, info);
-                    lwork_sormbr__ = (integer) dum[0];
+                    sormbr_("Q", "L", "T", m, nrhs, m, &a[a_offset], lda, dum, &b[b_offset], ldb,
+                            dum, &c_n1, info);
+                    lwork_sormbr__ = (integer)dum[0];
                     /* Compute space needed for SORGBR */
                     sorgbr_("P", m, n, m, &a[a_offset], lda, dum, dum, &c_n1, info);
-                    lwork_sorgbr__ = (integer) dum[0];
+                    lwork_sorgbr__ = (integer)dum[0];
                     maxwrk = *m * 3 + lwork_sgebrd__;
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = *m * 3 + lwork_sormbr__; // , expr subst
-                    maxwrk = fla_max(i__1,i__2);
+                    maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = *m * 3 + lwork_sorgbr__; // , expr subst
-                    maxwrk = fla_max(i__1,i__2);
-                    maxwrk = fla_max(maxwrk,bdspac);
+                    maxwrk = fla_max(i__1, i__2);
+                    maxwrk = fla_max(maxwrk, bdspac);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = *n * *nrhs; // , expr subst
-                    maxwrk = fla_max(i__1,i__2);
+                    maxwrk = fla_max(i__1, i__2);
                 }
             }
-            maxwrk = fla_max(minwrk,maxwrk);
+            maxwrk = fla_max(minwrk, maxwrk);
         }
-        work[1] = (real) maxwrk;
-        if (*lwork < minwrk && ! lquery)
+        work[1] = (real)maxwrk;
+        if(*lwork < minwrk && !lquery)
         {
             *info = -12;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SGELSS", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* Quick return if possible */
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
         *rank = 0;
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* Get machine parameters */
     eps = slamch_("P");
@@ -471,22 +515,22 @@ int sgelss_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
     anrm = slange_("M", m, n, &a[a_offset], lda, &work[1]);
     iascl = 0;
-    if (anrm > 0.f && anrm < smlnum)
+    if(anrm > 0.f && anrm < smlnum)
     {
         /* Scale matrix norm up to SMLNUM */
         slascl_("G", &c__0, &c__0, &anrm, &smlnum, m, n, &a[a_offset], lda, info);
         iascl = 1;
     }
-    else if (anrm > bignum)
+    else if(anrm > bignum)
     {
         /* Scale matrix norm down to BIGNUM */
         slascl_("G", &c__0, &c__0, &anrm, &bignum, m, n, &a[a_offset], lda, info);
         iascl = 2;
     }
-    else if (anrm == 0.f)
+    else if(anrm == 0.f)
     {
         /* Matrix all zero. Return zero solution. */
-        i__1 = fla_max(*m,*n);
+        i__1 = fla_max(*m, *n);
         slaset_("F", &i__1, nrhs, &c_b50, &c_b50, &b[b_offset], ldb);
         slaset_("F", &minmn, &c__1, &c_b50, &c_b50, &s[1], &minmn);
         *rank = 0;
@@ -495,24 +539,24 @@ int sgelss_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *
     /* Scale B if max element outside range [SMLNUM,BIGNUM] */
     bnrm = slange_("M", m, nrhs, &b[b_offset], ldb, &work[1]);
     ibscl = 0;
-    if (bnrm > 0.f && bnrm < smlnum)
+    if(bnrm > 0.f && bnrm < smlnum)
     {
         /* Scale matrix norm up to SMLNUM */
         slascl_("G", &c__0, &c__0, &bnrm, &smlnum, m, nrhs, &b[b_offset], ldb, info);
         ibscl = 1;
     }
-    else if (bnrm > bignum)
+    else if(bnrm > bignum)
     {
         /* Scale matrix norm down to BIGNUM */
         slascl_("G", &c__0, &c__0, &bnrm, &bignum, m, nrhs, &b[b_offset], ldb, info);
         ibscl = 2;
     }
     /* Overdetermined case */
-    if (*m >= *n)
+    if(*m >= *n)
     {
         /* Path 1 - overdetermined or exactly determined */
         mm = *m;
-        if (*m >= mnthr)
+        if(*m >= mnthr)
         {
             /* Path 1a - overdetermined, with many more rows than columns */
             mm = *n;
@@ -525,9 +569,10 @@ int sgelss_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *
             /* Multiply B by transpose(Q) */
             /* (Workspace: need N+NRHS, prefer N+NRHS*NB) */
             i__1 = *lwork - iwork + 1;
-            sormqr_("L", "T", m, nrhs, n, &a[a_offset], lda, &work[itau], &b[ b_offset], ldb, &work[iwork], &i__1, info);
+            sormqr_("L", "T", m, nrhs, n, &a[a_offset], lda, &work[itau], &b[b_offset], ldb,
+                    &work[iwork], &i__1, info);
             /* Zero out below R */
-            if (*n > 1)
+            if(*n > 1)
             {
                 i__1 = *n - 1;
                 i__2 = *n - 1;
@@ -541,42 +586,43 @@ int sgelss_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *
         /* Bidiagonalize R in A */
         /* (Workspace: need 3*N+MM, prefer 3*N+(MM+N)*NB) */
         i__1 = *lwork - iwork + 1;
-        sgebrd_(&mm, n, &a[a_offset], lda, &s[1], &work[ie], &work[itauq], & work[itaup], &work[iwork], &i__1, info);
+        sgebrd_(&mm, n, &a[a_offset], lda, &s[1], &work[ie], &work[itauq], &work[itaup],
+                &work[iwork], &i__1, info);
         /* Multiply B by transpose of left bidiagonalizing vectors of R */
         /* (Workspace: need 3*N+NRHS, prefer 3*N+NRHS*NB) */
         i__1 = *lwork - iwork + 1;
-        sormbr_("Q", "L", "T", &mm, nrhs, n, &a[a_offset], lda, &work[itauq], &b[b_offset], ldb, &work[iwork], &i__1, info);
+        sormbr_("Q", "L", "T", &mm, nrhs, n, &a[a_offset], lda, &work[itauq], &b[b_offset], ldb,
+                &work[iwork], &i__1, info);
         /* Generate right bidiagonalizing vectors of R in A */
         /* (Workspace: need 4*N-1, prefer 3*N+(N-1)*NB) */
         i__1 = *lwork - iwork + 1;
-        sorgbr_("P", n, n, n, &a[a_offset], lda, &work[itaup], &work[iwork], & i__1, info);
+        sorgbr_("P", n, n, n, &a[a_offset], lda, &work[itaup], &work[iwork], &i__1, info);
         iwork = ie + *n;
         /* Perform bidiagonal QR iteration */
         /* multiply B by transpose of left singular vectors */
         /* compute right singular vectors in A */
         /* (Workspace: need BDSPAC) */
-        sbdsqr_("U", n, n, &c__0, nrhs, &s[1], &work[ie], &a[a_offset], lda, dum, &c__1, &b[b_offset], ldb, &work[iwork], info);
-        if (*info != 0)
+        sbdsqr_("U", n, n, &c__0, nrhs, &s[1], &work[ie], &a[a_offset], lda, dum, &c__1,
+                &b[b_offset], ldb, &work[iwork], info);
+        if(*info != 0)
         {
             goto L70;
         }
         /* Multiply B by reciprocals of singular values */
         /* Computing MAX */
         r__1 = *rcond * s[1];
-        thr = fla_max(r__1,sfmin);
-        if (*rcond < 0.f)
+        thr = fla_max(r__1, sfmin);
+        if(*rcond < 0.f)
         {
             /* Computing MAX */
             r__1 = eps * s[1];
-            thr = fla_max(r__1,sfmin);
+            thr = fla_max(r__1, sfmin);
         }
         *rank = 0;
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            if (s[i__] > thr)
+            if(s[i__] > thr)
             {
                 srscl_(nrhs, &s[i__], &b[i__ + b_dim1], ldb);
                 ++(*rank);
@@ -589,53 +635,54 @@ int sgelss_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *
         }
         /* Multiply B by right singular vectors */
         /* (Workspace: need N, prefer N*NRHS) */
-        if (*lwork >= *ldb * *nrhs && *nrhs > 1)
+        if(*lwork >= *ldb * *nrhs && *nrhs > 1)
         {
-            sgemm_("T", "N", n, nrhs, n, &c_b83, &a[a_offset], lda, &b[ b_offset], ldb, &c_b50, &work[1], ldb);
-            slacpy_("G", n, nrhs, &work[1], ldb, &b[b_offset], ldb) ;
+            sgemm_("T", "N", n, nrhs, n, &c_b83, &a[a_offset], lda, &b[b_offset], ldb, &c_b50,
+                   &work[1], ldb);
+            slacpy_("G", n, nrhs, &work[1], ldb, &b[b_offset], ldb);
         }
-        else if (*nrhs > 1)
+        else if(*nrhs > 1)
         {
             chunk = *lwork / *n;
             i__1 = *nrhs;
             i__2 = chunk;
-            for (i__ = 1;
-                    i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
-                    i__ += i__2)
+            for(i__ = 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
             {
                 /* Computing MIN */
                 i__3 = *nrhs - i__ + 1;
-                bl = fla_min(i__3,chunk);
-                sgemm_("T", "N", n, &bl, n, &c_b83, &a[a_offset], lda, &b[i__ * b_dim1 + 1], ldb, &c_b50, &work[1], n);
+                bl = fla_min(i__3, chunk);
+                sgemm_("T", "N", n, &bl, n, &c_b83, &a[a_offset], lda, &b[i__ * b_dim1 + 1], ldb,
+                       &c_b50, &work[1], n);
                 slacpy_("G", n, &bl, &work[1], n, &b[i__ * b_dim1 + 1], ldb);
                 /* L20: */
             }
         }
         else
         {
-            sgemv_("T", n, n, &c_b83, &a[a_offset], lda, &b[b_offset], &c__1, &c_b50, &work[1], &c__1);
+            sgemv_("T", n, n, &c_b83, &a[a_offset], lda, &b[b_offset], &c__1, &c_b50, &work[1],
+                   &c__1);
             scopy_(n, &work[1], &c__1, &b[b_offset], &c__1);
         }
     }
     else /* if(complicated condition) */
     {
         /* Computing MAX */
-        i__2 = *m, i__1 = (*m << 1) - 4, i__2 = fla_max(i__2,i__1);
-        i__2 = fla_max( i__2,*nrhs);
+        i__2 = *m, i__1 = (*m << 1) - 4, i__2 = fla_max(i__2, i__1);
+        i__2 = fla_max(i__2, *nrhs);
         i__1 = *n - *m * 3; // ; expr subst
-        if (*n >= mnthr && *lwork >= (*m << 2) + *m * *m + fla_max(i__2,i__1))
+        if(*n >= mnthr && *lwork >= (*m << 2) + *m * *m + fla_max(i__2, i__1))
         {
             /* Path 2a - underdetermined, with many more columns than rows */
             /* and sufficient workspace for an efficient algorithm */
             ldwork = *m;
             /* Computing MAX */
             /* Computing MAX */
-            i__3 = *m, i__4 = (*m << 1) - 4, i__3 = fla_max(i__3,i__4);
-            i__3 = fla_max(i__3,*nrhs);
+            i__3 = *m, i__4 = (*m << 1) - 4, i__3 = fla_max(i__3, i__4);
+            i__3 = fla_max(i__3, *nrhs);
             i__4 = *n - *m * 3; // ; expr subst
-            i__2 = (*m << 2) + *m * *lda + fla_max(i__3,i__4);
+            i__2 = (*m << 2) + *m * *lda + fla_max(i__3, i__4);
             i__1 = *m * *lda + *m + *m * *nrhs; // , expr subst
-            if (*lwork >= fla_max(i__2,i__1))
+            if(*lwork >= fla_max(i__2, i__1))
             {
                 ldwork = *lda;
             }
@@ -650,7 +697,7 @@ int sgelss_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *
             slacpy_("L", m, m, &a[a_offset], lda, &work[il], &ldwork);
             i__2 = *m - 1;
             i__1 = *m - 1;
-            slaset_("U", &i__2, &i__1, &c_b50, &c_b50, &work[il + ldwork], & ldwork);
+            slaset_("U", &i__2, &i__1, &c_b50, &c_b50, &work[il + ldwork], &ldwork);
             ie = il + ldwork * *m;
             itauq = ie + *m;
             itaup = itauq + *m;
@@ -658,42 +705,43 @@ int sgelss_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *
             /* Bidiagonalize L in WORK(IL) */
             /* (Workspace: need M*M+5*M, prefer M*M+4*M+2*M*NB) */
             i__2 = *lwork - iwork + 1;
-            sgebrd_(m, m, &work[il], &ldwork, &s[1], &work[ie], &work[itauq], &work[itaup], &work[iwork], &i__2, info);
+            sgebrd_(m, m, &work[il], &ldwork, &s[1], &work[ie], &work[itauq], &work[itaup],
+                    &work[iwork], &i__2, info);
             /* Multiply B by transpose of left bidiagonalizing vectors of L */
             /* (Workspace: need M*M+4*M+NRHS, prefer M*M+4*M+NRHS*NB) */
             i__2 = *lwork - iwork + 1;
-            sormbr_("Q", "L", "T", m, nrhs, m, &work[il], &ldwork, &work[ itauq], &b[b_offset], ldb, &work[iwork], &i__2, info);
+            sormbr_("Q", "L", "T", m, nrhs, m, &work[il], &ldwork, &work[itauq], &b[b_offset], ldb,
+                    &work[iwork], &i__2, info);
             /* Generate right bidiagonalizing vectors of R in WORK(IL) */
             /* (Workspace: need M*M+5*M-1, prefer M*M+4*M+(M-1)*NB) */
             i__2 = *lwork - iwork + 1;
-            sorgbr_("P", m, m, m, &work[il], &ldwork, &work[itaup], &work[ iwork], &i__2, info);
+            sorgbr_("P", m, m, m, &work[il], &ldwork, &work[itaup], &work[iwork], &i__2, info);
             iwork = ie + *m;
             /* Perform bidiagonal QR iteration, */
             /* computing right singular vectors of L in WORK(IL) and */
             /* multiplying B by transpose of left singular vectors */
             /* (Workspace: need M*M+M+BDSPAC) */
-            sbdsqr_("U", m, m, &c__0, nrhs, &s[1], &work[ie], &work[il], & ldwork, &a[a_offset], lda, &b[b_offset], ldb, &work[iwork], info);
-            if (*info != 0)
+            sbdsqr_("U", m, m, &c__0, nrhs, &s[1], &work[ie], &work[il], &ldwork, &a[a_offset], lda,
+                    &b[b_offset], ldb, &work[iwork], info);
+            if(*info != 0)
             {
                 goto L70;
             }
             /* Multiply B by reciprocals of singular values */
             /* Computing MAX */
             r__1 = *rcond * s[1];
-            thr = fla_max(r__1,sfmin);
-            if (*rcond < 0.f)
+            thr = fla_max(r__1, sfmin);
+            if(*rcond < 0.f)
             {
                 /* Computing MAX */
                 r__1 = eps * s[1];
-                thr = fla_max(r__1,sfmin);
+                thr = fla_max(r__1, sfmin);
             }
             *rank = 0;
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
-                if (s[i__] > thr)
+                if(s[i__] > thr)
                 {
                     srscl_(nrhs, &s[i__], &b[i__ + b_dim1], ldb);
                     ++(*rank);
@@ -707,31 +755,32 @@ int sgelss_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *
             iwork = ie;
             /* Multiply B by right singular vectors of L in WORK(IL) */
             /* (Workspace: need M*M+2*M, prefer M*M+M+M*NRHS) */
-            if (*lwork >= *ldb * *nrhs + iwork - 1 && *nrhs > 1)
+            if(*lwork >= *ldb * *nrhs + iwork - 1 && *nrhs > 1)
             {
-                sgemm_("T", "N", m, nrhs, m, &c_b83, &work[il], &ldwork, &b[ b_offset], ldb, &c_b50, &work[iwork], ldb);
+                sgemm_("T", "N", m, nrhs, m, &c_b83, &work[il], &ldwork, &b[b_offset], ldb, &c_b50,
+                       &work[iwork], ldb);
                 slacpy_("G", m, nrhs, &work[iwork], ldb, &b[b_offset], ldb);
             }
-            else if (*nrhs > 1)
+            else if(*nrhs > 1)
             {
                 chunk = (*lwork - iwork + 1) / *m;
                 i__2 = *nrhs;
                 i__1 = chunk;
-                for (i__ = 1;
-                        i__1 < 0 ? i__ >= i__2 : i__ <= i__2;
-                        i__ += i__1)
+                for(i__ = 1; i__1 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__1)
                 {
                     /* Computing MIN */
                     i__3 = *nrhs - i__ + 1;
-                    bl = fla_min(i__3,chunk);
-                    sgemm_("T", "N", m, &bl, m, &c_b83, &work[il], &ldwork, & b[i__ * b_dim1 + 1], ldb, &c_b50, &work[iwork], m);
+                    bl = fla_min(i__3, chunk);
+                    sgemm_("T", "N", m, &bl, m, &c_b83, &work[il], &ldwork, &b[i__ * b_dim1 + 1],
+                           ldb, &c_b50, &work[iwork], m);
                     slacpy_("G", m, &bl, &work[iwork], m, &b[i__ * b_dim1 + 1], ldb);
                     /* L40: */
                 }
             }
             else
             {
-                sgemv_("T", m, m, &c_b83, &work[il], &ldwork, &b[b_dim1 + 1], &c__1, &c_b50, &work[iwork], &c__1);
+                sgemv_("T", m, m, &c_b83, &work[il], &ldwork, &b[b_dim1 + 1], &c__1, &c_b50,
+                       &work[iwork], &c__1);
                 scopy_(m, &work[iwork], &c__1, &b[b_dim1 + 1], &c__1);
             }
             /* Zero out below first M rows of B */
@@ -741,7 +790,8 @@ int sgelss_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *
             /* Multiply transpose(Q) by B */
             /* (Workspace: need M+NRHS, prefer M+NRHS*NB) */
             i__1 = *lwork - iwork + 1;
-            sormlq_("L", "T", n, nrhs, m, &a[a_offset], lda, &work[itau], &b[ b_offset], ldb, &work[iwork], &i__1, info);
+            sormlq_("L", "T", n, nrhs, m, &a[a_offset], lda, &work[itau], &b[b_offset], ldb,
+                    &work[iwork], &i__1, info);
         }
         else
         {
@@ -753,42 +803,43 @@ int sgelss_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *
             /* Bidiagonalize A */
             /* (Workspace: need 3*M+N, prefer 3*M+(M+N)*NB) */
             i__1 = *lwork - iwork + 1;
-            sgebrd_(m, n, &a[a_offset], lda, &s[1], &work[ie], &work[itauq], & work[itaup], &work[iwork], &i__1, info);
+            sgebrd_(m, n, &a[a_offset], lda, &s[1], &work[ie], &work[itauq], &work[itaup],
+                    &work[iwork], &i__1, info);
             /* Multiply B by transpose of left bidiagonalizing vectors */
             /* (Workspace: need 3*M+NRHS, prefer 3*M+NRHS*NB) */
             i__1 = *lwork - iwork + 1;
-            sormbr_("Q", "L", "T", m, nrhs, n, &a[a_offset], lda, &work[itauq], &b[b_offset], ldb, &work[iwork], &i__1, info);
+            sormbr_("Q", "L", "T", m, nrhs, n, &a[a_offset], lda, &work[itauq], &b[b_offset], ldb,
+                    &work[iwork], &i__1, info);
             /* Generate right bidiagonalizing vectors in A */
             /* (Workspace: need 4*M, prefer 3*M+M*NB) */
             i__1 = *lwork - iwork + 1;
-            sorgbr_("P", m, n, m, &a[a_offset], lda, &work[itaup], &work[ iwork], &i__1, info);
+            sorgbr_("P", m, n, m, &a[a_offset], lda, &work[itaup], &work[iwork], &i__1, info);
             iwork = ie + *m;
             /* Perform bidiagonal QR iteration, */
             /* computing right singular vectors of A in A and */
             /* multiplying B by transpose of left singular vectors */
             /* (Workspace: need BDSPAC) */
-            sbdsqr_("L", m, n, &c__0, nrhs, &s[1], &work[ie], &a[a_offset], lda, dum, &c__1, &b[b_offset], ldb, &work[iwork], info);
-            if (*info != 0)
+            sbdsqr_("L", m, n, &c__0, nrhs, &s[1], &work[ie], &a[a_offset], lda, dum, &c__1,
+                    &b[b_offset], ldb, &work[iwork], info);
+            if(*info != 0)
             {
                 goto L70;
             }
             /* Multiply B by reciprocals of singular values */
             /* Computing MAX */
             r__1 = *rcond * s[1];
-            thr = fla_max(r__1,sfmin);
-            if (*rcond < 0.f)
+            thr = fla_max(r__1, sfmin);
+            if(*rcond < 0.f)
             {
                 /* Computing MAX */
                 r__1 = eps * s[1];
-                thr = fla_max(r__1,sfmin);
+                thr = fla_max(r__1, sfmin);
             }
             *rank = 0;
             i__1 = *m;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
-                if (s[i__] > thr)
+                if(s[i__] > thr)
                 {
                     srscl_(nrhs, &s[i__], &b[i__ + b_dim1], ldb);
                     ++(*rank);
@@ -801,58 +852,59 @@ int sgelss_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *
             }
             /* Multiply B by right singular vectors of A */
             /* (Workspace: need N, prefer N*NRHS) */
-            if (*lwork >= *ldb * *nrhs && *nrhs > 1)
+            if(*lwork >= *ldb * *nrhs && *nrhs > 1)
             {
-                sgemm_("T", "N", n, nrhs, m, &c_b83, &a[a_offset], lda, &b[ b_offset], ldb, &c_b50, &work[1], ldb);
+                sgemm_("T", "N", n, nrhs, m, &c_b83, &a[a_offset], lda, &b[b_offset], ldb, &c_b50,
+                       &work[1], ldb);
                 slacpy_("F", n, nrhs, &work[1], ldb, &b[b_offset], ldb);
             }
-            else if (*nrhs > 1)
+            else if(*nrhs > 1)
             {
                 chunk = *lwork / *n;
                 i__1 = *nrhs;
                 i__2 = chunk;
-                for (i__ = 1;
-                        i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
-                        i__ += i__2)
+                for(i__ = 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
                 {
                     /* Computing MIN */
                     i__3 = *nrhs - i__ + 1;
-                    bl = fla_min(i__3,chunk);
-                    sgemm_("T", "N", n, &bl, m, &c_b83, &a[a_offset], lda, &b[ i__ * b_dim1 + 1], ldb, &c_b50, &work[1], n);
+                    bl = fla_min(i__3, chunk);
+                    sgemm_("T", "N", n, &bl, m, &c_b83, &a[a_offset], lda, &b[i__ * b_dim1 + 1],
+                           ldb, &c_b50, &work[1], n);
                     slacpy_("F", n, &bl, &work[1], n, &b[i__ * b_dim1 + 1], ldb);
                     /* L60: */
                 }
             }
             else
             {
-                sgemv_("T", m, n, &c_b83, &a[a_offset], lda, &b[b_offset], & c__1, &c_b50, &work[1], &c__1);
+                sgemv_("T", m, n, &c_b83, &a[a_offset], lda, &b[b_offset], &c__1, &c_b50, &work[1],
+                       &c__1);
                 scopy_(n, &work[1], &c__1, &b[b_offset], &c__1);
             }
         }
     }
     /* Undo scaling */
-    if (iascl == 1)
+    if(iascl == 1)
     {
         slascl_("G", &c__0, &c__0, &anrm, &smlnum, n, nrhs, &b[b_offset], ldb, info);
-        slascl_("G", &c__0, &c__0, &smlnum, &anrm, &minmn, &c__1, &s[1], & minmn, info);
+        slascl_("G", &c__0, &c__0, &smlnum, &anrm, &minmn, &c__1, &s[1], &minmn, info);
     }
-    else if (iascl == 2)
+    else if(iascl == 2)
     {
         slascl_("G", &c__0, &c__0, &anrm, &bignum, n, nrhs, &b[b_offset], ldb, info);
-        slascl_("G", &c__0, &c__0, &bignum, &anrm, &minmn, &c__1, &s[1], & minmn, info);
+        slascl_("G", &c__0, &c__0, &bignum, &anrm, &minmn, &c__1, &s[1], &minmn, info);
     }
-    if (ibscl == 1)
+    if(ibscl == 1)
     {
         slascl_("G", &c__0, &c__0, &smlnum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
     }
-    else if (ibscl == 2)
+    else if(ibscl == 2)
     {
         slascl_("G", &c__0, &c__0, &bignum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
     }
 L70:
-    work[1] = (real) maxwrk;
+    work[1] = (real)maxwrk;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SGELSS */
 }
 /* sgelss_ */

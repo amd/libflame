@@ -1,5 +1,8 @@
-/* sorgtsqr_row.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* sorgtsqr_row.f -- translated by f2c (version 20160102). You must link the resulting object file
+ with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b4 = 0.f;
 static real c_b5 = 1.f;
@@ -11,11 +14,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SORGTSQR_ROW + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorgtsq r_row.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorgtsq
+ * r_row.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorgtsq r_row.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorgtsq
+ * r_row.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorgtsq r_row.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorgtsq
+ * r_row.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -179,19 +188,26 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sorgtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, real *a, integer *lda, real *t, integer *ldt, real *work, integer *lwork, integer *info)
+void sorgtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, real *a, integer *lda, real *t,
+                   integer *ldt, real *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */
     integer lworkopt, ib_bottom__, ib, kb, mb1, mb2, m_plus_one__, num_all_row_blocks__, imb, knb;
     extern /* Subroutine */
-    int slarfb_gett_(char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
+        void
+        slarfb_gett_(char *, integer *, integer *, integer *, real *, integer *, real *, integer *,
+                     real *, integer *, real *, integer *);
     integer jb_t__, itmp;
     real dummy[1] /* was [1][1] */
-    ;
+        ;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slaset_( char *, integer *, integer *, real *, real *, real *, integer *);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
+        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     logical lquery;
     integer nblocal, kb_last__;
     /* -- LAPACK computational routine -- */
@@ -225,23 +241,23 @@ int sorgtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, real *a, int
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0 || *m < *n)
+    else if(*n < 0 || *m < *n)
     {
         *info = -2;
     }
-    else if (*mb <= *n)
+    else if(*mb <= *n)
     {
         *info = -3;
     }
-    else if (*nb < 1)
+    else if(*nb < 1)
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -6;
     }
@@ -249,42 +265,42 @@ int sorgtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, real *a, int
     {
         /* Computing MAX */
         i__1 = 1;
-        i__2 = fla_min(*nb,*n); // , expr subst
-        if (*ldt < fla_max(i__1,i__2))
+        i__2 = fla_min(*nb, *n); // , expr subst
+        if(*ldt < fla_max(i__1, i__2))
         {
             *info = -8;
         }
-        else if (*lwork < 1 && ! lquery)
+        else if(*lwork < 1 && !lquery)
         {
             *info = -10;
         }
     }
-    nblocal = fla_min(*nb,*n);
+    nblocal = fla_min(*nb, *n);
     /* Determine the workspace size. */
-    if (*info == 0)
+    if(*info == 0)
     {
         /* Computing MAX */
         i__1 = nblocal;
         i__2 = *n - nblocal; // , expr subst
-        lworkopt = nblocal * fla_max(i__1,i__2);
+        lworkopt = nblocal * fla_max(i__1, i__2);
     }
     /* Handle error in the input parameters and handle the workspace query. */
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SORGTSQR_ROW", &i__1, (ftnlen)12);
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-        work[1] = (real) lworkopt;
-        return 0;
+        work[1] = (real)lworkopt;
+        return;
     }
     /* Quick return if possible */
-    if (fla_min(*m,*n) == 0)
+    if(fla_min(*m, *n) == 0)
     {
-        work[1] = (real) lworkopt;
-        return 0;
+        work[1] = (real)lworkopt;
+        return;
     }
     /* (0) Set the upper-triangular part of the matrix A to zero and */
     /* its diagonal elements to one. */
@@ -294,7 +310,7 @@ int sorgtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, real *a, int
     kb_last__ = (*n - 1) / nblocal * nblocal + 1;
     /* (1) Bottom-up loop over row blocks of A, except the top row block. */
     /* NOTE: If MB>=M, then the loop is never executed. */
-    if (*mb < *m)
+    if(*mb < *m)
     {
         /* MB2 is the row blocking size for the row blocks before the */
         /* first top row block in the matrix A. IB is the row index for */
@@ -313,15 +329,13 @@ int sorgtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, real *a, int
         jb_t__ = num_all_row_blocks__ * *n + 1;
         i__1 = *mb + 1;
         i__2 = -mb2;
-        for (ib = ib_bottom__;
-                i__2 < 0 ? ib >= i__1 : ib <= i__1;
-                ib += i__2)
+        for(ib = ib_bottom__; i__2 < 0 ? ib >= i__1 : ib <= i__1; ib += i__2)
         {
             /* Determine the block size IMB for the current row block */
             /* in the matrix A. */
             /* Computing MIN */
             i__3 = m_plus_one__ - ib;
-            imb = fla_min(i__3,mb2);
+            imb = fla_min(i__3, mb2);
             /* Determine the column index JB_T for the current column block */
             /* in the matrix T. */
             jb_t__ -= *n;
@@ -329,56 +343,55 @@ int sorgtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, real *a, int
             /* KB is the column index of the current column block reflector */
             /* in the matrices T and V. */
             i__3 = -nblocal;
-            for (kb = kb_last__;
-                    i__3 < 0 ? kb >= 1 : kb <= 1;
-                    kb += i__3)
+            for(kb = kb_last__; i__3 < 0 ? kb >= 1 : kb <= 1; kb += i__3)
             {
                 /* Determine the size of the current column block KNB in */
                 /* the matrices T and V. */
                 /* Computing MIN */
                 i__4 = nblocal;
                 i__5 = *n - kb + 1; // , expr subst
-                knb = fla_min(i__4,i__5);
+                knb = fla_min(i__4, i__5);
                 i__4 = *n - kb + 1;
-                slarfb_gett_("I", &imb, &i__4, &knb, &t[(jb_t__ + kb - 1) * t_dim1 + 1], ldt, &a[kb + kb * a_dim1], lda, &a[ib + kb * a_dim1], lda, &work[1], &knb);
+                slarfb_gett_("I", &imb, &i__4, &knb, &t[(jb_t__ + kb - 1) * t_dim1 + 1], ldt,
+                             &a[kb + kb * a_dim1], lda, &a[ib + kb * a_dim1], lda, &work[1], &knb);
             }
         }
     }
     /* (2) Top row block of A. */
     /* NOTE: If MB>=M, then we have only one row block of A of size M */
     /* and we work on the entire matrix A. */
-    mb1 = fla_min(*mb,*m);
+    mb1 = fla_min(*mb, *m);
     /* Apply column blocks of H in the top row block from right to left. */
     /* KB is the column index of the current block reflector in */
     /* the matrices T and V. */
     i__2 = -nblocal;
-    for (kb = kb_last__;
-            i__2 < 0 ? kb >= 1 : kb <= 1;
-            kb += i__2)
+    for(kb = kb_last__; i__2 < 0 ? kb >= 1 : kb <= 1; kb += i__2)
     {
         /* Determine the size of the current column block KNB in */
         /* the matrices T and V. */
         /* Computing MIN */
         i__1 = nblocal;
         i__3 = *n - kb + 1; // , expr subst
-        knb = fla_min(i__1,i__3);
-        if (mb1 - kb - knb + 1 == 0)
+        knb = fla_min(i__1, i__3);
+        if(mb1 - kb - knb + 1 == 0)
         {
             /* In SLARFB_GETT parameters, when M=0, then the matrix B */
             /* does not exist, hence we need to pass a dummy array */
             /* reference DUMMY(1,1) to B with LDDUMMY=1. */
             i__1 = *n - kb + 1;
-            slarfb_gett_("N", &c__0, &i__1, &knb, &t[kb * t_dim1 + 1], ldt, & a[kb + kb * a_dim1], lda, dummy, &c__1, &work[1], &knb);
+            slarfb_gett_("N", &c__0, &i__1, &knb, &t[kb * t_dim1 + 1], ldt, &a[kb + kb * a_dim1],
+                         lda, dummy, &c__1, &work[1], &knb);
         }
         else
         {
             i__1 = mb1 - kb - knb + 1;
             i__3 = *n - kb + 1;
-            slarfb_gett_("N", &i__1, &i__3, &knb, &t[kb * t_dim1 + 1], ldt, & a[kb + kb * a_dim1], lda, &a[kb + knb + kb * a_dim1], lda, &work[1], &knb);
+            slarfb_gett_("N", &i__1, &i__3, &knb, &t[kb * t_dim1 + 1], ldt, &a[kb + kb * a_dim1],
+                         lda, &a[kb + knb + kb * a_dim1], lda, &work[1], &knb);
         }
     }
-    work[1] = (real) lworkopt;
-    return 0;
+    work[1] = (real)lworkopt;
+    return;
     /* End of SORGTSQR_ROW */
 }
 /* sorgtsqr_row__ */

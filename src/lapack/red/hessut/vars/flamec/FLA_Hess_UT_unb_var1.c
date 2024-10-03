@@ -35,7 +35,7 @@ FLA_Error FLA_Hess_UT_step_unb_var1( FLA_Obj A, FLA_Obj T )
 
   FLA_Obj  first_elem;
 
-  dim_t        b_alg;
+  fla_dim_t        b_alg;
   FLA_Datatype datatype_A;
 
 

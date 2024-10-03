@@ -1,19 +1,29 @@
-/* ../netlib/v3.9.0/dsysv_aa_2stage.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/dsysv_aa_2stage.f -- translated by f2c (version 20160102). You must link the
+ resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
+ Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
+ with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c_n1 = -1;
-/* > \brief <b> DSYSV_AA_2STAGE computes the solution to system of linear equations A * X = B for SY matrices </b> */
+/* > \brief <b> DSYSV_AA_2STAGE computes the solution to system of linear equations A * X = B for SY
+ * matrices </b> */
 /* @generated from SRC/chesv_aa_2stage.f, fortran c -> d, Tue Oct 31 11:22:31 2017 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DSYSV_AA_2STAGE + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsysv_a a_2stage.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsysv_a
+ * a_2stage.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsysv_a a_2stage.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsysv_a
+ * a_2stage.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsysv_a a_2stage.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsysv_a
+ * a_2stage.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -56,7 +66,7 @@ static integer c_n1 = -1;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -177,19 +187,28 @@ the */
 /* > \ingroup doubleSYsolve */
 /* ===================================================================== */
 /* Subroutine */
-int dsysv_aa_2stage_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *tb, integer *ltb, integer * ipiv, integer *ipiv2, doublereal *b, integer *ldb, doublereal *work, integer *lwork, integer *info)
+void dsysv_aa_2stage_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda,
+                      doublereal *tb, integer *ltb, integer *ipiv, integer *ipiv2, doublereal *b,
+                      integer *ldb, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsysv_aa_2stage inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ltb %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ltb, *ldb, *lwork);
+    AOCL_DTL_SNPRINTF("dsysv_aa_2stage inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS
+                      ", lda %" FLA_IS ", ltb %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",
+                      *uplo, *n, *nrhs, *lda, *ltb, *ldb, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int dsytrf_aa_2stage_(char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *, integer *), dsytrs_aa_2stage_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *, integer *);
-    extern logical lsame_(char *, char *);
+        void
+        dsytrf_aa_2stage_(char *, integer *, doublereal *, integer *, doublereal *, integer *,
+                          integer *, integer *, doublereal *, integer *, integer *),
+        dsytrs_aa_2stage_(char *, integer *, integer *, doublereal *, integer *, doublereal *,
+                          integer *, integer *, integer *, doublereal *, integer *, integer *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lwkopt;
     logical tquery, wquery;
     /* -- LAPACK computational routine (version 3.8.0) -- */
@@ -224,65 +243,67 @@ int dsysv_aa_2stage_(char *uplo, integer *n, integer *nrhs, doublereal *a, integ
     --work;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     wquery = *lwork == -1;
     tquery = *ltb == -1;
-    if (! upper && ! lsame_(uplo, "L"))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ltb < *n << 2 && ! tquery)
+    else if(*ltb < *n << 2 && !tquery)
     {
         *info = -7;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -11;
     }
-    else if (*lwork < *n && ! wquery)
+    else if(*lwork < *n && !wquery)
     {
         *info = -13;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        dsytrf_aa_2stage_(uplo, n, &a[a_offset], lda, &tb[1], &c_n1, &ipiv[1], &ipiv2[1], &work[1], &c_n1, info);
-        lwkopt = (integer) work[1];
+        dsytrf_aa_2stage_(uplo, n, &a[a_offset], lda, &tb[1], &c_n1, &ipiv[1], &ipiv2[1], &work[1],
+                          &c_n1, info);
+        lwkopt = (integer)work[1];
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DSYSV_AA_2STAGE", &i__1, (ftnlen)15);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    else if (wquery || tquery)
+    else if(wquery || tquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute the factorization A = U**T*T*U or A = L*T*L**T. */
-    dsytrf_aa_2stage_(uplo, n, &a[a_offset], lda, &tb[1], ltb, &ipiv[1], & ipiv2[1], &work[1], lwork, info);
-    if (*info == 0)
+    dsytrf_aa_2stage_(uplo, n, &a[a_offset], lda, &tb[1], ltb, &ipiv[1], &ipiv2[1], &work[1], lwork,
+                      info);
+    if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */
-        dsytrs_aa_2stage_(uplo, n, nrhs, &a[a_offset], lda, &tb[1], ltb, & ipiv[1], &ipiv2[1], &b[b_offset], ldb, info);
+        dsytrs_aa_2stage_(uplo, n, nrhs, &a[a_offset], lda, &tb[1], ltb, &ipiv[1], &ipiv2[1],
+                          &b[b_offset], ldb, info);
     }
-    work[1] = (doublereal) lwkopt;
+    work[1] = (doublereal)lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYSV_AA_2STAGE */
 }
 /* dsysv_aa_2stage__ */
-

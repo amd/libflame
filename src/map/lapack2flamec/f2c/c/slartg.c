@@ -1,5 +1,8 @@
-/* slartg.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* slartg.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 /* > \brief \b SLARTG generates a plane rotation with real cosine and real sine. */
 /*  =========== DOCUMENTATION =========== */
@@ -97,7 +100,7 @@
 /* > \endverbatim */
 static real c_b2 = 1.f;
 /* Subroutine */
-int slartg_(real *f, real *g, real *c__, real *s, real *r__)
+void slartg_(real *f, real *g, real *c__, real *s, real *r__)
 {
     AOCL_DTL_TRACE_LOG_INIT
     /* Builtin functions */
@@ -120,19 +123,19 @@ int slartg_(real *f, real *g, real *c__, real *s, real *r__)
     /* .. Executable Statements .. */
     f1 = f2c_abs(*f);
     g1 = f2c_abs(*g);
-    if (*g == 0.f)
+    if(*g == 0.f)
     {
         *c__ = 1.f;
         *s = 0.f;
         *r__ = *f;
     }
-    else if (*f == 0.f)
+    else if(*f == 0.f)
     {
         *c__ = 0.f;
         *s = r_sign(&c_b2, g);
         *r__ = g1;
     }
-    else if (f1 > rtmin && f1 < rtmax && g1 > rtmin && g1 < rtmax)
+    else if(f1 > rtmin && f1 < rtmax && g1 > rtmin && g1 < rtmax)
     {
         d__ = sqrt(*f * *f + *g * *g);
         *c__ = f1 / d__;
@@ -143,10 +146,10 @@ int slartg_(real *f, real *g, real *c__, real *s, real *r__)
     {
         /* Computing MIN */
         /* Computing MAX */
-        r__3 = fla_max(safmin,f1);
+        r__3 = fla_max(safmin, f1);
         r__1 = safmax;
-        r__2 = fla_max(r__3,g1); // , expr subst
-        u = fla_min(r__1,r__2);
+        r__2 = fla_max(r__3, g1); // , expr subst
+        u = fla_min(r__1, r__2);
         fs = *f / u;
         gs = *g / u;
         d__ = sqrt(fs * fs + gs * gs);
@@ -156,6 +159,6 @@ int slartg_(real *f, real *g, real *c__, real *s, real *r__)
         *r__ *= u;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* slartg_ */

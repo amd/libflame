@@ -14,8 +14,8 @@ FLA_Error FLA_Shift_diag( FLA_Conj conj, FLA_Obj sigma, FLA_Obj A )
 {
   FLA_Datatype datatype_A;
   FLA_Datatype datatype_sigma;
-  dim_t        m_A, n_A;
-  dim_t        rs_A, cs_A;
+  fla_dim_t        m_A, n_A;
+  fla_dim_t        rs_A, cs_A;
   conj1_t       blis_conj;
 
   if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )

@@ -1,18 +1,28 @@
-/* ../netlib/dstevd.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dstevd.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief <b> DSTEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b> */
+/* > \brief <b> DSTEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors
+ * for OTHER matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DSTEVD + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dstevd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dstevd.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dstevd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dstevd.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dstevd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dstevd.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -49,7 +59,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > JOBZ is CHARACTER*1 */
 /* > = 'N': Compute eigenvalues only;
-*/
+ */
 /* > = 'V': Compute eigenvalues and eigenvectors. */
 /* > \endverbatim */
 /* > */
@@ -154,10 +164,13 @@ i */
 /* > \ingroup doubleOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-int dstevd_(char *jobz, integer *n, doublereal *d__, doublereal *e, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+void dstevd_(char *jobz, integer *n, doublereal *d__, doublereal *e, doublereal *z__, integer *ldz,
+             doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dstevd inputs: jobz %c, n %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",*jobz, *n, *ldz, *lwork, *liwork);
+    AOCL_DTL_SNPRINTF("dstevd inputs: jobz %c, n %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS
+                      ", liwork %" FLA_IS "",
+                      *jobz, *n, *ldz, *lwork, *liwork);
     /* System generated locals */
     integer z_dim1, z_offset, i__1;
     doublereal d__1;
@@ -166,22 +179,27 @@ int dstevd_(char *jobz, integer *n, doublereal *d__, doublereal *e, doublereal *
     /* Local variables */
     doublereal eps, rmin, rmax, tnrm;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer lwmin;
     logical wantz;
     extern doublereal dlamch_(char *);
     integer iscale;
     extern /* Subroutine */
-    int dstedc_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *);
+        void
+        dstedc_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *,
+                doublereal *, integer *, integer *, integer *, integer *);
     doublereal safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
     extern /* Subroutine */
-    int dsterf_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dsterf_(integer *, doublereal *, doublereal *, integer *);
     integer liwmin;
     doublereal smlnum;
     logical lquery;
@@ -215,69 +233,69 @@ int dstevd_(char *jobz, integer *n, doublereal *d__, doublereal *e, doublereal *
     --work;
     --iwork;
     /* Function Body */
-    wantz = lsame_(jobz, "V");
+    wantz = lsame_(jobz, "V", 1, 1);
     lquery = *lwork == -1 || *liwork == -1;
     *info = 0;
     liwmin = 1;
     lwmin = 1;
-    if (*n > 1 && wantz)
+    if(*n > 1 && wantz)
     {
         /* Computing 2nd power */
         i__1 = *n;
         lwmin = (*n << 2) + 1 + i__1 * i__1;
         liwmin = *n * 5 + 3;
     }
-    if (! (wantz || lsame_(jobz, "N")))
+    if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*ldz < 1 || wantz && *ldz < *n)
+    else if(*ldz < 1 || wantz && *ldz < *n)
     {
         *info = -6;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        work[1] = (doublereal) lwmin;
+        work[1] = (doublereal)lwmin;
         iwork[1] = liwmin;
-        if (*lwork < lwmin && ! lquery)
+        if(*lwork < lwmin && !lquery)
         {
             *info = -8;
         }
-        else if (*liwork < liwmin && ! lquery)
+        else if(*liwork < liwmin && !lquery)
         {
             *info = -10;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DSTEVD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    if (*n == 1)
+    if(*n == 1)
     {
-        if (wantz)
+        if(wantz)
         {
             z__[z_dim1 + 1] = 1.;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = dlamch_("Safe minimum");
@@ -289,17 +307,17 @@ int dstevd_(char *jobz, integer *n, doublereal *d__, doublereal *e, doublereal *
     /* Scale matrix to allowable range, if necessary. */
     iscale = 0;
     tnrm = dlanst_("M", n, &d__[1], &e[1]);
-    if (tnrm > 0. && tnrm < rmin)
+    if(tnrm > 0. && tnrm < rmin)
     {
         iscale = 1;
         sigma = rmin / tnrm;
     }
-    else if (tnrm > rmax)
+    else if(tnrm > rmax)
     {
         iscale = 1;
         sigma = rmax / tnrm;
     }
-    if (iscale == 1)
+    if(iscale == 1)
     {
         dscal_(n, &sigma, &d__[1], &c__1);
         i__1 = *n - 1;
@@ -307,24 +325,25 @@ int dstevd_(char *jobz, integer *n, doublereal *d__, doublereal *e, doublereal *
     }
     /* For eigenvalues only, call DSTERF. For eigenvalues and */
     /* eigenvectors, call DSTEDC. */
-    if (! wantz)
+    if(!wantz)
     {
         dsterf_(n, &d__[1], &e[1], info);
     }
     else
     {
-        dstedc_("I", n, &d__[1], &e[1], &z__[z_offset], ldz, &work[1], lwork, &iwork[1], liwork, info);
+        dstedc_("I", n, &d__[1], &e[1], &z__[z_offset], ldz, &work[1], lwork, &iwork[1], liwork,
+                info);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
-    if (iscale == 1)
+    if(iscale == 1)
     {
         d__1 = 1. / sigma;
         dscal_(n, &d__1, &d__[1], &c__1);
     }
-    work[1] = (doublereal) lwmin;
+    work[1] = (doublereal)lwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSTEVD */
 }
 /* dstevd_ */

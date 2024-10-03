@@ -1,16 +1,11 @@
-/* ../netlib/v3.9.0/cggsvp3.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/cggsvp3.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    0.f,0.f
-}
-;
-static complex c_b2 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {0.f, 0.f};
+static complex c_b2 = {1.f, 0.f};
 static integer c_n1 = -1;
 /* > \brief \b CGGSVP3 */
 /* =========== DOCUMENTATION =========== */
@@ -18,11 +13,17 @@ static integer c_n1 = -1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CGGSVP3 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cggsvp3 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cggsvp3
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cggsvp3 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cggsvp3
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cggsvp3 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cggsvp3
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -50,13 +51,13 @@ static integer c_n1 = -1;
 /* > */
 /* > N-K-L K L */
 /* > U**H*A*Q = K ( 0 A12 A13 ) if M-K-L >= 0;
-*/
+ */
 /* > L ( 0 0 A23 ) */
 /* > M-K-L ( 0 0 0 ) */
 /* > */
 /* > N-K-L K L */
 /* > = K ( 0 A12 A13 ) if M-K-L < 0;
-*/
+ */
 /* > M-K ( 0 0 A23 ) */
 /* > */
 /* > N-K-L K L */
@@ -79,7 +80,7 @@ A23 is L-by-L upper triangular if M-K-L >= 0, */
 /* > \verbatim */
 /* > JOBU is CHARACTER*1 */
 /* > = 'U': Unitary matrix U is computed;
-*/
+ */
 /* > = 'N': U is not computed. */
 /* > \endverbatim */
 /* > */
@@ -87,7 +88,7 @@ A23 is L-by-L upper triangular if M-K-L >= 0, */
 /* > \verbatim */
 /* > JOBV is CHARACTER*1 */
 /* > = 'V': Unitary matrix V is computed;
-*/
+ */
 /* > = 'N': V is not computed. */
 /* > \endverbatim */
 /* > */
@@ -95,7 +96,7 @@ A23 is L-by-L upper triangular if M-K-L >= 0, */
 /* > \verbatim */
 /* > JOBQ is CHARACTER*1 */
 /* > = 'Q': Unitary matrix Q is computed;
-*/
+ */
 /* > = 'N': Q is not computed. */
 /* > \endverbatim */
 /* > */
@@ -284,29 +285,54 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer *n, complex *a, integer *lda, complex *b, integer *ldb, real *tola, real *tolb, integer *k, integer *l, complex *u, integer *ldu, complex *v, integer *ldv, complex *q, integer *ldq, integer *iwork, real *rwork, complex *tau, complex *work, integer * lwork, integer *info)
+void cggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer *n, complex *a,
+              integer *lda, complex *b, integer *ldb, real *tola, real *tolb, integer *k,
+              integer *l, complex *u, integer *ldu, complex *v, integer *ldv, complex *q,
+              integer *ldq, integer *iwork, real *rwork, complex *tau, complex *work,
+              integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cggsvp3 inputs: jobu %c, jobv %c, jobq %c, m %lld, p %lld, n %lld, lda %lld, ldb %lld, ldu %lld, ldv %lld, ldq %lld, lwork %lld",*jobu, *jobv, *jobq, *m, *p, *n, *lda, *ldb, *ldu, *ldv, *ldq, *lwork);
+    snprintf(buffer, 256,
+             "cggsvp3 inputs: jobu %c, jobv %c, jobq %c, m %lld, p %lld, n %lld, lda %lld, ldb "
+             "%lld, ldu %lld, ldv %lld, ldq %lld, lwork %lld",
+             *jobu, *jobv, *jobq, *m, *p, *n, *lda, *ldb, *ldu, *ldv, *ldq, *lwork);
 #else
-    snprintf(buffer, 256,"cggsvp3 inputs: jobu %c, jobv %c, jobq %c, m %d, p %d, n %d, lda %d, ldb %d, ldu %d, ldv %d, ldq %d, lwork %d",*jobu, *jobv, *jobq, *m, *p, *n, *lda, *ldb, *ldu, *ldv, *ldq, *lwork);
+    snprintf(buffer, 256,
+             "cggsvp3 inputs: jobu %c, jobv %c, jobq %c, m %d, p %d, n %d, lda %d, ldb %d, ldu %d, "
+             "ldv %d, ldq %d, lwork %d",
+             *jobu, *jobv, *jobq, *m, *p, *n, *lda, *ldb, *ldu, *ldv, *ldq, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1, v_offset, i__1, i__2, i__3;
+    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1,
+        v_offset, i__1, i__2, i__3;
     complex q__1;
     /* Builtin functions */
     double c_abs(complex *);
     /* Local variables */
     integer i__, j;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical wantq, wantu, wantv;
     extern /* Subroutine */
-    int cgeqp3_(integer *, integer *, complex *, integer *, integer *, complex *, complex *, integer *, real *, integer *), cgeqr2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *), cgerq2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *), cung2r_( integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), cunm2r_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *), cunmr2_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), clapmt_(logical *, integer *, integer *, complex *, integer *, integer *);
+        void
+        cgeqp3_(integer *, integer *, complex *, integer *, integer *, complex *, complex *,
+                integer *, real *, integer *),
+        cgeqr2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *),
+        cgerq2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *),
+        cung2r_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
+                integer *),
+        cunm2r_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
+                complex *, integer *, complex *, integer *),
+        cunmr2_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
+                complex *, integer *, complex *, integer *),
+        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
+        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        clapmt_(logical *, integer *, integer *, complex *, integer *, integer *);
     logical forwrd;
     integer lwkopt;
     logical lquery;
@@ -352,151 +378,143 @@ int cggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     --tau;
     --work;
     /* Function Body */
-    wantu = lsame_(jobu, "U");
-    wantv = lsame_(jobv, "V");
-    wantq = lsame_(jobq, "Q");
+    wantu = lsame_(jobu, "U", 1, 1);
+    wantv = lsame_(jobv, "V", 1, 1);
+    wantq = lsame_(jobq, "Q", 1, 1);
     forwrd = TRUE_;
     lquery = *lwork == -1;
     lwkopt = 1;
     /* Test the input arguments */
     *info = 0;
-    if (! (wantu || lsame_(jobu, "N")))
+    if(!(wantu || lsame_(jobu, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (wantv || lsame_(jobv, "N")))
+    else if(!(wantv || lsame_(jobv, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (wantq || lsame_(jobq, "N")))
+    else if(!(wantq || lsame_(jobq, "N", 1, 1)))
     {
         *info = -3;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -4;
     }
-    else if (*p < 0)
+    else if(*p < 0)
     {
         *info = -5;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -6;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -8;
     }
-    else if (*ldb < fla_max(1,*p))
+    else if(*ldb < fla_max(1, *p))
     {
         *info = -10;
     }
-    else if (*ldu < 1 || wantu && *ldu < *m)
+    else if(*ldu < 1 || wantu && *ldu < *m)
     {
         *info = -16;
     }
-    else if (*ldv < 1 || wantv && *ldv < *p)
+    else if(*ldv < 1 || wantv && *ldv < *p)
     {
         *info = -18;
     }
-    else if (*ldq < 1 || wantq && *ldq < *n)
+    else if(*ldq < 1 || wantq && *ldq < *n)
     {
         *info = -20;
     }
-    else if (*lwork < 1 && ! lquery)
+    else if(*lwork < 1 && !lquery)
     {
         *info = -24;
     }
     /* Compute workspace */
-    if (*info == 0)
+    if(*info == 0)
     {
         cgeqp3_(p, n, &b[b_offset], ldb, &iwork[1], &tau[1], &work[1], &c_n1, &rwork[1], info);
-        lwkopt = (integer) work[1].r;
-        if (wantv)
+        lwkopt = (integer)work[1].r;
+        if(wantv)
         {
-            lwkopt = fla_max(lwkopt,*p);
+            lwkopt = fla_max(lwkopt, *p);
         }
         /* Computing MAX */
         i__1 = lwkopt;
-        i__2 = fla_min(*n,*p); // , expr subst
-        lwkopt = fla_max(i__1,i__2);
-        lwkopt = fla_max(lwkopt,*m);
-        if (wantq)
+        i__2 = fla_min(*n, *p); // , expr subst
+        lwkopt = fla_max(i__1, i__2);
+        lwkopt = fla_max(lwkopt, *m);
+        if(wantq)
         {
-            lwkopt = fla_max(lwkopt,*n);
+            lwkopt = fla_max(lwkopt, *n);
         }
         cgeqp3_(m, n, &a[a_offset], lda, &iwork[1], &tau[1], &work[1], &c_n1, &rwork[1], info);
         /* Computing MAX */
         i__1 = lwkopt;
-        i__2 = (integer) work[1].r; // , expr subst
-        lwkopt = fla_max(i__1,i__2);
-        lwkopt = fla_max(1,lwkopt);
-        q__1.r = (real) lwkopt;
+        i__2 = (integer)work[1].r; // , expr subst
+        lwkopt = fla_max(i__1, i__2);
+        lwkopt = fla_max(1, lwkopt);
+        q__1.r = (real)lwkopt;
         q__1.i = 0.f; // , expr subst
         work[1].r = q__1.r;
         work[1].i = q__1.i; // , expr subst
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CGGSVP3", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (lquery)
+    if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* QR with column pivoting of B: B*P = V*( S11 S12 ) */
     /* ( 0 0 ) */
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         iwork[i__] = 0;
         /* L10: */
     }
-    cgeqp3_(p, n, &b[b_offset], ldb, &iwork[1], &tau[1], &work[1], lwork, & rwork[1], info);
+    cgeqp3_(p, n, &b[b_offset], ldb, &iwork[1], &tau[1], &work[1], lwork, &rwork[1], info);
     /* Update A := A*P */
     clapmt_(&forwrd, m, n, &a[a_offset], lda, &iwork[1]);
     /* Determine the effective rank of matrix B. */
     *l = 0;
-    i__1 = fla_min(*p,*n);
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    i__1 = fla_min(*p, *n);
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if (c_abs(&b[i__ + i__ * b_dim1]) > *tolb)
+        if(c_abs(&b[i__ + i__ * b_dim1]) > *tolb)
         {
             ++(*l);
         }
         /* L20: */
     }
-    if (wantv)
+    if(wantv)
     {
         /* Copy the details of V, and form V. */
         claset_("Full", p, p, &c_b1, &c_b1, &v[v_offset], ldv);
-        if (*p > 1)
+        if(*p > 1)
         {
             i__1 = *p - 1;
             clacpy_("Lower", &i__1, n, &b[b_dim1 + 2], ldb, &v[v_dim1 + 2], ldv);
         }
-        i__1 = fla_min(*p,*n);
+        i__1 = fla_min(*p, *n);
         cung2r_(p, p, &i__1, &v[v_offset], ldv, &tau[1], &work[1], info);
     }
     /* Clean up B */
     i__1 = *l - 1;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         i__2 = *l;
-        for (i__ = j + 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = j + 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * b_dim1;
             b[i__3].r = 0.f;
@@ -505,40 +523,38 @@ int cggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
         }
         /* L40: */
     }
-    if (*p > *l)
+    if(*p > *l)
     {
         i__1 = *p - *l;
         claset_("Full", &i__1, n, &c_b1, &c_b1, &b[*l + 1 + b_dim1], ldb);
     }
-    if (wantq)
+    if(wantq)
     {
         /* Set Q = I and Update Q := Q*P */
         claset_("Full", n, n, &c_b1, &c_b2, &q[q_offset], ldq);
         clapmt_(&forwrd, n, n, &q[q_offset], ldq, &iwork[1]);
     }
-    if (*p >= *l && *n != *l)
+    if(*p >= *l && *n != *l)
     {
         /* RQ factorization of ( S11 S12 ) = ( 0 S12 )*Z */
         cgerq2_(l, n, &b[b_offset], ldb, &tau[1], &work[1], info);
         /* Update A := A*Z**H */
-        cunmr2_("Right", "Conjugate transpose", m, n, l, &b[b_offset], ldb, & tau[1], &a[a_offset], lda, &work[1], info);
-        if (wantq)
+        cunmr2_("Right", "Conjugate transpose", m, n, l, &b[b_offset], ldb, &tau[1], &a[a_offset],
+                lda, &work[1], info);
+        if(wantq)
         {
             /* Update Q := Q*Z**H */
-            cunmr2_("Right", "Conjugate transpose", n, n, l, &b[b_offset], ldb, &tau[1], &q[q_offset], ldq, &work[1], info);
+            cunmr2_("Right", "Conjugate transpose", n, n, l, &b[b_offset], ldb, &tau[1],
+                    &q[q_offset], ldq, &work[1], info);
         }
         /* Clean up B */
         i__1 = *n - *l;
         claset_("Full", l, &i__1, &c_b1, &c_b1, &b[b_offset], ldb);
         i__1 = *n;
-        for (j = *n - *l + 1;
-                j <= i__1;
-                ++j)
+        for(j = *n - *l + 1; j <= i__1; ++j)
         {
             i__2 = *l;
-            for (i__ = j - *n + *l + 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = j - *n + *l + 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * b_dim1;
                 b[i__3].r = 0.f;
@@ -554,9 +570,7 @@ int cggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     /* A11 = U*( 0 T12 )*P1**H */
     /* ( 0 0 ) */
     i__1 = *n - *l;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         iwork[i__] = 0;
         /* L70: */
@@ -568,12 +582,10 @@ int cggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     /* Computing MIN */
     i__2 = *m;
     i__3 = *n - *l; // , expr subst
-    i__1 = fla_min(i__2,i__3);
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    i__1 = fla_min(i__2, i__3);
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if (c_abs(&a[i__ + i__ * a_dim1]) > *tola)
+        if(c_abs(&a[i__ + i__ * a_dim1]) > *tola)
         {
             ++(*k);
         }
@@ -583,13 +595,14 @@ int cggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     /* Computing MIN */
     i__2 = *m;
     i__3 = *n - *l; // , expr subst
-    i__1 = fla_min(i__2,i__3);
-    cunm2r_("Left", "Conjugate transpose", m, l, &i__1, &a[a_offset], lda, & tau[1], &a[(*n - *l + 1) * a_dim1 + 1], lda, &work[1], info);
-    if (wantu)
+    i__1 = fla_min(i__2, i__3);
+    cunm2r_("Left", "Conjugate transpose", m, l, &i__1, &a[a_offset], lda, &tau[1],
+            &a[(*n - *l + 1) * a_dim1 + 1], lda, &work[1], info);
+    if(wantu)
     {
         /* Copy the details of U, and form U */
         claset_("Full", m, m, &c_b1, &c_b1, &u[u_offset], ldu);
-        if (*m > 1)
+        if(*m > 1)
         {
             i__1 = *m - 1;
             i__2 = *n - *l;
@@ -598,10 +611,10 @@ int cggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
         /* Computing MIN */
         i__2 = *m;
         i__3 = *n - *l; // , expr subst
-        i__1 = fla_min(i__2,i__3);
+        i__1 = fla_min(i__2, i__3);
         cung2r_(m, m, &i__1, &u[u_offset], ldu, &tau[1], &work[1], info);
     }
-    if (wantq)
+    if(wantq)
     {
         /* Update Q( 1:N, 1:N-L ) = Q( 1:N, 1:N-L )*P1 */
         i__1 = *n - *l;
@@ -610,14 +623,10 @@ int cggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
     /* Clean up A: set the strictly lower triangular part of */
     /* A(1:K, 1:K) = 0, and A( K+1:M, 1:N-L ) = 0. */
     i__1 = *k - 1;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         i__2 = *k;
-        for (i__ = j + 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = j + 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * a_dim1;
             a[i__3].r = 0.f;
@@ -626,35 +635,32 @@ int cggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
         }
         /* L100: */
     }
-    if (*m > *k)
+    if(*m > *k)
     {
         i__1 = *m - *k;
         i__2 = *n - *l;
         claset_("Full", &i__1, &i__2, &c_b1, &c_b1, &a[*k + 1 + a_dim1], lda);
     }
-    if (*n - *l > *k)
+    if(*n - *l > *k)
     {
         /* RQ factorization of ( T11 T12 ) = ( 0 T12 )*Z1 */
         i__1 = *n - *l;
         cgerq2_(k, &i__1, &a[a_offset], lda, &tau[1], &work[1], info);
-        if (wantq)
+        if(wantq)
         {
             /* Update Q( 1:N,1:N-L ) = Q( 1:N,1:N-L )*Z1**H */
             i__1 = *n - *l;
-            cunmr2_("Right", "Conjugate transpose", n, &i__1, k, &a[a_offset], lda, &tau[1], &q[q_offset], ldq, &work[1], info);
+            cunmr2_("Right", "Conjugate transpose", n, &i__1, k, &a[a_offset], lda, &tau[1],
+                    &q[q_offset], ldq, &work[1], info);
         }
         /* Clean up A */
         i__1 = *n - *l - *k;
         claset_("Full", k, &i__1, &c_b1, &c_b1, &a[a_offset], lda);
         i__1 = *n - *l;
-        for (j = *n - *l - *k + 1;
-                j <= i__1;
-                ++j)
+        for(j = *n - *l - *k + 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = j - *n + *l + *k + 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = j - *n + *l + *k + 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 a[i__3].r = 0.f;
@@ -664,30 +670,27 @@ int cggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
             /* L120: */
         }
     }
-    if (*m > *k)
+    if(*m > *k)
     {
         /* QR factorization of A( K+1:M,N-L+1:N ) */
         i__1 = *m - *k;
-        cgeqr2_(&i__1, l, &a[*k + 1 + (*n - *l + 1) * a_dim1], lda, &tau[1], & work[1], info);
-        if (wantu)
+        cgeqr2_(&i__1, l, &a[*k + 1 + (*n - *l + 1) * a_dim1], lda, &tau[1], &work[1], info);
+        if(wantu)
         {
             /* Update U(:,K+1:M) := U(:,K+1:M)*U1 */
             i__1 = *m - *k;
             /* Computing MIN */
             i__3 = *m - *k;
-            i__2 = fla_min(i__3,*l);
-            cunm2r_("Right", "No transpose", m, &i__1, &i__2, &a[*k + 1 + (*n - *l + 1) * a_dim1], lda, &tau[1], &u[(*k + 1) * u_dim1 + 1], ldu, &work[1], info);
+            i__2 = fla_min(i__3, *l);
+            cunm2r_("Right", "No transpose", m, &i__1, &i__2, &a[*k + 1 + (*n - *l + 1) * a_dim1],
+                    lda, &tau[1], &u[(*k + 1) * u_dim1 + 1], ldu, &work[1], info);
         }
         /* Clean up */
         i__1 = *n;
-        for (j = *n - *l + 1;
-                j <= i__1;
-                ++j)
+        for(j = *n - *l + 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = j - *n + *k + *l + 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = j - *n + *k + *l + 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 a[i__3].r = 0.f;
@@ -697,12 +700,12 @@ int cggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer
             /* L140: */
         }
     }
-    q__1.r = (real) lwkopt;
+    q__1.r = (real)lwkopt;
     q__1.i = 0.f; // , expr subst
     work[1].r = q__1.r;
     work[1].i = q__1.i; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGGSVP3 */
 }
 /* cggsvp3_ */

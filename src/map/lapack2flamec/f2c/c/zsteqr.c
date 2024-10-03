@@ -1,16 +1,11 @@
-/* ../netlib/zsteqr.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zsteqr.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    0.,0.
-}
-;
-static doublecomplex c_b2 =
-{
-    1.,0.
-}
-;
+static doublecomplex c_b1 = {0., 0.};
+static doublecomplex c_b2 = {1., 0.};
 static integer c__0 = 0;
 static integer c__1 = 1;
 static integer c__2 = 2;
@@ -21,11 +16,17 @@ static doublereal c_b41 = 1.;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZSTEQR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsteqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsteqr.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsteqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsteqr.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsteqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsteqr.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -135,10 +136,11 @@ on exit, D */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomplex *z__, integer *ldz, doublereal *work, integer *info)
+void zsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomplex *z__,
+             integer *ldz, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zsteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "",*compz, *n, *ldz);
+    AOCL_DTL_SNPRINTF("zsteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "", *compz, *n, *ldz);
     /* System generated locals */
     integer z_dim1, z_offset, i__1, i__2;
     doublereal d__1, d__2;
@@ -154,31 +156,44 @@ int zsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecompl
     doublereal tst, eps2;
     integer lend, jtot;
     extern /* Subroutine */
-    int dlae2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
-    extern logical lsame_(char *, char *);
+        void
+        dlae2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal anorm;
     extern /* Subroutine */
-    int zlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), dlaev2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        zlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
+               doublecomplex *, integer *),
+        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        dlaev2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
+                doublereal *);
     integer lendm1, lendp1;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
     integer iscale;
     extern /* Subroutine */
-    int dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+        void
+        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublereal *, integer *, integer *);
     doublereal safmin;
     extern /* Subroutine */
-    int dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal safmax;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
     extern /* Subroutine */
-    int dlasrt_(char *, integer *, doublereal *, integer *);
+        void
+        dlasrt_(char *, integer *, doublereal *, integer *);
     integer lendsv;
     doublereal ssfmin;
     integer nmaxit, icompz;
     doublereal ssfmax;
     extern /* Subroutine */
-    int zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
+                integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -209,15 +224,15 @@ int zsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecompl
     --work;
     /* Function Body */
     *info = 0;
-    if (lsame_(compz, "N"))
+    if(lsame_(compz, "N", 1, 1))
     {
         icompz = 0;
     }
-    else if (lsame_(compz, "V"))
+    else if(lsame_(compz, "V", 1, 1))
     {
         icompz = 1;
     }
-    else if (lsame_(compz, "I"))
+    else if(lsame_(compz, "I", 1, 1))
     {
         icompz = 2;
     }
@@ -225,41 +240,41 @@ int zsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecompl
     {
         icompz = -1;
     }
-    if (icompz < 0)
+    if(icompz < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*ldz < 1 || icompz > 0 && *ldz < fla_max(1,*n))
+    else if(*ldz < 1 || icompz > 0 && *ldz < fla_max(1, *n))
     {
         *info = -6;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZSTEQR", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
-    if (*n == 1)
+    if(*n == 1)
     {
-        if (icompz == 2)
+        if(icompz == 2)
         {
             i__1 = z_dim1 + 1;
             z__[i__1].r = 1.;
             z__[i__1].i = 0.; // , expr subst
         }
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* Determine the unit roundoff and over/underflow thresholds. */
     eps = dlamch_("E");
@@ -272,7 +287,7 @@ int zsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecompl
     ssfmin = sqrt(safmin) / eps2;
     /* Compute the eigenvalues and eigenvectors of the tridiagonal */
     /* matrix. */
-    if (icompz == 2)
+    if(icompz == 2)
     {
         zlaset_("Full", n, n, &c_b1, &c_b2, &z__[z_offset], ldz);
     }
@@ -284,27 +299,26 @@ int zsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecompl
     l1 = 1;
     nm1 = *n - 1;
 L10:
-    if (l1 > *n)
+    if(l1 > *n)
     {
         goto L160;
     }
-    if (l1 > 1)
+    if(l1 > 1)
     {
         e[l1 - 1] = 0.;
     }
-    if (l1 <= nm1)
+    if(l1 <= nm1)
     {
         i__1 = nm1;
-        for (m = l1;
-                m <= i__1;
-                ++m)
+        for(m = l1; m <= i__1; ++m)
         {
             tst = (d__1 = e[m], f2c_dabs(d__1));
-            if (tst == 0.)
+            if(tst == 0.)
             {
                 goto L30;
             }
-            if (tst <= sqrt((d__1 = d__[m], f2c_dabs(d__1))) * sqrt((d__2 = d__[m + 1], f2c_dabs(d__2))) * eps)
+            if(tst <= sqrt((d__1 = d__[m], f2c_dabs(d__1)))
+                          * sqrt((d__2 = d__[m + 1], f2c_dabs(d__2))) * eps)
             {
                 e[m] = 0.;
                 goto L30;
@@ -319,7 +333,7 @@ L30:
     lend = m;
     lendsv = lend;
     l1 = m + 1;
-    if (lend == l)
+    if(lend == l)
     {
         goto L10;
     }
@@ -327,11 +341,11 @@ L30:
     i__1 = lend - l + 1;
     anorm = dlanst_("I", &i__1, &d__[l], &e[l]);
     iscale = 0;
-    if (anorm == 0.)
+    if(anorm == 0.)
     {
         goto L10;
     }
-    if (anorm > ssfmax)
+    if(anorm > ssfmax)
     {
         iscale = 1;
         i__1 = lend - l + 1;
@@ -339,7 +353,7 @@ L30:
         i__1 = lend - l;
         dlascl_("G", &c__0, &c__0, &anorm, &ssfmax, &i__1, &c__1, &e[l], n, info);
     }
-    else if (anorm < ssfmin)
+    else if(anorm < ssfmin)
     {
         iscale = 2;
         i__1 = lend - l + 1;
@@ -348,28 +362,28 @@ L30:
         dlascl_("G", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &e[l], n, info);
     }
     /* Choose between QL and QR iteration */
-    if ((d__1 = d__[lend], f2c_dabs(d__1)) < (d__2 = d__[l], f2c_dabs(d__2)))
+    if((d__1 = d__[lend], f2c_dabs(d__1)) < (d__2 = d__[l], f2c_dabs(d__2)))
     {
         lend = lsv;
         l = lendsv;
     }
-    if (lend > l)
+    if(lend > l)
     {
         /* QL Iteration */
         /* Look for small subdiagonal element. */
-L40:
-        if (l != lend)
+    L40:
+        if(l != lend)
         {
             lendm1 = lend - 1;
             i__1 = lendm1;
-            for (m = l;
-                    m <= i__1;
-                    ++m)
+            for(m = l; m <= i__1; ++m)
             {
                 /* Computing 2nd power */
                 d__2 = (d__1 = e[m], f2c_dabs(d__1));
                 tst = d__2 * d__2;
-                if (tst <= eps2 * (d__1 = d__[m], f2c_dabs(d__1)) * (d__2 = d__[m + 1], f2c_dabs(d__2)) + safmin)
+                if(tst
+                   <= eps2 * (d__1 = d__[m], f2c_dabs(d__1)) * (d__2 = d__[m + 1], f2c_dabs(d__2))
+                          + safmin)
                 {
                     goto L60;
                 }
@@ -377,26 +391,27 @@ L40:
             }
         }
         m = lend;
-L60:
-        if (m < lend)
+    L60:
+        if(m < lend)
         {
             e[m] = 0.;
         }
         p = d__[l];
-        if (m == l)
+        if(m == l)
         {
             goto L80;
         }
         /* If remaining matrix is 2-by-2, use DLAE2 or SLAEV2 */
         /* to compute its eigensystem. */
-        if (m == l + 1)
+        if(m == l + 1)
         {
-            if (icompz > 0)
+            if(icompz > 0)
             {
                 dlaev2_(&d__[l], &e[l], &d__[l + 1], &rt1, &rt2, &c__, &s);
                 work[l] = c__;
                 work[*n - 1 + l] = s;
-                zlasr_("R", "V", "B", n, &c__2, &work[l], &work[*n - 1 + l], & z__[l * z_dim1 + 1], ldz);
+                zlasr_("R", "V", "B", n, &c__2, &work[l], &work[*n - 1 + l], &z__[l * z_dim1 + 1],
+                       ldz);
             }
             else
             {
@@ -406,13 +421,13 @@ L60:
             d__[l + 1] = rt2;
             e[l] = 0.;
             l += 2;
-            if (l <= lend)
+            if(l <= lend)
             {
                 goto L40;
             }
             goto L140;
         }
-        if (jtot == nmaxit)
+        if(jtot == nmaxit)
         {
             goto L140;
         }
@@ -427,14 +442,12 @@ L60:
         /* Inner loop */
         mm1 = m - 1;
         i__1 = l;
-        for (i__ = mm1;
-                i__ >= i__1;
-                --i__)
+        for(i__ = mm1; i__ >= i__1; --i__)
         {
             f = s * e[i__];
             b = c__ * e[i__];
             dlartg_(&g, &f, &c__, &s, &r__);
-            if (i__ != m - 1)
+            if(i__ != m - 1)
             {
                 e[i__ + 1] = r__;
             }
@@ -444,7 +457,7 @@ L60:
             d__[i__ + 1] = g + p;
             g = c__ * r__ - b;
             /* If eigenvectors are desired, then save rotations. */
-            if (icompz > 0)
+            if(icompz > 0)
             {
                 work[i__] = c__;
                 work[*n - 1 + i__] = -s;
@@ -452,7 +465,7 @@ L60:
             /* L70: */
         }
         /* If eigenvectors are desired, then apply saved rotations. */
-        if (icompz > 0)
+        if(icompz > 0)
         {
             mm = m - l + 1;
             zlasr_("R", "V", "B", n, &mm, &work[l], &work[*n - 1 + l], &z__[l * z_dim1 + 1], ldz);
@@ -461,10 +474,10 @@ L60:
         e[l] = g;
         goto L40;
         /* Eigenvalue found. */
-L80:
+    L80:
         d__[l] = p;
         ++l;
-        if (l <= lend)
+        if(l <= lend)
         {
             goto L40;
         }
@@ -474,19 +487,19 @@ L80:
     {
         /* QR Iteration */
         /* Look for small superdiagonal element. */
-L90:
-        if (l != lend)
+    L90:
+        if(l != lend)
         {
             lendp1 = lend + 1;
             i__1 = lendp1;
-            for (m = l;
-                    m >= i__1;
-                    --m)
+            for(m = l; m >= i__1; --m)
             {
                 /* Computing 2nd power */
                 d__2 = (d__1 = e[m - 1], f2c_dabs(d__1));
                 tst = d__2 * d__2;
-                if (tst <= eps2 * (d__1 = d__[m], f2c_dabs(d__1)) * (d__2 = d__[m - 1], f2c_dabs(d__2)) + safmin)
+                if(tst
+                   <= eps2 * (d__1 = d__[m], f2c_dabs(d__1)) * (d__2 = d__[m - 1], f2c_dabs(d__2))
+                          + safmin)
                 {
                     goto L110;
                 }
@@ -494,26 +507,27 @@ L90:
             }
         }
         m = lend;
-L110:
-        if (m > lend)
+    L110:
+        if(m > lend)
         {
             e[m - 1] = 0.;
         }
         p = d__[l];
-        if (m == l)
+        if(m == l)
         {
             goto L130;
         }
         /* If remaining matrix is 2-by-2, use DLAE2 or SLAEV2 */
         /* to compute its eigensystem. */
-        if (m == l - 1)
+        if(m == l - 1)
         {
-            if (icompz > 0)
+            if(icompz > 0)
             {
-                dlaev2_(&d__[l - 1], &e[l - 1], &d__[l], &rt1, &rt2, &c__, &s) ;
+                dlaev2_(&d__[l - 1], &e[l - 1], &d__[l], &rt1, &rt2, &c__, &s);
                 work[m] = c__;
                 work[*n - 1 + m] = s;
-                zlasr_("R", "V", "F", n, &c__2, &work[m], &work[*n - 1 + m], & z__[(l - 1) * z_dim1 + 1], ldz);
+                zlasr_("R", "V", "F", n, &c__2, &work[m], &work[*n - 1 + m],
+                       &z__[(l - 1) * z_dim1 + 1], ldz);
             }
             else
             {
@@ -523,13 +537,13 @@ L110:
             d__[l] = rt2;
             e[l - 1] = 0.;
             l += -2;
-            if (l >= lend)
+            if(l >= lend)
             {
                 goto L90;
             }
             goto L140;
         }
-        if (jtot == nmaxit)
+        if(jtot == nmaxit)
         {
             goto L140;
         }
@@ -544,14 +558,12 @@ L110:
         /* Inner loop */
         lm1 = l - 1;
         i__1 = lm1;
-        for (i__ = m;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = m; i__ <= i__1; ++i__)
         {
             f = s * e[i__];
             b = c__ * e[i__];
             dlartg_(&g, &f, &c__, &s, &r__);
-            if (i__ != m)
+            if(i__ != m)
             {
                 e[i__ - 1] = r__;
             }
@@ -561,7 +573,7 @@ L110:
             d__[i__] = g + p;
             g = c__ * r__ - b;
             /* If eigenvectors are desired, then save rotations. */
-            if (icompz > 0)
+            if(icompz > 0)
             {
                 work[i__] = c__;
                 work[*n - 1 + i__] = s;
@@ -569,7 +581,7 @@ L110:
             /* L120: */
         }
         /* If eigenvectors are desired, then apply saved rotations. */
-        if (icompz > 0)
+        if(icompz > 0)
         {
             mm = l - m + 1;
             zlasr_("R", "V", "F", n, &mm, &work[m], &work[*n - 1 + m], &z__[m * z_dim1 + 1], ldz);
@@ -578,10 +590,10 @@ L110:
         e[lm1] = g;
         goto L90;
         /* Eigenvalue found. */
-L130:
+    L130:
         d__[l] = p;
         --l;
-        if (l >= lend)
+        if(l >= lend)
         {
             goto L90;
         }
@@ -589,14 +601,14 @@ L130:
     }
     /* Undo scaling if necessary */
 L140:
-    if (iscale == 1)
+    if(iscale == 1)
     {
         i__1 = lendsv - lsv + 1;
         dlascl_("G", &c__0, &c__0, &ssfmax, &anorm, &i__1, &c__1, &d__[lsv], n, info);
         i__1 = lendsv - lsv;
         dlascl_("G", &c__0, &c__0, &ssfmax, &anorm, &i__1, &c__1, &e[lsv], n, info);
     }
-    else if (iscale == 2)
+    else if(iscale == 2)
     {
         i__1 = lendsv - lsv + 1;
         dlascl_("G", &c__0, &c__0, &ssfmin, &anorm, &i__1, &c__1, &d__[lsv], n, info);
@@ -605,26 +617,24 @@ L140:
     }
     /* Check for no convergence to an eigenvalue after a total */
     /* of N*MAXIT iterations. */
-    if (jtot == nmaxit)
+    if(jtot == nmaxit)
     {
         i__1 = *n - 1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            if (e[i__] != 0.)
+            if(e[i__] != 0.)
             {
                 ++(*info);
             }
             /* L150: */
         }
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     goto L10;
     /* Order eigenvalues and eigenvectors. */
 L160:
-    if (icompz == 0)
+    if(icompz == 0)
     {
         /* Use Quick Sort */
         dlasrt_("I", n, &d__[1], info);
@@ -633,26 +643,22 @@ L160:
     {
         /* Use Selection Sort to minimize swaps of eigenvectors */
         i__1 = *n;
-        for (ii = 2;
-                ii <= i__1;
-                ++ii)
+        for(ii = 2; ii <= i__1; ++ii)
         {
             i__ = ii - 1;
             k = i__;
             p = d__[i__];
             i__2 = *n;
-            for (j = ii;
-                    j <= i__2;
-                    ++j)
+            for(j = ii; j <= i__2; ++j)
             {
-                if (d__[j] < p)
+                if(d__[j] < p)
                 {
                     k = j;
                     p = d__[j];
                 }
                 /* L170: */
             }
-            if (k != i__)
+            if(k != i__)
             {
                 d__[k] = d__[i__];
                 d__[i__] = p;
@@ -662,7 +668,7 @@ L160:
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZSTEQR */
 }
 /* zsteqr_ */

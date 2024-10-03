@@ -1,16 +1,25 @@
-/* ../netlib/slarfg.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slarfg.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLARFG generates an elementary reflector (Householder matrix). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLARFG + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarfg. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarfg.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarfg. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarfg.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarfg. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarfg.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -92,12 +101,12 @@
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int slarfg_(integer *n, real *alpha, real *x, integer *incx, real *tau)
+void slarfg_(integer *n, real *alpha, real *x, integer *incx, real *tau)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slarfg inputs: n %d, incx %d",*n, *incx);
+    snprintf(buffer, 256, "slarfg inputs: n %d, incx %d", *n, *incx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -110,10 +119,15 @@ int slarfg_(integer *n, real *alpha, real *x, integer *incx, real *tau)
     real beta;
     extern real snrm2_(integer *, real *, integer *);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     real xnorm;
     extern real slapy2_(real *, real *), slamch_(char *);
     real safmin, rsafmn;
+#if FLA_ENABLE_AMD_OPT
+    void fla_sscal(integer *n, real *alpha, real *x, integer *incx);
+#endif
+
     /* -- LAPACK auxiliary routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -137,15 +151,15 @@ int slarfg_(integer *n, real *alpha, real *x, integer *incx, real *tau)
     /* Parameter adjustments */
     --x;
     /* Function Body */
-    if (*n <= 1)
+    if(*n <= 1)
     {
         *tau = 0.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     i__1 = *n - 1;
     xnorm = snrm2_(&i__1, &x[1], incx);
-    if (xnorm == 0.f)
+    if(xnorm == 0.f)
     {
         /* H = I */
         *tau = 0.f;
@@ -157,18 +171,23 @@ int slarfg_(integer *n, real *alpha, real *x, integer *incx, real *tau)
         beta = -r_sign(&r__1, alpha);
         safmin = slamch_("S") / slamch_("E");
         knt = 0;
-        if (f2c_abs(beta) < safmin)
+        if(f2c_abs(beta) < safmin)
         {
             /* XNORM, BETA may be inaccurate;
             scale X and recompute them */
             rsafmn = 1.f / safmin;
-L10:
+        L10:
             ++knt;
             i__1 = *n - 1;
+#if FLA_ENABLE_AMD_OPT
+            /* Inline SSCAL for small sizes */
+            fla_sscal(&i__1, &rsafmn, &x[1], incx);
+#else
             sscal_(&i__1, &rsafmn, &x[1], incx);
+#endif
             beta *= rsafmn;
             *alpha *= rsafmn;
-            if (f2c_abs(beta) < safmin && knt < 20)
+            if(f2c_abs(beta) < safmin && knt < 20)
             {
                 goto L10;
             }
@@ -181,12 +200,15 @@ L10:
         *tau = (beta - *alpha) / beta;
         i__1 = *n - 1;
         r__1 = 1.f / (*alpha - beta);
+#if FLA_ENABLE_AMD_OPT
+        /* Inline SSCAL for small sizes */
+        fla_sscal(&i__1, &r__1, &x[1], incx);
+#else
         sscal_(&i__1, &r__1, &x[1], incx);
+#endif
         /* If ALPHA is subnormal, it may lose relative accuracy */
         i__1 = knt;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             beta *= safmin;
             /* L20: */
@@ -194,8 +216,7 @@ L10:
         *alpha = beta;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLARFG */
 }
 /* slarfg_ */
-

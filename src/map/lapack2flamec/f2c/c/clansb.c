@@ -1,18 +1,28 @@
-/* clansb.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* clansb.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b CLANSB returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, or the ele ment of largest absolute value of a symmetric band matrix. */
+/* > \brief \b CLANSB returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
+ * or the ele ment of largest absolute value of a symmetric band matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLANSB + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clansb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clansb.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clansb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clansb.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clansb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clansb.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -92,7 +102,7 @@ static integer c__1 = 1;
 /* > stored in the first K+1 rows of AB. The j-th column of A is */
 /* > stored in the j-th column of the array AB as follows: */
 /* > if UPLO = 'U', AB(k+1+i-j,j) = A(i,j) for fla_max(1,j-k)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+k). */
 /* > \endverbatim */
 /* > */
@@ -123,9 +133,11 @@ real clansb_(char *norm, char *uplo, integer *n, integer *k, complex *ab, intege
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clansb inputs: norm %c, uplo %c, n %lld, k %lld, ldab %lld",*norm, *uplo, *n, *k, *ldab);
+    snprintf(buffer, 256, "clansb inputs: norm %c, uplo %c, n %lld, k %lld, ldab %lld", *norm,
+             *uplo, *n, *k, *ldab);
 #else
-    snprintf(buffer, 256,"clansb inputs: norm %c, uplo %c, n %d, k %d, ldab %d",*norm, *uplo, *n, *k, *ldab);
+    snprintf(buffer, 256, "clansb inputs: norm %c, uplo %c, n %d, k %d, ldab %d", *norm, *uplo, *n,
+             *k, *ldab);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -137,10 +149,11 @@ real clansb_(char *norm, char *uplo, integer *n, integer *k, complex *ab, intege
     /* Local variables */
     integer i__, j, l;
     real sum, absa, scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real value;
     extern /* Subroutine */
-    int classq_(integer *, complex *, integer *, real *, real *);
+        void
+        classq_(integer *, complex *, integer *, real *, real *);
     extern logical sisnan_(real *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -168,30 +181,26 @@ real clansb_(char *norm, char *uplo, integer *n, integer *k, complex *ab, intege
     --work;
     /* Function Body */
     value = 0.f;
-    if (*n == 0)
+    if(*n == 0)
     {
         value = 0.f;
     }
-    else if (lsame_(norm, "M"))
+    else if(lsame_(norm, "M", 1, 1))
     {
         /* Find fla_max(abs(A(i,j))). */
         value = 0.f;
-        if (lsame_(uplo, "U"))
+        if(lsame_(uplo, "U", 1, 1))
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 /* Computing MAX */
                 i__2 = *k + 2 - j;
                 i__3 = *k + 1;
-                for (i__ = fla_max(i__2,1);
-                        i__ <= i__3;
-                        ++i__)
+                for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
                 {
                     sum = c_abs(&ab[i__ + j * ab_dim1]);
-                    if (value < sum || sisnan_(&sum))
+                    if(value < sum || sisnan_(&sum))
                     {
                         value = sum;
                     }
@@ -203,20 +212,16 @@ real clansb_(char *norm, char *uplo, integer *n, integer *k, complex *ab, intege
         else
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 /* Computing MIN */
                 i__2 = *n + 1 - j;
                 i__4 = *k + 1; // , expr subst
-                i__3 = fla_min(i__2,i__4);
-                for (i__ = 1;
-                        i__ <= i__3;
-                        ++i__)
+                i__3 = fla_min(i__2, i__4);
+                for(i__ = 1; i__ <= i__3; ++i__)
                 {
                     sum = c_abs(&ab[i__ + j * ab_dim1]);
-                    if (value < sum || sisnan_(&sum))
+                    if(value < sum || sisnan_(&sum))
                     {
                         value = sum;
                     }
@@ -226,16 +231,14 @@ real clansb_(char *norm, char *uplo, integer *n, integer *k, complex *ab, intege
             }
         }
     }
-    else if (lsame_(norm, "I") || lsame_(norm, "O") || *(unsigned char *)norm == '1')
+    else if(lsame_(norm, "I", 1, 1) || lsame_(norm, "O", 1, 1) || *(unsigned char *)norm == '1')
     {
         /* Find normI(A) ( = norm1(A), since A is symmetric). */
         value = 0.f;
-        if (lsame_(uplo, "U"))
+        if(lsame_(uplo, "U", 1, 1))
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 sum = 0.f;
                 l = *k + 1 - j;
@@ -243,9 +246,7 @@ real clansb_(char *norm, char *uplo, integer *n, integer *k, complex *ab, intege
                 i__3 = 1;
                 i__2 = j - *k; // , expr subst
                 i__4 = j - 1;
-                for (i__ = fla_max(i__3,i__2);
-                        i__ <= i__4;
-                        ++i__)
+                for(i__ = fla_max(i__3, i__2); i__ <= i__4; ++i__)
                 {
                     absa = c_abs(&ab[l + i__ + j * ab_dim1]);
                     sum += absa;
@@ -256,12 +257,10 @@ real clansb_(char *norm, char *uplo, integer *n, integer *k, complex *ab, intege
                 /* L60: */
             }
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 sum = work[i__];
-                if (value < sum || sisnan_(&sum))
+                if(value < sum || sisnan_(&sum))
                 {
                     value = sum;
                 }
@@ -271,34 +270,28 @@ real clansb_(char *norm, char *uplo, integer *n, integer *k, complex *ab, intege
         else
         {
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 work[i__] = 0.f;
                 /* L80: */
             }
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 sum = work[j] + c_abs(&ab[j * ab_dim1 + 1]);
                 l = 1 - j;
                 /* Computing MIN */
                 i__3 = *n;
                 i__2 = j + *k; // , expr subst
-                i__4 = fla_min(i__3,i__2);
-                for (i__ = j + 1;
-                        i__ <= i__4;
-                        ++i__)
+                i__4 = fla_min(i__3, i__2);
+                for(i__ = j + 1; i__ <= i__4; ++i__)
                 {
                     absa = c_abs(&ab[l + i__ + j * ab_dim1]);
                     sum += absa;
                     work[i__] += absa;
                     /* L90: */
                 }
-                if (value < sum || sisnan_(&sum))
+                if(value < sum || sisnan_(&sum))
                 {
                     value = sum;
                 }
@@ -306,26 +299,24 @@ real clansb_(char *norm, char *uplo, integer *n, integer *k, complex *ab, intege
             }
         }
     }
-    else if (lsame_(norm, "F") || lsame_(norm, "E"))
+    else if(lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
     {
         /* Find normF(A). */
         scale = 0.f;
         sum = 1.f;
-        if (*k > 0)
+        if(*k > 0)
         {
-            if (lsame_(uplo, "U"))
+            if(lsame_(uplo, "U", 1, 1))
             {
                 i__1 = *n;
-                for (j = 2;
-                        j <= i__1;
-                        ++j)
+                for(j = 2; j <= i__1; ++j)
                 {
                     /* Computing MIN */
                     i__3 = j - 1;
-                    i__4 = fla_min(i__3,*k);
+                    i__4 = fla_min(i__3, *k);
                     /* Computing MAX */
                     i__2 = *k + 2 - j;
-                    classq_(&i__4, &ab[fla_max(i__2,1) + j * ab_dim1], &c__1, & scale, &sum);
+                    classq_(&i__4, &ab[fla_max(i__2, 1) + j * ab_dim1], &c__1, &scale, &sum);
                     /* L110: */
                 }
                 l = *k + 1;
@@ -333,13 +324,11 @@ real clansb_(char *norm, char *uplo, integer *n, integer *k, complex *ab, intege
             else
             {
                 i__1 = *n - 1;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     /* Computing MIN */
                     i__3 = *n - j;
-                    i__4 = fla_min(i__3,*k);
+                    i__4 = fla_min(i__3, *k);
                     classq_(&i__4, &ab[j * ab_dim1 + 2], &c__1, &scale, &sum);
                     /* L120: */
                 }

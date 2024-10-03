@@ -1,19 +1,29 @@
-/* ../netlib/slasd0.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slasd0.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__0 = 0;
 static integer c__2 = 2;
-/* > \brief \b SLASD0 computes the singular values of a real upper bidiagonal n-by-m matrix B with diagonal d and off-diagonal e. Used by sbdsdc. */
+/* > \brief \b SLASD0 computes the singular values of a real upper bidiagonal n-by-m matrix B with
+ * diagonal d and off-diagonal e. Used by sbdsdc. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLASD0 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasd0. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasd0.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasd0. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasd0.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasd0. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasd0.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -56,9 +66,9 @@ static integer c__2 = 2;
 /* > SQRE is INTEGER */
 /* > Specifies the column dimension of the bidiagonal matrix. */
 /* > = 0: The bidiagonal matrix has column dimension M = N;
-*/
+ */
 /* > = 1: The bidiagonal matrix has column dimension M = N+1;
-*/
+ */
 /* > \endverbatim */
 /* > */
 /* > \param[in,out] D */
@@ -140,7 +150,8 @@ static integer c__2 = 2;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slasd0_(integer *n, integer *sqre, real *d__, real *e, real *u, integer *ldu, real *vt, integer *ldvt, integer *smlsiz, integer *iwork, real *work, integer *info)
+void slasd0_(integer *n, integer *sqre, real *d__, real *e, real *u, integer *ldu, real *vt,
+             integer *ldvt, integer *smlsiz, integer *iwork, real *work, integer *info)
 {
     /* System generated locals */
     integer u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
@@ -153,7 +164,13 @@ int slasd0_(integer *n, integer *sqre, real *d__, real *e, real *u, integer *ldu
     real alpha;
     integer inode, ndiml, idxqc, ndimr, itemp, sqrei;
     extern /* Subroutine */
-    int slasd1_(integer *, integer *, integer *, real *, real *, real *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slasdq_(char *, integer *, integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), slasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer * );
+        void
+        slasd1_(integer *, integer *, integer *, real *, real *, real *, real *, integer *, real *,
+                integer *, integer *, integer *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slasdq_(char *, integer *, integer *, integer *, integer *, integer *, real *, real *,
+                real *, integer *, real *, integer *, real *, integer *, real *, integer *),
+        slasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -182,38 +199,39 @@ int slasd0_(integer *n, integer *sqre, real *d__, real *e, real *u, integer *ldu
     --work;
     /* Function Body */
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
     }
-    else if (*sqre < 0 || *sqre > 1)
+    else if(*sqre < 0 || *sqre > 1)
     {
         *info = -2;
     }
     m = *n + *sqre;
-    if (*ldu < *n)
+    if(*ldu < *n)
     {
         *info = -6;
     }
-    else if (*ldvt < m)
+    else if(*ldvt < m)
     {
         *info = -8;
     }
-    else if (*smlsiz < 3)
+    else if(*smlsiz < 3)
     {
         *info = -9;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SLASD0", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* If the input matrix is too small, call SLASDQ to find the SVD. */
-    if (*n <= *smlsiz)
+    if(*n <= *smlsiz)
     {
-        slasdq_("U", sqre, n, &m, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldvt, &u[u_offset], ldu, &u[u_offset], ldu, &work[1], info);
-        return 0;
+        slasdq_("U", sqre, n, &m, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldvt, &u[u_offset], ldu,
+                &u[u_offset], ldu, &work[1], info);
+        return;
     }
     /* Set up the computation tree. */
     inode = 1;
@@ -227,9 +245,7 @@ int slasd0_(integer *n, integer *sqre, real *d__, real *e, real *u, integer *ldu
     ndb1 = (nd + 1) / 2;
     ncc = 0;
     i__1 = nd;
-    for (i__ = ndb1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = ndb1; i__ <= i__1; ++i__)
     {
         /* IC : center row of each node */
         /* NL : number of rows of left subproblem */
@@ -245,21 +261,20 @@ int slasd0_(integer *n, integer *sqre, real *d__, real *e, real *u, integer *ldu
         nlf = ic - nl;
         nrf = ic + 1;
         sqrei = 1;
-        slasdq_("U", &sqrei, &nl, &nlp1, &nl, &ncc, &d__[nlf], &e[nlf], &vt[ nlf + nlf * vt_dim1], ldvt, &u[nlf + nlf * u_dim1], ldu, &u[ nlf + nlf * u_dim1], ldu, &work[1], info);
-        if (*info != 0)
+        slasdq_("U", &sqrei, &nl, &nlp1, &nl, &ncc, &d__[nlf], &e[nlf], &vt[nlf + nlf * vt_dim1],
+                ldvt, &u[nlf + nlf * u_dim1], ldu, &u[nlf + nlf * u_dim1], ldu, &work[1], info);
+        if(*info != 0)
         {
-            return 0;
+            return;
         }
         itemp = idxq + nlf - 2;
         i__2 = nl;
-        for (j = 1;
-                j <= i__2;
-                ++j)
+        for(j = 1; j <= i__2; ++j)
         {
             iwork[itemp + j] = j;
             /* L10: */
         }
-        if (i__ == nd)
+        if(i__ == nd)
         {
             sqrei = *sqre;
         }
@@ -268,16 +283,15 @@ int slasd0_(integer *n, integer *sqre, real *d__, real *e, real *u, integer *ldu
             sqrei = 1;
         }
         nrp1 = nr + sqrei;
-        slasdq_("U", &sqrei, &nr, &nrp1, &nr, &ncc, &d__[nrf], &e[nrf], &vt[ nrf + nrf * vt_dim1], ldvt, &u[nrf + nrf * u_dim1], ldu, &u[ nrf + nrf * u_dim1], ldu, &work[1], info);
-        if (*info != 0)
+        slasdq_("U", &sqrei, &nr, &nrp1, &nr, &ncc, &d__[nrf], &e[nrf], &vt[nrf + nrf * vt_dim1],
+                ldvt, &u[nrf + nrf * u_dim1], ldu, &u[nrf + nrf * u_dim1], ldu, &work[1], info);
+        if(*info != 0)
         {
-            return 0;
+            return;
         }
         itemp = idxq + ic;
         i__2 = nr;
-        for (j = 1;
-                j <= i__2;
-                ++j)
+        for(j = 1; j <= i__2; ++j)
         {
             iwork[itemp + j - 1] = j;
             /* L20: */
@@ -285,13 +299,11 @@ int slasd0_(integer *n, integer *sqre, real *d__, real *e, real *u, integer *ldu
         /* L30: */
     }
     /* Now conquer each subproblem bottom-up. */
-    for (lvl = nlvl;
-            lvl >= 1;
-            --lvl)
+    for(lvl = nlvl; lvl >= 1; --lvl)
     {
         /* Find the first node LF and last node LL on the */
         /* current level LVL. */
-        if (lvl == 1)
+        if(lvl == 1)
         {
             lf = 1;
             ll = 1;
@@ -303,16 +315,14 @@ int slasd0_(integer *n, integer *sqre, real *d__, real *e, real *u, integer *ldu
             ll = (lf << 1) - 1;
         }
         i__1 = ll;
-        for (i__ = lf;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = lf; i__ <= i__1; ++i__)
         {
             im1 = i__ - 1;
             ic = iwork[inode + im1];
             nl = iwork[ndiml + im1];
             nr = iwork[ndimr + im1];
             nlf = ic - nl;
-            if (*sqre == 0 && i__ == ll)
+            if(*sqre == 0 && i__ == ll)
             {
                 sqrei = *sqre;
             }
@@ -323,16 +333,17 @@ int slasd0_(integer *n, integer *sqre, real *d__, real *e, real *u, integer *ldu
             idxqc = idxq + nlf - 1;
             alpha = d__[ic];
             beta = e[ic];
-            slasd1_(&nl, &nr, &sqrei, &d__[nlf], &alpha, &beta, &u[nlf + nlf * u_dim1], ldu, &vt[nlf + nlf * vt_dim1], ldvt, &iwork[ idxqc], &iwork[iwk], &work[1], info);
-            if (*info != 0)
+            slasd1_(&nl, &nr, &sqrei, &d__[nlf], &alpha, &beta, &u[nlf + nlf * u_dim1], ldu,
+                    &vt[nlf + nlf * vt_dim1], ldvt, &iwork[idxqc], &iwork[iwk], &work[1], info);
+            if(*info != 0)
             {
-                return 0;
+                return;
             }
             /* L40: */
         }
         /* L50: */
     }
-    return 0;
+    return;
     /* End of SLASD0 */
 }
 /* slasd0_ */

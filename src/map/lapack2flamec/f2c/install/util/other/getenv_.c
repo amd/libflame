@@ -8,7 +8,7 @@ extern char *F77_aloc(), *getenv();
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern char *F77_aloc(ftnlen, const char*);
+extern char *F77_aloc(ftnlen, const char *);
 #endif
 
 /*
@@ -24,39 +24,40 @@ extern char *F77_aloc(ftnlen, const char*);
  */
 
 #ifdef KR_headers
- VOID
-getenv_(fname, value, flen, vlen) char *value, *fname; ftnlen vlen, flen;
+VOID getenv_(fname, value, flen, vlen) char *value, *fname;
+ftnlen vlen, flen;
 #else
- void
-getenv_(char *fname, char *value, ftnlen flen, ftnlen vlen)
+void getenv_(char *fname, char *value, ftnlen flen, ftnlen vlen)
 #endif
 {
-	char buf[256], *ep, *fp;
-	integer i;
+    char buf[256], *ep, *fp;
+    integer i;
 
-	if (flen <= 0)
-		goto add_blanks;
-	for(i = 0; i < sizeof(buf); i++) {
-		if (i == flen || (buf[i] = fname[i]) == ' ') {
-			buf[i] = 0;
-			ep = getenv(buf);
-			goto have_ep;
-			}
-		}
-	while(i < flen && fname[i] != ' ')
-		i++;
-	strncpy(fp = F77_aloc(i+1, "getenv_"), fname, (int)i);
-	fp[i] = 0;
-	ep = getenv(fp);
-	free(fp);
- have_ep:
-	if (ep)
-		while(*ep && vlen-- > 0)
-			*value++ = *ep++;
- add_blanks:
-	while(vlen-- > 0)
-		*value++ = ' ';
-	}
+    if(flen <= 0)
+        goto add_blanks;
+    for(i = 0; i < sizeof(buf); i++)
+    {
+        if(i == flen || (buf[i] = fname[i]) == ' ')
+        {
+            buf[i] = 0;
+            ep = getenv(buf);
+            goto have_ep;
+        }
+    }
+    while(i < flen && fname[i] != ' ')
+        i++;
+    strncpy(fp = F77_aloc(i + 1, "getenv_"), fname, (int)i);
+    fp[i] = 0;
+    ep = getenv(fp);
+    free(fp);
+have_ep:
+    if(ep)
+        while(*ep && vlen-- > 0)
+            *value++ = *ep++;
+add_blanks:
+    while(vlen-- > 0)
+        *value++ = ' ';
+}
 #ifdef __cplusplus
 }
 #endif

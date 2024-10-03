@@ -1,23 +1,29 @@
-/* ../netlib/cgeqrt3.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cgeqrt3.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {1.f, 0.f};
 static integer c__1 = 1;
-/* > \brief <b> CGEQRT3 recursively computes a QR factorization of a general real or complex matrix using the compact WY representation of Q. </b> */
+/* > \brief <b> CGEQRT3 recursively computes a QR factorization of a general real or complex matrix
+ * using the compact WY representation of Q. </b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CGEQRT3 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgeqrt3 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgeqrt3
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgeqrt3 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgeqrt3
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgeqrt3 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgeqrt3
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -127,15 +133,16 @@ the elements below the diagonal are not used. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cgeqrt3_(integer *m, integer *n, complex *a, integer * lda, complex *t, integer *ldt, integer *info)
+void cgeqrt3_(integer *m, integer *n, complex *a, integer *lda, complex *t, integer *ldt,
+              integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgeqrt3 inputs: m %ld, n %ld, lda %ld, ldt %ld",*m, *n, *lda, *ldt);
+    snprintf(buffer, 256, "cgeqrt3 inputs: m %ld, n %ld, lda %ld, ldt %ld", *m, *n, *lda, *ldt);
 #else
-    snprintf(buffer, 256,"cgeqrt3 inputs: m %d, n %d, lda %d, ldt %d",*m, *n, *lda, *ldt);
+    snprintf(buffer, 256, "cgeqrt3 inputs: m %d, n %d, lda %d, ldt %d", *m, *n, *lda, *ldt);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -147,10 +154,16 @@ int cgeqrt3_(integer *m, integer *n, complex *a, integer * lda, complex *t, inte
     /* Local variables */
     integer i__, j, i1, j1, n1, n2;
     extern /* Subroutine */
-    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+        void
+        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
+               complex *, integer *, complex *, complex *, integer *);
     integer iinfo;
     extern /* Subroutine */
-    int ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), clarfg_(integer *, complex *, complex *, integer *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
+               integer *, complex *, integer *),
+        clarfg_(integer *, complex *, complex *, integer *, complex *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -176,33 +189,33 @@ int cgeqrt3_(integer *m, integer *n, complex *a, integer * lda, complex *t, inte
     t -= t_offset;
     /* Function Body */
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -2;
     }
-    else if (*m < *n)
+    else if(*m < *n)
     {
         *info = -1;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
-    else if (*ldt < fla_max(1,*n))
+    else if(*ldt < fla_max(1, *n))
     {
         *info = -6;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CGEQRT3", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (*n == 1)
+    if(*n == 1)
     {
         /* Compute Householder transform when N=1 */
-        clarfg_(m, &a[a_dim1 + 1], &a[fla_min(2,*m) + a_dim1], &c__1, &t[t_dim1 + 1]);
+        clarfg_(m, &a[a_dim1 + 1], &a[fla_min(2, *m) + a_dim1], &c__1, &t[t_dim1 + 1]);
     }
     else
     {
@@ -211,22 +224,18 @@ int cgeqrt3_(integer *m, integer *n, complex *a, integer * lda, complex *t, inte
         n2 = *n - n1;
         /* Computing MIN */
         i__1 = n1 + 1;
-        j1 = fla_min(i__1,*n);
+        j1 = fla_min(i__1, *n);
         /* Computing MIN */
         i__1 = *n + 1;
-        i1 = fla_min(i__1,*m);
+        i1 = fla_min(i__1, *m);
         /* Compute A(1:M,1:N1) <- (Y1,R1,T1), where Q1 = I - Y1 T1 Y1**H */
         cgeqrt3_(m, &n1, &a[a_offset], lda, &t[t_offset], ldt, &iinfo);
         /* Compute A(1:M,J1:N) = Q1**H A(1:M,J1:N) [workspace: T(1:N1,J1:N)] */
         i__1 = n2;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = n1;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + (j + n1) * t_dim1;
                 i__4 = i__ + (j + n1) * a_dim1;
@@ -234,30 +243,28 @@ int cgeqrt3_(integer *m, integer *n, complex *a, integer * lda, complex *t, inte
                 t[i__3].i = a[i__4].i; // , expr subst
             }
         }
-        ctrmm_("L", "L", "C", "U", &n1, &n2, &c_b1, &a[a_offset], lda, &t[j1 * t_dim1 + 1], ldt) ;
+        ctrmm_("L", "L", "C", "U", &n1, &n2, &c_b1, &a[a_offset], lda, &t[j1 * t_dim1 + 1], ldt);
         i__1 = *m - n1;
-        cgemm_("C", "N", &n1, &n2, &i__1, &c_b1, &a[j1 + a_dim1], lda, &a[j1 + j1 * a_dim1], lda, &c_b1, &t[j1 * t_dim1 + 1], ldt);
-        ctrmm_("L", "U", "C", "N", &n1, &n2, &c_b1, &t[t_offset], ldt, &t[j1 * t_dim1 + 1], ldt) ;
+        cgemm_("C", "N", &n1, &n2, &i__1, &c_b1, &a[j1 + a_dim1], lda, &a[j1 + j1 * a_dim1], lda,
+               &c_b1, &t[j1 * t_dim1 + 1], ldt);
+        ctrmm_("L", "U", "C", "N", &n1, &n2, &c_b1, &t[t_offset], ldt, &t[j1 * t_dim1 + 1], ldt);
         i__1 = *m - n1;
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        cgemm_("N", "N", &i__1, &n2, &n1, &q__1, &a[j1 + a_dim1], lda, &t[j1 * t_dim1 + 1], ldt, &c_b1, &a[j1 + j1 * a_dim1], lda);
-        ctrmm_("L", "L", "N", "U", &n1, &n2, &c_b1, &a[a_offset], lda, &t[j1 * t_dim1 + 1], ldt) ;
+        cgemm_("N", "N", &i__1, &n2, &n1, &q__1, &a[j1 + a_dim1], lda, &t[j1 * t_dim1 + 1], ldt,
+               &c_b1, &a[j1 + j1 * a_dim1], lda);
+        ctrmm_("L", "L", "N", "U", &n1, &n2, &c_b1, &a[a_offset], lda, &t[j1 * t_dim1 + 1], ldt);
         i__1 = n2;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = n1;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + (j + n1) * a_dim1;
                 i__4 = i__ + (j + n1) * a_dim1;
                 i__5 = i__ + (j + n1) * t_dim1;
                 q__1.r = a[i__4].r - t[i__5].r;
-                q__1.i = a[i__4].i - t[i__5] .i; // , expr subst
+                q__1.i = a[i__4].i - t[i__5].i; // , expr subst
                 a[i__3].r = q__1.r;
                 a[i__3].i = q__1.i; // , expr subst
             }
@@ -267,14 +274,10 @@ int cgeqrt3_(integer *m, integer *n, complex *a, integer * lda, complex *t, inte
         cgeqrt3_(&i__1, &n2, &a[j1 + j1 * a_dim1], lda, &t[j1 + j1 * t_dim1], ldt, &iinfo);
         /* Compute T3 = T(1:N1,J1:N) = -T1 Y1**H Y2 T2 */
         i__1 = n1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = n2;
-            for (j = 1;
-                    j <= i__2;
-                    ++j)
+            for(j = 1; j <= i__2; ++j)
             {
                 i__3 = i__ + (j + n1) * t_dim1;
                 r_cnjg(&q__1, &a[j + n1 + i__ * a_dim1]);
@@ -282,20 +285,23 @@ int cgeqrt3_(integer *m, integer *n, complex *a, integer * lda, complex *t, inte
                 t[i__3].i = q__1.i; // , expr subst
             }
         }
-        ctrmm_("R", "L", "N", "U", &n1, &n2, &c_b1, &a[j1 + j1 * a_dim1], lda, &t[j1 * t_dim1 + 1], ldt);
+        ctrmm_("R", "L", "N", "U", &n1, &n2, &c_b1, &a[j1 + j1 * a_dim1], lda, &t[j1 * t_dim1 + 1],
+               ldt);
         i__1 = *m - *n;
-        cgemm_("C", "N", &n1, &n2, &i__1, &c_b1, &a[i1 + a_dim1], lda, &a[i1 + j1 * a_dim1], lda, &c_b1, &t[j1 * t_dim1 + 1], ldt);
+        cgemm_("C", "N", &n1, &n2, &i__1, &c_b1, &a[i1 + a_dim1], lda, &a[i1 + j1 * a_dim1], lda,
+               &c_b1, &t[j1 * t_dim1 + 1], ldt);
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        ctrmm_("L", "U", "N", "N", &n1, &n2, &q__1, &t[t_offset], ldt, &t[j1 * t_dim1 + 1], ldt) ;
-        ctrmm_("R", "U", "N", "N", &n1, &n2, &c_b1, &t[j1 + j1 * t_dim1], ldt, &t[j1 * t_dim1 + 1], ldt);
+        ctrmm_("L", "U", "N", "N", &n1, &n2, &q__1, &t[t_offset], ldt, &t[j1 * t_dim1 + 1], ldt);
+        ctrmm_("R", "U", "N", "N", &n1, &n2, &c_b1, &t[j1 + j1 * t_dim1], ldt, &t[j1 * t_dim1 + 1],
+               ldt);
         /* Y = (Y1,Y2);
         R = [ R1 A(1:N1,J1:N) ];
         T = [T1 T3] */
         /* [ 0 R2 ] [ 0 T2] */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGEQRT3 */
 }
 /* cgeqrt3_ */

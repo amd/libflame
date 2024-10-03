@@ -1,18 +1,28 @@
-/* ../netlib/zla_hercond_c.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zla_hercond_c.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b ZLA_HERCOND_C computes the infinity norm condition number of op(A)*inv(diag(c)) for Hermitian i ndefinite matrices. */
+/* > \brief \b ZLA_HERCOND_C computes the infinity norm condition number of op(A)*inv(diag(c)) for
+ * Hermitian i ndefinite matrices. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLA_HERCOND_C + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zla_her cond_c.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zla_her
+ * cond_c.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zla_her cond_c.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zla_her
+ * cond_c.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zla_her cond_c.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zla_her
+ * cond_c.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -44,7 +54,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -126,10 +136,14 @@ static integer c__1 = 1;
 /* > \date December 2016 */
 /* > \ingroup complex16HEcomputational */
 /* ===================================================================== */
-doublereal zla_hercond_c_(char *uplo, integer *n, doublecomplex *a, integer * lda, doublecomplex *af, integer *ldaf, integer *ipiv, doublereal *c__, logical *capply, integer *info, doublecomplex *work, doublereal * rwork)
+doublereal zla_hercond_c_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *af,
+                          integer *ldaf, integer *ipiv, doublereal *c__, logical *capply,
+                          integer *info, doublecomplex *work, doublereal *rwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zla_hercond_c inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS "", *uplo, *n, *lda, *ldaf);
+    AOCL_DTL_SNPRINTF("zla_hercond_c inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS
+                      "",
+                      *uplo, *n, *lda, *ldaf);
     /* System generated locals */
     integer a_dim1, a_offset, af_dim1, af_offset, i__1, i__2, i__3, i__4;
     doublereal ret_val, d__1, d__2;
@@ -141,15 +155,19 @@ doublereal zla_hercond_c_(char *uplo, integer *n, doublecomplex *a, integer * ld
     logical up;
     doublereal tmp;
     integer kase;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     doublereal anorm;
     logical upper;
     extern /* Subroutine */
-    int zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     extern /* Subroutine */
-    int zhetrs_(char *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zhetrs_(char *, integer *, integer *, doublecomplex *, integer *, integer *,
+                doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -188,24 +206,24 @@ doublereal zla_hercond_c_(char *uplo, integer *n, doublecomplex *a, integer * ld
     /* Function Body */
     ret_val = 0.;
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -6;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZLA_HERCOND_C", &i__1, (ftnlen)13);
@@ -213,120 +231,112 @@ doublereal zla_hercond_c_(char *uplo, integer *n, doublecomplex *a, integer * ld
         return ret_val;
     }
     up = FALSE_;
-    if (lsame_(uplo, "U"))
+    if(lsame_(uplo, "U", 1, 1))
     {
         up = TRUE_;
     }
     /* Compute norm of op(A)*op2(C). */
     anorm = 0.;
-    if (up)
+    if(up)
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             tmp = 0.;
-            if (*capply)
+            if(*capply)
             {
                 i__2 = i__;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = j + i__ * a_dim1;
-                    tmp += ((d__1 = a[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&a[ j + i__ * a_dim1]), f2c_abs(d__2))) / c__[j];
+                    tmp += ((d__1 = a[i__3].r, f2c_abs(d__1))
+                            + (d__2 = d_imag(&a[j + i__ * a_dim1]), f2c_abs(d__2)))
+                           / c__[j];
                 }
                 i__2 = *n;
-                for (j = i__ + 1;
-                        j <= i__2;
-                        ++j)
+                for(j = i__ + 1; j <= i__2; ++j)
                 {
                     i__3 = i__ + j * a_dim1;
-                    tmp += ((d__1 = a[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&a[ i__ + j * a_dim1]), f2c_abs(d__2))) / c__[j];
+                    tmp += ((d__1 = a[i__3].r, f2c_abs(d__1))
+                            + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_abs(d__2)))
+                           / c__[j];
                 }
             }
             else
             {
                 i__2 = i__;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = j + i__ * a_dim1;
-                    tmp += (d__1 = a[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&a[ j + i__ * a_dim1]), f2c_abs(d__2));
+                    tmp += (d__1 = a[i__3].r, f2c_abs(d__1))
+                           + (d__2 = d_imag(&a[j + i__ * a_dim1]), f2c_abs(d__2));
                 }
                 i__2 = *n;
-                for (j = i__ + 1;
-                        j <= i__2;
-                        ++j)
+                for(j = i__ + 1; j <= i__2; ++j)
                 {
                     i__3 = i__ + j * a_dim1;
-                    tmp += (d__1 = a[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&a[ i__ + j * a_dim1]), f2c_abs(d__2));
+                    tmp += (d__1 = a[i__3].r, f2c_abs(d__1))
+                           + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_abs(d__2));
                 }
             }
             rwork[i__] = tmp;
-            anorm = fla_max(anorm,tmp);
+            anorm = fla_max(anorm, tmp);
         }
     }
     else
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             tmp = 0.;
-            if (*capply)
+            if(*capply)
             {
                 i__2 = i__;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = i__ + j * a_dim1;
-                    tmp += ((d__1 = a[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&a[ i__ + j * a_dim1]), f2c_abs(d__2))) / c__[j];
+                    tmp += ((d__1 = a[i__3].r, f2c_abs(d__1))
+                            + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_abs(d__2)))
+                           / c__[j];
                 }
                 i__2 = *n;
-                for (j = i__ + 1;
-                        j <= i__2;
-                        ++j)
+                for(j = i__ + 1; j <= i__2; ++j)
                 {
                     i__3 = j + i__ * a_dim1;
-                    tmp += ((d__1 = a[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&a[ j + i__ * a_dim1]), f2c_abs(d__2))) / c__[j];
+                    tmp += ((d__1 = a[i__3].r, f2c_abs(d__1))
+                            + (d__2 = d_imag(&a[j + i__ * a_dim1]), f2c_abs(d__2)))
+                           / c__[j];
                 }
             }
             else
             {
                 i__2 = i__;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = i__ + j * a_dim1;
-                    tmp += (d__1 = a[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&a[ i__ + j * a_dim1]), f2c_abs(d__2));
+                    tmp += (d__1 = a[i__3].r, f2c_abs(d__1))
+                           + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_abs(d__2));
                 }
                 i__2 = *n;
-                for (j = i__ + 1;
-                        j <= i__2;
-                        ++j)
+                for(j = i__ + 1; j <= i__2; ++j)
                 {
                     i__3 = j + i__ * a_dim1;
-                    tmp += (d__1 = a[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&a[ j + i__ * a_dim1]), f2c_abs(d__2));
+                    tmp += (d__1 = a[i__3].r, f2c_abs(d__1))
+                           + (d__2 = d_imag(&a[j + i__ * a_dim1]), f2c_abs(d__2));
                 }
             }
             rwork[i__] = tmp;
-            anorm = fla_max(anorm,tmp);
+            anorm = fla_max(anorm, tmp);
         }
     }
     /* Quick return if possible. */
-    if (*n == 0)
+    if(*n == 0)
     {
         ret_val = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
         return ret_val;
     }
-    else if (anorm == 0.)
+    else if(anorm == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return ret_val;
@@ -336,15 +346,13 @@ doublereal zla_hercond_c_(char *uplo, integer *n, doublecomplex *a, integer * ld
     kase = 0;
 L10:
     zlacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
-    if (kase != 0)
+    if(kase != 0)
     {
-        if (kase == 2)
+        if(kase == 2)
         {
             /* Multiply by R. */
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = i__;
                 i__3 = i__;
@@ -354,21 +362,19 @@ L10:
                 work[i__2].r = z__1.r;
                 work[i__2].i = z__1.i; // , expr subst
             }
-            if (up)
+            if(up)
             {
-                zhetrs_("U", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[ 1], n, info);
+                zhetrs_("U", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n, info);
             }
             else
             {
-                zhetrs_("L", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[ 1], n, info);
+                zhetrs_("L", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n, info);
             }
             /* Multiply by inv(C). */
-            if (*capply)
+            if(*capply)
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = i__;
                     i__3 = i__;
@@ -383,12 +389,10 @@ L10:
         else
         {
             /* Multiply by inv(C**H). */
-            if (*capply)
+            if(*capply)
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = i__;
                     i__3 = i__;
@@ -399,19 +403,17 @@ L10:
                     work[i__2].i = z__1.i; // , expr subst
                 }
             }
-            if (up)
+            if(up)
             {
-                zhetrs_("U", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[ 1], n, info);
+                zhetrs_("U", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n, info);
             }
             else
             {
-                zhetrs_("L", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[ 1], n, info);
+                zhetrs_("L", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n, info);
             }
             /* Multiply by R. */
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = i__;
                 i__3 = i__;
@@ -425,7 +427,7 @@ L10:
         goto L10;
     }
     /* Compute the estimate of the reciprocal condition number. */
-    if (ainvnm != 0.)
+    if(ainvnm != 0.)
     {
         ret_val = 1. / ainvnm;
     }

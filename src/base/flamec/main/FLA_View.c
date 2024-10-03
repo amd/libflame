@@ -8,6 +8,10 @@
 
 */
 
+/*
+*     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+*/
+
 #include "FLAME.h"
 
 //
@@ -16,10 +20,10 @@
 
 FLA_Error FLA_Part_2x2( FLA_Obj A,  FLA_Obj *A11, FLA_Obj *A12,
                                     FLA_Obj *A21, FLA_Obj *A22, 
-                        dim_t  mb,  dim_t     nb, FLA_Quadrant quadrant )
+                        fla_dim_t  mb,  fla_dim_t     nb, FLA_Quadrant quadrant )
 {
   FLA_Base_obj *base;
-  dim_t         m, n, offm, offn;
+  fla_dim_t         m, n, offm, offn;
 
   if ( FLA_Check_error_level() == FLA_FULL_ERROR_CHECKING )
     FLA_Part_2x2_check( A,    A11, A12,
@@ -46,24 +50,30 @@ FLA_Error FLA_Part_2x2( FLA_Obj A,  FLA_Obj *A11, FLA_Obj *A12,
   A11->offm = offm;
   A11->offn = offn;
   A11->base = base;
+  // init as 0 because FLASH APIs
+  // populate these field as required
+  A11->m_inner = A11->n_inner = 0;
 
   A21->m    = m-mb;
   A21->n    = nb;
   A21->offm = offm + mb;
   A21->offn = offn;
   A21->base = base;
+  A21->m_inner = A21->n_inner = 0;
 
   A12->m    = mb;
   A12->n    = n-nb;
   A12->offm = offm;
   A12->offn = offn + nb;
   A12->base = base;
+  A12->m_inner = A12->n_inner = 0;
 
   A22->m    = m-mb;
   A22->n    = n-nb;
   A22->offm = offm + mb;
   A22->offn = offn + nb;
   A22->base = base;
+  A22->m_inner = A22->n_inner = 0;
 
   return FLA_SUCCESS;
 }
@@ -75,7 +85,7 @@ FLA_Error FLA_Part_2x2( FLA_Obj A,  FLA_Obj *A11, FLA_Obj *A12,
 
 FLA_Error FLA_Part_2x1( FLA_Obj A,  FLA_Obj *A1, 
                                     FLA_Obj *A2,
-                        dim_t  mb,  FLA_Side side )
+                        fla_dim_t  mb,  FLA_Side side )
 { 
   if ( FLA_Check_error_level() == FLA_FULL_ERROR_CHECKING )
     FLA_Part_2x1_check( A,    A1,
@@ -92,12 +102,16 @@ FLA_Error FLA_Part_2x1( FLA_Obj A,  FLA_Obj *A1,
   A1->offm = A.offm;
   A1->offn = A.offn;
   A1->base = A.base;
+  // init as 0 because FLASH APIs
+  // populate these field as required
+  A1->m_inner = A1->n_inner = 0;
 
   A2->m    = A.m - mb;
   A2->n    = A.n;
   A2->offm = A.offm + mb;
   A2->offn = A.offn;
   A2->base = A.base;
+  A2->m_inner = A2->n_inner = 0;
 
   return FLA_SUCCESS;
 }
@@ -108,7 +122,7 @@ FLA_Error FLA_Part_2x1( FLA_Obj A,  FLA_Obj *A1,
 //
 
 FLA_Error FLA_Part_1x2( FLA_Obj A,  FLA_Obj *A1, FLA_Obj *A2,
-                                    dim_t    nb, FLA_Side side )
+                                    fla_dim_t    nb, FLA_Side side )
 {
   if ( FLA_Check_error_level() == FLA_FULL_ERROR_CHECKING )
     FLA_Part_1x2_check( A,    A1,  A2,      nb, side );
@@ -124,12 +138,14 @@ FLA_Error FLA_Part_1x2( FLA_Obj A,  FLA_Obj *A1, FLA_Obj *A2,
   A1->offm = A.offm;
   A1->offn = A.offn;
   A1->base = A.base;
+  A1->m_inner = A1->n_inner = 0;
 
   A2->m    = A.m;
   A2->n    = A.n - nb;
   A2->offm = A.offm;
   A2->offn = A.offn + nb;
   A2->base = A.base;
+  A2->m_inner = A2->n_inner = 0;
 
   return FLA_SUCCESS;
 }
@@ -142,7 +158,7 @@ FLA_Error FLA_Part_1x2( FLA_Obj A,  FLA_Obj *A1, FLA_Obj *A2,
 FLA_Error FLA_Repart_2x2_to_3x3( FLA_Obj ATL, FLA_Obj ATR,  FLA_Obj *A00, FLA_Obj *A01, FLA_Obj *A02,
                                                             FLA_Obj *A10, FLA_Obj *A11, FLA_Obj *A12,
                                  FLA_Obj ABL, FLA_Obj ABR,  FLA_Obj *A20, FLA_Obj *A21, FLA_Obj *A22,
-                                 dim_t   mb,  dim_t    nb,  FLA_Quadrant quadrant )
+                                 fla_dim_t   mb,  fla_dim_t    nb,  FLA_Quadrant quadrant )
 {
   if ( FLA_Check_error_level() == FLA_FULL_ERROR_CHECKING )
     FLA_Repart_2x2_to_3x3_check( ATL, ATR,       A00, A01, A02,
@@ -165,6 +181,7 @@ FLA_Error FLA_Repart_2x2_to_3x3( FLA_Obj ATL, FLA_Obj ATR,  FLA_Obj *A00, FLA_Ob
     A00->offm = ATL.offm;
     A00->offn = ATL.offn;
     A00->base = ATL.base;
+    A00->m_inner = A00->n_inner = 0;
   }
   else if ( quadrant == FLA_BL )
   {
@@ -181,6 +198,7 @@ FLA_Error FLA_Repart_2x2_to_3x3( FLA_Obj ATL, FLA_Obj ATR,  FLA_Obj *A00, FLA_Ob
     A02->offm = ATR.offm;
     A02->offn = ATR.offn;
     A02->base = ATR.base;
+    A02->m_inner = A02->n_inner = 0;
   }
   else if ( quadrant == FLA_TL )
   {
@@ -197,6 +215,7 @@ FLA_Error FLA_Repart_2x2_to_3x3( FLA_Obj ATL, FLA_Obj ATR,  FLA_Obj *A00, FLA_Ob
     A22->offm = ABR.offm;
     A22->offn = ABR.offn;
     A22->base = ABR.base;
+    A22->m_inner = A22->n_inner = 0;
   }
   else if ( quadrant == FLA_TR )
   {
@@ -213,6 +232,7 @@ FLA_Error FLA_Repart_2x2_to_3x3( FLA_Obj ATL, FLA_Obj ATR,  FLA_Obj *A00, FLA_Ob
     A20->offm = ABL.offm;
     A20->offn = ABL.offn;
     A20->base = ABL.base;
+    A20->m_inner = A20->n_inner = 0;
   }
 
   return FLA_SUCCESS;
@@ -226,7 +246,7 @@ FLA_Error FLA_Repart_2x2_to_3x3( FLA_Obj ATL, FLA_Obj ATR,  FLA_Obj *A00, FLA_Ob
 FLA_Error FLA_Repart_2x1_to_3x1( FLA_Obj AT,  FLA_Obj *A0,
                                               FLA_Obj *A1,
                                  FLA_Obj AB,  FLA_Obj *A2,
-                                 dim_t   mb,  FLA_Side side )
+                                 fla_dim_t   mb,  FLA_Side side )
 {
   if ( FLA_Check_error_level() == FLA_FULL_ERROR_CHECKING )
     FLA_Repart_2x1_to_3x1_check( AT,     A0, 
@@ -243,6 +263,7 @@ FLA_Error FLA_Repart_2x1_to_3x1( FLA_Obj AT,  FLA_Obj *A0,
     A2->offm = AB.offm;
     A2->offn = AB.offn;
     A2->base = AB.base;
+    A2->m_inner = A2->n_inner = 0;
   }
   else
   {
@@ -251,6 +272,7 @@ FLA_Error FLA_Repart_2x1_to_3x1( FLA_Obj AT,  FLA_Obj *A0,
     A0->offm = AT.offm;
     A0->offn = AT.offn;
     A0->base = AT.base;
+    A0->m_inner = A0->n_inner = 0;
 
     FLA_Part_2x1 ( AB,    A1, 
                           A2,    mb, FLA_TOP );
@@ -266,7 +288,7 @@ FLA_Error FLA_Repart_2x1_to_3x1( FLA_Obj AT,  FLA_Obj *A0,
 
 FLA_Error FLA_Repart_1x2_to_1x3( FLA_Obj  AL,              FLA_Obj  AR,
                                  FLA_Obj *A0, FLA_Obj *A1, FLA_Obj *A2,
-                                              dim_t    nb, FLA_Side side )
+                                              fla_dim_t    nb, FLA_Side side )
 {
   if ( FLA_Check_error_level() == FLA_FULL_ERROR_CHECKING )
     FLA_Repart_1x2_to_1x3_check( AL, AR,        A0, A1, A2,
@@ -281,6 +303,7 @@ FLA_Error FLA_Repart_1x2_to_1x3( FLA_Obj  AL,              FLA_Obj  AR,
     A2->offm = AR.offm;
     A2->offn = AR.offn;
     A2->base = AR.base;
+    A2->m_inner = A2->n_inner = 0;
   }
   else
   {
@@ -289,6 +312,7 @@ FLA_Error FLA_Repart_1x2_to_1x3( FLA_Obj  AL,              FLA_Obj  AR,
     A0->offm = AL.offm;
     A0->offn = AL.offn;
     A0->base = AL.base;
+    A0->m_inner = A0->n_inner = 0;
 
     FLA_Part_1x2( AR,    A1, A2,    nb, FLA_LEFT );
   }
@@ -319,24 +343,34 @@ FLA_Error FLA_Cont_with_3x3_to_2x2( FLA_Obj *ATL, FLA_Obj *ATR,  FLA_Obj A00, FL
     ATL->offm = A00.offm;
     ATL->offn = A00.offn;
     ATL->base = A00.base;
- 
+    // populating m_inner and n_inner as 
+    // addition of the merging blocks
+    ATL->m_inner = A00.m_inner + A10.m_inner;
+    ATL->n_inner = A00.n_inner + A01.n_inner;
+
     ATR->m    = A02.m + A12.m;
     ATR->n    = A02.n;
     ATR->offm = A02.offm;
     ATR->offn = A02.offn;
     ATR->base = A02.base;
+    ATR->m_inner = A02.m_inner + A12.m_inner;
+    ATR->n_inner = A02.n_inner;
  
     ABL->m    = A20.m;
     ABL->n    = A20.n + A21.n;
     ABL->offm = A20.offm;
     ABL->offn = A20.offn;
     ABL->base = A20.base;
+    ABL->m_inner = A20.m_inner;
+    ABL->n_inner = A20.n_inner + A21.n_inner;
  
     ABR->m    = A22.m;
     ABR->n    = A22.n;
     ABR->offm = A22.offm;
     ABR->offn = A22.offn;
     ABR->base = A22.base;
+    ABR->m_inner = A22.m_inner;
+    ABR->n_inner = A22.n_inner;
   }
   else if ( quadrant == FLA_TR )
   {
@@ -345,24 +379,32 @@ FLA_Error FLA_Cont_with_3x3_to_2x2( FLA_Obj *ATL, FLA_Obj *ATR,  FLA_Obj A00, FL
     ATL->offm = A00.offm;
     ATL->offn = A00.offn;
     ATL->base = A00.base;
+    ATL->m_inner = A00.m_inner + A10.m_inner;
+    ATL->n_inner = A00.n_inner;
  
     ATR->m    = A01.m + A11.m;
     ATR->n    = A01.n + A02.n;
     ATR->offm = A01.offm;
     ATR->offn = A01.offn;
     ATR->base = A01.base;
+    ATR->m_inner = A01.m_inner + A11.m_inner;
+    ATR->n_inner = A01.n_inner + A02.n_inner;
  
     ABL->m    = A20.m;
     ABL->n    = A20.n;
     ABL->offm = A20.offm;
     ABL->offn = A20.offn;
     ABL->base = A20.base;
+    ABL->m_inner = A20.m_inner;
+    ABL->n_inner = A20.n_inner;
  
     ABR->m    = A21.m;
     ABR->n    = A21.n + A22.n;
     ABR->offm = A21.offm;
     ABR->offn = A21.offn;
     ABR->base = A21.base;
+    ABR->m_inner = A21.m_inner;
+    ABR->n_inner = A21.n_inner + A22.n_inner;
   }
   else if ( quadrant == FLA_BR )
   {
@@ -371,24 +413,32 @@ FLA_Error FLA_Cont_with_3x3_to_2x2( FLA_Obj *ATL, FLA_Obj *ATR,  FLA_Obj A00, FL
     ATL->offm = A00.offm;
     ATL->offn = A00.offn;
     ATL->base = A00.base;
+    ATL->m_inner = A00.m_inner;
+    ATL->n_inner = A00.n_inner;
  
     ATR->m    = A01.m;
     ATR->n    = A01.n + A02.n;
     ATR->offm = A01.offm;
     ATR->offn = A01.offn;
     ATR->base = A01.base;
+    ATR->m_inner = A01.m_inner;
+    ATR->n_inner = A01.n_inner + A02.n_inner;
  
     ABL->m    = A10.m + A20.m;
     ABL->n    = A10.n;
     ABL->offm = A10.offm;
     ABL->offn = A10.offn;
     ABL->base = A10.base;
+    ABL->m_inner = A10.m_inner + A20.m_inner;
+    ABL->n_inner = A10.n_inner;
  
     ABR->m    = A11.m + A21.m;
     ABR->n    = A11.n + A12.n;
     ABR->offm = A11.offm;
     ABR->offn = A11.offn;
     ABR->base = A11.base;
+    ABR->m_inner = A11.m_inner + A21.m_inner;
+    ABR->n_inner = A11.n_inner + A12.n_inner;
   }
   else if ( quadrant == FLA_BL )
   {
@@ -397,24 +447,32 @@ FLA_Error FLA_Cont_with_3x3_to_2x2( FLA_Obj *ATL, FLA_Obj *ATR,  FLA_Obj A00, FL
     ATL->offm = A00.offm;
     ATL->offn = A00.offn;
     ATL->base = A00.base;
+    ATL->m_inner = A00.m_inner;
+    ATL->n_inner = A00.n_inner + A01.n_inner;
  
     ATR->m    = A02.m;
     ATR->n    = A02.n;
     ATR->offm = A02.offm;
     ATR->offn = A02.offn;
     ATR->base = A02.base;
+    ATR->m_inner = A02.m_inner;
+    ATR->n_inner = A02.n_inner;
  
     ABL->m    = A10.m + A20.m;
     ABL->n    = A10.n + A11.n;
     ABL->offm = A10.offm;
     ABL->offn = A10.offn;
     ABL->base = A10.base;
+    ABL->m_inner = A10.m_inner + A20.m_inner;
+    ABL->n_inner = A10.n_inner + A11.n_inner;
  
     ABR->m    = A12.m + A22.m;
     ABR->n    = A12.n ;
     ABR->offm = A12.offm;
     ABR->offn = A12.offn;
     ABR->base = A12.base;
+    ABR->m_inner = A12.m_inner + A22.m_inner;
+    ABR->n_inner = A12.n_inner ;
   }
 
   return FLA_SUCCESS;
@@ -442,12 +500,16 @@ FLA_Error FLA_Cont_with_3x1_to_2x1( FLA_Obj *AT,  FLA_Obj A0,
     AT->offm = A0.offm;
     AT->offn = A0.offn;
     AT->base = A0.base;
+    AT->m_inner = A0.m_inner + A1.m_inner;
+    AT->n_inner = A0.n_inner;
 
     AB->m    = A2.m;
     AB->n    = A2.n;
     AB->offm = A2.offm;
     AB->offn = A2.offn;
     AB->base = A2.base;
+    AB->m_inner = A2.m_inner;
+    AB->n_inner = A2.n_inner;
   }
   else
   {
@@ -456,12 +518,16 @@ FLA_Error FLA_Cont_with_3x1_to_2x1( FLA_Obj *AT,  FLA_Obj A0,
     AT->offm = A0.offm;
     AT->offn = A0.offn;
     AT->base = A0.base;
+    AT->m_inner = A0.m_inner;
+    AT->n_inner = A0.n_inner;
  
     AB->m    = A1.m + A2.m;
     AB->n    = A1.n;
     AB->offm = A1.offm;
     AB->offn = A1.offn;
     AB->base = A1.base;
+    AB->m_inner = A1.m_inner + A2.m_inner;
+    AB->n_inner = A1.n_inner;
   }
 
   return FLA_SUCCESS;
@@ -487,12 +553,16 @@ FLA_Error FLA_Cont_with_1x3_to_1x2( FLA_Obj *AL,              FLA_Obj *AR,
     AL->offm = A0.offm;
     AL->offn = A0.offn;
     AL->base = A0.base;
+    AL->m_inner = A0.m_inner;
+    AL->n_inner = A0.n_inner + A1.n_inner;
 
     AR->m    = A2.m;
     AR->n    = A2.n;
     AR->offm = A2.offm;
     AR->offn = A2.offn;
     AR->base = A2.base;
+    AR->m_inner = A2.m_inner;
+    AR->n_inner = A2.n_inner;
   }
   else
   {
@@ -501,12 +571,16 @@ FLA_Error FLA_Cont_with_1x3_to_1x2( FLA_Obj *AL,              FLA_Obj *AR,
     AL->offm = A0.offm;
     AL->offn = A0.offn;
     AL->base = A0.base;
+    AL->m_inner = A0.m_inner;
+    AL->n_inner = A0.n_inner;
 
     AR->m    = A1.m;
     AR->n    = A1.n + A2.n;
     AR->offm = A1.offm;
     AR->offn = A1.offn;
     AR->base = A1.base;
+    AR->m_inner = A1.m_inner;
+    AR->n_inner = A1.n_inner + A2.n_inner;
   }
 
   return FLA_SUCCESS;
@@ -529,6 +603,8 @@ FLA_Error FLA_Merge_2x2( FLA_Obj A11, FLA_Obj A12,
   A->offm   = A11.offm;
   A->offn   = A11.offn;
   A->base   = A11.base;
+  A->m_inner = A11.m_inner + A21.m_inner;
+  A->n_inner = A11.n_inner + A12.n_inner;
 
   return FLA_SUCCESS;
 }
@@ -550,6 +626,8 @@ FLA_Error FLA_Merge_2x1( FLA_Obj AT,
   A->offm = AT.offm;
   A->offn = AT.offn;
   A->base = AT.base;
+  A->m_inner = AT.m_inner + AB.m_inner;
+  A->n_inner = AT.n_inner;
 
   return FLA_SUCCESS;
 }
@@ -569,6 +647,8 @@ FLA_Error FLA_Merge_1x2( FLA_Obj AL, FLA_Obj AR,   FLA_Obj *A )
   A->offm = AL.offm;
   A->offn = AL.offn;
   A->base = AL.base;
+  A->m_inner = AL.m_inner;
+  A->n_inner = AL.n_inner + AR.n_inner;
 
   return FLA_SUCCESS;
 }

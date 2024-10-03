@@ -1,22 +1,32 @@
-/* ../netlib/dlals0.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlals0.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b5 = -1.;
 static integer c__1 = 1;
 static doublereal c_b11 = 1.;
 static doublereal c_b13 = 0.;
 static integer c__0 = 0;
-/* > \brief \b DLALS0 applies back multiplying factors in solving the least squares problem using divide and c onquer SVD approach. Used by sgelsd. */
+/* > \brief \b DLALS0 applies back multiplying factors in solving the least squares problem using
+ * divide and c onquer SVD approach. Used by sgelsd. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLALS0 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlals0. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlals0.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlals0. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlals0.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlals0. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlals0.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -51,7 +61,7 @@ static integer c__0 = 0;
 /* > (1L) Givens rotations: the number of such rotations is GIVPTR;
 the */
 /* > pairs of columns/rows they were applied to are stored in GIVCOL;
-*/
+ */
 /* > and the C- and S-values of these rotations are stored in GIVNUM. */
 /* > */
 /* > (2L) Permutation. The (NL+1)-st row of B is to be moved to the first */
@@ -259,12 +269,21 @@ the */
 /* > Osni Marques, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-int dlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *nrhs, doublereal *b, integer *ldb, doublereal *bx, integer *ldbx, integer *perm, integer *givptr, integer *givcol, integer *ldgcol, doublereal *givnum, integer *ldgnum, doublereal * poles, doublereal *difl, doublereal *difr, doublereal *z__, integer * k, doublereal *c__, doublereal *s, doublereal *work, integer *info)
+void dlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *nrhs, doublereal *b,
+             integer *ldb, doublereal *bx, integer *ldbx, integer *perm, integer *givptr,
+             integer *givcol, integer *ldgcol, doublereal *givnum, integer *ldgnum,
+             doublereal *poles, doublereal *difl, doublereal *difr, doublereal *z__, integer *k,
+             doublereal *c__, doublereal *s, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlals0 inputs: icompq %" FLA_IS ", nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldbx %" FLA_IS ", givptr %" FLA_IS ", givcol %" FLA_IS ", ldgcol %" FLA_IS ", ldgnum %" FLA_IS ", k %" FLA_IS "",*icompq, *nl, *nr, *sqre, *nrhs, *ldb, *ldbx, *givptr, *givcol, *ldgcol, *ldgnum, *k);
+    AOCL_DTL_SNPRINTF(
+        "dlals0 inputs: icompq %" FLA_IS ", nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS
+        ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldbx %" FLA_IS ", givptr %" FLA_IS ", givcol %" FLA_IS
+        ", ldgcol %" FLA_IS ", ldgnum %" FLA_IS ", k %" FLA_IS "",
+        *icompq, *nl, *nr, *sqre, *nrhs, *ldb, *ldbx, *givptr, *givcol, *ldgcol, *ldgnum, *k);
     /* System generated locals */
-    integer givcol_dim1, givcol_offset, b_dim1, b_offset, bx_dim1, bx_offset, difr_dim1, difr_offset, givnum_dim1, givnum_offset, poles_dim1, poles_offset, i__1, i__2;
+    integer givcol_dim1, givcol_offset, b_dim1, b_offset, bx_dim1, bx_offset, difr_dim1,
+        difr_offset, givnum_dim1, givnum_offset, poles_dim1, poles_offset, i__1, i__2;
     doublereal d__1;
     /* Local variables */
     integer i__, j, m, n;
@@ -272,16 +291,26 @@ int dlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *n
     integer nlp1;
     doublereal temp;
     extern /* Subroutine */
-    int drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
+        void
+        drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+              doublereal *);
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal diflj, difrj, dsigj;
     extern /* Subroutine */
-    int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
+               integer *, doublereal *, doublereal *, integer *),
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern doublereal dlamc3_(doublereal *, doublereal *);
     extern /* Subroutine */
-    int dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublereal *, integer *, integer *),
+        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal dsigjp;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -331,87 +360,85 @@ int dlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *n
     *info = 0;
     difrj = 0.;
     n = *nl + *nr + 1;
-    if (*icompq < 0 || *icompq > 1)
+    if(*icompq < 0 || *icompq > 1)
     {
         *info = -1;
     }
-    else if (*nl < 1)
+    else if(*nl < 1)
     {
         *info = -2;
     }
-    else if (*nr < 1)
+    else if(*nr < 1)
     {
         *info = -3;
     }
-    else if (*sqre < 0 || *sqre > 1)
+    else if(*sqre < 0 || *sqre > 1)
     {
         *info = -4;
     }
-    else if (*nrhs < 1)
+    else if(*nrhs < 1)
     {
         *info = -5;
     }
-    else if (*ldb < n)
+    else if(*ldb < n)
     {
         *info = -7;
     }
-    else if (*ldbx < n)
+    else if(*ldbx < n)
     {
         *info = -9;
     }
-    else if (*givptr < 0)
+    else if(*givptr < 0)
     {
         *info = -11;
     }
-    else if (*ldgcol < n)
+    else if(*ldgcol < n)
     {
         *info = -13;
     }
-    else if (*ldgnum < n)
+    else if(*ldgnum < n)
     {
         *info = -15;
     }
-    else if (*k < 1)
+    else if(*k < 1)
     {
         *info = -20;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DLALS0", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     m = n + *sqre;
     nlp1 = *nl + 1;
-    if (*icompq == 0)
+    if(*icompq == 0)
     {
         /* Apply back orthogonal transformations from the left. */
         /* Step (1L): apply back the Givens rotations performed. */
         i__1 = *givptr;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            drot_(nrhs, &b[givcol[i__ + (givcol_dim1 << 1)] + b_dim1], ldb, & b[givcol[i__ + givcol_dim1] + b_dim1], ldb, &givnum[i__ + (givnum_dim1 << 1)], &givnum[i__ + givnum_dim1]);
+            drot_(nrhs, &b[givcol[i__ + (givcol_dim1 << 1)] + b_dim1], ldb,
+                  &b[givcol[i__ + givcol_dim1] + b_dim1], ldb, &givnum[i__ + (givnum_dim1 << 1)],
+                  &givnum[i__ + givnum_dim1]);
             /* L10: */
         }
         /* Step (2L): permute rows of B. */
         dcopy_(nrhs, &b[nlp1 + b_dim1], ldb, &bx[bx_dim1 + 1], ldbx);
         i__1 = n;
-        for (i__ = 2;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 2; i__ <= i__1; ++i__)
         {
             dcopy_(nrhs, &b[perm[i__] + b_dim1], ldb, &bx[i__ + bx_dim1], ldbx);
             /* L20: */
         }
         /* Step (3L): apply the inverse of the left singular vector */
         /* matrix to BX. */
-        if (*k == 1)
+        if(*k == 1)
         {
             dcopy_(nrhs, &bx[bx_offset], ldbx, &b[b_offset], ldb);
-            if (z__[1] < 0.)
+            if(z__[1] < 0.)
             {
                 dscal_(nrhs, &c_b5, &b[b_offset], ldb);
             }
@@ -419,65 +446,65 @@ int dlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *n
         else
         {
             i__1 = *k;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 diflj = difl[j];
                 dj = poles[j + poles_dim1];
                 dsigj = -poles[j + (poles_dim1 << 1)];
-                if (j < *k)
+                if(j < *k)
                 {
                     difrj = -difr[j + difr_dim1];
                     dsigjp = -poles[j + 1 + (poles_dim1 << 1)];
                 }
-                if (z__[j] == 0. || poles[j + (poles_dim1 << 1)] == 0.)
+                if(z__[j] == 0. || poles[j + (poles_dim1 << 1)] == 0.)
                 {
                     work[j] = 0.;
                 }
                 else
                 {
-                    work[j] = -poles[j + (poles_dim1 << 1)] * z__[j] / diflj / (poles[j + (poles_dim1 << 1)] + dj);
+                    work[j] = -poles[j + (poles_dim1 << 1)] * z__[j] / diflj
+                              / (poles[j + (poles_dim1 << 1)] + dj);
                 }
                 i__2 = j - 1;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
-                    if (z__[i__] == 0. || poles[i__ + (poles_dim1 << 1)] == 0.)
+                    if(z__[i__] == 0. || poles[i__ + (poles_dim1 << 1)] == 0.)
                     {
                         work[i__] = 0.;
                     }
                     else
                     {
-                        work[i__] = poles[i__ + (poles_dim1 << 1)] * z__[i__] / (dlamc3_(&poles[i__ + (poles_dim1 << 1)], & dsigj) - diflj) / (poles[i__ + (poles_dim1 << 1)] + dj);
+                        work[i__] = poles[i__ + (poles_dim1 << 1)] * z__[i__]
+                                    / (dlamc3_(&poles[i__ + (poles_dim1 << 1)], &dsigj) - diflj)
+                                    / (poles[i__ + (poles_dim1 << 1)] + dj);
                     }
                     /* L30: */
                 }
                 i__2 = *k;
-                for (i__ = j + 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = j + 1; i__ <= i__2; ++i__)
                 {
-                    if (z__[i__] == 0. || poles[i__ + (poles_dim1 << 1)] == 0.)
+                    if(z__[i__] == 0. || poles[i__ + (poles_dim1 << 1)] == 0.)
                     {
                         work[i__] = 0.;
                     }
                     else
                     {
-                        work[i__] = poles[i__ + (poles_dim1 << 1)] * z__[i__] / (dlamc3_(&poles[i__ + (poles_dim1 << 1)], & dsigjp) + difrj) / (poles[i__ + (poles_dim1 << 1)] + dj);
+                        work[i__] = poles[i__ + (poles_dim1 << 1)] * z__[i__]
+                                    / (dlamc3_(&poles[i__ + (poles_dim1 << 1)], &dsigjp) + difrj)
+                                    / (poles[i__ + (poles_dim1 << 1)] + dj);
                     }
                     /* L40: */
                 }
                 work[1] = -1.;
                 temp = dnrm2_(k, &work[1], &c__1);
-                dgemv_("T", k, nrhs, &c_b11, &bx[bx_offset], ldbx, &work[1], & c__1, &c_b13, &b[j + b_dim1], ldb);
+                dgemv_("T", k, nrhs, &c_b11, &bx[bx_offset], ldbx, &work[1], &c__1, &c_b13,
+                       &b[j + b_dim1], ldb);
                 dlascl_("G", &c__0, &c__0, &temp, &c_b11, &c__1, nrhs, &b[j + b_dim1], ldb, info);
                 /* L50: */
             }
         }
         /* Move the deflated rows of BX to B also. */
-        if (*k < fla_max(m,n))
+        if(*k < fla_max(m, n))
         {
             i__1 = n - *k;
             dlacpy_("A", &i__1, nrhs, &bx[*k + 1 + bx_dim1], ldbx, &b[*k + 1 + b_dim1], ldb);
@@ -488,100 +515,98 @@ int dlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *n
         /* Apply back the right orthogonal transformations. */
         /* Step (1R): apply back the new right singular vector matrix */
         /* to B. */
-        if (*k == 1)
+        if(*k == 1)
         {
             dcopy_(nrhs, &b[b_offset], ldb, &bx[bx_offset], ldbx);
         }
         else
         {
             i__1 = *k;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 dsigj = poles[j + (poles_dim1 << 1)];
-                if (z__[j] == 0.)
+                if(z__[j] == 0.)
                 {
                     work[j] = 0.;
                 }
                 else
                 {
-                    work[j] = -z__[j] / difl[j] / (dsigj + poles[j + poles_dim1]) / difr[j + (difr_dim1 << 1)];
+                    work[j] = -z__[j] / difl[j] / (dsigj + poles[j + poles_dim1])
+                              / difr[j + (difr_dim1 << 1)];
                 }
                 i__2 = j - 1;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
-                    if (z__[j] == 0.)
+                    if(z__[j] == 0.)
                     {
                         work[i__] = 0.;
                     }
                     else
                     {
                         d__1 = -poles[i__ + 1 + (poles_dim1 << 1)];
-                        work[i__] = z__[j] / (dlamc3_(&dsigj, &d__1) - difr[ i__ + difr_dim1]) / (dsigj + poles[i__ + poles_dim1]) / difr[i__ + (difr_dim1 << 1)];
+                        work[i__] = z__[j] / (dlamc3_(&dsigj, &d__1) - difr[i__ + difr_dim1])
+                                    / (dsigj + poles[i__ + poles_dim1])
+                                    / difr[i__ + (difr_dim1 << 1)];
                     }
                     /* L60: */
                 }
                 i__2 = *k;
-                for (i__ = j + 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = j + 1; i__ <= i__2; ++i__)
                 {
-                    if (z__[j] == 0.)
+                    if(z__[j] == 0.)
                     {
                         work[i__] = 0.;
                     }
                     else
                     {
                         d__1 = -poles[i__ + (poles_dim1 << 1)];
-                        work[i__] = z__[j] / (dlamc3_(&dsigj, &d__1) - difl[ i__]) / (dsigj + poles[i__ + poles_dim1]) / difr[i__ + (difr_dim1 << 1)];
+                        work[i__] = z__[j] / (dlamc3_(&dsigj, &d__1) - difl[i__])
+                                    / (dsigj + poles[i__ + poles_dim1])
+                                    / difr[i__ + (difr_dim1 << 1)];
                     }
                     /* L70: */
                 }
-                dgemv_("T", k, nrhs, &c_b11, &b[b_offset], ldb, &work[1], & c__1, &c_b13, &bx[j + bx_dim1], ldbx);
+                dgemv_("T", k, nrhs, &c_b11, &b[b_offset], ldb, &work[1], &c__1, &c_b13,
+                       &bx[j + bx_dim1], ldbx);
                 /* L80: */
             }
         }
         /* Step (2R): if SQRE = 1, apply back the rotation that is */
         /* related to the right null space of the subproblem. */
-        if (*sqre == 1)
+        if(*sqre == 1)
         {
             dcopy_(nrhs, &b[m + b_dim1], ldb, &bx[m + bx_dim1], ldbx);
             drot_(nrhs, &bx[bx_dim1 + 1], ldbx, &bx[m + bx_dim1], ldbx, c__, s);
         }
-        if (*k < fla_max(m,n))
+        if(*k < fla_max(m, n))
         {
             i__1 = n - *k;
             dlacpy_("A", &i__1, nrhs, &b[*k + 1 + b_dim1], ldb, &bx[*k + 1 + bx_dim1], ldbx);
         }
         /* Step (3R): permute rows of B. */
         dcopy_(nrhs, &bx[bx_dim1 + 1], ldbx, &b[nlp1 + b_dim1], ldb);
-        if (*sqre == 1)
+        if(*sqre == 1)
         {
             dcopy_(nrhs, &bx[m + bx_dim1], ldbx, &b[m + b_dim1], ldb);
         }
         i__1 = n;
-        for (i__ = 2;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 2; i__ <= i__1; ++i__)
         {
             dcopy_(nrhs, &bx[i__ + bx_dim1], ldbx, &b[perm[i__] + b_dim1], ldb);
             /* L90: */
         }
         /* Step (4R): apply back the Givens rotations performed. */
-        for (i__ = *givptr;
-                i__ >= 1;
-                --i__)
+        for(i__ = *givptr; i__ >= 1; --i__)
         {
             d__1 = -givnum[i__ + givnum_dim1];
-            drot_(nrhs, &b[givcol[i__ + (givcol_dim1 << 1)] + b_dim1], ldb, & b[givcol[i__ + givcol_dim1] + b_dim1], ldb, &givnum[i__ + (givnum_dim1 << 1)], &d__1);
+            drot_(nrhs, &b[givcol[i__ + (givcol_dim1 << 1)] + b_dim1], ldb,
+                  &b[givcol[i__ + givcol_dim1] + b_dim1], ldb, &givnum[i__ + (givnum_dim1 << 1)],
+                  &d__1);
             /* L100: */
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLALS0 */
 }
 /* dlals0_ */

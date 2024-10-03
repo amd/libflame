@@ -19,7 +19,7 @@ FLA_Error FLA_Apply_CAQ2_UT_lhfc_blk_var3( FLA_Obj D, FLA_Obj T, FLA_Obj W, FLA_
 
   FLA_Obj EL,    ER,       E0,  E1,  E2;
 
-  dim_t b;
+  fla_dim_t b;
 
   FLA_Part_1x2( W,    &WL,  &WR,      0, FLA_LEFT );
 

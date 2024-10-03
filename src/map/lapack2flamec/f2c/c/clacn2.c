@@ -1,18 +1,28 @@
-/* ../netlib/clacn2.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/clacn2.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b CLACN2 estimates the 1-norm of a square matrix, using reverse communication for evaluating matr ix-vector products. */
+/* > \brief \b CLACN2 estimates the 1-norm of a square matrix, using reverse communication for
+ * evaluating matr ix-vector products. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLACN2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clacn2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clacn2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clacn2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clacn2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clacn2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clacn2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -119,15 +129,15 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int clacn2_(integer *n, complex *v, complex *x, real *est, integer *kase, integer *isave)
+void clacn2_(integer *n, complex *v, complex *x, real *est, integer *kase, integer *isave)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clacn2 inputs: n %lld, kase %lld, isave %lld",*n, *kase, *isave);
+    snprintf(buffer, 256, "clacn2 inputs: n %lld, kase %lld, isave %lld", *n, *kase, *isave);
 #else
-    snprintf(buffer, 256,"clacn2 inputs: n %d, kase %d, isave %d",*n, *kase, *isave);
+    snprintf(buffer, 256, "clacn2 inputs: n %d, kase %d, isave %d", *n, *kase, *isave);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -142,7 +152,8 @@ int clacn2_(integer *n, complex *v, complex *x, real *est, integer *kase, intege
     real temp, absxi;
     integer jlast;
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *);
+        void
+        ccopy_(integer *, complex *, integer *, complex *, integer *);
     extern integer icmax1_(integer *, complex *, integer *);
     extern real scsum1_(integer *, complex *, integer *), slamch_(char *);
     real safmin, altsgn, estold;
@@ -172,15 +183,13 @@ int clacn2_(integer *n, complex *v, complex *x, real *est, integer *kase, intege
     --v;
     /* Function Body */
     safmin = slamch_("Safe minimum");
-    if (*kase == 0)
+    if(*kase == 0)
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__;
-            r__1 = 1.f / (real) (*n);
+            r__1 = 1.f / (real)(*n);
             q__1.r = r__1;
             q__1.i = 0.f; // , expr subst
             x[i__2].r = q__1.r;
@@ -190,25 +199,25 @@ int clacn2_(integer *n, complex *v, complex *x, real *est, integer *kase, intege
         *kase = 1;
         isave[1] = 1;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    switch (isave[1])
+    switch(isave[1])
     {
-    case 1:
-        goto L20;
-    case 2:
-        goto L40;
-    case 3:
-        goto L70;
-    case 4:
-        goto L90;
-    case 5:
-        goto L120;
+        case 1:
+            goto L20;
+        case 2:
+            goto L40;
+        case 3:
+            goto L70;
+        case 4:
+            goto L90;
+        case 5:
+            goto L120;
     }
     /* ................ ENTRY (ISAVE( 1 ) = 1) */
     /* FIRST ITERATION. X HAS BEEN OVERWRITTEN BY A*X. */
 L20:
-    if (*n == 1)
+    if(*n == 1)
     {
         v[1].r = x[1].r;
         v[1].i = x[1].i; // , expr subst
@@ -218,12 +227,10 @@ L20:
     }
     *est = scsum1_(n, &x[1], &c__1);
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         absxi = c_abs(&x[i__]);
-        if (absxi > safmin)
+        if(absxi > safmin)
         {
             i__2 = i__;
             i__3 = i__;
@@ -245,7 +252,7 @@ L20:
     *kase = 2;
     isave[1] = 2;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* ................ ENTRY (ISAVE( 1 ) = 2) */
     /* FIRST ITERATION. X HAS BEEN OVERWRITTEN BY CTRANS(A)*X. */
 L40:
@@ -254,9 +261,7 @@ L40:
     /* MAIN LOOP - ITERATIONS 2,3,...,ITMAX. */
 L50:
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__;
         x[i__2].r = 0.f;
@@ -269,7 +274,7 @@ L50:
     *kase = 1;
     isave[1] = 3;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* ................ ENTRY (ISAVE( 1 ) = 3) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L70:
@@ -277,17 +282,15 @@ L70:
     estold = *est;
     *est = scsum1_(n, &v[1], &c__1);
     /* TEST FOR CYCLING. */
-    if (*est <= estold)
+    if(*est <= estold)
     {
         goto L100;
     }
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         absxi = c_abs(&x[i__]);
-        if (absxi > safmin)
+        if(absxi > safmin)
         {
             i__2 = i__;
             i__3 = i__;
@@ -309,13 +312,13 @@ L70:
     *kase = 2;
     isave[1] = 4;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* ................ ENTRY (ISAVE( 1 ) = 4) */
     /* X HAS BEEN OVERWRITTEN BY CTRANS(A)*X. */
 L90:
     jlast = isave[2];
     isave[2] = icmax1_(n, &x[1], &c__1);
-    if (c_abs(&x[jlast]) != c_abs(&x[isave[2]]) && isave[3] < 5)
+    if(c_abs(&x[jlast]) != c_abs(&x[isave[2]]) && isave[3] < 5)
     {
         ++isave[3];
         goto L50;
@@ -324,12 +327,10 @@ L90:
 L100:
     altsgn = 1.f;
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__;
-        r__1 = altsgn * ((real) (i__ - 1) / (real) (*n - 1) + 1.f);
+        r__1 = altsgn * ((real)(i__ - 1) / (real)(*n - 1) + 1.f);
         q__1.r = r__1;
         q__1.i = 0.f; // , expr subst
         x[i__2].r = q__1.r;
@@ -340,12 +341,12 @@ L100:
     *kase = 1;
     isave[1] = 5;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* ................ ENTRY (ISAVE( 1 ) = 5) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L120:
-    temp = scsum1_(n, &x[1], &c__1) / (real) (*n * 3) * 2.f;
-    if (temp > *est)
+    temp = scsum1_(n, &x[1], &c__1) / (real)(*n * 3) * 2.f;
+    if(temp > *est)
     {
         ccopy_(n, &x[1], &c__1, &v[1], &c__1);
         *est = temp;
@@ -353,7 +354,7 @@ L120:
 L130:
     *kase = 0;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLACN2 */
 }
 /* clacn2_ */

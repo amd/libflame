@@ -1,19 +1,29 @@
-/* ../netlib/dlasd2.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlasd2.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static doublereal c_b30 = 0.;
-/* > \brief \b DLASD2 merges the two sets of singular values together into a single sorted set. Used by sbdsdc . */
+/* > \brief \b DLASD2 merges the two sets of singular values together into a single sorted set. Used
+ * by sbdsdc . */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLASD2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasd2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasd2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasd2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasd2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasd2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasd2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -262,10 +272,17 @@ and entries in the second half */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d__, doublereal *z__, doublereal *alpha, doublereal * beta, doublereal *u, integer *ldu, doublereal *vt, integer *ldvt, doublereal *dsigma, doublereal *u2, integer *ldu2, doublereal *vt2, integer *ldvt2, integer *idxp, integer *idx, integer *idxc, integer * idxq, integer *coltyp, integer *info)
+void dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d__, doublereal *z__,
+             doublereal *alpha, doublereal *beta, doublereal *u, integer *ldu, doublereal *vt,
+             integer *ldvt, doublereal *dsigma, doublereal *u2, integer *ldu2, doublereal *vt2,
+             integer *ldvt2, integer *idxp, integer *idx, integer *idxc, integer *idxq,
+             integer *coltyp, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlasd2 inputs: nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS ", ldu %" FLA_IS ", ldvt %" FLA_IS ", ldu2 %" FLA_IS ", ldvt2 %" FLA_IS ", idxq %" FLA_IS "",*nl, *nr, *sqre, *ldu, *ldvt, *ldu2, *ldvt2, *idxq);
+    AOCL_DTL_SNPRINTF("dlasd2 inputs: nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS
+                      ", ldu %" FLA_IS ", ldvt %" FLA_IS ", ldu2 %" FLA_IS ", ldvt2 %" FLA_IS
+                      ", idxq %" FLA_IS "",
+                      *nl, *nr, *sqre, *ldu, *ldvt, *ldu2, *ldvt2, *idxq);
     /* System generated locals */
     integer u_dim1, u_offset, u2_dim1, u2_offset, vt_dim1, vt_offset, vt2_dim1, vt2_offset, i__1;
     doublereal d__1, d__2;
@@ -279,14 +296,21 @@ int dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d__
     doublereal eps, tau, tol;
     integer psm[4], nlp1, nlp2, idxi, idxj;
     extern /* Subroutine */
-    int drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
+        void
+        drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+              doublereal *);
     integer ctot[4], idxjp;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer jprev;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
     extern /* Subroutine */
-    int dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *),
+        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
+        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal hlftol;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -335,42 +359,44 @@ int dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d__
     /* Function Body */
     *info = 0;
     jprev = 0;
-    if (*nl < 1)
+    c__ = 1.;
+    s = 0.;
+    if(*nl < 1)
     {
         *info = -1;
     }
-    else if (*nr < 1)
+    else if(*nr < 1)
     {
         *info = -2;
     }
-    else if (*sqre != 1 && *sqre != 0)
+    else if(*sqre != 1 && *sqre != 0)
     {
         *info = -3;
     }
     n = *nl + *nr + 1;
     m = n + *sqre;
-    if (*ldu < n)
+    if(*ldu < n)
     {
         *info = -10;
     }
-    else if (*ldvt < m)
+    else if(*ldvt < m)
     {
         *info = -12;
     }
-    else if (*ldu2 < n)
+    else if(*ldu2 < n)
     {
         *info = -15;
     }
-    else if (*ldvt2 < m)
+    else if(*ldvt2 < m)
     {
         *info = -17;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DLASD2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     nlp1 = *nl + 1;
     nlp2 = *nl + 2;
@@ -379,9 +405,7 @@ int dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d__
     /* values in the first part of D one position backward. */
     z1 = *alpha * vt[nlp1 + nlp1 * vt_dim1];
     z__[1] = z1;
-    for (i__ = *nl;
-            i__ >= 1;
-            --i__)
+    for(i__ = *nl; i__ >= 1; --i__)
     {
         z__[i__ + 1] = *alpha * vt[i__ + nlp1 * vt_dim1];
         d__[i__ + 1] = d__[i__];
@@ -390,35 +414,27 @@ int dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d__
     }
     /* Generate the second part of the vector Z. */
     i__1 = m;
-    for (i__ = nlp2;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = nlp2; i__ <= i__1; ++i__)
     {
         z__[i__] = *beta * vt[i__ + nlp2 * vt_dim1];
         /* L20: */
     }
     /* Initialize some reference arrays. */
     i__1 = nlp1;
-    for (i__ = 2;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 2; i__ <= i__1; ++i__)
     {
         coltyp[i__] = 1;
         /* L30: */
     }
     i__1 = n;
-    for (i__ = nlp2;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = nlp2; i__ <= i__1; ++i__)
     {
         coltyp[i__] = 2;
         /* L40: */
     }
     /* Sort the singular values into increasing order */
     i__1 = n;
-    for (i__ = nlp2;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = nlp2; i__ <= i__1; ++i__)
     {
         idxq[i__] += nlp1;
         /* L50: */
@@ -426,9 +442,7 @@ int dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d__
     /* DSIGMA, IDXC, IDXC, and the first column of U2 */
     /* are used as storage space. */
     i__1 = n;
-    for (i__ = 2;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 2; i__ <= i__1; ++i__)
     {
         dsigma[i__] = d__[idxq[i__]];
         u2[i__ + u2_dim1] = z__[idxq[i__]];
@@ -437,9 +451,7 @@ int dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d__
     }
     dlamrg_(nl, nr, &dsigma[2], &c__1, &c__1, &idx[2]);
     i__1 = n;
-    for (i__ = 2;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 2; i__ <= i__1; ++i__)
     {
         idxi = idx[i__] + 1;
         d__[i__] = dsigma[idxi];
@@ -452,10 +464,10 @@ int dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d__
     /* Computing MAX */
     d__1 = f2c_dabs(*alpha);
     d__2 = f2c_dabs(*beta); // , expr subst
-    tol = fla_max(d__1,d__2);
+    tol = fla_max(d__1, d__2);
     /* Computing MAX */
     d__2 = (d__1 = d__[n], f2c_dabs(d__1));
-    tol = eps * 8. * fla_max(d__2,tol);
+    tol = eps * 8. * fla_max(d__2, tol);
     /* There are 2 kinds of deflation -- first a value in the z-vector */
     /* is small, second two (or more) singular values are very close */
     /* together (their difference is (*small_val). */
@@ -474,17 +486,15 @@ int dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d__
     *k = 1;
     k2 = n + 1;
     i__1 = n;
-    for (j = 2;
-            j <= i__1;
-            ++j)
+    for(j = 2; j <= i__1; ++j)
     {
-        if ((d__1 = z__[j], f2c_dabs(d__1)) <= tol)
+        if((d__1 = z__[j], f2c_dabs(d__1)) <= tol)
         {
             /* Deflate due to small z component. */
             --k2;
             idxp[k2] = j;
             coltyp[j] = 4;
-            if (j == n)
+            if(j == n)
             {
                 goto L120;
             }
@@ -500,11 +510,11 @@ L90:
     j = jprev;
 L100:
     ++j;
-    if (j > n)
+    if(j > n)
     {
         goto L110;
     }
-    if ((d__1 = z__[j], f2c_dabs(d__1)) <= tol)
+    if((d__1 = z__[j], f2c_dabs(d__1)) <= tol)
     {
         /* Deflate due to small z component. */
         --k2;
@@ -514,7 +524,7 @@ L100:
     else
     {
         /* Check if singular values are close enough to allow deflation. */
-        if ((d__1 = d__[j] - d__[jprev], f2c_dabs(d__1)) <= tol)
+        if((d__1 = d__[j] - d__[jprev], f2c_dabs(d__1)) <= tol)
         {
             /* Deflation is possible. */
             s = z__[jprev];
@@ -530,17 +540,17 @@ L100:
             /* singular vector matrices. */
             idxjp = idxq[idx[jprev] + 1];
             idxj = idxq[idx[j] + 1];
-            if (idxjp <= nlp1)
+            if(idxjp <= nlp1)
             {
                 --idxjp;
             }
-            if (idxj <= nlp1)
+            if(idxj <= nlp1)
             {
                 --idxj;
             }
-            drot_(&n, &u[idxjp * u_dim1 + 1], &c__1, &u[idxj * u_dim1 + 1], & c__1, &c__, &s);
-            drot_(&m, &vt[idxjp + vt_dim1], ldvt, &vt[idxj + vt_dim1], ldvt, & c__, &s);
-            if (coltyp[j] != coltyp[jprev])
+            drot_(&n, &u[idxjp * u_dim1 + 1], &c__1, &u[idxj * u_dim1 + 1], &c__1, &c__, &s);
+            drot_(&m, &vt[idxjp + vt_dim1], ldvt, &vt[idxj + vt_dim1], ldvt, &c__, &s);
+            if(coltyp[j] != coltyp[jprev])
             {
                 coltyp[j] = 3;
             }
@@ -568,17 +578,13 @@ L120: /* Count up the total number of the various types of columns, then */
     /* form a permutation which positions the four column types into */
     /* four groups of uniform structure (although one or more of these */
     /* groups may be empty). */
-    for (j = 1;
-            j <= 4;
-            ++j)
+    for(j = 1; j <= 4; ++j)
     {
         ctot[j - 1] = 0;
         /* L130: */
     }
     i__1 = n;
-    for (j = 2;
-            j <= i__1;
-            ++j)
+    for(j = 2; j <= i__1; ++j)
     {
         ct = coltyp[j];
         ++ctot[ct - 1];
@@ -594,9 +600,7 @@ L120: /* Count up the total number of the various types of columns, then */
     /* then all type-3's, and finally all type-4's, starting from the */
     /* second column. This applies similarly to the rows of VT. */
     i__1 = n;
-    for (j = 2;
-            j <= i__1;
-            ++j)
+    for(j = 2; j <= i__1; ++j)
     {
         jp = idxp[j];
         ct = coltyp[jp];
@@ -611,14 +615,12 @@ L120: /* Count up the total number of the various types of columns, then */
     /* last N - K slots, except that the first column/row will be treated */
     /* separately. */
     i__1 = n;
-    for (j = 2;
-            j <= i__1;
-            ++j)
+    for(j = 2; j <= i__1; ++j)
     {
         jp = idxp[j];
         dsigma[j] = d__[jp];
         idxj = idxq[idx[idxp[idxc[j]]] + 1];
-        if (idxj <= nlp1)
+        if(idxj <= nlp1)
         {
             --idxj;
         }
@@ -629,14 +631,14 @@ L120: /* Count up the total number of the various types of columns, then */
     /* Determine DSIGMA(1), DSIGMA(2) and Z(1) */
     dsigma[1] = 0.;
     hlftol = tol / 2.;
-    if (f2c_dabs(dsigma[2]) <= hlftol)
+    if(f2c_dabs(dsigma[2]) <= hlftol)
     {
         dsigma[2] = hlftol;
     }
-    if (m > n)
+    if(m > n)
     {
         z__[1] = dlapy2_(&z1, &z__[m]);
-        if (z__[1] <= tol)
+        if(z__[1] <= tol)
         {
             c__ = 1.;
             s = 0.;
@@ -650,7 +652,7 @@ L120: /* Count up the total number of the various types of columns, then */
     }
     else
     {
-        if (f2c_dabs(z1) <= tol)
+        if(f2c_dabs(z1) <= tol)
         {
             z__[1] = tol;
         }
@@ -666,21 +668,17 @@ L120: /* Count up the total number of the various types of columns, then */
     /* last row of VT. */
     dlaset_("A", &n, &c__1, &c_b30, &c_b30, &u2[u2_offset], ldu2);
     u2[nlp1 + u2_dim1] = 1.;
-    if (m > n)
+    if(m > n)
     {
         i__1 = nlp1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             vt[m + i__ * vt_dim1] = -s * vt[nlp1 + i__ * vt_dim1];
             vt2[i__ * vt2_dim1 + 1] = c__ * vt[nlp1 + i__ * vt_dim1];
             /* L170: */
         }
         i__1 = m;
-        for (i__ = nlp2;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = nlp2; i__ <= i__1; ++i__)
         {
             vt2[i__ * vt2_dim1 + 1] = s * vt[m + i__ * vt_dim1];
             vt[m + i__ * vt_dim1] = c__ * vt[m + i__ * vt_dim1];
@@ -691,13 +689,13 @@ L120: /* Count up the total number of the various types of columns, then */
     {
         dcopy_(&m, &vt[nlp1 + vt_dim1], ldvt, &vt2[vt2_dim1 + 1], ldvt2);
     }
-    if (m > n)
+    if(m > n)
     {
         dcopy_(&m, &vt[m + vt_dim1], ldvt, &vt2[m + vt2_dim1], ldvt2);
     }
     /* The deflated singular values and their corresponding vectors go */
     /* into the back of D, U, and V respectively. */
-    if (n > *k)
+    if(n > *k)
     {
         i__1 = n - *k;
         dcopy_(&i__1, &dsigma[*k + 1], &c__1, &d__[*k + 1], &c__1);
@@ -707,15 +705,13 @@ L120: /* Count up the total number of the various types of columns, then */
         dlacpy_("A", &i__1, &m, &vt2[*k + 1 + vt2_dim1], ldvt2, &vt[*k + 1 + vt_dim1], ldvt);
     }
     /* Copy CTOT into COLTYP for referencing in DLASD3. */
-    for (j = 1;
-            j <= 4;
-            ++j)
+    for(j = 1; j <= 4; ++j)
     {
         coltyp[j] = ctot[j - 1];
         /* L190: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLASD2 */
 }
 /* dlasd2_ */

@@ -1,18 +1,28 @@
-/* ../netlib/clarfx.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/clarfx.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b CLARFX applies an elementary reflector to a general rectangular matrix, with loop unrolling whe n the reflector has order ≤ 10. */
+/* > \brief \b CLARFX applies an elementary reflector to a general rectangular matrix, with loop
+ * unrolling whe n the reflector has order ≤ 10. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLARFX + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clarfx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clarfx.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clarfx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clarfx.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarfx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarfx.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -107,29 +117,33 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int clarfx_(char *side, integer *m, integer *n, complex *v, complex *tau, complex *c__, integer *ldc, complex *work)
+void clarfx_(char *side, integer *m, integer *n, complex *v, complex *tau, complex *c__,
+             integer *ldc, complex *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clarfx inputs: side %c, m %lld, n %lld, ldc %lld",*side, *m, *n, *ldc);
+    snprintf(buffer, 256, "clarfx inputs: side %c, m %lld, n %lld, ldc %lld", *side, *m, *n, *ldc);
 #else
-    snprintf(buffer, 256,"clarfx inputs: side %c, m %d, n %d, ldc %d",*side, *m, *n, *ldc);
+    snprintf(buffer, 256, "clarfx inputs: side %c, m %d, n %d, ldc %d", *side, *m, *n, *ldc);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
     integer c_dim1, c_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8, i__9, i__10, i__11;
-    complex q__1, q__2, q__3, q__4, q__5, q__6, q__7, q__8, q__9, q__10, q__11, q__12, q__13, q__14, q__15, q__16, q__17, q__18, q__19;
+    complex q__1, q__2, q__3, q__4, q__5, q__6, q__7, q__8, q__9, q__10, q__11, q__12, q__13, q__14,
+        q__15, q__16, q__17, q__18, q__19;
     /* Builtin functions */
     void r_cnjg(complex *, complex *);
     /* Local variables */
     integer j;
     complex t1, t2, t3, t4, t5, t6, t7, t8, t9, v1, v2, v3, v4, v5, v6, v7, v8, v9, t10, v10, sum;
     extern /* Subroutine */
-    int clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *);
-    extern logical lsame_(char *, char *);
+        void
+        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+               complex *);
+    extern logical lsame_(char *, char *, integer, integer);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -157,41 +171,41 @@ int clarfx_(char *side, integer *m, integer *n, complex *v, complex *tau, comple
     c__ -= c_offset;
     --work;
     /* Function Body */
-    if (tau->r == 0.f && tau->i == 0.f)
+    if(tau->r == 0.f && tau->i == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (lsame_(side, "L"))
+    if(lsame_(side, "L", 1, 1))
     {
         /* Form H * C, where H has order m. */
-        switch (*m)
+        switch(*m)
         {
-        case 1:
-            goto L10;
-        case 2:
-            goto L30;
-        case 3:
-            goto L50;
-        case 4:
-            goto L70;
-        case 5:
-            goto L90;
-        case 6:
-            goto L110;
-        case 7:
-            goto L130;
-        case 8:
-            goto L150;
-        case 9:
-            goto L170;
-        case 10:
-            goto L190;
+            case 1:
+                goto L10;
+            case 2:
+                goto L30;
+            case 3:
+                goto L50;
+            case 4:
+                goto L70;
+            case 5:
+                goto L90;
+            case 6:
+                goto L110;
+            case 7:
+                goto L130;
+            case 8:
+                goto L150;
+            case 9:
+                goto L170;
+            case 10:
+                goto L190;
         }
         /* Code for general M */
         clarf_(side, m, n, &v[1], &c__1, tau, &c__[c_offset], ldc, &work[1]);
         goto L410;
-L10: /* Special code for 1 x 1 Householder */
+    L10: /* Special code for 1 x 1 Householder */
         q__3.r = tau->r * v[1].r - tau->i * v[1].i;
         q__3.i = tau->r * v[1].i + tau->i * v[1].r; // , expr subst
         r_cnjg(&q__4, &v[1]);
@@ -202,9 +216,7 @@ L10: /* Special code for 1 x 1 Householder */
         t1.r = q__1.r;
         t1.i = q__1.i; // , expr subst
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j * c_dim1 + 1;
             i__3 = j * c_dim1 + 1;
@@ -215,7 +227,7 @@ L10: /* Special code for 1 x 1 Householder */
             /* L20: */
         }
         goto L410;
-L30: /* Special code for 2 x 2 Householder */
+    L30: /* Special code for 2 x 2 Householder */
         r_cnjg(&q__1, &v[1]);
         v1.r = q__1.r;
         v1.i = q__1.i; // , expr subst
@@ -233,9 +245,7 @@ L30: /* Special code for 2 x 2 Householder */
         t2.r = q__1.r;
         t2.i = q__1.i; // , expr subst
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j * c_dim1 + 1;
             q__2.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i;
@@ -266,7 +276,7 @@ L30: /* Special code for 2 x 2 Householder */
             /* L40: */
         }
         goto L410;
-L50: /* Special code for 3 x 3 Householder */
+    L50: /* Special code for 3 x 3 Householder */
         r_cnjg(&q__1, &v[1]);
         v1.r = q__1.r;
         v1.i = q__1.i; // , expr subst
@@ -292,9 +302,7 @@ L50: /* Special code for 3 x 3 Householder */
         t3.r = q__1.r;
         t3.i = q__1.i; // , expr subst
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j * c_dim1 + 1;
             q__3.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i;
@@ -338,7 +346,7 @@ L50: /* Special code for 3 x 3 Householder */
             /* L60: */
         }
         goto L410;
-L70: /* Special code for 4 x 4 Householder */
+    L70: /* Special code for 4 x 4 Householder */
         r_cnjg(&q__1, &v[1]);
         v1.r = q__1.r;
         v1.i = q__1.i; // , expr subst
@@ -372,9 +380,7 @@ L70: /* Special code for 4 x 4 Householder */
         t4.r = q__1.r;
         t4.i = q__1.i; // , expr subst
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j * c_dim1 + 1;
             q__4.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i;
@@ -431,7 +437,7 @@ L70: /* Special code for 4 x 4 Householder */
             /* L80: */
         }
         goto L410;
-L90: /* Special code for 5 x 5 Householder */
+    L90: /* Special code for 5 x 5 Householder */
         r_cnjg(&q__1, &v[1]);
         v1.r = q__1.r;
         v1.i = q__1.i; // , expr subst
@@ -473,9 +479,7 @@ L90: /* Special code for 5 x 5 Householder */
         t5.r = q__1.r;
         t5.i = q__1.i; // , expr subst
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j * c_dim1 + 1;
             q__5.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i;
@@ -545,7 +549,7 @@ L90: /* Special code for 5 x 5 Householder */
             /* L100: */
         }
         goto L410;
-L110: /* Special code for 6 x 6 Householder */
+    L110: /* Special code for 6 x 6 Householder */
         r_cnjg(&q__1, &v[1]);
         v1.r = q__1.r;
         v1.i = q__1.i; // , expr subst
@@ -595,9 +599,7 @@ L110: /* Special code for 6 x 6 Householder */
         t6.r = q__1.r;
         t6.i = q__1.i; // , expr subst
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j * c_dim1 + 1;
             q__6.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i;
@@ -680,7 +682,7 @@ L110: /* Special code for 6 x 6 Householder */
             /* L120: */
         }
         goto L410;
-L130: /* Special code for 7 x 7 Householder */
+    L130: /* Special code for 7 x 7 Householder */
         r_cnjg(&q__1, &v[1]);
         v1.r = q__1.r;
         v1.i = q__1.i; // , expr subst
@@ -738,9 +740,7 @@ L130: /* Special code for 7 x 7 Householder */
         t7.r = q__1.r;
         t7.i = q__1.i; // , expr subst
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j * c_dim1 + 1;
             q__7.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i;
@@ -836,7 +836,7 @@ L130: /* Special code for 7 x 7 Householder */
             /* L140: */
         }
         goto L410;
-L150: /* Special code for 8 x 8 Householder */
+    L150: /* Special code for 8 x 8 Householder */
         r_cnjg(&q__1, &v[1]);
         v1.r = q__1.r;
         v1.i = q__1.i; // , expr subst
@@ -902,9 +902,7 @@ L150: /* Special code for 8 x 8 Householder */
         t8.r = q__1.r;
         t8.i = q__1.i; // , expr subst
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j * c_dim1 + 1;
             q__8.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i;
@@ -1013,7 +1011,7 @@ L150: /* Special code for 8 x 8 Householder */
             /* L160: */
         }
         goto L410;
-L170: /* Special code for 9 x 9 Householder */
+    L170: /* Special code for 9 x 9 Householder */
         r_cnjg(&q__1, &v[1]);
         v1.r = q__1.r;
         v1.i = q__1.i; // , expr subst
@@ -1087,9 +1085,7 @@ L170: /* Special code for 9 x 9 Householder */
         t9.r = q__1.r;
         t9.i = q__1.i; // , expr subst
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j * c_dim1 + 1;
             q__9.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i;
@@ -1211,7 +1207,7 @@ L170: /* Special code for 9 x 9 Householder */
             /* L180: */
         }
         goto L410;
-L190: /* Special code for 10 x 10 Householder */
+    L190: /* Special code for 10 x 10 Householder */
         r_cnjg(&q__1, &v[1]);
         v1.r = q__1.r;
         v1.i = q__1.i; // , expr subst
@@ -1293,9 +1289,7 @@ L190: /* Special code for 10 x 10 Householder */
         t10.r = q__1.r;
         t10.i = q__1.i; // , expr subst
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j * c_dim1 + 1;
             q__10.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i;
@@ -1434,33 +1428,33 @@ L190: /* Special code for 10 x 10 Householder */
     else
     {
         /* Form C * H, where H has order n. */
-        switch (*n)
+        switch(*n)
         {
-        case 1:
-            goto L210;
-        case 2:
-            goto L230;
-        case 3:
-            goto L250;
-        case 4:
-            goto L270;
-        case 5:
-            goto L290;
-        case 6:
-            goto L310;
-        case 7:
-            goto L330;
-        case 8:
-            goto L350;
-        case 9:
-            goto L370;
-        case 10:
-            goto L390;
+            case 1:
+                goto L210;
+            case 2:
+                goto L230;
+            case 3:
+                goto L250;
+            case 4:
+                goto L270;
+            case 5:
+                goto L290;
+            case 6:
+                goto L310;
+            case 7:
+                goto L330;
+            case 8:
+                goto L350;
+            case 9:
+                goto L370;
+            case 10:
+                goto L390;
         }
         /* Code for general N */
         clarf_(side, m, n, &v[1], &c__1, tau, &c__[c_offset], ldc, &work[1]);
         goto L410;
-L210: /* Special code for 1 x 1 Householder */
+    L210: /* Special code for 1 x 1 Householder */
         q__3.r = tau->r * v[1].r - tau->i * v[1].i;
         q__3.i = tau->r * v[1].i + tau->i * v[1].r; // , expr subst
         r_cnjg(&q__4, &v[1]);
@@ -1471,9 +1465,7 @@ L210: /* Special code for 1 x 1 Householder */
         t1.r = q__1.r;
         t1.i = q__1.i; // , expr subst
         i__1 = *m;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j + c_dim1;
             i__3 = j + c_dim1;
@@ -1484,7 +1476,7 @@ L210: /* Special code for 1 x 1 Householder */
             /* L220: */
         }
         goto L410;
-L230: /* Special code for 2 x 2 Householder */
+    L230: /* Special code for 2 x 2 Householder */
         v1.r = v[1].r;
         v1.i = v[1].i; // , expr subst
         r_cnjg(&q__2, &v1);
@@ -1500,9 +1492,7 @@ L230: /* Special code for 2 x 2 Householder */
         t2.r = q__1.r;
         t2.i = q__1.i; // , expr subst
         i__1 = *m;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j + c_dim1;
             q__2.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i;
@@ -1533,7 +1523,7 @@ L230: /* Special code for 2 x 2 Householder */
             /* L240: */
         }
         goto L410;
-L250: /* Special code for 3 x 3 Householder */
+    L250: /* Special code for 3 x 3 Householder */
         v1.r = v[1].r;
         v1.i = v[1].i; // , expr subst
         r_cnjg(&q__2, &v1);
@@ -1556,9 +1546,7 @@ L250: /* Special code for 3 x 3 Householder */
         t3.r = q__1.r;
         t3.i = q__1.i; // , expr subst
         i__1 = *m;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j + c_dim1;
             q__3.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i;
@@ -1602,7 +1590,7 @@ L250: /* Special code for 3 x 3 Householder */
             /* L260: */
         }
         goto L410;
-L270: /* Special code for 4 x 4 Householder */
+    L270: /* Special code for 4 x 4 Householder */
         v1.r = v[1].r;
         v1.i = v[1].i; // , expr subst
         r_cnjg(&q__2, &v1);
@@ -1632,9 +1620,7 @@ L270: /* Special code for 4 x 4 Householder */
         t4.r = q__1.r;
         t4.i = q__1.i; // , expr subst
         i__1 = *m;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j + c_dim1;
             q__4.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i;
@@ -1691,7 +1677,7 @@ L270: /* Special code for 4 x 4 Householder */
             /* L280: */
         }
         goto L410;
-L290: /* Special code for 5 x 5 Householder */
+    L290: /* Special code for 5 x 5 Householder */
         v1.r = v[1].r;
         v1.i = v[1].i; // , expr subst
         r_cnjg(&q__2, &v1);
@@ -1728,9 +1714,7 @@ L290: /* Special code for 5 x 5 Householder */
         t5.r = q__1.r;
         t5.i = q__1.i; // , expr subst
         i__1 = *m;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j + c_dim1;
             q__5.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i;
@@ -1800,7 +1784,7 @@ L290: /* Special code for 5 x 5 Householder */
             /* L300: */
         }
         goto L410;
-L310: /* Special code for 6 x 6 Householder */
+    L310: /* Special code for 6 x 6 Householder */
         v1.r = v[1].r;
         v1.i = v[1].i; // , expr subst
         r_cnjg(&q__2, &v1);
@@ -1844,9 +1828,7 @@ L310: /* Special code for 6 x 6 Householder */
         t6.r = q__1.r;
         t6.i = q__1.i; // , expr subst
         i__1 = *m;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j + c_dim1;
             q__6.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i;
@@ -1929,7 +1911,7 @@ L310: /* Special code for 6 x 6 Householder */
             /* L320: */
         }
         goto L410;
-L330: /* Special code for 7 x 7 Householder */
+    L330: /* Special code for 7 x 7 Householder */
         v1.r = v[1].r;
         v1.i = v[1].i; // , expr subst
         r_cnjg(&q__2, &v1);
@@ -1980,9 +1962,7 @@ L330: /* Special code for 7 x 7 Householder */
         t7.r = q__1.r;
         t7.i = q__1.i; // , expr subst
         i__1 = *m;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j + c_dim1;
             q__7.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i;
@@ -2078,7 +2058,7 @@ L330: /* Special code for 7 x 7 Householder */
             /* L340: */
         }
         goto L410;
-L350: /* Special code for 8 x 8 Householder */
+    L350: /* Special code for 8 x 8 Householder */
         v1.r = v[1].r;
         v1.i = v[1].i; // , expr subst
         r_cnjg(&q__2, &v1);
@@ -2136,9 +2116,7 @@ L350: /* Special code for 8 x 8 Householder */
         t8.r = q__1.r;
         t8.i = q__1.i; // , expr subst
         i__1 = *m;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j + c_dim1;
             q__8.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i;
@@ -2247,7 +2225,7 @@ L350: /* Special code for 8 x 8 Householder */
             /* L360: */
         }
         goto L410;
-L370: /* Special code for 9 x 9 Householder */
+    L370: /* Special code for 9 x 9 Householder */
         v1.r = v[1].r;
         v1.i = v[1].i; // , expr subst
         r_cnjg(&q__2, &v1);
@@ -2312,9 +2290,7 @@ L370: /* Special code for 9 x 9 Householder */
         t9.r = q__1.r;
         t9.i = q__1.i; // , expr subst
         i__1 = *m;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j + c_dim1;
             q__9.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i;
@@ -2436,7 +2412,7 @@ L370: /* Special code for 9 x 9 Householder */
             /* L380: */
         }
         goto L410;
-L390: /* Special code for 10 x 10 Householder */
+    L390: /* Special code for 10 x 10 Householder */
         v1.r = v[1].r;
         v1.i = v[1].i; // , expr subst
         r_cnjg(&q__2, &v1);
@@ -2508,9 +2484,7 @@ L390: /* Special code for 10 x 10 Householder */
         t10.r = q__1.r;
         t10.i = q__1.i; // , expr subst
         i__1 = *m;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j + c_dim1;
             q__10.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i;
@@ -2648,7 +2622,7 @@ L390: /* Special code for 10 x 10 Householder */
     }
 L410:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLARFX */
 }
 /* clarfx_ */

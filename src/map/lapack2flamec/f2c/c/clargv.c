@@ -1,16 +1,25 @@
-/* clargv.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* clargv.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CLARGV generates a vector of plane rotations with real cosines and complex sines. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLARGV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clargv. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clargv.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clargv. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clargv.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clargv. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clargv.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -107,10 +116,13 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int clargv_(integer *n, complex *x, integer *incx, complex * y, integer *incy, real *c__, integer *incc)
+void clargv_(integer *n, complex *x, integer *incx, complex *y, integer *incy, real *c__,
+             integer *incc)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("clargv inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS ", incc %" FLA_IS "",*n, *incx, *incy, *incc);
+    AOCL_DTL_SNPRINTF("clargv inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS
+                      ", incc %" FLA_IS "",
+                      *n, *incx, *incy, *incc);
     /* System generated locals */
     integer i__1, i__2;
     real r__1, r__2, r__3, r__4, r__5, r__6, r__7, r__8, r__9, r__10;
@@ -174,7 +186,7 @@ int clargv_(integer *n, complex *x, integer *incx, complex * y, integer *incy, r
     safmin = slamch_("S");
     eps = slamch_("E");
     r__1 = slamch_("B");
-    i__1 = (integer) (log(safmin / eps) / log(slamch_("B")) / 2.f);
+    i__1 = (integer)(log(safmin / eps) / log(slamch_("B")) / 2.f);
     safmn2 = pow_ri(&r__1, &i__1);
     safmx2 = 1.f / safmn2;
     /* END IF */
@@ -182,9 +194,7 @@ int clargv_(integer *n, complex *x, integer *incx, complex * y, integer *incy, r
     iy = 1;
     ic = 1;
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = ix;
         f.r = x[i__2].r;
@@ -199,18 +209,18 @@ int clargv_(integer *n, complex *x, integer *incx, complex * y, integer *incy, r
         r__8 = (r__2 = r_imag(&f), f2c_abs(r__2)); // , expr subst
         /* Computing MAX */
         r__9 = (r__3 = g.r, f2c_abs(r__3));
-        r__10 = (r__4 = r_imag(&g), f2c_abs(r__4)) ; // , expr subst
-        r__5 = fla_max(r__7,r__8);
-        r__6 = fla_max(r__9,r__10); // , expr subst
-        scale = fla_max(r__5,r__6);
+        r__10 = (r__4 = r_imag(&g), f2c_abs(r__4)); // , expr subst
+        r__5 = fla_max(r__7, r__8);
+        r__6 = fla_max(r__9, r__10); // , expr subst
+        scale = fla_max(r__5, r__6);
         fs.r = f.r;
         fs.i = f.i; // , expr subst
         gs.r = g.r;
         gs.i = g.i; // , expr subst
         count = 0;
-        if (scale >= safmx2)
+        if(scale >= safmx2)
         {
-L10:
+        L10:
             ++count;
             q__1.r = safmn2 * fs.r;
             q__1.i = safmn2 * fs.i; // , expr subst
@@ -221,14 +231,14 @@ L10:
             gs.r = q__1.r;
             gs.i = q__1.i; // , expr subst
             scale *= safmn2;
-            if (scale >= safmx2 && count < 20)
+            if(scale >= safmx2 && count < 20)
             {
                 goto L10;
             }
         }
-        else if (scale <= safmn2)
+        else if(scale <= safmn2)
         {
-            if (g.r == 0.f && g.i == 0.f)
+            if(g.r == 0.f && g.i == 0.f)
             {
                 cs = 1.f;
                 sn.r = 0.f;
@@ -237,7 +247,7 @@ L10:
                 r__.i = f.i; // , expr subst
                 goto L50;
             }
-L20:
+        L20:
             --count;
             q__1.r = safmx2 * fs.r;
             q__1.i = safmx2 * fs.i; // , expr subst
@@ -248,7 +258,7 @@ L20:
             gs.r = q__1.r;
             gs.i = q__1.i; // , expr subst
             scale *= safmx2;
-            if (scale <= safmn2)
+            if(scale <= safmn2)
             {
                 goto L20;
             }
@@ -263,10 +273,10 @@ L20:
         /* Computing 2nd power */
         r__2 = r_imag(&gs);
         g2 = r__1 * r__1 + r__2 * r__2;
-        if (f2 <= fla_max(g2,1.f) * safmin)
+        if(f2 <= fla_max(g2, 1.f) * safmin)
         {
             /* This is a rare case: F is very small. */
-            if (f.r == 0.f && f.i == 0.f)
+            if(f.r == 0.f && f.i == 0.f)
             {
                 cs = 0.f;
                 r__2 = g.r;
@@ -305,8 +315,8 @@ L20:
             /* Do complex/real division explicitly with 2 real divisions */
             /* Computing MAX */
             r__3 = (r__1 = f.r, f2c_abs(r__1));
-            r__4 = (r__2 = r_imag(&f), f2c_abs( r__2)); // , expr subst
-            if (fla_max(r__3,r__4) > 1.f)
+            r__4 = (r__2 = r_imag(&f), f2c_abs(r__2)); // , expr subst
+            if(fla_max(r__3, r__4) > 1.f)
             {
                 r__1 = f.r;
                 r__2 = r_imag(&f);
@@ -375,14 +385,12 @@ L20:
             q__1.i = sn.r * q__2.i + sn.i * q__2.r; // , expr subst
             sn.r = q__1.r;
             sn.i = q__1.i; // , expr subst
-            if (count != 0)
+            if(count != 0)
             {
-                if (count > 0)
+                if(count > 0)
                 {
                     i__2 = count;
-                    for (j = 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = 1; j <= i__2; ++j)
                     {
                         q__1.r = safmx2 * r__.r;
                         q__1.i = safmx2 * r__.i; // , expr subst
@@ -394,9 +402,7 @@ L20:
                 else
                 {
                     i__2 = -count;
-                    for (j = 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = 1; j <= i__2; ++j)
                     {
                         q__1.r = safmn2 * r__.r;
                         q__1.i = safmn2 * r__.i; // , expr subst
@@ -407,7 +413,7 @@ L20:
                 }
             }
         }
-L50:
+    L50:
         c__[ic] = cs;
         i__2 = iy;
         y[i__2].r = sn.r;
@@ -421,7 +427,7 @@ L50:
         /* L60: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CLARGV */
 }
 /* clargv_ */

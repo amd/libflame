@@ -1,16 +1,11 @@
-/* claqz2.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* claqz2.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    0.f,0.f
-}
-;
-static complex c_b2 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {0.f, 0.f};
+static complex c_b2 = {1.f, 0.f};
 static integer c__1 = 1;
 static integer c_n1 = -1;
 static logical c_true = TRUE_;
@@ -20,11 +15,17 @@ static logical c_true = TRUE_;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLAQZ2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/CLAQZ2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/CLAQZ2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/CLAQZ2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/CLAQZ2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/CLAQZ2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/CLAQZ2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -230,10 +231,15 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *ilo, integer *ihi, integer *nw, complex *a, integer *lda, complex *b, integer *ldb, complex *q, integer *ldq, complex *z__, integer *ldz, integer *ns, integer *nd, complex *alpha, complex *beta, complex *qc, integer *ldqc, complex *zc, integer *ldzc, complex *work, integer *lwork, real *rwork, integer *rec, integer * info)
+void claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *ilo, integer *ihi,
+             integer *nw, complex *a, integer *lda, complex *b, integer *ldb, complex *q,
+             integer *ldq, complex *z__, integer *ldz, integer *ns, integer *nd, complex *alpha,
+             complex *beta, complex *qc, integer *ldqc, complex *zc, integer *ldzc, complex *work,
+             integer *lwork, real *rwork, integer *rec, integer *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, qc_dim1, qc_offset, zc_dim1, zc_offset, i__1, i__2, i__3, i__4;
+    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, qc_dim1,
+        qc_offset, zc_dim1, zc_offset, i__1, i__2, i__3, i__4;
     real r__1, r__2;
     complex q__1, q__2;
     /* Builtin functions */
@@ -250,28 +256,44 @@ int claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
     integer ctgexc_info__, ifst;
     complex temp;
     extern /* Subroutine */
-    int crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
+        void
+        crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
     integer ilst;
     extern /* Subroutine */
-    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+        void
+        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
+               complex *, integer *, complex *, complex *, integer *);
     complex atemp;
     integer kwbot;
     real tempr;
     integer kwtop;
     extern /* Subroutine */
-    int claqz0_(char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, complex *, complex *, integer *, complex *, integer *, complex *, integer *, real *, integer *, integer *);
+        void
+        claqz0_(char *, char *, char *, integer *, integer *, integer *, complex *, integer *,
+                complex *, integer *, complex *, complex *, complex *, integer *, complex *,
+                integer *, complex *, integer *, real *, integer *, integer *);
     integer qz_small_info__;
     extern /* Subroutine */
-    int claqz1_(logical *, logical *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, complex *, integer *, integer *, integer *, complex *, integer *), slabad_(real *, real *);
+        void
+        claqz1_(logical *, logical *, integer *, integer *, integer *, integer *, complex *,
+                integer *, complex *, integer *, integer *, integer *, complex *, integer *,
+                integer *, integer *, complex *, integer *),
+        slabad_(real *, real *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
+        void
+        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
+        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real safmax;
     extern /* Subroutine */
-    int ctgexc_(logical *, logical *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, integer *), clartg_( complex *, complex *, real *, complex *, complex *);
+        void
+        ctgexc_(logical *, logical *, integer *, complex *, integer *, complex *, integer *,
+                complex *, integer *, complex *, integer *, integer *, integer *, integer *),
+        clartg_(complex *, complex *, real *, complex *, complex *);
     integer istopm;
     real smlnum;
     integer istartm;
@@ -308,9 +330,9 @@ int claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
     /* Computing MIN */
     i__1 = *nw;
     i__2 = *ihi - *ilo + 1; // , expr subst
-    jw = fla_min(i__1,i__2);
+    jw = fla_min(i__1, i__2);
     kwtop = *ihi - jw + 1;
-    if (kwtop == *ilo)
+    if(kwtop == *ilo)
     {
         s.r = 0.f;
         s.i = 0.f; // , expr subst
@@ -325,41 +347,43 @@ int claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
     ifst = 1;
     ilst = jw;
     i__1 = *rec + 1;
-    claqz0_("S", "V", "V", &jw, &c__1, &jw, &a[kwtop + kwtop * a_dim1], lda, & b[kwtop + kwtop * b_dim1], ldb, &alpha[1], &beta[1], &qc[ qc_offset], ldqc, &zc[zc_offset], ldzc, &work[1], &c_n1, &rwork[1], &i__1, &qz_small_info__);
+    claqz0_("S", "V", "V", &jw, &c__1, &jw, &a[kwtop + kwtop * a_dim1], lda,
+            &b[kwtop + kwtop * b_dim1], ldb, &alpha[1], &beta[1], &qc[qc_offset], ldqc,
+            &zc[zc_offset], ldzc, &work[1], &c_n1, &rwork[1], &i__1, &qz_small_info__);
     /* Computing 2nd power */
     i__1 = jw;
-    lworkreq = (integer) work[1].r + (i__1 * i__1 << 1);
+    lworkreq = (integer)work[1].r + (i__1 * i__1 << 1);
     /* Computing MAX */
     /* Computing 2nd power */
     i__3 = *nw;
     i__1 = lworkreq, i__2 = *n * *nw;
-    i__1 = fla_max(i__1,i__2);
+    i__1 = fla_max(i__1, i__2);
     i__2 = (i__3 * i__3 << 1) + *n; // ; expr subst
-    lworkreq = fla_max(i__1,i__2);
-    if (*lwork == -1)
+    lworkreq = fla_max(i__1, i__2);
+    if(*lwork == -1)
     {
         /* workspace query, quick return */
-        work[1].r = (real) lworkreq;
+        work[1].r = (real)lworkreq;
         work[1].i = 0.f; // , expr subst
-        return 0;
+        return;
     }
-    else if (*lwork < lworkreq)
+    else if(*lwork < lworkreq)
     {
         *info = -26;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CLAQZ2", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Get machine constants */
     safmin = slamch_("SAFE MINIMUM");
     safmax = 1.f / safmin;
     slabad_(&safmin, &safmax);
     ulp = slamch_("PRECISION");
-    smlnum = safmin * ((real) (*n) / ulp);
-    if (*ihi == kwtop)
+    smlnum = safmin * ((real)(*n) / ulp);
+    if(*ihi == kwtop)
     {
         /* 1 by 1 deflation window, just try a regular deflation */
         i__1 = kwtop;
@@ -375,11 +399,11 @@ int claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
         /* Computing MAX */
         r__1 = smlnum;
         r__2 = ulp * c_abs(&a[kwtop + kwtop * a_dim1]); // , expr subst
-        if (c_abs(&s) <= fla_max(r__1,r__2))
+        if(c_abs(&s) <= fla_max(r__1, r__2))
         {
             *ns = 0;
             *nd = 1;
-            if (kwtop > *ilo)
+            if(kwtop > *ilo)
             {
                 i__1 = kwtop + (kwtop - 1) * a_dim1;
                 a[i__1].r = 0.f;
@@ -401,8 +425,11 @@ int claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
     i__3 = jw;
     i__2 = *lwork - (i__3 * i__3 << 1);
     i__4 = *rec + 1;
-    claqz0_("S", "V", "V", &jw, &c__1, &jw, &a[kwtop + kwtop * a_dim1], lda, & b[kwtop + kwtop * b_dim1], ldb, &alpha[1], &beta[1], &qc[ qc_offset], ldqc, &zc[zc_offset], ldzc, &work[(i__1 * i__1 << 1) + 1], &i__2, &rwork[1], &i__4, &qz_small_info__);
-    if (qz_small_info__ != 0)
+    claqz0_("S", "V", "V", &jw, &c__1, &jw, &a[kwtop + kwtop * a_dim1], lda,
+            &b[kwtop + kwtop * b_dim1], ldb, &alpha[1], &beta[1], &qc[qc_offset], ldqc,
+            &zc[zc_offset], ldzc, &work[(i__1 * i__1 << 1) + 1], &i__2, &rwork[1], &i__4,
+            &qz_small_info__);
+    if(qz_small_info__ != 0)
     {
         /* Convergence failure, restore the window and exit */
         *nd = 0;
@@ -411,10 +438,10 @@ int claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
         /* Computing 2nd power */
         i__1 = jw;
         clacpy_("ALL", &jw, &jw, &work[i__1 * i__1 + 1], &jw, &b[kwtop + kwtop * b_dim1], ldb);
-        return 0;
+        return;
     }
     /* Deflation detection loop */
-    if (kwtop == *ilo || s.r == 0.f && s.i == 0.f)
+    if(kwtop == *ilo || s.r == 0.f && s.i == 0.f)
     {
         kwbot = kwtop - 1;
     }
@@ -427,16 +454,16 @@ int claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
         {
             /* Try to deflate eigenvalue */
             tempr = c_abs(&a[kwbot + kwbot * a_dim1]);
-            if (tempr == 0.f)
+            if(tempr == 0.f)
             {
                 tempr = c_abs(&s);
             }
             i__1 = (kwbot - kwtop + 1) * qc_dim1 + 1;
             q__1.r = s.r * qc[i__1].r - s.i * qc[i__1].i;
-            q__1.i = s.r * qc[ i__1].i + s.i * qc[i__1].r; // , expr subst
+            q__1.i = s.r * qc[i__1].i + s.i * qc[i__1].r; // , expr subst
             /* Computing MAX */
             r__1 = ulp * tempr;
-            if (c_abs(&q__1) <= fla_max(r__1,smlnum))
+            if(c_abs(&q__1) <= fla_max(r__1, smlnum))
             {
                 /* Deflatable */
                 --kwbot;
@@ -446,7 +473,9 @@ int claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
                 /* Not deflatable, move out of the way */
                 ifst = kwbot - kwtop + 1;
                 ilst = k2;
-                ctgexc_(&c_true, &c_true, &jw, &a[kwtop + kwtop * a_dim1], lda, &b[kwtop + kwtop * b_dim1], ldb, &qc[qc_offset], ldqc, &zc[zc_offset], ldzc, &ifst, &ilst, & ctgexc_info__);
+                ctgexc_(&c_true, &c_true, &jw, &a[kwtop + kwtop * a_dim1], lda,
+                        &b[kwtop + kwtop * b_dim1], ldb, &qc[qc_offset], ldqc, &zc[zc_offset], ldzc,
+                        &ifst, &ilst, &ctgexc_info__);
                 ++k2;
             }
             ++k;
@@ -468,7 +497,7 @@ int claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
         beta[i__1].i = b[i__2].i; // , expr subst
         ++k;
     }
-    if (kwtop != *ilo && (s.r != 0.f || s.i != 0.f))
+    if(kwtop != *ilo && (s.r != 0.f || s.i != 0.f))
     {
         /* Reflect spike back, this will create optimally packed bulges */
         /* A( KWTOP:KWBOT, KWTOP-1 ) = A( KWTOP, KWTOP-1 ) *CONJG( QC( 1, */
@@ -478,9 +507,7 @@ int claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
         atemp.i = a[i__1].i; // , expr subst
         j = 1;
         i__1 = kwbot;
-        for (i__ = kwtop;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = kwtop; i__ <= i__1; ++i__)
         {
             i__2 = i__ + (kwtop - 1) * a_dim1;
             r_cnjg(&q__2, &qc[j * qc_dim1 + 1]);
@@ -491,11 +518,10 @@ int claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
             ++j;
         }
         i__1 = kwtop;
-        for (k = kwbot - 1;
-                k >= i__1;
-                --k)
+        for(k = kwbot - 1; k >= i__1; --k)
         {
-            clartg_(&a[k + (kwtop - 1) * a_dim1], &a[k + 1 + (kwtop - 1) * a_dim1], &c1, &s1, &temp);
+            clartg_(&a[k + (kwtop - 1) * a_dim1], &a[k + 1 + (kwtop - 1) * a_dim1], &c1, &s1,
+                    &temp);
             i__2 = k + (kwtop - 1) * a_dim1;
             a[i__2].r = temp.r;
             a[i__2].i = temp.i; // , expr subst
@@ -505,13 +531,15 @@ int claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
             /* Computing MAX */
             i__2 = kwtop;
             i__3 = k - 1; // , expr subst
-            k2 = fla_max(i__2,i__3);
+            k2 = fla_max(i__2, i__3);
             i__2 = *ihi - k2 + 1;
             crot_(&i__2, &a[k + k2 * a_dim1], lda, &a[k + 1 + k2 * a_dim1], lda, &c1, &s1);
             i__2 = *ihi - (k - 1) + 1;
-            crot_(&i__2, &b[k + (k - 1) * b_dim1], ldb, &b[k + 1 + (k - 1) * b_dim1], ldb, &c1, &s1);
+            crot_(&i__2, &b[k + (k - 1) * b_dim1], ldb, &b[k + 1 + (k - 1) * b_dim1], ldb, &c1,
+                  &s1);
             r_cnjg(&q__1, &s1);
-            crot_(&jw, &qc[(k - kwtop + 1) * qc_dim1 + 1], &c__1, &qc[(k + 1 - kwtop + 1) * qc_dim1 + 1], &c__1, &c1, &q__1);
+            crot_(&jw, &qc[(k - kwtop + 1) * qc_dim1 + 1], &c__1,
+                  &qc[(k + 1 - kwtop + 1) * qc_dim1 + 1], &c__1, &c1, &q__1);
         }
         /* Chase bulges down */
         istartm = kwtop;
@@ -521,18 +549,18 @@ int claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
         {
             /* Move bulge down and remove it */
             i__1 = kwbot - 1;
-            for (k2 = k;
-                    k2 <= i__1;
-                    ++k2)
+            for(k2 = k; k2 <= i__1; ++k2)
             {
                 i__2 = kwtop + jw - 1;
-                claqz1_(&c_true, &c_true, &k2, &kwtop, &i__2, &kwbot, &a[ a_offset], lda, &b[b_offset], ldb, &jw, &kwtop, &qc[ qc_offset], ldqc, &jw, &kwtop, &zc[zc_offset], ldzc);
+                claqz1_(&c_true, &c_true, &k2, &kwtop, &i__2, &kwbot, &a[a_offset], lda,
+                        &b[b_offset], ldb, &jw, &kwtop, &qc[qc_offset], ldqc, &jw, &kwtop,
+                        &zc[zc_offset], ldzc);
             }
             --k;
         }
     }
     /* Apply Qc and Zc to rest of the matrix */
-    if (*ilschur)
+    if(*ilschur)
     {
         istartm = 1;
         istopm = *n;
@@ -542,42 +570,48 @@ int claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
         istartm = *ilo;
         istopm = *ihi;
     }
-    if (istopm - *ihi > 0)
+    if(istopm - *ihi > 0)
     {
         i__1 = istopm - *ihi;
-        cgemm_("C", "N", &jw, &i__1, &jw, &c_b2, &qc[qc_offset], ldqc, &a[ kwtop + (*ihi + 1) * a_dim1], lda, &c_b1, &work[1], &jw);
+        cgemm_("C", "N", &jw, &i__1, &jw, &c_b2, &qc[qc_offset], ldqc,
+               &a[kwtop + (*ihi + 1) * a_dim1], lda, &c_b1, &work[1], &jw);
         i__1 = istopm - *ihi;
         clacpy_("ALL", &jw, &i__1, &work[1], &jw, &a[kwtop + (*ihi + 1) * a_dim1], lda);
         i__1 = istopm - *ihi;
-        cgemm_("C", "N", &jw, &i__1, &jw, &c_b2, &qc[qc_offset], ldqc, &b[ kwtop + (*ihi + 1) * b_dim1], ldb, &c_b1, &work[1], &jw);
+        cgemm_("C", "N", &jw, &i__1, &jw, &c_b2, &qc[qc_offset], ldqc,
+               &b[kwtop + (*ihi + 1) * b_dim1], ldb, &c_b1, &work[1], &jw);
         i__1 = istopm - *ihi;
         clacpy_("ALL", &jw, &i__1, &work[1], &jw, &b[kwtop + (*ihi + 1) * b_dim1], ldb);
     }
-    if (*ilq)
+    if(*ilq)
     {
-        cgemm_("N", "N", n, &jw, &jw, &c_b2, &q[kwtop * q_dim1 + 1], ldq, &qc[ qc_offset], ldqc, &c_b1, &work[1], n);
+        cgemm_("N", "N", n, &jw, &jw, &c_b2, &q[kwtop * q_dim1 + 1], ldq, &qc[qc_offset], ldqc,
+               &c_b1, &work[1], n);
         clacpy_("ALL", n, &jw, &work[1], n, &q[kwtop * q_dim1 + 1], ldq);
     }
-    if (kwtop - 1 - istartm + 1 > 0)
+    if(kwtop - 1 - istartm + 1 > 0)
     {
         i__1 = kwtop - istartm;
         i__2 = kwtop - istartm;
-        cgemm_("N", "N", &i__1, &jw, &jw, &c_b2, &a[istartm + kwtop * a_dim1], lda, &zc[zc_offset], ldzc, &c_b1, &work[1], &i__2);
+        cgemm_("N", "N", &i__1, &jw, &jw, &c_b2, &a[istartm + kwtop * a_dim1], lda, &zc[zc_offset],
+               ldzc, &c_b1, &work[1], &i__2);
         i__1 = kwtop - istartm;
         i__2 = kwtop - istartm;
         clacpy_("ALL", &i__1, &jw, &work[1], &i__2, &a[istartm + kwtop * a_dim1], lda);
         i__1 = kwtop - istartm;
         i__2 = kwtop - istartm;
-        cgemm_("N", "N", &i__1, &jw, &jw, &c_b2, &b[istartm + kwtop * b_dim1], ldb, &zc[zc_offset], ldzc, &c_b1, &work[1], &i__2);
+        cgemm_("N", "N", &i__1, &jw, &jw, &c_b2, &b[istartm + kwtop * b_dim1], ldb, &zc[zc_offset],
+               ldzc, &c_b1, &work[1], &i__2);
         i__1 = kwtop - istartm;
         i__2 = kwtop - istartm;
         clacpy_("ALL", &i__1, &jw, &work[1], &i__2, &b[istartm + kwtop * b_dim1], ldb);
     }
-    if (*ilz)
+    if(*ilz)
     {
-        cgemm_("N", "N", n, &jw, &jw, &c_b2, &z__[kwtop * z_dim1 + 1], ldz, & zc[zc_offset], ldzc, &c_b1, &work[1], n) ;
+        cgemm_("N", "N", n, &jw, &jw, &c_b2, &z__[kwtop * z_dim1 + 1], ldz, &zc[zc_offset], ldzc,
+               &c_b1, &work[1], n);
         clacpy_("ALL", n, &jw, &work[1], n, &z__[kwtop * z_dim1 + 1], ldz);
     }
-    return 0;
+    return;
 }
 /* claqz2_ */

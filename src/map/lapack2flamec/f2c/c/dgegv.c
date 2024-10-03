@@ -1,21 +1,31 @@
-/* ../netlib/dgegv.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dgegv.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
 static doublereal c_b27 = 1.;
 static doublereal c_b38 = 0.;
-/* > \brief <b> DGEEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors for GE mat rices</b> */
+/* > \brief <b> DGEEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors
+ * for GE mat rices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DGEGV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgegv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgegv.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgegv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgegv.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgegv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgegv.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -73,7 +83,7 @@ static doublereal c_b38 = 0.;
 /* > \verbatim */
 /* > JOBVL is CHARACTER*1 */
 /* > = 'N': do not compute the left generalized eigenvectors;
-*/
+ */
 /* > = 'V': compute the left generalized eigenvectors (returned */
 /* > in VL). */
 /* > \endverbatim */
@@ -82,7 +92,7 @@ static doublereal c_b38 = 0.;
 /* > \verbatim */
 /* > JOBVR is CHARACTER*1 */
 /* > = 'N': do not compute the right generalized eigenvectors;
-*/
+ */
 /* > = 'V': compute the right generalized eigenvectors (returned */
 /* > in VR). */
 /* > \endverbatim */
@@ -225,7 +235,7 @@ if positive, then the j-th and */
 /* > To compute the optimal value of LWORK, call ILAENV to get */
 /* > blocksizes (for DGEQRF, DORMQR, and DORGQR.) Then compute: */
 /* > NB -- MAX of the blocksizes for DGEQRF, DORMQR, and DORGQR;
-*/
+ */
 /* > The optimal LWORK is: */
 /* > 2*N + MAX( 6*N, N*(NB+1) ). */
 /* > */
@@ -301,10 +311,15 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dgegv_(char *jobvl, char *jobvr, integer *n, doublereal * a, integer *lda, doublereal *b, integer *ldb, doublereal *alphar, doublereal *alphai, doublereal *beta, doublereal *vl, integer *ldvl, doublereal *vr, integer *ldvr, doublereal *work, integer *lwork, integer *info)
+void dgegv_(char *jobvl, char *jobvr, integer *n, doublereal *a, integer *lda, doublereal *b,
+            integer *ldb, doublereal *alphar, doublereal *alphai, doublereal *beta, doublereal *vl,
+            integer *ldvl, doublereal *vr, integer *ldvr, doublereal *work, integer *lwork,
+            integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgegv inputs: jobvl %c, jobvr %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", lwork %" FLA_IS "",*jobvl, *jobvr, *n, *lda, *ldb, *ldvl, *ldvr, *lwork);
+    AOCL_DTL_SNPRINTF("dgegv inputs: jobvl %c, jobvr %c, n %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", lwork %" FLA_IS "",
+                      *jobvl, *jobvr, *n, *lda, *ldb, *ldvl, *ldvr, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2;
     doublereal d__1, d__2, d__3, d__4;
@@ -318,35 +333,60 @@ int dgegv_(char *jobvl, char *jobvr, integer *n, doublereal * a, integer *lda, d
     logical ilvl, ilvr;
     integer lopt;
     doublereal anrm1, anrm2, bnrm1, bnrm2, absai, scale, absar, sbeta;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer ileft, iinfo, icols, iwork, irows;
     extern /* Subroutine */
-    int dggbak_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), dggbal_(char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
-    extern doublereal dlamch_(char *), dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
+        void
+        dggbak_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
+                integer *, doublereal *, integer *, integer *),
+        dggbal_(char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *,
+                integer *, doublereal *, doublereal *, doublereal *, integer *);
+    extern doublereal dlamch_(char *),
+        dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
     doublereal salfai;
     extern /* Subroutine */
-    int dgghrd_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+        void
+        dgghrd_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, integer *, doublereal *, integer *, doublereal *, integer *,
+                integer *),
+        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublereal *, integer *, integer *);
     doublereal salfar;
     extern /* Subroutine */
-    int dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                integer *, integer *),
+        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal safmin;
     extern /* Subroutine */
-    int dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
+        void
+        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     doublereal safmax;
     char chtemp[1];
     logical ldumma[1];
     extern /* Subroutine */
-    int dhgeqz_(char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), dtgevc_(char *, char *, logical *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dhgeqz_(char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
+                integer *, doublereal *, integer *, doublereal *, integer *, integer *),
+        dtgevc_(char *, char *, logical *, integer *, doublereal *, integer *, doublereal *,
+                integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *,
+                doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer ijobvl, iright;
     logical ilimit;
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ijobvr;
     extern /* Subroutine */
-    int dorgqr_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
+        void
+        dorgqr_(integer *, integer *, integer *, doublereal *, integer *, doublereal *,
+                doublereal *, integer *, integer *);
     doublereal onepls;
     integer lwkmin;
     extern /* Subroutine */
-    int dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
+                doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK driver routine (version 3.4.0) -- */
@@ -390,12 +430,12 @@ int dgegv_(char *jobvl, char *jobvr, integer *n, doublereal * a, integer *lda, d
     vr -= vr_offset;
     --work;
     /* Function Body */
-    if (lsame_(jobvl, "N"))
+    if(lsame_(jobvl, "N", 1, 1))
     {
         ijobvl = 1;
         ilvl = FALSE_;
     }
-    else if (lsame_(jobvl, "V"))
+    else if(lsame_(jobvl, "V", 1, 1))
     {
         ijobvl = 2;
         ilvl = TRUE_;
@@ -405,12 +445,12 @@ int dgegv_(char *jobvl, char *jobvr, integer *n, doublereal * a, integer *lda, d
         ijobvl = -1;
         ilvl = FALSE_;
     }
-    if (lsame_(jobvr, "N"))
+    if(lsame_(jobvr, "N", 1, 1))
     {
         ijobvr = 1;
         ilvr = FALSE_;
     }
-    else if (lsame_(jobvr, "V"))
+    else if(lsame_(jobvr, "V", 1, 1))
     {
         ijobvr = 2;
         ilvr = TRUE_;
@@ -424,74 +464,74 @@ int dgegv_(char *jobvl, char *jobvr, integer *n, doublereal * a, integer *lda, d
     /* Test the input arguments */
     /* Computing MAX */
     i__1 = *n << 3;
-    lwkmin = fla_max(i__1,1);
+    lwkmin = fla_max(i__1, 1);
     lwkopt = lwkmin;
-    work[1] = (doublereal) lwkopt;
+    work[1] = (doublereal)lwkopt;
     lquery = *lwork == -1;
     *info = 0;
-    if (ijobvl <= 0)
+    if(ijobvl <= 0)
     {
         *info = -1;
     }
-    else if (ijobvr <= 0)
+    else if(ijobvr <= 0)
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldvl < 1 || ilvl && *ldvl < *n)
+    else if(*ldvl < 1 || ilvl && *ldvl < *n)
     {
         *info = -12;
     }
-    else if (*ldvr < 1 || ilvr && *ldvr < *n)
+    else if(*ldvr < 1 || ilvr && *ldvr < *n)
     {
         *info = -14;
     }
-    else if (*lwork < lwkmin && ! lquery)
+    else if(*lwork < lwkmin && !lquery)
     {
         *info = -16;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
         nb1 = ilaenv_(&c__1, "DGEQRF", " ", n, n, &c_n1, &c_n1);
         nb2 = ilaenv_(&c__1, "DORMQR", " ", n, n, n, &c_n1);
         nb3 = ilaenv_(&c__1, "DORGQR", " ", n, n, n, &c_n1);
         /* Computing MAX */
-        i__1 = fla_max(nb1,nb2);
-        nb = fla_max(i__1,nb3);
+        i__1 = fla_max(nb1, nb2);
+        nb = fla_max(i__1, nb3);
         /* Computing MAX */
         i__1 = *n * 6;
         i__2 = *n * (nb + 1); // , expr subst
-        lopt = (*n << 1) + fla_max(i__1,i__2);
-        work[1] = (doublereal) lopt;
+        lopt = (*n << 1) + fla_max(i__1, i__2);
+        work[1] = (doublereal)lopt;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DGEGV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants */
     eps = dlamch_("E") * dlamch_("B");
@@ -503,44 +543,44 @@ int dgegv_(char *jobvl, char *jobvr, integer *n, doublereal * a, integer *lda, d
     anrm = dlange_("M", n, n, &a[a_offset], lda, &work[1]);
     anrm1 = anrm;
     anrm2 = 1.;
-    if (anrm < 1.)
+    if(anrm < 1.)
     {
-        if (safmax * anrm < 1.)
+        if(safmax * anrm < 1.)
         {
             anrm1 = safmin;
             anrm2 = safmax * anrm;
         }
     }
-    if (anrm > 0.)
+    if(anrm > 0.)
     {
-        dlascl_("G", &c_n1, &c_n1, &anrm, &c_b27, n, n, &a[a_offset], lda, & iinfo);
-        if (iinfo != 0)
+        dlascl_("G", &c_n1, &c_n1, &anrm, &c_b27, n, n, &a[a_offset], lda, &iinfo);
+        if(iinfo != 0)
         {
             *info = *n + 10;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     /* Scale B */
     bnrm = dlange_("M", n, n, &b[b_offset], ldb, &work[1]);
     bnrm1 = bnrm;
     bnrm2 = 1.;
-    if (bnrm < 1.)
+    if(bnrm < 1.)
     {
-        if (safmax * bnrm < 1.)
+        if(safmax * bnrm < 1.)
         {
             bnrm1 = safmin;
             bnrm2 = safmax * bnrm;
         }
     }
-    if (bnrm > 0.)
+    if(bnrm > 0.)
     {
-        dlascl_("G", &c_n1, &c_n1, &bnrm, &c_b27, n, n, &b[b_offset], ldb, & iinfo);
-        if (iinfo != 0)
+        dlascl_("G", &c_n1, &c_n1, &bnrm, &c_b27, n, n, &b[b_offset], ldb, &iinfo);
+        if(iinfo != 0)
         {
             *info = *n + 10;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     /* Permute the matrix to make it more nearly triangular */
@@ -549,8 +589,9 @@ int dgegv_(char *jobvl, char *jobvr, integer *n, doublereal * a, integer *lda, d
     ileft = 1;
     iright = *n + 1;
     iwork = iright + *n;
-    dggbal_("P", n, &a[a_offset], lda, &b[b_offset], ldb, &ilo, &ihi, &work[ ileft], &work[iright], &work[iwork], &iinfo);
-    if (iinfo != 0)
+    dggbal_("P", n, &a[a_offset], lda, &b[b_offset], ldb, &ilo, &ihi, &work[ileft], &work[iright],
+            &work[iwork], &iinfo);
+    if(iinfo != 0)
     {
         *info = *n + 1;
         goto L120;
@@ -559,7 +600,7 @@ int dgegv_(char *jobvl, char *jobvr, integer *n, doublereal * a, integer *lda, d
     /* Workspace layout: ("work..." must have at least N words) */
     /* left_permutation, right_permutation, tau, work... */
     irows = ihi + 1 - ilo;
-    if (ilv)
+    if(ilv)
     {
         icols = *n + 1 - ilo;
     }
@@ -570,69 +611,74 @@ int dgegv_(char *jobvl, char *jobvr, integer *n, doublereal * a, integer *lda, d
     itau = iwork;
     iwork = itau + irows;
     i__1 = *lwork + 1 - iwork;
-    dgeqrf_(&irows, &icols, &b[ilo + ilo * b_dim1], ldb, &work[itau], &work[ iwork], &i__1, &iinfo);
-    if (iinfo >= 0)
+    dgeqrf_(&irows, &icols, &b[ilo + ilo * b_dim1], ldb, &work[itau], &work[iwork], &i__1, &iinfo);
+    if(iinfo >= 0)
     {
         /* Computing MAX */
         i__1 = lwkopt;
-        i__2 = (integer) work[iwork] + iwork - 1; // , expr subst
-        lwkopt = fla_max(i__1,i__2);
+        i__2 = (integer)work[iwork] + iwork - 1; // , expr subst
+        lwkopt = fla_max(i__1, i__2);
     }
-    if (iinfo != 0)
+    if(iinfo != 0)
     {
         *info = *n + 2;
         goto L120;
     }
     i__1 = *lwork + 1 - iwork;
-    dormqr_("L", "T", &irows, &icols, &irows, &b[ilo + ilo * b_dim1], ldb, & work[itau], &a[ilo + ilo * a_dim1], lda, &work[iwork], &i__1, & iinfo);
-    if (iinfo >= 0)
+    dormqr_("L", "T", &irows, &icols, &irows, &b[ilo + ilo * b_dim1], ldb, &work[itau],
+            &a[ilo + ilo * a_dim1], lda, &work[iwork], &i__1, &iinfo);
+    if(iinfo >= 0)
     {
         /* Computing MAX */
         i__1 = lwkopt;
-        i__2 = (integer) work[iwork] + iwork - 1; // , expr subst
-        lwkopt = fla_max(i__1,i__2);
+        i__2 = (integer)work[iwork] + iwork - 1; // , expr subst
+        lwkopt = fla_max(i__1, i__2);
     }
-    if (iinfo != 0)
+    if(iinfo != 0)
     {
         *info = *n + 3;
         goto L120;
     }
-    if (ilvl)
+    if(ilvl)
     {
-        dlaset_("Full", n, n, &c_b38, &c_b27, &vl[vl_offset], ldvl) ;
+        dlaset_("Full", n, n, &c_b38, &c_b27, &vl[vl_offset], ldvl);
         i__1 = irows - 1;
         i__2 = irows - 1;
-        dlacpy_("L", &i__1, &i__2, &b[ilo + 1 + ilo * b_dim1], ldb, &vl[ilo + 1 + ilo * vl_dim1], ldvl);
+        dlacpy_("L", &i__1, &i__2, &b[ilo + 1 + ilo * b_dim1], ldb, &vl[ilo + 1 + ilo * vl_dim1],
+                ldvl);
         i__1 = *lwork + 1 - iwork;
-        dorgqr_(&irows, &irows, &irows, &vl[ilo + ilo * vl_dim1], ldvl, &work[ itau], &work[iwork], &i__1, &iinfo);
-        if (iinfo >= 0)
+        dorgqr_(&irows, &irows, &irows, &vl[ilo + ilo * vl_dim1], ldvl, &work[itau], &work[iwork],
+                &i__1, &iinfo);
+        if(iinfo >= 0)
         {
             /* Computing MAX */
             i__1 = lwkopt;
-            i__2 = (integer) work[iwork] + iwork - 1; // , expr subst
-            lwkopt = fla_max(i__1,i__2);
+            i__2 = (integer)work[iwork] + iwork - 1; // , expr subst
+            lwkopt = fla_max(i__1, i__2);
         }
-        if (iinfo != 0)
+        if(iinfo != 0)
         {
             *info = *n + 4;
             goto L120;
         }
     }
-    if (ilvr)
+    if(ilvr)
     {
-        dlaset_("Full", n, n, &c_b38, &c_b27, &vr[vr_offset], ldvr) ;
+        dlaset_("Full", n, n, &c_b38, &c_b27, &vr[vr_offset], ldvr);
     }
     /* Reduce to generalized Hessenberg form */
-    if (ilv)
+    if(ilv)
     {
         /* Eigenvectors requested -- work on whole matrix. */
-        dgghrd_(jobvl, jobvr, n, &ilo, &ihi, &a[a_offset], lda, &b[b_offset], ldb, &vl[vl_offset], ldvl, &vr[vr_offset], ldvr, &iinfo);
+        dgghrd_(jobvl, jobvr, n, &ilo, &ihi, &a[a_offset], lda, &b[b_offset], ldb, &vl[vl_offset],
+                ldvl, &vr[vr_offset], ldvr, &iinfo);
     }
     else
     {
-        dgghrd_("N", "N", &irows, &c__1, &irows, &a[ilo + ilo * a_dim1], lda, &b[ilo + ilo * b_dim1], ldb, &vl[vl_offset], ldvl, &vr[ vr_offset], ldvr, &iinfo);
+        dgghrd_("N", "N", &irows, &c__1, &irows, &a[ilo + ilo * a_dim1], lda,
+                &b[ilo + ilo * b_dim1], ldb, &vl[vl_offset], ldvl, &vr[vr_offset], ldvr, &iinfo);
     }
-    if (iinfo != 0)
+    if(iinfo != 0)
     {
         *info = *n + 5;
         goto L120;
@@ -641,7 +687,7 @@ int dgegv_(char *jobvl, char *jobvr, integer *n, doublereal * a, integer *lda, d
     /* Workspace layout: ("work..." must have at least 1 word) */
     /* left_permutation, right_permutation, work... */
     iwork = itau;
-    if (ilv)
+    if(ilv)
     {
         *(unsigned char *)chtemp = 'S';
     }
@@ -650,21 +696,23 @@ int dgegv_(char *jobvl, char *jobvr, integer *n, doublereal * a, integer *lda, d
         *(unsigned char *)chtemp = 'E';
     }
     i__1 = *lwork + 1 - iwork;
-    dhgeqz_(chtemp, jobvl, jobvr, n, &ilo, &ihi, &a[a_offset], lda, &b[ b_offset], ldb, &alphar[1], &alphai[1], &beta[1], &vl[vl_offset], ldvl, &vr[vr_offset], ldvr, &work[iwork], &i__1, &iinfo);
-    if (iinfo >= 0)
+    dhgeqz_(chtemp, jobvl, jobvr, n, &ilo, &ihi, &a[a_offset], lda, &b[b_offset], ldb, &alphar[1],
+            &alphai[1], &beta[1], &vl[vl_offset], ldvl, &vr[vr_offset], ldvr, &work[iwork], &i__1,
+            &iinfo);
+    if(iinfo >= 0)
     {
         /* Computing MAX */
         i__1 = lwkopt;
-        i__2 = (integer) work[iwork] + iwork - 1; // , expr subst
-        lwkopt = fla_max(i__1,i__2);
+        i__2 = (integer)work[iwork] + iwork - 1; // , expr subst
+        lwkopt = fla_max(i__1, i__2);
     }
-    if (iinfo != 0)
+    if(iinfo != 0)
     {
-        if (iinfo > 0 && iinfo <= *n)
+        if(iinfo > 0 && iinfo <= *n)
         {
             *info = iinfo;
         }
-        else if (iinfo > *n && iinfo <= *n << 1)
+        else if(iinfo > *n && iinfo <= *n << 1)
         {
             *info = iinfo - *n;
         }
@@ -674,12 +722,12 @@ int dgegv_(char *jobvl, char *jobvr, integer *n, doublereal * a, integer *lda, d
         }
         goto L120;
     }
-    if (ilv)
+    if(ilv)
     {
         /* Compute Eigenvectors (DTGEVC requires 6*N words of workspace) */
-        if (ilvl)
+        if(ilvl)
         {
-            if (ilvr)
+            if(ilvr)
             {
                 *(unsigned char *)chtemp = 'B';
             }
@@ -692,70 +740,66 @@ int dgegv_(char *jobvl, char *jobvr, integer *n, doublereal * a, integer *lda, d
         {
             *(unsigned char *)chtemp = 'R';
         }
-        dtgevc_(chtemp, "B", ldumma, n, &a[a_offset], lda, &b[b_offset], ldb, &vl[vl_offset], ldvl, &vr[vr_offset], ldvr, n, &in, &work[ iwork], &iinfo);
-        if (iinfo != 0)
+        dtgevc_(chtemp, "B", ldumma, n, &a[a_offset], lda, &b[b_offset], ldb, &vl[vl_offset], ldvl,
+                &vr[vr_offset], ldvr, n, &in, &work[iwork], &iinfo);
+        if(iinfo != 0)
         {
             *info = *n + 7;
             goto L120;
         }
         /* Undo balancing on VL and VR, rescale */
-        if (ilvl)
+        if(ilvl)
         {
-            dggbak_("P", "L", n, &ilo, &ihi, &work[ileft], &work[iright], n, & vl[vl_offset], ldvl, &iinfo);
-            if (iinfo != 0)
+            dggbak_("P", "L", n, &ilo, &ihi, &work[ileft], &work[iright], n, &vl[vl_offset], ldvl,
+                    &iinfo);
+            if(iinfo != 0)
             {
                 *info = *n + 8;
                 goto L120;
             }
             i__1 = *n;
-            for (jc = 1;
-                    jc <= i__1;
-                    ++jc)
+            for(jc = 1; jc <= i__1; ++jc)
             {
-                if (alphai[jc] < 0.)
+                if(alphai[jc] < 0.)
                 {
                     goto L50;
                 }
                 temp = 0.;
-                if (alphai[jc] == 0.)
+                if(alphai[jc] == 0.)
                 {
                     i__2 = *n;
-                    for (jr = 1;
-                            jr <= i__2;
-                            ++jr)
+                    for(jr = 1; jr <= i__2; ++jr)
                     {
                         /* Computing MAX */
                         d__2 = temp;
                         d__3 = (d__1 = vl[jr + jc * vl_dim1], f2c_dabs(d__1)); // , expr subst
-                        temp = fla_max(d__2,d__3);
+                        temp = fla_max(d__2, d__3);
                         /* L10: */
                     }
                 }
                 else
                 {
                     i__2 = *n;
-                    for (jr = 1;
-                            jr <= i__2;
-                            ++jr)
+                    for(jr = 1; jr <= i__2; ++jr)
                     {
                         /* Computing MAX */
                         d__3 = temp;
-                        d__4 = (d__1 = vl[jr + jc * vl_dim1], f2c_dabs(d__1)) + (d__2 = vl[jr + (jc + 1) * vl_dim1], f2c_dabs(d__2)); // , expr subst
-                        temp = fla_max(d__3,d__4);
+                        d__4 = (d__1 = vl[jr + jc * vl_dim1], f2c_dabs(d__1))
+                               + (d__2 = vl[jr + (jc + 1) * vl_dim1],
+                                  f2c_dabs(d__2)); // , expr subst
+                        temp = fla_max(d__3, d__4);
                         /* L20: */
                     }
                 }
-                if (temp < safmin)
+                if(temp < safmin)
                 {
                     goto L50;
                 }
                 temp = 1. / temp;
-                if (alphai[jc] == 0.)
+                if(alphai[jc] == 0.)
                 {
                     i__2 = *n;
-                    for (jr = 1;
-                            jr <= i__2;
-                            ++jr)
+                    for(jr = 1; jr <= i__2; ++jr)
                     {
                         vl[jr + jc * vl_dim1] *= temp;
                         /* L30: */
@@ -764,76 +808,68 @@ int dgegv_(char *jobvl, char *jobvr, integer *n, doublereal * a, integer *lda, d
                 else
                 {
                     i__2 = *n;
-                    for (jr = 1;
-                            jr <= i__2;
-                            ++jr)
+                    for(jr = 1; jr <= i__2; ++jr)
                     {
                         vl[jr + jc * vl_dim1] *= temp;
                         vl[jr + (jc + 1) * vl_dim1] *= temp;
                         /* L40: */
                     }
                 }
-L50:
-                ;
+            L50:;
             }
         }
-        if (ilvr)
+        if(ilvr)
         {
-            dggbak_("P", "R", n, &ilo, &ihi, &work[ileft], &work[iright], n, & vr[vr_offset], ldvr, &iinfo);
-            if (iinfo != 0)
+            dggbak_("P", "R", n, &ilo, &ihi, &work[ileft], &work[iright], n, &vr[vr_offset], ldvr,
+                    &iinfo);
+            if(iinfo != 0)
             {
                 *info = *n + 9;
                 goto L120;
             }
             i__1 = *n;
-            for (jc = 1;
-                    jc <= i__1;
-                    ++jc)
+            for(jc = 1; jc <= i__1; ++jc)
             {
-                if (alphai[jc] < 0.)
+                if(alphai[jc] < 0.)
                 {
                     goto L100;
                 }
                 temp = 0.;
-                if (alphai[jc] == 0.)
+                if(alphai[jc] == 0.)
                 {
                     i__2 = *n;
-                    for (jr = 1;
-                            jr <= i__2;
-                            ++jr)
+                    for(jr = 1; jr <= i__2; ++jr)
                     {
                         /* Computing MAX */
                         d__2 = temp;
                         d__3 = (d__1 = vr[jr + jc * vr_dim1], f2c_dabs(d__1)); // , expr subst
-                        temp = fla_max(d__2,d__3);
+                        temp = fla_max(d__2, d__3);
                         /* L60: */
                     }
                 }
                 else
                 {
                     i__2 = *n;
-                    for (jr = 1;
-                            jr <= i__2;
-                            ++jr)
+                    for(jr = 1; jr <= i__2; ++jr)
                     {
                         /* Computing MAX */
                         d__3 = temp;
-                        d__4 = (d__1 = vr[jr + jc * vr_dim1], f2c_dabs(d__1)) + (d__2 = vr[jr + (jc + 1) * vr_dim1], f2c_dabs(d__2)); // , expr subst
-                        temp = fla_max(d__3,d__4);
+                        d__4 = (d__1 = vr[jr + jc * vr_dim1], f2c_dabs(d__1))
+                               + (d__2 = vr[jr + (jc + 1) * vr_dim1],
+                                  f2c_dabs(d__2)); // , expr subst
+                        temp = fla_max(d__3, d__4);
                         /* L70: */
                     }
                 }
-                if (temp < safmin)
+                if(temp < safmin)
                 {
                     goto L100;
                 }
                 temp = 1. / temp;
-                if (alphai[jc] == 0.)
+                if(alphai[jc] == 0.)
                 {
                     i__2 = *n;
-                    for (jr = 1;
-                            jr <= i__2;
-                            ++jr)
+                    for(jr = 1; jr <= i__2; ++jr)
                     {
                         vr[jr + jc * vr_dim1] *= temp;
                         /* L80: */
@@ -842,17 +878,14 @@ L50:
                 else
                 {
                     i__2 = *n;
-                    for (jr = 1;
-                            jr <= i__2;
-                            ++jr)
+                    for(jr = 1; jr <= i__2; ++jr)
                     {
                         vr[jr + jc * vr_dim1] *= temp;
                         vr[jr + (jc + 1) * vr_dim1] *= temp;
                         /* L90: */
                     }
                 }
-L100:
-                ;
+            L100:;
             }
         }
         /* End of eigenvector calculation */
@@ -863,9 +896,7 @@ L100:
     /* Un-scaling is limited to avoid underflow in alpha and beta */
     /* if they are significant. */
     i__1 = *n;
-    for (jc = 1;
-            jc <= i__1;
-            ++jc)
+    for(jc = 1; jc <= i__1; ++jc)
     {
         absar = (d__1 = alphar[jc], f2c_dabs(d__1));
         absai = (d__1 = alphai[jc], f2c_dabs(d__1));
@@ -878,25 +909,25 @@ L100:
         /* Check for significant underflow in ALPHAI */
         /* Computing MAX */
         d__1 = safmin, d__2 = eps * absar;
-        d__1 = fla_max(d__1,d__2);
+        d__1 = fla_max(d__1, d__2);
         d__2 = eps * absb; // ; expr subst
-        if (f2c_dabs(salfai) < safmin && absai >= fla_max(d__1,d__2))
+        if(f2c_dabs(salfai) < safmin && absai >= fla_max(d__1, d__2))
         {
             ilimit = TRUE_;
             /* Computing MAX */
             d__1 = onepls * safmin;
             d__2 = anrm2 * absai; // , expr subst
-            scale = onepls * safmin / anrm1 / fla_max(d__1,d__2);
+            scale = onepls * safmin / anrm1 / fla_max(d__1, d__2);
         }
-        else if (salfai == 0.)
+        else if(salfai == 0.)
         {
             /* If insignificant underflow in ALPHAI, then make the */
             /* conjugate eigenvalue real. */
-            if (alphai[jc] < 0. && jc > 1)
+            if(alphai[jc] < 0. && jc > 1)
             {
                 alphai[jc - 1] = 0.;
             }
-            else if (alphai[jc] > 0. && jc < *n)
+            else if(alphai[jc] > 0. && jc < *n)
             {
                 alphai[jc + 1] = 0.;
             }
@@ -904,9 +935,9 @@ L100:
         /* Check for significant underflow in ALPHAR */
         /* Computing MAX */
         d__1 = safmin, d__2 = eps * absai;
-        d__1 = fla_max(d__1,d__2);
+        d__1 = fla_max(d__1, d__2);
         d__2 = eps * absb; // ; expr subst
-        if (f2c_dabs(salfar) < safmin && absar >= fla_max(d__1,d__2))
+        if(f2c_dabs(salfar) < safmin && absar >= fla_max(d__1, d__2))
         {
             ilimit = TRUE_;
             /* Computing MAX */
@@ -914,15 +945,15 @@ L100:
             d__3 = onepls * safmin;
             d__4 = anrm2 * absar; // , expr subst
             d__1 = scale;
-            d__2 = onepls * safmin / anrm1 / fla_max(d__3,d__4); // , expr subst
-            scale = fla_max(d__1,d__2);
+            d__2 = onepls * safmin / anrm1 / fla_max(d__3, d__4); // , expr subst
+            scale = fla_max(d__1, d__2);
         }
         /* Check for significant underflow in BETA */
         /* Computing MAX */
         d__1 = safmin, d__2 = eps * absar;
-        d__1 = fla_max(d__1,d__2);
+        d__1 = fla_max(d__1, d__2);
         d__2 = eps * absai; // ; expr subst
-        if (f2c_dabs(sbeta) < safmin && absb >= fla_max(d__1,d__2))
+        if(f2c_dabs(sbeta) < safmin && absb >= fla_max(d__1, d__2))
         {
             ilimit = TRUE_;
             /* Computing MAX */
@@ -930,28 +961,28 @@ L100:
             d__3 = onepls * safmin;
             d__4 = bnrm2 * absb; // , expr subst
             d__1 = scale;
-            d__2 = onepls * safmin / bnrm1 / fla_max(d__3,d__4); // , expr subst
-            scale = fla_max(d__1,d__2);
+            d__2 = onepls * safmin / bnrm1 / fla_max(d__3, d__4); // , expr subst
+            scale = fla_max(d__1, d__2);
         }
         /* Check for possible overflow when limiting scaling */
-        if (ilimit)
+        if(ilimit)
         {
             /* Computing MAX */
             d__1 = f2c_dabs(salfar), d__2 = f2c_dabs(salfai);
-            d__1 = fla_max(d__1,d__2);
+            d__1 = fla_max(d__1, d__2);
             d__2 = f2c_dabs(sbeta); // ; expr subst
-            temp = scale * safmin * fla_max(d__1,d__2);
-            if (temp > 1.)
+            temp = scale * safmin * fla_max(d__1, d__2);
+            if(temp > 1.)
             {
                 scale /= temp;
             }
-            if (scale < 1.)
+            if(scale < 1.)
             {
                 ilimit = FALSE_;
             }
         }
         /* Recompute un-scaled ALPHAR, ALPHAI, BETA if necessary. */
-        if (ilimit)
+        if(ilimit)
         {
             salfar = scale * alphar[jc] * anrm;
             salfai = scale * alphai[jc] * anrm;
@@ -963,9 +994,9 @@ L100:
         /* L110: */
     }
 L120:
-    work[1] = (doublereal) lwkopt;
+    work[1] = (doublereal)lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGEGV */
 }
 /* dgegv_ */

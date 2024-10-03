@@ -1,8 +1,11 @@
 /*
     Copyright (c) 2019-2023 Advanced Micro Devices, Inc.
 */
-/* ../netlib/zgeqp3.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zgeqp3.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -14,11 +17,17 @@ static integer c__2 = 2;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZGEQP3 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgeqp3. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgeqp3.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgeqp3. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgeqp3.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgeqp3. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgeqp3.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -155,30 +164,45 @@ v(i+1:m) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zgeqp3_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *jpvt, doublecomplex *tau, doublecomplex *work, integer *lwork, doublereal *rwork, integer *info)
+void zgeqp3_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *jpvt,
+             doublecomplex *tau, doublecomplex *work, integer *lwork, doublereal *rwork,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgeqp3 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",*m, *n, *lda, *lwork);
+    AOCL_DTL_SNPRINTF("zgeqp3 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS
+                      "",
+                      *m, *n, *lda, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
     doublecomplex z__1;
     /* Local variables */
     integer j, jb, na, nb, sm, sn, nx, fjb, iws, nfxd, nbmin, minmn, minws;
     extern /* Subroutine */
-    int zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zlaqp2_(integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, doublereal *, doublereal *, doublecomplex *);
+        void
+        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zlaqp2_(integer *, integer *, integer *, doublecomplex *, integer *, integer *,
+                doublecomplex *, doublereal *, doublereal *, doublecomplex *);
     extern doublereal dznrm2_(integer *, doublecomplex *, integer *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int zgeqrf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer * );
+        void
+        zgeqrf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *,
+                integer *, integer *);
     integer topbmn, sminmn;
     extern /* Subroutine */
-    int zlaqps_(integer *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, doublereal *, doublereal *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zlaqps_(integer *, integer *, integer *, integer *, integer *, doublecomplex *, integer *,
+                integer *, doublecomplex *, doublereal *, doublereal *, doublecomplex *,
+                doublecomplex *, integer *);
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    int zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -212,22 +236,22 @@ int zgeqp3_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *jpv
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        minmn = fla_min(*m,*n);
-        if (minmn == 0)
+        minmn = fla_min(*m, *n);
+        if(minmn == 0)
         {
             iws = 1;
             lwkopt = 1;
@@ -242,39 +266,37 @@ int zgeqp3_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *jpv
 #endif
             lwkopt = (*n + 1) * nb;
         }
-        z__1.r = (doublereal) lwkopt;
+        z__1.r = (doublereal)lwkopt;
         z__1.i = 0.; // , expr subst
         work[1].r = z__1.r;
         work[1].i = z__1.i; // , expr subst
-        if (*lwork < iws && ! lquery)
+        if(*lwork < iws && !lquery)
         {
             *info = -8;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZGEQP3", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Move initial columns up front. */
     nfxd = 1;
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
-        if (jpvt[j] != 0)
+        if(jpvt[j] != 0)
         {
-            if (j != nfxd)
+            if(j != nfxd)
             {
-                zswap_(m, &a[j * a_dim1 + 1], &c__1, &a[nfxd * a_dim1 + 1], & c__1);
+                zswap_(m, &a[j * a_dim1 + 1], &c__1, &a[nfxd * a_dim1 + 1], &c__1);
                 jpvt[j] = jpvt[nfxd];
                 jpvt[nfxd] = j;
             }
@@ -295,31 +317,32 @@ int zgeqp3_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *jpv
     /* ======================= */
     /* Compute the QR factorization of fixed columns and update */
     /* remaining columns. */
-    if (nfxd > 0)
+    if(nfxd > 0)
     {
-        na = fla_min(*m,nfxd);
+        na = fla_min(*m, nfxd);
         /* CC CALL ZGEQR2( M, NA, A, LDA, TAU, WORK, INFO ) */
         zgeqrf_(m, &na, &a[a_offset], lda, &tau[1], &work[1], lwork, info);
         /* Computing MAX */
         i__1 = iws;
-        i__2 = (integer) work[1].r; // , expr subst
-        iws = fla_max(i__1,i__2);
-        if (na < *n)
+        i__2 = (integer)work[1].r; // , expr subst
+        iws = fla_max(i__1, i__2);
+        if(na < *n)
         {
             /* CC CALL ZUNM2R( 'Left', 'Conjugate Transpose', M, N-NA, */
             /* CC $ NA, A, LDA, TAU, A( 1, NA+1 ), LDA, WORK, */
             /* CC $ INFO ) */
             i__1 = *n - na;
-            zunmqr_("Left", "Conjugate Transpose", m, &i__1, &na, &a[a_offset], lda, &tau[1], &a[(na + 1) * a_dim1 + 1], lda, &work[1], lwork, info);
+            zunmqr_("Left", "Conjugate Transpose", m, &i__1, &na, &a[a_offset], lda, &tau[1],
+                    &a[(na + 1) * a_dim1 + 1], lda, &work[1], lwork, info);
             /* Computing MAX */
             i__1 = iws;
-            i__2 = (integer) work[1].r; // , expr subst
-            iws = fla_max(i__1,i__2);
+            i__2 = (integer)work[1].r; // , expr subst
+            iws = fla_max(i__1, i__2);
         }
     }
     /* Factorize free columns */
     /* ====================== */
-    if (nfxd < minmn)
+    if(nfxd < minmn)
     {
         sm = *m - nfxd;
         sn = *n - nfxd;
@@ -332,59 +355,58 @@ int zgeqp3_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *jpv
 #endif
         nbmin = 2;
         nx = 0;
-        if (nb > 1 && nb < sminmn)
+        if(nb > 1 && nb < sminmn)
         {
             /* Determine when to cross over from blocked to unblocked code. */
             /* Computing MAX */
             i__1 = 0;
-            i__2 = ilaenv_(&c__3, "ZGEQRF", " ", &sm, &sn, &c_n1, & c_n1); // , expr subst
-            nx = fla_max(i__1,i__2);
-            if (nx < sminmn)
+            i__2 = ilaenv_(&c__3, "ZGEQRF", " ", &sm, &sn, &c_n1, &c_n1); // , expr subst
+            nx = fla_max(i__1, i__2);
+            if(nx < sminmn)
             {
                 /* Determine if workspace is large enough for blocked code. */
                 minws = (sn + 1) * nb;
-                iws = fla_max(iws,minws);
-                if (*lwork < minws)
+                iws = fla_max(iws, minws);
+                if(*lwork < minws)
                 {
                     /* Not enough workspace to use optimal NB: Reduce NB and */
                     /* determine the minimum value of NB. */
                     nb = *lwork / (sn + 1);
                     /* Computing MAX */
                     i__1 = 2;
-                    i__2 = ilaenv_(&c__2, "ZGEQRF", " ", &sm, &sn, & c_n1, &c_n1); // , expr subst
-                    nbmin = fla_max(i__1,i__2);
+                    i__2 = ilaenv_(&c__2, "ZGEQRF", " ", &sm, &sn, &c_n1, &c_n1); // , expr subst
+                    nbmin = fla_max(i__1, i__2);
                 }
             }
         }
         /* Initialize partial column norms. The first N elements of work */
         /* store the exact column norms. */
         i__1 = *n;
-        for (j = nfxd + 1;
-                j <= i__1;
-                ++j)
+        for(j = nfxd + 1; j <= i__1; ++j)
         {
             rwork[j] = dznrm2_(&sm, &a[nfxd + 1 + j * a_dim1], &c__1);
             rwork[*n + j] = rwork[j];
             /* L20: */
         }
-        if (nb >= nbmin && nb < sminmn && nx < sminmn)
+        if(nb >= nbmin && nb < sminmn && nx < sminmn)
         {
             /* Use blocked code initially. */
             j = nfxd + 1;
             /* Compute factorization: while loop. */
             topbmn = minmn - nx;
-L30:
-            if (j <= topbmn)
+        L30:
+            if(j <= topbmn)
             {
                 /* Computing MIN */
                 i__1 = nb;
                 i__2 = topbmn - j + 1; // , expr subst
-                jb = fla_min(i__1,i__2);
+                jb = fla_min(i__1, i__2);
                 /* Factorize JB columns among columns J:N. */
                 i__1 = *n - j + 1;
                 i__2 = j - 1;
                 i__3 = *n - j + 1;
-                zlaqps_(m, &i__1, &i__2, &jb, &fjb, &a[j * a_dim1 + 1], lda, & jpvt[j], &tau[j], &rwork[j], &rwork[*n + j], &work[1], &work[jb + 1], &i__3);
+                zlaqps_(m, &i__1, &i__2, &jb, &fjb, &a[j * a_dim1 + 1], lda, &jpvt[j], &tau[j],
+                        &rwork[j], &rwork[*n + j], &work[1], &work[jb + 1], &i__3);
                 j += fjb;
                 goto L30;
             }
@@ -394,20 +416,20 @@ L30:
             j = nfxd + 1;
         }
         /* Use unblocked code to factor the last or only block. */
-        if (j <= minmn)
+        if(j <= minmn)
         {
             i__1 = *n - j + 1;
             i__2 = j - 1;
-            zlaqp2_(m, &i__1, &i__2, &a[j * a_dim1 + 1], lda, &jpvt[j], &tau[ j], &rwork[j], &rwork[*n + j], &work[1]);
+            zlaqp2_(m, &i__1, &i__2, &a[j * a_dim1 + 1], lda, &jpvt[j], &tau[j], &rwork[j],
+                    &rwork[*n + j], &work[1]);
         }
     }
-    z__1.r = (doublereal) lwkopt;
+    z__1.r = (doublereal)lwkopt;
     z__1.i = 0.; // , expr subst
     work[1].r = z__1.r;
     work[1].i = z__1.i; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGEQP3 */
 }
 /* zgeqp3_ */
-

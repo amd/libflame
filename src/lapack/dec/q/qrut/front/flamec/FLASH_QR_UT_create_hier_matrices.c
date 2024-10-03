@@ -10,11 +10,11 @@
 
 #include "FLAME.h"
 
-FLA_Error FLASH_QR_UT_create_hier_matrices( FLA_Obj A_flat, dim_t depth, dim_t* b_flash, FLA_Obj* A, FLA_Obj* TW )
+FLA_Error FLASH_QR_UT_create_hier_matrices( FLA_Obj A_flat, fla_dim_t depth, fla_dim_t* b_flash, FLA_Obj* A, FLA_Obj* TW )
 {
 	FLA_Datatype datatype;
-	dim_t        m, n;
-	dim_t        min_m_n;
+	fla_dim_t        m, n;
+	fla_dim_t        min_m_n;
 	
 	// *** The current QR_UT algorithm implemented assumes that
 	// the matrix has a hierarchical depth of 1. We check for that here

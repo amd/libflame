@@ -25,7 +25,7 @@ static doublereal c_b12 = 1.;
     /* Builtin functions */
     double sqrt(doublereal);
 #ifndef FLA_ENABLE_AOCL_BLAS
-	int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+	void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
 	logical lsame_(char *ca, char *cb, integer a, integer b);
 #endif
     /* Local variables */

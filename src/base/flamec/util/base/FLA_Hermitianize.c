@@ -13,8 +13,8 @@
 FLA_Error FLA_Hermitianize( FLA_Uplo uplo, FLA_Obj A )
 {
   FLA_Datatype datatype;
-  dim_t        n_A;
-  dim_t        rs_A, cs_A;
+  fla_dim_t        n_A;
+  fla_dim_t        rs_A, cs_A;
   conj1_t       blis_conj;
   uplo1_t       blis_uplo;
 

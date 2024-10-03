@@ -1,16 +1,25 @@
-/* ../netlib/zupgtr.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zupgtr.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b ZUPGTR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZUPGTR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zupgtr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zupgtr.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zupgtr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zupgtr.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zupgtr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zupgtr.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -43,7 +52,7 @@
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangular packed storage used in previous */
 /* > call to ZHPTRD;
-*/
+ */
 /* > = 'L': Lower triangular packed storage used in previous */
 /* > call to ZHPTRD. */
 /* > \endverbatim */
@@ -101,19 +110,25 @@
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zupgtr_(char *uplo, integer *n, doublecomplex *ap, doublecomplex *tau, doublecomplex *q, integer *ldq, doublecomplex * work, integer *info)
+void zupgtr_(char *uplo, integer *n, doublecomplex *ap, doublecomplex *tau, doublecomplex *q,
+             integer *ldq, doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zupgtr inputs: uplo %c, n %" FLA_IS ", ldq %" FLA_IS "",*uplo, *n, *ldq);
+    AOCL_DTL_SNPRINTF("zupgtr inputs: uplo %c, n %" FLA_IS ", ldq %" FLA_IS "", *uplo, *n, *ldq);
     /* System generated locals */
     integer q_dim1, q_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
     integer i__, j, ij;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     logical upper;
     extern /* Subroutine */
-    int zung2l_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zung2r_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zung2l_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                doublecomplex *, integer *),
+        zung2r_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -144,33 +159,33 @@ int zupgtr_(char *uplo, integer *n, doublecomplex *ap, doublecomplex *tau, doubl
     --work;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*ldq < fla_max(1,*n))
+    else if(*ldq < fla_max(1, *n))
     {
         *info = -6;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZUPGTR", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
-    if (upper)
+    if(upper)
     {
         /* Q was determined by a call to ZHPTRD with UPLO = 'U' */
         /* Unpack the vectors which define the elementary reflectors and */
@@ -178,14 +193,10 @@ int zupgtr_(char *uplo, integer *n, doublecomplex *ap, doublecomplex *tau, doubl
         /* matrix */
         ij = 2;
         i__1 = *n - 1;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j - 1;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * q_dim1;
                 i__4 = ij;
@@ -201,9 +212,7 @@ int zupgtr_(char *uplo, integer *n, doublecomplex *ap, doublecomplex *tau, doubl
             /* L20: */
         }
         i__1 = *n - 1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + *n * q_dim1;
             q[i__2].r = 0.;
@@ -217,7 +226,7 @@ int zupgtr_(char *uplo, integer *n, doublecomplex *ap, doublecomplex *tau, doubl
         i__1 = *n - 1;
         i__2 = *n - 1;
         i__3 = *n - 1;
-        zung2l_(&i__1, &i__2, &i__3, &q[q_offset], ldq, &tau[1], &work[1], & iinfo);
+        zung2l_(&i__1, &i__2, &i__3, &q[q_offset], ldq, &tau[1], &work[1], &iinfo);
     }
     else
     {
@@ -229,9 +238,7 @@ int zupgtr_(char *uplo, integer *n, doublecomplex *ap, doublecomplex *tau, doubl
         q[i__1].r = 1.;
         q[i__1].i = 0.; // , expr subst
         i__1 = *n;
-        for (i__ = 2;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 2; i__ <= i__1; ++i__)
         {
             i__2 = i__ + q_dim1;
             q[i__2].r = 0.;
@@ -240,17 +247,13 @@ int zupgtr_(char *uplo, integer *n, doublecomplex *ap, doublecomplex *tau, doubl
         }
         ij = 3;
         i__1 = *n;
-        for (j = 2;
-                j <= i__1;
-                ++j)
+        for(j = 2; j <= i__1; ++j)
         {
             i__2 = j * q_dim1 + 1;
             q[i__2].r = 0.;
             q[i__2].i = 0.; // , expr subst
             i__2 = *n;
-            for (i__ = j + 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = j + 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * q_dim1;
                 i__4 = ij;
@@ -262,7 +265,7 @@ int zupgtr_(char *uplo, integer *n, doublecomplex *ap, doublecomplex *tau, doubl
             ij += 2;
             /* L60: */
         }
-        if (*n > 1)
+        if(*n > 1)
         {
             /* Generate Q(2:n,2:n) */
             i__1 = *n - 1;
@@ -272,7 +275,7 @@ int zupgtr_(char *uplo, integer *n, doublecomplex *ap, doublecomplex *tau, doubl
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZUPGTR */
 }
 /* zupgtr_ */

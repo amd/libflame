@@ -1,16 +1,25 @@
-/* ../netlib/dladiv.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dladiv.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLADIV performs complex division in real arithmetic, avoiding unnecessary overflow. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLADIV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dladiv. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dladiv.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dladiv. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dladiv.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dladiv. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dladiv.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -77,7 +86,8 @@
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dladiv_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, doublereal *p, doublereal *q)
+void dladiv_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, doublereal *p,
+             doublereal *q)
 {
     AOCL_DTL_TRACE_ENTRY_INDENT
     /* System generated locals */
@@ -87,7 +97,9 @@ int dladiv_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, doub
     doublereal s, aa, ab, bb, cc, cd, dd;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dladiv1_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dladiv1_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
+                 doublereal *);
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -112,11 +124,11 @@ int dladiv_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, doub
     /* Computing MAX */
     d__1 = f2c_abs(*a);
     d__2 = f2c_abs(*b); // , expr subst
-    ab = fla_max(d__1,d__2);
+    ab = fla_max(d__1, d__2);
     /* Computing MAX */
     d__1 = f2c_abs(*c__);
     d__2 = f2c_abs(*d__); // , expr subst
-    cd = fla_max(d__1,d__2);
+    cd = fla_max(d__1, d__2);
 
     if(ov == 0)
     {
@@ -127,32 +139,32 @@ int dladiv_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, doub
     }
 
     s = 1.;
-    if (ab >= ov )
+    if(ab >= ov)
     {
         aa *= .5;
         bb *= .5;
         s *= 2.;
     }
-    if (cd >= ov )
+    if(cd >= ov)
     {
         cc *= .5;
         dd *= .5;
         s *= .5;
     }
-    if (ab <= un )
+    if(ab <= un)
     {
         aa *= be;
         bb *= be;
         s /= be;
     }
-    if (cd <= un )
+    if(cd <= un)
     {
         cc *= be;
         dd *= be;
         s *= be;
     }
 
-    if (f2c_abs(*d__) <= f2c_abs(*c__))
+    if(f2c_abs(*d__) <= f2c_abs(*c__))
     {
         dladiv1_(&aa, &bb, &cc, &dd, p, q);
     }
@@ -164,17 +176,19 @@ int dladiv_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, doub
     *p *= s;
     *q *= s;
     AOCL_DTL_TRACE_EXIT_INDENT
-    return 0;
+    return;
     /* End of DLADIV */
 }
 /* dladiv_ */
 /* > \ingroup doubleOTHERauxiliary */
 /* Subroutine */
-int dladiv1_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, doublereal *p, doublereal *q)
+void dladiv1_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, doublereal *p,
+              doublereal *q)
 {
     AOCL_DTL_TRACE_ENTRY_INDENT
     doublereal r__, t;
-    extern doublereal dladiv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    extern doublereal dladiv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
+                               doublereal *);
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -194,12 +208,13 @@ int dladiv1_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, dou
     *a = -(*a);
     *q = dladiv2_(b, a, c__, d__, &r__, &t);
     AOCL_DTL_TRACE_EXIT_INDENT
-    return 0;
+    return;
     /* End of DLADIV1 */
 }
 /* dladiv1_ */
 /* > \ingroup doubleOTHERauxiliary */
-doublereal dladiv2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, doublereal *r__, doublereal *t)
+doublereal dladiv2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, doublereal *r__,
+                    doublereal *t)
 {
     AOCL_DTL_TRACE_ENTRY_INDENT
     /* System generated locals */
@@ -217,10 +232,10 @@ doublereal dladiv2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d
     /* .. Local Scalars .. */
     /* .. */
     /* .. Executable Statements .. */
-    if (*r__ != 0.)
+    if(*r__ != 0.)
     {
         br = *b * *r__;
-        if (br != 0.)
+        if(br != 0.)
         {
             ret_val = (*a + br) * *t;
         }

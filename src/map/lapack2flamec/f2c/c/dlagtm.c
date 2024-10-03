@@ -1,16 +1,25 @@
-/* ../netlib/dlagtm.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlagtm.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLAGTM performs a matrix-matrix product of the form C = αAB+βC, where A is a tridiagonal matr ix, B and C are rectangular matrices, and α and β are scalars, which may be 0, 1, or -1. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLAGTM + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlagtm. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlagtm.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlagtm. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlagtm.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlagtm. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlagtm.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -132,15 +141,19 @@ otherwise, */
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doublereal *dl, doublereal *d__, doublereal *du, doublereal *x, integer *ldx, doublereal *beta, doublereal *b, integer *ldb)
+void dlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doublereal *dl,
+             doublereal *d__, doublereal *du, doublereal *x, integer *ldx, doublereal *beta,
+             doublereal *b, integer *ldb)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlagtm inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldx %" FLA_IS ", ldb %" FLA_IS "",*trans, *n, *nrhs, *ldx, *ldb);
+    AOCL_DTL_SNPRINTF("dlagtm inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldx %" FLA_IS
+                      ", ldb %" FLA_IS "",
+                      *trans, *n, *nrhs, *ldx, *ldb);
     /* System generated locals */
     integer b_dim1, b_offset, x_dim1, x_offset, i__1, i__2;
     /* Local variables */
     integer i__, j;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -168,23 +181,19 @@ int dlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doublerea
     b_offset = 1 + b_dim1;
     b -= b_offset;
     /* Function Body */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Multiply B by BETA if BETA.NE.1. */
-    if (*beta == 0.)
+    if(*beta == 0.)
     {
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *n;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 b[i__ + j * b_dim1] = 0.;
                 /* L10: */
@@ -192,17 +201,13 @@ int dlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doublerea
             /* L20: */
         }
     }
-    else if (*beta == -1.)
+    else if(*beta == -1.)
     {
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *n;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 b[i__ + j * b_dim1] = -b[i__ + j * b_dim1];
                 /* L30: */
@@ -210,30 +215,30 @@ int dlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doublerea
             /* L40: */
         }
     }
-    if (*alpha == 1.)
+    if(*alpha == 1.)
     {
-        if (lsame_(trans, "N"))
+        if(lsame_(trans, "N", 1, 1))
         {
             /* Compute B := B + A*X */
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
-                if (*n == 1)
+                if(*n == 1)
                 {
                     b[j * b_dim1 + 1] += d__[1] * x[j * x_dim1 + 1];
                 }
                 else
                 {
-                    b[j * b_dim1 + 1] = b[j * b_dim1 + 1] + d__[1] * x[j * x_dim1 + 1] + du[1] * x[j * x_dim1 + 2];
-                    b[*n + j * b_dim1] = b[*n + j * b_dim1] + dl[*n - 1] * x[* n - 1 + j * x_dim1] + d__[*n] * x[*n + j * x_dim1] ;
+                    b[j * b_dim1 + 1] = b[j * b_dim1 + 1] + d__[1] * x[j * x_dim1 + 1]
+                                        + du[1] * x[j * x_dim1 + 2];
+                    b[*n + j * b_dim1] = b[*n + j * b_dim1] + dl[*n - 1] * x[*n - 1 + j * x_dim1]
+                                         + d__[*n] * x[*n + j * x_dim1];
                     i__2 = *n - 1;
-                    for (i__ = 2;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 2; i__ <= i__2; ++i__)
                     {
-                        b[i__ + j * b_dim1] = b[i__ + j * b_dim1] + dl[i__ - 1] * x[i__ - 1 + j * x_dim1] + d__[i__] * x[ i__ + j * x_dim1] + du[i__] * x[i__ + 1 + j * x_dim1];
+                        b[i__ + j * b_dim1]
+                            = b[i__ + j * b_dim1] + dl[i__ - 1] * x[i__ - 1 + j * x_dim1]
+                              + d__[i__] * x[i__ + j * x_dim1] + du[i__] * x[i__ + 1 + j * x_dim1];
                         /* L50: */
                     }
                 }
@@ -244,24 +249,24 @@ int dlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doublerea
         {
             /* Compute B := B + A**T*X */
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
-                if (*n == 1)
+                if(*n == 1)
                 {
                     b[j * b_dim1 + 1] += d__[1] * x[j * x_dim1 + 1];
                 }
                 else
                 {
-                    b[j * b_dim1 + 1] = b[j * b_dim1 + 1] + d__[1] * x[j * x_dim1 + 1] + dl[1] * x[j * x_dim1 + 2];
-                    b[*n + j * b_dim1] = b[*n + j * b_dim1] + du[*n - 1] * x[* n - 1 + j * x_dim1] + d__[*n] * x[*n + j * x_dim1] ;
+                    b[j * b_dim1 + 1] = b[j * b_dim1 + 1] + d__[1] * x[j * x_dim1 + 1]
+                                        + dl[1] * x[j * x_dim1 + 2];
+                    b[*n + j * b_dim1] = b[*n + j * b_dim1] + du[*n - 1] * x[*n - 1 + j * x_dim1]
+                                         + d__[*n] * x[*n + j * x_dim1];
                     i__2 = *n - 1;
-                    for (i__ = 2;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 2; i__ <= i__2; ++i__)
                     {
-                        b[i__ + j * b_dim1] = b[i__ + j * b_dim1] + du[i__ - 1] * x[i__ - 1 + j * x_dim1] + d__[i__] * x[ i__ + j * x_dim1] + dl[i__] * x[i__ + 1 + j * x_dim1];
+                        b[i__ + j * b_dim1]
+                            = b[i__ + j * b_dim1] + du[i__ - 1] * x[i__ - 1 + j * x_dim1]
+                              + d__[i__] * x[i__ + j * x_dim1] + dl[i__] * x[i__ + 1 + j * x_dim1];
                         /* L70: */
                     }
                 }
@@ -269,30 +274,30 @@ int dlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doublerea
             }
         }
     }
-    else if (*alpha == -1.)
+    else if(*alpha == -1.)
     {
-        if (lsame_(trans, "N"))
+        if(lsame_(trans, "N", 1, 1))
         {
             /* Compute B := B - A*X */
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
-                if (*n == 1)
+                if(*n == 1)
                 {
                     b[j * b_dim1 + 1] -= d__[1] * x[j * x_dim1 + 1];
                 }
                 else
                 {
-                    b[j * b_dim1 + 1] = b[j * b_dim1 + 1] - d__[1] * x[j * x_dim1 + 1] - du[1] * x[j * x_dim1 + 2];
-                    b[*n + j * b_dim1] = b[*n + j * b_dim1] - dl[*n - 1] * x[* n - 1 + j * x_dim1] - d__[*n] * x[*n + j * x_dim1] ;
+                    b[j * b_dim1 + 1] = b[j * b_dim1 + 1] - d__[1] * x[j * x_dim1 + 1]
+                                        - du[1] * x[j * x_dim1 + 2];
+                    b[*n + j * b_dim1] = b[*n + j * b_dim1] - dl[*n - 1] * x[*n - 1 + j * x_dim1]
+                                         - d__[*n] * x[*n + j * x_dim1];
                     i__2 = *n - 1;
-                    for (i__ = 2;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 2; i__ <= i__2; ++i__)
                     {
-                        b[i__ + j * b_dim1] = b[i__ + j * b_dim1] - dl[i__ - 1] * x[i__ - 1 + j * x_dim1] - d__[i__] * x[ i__ + j * x_dim1] - du[i__] * x[i__ + 1 + j * x_dim1];
+                        b[i__ + j * b_dim1]
+                            = b[i__ + j * b_dim1] - dl[i__ - 1] * x[i__ - 1 + j * x_dim1]
+                              - d__[i__] * x[i__ + j * x_dim1] - du[i__] * x[i__ + 1 + j * x_dim1];
                         /* L90: */
                     }
                 }
@@ -303,24 +308,24 @@ int dlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doublerea
         {
             /* Compute B := B - A**T*X */
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
-                if (*n == 1)
+                if(*n == 1)
                 {
                     b[j * b_dim1 + 1] -= d__[1] * x[j * x_dim1 + 1];
                 }
                 else
                 {
-                    b[j * b_dim1 + 1] = b[j * b_dim1 + 1] - d__[1] * x[j * x_dim1 + 1] - dl[1] * x[j * x_dim1 + 2];
-                    b[*n + j * b_dim1] = b[*n + j * b_dim1] - du[*n - 1] * x[* n - 1 + j * x_dim1] - d__[*n] * x[*n + j * x_dim1] ;
+                    b[j * b_dim1 + 1] = b[j * b_dim1 + 1] - d__[1] * x[j * x_dim1 + 1]
+                                        - dl[1] * x[j * x_dim1 + 2];
+                    b[*n + j * b_dim1] = b[*n + j * b_dim1] - du[*n - 1] * x[*n - 1 + j * x_dim1]
+                                         - d__[*n] * x[*n + j * x_dim1];
                     i__2 = *n - 1;
-                    for (i__ = 2;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 2; i__ <= i__2; ++i__)
                     {
-                        b[i__ + j * b_dim1] = b[i__ + j * b_dim1] - du[i__ - 1] * x[i__ - 1 + j * x_dim1] - d__[i__] * x[ i__ + j * x_dim1] - dl[i__] * x[i__ + 1 + j * x_dim1];
+                        b[i__ + j * b_dim1]
+                            = b[i__ + j * b_dim1] - du[i__ - 1] * x[i__ - 1 + j * x_dim1]
+                              - d__[i__] * x[i__ + j * x_dim1] - dl[i__] * x[i__ + 1 + j * x_dim1];
                         /* L110: */
                     }
                 }
@@ -329,7 +334,7 @@ int dlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doublerea
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAGTM */
 }
 /* dlagtm_ */

@@ -1,20 +1,30 @@
-/* ../netlib/slasq1.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slasq1.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__2 = 2;
 static integer c__0 = 0;
-/* > \brief \b SLASQ1 computes the singular values of a real square bidiagonal matrix. Used by sbdsqr. */
+/* > \brief \b SLASQ1 computes the singular values of a real square bidiagonal matrix. Used by
+ * sbdsqr. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLASQ1 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasq1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasq1.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasq1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasq1.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasq1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasq1.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -98,12 +108,12 @@ static integer c__0 = 0;
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int slasq1_(integer *n, real *d__, real *e, real *work, integer *info)
+void slasq1_(integer *n, real *d__, real *e, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slasq1 inputs: n %d",*n);
+    snprintf(buffer, 256, "slasq1 inputs: n %d", *n);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -115,16 +125,25 @@ int slasq1_(integer *n, real *d__, real *e, real *work, integer *info)
     integer i__;
     real eps;
     extern /* Subroutine */
-    int slas2_(real *, real *, real *, real *, real *) ;
+        void
+        slas2_(real *, real *, real *, real *, real *);
     real scale;
     integer iinfo;
     real sigmn, sigmx;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), slasq2_(integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *),
+        slasq2_(integer *, real *, integer *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slascl_( char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slasrt_(char *, integer *, real *, integer *);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
+        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
+                integer *, integer *),
+        slasrt_(char *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -151,64 +170,60 @@ int slasq1_(integer *n, real *d__, real *e, real *work, integer *info)
     --d__;
     /* Function Body */
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
         i__1 = -(*info);
         xerbla_("SLASQ1", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    else if (*n == 0)
+    else if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    else if (*n == 1)
+    else if(*n == 1)
     {
         d__[1] = f2c_abs(d__[1]);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    else if (*n == 2)
+    else if(*n == 2)
     {
         slas2_(&d__[1], &e[1], &d__[2], &sigmn, &sigmx);
         d__[1] = sigmx;
         d__[2] = sigmn;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Estimate the largest singular value. */
     sigmx = 0.f;
     i__1 = *n - 1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         d__[i__] = (r__1 = d__[i__], f2c_abs(r__1));
         /* Computing MAX */
         r__2 = sigmx;
         r__3 = (r__1 = e[i__], f2c_abs(r__1)); // , expr subst
-        sigmx = fla_max(r__2,r__3);
+        sigmx = fla_max(r__2, r__3);
         /* L10: */
     }
     d__[*n] = (r__1 = d__[*n], f2c_abs(r__1));
     /* Early return if SIGMX is zero (matrix is already diagonal). */
-    if (sigmx == 0.f)
+    if(sigmx == 0.f)
     {
         slasrt_("D", n, &d__[1], &iinfo);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* Computing MAX */
         r__1 = sigmx;
         r__2 = d__[i__]; // , expr subst
-        sigmx = fla_max(r__1,r__2);
+        sigmx = fla_max(r__1, r__2);
         /* L20: */
     }
     /* Copy D and E into WORK (in the Z format) and scale (squaring the */
@@ -224,9 +239,7 @@ int slasq1_(integer *n, real *d__, real *e, real *work, integer *info)
     slascl_("G", &c__0, &c__0, &sigmx, &scale, &i__1, &c__1, &work[1], &i__2, &iinfo);
     /* Compute the q's and e's. */
     i__1 = (*n << 1) - 1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* Computing 2nd power */
         r__1 = work[i__];
@@ -235,36 +248,31 @@ int slasq1_(integer *n, real *d__, real *e, real *work, integer *info)
     }
     work[*n * 2] = 0.f;
     slasq2_(n, &work[1], info);
-    if (*info == 0)
+    if(*info == 0)
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             d__[i__] = sqrt(work[i__]);
             /* L40: */
         }
-        slascl_("G", &c__0, &c__0, &scale, &sigmx, n, &c__1, &d__[1], n, & iinfo);
+        slascl_("G", &c__0, &c__0, &scale, &sigmx, n, &c__1, &d__[1], n, &iinfo);
     }
-    else if (*info == 2)
+    else if(*info == 2)
     {
         /* Maximum number of iterations exceeded. Move data from WORK */
         /* into D and E so the calling subroutine can try to finish */
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             d__[i__] = sqrt(work[(i__ << 1) - 1]);
             e[i__] = sqrt(work[i__ * 2]);
         }
-        slascl_("G", &c__0, &c__0, &scale, &sigmx, n, &c__1, &d__[1], n, & iinfo);
+        slascl_("G", &c__0, &c__0, &scale, &sigmx, n, &c__1, &d__[1], n, &iinfo);
         slascl_("G", &c__0, &c__0, &scale, &sigmx, n, &c__1, &e[1], n, &iinfo);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLASQ1 */
 }
 /* slasq1_ */
-

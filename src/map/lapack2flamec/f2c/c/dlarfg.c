@@ -1,5 +1,8 @@
-/* ../netlib/dlarfg.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlarfg.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 
 /*
     Modifications Copyright (c) 2023 Advanced Micro Devices, Inc.  All rights reserved.
@@ -11,11 +14,17 @@
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLARFG + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarfg. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarfg.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarfg. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarfg.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarfg. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarfg.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -97,10 +106,10 @@
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlarfg_(integer *n, doublereal *alpha, doublereal *x, integer *incx, doublereal *tau)
+void dlarfg_(integer *n, doublereal *alpha, doublereal *x, integer *incx, doublereal *tau)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlarfg inputs: n %" FLA_IS ", incx %" FLA_IS "",*n, *incx);
+    AOCL_DTL_SNPRINTF("dlarfg inputs: n %" FLA_IS ", incx %" FLA_IS "", *n, *incx);
     /* System generated locals */
     integer i__1;
     doublereal d__1;
@@ -111,11 +120,12 @@ int dlarfg_(integer *n, doublereal *alpha, doublereal *x, integer *incx, doubler
     doublereal beta;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal xnorm;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
 #if FLA_ENABLE_AMD_OPT
-    extern int fla_dscal(integer *n, doublereal *da, doublereal *dx, integer *incx);
+    extern int fla_dscal(integer * n, doublereal * da, doublereal * dx, integer * incx);
 #endif
     static TLS_CLASS_SPEC integer r_once = 1;
     static TLS_CLASS_SPEC doublereal safmin, rsafmn;
@@ -140,22 +150,19 @@ int dlarfg_(integer *n, doublereal *alpha, doublereal *x, integer *incx, doubler
     /* .. */
     /* .. Executable Statements .. */
     /* Parameter adjustments */
-    
-    /* Initialize global context data */
-    aocl_fla_init();
 
     --x;
     /* Function Body */
-    if (*n <= 1)
+    if(*n <= 1)
     {
         *tau = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
 
     i__1 = *n - 1;
     xnorm = dnrm2_(&i__1, &x[1], incx);
-    if (xnorm == 0.)
+    if(xnorm == 0.)
     {
         /* H = I */
         *tau = 0.;
@@ -165,24 +172,24 @@ int dlarfg_(integer *n, doublereal *alpha, doublereal *x, integer *incx, doubler
         /* general case */
         d__1 = dlapy2_(alpha, &xnorm);
         beta = -d_sign(&d__1, alpha);
-        if (r_once)
+        if(r_once)
         {
             safmin = dlamch_("S") / dlamch_("E");
             rsafmn = 1. / safmin;
             r_once = 0;
         }
         knt = 0;
-        if (f2c_abs(beta) < safmin)
+        if(f2c_abs(beta) < safmin)
         {
             /* XNORM, BETA may be inaccurate;
             scale X and recompute them */
-L10:
+        L10:
             ++knt;
             i__1 = *n - 1;
             dscal_(&i__1, &rsafmn, &x[1], incx);
             beta *= rsafmn;
             *alpha *= rsafmn;
-            if (f2c_abs(beta) < safmin && knt < 20)
+            if(f2c_abs(beta) < safmin && knt < 20)
             {
                 goto L10;
             }
@@ -204,9 +211,7 @@ L10:
 #endif
         /* If ALPHA is subnormal, it may lose relative accuracy */
         i__1 = knt;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             beta *= safmin;
             /* L20: */
@@ -214,7 +219,7 @@ L10:
         *alpha = beta;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLARFG */
 }
 /* dlarfg_ */

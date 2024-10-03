@@ -1,16 +1,25 @@
-/* dlat2s.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dlat2s.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLAT2S converts a double-precision triangular matrix to a single-precision triangular matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLAT2S + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlat2s. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlat2s.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlat2s. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlat2s.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlat2s. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlat2s.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -44,7 +53,7 @@
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': A is upper triangular;
-*/
+ */
 /* > = 'L': A is lower triangular. */
 /* > \endverbatim */
 /* > */
@@ -98,16 +107,18 @@ if INFO>0, the content of */
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlat2s_(char *uplo, integer *n, doublereal *a, integer * lda, real *sa, integer *ldsa, integer *info)
+void dlat2s_(char *uplo, integer *n, doublereal *a, integer *lda, real *sa, integer *ldsa,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlat2s inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldsa %" FLA_IS "",*uplo, *n, *lda, *ldsa);
+    AOCL_DTL_SNPRINTF("dlat2s inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldsa %" FLA_IS "",
+                      *uplo, *n, *lda, *ldsa);
     /* System generated locals */
     integer sa_dim1, sa_offset, a_dim1, a_offset, i__1, i__2;
     /* Local variables */
     integer i__, j;
     doublereal rmax;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern real slamch_(char *);
     /* -- LAPACK auxiliary routine -- */
@@ -134,25 +145,21 @@ int dlat2s_(char *uplo, integer *n, doublereal *a, integer * lda, real *sa, inte
     sa -= sa_offset;
     /* Function Body */
     rmax = slamch_("O");
-    upper = lsame_(uplo, "U");
-    if (upper)
+    upper = lsame_(uplo, "U", 1, 1);
+    if(upper)
     {
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
-                if (a[i__ + j * a_dim1] < -rmax || a[i__ + j * a_dim1] > rmax)
+                if(a[i__ + j * a_dim1] < -rmax || a[i__ + j * a_dim1] > rmax)
                 {
                     *info = 1;
                     goto L50;
                 }
-                sa[i__ + j * sa_dim1] = (real) a[i__ + j * a_dim1];
+                sa[i__ + j * sa_dim1] = (real)a[i__ + j * a_dim1];
                 /* L10: */
             }
             /* L20: */
@@ -161,21 +168,17 @@ int dlat2s_(char *uplo, integer *n, doublereal *a, integer * lda, real *sa, inte
     else
     {
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *n;
-            for (i__ = j;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = j; i__ <= i__2; ++i__)
             {
-                if (a[i__ + j * a_dim1] < -rmax || a[i__ + j * a_dim1] > rmax)
+                if(a[i__ + j * a_dim1] < -rmax || a[i__ + j * a_dim1] > rmax)
                 {
                     *info = 1;
                     goto L50;
                 }
-                sa[i__ + j * sa_dim1] = (real) a[i__ + j * a_dim1];
+                sa[i__ + j * sa_dim1] = (real)a[i__ + j * a_dim1];
                 /* L30: */
             }
             /* L40: */
@@ -183,7 +186,7 @@ int dlat2s_(char *uplo, integer *n, doublereal *a, integer * lda, real *sa, inte
     }
 L50:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAT2S */
 }
 /* dlat2s_ */

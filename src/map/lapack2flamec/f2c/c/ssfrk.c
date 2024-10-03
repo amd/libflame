@@ -1,16 +1,25 @@
-/* ../netlib/ssfrk.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ssfrk.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SSFRK performs a symmetric rank-k operation for matrix in RFP format. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SSFRK + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssfrk.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssfrk.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssfrk.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssfrk.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssfrk.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssfrk.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -50,7 +59,7 @@
 /* > \verbatim */
 /* > TRANSR is CHARACTER*1 */
 /* > = 'N': The Normal Form of RFP A is stored;
-*/
+ */
 /* > = 'T': The Transpose Form of RFP A is stored. */
 /* > \endverbatim */
 /* > */
@@ -152,12 +161,16 @@
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int ssfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real *alpha, real *a, integer *lda, real *beta, real * c__)
+void ssfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real *alpha, real *a,
+            integer *lda, real *beta, real *c__)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"ssfrk inputs: transr %c, uplo %c, trans %c, n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",*transr, *uplo, *trans, *n, *k, *lda);
+    snprintf(buffer, 256,
+             "ssfrk inputs: transr %c, uplo %c, trans %c, n %" FLA_IS ", k %" FLA_IS
+             ", lda %" FLA_IS "",
+             *transr, *uplo, *trans, *n, *k, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -165,13 +178,18 @@ int ssfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real *
     /* Local variables */
     integer j, n1, n2, nk, info;
     logical normaltransr;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+        void
+        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
+               integer *, real *, real *, integer *);
     integer nrowa;
     logical lower;
     extern /* Subroutine */
-    int ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *,
+               integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd, notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -201,10 +219,10 @@ int ssfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real *
     --c__;
     /* Function Body */
     info = 0;
-    normaltransr = lsame_(transr, "N");
-    lower = lsame_(uplo, "L");
-    notrans = lsame_(trans, "N");
-    if (notrans)
+    normaltransr = lsame_(transr, "N", 1, 1);
+    lower = lsame_(uplo, "L", 1, 1);
+    notrans = lsame_(trans, "N", 1, 1);
+    if(notrans)
     {
         nrowa = *n;
     }
@@ -212,61 +230,59 @@ int ssfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real *
     {
         nrowa = *k;
     }
-    if (! normaltransr && ! lsame_(transr, "T"))
+    if(!normaltransr && !lsame_(transr, "T", 1, 1))
     {
         info = -1;
     }
-    else if (! lower && ! lsame_(uplo, "U"))
+    else if(!lower && !lsame_(uplo, "U", 1, 1))
     {
         info = -2;
     }
-    else if (! notrans && ! lsame_(trans, "T"))
+    else if(!notrans && !lsame_(trans, "T", 1, 1))
     {
         info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         info = -4;
     }
-    else if (*k < 0)
+    else if(*k < 0)
     {
         info = -5;
     }
-    else if (*lda < fla_max(1,nrowa))
+    else if(*lda < fla_max(1, nrowa))
     {
         info = -8;
     }
-    if (info != 0)
+    if(info != 0)
     {
         i__1 = -info;
         xerbla_("SSFRK ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
     /* The quick return case: ((ALPHA.EQ.0).AND.(BETA.NE.ZERO)) is not */
     /* done (it is in SSYRK for example) and left in the general case. */
-    if (*n == 0 || (*alpha == 0.f || *k == 0) && *beta == 1.f)
+    if(*n == 0 || (*alpha == 0.f || *k == 0) && *beta == 1.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (*alpha == 0.f && *beta == 0.f)
+    if(*alpha == 0.f && *beta == 0.f)
     {
         i__1 = *n * (*n + 1) / 2;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             c__[j] = 0.f;
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* C is N-by-N. */
     /* If N is odd, set NISODD = .TRUE., and N1 and N2. */
     /* If N is even, NISODD = .FALSE., and NK. */
-    if (*n % 2 == 0)
+    if(*n % 2 == 0)
     {
         nisodd = FALSE_;
         nk = *n / 2;
@@ -274,7 +290,7 @@ int ssfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real *
     else
     {
         nisodd = TRUE_;
-        if (lower)
+        if(lower)
         {
             n2 = *n / 2;
             n1 = *n - n2;
@@ -285,86 +301,102 @@ int ssfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real *
             n2 = *n - n1;
         }
     }
-    if (nisodd)
+    if(nisodd)
     {
         /* N is odd */
-        if (normaltransr)
+        if(normaltransr)
         {
             /* N is odd and TRANSR = 'N' */
-            if (lower)
+            if(lower)
             {
                 /* N is odd, TRANSR = 'N', and UPLO = 'L' */
-                if (notrans)
+                if(notrans)
                 {
                     /* N is odd, TRANSR = 'N', UPLO = 'L', and TRANS = 'N' */
                     ssyrk_("L", "N", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[1], n);
-                    ssyrk_("U", "N", &n2, k, alpha, &a[n1 + 1 + a_dim1], lda, beta, &c__[*n + 1], n);
-                    sgemm_("N", "T", &n2, &n1, k, alpha, &a[n1 + 1 + a_dim1], lda, &a[a_dim1 + 1], lda, beta, &c__[n1 + 1], n);
+                    ssyrk_("U", "N", &n2, k, alpha, &a[n1 + 1 + a_dim1], lda, beta, &c__[*n + 1],
+                           n);
+                    sgemm_("N", "T", &n2, &n1, k, alpha, &a[n1 + 1 + a_dim1], lda, &a[a_dim1 + 1],
+                           lda, beta, &c__[n1 + 1], n);
                 }
                 else
                 {
                     /* N is odd, TRANSR = 'N', UPLO = 'L', and TRANS = 'T' */
                     ssyrk_("L", "T", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[1], n);
-                    ssyrk_("U", "T", &n2, k, alpha, &a[(n1 + 1) * a_dim1 + 1], lda, beta, &c__[*n + 1], n) ;
-                    sgemm_("T", "N", &n2, &n1, k, alpha, &a[(n1 + 1) * a_dim1 + 1], lda, &a[a_dim1 + 1], lda, beta, &c__[n1 + 1], n);
+                    ssyrk_("U", "T", &n2, k, alpha, &a[(n1 + 1) * a_dim1 + 1], lda, beta,
+                           &c__[*n + 1], n);
+                    sgemm_("T", "N", &n2, &n1, k, alpha, &a[(n1 + 1) * a_dim1 + 1], lda,
+                           &a[a_dim1 + 1], lda, beta, &c__[n1 + 1], n);
                 }
             }
             else
             {
                 /* N is odd, TRANSR = 'N', and UPLO = 'U' */
-                if (notrans)
+                if(notrans)
                 {
                     /* N is odd, TRANSR = 'N', UPLO = 'U', and TRANS = 'N' */
                     ssyrk_("L", "N", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[n2 + 1], n);
                     ssyrk_("U", "N", &n2, k, alpha, &a[n2 + a_dim1], lda, beta, &c__[n1 + 1], n);
-                    sgemm_("N", "T", &n1, &n2, k, alpha, &a[a_dim1 + 1], lda, &a[n2 + a_dim1], lda, beta, &c__[1], n);
+                    sgemm_("N", "T", &n1, &n2, k, alpha, &a[a_dim1 + 1], lda, &a[n2 + a_dim1], lda,
+                           beta, &c__[1], n);
                 }
                 else
                 {
                     /* N is odd, TRANSR = 'N', UPLO = 'U', and TRANS = 'T' */
                     ssyrk_("L", "T", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[n2 + 1], n);
-                    ssyrk_("U", "T", &n2, k, alpha, &a[n2 * a_dim1 + 1], lda, beta, &c__[n1 + 1], n);
-                    sgemm_("T", "N", &n1, &n2, k, alpha, &a[a_dim1 + 1], lda, &a[n2 * a_dim1 + 1], lda, beta, &c__[1], n);
+                    ssyrk_("U", "T", &n2, k, alpha, &a[n2 * a_dim1 + 1], lda, beta, &c__[n1 + 1],
+                           n);
+                    sgemm_("T", "N", &n1, &n2, k, alpha, &a[a_dim1 + 1], lda, &a[n2 * a_dim1 + 1],
+                           lda, beta, &c__[1], n);
                 }
             }
         }
         else
         {
             /* N is odd, and TRANSR = 'T' */
-            if (lower)
+            if(lower)
             {
                 /* N is odd, TRANSR = 'T', and UPLO = 'L' */
-                if (notrans)
+                if(notrans)
                 {
                     /* N is odd, TRANSR = 'T', UPLO = 'L', and TRANS = 'N' */
                     ssyrk_("U", "N", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[1], &n1);
                     ssyrk_("L", "N", &n2, k, alpha, &a[n1 + 1 + a_dim1], lda, beta, &c__[2], &n1);
-                    sgemm_("N", "T", &n1, &n2, k, alpha, &a[a_dim1 + 1], lda, &a[n1 + 1 + a_dim1], lda, beta, &c__[n1 * n1 + 1], &n1);
+                    sgemm_("N", "T", &n1, &n2, k, alpha, &a[a_dim1 + 1], lda, &a[n1 + 1 + a_dim1],
+                           lda, beta, &c__[n1 * n1 + 1], &n1);
                 }
                 else
                 {
                     /* N is odd, TRANSR = 'T', UPLO = 'L', and TRANS = 'T' */
                     ssyrk_("U", "T", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[1], &n1);
-                    ssyrk_("L", "T", &n2, k, alpha, &a[(n1 + 1) * a_dim1 + 1], lda, beta, &c__[2], &n1);
-                    sgemm_("T", "N", &n1, &n2, k, alpha, &a[a_dim1 + 1], lda, &a[(n1 + 1) * a_dim1 + 1], lda, beta, &c__[n1 * n1 + 1], &n1);
+                    ssyrk_("L", "T", &n2, k, alpha, &a[(n1 + 1) * a_dim1 + 1], lda, beta, &c__[2],
+                           &n1);
+                    sgemm_("T", "N", &n1, &n2, k, alpha, &a[a_dim1 + 1], lda,
+                           &a[(n1 + 1) * a_dim1 + 1], lda, beta, &c__[n1 * n1 + 1], &n1);
                 }
             }
             else
             {
                 /* N is odd, TRANSR = 'T', and UPLO = 'U' */
-                if (notrans)
+                if(notrans)
                 {
                     /* N is odd, TRANSR = 'T', UPLO = 'U', and TRANS = 'N' */
-                    ssyrk_("U", "N", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[n2 * n2 + 1], &n2);
-                    ssyrk_("L", "N", &n2, k, alpha, &a[n1 + 1 + a_dim1], lda, beta, &c__[n1 * n2 + 1], &n2);
-                    sgemm_("N", "T", &n2, &n1, k, alpha, &a[n1 + 1 + a_dim1], lda, &a[a_dim1 + 1], lda, beta, &c__[1], &n2);
+                    ssyrk_("U", "N", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[n2 * n2 + 1],
+                           &n2);
+                    ssyrk_("L", "N", &n2, k, alpha, &a[n1 + 1 + a_dim1], lda, beta,
+                           &c__[n1 * n2 + 1], &n2);
+                    sgemm_("N", "T", &n2, &n1, k, alpha, &a[n1 + 1 + a_dim1], lda, &a[a_dim1 + 1],
+                           lda, beta, &c__[1], &n2);
                 }
                 else
                 {
                     /* N is odd, TRANSR = 'T', UPLO = 'U', and TRANS = 'T' */
-                    ssyrk_("U", "T", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[n2 * n2 + 1], &n2);
-                    ssyrk_("L", "T", &n2, k, alpha, &a[(n1 + 1) * a_dim1 + 1], lda, beta, &c__[n1 * n2 + 1], &n2);
-                    sgemm_("T", "N", &n2, &n1, k, alpha, &a[(n1 + 1) * a_dim1 + 1], lda, &a[a_dim1 + 1], lda, beta, &c__[1], & n2);
+                    ssyrk_("U", "T", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[n2 * n2 + 1],
+                           &n2);
+                    ssyrk_("L", "T", &n2, k, alpha, &a[(n1 + 1) * a_dim1 + 1], lda, beta,
+                           &c__[n1 * n2 + 1], &n2);
+                    sgemm_("T", "N", &n2, &n1, k, alpha, &a[(n1 + 1) * a_dim1 + 1], lda,
+                           &a[a_dim1 + 1], lda, beta, &c__[1], &n2);
                 }
             }
         }
@@ -372,13 +404,13 @@ int ssfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real *
     else
     {
         /* N is even */
-        if (normaltransr)
+        if(normaltransr)
         {
             /* N is even and TRANSR = 'N' */
-            if (lower)
+            if(lower)
             {
                 /* N is even, TRANSR = 'N', and UPLO = 'L' */
-                if (notrans)
+                if(notrans)
                 {
                     /* N is even, TRANSR = 'N', UPLO = 'L', and TRANS = 'N' */
                     i__1 = *n + 1;
@@ -386,7 +418,8 @@ int ssfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real *
                     i__1 = *n + 1;
                     ssyrk_("U", "N", &nk, k, alpha, &a[nk + 1 + a_dim1], lda, beta, &c__[1], &i__1);
                     i__1 = *n + 1;
-                    sgemm_("N", "T", &nk, &nk, k, alpha, &a[nk + 1 + a_dim1], lda, &a[a_dim1 + 1], lda, beta, &c__[nk + 2], & i__1);
+                    sgemm_("N", "T", &nk, &nk, k, alpha, &a[nk + 1 + a_dim1], lda, &a[a_dim1 + 1],
+                           lda, beta, &c__[nk + 2], &i__1);
                 }
                 else
                 {
@@ -394,23 +427,27 @@ int ssfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real *
                     i__1 = *n + 1;
                     ssyrk_("L", "T", &nk, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[2], &i__1);
                     i__1 = *n + 1;
-                    ssyrk_("U", "T", &nk, k, alpha, &a[(nk + 1) * a_dim1 + 1], lda, beta, &c__[1], &i__1);
+                    ssyrk_("U", "T", &nk, k, alpha, &a[(nk + 1) * a_dim1 + 1], lda, beta, &c__[1],
+                           &i__1);
                     i__1 = *n + 1;
-                    sgemm_("T", "N", &nk, &nk, k, alpha, &a[(nk + 1) * a_dim1 + 1], lda, &a[a_dim1 + 1], lda, beta, &c__[nk + 2], &i__1);
+                    sgemm_("T", "N", &nk, &nk, k, alpha, &a[(nk + 1) * a_dim1 + 1], lda,
+                           &a[a_dim1 + 1], lda, beta, &c__[nk + 2], &i__1);
                 }
             }
             else
             {
                 /* N is even, TRANSR = 'N', and UPLO = 'U' */
-                if (notrans)
+                if(notrans)
                 {
                     /* N is even, TRANSR = 'N', UPLO = 'U', and TRANS = 'N' */
                     i__1 = *n + 1;
                     ssyrk_("L", "N", &nk, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[nk + 2], &i__1);
                     i__1 = *n + 1;
-                    ssyrk_("U", "N", &nk, k, alpha, &a[nk + 1 + a_dim1], lda, beta, &c__[nk + 1], &i__1);
+                    ssyrk_("U", "N", &nk, k, alpha, &a[nk + 1 + a_dim1], lda, beta, &c__[nk + 1],
+                           &i__1);
                     i__1 = *n + 1;
-                    sgemm_("N", "T", &nk, &nk, k, alpha, &a[a_dim1 + 1], lda, &a[nk + 1 + a_dim1], lda, beta, &c__[1], &i__1);
+                    sgemm_("N", "T", &nk, &nk, k, alpha, &a[a_dim1 + 1], lda, &a[nk + 1 + a_dim1],
+                           lda, beta, &c__[1], &i__1);
                 }
                 else
                 {
@@ -418,55 +455,66 @@ int ssfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real *
                     i__1 = *n + 1;
                     ssyrk_("L", "T", &nk, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[nk + 2], &i__1);
                     i__1 = *n + 1;
-                    ssyrk_("U", "T", &nk, k, alpha, &a[(nk + 1) * a_dim1 + 1], lda, beta, &c__[nk + 1], &i__1);
+                    ssyrk_("U", "T", &nk, k, alpha, &a[(nk + 1) * a_dim1 + 1], lda, beta,
+                           &c__[nk + 1], &i__1);
                     i__1 = *n + 1;
-                    sgemm_("T", "N", &nk, &nk, k, alpha, &a[a_dim1 + 1], lda, &a[(nk + 1) * a_dim1 + 1], lda, beta, &c__[1], & i__1);
+                    sgemm_("T", "N", &nk, &nk, k, alpha, &a[a_dim1 + 1], lda,
+                           &a[(nk + 1) * a_dim1 + 1], lda, beta, &c__[1], &i__1);
                 }
             }
         }
         else
         {
             /* N is even, and TRANSR = 'T' */
-            if (lower)
+            if(lower)
             {
                 /* N is even, TRANSR = 'T', and UPLO = 'L' */
-                if (notrans)
+                if(notrans)
                 {
                     /* N is even, TRANSR = 'T', UPLO = 'L', and TRANS = 'N' */
                     ssyrk_("U", "N", &nk, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[nk + 1], &nk);
                     ssyrk_("L", "N", &nk, k, alpha, &a[nk + 1 + a_dim1], lda, beta, &c__[1], &nk);
-                    sgemm_("N", "T", &nk, &nk, k, alpha, &a[a_dim1 + 1], lda, &a[nk + 1 + a_dim1], lda, beta, &c__[(nk + 1) * nk + 1], &nk);
+                    sgemm_("N", "T", &nk, &nk, k, alpha, &a[a_dim1 + 1], lda, &a[nk + 1 + a_dim1],
+                           lda, beta, &c__[(nk + 1) * nk + 1], &nk);
                 }
                 else
                 {
                     /* N is even, TRANSR = 'T', UPLO = 'L', and TRANS = 'T' */
                     ssyrk_("U", "T", &nk, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[nk + 1], &nk);
-                    ssyrk_("L", "T", &nk, k, alpha, &a[(nk + 1) * a_dim1 + 1], lda, beta, &c__[1], &nk);
-                    sgemm_("T", "N", &nk, &nk, k, alpha, &a[a_dim1 + 1], lda, &a[(nk + 1) * a_dim1 + 1], lda, beta, &c__[(nk + 1) * nk + 1], &nk);
+                    ssyrk_("L", "T", &nk, k, alpha, &a[(nk + 1) * a_dim1 + 1], lda, beta, &c__[1],
+                           &nk);
+                    sgemm_("T", "N", &nk, &nk, k, alpha, &a[a_dim1 + 1], lda,
+                           &a[(nk + 1) * a_dim1 + 1], lda, beta, &c__[(nk + 1) * nk + 1], &nk);
                 }
             }
             else
             {
                 /* N is even, TRANSR = 'T', and UPLO = 'U' */
-                if (notrans)
+                if(notrans)
                 {
                     /* N is even, TRANSR = 'T', UPLO = 'U', and TRANS = 'N' */
-                    ssyrk_("U", "N", &nk, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[nk * (nk + 1) + 1], &nk);
-                    ssyrk_("L", "N", &nk, k, alpha, &a[nk + 1 + a_dim1], lda, beta, &c__[nk * nk + 1], &nk);
-                    sgemm_("N", "T", &nk, &nk, k, alpha, &a[nk + 1 + a_dim1], lda, &a[a_dim1 + 1], lda, beta, &c__[1], &nk);
+                    ssyrk_("U", "N", &nk, k, alpha, &a[a_dim1 + 1], lda, beta,
+                           &c__[nk * (nk + 1) + 1], &nk);
+                    ssyrk_("L", "N", &nk, k, alpha, &a[nk + 1 + a_dim1], lda, beta,
+                           &c__[nk * nk + 1], &nk);
+                    sgemm_("N", "T", &nk, &nk, k, alpha, &a[nk + 1 + a_dim1], lda, &a[a_dim1 + 1],
+                           lda, beta, &c__[1], &nk);
                 }
                 else
                 {
                     /* N is even, TRANSR = 'T', UPLO = 'U', and TRANS = 'T' */
-                    ssyrk_("U", "T", &nk, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[nk * (nk + 1) + 1], &nk);
-                    ssyrk_("L", "T", &nk, k, alpha, &a[(nk + 1) * a_dim1 + 1], lda, beta, &c__[nk * nk + 1], &nk);
-                    sgemm_("T", "N", &nk, &nk, k, alpha, &a[(nk + 1) * a_dim1 + 1], lda, &a[a_dim1 + 1], lda, beta, &c__[1], & nk);
+                    ssyrk_("U", "T", &nk, k, alpha, &a[a_dim1 + 1], lda, beta,
+                           &c__[nk * (nk + 1) + 1], &nk);
+                    ssyrk_("L", "T", &nk, k, alpha, &a[(nk + 1) * a_dim1 + 1], lda, beta,
+                           &c__[nk * nk + 1], &nk);
+                    sgemm_("T", "N", &nk, &nk, k, alpha, &a[(nk + 1) * a_dim1 + 1], lda,
+                           &a[a_dim1 + 1], lda, beta, &c__[1], &nk);
                 }
             }
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSFRK */
 }
 /* ssfrk_ */

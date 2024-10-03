@@ -1,5 +1,8 @@
-/* ../netlib/sorcsd.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sorcsd.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c_n1 = -1;
 static logical c_false = FALSE_;
@@ -9,11 +12,17 @@ static logical c_false = FALSE_;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SORCSD + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorcsd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorcsd.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorcsd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorcsd.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorcsd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorcsd.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -63,7 +72,7 @@ static logical c_false = FALSE_;
 /* > \verbatim */
 /* > JOBU1 is CHARACTER */
 /* > = 'Y': U1 is computed;
-*/
+ */
 /* > otherwise: U1 is not computed. */
 /* > \endverbatim */
 /* > */
@@ -71,7 +80,7 @@ static logical c_false = FALSE_;
 /* > \verbatim */
 /* > JOBU2 is CHARACTER */
 /* > = 'Y': U2 is computed;
-*/
+ */
 /* > otherwise: U2 is not computed. */
 /* > \endverbatim */
 /* > */
@@ -79,7 +88,7 @@ static logical c_false = FALSE_;
 /* > \verbatim */
 /* > JOBV1T is CHARACTER */
 /* > = 'Y': V1T is computed;
-*/
+ */
 /* > otherwise: V1T is not computed. */
 /* > \endverbatim */
 /* > */
@@ -87,7 +96,7 @@ static logical c_false = FALSE_;
 /* > \verbatim */
 /* > JOBV2T is CHARACTER */
 /* > = 'Y': V2T is computed;
-*/
+ */
 /* > otherwise: V2T is not computed. */
 /* > \endverbatim */
 /* > */
@@ -96,7 +105,7 @@ static logical c_false = FALSE_;
 /* > TRANS is CHARACTER */
 /* > = 'T': X, U1, U2, V1T, and V2T are stored in row-major */
 /* > order;
-*/
+ */
 /* > otherwise: X, U1, U2, V1T, and V2T are stored in column- */
 /* > major order. */
 /* > \endverbatim */
@@ -106,7 +115,7 @@ static logical c_false = FALSE_;
 /* > SIGNS is CHARACTER */
 /* > = 'O': The lower-left block is made nonpositive (the */
 /* > "other" convention);
-*/
+ */
 /* > otherwise: The upper-right block is made nonpositive (the */
 /* > "default" convention). */
 /* > \endverbatim */
@@ -291,37 +300,59 @@ the routine */
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sorcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, char *signs, integer *m, integer *p, integer *q, real *x11, integer *ldx11, real *x12, integer *ldx12, real *x21, integer *ldx21, real *x22, integer *ldx22, real *theta, real *u1, integer *ldu1, real *u2, integer *ldu2, real *v1t, integer *ldv1t, real *v2t, integer *ldv2t, real *work, integer *lwork, integer *iwork, integer *info)
+void sorcsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, char *signs,
+             integer *m, integer *p, integer *q, real *x11, integer *ldx11, real *x12,
+             integer *ldx12, real *x21, integer *ldx21, real *x22, integer *ldx22, real *theta,
+             real *u1, integer *ldu1, real *u2, integer *ldu2, real *v1t, integer *ldv1t, real *v2t,
+             integer *ldv2t, real *work, integer *lwork, integer *iwork, integer *info)
 {
     /* System generated locals */
-    integer u1_dim1, u1_offset, u2_dim1, u2_offset, v1t_dim1, v1t_offset, v2t_dim1, v2t_offset, x11_dim1, x11_offset, x12_dim1, x12_offset, x21_dim1, x21_offset, x22_dim1, x22_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    integer u1_dim1, u1_offset, u2_dim1, u2_offset, v1t_dim1, v1t_offset, v2t_dim1, v2t_offset,
+        x11_dim1, x11_offset, x12_dim1, x12_offset, x21_dim1, x21_offset, x22_dim1, x22_offset,
+        i__1, i__2, i__3, i__4, i__5, i__6;
     /* Local variables */
     logical colmajor;
-    integer lworkmin, lworkopt, i__, j, childinfo, lbbcsdwork, lorbdbwork, lorglqwork, lorgqrwork, ib11d, ib11e, ib12d, ib12e, ib21d, ib21e, ib22d, ib22e, iphi;
+    integer lworkmin, lworkopt, i__, j, childinfo, lbbcsdwork, lorbdbwork, lorglqwork, lorgqrwork,
+        ib11d, ib11e, ib12d, ib12e, ib21d, ib21e, ib22d, ib22e, iphi;
     logical defaultsigns;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real dummy[1];
     integer lbbcsdworkmin, itaup1, itaup2, itauq1, itauq2, lbbcsdworkopt;
     logical wantu1, wantu2;
     integer ibbcsd, lorbdbworkopt;
     extern /* Subroutine */
-    int sbbcsd_(char *, char *, char *, char *, char * , integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer * , real *, real *, real *, real *, real *, real *, real *, real *, real *, integer *, integer *);
+        void
+        sbbcsd_(char *, char *, char *, char *, char *, integer *, integer *, integer *, real *,
+                real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *,
+                real *, real *, real *, real *, real *, real *, real *, real *, real *, integer *,
+                integer *);
     integer iorbdb, lorglqworkmin, lorgqrworkmin;
     extern /* Subroutine */
-    int sorbdb_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer * , real *, integer *, real *, real *, real *, real *, real *, real *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        sorbdb_(char *, char *, integer *, integer *, integer *, real *, integer *, real *,
+                integer *, real *, integer *, real *, integer *, real *, real *, real *, real *,
+                real *, real *, real *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lorglqworkopt, lorgqrworkopt;
     extern /* Subroutine */
-    int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+        void
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     integer iorglq;
     extern /* Subroutine */
-    int slapmr_(logical *, integer *, integer *, real *, integer *, integer *), slapmt_(logical *, integer *, integer *, real *, integer *, integer *);
+        void
+        slapmr_(logical *, integer *, integer *, real *, integer *, integer *),
+        slapmt_(logical *, integer *, integer *, real *, integer *, integer *);
     integer iorgqr;
     char signst[1];
     extern /* Subroutine */
-    int sorglq_fla(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
+        void
+        sorglq_fla(integer *, integer *, integer *, real *, integer *, real *, real *, integer *,
+                   integer *);
     char transt[1];
     extern /* Subroutine */
-    int sorgqr_fla(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
+        void
+        sorgqr_fla(integer *, integer *, integer *, real *, integer *, real *, real *, integer *,
+                   integer *);
     logical lquery, wantv1t, wantv2t;
     /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -376,12 +407,12 @@ int sorcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
     --iwork;
     /* Function Body */
     *info = 0;
-    wantu1 = lsame_(jobu1, "Y");
-    wantu2 = lsame_(jobu2, "Y");
-    wantv1t = lsame_(jobv1t, "Y");
-    wantv2t = lsame_(jobv2t, "Y");
-    colmajor = ! lsame_(trans, "T");
-    defaultsigns = ! lsame_(signs, "O");
+    wantu1 = lsame_(jobu1, "Y", 1, 1);
+    wantu2 = lsame_(jobu2, "Y", 1, 1);
+    wantv1t = lsame_(jobv1t, "Y", 1, 1);
+    wantv2t = lsame_(jobv2t, "Y", 1, 1);
+    colmajor = !lsame_(trans, "T", 1, 1);
+    defaultsigns = !lsame_(signs, "O", 1, 1);
     lquery = *lwork == -1;
     iorgqr = 0;
     iorglq = 0;
@@ -400,27 +431,27 @@ int sorcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
     ib12d = 0;
     ib11e = 0;
     ib11d = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -7;
     }
-    else if (*p < 0 || *p > *m)
+    else if(*p < 0 || *p > *m)
     {
         *info = -8;
     }
-    else if (*q < 0 || *q > *m)
+    else if(*q < 0 || *q > *m)
     {
         *info = -9;
     }
-    else if (colmajor && *ldx11 < fla_max(1,*p))
+    else if(colmajor && *ldx11 < fla_max(1, *p))
     {
         *info = -11;
     }
-    else if (! colmajor && *ldx11 < fla_max(1,*q))
+    else if(!colmajor && *ldx11 < fla_max(1, *q))
     {
         *info = -11;
     }
-    else if (colmajor && *ldx12 < fla_max(1,*p))
+    else if(colmajor && *ldx12 < fla_max(1, *p))
     {
         *info = -13;
     }
@@ -429,7 +460,7 @@ int sorcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
         /* Computing MAX */
         i__1 = 1;
         i__2 = *m - *q; // , expr subst
-        if (! colmajor && *ldx12 < fla_max(i__1,i__2))
+        if(!colmajor && *ldx12 < fla_max(i__1, i__2))
         {
             *info = -13;
         }
@@ -438,11 +469,11 @@ int sorcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
             /* Computing MAX */
             i__1 = 1;
             i__2 = *m - *p; // , expr subst
-            if (colmajor && *ldx21 < fla_max(i__1,i__2))
+            if(colmajor && *ldx21 < fla_max(i__1, i__2))
             {
                 *info = -15;
             }
-            else if (! colmajor && *ldx21 < fla_max(1,*q))
+            else if(!colmajor && *ldx21 < fla_max(1, *q))
             {
                 *info = -15;
             }
@@ -451,7 +482,7 @@ int sorcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
                 /* Computing MAX */
                 i__1 = 1;
                 i__2 = *m - *p; // , expr subst
-                if (colmajor && *ldx22 < fla_max(i__1,i__2))
+                if(colmajor && *ldx22 < fla_max(i__1, i__2))
                 {
                     *info = -17;
                 }
@@ -460,23 +491,23 @@ int sorcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
                     /* Computing MAX */
                     i__1 = 1;
                     i__2 = *m - *q; // , expr subst
-                    if (! colmajor && *ldx22 < fla_max(i__1,i__2))
+                    if(!colmajor && *ldx22 < fla_max(i__1, i__2))
                     {
                         *info = -17;
                     }
-                    else if (wantu1 && *ldu1 < *p)
+                    else if(wantu1 && *ldu1 < *p)
                     {
                         *info = -20;
                     }
-                    else if (wantu2 && *ldu2 < *m - *p)
+                    else if(wantu2 && *ldu2 < *m - *p)
                     {
                         *info = -22;
                     }
-                    else if (wantv1t && *ldv1t < *q)
+                    else if(wantv1t && *ldv1t < *q)
                     {
                         *info = -24;
                     }
-                    else if (wantv2t && *ldv2t < *m - *q)
+                    else if(wantv2t && *ldv2t < *m - *q)
                     {
                         *info = -26;
                     }
@@ -491,9 +522,9 @@ int sorcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
     /* Computing MIN */
     i__3 = *q;
     i__4 = *m - *q; // , expr subst
-    if (*info == 0 && fla_min(i__1,i__2) < fla_min(i__3,i__4))
+    if(*info == 0 && fla_min(i__1, i__2) < fla_min(i__3, i__4))
     {
-        if (colmajor)
+        if(colmajor)
         {
             *(unsigned char *)transt = 'T';
         }
@@ -501,7 +532,7 @@ int sorcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
         {
             *(unsigned char *)transt = 'N';
         }
-        if (defaultsigns)
+        if(defaultsigns)
         {
             *(unsigned char *)signst = 'O';
         }
@@ -509,16 +540,19 @@ int sorcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
         {
             *(unsigned char *)signst = 'D';
         }
-        sorcsd_(jobv1t, jobv2t, jobu1, jobu2, transt, signst, m, q, p, &x11[ x11_offset], ldx11, &x21[x21_offset], ldx21, &x12[x12_offset], ldx12, &x22[x22_offset], ldx22, &theta[1], &v1t[v1t_offset], ldv1t, &v2t[v2t_offset], ldv2t, &u1[u1_offset], ldu1, &u2[ u2_offset], ldu2, &work[1], lwork, &iwork[1], info);
-        return 0;
+        sorcsd_(jobv1t, jobv2t, jobu1, jobu2, transt, signst, m, q, p, &x11[x11_offset], ldx11,
+                &x21[x21_offset], ldx21, &x12[x12_offset], ldx12, &x22[x22_offset], ldx22,
+                &theta[1], &v1t[v1t_offset], ldv1t, &v2t[v2t_offset], ldv2t, &u1[u1_offset], ldu1,
+                &u2[u2_offset], ldu2, &work[1], lwork, &iwork[1], info);
+        return;
     }
     /* Work with permutation [ 0 I;
     I 0 ] * X * [ 0 I;
     I 0 ] if */
     /* convenient */
-    if (*info == 0 && *m - *q < *q)
+    if(*info == 0 && *m - *q < *q)
     {
-        if (defaultsigns)
+        if(defaultsigns)
         {
             *(unsigned char *)signst = 'O';
         }
@@ -528,102 +562,111 @@ int sorcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
         }
         i__1 = *m - *p;
         i__2 = *m - *q;
-        sorcsd_(jobu2, jobu1, jobv2t, jobv1t, trans, signst, m, &i__1, &i__2, &x22[x22_offset], ldx22, &x21[x21_offset], ldx21, &x12[ x12_offset], ldx12, &x11[x11_offset], ldx11, &theta[1], &u2[ u2_offset], ldu2, &u1[u1_offset], ldu1, &v2t[v2t_offset], ldv2t, &v1t[v1t_offset], ldv1t, &work[1], lwork, &iwork[1], info);
-        return 0;
+        sorcsd_(jobu2, jobu1, jobv2t, jobv1t, trans, signst, m, &i__1, &i__2, &x22[x22_offset],
+                ldx22, &x21[x21_offset], ldx21, &x12[x12_offset], ldx12, &x11[x11_offset], ldx11,
+                &theta[1], &u2[u2_offset], ldu2, &u1[u1_offset], ldu1, &v2t[v2t_offset], ldv2t,
+                &v1t[v1t_offset], ldv1t, &work[1], lwork, &iwork[1], info);
+        return;
     }
     /* Compute workspace */
-    if (*info == 0)
+    if(*info == 0)
     {
         iphi = 2;
         /* Computing MAX */
         i__1 = 1;
         i__2 = *q - 1; // , expr subst
-        itaup1 = iphi + fla_max(i__1,i__2);
-        itaup2 = itaup1 + fla_max(1,*p);
+        itaup1 = iphi + fla_max(i__1, i__2);
+        itaup2 = itaup1 + fla_max(1, *p);
         /* Computing MAX */
         i__1 = 1;
         i__2 = *m - *p; // , expr subst
-        itauq1 = itaup2 + fla_max(i__1,i__2);
-        itauq2 = itauq1 + fla_max(1,*q);
+        itauq1 = itaup2 + fla_max(i__1, i__2);
+        itauq2 = itauq1 + fla_max(1, *q);
         /* Computing MAX */
         i__1 = 1;
         i__2 = *m - *q; // , expr subst
-        iorgqr = itauq2 + fla_max(i__1,i__2);
+        iorgqr = itauq2 + fla_max(i__1, i__2);
         i__1 = *m - *q;
         i__2 = *m - *q;
         i__3 = *m - *q;
         /* Computing MAX */
         i__5 = 1;
         i__6 = *m - *q; // , expr subst
-        i__4 = fla_max(i__5,i__6);
-        sorgqr_fla(&i__1, &i__2, &i__3, dummy, &i__4, dummy, &work[1], &c_n1, & childinfo);
-        lorgqrworkopt = (integer) work[1];
+        i__4 = fla_max(i__5, i__6);
+        sorgqr_fla(&i__1, &i__2, &i__3, dummy, &i__4, dummy, &work[1], &c_n1, &childinfo);
+        lorgqrworkopt = (integer)work[1];
         /* Computing MAX */
         i__1 = 1;
         i__2 = *m - *q; // , expr subst
-        lorgqrworkmin = fla_max(i__1,i__2);
+        lorgqrworkmin = fla_max(i__1, i__2);
         /* Computing MAX */
         i__1 = 1;
         i__2 = *m - *q; // , expr subst
-        iorglq = itauq2 + fla_max(i__1,i__2);
+        iorglq = itauq2 + fla_max(i__1, i__2);
         i__1 = *m - *q;
         i__2 = *m - *q;
         i__3 = *m - *q;
         /* Computing MAX */
         i__5 = 1;
         i__6 = *m - *q; // , expr subst
-        i__4 = fla_max(i__5,i__6);
-        sorglq_fla(&i__1, &i__2, &i__3, dummy, &i__4, dummy, &work[1], &c_n1, & childinfo);
-        lorglqworkopt = (integer) work[1];
+        i__4 = fla_max(i__5, i__6);
+        sorglq_fla(&i__1, &i__2, &i__3, dummy, &i__4, dummy, &work[1], &c_n1, &childinfo);
+        lorglqworkopt = (integer)work[1];
         /* Computing MAX */
         i__1 = 1;
         i__2 = *m - *q; // , expr subst
-        lorglqworkmin = fla_max(i__1,i__2);
+        lorglqworkmin = fla_max(i__1, i__2);
         /* Computing MAX */
         i__1 = 1;
         i__2 = *m - *q; // , expr subst
-        iorbdb = itauq2 + fla_max(i__1,i__2);
-        sorbdb_(trans, signs, m, p, q, &x11[x11_offset], ldx11, &x12[ x12_offset], ldx12, &x21[x21_offset], ldx21, &x22[x22_offset], ldx22, dummy, dummy, dummy, dummy, dummy, dummy, &work[1], & c_n1, &childinfo);
-        lorbdbworkopt = (integer) work[1];
+        iorbdb = itauq2 + fla_max(i__1, i__2);
+        sorbdb_(trans, signs, m, p, q, &x11[x11_offset], ldx11, &x12[x12_offset], ldx12,
+                &x21[x21_offset], ldx21, &x22[x22_offset], ldx22, dummy, dummy, dummy, dummy, dummy,
+                dummy, &work[1], &c_n1, &childinfo);
+        lorbdbworkopt = (integer)work[1];
         /* Computing MAX */
         i__1 = 1;
         i__2 = *m - *q; // , expr subst
-        ib11d = itauq2 + fla_max(i__1,i__2);
-        ib11e = ib11d + fla_max(1,*q);
+        ib11d = itauq2 + fla_max(i__1, i__2);
+        ib11e = ib11d + fla_max(1, *q);
         /* Computing MAX */
         i__1 = 1;
         i__2 = *q - 1; // , expr subst
-        ib12d = ib11e + fla_max(i__1,i__2);
-        ib12e = ib12d + fla_max(1,*q);
+        ib12d = ib11e + fla_max(i__1, i__2);
+        ib12e = ib12d + fla_max(1, *q);
         /* Computing MAX */
         i__1 = 1;
         i__2 = *q - 1; // , expr subst
-        ib21d = ib12e + fla_max(i__1,i__2);
-        ib21e = ib21d + fla_max(1,*q);
+        ib21d = ib12e + fla_max(i__1, i__2);
+        ib21e = ib21d + fla_max(1, *q);
         /* Computing MAX */
         i__1 = 1;
         i__2 = *q - 1; // , expr subst
-        ib22d = ib21e + fla_max(i__1,i__2);
-        ib22e = ib22d + fla_max(1,*q);
+        ib22d = ib21e + fla_max(i__1, i__2);
+        ib22e = ib22d + fla_max(1, *q);
         /* Computing MAX */
         i__1 = 1;
         i__2 = *q - 1; // , expr subst
-        ibbcsd = ib22e + fla_max(i__1,i__2);
-        sbbcsd_(jobu1, jobu2, jobv1t, jobv2t, trans, m, p, q, dummy, dummy, & u1[u1_offset], ldu1, &u2[u2_offset], ldu2, &v1t[v1t_offset], ldv1t, &v2t[v2t_offset], ldv2t, dummy, dummy, dummy, dummy, dummy, dummy, dummy, dummy, &work[1], &c_n1, &childinfo);
-        lbbcsdworkopt = (integer) work[1];
+        ibbcsd = ib22e + fla_max(i__1, i__2);
+        sbbcsd_(jobu1, jobu2, jobv1t, jobv2t, trans, m, p, q, dummy, dummy, &u1[u1_offset], ldu1,
+                &u2[u2_offset], ldu2, &v1t[v1t_offset], ldv1t, &v2t[v2t_offset], ldv2t, dummy,
+                dummy, dummy, dummy, dummy, dummy, dummy, dummy, &work[1], &c_n1, &childinfo);
+        lbbcsdworkopt = (integer)work[1];
         lbbcsdworkmin = lbbcsdworkopt;
         /* Computing MAX */
-        i__1 = iorgqr + lorgqrworkopt, i__2 = iorglq + lorglqworkopt, i__1 = fla_max(i__1,i__2), i__2 = iorbdb + lorbdbworkopt;
-        i__1 = fla_max( i__1,i__2);
+        i__1 = iorgqr + lorgqrworkopt, i__2 = iorglq + lorglqworkopt, i__1 = fla_max(i__1, i__2),
+        i__2 = iorbdb + lorbdbworkopt;
+        i__1 = fla_max(i__1, i__2);
         i__2 = ibbcsd + lbbcsdworkopt; // ; expr subst
-        lworkopt = fla_max(i__1,i__2) - 1;
+        lworkopt = fla_max(i__1, i__2) - 1;
         /* Computing MAX */
-        i__1 = iorgqr + lorgqrworkmin, i__2 = iorglq + lorglqworkmin, i__1 = fla_max(i__1,i__2), i__2 = iorbdb + lorbdbworkopt;
-        i__1 = fla_max( i__1,i__2);
+        i__1 = iorgqr + lorgqrworkmin, i__2 = iorglq + lorglqworkmin, i__1 = fla_max(i__1, i__2),
+        i__2 = iorbdb + lorbdbworkopt;
+        i__1 = fla_max(i__1, i__2);
         i__2 = ibbcsd + lbbcsdworkmin; // ; expr subst
-        lworkmin = fla_max(i__1,i__2) - 1;
-        work[1] = (real) fla_max(lworkopt,lworkmin);
-        if (*lwork < lworkmin && ! lquery)
+        lworkmin = fla_max(i__1, i__2) - 1;
+        work[1] = (real)fla_max(lworkopt, lworkmin);
+        if(*lwork < lworkmin && !lquery)
         {
             *info = -22;
         }
@@ -636,44 +679,47 @@ int sorcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
         }
     }
     /* Abort if any illegal arguments */
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SORCSD", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-        return 0;
+        return;
     }
     /* Transform to bidiagonal block form */
-    sorbdb_(trans, signs, m, p, q, &x11[x11_offset], ldx11, &x12[x12_offset], ldx12, &x21[x21_offset], ldx21, &x22[x22_offset], ldx22, &theta[1] , &work[iphi], &work[itaup1], &work[itaup2], &work[itauq1], &work[ itauq2], &work[iorbdb], &lorbdbwork, &childinfo);
+    sorbdb_(trans, signs, m, p, q, &x11[x11_offset], ldx11, &x12[x12_offset], ldx12,
+            &x21[x21_offset], ldx21, &x22[x22_offset], ldx22, &theta[1], &work[iphi], &work[itaup1],
+            &work[itaup2], &work[itauq1], &work[itauq2], &work[iorbdb], &lorbdbwork, &childinfo);
     /* Accumulate Householder reflectors */
-    if (colmajor)
+    if(colmajor)
     {
-        if (wantu1 && *p > 0)
+        if(wantu1 && *p > 0)
         {
             slacpy_("L", p, q, &x11[x11_offset], ldx11, &u1[u1_offset], ldu1);
-            sorgqr_fla(p, p, q, &u1[u1_offset], ldu1, &work[itaup1], &work[ iorgqr], &lorgqrwork, info);
+            sorgqr_fla(p, p, q, &u1[u1_offset], ldu1, &work[itaup1], &work[iorgqr], &lorgqrwork,
+                       info);
         }
-        if (wantu2 && *m - *p > 0)
+        if(wantu2 && *m - *p > 0)
         {
             i__1 = *m - *p;
             slacpy_("L", &i__1, q, &x21[x21_offset], ldx21, &u2[u2_offset], ldu2);
             i__1 = *m - *p;
             i__2 = *m - *p;
-            sorgqr_fla(&i__1, &i__2, q, &u2[u2_offset], ldu2, &work[itaup2], & work[iorgqr], &lorgqrwork, info);
+            sorgqr_fla(&i__1, &i__2, q, &u2[u2_offset], ldu2, &work[itaup2], &work[iorgqr],
+                       &lorgqrwork, info);
         }
-        if (wantv1t && *q > 0)
+        if(wantv1t && *q > 0)
         {
             i__1 = *q - 1;
             i__2 = *q - 1;
-            slacpy_("U", &i__1, &i__2, &x11[(x11_dim1 << 1) + 1], ldx11, &v1t[ (v1t_dim1 << 1) + 2], ldv1t);
+            slacpy_("U", &i__1, &i__2, &x11[(x11_dim1 << 1) + 1], ldx11, &v1t[(v1t_dim1 << 1) + 2],
+                    ldv1t);
             v1t[v1t_dim1 + 1] = 1.f;
             i__1 = *q;
-            for (j = 2;
-                    j <= i__1;
-                    ++j)
+            for(j = 2; j <= i__1; ++j)
             {
                 v1t[j * v1t_dim1 + 1] = 0.f;
                 v1t[j + v1t_dim1] = 0.f;
@@ -681,46 +727,49 @@ int sorcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
             i__1 = *q - 1;
             i__2 = *q - 1;
             i__3 = *q - 1;
-            sorglq_fla(&i__1, &i__2, &i__3, &v1t[(v1t_dim1 << 1) + 2], ldv1t, & work[itauq1], &work[iorglq], &lorglqwork, info);
+            sorglq_fla(&i__1, &i__2, &i__3, &v1t[(v1t_dim1 << 1) + 2], ldv1t, &work[itauq1],
+                       &work[iorglq], &lorglqwork, info);
         }
-        if (wantv2t && *m - *q > 0)
+        if(wantv2t && *m - *q > 0)
         {
             i__1 = *m - *q;
             slacpy_("U", p, &i__1, &x12[x12_offset], ldx12, &v2t[v2t_offset], ldv2t);
             i__1 = *m - *p - *q;
             i__2 = *m - *p - *q;
-            slacpy_("U", &i__1, &i__2, &x22[*q + 1 + (*p + 1) * x22_dim1], ldx22, &v2t[*p + 1 + (*p + 1) * v2t_dim1], ldv2t);
+            slacpy_("U", &i__1, &i__2, &x22[*q + 1 + (*p + 1) * x22_dim1], ldx22,
+                    &v2t[*p + 1 + (*p + 1) * v2t_dim1], ldv2t);
             i__1 = *m - *q;
             i__2 = *m - *q;
             i__3 = *m - *q;
-            sorglq_fla(&i__1, &i__2, &i__3, &v2t[v2t_offset], ldv2t, &work[ itauq2], &work[iorglq], &lorglqwork, info);
+            sorglq_fla(&i__1, &i__2, &i__3, &v2t[v2t_offset], ldv2t, &work[itauq2], &work[iorglq],
+                       &lorglqwork, info);
         }
     }
     else
     {
-        if (wantu1 && *p > 0)
+        if(wantu1 && *p > 0)
         {
             slacpy_("U", q, p, &x11[x11_offset], ldx11, &u1[u1_offset], ldu1);
-            sorglq_fla(p, p, q, &u1[u1_offset], ldu1, &work[itaup1], &work[ iorglq], &lorglqwork, info);
+            sorglq_fla(p, p, q, &u1[u1_offset], ldu1, &work[itaup1], &work[iorglq], &lorglqwork,
+                       info);
         }
-        if (wantu2 && *m - *p > 0)
+        if(wantu2 && *m - *p > 0)
         {
             i__1 = *m - *p;
             slacpy_("U", q, &i__1, &x21[x21_offset], ldx21, &u2[u2_offset], ldu2);
             i__1 = *m - *p;
             i__2 = *m - *p;
-            sorglq_fla(&i__1, &i__2, q, &u2[u2_offset], ldu2, &work[itaup2], & work[iorglq], &lorglqwork, info);
+            sorglq_fla(&i__1, &i__2, q, &u2[u2_offset], ldu2, &work[itaup2], &work[iorglq],
+                       &lorglqwork, info);
         }
-        if (wantv1t && *q > 0)
+        if(wantv1t && *q > 0)
         {
             i__1 = *q - 1;
             i__2 = *q - 1;
-            slacpy_("L", &i__1, &i__2, &x11[x11_dim1 + 2], ldx11, &v1t[( v1t_dim1 << 1) + 2], ldv1t);
+            slacpy_("L", &i__1, &i__2, &x11[x11_dim1 + 2], ldx11, &v1t[(v1t_dim1 << 1) + 2], ldv1t);
             v1t[v1t_dim1 + 1] = 1.f;
             i__1 = *q;
-            for (j = 2;
-                    j <= i__1;
-                    ++j)
+            for(j = 2; j <= i__1; ++j)
             {
                 v1t[j * v1t_dim1 + 1] = 0.f;
                 v1t[j + v1t_dim1] = 0.f;
@@ -728,44 +777,46 @@ int sorcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
             i__1 = *q - 1;
             i__2 = *q - 1;
             i__3 = *q - 1;
-            sorgqr_fla(&i__1, &i__2, &i__3, &v1t[(v1t_dim1 << 1) + 2], ldv1t, & work[itauq1], &work[iorgqr], &lorgqrwork, info);
+            sorgqr_fla(&i__1, &i__2, &i__3, &v1t[(v1t_dim1 << 1) + 2], ldv1t, &work[itauq1],
+                       &work[iorgqr], &lorgqrwork, info);
         }
-        if (wantv2t && *m - *q > 0)
+        if(wantv2t && *m - *q > 0)
         {
             i__1 = *m - *q;
             slacpy_("L", &i__1, p, &x12[x12_offset], ldx12, &v2t[v2t_offset], ldv2t);
             i__1 = *m - *p - *q;
             i__2 = *m - *p - *q;
-            slacpy_("L", &i__1, &i__2, &x22[*p + 1 + (*q + 1) * x22_dim1], ldx22, &v2t[*p + 1 + (*p + 1) * v2t_dim1], ldv2t);
+            slacpy_("L", &i__1, &i__2, &x22[*p + 1 + (*q + 1) * x22_dim1], ldx22,
+                    &v2t[*p + 1 + (*p + 1) * v2t_dim1], ldv2t);
             i__1 = *m - *q;
             i__2 = *m - *q;
             i__3 = *m - *q;
-            sorgqr_fla(&i__1, &i__2, &i__3, &v2t[v2t_offset], ldv2t, &work[ itauq2], &work[iorgqr], &lorgqrwork, info);
+            sorgqr_fla(&i__1, &i__2, &i__3, &v2t[v2t_offset], ldv2t, &work[itauq2], &work[iorgqr],
+                       &lorgqrwork, info);
         }
     }
     /* Compute the CSD of the matrix in bidiagonal-block form */
-    sbbcsd_(jobu1, jobu2, jobv1t, jobv2t, trans, m, p, q, &theta[1], &work[ iphi], &u1[u1_offset], ldu1, &u2[u2_offset], ldu2, &v1t[ v1t_offset], ldv1t, &v2t[v2t_offset], ldv2t, &work[ib11d], &work[ ib11e], &work[ib12d], &work[ib12e], &work[ib21d], &work[ib21e], & work[ib22d], &work[ib22e], &work[ibbcsd], &lbbcsdwork, info);
+    sbbcsd_(jobu1, jobu2, jobv1t, jobv2t, trans, m, p, q, &theta[1], &work[iphi], &u1[u1_offset],
+            ldu1, &u2[u2_offset], ldu2, &v1t[v1t_offset], ldv1t, &v2t[v2t_offset], ldv2t,
+            &work[ib11d], &work[ib11e], &work[ib12d], &work[ib12e], &work[ib21d], &work[ib21e],
+            &work[ib22d], &work[ib22e], &work[ibbcsd], &lbbcsdwork, info);
     /* Permute rows and columns to place identity submatrices in top- */
     /* left corner of (1,1)-block and/or bottom-right corner of (1,2)- */
     /* block and/or bottom-right corner of (2,1)-block and/or top-left */
     /* corner of (2,2)-block */
-    if (*q > 0 && wantu2)
+    if(*q > 0 && wantu2)
     {
         i__1 = *q;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             iwork[i__] = *m - *p - *q + i__;
         }
         i__1 = *m - *p;
-        for (i__ = *q + 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = *q + 1; i__ <= i__1; ++i__)
         {
             iwork[i__] = i__ - *q;
         }
-        if (colmajor)
+        if(colmajor)
         {
             i__1 = *m - *p;
             i__2 = *m - *p;
@@ -778,36 +829,32 @@ int sorcsd_(char *jobu1, char *jobu2, char *jobv1t, char * jobv2t, char *trans, 
             slapmr_(&c_false, &i__1, &i__2, &u2[u2_offset], ldu2, &iwork[1]);
         }
     }
-    if (*m > 0 && wantv2t)
+    if(*m > 0 && wantv2t)
     {
         i__1 = *p;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             iwork[i__] = *m - *p - *q + i__;
         }
         i__1 = *m - *q;
-        for (i__ = *p + 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = *p + 1; i__ <= i__1; ++i__)
         {
             iwork[i__] = i__ - *p;
         }
-        if (! colmajor)
+        if(!colmajor)
         {
             i__1 = *m - *q;
             i__2 = *m - *q;
-            slapmt_(&c_false, &i__1, &i__2, &v2t[v2t_offset], ldv2t, &iwork[1] );
+            slapmt_(&c_false, &i__1, &i__2, &v2t[v2t_offset], ldv2t, &iwork[1]);
         }
         else
         {
             i__1 = *m - *q;
             i__2 = *m - *q;
-            slapmr_(&c_false, &i__1, &i__2, &v2t[v2t_offset], ldv2t, &iwork[1] );
+            slapmr_(&c_false, &i__1, &i__2, &v2t[v2t_offset], ldv2t, &iwork[1]);
         }
     }
-    return 0;
+    return;
     /* End SORCSD */
 }
 /* sorcsd_ */

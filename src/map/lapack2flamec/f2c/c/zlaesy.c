@@ -1,23 +1,29 @@
-/* ../netlib/zlaesy.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zlaesy.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    1.,0.
-}
-;
+static doublecomplex c_b1 = {1., 0.};
 static integer c__2 = 2;
-/* > \brief \b ZLAESY computes the eigenvalues and eigenvectors of a 2-by-2 complex symmetric matrix. */
+/* > \brief \b ZLAESY computes the eigenvalues and eigenvectors of a 2-by-2 complex symmetric
+ * matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLAESY + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaesy. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaesy.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaesy. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaesy.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaesy. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaesy.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -109,7 +115,8 @@ static integer c__2 = 2;
 /* > \ingroup complex16SYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int zlaesy_(doublecomplex *a, doublecomplex *b, doublecomplex *c__, doublecomplex *rt1, doublecomplex *rt2, doublecomplex *evscal, doublecomplex *cs1, doublecomplex *sn1)
+void zlaesy_(doublecomplex *a, doublecomplex *b, doublecomplex *c__, doublecomplex *rt1,
+             doublecomplex *rt2, doublecomplex *evscal, doublecomplex *cs1, doublecomplex *sn1)
 {
     AOCL_DTL_TRACE_ENTRY_INDENT
     /* System generated locals */
@@ -117,7 +124,9 @@ int zlaesy_(doublecomplex *a, doublecomplex *b, doublecomplex *c__, doublecomple
     doublecomplex z__1, z__2, z__3, z__4, z__5, z__6, z__7;
     /* Builtin functions */
     double z_abs(doublecomplex *);
-    void pow_zi(doublecomplex *, doublecomplex *, integer *), z_sqrt( doublecomplex *, doublecomplex *), z_div(doublecomplex *, doublecomplex *, doublecomplex *);
+    void pow_zi(doublecomplex *, doublecomplex *, integer *),
+        z_sqrt(doublecomplex *, doublecomplex *),
+        z_div(doublecomplex *, doublecomplex *, doublecomplex *);
     /* Local variables */
     doublecomplex s, t;
     doublereal z__;
@@ -139,11 +148,11 @@ int zlaesy_(doublecomplex *a, doublecomplex *b, doublecomplex *c__, doublecomple
     /* .. Executable Statements .. */
     /* Special case: The matrix is actually diagonal. */
     /* To avoid divide by zero later, we treat this case separately. */
-    if (z_abs(b) == 0.)
+    if(z_abs(b) == 0.)
     {
         rt1->r = a->r, rt1->i = a->i;
         rt2->r = c__->r, rt2->i = c__->i;
-        if (z_abs(rt1) < z_abs(rt2))
+        if(z_abs(rt1) < z_abs(rt2))
         {
             tmp.r = rt1->r;
             tmp.i = rt1->i; // , expr subst
@@ -179,8 +188,8 @@ int zlaesy_(doublecomplex *a, doublecomplex *b, doublecomplex *c__, doublecomple
         /* Take the square root carefully to avoid over/under flow. */
         babs = z_abs(b);
         tabs = z_abs(&t);
-        z__ = fla_max(babs,tabs);
-        if (z__ > 0.)
+        z__ = fla_max(babs, tabs);
+        if(z__ > 0.)
         {
             z__5.r = t.r / z__;
             z__5.i = t.i / z__; // , expr subst
@@ -204,7 +213,7 @@ int zlaesy_(doublecomplex *a, doublecomplex *b, doublecomplex *c__, doublecomple
         z__1.r = s.r - t.r;
         z__1.i = s.i - t.i; // , expr subst
         rt2->r = z__1.r, rt2->i = z__1.i;
-        if (z_abs(rt1) < z_abs(rt2))
+        if(z_abs(rt1) < z_abs(rt2))
         {
             tmp.r = rt1->r;
             tmp.i = rt1->i; // , expr subst
@@ -220,7 +229,7 @@ int zlaesy_(doublecomplex *a, doublecomplex *b, doublecomplex *c__, doublecomple
         z_div(&z__1, &z__2, b);
         sn1->r = z__1.r, sn1->i = z__1.i;
         tabs = z_abs(sn1);
-        if (tabs > 1.)
+        if(tabs > 1.)
         {
             /* Computing 2nd power */
             d__2 = 1. / tabs;
@@ -247,7 +256,7 @@ int zlaesy_(doublecomplex *a, doublecomplex *b, doublecomplex *c__, doublecomple
             t.i = z__1.i; // , expr subst
         }
         evnorm = z_abs(&t);
-        if (evnorm >= .1)
+        if(evnorm >= .1)
         {
             z_div(&z__1, &c_b1, &t);
             evscal->r = z__1.r, evscal->i = z__1.i;
@@ -262,7 +271,7 @@ int zlaesy_(doublecomplex *a, doublecomplex *b, doublecomplex *c__, doublecomple
         }
     }
     AOCL_DTL_TRACE_EXIT_INDENT
-    return 0;
+    return;
     /* End of ZLAESY */
 }
 /* zlaesy_ */

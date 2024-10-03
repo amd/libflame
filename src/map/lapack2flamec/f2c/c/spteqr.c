@@ -1,5 +1,8 @@
-/* ../netlib/spteqr.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/spteqr.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b7 = 0.f;
 static real c_b8 = 1.f;
@@ -11,11 +14,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SPTEQR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spteqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spteqr.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spteqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spteqr.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spteqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spteqr.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -94,7 +103,7 @@ static integer c__1 = 1;
 /* > reduction to tridiagonal form. */
 /* > On exit, if COMPZ = 'V', the orthonormal eigenvectors of the */
 /* > original symmetric matrix;
-*/
+ */
 /* > if COMPZ = 'I', the orthonormal eigenvectors of the */
 /* > tridiagonal matrix. */
 /* > If INFO > 0 on exit, Z contains the eigenvectors associated */
@@ -124,7 +133,7 @@ static integer c__1 = 1;
 /* > not be performed because the i-th principal minor */
 /* > was not positive definite. */
 /* > > N the SVD algorithm failed to converge;
-*/
+ */
 /* > if INFO = N+i, i off-diagonal elements of the */
 /* > bidiagonal factor did not converge to zero. */
 /* > \endverbatim */
@@ -138,12 +147,14 @@ static integer c__1 = 1;
 /* > \ingroup realPTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int spteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ldz, real *work, integer *info)
+void spteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ldz, real *work,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"spteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "",*compz, *n, *ldz);
+    snprintf(buffer, 256, "spteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "", *compz, *n,
+             *ldz);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -152,17 +163,24 @@ int spteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ldz
     double sqrt(doublereal);
     /* Local variables */
     real c__[1] /* was [1][1] */
-    ;
+        ;
     integer i__;
     real vt[1] /* was [1][1] */
-    ;
+        ;
     integer nru;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slaset_( char *, integer *, integer *, real *, real *, real *, integer *), sbdsqr_(char *, integer *, integer *, integer *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
+        slaset_(char *, integer *, integer *, real *, real *, real *, integer *),
+        sbdsqr_(char *, integer *, integer *, integer *, integer *, real *, real *, real *,
+                integer *, real *, integer *, real *, integer *, real *, integer *);
     integer icompz;
     extern /* Subroutine */
-    int spttrf_(integer *, real *, real *, integer *);
+        void
+        spttrf_(integer *, real *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -195,15 +213,15 @@ int spteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ldz
     --work;
     /* Function Body */
     *info = 0;
-    if (lsame_(compz, "N"))
+    if(lsame_(compz, "N", 1, 1))
     {
         icompz = 0;
     }
-    else if (lsame_(compz, "V"))
+    else if(lsame_(compz, "V", 1, 1))
     {
         icompz = 1;
     }
-    else if (lsame_(compz, "I"))
+    else if(lsame_(compz, "I", 1, 1))
     {
         icompz = 2;
     }
@@ -211,70 +229,66 @@ int spteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ldz
     {
         icompz = -1;
     }
-    if (icompz < 0)
+    if(icompz < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*ldz < 1 || icompz > 0 && *ldz < fla_max(1,*n))
+    else if(*ldz < 1 || icompz > 0 && *ldz < fla_max(1, *n))
     {
         *info = -6;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SPTEQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (*n == 1)
+    if(*n == 1)
     {
-        if (icompz > 0)
+        if(icompz > 0)
         {
             z__[z_dim1 + 1] = 1.f;
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (icompz == 2)
+    if(icompz == 2)
     {
         slaset_("Full", n, n, &c_b7, &c_b8, &z__[z_offset], ldz);
     }
     /* Call SPTTRF to factor the matrix. */
     spttrf_(n, &d__[1], &e[1], info);
-    if (*info != 0)
+    if(*info != 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         d__[i__] = sqrt(d__[i__]);
         /* L10: */
     }
     i__1 = *n - 1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         e[i__] *= d__[i__];
         /* L20: */
     }
     /* Call SBDSQR to compute the singular values/vectors of the */
     /* bidiagonal factor. */
-    if (icompz > 0)
+    if(icompz > 0)
     {
         nru = *n;
     }
@@ -282,14 +296,13 @@ int spteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ldz
     {
         nru = 0;
     }
-    sbdsqr_("Lower", n, &c__0, &nru, &c__0, &d__[1], &e[1], vt, &c__1, &z__[ z_offset], ldz, c__, &c__1, &work[1], info);
+    sbdsqr_("Lower", n, &c__0, &nru, &c__0, &d__[1], &e[1], vt, &c__1, &z__[z_offset], ldz, c__,
+            &c__1, &work[1], info);
     /* Square the singular values. */
-    if (*info == 0)
+    if(*info == 0)
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             d__[i__] *= d__[i__];
             /* L30: */
@@ -300,7 +313,7 @@ int spteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ldz
         *info = *n + *info;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPTEQR */
 }
 /* spteqr_ */

@@ -1,16 +1,25 @@
-/* ../netlib/cgbsv.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cgbsv.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief <b> CGBSV computes the solution to system of linear equations A * X = B for GB matrices</b> (simpl e driver) */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CGBSV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgbsv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgbsv.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgbsv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgbsv.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgbsv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgbsv.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -92,7 +101,7 @@ rows 1 to KL of the array need not be set. */
 /* > \verbatim */
 /* > IPIV is INTEGER array, dimension (N) */
 /* > The pivot indices that define the permutation matrix P;
-*/
+ */
 /* > row i of the matrix was interchanged with row IPIV(i). */
 /* > \endverbatim */
 /* > */
@@ -151,15 +160,18 @@ elements marked */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cgbsv_(integer *n, integer *kl, integer *ku, integer * nrhs, complex *ab, integer *ldab, integer *ipiv, complex *b, integer * ldb, integer *info)
+void cgbsv_(integer *n, integer *kl, integer *ku, integer *nrhs, complex *ab, integer *ldab,
+            integer *ipiv, complex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgbsv inputs: n %lld, kl %lld, ku %lld, nrhs %lld, ldab %lld, ldb %lld",*n, *kl, *ku, *nrhs, *ldab, *ldb);
+    snprintf(buffer, 256, "cgbsv inputs: n %lld, kl %lld, ku %lld, nrhs %lld, ldab %lld, ldb %lld",
+             *n, *kl, *ku, *nrhs, *ldab, *ldb);
 #else
-    snprintf(buffer, 256,"cgbsv inputs: n %d, kl %d, ku %d, nrhs %d, ldab %d, ldb %d",*n, *kl, *ku, *nrhs, *ldab, *ldb);
+    snprintf(buffer, 256, "cgbsv inputs: n %d, kl %d, ku %d, nrhs %d, ldab %d, ldb %d", *n, *kl,
+             *ku, *nrhs, *ldab, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -167,7 +179,12 @@ int cgbsv_(integer *n, integer *kl, integer *ku, integer * nrhs, complex *ab, in
     integer ab_dim1, ab_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int cgbtrf_(integer *, integer *, integer *, integer *, complex *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cgbtrs_(char *, integer *, integer *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+        void
+        cgbtrf_(integer *, integer *, integer *, integer *, complex *, integer *, integer *,
+                integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        cgbtrs_(char *, integer *, integer *, integer *, integer *, complex *, integer *, integer *,
+                complex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -193,46 +210,47 @@ int cgbsv_(integer *n, integer *kl, integer *ku, integer * nrhs, complex *ab, in
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
     }
-    else if (*kl < 0)
+    else if(*kl < 0)
     {
         *info = -2;
     }
-    else if (*ku < 0)
+    else if(*ku < 0)
     {
         *info = -3;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -4;
     }
-    else if (*ldab < (*kl << 1) + *ku + 1)
+    else if(*ldab < (*kl << 1) + *ku + 1)
     {
         *info = -6;
     }
-    else if (*ldb < fla_max(*n,1))
+    else if(*ldb < fla_max(*n, 1))
     {
         *info = -9;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CGBSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute the LU factorization of the band matrix A. */
     cgbtrf_(n, n, kl, ku, &ab[ab_offset], ldab, &ipiv[1], info);
-    if (*info == 0)
+    if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */
-        cgbtrs_("No transpose", n, kl, ku, nrhs, &ab[ab_offset], ldab, &ipiv[ 1], &b[b_offset], ldb, info);
+        cgbtrs_("No transpose", n, kl, ku, nrhs, &ab[ab_offset], ldab, &ipiv[1], &b[b_offset], ldb,
+                info);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGBSV */
 }
 /* cgbsv_ */

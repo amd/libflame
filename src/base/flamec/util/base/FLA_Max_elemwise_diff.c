@@ -13,10 +13,10 @@
 double FLA_Max_elemwise_diff( FLA_Obj A, FLA_Obj B )
 {
   FLA_Datatype datatype;
-  dim_t        i, j;
-  dim_t        m_A, n_A;
-  dim_t        rs_A, cs_A;
-  dim_t        rs_B, cs_B;
+  fla_dim_t        i, j;
+  fla_dim_t        m_A, n_A;
+  fla_dim_t        rs_A, cs_A;
+  fla_dim_t        rs_B, cs_B;
   double       diff;
   double       d_max = 0.0;
 

@@ -1,16 +1,25 @@
-/* dlaed4.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dlaed4.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLAED4 used by DSTEDC. Finds a single root of the secular equation. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLAED4 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaed4. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaed4.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaed4. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaed4.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaed4. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaed4.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -129,10 +138,11 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublereal *delta, doublereal *rho, doublereal *dlam, integer *info)
+void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublereal *delta,
+             doublereal *rho, doublereal *dlam, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaed4 inputs: n %" FLA_IS ", i__ %" FLA_IS "",*n, *i__);
+    AOCL_DTL_SNPRINTF("dlaed4 inputs: n %" FLA_IS ", i__ %" FLA_IS "", *n, *i__);
     /* System generated locals */
     integer i__1;
     doublereal d__1;
@@ -153,7 +163,10 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
     integer niter;
     logical swtch;
     extern /* Subroutine */
-    int dlaed5_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlaed6_(integer *, logical *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *);
+        void
+        dlaed5_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *),
+        dlaed6_(integer *, logical *, doublereal *, doublereal *, doublereal *, doublereal *,
+                doublereal *, integer *);
     logical swtch3;
     extern doublereal dlamch_(char *);
     logical orgati;
@@ -188,25 +201,25 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
     --d__;
     /* Function Body */
     *info = 0;
-    if (*n == 1)
+    if(*n == 1)
     {
         /* Presumably, I=1 upon entry */
         *dlam = d__[1] + *rho * z__[1] * z__[1];
         delta[1] = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    if (*n == 2)
+    if(*n == 2)
     {
         dlaed5_(i__, &d__[1], &z__[1], &delta[1], rho, dlam);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Compute machine epsilon */
     eps = dlamch_("Epsilon");
     rhoinv = 1. / *rho;
     /* The case I = N */
-    if (*i__ == *n)
+    if(*i__ == *n)
     {
         /* Initialize some basic variables */
         ii = *n - 1;
@@ -216,37 +229,34 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
         /* If ||Z||_2 is not one, then TEMP should be set to */
         /* RHO * ||Z||_2^2 / TWO */
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             delta[j] = d__[j] - d__[*i__] - midpt;
             /* L10: */
         }
         psi = 0.;
         i__1 = *n - 2;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             psi += z__[j] * z__[j] / delta[j];
             /* L20: */
         }
         c__ = rhoinv + psi;
-        w = c__ + z__[ii] * z__[ii] / delta[ii] + z__[*n] * z__[*n] / delta[* n];
-        if (w <= 0.)
+        w = c__ + z__[ii] * z__[ii] / delta[ii] + z__[*n] * z__[*n] / delta[*n];
+        if(w <= 0.)
         {
-            temp = z__[*n - 1] * z__[*n - 1] / (d__[*n] - d__[*n - 1] + *rho) + z__[*n] * z__[*n] / *rho;
-            if (c__ <= temp)
+            temp = z__[*n - 1] * z__[*n - 1] / (d__[*n] - d__[*n - 1] + *rho)
+                   + z__[*n] * z__[*n] / *rho;
+            if(c__ <= temp)
             {
                 tau = *rho;
             }
             else
             {
                 del = d__[*n] - d__[*n - 1];
-                a = -c__ * del + z__[*n - 1] * z__[*n - 1] + z__[*n] * z__[*n] ;
+                a = -c__ * del + z__[*n - 1] * z__[*n - 1] + z__[*n] * z__[*n];
                 b = z__[*n] * z__[*n] * del;
-                if (a < 0.)
+                if(a < 0.)
                 {
                     tau = b * 2. / (sqrt(a * a + b * 4. * c__) - a);
                 }
@@ -265,7 +275,7 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
             del = d__[*n] - d__[*n - 1];
             a = -c__ * del + z__[*n - 1] * z__[*n - 1] + z__[*n] * z__[*n];
             b = z__[*n] * z__[*n] * del;
-            if (a < 0.)
+            if(a < 0.)
             {
                 tau = b * 2. / (sqrt(a * a + b * 4. * c__) - a);
             }
@@ -279,9 +289,7 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
             dltub = midpt;
         }
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             delta[j] = d__[j] - d__[*i__] - tau;
             /* L30: */
@@ -291,9 +299,7 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
         psi = 0.;
         erretm = 0.;
         i__1 = ii;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             temp = z__[j] / delta[j];
             psi += z__[j] * temp;
@@ -309,29 +315,29 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
         erretm = (-phi - psi) * 8. + erretm - phi + rhoinv + f2c_dabs(tau) * (dpsi + dphi);
         w = rhoinv + phi + psi;
         /* Test for convergence */
-        if (f2c_dabs(w) <= eps * erretm)
+        if(f2c_dabs(w) <= eps * erretm)
         {
             *dlam = d__[*i__] + tau;
             goto L250;
         }
-        if (w <= 0.)
+        if(w <= 0.)
         {
-            dltlb = fla_max(dltlb,tau);
+            dltlb = fla_max(dltlb, tau);
         }
         else
         {
-            dltub = fla_min(dltub,tau);
+            dltub = fla_min(dltub, tau);
         }
         /* Calculate the new step */
         ++niter;
         c__ = w - delta[*n - 1] * dpsi - delta[*n] * dphi;
-        a = (delta[*n - 1] + delta[*n]) * w - delta[*n - 1] * delta[*n] * ( dpsi + dphi);
+        a = (delta[*n - 1] + delta[*n]) * w - delta[*n - 1] * delta[*n] * (dpsi + dphi);
         b = delta[*n - 1] * delta[*n] * w;
-        if (c__ < 0.)
+        if(c__ < 0.)
         {
             c__ = f2c_dabs(c__);
         }
-        if (c__ == 0.)
+        if(c__ == 0.)
         {
             /* ETA = B/A */
             /* ETA = RHO - TAU */
@@ -339,27 +345,27 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
             /* Update proposed by Li, Ren-Cang: */
             eta = -w / (dpsi + dphi);
         }
-        else if (a >= 0.)
+        else if(a >= 0.)
         {
             eta = (a + sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs(d__1)))) / (c__ * 2.);
         }
         else
         {
-            eta = b * 2. / (a - sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs(d__1))) );
+            eta = b * 2. / (a - sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs(d__1))));
         }
         /* Note, eta should be positive if w is negative, and */
         /* eta should be negative otherwise. However, */
         /* if for some reason caused by roundoff, eta*w > 0, */
         /* we simply use one Newton step instead. This way */
         /* will guarantee eta*w < 0. */
-        if (w * eta > 0.)
+        if(w * eta > 0.)
         {
             eta = -w / (dpsi + dphi);
         }
         temp = tau + eta;
-        if (temp > dltub || temp < dltlb)
+        if(temp > dltub || temp < dltlb)
         {
-            if (w < 0.)
+            if(w < 0.)
             {
                 eta = (dltub - tau) / 2.;
             }
@@ -369,9 +375,7 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
             }
         }
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             delta[j] -= eta;
             /* L50: */
@@ -382,9 +386,7 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
         psi = 0.;
         erretm = 0.;
         i__1 = ii;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             temp = z__[j] / delta[j];
             psi += z__[j] * temp;
@@ -401,49 +403,47 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
         w = rhoinv + phi + psi;
         /* Main loop to update the values of the array DELTA */
         iter = niter + 1;
-        for (niter = iter;
-                niter <= 30;
-                ++niter)
+        for(niter = iter; niter <= 30; ++niter)
         {
             /* Test for convergence */
-            if (f2c_dabs(w) <= eps * erretm)
+            if(f2c_dabs(w) <= eps * erretm)
             {
                 *dlam = d__[*i__] + tau;
                 goto L250;
             }
-            if (w <= 0.)
+            if(w <= 0.)
             {
-                dltlb = fla_max(dltlb,tau);
+                dltlb = fla_max(dltlb, tau);
             }
             else
             {
-                dltub = fla_min(dltub,tau);
+                dltub = fla_min(dltub, tau);
             }
             /* Calculate the new step */
             c__ = w - delta[*n - 1] * dpsi - delta[*n] * dphi;
             a = (delta[*n - 1] + delta[*n]) * w - delta[*n - 1] * delta[*n] * (dpsi + dphi);
             b = delta[*n - 1] * delta[*n] * w;
-            if (a >= 0.)
+            if(a >= 0.)
             {
-                eta = (a + sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs(d__1)))) / ( c__ * 2.);
+                eta = (a + sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs(d__1)))) / (c__ * 2.);
             }
             else
             {
-                eta = b * 2. / (a - sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs( d__1))));
+                eta = b * 2. / (a - sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs(d__1))));
             }
             /* Note, eta should be positive if w is negative, and */
             /* eta should be negative otherwise. However, */
             /* if for some reason caused by roundoff, eta*w > 0, */
             /* we simply use one Newton step instead. This way */
             /* will guarantee eta*w < 0. */
-            if (w * eta > 0.)
+            if(w * eta > 0.)
             {
                 eta = -w / (dpsi + dphi);
             }
             temp = tau + eta;
-            if (temp > dltub || temp < dltlb)
+            if(temp > dltub || temp < dltlb)
             {
-                if (w < 0.)
+                if(w < 0.)
                 {
                     eta = (dltub - tau) / 2.;
                 }
@@ -453,9 +453,7 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
                 }
             }
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 delta[j] -= eta;
                 /* L70: */
@@ -466,9 +464,7 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
             psi = 0.;
             erretm = 0.;
             i__1 = ii;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 temp = z__[j] / delta[j];
                 psi += z__[j] * temp;
@@ -481,7 +477,7 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
             temp = z__[*n] / delta[*n];
             phi = z__[*n] * temp;
             dphi = temp * temp;
-            erretm = (-phi - psi) * 8. + erretm - phi + rhoinv + f2c_dabs(tau) * ( dpsi + dphi);
+            erretm = (-phi - psi) * 8. + erretm - phi + rhoinv + f2c_dabs(tau) * (dpsi + dphi);
             w = rhoinv + phi + psi;
             /* L90: */
         }
@@ -500,47 +496,41 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
         del = d__[ip1] - d__[*i__];
         midpt = del / 2.;
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             delta[j] = d__[j] - d__[*i__] - midpt;
             /* L100: */
         }
         psi = 0.;
         i__1 = *i__ - 1;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             psi += z__[j] * z__[j] / delta[j];
             /* L110: */
         }
         phi = 0.;
         i__1 = *i__ + 2;
-        for (j = *n;
-                j >= i__1;
-                --j)
+        for(j = *n; j >= i__1; --j)
         {
             phi += z__[j] * z__[j] / delta[j];
             /* L120: */
         }
         c__ = rhoinv + psi + phi;
         w = c__ + z__[*i__] * z__[*i__] / delta[*i__] + z__[ip1] * z__[ip1] / delta[ip1];
-        if (w > 0.)
+        if(w > 0.)
         {
             /* d(i)< the ith eigenvalue < (d(i)+d(i+1))/2 */
             /* We choose d(i) as origin. */
             orgati = TRUE_;
             a = c__ * del + z__[*i__] * z__[*i__] + z__[ip1] * z__[ip1];
             b = z__[*i__] * z__[*i__] * del;
-            if (a > 0.)
+            if(a > 0.)
             {
-                tau = b * 2. / (a + sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs( d__1))));
+                tau = b * 2. / (a + sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs(d__1))));
             }
             else
             {
-                tau = (a - sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs(d__1)))) / ( c__ * 2.);
+                tau = (a - sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs(d__1)))) / (c__ * 2.);
             }
             dltlb = 0.;
             dltub = midpt;
@@ -552,9 +542,9 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
             orgati = FALSE_;
             a = c__ * del - z__[*i__] * z__[*i__] - z__[ip1] * z__[ip1];
             b = z__[ip1] * z__[ip1] * del;
-            if (a < 0.)
+            if(a < 0.)
             {
-                tau = b * 2. / (a - sqrt((d__1 = a * a + b * 4. * c__, f2c_dabs( d__1))));
+                tau = b * 2. / (a - sqrt((d__1 = a * a + b * 4. * c__, f2c_dabs(d__1))));
             }
             else
             {
@@ -563,12 +553,10 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
             dltlb = -midpt;
             dltub = 0.;
         }
-        if (orgati)
+        if(orgati)
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 delta[j] = d__[j] - d__[*i__] - tau;
                 /* L130: */
@@ -577,15 +565,13 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
         else
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 delta[j] = d__[j] - d__[ip1] - tau;
                 /* L140: */
             }
         }
-        if (orgati)
+        if(orgati)
         {
             ii = *i__;
         }
@@ -600,9 +586,7 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
         psi = 0.;
         erretm = 0.;
         i__1 = iim1;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             temp = z__[j] / delta[j];
             psi += z__[j] * temp;
@@ -615,9 +599,7 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
         dphi = 0.;
         phi = 0.;
         i__1 = iip1;
-        for (j = *n;
-                j >= i__1;
-                --j)
+        for(j = *n; j >= i__1; --j)
         {
             temp = z__[j] / delta[j];
             phi += z__[j] * temp;
@@ -629,21 +611,21 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
         /* W is the value of the secular function with */
         /* its ii-th element removed. */
         swtch3 = FALSE_;
-        if (orgati)
+        if(orgati)
         {
-            if (w < 0.)
+            if(w < 0.)
             {
                 swtch3 = TRUE_;
             }
         }
         else
         {
-            if (w > 0.)
+            if(w > 0.)
             {
                 swtch3 = TRUE_;
             }
         }
-        if (ii == 1 || ii == *n)
+        if(ii == 1 || ii == *n)
         {
             swtch3 = FALSE_;
         }
@@ -653,9 +635,9 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
         w += temp;
         erretm = (phi - psi) * 8. + erretm + rhoinv * 2. + f2c_dabs(temp) * 3. + f2c_dabs(tau) * dw;
         /* Test for convergence */
-        if (f2c_dabs(w) <= eps * erretm)
+        if(f2c_dabs(w) <= eps * erretm)
         {
-            if (orgati)
+            if(orgati)
             {
                 *dlam = d__[*i__] + tau;
             }
@@ -665,19 +647,19 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
             }
             goto L250;
         }
-        if (w <= 0.)
+        if(w <= 0.)
         {
-            dltlb = fla_max(dltlb,tau);
+            dltlb = fla_max(dltlb, tau);
         }
         else
         {
-            dltub = fla_min(dltub,tau);
+            dltub = fla_min(dltub, tau);
         }
         /* Calculate the new step */
         ++niter;
-        if (! swtch3)
+        if(!swtch3)
         {
-            if (orgati)
+            if(orgati)
             {
                 /* Computing 2nd power */
                 d__1 = z__[*i__] / delta[*i__];
@@ -691,11 +673,11 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
             }
             a = (delta[*i__] + delta[ip1]) * w - delta[*i__] * delta[ip1] * dw;
             b = delta[*i__] * delta[ip1] * w;
-            if (c__ == 0.)
+            if(c__ == 0.)
             {
-                if (a == 0.)
+                if(a == 0.)
                 {
-                    if (orgati)
+                    if(orgati)
                     {
                         a = z__[*i__] * z__[*i__] + delta[ip1] * delta[ip1] * (dpsi + dphi);
                     }
@@ -706,24 +688,24 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
                 }
                 eta = b / a;
             }
-            else if (a <= 0.)
+            else if(a <= 0.)
             {
-                eta = (a - sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs(d__1)))) / ( c__ * 2.);
+                eta = (a - sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs(d__1)))) / (c__ * 2.);
             }
             else
             {
-                eta = b * 2. / (a + sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs( d__1))));
+                eta = b * 2. / (a + sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs(d__1))));
             }
         }
         else
         {
             /* Interpolation using THREE most relevant poles */
             temp = rhoinv + psi + phi;
-            if (orgati)
+            if(orgati)
             {
                 temp1 = z__[iim1] / delta[iim1];
                 temp1 *= temp1;
-                c__ = temp - delta[iip1] * (dpsi + dphi) - (d__[iim1] - d__[ iip1]) * temp1;
+                c__ = temp - delta[iip1] * (dpsi + dphi) - (d__[iim1] - d__[iip1]) * temp1;
                 zz[0] = z__[iim1] * z__[iim1];
                 zz[2] = delta[iip1] * delta[iip1] * (dpsi - temp1 + dphi);
             }
@@ -731,13 +713,13 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
             {
                 temp1 = z__[iip1] / delta[iip1];
                 temp1 *= temp1;
-                c__ = temp - delta[iim1] * (dpsi + dphi) - (d__[iip1] - d__[ iim1]) * temp1;
+                c__ = temp - delta[iim1] * (dpsi + dphi) - (d__[iip1] - d__[iim1]) * temp1;
                 zz[0] = delta[iim1] * delta[iim1] * (dpsi + (dphi - temp1));
                 zz[2] = z__[iip1] * z__[iip1];
             }
             zz[1] = z__[ii] * z__[ii];
             dlaed6_(&niter, &orgati, &c__, &delta[iim1], zz, &w, &eta, info);
-            if (*info != 0)
+            if(*info != 0)
             {
                 goto L250;
             }
@@ -747,14 +729,14 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
         /* if for some reason caused by roundoff, eta*w > 0, */
         /* we simply use one Newton step instead. This way */
         /* will guarantee eta*w < 0. */
-        if (w * eta >= 0.)
+        if(w * eta >= 0.)
         {
             eta = -w / dw;
         }
         temp = tau + eta;
-        if (temp > dltub || temp < dltlb)
+        if(temp > dltub || temp < dltlb)
         {
-            if (w < 0.)
+            if(w < 0.)
             {
                 eta = (dltub - tau) / 2.;
             }
@@ -765,9 +747,7 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
         }
         prew = w;
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             delta[j] -= eta;
             /* L180: */
@@ -777,9 +757,7 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
         psi = 0.;
         erretm = 0.;
         i__1 = iim1;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             temp = z__[j] / delta[j];
             psi += z__[j] * temp;
@@ -792,9 +770,7 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
         dphi = 0.;
         phi = 0.;
         i__1 = iip1;
-        for (j = *n;
-                j >= i__1;
-                --j)
+        for(j = *n; j >= i__1; --j)
         {
             temp = z__[j] / delta[j];
             phi += z__[j] * temp;
@@ -806,18 +782,19 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
         dw = dpsi + dphi + temp * temp;
         temp = z__[ii] * temp;
         w = rhoinv + phi + psi + temp;
-        erretm = (phi - psi) * 8. + erretm + rhoinv * 2. + f2c_dabs(temp) * 3. + ( d__1 = tau + eta, f2c_dabs(d__1)) * dw;
+        erretm = (phi - psi) * 8. + erretm + rhoinv * 2. + f2c_dabs(temp) * 3.
+                 + (d__1 = tau + eta, f2c_dabs(d__1)) * dw;
         swtch = FALSE_;
-        if (orgati)
+        if(orgati)
         {
-            if (-w > f2c_dabs(prew) / 10.)
+            if(-w > f2c_dabs(prew) / 10.)
             {
                 swtch = TRUE_;
             }
         }
         else
         {
-            if (w > f2c_dabs(prew) / 10.)
+            if(w > f2c_dabs(prew) / 10.)
             {
                 swtch = TRUE_;
             }
@@ -825,14 +802,12 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
         tau += eta;
         /* Main loop to update the values of the array DELTA */
         iter = niter + 1;
-        for (niter = iter;
-                niter <= 30;
-                ++niter)
+        for(niter = iter; niter <= 30; ++niter)
         {
             /* Test for convergence */
-            if (f2c_dabs(w) <= eps * erretm)
+            if(f2c_dabs(w) <= eps * erretm)
             {
-                if (orgati)
+                if(orgati)
                 {
                     *dlam = d__[*i__] + tau;
                 }
@@ -842,24 +817,24 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
                 }
                 goto L250;
             }
-            if (w <= 0.)
+            if(w <= 0.)
             {
-                dltlb = fla_max(dltlb,tau);
+                dltlb = fla_max(dltlb, tau);
             }
             else
             {
-                dltub = fla_min(dltub,tau);
+                dltub = fla_min(dltub, tau);
             }
             /* Calculate the new step */
-            if (! swtch3)
+            if(!swtch3)
             {
-                if (! swtch)
+                if(!swtch)
                 {
-                    if (orgati)
+                    if(orgati)
                     {
                         /* Computing 2nd power */
                         d__1 = z__[*i__] / delta[*i__];
-                        c__ = w - delta[ip1] * dw - (d__[*i__] - d__[ip1]) * ( d__1 * d__1);
+                        c__ = w - delta[ip1] * dw - (d__[*i__] - d__[ip1]) * (d__1 * d__1);
                     }
                     else
                     {
@@ -871,7 +846,7 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
                 else
                 {
                     temp = z__[ii] / delta[ii];
-                    if (orgati)
+                    if(orgati)
                     {
                         dpsi += temp * temp;
                     }
@@ -883,19 +858,19 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
                 }
                 a = (delta[*i__] + delta[ip1]) * w - delta[*i__] * delta[ip1] * dw;
                 b = delta[*i__] * delta[ip1] * w;
-                if (c__ == 0.)
+                if(c__ == 0.)
                 {
-                    if (a == 0.)
+                    if(a == 0.)
                     {
-                        if (! swtch)
+                        if(!swtch)
                         {
-                            if (orgati)
+                            if(orgati)
                             {
                                 a = z__[*i__] * z__[*i__] + delta[ip1] * delta[ip1] * (dpsi + dphi);
                             }
                             else
                             {
-                                a = z__[ip1] * z__[ip1] + delta[*i__] * delta[ *i__] * (dpsi + dphi);
+                                a = z__[ip1] * z__[ip1] + delta[*i__] * delta[*i__] * (dpsi + dphi);
                             }
                         }
                         else
@@ -905,7 +880,7 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
                     }
                     eta = b / a;
                 }
-                else if (a <= 0.)
+                else if(a <= 0.)
                 {
                     eta = (a - sqrt((d__1 = a * a - b * 4. * c__, f2c_dabs(d__1)))) / (c__ * 2.);
                 }
@@ -918,7 +893,7 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
             {
                 /* Interpolation using THREE most relevant poles */
                 temp = rhoinv + psi + phi;
-                if (swtch)
+                if(swtch)
                 {
                     c__ = temp - delta[iim1] * dpsi - delta[iip1] * dphi;
                     zz[0] = delta[iim1] * delta[iim1] * dpsi;
@@ -926,7 +901,7 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
                 }
                 else
                 {
-                    if (orgati)
+                    if(orgati)
                     {
                         temp1 = z__[iim1] / delta[iim1];
                         temp1 *= temp1;
@@ -944,7 +919,7 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
                     }
                 }
                 dlaed6_(&niter, &orgati, &c__, &delta[iim1], zz, &w, &eta, info);
-                if (*info != 0)
+                if(*info != 0)
                 {
                     goto L250;
                 }
@@ -954,14 +929,14 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
             /* if for some reason caused by roundoff, eta*w > 0, */
             /* we simply use one Newton step instead. This way */
             /* will guarantee eta*w < 0. */
-            if (w * eta >= 0.)
+            if(w * eta >= 0.)
             {
                 eta = -w / dw;
             }
             temp = tau + eta;
-            if (temp > dltub || temp < dltlb)
+            if(temp > dltub || temp < dltlb)
             {
-                if (w < 0.)
+                if(w < 0.)
                 {
                     eta = (dltub - tau) / 2.;
                 }
@@ -971,9 +946,7 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
                 }
             }
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 delta[j] -= eta;
                 /* L210: */
@@ -985,9 +958,7 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
             psi = 0.;
             erretm = 0.;
             i__1 = iim1;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 temp = z__[j] / delta[j];
                 psi += z__[j] * temp;
@@ -1000,9 +971,7 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
             dphi = 0.;
             phi = 0.;
             i__1 = iip1;
-            for (j = *n;
-                    j >= i__1;
-                    --j)
+            for(j = *n; j >= i__1; --j)
             {
                 temp = z__[j] / delta[j];
                 phi += z__[j] * temp;
@@ -1014,16 +983,17 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
             dw = dpsi + dphi + temp * temp;
             temp = z__[ii] * temp;
             w = rhoinv + phi + psi + temp;
-            erretm = (phi - psi) * 8. + erretm + rhoinv * 2. + f2c_dabs(temp) * 3. + f2c_dabs(tau) * dw;
-            if (w * prew > 0. && f2c_dabs(w) > f2c_dabs(prew) / 10.)
+            erretm = (phi - psi) * 8. + erretm + rhoinv * 2. + f2c_dabs(temp) * 3.
+                     + f2c_dabs(tau) * dw;
+            if(w * prew > 0. && f2c_dabs(w) > f2c_dabs(prew) / 10.)
             {
-                swtch = ! swtch;
+                swtch = !swtch;
             }
             /* L240: */
         }
         /* Return with INFO = 1, NITER = MAXIT and not converged */
         *info = 1;
-        if (orgati)
+        if(orgati)
         {
             *dlam = d__[*i__] + tau;
         }
@@ -1034,7 +1004,7 @@ int dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublere
     }
 L250:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAED4 */
 }
 /* dlaed4_ */

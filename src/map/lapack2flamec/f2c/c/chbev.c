@@ -1,19 +1,29 @@
-/* ../netlib/chbev.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/chbev.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b11 = 1.f;
 static integer c__1 = 1;
-/* > \brief <b> CHBEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER m atrices</b> */
+/* > \brief <b> CHBEV computes the eigenvalues and, optionally, the left and/or right eigenvectors
+ * for OTHER m atrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CHBEV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chbev.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chbev.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chbev.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chbev.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chbev.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chbev.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -42,7 +52,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > JOBZ is CHARACTER*1 */
 /* > = 'N': Compute eigenvalues only;
-*/
+ */
 /* > = 'V': Compute eigenvalues and eigenvectors. */
 /* > \endverbatim */
 /* > */
@@ -50,7 +60,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -75,7 +85,7 @@ static integer c__1 = 1;
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > */
 /* > On exit, AB is overwritten by values generated during the */
@@ -144,15 +154,18 @@ i */
 /* > \ingroup complexOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-int chbev_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, real *w, complex *z__, integer *ldz, complex *work, real *rwork, integer *info)
+void chbev_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, real *w,
+            complex *z__, integer *ldz, complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"chbev inputs: jobz %c, uplo %c, n %lld, kd %lld, ldab %lld, ldz %lld",*jobz, *uplo, *n, *kd, *ldab, *ldz);
+    snprintf(buffer, 256, "chbev inputs: jobz %c, uplo %c, n %lld, kd %lld, ldab %lld, ldz %lld",
+             *jobz, *uplo, *n, *kd, *ldab, *ldz);
 #else
-    snprintf(buffer, 256,"chbev inputs: jobz %c, uplo %c, n %d, kd %d, ldab %d, ldz %d",*jobz, *uplo, *n, *kd, *ldab, *ldz);
+    snprintf(buffer, 256, "chbev inputs: jobz %c, uplo %c, n %d, kd %d, ldab %d, ldz %d", *jobz,
+             *uplo, *n, *kd, *ldab, *ldz);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -167,23 +180,31 @@ int chbev_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integer
     real anrm;
     integer imax;
     real rmin, rmax, sigma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     logical lower, wantz;
     extern real clanhb_(char *, char *, integer *, integer *, complex *, integer *, real *);
     integer iscale;
     extern /* Subroutine */
-    int clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *), chbtrd_(char *, char *, integer *, integer *, complex *, integer *, real *, real *, complex *, integer *, complex *, integer *);
+        void
+        clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *,
+                integer *, integer *),
+        chbtrd_(char *, char *, integer *, integer *, complex *, integer *, real *, real *,
+                complex *, integer *, complex *, integer *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer indrwk;
     extern /* Subroutine */
-    int csteqr_(char *, integer *, real *, real *, complex *, integer *, real *, integer *), ssterf_(integer *, real *, real *, integer *);
+        void
+        csteqr_(char *, integer *, real *, real *, complex *, integer *, real *, integer *),
+        ssterf_(integer *, real *, real *, integer *);
     real smlnum;
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -217,49 +238,49 @@ int chbev_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integer
     --work;
     --rwork;
     /* Function Body */
-    wantz = lsame_(jobz, "V");
-    lower = lsame_(uplo, "L");
+    wantz = lsame_(jobz, "V", 1, 1);
+    lower = lsame_(uplo, "L", 1, 1);
     *info = 0;
-    if (! (wantz || lsame_(jobz, "N")))
+    if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (lower || lsame_(uplo, "U")))
+    else if(!(lower || lsame_(uplo, "U", 1, 1)))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*kd < 0)
+    else if(*kd < 0)
     {
         *info = -4;
     }
-    else if (*ldab < *kd + 1)
+    else if(*ldab < *kd + 1)
     {
         *info = -6;
     }
-    else if (*ldz < 1 || wantz && *ldz < *n)
+    else if(*ldz < 1 || wantz && *ldz < *n)
     {
         *info = -9;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CHBEV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (*n == 1)
+    if(*n == 1)
     {
-        if (lower)
+        if(lower)
         {
             i__1 = ab_dim1 + 1;
             w[1] = ab[i__1].r;
@@ -269,14 +290,14 @@ int chbev_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integer
             i__1 = *kd + 1 + ab_dim1;
             w[1] = ab[i__1].r;
         }
-        if (wantz)
+        if(wantz)
         {
             i__1 = z_dim1 + 1;
             z__[i__1].r = 1.f;
             z__[i__1].i = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = slamch_("Safe minimum");
@@ -288,19 +309,19 @@ int chbev_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integer
     /* Scale matrix to allowable range, if necessary. */
     anrm = clanhb_("M", uplo, n, kd, &ab[ab_offset], ldab, &rwork[1]);
     iscale = 0;
-    if (anrm > 0.f && anrm < rmin)
+    if(anrm > 0.f && anrm < rmin)
     {
         iscale = 1;
         sigma = rmin / anrm;
     }
-    else if (anrm > rmax)
+    else if(anrm > rmax)
     {
         iscale = 1;
         sigma = rmax / anrm;
     }
-    if (iscale == 1)
+    if(iscale == 1)
     {
-        if (lower)
+        if(lower)
         {
             clascl_("B", kd, kd, &c_b11, &sigma, n, n, &ab[ab_offset], ldab, info);
         }
@@ -311,21 +332,22 @@ int chbev_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integer
     }
     /* Call CHBTRD to reduce Hermitian band matrix to tridiagonal form. */
     inde = 1;
-    chbtrd_(jobz, uplo, n, kd, &ab[ab_offset], ldab, &w[1], &rwork[inde], & z__[z_offset], ldz, &work[1], &iinfo);
+    chbtrd_(jobz, uplo, n, kd, &ab[ab_offset], ldab, &w[1], &rwork[inde], &z__[z_offset], ldz,
+            &work[1], &iinfo);
     /* For eigenvalues only, call SSTERF. For eigenvectors, call CSTEQR. */
-    if (! wantz)
+    if(!wantz)
     {
         ssterf_(n, &w[1], &rwork[inde], info);
     }
     else
     {
         indrwk = inde + *n;
-        csteqr_(jobz, n, &w[1], &rwork[inde], &z__[z_offset], ldz, &rwork[ indrwk], info);
+        csteqr_(jobz, n, &w[1], &rwork[inde], &z__[z_offset], ldz, &rwork[indrwk], info);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
-    if (iscale == 1)
+    if(iscale == 1)
     {
-        if (*info == 0)
+        if(*info == 0)
         {
             imax = *n;
         }
@@ -337,7 +359,7 @@ int chbev_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integer
         sscal_(&imax, &r__1, &w[1], &c__1);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHBEV */
 }
 /* chbev_ */

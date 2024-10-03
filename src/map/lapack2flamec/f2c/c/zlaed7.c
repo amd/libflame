@@ -1,20 +1,30 @@
-/* ../netlib/zlaed7.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zlaed7.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__2 = 2;
 static integer c__1 = 1;
 static integer c_n1 = -1;
-/* > \brief \b ZLAED7 used by sstedc. Computes the updated eigensystem of a diagonal matrix after modification by a rank-one symmetric matrix. Used when the original matrix is dense. */
+/* > \brief \b ZLAED7 used by sstedc. Computes the updated eigensystem of a diagonal matrix after
+ * modification by a rank-one symmetric matrix. Used when the original matrix is dense. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLAED7 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaed7. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaed7.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaed7. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaed7.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaed7. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaed7.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -236,10 +246,17 @@ static integer c_n1 = -1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zlaed7_(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, integer *curlvl, integer *curpbm, doublereal *d__, doublecomplex *q, integer *ldq, doublereal *rho, integer *indxq, doublereal *qstore, integer *qptr, integer *prmptr, integer *perm, integer *givptr, integer *givcol, doublereal *givnum, doublecomplex * work, doublereal *rwork, integer *iwork, integer *info)
+void zlaed7_(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, integer *curlvl,
+             integer *curpbm, doublereal *d__, doublecomplex *q, integer *ldq, doublereal *rho,
+             integer *indxq, doublereal *qstore, integer *qptr, integer *prmptr, integer *perm,
+             integer *givptr, integer *givcol, doublereal *givnum, doublecomplex *work,
+             doublereal *rwork, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlaed7 inputs: n %" FLA_IS ", cutpnt %" FLA_IS ", qsiz %" FLA_IS ", tlvls %" FLA_IS ", curlvl %" FLA_IS ", curpbm %" FLA_IS ", ldq %" FLA_IS "",*n, *cutpnt, *qsiz, *tlvls, *curlvl, *curpbm, *ldq);
+    AOCL_DTL_SNPRINTF("zlaed7 inputs: n %" FLA_IS ", cutpnt %" FLA_IS ", qsiz %" FLA_IS
+                      ", tlvls %" FLA_IS ", curlvl %" FLA_IS ", curpbm %" FLA_IS ", ldq %" FLA_IS
+                      "",
+                      *n, *cutpnt, *qsiz, *tlvls, *curlvl, *curpbm, *ldq);
     /* System generated locals */
     integer q_dim1, q_offset, i__1, i__2;
     /* Builtin functions */
@@ -247,10 +264,23 @@ int zlaed7_(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, integer 
     /* Local variables */
     integer i__, k, n1, n2, iq, iw, iz, ptr, indx, curr, indxc, indxp;
     extern /* Subroutine */
-    int dlaed9_(integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *), zlaed8_(integer *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, doublereal *, integer *, integer *, integer *, integer *, integer *, integer *, doublereal *, integer *), dlaeda_(integer *, integer *, integer *, integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dlaed9_(integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *,
+                doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *),
+        zlaed8_(integer *, integer *, integer *, doublecomplex *, integer *, doublereal *,
+                doublereal *, integer *, doublereal *, doublereal *, doublecomplex *, integer *,
+                doublereal *, integer *, integer *, integer *, integer *, integer *, integer *,
+                doublereal *, integer *),
+        dlaeda_(integer *, integer *, integer *, integer *, integer *, integer *, integer *,
+                integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *,
+                integer *);
     integer idlmda;
     extern /* Subroutine */
-    int dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlacrm_(integer *, integer *, doublecomplex *, integer *, doublereal *, integer *, doublecomplex *, integer *, doublereal * );
+        void
+        dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zlacrm_(integer *, integer *, doublecomplex *, integer *, doublereal *, integer *,
+                doublecomplex *, integer *, doublereal *);
     integer coltyp;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -290,34 +320,34 @@ int zlaed7_(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, integer 
     /* IF( ICOMPQ.LT.0 .OR. ICOMPQ.GT.1 ) THEN */
     /* INFO = -1 */
     /* ELSE IF( N.LT.0 ) THEN */
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
     }
-    else if (fla_min(1,*n) > *cutpnt || *n < *cutpnt)
+    else if(fla_min(1, *n) > *cutpnt || *n < *cutpnt)
     {
         *info = -2;
     }
-    else if (*qsiz < *n)
+    else if(*qsiz < *n)
     {
         *info = -3;
     }
-    else if (*ldq < fla_max(1,*n))
+    else if(*ldq < fla_max(1, *n))
     {
         *info = -9;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZLAED7", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* The following values are for bookkeeping purposes only. They are */
     /* integer pointers which indicate the portion of the workspace */
@@ -334,41 +364,44 @@ int zlaed7_(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, integer 
     /* first row of Q_2. */
     ptr = pow_ii(&c__2, tlvls) + 1;
     i__1 = *curlvl - 1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = *tlvls - i__;
         ptr += pow_ii(&c__2, &i__2);
         /* L10: */
     }
     curr = ptr + *curpbm;
-    dlaeda_(n, tlvls, curlvl, curpbm, &prmptr[1], &perm[1], &givptr[1], & givcol[3], &givnum[3], &qstore[1], &qptr[1], &rwork[iz], &rwork[ iz + *n], info);
+    dlaeda_(n, tlvls, curlvl, curpbm, &prmptr[1], &perm[1], &givptr[1], &givcol[3], &givnum[3],
+            &qstore[1], &qptr[1], &rwork[iz], &rwork[iz + *n], info);
     /* When solving the final problem, we no longer need the stored data, */
     /* so we will overwrite the data from this level onto the previously */
     /* used storage space. */
-    if (*curlvl == *tlvls)
+    if(*curlvl == *tlvls)
     {
         qptr[curr] = 1;
         prmptr[curr] = 1;
         givptr[curr] = 1;
     }
     /* Sort and Deflate eigenvalues. */
-    zlaed8_(&k, n, qsiz, &q[q_offset], ldq, &d__[1], rho, cutpnt, &rwork[iz], &rwork[idlmda], &work[1], qsiz, &rwork[iw], &iwork[indxp], &iwork[ indx], &indxq[1], &perm[prmptr[curr]], &givptr[curr + 1], &givcol[ (givptr[curr] << 1) + 1], &givnum[(givptr[curr] << 1) + 1], info);
+    zlaed8_(&k, n, qsiz, &q[q_offset], ldq, &d__[1], rho, cutpnt, &rwork[iz], &rwork[idlmda],
+            &work[1], qsiz, &rwork[iw], &iwork[indxp], &iwork[indx], &indxq[1], &perm[prmptr[curr]],
+            &givptr[curr + 1], &givcol[(givptr[curr] << 1) + 1], &givnum[(givptr[curr] << 1) + 1],
+            info);
     prmptr[curr + 1] = prmptr[curr] + *n;
     givptr[curr + 1] += givptr[curr];
     /* Solve Secular Equation. */
-    if (k != 0)
+    if(k != 0)
     {
-        dlaed9_(&k, &c__1, &k, n, &d__[1], &rwork[iq], &k, rho, &rwork[idlmda], &rwork[iw], &qstore[qptr[curr]], &k, info);
-        zlacrm_(qsiz, &k, &work[1], qsiz, &qstore[qptr[curr]], &k, &q[ q_offset], ldq, &rwork[iq]);
+        dlaed9_(&k, &c__1, &k, n, &d__[1], &rwork[iq], &k, rho, &rwork[idlmda], &rwork[iw],
+                &qstore[qptr[curr]], &k, info);
+        zlacrm_(qsiz, &k, &work[1], qsiz, &qstore[qptr[curr]], &k, &q[q_offset], ldq, &rwork[iq]);
         /* Computing 2nd power */
         i__1 = k;
         qptr[curr + 1] = qptr[curr] + i__1 * i__1;
-        if (*info != 0)
+        if(*info != 0)
         {
-    AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            AOCL_DTL_TRACE_LOG_EXIT
+            return;
         }
         /* Prepare the INDXQ sorting premutation. */
         n1 = k;
@@ -379,16 +412,14 @@ int zlaed7_(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, integer 
     {
         qptr[curr + 1] = qptr[curr];
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             indxq[i__] = i__;
             /* L20: */
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLAED7 */
 }
 /* zlaed7_ */

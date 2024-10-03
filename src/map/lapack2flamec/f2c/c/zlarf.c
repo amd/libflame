@@ -1,19 +1,14 @@
 /*
     Copyright (c) 2019-2023 Advanced Micro Devices, Inc.
 */
-/* ../netlib/zlarf.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zlarf.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    1.,0.
-}
-;
-static doublecomplex c_b2 =
-{
-    0.,0.
-}
-;
+static doublecomplex c_b1 = {1., 0.};
+static doublecomplex c_b2 = {0., 0.};
 static integer c__1 = 1;
 /* > \brief \b ZLARF applies an elementary reflector to a general rectangular matrix. */
 /* =========== DOCUMENTATION =========== */
@@ -21,11 +16,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLARF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlarf.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlarf.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlarf.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlarf.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlarf.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlarf.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -129,10 +130,13 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int zlarf_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv, doublecomplex *tau, doublecomplex *c__, integer * ldc, doublecomplex *work)
+void zlarf_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv, doublecomplex *tau,
+            doublecomplex *c__, integer *ldc, doublecomplex *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlarf inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS ", ldc %" FLA_IS "",*side, *m, *n, *incv, *ldc);
+    AOCL_DTL_SNPRINTF("zlarf inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS
+                      ", ldc %" FLA_IS "",
+                      *side, *m, *n, *incv, *ldc);
 
     /* System generated locals */
     integer c_dim1, c_offset, i__1;
@@ -140,12 +144,17 @@ int zlarf_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv, 
     /* Local variables */
     integer i__;
     logical applyleft;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer lastc;
     extern /* Subroutine */
-    int zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
+               integer *, doublecomplex *, integer *),
+        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
+               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     integer lastv;
-    extern integer ilazlc_(integer *, integer *, doublecomplex *, integer *), ilazlr_(integer *, integer *, doublecomplex *, integer *);
+    extern integer ilazlc_(integer *, integer *, doublecomplex *, integer *),
+        ilazlr_(integer *, integer *, doublecomplex *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -171,14 +180,14 @@ int zlarf_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv, 
     c__ -= c_offset;
     --work;
     /* Function Body */
-    applyleft = lsame_(side, "L");
+    applyleft = lsame_(side, "L", 1, 1);
     lastv = 0;
     lastc = 0;
-    if (tau->r != 0. || tau->i != 0.)
+    if(tau->r != 0. || tau->i != 0.)
     {
         /* Set up variables for scanning V. LASTV begins pointing to the end */
         /* of V. */
-        if (applyleft)
+        if(applyleft)
         {
             lastv = *m;
         }
@@ -186,7 +195,7 @@ int zlarf_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv, 
         {
             lastv = *n;
         }
-        if (*incv > 0)
+        if(*incv > 0)
         {
             i__ = (lastv - 1) * *incv + 1;
         }
@@ -195,17 +204,16 @@ int zlarf_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv, 
             i__ = 1;
         }
         /* Look for the last non-zero row in V. */
-        for(;
-                ;
-           )
+        for(;;)
         {
             /* while(complicated condition) */
             i__1 = i__;
-            if (!(lastv > 0 && (v[i__1].r == 0. && v[i__1].i == 0.))) break;
+            if(!(lastv > 0 && (v[i__1].r == 0. && v[i__1].i == 0.)))
+                break;
             --lastv;
             i__ -= *incv;
         }
-        if (applyleft)
+        if(applyleft)
         {
             /* Scan for the last non-zero column in C(1:lastv,:). */
             lastc = ilazlc_(&lastv, n, &c__[c_offset], ldc);
@@ -219,64 +227,67 @@ int zlarf_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv, 
     /* Note that lastc.eq.0 renders the BLAS operations null;
     no special */
     /* case is needed at this level. */
-    if (applyleft)
+    if(applyleft)
     {
         /* Form H * C */
-        if (lastv > 0)
+        if(lastv > 0)
         {
             /* w(1:lastc,1) := C(1:lastv,1:lastc)**H * v(1:lastv,1) */
-            zgemv_("Conjugate transpose", &lastv, &lastc, &c_b1, &c__[ c_offset], ldc, &v[1], incv, &c_b2, &work[1], &c__1);
+            zgemv_("Conjugate transpose", &lastv, &lastc, &c_b1, &c__[c_offset], ldc, &v[1], incv,
+                   &c_b2, &work[1], &c__1);
             /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**H */
             z__1.r = -tau->r;
             z__1.i = -tau->i; // , expr subst
 #ifdef FLA_ENABLE_AMD_OPT
-            /* performs rank 1 operation when increment is 1 and lastc,lastv are within defined threshold */
-            if (*incv == c__1 && lastc <= FLA_ZGERC_INLINE_SMALL_THRESH0 && lastv <= FLA_ZGERC_INLINE_SMALL_THRESH1)
+            /* performs rank 1 operation when increment is 1 and lastc,lastv are within defined
+             * threshold */
+            if(*incv == c__1 && lastc <= FLA_ZGERC_INLINE_SMALL_THRESH0
+               && lastv <= FLA_ZGERC_INLINE_SMALL_THRESH1)
             {
-                doublereal yr,yi;
+                doublereal yr, yi;
                 doublecomplex temp;
-                for (integer j = 1; j <= lastc; ++j)
+                for(integer j = 1; j <= lastc; ++j)
                 {
                     yr = work[j].r;
                     yi = work[j].i;
-                    if (yr != 0. || yi != 0.)
+                    if(yr != 0. || yi != 0.)
                     {
-                        temp.r = z__1.r * yr + z__1.i * yi,
-                        temp.i = - z__1.r * yi + z__1.i * yr;
-                        for (integer i = 1; i <= lastv; ++i)
+                        temp.r = z__1.r * yr + z__1.i * yi, temp.i = -z__1.r * yi + z__1.i * yr;
+                        for(integer i = 1; i <= lastv; ++i)
                         {
                             /* performs A := alpha*x*conjg( y' ) + A */
                             integer index = i + j * *ldc;
                             c__[index].r += v[i].r * temp.r - v[i].i * temp.i,
-                            c__[index].i += v[i].r * temp.i + v[i].i * temp.r;
+                                c__[index].i += v[i].r * temp.i + v[i].i * temp.r;
                         }
                     }
                 }
             }
             else
             {
-                zgerc_(&lastv, &lastc, &z__1, &v[1], incv, &work[1], &c__1, &c__[ c_offset], ldc);
+                zgerc_(&lastv, &lastc, &z__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
             }
 #else
-            zgerc_(&lastv, &lastc, &z__1, &v[1], incv, &work[1], &c__1, &c__[ c_offset], ldc);
+            zgerc_(&lastv, &lastc, &z__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
 #endif
         }
     }
     else
     {
         /* Form C * H */
-        if (lastv > 0)
+        if(lastv > 0)
         {
             /* w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1) */
-            zgemv_("No transpose", &lastc, &lastv, &c_b1, &c__[c_offset], ldc, &v[1], incv, &c_b2, &work[1], &c__1);
+            zgemv_("No transpose", &lastc, &lastv, &c_b1, &c__[c_offset], ldc, &v[1], incv, &c_b2,
+                   &work[1], &c__1);
             /* C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**H */
             z__1.r = -tau->r;
             z__1.i = -tau->i; // , expr subst
-            zgerc_(&lastc, &lastv, &z__1, &work[1], &c__1, &v[1], incv, &c__[ c_offset], ldc);
+            zgerc_(&lastc, &lastv, &z__1, &work[1], &c__1, &v[1], incv, &c__[c_offset], ldc);
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLARF */
 }
 /* zlarf_ */

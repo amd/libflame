@@ -1,18 +1,28 @@
-/* ../netlib/zla_gbrcond_c.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zla_gbrcond_c.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b ZLA_GBRCOND_C computes the infinity norm condition number of op(A)*inv(diag(c)) for general ban ded matrices. */
+/* > \brief \b ZLA_GBRCOND_C computes the infinity norm condition number of op(A)*inv(diag(c)) for
+ * general ban ded matrices. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLA_GBRCOND_C + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zla_gbr cond_c.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zla_gbr
+ * cond_c.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zla_gbr cond_c.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zla_gbr
+ * cond_c.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zla_gbr cond_c.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zla_gbr
+ * cond_c.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -147,10 +157,15 @@ row i of the matrix was interchanged */
 /* > \date December 2016 */
 /* > \ingroup complex16GBcomputational */
 /* ===================================================================== */
-doublereal zla_gbrcond_c_(char *trans, integer *n, integer *kl, integer *ku, doublecomplex *ab, integer *ldab, doublecomplex *afb, integer *ldafb, integer *ipiv, doublereal *c__, logical *capply, integer *info, doublecomplex *work, doublereal *rwork)
+doublereal zla_gbrcond_c_(char *trans, integer *n, integer *kl, integer *ku, doublecomplex *ab,
+                          integer *ldab, doublecomplex *afb, integer *ldafb, integer *ipiv,
+                          doublereal *c__, logical *capply, integer *info, doublecomplex *work,
+                          doublereal *rwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zla_gbrcond_c inputs: trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ", capply %" FLA_IS "", *trans, *n, *kl, *ku, *ldab, *ldafb, *capply);
+    AOCL_DTL_SNPRINTF("zla_gbrcond_c inputs: trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
+                      ", ldab %" FLA_IS ", ldafb %" FLA_IS ", capply %" FLA_IS "",
+                      *trans, *n, *kl, *ku, *ldab, *ldafb, *capply);
     /* System generated locals */
     integer ab_dim1, ab_offset, afb_dim1, afb_offset, i__1, i__2, i__3, i__4;
     doublereal ret_val, d__1, d__2;
@@ -161,14 +176,18 @@ doublereal zla_gbrcond_c_(char *trans, integer *n, integer *kl, integer *ku, dou
     integer i__, j, kd, ke;
     doublereal tmp;
     integer kase;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     doublereal anorm;
     extern /* Subroutine */
-    int zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     extern /* Subroutine */
-    int zgbtrs_(char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zgbtrs_(char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *,
+                integer *, doublecomplex *, integer *, integer *);
     logical notrans;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -207,32 +226,32 @@ doublereal zla_gbrcond_c_(char *trans, integer *n, integer *kl, integer *ku, dou
     /* Function Body */
     ret_val = 0.;
     *info = 0;
-    notrans = lsame_(trans, "N");
-    if (! notrans && ! lsame_(trans, "T") && ! lsame_( trans, "C"))
+    notrans = lsame_(trans, "N", 1, 1);
+    if(!notrans && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*kl < 0 || *kl > *n - 1)
+    else if(*kl < 0 || *kl > *n - 1)
     {
         *info = -3;
     }
-    else if (*ku < 0 || *ku > *n - 1)
+    else if(*ku < 0 || *ku > *n - 1)
     {
         *info = -4;
     }
-    else if (*ldab < *kl + *ku + 1)
+    else if(*ldab < *kl + *ku + 1)
     {
         *info = -6;
     }
-    else if (*ldafb < (*kl << 1) + *ku + 1)
+    else if(*ldafb < (*kl << 1) + *ku + 1)
     {
         *info = -8;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZLA_GBRCOND_C", &i__1, (ftnlen)13);
@@ -243,27 +262,25 @@ doublereal zla_gbrcond_c_(char *trans, integer *n, integer *kl, integer *ku, dou
     anorm = 0.;
     kd = *ku + 1;
     ke = *kl + 1;
-    if (notrans)
+    if(notrans)
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             tmp = 0.;
-            if (*capply)
+            if(*capply)
             {
                 /* Computing MAX */
                 i__2 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__3 = fla_min(i__4,*n);
-                for (j = fla_max(i__2,1);
-                        j <= i__3;
-                        ++j)
+                i__3 = fla_min(i__4, *n);
+                for(j = fla_max(i__2, 1); j <= i__3; ++j)
                 {
                     i__2 = kd + i__ - j + j * ab_dim1;
-                    tmp += ((d__1 = ab[i__2].r, f2c_abs(d__1)) + (d__2 = d_imag(& ab[kd + i__ - j + j * ab_dim1]), f2c_abs(d__2))) / c__[j];
+                    tmp += ((d__1 = ab[i__2].r, f2c_abs(d__1))
+                            + (d__2 = d_imag(&ab[kd + i__ - j + j * ab_dim1]), f2c_abs(d__2)))
+                           / c__[j];
                 }
             }
             else
@@ -272,40 +289,37 @@ doublereal zla_gbrcond_c_(char *trans, integer *n, integer *kl, integer *ku, dou
                 i__3 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__2 = fla_min(i__4,*n);
-                for (j = fla_max(i__3,1);
-                        j <= i__2;
-                        ++j)
+                i__2 = fla_min(i__4, *n);
+                for(j = fla_max(i__3, 1); j <= i__2; ++j)
                 {
                     i__3 = kd + i__ - j + j * ab_dim1;
-                    tmp += (d__1 = ab[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(& ab[kd + i__ - j + j * ab_dim1]), f2c_abs(d__2));
+                    tmp += (d__1 = ab[i__3].r, f2c_abs(d__1))
+                           + (d__2 = d_imag(&ab[kd + i__ - j + j * ab_dim1]), f2c_abs(d__2));
                 }
             }
             rwork[i__] = tmp;
-            anorm = fla_max(anorm,tmp);
+            anorm = fla_max(anorm, tmp);
         }
     }
     else
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             tmp = 0.;
-            if (*capply)
+            if(*capply)
             {
                 /* Computing MAX */
                 i__2 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__3 = fla_min(i__4,*n);
-                for (j = fla_max(i__2,1);
-                        j <= i__3;
-                        ++j)
+                i__3 = fla_min(i__4, *n);
+                for(j = fla_max(i__2, 1); j <= i__3; ++j)
                 {
                     i__2 = ke - i__ + j + i__ * ab_dim1;
-                    tmp += ((d__1 = ab[i__2].r, f2c_abs(d__1)) + (d__2 = d_imag(& ab[ke - i__ + j + i__ * ab_dim1]), f2c_abs(d__2))) / c__[j];
+                    tmp += ((d__1 = ab[i__2].r, f2c_abs(d__1))
+                            + (d__2 = d_imag(&ab[ke - i__ + j + i__ * ab_dim1]), f2c_abs(d__2)))
+                           / c__[j];
                 }
             }
             else
@@ -314,27 +328,26 @@ doublereal zla_gbrcond_c_(char *trans, integer *n, integer *kl, integer *ku, dou
                 i__3 = i__ - *kl;
                 /* Computing MIN */
                 i__4 = i__ + *ku;
-                i__2 = fla_min(i__4,*n);
-                for (j = fla_max(i__3,1);
-                        j <= i__2;
-                        ++j)
+                i__2 = fla_min(i__4, *n);
+                for(j = fla_max(i__3, 1); j <= i__2; ++j)
                 {
                     i__3 = ke - i__ + j + i__ * ab_dim1;
-                    tmp += (d__1 = ab[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(& ab[ke - i__ + j + i__ * ab_dim1]), f2c_abs(d__2));
+                    tmp += (d__1 = ab[i__3].r, f2c_abs(d__1))
+                           + (d__2 = d_imag(&ab[ke - i__ + j + i__ * ab_dim1]), f2c_abs(d__2));
                 }
             }
             rwork[i__] = tmp;
-            anorm = fla_max(anorm,tmp);
+            anorm = fla_max(anorm, tmp);
         }
     }
     /* Quick return if possible. */
-    if (*n == 0)
+    if(*n == 0)
     {
         ret_val = 1.;
         AOCL_DTL_TRACE_LOG_EXIT
         return ret_val;
     }
-    else if (anorm == 0.)
+    else if(anorm == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return ret_val;
@@ -344,15 +357,13 @@ doublereal zla_gbrcond_c_(char *trans, integer *n, integer *kl, integer *ku, dou
     kase = 0;
 L10:
     zlacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
-    if (kase != 0)
+    if(kase != 0)
     {
-        if (kase == 2)
+        if(kase == 2)
         {
             /* Multiply by R. */
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = i__;
                 i__3 = i__;
@@ -362,21 +373,21 @@ L10:
                 work[i__2].r = z__1.r;
                 work[i__2].i = z__1.i; // , expr subst
             }
-            if (notrans)
+            if(notrans)
             {
-                zgbtrs_("No transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1], &work[1], n, info);
+                zgbtrs_("No transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1],
+                        &work[1], n, info);
             }
             else
             {
-                zgbtrs_("Conjugate transpose", n, kl, ku, &c__1, &afb[ afb_offset], ldafb, &ipiv[1], &work[1], n, info);
+                zgbtrs_("Conjugate transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1],
+                        &work[1], n, info);
             }
             /* Multiply by inv(C). */
-            if (*capply)
+            if(*capply)
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = i__;
                     i__3 = i__;
@@ -391,12 +402,10 @@ L10:
         else
         {
             /* Multiply by inv(C**H). */
-            if (*capply)
+            if(*capply)
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = i__;
                     i__3 = i__;
@@ -407,19 +416,19 @@ L10:
                     work[i__2].i = z__1.i; // , expr subst
                 }
             }
-            if (notrans)
+            if(notrans)
             {
-                zgbtrs_("Conjugate transpose", n, kl, ku, &c__1, &afb[ afb_offset], ldafb, &ipiv[1], &work[1], n, info);
+                zgbtrs_("Conjugate transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1],
+                        &work[1], n, info);
             }
             else
             {
-                zgbtrs_("No transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1], &work[1], n, info);
+                zgbtrs_("No transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1],
+                        &work[1], n, info);
             }
             /* Multiply by R. */
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = i__;
                 i__3 = i__;
@@ -433,11 +442,11 @@ L10:
         goto L10;
     }
     /* Compute the estimate of the reciprocal condition number. */
-    if (ainvnm != 0.)
+    if(ainvnm != 0.)
     {
         ret_val = 1. / ainvnm;
     }
-        AOCL_DTL_TRACE_LOG_EXIT
-        return ret_val;
+    AOCL_DTL_TRACE_LOG_EXIT
+    return ret_val;
 }
 /* zla_gbrcond_c__ */

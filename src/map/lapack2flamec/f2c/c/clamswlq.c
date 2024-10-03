@@ -1,5 +1,8 @@
-/* clamswlq.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* clamswlq.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__0 = 0;
 /* > \brief \b CLAMSWLQ */
@@ -35,7 +38,7 @@ static integer c__0 = 0;
 /* > \verbatim */
 /* > SIDE is CHARACTER*1 */
 /* > = 'L': apply Q or Q**H from the Left;
-*/
+ */
 /* > = 'R': apply Q or Q**H from the Right. */
 /* > \endverbatim */
 /* > */
@@ -43,7 +46,7 @@ static integer c__0 = 0;
 /* > \verbatim */
 /* > TRANS is CHARACTER*1 */
 /* > = 'N': No transpose, apply Q;
-*/
+ */
 /* > = 'C': Conjugate transpose, apply Q**H. */
 /* > \endverbatim */
 /* > */
@@ -65,7 +68,7 @@ static integer c__0 = 0;
 /* > The number of elementary reflectors whose product defines */
 /* > the matrix Q. */
 /* > M >= K >= 0;
-*/
+ */
 /* > */
 /* > \endverbatim */
 /* > \param[in] MB */
@@ -136,7 +139,7 @@ static integer c__0 = 0;
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. */
 /* > If SIDE = 'L', LWORK >= fla_max(1,NB) * MB;
-*/
+ */
 /* > if SIDE = 'R', LWORK >= fla_max(1,M) * MB. */
 /* > If LWORK = -1, then a workspace query is assumed;
 the routine */
@@ -191,15 +194,23 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int clamswlq_(char *side, char *trans, integer *m, integer * n, integer *k, integer *mb, integer *nb, complex *a, integer *lda, complex *t, integer *ldt, complex *c__, integer *ldc, complex *work, integer *lwork, integer *info)
+void clamswlq_(char *side, char *trans, integer *m, integer *n, integer *k, integer *mb,
+               integer *nb, complex *a, integer *lda, complex *t, integer *ldt, complex *c__,
+               integer *ldc, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clamswlq inputs: side %c, trans %c, m %lld, n %lld, k %lld, mb %lld, nb %lld, lda %lld, ldt %lld, ldc %lld, lwork %lld",*side, *trans, *m, *n, *k, *mb, *nb, *lda, *ldt, *ldc, *lwork);
+    snprintf(buffer, 256,
+             "clamswlq inputs: side %c, trans %c, m %lld, n %lld, k %lld, mb %lld, nb %lld, lda "
+             "%lld, ldt %lld, ldc %lld, lwork %lld",
+             *side, *trans, *m, *n, *k, *mb, *nb, *lda, *ldt, *ldc, *lwork);
 #else
-    snprintf(buffer, 256,"clamswlq inputs: side %c, trans %c, m %d, n %d, k %d, mb %d, nb %d, lda %d, ldt %d, ldc %d, lwork %d",*side, *trans, *m, *n, *k, *mb, *nb, *lda, *ldt, *ldc, *lwork);
+    snprintf(buffer, 256,
+             "clamswlq inputs: side %c, trans %c, m %d, n %d, k %d, mb %d, nb %d, lda %d, ldt %d, "
+             "ldc %d, lwork %d",
+             *side, *trans, *m, *n, *k, *mb, *nb, *lda, *ldt, *ldc, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -208,13 +219,19 @@ int clamswlq_(char *side, char *trans, integer *m, integer * n, integer *k, inte
     /* Local variables */
     integer i__, ii, kk, lw, ctr;
     logical left, tran;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical right;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, lquery;
     extern /* Subroutine */
-    int cgemlqt_(char *, char *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *), ctpmlqt_(char *, char *, integer *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *);
+        void
+        cgemlqt_(char *, char *, integer *, integer *, integer *, integer *, complex *, integer *,
+                 complex *, integer *, complex *, integer *, complex *, integer *),
+        ctpmlqt_(char *, char *, integer *, integer *, integer *, integer *, integer *, complex *,
+                 integer *, complex *, integer *, complex *, integer *, complex *, integer *,
+                 complex *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -244,11 +261,11 @@ int clamswlq_(char *side, char *trans, integer *m, integer * n, integer *k, inte
     --work;
     /* Function Body */
     lquery = *lwork < 0;
-    notran = lsame_(trans, "N");
-    tran = lsame_(trans, "C");
-    left = lsame_(side, "L");
-    right = lsame_(side, "R");
-    if (left)
+    notran = lsame_(trans, "N", 1, 1);
+    tran = lsame_(trans, "C", 1, 1);
+    left = lsame_(side, "L", 1, 1);
+    right = lsame_(side, "R", 1, 1);
+    if(left)
     {
         lw = *n * *mb;
     }
@@ -257,87 +274,90 @@ int clamswlq_(char *side, char *trans, integer *m, integer * n, integer *k, inte
         lw = *m * *mb;
     }
     *info = 0;
-    if (! left && ! right)
+    if(!left && !right)
     {
         *info = -1;
     }
-    else if (! tran && ! notran)
+    else if(!tran && !notran)
     {
         *info = -2;
     }
-    else if (*k < 0)
+    else if(*k < 0)
     {
         *info = -5;
     }
-    else if (*m < *k)
+    else if(*m < *k)
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*k < *mb || *mb < 1)
+    else if(*k < *mb || *mb < 1)
     {
         *info = -6;
     }
-    else if (*lda < fla_max(1,*k))
+    else if(*lda < fla_max(1, *k))
     {
         *info = -9;
     }
-    else if (*ldt < fla_max(1,*mb))
+    else if(*ldt < fla_max(1, *mb))
     {
         *info = -11;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -13;
     }
-    else if (*lwork < fla_max(1,lw) && ! lquery)
+    else if(*lwork < fla_max(1, lw) && !lquery)
     {
         *info = -15;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CLAMSWLQ", &i__1, (ftnlen)8);
-        work[1].r = (real) lw;
+        work[1].r = (real)lw;
         work[1].i = 0.f; // , expr subst
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-        work[1].r = (real) lw;
+        work[1].r = (real)lw;
         work[1].i = 0.f; // , expr subst
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return;
     }
     /* Quick return if possible */
     /* Computing MIN */
-    i__1 = fla_min(*m,*n);
-    if (fla_min(i__1,*k) == 0)
+    i__1 = fla_min(*m, *n);
+    if(fla_min(i__1, *k) == 0)
     {
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return;
     }
     /* Computing MAX */
-    i__1 = fla_max(*m,*n);
-    if (*nb <= *k || *nb >= fla_max(i__1,*k))
+    i__1 = fla_max(*m, *n);
+    if(*nb <= *k || *nb >= fla_max(i__1, *k))
     {
-        cgemlqt_(side, trans, m, n, k, mb, &a[a_offset], lda, &t[t_offset], ldt, &c__[c_offset], ldc, &work[1], info);
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        cgemlqt_(side, trans, m, n, k, mb, &a[a_offset], lda, &t[t_offset], ldt, &c__[c_offset],
+                 ldc, &work[1], info);
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return;
     }
-    if (left && tran)
+    if(left && tran)
     {
         /* Multiply Q to the last block of C */
         kk = (*m - *k) % (*nb - *k);
         ctr = (*m - *k) / (*nb - *k);
-        if (kk > 0)
+        if(kk > 0)
         {
             ii = *m - kk + 1;
-            ctpmlqt_("L", "C", &kk, n, k, &c__0, mb, &a[ii * a_dim1 + 1], lda, &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc, &c__[ii + c_dim1], ldc, &work[1], info);
+            ctpmlqt_("L", "C", &kk, n, k, &c__0, mb, &a[ii * a_dim1 + 1], lda,
+                     &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc, &c__[ii + c_dim1],
+                     ldc, &work[1], info);
         }
         else
         {
@@ -345,51 +365,57 @@ int clamswlq_(char *side, char *trans, integer *m, integer * n, integer *k, inte
         }
         i__1 = *nb + 1;
         i__2 = -(*nb - *k);
-        for (i__ = ii - (*nb - *k);
-                i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
-                i__ += i__2)
+        for(i__ = ii - (*nb - *k); i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
         {
             /* Multiply Q to the current block of C (1:M,I:I+NB) */
             --ctr;
             i__3 = *nb - *k;
-            ctpmlqt_("L", "C", &i__3, n, k, &c__0, mb, &a[i__ * a_dim1 + 1], lda, &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc, &c__[i__ + c_dim1], ldc, &work[1], info);
+            ctpmlqt_("L", "C", &i__3, n, k, &c__0, mb, &a[i__ * a_dim1 + 1], lda,
+                     &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
+                     &c__[i__ + c_dim1], ldc, &work[1], info);
         }
         /* Multiply Q to the first block of C (1:M,1:NB) */
-        cgemlqt_("L", "C", nb, n, k, mb, &a[a_dim1 + 1], lda, &t[t_offset], ldt, &c__[c_dim1 + 1], ldc, &work[1], info);
+        cgemlqt_("L", "C", nb, n, k, mb, &a[a_dim1 + 1], lda, &t[t_offset], ldt, &c__[c_dim1 + 1],
+                 ldc, &work[1], info);
     }
-    else if (left && notran)
+    else if(left && notran)
     {
         /* Multiply Q to the first block of C */
         kk = (*m - *k) % (*nb - *k);
         ii = *m - kk + 1;
         ctr = 1;
-        cgemlqt_("L", "N", nb, n, k, mb, &a[a_dim1 + 1], lda, &t[t_offset], ldt, &c__[c_dim1 + 1], ldc, &work[1], info);
+        cgemlqt_("L", "N", nb, n, k, mb, &a[a_dim1 + 1], lda, &t[t_offset], ldt, &c__[c_dim1 + 1],
+                 ldc, &work[1], info);
         i__2 = ii - *nb + *k;
         i__1 = *nb - *k;
-        for (i__ = *nb + 1;
-                i__1 < 0 ? i__ >= i__2 : i__ <= i__2;
-                i__ += i__1)
+        for(i__ = *nb + 1; i__1 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__1)
         {
             /* Multiply Q to the current block of C (I:I+NB,1:N) */
             i__3 = *nb - *k;
-            ctpmlqt_("L", "N", &i__3, n, k, &c__0, mb, &a[i__ * a_dim1 + 1], lda, &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc, &c__[i__ + c_dim1], ldc, &work[1], info);
+            ctpmlqt_("L", "N", &i__3, n, k, &c__0, mb, &a[i__ * a_dim1 + 1], lda,
+                     &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
+                     &c__[i__ + c_dim1], ldc, &work[1], info);
             ++ctr;
         }
-        if (ii <= *m)
+        if(ii <= *m)
         {
             /* Multiply Q to the last block of C */
-            ctpmlqt_("L", "N", &kk, n, k, &c__0, mb, &a[ii * a_dim1 + 1], lda, &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc, &c__[ii + c_dim1], ldc, &work[1], info);
+            ctpmlqt_("L", "N", &kk, n, k, &c__0, mb, &a[ii * a_dim1 + 1], lda,
+                     &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc, &c__[ii + c_dim1],
+                     ldc, &work[1], info);
         }
     }
-    else if (right && notran)
+    else if(right && notran)
     {
         /* Multiply Q to the last block of C */
         kk = (*n - *k) % (*nb - *k);
         ctr = (*n - *k) / (*nb - *k);
-        if (kk > 0)
+        if(kk > 0)
         {
             ii = *n - kk + 1;
-            ctpmlqt_("R", "N", m, &kk, k, &c__0, mb, &a[ii * a_dim1 + 1], lda, &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc, &c__[ii * c_dim1 + 1], ldc, &work[1], info);
+            ctpmlqt_("R", "N", m, &kk, k, &c__0, mb, &a[ii * a_dim1 + 1], lda,
+                     &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
+                     &c__[ii * c_dim1 + 1], ldc, &work[1], info);
         }
         else
         {
@@ -397,46 +423,50 @@ int clamswlq_(char *side, char *trans, integer *m, integer * n, integer *k, inte
         }
         i__1 = *nb + 1;
         i__2 = -(*nb - *k);
-        for (i__ = ii - (*nb - *k);
-                i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
-                i__ += i__2)
+        for(i__ = ii - (*nb - *k); i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
         {
             /* Multiply Q to the current block of C (1:M,I:I+MB) */
             --ctr;
             i__3 = *nb - *k;
-            ctpmlqt_("R", "N", m, &i__3, k, &c__0, mb, &a[i__ * a_dim1 + 1], lda, &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc, &c__[i__ * c_dim1 + 1], ldc, &work[1], info);
+            ctpmlqt_("R", "N", m, &i__3, k, &c__0, mb, &a[i__ * a_dim1 + 1], lda,
+                     &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
+                     &c__[i__ * c_dim1 + 1], ldc, &work[1], info);
         }
         /* Multiply Q to the first block of C (1:M,1:MB) */
-        cgemlqt_("R", "N", m, nb, k, mb, &a[a_dim1 + 1], lda, &t[t_offset], ldt, &c__[c_dim1 + 1], ldc, &work[1], info);
+        cgemlqt_("R", "N", m, nb, k, mb, &a[a_dim1 + 1], lda, &t[t_offset], ldt, &c__[c_dim1 + 1],
+                 ldc, &work[1], info);
     }
-    else if (right && tran)
+    else if(right && tran)
     {
         /* Multiply Q to the first block of C */
         kk = (*n - *k) % (*nb - *k);
         ii = *n - kk + 1;
         ctr = 1;
-        cgemlqt_("R", "C", m, nb, k, mb, &a[a_dim1 + 1], lda, &t[t_offset], ldt, &c__[c_dim1 + 1], ldc, &work[1], info);
+        cgemlqt_("R", "C", m, nb, k, mb, &a[a_dim1 + 1], lda, &t[t_offset], ldt, &c__[c_dim1 + 1],
+                 ldc, &work[1], info);
         i__2 = ii - *nb + *k;
         i__1 = *nb - *k;
-        for (i__ = *nb + 1;
-                i__1 < 0 ? i__ >= i__2 : i__ <= i__2;
-                i__ += i__1)
+        for(i__ = *nb + 1; i__1 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__1)
         {
             /* Multiply Q to the current block of C (1:M,I:I+MB) */
             i__3 = *nb - *k;
-            ctpmlqt_("R", "C", m, &i__3, k, &c__0, mb, &a[i__ * a_dim1 + 1], lda, &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc, &c__[i__ * c_dim1 + 1], ldc, &work[1], info);
+            ctpmlqt_("R", "C", m, &i__3, k, &c__0, mb, &a[i__ * a_dim1 + 1], lda,
+                     &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
+                     &c__[i__ * c_dim1 + 1], ldc, &work[1], info);
             ++ctr;
         }
-        if (ii <= *n)
+        if(ii <= *n)
         {
             /* Multiply Q to the last block of C */
-            ctpmlqt_("R", "C", m, &kk, k, &c__0, mb, &a[ii * a_dim1 + 1], lda, &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc, &c__[ii * c_dim1 + 1], ldc, &work[1], info);
+            ctpmlqt_("R", "C", m, &kk, k, &c__0, mb, &a[ii * a_dim1 + 1], lda,
+                     &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
+                     &c__[ii * c_dim1 + 1], ldc, &work[1], info);
         }
     }
-    work[1].r = (real) lw;
+    work[1].r = (real)lw;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAMSWLQ */
 }
 /* clamswlq_ */

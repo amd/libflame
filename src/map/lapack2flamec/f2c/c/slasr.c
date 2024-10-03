@@ -1,16 +1,25 @@
-/* ../netlib/slasr.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slasr.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLASR applies a sequence of plane rotations to a general rectangular matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLASR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasr.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasr.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasr.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasr.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasr.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasr.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -185,12 +194,14 @@
 /* > \ingroup auxOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int slasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real *c__, real *s, real *a, integer *lda)
+void slasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real *c__, real *s,
+            real *a, integer *lda)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slasr inputs: side %c, pivot %c, direct %c, m %d, n %d, lda %d",*side, *pivot, *direct, *m, *n, *lda);
+    snprintf(buffer, 256, "slasr inputs: side %c, pivot %c, direct %c, m %d, n %d, lda %d", *side,
+             *pivot, *direct, *m, *n, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -198,10 +209,11 @@ int slasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real *
     /* Local variables */
     integer i__, j, info;
     real temp;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real ctemp, stemp;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -231,62 +243,58 @@ int slasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real *
     a -= a_offset;
     /* Function Body */
     info = 0;
-    if (! (lsame_(side, "L") || lsame_(side, "R")))
+    if(!(lsame_(side, "L", 1, 1) || lsame_(side, "R", 1, 1)))
     {
         info = 1;
     }
-    else if (! (lsame_(pivot, "V") || lsame_(pivot, "T") || lsame_(pivot, "B")))
+    else if(!(lsame_(pivot, "V", 1, 1) || lsame_(pivot, "T", 1, 1) || lsame_(pivot, "B", 1, 1)))
     {
         info = 2;
     }
-    else if (! (lsame_(direct, "F") || lsame_(direct, "B")))
+    else if(!(lsame_(direct, "F", 1, 1) || lsame_(direct, "B", 1, 1)))
     {
         info = 3;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         info = 4;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         info = 5;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         info = 9;
     }
-    if (info != 0)
+    if(info != 0)
     {
         xerbla_("SLASR ", &info, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (lsame_(side, "L"))
+    if(lsame_(side, "L", 1, 1))
     {
         /* Form P * A */
-        if (lsame_(pivot, "V"))
+        if(lsame_(pivot, "V", 1, 1))
         {
-            if (lsame_(direct, "F"))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *m - 1;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1.f || stemp != 0.f)
+                    if(ctemp != 1.f || stemp != 0.f)
                     {
                         i__2 = *n;
-                        for (i__ = 1;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             temp = a[j + 1 + i__ * a_dim1];
                             a[j + 1 + i__ * a_dim1] = ctemp * temp - stemp * a[j + i__ * a_dim1];
@@ -297,20 +305,16 @@ int slasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real *
                     /* L20: */
                 }
             }
-            else if (lsame_(direct, "B"))
+            else if(lsame_(direct, "B", 1, 1))
             {
-                for (j = *m - 1;
-                        j >= 1;
-                        --j)
+                for(j = *m - 1; j >= 1; --j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1.f || stemp != 0.f)
+                    if(ctemp != 1.f || stemp != 0.f)
                     {
                         i__1 = *n;
-                        for (i__ = 1;
-                                i__ <= i__1;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             temp = a[j + 1 + i__ * a_dim1];
                             a[j + 1 + i__ * a_dim1] = ctemp * temp - stemp * a[j + i__ * a_dim1];
@@ -322,51 +326,43 @@ int slasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real *
                 }
             }
         }
-        else if (lsame_(pivot, "T"))
+        else if(lsame_(pivot, "T", 1, 1))
         {
-            if (lsame_(direct, "F"))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *m;
-                for (j = 2;
-                        j <= i__1;
-                        ++j)
+                for(j = 2; j <= i__1; ++j)
                 {
                     ctemp = c__[j - 1];
                     stemp = s[j - 1];
-                    if (ctemp != 1.f || stemp != 0.f)
+                    if(ctemp != 1.f || stemp != 0.f)
                     {
                         i__2 = *n;
-                        for (i__ = 1;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             temp = a[j + i__ * a_dim1];
-                            a[j + i__ * a_dim1] = ctemp * temp - stemp * a[ i__ * a_dim1 + 1];
-                            a[i__ * a_dim1 + 1] = stemp * temp + ctemp * a[ i__ * a_dim1 + 1];
+                            a[j + i__ * a_dim1] = ctemp * temp - stemp * a[i__ * a_dim1 + 1];
+                            a[i__ * a_dim1 + 1] = stemp * temp + ctemp * a[i__ * a_dim1 + 1];
                             /* L50: */
                         }
                     }
                     /* L60: */
                 }
             }
-            else if (lsame_(direct, "B"))
+            else if(lsame_(direct, "B", 1, 1))
             {
-                for (j = *m;
-                        j >= 2;
-                        --j)
+                for(j = *m; j >= 2; --j)
                 {
                     ctemp = c__[j - 1];
                     stemp = s[j - 1];
-                    if (ctemp != 1.f || stemp != 0.f)
+                    if(ctemp != 1.f || stemp != 0.f)
                     {
                         i__1 = *n;
-                        for (i__ = 1;
-                                i__ <= i__1;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             temp = a[j + i__ * a_dim1];
-                            a[j + i__ * a_dim1] = ctemp * temp - stemp * a[ i__ * a_dim1 + 1];
-                            a[i__ * a_dim1 + 1] = stemp * temp + ctemp * a[ i__ * a_dim1 + 1];
+                            a[j + i__ * a_dim1] = ctemp * temp - stemp * a[i__ * a_dim1 + 1];
+                            a[i__ * a_dim1 + 1] = stemp * temp + ctemp * a[i__ * a_dim1 + 1];
                             /* L70: */
                         }
                     }
@@ -374,23 +370,19 @@ int slasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real *
                 }
             }
         }
-        else if (lsame_(pivot, "B"))
+        else if(lsame_(pivot, "B", 1, 1))
         {
-            if (lsame_(direct, "F"))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *m - 1;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1.f || stemp != 0.f)
+                    if(ctemp != 1.f || stemp != 0.f)
                     {
                         i__2 = *n;
-                        for (i__ = 1;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             temp = a[j + i__ * a_dim1];
                             a[j + i__ * a_dim1] = stemp * a[*m + i__ * a_dim1] + ctemp * temp;
@@ -401,20 +393,16 @@ int slasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real *
                     /* L100: */
                 }
             }
-            else if (lsame_(direct, "B"))
+            else if(lsame_(direct, "B", 1, 1))
             {
-                for (j = *m - 1;
-                        j >= 1;
-                        --j)
+                for(j = *m - 1; j >= 1; --j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1.f || stemp != 0.f)
+                    if(ctemp != 1.f || stemp != 0.f)
                     {
                         i__1 = *n;
-                        for (i__ = 1;
-                                i__ <= i__1;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             temp = a[j + i__ * a_dim1];
                             a[j + i__ * a_dim1] = stemp * a[*m + i__ * a_dim1] + ctemp * temp;
@@ -427,54 +415,46 @@ int slasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real *
             }
         }
     }
-    else if (lsame_(side, "R"))
+    else if(lsame_(side, "R", 1, 1))
     {
         /* Form A * P**T */
-        if (lsame_(pivot, "V"))
+        if(lsame_(pivot, "V", 1, 1))
         {
-            if (lsame_(direct, "F"))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *n - 1;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1.f || stemp != 0.f)
+                    if(ctemp != 1.f || stemp != 0.f)
                     {
                         i__2 = *m;
-                        for (i__ = 1;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             temp = a[i__ + (j + 1) * a_dim1];
                             a[i__ + (j + 1) * a_dim1] = ctemp * temp - stemp * a[i__ + j * a_dim1];
-                            a[i__ + j * a_dim1] = stemp * temp + ctemp * a[ i__ + j * a_dim1];
+                            a[i__ + j * a_dim1] = stemp * temp + ctemp * a[i__ + j * a_dim1];
                             /* L130: */
                         }
                     }
                     /* L140: */
                 }
             }
-            else if (lsame_(direct, "B"))
+            else if(lsame_(direct, "B", 1, 1))
             {
-                for (j = *n - 1;
-                        j >= 1;
-                        --j)
+                for(j = *n - 1; j >= 1; --j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1.f || stemp != 0.f)
+                    if(ctemp != 1.f || stemp != 0.f)
                     {
                         i__1 = *m;
-                        for (i__ = 1;
-                                i__ <= i__1;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             temp = a[i__ + (j + 1) * a_dim1];
                             a[i__ + (j + 1) * a_dim1] = ctemp * temp - stemp * a[i__ + j * a_dim1];
-                            a[i__ + j * a_dim1] = stemp * temp + ctemp * a[ i__ + j * a_dim1];
+                            a[i__ + j * a_dim1] = stemp * temp + ctemp * a[i__ + j * a_dim1];
                             /* L150: */
                         }
                     }
@@ -482,26 +462,22 @@ int slasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real *
                 }
             }
         }
-        else if (lsame_(pivot, "T"))
+        else if(lsame_(pivot, "T", 1, 1))
         {
-            if (lsame_(direct, "F"))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *n;
-                for (j = 2;
-                        j <= i__1;
-                        ++j)
+                for(j = 2; j <= i__1; ++j)
                 {
                     ctemp = c__[j - 1];
                     stemp = s[j - 1];
-                    if (ctemp != 1.f || stemp != 0.f)
+                    if(ctemp != 1.f || stemp != 0.f)
                     {
                         i__2 = *m;
-                        for (i__ = 1;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             temp = a[i__ + j * a_dim1];
-                            a[i__ + j * a_dim1] = ctemp * temp - stemp * a[ i__ + a_dim1];
+                            a[i__ + j * a_dim1] = ctemp * temp - stemp * a[i__ + a_dim1];
                             a[i__ + a_dim1] = stemp * temp + ctemp * a[i__ + a_dim1];
                             /* L170: */
                         }
@@ -509,23 +485,19 @@ int slasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real *
                     /* L180: */
                 }
             }
-            else if (lsame_(direct, "B"))
+            else if(lsame_(direct, "B", 1, 1))
             {
-                for (j = *n;
-                        j >= 2;
-                        --j)
+                for(j = *n; j >= 2; --j)
                 {
                     ctemp = c__[j - 1];
                     stemp = s[j - 1];
-                    if (ctemp != 1.f || stemp != 0.f)
+                    if(ctemp != 1.f || stemp != 0.f)
                     {
                         i__1 = *m;
-                        for (i__ = 1;
-                                i__ <= i__1;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             temp = a[i__ + j * a_dim1];
-                            a[i__ + j * a_dim1] = ctemp * temp - stemp * a[ i__ + a_dim1];
+                            a[i__ + j * a_dim1] = ctemp * temp - stemp * a[i__ + a_dim1];
                             a[i__ + a_dim1] = stemp * temp + ctemp * a[i__ + a_dim1];
                             /* L190: */
                         }
@@ -534,23 +506,19 @@ int slasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real *
                 }
             }
         }
-        else if (lsame_(pivot, "B"))
+        else if(lsame_(pivot, "B", 1, 1))
         {
-            if (lsame_(direct, "F"))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *n - 1;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1.f || stemp != 0.f)
+                    if(ctemp != 1.f || stemp != 0.f)
                     {
                         i__2 = *m;
-                        for (i__ = 1;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             temp = a[i__ + j * a_dim1];
                             a[i__ + j * a_dim1] = stemp * a[i__ + *n * a_dim1] + ctemp * temp;
@@ -561,20 +529,16 @@ int slasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real *
                     /* L220: */
                 }
             }
-            else if (lsame_(direct, "B"))
+            else if(lsame_(direct, "B", 1, 1))
             {
-                for (j = *n - 1;
-                        j >= 1;
-                        --j)
+                for(j = *n - 1; j >= 1; --j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1.f || stemp != 0.f)
+                    if(ctemp != 1.f || stemp != 0.f)
                     {
                         i__1 = *m;
-                        for (i__ = 1;
-                                i__ <= i__1;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             temp = a[i__ + j * a_dim1];
                             a[i__ + j * a_dim1] = stemp * a[i__ + *n * a_dim1] + ctemp * temp;
@@ -588,7 +552,7 @@ int slasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real *
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLASR */
 }
 /* slasr_ */

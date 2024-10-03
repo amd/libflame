@@ -1,23 +1,29 @@
-/* ../netlib/claesy.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/claesy.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {1.f, 0.f};
 static integer c__2 = 2;
-/* > \brief \b CLAESY computes the eigenvalues and eigenvectors of a 2-by-2 complex symmetric matrix. */
+/* > \brief \b CLAESY computes the eigenvalues and eigenvectors of a 2-by-2 complex symmetric
+ * matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLAESY + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claesy. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claesy.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claesy. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claesy.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claesy. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claesy.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -109,7 +115,8 @@ static integer c__2 = 2;
 /* > \ingroup complexSYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int claesy_(complex *a, complex *b, complex *c__, complex * rt1, complex *rt2, complex *evscal, complex *cs1, complex *sn1)
+void claesy_(complex *a, complex *b, complex *c__, complex *rt1, complex *rt2, complex *evscal,
+             complex *cs1, complex *sn1)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* System generated locals */
@@ -117,7 +124,8 @@ int claesy_(complex *a, complex *b, complex *c__, complex * rt1, complex *rt2, c
     complex q__1, q__2, q__3, q__4, q__5, q__6, q__7;
     /* Builtin functions */
     double c_abs(complex *);
-    void pow_ci(complex *, complex *, integer *), c_sqrt(complex *, complex *), c_div(complex *, complex *, complex *);
+    void pow_ci(complex *, complex *, integer *), c_sqrt(complex *, complex *),
+        c_div(complex *, complex *, complex *);
     /* Local variables */
     complex s, t;
     real z__;
@@ -139,11 +147,11 @@ int claesy_(complex *a, complex *b, complex *c__, complex * rt1, complex *rt2, c
     /* .. Executable Statements .. */
     /* Special case: The matrix is actually diagonal. */
     /* To avoid divide by zero later, we treat this case separately. */
-    if (c_abs(b) == 0.f)
+    if(c_abs(b) == 0.f)
     {
         rt1->r = a->r, rt1->i = a->i;
         rt2->r = c__->r, rt2->i = c__->i;
-        if (c_abs(rt1) < c_abs(rt2))
+        if(c_abs(rt1) < c_abs(rt2))
         {
             tmp.r = rt1->r;
             tmp.i = rt1->i; // , expr subst
@@ -179,8 +187,8 @@ int claesy_(complex *a, complex *b, complex *c__, complex * rt1, complex *rt2, c
         /* Take the square root carefully to avoid over/under flow. */
         babs = c_abs(b);
         tabs = c_abs(&t);
-        z__ = fla_max(babs,tabs);
-        if (z__ > 0.f)
+        z__ = fla_max(babs, tabs);
+        if(z__ > 0.f)
         {
             q__5.r = t.r / z__;
             q__5.i = t.i / z__; // , expr subst
@@ -204,7 +212,7 @@ int claesy_(complex *a, complex *b, complex *c__, complex * rt1, complex *rt2, c
         q__1.r = s.r - t.r;
         q__1.i = s.i - t.i; // , expr subst
         rt2->r = q__1.r, rt2->i = q__1.i;
-        if (c_abs(rt1) < c_abs(rt2))
+        if(c_abs(rt1) < c_abs(rt2))
         {
             tmp.r = rt1->r;
             tmp.i = rt1->i; // , expr subst
@@ -220,7 +228,7 @@ int claesy_(complex *a, complex *b, complex *c__, complex * rt1, complex *rt2, c
         c_div(&q__1, &q__2, b);
         sn1->r = q__1.r, sn1->i = q__1.i;
         tabs = c_abs(sn1);
-        if (tabs > 1.f)
+        if(tabs > 1.f)
         {
             /* Computing 2nd power */
             r__2 = 1.f / tabs;
@@ -247,7 +255,7 @@ int claesy_(complex *a, complex *b, complex *c__, complex * rt1, complex *rt2, c
             t.i = q__1.i; // , expr subst
         }
         evnorm = c_abs(&t);
-        if (evnorm >= .1f)
+        if(evnorm >= .1f)
         {
             c_div(&q__1, &c_b1, &t);
             evscal->r = q__1.r, evscal->i = q__1.i;
@@ -262,7 +270,7 @@ int claesy_(complex *a, complex *b, complex *c__, complex * rt1, complex *rt2, c
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAESY */
 }
 /* claesy_ */

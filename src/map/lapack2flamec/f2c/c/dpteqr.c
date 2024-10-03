@@ -1,5 +1,8 @@
-/* ../netlib/dpteqr.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dpteqr.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b7 = 0.;
 static doublereal c_b8 = 1.;
@@ -11,11 +14,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DPTEQR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dpteqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dpteqr.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dpteqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dpteqr.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpteqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpteqr.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -94,7 +103,7 @@ static integer c__1 = 1;
 /* > reduction to tridiagonal form. */
 /* > On exit, if COMPZ = 'V', the orthonormal eigenvectors of the */
 /* > original symmetric matrix;
-*/
+ */
 /* > if COMPZ = 'I', the orthonormal eigenvectors of the */
 /* > tridiagonal matrix. */
 /* > If INFO > 0 on exit, Z contains the eigenvectors associated */
@@ -124,7 +133,7 @@ static integer c__1 = 1;
 /* > not be performed because the i-th principal minor */
 /* > was not positive definite. */
 /* > > N the SVD algorithm failed to converge;
-*/
+ */
 /* > if INFO = N+i, i off-diagonal elements of the */
 /* > bidiagonal factor did not converge to zero. */
 /* > \endverbatim */
@@ -138,27 +147,34 @@ static integer c__1 = 1;
 /* > \ingroup doublePTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal *z__, integer *ldz, doublereal *work, integer *info)
+void dpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal *z__, integer *ldz,
+             doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dpteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "",*compz, *n, *ldz);
+    AOCL_DTL_SNPRINTF("dpteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "", *compz, *n, *ldz);
     /* System generated locals */
     integer z_dim1, z_offset, i__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     doublereal c__[1] /* was [1][1] */
-    ;
+        ;
     integer i__;
     doublereal vt[1] /* was [1][1] */
-    ;
+        ;
     integer nru;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dbdsqr_(char *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        dbdsqr_(char *, integer *, integer *, integer *, integer *, doublereal *, doublereal *,
+                doublereal *, integer *, doublereal *, integer *, doublereal *, integer *,
+                doublereal *, integer *);
     integer icompz;
     extern /* Subroutine */
-    int dpttrf_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dpttrf_(integer *, doublereal *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -191,15 +207,15 @@ int dpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal 
     --work;
     /* Function Body */
     *info = 0;
-    if (lsame_(compz, "N"))
+    if(lsame_(compz, "N", 1, 1))
     {
         icompz = 0;
     }
-    else if (lsame_(compz, "V"))
+    else if(lsame_(compz, "V", 1, 1))
     {
         icompz = 1;
     }
-    else if (lsame_(compz, "I"))
+    else if(lsame_(compz, "I", 1, 1))
     {
         icompz = 2;
     }
@@ -207,70 +223,66 @@ int dpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal 
     {
         icompz = -1;
     }
-    if (icompz < 0)
+    if(icompz < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*ldz < 1 || icompz > 0 && *ldz < fla_max(1,*n))
+    else if(*ldz < 1 || icompz > 0 && *ldz < fla_max(1, *n))
     {
         *info = -6;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DPTEQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    if (*n == 1)
+    if(*n == 1)
     {
-        if (icompz > 0)
+        if(icompz > 0)
         {
             z__[z_dim1 + 1] = 1.;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    if (icompz == 2)
+    if(icompz == 2)
     {
         dlaset_("Full", n, n, &c_b7, &c_b8, &z__[z_offset], ldz);
     }
     /* Call DPTTRF to factor the matrix. */
     dpttrf_(n, &d__[1], &e[1], info);
-    if (*info != 0)
+    if(*info != 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         d__[i__] = sqrt(d__[i__]);
         /* L10: */
     }
     i__1 = *n - 1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         e[i__] *= d__[i__];
         /* L20: */
     }
     /* Call DBDSQR to compute the singular values/vectors of the */
     /* bidiagonal factor. */
-    if (icompz > 0)
+    if(icompz > 0)
     {
         nru = *n;
     }
@@ -278,14 +290,13 @@ int dpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal 
     {
         nru = 0;
     }
-    dbdsqr_("Lower", n, &c__0, &nru, &c__0, &d__[1], &e[1], vt, &c__1, &z__[ z_offset], ldz, c__, &c__1, &work[1], info);
+    dbdsqr_("Lower", n, &c__0, &nru, &c__0, &d__[1], &e[1], vt, &c__1, &z__[z_offset], ldz, c__,
+            &c__1, &work[1], info);
     /* Square the singular values. */
-    if (*info == 0)
+    if(*info == 0)
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             d__[i__] *= d__[i__];
             /* L30: */
@@ -296,7 +307,7 @@ int dpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal 
         *info = *n + *info;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPTEQR */
 }
 /* dpteqr_ */

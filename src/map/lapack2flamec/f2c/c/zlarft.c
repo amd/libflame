@@ -1,11 +1,10 @@
-/* ../netlib/zlarft.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zlarft.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    1.,0.
-}
-;
+static doublecomplex c_b1 = {1., 0.};
 static integer c__1 = 1;
 /* > \brief \b ZLARFT forms the triangular factor T of a block reflector H = I - vtvH */
 /* =========== DOCUMENTATION =========== */
@@ -13,11 +12,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLARFT + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlarft. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlarft.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlarft. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlarft.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlarft. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlarft.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -39,7 +44,7 @@ static integer c__1 = 1;
 /* > of order n, which is defined as a product of k elementary reflectors. */
 /* > */
 /* > If DIRECT = 'F', H = H(1) H(2) . . . H(k) and T is upper triangular;
-*/
+ */
 /* > */
 /* > If DIRECT = 'B', H = H(k) . . . H(2) H(1) and T is lower triangular. */
 /* > */
@@ -159,10 +164,13 @@ if DIRECT = 'B', T is */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zlarft_(char *direct, char *storev, integer *n, integer * k, doublecomplex *v, integer *ldv, doublecomplex *tau, doublecomplex * t, integer *ldt)
+void zlarft_(char *direct, char *storev, integer *n, integer *k, doublecomplex *v, integer *ldv,
+             doublecomplex *tau, doublecomplex *t, integer *ldt)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlarft inputs: direct %c, storev %c, n %" FLA_IS ", k %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS "",*direct, *storev, *n, *k, *ldv, *ldt);
+    AOCL_DTL_SNPRINTF("zlarft inputs: direct %c, storev %c, n %" FLA_IS ", k %" FLA_IS
+                      ", ldv %" FLA_IS ", ldt %" FLA_IS "",
+                      *direct, *storev, *n, *k, *ldv, *ldt);
 
     /* System generated locals */
     integer t_dim1, t_offset, v_dim1, v_offset, i__1, i__2, i__3, i__4, i__5;
@@ -171,12 +179,19 @@ int zlarft_(char *direct, char *storev, integer *n, integer * k, doublecomplex *
     void d_cnjg(doublecomplex *, doublecomplex *);
     /* Local variables */
     integer i__, j, prevlastv;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
+               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
+        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
+               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     integer lastv;
     extern /* Subroutine */
-    int ztrmv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), f90_exit_(void);
+        void
+        ztrmv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *,
+               integer *),
+        f90_exit_(void);
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -205,28 +220,24 @@ int zlarft_(char *direct, char *storev, integer *n, integer * k, doublecomplex *
     t_offset = 1 + t_dim1;
     t -= t_offset;
     /* Function Body */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    if (lsame_(direct, "F"))
+    if(lsame_(direct, "F", 1, 1))
     {
         prevlastv = *n;
         i__1 = *k;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            prevlastv = fla_max(prevlastv,i__);
+            prevlastv = fla_max(prevlastv, i__);
             i__2 = i__;
-            if (tau[i__2].r == 0. && tau[i__2].i == 0.)
+            if(tau[i__2].r == 0. && tau[i__2].i == 0.)
             {
                 /* H(i) = I */
                 i__2 = i__;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = j + i__ * t_dim1;
                     t[i__3].r = 0.;
@@ -236,24 +247,20 @@ int zlarft_(char *direct, char *storev, integer *n, integer * k, doublecomplex *
             else
             {
                 /* general case */
-                if (lsame_(storev, "C"))
+                if(lsame_(storev, "C", 1, 1))
                 {
                     /* Skip any trailing zeros. */
                     i__2 = i__ + 1;
-                    for (lastv = *n;
-                            lastv >= i__2;
-                            --lastv)
+                    for(lastv = *n; lastv >= i__2; --lastv)
                     {
                         i__3 = lastv + i__ * v_dim1;
-                        if (v[i__3].r != 0. || v[i__3].i != 0.)
+                        if(v[i__3].r != 0. || v[i__3].i != 0.)
                         {
                             break;
                         }
                     }
                     i__2 = i__ - 1;
-                    for (j = 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = 1; j <= i__2; ++j)
                     {
                         i__3 = j + i__ * t_dim1;
                         i__4 = i__;
@@ -265,33 +272,30 @@ int zlarft_(char *direct, char *storev, integer *n, integer * k, doublecomplex *
                         t[i__3].r = z__1.r;
                         t[i__3].i = z__1.i; // , expr subst
                     }
-                    j = fla_min(lastv,prevlastv);
+                    j = fla_min(lastv, prevlastv);
                     /* T(1:i-1,i) := - tau(i) * V(i:j,1:i-1)**H * V(i:j,i) */
                     i__2 = j - i__;
                     i__3 = i__ - 1;
                     i__4 = i__;
                     z__1.r = -tau[i__4].r;
                     z__1.i = -tau[i__4].i; // , expr subst
-                    zgemv_("Conjugate transpose", &i__2, &i__3, &z__1, &v[i__ + 1 + v_dim1], ldv, &v[i__ + 1 + i__ * v_dim1], & c__1, &c_b1, &t[i__ * t_dim1 + 1], &c__1);
+                    zgemv_("Conjugate transpose", &i__2, &i__3, &z__1, &v[i__ + 1 + v_dim1], ldv,
+                           &v[i__ + 1 + i__ * v_dim1], &c__1, &c_b1, &t[i__ * t_dim1 + 1], &c__1);
                 }
                 else
                 {
                     /* Skip any trailing zeros. */
                     i__2 = i__ + 1;
-                    for (lastv = *n;
-                            lastv >= i__2;
-                            --lastv)
+                    for(lastv = *n; lastv >= i__2; --lastv)
                     {
                         i__3 = i__ + lastv * v_dim1;
-                        if (v[i__3].r != 0. || v[i__3].i != 0.)
+                        if(v[i__3].r != 0. || v[i__3].i != 0.)
                         {
                             break;
                         }
                     }
                     i__2 = i__ - 1;
-                    for (j = 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = 1; j <= i__2; ++j)
                     {
                         i__3 = j + i__ * t_dim1;
                         i__4 = i__;
@@ -299,29 +303,31 @@ int zlarft_(char *direct, char *storev, integer *n, integer * k, doublecomplex *
                         z__2.i = -tau[i__4].i; // , expr subst
                         i__5 = j + i__ * v_dim1;
                         z__1.r = z__2.r * v[i__5].r - z__2.i * v[i__5].i;
-                        z__1.i = z__2.r * v[i__5].i + z__2.i * v[i__5] .r; // , expr subst
+                        z__1.i = z__2.r * v[i__5].i + z__2.i * v[i__5].r; // , expr subst
                         t[i__3].r = z__1.r;
                         t[i__3].i = z__1.i; // , expr subst
                     }
-                    j = fla_min(lastv,prevlastv);
+                    j = fla_min(lastv, prevlastv);
                     /* T(1:i-1,i) := - tau(i) * V(1:i-1,i:j) * V(i,i:j)**H */
                     i__2 = i__ - 1;
                     i__3 = j - i__;
                     i__4 = i__;
                     z__1.r = -tau[i__4].r;
                     z__1.i = -tau[i__4].i; // , expr subst
-                    zgemm_("N", "C", &i__2, &c__1, &i__3, &z__1, &v[(i__ + 1) * v_dim1 + 1], ldv, &v[i__ + (i__ + 1) * v_dim1], ldv, &c_b1, &t[i__ * t_dim1 + 1], ldt);
+                    zgemm_("N", "C", &i__2, &c__1, &i__3, &z__1, &v[(i__ + 1) * v_dim1 + 1], ldv,
+                           &v[i__ + (i__ + 1) * v_dim1], ldv, &c_b1, &t[i__ * t_dim1 + 1], ldt);
                 }
                 /* T(1:i-1,i) := T(1:i-1,1:i-1) * T(1:i-1,i) */
                 i__2 = i__ - 1;
-                ztrmv_("Upper", "No transpose", "Non-unit", &i__2, &t[ t_offset], ldt, &t[i__ * t_dim1 + 1], &c__1);
+                ztrmv_("Upper", "No transpose", "Non-unit", &i__2, &t[t_offset], ldt,
+                       &t[i__ * t_dim1 + 1], &c__1);
                 i__2 = i__ + i__ * t_dim1;
                 i__3 = i__;
                 t[i__2].r = tau[i__3].r;
                 t[i__2].i = tau[i__3].i; // , expr subst
-                if (i__ > 1)
+                if(i__ > 1)
                 {
-                    prevlastv = fla_max(prevlastv,lastv);
+                    prevlastv = fla_max(prevlastv, lastv);
                 }
                 else
                 {
@@ -333,18 +339,14 @@ int zlarft_(char *direct, char *storev, integer *n, integer * k, doublecomplex *
     else
     {
         prevlastv = 1;
-        for (i__ = *k;
-                i__ >= 1;
-                --i__)
+        for(i__ = *k; i__ >= 1; --i__)
         {
             i__1 = i__;
-            if (tau[i__1].r == 0. && tau[i__1].i == 0.)
+            if(tau[i__1].r == 0. && tau[i__1].i == 0.)
             {
                 /* H(i) = I */
                 i__1 = *k;
-                for (j = i__;
-                        j <= i__1;
-                        ++j)
+                for(j = i__; j <= i__1; ++j)
                 {
                     i__2 = j + i__ * t_dim1;
                     t[i__2].r = 0.;
@@ -354,26 +356,22 @@ int zlarft_(char *direct, char *storev, integer *n, integer * k, doublecomplex *
             else
             {
                 /* general case */
-                if (i__ < *k)
+                if(i__ < *k)
                 {
-                    if (lsame_(storev, "C"))
+                    if(lsame_(storev, "C", 1, 1))
                     {
                         /* Skip any leading zeros. */
                         i__1 = i__ - 1;
-                        for (lastv = 1;
-                                lastv <= i__1;
-                                ++lastv)
+                        for(lastv = 1; lastv <= i__1; ++lastv)
                         {
                             i__2 = lastv + i__ * v_dim1;
-                            if (v[i__2].r != 0. || v[i__2].i != 0.)
+                            if(v[i__2].r != 0. || v[i__2].i != 0.)
                             {
                                 break;
                             }
                         }
                         i__1 = *k;
-                        for (j = i__ + 1;
-                                j <= i__1;
-                                ++j)
+                        for(j = i__ + 1; j <= i__1; ++j)
                         {
                             i__2 = j + i__ * t_dim1;
                             i__3 = i__;
@@ -385,33 +383,31 @@ int zlarft_(char *direct, char *storev, integer *n, integer * k, doublecomplex *
                             t[i__2].r = z__1.r;
                             t[i__2].i = z__1.i; // , expr subst
                         }
-                        j = fla_max(lastv,prevlastv);
+                        j = fla_max(lastv, prevlastv);
                         /* T(i+1:k,i) = -tau(i) * V(j:n-k+i,i+1:k)**H * V(j:n-k+i,i) */
                         i__1 = *n - *k + i__ - j;
                         i__2 = *k - i__;
                         i__3 = i__;
                         z__1.r = -tau[i__3].r;
                         z__1.i = -tau[i__3].i; // , expr subst
-                        zgemv_("Conjugate transpose", &i__1, &i__2, &z__1, &v[ j + (i__ + 1) * v_dim1], ldv, &v[j + i__ * v_dim1], &c__1, &c_b1, &t[i__ + 1 + i__ * t_dim1], &c__1);
+                        zgemv_("Conjugate transpose", &i__1, &i__2, &z__1,
+                               &v[j + (i__ + 1) * v_dim1], ldv, &v[j + i__ * v_dim1], &c__1, &c_b1,
+                               &t[i__ + 1 + i__ * t_dim1], &c__1);
                     }
                     else
                     {
                         /* Skip any leading zeros. */
                         i__1 = i__ - 1;
-                        for (lastv = 1;
-                                lastv <= i__1;
-                                ++lastv)
+                        for(lastv = 1; lastv <= i__1; ++lastv)
                         {
                             i__2 = i__ + lastv * v_dim1;
-                            if (v[i__2].r != 0. || v[i__2].i != 0.)
+                            if(v[i__2].r != 0. || v[i__2].i != 0.)
                             {
                                 break;
                             }
                         }
                         i__1 = *k;
-                        for (j = i__ + 1;
-                                j <= i__1;
-                                ++j)
+                        for(j = i__ + 1; j <= i__1; ++j)
                         {
                             i__2 = j + i__ * t_dim1;
                             i__3 = i__;
@@ -419,25 +415,28 @@ int zlarft_(char *direct, char *storev, integer *n, integer * k, doublecomplex *
                             z__2.i = -tau[i__3].i; // , expr subst
                             i__4 = j + (*n - *k + i__) * v_dim1;
                             z__1.r = z__2.r * v[i__4].r - z__2.i * v[i__4].i;
-                            z__1.i = z__2.r * v[i__4].i + z__2.i * v[ i__4].r; // , expr subst
+                            z__1.i = z__2.r * v[i__4].i + z__2.i * v[i__4].r; // , expr subst
                             t[i__2].r = z__1.r;
                             t[i__2].i = z__1.i; // , expr subst
                         }
-                        j = fla_max(lastv,prevlastv);
+                        j = fla_max(lastv, prevlastv);
                         /* T(i+1:k,i) = -tau(i) * V(i+1:k,j:n-k+i) * V(i,j:n-k+i)**H */
                         i__1 = *k - i__;
                         i__2 = *n - *k + i__ - j;
                         i__3 = i__;
                         z__1.r = -tau[i__3].r;
                         z__1.i = -tau[i__3].i; // , expr subst
-                        zgemm_("N", "C", &i__1, &c__1, &i__2, &z__1, &v[i__ + 1 + j * v_dim1], ldv, &v[i__ + j * v_dim1], ldv, &c_b1, &t[i__ + 1 + i__ * t_dim1], ldt);
+                        zgemm_("N", "C", &i__1, &c__1, &i__2, &z__1, &v[i__ + 1 + j * v_dim1], ldv,
+                               &v[i__ + j * v_dim1], ldv, &c_b1, &t[i__ + 1 + i__ * t_dim1], ldt);
                     }
                     /* T(i+1:k,i) := T(i+1:k,i+1:k) * T(i+1:k,i) */
                     i__1 = *k - i__;
-                    ztrmv_("Lower", "No transpose", "Non-unit", &i__1, &t[i__ + 1 + (i__ + 1) * t_dim1], ldt, &t[i__ + 1 + i__ * t_dim1], &c__1) ;
-                    if (i__ > 1)
+                    ztrmv_("Lower", "No transpose", "Non-unit", &i__1,
+                           &t[i__ + 1 + (i__ + 1) * t_dim1], ldt, &t[i__ + 1 + i__ * t_dim1],
+                           &c__1);
+                    if(i__ > 1)
                     {
-                        prevlastv = fla_min(prevlastv,lastv);
+                        prevlastv = fla_min(prevlastv, lastv);
                     }
                     else
                     {
@@ -452,8 +451,7 @@ int zlarft_(char *direct, char *storev, integer *n, integer * k, doublecomplex *
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLARFT */
 }
 /* zlarft_ */
-

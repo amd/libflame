@@ -1,20 +1,30 @@
-/* ../netlib/stprfb.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/stprfb.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b12 = 1.f;
 static real c_b20 = 0.f;
 static real c_b27 = -1.f;
-/* > \brief \b STPRFB applies a real or complex "triangular-pentagonal" blocked reflector to a real or complex matrix, which is composed of two blocks. */
+/* > \brief \b STPRFB applies a real or complex "triangular-pentagonal" blocked reflector to a real
+ * or complex matrix, which is composed of two blocks. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download STPRFB + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stprfb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stprfb.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stprfb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stprfb.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stprfb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stprfb.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -117,9 +127,9 @@ static real c_b27 = -1.f;
 /* > LDV is INTEGER */
 /* > The leading dimension of the array V. */
 /* > If STOREV = 'C' and SIDE = 'L', LDV >= fla_max(1,M);
-*/
+ */
 /* > if STOREV = 'C' and SIDE = 'R', LDV >= fla_max(1,N);
-*/
+ */
 /* > if STOREV = 'R', LDV >= K. */
 /* > \endverbatim */
 /* > */
@@ -151,7 +161,7 @@ static real c_b27 = -1.f;
 /* > LDA is INTEGER */
 /* > The leading dimension of the array A. */
 /* > If SIDE = 'L', LDA >= fla_max(1,K);
-*/
+ */
 /* > If SIDE = 'R', LDA >= fla_max(1,M). */
 /* > \endverbatim */
 /* > */
@@ -182,7 +192,7 @@ static real c_b27 = -1.f;
 /* > LDWORK is INTEGER */
 /* > The leading dimension of the array WORK. */
 /* > If SIDE = 'L', LDWORK >= K;
-*/
+ */
 /* > if SIDE = 'R', LDWORK >= M. */
 /* > \endverbatim */
 /* Authors: */
@@ -216,7 +226,7 @@ if SIDE = 'R', A is of size M-by-K, */
 /* > The pentagonal matrix V is composed of a rectangular block V1 and a */
 /* > trapezoidal block V2. The size of the trapezoidal block is determined by */
 /* > the parameter L, where 0<=L<=K. If L=K, the V2 block of V is triangular;
-*/
+ */
 /* > if L=0, there is no trapezoidal block, thus V = V1 is rectangular. */
 /* > */
 /* > If DIRECT = 'F' and STOREV = 'C': V = [V1] */
@@ -246,26 +256,36 @@ if SIDE = 'R', A is of size M-by-K, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int stprfb_(char *side, char *trans, char *direct, char * storev, integer *m, integer *n, integer *k, integer *l, real *v, integer *ldv, real *t, integer *ldt, real *a, integer *lda, real *b, integer *ldb, real *work, integer *ldwork)
+void stprfb_(char *side, char *trans, char *direct, char *storev, integer *m, integer *n,
+             integer *k, integer *l, real *v, integer *ldv, real *t, integer *ldt, real *a,
+             integer *lda, real *b, integer *ldb, real *work, integer *ldwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"stprfb inputs: side %c, trans %c, direct %c, storev %c, m %d, n %d, k %d, l %d, ldv %d, ldt %d, lda %d, ldb %d",*side, *trans, *direct, *storev, *m, *n, *k, *l, *ldv, *ldt, *lda, *ldb);
+    snprintf(buffer, 256,
+             "stprfb inputs: side %c, trans %c, direct %c, storev %c, m %d, n %d, k %d, l %d, ldv "
+             "%d, ldt %d, lda %d, ldb %d",
+             *side, *trans, *direct, *storev, *m, *n, *k, *l, *ldv, *ldt, *lda, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1, i__2;
+    integer a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1,
+        work_offset, i__1, i__2;
     /* Local variables */
     logical backward;
     integer i__, j, kp, mp, np;
     logical row, left;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+        void
+        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
+               integer *, real *, real *, integer *);
     logical right;
     extern /* Subroutine */
-    int strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * );
+        void
+        strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
+               real *, integer *);
     logical column, forward;
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -303,17 +323,17 @@ int stprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
     work_offset = 1 + work_dim1;
     work -= work_offset;
     /* Function Body */
-    if (*m <= 0 || *n <= 0 || *k <= 0 || *l < 0)
+    if(*m <= 0 || *n <= 0 || *k <= 0 || *l < 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (lsame_(storev, "C"))
+    if(lsame_(storev, "C", 1, 1))
     {
         column = TRUE_;
         row = FALSE_;
     }
-    else if (lsame_(storev, "R"))
+    else if(lsame_(storev, "R", 1, 1))
     {
         column = FALSE_;
         row = TRUE_;
@@ -323,12 +343,12 @@ int stprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         column = FALSE_;
         row = FALSE_;
     }
-    if (lsame_(side, "L"))
+    if(lsame_(side, "L", 1, 1))
     {
         left = TRUE_;
         right = FALSE_;
     }
-    else if (lsame_(side, "R"))
+    else if(lsame_(side, "R", 1, 1))
     {
         left = FALSE_;
         right = TRUE_;
@@ -338,12 +358,12 @@ int stprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         left = FALSE_;
         right = FALSE_;
     }
-    if (lsame_(direct, "F"))
+    if(lsame_(direct, "F", 1, 1))
     {
         forward = TRUE_;
         backward = FALSE_;
     }
-    else if (lsame_(direct, "B"))
+    else if(lsame_(direct, "B", 1, 1))
     {
         forward = FALSE_;
         backward = TRUE_;
@@ -354,7 +374,7 @@ int stprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         backward = FALSE_;
     }
     /* --------------------------------------------------------------------------- */
-    if (column && forward && left)
+    if(column && forward && left)
     {
         /* --------------------------------------------------------------------------- */
         /* Let W = [ I ] (K-by-K) */
@@ -367,76 +387,64 @@ int stprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         /* --------------------------------------------------------------------------- */
         /* Computing MIN */
         i__1 = *m - *l + 1;
-        mp = fla_min(i__1,*m);
+        mp = fla_min(i__1, *m);
         /* Computing MIN */
         i__1 = *l + 1;
-        kp = fla_min(i__1,*k);
+        kp = fla_min(i__1, *k);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *l;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 work[i__ + j * work_dim1] = b[*m - *l + i__ + j * b_dim1];
             }
         }
-        strmm_("L", "U", "T", "N", l, n, &c_b12, &v[mp + v_dim1], ldv, &work[ work_offset], ldwork);
+        strmm_("L", "U", "T", "N", l, n, &c_b12, &v[mp + v_dim1], ldv, &work[work_offset], ldwork);
         i__1 = *m - *l;
-        sgemm_("T", "N", l, n, &i__1, &c_b12, &v[v_offset], ldv, &b[b_offset], ldb, &c_b12, &work[work_offset], ldwork);
+        sgemm_("T", "N", l, n, &i__1, &c_b12, &v[v_offset], ldv, &b[b_offset], ldb, &c_b12,
+               &work[work_offset], ldwork);
         i__1 = *k - *l;
-        sgemm_("T", "N", &i__1, n, m, &c_b12, &v[kp * v_dim1 + 1], ldv, &b[ b_offset], ldb, &c_b20, &work[kp + work_dim1], ldwork);
+        sgemm_("T", "N", &i__1, n, m, &c_b12, &v[kp * v_dim1 + 1], ldv, &b[b_offset], ldb, &c_b20,
+               &work[kp + work_dim1], ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 work[i__ + j * work_dim1] += a[i__ + j * a_dim1];
             }
         }
-        strmm_("L", "U", trans, "N", k, n, &c_b12, &t[t_offset], ldt, &work[ work_offset], ldwork);
+        strmm_("L", "U", trans, "N", k, n, &c_b12, &t[t_offset], ldt, &work[work_offset], ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 a[i__ + j * a_dim1] -= work[i__ + j * work_dim1];
             }
         }
         i__1 = *m - *l;
-        sgemm_("N", "N", &i__1, n, k, &c_b27, &v[v_offset], ldv, &work[ work_offset], ldwork, &c_b12, &b[b_offset], ldb);
+        sgemm_("N", "N", &i__1, n, k, &c_b27, &v[v_offset], ldv, &work[work_offset], ldwork, &c_b12,
+               &b[b_offset], ldb);
         i__1 = *k - *l;
-        sgemm_("N", "N", l, n, &i__1, &c_b27, &v[mp + kp * v_dim1], ldv, & work[kp + work_dim1], ldwork, &c_b12, &b[mp + b_dim1], ldb);
-        strmm_("L", "U", "N", "N", l, n, &c_b12, &v[mp + v_dim1], ldv, &work[ work_offset], ldwork);
+        sgemm_("N", "N", l, n, &i__1, &c_b27, &v[mp + kp * v_dim1], ldv, &work[kp + work_dim1],
+               ldwork, &c_b12, &b[mp + b_dim1], ldb);
+        strmm_("L", "U", "N", "N", l, n, &c_b12, &v[mp + v_dim1], ldv, &work[work_offset], ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *l;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 b[*m - *l + i__ + j * b_dim1] -= work[i__ + j * work_dim1];
             }
         }
         /* --------------------------------------------------------------------------- */
     }
-    else if (column && forward && right)
+    else if(column && forward && right)
     {
         /* --------------------------------------------------------------------------- */
         /* Let W = [ I ] (K-by-K) */
@@ -448,76 +456,64 @@ int stprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         /* --------------------------------------------------------------------------- */
         /* Computing MIN */
         i__1 = *n - *l + 1;
-        np = fla_min(i__1,*n);
+        np = fla_min(i__1, *n);
         /* Computing MIN */
         i__1 = *l + 1;
-        kp = fla_min(i__1,*k);
+        kp = fla_min(i__1, *k);
         i__1 = *l;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 work[i__ + j * work_dim1] = b[i__ + (*n - *l + j) * b_dim1];
             }
         }
-        strmm_("R", "U", "N", "N", m, l, &c_b12, &v[np + v_dim1], ldv, &work[ work_offset], ldwork);
+        strmm_("R", "U", "N", "N", m, l, &c_b12, &v[np + v_dim1], ldv, &work[work_offset], ldwork);
         i__1 = *n - *l;
-        sgemm_("N", "N", m, l, &i__1, &c_b12, &b[b_offset], ldb, &v[v_offset], ldv, &c_b12, &work[work_offset], ldwork);
+        sgemm_("N", "N", m, l, &i__1, &c_b12, &b[b_offset], ldb, &v[v_offset], ldv, &c_b12,
+               &work[work_offset], ldwork);
         i__1 = *k - *l;
-        sgemm_("N", "N", m, &i__1, n, &c_b12, &b[b_offset], ldb, &v[kp * v_dim1 + 1], ldv, &c_b20, &work[kp * work_dim1 + 1], ldwork);
+        sgemm_("N", "N", m, &i__1, n, &c_b12, &b[b_offset], ldb, &v[kp * v_dim1 + 1], ldv, &c_b20,
+               &work[kp * work_dim1 + 1], ldwork);
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 work[i__ + j * work_dim1] += a[i__ + j * a_dim1];
             }
         }
-        strmm_("R", "U", trans, "N", m, k, &c_b12, &t[t_offset], ldt, &work[ work_offset], ldwork);
+        strmm_("R", "U", trans, "N", m, k, &c_b12, &t[t_offset], ldt, &work[work_offset], ldwork);
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 a[i__ + j * a_dim1] -= work[i__ + j * work_dim1];
             }
         }
         i__1 = *n - *l;
-        sgemm_("N", "T", m, &i__1, k, &c_b27, &work[work_offset], ldwork, &v[ v_offset], ldv, &c_b12, &b[b_offset], ldb);
+        sgemm_("N", "T", m, &i__1, k, &c_b27, &work[work_offset], ldwork, &v[v_offset], ldv, &c_b12,
+               &b[b_offset], ldb);
         i__1 = *k - *l;
-        sgemm_("N", "T", m, l, &i__1, &c_b27, &work[kp * work_dim1 + 1], ldwork, &v[np + kp * v_dim1], ldv, &c_b12, &b[np * b_dim1 + 1], ldb);
-        strmm_("R", "U", "T", "N", m, l, &c_b12, &v[np + v_dim1], ldv, &work[ work_offset], ldwork);
+        sgemm_("N", "T", m, l, &i__1, &c_b27, &work[kp * work_dim1 + 1], ldwork,
+               &v[np + kp * v_dim1], ldv, &c_b12, &b[np * b_dim1 + 1], ldb);
+        strmm_("R", "U", "T", "N", m, l, &c_b12, &v[np + v_dim1], ldv, &work[work_offset], ldwork);
         i__1 = *l;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 b[i__ + (*n - *l + j) * b_dim1] -= work[i__ + j * work_dim1];
             }
         }
         /* --------------------------------------------------------------------------- */
     }
-    else if (column && backward && left)
+    else if(column && backward && left)
     {
         /* --------------------------------------------------------------------------- */
         /* Let W = [ V ] (M-by-K) */
@@ -530,76 +526,66 @@ int stprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         /* --------------------------------------------------------------------------- */
         /* Computing MIN */
         i__1 = *l + 1;
-        mp = fla_min(i__1,*m);
+        mp = fla_min(i__1, *m);
         /* Computing MIN */
         i__1 = *k - *l + 1;
-        kp = fla_min(i__1,*k);
+        kp = fla_min(i__1, *k);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *l;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 work[*k - *l + i__ + j * work_dim1] = b[i__ + j * b_dim1];
             }
         }
-        strmm_("L", "L", "T", "N", l, n, &c_b12, &v[kp * v_dim1 + 1], ldv, & work[kp + work_dim1], ldwork);
+        strmm_("L", "L", "T", "N", l, n, &c_b12, &v[kp * v_dim1 + 1], ldv, &work[kp + work_dim1],
+               ldwork);
         i__1 = *m - *l;
-        sgemm_("T", "N", l, n, &i__1, &c_b12, &v[mp + kp * v_dim1], ldv, &b[ mp + b_dim1], ldb, &c_b12, &work[kp + work_dim1], ldwork);
+        sgemm_("T", "N", l, n, &i__1, &c_b12, &v[mp + kp * v_dim1], ldv, &b[mp + b_dim1], ldb,
+               &c_b12, &work[kp + work_dim1], ldwork);
         i__1 = *k - *l;
-        sgemm_("T", "N", &i__1, n, m, &c_b12, &v[v_offset], ldv, &b[b_offset], ldb, &c_b20, &work[work_offset], ldwork);
+        sgemm_("T", "N", &i__1, n, m, &c_b12, &v[v_offset], ldv, &b[b_offset], ldb, &c_b20,
+               &work[work_offset], ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 work[i__ + j * work_dim1] += a[i__ + j * a_dim1];
             }
         }
-        strmm_("L", "L", trans, "N", k, n, &c_b12, &t[t_offset], ldt, &work[ work_offset], ldwork);
+        strmm_("L", "L", trans, "N", k, n, &c_b12, &t[t_offset], ldt, &work[work_offset], ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 a[i__ + j * a_dim1] -= work[i__ + j * work_dim1];
             }
         }
         i__1 = *m - *l;
-        sgemm_("N", "N", &i__1, n, k, &c_b27, &v[mp + v_dim1], ldv, &work[ work_offset], ldwork, &c_b12, &b[mp + b_dim1], ldb);
+        sgemm_("N", "N", &i__1, n, k, &c_b27, &v[mp + v_dim1], ldv, &work[work_offset], ldwork,
+               &c_b12, &b[mp + b_dim1], ldb);
         i__1 = *k - *l;
-        sgemm_("N", "N", l, n, &i__1, &c_b27, &v[v_offset], ldv, &work[ work_offset], ldwork, &c_b12, &b[b_offset], ldb);
-        strmm_("L", "L", "N", "N", l, n, &c_b12, &v[kp * v_dim1 + 1], ldv, & work[kp + work_dim1], ldwork);
+        sgemm_("N", "N", l, n, &i__1, &c_b27, &v[v_offset], ldv, &work[work_offset], ldwork, &c_b12,
+               &b[b_offset], ldb);
+        strmm_("L", "L", "N", "N", l, n, &c_b12, &v[kp * v_dim1 + 1], ldv, &work[kp + work_dim1],
+               ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *l;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 b[i__ + j * b_dim1] -= work[*k - *l + i__ + j * work_dim1];
             }
         }
         /* --------------------------------------------------------------------------- */
     }
-    else if (column && backward && right)
+    else if(column && backward && right)
     {
         /* --------------------------------------------------------------------------- */
         /* Let W = [ V ] (N-by-K) */
@@ -611,76 +597,66 @@ int stprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         /* --------------------------------------------------------------------------- */
         /* Computing MIN */
         i__1 = *l + 1;
-        np = fla_min(i__1,*n);
+        np = fla_min(i__1, *n);
         /* Computing MIN */
         i__1 = *k - *l + 1;
-        kp = fla_min(i__1,*k);
+        kp = fla_min(i__1, *k);
         i__1 = *l;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 work[i__ + (*k - *l + j) * work_dim1] = b[i__ + j * b_dim1];
             }
         }
-        strmm_("R", "L", "N", "N", m, l, &c_b12, &v[kp * v_dim1 + 1], ldv, & work[kp * work_dim1 + 1], ldwork);
+        strmm_("R", "L", "N", "N", m, l, &c_b12, &v[kp * v_dim1 + 1], ldv,
+               &work[kp * work_dim1 + 1], ldwork);
         i__1 = *n - *l;
-        sgemm_("N", "N", m, l, &i__1, &c_b12, &b[np * b_dim1 + 1], ldb, &v[np + kp * v_dim1], ldv, &c_b12, &work[kp * work_dim1 + 1], ldwork);
+        sgemm_("N", "N", m, l, &i__1, &c_b12, &b[np * b_dim1 + 1], ldb, &v[np + kp * v_dim1], ldv,
+               &c_b12, &work[kp * work_dim1 + 1], ldwork);
         i__1 = *k - *l;
-        sgemm_("N", "N", m, &i__1, n, &c_b12, &b[b_offset], ldb, &v[v_offset], ldv, &c_b20, &work[work_offset], ldwork);
+        sgemm_("N", "N", m, &i__1, n, &c_b12, &b[b_offset], ldb, &v[v_offset], ldv, &c_b20,
+               &work[work_offset], ldwork);
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 work[i__ + j * work_dim1] += a[i__ + j * a_dim1];
             }
         }
-        strmm_("R", "L", trans, "N", m, k, &c_b12, &t[t_offset], ldt, &work[ work_offset], ldwork);
+        strmm_("R", "L", trans, "N", m, k, &c_b12, &t[t_offset], ldt, &work[work_offset], ldwork);
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 a[i__ + j * a_dim1] -= work[i__ + j * work_dim1];
             }
         }
         i__1 = *n - *l;
-        sgemm_("N", "T", m, &i__1, k, &c_b27, &work[work_offset], ldwork, &v[ np + v_dim1], ldv, &c_b12, &b[np * b_dim1 + 1], ldb);
+        sgemm_("N", "T", m, &i__1, k, &c_b27, &work[work_offset], ldwork, &v[np + v_dim1], ldv,
+               &c_b12, &b[np * b_dim1 + 1], ldb);
         i__1 = *k - *l;
-        sgemm_("N", "T", m, l, &i__1, &c_b27, &work[work_offset], ldwork, &v[ v_offset], ldv, &c_b12, &b[b_offset], ldb);
-        strmm_("R", "L", "T", "N", m, l, &c_b12, &v[kp * v_dim1 + 1], ldv, & work[kp * work_dim1 + 1], ldwork);
+        sgemm_("N", "T", m, l, &i__1, &c_b27, &work[work_offset], ldwork, &v[v_offset], ldv, &c_b12,
+               &b[b_offset], ldb);
+        strmm_("R", "L", "T", "N", m, l, &c_b12, &v[kp * v_dim1 + 1], ldv,
+               &work[kp * work_dim1 + 1], ldwork);
         i__1 = *l;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 b[i__ + j * b_dim1] -= work[i__ + (*k - *l + j) * work_dim1];
             }
         }
         /* --------------------------------------------------------------------------- */
     }
-    else if (row && forward && left)
+    else if(row && forward && left)
     {
         /* --------------------------------------------------------------------------- */
         /* Let W = [ I V ] ( I is K-by-K, V is K-by-M ) */
@@ -692,76 +668,65 @@ int stprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         /* --------------------------------------------------------------------------- */
         /* Computing MIN */
         i__1 = *m - *l + 1;
-        mp = fla_min(i__1,*m);
+        mp = fla_min(i__1, *m);
         /* Computing MIN */
         i__1 = *l + 1;
-        kp = fla_min(i__1,*k);
+        kp = fla_min(i__1, *k);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *l;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 work[i__ + j * work_dim1] = b[*m - *l + i__ + j * b_dim1];
             }
         }
-        strmm_("L", "L", "N", "N", l, n, &c_b12, &v[mp * v_dim1 + 1], ldv, & work[work_offset], ldb);
+        strmm_("L", "L", "N", "N", l, n, &c_b12, &v[mp * v_dim1 + 1], ldv, &work[work_offset], ldb);
         i__1 = *m - *l;
-        sgemm_("N", "N", l, n, &i__1, &c_b12, &v[v_offset], ldv, &b[b_offset], ldb, &c_b12, &work[work_offset], ldwork);
+        sgemm_("N", "N", l, n, &i__1, &c_b12, &v[v_offset], ldv, &b[b_offset], ldb, &c_b12,
+               &work[work_offset], ldwork);
         i__1 = *k - *l;
-        sgemm_("N", "N", &i__1, n, m, &c_b12, &v[kp + v_dim1], ldv, &b[ b_offset], ldb, &c_b20, &work[kp + work_dim1], ldwork);
+        sgemm_("N", "N", &i__1, n, m, &c_b12, &v[kp + v_dim1], ldv, &b[b_offset], ldb, &c_b20,
+               &work[kp + work_dim1], ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 work[i__ + j * work_dim1] += a[i__ + j * a_dim1];
             }
         }
-        strmm_("L", "U", trans, "N", k, n, &c_b12, &t[t_offset], ldt, &work[ work_offset], ldwork);
+        strmm_("L", "U", trans, "N", k, n, &c_b12, &t[t_offset], ldt, &work[work_offset], ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 a[i__ + j * a_dim1] -= work[i__ + j * work_dim1];
             }
         }
         i__1 = *m - *l;
-        sgemm_("T", "N", &i__1, n, k, &c_b27, &v[v_offset], ldv, &work[ work_offset], ldwork, &c_b12, &b[b_offset], ldb);
+        sgemm_("T", "N", &i__1, n, k, &c_b27, &v[v_offset], ldv, &work[work_offset], ldwork, &c_b12,
+               &b[b_offset], ldb);
         i__1 = *k - *l;
-        sgemm_("T", "N", l, n, &i__1, &c_b27, &v[kp + mp * v_dim1], ldv, & work[kp + work_dim1], ldwork, &c_b12, &b[mp + b_dim1], ldb);
-        strmm_("L", "L", "T", "N", l, n, &c_b12, &v[mp * v_dim1 + 1], ldv, & work[work_offset], ldwork);
+        sgemm_("T", "N", l, n, &i__1, &c_b27, &v[kp + mp * v_dim1], ldv, &work[kp + work_dim1],
+               ldwork, &c_b12, &b[mp + b_dim1], ldb);
+        strmm_("L", "L", "T", "N", l, n, &c_b12, &v[mp * v_dim1 + 1], ldv, &work[work_offset],
+               ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *l;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 b[*m - *l + i__ + j * b_dim1] -= work[i__ + j * work_dim1];
             }
         }
         /* --------------------------------------------------------------------------- */
     }
-    else if (row && forward && right)
+    else if(row && forward && right)
     {
         /* --------------------------------------------------------------------------- */
         /* Let W = [ I V ] ( I is K-by-K, V is K-by-N ) */
@@ -772,76 +737,66 @@ int stprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         /* --------------------------------------------------------------------------- */
         /* Computing MIN */
         i__1 = *n - *l + 1;
-        np = fla_min(i__1,*n);
+        np = fla_min(i__1, *n);
         /* Computing MIN */
         i__1 = *l + 1;
-        kp = fla_min(i__1,*k);
+        kp = fla_min(i__1, *k);
         i__1 = *l;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 work[i__ + j * work_dim1] = b[i__ + (*n - *l + j) * b_dim1];
             }
         }
-        strmm_("R", "L", "T", "N", m, l, &c_b12, &v[np * v_dim1 + 1], ldv, & work[work_offset], ldwork);
+        strmm_("R", "L", "T", "N", m, l, &c_b12, &v[np * v_dim1 + 1], ldv, &work[work_offset],
+               ldwork);
         i__1 = *n - *l;
-        sgemm_("N", "T", m, l, &i__1, &c_b12, &b[b_offset], ldb, &v[v_offset], ldv, &c_b12, &work[work_offset], ldwork);
+        sgemm_("N", "T", m, l, &i__1, &c_b12, &b[b_offset], ldb, &v[v_offset], ldv, &c_b12,
+               &work[work_offset], ldwork);
         i__1 = *k - *l;
-        sgemm_("N", "T", m, &i__1, n, &c_b12, &b[b_offset], ldb, &v[kp + v_dim1], ldv, &c_b20, &work[kp * work_dim1 + 1], ldwork);
+        sgemm_("N", "T", m, &i__1, n, &c_b12, &b[b_offset], ldb, &v[kp + v_dim1], ldv, &c_b20,
+               &work[kp * work_dim1 + 1], ldwork);
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 work[i__ + j * work_dim1] += a[i__ + j * a_dim1];
             }
         }
-        strmm_("R", "U", trans, "N", m, k, &c_b12, &t[t_offset], ldt, &work[ work_offset], ldwork);
+        strmm_("R", "U", trans, "N", m, k, &c_b12, &t[t_offset], ldt, &work[work_offset], ldwork);
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 a[i__ + j * a_dim1] -= work[i__ + j * work_dim1];
             }
         }
         i__1 = *n - *l;
-        sgemm_("N", "N", m, &i__1, k, &c_b27, &work[work_offset], ldwork, &v[ v_offset], ldv, &c_b12, &b[b_offset], ldb);
+        sgemm_("N", "N", m, &i__1, k, &c_b27, &work[work_offset], ldwork, &v[v_offset], ldv, &c_b12,
+               &b[b_offset], ldb);
         i__1 = *k - *l;
-        sgemm_("N", "N", m, l, &i__1, &c_b27, &work[kp * work_dim1 + 1], ldwork, &v[kp + np * v_dim1], ldv, &c_b12, &b[np * b_dim1 + 1], ldb);
-        strmm_("R", "L", "N", "N", m, l, &c_b12, &v[np * v_dim1 + 1], ldv, & work[work_offset], ldwork);
+        sgemm_("N", "N", m, l, &i__1, &c_b27, &work[kp * work_dim1 + 1], ldwork,
+               &v[kp + np * v_dim1], ldv, &c_b12, &b[np * b_dim1 + 1], ldb);
+        strmm_("R", "L", "N", "N", m, l, &c_b12, &v[np * v_dim1 + 1], ldv, &work[work_offset],
+               ldwork);
         i__1 = *l;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 b[i__ + (*n - *l + j) * b_dim1] -= work[i__ + j * work_dim1];
             }
         }
         /* --------------------------------------------------------------------------- */
     }
-    else if (row && backward && left)
+    else if(row && backward && left)
     {
         /* --------------------------------------------------------------------------- */
         /* Let W = [ V I ] ( I is K-by-K, V is K-by-M ) */
@@ -853,76 +808,66 @@ int stprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         /* --------------------------------------------------------------------------- */
         /* Computing MIN */
         i__1 = *l + 1;
-        mp = fla_min(i__1,*m);
+        mp = fla_min(i__1, *m);
         /* Computing MIN */
         i__1 = *k - *l + 1;
-        kp = fla_min(i__1,*k);
+        kp = fla_min(i__1, *k);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *l;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 work[*k - *l + i__ + j * work_dim1] = b[i__ + j * b_dim1];
             }
         }
-        strmm_("L", "U", "N", "N", l, n, &c_b12, &v[kp + v_dim1], ldv, &work[ kp + work_dim1], ldwork);
+        strmm_("L", "U", "N", "N", l, n, &c_b12, &v[kp + v_dim1], ldv, &work[kp + work_dim1],
+               ldwork);
         i__1 = *m - *l;
-        sgemm_("N", "N", l, n, &i__1, &c_b12, &v[kp + mp * v_dim1], ldv, &b[ mp + b_dim1], ldb, &c_b12, &work[kp + work_dim1], ldwork);
+        sgemm_("N", "N", l, n, &i__1, &c_b12, &v[kp + mp * v_dim1], ldv, &b[mp + b_dim1], ldb,
+               &c_b12, &work[kp + work_dim1], ldwork);
         i__1 = *k - *l;
-        sgemm_("N", "N", &i__1, n, m, &c_b12, &v[v_offset], ldv, &b[b_offset], ldb, &c_b20, &work[work_offset], ldwork);
+        sgemm_("N", "N", &i__1, n, m, &c_b12, &v[v_offset], ldv, &b[b_offset], ldb, &c_b20,
+               &work[work_offset], ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 work[i__ + j * work_dim1] += a[i__ + j * a_dim1];
             }
         }
-        strmm_("L", "L ", trans, "N", k, n, &c_b12, &t[t_offset], ldt, &work[ work_offset], ldwork);
+        strmm_("L", "L ", trans, "N", k, n, &c_b12, &t[t_offset], ldt, &work[work_offset], ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 a[i__ + j * a_dim1] -= work[i__ + j * work_dim1];
             }
         }
         i__1 = *m - *l;
-        sgemm_("T", "N", &i__1, n, k, &c_b27, &v[mp * v_dim1 + 1], ldv, &work[ work_offset], ldwork, &c_b12, &b[mp + b_dim1], ldb);
+        sgemm_("T", "N", &i__1, n, k, &c_b27, &v[mp * v_dim1 + 1], ldv, &work[work_offset], ldwork,
+               &c_b12, &b[mp + b_dim1], ldb);
         i__1 = *k - *l;
-        sgemm_("T", "N", l, n, &i__1, &c_b27, &v[v_offset], ldv, &work[ work_offset], ldwork, &c_b12, &b[b_offset], ldb);
-        strmm_("L", "U", "T", "N", l, n, &c_b12, &v[kp + v_dim1], ldv, &work[ kp + work_dim1], ldwork);
+        sgemm_("T", "N", l, n, &i__1, &c_b27, &v[v_offset], ldv, &work[work_offset], ldwork, &c_b12,
+               &b[b_offset], ldb);
+        strmm_("L", "U", "T", "N", l, n, &c_b12, &v[kp + v_dim1], ldv, &work[kp + work_dim1],
+               ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *l;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 b[i__ + j * b_dim1] -= work[*k - *l + i__ + j * work_dim1];
             }
         }
         /* --------------------------------------------------------------------------- */
     }
-    else if (row && backward && right)
+    else if(row && backward && right)
     {
         /* --------------------------------------------------------------------------- */
         /* Let W = [ V I ] ( I is K-by-K, V is K-by-N ) */
@@ -933,77 +878,66 @@ int stprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         /* --------------------------------------------------------------------------- */
         /* Computing MIN */
         i__1 = *l + 1;
-        np = fla_min(i__1,*n);
+        np = fla_min(i__1, *n);
         /* Computing MIN */
         i__1 = *k - *l + 1;
-        kp = fla_min(i__1,*k);
+        kp = fla_min(i__1, *k);
         i__1 = *l;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 work[i__ + (*k - *l + j) * work_dim1] = b[i__ + j * b_dim1];
             }
         }
-        strmm_("R", "U", "T", "N", m, l, &c_b12, &v[kp + v_dim1], ldv, &work[ kp * work_dim1 + 1], ldwork);
+        strmm_("R", "U", "T", "N", m, l, &c_b12, &v[kp + v_dim1], ldv, &work[kp * work_dim1 + 1],
+               ldwork);
         i__1 = *n - *l;
-        sgemm_("N", "T", m, l, &i__1, &c_b12, &b[np * b_dim1 + 1], ldb, &v[kp + np * v_dim1], ldv, &c_b12, &work[kp * work_dim1 + 1], ldwork);
+        sgemm_("N", "T", m, l, &i__1, &c_b12, &b[np * b_dim1 + 1], ldb, &v[kp + np * v_dim1], ldv,
+               &c_b12, &work[kp * work_dim1 + 1], ldwork);
         i__1 = *k - *l;
-        sgemm_("N", "T", m, &i__1, n, &c_b12, &b[b_offset], ldb, &v[v_offset], ldv, &c_b20, &work[work_offset], ldwork);
+        sgemm_("N", "T", m, &i__1, n, &c_b12, &b[b_offset], ldb, &v[v_offset], ldv, &c_b20,
+               &work[work_offset], ldwork);
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 work[i__ + j * work_dim1] += a[i__ + j * a_dim1];
             }
         }
-        strmm_("R", "L", trans, "N", m, k, &c_b12, &t[t_offset], ldt, &work[ work_offset], ldwork);
+        strmm_("R", "L", trans, "N", m, k, &c_b12, &t[t_offset], ldt, &work[work_offset], ldwork);
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 a[i__ + j * a_dim1] -= work[i__ + j * work_dim1];
             }
         }
         i__1 = *n - *l;
-        sgemm_("N", "N", m, &i__1, k, &c_b27, &work[work_offset], ldwork, &v[ np * v_dim1 + 1], ldv, &c_b12, &b[np * b_dim1 + 1], ldb);
+        sgemm_("N", "N", m, &i__1, k, &c_b27, &work[work_offset], ldwork, &v[np * v_dim1 + 1], ldv,
+               &c_b12, &b[np * b_dim1 + 1], ldb);
         i__1 = *k - *l;
-        sgemm_("N", "N", m, l, &i__1, &c_b27, &work[work_offset], ldwork, &v[ v_offset], ldv, &c_b12, &b[b_offset], ldb);
-        strmm_("R", "U", "N", "N", m, l, &c_b12, &v[kp + v_dim1], ldv, &work[ kp * work_dim1 + 1], ldwork);
+        sgemm_("N", "N", m, l, &i__1, &c_b27, &work[work_offset], ldwork, &v[v_offset], ldv, &c_b12,
+               &b[b_offset], ldb);
+        strmm_("R", "U", "N", "N", m, l, &c_b12, &v[kp + v_dim1], ldv, &work[kp * work_dim1 + 1],
+               ldwork);
         i__1 = *l;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 b[i__ + j * b_dim1] -= work[i__ + (*k - *l + j) * work_dim1];
             }
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of STPRFB */
 }
 /* stprfb_ */
-

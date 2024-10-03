@@ -1,5 +1,8 @@
-/* ../netlib/v3.9.0/dlarfy.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/dlarfy.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b2 = 1.;
 static doublereal c_b3 = 0.;
@@ -99,20 +102,27 @@ static integer c__1 = 1;
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlarfy_(char *uplo, integer *n, doublereal *v, integer * incv, doublereal *tau, doublereal *c__, integer *ldc, doublereal * work)
+void dlarfy_(char *uplo, integer *n, doublereal *v, integer *incv, doublereal *tau, doublereal *c__,
+             integer *ldc, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlarfy inputs: uplo %c, n %" FLA_IS ", incv %" FLA_IS ", ldc %" FLA_IS "",*uplo, *n, *incv, *ldc);
+    AOCL_DTL_SNPRINTF("dlarfy inputs: uplo %c, n %" FLA_IS ", incv %" FLA_IS ", ldc %" FLA_IS "",
+                      *uplo, *n, *incv, *ldc);
     /* System generated locals */
     integer c_dim1, c_offset;
     doublereal d__1;
     /* Local variables */
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int dsyr2_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dsyr2_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+               doublereal *, integer *);
     doublereal alpha;
     extern /* Subroutine */
-    int daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dsymv_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *),
+        dsymv_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+               doublereal *, doublereal *, integer *);
     /* -- LAPACK test routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -138,10 +148,10 @@ int dlarfy_(char *uplo, integer *n, doublereal *v, integer * incv, doublereal *t
     c__ -= c_offset;
     --work;
     /* Function Body */
-    if (*tau == 0.)
+    if(*tau == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Form w:= C * v */
     dsymv_(uplo, n, &c_b2, &c__[c_offset], ldc, &v[1], incv, &c_b3, &work[1], &c__1);
@@ -151,7 +161,7 @@ int dlarfy_(char *uplo, integer *n, doublereal *v, integer * incv, doublereal *t
     d__1 = -(*tau);
     dsyr2_(uplo, n, &d__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLARFY */
 }
 /* dlarfy_ */

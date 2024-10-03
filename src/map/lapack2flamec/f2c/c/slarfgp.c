@@ -1,16 +1,25 @@
-/* ../netlib/slarfgp.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slarfgp.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLARFGP generates an elementary reflector (Householder matrix) with non-negative beta. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLARFGP + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarfgp .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarfgp
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarfgp .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarfgp
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarfgp .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarfgp
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -90,7 +99,7 @@
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int slarfgp_(integer *n, real *alpha, real *x, integer *incx, real *tau)
+void slarfgp_(integer *n, real *alpha, real *x, integer *incx, real *tau)
 {
     /* System generated locals */
     integer i__1;
@@ -104,7 +113,8 @@ int slarfgp_(integer *n, real *alpha, real *x, integer *incx, real *tau)
     real beta;
     extern real snrm2_(integer *, real *, integer *);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     real xnorm;
     extern real slapy2_(real *, real *), slamch_(char *);
     real bignum, smlnum;
@@ -131,18 +141,18 @@ int slarfgp_(integer *n, real *alpha, real *x, integer *incx, real *tau)
     /* Parameter adjustments */
     --x;
     /* Function Body */
-    if (*n <= 0)
+    if(*n <= 0)
     {
         *tau = 0.f;
-        return 0;
+        return;
     }
     i__1 = *n - 1;
     xnorm = snrm2_(&i__1, &x[1], incx);
-    if (xnorm == 0.f)
+    if(xnorm == 0.f)
     {
         /* H = [+/-1, 0;
         I], sign chosen so ALPHA >= 0. */
-        if (*alpha >= 0.f)
+        if(*alpha >= 0.f)
         {
             /* When TAU.eq.ZERO, the vector is special-cased to be */
             /* all zeros in the application routines. We do not need */
@@ -155,9 +165,7 @@ int slarfgp_(integer *n, real *alpha, real *x, integer *incx, real *tau)
             /* zero checks when TAU.ne.ZERO, and we must clear X. */
             *tau = 2.f;
             i__1 = *n - 1;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 x[(j - 1) * *incx + 1] = 0.f;
             }
@@ -171,18 +179,18 @@ int slarfgp_(integer *n, real *alpha, real *x, integer *incx, real *tau)
         beta = r_sign(&r__1, alpha);
         smlnum = slamch_("S") / slamch_("E");
         knt = 0;
-        if (f2c_abs(beta) < smlnum)
+        if(f2c_abs(beta) < smlnum)
         {
             /* XNORM, BETA may be inaccurate;
             scale X and recompute them */
             bignum = 1.f / smlnum;
-L10:
+        L10:
             ++knt;
             i__1 = *n - 1;
             sscal_(&i__1, &bignum, &x[1], incx);
             beta *= bignum;
             *alpha *= bignum;
-            if (f2c_abs(beta) < smlnum && knt < 20)
+            if(f2c_abs(beta) < smlnum && knt < 20)
             {
                 goto L10;
             }
@@ -194,7 +202,7 @@ L10:
         }
         savealpha = *alpha;
         *alpha += beta;
-        if (beta < 0.f)
+        if(beta < 0.f)
         {
             beta = -beta;
             *tau = -(*alpha) / beta;
@@ -205,14 +213,14 @@ L10:
             *tau = *alpha / beta;
             *alpha = -(*alpha);
         }
-        if (f2c_abs(*tau) <= smlnum)
+        if(f2c_abs(*tau) <= smlnum)
         {
             /* In the case where the computed TAU ends up being a denormalized number, */
             /* it loses relative accuracy. This is a BIG problem. Solution: flush TAU */
             /* to ZERO. This explains the next IF statement. */
             /* (Bug report provided by Pat Quillen from MathWorks on Jul 29, 2009.) */
             /* (Thanks Pat. Thanks MathWorks.) */
-            if (savealpha >= 0.f)
+            if(savealpha >= 0.f)
             {
                 *tau = 0.f;
             }
@@ -220,9 +228,7 @@ L10:
             {
                 *tau = 2.f;
                 i__1 = *n - 1;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     x[(j - 1) * *incx + 1] = 0.f;
                 }
@@ -238,16 +244,14 @@ L10:
         }
         /* If BETA is subnormal, it may lose relative accuracy */
         i__1 = knt;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             beta *= smlnum;
             /* L20: */
         }
         *alpha = beta;
     }
-    return 0;
+    return;
     /* End of SLARFGP */
 }
 /* slarfgp_ */

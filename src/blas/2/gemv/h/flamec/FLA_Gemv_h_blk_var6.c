@@ -22,7 +22,7 @@ FLA_Error FLA_Gemv_h_blk_var6( FLA_Obj alpha, FLA_Obj A, FLA_Obj x, FLA_Obj beta
           xB,              x1,
                            x2;
 
-  dim_t b;
+  fla_dim_t b;
 
   FLA_Scal_internal( beta, y,
                      FLA_Cntl_sub_scal( cntl ) );

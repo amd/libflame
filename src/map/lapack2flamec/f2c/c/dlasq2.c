@@ -1,22 +1,32 @@
-/* dlasq2.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dlasq2.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__2 = 2;
 static integer c__10 = 10;
 static integer c__3 = 3;
 static integer c__4 = 4;
-/* > \brief \b DLASQ2 computes all the eigenvalues of the symmetric positive definite tridiagonal matrix assoc iated with the qd Array Z to high relative accuracy. Used by sbdsqr and sstegr. */
+/* > \brief \b DLASQ2 computes all the eigenvalues of the symmetric positive definite tridiagonal
+ * matrix assoc iated with the qd Array Z to high relative accuracy. Used by sbdsqr and sstegr. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLASQ2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasq2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasq2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasq2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasq2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasq2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasq2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -103,10 +113,10 @@ static integer c__4 = 4;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlasq2_(integer *n, doublereal *z__, integer *info)
+void dlasq2_(integer *n, doublereal *z__, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlasq2 inputs: n %" FLA_IS "",*n);
+    AOCL_DTL_SNPRINTF("dlasq2 inputs: n %" FLA_IS "", *n);
     /* System generated locals */
     integer i__1, i__2, i__3;
     doublereal d__1, d__2;
@@ -135,16 +145,22 @@ int dlasq2_(integer *n, doublereal *z__, integer *info)
     doublereal tempe, tempq;
     integer ttype;
     extern /* Subroutine */
-    int dlasq3_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, logical *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dlasq3_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                doublereal *, doublereal *, integer *, integer *, integer *, logical *, integer *,
+                doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
+                doublereal *);
     extern doublereal dlamch_(char *);
     doublereal deemin;
     integer iwhila, iwhilb;
     doublereal oldemn, safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int dlasrt_(char *, integer *, doublereal *, integer *);
+        void
+        dlasrt_(char *, integer *, doublereal *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -176,65 +192,65 @@ int dlasq2_(integer *n, doublereal *z__, integer *info)
     /* Computing 2nd power */
     d__1 = tol;
     tol2 = d__1 * d__1;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
         xerbla_("DLASQ2", &c__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    else if (*n == 0)
+    else if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    else if (*n == 1)
+    else if(*n == 1)
     {
         /* 1-by-1 case. */
-        if (z__[1] < 0.)
+        if(z__[1] < 0.)
         {
             *info = -201;
             xerbla_("DLASQ2", &c__2, (ftnlen)6);
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    else if (*n == 2)
+    else if(*n == 2)
     {
         /* 2-by-2 case. */
-        if (z__[1] < 0.)
+        if(z__[1] < 0.)
         {
             *info = -201;
             xerbla_("DLASQ2", &c__2, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
-        else if (z__[2] < 0.)
+        else if(z__[2] < 0.)
         {
             *info = -202;
             xerbla_("DLASQ2", &c__2, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
-        else if (z__[3] < 0.)
+        else if(z__[3] < 0.)
         {
             *info = -203;
             xerbla_("DLASQ2", &c__2, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
-        else if (z__[3] > z__[1])
+        else if(z__[3] > z__[1])
         {
             d__ = z__[3];
             z__[3] = z__[1];
             z__[1] = d__;
         }
         z__[5] = z__[1] + z__[2] + z__[3];
-        if (z__[2] > z__[3] * tol2)
+        if(z__[2] > z__[3] * tol2)
         {
             t = (z__[1] - z__[3] + z__[2]) * .5;
             s = z__[3] * (z__[2] / t);
-            if (s <= t)
+            if(s <= t)
             {
                 s = z__[3] * (z__[2] / (t * (sqrt(s / t + 1.) + 1.)));
             }
@@ -249,7 +265,7 @@ int dlasq2_(integer *n, doublereal *z__, integer *info)
         z__[2] = z__[3];
         z__[6] = z__[2] + z__[1];
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Check for negative data and compute sums of q's and e's. */
     z__[*n * 2] = 0.;
@@ -259,60 +275,56 @@ int dlasq2_(integer *n, doublereal *z__, integer *info)
     d__ = 0.;
     e = 0.;
     i__1 = *n - 1 << 1;
-    for (k = 1;
-            k <= i__1;
-            k += 2)
+    for(k = 1; k <= i__1; k += 2)
     {
-        if (z__[k] < 0.)
+        if(z__[k] < 0.)
         {
             *info = -(k + 200);
             xerbla_("DLASQ2", &c__2, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
-        else if (z__[k + 1] < 0.)
+        else if(z__[k + 1] < 0.)
         {
             *info = -(k + 201);
             xerbla_("DLASQ2", &c__2, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         d__ += z__[k];
         e += z__[k + 1];
         /* Computing MAX */
         d__1 = qmax;
         d__2 = z__[k]; // , expr subst
-        qmax = fla_max(d__1,d__2);
+        qmax = fla_max(d__1, d__2);
         /* Computing MIN */
         d__1 = emin;
         d__2 = z__[k + 1]; // , expr subst
-        emin = fla_min(d__1,d__2);
+        emin = fla_min(d__1, d__2);
         /* Computing MAX */
-        d__1 = fla_max(qmax,zmax);
+        d__1 = fla_max(qmax, zmax);
         d__2 = z__[k + 1]; // , expr subst
-        zmax = fla_max(d__1,d__2);
+        zmax = fla_max(d__1, d__2);
         /* L10: */
     }
-    if (z__[(*n << 1) - 1] < 0.)
+    if(z__[(*n << 1) - 1] < 0.)
     {
         *info = -((*n << 1) + 199);
         xerbla_("DLASQ2", &c__2, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     d__ += z__[(*n << 1) - 1];
     /* Computing MAX */
     d__1 = qmax;
     d__2 = z__[(*n << 1) - 1]; // , expr subst
-    qmax = fla_max(d__1,d__2);
-    zmax = fla_max(qmax,zmax);
+    qmax = fla_max(d__1, d__2);
+    zmax = fla_max(qmax, zmax);
     /* Check for diagonality. */
-    if (e == 0.)
+    if(e == 0.)
     {
         i__1 = *n;
-        for (k = 2;
-                k <= i__1;
-                ++k)
+        for(k = 2; k <= i__1; ++k)
         {
             z__[k] = z__[(k << 1) - 1];
             /* L20: */
@@ -320,22 +332,20 @@ int dlasq2_(integer *n, doublereal *z__, integer *info)
         dlasrt_("D", n, &z__[1], &iinfo);
         z__[(*n << 1) - 1] = d__;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     trace = d__ + e;
     /* Check for zero data. */
-    if (trace == 0.)
+    if(trace == 0.)
     {
         z__[(*n << 1) - 1] = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Check whether the machine is IEEE conformable. */
     ieee = ilaenv_(&c__10, "DLASQ2", "N", &c__1, &c__2, &c__3, &c__4) == 1;
     /* Rearrange data for locality: Z=(q1,qq1,e1,ee1,q2,qq2,e2,ee2,...). */
-    for (k = *n << 1;
-            k >= 2;
-            k += -2)
+    for(k = *n << 1; k >= 2; k += -2)
     {
         z__[k * 2] = 0.;
         z__[(k << 1) - 1] = z__[k];
@@ -346,13 +356,11 @@ int dlasq2_(integer *n, doublereal *z__, integer *info)
     i0 = 1;
     n0 = *n;
     /* Reverse the qd-array, if warranted. */
-    if (z__[(i0 << 2) - 3] * 1.5 < z__[(n0 << 2) - 3])
+    if(z__[(i0 << 2) - 3] * 1.5 < z__[(n0 << 2) - 3])
     {
         ipn4 = i0 + n0 << 2;
         i__1 = i0 + n0 - 1 << 1;
-        for (i4 = i0 << 2;
-                i4 <= i__1;
-                i4 += 4)
+        for(i4 = i0 << 2; i4 <= i__1; i4 += 4)
         {
             temp = z__[i4 - 3];
             z__[i4 - 3] = z__[ipn4 - i4 - 3];
@@ -365,17 +373,13 @@ int dlasq2_(integer *n, doublereal *z__, integer *info)
     }
     /* Initial split checking via dqd and Li's test. */
     pp = 0;
-    for (k = 1;
-            k <= 2;
-            ++k)
+    for(k = 1; k <= 2; ++k)
     {
         d__ = z__[(n0 << 2) + pp - 3];
         i__1 = (i0 << 2) + pp;
-        for (i4 = (n0 - 1 << 2) + pp;
-                i4 >= i__1;
-                i4 += -4)
+        for(i4 = (n0 - 1 << 2) + pp; i4 >= i__1; i4 += -4)
         {
-            if (z__[i4 - 1] <= tol2 * d__)
+            if(z__[i4 - 1] <= tol2 * d__)
             {
                 z__[i4 - 1] = -0.;
                 d__ = z__[i4 - 3];
@@ -390,19 +394,18 @@ int dlasq2_(integer *n, doublereal *z__, integer *info)
         emin = z__[(i0 << 2) + pp + 1];
         d__ = z__[(i0 << 2) + pp - 3];
         i__1 = (n0 - 1 << 2) + pp;
-        for (i4 = (i0 << 2) + pp;
-                i4 <= i__1;
-                i4 += 4)
+        for(i4 = (i0 << 2) + pp; i4 <= i__1; i4 += 4)
         {
             z__[i4 - (pp << 1) - 2] = d__ + z__[i4 - 1];
-            if (z__[i4 - 1] <= tol2 * d__)
+            if(z__[i4 - 1] <= tol2 * d__)
             {
                 z__[i4 - 1] = -0.;
                 z__[i4 - (pp << 1) - 2] = d__;
                 z__[i4 - (pp << 1)] = 0.;
                 d__ = z__[i4 + 1];
             }
-            else if (safmin * z__[i4 + 1] < z__[i4 - (pp << 1) - 2] && safmin * z__[i4 - (pp << 1) - 2] < z__[i4 + 1])
+            else if(safmin * z__[i4 + 1] < z__[i4 - (pp << 1) - 2]
+                    && safmin * z__[i4 - (pp << 1) - 2] < z__[i4 + 1])
             {
                 temp = z__[i4 + 1] / z__[i4 - (pp << 1) - 2];
                 z__[i4 - (pp << 1)] = z__[i4 - 1] * temp;
@@ -410,27 +413,25 @@ int dlasq2_(integer *n, doublereal *z__, integer *info)
             }
             else
             {
-                z__[i4 - (pp << 1)] = z__[i4 + 1] * (z__[i4 - 1] / z__[i4 - ( pp << 1) - 2]);
+                z__[i4 - (pp << 1)] = z__[i4 + 1] * (z__[i4 - 1] / z__[i4 - (pp << 1) - 2]);
                 d__ = z__[i4 + 1] * (d__ / z__[i4 - (pp << 1) - 2]);
             }
             /* Computing MIN */
             d__1 = emin;
             d__2 = z__[i4 - (pp << 1)]; // , expr subst
-            emin = fla_min(d__1,d__2);
+            emin = fla_min(d__1, d__2);
             /* L60: */
         }
         z__[(n0 << 2) - pp - 2] = d__;
         /* Now find qmax. */
         qmax = z__[(i0 << 2) - pp - 2];
         i__1 = (n0 << 2) - pp - 2;
-        for (i4 = (i0 << 2) - pp + 2;
-                i4 <= i__1;
-                i4 += 4)
+        for(i4 = (i0 << 2) - pp + 2; i4 <= i__1; i4 += 4)
         {
             /* Computing MAX */
             d__1 = qmax;
             d__2 = z__[i4]; // , expr subst
-            qmax = fla_max(d__1,d__2);
+            qmax = fla_max(d__1, d__2);
             /* L70: */
         }
         /* Prepare for the next iteration on K. */
@@ -450,11 +451,9 @@ int dlasq2_(integer *n, doublereal *z__, integer *info)
     nfail = 0;
     ndiv = n0 - i0 << 1;
     i__1 = *n + 1;
-    for (iwhila = 1;
-            iwhila <= i__1;
-            ++iwhila)
+    for(iwhila = 1; iwhila <= i__1; ++iwhila)
     {
-        if (n0 < 1)
+        if(n0 < 1)
         {
             goto L170;
         }
@@ -462,7 +461,7 @@ int dlasq2_(integer *n, doublereal *z__, integer *info)
         /* E(N0) holds the value of SIGMA when submatrix in I0:N0 */
         /* splits from the rest of the array, but is negated. */
         desig = 0.;
-        if (n0 == *n)
+        if(n0 == *n)
         {
             sigma = 0.;
         }
@@ -470,16 +469,16 @@ int dlasq2_(integer *n, doublereal *z__, integer *info)
         {
             sigma = -z__[(n0 << 2) - 1];
         }
-        if (sigma < 0.)
+        if(sigma < 0.)
         {
             *info = 1;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* Find last unreduced submatrix's top index I0, find QMAX and */
         /* EMIN. Find Gershgorin-type bound if Q's much greater than E's. */
         emax = 0.;
-        if (n0 > i0)
+        if(n0 > i0)
         {
             emin = (d__1 = z__[(n0 << 2) - 5], f2c_dabs(d__1));
         }
@@ -489,65 +488,59 @@ int dlasq2_(integer *n, doublereal *z__, integer *info)
         }
         qmin = z__[(n0 << 2) - 3];
         qmax = qmin;
-        for (i4 = n0 << 2;
-                i4 >= 8;
-                i4 += -4)
+        for(i4 = n0 << 2; i4 >= 8; i4 += -4)
         {
-            if (z__[i4 - 5] <= 0.)
+            if(z__[i4 - 5] <= 0.)
             {
                 goto L100;
             }
-            if (qmin >= emax * 4.)
+            if(qmin >= emax * 4.)
             {
                 /* Computing MIN */
                 d__1 = qmin;
                 d__2 = z__[i4 - 3]; // , expr subst
-                qmin = fla_min(d__1,d__2);
+                qmin = fla_min(d__1, d__2);
                 /* Computing MAX */
                 d__1 = emax;
                 d__2 = z__[i4 - 5]; // , expr subst
-                emax = fla_max(d__1,d__2);
+                emax = fla_max(d__1, d__2);
             }
             /* Computing MAX */
             d__1 = qmax;
             d__2 = z__[i4 - 7] + z__[i4 - 5]; // , expr subst
-            qmax = fla_max(d__1,d__2);
+            qmax = fla_max(d__1, d__2);
             /* Computing MIN */
             d__1 = emin;
             d__2 = z__[i4 - 5]; // , expr subst
-            emin = fla_min(d__1,d__2);
+            emin = fla_min(d__1, d__2);
             /* L90: */
         }
         i4 = 4;
-L100:
+    L100:
         i0 = i4 / 4;
         pp = 0;
-        if (n0 - i0 > 1)
+        if(n0 - i0 > 1)
         {
             dee = z__[(i0 << 2) - 3];
             deemin = dee;
             kmin = i0;
             i__2 = (n0 << 2) - 3;
-            for (i4 = (i0 << 2) + 1;
-                    i4 <= i__2;
-                    i4 += 4)
+            for(i4 = (i0 << 2) + 1; i4 <= i__2; i4 += 4)
             {
                 dee = z__[i4] * (dee / (dee + z__[i4 - 2]));
-                if (dee <= deemin)
+                if(dee <= deemin)
                 {
                     deemin = dee;
                     kmin = (i4 + 3) / 4;
                 }
                 /* L110: */
             }
-            if (kmin - i0 << 1 < n0 - kmin && deemin <= z__[(n0 << 2) - 3] * .5)
+            if(kmin - i0 << 1 < n0 - kmin && deemin <= z__[(n0 << 2) - 3] * .5)
             {
                 ipn4 = i0 + n0 << 2;
                 pp = 2;
                 i__2 = i0 + n0 - 1 << 1;
-                for (i4 = i0 << 2;
-                        i4 <= i__2;
-                        i4 += 4)
+                for(i4 = i0 << 2; i4 <= i__2; i4 += 4)
                 {
                     temp = z__[i4 - 3];
                     z__[i4 - 3] = z__[ipn4 - i4 - 3];
@@ -569,7 +562,7 @@ L100:
         /* Computing MAX */
         d__1 = 0.;
         d__2 = qmin - sqrt(qmin) * 2. * sqrt(emax); // , expr subst
-        dmin__ = -fla_max(d__1,d__2);
+        dmin__ = -fla_max(d__1, d__2);
         /* Now I0:N0 is unreduced. */
         /* PP = 0 for ping, PP = 1 for pong. */
         /* PP = 2 indicates that flipping was applied to the Z array and */
@@ -577,32 +570,29 @@ L100:
         /* should not be performed. */
         nbig = (n0 - i0 + 1) * 100;
         i__2 = nbig;
-        for (iwhilb = 1;
-                iwhilb <= i__2;
-                ++iwhilb)
+        for(iwhilb = 1; iwhilb <= i__2; ++iwhilb)
         {
-            if (i0 > n0)
+            if(i0 > n0)
             {
                 goto L150;
             }
             /* While submatrix unfinished take a good dqds step. */
-            dlasq3_(&i0, &n0, &z__[1], &pp, &dmin__, &sigma, &desig, &qmax, & nfail, &iter, &ndiv, &ieee, &ttype, &dmin1, &dmin2, &dn, & dn1, &dn2, &g, &tau);
+            dlasq3_(&i0, &n0, &z__[1], &pp, &dmin__, &sigma, &desig, &qmax, &nfail, &iter, &ndiv,
+                    &ieee, &ttype, &dmin1, &dmin2, &dn, &dn1, &dn2, &g, &tau);
             pp = 1 - pp;
             /* When EMIN is very small check for splits. */
-            if (pp == 0 && n0 - i0 >= 3)
+            if(pp == 0 && n0 - i0 >= 3)
             {
-                if (z__[n0 * 4] <= tol2 * qmax || z__[(n0 << 2) - 1] <= tol2 * sigma)
+                if(z__[n0 * 4] <= tol2 * qmax || z__[(n0 << 2) - 1] <= tol2 * sigma)
                 {
                     splt = i0 - 1;
                     qmax = z__[(i0 << 2) - 3];
                     emin = z__[(i0 << 2) - 1];
                     oldemn = z__[i0 * 4];
                     i__3 = n0 - 3 << 2;
-                    for (i4 = i0 << 2;
-                            i4 <= i__3;
-                            i4 += 4)
+                    for(i4 = i0 << 2; i4 <= i__3; i4 += 4)
                     {
-                        if (z__[i4] <= tol2 * z__[i4 - 3] || z__[i4 - 1] <= tol2 * sigma)
+                        if(z__[i4] <= tol2 * z__[i4 - 3] || z__[i4 - 1] <= tol2 * sigma)
                         {
                             z__[i4 - 1] = -sigma;
                             splt = i4 / 4;
@@ -615,15 +605,15 @@ L100:
                             /* Computing MAX */
                             d__1 = qmax;
                             d__2 = z__[i4 + 1]; // , expr subst
-                            qmax = fla_max(d__1,d__2);
+                            qmax = fla_max(d__1, d__2);
                             /* Computing MIN */
                             d__1 = emin;
                             d__2 = z__[i4 - 1]; // , expr subst
-                            emin = fla_min(d__1,d__2);
+                            emin = fla_min(d__1, d__2);
                             /* Computing MIN */
                             d__1 = oldemn;
                             d__2 = z__[i4]; // , expr subst
-                            oldemn = fla_min(d__1,d__2);
+                            oldemn = fla_min(d__1, d__2);
                         }
                         /* L130: */
                     }
@@ -640,13 +630,11 @@ L100:
         /* This might need to be done for several blocks */
         i1 = i0;
         n1 = n0;
-L145:
+    L145:
         tempq = z__[(i0 << 2) - 3];
         z__[(i0 << 2) - 3] += sigma;
         i__2 = n0;
-        for (k = i0 + 1;
-                k <= i__2;
-                ++k)
+        for(k = i0 + 1; k <= i__2; ++k)
         {
             tempe = z__[(k << 2) - 5];
             z__[(k << 2) - 5] *= tempq / z__[(k << 2) - 7];
@@ -654,7 +642,7 @@ L145:
             z__[(k << 2) - 3] = z__[(k << 2) - 3] + sigma + tempe - z__[(k << 2) - 5];
         }
         /* Prepare to do this on the previous block if there is one */
-        if (i1 > 1)
+        if(i1 > 1)
         {
             n1 = i1 - 1;
             while(i1 >= 2 && z__[(i1 << 2) - 5] >= 0.)
@@ -665,15 +653,13 @@ L145:
             goto L145;
         }
         i__2 = *n;
-        for (k = 1;
-                k <= i__2;
-                ++k)
+        for(k = 1; k <= i__2; ++k)
         {
             z__[(k << 1) - 1] = z__[(k << 2) - 3];
             /* Only the block 1..N0 is unfinished. The rest of the e's */
             /* must be essentially zero, although sometimes other data */
             /* has been stored in them. */
-            if (k < n0)
+            if(k < n0)
             {
                 z__[k * 2] = z__[(k << 2) - 1];
             }
@@ -683,20 +669,18 @@ L145:
             }
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
         /* end IWHILB */
-L150: /* L160: */
-        ;
+    L150: /* L160: */
+          ;
     }
     *info = 3;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* end IWHILA */
 L170: /* Move q's to the front. */
     i__1 = *n;
-    for (k = 2;
-            k <= i__1;
-            ++k)
+    for(k = 2; k <= i__1; ++k)
     {
         z__[k] = z__[(k << 2) - 3];
         /* L180: */
@@ -704,9 +688,7 @@ L170: /* Move q's to the front. */
     /* Sort and compute sum of eigenvalues. */
     dlasrt_("D", n, &z__[1], &iinfo);
     e = 0.;
-    for (k = *n;
-            k >= 1;
-            --k)
+    for(k = *n; k >= 1; --k)
     {
         e += z__[k];
         /* L190: */
@@ -714,13 +696,13 @@ L170: /* Move q's to the front. */
     /* Store trace, sum(eigenvalues) and information on performance. */
     z__[(*n << 1) + 1] = trace;
     z__[(*n << 1) + 2] = e;
-    z__[(*n << 1) + 3] = (doublereal) iter;
+    z__[(*n << 1) + 3] = (doublereal)iter;
     /* Computing 2nd power */
     i__1 = *n;
-    z__[(*n << 1) + 4] = (doublereal) ndiv / (doublereal) (i__1 * i__1);
-    z__[(*n << 1) + 5] = nfail * 100. / (doublereal) iter;
+    z__[(*n << 1) + 4] = (doublereal)ndiv / (doublereal)(i__1 * i__1);
+    z__[(*n << 1) + 5] = nfail * 100. / (doublereal)iter;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLASQ2 */
 }
 /* dlasq2_ */

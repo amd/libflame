@@ -1,20 +1,30 @@
-/* dgeqrt2.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dgeqrt2.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static doublereal c_b5 = 1.;
 static doublereal c_b7 = 0.;
-/* > \brief \b DGEQRT2 computes a QR factorization of a general real or complex matrix using the compact WY re presentation of Q. */
+/* > \brief \b DGEQRT2 computes a QR factorization of a general real or complex matrix using the
+ * compact WY re presentation of Q. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DGEQRT2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgeqrt2 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgeqrt2
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgeqrt2 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgeqrt2
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgeqrt2 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgeqrt2
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -118,20 +128,30 @@ the elements below the diagonal are not used. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dgeqrt2_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *t, integer *ldt, integer *info)
+void dgeqrt2_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *t, integer *ldt,
+              integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgeqrt2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS "",*m, *n, *lda, *ldt);
+    AOCL_DTL_SNPRINTF("dgeqrt2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS
+                      "",
+                      *m, *n, *lda, *ldt);
     /* System generated locals */
     integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3;
     /* Local variables */
     integer i__, k;
     doublereal aii;
     extern /* Subroutine */
-    int dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+              doublereal *, integer *);
     doublereal alpha;
     extern /* Subroutine */
-    int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
+               integer *, doublereal *, doublereal *, integer *),
+        dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *),
+        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -157,41 +177,40 @@ int dgeqrt2_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *t
     t -= t_offset;
     /* Function Body */
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -2;
     }
-    else if (*m < *n)
+    else if(*m < *n)
     {
         *info = -1;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
-    else if (*ldt < fla_max(1,*n))
+    else if(*ldt < fla_max(1, *n))
     {
         *info = -6;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DGEQRT2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    k = fla_min(*m,*n);
+    k = fla_min(*m, *n);
     i__1 = k;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* Generate elem. refl. H(i) to annihilate A(i+1:m,i), tau(I) -> T(I,1) */
         i__2 = *m - i__ + 1;
         /* Computing MIN */
         i__3 = i__ + 1;
-        dlarfg_(&i__2, &a[i__ + i__ * a_dim1], &a[fla_min(i__3,*m) + i__ * a_dim1], &c__1, &t[i__ + t_dim1]);
-        if (i__ < *n)
+        dlarfg_(&i__2, &a[i__ + i__ * a_dim1], &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1,
+                &t[i__ + t_dim1]);
+        if(i__ < *n)
         {
             /* Apply H(i) to A(I:M,I+1:N) from the left */
             aii = a[i__ + i__ * a_dim1];
@@ -199,19 +218,19 @@ int dgeqrt2_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *t
             /* W(1:N-I) := A(I:M,I+1:N)^H * A(I:M,I) [W = T(:,N)] */
             i__2 = *m - i__ + 1;
             i__3 = *n - i__;
-            dgemv_("T", &i__2, &i__3, &c_b5, &a[i__ + (i__ + 1) * a_dim1], lda, &a[i__ + i__ * a_dim1], &c__1, &c_b7, &t[*n * t_dim1 + 1], &c__1);
+            dgemv_("T", &i__2, &i__3, &c_b5, &a[i__ + (i__ + 1) * a_dim1], lda,
+                   &a[i__ + i__ * a_dim1], &c__1, &c_b7, &t[*n * t_dim1 + 1], &c__1);
             /* A(I:M,I+1:N) = A(I:m,I+1:N) + alpha*A(I:M,I)*W(1:N-1)^H */
             alpha = -t[i__ + t_dim1];
             i__2 = *m - i__ + 1;
             i__3 = *n - i__;
-            dger_(&i__2, &i__3, &alpha, &a[i__ + i__ * a_dim1], &c__1, &t[*n * t_dim1 + 1], &c__1, &a[i__ + (i__ + 1) * a_dim1], lda);
+            dger_(&i__2, &i__3, &alpha, &a[i__ + i__ * a_dim1], &c__1, &t[*n * t_dim1 + 1], &c__1,
+                  &a[i__ + (i__ + 1) * a_dim1], lda);
             a[i__ + i__ * a_dim1] = aii;
         }
     }
     i__1 = *n;
-    for (i__ = 2;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 2; i__ <= i__1; ++i__)
     {
         aii = a[i__ + i__ * a_dim1];
         a[i__ + i__ * a_dim1] = 1.;
@@ -219,7 +238,8 @@ int dgeqrt2_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *t
         alpha = -t[i__ + t_dim1];
         i__2 = *m - i__ + 1;
         i__3 = i__ - 1;
-        dgemv_("T", &i__2, &i__3, &alpha, &a[i__ + a_dim1], lda, &a[i__ + i__ * a_dim1], &c__1, &c_b7, &t[i__ * t_dim1 + 1], &c__1);
+        dgemv_("T", &i__2, &i__3, &alpha, &a[i__ + a_dim1], lda, &a[i__ + i__ * a_dim1], &c__1,
+               &c_b7, &t[i__ * t_dim1 + 1], &c__1);
         a[i__ + i__ * a_dim1] = aii;
         /* T(1:I-1,I) := T(1:I-1,1:I-1) * T(1:I-1,I) */
         i__2 = i__ - 1;
@@ -230,6 +250,6 @@ int dgeqrt2_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *t
     }
     /* End of DGEQRT2 */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* dgeqrt2_ */

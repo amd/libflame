@@ -1,6 +1,6 @@
 /******************************************************************************
-* Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
-*******************************************************************************/
+ * Copyright (C) 2023-24, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 
 #include "FLAME.h"
 #include "fla_lapack_avx2_kernels.h"
@@ -13,9 +13,7 @@
  * All the computations are done inline without using
  * corresponding BLAS APIs to reduce function overheads.
  */
-integer fla_dgetrf_small_avx2(integer *m, integer *n,
-                              doublereal *a, integer *lda,
-                              integer *ipiv,
+integer fla_dgetrf_small_avx2(integer *m, integer *n, doublereal *a, integer *lda, integer *ipiv,
                               integer *info)
 {
     integer mi, ni;
@@ -27,7 +25,7 @@ integer fla_dgetrf_small_avx2(integer *m, integer *n,
     integer min_m_n = fla_min(*m, *n);
     lda_t = *lda;
 
-    for( i = 0; i < min_m_n; i++ )
+    for(i = 0; i < min_m_n; i++)
     {
         mi = *m - i;
         ni = *n - i;
@@ -37,11 +35,11 @@ integer fla_dgetrf_small_avx2(integer *m, integer *n,
         /* Find the pivot element */
         max_val = 0;
         p_idx = i;
-        for( i_1 = 0; i_1 < mi; i_1++ )
+        for(i_1 = 0; i_1 < mi; i_1++)
         {
             t_val = acur[i_1];
-            t_val = ( t_val < 0.0 ) ? -t_val : t_val;
-            if( t_val > max_val )
+            t_val = (t_val < 0.0) ? -t_val : t_val;
+            if(t_val > max_val)
             {
                 max_val = t_val;
                 p_idx = i + i_1;
@@ -53,12 +51,12 @@ integer fla_dgetrf_small_avx2(integer *m, integer *n,
         ipiv[i] = p_idx + 1;
 
         /* Swap rows and calculate a column of L */
-        if( max_val != 0.0 )
+        if(max_val != 0.0)
         {
             /* Swap entire rows */
-            if( p_idx != i)
+            if(p_idx != i)
             {
-                for( i_1 = 0; i_1 < *n; i_1++ )
+                for(i_1 = 0; i_1 < *n; i_1++)
                 {
                     t_val = apiv[i_1 * lda_t];
                     apiv[i_1 * *lda] = asrc[i_1 * lda_t];
@@ -67,14 +65,16 @@ integer fla_dgetrf_small_avx2(integer *m, integer *n,
             }
 
             /* Calculate scalefactors (L)  & update trailing matrix */
-			fla_lu_piv_small_d_update_tr_matrix_avx2(1, mi, ni, acur, *lda);
+            if(mi > 1)
+            {
+                fla_lu_piv_small_d_update_tr_matrix_avx2(1, mi, ni, acur, *lda);
+            }
         }
         else
         {
-            *info = ( *info == 0 ) ? p_idx + 1 : *info;
+            *info = (*info == 0) ? p_idx + 1 : *info;
         }
     }
-    
 
     return *info;
 }

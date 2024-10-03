@@ -4,14 +4,14 @@
 extern "C" {
 #endif
 
-    double d_atn2(doublereal *x, doublereal *y)
-    {
-        return( atan2(*x,*y) );
-    }
-    double r_atn2(real *x, real *y)
-    {
-        return( atan2(*x,*y) );
-    }
+double d_atn2(doublereal *x, doublereal *y)
+{
+    return (atan2(*x, *y));
+}
+double r_atn2(real *x, real *y)
+{
+    return (atan2(*x, *y));
+}
 
 #ifdef __cplusplus
 }

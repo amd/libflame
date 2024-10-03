@@ -1,21 +1,31 @@
-/* ../netlib/dlasd6.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlasd6.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__0 = 0;
 static doublereal c_b7 = 1.;
 static integer c__1 = 1;
 static integer c_n1 = -1;
-/* > \brief \b DLASD6 computes the SVD of an updated upper bidiagonal matrix obtained by merging two smaller o nes by appending a row. Used by sbdsdc. */
+/* > \brief \b DLASD6 computes the SVD of an updated upper bidiagonal matrix obtained by merging two
+ * smaller o nes by appending a row. Used by sbdsdc. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLASD6 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasd6. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasd6.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasd6. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasd6.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasd6. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasd6.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -304,20 +314,40 @@ and VL(NL+2:M) */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlasd6_(integer *icompq, integer *nl, integer *nr, integer *sqre, doublereal *d__, doublereal *vf, doublereal *vl, doublereal *alpha, doublereal *beta, integer *idxq, integer *perm, integer *givptr, integer *givcol, integer *ldgcol, doublereal *givnum, integer *ldgnum, doublereal *poles, doublereal *difl, doublereal * difr, doublereal *z__, integer *k, doublereal *c__, doublereal *s, doublereal *work, integer *iwork, integer *info)
+void dlasd6_(integer *icompq, integer *nl, integer *nr, integer *sqre, doublereal *d__,
+             doublereal *vf, doublereal *vl, doublereal *alpha, doublereal *beta, integer *idxq,
+             integer *perm, integer *givptr, integer *givcol, integer *ldgcol, doublereal *givnum,
+             integer *ldgnum, doublereal *poles, doublereal *difl, doublereal *difr,
+             doublereal *z__, integer *k, doublereal *c__, doublereal *s, doublereal *work,
+             integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlasd6 inputs: icompq %" FLA_IS ", nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS ", idxq %" FLA_IS ", ldgcol %" FLA_IS ", ldgnum %" FLA_IS "",*icompq, *nl, *nr, *sqre, *idxq, *ldgcol, *ldgnum);
+    AOCL_DTL_SNPRINTF("dlasd6 inputs: icompq %" FLA_IS ", nl %" FLA_IS ", nr %" FLA_IS
+                      ", sqre %" FLA_IS ", idxq %" FLA_IS ", ldgcol %" FLA_IS ", ldgnum %" FLA_IS
+                      "",
+                      *icompq, *nl, *nr, *sqre, *idxq, *ldgcol, *ldgnum);
     /* System generated locals */
     integer givcol_dim1, givcol_offset, givnum_dim1, givnum_offset, poles_dim1, poles_offset, i__1;
     doublereal d__1, d__2;
     /* Local variables */
     integer i__, m, n, n1, n2, iw, idx, idxc, idxp, ivfw, ivlw;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dlasd7_(integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlasd8_( integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        dlasd7_(integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *,
+                doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
+                doublereal *, doublereal *, integer *, integer *, integer *, integer *, integer *,
+                integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                integer *),
+        dlasd8_(integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
+                doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *),
+        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublereal *, integer *, integer *),
+        dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *);
     integer isigma;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal orgnrm;
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -362,36 +392,36 @@ int dlasd6_(integer *icompq, integer *nl, integer *nr, integer *sqre, doublereal
     *info = 0;
     n = *nl + *nr + 1;
     m = n + *sqre;
-    if (*icompq < 0 || *icompq > 1)
+    if(*icompq < 0 || *icompq > 1)
     {
         *info = -1;
     }
-    else if (*nl < 1)
+    else if(*nl < 1)
     {
         *info = -2;
     }
-    else if (*nr < 1)
+    else if(*nr < 1)
     {
         *info = -3;
     }
-    else if (*sqre < 0 || *sqre > 1)
+    else if(*sqre < 0 || *sqre > 1)
     {
         *info = -4;
     }
-    else if (*ldgcol < n)
+    else if(*ldgcol < n)
     {
         *info = -14;
     }
-    else if (*ldgnum < n)
+    else if(*ldgnum < n)
     {
         *info = -16;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DLASD6", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* The following values are for bookkeeping purposes only. They are */
     /* integer pointers which indicate the portion of the workspace */
@@ -407,14 +437,12 @@ int dlasd6_(integer *icompq, integer *nl, integer *nr, integer *sqre, doublereal
     /* Computing MAX */
     d__1 = f2c_abs(*alpha);
     d__2 = f2c_abs(*beta); // , expr subst
-    orgnrm = fla_max(d__1,d__2);
+    orgnrm = fla_max(d__1, d__2);
     d__[*nl + 1] = 0.;
     i__1 = n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if ((d__1 = d__[i__], f2c_abs(d__1)) > orgnrm)
+        if((d__1 = d__[i__], f2c_abs(d__1)) > orgnrm)
         {
             orgnrm = (d__1 = d__[i__], f2c_abs(d__1));
         }
@@ -424,17 +452,20 @@ int dlasd6_(integer *icompq, integer *nl, integer *nr, integer *sqre, doublereal
     *alpha /= orgnrm;
     *beta /= orgnrm;
     /* Sort and Deflate singular values. */
-    dlasd7_(icompq, nl, nr, sqre, k, &d__[1], &z__[1], &work[iw], &vf[1], & work[ivfw], &vl[1], &work[ivlw], alpha, beta, &work[isigma], & iwork[idx], &iwork[idxp], &idxq[1], &perm[1], givptr, &givcol[ givcol_offset], ldgcol, &givnum[givnum_offset], ldgnum, c__, s, info);
+    dlasd7_(icompq, nl, nr, sqre, k, &d__[1], &z__[1], &work[iw], &vf[1], &work[ivfw], &vl[1],
+            &work[ivlw], alpha, beta, &work[isigma], &iwork[idx], &iwork[idxp], &idxq[1], &perm[1],
+            givptr, &givcol[givcol_offset], ldgcol, &givnum[givnum_offset], ldgnum, c__, s, info);
     /* Solve Secular Equation, compute DIFL, DIFR, and update VF, VL. */
-    dlasd8_(icompq, k, &d__[1], &z__[1], &vf[1], &vl[1], &difl[1], &difr[1], ldgnum, &work[isigma], &work[iw], info);
+    dlasd8_(icompq, k, &d__[1], &z__[1], &vf[1], &vl[1], &difl[1], &difr[1], ldgnum, &work[isigma],
+            &work[iw], info);
     /* Report the possible convergence failure. */
-    if (*info != 0)
+    if(*info != 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Save the poles if ICOMPQ = 1. */
-    if (*icompq == 1)
+    if(*icompq == 1)
     {
         dcopy_(k, &d__[1], &c__1, &poles[poles_dim1 + 1], &c__1);
         dcopy_(k, &work[isigma], &c__1, &poles[(poles_dim1 << 1) + 1], &c__1);
@@ -446,7 +477,7 @@ int dlasd6_(integer *icompq, integer *nl, integer *nr, integer *sqre, doublereal
     n2 = n - *k;
     dlamrg_(&n1, &n2, &d__[1], &c__1, &c_n1, &idxq[1]);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLASD6 */
 }
 /* dlasd6_ */

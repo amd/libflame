@@ -1,19 +1,34 @@
-/* ../netlib/slarre.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slarre.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+
+/*
+*     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+*/
+
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__2 = 2;
-/* > \brief \b SLARRE given the tridiagonal matrix T, sets small off-diagonal elements to zero and for each un reduced block Ti, finds base representations and eigenvalues. */
+/* > \brief \b SLARRE given the tridiagonal matrix T, sets small off-diagonal elements to zero and
+ * for each un reduced block Ti, finds base representations and eigenvalues. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLARRE + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarre. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarre.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarre. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarre.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarre. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarre.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -131,7 +146,7 @@ E(N) need not be set. */
 /* > E2 is REAL array, dimension (N) */
 /* > On entry, the first (N-1) entries contain the SQUARES of the */
 /* > subdiagonal elements of the tridiagonal matrix T;
-*/
+ */
 /* > E2(N) need not be set. */
 /* > On exit, the entries E2( ISPLIT( I ) ), */
 /* > 1 <= I <= NSPLIT, have been set to zero */
@@ -217,7 +232,7 @@ IBLOCK(i)=1 if eigenvalue */
 /* > \verbatim */
 /* > INDEXW is INTEGER array, dimension (N) */
 /* > The indices of the eigenvalues within each block (submatrix);
-*/
+ */
 /* > for example, INDEXW(i)= 10 and IBLOCK(i)=2 imply that the */
 /* > i-th eigenvalue W(i) is the 10-th eigenvalue in block 2 */
 /* > \endverbatim */
@@ -294,7 +309,10 @@ IBLOCK(i)=1 if eigenvalue */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *iu, real *d__, real *e, real *e2, real *rtol1, real *rtol2, real *spltol, integer *nsplit, integer *isplit, integer * m, real *w, real *werr, real *wgap, integer *iblock, integer *indexw, real *gers, real *pivmin, real *work, integer *iwork, integer *info)
+void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *iu, real *d__,
+             real *e, real *e2, real *rtol1, real *rtol2, real *spltol, integer *nsplit,
+             integer *isplit, integer *m, real *w, real *werr, real *wgap, integer *iblock,
+             integer *indexw, real *gers, real *pivmin, real *work, integer *iwork, integer *info)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -320,11 +338,13 @@ int slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *i
     real rtol;
     integer iseed[4];
     real avgap, sigma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     logical norep;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), slasq2_(integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *),
+        slasq2_(integer *, real *, integer *);
     integer ibegin;
     logical forceb;
     integer irange;
@@ -333,14 +353,25 @@ int slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *i
     integer wbegin;
     real safmin, spdiam;
     extern /* Subroutine */
-    int slarra_(integer *, real *, real *, real *, real *, real *, integer *, integer *, integer *);
+        void
+        slarra_(integer *, real *, real *, real *, real *, real *, integer *, integer *, integer *);
     logical usedqd;
     real clwdth, isleft;
     extern /* Subroutine */
-    int slarrb_(integer *, real *, real *, integer *, integer *, real *, real *, integer *, real *, real *, real *, real *, integer *, real *, real *, integer *, integer *), slarrc_( char *, integer *, real *, real *, real *, real *, real *, integer *, integer *, integer *, integer *), slarrd_(char *, char *, integer *, real *, real *, integer *, integer *, real *, real *, real *, real *, real *, real *, integer *, integer *, integer *, real *, real *, real *, real *, integer *, integer *, real *, integer *, integer *), slarrk_(integer *, integer *, real *, real *, real *, real *, real *, real *, real *, real *, integer *);
+        void
+        slarrb_(integer *, real *, real *, integer *, integer *, real *, real *, integer *, real *,
+                real *, real *, real *, integer *, real *, real *, integer *, integer *),
+        slarrc_(char *, integer *, real *, real *, real *, real *, real *, integer *, integer *,
+                integer *, integer *),
+        slarrd_(char *, char *, integer *, real *, real *, integer *, integer *, real *, real *,
+                real *, real *, real *, real *, integer *, integer *, integer *, real *, real *,
+                real *, real *, integer *, integer *, real *, integer *, integer *),
+        slarrk_(integer *, integer *, real *, real *, real *, real *, real *, real *, real *,
+                real *, integer *);
     real isrght, bsrtol, dpivot;
     extern /* Subroutine */
-    int slarnv_(integer *, integer *, integer *, real *);
+        void
+        slarnv_(integer *, integer *, integer *, real *);
     /* -- LAPACK auxiliary routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -381,21 +412,22 @@ int slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *i
     wend = 0;
     mb = 0;
     irange = 0;
+    cnt1 = cnt2 = 0;
     /* Quick return if possible */
-    if (*n <= 0)
+    if(*n <= 0)
     {
-        return 0;
+        return;
     }
     /* Decode RANGE */
-    if (lsame_(range, "A"))
+    if(lsame_(range, "A", 1, 1))
     {
         irange = 1;
     }
-    else if (lsame_(range, "V"))
+    else if(lsame_(range, "V", 1, 1))
     {
         irange = 3;
     }
-    else if (lsame_(range, "I"))
+    else if(lsame_(range, "I", 1, 1))
     {
         irange = 2;
     }
@@ -411,9 +443,10 @@ int slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *i
     /* (eigenvalues in the middle need not as much accuracy) */
     bsrtol = sqrt(eps) * 5e-4f;
     /* Treat case of 1x1 matrix for quick return */
-    if (*n == 1)
+    if(*n == 1)
     {
-        if (irange == 1 || irange == 3 && d__[1] > *vl && d__[1] <= *vu || irange == 2 && *il == 1 && *iu == 1)
+        if(irange == 1 || irange == 3 && d__[1] > *vl && d__[1] <= *vu
+           || irange == 2 && *il == 1 && *iu == 1)
         {
             *m = 1;
             w[1] = d__[1];
@@ -427,7 +460,7 @@ int slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *i
         }
         /* store the shift for the initial RRR, which is zero in this case */
         e[1] = 0.f;
-        return 0;
+        return;
     }
     /* General case: tridiagonal matrix of order > 1 */
     /* Init WERR, WGAP. Compute Gerschgorin intervals and spectral diameter. */
@@ -438,14 +471,12 @@ int slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *i
     emax = 0.f;
     e[*n] = 0.f;
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         werr[i__] = 0.f;
         wgap[i__] = 0.f;
         eabs = (r__1 = e[i__], f2c_abs(r__1));
-        if (eabs >= emax)
+        if(eabs >= emax)
         {
             emax = eabs;
         }
@@ -454,12 +485,12 @@ int slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *i
         /* Computing MIN */
         r__1 = gl;
         r__2 = gers[(i__ << 1) - 1]; // , expr subst
-        gl = fla_min(r__1,r__2);
+        gl = fla_min(r__1, r__2);
         gers[i__ * 2] = d__[i__] + tmp1;
         /* Computing MAX */
         r__1 = gu;
         r__2 = gers[i__ * 2]; // , expr subst
-        gu = fla_max(r__1,r__2);
+        gu = fla_max(r__1, r__2);
         eold = eabs;
         /* L5: */
     }
@@ -469,19 +500,19 @@ int slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *i
     r__3 = emax;
     r__1 = 1.f;
     r__2 = r__3 * r__3; // , expr subst
-    *pivmin = safmin * fla_max(r__1,r__2);
+    *pivmin = safmin * fla_max(r__1, r__2);
     /* Compute spectral diameter. The Gerschgorin bounds give an */
     /* estimate that is wrong by at most a factor of SQRT(2) */
     spdiam = gu - gl;
     /* Compute splitting points */
-    slarra_(n, &d__[1], &e[1], &e2[1], spltol, &spdiam, nsplit, &isplit[1], & iinfo);
+    slarra_(n, &d__[1], &e[1], &e2[1], spltol, &spdiam, nsplit, &isplit[1], &iinfo);
     /* Can force use of bisection instead of faster DQDS. */
     /* Option left in the code for future multisection work. */
     forceb = FALSE_;
     /* Initialize USEDQD, DQDS should be used for ALLRNG unless someone */
     /* explicitly wants bisection. */
-    usedqd = irange == 1 && ! forceb;
-    if (irange == 1 && ! forceb)
+    usedqd = irange == 1 && !forceb;
+    if(irange == 1 && !forceb)
     {
         /* Set interval [VL,VU] that contains all eigenvalues */
         *vl = gl;
@@ -495,17 +526,17 @@ int slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *i
         /* An interval [LEFT,RIGHT] has converged if */
         /* RIGHT-LEFT.LT.RTOL*MAX(ABS(LEFT),ABS(RIGHT)) */
         /* SLARRD needs a WORK of size 4*N, IWORK of size 3*N */
-        slarrd_(range, "B", n, vl, vu, il, iu, &gers[1], &bsrtol, &d__[1], &e[ 1], &e2[1], pivmin, nsplit, &isplit[1], &mm, &w[1], &werr[1], vl, vu, &iblock[1], &indexw[1], &work[1], &iwork[1], &iinfo);
-        if (iinfo != 0)
+        slarrd_(range, "B", n, vl, vu, il, iu, &gers[1], &bsrtol, &d__[1], &e[1], &e2[1], pivmin,
+                nsplit, &isplit[1], &mm, &w[1], &werr[1], vl, vu, &iblock[1], &indexw[1], &work[1],
+                &iwork[1], &iinfo);
+        if(iinfo != 0)
         {
             *info = -1;
-            return 0;
+            return;
         }
         /* Make sure that the entries M+1 to N in W, WERR, IBLOCK, INDEXW are 0 */
         i__1 = *n;
-        for (i__ = mm + 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = mm + 1; i__ <= i__1; ++i__)
         {
             w[i__] = 0.f;
             werr[i__] = 0.f;
@@ -519,16 +550,15 @@ int slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *i
     ibegin = 1;
     wbegin = 1;
     i__1 = *nsplit;
-    for (jblk = 1;
-            jblk <= i__1;
-            ++jblk)
+    for(jblk = 1; jblk <= i__1; ++jblk)
     {
         iend = isplit[jblk];
         in = iend - ibegin + 1;
         /* 1 X 1 block */
-        if (in == 1)
+        if(in == 1)
         {
-            if (irange == 1 || irange == 3 && d__[ibegin] > *vl && d__[ibegin] <= *vu || irange == 2 && iblock[wbegin] == jblk)
+            if(irange == 1 || irange == 3 && d__[ibegin] > *vl && d__[ibegin] <= *vu
+               || irange == 2 && iblock[wbegin] == jblk)
             {
                 ++(*m);
                 w[*m] = d__[ibegin];
@@ -552,29 +582,25 @@ int slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *i
         gl = d__[ibegin];
         gu = d__[ibegin];
         i__2 = iend;
-        for (i__ = ibegin;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = ibegin; i__ <= i__2; ++i__)
         {
             /* Computing MIN */
             r__1 = gers[(i__ << 1) - 1];
-            gl = fla_min(r__1,gl);
+            gl = fla_min(r__1, gl);
             /* Computing MAX */
             r__1 = gers[i__ * 2];
-            gu = fla_max(r__1,gu);
+            gu = fla_max(r__1, gu);
             /* L15: */
         }
         spdiam = gu - gl;
-        if (! (irange == 1 && ! forceb))
+        if(!(irange == 1 && !forceb))
         {
             /* Count the number of eigenvalues in the current block. */
             mb = 0;
             i__2 = mm;
-            for (i__ = wbegin;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = wbegin; i__ <= i__2; ++i__)
             {
-                if (iblock[i__] == jblk)
+                if(iblock[i__] == jblk)
                 {
                     ++mb;
                 }
@@ -584,8 +610,8 @@ int slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *i
                 }
                 /* L20: */
             }
-L21:
-            if (mb == 0)
+        L21:
+            if(mb == 0)
             {
                 /* No eigenvalue in the current block lies in the desired range */
                 /* E( IEND ) holds the shift for the initial RRR */
@@ -596,56 +622,56 @@ L21:
             else
             {
                 /* Decide whether dqds or bisection is more efficient */
-                usedqd = (real) mb > in * .5f && ! forceb;
+                usedqd = (real)mb > in * .5f && !forceb;
                 wend = wbegin + mb - 1;
                 /* Calculate gaps for the current block */
                 /* In later stages, when representations for individual */
                 /* eigenvalues are different, we use SIGMA = E( IEND ). */
                 sigma = 0.f;
                 i__2 = wend - 1;
-                for (i__ = wbegin;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = wbegin; i__ <= i__2; ++i__)
                 {
                     /* Computing MAX */
                     r__1 = 0.f;
                     r__2 = w[i__ + 1] - werr[i__ + 1] - (w[i__] + werr[i__]); // , expr subst
-                    wgap[i__] = fla_max(r__1,r__2);
+                    wgap[i__] = fla_max(r__1, r__2);
                     /* L30: */
                 }
                 /* Computing MAX */
                 r__1 = 0.f;
                 r__2 = *vu - sigma - (w[wend] + werr[wend]); // , expr subst
-                wgap[wend] = fla_max(r__1,r__2);
+                wgap[wend] = fla_max(r__1, r__2);
                 /* Find local index of the first and last desired evalue. */
                 indl = indexw[wbegin];
                 indu = indexw[wend];
             }
         }
-        if (irange == 1 && ! forceb || usedqd)
+        if(irange == 1 && !forceb || usedqd)
         {
             /* Case of DQDS */
             /* Find approximations to the extremal eigenvalues of the block */
-            slarrk_(&in, &c__1, &gl, &gu, &d__[ibegin], &e2[ibegin], pivmin, & rtl, &tmp, &tmp1, &iinfo);
-            if (iinfo != 0)
+            slarrk_(&in, &c__1, &gl, &gu, &d__[ibegin], &e2[ibegin], pivmin, &rtl, &tmp, &tmp1,
+                    &iinfo);
+            if(iinfo != 0)
             {
                 *info = -1;
-                return 0;
+                return;
             }
             /* Computing MAX */
             r__2 = gl;
             r__3 = tmp - tmp1 - eps * 100.f * (r__1 = tmp - tmp1, f2c_abs(r__1)); // , expr subst
-            isleft = fla_max(r__2,r__3);
-            slarrk_(&in, &in, &gl, &gu, &d__[ibegin], &e2[ibegin], pivmin, & rtl, &tmp, &tmp1, &iinfo);
-            if (iinfo != 0)
+            isleft = fla_max(r__2, r__3);
+            slarrk_(&in, &in, &gl, &gu, &d__[ibegin], &e2[ibegin], pivmin, &rtl, &tmp, &tmp1,
+                    &iinfo);
+            if(iinfo != 0)
             {
                 *info = -1;
-                return 0;
+                return;
             }
             /* Computing MIN */
             r__2 = gu;
             r__3 = tmp + tmp1 + eps * 100.f * (r__1 = tmp + tmp1, f2c_abs(r__1)); // , expr subst
-            isrght = fla_min(r__2,r__3);
+            isrght = fla_min(r__2, r__3);
             /* Improve the estimate of the spectral diameter */
             spdiam = isrght - isleft;
         }
@@ -655,12 +681,14 @@ L21:
             /* Find approximations to the wanted extremal eigenvalues */
             /* Computing MAX */
             r__2 = gl;
-            r__3 = w[wbegin] - werr[wbegin] - eps * 100.f * (r__1 = w[wbegin] - werr[wbegin], f2c_abs(r__1)); // , expr subst
-            isleft = fla_max(r__2,r__3);
+            r__3 = w[wbegin] - werr[wbegin]
+                   - eps * 100.f * (r__1 = w[wbegin] - werr[wbegin], f2c_abs(r__1)); // , expr subst
+            isleft = fla_max(r__2, r__3);
             /* Computing MIN */
             r__2 = gu;
-            r__3 = w[wend] + werr[wend] + eps * 100.f * (r__1 = w[ wend] + werr[wend], f2c_abs(r__1)); // , expr subst
-            isrght = fla_min(r__2,r__3);
+            r__3 = w[wend] + werr[wend]
+                   + eps * 100.f * (r__1 = w[wend] + werr[wend], f2c_abs(r__1)); // , expr subst
+            isrght = fla_min(r__2, r__3);
         }
         /* Decide whether the base representation for the current block */
         /* L_JBLK D_JBLK L_JBLK^T = T_JBLK - sigma_JBLK I */
@@ -670,7 +698,7 @@ L21:
         /* the eigenvalue approximations at the end of SLARRE or bisection. */
         /* dqds is chosen if all eigenvalues are desired or the number of */
         /* eigenvalues to be computed is large compared to the blocksize. */
-        if (irange == 1 && ! forceb)
+        if(irange == 1 && !forceb)
         {
             /* If all the eigenvalues have to be computed, we use dqd */
             usedqd = TRUE_;
@@ -689,35 +717,36 @@ L21:
             /* SLARRD has computed IBLOCK and INDEXW for each eigenvalue */
             /* approximation. */
             /* choose sigma */
-            if (usedqd)
+            if(usedqd)
             {
                 s1 = isleft + spdiam * .25f;
                 s2 = isrght - spdiam * .25f;
             }
             else
             {
-                tmp = fla_min(isrght,*vu) - fla_max(isleft,*vl);
-                s1 = fla_max(isleft,*vl) + tmp * .25f;
-                s2 = fla_min(isrght,*vu) - tmp * .25f;
+                tmp = fla_min(isrght, *vu) - fla_max(isleft, *vl);
+                s1 = fla_max(isleft, *vl) + tmp * .25f;
+                s2 = fla_min(isrght, *vu) - tmp * .25f;
             }
         }
         /* Compute the negcount at the 1/4 and 3/4 points */
-        if (mb > 1)
+        if(mb > 1)
         {
-            slarrc_("T", &in, &s1, &s2, &d__[ibegin], &e[ibegin], pivmin, & cnt, &cnt1, &cnt2, &iinfo);
+            slarrc_("T", &in, &s1, &s2, &d__[ibegin], &e[ibegin], pivmin, &cnt, &cnt1, &cnt2,
+                    &iinfo);
         }
-        if (mb == 1)
+        if(mb == 1)
         {
             sigma = gl;
             sgndef = 1.f;
         }
-        else if (cnt1 - indl >= indu - cnt2)
+        else if(cnt1 - indl >= indu - cnt2)
         {
-            if (irange == 1 && ! forceb)
+            if(irange == 1 && !forceb)
             {
-                sigma = fla_max(isleft,gl);
+                sigma = fla_max(isleft, gl);
             }
-            else if (usedqd)
+            else if(usedqd)
             {
                 /* use Gerschgorin bound as shift to get pos def matrix */
                 /* for dqds */
@@ -727,17 +756,17 @@ L21:
             {
                 /* use approximation of the first desired eigenvalue of the */
                 /* block as shift */
-                sigma = fla_max(isleft,*vl);
+                sigma = fla_max(isleft, *vl);
             }
             sgndef = 1.f;
         }
         else
         {
-            if (irange == 1 && ! forceb)
+            if(irange == 1 && !forceb)
             {
-                sigma = fla_min(isrght,gu);
+                sigma = fla_min(isrght, gu);
             }
-            else if (usedqd)
+            else if(usedqd)
             {
                 /* use Gerschgorin bound as shift to get neg def matrix */
                 /* for dqds */
@@ -747,7 +776,7 @@ L21:
             {
                 /* use approximation of the first desired eigenvalue of the */
                 /* block as shift */
-                sigma = fla_min(isrght,*vu);
+                sigma = fla_min(isrght, *vu);
             }
             sgndef = -1.f;
         }
@@ -756,7 +785,7 @@ L21:
         /* Define the increment TAU of the shift in case the initial shift */
         /* needs to be refined to obtain a factorization with not too much */
         /* element growth. */
-        if (usedqd)
+        if(usedqd)
         {
             /* The initial SIGMA was to the outer end of the spectrum */
             /* the matrix is definite and we need not retreat. */
@@ -764,33 +793,33 @@ L21:
             /* Computing MAX */
             r__1 = tau;
             r__2 = eps * 2.f * f2c_abs(sigma); // , expr subst
-            tau = fla_max(r__1,r__2);
+            tau = fla_max(r__1, r__2);
         }
         else
         {
-            if (mb > 1)
+            if(mb > 1)
             {
                 clwdth = w[wend] + werr[wend] - w[wbegin] - werr[wbegin];
-                avgap = (r__1 = clwdth / (real) (wend - wbegin), f2c_abs(r__1));
-                if (sgndef == 1.f)
+                avgap = (r__1 = clwdth / (real)(wend - wbegin), f2c_abs(r__1));
+                if(sgndef == 1.f)
                 {
                     /* Computing MAX */
                     r__1 = wgap[wbegin];
-                    tau = fla_max(r__1,avgap) * .5f;
+                    tau = fla_max(r__1, avgap) * .5f;
                     /* Computing MAX */
                     r__1 = tau;
                     r__2 = werr[wbegin]; // , expr subst
-                    tau = fla_max(r__1,r__2);
+                    tau = fla_max(r__1, r__2);
                 }
                 else
                 {
                     /* Computing MAX */
                     r__1 = wgap[wend - 1];
-                    tau = fla_max(r__1,avgap) * .5f;
+                    tau = fla_max(r__1, avgap) * .5f;
                     /* Computing MAX */
                     r__1 = tau;
                     r__2 = werr[wend]; // , expr subst
-                    tau = fla_max(r__1,r__2);
+                    tau = fla_max(r__1, r__2);
                 }
             }
             else
@@ -798,9 +827,7 @@ L21:
                 tau = werr[wbegin];
             }
         }
-        for (idum = 1;
-                idum <= 6;
-                ++idum)
+        for(idum = 1; idum <= 6; ++idum)
         {
             /* Compute L D L^T factorization of tridiagonal matrix T - sigma I. */
             /* Store D in WORK(1:IN), L in WORK(IN+1:2*IN), and reciprocals of */
@@ -810,9 +837,7 @@ L21:
             dmax__ = f2c_abs(work[1]);
             j = ibegin;
             i__2 = in - 1;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 work[(in << 1) + i__] = 1.f / work[i__];
                 tmp = e[j] * work[(in << 1) + i__];
@@ -822,12 +847,12 @@ L21:
                 /* Computing MAX */
                 r__1 = dmax__;
                 r__2 = f2c_abs(dpivot); // , expr subst
-                dmax__ = fla_max(r__1,r__2);
+                dmax__ = fla_max(r__1, r__2);
                 ++j;
                 /* L70: */
             }
             /* check for element growth */
-            if (dmax__ > spdiam * 64.f)
+            if(dmax__ > spdiam * 64.f)
             {
                 norep = TRUE_;
             }
@@ -835,31 +860,29 @@ L21:
             {
                 norep = FALSE_;
             }
-            if (usedqd && ! norep)
+            if(usedqd && !norep)
             {
                 /* Ensure the definiteness of the representation */
                 /* All entries of D (of L D L^T) must have the same sign */
                 i__2 = in;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     tmp = sgndef * work[i__];
-                    if (tmp < 0.f)
+                    if(tmp < 0.f)
                     {
                         norep = TRUE_;
                     }
                     /* L71: */
                 }
             }
-            if (norep)
+            if(norep)
             {
                 /* Note that in the case of IRANGE=ALLRNG, we use the Gerschgorin */
                 /* shift which makes the matrix definite. So we should end up */
                 /* here really only in the case of IRANGE = VALRNG or INDRNG. */
-                if (idum == 5)
+                if(idum == 5)
                 {
-                    if (sgndef == 1.f)
+                    if(sgndef == 1.f)
                     {
                         /* The fudged Gerschgorin shift should succeed */
                         sigma = gl - spdiam * 2.f * eps * *n - *pivmin * 4.f;
@@ -885,8 +908,8 @@ L21:
         /* if the program reaches this point, no base representation could be */
         /* found in MAXTRY iterations. */
         *info = 2;
-        return 0;
-L83: /* At this point, we have found an initial base representation */
+        return;
+    L83: /* At this point, we have found an initial base representation */
         /* T - SIGMA I = L D L^T with not too much element growth. */
         /* Store the shift. */
         e[iend] = sigma;
@@ -894,14 +917,12 @@ L83: /* At this point, we have found an initial base representation */
         scopy_(&in, &work[1], &c__1, &d__[ibegin], &c__1);
         i__2 = in - 1;
         scopy_(&i__2, &work[in + 1], &c__1, &e[ibegin], &c__1);
-        if (mb > 1)
+        if(mb > 1)
         {
             /* Perturb each entry of the base representation by a small */
             /* (but random) relative amount to overcome difficulties with */
             /* glued matrices. */
-            for (i__ = 1;
-                    i__ <= 4;
-                    ++i__)
+            for(i__ = 1; i__ <= 4; ++i__)
             {
                 iseed[i__ - 1] = 1;
                 /* L122: */
@@ -909,9 +930,7 @@ L83: /* At this point, we have found an initial base representation */
             i__2 = (in << 1) - 1;
             slarnv_(&c__2, iseed, &i__2, &work[1]);
             i__2 = in - 1;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 d__[ibegin + i__ - 1] *= eps * 4.f * work[i__] + 1.f;
                 e[ibegin + i__ - 1] *= eps * 4.f * work[in + i__] + 1.f;
@@ -924,7 +943,7 @@ L83: /* At this point, we have found an initial base representation */
         /* We update W instead and use it to locate the proper Gerschgorin */
         /* intervals. */
         /* Compute the required eigenvalues of L D L' by bisection or dqds */
-        if (! usedqd)
+        if(!usedqd)
         {
             /* If SLARRD has been used, shift the eigenvalue approximations */
             /* according to their representation. This is necessary for */
@@ -932,9 +951,7 @@ L83: /* At this point, we have found an initial base representation */
             /* shifted representation. In SLARRV, W will always hold the */
             /* UNshifted eigenvalue approximation. */
             i__2 = wend;
-            for (j = wbegin;
-                    j <= i__2;
-                    ++j)
+            for(j = wbegin; j <= i__2; ++j)
             {
                 w[j] -= sigma;
                 werr[j] += (r__1 = w[j], f2c_abs(r__1)) * eps;
@@ -943,9 +960,7 @@ L83: /* At this point, we have found an initial base representation */
             /* call SLARRB to reduce eigenvalue error of the approximations */
             /* from SLARRD */
             i__2 = iend - 1;
-            for (i__ = ibegin;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = ibegin; i__ <= i__2; ++i__)
             {
                 /* Computing 2nd power */
                 r__1 = e[i__];
@@ -954,22 +969,22 @@ L83: /* At this point, we have found an initial base representation */
             }
             /* use bisection to find EV from INDL to INDU */
             i__2 = indl - 1;
-            slarrb_(&in, &d__[ibegin], &work[ibegin], &indl, &indu, rtol1, rtol2, &i__2, &w[wbegin], &wgap[wbegin], &werr[wbegin], & work[(*n << 1) + 1], &iwork[1], pivmin, &spdiam, &in, & iinfo);
-            if (iinfo != 0)
+            slarrb_(&in, &d__[ibegin], &work[ibegin], &indl, &indu, rtol1, rtol2, &i__2, &w[wbegin],
+                    &wgap[wbegin], &werr[wbegin], &work[(*n << 1) + 1], &iwork[1], pivmin, &spdiam,
+                    &in, &iinfo);
+            if(iinfo != 0)
             {
                 *info = -4;
-                return 0;
+                return;
             }
             /* SLARRB computes all gaps correctly except for the last one */
             /* Record distance to VU/GU */
             /* Computing MAX */
             r__1 = 0.f;
             r__2 = *vu - sigma - (w[wend] + werr[wend]); // , expr subst
-            wgap[wend] = fla_max(r__1,r__2);
+            wgap[wend] = fla_max(r__1, r__2);
             i__2 = indu;
-            for (i__ = indl;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = indl; i__ <= i__2; ++i__)
             {
                 ++(*m);
                 iblock[*m] = jblk;
@@ -990,12 +1005,10 @@ L83: /* At this point, we have found an initial base representation */
             /* This is an ESTIMATED error, the worst case bound is 4*N*EPS */
             /* which is usually too large and requires unnecessary work to be */
             /* done by bisection when computing the eigenvectors */
-            rtol = log((real) in) * 4.f * eps;
+            rtol = log((real)in) * 4.f * eps;
             j = ibegin;
             i__2 = in - 1;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 work[(i__ << 1) - 1] = (r__1 = d__[j], f2c_abs(r__1));
                 work[i__ * 2] = e[j] * e[j] * work[(i__ << 1) - 1];
@@ -1005,36 +1018,32 @@ L83: /* At this point, we have found an initial base representation */
             work[(in << 1) - 1] = (r__1 = d__[iend], f2c_abs(r__1));
             work[in * 2] = 0.f;
             slasq2_(&in, &work[1], &iinfo);
-            if (iinfo != 0)
+            if(iinfo != 0)
             {
                 /* If IINFO = -5 then an index is part of a tight cluster */
                 /* and should be changed. The index is in IWORK(1) and the */
                 /* gap is in WORK(N+1) */
                 *info = -5;
-                return 0;
+                return;
             }
             else
             {
                 /* Test that all eigenvalues are positive as expected */
                 i__2 = in;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
-                    if (work[i__] < 0.f)
+                    if(work[i__] < 0.f)
                     {
                         *info = -6;
-                        return 0;
+                        return;
                     }
                     /* L149: */
                 }
             }
-            if (sgndef > 0.f)
+            if(sgndef > 0.f)
             {
                 i__2 = indu;
-                for (i__ = indl;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = indl; i__ <= i__2; ++i__)
                 {
                     ++(*m);
                     w[*m] = work[in - i__ + 1];
@@ -1046,9 +1055,7 @@ L83: /* At this point, we have found an initial base representation */
             else
             {
                 i__2 = indu;
-                for (i__ = indl;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = indl; i__ <= i__2; ++i__)
                 {
                     ++(*m);
                     w[*m] = -work[i__];
@@ -1058,38 +1065,33 @@ L83: /* At this point, we have found an initial base representation */
                 }
             }
             i__2 = *m;
-            for (i__ = *m - mb + 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = *m - mb + 1; i__ <= i__2; ++i__)
             {
                 /* the value of RTOL below should be the tolerance in SLASQ2 */
                 werr[i__] = rtol * (r__1 = w[i__], f2c_abs(r__1));
                 /* L165: */
             }
             i__2 = *m - 1;
-            for (i__ = *m - mb + 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = *m - mb + 1; i__ <= i__2; ++i__)
             {
                 /* compute the right gap between the intervals */
                 /* Computing MAX */
                 r__1 = 0.f;
                 r__2 = w[i__ + 1] - werr[i__ + 1] - (w[i__] + werr[i__]); // , expr subst
-                wgap[i__] = fla_max(r__1,r__2);
+                wgap[i__] = fla_max(r__1, r__2);
                 /* L166: */
             }
             /* Computing MAX */
             r__1 = 0.f;
             r__2 = *vu - sigma - (w[*m] + werr[*m]); // , expr subst
-            wgap[*m] = fla_max(r__1,r__2);
+            wgap[*m] = fla_max(r__1, r__2);
         }
         /* proceed with next block */
         ibegin = iend + 1;
         wbegin = wend + 1;
-L170:
-        ;
+    L170:;
     }
-    return 0;
+    return;
     /* end of SLARRE */
 }
 /* slarre_ */

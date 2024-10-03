@@ -1,16 +1,25 @@
-/* ../netlib/crot.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/crot.f -- translated by f2c (version 20100827). You must link the resulting object file
+ with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CROT applies a plane rotation with real cosine and complex sine to a pair of complex vectors. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CROT + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/crot.f" > */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/crot.f"
+ * > */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/crot.f" > */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/crot.f"
+ * > */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/crot.f" > */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/crot.f"
+ * > */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -89,15 +98,16 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int crot_(integer *n, complex *cx, integer *incx, complex * cy, integer *incy, real *c__, complex *s)
+void crot_(integer *n, complex *cx, integer *incx, complex *cy, integer *incy, real *c__,
+           complex *s)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"crot inputs: n %lld, incx %lld, incy %lld",*n, *incx, *incy);
+    snprintf(buffer, 256, "crot inputs: n %lld, incx %lld, incy %lld", *n, *incx, *incy);
 #else
-    snprintf(buffer, 256,"crot inputs: n %d, incx %d, incy %d",*n, *incx, *incy);
+    snprintf(buffer, 256, "crot inputs: n %d, incx %d, incy %d", *n, *incx, *incy);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -125,32 +135,30 @@ int crot_(integer *n, complex *cx, integer *incx, complex * cy, integer *incy, r
     --cy;
     --cx;
     /* Function Body */
-    if (*n <= 0)
+    if(*n <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (*incx == 1 && *incy == 1)
+    if(*incx == 1 && *incy == 1)
     {
         goto L20;
     }
     /* Code for unequal increments or equal increments not equal to 1 */
     ix = 1;
     iy = 1;
-    if (*incx < 0)
+    if(*incx < 0)
     {
         ix = (-(*n) + 1) * *incx + 1;
     }
-    if (*incy < 0)
+    if(*incy < 0)
     {
         iy = (-(*n) + 1) * *incy + 1;
     }
     i__1 = *n;
-	real sr = s->r;
+    real sr = s->r;
     real si = s->i;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         q__2.r = *c__ * cx[ix].r;
         q__2.i = *c__ * cx[ix].i; // , expr subst
@@ -175,15 +183,13 @@ int crot_(integer *n, complex *cx, integer *incx, complex * cy, integer *incy, r
         /* L10: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* Code for both increments equal to 1 */
 L20:
-	sr = s->r;
+    sr = s->r;
     si = s->i;
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         q__2.r = *c__ * cx[i__].r;
         q__2.i = *c__ * cx[i__].i; // , expr subst
@@ -206,6 +212,6 @@ L20:
         /* L30: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* crot_ */

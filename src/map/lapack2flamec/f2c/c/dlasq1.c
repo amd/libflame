@@ -1,20 +1,30 @@
-/* ../netlib/dlasq1.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlasq1.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__2 = 2;
 static integer c__0 = 0;
-/* > \brief \b DLASQ1 computes the singular values of a real square bidiagonal matrix. Used by sbdsqr. */
+/* > \brief \b DLASQ1 computes the singular values of a real square bidiagonal matrix. Used by
+ * sbdsqr. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLASQ1 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasq1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasq1.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasq1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasq1.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasq1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasq1.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -98,10 +108,10 @@ static integer c__0 = 0;
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dlasq1_(integer *n, doublereal *d__, doublereal *e, doublereal *work, integer *info)
+void dlasq1_(integer *n, doublereal *d__, doublereal *e, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlasq1 inputs: n %" FLA_IS "",*n);
+    AOCL_DTL_SNPRINTF("dlasq1 inputs: n %" FLA_IS "", *n);
     /* System generated locals */
     integer i__1, i__2;
     doublereal d__1, d__2, d__3;
@@ -111,21 +121,30 @@ int dlasq1_(integer *n, doublereal *d__, doublereal *e, doublereal *work, intege
     integer i__;
     doublereal eps;
     extern /* Subroutine */
-    int dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal scale;
     integer iinfo;
     doublereal sigmn;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal sigmx;
     extern /* Subroutine */
-    int dlasq2_(integer *, doublereal *, integer *);
+        void
+        dlasq2_(integer *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+        void
+        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublereal *, integer *, integer *);
     doublereal safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlasrt_( char *, integer *, doublereal *, integer *);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
+        dlasrt_(char *, integer *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -152,64 +171,60 @@ int dlasq1_(integer *n, doublereal *d__, doublereal *e, doublereal *work, intege
     --d__;
     /* Function Body */
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
         i__1 = -(*info);
         xerbla_("DLASQ1", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    else if (*n == 0)
+    else if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    else if (*n == 1)
+    else if(*n == 1)
     {
         d__[1] = f2c_abs(d__[1]);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    else if (*n == 2)
+    else if(*n == 2)
     {
         dlas2_(&d__[1], &e[1], &d__[2], &sigmn, &sigmx);
         d__[1] = sigmx;
         d__[2] = sigmn;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Estimate the largest singular value. */
     sigmx = 0.;
     i__1 = *n - 1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         d__[i__] = (d__1 = d__[i__], f2c_abs(d__1));
         /* Computing MAX */
         d__2 = sigmx;
         d__3 = (d__1 = e[i__], f2c_abs(d__1)); // , expr subst
-        sigmx = fla_max(d__2,d__3);
+        sigmx = fla_max(d__2, d__3);
         /* L10: */
     }
     d__[*n] = (d__1 = d__[*n], f2c_abs(d__1));
     /* Early return if SIGMX is zero (matrix is already diagonal). */
-    if (sigmx == 0.)
+    if(sigmx == 0.)
     {
         dlasrt_("D", n, &d__[1], &iinfo);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* Computing MAX */
         d__1 = sigmx;
         d__2 = d__[i__]; // , expr subst
-        sigmx = fla_max(d__1,d__2);
+        sigmx = fla_max(d__1, d__2);
         /* L20: */
     }
     /* Copy D and E into WORK (in the Z format) and scale (squaring the */
@@ -225,9 +240,7 @@ int dlasq1_(integer *n, doublereal *d__, doublereal *e, doublereal *work, intege
     dlascl_("G", &c__0, &c__0, &sigmx, &scale, &i__1, &c__1, &work[1], &i__2, &iinfo);
     /* Compute the q's and e's. */
     i__1 = (*n << 1) - 1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* Computing 2nd power */
         d__1 = work[i__];
@@ -236,35 +249,31 @@ int dlasq1_(integer *n, doublereal *d__, doublereal *e, doublereal *work, intege
     }
     work[*n * 2] = 0.;
     dlasq2_(n, &work[1], info);
-    if (*info == 0)
+    if(*info == 0)
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             d__[i__] = sqrt(work[i__]);
             /* L40: */
         }
-        dlascl_("G", &c__0, &c__0, &scale, &sigmx, n, &c__1, &d__[1], n, & iinfo);
+        dlascl_("G", &c__0, &c__0, &scale, &sigmx, n, &c__1, &d__[1], n, &iinfo);
     }
-    else if (*info == 2)
+    else if(*info == 2)
     {
         /* Maximum number of iterations exceeded. Move data from WORK */
         /* into D and E so the calling subroutine can try to finish */
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             d__[i__] = sqrt(work[(i__ << 1) - 1]);
             e[i__] = sqrt(work[i__ * 2]);
         }
-        dlascl_("G", &c__0, &c__0, &scale, &sigmx, n, &c__1, &d__[1], n, & iinfo);
+        dlascl_("G", &c__0, &c__0, &scale, &sigmx, n, &c__1, &d__[1], n, &iinfo);
         dlascl_("G", &c__0, &c__0, &scale, &sigmx, n, &c__1, &e[1], n, &iinfo);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLASQ1 */
 }
 /* dlasq1_ */

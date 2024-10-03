@@ -1,10 +1,13 @@
-/* ../netlib/v3.9.0/dgetrf2.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/dgetrf2.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static doublereal c_b13 = 1.;
 static doublereal c_b16 = -1.;
-        
+
 /* > \brief \b DGETRF2 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -108,10 +111,11 @@ for 1 <= i <= fla_min(M,N), row i of the */
 /* ===================================================================== */
 /* Subroutine */
 
-int dgetrf2_(integer *m, integer *n, doublereal *a, integer * lda, integer *ipiv, integer *info)
+void dgetrf2_(integer *m, integer *n, doublereal *a, integer *lda, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgetrf2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
+    AOCL_DTL_SNPRINTF("dgetrf2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
+                      *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     doublereal d__1;
@@ -119,15 +123,24 @@ int dgetrf2_(integer *m, integer *n, doublereal *a, integer * lda, integer *ipiv
     integer i__, n1, n2;
     doublereal temp;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *),
+        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     integer iinfo;
     doublereal sfmin;
     extern /* Subroutine */
-    int dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlaswp_( integer *, doublereal *, integer *, integer *, integer *, integer *, integer *);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
+        dlaswp_(integer *, doublereal *, integer *, integer *, integer *, integer *, integer *);
 
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -151,53 +164,53 @@ int dgetrf2_(integer *m, integer *n, doublereal *a, integer * lda, integer *ipiv
     /* .. Executable Statements .. */
     /* Test the input parameters */
     /* Parameter adjustments */
-   #if AOCL_FLA_PROGRESS_H
-       AOCL_FLA_PROGRESS_VAR;
-       static TLS_CLASS_SPEC integer progress_size = 0;
-   #endif
+#if AOCL_FLA_PROGRESS_H
+    AOCL_FLA_PROGRESS_VAR;
+    static TLS_CLASS_SPEC integer progress_size = 0;
+#endif
     a_dim1 = *lda;
     a_offset = 1 + a_dim1;
     a -= a_offset;
     --ipiv;
     /* Function Body */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DGETRF2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
 
     /* Quick return if possible */
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    if (*m == 1)
+    if(*m == 1)
     {
         /* Use unblocked code for one row case */
         /* Just need to handle IPIV and INFO */
         ipiv[1] = 1;
-        if (a[a_dim1 + 1] == 0.)
+        if(a[a_dim1 + 1] == 0.)
         {
             *info = 1;
         }
     }
-    else if (*n == 1)
+    else if(*n == 1)
     {
         /* Use unblocked code for one column case */
         /* Compute machine safe minimum */
@@ -205,17 +218,17 @@ int dgetrf2_(integer *m, integer *n, doublereal *a, integer * lda, integer *ipiv
         /* Find pivot and test for singularity */
         i__ = idamax_(m, &a[a_dim1 + 1], &c__1);
         ipiv[1] = i__;
-        if (a[i__ + a_dim1] != 0.)
+        if(a[i__ + a_dim1] != 0.)
         {
             /* Apply the interchange */
-            if (i__ != 1)
+            if(i__ != 1)
             {
                 temp = a[a_dim1 + 1];
                 a[a_dim1 + 1] = a[i__ + a_dim1];
                 a[i__ + a_dim1] = temp;
             }
             /* Compute elements 2:M of the column */
-            if ((d__1 = a[a_dim1 + 1], f2c_dabs(d__1)) >= sfmin)
+            if((d__1 = a[a_dim1 + 1], f2c_dabs(d__1)) >= sfmin)
             {
                 i__1 = *m - 1;
                 d__1 = 1. / a[a_dim1 + 1];
@@ -224,9 +237,7 @@ int dgetrf2_(integer *m, integer *n, doublereal *a, integer * lda, integer *ipiv
             else
             {
                 i__1 = *m - 1;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     a[i__ + 1 + a_dim1] /= a[a_dim1 + 1];
                     /* L10: */
@@ -241,67 +252,68 @@ int dgetrf2_(integer *m, integer *n, doublereal *a, integer * lda, integer *ipiv
     else
     {
         /* Use recursive code */
-        n1 = fla_min(*m,*n) / 2;
+        n1 = fla_min(*m, *n) / 2;
         n2 = *n - n1;
         /* [ A11 ] */
         /* Factor [ --- ] */
         /* [ A21 ] */
-	#if AOCL_FLA_PROGRESS_H
-        if(progress_step_count == 0 || progress_step_count == progress_size ){
-            progress_size = fla_min(*m,*n);
+#if AOCL_FLA_PROGRESS_H
+        if(progress_step_count == 0 || progress_step_count == progress_size)
+        {
+            progress_size = fla_min(*m, *n);
             progress_step_count = 1;
         }
-	#ifndef FLA_ENABLE_WINDOWS_BUILD
-		if(!aocl_fla_progress_ptr)
-            		aocl_fla_progress_ptr=aocl_fla_progress;
-	#endif
+#ifndef FLA_ENABLE_WINDOWS_BUILD
+        if(!aocl_fla_progress_ptr)
+            aocl_fla_progress_ptr = aocl_fla_progress;
+#endif
         if(aocl_fla_progress_ptr)
         {
-	        ++progress_step_count;
-            if((progress_step_count%8)==0 || progress_step_count == progress_size)
-	        {
-                AOCL_FLA_PROGRESS_FUNC_PTR("DGETRF",6,&progress_step_count,&progress_thread_id,&progress_total_threads);
+            ++progress_step_count;
+            if((progress_step_count % 8) == 0 || progress_step_count == progress_size)
+            {
+                AOCL_FLA_PROGRESS_FUNC_PTR("DGETRF", 6, &progress_step_count, &progress_thread_id,
+                                           &progress_total_threads);
             }
-               
         }
-        #endif
-	dgetrf2_(m, &n1, &a[a_offset], lda, &ipiv[1], &iinfo);
-        if (*info == 0 && iinfo > 0)
+#endif
+        dgetrf2_(m, &n1, &a[a_offset], lda, &ipiv[1], &iinfo);
+        if(*info == 0 && iinfo > 0)
         {
             *info = iinfo;
         }
         /* [ A12 ] */
         /* Apply interchanges to [ --- ] */
         /* [ A22 ] */
-        dlaswp_(&n2, &a[(n1 + 1) * a_dim1 + 1], lda, &c__1, &n1, &ipiv[1], & c__1);
+        dlaswp_(&n2, &a[(n1 + 1) * a_dim1 + 1], lda, &c__1, &n1, &ipiv[1], &c__1);
         /* Solve A12 */
-        dtrsm_("L", "L", "N", "U", &n1, &n2, &c_b13, &a[a_offset], lda, &a[( n1 + 1) * a_dim1 + 1], lda);
+        dtrsm_("L", "L", "N", "U", &n1, &n2, &c_b13, &a[a_offset], lda, &a[(n1 + 1) * a_dim1 + 1],
+               lda);
         /* Update A22 */
         i__1 = *m - n1;
-        dgemm_("N", "N", &i__1, &n2, &n1, &c_b16, &a[n1 + 1 + a_dim1], lda, & a[(n1 + 1) * a_dim1 + 1], lda, &c_b13, &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
+        dgemm_("N", "N", &i__1, &n2, &n1, &c_b16, &a[n1 + 1 + a_dim1], lda,
+               &a[(n1 + 1) * a_dim1 + 1], lda, &c_b13, &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
         /* Factor A22 */
         i__1 = *m - n1;
         dgetrf2_(&i__1, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &ipiv[n1 + 1], &iinfo);
         /* Adjust INFO and the pivot indices */
-        if (*info == 0 && iinfo > 0)
+        if(*info == 0 && iinfo > 0)
         {
             *info = iinfo + n1;
         }
-        i__1 = fla_min(*m,*n);
-        for (i__ = n1 + 1;
-                i__ <= i__1;
-                ++i__)
+        i__1 = fla_min(*m, *n);
+        for(i__ = n1 + 1; i__ <= i__1; ++i__)
         {
             ipiv[i__] += n1;
             /* L20: */
         }
         /* Apply interchanges to A21 */
         i__1 = n1 + 1;
-        i__2 = fla_min(*m,*n);
+        i__2 = fla_min(*m, *n);
         dlaswp_(&n1, &a[a_dim1 + 1], lda, &i__1, &i__2, &ipiv[1], &c__1);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGETRF2 */
 }
 /* dgetrf2_ */

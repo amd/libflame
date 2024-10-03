@@ -1,6 +1,6 @@
 /******************************************************************************
-* Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
-*******************************************************************************/
+ * Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 
 /*! @file validate_syevd.c
  *  @brief Defines validate function of SYEVD() to use in test suite.
@@ -8,9 +8,10 @@
 
 #include "test_common.h"
 
-void validate_syevd(char* jobz, integer n, void* A, void* A_test, integer lda, void* w, integer datatype, double* residual, integer* info)
+void validate_syevd(char *jobz, integer n, void *A, void *A_test, integer lda, void *w,
+                    integer datatype, double *residual, integer *info)
 {
-   if(n == 0)
+    if(n == 0)
         return;
     *info = 0;
     if(*jobz != 'N')
@@ -18,16 +19,16 @@ void validate_syevd(char* jobz, integer n, void* A, void* A_test, integer lda, v
         void *lambda = NULL, *zlambda = NULL, *Z = NULL;
         void *work = NULL;
 
-        create_matrix(datatype, &lambda, n, n);
-        create_matrix(datatype, &zlambda, n, n);
-        create_matrix(datatype, &Z, lda, n);
+        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &lambda, n);
+        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &zlambda, n);
+        create_matrix(datatype, LAPACK_COL_MAJOR, lda, n, &Z, n);
 
         reset_matrix(datatype, n, n, zlambda, n);
         reset_matrix(datatype, n, n, Z, lda);
 
         copy_matrix(datatype, "full", n, n, A_test, lda, Z, lda);
 
-        diagonalize_vector(datatype, w, lambda, n, n, n);
+        diagonalize_realtype_vector(datatype, w, lambda, n, n, n);
 
         switch(datatype)
         {
@@ -42,7 +43,7 @@ void validate_syevd(char* jobz, integer n, void* A, void* A_test, integer lda, v
                 sgemm_("N", "N", &n, &n, &n, &s_one, Z, &lda, lambda, &n, &s_zero, zlambda, &n);
                 sgemm_("N", "T", &n, &n, &n, &s_one, zlambda, &n, Z, &lda, &s_n_one, A, &lda);
                 norm = fla_lapack_slange("1", &n, &n, A, &lda, work);
-                resid1 = norm/(eps * norm_A * (float)n);
+                resid1 = norm / (eps * norm_A * (float)n);
 
                 /* Test 2
                    compute norm(I - Z'*Z) / (N * EPS)*/
@@ -63,7 +64,7 @@ void validate_syevd(char* jobz, integer n, void* A, void* A_test, integer lda, v
                 dgemm_("N", "N", &n, &n, &n, &d_one, Z, &lda, lambda, &n, &d_zero, zlambda, &n);
                 dgemm_("N", "T", &n, &n, &n, &d_one, zlambda, &n, Z, &lda, &d_n_one, A, &lda);
                 norm = fla_lapack_dlange("1", &n, &n, A, &lda, work);
-                resid1 = norm/(eps * norm_A * (float)n);
+                resid1 = norm / (eps * norm_A * (float)n);
 
                 /* Test 2
                    compute norm(I - Z'*Z) / (N * EPS)*/
@@ -84,7 +85,7 @@ void validate_syevd(char* jobz, integer n, void* A, void* A_test, integer lda, v
                 cgemm_("N", "N", &n, &n, &n, &c_one, Z, &lda, lambda, &n, &c_zero, zlambda, &n);
                 cgemm_("N", "C", &n, &n, &n, &c_one, zlambda, &n, Z, &lda, &c_n_one, A, &lda);
                 norm = fla_lapack_clange("1", &n, &n, A, &lda, work);
-                resid1 = norm/(eps * norm_A * (float)n);
+                resid1 = norm / (eps * norm_A * (float)n);
 
                 /* Test 2
                    compute norm(I - Z'*Z) / (N * EPS)*/
@@ -105,7 +106,7 @@ void validate_syevd(char* jobz, integer n, void* A, void* A_test, integer lda, v
                 zgemm_("N", "N", &n, &n, &n, &z_one, Z, &lda, lambda, &n, &z_zero, zlambda, &n);
                 zgemm_("N", "C", &n, &n, &n, &z_one, zlambda, &n, Z, &lda, &z_n_one, A, &lda);
                 norm = fla_lapack_zlange("1", &n, &n, A, &lda, work);
-                resid1 = norm/(eps * norm_A * (float)n);
+                resid1 = norm / (eps * norm_A * (float)n);
 
                 /* Test 2
                    compute norm(I - Z'*Z) / (N * EPS)*/

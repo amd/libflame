@@ -1,5 +1,8 @@
-/* ../netlib/dsytrd.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dsytrd.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -13,11 +16,17 @@ static doublereal c_b23 = 1.;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DSYTRD + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsytrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsytrd.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsytrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsytrd.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytrd.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -46,7 +55,7 @@ static doublereal c_b23 = 1.;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -190,17 +199,25 @@ v(i+2:n) is stored on exit in A(i+2:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dsytrd_fla(char *uplo, integer *n, doublereal *a, integer * lda, doublereal *d__, doublereal *e, doublereal *tau, doublereal * work, integer *lwork, integer *info)
+void dsytrd_fla(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *d__, doublereal *e,
+                doublereal *tau, doublereal *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
     integer i__, j, nb, kk, nx, iws;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer nbmin, iinfo;
     logical upper;
     extern /* Subroutine */
-    int dsytd2_fla(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *), dsyr2k_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlatrd_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dsytd2_fla(char *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                   doublereal *, integer *),
+        dsyr2k_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *,
+                doublereal *, integer *, doublereal *, doublereal *, integer *),
+        dlatrd_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
@@ -235,72 +252,72 @@ int dsytrd_fla(char *uplo, integer *n, doublereal *a, integer * lda, doublereal 
     --work;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
-    if (! upper && ! lsame_(uplo, "L"))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    else if (*lwork < 1 && ! lquery)
+    else if(*lwork < 1 && !lquery)
     {
         *info = -9;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
         /* Determine the block size. */
         nb = ilaenv_(&c__1, "DSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
         lwkopt = *n * nb;
-        work[1] = (doublereal) lwkopt;
+        work[1] = (doublereal)lwkopt;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DSYTRD", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         work[1] = 1.;
-        return 0;
+        return;
     }
     nx = *n;
     iws = 1;
-    if (nb > 1 && nb < *n)
+    if(nb > 1 && nb < *n)
     {
         /* Determine when to cross over from blocked to unblocked code */
         /* (last block is always handled by unblocked code). */
         /* Computing MAX */
         i__1 = nb;
-        i__2 = ilaenv_(&c__3, "DSYTRD", uplo, n, &c_n1, &c_n1, & c_n1); // , expr subst
-        nx = fla_max(i__1,i__2);
-        if (nx < *n)
+        i__2 = ilaenv_(&c__3, "DSYTRD", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+        nx = fla_max(i__1, i__2);
+        if(nx < *n)
         {
             /* Determine if workspace is large enough for blocked code. */
             ldwork = *n;
             iws = ldwork * nb;
-            if (*lwork < iws)
+            if(*lwork < iws)
             {
                 /* Not enough workspace to use optimal NB: determine the */
                 /* minimum value of NB, and reduce NB or force use of */
                 /* unblocked code by setting NX = N. */
                 /* Computing MAX */
                 i__1 = *lwork / ldwork;
-                nb = fla_max(i__1,1);
+                nb = fla_max(i__1, 1);
                 nbmin = ilaenv_(&c__2, "DSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
-                if (nb < nbmin)
+                if(nb < nbmin)
                 {
                     nx = *n;
                 }
@@ -315,32 +332,29 @@ int dsytrd_fla(char *uplo, integer *n, doublereal *a, integer * lda, doublereal 
     {
         nb = 1;
     }
-    if (upper)
+    if(upper)
     {
         /* Reduce the upper triangle of A. */
         /* Columns 1:kk are handled by the unblocked method. */
         kk = *n - (*n - nx + nb - 1) / nb * nb;
         i__1 = kk + 1;
         i__2 = -nb;
-        for (i__ = *n - nb + 1;
-                i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
-                i__ += i__2)
+        for(i__ = *n - nb + 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
         {
             /* Reduce columns i:i+nb-1 to tridiagonal form and form the */
             /* matrix W which is needed to update the unreduced part of */
             /* the matrix */
             i__3 = i__ + nb - 1;
-            dlatrd_(uplo, &i__3, &nb, &a[a_offset], lda, &e[1], &tau[1], & work[1], &ldwork);
+            dlatrd_(uplo, &i__3, &nb, &a[a_offset], lda, &e[1], &tau[1], &work[1], &ldwork);
             /* Update the unreduced submatrix A(1:i-1,1:i-1), using an */
             /* update of the form: A := A - V*W**T - W*V**T */
             i__3 = i__ - 1;
-            dsyr2k_(uplo, "No transpose", &i__3, &nb, &c_b22, &a[i__ * a_dim1 + 1], lda, &work[1], &ldwork, &c_b23, &a[a_offset], lda);
+            dsyr2k_(uplo, "No transpose", &i__3, &nb, &c_b22, &a[i__ * a_dim1 + 1], lda, &work[1],
+                    &ldwork, &c_b23, &a[a_offset], lda);
             /* Copy superdiagonal elements back into A, and diagonal */
             /* elements into D */
             i__3 = i__ + nb - 1;
-            for (j = i__;
-                    j <= i__3;
-                    ++j)
+            for(j = i__; j <= i__3; ++j)
             {
                 a[j - 1 + j * a_dim1] = e[j - 1];
                 d__[j] = a[j + j * a_dim1];
@@ -356,25 +370,23 @@ int dsytrd_fla(char *uplo, integer *n, doublereal *a, integer * lda, doublereal 
         /* Reduce the lower triangle of A */
         i__2 = *n - nx;
         i__1 = nb;
-        for (i__ = 1;
-                i__1 < 0 ? i__ >= i__2 : i__ <= i__2;
-                i__ += i__1)
+        for(i__ = 1; i__1 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__1)
         {
             /* Reduce columns i:i+nb-1 to tridiagonal form and form the */
             /* matrix W which is needed to update the unreduced part of */
             /* the matrix */
             i__3 = *n - i__ + 1;
-            dlatrd_(uplo, &i__3, &nb, &a[i__ + i__ * a_dim1], lda, &e[i__], & tau[i__], &work[1], &ldwork);
+            dlatrd_(uplo, &i__3, &nb, &a[i__ + i__ * a_dim1], lda, &e[i__], &tau[i__], &work[1],
+                    &ldwork);
             /* Update the unreduced submatrix A(i+ib:n,i+ib:n), using */
             /* an update of the form: A := A - V*W**T - W*V**T */
             i__3 = *n - i__ - nb + 1;
-            dsyr2k_(uplo, "No transpose", &i__3, &nb, &c_b22, &a[i__ + nb + i__ * a_dim1], lda, &work[nb + 1], &ldwork, &c_b23, &a[ i__ + nb + (i__ + nb) * a_dim1], lda);
+            dsyr2k_(uplo, "No transpose", &i__3, &nb, &c_b22, &a[i__ + nb + i__ * a_dim1], lda,
+                    &work[nb + 1], &ldwork, &c_b23, &a[i__ + nb + (i__ + nb) * a_dim1], lda);
             /* Copy subdiagonal elements back into A, and diagonal */
             /* elements into D */
             i__3 = i__ + nb - 1;
-            for (j = i__;
-                    j <= i__3;
-                    ++j)
+            for(j = i__; j <= i__3; ++j)
             {
                 a[j + 1 + j * a_dim1] = e[j];
                 d__[j] = a[j + j * a_dim1];
@@ -386,8 +398,8 @@ int dsytrd_fla(char *uplo, integer *n, doublereal *a, integer * lda, doublereal 
         i__1 = *n - i__ + 1;
         dsytd2_fla(uplo, &i__1, &a[i__ + i__ * a_dim1], lda, &d__[i__], &e[i__], &tau[i__], &iinfo);
     }
-    work[1] = (doublereal) lwkopt;
-    return 0;
+    work[1] = (doublereal)lwkopt;
+    return;
     /* End of DSYTRD */
 }
 /* dsytrd_ */

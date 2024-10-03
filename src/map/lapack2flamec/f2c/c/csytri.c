@@ -1,16 +1,11 @@
-/* ../netlib/csytri.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/csytri.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    1.f,0.f
-}
-;
-static complex c_b2 =
-{
-    0.f,0.f
-}
-;
+static complex c_b1 = {1.f, 0.f};
+static complex c_b2 = {0.f, 0.f};
 static integer c__1 = 1;
 /* > \brief \b CSYTRI */
 /* =========== DOCUMENTATION =========== */
@@ -18,11 +13,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CSYTRI + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csytri. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csytri.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csytri. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csytri.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csytri. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csytri.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -53,7 +54,7 @@ static integer c__1 = 1;
 /* > Specifies whether the details of the factorization are stored */
 /* > as an upper or lower triangular matrix. */
 /* > = 'U': Upper triangular, form is A = U*D*U**T;
-*/
+ */
 /* > = 'L': Lower triangular, form is A = L*D*L**T. */
 /* > \endverbatim */
 /* > */
@@ -115,15 +116,16 @@ the matrix is singular and its */
 /* > \ingroup complexSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int csytri_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, complex *work, integer *info)
+void csytri_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, complex *work,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"csytri inputs: uplo %c, n %lld, lda %lld",*uplo, *n, *lda);
+    snprintf(buffer, 256, "csytri inputs: uplo %c, n %lld, lda %lld", *uplo, *n, *lda);
 #else
-    snprintf(buffer, 256,"csytri inputs: uplo %c, n %d, lda %d",*uplo, *n, *lda);
+    snprintf(buffer, 256, "csytri inputs: uplo %c, n %d, lda %d", *uplo, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -138,17 +140,23 @@ int csytri_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, com
     complex t, ak;
     integer kp;
     complex akp1, temp, akkp1;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *);
+        void
+        ccopy_(integer *, complex *, integer *, complex *, integer *);
     extern /* Complex */
-    VOID cdotu_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+        VOID
+        cdotu_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern /* Subroutine */
-    int cswap_(integer *, complex *, integer *, complex *, integer *);
+        void
+        cswap_(integer *, complex *, integer *, complex *, integer *);
     integer kstep;
     logical upper;
     extern /* Subroutine */
-    int csymv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        csymv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *,
+               complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -178,45 +186,43 @@ int csytri_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, com
     --work;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CSYTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Check that the diagonal matrix D is nonsingular. */
-    if (upper)
+    if(upper)
     {
         /* Upper triangular storage: examine D from bottom to top */
-        for (*info = *n;
-                *info >= 1;
-                --(*info))
+        for(*info = *n; *info >= 1; --(*info))
         {
             i__1 = *info + *info * a_dim1;
-            if (ipiv[*info] > 0 && (a[i__1].r == 0.f && a[i__1].i == 0.f))
+            if(ipiv[*info] > 0 && (a[i__1].r == 0.f && a[i__1].i == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L10: */
         }
@@ -225,32 +231,30 @@ int csytri_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, com
     {
         /* Lower triangular storage: examine D from top to bottom. */
         i__1 = *n;
-        for (*info = 1;
-                *info <= i__1;
-                ++(*info))
+        for(*info = 1; *info <= i__1; ++(*info))
         {
             i__2 = *info + *info * a_dim1;
-            if (ipiv[*info] > 0 && (a[i__2].r == 0.f && a[i__2].i == 0.f))
+            if(ipiv[*info] > 0 && (a[i__2].r == 0.f && a[i__2].i == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L20: */
         }
     }
     *info = 0;
-    if (upper)
+    if(upper)
     {
         /* Compute inv(A) from the factorization A = U*D*U**T. */
         /* K is the main loop index, increasing from 1 to N in steps of */
         /* 1 or 2, depending on the size of the diagonal blocks. */
         k = 1;
-L30: /* If K > N, exit from loop. */
-        if (k > *n)
+    L30: /* If K > N, exit from loop. */
+        if(k > *n)
         {
             goto L40;
         }
-        if (ipiv[k] > 0)
+        if(ipiv[k] > 0)
         {
             /* 1 x 1 diagonal block */
             /* Invert the diagonal block. */
@@ -259,18 +263,19 @@ L30: /* If K > N, exit from loop. */
             a[i__1].r = q__1.r;
             a[i__1].i = q__1.i; // , expr subst
             /* Compute column K of the inverse. */
-            if (k > 1)
+            if(k > 1)
             {
                 i__1 = k - 1;
                 ccopy_(&i__1, &a[k * a_dim1 + 1], &c__1, &work[1], &c__1);
                 i__1 = k - 1;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                csymv_(uplo, &i__1, &q__1, &a[a_offset], lda, &work[1], &c__1, &c_b2, &a[k * a_dim1 + 1], &c__1);
+                csymv_(uplo, &i__1, &q__1, &a[a_offset], lda, &work[1], &c__1, &c_b2,
+                       &a[k * a_dim1 + 1], &c__1);
                 i__1 = k + k * a_dim1;
                 i__2 = k + k * a_dim1;
                 i__3 = k - 1;
-                cdotu_f2c_(&q__2, &i__3, &work[1], &c__1, &a[k * a_dim1 + 1], & c__1);
+                cdotu_f2c_(&q__2, &i__3, &work[1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 q__1.r = a[i__2].r - q__2.r;
                 q__1.i = a[i__2].i - q__2.i; // , expr subst
                 a[i__1].r = q__1.r;
@@ -317,18 +322,19 @@ L30: /* If K > N, exit from loop. */
             a[i__1].r = q__1.r;
             a[i__1].i = q__1.i; // , expr subst
             /* Compute columns K and K+1 of the inverse. */
-            if (k > 1)
+            if(k > 1)
             {
                 i__1 = k - 1;
                 ccopy_(&i__1, &a[k * a_dim1 + 1], &c__1, &work[1], &c__1);
                 i__1 = k - 1;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                csymv_(uplo, &i__1, &q__1, &a[a_offset], lda, &work[1], &c__1, &c_b2, &a[k * a_dim1 + 1], &c__1);
+                csymv_(uplo, &i__1, &q__1, &a[a_offset], lda, &work[1], &c__1, &c_b2,
+                       &a[k * a_dim1 + 1], &c__1);
                 i__1 = k + k * a_dim1;
                 i__2 = k + k * a_dim1;
                 i__3 = k - 1;
-                cdotu_f2c_(&q__2, &i__3, &work[1], &c__1, &a[k * a_dim1 + 1], & c__1);
+                cdotu_f2c_(&q__2, &i__3, &work[1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 q__1.r = a[i__2].r - q__2.r;
                 q__1.i = a[i__2].i - q__2.i; // , expr subst
                 a[i__1].r = q__1.r;
@@ -336,17 +342,19 @@ L30: /* If K > N, exit from loop. */
                 i__1 = k + (k + 1) * a_dim1;
                 i__2 = k + (k + 1) * a_dim1;
                 i__3 = k - 1;
-                cdotu_f2c_(&q__2, &i__3, &a[k * a_dim1 + 1], &c__1, &a[(k + 1) * a_dim1 + 1], &c__1);
+                cdotu_f2c_(&q__2, &i__3, &a[k * a_dim1 + 1], &c__1, &a[(k + 1) * a_dim1 + 1],
+                           &c__1);
                 q__1.r = a[i__2].r - q__2.r;
                 q__1.i = a[i__2].i - q__2.i; // , expr subst
                 a[i__1].r = q__1.r;
                 a[i__1].i = q__1.i; // , expr subst
                 i__1 = k - 1;
-                ccopy_(&i__1, &a[(k + 1) * a_dim1 + 1], &c__1, &work[1], & c__1);
+                ccopy_(&i__1, &a[(k + 1) * a_dim1 + 1], &c__1, &work[1], &c__1);
                 i__1 = k - 1;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                csymv_(uplo, &i__1, &q__1, &a[a_offset], lda, &work[1], &c__1, &c_b2, &a[(k + 1) * a_dim1 + 1], &c__1);
+                csymv_(uplo, &i__1, &q__1, &a[a_offset], lda, &work[1], &c__1, &c_b2,
+                       &a[(k + 1) * a_dim1 + 1], &c__1);
                 i__1 = k + 1 + (k + 1) * a_dim1;
                 i__2 = k + 1 + (k + 1) * a_dim1;
                 i__3 = k - 1;
@@ -359,12 +367,12 @@ L30: /* If K > N, exit from loop. */
             kstep = 2;
         }
         kp = (i__1 = ipiv[k], f2c_abs(i__1));
-        if (kp != k)
+        if(kp != k)
         {
             /* Interchange rows and columns K and KP in the leading */
             /* submatrix A(1:k+1,1:k+1) */
             i__1 = kp - 1;
-            cswap_(&i__1, &a[k * a_dim1 + 1], &c__1, &a[kp * a_dim1 + 1], & c__1);
+            cswap_(&i__1, &a[k * a_dim1 + 1], &c__1, &a[kp * a_dim1 + 1], &c__1);
             i__1 = k - kp - 1;
             cswap_(&i__1, &a[kp + 1 + k * a_dim1], &c__1, &a[kp + (kp + 1) * a_dim1], lda);
             i__1 = k + k * a_dim1;
@@ -377,7 +385,7 @@ L30: /* If K > N, exit from loop. */
             i__1 = kp + kp * a_dim1;
             a[i__1].r = temp.r;
             a[i__1].i = temp.i; // , expr subst
-            if (kstep == 2)
+            if(kstep == 2)
             {
                 i__1 = k + (k + 1) * a_dim1;
                 temp.r = a[i__1].r;
@@ -393,8 +401,7 @@ L30: /* If K > N, exit from loop. */
         }
         k += kstep;
         goto L30;
-L40:
-        ;
+    L40:;
     }
     else
     {
@@ -402,12 +409,12 @@ L40:
         /* K is the main loop index, increasing from 1 to N in steps of */
         /* 1 or 2, depending on the size of the diagonal blocks. */
         k = *n;
-L50: /* If K < 1, exit from loop. */
-        if (k < 1)
+    L50: /* If K < 1, exit from loop. */
+        if(k < 1)
         {
             goto L60;
         }
-        if (ipiv[k] > 0)
+        if(ipiv[k] > 0)
         {
             /* 1 x 1 diagonal block */
             /* Invert the diagonal block. */
@@ -416,14 +423,15 @@ L50: /* If K < 1, exit from loop. */
             a[i__1].r = q__1.r;
             a[i__1].i = q__1.i; // , expr subst
             /* Compute column K of the inverse. */
-            if (k < *n)
+            if(k < *n)
             {
                 i__1 = *n - k;
                 ccopy_(&i__1, &a[k + 1 + k * a_dim1], &c__1, &work[1], &c__1);
                 i__1 = *n - k;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                csymv_(uplo, &i__1, &q__1, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1], &c__1, &c_b2, &a[k + 1 + k * a_dim1], &c__1);
+                csymv_(uplo, &i__1, &q__1, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1], &c__1,
+                       &c_b2, &a[k + 1 + k * a_dim1], &c__1);
                 i__1 = k + k * a_dim1;
                 i__2 = k + k * a_dim1;
                 i__3 = *n - k;
@@ -474,14 +482,15 @@ L50: /* If K < 1, exit from loop. */
             a[i__1].r = q__1.r;
             a[i__1].i = q__1.i; // , expr subst
             /* Compute columns K-1 and K of the inverse. */
-            if (k < *n)
+            if(k < *n)
             {
                 i__1 = *n - k;
                 ccopy_(&i__1, &a[k + 1 + k * a_dim1], &c__1, &work[1], &c__1);
                 i__1 = *n - k;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                csymv_(uplo, &i__1, &q__1, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1], &c__1, &c_b2, &a[k + 1 + k * a_dim1], &c__1);
+                csymv_(uplo, &i__1, &q__1, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1], &c__1,
+                       &c_b2, &a[k + 1 + k * a_dim1], &c__1);
                 i__1 = k + k * a_dim1;
                 i__2 = k + k * a_dim1;
                 i__3 = *n - k;
@@ -493,17 +502,19 @@ L50: /* If K < 1, exit from loop. */
                 i__1 = k + (k - 1) * a_dim1;
                 i__2 = k + (k - 1) * a_dim1;
                 i__3 = *n - k;
-                cdotu_f2c_(&q__2, &i__3, &a[k + 1 + k * a_dim1], &c__1, &a[k + 1 + (k - 1) * a_dim1], &c__1);
+                cdotu_f2c_(&q__2, &i__3, &a[k + 1 + k * a_dim1], &c__1,
+                           &a[k + 1 + (k - 1) * a_dim1], &c__1);
                 q__1.r = a[i__2].r - q__2.r;
                 q__1.i = a[i__2].i - q__2.i; // , expr subst
                 a[i__1].r = q__1.r;
                 a[i__1].i = q__1.i; // , expr subst
                 i__1 = *n - k;
-                ccopy_(&i__1, &a[k + 1 + (k - 1) * a_dim1], &c__1, &work[1], & c__1);
+                ccopy_(&i__1, &a[k + 1 + (k - 1) * a_dim1], &c__1, &work[1], &c__1);
                 i__1 = *n - k;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                csymv_(uplo, &i__1, &q__1, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1], &c__1, &c_b2, &a[k + 1 + (k - 1) * a_dim1], &c__1);
+                csymv_(uplo, &i__1, &q__1, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1], &c__1,
+                       &c_b2, &a[k + 1 + (k - 1) * a_dim1], &c__1);
                 i__1 = k - 1 + (k - 1) * a_dim1;
                 i__2 = k - 1 + (k - 1) * a_dim1;
                 i__3 = *n - k;
@@ -516,11 +527,11 @@ L50: /* If K < 1, exit from loop. */
             kstep = 2;
         }
         kp = (i__1 = ipiv[k], f2c_abs(i__1));
-        if (kp != k)
+        if(kp != k)
         {
             /* Interchange rows and columns K and KP in the trailing */
             /* submatrix A(k-1:n,k-1:n) */
-            if (kp < *n)
+            if(kp < *n)
             {
                 i__1 = *n - kp;
                 cswap_(&i__1, &a[kp + 1 + k * a_dim1], &c__1, &a[kp + 1 + kp * a_dim1], &c__1);
@@ -537,7 +548,7 @@ L50: /* If K < 1, exit from loop. */
             i__1 = kp + kp * a_dim1;
             a[i__1].r = temp.r;
             a[i__1].i = temp.i; // , expr subst
-            if (kstep == 2)
+            if(kstep == 2)
             {
                 i__1 = k + (k - 1) * a_dim1;
                 temp.r = a[i__1].r;
@@ -553,11 +564,10 @@ L50: /* If K < 1, exit from loop. */
         }
         k -= kstep;
         goto L50;
-L60:
-        ;
+    L60:;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSYTRI */
 }
 /* csytri_ */

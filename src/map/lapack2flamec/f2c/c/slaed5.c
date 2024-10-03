@@ -1,16 +1,25 @@
-/* ../netlib/slaed5.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slaed5.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLAED5 used by sstedc. Solves the 2-by-2 secular equation. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLAED5 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaed5. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaed5.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaed5. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaed5.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaed5. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaed5.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -94,7 +103,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slaed5_(integer *i__, real *d__, real *z__, real *delta, real *rho, real *dlam)
+void slaed5_(integer *i__, real *d__, real *z__, real *delta, real *rho, real *dlam)
 {
     /* System generated locals */
     real r__1;
@@ -124,15 +133,15 @@ int slaed5_(integer *i__, real *d__, real *z__, real *delta, real *rho, real *dl
     --d__;
     /* Function Body */
     del = d__[2] - d__[1];
-    if (*i__ == 1)
+    if(*i__ == 1)
     {
         w = *rho * 2.f * (z__[2] * z__[2] - z__[1] * z__[1]) / del + 1.f;
-        if (w > 0.f)
+        if(w > 0.f)
         {
             b = del + *rho * (z__[1] * z__[1] + z__[2] * z__[2]);
             c__ = *rho * z__[1] * z__[1] * del;
             /* B > ZERO, always */
-            tau = c__ * 2.f / (b + sqrt((r__1 = b * b - c__ * 4.f, f2c_abs(r__1))) );
+            tau = c__ * 2.f / (b + sqrt((r__1 = b * b - c__ * 4.f, f2c_abs(r__1))));
             *dlam = d__[1] + tau;
             delta[1] = -z__[1] / tau;
             delta[2] = z__[2] / (del - tau);
@@ -141,7 +150,7 @@ int slaed5_(integer *i__, real *d__, real *z__, real *delta, real *rho, real *dl
         {
             b = -del + *rho * (z__[1] * z__[1] + z__[2] * z__[2]);
             c__ = *rho * z__[2] * z__[2] * del;
-            if (b > 0.f)
+            if(b > 0.f)
             {
                 tau = c__ * -2.f / (b + sqrt(b * b + c__ * 4.f));
             }
@@ -162,7 +171,7 @@ int slaed5_(integer *i__, real *d__, real *z__, real *delta, real *rho, real *dl
         /* Now I=2 */
         b = -del + *rho * (z__[1] * z__[1] + z__[2] * z__[2]);
         c__ = *rho * z__[2] * z__[2] * del;
-        if (b > 0.f)
+        if(b > 0.f)
         {
             tau = (b + sqrt(b * b + c__ * 4.f)) / 2.f;
         }
@@ -177,7 +186,7 @@ int slaed5_(integer *i__, real *d__, real *z__, real *delta, real *rho, real *dl
         delta[1] /= temp;
         delta[2] /= temp;
     }
-    return 0;
+    return;
     /* End OF SLAED5 */
 }
 /* slaed5_ */

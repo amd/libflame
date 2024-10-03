@@ -177,7 +177,7 @@ void time_Tridiag_UT_l(
     FLA_Obj E, ET, EB;
     FLA_Obj F;
     FLA_Obj W, WW, eye;
-    dim_t   m_A, n_Q, m_T, m_TT;
+    fla_dim_t   m_A, n_Q, m_T, m_TT;
 
 //FLA_Obj_show( "A_save", A_save, "%10.3e", "" );
 

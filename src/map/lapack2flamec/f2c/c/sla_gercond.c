@@ -1,5 +1,8 @@
-/* ../netlib/sla_gercond.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sla_gercond.f -- translated by f2c (version 20100827). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b SLA_GERCOND estimates the Skeel condition number for a general matrix. */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLA_GERCOND + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sla_ger cond.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sla_ger
+ * cond.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sla_ger cond.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sla_ger
+ * cond.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sla_ger cond.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sla_ger
+ * cond.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -137,7 +146,9 @@ row i of the matrix was interchanged */
 /* > \date September 2012 */
 /* > \ingroup realGEcomputational */
 /* ===================================================================== */
-real sla_gercond_(char *trans, integer *n, real *a, integer *lda, real *af, integer *ldaf, integer *ipiv, integer *cmode, real *c__, integer * info, real *work, integer *iwork)
+real sla_gercond_(char *trans, integer *n, real *a, integer *lda, real *af, integer *ldaf,
+                  integer *ipiv, integer *cmode, real *c__, integer *info, real *work,
+                  integer *iwork)
 {
     /* System generated locals */
     integer a_dim1, a_offset, af_dim1, af_offset, i__1, i__2;
@@ -146,13 +157,17 @@ real sla_gercond_(char *trans, integer *n, real *a, integer *lda, real *af, inte
     integer i__, j;
     real tmp;
     integer kase;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
-    int slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     extern /* Subroutine */
-    int sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+        void
+        sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *,
+                integer *);
     logical notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -188,60 +203,54 @@ real sla_gercond_(char *trans, integer *n, real *a, integer *lda, real *af, inte
     /* Function Body */
     ret_val = 0.f;
     *info = 0;
-    notrans = lsame_(trans, "N");
-    if (! notrans && ! lsame_(trans, "T") && ! lsame_( trans, "C"))
+    notrans = lsame_(trans, "N", 1, 1);
+    if(!notrans && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -6;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SLA_GERCOND", &i__1, (ftnlen)11);
         return ret_val;
     }
-    if (*n == 0)
+    if(*n == 0)
     {
         ret_val = 1.f;
         return ret_val;
     }
     /* Compute the equilibration matrix R such that */
     /* inv(R)*A*C has unit 1-norm. */
-    if (notrans)
+    if(notrans)
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             tmp = 0.f;
-            if (*cmode == 1)
+            if(*cmode == 1)
             {
                 i__2 = *n;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     tmp += (r__1 = a[i__ + j * a_dim1] * c__[j], f2c_abs(r__1));
                 }
             }
-            else if (*cmode == 0)
+            else if(*cmode == 0)
             {
                 i__2 = *n;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     tmp += (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1));
                 }
@@ -249,9 +258,7 @@ real sla_gercond_(char *trans, integer *n, real *a, integer *lda, real *af, inte
             else
             {
                 i__2 = *n;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     tmp += (r__1 = a[i__ + j * a_dim1] / c__[j], f2c_abs(r__1));
                 }
@@ -262,27 +269,21 @@ real sla_gercond_(char *trans, integer *n, real *a, integer *lda, real *af, inte
     else
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             tmp = 0.f;
-            if (*cmode == 1)
+            if(*cmode == 1)
             {
                 i__2 = *n;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     tmp += (r__1 = a[j + i__ * a_dim1] * c__[j], f2c_abs(r__1));
                 }
             }
-            else if (*cmode == 0)
+            else if(*cmode == 0)
             {
                 i__2 = *n;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     tmp += (r__1 = a[j + i__ * a_dim1], f2c_abs(r__1));
                 }
@@ -290,9 +291,7 @@ real sla_gercond_(char *trans, integer *n, real *a, integer *lda, real *af, inte
             else
             {
                 i__2 = *n;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     tmp += (r__1 = a[j + i__ * a_dim1] / c__[j], f2c_abs(r__1));
                 }
@@ -305,43 +304,38 @@ real sla_gercond_(char *trans, integer *n, real *a, integer *lda, real *af, inte
     kase = 0;
 L10:
     slacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
-    if (kase != 0)
+    if(kase != 0)
     {
-        if (kase == 2)
+        if(kase == 2)
         {
             /* Multiply by R. */
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 work[i__] *= work[(*n << 1) + i__];
             }
-            if (notrans)
+            if(notrans)
             {
-                sgetrs_("No transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[ 1], &work[1], n, info);
+                sgetrs_("No transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n,
+                        info);
             }
             else
             {
                 sgetrs_("Transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n, info);
             }
             /* Multiply by inv(C). */
-            if (*cmode == 1)
+            if(*cmode == 1)
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     work[i__] /= c__[i__];
                 }
             }
-            else if (*cmode == -1)
+            else if(*cmode == -1)
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     work[i__] *= c__[i__];
                 }
@@ -350,39 +344,34 @@ L10:
         else
         {
             /* Multiply by inv(C**T). */
-            if (*cmode == 1)
+            if(*cmode == 1)
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     work[i__] /= c__[i__];
                 }
             }
-            else if (*cmode == -1)
+            else if(*cmode == -1)
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     work[i__] *= c__[i__];
                 }
             }
-            if (notrans)
+            if(notrans)
             {
                 sgetrs_("Transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n, info);
             }
             else
             {
-                sgetrs_("No transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[ 1], &work[1], n, info);
+                sgetrs_("No transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n,
+                        info);
             }
             /* Multiply by R. */
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 work[i__] *= work[(*n << 1) + i__];
             }
@@ -390,7 +379,7 @@ L10:
         goto L10;
     }
     /* Compute the estimate of the reciprocal condition number. */
-    if (ainvnm != 0.f)
+    if(ainvnm != 0.f)
     {
         ret_val = 1.f / ainvnm;
     }

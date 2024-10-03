@@ -1,5 +1,8 @@
-/* ../netlib/ztrcon.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ztrcon.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b ZTRCON */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZTRCON + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztrcon. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztrcon.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztrcon. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztrcon.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztrcon. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztrcon.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -49,7 +58,7 @@ static integer c__1 = 1;
 /* > Specifies whether the 1-norm condition number or the */
 /* > infinity-norm condition number is required: */
 /* > = '1' or 'O': 1-norm;
-*/
+ */
 /* > = 'I': Infinity-norm. */
 /* > \endverbatim */
 /* > */
@@ -57,7 +66,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': A is upper triangular;
-*/
+ */
 /* > = 'L': A is lower triangular. */
 /* > \endverbatim */
 /* > */
@@ -65,7 +74,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > DIAG is CHARACTER*1 */
 /* > = 'N': A is non-unit triangular;
-*/
+ */
 /* > = 'U': A is unit triangular. */
 /* > \endverbatim */
 /* > */
@@ -127,10 +136,12 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int ztrcon_(char *norm, char *uplo, char *diag, integer *n, doublecomplex *a, integer *lda, doublereal *rcond, doublecomplex * work, doublereal *rwork, integer *info)
+void ztrcon_(char *norm, char *uplo, char *diag, integer *n, doublecomplex *a, integer *lda,
+             doublereal *rcond, doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztrcon inputs: norm %c, uplo %c, diag %c, n %" FLA_IS ", lda %" FLA_IS "",*norm, *uplo, *diag, *n, *lda);
+    AOCL_DTL_SNPRINTF("ztrcon inputs: norm %c, uplo %c, diag %c, n %" FLA_IS ", lda %" FLA_IS "",
+                      *norm, *uplo, *diag, *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
     doublereal d__1, d__2;
@@ -139,27 +150,33 @@ int ztrcon_(char *norm, char *uplo, char *diag, integer *n, doublecomplex *a, in
     /* Local variables */
     integer ix, kase, kase1;
     doublereal scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     doublereal anorm;
     logical upper;
     doublereal xnorm;
     extern /* Subroutine */
-    int zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
+        void
+        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     extern integer izamax_(integer *, doublecomplex *, integer *);
     logical onenrm;
     extern /* Subroutine */
-    int zdrscl_(integer *, doublereal *, doublecomplex *, integer *);
+        void
+        zdrscl_(integer *, doublereal *, doublecomplex *, integer *);
     char normin[1];
-    extern doublereal zlantr_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
+    extern doublereal zlantr_(char *, char *, char *, integer *, integer *, doublecomplex *,
+                              integer *, doublereal *);
     doublereal smlnum;
     logical nounit;
     extern /* Subroutine */
-    int zlatrs_(char *, char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *, doublereal *, integer *);
+        void
+        zlatrs_(char *, char *, char *, char *, integer *, doublecomplex *, integer *,
+                doublecomplex *, doublereal *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -195,54 +212,54 @@ int ztrcon_(char *norm, char *uplo, char *diag, integer *n, doublecomplex *a, in
     --rwork;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O");
-    nounit = lsame_(diag, "N");
-    if (! onenrm && ! lsame_(norm, "I"))
+    upper = lsame_(uplo, "U", 1, 1);
+    onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
+    nounit = lsame_(diag, "N", 1, 1);
+    if(!onenrm && !lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L"))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (! nounit && ! lsame_(diag, "U"))
+    else if(!nounit && !lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZTRCON", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         *rcond = 1.;
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     *rcond = 0.;
-    smlnum = dlamch_("Safe minimum") * (doublereal) fla_max(1,*n);
+    smlnum = dlamch_("Safe minimum") * (doublereal)fla_max(1, *n);
     /* Compute the norm of the triangular matrix A. */
     anorm = zlantr_(norm, uplo, diag, n, n, &a[a_offset], lda, &rwork[1]);
     /* Continue only if ANORM > 0. */
-    if (anorm > 0.)
+    if(anorm > 0.)
     {
         /* Estimate the norm of the inverse of A. */
         ainvnm = 0.;
         *(unsigned char *)normin = 'N';
-        if (onenrm)
+        if(onenrm)
         {
             kase1 = 1;
         }
@@ -251,28 +268,31 @@ int ztrcon_(char *norm, char *uplo, char *diag, integer *n, doublecomplex *a, in
             kase1 = 2;
         }
         kase = 0;
-L10:
+    L10:
         zlacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
-        if (kase != 0)
+        if(kase != 0)
         {
-            if (kase == kase1)
+            if(kase == kase1)
             {
                 /* Multiply by inv(A). */
-                zlatrs_(uplo, "No transpose", diag, normin, n, &a[a_offset], lda, &work[1], &scale, &rwork[1], info);
+                zlatrs_(uplo, "No transpose", diag, normin, n, &a[a_offset], lda, &work[1], &scale,
+                        &rwork[1], info);
             }
             else
             {
                 /* Multiply by inv(A**H). */
-                zlatrs_(uplo, "Conjugate transpose", diag, normin, n, &a[ a_offset], lda, &work[1], &scale, &rwork[1], info);
+                zlatrs_(uplo, "Conjugate transpose", diag, normin, n, &a[a_offset], lda, &work[1],
+                        &scale, &rwork[1], info);
             }
             *(unsigned char *)normin = 'Y';
             /* Multiply by 1/SCALE if doing so will not cause overflow. */
-            if (scale != 1.)
+            if(scale != 1.)
             {
                 ix = izamax_(n, &work[1], &c__1);
                 i__1 = ix;
-                xnorm = (d__1 = work[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(& work[ix]), f2c_dabs(d__2));
-                if (scale < xnorm * smlnum || scale == 0.)
+                xnorm = (d__1 = work[i__1].r, f2c_dabs(d__1))
+                        + (d__2 = d_imag(&work[ix]), f2c_dabs(d__2));
+                if(scale < xnorm * smlnum || scale == 0.)
                 {
                     goto L20;
                 }
@@ -281,14 +301,14 @@ L10:
             goto L10;
         }
         /* Compute the estimate of the reciprocal condition number. */
-        if (ainvnm != 0.)
+        if(ainvnm != 0.)
         {
             *rcond = 1. / anorm / ainvnm;
         }
     }
 L20:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTRCON */
 }
 /* ztrcon_ */

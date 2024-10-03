@@ -18,7 +18,7 @@
 char* pc_str[N_PIVOT_COMBOS] = { "incpiv" };
 
 void time_LU(
-              integer is_pivoting, integer type, integer n_repeats, integer m, integer n, dim_t nb_alg, dim_t nb_flash,
+              integer is_pivoting, integer type, integer n_repeats, integer m, integer n, fla_dim_t nb_alg, fla_dim_t nb_flash,
               FLA_Obj C, FLA_Obj p, FLA_Obj b, FLA_Obj b_ref, FLA_Obj b_norm, 
               double *dtime, double *diff, double *gflops );
 
@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     i,
     n_pivot_combos = N_PIVOT_COMBOS;
 
-  dim_t
+  fla_dim_t
     nb_alg,
     nb_flash;
   

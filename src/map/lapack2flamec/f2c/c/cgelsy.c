@@ -1,16 +1,11 @@
-/* ../netlib/cgelsy.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cgelsy.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    0.f,0.f
-}
-;
-static complex c_b2 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {0.f, 0.f};
+static complex c_b2 = {1.f, 0.f};
 static integer c__1 = 1;
 static integer c_n1 = -1;
 static integer c__0 = 0;
@@ -21,11 +16,17 @@ static integer c__2 = 2;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CGELSY + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgelsy. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgelsy.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgelsy. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgelsy.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgelsy. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgelsy.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -212,15 +213,20 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cgelsy_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, complex *b, integer *ldb, integer *jpvt, real *rcond, integer *rank, complex *work, integer *lwork, real *rwork, integer * info)
+void cgelsy_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, complex *b,
+             integer *ldb, integer *jpvt, real *rcond, integer *rank, complex *work, integer *lwork,
+             real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgelsy inputs: m %lld, n %lld, nrhs %lld, lda %lld, ldb %lld, lwork %lld",*m, *n, *nrhs, *lda, *ldb, *lwork);
+    snprintf(buffer, 256,
+             "cgelsy inputs: m %lld, n %lld, nrhs %lld, lda %lld, ldb %lld, lwork %lld", *m, *n,
+             *nrhs, *lda, *ldb, *lwork);
 #else
-    snprintf(buffer, 256,"cgelsy inputs: m %d, n %d, nrhs %d, lda %d, ldb %d, lwork %d",*m, *n, *nrhs, *lda, *ldb, *lwork);
+    snprintf(buffer, 256, "cgelsy inputs: m %d, n %d, nrhs %d, lda %d, ldb %d, lwork %d", *m, *n,
+             *nrhs, *lda, *ldb, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -237,30 +243,48 @@ int cgelsy_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, co
     real anrm, bnrm, smin, smax;
     integer iascl, ibscl;
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *);
+        void
+        ccopy_(integer *, complex *, integer *, complex *, integer *);
     integer ismin, ismax;
     extern /* Subroutine */
-    int ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), claic1_(integer *, integer *, complex *, real *, complex *, complex *, real *, complex *, complex *);
+        void
+        ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
+               integer *, complex *, integer *),
+        claic1_(integer *, integer *, complex *, real *, complex *, complex *, real *, complex *,
+                complex *);
     real wsize;
     extern /* Subroutine */
-    int cgeqp3_(integer *, integer *, complex *, integer *, integer *, complex *, complex *, integer *, real *, integer *), slabad_(real *, real *);
+        void
+        cgeqp3_(integer *, integer *, complex *, integer *, integer *, complex *, complex *,
+                integer *, real *, integer *),
+        slabad_(real *, real *);
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    int clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *);
+        void
+        clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *,
+                integer *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;
     extern /* Subroutine */
-    int cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+        void
+        cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
+                complex *, integer *, complex *, integer *, integer *);
     real sminpr, smaxpr, smlnum;
     extern /* Subroutine */
-    int cunmrz_(char *, char *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+        void
+        cunmrz_(char *, char *, integer *, integer *, integer *, integer *, complex *, integer *,
+                complex *, complex *, integer *, complex *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    int ctzrzf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *, integer *);
+        void
+        ctzrzf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+                integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -292,7 +316,7 @@ int cgelsy_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, co
     --work;
     --rwork;
     /* Function Body */
-    mn = fla_min(*m,*n);
+    mn = fla_min(*m, *n);
     ismin = mn + 1;
     ismax = (mn << 1) + 1;
     /* Test the input arguments. */
@@ -302,40 +326,40 @@ int cgelsy_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, co
     nb3 = ilaenv_(&c__1, "CUNMQR", " ", m, n, nrhs, &c_n1);
     nb4 = ilaenv_(&c__1, "CUNMRQ", " ", m, n, nrhs, &c_n1);
     /* Computing MAX */
-    i__1 = fla_max(nb1,nb2);
-    i__1 = fla_max(i__1,nb3); // , expr subst
-    nb = fla_max(i__1,nb4);
+    i__1 = fla_max(nb1, nb2);
+    i__1 = fla_max(i__1, nb3); // , expr subst
+    nb = fla_max(i__1, nb4);
     /* Computing MAX */
     i__1 = 1, i__2 = mn + (*n << 1) + nb * (*n + 1);
-    i__1 = fla_max(i__1,i__2);
+    i__1 = fla_max(i__1, i__2);
     i__2 = (mn << 1) + nb * *nrhs; // ; expr subst
-    lwkopt = fla_max(i__1,i__2);
-    q__1.r = (real) lwkopt;
+    lwkopt = fla_max(i__1, i__2);
+    q__1.r = (real)lwkopt;
     q__1.i = 0.f; // , expr subst
     work[1].r = q__1.r;
     work[1].i = q__1.i; // , expr subst
     lquery = *lwork == -1;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
     else /* if(complicated condition) */
     {
         /* Computing MAX */
-        i__1 = fla_max(1,*m);
-        if (*ldb < fla_max(i__1,*n))
+        i__1 = fla_max(1, *m);
+        if(*ldb < fla_max(i__1, *n))
         {
             *info = -7;
         }
@@ -343,34 +367,34 @@ int cgelsy_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, co
         {
             /* Computing MAX */
             i__1 = mn << 1, i__2 = *n + 1;
-            i__1 = fla_max(i__1,i__2);
+            i__1 = fla_max(i__1, i__2);
             i__2 = mn + *nrhs; // ; expr subst
-            if (*lwork < mn + fla_max(i__1,i__2) && ! lquery)
+            if(*lwork < mn + fla_max(i__1, i__2) && !lquery)
             {
                 *info = -12;
             }
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CGELSY", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     /* Computing MIN */
-    i__1 = fla_min(*m,*n);
-    if (fla_min(i__1,*nrhs) == 0)
+    i__1 = fla_min(*m, *n);
+    if(fla_min(i__1, *nrhs) == 0)
     {
         *rank = 0;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine parameters */
     smlnum = slamch_("S") / slamch_("P");
@@ -379,35 +403,35 @@ int cgelsy_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, co
     /* Scale A, B if max entries outside range [SMLNUM,BIGNUM] */
     anrm = clange_("M", m, n, &a[a_offset], lda, &rwork[1]);
     iascl = 0;
-    if (anrm > 0.f && anrm < smlnum)
+    if(anrm > 0.f && anrm < smlnum)
     {
         /* Scale matrix norm up to SMLNUM */
         clascl_("G", &c__0, &c__0, &anrm, &smlnum, m, n, &a[a_offset], lda, info);
         iascl = 1;
     }
-    else if (anrm > bignum)
+    else if(anrm > bignum)
     {
         /* Scale matrix norm down to BIGNUM */
         clascl_("G", &c__0, &c__0, &anrm, &bignum, m, n, &a[a_offset], lda, info);
         iascl = 2;
     }
-    else if (anrm == 0.f)
+    else if(anrm == 0.f)
     {
         /* Matrix all zero. Return zero solution. */
-        i__1 = fla_max(*m,*n);
+        i__1 = fla_max(*m, *n);
         claset_("F", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
         *rank = 0;
         goto L70;
     }
     bnrm = clange_("M", m, nrhs, &b[b_offset], ldb, &rwork[1]);
     ibscl = 0;
-    if (bnrm > 0.f && bnrm < smlnum)
+    if(bnrm > 0.f && bnrm < smlnum)
     {
         /* Scale matrix norm up to SMLNUM */
         clascl_("G", &c__0, &c__0, &bnrm, &smlnum, m, nrhs, &b[b_offset], ldb, info);
         ibscl = 1;
     }
-    else if (bnrm > bignum)
+    else if(bnrm > bignum)
     {
         /* Scale matrix norm down to BIGNUM */
         clascl_("G", &c__0, &c__0, &bnrm, &bignum, m, nrhs, &b[b_offset], ldb, info);
@@ -430,10 +454,10 @@ int cgelsy_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, co
     work[i__1].i = 0.f; // , expr subst
     smax = c_abs(&a[a_dim1 + 1]);
     smin = smax;
-    if (c_abs(&a[a_dim1 + 1]) == 0.f)
+    if(c_abs(&a[a_dim1 + 1]) == 0.f)
     {
         *rank = 0;
-        i__1 = fla_max(*m,*n);
+        i__1 = fla_max(*m, *n);
         claset_("F", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
         goto L70;
     }
@@ -442,17 +466,17 @@ int cgelsy_(integer *m, integer *n, integer *nrhs, complex * a, integer *lda, co
         *rank = 1;
     }
 L10:
-    if (*rank < mn)
+    if(*rank < mn)
     {
         i__ = *rank + 1;
-        claic1_(&c__2, rank, &work[ismin], &smin, &a[i__ * a_dim1 + 1], &a[ i__ + i__ * a_dim1], &sminpr, &s1, &c1);
-        claic1_(&c__1, rank, &work[ismax], &smax, &a[i__ * a_dim1 + 1], &a[ i__ + i__ * a_dim1], &smaxpr, &s2, &c2);
-        if (smaxpr * *rcond <= sminpr)
+        claic1_(&c__2, rank, &work[ismin], &smin, &a[i__ * a_dim1 + 1], &a[i__ + i__ * a_dim1],
+                &sminpr, &s1, &c1);
+        claic1_(&c__1, rank, &work[ismax], &smax, &a[i__ * a_dim1 + 1], &a[i__ + i__ * a_dim1],
+                &smaxpr, &s2, &c2);
+        if(smaxpr * *rcond <= sminpr)
         {
             i__1 = *rank;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = ismin + i__ - 1;
                 i__3 = ismin + i__ - 1;
@@ -485,7 +509,7 @@ L10:
     /* [ 0 R22 ] */
     /* where R11 = R(1:RANK,1:RANK) */
     /* [R11,R12] = [ T11, 0 ] * Y */
-    if (*rank < *n)
+    if(*rank < *n)
     {
         i__1 = *lwork - (mn << 1);
         ctzrzf_(rank, n, &a[a_offset], lda, &work[mn + 1], &work[(mn << 1) + 1], &i__1, info);
@@ -494,24 +518,22 @@ L10:
     /* Details of Householder rotations stored in WORK(MN+1:2*MN) */
     /* B(1:M,1:NRHS) := Q**H * B(1:M,1:NRHS) */
     i__1 = *lwork - (mn << 1);
-    cunmqr_("Left", "Conjugate transpose", m, nrhs, &mn, &a[a_offset], lda, & work[1], &b[b_offset], ldb, &work[(mn << 1) + 1], &i__1, info);
+    cunmqr_("Left", "Conjugate transpose", m, nrhs, &mn, &a[a_offset], lda, &work[1], &b[b_offset],
+            ldb, &work[(mn << 1) + 1], &i__1, info);
     /* Computing MAX */
     i__1 = (mn << 1) + 1;
     r__1 = wsize;
     r__2 = (mn << 1) + work[i__1].r; // , expr subst
-    wsize = fla_max(r__1,r__2);
+    wsize = fla_max(r__1, r__2);
     /* complex workspace: 2*MN+NB*NRHS. */
     /* B(1:RANK,1:NRHS) := inv(T11) * B(1:RANK,1:NRHS) */
-    ctrsm_("Left", "Upper", "No transpose", "Non-unit", rank, nrhs, &c_b2, &a[ a_offset], lda, &b[b_offset], ldb);
+    ctrsm_("Left", "Upper", "No transpose", "Non-unit", rank, nrhs, &c_b2, &a[a_offset], lda,
+           &b[b_offset], ldb);
     i__1 = *nrhs;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         i__2 = *n;
-        for (i__ = *rank + 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = *rank + 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * b_dim1;
             b[i__3].r = 0.f;
@@ -521,23 +543,20 @@ L10:
         /* L40: */
     }
     /* B(1:N,1:NRHS) := Y**H * B(1:N,1:NRHS) */
-    if (*rank < *n)
+    if(*rank < *n)
     {
         i__1 = *n - *rank;
         i__2 = *lwork - (mn << 1);
-        cunmrz_("Left", "Conjugate transpose", n, nrhs, rank, &i__1, &a[ a_offset], lda, &work[mn + 1], &b[b_offset], ldb, &work[(mn << 1) + 1], &i__2, info);
+        cunmrz_("Left", "Conjugate transpose", n, nrhs, rank, &i__1, &a[a_offset], lda,
+                &work[mn + 1], &b[b_offset], ldb, &work[(mn << 1) + 1], &i__2, info);
     }
     /* complex workspace: 2*MN+NRHS. */
     /* B(1:N,1:NRHS) := P * B(1:N,1:NRHS) */
     i__1 = *nrhs;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = jpvt[i__];
             i__4 = i__ + j * b_dim1;
@@ -550,31 +569,31 @@ L10:
     }
     /* complex workspace: N. */
     /* Undo scaling */
-    if (iascl == 1)
+    if(iascl == 1)
     {
         clascl_("G", &c__0, &c__0, &anrm, &smlnum, n, nrhs, &b[b_offset], ldb, info);
         clascl_("U", &c__0, &c__0, &smlnum, &anrm, rank, rank, &a[a_offset], lda, info);
     }
-    else if (iascl == 2)
+    else if(iascl == 2)
     {
         clascl_("G", &c__0, &c__0, &anrm, &bignum, n, nrhs, &b[b_offset], ldb, info);
         clascl_("U", &c__0, &c__0, &bignum, &anrm, rank, rank, &a[a_offset], lda, info);
     }
-    if (ibscl == 1)
+    if(ibscl == 1)
     {
         clascl_("G", &c__0, &c__0, &smlnum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
     }
-    else if (ibscl == 2)
+    else if(ibscl == 2)
     {
         clascl_("G", &c__0, &c__0, &bignum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
     }
 L70:
-    q__1.r = (real) lwkopt;
+    q__1.r = (real)lwkopt;
     q__1.i = 0.f; // , expr subst
     work[1].r = q__1.r;
     work[1].i = q__1.i; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGELSY */
 }
 /* cgelsy_ */

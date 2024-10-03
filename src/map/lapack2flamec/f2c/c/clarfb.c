@@ -1,23 +1,29 @@
-/* ../netlib/clarfb.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/clarfb.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {1.f, 0.f};
 static integer c__1 = 1;
-/* > \brief \b CLARFB applies a block reflector or its conjugate-transpose to a general rectangular matrix. */
+/* > \brief \b CLARFB applies a block reflector or its conjugate-transpose to a general rectangular
+ * matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLARFB + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clarfb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clarfb.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clarfb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clarfb.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarfb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarfb.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -107,9 +113,9 @@ static integer c__1 = 1;
 /* > LDV is INTEGER */
 /* > The leading dimension of the array V. */
 /* > If STOREV = 'C' and SIDE = 'L', LDV >= fla_max(1,M);
-*/
+ */
 /* > if STOREV = 'C' and SIDE = 'R', LDV >= fla_max(1,N);
-*/
+ */
 /* > if STOREV = 'R', LDV >= K. */
 /* > \endverbatim */
 /* > */
@@ -149,7 +155,7 @@ static integer c__1 = 1;
 /* > LDWORK is INTEGER */
 /* > The leading dimension of the array WORK. */
 /* > If SIDE = 'L', LDWORK >= fla_max(1,N);
-*/
+ */
 /* > if SIDE = 'R', LDWORK >= fla_max(1,M). */
 /* > \endverbatim */
 /* Authors: */
@@ -191,28 +197,43 @@ the corresponding */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int clarfb_(char *side, char *trans, char *direct, char * storev, integer *m, integer *n, integer *k, complex *v, integer *ldv, complex *t, integer *ldt, complex *c__, integer *ldc, complex *work, integer *ldwork)
+void clarfb_(char *side, char *trans, char *direct, char *storev, integer *m, integer *n,
+             integer *k, complex *v, integer *ldv, complex *t, integer *ldt, complex *c__,
+             integer *ldc, complex *work, integer *ldwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clarfb inputs: side %c, trans %c, direct %c, storev %c, m %lld, n %lld, k %lld, ldv %lld, ldt %lld, ldc %lld, ldwork %lld",*side, *trans, *direct, *storev, *m, *n, *k, *ldv, *ldt, *ldc, *ldwork);
+    snprintf(buffer, 256,
+             "clarfb inputs: side %c, trans %c, direct %c, storev %c, m %lld, n %lld, k %lld, ldv "
+             "%lld, ldt %lld, ldc %lld, ldwork %lld",
+             *side, *trans, *direct, *storev, *m, *n, *k, *ldv, *ldt, *ldc, *ldwork);
 #else
-    snprintf(buffer, 256,"clarfb inputs: side %c, trans %c, direct %c, storev %c, m %d, n %d, k %d, ldv %d, ldt %d, ldc %d, ldwork %d",*side, *trans, *direct, *storev, *m, *n, *k, *ldv, *ldt, *ldc, *ldwork);
+    snprintf(buffer, 256,
+             "clarfb inputs: side %c, trans %c, direct %c, storev %c, m %d, n %d, k %d, ldv %d, "
+             "ldt %d, ldc %d, ldwork %d",
+             *side, *trans, *direct, *storev, *m, *n, *k, *ldv, *ldt, *ldc, *ldwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1, i__2, i__3, i__4, i__5;
+    integer c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1,
+        i__2, i__3, i__4, i__5;
     complex q__1, q__2;
     /* Local variables */
     integer i__, j;
     extern /* Subroutine */
-    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+        void
+        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
+               complex *, integer *, complex *, complex *, integer *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *), ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), clacgv_(integer *, complex *, integer *);
+        void
+        ccopy_(integer *, complex *, integer *, complex *, integer *),
+        ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
+               integer *, complex *, integer *),
+        clacgv_(integer *, complex *, integer *);
     char transt[1];
     /* -- LAPACK auxiliary routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -249,12 +270,12 @@ int clarfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
     work_offset = 1 + work_dim1;
     work -= work_offset;
     /* Function Body */
-    if (*m <= 0 || *n <= 0)
+    if(*m <= 0 || *n <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (lsame_(trans, "N"))
+    if(lsame_(trans, "N", 1, 1))
     {
         *(unsigned char *)transt = 'C';
     }
@@ -262,65 +283,66 @@ int clarfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
     {
         *(unsigned char *)transt = 'N';
     }
-    if (lsame_(storev, "C"))
+    if(lsame_(storev, "C", 1, 1))
     {
-        if (lsame_(direct, "F"))
+        if(lsame_(direct, "F", 1, 1))
         {
             /* Let V = ( V1 ) (first K rows) */
             /* ( V2 ) */
             /* where V1 is unit lower triangular. */
-            if (lsame_(side, "L"))
+            if(lsame_(side, "L", 1, 1))
             {
                 /* Form H * C or H**H * C where C = ( C1 ) */
                 /* ( C2 ) */
                 /* W := C**H * V = (C1**H * V1 + C2**H * V2) (stored in WORK) */
                 /* W := C1**H */
                 i__1 = *k;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     ccopy_(n, &c__[j + c_dim1], ldc, &work[j * work_dim1 + 1], &c__1);
                     clacgv_(n, &work[j * work_dim1 + 1], &c__1);
                     /* L10: */
                 }
                 /* W := W * V1 */
-                ctrmm_("Right", "Lower", "No transpose", "Unit", n, k, &c_b1, &v[v_offset], ldv, &work[work_offset], ldwork);
-                if (*m > *k)
+                ctrmm_("Right", "Lower", "No transpose", "Unit", n, k, &c_b1, &v[v_offset], ldv,
+                       &work[work_offset], ldwork);
+                if(*m > *k)
                 {
                     /* W := W + C2**H *V2 */
                     i__1 = *m - *k;
-                    cgemm_("Conjugate transpose", "No transpose", n, k, &i__1, &c_b1, &c__[*k + 1 + c_dim1], ldc, &v[*k + 1 + v_dim1], ldv, &c_b1, &work[work_offset], ldwork);
+                    cgemm_("Conjugate transpose", "No transpose", n, k, &i__1, &c_b1,
+                           &c__[*k + 1 + c_dim1], ldc, &v[*k + 1 + v_dim1], ldv, &c_b1,
+                           &work[work_offset], ldwork);
                 }
                 /* W := W * T**H or W * T */
-                ctrmm_("Right", "Upper", transt, "Non-unit", n, k, &c_b1, &t[ t_offset], ldt, &work[work_offset], ldwork);
+                ctrmm_("Right", "Upper", transt, "Non-unit", n, k, &c_b1, &t[t_offset], ldt,
+                       &work[work_offset], ldwork);
                 /* C := C - V * W**H */
-                if (*m > *k)
+                if(*m > *k)
                 {
                     /* C2 := C2 - V2 * W**H */
                     i__1 = *m - *k;
                     q__1.r = -1.f;
                     q__1.i = -0.f; // , expr subst
-                    cgemm_("No transpose", "Conjugate transpose", &i__1, n, k, &q__1, &v[*k + 1 + v_dim1], ldv, &work[ work_offset], ldwork, &c_b1, &c__[*k + 1 + c_dim1], ldc);
+                    cgemm_("No transpose", "Conjugate transpose", &i__1, n, k, &q__1,
+                           &v[*k + 1 + v_dim1], ldv, &work[work_offset], ldwork, &c_b1,
+                           &c__[*k + 1 + c_dim1], ldc);
                 }
                 /* W := W * V1**H */
-                ctrmm_("Right", "Lower", "Conjugate transpose", "Unit", n, k, &c_b1, &v[v_offset], ldv, &work[work_offset], ldwork);
+                ctrmm_("Right", "Lower", "Conjugate transpose", "Unit", n, k, &c_b1, &v[v_offset],
+                       ldv, &work[work_offset], ldwork);
                 /* C1 := C1 - W**H */
                 i__1 = *k;
                 integer jw_;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = *n;
                     jw_ = j * work_dim1;
-                    for (i__ = 1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         i__3 = j + i__ * c_dim1;
                         i__4 = j + i__ * c_dim1;
-                        q__2.r =  work[i__ + jw_].r;
+                        q__2.r = work[i__ + jw_].r;
                         q__2.i = -work[i__ + jw_].i;
                         q__1.r = c__[i__4].r - q__2.r;
                         q__1.i = c__[i__4].i - q__2.i; // , expr subst
@@ -331,56 +353,57 @@ int clarfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
                     /* L30: */
                 }
             }
-            else if (lsame_(side, "R"))
+            else if(lsame_(side, "R", 1, 1))
             {
                 /* Form C * H or C * H**H where C = ( C1 C2 ) */
                 /* W := C * V = (C1*V1 + C2*V2) (stored in WORK) */
                 /* W := C1 */
                 i__1 = *k;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     ccopy_(m, &c__[j * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1], &c__1);
                     /* L40: */
                 }
                 /* W := W * V1 */
-                ctrmm_("Right", "Lower", "No transpose", "Unit", m, k, &c_b1, &v[v_offset], ldv, &work[work_offset], ldwork);
-                if (*n > *k)
+                ctrmm_("Right", "Lower", "No transpose", "Unit", m, k, &c_b1, &v[v_offset], ldv,
+                       &work[work_offset], ldwork);
+                if(*n > *k)
                 {
                     /* W := W + C2 * V2 */
                     i__1 = *n - *k;
-                    cgemm_("No transpose", "No transpose", m, k, &i__1, &c_b1, &c__[(*k + 1) * c_dim1 + 1], ldc, &v[*k + 1 + v_dim1], ldv, &c_b1, &work[work_offset], ldwork);
+                    cgemm_("No transpose", "No transpose", m, k, &i__1, &c_b1,
+                           &c__[(*k + 1) * c_dim1 + 1], ldc, &v[*k + 1 + v_dim1], ldv, &c_b1,
+                           &work[work_offset], ldwork);
                 }
                 /* W := W * T or W * T**H */
-                ctrmm_("Right", "Upper", trans, "Non-unit", m, k, &c_b1, &t[ t_offset], ldt, &work[work_offset], ldwork);
+                ctrmm_("Right", "Upper", trans, "Non-unit", m, k, &c_b1, &t[t_offset], ldt,
+                       &work[work_offset], ldwork);
                 /* C := C - W * V**H */
-                if (*n > *k)
+                if(*n > *k)
                 {
                     /* C2 := C2 - W * V2**H */
                     i__1 = *n - *k;
                     q__1.r = -1.f;
                     q__1.i = -0.f; // , expr subst
-                    cgemm_("No transpose", "Conjugate transpose", m, &i__1, k, &q__1, &work[work_offset], ldwork, &v[*k + 1 + v_dim1], ldv, &c_b1, &c__[(*k + 1) * c_dim1 + 1], ldc);
+                    cgemm_("No transpose", "Conjugate transpose", m, &i__1, k, &q__1,
+                           &work[work_offset], ldwork, &v[*k + 1 + v_dim1], ldv, &c_b1,
+                           &c__[(*k + 1) * c_dim1 + 1], ldc);
                 }
                 /* W := W * V1**H */
-                ctrmm_("Right", "Lower", "Conjugate transpose", "Unit", m, k, &c_b1, &v[v_offset], ldv, &work[work_offset], ldwork);
+                ctrmm_("Right", "Lower", "Conjugate transpose", "Unit", m, k, &c_b1, &v[v_offset],
+                       ldv, &work[work_offset], ldwork);
                 /* C1 := C1 - W */
                 i__1 = *k;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = *m;
-                    for (i__ = 1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         i__3 = i__ + j * c_dim1;
                         i__4 = i__ + j * c_dim1;
                         i__5 = i__ + j * work_dim1;
                         q__1.r = c__[i__4].r - work[i__5].r;
-                        q__1.i = c__[ i__4].i - work[i__5].i; // , expr subst
+                        q__1.i = c__[i__4].i - work[i__5].i; // , expr subst
                         c__[i__3].r = q__1.r;
                         c__[i__3].i = q__1.i; // , expr subst
                         /* L50: */
@@ -394,54 +417,54 @@ int clarfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
             /* Let V = ( V1 ) */
             /* ( V2 ) (last K rows) */
             /* where V2 is unit upper triangular. */
-            if (lsame_(side, "L"))
+            if(lsame_(side, "L", 1, 1))
             {
                 /* Form H * C or H**H * C where C = ( C1 ) */
                 /* ( C2 ) */
                 /* W := C**H * V = (C1**H * V1 + C2**H * V2) (stored in WORK) */
                 /* W := C2**H */
                 i__1 = *k;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     ccopy_(n, &c__[*m - *k + j + c_dim1], ldc, &work[j * work_dim1 + 1], &c__1);
                     clacgv_(n, &work[j * work_dim1 + 1], &c__1);
                     /* L70: */
                 }
                 /* W := W * V2 */
-                ctrmm_("Right", "Upper", "No transpose", "Unit", n, k, &c_b1, &v[*m - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
-                if (*m > *k)
+                ctrmm_("Right", "Upper", "No transpose", "Unit", n, k, &c_b1,
+                       &v[*m - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
+                if(*m > *k)
                 {
                     /* W := W + C1**H * V1 */
                     i__1 = *m - *k;
-                    cgemm_("Conjugate transpose", "No transpose", n, k, &i__1, &c_b1, &c__[c_offset], ldc, &v[v_offset], ldv, & c_b1, &work[work_offset], ldwork);
+                    cgemm_("Conjugate transpose", "No transpose", n, k, &i__1, &c_b1,
+                           &c__[c_offset], ldc, &v[v_offset], ldv, &c_b1, &work[work_offset],
+                           ldwork);
                 }
                 /* W := W * T**H or W * T */
-                ctrmm_("Right", "Lower", transt, "Non-unit", n, k, &c_b1, &t[ t_offset], ldt, &work[work_offset], ldwork);
+                ctrmm_("Right", "Lower", transt, "Non-unit", n, k, &c_b1, &t[t_offset], ldt,
+                       &work[work_offset], ldwork);
                 /* C := C - V * W**H */
-                if (*m > *k)
+                if(*m > *k)
                 {
                     /* C1 := C1 - V1 * W**H */
                     i__1 = *m - *k;
                     q__1.r = -1.f;
                     q__1.i = -0.f; // , expr subst
-                    cgemm_("No transpose", "Conjugate transpose", &i__1, n, k, &q__1, &v[v_offset], ldv, &work[work_offset], ldwork, &c_b1, &c__[c_offset], ldc);
+                    cgemm_("No transpose", "Conjugate transpose", &i__1, n, k, &q__1, &v[v_offset],
+                           ldv, &work[work_offset], ldwork, &c_b1, &c__[c_offset], ldc);
                 }
                 /* W := W * V2**H */
-                ctrmm_("Right", "Upper", "Conjugate transpose", "Unit", n, k, &c_b1, &v[*m - *k + 1 + v_dim1], ldv, &work[ work_offset], ldwork);
+                ctrmm_("Right", "Upper", "Conjugate transpose", "Unit", n, k, &c_b1,
+                       &v[*m - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
                 /* C2 := C2 - W**H */
                 i__1 = *k;
                 integer jw_;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = *n;
-                    jw_ =  j * work_dim1;
-                    for (i__ = 1;
-                            i__ <= i__2;
-                            ++i__)
+                    jw_ = j * work_dim1;
+                    for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         i__3 = *m - *k + j + i__ * c_dim1;
                         i__4 = *m - *k + j + i__ * c_dim1;
@@ -456,56 +479,57 @@ int clarfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
                     /* L90: */
                 }
             }
-            else if (lsame_(side, "R"))
+            else if(lsame_(side, "R", 1, 1))
             {
                 /* Form C * H or C * H**H where C = ( C1 C2 ) */
                 /* W := C * V = (C1*V1 + C2*V2) (stored in WORK) */
                 /* W := C2 */
                 i__1 = *k;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
-                    ccopy_(m, &c__[(*n - *k + j) * c_dim1 + 1], &c__1, &work[ j * work_dim1 + 1], &c__1);
+                    ccopy_(m, &c__[(*n - *k + j) * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1],
+                           &c__1);
                     /* L100: */
                 }
                 /* W := W * V2 */
-                ctrmm_("Right", "Upper", "No transpose", "Unit", m, k, &c_b1, &v[*n - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
-                if (*n > *k)
+                ctrmm_("Right", "Upper", "No transpose", "Unit", m, k, &c_b1,
+                       &v[*n - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
+                if(*n > *k)
                 {
                     /* W := W + C1 * V1 */
                     i__1 = *n - *k;
-                    cgemm_("No transpose", "No transpose", m, k, &i__1, &c_b1, &c__[c_offset], ldc, &v[v_offset], ldv, &c_b1, & work[work_offset], ldwork) ;
+                    cgemm_("No transpose", "No transpose", m, k, &i__1, &c_b1, &c__[c_offset], ldc,
+                           &v[v_offset], ldv, &c_b1, &work[work_offset], ldwork);
                 }
                 /* W := W * T or W * T**H */
-                ctrmm_("Right", "Lower", trans, "Non-unit", m, k, &c_b1, &t[ t_offset], ldt, &work[work_offset], ldwork);
+                ctrmm_("Right", "Lower", trans, "Non-unit", m, k, &c_b1, &t[t_offset], ldt,
+                       &work[work_offset], ldwork);
                 /* C := C - W * V**H */
-                if (*n > *k)
+                if(*n > *k)
                 {
                     /* C1 := C1 - W * V1**H */
                     i__1 = *n - *k;
                     q__1.r = -1.f;
                     q__1.i = -0.f; // , expr subst
-                    cgemm_("No transpose", "Conjugate transpose", m, &i__1, k, &q__1, &work[work_offset], ldwork, &v[v_offset], ldv, &c_b1, &c__[c_offset], ldc);
+                    cgemm_("No transpose", "Conjugate transpose", m, &i__1, k, &q__1,
+                           &work[work_offset], ldwork, &v[v_offset], ldv, &c_b1, &c__[c_offset],
+                           ldc);
                 }
                 /* W := W * V2**H */
-                ctrmm_("Right", "Upper", "Conjugate transpose", "Unit", m, k, &c_b1, &v[*n - *k + 1 + v_dim1], ldv, &work[ work_offset], ldwork);
+                ctrmm_("Right", "Upper", "Conjugate transpose", "Unit", m, k, &c_b1,
+                       &v[*n - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
                 /* C2 := C2 - W */
                 i__1 = *k;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = *m;
-                    for (i__ = 1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         i__3 = i__ + (*n - *k + j) * c_dim1;
                         i__4 = i__ + (*n - *k + j) * c_dim1;
                         i__5 = i__ + j * work_dim1;
                         q__1.r = c__[i__4].r - work[i__5].r;
-                        q__1.i = c__[ i__4].i - work[i__5].i; // , expr subst
+                        q__1.i = c__[i__4].i - work[i__5].i; // , expr subst
                         c__[i__3].r = q__1.r;
                         c__[i__3].i = q__1.i; // , expr subst
                         /* L110: */
@@ -515,60 +539,61 @@ int clarfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
             }
         }
     }
-    else if (lsame_(storev, "R"))
+    else if(lsame_(storev, "R", 1, 1))
     {
-        if (lsame_(direct, "F"))
+        if(lsame_(direct, "F", 1, 1))
         {
             /* Let V = ( V1 V2 ) (V1: first K columns) */
             /* where V1 is unit upper triangular. */
-            if (lsame_(side, "L"))
+            if(lsame_(side, "L", 1, 1))
             {
                 /* Form H * C or H**H * C where C = ( C1 ) */
                 /* ( C2 ) */
                 /* W := C**H * V**H = (C1**H * V1**H + C2**H * V2**H) (stored in WORK) */
                 /* W := C1**H */
                 i__1 = *k;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     ccopy_(n, &c__[j + c_dim1], ldc, &work[j * work_dim1 + 1], &c__1);
                     clacgv_(n, &work[j * work_dim1 + 1], &c__1);
                     /* L130: */
                 }
                 /* W := W * V1**H */
-                ctrmm_("Right", "Upper", "Conjugate transpose", "Unit", n, k, &c_b1, &v[v_offset], ldv, &work[work_offset], ldwork);
-                if (*m > *k)
+                ctrmm_("Right", "Upper", "Conjugate transpose", "Unit", n, k, &c_b1, &v[v_offset],
+                       ldv, &work[work_offset], ldwork);
+                if(*m > *k)
                 {
                     /* W := W + C2**H * V2**H */
                     i__1 = *m - *k;
-                    cgemm_("Conjugate transpose", "Conjugate transpose", n, k, &i__1, &c_b1, &c__[*k + 1 + c_dim1], ldc, &v[(*k + 1) * v_dim1 + 1], ldv, &c_b1, &work[work_offset], ldwork);
+                    cgemm_("Conjugate transpose", "Conjugate transpose", n, k, &i__1, &c_b1,
+                           &c__[*k + 1 + c_dim1], ldc, &v[(*k + 1) * v_dim1 + 1], ldv, &c_b1,
+                           &work[work_offset], ldwork);
                 }
                 /* W := W * T**H or W * T */
-                ctrmm_("Right", "Upper", transt, "Non-unit", n, k, &c_b1, &t[ t_offset], ldt, &work[work_offset], ldwork);
+                ctrmm_("Right", "Upper", transt, "Non-unit", n, k, &c_b1, &t[t_offset], ldt,
+                       &work[work_offset], ldwork);
                 /* C := C - V**H * W**H */
-                if (*m > *k)
+                if(*m > *k)
                 {
                     /* C2 := C2 - V2**H * W**H */
                     i__1 = *m - *k;
                     q__1.r = -1.f;
                     q__1.i = -0.f; // , expr subst
-                    cgemm_("Conjugate transpose", "Conjugate transpose", & i__1, n, k, &q__1, &v[(*k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork, &c_b1, &c__[*k + 1 + c_dim1], ldc);
+                    cgemm_("Conjugate transpose", "Conjugate transpose", &i__1, n, k, &q__1,
+                           &v[(*k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork, &c_b1,
+                           &c__[*k + 1 + c_dim1], ldc);
                 }
                 /* W := W * V1 */
-                ctrmm_("Right", "Upper", "No transpose", "Unit", n, k, &c_b1, &v[v_offset], ldv, &work[work_offset], ldwork);
+                ctrmm_("Right", "Upper", "No transpose", "Unit", n, k, &c_b1, &v[v_offset], ldv,
+                       &work[work_offset], ldwork);
                 /* C1 := C1 - W**H */
                 i__1 = *k;
                 integer jw_;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = *n;
-                    jw_ =  j * work_dim1;
-                    for (i__ = 1;
-                            i__ <= i__2;
-                            ++i__)
+                    jw_ = j * work_dim1;
+                    for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         i__3 = j + i__ * c_dim1;
                         i__4 = j + i__ * c_dim1;
@@ -583,56 +608,57 @@ int clarfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
                     /* L150: */
                 }
             }
-            else if (lsame_(side, "R"))
+            else if(lsame_(side, "R", 1, 1))
             {
                 /* Form C * H or C * H**H where C = ( C1 C2 ) */
                 /* W := C * V**H = (C1*V1**H + C2*V2**H) (stored in WORK) */
                 /* W := C1 */
                 i__1 = *k;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     ccopy_(m, &c__[j * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1], &c__1);
                     /* L160: */
                 }
                 /* W := W * V1**H */
-                ctrmm_("Right", "Upper", "Conjugate transpose", "Unit", m, k, &c_b1, &v[v_offset], ldv, &work[work_offset], ldwork);
-                if (*n > *k)
+                ctrmm_("Right", "Upper", "Conjugate transpose", "Unit", m, k, &c_b1, &v[v_offset],
+                       ldv, &work[work_offset], ldwork);
+                if(*n > *k)
                 {
                     /* W := W + C2 * V2**H */
                     i__1 = *n - *k;
-                    cgemm_("No transpose", "Conjugate transpose", m, k, &i__1, &c_b1, &c__[(*k + 1) * c_dim1 + 1], ldc, &v[(*k + 1) * v_dim1 + 1], ldv, &c_b1, &work[work_offset], ldwork);
+                    cgemm_("No transpose", "Conjugate transpose", m, k, &i__1, &c_b1,
+                           &c__[(*k + 1) * c_dim1 + 1], ldc, &v[(*k + 1) * v_dim1 + 1], ldv, &c_b1,
+                           &work[work_offset], ldwork);
                 }
                 /* W := W * T or W * T**H */
-                ctrmm_("Right", "Upper", trans, "Non-unit", m, k, &c_b1, &t[ t_offset], ldt, &work[work_offset], ldwork);
+                ctrmm_("Right", "Upper", trans, "Non-unit", m, k, &c_b1, &t[t_offset], ldt,
+                       &work[work_offset], ldwork);
                 /* C := C - W * V */
-                if (*n > *k)
+                if(*n > *k)
                 {
                     /* C2 := C2 - W * V2 */
                     i__1 = *n - *k;
                     q__1.r = -1.f;
                     q__1.i = -0.f; // , expr subst
-                    cgemm_("No transpose", "No transpose", m, &i__1, k, &q__1, &work[work_offset], ldwork, &v[(*k + 1) * v_dim1 + 1], ldv, &c_b1, &c__[(*k + 1) * c_dim1 + 1], ldc);
+                    cgemm_("No transpose", "No transpose", m, &i__1, k, &q__1, &work[work_offset],
+                           ldwork, &v[(*k + 1) * v_dim1 + 1], ldv, &c_b1,
+                           &c__[(*k + 1) * c_dim1 + 1], ldc);
                 }
                 /* W := W * V1 */
-                ctrmm_("Right", "Upper", "No transpose", "Unit", m, k, &c_b1, &v[v_offset], ldv, &work[work_offset], ldwork);
+                ctrmm_("Right", "Upper", "No transpose", "Unit", m, k, &c_b1, &v[v_offset], ldv,
+                       &work[work_offset], ldwork);
                 /* C1 := C1 - W */
                 i__1 = *k;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = *m;
-                    for (i__ = 1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         i__3 = i__ + j * c_dim1;
                         i__4 = i__ + j * c_dim1;
                         i__5 = i__ + j * work_dim1;
                         q__1.r = c__[i__4].r - work[i__5].r;
-                        q__1.i = c__[ i__4].i - work[i__5].i; // , expr subst
+                        q__1.i = c__[i__4].i - work[i__5].i; // , expr subst
                         c__[i__3].r = q__1.r;
                         c__[i__3].i = q__1.i; // , expr subst
                         /* L170: */
@@ -645,54 +671,55 @@ int clarfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         {
             /* Let V = ( V1 V2 ) (V2: last K columns) */
             /* where V2 is unit lower triangular. */
-            if (lsame_(side, "L"))
+            if(lsame_(side, "L", 1, 1))
             {
                 /* Form H * C or H**H * C where C = ( C1 ) */
                 /* ( C2 ) */
                 /* W := C**H * V**H = (C1**H * V1**H + C2**H * V2**H) (stored in WORK) */
                 /* W := C2**H */
                 i__1 = *k;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     ccopy_(n, &c__[*m - *k + j + c_dim1], ldc, &work[j * work_dim1 + 1], &c__1);
                     clacgv_(n, &work[j * work_dim1 + 1], &c__1);
                     /* L190: */
                 }
                 /* W := W * V2**H */
-                ctrmm_("Right", "Lower", "Conjugate transpose", "Unit", n, k, &c_b1, &v[(*m - *k + 1) * v_dim1 + 1], ldv, &work[ work_offset], ldwork);
-                if (*m > *k)
+                ctrmm_("Right", "Lower", "Conjugate transpose", "Unit", n, k, &c_b1,
+                       &v[(*m - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
+                if(*m > *k)
                 {
                     /* W := W + C1**H * V1**H */
                     i__1 = *m - *k;
-                    cgemm_("Conjugate transpose", "Conjugate transpose", n, k, &i__1, &c_b1, &c__[c_offset], ldc, &v[v_offset], ldv, &c_b1, &work[work_offset], ldwork);
+                    cgemm_("Conjugate transpose", "Conjugate transpose", n, k, &i__1, &c_b1,
+                           &c__[c_offset], ldc, &v[v_offset], ldv, &c_b1, &work[work_offset],
+                           ldwork);
                 }
                 /* W := W * T**H or W * T */
-                ctrmm_("Right", "Lower", transt, "Non-unit", n, k, &c_b1, &t[ t_offset], ldt, &work[work_offset], ldwork);
+                ctrmm_("Right", "Lower", transt, "Non-unit", n, k, &c_b1, &t[t_offset], ldt,
+                       &work[work_offset], ldwork);
                 /* C := C - V**H * W**H */
-                if (*m > *k)
+                if(*m > *k)
                 {
                     /* C1 := C1 - V1**H * W**H */
                     i__1 = *m - *k;
                     q__1.r = -1.f;
                     q__1.i = -0.f; // , expr subst
-                    cgemm_("Conjugate transpose", "Conjugate transpose", & i__1, n, k, &q__1, &v[v_offset], ldv, &work[ work_offset], ldwork, &c_b1, &c__[c_offset], ldc);
+                    cgemm_("Conjugate transpose", "Conjugate transpose", &i__1, n, k, &q__1,
+                           &v[v_offset], ldv, &work[work_offset], ldwork, &c_b1, &c__[c_offset],
+                           ldc);
                 }
                 /* W := W * V2 */
-                ctrmm_("Right", "Lower", "No transpose", "Unit", n, k, &c_b1, &v[(*m - *k + 1) * v_dim1 + 1], ldv, &work[ work_offset], ldwork);
+                ctrmm_("Right", "Lower", "No transpose", "Unit", n, k, &c_b1,
+                       &v[(*m - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
                 /* C2 := C2 - W**H */
                 i__1 = *k;
                 integer jw_;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = *n;
                     jw_ = j * work_dim1;
-                    for (i__ = 1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         i__3 = *m - *k + j + i__ * c_dim1;
                         i__4 = *m - *k + j + i__ * c_dim1;
@@ -707,56 +734,57 @@ int clarfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
                     /* L210: */
                 }
             }
-            else if (lsame_(side, "R"))
+            else if(lsame_(side, "R", 1, 1))
             {
                 /* Form C * H or C * H**H where C = ( C1 C2 ) */
                 /* W := C * V**H = (C1*V1**H + C2*V2**H) (stored in WORK) */
                 /* W := C2 */
                 i__1 = *k;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
-                    ccopy_(m, &c__[(*n - *k + j) * c_dim1 + 1], &c__1, &work[ j * work_dim1 + 1], &c__1);
+                    ccopy_(m, &c__[(*n - *k + j) * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1],
+                           &c__1);
                     /* L220: */
                 }
                 /* W := W * V2**H */
-                ctrmm_("Right", "Lower", "Conjugate transpose", "Unit", m, k, &c_b1, &v[(*n - *k + 1) * v_dim1 + 1], ldv, &work[ work_offset], ldwork);
-                if (*n > *k)
+                ctrmm_("Right", "Lower", "Conjugate transpose", "Unit", m, k, &c_b1,
+                       &v[(*n - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
+                if(*n > *k)
                 {
                     /* W := W + C1 * V1**H */
                     i__1 = *n - *k;
-                    cgemm_("No transpose", "Conjugate transpose", m, k, &i__1, &c_b1, &c__[c_offset], ldc, &v[v_offset], ldv, & c_b1, &work[work_offset], ldwork);
+                    cgemm_("No transpose", "Conjugate transpose", m, k, &i__1, &c_b1,
+                           &c__[c_offset], ldc, &v[v_offset], ldv, &c_b1, &work[work_offset],
+                           ldwork);
                 }
                 /* W := W * T or W * T**H */
-                ctrmm_("Right", "Lower", trans, "Non-unit", m, k, &c_b1, &t[ t_offset], ldt, &work[work_offset], ldwork);
+                ctrmm_("Right", "Lower", trans, "Non-unit", m, k, &c_b1, &t[t_offset], ldt,
+                       &work[work_offset], ldwork);
                 /* C := C - W * V */
-                if (*n > *k)
+                if(*n > *k)
                 {
                     /* C1 := C1 - W * V1 */
                     i__1 = *n - *k;
                     q__1.r = -1.f;
                     q__1.i = -0.f; // , expr subst
-                    cgemm_("No transpose", "No transpose", m, &i__1, k, &q__1, &work[work_offset], ldwork, &v[v_offset], ldv, & c_b1, &c__[c_offset], ldc) ;
+                    cgemm_("No transpose", "No transpose", m, &i__1, k, &q__1, &work[work_offset],
+                           ldwork, &v[v_offset], ldv, &c_b1, &c__[c_offset], ldc);
                 }
                 /* W := W * V2 */
-                ctrmm_("Right", "Lower", "No transpose", "Unit", m, k, &c_b1, &v[(*n - *k + 1) * v_dim1 + 1], ldv, &work[ work_offset], ldwork);
+                ctrmm_("Right", "Lower", "No transpose", "Unit", m, k, &c_b1,
+                       &v[(*n - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
                 /* C1 := C1 - W */
                 i__1 = *k;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = *m;
-                    for (i__ = 1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         i__3 = i__ + (*n - *k + j) * c_dim1;
                         i__4 = i__ + (*n - *k + j) * c_dim1;
                         i__5 = i__ + j * work_dim1;
                         q__1.r = c__[i__4].r - work[i__5].r;
-                        q__1.i = c__[ i__4].i - work[i__5].i; // , expr subst
+                        q__1.i = c__[i__4].i - work[i__5].i; // , expr subst
                         c__[i__3].r = q__1.r;
                         c__[i__3].i = q__1.i; // , expr subst
                         /* L230: */
@@ -767,7 +795,7 @@ int clarfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLARFB */
 }
 /* clarfb_ */

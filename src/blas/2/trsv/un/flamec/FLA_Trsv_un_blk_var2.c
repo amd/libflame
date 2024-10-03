@@ -20,7 +20,7 @@ FLA_Error FLA_Trsv_un_blk_var2( FLA_Diag diagA, FLA_Obj A, FLA_Obj x, fla_trsv_t
           xB,              x1,
                            x2;
 
-  dim_t b;
+  fla_dim_t b;
 
   FLA_Part_2x2( A,    &ATL, &ATR,
                       &ABL, &ABR,     0, 0, FLA_BR );

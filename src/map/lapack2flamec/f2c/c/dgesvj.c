@@ -1,5 +1,8 @@
-/* ../netlib/dgesvj.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dgesvj.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b17 = 0.;
 static doublereal c_b18 = 1.;
@@ -12,11 +15,17 @@ static integer c__2 = 2;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DGESVJ + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgesvj. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgesvj.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgesvj. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgesvj.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgesvj. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgesvj.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -55,9 +64,9 @@ static integer c__2 = 2;
 /* > JOBA is CHARACTER*1 */
 /* > Specifies the structure of A. */
 /* > = 'L': The input matrix A is lower triangular;
-*/
+ */
 /* > = 'U': The input matrix A is upper triangular;
-*/
+ */
 /* > = 'G': The input matrix A is general M-by-N matrix, M >= N. */
 /* > \endverbatim */
 /* > */
@@ -193,7 +202,7 @@ or TOL=CTOL*EPS (JOBU = 'C'), */
 /* > V is DOUBLE PRECISION array, dimension (LDV,N) */
 /* > If JOBV = 'V', then V contains on exit the N-by-N matrix of */
 /* > the right singular vectors;
-*/
+ */
 /* > If JOBV = 'A', then V contains the product of the computed right */
 /* > singular vector matrix and the initial matrix in */
 /* > the array V. */
@@ -333,10 +342,14 @@ kappa(A*D), where kappa(.) is the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublereal *a, integer *lda, doublereal *sva, integer *mv, doublereal *v, integer *ldv, doublereal *work, integer *lwork, integer *info)
+void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublereal *a,
+             integer *lda, doublereal *sva, integer *mv, doublereal *v, integer *ldv,
+             doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgesvj inputs: joba %c, jobu %c, jobv %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", mv %" FLA_IS ", ldv %" FLA_IS ", lwork %" FLA_IS "",*joba, *jobu, *jobv, *m, *n, *lda, *mv, *ldv, *lwork);
+    AOCL_DTL_SNPRINTF("dgesvj inputs: joba %c, jobu %c, jobv %c, m %" FLA_IS ", n %" FLA_IS
+                      ", lda %" FLA_IS ", mv %" FLA_IS ", ldv %" FLA_IS ", lwork %" FLA_IS "",
+                      *joba, *jobu, *jobv, *m, *n, *lda, *mv, *ldv, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, v_dim1, v_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal d__1, d__2;
@@ -363,36 +376,52 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     doublereal temp1;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal apoaq, aqoap;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal theta, small_val, sfmin;
     logical lsvec;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal fastr[5];
     extern /* Subroutine */
-    int dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal epsln;
     logical applv, rsvec;
     extern /* Subroutine */
-    int daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+        void
+        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     logical uctol;
     extern /* Subroutine */
-    int drotm_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *);
+        void
+        drotm_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *);
     logical lower, upper, rotok;
     extern /* Subroutine */
-    int dgsvj0_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *), dgsvj1_( char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dgsvj0_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *,
+                integer *, doublereal *, integer *, integer *),
+        dgsvj1_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *,
+                doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                doublereal *, integer *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+        void
+        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublereal *, integer *, integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer ijblsk, swband, blskip;
     doublereal mxaapq;
     extern /* Subroutine */
-    int dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
+        void
+        dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
     doublereal thsign, mxsinj;
     integer emptsw, notrot, iswrot, lkahead;
     logical goscale, noscale;
@@ -438,45 +467,45 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
     v -= v_offset;
     --work;
     /* Function Body */
-    lsvec = lsame_(jobu, "U");
-    uctol = lsame_(jobu, "C");
-    rsvec = lsame_(jobv, "V");
-    applv = lsame_(jobv, "A");
-    upper = lsame_(joba, "U");
-    lower = lsame_(joba, "L");
-    if (! (upper || lower || lsame_(joba, "G")))
+    lsvec = lsame_(jobu, "U", 1, 1);
+    uctol = lsame_(jobu, "C", 1, 1);
+    rsvec = lsame_(jobv, "V", 1, 1);
+    applv = lsame_(jobv, "A", 1, 1);
+    upper = lsame_(joba, "U", 1, 1);
+    lower = lsame_(joba, "L", 1, 1);
+    if(!(upper || lower || lsame_(joba, "G", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (lsvec || uctol || lsame_(jobu, "N")))
+    else if(!(lsvec || uctol || lsame_(jobu, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (rsvec || applv || lsame_(jobv, "N")))
+    else if(!(rsvec || applv || lsame_(jobv, "N", 1, 1)))
     {
         *info = -3;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -4;
     }
-    else if (*n < 0 || *n > *m)
+    else if(*n < 0 || *n > *m)
     {
         *info = -5;
     }
-    else if (*lda < *m)
+    else if(*lda < *m)
     {
         *info = -7;
     }
-    else if (*mv < 0)
+    else if(*mv < 0)
     {
         *info = -9;
     }
-    else if (rsvec && *ldv < *n || applv && *ldv < *mv)
+    else if(rsvec && *ldv < *n || applv && *ldv < *mv)
     {
         *info = -11;
     }
-    else if (uctol && work[1] <= 1.)
+    else if(uctol && work[1] <= 1.)
     {
         *info = -12;
     }
@@ -484,7 +513,7 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
     {
         /* Computing MAX */
         i__1 = *m + *n;
-        if (*lwork < fla_max(i__1,6))
+        if(*lwork < fla_max(i__1, 6))
         {
             *info = -13;
         }
@@ -494,18 +523,18 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
         }
     }
     /* #:( */
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DGESVJ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* #:) Quick return for void matrix */
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set numerical parameters */
     /* The stopping criterion for Jacobi rotations is */
@@ -513,7 +542,7 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
     i<>j}
     |A(:,i)^T * A(:,j)|/(||A(:,i)||*||A(:,j)||) < CTOL*EPS */
     /* where EPS is the round-off and CTOL is defined as follows: */
-    if (uctol)
+    if(uctol)
     {
         /* ... user controlled */
         ctol = work[1];
@@ -521,13 +550,13 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
     else
     {
         /* ... default */
-        if (lsvec || rsvec || applv)
+        if(lsvec || rsvec || applv)
         {
-            ctol = sqrt((doublereal) (*m));
+            ctol = sqrt((doublereal)(*m));
         }
         else
         {
-            ctol = (doublereal) (*m);
+            ctol = (doublereal)(*m);
         }
     }
     /* ... and the machine dependent parameters are */
@@ -543,21 +572,21 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
     bigtheta = 1. / rooteps;
     tol = ctol * epsln;
     roottol = sqrt(tol);
-    if ((doublereal) (*m) * epsln >= 1.)
+    if((doublereal)(*m) * epsln >= 1.)
     {
         *info = -4;
         i__1 = -(*info);
         xerbla_("DGESVJ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize the right singular vector matrix. */
-    if (rsvec)
+    if(rsvec)
     {
         mvl = *n;
         dlaset_("A", &mvl, n, &c_b17, &c_b18, &v[v_offset], ldv);
     }
-    else if (applv)
+    else if(applv)
     {
         mvl = *mv;
     }
@@ -570,31 +599,29 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
     /* goal is to make sure that no column norm overflows, and that */
     /* DSQRT(N)*max_i SVA(i) does not overflow. If INFinite entries */
     /* in A are detected, the procedure returns with INFO=-6. */
-    skl = 1. / sqrt((doublereal) (*m) * (doublereal) (*n));
+    skl = 1. / sqrt((doublereal)(*m) * (doublereal)(*n));
     noscale = TRUE_;
     goscale = TRUE_;
-    if (lower)
+    if(lower)
     {
         /* the input matrix is M-by-N lower triangular (trapezoidal) */
         i__1 = *n;
-        for (p = 1;
-                p <= i__1;
-                ++p)
+        for(p = 1; p <= i__1; ++p)
         {
             aapp = 0.;
             aaqq = 1.;
             i__2 = *m - p + 1;
             dlassq_(&i__2, &a[p + p * a_dim1], &c__1, &aapp, &aaqq);
-            if (aapp > big)
+            if(aapp > big)
             {
                 *info = -6;
                 i__2 = -(*info);
                 xerbla_("DGESVJ", &i__2, (ftnlen)6);
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             aaqq = sqrt(aaqq);
-            if (aapp < big / aaqq && noscale)
+            if(aapp < big / aaqq && noscale)
             {
                 sva[p] = aapp * aaqq;
             }
@@ -602,13 +629,11 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
             {
                 noscale = FALSE_;
                 sva[p] = aapp * (aaqq * skl);
-                if (goscale)
+                if(goscale)
                 {
                     goscale = FALSE_;
                     i__2 = p - 1;
-                    for (q = 1;
-                            q <= i__2;
-                            ++q)
+                    for(q = 1; q <= i__2; ++q)
                     {
                         sva[q] *= skl;
                         /* L1873: */
@@ -618,27 +643,25 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
             /* L1874: */
         }
     }
-    else if (upper)
+    else if(upper)
     {
         /* the input matrix is M-by-N upper triangular (trapezoidal) */
         i__1 = *n;
-        for (p = 1;
-                p <= i__1;
-                ++p)
+        for(p = 1; p <= i__1; ++p)
         {
             aapp = 0.;
             aaqq = 1.;
             dlassq_(&p, &a[p * a_dim1 + 1], &c__1, &aapp, &aaqq);
-            if (aapp > big)
+            if(aapp > big)
             {
                 *info = -6;
                 i__2 = -(*info);
                 xerbla_("DGESVJ", &i__2, (ftnlen)6);
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             aaqq = sqrt(aaqq);
-            if (aapp < big / aaqq && noscale)
+            if(aapp < big / aaqq && noscale)
             {
                 sva[p] = aapp * aaqq;
             }
@@ -646,13 +669,11 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
             {
                 noscale = FALSE_;
                 sva[p] = aapp * (aaqq * skl);
-                if (goscale)
+                if(goscale)
                 {
                     goscale = FALSE_;
                     i__2 = p - 1;
-                    for (q = 1;
-                            q <= i__2;
-                            ++q)
+                    for(q = 1; q <= i__2; ++q)
                     {
                         sva[q] *= skl;
                         /* L2873: */
@@ -666,23 +687,21 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
     {
         /* the input matrix is M-by-N general dense */
         i__1 = *n;
-        for (p = 1;
-                p <= i__1;
-                ++p)
+        for(p = 1; p <= i__1; ++p)
         {
             aapp = 0.;
             aaqq = 1.;
             dlassq_(m, &a[p * a_dim1 + 1], &c__1, &aapp, &aaqq);
-            if (aapp > big)
+            if(aapp > big)
             {
                 *info = -6;
                 i__2 = -(*info);
                 xerbla_("DGESVJ", &i__2, (ftnlen)6);
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             aaqq = sqrt(aaqq);
-            if (aapp < big / aaqq && noscale)
+            if(aapp < big / aaqq && noscale)
             {
                 sva[p] = aapp * aaqq;
             }
@@ -690,13 +709,11 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
             {
                 noscale = FALSE_;
                 sva[p] = aapp * (aaqq * skl);
-                if (goscale)
+                if(goscale)
                 {
                     goscale = FALSE_;
                     i__2 = p - 1;
-                    for (q = 1;
-                            q <= i__2;
-                            ++q)
+                    for(q = 1; q <= i__2; ++q)
                     {
                         sva[q] *= skl;
                         /* L3873: */
@@ -706,7 +723,7 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
             /* L3874: */
         }
     }
-    if (noscale)
+    if(noscale)
     {
         skl = 1.;
     }
@@ -716,27 +733,25 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
     aapp = 0.;
     aaqq = big;
     i__1 = *n;
-    for (p = 1;
-            p <= i__1;
-            ++p)
+    for(p = 1; p <= i__1; ++p)
     {
-        if (sva[p] != 0.)
+        if(sva[p] != 0.)
         {
             /* Computing MIN */
             d__1 = aaqq;
             d__2 = sva[p]; // , expr subst
-            aaqq = fla_min(d__1,d__2);
+            aaqq = fla_min(d__1, d__2);
         }
         /* Computing MAX */
         d__1 = aapp;
         d__2 = sva[p]; // , expr subst
-        aapp = fla_max(d__1,d__2);
+        aapp = fla_max(d__1, d__2);
         /* L4781: */
     }
     /* #:) Quick return for zero matrix */
-    if (aapp == 0.)
+    if(aapp == 0.)
     {
-        if (lsvec)
+        if(lsvec)
         {
             dlaset_("G", m, n, &c_b17, &c_b18, &a[a_offset], lda);
         }
@@ -747,17 +762,17 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
         work[5] = 0.;
         work[6] = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* #:) Quick return for one-column matrix */
-    if (*n == 1)
+    if(*n == 1)
     {
-        if (lsvec)
+        if(lsvec)
         {
             dlascl_("G", &c__0, &c__0, &sva[1], &skl, m, &c__1, &a[a_dim1 + 1], lda, &ierr);
         }
         work[1] = 1. / skl;
-        if (sva[1] >= sfmin)
+        if(sva[1] >= sfmin)
         {
             work[2] = 1.;
         }
@@ -770,45 +785,45 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
         work[5] = 0.;
         work[6] = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Protect small singular values from underflow, and try to */
     /* avoid underflows/overflows in computing Jacobi rotations. */
     sn = sqrt(sfmin / epsln);
-    temp1 = sqrt(big / (doublereal) (*n));
-    if (aapp <= sn || aaqq >= temp1 || sn <= aaqq && aapp <= temp1)
+    temp1 = sqrt(big / (doublereal)(*n));
+    if(aapp <= sn || aaqq >= temp1 || sn <= aaqq && aapp <= temp1)
     {
         /* Computing MIN */
         d__1 = big;
         d__2 = temp1 / aapp; // , expr subst
-        temp1 = fla_min(d__1,d__2);
+        temp1 = fla_min(d__1, d__2);
         /* AAQQ = AAQQ*TEMP1 */
         /* AAPP = AAPP*TEMP1 */
     }
-    else if (aaqq <= sn && aapp <= temp1)
+    else if(aaqq <= sn && aapp <= temp1)
     {
         /* Computing MIN */
         d__1 = sn / aaqq;
-        d__2 = big / (aapp * sqrt((doublereal) (*n))); // , expr subst
-        temp1 = fla_min(d__1,d__2);
+        d__2 = big / (aapp * sqrt((doublereal)(*n))); // , expr subst
+        temp1 = fla_min(d__1, d__2);
         /* AAQQ = AAQQ*TEMP1 */
         /* AAPP = AAPP*TEMP1 */
     }
-    else if (aaqq >= sn && aapp >= temp1)
+    else if(aaqq >= sn && aapp >= temp1)
     {
         /* Computing MAX */
         d__1 = sn / aaqq;
         d__2 = temp1 / aapp; // , expr subst
-        temp1 = fla_max(d__1,d__2);
+        temp1 = fla_max(d__1, d__2);
         /* AAQQ = AAQQ*TEMP1 */
         /* AAPP = AAPP*TEMP1 */
     }
-    else if (aaqq <= sn && aapp >= temp1)
+    else if(aaqq <= sn && aapp >= temp1)
     {
         /* Computing MIN */
         d__1 = sn / aaqq;
-        d__2 = big / (sqrt((doublereal) (*n)) * aapp); // , expr subst
-        temp1 = fla_min(d__1,d__2);
+        d__2 = big / (sqrt((doublereal)(*n)) * aapp); // , expr subst
+        temp1 = fla_min(d__1, d__2);
         /* AAQQ = AAQQ*TEMP1 */
         /* AAPP = AAPP*TEMP1 */
     }
@@ -817,14 +832,14 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
         temp1 = 1.;
     }
     /* Scale, if necessary */
-    if (temp1 != 1.)
+    if(temp1 != 1.)
     {
-        dlascl_("G", &c__0, &c__0, &c_b18, &temp1, n, &c__1, &sva[1], n, & ierr);
+        dlascl_("G", &c__0, &c__0, &c_b18, &temp1, n, &c__1, &sva[1], n, &ierr);
     }
     skl = temp1 * skl;
-    if (skl != 1.)
+    if(skl != 1.)
     {
-        dlascl_(joba, &c__0, &c__0, &c_b18, &skl, m, n, &a[a_offset], lda, & ierr);
+        dlascl_(joba, &c__0, &c__0, &c_b18, &skl, m, n, &a[a_offset], lda, &ierr);
         skl = 1. / skl;
     }
     /* Row-cyclic Jacobi SVD algorithm with column pivoting */
@@ -835,9 +850,7 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
     /* is initialized to identity. WORK is updated during fast scaled */
     /* rotations. */
     i__1 = *n;
-    for (q = 1;
-            q <= i__1;
-            ++q)
+    for(q = 1; q <= i__1; ++q)
     {
         work[q] = 1.;
         /* L1868: */
@@ -849,13 +862,13 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
     /* works on pivots inside a band-like region around the diagonal. */
     /* The boundaries are determined dynamically, based on the number of */
     /* pivots above a threshold. */
-    kbl = fla_min(8,*n);
+    kbl = fla_min(8, *n);
     /* [TP] KBL is a tuning parameter that defines the tile size in the */
     /* tiling of the p-q loops of pivot pairs. In general, an optimal */
     /* value of KBL depends on the matrix dimensions and on the */
     /* parameters of the computer's memory. */
     nbl = *n / kbl;
-    if (nbl * kbl != *n)
+    if(nbl * kbl != *n)
     {
         ++nbl;
     }
@@ -863,7 +876,7 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
     i__1 = kbl;
     blskip = i__1 * i__1;
     /* [TP] BLKSKIP is a tuning parameter that depends on SWBAND and KBL. */
-    rowskip = fla_min(5,kbl);
+    rowskip = fla_min(5, kbl);
     /* [TP] ROWSKIP is a tuning parameter. */
     lkahead = 1;
     /* [TP] LKAHEAD is a tuning parameter. */
@@ -874,14 +887,14 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
     /* Computing MAX */
     i__1 = 64;
     i__2 = kbl << 2; // , expr subst
-    if ((lower || upper) && *n > fla_max(i__1,i__2))
+    if((lower || upper) && *n > fla_max(i__1, i__2))
     {
         /* [TP] The number of partition levels and the actual partition are */
         /* tuning parameters. */
         n4 = *n / 4;
         n2 = *n / 2;
         n34 = n4 * 3;
-        if (applv)
+        if(applv)
         {
             q = 0;
         }
@@ -889,7 +902,7 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
         {
             q = 1;
         }
-        if (lower)
+        if(lower)
         {
             /* This works very well on lower triangular matrices, in particular */
             /* in the framework of the preconditioned Jacobi SVD (xGEJSV). */
@@ -901,41 +914,55 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
             i__1 = *m - n34;
             i__2 = *n - n34;
             i__3 = *lwork - *n;
-            dgsvj0_(jobv, &i__1, &i__2, &a[n34 + 1 + (n34 + 1) * a_dim1], lda, &work[n34 + 1], &sva[n34 + 1], &mvl, &v[n34 * q + 1 + ( n34 + 1) * v_dim1], ldv, &epsln, &sfmin, &tol, &c__2, & work[*n + 1], &i__3, &ierr);
+            dgsvj0_(jobv, &i__1, &i__2, &a[n34 + 1 + (n34 + 1) * a_dim1], lda, &work[n34 + 1],
+                    &sva[n34 + 1], &mvl, &v[n34 * q + 1 + (n34 + 1) * v_dim1], ldv, &epsln, &sfmin,
+                    &tol, &c__2, &work[*n + 1], &i__3, &ierr);
             i__1 = *m - n2;
             i__2 = n34 - n2;
             i__3 = *lwork - *n;
-            dgsvj0_(jobv, &i__1, &i__2, &a[n2 + 1 + (n2 + 1) * a_dim1], lda, & work[n2 + 1], &sva[n2 + 1], &mvl, &v[n2 * q + 1 + (n2 + 1) * v_dim1], ldv, &epsln, &sfmin, &tol, &c__2, &work[*n + 1], &i__3, &ierr);
+            dgsvj0_(jobv, &i__1, &i__2, &a[n2 + 1 + (n2 + 1) * a_dim1], lda, &work[n2 + 1],
+                    &sva[n2 + 1], &mvl, &v[n2 * q + 1 + (n2 + 1) * v_dim1], ldv, &epsln, &sfmin,
+                    &tol, &c__2, &work[*n + 1], &i__3, &ierr);
             i__1 = *m - n2;
             i__2 = *n - n2;
             i__3 = *lwork - *n;
-            dgsvj1_(jobv, &i__1, &i__2, &n4, &a[n2 + 1 + (n2 + 1) * a_dim1], lda, &work[n2 + 1], &sva[n2 + 1], &mvl, &v[n2 * q + 1 + ( n2 + 1) * v_dim1], ldv, &epsln, &sfmin, &tol, &c__1, & work[*n + 1], &i__3, &ierr);
+            dgsvj1_(jobv, &i__1, &i__2, &n4, &a[n2 + 1 + (n2 + 1) * a_dim1], lda, &work[n2 + 1],
+                    &sva[n2 + 1], &mvl, &v[n2 * q + 1 + (n2 + 1) * v_dim1], ldv, &epsln, &sfmin,
+                    &tol, &c__1, &work[*n + 1], &i__3, &ierr);
             i__1 = *m - n4;
             i__2 = n2 - n4;
             i__3 = *lwork - *n;
-            dgsvj0_(jobv, &i__1, &i__2, &a[n4 + 1 + (n4 + 1) * a_dim1], lda, & work[n4 + 1], &sva[n4 + 1], &mvl, &v[n4 * q + 1 + (n4 + 1) * v_dim1], ldv, &epsln, &sfmin, &tol, &c__1, &work[*n + 1], &i__3, &ierr);
+            dgsvj0_(jobv, &i__1, &i__2, &a[n4 + 1 + (n4 + 1) * a_dim1], lda, &work[n4 + 1],
+                    &sva[n4 + 1], &mvl, &v[n4 * q + 1 + (n4 + 1) * v_dim1], ldv, &epsln, &sfmin,
+                    &tol, &c__1, &work[*n + 1], &i__3, &ierr);
             i__1 = *lwork - *n;
-            dgsvj0_(jobv, m, &n4, &a[a_offset], lda, &work[1], &sva[1], &mvl, &v[v_offset], ldv, &epsln, &sfmin, &tol, &c__1, &work[*n + 1], &i__1, &ierr);
+            dgsvj0_(jobv, m, &n4, &a[a_offset], lda, &work[1], &sva[1], &mvl, &v[v_offset], ldv,
+                    &epsln, &sfmin, &tol, &c__1, &work[*n + 1], &i__1, &ierr);
             i__1 = *lwork - *n;
-            dgsvj1_(jobv, m, &n2, &n4, &a[a_offset], lda, &work[1], &sva[1], & mvl, &v[v_offset], ldv, &epsln, &sfmin, &tol, &c__1, & work[*n + 1], &i__1, &ierr);
+            dgsvj1_(jobv, m, &n2, &n4, &a[a_offset], lda, &work[1], &sva[1], &mvl, &v[v_offset],
+                    ldv, &epsln, &sfmin, &tol, &c__1, &work[*n + 1], &i__1, &ierr);
         }
-        else if (upper)
+        else if(upper)
         {
             i__1 = *lwork - *n;
-            dgsvj0_(jobv, &n4, &n4, &a[a_offset], lda, &work[1], &sva[1], & mvl, &v[v_offset], ldv, &epsln, &sfmin, &tol, &c__2, & work[*n + 1], &i__1, &ierr);
+            dgsvj0_(jobv, &n4, &n4, &a[a_offset], lda, &work[1], &sva[1], &mvl, &v[v_offset], ldv,
+                    &epsln, &sfmin, &tol, &c__2, &work[*n + 1], &i__1, &ierr);
             i__1 = *lwork - *n;
-            dgsvj0_(jobv, &n2, &n4, &a[(n4 + 1) * a_dim1 + 1], lda, &work[n4 + 1], &sva[n4 + 1], &mvl, &v[n4 * q + 1 + (n4 + 1) * v_dim1], ldv, &epsln, &sfmin, &tol, &c__1, &work[*n + 1], &i__1, &ierr);
+            dgsvj0_(jobv, &n2, &n4, &a[(n4 + 1) * a_dim1 + 1], lda, &work[n4 + 1], &sva[n4 + 1],
+                    &mvl, &v[n4 * q + 1 + (n4 + 1) * v_dim1], ldv, &epsln, &sfmin, &tol, &c__1,
+                    &work[*n + 1], &i__1, &ierr);
             i__1 = *lwork - *n;
-            dgsvj1_(jobv, &n2, &n2, &n4, &a[a_offset], lda, &work[1], &sva[1], &mvl, &v[v_offset], ldv, &epsln, &sfmin, &tol, &c__1, & work[*n + 1], &i__1, &ierr);
+            dgsvj1_(jobv, &n2, &n2, &n4, &a[a_offset], lda, &work[1], &sva[1], &mvl, &v[v_offset],
+                    ldv, &epsln, &sfmin, &tol, &c__1, &work[*n + 1], &i__1, &ierr);
             i__1 = n2 + n4;
             i__2 = *lwork - *n;
-            dgsvj0_(jobv, &i__1, &n4, &a[(n2 + 1) * a_dim1 + 1], lda, &work[ n2 + 1], &sva[n2 + 1], &mvl, &v[n2 * q + 1 + (n2 + 1) * v_dim1], ldv, &epsln, &sfmin, &tol, &c__1, &work[*n + 1], &i__2, &ierr);
+            dgsvj0_(jobv, &i__1, &n4, &a[(n2 + 1) * a_dim1 + 1], lda, &work[n2 + 1], &sva[n2 + 1],
+                    &mvl, &v[n2 * q + 1 + (n2 + 1) * v_dim1], ldv, &epsln, &sfmin, &tol, &c__1,
+                    &work[*n + 1], &i__2, &ierr);
         }
     }
     /* .. Row-cyclic pivot strategy with de Rijk's pivoting .. */
-    for (i__ = 1;
-            i__ <= 30;
-            ++i__)
+    for(i__ = 1; i__ <= 30; ++i__)
     {
         /* .. go go go ... */
         mxaapq = 0.;
@@ -948,35 +975,29 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
         /* of the rotations. New implementation, based on block transformations, */
         /* is under development. */
         i__1 = nbl;
-        for (ibr = 1;
-                ibr <= i__1;
-                ++ibr)
+        for(ibr = 1; ibr <= i__1; ++ibr)
         {
             igl = (ibr - 1) * kbl + 1;
             /* Computing MIN */
             i__3 = lkahead;
             i__4 = nbl - ibr; // , expr subst
-            i__2 = fla_min(i__3,i__4);
-            for (ir1 = 0;
-                    ir1 <= i__2;
-                    ++ir1)
+            i__2 = fla_min(i__3, i__4);
+            for(ir1 = 0; ir1 <= i__2; ++ir1)
             {
                 igl += ir1 * kbl;
                 /* Computing MIN */
                 i__4 = igl + kbl - 1;
                 i__5 = *n - 1; // , expr subst
-                i__3 = fla_min(i__4,i__5);
-                for (p = igl;
-                        p <= i__3;
-                        ++p)
+                i__3 = fla_min(i__4, i__5);
+                for(p = igl; p <= i__3; ++p)
                 {
                     /* .. de Rijk's pivoting */
                     i__4 = *n - p + 1;
                     q = idamax_(&i__4, &sva[p], &c__1) + p - 1;
-                    if (p != q)
+                    if(p != q)
                     {
                         dswap_(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1], &c__1);
-                        if (rsvec)
+                        if(rsvec)
                         {
                             dswap_(&mvl, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], &c__1);
                         }
@@ -987,7 +1008,7 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
                         work[p] = work[q];
                         work[q] = temp1;
                     }
-                    if (ir1 == 0)
+                    if(ir1 == 0)
                     {
                         /* Column norms are periodically updated by explicit */
                         /* norm computation. */
@@ -1000,7 +1021,7 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
                         /* the true norm is far from the under(over)flow boundaries. */
                         /* If properly implemented DNRM2 is available, the IF-THEN-ELSE */
                         /* below should read "AAPP = DNRM2( M, A(1,p), 1 ) * WORK(p)". */
-                        if (sva[p] < rootbig && sva[p] > rootsfmin)
+                        if(sva[p] < rootbig && sva[p] > rootsfmin)
                         {
                             sva[p] = dnrm2_(m, &a[p * a_dim1 + 1], &c__1) * work[p];
                         }
@@ -1008,7 +1029,7 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
                         {
                             temp1 = 0.;
                             aapp = 1.;
-                            dlassq_(m, &a[p * a_dim1 + 1], &c__1, &temp1, & aapp);
+                            dlassq_(m, &a[p * a_dim1 + 1], &c__1, &temp1, &aapp);
                             sva[p] = temp1 * sqrt(aapp) * work[p];
                         }
                         aapp = sva[p];
@@ -1017,77 +1038,87 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
                     {
                         aapp = sva[p];
                     }
-                    if (aapp > 0.)
+                    if(aapp > 0.)
                     {
                         pskipped = 0;
                         /* Computing MIN */
                         i__5 = igl + kbl - 1;
-                        i__4 = fla_min(i__5,*n);
-                        for (q = p + 1;
-                                q <= i__4;
-                                ++q)
+                        i__4 = fla_min(i__5, *n);
+                        for(q = p + 1; q <= i__4; ++q)
                         {
                             aaqq = sva[q];
-                            if (aaqq > 0.)
+                            if(aaqq > 0.)
                             {
                                 aapp0 = aapp;
-                                if (aaqq >= 1.)
+                                if(aaqq >= 1.)
                                 {
                                     rotok = small_val * aapp <= aaqq;
-                                    if (aapp < big / aaqq)
+                                    if(aapp < big / aaqq)
                                     {
-                                        aapq = ddot_(m, &a[p * a_dim1 + 1], & c__1, &a[q * a_dim1 + 1], & c__1) * work[p] * work[q] / aaqq / aapp;
+                                        aapq = ddot_(m, &a[p * a_dim1 + 1], &c__1,
+                                                     &a[q * a_dim1 + 1], &c__1)
+                                               * work[p] * work[q] / aaqq / aapp;
                                     }
                                     else
                                     {
-                                        dcopy_(m, &a[p * a_dim1 + 1], &c__1, & work[*n + 1], &c__1);
-                                        dlascl_("G", &c__0, &c__0, &aapp, & work[p], m, &c__1, &work[*n + 1], lda, &ierr);
-                                        aapq = ddot_(m, &work[*n + 1], &c__1, &a[q * a_dim1 + 1], &c__1) * work[q] / aaqq;
+                                        dcopy_(m, &a[p * a_dim1 + 1], &c__1, &work[*n + 1], &c__1);
+                                        dlascl_("G", &c__0, &c__0, &aapp, &work[p], m, &c__1,
+                                                &work[*n + 1], lda, &ierr);
+                                        aapq = ddot_(m, &work[*n + 1], &c__1, &a[q * a_dim1 + 1],
+                                                     &c__1)
+                                               * work[q] / aaqq;
                                     }
                                 }
                                 else
                                 {
                                     rotok = aapp <= aaqq / small_val;
-                                    if (aapp > small_val / aaqq)
+                                    if(aapp > small_val / aaqq)
                                     {
-                                        aapq = ddot_(m, &a[p * a_dim1 + 1], & c__1, &a[q * a_dim1 + 1], & c__1) * work[p] * work[q] / aaqq / aapp;
+                                        aapq = ddot_(m, &a[p * a_dim1 + 1], &c__1,
+                                                     &a[q * a_dim1 + 1], &c__1)
+                                               * work[p] * work[q] / aaqq / aapp;
                                     }
                                     else
                                     {
-                                        dcopy_(m, &a[q * a_dim1 + 1], &c__1, & work[*n + 1], &c__1);
-                                        dlascl_("G", &c__0, &c__0, &aaqq, & work[q], m, &c__1, &work[*n + 1], lda, &ierr);
-                                        aapq = ddot_(m, &work[*n + 1], &c__1, &a[p * a_dim1 + 1], &c__1) * work[p] / aapp;
+                                        dcopy_(m, &a[q * a_dim1 + 1], &c__1, &work[*n + 1], &c__1);
+                                        dlascl_("G", &c__0, &c__0, &aaqq, &work[q], m, &c__1,
+                                                &work[*n + 1], lda, &ierr);
+                                        aapq = ddot_(m, &work[*n + 1], &c__1, &a[p * a_dim1 + 1],
+                                                     &c__1)
+                                               * work[p] / aapp;
                                     }
                                 }
                                 /* Computing MAX */
                                 d__1 = mxaapq;
                                 d__2 = f2c_abs(aapq); // , expr subst
-                                mxaapq = fla_max(d__1,d__2);
+                                mxaapq = fla_max(d__1, d__2);
                                 /* TO rotate or NOT to rotate, THAT is the question ... */
-                                if (f2c_abs(aapq) > tol)
+                                if(f2c_abs(aapq) > tol)
                                 {
                                     /* .. rotate */
                                     /* [RTD] ROTATED = ROTATED + ONE */
-                                    if (ir1 == 0)
+                                    if(ir1 == 0)
                                     {
                                         notrot = 0;
                                         pskipped = 0;
                                         ++iswrot;
                                     }
-                                    if (rotok)
+                                    if(rotok)
                                     {
                                         aqoap = aaqq / aapp;
                                         apoaq = aapp / aaqq;
-                                        theta = (d__1 = aqoap - apoaq, f2c_abs( d__1)) * -.5 / aapq;
-                                        if (f2c_abs(theta) > bigtheta)
+                                        theta = (d__1 = aqoap - apoaq, f2c_abs(d__1)) * -.5 / aapq;
+                                        if(f2c_abs(theta) > bigtheta)
                                         {
                                             t = .5 / theta;
                                             fastr[2] = t * work[p] / work[q];
                                             fastr[3] = -t * work[q] / work[p];
-                                            drotm_(m, &a[p * a_dim1 + 1], & c__1, &a[q * a_dim1 + 1], &c__1, fastr);
-                                            if (rsvec)
+                                            drotm_(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1],
+                                                   &c__1, fastr);
+                                            if(rsvec)
                                             {
-                                                drotm_(&mvl, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], &c__1, fastr);
+                                                drotm_(&mvl, &v[p * v_dim1 + 1], &c__1,
+                                                       &v[q * v_dim1 + 1], &c__1, fastr);
                                             }
                                             /* Computing MAX */
                                             d__1 = 0.;
@@ -1096,23 +1127,23 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
                                             /* Computing MAX */
                                             d__1 = 0.;
                                             d__2 = 1. - t * aqoap * aapq; // , expr subst
-                                            aapp *= sqrt((fla_max(d__1,d__2)));
+                                            aapp *= sqrt((fla_max(d__1, d__2)));
                                             /* Computing MAX */
                                             d__1 = mxsinj;
                                             d__2 = f2c_abs(t); // , expr subst
-                                            mxsinj = fla_max(d__1,d__2);
+                                            mxsinj = fla_max(d__1, d__2);
                                         }
                                         else
                                         {
                                             /* .. choose correct signum for THETA and rotate */
                                             thsign = -d_sign(&c_b18, &aapq);
-                                            t = 1. / (theta + thsign * sqrt( theta * theta + 1.));
+                                            t = 1. / (theta + thsign * sqrt(theta * theta + 1.));
                                             cs = sqrt(1. / (t * t + 1.));
                                             sn = t * cs;
                                             /* Computing MAX */
                                             d__1 = mxsinj;
                                             d__2 = f2c_abs(sn); // , expr subst
-                                            mxsinj = fla_max(d__1,d__2);
+                                            mxsinj = fla_max(d__1, d__2);
                                             /* Computing MAX */
                                             d__1 = 0.;
                                             d__2 = t * apoaq * aapq + 1.; // , expr subst
@@ -1120,90 +1151,112 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
                                             /* Computing MAX */
                                             d__1 = 0.;
                                             d__2 = 1. - t * aqoap * aapq; // , expr subst
-                                            aapp *= sqrt((fla_max(d__1,d__2)));
+                                            aapp *= sqrt((fla_max(d__1, d__2)));
                                             apoaq = work[p] / work[q];
                                             aqoap = work[q] / work[p];
-                                            if (work[p] >= 1.)
+                                            if(work[p] >= 1.)
                                             {
-                                                if (work[q] >= 1.)
+                                                if(work[q] >= 1.)
                                                 {
                                                     fastr[2] = t * apoaq;
                                                     fastr[3] = -t * aqoap;
                                                     work[p] *= cs;
                                                     work[q] *= cs;
-                                                    drotm_(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1], &c__1, fastr);
-                                                    if (rsvec)
+                                                    drotm_(m, &a[p * a_dim1 + 1], &c__1,
+                                                           &a[q * a_dim1 + 1], &c__1, fastr);
+                                                    if(rsvec)
                                                     {
-                                                        drotm_(&mvl, &v[p * v_dim1 + 1], &c__1, &v[ q * v_dim1 + 1], &c__1, fastr);
+                                                        drotm_(&mvl, &v[p * v_dim1 + 1], &c__1,
+                                                               &v[q * v_dim1 + 1], &c__1, fastr);
                                                     }
                                                 }
                                                 else
                                                 {
                                                     d__1 = -t * aqoap;
-                                                    daxpy_(m, &d__1, &a[q * a_dim1 + 1], &c__1, &a[ p * a_dim1 + 1], &c__1);
+                                                    daxpy_(m, &d__1, &a[q * a_dim1 + 1], &c__1,
+                                                           &a[p * a_dim1 + 1], &c__1);
                                                     d__1 = cs * sn * apoaq;
-                                                    daxpy_(m, &d__1, &a[p * a_dim1 + 1], &c__1, &a[ q * a_dim1 + 1], &c__1);
+                                                    daxpy_(m, &d__1, &a[p * a_dim1 + 1], &c__1,
+                                                           &a[q * a_dim1 + 1], &c__1);
                                                     work[p] *= cs;
                                                     work[q] /= cs;
-                                                    if (rsvec)
+                                                    if(rsvec)
                                                     {
                                                         d__1 = -t * aqoap;
-                                                        daxpy_(&mvl, &d__1, &v[q * v_dim1 + 1], & c__1, &v[p * v_dim1 + 1], &c__1);
+                                                        daxpy_(&mvl, &d__1, &v[q * v_dim1 + 1],
+                                                               &c__1, &v[p * v_dim1 + 1], &c__1);
                                                         d__1 = cs * sn * apoaq;
-                                                        daxpy_(&mvl, &d__1, &v[p * v_dim1 + 1], & c__1, &v[q * v_dim1 + 1], &c__1);
+                                                        daxpy_(&mvl, &d__1, &v[p * v_dim1 + 1],
+                                                               &c__1, &v[q * v_dim1 + 1], &c__1);
                                                     }
                                                 }
                                             }
                                             else
                                             {
-                                                if (work[q] >= 1.)
+                                                if(work[q] >= 1.)
                                                 {
                                                     d__1 = t * apoaq;
-                                                    daxpy_(m, &d__1, &a[p * a_dim1 + 1], &c__1, &a[ q * a_dim1 + 1], &c__1);
+                                                    daxpy_(m, &d__1, &a[p * a_dim1 + 1], &c__1,
+                                                           &a[q * a_dim1 + 1], &c__1);
                                                     d__1 = -cs * sn * aqoap;
-                                                    daxpy_(m, &d__1, &a[q * a_dim1 + 1], &c__1, &a[ p * a_dim1 + 1], &c__1);
+                                                    daxpy_(m, &d__1, &a[q * a_dim1 + 1], &c__1,
+                                                           &a[p * a_dim1 + 1], &c__1);
                                                     work[p] /= cs;
                                                     work[q] *= cs;
-                                                    if (rsvec)
+                                                    if(rsvec)
                                                     {
                                                         d__1 = t * apoaq;
-                                                        daxpy_(&mvl, &d__1, &v[p * v_dim1 + 1], & c__1, &v[q * v_dim1 + 1], &c__1);
+                                                        daxpy_(&mvl, &d__1, &v[p * v_dim1 + 1],
+                                                               &c__1, &v[q * v_dim1 + 1], &c__1);
                                                         d__1 = -cs * sn * aqoap;
-                                                        daxpy_(&mvl, &d__1, &v[q * v_dim1 + 1], & c__1, &v[p * v_dim1 + 1], &c__1);
+                                                        daxpy_(&mvl, &d__1, &v[q * v_dim1 + 1],
+                                                               &c__1, &v[p * v_dim1 + 1], &c__1);
                                                     }
                                                 }
                                                 else
                                                 {
-                                                    if (work[p] >= work[q])
+                                                    if(work[p] >= work[q])
                                                     {
                                                         d__1 = -t * aqoap;
-                                                        daxpy_(m, &d__1, &a[q * a_dim1 + 1], &c__1, &a[p * a_dim1 + 1], &c__1);
+                                                        daxpy_(m, &d__1, &a[q * a_dim1 + 1], &c__1,
+                                                               &a[p * a_dim1 + 1], &c__1);
                                                         d__1 = cs * sn * apoaq;
-                                                        daxpy_(m, &d__1, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1], &c__1);
+                                                        daxpy_(m, &d__1, &a[p * a_dim1 + 1], &c__1,
+                                                               &a[q * a_dim1 + 1], &c__1);
                                                         work[p] *= cs;
                                                         work[q] /= cs;
-                                                        if (rsvec)
+                                                        if(rsvec)
                                                         {
                                                             d__1 = -t * aqoap;
-                                                            daxpy_(&mvl, &d__1, &v[q * v_dim1 + 1], &c__1, &v[p * v_dim1 + 1], & c__1);
+                                                            daxpy_(&mvl, &d__1, &v[q * v_dim1 + 1],
+                                                                   &c__1, &v[p * v_dim1 + 1],
+                                                                   &c__1);
                                                             d__1 = cs * sn * apoaq;
-                                                            daxpy_(&mvl, &d__1, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], & c__1);
+                                                            daxpy_(&mvl, &d__1, &v[p * v_dim1 + 1],
+                                                                   &c__1, &v[q * v_dim1 + 1],
+                                                                   &c__1);
                                                         }
                                                     }
                                                     else
                                                     {
                                                         d__1 = t * apoaq;
-                                                        daxpy_(m, &d__1, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1], &c__1);
+                                                        daxpy_(m, &d__1, &a[p * a_dim1 + 1], &c__1,
+                                                               &a[q * a_dim1 + 1], &c__1);
                                                         d__1 = -cs * sn * aqoap;
-                                                        daxpy_(m, &d__1, &a[q * a_dim1 + 1], &c__1, &a[p * a_dim1 + 1], &c__1);
+                                                        daxpy_(m, &d__1, &a[q * a_dim1 + 1], &c__1,
+                                                               &a[p * a_dim1 + 1], &c__1);
                                                         work[p] /= cs;
                                                         work[q] *= cs;
-                                                        if (rsvec)
+                                                        if(rsvec)
                                                         {
                                                             d__1 = t * apoaq;
-                                                            daxpy_(&mvl, &d__1, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], & c__1);
+                                                            daxpy_(&mvl, &d__1, &v[p * v_dim1 + 1],
+                                                                   &c__1, &v[q * v_dim1 + 1],
+                                                                   &c__1);
                                                             d__1 = -cs * sn * aqoap;
-                                                            daxpy_(&mvl, &d__1, &v[q * v_dim1 + 1], &c__1, &v[p * v_dim1 + 1], & c__1);
+                                                            daxpy_(&mvl, &d__1, &v[q * v_dim1 + 1],
+                                                                   &c__1, &v[p * v_dim1 + 1],
+                                                                   &c__1);
                                                         }
                                                     }
                                                 }
@@ -1212,27 +1265,32 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
                                     }
                                     else
                                     {
-                                        /* .. have to use modified Gram-Schmidt like transformation */
-                                        dcopy_(m, &a[p * a_dim1 + 1], &c__1, & work[*n + 1], &c__1);
-                                        dlascl_("G", &c__0, &c__0, &aapp, & c_b18, m, &c__1, &work[*n + 1], lda, &ierr);
-                                        dlascl_("G", &c__0, &c__0, &aaqq, & c_b18, m, &c__1, &a[q * a_dim1 + 1], lda, &ierr);
+                                        /* .. have to use modified Gram-Schmidt like transformation
+                                         */
+                                        dcopy_(m, &a[p * a_dim1 + 1], &c__1, &work[*n + 1], &c__1);
+                                        dlascl_("G", &c__0, &c__0, &aapp, &c_b18, m, &c__1,
+                                                &work[*n + 1], lda, &ierr);
+                                        dlascl_("G", &c__0, &c__0, &aaqq, &c_b18, m, &c__1,
+                                                &a[q * a_dim1 + 1], lda, &ierr);
                                         temp1 = -aapq * work[p] / work[q];
-                                        daxpy_(m, &temp1, &work[*n + 1], & c__1, &a[q * a_dim1 + 1], & c__1);
-                                        dlascl_("G", &c__0, &c__0, &c_b18, & aaqq, m, &c__1, &a[q * a_dim1 + 1], lda, &ierr);
+                                        daxpy_(m, &temp1, &work[*n + 1], &c__1, &a[q * a_dim1 + 1],
+                                               &c__1);
+                                        dlascl_("G", &c__0, &c__0, &c_b18, &aaqq, m, &c__1,
+                                                &a[q * a_dim1 + 1], lda, &ierr);
                                         /* Computing MAX */
                                         d__1 = 0.;
                                         d__2 = 1. - aapq * aapq; // , expr subst
-                                        sva[q] = aaqq * sqrt((fla_max(d__1,d__2))) ;
-                                        mxsinj = fla_max(mxsinj,sfmin);
+                                        sva[q] = aaqq * sqrt((fla_max(d__1, d__2)));
+                                        mxsinj = fla_max(mxsinj, sfmin);
                                     }
                                     /* END IF ROTOK THEN ... ELSE */
                                     /* In the case of cancellation in updating SVA(q), SVA(p) */
                                     /* recompute SVA(q), SVA(p). */
                                     /* Computing 2nd power */
                                     d__1 = sva[q] / aaqq;
-                                    if (d__1 * d__1 <= rooteps)
+                                    if(d__1 * d__1 <= rooteps)
                                     {
-                                        if (aaqq < rootbig && aaqq > rootsfmin)
+                                        if(aaqq < rootbig && aaqq > rootsfmin)
                                         {
                                             sva[q] = dnrm2_(m, &a[q * a_dim1 + 1], &c__1) * work[q];
                                         }
@@ -1240,13 +1298,13 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
                                         {
                                             t = 0.;
                                             aaqq = 1.;
-                                            dlassq_(m, &a[q * a_dim1 + 1], & c__1, &t, &aaqq);
+                                            dlassq_(m, &a[q * a_dim1 + 1], &c__1, &t, &aaqq);
                                             sva[q] = t * sqrt(aaqq) * work[q];
                                         }
                                     }
-                                    if (aapp / aapp0 <= rooteps)
+                                    if(aapp / aapp0 <= rooteps)
                                     {
-                                        if (aapp < rootbig && aapp > rootsfmin)
+                                        if(aapp < rootbig && aapp > rootsfmin)
                                         {
                                             aapp = dnrm2_(m, &a[p * a_dim1 + 1], &c__1) * work[p];
                                         }
@@ -1254,7 +1312,7 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
                                         {
                                             t = 0.;
                                             aapp = 1.;
-                                            dlassq_(m, &a[p * a_dim1 + 1], & c__1, &t, &aapp);
+                                            dlassq_(m, &a[p * a_dim1 + 1], &c__1, &t, &aapp);
                                             aapp = t * sqrt(aapp) * work[p];
                                         }
                                         sva[p] = aapp;
@@ -1263,7 +1321,7 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
                                 else
                                 {
                                     /* A(:,p) and A(:,q) already numerically orthogonal */
-                                    if (ir1 == 0)
+                                    if(ir1 == 0)
                                     {
                                         ++notrot;
                                     }
@@ -1274,15 +1332,15 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
                             else
                             {
                                 /* A(:,q) is zero column */
-                                if (ir1 == 0)
+                                if(ir1 == 0)
                                 {
                                     ++notrot;
                                 }
                                 ++pskipped;
                             }
-                            if (i__ <= swband && pskipped > rowskip)
+                            if(i__ <= swband && pskipped > rowskip)
                             {
-                                if (ir1 == 0)
+                                if(ir1 == 0)
                                 {
                                     aapp = -aapp;
                                 }
@@ -1292,17 +1350,17 @@ int dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublere
                             /* L2002: */
                         }
                         /* END q-LOOP */
-L2103: /* bailed out of q-loop */
+                    L2103: /* bailed out of q-loop */
                         sva[p] = aapp;
                     }
                     else
                     {
                         sva[p] = aapp;
-                        if (ir1 == 0 && aapp == 0.)
+                        if(ir1 == 0 && aapp == 0.)
                         {
                             /* Computing MIN */
                             i__4 = igl + kbl - 1;
-                            notrot = notrot + fla_min(i__4,*n) - p;
+                            notrot = notrot + fla_min(i__4, *n) - p;
                         }
                     }
                     /* L2001: */
@@ -1315,40 +1373,34 @@ L2103: /* bailed out of q-loop */
             /* ... go to the off diagonal blocks */
             igl = (ibr - 1) * kbl + 1;
             i__2 = nbl;
-            for (jbc = ibr + 1;
-                    jbc <= i__2;
-                    ++jbc)
+            for(jbc = ibr + 1; jbc <= i__2; ++jbc)
             {
                 jgl = (jbc - 1) * kbl + 1;
                 /* doing the block at ( ibr, jbc ) */
                 ijblsk = 0;
                 /* Computing MIN */
                 i__4 = igl + kbl - 1;
-                i__3 = fla_min(i__4,*n);
-                for (p = igl;
-                        p <= i__3;
-                        ++p)
+                i__3 = fla_min(i__4, *n);
+                for(p = igl; p <= i__3; ++p)
                 {
                     aapp = sva[p];
-                    if (aapp > 0.)
+                    if(aapp > 0.)
                     {
                         pskipped = 0;
                         /* Computing MIN */
                         i__5 = jgl + kbl - 1;
-                        i__4 = fla_min(i__5,*n);
-                        for (q = jgl;
-                                q <= i__4;
-                                ++q)
+                        i__4 = fla_min(i__5, *n);
+                        for(q = jgl; q <= i__4; ++q)
                         {
                             aaqq = sva[q];
-                            if (aaqq > 0.)
+                            if(aaqq > 0.)
                             {
                                 aapp0 = aapp;
                                 /* .. M x 2 Jacobi SVD .. */
                                 /* Safe Gram matrix computation */
-                                if (aaqq >= 1.)
+                                if(aaqq >= 1.)
                                 {
-                                    if (aapp >= aaqq)
+                                    if(aapp >= aaqq)
                                     {
                                         rotok = small_val * aapp <= aaqq;
                                     }
@@ -1356,20 +1408,25 @@ L2103: /* bailed out of q-loop */
                                     {
                                         rotok = small_val * aaqq <= aapp;
                                     }
-                                    if (aapp < big / aaqq)
+                                    if(aapp < big / aaqq)
                                     {
-                                        aapq = ddot_(m, &a[p * a_dim1 + 1], & c__1, &a[q * a_dim1 + 1], & c__1) * work[p] * work[q] / aaqq / aapp;
+                                        aapq = ddot_(m, &a[p * a_dim1 + 1], &c__1,
+                                                     &a[q * a_dim1 + 1], &c__1)
+                                               * work[p] * work[q] / aaqq / aapp;
                                     }
                                     else
                                     {
-                                        dcopy_(m, &a[p * a_dim1 + 1], &c__1, & work[*n + 1], &c__1);
-                                        dlascl_("G", &c__0, &c__0, &aapp, & work[p], m, &c__1, &work[*n + 1], lda, &ierr);
-                                        aapq = ddot_(m, &work[*n + 1], &c__1, &a[q * a_dim1 + 1], &c__1) * work[q] / aaqq;
+                                        dcopy_(m, &a[p * a_dim1 + 1], &c__1, &work[*n + 1], &c__1);
+                                        dlascl_("G", &c__0, &c__0, &aapp, &work[p], m, &c__1,
+                                                &work[*n + 1], lda, &ierr);
+                                        aapq = ddot_(m, &work[*n + 1], &c__1, &a[q * a_dim1 + 1],
+                                                     &c__1)
+                                               * work[q] / aaqq;
                                     }
                                 }
                                 else
                                 {
-                                    if (aapp >= aaqq)
+                                    if(aapp >= aaqq)
                                     {
                                         rotok = aapp <= aaqq / small_val;
                                     }
@@ -1377,46 +1434,53 @@ L2103: /* bailed out of q-loop */
                                     {
                                         rotok = aaqq <= aapp / small_val;
                                     }
-                                    if (aapp > small_val / aaqq)
+                                    if(aapp > small_val / aaqq)
                                     {
-                                        aapq = ddot_(m, &a[p * a_dim1 + 1], & c__1, &a[q * a_dim1 + 1], & c__1) * work[p] * work[q] / aaqq / aapp;
+                                        aapq = ddot_(m, &a[p * a_dim1 + 1], &c__1,
+                                                     &a[q * a_dim1 + 1], &c__1)
+                                               * work[p] * work[q] / aaqq / aapp;
                                     }
                                     else
                                     {
-                                        dcopy_(m, &a[q * a_dim1 + 1], &c__1, & work[*n + 1], &c__1);
-                                        dlascl_("G", &c__0, &c__0, &aaqq, & work[q], m, &c__1, &work[*n + 1], lda, &ierr);
-                                        aapq = ddot_(m, &work[*n + 1], &c__1, &a[p * a_dim1 + 1], &c__1) * work[p] / aapp;
+                                        dcopy_(m, &a[q * a_dim1 + 1], &c__1, &work[*n + 1], &c__1);
+                                        dlascl_("G", &c__0, &c__0, &aaqq, &work[q], m, &c__1,
+                                                &work[*n + 1], lda, &ierr);
+                                        aapq = ddot_(m, &work[*n + 1], &c__1, &a[p * a_dim1 + 1],
+                                                     &c__1)
+                                               * work[p] / aapp;
                                     }
                                 }
                                 /* Computing MAX */
                                 d__1 = mxaapq;
                                 d__2 = f2c_abs(aapq); // , expr subst
-                                mxaapq = fla_max(d__1,d__2);
+                                mxaapq = fla_max(d__1, d__2);
                                 /* TO rotate or NOT to rotate, THAT is the question ... */
-                                if (f2c_abs(aapq) > tol)
+                                if(f2c_abs(aapq) > tol)
                                 {
                                     notrot = 0;
                                     /* [RTD] ROTATED = ROTATED + 1 */
                                     pskipped = 0;
                                     ++iswrot;
-                                    if (rotok)
+                                    if(rotok)
                                     {
                                         aqoap = aaqq / aapp;
                                         apoaq = aapp / aaqq;
-                                        theta = (d__1 = aqoap - apoaq, f2c_abs( d__1)) * -.5 / aapq;
-                                        if (aaqq > aapp0)
+                                        theta = (d__1 = aqoap - apoaq, f2c_abs(d__1)) * -.5 / aapq;
+                                        if(aaqq > aapp0)
                                         {
                                             theta = -theta;
                                         }
-                                        if (f2c_abs(theta) > bigtheta)
+                                        if(f2c_abs(theta) > bigtheta)
                                         {
                                             t = .5 / theta;
                                             fastr[2] = t * work[p] / work[q];
                                             fastr[3] = -t * work[q] / work[p];
-                                            drotm_(m, &a[p * a_dim1 + 1], & c__1, &a[q * a_dim1 + 1], &c__1, fastr);
-                                            if (rsvec)
+                                            drotm_(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1],
+                                                   &c__1, fastr);
+                                            if(rsvec)
                                             {
-                                                drotm_(&mvl, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], &c__1, fastr);
+                                                drotm_(&mvl, &v[p * v_dim1 + 1], &c__1,
+                                                       &v[q * v_dim1 + 1], &c__1, fastr);
                                             }
                                             /* Computing MAX */
                                             d__1 = 0.;
@@ -1425,27 +1489,27 @@ L2103: /* bailed out of q-loop */
                                             /* Computing MAX */
                                             d__1 = 0.;
                                             d__2 = 1. - t * aqoap * aapq; // , expr subst
-                                            aapp *= sqrt((fla_max(d__1,d__2)));
+                                            aapp *= sqrt((fla_max(d__1, d__2)));
                                             /* Computing MAX */
                                             d__1 = mxsinj;
                                             d__2 = f2c_abs(t); // , expr subst
-                                            mxsinj = fla_max(d__1,d__2);
+                                            mxsinj = fla_max(d__1, d__2);
                                         }
                                         else
                                         {
                                             /* .. choose correct signum for THETA and rotate */
                                             thsign = -d_sign(&c_b18, &aapq);
-                                            if (aaqq > aapp0)
+                                            if(aaqq > aapp0)
                                             {
                                                 thsign = -thsign;
                                             }
-                                            t = 1. / (theta + thsign * sqrt( theta * theta + 1.));
+                                            t = 1. / (theta + thsign * sqrt(theta * theta + 1.));
                                             cs = sqrt(1. / (t * t + 1.));
                                             sn = t * cs;
                                             /* Computing MAX */
                                             d__1 = mxsinj;
                                             d__2 = f2c_abs(sn); // , expr subst
-                                            mxsinj = fla_max(d__1,d__2);
+                                            mxsinj = fla_max(d__1, d__2);
                                             /* Computing MAX */
                                             d__1 = 0.;
                                             d__2 = t * apoaq * aapq + 1.; // , expr subst
@@ -1453,35 +1517,41 @@ L2103: /* bailed out of q-loop */
                                             /* Computing MAX */
                                             d__1 = 0.;
                                             d__2 = 1. - t * aqoap * aapq; // , expr subst
-                                            aapp *= sqrt((fla_max(d__1,d__2)));
+                                            aapp *= sqrt((fla_max(d__1, d__2)));
                                             apoaq = work[p] / work[q];
                                             aqoap = work[q] / work[p];
-                                            if (work[p] >= 1.)
+                                            if(work[p] >= 1.)
                                             {
-                                                if (work[q] >= 1.)
+                                                if(work[q] >= 1.)
                                                 {
                                                     fastr[2] = t * apoaq;
                                                     fastr[3] = -t * aqoap;
                                                     work[p] *= cs;
                                                     work[q] *= cs;
-                                                    drotm_(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1], &c__1, fastr);
-                                                    if (rsvec)
+                                                    drotm_(m, &a[p * a_dim1 + 1], &c__1,
+                                                           &a[q * a_dim1 + 1], &c__1, fastr);
+                                                    if(rsvec)
                                                     {
-                                                        drotm_(&mvl, &v[p * v_dim1 + 1], &c__1, &v[ q * v_dim1 + 1], &c__1, fastr);
+                                                        drotm_(&mvl, &v[p * v_dim1 + 1], &c__1,
+                                                               &v[q * v_dim1 + 1], &c__1, fastr);
                                                     }
                                                 }
                                                 else
                                                 {
                                                     d__1 = -t * aqoap;
-                                                    daxpy_(m, &d__1, &a[q * a_dim1 + 1], &c__1, &a[ p * a_dim1 + 1], &c__1);
+                                                    daxpy_(m, &d__1, &a[q * a_dim1 + 1], &c__1,
+                                                           &a[p * a_dim1 + 1], &c__1);
                                                     d__1 = cs * sn * apoaq;
-                                                    daxpy_(m, &d__1, &a[p * a_dim1 + 1], &c__1, &a[ q * a_dim1 + 1], &c__1);
-                                                    if (rsvec)
+                                                    daxpy_(m, &d__1, &a[p * a_dim1 + 1], &c__1,
+                                                           &a[q * a_dim1 + 1], &c__1);
+                                                    if(rsvec)
                                                     {
                                                         d__1 = -t * aqoap;
-                                                        daxpy_(&mvl, &d__1, &v[q * v_dim1 + 1], & c__1, &v[p * v_dim1 + 1], &c__1);
+                                                        daxpy_(&mvl, &d__1, &v[q * v_dim1 + 1],
+                                                               &c__1, &v[p * v_dim1 + 1], &c__1);
                                                         d__1 = cs * sn * apoaq;
-                                                        daxpy_(&mvl, &d__1, &v[p * v_dim1 + 1], & c__1, &v[q * v_dim1 + 1], &c__1);
+                                                        daxpy_(&mvl, &d__1, &v[p * v_dim1 + 1],
+                                                               &c__1, &v[q * v_dim1 + 1], &c__1);
                                                     }
                                                     work[p] *= cs;
                                                     work[q] /= cs;
@@ -1489,54 +1559,70 @@ L2103: /* bailed out of q-loop */
                                             }
                                             else
                                             {
-                                                if (work[q] >= 1.)
+                                                if(work[q] >= 1.)
                                                 {
                                                     d__1 = t * apoaq;
-                                                    daxpy_(m, &d__1, &a[p * a_dim1 + 1], &c__1, &a[ q * a_dim1 + 1], &c__1);
+                                                    daxpy_(m, &d__1, &a[p * a_dim1 + 1], &c__1,
+                                                           &a[q * a_dim1 + 1], &c__1);
                                                     d__1 = -cs * sn * aqoap;
-                                                    daxpy_(m, &d__1, &a[q * a_dim1 + 1], &c__1, &a[ p * a_dim1 + 1], &c__1);
-                                                    if (rsvec)
+                                                    daxpy_(m, &d__1, &a[q * a_dim1 + 1], &c__1,
+                                                           &a[p * a_dim1 + 1], &c__1);
+                                                    if(rsvec)
                                                     {
                                                         d__1 = t * apoaq;
-                                                        daxpy_(&mvl, &d__1, &v[p * v_dim1 + 1], & c__1, &v[q * v_dim1 + 1], &c__1);
+                                                        daxpy_(&mvl, &d__1, &v[p * v_dim1 + 1],
+                                                               &c__1, &v[q * v_dim1 + 1], &c__1);
                                                         d__1 = -cs * sn * aqoap;
-                                                        daxpy_(&mvl, &d__1, &v[q * v_dim1 + 1], & c__1, &v[p * v_dim1 + 1], &c__1);
+                                                        daxpy_(&mvl, &d__1, &v[q * v_dim1 + 1],
+                                                               &c__1, &v[p * v_dim1 + 1], &c__1);
                                                     }
                                                     work[p] /= cs;
                                                     work[q] *= cs;
                                                 }
                                                 else
                                                 {
-                                                    if (work[p] >= work[q])
+                                                    if(work[p] >= work[q])
                                                     {
                                                         d__1 = -t * aqoap;
-                                                        daxpy_(m, &d__1, &a[q * a_dim1 + 1], &c__1, &a[p * a_dim1 + 1], &c__1);
+                                                        daxpy_(m, &d__1, &a[q * a_dim1 + 1], &c__1,
+                                                               &a[p * a_dim1 + 1], &c__1);
                                                         d__1 = cs * sn * apoaq;
-                                                        daxpy_(m, &d__1, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1], &c__1);
+                                                        daxpy_(m, &d__1, &a[p * a_dim1 + 1], &c__1,
+                                                               &a[q * a_dim1 + 1], &c__1);
                                                         work[p] *= cs;
                                                         work[q] /= cs;
-                                                        if (rsvec)
+                                                        if(rsvec)
                                                         {
                                                             d__1 = -t * aqoap;
-                                                            daxpy_(&mvl, &d__1, &v[q * v_dim1 + 1], &c__1, &v[p * v_dim1 + 1], & c__1);
+                                                            daxpy_(&mvl, &d__1, &v[q * v_dim1 + 1],
+                                                                   &c__1, &v[p * v_dim1 + 1],
+                                                                   &c__1);
                                                             d__1 = cs * sn * apoaq;
-                                                            daxpy_(&mvl, &d__1, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], & c__1);
+                                                            daxpy_(&mvl, &d__1, &v[p * v_dim1 + 1],
+                                                                   &c__1, &v[q * v_dim1 + 1],
+                                                                   &c__1);
                                                         }
                                                     }
                                                     else
                                                     {
                                                         d__1 = t * apoaq;
-                                                        daxpy_(m, &d__1, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1], &c__1);
+                                                        daxpy_(m, &d__1, &a[p * a_dim1 + 1], &c__1,
+                                                               &a[q * a_dim1 + 1], &c__1);
                                                         d__1 = -cs * sn * aqoap;
-                                                        daxpy_(m, &d__1, &a[q * a_dim1 + 1], &c__1, &a[p * a_dim1 + 1], &c__1);
+                                                        daxpy_(m, &d__1, &a[q * a_dim1 + 1], &c__1,
+                                                               &a[p * a_dim1 + 1], &c__1);
                                                         work[p] /= cs;
                                                         work[q] *= cs;
-                                                        if (rsvec)
+                                                        if(rsvec)
                                                         {
                                                             d__1 = t * apoaq;
-                                                            daxpy_(&mvl, &d__1, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], & c__1);
+                                                            daxpy_(&mvl, &d__1, &v[p * v_dim1 + 1],
+                                                                   &c__1, &v[q * v_dim1 + 1],
+                                                                   &c__1);
                                                             d__1 = -cs * sn * aqoap;
-                                                            daxpy_(&mvl, &d__1, &v[q * v_dim1 + 1], &c__1, &v[p * v_dim1 + 1], & c__1);
+                                                            daxpy_(&mvl, &d__1, &v[q * v_dim1 + 1],
+                                                                   &c__1, &v[p * v_dim1 + 1],
+                                                                   &c__1);
                                                         }
                                                     }
                                                 }
@@ -1545,33 +1631,43 @@ L2103: /* bailed out of q-loop */
                                     }
                                     else
                                     {
-                                        if (aapp > aaqq)
+                                        if(aapp > aaqq)
                                         {
-                                            dcopy_(m, &a[p * a_dim1 + 1], & c__1, &work[*n + 1], & c__1);
-                                            dlascl_("G", &c__0, &c__0, &aapp, &c_b18, m, &c__1, &work[* n + 1], lda, &ierr);
-                                            dlascl_("G", &c__0, &c__0, &aaqq, &c_b18, m, &c__1, &a[q * a_dim1 + 1], lda, &ierr);
+                                            dcopy_(m, &a[p * a_dim1 + 1], &c__1, &work[*n + 1],
+                                                   &c__1);
+                                            dlascl_("G", &c__0, &c__0, &aapp, &c_b18, m, &c__1,
+                                                    &work[*n + 1], lda, &ierr);
+                                            dlascl_("G", &c__0, &c__0, &aaqq, &c_b18, m, &c__1,
+                                                    &a[q * a_dim1 + 1], lda, &ierr);
                                             temp1 = -aapq * work[p] / work[q];
-                                            daxpy_(m, &temp1, &work[*n + 1], & c__1, &a[q * a_dim1 + 1], &c__1);
-                                            dlascl_("G", &c__0, &c__0, &c_b18, &aaqq, m, &c__1, &a[q * a_dim1 + 1], lda, &ierr);
+                                            daxpy_(m, &temp1, &work[*n + 1], &c__1,
+                                                   &a[q * a_dim1 + 1], &c__1);
+                                            dlascl_("G", &c__0, &c__0, &c_b18, &aaqq, m, &c__1,
+                                                    &a[q * a_dim1 + 1], lda, &ierr);
                                             /* Computing MAX */
                                             d__1 = 0.;
                                             d__2 = 1. - aapq * aapq; // , expr subst
                                             sva[q] = aaqq * sqrt((fla_max(d__1, d__2)));
-                                            mxsinj = fla_max(mxsinj,sfmin);
+                                            mxsinj = fla_max(mxsinj, sfmin);
                                         }
                                         else
                                         {
-                                            dcopy_(m, &a[q * a_dim1 + 1], & c__1, &work[*n + 1], & c__1);
-                                            dlascl_("G", &c__0, &c__0, &aaqq, &c_b18, m, &c__1, &work[* n + 1], lda, &ierr);
-                                            dlascl_("G", &c__0, &c__0, &aapp, &c_b18, m, &c__1, &a[p * a_dim1 + 1], lda, &ierr);
+                                            dcopy_(m, &a[q * a_dim1 + 1], &c__1, &work[*n + 1],
+                                                   &c__1);
+                                            dlascl_("G", &c__0, &c__0, &aaqq, &c_b18, m, &c__1,
+                                                    &work[*n + 1], lda, &ierr);
+                                            dlascl_("G", &c__0, &c__0, &aapp, &c_b18, m, &c__1,
+                                                    &a[p * a_dim1 + 1], lda, &ierr);
                                             temp1 = -aapq * work[q] / work[p];
-                                            daxpy_(m, &temp1, &work[*n + 1], & c__1, &a[p * a_dim1 + 1], &c__1);
-                                            dlascl_("G", &c__0, &c__0, &c_b18, &aapp, m, &c__1, &a[p * a_dim1 + 1], lda, &ierr);
+                                            daxpy_(m, &temp1, &work[*n + 1], &c__1,
+                                                   &a[p * a_dim1 + 1], &c__1);
+                                            dlascl_("G", &c__0, &c__0, &c_b18, &aapp, m, &c__1,
+                                                    &a[p * a_dim1 + 1], lda, &ierr);
                                             /* Computing MAX */
                                             d__1 = 0.;
                                             d__2 = 1. - aapq * aapq; // , expr subst
                                             sva[p] = aapp * sqrt((fla_max(d__1, d__2)));
-                                            mxsinj = fla_max(mxsinj,sfmin);
+                                            mxsinj = fla_max(mxsinj, sfmin);
                                         }
                                     }
                                     /* END IF ROTOK THEN ... ELSE */
@@ -1579,9 +1675,9 @@ L2103: /* bailed out of q-loop */
                                     /* .. recompute SVA(q) */
                                     /* Computing 2nd power */
                                     d__1 = sva[q] / aaqq;
-                                    if (d__1 * d__1 <= rooteps)
+                                    if(d__1 * d__1 <= rooteps)
                                     {
-                                        if (aaqq < rootbig && aaqq > rootsfmin)
+                                        if(aaqq < rootbig && aaqq > rootsfmin)
                                         {
                                             sva[q] = dnrm2_(m, &a[q * a_dim1 + 1], &c__1) * work[q];
                                         }
@@ -1589,15 +1685,15 @@ L2103: /* bailed out of q-loop */
                                         {
                                             t = 0.;
                                             aaqq = 1.;
-                                            dlassq_(m, &a[q * a_dim1 + 1], & c__1, &t, &aaqq);
+                                            dlassq_(m, &a[q * a_dim1 + 1], &c__1, &t, &aaqq);
                                             sva[q] = t * sqrt(aaqq) * work[q];
                                         }
                                     }
                                     /* Computing 2nd power */
                                     d__1 = aapp / aapp0;
-                                    if (d__1 * d__1 <= rooteps)
+                                    if(d__1 * d__1 <= rooteps)
                                     {
-                                        if (aapp < rootbig && aapp > rootsfmin)
+                                        if(aapp < rootbig && aapp > rootsfmin)
                                         {
                                             aapp = dnrm2_(m, &a[p * a_dim1 + 1], &c__1) * work[p];
                                         }
@@ -1605,7 +1701,7 @@ L2103: /* bailed out of q-loop */
                                         {
                                             t = 0.;
                                             aapp = 1.;
-                                            dlassq_(m, &a[p * a_dim1 + 1], & c__1, &t, &aapp);
+                                            dlassq_(m, &a[p * a_dim1 + 1], &c__1, &t, &aapp);
                                             aapp = t * sqrt(aapp) * work[p];
                                         }
                                         sva[p] = aapp;
@@ -1626,13 +1722,13 @@ L2103: /* bailed out of q-loop */
                                 ++pskipped;
                                 ++ijblsk;
                             }
-                            if (i__ <= swband && ijblsk >= blskip)
+                            if(i__ <= swband && ijblsk >= blskip)
                             {
                                 sva[p] = aapp;
                                 notrot = 0;
                                 goto L2011;
                             }
-                            if (i__ <= swband && pskipped > rowskip)
+                            if(i__ <= swband && pskipped > rowskip)
                             {
                                 aapp = -aapp;
                                 notrot = 0;
@@ -1641,18 +1737,18 @@ L2103: /* bailed out of q-loop */
                             /* L2200: */
                         }
                         /* end of the q-loop */
-L2203:
+                    L2203:
                         sva[p] = aapp;
                     }
                     else
                     {
-                        if (aapp == 0.)
+                        if(aapp == 0.)
                         {
                             /* Computing MIN */
                             i__4 = jgl + kbl - 1;
-                            notrot = notrot + fla_min(i__4,*n) - jgl + 1;
+                            notrot = notrot + fla_min(i__4, *n) - jgl + 1;
                         }
-                        if (aapp < 0.)
+                        if(aapp < 0.)
                         {
                             notrot = 0;
                         }
@@ -1663,13 +1759,11 @@ L2203:
                 /* L2010: */
             }
             /* end of the jbc-loop */
-L2011: /* 2011 bailed out of the jbc-loop */
+        L2011: /* 2011 bailed out of the jbc-loop */
             /* Computing MIN */
             i__3 = igl + kbl - 1;
-            i__2 = fla_min(i__3,*n);
-            for (p = igl;
-                    p <= i__2;
-                    ++p)
+            i__2 = fla_min(i__3, *n);
+            for(p = igl; p <= i__2; ++p)
             {
                 sva[p] = (d__1 = sva[p], f2c_abs(d__1));
                 /* L2012: */
@@ -1679,7 +1773,7 @@ L2011: /* 2011 bailed out of the jbc-loop */
         }
         /* 2000 :: end of the ibr-loop */
         /* .. update SVA(N) */
-        if (sva[*n] < rootbig && sva[*n] > rootsfmin)
+        if(sva[*n] < rootbig && sva[*n] > rootsfmin)
         {
             sva[*n] = dnrm2_(m, &a[*n * a_dim1 + 1], &c__1) * work[*n];
         }
@@ -1691,15 +1785,16 @@ L2011: /* 2011 bailed out of the jbc-loop */
             sva[*n] = t * sqrt(aapp) * work[*n];
         }
         /* Additional steering devices */
-        if (i__ < swband && (mxaapq <= roottol || iswrot <= *n))
+        if(i__ < swband && (mxaapq <= roottol || iswrot <= *n))
         {
             swband = i__;
         }
-        if (i__ > swband + 1 && mxaapq < sqrt((doublereal) (*n)) * tol && ( doublereal) (*n) * mxaapq * mxsinj < tol)
+        if(i__ > swband + 1 && mxaapq < sqrt((doublereal)(*n)) * tol
+           && (doublereal)(*n) * mxaapq * mxsinj < tol)
         {
             goto L1994;
         }
-        if (notrot >= emptsw)
+        if(notrot >= emptsw)
         {
             goto L1994;
         }
@@ -1718,13 +1813,11 @@ L1995: /* Sort the singular values and find how many are above */
     n2 = 0;
     n4 = 0;
     i__1 = *n - 1;
-    for (p = 1;
-            p <= i__1;
-            ++p)
+    for(p = 1; p <= i__1; ++p)
     {
         i__2 = *n - p + 1;
         q = idamax_(&i__2, &sva[p], &c__1) + p - 1;
-        if (p != q)
+        if(p != q)
         {
             temp1 = sva[p];
             sva[p] = sva[q];
@@ -1733,36 +1826,34 @@ L1995: /* Sort the singular values and find how many are above */
             work[p] = work[q];
             work[q] = temp1;
             dswap_(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1], &c__1);
-            if (rsvec)
+            if(rsvec)
             {
-                dswap_(&mvl, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], & c__1);
+                dswap_(&mvl, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], &c__1);
             }
         }
-        if (sva[p] != 0.)
+        if(sva[p] != 0.)
         {
             ++n4;
-            if (sva[p] * skl > sfmin)
+            if(sva[p] * skl > sfmin)
             {
                 ++n2;
             }
         }
         /* L5991: */
     }
-    if (sva[*n] != 0.)
+    if(sva[*n] != 0.)
     {
         ++n4;
-        if (sva[*n] * skl > sfmin)
+        if(sva[*n] * skl > sfmin)
         {
             ++n2;
         }
     }
     /* Normalize the left singular vectors. */
-    if (lsvec || uctol)
+    if(lsvec || uctol)
     {
         i__1 = n2;
-        for (p = 1;
-                p <= i__1;
-                ++p)
+        for(p = 1; p <= i__1; ++p)
         {
             d__1 = work[p] / sva[p];
             dscal_(m, &d__1, &a[p * a_dim1 + 1], &c__1);
@@ -1770,14 +1861,12 @@ L1995: /* Sort the singular values and find how many are above */
         }
     }
     /* Scale the product of Jacobi rotations (assemble the fast rotations). */
-    if (rsvec)
+    if(rsvec)
     {
-        if (applv)
+        if(applv)
         {
             i__1 = *n;
-            for (p = 1;
-                    p <= i__1;
-                    ++p)
+            for(p = 1; p <= i__1; ++p)
             {
                 dscal_(&mvl, &work[p], &v[p * v_dim1 + 1], &c__1);
                 /* L2398: */
@@ -1786,9 +1875,7 @@ L1995: /* Sort the singular values and find how many are above */
         else
         {
             i__1 = *n;
-            for (p = 1;
-                    p <= i__1;
-                    ++p)
+            for(p = 1; p <= i__1; ++p)
             {
                 temp1 = 1. / dnrm2_(&mvl, &v[p * v_dim1 + 1], &c__1);
                 dscal_(&mvl, &temp1, &v[p * v_dim1 + 1], &c__1);
@@ -1797,12 +1884,10 @@ L1995: /* Sort the singular values and find how many are above */
         }
     }
     /* Undo scaling, if necessary (and possible). */
-    if (skl > 1. && sva[1] < big / skl || skl < 1. && sva[fla_max(n2,1)] > sfmin / skl)
+    if(skl > 1. && sva[1] < big / skl || skl < 1. && sva[fla_max(n2, 1)] > sfmin / skl)
     {
         i__1 = *n;
-        for (p = 1;
-                p <= i__1;
-                ++p)
+        for(p = 1; p <= i__1; ++p)
         {
             sva[p] = skl * sva[p];
             /* L2400: */
@@ -1813,13 +1898,13 @@ L1995: /* Sort the singular values and find how many are above */
     /* The singular values of A are SKL*SVA(1:N). If SKL.NE.ONE */
     /* then some of the singular values may overflow or underflow and */
     /* the spectrum is given in this factored representation. */
-    work[2] = (doublereal) n4;
+    work[2] = (doublereal)n4;
     /* N4 is the number of computed nonzero singular values of A. */
-    work[3] = (doublereal) n2;
+    work[3] = (doublereal)n2;
     /* N2 is the number of singular values of A greater than SFMIN. */
     /* If N2<N, SVA(N2:N) contains ZEROS and/or denormalized numbers */
     /* that may carry some information. */
-    work[4] = (doublereal) i__;
+    work[4] = (doublereal)i__;
     /* i is the index of the last sweep before declaring convergence. */
     work[5] = mxaapq;
     /* MXAAPQ is the largest absolute value of scaled pivots in the */
@@ -1828,7 +1913,7 @@ L1995: /* Sort the singular values and find how many are above */
     /* MXSINJ is the largest absolute value of the sines of Jacobi angles */
     /* in the last sweep */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* .. */
     /* .. END OF DGESVJ */
     /* .. */

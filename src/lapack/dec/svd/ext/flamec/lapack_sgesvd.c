@@ -231,10 +231,10 @@ int lapack_sgesvd(char *jobu, char *jobvt, integer *m, integer *n, real *a, inte
     integer iscl;
     real anrm;
     integer ierr, itau, ncvt, nrvt, lwork_sgebrd__, lwork_sgelqf__, lwork_sgeqrf__, i__;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer chunk;
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer minmn, wrkbl, itaup, itauq, mnthr, iwork;
     logical wntua, wntva, wntun, wntuo, wntvn, wntvo, wntus, wntvs;
     integer ie, ir, bdspac, iu;
@@ -242,7 +242,7 @@ int lapack_sgesvd(char *jobu, char *jobvt, integer *m, integer *n, real *a, inte
     int lapack_sgebrd(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *, integer *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;
     extern /* Subroutine */
@@ -294,16 +294,16 @@ int lapack_sgesvd(char *jobu, char *jobvt, integer *m, integer *n, real *a, inte
     /* Function Body */
     *info = 0;
     minmn = fla_min(*m,*n);
-    wntua = lsame_(jobu, "A");
-    wntus = lsame_(jobu, "S");
+    wntua = lsame_(jobu, "A", 1, 1);
+    wntus = lsame_(jobu, "S", 1, 1);
     wntuas = wntua || wntus;
-    wntuo = lsame_(jobu, "O");
-    wntun = lsame_(jobu, "N");
-    wntva = lsame_(jobvt, "A");
-    wntvs = lsame_(jobvt, "S");
+    wntuo = lsame_(jobu, "O", 1, 1);
+    wntun = lsame_(jobu, "N", 1, 1);
+    wntva = lsame_(jobvt, "A", 1, 1);
+    wntvs = lsame_(jobvt, "S", 1, 1);
     wntvas = wntva || wntvs;
-    wntvo = lsame_(jobvt, "O");
-    wntvn = lsame_(jobvt, "N");
+    wntvo = lsame_(jobvt, "O", 1, 1);
+    wntvn = lsame_(jobvt, "N", 1, 1);
     lquery = *lwork == -1;
     ie = 0;
     bdspac = 0;

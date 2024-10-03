@@ -1,5 +1,8 @@
-/* slaqz4.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* slaqz4.f -- translated by f2c (version 20160102). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b4 = 0.f;
 static real c_b5 = 1.f;
@@ -11,11 +14,17 @@ static logical c_true = TRUE_;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLAQZ4 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaqz4. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaqz4.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaqz4. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaqz4.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaqz4. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaqz4.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -200,12 +209,21 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slaqz4_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *ilo, integer *ihi, integer *nshifts, integer * nblock_desired__, real *sr, real *si, real *ss, real *a, integer *lda, real *b, integer *ldb, real *q, integer *ldq, real *z__, integer * ldz, real *qc, integer *ldqc, real *zc, integer *ldzc, real *work, integer *lwork, integer *info)
+void slaqz4_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *ilo, integer *ihi,
+             integer *nshifts, integer *nblock_desired__, real *sr, real *si, real *ss, real *a,
+             integer *lda, real *b, integer *ldb, real *q, integer *ldq, real *z__, integer *ldz,
+             real *qc, integer *ldqc, real *zc, integer *ldzc, real *work, integer *lwork,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("slaqz4 inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", nshifts %" FLA_IS ", nblock_desired__ %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", ldqc %" FLA_IS ", ldzc %" FLA_IS "",*n, *ilo, *ihi, *nshifts, *nblock_desired__, *lda, *ldb, *ldq, *ldz, *ldqc, *ldzc);
+    AOCL_DTL_SNPRINTF(
+        "slaqz4 inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", nshifts %" FLA_IS
+        ", nblock_desired__ %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS
+        ", ldz %" FLA_IS ", ldqc %" FLA_IS ", ldzc %" FLA_IS "",
+        *n, *ilo, *ihi, *nshifts, *nblock_desired__, *lda, *ldb, *ldq, *ldz, *ldqc, *ldzc);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, qc_dim1, qc_offset, zc_dim1, zc_offset, i__1, i__2, i__3, i__4, i__5;
+    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, qc_dim1,
+        qc_offset, zc_dim1, zc_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */
     integer i__, j, k;
     real v[3], c1, c2, s1, s2;
@@ -213,13 +231,25 @@ int slaqz4_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
     real temp, swap;
     integer npos;
     extern /* Subroutine */
-    int srot_(integer *, real *, integer *, real *, integer *, real *, real *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), slaqz1_(real *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *), slaqz2_(logical *, logical *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *, integer *, integer *, real *, integer *);
+        void
+        srot_(integer *, real *, integer *, real *, integer *, real *, real *),
+        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
+               integer *, real *, real *, integer *),
+        slaqz1_(real *, integer *, real *, integer *, real *, real *, real *, real *, real *,
+                real *),
+        slaqz2_(logical *, logical *, integer *, integer *, integer *, integer *, real *, integer *,
+                real *, integer *, integer *, integer *, real *, integer *, integer *, integer *,
+                real *, integer *);
     integer nblock;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer ishift;
     extern /* Subroutine */
-    int slaset_(char *, integer *, integer *, real *, real *, real *, integer *), slartg_(real *, real *, real *, real *, real *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+        void
+        slaset_(char *, integer *, integer *, real *, real *, real *, integer *),
+        slartg_(real *, real *, real *, real *, real *),
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     integer istopb, swidth, istopm, sheight, istartb, istartm;
     /* Function arguments */
     /* Parameters */
@@ -250,40 +280,40 @@ int slaqz4_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
     --work;
     /* Function Body */
     *info = 0;
-    if (*nblock_desired__ < *nshifts + 1)
+    if(*nblock_desired__ < *nshifts + 1)
     {
         *info = -8;
     }
-    if (*lwork == -1)
+    if(*lwork == -1)
     {
         /* workspace query, quick return */
-        work[1] = (real) (*n * *nblock_desired__);
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        work[1] = (real)(*n * *nblock_desired__);
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
-    else if (*lwork < *n * *nblock_desired__)
+    else if(*lwork < *n * *nblock_desired__)
     {
         *info = -25;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SLAQZ4", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* Executable statements */
-    if (*nshifts < 2)
+    if(*nshifts < 2)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
-    if (*ilo >= *ihi)
+    if(*ilo >= *ihi)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
-    if (*ilschur)
+    if(*ilschur)
     {
         istartm = 1;
         istopm = *n;
@@ -298,11 +328,9 @@ int slaqz4_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
     /* conjugate shifts are already adjacent to one */
     /* another */
     i__1 = *nshifts - 2;
-    for (i__ = 1;
-            i__ <= i__1;
-            i__ += 2)
+    for(i__ = 1; i__ <= i__1; i__ += 2)
     {
-        if (si[i__] != -si[i__ + 1])
+        if(si[i__] != -si[i__ + 1])
         {
             swap = sr[i__];
             sr[i__] = sr[i__ + 1];
@@ -325,7 +353,7 @@ int slaqz4_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
     ns = *nshifts - *nshifts % 2;
     /* Computing MAX */
     i__1 = *nblock_desired__ - ns;
-    npos = fla_max(i__1,1);
+    npos = fla_max(i__1, 1);
     /* The following block introduces the shifts and chases */
     /* them down one by one just enough to make space for */
     /* the other shifts. The near-the-diagonal block is */
@@ -335,12 +363,11 @@ int slaqz4_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
     slaset_("FULL", &i__1, &i__2, &c_b4, &c_b5, &qc[qc_offset], ldqc);
     slaset_("FULL", &ns, &ns, &c_b4, &c_b5, &zc[zc_offset], ldzc);
     i__1 = ns;
-    for (i__ = 1;
-            i__ <= i__1;
-            i__ += 2)
+    for(i__ = 1; i__ <= i__1; i__ += 2)
     {
         /* Introduce the shift */
-        slaqz1_(&a[*ilo + *ilo * a_dim1], lda, &b[*ilo + *ilo * b_dim1], ldb, &sr[i__], &sr[i__ + 1], &si[i__], &ss[i__], &ss[i__ + 1], v);
+        slaqz1_(&a[*ilo + *ilo * a_dim1], lda, &b[*ilo + *ilo * b_dim1], ldb, &sr[i__],
+                &sr[i__ + 1], &si[i__], &ss[i__], &ss[i__ + 1], v);
         temp = v[1];
         slartg_(&temp, &v[2], &c1, &s1, &v[1]);
         slartg_(v, &v[1], &c2, &s2, &temp);
@@ -349,18 +376,18 @@ int slaqz4_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
         srot_(&ns, &b[*ilo + 1 + *ilo * b_dim1], ldb, &b[*ilo + 2 + *ilo * b_dim1], ldb, &c1, &s1);
         srot_(&ns, &b[*ilo + *ilo * b_dim1], ldb, &b[*ilo + 1 + *ilo * b_dim1], ldb, &c2, &s2);
         i__2 = ns + 1;
-        srot_(&i__2, &qc[(qc_dim1 << 1) + 1], &c__1, &qc[qc_dim1 * 3 + 1], & c__1, &c1, &s1);
+        srot_(&i__2, &qc[(qc_dim1 << 1) + 1], &c__1, &qc[qc_dim1 * 3 + 1], &c__1, &c1, &s1);
         i__2 = ns + 1;
         srot_(&i__2, &qc[qc_dim1 + 1], &c__1, &qc[(qc_dim1 << 1) + 1], &c__1, &c2, &s2);
         /* Chase the shift down */
         i__2 = ns - 1 - i__;
-        for (j = 1;
-                j <= i__2;
-                ++j)
+        for(j = 1; j <= i__2; ++j)
         {
             i__3 = *ihi - *ilo + 1;
             i__4 = ns + 1;
-            slaqz2_(&c_true, &c_true, &j, &c__1, &ns, &i__3, &a[*ilo + *ilo * a_dim1], lda, &b[*ilo + *ilo * b_dim1], ldb, &i__4, &c__1, &qc[qc_offset], ldqc, &ns, &c__1, &zc[zc_offset], ldzc);
+            slaqz2_(&c_true, &c_true, &j, &c__1, &ns, &i__3, &a[*ilo + *ilo * a_dim1], lda,
+                    &b[*ilo + *ilo * b_dim1], ldb, &i__4, &c__1, &qc[qc_offset], ldqc, &ns, &c__1,
+                    &zc[zc_offset], ldzc);
         }
     }
     /* Update the rest of the pencil */
@@ -368,32 +395,38 @@ int slaqz4_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
     /* from the left with Qc(1:ns+1,1:ns+1)' */
     sheight = ns + 1;
     swidth = istopm - (*ilo + ns) + 1;
-    if (swidth > 0)
+    if(swidth > 0)
     {
-        sgemm_("T", "N", &sheight, &swidth, &sheight, &c_b5, &qc[qc_offset], ldqc, &a[*ilo + (*ilo + ns) * a_dim1], lda, &c_b4, &work[1], & sheight);
+        sgemm_("T", "N", &sheight, &swidth, &sheight, &c_b5, &qc[qc_offset], ldqc,
+               &a[*ilo + (*ilo + ns) * a_dim1], lda, &c_b4, &work[1], &sheight);
         slacpy_("ALL", &sheight, &swidth, &work[1], &sheight, &a[*ilo + (*ilo + ns) * a_dim1], lda);
-        sgemm_("T", "N", &sheight, &swidth, &sheight, &c_b5, &qc[qc_offset], ldqc, &b[*ilo + (*ilo + ns) * b_dim1], ldb, &c_b4, &work[1], & sheight);
+        sgemm_("T", "N", &sheight, &swidth, &sheight, &c_b5, &qc[qc_offset], ldqc,
+               &b[*ilo + (*ilo + ns) * b_dim1], ldb, &c_b4, &work[1], &sheight);
         slacpy_("ALL", &sheight, &swidth, &work[1], &sheight, &b[*ilo + (*ilo + ns) * b_dim1], ldb);
     }
-    if (*ilq)
+    if(*ilq)
     {
-        sgemm_("N", "N", n, &sheight, &sheight, &c_b5, &q[*ilo * q_dim1 + 1], ldq, &qc[qc_offset], ldqc, &c_b4, &work[1], n);
+        sgemm_("N", "N", n, &sheight, &sheight, &c_b5, &q[*ilo * q_dim1 + 1], ldq, &qc[qc_offset],
+               ldqc, &c_b4, &work[1], n);
         slacpy_("ALL", n, &sheight, &work[1], n, &q[*ilo * q_dim1 + 1], ldq);
     }
     /* Update A(istartm:ilo-1,ilo:ilo+ns-1) and B(istartm:ilo-1,ilo:ilo+ns-1) */
     /* from the right with Zc(1:ns,1:ns) */
     sheight = *ilo - 1 - istartm + 1;
     swidth = ns;
-    if (sheight > 0)
+    if(sheight > 0)
     {
-        sgemm_("N", "N", &sheight, &swidth, &swidth, &c_b5, &a[istartm + *ilo * a_dim1], lda, &zc[zc_offset], ldzc, &c_b4, &work[1], & sheight);
-        slacpy_("ALL", &sheight, &swidth, &work[1], &sheight, &a[istartm + * ilo * a_dim1], lda);
-        sgemm_("N", "N", &sheight, &swidth, &swidth, &c_b5, &b[istartm + *ilo * b_dim1], ldb, &zc[zc_offset], ldzc, &c_b4, &work[1], & sheight);
-        slacpy_("ALL", &sheight, &swidth, &work[1], &sheight, &b[istartm + * ilo * b_dim1], ldb);
+        sgemm_("N", "N", &sheight, &swidth, &swidth, &c_b5, &a[istartm + *ilo * a_dim1], lda,
+               &zc[zc_offset], ldzc, &c_b4, &work[1], &sheight);
+        slacpy_("ALL", &sheight, &swidth, &work[1], &sheight, &a[istartm + *ilo * a_dim1], lda);
+        sgemm_("N", "N", &sheight, &swidth, &swidth, &c_b5, &b[istartm + *ilo * b_dim1], ldb,
+               &zc[zc_offset], ldzc, &c_b4, &work[1], &sheight);
+        slacpy_("ALL", &sheight, &swidth, &work[1], &sheight, &b[istartm + *ilo * b_dim1], ldb);
     }
-    if (*ilz)
+    if(*ilz)
     {
-        sgemm_("N", "N", n, &swidth, &swidth, &c_b5, &z__[*ilo * z_dim1 + 1], ldz, &zc[zc_offset], ldzc, &c_b4, &work[1], n);
+        sgemm_("N", "N", n, &swidth, &swidth, &c_b5, &z__[*ilo * z_dim1 + 1], ldz, &zc[zc_offset],
+               ldzc, &c_b4, &work[1], n);
         slacpy_("ALL", n, &swidth, &work[1], n, &z__[*ilo * z_dim1 + 1], ldz);
     }
     /* The following block chases the shifts down to the bottom */
@@ -404,7 +437,7 @@ int slaqz4_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
     {
         /* Computing MIN */
         i__1 = *ihi - ns - k;
-        np = fla_min(i__1,npos);
+        np = fla_min(i__1, npos);
         /* Size of the near-the-diagonal block */
         nblock = ns + np;
         /* istartb points to the first row we will be updating */
@@ -418,21 +451,19 @@ int slaqz4_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
         i__2 = ns + np;
         slaset_("FULL", &i__1, &i__2, &c_b4, &c_b5, &zc[zc_offset], ldzc);
         /* Near the diagonal shift chase */
-        for (i__ = ns - 1;
-                i__ >= 0;
-                i__ += -2)
+        for(i__ = ns - 1; i__ >= 0; i__ += -2)
         {
             i__1 = np - 1;
-            for (j = 0;
-                    j <= i__1;
-                    ++j)
+            for(j = 0; j <= i__1; ++j)
             {
                 /* Move down the block with index k+i+j-1, updating */
                 /* the (ns+np x ns+np) block: */
                 /* (k:k+ns+np,k:k+ns+np-1) */
                 i__2 = k + i__ + j - 1;
                 i__3 = k + 1;
-                slaqz2_(&c_true, &c_true, &i__2, &istartb, &istopb, ihi, &a[ a_offset], lda, &b[b_offset], ldb, &nblock, &i__3, & qc[qc_offset], ldqc, &nblock, &k, &zc[zc_offset], ldzc);
+                slaqz2_(&c_true, &c_true, &i__2, &istartb, &istopb, ihi, &a[a_offset], lda,
+                        &b[b_offset], ldb, &nblock, &i__3, &qc[qc_offset], ldqc, &nblock, &k,
+                        &zc[zc_offset], ldzc);
             }
         }
         /* Update rest of the pencil */
@@ -441,32 +472,40 @@ int slaqz4_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
         /* from the left with Qc(1:ns+np,1:ns+np)' */
         sheight = ns + np;
         swidth = istopm - (k + ns + np) + 1;
-        if (swidth > 0)
+        if(swidth > 0)
         {
-            sgemm_("T", "N", &sheight, &swidth, &sheight, &c_b5, &qc[ qc_offset], ldqc, &a[k + 1 + (k + ns + np) * a_dim1], lda, &c_b4, &work[1], &sheight);
-            slacpy_("ALL", &sheight, &swidth, &work[1], &sheight, &a[k + 1 + ( k + ns + np) * a_dim1], lda);
-            sgemm_("T", "N", &sheight, &swidth, &sheight, &c_b5, &qc[ qc_offset], ldqc, &b[k + 1 + (k + ns + np) * b_dim1], ldb, &c_b4, &work[1], &sheight);
-            slacpy_("ALL", &sheight, &swidth, &work[1], &sheight, &b[k + 1 + ( k + ns + np) * b_dim1], ldb);
+            sgemm_("T", "N", &sheight, &swidth, &sheight, &c_b5, &qc[qc_offset], ldqc,
+                   &a[k + 1 + (k + ns + np) * a_dim1], lda, &c_b4, &work[1], &sheight);
+            slacpy_("ALL", &sheight, &swidth, &work[1], &sheight,
+                    &a[k + 1 + (k + ns + np) * a_dim1], lda);
+            sgemm_("T", "N", &sheight, &swidth, &sheight, &c_b5, &qc[qc_offset], ldqc,
+                   &b[k + 1 + (k + ns + np) * b_dim1], ldb, &c_b4, &work[1], &sheight);
+            slacpy_("ALL", &sheight, &swidth, &work[1], &sheight,
+                    &b[k + 1 + (k + ns + np) * b_dim1], ldb);
         }
-        if (*ilq)
+        if(*ilq)
         {
-            sgemm_("N", "N", n, &nblock, &nblock, &c_b5, &q[(k + 1) * q_dim1 + 1], ldq, &qc[qc_offset], ldqc, &c_b4, &work[1], n);
+            sgemm_("N", "N", n, &nblock, &nblock, &c_b5, &q[(k + 1) * q_dim1 + 1], ldq,
+                   &qc[qc_offset], ldqc, &c_b4, &work[1], n);
             slacpy_("ALL", n, &nblock, &work[1], n, &q[(k + 1) * q_dim1 + 1], ldq);
         }
         /* Update A(istartm:k,k:k+ns+npos-1) and B(istartm:k,k:k+ns+npos-1) */
         /* from the right with Zc(1:ns+np,1:ns+np) */
         sheight = k - istartm + 1;
         swidth = nblock;
-        if (sheight > 0)
+        if(sheight > 0)
         {
-            sgemm_("N", "N", &sheight, &swidth, &swidth, &c_b5, &a[istartm + k * a_dim1], lda, &zc[zc_offset], ldzc, &c_b4, &work[1], & sheight);
+            sgemm_("N", "N", &sheight, &swidth, &swidth, &c_b5, &a[istartm + k * a_dim1], lda,
+                   &zc[zc_offset], ldzc, &c_b4, &work[1], &sheight);
             slacpy_("ALL", &sheight, &swidth, &work[1], &sheight, &a[istartm + k * a_dim1], lda);
-            sgemm_("N", "N", &sheight, &swidth, &swidth, &c_b5, &b[istartm + k * b_dim1], ldb, &zc[zc_offset], ldzc, &c_b4, &work[1], & sheight);
+            sgemm_("N", "N", &sheight, &swidth, &swidth, &c_b5, &b[istartm + k * b_dim1], ldb,
+                   &zc[zc_offset], ldzc, &c_b4, &work[1], &sheight);
             slacpy_("ALL", &sheight, &swidth, &work[1], &sheight, &b[istartm + k * b_dim1], ldb);
         }
-        if (*ilz)
+        if(*ilz)
         {
-            sgemm_("N", "N", n, &nblock, &nblock, &c_b5, &z__[k * z_dim1 + 1], ldz, &zc[zc_offset], ldzc, &c_b4, &work[1], n);
+            sgemm_("N", "N", n, &nblock, &nblock, &c_b5, &z__[k * z_dim1 + 1], ldz, &zc[zc_offset],
+                   ldzc, &c_b4, &work[1], n);
             slacpy_("ALL", n, &nblock, &work[1], n, &z__[k * z_dim1 + 1], ldz);
         }
         k += np;
@@ -482,20 +521,18 @@ int slaqz4_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
     /* istopb points to the last column we will be updating */
     istopb = *ihi;
     i__1 = ns;
-    for (i__ = 1;
-            i__ <= i__1;
-            i__ += 2)
+    for(i__ = 1; i__ <= i__1; i__ += 2)
     {
         /* Chase the shift down to the bottom right corner */
         i__2 = *ihi - 2;
-        for (ishift = *ihi - i__ - 1;
-                ishift <= i__2;
-                ++ishift)
+        for(ishift = *ihi - i__ - 1; ishift <= i__2; ++ishift)
         {
             i__3 = *ihi - ns + 1;
             i__4 = ns + 1;
             i__5 = *ihi - ns;
-            slaqz2_(&c_true, &c_true, &ishift, &istartb, &istopb, ihi, &a[ a_offset], lda, &b[b_offset], ldb, &ns, &i__3, &qc[ qc_offset], ldqc, &i__4, &i__5, &zc[zc_offset], ldzc);
+            slaqz2_(&c_true, &c_true, &ishift, &istartb, &istopb, ihi, &a[a_offset], lda,
+                    &b[b_offset], ldb, &ns, &i__3, &qc[qc_offset], ldqc, &i__4, &i__5,
+                    &zc[zc_offset], ldzc);
         }
     }
     /* Update rest of the pencil */
@@ -503,38 +540,48 @@ int slaqz4_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *i
     /* from the left with Qc(1:ns,1:ns)' */
     sheight = ns;
     swidth = istopm - (*ihi + 1) + 1;
-    if (swidth > 0)
+    if(swidth > 0)
     {
-        sgemm_("T", "N", &sheight, &swidth, &sheight, &c_b5, &qc[qc_offset], ldqc, &a[*ihi - ns + 1 + (*ihi + 1) * a_dim1], lda, &c_b4, & work[1], &sheight);
-        slacpy_("ALL", &sheight, &swidth, &work[1], &sheight, &a[*ihi - ns + 1 + (*ihi + 1) * a_dim1], lda);
-        sgemm_("T", "N", &sheight, &swidth, &sheight, &c_b5, &qc[qc_offset], ldqc, &b[*ihi - ns + 1 + (*ihi + 1) * b_dim1], ldb, &c_b4, & work[1], &sheight);
-        slacpy_("ALL", &sheight, &swidth, &work[1], &sheight, &b[*ihi - ns + 1 + (*ihi + 1) * b_dim1], ldb);
+        sgemm_("T", "N", &sheight, &swidth, &sheight, &c_b5, &qc[qc_offset], ldqc,
+               &a[*ihi - ns + 1 + (*ihi + 1) * a_dim1], lda, &c_b4, &work[1], &sheight);
+        slacpy_("ALL", &sheight, &swidth, &work[1], &sheight,
+                &a[*ihi - ns + 1 + (*ihi + 1) * a_dim1], lda);
+        sgemm_("T", "N", &sheight, &swidth, &sheight, &c_b5, &qc[qc_offset], ldqc,
+               &b[*ihi - ns + 1 + (*ihi + 1) * b_dim1], ldb, &c_b4, &work[1], &sheight);
+        slacpy_("ALL", &sheight, &swidth, &work[1], &sheight,
+                &b[*ihi - ns + 1 + (*ihi + 1) * b_dim1], ldb);
     }
-    if (*ilq)
+    if(*ilq)
     {
-        sgemm_("N", "N", n, &ns, &ns, &c_b5, &q[(*ihi - ns + 1) * q_dim1 + 1], ldq, &qc[qc_offset], ldqc, &c_b4, &work[1], n);
+        sgemm_("N", "N", n, &ns, &ns, &c_b5, &q[(*ihi - ns + 1) * q_dim1 + 1], ldq, &qc[qc_offset],
+               ldqc, &c_b4, &work[1], n);
         slacpy_("ALL", n, &ns, &work[1], n, &q[(*ihi - ns + 1) * q_dim1 + 1], ldq);
     }
     /* Update A(istartm:ihi-ns,ihi-ns:ihi) */
     /* from the right with Zc(1:ns+1,1:ns+1) */
     sheight = *ihi - ns - istartm + 1;
     swidth = ns + 1;
-    if (sheight > 0)
+    if(sheight > 0)
     {
-        sgemm_("N", "N", &sheight, &swidth, &swidth, &c_b5, &a[istartm + (* ihi - ns) * a_dim1], lda, &zc[zc_offset], ldzc, &c_b4, &work[ 1], &sheight);
-        slacpy_("ALL", &sheight, &swidth, &work[1], &sheight, &a[istartm + (* ihi - ns) * a_dim1], lda);
-        sgemm_("N", "N", &sheight, &swidth, &swidth, &c_b5, &b[istartm + (* ihi - ns) * b_dim1], ldb, &zc[zc_offset], ldzc, &c_b4, &work[ 1], &sheight);
-        slacpy_("ALL", &sheight, &swidth, &work[1], &sheight, &b[istartm + (* ihi - ns) * b_dim1], ldb);
+        sgemm_("N", "N", &sheight, &swidth, &swidth, &c_b5, &a[istartm + (*ihi - ns) * a_dim1], lda,
+               &zc[zc_offset], ldzc, &c_b4, &work[1], &sheight);
+        slacpy_("ALL", &sheight, &swidth, &work[1], &sheight, &a[istartm + (*ihi - ns) * a_dim1],
+                lda);
+        sgemm_("N", "N", &sheight, &swidth, &swidth, &c_b5, &b[istartm + (*ihi - ns) * b_dim1], ldb,
+               &zc[zc_offset], ldzc, &c_b4, &work[1], &sheight);
+        slacpy_("ALL", &sheight, &swidth, &work[1], &sheight, &b[istartm + (*ihi - ns) * b_dim1],
+                ldb);
     }
-    if (*ilz)
+    if(*ilz)
     {
         i__1 = ns + 1;
         i__2 = ns + 1;
-        sgemm_("N", "N", n, &i__1, &i__2, &c_b5, &z__[(*ihi - ns) * z_dim1 + 1], ldz, &zc[zc_offset], ldzc, &c_b4, &work[1], n);
+        sgemm_("N", "N", n, &i__1, &i__2, &c_b5, &z__[(*ihi - ns) * z_dim1 + 1], ldz,
+               &zc[zc_offset], ldzc, &c_b4, &work[1], n);
         i__1 = ns + 1;
         slacpy_("ALL", n, &i__1, &work[1], n, &z__[(*ihi - ns) * z_dim1 + 1], ldz);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* slaqz4_ */

@@ -10,7 +10,7 @@
 
 #include "FLAME.h"
 
-FLA_Error FLA_Apply_G_rf_blk_var3( FLA_Obj G, FLA_Obj A, dim_t b_alg )
+FLA_Error FLA_Apply_G_rf_blk_var3( FLA_Obj G, FLA_Obj A, fla_dim_t b_alg )
 {
 	FLA_Datatype datatype;
 	integer          k_G, m_A, n_A;

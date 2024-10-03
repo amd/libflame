@@ -4,14 +4,14 @@
 extern "C" {
 #endif
 
-    double d_tan(doublereal *x)
-    {
-        return( tan(*x) );
-    }
-    double r_tan(real *x)
-    {
-        return( tan(*x) );
-    }
+double d_tan(doublereal *x)
+{
+    return (tan(*x));
+}
+double r_tan(real *x)
+{
+    return (tan(*x));
+}
 
 #ifdef __cplusplus
 }

@@ -1,16 +1,25 @@
-/* ../netlib/scsum1.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/scsum1.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SCSUM1 forms the 1-norm of the complex vector using the true absolute value. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SCSUM1 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/scsum1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/scsum1.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/scsum1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/scsum1.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/scsum1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/scsum1.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -70,7 +79,7 @@ real scsum1_(integer *n, complex *cx, integer *incx)
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"scsum1 inputs: n %d, incx %d",*n, *incx);
+    snprintf(buffer, 256, "scsum1 inputs: n %d, incx %d", *n, *incx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -100,12 +109,12 @@ real scsum1_(integer *n, complex *cx, integer *incx)
     /* Function Body */
     ret_val = 0.f;
     stemp = 0.f;
-    if (*n <= 0)
+    if(*n <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return ret_val;
     }
-    if (*incx == 1)
+    if(*incx == 1)
     {
         goto L20;
     }
@@ -113,9 +122,7 @@ real scsum1_(integer *n, complex *cx, integer *incx)
     nincx = *n * *incx;
     i__1 = nincx;
     i__2 = *incx;
-    for (i__ = 1;
-            i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
-            i__ += i__2)
+    for(i__ = 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
     {
         /* NEXT LINE MODIFIED. */
         stemp += c_abs(&cx[i__]);
@@ -127,9 +134,7 @@ real scsum1_(integer *n, complex *cx, integer *incx)
     /* CODE FOR INCREMENT EQUAL TO 1 */
 L20:
     i__2 = *n;
-    for (i__ = 1;
-            i__ <= i__2;
-            ++i__)
+    for(i__ = 1; i__ <= i__2; ++i__)
     {
         /* NEXT LINE MODIFIED. */
         stemp += c_abs(&cx[i__]);

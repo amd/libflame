@@ -1,16 +1,25 @@
-/* ../netlib/dlaswp.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlaswp.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLASWP performs a series of row interchanges on a general rectangular matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLASWP + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaswp. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaswp.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaswp. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaswp.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaswp. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaswp.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -101,10 +110,13 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlaswp_(integer *n, doublereal *a, integer *lda, integer *k1, integer *k2, integer *ipiv, integer *incx)
+void dlaswp_(integer *n, doublereal *a, integer *lda, integer *k1, integer *k2, integer *ipiv,
+             integer *incx)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaswp inputs: n %" FLA_IS ", lda %" FLA_IS ", k1 %" FLA_IS ", k2 %" FLA_IS ", incx %" FLA_IS "",*n, *lda, *k1, *k2, *incx);
+    AOCL_DTL_SNPRINTF("dlaswp inputs: n %" FLA_IS ", lda %" FLA_IS ", k1 %" FLA_IS ", k2 %" FLA_IS
+                      ", incx %" FLA_IS "",
+                      *n, *lda, *k1, *k2, *incx);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
@@ -130,14 +142,14 @@ int dlaswp_(integer *n, doublereal *a, integer *lda, integer *k1, integer *k2, i
     a -= a_offset;
     --ipiv;
     /* Function Body */
-    if (*incx > 0)
+    if(*incx > 0)
     {
         ix0 = *k1;
         i1 = *k1;
         i2 = *k2;
         inc = 1;
     }
-    else if (*incx < 0)
+    else if(*incx < 0)
     {
         ix0 = *k1 + (*k1 - *k2) * *incx;
         i1 = *k2;
@@ -147,30 +159,24 @@ int dlaswp_(integer *n, doublereal *a, integer *lda, integer *k1, integer *k2, i
     else
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     n32 = *n / 32 << 5;
-    if (n32 != 0)
+    if(n32 != 0)
     {
         i__1 = n32;
-        for (j = 1;
-                j <= i__1;
-                j += 32)
+        for(j = 1; j <= i__1; j += 32)
         {
             ix = ix0;
             i__2 = i2;
             i__3 = inc;
-            for (i__ = i1;
-                    i__3 < 0 ? i__ >= i__2 : i__ <= i__2;
-                    i__ += i__3)
+            for(i__ = i1; i__3 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__3)
             {
                 ip = ipiv[ix];
-                if (ip != i__)
+                if(ip != i__)
                 {
                     i__4 = j + 31;
-                    for (k = j;
-                            k <= i__4;
-                            ++k)
+                    for(k = j; k <= i__4; ++k)
                     {
                         temp = a[i__ + k * a_dim1];
                         a[i__ + k * a_dim1] = a[ip + k * a_dim1];
@@ -184,23 +190,19 @@ int dlaswp_(integer *n, doublereal *a, integer *lda, integer *k1, integer *k2, i
             /* L30: */
         }
     }
-    if (n32 != *n)
+    if(n32 != *n)
     {
         ++n32;
         ix = ix0;
         i__1 = i2;
         i__3 = inc;
-        for (i__ = i1;
-                i__3 < 0 ? i__ >= i__1 : i__ <= i__1;
-                i__ += i__3)
+        for(i__ = i1; i__3 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__3)
         {
             ip = ipiv[ix];
-            if (ip != i__)
+            if(ip != i__)
             {
                 i__2 = *n;
-                for (k = n32;
-                        k <= i__2;
-                        ++k)
+                for(k = n32; k <= i__2; ++k)
                 {
                     temp = a[i__ + k * a_dim1];
                     a[i__ + k * a_dim1] = a[ip + k * a_dim1];
@@ -213,7 +215,7 @@ int dlaswp_(integer *n, doublereal *a, integer *lda, integer *k1, integer *k2, i
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLASWP */
 }
 /* dlaswp_ */

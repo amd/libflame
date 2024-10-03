@@ -1,11 +1,10 @@
-/* ../netlib/v3.9.0/cgetrf2.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/cgetrf2.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {1.f, 0.f};
 static integer c__1 = 1;
 /* > \brief \b CGETRF2 */
 /* =========== DOCUMENTATION =========== */
@@ -109,15 +108,15 @@ for 1 <= i <= fla_min(M,N), row i of the */
 /* > \ingroup complexGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cgetrf2_(integer *m, integer *n, complex *a, integer * lda, integer *ipiv, integer *info)
+void cgetrf2_(integer *m, integer *n, complex *a, integer *lda, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgetrf2 inputs: m %lld, n %lld, lda %lld",*m, *n, *lda);
+    snprintf(buffer, 256, "cgetrf2 inputs: m %lld, n %lld, lda %lld", *m, *n, *lda);
 #else
-    snprintf(buffer, 256,"cgetrf2 inputs: m %d, n %d, lda %d",*m, *n, *lda);
+    snprintf(buffer, 256, "cgetrf2 inputs: m %d, n %d, lda %d", *m, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -131,84 +130,93 @@ int cgetrf2_(integer *m, integer *n, complex *a, integer * lda, integer *ipiv, i
     integer i__, n1, n2;
     complex temp;
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *), cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+        void
+        cscal_(integer *, complex *, complex *, integer *),
+        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
+               complex *, integer *, complex *, complex *, integer *);
     integer iinfo;
     real sfmin;
     extern /* Subroutine */
-    int ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
+        void
+        ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
+               integer *, complex *, integer *);
     extern integer icamax_(integer *, complex *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), claswp_( integer *, complex *, integer *, integer *, integer *, integer *, integer *);
-    /* -- LAPACK computational routine (version 3.7.0) -- */
-    /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
-    /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2016 */
-    /* .. Scalar Arguments .. */
-    /* .. */
-    /* .. Array Arguments .. */
-    /* .. */
-    /* ===================================================================== */
-    /* .. Parameters .. */
-    /* .. */
-    /* .. Local Scalars .. */
-    /* .. */
-    /* .. External Functions .. */
-    /* .. */
-    /* .. External Subroutines .. */
-    /* .. */
-    /* .. Intrinsic Functions .. */
-    /* .. */
-    /* .. Executable Statements .. */
-    /* Test the input parameters */
-    /* Parameter adjustments */
-    #if AOCL_FLA_PROGRESS_H
-       AOCL_FLA_PROGRESS_VAR;
-       static TLS_CLASS_SPEC integer progress_size = 0;
-    #endif
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
+        claswp_(integer *, complex *, integer *, integer *, integer *, integer *, integer *);
+/* -- LAPACK computational routine (version 3.7.0) -- */
+/* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
+/* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
+/* June 2016 */
+/* .. Scalar Arguments .. */
+/* .. */
+/* .. Array Arguments .. */
+/* .. */
+/* ===================================================================== */
+/* .. Parameters .. */
+/* .. */
+/* .. Local Scalars .. */
+/* .. */
+/* .. External Functions .. */
+/* .. */
+/* .. External Subroutines .. */
+/* .. */
+/* .. Intrinsic Functions .. */
+/* .. */
+/* .. Executable Statements .. */
+/* Test the input parameters */
+/* Parameter adjustments */
+#if AOCL_FLA_PROGRESS_H
+    AOCL_FLA_PROGRESS_VAR;
+    static TLS_CLASS_SPEC integer progress_size = 0;
+#endif
     a_dim1 = *lda;
     a_offset = 1 + a_dim1;
     a -= a_offset;
     --ipiv;
     /* Function Body */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CGETRF2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (*m == 1)
+    if(*m == 1)
     {
         /* Use unblocked code for one row case */
         /* Just need to handle IPIV and INFO */
         ipiv[1] = 1;
         i__1 = a_dim1 + 1;
-        if (a[i__1].r == 0.f && a[i__1].i == 0.f)
+        if(a[i__1].r == 0.f && a[i__1].i == 0.f)
         {
             *info = 1;
         }
     }
-    else if (*n == 1)
+    else if(*n == 1)
     {
         /* Use unblocked code for one column case */
         /* Compute machine safe minimum */
@@ -217,10 +225,10 @@ int cgetrf2_(integer *m, integer *n, complex *a, integer * lda, integer *ipiv, i
         i__ = icamax_(m, &a[a_dim1 + 1], &c__1);
         ipiv[1] = i__;
         i__1 = i__ + a_dim1;
-        if (a[i__1].r != 0.f || a[i__1].i != 0.f)
+        if(a[i__1].r != 0.f || a[i__1].i != 0.f)
         {
             /* Apply the interchange */
-            if (i__ != 1)
+            if(i__ != 1)
             {
                 i__1 = a_dim1 + 1;
                 temp.r = a[i__1].r;
@@ -234,7 +242,7 @@ int cgetrf2_(integer *m, integer *n, complex *a, integer * lda, integer *ipiv, i
                 a[i__1].i = temp.i; // , expr subst
             }
             /* Compute elements 2:M of the column */
-            if (c_abs(&a[a_dim1 + 1]) >= sfmin)
+            if(c_abs(&a[a_dim1 + 1]) >= sfmin)
             {
                 i__1 = *m - 1;
                 c_div(&q__1, &c_b1, &a[a_dim1 + 1]);
@@ -243,9 +251,7 @@ int cgetrf2_(integer *m, integer *n, complex *a, integer * lda, integer *ipiv, i
             else
             {
                 i__1 = *m - 1;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = i__ + 1 + a_dim1;
                     c_div(&q__1, &a[i__ + 1 + a_dim1], &a[a_dim1 + 1]);
@@ -263,77 +269,78 @@ int cgetrf2_(integer *m, integer *n, complex *a, integer * lda, integer *ipiv, i
     else
     {
         /* Use recursive code */
-        n1 = fla_min(*m,*n) / 2;
+        n1 = fla_min(*m, *n) / 2;
         n2 = *n - n1;
         /* [ A11 ] */
         /* Factor [ --- ] */
         /* [ A21 ] */
-	#if AOCL_FLA_PROGRESS_H
-                
-	   #ifndef FLA_ENABLE_WINDOWS_BUILD
-	        if(!aocl_fla_progress_ptr)
-                        aocl_fla_progress_ptr=aocl_fla_progress;
-	   #endif
-                if(aocl_fla_progress_ptr)
+#if AOCL_FLA_PROGRESS_H
+
+#ifndef FLA_ENABLE_WINDOWS_BUILD
+        if(!aocl_fla_progress_ptr)
+            aocl_fla_progress_ptr = aocl_fla_progress;
+#endif
+        if(aocl_fla_progress_ptr)
+        {
+            if(progress_step_count == 0 || progress_step_count == progress_size)
+            {
+                progress_size = fla_min(*m, *n);
+                progress_step_count = 1;
+            }
+
+            if(!(progress_step_count == 1 && (*m < FLA_GETRF_SMALL && *n < FLA_GETRF_SMALL)))
+            {
+
+                ++progress_step_count;
+                if((progress_step_count % 8) == 0 || progress_step_count == progress_size)
                 {
-                        if(progress_step_count == 0 || progress_step_count == progress_size ){
-                                        progress_size = fla_min(*m,*n);
-                                        progress_step_count = 1;
-                         }
-
-                        if(!(progress_step_count == 1 &&(*m < FLA_GETRF_SMALL &&  *n < FLA_GETRF_SMALL)))
-                        {
-
-
-                                ++progress_step_count;
-                                if((progress_step_count%8)==0 || progress_step_count == progress_size)
-                                {
-                                        AOCL_FLA_PROGRESS_FUNC_PTR("CGETRF2",7,&progress_step_count,&progress_thread_id,&progress_total_threads);
-                                }
-                        }
+                    AOCL_FLA_PROGRESS_FUNC_PTR("CGETRF2", 7, &progress_step_count,
+                                               &progress_thread_id, &progress_total_threads);
                 }
+            }
+        }
 
-    #endif
+#endif
 
         cgetrf2_(m, &n1, &a[a_offset], lda, &ipiv[1], &iinfo);
-        if (*info == 0 && iinfo > 0)
+        if(*info == 0 && iinfo > 0)
         {
             *info = iinfo;
         }
         /* [ A12 ] */
         /* Apply interchanges to [ --- ] */
         /* [ A22 ] */
-        claswp_(&n2, &a[(n1 + 1) * a_dim1 + 1], lda, &c__1, &n1, &ipiv[1], & c__1);
+        claswp_(&n2, &a[(n1 + 1) * a_dim1 + 1], lda, &c__1, &n1, &ipiv[1], &c__1);
         /* Solve A12 */
-        ctrsm_("L", "L", "N", "U", &n1, &n2, &c_b1, &a[a_offset], lda, &a[(n1 + 1) * a_dim1 + 1], lda);
+        ctrsm_("L", "L", "N", "U", &n1, &n2, &c_b1, &a[a_offset], lda, &a[(n1 + 1) * a_dim1 + 1],
+               lda);
         /* Update A22 */
         i__1 = *m - n1;
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        cgemm_("N", "N", &i__1, &n2, &n1, &q__1, &a[n1 + 1 + a_dim1], lda, &a[ (n1 + 1) * a_dim1 + 1], lda, &c_b1, &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
+        cgemm_("N", "N", &i__1, &n2, &n1, &q__1, &a[n1 + 1 + a_dim1], lda,
+               &a[(n1 + 1) * a_dim1 + 1], lda, &c_b1, &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
         /* Factor A22 */
         i__1 = *m - n1;
         cgetrf2_(&i__1, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &ipiv[n1 + 1], &iinfo);
         /* Adjust INFO and the pivot indices */
-        if (*info == 0 && iinfo > 0)
+        if(*info == 0 && iinfo > 0)
         {
             *info = iinfo + n1;
         }
-        i__1 = fla_min(*m,*n);
-        for (i__ = n1 + 1;
-                i__ <= i__1;
-                ++i__)
+        i__1 = fla_min(*m, *n);
+        for(i__ = n1 + 1; i__ <= i__1; ++i__)
         {
             ipiv[i__] += n1;
             /* L20: */
         }
         /* Apply interchanges to A21 */
         i__1 = n1 + 1;
-        i__2 = fla_min(*m,*n);
+        i__2 = fla_min(*m, *n);
         claswp_(&n1, &a[a_dim1 + 1], lda, &i__1, &i__2, &ipiv[1], &c__1);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGETRF2 */
 }
 /* cgetrf2_ */

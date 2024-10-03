@@ -1,5 +1,8 @@
-/* ../netlib/dlabrd.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlabrd.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 /*
  *  Copyright (c) 2021-2023 Advanced Micro Devices, Inc.  All rights reserved.
  */
@@ -9,17 +12,24 @@ static doublereal c_b4 = -1.;
 static doublereal c_b5 = 1.;
 static integer c__1 = 1;
 static doublereal c_b16 = 0.;
-/* > \brief \b DLABRD reduces the first nb rows and columns of a general matrix to a bidiagonal form. */
+/* > \brief \b DLABRD reduces the first nb rows and columns of a general matrix to a bidiagonal
+ * form. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLABRD + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlabrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlabrd.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlabrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlabrd.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlabrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlabrd.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -211,28 +221,43 @@ tauq is stored in TAUQ(i) and taup in TAUP(i). */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlabrd_(integer *m, integer *n, integer *nb, doublereal * a, integer *lda, doublereal *d__, doublereal *e, doublereal *tauq, doublereal *taup, doublereal *x, integer *ldx, doublereal *y, integer *ldy)
+void dlabrd_(integer *m, integer *n, integer *nb, doublereal *a, integer *lda, doublereal *d__,
+             doublereal *e, doublereal *tauq, doublereal *taup, doublereal *x, integer *ldx,
+             doublereal *y, integer *ldy)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlabrd inputs: m %" FLA_IS ", n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldx %" FLA_IS ", ldy %" FLA_IS "",*m, *n, *nb, *lda, *ldx, *ldy);
-  
-    extern int fla_dlabrd(integer *m, integer *n, integer *nb, doublereal * a, integer *lda, doublereal *d__, doublereal *e, doublereal *tauq, doublereal *taup, doublereal *x, integer *ldx, doublereal *y, integer *ldy);
-    
-    int ret_val = fla_dlabrd(m, n, nb, a, lda, d__, e, tauq, taup, x, ldx, y, ldy);
-    AOCL_DTL_TRACE_LOG_EXIT
-    return ret_val;
+    AOCL_DTL_SNPRINTF("dlabrd inputs: m %" FLA_IS ", n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS
+                      ", ldx %" FLA_IS ", ldy %" FLA_IS "",
+                      *m, *n, *nb, *lda, *ldx, *ldy);
 
+    extern void fla_dlabrd(integer * m, integer * n, integer * nb, doublereal * a, integer * lda,
+                           doublereal * d__, doublereal * e, doublereal * tauq, doublereal * taup,
+                           doublereal * x, integer * ldx, doublereal * y, integer * ldy);
+
+    fla_dlabrd(m, n, nb, a, lda, d__, e, tauq, taup, x, ldx, y, ldy);
+    AOCL_DTL_TRACE_LOG_EXIT
+    return;
 }
 
-int fla_dlabrd(integer *m, integer *n, integer *nb, doublereal * a, integer *lda, doublereal *d__, doublereal *e, doublereal *tauq, doublereal *taup, doublereal *x, integer *ldx, doublereal *y, integer *ldy)
+void fla_dlabrd(integer *m, integer *n, integer *nb, doublereal *a, integer *lda, doublereal *d__,
+                doublereal *e, doublereal *tauq, doublereal *taup, doublereal *x, integer *ldx,
+                doublereal *y, integer *ldy)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, x_dim1, x_offset, y_dim1, y_offset, i__1, i__2, i__3, i__4, i__5;
+    integer a_dim1, a_offset, x_dim1, x_offset, y_dim1, y_offset, i__1, i__2, i__3;
     /* Local variables */
     integer i__;
-    int thread_id, actual_num_threads;
+    int thread_id;
+#if FLA_OPENMP_MULTITHREADING
+    integer i__4, i__5;
+    int actual_num_threads;
+#endif
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *), dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *),
+        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
+               integer *, doublereal *, doublereal *, integer *),
+        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -272,49 +297,50 @@ int fla_dlabrd(integer *m, integer *n, integer *nb, doublereal * a, integer *lda
     y -= y_offset;
 
     /* Function Body */
-    if (*m <= 0 || *n <= 0)
+    if(*m <= 0 || *n <= 0)
     {
-        return 0;
+        return;
     }
 
 #ifdef FLA_OPENMP_MULTITHREADING
     /* Get optimum thread number for DLABRD*/
-    FLA_Thread_optimum( FLA_LABRD, &actual_num_threads);
+    FLA_Thread_optimum(FLA_LABRD, &actual_num_threads);
 #endif
 
-    if (*m >= *n)
+    if(*m >= *n)
     {
         /* Reduce to upper bidiagonal form */
         i__1 = *nb;
 #ifdef FLA_OPENMP_MULTITHREADING
-        #pragma omp parallel num_threads(actual_num_threads) private(i__, i__2, i__3, i__4, i__5, thread_id)
+#pragma omp parallel num_threads(actual_num_threads) private(i__, i__2, i__3, i__4, i__5, thread_id)
         {
             thread_id = omp_get_thread_num();
 #else
         {
             thread_id = 0;
 #endif
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 if(thread_id == 0)
                 {
                     /* Update A(i:m,i) */
                     i__2 = *m - i__ + 1;
                     i__3 = i__ - 1;
-                    dgemv_("No transpose", &i__2, &i__3, &c_b4, &a[i__ + a_dim1], lda, &y[i__ + y_dim1], ldy, &c_b5, &a[i__ + i__ * a_dim1], & c__1);
+                    dgemv_("No transpose", &i__2, &i__3, &c_b4, &a[i__ + a_dim1], lda,
+                           &y[i__ + y_dim1], ldy, &c_b5, &a[i__ + i__ * a_dim1], &c__1);
                     i__2 = *m - i__ + 1;
                     i__3 = i__ - 1;
-                    dgemv_("No transpose", &i__2, &i__3, &c_b4, &x[i__ + x_dim1], ldx, &a[i__ * a_dim1 + 1], &c__1, &c_b5, &a[i__ + i__ * a_dim1], &c__1);
+                    dgemv_("No transpose", &i__2, &i__3, &c_b4, &x[i__ + x_dim1], ldx,
+                           &a[i__ * a_dim1 + 1], &c__1, &c_b5, &a[i__ + i__ * a_dim1], &c__1);
                     /* Generate reflection Q(i) to annihilate A(i+1:m,i) */
                     i__2 = *m - i__ + 1;
                     /* Computing MIN */
                     i__3 = i__ + 1;
-                    dlarfg_(&i__2, &a[i__ + i__ * a_dim1], &a[fla_min(i__3,*m) + i__ * a_dim1], &c__1, &tauq[i__]);
+                    dlarfg_(&i__2, &a[i__ + i__ * a_dim1], &a[fla_min(i__3, *m) + i__ * a_dim1],
+                            &c__1, &tauq[i__]);
                     d__[i__] = a[i__ + i__ * a_dim1];
                 }
-                if (i__ < *n)
+                if(i__ < *n)
                 {
                     if(thread_id == 0)
                     {
@@ -324,41 +350,54 @@ int fla_dlabrd(integer *m, integer *n, integer *nb, doublereal * a, integer *lda
                     i__2 = *m - i__ + 1;
                     i__3 = *n - i__;
 #ifdef FLA_OPENMP_MULTITHREADING
-                    /* Determine the sub partition range of current thread */ 
+                    /* Determine the sub partition range of current thread */
                     FLA_Thread_get_subrange(thread_id, actual_num_threads, i__3, &i__4, &i__5);
-                    #pragma omp barrier
-                    dgemv_("Transpose", &i__2, &i__4, &c_b5, &a[i__ + (i__5 + i__ + 1) * a_dim1], lda, &a[i__ + i__ * a_dim1], &c__1, &c_b16, &y[i__5 + i__ + 1 + i__ * y_dim1], &c__1);
-                    #pragma omp barrier
+#pragma omp barrier
+                    dgemv_("Transpose", &i__2, &i__4, &c_b5, &a[i__ + (i__5 + i__ + 1) * a_dim1],
+                           lda, &a[i__ + i__ * a_dim1], &c__1, &c_b16,
+                           &y[i__5 + i__ + 1 + i__ * y_dim1], &c__1);
+#pragma omp barrier
 #else
-                    dgemv_("Transpose", &i__2, &i__3, &c_b5, &a[i__ + (i__ + 1) * a_dim1], lda, &a[i__ + i__ * a_dim1], &c__1, &c_b16, & y[i__ + 1 + i__ * y_dim1], &c__1);
+                    dgemv_("Transpose", &i__2, &i__3, &c_b5, &a[i__ + (i__ + 1) * a_dim1], lda,
+                           &a[i__ + i__ * a_dim1], &c__1, &c_b16, &y[i__ + 1 + i__ * y_dim1],
+                           &c__1);
 #endif
                     if(thread_id == 0)
                     {
                         i__2 = *m - i__ + 1;
                         i__3 = i__ - 1;
-                        dgemv_("Transpose", &i__2, &i__3, &c_b5, &a[i__ + a_dim1], lda, &a[i__ + i__ * a_dim1], &c__1, &c_b16, &y[i__ * y_dim1 + 1], &c__1);
+                        dgemv_("Transpose", &i__2, &i__3, &c_b5, &a[i__ + a_dim1], lda,
+                               &a[i__ + i__ * a_dim1], &c__1, &c_b16, &y[i__ * y_dim1 + 1], &c__1);
                         i__2 = *n - i__;
                         i__3 = i__ - 1;
-                        dgemv_("No transpose", &i__2, &i__3, &c_b4, &y[i__ + 1 + y_dim1], ldy, &y[i__ * y_dim1 + 1], &c__1, &c_b5, &y[ i__ + 1 + i__ * y_dim1], &c__1);
+                        dgemv_("No transpose", &i__2, &i__3, &c_b4, &y[i__ + 1 + y_dim1], ldy,
+                               &y[i__ * y_dim1 + 1], &c__1, &c_b5, &y[i__ + 1 + i__ * y_dim1],
+                               &c__1);
                         i__2 = *m - i__ + 1;
                         i__3 = i__ - 1;
-                        dgemv_("Transpose", &i__2, &i__3, &c_b5, &x[i__ + x_dim1], ldx, &a[i__ + i__ * a_dim1], &c__1, &c_b16, &y[i__ * y_dim1 + 1], &c__1);
+                        dgemv_("Transpose", &i__2, &i__3, &c_b5, &x[i__ + x_dim1], ldx,
+                               &a[i__ + i__ * a_dim1], &c__1, &c_b16, &y[i__ * y_dim1 + 1], &c__1);
                         i__2 = i__ - 1;
                         i__3 = *n - i__;
-                        dgemv_("Transpose", &i__2, &i__3, &c_b4, &a[(i__ + 1) * a_dim1 + 1], lda, &y[i__ * y_dim1 + 1], &c__1, &c_b5, &y[i__ + 1 + i__ * y_dim1], &c__1);
+                        dgemv_("Transpose", &i__2, &i__3, &c_b4, &a[(i__ + 1) * a_dim1 + 1], lda,
+                               &y[i__ * y_dim1 + 1], &c__1, &c_b5, &y[i__ + 1 + i__ * y_dim1],
+                               &c__1);
                         i__2 = *n - i__;
                         dscal_(&i__2, &tauq[i__], &y[i__ + 1 + i__ * y_dim1], &c__1);
                         /* Update A(i,i+1:n) */
                         i__2 = *n - i__;
-                        dgemv_("No transpose", &i__2, &i__, &c_b4, &y[i__ + 1 + y_dim1], ldy, &a[i__ + a_dim1], lda, &c_b5, &a[i__ + ( i__ + 1) * a_dim1], lda);
+                        dgemv_("No transpose", &i__2, &i__, &c_b4, &y[i__ + 1 + y_dim1], ldy,
+                               &a[i__ + a_dim1], lda, &c_b5, &a[i__ + (i__ + 1) * a_dim1], lda);
                         i__2 = i__ - 1;
                         i__3 = *n - i__;
-                        dgemv_("Transpose", &i__2, &i__3, &c_b4, &a[(i__ + 1) * a_dim1 + 1], lda, &x[i__ + x_dim1], ldx, &c_b5, &a[ i__ + (i__ + 1) * a_dim1], lda);
+                        dgemv_("Transpose", &i__2, &i__3, &c_b4, &a[(i__ + 1) * a_dim1 + 1], lda,
+                               &x[i__ + x_dim1], ldx, &c_b5, &a[i__ + (i__ + 1) * a_dim1], lda);
                         /* Generate reflection P(i) to annihilate A(i,i+2:n) */
                         i__2 = *n - i__;
                         /* Computing MIN */
                         i__3 = i__ + 2;
-                        dlarfg_(&i__2, &a[i__ + (i__ + 1) * a_dim1], &a[i__ + fla_min( i__3,*n) * a_dim1], lda, &taup[i__]);
+                        dlarfg_(&i__2, &a[i__ + (i__ + 1) * a_dim1],
+                                &a[i__ + fla_min(i__3, *n) * a_dim1], lda, &taup[i__]);
                         e[i__] = a[i__ + (i__ + 1) * a_dim1];
                         a[i__ + (i__ + 1) * a_dim1] = 1.;
                     }
@@ -368,24 +407,37 @@ int fla_dlabrd(integer *m, integer *n, integer *nb, doublereal * a, integer *lda
 #ifdef FLA_OPENMP_MULTITHREADING
                     /* Determine the sub partition range of current thread */
                     FLA_Thread_get_subrange(thread_id, actual_num_threads, i__2, &i__4, &i__5);
-                    #pragma omp barrier
-                    dgemv_("No transpose", &i__4, &i__3, &c_b5, &a[i__5 + i__ + 1 + (i__ + 1) * a_dim1], lda, &a[i__ + (i__ + 1) * a_dim1], lda, &c_b16, &x[i__5 + i__ + 1 + i__ * x_dim1], &c__1);
-                    #pragma omp barrier
+#pragma omp barrier
+                    dgemv_("No transpose", &i__4, &i__3, &c_b5,
+                           &a[i__5 + i__ + 1 + (i__ + 1) * a_dim1], lda,
+                           &a[i__ + (i__ + 1) * a_dim1], lda, &c_b16,
+                           &x[i__5 + i__ + 1 + i__ * x_dim1], &c__1);
+#pragma omp barrier
 #else
-                    dgemv_("No transpose", &i__2, &i__3, &c_b5, &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &a[i__ + (i__ + 1) * a_dim1], lda, &c_b16, &x[i__ + 1 + i__ * x_dim1], &c__1);
+                    dgemv_("No transpose", &i__2, &i__3, &c_b5, &a[i__ + 1 + (i__ + 1) * a_dim1],
+                           lda, &a[i__ + (i__ + 1) * a_dim1], lda, &c_b16,
+                           &x[i__ + 1 + i__ * x_dim1], &c__1);
 #endif
                     if(thread_id == 0)
                     {
                         i__2 = *n - i__;
-                        dgemv_("Transpose", &i__2, &i__, &c_b5, &y[i__ + 1 + y_dim1], ldy, &a[i__ + (i__ + 1) * a_dim1], lda, &c_b16, &x[ i__ * x_dim1 + 1], &c__1);
+                        dgemv_("Transpose", &i__2, &i__, &c_b5, &y[i__ + 1 + y_dim1], ldy,
+                               &a[i__ + (i__ + 1) * a_dim1], lda, &c_b16, &x[i__ * x_dim1 + 1],
+                               &c__1);
                         i__2 = *m - i__;
-                        dgemv_("No transpose", &i__2, &i__, &c_b4, &a[i__ + 1 + a_dim1], lda, &x[i__ * x_dim1 + 1], &c__1, &c_b5, &x[ i__ + 1 + i__ * x_dim1], &c__1);
+                        dgemv_("No transpose", &i__2, &i__, &c_b4, &a[i__ + 1 + a_dim1], lda,
+                               &x[i__ * x_dim1 + 1], &c__1, &c_b5, &x[i__ + 1 + i__ * x_dim1],
+                               &c__1);
                         i__2 = i__ - 1;
                         i__3 = *n - i__;
-                        dgemv_("No transpose", &i__2, &i__3, &c_b5, &a[(i__ + 1) * a_dim1 + 1], lda, &a[i__ + (i__ + 1) * a_dim1], lda, & c_b16, &x[i__ * x_dim1 + 1], &c__1);
+                        dgemv_("No transpose", &i__2, &i__3, &c_b5, &a[(i__ + 1) * a_dim1 + 1], lda,
+                               &a[i__ + (i__ + 1) * a_dim1], lda, &c_b16, &x[i__ * x_dim1 + 1],
+                               &c__1);
                         i__2 = *m - i__;
                         i__3 = i__ - 1;
-                        dgemv_("No transpose", &i__2, &i__3, &c_b4, &x[i__ + 1 + x_dim1], ldx, &x[i__ * x_dim1 + 1], &c__1, &c_b5, &x[ i__ + 1 + i__ * x_dim1], &c__1);
+                        dgemv_("No transpose", &i__2, &i__3, &c_b4, &x[i__ + 1 + x_dim1], ldx,
+                               &x[i__ * x_dim1 + 1], &c__1, &c_b5, &x[i__ + 1 + i__ * x_dim1],
+                               &c__1);
                         i__2 = *m - i__;
                         dscal_(&i__2, &taup[i__], &x[i__ + 1 + i__ * x_dim1], &c__1);
                     }
@@ -399,34 +451,35 @@ int fla_dlabrd(integer *m, integer *n, integer *nb, doublereal * a, integer *lda
         /* Reduce to lower bidiagonal form */
         i__1 = *nb;
 #ifdef FLA_OPENMP_MULTITHREADING
-        #pragma omp parallel num_threads(actual_num_threads) private(i__, i__2, i__3, i__4, i__5, thread_id)
+#pragma omp parallel num_threads(actual_num_threads) private(i__, i__2, i__3, i__4, i__5, thread_id)
         {
             thread_id = omp_get_thread_num();
 #else
         {
             thread_id = 0;
 #endif
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 if(thread_id == 0)
                 {
                     /* Update A(i,i:n) */
                     i__2 = *n - i__ + 1;
                     i__3 = i__ - 1;
-                    dgemv_("No transpose", &i__2, &i__3, &c_b4, &y[i__ + y_dim1], ldy, &a[i__ + a_dim1], lda, &c_b5, &a[i__ + i__ * a_dim1], lda);
+                    dgemv_("No transpose", &i__2, &i__3, &c_b4, &y[i__ + y_dim1], ldy,
+                           &a[i__ + a_dim1], lda, &c_b5, &a[i__ + i__ * a_dim1], lda);
                     i__2 = i__ - 1;
                     i__3 = *n - i__ + 1;
-                    dgemv_("Transpose", &i__2, &i__3, &c_b4, &a[i__ * a_dim1 + 1], lda, &x[i__ + x_dim1], ldx, &c_b5, &a[i__ + i__ * a_dim1], lda);
+                    dgemv_("Transpose", &i__2, &i__3, &c_b4, &a[i__ * a_dim1 + 1], lda,
+                           &x[i__ + x_dim1], ldx, &c_b5, &a[i__ + i__ * a_dim1], lda);
                     /* Generate reflection P(i) to annihilate A(i,i+1:n) */
                     i__2 = *n - i__ + 1;
                     /* Computing MIN */
                     i__3 = i__ + 1;
-                    dlarfg_(&i__2, &a[i__ + i__ * a_dim1], &a[i__ + fla_min(i__3,*n) * a_dim1], lda, &taup[i__]);
+                    dlarfg_(&i__2, &a[i__ + i__ * a_dim1], &a[i__ + fla_min(i__3, *n) * a_dim1],
+                            lda, &taup[i__]);
                     d__[i__] = a[i__ + i__ * a_dim1];
                 }
-                if (i__ < *m)
+                if(i__ < *m)
                 {
                     if(thread_id == 0)
                     {
@@ -438,39 +491,52 @@ int fla_dlabrd(integer *m, integer *n, integer *nb, doublereal * a, integer *lda
 #ifdef FLA_OPENMP_MULTITHREADING
                     /* Determine the sub partition range of current thread */
                     FLA_Thread_get_subrange(thread_id, actual_num_threads, i__2, &i__4, &i__5);
-                    #pragma omp barrier
-                    dgemv_("No transpose", &i__4, &i__3, &c_b5, &a[i__5 + i__ + 1 + i__ * a_dim1], lda, &a[i__ + i__ * a_dim1], lda, &c_b16, & x[i__5 + i__ + 1 + i__ * x_dim1], &c__1);
-                    #pragma omp barrier
+#pragma omp barrier
+                    dgemv_("No transpose", &i__4, &i__3, &c_b5, &a[i__5 + i__ + 1 + i__ * a_dim1],
+                           lda, &a[i__ + i__ * a_dim1], lda, &c_b16,
+                           &x[i__5 + i__ + 1 + i__ * x_dim1], &c__1);
+#pragma omp barrier
 #else
-                    dgemv_("No transpose", &i__2, &i__3, &c_b5, &a[i__ + 1 + i__ * a_dim1], lda, &a[i__ + i__ * a_dim1], lda, &c_b16, & x[i__ + 1 + i__ * x_dim1], &c__1);
+                    dgemv_("No transpose", &i__2, &i__3, &c_b5, &a[i__ + 1 + i__ * a_dim1], lda,
+                           &a[i__ + i__ * a_dim1], lda, &c_b16, &x[i__ + 1 + i__ * x_dim1], &c__1);
 #endif
                     if(thread_id == 0)
                     {
                         i__2 = *n - i__ + 1;
                         i__3 = i__ - 1;
-                        dgemv_("Transpose", &i__2, &i__3, &c_b5, &y[i__ + y_dim1], ldy, &a[i__ + i__ * a_dim1], lda, &c_b16, &x[i__ * x_dim1 + 1], &c__1);
+                        dgemv_("Transpose", &i__2, &i__3, &c_b5, &y[i__ + y_dim1], ldy,
+                               &a[i__ + i__ * a_dim1], lda, &c_b16, &x[i__ * x_dim1 + 1], &c__1);
                         i__2 = *m - i__;
                         i__3 = i__ - 1;
-                        dgemv_("No transpose", &i__2, &i__3, &c_b4, &a[i__ + 1 + a_dim1], lda, &x[i__ * x_dim1 + 1], &c__1, &c_b5, &x[ i__ + 1 + i__ * x_dim1], &c__1);
+                        dgemv_("No transpose", &i__2, &i__3, &c_b4, &a[i__ + 1 + a_dim1], lda,
+                               &x[i__ * x_dim1 + 1], &c__1, &c_b5, &x[i__ + 1 + i__ * x_dim1],
+                               &c__1);
                         i__2 = i__ - 1;
                         i__3 = *n - i__ + 1;
-                        dgemv_("No transpose", &i__2, &i__3, &c_b5, &a[i__ * a_dim1 + 1], lda, &a[i__ + i__ * a_dim1], lda, &c_b16, &x[i__ * x_dim1 + 1], &c__1);
+                        dgemv_("No transpose", &i__2, &i__3, &c_b5, &a[i__ * a_dim1 + 1], lda,
+                               &a[i__ + i__ * a_dim1], lda, &c_b16, &x[i__ * x_dim1 + 1], &c__1);
                         i__2 = *m - i__;
                         i__3 = i__ - 1;
-                        dgemv_("No transpose", &i__2, &i__3, &c_b4, &x[i__ + 1 + x_dim1], ldx, &x[i__ * x_dim1 + 1], &c__1, &c_b5, &x[ i__ + 1 + i__ * x_dim1], &c__1);
+                        dgemv_("No transpose", &i__2, &i__3, &c_b4, &x[i__ + 1 + x_dim1], ldx,
+                               &x[i__ * x_dim1 + 1], &c__1, &c_b5, &x[i__ + 1 + i__ * x_dim1],
+                               &c__1);
                         i__2 = *m - i__;
                         dscal_(&i__2, &taup[i__], &x[i__ + 1 + i__ * x_dim1], &c__1);
                         /* Update A(i+1:m,i) */
                         i__2 = *m - i__;
                         i__3 = i__ - 1;
-                        dgemv_("No transpose", &i__2, &i__3, &c_b4, &a[i__ + 1 + a_dim1], lda, &y[i__ + y_dim1], ldy, &c_b5, &a[i__ + 1 + i__ * a_dim1], &c__1);
+                        dgemv_("No transpose", &i__2, &i__3, &c_b4, &a[i__ + 1 + a_dim1], lda,
+                               &y[i__ + y_dim1], ldy, &c_b5, &a[i__ + 1 + i__ * a_dim1], &c__1);
                         i__2 = *m - i__;
-                        dgemv_("No transpose", &i__2, &i__, &c_b4, &x[i__ + 1 + x_dim1], ldx, &a[i__ * a_dim1 + 1], &c__1, &c_b5, &a[ i__ + 1 + i__ * a_dim1], &c__1);
+                        dgemv_("No transpose", &i__2, &i__, &c_b4, &x[i__ + 1 + x_dim1], ldx,
+                               &a[i__ * a_dim1 + 1], &c__1, &c_b5, &a[i__ + 1 + i__ * a_dim1],
+                               &c__1);
                         /* Generate reflection Q(i) to annihilate A(i+2:m,i) */
                         i__2 = *m - i__;
                         /* Computing MIN */
                         i__3 = i__ + 2;
-                        dlarfg_(&i__2, &a[i__ + 1 + i__ * a_dim1], &a[fla_min(i__3,*m) + i__ * a_dim1], &c__1, &tauq[i__]);
+                        dlarfg_(&i__2, &a[i__ + 1 + i__ * a_dim1],
+                                &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1, &tauq[i__]);
                         e[i__] = a[i__ + 1 + i__ * a_dim1];
                         a[i__ + 1 + i__ * a_dim1] = 1.;
                     }
@@ -480,24 +546,36 @@ int fla_dlabrd(integer *m, integer *n, integer *nb, doublereal * a, integer *lda
 #ifdef FLA_OPENMP_MULTITHREADING
                     /* Determine the sub partition range of current thread */
                     FLA_Thread_get_subrange(thread_id, actual_num_threads, i__3, &i__4, &i__5);
-                    #pragma omp barrier
-                    dgemv_("Transpose", &i__2, &i__4, &c_b5, &a[i__ + 1 + (i__5 + i__ + 1) * a_dim1], lda, &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &y[i__5 + i__ + 1 + i__ * y_dim1], &c__1);
-                    #pragma omp barrier
+#pragma omp barrier
+                    dgemv_("Transpose", &i__2, &i__4, &c_b5,
+                           &a[i__ + 1 + (i__5 + i__ + 1) * a_dim1], lda, &a[i__ + 1 + i__ * a_dim1],
+                           &c__1, &c_b16, &y[i__5 + i__ + 1 + i__ * y_dim1], &c__1);
+#pragma omp barrier
 #else
-                    dgemv_("Transpose", &i__2, &i__3, &c_b5, &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &y[i__ + 1 + i__ * y_dim1], &c__1);
+                    dgemv_("Transpose", &i__2, &i__3, &c_b5, &a[i__ + 1 + (i__ + 1) * a_dim1], lda,
+                           &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &y[i__ + 1 + i__ * y_dim1],
+                           &c__1);
 #endif
                     if(thread_id == 0)
                     {
                         i__2 = *m - i__;
                         i__3 = i__ - 1;
-                        dgemv_("Transpose", &i__2, &i__3, &c_b5, &a[i__ + 1 + a_dim1], lda, &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &y[ i__ * y_dim1 + 1], &c__1);
+                        dgemv_("Transpose", &i__2, &i__3, &c_b5, &a[i__ + 1 + a_dim1], lda,
+                               &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &y[i__ * y_dim1 + 1],
+                               &c__1);
                         i__2 = *n - i__;
                         i__3 = i__ - 1;
-                        dgemv_("No transpose", &i__2, &i__3, &c_b4, &y[i__ + 1 + y_dim1], ldy, &y[i__ * y_dim1 + 1], &c__1, &c_b5, &y[ i__ + 1 + i__ * y_dim1], &c__1);
+                        dgemv_("No transpose", &i__2, &i__3, &c_b4, &y[i__ + 1 + y_dim1], ldy,
+                               &y[i__ * y_dim1 + 1], &c__1, &c_b5, &y[i__ + 1 + i__ * y_dim1],
+                               &c__1);
                         i__2 = *m - i__;
-                        dgemv_("Transpose", &i__2, &i__, &c_b5, &x[i__ + 1 + x_dim1], ldx, &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &y[ i__ * y_dim1 + 1], &c__1);
+                        dgemv_("Transpose", &i__2, &i__, &c_b5, &x[i__ + 1 + x_dim1], ldx,
+                               &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &y[i__ * y_dim1 + 1],
+                               &c__1);
                         i__2 = *n - i__;
-                        dgemv_("Transpose", &i__, &i__2, &c_b4, &a[(i__ + 1) * a_dim1 + 1], lda, &y[i__ * y_dim1 + 1], &c__1, &c_b5, &y[i__ + 1 + i__ * y_dim1], &c__1);
+                        dgemv_("Transpose", &i__, &i__2, &c_b4, &a[(i__ + 1) * a_dim1 + 1], lda,
+                               &y[i__ * y_dim1 + 1], &c__1, &c_b5, &y[i__ + 1 + i__ * y_dim1],
+                               &c__1);
                         i__2 = *n - i__;
                         dscal_(&i__2, &tauq[i__], &y[i__ + 1 + i__ * y_dim1], &c__1);
                     }
@@ -506,7 +584,7 @@ int fla_dlabrd(integer *m, integer *n, integer *nb, doublereal * a, integer *lda
             }
         }
     }
-    return 0;
+    return;
     /* End of DLABRD */
 }
 /* dlabrd_ */

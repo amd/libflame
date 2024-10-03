@@ -16,7 +16,7 @@ FLA_Error FLA_Ttmm_l_blk_var1( FLA_Obj A, fla_ttmm_t* cntl )
           ABL,   ABR,      A10, A11, A12,
                            A20, A21, A22;
 
-  dim_t b;
+  fla_dim_t b;
 
   FLA_Part_2x2( A,    &ATL, &ATR,
                       &ABL, &ABR,     0, 0, FLA_TL );

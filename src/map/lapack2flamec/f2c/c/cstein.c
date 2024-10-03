@@ -1,5 +1,8 @@
-/* ../netlib/cstein.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cstein.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__2 = 2;
 static integer c__1 = 1;
@@ -10,11 +13,17 @@ static integer c_n1 = -1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CSTEIN + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cstein. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cstein.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cstein. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cstein.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cstein. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cstein.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -171,15 +180,18 @@ IBLOCK(i)=1 if eigenvalue W(i) belongs to */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cstein_(integer *n, real *d__, real *e, integer *m, real *w, integer *iblock, integer *isplit, complex *z__, integer *ldz, real *work, integer *iwork, integer *ifail, integer *info)
+void cstein_(integer *n, real *d__, real *e, integer *m, real *w, integer *iblock, integer *isplit,
+             complex *z__, integer *ldz, real *work, integer *iwork, integer *ifail, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cstein inputs: n %lld, m %lld, iblock %lld, isplit %lld, ldz %lld",*n, *m, *iblock, *isplit, *ldz);
+    snprintf(buffer, 256, "cstein inputs: n %lld, m %lld, iblock %lld, isplit %lld, ldz %lld", *n,
+             *m, *iblock, *isplit, *ldz);
 #else
-    snprintf(buffer, 256,"cstein inputs: n %d, m %d, iblock %d, isplit %d, ldz %d",*n, *m, *iblock, *isplit, *ldz);
+    snprintf(buffer, 256, "cstein inputs: n %d, m %d, iblock %d, isplit %d, ldz %d", *n, *m,
+             *iblock, *isplit, *ldz);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -198,20 +210,29 @@ int cstein_(integer *n, real *d__, real *e, integer *m, real *w, integer *iblock
     extern real snrm2_(integer *, real *, integer *);
     integer iseed[4], gpind, iinfo;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *),
+        scopy_(integer *, real *, integer *, real *, integer *);
     real ortol;
     integer indrv1, indrv2, indrv3, indrv4, indrv5;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slagtf_( integer *, real *, real *, real *, real *, real *, real *, integer *, integer *);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
+        slagtf_(integer *, real *, real *, real *, real *, real *, real *, integer *, integer *);
     integer nrmchk;
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    int slagts_(integer *, integer *, real *, real *, real *, real *, integer *, real *, real *, integer *);
+        void
+        slagts_(integer *, integer *, real *, real *, real *, real *, integer *, real *, real *,
+                integer *);
     integer blksiz;
     real onenrm, pertol;
     extern /* Subroutine */
-    int slarnv_(integer *, integer *, integer *, real *);
+        void
+        slarnv_(integer *, integer *, integer *, real *);
     real stpcrt;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -253,77 +274,70 @@ int cstein_(integer *n, real *d__, real *e, integer *m, real *w, integer *iblock
     stpcrt = 0.f;
     onenrm = 0.f;
     ortol = 0.f;
-    gpind= 0;
+    gpind = 0;
     xjm = 0.f;
     i__1 = *m;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         ifail[i__] = 0;
         /* L10: */
     }
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
     }
-    else if (*m < 0 || *m > *n)
+    else if(*m < 0 || *m > *n)
     {
         *info = -4;
     }
-    else if (*ldz < fla_max(1,*n))
+    else if(*ldz < fla_max(1, *n))
     {
         *info = -9;
     }
     else
     {
         i__1 = *m;
-        for (j = 2;
-                j <= i__1;
-                ++j)
+        for(j = 2; j <= i__1; ++j)
         {
-            if (iblock[j] < iblock[j - 1])
+            if(iblock[j] < iblock[j - 1])
             {
                 *info = -6;
                 goto L30;
             }
-            if (iblock[j] == iblock[j - 1] && w[j] < w[j - 1])
+            if(iblock[j] == iblock[j - 1] && w[j] < w[j - 1])
             {
                 *info = -5;
                 goto L30;
             }
             /* L20: */
         }
-L30:
-        ;
+    L30:;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CSTEIN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0 || *m == 0)
+    if(*n == 0 || *m == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    else if (*n == 1)
+    else if(*n == 1)
     {
         i__1 = z_dim1 + 1;
         z__[i__1].r = 1.f;
         z__[i__1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants. */
     eps = slamch_("Precision");
     /* Initialize seed for random number generator SLARNV. */
-    for (i__ = 1;
-            i__ <= 4;
-            ++i__)
+    for(i__ = 1; i__ <= 4; ++i__)
     {
         iseed[i__ - 1] = 1;
         /* L40: */
@@ -337,12 +351,10 @@ L30:
     /* Compute eigenvectors of matrix blocks. */
     j1 = 1;
     i__1 = iblock[*m];
-    for (nblk = 1;
-            nblk <= i__1;
-            ++nblk)
+    for(nblk = 1; nblk <= i__1; ++nblk)
     {
         /* Find starting and ending indices of block nblk. */
-        if (nblk == 1)
+        if(nblk == 1)
         {
             b1 = 1;
         }
@@ -352,7 +364,7 @@ L30:
         }
         bn = isplit[nblk];
         blksiz = bn - b1 + 1;
-        if (blksiz == 1)
+        if(blksiz == 1)
         {
             goto L60;
         }
@@ -362,29 +374,26 @@ L30:
         /* Computing MAX */
         r__3 = onenrm;
         r__4 = (r__1 = d__[bn], f2c_abs(r__1)) + (r__2 = e[bn - 1], f2c_abs(r__2)); // , expr subst
-        onenrm = fla_max(r__3,r__4);
+        onenrm = fla_max(r__3, r__4);
         i__2 = bn - 1;
-        for (i__ = b1 + 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = b1 + 1; i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             r__4 = onenrm;
-            r__5 = (r__1 = d__[i__], f2c_abs(r__1)) + (r__2 = e[ i__ - 1], f2c_abs(r__2)) + (r__3 = e[i__], f2c_abs(r__3)); // , expr subst
-            onenrm = fla_max(r__4,r__5);
+            r__5 = (r__1 = d__[i__], f2c_abs(r__1)) + (r__2 = e[i__ - 1], f2c_abs(r__2))
+                   + (r__3 = e[i__], f2c_abs(r__3)); // , expr subst
+            onenrm = fla_max(r__4, r__5);
             /* L50: */
         }
         ortol = onenrm * .001f;
         stpcrt = sqrt(.1f / blksiz);
         /* Loop through eigenvalues of block nblk. */
-L60:
+    L60:
         jblk = 0;
         i__2 = *m;
-        for (j = j1;
-                j <= i__2;
-                ++j)
+        for(j = j1; j <= i__2; ++j)
         {
-            if (iblock[j] != nblk)
+            if(iblock[j] != nblk)
             {
                 j1 = j;
                 goto L180;
@@ -392,19 +401,19 @@ L60:
             ++jblk;
             xj = w[j];
             /* Skip all the work if the block size is one. */
-            if (blksiz == 1)
+            if(blksiz == 1)
             {
                 work[indrv1 + 1] = 1.f;
                 goto L140;
             }
             /* If eigenvalues j and j-1 are too close, add a relatively */
             /* small perturbation. */
-            if (jblk > 1)
+            if(jblk > 1)
             {
                 eps1 = (r__1 = eps * xj, f2c_abs(r__1));
                 pertol = eps1 * 10.f;
                 sep = xj - xjm;
-                if (sep < pertol)
+                if(sep < pertol)
                 {
                     xj = xjm + pertol;
                 }
@@ -421,11 +430,12 @@ L60:
             scopy_(&i__3, &e[b1], &c__1, &work[indrv3 + 1], &c__1);
             /* Compute LU factors with partial pivoting ( PT = LU ) */
             tol = 0.f;
-            slagtf_(&blksiz, &work[indrv4 + 1], &xj, &work[indrv2 + 2], &work[ indrv3 + 1], &tol, &work[indrv5 + 1], &iwork[1], &iinfo);
+            slagtf_(&blksiz, &work[indrv4 + 1], &xj, &work[indrv2 + 2], &work[indrv3 + 1], &tol,
+                    &work[indrv5 + 1], &iwork[1], &iinfo);
             /* Update iteration count. */
-L70:
+        L70:
             ++its;
-            if (its > 5)
+            if(its > 5)
             {
                 goto L120;
             }
@@ -434,41 +444,37 @@ L70:
             /* Computing MAX */
             r__3 = eps;
             r__4 = (r__1 = work[indrv4 + blksiz], f2c_abs(r__1)); // , expr subst
-            scl = blksiz * onenrm * fla_max(r__3,r__4) / (r__2 = work[indrv1 + jmax], f2c_abs(r__2));
+            scl = blksiz * onenrm * fla_max(r__3, r__4)
+                  / (r__2 = work[indrv1 + jmax], f2c_abs(r__2));
             sscal_(&blksiz, &scl, &work[indrv1 + 1], &c__1);
             /* Solve the system LU = Pb. */
-            slagts_(&c_n1, &blksiz, &work[indrv4 + 1], &work[indrv2 + 2], & work[indrv3 + 1], &work[indrv5 + 1], &iwork[1], &work[ indrv1 + 1], &tol, &iinfo);
+            slagts_(&c_n1, &blksiz, &work[indrv4 + 1], &work[indrv2 + 2], &work[indrv3 + 1],
+                    &work[indrv5 + 1], &iwork[1], &work[indrv1 + 1], &tol, &iinfo);
             /* Reorthogonalize by modified Gram-Schmidt if eigenvalues are */
             /* close enough. */
-            if (jblk == 1)
+            if(jblk == 1)
             {
                 goto L110;
             }
-            if ((r__1 = xj - xjm, f2c_abs(r__1)) > ortol)
+            if((r__1 = xj - xjm, f2c_abs(r__1)) > ortol)
             {
                 gpind = j;
             }
-            if (gpind != j)
+            if(gpind != j)
             {
                 i__3 = j - 1;
-                for (i__ = gpind;
-                        i__ <= i__3;
-                        ++i__)
+                for(i__ = gpind; i__ <= i__3; ++i__)
                 {
                     ctr = 0.f;
                     i__4 = blksiz;
-                    for (jr = 1;
-                            jr <= i__4;
-                            ++jr)
+                    for(jr = 1; jr <= i__4; ++jr)
                     {
                         i__5 = b1 - 1 + jr + i__ * z_dim1;
                         ctr += work[indrv1 + jr] * z__[i__5].r;
                         /* L80: */
                     }
                     i__4 = blksiz;
-                    for (jr = 1;
-                            jr <= i__4;
-                            ++jr)
+                    for(jr = 1; jr <= i__4; ++jr)
                     {
                         i__5 = b1 - 1 + jr + i__ * z_dim1;
                         work[indrv1 + jr] -= ctr * z__[i__5].r;
@@ -478,40 +484,38 @@ L70:
                 }
             }
             /* Check the infinity norm of the iterate. */
-L110:
+        L110:
             jmax = isamax_(&blksiz, &work[indrv1 + 1], &c__1);
             nrm = (r__1 = work[indrv1 + jmax], f2c_abs(r__1));
             /* Continue for additional iterations after norm reaches */
             /* stopping criterion. */
-            if (nrm < stpcrt)
+            if(nrm < stpcrt)
             {
                 goto L70;
             }
             ++nrmchk;
-            if (nrmchk < 3)
+            if(nrmchk < 3)
             {
                 goto L70;
             }
             goto L130;
             /* If stopping criterion was not satisfied, update info and */
             /* store eigenvector number in array ifail. */
-L120:
+        L120:
             ++(*info);
             ifail[*info] = j;
             /* Accept iterate as jth eigenvector. */
-L130:
+        L130:
             scl = 1.f / snrm2_(&blksiz, &work[indrv1 + 1], &c__1);
             jmax = isamax_(&blksiz, &work[indrv1 + 1], &c__1);
-            if (work[indrv1 + jmax] < 0.f)
+            if(work[indrv1 + jmax] < 0.f)
             {
                 scl = -scl;
             }
             sscal_(&blksiz, &scl, &work[indrv1 + 1], &c__1);
-L140:
+        L140:
             i__3 = *n;
-            for (i__ = 1;
-                    i__ <= i__3;
-                    ++i__)
+            for(i__ = 1; i__ <= i__3; ++i__)
             {
                 i__4 = i__ + j * z_dim1;
                 z__[i__4].r = 0.f;
@@ -519,9 +523,7 @@ L140:
                 /* L150: */
             }
             i__3 = blksiz;
-            for (i__ = 1;
-                    i__ <= i__3;
-                    ++i__)
+            for(i__ = 1; i__ <= i__3; ++i__)
             {
                 i__4 = b1 + i__ - 1 + j * z_dim1;
                 i__5 = indrv1 + i__;
@@ -536,11 +538,10 @@ L140:
             xjm = xj;
             /* L170: */
         }
-L180:
-        ;
+    L180:;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSTEIN */
 }
 /* cstein_ */

@@ -1,16 +1,25 @@
-/* ../netlib/zla_gbrpvgrw.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zla_gbrpvgrw.f -- translated by f2c (version 20100827). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b ZLA_GBRPVGRW computes the reciprocal pivot growth factor norm(A)/norm(U) for a general banded m atrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLA_GBRPVGRW + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zla_gbr pvgrw.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zla_gbr
+ * pvgrw.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zla_gbr pvgrw.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zla_gbr
+ * pvgrw.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zla_gbr pvgrw.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zla_gbr
+ * pvgrw.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -101,10 +110,13 @@
 /* > \date September 2012 */
 /* > \ingroup complex16GBcomputational */
 /* ===================================================================== */
-doublereal zla_gbrpvgrw_(integer *n, integer *kl, integer *ku, integer * ncols, doublecomplex *ab, integer *ldab, doublecomplex *afb, integer * ldafb)
+doublereal zla_gbrpvgrw_(integer *n, integer *kl, integer *ku, integer *ncols, doublecomplex *ab,
+                         integer *ldab, doublecomplex *afb, integer *ldafb)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zla_gbrpvgrw inputs: n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ncols %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS "", *n, *kl, *ku, *ncols, *ldab, *ldafb);
+    AOCL_DTL_SNPRINTF("zla_gbrpvgrw inputs: n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
+                      ", ncols %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS "",
+                      *n, *kl, *ku, *ncols, *ldab, *ldafb);
     /* System generated locals */
     integer ab_dim1, ab_offset, afb_dim1, afb_offset, i__1, i__2, i__3, i__4;
     doublereal ret_val, d__1, d__2, d__3;
@@ -142,9 +154,7 @@ doublereal zla_gbrpvgrw_(integer *n, integer *kl, integer *ku, integer * ncols, 
     rpvgrw = 1.;
     kd = *ku + 1;
     i__1 = *ncols;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         amax = 0.;
         umax = 0.;
@@ -152,33 +162,31 @@ doublereal zla_gbrpvgrw_(integer *n, integer *kl, integer *ku, integer * ncols, 
         i__2 = j - *ku;
         /* Computing MIN */
         i__4 = j + *kl;
-        i__3 = fla_min(i__4,*n);
-        for (i__ = fla_max(i__2,1);
-                i__ <= i__3;
-                ++i__)
+        i__3 = fla_min(i__4, *n);
+        for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
         {
             /* Computing MAX */
             i__2 = kd + i__ - j + j * ab_dim1;
-            d__3 = (d__1 = ab[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&ab[kd + i__ - j + j * ab_dim1]), f2c_dabs(d__2));
-            amax = fla_max(d__3,amax);
+            d__3 = (d__1 = ab[i__2].r, f2c_dabs(d__1))
+                   + (d__2 = d_imag(&ab[kd + i__ - j + j * ab_dim1]), f2c_dabs(d__2));
+            amax = fla_max(d__3, amax);
         }
         /* Computing MAX */
         i__3 = j - *ku;
         i__2 = j;
-        for (i__ = fla_max(i__3,1);
-                i__ <= i__2;
-                ++i__)
+        for(i__ = fla_max(i__3, 1); i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             i__3 = kd + i__ - j + j * afb_dim1;
-            d__3 = (d__1 = afb[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&afb[kd + i__ - j + j * afb_dim1]), f2c_dabs(d__2));
-            umax = fla_max(d__3,umax);
+            d__3 = (d__1 = afb[i__3].r, f2c_dabs(d__1))
+                   + (d__2 = d_imag(&afb[kd + i__ - j + j * afb_dim1]), f2c_dabs(d__2));
+            umax = fla_max(d__3, umax);
         }
-        if (umax != 0.)
+        if(umax != 0.)
         {
             /* Computing MIN */
             d__1 = amax / umax;
-            rpvgrw = fla_min(d__1,rpvgrw);
+            rpvgrw = fla_min(d__1, rpvgrw);
         }
     }
     ret_val = rpvgrw;

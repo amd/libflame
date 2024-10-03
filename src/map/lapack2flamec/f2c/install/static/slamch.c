@@ -1,11 +1,12 @@
 #include "FLAME.h"
+
 #include <float.h>
 
 /* Table of constant values */
 
-static TLS_CLASS_SPEC const real half  = 0.5f;
-static TLS_CLASS_SPEC const real one   = 1.f;
-static TLS_CLASS_SPEC const real zero  = 0.f;
+static TLS_CLASS_SPEC const real half = 0.5f;
+static TLS_CLASS_SPEC const real one = 1.f;
+static TLS_CLASS_SPEC const real zero = 0.f;
 
 real slamch_(char *cmach)
 {
@@ -16,10 +17,10 @@ real slamch_(char *cmach)
     real ret_val;
 
     /* Local variables */
-    static TLS_CLASS_SPEC real  eps, sfmin, base, prec, t, rnd, emin, rmin, emax, rmax;
+    static TLS_CLASS_SPEC real eps, sfmin, base, prec, t, rnd, emin, rmin, emax, rmax;
     real rmach, small_val;
 
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
 
     /*  Purpose */
     /*  ======= */
@@ -59,7 +60,7 @@ real slamch_(char *cmach)
     rmach = 0.;
     /* Assume rounding, not chopping. Always. -- This is a comment from LAPACK.
      */
-    if (first)
+    if(first)
     {
         /* flt_ROUNDS specification
         -1 undetermined
@@ -68,7 +69,7 @@ real slamch_(char *cmach)
          2 toward positive infinity
          3 toward negative infinity
             */
-        if (FLT_ROUNDS == 1)
+        if(FLT_ROUNDS == 1)
         {
             rnd = one;
             eps = FLT_EPSILON * half;
@@ -78,61 +79,61 @@ real slamch_(char *cmach)
             rnd = zero;
             eps = FLT_EPSILON;
         }
-        base  = FLT_RADIX;
-        prec  = eps * base;
+        base = FLT_RADIX;
+        prec = eps * base;
         sfmin = FLT_MIN;
         small_val = one / FLT_MAX;
-        if ( small_val >= sfmin)
+        if(small_val >= sfmin)
             sfmin = small_val * (one + eps);
 
-		// For t, we need the number of base-2 digits, not base-10 digits.
-		// Here, we hardcode the value obtained from netlib LAPACK.
-        //t    = FLT_DIG;
-        //t    = 24;
-        t    = FLT_MANT_DIG;
+        // For t, we need the number of base-2 digits, not base-10 digits.
+        // Here, we hardcode the value obtained from netlib LAPACK.
+        // t    = FLT_DIG;
+        // t    = 24;
+        t = FLT_MANT_DIG;
         emin = FLT_MIN_EXP;
         emax = FLT_MAX_EXP;
         rmin = FLT_MIN;
         rmax = FLT_MAX;
     }
 
-    if (lsame_(cmach, "E"))
+    if(lsame_(cmach, "E", 1, 1))
     {
         rmach = eps;
     }
-    else if (lsame_(cmach, "S"))
+    else if(lsame_(cmach, "S", 1, 1))
     {
         rmach = sfmin;
     }
-    else if (lsame_(cmach, "B"))
+    else if(lsame_(cmach, "B", 1, 1))
     {
         rmach = base;
     }
-    else if (lsame_(cmach, "P"))
+    else if(lsame_(cmach, "P", 1, 1))
     {
         rmach = prec;
     }
-    else if (lsame_(cmach, "N"))
+    else if(lsame_(cmach, "N", 1, 1))
     {
         rmach = t;
     }
-    else if (lsame_(cmach, "R"))
+    else if(lsame_(cmach, "R", 1, 1))
     {
         rmach = rnd;
     }
-    else if (lsame_(cmach, "M"))
+    else if(lsame_(cmach, "M", 1, 1))
     {
         rmach = emin;
     }
-    else if (lsame_(cmach, "U"))
+    else if(lsame_(cmach, "U", 1, 1))
     {
         rmach = rmin;
     }
-    else if (lsame_(cmach, "L"))
+    else if(lsame_(cmach, "L", 1, 1))
     {
         rmach = emax;
     }
-    else if (lsame_(cmach, "O"))
+    else if(lsame_(cmach, "O", 1, 1))
     {
         rmach = rmax;
     }
@@ -147,7 +148,6 @@ real slamc3_(real *a, real *b)
 {
     /* System generated locals */
     real ret_val;
-
 
     /*  -- LAPACK auxiliary routine (version 3.4.0) -- */
     /*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
@@ -181,4 +181,3 @@ real slamc3_(real *a, real *b)
     /*     End of SLAMC3 */
 
 } /* slamc3_ */
-

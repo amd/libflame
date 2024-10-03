@@ -1,5 +1,8 @@
-/* ../netlib/ssterf.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ssterf.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__0 = 0;
 static integer c__1 = 1;
@@ -10,11 +13,17 @@ static real c_b32 = 1.f;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SSTERF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssterf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssterf.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssterf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssterf.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssterf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssterf.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -77,12 +86,12 @@ if INFO = i, then i */
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int ssterf_(integer *n, real *d__, real *e, integer *info)
+void ssterf_(integer *n, real *d__, real *e, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"ssterf inputs: n %" FLA_IS "",*n);
+    snprintf(buffer, 256, "ssterf inputs: n %" FLA_IS "", *n);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -100,7 +109,8 @@ int ssterf_(integer *n, real *d__, real *e, integer *info)
     real eps2, oldc;
     integer lend, jtot;
     extern /* Subroutine */
-    int slae2_(real *, real *, real *, real *, real *) ;
+        void
+        slae2_(real *, real *, real *, real *, real *);
     real gamma, alpha, sigma, anorm;
     extern real slapy2_(real *, real *);
     integer iscale;
@@ -108,17 +118,21 @@ int ssterf_(integer *n, real *d__, real *e, integer *info)
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real safmax;
     extern /* Subroutine */
-    int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+        void
+        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
+                integer *, integer *);
     integer lendsv;
     real ssfmin;
     integer nmaxit;
     real ssfmax;
     extern real slanst_(char *, integer *, real *, real *);
     extern /* Subroutine */
-    int slasrt_(char *, integer *, real *, integer *);
+        void
+        slasrt_(char *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -146,18 +160,18 @@ int ssterf_(integer *n, real *d__, real *e, integer *info)
     /* Function Body */
     *info = 0;
     /* Quick return if possible */
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
         i__1 = -(*info);
         xerbla_("SSTERF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (*n <= 1)
+    if(*n <= 1)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Determine the unit roundoff for this environment. */
     eps = slamch_("E");
@@ -177,20 +191,19 @@ int ssterf_(integer *n, real *d__, real *e, integer *info)
     /* element is smaller. */
     l1 = 1;
 L10:
-    if (l1 > *n)
+    if(l1 > *n)
     {
         goto L170;
     }
-    if (l1 > 1)
+    if(l1 > 1)
     {
         e[l1 - 1] = 0.f;
     }
     i__1 = *n - 1;
-    for (m = l1;
-            m <= i__1;
-            ++m)
+    for(m = l1; m <= i__1; ++m)
     {
-        if ((r__3 = e[m], f2c_abs(r__3)) <= sqrt((r__1 = d__[m], f2c_abs(r__1))) * sqrt((r__2 = d__[m + 1], f2c_abs(r__2))) * eps)
+        if((r__3 = e[m], f2c_abs(r__3))
+           <= sqrt((r__1 = d__[m], f2c_abs(r__1))) * sqrt((r__2 = d__[m + 1], f2c_abs(r__2))) * eps)
         {
             e[m] = 0.f;
             goto L30;
@@ -204,7 +217,7 @@ L30:
     lend = m;
     lendsv = lend;
     l1 = m + 1;
-    if (lend == l)
+    if(lend == l)
     {
         goto L10;
     }
@@ -212,11 +225,11 @@ L30:
     i__1 = lend - l + 1;
     anorm = slanst_("M", &i__1, &d__[l], &e[l]);
     iscale = 0;
-    if (anorm == 0.f)
+    if(anorm == 0.f)
     {
         goto L10;
     }
-    if (anorm > ssfmax)
+    if(anorm > ssfmax)
     {
         iscale = 1;
         i__1 = lend - l + 1;
@@ -224,7 +237,7 @@ L30:
         i__1 = lend - l;
         slascl_("G", &c__0, &c__0, &anorm, &ssfmax, &i__1, &c__1, &e[l], n, info);
     }
-    else if (anorm < ssfmin)
+    else if(anorm < ssfmin)
     {
         iscale = 2;
         i__1 = lend - l + 1;
@@ -233,9 +246,7 @@ L30:
         slascl_("G", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &e[l], n, info);
     }
     i__1 = lend - 1;
-    for (i__ = l;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = l; i__ <= i__1; ++i__)
     {
         /* Computing 2nd power */
         r__1 = e[i__];
@@ -243,24 +254,23 @@ L30:
         /* L40: */
     }
     /* Choose between QL and QR iteration */
-    if ((r__1 = d__[lend], f2c_abs(r__1)) < (r__2 = d__[l], f2c_abs(r__2)))
+    if((r__1 = d__[lend], f2c_abs(r__1)) < (r__2 = d__[l], f2c_abs(r__2)))
     {
         lend = lsv;
         l = lendsv;
     }
-    if (lend >= l)
+    if(lend >= l)
     {
         /* QL Iteration */
         /* Look for small subdiagonal element. */
-L50:
-        if (l != lend)
+    L50:
+        if(l != lend)
         {
             i__1 = lend - 1;
-            for (m = l;
-                    m <= i__1;
-                    ++m)
+            for(m = l; m <= i__1; ++m)
             {
-                if ((r__2 = e[m], f2c_abs(r__2)) <= eps2 * (r__1 = d__[m] * d__[m + 1], f2c_abs(r__1)))
+                if((r__2 = e[m], f2c_abs(r__2))
+                   <= eps2 * (r__1 = d__[m] * d__[m + 1], f2c_abs(r__1)))
                 {
                     goto L70;
                 }
@@ -268,19 +278,19 @@ L50:
             }
         }
         m = lend;
-L70:
-        if (m < lend)
+    L70:
+        if(m < lend)
         {
             e[m] = 0.f;
         }
         p = d__[l];
-        if (m == l)
+        if(m == l)
         {
             goto L90;
         }
         /* If remaining matrix is 2 by 2, use SLAE2 to compute its */
         /* eigenvalues. */
-        if (m == l + 1)
+        if(m == l + 1)
         {
             rte = sqrt(e[l]);
             slae2_(&d__[l], &rte, &d__[l + 1], &rt1, &rt2);
@@ -288,13 +298,13 @@ L70:
             d__[l + 1] = rt2;
             e[l] = 0.f;
             l += 2;
-            if (l <= lend)
+            if(l <= lend)
             {
                 goto L50;
             }
             goto L150;
         }
-        if (jtot == nmaxit)
+        if(jtot == nmaxit)
         {
             goto L150;
         }
@@ -310,13 +320,11 @@ L70:
         p = gamma * gamma;
         /* Inner loop */
         i__1 = l;
-        for (i__ = m - 1;
-                i__ >= i__1;
-                --i__)
+        for(i__ = m - 1; i__ >= i__1; --i__)
         {
             bb = e[i__];
             r__ = p + bb;
-            if (i__ != m - 1)
+            if(i__ != m - 1)
             {
                 e[i__ + 1] = s * r__;
             }
@@ -327,7 +335,7 @@ L70:
             alpha = d__[i__];
             gamma = c__ * (alpha - sigma) - s * oldgam;
             d__[i__ + 1] = oldgam + (alpha - gamma);
-            if (c__ != 0.f)
+            if(c__ != 0.f)
             {
                 p = gamma * gamma / c__;
             }
@@ -341,10 +349,10 @@ L70:
         d__[l] = sigma + gamma;
         goto L50;
         /* Eigenvalue found. */
-L90:
+    L90:
         d__[l] = p;
         ++l;
-        if (l <= lend)
+        if(l <= lend)
         {
             goto L50;
         }
@@ -354,32 +362,31 @@ L90:
     {
         /* QR Iteration */
         /* Look for small superdiagonal element. */
-L100:
+    L100:
         i__1 = lend + 1;
-        for (m = l;
-                m >= i__1;
-                --m)
+        for(m = l; m >= i__1; --m)
         {
-            if ((r__2 = e[m - 1], f2c_abs(r__2)) <= eps2 * (r__1 = d__[m] * d__[m - 1], f2c_abs(r__1)))
+            if((r__2 = e[m - 1], f2c_abs(r__2))
+               <= eps2 * (r__1 = d__[m] * d__[m - 1], f2c_abs(r__1)))
             {
                 goto L120;
             }
             /* L110: */
         }
         m = lend;
-L120:
-        if (m > lend)
+    L120:
+        if(m > lend)
         {
             e[m - 1] = 0.f;
         }
         p = d__[l];
-        if (m == l)
+        if(m == l)
         {
             goto L140;
         }
         /* If remaining matrix is 2 by 2, use SLAE2 to compute its */
         /* eigenvalues. */
-        if (m == l - 1)
+        if(m == l - 1)
         {
             rte = sqrt(e[l - 1]);
             slae2_(&d__[l], &rte, &d__[l - 1], &rt1, &rt2);
@@ -387,13 +394,13 @@ L120:
             d__[l - 1] = rt2;
             e[l - 1] = 0.f;
             l += -2;
-            if (l >= lend)
+            if(l >= lend)
             {
                 goto L100;
             }
             goto L150;
         }
-        if (jtot == nmaxit)
+        if(jtot == nmaxit)
         {
             goto L150;
         }
@@ -409,13 +416,11 @@ L120:
         p = gamma * gamma;
         /* Inner loop */
         i__1 = l - 1;
-        for (i__ = m;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = m; i__ <= i__1; ++i__)
         {
             bb = e[i__];
             r__ = p + bb;
-            if (i__ != m)
+            if(i__ != m)
             {
                 e[i__ - 1] = s * r__;
             }
@@ -426,7 +431,7 @@ L120:
             alpha = d__[i__ + 1];
             gamma = c__ * (alpha - sigma) - s * oldgam;
             d__[i__] = oldgam + (alpha - gamma);
-            if (c__ != 0.f)
+            if(c__ != 0.f)
             {
                 p = gamma * gamma / c__;
             }
@@ -440,10 +445,10 @@ L120:
         d__[l] = sigma + gamma;
         goto L100;
         /* Eigenvalue found. */
-L140:
+    L140:
         d__[l] = p;
         --l;
-        if (l >= lend)
+        if(l >= lend)
         {
             goto L100;
         }
@@ -451,28 +456,26 @@ L140:
     }
     /* Undo scaling if necessary */
 L150:
-    if (iscale == 1)
+    if(iscale == 1)
     {
         i__1 = lendsv - lsv + 1;
         slascl_("G", &c__0, &c__0, &ssfmax, &anorm, &i__1, &c__1, &d__[lsv], n, info);
     }
-    if (iscale == 2)
+    if(iscale == 2)
     {
         i__1 = lendsv - lsv + 1;
         slascl_("G", &c__0, &c__0, &ssfmin, &anorm, &i__1, &c__1, &d__[lsv], n, info);
     }
     /* Check for no convergence to an eigenvalue after a total */
     /* of N*MAXIT iterations. */
-    if (jtot < nmaxit)
+    if(jtot < nmaxit)
     {
         goto L10;
     }
     i__1 = *n - 1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if (e[i__] != 0.f)
+        if(e[i__] != 0.f)
         {
             ++(*info);
         }
@@ -484,8 +487,7 @@ L170:
     slasrt_("I", n, &d__[1], info);
 L180:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSTERF */
 }
 /* ssterf_ */
-

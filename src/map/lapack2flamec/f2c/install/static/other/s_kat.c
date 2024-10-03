@@ -1,6 +1,5 @@
 #include "FLA_f2c.h"
 
-
 #ifdef FLA_ENABLE_YET_LAPACK2FLAME
 
 int s_kat(char *lp, char *rpp[], integer rnp[], integer *np)

@@ -13,7 +13,7 @@
 FLA_Error FLA_Repart_2x1_to_3x1_check( FLA_Obj AT,  FLA_Obj *A0,
                                                     FLA_Obj *A1,
                                        FLA_Obj AB,  FLA_Obj *A2,
-                                       dim_t   mb,  FLA_Side side )
+                                       fla_dim_t   mb,  FLA_Side side )
 {
   FLA_Error e_val;
 

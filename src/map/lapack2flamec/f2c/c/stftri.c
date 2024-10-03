@@ -1,5 +1,8 @@
-/* ../netlib/stftri.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/stftri.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b13 = -1.f;
 static real c_b18 = 1.f;
@@ -9,11 +12,17 @@ static real c_b18 = 1.f;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download STFTRI + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stftri. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stftri.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stftri. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stftri.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stftri. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stftri.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -42,7 +51,7 @@ static real c_b18 = 1.f;
 /* > \verbatim */
 /* > TRANSR is CHARACTER*1 */
 /* > = 'N': The Normal TRANSR of RFP A is stored;
-*/
+ */
 /* > = 'T': The Transpose TRANSR of RFP A is stored. */
 /* > \endverbatim */
 /* > */
@@ -50,7 +59,7 @@ static real c_b18 = 1.f;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': A is upper triangular;
-*/
+ */
 /* > = 'L': A is lower triangular. */
 /* > \endverbatim */
 /* > */
@@ -58,7 +67,7 @@ static real c_b18 = 1.f;
 /* > \verbatim */
 /* > DIAG is CHARACTER*1 */
 /* > = 'N': A is non-unit triangular;
-*/
+ */
 /* > = 'U': A is unit triangular. */
 /* > \endverbatim */
 /* > */
@@ -71,7 +80,7 @@ static real c_b18 = 1.f;
 /* > \param[in,out] A */
 /* > \verbatim */
 /* > A is REAL array, dimension (NT);
-*/
+ */
 /* > NT=N*(N+1)/2. On entry, the triangular factor of a Hermitian */
 /* > Positive Definite matrix A in RFP format. RFP format is */
 /* > described by TRANSR, UPLO, and N as follows: If TRANSR = 'N' */
@@ -197,20 +206,24 @@ If UPLO = 'L' the RFP A contains the nt */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer *info)
+void stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer *info)
 {
     /* System generated locals */
     integer i__1, i__2;
     /* Local variables */
     integer k, n1, n2;
     logical normaltransr;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
-    int strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
+               real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     extern /* Subroutine */
-    int strtri_(char *, char *, integer *, real *, integer *, integer *);
+        void
+        strtri_(char *, char *, integer *, real *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -233,38 +246,38 @@ int stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer *
     /* .. Executable Statements .. */
     /* Test the input parameters. */
     *info = 0;
-    normaltransr = lsame_(transr, "N");
-    lower = lsame_(uplo, "L");
-    if (! normaltransr && ! lsame_(transr, "T"))
+    normaltransr = lsame_(transr, "N", 1, 1);
+    lower = lsame_(uplo, "L", 1, 1);
+    if(!normaltransr && !lsame_(transr, "T", 1, 1))
     {
         *info = -1;
     }
-    else if (! lower && ! lsame_(uplo, "U"))
+    else if(!lower && !lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }
-    else if (! lsame_(diag, "N") && ! lsame_(diag, "U"))
+    else if(!lsame_(diag, "N", 1, 1) && !lsame_(diag, "U", 1, 1))
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("STFTRI", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
-        return 0;
+        return;
     }
     /* If N is odd, set NISODD = .TRUE. */
     /* If N is even, set K = N/2 and NISODD = .FALSE. */
-    if (*n % 2 == 0)
+    if(*n % 2 == 0)
     {
         k = *n / 2;
         nisodd = FALSE_;
@@ -274,7 +287,7 @@ int stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer *
         nisodd = TRUE_;
     }
     /* Set N1 and N2 depending on LOWER */
-    if (lower)
+    if(lower)
     {
         n2 = *n / 2;
         n1 = *n - n2;
@@ -285,53 +298,53 @@ int stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer *
         n2 = *n - n1;
     }
     /* start execution: there are eight cases */
-    if (nisodd)
+    if(nisodd)
     {
         /* N is odd */
-        if (normaltransr)
+        if(normaltransr)
         {
             /* N is odd and TRANSR = 'N' */
-            if (lower)
+            if(lower)
             {
                 /* SRPA for LOWER, NORMAL and N is odd ( a(0:n-1,0:n1-1) ) */
                 /* T1 -> a(0,0), T2 -> a(0,1), S -> a(n1,0) */
                 /* T1 -> a(0), T2 -> a(n), S -> a(n1) */
                 strtri_("L", diag, &n1, a, n, info);
-                if (*info > 0)
+                if(*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 strmm_("R", "L", "N", diag, &n2, &n1, &c_b13, a, n, &a[n1], n);
-                strtri_("U", diag, &n2, &a[*n], n, info) ;
-                if (*info > 0)
+                strtri_("U", diag, &n2, &a[*n], n, info);
+                if(*info > 0)
                 {
                     *info += n1;
                 }
-                if (*info > 0)
+                if(*info > 0)
                 {
-                    return 0;
+                    return;
                 }
-                strmm_("L", "U", "T", diag, &n2, &n1, &c_b18, &a[*n], n, &a[ n1], n);
+                strmm_("L", "U", "T", diag, &n2, &n1, &c_b18, &a[*n], n, &a[n1], n);
             }
             else
             {
                 /* SRPA for UPPER, NORMAL and N is odd ( a(0:n-1,0:n2-1) */
                 /* T1 -> a(n1+1,0), T2 -> a(n1,0), S -> a(0,0) */
                 /* T1 -> a(n2), T2 -> a(n1), S -> a(0) */
-                strtri_("L", diag, &n1, &a[n2], n, info) ;
-                if (*info > 0)
+                strtri_("L", diag, &n1, &a[n2], n, info);
+                if(*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 strmm_("L", "L", "T", diag, &n1, &n2, &c_b13, &a[n2], n, a, n);
-                strtri_("U", diag, &n2, &a[n1], n, info) ;
-                if (*info > 0)
+                strtri_("U", diag, &n2, &a[n1], n, info);
+                if(*info > 0)
                 {
                     *info += n1;
                 }
-                if (*info > 0)
+                if(*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 strmm_("R", "U", "N", diag, &n1, &n2, &c_b18, &a[n1], n, a, n);
             }
@@ -339,83 +352,83 @@ int stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer *
         else
         {
             /* N is odd and TRANSR = 'T' */
-            if (lower)
+            if(lower)
             {
                 /* SRPA for LOWER, TRANSPOSE and N is odd */
                 /* T1 -> a(0), T2 -> a(1), S -> a(0+n1*n1) */
                 strtri_("U", diag, &n1, a, &n1, info);
-                if (*info > 0)
+                if(*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 strmm_("L", "U", "N", diag, &n1, &n2, &c_b13, a, &n1, &a[n1 * n1], &n1);
                 strtri_("L", diag, &n2, &a[1], &n1, info);
-                if (*info > 0)
+                if(*info > 0)
                 {
                     *info += n1;
                 }
-                if (*info > 0)
+                if(*info > 0)
                 {
-                    return 0;
+                    return;
                 }
-                strmm_("R", "L", "T", diag, &n1, &n2, &c_b18, &a[1], &n1, &a[ n1 * n1], &n1);
+                strmm_("R", "L", "T", diag, &n1, &n2, &c_b18, &a[1], &n1, &a[n1 * n1], &n1);
             }
             else
             {
                 /* SRPA for UPPER, TRANSPOSE and N is odd */
                 /* T1 -> a(0+n2*n2), T2 -> a(0+n1*n2), S -> a(0) */
                 strtri_("U", diag, &n1, &a[n2 * n2], &n2, info);
-                if (*info > 0)
+                if(*info > 0)
                 {
-                    return 0;
+                    return;
                 }
-                strmm_("R", "U", "T", diag, &n2, &n1, &c_b13, &a[n2 * n2], & n2, a, &n2);
+                strmm_("R", "U", "T", diag, &n2, &n1, &c_b13, &a[n2 * n2], &n2, a, &n2);
                 strtri_("L", diag, &n2, &a[n1 * n2], &n2, info);
-                if (*info > 0)
+                if(*info > 0)
                 {
                     *info += n1;
                 }
-                if (*info > 0)
+                if(*info > 0)
                 {
-                    return 0;
+                    return;
                 }
-                strmm_("L", "L", "N", diag, &n2, &n1, &c_b18, &a[n1 * n2], & n2, a, &n2);
+                strmm_("L", "L", "N", diag, &n2, &n1, &c_b18, &a[n1 * n2], &n2, a, &n2);
             }
         }
     }
     else
     {
         /* N is even */
-        if (normaltransr)
+        if(normaltransr)
         {
             /* N is even and TRANSR = 'N' */
-            if (lower)
+            if(lower)
             {
                 /* SRPA for LOWER, NORMAL, and N is even ( a(0:n,0:k-1) ) */
                 /* T1 -> a(1,0), T2 -> a(0,0), S -> a(k+1,0) */
                 /* T1 -> a(1), T2 -> a(0), S -> a(k+1) */
                 i__1 = *n + 1;
                 strtri_("L", diag, &k, &a[1], &i__1, info);
-                if (*info > 0)
+                if(*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                strmm_("R", "L", "N", diag, &k, &k, &c_b13, &a[1], &i__1, &a[ k + 1], &i__2);
+                strmm_("R", "L", "N", diag, &k, &k, &c_b13, &a[1], &i__1, &a[k + 1], &i__2);
                 i__1 = *n + 1;
                 strtri_("U", diag, &k, a, &i__1, info);
-                if (*info > 0)
+                if(*info > 0)
                 {
                     *info += k;
                 }
-                if (*info > 0)
+                if(*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                strmm_("L", "U", "T", diag, &k, &k, &c_b18, a, &i__1, &a[k + 1], &i__2) ;
+                strmm_("L", "U", "T", diag, &k, &k, &c_b18, a, &i__1, &a[k + 1], &i__2);
             }
             else
             {
@@ -424,53 +437,53 @@ int stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer *
                 /* T1 -> a(k+1), T2 -> a(k), S -> a(0) */
                 i__1 = *n + 1;
                 strtri_("L", diag, &k, &a[k + 1], &i__1, info);
-                if (*info > 0)
+                if(*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
                 strmm_("L", "L", "T", diag, &k, &k, &c_b13, &a[k + 1], &i__1, a, &i__2);
                 i__1 = *n + 1;
                 strtri_("U", diag, &k, &a[k], &i__1, info);
-                if (*info > 0)
+                if(*info > 0)
                 {
                     *info += k;
                 }
-                if (*info > 0)
+                if(*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                strmm_("R", "U", "N", diag, &k, &k, &c_b18, &a[k], &i__1, a, & i__2);
+                strmm_("R", "U", "N", diag, &k, &k, &c_b18, &a[k], &i__1, a, &i__2);
             }
         }
         else
         {
             /* N is even and TRANSR = 'T' */
-            if (lower)
+            if(lower)
             {
                 /* SRPA for LOWER, TRANSPOSE and N is even (see paper) */
                 /* T1 -> B(0,1), T2 -> B(0,0), S -> B(0,k+1) */
                 /* T1 -> a(0+k), T2 -> a(0+0), S -> a(0+k*(k+1));
                 lda=k */
                 strtri_("U", diag, &k, &a[k], &k, info);
-                if (*info > 0)
+                if(*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 strmm_("L", "U", "N", diag, &k, &k, &c_b13, &a[k], &k, &a[k * (k + 1)], &k);
                 strtri_("L", diag, &k, a, &k, info);
-                if (*info > 0)
+                if(*info > 0)
                 {
                     *info += k;
                 }
-                if (*info > 0)
+                if(*info > 0)
                 {
-                    return 0;
+                    return;
                 }
-                strmm_("R", "L", "T", diag, &k, &k, &c_b18, a, &k, &a[k * (k + 1)], &k) ;
+                strmm_("R", "L", "T", diag, &k, &k, &c_b18, a, &k, &a[k * (k + 1)], &k);
             }
             else
             {
@@ -479,25 +492,25 @@ int stftri_(char *transr, char *uplo, char *diag, integer *n, real *a, integer *
                 /* T1 -> a(0+k*(k+1)), T2 -> a(0+k*k), S -> a(0+0));
                 lda=k */
                 strtri_("U", diag, &k, &a[k * (k + 1)], &k, info);
-                if (*info > 0)
+                if(*info > 0)
                 {
-                    return 0;
+                    return;
                 }
-                strmm_("R", "U", "T", diag, &k, &k, &c_b13, &a[k * (k + 1)], & k, a, &k);
+                strmm_("R", "U", "T", diag, &k, &k, &c_b13, &a[k * (k + 1)], &k, a, &k);
                 strtri_("L", diag, &k, &a[k * k], &k, info);
-                if (*info > 0)
+                if(*info > 0)
                 {
                     *info += k;
                 }
-                if (*info > 0)
+                if(*info > 0)
                 {
-                    return 0;
+                    return;
                 }
                 strmm_("L", "L", "N", diag, &k, &k, &c_b18, &a[k * k], &k, a, &k);
             }
         }
     }
-    return 0;
+    return;
     /* End of STFTRI */
 }
 /* stftri_ */

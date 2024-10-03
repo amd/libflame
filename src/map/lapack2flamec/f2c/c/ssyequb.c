@@ -1,5 +1,8 @@
-/* ../netlib/ssyequb.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ssyequb.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b SSYEQUB */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SSYEQUB + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssyequb .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssyequb
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssyequb .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssyequb
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssyequb .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssyequb
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -45,7 +54,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -120,7 +129,8 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ssyequb_(char *uplo, integer *n, real *a, integer *lda, real *s, real *scond, real *amax, real *work, integer *info)
+void ssyequb_(char *uplo, integer *n, real *a, integer *lda, real *s, real *scond, real *amax,
+              real *work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -135,14 +145,16 @@ int ssyequb_(char *uplo, integer *n, real *a, integer *lda, real *s, real *scond
     real avg, std, tol, base;
     integer iter;
     real smin, smax, scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real sumsq;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern /* Subroutine */
-    int slassq_(integer *, real *, integer *, real *, real *);
+        void
+        slassq_(integer *, real *, integer *, real *, real *);
     real smlnum;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -173,146 +185,126 @@ int ssyequb_(char *uplo, integer *n, real *a, integer *lda, real *s, real *scond
     --work;
     /* Function Body */
     *info = 0;
-    if (! (lsame_(uplo, "U") || lsame_(uplo, "L")))
+    if(!(lsame_(uplo, "U", 1, 1) || lsame_(uplo, "L", 1, 1)))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SSYEQUB", &i__1, (ftnlen)7);
-        return 0;
+        return;
     }
-    up = lsame_(uplo, "U");
+    up = lsame_(uplo, "U", 1, 1);
     *amax = 0.f;
     /* Quick return if possible. */
-    if (*n == 0)
+    if(*n == 0)
     {
         *scond = 1.f;
-        return 0;
+        return;
     }
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         s[i__] = 0.f;
     }
     *amax = 0.f;
-    if (up)
+    if(up)
     {
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j - 1;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 /* Computing MAX */
                 r__2 = s[i__];
                 r__3 = (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1)); // , expr subst
-                s[i__] = fla_max(r__2,r__3);
+                s[i__] = fla_max(r__2, r__3);
                 /* Computing MAX */
                 r__2 = s[j];
                 r__3 = (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1)); // , expr subst
-                s[j] = fla_max(r__2,r__3);
+                s[j] = fla_max(r__2, r__3);
                 /* Computing MAX */
                 r__2 = *amax;
                 r__3 = (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1)); // , expr subst
-                *amax = fla_max(r__2,r__3);
+                *amax = fla_max(r__2, r__3);
             }
             /* Computing MAX */
             r__2 = s[j];
             r__3 = (r__1 = a[j + j * a_dim1], f2c_abs(r__1)); // , expr subst
-            s[j] = fla_max(r__2,r__3);
+            s[j] = fla_max(r__2, r__3);
             /* Computing MAX */
             r__2 = *amax;
             r__3 = (r__1 = a[j + j * a_dim1], f2c_abs(r__1)); // , expr subst
-            *amax = fla_max(r__2,r__3);
+            *amax = fla_max(r__2, r__3);
         }
     }
     else
     {
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             /* Computing MAX */
             r__2 = s[j];
             r__3 = (r__1 = a[j + j * a_dim1], f2c_abs(r__1)); // , expr subst
-            s[j] = fla_max(r__2,r__3);
+            s[j] = fla_max(r__2, r__3);
             /* Computing MAX */
             r__2 = *amax;
             r__3 = (r__1 = a[j + j * a_dim1], f2c_abs(r__1)); // , expr subst
-            *amax = fla_max(r__2,r__3);
+            *amax = fla_max(r__2, r__3);
             i__2 = *n;
-            for (i__ = j + 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = j + 1; i__ <= i__2; ++i__)
             {
                 /* Computing MAX */
                 r__2 = s[i__];
                 r__3 = (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1)); // , expr subst
-                s[i__] = fla_max(r__2,r__3);
+                s[i__] = fla_max(r__2, r__3);
                 /* Computing MAX */
                 r__2 = s[j];
                 r__3 = (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1)); // , expr subst
-                s[j] = fla_max(r__2,r__3);
+                s[j] = fla_max(r__2, r__3);
                 /* Computing MAX */
                 r__2 = *amax;
                 r__3 = (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1)); // , expr subst
-                *amax = fla_max(r__2,r__3);
+                *amax = fla_max(r__2, r__3);
             }
         }
     }
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         s[j] = 1.f / s[j];
     }
     tol = 1.f / sqrt(*n * 2.f);
-    for (iter = 1;
-            iter <= 100;
-            ++iter)
+    for(iter = 1; iter <= 100; ++iter)
     {
         scale = 0.f;
         sumsq = 0.f;
         /* beta = |A|s */
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             work[i__] = 0.f;
         }
-        if (up)
+        if(up)
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j - 1;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
-                    work[i__] += (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1)) * s[ j];
-                    work[j] += (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1)) * s[ i__];
+                    work[i__] += (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1)) * s[j];
+                    work[j] += (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1)) * s[i__];
                 }
                 work[j] += (r__1 = a[j + j * a_dim1], f2c_abs(r__1)) * s[j];
             }
@@ -320,49 +312,39 @@ int ssyequb_(char *uplo, integer *n, real *a, integer *lda, real *s, real *scond
         else
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 work[j] += (r__1 = a[j + j * a_dim1], f2c_abs(r__1)) * s[j];
                 i__2 = *n;
-                for (i__ = j + 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = j + 1; i__ <= i__2; ++i__)
                 {
-                    work[i__] += (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1)) * s[ j];
-                    work[j] += (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1)) * s[ i__];
+                    work[i__] += (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1)) * s[j];
+                    work[j] += (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1)) * s[i__];
                 }
             }
         }
         /* avg = s^T beta / n */
         avg = 0.f;
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             avg += s[i__] * work[i__];
         }
         avg /= *n;
         std = 0.f;
         i__1 = *n << 1;
-        for (i__ = *n + 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = *n + 1; i__ <= i__1; ++i__)
         {
             work[i__] = s[i__ - *n] * work[i__ - *n] - avg;
         }
         slassq_(n, &work[*n + 1], &c__1, &scale, &sumsq);
         std = scale * sqrt(sumsq / *n);
-        if (std < tol * avg)
+        if(std < tol * avg)
         {
             goto L999;
         }
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             t = (r__1 = a[i__ + i__ * a_dim1], f2c_abs(r__1));
             si = s[i__];
@@ -370,29 +352,25 @@ int ssyequb_(char *uplo, integer *n, real *a, integer *lda, real *s, real *scond
             c1 = (*n - 2) * (work[i__] - t * si);
             c0 = -(t * si) * si + work[i__] * 2 * si - *n * avg;
             d__ = c1 * c1 - c0 * 4 * c2;
-            if (d__ <= 0.f)
+            if(d__ <= 0.f)
             {
                 *info = -1;
-                return 0;
+                return;
             }
             si = c0 * -2 / (c1 + sqrt(d__));
             d__ = si - s[i__];
             u = 0.f;
-            if (up)
+            if(up)
             {
                 i__2 = i__;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     t = (r__1 = a[j + i__ * a_dim1], f2c_abs(r__1));
                     u += s[j] * t;
                     work[j] += d__ * t;
                 }
                 i__2 = *n;
-                for (j = i__ + 1;
-                        j <= i__2;
-                        ++j)
+                for(j = i__ + 1; j <= i__2; ++j)
                 {
                     t = (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1));
                     u += s[j] * t;
@@ -402,18 +380,14 @@ int ssyequb_(char *uplo, integer *n, real *a, integer *lda, real *s, real *scond
             else
             {
                 i__2 = i__;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     t = (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1));
                     u += s[j] * t;
                     work[j] += d__ * t;
                 }
                 i__2 = *n;
-                for (j = i__ + 1;
-                        j <= i__2;
-                        ++j)
+                for(j = i__ + 1; j <= i__2; ++j)
                 {
                     t = (r__1 = a[j + i__ * a_dim1], f2c_abs(r__1));
                     u += s[j] * t;
@@ -433,22 +407,20 @@ L999:
     base = slamch_("B");
     u = 1.f / log(base);
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        i__2 = (integer) (u * log(s[i__] * t));
+        i__2 = (integer)(u * log(s[i__] * t));
         s[i__] = pow_ri(&base, &i__2);
         /* Computing MIN */
         r__1 = smin;
         r__2 = s[i__]; // , expr subst
-        smin = fla_min(r__1,r__2);
+        smin = fla_min(r__1, r__2);
         /* Computing MAX */
         r__1 = smax;
         r__2 = s[i__]; // , expr subst
-        smax = fla_max(r__1,r__2);
+        smax = fla_max(r__1, r__2);
     }
-    *scond = fla_max(smin,smlnum) / fla_min(smax,bignum);
-    return 0;
+    *scond = fla_max(smin, smlnum) / fla_min(smax, bignum);
+    return;
 }
 /* ssyequb_ */

@@ -1,18 +1,28 @@
-/* ../netlib/sgtsvx.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sgtsvx.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief <b> SGTSVX computes the solution to system of linear equations A * X = B for GT matrices <b> */
+/* > \brief <b> SGTSVX computes the solution to system of linear equations A * X = B for GT matrices
+ * <b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SGTSVX + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgtsvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgtsvx.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgtsvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgtsvx.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgtsvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgtsvx.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -180,7 +190,7 @@ DL, D, DU, DLF, DF, DUF, DU2 and IPIV */
 /* > */
 /* > If FACT = 'N', then IPIV is an output argument and on exit */
 /* > contains the pivot indices from the LU factorization of A;
-*/
+ */
 /* > row i of the matrix was interchanged with row IPIV(i). */
 /* > IPIV(i) will always be either i or i+1;
 IPIV(i) = i indicates */
@@ -281,32 +291,47 @@ IPIV(i) = i indicates */
 /* > \ingroup realGTsolve */
 /* ===================================================================== */
 /* Subroutine */
-int sgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, real *dl, real *d__, real *du, real *dlf, real *df, real *duf, real *du2, integer *ipiv, real *b, integer *ldb, real *x, integer * ldx, real *rcond, real *ferr, real *berr, real *work, integer *iwork, integer *info)
+void sgtsvx_(char *fact, char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *du,
+             real *dlf, real *df, real *duf, real *du2, integer *ipiv, real *b, integer *ldb,
+             real *x, integer *ldx, real *rcond, real *ferr, real *berr, real *work, integer *iwork,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sgtsvx inputs: fact %c, trans %c, n %d, nrhs %d, ldb %d, ldx %d",*fact, *trans, *n, *nrhs, *ldb, *ldx);
+    snprintf(buffer, 256, "sgtsvx inputs: fact %c, trans %c, n %d, nrhs %d, ldb %d, ldx %d", *fact,
+             *trans, *n, *nrhs, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
     integer b_dim1, b_offset, x_dim1, x_offset, i__1;
     /* Local variables */
     char norm[1];
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real anorm;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *);
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern real slangt_(char *, integer *, real *, real *, real *);
     extern /* Subroutine */
-    int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), sgtcon_(char *, integer *, real *, real *, real *, real *, integer *, real *, real *, real *, integer *, integer *);
+        void
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
+        sgtcon_(char *, integer *, real *, real *, real *, real *, integer *, real *, real *,
+                real *, integer *, integer *);
     logical notran;
     extern /* Subroutine */
-    int sgtrfs_(char *, integer *, integer *, real *, real *, real *, real *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), sgttrf_(integer *, real *, real *, real *, real *, integer *, integer *), sgttrs_(char *, integer *, integer *, real *, real *, real *, real *, integer *, real *, integer *, integer *);
+        void
+        sgtrfs_(char *, integer *, integer *, real *, real *, real *, real *, real *, real *,
+                real *, integer *, real *, integer *, real *, integer *, real *, real *, real *,
+                integer *, integer *),
+        sgttrf_(integer *, real *, real *, real *, real *, integer *, integer *),
+        sgttrs_(char *, integer *, integer *, real *, real *, real *, real *, integer *, real *,
+                integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -348,44 +373,44 @@ int sgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, real *dl, real 
     --iwork;
     /* Function Body */
     *info = 0;
-    nofact = lsame_(fact, "N");
-    notran = lsame_(trans, "N");
-    if (! nofact && ! lsame_(fact, "F"))
+    nofact = lsame_(fact, "N", 1, 1);
+    notran = lsame_(trans, "N", 1, 1);
+    if(!nofact && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T") && ! lsame_(trans, "C"))
+    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -4;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -14;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -16;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SGTSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (nofact)
+    if(nofact)
     {
         /* Compute the LU factorization of A. */
         scopy_(n, &d__[1], &c__1, &df[1], &c__1);
-        if (*n > 1)
+        if(*n > 1)
         {
             i__1 = *n - 1;
             scopy_(&i__1, &dl[1], &c__1, &dlf[1], &c__1);
@@ -394,15 +419,15 @@ int sgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, real *dl, real 
         }
         sgttrf_(n, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1], info);
         /* Return if INFO is non-zero. */
-        if (*info > 0)
+        if(*info > 0)
         {
             *rcond = 0.f;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A. */
-    if (notran)
+    if(notran)
     {
         *(unsigned char *)norm = '1';
     }
@@ -412,20 +437,22 @@ int sgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, real *dl, real 
     }
     anorm = slangt_(norm, n, &dl[1], &d__[1], &du[1]);
     /* Compute the reciprocal of the condition number of A. */
-    sgtcon_(norm, n, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1], &anorm, rcond, &work[1], &iwork[1], info);
+    sgtcon_(norm, n, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1], &anorm, rcond, &work[1],
+            &iwork[1], info);
     /* Compute the solution vectors X. */
     slacpy_("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
-    sgttrs_(trans, n, nrhs, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1], &x[ x_offset], ldx, info);
+    sgttrs_(trans, n, nrhs, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solutions and */
     /* compute error bounds and backward error estimates for them. */
-    sgtrfs_(trans, n, nrhs, &dl[1], &d__[1], &du[1], &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1], &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &iwork[1], info);
+    sgtrfs_(trans, n, nrhs, &dl[1], &d__[1], &du[1], &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1],
+            &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &iwork[1], info);
     /* Set INFO = N+1 if the matrix is singular to working precision. */
-    if (*rcond < slamch_("Epsilon"))
+    if(*rcond < slamch_("Epsilon"))
     {
         *info = *n + 1;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SGTSVX */
 }
 /* sgtsvx_ */

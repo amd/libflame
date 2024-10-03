@@ -1,5 +1,8 @@
-/* ../netlib/v3.9.0/cheev_2stage.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/cheev_2stage.f -- translated by f2c (version 20160102). You must link the
+ resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
+ Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
+ with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -8,18 +11,25 @@ static integer c__3 = 3;
 static integer c__4 = 4;
 static integer c__0 = 0;
 static real c_b28 = 1.f;
-/* > \brief <b> CHEEV_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for HE matrices</b> */
+/* > \brief <b> CHEEV_2STAGE computes the eigenvalues and, optionally, the left and/or right
+ * eigenvectors for HE matrices</b> */
 /* @generated from zheev_2stage.f, fortran z -> c, Sat Nov 5 23:18:06 2016 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CHEEV_2STAGE + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cheev_2 stage.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cheev_2
+ * stage.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cheev_2 stage.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cheev_2
+ * stage.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cheev_2 stage.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cheev_2
+ * stage.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -50,7 +60,7 @@ static real c_b28 = 1.f;
 /* > \verbatim */
 /* > JOBZ is CHARACTER*1 */
 /* > = 'N': Compute eigenvalues only;
-*/
+ */
 /* > = 'V': Compute eigenvalues and eigenvectors. */
 /* > Not available in this release. */
 /* > \endverbatim */
@@ -59,7 +69,7 @@ static real c_b28 = 1.f;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -106,7 +116,7 @@ static real c_b28 = 1.f;
 /* > \verbatim */
 /* > LWORK is INTEGER */
 /* > The length of the array WORK. LWORK >= 1, when N <= 1;
-*/
+ */
 /* > otherwise */
 /* > If JOBZ = 'N' and N > 1, LWORK must be queried. */
 /* > LWORK = MAX(1, dimension) where */
@@ -184,15 +194,18 @@ i */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int cheev_2stage_(char *jobz, char *uplo, integer *n, complex *a, integer *lda, real *w, complex *work, integer *lwork, real *rwork, integer *info)
+void cheev_2stage_(char *jobz, char *uplo, integer *n, complex *a, integer *lda, real *w,
+                   complex *work, integer *lwork, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cheev_2stage inputs: jobz %c, uplo %c, n %lld, lda %lld, lwork %lld",*jobz, *uplo, *n, *lda, *lwork);
+    snprintf(buffer, 256, "cheev_2stage inputs: jobz %c, uplo %c, n %lld, lda %lld, lwork %lld",
+             *jobz, *uplo, *n, *lda, *lwork);
 #else
-    snprintf(buffer, 256,"cheev_2stage inputs: jobz %c, uplo %c, n %d, lda %d, lwork %d",*jobz, *uplo, *n, *lda, *lwork);
+    snprintf(buffer, 256, "cheev_2stage inputs: jobz %c, uplo %c, n %d, lda %d, lwork %d", *jobz,
+             *uplo, *n, *lda, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -205,17 +218,21 @@ int cheev_2stage_(char *jobz, char *uplo, integer *n, complex *a, integer *lda, 
     integer ib, kd;
     real eps;
     integer inde;
-    extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *,
+                                 integer *);
     real anrm;
     integer imax;
     real rmin, rmax;
     extern /* Subroutine */
-    int chetrd_2stage_(char *, char *, integer *, complex *, integer *, real *, real *, complex *, complex *, integer *, complex *, integer *, integer *);
+        void
+        chetrd_2stage_(char *, char *, integer *, complex *, integer *, real *, real *, complex *,
+                       complex *, integer *, complex *, integer *, integer *);
     real sigma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     integer lhtrd, lwmin;
     logical lower;
     integer lwtrd;
@@ -223,15 +240,22 @@ int cheev_2stage_(char *jobz, char *uplo, integer *n, complex *a, integer *lda, 
     extern real clanhe_(char *, char *, integer *, complex *, integer *, real *);
     integer iscale;
     extern /* Subroutine */
-    int clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *);
+        void
+        clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *,
+                integer *, integer *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer indtau, indwrk;
     extern /* Subroutine */
-    int csteqr_(char *, integer *, real *, real *, complex *, integer *, real *, integer *), cungtr_(char *, integer *, complex *, integer *, complex *, complex *, integer *, integer *), ssterf_(integer *, real *, real *, integer *);
+        void
+        csteqr_(char *, integer *, real *, real *, complex *, integer *, real *, integer *),
+        cungtr_(char *, integer *, complex *, integer *, complex *, complex *, integer *,
+                integer *),
+        ssterf_(integer *, real *, real *, integer *);
     integer llwork;
     real smlnum;
     logical lquery;
@@ -265,72 +289,72 @@ int cheev_2stage_(char *jobz, char *uplo, integer *n, complex *a, integer *lda, 
     --work;
     --rwork;
     /* Function Body */
-    wantz = lsame_(jobz, "V");
-    lower = lsame_(uplo, "L");
+    wantz = lsame_(jobz, "V", 1, 1);
+    lower = lsame_(uplo, "L", 1, 1);
     lquery = *lwork == -1;
     *info = 0;
-    if (! lsame_(jobz, "N"))
+    if(!lsame_(jobz, "N", 1, 1))
     {
         *info = -1;
     }
-    else if (! (lower || lsame_(uplo, "U")))
+    else if(!(lower || lsame_(uplo, "U", 1, 1)))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        kd = ilaenv2stage_(&c__1, "CHETRD_2STAGE", jobz, n, &c_n1, &c_n1, & c_n1);
+        kd = ilaenv2stage_(&c__1, "CHETRD_2STAGE", jobz, n, &c_n1, &c_n1, &c_n1);
         ib = ilaenv2stage_(&c__2, "CHETRD_2STAGE", jobz, n, &kd, &c_n1, &c_n1);
-        lhtrd = ilaenv2stage_(&c__3, "CHETRD_2STAGE", jobz, n, &kd, &ib, & c_n1);
-        lwtrd = ilaenv2stage_(&c__4, "CHETRD_2STAGE", jobz, n, &kd, &ib, & c_n1);
+        lhtrd = ilaenv2stage_(&c__3, "CHETRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
+        lwtrd = ilaenv2stage_(&c__4, "CHETRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
         lwmin = *n + lhtrd + lwtrd;
-        work[1].r = (real) lwmin;
+        work[1].r = (real)lwmin;
         work[1].i = 0.f; // , expr subst
-        if (*lwork < lwmin && ! lquery)
+        if(*lwork < lwmin && !lquery)
         {
             *info = -8;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CHEEV_2STAGE ", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (*n == 1)
+    if(*n == 1)
     {
         i__1 = a_dim1 + 1;
         w[1] = a[i__1].r;
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
-        if (wantz)
+        if(wantz)
         {
             i__1 = a_dim1 + 1;
             a[i__1].r = 1.f;
             a[i__1].i = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = slamch_("Safe minimum");
@@ -342,17 +366,17 @@ int cheev_2stage_(char *jobz, char *uplo, integer *n, complex *a, integer *lda, 
     /* Scale matrix to allowable range, if necessary. */
     anrm = clanhe_("M", uplo, n, &a[a_offset], lda, &rwork[1]);
     iscale = 0;
-    if (anrm > 0.f && anrm < rmin)
+    if(anrm > 0.f && anrm < rmin)
     {
         iscale = 1;
         sigma = rmin / anrm;
     }
-    else if (anrm > rmax)
+    else if(anrm > rmax)
     {
         iscale = 1;
         sigma = rmax / anrm;
     }
-    if (iscale == 1)
+    if(iscale == 1)
     {
         clascl_(uplo, &c__0, &c__0, &c_b28, &sigma, n, n, &a[a_offset], lda, info);
     }
@@ -362,23 +386,24 @@ int cheev_2stage_(char *jobz, char *uplo, integer *n, complex *a, integer *lda, 
     indhous = indtau + *n;
     indwrk = indhous + lhtrd;
     llwork = *lwork - indwrk + 1;
-    chetrd_2stage_(jobz, uplo, n, &a[a_offset], lda, &w[1], &rwork[inde], & work[indtau], &work[indhous], &lhtrd, &work[indwrk], &llwork, & iinfo);
+    chetrd_2stage_(jobz, uplo, n, &a[a_offset], lda, &w[1], &rwork[inde], &work[indtau],
+                   &work[indhous], &lhtrd, &work[indwrk], &llwork, &iinfo);
     /* For eigenvalues only, call SSTERF. For eigenvectors, first call */
     /* CUNGTR to generate the unitary matrix, then call CSTEQR. */
-    if (! wantz)
+    if(!wantz)
     {
         ssterf_(n, &w[1], &rwork[inde], info);
     }
     else
     {
-        cungtr_(uplo, n, &a[a_offset], lda, &work[indtau], &work[indwrk], & llwork, &iinfo);
+        cungtr_(uplo, n, &a[a_offset], lda, &work[indtau], &work[indwrk], &llwork, &iinfo);
         indwrk = inde + *n;
-        csteqr_(jobz, n, &w[1], &rwork[inde], &a[a_offset], lda, &rwork[ indwrk], info);
+        csteqr_(jobz, n, &w[1], &rwork[inde], &a[a_offset], lda, &rwork[indwrk], info);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
-    if (iscale == 1)
+    if(iscale == 1)
     {
-        if (*info == 0)
+        if(*info == 0)
         {
             imax = *n;
         }
@@ -390,10 +415,10 @@ int cheev_2stage_(char *jobz, char *uplo, integer *n, complex *a, integer *lda, 
         sscal_(&imax, &r__1, &w[1], &c__1);
     }
     /* Set WORK(1) to optimal complex workspace size. */
-    work[1].r = (real) lwmin;
+    work[1].r = (real)lwmin;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHEEV_2STAGE */
 }
 /* cheev_2stage__ */

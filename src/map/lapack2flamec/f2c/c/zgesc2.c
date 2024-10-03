@@ -1,24 +1,30 @@
-/* ../netlib/zgesc2.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zgesc2.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-static doublecomplex c_b13 =
-{
-    1.,0.
-}
-;
+static doublecomplex c_b13 = {1., 0.};
 static integer c_n1 = -1;
-/* > \brief \b ZGESC2 solves a system of linear equations using the LU factorization with complete pivoting co mputed by sgetc2. */
+/* > \brief \b ZGESC2 solves a system of linear equations using the LU factorization with complete
+ * pivoting co mputed by sgetc2. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZGESC2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgesc2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgesc2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgesc2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgesc2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgesc2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgesc2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -110,10 +116,11 @@ for 1 <= j <= N, column j of the */
 /* > Umea University, S-901 87 Umea, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-int zgesc2_(integer *n, doublecomplex *a, integer *lda, doublecomplex *rhs, integer *ipiv, integer *jpiv, doublereal *scale)
+void zgesc2_(integer *n, doublecomplex *a, integer *lda, doublecomplex *rhs, integer *ipiv,
+             integer *jpiv, doublereal *scale)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgesc2 inputs: n %" FLA_IS ", lda %" FLA_IS "",*n, *lda);
+    AOCL_DTL_SNPRINTF("zgesc2 inputs: n %" FLA_IS ", lda %" FLA_IS "", *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     doublereal d__1;
@@ -126,13 +133,16 @@ int zgesc2_(integer *n, doublecomplex *a, integer *lda, doublecomplex *rhs, inte
     doublereal eps;
     doublecomplex temp;
     extern /* Subroutine */
-    int zscal_(integer *, doublecomplex *, doublecomplex *, integer *), dlabad_(doublereal *, doublereal *);
+        void
+        zscal_(integer *, doublecomplex *, doublecomplex *, integer *),
+        dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     doublereal bignum;
     extern integer izamax_(integer *, doublecomplex *, integer *);
     doublereal smlnum;
     extern /* Subroutine */
-    int zlaswp_(integer *, doublecomplex *, integer *, integer *, integer *, integer *, integer *);
+        void
+        zlaswp_(integer *, doublecomplex *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK auxiliary routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -171,21 +181,17 @@ int zgesc2_(integer *n, doublecomplex *a, integer *lda, doublecomplex *rhs, inte
     zlaswp_(&c__1, &rhs[1], lda, &c__1, &i__1, &ipiv[1], &c__1);
     /* Solve for L part */
     i__1 = *n - 1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = *n;
-        for (j = i__ + 1;
-                j <= i__2;
-                ++j)
+        for(j = i__ + 1; j <= i__2; ++j)
         {
             i__3 = j;
             i__4 = j;
             i__5 = j + i__ * a_dim1;
             i__6 = i__;
             z__2.r = a[i__5].r * rhs[i__6].r - a[i__5].i * rhs[i__6].i;
-            z__2.i = a[i__5].r * rhs[i__6].i + a[i__5].i * rhs[i__6] .r; // , expr subst
+            z__2.i = a[i__5].r * rhs[i__6].i + a[i__5].i * rhs[i__6].r; // , expr subst
             z__1.r = rhs[i__4].r - z__2.r;
             z__1.i = rhs[i__4].i - z__2.i; // , expr subst
             rhs[i__3].r = z__1.r;
@@ -198,7 +204,7 @@ int zgesc2_(integer *n, doublecomplex *a, integer *lda, doublecomplex *rhs, inte
     *scale = 1.;
     /* Check for scaling */
     i__ = izamax_(n, &rhs[1], &c__1);
-    if (smlnum * 2. * z_abs(&rhs[i__]) > z_abs(&a[*n + *n * a_dim1]))
+    if(smlnum * 2. * z_abs(&rhs[i__]) > z_abs(&a[*n + *n * a_dim1]))
     {
         d__1 = z_abs(&rhs[i__]);
         z__1.r = .5 / d__1;
@@ -208,9 +214,7 @@ int zgesc2_(integer *n, doublecomplex *a, integer *lda, doublecomplex *rhs, inte
         zscal_(n, &temp, &rhs[1], &c__1);
         *scale *= temp.r;
     }
-    for (i__ = *n;
-            i__ >= 1;
-            --i__)
+    for(i__ = *n; i__ >= 1; --i__)
     {
         z_div(&z__1, &c_b13, &a[i__ + i__ * a_dim1]);
         temp.r = z__1.r;
@@ -218,20 +222,18 @@ int zgesc2_(integer *n, doublecomplex *a, integer *lda, doublecomplex *rhs, inte
         i__1 = i__;
         i__2 = i__;
         z__1.r = rhs[i__2].r * temp.r - rhs[i__2].i * temp.i;
-        z__1.i = rhs[ i__2].r * temp.i + rhs[i__2].i * temp.r; // , expr subst
+        z__1.i = rhs[i__2].r * temp.i + rhs[i__2].i * temp.r; // , expr subst
         rhs[i__1].r = z__1.r;
         rhs[i__1].i = z__1.i; // , expr subst
         i__1 = *n;
-        for (j = i__ + 1;
-                j <= i__1;
-                ++j)
+        for(j = i__ + 1; j <= i__1; ++j)
         {
             i__2 = i__;
             i__3 = i__;
             i__4 = j;
             i__5 = i__ + j * a_dim1;
             z__3.r = a[i__5].r * temp.r - a[i__5].i * temp.i;
-            z__3.i = a[i__5] .r * temp.i + a[i__5].i * temp.r; // , expr subst
+            z__3.i = a[i__5].r * temp.i + a[i__5].i * temp.r; // , expr subst
             z__2.r = rhs[i__4].r * z__3.r - rhs[i__4].i * z__3.i;
             z__2.i = rhs[i__4].r * z__3.i + rhs[i__4].i * z__3.r; // , expr subst
             z__1.r = rhs[i__3].r - z__2.r;
@@ -246,7 +248,7 @@ int zgesc2_(integer *n, doublecomplex *a, integer *lda, doublecomplex *rhs, inte
     i__1 = *n - 1;
     zlaswp_(&c__1, &rhs[1], lda, &c__1, &i__1, &jpiv[1], &c_n1);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGESC2 */
 }
 /* zgesc2_ */

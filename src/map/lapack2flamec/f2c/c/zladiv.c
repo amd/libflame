@@ -1,19 +1,28 @@
 /*
     Copyright (c) 2019-2023 Advanced Micro Devices, Inc.
 */
-/* ../netlib/zladiv.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zladiv.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b ZLADIV performs complex division in real arithmetic, avoiding unnecessary overflow. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLADIV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zladiv. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zladiv.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zladiv. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zladiv.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zladiv. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zladiv.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -54,7 +63,7 @@
 /* ===================================================================== */
 /* Double Complex */
 #ifdef FLA_ENABLE_VOID_RETURN_COMPLEX_FUNCTION
-VOID zladiv_(doublecomplex * ret_val, doublecomplex *x, doublecomplex *y)
+void zladiv_(doublecomplex *ret_val, doublecomplex *x, doublecomplex *y)
 {
     AOCL_DTL_TRACE_ENTRY_INDENT
     /* System generated locals */
@@ -63,7 +72,8 @@ VOID zladiv_(doublecomplex * ret_val, doublecomplex *x, doublecomplex *y)
     /* Local variables */
     doublereal zi, zr;
     extern /* Subroutine */
-    int dladiv_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dladiv_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -87,7 +97,7 @@ VOID zladiv_(doublecomplex * ret_val, doublecomplex *x, doublecomplex *y)
     z__1.i = zi; // , expr subst
     ret_val->r = z__1.r, ret_val->i = z__1.i;
     AOCL_DTL_TRACE_EXIT_INDENT
-    return ;
+    return;
     /* End of ZLADIV */
 }
 #else
@@ -100,7 +110,8 @@ doublecomplex zladiv_(doublecomplex *x, doublecomplex *y)
     /* Local variables */
     doublereal zi, zr;
     extern /* Subroutine */
-    int dladiv_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dladiv_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -122,7 +133,7 @@ doublecomplex zladiv_(doublecomplex *x, doublecomplex *y)
     dladiv_(&d__1, &d__2, &d__3, &d__4, &zr, &zi);
     z__1.r = zr;
     z__1.i = zi; // , expr subst
-    //ret_val->r = z__1.r, ret_val->i = z__1.i;
+    // ret_val->r = z__1.r, ret_val->i = z__1.i;
     AOCL_DTL_TRACE_EXIT_INDENT
     return z__1;
     /* End of ZLADIV */

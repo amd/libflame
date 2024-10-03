@@ -1,19 +1,29 @@
-/* ../netlib/sgbtf2.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sgbtf2.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static real c_b9 = -1.f;
-/* > \brief \b SGBTF2 computes the LU factorization of a general band matrix using the unblocked version of th e algorithm. */
+/* > \brief \b SGBTF2 computes the LU factorization of a general band matrix using the unblocked
+ * version of th e algorithm. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SGBTF2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgbtf2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgbtf2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgbtf2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgbtf2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgbtf2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgbtf2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -137,12 +147,14 @@ elements marked */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sgbtf2_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer *ldab, integer *ipiv, integer *info)
+void sgbtf2_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer *ldab,
+             integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sgbtf2 inputs: m %d, n %d, kl %d, ku %d, ldab %d",*m, *n, *kl, *ku, *ldab);
+    snprintf(buffer, 256, "sgbtf2 inputs: m %d, n %d, kl %d, ku %d, ldab %d", *m, *n, *kl, *ku,
+             *ldab);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -151,7 +163,12 @@ int sgbtf2_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer 
     /* Local variables */
     integer i__, j, km, jp, ju, kv;
     extern /* Subroutine */
-    int sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *), sscal_(integer *, real *, real *, integer *), sswap_(integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+              integer *),
+        sscal_(integer *, real *, real *, integer *),
+        sswap_(integer *, real *, integer *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -180,65 +197,61 @@ int sgbtf2_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer 
     ab_offset = 1 + ab_dim1;
     ab -= ab_offset;
     --ipiv;
-    #if AOCL_FLA_PROGRESS_H
-        AOCL_FLA_PROGRESS_VAR;
-    #endif
+#if AOCL_FLA_PROGRESS_H
+    AOCL_FLA_PROGRESS_VAR;
+#endif
     /* Function Body */
     kv = *ku + *kl;
     /* Test the input parameters. */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*kl < 0)
+    else if(*kl < 0)
     {
         *info = -3;
     }
-    else if (*ku < 0)
+    else if(*ku < 0)
     {
         *info = -4;
     }
-    else if (*ldab < *kl + kv + 1)
+    else if(*ldab < *kl + kv + 1)
     {
         *info = -6;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SGBTF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    #if AOCL_FLA_PROGRESS_H
-        progress_step_count =0;
-    	 #ifndef FLA_ENABLE_WINDOWS_BUILD
-        	if(!aocl_fla_progress_ptr)
-              	    aocl_fla_progress_ptr=aocl_fla_progress;
-     	 #endif
-    #endif
+#if AOCL_FLA_PROGRESS_H
+    progress_step_count = 0;
+#ifndef FLA_ENABLE_WINDOWS_BUILD
+    if(!aocl_fla_progress_ptr)
+        aocl_fla_progress_ptr = aocl_fla_progress;
+#endif
+#endif
 
     /* Gaussian elimination with partial pivoting */
     /* Set fill-in elements in columns KU+2 to KV to zero. */
-    i__1 = fla_min(kv,*n);
-    for (j = *ku + 2;
-            j <= i__1;
-            ++j)
+    i__1 = fla_min(kv, *n);
+    for(j = *ku + 2; j <= i__1; ++j)
     {
         i__2 = *kl;
-        for (i__ = kv - j + 2;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = kv - j + 2; i__ <= i__2; ++i__)
         {
             ab[i__ + j * ab_dim1] = 0.f;
             /* L10: */
@@ -248,27 +261,26 @@ int sgbtf2_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer 
     /* JU is the index of the last column affected by the current stage */
     /* of the factorization. */
     ju = 1;
-    i__1 = fla_min(*m,*n);
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    i__1 = fla_min(*m, *n);
+    for(j = 1; j <= i__1; ++j)
     {
-	#if AOCL_FLA_PROGRESS_H
-        if(aocl_fla_progress_ptr){
-		    if(j%32==0 || j==i__1){
-			    progress_step_count=j;
-                AOCL_FLA_PROGRESS_FUNC_PTR("SGBTF2",6,&progress_step_count,&progress_thread_id,&progress_total_threads);
+#if AOCL_FLA_PROGRESS_H
+        if(aocl_fla_progress_ptr)
+        {
+            if(j % 32 == 0 || j == i__1)
+            {
+                progress_step_count = j;
+                AOCL_FLA_PROGRESS_FUNC_PTR("SGBTF2", 6, &progress_step_count, &progress_thread_id,
+                                           &progress_total_threads);
             }
-        }  
-    #endif
+        }
+#endif
 
         /* Set fill-in elements in column J+KV to zero. */
-        if (j + kv <= *n)
+        if(j + kv <= *n)
         {
             i__2 = *kl;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 ab[i__ + (j + kv) * ab_dim1] = 0.f;
                 /* L30: */
@@ -279,38 +291,40 @@ int sgbtf2_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer 
         /* Computing MIN */
         i__2 = *kl;
         i__3 = *m - j; // , expr subst
-        km = fla_min(i__2,i__3);
+        km = fla_min(i__2, i__3);
         i__2 = km + 1;
         jp = isamax_(&i__2, &ab[kv + 1 + j * ab_dim1], &c__1);
         ipiv[j] = jp + j - 1;
-        if (ab[kv + jp + j * ab_dim1] != 0.f)
+        if(ab[kv + jp + j * ab_dim1] != 0.f)
         {
             /* Computing MAX */
             /* Computing MIN */
             i__4 = j + *ku + jp - 1;
             i__2 = ju;
-            i__3 = fla_min(i__4,*n); // , expr subst
-            ju = fla_max(i__2,i__3);
+            i__3 = fla_min(i__4, *n); // , expr subst
+            ju = fla_max(i__2, i__3);
             /* Apply interchange to columns J to JU. */
-            if (jp != 1)
+            if(jp != 1)
             {
                 i__2 = ju - j + 1;
                 i__3 = *ldab - 1;
                 i__4 = *ldab - 1;
                 sswap_(&i__2, &ab[kv + jp + j * ab_dim1], &i__3, &ab[kv + 1 + j * ab_dim1], &i__4);
             }
-            if (km > 0)
+            if(km > 0)
             {
                 /* Compute multipliers. */
                 r__1 = 1.f / ab[kv + 1 + j * ab_dim1];
                 sscal_(&km, &r__1, &ab[kv + 2 + j * ab_dim1], &c__1);
                 /* Update trailing submatrix within the band. */
-                if (ju > j)
+                if(ju > j)
                 {
                     i__2 = ju - j;
                     i__3 = *ldab - 1;
                     i__4 = *ldab - 1;
-                    sger_(&km, &i__2, &c_b9, &ab[kv + 2 + j * ab_dim1], &c__1, &ab[kv + (j + 1) * ab_dim1], &i__3, &ab[kv + 1 + (j + 1) * ab_dim1], &i__4);
+                    sger_(&km, &i__2, &c_b9, &ab[kv + 2 + j * ab_dim1], &c__1,
+                          &ab[kv + (j + 1) * ab_dim1], &i__3, &ab[kv + 1 + (j + 1) * ab_dim1],
+                          &i__4);
                 }
             }
         }
@@ -318,7 +332,7 @@ int sgbtf2_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer 
         {
             /* If pivot is zero, set INFO to the index of the pivot */
             /* unless a zero pivot has already been found. */
-            if (*info == 0)
+            if(*info == 0)
             {
                 *info = j;
             }
@@ -326,7 +340,7 @@ int sgbtf2_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer 
         /* L40: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SGBTF2 */
 }
 /* sgbtf2_ */

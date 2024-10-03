@@ -8,6 +8,10 @@
 
 */
 
+/*
+*     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+*/
+
 #include "FLAME.h"
 
 FLA_Error FLA_Fused_UYx_ZVx_opt_var1( FLA_Obj delta, FLA_Obj a, FLA_Obj U, FLA_Obj Y, FLA_Obj Z, FLA_Obj V, FLA_Obj A, FLA_Obj temp, FLA_Obj t, FLA_Obj w, FLA_Obj al )
@@ -370,8 +374,8 @@ FLA_Error FLA_Fused_UYx_ZVx_opd_var1( integer m_U,
     double*   restrict al       = buff_al;
     double*   restrict psi20_l  = buff_Y + (i  )*cs_Y + (0  )*rs_Y;
     double*   restrict nu20_l   = buff_V + (0  )*cs_V + (i  )*rs_V;
-    double    alpha;
-    double    beta;
+    double    alpha = 0.;
+    double    beta = 0.;
     double    gamma;
     double    kappa;
 
@@ -580,8 +584,8 @@ FLA_Error FLA_Fused_UYx_ZVx_opz_var1( integer m_U,
     dcomplex* restrict al       = buff_al;
     dcomplex* restrict psi20_l  = buff_Y + (i  )*cs_Y + (0  )*rs_Y;
     dcomplex* restrict nu20_l   = buff_V + (0  )*cs_V + (i  )*rs_V;
-    dcomplex  alpha;
-    dcomplex  beta;
+    dcomplex  alpha = (dcomplex){.real = 0., .imag = 0.};
+    dcomplex  beta = (dcomplex){.real = 0., .imag = 0.};
     dcomplex  gamma;
     dcomplex  kappa;
 

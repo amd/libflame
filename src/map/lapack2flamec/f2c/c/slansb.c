@@ -1,18 +1,28 @@
-/* slansb.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* slansb.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b SLANSB returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, or the ele ment of largest absolute value of a symmetric band matrix. */
+/* > \brief \b SLANSB returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
+ * or the ele ment of largest absolute value of a symmetric band matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLANSB + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slansb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slansb.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slansb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slansb.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slansb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slansb.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -91,7 +101,7 @@ static integer c__1 = 1;
 /* > stored in the first K+1 rows of AB. The j-th column of A is */
 /* > stored in the j-th column of the array AB as follows: */
 /* > if UPLO = 'U', AB(k+1+i-j,j) = A(i,j) for fla_max(1,j-k)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+k). */
 /* > \endverbatim */
 /* > */
@@ -119,7 +129,9 @@ otherwise, */
 real slansb_(char *norm, char *uplo, integer *n, integer *k, real *ab, integer *ldab, real *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("slansb inputs: norm %c, uplo %c, n %" FLA_IS ", k %" FLA_IS ", ldab %" FLA_IS "",*norm, *uplo, *n, *k, *ldab);
+    AOCL_DTL_SNPRINTF("slansb inputs: norm %c, uplo %c, n %" FLA_IS ", k %" FLA_IS ", ldab %" FLA_IS
+                      "",
+                      *norm, *uplo, *n, *k, *ldab);
     /* System generated locals */
     integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     real ret_val, r__1;
@@ -128,10 +140,11 @@ real slansb_(char *norm, char *uplo, integer *n, integer *k, real *ab, integer *
     /* Local variables */
     integer i__, j, l;
     real sum, absa, scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real value;
     extern /* Subroutine */
-    int slassq_(integer *, real *, integer *, real *, real *);
+        void
+        slassq_(integer *, real *, integer *, real *, real *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -158,30 +171,26 @@ real slansb_(char *norm, char *uplo, integer *n, integer *k, real *ab, integer *
     --work;
     /* Function Body */
     value = 0.f;
-    if (*n == 0)
+    if(*n == 0)
     {
         value = 0.f;
     }
-    else if (lsame_(norm, "M"))
+    else if(lsame_(norm, "M", 1, 1))
     {
         /* Find fla_max(abs(A(i,j))). */
         value = 0.f;
-        if (lsame_(uplo, "U"))
+        if(lsame_(uplo, "U", 1, 1))
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 /* Computing MAX */
                 i__2 = *k + 2 - j;
                 i__3 = *k + 1;
-                for (i__ = fla_max(i__2,1);
-                        i__ <= i__3;
-                        ++i__)
+                for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
                 {
                     sum = (r__1 = ab[i__ + j * ab_dim1], f2c_abs(r__1));
-                    if (value < sum || sum != sum)
+                    if(value < sum || sum != sum)
                     {
                         value = sum;
                     }
@@ -193,20 +202,16 @@ real slansb_(char *norm, char *uplo, integer *n, integer *k, real *ab, integer *
         else
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 /* Computing MIN */
                 i__2 = *n + 1 - j;
                 i__4 = *k + 1; // , expr subst
-                i__3 = fla_min(i__2,i__4);
-                for (i__ = 1;
-                        i__ <= i__3;
-                        ++i__)
+                i__3 = fla_min(i__2, i__4);
+                for(i__ = 1; i__ <= i__3; ++i__)
                 {
                     sum = (r__1 = ab[i__ + j * ab_dim1], f2c_abs(r__1));
-                    if (value < sum || sum != sum)
+                    if(value < sum || sum != sum)
                     {
                         value = sum;
                     }
@@ -216,16 +221,14 @@ real slansb_(char *norm, char *uplo, integer *n, integer *k, real *ab, integer *
             }
         }
     }
-    else if (lsame_(norm, "I") || lsame_(norm, "O") || *(unsigned char *)norm == '1')
+    else if(lsame_(norm, "I", 1, 1) || lsame_(norm, "O", 1, 1) || *(unsigned char *)norm == '1')
     {
         /* Find normI(A) ( = norm1(A), since A is symmetric). */
         value = 0.f;
-        if (lsame_(uplo, "U"))
+        if(lsame_(uplo, "U", 1, 1))
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 sum = 0.f;
                 l = *k + 1 - j;
@@ -233,9 +236,7 @@ real slansb_(char *norm, char *uplo, integer *n, integer *k, real *ab, integer *
                 i__3 = 1;
                 i__2 = j - *k; // , expr subst
                 i__4 = j - 1;
-                for (i__ = fla_max(i__3,i__2);
-                        i__ <= i__4;
-                        ++i__)
+                for(i__ = fla_max(i__3, i__2); i__ <= i__4; ++i__)
                 {
                     absa = (r__1 = ab[l + i__ + j * ab_dim1], f2c_abs(r__1));
                     sum += absa;
@@ -246,12 +247,10 @@ real slansb_(char *norm, char *uplo, integer *n, integer *k, real *ab, integer *
                 /* L60: */
             }
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 sum = work[i__];
-                if (value < sum || sum != sum)
+                if(value < sum || sum != sum)
                 {
                     value = sum;
                 }
@@ -261,34 +260,28 @@ real slansb_(char *norm, char *uplo, integer *n, integer *k, real *ab, integer *
         else
         {
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 work[i__] = 0.f;
                 /* L80: */
             }
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 sum = work[j] + (r__1 = ab[j * ab_dim1 + 1], f2c_abs(r__1));
                 l = 1 - j;
                 /* Computing MIN */
                 i__3 = *n;
                 i__2 = j + *k; // , expr subst
-                i__4 = fla_min(i__3,i__2);
-                for (i__ = j + 1;
-                        i__ <= i__4;
-                        ++i__)
+                i__4 = fla_min(i__3, i__2);
+                for(i__ = j + 1; i__ <= i__4; ++i__)
                 {
                     absa = (r__1 = ab[l + i__ + j * ab_dim1], f2c_abs(r__1));
                     sum += absa;
                     work[i__] += absa;
                     /* L90: */
                 }
-                if (value < sum || sum != sum)
+                if(value < sum || sum != sum)
                 {
                     value = sum;
                 }
@@ -296,26 +289,24 @@ real slansb_(char *norm, char *uplo, integer *n, integer *k, real *ab, integer *
             }
         }
     }
-    else if (lsame_(norm, "F") || lsame_(norm, "E"))
+    else if(lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
     {
         /* Find normF(A). */
         scale = 0.f;
         sum = 1.f;
-        if (*k > 0)
+        if(*k > 0)
         {
-            if (lsame_(uplo, "U"))
+            if(lsame_(uplo, "U", 1, 1))
             {
                 i__1 = *n;
-                for (j = 2;
-                        j <= i__1;
-                        ++j)
+                for(j = 2; j <= i__1; ++j)
                 {
                     /* Computing MIN */
                     i__3 = j - 1;
-                    i__4 = fla_min(i__3,*k);
+                    i__4 = fla_min(i__3, *k);
                     /* Computing MAX */
                     i__2 = *k + 2 - j;
-                    slassq_(&i__4, &ab[fla_max(i__2,1) + j * ab_dim1], &c__1, & scale, &sum);
+                    slassq_(&i__4, &ab[fla_max(i__2, 1) + j * ab_dim1], &c__1, &scale, &sum);
                     /* L110: */
                 }
                 l = *k + 1;
@@ -323,13 +314,11 @@ real slansb_(char *norm, char *uplo, integer *n, integer *k, real *ab, integer *
             else
             {
                 i__1 = *n - 1;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     /* Computing MIN */
                     i__3 = *n - j;
-                    i__4 = fla_min(i__3,*k);
+                    i__4 = fla_min(i__3, *k);
                     slassq_(&i__4, &ab[j * ab_dim1 + 2], &c__1, &scale, &sum);
                     /* L120: */
                 }

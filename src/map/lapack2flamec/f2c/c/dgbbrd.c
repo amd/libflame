@@ -1,5 +1,8 @@
-/* ../netlib/dgbbrd.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dgbbrd.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b8 = 0.;
 static doublereal c_b9 = 1.;
@@ -10,11 +13,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DGBBRD + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgbbrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgbbrd.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgbbrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgbbrd.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgbbrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgbbrd.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -48,11 +57,11 @@ static integer c__1 = 1;
 /* > Specifies whether or not the matrices Q and P**T are to be */
 /* > formed. */
 /* > = 'N': do not form Q or P**T;
-*/
+ */
 /* > = 'Q': form Q only;
-*/
+ */
 /* > = 'P': form P**T only;
-*/
+ */
 /* > = 'B': form both. */
 /* > \endverbatim */
 /* > */
@@ -182,12 +191,19 @@ LDC >= 1 if NCC = 0. */
 /* > \ingroup doubleGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integer *ku, doublereal *ab, integer *ldab, doublereal * d__, doublereal *e, doublereal *q, integer *ldq, doublereal *pt, integer *ldpt, doublereal *c__, integer *ldc, doublereal *work, integer *info)
+void dgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integer *ku,
+             doublereal *ab, integer *ldab, doublereal *d__, doublereal *e, doublereal *q,
+             integer *ldq, doublereal *pt, integer *ldpt, doublereal *c__, integer *ldc,
+             doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgbbrd inputs: vect %c, m %" FLA_IS ", n %" FLA_IS ", ncc %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS ", ldq %" FLA_IS ", ldpt %" FLA_IS ", ldc %" FLA_IS "",*vect, *m, *n, *ncc, *kl, *ku, *ldab, *ldq, *ldpt, *ldc);
+    AOCL_DTL_SNPRINTF("dgbbrd inputs: vect %c, m %" FLA_IS ", n %" FLA_IS ", ncc %" FLA_IS
+                      ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS ", ldq %" FLA_IS
+                      ", ldpt %" FLA_IS ", ldc %" FLA_IS "",
+                      *vect, *m, *n, *ncc, *kl, *ku, *ldab, *ldq, *ldpt, *ldc);
     /* System generated locals */
-    integer ab_dim1, ab_offset, c_dim1, c_offset, pt_dim1, pt_offset, q_dim1, q_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7;
+    integer ab_dim1, ab_offset, c_dim1, c_offset, pt_dim1, pt_offset, q_dim1, q_offset, i__1, i__2,
+        i__3, i__4, i__5, i__6, i__7;
     /* Local variables */
     integer i__, j, l, j1, j2, kb;
     doublereal ra, rb, rc;
@@ -195,13 +211,22 @@ int dgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integ
     doublereal rs;
     integer kb1, ml0, mu0, klm, kun, nrt, klu1, inca;
     extern /* Subroutine */
-    int drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
-    extern logical lsame_(char *, char *);
+        void
+        drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+              doublereal *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical wantb, wantc;
     integer minmn;
     logical wantq;
     extern /* Subroutine */
-    int dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlargv_( integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlartv_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
+        dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        dlargv_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+                integer *),
+        dlartv_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+                doublereal *, integer *);
     logical wantpt;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -241,82 +266,82 @@ int dgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integ
     c__ -= c_offset;
     --work;
     /* Function Body */
-    wantb = lsame_(vect, "B");
-    wantq = lsame_(vect, "Q") || wantb;
-    wantpt = lsame_(vect, "P") || wantb;
+    wantb = lsame_(vect, "B", 1, 1);
+    wantq = lsame_(vect, "Q", 1, 1) || wantb;
+    wantpt = lsame_(vect, "P", 1, 1) || wantb;
     wantc = *ncc > 0;
     klu1 = *kl + *ku + 1;
     *info = 0;
-    if (! wantq && ! wantpt && ! lsame_(vect, "N"))
+    if(!wantq && !wantpt && !lsame_(vect, "N", 1, 1))
     {
         *info = -1;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*ncc < 0)
+    else if(*ncc < 0)
     {
         *info = -4;
     }
-    else if (*kl < 0)
+    else if(*kl < 0)
     {
         *info = -5;
     }
-    else if (*ku < 0)
+    else if(*ku < 0)
     {
         *info = -6;
     }
-    else if (*ldab < klu1)
+    else if(*ldab < klu1)
     {
         *info = -8;
     }
-    else if (*ldq < 1 || wantq && *ldq < fla_max(1,*m))
+    else if(*ldq < 1 || wantq && *ldq < fla_max(1, *m))
     {
         *info = -12;
     }
-    else if (*ldpt < 1 || wantpt && *ldpt < fla_max(1,*n))
+    else if(*ldpt < 1 || wantpt && *ldpt < fla_max(1, *n))
     {
         *info = -14;
     }
-    else if (*ldc < 1 || wantc && *ldc < fla_max(1,*m))
+    else if(*ldc < 1 || wantc && *ldc < fla_max(1, *m))
     {
         *info = -16;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DGBBRD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize Q and P**T to the unit matrix, if needed */
-    if (wantq)
+    if(wantq)
     {
         dlaset_("Full", m, m, &c_b8, &c_b9, &q[q_offset], ldq);
     }
-    if (wantpt)
+    if(wantpt)
     {
         dlaset_("Full", n, n, &c_b8, &c_b9, &pt[pt_offset], ldpt);
     }
     /* Quick return if possible. */
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    minmn = fla_min(*m,*n);
-    if (*kl + *ku > 1)
+    minmn = fla_min(*m, *n);
+    if(*kl + *ku > 1)
     {
         /* Reduce to upper bidiagonal form if KU > 0;
         if KU = 0, reduce */
         /* first to lower bidiagonal form and then transform to upper */
         /* bidiagonal */
-        if (*ku > 0)
+        if(*ku > 0)
         {
             ml0 = 1;
             mu0 = 2;
@@ -330,13 +355,13 @@ int dgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integ
         /* vector operations of length NR over the index set J1:J2:KLU1. */
         /* The sines of the plane rotations are stored in WORK(1:fla_max(m,n)) */
         /* and the cosines in WORK(fla_max(m,n)+1:2*fla_max(m,n)). */
-        mn = fla_max(*m,*n);
+        mn = fla_max(*m, *n);
         /* Computing MIN */
         i__1 = *m - 1;
-        klm = fla_min(i__1,*kl);
+        klm = fla_min(i__1, *kl);
         /* Computing MIN */
         i__1 = *n - 1;
-        kun = fla_min(i__1,*ku);
+        kun = fla_min(i__1, *ku);
         kb = klm + kun;
         kb1 = kb + 1;
         inca = kb1 * *ldab;
@@ -344,33 +369,28 @@ int dgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integ
         j1 = klm + 2;
         j2 = 1 - kun;
         i__1 = minmn;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* Reduce i-th column and i-th row of matrix to bidiagonal form */
             ml = klm + 1;
             mu = kun + 1;
             i__2 = kb;
-            for (kk = 1;
-                    kk <= i__2;
-                    ++kk)
+            for(kk = 1; kk <= i__2; ++kk)
             {
                 j1 += kb;
                 j2 += kb;
                 /* generate plane rotations to annihilate nonzero elements */
                 /* which have been created below the band */
-                if (nr > 0)
+                if(nr > 0)
                 {
-                    dlargv_(&nr, &ab[klu1 + (j1 - klm - 1) * ab_dim1], &inca, &work[j1], &kb1, &work[mn + j1], &kb1);
+                    dlargv_(&nr, &ab[klu1 + (j1 - klm - 1) * ab_dim1], &inca, &work[j1], &kb1,
+                            &work[mn + j1], &kb1);
                 }
                 /* apply plane rotations from the left */
                 i__3 = kb;
-                for (l = 1;
-                        l <= i__3;
-                        ++l)
+                for(l = 1; l <= i__3; ++l)
                 {
-                    if (j2 - klm + l - 1 > *n)
+                    if(j2 - klm + l - 1 > *n)
                     {
                         nrt = nr - 1;
                     }
@@ -378,61 +398,64 @@ int dgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integ
                     {
                         nrt = nr;
                     }
-                    if (nrt > 0)
+                    if(nrt > 0)
                     {
-                        dlartv_(&nrt, &ab[klu1 - l + (j1 - klm + l - 1) * ab_dim1], &inca, &ab[klu1 - l + 1 + (j1 - klm + l - 1) * ab_dim1], &inca, &work[mn + j1], & work[j1], &kb1);
+                        dlartv_(&nrt, &ab[klu1 - l + (j1 - klm + l - 1) * ab_dim1], &inca,
+                                &ab[klu1 - l + 1 + (j1 - klm + l - 1) * ab_dim1], &inca,
+                                &work[mn + j1], &work[j1], &kb1);
                     }
                     /* L10: */
                 }
-                if (ml > ml0)
+                if(ml > ml0)
                 {
-                    if (ml <= *m - i__ + 1)
+                    if(ml <= *m - i__ + 1)
                     {
                         /* generate plane rotation to annihilate a(i+ml-1,i) */
                         /* within the band, and apply rotation from the left */
-                        dlartg_(&ab[*ku + ml - 1 + i__ * ab_dim1], &ab[*ku + ml + i__ * ab_dim1], &work[mn + i__ + ml - 1], &work[i__ + ml - 1], &ra);
+                        dlartg_(&ab[*ku + ml - 1 + i__ * ab_dim1], &ab[*ku + ml + i__ * ab_dim1],
+                                &work[mn + i__ + ml - 1], &work[i__ + ml - 1], &ra);
                         ab[*ku + ml - 1 + i__ * ab_dim1] = ra;
-                        if (i__ < *n)
+                        if(i__ < *n)
                         {
                             /* Computing MIN */
                             i__4 = *ku + ml - 2;
                             i__5 = *n - i__; // , expr subst
-                            i__3 = fla_min(i__4,i__5);
+                            i__3 = fla_min(i__4, i__5);
                             i__6 = *ldab - 1;
                             i__7 = *ldab - 1;
-                            drot_(&i__3, &ab[*ku + ml - 2 + (i__ + 1) * ab_dim1], &i__6, &ab[*ku + ml - 1 + (i__ + 1) * ab_dim1], &i__7, &work[mn + i__ + ml - 1], &work[i__ + ml - 1]);
+                            drot_(&i__3, &ab[*ku + ml - 2 + (i__ + 1) * ab_dim1], &i__6,
+                                  &ab[*ku + ml - 1 + (i__ + 1) * ab_dim1], &i__7,
+                                  &work[mn + i__ + ml - 1], &work[i__ + ml - 1]);
                         }
                     }
                     ++nr;
                     j1 -= kb1;
                 }
-                if (wantq)
+                if(wantq)
                 {
                     /* accumulate product of plane rotations in Q */
                     i__3 = j2;
                     i__4 = kb1;
-                    for (j = j1;
-                            i__4 < 0 ? j >= i__3 : j <= i__3;
-                            j += i__4)
+                    for(j = j1; i__4 < 0 ? j >= i__3 : j <= i__3; j += i__4)
                     {
-                        drot_(m, &q[(j - 1) * q_dim1 + 1], &c__1, &q[j * q_dim1 + 1], &c__1, &work[mn + j], &work[j]);
+                        drot_(m, &q[(j - 1) * q_dim1 + 1], &c__1, &q[j * q_dim1 + 1], &c__1,
+                              &work[mn + j], &work[j]);
                         /* L20: */
                     }
                 }
-                if (wantc)
+                if(wantc)
                 {
                     /* apply plane rotations to C */
                     i__4 = j2;
                     i__3 = kb1;
-                    for (j = j1;
-                            i__3 < 0 ? j >= i__4 : j <= i__4;
-                            j += i__3)
+                    for(j = j1; i__3 < 0 ? j >= i__4 : j <= i__4; j += i__3)
                     {
-                        drot_(ncc, &c__[j - 1 + c_dim1], ldc, &c__[j + c_dim1], ldc, &work[mn + j], &work[j]);
+                        drot_(ncc, &c__[j - 1 + c_dim1], ldc, &c__[j + c_dim1], ldc, &work[mn + j],
+                              &work[j]);
                         /* L30: */
                     }
                 }
-                if (j2 + kun > *n)
+                if(j2 + kun > *n)
                 {
                     /* adjust J2 to keep within the bounds of the matrix */
                     --nr;
@@ -440,9 +463,7 @@ int dgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integ
                 }
                 i__3 = j2;
                 i__4 = kb1;
-                for (j = j1;
-                        i__4 < 0 ? j >= i__3 : j <= i__3;
-                        j += i__4)
+                for(j = j1; i__4 < 0 ? j >= i__3 : j <= i__3; j += i__4)
                 {
                     /* create nonzero element a(j-1,j+ku) above the band */
                     /* and store it in WORK(n+1:2*n) */
@@ -452,17 +473,16 @@ int dgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integ
                 }
                 /* generate plane rotations to annihilate nonzero elements */
                 /* which have been generated above the band */
-                if (nr > 0)
+                if(nr > 0)
                 {
-                    dlargv_(&nr, &ab[(j1 + kun - 1) * ab_dim1 + 1], &inca, & work[j1 + kun], &kb1, &work[mn + j1 + kun], &kb1);
+                    dlargv_(&nr, &ab[(j1 + kun - 1) * ab_dim1 + 1], &inca, &work[j1 + kun], &kb1,
+                            &work[mn + j1 + kun], &kb1);
                 }
                 /* apply plane rotations from the right */
                 i__4 = kb;
-                for (l = 1;
-                        l <= i__4;
-                        ++l)
+                for(l = 1; l <= i__4; ++l)
                 {
-                    if (j2 + l - 1 > *m)
+                    if(j2 + l - 1 > *m)
                     {
                         nrt = nr - 1;
                     }
@@ -470,43 +490,48 @@ int dgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integ
                     {
                         nrt = nr;
                     }
-                    if (nrt > 0)
+                    if(nrt > 0)
                     {
-                        dlartv_(&nrt, &ab[l + 1 + (j1 + kun - 1) * ab_dim1], & inca, &ab[l + (j1 + kun) * ab_dim1], &inca, & work[mn + j1 + kun], &work[j1 + kun], &kb1);
+                        dlartv_(&nrt, &ab[l + 1 + (j1 + kun - 1) * ab_dim1], &inca,
+                                &ab[l + (j1 + kun) * ab_dim1], &inca, &work[mn + j1 + kun],
+                                &work[j1 + kun], &kb1);
                     }
                     /* L50: */
                 }
-                if (ml == ml0 && mu > mu0)
+                if(ml == ml0 && mu > mu0)
                 {
-                    if (mu <= *n - i__ + 1)
+                    if(mu <= *n - i__ + 1)
                     {
                         /* generate plane rotation to annihilate a(i,i+mu-1) */
                         /* within the band, and apply rotation from the right */
-                        dlartg_(&ab[*ku - mu + 3 + (i__ + mu - 2) * ab_dim1], &ab[*ku - mu + 2 + (i__ + mu - 1) * ab_dim1], &work[mn + i__ + mu - 1], &work[i__ + mu - 1], &ra);
+                        dlartg_(&ab[*ku - mu + 3 + (i__ + mu - 2) * ab_dim1],
+                                &ab[*ku - mu + 2 + (i__ + mu - 1) * ab_dim1],
+                                &work[mn + i__ + mu - 1], &work[i__ + mu - 1], &ra);
                         ab[*ku - mu + 3 + (i__ + mu - 2) * ab_dim1] = ra;
                         /* Computing MIN */
                         i__3 = *kl + mu - 2;
                         i__5 = *m - i__; // , expr subst
-                        i__4 = fla_min(i__3,i__5);
-                        drot_(&i__4, &ab[*ku - mu + 4 + (i__ + mu - 2) * ab_dim1], &c__1, &ab[*ku - mu + 3 + (i__ + mu - 1) * ab_dim1], &c__1, &work[mn + i__ + mu - 1], &work[i__ + mu - 1]);
+                        i__4 = fla_min(i__3, i__5);
+                        drot_(&i__4, &ab[*ku - mu + 4 + (i__ + mu - 2) * ab_dim1], &c__1,
+                              &ab[*ku - mu + 3 + (i__ + mu - 1) * ab_dim1], &c__1,
+                              &work[mn + i__ + mu - 1], &work[i__ + mu - 1]);
                     }
                     ++nr;
                     j1 -= kb1;
                 }
-                if (wantpt)
+                if(wantpt)
                 {
                     /* accumulate product of plane rotations in P**T */
                     i__4 = j2;
                     i__3 = kb1;
-                    for (j = j1;
-                            i__3 < 0 ? j >= i__4 : j <= i__4;
-                            j += i__3)
+                    for(j = j1; i__3 < 0 ? j >= i__4 : j <= i__4; j += i__3)
                     {
-                        drot_(n, &pt[j + kun - 1 + pt_dim1], ldpt, &pt[j + kun + pt_dim1], ldpt, &work[mn + j + kun], & work[j + kun]);
+                        drot_(n, &pt[j + kun - 1 + pt_dim1], ldpt, &pt[j + kun + pt_dim1], ldpt,
+                              &work[mn + j + kun], &work[j + kun]);
                         /* L60: */
                     }
                 }
-                if (j2 + kb > *m)
+                if(j2 + kb > *m)
                 {
                     /* adjust J2 to keep within the bounds of the matrix */
                     --nr;
@@ -514,17 +539,16 @@ int dgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integ
                 }
                 i__3 = j2;
                 i__4 = kb1;
-                for (j = j1;
-                        i__4 < 0 ? j >= i__3 : j <= i__3;
-                        j += i__4)
+                for(j = j1; i__4 < 0 ? j >= i__3 : j <= i__3; j += i__4)
                 {
                     /* create nonzero element a(j+kl+ku,j+ku-1) below the */
                     /* band and store it in WORK(1:n) */
                     work[j + kb] = work[j + kun] * ab[klu1 + (j + kun) * ab_dim1];
-                    ab[klu1 + (j + kun) * ab_dim1] = work[mn + j + kun] * ab[ klu1 + (j + kun) * ab_dim1];
+                    ab[klu1 + (j + kun) * ab_dim1]
+                        = work[mn + j + kun] * ab[klu1 + (j + kun) * ab_dim1];
                     /* L70: */
                 }
-                if (ml > ml0)
+                if(ml > ml0)
                 {
                     --ml;
                 }
@@ -537,7 +561,7 @@ int dgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integ
             /* L90: */
         }
     }
-    if (*ku == 0 && *kl > 0)
+    if(*ku == 0 && *kl > 0)
     {
         /* A has been reduced to lower bidiagonal form */
         /* Transform lower bidiagonal form to upper bidiagonal by applying */
@@ -545,54 +569,50 @@ int dgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integ
         /* and off-diagonal elements in E */
         /* Computing MIN */
         i__2 = *m - 1;
-        i__1 = fla_min(i__2,*n);
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        i__1 = fla_min(i__2, *n);
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             dlartg_(&ab[i__ * ab_dim1 + 1], &ab[i__ * ab_dim1 + 2], &rc, &rs, &ra);
             d__[i__] = ra;
-            if (i__ < *n)
+            if(i__ < *n)
             {
                 e[i__] = rs * ab[(i__ + 1) * ab_dim1 + 1];
-                ab[(i__ + 1) * ab_dim1 + 1] = rc * ab[(i__ + 1) * ab_dim1 + 1] ;
+                ab[(i__ + 1) * ab_dim1 + 1] = rc * ab[(i__ + 1) * ab_dim1 + 1];
             }
-            if (wantq)
+            if(wantq)
             {
                 drot_(m, &q[i__ * q_dim1 + 1], &c__1, &q[(i__ + 1) * q_dim1 + 1], &c__1, &rc, &rs);
             }
-            if (wantc)
+            if(wantc)
             {
                 drot_(ncc, &c__[i__ + c_dim1], ldc, &c__[i__ + 1 + c_dim1], ldc, &rc, &rs);
             }
             /* L100: */
         }
-        if (*m <= *n)
+        if(*m <= *n)
         {
             d__[*m] = ab[*m * ab_dim1 + 1];
         }
     }
-    else if (*ku > 0)
+    else if(*ku > 0)
     {
         /* A has been reduced to upper bidiagonal form */
-        if (*m < *n)
+        if(*m < *n)
         {
             /* Annihilate a(m,m+1) by applying plane rotations from the */
             /* right, storing diagonal elements in D and off-diagonal */
             /* elements in E */
             rb = ab[*ku + (*m + 1) * ab_dim1];
-            for (i__ = *m;
-                    i__ >= 1;
-                    --i__)
+            for(i__ = *m; i__ >= 1; --i__)
             {
                 dlartg_(&ab[*ku + 1 + i__ * ab_dim1], &rb, &rc, &rs, &ra);
                 d__[i__] = ra;
-                if (i__ > 1)
+                if(i__ > 1)
                 {
                     rb = -rs * ab[*ku + i__ * ab_dim1];
                     e[i__ - 1] = rc * ab[*ku + i__ * ab_dim1];
                 }
-                if (wantpt)
+                if(wantpt)
                 {
                     drot_(n, &pt[i__ + pt_dim1], ldpt, &pt[*m + 1 + pt_dim1], ldpt, &rc, &rs);
                 }
@@ -603,17 +623,13 @@ int dgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integ
         {
             /* Copy off-diagonal elements to E and diagonal elements to D */
             i__1 = minmn - 1;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 e[i__] = ab[*ku + (i__ + 1) * ab_dim1];
                 /* L120: */
             }
             i__1 = minmn;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 d__[i__] = ab[*ku + 1 + i__ * ab_dim1];
                 /* L130: */
@@ -625,24 +641,20 @@ int dgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integ
         /* A is diagonal. Set elements of E to zero and copy diagonal */
         /* elements to D. */
         i__1 = minmn - 1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             e[i__] = 0.;
             /* L140: */
         }
         i__1 = minmn;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             d__[i__] = ab[i__ * ab_dim1 + 1];
             /* L150: */
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGBBRD */
 }
 /* dgbbrd_ */

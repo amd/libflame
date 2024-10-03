@@ -1,6 +1,13 @@
-/* ../netlib/dlarf.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlarf.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/*
+ *     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+ */
 #include "FLA_f2c.h" /* Table of constant values */
+
 static doublereal c_b4 = 1.;
 static doublereal c_b5 = 0.;
 static integer c__1 = 1;
@@ -10,11 +17,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLARF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarf.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarf.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarf.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarf.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarf.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarf.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -114,27 +127,34 @@ static integer c__1 = 1;
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, doublereal *tau, doublereal *c__, integer *ldc, doublereal *work)
+void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, doublereal *tau,
+            doublereal *c__, integer *ldc, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlarf inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS ", ldc %" FLA_IS "",*side, *m, *n, *incv, *ldc);
+    AOCL_DTL_SNPRINTF("dlarf inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS
+                      ", ldc %" FLA_IS "",
+                      *side, *m, *n, *incv, *ldc);
     /* System generated locals */
     integer c_dim1, c_offset;
     doublereal d__1;
     /* Local variables */
     integer i__;
-#ifdef FLA_ENABLE_AMD_OPT
-    doublereal temp;
-    integer i__1, j;
-#endif
     logical applyleft;
+#ifdef FLA_ENABLE_AMD_OPT
+    extern void fla_dlarf_small_incv1_simd( integer lastv, integer lastc, double *c__, integer ldc, double *v, double tau, double *work);
+#endif
     extern /* Subroutine */
-    int dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+        void
+        dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+              doublereal *, integer *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
+               integer *, doublereal *, doublereal *, integer *);
     integer lastc, lastv;
-    extern integer iladlc_(integer *, integer *, doublereal *, integer *), iladlr_(integer *, integer *, doublereal *, integer *);
+    extern integer iladlc_(integer *, integer *, doublereal *, integer *),
+        iladlr_(integer *, integer *, doublereal *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -160,14 +180,14 @@ int dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, dou
     c__ -= c_offset;
     --work;
     /* Function Body */
-    applyleft = lsame_(side, "L");
+    applyleft = lsame_(side, "L", 1, 1);
     lastv = 0;
     lastc = 0;
-    if (*tau != 0.)
+    if(*tau != 0.)
     {
         /* Set up variables for scanning V. LASTV begins pointing to the end */
         /* of V. */
-        if (applyleft)
+        if(applyleft)
         {
             lastv = *m;
         }
@@ -175,7 +195,7 @@ int dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, dou
         {
             lastv = *n;
         }
-        if (*incv > 0)
+        if(*incv > 0)
         {
             i__ = (lastv - 1) * *incv + 1;
         }
@@ -189,7 +209,7 @@ int dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, dou
             --lastv;
             i__ -= *incv;
         }
-        if (applyleft)
+        if(applyleft)
         {
             /* Scan for the last non-zero column in C(1:lastv,:). */
             lastc = iladlc_(&lastv, n, &c__[c_offset], ldc);
@@ -203,73 +223,57 @@ int dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, dou
     /* Note that lastc.eq.0 renders the BLAS operations null;
     no special */
     /* case is needed at this level. */
-    if (applyleft)
+    if(applyleft)
     {
         /* Form H * C */
-        if (lastv > 0)
+        if(lastv > 0 && lastc > 0)
         {
-            /* w(1:lastc,1) := C(1:lastv,1:lastc)**T * v(1:lastv,1) */
-            dgemv_("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, & v[1], incv, &c_b5, &work[1], &c__1);
-            /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**T */
             d__1 = -(*tau);
-#ifdef FLA_ENABLE_AMD_OPT
-            /* Inline DGER for small size */
-            if(lastc <= FLA_DGER_INLINE_SMALL_THRESH0 && lastv <= FLA_DGER_INLINE_SMALL_THRESH1)
+
+#ifndef FLA_ENABLE_AMD_OPT
+            /* w(1:lastc,1) := C(1:lastv,1:lastc)**T * v(1:lastv,1) */
+            dgemv_("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[1], incv, &c_b5,
+                   &work[1], &c__1);
+
+            /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**T */
+            dger_(&lastv, &lastc, &d__1, &v[1], incv, &work[1], &c__1, &c__[ c_offset], ldc);            
+#else
+            /* Get threshold sizes to take optimized path*/
+            FLA_Bool min_lastc_lastv = (lastc < FLA_DGEMV_DGER_SIMD_SMALL_THRESH) && 
+                    (lastv > FLA_DGEMV_DGER_SIMD_SMALL_THRESH_M && lastv < FLA_DGEMV_DGER_SIMD_SMALL_THRESH);
+
+          /* If the size of the matrix is small and incv =1, use the optimized path */
+            if(min_lastc_lastv && *incv == c__1 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
             {
-                if (*incv == c__1)
-                {
-                    for (j = 1; j <= lastc; ++j)
-                    {
-                        if (work[j] != 0.)
-                        {
-                            temp = d__1 * work[j];
-                            for (i__ = 1; i__ <= lastv; ++i__)
-                            {
-                                c__[i__ + j * *ldc] += v[i__] * temp;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    for (j = 1; j <= lastc; ++j)
-                    {
-                        if (work[j] != 0.)
-                        {
-                            i__1 = 1;
-                            temp = d__1 * work[j];
-                            for (i__ = 1; i__ <= lastv; ++i__)
-                            {
-                                c__[i__ + j * *ldc] += v[i__1] * temp;
-                                i__1 += *incv;
-                            }
-                        }
-                    }
-                }
+                /* Call optimized routine */
+                fla_dlarf_small_incv1_simd( lastv, lastc, c__, *ldc, v, d__1, work);
             }
             else
             {
+                /* w(1:lastc,1) := C(1:lastv,1:lastc)**T * v(1:lastv,1) */
+                dgemv_("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[1], incv, &c_b5, &work[1], &c__1);
+            
+                /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**T*/
                 dger_(&lastv, &lastc, &d__1, &v[1], incv, &work[1], &c__1, &c__[ c_offset], ldc);
             }
-#else
-            dger_(&lastv, &lastc, &d__1, &v[1], incv, &work[1], &c__1, &c__[ c_offset], ldc);
 #endif
         }
     }
     else
     {
         /* Form C * H */
-        if (lastv > 0)
+        if(lastv > 0)
         {
             /* w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1) */
-            dgemv_("No transpose", &lastc, &lastv, &c_b4, &c__[c_offset], ldc, &v[1], incv, &c_b5, &work[1], &c__1);
+            dgemv_("No transpose", &lastc, &lastv, &c_b4, &c__[c_offset], ldc, &v[1], incv, &c_b5,
+                   &work[1], &c__1);
             /* C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**T */
             d__1 = -(*tau);
-            dger_(&lastc, &lastv, &d__1, &work[1], &c__1, &v[1], incv, &c__[ c_offset], ldc);
+            dger_(&lastc, &lastv, &d__1, &work[1], &c__1, &v[1], incv, &c__[c_offset], ldc);
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLARF */
 }
 /* dlarf_ */

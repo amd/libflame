@@ -1,5 +1,8 @@
-/* ../netlib/dlaic1.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlaic1.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static doublereal c_b5 = 1.;
@@ -9,11 +12,17 @@ static doublereal c_b5 = 1.;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLAIC1 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaic1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaic1.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaic1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaic1.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaic1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaic1.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -123,10 +132,11 @@ static doublereal c_b5 = 1.;
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublereal *w, doublereal *gamma, doublereal * sestpr, doublereal *s, doublereal *c__)
+void dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublereal *w,
+             doublereal *gamma, doublereal *sestpr, doublereal *s, doublereal *c__)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaic1 inputs: job %" FLA_IS ", j %" FLA_IS "",*job, *j);
+    AOCL_DTL_SNPRINTF("dlaic1 inputs: job %" FLA_IS ", j %" FLA_IS "", *job, *j);
     /* System generated locals */
     doublereal d__1, d__2, d__3, d__4;
     /* Builtin functions */
@@ -164,14 +174,14 @@ int dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublerea
     absalp = f2c_dabs(alpha);
     absgam = f2c_dabs(*gamma);
     absest = f2c_dabs(*sest);
-    if (*job == 1)
+    if(*job == 1)
     {
         /* Estimating largest singular value */
         /* special cases */
-        if (*sest == 0.)
+        if(*sest == 0.)
         {
-            s1 = fla_max(absgam,absalp);
-            if (s1 == 0.)
+            s1 = fla_max(absgam, absalp);
+            if(s1 == 0.)
             {
                 *s = 0.;
                 *c__ = 1.;
@@ -187,24 +197,24 @@ int dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublerea
                 *sestpr = s1 * tmp;
             }
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
-        else if (absgam <= eps * absest)
+        else if(absgam <= eps * absest)
         {
             *s = 1.;
             *c__ = 0.;
-            tmp = fla_max(absest,absalp);
+            tmp = fla_max(absest, absalp);
             s1 = absest / tmp;
             s2 = absalp / tmp;
             *sestpr = tmp * sqrt(s1 * s1 + s2 * s2);
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
-        else if (absalp <= eps * absest)
+        else if(absalp <= eps * absest)
         {
             s1 = absgam;
             s2 = absest;
-            if (s1 <= s2)
+            if(s1 <= s2)
             {
                 *s = 1.;
                 *c__ = 0.;
@@ -217,13 +227,13 @@ int dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublerea
                 *sestpr = s1;
             }
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
-        else if (absest <= eps * absalp || absest <= eps * absgam)
+        else if(absest <= eps * absalp || absest <= eps * absgam)
         {
             s1 = absgam;
             s2 = absalp;
-            if (s1 <= s2)
+            if(s1 <= s2)
             {
                 tmp = s1 / s2;
                 *s = sqrt(tmp * tmp + 1.);
@@ -240,7 +250,7 @@ int dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublerea
                 *c__ = d_sign(&c_b5, gamma) / *c__;
             }
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         else
         {
@@ -249,7 +259,7 @@ int dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublerea
             zeta2 = *gamma / absest;
             b = (1. - zeta1 * zeta1 - zeta2 * zeta2) * .5;
             *c__ = zeta1 * zeta1;
-            if (b > 0.)
+            if(b > 0.)
             {
                 t = *c__ / (b + sqrt(b * b + *c__));
             }
@@ -264,17 +274,17 @@ int dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublerea
             *c__ = cosine / tmp;
             *sestpr = sqrt(t + 1.) * absest;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
-    else if (*job == 2)
+    else if(*job == 2)
     {
         /* Estimating smallest singular value */
         /* special cases */
-        if (*sest == 0.)
+        if(*sest == 0.)
         {
             *sestpr = 0.;
-            if (fla_max(absgam,absalp) == 0.)
+            if(fla_max(absgam, absalp) == 0.)
             {
                 sine = 1.;
                 cosine = 0.;
@@ -287,28 +297,28 @@ int dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublerea
             /* Computing MAX */
             d__1 = f2c_dabs(sine);
             d__2 = f2c_dabs(cosine); // , expr subst
-            s1 = fla_max(d__1,d__2);
+            s1 = fla_max(d__1, d__2);
             *s = sine / s1;
             *c__ = cosine / s1;
             tmp = sqrt(*s * *s + *c__ * *c__);
             *s /= tmp;
             *c__ /= tmp;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
-        else if (absgam <= eps * absest)
+        else if(absgam <= eps * absest)
         {
             *s = 0.;
             *c__ = 1.;
             *sestpr = absgam;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
-        else if (absalp <= eps * absest)
+        else if(absalp <= eps * absest)
         {
             s1 = absgam;
             s2 = absest;
-            if (s1 <= s2)
+            if(s1 <= s2)
             {
                 *s = 0.;
                 *c__ = 1.;
@@ -321,13 +331,13 @@ int dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublerea
                 *sestpr = s2;
             }
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
-        else if (absest <= eps * absalp || absest <= eps * absgam)
+        else if(absest <= eps * absalp || absest <= eps * absgam)
         {
             s1 = absgam;
             s2 = absalp;
-            if (s1 <= s2)
+            if(s1 <= s2)
             {
                 tmp = s1 / s2;
                 *c__ = sqrt(tmp * tmp + 1.);
@@ -344,7 +354,7 @@ int dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublerea
                 *s = -d_sign(&c_b5, gamma) / *s;
             }
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         else
         {
@@ -354,10 +364,10 @@ int dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublerea
             /* Computing MAX */
             d__3 = zeta1 * zeta1 + 1. + (d__1 = zeta1 * zeta2, f2c_dabs(d__1));
             d__4 = (d__2 = zeta1 * zeta2, f2c_dabs(d__2)) + zeta2 * zeta2; // , expr subst
-            norma = fla_max(d__3,d__4);
+            norma = fla_max(d__3, d__4);
             /* See if root is closer to zero or to ONE */
             test = (zeta1 - zeta2) * 2. * (zeta1 + zeta2) + 1.;
-            if (test >= 0.)
+            if(test >= 0.)
             {
                 /* root is close to zero, compute directly */
                 b = (zeta1 * zeta1 + zeta2 * zeta2 + 1.) * .5;
@@ -372,7 +382,7 @@ int dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublerea
                 /* root is closer to ONE, shift by that amount */
                 b = (zeta2 * zeta2 + zeta1 * zeta1 - 1.) * .5;
                 *c__ = zeta1 * zeta1;
-                if (b >= 0.)
+                if(b >= 0.)
                 {
                     t = -(*c__) / (b + sqrt(b * b + *c__));
                 }
@@ -388,11 +398,11 @@ int dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublerea
             *s = sine / tmp;
             *c__ = cosine / tmp;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAIC1 */
 }
 /* dlaic1_ */

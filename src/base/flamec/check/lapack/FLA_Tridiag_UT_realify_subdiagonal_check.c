@@ -13,7 +13,7 @@
 FLA_Error FLA_Tridiag_UT_realify_subdiagonal_check( FLA_Obj b, FLA_Obj d )
 {
   FLA_Error e_val;
-  dim_t     m_d;
+  fla_dim_t     m_d;
 
   e_val = FLA_Check_floating_object( d );
   FLA_Check_error_code( e_val );

@@ -1,16 +1,25 @@
-/* ../netlib/v3.9.0/dsyconvf.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/dsyconvf.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DSYCONVF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DSYCONVF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsyconv f.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsyconv
+ * f.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsyconv f.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsyconv
+ * f.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsyconv f.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsyconv
+ * f.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -89,7 +98,7 @@
 /* > DSYTRF_RK or DSYTRF_BK: */
 /* > a) ONLY diagonal elements of the symmetric block diagonal */
 /* > matrix D on the diagonal of A, i.e. D(k,k) = A(k,k);
-*/
+ */
 /* > (superdiagonal (or subdiagonal) elements of D */
 /* > are stored on exit in array E), and */
 /* > b) If UPLO = 'U': factor U in the superdiagonal part of A. */
@@ -101,7 +110,7 @@
 /* > DSYTRF_RK or DSYTRF_BK: */
 /* > a) ONLY diagonal elements of the symmetric block diagonal */
 /* > matrix D on the diagonal of A, i.e. D(k,k) = A(k,k);
-*/
+ */
 /* > (superdiagonal (or subdiagonal) elements of D */
 /* > are stored on exit in array E), and */
 /* > b) If UPLO = 'U': factor U in the superdiagonal part of A. */
@@ -136,7 +145,7 @@
 /* > elements of the symmetric block diagonal matrix D */
 /* > with 1-by-1 or 2-by-2 diagonal blocks, where */
 /* > If UPLO = 'U': E(i) = D(i-1,i), i=2:N, E(1) is set to 0;
-*/
+ */
 /* > If UPLO = 'L': E(i) = D(i+1,i), i=1:N-1, E(N) is set to 0. */
 /* > */
 /* > 2) If WAY = 'R': */
@@ -145,7 +154,7 @@
 /* > elements of the symmetric block diagonal matrix D */
 /* > with 1-by-1 or 2-by-2 diagonal blocks, where */
 /* > If UPLO = 'U': E(i) = D(i-1,i),i=2:N, E(1) not referenced;
-*/
+ */
 /* > If UPLO = 'L': E(i) = D(i+1,i),i=1:N-1, E(N) not referenced. */
 /* > */
 /* > On exit, is not changed */
@@ -196,20 +205,24 @@
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int dsyconvf_(char *uplo, char *way, integer *n, doublereal * a, integer *lda, doublereal *e, integer *ipiv, integer *info)
+void dsyconvf_(char *uplo, char *way, integer *n, doublereal *a, integer *lda, doublereal *e,
+               integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsyconvf inputs: uplo %c, way %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *way, *n, *lda);
+    AOCL_DTL_SNPRINTF("dsyconvf inputs: uplo %c, way %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo,
+                      *way, *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
     /* Local variables */
     integer i__, ip;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical convert;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -235,41 +248,41 @@ int dsyconvf_(char *uplo, char *way, integer *n, doublereal * a, integer *lda, d
     --ipiv;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    convert = lsame_(way, "C");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    convert = lsame_(way, "C", 1, 1);
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! convert && ! lsame_(way, "R"))
+    else if(!convert && !lsame_(way, "R", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DSYCONVF", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    if (upper)
+    if(upper)
     {
         /* Begin A is UPPER */
-        if (convert)
+        if(convert)
         {
             /* Convert A (A is upper) */
             /* Convert VALUE */
@@ -279,7 +292,7 @@ int dsyconvf_(char *uplo, char *way, integer *n, doublereal * a, integer *lda, d
             e[1] = 0.;
             while(i__ > 1)
             {
-                if (ipiv[i__] < 0)
+                if(ipiv[i__] < 0)
                 {
                     e[i__] = a[i__ - 1 + i__ * a_dim1];
                     e[i__ - 1] = 0.;
@@ -298,17 +311,18 @@ int dsyconvf_(char *uplo, char *way, integer *n, doublereal * a, integer *lda, d
             i__ = *n;
             while(i__ >= 1)
             {
-                if (ipiv[i__] > 0)
+                if(ipiv[i__] > 0)
                 {
                     /* 1-by-1 pivot interchange */
                     /* Swap rows i and IPIV(i) in A(1:i,N-i:N) */
                     ip = ipiv[i__];
-                    if (i__ < *n)
+                    if(i__ < *n)
                     {
-                        if (ip != i__)
+                        if(ip != i__)
                         {
                             i__1 = *n - i__;
-                            dswap_(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda, & a[ip + (i__ + 1) * a_dim1], lda);
+                            dswap_(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda,
+                                   &a[ip + (i__ + 1) * a_dim1], lda);
                         }
                     }
                 }
@@ -317,12 +331,13 @@ int dsyconvf_(char *uplo, char *way, integer *n, doublereal * a, integer *lda, d
                     /* 2-by-2 pivot interchange */
                     /* Swap rows i-1 and IPIV(i) in A(1:i,N-i:N) */
                     ip = -ipiv[i__];
-                    if (i__ < *n)
+                    if(i__ < *n)
                     {
-                        if (ip != i__ - 1)
+                        if(ip != i__ - 1)
                         {
                             i__1 = *n - i__;
-                            dswap_(&i__1, &a[i__ - 1 + (i__ + 1) * a_dim1], lda, &a[ip + (i__ + 1) * a_dim1], lda);
+                            dswap_(&i__1, &a[i__ - 1 + (i__ + 1) * a_dim1], lda,
+                                   &a[ip + (i__ + 1) * a_dim1], lda);
                         }
                     }
                     /* Convert IPIV */
@@ -344,17 +359,18 @@ int dsyconvf_(char *uplo, char *way, integer *n, doublereal * a, integer *lda, d
             i__ = 1;
             while(i__ <= *n)
             {
-                if (ipiv[i__] > 0)
+                if(ipiv[i__] > 0)
                 {
                     /* 1-by-1 pivot interchange */
                     /* Swap rows i and IPIV(i) in A(1:i,N-i:N) */
                     ip = ipiv[i__];
-                    if (i__ < *n)
+                    if(i__ < *n)
                     {
-                        if (ip != i__)
+                        if(ip != i__)
                         {
                             i__1 = *n - i__;
-                            dswap_(&i__1, &a[ip + (i__ + 1) * a_dim1], lda, & a[i__ + (i__ + 1) * a_dim1], lda);
+                            dswap_(&i__1, &a[ip + (i__ + 1) * a_dim1], lda,
+                                   &a[i__ + (i__ + 1) * a_dim1], lda);
                         }
                     }
                 }
@@ -364,12 +380,13 @@ int dsyconvf_(char *uplo, char *way, integer *n, doublereal * a, integer *lda, d
                     /* Swap rows i-1 and IPIV(i) in A(1:i,N-i:N) */
                     ++i__;
                     ip = -ipiv[i__];
-                    if (i__ < *n)
+                    if(i__ < *n)
                     {
-                        if (ip != i__ - 1)
+                        if(ip != i__ - 1)
                         {
                             i__1 = *n - i__;
-                            dswap_(&i__1, &a[ip + (i__ + 1) * a_dim1], lda, & a[i__ - 1 + (i__ + 1) * a_dim1], lda);
+                            dswap_(&i__1, &a[ip + (i__ + 1) * a_dim1], lda,
+                                   &a[i__ - 1 + (i__ + 1) * a_dim1], lda);
                         }
                     }
                     /* Convert IPIV */
@@ -386,7 +403,7 @@ int dsyconvf_(char *uplo, char *way, integer *n, doublereal * a, integer *lda, d
             i__ = *n;
             while(i__ > 1)
             {
-                if (ipiv[i__] < 0)
+                if(ipiv[i__] < 0)
                 {
                     a[i__ - 1 + i__ * a_dim1] = e[i__];
                     --i__;
@@ -399,7 +416,7 @@ int dsyconvf_(char *uplo, char *way, integer *n, doublereal * a, integer *lda, d
     else
     {
         /* Begin A is LOWER */
-        if (convert)
+        if(convert)
         {
             /* Convert A (A is lower) */
             /* Convert VALUE */
@@ -409,7 +426,7 @@ int dsyconvf_(char *uplo, char *way, integer *n, doublereal * a, integer *lda, d
             e[*n] = 0.;
             while(i__ <= *n)
             {
-                if (i__ < *n && ipiv[i__] < 0)
+                if(i__ < *n && ipiv[i__] < 0)
                 {
                     e[i__] = a[i__ + 1 + i__ * a_dim1];
                     e[i__ + 1] = 0.;
@@ -428,14 +445,14 @@ int dsyconvf_(char *uplo, char *way, integer *n, doublereal * a, integer *lda, d
             i__ = 1;
             while(i__ <= *n)
             {
-                if (ipiv[i__] > 0)
+                if(ipiv[i__] > 0)
                 {
                     /* 1-by-1 pivot interchange */
                     /* Swap rows i and IPIV(i) in A(i:N,1:i-1) */
                     ip = ipiv[i__];
-                    if (i__ > 1)
+                    if(i__ > 1)
                     {
-                        if (ip != i__)
+                        if(ip != i__)
                         {
                             i__1 = i__ - 1;
                             dswap_(&i__1, &a[i__ + a_dim1], lda, &a[ip + a_dim1], lda);
@@ -447,9 +464,9 @@ int dsyconvf_(char *uplo, char *way, integer *n, doublereal * a, integer *lda, d
                     /* 2-by-2 pivot interchange */
                     /* Swap rows i+1 and IPIV(i) in A(i:N,1:i-1) */
                     ip = -ipiv[i__];
-                    if (i__ > 1)
+                    if(i__ > 1)
                     {
-                        if (ip != i__ + 1)
+                        if(ip != i__ + 1)
                         {
                             i__1 = i__ - 1;
                             dswap_(&i__1, &a[i__ + 1 + a_dim1], lda, &a[ip + a_dim1], lda);
@@ -474,14 +491,14 @@ int dsyconvf_(char *uplo, char *way, integer *n, doublereal * a, integer *lda, d
             i__ = *n;
             while(i__ >= 1)
             {
-                if (ipiv[i__] > 0)
+                if(ipiv[i__] > 0)
                 {
                     /* 1-by-1 pivot interchange */
                     /* Swap rows i and IPIV(i) in A(i:N,1:i-1) */
                     ip = ipiv[i__];
-                    if (i__ > 1)
+                    if(i__ > 1)
                     {
-                        if (ip != i__)
+                        if(ip != i__)
                         {
                             i__1 = i__ - 1;
                             dswap_(&i__1, &a[ip + a_dim1], lda, &a[i__ + a_dim1], lda);
@@ -494,9 +511,9 @@ int dsyconvf_(char *uplo, char *way, integer *n, doublereal * a, integer *lda, d
                     /* Swap rows i+1 and IPIV(i) in A(i:N,1:i-1) */
                     --i__;
                     ip = -ipiv[i__];
-                    if (i__ > 1)
+                    if(i__ > 1)
                     {
-                        if (ip != i__ + 1)
+                        if(ip != i__ + 1)
                         {
                             i__1 = i__ - 1;
                             dswap_(&i__1, &a[ip + a_dim1], lda, &a[i__ + 1 + a_dim1], lda);
@@ -516,7 +533,7 @@ int dsyconvf_(char *uplo, char *way, integer *n, doublereal * a, integer *lda, d
             i__ = 1;
             while(i__ <= *n - 1)
             {
-                if (ipiv[i__] < 0)
+                if(ipiv[i__] < 0)
                 {
                     a[i__ + 1 + i__ * a_dim1] = e[i__];
                     ++i__;
@@ -527,8 +544,7 @@ int dsyconvf_(char *uplo, char *way, integer *n, doublereal * a, integer *lda, d
         /* End A is LOWER */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYCONVF */
 }
 /* dsyconvf_ */
-

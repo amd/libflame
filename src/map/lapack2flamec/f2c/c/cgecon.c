@@ -1,5 +1,8 @@
-/* ../netlib/cgecon.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cgecon.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b CGECON */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CGECON + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgecon. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgecon.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgecon. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgecon.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgecon. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgecon.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -49,7 +58,7 @@ static integer c__1 = 1;
 /* > Specifies whether the 1-norm condition number or the */
 /* > infinity-norm condition number is required: */
 /* > = '1' or 'O': 1-norm;
-*/
+ */
 /* > = 'I': Infinity-norm. */
 /* > \endverbatim */
 /* > */
@@ -112,15 +121,16 @@ static integer c__1 = 1;
 /* > \ingroup complexGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cgecon_(char *norm, integer *n, complex *a, integer *lda, real *anorm, real *rcond, complex *work, real *rwork, integer *info)
+void cgecon_(char *norm, integer *n, complex *a, integer *lda, real *anorm, real *rcond,
+             complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgecon inputs: norm %c, n %lld, lda %lld",*norm, *n, *lda);
+    snprintf(buffer, 256, "cgecon inputs: norm %c, n %lld, lda %lld", *norm, *n, *lda);
 #else
-    snprintf(buffer, 256,"cgecon inputs: norm %c, n %d, lda %d",*norm, *n, *lda);
+    snprintf(buffer, 256, "cgecon inputs: norm %c, n %d, lda %d", *norm, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -135,17 +145,22 @@ int cgecon_(char *norm, integer *n, complex *a, integer *lda, real *anorm, real 
     real su;
     integer kase, kase1;
     real scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
-    int clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
+        void
+        clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
     extern integer icamax_(integer *, complex *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     extern /* Subroutine */
-    int clatrs_(char *, char *, char *, char *, integer *, complex *, integer *, complex *, real *, real *, integer *), csrscl_(integer *, real *, complex *, integer *);
+        void
+        clatrs_(char *, char *, char *, char *, integer *, complex *, integer *, complex *, real *,
+                real *, integer *),
+        csrscl_(integer *, real *, complex *, integer *);
     logical onenrm;
     char normin[1];
     real smlnum;
@@ -184,48 +199,48 @@ int cgecon_(char *norm, integer *n, complex *a, integer *lda, real *anorm, real 
     --rwork;
     /* Function Body */
     *info = 0;
-    onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O");
-    if (! onenrm && ! lsame_(norm, "I"))
+    onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
+    if(!onenrm && !lsame_(norm, "I", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    else if (*anorm < 0.f)
+    else if(*anorm < 0.f)
     {
         *info = -5;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CGECON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.f;
-    if (*n == 0)
+    if(*n == 0)
     {
         *rcond = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    else if (*anorm == 0.f)
+    else if(*anorm == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     smlnum = slamch_("Safe minimum");
     /* Estimate the norm of inv(A). */
     ainvnm = 0.f;
     *(unsigned char *)normin = 'N';
-    if (onenrm)
+    if(onenrm)
     {
         kase1 = 1;
     }
@@ -236,30 +251,37 @@ int cgecon_(char *norm, integer *n, complex *a, integer *lda, real *anorm, real 
     kase = 0;
 L10:
     clacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
-    if (kase != 0)
+    if(kase != 0)
     {
-        if (kase == kase1)
+        if(kase == kase1)
         {
             /* Multiply by inv(L). */
-            clatrs_("Lower", "No transpose", "Unit", normin, n, &a[a_offset], lda, &work[1], &sl, &rwork[1], info);
+            clatrs_("Lower", "No transpose", "Unit", normin, n, &a[a_offset], lda, &work[1], &sl,
+                    &rwork[1], info);
             /* Multiply by inv(U). */
-            clatrs_("Upper", "No transpose", "Non-unit", normin, n, &a[ a_offset], lda, &work[1], &su, &rwork[*n + 1], info);
+            clatrs_("Upper", "No transpose", "Non-unit", normin, n, &a[a_offset], lda, &work[1],
+                    &su, &rwork[*n + 1], info);
         }
         else
         {
             /* Multiply by inv(U**H). */
-            clatrs_("Upper", "Conjugate transpose", "Non-unit", normin, n, &a[ a_offset], lda, &work[1], &su, &rwork[*n + 1], info);
+            clatrs_("Upper", "Conjugate transpose", "Non-unit", normin, n, &a[a_offset], lda,
+                    &work[1], &su, &rwork[*n + 1], info);
             /* Multiply by inv(L**H). */
-            clatrs_("Lower", "Conjugate transpose", "Unit", normin, n, &a[ a_offset], lda, &work[1], &sl, &rwork[1], info);
+            clatrs_("Lower", "Conjugate transpose", "Unit", normin, n, &a[a_offset], lda, &work[1],
+                    &sl, &rwork[1], info);
         }
         /* Divide X by 1/(SL*SU) if doing so will not cause overflow. */
         scale = sl * su;
         *(unsigned char *)normin = 'Y';
-        if (scale != 1.f)
+        if(scale != 1.f)
         {
             ix = icamax_(n, &work[1], &c__1);
             i__1 = ix;
-            if (scale < ((r__1 = work[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(& work[ix]), f2c_abs(r__2))) * smlnum || scale == 0.f)
+            if(scale < ((r__1 = work[i__1].r, f2c_abs(r__1))
+                        + (r__2 = r_imag(&work[ix]), f2c_abs(r__2)))
+                           * smlnum
+               || scale == 0.f)
             {
                 goto L20;
             }
@@ -268,13 +290,13 @@ L10:
         goto L10;
     }
     /* Compute the estimate of the reciprocal condition number. */
-    if (ainvnm != 0.f)
+    if(ainvnm != 0.f)
     {
         *rcond = 1.f / ainvnm / *anorm;
     }
 L20:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGECON */
 }
 /* cgecon_ */

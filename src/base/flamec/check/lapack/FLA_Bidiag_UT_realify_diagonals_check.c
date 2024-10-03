@@ -13,7 +13,7 @@
 FLA_Error FLA_Bidiag_UT_realify_diagonals_check( FLA_Uplo uplo, FLA_Obj a, FLA_Obj b, FLA_Obj d, FLA_Obj e )
 {
   FLA_Error e_val;
-  dim_t     m_a;
+  fla_dim_t     m_a;
 
   e_val = FLA_Check_valid_uplo( uplo );
   FLA_Check_error_code( e_val );  

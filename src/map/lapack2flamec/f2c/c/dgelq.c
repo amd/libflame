@@ -1,5 +1,8 @@
-/* ../netlib/v3.9.0/dgelq.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/dgelq.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -27,9 +30,9 @@ static integer c__2 = 2;
 /* > where: */
 /* > */
 /* > Q is a N-by-N orthogonal matrix;
-*/
+ */
 /* > L is an lower-triangular M-by-M matrix;
-*/
+ */
 /* > 0 is a M-by-(N-M) zero matrix, if M < N. */
 /* > */
 /* > \endverbatim */
@@ -54,7 +57,7 @@ static integer c__2 = 2;
 /* > On exit, the elements on and below the diagonal of the array */
 /* > contain the M-by-fla_min(M,N) lower trapezoidal matrix L */
 /* > (L is lower triangular if M <= N);
-*/
+ */
 /* > the elements above the diagonal are used to store part of the */
 /* > data structure to represent Q. */
 /* > \endverbatim */
@@ -167,10 +170,13 @@ static integer c__2 = 2;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dgelq_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *t, integer *tsize, doublereal *work, integer *lwork, integer *info)
+void dgelq_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *t, integer *tsize,
+            doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgelq inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", tsize %" FLA_IS ", lwork %" FLA_IS "",*m, *n, *lda, *tsize, *lwork);
+    AOCL_DTL_SNPRINTF("dgelq inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", tsize %" FLA_IS
+                      ", lwork %" FLA_IS "",
+                      *m, *n, *lda, *tsize, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     /* Local variables */
@@ -178,14 +184,19 @@ int dgelq_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *t, 
     logical mint, minw;
     integer nblcks;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int dgelqt_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dgelqt_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *,
+                doublereal *, integer *);
     logical lminws, lquery;
     integer mintsz;
     extern /* Subroutine */
-    int dlaswlq_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dlaswlq_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *,
+                 integer *, doublereal *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.9.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. -- */
@@ -219,19 +230,19 @@ int dgelq_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *t, 
     lquery = *tsize == -1 || *tsize == -2 || *lwork == -1 || *lwork == -2;
     mint = FALSE_;
     minw = FALSE_;
-    if (*tsize == -2 || *lwork == -2)
+    if(*tsize == -2 || *lwork == -2)
     {
-        if (*tsize != -1)
+        if(*tsize != -1)
         {
             mint = TRUE_;
         }
-        if (*lwork != -1)
+        if(*lwork != -1)
         {
             minw = TRUE_;
         }
     }
     /* Determine the block size */
-    if (fla_min(*m,*n) > 0)
+    if(fla_min(*m, *n) > 0)
     {
         mb = ilaenv_(&c__1, "DGELQ ", " ", m, n, &c__1, &c_n1);
         nb = ilaenv_(&c__1, "DGELQ ", " ", m, n, &c__2, &c_n1);
@@ -241,18 +252,18 @@ int dgelq_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *t, 
         mb = 1;
         nb = *n;
     }
-    if (mb > fla_min(*m,*n) || mb < 1)
+    if(mb > fla_min(*m, *n) || mb < 1)
     {
         mb = 1;
     }
-    if (nb > *n || nb <= *m)
+    if(nb > *n || nb <= *m)
     {
         nb = *n;
     }
     mintsz = *m + 5;
-    if (nb > *m && *n > *m)
+    if(nb > *m && *n > *m)
     {
-        if ((*n - *m) % (nb - *m) == 0)
+        if((*n - *m) % (nb - *m) == 0)
         {
             nblcks = (*n - *m) / (nb - *m);
         }
@@ -270,32 +281,33 @@ int dgelq_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *t, 
     /* Computing MAX */
     i__1 = 1;
     i__2 = mb * *m * nblcks + 5; // , expr subst
-    if ((*tsize < fla_max(i__1,i__2) || *lwork < mb * *m) && *lwork >= *m && * tsize >= mintsz && ! lquery)
+    if((*tsize < fla_max(i__1, i__2) || *lwork < mb * *m) && *lwork >= *m && *tsize >= mintsz
+       && !lquery)
     {
         /* Computing MAX */
         i__1 = 1;
         i__2 = mb * *m * nblcks + 5; // , expr subst
-        if (*tsize < fla_max(i__1,i__2))
+        if(*tsize < fla_max(i__1, i__2))
         {
             lminws = TRUE_;
             mb = 1;
             nb = *n;
         }
-        if (*lwork < mb * *m)
+        if(*lwork < mb * *m)
         {
             lminws = TRUE_;
             mb = 1;
         }
     }
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
@@ -304,7 +316,7 @@ int dgelq_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *t, 
         /* Computing MAX */
         i__1 = 1;
         i__2 = mb * *m * nblcks + 5; // , expr subst
-        if (*tsize < fla_max(i__1,i__2) && ! lquery && ! lminws)
+        if(*tsize < fla_max(i__1, i__2) && !lquery && !lminws)
         {
             *info = -6;
         }
@@ -313,56 +325,56 @@ int dgelq_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *t, 
             /* Computing MAX */
             i__1 = 1;
             i__2 = *m * mb; // , expr subst
-            if (*lwork < fla_max(i__1,i__2) && ! lquery && ! lminws)
+            if(*lwork < fla_max(i__1, i__2) && !lquery && !lminws)
             {
                 *info = -8;
             }
         }
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        if (mint)
+        if(mint)
         {
-            t[1] = (doublereal) mintsz;
+            t[1] = (doublereal)mintsz;
         }
         else
         {
-            t[1] = (doublereal) (mb * *m * nblcks + 5);
+            t[1] = (doublereal)(mb * *m * nblcks + 5);
         }
-        t[2] = (doublereal) mb;
-        t[3] = (doublereal) nb;
-        if (minw)
+        t[2] = (doublereal)mb;
+        t[3] = (doublereal)nb;
+        if(minw)
         {
-            work[1] = (doublereal) fla_max(1,*n);
+            work[1] = (doublereal)fla_max(1, *n);
         }
         else
         {
             /* Computing MAX */
             i__1 = 1;
             i__2 = mb * *m; // , expr subst
-            work[1] = (doublereal) fla_max(i__1,i__2);
+            work[1] = (doublereal)fla_max(i__1, i__2);
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DGELQ", &i__1, (ftnlen)5);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (fla_min(*m,*n) == 0)
+    if(fla_min(*m, *n) == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* The LQ Decomposition */
-    if (*n <= *m || nb <= *m || nb >= *n)
+    if(*n <= *m || nb <= *m || nb >= *n)
     {
         dgelqt_(m, n, &mb, &a[a_offset], lda, &t[6], &mb, &work[1], info);
     }
@@ -373,9 +385,9 @@ int dgelq_(integer *m, integer *n, doublereal *a, integer * lda, doublereal *t, 
     /* Computing MAX */
     i__1 = 1;
     i__2 = mb * *m; // , expr subst
-    work[1] = (doublereal) fla_max(i__1,i__2);
+    work[1] = (doublereal)fla_max(i__1, i__2);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGELQ */
 }
 /* dgelq_ */

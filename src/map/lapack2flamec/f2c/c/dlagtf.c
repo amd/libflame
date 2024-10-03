@@ -1,16 +1,25 @@
-/* ../netlib/dlagtf.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlagtf.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLAGTF computes an LU factorization of a matrix T-λI, where T is a general tridiagonal matrix, and λ a scalar, using partial pivoting with row interchanges. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLAGTF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlagtf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlagtf.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlagtf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlagtf.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlagtf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlagtf.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -142,10 +151,11 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dlagtf_(integer *n, doublereal *a, doublereal *lambda, doublereal *b, doublereal *c__, doublereal *tol, doublereal *d__, integer *in, integer *info)
+void dlagtf_(integer *n, doublereal *a, doublereal *lambda, doublereal *b, doublereal *c__,
+             doublereal *tol, doublereal *d__, integer *in, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlagtf inputs: n %" FLA_IS "",*n);
+    AOCL_DTL_SNPRINTF("dlagtf inputs: n %" FLA_IS "", *n);
     /* System generated locals */
     integer i__1;
     doublereal d__1, d__2;
@@ -154,7 +164,8 @@ int dlagtf_(integer *n, doublereal *a, doublereal *lambda, doublereal *b, double
     doublereal tl, eps, piv1, piv2, temp, mult, scale1, scale2;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -183,45 +194,43 @@ int dlagtf_(integer *n, doublereal *a, doublereal *lambda, doublereal *b, double
     --a;
     /* Function Body */
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
         i__1 = -(*info);
         xerbla_("DLAGTF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     a[1] -= *lambda;
     in[*n] = 0;
-    if (*n == 1)
+    if(*n == 1)
     {
-        if (a[1] == 0.)
+        if(a[1] == 0.)
         {
             in[1] = 1;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     eps = dlamch_("Epsilon");
-    tl = fla_max(*tol,eps);
+    tl = fla_max(*tol, eps);
     scale1 = f2c_dabs(a[1]) + f2c_dabs(b[1]);
     i__1 = *n - 1;
-    for (k = 1;
-            k <= i__1;
-            ++k)
+    for(k = 1; k <= i__1; ++k)
     {
         a[k + 1] -= *lambda;
         scale2 = (d__1 = c__[k], f2c_dabs(d__1)) + (d__2 = a[k + 1], f2c_dabs(d__2));
-        if (k < *n - 1)
+        if(k < *n - 1)
         {
             scale2 += (d__1 = b[k + 1], f2c_dabs(d__1));
         }
-        if (a[k] == 0.)
+        if(a[k] == 0.)
         {
             piv1 = 0.;
         }
@@ -229,12 +238,12 @@ int dlagtf_(integer *n, doublereal *a, doublereal *lambda, doublereal *b, double
         {
             piv1 = (d__1 = a[k], f2c_dabs(d__1)) / scale1;
         }
-        if (c__[k] == 0.)
+        if(c__[k] == 0.)
         {
             in[k] = 0;
             piv2 = 0.;
             scale1 = scale2;
-            if (k < *n - 1)
+            if(k < *n - 1)
             {
                 d__[k] = 0.;
             }
@@ -242,13 +251,13 @@ int dlagtf_(integer *n, doublereal *a, doublereal *lambda, doublereal *b, double
         else
         {
             piv2 = (d__1 = c__[k], f2c_dabs(d__1)) / scale2;
-            if (piv2 <= piv1)
+            if(piv2 <= piv1)
             {
                 in[k] = 0;
                 scale1 = scale2;
                 c__[k] /= a[k];
                 a[k + 1] -= c__[k] * b[k];
-                if (k < *n - 1)
+                if(k < *n - 1)
                 {
                     d__[k] = 0.;
                 }
@@ -260,7 +269,7 @@ int dlagtf_(integer *n, doublereal *a, doublereal *lambda, doublereal *b, double
                 a[k] = c__[k];
                 temp = a[k + 1];
                 a[k + 1] = b[k] - mult * temp;
-                if (k < *n - 1)
+                if(k < *n - 1)
                 {
                     d__[k] = b[k + 1];
                     b[k + 1] = -mult * d__[k];
@@ -269,18 +278,18 @@ int dlagtf_(integer *n, doublereal *a, doublereal *lambda, doublereal *b, double
                 c__[k] = mult;
             }
         }
-        if (fla_max(piv1,piv2) <= tl && in[*n] == 0)
+        if(fla_max(piv1, piv2) <= tl && in[*n] == 0)
         {
             in[*n] = k;
         }
         /* L10: */
     }
-    if ((d__1 = a[*n], f2c_dabs(d__1)) <= scale1 * tl && in[*n] == 0)
+    if((d__1 = a[*n], f2c_dabs(d__1)) <= scale1 * tl && in[*n] == 0)
     {
         in[*n] = *n;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAGTF */
 }
 /* dlagtf_ */

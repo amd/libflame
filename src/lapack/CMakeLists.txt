@@ -1,4 +1,4 @@
-##Copyright (C) 2023, Advanced Micro Devices, Inc.## 
+##Copyright (C) 2023, Advanced Micro Devices, Inc.##
 add_subdirectory(dec)
 add_subdirectory(inv)
 add_subdirectory(misc)

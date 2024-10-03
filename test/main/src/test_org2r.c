@@ -1,27 +1,26 @@
 /*
-    Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
-#include "test_lapack.h"
 #include "test_common.h"
+#include "test_lapack.h"
 #include "test_prototype.h"
 
 /* Local prototypes.*/
-void fla_test_org2r_experiment(test_params_t *params, integer datatype,
-                               integer  p_cur, integer  q_cur, integer  pci,
-                               integer  n_repeats, integer einfo, double* perf,
-                               double* t,double* residual);
-void prepare_org2r_run(integer m, integer n, void *A, integer lda, void *T,
-                       void* work, integer datatype, integer n_repeats,
-                       double* time_min_, integer *info);
-void invoke_org2r(integer datatype, integer* m, integer* n, integer *min_A,
-                  void* a, integer* lda, void* tau, void* work, integer* info);
+void fla_test_org2r_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *t, double *residual);
+void prepare_org2r_run(integer m, integer n, void *A, integer lda, void *T, void *work,
+                       integer datatype, integer n_repeats, double *time_min_, integer *info);
+void invoke_org2r(integer datatype, integer *m, integer *n, integer *min_A, void *a, integer *lda,
+                  void *tau, void *work, integer *info);
 
-void fla_test_org2r(integer argc, char ** argv, test_params_t *params)
+void fla_test_org2r(integer argc, char **argv, test_params_t *params)
 {
-    char* op_str = "QR factorization";
-    char* front_str = "ORG2R";
+    char *op_str = "QR factorization";
+    char *front_str = "ORG2R";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
+    params->imatrix_char = '\0';
 
     if(argc == 1)
     {
@@ -32,16 +31,16 @@ void fla_test_org2r(integer argc, char ** argv, test_params_t *params)
         fla_test_op_driver(front_str, RECT_INPUT, params, LIN, fla_test_org2r_experiment);
         tests_not_run = 0;
     }
-    if (argc == 8)
+    if(argc == 8)
     {
         FLA_TEST_PARSE_LAST_ARG(argv[7]);
     }
-    if (argc >= 7 && argc <= 8)
+    if(argc >= 7 && argc <= 8)
     {
-        integer i, num_types,N,M;
+        integer i, num_types, N, M;
         integer datatype, n_repeats;
         double perf, time_min, residual;
-        char stype,type_flag[4] = {0};
+        char stype, type_flag[4] = {0};
         char *endptr;
 
         /* Parse the arguments */
@@ -75,18 +74,12 @@ void fla_test_org2r(integer argc, char ** argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_org2r_experiment(params, datatype,
-                                          M, N,
-                                          0,
-                                          n_repeats, einfo,
-                                          &perf, &time_min, &residual);
+                fla_test_org2r_experiment(params, datatype, M, N, 0, n_repeats, einfo, &perf,
+                                          &time_min, &residual);
                 /* Print the results */
-                fla_test_print_status(front_str,
-                                      stype,
-                                      RECT_INPUT,
-                                      M, N,
-                                      residual, params->lin_solver_paramslist[0].solver_threshold,
-                                      time_min, perf);
+                fla_test_print_status(front_str, stype, RECT_INPUT, M, N, residual,
+                                      params->lin_solver_paramslist[0].solver_threshold, time_min,
+                                      perf);
                 tests_not_run = 0;
             }
         }
@@ -95,14 +88,15 @@ void fla_test_org2r(integer argc, char ** argv, test_params_t *params)
     /* Print error messages */
     if(tests_not_run)
     {
-        printf("\nIllegal arguments for org2r\n");
-        printf("./<EXE> org2r <precisions - sdcz> <M> <N> <lda> <repeats>\n");
+        printf("\nIllegal arguments for org2r/ung2r\n");
+        printf("./<EXE> org2r <precisions - sd> <M> <N> <lda> <repeats>\n");
+        printf("./<EXE> ung2r <precisions - cz> <M> <N> <lda> <repeats>\n");
     }
     if(invalid_dtype)
     {
         printf("\nInvalid datatypes specified, choose valid datatypes from 'sdcz'\n\n");
     }
-    if (g_ext_fptr != NULL)
+    if(g_ext_fptr != NULL)
     {
         fclose(g_ext_fptr);
         g_ext_fptr = NULL;
@@ -110,16 +104,9 @@ void fla_test_org2r(integer argc, char ** argv, test_params_t *params)
     return;
 }
 
-void fla_test_org2r_experiment(test_params_t *params,
-    integer datatype,
-    integer p_cur,
-    integer q_cur,
-    integer pci,
-    integer n_repeats,
-    integer einfo,
-    double* perf,
-    double* time_min,
-    double* residual)
+void fla_test_org2r_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *time_min, double *residual)
 {
     integer m, n, lda;
     void *A = NULL, *A_test = NULL, *T_test = NULL;
@@ -137,33 +124,37 @@ void fla_test_org2r_experiment(test_params_t *params,
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if (config_data)
+    if(config_data)
     {
-        if (lda == -1)
+        if(lda == -1)
         {
-            lda = fla_max(1,m);
+            lda = fla_max(1, m);
         }
     }
 
     if(m >= n)
     {
         /* Create input matrix parameters */
-        create_matrix(datatype, &A, lda, n);
+        create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
 
         /* create tau vector */
-        create_vector(datatype, &T_test, fla_min(m,n));
+        create_vector(datatype, &T_test, fla_min(m, n));
 
         init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            scale_matrix_underflow_overflow_org2r(datatype, m, n, A, lda, params->imatrix_char);
+        }
 
         /* Make a copy of input matrix A.
            This is required to validate the API functionality.*/
-        create_matrix(datatype, &A_test, lda, n);
+        create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
         copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
         /* create Q matrix to check orthogonality */
-        create_matrix(datatype, &Q, lda, n);
+        create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &Q, lda);
         reset_matrix(datatype, m, n, Q, lda);
- 
+
         /* Make a workspace query the first time. This will provide us with
            and ideal workspace size based on internal block size.*/
         if(g_lwork <= 0)
@@ -186,13 +177,13 @@ void fla_test_org2r_experiment(test_params_t *params,
         }
 
         /* create work buffer */
-        create_matrix(datatype, &work, lwork, 1);
+        create_vector(datatype, &work, lwork);
         create_vector(datatype, &work_test, n);
 
         /* QR Factorisation on matrix A to generate Q and R */
         invoke_geqrf(datatype, &m, &n, A_test, &lda, T_test, work, &lwork, &info);
 
-        create_matrix(datatype, &R, n, n);
+        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &R, n);
         reset_matrix(datatype, n, n, R, n);
         copy_matrix(datatype, "Upper", n, n, A_test, lda, R, n);
 
@@ -203,15 +194,24 @@ void fla_test_org2r_experiment(test_params_t *params,
 
         /* performance computation
            (2/3)*n2*(3m - n) */
-        *perf = (double)((2.0 * m * n * n) - (( 2.0 / 3.0 ) * n * n * n )) / *time_min / FLOPS_PER_UNIT_PERF;
+        *perf = (double)((2.0 * m * n * n) - ((2.0 / 3.0) * n * n * n)) / *time_min
+                / FLOPS_PER_UNIT_PERF;
         if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
             *perf *= 4.0;
 
         /* output validation */
-        if(info == 0)
+        if((!FLA_EXTREME_CASE_TEST || FLA_OVERFLOW_UNDERFLOW_TEST) && info == 0)
             validate_orgqr(m, n, A, lda, Q, R, work_test, datatype, residual, &vinfo);
-
-        FLA_TEST_CHECK_EINFO(residual, info, einfo);
+        /* check for output matrix when inputs as extreme values */
+        else if(FLA_EXTREME_CASE_TEST)
+        {
+            if(!check_extreme_value(datatype, m, n, Q, lda, params->imatrix_char))
+            {
+                *residual = DBL_MAX;
+            }
+        }
+        else
+            FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
         /* Free up the buffers */
         free_matrix(A);
@@ -224,15 +224,8 @@ void fla_test_org2r_experiment(test_params_t *params,
     }
 }
 
-void prepare_org2r_run(integer m, integer n,
-    void* A,
-    integer lda,
-    void* T,
-    void* work,
-    integer datatype,
-    integer n_repeats,
-    double* time_min_,
-    integer *info)
+void prepare_org2r_run(integer m, integer n, void *A, integer lda, void *T, void *work,
+                       integer datatype, integer n_repeats, double *time_min_, integer *info)
 {
     integer i;
     void *A_save = NULL;
@@ -240,11 +233,11 @@ void prepare_org2r_run(integer m, integer n,
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
-    create_matrix(datatype, &A_save, lda, n);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_save, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_save, lda);
 
     *info = 0;
-    for (i = 0; i < n_repeats && *info == 0; ++i)
+    for(i = 0; i < n_repeats && *info == 0; ++i)
     {
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
@@ -259,7 +252,6 @@ void prepare_org2r_run(integer m, integer n,
 
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);
-
     }
 
     *time_min_ = time_min;
@@ -267,9 +259,8 @@ void prepare_org2r_run(integer m, integer n,
     free_matrix(A_save);
 }
 
-
-void invoke_org2r(integer datatype, integer* m, integer* n, integer *min_A,
-                  void* a, integer* lda, void* tau, void* work, integer* info)
+void invoke_org2r(integer datatype, integer *m, integer *n, integer *min_A, void *a, integer *lda,
+                  void *tau, void *work, integer *info)
 {
     switch(datatype)
     {

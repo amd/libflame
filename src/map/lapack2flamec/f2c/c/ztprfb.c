@@ -1,32 +1,30 @@
-/* ../netlib/ztprfb.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ztprfb.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b14 =
-{
-    1.,0.
-}
-;
-static doublecomplex c_b22 =
-{
-    0.,0.
-}
-;
-static doublecomplex c_b29 =
-{
-    -1.,-0.
-    }
-;
-/* > \brief \b ZTPRFB applies a real or complex "triangular-pentagonal" blocked reflector to a real or complex matrix, which is composed of two blocks. */
+static doublecomplex c_b14 = {1., 0.};
+static doublecomplex c_b22 = {0., 0.};
+static doublecomplex c_b29 = {-1., -0.};
+/* > \brief \b ZTPRFB applies a real or complex "triangular-pentagonal" blocked reflector to a real
+ * or complex matrix, which is composed of two blocks. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZTPRFB + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztprfb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztprfb.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztprfb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztprfb.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztprfb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztprfb.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -129,9 +127,9 @@ static doublecomplex c_b29 =
 /* > LDV is INTEGER */
 /* > The leading dimension of the array V. */
 /* > If STOREV = 'C' and SIDE = 'L', LDV >= fla_max(1,M);
-*/
+ */
 /* > if STOREV = 'C' and SIDE = 'R', LDV >= fla_max(1,N);
-*/
+ */
 /* > if STOREV = 'R', LDV >= K. */
 /* > \endverbatim */
 /* > */
@@ -163,7 +161,7 @@ static doublecomplex c_b29 =
 /* > LDA is INTEGER */
 /* > The leading dimension of the array A. */
 /* > If SIDE = 'L', LDA >= fla_max(1,K);
-*/
+ */
 /* > If SIDE = 'R', LDA >= fla_max(1,M). */
 /* > \endverbatim */
 /* > */
@@ -194,7 +192,7 @@ static doublecomplex c_b29 =
 /* > LDWORK is INTEGER */
 /* > The leading dimension of the array WORK. */
 /* > If SIDE = 'L', LDWORK >= K;
-*/
+ */
 /* > if SIDE = 'R', LDWORK >= M. */
 /* > \endverbatim */
 /* Authors: */
@@ -228,7 +226,7 @@ if SIDE = 'R', A is of size M-by-K, */
 /* > The pentagonal matrix V is composed of a rectangular block V1 and a */
 /* > trapezoidal block V2. The size of the trapezoidal block is determined by */
 /* > the parameter L, where 0<=L<=K. If L=K, the V2 block of V is triangular;
-*/
+ */
 /* > if L=0, there is no trapezoidal block, thus V = V1 is rectangular. */
 /* > */
 /* > If DIRECT = 'F' and STOREV = 'C': V = [V1] */
@@ -258,21 +256,32 @@ if SIDE = 'R', A is of size M-by-K, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ztprfb_(char *side, char *trans, char *direct, char * storev, integer *m, integer *n, integer *k, integer *l, doublecomplex *v, integer *ldv, doublecomplex *t, integer *ldt, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *work, integer *ldwork)
+void ztprfb_(char *side, char *trans, char *direct, char *storev, integer *m, integer *n,
+             integer *k, integer *l, doublecomplex *v, integer *ldv, doublecomplex *t, integer *ldt,
+             doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *work,
+             integer *ldwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztprfb inputs: side %c, trans %c, direct %c, storev %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*side, *trans, *direct, *storev, *m, *n, *k, *l, *ldv, *ldt, *lda, *ldb);
+    AOCL_DTL_SNPRINTF("ztprfb inputs: side %c, trans %c, direct %c, storev %c, m %" FLA_IS
+                      ", n %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS
+                      ", lda %" FLA_IS ", ldb %" FLA_IS "",
+                      *side, *trans, *direct, *storev, *m, *n, *k, *l, *ldv, *ldt, *lda, *ldb);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1, i__2, i__3, i__4, i__5;
+    integer a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1,
+        work_offset, i__1, i__2, i__3, i__4, i__5;
     doublecomplex z__1;
     /* Local variables */
     logical backward;
     integer i__, j, kp, mp, np;
     logical row, left;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical right;
     extern /* Subroutine */
-    int zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
+               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
+        ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *, integer *);
     logical column, forward;
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -312,17 +321,17 @@ int ztprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
     work_offset = 1 + work_dim1;
     work -= work_offset;
     /* Function Body */
-    if (*m <= 0 || *n <= 0 || *k <= 0 || *l < 0)
+    if(*m <= 0 || *n <= 0 || *k <= 0 || *l < 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
-    if (lsame_(storev, "C"))
+    if(lsame_(storev, "C", 1, 1))
     {
         column = TRUE_;
         row = FALSE_;
     }
-    else if (lsame_(storev, "R"))
+    else if(lsame_(storev, "R", 1, 1))
     {
         column = FALSE_;
         row = TRUE_;
@@ -332,12 +341,12 @@ int ztprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         column = FALSE_;
         row = FALSE_;
     }
-    if (lsame_(side, "L"))
+    if(lsame_(side, "L", 1, 1))
     {
         left = TRUE_;
         right = FALSE_;
     }
-    else if (lsame_(side, "R"))
+    else if(lsame_(side, "R", 1, 1))
     {
         left = FALSE_;
         right = TRUE_;
@@ -347,12 +356,12 @@ int ztprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         left = FALSE_;
         right = FALSE_;
     }
-    if (lsame_(direct, "F"))
+    if(lsame_(direct, "F", 1, 1))
     {
         forward = TRUE_;
         backward = FALSE_;
     }
-    else if (lsame_(direct, "B"))
+    else if(lsame_(direct, "B", 1, 1))
     {
         forward = FALSE_;
         backward = TRUE_;
@@ -363,7 +372,7 @@ int ztprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         backward = FALSE_;
     }
     /* --------------------------------------------------------------------------- */
-    if (column && forward && left)
+    if(column && forward && left)
     {
         /* --------------------------------------------------------------------------- */
         /* Let W = [ I ] (K-by-K) */
@@ -376,19 +385,15 @@ int ztprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         /* --------------------------------------------------------------------------- */
         /* Computing MIN */
         i__1 = *m - *l + 1;
-        mp = fla_min(i__1,*m);
+        mp = fla_min(i__1, *m);
         /* Computing MIN */
         i__1 = *l + 1;
-        kp = fla_min(i__1,*k);
+        kp = fla_min(i__1, *k);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *l;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = *m - *l + i__ + j * b_dim1;
@@ -396,77 +401,69 @@ int ztprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
                 work[i__3].i = b[i__4].i; // , expr subst
             }
         }
-        ztrmm_("L", "U", "C", "N", l, n, &c_b14, &v[mp + v_dim1], ldv, &work[ work_offset], ldwork);
+        ztrmm_("L", "U", "C", "N", l, n, &c_b14, &v[mp + v_dim1], ldv, &work[work_offset], ldwork);
         i__1 = *m - *l;
-        zgemm_("C", "N", l, n, &i__1, &c_b14, &v[v_offset], ldv, &b[b_offset], ldb, &c_b14, &work[work_offset], ldwork);
+        zgemm_("C", "N", l, n, &i__1, &c_b14, &v[v_offset], ldv, &b[b_offset], ldb, &c_b14,
+               &work[work_offset], ldwork);
         i__1 = *k - *l;
-        zgemm_("C", "N", &i__1, n, m, &c_b14, &v[kp * v_dim1 + 1], ldv, &b[ b_offset], ldb, &c_b22, &work[kp + work_dim1], ldwork);
+        zgemm_("C", "N", &i__1, n, m, &c_b14, &v[kp * v_dim1 + 1], ldv, &b[b_offset], ldb, &c_b22,
+               &work[kp + work_dim1], ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
                 z__1.r = work[i__4].r + a[i__5].r;
-                z__1.i = work[i__4].i + a[ i__5].i; // , expr subst
+                z__1.i = work[i__4].i + a[i__5].i; // , expr subst
                 work[i__3].r = z__1.r;
                 work[i__3].i = z__1.i; // , expr subst
             }
         }
-        ztrmm_("L", "U", trans, "N", k, n, &c_b14, &t[t_offset], ldt, &work[ work_offset], ldwork);
+        ztrmm_("L", "U", trans, "N", k, n, &c_b14, &t[t_offset], ldt, &work[work_offset], ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
                 z__1.r = a[i__4].r - work[i__5].r;
-                z__1.i = a[i__4].i - work[ i__5].i; // , expr subst
+                z__1.i = a[i__4].i - work[i__5].i; // , expr subst
                 a[i__3].r = z__1.r;
                 a[i__3].i = z__1.i; // , expr subst
             }
         }
         i__1 = *m - *l;
-        zgemm_("N", "N", &i__1, n, k, &c_b29, &v[v_offset], ldv, &work[ work_offset], ldwork, &c_b14, &b[b_offset], ldb);
+        zgemm_("N", "N", &i__1, n, k, &c_b29, &v[v_offset], ldv, &work[work_offset], ldwork, &c_b14,
+               &b[b_offset], ldb);
         i__1 = *k - *l;
-        zgemm_("N", "N", l, n, &i__1, &c_b29, &v[mp + kp * v_dim1], ldv, & work[kp + work_dim1], ldwork, &c_b14, &b[mp + b_dim1], ldb);
-        ztrmm_("L", "U", "N", "N", l, n, &c_b14, &v[mp + v_dim1], ldv, &work[ work_offset], ldwork);
+        zgemm_("N", "N", l, n, &i__1, &c_b29, &v[mp + kp * v_dim1], ldv, &work[kp + work_dim1],
+               ldwork, &c_b14, &b[mp + b_dim1], ldb);
+        ztrmm_("L", "U", "N", "N", l, n, &c_b14, &v[mp + v_dim1], ldv, &work[work_offset], ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *l;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = *m - *l + i__ + j * b_dim1;
                 i__4 = *m - *l + i__ + j * b_dim1;
                 i__5 = i__ + j * work_dim1;
                 z__1.r = b[i__4].r - work[i__5].r;
-                z__1.i = b[i__4].i - work[ i__5].i; // , expr subst
+                z__1.i = b[i__4].i - work[i__5].i; // , expr subst
                 b[i__3].r = z__1.r;
                 b[i__3].i = z__1.i; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
     }
-    else if (column && forward && right)
+    else if(column && forward && right)
     {
         /* --------------------------------------------------------------------------- */
         /* Let W = [ I ] (K-by-K) */
@@ -478,19 +475,15 @@ int ztprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         /* --------------------------------------------------------------------------- */
         /* Computing MIN */
         i__1 = *n - *l + 1;
-        np = fla_min(i__1,*n);
+        np = fla_min(i__1, *n);
         /* Computing MIN */
         i__1 = *l + 1;
-        kp = fla_min(i__1,*k);
+        kp = fla_min(i__1, *k);
         i__1 = *l;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + (*n - *l + j) * b_dim1;
@@ -498,77 +491,69 @@ int ztprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
                 work[i__3].i = b[i__4].i; // , expr subst
             }
         }
-        ztrmm_("R", "U", "N", "N", m, l, &c_b14, &v[np + v_dim1], ldv, &work[ work_offset], ldwork);
+        ztrmm_("R", "U", "N", "N", m, l, &c_b14, &v[np + v_dim1], ldv, &work[work_offset], ldwork);
         i__1 = *n - *l;
-        zgemm_("N", "N", m, l, &i__1, &c_b14, &b[b_offset], ldb, &v[v_offset], ldv, &c_b14, &work[work_offset], ldwork);
+        zgemm_("N", "N", m, l, &i__1, &c_b14, &b[b_offset], ldb, &v[v_offset], ldv, &c_b14,
+               &work[work_offset], ldwork);
         i__1 = *k - *l;
-        zgemm_("N", "N", m, &i__1, n, &c_b14, &b[b_offset], ldb, &v[kp * v_dim1 + 1], ldv, &c_b22, &work[kp * work_dim1 + 1], ldwork);
+        zgemm_("N", "N", m, &i__1, n, &c_b14, &b[b_offset], ldb, &v[kp * v_dim1 + 1], ldv, &c_b22,
+               &work[kp * work_dim1 + 1], ldwork);
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
                 z__1.r = work[i__4].r + a[i__5].r;
-                z__1.i = work[i__4].i + a[ i__5].i; // , expr subst
+                z__1.i = work[i__4].i + a[i__5].i; // , expr subst
                 work[i__3].r = z__1.r;
                 work[i__3].i = z__1.i; // , expr subst
             }
         }
-        ztrmm_("R", "U", trans, "N", m, k, &c_b14, &t[t_offset], ldt, &work[ work_offset], ldwork);
+        ztrmm_("R", "U", trans, "N", m, k, &c_b14, &t[t_offset], ldt, &work[work_offset], ldwork);
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
                 z__1.r = a[i__4].r - work[i__5].r;
-                z__1.i = a[i__4].i - work[ i__5].i; // , expr subst
+                z__1.i = a[i__4].i - work[i__5].i; // , expr subst
                 a[i__3].r = z__1.r;
                 a[i__3].i = z__1.i; // , expr subst
             }
         }
         i__1 = *n - *l;
-        zgemm_("N", "C", m, &i__1, k, &c_b29, &work[work_offset], ldwork, &v[ v_offset], ldv, &c_b14, &b[b_offset], ldb);
+        zgemm_("N", "C", m, &i__1, k, &c_b29, &work[work_offset], ldwork, &v[v_offset], ldv, &c_b14,
+               &b[b_offset], ldb);
         i__1 = *k - *l;
-        zgemm_("N", "C", m, l, &i__1, &c_b29, &work[kp * work_dim1 + 1], ldwork, &v[np + kp * v_dim1], ldv, &c_b14, &b[np * b_dim1 + 1], ldb);
-        ztrmm_("R", "U", "C", "N", m, l, &c_b14, &v[np + v_dim1], ldv, &work[ work_offset], ldwork);
+        zgemm_("N", "C", m, l, &i__1, &c_b29, &work[kp * work_dim1 + 1], ldwork,
+               &v[np + kp * v_dim1], ldv, &c_b14, &b[np * b_dim1 + 1], ldb);
+        ztrmm_("R", "U", "C", "N", m, l, &c_b14, &v[np + v_dim1], ldv, &work[work_offset], ldwork);
         i__1 = *l;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + (*n - *l + j) * b_dim1;
                 i__4 = i__ + (*n - *l + j) * b_dim1;
                 i__5 = i__ + j * work_dim1;
                 z__1.r = b[i__4].r - work[i__5].r;
-                z__1.i = b[i__4].i - work[ i__5].i; // , expr subst
+                z__1.i = b[i__4].i - work[i__5].i; // , expr subst
                 b[i__3].r = z__1.r;
                 b[i__3].i = z__1.i; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
     }
-    else if (column && backward && left)
+    else if(column && backward && left)
     {
         /* --------------------------------------------------------------------------- */
         /* Let W = [ V ] (M-by-K) */
@@ -581,19 +566,15 @@ int ztprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         /* --------------------------------------------------------------------------- */
         /* Computing MIN */
         i__1 = *l + 1;
-        mp = fla_min(i__1,*m);
+        mp = fla_min(i__1, *m);
         /* Computing MIN */
         i__1 = *k - *l + 1;
-        kp = fla_min(i__1,*k);
+        kp = fla_min(i__1, *k);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *l;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = *k - *l + i__ + j * work_dim1;
                 i__4 = i__ + j * b_dim1;
@@ -601,77 +582,71 @@ int ztprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
                 work[i__3].i = b[i__4].i; // , expr subst
             }
         }
-        ztrmm_("L", "L", "C", "N", l, n, &c_b14, &v[kp * v_dim1 + 1], ldv, & work[kp + work_dim1], ldwork);
+        ztrmm_("L", "L", "C", "N", l, n, &c_b14, &v[kp * v_dim1 + 1], ldv, &work[kp + work_dim1],
+               ldwork);
         i__1 = *m - *l;
-        zgemm_("C", "N", l, n, &i__1, &c_b14, &v[mp + kp * v_dim1], ldv, &b[ mp + b_dim1], ldb, &c_b14, &work[kp + work_dim1], ldwork);
+        zgemm_("C", "N", l, n, &i__1, &c_b14, &v[mp + kp * v_dim1], ldv, &b[mp + b_dim1], ldb,
+               &c_b14, &work[kp + work_dim1], ldwork);
         i__1 = *k - *l;
-        zgemm_("C", "N", &i__1, n, m, &c_b14, &v[v_offset], ldv, &b[b_offset], ldb, &c_b22, &work[work_offset], ldwork);
+        zgemm_("C", "N", &i__1, n, m, &c_b14, &v[v_offset], ldv, &b[b_offset], ldb, &c_b22,
+               &work[work_offset], ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
                 z__1.r = work[i__4].r + a[i__5].r;
-                z__1.i = work[i__4].i + a[ i__5].i; // , expr subst
+                z__1.i = work[i__4].i + a[i__5].i; // , expr subst
                 work[i__3].r = z__1.r;
                 work[i__3].i = z__1.i; // , expr subst
             }
         }
-        ztrmm_("L", "L", trans, "N", k, n, &c_b14, &t[t_offset], ldt, &work[ work_offset], ldwork);
+        ztrmm_("L", "L", trans, "N", k, n, &c_b14, &t[t_offset], ldt, &work[work_offset], ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
                 z__1.r = a[i__4].r - work[i__5].r;
-                z__1.i = a[i__4].i - work[ i__5].i; // , expr subst
+                z__1.i = a[i__4].i - work[i__5].i; // , expr subst
                 a[i__3].r = z__1.r;
                 a[i__3].i = z__1.i; // , expr subst
             }
         }
         i__1 = *m - *l;
-        zgemm_("N", "N", &i__1, n, k, &c_b29, &v[mp + v_dim1], ldv, &work[ work_offset], ldwork, &c_b14, &b[mp + b_dim1], ldb);
+        zgemm_("N", "N", &i__1, n, k, &c_b29, &v[mp + v_dim1], ldv, &work[work_offset], ldwork,
+               &c_b14, &b[mp + b_dim1], ldb);
         i__1 = *k - *l;
-        zgemm_("N", "N", l, n, &i__1, &c_b29, &v[v_offset], ldv, &work[ work_offset], ldwork, &c_b14, &b[b_offset], ldb);
-        ztrmm_("L", "L", "N", "N", l, n, &c_b14, &v[kp * v_dim1 + 1], ldv, & work[kp + work_dim1], ldwork);
+        zgemm_("N", "N", l, n, &i__1, &c_b29, &v[v_offset], ldv, &work[work_offset], ldwork, &c_b14,
+               &b[b_offset], ldb);
+        ztrmm_("L", "L", "N", "N", l, n, &c_b14, &v[kp * v_dim1 + 1], ldv, &work[kp + work_dim1],
+               ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *l;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * b_dim1;
                 i__5 = *k - *l + i__ + j * work_dim1;
                 z__1.r = b[i__4].r - work[i__5].r;
-                z__1.i = b[i__4].i - work[ i__5].i; // , expr subst
+                z__1.i = b[i__4].i - work[i__5].i; // , expr subst
                 b[i__3].r = z__1.r;
                 b[i__3].i = z__1.i; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
     }
-    else if (column && backward && right)
+    else if(column && backward && right)
     {
         /* --------------------------------------------------------------------------- */
         /* Let W = [ V ] (N-by-K) */
@@ -683,19 +658,15 @@ int ztprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         /* --------------------------------------------------------------------------- */
         /* Computing MIN */
         i__1 = *l + 1;
-        np = fla_min(i__1,*n);
+        np = fla_min(i__1, *n);
         /* Computing MIN */
         i__1 = *k - *l + 1;
-        kp = fla_min(i__1,*k);
+        kp = fla_min(i__1, *k);
         i__1 = *l;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + (*k - *l + j) * work_dim1;
                 i__4 = i__ + j * b_dim1;
@@ -703,77 +674,71 @@ int ztprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
                 work[i__3].i = b[i__4].i; // , expr subst
             }
         }
-        ztrmm_("R", "L", "N", "N", m, l, &c_b14, &v[kp * v_dim1 + 1], ldv, & work[kp * work_dim1 + 1], ldwork);
+        ztrmm_("R", "L", "N", "N", m, l, &c_b14, &v[kp * v_dim1 + 1], ldv,
+               &work[kp * work_dim1 + 1], ldwork);
         i__1 = *n - *l;
-        zgemm_("N", "N", m, l, &i__1, &c_b14, &b[np * b_dim1 + 1], ldb, &v[np + kp * v_dim1], ldv, &c_b14, &work[kp * work_dim1 + 1], ldwork);
+        zgemm_("N", "N", m, l, &i__1, &c_b14, &b[np * b_dim1 + 1], ldb, &v[np + kp * v_dim1], ldv,
+               &c_b14, &work[kp * work_dim1 + 1], ldwork);
         i__1 = *k - *l;
-        zgemm_("N", "N", m, &i__1, n, &c_b14, &b[b_offset], ldb, &v[v_offset], ldv, &c_b22, &work[work_offset], ldwork);
+        zgemm_("N", "N", m, &i__1, n, &c_b14, &b[b_offset], ldb, &v[v_offset], ldv, &c_b22,
+               &work[work_offset], ldwork);
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
                 z__1.r = work[i__4].r + a[i__5].r;
-                z__1.i = work[i__4].i + a[ i__5].i; // , expr subst
+                z__1.i = work[i__4].i + a[i__5].i; // , expr subst
                 work[i__3].r = z__1.r;
                 work[i__3].i = z__1.i; // , expr subst
             }
         }
-        ztrmm_("R", "L", trans, "N", m, k, &c_b14, &t[t_offset], ldt, &work[ work_offset], ldwork);
+        ztrmm_("R", "L", trans, "N", m, k, &c_b14, &t[t_offset], ldt, &work[work_offset], ldwork);
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
                 z__1.r = a[i__4].r - work[i__5].r;
-                z__1.i = a[i__4].i - work[ i__5].i; // , expr subst
+                z__1.i = a[i__4].i - work[i__5].i; // , expr subst
                 a[i__3].r = z__1.r;
                 a[i__3].i = z__1.i; // , expr subst
             }
         }
         i__1 = *n - *l;
-        zgemm_("N", "C", m, &i__1, k, &c_b29, &work[work_offset], ldwork, &v[ np + v_dim1], ldv, &c_b14, &b[np * b_dim1 + 1], ldb);
+        zgemm_("N", "C", m, &i__1, k, &c_b29, &work[work_offset], ldwork, &v[np + v_dim1], ldv,
+               &c_b14, &b[np * b_dim1 + 1], ldb);
         i__1 = *k - *l;
-        zgemm_("N", "C", m, l, &i__1, &c_b29, &work[work_offset], ldwork, &v[ v_offset], ldv, &c_b14, &b[b_offset], ldb);
-        ztrmm_("R", "L", "C", "N", m, l, &c_b14, &v[kp * v_dim1 + 1], ldv, & work[kp * work_dim1 + 1], ldwork);
+        zgemm_("N", "C", m, l, &i__1, &c_b29, &work[work_offset], ldwork, &v[v_offset], ldv, &c_b14,
+               &b[b_offset], ldb);
+        ztrmm_("R", "L", "C", "N", m, l, &c_b14, &v[kp * v_dim1 + 1], ldv,
+               &work[kp * work_dim1 + 1], ldwork);
         i__1 = *l;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * b_dim1;
                 i__5 = i__ + (*k - *l + j) * work_dim1;
                 z__1.r = b[i__4].r - work[i__5].r;
-                z__1.i = b[i__4].i - work[ i__5].i; // , expr subst
+                z__1.i = b[i__4].i - work[i__5].i; // , expr subst
                 b[i__3].r = z__1.r;
                 b[i__3].i = z__1.i; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
     }
-    else if (row && forward && left)
+    else if(row && forward && left)
     {
         /* --------------------------------------------------------------------------- */
         /* Let W = [ I V ] ( I is K-by-K, V is K-by-M ) */
@@ -785,19 +750,15 @@ int ztprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         /* --------------------------------------------------------------------------- */
         /* Computing MIN */
         i__1 = *m - *l + 1;
-        mp = fla_min(i__1,*m);
+        mp = fla_min(i__1, *m);
         /* Computing MIN */
         i__1 = *l + 1;
-        kp = fla_min(i__1,*k);
+        kp = fla_min(i__1, *k);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *l;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = *m - *l + i__ + j * b_dim1;
@@ -805,77 +766,70 @@ int ztprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
                 work[i__3].i = b[i__4].i; // , expr subst
             }
         }
-        ztrmm_("L", "L", "N", "N", l, n, &c_b14, &v[mp * v_dim1 + 1], ldv, & work[work_offset], ldb);
+        ztrmm_("L", "L", "N", "N", l, n, &c_b14, &v[mp * v_dim1 + 1], ldv, &work[work_offset], ldb);
         i__1 = *m - *l;
-        zgemm_("N", "N", l, n, &i__1, &c_b14, &v[v_offset], ldv, &b[b_offset], ldb, &c_b14, &work[work_offset], ldwork);
+        zgemm_("N", "N", l, n, &i__1, &c_b14, &v[v_offset], ldv, &b[b_offset], ldb, &c_b14,
+               &work[work_offset], ldwork);
         i__1 = *k - *l;
-        zgemm_("N", "N", &i__1, n, m, &c_b14, &v[kp + v_dim1], ldv, &b[ b_offset], ldb, &c_b22, &work[kp + work_dim1], ldwork);
+        zgemm_("N", "N", &i__1, n, m, &c_b14, &v[kp + v_dim1], ldv, &b[b_offset], ldb, &c_b22,
+               &work[kp + work_dim1], ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
                 z__1.r = work[i__4].r + a[i__5].r;
-                z__1.i = work[i__4].i + a[ i__5].i; // , expr subst
+                z__1.i = work[i__4].i + a[i__5].i; // , expr subst
                 work[i__3].r = z__1.r;
                 work[i__3].i = z__1.i; // , expr subst
             }
         }
-        ztrmm_("L", "U", trans, "N", k, n, &c_b14, &t[t_offset], ldt, &work[ work_offset], ldwork);
+        ztrmm_("L", "U", trans, "N", k, n, &c_b14, &t[t_offset], ldt, &work[work_offset], ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
                 z__1.r = a[i__4].r - work[i__5].r;
-                z__1.i = a[i__4].i - work[ i__5].i; // , expr subst
+                z__1.i = a[i__4].i - work[i__5].i; // , expr subst
                 a[i__3].r = z__1.r;
                 a[i__3].i = z__1.i; // , expr subst
             }
         }
         i__1 = *m - *l;
-        zgemm_("C", "N", &i__1, n, k, &c_b29, &v[v_offset], ldv, &work[ work_offset], ldwork, &c_b14, &b[b_offset], ldb);
+        zgemm_("C", "N", &i__1, n, k, &c_b29, &v[v_offset], ldv, &work[work_offset], ldwork, &c_b14,
+               &b[b_offset], ldb);
         i__1 = *k - *l;
-        zgemm_("C", "N", l, n, &i__1, &c_b29, &v[kp + mp * v_dim1], ldv, & work[kp + work_dim1], ldwork, &c_b14, &b[mp + b_dim1], ldb);
-        ztrmm_("L", "L", "C", "N", l, n, &c_b14, &v[mp * v_dim1 + 1], ldv, & work[work_offset], ldwork);
+        zgemm_("C", "N", l, n, &i__1, &c_b29, &v[kp + mp * v_dim1], ldv, &work[kp + work_dim1],
+               ldwork, &c_b14, &b[mp + b_dim1], ldb);
+        ztrmm_("L", "L", "C", "N", l, n, &c_b14, &v[mp * v_dim1 + 1], ldv, &work[work_offset],
+               ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *l;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = *m - *l + i__ + j * b_dim1;
                 i__4 = *m - *l + i__ + j * b_dim1;
                 i__5 = i__ + j * work_dim1;
                 z__1.r = b[i__4].r - work[i__5].r;
-                z__1.i = b[i__4].i - work[ i__5].i; // , expr subst
+                z__1.i = b[i__4].i - work[i__5].i; // , expr subst
                 b[i__3].r = z__1.r;
                 b[i__3].i = z__1.i; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
     }
-    else if (row && forward && right)
+    else if(row && forward && right)
     {
         /* --------------------------------------------------------------------------- */
         /* Let W = [ I V ] ( I is K-by-K, V is K-by-N ) */
@@ -886,19 +840,15 @@ int ztprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         /* --------------------------------------------------------------------------- */
         /* Computing MIN */
         i__1 = *n - *l + 1;
-        np = fla_min(i__1,*n);
+        np = fla_min(i__1, *n);
         /* Computing MIN */
         i__1 = *l + 1;
-        kp = fla_min(i__1,*k);
+        kp = fla_min(i__1, *k);
         i__1 = *l;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + (*n - *l + j) * b_dim1;
@@ -906,77 +856,71 @@ int ztprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
                 work[i__3].i = b[i__4].i; // , expr subst
             }
         }
-        ztrmm_("R", "L", "C", "N", m, l, &c_b14, &v[np * v_dim1 + 1], ldv, & work[work_offset], ldwork);
+        ztrmm_("R", "L", "C", "N", m, l, &c_b14, &v[np * v_dim1 + 1], ldv, &work[work_offset],
+               ldwork);
         i__1 = *n - *l;
-        zgemm_("N", "C", m, l, &i__1, &c_b14, &b[b_offset], ldb, &v[v_offset], ldv, &c_b14, &work[work_offset], ldwork);
+        zgemm_("N", "C", m, l, &i__1, &c_b14, &b[b_offset], ldb, &v[v_offset], ldv, &c_b14,
+               &work[work_offset], ldwork);
         i__1 = *k - *l;
-        zgemm_("N", "C", m, &i__1, n, &c_b14, &b[b_offset], ldb, &v[kp + v_dim1], ldv, &c_b22, &work[kp * work_dim1 + 1], ldwork);
+        zgemm_("N", "C", m, &i__1, n, &c_b14, &b[b_offset], ldb, &v[kp + v_dim1], ldv, &c_b22,
+               &work[kp * work_dim1 + 1], ldwork);
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
                 z__1.r = work[i__4].r + a[i__5].r;
-                z__1.i = work[i__4].i + a[ i__5].i; // , expr subst
+                z__1.i = work[i__4].i + a[i__5].i; // , expr subst
                 work[i__3].r = z__1.r;
                 work[i__3].i = z__1.i; // , expr subst
             }
         }
-        ztrmm_("R", "U", trans, "N", m, k, &c_b14, &t[t_offset], ldt, &work[ work_offset], ldwork);
+        ztrmm_("R", "U", trans, "N", m, k, &c_b14, &t[t_offset], ldt, &work[work_offset], ldwork);
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
                 z__1.r = a[i__4].r - work[i__5].r;
-                z__1.i = a[i__4].i - work[ i__5].i; // , expr subst
+                z__1.i = a[i__4].i - work[i__5].i; // , expr subst
                 a[i__3].r = z__1.r;
                 a[i__3].i = z__1.i; // , expr subst
             }
         }
         i__1 = *n - *l;
-        zgemm_("N", "N", m, &i__1, k, &c_b29, &work[work_offset], ldwork, &v[ v_offset], ldv, &c_b14, &b[b_offset], ldb);
+        zgemm_("N", "N", m, &i__1, k, &c_b29, &work[work_offset], ldwork, &v[v_offset], ldv, &c_b14,
+               &b[b_offset], ldb);
         i__1 = *k - *l;
-        zgemm_("N", "N", m, l, &i__1, &c_b29, &work[kp * work_dim1 + 1], ldwork, &v[kp + np * v_dim1], ldv, &c_b14, &b[np * b_dim1 + 1], ldb);
-        ztrmm_("R", "L", "N", "N", m, l, &c_b14, &v[np * v_dim1 + 1], ldv, & work[work_offset], ldwork);
+        zgemm_("N", "N", m, l, &i__1, &c_b29, &work[kp * work_dim1 + 1], ldwork,
+               &v[kp + np * v_dim1], ldv, &c_b14, &b[np * b_dim1 + 1], ldb);
+        ztrmm_("R", "L", "N", "N", m, l, &c_b14, &v[np * v_dim1 + 1], ldv, &work[work_offset],
+               ldwork);
         i__1 = *l;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + (*n - *l + j) * b_dim1;
                 i__4 = i__ + (*n - *l + j) * b_dim1;
                 i__5 = i__ + j * work_dim1;
                 z__1.r = b[i__4].r - work[i__5].r;
-                z__1.i = b[i__4].i - work[ i__5].i; // , expr subst
+                z__1.i = b[i__4].i - work[i__5].i; // , expr subst
                 b[i__3].r = z__1.r;
                 b[i__3].i = z__1.i; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
     }
-    else if (row && backward && left)
+    else if(row && backward && left)
     {
         /* --------------------------------------------------------------------------- */
         /* Let W = [ V I ] ( I is K-by-K, V is K-by-M ) */
@@ -988,19 +932,15 @@ int ztprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         /* --------------------------------------------------------------------------- */
         /* Computing MIN */
         i__1 = *l + 1;
-        mp = fla_min(i__1,*m);
+        mp = fla_min(i__1, *m);
         /* Computing MIN */
         i__1 = *k - *l + 1;
-        kp = fla_min(i__1,*k);
+        kp = fla_min(i__1, *k);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *l;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = *k - *l + i__ + j * work_dim1;
                 i__4 = i__ + j * b_dim1;
@@ -1008,77 +948,71 @@ int ztprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
                 work[i__3].i = b[i__4].i; // , expr subst
             }
         }
-        ztrmm_("L", "U", "N", "N", l, n, &c_b14, &v[kp + v_dim1], ldv, &work[ kp + work_dim1], ldwork);
+        ztrmm_("L", "U", "N", "N", l, n, &c_b14, &v[kp + v_dim1], ldv, &work[kp + work_dim1],
+               ldwork);
         i__1 = *m - *l;
-        zgemm_("N", "N", l, n, &i__1, &c_b14, &v[kp + mp * v_dim1], ldv, &b[ mp + b_dim1], ldb, &c_b14, &work[kp + work_dim1], ldwork);
+        zgemm_("N", "N", l, n, &i__1, &c_b14, &v[kp + mp * v_dim1], ldv, &b[mp + b_dim1], ldb,
+               &c_b14, &work[kp + work_dim1], ldwork);
         i__1 = *k - *l;
-        zgemm_("N", "N", &i__1, n, m, &c_b14, &v[v_offset], ldv, &b[b_offset], ldb, &c_b22, &work[work_offset], ldwork);
+        zgemm_("N", "N", &i__1, n, m, &c_b14, &v[v_offset], ldv, &b[b_offset], ldb, &c_b22,
+               &work[work_offset], ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
                 z__1.r = work[i__4].r + a[i__5].r;
-                z__1.i = work[i__4].i + a[ i__5].i; // , expr subst
+                z__1.i = work[i__4].i + a[i__5].i; // , expr subst
                 work[i__3].r = z__1.r;
                 work[i__3].i = z__1.i; // , expr subst
             }
         }
-        ztrmm_("L", "L ", trans, "N", k, n, &c_b14, &t[t_offset], ldt, &work[ work_offset], ldwork);
+        ztrmm_("L", "L ", trans, "N", k, n, &c_b14, &t[t_offset], ldt, &work[work_offset], ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
                 z__1.r = a[i__4].r - work[i__5].r;
-                z__1.i = a[i__4].i - work[ i__5].i; // , expr subst
+                z__1.i = a[i__4].i - work[i__5].i; // , expr subst
                 a[i__3].r = z__1.r;
                 a[i__3].i = z__1.i; // , expr subst
             }
         }
         i__1 = *m - *l;
-        zgemm_("C", "N", &i__1, n, k, &c_b29, &v[mp * v_dim1 + 1], ldv, &work[ work_offset], ldwork, &c_b14, &b[mp + b_dim1], ldb);
+        zgemm_("C", "N", &i__1, n, k, &c_b29, &v[mp * v_dim1 + 1], ldv, &work[work_offset], ldwork,
+               &c_b14, &b[mp + b_dim1], ldb);
         i__1 = *k - *l;
-        zgemm_("C", "N", l, n, &i__1, &c_b29, &v[v_offset], ldv, &work[ work_offset], ldwork, &c_b14, &b[b_offset], ldb);
-        ztrmm_("L", "U", "C", "N", l, n, &c_b14, &v[kp + v_dim1], ldv, &work[ kp + work_dim1], ldwork);
+        zgemm_("C", "N", l, n, &i__1, &c_b29, &v[v_offset], ldv, &work[work_offset], ldwork, &c_b14,
+               &b[b_offset], ldb);
+        ztrmm_("L", "U", "C", "N", l, n, &c_b14, &v[kp + v_dim1], ldv, &work[kp + work_dim1],
+               ldwork);
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *l;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * b_dim1;
                 i__5 = *k - *l + i__ + j * work_dim1;
                 z__1.r = b[i__4].r - work[i__5].r;
-                z__1.i = b[i__4].i - work[ i__5].i; // , expr subst
+                z__1.i = b[i__4].i - work[i__5].i; // , expr subst
                 b[i__3].r = z__1.r;
                 b[i__3].i = z__1.i; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
     }
-    else if (row && backward && right)
+    else if(row && backward && right)
     {
         /* --------------------------------------------------------------------------- */
         /* Let W = [ V I ] ( I is K-by-K, V is K-by-N ) */
@@ -1089,19 +1023,15 @@ int ztprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         /* --------------------------------------------------------------------------- */
         /* Computing MIN */
         i__1 = *l + 1;
-        np = fla_min(i__1,*n);
+        np = fla_min(i__1, *n);
         /* Computing MIN */
         i__1 = *k - *l + 1;
-        kp = fla_min(i__1,*k);
+        kp = fla_min(i__1, *k);
         i__1 = *l;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + (*k - *l + j) * work_dim1;
                 i__4 = i__ + j * b_dim1;
@@ -1109,77 +1039,71 @@ int ztprfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
                 work[i__3].i = b[i__4].i; // , expr subst
             }
         }
-        ztrmm_("R", "U", "C", "N", m, l, &c_b14, &v[kp + v_dim1], ldv, &work[ kp * work_dim1 + 1], ldwork);
+        ztrmm_("R", "U", "C", "N", m, l, &c_b14, &v[kp + v_dim1], ldv, &work[kp * work_dim1 + 1],
+               ldwork);
         i__1 = *n - *l;
-        zgemm_("N", "C", m, l, &i__1, &c_b14, &b[np * b_dim1 + 1], ldb, &v[kp + np * v_dim1], ldv, &c_b14, &work[kp * work_dim1 + 1], ldwork);
+        zgemm_("N", "C", m, l, &i__1, &c_b14, &b[np * b_dim1 + 1], ldb, &v[kp + np * v_dim1], ldv,
+               &c_b14, &work[kp * work_dim1 + 1], ldwork);
         i__1 = *k - *l;
-        zgemm_("N", "C", m, &i__1, n, &c_b14, &b[b_offset], ldb, &v[v_offset], ldv, &c_b22, &work[work_offset], ldwork);
+        zgemm_("N", "C", m, &i__1, n, &c_b14, &b[b_offset], ldb, &v[v_offset], ldv, &c_b22,
+               &work[work_offset], ldwork);
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
                 z__1.r = work[i__4].r + a[i__5].r;
-                z__1.i = work[i__4].i + a[ i__5].i; // , expr subst
+                z__1.i = work[i__4].i + a[i__5].i; // , expr subst
                 work[i__3].r = z__1.r;
                 work[i__3].i = z__1.i; // , expr subst
             }
         }
-        ztrmm_("R", "L", trans, "N", m, k, &c_b14, &t[t_offset], ldt, &work[ work_offset], ldwork);
+        ztrmm_("R", "L", trans, "N", m, k, &c_b14, &t[t_offset], ldt, &work[work_offset], ldwork);
         i__1 = *k;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
                 z__1.r = a[i__4].r - work[i__5].r;
-                z__1.i = a[i__4].i - work[ i__5].i; // , expr subst
+                z__1.i = a[i__4].i - work[i__5].i; // , expr subst
                 a[i__3].r = z__1.r;
                 a[i__3].i = z__1.i; // , expr subst
             }
         }
         i__1 = *n - *l;
-        zgemm_("N", "N", m, &i__1, k, &c_b29, &work[work_offset], ldwork, &v[ np * v_dim1 + 1], ldv, &c_b14, &b[np * b_dim1 + 1], ldb);
+        zgemm_("N", "N", m, &i__1, k, &c_b29, &work[work_offset], ldwork, &v[np * v_dim1 + 1], ldv,
+               &c_b14, &b[np * b_dim1 + 1], ldb);
         i__1 = *k - *l;
-        zgemm_("N", "N", m, l, &i__1, &c_b29, &work[work_offset], ldwork, &v[ v_offset], ldv, &c_b14, &b[b_offset], ldb);
-        ztrmm_("R", "U", "N", "N", m, l, &c_b14, &v[kp + v_dim1], ldv, &work[ kp * work_dim1 + 1], ldwork);
+        zgemm_("N", "N", m, l, &i__1, &c_b29, &work[work_offset], ldwork, &v[v_offset], ldv, &c_b14,
+               &b[b_offset], ldb);
+        ztrmm_("R", "U", "N", "N", m, l, &c_b14, &v[kp + v_dim1], ldv, &work[kp * work_dim1 + 1],
+               ldwork);
         i__1 = *l;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * b_dim1;
                 i__5 = i__ + (*k - *l + j) * work_dim1;
                 z__1.r = b[i__4].r - work[i__5].r;
-                z__1.i = b[i__4].i - work[ i__5].i; // , expr subst
+                z__1.i = b[i__4].i - work[i__5].i; // , expr subst
                 b[i__3].r = z__1.r;
                 b[i__3].i = z__1.i; // , expr subst
             }
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTPRFB */
 }
 /* ztprfb_ */

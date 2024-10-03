@@ -13,7 +13,7 @@ int cher2_(char *uplo, integer *n, complex *alpha, complex * x, integer *incx, c
     integer info;
     complex temp1, temp2;
     integer i__, j;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer ix, iy, jx, jy, kx, ky;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -105,7 +105,7 @@ int cher2_(char *uplo, integer *n, complex *alpha, complex * x, integer *incx, c
     a -= a_offset;
     /* Function Body */
     info = 0;
-    if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    if (! lsame_(uplo, "U", 1, 1) && ! lsame_(uplo, "L", 1, 1))
     {
         info = 1;
     }
@@ -161,7 +161,7 @@ int cher2_(char *uplo, integer *n, complex *alpha, complex * x, integer *incx, c
     /* Start the operations. In this version the elements of A are */
     /* accessed sequentially with one pass through the triangular part */
     /* of A. */
-    if (lsame_(uplo, "U"))
+    if (lsame_(uplo, "U", 1, 1))
     {
         /* Form A when A is stored in the upper triangle. */
         if (*incx == 1 && *incy == 1)

@@ -1,5 +1,13 @@
-/* ../netlib/dtrsna.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dtrsna.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+
+/*
+*     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+*/
+
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static logical c_true = TRUE_;
@@ -10,11 +18,17 @@ static logical c_false = FALSE_;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DTRSNA + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtrsna. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtrsna.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtrsna. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtrsna.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtrsna. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtrsna.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -56,9 +70,9 @@ each */
 /* > Specifies whether condition numbers are required for */
 /* > eigenvalues (S) or eigenvectors (SEP): */
 /* > = 'E': for eigenvalues only (S);
-*/
+ */
 /* > = 'V': for eigenvectors only (SEP);
-*/
+ */
 /* > = 'B': for both eigenvalues and eigenvectors (S and SEP). */
 /* > \endverbatim */
 /* > */
@@ -66,7 +80,7 @@ each */
 /* > \verbatim */
 /* > HOWMNY is CHARACTER*1 */
 /* > = 'A': compute condition numbers for all eigenpairs;
-*/
+ */
 /* > = 'S': compute condition numbers for selected eigenpairs */
 /* > specified by the array SELECT. */
 /* > \endverbatim */
@@ -262,12 +276,18 @@ v**T denotes the transpose of v, and norm(u) */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t, integer *ldt, doublereal *vl, integer * ldvl, doublereal *vr, integer *ldvr, doublereal *s, doublereal *sep, integer *mm, integer *m, doublereal *work, integer *ldwork, integer * iwork, integer *info)
+void dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t, integer *ldt,
+             doublereal *vl, integer *ldvl, doublereal *vr, integer *ldvr, doublereal *s,
+             doublereal *sep, integer *mm, integer *m, doublereal *work, integer *ldwork,
+             integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dtrsna inputs: job %c, howmny %c, n %" FLA_IS ", ldt %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS ", ldwork %" FLA_IS "",*job, *howmny, *n, *ldt, *ldvl, *ldvr, *mm, *ldwork);
+    AOCL_DTL_SNPRINTF("dtrsna inputs: job %c, howmny %c, n %" FLA_IS ", ldt %" FLA_IS
+                      ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS ", ldwork %" FLA_IS "",
+                      *job, *howmny, *n, *ldt, *ldvl, *ldvr, *mm, *ldwork);
     /* System generated locals */
-    integer t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, work_dim1, work_offset, i__1, i__2;
+    integer t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, work_dim1, work_offset, i__1,
+        i__2;
     doublereal d__1, d__2;
     /* Builtin functions */
     double sqrt(doublereal);
@@ -288,22 +308,31 @@ int dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t,
     doublereal rnrm;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     doublereal prod1, prod2, scale, delta;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     logical wants;
     doublereal dummy[1];
     extern /* Subroutine */
-    int dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+                integer *);
     extern doublereal dlapy2_(doublereal *, doublereal *);
     extern /* Subroutine */
-    int dlabad_(doublereal *, doublereal *);
+        void
+        dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     logical wantbh;
     extern /* Subroutine */
-    int dlaqtr_(logical *, logical *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dtrexc_(char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *);
+        void
+        dlaqtr_(logical *, logical *, integer *, doublereal *, integer *, doublereal *,
+                doublereal *, doublereal *, doublereal *, doublereal *, integer *),
+        dtrexc_(char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *,
+                integer *, doublereal *, integer *);
     logical somcon;
     doublereal smlnum;
     logical wantsp;
@@ -348,32 +377,33 @@ int dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t,
     work -= work_offset;
     --iwork;
     /* Function Body */
-    wantbh = lsame_(job, "B");
-    wants = lsame_(job, "E") || wantbh;
-    wantsp = lsame_(job, "V") || wantbh;
-    somcon = lsame_(howmny, "S");
+    wantbh = lsame_(job, "B", 1, 1);
+    wants = lsame_(job, "E", 1, 1) || wantbh;
+    wantsp = lsame_(job, "V", 1, 1) || wantbh;
+    somcon = lsame_(howmny, "S", 1, 1);
     *info = 0;
-    if (! wants && ! wantsp)
+    dumm = 0.;
+    if(!wants && !wantsp)
     {
         *info = -1;
     }
-    else if (! lsame_(howmny, "A") && ! somcon)
+    else if(!lsame_(howmny, "A", 1, 1) && !somcon)
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*ldt < fla_max(1,*n))
+    else if(*ldt < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldvl < 1 || wants && *ldvl < *n)
+    else if(*ldvl < 1 || wants && *ldvl < *n)
     {
         *info = -8;
     }
-    else if (*ldvr < 1 || wants && *ldvr < *n)
+    else if(*ldvr < 1 || wants && *ldvr < *n)
     {
         *info = -10;
     }
@@ -381,26 +411,24 @@ int dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t,
     {
         /* Set M to the number of eigenpairs for which condition numbers */
         /* are required, and test MM. */
-        if (somcon)
+        if(somcon)
         {
             *m = 0;
             pair = FALSE_;
             i__1 = *n;
-            for (k = 1;
-                    k <= i__1;
-                    ++k)
+            for(k = 1; k <= i__1; ++k)
             {
-                if (pair)
+                if(pair)
                 {
                     pair = FALSE_;
                 }
                 else
                 {
-                    if (k < *n)
+                    if(k < *n)
                     {
-                        if (t[k + 1 + k * t_dim1] == 0.)
+                        if(t[k + 1 + k * t_dim1] == 0.)
                         {
-                            if (select[k])
+                            if(select[k])
                             {
                                 ++(*m);
                             }
@@ -408,7 +436,7 @@ int dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t,
                         else
                         {
                             pair = TRUE_;
-                            if (select[k] || select[k + 1])
+                            if(select[k] || select[k + 1])
                             {
                                 *m += 2;
                             }
@@ -416,7 +444,7 @@ int dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t,
                     }
                     else
                     {
-                        if (select[*n])
+                        if(select[*n])
                         {
                             ++(*m);
                         }
@@ -429,48 +457,48 @@ int dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t,
         {
             *m = *n;
         }
-        if (*mm < *m)
+        if(*mm < *m)
         {
             *info = -13;
         }
-        else if (*ldwork < 1 || wantsp && *ldwork < *n)
+        else if(*ldwork < 1 || wantsp && *ldwork < *n)
         {
             *info = -16;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DTRSNA", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    if (*n == 1)
+    if(*n == 1)
     {
-        if (somcon)
+        if(somcon)
         {
-            if (! select[1])
+            if(!select[1])
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
         }
-        if (wants)
+        if(wants)
         {
             s[1] = 1.;
         }
-        if (wantsp)
+        if(wantsp)
         {
             sep[1] = (d__1 = t[t_dim1 + 1], f2c_abs(d__1));
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants */
     eps = dlamch_("P");
@@ -480,48 +508,46 @@ int dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t,
     ks = 0;
     pair = FALSE_;
     i__1 = *n;
-    for (k = 1;
-            k <= i__1;
-            ++k)
+    for(k = 1; k <= i__1; ++k)
     {
         /* Determine whether T(k,k) begins a 1-by-1 or 2-by-2 block. */
-        if (pair)
+        if(pair)
         {
             pair = FALSE_;
             goto L60;
         }
         else
         {
-            if (k < *n)
+            if(k < *n)
             {
                 pair = t[k + 1 + k * t_dim1] != 0.;
             }
         }
         /* Determine whether condition numbers are required for the k-th */
         /* eigenpair. */
-        if (somcon)
+        if(somcon)
         {
-            if (pair)
+            if(pair)
             {
-                if (! select[k] && ! select[k + 1])
+                if(!select[k] && !select[k + 1])
                 {
                     goto L60;
                 }
             }
             else
             {
-                if (! select[k])
+                if(!select[k])
                 {
                     goto L60;
                 }
             }
         }
         ++ks;
-        if (wants)
+        if(wants)
         {
             /* Compute the reciprocal condition number of the k-th */
             /* eigenvalue. */
-            if (! pair)
+            if(!pair)
             {
                 /* Real eigenvalue. */
                 prod = ddot_(n, &vr[ks * vr_dim1 + 1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
@@ -533,7 +559,8 @@ int dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t,
             {
                 /* Complex eigenvalue. */
                 prod1 = ddot_(n, &vr[ks * vr_dim1 + 1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
-                prod1 += ddot_(n, &vr[(ks + 1) * vr_dim1 + 1], &c__1, &vl[(ks + 1) * vl_dim1 + 1], &c__1);
+                prod1 += ddot_(n, &vr[(ks + 1) * vr_dim1 + 1], &c__1, &vl[(ks + 1) * vl_dim1 + 1],
+                               &c__1);
                 prod2 = ddot_(n, &vl[ks * vl_dim1 + 1], &c__1, &vr[(ks + 1) * vr_dim1 + 1], &c__1);
                 prod2 -= ddot_(n, &vl[(ks + 1) * vl_dim1 + 1], &c__1, &vr[ks * vr_dim1 + 1], &c__1);
                 d__1 = dnrm2_(n, &vr[ks * vr_dim1 + 1], &c__1);
@@ -547,7 +574,7 @@ int dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t,
                 s[ks + 1] = cond;
             }
         }
-        if (wantsp)
+        if(wantsp)
         {
             /* Estimate the reciprocal condition number of the k-th */
             /* eigenvector. */
@@ -556,8 +583,9 @@ int dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t,
             dlacpy_("Full", n, n, &t[t_offset], ldt, &work[work_offset], ldwork);
             ifst = k;
             ilst = 1;
-            dtrexc_("No Q", n, &work[work_offset], ldwork, dummy, &c__1, & ifst, &ilst, &work[(*n + 1) * work_dim1 + 1], &ierr);
-            if (ierr == 1 || ierr == 2)
+            dtrexc_("No Q", n, &work[work_offset], ldwork, dummy, &c__1, &ifst, &ilst,
+                    &work[(*n + 1) * work_dim1 + 1], &ierr);
+            if(ierr == 1 || ierr == 2)
             {
                 /* Could not swap because blocks not well separated */
                 scale = 1.;
@@ -566,13 +594,11 @@ int dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t,
             else
             {
                 /* Reordering successful */
-                if (work[work_dim1 + 2] == 0.)
+                if(work[work_dim1 + 2] == 0.)
                 {
                     /* Form C = T22 - lambda*I in WORK(2:N,2:N). */
                     i__2 = *n;
-                    for (i__ = 2;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 2; i__ <= i__2; ++i__)
                     {
                         work[i__ + i__ * work_dim1] -= work[work_dim1 + 1];
                         /* L20: */
@@ -589,7 +615,8 @@ int dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t,
                     /* eigenvalue lambda with positive imaginary part. (2,2) */
                     /* position of WORK is the complex eigenvalue lambda */
                     /* with negative imaginary part. */
-                    mu = sqrt((d__1 = work[(work_dim1 << 1) + 1], f2c_abs(d__1))) * sqrt((d__2 = work[work_dim1 + 2], f2c_abs(d__2)));
+                    mu = sqrt((d__1 = work[(work_dim1 << 1) + 1], f2c_abs(d__1)))
+                         * sqrt((d__2 = work[work_dim1 + 2], f2c_abs(d__2)));
                     delta = dlapy2_(&mu, &work[work_dim1 + 2]);
                     cs = mu / delta;
                     sn = -work[work_dim1 + 2] / delta;
@@ -603,20 +630,16 @@ int dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t,
                     /* and RWORK is stored starting in the N+1-st column of */
                     /* WORK. */
                     i__2 = *n;
-                    for (j = 3;
-                            j <= i__2;
-                            ++j)
+                    for(j = 3; j <= i__2; ++j)
                     {
-                        work[j * work_dim1 + 2] = cs * work[j * work_dim1 + 2] ;
+                        work[j * work_dim1 + 2] = cs * work[j * work_dim1 + 2];
                         work[j + j * work_dim1] -= work[work_dim1 + 1];
                         /* L30: */
                     }
                     work[(work_dim1 << 1) + 2] = 0.;
                     work[(*n + 1) * work_dim1 + 1] = mu * 2.;
                     i__2 = *n - 1;
-                    for (i__ = 2;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 2; i__ <= i__2; ++i__)
                     {
                         work[i__ + (*n + 1) * work_dim1] = sn * work[(i__ + 1) * work_dim1 + 1];
                         /* L40: */
@@ -627,61 +650,70 @@ int dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t,
                 /* Estimate norm(inv(C**T)) */
                 est = 0.;
                 kase = 0;
-L50:
-                dlacn2_(&nn, &work[(*n + 2) * work_dim1 + 1], &work[(*n + 4) * work_dim1 + 1], &iwork[1], &est, &kase, isave);
-                if (kase != 0)
+            L50:
+                dlacn2_(&nn, &work[(*n + 2) * work_dim1 + 1], &work[(*n + 4) * work_dim1 + 1],
+                        &iwork[1], &est, &kase, isave);
+                if(kase != 0)
                 {
-                    if (kase == 1)
+                    if(kase == 1)
                     {
-                        if (n2 == 1)
+                        if(n2 == 1)
                         {
                             /* Real eigenvalue: solve C**T*x = scale*c. */
                             i__2 = *n - 1;
-                            dlaqtr_(&c_true, &c_true, &i__2, &work[(work_dim1 << 1) + 2], ldwork, dummy, &dumm, &scale, &work[(*n + 4) * work_dim1 + 1], &work[(* n + 6) * work_dim1 + 1], &ierr);
+                            dlaqtr_(&c_true, &c_true, &i__2, &work[(work_dim1 << 1) + 2], ldwork,
+                                    dummy, &dumm, &scale, &work[(*n + 4) * work_dim1 + 1],
+                                    &work[(*n + 6) * work_dim1 + 1], &ierr);
                         }
                         else
                         {
                             /* Complex eigenvalue: solve */
                             /* C**T*(p+iq) = scale*(c+id) in real arithmetic. */
                             i__2 = *n - 1;
-                            dlaqtr_(&c_true, &c_false, &i__2, &work[( work_dim1 << 1) + 2], ldwork, &work[(*n + 1) * work_dim1 + 1], &mu, &scale, &work[(* n + 4) * work_dim1 + 1], &work[(*n + 6) * work_dim1 + 1], &ierr);
+                            dlaqtr_(&c_true, &c_false, &i__2, &work[(work_dim1 << 1) + 2], ldwork,
+                                    &work[(*n + 1) * work_dim1 + 1], &mu, &scale,
+                                    &work[(*n + 4) * work_dim1 + 1],
+                                    &work[(*n + 6) * work_dim1 + 1], &ierr);
                         }
                     }
                     else
                     {
-                        if (n2 == 1)
+                        if(n2 == 1)
                         {
                             /* Real eigenvalue: solve C*x = scale*c. */
                             i__2 = *n - 1;
-                            dlaqtr_(&c_false, &c_true, &i__2, &work[( work_dim1 << 1) + 2], ldwork, dummy, & dumm, &scale, &work[(*n + 4) * work_dim1 + 1], &work[(*n + 6) * work_dim1 + 1], & ierr);
+                            dlaqtr_(&c_false, &c_true, &i__2, &work[(work_dim1 << 1) + 2], ldwork,
+                                    dummy, &dumm, &scale, &work[(*n + 4) * work_dim1 + 1],
+                                    &work[(*n + 6) * work_dim1 + 1], &ierr);
                         }
                         else
                         {
                             /* Complex eigenvalue: solve */
                             /* C*(p+iq) = scale*(c+id) in real arithmetic. */
                             i__2 = *n - 1;
-                            dlaqtr_(&c_false, &c_false, &i__2, &work[( work_dim1 << 1) + 2], ldwork, &work[(*n + 1) * work_dim1 + 1], &mu, &scale, &work[(* n + 4) * work_dim1 + 1], &work[(*n + 6) * work_dim1 + 1], &ierr);
+                            dlaqtr_(&c_false, &c_false, &i__2, &work[(work_dim1 << 1) + 2], ldwork,
+                                    &work[(*n + 1) * work_dim1 + 1], &mu, &scale,
+                                    &work[(*n + 4) * work_dim1 + 1],
+                                    &work[(*n + 6) * work_dim1 + 1], &ierr);
                         }
                     }
                     goto L50;
                 }
             }
-            sep[ks] = scale / fla_max(est,smlnum);
-            if (pair)
+            sep[ks] = scale / fla_max(est, smlnum);
+            if(pair)
             {
                 sep[ks + 1] = sep[ks];
             }
         }
-        if (pair)
+        if(pair)
         {
             ++ks;
         }
-L60:
-        ;
+    L60:;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DTRSNA */
 }
 /* dtrsna_ */
-

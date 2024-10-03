@@ -63,6 +63,32 @@ set_property(TEST DGESVD_SML_OPT22 PROPERTY ENVIRONMENT "OMP_NUM_THREADS=64")
 add_test(NAME DGESVD_SML_OPT23 COMMAND ${CTEST_MAIN_COMMAND} gesvd d S S 6 4 6 6 4 -1 10)
 set_property(TEST DGESVD_SML_OPT23 PROPERTY ENVIRONMENT "OMP_NUM_THREADS=64")
 
+# Added tests to for lapack_dgesvd
+set(DGESVD_TEST_CASES "gesvd d A S 124 15 124 124 15 -1 1"
+                "gesvd d A O 85 21 85 85 21 -1 1"
+                "gesvd d A N 20 17 20 20 17 -1 1"
+                "gesvd d S A 85 21 85 85 21 -1 1"
+                "gesvd d S S 124 15 124 124 15 -1 1"
+                "gesvd d S N 20 17 20 20 17 -1 1"
+                "gesvd d O A 85 21 85 85 21 -1 1"
+                "gesvd d O S 124 15 124 124 15 -1 1"
+                "gesvd d O N 20 17 20 20 17 -1 1"
+                "gesvd d N A 124 15 124 124 15 -1 1"
+                "gesvd d N S 85 21 85 85 21 -1 1"
+                "gesvd d N N 20 17 20 20 17 -1 1"
+                "gesvd d A A 3 20 3 3 20 -1 1"
+                "gesvd d A S 12 19 12 12 19 -1 1"
+                "gesvd d A O 12 19 12 12 19 -1 1"
+                "gesvd d A N 40 120 40 40 120 -1 1"
+                "gesvd d O A 3 20 3 3 20 -1 1"
+                "gesvd d O S 12 19 12 12 19 -1 1"
+                "gesvd d O N 40 120 40 40 120 -1 1"
+                "gesvd d N A 3 20 3 3 20 -1 1"
+                "gesvd d N S 12 19 12 12 19 -1 1"
+                "gesvd d N O 40 120 40 40 120 -1 1"
+                "gesvd d N N 120 120 120 120 120 -1 1"
+)
+
 #Performance tests for ZGETRF
 foreach(FUNCTION "getrf")
     foreach(PREC "z") 
@@ -82,3 +108,26 @@ foreach(FUNCTION "gesv")
         endforeach(SIZE_N)
     endforeach(PREC)
 endforeach(FUNCTION)
+
+#Performance tests for GELS
+foreach(FUNCTION "gels")
+    foreach(PREC "d") 
+        foreach(SIZE_M RANGE 10 40)
+          foreach(SIZE_N 10)
+            add_test(NAME GELS_NT_NRHS2_${PREC}${FUNCTION}_${SIZE_M}x${SIZE_N} COMMAND ${CTEST_MAIN_COMMAND} ${FUNCTION} ${PREC} N ${SIZE_M} ${SIZE_N} 2 ${SIZE_M} ${SIZE_M} -1 10000)
+            set_property(TEST GELS_NT_NRHS2_${PREC}${FUNCTION}_${SIZE_M}x${SIZE_N} PROPERTY ENVIRONMENT "OMP_NUM_THREADS=1")
+          endforeach(SIZE_N)
+	endforeach(SIZE_M)
+    endforeach(PREC)
+endforeach(FUNCTION)
+
+
+set(TEST_NUM 1)
+foreach(dgesvd_test_cases IN LISTS DGESVD_TEST_CASES)
+    string(REPLACE " " ";" COMMANDLINE_PARAMS ${dgesvd_test_cases})
+    set(TEST_NAME DGESVD_TEST_CASE${TEST_NUM} )
+    add_test(${TEST_NAME} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME} ${COMMANDLINE_PARAMS})
+    set_tests_properties(${TEST_NAME} PROPERTIES FAIL_REGULAR_EXPRESSION "FAIL;No test was run, give valid arguments")
+MATH(EXPR TEST_NUM "${TEST_NUM}+1")
+endforeach()
+

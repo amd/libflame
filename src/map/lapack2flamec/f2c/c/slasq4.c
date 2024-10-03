@@ -1,16 +1,25 @@
-/* ../netlib/slasq4.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slasq4.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLASQ4 computes an approximation to the smallest eigenvalue using values of d from the previous transform. Used by sbdsqr. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLASQ4 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasq4. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasq4.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasq4. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasq4.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasq4. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasq4.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -136,12 +145,14 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slasq4_(integer *i0, integer *n0, real *z__, integer *pp, integer *n0in, real *dmin__, real *dmin1, real *dmin2, real *dn, real *dn1, real *dn2, real *tau, integer *ttype, real *g)
+void slasq4_(integer *i0, integer *n0, real *z__, integer *pp, integer *n0in, real *dmin__,
+             real *dmin1, real *dmin2, real *dn, real *dn1, real *dn2, real *tau, integer *ttype,
+             real *g)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slasq4 inputs: i0 %d, n0 %d, pp %d, n0in %d",*i0, *n0, *pp, *n0in);
+    snprintf(buffer, 256, "slasq4 inputs: i0 %d, n0 %d, pp %d, n0in %d", *i0, *n0, *pp, *n0in);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -175,27 +186,27 @@ int slasq4_(integer *i0, integer *n0, real *z__, integer *pp, integer *n0in, rea
     --z__;
     /* Function Body */
     s = 0.f;
-    if (*dmin__ <= 0.f)
+    if(*dmin__ <= 0.f)
     {
         *tau = -(*dmin__);
         *ttype = -1;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     nn = (*n0 << 2) + *pp;
-    if (*n0in == *n0)
+    if(*n0in == *n0)
     {
         /* No eigenvalues deflated. */
-        if (*dmin__ == *dn || *dmin__ == *dn1)
+        if(*dmin__ == *dn || *dmin__ == *dn1)
         {
             b1 = sqrt(z__[nn - 3]) * sqrt(z__[nn - 5]);
             b2 = sqrt(z__[nn - 7]) * sqrt(z__[nn - 9]);
             a2 = z__[nn - 7] + z__[nn - 5];
             /* Cases 2 and 3. */
-            if (*dmin__ == *dn && *dmin1 == *dn1)
+            if(*dmin__ == *dn && *dmin1 == *dn1)
             {
                 gap2 = *dmin2 - a2 - *dmin2 * .25f;
-                if (gap2 > 0.f && gap2 > b2)
+                if(gap2 > 0.f && gap2 > b2)
                 {
                     gap1 = a2 - *dn - b2 / gap2 * b2;
                 }
@@ -203,32 +214,32 @@ int slasq4_(integer *i0, integer *n0, real *z__, integer *pp, integer *n0in, rea
                 {
                     gap1 = a2 - *dn - (b1 + b2);
                 }
-                if (gap1 > 0.f && gap1 > b1)
+                if(gap1 > 0.f && gap1 > b1)
                 {
                     /* Computing MAX */
                     r__1 = *dn - b1 / gap1 * b1;
                     r__2 = *dmin__ * .5f; // , expr subst
-                    s = fla_max(r__1,r__2);
+                    s = fla_max(r__1, r__2);
                     *ttype = -2;
                 }
                 else
                 {
                     s = 0.f;
-                    if (*dn > b1)
+                    if(*dn > b1)
                     {
                         s = *dn - b1;
                     }
-                    if (a2 > b1 + b2)
+                    if(a2 > b1 + b2)
                     {
                         /* Computing MIN */
                         r__1 = s;
                         r__2 = a2 - (b1 + b2); // , expr subst
-                        s = fla_min(r__1,r__2);
+                        s = fla_min(r__1, r__2);
                     }
                     /* Computing MAX */
                     r__1 = s;
                     r__2 = *dmin__ * .333f; // , expr subst
-                    s = fla_max(r__1,r__2);
+                    s = fla_max(r__1, r__2);
                     *ttype = -3;
                 }
             }
@@ -237,14 +248,14 @@ int slasq4_(integer *i0, integer *n0, real *z__, integer *pp, integer *n0in, rea
                 /* Case 4. */
                 *ttype = -4;
                 s = *dmin__ * .25f;
-                if (*dmin__ == *dn)
+                if(*dmin__ == *dn)
                 {
                     gam = *dn;
                     a2 = 0.f;
-                    if (z__[nn - 5] > z__[nn - 7])
+                    if(z__[nn - 5] > z__[nn - 7])
                     {
                         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                        return 0;
+                        return;
                     }
                     b2 = z__[nn - 5] / z__[nn - 7];
                     np = nn - 9;
@@ -253,16 +264,16 @@ int slasq4_(integer *i0, integer *n0, real *z__, integer *pp, integer *n0in, rea
                 {
                     np = nn - (*pp << 1);
                     gam = *dn1;
-                    if (z__[np - 4] > z__[np - 2])
+                    if(z__[np - 4] > z__[np - 2])
                     {
                         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                        return 0;
+                        return;
                     }
                     a2 = z__[np - 4] / z__[np - 2];
-                    if (z__[nn - 9] > z__[nn - 11])
+                    if(z__[nn - 9] > z__[nn - 11])
                     {
                         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                        return 0;
+                        return;
                     }
                     b2 = z__[nn - 9] / z__[nn - 11];
                     np = nn - 13;
@@ -270,38 +281,36 @@ int slasq4_(integer *i0, integer *n0, real *z__, integer *pp, integer *n0in, rea
                 /* Approximate contribution to norm squared from I < NN-1. */
                 a2 += b2;
                 i__1 = (*i0 << 2) - 1 + *pp;
-                for (i4 = np;
-                        i4 >= i__1;
-                        i4 += -4)
+                for(i4 = np; i4 >= i__1; i4 += -4)
                 {
-                    if (b2 == 0.f)
+                    if(b2 == 0.f)
                     {
                         goto L20;
                     }
                     b1 = b2;
-                    if (z__[i4] > z__[i4 - 2])
+                    if(z__[i4] > z__[i4 - 2])
                     {
                         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                        return 0;
+                        return;
                     }
                     b2 *= z__[i4] / z__[i4 - 2];
                     a2 += b2;
-                    if (fla_max(b2,b1) * 100.f < a2 || .563f < a2)
+                    if(fla_max(b2, b1) * 100.f < a2 || .563f < a2)
                     {
                         goto L20;
                     }
                     /* L10: */
                 }
-L20:
+            L20:
                 a2 *= 1.05f;
                 /* Rayleigh quotient residual bound. */
-                if (a2 < .563f)
+                if(a2 < .563f)
                 {
                     s = gam * (1.f - sqrt(a2)) / (a2 + 1.f);
                 }
             }
         }
-        else if (*dmin__ == *dn2)
+        else if(*dmin__ == *dn2)
         {
             /* Case 5. */
             *ttype = -5;
@@ -311,44 +320,42 @@ L20:
             b1 = z__[np - 2];
             b2 = z__[np - 6];
             gam = *dn2;
-            if (z__[np - 8] > b2 || z__[np - 4] > b1)
+            if(z__[np - 8] > b2 || z__[np - 4] > b1)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             a2 = z__[np - 8] / b2 * (z__[np - 4] / b1 + 1.f);
             /* Approximate contribution to norm squared from I < NN-2. */
-            if (*n0 - *i0 > 2)
+            if(*n0 - *i0 > 2)
             {
                 b2 = z__[nn - 13] / z__[nn - 15];
                 a2 += b2;
                 i__1 = (*i0 << 2) - 1 + *pp;
-                for (i4 = nn - 17;
-                        i4 >= i__1;
-                        i4 += -4)
+                for(i4 = nn - 17; i4 >= i__1; i4 += -4)
                 {
-                    if (b2 == 0.f)
+                    if(b2 == 0.f)
                     {
                         goto L40;
                     }
                     b1 = b2;
-                    if (z__[i4] > z__[i4 - 2])
+                    if(z__[i4] > z__[i4 - 2])
                     {
                         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                        return 0;
+                        return;
                     }
                     b2 *= z__[i4] / z__[i4 - 2];
                     a2 += b2;
-                    if (fla_max(b2,b1) * 100.f < a2 || .563f < a2)
+                    if(fla_max(b2, b1) * 100.f < a2 || .563f < a2)
                     {
                         goto L40;
                     }
                     /* L30: */
                 }
-L40:
+            L40:
                 a2 *= 1.05f;
             }
-            if (a2 < .563f)
+            if(a2 < .563f)
             {
                 s = gam * (1.f - sqrt(a2)) / (a2 + 1.f);
             }
@@ -356,11 +363,11 @@ L40:
         else
         {
             /* Case 6, no information to guide us. */
-            if (*ttype == -6)
+            if(*ttype == -6)
             {
                 *g += (1.f - *g) * .333f;
             }
-            else if (*ttype == -18)
+            else if(*ttype == -18)
             {
                 *g = .083250000000000005f;
             }
@@ -372,63 +379,61 @@ L40:
             *ttype = -6;
         }
     }
-    else if (*n0in == *n0 + 1)
+    else if(*n0in == *n0 + 1)
     {
         /* One eigenvalue just deflated. Use DMIN1, DN1 for DMIN and DN. */
-        if (*dmin1 == *dn1 && *dmin2 == *dn2)
+        if(*dmin1 == *dn1 && *dmin2 == *dn2)
         {
             /* Cases 7 and 8. */
             *ttype = -7;
             s = *dmin1 * .333f;
-            if (z__[nn - 5] > z__[nn - 7])
+            if(z__[nn - 5] > z__[nn - 7])
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             b1 = z__[nn - 5] / z__[nn - 7];
             b2 = b1;
-            if (b2 == 0.f)
+            if(b2 == 0.f)
             {
                 goto L60;
             }
             i__1 = (*i0 << 2) - 1 + *pp;
-            for (i4 = (*n0 << 2) - 9 + *pp;
-                    i4 >= i__1;
-                    i4 += -4)
+            for(i4 = (*n0 << 2) - 9 + *pp; i4 >= i__1; i4 += -4)
             {
                 a2 = b1;
-                if (z__[i4] > z__[i4 - 2])
+                if(z__[i4] > z__[i4 - 2])
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 b1 *= z__[i4] / z__[i4 - 2];
                 b2 += b1;
-                if (fla_max(b1,a2) * 100.f < b2)
+                if(fla_max(b1, a2) * 100.f < b2)
                 {
                     goto L60;
                 }
                 /* L50: */
             }
-L60:
+        L60:
             b2 = sqrt(b2 * 1.05f);
             /* Computing 2nd power */
             r__1 = b2;
             a2 = *dmin1 / (r__1 * r__1 + 1.f);
             gap2 = *dmin2 * .5f - a2;
-            if (gap2 > 0.f && gap2 > b2 * a2)
+            if(gap2 > 0.f && gap2 > b2 * a2)
             {
                 /* Computing MAX */
                 r__1 = s;
                 r__2 = a2 * (1.f - a2 * 1.01f * (b2 / gap2) * b2); // , expr subst
-                s = fla_max(r__1,r__2);
+                s = fla_max(r__1, r__2);
             }
             else
             {
                 /* Computing MAX */
                 r__1 = s;
                 r__2 = a2 * (1.f - b2 * 1.01f); // , expr subst
-                s = fla_max(r__1,r__2);
+                s = fla_max(r__1, r__2);
                 *ttype = -8;
             }
         }
@@ -436,69 +441,67 @@ L60:
         {
             /* Case 9. */
             s = *dmin1 * .25f;
-            if (*dmin1 == *dn1)
+            if(*dmin1 == *dn1)
             {
                 s = *dmin1 * .5f;
             }
             *ttype = -9;
         }
     }
-    else if (*n0in == *n0 + 2)
+    else if(*n0in == *n0 + 2)
     {
         /* Two eigenvalues deflated. Use DMIN2, DN2 for DMIN and DN. */
         /* Cases 10 and 11. */
-        if (*dmin2 == *dn2 && z__[nn - 5] * 2.f < z__[nn - 7])
+        if(*dmin2 == *dn2 && z__[nn - 5] * 2.f < z__[nn - 7])
         {
             *ttype = -10;
             s = *dmin2 * .333f;
-            if (z__[nn - 5] > z__[nn - 7])
+            if(z__[nn - 5] > z__[nn - 7])
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             b1 = z__[nn - 5] / z__[nn - 7];
             b2 = b1;
-            if (b2 == 0.f)
+            if(b2 == 0.f)
             {
                 goto L80;
             }
             i__1 = (*i0 << 2) - 1 + *pp;
-            for (i4 = (*n0 << 2) - 9 + *pp;
-                    i4 >= i__1;
-                    i4 += -4)
+            for(i4 = (*n0 << 2) - 9 + *pp; i4 >= i__1; i4 += -4)
             {
-                if (z__[i4] > z__[i4 - 2])
+                if(z__[i4] > z__[i4 - 2])
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
                 b1 *= z__[i4] / z__[i4 - 2];
                 b2 += b1;
-                if (b1 * 100.f < b2)
+                if(b1 * 100.f < b2)
                 {
                     goto L80;
                 }
                 /* L70: */
             }
-L80:
+        L80:
             b2 = sqrt(b2 * 1.05f);
             /* Computing 2nd power */
             r__1 = b2;
             a2 = *dmin2 / (r__1 * r__1 + 1.f);
-            gap2 = z__[nn - 7] + z__[nn - 9] - sqrt(z__[nn - 11]) * sqrt(z__[ nn - 9]) - a2;
-            if (gap2 > 0.f && gap2 > b2 * a2)
+            gap2 = z__[nn - 7] + z__[nn - 9] - sqrt(z__[nn - 11]) * sqrt(z__[nn - 9]) - a2;
+            if(gap2 > 0.f && gap2 > b2 * a2)
             {
                 /* Computing MAX */
                 r__1 = s;
                 r__2 = a2 * (1.f - a2 * 1.01f * (b2 / gap2) * b2); // , expr subst
-                s = fla_max(r__1,r__2);
+                s = fla_max(r__1, r__2);
             }
             else
             {
                 /* Computing MAX */
                 r__1 = s;
                 r__2 = a2 * (1.f - b2 * 1.01f); // , expr subst
-                s = fla_max(r__1,r__2);
+                s = fla_max(r__1, r__2);
             }
         }
         else
@@ -507,7 +510,7 @@ L80:
             *ttype = -11;
         }
     }
-    else if (*n0in > *n0 + 2)
+    else if(*n0in > *n0 + 2)
     {
         /* Case 12, more than two eigenvalues deflated. No information. */
         s = 0.f;
@@ -515,8 +518,7 @@ L80:
     }
     *tau = s;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLASQ4 */
 }
 /* slasq4_ */
-

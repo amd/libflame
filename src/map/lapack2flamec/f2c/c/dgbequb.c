@@ -1,16 +1,25 @@
-/* ../netlib/dgbequb.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dgbequb.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DGBEQUB */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DGBEQUB + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgbequb .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgbequb
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgbequb .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgbequb
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgbequb .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgbequb
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -145,10 +154,14 @@
 /* > \ingroup doubleGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dgbequb_(integer *m, integer *n, integer *kl, integer * ku, doublereal *ab, integer *ldab, doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd, doublereal *amax, integer * info)
+void dgbequb_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, integer *ldab,
+              doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd,
+              doublereal *amax, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgbequb inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", ldab %" FLA_IS "",*m, *n, *kl, *ku, *ldab);
+    AOCL_DTL_SNPRINTF("dgbequb inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
+                      ", ldab %" FLA_IS "",
+                      *m, *n, *kl, *ku, *ldab);
     /* System generated locals */
     integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2, d__3;
@@ -159,7 +172,8 @@ int dgbequb_(integer *m, integer *n, integer *kl, integer * ku, doublereal *ab, 
     doublereal radix, rcmin, rcmax;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum, logrdx, smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -190,41 +204,41 @@ int dgbequb_(integer *m, integer *n, integer *kl, integer * ku, doublereal *ab, 
     --c__;
     /* Function Body */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*kl < 0)
+    else if(*kl < 0)
     {
         *info = -3;
     }
-    else if (*ku < 0)
+    else if(*ku < 0)
     {
         *info = -4;
     }
-    else if (*ldab < *kl + *ku + 1)
+    else if(*ldab < *kl + *ku + 1)
     {
         *info = -6;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DGBEQUB", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
         *rowcnd = 1.;
         *colcnd = 1.;
         *amax = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants. Assume SMLNUM is a power of the radix. */
     smlnum = dlamch_("S");
@@ -233,9 +247,7 @@ int dgbequb_(integer *m, integer *n, integer *kl, integer * ku, doublereal *ab, 
     logrdx = log(radix);
     /* Compute row scale factors. */
     i__1 = *m;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         r__[i__] = 0.;
         /* L10: */
@@ -243,35 +255,29 @@ int dgbequb_(integer *m, integer *n, integer *kl, integer * ku, doublereal *ab, 
     /* Find the maximum element in each row. */
     kd = *ku + 1;
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         /* Computing MAX */
         i__2 = j - *ku;
         /* Computing MIN */
         i__4 = j + *kl;
-        i__3 = fla_min(i__4,*m);
-        for (i__ = fla_max(i__2,1);
-                i__ <= i__3;
-                ++i__)
+        i__3 = fla_min(i__4, *m);
+        for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
         {
             /* Computing MAX */
             d__2 = r__[i__];
             d__3 = (d__1 = ab[kd + i__ - j + j * ab_dim1], f2c_dabs(d__1)); // , expr subst
-            r__[i__] = fla_max(d__2,d__3);
+            r__[i__] = fla_max(d__2, d__3);
             /* L20: */
         }
         /* L30: */
     }
     i__1 = *m;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if (r__[i__] > 0.)
+        if(r__[i__] > 0.)
         {
-            i__3 = (integer) (log(r__[i__]) / logrdx);
+            i__3 = (integer)(log(r__[i__]) / logrdx);
             r__[i__] = pow_di(&radix, &i__3);
         }
     }
@@ -279,34 +285,30 @@ int dgbequb_(integer *m, integer *n, integer *kl, integer * ku, doublereal *ab, 
     rcmin = bignum;
     rcmax = 0.;
     i__1 = *m;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* Computing MAX */
         d__1 = rcmax;
         d__2 = r__[i__]; // , expr subst
-        rcmax = fla_max(d__1,d__2);
+        rcmax = fla_max(d__1, d__2);
         /* Computing MIN */
         d__1 = rcmin;
         d__2 = r__[i__]; // , expr subst
-        rcmin = fla_min(d__1,d__2);
+        rcmin = fla_min(d__1, d__2);
         /* L40: */
     }
     *amax = rcmax;
-    if (rcmin == 0.)
+    if(rcmin == 0.)
     {
         /* Find the first zero scale factor and return an error code. */
         i__1 = *m;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            if (r__[i__] == 0.)
+            if(r__[i__] == 0.)
             {
                 *info = i__;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* L50: */
         }
@@ -315,25 +317,21 @@ int dgbequb_(integer *m, integer *n, integer *kl, integer * ku, doublereal *ab, 
     {
         /* Invert the scale factors. */
         i__1 = *m;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* Computing MIN */
             /* Computing MAX */
             d__2 = r__[i__];
-            d__1 = fla_max(d__2,smlnum);
-            r__[i__] = 1. / fla_min(d__1,bignum);
+            d__1 = fla_max(d__2, smlnum);
+            r__[i__] = 1. / fla_min(d__1, bignum);
             /* L60: */
         }
         /* Compute ROWCND = fla_min(R(I)) / fla_max(R(I)). */
-        *rowcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+        *rowcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
     }
     /* Compute column scale factors. */
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         c__[j] = 0.;
         /* L70: */
@@ -341,28 +339,25 @@ int dgbequb_(integer *m, integer *n, integer *kl, integer * ku, doublereal *ab, 
     /* Find the maximum element in each column, */
     /* assuming the row scaling computed above. */
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         /* Computing MAX */
         i__3 = j - *ku;
         /* Computing MIN */
         i__4 = j + *kl;
-        i__2 = fla_min(i__4,*m);
-        for (i__ = fla_max(i__3,1);
-                i__ <= i__2;
-                ++i__)
+        i__2 = fla_min(i__4, *m);
+        for(i__ = fla_max(i__3, 1); i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             d__2 = c__[j];
-            d__3 = (d__1 = ab[kd + i__ - j + j * ab_dim1], f2c_dabs( d__1)) * r__[i__]; // , expr subst
-            c__[j] = fla_max(d__2,d__3);
+            d__3 = (d__1 = ab[kd + i__ - j + j * ab_dim1], f2c_dabs(d__1))
+                   * r__[i__]; // , expr subst
+            c__[j] = fla_max(d__2, d__3);
             /* L80: */
         }
-        if (c__[j] > 0.)
+        if(c__[j] > 0.)
         {
-            i__2 = (integer) (log(c__[j]) / logrdx);
+            i__2 = (integer)(log(c__[j]) / logrdx);
             c__[j] = pow_di(&radix, &i__2);
         }
         /* L90: */
@@ -371,33 +366,29 @@ int dgbequb_(integer *m, integer *n, integer *kl, integer * ku, doublereal *ab, 
     rcmin = bignum;
     rcmax = 0.;
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         /* Computing MIN */
         d__1 = rcmin;
         d__2 = c__[j]; // , expr subst
-        rcmin = fla_min(d__1,d__2);
+        rcmin = fla_min(d__1, d__2);
         /* Computing MAX */
         d__1 = rcmax;
         d__2 = c__[j]; // , expr subst
-        rcmax = fla_max(d__1,d__2);
+        rcmax = fla_max(d__1, d__2);
         /* L100: */
     }
-    if (rcmin == 0.)
+    if(rcmin == 0.)
     {
         /* Find the first zero scale factor and return an error code. */
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
-            if (c__[j] == 0.)
+            if(c__[j] == 0.)
             {
                 *info = *m + j;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* L110: */
         }
@@ -406,22 +397,20 @@ int dgbequb_(integer *m, integer *n, integer *kl, integer * ku, doublereal *ab, 
     {
         /* Invert the scale factors. */
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             /* Computing MIN */
             /* Computing MAX */
             d__2 = c__[j];
-            d__1 = fla_max(d__2,smlnum);
-            c__[j] = 1. / fla_min(d__1,bignum);
+            d__1 = fla_max(d__2, smlnum);
+            c__[j] = 1. / fla_min(d__1, bignum);
             /* L120: */
         }
         /* Compute COLCND = fla_min(C(J)) / fla_max(C(J)). */
-        *colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+        *colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGBEQUB */
 }
 /* dgbequb_ */

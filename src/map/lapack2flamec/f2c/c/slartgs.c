@@ -1,16 +1,25 @@
-/* ../netlib/slartgs.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slartgs.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLARTGS generates a plane rotation designed to introduce a bulge in implicit QR iteration for t he bidiagonal SVD problem. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLARTGS + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slartgs .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slartgs
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slartgs .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slartgs
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slartgs .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slartgs
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -76,13 +85,14 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int slartgs_(real *x, real *y, real *sigma, real *cs, real * sn)
+void slartgs_(real *x, real *y, real *sigma, real *cs, real *sn)
 {
     real r__, s, w, z__;
     extern real slamch_(char *);
     real thresh;
     extern /* Subroutine */
-    int slartgp_(real *, real *, real *, real *, real *);
+        void
+        slartgp_(real *, real *, real *, real *, real *);
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -101,14 +111,14 @@ int slartgs_(real *x, real *y, real *sigma, real *cs, real * sn)
     thresh = slamch_("E");
     /* Compute the first column of B**T*B - SIGMA^2*I, up to a scale */
     /* factor. */
-    if (*sigma == 0.f && f2c_abs(*x) < thresh || f2c_abs(*x) == *sigma && *y == 0.f)
+    if(*sigma == 0.f && f2c_abs(*x) < thresh || f2c_abs(*x) == *sigma && *y == 0.f)
     {
         z__ = 0.f;
         w = 0.f;
     }
-    else if (*sigma == 0.f)
+    else if(*sigma == 0.f)
     {
-        if (*x >= 0.f)
+        if(*x >= 0.f)
         {
             z__ = *x;
             w = *y;
@@ -119,14 +129,14 @@ int slartgs_(real *x, real *y, real *sigma, real *cs, real * sn)
             w = -(*y);
         }
     }
-    else if (f2c_abs(*x) < thresh)
+    else if(f2c_abs(*x) < thresh)
     {
         z__ = -(*sigma) * *sigma;
         w = 0.f;
     }
     else
     {
-        if (*x >= 0.f)
+        if(*x >= 0.f)
         {
             s = 1.f;
         }
@@ -139,11 +149,11 @@ int slartgs_(real *x, real *y, real *sigma, real *cs, real * sn)
     }
     /* Generate the rotation. */
     /* CALL SLARTGP( Z, W, CS, SN, R ) might seem more natural;
-    */
+     */
     /* reordering the arguments ensures that if Z = 0 then the rotation */
     /* is by PI/2. */
     slartgp_(&w, &z__, sn, cs, &r__);
-    return 0;
+    return;
     /* End SLARTGS */
 }
 /* slartgs_ */

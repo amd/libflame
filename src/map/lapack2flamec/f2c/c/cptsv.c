@@ -1,16 +1,25 @@
-/* ../netlib/cptsv.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cptsv.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief <b> CPTSV computes the solution to system of linear equations A * X = B for PT matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CPTSV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cptsv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cptsv.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cptsv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cptsv.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cptsv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cptsv.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -101,15 +110,16 @@
 /* > \ingroup complexPTsolve */
 /* ===================================================================== */
 /* Subroutine */
-int cptsv_(integer *n, integer *nrhs, real *d__, complex *e, complex *b, integer *ldb, integer *info)
+void cptsv_(integer *n, integer *nrhs, real *d__, complex *e, complex *b, integer *ldb,
+            integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cptsv inputs: n %lld, nrhs %lld, ldb %lld",*n, *nrhs, *ldb);
+    snprintf(buffer, 256, "cptsv inputs: n %lld, nrhs %lld, ldb %lld", *n, *nrhs, *ldb);
 #else
-    snprintf(buffer, 256,"cptsv inputs: n %d, nrhs %d, ldb %d",*n, *nrhs, *ldb);
+    snprintf(buffer, 256, "cptsv inputs: n %d, nrhs %d, ldb %d", *n, *nrhs, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -117,7 +127,12 @@ int cptsv_(integer *n, integer *nrhs, real *d__, complex *e, complex *b, integer
     integer b_dim1, b_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), cpttrf_( integer *, real *, complex *, integer *), cpttrs_(char *, integer *, integer *, real *, complex *, complex *, integer *, integer *);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
+        cpttrf_(integer *, real *, complex *, integer *),
+        cpttrs_(char *, integer *, integer *, real *, complex *, complex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -141,34 +156,34 @@ int cptsv_(integer *n, integer *nrhs, real *d__, complex *e, complex *b, integer
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -2;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -6;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CPTSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute the L*D*L**H (or U**H*D*U) factorization of A. */
     cpttrf_(n, &d__[1], &e[1], info);
-    if (*info == 0)
+    if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */
         cpttrs_("Lower", n, nrhs, &d__[1], &e[1], &b[b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPTSV */
 }
 /* cptsv_ */

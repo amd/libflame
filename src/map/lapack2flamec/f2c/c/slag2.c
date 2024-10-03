@@ -1,16 +1,25 @@
-/* ../netlib/slag2.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slag2.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLAG2 computes the eigenvalues of a 2-by-2 generalized eigenvalue problem, with scaling as nece ssary to avoid over-/underflow. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLAG2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slag2.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slag2.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slag2.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slag2.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slag2.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slag2.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -142,7 +151,8 @@ if a diagonal is smaller */
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int slag2_(real *a, integer *lda, real *b, integer *ldb, real *safmin, real *scale1, real *scale2, real *wr1, real *wr2, real * wi)
+void slag2_(real *a, integer *lda, real *b, integer *ldb, real *safmin, real *scale1, real *scale2,
+            real *wr1, real *wr2, real *wi)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset;
@@ -150,7 +160,9 @@ int slag2_(real *a, integer *lda, real *b, integer *ldb, real *safmin, real *sca
     /* Builtin functions */
     double sqrt(doublereal), r_sign(real *, real *);
     /* Local variables */
-    real r__, c1, c2, c3, c4, c5, s1, s2, a11, a12, a21, a22, b11, b12, b22, pp, qq, ss, as11, as12, as22, sum, abi22, diff, bmin, wbig, wabs, wdet, binv11, binv22, discr, anorm, bnorm, bsize, shift, rtmin, rtmax, wsize, ascale, bscale, wscale, safmax, wsmall;
+    real r__, c1, c2, c3, c4, c5, s1, s2, a11, a12, a21, a22, b11, b12, b22, pp, qq, ss, as11, as12,
+        as22, sum, abi22, diff, bmin, wbig, wabs, wdet, binv11, binv22, discr, anorm, bnorm, bsize,
+        shift, rtmin, rtmax, wsize, ascale, bscale, wscale, safmax, wsmall;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -180,10 +192,11 @@ int slag2_(real *a, integer *lda, real *b, integer *ldb, real *safmin, real *sca
     safmax = 1.f / *safmin;
     /* Scale A */
     /* Computing MAX */
-    r__5 = (r__1 = a[a_dim1 + 1], f2c_abs(r__1)) + (r__2 = a[a_dim1 + 2], f2c_abs( r__2));
-    r__6 = (r__3 = a[(a_dim1 << 1) + 1], f2c_abs(r__3)) + (r__4 = a[(a_dim1 << 1) + 2], f2c_abs(r__4));
-    r__5 = fla_max(r__5,r__6); // ; expr subst
-    anorm = fla_max(r__5,*safmin);
+    r__5 = (r__1 = a[a_dim1 + 1], f2c_abs(r__1)) + (r__2 = a[a_dim1 + 2], f2c_abs(r__2));
+    r__6 = (r__3 = a[(a_dim1 << 1) + 1], f2c_abs(r__3))
+           + (r__4 = a[(a_dim1 << 1) + 2], f2c_abs(r__4));
+    r__5 = fla_max(r__5, r__6); // ; expr subst
+    anorm = fla_max(r__5, *safmin);
     ascale = 1.f / anorm;
     a11 = ascale * a[a_dim1 + 1];
     a21 = ascale * a[a_dim1 + 2];
@@ -194,15 +207,15 @@ int slag2_(real *a, integer *lda, real *b, integer *ldb, real *safmin, real *sca
     b12 = b[(b_dim1 << 1) + 1];
     b22 = b[(b_dim1 << 1) + 2];
     /* Computing MAX */
-    r__1 = f2c_abs(b11), r__2 = f2c_abs(b12), r__1 = fla_max(r__1,r__2);
+    r__1 = f2c_abs(b11), r__2 = f2c_abs(b12), r__1 = fla_max(r__1, r__2);
     r__2 = f2c_abs(b22);
-    r__1 = fla_max(r__1,r__2); // ; expr subst
-    bmin = rtmin * fla_max(r__1,rtmin);
-    if (f2c_abs(b11) < bmin)
+    r__1 = fla_max(r__1, r__2); // ; expr subst
+    bmin = rtmin * fla_max(r__1, rtmin);
+    if(f2c_abs(b11) < bmin)
     {
         b11 = r_sign(&bmin, &b11);
     }
-    if (f2c_abs(b22) < bmin)
+    if(f2c_abs(b22) < bmin)
     {
         b22 = r_sign(&bmin, &b22);
     }
@@ -210,12 +223,12 @@ int slag2_(real *a, integer *lda, real *b, integer *ldb, real *safmin, real *sca
     /* Computing MAX */
     r__1 = f2c_abs(b11);
     r__2 = f2c_abs(b12) + f2c_abs(b22);
-    r__1 = fla_max(r__1,r__2); // ; expr subst
-    bnorm = fla_max(r__1,*safmin);
+    r__1 = fla_max(r__1, r__2); // ; expr subst
+    bnorm = fla_max(r__1, *safmin);
     /* Computing MAX */
     r__1 = f2c_abs(b11);
     r__2 = f2c_abs(b22); // , expr subst
-    bsize = fla_max(r__1,r__2);
+    bsize = fla_max(r__1, r__2);
     bscale = 1.f / bsize;
     b11 *= bscale;
     b12 *= bscale;
@@ -226,7 +239,7 @@ int slag2_(real *a, integer *lda, real *b, integer *ldb, real *safmin, real *sca
     binv22 = 1.f / b22;
     s1 = a11 * binv11;
     s2 = a22 * binv22;
-    if (f2c_abs(s1) <= f2c_abs(s2))
+    if(f2c_abs(s1) <= f2c_abs(s2))
     {
         as12 = a12 - s1 * b12;
         as22 = a22 - s1 * b22;
@@ -245,7 +258,7 @@ int slag2_(real *a, integer *lda, real *b, integer *ldb, real *safmin, real *sca
         shift = s2;
     }
     qq = ss * as12;
-    if ((r__1 = pp * rtmin, f2c_abs(r__1)) >= 1.f)
+    if((r__1 = pp * rtmin, f2c_abs(r__1)) >= 1.f)
     {
         /* Computing 2nd power */
         r__1 = rtmin * pp;
@@ -256,7 +269,7 @@ int slag2_(real *a, integer *lda, real *b, integer *ldb, real *safmin, real *sca
     {
         /* Computing 2nd power */
         r__1 = pp;
-        if (r__1 * r__1 + f2c_abs(qq) <= *safmin)
+        if(r__1 * r__1 + f2c_abs(qq) <= *safmin)
         {
             /* Computing 2nd power */
             r__1 = rtmax * pp;
@@ -276,7 +289,7 @@ int slag2_(real *a, integer *lda, real *b, integer *ldb, real *safmin, real *sca
     /* the calculation of R. On machines which have a consistent */
     /* flush-to-zero threshhold and handle numbers above that */
     /* threshhold correctly, it would not be necessary. */
-    if (discr >= 0.f || r__ == 0.f)
+    if(discr >= 0.f || r__ == 0.f)
     {
         sum = pp + r_sign(&r__, &pp);
         diff = pp - r_sign(&r__, &pp);
@@ -285,22 +298,22 @@ int slag2_(real *a, integer *lda, real *b, integer *ldb, real *safmin, real *sca
         wsmall = shift + diff;
         /* Computing MAX */
         r__1 = f2c_abs(wsmall);
-        if (f2c_abs(wbig) * .5f > fla_max(r__1,*safmin))
+        if(f2c_abs(wbig) * .5f > fla_max(r__1, *safmin))
         {
             wdet = (a11 * a22 - a12 * a21) * (binv11 * binv22);
             wsmall = wdet / wbig;
         }
         /* Choose (real) eigenvalue closest to 2,2 element of A*B**(-1) */
         /* for WR1. */
-        if (pp > abi22)
+        if(pp > abi22)
         {
-            *wr1 = fla_min(wbig,wsmall);
-            *wr2 = fla_max(wbig,wsmall);
+            *wr1 = fla_min(wbig, wsmall);
+            *wr2 = fla_max(wbig, wsmall);
         }
         else
         {
-            *wr1 = fla_max(wbig,wsmall);
-            *wr2 = fla_min(wbig,wsmall);
+            *wr1 = fla_max(wbig, wsmall);
+            *wr2 = fla_min(wbig, wsmall);
         }
         *wi = 0.f;
     }
@@ -321,26 +334,26 @@ int slag2_(real *a, integer *lda, real *b, integer *ldb, real *safmin, real *sca
     /* implement the condition that s A - w B must never overflow. */
     /* C4 implements the condition s should not underflow. */
     /* C5 implements the condition fla_max(s,|w|) should be at least 2. */
-    c1 = bsize * (*safmin * fla_max(1.f,ascale));
-    c2 = *safmin * fla_max(1.f,bnorm);
+    c1 = bsize * (*safmin * fla_max(1.f, ascale));
+    c2 = *safmin * fla_max(1.f, bnorm);
     c3 = bsize * *safmin;
-    if (ascale <= 1.f && bsize <= 1.f)
+    if(ascale <= 1.f && bsize <= 1.f)
     {
         /* Computing MIN */
         r__1 = 1.f;
         r__2 = ascale / *safmin * bsize; // , expr subst
-        c4 = fla_min(r__1,r__2);
+        c4 = fla_min(r__1, r__2);
     }
     else
     {
         c4 = 1.f;
     }
-    if (ascale <= 1.f || bsize <= 1.f)
+    if(ascale <= 1.f || bsize <= 1.f)
     {
         /* Computing MIN */
         r__1 = 1.f;
         r__2 = ascale * bsize; // , expr subst
-        c5 = fla_min(r__1,r__2);
+        c5 = fla_min(r__1, r__2);
     }
     else
     {
@@ -351,24 +364,24 @@ int slag2_(real *a, integer *lda, real *b, integer *ldb, real *safmin, real *sca
     /* Computing MAX */
     /* Computing MIN */
     r__3 = c4;
-    r__4 = fla_max(wabs,c5) * .5f; // , expr subst
-    r__1 = fla_max(*safmin,c1), r__2 = (wabs * c2 + c3) * 1.0000100000000001f;
-    r__1 = fla_max(r__1,r__2);
-    r__2 = fla_min(r__3,r__4); // ; expr subst
-    wsize = fla_max(r__1,r__2);
-    if (wsize != 1.f)
+    r__4 = fla_max(wabs, c5) * .5f; // , expr subst
+    r__1 = fla_max(*safmin, c1), r__2 = (wabs * c2 + c3) * 1.0000100000000001f;
+    r__1 = fla_max(r__1, r__2);
+    r__2 = fla_min(r__3, r__4); // ; expr subst
+    wsize = fla_max(r__1, r__2);
+    if(wsize != 1.f)
     {
         wscale = 1.f / wsize;
-        if (wsize > 1.f)
+        if(wsize > 1.f)
         {
-            *scale1 = fla_max(ascale,bsize) * wscale * fla_min(ascale,bsize);
+            *scale1 = fla_max(ascale, bsize) * wscale * fla_min(ascale, bsize);
         }
         else
         {
-            *scale1 = fla_min(ascale,bsize) * wscale * fla_max(ascale,bsize);
+            *scale1 = fla_min(ascale, bsize) * wscale * fla_max(ascale, bsize);
         }
         *wr1 *= wscale;
-        if (*wi != 0.f)
+        if(*wi != 0.f)
         {
             *wi *= wscale;
             *wr2 = *wr1;
@@ -381,28 +394,28 @@ int slag2_(real *a, integer *lda, real *b, integer *ldb, real *safmin, real *sca
         *scale2 = *scale1;
     }
     /* Scale second eigenvalue (if real) */
-    if (*wi == 0.f)
+    if(*wi == 0.f)
     {
         /* Computing MAX */
         /* Computing MIN */
         /* Computing MAX */
         r__5 = f2c_abs(*wr2);
         r__3 = c4;
-        r__4 = fla_max(r__5,c5) * .5f; // , expr subst
-        r__1 = fla_max(*safmin,c1), r__2 = (f2c_abs(*wr2) * c2 + c3) * 1.0000100000000001f;
-        r__1 = fla_max(r__1,r__2);
+        r__4 = fla_max(r__5, c5) * .5f; // , expr subst
+        r__1 = fla_max(*safmin, c1), r__2 = (f2c_abs(*wr2) * c2 + c3) * 1.0000100000000001f;
+        r__1 = fla_max(r__1, r__2);
         r__2 = fla_min(r__3, r__4); // ; expr subst
-        wsize = fla_max(r__1,r__2);
-        if (wsize != 1.f)
+        wsize = fla_max(r__1, r__2);
+        if(wsize != 1.f)
         {
             wscale = 1.f / wsize;
-            if (wsize > 1.f)
+            if(wsize > 1.f)
             {
-                *scale2 = fla_max(ascale,bsize) * wscale * fla_min(ascale,bsize);
+                *scale2 = fla_max(ascale, bsize) * wscale * fla_min(ascale, bsize);
             }
             else
             {
-                *scale2 = fla_min(ascale,bsize) * wscale * fla_max(ascale,bsize);
+                *scale2 = fla_min(ascale, bsize) * wscale * fla_max(ascale, bsize);
             }
             *wr2 *= wscale;
         }
@@ -412,6 +425,6 @@ int slag2_(real *a, integer *lda, real *b, integer *ldb, real *safmin, real *sca
         }
     }
     /* End of SLAG2 */
-    return 0;
+    return;
 }
 /* slag2_ */

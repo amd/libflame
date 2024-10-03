@@ -1,5 +1,8 @@
-/* ../netlib/dsytri2x.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dsytri2x.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b11 = 1.;
 static doublereal c_b15 = 0.;
@@ -9,11 +12,17 @@ static doublereal c_b15 = 0.;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DSYTRI2X + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsytri2 x.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsytri2
+ * x.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsytri2 x.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsytri2
+ * x.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytri2 x.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytri2
+ * x.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -44,7 +53,7 @@ static doublereal c_b15 = 0.;
 /* > Specifies whether the details of the factorization are stored */
 /* > as an upper or lower triangular matrix. */
 /* > = 'U': Upper triangular, form is A = U*D*U**T;
-*/
+ */
 /* > = 'L': Lower triangular, form is A = L*D*L**T. */
 /* > \endverbatim */
 /* > */
@@ -112,15 +121,18 @@ the matrix is singular and its */
 /* > \ingroup doubleSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *work, integer *nb, integer *info)
+void dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *work,
+               integer *nb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsytri2x inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", nb %" FLA_IS "",*uplo, *n, *lda, *nb);
+    AOCL_DTL_SNPRINTF("dsytri2x inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", nb %" FLA_IS "",
+                      *uplo, *n, *lda, *nb);
     /* System generated locals */
     integer a_dim1, a_offset, work_dim1, work_offset, i__1, i__2, i__3;
     /* Local variables */
     extern /* Subroutine */
-    int dsyswapr_(char *, integer *, doublereal *, integer *, integer *, integer *);
+        void
+        dsyswapr_(char *, integer *, doublereal *, integer *, integer *, integer *);
     doublereal d__;
     integer i__, j, k;
     doublereal t, ak;
@@ -129,16 +141,26 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
     integer invd;
     doublereal akkp1;
     extern /* Subroutine */
-    int dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+        void
+        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
-    int dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *);
     integer count;
     logical upper;
     doublereal u01_i_j__, u11_i_j__;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dtrtri_( char *, char *, integer *, doublereal *, integer *, integer *), dsyconv_(char *, char *, integer *, doublereal *, integer *, integer *, doublereal *, integer *);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
+        dtrtri_(char *, char *, integer *, doublereal *, integer *, integer *),
+        dsyconv_(char *, char *, integer *, doublereal *, integer *, integer *, doublereal *,
+                 integer *);
     doublereal u01_ip1_j__, u11_ip1_j__;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -171,47 +193,45 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
     work -= work_offset;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
     /* Quick return if possible */
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DSYTRI2X", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Convert A */
     /* Workspace got Non-diag elements of D */
-    dsyconv_(uplo, "C", n, &a[a_offset], lda, &ipiv[1], &work[work_offset], & iinfo);
+    dsyconv_(uplo, "C", n, &a[a_offset], lda, &ipiv[1], &work[work_offset], &iinfo);
     /* Check that the diagonal matrix D is nonsingular. */
-    if (upper)
+    if(upper)
     {
         /* Upper triangular storage: examine D from bottom to top */
-        for (*info = *n;
-                *info >= 1;
-                --(*info))
+        for(*info = *n; *info >= 1; --(*info))
         {
-            if (ipiv[*info] > 0 && a[*info + *info * a_dim1] == 0.)
+            if(ipiv[*info] > 0 && a[*info + *info * a_dim1] == 0.)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
         }
     }
@@ -219,14 +239,12 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
     {
         /* Lower triangular storage: examine D from top to bottom. */
         i__1 = *n;
-        for (*info = 1;
-                *info <= i__1;
-                ++(*info))
+        for(*info = 1; *info <= i__1; ++(*info))
         {
-            if (ipiv[*info] > 0 && a[*info + *info * a_dim1] == 0.)
+            if(ipiv[*info] > 0 && a[*info + *info * a_dim1] == 0.)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
         }
     }
@@ -240,7 +258,7 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
     /* INVD is a block (N,2) */
     /* The first element of INVD is in WORK(1,INVD) */
     invd = *nb + 2;
-    if (upper)
+    if(upper)
     {
         /* invA = P * inv(U**T)*inv(D)*inv(U)*P**T. */
         dtrtri_(uplo, "U", n, &a[a_offset], lda, info);
@@ -248,7 +266,7 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
         k = 1;
         while(k <= *n)
         {
-            if (ipiv[k] > 0)
+            if(ipiv[k] > 0)
             {
                 /* 1 x 1 diagonal NNB */
                 work[k + invd * work_dim1] = 1. / a[k + k * a_dim1];
@@ -276,7 +294,7 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
         while(cut > 0)
         {
             nnb = *nb;
-            if (cut <= nnb)
+            if(cut <= nnb)
             {
                 nnb = cut;
             }
@@ -285,17 +303,15 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
                 count = 0;
                 /* count negative elements, */
                 i__1 = cut;
-                for (i__ = cut + 1 - nnb;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = cut + 1 - nnb; i__ <= i__1; ++i__)
                 {
-                    if (ipiv[i__] < 0)
+                    if(ipiv[i__] < 0)
                     {
                         ++count;
                     }
                 }
                 /* need a even number for a clear cut */
-                if (count % 2 == 1)
+                if(count % 2 == 1)
                 {
                     ++nnb;
                 }
@@ -303,36 +319,26 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
             cut -= nnb;
             /* U01 Block */
             i__1 = cut;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = nnb;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     work[i__ + j * work_dim1] = a[i__ + (cut + j) * a_dim1];
                 }
             }
             /* U11 Block */
             i__1 = nnb;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 work[u11 + i__ + i__ * work_dim1] = 1.;
                 i__2 = i__ - 1;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     work[u11 + i__ + j * work_dim1] = 0.;
                 }
                 i__2 = nnb;
-                for (j = i__ + 1;
-                        j <= i__2;
-                        ++j)
+                for(j = i__ + 1; j <= i__2; ++j)
                 {
                     work[u11 + i__ + j * work_dim1] = a[cut + i__ + (cut + j) * a_dim1];
                 }
@@ -341,28 +347,29 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
             i__ = 1;
             while(i__ <= cut)
             {
-                if (ipiv[i__] > 0)
+                if(ipiv[i__] > 0)
                 {
                     i__1 = nnb;
-                    for (j = 1;
-                            j <= i__1;
-                            ++j)
+                    for(j = 1; j <= i__1; ++j)
                     {
-                        work[i__ + j * work_dim1] = work[i__ + invd * work_dim1] * work[i__ + j * work_dim1];
+                        work[i__ + j * work_dim1]
+                            = work[i__ + invd * work_dim1] * work[i__ + j * work_dim1];
                     }
                     ++i__;
                 }
                 else
                 {
                     i__1 = nnb;
-                    for (j = 1;
-                            j <= i__1;
-                            ++j)
+                    for(j = 1; j <= i__1; ++j)
                     {
                         u01_i_j__ = work[i__ + j * work_dim1];
                         u01_ip1_j__ = work[i__ + 1 + j * work_dim1];
-                        work[i__ + j * work_dim1] = work[i__ + invd * work_dim1] * u01_i_j__ + work[i__ + (invd + 1) * work_dim1] * u01_ip1_j__;
-                        work[i__ + 1 + j * work_dim1] = work[i__ + 1 + invd * work_dim1] * u01_i_j__ + work[i__ + 1 + (invd + 1) * work_dim1] * u01_ip1_j__;
+                        work[i__ + j * work_dim1]
+                            = work[i__ + invd * work_dim1] * u01_i_j__
+                              + work[i__ + (invd + 1) * work_dim1] * u01_ip1_j__;
+                        work[i__ + 1 + j * work_dim1]
+                            = work[i__ + 1 + invd * work_dim1] * u01_i_j__
+                              + work[i__ + 1 + (invd + 1) * work_dim1] * u01_ip1_j__;
                     }
                     i__ += 2;
                 }
@@ -371,44 +378,43 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
             i__ = 1;
             while(i__ <= nnb)
             {
-                if (ipiv[cut + i__] > 0)
+                if(ipiv[cut + i__] > 0)
                 {
                     i__1 = nnb;
-                    for (j = i__;
-                            j <= i__1;
-                            ++j)
+                    for(j = i__; j <= i__1; ++j)
                     {
-                        work[u11 + i__ + j * work_dim1] = work[cut + i__ + invd * work_dim1] * work[u11 + i__ + j * work_dim1];
+                        work[u11 + i__ + j * work_dim1]
+                            = work[cut + i__ + invd * work_dim1] * work[u11 + i__ + j * work_dim1];
                     }
                     ++i__;
                 }
                 else
                 {
                     i__1 = nnb;
-                    for (j = i__;
-                            j <= i__1;
-                            ++j)
+                    for(j = i__; j <= i__1; ++j)
                     {
                         u11_i_j__ = work[u11 + i__ + j * work_dim1];
                         u11_ip1_j__ = work[u11 + i__ + 1 + j * work_dim1];
-                        work[u11 + i__ + j * work_dim1] = work[cut + i__ + invd * work_dim1] * work[u11 + i__ + j * work_dim1] + work[cut + i__ + (invd + 1) * work_dim1] * work[u11 + i__ + 1 + j * work_dim1];
-                        work[u11 + i__ + 1 + j * work_dim1] = work[cut + i__ + 1 + invd * work_dim1] * u11_i_j__ + work[ cut + i__ + 1 + (invd + 1) * work_dim1] * u11_ip1_j__;
+                        work[u11 + i__ + j * work_dim1]
+                            = work[cut + i__ + invd * work_dim1] * work[u11 + i__ + j * work_dim1]
+                              + work[cut + i__ + (invd + 1) * work_dim1]
+                                    * work[u11 + i__ + 1 + j * work_dim1];
+                        work[u11 + i__ + 1 + j * work_dim1]
+                            = work[cut + i__ + 1 + invd * work_dim1] * u11_i_j__
+                              + work[cut + i__ + 1 + (invd + 1) * work_dim1] * u11_ip1_j__;
                     }
                     i__ += 2;
                 }
             }
             /* U11**T*invD1*U11->U11 */
             i__1 = *n + *nb + 1;
-            dtrmm_("L", "U", "T", "U", &nnb, &nnb, &c_b11, &a[cut + 1 + (cut + 1) * a_dim1], lda, &work[u11 + 1 + work_dim1], &i__1);
+            dtrmm_("L", "U", "T", "U", &nnb, &nnb, &c_b11, &a[cut + 1 + (cut + 1) * a_dim1], lda,
+                   &work[u11 + 1 + work_dim1], &i__1);
             i__1 = nnb;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = nnb;
-                for (j = i__;
-                        j <= i__2;
-                        ++j)
+                for(j = i__; j <= i__2; ++j)
                 {
                     a[cut + i__ + (cut + j) * a_dim1] = work[u11 + i__ + j * work_dim1];
                 }
@@ -416,34 +422,28 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
             /* U01**T*invD*U01->A(CUT+I,CUT+J) */
             i__1 = *n + *nb + 1;
             i__2 = *n + *nb + 1;
-            dgemm_("T", "N", &nnb, &nnb, &cut, &c_b11, &a[(cut + 1) * a_dim1 + 1], lda, &work[work_offset], &i__1, &c_b15, &work[u11 + 1 + work_dim1], &i__2);
+            dgemm_("T", "N", &nnb, &nnb, &cut, &c_b11, &a[(cut + 1) * a_dim1 + 1], lda,
+                   &work[work_offset], &i__1, &c_b15, &work[u11 + 1 + work_dim1], &i__2);
             /* U11 = U11**T*invD1*U11 + U01**T*invD*U01 */
             i__1 = nnb;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = nnb;
-                for (j = i__;
-                        j <= i__2;
-                        ++j)
+                for(j = i__; j <= i__2; ++j)
                 {
                     a[cut + i__ + (cut + j) * a_dim1] += work[u11 + i__ + j * work_dim1];
                 }
             }
             /* U01 = U00**T*invD0*U01 */
             i__1 = *n + *nb + 1;
-            dtrmm_("L", uplo, "T", "U", &cut, &nnb, &c_b11, &a[a_offset], lda, &work[work_offset], &i__1);
+            dtrmm_("L", uplo, "T", "U", &cut, &nnb, &c_b11, &a[a_offset], lda, &work[work_offset],
+                   &i__1);
             /* Update U01 */
             i__1 = cut;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = nnb;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     a[i__ + (cut + j) * a_dim1] = work[i__ + j * work_dim1];
                 }
@@ -454,14 +454,14 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
         i__ = 1;
         while(i__ <= *n)
         {
-            if (ipiv[i__] > 0)
+            if(ipiv[i__] > 0)
             {
                 ip = ipiv[i__];
-                if (i__ < ip)
+                if(i__ < ip)
                 {
                     dsyswapr_(uplo, n, &a[a_offset], lda, &i__, &ip);
                 }
-                if (i__ > ip)
+                if(i__ > ip)
                 {
                     dsyswapr_(uplo, n, &a[a_offset], lda, &ip, &i__);
                 }
@@ -470,12 +470,12 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
             {
                 ip = -ipiv[i__];
                 ++i__;
-                if (i__ - 1 < ip)
+                if(i__ - 1 < ip)
                 {
                     i__1 = i__ - 1;
                     dsyswapr_(uplo, n, &a[a_offset], lda, &i__1, &ip);
                 }
-                if (i__ - 1 > ip)
+                if(i__ - 1 > ip)
                 {
                     i__1 = i__ - 1;
                     dsyswapr_(uplo, n, &a[a_offset], lda, &ip, &i__1);
@@ -493,7 +493,7 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
         k = *n;
         while(k >= 1)
         {
-            if (ipiv[k] > 0)
+            if(ipiv[k] > 0)
             {
                 /* 1 x 1 diagonal NNB */
                 work[k + invd * work_dim1] = 1. / a[k + k * a_dim1];
@@ -521,7 +521,7 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
         while(cut < *n)
         {
             nnb = *nb;
-            if (cut + nnb > *n)
+            if(cut + nnb > *n)
             {
                 nnb = *n - cut;
             }
@@ -530,53 +530,41 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
                 count = 0;
                 /* count negative elements, */
                 i__1 = cut + nnb;
-                for (i__ = cut + 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = cut + 1; i__ <= i__1; ++i__)
                 {
-                    if (ipiv[i__] < 0)
+                    if(ipiv[i__] < 0)
                     {
                         ++count;
                     }
                 }
                 /* need a even number for a clear cut */
-                if (count % 2 == 1)
+                if(count % 2 == 1)
                 {
                     ++nnb;
                 }
             }
             /* L21 Block */
             i__1 = *n - cut - nnb;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = nnb;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     work[i__ + j * work_dim1] = a[cut + nnb + i__ + (cut + j) * a_dim1];
                 }
             }
             /* L11 Block */
             i__1 = nnb;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 work[u11 + i__ + i__ * work_dim1] = 1.;
                 i__2 = nnb;
-                for (j = i__ + 1;
-                        j <= i__2;
-                        ++j)
+                for(j = i__ + 1; j <= i__2; ++j)
                 {
                     work[u11 + i__ + j * work_dim1] = 0.;
                 }
                 i__2 = i__ - 1;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     work[u11 + i__ + j * work_dim1] = a[cut + i__ + (cut + j) * a_dim1];
                 }
@@ -585,28 +573,29 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
             i__ = *n - cut - nnb;
             while(i__ >= 1)
             {
-                if (ipiv[cut + nnb + i__] > 0)
+                if(ipiv[cut + nnb + i__] > 0)
                 {
                     i__1 = nnb;
-                    for (j = 1;
-                            j <= i__1;
-                            ++j)
+                    for(j = 1; j <= i__1; ++j)
                     {
-                        work[i__ + j * work_dim1] = work[cut + nnb + i__ + invd * work_dim1] * work[i__ + j * work_dim1];
+                        work[i__ + j * work_dim1]
+                            = work[cut + nnb + i__ + invd * work_dim1] * work[i__ + j * work_dim1];
                     }
                     --i__;
                 }
                 else
                 {
                     i__1 = nnb;
-                    for (j = 1;
-                            j <= i__1;
-                            ++j)
+                    for(j = 1; j <= i__1; ++j)
                     {
                         u01_i_j__ = work[i__ + j * work_dim1];
                         u01_ip1_j__ = work[i__ - 1 + j * work_dim1];
-                        work[i__ + j * work_dim1] = work[cut + nnb + i__ + invd * work_dim1] * u01_i_j__ + work[cut + nnb + i__ + (invd + 1) * work_dim1] * u01_ip1_j__;
-                        work[i__ - 1 + j * work_dim1] = work[cut + nnb + i__ - 1 + (invd + 1) * work_dim1] * u01_i_j__ + work[cut + nnb + i__ - 1 + invd * work_dim1] * u01_ip1_j__;
+                        work[i__ + j * work_dim1]
+                            = work[cut + nnb + i__ + invd * work_dim1] * u01_i_j__
+                              + work[cut + nnb + i__ + (invd + 1) * work_dim1] * u01_ip1_j__;
+                        work[i__ - 1 + j * work_dim1]
+                            = work[cut + nnb + i__ - 1 + (invd + 1) * work_dim1] * u01_i_j__
+                              + work[cut + nnb + i__ - 1 + invd * work_dim1] * u01_ip1_j__;
                     }
                     i__ += -2;
                 }
@@ -615,65 +604,60 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
             i__ = nnb;
             while(i__ >= 1)
             {
-                if (ipiv[cut + i__] > 0)
+                if(ipiv[cut + i__] > 0)
                 {
                     i__1 = nnb;
-                    for (j = 1;
-                            j <= i__1;
-                            ++j)
+                    for(j = 1; j <= i__1; ++j)
                     {
-                        work[u11 + i__ + j * work_dim1] = work[cut + i__ + invd * work_dim1] * work[u11 + i__ + j * work_dim1];
+                        work[u11 + i__ + j * work_dim1]
+                            = work[cut + i__ + invd * work_dim1] * work[u11 + i__ + j * work_dim1];
                     }
                     --i__;
                 }
                 else
                 {
                     i__1 = nnb;
-                    for (j = 1;
-                            j <= i__1;
-                            ++j)
+                    for(j = 1; j <= i__1; ++j)
                     {
                         u11_i_j__ = work[u11 + i__ + j * work_dim1];
                         u11_ip1_j__ = work[u11 + i__ - 1 + j * work_dim1];
-                        work[u11 + i__ + j * work_dim1] = work[cut + i__ + invd * work_dim1] * work[u11 + i__ + j * work_dim1] + work[cut + i__ + (invd + 1) * work_dim1] * u11_ip1_j__;
-                        work[u11 + i__ - 1 + j * work_dim1] = work[cut + i__ - 1 + (invd + 1) * work_dim1] * u11_i_j__ + work[cut + i__ - 1 + invd * work_dim1] * u11_ip1_j__;
+                        work[u11 + i__ + j * work_dim1]
+                            = work[cut + i__ + invd * work_dim1] * work[u11 + i__ + j * work_dim1]
+                              + work[cut + i__ + (invd + 1) * work_dim1] * u11_ip1_j__;
+                        work[u11 + i__ - 1 + j * work_dim1]
+                            = work[cut + i__ - 1 + (invd + 1) * work_dim1] * u11_i_j__
+                              + work[cut + i__ - 1 + invd * work_dim1] * u11_ip1_j__;
                     }
                     i__ += -2;
                 }
             }
             /* L11**T*invD1*L11->L11 */
             i__1 = *n + *nb + 1;
-            dtrmm_("L", uplo, "T", "U", &nnb, &nnb, &c_b11, &a[cut + 1 + (cut + 1) * a_dim1], lda, &work[u11 + 1 + work_dim1], &i__1);
+            dtrmm_("L", uplo, "T", "U", &nnb, &nnb, &c_b11, &a[cut + 1 + (cut + 1) * a_dim1], lda,
+                   &work[u11 + 1 + work_dim1], &i__1);
             i__1 = nnb;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = i__;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     a[cut + i__ + (cut + j) * a_dim1] = work[u11 + i__ + j * work_dim1];
                 }
             }
-            if (cut + nnb < *n)
+            if(cut + nnb < *n)
             {
                 /* L21**T*invD2*L21->A(CUT+I,CUT+J) */
                 i__1 = *n - nnb - cut;
                 i__2 = *n + *nb + 1;
                 i__3 = *n + *nb + 1;
-                dgemm_("T", "N", &nnb, &nnb, &i__1, &c_b11, &a[cut + nnb + 1 + (cut + 1) * a_dim1], lda, &work[work_offset], &i__2, &c_b15, &work[u11 + 1 + work_dim1], &i__3);
+                dgemm_("T", "N", &nnb, &nnb, &i__1, &c_b11, &a[cut + nnb + 1 + (cut + 1) * a_dim1],
+                       lda, &work[work_offset], &i__2, &c_b15, &work[u11 + 1 + work_dim1], &i__3);
                 /* L11 = L11**T*invD1*L11 + U01**T*invD*U01 */
                 i__1 = nnb;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = i__;
-                    for (j = 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = 1; j <= i__2; ++j)
                     {
                         a[cut + i__ + (cut + j) * a_dim1] += work[u11 + i__ + j * work_dim1];
                     }
@@ -681,17 +665,15 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
                 /* L01 = L22**T*invD2*L21 */
                 i__1 = *n - nnb - cut;
                 i__2 = *n + *nb + 1;
-                dtrmm_("L", uplo, "T", "U", &i__1, &nnb, &c_b11, &a[cut + nnb + 1 + (cut + nnb + 1) * a_dim1], lda, &work[ work_offset], &i__2);
+                dtrmm_("L", uplo, "T", "U", &i__1, &nnb, &c_b11,
+                       &a[cut + nnb + 1 + (cut + nnb + 1) * a_dim1], lda, &work[work_offset],
+                       &i__2);
                 /* Update L21 */
                 i__1 = *n - cut - nnb;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = nnb;
-                    for (j = 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = 1; j <= i__2; ++j)
                     {
                         a[cut + nnb + i__ + (cut + j) * a_dim1] = work[i__ + j * work_dim1];
                     }
@@ -701,14 +683,10 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
             {
                 /* L11 = L11**T*invD1*L11 */
                 i__1 = nnb;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = i__;
-                    for (j = 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = 1; j <= i__2; ++j)
                     {
                         a[cut + i__ + (cut + j) * a_dim1] = work[u11 + i__ + j * work_dim1];
                     }
@@ -721,14 +699,14 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
         i__ = *n;
         while(i__ >= 1)
         {
-            if (ipiv[i__] > 0)
+            if(ipiv[i__] > 0)
             {
                 ip = ipiv[i__];
-                if (i__ < ip)
+                if(i__ < ip)
                 {
                     dsyswapr_(uplo, n, &a[a_offset], lda, &i__, &ip);
                 }
-                if (i__ > ip)
+                if(i__ > ip)
                 {
                     dsyswapr_(uplo, n, &a[a_offset], lda, &ip, &i__);
                 }
@@ -736,11 +714,11 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
             else
             {
                 ip = -ipiv[i__];
-                if (i__ < ip)
+                if(i__ < ip)
                 {
                     dsyswapr_(uplo, n, &a[a_offset], lda, &i__, &ip);
                 }
-                if (i__ > ip)
+                if(i__ > ip)
                 {
                     dsyswapr_(uplo, n, &a[a_offset], lda, &ip, &i__);
                 }
@@ -750,8 +728,7 @@ int dsytri2x_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSYTRI2X */
 }
 /* dsytri2x_ */
-

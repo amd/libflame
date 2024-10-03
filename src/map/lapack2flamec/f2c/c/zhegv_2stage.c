@@ -1,11 +1,10 @@
-/* ../netlib/v3.9.0/zhegv_2stage.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/zhegv_2stage.f -- translated by f2c (version 20160102). You must link the
+ resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
+ Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
+ with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    1.,0.
-}
-;
+static doublecomplex c_b1 = {1., 0.};
 static integer c__1 = 1;
 static integer c_n1 = -1;
 static integer c__2 = 2;
@@ -18,11 +17,17 @@ static integer c__4 = 4;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZHEGV_2STAGE + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhegv_2 stage.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhegv_2
+ * stage.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhegv_2 stage.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhegv_2
+ * stage.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhegv_2 stage.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhegv_2
+ * stage.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -67,7 +72,7 @@ static integer c__4 = 4;
 /* > \verbatim */
 /* > JOBZ is CHARACTER*1 */
 /* > = 'N': Compute eigenvalues only;
-*/
+ */
 /* > = 'V': Compute eigenvalues and eigenvectors. */
 /* > Not available in this release. */
 /* > \endverbatim */
@@ -76,7 +81,7 @@ static integer c__4 = 4;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangles of A and B are stored;
-*/
+ */
 /* > = 'L': Lower triangles of A and B are stored. */
 /* > \endverbatim */
 /* > */
@@ -99,7 +104,7 @@ static integer c__4 = 4;
 /* > matrix Z of eigenvectors. The eigenvectors are normalized */
 /* > as follows: */
 /* > if ITYPE = 1 or 2, Z**H*B*Z = I;
-*/
+ */
 /* > if ITYPE = 3, Z**H*inv(B)*Z = I. */
 /* > If JOBZ = 'N', then on exit the upper triangle (if UPLO='U') */
 /* > or the lower triangle (if UPLO='L') of A, including the */
@@ -148,7 +153,7 @@ static integer c__4 = 4;
 /* > \verbatim */
 /* > LWORK is INTEGER */
 /* > The length of the array WORK. LWORK >= 1, when N <= 1;
-*/
+ */
 /* > otherwise */
 /* > If JOBZ = 'N' and N > 1, LWORK must be queried. */
 /* > LWORK = MAX(1, dimension) where */
@@ -182,10 +187,10 @@ the routine */
 /* > < 0: if INFO = -i, the i-th argument had an illegal value */
 /* > > 0: ZPOTRF or ZHEEV returned an error code: */
 /* > <= N: if INFO = i, ZHEEV failed to converge;
-*/
+ */
 /* > i off-diagonal elements of an intermediate */
 /* > tridiagonal form did not converge to zero;
-*/
+ */
 /* > > N: if INFO = N + i, for 1 <= i <= N, then the leading */
 /* > minor of order i of B is not positive definite. */
 /* > The factorization of B could not be completed and */
@@ -232,28 +237,43 @@ the routine */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int zhegv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublereal *w, doublecomplex *work, integer *lwork, doublereal * rwork, integer *info)
+void zhegv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, doublecomplex *a,
+                   integer *lda, doublecomplex *b, integer *ldb, doublereal *w, doublecomplex *work,
+                   integer *lwork, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhegv_2stage inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "", *itype, *jobz, *uplo, *n, *lda, *ldb, *lwork);
+    AOCL_DTL_SNPRINTF("zhegv_2stage inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS
+                      ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",
+                      *itype, *jobz, *uplo, *n, *lda, *ldb, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     integer ib, kd, neig;
-    extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *,
+                                 integer *);
     extern /* Subroutine */
-    int zheev_2stage_(char *, char *, integer *, doublecomplex *, integer *, doublereal *, doublecomplex *, integer *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+        void
+        zheev_2stage_(char *, char *, integer *, doublecomplex *, integer *, doublereal *,
+                      doublecomplex *, integer *, doublereal *, integer *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer lhtrd, lwmin;
     char trans[1];
     logical upper;
     integer lwtrd;
     logical wantz;
     extern /* Subroutine */
-    int ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), zhegst_(integer *, char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+        void
+        ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *, integer *),
+        ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        zhegst_(integer *, char *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *, integer *);
     logical lquery;
     extern /* Subroutine */
-    int zpotrf_(char *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zpotrf_(char *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -286,91 +306,91 @@ int zhegv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, doublecomp
     --work;
     --rwork;
     /* Function Body */
-    wantz = lsame_(jobz, "V");
-    upper = lsame_(uplo, "U");
+    wantz = lsame_(jobz, "V", 1, 1);
+    upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
     *info = 0;
-    if (*itype < 1 || *itype > 3)
+    if(*itype < 1 || *itype > 3)
     {
         *info = -1;
     }
-    else if (! lsame_(jobz, "N"))
+    else if(!lsame_(jobz, "N", 1, 1))
     {
         *info = -2;
     }
-    else if (! (upper || lsame_(uplo, "L")))
+    else if(!(upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -8;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        kd = ilaenv2stage_(&c__1, "ZHETRD_2STAGE", jobz, n, &c_n1, &c_n1, & c_n1);
+        kd = ilaenv2stage_(&c__1, "ZHETRD_2STAGE", jobz, n, &c_n1, &c_n1, &c_n1);
         ib = ilaenv2stage_(&c__2, "ZHETRD_2STAGE", jobz, n, &kd, &c_n1, &c_n1);
-        lhtrd = ilaenv2stage_(&c__3, "ZHETRD_2STAGE", jobz, n, &kd, &ib, & c_n1);
-        lwtrd = ilaenv2stage_(&c__4, "ZHETRD_2STAGE", jobz, n, &kd, &ib, & c_n1);
+        lhtrd = ilaenv2stage_(&c__3, "ZHETRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
+        lwtrd = ilaenv2stage_(&c__4, "ZHETRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
         lwmin = *n + lhtrd + lwtrd;
-        work[1].r = (doublereal) lwmin;
+        work[1].r = (doublereal)lwmin;
         work[1].i = 0.; // , expr subst
-        if (*lwork < lwmin && ! lquery)
+        if(*lwork < lwmin && !lquery)
         {
             *info = -11;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZHEGV_2STAGE ", &i__1, (ftnlen)13);
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* Form a Cholesky factorization of B. */
     zpotrf_(uplo, n, &b[b_offset], ldb, info);
-    if (*info != 0)
+    if(*info != 0)
     {
         *info = *n + *info;
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
     zhegst_(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
-    zheev_2stage_(jobz, uplo, n, &a[a_offset], lda, &w[1], &work[1], lwork, & rwork[1], info);
-    if (wantz)
+    zheev_2stage_(jobz, uplo, n, &a[a_offset], lda, &w[1], &work[1], lwork, &rwork[1], info);
+    if(wantz)
     {
         /* Backtransform eigenvectors to the original problem. */
         neig = *n;
-        if (*info > 0)
+        if(*info > 0)
         {
             neig = *info - 1;
         }
-        if (*itype == 1 || *itype == 2)
+        if(*itype == 1 || *itype == 2)
         {
             /* For A*x=(lambda)*B*x and A*B*x=(lambda)*x;
-            */
+             */
             /* backtransform eigenvectors: x = inv(L)**H *y or inv(U)*y */
-            if (upper)
+            if(upper)
             {
                 *(unsigned char *)trans = 'N';
             }
@@ -378,14 +398,15 @@ int zhegv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, doublecomp
             {
                 *(unsigned char *)trans = 'C';
             }
-            ztrsm_("Left", uplo, trans, "Non-unit", n, &neig, &c_b1, &b[ b_offset], ldb, &a[a_offset], lda);
+            ztrsm_("Left", uplo, trans, "Non-unit", n, &neig, &c_b1, &b[b_offset], ldb,
+                   &a[a_offset], lda);
         }
-        else if (*itype == 3)
+        else if(*itype == 3)
         {
             /* For B*A*x=(lambda)*x;
-            */
+             */
             /* backtransform eigenvectors: x = L*y or U**H *y */
-            if (upper)
+            if(upper)
             {
                 *(unsigned char *)trans = 'C';
             }
@@ -393,13 +414,14 @@ int zhegv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, doublecomp
             {
                 *(unsigned char *)trans = 'N';
             }
-            ztrmm_("Left", uplo, trans, "Non-unit", n, &neig, &c_b1, &b[ b_offset], ldb, &a[a_offset], lda);
+            ztrmm_("Left", uplo, trans, "Non-unit", n, &neig, &c_b1, &b[b_offset], ldb,
+                   &a[a_offset], lda);
         }
     }
-    work[1].r = (doublereal) lwmin;
+    work[1].r = (doublereal)lwmin;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHEGV_2STAGE */
 }
 /* zhegv_2stage__ */

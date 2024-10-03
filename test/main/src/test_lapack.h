@@ -1,82 +1,73 @@
 /*
-    Copyright (C) 2022, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #ifndef TEST_LAPACK_H
 #define TEST_LAPACK_H
 
-#include <string.h>
-#include <time.h>
-#include <float.h>
-#include <sys/stat.h>
 #include <ctype.h>
+#include <float.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <time.h>
 #ifdef _WIN32
 #include <Windows.h>
 #endif
-#include <stdarg.h>
-#include <math.h>
-#include <stdint.h>
 #include <inttypes.h>
+#include <math.h>
+#include <stdarg.h>
+#include <stdint.h>
 #ifndef _WIN32
-#include <unistd.h>
 #include <sys/time.h>
+#include <unistd.h>
 #endif
 #include "test_common.h"
 
-#define OPERATIONS_FILENAME                "input.global.operations"
+#define LAPACK_OPERATIONS_FILENAME "input.global.operations"
+#define LAPACKE_OPERATIONS_FILENAME "input.global.operations.lapacke"
 
-#define COMMENT_CHAR             '#'
-#define MAX_BINARY_NAME_LENGTH   256
-#define INPUT_BUFFER_SIZE        256
-#define MAX_DT_STRING_LENGTH     32
-#define MAX_STOR_STRING_LENGTH   32
-#define MAX_FUNC_STRING_LENGTH   20
-#define MAX_NUM_STORAGE          4
-#define MAX_NUM_DATATYPES        4
-#define FLOPS_PER_UNIT_PERF      1e9
+#define COMMENT_CHAR '#'
+#define MAX_BINARY_NAME_LENGTH 256
+#define INPUT_BUFFER_SIZE 256
+#define MAX_DT_STRING_LENGTH 32
+#define MAX_STOR_STRING_LENGTH 32
+#define MAX_FUNC_STRING_LENGTH 20
+#define MAX_NUM_STORAGE 4
+#define MAX_NUM_DATATYPES 4
+#define FLOPS_PER_UNIT_PERF 1e9
 
-#define DISABLE_ALL              0
-#define SPECIFY                  1
-#define DISABLE                  0
-#define ENABLE                   1
+#define DISABLE_ALL 0
+#define SPECIFY 1
+#define DISABLE 0
+#define ENABLE 1
 
-#define RECT_INPUT              0
-#define SQUARE_INPUT            1
+#define RECT_INPUT 0
+#define SQUARE_INPUT 1
 
-#define CLI_NORM_THRESH         30.0
-#define CLI_DECIMAL_BASE        10
+#define CLI_NORM_THRESH 30.0
+#define CLI_DECIMAL_BASE 10
 
-#define MAX_PASS_STRING_LENGTH   32
+#define MAX_PASS_STRING_LENGTH 32
 
-#define NUM_STORAGE_CHARS        3
-#define STORAGE_SCHEME_CHARS     "crg"
+#define NUM_STORAGE_CHARS 3
+#define STORAGE_SCHEME_CHARS "crg"
 
 #define NUM_SUB_TESTS (4)
 
-#if defined(FLA_ENABLE_ILP64)
-#ifdef _WIN32
-#define FT_IS "lld"
-#else
-#define FT_IS "ld"
-#endif
-#else
-#define FT_IS "d"
-#endif
-
 // API categories
-#define LIN            (1)
-#define EIG_SYM        (2)
-#define EIG_NSYM       (3)
-#define SVD            (4)
-#define AUX            (5)
+#define LIN (1)
+#define EIG_SYM (2)
+#define EIG_NSYM (3)
+#define SVD (4)
+#define AUX (5)
 
-
-//pass 1 to test  standard AOCL_FLA_PROGRESS fucntion,
-//pass 2 to test  register callback function
-#define AOCL_FLA_SET_PROGRESS_ENABLE   0
+// pass 1 to test  standard AOCL_FLA_PROGRESS fucntion,
+// pass 2 to test  register callback function
+#define AOCL_FLA_SET_PROGRESS_ENABLE 0
 
 #if AOCL_FLA_SET_PROGRESS_ENABLE == 2
-int test_progress(const char* const api,const integer lenapi,const integer* const progress,const integer* const current_thread,const integer* const total_threads);
+int test_progress(const char *const api, const integer lenapi, const integer *const progress,
+                  const integer *const current_thread, const integer *const total_threads);
 #endif
 
 /* Flag to indicate lwork/liwork/lrwork availability status
@@ -94,50 +85,91 @@ extern integer config_data;
 /* File pointer for external file which is used
  * to pass the input matrix values
  * */
-extern FILE* g_ext_fptr;
+extern FILE *g_ext_fptr;
 
+#define FLA_TEST_PARSE_LAST_ARG(argv)                                                             \
+    integer i;                                                                                    \
+    char *info;                                                                                   \
+    char info_value[2][MAX_PASS_STRING_LENGTH];                                                   \
+                                                                                                  \
+    i = 0;                                                                                        \
+    if(strstr(argv, "--einfo") != NULL)                                                           \
+    {                                                                                             \
+        info = strtok(argv, "=");                                                                 \
+        while(info != NULL && i < 2)                                                              \
+        {                                                                                         \
+            strcpy(info_value[i], info);                                                          \
+            i++;                                                                                  \
+            info = strtok(NULL, "=");                                                             \
+        }                                                                                         \
+        einfo = atoi(info_value[1]);                                                              \
+    }                                                                                             \
+    else if(strstr(argv, "--imatrix") != NULL)                                                    \
+    {                                                                                             \
+        info = strtok(argv, "=");                                                                 \
+        while(info != NULL && i < 2)                                                              \
+        {                                                                                         \
+            strcpy(info_value[i], info);                                                          \
+            i++;                                                                                  \
+            info = strtok(NULL, "=");                                                             \
+        }                                                                                         \
+        if(strlen(info_value[1]) != 1                                                             \
+           || (info_value[1][0] != 'I' && info_value[1][0] != 'N' && info_value[1][0] != 'A'      \
+               && info_value[1][0] != 'F' && info_value[1][0] != 'U' && info_value[1][0] != 'O')) \
+        {                                                                                         \
+            printf("\n Invalid input for imatrix \n");                                            \
+            return;                                                                               \
+        }                                                                                         \
+        params->imatrix_char = info_value[1][0];                                                  \
+    }                                                                                             \
+    else                                                                                          \
+    {                                                                                             \
+        g_ext_fptr = fopen(argv, "r");                                                            \
+        if(g_ext_fptr == NULL)                                                                    \
+        {                                                                                         \
+            printf("\n Invalid input file argument \n");                                          \
+            return;                                                                               \
+        }                                                                                         \
+    }
 
-#define FLA_TEST_PARSE_LAST_ARG(argv)                     \
-    integer i;                                            \
-    char *info;                                           \
-    char info_value[2][MAX_PASS_STRING_LENGTH];           \
-                                                          \
-    i = 0;                                                \
-    if(strstr(argv,"--einfo") != NULL)                    \
-    {                                                     \
-        info = strtok(argv,"=");                          \
-        while( info != NULL && i < 2 )                    \
-        {                                                 \
-            strcpy( info_value[i], info);                 \
-            i++;                                          \
-            info = strtok(NULL, "=");                     \
-        }                                                 \
-        einfo = atoi(info_value[1]);                      \
-    }                                                     \
-    else if(strstr(argv,"--imatrix") != NULL)             \
-    {                                                     \
-        info = strtok(argv,"=");                          \
-        while( info != NULL && i < 2 )                    \
-        {                                                 \
-            strcpy( info_value[i], info);                 \
-            i++;                                          \
-            info = strtok(NULL, "=");                     \
-        }                                                 \
-        params->imatrix_char  = info_value[1][0];         \
-    }                                                     \
-    else                                                  \
-    {                                                     \ 
-        g_ext_fptr = fopen(argv, "r");                    \
-        if (g_ext_fptr == NULL)                           \
-        {                                                 \
-            printf("\n Invalid input file argument \n");  \
-            return;                                       \
-        }                                                 \
-    }                                                     \
+#define FLA_TEST_CHECK_EINFO(residual, info, einfo) \
+    if(info != einfo)                               \
+        *residual = DBL_MAX;
 
-#define FLA_TEST_CHECK_EINFO(residual, info, einfo)       \
-    if(info != einfo)                                     \
-        *residual = DBL_MAX;                              \
+#define FLA_EXTREME_CASE_TEST                                                                  \
+    (params->imatrix_char == 'A' || params->imatrix_char == 'F' || params->imatrix_char == 'N' \
+     || params->imatrix_char == 'I')
+
+#define FLA_OVERFLOW_UNDERFLOW_TEST (params->imatrix_char == 'O' || params->imatrix_char == 'U')
+
+/* Macro to check if a LAPACK API have different names for its
+   (precision)variants and modify API display string
+   according to datatype/precision
+
+   Ex: Eigen API SYEVX - FLOAT          - SSYEVX
+                         DOUBLE         - DSYEVX
+                         COMPLEX        - CHEEVX
+                         DOUBLE_COMPLEX - ZHEEVX                 */
+#define FLA_MAP_API_NAME(datatype, func_str)                  \
+    if((datatype == COMPLEX) || (datatype == DOUBLE_COMPLEX)) \
+    {                                                         \
+        if(strcmp(func_str, "SYEVX") == 0)                    \
+            func_str = "HEEVX";                               \
+        else if(strcmp(func_str, "SYEV") == 0)                \
+            func_str = "HEEV";                                \
+        else if(strcmp(func_str, "SYEVD") == 0)               \
+            func_str = "HEEVD";                               \
+        else if(strcmp(func_str, "ORGQR") == 0)               \
+            func_str = "UNGQR";                               \
+        else if(strcmp(func_str, "ORG2R") == 0)               \
+            func_str = "UNG2R";                               \
+    }
+
+/* Macro to skip complex and double complex tests of not supported APIs */
+#define FLA_SKIP_TEST(datatype_char, func_str)                                               \
+    (((datatype_char == 'c') || (datatype_char == 'z')) && (strcmp(func_str, "STEVD") == 0)) \
+        ? TRUE                                                                               \
+        : FALSE
 
 typedef struct Lin_solver_paramlist_t
 {
@@ -164,7 +196,7 @@ typedef struct Lin_solver_paramlist_t
     integer ldb; //  leading dimension of the array b
     integer ldq; //  leading dimension of the array q
     integer ldz; //  leading dimension of the array z
-    integer ldab;  //  leading dimension of the array ab
+    integer ldab; //  leading dimension of the array ab. For GBTRF, GBTRS, LDAB >= 2*KL+KU+1
     integer kl; // number of subdiagonals
     integer ku; // number of superdiagonals
     integer kd; // number of super or sub diagonals
@@ -172,17 +204,18 @@ typedef struct Lin_solver_paramlist_t
     integer ilo;
     integer ihi;
     // below params are used only by Lin solver driver APIs.
-    char fact;  // Must be 'F', 'N', or 'E'.
+    char fact; // Must be 'F', 'N', or 'E'.
     char equed; // Must be 'N', 'R'. 'C', 'B'
     char symm; // if symmetric 'S' or Hermitian 'H'
-    float solver_threshold;// threshold to verify PASS/FAIL criteria
+    float solver_threshold; // threshold to verify PASS/FAIL criteria
     char equed_porfsx; // Must be 'N', 'Y'.
-    integer  n_err_bnds_porfsx;
-    integer  nparams_porfsx;
+    integer n_err_bnds_porfsx;
+    integer nparams_porfsx;
     char norm_gbcon; // norm param for gbcon API
     integer kl_gbcon; // number of subdiagonals
     integer ku_gbcon; // number of superdiagonals
-    integer ldab_gbcon;  //  leading dimension of the array ab
+    integer ldab_gbcon; // leading dimension of the array ab
+    doublereal rcond; // used to determine the effective rank of matrix
 } Lin_solver_paramlist;
 
 /* struct to hold eigen parameters */
@@ -204,14 +237,14 @@ typedef struct EIG_paramlist_t
     char trans; // Must be 'N' or 'T' or 'C'.
     char uplo; // Must be 'U' or 'L'
     char job; // Must be 'N', 'P', 'S' or 'B'
-    char jobz; //Must be 'N' or 'V'
+    char jobz; // Must be 'N' or 'V'
     char vect; // Vector must be 'Q' or  'P'
     integer nrhs; // number of rhight hand sides
     integer lda; //  leading dimension of the array a
     integer ldb; //  leading dimension of the array b
     integer ldz;
     integer ldq;
-    integer nb;  //  leading dimension of the array ab
+    integer nb; //  leading dimension of the array ab
     integer ldt; // number of subdiagonals
     integer k;
     integer isgn;
@@ -239,8 +272,7 @@ typedef struct EIG_paramlist_t
     real VU;
     real abstol;
     integer threshold_value; // threshold value for EIG
-}EIG_paramlist;
-
+} EIG_paramlist;
 
 /* struct to hold eigen parameters */
 typedef struct EIG_Non_symmetric_paramlist_t
@@ -254,8 +286,10 @@ typedef struct EIG_Non_symmetric_paramlist_t
     integer n_range_step_size;
     integer lda; // The leading dimension of A. LDA >= fla_max(1,N).
     integer ldb; // The leading dimension of B.  LDB >= fla_max(1,N).
-    integer ldvl; // The leading dimension of the matrix VL. LDVL >= 1, and if JOBVL = 'V', LDVL >= N.
-    integer ldvr; // The leading dimension of the matrix VR. LDVR >= 1, and if JOBVR = 'V', LDVR >= N.
+    integer ldvl; // The leading dimension of the matrix VL. LDVL >= 1, and
+                  // if JOBVL = 'V', LDVL >= N.
+    integer ldvr; // The leading dimension of the matrix VR. LDVR >= 1, and
+                  // if JOBVR = 'V', LDVR >= N.
     integer num_repeats;
     integer num_tests;
     integer num_data_types;
@@ -266,12 +300,12 @@ typedef struct EIG_Non_symmetric_paramlist_t
     char initv; // Must be 'N' or 'U'.
     char job_seqr; // Must be 'E', 'S'
     char eigsrc; // Must be 'Q' or  'N'.
-    char side;  // Must be 'R' or 'L' or 'B'.
+    char side; // Must be 'R' or 'L' or 'B'.
     char job; //  Must be 'E' or 'V' or 'B'.
     char howmny_trsna; // Must be 'A' or 'S'.
 
     /* used params for trsen API  */
-    char job_trsen;// must bie 'N' or 'E' or 'V' or 'B'.
+    char job_trsen; // must bie 'N' or 'E' or 'V' or 'B'.
     char compq; // Must be 'V' or 'N' .
 
     /* used params for trsyl API  */
@@ -293,18 +327,17 @@ typedef struct EIG_Non_symmetric_paramlist_t
     char jobvsl; // Must be 'N', or 'V'.
     char jobvsr; // Must be 'N', or 'V'.
     char sort; // Must be 'N', or 'S'.
-    char sense_ggesx;// must be 'N' or 'E' or 'V' or 'B'.
-    char balance_ggevx;// must be 'N' or 'P' or 'S' or 'B'.
-    char sense_ggevx;// must be 'N' or 'E' or 'V' or 'B'.
+    char sense_ggesx; // must be 'N' or 'E' or 'V' or 'B'.
+    char balance_ggevx; // must be 'N' or 'P' or 'S' or 'B'.
+    char sense_ggevx; // must be 'N' or 'E' or 'V' or 'B'.
     char sort_gees; // Must be 'N', or 'S'.
-    integer  wantz; // Must be 1 or 0
-    integer  wantq; // Must be 1 or 0
-    integer  tgsen_ijob; // Must be between 0 to 5
+    integer wantz; // Must be 1 or 0
+    integer wantq; // Must be 1 or 0
+    integer tgsen_ijob; // Must be between 0 to 5
     char unmhr_trans; // Must be N or C
     integer ilo;
     integer ihi;
-}EIG_Non_symmetric_paramlist;
-
+} EIG_Non_symmetric_paramlist;
 
 /* struct to hold SVD parameters */
 typedef struct SVD_paramlist_t
@@ -317,8 +350,10 @@ typedef struct SVD_paramlist_t
     integer n_range_end;
     integer n_range_step_size;
     integer lda; // Leading dimension of Array A. LDA >= fla_max(1, n)
-    integer ldu; // The leading dimension of the array U.  LDU >= 1; if JOBZ = 'S' or 'A' or JOBZ = 'O' and M < N, LDU >= M.
-    integer ldvt; // The leading dimension of the array VT.  LDVT >= 1; if JOBZ = 'A' or JOBZ = 'O' and M >= N, LDVT >= N;if JOBZ = 'S', LDVT >= min(M,N).
+    integer ldu; // The leading dimension of the array U.  LDU >= 1; if JOBZ = 'S' or 'A' or JOBZ =
+                 // 'O' and M < N, LDU >= M.
+    integer ldvt; // The leading dimension of the array VT.  LDVT >= 1; if JOBZ = 'A' or JOBZ = 'O'
+                  // and M >= N, LDVT >= N;if JOBZ = 'S', LDVT >= min(M,N).
     integer num_repeats;
     integer num_tests;
     integer num_data_types;
@@ -362,14 +397,14 @@ typedef struct SVD_paramlist_t
     float vl, vu; //  the lower and upper bounds of the interval.
 
     /* Parameters for 'gesvdq' API  */
-        char joba_gesvdq; //  Must be 'A', 'H', 'M' , 'E'
-        char jobu_gesvdq; // Must be 'A', 'S', 'R' , 'N'
-        char jobv_gesvdq; // Must be 'A', 'V', 'R' , 'N'.
+    char joba_gesvdq; //  Must be 'A', 'H', 'M' , 'E'
+    char jobu_gesvdq; // Must be 'A', 'S', 'R' , 'N'
+    char jobv_gesvdq; // Must be 'A', 'V', 'R' , 'N'.
 
     /* Thresholds for the APIs  */
     float svd_threshold; // threshold for the gghrd API
 
-}SVD_paramlist;
+} SVD_paramlist;
 
 /* struct to hold AUX parameters */
 typedef struct AUX_paramlist_t
@@ -384,6 +419,13 @@ typedef struct AUX_paramlist_t
     integer lda; // Leading dimension of Array A. LDA >= fla_max(1, n)
     integer incx; // The increment between successive values of CX
     integer incy; // The increment between successive values of CY
+    /* Parameter for 'larfg' API */
+    integer incx_larfg; // The increment between successive values of X in larfg(incx > 0)
+    double alpha_real;
+    double alpha_imag; // The alpha values for larfg
+    char side; // The side (either L or R) for larf. L means left and R means right
+    integer incv; // The increment between elements of V for larf
+    integer ldc; // The leading dimension of the array C for larf
     integer num_repeats;
     integer num_tests;
     integer num_data_types;
@@ -393,20 +435,21 @@ typedef struct AUX_paramlist_t
     /* Thresholds for the APIs  */
     float aux_threshold; // threshold for the aux API
 
-}AUX_paramlist;
-
+} AUX_paramlist;
 
 typedef struct
 {
-    integer       n_repeats;
-    integer       n_datatypes;
-    char          *datatype_char;
-    integer       *datatype;
-    integer       p_first;
-    integer       p_max;
-    integer       p_inc;
-    integer       p_nfact;
-    char          imatrix_char;
+    integer n_repeats;
+    integer n_datatypes;
+    char *datatype_char;
+    integer *datatype;
+    integer p_first;
+    integer p_max;
+    integer p_inc;
+    integer p_nfact;
+    char imatrix_char;
+    integer test_lapacke_interface;
+    int matrix_major;
 
     struct SVD_paramlist_t svd_paramslist[NUM_SUB_TESTS];
     struct EIG_Non_symmetric_paramlist_t eig_non_sym_paramslist[NUM_SUB_TESTS];
@@ -430,71 +473,59 @@ typedef struct
 
 typedef struct
 {
-    integer type;/* 0 for LIN, 1 for EIG, 2 for SVD, 3 for AUX */
+    integer type; /* 0 for LIN, 1 for EIG, 2 for SVD, 3 for AUX */
     char *ops;
-    void (*fp)(integer argc, char** argv, test_params_t *);
-}OPERATIONS;
-
+    void (*fp)(integer argc, char **argv, test_params_t *);
+} OPERATIONS;
 
 // Prototypes.
-char* fla_test_get_string_for_result( double residual, integer datatype, double thresh );
-void fla_test_init_strings( void );
-void fla_test_execute_cli_api( integer argc, char** argv, test_params_t *params );
-void fla_test_output_op_struct( char* op_str, integer op );
-void fla_test_output_info( char* message, ... );
-void fla_test_output_error( char* message, ... );
-void fla_test_parse_message( FILE* output_stream, char* message, va_list args );
-void fla_test_read_next_line( char* buffer, FILE* input_stream );
-integer fla_test_check_run_only( FILE* input_stream, integer* op, char* buffer);
-integer fla_test_read_tests_for_op( FILE* input_stream, integer* op, char* buffer );
+char *fla_test_get_string_for_result(double residual, integer datatype, double thresh);
+void fla_test_init_strings(void);
+void fla_test_execute_cli_api(integer argc, char **argv, test_params_t *params);
+void fla_test_output_op_struct(char *op_str, integer op);
+void fla_test_output_info(char *message, ...);
+void fla_test_output_error(char *message, ...);
+void fla_test_parse_message(FILE *output_stream, char *message, va_list args);
+void fla_test_read_next_line(char *buffer, FILE *input_stream);
+integer fla_test_check_run_only(FILE *input_stream, integer *op, char *buffer);
+integer fla_test_read_tests_for_op(FILE *input_stream, integer *op, char *buffer);
 
 /*Read Linear API parameters from config file */
-void fla_test_read_linear_param( const char* input_filename, test_params_t* params );
+void fla_test_read_linear_param(const char *input_filename, test_params_t *params);
 
 /*Function to read EIG parametes from config file */
-void fla_test_read_sym_eig_params( const char* input_filename, test_params_t* params );
+void fla_test_read_sym_eig_params(const char *input_filename, test_params_t *params);
 
 /*Function to read EIG non-symmetric parametes from config file */
-void fla_test_read_non_sym_eig_params( const char* input_filename, test_params_t* params );
+void fla_test_read_non_sym_eig_params(const char *input_filename, test_params_t *params);
 
 /*Function to read SVD parametes from config file */
-void fla_test_read_svd_params ( const char* input_filename, test_params_t* params );
+void fla_test_read_svd_params(const char *input_filename, test_params_t *params);
 
 /*Function to read AUX parametes from config file */
-void fla_test_read_aux_params ( const char* input_filename, test_params_t* params );
+void fla_test_read_aux_params(const char *input_filename, test_params_t *params);
 
-void fla_test_lapack_suite( char* input_filename, test_params_t *params );
+void fla_test_lapack_suite(char *input_filename, test_params_t *params);
 
-void fla_test_op_driver( char*            func_str,
-                         integer       square_inp,
-                         test_params_t *params,
-                         integer       api_type,
-                         void (*f_exp) (test_params_t *, // params
-                                        integer,        // datatype
-                                        integer,        // p_cur
-                                        integer,        // q_cur
-                                        integer,        // pci (param combo counter)
-                                        integer,        // n_repeats
-                                        integer,        // einfo
-                                        double*,        // perf
-                                        double*,        // time
-                                        double* ) );    // residual
-void fla_test_print_status(char* func_str,
-                           char datatype_char,
-                           integer sqr_inp,
-                           integer p_cur,
-                           integer q_cur,
-                           double residual,
-                           double thresh,
-                           double time,
-                           double perf);
+void fla_test_op_driver(char *func_str, integer square_inp, test_params_t *params, integer api_type,
+                        void (*f_exp)(test_params_t *, // params
+                                      integer, // datatype
+                                      integer, // p_cur
+                                      integer, // q_cur
+                                      integer, // pci (param combo counter)
+                                      integer, // n_repeats
+                                      integer, // einfo
+                                      double *, // perf
+                                      double *, // time
+                                      double *)); // residual
+void fla_test_print_status(char *func_str, char datatype_char, integer sqr_inp, integer p_cur,
+                           integer q_cur, double residual, double thresh, double time, double perf);
 void fla_test_print_summary();
-void fla_test_build_function_string( char*        func_base_str,
-                                        char*        impl_var_str,
-                                        char*        func_str );
-void fill_string_with_n_spaces( char* str, integer n_spaces );
+void fla_test_build_function_string(char *func_base_str, char *impl_var_str, char *func_str);
+void fill_string_with_n_spaces(char *str, integer n_spaces);
 double fla_test_clock(void);
-void fla_test_get_time_unit(char * scale , double * time);
+void fla_test_get_time_unit(char *scale, double *time);
 integer fla_test_get_group_id(char *buffer);
+void fla_check_lapacke_interface(integer *arg_count, char **argv, test_params_t *params);
 
 #endif // TEST_LAPACK_H

@@ -17,7 +17,7 @@ FLA_Error FLA_Fill_with_logarithmic_dist( FLA_Obj alpha, FLA_Obj x )
 	                              l2;
 	FLA_Obj      l, k, alpha2;
 	FLA_Datatype dt_real;
-	dim_t        n_x;
+	fla_dim_t        n_x;
 
 
 	if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )

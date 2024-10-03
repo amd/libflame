@@ -1,5 +1,8 @@
-/* ../netlib/zhetrf.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zhetrf.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -10,11 +13,17 @@ static integer c__2 = 2;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZHETRF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhetrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhetrf.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhetrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhetrf.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetrf.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -51,7 +60,7 @@ static integer c__2 = 2;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -168,19 +177,25 @@ static integer c__2 = 2;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zhetrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *work, integer *lwork, integer *info)
+void zhetrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv,
+             doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zhetrf inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",*uplo, *n, *lda, *lwork);
+    AOCL_DTL_SNPRINTF("zhetrf inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",
+                      *uplo, *n, *lda, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     /* Local variables */
     integer j, k, kb, nb, iws;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer nbmin, iinfo;
     logical upper;
     extern /* Subroutine */
-    int zhetf2_(char *, integer *, doublecomplex *, integer *, integer *, integer *), zlahef_(char *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zhetf2_(char *, integer *, doublecomplex *, integer *, integer *, integer *),
+        zlahef_(char *, integer *, integer *, integer *, doublecomplex *, integer *, integer *,
+                doublecomplex *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
@@ -211,82 +226,82 @@ int zhetrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipi
     --work;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
-    if (! upper && ! lsame_(uplo, "L"))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    else if (*lwork < 1 && ! lquery)
+    else if(*lwork < 1 && !lquery)
     {
         *info = -7;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
         /* Determine the block size */
         nb = ilaenv_(&c__1, "ZHETRF", uplo, n, &c_n1, &c_n1, &c_n1);
         lwkopt = *n * nb;
-        work[1].r = (doublereal) lwkopt;
+        work[1].r = (doublereal)lwkopt;
         work[1].i = 0.; // , expr subst
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZHETRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     nbmin = 2;
     ldwork = *n;
-    if (nb > 1 && nb < *n)
+    if(nb > 1 && nb < *n)
     {
         iws = ldwork * nb;
-        if (*lwork < iws)
+        if(*lwork < iws)
         {
             /* Computing MAX */
             i__1 = *lwork / ldwork;
-            nb = fla_max(i__1,1);
+            nb = fla_max(i__1, 1);
             /* Computing MAX */
             i__1 = 2;
-            i__2 = ilaenv_(&c__2, "ZHETRF", uplo, n, &c_n1, &c_n1, & c_n1); // , expr subst
-            nbmin = fla_max(i__1,i__2);
+            i__2 = ilaenv_(&c__2, "ZHETRF", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+            nbmin = fla_max(i__1, i__2);
         }
     }
     else
     {
         iws = 1;
     }
-    if (nb < nbmin)
+    if(nb < nbmin)
     {
         nb = *n;
     }
-    if (upper)
+    if(upper)
     {
         /* Factorize A as U*D*U**H using the upper triangle of A */
         /* K is the main loop index, decreasing from N to 1 in steps of */
         /* KB, where KB is the number of columns factorized by ZLAHEF;
-        */
+         */
         /* KB is either NB or NB-1, or K for the last block */
         k = *n;
-L10: /* If K < 1, exit from loop */
-        if (k < 1)
+    L10: /* If K < 1, exit from loop */
+        if(k < 1)
         {
             goto L40;
         }
-        if (k > nb)
+        if(k > nb)
         {
             /* Factorize columns k-kb+1:k of A and use blocked code to */
             /* update columns 1:k-kb */
@@ -299,7 +314,7 @@ L10: /* If K < 1, exit from loop */
             kb = k;
         }
         /* Set INFO on the first occurrence of a zero pivot */
-        if (*info == 0 && iinfo > 0)
+        if(*info == 0 && iinfo > 0)
         {
             *info = iinfo;
         }
@@ -312,15 +327,15 @@ L10: /* If K < 1, exit from loop */
         /* Factorize A as L*D*L**H using the lower triangle of A */
         /* K is the main loop index, increasing from 1 to N in steps of */
         /* KB, where KB is the number of columns factorized by ZLAHEF;
-        */
+         */
         /* KB is either NB or NB-1, or N-K+1 for the last block */
         k = 1;
-L20: /* If K > N, exit from loop */
-        if (k > *n)
+    L20: /* If K > N, exit from loop */
+        if(k > *n)
         {
             goto L40;
         }
-        if (k <= *n - nb)
+        if(k <= *n - nb)
         {
             /* Factorize columns k:k+kb-1 of A and use blocked code to */
             /* update columns k+kb:n */
@@ -335,17 +350,15 @@ L20: /* If K > N, exit from loop */
             kb = *n - k + 1;
         }
         /* Set INFO on the first occurrence of a zero pivot */
-        if (*info == 0 && iinfo > 0)
+        if(*info == 0 && iinfo > 0)
         {
             *info = iinfo + k - 1;
         }
         /* Adjust IPIV */
         i__1 = k + kb - 1;
-        for (j = k;
-                j <= i__1;
-                ++j)
+        for(j = k; j <= i__1; ++j)
         {
-            if (ipiv[j] > 0)
+            if(ipiv[j] > 0)
             {
                 ipiv[j] = ipiv[j] + k - 1;
             }
@@ -360,10 +373,10 @@ L20: /* If K > N, exit from loop */
         goto L20;
     }
 L40:
-    work[1].r = (doublereal) lwkopt;
+    work[1].r = (doublereal)lwkopt;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZHETRF */
 }
 /* zhetrf_ */

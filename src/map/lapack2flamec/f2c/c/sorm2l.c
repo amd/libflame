@@ -1,18 +1,28 @@
-/* ../netlib/sorm2l.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sorm2l.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b SORM2L multiplies a general matrix by the orthogonal matrix from a QL factorization determined by sgeqlf (unblocked algorithm). */
+/* > \brief \b SORM2L multiplies a general matrix by the orthogonal matrix from a QL factorization
+ * determined by sgeqlf (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SORM2L + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorm2l. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorm2l.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorm2l. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorm2l.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorm2l. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorm2l.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -83,7 +93,7 @@ static integer c__1 = 1;
 /* > The number of elementary reflectors whose product defines */
 /* > the matrix Q. */
 /* > If SIDE = 'L', M >= K >= 0;
-*/
+ */
 /* > if SIDE = 'R', N >= K >= 0. */
 /* > \endverbatim */
 /* > */
@@ -101,7 +111,7 @@ static integer c__1 = 1;
 /* > LDA is INTEGER */
 /* > The leading dimension of the array A. */
 /* > If SIDE = 'L', LDA >= fla_max(1,M);
-*/
+ */
 /* > if SIDE = 'R', LDA >= fla_max(1,N). */
 /* > \endverbatim */
 /* > */
@@ -148,12 +158,14 @@ static integer c__1 = 1;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sorm2l_(char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *c__, integer *ldc, real *work, integer *info)
+void sorm2l_(char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda,
+             real *tau, real *c__, integer *ldc, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sorm2l inputs: side %c, trans %c, m %d, n %d, k %d, lda %d, ldc %d",*side, *trans, *m, *n, *k, *lda, *ldc);
+    snprintf(buffer, 256, "sorm2l inputs: side %c, trans %c, m %d, n %d, k %d, lda %d, ldc %d",
+             *side, *trans, *m, *n, *k, *lda, *ldc);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -162,9 +174,11 @@ int sorm2l_(char *side, char *trans, integer *m, integer *n, integer *k, real *a
     integer i__, i1, i2, i3, mi, ni, nq;
     real aii;
     logical left;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -198,10 +212,10 @@ int sorm2l_(char *side, char *trans, integer *m, integer *n, integer *k, real *a
     --work;
     /* Function Body */
     *info = 0;
-    left = lsame_(side, "L");
-    notran = lsame_(trans, "N");
+    left = lsame_(side, "L", 1, 1);
+    notran = lsame_(trans, "N", 1, 1);
     /* NQ is the order of Q */
-    if (left)
+    if(left)
     {
         nq = *m;
     }
@@ -209,48 +223,48 @@ int sorm2l_(char *side, char *trans, integer *m, integer *n, integer *k, real *a
     {
         nq = *n;
     }
-    if (! left && ! lsame_(side, "R"))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T"))
+    else if(!notran && !lsame_(trans, "T", 1, 1))
     {
         *info = -2;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*k < 0 || *k > nq)
+    else if(*k < 0 || *k > nq)
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,nq))
+    else if(*lda < fla_max(1, nq))
     {
         *info = -7;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -10;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SORM2L", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*m == 0 || *n == 0 || *k == 0)
+    if(*m == 0 || *n == 0 || *k == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (left && notran || ! left && ! notran)
+    if(left && notran || !left && !notran)
     {
         i1 = 1;
         i2 = *k;
@@ -262,7 +276,7 @@ int sorm2l_(char *side, char *trans, integer *m, integer *n, integer *k, real *a
         i2 = 1;
         i3 = -1;
     }
-    if (left)
+    if(left)
     {
         ni = *n;
     }
@@ -272,11 +286,9 @@ int sorm2l_(char *side, char *trans, integer *m, integer *n, integer *k, real *a
     }
     i__1 = i2;
     i__2 = i3;
-    for (i__ = i1;
-            i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
-            i__ += i__2)
+    for(i__ = i1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
     {
-        if (left)
+        if(left)
         {
             /* H(i) is applied to C(1:m-k+i,1:n) */
             mi = *m - *k + i__;
@@ -289,12 +301,13 @@ int sorm2l_(char *side, char *trans, integer *m, integer *n, integer *k, real *a
         /* Apply H(i) */
         aii = a[nq - *k + i__ + i__ * a_dim1];
         a[nq - *k + i__ + i__ * a_dim1] = 1.f;
-        slarf_(side, &mi, &ni, &a[i__ * a_dim1 + 1], &c__1, &tau[i__], &c__[ c_offset], ldc, &work[1]);
+        slarf_(side, &mi, &ni, &a[i__ * a_dim1 + 1], &c__1, &tau[i__], &c__[c_offset], ldc,
+               &work[1]);
         a[nq - *k + i__ + i__ * a_dim1] = aii;
         /* L10: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SORM2L */
 }
 /* sorm2l_ */

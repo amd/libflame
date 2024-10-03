@@ -1,23 +1,34 @@
-/* ../netlib/clasyf.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/clasyf.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+
+/*
+*     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+*/
+
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {1.f, 0.f};
 static integer c__1 = 1;
-/* > \brief \b CLASYF computes a partial factorization of a complex symmetric matrix using the Bunch-Kaufman d iagonal pivoting method. */
+/* > \brief \b CLASYF computes a partial factorization of a complex symmetric matrix using the
+ * Bunch-Kaufman d iagonal pivoting method. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLASYF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clasyf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clasyf.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clasyf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clasyf.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clasyf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clasyf.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -169,15 +180,18 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int clasyf_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integer *lda, integer *ipiv, complex *w, integer *ldw, integer *info)
+void clasyf_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integer *lda,
+             integer *ipiv, complex *w, integer *ldw, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clasyf inputs: uplo %c, n %lld, nb %lld, kb %lld, lda %lld, ldw %lld",*uplo, *n, *nb, *kb, *lda, *ldw);
+    snprintf(buffer, 256, "clasyf inputs: uplo %c, n %lld, nb %lld, kb %lld, lda %lld, ldw %lld",
+             *uplo, *n, *nb, *kb, *lda, *ldw);
 #else
-    snprintf(buffer, 256,"clasyf inputs: uplo %c, n %d, nb %d, kb %d, lda %d, ldw %d",*uplo, *n, *nb, *kb, *lda, *ldw);
+    snprintf(buffer, 256, "clasyf inputs: uplo %c, n %d, nb %d, kb %d, lda %d, ldw %d", *uplo, *n,
+             *nb, *kb, *lda, *ldw);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -194,10 +208,17 @@ int clasyf_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, intege
     integer jb, jj, kk, jp, kp, kw, kkw, imax, jmax;
     real alpha;
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *), cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+        void
+        cscal_(integer *, complex *, complex *, integer *),
+        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
+               complex *, integer *, complex *, complex *, integer *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), ccopy_(integer *, complex *, integer *, complex *, integer *), cswap_(integer *, complex *, integer *, complex *, integer *);
+        void
+        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
+               complex *, complex *, integer *),
+        ccopy_(integer *, complex *, integer *, complex *, integer *),
+        cswap_(integer *, complex *, integer *, complex *, integer *);
     integer kstep;
     real absakk;
     extern integer icamax_(integer *, complex *, integer *);
@@ -236,9 +257,10 @@ int clasyf_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, intege
     w -= w_offset;
     /* Function Body */
     *info = 0;
+    imax = 0;
     /* Initialize ALPHA for use in choosing pivot block size. */
     alpha = (sqrt(17.f) + 1.f) / 8.f;
-    if (lsame_(uplo, "U"))
+    if(lsame_(uplo, "U", 1, 1))
     {
         /* Factorize the trailing columns of A using the upper triangle */
         /* of A and working backwards, and compute the matrix W = U12*D */
@@ -246,45 +268,48 @@ int clasyf_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, intege
         /* K is the main loop index, decreasing from N in steps of 1 or 2 */
         /* KW is the column of W which corresponds to column K of A */
         k = *n;
-L10:
+    L10:
         kw = *nb + k - *n;
         /* Exit from loop */
-        if (k <= *n - *nb + 1 && *nb < *n || k < 1)
+        if(k <= *n - *nb + 1 && *nb < *n || k < 1)
         {
             goto L30;
         }
         /* Copy column K of A to column KW of W and update it */
         ccopy_(&k, &a[k * a_dim1 + 1], &c__1, &w[kw * w_dim1 + 1], &c__1);
-        if (k < *n)
+        if(k < *n)
         {
             i__1 = *n - k;
             q__1.r = -1.f;
             q__1.i = -0.f; // , expr subst
-            cgemv_("No transpose", &k, &i__1, &q__1, &a[(k + 1) * a_dim1 + 1], lda, &w[k + (kw + 1) * w_dim1], ldw, &c_b1, &w[kw * w_dim1 + 1], &c__1);
+            cgemv_("No transpose", &k, &i__1, &q__1, &a[(k + 1) * a_dim1 + 1], lda,
+                   &w[k + (kw + 1) * w_dim1], ldw, &c_b1, &w[kw * w_dim1 + 1], &c__1);
         }
         kstep = 1;
         /* Determine rows and columns to be interchanged and whether */
         /* a 1-by-1 or 2-by-2 pivot block will be used */
         i__1 = k + kw * w_dim1;
-        absakk = (r__1 = w[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&w[k + kw * w_dim1]), f2c_abs(r__2));
+        absakk = (r__1 = w[i__1].r, f2c_abs(r__1))
+                 + (r__2 = r_imag(&w[k + kw * w_dim1]), f2c_abs(r__2));
         /* IMAX is the row-index of the largest off-diagonal element in */
         /* column K, and COLMAX is its absolute value. */
         /* Determine both COLMAX and IMAX. */
-        if (k > 1)
+        if(k > 1)
         {
             i__1 = k - 1;
             imax = icamax_(&i__1, &w[kw * w_dim1 + 1], &c__1);
             i__1 = imax + kw * w_dim1;
-            colmax = (r__1 = w[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&w[imax + kw * w_dim1]), f2c_abs(r__2));
+            colmax = (r__1 = w[i__1].r, f2c_abs(r__1))
+                     + (r__2 = r_imag(&w[imax + kw * w_dim1]), f2c_abs(r__2));
         }
         else
         {
             colmax = 0.f;
         }
-        if (fla_max(absakk,colmax) == 0.f)
+        if(fla_max(absakk, colmax) == 0.f)
         {
             /* Column K is zero or underflow: set INFO and continue */
-            if (*info == 0)
+            if(*info == 0)
             {
                 *info = k;
             }
@@ -292,7 +317,7 @@ L10:
         }
         else
         {
-            if (absakk >= alpha * colmax)
+            if(absakk >= alpha * colmax)
             {
                 /* no interchange, use 1-by-1 pivot block */
                 kp = k;
@@ -302,31 +327,37 @@ L10:
                 /* Copy column IMAX to column KW-1 of W and update it */
                 ccopy_(&imax, &a[imax * a_dim1 + 1], &c__1, &w[(kw - 1) * w_dim1 + 1], &c__1);
                 i__1 = k - imax;
-                ccopy_(&i__1, &a[imax + (imax + 1) * a_dim1], lda, &w[imax + 1 + (kw - 1) * w_dim1], &c__1);
-                if (k < *n)
+                ccopy_(&i__1, &a[imax + (imax + 1) * a_dim1], lda, &w[imax + 1 + (kw - 1) * w_dim1],
+                       &c__1);
+                if(k < *n)
                 {
                     i__1 = *n - k;
                     q__1.r = -1.f;
                     q__1.i = -0.f; // , expr subst
-                    cgemv_("No transpose", &k, &i__1, &q__1, &a[(k + 1) * a_dim1 + 1], lda, &w[imax + (kw + 1) * w_dim1], ldw, &c_b1, &w[(kw - 1) * w_dim1 + 1], &c__1);
+                    cgemv_("No transpose", &k, &i__1, &q__1, &a[(k + 1) * a_dim1 + 1], lda,
+                           &w[imax + (kw + 1) * w_dim1], ldw, &c_b1, &w[(kw - 1) * w_dim1 + 1],
+                           &c__1);
                 }
                 /* JMAX is the column-index of the largest off-diagonal */
                 /* element in row IMAX, and ROWMAX is its absolute value */
                 i__1 = k - imax;
                 jmax = imax + icamax_(&i__1, &w[imax + 1 + (kw - 1) * w_dim1], &c__1);
                 i__1 = jmax + (kw - 1) * w_dim1;
-                rowmax = (r__1 = w[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&w[ jmax + (kw - 1) * w_dim1]), f2c_abs(r__2));
-                if (imax > 1)
+                rowmax = (r__1 = w[i__1].r, f2c_abs(r__1))
+                         + (r__2 = r_imag(&w[jmax + (kw - 1) * w_dim1]), f2c_abs(r__2));
+                if(imax > 1)
                 {
                     i__1 = imax - 1;
                     jmax = icamax_(&i__1, &w[(kw - 1) * w_dim1 + 1], &c__1);
                     /* Computing MAX */
                     i__1 = jmax + (kw - 1) * w_dim1;
                     r__3 = rowmax;
-                    r__4 = (r__1 = w[i__1].r, f2c_abs(r__1)) + ( r__2 = r_imag(&w[jmax + (kw - 1) * w_dim1]), f2c_abs( r__2)); // , expr subst
-                    rowmax = fla_max(r__3,r__4);
+                    r__4 = (r__1 = w[i__1].r, f2c_abs(r__1))
+                           + (r__2 = r_imag(&w[jmax + (kw - 1) * w_dim1]),
+                              f2c_abs(r__2)); // , expr subst
+                    rowmax = fla_max(r__3, r__4);
                 }
-                if (absakk >= alpha * colmax * (colmax / rowmax))
+                if(absakk >= alpha * colmax * (colmax / rowmax))
                 {
                     /* no interchange, use 1-by-1 pivot block */
                     kp = k;
@@ -334,7 +365,9 @@ L10:
                 else /* if(complicated condition) */
                 {
                     i__1 = imax + (kw - 1) * w_dim1;
-                    if ((r__1 = w[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&w[ imax + (kw - 1) * w_dim1]), f2c_abs(r__2)) >= alpha * rowmax)
+                    if((r__1 = w[i__1].r, f2c_abs(r__1))
+                           + (r__2 = r_imag(&w[imax + (kw - 1) * w_dim1]), f2c_abs(r__2))
+                       >= alpha * rowmax)
                     {
                         /* interchange rows and columns K and IMAX, use 1-by-1 */
                         /* pivot block */
@@ -358,7 +391,7 @@ L10:
             kkw = *nb + kk - *n;
             /* Interchange rows and columns KP and KK. */
             /* Updated column KP is already stored in column KKW of W. */
-            if (kp != kk)
+            if(kp != kk)
             {
                 /* Copy non-updated column KK to column KP of submatrix A */
                 /* at step K. No need to copy element into column K */
@@ -370,7 +403,7 @@ L10:
                 a[i__1].i = a[i__2].i; // , expr subst
                 i__1 = kk - 1 - kp;
                 ccopy_(&i__1, &a[kp + 1 + kk * a_dim1], &c__1, &a[kp + (kp + 1) * a_dim1], lda);
-                if (kp > 1)
+                if(kp > 1)
                 {
                     i__1 = kp - 1;
                     ccopy_(&i__1, &a[kk * a_dim1 + 1], &c__1, &a[kp * a_dim1 + 1], &c__1);
@@ -379,7 +412,7 @@ L10:
                 /* (columns K (or K and K-1 for 2-by-2 pivot) of A will be */
                 /* later overwritten). Interchange rows KK and KP */
                 /* in last KKW to NB columns of W. */
-                if (k < *n)
+                if(k < *n)
                 {
                     i__1 = *n - k;
                     cswap_(&i__1, &a[kk + (k + 1) * a_dim1], lda, &a[kp + (k + 1) * a_dim1], lda);
@@ -387,7 +420,7 @@ L10:
                 i__1 = *n - kk + 1;
                 cswap_(&i__1, &w[kk + kkw * w_dim1], ldw, &w[kp + kkw * w_dim1], ldw);
             }
-            if (kstep == 1)
+            if(kstep == 1)
             {
                 /* 1-by-1 pivot block D(k): column kw of W now holds */
                 /* W(kw) = U(k)*D(k), */
@@ -398,7 +431,7 @@ L10:
                 /* and not stored. */
                 /* A(k,k) := D(k,k) = W(k,kw) */
                 /* A(1:k-1,k) := U(1:k-1,k) = W(1:k-1,kw)/D(k,k) */
-                ccopy_(&k, &w[kw * w_dim1 + 1], &c__1, &a[k * a_dim1 + 1], & c__1);
+                ccopy_(&k, &w[kw * w_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 c_div(&q__1, &c_b1, &a[k + k * a_dim1]);
                 r1.r = q__1.r;
                 r1.i = q__1.i; // , expr subst
@@ -418,7 +451,7 @@ L10:
                 /* A(k-1:k,k-1:k) := D(k-1:k,k-1:k) = W(k-1:k,kw-1:kw) */
                 /* A(1:k-2,k-1:k) := U(1:k-2,k:k-1:k) = */
                 /* = W(1:k-2,kw-1:kw) * ( D(k-1:k,k-1:k)**(-1) ) */
-                if (k > 2)
+                if(k > 2)
                 {
                     /* Compose the columns of the inverse of 2-by-2 pivot */
                     /* block D in the following way to reduce the number */
@@ -460,17 +493,15 @@ L10:
                     d21.r = q__1.r;
                     d21.i = q__1.i; // , expr subst
                     i__1 = k - 2;
-                    for (j = 1;
-                            j <= i__1;
-                            ++j)
+                    for(j = 1; j <= i__1; ++j)
                     {
                         i__2 = j + (k - 1) * a_dim1;
                         i__3 = j + (kw - 1) * w_dim1;
                         q__3.r = d11.r * w[i__3].r - d11.i * w[i__3].i;
-                        q__3.i = d11.r * w[i__3].i + d11.i * w[i__3] .r; // , expr subst
+                        q__3.i = d11.r * w[i__3].i + d11.i * w[i__3].r; // , expr subst
                         i__4 = j + kw * w_dim1;
                         q__2.r = q__3.r - w[i__4].r;
-                        q__2.i = q__3.i - w[i__4] .i; // , expr subst
+                        q__2.i = q__3.i - w[i__4].i; // , expr subst
                         q__1.r = d21.r * q__2.r - d21.i * q__2.i;
                         q__1.i = d21.r * q__2.i + d21.i * q__2.r; // , expr subst
                         a[i__2].r = q__1.r;
@@ -478,10 +509,10 @@ L10:
                         i__2 = j + k * a_dim1;
                         i__3 = j + kw * w_dim1;
                         q__3.r = d22.r * w[i__3].r - d22.i * w[i__3].i;
-                        q__3.i = d22.r * w[i__3].i + d22.i * w[i__3] .r; // , expr subst
+                        q__3.i = d22.r * w[i__3].i + d22.i * w[i__3].r; // , expr subst
                         i__4 = j + (kw - 1) * w_dim1;
                         q__2.r = q__3.r - w[i__4].r;
-                        q__2.i = q__3.i - w[i__4] .i; // , expr subst
+                        q__2.i = q__3.i - w[i__4].i; // , expr subst
                         q__1.r = d21.r * q__2.r - d21.i * q__2.i;
                         q__1.i = d21.r * q__2.i + d21.i * q__2.r; // , expr subst
                         a[i__2].r = q__1.r;
@@ -505,7 +536,7 @@ L10:
             }
         }
         /* Store details of the interchanges in IPIV */
-        if (kstep == 1)
+        if(kstep == 1)
         {
             ipiv[k] = kp;
         }
@@ -517,29 +548,26 @@ L10:
         /* Decrease K and return to the start of the main loop */
         k -= kstep;
         goto L10;
-L30: /* Update the upper triangle of A11 (= A(1:k,1:k)) as */
+    L30: /* Update the upper triangle of A11 (= A(1:k,1:k)) as */
         /* A11 := A11 - U12*D*U12**T = A11 - U12*W**T */
         /* computing blocks of NB columns at a time */
         i__1 = -(*nb);
-        for (j = (k - 1) / *nb * *nb + 1;
-                i__1 < 0 ? j >= 1 : j <= 1;
-                j += i__1)
+        for(j = (k - 1) / *nb * *nb + 1; i__1 < 0 ? j >= 1 : j <= 1; j += i__1)
         {
             /* Computing MIN */
             i__2 = *nb;
             i__3 = k - j + 1; // , expr subst
-            jb = fla_min(i__2,i__3);
+            jb = fla_min(i__2, i__3);
             /* Update the upper triangle of the diagonal block */
             i__2 = j + jb - 1;
-            for (jj = j;
-                    jj <= i__2;
-                    ++jj)
+            for(jj = j; jj <= i__2; ++jj)
             {
                 i__3 = jj - j + 1;
                 i__4 = *n - k;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cgemv_("No transpose", &i__3, &i__4, &q__1, &a[j + (k + 1) * a_dim1], lda, &w[jj + (kw + 1) * w_dim1], ldw, &c_b1, &a[j + jj * a_dim1], &c__1);
+                cgemv_("No transpose", &i__3, &i__4, &q__1, &a[j + (k + 1) * a_dim1], lda,
+                       &w[jj + (kw + 1) * w_dim1], ldw, &c_b1, &a[j + jj * a_dim1], &c__1);
                 /* L40: */
             }
             /* Update the rectangular superdiagonal block */
@@ -547,18 +575,19 @@ L30: /* Update the upper triangle of A11 (= A(1:k,1:k)) as */
             i__3 = *n - k;
             q__1.r = -1.f;
             q__1.i = -0.f; // , expr subst
-            cgemm_("No transpose", "Transpose", &i__2, &jb, &i__3, &q__1, &a[( k + 1) * a_dim1 + 1], lda, &w[j + (kw + 1) * w_dim1], ldw, &c_b1, &a[j * a_dim1 + 1], lda);
+            cgemm_("No transpose", "Transpose", &i__2, &jb, &i__3, &q__1, &a[(k + 1) * a_dim1 + 1],
+                   lda, &w[j + (kw + 1) * w_dim1], ldw, &c_b1, &a[j * a_dim1 + 1], lda);
             /* L50: */
         }
         /* Put U12 in standard form by partially undoing the interchanges */
         /* in columns k+1:n looping backwards from k+1 to n */
         j = k + 1;
-L60: /* Undo the interchanges (if any) of rows JJ and JP at each */
+    L60: /* Undo the interchanges (if any) of rows JJ and JP at each */
         /* step J */
         /* (Here, J is a diagonal index) */
         jj = j;
         jp = ipiv[j];
-        if (jp < 0)
+        if(jp < 0)
         {
             jp = -jp;
             /* (Here, J is a diagonal index) */
@@ -567,12 +596,12 @@ L60: /* Undo the interchanges (if any) of rows JJ and JP at each */
         /* (NOTE: Here, J is used to determine row length. Length N-J+1 */
         /* of the rows to swap back doesn't include diagonal element) */
         ++j;
-        if (jp != jj && j <= *n)
+        if(jp != jj && j <= *n)
         {
             i__1 = *n - j + 1;
             cswap_(&i__1, &a[jp + j * a_dim1], lda, &a[jj + j * a_dim1], lda);
         }
-        if (j < *n)
+        if(j < *n)
         {
             goto L60;
         }
@@ -586,8 +615,8 @@ L60: /* Undo the interchanges (if any) of rows JJ and JP at each */
         /* for use in updating A22 */
         /* K is the main loop index, increasing from 1 in steps of 1 or 2 */
         k = 1;
-L70: /* Exit from loop */
-        if (k >= *nb && *nb < *n || k > *n)
+    L70: /* Exit from loop */
+        if(k >= *nb && *nb < *n || k > *n)
         {
             goto L90;
         }
@@ -598,30 +627,33 @@ L70: /* Exit from loop */
         i__2 = k - 1;
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        cgemv_("No transpose", &i__1, &i__2, &q__1, &a[k + a_dim1], lda, &w[k + w_dim1], ldw, &c_b1, &w[k + k * w_dim1], &c__1);
+        cgemv_("No transpose", &i__1, &i__2, &q__1, &a[k + a_dim1], lda, &w[k + w_dim1], ldw, &c_b1,
+               &w[k + k * w_dim1], &c__1);
         kstep = 1;
         /* Determine rows and columns to be interchanged and whether */
         /* a 1-by-1 or 2-by-2 pivot block will be used */
         i__1 = k + k * w_dim1;
-        absakk = (r__1 = w[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&w[k + k * w_dim1]), f2c_abs(r__2));
+        absakk = (r__1 = w[i__1].r, f2c_abs(r__1))
+                 + (r__2 = r_imag(&w[k + k * w_dim1]), f2c_abs(r__2));
         /* IMAX is the row-index of the largest off-diagonal element in */
         /* column K, and COLMAX is its absolute value. */
         /* Determine both COLMAX and IMAX. */
-        if (k < *n)
+        if(k < *n)
         {
             i__1 = *n - k;
             imax = k + icamax_(&i__1, &w[k + 1 + k * w_dim1], &c__1);
             i__1 = imax + k * w_dim1;
-            colmax = (r__1 = w[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&w[imax + k * w_dim1]), f2c_abs(r__2));
+            colmax = (r__1 = w[i__1].r, f2c_abs(r__1))
+                     + (r__2 = r_imag(&w[imax + k * w_dim1]), f2c_abs(r__2));
         }
         else
         {
             colmax = 0.f;
         }
-        if (fla_max(absakk,colmax) == 0.f)
+        if(fla_max(absakk, colmax) == 0.f)
         {
             /* Column K is zero or underflow: set INFO and continue */
-            if (*info == 0)
+            if(*info == 0)
             {
                 *info = k;
             }
@@ -629,7 +661,7 @@ L70: /* Exit from loop */
         }
         else
         {
-            if (absakk >= alpha * colmax)
+            if(absakk >= alpha * colmax)
             {
                 /* no interchange, use 1-by-1 pivot block */
                 kp = k;
@@ -645,24 +677,28 @@ L70: /* Exit from loop */
                 i__2 = k - 1;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cgemv_("No transpose", &i__1, &i__2, &q__1, &a[k + a_dim1], lda, &w[imax + w_dim1], ldw, &c_b1, &w[k + (k + 1) * w_dim1], &c__1);
+                cgemv_("No transpose", &i__1, &i__2, &q__1, &a[k + a_dim1], lda, &w[imax + w_dim1],
+                       ldw, &c_b1, &w[k + (k + 1) * w_dim1], &c__1);
                 /* JMAX is the column-index of the largest off-diagonal */
                 /* element in row IMAX, and ROWMAX is its absolute value */
                 i__1 = imax - k;
-                jmax = k - 1 + icamax_(&i__1, &w[k + (k + 1) * w_dim1], &c__1) ;
+                jmax = k - 1 + icamax_(&i__1, &w[k + (k + 1) * w_dim1], &c__1);
                 i__1 = jmax + (k + 1) * w_dim1;
-                rowmax = (r__1 = w[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&w[ jmax + (k + 1) * w_dim1]), f2c_abs(r__2));
-                if (imax < *n)
+                rowmax = (r__1 = w[i__1].r, f2c_abs(r__1))
+                         + (r__2 = r_imag(&w[jmax + (k + 1) * w_dim1]), f2c_abs(r__2));
+                if(imax < *n)
                 {
                     i__1 = *n - imax;
                     jmax = imax + icamax_(&i__1, &w[imax + 1 + (k + 1) * w_dim1], &c__1);
                     /* Computing MAX */
                     i__1 = jmax + (k + 1) * w_dim1;
                     r__3 = rowmax;
-                    r__4 = (r__1 = w[i__1].r, f2c_abs(r__1)) + ( r__2 = r_imag(&w[jmax + (k + 1) * w_dim1]), f2c_abs( r__2)); // , expr subst
-                    rowmax = fla_max(r__3,r__4);
+                    r__4 = (r__1 = w[i__1].r, f2c_abs(r__1))
+                           + (r__2 = r_imag(&w[jmax + (k + 1) * w_dim1]),
+                              f2c_abs(r__2)); // , expr subst
+                    rowmax = fla_max(r__3, r__4);
                 }
-                if (absakk >= alpha * colmax * (colmax / rowmax))
+                if(absakk >= alpha * colmax * (colmax / rowmax))
                 {
                     /* no interchange, use 1-by-1 pivot block */
                     kp = k;
@@ -670,7 +706,9 @@ L70: /* Exit from loop */
                 else /* if(complicated condition) */
                 {
                     i__1 = imax + (k + 1) * w_dim1;
-                    if ((r__1 = w[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&w[ imax + (k + 1) * w_dim1]), f2c_abs(r__2)) >= alpha * rowmax)
+                    if((r__1 = w[i__1].r, f2c_abs(r__1))
+                           + (r__2 = r_imag(&w[imax + (k + 1) * w_dim1]), f2c_abs(r__2))
+                       >= alpha * rowmax)
                     {
                         /* interchange rows and columns K and IMAX, use 1-by-1 */
                         /* pivot block */
@@ -693,7 +731,7 @@ L70: /* Exit from loop */
             kk = k + kstep - 1;
             /* Interchange rows and columns KP and KK. */
             /* Updated column KP is already stored in column KK of W. */
-            if (kp != kk)
+            if(kp != kk)
             {
                 /* Copy non-updated column KK to column KP of submatrix A */
                 /* at step K. No need to copy element into column K */
@@ -705,7 +743,7 @@ L70: /* Exit from loop */
                 a[i__1].i = a[i__2].i; // , expr subst
                 i__1 = kp - kk - 1;
                 ccopy_(&i__1, &a[kk + 1 + kk * a_dim1], &c__1, &a[kp + (kk + 1) * a_dim1], lda);
-                if (kp < *n)
+                if(kp < *n)
                 {
                     i__1 = *n - kp;
                     ccopy_(&i__1, &a[kp + 1 + kk * a_dim1], &c__1, &a[kp + 1 + kp * a_dim1], &c__1);
@@ -714,14 +752,14 @@ L70: /* Exit from loop */
                 /* (columns K (or K and K+1 for 2-by-2 pivot) of A will be */
                 /* later overwritten). Interchange rows KK and KP */
                 /* in first KK columns of W. */
-                if (k > 1)
+                if(k > 1)
                 {
                     i__1 = k - 1;
                     cswap_(&i__1, &a[kk + a_dim1], lda, &a[kp + a_dim1], lda);
                 }
                 cswap_(&kk, &w[kk + w_dim1], ldw, &w[kp + w_dim1], ldw);
             }
-            if (kstep == 1)
+            if(kstep == 1)
             {
                 /* 1-by-1 pivot block D(k): column k of W now holds */
                 /* W(k) = L(k)*D(k), */
@@ -733,8 +771,8 @@ L70: /* Exit from loop */
                 /* A(k,k) := D(k,k) = W(k,k) */
                 /* A(k+1:N,k) := L(k+1:N,k) = W(k+1:N,k)/D(k,k) */
                 i__1 = *n - k + 1;
-                ccopy_(&i__1, &w[k + k * w_dim1], &c__1, &a[k + k * a_dim1], & c__1);
-                if (k < *n)
+                ccopy_(&i__1, &w[k + k * w_dim1], &c__1, &a[k + k * a_dim1], &c__1);
+                if(k < *n)
                 {
                     c_div(&q__1, &c_b1, &a[k + k * a_dim1]);
                     r1.r = q__1.r;
@@ -756,7 +794,7 @@ L70: /* Exit from loop */
                 /* A(k:k+1,k:k+1) := D(k:k+1,k:k+1) = W(k:k+1,k:k+1) */
                 /* A(k+2:N,k:k+1) := L(k+2:N,k:k+1) = */
                 /* = W(k+2:N,k:k+1) * ( D(k:k+1,k:k+1)**(-1) ) */
-                if (k < *n - 1)
+                if(k < *n - 1)
                 {
                     /* Compose the columns of the inverse of 2-by-2 pivot */
                     /* block D in the following way to reduce the number */
@@ -798,17 +836,15 @@ L70: /* Exit from loop */
                     /* dot products of rows of ( W(k) W(k+1) ) and columns */
                     /* of D**(-1) */
                     i__1 = *n;
-                    for (j = k + 2;
-                            j <= i__1;
-                            ++j)
+                    for(j = k + 2; j <= i__1; ++j)
                     {
                         i__2 = j + k * a_dim1;
                         i__3 = j + k * w_dim1;
                         q__3.r = d11.r * w[i__3].r - d11.i * w[i__3].i;
-                        q__3.i = d11.r * w[i__3].i + d11.i * w[i__3] .r; // , expr subst
+                        q__3.i = d11.r * w[i__3].i + d11.i * w[i__3].r; // , expr subst
                         i__4 = j + (k + 1) * w_dim1;
                         q__2.r = q__3.r - w[i__4].r;
-                        q__2.i = q__3.i - w[i__4] .i; // , expr subst
+                        q__2.i = q__3.i - w[i__4].i; // , expr subst
                         q__1.r = d21.r * q__2.r - d21.i * q__2.i;
                         q__1.i = d21.r * q__2.i + d21.i * q__2.r; // , expr subst
                         a[i__2].r = q__1.r;
@@ -816,10 +852,10 @@ L70: /* Exit from loop */
                         i__2 = j + (k + 1) * a_dim1;
                         i__3 = j + (k + 1) * w_dim1;
                         q__3.r = d22.r * w[i__3].r - d22.i * w[i__3].i;
-                        q__3.i = d22.r * w[i__3].i + d22.i * w[i__3] .r; // , expr subst
+                        q__3.i = d22.r * w[i__3].i + d22.i * w[i__3].r; // , expr subst
                         i__4 = j + k * w_dim1;
                         q__2.r = q__3.r - w[i__4].r;
-                        q__2.i = q__3.i - w[i__4] .i; // , expr subst
+                        q__2.i = q__3.i - w[i__4].i; // , expr subst
                         q__1.r = d21.r * q__2.r - d21.i * q__2.i;
                         q__1.i = d21.r * q__2.i + d21.i * q__2.r; // , expr subst
                         a[i__2].r = q__1.r;
@@ -843,7 +879,7 @@ L70: /* Exit from loop */
             }
         }
         /* Store details of the interchanges in IPIV */
-        if (kstep == 1)
+        if(kstep == 1)
         {
             ipiv[k] = kp;
         }
@@ -855,52 +891,50 @@ L70: /* Exit from loop */
         /* Increase K and return to the start of the main loop */
         k += kstep;
         goto L70;
-L90: /* Update the lower triangle of A22 (= A(k:n,k:n)) as */
+    L90: /* Update the lower triangle of A22 (= A(k:n,k:n)) as */
         /* A22 := A22 - L21*D*L21**T = A22 - L21*W**T */
         /* computing blocks of NB columns at a time */
         i__1 = *n;
         i__2 = *nb;
-        for (j = k;
-                i__2 < 0 ? j >= i__1 : j <= i__1;
-                j += i__2)
+        for(j = k; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2)
         {
             /* Computing MIN */
             i__3 = *nb;
             i__4 = *n - j + 1; // , expr subst
-            jb = fla_min(i__3,i__4);
+            jb = fla_min(i__3, i__4);
             /* Update the lower triangle of the diagonal block */
             i__3 = j + jb - 1;
-            for (jj = j;
-                    jj <= i__3;
-                    ++jj)
+            for(jj = j; jj <= i__3; ++jj)
             {
                 i__4 = j + jb - jj;
                 i__5 = k - 1;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cgemv_("No transpose", &i__4, &i__5, &q__1, &a[jj + a_dim1], lda, &w[jj + w_dim1], ldw, &c_b1, &a[jj + jj * a_dim1], &c__1);
+                cgemv_("No transpose", &i__4, &i__5, &q__1, &a[jj + a_dim1], lda, &w[jj + w_dim1],
+                       ldw, &c_b1, &a[jj + jj * a_dim1], &c__1);
                 /* L100: */
             }
             /* Update the rectangular subdiagonal block */
-            if (j + jb <= *n)
+            if(j + jb <= *n)
             {
                 i__3 = *n - j - jb + 1;
                 i__4 = k - 1;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cgemm_("No transpose", "Transpose", &i__3, &jb, &i__4, &q__1, &a[j + jb + a_dim1], lda, &w[j + w_dim1], ldw, &c_b1, &a[j + jb + j * a_dim1], lda);
+                cgemm_("No transpose", "Transpose", &i__3, &jb, &i__4, &q__1, &a[j + jb + a_dim1],
+                       lda, &w[j + w_dim1], ldw, &c_b1, &a[j + jb + j * a_dim1], lda);
             }
             /* L110: */
         }
         /* Put L21 in standard form by partially undoing the interchanges */
         /* of rows in columns 1:k-1 looping backwards from k-1 to 1 */
         j = k - 1;
-L120: /* Undo the interchanges (if any) of rows JJ and JP at each */
+    L120: /* Undo the interchanges (if any) of rows JJ and JP at each */
         /* step J */
         /* (Here, J is a diagonal index) */
         jj = j;
         jp = ipiv[j];
-        if (jp < 0)
+        if(jp < 0)
         {
             jp = -jp;
             /* (Here, J is a diagonal index) */
@@ -909,11 +943,11 @@ L120: /* Undo the interchanges (if any) of rows JJ and JP at each */
         /* (NOTE: Here, J is used to determine row length. Length J */
         /* of the rows to swap back doesn't include diagonal element) */
         --j;
-        if (jp != jj && j >= 1)
+        if(jp != jj && j >= 1)
         {
             cswap_(&j, &a[jp + a_dim1], lda, &a[jj + a_dim1], lda);
         }
-        if (j > 1)
+        if(j > 1)
         {
             goto L120;
         }
@@ -921,7 +955,7 @@ L120: /* Undo the interchanges (if any) of rows JJ and JP at each */
         *kb = k - 1;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLASYF */
 }
 /* clasyf_ */

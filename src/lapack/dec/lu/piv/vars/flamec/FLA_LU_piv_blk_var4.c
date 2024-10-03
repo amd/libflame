@@ -25,7 +25,7 @@ FLA_Error FLA_LU_piv_blk_var4( FLA_Obj A, FLA_Obj p, fla_lu_t* cntl )
 
   FLA_Obj AB0, AB1, AB2;
 
-  dim_t b;
+  fla_dim_t b;
 
 
   FLA_Part_2x2( A,    &ATL, &ATR,

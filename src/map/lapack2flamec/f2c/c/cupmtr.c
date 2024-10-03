@@ -1,5 +1,8 @@
-/* ../netlib/cupmtr.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cupmtr.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b CUPMTR */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CUPMTR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cupmtr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cupmtr.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cupmtr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cupmtr.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cupmtr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cupmtr.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -43,7 +52,7 @@ static integer c__1 = 1;
 /* > storage: */
 /* > */
 /* > if UPLO = 'U', Q = H(nq-1) . . . H(2) H(1);
-*/
+ */
 /* > */
 /* > if UPLO = 'L', Q = H(1) H(2) . . . H(nq-1). */
 /* > \endverbatim */
@@ -53,7 +62,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > SIDE is CHARACTER*1 */
 /* > = 'L': apply Q or Q**H from the Left;
-*/
+ */
 /* > = 'R': apply Q or Q**H from the Right. */
 /* > \endverbatim */
 /* > */
@@ -62,7 +71,7 @@ static integer c__1 = 1;
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangular packed storage used in previous */
 /* > call to CHPTRD;
-*/
+ */
 /* > = 'L': Lower triangular packed storage used in previous */
 /* > call to CHPTRD. */
 /* > \endverbatim */
@@ -71,7 +80,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > TRANS is CHARACTER*1 */
 /* > = 'N': No transpose, apply Q;
-*/
+ */
 /* > = 'C': Conjugate transpose, apply Q**H. */
 /* > \endverbatim */
 /* > */
@@ -141,12 +150,16 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, complex *ap, complex *tau, complex *c__, integer *ldc, complex *work, integer *info)
+void cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, complex *ap, complex *tau,
+             complex *c__, integer *ldc, complex *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"cupmtr inputs: side %c, uplo %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", ldc %" FLA_IS "",*side, *uplo, *trans, *m, *n, *ldc);
+    snprintf(buffer, 256,
+             "cupmtr inputs: side %c, uplo %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", ldc %" FLA_IS
+             "",
+             *side, *uplo, *trans, *m, *n, *ldc);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -160,11 +173,14 @@ int cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, complex
     logical left;
     complex taui;
     extern /* Subroutine */
-    int clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *);
-    extern logical lsame_(char *, char *);
+        void
+        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+               complex *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, forwrd;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -196,11 +212,11 @@ int cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, complex
     --work;
     /* Function Body */
     *info = 0;
-    left = lsame_(side, "L");
-    notran = lsame_(trans, "N");
-    upper = lsame_(uplo, "U");
+    left = lsame_(side, "L", 1, 1);
+    notran = lsame_(trans, "N", 1, 1);
+    upper = lsame_(uplo, "U", 1, 1);
     /* NQ is the order of Q */
-    if (left)
+    if(left)
     {
         nq = *m;
     }
@@ -208,48 +224,48 @@ int cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, complex
     {
         nq = *n;
     }
-    if (! left && ! lsame_(side, "R"))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L"))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (! notran && ! lsame_(trans, "C"))
+    else if(!notran && !lsame_(trans, "C", 1, 1))
     {
         *info = -3;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -4;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -5;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -9;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CUPMTR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (upper)
+    if(upper)
     {
         /* Q was determined by a call to CHPTRD with UPLO = 'U' */
-        forwrd = left && notran || ! left && ! notran;
-        if (forwrd)
+        forwrd = left && notran || !left && !notran;
+        if(forwrd)
         {
             i1 = 1;
             i2 = nq - 1;
@@ -263,7 +279,7 @@ int cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, complex
             i3 = -1;
             ii = nq * (nq + 1) / 2 - 1;
         }
-        if (left)
+        if(left)
         {
             ni = *n;
         }
@@ -273,11 +289,9 @@ int cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, complex
         }
         i__1 = i2;
         i__2 = i3;
-        for (i__ = i1;
-                i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
-                i__ += i__2)
+        for(i__ = i1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
         {
-            if (left)
+            if(left)
             {
                 /* H(i) or H(i)**H is applied to C(1:i,1:n) */
                 mi = i__;
@@ -288,7 +302,7 @@ int cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, complex
                 ni = i__;
             }
             /* Apply H(i) or H(i)**H */
-            if (notran)
+            if(notran)
             {
                 i__3 = i__;
                 taui.r = tau[i__3].r;
@@ -306,11 +320,11 @@ int cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, complex
             i__3 = ii;
             ap[i__3].r = 1.f;
             ap[i__3].i = 0.f; // , expr subst
-            clarf_(side, &mi, &ni, &ap[ii - i__ + 1], &c__1, &taui, &c__[ c_offset], ldc, &work[1]);
+            clarf_(side, &mi, &ni, &ap[ii - i__ + 1], &c__1, &taui, &c__[c_offset], ldc, &work[1]);
             i__3 = ii;
             ap[i__3].r = aii.r;
             ap[i__3].i = aii.i; // , expr subst
-            if (forwrd)
+            if(forwrd)
             {
                 ii = ii + i__ + 2;
             }
@@ -324,8 +338,8 @@ int cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, complex
     else
     {
         /* Q was determined by a call to CHPTRD with UPLO = 'L'. */
-        forwrd = left && ! notran || ! left && notran;
-        if (forwrd)
+        forwrd = left && !notran || !left && notran;
+        if(forwrd)
         {
             i1 = 1;
             i2 = nq - 1;
@@ -339,7 +353,7 @@ int cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, complex
             i3 = -1;
             ii = nq * (nq + 1) / 2 - 1;
         }
-        if (left)
+        if(left)
         {
             ni = *n;
             jc = 1;
@@ -351,9 +365,7 @@ int cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, complex
         }
         i__2 = i2;
         i__1 = i3;
-        for (i__ = i1;
-                i__1 < 0 ? i__ >= i__2 : i__ <= i__2;
-                i__ += i__1)
+        for(i__ = i1; i__1 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__1)
         {
             i__3 = ii;
             aii.r = ap[i__3].r;
@@ -361,7 +373,7 @@ int cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, complex
             i__3 = ii;
             ap[i__3].r = 1.f;
             ap[i__3].i = 0.f; // , expr subst
-            if (left)
+            if(left)
             {
                 /* H(i) or H(i)**H is applied to C(i+1:m,1:n) */
                 mi = *m - i__;
@@ -374,7 +386,7 @@ int cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, complex
                 jc = i__ + 1;
             }
             /* Apply H(i) or H(i)**H */
-            if (notran)
+            if(notran)
             {
                 i__3 = i__;
                 taui.r = tau[i__3].r;
@@ -390,7 +402,7 @@ int cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, complex
             i__3 = ii;
             ap[i__3].r = aii.r;
             ap[i__3].i = aii.i; // , expr subst
-            if (forwrd)
+            if(forwrd)
             {
                 ii = ii + nq - i__ + 1;
             }
@@ -402,7 +414,7 @@ int cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, complex
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CUPMTR */
 }
 /* cupmtr_ */

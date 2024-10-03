@@ -1,16 +1,25 @@
-/* ../netlib/zsymv.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zsymv.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b ZSYMV computes a matrix-vector product for a complex symmetric matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZSYMV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsymv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsymv.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsymv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsymv.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsymv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsymv.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -143,10 +152,13 @@
 /* > \ingroup complex16SYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integer *lda, doublecomplex *x, integer *incx, doublecomplex *beta, doublecomplex *y, integer *incy)
+void zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integer *lda,
+            doublecomplex *x, integer *incx, doublecomplex *beta, doublecomplex *y, integer *incy)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zsymv inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "",*uplo, *n, *lda, *incx, *incy);
+    AOCL_DTL_SNPRINTF("zsymv inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", incx %" FLA_IS
+                      ", incy %" FLA_IS "",
+                      *uplo, *n, *lda, *incx, *incy);
 
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
@@ -154,9 +166,10 @@ int zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integ
     /* Local variables */
     integer i__, j, ix, iy, jx, jy, kx, ky, info;
     doublecomplex temp1, temp2;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -186,40 +199,40 @@ int zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integ
     --y;
     /* Function Body */
     info = 0;
-    if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         info = 1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         info = 2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         info = 5;
     }
-    else if (*incx == 0)
+    else if(*incx == 0)
     {
         info = 7;
     }
-    else if (*incy == 0)
+    else if(*incy == 0)
     {
         info = 10;
     }
-    if (info != 0)
+    if(info != 0)
     {
         xerbla_("ZSYMV ", &info, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
-    if (*n == 0 || alpha->r == 0. && alpha->i == 0. && (beta->r == 1. && beta->i == 0.))
+    if(*n == 0 || alpha->r == 0. && alpha->i == 0. && (beta->r == 1. && beta->i == 0.))
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set up the start points in X and Y. */
-    if (*incx > 0)
+    if(*incx > 0)
     {
         kx = 1;
     }
@@ -227,7 +240,7 @@ int zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integ
     {
         kx = 1 - (*n - 1) * *incx;
     }
-    if (*incy > 0)
+    if(*incy > 0)
     {
         ky = 1;
     }
@@ -239,16 +252,14 @@ int zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integ
     /* accessed sequentially with one pass through the triangular part */
     /* of A. */
     /* First form y := beta*y. */
-    if (beta->r != 1. || beta->i != 0.)
+    if(beta->r != 1. || beta->i != 0.)
     {
-        if (*incy == 1)
+        if(*incy == 1)
         {
-            if (beta->r == 0. && beta->i == 0.)
+            if(beta->r == 0. && beta->i == 0.)
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = i__;
                     y[i__2].r = 0.;
@@ -259,14 +270,12 @@ int zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integ
             else
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = i__;
                     i__3 = i__;
                     z__1.r = beta->r * y[i__3].r - beta->i * y[i__3].i;
-                    z__1.i = beta->r * y[i__3].i + beta->i * y[i__3] .r; // , expr subst
+                    z__1.i = beta->r * y[i__3].i + beta->i * y[i__3].r; // , expr subst
                     y[i__2].r = z__1.r;
                     y[i__2].i = z__1.i; // , expr subst
                     /* L20: */
@@ -276,12 +285,10 @@ int zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integ
         else
         {
             iy = ky;
-            if (beta->r == 0. && beta->i == 0.)
+            if(beta->r == 0. && beta->i == 0.)
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = iy;
                     y[i__2].r = 0.;
@@ -293,14 +300,12 @@ int zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integ
             else
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = iy;
                     i__3 = iy;
                     z__1.r = beta->r * y[i__3].r - beta->i * y[i__3].i;
-                    z__1.i = beta->r * y[i__3].i + beta->i * y[i__3] .r; // , expr subst
+                    z__1.i = beta->r * y[i__3].i + beta->i * y[i__3].r; // , expr subst
                     y[i__2].r = z__1.r;
                     y[i__2].i = z__1.i; // , expr subst
                     iy += *incy;
@@ -309,20 +314,18 @@ int zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integ
             }
         }
     }
-    if (alpha->r == 0. && alpha->i == 0.)
+    if(alpha->r == 0. && alpha->i == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    if (lsame_(uplo, "U"))
+    if(lsame_(uplo, "U", 1, 1))
     {
         /* Form y when A is stored in upper triangle. */
-        if (*incx == 1 && *incy == 1)
+        if(*incx == 1 && *incy == 1)
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j;
                 z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
@@ -332,15 +335,13 @@ int zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integ
                 temp2.r = 0.;
                 temp2.i = 0.; // , expr subst
                 i__2 = j - 1;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__;
                     i__4 = i__;
                     i__5 = i__ + j * a_dim1;
                     z__2.r = temp1.r * a[i__5].r - temp1.i * a[i__5].i;
-                    z__2.i = temp1.r * a[i__5].i + temp1.i * a[i__5] .r; // , expr subst
+                    z__2.i = temp1.r * a[i__5].i + temp1.i * a[i__5].r; // , expr subst
                     z__1.r = y[i__4].r + z__2.r;
                     z__1.i = y[i__4].i + z__2.i; // , expr subst
                     y[i__3].r = z__1.r;
@@ -348,7 +349,7 @@ int zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integ
                     i__3 = i__ + j * a_dim1;
                     i__4 = i__;
                     z__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
-                    z__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[ i__4].r; // , expr subst
+                    z__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
                     z__1.r = temp2.r + z__2.r;
                     z__1.i = temp2.i + z__2.i; // , expr subst
                     temp2.r = z__1.r;
@@ -376,9 +377,7 @@ int zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integ
             jx = kx;
             jy = ky;
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = jx;
                 z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
@@ -390,15 +389,13 @@ int zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integ
                 ix = kx;
                 iy = ky;
                 i__2 = j - 1;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = iy;
                     i__4 = iy;
                     i__5 = i__ + j * a_dim1;
                     z__2.r = temp1.r * a[i__5].r - temp1.i * a[i__5].i;
-                    z__2.i = temp1.r * a[i__5].i + temp1.i * a[i__5] .r; // , expr subst
+                    z__2.i = temp1.r * a[i__5].i + temp1.i * a[i__5].r; // , expr subst
                     z__1.r = y[i__4].r + z__2.r;
                     z__1.i = y[i__4].i + z__2.i; // , expr subst
                     y[i__3].r = z__1.r;
@@ -406,7 +403,7 @@ int zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integ
                     i__3 = i__ + j * a_dim1;
                     i__4 = ix;
                     z__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
-                    z__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[ i__4].r; // , expr subst
+                    z__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
                     z__1.r = temp2.r + z__2.r;
                     z__1.i = temp2.i + z__2.i; // , expr subst
                     temp2.r = z__1.r;
@@ -437,12 +434,10 @@ int zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integ
     else
     {
         /* Form y when A is stored in lower triangle. */
-        if (*incx == 1 && *incy == 1)
+        if(*incx == 1 && *incy == 1)
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j;
                 z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
@@ -461,15 +456,13 @@ int zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integ
                 y[i__2].r = z__1.r;
                 y[i__2].i = z__1.i; // , expr subst
                 i__2 = *n;
-                for (i__ = j + 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = j + 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__;
                     i__4 = i__;
                     i__5 = i__ + j * a_dim1;
                     z__2.r = temp1.r * a[i__5].r - temp1.i * a[i__5].i;
-                    z__2.i = temp1.r * a[i__5].i + temp1.i * a[i__5] .r; // , expr subst
+                    z__2.i = temp1.r * a[i__5].i + temp1.i * a[i__5].r; // , expr subst
                     z__1.r = y[i__4].r + z__2.r;
                     z__1.i = y[i__4].i + z__2.i; // , expr subst
                     y[i__3].r = z__1.r;
@@ -477,7 +470,7 @@ int zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integ
                     i__3 = i__ + j * a_dim1;
                     i__4 = i__;
                     z__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
-                    z__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[ i__4].r; // , expr subst
+                    z__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
                     z__1.r = temp2.r + z__2.r;
                     z__1.i = temp2.i + z__2.i; // , expr subst
                     temp2.r = z__1.r;
@@ -500,9 +493,7 @@ int zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integ
             jx = kx;
             jy = ky;
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = jx;
                 z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
@@ -523,9 +514,7 @@ int zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integ
                 ix = jx;
                 iy = jy;
                 i__2 = *n;
-                for (i__ = j + 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = j + 1; i__ <= i__2; ++i__)
                 {
                     ix += *incx;
                     iy += *incy;
@@ -533,7 +522,7 @@ int zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integ
                     i__4 = iy;
                     i__5 = i__ + j * a_dim1;
                     z__2.r = temp1.r * a[i__5].r - temp1.i * a[i__5].i;
-                    z__2.i = temp1.r * a[i__5].i + temp1.i * a[i__5] .r; // , expr subst
+                    z__2.i = temp1.r * a[i__5].i + temp1.i * a[i__5].r; // , expr subst
                     z__1.r = y[i__4].r + z__2.r;
                     z__1.i = y[i__4].i + z__2.i; // , expr subst
                     y[i__3].r = z__1.r;
@@ -541,7 +530,7 @@ int zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integ
                     i__3 = i__ + j * a_dim1;
                     i__4 = ix;
                     z__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
-                    z__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[ i__4].r; // , expr subst
+                    z__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
                     z__1.r = temp2.r + z__2.r;
                     z__1.i = temp2.i + z__2.i; // , expr subst
                     temp2.r = z__1.r;
@@ -563,7 +552,7 @@ int zsymv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integ
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZSYMV */
 }
 /* zsymv_ */

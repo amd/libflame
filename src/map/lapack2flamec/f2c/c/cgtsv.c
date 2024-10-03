@@ -1,16 +1,25 @@
-/* ../netlib/cgtsv.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cgtsv.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief <b> CGTSV computes the solution to system of linear equations A * X = B for GT matrices <b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CGTSV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgtsv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgtsv.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgtsv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgtsv.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgtsv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgtsv.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -110,15 +119,16 @@
 /* > \ingroup complexGTsolve */
 /* ===================================================================== */
 /* Subroutine */
-int cgtsv_(integer *n, integer *nrhs, complex *dl, complex * d__, complex *du, complex *b, integer *ldb, integer *info)
+void cgtsv_(integer *n, integer *nrhs, complex *dl, complex *d__, complex *du, complex *b,
+            integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgtsv inputs: n %lld, nrhs %lld, ldb %lld",*n, *nrhs, *ldb);
+    snprintf(buffer, 256, "cgtsv inputs: n %lld, nrhs %lld, ldb %lld", *n, *nrhs, *ldb);
 #else
-    snprintf(buffer, 256,"cgtsv inputs: n %d, nrhs %d, ldb %d",*n, *nrhs, *ldb);
+    snprintf(buffer, 256, "cgtsv inputs: n %d, nrhs %d, ldb %d", *n, *nrhs, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -133,7 +143,8 @@ int cgtsv_(integer *n, integer *nrhs, complex *dl, complex * d__, complex *du, c
     integer j, k;
     complex temp, mult;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -165,55 +176,54 @@ int cgtsv_(integer *n, integer *nrhs, complex *dl, complex * d__, complex *du, c
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -2;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CGTSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     i__1 = *n - 1;
-    for (k = 1;
-            k <= i__1;
-            ++k)
+    for(k = 1; k <= i__1; ++k)
     {
         i__2 = k;
-        if (dl[i__2].r == 0.f && dl[i__2].i == 0.f)
+        if(dl[i__2].r == 0.f && dl[i__2].i == 0.f)
         {
             /* Subdiagonal is zero, no elimination is required. */
             i__2 = k;
-            if (d__[i__2].r == 0.f && d__[i__2].i == 0.f)
+            if(d__[i__2].r == 0.f && d__[i__2].i == 0.f)
             {
                 /* Diagonal is zero: set INFO = K and return;
                 a unique */
                 /* solution can not be found. */
                 *info = k;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
         }
         else /* if(complicated condition) */
         {
             i__2 = k;
             i__3 = k;
-            if ((r__1 = d__[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&d__[k]), f2c_abs(r__2)) >= (r__3 = dl[i__3].r, f2c_abs(r__3)) + (r__4 = r_imag(&dl[k]), f2c_abs(r__4)))
+            if((r__1 = d__[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&d__[k]), f2c_abs(r__2))
+               >= (r__3 = dl[i__3].r, f2c_abs(r__3)) + (r__4 = r_imag(&dl[k]), f2c_abs(r__4)))
             {
                 /* No row interchange required */
                 c_div(&q__1, &dl[k], &d__[k]);
@@ -229,9 +239,7 @@ int cgtsv_(integer *n, integer *nrhs, complex *dl, complex * d__, complex *du, c
                 d__[i__2].r = q__1.r;
                 d__[i__2].i = q__1.i; // , expr subst
                 i__2 = *nrhs;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = k + 1 + j * b_dim1;
                     i__4 = k + 1 + j * b_dim1;
@@ -244,7 +252,7 @@ int cgtsv_(integer *n, integer *nrhs, complex *dl, complex * d__, complex *du, c
                     b[i__3].i = q__1.i; // , expr subst
                     /* L10: */
                 }
-                if (k < *n - 1)
+                if(k < *n - 1)
                 {
                     i__2 = k;
                     dl[i__2].r = 0.f;
@@ -272,7 +280,7 @@ int cgtsv_(integer *n, integer *nrhs, complex *dl, complex * d__, complex *du, c
                 q__1.i = du[i__3].i - q__2.i; // , expr subst
                 d__[i__2].r = q__1.r;
                 d__[i__2].i = q__1.i; // , expr subst
-                if (k < *n - 1)
+                if(k < *n - 1)
                 {
                     i__2 = k;
                     i__3 = k + 1;
@@ -283,7 +291,7 @@ int cgtsv_(integer *n, integer *nrhs, complex *dl, complex * d__, complex *du, c
                     q__2.i = -mult.i; // , expr subst
                     i__3 = k;
                     q__1.r = q__2.r * dl[i__3].r - q__2.i * dl[i__3].i;
-                    q__1.i = q__2.r * dl[i__3].i + q__2.i * dl[i__3] .r; // , expr subst
+                    q__1.i = q__2.r * dl[i__3].i + q__2.i * dl[i__3].r; // , expr subst
                     du[i__2].r = q__1.r;
                     du[i__2].i = q__1.i; // , expr subst
                 }
@@ -291,9 +299,7 @@ int cgtsv_(integer *n, integer *nrhs, complex *dl, complex * d__, complex *du, c
                 du[i__2].r = temp.r;
                 du[i__2].i = temp.i; // , expr subst
                 i__2 = *nrhs;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = k + j * b_dim1;
                     temp.r = b[i__3].r;
@@ -317,23 +323,21 @@ int cgtsv_(integer *n, integer *nrhs, complex *dl, complex * d__, complex *du, c
         /* L30: */
     }
     i__1 = *n;
-    if (d__[i__1].r == 0.f && d__[i__1].i == 0.f)
+    if(d__[i__1].r == 0.f && d__[i__1].i == 0.f)
     {
         *info = *n;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Back solve with the matrix U from the factorization. */
     i__1 = *nrhs;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         i__2 = *n + j * b_dim1;
         c_div(&q__1, &b[*n + j * b_dim1], &d__[*n]);
         b[i__2].r = q__1.r;
         b[i__2].i = q__1.i; // , expr subst
-        if (*n > 1)
+        if(*n > 1)
         {
             i__2 = *n - 1 + j * b_dim1;
             i__3 = *n - 1 + j * b_dim1;
@@ -347,9 +351,7 @@ int cgtsv_(integer *n, integer *nrhs, complex *dl, complex * d__, complex *du, c
             b[i__2].r = q__1.r;
             b[i__2].i = q__1.i; // , expr subst
         }
-        for (k = *n - 2;
-                k >= 1;
-                --k)
+        for(k = *n - 2; k >= 1; --k)
         {
             i__2 = k + j * b_dim1;
             i__3 = k + j * b_dim1;
@@ -373,7 +375,7 @@ int cgtsv_(integer *n, integer *nrhs, complex *dl, complex * d__, complex *du, c
         /* L50: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGTSV */
 }
 /* cgtsv_ */

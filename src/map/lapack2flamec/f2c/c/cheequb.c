@@ -1,5 +1,8 @@
-/* cheequb.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* cheequb.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b CHEEQUB */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CHEEQUB + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cheequb .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cheequb
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cheequb .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cheequb
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cheequb .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cheequb
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -46,7 +55,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -120,10 +129,11 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cheequb_(char *uplo, integer *n, complex *a, integer * lda, real *s, real *scond, real *amax, complex *work, integer *info)
+void cheequb_(char *uplo, integer *n, complex *a, integer *lda, real *s, real *scond, real *amax,
+              complex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("cheequb inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
+    AOCL_DTL_SNPRINTF("cheequb inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     real r__1, r__2, r__3, r__4;
@@ -139,14 +149,16 @@ int cheequb_(char *uplo, integer *n, complex *a, integer * lda, real *s, real *s
     real avg, std, tol, base;
     integer iter;
     real smin, smax, scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real sumsq;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern /* Subroutine */
-    int classq_(integer *, complex *, integer *, real *, real *);
+        void
+        classq_(integer *, complex *, integer *, real *, real *);
     real smlnum;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -180,162 +192,154 @@ int cheequb_(char *uplo, integer *n, complex *a, integer * lda, real *s, real *s
     --work;
     /* Function Body */
     *info = 0;
-    if (! (lsame_(uplo, "U") || lsame_(uplo, "L")))
+    if(!(lsame_(uplo, "U", 1, 1) || lsame_(uplo, "L", 1, 1)))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CHEEQUB", &i__1, (ftnlen)7);
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
-    up = lsame_(uplo, "U");
+    up = lsame_(uplo, "U", 1, 1);
     *amax = 0.f;
     /* Quick return if possible. */
-    if (*n == 0)
+    if(*n == 0)
     {
         *scond = 1.f;
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         s[i__] = 0.f;
     }
     *amax = 0.f;
-    if (up)
+    if(up)
     {
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j - 1;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 /* Computing MAX */
                 i__3 = i__ + j * a_dim1;
                 r__3 = s[i__];
-                r__4 = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // , expr subst
-                s[i__] = fla_max(r__3,r__4);
+                r__4 = (r__1 = a[i__3].r, f2c_abs(r__1))
+                       + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // , expr subst
+                s[i__] = fla_max(r__3, r__4);
                 /* Computing MAX */
                 i__3 = i__ + j * a_dim1;
                 r__3 = s[j];
-                r__4 = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // , expr subst
-                s[j] = fla_max(r__3,r__4);
+                r__4 = (r__1 = a[i__3].r, f2c_abs(r__1))
+                       + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // , expr subst
+                s[j] = fla_max(r__3, r__4);
                 /* Computing MAX */
                 i__3 = i__ + j * a_dim1;
                 r__3 = *amax;
-                r__4 = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // , expr subst
-                *amax = fla_max(r__3,r__4);
+                r__4 = (r__1 = a[i__3].r, f2c_abs(r__1))
+                       + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // , expr subst
+                *amax = fla_max(r__3, r__4);
             }
             /* Computing MAX */
             i__2 = j + j * a_dim1;
             r__3 = s[j];
-            r__4 = (r__1 = a[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[j + j * a_dim1]), f2c_abs(r__2)); // , expr subst
-            s[j] = fla_max(r__3,r__4);
+            r__4 = (r__1 = a[i__2].r, f2c_abs(r__1))
+                   + (r__2 = r_imag(&a[j + j * a_dim1]), f2c_abs(r__2)); // , expr subst
+            s[j] = fla_max(r__3, r__4);
             /* Computing MAX */
             i__2 = j + j * a_dim1;
             r__3 = *amax;
-            r__4 = (r__1 = a[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[j + j * a_dim1]), f2c_abs(r__2)); // , expr subst
-            *amax = fla_max(r__3,r__4);
+            r__4 = (r__1 = a[i__2].r, f2c_abs(r__1))
+                   + (r__2 = r_imag(&a[j + j * a_dim1]), f2c_abs(r__2)); // , expr subst
+            *amax = fla_max(r__3, r__4);
         }
     }
     else
     {
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             /* Computing MAX */
             i__2 = j + j * a_dim1;
             r__3 = s[j];
-            r__4 = (r__1 = a[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[j + j * a_dim1]), f2c_abs(r__2)); // , expr subst
-            s[j] = fla_max(r__3,r__4);
+            r__4 = (r__1 = a[i__2].r, f2c_abs(r__1))
+                   + (r__2 = r_imag(&a[j + j * a_dim1]), f2c_abs(r__2)); // , expr subst
+            s[j] = fla_max(r__3, r__4);
             /* Computing MAX */
             i__2 = j + j * a_dim1;
             r__3 = *amax;
-            r__4 = (r__1 = a[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[j + j * a_dim1]), f2c_abs(r__2)); // , expr subst
-            *amax = fla_max(r__3,r__4);
+            r__4 = (r__1 = a[i__2].r, f2c_abs(r__1))
+                   + (r__2 = r_imag(&a[j + j * a_dim1]), f2c_abs(r__2)); // , expr subst
+            *amax = fla_max(r__3, r__4);
             i__2 = *n;
-            for (i__ = j + 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = j + 1; i__ <= i__2; ++i__)
             {
                 /* Computing MAX */
                 i__3 = i__ + j * a_dim1;
                 r__3 = s[i__];
-                r__4 = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // , expr subst
-                s[i__] = fla_max(r__3,r__4);
+                r__4 = (r__1 = a[i__3].r, f2c_abs(r__1))
+                       + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // , expr subst
+                s[i__] = fla_max(r__3, r__4);
                 /* Computing MAX */
                 i__3 = i__ + j * a_dim1;
                 r__3 = s[j];
-                r__4 = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // , expr subst
-                s[j] = fla_max(r__3,r__4);
+                r__4 = (r__1 = a[i__3].r, f2c_abs(r__1))
+                       + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // , expr subst
+                s[j] = fla_max(r__3, r__4);
                 /* Computing MAX */
                 i__3 = i__ + j * a_dim1;
                 r__3 = *amax;
-                r__4 = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // , expr subst
-                *amax = fla_max(r__3,r__4);
+                r__4 = (r__1 = a[i__3].r, f2c_abs(r__1))
+                       + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // , expr subst
+                *amax = fla_max(r__3, r__4);
             }
         }
     }
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         s[j] = 1.f / s[j];
     }
     tol = 1.f / sqrt(*n * 2.f);
-    for (iter = 1;
-            iter <= 100;
-            ++iter)
+    for(iter = 1; iter <= 100; ++iter)
     {
         scale = 0.f;
         sumsq = 0.f;
         /* beta = |A|s */
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__;
             work[i__2].r = 0.f;
             work[i__2].i = 0.f; // , expr subst
         }
-        if (up)
+        if(up)
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j - 1;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__;
                     i__4 = i__;
                     i__5 = i__ + j * a_dim1;
-                    r__3 = ((r__1 = a[i__5].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[ i__ + j * a_dim1]), f2c_abs(r__2))) * s[j];
+                    r__3 = ((r__1 = a[i__5].r, f2c_abs(r__1))
+                            + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)))
+                           * s[j];
                     q__1.r = work[i__4].r + r__3;
                     q__1.i = work[i__4].i; // , expr subst
                     work[i__3].r = q__1.r;
@@ -343,7 +347,9 @@ int cheequb_(char *uplo, integer *n, complex *a, integer * lda, real *s, real *s
                     i__3 = j;
                     i__4 = j;
                     i__5 = i__ + j * a_dim1;
-                    r__3 = ((r__1 = a[i__5].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[ i__ + j * a_dim1]), f2c_abs(r__2))) * s[i__];
+                    r__3 = ((r__1 = a[i__5].r, f2c_abs(r__1))
+                            + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)))
+                           * s[i__];
                     q__1.r = work[i__4].r + r__3;
                     q__1.i = work[i__4].i; // , expr subst
                     work[i__3].r = q__1.r;
@@ -352,7 +358,9 @@ int cheequb_(char *uplo, integer *n, complex *a, integer * lda, real *s, real *s
                 i__2 = j;
                 i__3 = j;
                 i__4 = j + j * a_dim1;
-                r__3 = ((r__1 = a[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[j + j * a_dim1]), f2c_abs(r__2))) * s[j];
+                r__3 = ((r__1 = a[i__4].r, f2c_abs(r__1))
+                        + (r__2 = r_imag(&a[j + j * a_dim1]), f2c_abs(r__2)))
+                       * s[j];
                 q__1.r = work[i__3].r + r__3;
                 q__1.i = work[i__3].i; // , expr subst
                 work[i__2].r = q__1.r;
@@ -362,27 +370,27 @@ int cheequb_(char *uplo, integer *n, complex *a, integer * lda, real *s, real *s
         else
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j;
                 i__3 = j;
                 i__4 = j + j * a_dim1;
-                r__3 = ((r__1 = a[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[j + j * a_dim1]), f2c_abs(r__2))) * s[j];
+                r__3 = ((r__1 = a[i__4].r, f2c_abs(r__1))
+                        + (r__2 = r_imag(&a[j + j * a_dim1]), f2c_abs(r__2)))
+                       * s[j];
                 q__1.r = work[i__3].r + r__3;
                 q__1.i = work[i__3].i; // , expr subst
                 work[i__2].r = q__1.r;
                 work[i__2].i = q__1.i; // , expr subst
                 i__2 = *n;
-                for (i__ = j + 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = j + 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__;
                     i__4 = i__;
                     i__5 = i__ + j * a_dim1;
-                    r__3 = ((r__1 = a[i__5].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[ i__ + j * a_dim1]), f2c_abs(r__2))) * s[j];
+                    r__3 = ((r__1 = a[i__5].r, f2c_abs(r__1))
+                            + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)))
+                           * s[j];
                     q__1.r = work[i__4].r + r__3;
                     q__1.i = work[i__4].i; // , expr subst
                     work[i__3].r = q__1.r;
@@ -390,7 +398,9 @@ int cheequb_(char *uplo, integer *n, complex *a, integer * lda, real *s, real *s
                     i__3 = j;
                     i__4 = j;
                     i__5 = i__ + j * a_dim1;
-                    r__3 = ((r__1 = a[i__5].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[ i__ + j * a_dim1]), f2c_abs(r__2))) * s[i__];
+                    r__3 = ((r__1 = a[i__5].r, f2c_abs(r__1))
+                            + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)))
+                           * s[i__];
                     q__1.r = work[i__4].r + r__3;
                     q__1.i = work[i__4].i; // , expr subst
                     work[i__3].r = q__1.r;
@@ -401,9 +411,7 @@ int cheequb_(char *uplo, integer *n, complex *a, integer * lda, real *s, real *s
         /* avg = s^T beta / n */
         avg = 0.f;
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__;
             i__3 = i__;
@@ -414,9 +422,7 @@ int cheequb_(char *uplo, integer *n, complex *a, integer * lda, real *s, real *s
         avg /= *n;
         std = 0.f;
         i__1 = *n << 1;
-        for (i__ = *n + 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = *n + 1; i__ <= i__1; ++i__)
         {
             i__2 = i__;
             i__3 = i__ - *n;
@@ -430,17 +436,16 @@ int cheequb_(char *uplo, integer *n, complex *a, integer * lda, real *s, real *s
         }
         classq_(n, &work[*n + 1], &c__1, &scale, &sumsq);
         std = scale * sqrt(sumsq / *n);
-        if (std < tol * avg)
+        if(std < tol * avg)
         {
             goto L999;
         }
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + i__ * a_dim1;
-            t = (r__1 = a[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + i__ * a_dim1]), f2c_abs(r__2));
+            t = (r__1 = a[i__2].r, f2c_abs(r__1))
+                + (r__2 = r_imag(&a[i__ + i__ * a_dim1]), f2c_abs(r__2));
             si = s[i__];
             c2 = (*n - 1) * t;
             i__2 = *n - 2;
@@ -448,7 +453,7 @@ int cheequb_(char *uplo, integer *n, complex *a, integer * lda, real *s, real *s
             r__1 = t * si;
             q__2.r = work[i__3].r - r__1;
             q__2.i = work[i__3].i; // , expr subst
-            d__1 = (doublereal) i__2;
+            d__1 = (doublereal)i__2;
             q__1.r = d__1 * q__2.r;
             q__1.i = d__1 * q__2.i; // , expr subst
             c1 = q__1.r;
@@ -466,24 +471,23 @@ int cheequb_(char *uplo, integer *n, complex *a, integer * lda, real *s, real *s
             q__1.i = q__2.i; // , expr subst
             c0 = q__1.r;
             d__ = c1 * c1 - c0 * 4 * c2;
-            if (d__ <= 0.f)
+            if(d__ <= 0.f)
             {
                 *info = -1;
-    AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                AOCL_DTL_TRACE_LOG_EXIT
+                return;
             }
             si = c0 * -2 / (c1 + sqrt(d__));
             d__ = si - s[i__];
             u = 0.f;
-            if (up)
+            if(up)
             {
                 i__2 = i__;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = j + i__ * a_dim1;
-                    t = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[j + i__ * a_dim1]), f2c_abs(r__2));
+                    t = (r__1 = a[i__3].r, f2c_abs(r__1))
+                        + (r__2 = r_imag(&a[j + i__ * a_dim1]), f2c_abs(r__2));
                     u += s[j] * t;
                     i__3 = j;
                     i__4 = j;
@@ -494,12 +498,11 @@ int cheequb_(char *uplo, integer *n, complex *a, integer * lda, real *s, real *s
                     work[i__3].i = q__1.i; // , expr subst
                 }
                 i__2 = *n;
-                for (j = i__ + 1;
-                        j <= i__2;
-                        ++j)
+                for(j = i__ + 1; j <= i__2; ++j)
                 {
                     i__3 = i__ + j * a_dim1;
-                    t = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
+                    t = (r__1 = a[i__3].r, f2c_abs(r__1))
+                        + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
                     u += s[j] * t;
                     i__3 = j;
                     i__4 = j;
@@ -513,12 +516,11 @@ int cheequb_(char *uplo, integer *n, complex *a, integer * lda, real *s, real *s
             else
             {
                 i__2 = i__;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = i__ + j * a_dim1;
-                    t = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
+                    t = (r__1 = a[i__3].r, f2c_abs(r__1))
+                        + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
                     u += s[j] * t;
                     i__3 = j;
                     i__4 = j;
@@ -529,12 +531,11 @@ int cheequb_(char *uplo, integer *n, complex *a, integer * lda, real *s, real *s
                     work[i__3].i = q__1.i; // , expr subst
                 }
                 i__2 = *n;
-                for (j = i__ + 1;
-                        j <= i__2;
-                        ++j)
+                for(j = i__ + 1; j <= i__2; ++j)
                 {
                     i__3 = j + i__ * a_dim1;
-                    t = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[j + i__ * a_dim1]), f2c_abs(r__2));
+                    t = (r__1 = a[i__3].r, f2c_abs(r__1))
+                        + (r__2 = r_imag(&a[j + i__ * a_dim1]), f2c_abs(r__2));
                     u += s[j] * t;
                     i__3 = j;
                     i__4 = j;
@@ -550,7 +551,7 @@ int cheequb_(char *uplo, integer *n, complex *a, integer * lda, real *s, real *s
             q__3.i = work[i__2].i; // , expr subst
             q__2.r = d__ * q__3.r;
             q__2.i = d__ * q__3.i; // , expr subst
-            d__1 = (doublereal) (*n);
+            d__1 = (doublereal)(*n);
             q__1.r = q__2.r / d__1;
             q__1.i = q__2.i / d__1; // , expr subst
             avg += q__1.r;
@@ -566,23 +567,21 @@ L999:
     base = slamch_("B");
     u = 1.f / log(base);
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        i__2 = (integer) (u * log(s[i__] * t));
+        i__2 = (integer)(u * log(s[i__] * t));
         s[i__] = pow_ri(&base, &i__2);
         /* Computing MIN */
         r__1 = smin;
         r__2 = s[i__]; // , expr subst
-        smin = fla_min(r__1,r__2);
+        smin = fla_min(r__1, r__2);
         /* Computing MAX */
         r__1 = smax;
         r__2 = s[i__]; // , expr subst
-        smax = fla_max(r__1,r__2);
+        smax = fla_max(r__1, r__2);
     }
-    *scond = fla_max(smin,smlnum) / fla_min(smax,bignum);
+    *scond = fla_max(smin, smlnum) / fla_min(smax, bignum);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* cheequb_ */

@@ -1,18 +1,28 @@
-/* ../netlib/ssytf2.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ssytf2.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b SSYTF2 computes the factorization of a real symmetric indefinite matrix, using the diagonal piv oting method (unblocked algorithm). */
+/* > \brief \b SSYTF2 computes the factorization of a real symmetric indefinite matrix, using the
+ * diagonal piv oting method (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SSYTF2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssytf2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssytf2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssytf2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssytf2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytf2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytf2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -181,12 +191,13 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integer *info)
+void ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"ssytf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
+    snprintf(buffer, 256, "ssytf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n,
+             *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -201,18 +212,22 @@ int ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, intege
     real wk, wkm1, wkp1;
     integer imax, jmax;
     extern /* Subroutine */
-    int ssyr_(char *, integer *, real *, real *, integer *, real *, integer *);
+        void
+        ssyr_(char *, integer *, real *, real *, integer *, real *, integer *);
     real alpha;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     integer kstep;
     logical upper;
     extern /* Subroutine */
-    int sswap_(integer *, real *, integer *, real *, integer *);
+        void
+        sswap_(integer *, real *, integer *, real *, integer *);
     real absakk;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     real colmax;
     extern logical sisnan_(real *);
@@ -245,37 +260,37 @@ int ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, intege
     --ipiv;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     imax = 0;
-    if (! upper && ! lsame_(uplo, "L"))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SSYTF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize ALPHA for use in choosing pivot block size. */
     alpha = (sqrt(17.f) + 1.f) / 8.f;
-    if (upper)
+    if(upper)
     {
         /* Factorize A as U*D*U**T using the upper triangle of A */
         /* K is the main loop index, decreasing from N to 1 in steps of */
         /* 1 or 2 */
         k = *n;
-L10: /* If K < 1, exit from loop */
-        if (k < 1)
+    L10: /* If K < 1, exit from loop */
+        if(k < 1)
         {
             goto L70;
         }
@@ -286,7 +301,7 @@ L10: /* If K < 1, exit from loop */
         /* IMAX is the row-index of the largest off-diagonal element in */
         /* column K, and COLMAX is its absolute value. */
         /* Determine both COLMAX and IMAX. */
-        if (k > 1)
+        if(k > 1)
         {
             i__1 = k - 1;
             imax = isamax_(&i__1, &a[k * a_dim1 + 1], &c__1);
@@ -296,11 +311,11 @@ L10: /* If K < 1, exit from loop */
         {
             colmax = 0.f;
         }
-        if (fla_max(absakk,colmax) == 0.f || sisnan_(&absakk))
+        if(fla_max(absakk, colmax) == 0.f || sisnan_(&absakk))
         {
             /* Column K is zero or underflow, or contains a NaN: */
             /* set INFO and continue */
-            if (*info == 0)
+            if(*info == 0)
             {
                 *info = k;
             }
@@ -308,7 +323,7 @@ L10: /* If K < 1, exit from loop */
         }
         else
         {
-            if (absakk >= alpha * colmax)
+            if(absakk >= alpha * colmax)
             {
                 /* no interchange, use 1-by-1 pivot block */
                 kp = k;
@@ -320,21 +335,21 @@ L10: /* If K < 1, exit from loop */
                 i__1 = k - imax;
                 jmax = imax + isamax_(&i__1, &a[imax + (imax + 1) * a_dim1], lda);
                 rowmax = (r__1 = a[imax + jmax * a_dim1], f2c_abs(r__1));
-                if (imax > 1)
+                if(imax > 1)
                 {
                     i__1 = imax - 1;
                     jmax = isamax_(&i__1, &a[imax * a_dim1 + 1], &c__1);
                     /* Computing MAX */
                     r__2 = rowmax;
                     r__3 = (r__1 = a[jmax + imax * a_dim1], f2c_abs(r__1)); // , expr subst
-                    rowmax = fla_max(r__2,r__3);
+                    rowmax = fla_max(r__2, r__3);
                 }
-                if (absakk >= alpha * colmax * (colmax / rowmax))
+                if(absakk >= alpha * colmax * (colmax / rowmax))
                 {
                     /* no interchange, use 1-by-1 pivot block */
                     kp = k;
                 }
-                else if ((r__1 = a[imax + imax * a_dim1], f2c_abs(r__1)) >= alpha * rowmax)
+                else if((r__1 = a[imax + imax * a_dim1], f2c_abs(r__1)) >= alpha * rowmax)
                 {
                     /* interchange rows and columns K and IMAX, use 1-by-1 */
                     /* pivot block */
@@ -349,7 +364,7 @@ L10: /* If K < 1, exit from loop */
                 }
             }
             kk = k - kstep + 1;
-            if (kp != kk)
+            if(kp != kk)
             {
                 /* Interchange rows and columns KK and KP in the leading */
                 /* submatrix A(1:k,1:k) */
@@ -360,7 +375,7 @@ L10: /* If K < 1, exit from loop */
                 t = a[kk + kk * a_dim1];
                 a[kk + kk * a_dim1] = a[kp + kp * a_dim1];
                 a[kp + kp * a_dim1] = t;
-                if (kstep == 2)
+                if(kstep == 2)
                 {
                     t = a[k - 1 + k * a_dim1];
                     a[k - 1 + k * a_dim1] = a[kp + k * a_dim1];
@@ -368,7 +383,7 @@ L10: /* If K < 1, exit from loop */
                 }
             }
             /* Update the leading submatrix */
-            if (kstep == 1)
+            if(kstep == 1)
             {
                 /* 1-by-1 pivot block D(k): column k now holds */
                 /* W(k) = U(k)*D(k) */
@@ -378,7 +393,7 @@ L10: /* If K < 1, exit from loop */
                 r1 = 1.f / a[k + k * a_dim1];
                 i__1 = k - 1;
                 r__1 = -r1;
-                ssyr_(uplo, &i__1, &r__1, &a[k * a_dim1 + 1], &c__1, &a[ a_offset], lda);
+                ssyr_(uplo, &i__1, &r__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
                 /* Store U(k) in column k */
                 i__1 = k - 1;
                 sscal_(&i__1, &r1, &a[k * a_dim1 + 1], &c__1);
@@ -392,24 +407,21 @@ L10: /* If K < 1, exit from loop */
                 /* Perform a rank-2 update of A(1:k-2,1:k-2) as */
                 /* A := A - ( U(k-1) U(k) )*D(k)*( U(k-1) U(k) )**T */
                 /* = A - ( W(k-1) W(k) )*inv(D(k))*( W(k-1) W(k) )**T */
-                if (k > 2)
+                if(k > 2)
                 {
                     d12 = a[k - 1 + k * a_dim1];
                     d22 = a[k - 1 + (k - 1) * a_dim1] / d12;
                     d11 = a[k + k * a_dim1] / d12;
                     t = 1.f / (d11 * d22 - 1.f);
                     d12 = t / d12;
-                    for (j = k - 2;
-                            j >= 1;
-                            --j)
+                    for(j = k - 2; j >= 1; --j)
                     {
                         wkm1 = d12 * (d11 * a[j + (k - 1) * a_dim1] - a[j + k * a_dim1]);
                         wk = d12 * (d22 * a[j + k * a_dim1] - a[j + (k - 1) * a_dim1]);
-                        for (i__ = j;
-                                i__ >= 1;
-                                --i__)
+                        for(i__ = j; i__ >= 1; --i__)
                         {
-                            a[i__ + j * a_dim1] = a[i__ + j * a_dim1] - a[i__ + k * a_dim1] * wk - a[i__ + (k - 1) * a_dim1] * wkm1;
+                            a[i__ + j * a_dim1] = a[i__ + j * a_dim1] - a[i__ + k * a_dim1] * wk
+                                                  - a[i__ + (k - 1) * a_dim1] * wkm1;
                             /* L20: */
                         }
                         a[j + k * a_dim1] = wk;
@@ -420,7 +432,7 @@ L10: /* If K < 1, exit from loop */
             }
         }
         /* Store details of the interchanges in IPIV */
-        if (kstep == 1)
+        if(kstep == 1)
         {
             ipiv[k] = kp;
         }
@@ -439,8 +451,8 @@ L10: /* If K < 1, exit from loop */
         /* K is the main loop index, increasing from 1 to N in steps of */
         /* 1 or 2 */
         k = 1;
-L40: /* If K > N, exit from loop */
-        if (k > *n)
+    L40: /* If K > N, exit from loop */
+        if(k > *n)
         {
             goto L70;
         }
@@ -451,7 +463,7 @@ L40: /* If K > N, exit from loop */
         /* IMAX is the row-index of the largest off-diagonal element in */
         /* column K, and COLMAX is its absolute value. */
         /* Determine both COLMAX and IMAX. */
-        if (k < *n)
+        if(k < *n)
         {
             i__1 = *n - k;
             imax = k + isamax_(&i__1, &a[k + 1 + k * a_dim1], &c__1);
@@ -461,11 +473,11 @@ L40: /* If K > N, exit from loop */
         {
             colmax = 0.f;
         }
-        if (fla_max(absakk,colmax) == 0.f || sisnan_(&absakk))
+        if(fla_max(absakk, colmax) == 0.f || sisnan_(&absakk))
         {
             /* Column K is zero or underflow, or contains a NaN: */
             /* set INFO and continue */
-            if (*info == 0)
+            if(*info == 0)
             {
                 *info = k;
             }
@@ -473,7 +485,7 @@ L40: /* If K > N, exit from loop */
         }
         else
         {
-            if (absakk >= alpha * colmax)
+            if(absakk >= alpha * colmax)
             {
                 /* no interchange, use 1-by-1 pivot block */
                 kp = k;
@@ -485,21 +497,21 @@ L40: /* If K > N, exit from loop */
                 i__1 = imax - k;
                 jmax = k - 1 + isamax_(&i__1, &a[imax + k * a_dim1], lda);
                 rowmax = (r__1 = a[imax + jmax * a_dim1], f2c_abs(r__1));
-                if (imax < *n)
+                if(imax < *n)
                 {
                     i__1 = *n - imax;
                     jmax = imax + isamax_(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
                     /* Computing MAX */
                     r__2 = rowmax;
                     r__3 = (r__1 = a[jmax + imax * a_dim1], f2c_abs(r__1)); // , expr subst
-                    rowmax = fla_max(r__2,r__3);
+                    rowmax = fla_max(r__2, r__3);
                 }
-                if (absakk >= alpha * colmax * (colmax / rowmax))
+                if(absakk >= alpha * colmax * (colmax / rowmax))
                 {
                     /* no interchange, use 1-by-1 pivot block */
                     kp = k;
                 }
-                else if ((r__1 = a[imax + imax * a_dim1], f2c_abs(r__1)) >= alpha * rowmax)
+                else if((r__1 = a[imax + imax * a_dim1], f2c_abs(r__1)) >= alpha * rowmax)
                 {
                     /* interchange rows and columns K and IMAX, use 1-by-1 */
                     /* pivot block */
@@ -514,11 +526,11 @@ L40: /* If K > N, exit from loop */
                 }
             }
             kk = k + kstep - 1;
-            if (kp != kk)
+            if(kp != kk)
             {
                 /* Interchange rows and columns KK and KP in the trailing */
                 /* submatrix A(k:n,k:n) */
-                if (kp < *n)
+                if(kp < *n)
                 {
                     i__1 = *n - kp;
                     sswap_(&i__1, &a[kp + 1 + kk * a_dim1], &c__1, &a[kp + 1 + kp * a_dim1], &c__1);
@@ -528,7 +540,7 @@ L40: /* If K > N, exit from loop */
                 t = a[kk + kk * a_dim1];
                 a[kk + kk * a_dim1] = a[kp + kp * a_dim1];
                 a[kp + kp * a_dim1] = t;
-                if (kstep == 2)
+                if(kstep == 2)
                 {
                     t = a[k + 1 + k * a_dim1];
                     a[k + 1 + k * a_dim1] = a[kp + k * a_dim1];
@@ -536,19 +548,20 @@ L40: /* If K > N, exit from loop */
                 }
             }
             /* Update the trailing submatrix */
-            if (kstep == 1)
+            if(kstep == 1)
             {
                 /* 1-by-1 pivot block D(k): column k now holds */
                 /* W(k) = L(k)*D(k) */
                 /* where L(k) is the k-th column of L */
-                if (k < *n)
+                if(k < *n)
                 {
                     /* Perform a rank-1 update of A(k+1:n,k+1:n) as */
                     /* A := A - L(k)*D(k)*L(k)**T = A - W(k)*(1/D(k))*W(k)**T */
                     d11 = 1.f / a[k + k * a_dim1];
                     i__1 = *n - k;
                     r__1 = -d11;
-                    ssyr_(uplo, &i__1, &r__1, &a[k + 1 + k * a_dim1], &c__1, & a[k + 1 + (k + 1) * a_dim1], lda);
+                    ssyr_(uplo, &i__1, &r__1, &a[k + 1 + k * a_dim1], &c__1,
+                          &a[k + 1 + (k + 1) * a_dim1], lda);
                     /* Store L(k) in column K */
                     i__1 = *n - k;
                     sscal_(&i__1, &d11, &a[k + 1 + k * a_dim1], &c__1);
@@ -557,7 +570,7 @@ L40: /* If K > N, exit from loop */
             else
             {
                 /* 2-by-2 pivot block D(k) */
-                if (k < *n - 1)
+                if(k < *n - 1)
                 {
                     /* Perform a rank-2 update of A(k+2:n,k+2:n) as */
                     /* A := A - ( (A(k) A(k+1))*D(k)**(-1) ) * (A(k) A(k+1))**T */
@@ -569,18 +582,15 @@ L40: /* If K > N, exit from loop */
                     t = 1.f / (d11 * d22 - 1.f);
                     d21 = t / d21;
                     i__1 = *n;
-                    for (j = k + 2;
-                            j <= i__1;
-                            ++j)
+                    for(j = k + 2; j <= i__1; ++j)
                     {
                         wk = d21 * (d11 * a[j + k * a_dim1] - a[j + (k + 1) * a_dim1]);
                         wkp1 = d21 * (d22 * a[j + (k + 1) * a_dim1] - a[j + k * a_dim1]);
                         i__2 = *n;
-                        for (i__ = j;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = j; i__ <= i__2; ++i__)
                         {
-                            a[i__ + j * a_dim1] = a[i__ + j * a_dim1] - a[i__ + k * a_dim1] * wk - a[i__ + (k + 1) * a_dim1] * wkp1;
+                            a[i__ + j * a_dim1] = a[i__ + j * a_dim1] - a[i__ + k * a_dim1] * wk
+                                                  - a[i__ + (k + 1) * a_dim1] * wkp1;
                             /* L50: */
                         }
                         a[j + k * a_dim1] = wk;
@@ -591,7 +601,7 @@ L40: /* If K > N, exit from loop */
             }
         }
         /* Store details of the interchanges in IPIV */
-        if (kstep == 1)
+        if(kstep == 1)
         {
             ipiv[k] = kp;
         }
@@ -606,7 +616,7 @@ L40: /* If K > N, exit from loop */
     }
 L70:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYTF2 */
 }
 /* ssytf2_ */

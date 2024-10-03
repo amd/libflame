@@ -1,5 +1,8 @@
-/* ../netlib/sptrfs.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sptrfs.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static real c_b11 = 1.f;
@@ -9,11 +12,17 @@ static real c_b11 = 1.f;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SPTRFS + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sptrfs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sptrfs.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sptrfs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sptrfs.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sptrfs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sptrfs.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -150,12 +159,15 @@ static real c_b11 = 1.f;
 /* > \ingroup realPTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sptrfs_(integer *n, integer *nrhs, real *d__, real *e, real *df, real *ef, real *b, integer *ldb, real *x, integer *ldx, real *ferr, real *berr, real *work, integer *info)
+void sptrfs_(integer *n, integer *nrhs, real *d__, real *e, real *df, real *ef, real *b,
+             integer *ldb, real *x, integer *ldx, real *ferr, real *berr, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sptrfs inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*n, *nrhs, *ldb, *ldx);
+    snprintf(buffer, 256,
+             "sptrfs inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "", *n,
+             *nrhs, *ldb, *ldx);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -168,15 +180,18 @@ int sptrfs_(integer *n, integer *nrhs, real *d__, real *e, real *df, real *ef, r
     real eps, safe1, safe2;
     integer count;
     extern /* Subroutine */
-    int saxpy_(integer *, real *, real *, integer *, real *, integer *);
+        void
+        saxpy_(integer *, real *, real *, integer *, real *, integer *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     real lstres;
     extern /* Subroutine */
-    int spttrs_(integer *, integer *, real *, real *, real *, integer *, integer *);
+        void
+        spttrs_(integer *, integer *, real *, real *, real *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -214,43 +229,41 @@ int sptrfs_(integer *n, integer *nrhs, real *d__, real *e, real *df, real *ef, r
     --work;
     /* Function Body */
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -2;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -8;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -10;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SPTRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0 || *nrhs == 0)
+    if(*n == 0 || *nrhs == 0)
     {
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             ferr[j] = 0.f;
             berr[j] = 0.f;
             /* L10: */
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* NZ = maximum number of nonzero elements in each row of A, plus 1 */
     nz = 4;
@@ -260,16 +273,14 @@ int sptrfs_(integer *n, integer *nrhs, real *d__, real *e, real *df, real *ef, r
     safe2 = safe1 / eps;
     /* Do for each right hand side */
     i__1 = *nrhs;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         count = 1;
         lstres = 3.f;
-L20: /* Loop until stopping criterion is satisfied. */
+    L20: /* Loop until stopping criterion is satisfied. */
         /* Compute residual R = B - A * X. Also compute */
         /* f2c_abs(A)*f2c_abs(x) + f2c_abs(b) for use in the backward error bound. */
-        if (*n == 1)
+        if(*n == 1)
         {
             bi = b[j * b_dim1 + 1];
             dx = d__[1] * x[j * x_dim1 + 1];
@@ -284,9 +295,7 @@ L20: /* Loop until stopping criterion is satisfied. */
             work[*n + 1] = bi - dx - ex;
             work[1] = f2c_abs(bi) + f2c_abs(dx) + f2c_abs(ex);
             i__2 = *n - 1;
-            for (i__ = 2;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 2; i__ <= i__2; ++i__)
             {
                 bi = b[i__ + j * b_dim1];
                 cx = e[i__ - 1] * x[i__ - 1 + j * x_dim1];
@@ -310,23 +319,22 @@ L20: /* Loop until stopping criterion is satisfied. */
         /* numerator and denominator before dividing. */
         s = 0.f;
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
-            if (work[i__] > safe2)
+            if(work[i__] > safe2)
             {
                 /* Computing MAX */
                 r__2 = s;
-                r__3 = (r__1 = work[*n + i__], f2c_abs(r__1)) / work[ i__]; // , expr subst
-                s = fla_max(r__2,r__3);
+                r__3 = (r__1 = work[*n + i__], f2c_abs(r__1)) / work[i__]; // , expr subst
+                s = fla_max(r__2, r__3);
             }
             else
             {
                 /* Computing MAX */
                 r__2 = s;
-                r__3 = ((r__1 = work[*n + i__], f2c_abs(r__1)) + safe1) / (work[i__] + safe1); // , expr subst
-                s = fla_max(r__2,r__3);
+                r__3 = ((r__1 = work[*n + i__], f2c_abs(r__1)) + safe1)
+                       / (work[i__] + safe1); // , expr subst
+                s = fla_max(r__2, r__3);
             }
             /* L40: */
         }
@@ -336,11 +344,11 @@ L20: /* Loop until stopping criterion is satisfied. */
         /* 2) BERR(J) decreased by at least a factor of 2 during the */
         /* last iteration, and */
         /* 3) At most ITMAX iterations tried. */
-        if (berr[j] > eps && berr[j] * 2.f <= lstres && count <= 5)
+        if(berr[j] > eps && berr[j] * 2.f <= lstres && count <= 5)
         {
             /* Update solution and try again. */
             spttrs_(n, &c__1, &df[1], &ef[1], &work[*n + 1], n, info);
-            saxpy_(n, &c_b11, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1) ;
+            saxpy_(n, &c_b11, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
             lstres = berr[j];
             ++count;
             goto L20;
@@ -360,11 +368,9 @@ L20: /* Loop until stopping criterion is satisfied. */
         /* is incremented by SAFE1 if the i-th component of */
         /* f2c_abs(A)*f2c_abs(X) + f2c_abs(B) is less than SAFE2. */
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
-            if (work[i__] > safe2)
+            if(work[i__] > safe2)
             {
                 work[i__] = (r__1 = work[*n + i__], f2c_abs(r__1)) + nz * eps * work[i__];
             }
@@ -384,18 +390,14 @@ L20: /* Loop until stopping criterion is satisfied. */
         /* Solve M(L) * x = e. */
         work[1] = 1.f;
         i__2 = *n;
-        for (i__ = 2;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 2; i__ <= i__2; ++i__)
         {
             work[i__] = work[i__ - 1] * (r__1 = ef[i__ - 1], f2c_abs(r__1)) + 1.f;
             /* L60: */
         }
         /* Solve D * M(L)**T * x = b. */
         work[*n] /= df[*n];
-        for (i__ = *n - 1;
-                i__ >= 1;
-                --i__)
+        for(i__ = *n - 1; i__ >= 1; --i__)
         {
             work[i__] = work[i__] / df[i__] + work[i__ + 1] * (r__1 = ef[i__], f2c_abs(r__1));
             /* L70: */
@@ -406,24 +408,22 @@ L20: /* Loop until stopping criterion is satisfied. */
         /* Normalize error. */
         lstres = 0.f;
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             r__2 = lstres;
             r__3 = (r__1 = x[i__ + j * x_dim1], f2c_abs(r__1)); // , expr subst
-            lstres = fla_max(r__2,r__3);
+            lstres = fla_max(r__2, r__3);
             /* L80: */
         }
-        if (lstres != 0.f)
+        if(lstres != 0.f)
         {
             ferr[j] /= lstres;
         }
         /* L90: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPTRFS */
 }
 /* sptrfs_ */

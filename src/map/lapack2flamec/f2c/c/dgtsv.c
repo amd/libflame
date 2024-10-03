@@ -1,16 +1,25 @@
-/* ../netlib/dgtsv.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dgtsv.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief <b> DGTSV computes the solution to system of linear equations A * X = B for GT matrices <b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DGTSV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgtsv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgtsv.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgtsv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgtsv.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgtsv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgtsv.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -113,10 +122,12 @@
 /* > \ingroup doubleGTsolve */
 /* ===================================================================== */
 /* Subroutine */
-int dgtsv_(integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublereal *du, doublereal *b, integer *ldb, integer *info)
+void dgtsv_(integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublereal *du,
+            doublereal *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgtsv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*n, *nrhs, *ldb);
+    AOCL_DTL_SNPRINTF("dgtsv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "", *n, *nrhs,
+                      *ldb);
     /* System generated locals */
     integer b_dim1, b_offset, i__1, i__2;
     doublereal d__1, d__2;
@@ -124,7 +135,8 @@ int dgtsv_(integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublerea
     integer i__, j;
     doublereal fact, temp;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -152,41 +164,39 @@ int dgtsv_(integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublerea
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -2;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DGTSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    if (*nrhs == 1)
+    if(*nrhs == 1)
     {
         i__1 = *n - 2;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            if ((d__1 = d__[i__], f2c_dabs(d__1)) >= (d__2 = dl[i__], f2c_dabs(d__2)))
+            if((d__1 = d__[i__], f2c_dabs(d__1)) >= (d__2 = dl[i__], f2c_dabs(d__2)))
             {
                 /* No row interchange required */
-                if (d__[i__] != 0.)
+                if(d__[i__] != 0.)
                 {
                     fact = dl[i__] / d__[i__];
                     d__[i__ + 1] -= fact * du[i__];
@@ -196,7 +206,7 @@ int dgtsv_(integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublerea
                 {
                     *info = i__;
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 dl[i__] = 0.;
             }
@@ -216,12 +226,12 @@ int dgtsv_(integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublerea
             }
             /* L10: */
         }
-        if (*n > 1)
+        if(*n > 1)
         {
             i__ = *n - 1;
-            if ((d__1 = d__[i__], f2c_dabs(d__1)) >= (d__2 = dl[i__], f2c_dabs(d__2)))
+            if((d__1 = d__[i__], f2c_dabs(d__1)) >= (d__2 = dl[i__], f2c_dabs(d__2)))
             {
-                if (d__[i__] != 0.)
+                if(d__[i__] != 0.)
                 {
                     fact = dl[i__] / d__[i__];
                     d__[i__ + 1] -= fact * du[i__];
@@ -231,7 +241,7 @@ int dgtsv_(integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublerea
                 {
                     *info = i__;
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
             }
             else
@@ -246,31 +256,27 @@ int dgtsv_(integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublerea
                 b[i__ + 1 + b_dim1] = temp - fact * b[i__ + 1 + b_dim1];
             }
         }
-        if (d__[*n] == 0.)
+        if(d__[*n] == 0.)
         {
             *info = *n;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     else
     {
         i__1 = *n - 2;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            if ((d__1 = d__[i__], f2c_dabs(d__1)) >= (d__2 = dl[i__], f2c_dabs(d__2)))
+            if((d__1 = d__[i__], f2c_dabs(d__1)) >= (d__2 = dl[i__], f2c_dabs(d__2)))
             {
                 /* No row interchange required */
-                if (d__[i__] != 0.)
+                if(d__[i__] != 0.)
                 {
                     fact = dl[i__] / d__[i__];
                     d__[i__ + 1] -= fact * du[i__];
                     i__2 = *nrhs;
-                    for (j = 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = 1; j <= i__2; ++j)
                     {
                         b[i__ + 1 + j * b_dim1] -= fact * b[i__ + j * b_dim1];
                         /* L20: */
@@ -280,7 +286,7 @@ int dgtsv_(integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublerea
                 {
                     *info = i__;
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
                 dl[i__] = 0.;
             }
@@ -295,9 +301,7 @@ int dgtsv_(integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublerea
                 du[i__ + 1] = -fact * dl[i__];
                 du[i__] = temp;
                 i__2 = *nrhs;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     temp = b[i__ + j * b_dim1];
                     b[i__ + j * b_dim1] = b[i__ + 1 + j * b_dim1];
@@ -307,19 +311,17 @@ int dgtsv_(integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublerea
             }
             /* L40: */
         }
-        if (*n > 1)
+        if(*n > 1)
         {
             i__ = *n - 1;
-            if ((d__1 = d__[i__], f2c_dabs(d__1)) >= (d__2 = dl[i__], f2c_dabs(d__2)))
+            if((d__1 = d__[i__], f2c_dabs(d__1)) >= (d__2 = dl[i__], f2c_dabs(d__2)))
             {
-                if (d__[i__] != 0.)
+                if(d__[i__] != 0.)
                 {
                     fact = dl[i__] / d__[i__];
                     d__[i__ + 1] -= fact * du[i__];
                     i__1 = *nrhs;
-                    for (j = 1;
-                            j <= i__1;
-                            ++j)
+                    for(j = 1; j <= i__1; ++j)
                     {
                         b[i__ + 1 + j * b_dim1] -= fact * b[i__ + j * b_dim1];
                         /* L50: */
@@ -329,7 +331,7 @@ int dgtsv_(integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublerea
                 {
                     *info = i__;
                     AOCL_DTL_TRACE_LOG_EXIT
-                    return 0;
+                    return;
                 }
             }
             else
@@ -340,9 +342,7 @@ int dgtsv_(integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublerea
                 d__[i__ + 1] = du[i__] - fact * temp;
                 du[i__] = temp;
                 i__1 = *nrhs;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     temp = b[i__ + j * b_dim1];
                     b[i__ + j * b_dim1] = b[i__ + 1 + j * b_dim1];
@@ -351,31 +351,32 @@ int dgtsv_(integer *n, integer *nrhs, doublereal *dl, doublereal *d__, doublerea
                 }
             }
         }
-        if (d__[*n] == 0.)
+        if(d__[*n] == 0.)
         {
             *info = *n;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     /* Back solve with the matrix U from the factorization. */
-    if (*nrhs <= 2)
+    if(*nrhs <= 2)
     {
         j = 1;
-L70:
+    L70:
         b[*n + j * b_dim1] /= d__[*n];
-        if (*n > 1)
+        if(*n > 1)
         {
-            b[*n - 1 + j * b_dim1] = (b[*n - 1 + j * b_dim1] - du[*n - 1] * b[ *n + j * b_dim1]) / d__[*n - 1];
+            b[*n - 1 + j * b_dim1]
+                = (b[*n - 1 + j * b_dim1] - du[*n - 1] * b[*n + j * b_dim1]) / d__[*n - 1];
         }
-        for (i__ = *n - 2;
-                i__ >= 1;
-                --i__)
+        for(i__ = *n - 2; i__ >= 1; --i__)
         {
-            b[i__ + j * b_dim1] = (b[i__ + j * b_dim1] - du[i__] * b[i__ + 1 + j * b_dim1] - dl[i__] * b[i__ + 2 + j * b_dim1]) / d__[ i__];
+            b[i__ + j * b_dim1] = (b[i__ + j * b_dim1] - du[i__] * b[i__ + 1 + j * b_dim1]
+                                   - dl[i__] * b[i__ + 2 + j * b_dim1])
+                                  / d__[i__];
             /* L80: */
         }
-        if (j < *nrhs)
+        if(j < *nrhs)
         {
             ++j;
             goto L70;
@@ -384,27 +385,26 @@ L70:
     else
     {
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             b[*n + j * b_dim1] /= d__[*n];
-            if (*n > 1)
+            if(*n > 1)
             {
-                b[*n - 1 + j * b_dim1] = (b[*n - 1 + j * b_dim1] - du[*n - 1] * b[*n + j * b_dim1]) / d__[*n - 1];
+                b[*n - 1 + j * b_dim1]
+                    = (b[*n - 1 + j * b_dim1] - du[*n - 1] * b[*n + j * b_dim1]) / d__[*n - 1];
             }
-            for (i__ = *n - 2;
-                    i__ >= 1;
-                    --i__)
+            for(i__ = *n - 2; i__ >= 1; --i__)
             {
-                b[i__ + j * b_dim1] = (b[i__ + j * b_dim1] - du[i__] * b[i__ + 1 + j * b_dim1] - dl[i__] * b[i__ + 2 + j * b_dim1]) / d__[i__];
+                b[i__ + j * b_dim1] = (b[i__ + j * b_dim1] - du[i__] * b[i__ + 1 + j * b_dim1]
+                                       - dl[i__] * b[i__ + 2 + j * b_dim1])
+                                      / d__[i__];
                 /* L90: */
             }
             /* L100: */
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGTSV */
 }
 /* dgtsv_ */

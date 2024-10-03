@@ -1,5 +1,8 @@
-/* ../netlib/v3.9.0/zgemqr.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/zgemqr.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b ZGEMQR */
 /* Definition: */
 /* =========== */
@@ -34,7 +37,7 @@
 /* > \verbatim */
 /* > SIDE is CHARACTER*1 */
 /* > = 'L': apply Q or Q**T from the Left;
-*/
+ */
 /* > = 'R': apply Q or Q**T from the Right. */
 /* > \endverbatim */
 /* > */
@@ -42,7 +45,7 @@
 /* > \verbatim */
 /* > TRANS is CHARACTER*1 */
 /* > = 'N': No transpose, apply Q;
-*/
+ */
 /* > = 'T': Transpose, apply Q**T. */
 /* > \endverbatim */
 /* > */
@@ -64,7 +67,7 @@
 /* > The number of elementary reflectors whose product defines */
 /* > the matrix Q. */
 /* > If SIDE = 'L', M >= K >= 0;
-*/
+ */
 /* > if SIDE = 'R', N >= K >= 0. */
 /* > \endverbatim */
 /* > */
@@ -79,7 +82,7 @@
 /* > LDA is INTEGER */
 /* > The leading dimension of the array A. */
 /* > If SIDE = 'L', LDA >= fla_max(1,M);
-*/
+ */
 /* > if SIDE = 'R', LDA >= fla_max(1,N). */
 /* > \endverbatim */
 /* > */
@@ -164,25 +167,36 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *t, integer *tsize, doublecomplex *c__, integer *ldc, doublecomplex *work, integer *lwork, integer *info)
+void zgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, doublecomplex *a,
+             integer *lda, doublecomplex *t, integer *tsize, doublecomplex *c__, integer *ldc,
+             doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgemqr inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS ", tsize %" FLA_IS ", ldc %" FLA_IS "",*side, *trans, *m, *n, *k, *lda, *tsize, *ldc);
+    AOCL_DTL_SNPRINTF("zgemqr inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
+                      ", lda %" FLA_IS ", tsize %" FLA_IS ", ldc %" FLA_IS "",
+                      *side, *trans, *m, *n, *k, *lda, *tsize, *ldc);
 
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int zlamtsqr_(char *, char *, integer *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zlamtsqr_(char *, char *, integer *, integer *, integer *, integer *, integer *,
+                  doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
+                  integer *, doublecomplex *, integer *, integer *);
     integer mb, nb, mn, lw;
     logical left, tran;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical right;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, lquery;
     extern /* Subroutine */
-    int zgemqrt_(char *, char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zgemqrt_(char *, char *, integer *, integer *, integer *, integer *, doublecomplex *,
+                 integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
+                 integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -214,13 +228,13 @@ int zgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, doublec
     --work;
     /* Function Body */
     lquery = *lwork == -1;
-    notran = lsame_(trans, "N");
-    tran = lsame_(trans, "C");
-    left = lsame_(side, "L");
-    right = lsame_(side, "R");
-    mb = (integer) t[2].r;
-    nb = (integer) t[3].r;
-    if (left)
+    notran = lsame_(trans, "N", 1, 1);
+    tran = lsame_(trans, "C", 1, 1);
+    left = lsame_(side, "L", 1, 1);
+    right = lsame_(side, "R", 1, 1);
+    mb = (integer)t[2].r;
+    nb = (integer)t[3].r;
+    if(left)
     {
         lw = *n * nb;
         mn = *m;
@@ -231,82 +245,83 @@ int zgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, doublec
         mn = *n;
     }
     *info = 0;
-    if (! left && ! right)
+    if(!left && !right)
     {
         *info = -1;
     }
-    else if (! tran && ! notran)
+    else if(!tran && !notran)
     {
         *info = -2;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*k < 0 || *k > mn)
+    else if(*k < 0 || *k > mn)
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,mn))
+    else if(*lda < fla_max(1, mn))
     {
         *info = -7;
     }
-    else if (*tsize < 5)
+    else if(*tsize < 5)
     {
         *info = -9;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -11;
     }
-    else if (*lwork < fla_max(1,lw) && ! lquery)
+    else if(*lwork < fla_max(1, lw) && !lquery)
     {
         *info = -13;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        work[1].r = (doublereal) lw;
+        work[1].r = (doublereal)lw;
         work[1].i = 0.; // , expr subst
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZGEMQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
     /* Computing MIN */
-    i__1 = fla_min(*m,*n);
-    if (fla_min(i__1,*k) == 0)
+    i__1 = fla_min(*m, *n);
+    if(fla_min(i__1, *k) == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Computing MAX */
-    i__1 = fla_max(*m,*n);
-    if (left && *m <= *k || right && *n <= *k || mb <= *k || mb >= fla_max(i__1,* k))
+    i__1 = fla_max(*m, *n);
+    if(left && *m <= *k || right && *n <= *k || mb <= *k || mb >= fla_max(i__1, *k))
     {
-        zgemqrt_(side, trans, m, n, k, &nb, &a[a_offset], lda, &t[6], &nb, & c__[c_offset], ldc, &work[1], info);
+        zgemqrt_(side, trans, m, n, k, &nb, &a[a_offset], lda, &t[6], &nb, &c__[c_offset], ldc,
+                 &work[1], info);
     }
     else
     {
-        zlamtsqr_(side, trans, m, n, k, &mb, &nb, &a[a_offset], lda, &t[6], & nb, &c__[c_offset], ldc, &work[1], lwork, info);
+        zlamtsqr_(side, trans, m, n, k, &mb, &nb, &a[a_offset], lda, &t[6], &nb, &c__[c_offset],
+                  ldc, &work[1], lwork, info);
     }
-    work[1].r = (doublereal) lw;
+    work[1].r = (doublereal)lw;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGEMQR */
 }
 /* zgemqr_ */
-

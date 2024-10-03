@@ -1,16 +1,25 @@
-/* ../netlib/dtrttf.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dtrttf.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DTRTTF copies a triangular matrix from the standard full format (TR) to the rectangular full pa cked format (TF). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DTRTTF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtrttf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtrttf.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtrttf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtrttf.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtrttf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtrttf.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -37,7 +46,7 @@
 /* > \verbatim */
 /* > TRANSR is CHARACTER*1 */
 /* > = 'N': ARF in Normal form is wanted;
-*/
+ */
 /* > = 'T': ARF in Transpose form is wanted. */
 /* > \endverbatim */
 /* > */
@@ -45,7 +54,7 @@
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -181,19 +190,22 @@
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int dtrttf_(char *transr, char *uplo, integer *n, doublereal *a, integer *lda, doublereal *arf, integer *info)
+void dtrttf_(char *transr, char *uplo, integer *n, doublereal *a, integer *lda, doublereal *arf,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dtrttf inputs: transr %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*transr, *uplo, *n, *lda);
+    AOCL_DTL_SNPRINTF("dtrttf inputs: transr %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *transr,
+                      *uplo, *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     /* Local variables */
     integer i__, j, k, l, n1, n2, ij, nt, nx2, np1x2;
     logical normaltransr;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -221,45 +233,45 @@ int dtrttf_(char *transr, char *uplo, integer *n, doublereal *a, integer *lda, d
     a -= a_offset;
     /* Function Body */
     *info = 0;
-    normaltransr = lsame_(transr, "N");
-    lower = lsame_(uplo, "L");
-    if (! normaltransr && ! lsame_(transr, "T"))
+    normaltransr = lsame_(transr, "N", 1, 1);
+    lower = lsame_(uplo, "L", 1, 1);
+    if(!normaltransr && !lsame_(transr, "T", 1, 1))
     {
         *info = -1;
     }
-    else if (! lower && ! lsame_(uplo, "U"))
+    else if(!lower && !lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DTRTTF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n <= 1)
+    if(*n <= 1)
     {
-        if (*n == 1)
+        if(*n == 1)
         {
             arf[0] = a[0];
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Size of array ARF(0:nt-1) */
     nt = *n * (*n + 1) / 2;
     /* Set N1 and N2 depending on LOWER: for N even N1=N2=K */
-    if (lower)
+    if(lower)
     {
         n2 = *n / 2;
         n1 = *n - n2;
@@ -272,11 +284,11 @@ int dtrttf_(char *transr, char *uplo, integer *n, doublereal *a, integer *lda, d
     /* If N is odd, set NISODD = .TRUE., LDA=N+1 and A is (N+1)--by--K2. */
     /* If N is even, set K = N/2 and NISODD = .FALSE., LDA=N and A is */
     /* N--by--(N+1)/2. */
-    if (*n % 2 == 0)
+    if(*n % 2 == 0)
     {
         k = *n / 2;
         nisodd = FALSE_;
-        if (! lower)
+        if(!lower)
         {
             np1x2 = *n + *n + 2;
         }
@@ -284,38 +296,32 @@ int dtrttf_(char *transr, char *uplo, integer *n, doublereal *a, integer *lda, d
     else
     {
         nisodd = TRUE_;
-        if (! lower)
+        if(!lower)
         {
             nx2 = *n + *n;
         }
     }
-    if (nisodd)
+    if(nisodd)
     {
         /* N is odd */
-        if (normaltransr)
+        if(normaltransr)
         {
             /* N is odd and TRANSR = 'N' */
-            if (lower)
+            if(lower)
             {
                 /* N is odd, TRANSR = 'N', and UPLO = 'L' */
                 ij = 0;
                 i__1 = n2;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__2 = n2 + j;
-                    for (i__ = n1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = n1; i__ <= i__2; ++i__)
                     {
                         arf[ij] = a[n2 + j + i__ * a_dim1];
                         ++ij;
                     }
                     i__2 = *n - 1;
-                    for (i__ = j;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = j; i__ <= i__2; ++i__)
                     {
                         arf[ij] = a[i__ + j * a_dim1];
                         ++ij;
@@ -327,22 +333,16 @@ int dtrttf_(char *transr, char *uplo, integer *n, doublereal *a, integer *lda, d
                 /* N is odd, TRANSR = 'N', and UPLO = 'U' */
                 ij = nt - *n;
                 i__1 = n1;
-                for (j = *n - 1;
-                        j >= i__1;
-                        --j)
+                for(j = *n - 1; j >= i__1; --j)
                 {
                     i__2 = j;
-                    for (i__ = 0;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__2; ++i__)
                     {
                         arf[ij] = a[i__ + j * a_dim1];
                         ++ij;
                     }
                     i__2 = n1 - 1;
-                    for (l = j - n1;
-                            l <= i__2;
-                            ++l)
+                    for(l = j - n1; l <= i__2; ++l)
                     {
                         arf[ij] = a[j - n1 + l * a_dim1];
                         ++ij;
@@ -354,41 +354,31 @@ int dtrttf_(char *transr, char *uplo, integer *n, doublereal *a, integer *lda, d
         else
         {
             /* N is odd and TRANSR = 'T' */
-            if (lower)
+            if(lower)
             {
                 /* N is odd, TRANSR = 'T', and UPLO = 'L' */
                 ij = 0;
                 i__1 = n2 - 1;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__2 = j;
-                    for (i__ = 0;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__2; ++i__)
                     {
                         arf[ij] = a[j + i__ * a_dim1];
                         ++ij;
                     }
                     i__2 = *n - 1;
-                    for (i__ = n1 + j;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = n1 + j; i__ <= i__2; ++i__)
                     {
                         arf[ij] = a[i__ + (n1 + j) * a_dim1];
                         ++ij;
                     }
                 }
                 i__1 = *n - 1;
-                for (j = n2;
-                        j <= i__1;
-                        ++j)
+                for(j = n2; j <= i__1; ++j)
                 {
                     i__2 = n1 - 1;
-                    for (i__ = 0;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__2; ++i__)
                     {
                         arf[ij] = a[j + i__ * a_dim1];
                         ++ij;
@@ -400,36 +390,26 @@ int dtrttf_(char *transr, char *uplo, integer *n, doublereal *a, integer *lda, d
                 /* N is odd, TRANSR = 'T', and UPLO = 'U' */
                 ij = 0;
                 i__1 = n1;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__2 = *n - 1;
-                    for (i__ = n1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = n1; i__ <= i__2; ++i__)
                     {
                         arf[ij] = a[j + i__ * a_dim1];
                         ++ij;
                     }
                 }
                 i__1 = n1 - 1;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__2 = j;
-                    for (i__ = 0;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__2; ++i__)
                     {
                         arf[ij] = a[i__ + j * a_dim1];
                         ++ij;
                     }
                     i__2 = *n - 1;
-                    for (l = n2 + j;
-                            l <= i__2;
-                            ++l)
+                    for(l = n2 + j; l <= i__2; ++l)
                     {
                         arf[ij] = a[n2 + j + l * a_dim1];
                         ++ij;
@@ -441,30 +421,24 @@ int dtrttf_(char *transr, char *uplo, integer *n, doublereal *a, integer *lda, d
     else
     {
         /* N is even */
-        if (normaltransr)
+        if(normaltransr)
         {
             /* N is even and TRANSR = 'N' */
-            if (lower)
+            if(lower)
             {
                 /* N is even, TRANSR = 'N', and UPLO = 'L' */
                 ij = 0;
                 i__1 = k - 1;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__2 = k + j;
-                    for (i__ = k;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = k; i__ <= i__2; ++i__)
                     {
                         arf[ij] = a[k + j + i__ * a_dim1];
                         ++ij;
                     }
                     i__2 = *n - 1;
-                    for (i__ = j;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = j; i__ <= i__2; ++i__)
                     {
                         arf[ij] = a[i__ + j * a_dim1];
                         ++ij;
@@ -476,22 +450,16 @@ int dtrttf_(char *transr, char *uplo, integer *n, doublereal *a, integer *lda, d
                 /* N is even, TRANSR = 'N', and UPLO = 'U' */
                 ij = nt - *n - 1;
                 i__1 = k;
-                for (j = *n - 1;
-                        j >= i__1;
-                        --j)
+                for(j = *n - 1; j >= i__1; --j)
                 {
                     i__2 = j;
-                    for (i__ = 0;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__2; ++i__)
                     {
                         arf[ij] = a[i__ + j * a_dim1];
                         ++ij;
                     }
                     i__2 = k - 1;
-                    for (l = j - k;
-                            l <= i__2;
-                            ++l)
+                    for(l = j - k; l <= i__2; ++l)
                     {
                         arf[ij] = a[j - k + l * a_dim1];
                         ++ij;
@@ -503,50 +471,38 @@ int dtrttf_(char *transr, char *uplo, integer *n, doublereal *a, integer *lda, d
         else
         {
             /* N is even and TRANSR = 'T' */
-            if (lower)
+            if(lower)
             {
                 /* N is even, TRANSR = 'T', and UPLO = 'L' */
                 ij = 0;
                 j = k;
                 i__1 = *n - 1;
-                for (i__ = k;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = k; i__ <= i__1; ++i__)
                 {
                     arf[ij] = a[i__ + j * a_dim1];
                     ++ij;
                 }
                 i__1 = k - 2;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__2 = j;
-                    for (i__ = 0;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__2; ++i__)
                     {
                         arf[ij] = a[j + i__ * a_dim1];
                         ++ij;
                     }
                     i__2 = *n - 1;
-                    for (i__ = k + 1 + j;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = k + 1 + j; i__ <= i__2; ++i__)
                     {
                         arf[ij] = a[i__ + (k + 1 + j) * a_dim1];
                         ++ij;
                     }
                 }
                 i__1 = *n - 1;
-                for (j = k - 1;
-                        j <= i__1;
-                        ++j)
+                for(j = k - 1; j <= i__1; ++j)
                 {
                     i__2 = k - 1;
-                    for (i__ = 0;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__2; ++i__)
                     {
                         arf[ij] = a[j + i__ * a_dim1];
                         ++ij;
@@ -558,36 +514,26 @@ int dtrttf_(char *transr, char *uplo, integer *n, doublereal *a, integer *lda, d
                 /* N is even, TRANSR = 'T', and UPLO = 'U' */
                 ij = 0;
                 i__1 = k;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__2 = *n - 1;
-                    for (i__ = k;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = k; i__ <= i__2; ++i__)
                     {
                         arf[ij] = a[j + i__ * a_dim1];
                         ++ij;
                     }
                 }
                 i__1 = k - 2;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__2 = j;
-                    for (i__ = 0;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__2; ++i__)
                     {
                         arf[ij] = a[i__ + j * a_dim1];
                         ++ij;
                     }
                     i__2 = *n - 1;
-                    for (l = k + 1 + j;
-                            l <= i__2;
-                            ++l)
+                    for(l = k + 1 + j; l <= i__2; ++l)
                     {
                         arf[ij] = a[k + 1 + j + l * a_dim1];
                         ++ij;
@@ -595,9 +541,7 @@ int dtrttf_(char *transr, char *uplo, integer *n, doublereal *a, integer *lda, d
                 }
                 /* Note that here, on exit of the loop, J = K-1 */
                 i__1 = j;
-                for (i__ = 0;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 0; i__ <= i__1; ++i__)
                 {
                     arf[ij] = a[i__ + j * a_dim1];
                     ++ij;
@@ -606,7 +550,7 @@ int dtrttf_(char *transr, char *uplo, integer *n, doublereal *a, integer *lda, d
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DTRTTF */
 }
 /* dtrttf_ */

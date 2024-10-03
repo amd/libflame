@@ -1,5 +1,8 @@
-/* ../netlib/dgghrd.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dgghrd.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b10 = 0.;
 static doublereal c_b11 = 1.;
@@ -10,11 +13,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DGGHRD + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgghrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgghrd.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgghrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgghrd.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgghrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgghrd.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -69,10 +78,10 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > COMPQ is CHARACTER*1 */
 /* > = 'N': do not compute Q;
-*/
+ */
 /* > = 'I': Q is initialized to the unit matrix, and the */
 /* > orthogonal matrix Q is returned;
-*/
+ */
 /* > = 'V': Q must contain an orthogonal matrix Q1 on entry, */
 /* > and the product Q1*Q is returned. */
 /* > \endverbatim */
@@ -81,10 +90,10 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > COMPZ is CHARACTER*1 */
 /* > = 'N': do not compute Z;
-*/
+ */
 /* > = 'I': Z is initialized to the unit matrix, and the */
 /* > orthogonal matrix Z is returned;
-*/
+ */
 /* > = 'V': Z must contain an orthogonal matrix Z1 on entry, */
 /* > and the product Z1*Z is returned. */
 /* > \endverbatim */
@@ -204,23 +213,34 @@ LDZ >= 1 otherwise. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *q, integer *ldq, doublereal *z__, integer * ldz, integer *info)
+void dgghrd_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublereal *a,
+             integer *lda, doublereal *b, integer *ldb, doublereal *q, integer *ldq,
+             doublereal *z__, integer *ldz, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgghrd inputs: compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS "",*compq, *compz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz);
+    AOCL_DTL_SNPRINTF("dgghrd inputs: compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS
+                      ", ihi %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS
+                      ", ldz %" FLA_IS "",
+                      *compq, *compz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2, i__3;
+    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
+        i__3;
     /* Local variables */
     doublereal c__, s;
     logical ilq, ilz;
     integer jcol;
     doublereal temp;
     extern /* Subroutine */
-    int drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
+        void
+        drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+              doublereal *);
     integer jrow;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
+        dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer icompq, icompz;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -257,17 +277,17 @@ int dgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, d
     z_offset = 1 + z_dim1;
     z__ -= z_offset;
     /* Function Body */
-    if (lsame_(compq, "N"))
+    if(lsame_(compq, "N", 1, 1))
     {
         ilq = FALSE_;
         icompq = 1;
     }
-    else if (lsame_(compq, "V"))
+    else if(lsame_(compq, "V", 1, 1))
     {
         ilq = TRUE_;
         icompq = 2;
     }
-    else if (lsame_(compq, "I"))
+    else if(lsame_(compq, "I", 1, 1))
     {
         ilq = TRUE_;
         icompq = 3;
@@ -277,17 +297,17 @@ int dgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, d
         icompq = 0;
     }
     /* Decode COMPZ */
-    if (lsame_(compz, "N"))
+    if(lsame_(compz, "N", 1, 1))
     {
         ilz = FALSE_;
         icompz = 1;
     }
-    else if (lsame_(compz, "V"))
+    else if(lsame_(compz, "V", 1, 1))
     {
         ilz = TRUE_;
         icompz = 2;
     }
-    else if (lsame_(compz, "I"))
+    else if(lsame_(compz, "I", 1, 1))
     {
         ilz = TRUE_;
         icompz = 3;
@@ -298,74 +318,70 @@ int dgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, d
     }
     /* Test the input parameters. */
     *info = 0;
-    if (icompq <= 0)
+    if(icompq <= 0)
     {
         *info = -1;
     }
-    else if (icompz <= 0)
+    else if(icompz <= 0)
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*ilo < 1)
+    else if(*ilo < 1)
     {
         *info = -4;
     }
-    else if (*ihi > *n || *ihi < *ilo - 1)
+    else if(*ihi > *n || *ihi < *ilo - 1)
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (ilq && *ldq < *n || *ldq < 1)
+    else if(ilq && *ldq < *n || *ldq < 1)
     {
         *info = -11;
     }
-    else if (ilz && *ldz < *n || *ldz < 1)
+    else if(ilz && *ldz < *n || *ldz < 1)
     {
         *info = -13;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DGGHRD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize Q and Z if desired. */
-    if (icompq == 3)
+    if(icompq == 3)
     {
         dlaset_("Full", n, n, &c_b10, &c_b11, &q[q_offset], ldq);
     }
-    if (icompz == 3)
+    if(icompz == 3)
     {
         dlaset_("Full", n, n, &c_b10, &c_b11, &z__[z_offset], ldz);
     }
     /* Quick return if possible */
-    if (*n <= 1)
+    if(*n <= 1)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Zero out lower triangle of B */
     i__1 = *n - 1;
-    for (jcol = 1;
-            jcol <= i__1;
-            ++jcol)
+    for(jcol = 1; jcol <= i__1; ++jcol)
     {
         i__2 = *n;
-        for (jrow = jcol + 1;
-                jrow <= i__2;
-                ++jrow)
+        for(jrow = jcol + 1; jrow <= i__2; ++jrow)
         {
             b[jrow + jcol * b_dim1] = 0.;
             /* L10: */
@@ -374,26 +390,25 @@ int dgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, d
     }
     /* Reduce A and B */
     i__1 = *ihi - 2;
-    for (jcol = *ilo;
-            jcol <= i__1;
-            ++jcol)
+    for(jcol = *ilo; jcol <= i__1; ++jcol)
     {
         i__2 = jcol + 2;
-        for (jrow = *ihi;
-                jrow >= i__2;
-                --jrow)
+        for(jrow = *ihi; jrow >= i__2; --jrow)
         {
             /* Step 1: rotate rows JROW-1, JROW to kill A(JROW,JCOL) */
             temp = a[jrow - 1 + jcol * a_dim1];
             dlartg_(&temp, &a[jrow + jcol * a_dim1], &c__, &s, &a[jrow - 1 + jcol * a_dim1]);
             a[jrow + jcol * a_dim1] = 0.;
             i__3 = *n - jcol;
-            drot_(&i__3, &a[jrow - 1 + (jcol + 1) * a_dim1], lda, &a[jrow + ( jcol + 1) * a_dim1], lda, &c__, &s);
+            drot_(&i__3, &a[jrow - 1 + (jcol + 1) * a_dim1], lda, &a[jrow + (jcol + 1) * a_dim1],
+                  lda, &c__, &s);
             i__3 = *n + 2 - jrow;
-            drot_(&i__3, &b[jrow - 1 + (jrow - 1) * b_dim1], ldb, &b[jrow + ( jrow - 1) * b_dim1], ldb, &c__, &s);
-            if (ilq)
+            drot_(&i__3, &b[jrow - 1 + (jrow - 1) * b_dim1], ldb, &b[jrow + (jrow - 1) * b_dim1],
+                  ldb, &c__, &s);
+            if(ilq)
             {
-                drot_(n, &q[(jrow - 1) * q_dim1 + 1], &c__1, &q[jrow * q_dim1 + 1], &c__1, &c__, &s);
+                drot_(n, &q[(jrow - 1) * q_dim1 + 1], &c__1, &q[jrow * q_dim1 + 1], &c__1, &c__,
+                      &s);
             }
             /* Step 2: rotate columns JROW, JROW-1 to kill B(JROW,JROW-1) */
             temp = b[jrow + jrow * b_dim1];
@@ -401,17 +416,19 @@ int dgghrd_(char *compq, char *compz, integer *n, integer * ilo, integer *ihi, d
             b[jrow + (jrow - 1) * b_dim1] = 0.;
             drot_(ihi, &a[jrow * a_dim1 + 1], &c__1, &a[(jrow - 1) * a_dim1 + 1], &c__1, &c__, &s);
             i__3 = jrow - 1;
-            drot_(&i__3, &b[jrow * b_dim1 + 1], &c__1, &b[(jrow - 1) * b_dim1 + 1], &c__1, &c__, &s);
-            if (ilz)
+            drot_(&i__3, &b[jrow * b_dim1 + 1], &c__1, &b[(jrow - 1) * b_dim1 + 1], &c__1, &c__,
+                  &s);
+            if(ilz)
             {
-                drot_(n, &z__[jrow * z_dim1 + 1], &c__1, &z__[(jrow - 1) * z_dim1 + 1], &c__1, &c__, &s);
+                drot_(n, &z__[jrow * z_dim1 + 1], &c__1, &z__[(jrow - 1) * z_dim1 + 1], &c__1, &c__,
+                      &s);
             }
             /* L30: */
         }
         /* L40: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGGHRD */
 }
 /* dgghrd_ */

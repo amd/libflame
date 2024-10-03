@@ -1,16 +1,25 @@
-/* ../netlib/zspmv.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zspmv.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b ZSPMV computes a matrix-vector product for complex vectors using a complex symmetric packed mat rix */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZSPMV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zspmv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zspmv.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zspmv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zspmv.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zspmv.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zspmv.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -137,10 +146,12 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int zspmv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *ap, doublecomplex *x, integer *incx, doublecomplex * beta, doublecomplex *y, integer *incy)
+void zspmv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *ap, doublecomplex *x,
+            integer *incx, doublecomplex *beta, doublecomplex *y, integer *incy)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zspmv inputs: uplo %c, n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "",*uplo, *n, *incx, *incy);
+    AOCL_DTL_SNPRINTF("zspmv inputs: uplo %c, n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "",
+                      *uplo, *n, *incx, *incy);
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5;
@@ -148,9 +159,10 @@ int zspmv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *ap, doub
     /* Local variables */
     integer i__, j, k, kk, ix, iy, jx, jy, kx, ky, info;
     doublecomplex temp1, temp2;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -176,36 +188,36 @@ int zspmv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *ap, doub
     --ap;
     /* Function Body */
     info = 0;
-    if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         info = 1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         info = 2;
     }
-    else if (*incx == 0)
+    else if(*incx == 0)
     {
         info = 6;
     }
-    else if (*incy == 0)
+    else if(*incy == 0)
     {
         info = 9;
     }
-    if (info != 0)
+    if(info != 0)
     {
         xerbla_("ZSPMV ", &info, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
-    if (*n == 0 || alpha->r == 0. && alpha->i == 0. && (beta->r == 1. && beta->i == 0.))
+    if(*n == 0 || alpha->r == 0. && alpha->i == 0. && (beta->r == 1. && beta->i == 0.))
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set up the start points in X and Y. */
-    if (*incx > 0)
+    if(*incx > 0)
     {
         kx = 1;
     }
@@ -213,7 +225,7 @@ int zspmv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *ap, doub
     {
         kx = 1 - (*n - 1) * *incx;
     }
-    if (*incy > 0)
+    if(*incy > 0)
     {
         ky = 1;
     }
@@ -224,16 +236,14 @@ int zspmv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *ap, doub
     /* Start the operations. In this version the elements of the array AP */
     /* are accessed sequentially with one pass through AP. */
     /* First form y := beta*y. */
-    if (beta->r != 1. || beta->i != 0.)
+    if(beta->r != 1. || beta->i != 0.)
     {
-        if (*incy == 1)
+        if(*incy == 1)
         {
-            if (beta->r == 0. && beta->i == 0.)
+            if(beta->r == 0. && beta->i == 0.)
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = i__;
                     y[i__2].r = 0.;
@@ -244,14 +254,12 @@ int zspmv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *ap, doub
             else
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = i__;
                     i__3 = i__;
                     z__1.r = beta->r * y[i__3].r - beta->i * y[i__3].i;
-                    z__1.i = beta->r * y[i__3].i + beta->i * y[i__3] .r; // , expr subst
+                    z__1.i = beta->r * y[i__3].i + beta->i * y[i__3].r; // , expr subst
                     y[i__2].r = z__1.r;
                     y[i__2].i = z__1.i; // , expr subst
                     /* L20: */
@@ -261,12 +269,10 @@ int zspmv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *ap, doub
         else
         {
             iy = ky;
-            if (beta->r == 0. && beta->i == 0.)
+            if(beta->r == 0. && beta->i == 0.)
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = iy;
                     y[i__2].r = 0.;
@@ -278,14 +284,12 @@ int zspmv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *ap, doub
             else
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = iy;
                     i__3 = iy;
                     z__1.r = beta->r * y[i__3].r - beta->i * y[i__3].i;
-                    z__1.i = beta->r * y[i__3].i + beta->i * y[i__3] .r; // , expr subst
+                    z__1.i = beta->r * y[i__3].i + beta->i * y[i__3].r; // , expr subst
                     y[i__2].r = z__1.r;
                     y[i__2].i = z__1.i; // , expr subst
                     iy += *incy;
@@ -294,21 +298,19 @@ int zspmv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *ap, doub
             }
         }
     }
-    if (alpha->r == 0. && alpha->i == 0.)
+    if(alpha->r == 0. && alpha->i == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     kk = 1;
-    if (lsame_(uplo, "U"))
+    if(lsame_(uplo, "U", 1, 1))
     {
         /* Form y when AP contains the upper triangle. */
-        if (*incx == 1 && *incy == 1)
+        if(*incx == 1 && *incy == 1)
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j;
                 z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
@@ -319,15 +321,13 @@ int zspmv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *ap, doub
                 temp2.i = 0.; // , expr subst
                 k = kk;
                 i__2 = j - 1;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__;
                     i__4 = i__;
                     i__5 = k;
                     z__2.r = temp1.r * ap[i__5].r - temp1.i * ap[i__5].i;
-                    z__2.i = temp1.r * ap[i__5].i + temp1.i * ap[i__5] .r; // , expr subst
+                    z__2.i = temp1.r * ap[i__5].i + temp1.i * ap[i__5].r; // , expr subst
                     z__1.r = y[i__4].r + z__2.r;
                     z__1.i = y[i__4].i + z__2.i; // , expr subst
                     y[i__3].r = z__1.r;
@@ -335,7 +335,7 @@ int zspmv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *ap, doub
                     i__3 = k;
                     i__4 = i__;
                     z__2.r = ap[i__3].r * x[i__4].r - ap[i__3].i * x[i__4].i;
-                    z__2.i = ap[i__3].r * x[i__4].i + ap[i__3].i * x[ i__4].r; // , expr subst
+                    z__2.i = ap[i__3].r * x[i__4].i + ap[i__3].i * x[i__4].r; // , expr subst
                     z__1.r = temp2.r + z__2.r;
                     z__1.i = temp2.i + z__2.i; // , expr subst
                     temp2.r = z__1.r;
@@ -365,9 +365,7 @@ int zspmv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *ap, doub
             jx = kx;
             jy = ky;
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = jx;
                 z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
@@ -379,15 +377,13 @@ int zspmv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *ap, doub
                 ix = kx;
                 iy = ky;
                 i__2 = kk + j - 2;
-                for (k = kk;
-                        k <= i__2;
-                        ++k)
+                for(k = kk; k <= i__2; ++k)
                 {
                     i__3 = iy;
                     i__4 = iy;
                     i__5 = k;
                     z__2.r = temp1.r * ap[i__5].r - temp1.i * ap[i__5].i;
-                    z__2.i = temp1.r * ap[i__5].i + temp1.i * ap[i__5] .r; // , expr subst
+                    z__2.i = temp1.r * ap[i__5].i + temp1.i * ap[i__5].r; // , expr subst
                     z__1.r = y[i__4].r + z__2.r;
                     z__1.i = y[i__4].i + z__2.i; // , expr subst
                     y[i__3].r = z__1.r;
@@ -395,7 +391,7 @@ int zspmv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *ap, doub
                     i__3 = k;
                     i__4 = ix;
                     z__2.r = ap[i__3].r * x[i__4].r - ap[i__3].i * x[i__4].i;
-                    z__2.i = ap[i__3].r * x[i__4].i + ap[i__3].i * x[ i__4].r; // , expr subst
+                    z__2.i = ap[i__3].r * x[i__4].i + ap[i__3].i * x[i__4].r; // , expr subst
                     z__1.r = temp2.r + z__2.r;
                     z__1.i = temp2.i + z__2.i; // , expr subst
                     temp2.r = z__1.r;
@@ -427,12 +423,10 @@ int zspmv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *ap, doub
     else
     {
         /* Form y when AP contains the lower triangle. */
-        if (*incx == 1 && *incy == 1)
+        if(*incx == 1 && *incy == 1)
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j;
                 z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
@@ -452,15 +446,13 @@ int zspmv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *ap, doub
                 y[i__2].i = z__1.i; // , expr subst
                 k = kk + 1;
                 i__2 = *n;
-                for (i__ = j + 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = j + 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__;
                     i__4 = i__;
                     i__5 = k;
                     z__2.r = temp1.r * ap[i__5].r - temp1.i * ap[i__5].i;
-                    z__2.i = temp1.r * ap[i__5].i + temp1.i * ap[i__5] .r; // , expr subst
+                    z__2.i = temp1.r * ap[i__5].i + temp1.i * ap[i__5].r; // , expr subst
                     z__1.r = y[i__4].r + z__2.r;
                     z__1.i = y[i__4].i + z__2.i; // , expr subst
                     y[i__3].r = z__1.r;
@@ -468,7 +460,7 @@ int zspmv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *ap, doub
                     i__3 = k;
                     i__4 = i__;
                     z__2.r = ap[i__3].r * x[i__4].r - ap[i__3].i * x[i__4].i;
-                    z__2.i = ap[i__3].r * x[i__4].i + ap[i__3].i * x[ i__4].r; // , expr subst
+                    z__2.i = ap[i__3].r * x[i__4].i + ap[i__3].i * x[i__4].r; // , expr subst
                     z__1.r = temp2.r + z__2.r;
                     z__1.i = temp2.i + z__2.i; // , expr subst
                     temp2.r = z__1.r;
@@ -493,9 +485,7 @@ int zspmv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *ap, doub
             jx = kx;
             jy = ky;
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = jx;
                 z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
@@ -516,9 +506,7 @@ int zspmv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *ap, doub
                 ix = jx;
                 iy = jy;
                 i__2 = kk + *n - j;
-                for (k = kk + 1;
-                        k <= i__2;
-                        ++k)
+                for(k = kk + 1; k <= i__2; ++k)
                 {
                     ix += *incx;
                     iy += *incy;
@@ -526,7 +514,7 @@ int zspmv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *ap, doub
                     i__4 = iy;
                     i__5 = k;
                     z__2.r = temp1.r * ap[i__5].r - temp1.i * ap[i__5].i;
-                    z__2.i = temp1.r * ap[i__5].i + temp1.i * ap[i__5] .r; // , expr subst
+                    z__2.i = temp1.r * ap[i__5].i + temp1.i * ap[i__5].r; // , expr subst
                     z__1.r = y[i__4].r + z__2.r;
                     z__1.i = y[i__4].i + z__2.i; // , expr subst
                     y[i__3].r = z__1.r;
@@ -534,7 +522,7 @@ int zspmv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *ap, doub
                     i__3 = k;
                     i__4 = ix;
                     z__2.r = ap[i__3].r * x[i__4].r - ap[i__3].i * x[i__4].i;
-                    z__2.i = ap[i__3].r * x[i__4].i + ap[i__3].i * x[ i__4].r; // , expr subst
+                    z__2.i = ap[i__3].r * x[i__4].i + ap[i__3].i * x[i__4].r; // , expr subst
                     z__1.r = temp2.r + z__2.r;
                     z__1.i = temp2.i + z__2.i; // , expr subst
                     temp2.r = z__1.r;
@@ -557,7 +545,7 @@ int zspmv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *ap, doub
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZSPMV */
 }
 /* zspmv_ */

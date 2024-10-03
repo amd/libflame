@@ -1,11 +1,10 @@
-/* ../netlib/cgehrd.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cgehrd.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b2 =
-{
-    1.f,0.f
-}
-;
+static complex c_b2 = {1.f, 0.f};
 static integer c__1 = 1;
 static integer c_n1 = -1;
 static integer c__3 = 3;
@@ -17,11 +16,17 @@ static integer c__65 = 65;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CGEHRD + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgehrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgehrd.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgehrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgehrd.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgehrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgehrd.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -168,15 +173,18 @@ v(i+2:ihi) is stored on */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cgehrd_(integer *n, integer *ilo, integer *ihi, complex * a, integer *lda, complex *tau, complex *work, integer *lwork, integer *info)
+void cgehrd_(integer *n, integer *ilo, integer *ihi, complex *a, integer *lda, complex *tau,
+             complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgehrd inputs: n %lld, ilo %lld, ihi %lld, lda %lld, lwork %lld",*n, *ilo, *ihi, *lda, *lwork);
+    snprintf(buffer, 256, "cgehrd inputs: n %lld, ilo %lld, ihi %lld, lda %lld, lwork %lld", *n,
+             *ilo, *ihi, *lda, *lwork);
 #else
-    snprintf(buffer, 256,"cgehrd inputs: n %d, ilo %d, ihi %d, lda %d, lwork %d",*n, *ilo, *ihi, *lda, *lwork);
+    snprintf(buffer, 256, "cgehrd inputs: n %d, ilo %d, ihi %d, lda %d, lwork %d", *n, *ilo, *ihi,
+             *lda, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -188,10 +196,22 @@ int cgehrd_(integer *n, integer *ilo, integer *ihi, complex * a, integer *lda, c
     complex ei;
     integer nb, nh, nx, iwt;
     extern /* Subroutine */
-    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+        void
+        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
+               complex *, integer *, complex *, complex *, integer *);
     integer nbmin, iinfo;
     extern /* Subroutine */
-    int ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *), cgehd2_( integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *), clahr2_(integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *), clarfb_(char *, char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
+               integer *, complex *, integer *),
+        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *),
+        cgehd2_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
+                integer *),
+        clahr2_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
+                integer *, complex *, integer *),
+        clarfb_(char *, char *, char *, char *, integer *, integer *, integer *, complex *,
+                integer *, complex *, integer *, complex *, integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
@@ -226,54 +246,52 @@ int cgehrd_(integer *n, integer *ilo, integer *ihi, complex * a, integer *lda, c
     *info = 0;
     lquery = *lwork == -1;
     nx = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
     }
-    else if (*ilo < 1 || *ilo > fla_max(1,*n))
+    else if(*ilo < 1 || *ilo > fla_max(1, *n))
     {
         *info = -2;
     }
-    else if (*ihi < fla_min(*ilo,*n) || *ihi > *n)
+    else if(*ihi < fla_min(*ilo, *n) || *ihi > *n)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*lwork < fla_max(1,*n) && ! lquery)
+    else if(*lwork < fla_max(1, *n) && !lquery)
     {
         *info = -8;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
         /* Compute the workspace requirements */
         /* Computing MIN */
         i__1 = 64;
         i__2 = ilaenv_(&c__1, "CGEHRD", " ", n, ilo, ihi, &c_n1); // , expr subst
-        nb = fla_min(i__1,i__2);
+        nb = fla_min(i__1, i__2);
         lwkopt = *n * nb + 4160;
-        work[1].r = (real) lwkopt;
+        work[1].r = (real)lwkopt;
         work[1].i = 0.f; // , expr subst
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CGEHRD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Set elements 1:ILO-1 and IHI:N-1 of TAU to zero */
     i__1 = *ilo - 1;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__;
         tau[i__2].r = 0.f;
@@ -281,9 +299,7 @@ int cgehrd_(integer *n, integer *ilo, integer *ihi, complex * a, integer *lda, c
         /* L10: */
     }
     i__1 = *n - 1;
-    for (i__ = fla_max(1,*ihi);
-            i__ <= i__1;
-            ++i__)
+    for(i__ = fla_max(1, *ihi); i__ <= i__1; ++i__)
     {
         i__2 = i__;
         tau[i__2].r = 0.f;
@@ -292,40 +308,40 @@ int cgehrd_(integer *n, integer *ilo, integer *ihi, complex * a, integer *lda, c
     }
     /* Quick return if possible */
     nh = *ihi - *ilo + 1;
-    if (nh <= 1)
+    if(nh <= 1)
     {
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Determine the block size */
     /* Computing MIN */
     i__1 = 64;
     i__2 = ilaenv_(&c__1, "CGEHRD", " ", n, ilo, ihi, &c_n1); // , expr subst
-    nb = fla_min(i__1,i__2);
+    nb = fla_min(i__1, i__2);
     nbmin = 2;
-    if (nb > 1 && nb < nh)
+    if(nb > 1 && nb < nh)
     {
         /* Determine when to cross over from blocked to unblocked code */
         /* (last block is always handled by unblocked code) */
         /* Computing MAX */
         i__1 = nb;
         i__2 = ilaenv_(&c__3, "CGEHRD", " ", n, ilo, ihi, &c_n1); // , expr subst
-        nx = fla_max(i__1,i__2);
-        if (nx < nh)
+        nx = fla_max(i__1, i__2);
+        if(nx < nh)
         {
             /* Determine if workspace is large enough for blocked code */
-            if (*lwork < *n * nb + 4160)
+            if(*lwork < *n * nb + 4160)
             {
                 /* Not enough workspace to use optimal NB: determine the */
                 /* minimum value of NB, and reduce NB or force use of */
                 /* unblocked code */
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = ilaenv_(&c__2, "CGEHRD", " ", n, ilo, ihi, & c_n1); // , expr subst
-                nbmin = fla_max(i__1,i__2);
-                if (*lwork >= *n * nbmin + 4160)
+                i__2 = ilaenv_(&c__2, "CGEHRD", " ", n, ilo, ihi, &c_n1); // , expr subst
+                nbmin = fla_max(i__1, i__2);
+                if(*lwork >= *n * nbmin + 4160)
                 {
                     nb = (*lwork - 4160) / *n;
                 }
@@ -337,7 +353,7 @@ int cgehrd_(integer *n, integer *ilo, integer *ihi, complex * a, integer *lda, c
         }
     }
     ldwork = *n;
-    if (nb < nbmin || nb >= nh)
+    if(nb < nbmin || nb >= nh)
     {
         /* Use unblocked code below */
         i__ = *ilo;
@@ -348,18 +364,17 @@ int cgehrd_(integer *n, integer *ilo, integer *ihi, complex * a, integer *lda, c
         iwt = *n * nb + 1;
         i__1 = *ihi - 1 - nx;
         i__2 = nb;
-        for (i__ = *ilo;
-                i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
-                i__ += i__2)
+        for(i__ = *ilo; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
         {
             /* Computing MIN */
             i__3 = nb;
             i__4 = *ihi - i__; // , expr subst
-            ib = fla_min(i__3,i__4);
+            ib = fla_min(i__3, i__4);
             /* Reduce columns i:i+ib-1 to Hessenberg form, returning the */
             /* matrices V and T of the block reflector H = I - V*T*V**H */
             /* which performs the reduction, and also the matrix Y = A*V*T */
-            clahr2_(ihi, &i__, &ib, &a[i__ * a_dim1 + 1], lda, &tau[i__], & work[iwt], &c__65, &work[1], &ldwork);
+            clahr2_(ihi, &i__, &ib, &a[i__ * a_dim1 + 1], lda, &tau[i__], &work[iwt], &c__65,
+                    &work[1], &ldwork);
             /* Apply the block reflector H to A(1:ihi,i+ib:ihi) from the */
             /* right, computing A := A - Y * V**H. V(i+ib,ib-1) must be set */
             /* to 1 */
@@ -372,38 +387,41 @@ int cgehrd_(integer *n, integer *ilo, integer *ihi, complex * a, integer *lda, c
             i__3 = *ihi - i__ - ib + 1;
             q__1.r = -1.f;
             q__1.i = -0.f; // , expr subst
-            cgemm_("No transpose", "Conjugate transpose", ihi, &i__3, &ib, & q__1, &work[1], &ldwork, &a[i__ + ib + i__ * a_dim1], lda, &c_b2, &a[(i__ + ib) * a_dim1 + 1], lda);
+            cgemm_("No transpose", "Conjugate transpose", ihi, &i__3, &ib, &q__1, &work[1], &ldwork,
+                   &a[i__ + ib + i__ * a_dim1], lda, &c_b2, &a[(i__ + ib) * a_dim1 + 1], lda);
             i__3 = i__ + ib + (i__ + ib - 1) * a_dim1;
             a[i__3].r = ei.r;
             a[i__3].i = ei.i; // , expr subst
             /* Apply the block reflector H to A(1:i,i+1:i+ib-1) from the */
             /* right */
             i__3 = ib - 1;
-            ctrmm_("Right", "Lower", "Conjugate transpose", "Unit", &i__, & i__3, &c_b2, &a[i__ + 1 + i__ * a_dim1], lda, &work[1], & ldwork);
+            ctrmm_("Right", "Lower", "Conjugate transpose", "Unit", &i__, &i__3, &c_b2,
+                   &a[i__ + 1 + i__ * a_dim1], lda, &work[1], &ldwork);
             i__3 = ib - 2;
-            for (j = 0;
-                    j <= i__3;
-                    ++j)
+            for(j = 0; j <= i__3; ++j)
             {
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                caxpy_(&i__, &q__1, &work[ldwork * j + 1], &c__1, &a[(i__ + j + 1) * a_dim1 + 1], &c__1);
+                caxpy_(&i__, &q__1, &work[ldwork * j + 1], &c__1, &a[(i__ + j + 1) * a_dim1 + 1],
+                       &c__1);
                 /* L30: */
             }
             /* Apply the block reflector H to A(i+1:ihi,i+ib:n) from the */
             /* left */
             i__3 = *ihi - i__;
             i__4 = *n - i__ - ib + 1;
-            clarfb_("Left", "Conjugate transpose", "Forward", "Columnwise", & i__3, &i__4, &ib, &a[i__ + 1 + i__ * a_dim1], lda, &work[ iwt], &c__65, &a[i__ + 1 + (i__ + ib) * a_dim1], lda, & work[1], &ldwork);
+            clarfb_("Left", "Conjugate transpose", "Forward", "Columnwise", &i__3, &i__4, &ib,
+                    &a[i__ + 1 + i__ * a_dim1], lda, &work[iwt], &c__65,
+                    &a[i__ + 1 + (i__ + ib) * a_dim1], lda, &work[1], &ldwork);
             /* L40: */
         }
     }
     /* Use unblocked code to reduce the rest of the matrix */
     cgehd2_(n, &i__, ihi, &a[a_offset], lda, &tau[1], &work[1], &iinfo);
-    work[1].r = (real) lwkopt;
+    work[1].r = (real)lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGEHRD */
 }
 /* cgehrd_ */

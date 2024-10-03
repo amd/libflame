@@ -1,16 +1,25 @@
-/* ../netlib/stpqrt.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/stpqrt.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b STPQRT */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download STPQRT + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stpqrt. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stpqrt.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stpqrt. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stpqrt.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stpqrt. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stpqrt.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -176,12 +185,16 @@ that is, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int stpqrt_(integer *m, integer *n, integer *l, integer *nb, real *a, integer *lda, real *b, integer *ldb, real *t, integer *ldt, real *work, integer *info)
+void stpqrt_(integer *m, integer *n, integer *l, integer *nb, real *a, integer *lda, real *b,
+             integer *ldb, real *t, integer *ldt, real *work, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"stpqrt inputs: m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldt %" FLA_IS "",*m, *n, *l, *nb, *lda, *ldb, *ldt);
+    snprintf(buffer, 256,
+             "stpqrt inputs: m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", nb %" FLA_IS
+             ", lda %" FLA_IS ", ldb %" FLA_IS ", ldt %" FLA_IS "",
+             *m, *n, *l, *nb, *lda, *ldb, *ldt);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -189,7 +202,15 @@ int stpqrt_(integer *m, integer *n, integer *l, integer *nb, real *a, integer *l
     /* Local variables */
     integer i__, ib, lb, mb, iinfo;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), stprfb_( char *, char *, char *, char *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), stpqrt2_(integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
+        stprfb_(char *, char *, char *, char *, integer *, integer *, integer *, integer *, real *,
+                integer *, real *, integer *, real *, integer *, real *, integer *, real *,
+                integer *),
+        stpqrt2_(integer *, integer *, integer *, real *, integer *, real *, integer *, real *,
+                 integer *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -219,61 +240,59 @@ int stpqrt_(integer *m, integer *n, integer *l, integer *nb, real *a, integer *l
     --work;
     /* Function Body */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*l < 0 || *l > fla_min(*m,*n) && fla_min(*m,*n) >= 0)
+    else if(*l < 0 || *l > fla_min(*m, *n) && fla_min(*m, *n) >= 0)
     {
         *info = -3;
     }
-    else if (*nb < 1 || *nb > *n && *n > 0)
+    else if(*nb < 1 || *nb > *n && *n > 0)
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldb < fla_max(1,*m))
+    else if(*ldb < fla_max(1, *m))
     {
         *info = -8;
     }
-    else if (*ldt < *nb)
+    else if(*ldt < *nb)
     {
         *info = -10;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("STPQRT", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     i__1 = *n;
     i__2 = *nb;
-    for (i__ = 1;
-            i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
-            i__ += i__2)
+    for(i__ = 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
     {
         /* Compute the QR factorization of the current block */
         /* Computing MIN */
         i__3 = *n - i__ + 1;
-        ib = fla_min(i__3,*nb);
+        ib = fla_min(i__3, *nb);
         /* Computing MIN */
         i__3 = *m - *l + i__ + ib - 1;
-        mb = fla_min(i__3,*m);
-        if (i__ >= *l)
+        mb = fla_min(i__3, *m);
+        if(i__ >= *l)
         {
             lb = 0;
         }
@@ -281,17 +300,19 @@ int stpqrt_(integer *m, integer *n, integer *l, integer *nb, real *a, integer *l
         {
             lb = mb - *m + *l - i__ + 1;
         }
-        stpqrt2_(&mb, &ib, &lb, &a[i__ + i__ * a_dim1], lda, &b[i__ * b_dim1 + 1], ldb, &t[i__ * t_dim1 + 1], ldt, &iinfo);
+        stpqrt2_(&mb, &ib, &lb, &a[i__ + i__ * a_dim1], lda, &b[i__ * b_dim1 + 1], ldb,
+                 &t[i__ * t_dim1 + 1], ldt, &iinfo);
         /* Update by applying H^H to B(:,I+IB:N) from the left */
-        if (i__ + ib <= *n)
+        if(i__ + ib <= *n)
         {
             i__3 = *n - i__ - ib + 1;
-            stprfb_("L", "T", "F", "C", &mb, &i__3, &ib, &lb, &b[i__ * b_dim1 + 1], ldb, &t[i__ * t_dim1 + 1], ldt, &a[i__ + (i__ + ib) * a_dim1], lda, &b[(i__ + ib) * b_dim1 + 1], ldb, &work[1], &ib);
+            stprfb_("L", "T", "F", "C", &mb, &i__3, &ib, &lb, &b[i__ * b_dim1 + 1], ldb,
+                    &t[i__ * t_dim1 + 1], ldt, &a[i__ + (i__ + ib) * a_dim1], lda,
+                    &b[(i__ + ib) * b_dim1 + 1], ldb, &work[1], &ib);
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of STPQRT */
 }
 /* stpqrt_ */
-

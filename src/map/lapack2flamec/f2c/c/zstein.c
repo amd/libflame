@@ -1,5 +1,8 @@
-/* ../netlib/zstein.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zstein.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__2 = 2;
 static integer c__1 = 1;
@@ -10,11 +13,17 @@ static integer c_n1 = -1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZSTEIN + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zstein. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zstein.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zstein. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zstein.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zstein. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zstein.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -171,7 +180,9 @@ IBLOCK(i)=1 if eigenvalue W(i) belongs to */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zstein_(integer *n, doublereal *d__, doublereal *e, integer *m, doublereal *w, integer *iblock, integer *isplit, doublecomplex *z__, integer *ldz, doublereal *work, integer *iwork, integer *ifail, integer *info)
+void zstein_(integer *n, doublereal *d__, doublereal *e, integer *m, doublereal *w, integer *iblock,
+             integer *isplit, doublecomplex *z__, integer *ldz, doublereal *work, integer *iwork,
+             integer *ifail, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zstein inputs: n %" FLA_IS ", m %" FLA_IS ", ldz %" FLA_IS "", *n, *m, *ldz);
@@ -189,21 +200,31 @@ int zstein_(integer *n, doublereal *d__, doublereal *e, integer *m, doublereal *
     integer jblk, nblk, jmax;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     integer iseed[4], gpind, iinfo;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal ortol;
     integer indrv1, indrv2, indrv3, indrv4, indrv5;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dlagtf_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+        void
+        dlagtf_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
+                doublereal *, integer *, integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlagts_( integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
+        dlagts_(integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
+                integer *, doublereal *, doublereal *, integer *);
     integer nrmchk;
     extern /* Subroutine */
-    int dlarnv_(integer *, integer *, integer *, doublereal *);
+        void
+        dlarnv_(integer *, integer *, integer *, doublereal *);
     integer blksiz;
     doublereal onenrm, dtpcrt, pertol;
     /* -- LAPACK computational routine (version 3.7.0) -- */
@@ -249,74 +270,67 @@ int zstein_(integer *n, doublereal *d__, doublereal *e, integer *m, doublereal *
     ortol = 0.;
     gpind = 0;
     xjm = 0.;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         ifail[i__] = 0;
         /* L10: */
     }
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
     }
-    else if (*m < 0 || *m > *n)
+    else if(*m < 0 || *m > *n)
     {
         *info = -4;
     }
-    else if (*ldz < fla_max(1,*n))
+    else if(*ldz < fla_max(1, *n))
     {
         *info = -9;
     }
     else
     {
         i__1 = *m;
-        for (j = 2;
-                j <= i__1;
-                ++j)
+        for(j = 2; j <= i__1; ++j)
         {
-            if (iblock[j] < iblock[j - 1])
+            if(iblock[j] < iblock[j - 1])
             {
                 *info = -6;
                 goto L30;
             }
-            if (iblock[j] == iblock[j - 1] && w[j] < w[j - 1])
+            if(iblock[j] == iblock[j - 1] && w[j] < w[j - 1])
             {
                 *info = -5;
                 goto L30;
             }
             /* L20: */
         }
-L30:
-        ;
+    L30:;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZSTEIN", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0 || *m == 0)
+    if(*n == 0 || *m == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
-    else if (*n == 1)
+    else if(*n == 1)
     {
         i__1 = z_dim1 + 1;
         z__[i__1].r = 1.;
         z__[i__1].i = 0.; // , expr subst
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* Get machine constants. */
     eps = dlamch_("Precision");
     /* Initialize seed for random number generator DLARNV. */
-    for (i__ = 1;
-            i__ <= 4;
-            ++i__)
+    for(i__ = 1; i__ <= 4; ++i__)
     {
         iseed[i__ - 1] = 1;
         /* L40: */
@@ -330,12 +344,10 @@ L30:
     /* Compute eigenvectors of matrix blocks. */
     j1 = 1;
     i__1 = iblock[*m];
-    for (nblk = 1;
-            nblk <= i__1;
-            ++nblk)
+    for(nblk = 1; nblk <= i__1; ++nblk)
     {
         /* Find starting and ending indices of block nblk. */
-        if (nblk == 1)
+        if(nblk == 1)
         {
             b1 = 1;
         }
@@ -345,7 +357,7 @@ L30:
         }
         bn = isplit[nblk];
         blksiz = bn - b1 + 1;
-        if (blksiz == 1)
+        if(blksiz == 1)
         {
             goto L60;
         }
@@ -355,29 +367,26 @@ L30:
         /* Computing MAX */
         d__3 = onenrm;
         d__4 = (d__1 = d__[bn], f2c_abs(d__1)) + (d__2 = e[bn - 1], f2c_abs(d__2)); // , expr subst
-        onenrm = fla_max(d__3,d__4);
+        onenrm = fla_max(d__3, d__4);
         i__2 = bn - 1;
-        for (i__ = b1 + 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = b1 + 1; i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             d__4 = onenrm;
-            d__5 = (d__1 = d__[i__], f2c_abs(d__1)) + (d__2 = e[ i__ - 1], f2c_abs(d__2)) + (d__3 = e[i__], f2c_abs(d__3)); // , expr subst
-            onenrm = fla_max(d__4,d__5);
+            d__5 = (d__1 = d__[i__], f2c_abs(d__1)) + (d__2 = e[i__ - 1], f2c_abs(d__2))
+                   + (d__3 = e[i__], f2c_abs(d__3)); // , expr subst
+            onenrm = fla_max(d__4, d__5);
             /* L50: */
         }
         ortol = onenrm * .001;
         dtpcrt = sqrt(.1 / blksiz);
         /* Loop through eigenvalues of block nblk. */
-L60:
+    L60:
         jblk = 0;
         i__2 = *m;
-        for (j = j1;
-                j <= i__2;
-                ++j)
+        for(j = j1; j <= i__2; ++j)
         {
-            if (iblock[j] != nblk)
+            if(iblock[j] != nblk)
             {
                 j1 = j;
                 goto L180;
@@ -385,19 +394,19 @@ L60:
             ++jblk;
             xj = w[j];
             /* Skip all the work if the block size is one. */
-            if (blksiz == 1)
+            if(blksiz == 1)
             {
                 work[indrv1 + 1] = 1.;
                 goto L140;
             }
             /* If eigenvalues j and j-1 are too close, add a relatively */
             /* small perturbation. */
-            if (jblk > 1)
+            if(jblk > 1)
             {
                 eps1 = (d__1 = eps * xj, f2c_abs(d__1));
                 pertol = eps1 * 10.;
                 sep = xj - xjm;
-                if (sep < pertol)
+                if(sep < pertol)
                 {
                     xj = xjm + pertol;
                 }
@@ -414,11 +423,12 @@ L60:
             dcopy_(&i__3, &e[b1], &c__1, &work[indrv3 + 1], &c__1);
             /* Compute LU factors with partial pivoting ( PT = LU ) */
             tol = 0.;
-            dlagtf_(&blksiz, &work[indrv4 + 1], &xj, &work[indrv2 + 2], &work[ indrv3 + 1], &tol, &work[indrv5 + 1], &iwork[1], &iinfo);
+            dlagtf_(&blksiz, &work[indrv4 + 1], &xj, &work[indrv2 + 2], &work[indrv3 + 1], &tol,
+                    &work[indrv5 + 1], &iwork[1], &iinfo);
             /* Update iteration count. */
-L70:
+        L70:
             ++its;
-            if (its > 5)
+            if(its > 5)
             {
                 goto L120;
             }
@@ -427,41 +437,37 @@ L70:
             /* Computing MAX */
             d__3 = eps;
             d__4 = (d__1 = work[indrv4 + blksiz], f2c_abs(d__1)); // , expr subst
-            scl = blksiz * onenrm * fla_max(d__3,d__4) / (d__2 = work[indrv1 + jmax], f2c_abs(d__2));
+            scl = blksiz * onenrm * fla_max(d__3, d__4)
+                  / (d__2 = work[indrv1 + jmax], f2c_abs(d__2));
             dscal_(&blksiz, &scl, &work[indrv1 + 1], &c__1);
             /* Solve the system LU = Pb. */
-            dlagts_(&c_n1, &blksiz, &work[indrv4 + 1], &work[indrv2 + 2], & work[indrv3 + 1], &work[indrv5 + 1], &iwork[1], &work[ indrv1 + 1], &tol, &iinfo);
+            dlagts_(&c_n1, &blksiz, &work[indrv4 + 1], &work[indrv2 + 2], &work[indrv3 + 1],
+                    &work[indrv5 + 1], &iwork[1], &work[indrv1 + 1], &tol, &iinfo);
             /* Reorthogonalize by modified Gram-Schmidt if eigenvalues are */
             /* close enough. */
-            if (jblk == 1)
+            if(jblk == 1)
             {
                 goto L110;
             }
-            if ((d__1 = xj - xjm, f2c_abs(d__1)) > ortol)
+            if((d__1 = xj - xjm, f2c_abs(d__1)) > ortol)
             {
                 gpind = j;
             }
-            if (gpind != j)
+            if(gpind != j)
             {
                 i__3 = j - 1;
-                for (i__ = gpind;
-                        i__ <= i__3;
-                        ++i__)
+                for(i__ = gpind; i__ <= i__3; ++i__)
                 {
                     ztr = 0.;
                     i__4 = blksiz;
-                    for (jr = 1;
-                            jr <= i__4;
-                            ++jr)
+                    for(jr = 1; jr <= i__4; ++jr)
                     {
                         i__5 = b1 - 1 + jr + i__ * z_dim1;
                         ztr += work[indrv1 + jr] * z__[i__5].r;
                         /* L80: */
                     }
                     i__4 = blksiz;
-                    for (jr = 1;
-                            jr <= i__4;
-                            ++jr)
+                    for(jr = 1; jr <= i__4; ++jr)
                     {
                         i__5 = b1 - 1 + jr + i__ * z_dim1;
                         work[indrv1 + jr] -= ztr * z__[i__5].r;
@@ -471,40 +477,38 @@ L70:
                 }
             }
             /* Check the infinity norm of the iterate. */
-L110:
+        L110:
             jmax = idamax_(&blksiz, &work[indrv1 + 1], &c__1);
             nrm = (d__1 = work[indrv1 + jmax], f2c_abs(d__1));
             /* Continue for additional iterations after norm reaches */
             /* stopping criterion. */
-            if (nrm < dtpcrt)
+            if(nrm < dtpcrt)
             {
                 goto L70;
             }
             ++nrmchk;
-            if (nrmchk < 3)
+            if(nrmchk < 3)
             {
                 goto L70;
             }
             goto L130;
             /* If stopping criterion was not satisfied, update info and */
             /* store eigenvector number in array ifail. */
-L120:
+        L120:
             ++(*info);
             ifail[*info] = j;
             /* Accept iterate as jth eigenvector. */
-L130:
+        L130:
             scl = 1. / dnrm2_(&blksiz, &work[indrv1 + 1], &c__1);
             jmax = idamax_(&blksiz, &work[indrv1 + 1], &c__1);
-            if (work[indrv1 + jmax] < 0.)
+            if(work[indrv1 + jmax] < 0.)
             {
                 scl = -scl;
             }
             dscal_(&blksiz, &scl, &work[indrv1 + 1], &c__1);
-L140:
+        L140:
             i__3 = *n;
-            for (i__ = 1;
-                    i__ <= i__3;
-                    ++i__)
+            for(i__ = 1; i__ <= i__3; ++i__)
             {
                 i__4 = i__ + j * z_dim1;
                 z__[i__4].r = 0.;
@@ -512,9 +516,7 @@ L140:
                 /* L150: */
             }
             i__3 = blksiz;
-            for (i__ = 1;
-                    i__ <= i__3;
-                    ++i__)
+            for(i__ = 1; i__ <= i__3; ++i__)
             {
                 i__4 = b1 + i__ - 1 + j * z_dim1;
                 i__5 = indrv1 + i__;
@@ -529,11 +531,10 @@ L140:
             xjm = xj;
             /* L170: */
         }
-L180:
-        ;
+    L180:;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZSTEIN */
 }
 /* zstein_ */

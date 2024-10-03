@@ -1,19 +1,30 @@
-/* ../netlib/v3.9.0/dtplqt2.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/dtplqt2.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b4 = 1.;
 static doublereal c_b10 = 0.;
-/* > \brief \b DTPLQT2 computes a LQ factorization of a real or complex "triangular-pentagonal" matrix, which is composed of a triangular block and a pentagonal block, using the compact WY representation for Q. */
+/* > \brief \b DTPLQT2 computes a LQ factorization of a real or complex "triangular-pentagonal"
+ * matrix, which is composed of a triangular block and a pentagonal block, using the compact WY
+ * representation for Q. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DTPLQT2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtplqt2 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtplqt2
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtplqt2 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtplqt2
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtplqt2 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtplqt2
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -168,19 +179,29 @@ that is, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dtplqt2_(integer *m, integer *n, integer *l, doublereal * a, integer *lda, doublereal *b, integer *ldb, doublereal *t, integer * ldt, integer *info)
+void dtplqt2_(integer *m, integer *n, integer *l, doublereal *a, integer *lda, doublereal *b,
+              integer *ldb, doublereal *t, integer *ldt, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dtplqt2 inputs: m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldt %" FLA_IS "",*m, *n, *l, *lda, *ldb, *ldt);
+    AOCL_DTL_SNPRINTF("dtplqt2 inputs: m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS ", ldt %" FLA_IS "",
+                      *m, *n, *l, *lda, *ldb, *ldt);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, i__1, i__2, i__3;
     /* Local variables */
     integer i__, j, p, mp, np;
     extern /* Subroutine */
-    int dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+              doublereal *, integer *);
     doublereal alpha;
     extern /* Subroutine */
-    int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *), dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
+               integer *, doublereal *, doublereal *, integer *),
+        dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *),
+        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -212,116 +233,108 @@ int dtplqt2_(integer *m, integer *n, integer *l, doublereal * a, integer *lda, d
     t -= t_offset;
     /* Function Body */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*l < 0 || *l > fla_min(*m,*n))
+    else if(*l < 0 || *l > fla_min(*m, *n))
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*m))
+    else if(*ldb < fla_max(1, *m))
     {
         *info = -7;
     }
-    else if (*ldt < fla_max(1,*m))
+    else if(*ldt < fla_max(1, *m))
     {
         *info = -9;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DTPLQT2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0 || *m == 0)
+    if(*n == 0 || *m == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     i__1 = *m;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* Generate elementary reflector H(I) to annihilate B(I,:) */
-        p = *n - *l + fla_min(*l,i__);
+        p = *n - *l + fla_min(*l, i__);
         i__2 = p + 1;
         dlarfg_(&i__2, &a[i__ + i__ * a_dim1], &b[i__ + b_dim1], ldb, &t[i__ * t_dim1 + 1]);
-        if (i__ < *m)
+        if(i__ < *m)
         {
             /* W(M-I:1) := C(I+1:M,I:N) * C(I,I:N) [use W = T(M,:)] */
             i__2 = *m - i__;
-            for (j = 1;
-                    j <= i__2;
-                    ++j)
+            for(j = 1; j <= i__2; ++j)
             {
                 t[*m + j * t_dim1] = a[i__ + j + i__ * a_dim1];
             }
             i__2 = *m - i__;
-            dgemv_("N", &i__2, &p, &c_b4, &b[i__ + 1 + b_dim1], ldb, &b[i__ + b_dim1], ldb, &c_b4, &t[*m + t_dim1], ldt);
+            dgemv_("N", &i__2, &p, &c_b4, &b[i__ + 1 + b_dim1], ldb, &b[i__ + b_dim1], ldb, &c_b4,
+                   &t[*m + t_dim1], ldt);
             /* C(I+1:M,I:N) = C(I+1:M,I:N) + alpha * C(I,I:N)*W(M-1:1)^H */
             alpha = -t[i__ * t_dim1 + 1];
             i__2 = *m - i__;
-            for (j = 1;
-                    j <= i__2;
-                    ++j)
+            for(j = 1; j <= i__2; ++j)
             {
                 a[i__ + j + i__ * a_dim1] += alpha * t[*m + j * t_dim1];
             }
             i__2 = *m - i__;
-            dger_(&i__2, &p, &alpha, &t[*m + t_dim1], ldt, &b[i__ + b_dim1], ldb, &b[i__ + 1 + b_dim1], ldb);
+            dger_(&i__2, &p, &alpha, &t[*m + t_dim1], ldt, &b[i__ + b_dim1], ldb,
+                  &b[i__ + 1 + b_dim1], ldb);
         }
     }
     i__1 = *m;
-    for (i__ = 2;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 2; i__ <= i__1; ++i__)
     {
         /* T(I,1:I-1) := C(I:I-1,1:N) * (alpha * C(I,I:N)^H) */
         alpha = -t[i__ * t_dim1 + 1];
         i__2 = i__ - 1;
-        for (j = 1;
-                j <= i__2;
-                ++j)
+        for(j = 1; j <= i__2; ++j)
         {
             t[i__ + j * t_dim1] = 0.;
         }
         /* Computing MIN */
         i__2 = i__ - 1;
-        p = fla_min(i__2,*l);
+        p = fla_min(i__2, *l);
         /* Computing MIN */
         i__2 = *n - *l + 1;
-        np = fla_min(i__2,*n);
+        np = fla_min(i__2, *n);
         /* Computing MIN */
         i__2 = p + 1;
-        mp = fla_min(i__2,*m);
+        mp = fla_min(i__2, *m);
         /* Triangular part of B2 */
         i__2 = p;
-        for (j = 1;
-                j <= i__2;
-                ++j)
+        for(j = 1; j <= i__2; ++j)
         {
             t[i__ + j * t_dim1] = alpha * b[i__ + (*n - *l + j) * b_dim1];
         }
         dtrmv_("L", "N", "N", &p, &b[np * b_dim1 + 1], ldb, &t[i__ + t_dim1], ldt);
         /* Rectangular part of B2 */
         i__2 = i__ - 1 - p;
-        dgemv_("N", &i__2, l, &alpha, &b[mp + np * b_dim1], ldb, &b[i__ + np * b_dim1], ldb, &c_b10, &t[i__ + mp * t_dim1], ldt);
+        dgemv_("N", &i__2, l, &alpha, &b[mp + np * b_dim1], ldb, &b[i__ + np * b_dim1], ldb, &c_b10,
+               &t[i__ + mp * t_dim1], ldt);
         /* B1 */
         i__2 = i__ - 1;
         i__3 = *n - *l;
-        dgemv_("N", &i__2, &i__3, &alpha, &b[b_offset], ldb, &b[i__ + b_dim1], ldb, &c_b4, &t[i__ + t_dim1], ldt);
+        dgemv_("N", &i__2, &i__3, &alpha, &b[b_offset], ldb, &b[i__ + b_dim1], ldb, &c_b4,
+               &t[i__ + t_dim1], ldt);
         /* T(1:I-1,I) := T(1:I-1,1:I-1) * T(I,1:I-1) */
         i__2 = i__ - 1;
         dtrmv_("L", "T", "N", &i__2, &t[t_offset], ldt, &t[i__ + t_dim1], ldt);
@@ -330,14 +343,10 @@ int dtplqt2_(integer *m, integer *n, integer *l, doublereal * a, integer *lda, d
         t[i__ * t_dim1 + 1] = 0.;
     }
     i__1 = *m;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = *m;
-        for (j = i__ + 1;
-                j <= i__2;
-                ++j)
+        for(j = i__ + 1; j <= i__2; ++j)
         {
             t[i__ + j * t_dim1] = t[j + i__ * t_dim1];
             t[j + i__ * t_dim1] = 0.;
@@ -345,7 +354,6 @@ int dtplqt2_(integer *m, integer *n, integer *l, doublereal * a, integer *lda, d
     }
     /* End of DTPLQT2 */
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* dtplqt2_ */
-

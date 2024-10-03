@@ -21,7 +21,7 @@ FLA_Error FLA_Bidiag_UT_u_blf_var2( FLA_Obj A, FLA_Obj TU, FLA_Obj TV )
   FLA_Obj  TU1_tl;
   FLA_Obj  TV1_tl;
   FLA_Obj  none, none2, none3;
-  dim_t    b_alg, b;
+  fla_dim_t    b_alg, b;
 
   b_alg = FLA_Obj_length( TU );
 

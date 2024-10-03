@@ -1,18 +1,28 @@
-/* ../netlib/chpevx.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/chpevx.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief <b> CHPEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b> */
+/* > \brief <b> CHPEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors
+ * for OTHER matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CHPEVX + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chpevx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chpevx.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chpevx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chpevx.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chpevx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chpevx.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -46,7 +56,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > JOBZ is CHARACTER*1 */
 /* > = 'N': Compute eigenvalues only;
-*/
+ */
 /* > = 'V': Compute eigenvalues and eigenvectors. */
 /* > \endverbatim */
 /* > */
@@ -54,10 +64,10 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > RANGE is CHARACTER*1 */
 /* > = 'A': all eigenvalues will be found;
-*/
+ */
 /* > = 'V': all eigenvalues in the half-open interval (VL,VU] */
 /* > will be found;
-*/
+ */
 /* > = 'I': the IL-th through IU-th eigenvalues will be found. */
 /* > \endverbatim */
 /* > */
@@ -65,7 +75,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -82,7 +92,7 @@ static integer c__1 = 1;
 /* > A, packed columnwise in a linear array. The j-th column of A */
 /* > is stored in the array AP as follows: */
 /* > if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AP(i + (j-1)*(2*n-j)/2) = A(i,j) for j<=i<=n. */
 /* > */
 /* > On exit, AP is overwritten by values generated during the */
@@ -226,15 +236,23 @@ if RANGE = 'V', the exact value of M */
 /* > \ingroup complexOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-int chpevx_(char *jobz, char *range, char *uplo, integer *n, complex *ap, real *vl, real *vu, integer *il, integer *iu, real * abstol, integer *m, real *w, complex *z__, integer *ldz, complex * work, real *rwork, integer *iwork, integer *ifail, integer *info)
+void chpevx_(char *jobz, char *range, char *uplo, integer *n, complex *ap, real *vl, real *vu,
+             integer *il, integer *iu, real *abstol, integer *m, real *w, complex *z__,
+             integer *ldz, complex *work, real *rwork, integer *iwork, integer *ifail,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"chpevx inputs: jobz %c, range %c, uplo %c, n %lld, il %lld, iu %lld, m %lld, ldz %lld",*jobz, *range, *uplo, *n, *il, *iu, *m, *ldz);
+    snprintf(
+        buffer, 256,
+        "chpevx inputs: jobz %c, range %c, uplo %c, n %lld, il %lld, iu %lld, m %lld, ldz %lld",
+        *jobz, *range, *uplo, *n, *il, *iu, *m, *ldz);
 #else
-    snprintf(buffer, 256,"chpevx inputs: jobz %c, range %c, uplo %c, n %d, il %d, iu %d, m %d, ldz %d",*jobz, *range, *uplo, *n, *il, *iu, *m, *ldz);
+    snprintf(buffer, 256,
+             "chpevx inputs: jobz %c, range %c, uplo %c, n %d, il %d, iu %d, m %d, ldz %d", *jobz,
+             *range, *uplo, *n, *il, *iu, *m, *ldz);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -253,36 +271,53 @@ int chpevx_(char *jobz, char *range, char *uplo, integer *n, complex *ap, real *
     logical test;
     integer itmp1, indee;
     real sigma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     char order[1];
     extern /* Subroutine */
-    int cswap_(integer *, complex *, integer *, complex *, integer *), scopy_(integer *, real *, integer *, real *, integer *);
+        void
+        cswap_(integer *, complex *, integer *, complex *, integer *),
+        scopy_(integer *, real *, integer *, real *, integer *);
     logical wantz, alleig, indeig;
     integer iscale, indibl;
     extern real clanhp_(char *, char *, integer *, complex *, real *);
     logical valeig;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int csscal_(integer *, real *, complex *, integer *);
+        void
+        csscal_(integer *, real *, complex *, integer *);
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real abstll, bignum;
     integer indiwk, indisp, indtau;
     extern /* Subroutine */
-    int chptrd_(char *, integer *, complex *, real *, real *, complex *, integer *), cstein_(integer *, real *, real *, integer *, real *, integer *, integer *, complex *, integer *, real *, integer *, integer *, integer *);
+        void
+        chptrd_(char *, integer *, complex *, real *, real *, complex *, integer *),
+        cstein_(integer *, real *, real *, integer *, real *, integer *, integer *, complex *,
+                integer *, real *, integer *, integer *, integer *);
     integer indrwk, indwrk;
     extern /* Subroutine */
-    int csteqr_(char *, integer *, real *, real *, complex *, integer *, real *, integer *), cupgtr_(char *, integer *, complex *, complex *, complex *, integer *, complex *, integer *), ssterf_(integer *, real *, real *, integer *);
+        void
+        csteqr_(char *, integer *, real *, real *, complex *, integer *, real *, integer *),
+        cupgtr_(char *, integer *, complex *, complex *, complex *, integer *, complex *,
+                integer *),
+        ssterf_(integer *, real *, real *, integer *);
     integer nsplit;
     extern /* Subroutine */
-    int cupmtr_(char *, char *, char *, integer *, integer *, complex *, complex *, complex *, integer *, complex *, integer *);
+        void
+        cupmtr_(char *, char *, char *, integer *, integer *, complex *, complex *, complex *,
+                integer *, complex *, integer *);
     real smlnum;
     extern /* Subroutine */
-    int sstebz_(char *, char *, integer *, real *, real *, integer *, integer *, real *, real *, real *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *);
+        void
+        sstebz_(char *, char *, integer *, real *, real *, integer *, integer *, real *, real *,
+                real *, integer *, integer *, real *, integer *, integer *, real *, integer *,
+                integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -315,92 +350,92 @@ int chpevx_(char *jobz, char *range, char *uplo, integer *n, complex *ap, real *
     --iwork;
     --ifail;
     /* Function Body */
-    wantz = lsame_(jobz, "V");
-    alleig = lsame_(range, "A");
-    valeig = lsame_(range, "V");
-    indeig = lsame_(range, "I");
+    wantz = lsame_(jobz, "V", 1, 1);
+    alleig = lsame_(range, "A", 1, 1);
+    valeig = lsame_(range, "V", 1, 1);
+    indeig = lsame_(range, "I", 1, 1);
     *info = 0;
-    if (! (wantz || lsame_(jobz, "N")))
+    if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (alleig || valeig || indeig))
+    else if(!(alleig || valeig || indeig))
     {
         *info = -2;
     }
-    else if (! (lsame_(uplo, "L") || lsame_(uplo, "U")))
+    else if(!(lsame_(uplo, "L", 1, 1) || lsame_(uplo, "U", 1, 1)))
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
     else
     {
-        if (valeig)
+        if(valeig)
         {
-            if (*n > 0 && *vu <= *vl)
+            if(*n > 0 && *vu <= *vl)
             {
                 *info = -7;
             }
         }
-        else if (indeig)
+        else if(indeig)
         {
-            if (*il < 1 || *il > fla_max(1,*n))
+            if(*il < 1 || *il > fla_max(1, *n))
             {
                 *info = -8;
             }
-            else if (*iu < fla_min(*n,*il) || *iu > *n)
+            else if(*iu < fla_min(*n, *il) || *iu > *n)
             {
                 *info = -9;
             }
         }
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        if (*ldz < 1 || wantz && *ldz < *n)
+        if(*ldz < 1 || wantz && *ldz < *n)
         {
             *info = -14;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CHPEVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *m = 0;
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (*n == 1)
+    if(*n == 1)
     {
-        if (alleig || indeig)
+        if(alleig || indeig)
         {
             *m = 1;
             w[1] = ap[1].r;
         }
         else
         {
-            if (*vl < ap[1].r && *vu >= ap[1].r)
+            if(*vl < ap[1].r && *vu >= ap[1].r)
             {
                 *m = 1;
                 w[1] = ap[1].r;
             }
         }
-        if (wantz)
+        if(wantz)
         {
             i__1 = z_dim1 + 1;
             z__[i__1].r = 1.f;
             z__[i__1].i = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = slamch_("Safe minimum");
@@ -411,11 +446,11 @@ int chpevx_(char *jobz, char *range, char *uplo, integer *n, complex *ap, real *
     /* Computing MIN */
     r__1 = sqrt(bignum);
     r__2 = 1.f / sqrt(sqrt(safmin)); // , expr subst
-    rmax = fla_min(r__1,r__2);
+    rmax = fla_min(r__1, r__2);
     /* Scale matrix to allowable range, if necessary. */
     iscale = 0;
     abstll = *abstol;
-    if (valeig)
+    if(valeig)
     {
         vll = *vl;
         vuu = *vu;
@@ -426,25 +461,25 @@ int chpevx_(char *jobz, char *range, char *uplo, integer *n, complex *ap, real *
         vuu = 0.f;
     }
     anrm = clanhp_("M", uplo, n, &ap[1], &rwork[1]);
-    if (anrm > 0.f && anrm < rmin)
+    if(anrm > 0.f && anrm < rmin)
     {
         iscale = 1;
         sigma = rmin / anrm;
     }
-    else if (anrm > rmax)
+    else if(anrm > rmax)
     {
         iscale = 1;
         sigma = rmax / anrm;
     }
-    if (iscale == 1)
+    if(iscale == 1)
     {
         i__1 = *n * (*n + 1) / 2;
         csscal_(&i__1, &sigma, &ap[1], &c__1);
-        if (*abstol > 0.f)
+        if(*abstol > 0.f)
         {
             abstll = *abstol * sigma;
         }
-        if (valeig)
+        if(valeig)
         {
             vll = *vl * sigma;
             vuu = *vu * sigma;
@@ -456,24 +491,24 @@ int chpevx_(char *jobz, char *range, char *uplo, integer *n, complex *ap, real *
     indrwk = inde + *n;
     indtau = 1;
     indwrk = indtau + *n;
-    chptrd_(uplo, n, &ap[1], &rwork[indd], &rwork[inde], &work[indtau], & iinfo);
+    chptrd_(uplo, n, &ap[1], &rwork[indd], &rwork[inde], &work[indtau], &iinfo);
     /* If all eigenvalues are desired and ABSTOL is less than or equal */
     /* to zero, then call SSTERF or CUPGTR and CSTEQR. If this fails */
     /* for some eigenvalue, then try SSTEBZ. */
     indibl = 1;
     test = FALSE_;
-    if (indeig)
+    if(indeig)
     {
-        if (*il == 1 && *iu == *n)
+        if(*il == 1 && *iu == *n)
         {
             test = TRUE_;
         }
     }
-    if ((alleig || test) && *abstol <= 0.f)
+    if((alleig || test) && *abstol <= 0.f)
     {
         scopy_(n, &rwork[indd], &c__1, &w[1], &c__1);
         indee = indrwk + (*n << 1);
-        if (! wantz)
+        if(!wantz)
         {
             i__1 = *n - 1;
             scopy_(&i__1, &rwork[inde], &c__1, &rwork[indee], &c__1);
@@ -481,23 +516,21 @@ int chpevx_(char *jobz, char *range, char *uplo, integer *n, complex *ap, real *
         }
         else
         {
-            cupgtr_(uplo, n, &ap[1], &work[indtau], &z__[z_offset], ldz, & work[indwrk], &iinfo);
+            cupgtr_(uplo, n, &ap[1], &work[indtau], &z__[z_offset], ldz, &work[indwrk], &iinfo);
             i__1 = *n - 1;
             scopy_(&i__1, &rwork[inde], &c__1, &rwork[indee], &c__1);
-            csteqr_(jobz, n, &w[1], &rwork[indee], &z__[z_offset], ldz, & rwork[indrwk], info);
-            if (*info == 0)
+            csteqr_(jobz, n, &w[1], &rwork[indee], &z__[z_offset], ldz, &rwork[indrwk], info);
+            if(*info == 0)
             {
                 i__1 = *n;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     ifail[i__] = 0;
                     /* L10: */
                 }
             }
         }
-        if (*info == 0)
+        if(*info == 0)
         {
             *m = *n;
             goto L20;
@@ -505,7 +538,7 @@ int chpevx_(char *jobz, char *range, char *uplo, integer *n, complex *ap, real *
         *info = 0;
     }
     /* Otherwise, call SSTEBZ and, if eigenvectors are desired, CSTEIN. */
-    if (wantz)
+    if(wantz)
     {
         *(unsigned char *)order = 'B';
     }
@@ -515,20 +548,23 @@ int chpevx_(char *jobz, char *range, char *uplo, integer *n, complex *ap, real *
     }
     indisp = indibl + *n;
     indiwk = indisp + *n;
-    sstebz_(range, order, n, &vll, &vuu, il, iu, &abstll, &rwork[indd], & rwork[inde], m, &nsplit, &w[1], &iwork[indibl], &iwork[indisp], & rwork[indrwk], &iwork[indiwk], info);
-    if (wantz)
+    sstebz_(range, order, n, &vll, &vuu, il, iu, &abstll, &rwork[indd], &rwork[inde], m, &nsplit,
+            &w[1], &iwork[indibl], &iwork[indisp], &rwork[indrwk], &iwork[indiwk], info);
+    if(wantz)
     {
-        cstein_(n, &rwork[indd], &rwork[inde], m, &w[1], &iwork[indibl], & iwork[indisp], &z__[z_offset], ldz, &rwork[indrwk], &iwork[ indiwk], &ifail[1], info);
+        cstein_(n, &rwork[indd], &rwork[inde], m, &w[1], &iwork[indibl], &iwork[indisp],
+                &z__[z_offset], ldz, &rwork[indrwk], &iwork[indiwk], &ifail[1], info);
         /* Apply unitary matrix used in reduction to tridiagonal */
         /* form to eigenvectors returned by CSTEIN. */
         indwrk = indtau + *n;
-        cupmtr_("L", uplo, "N", n, m, &ap[1], &work[indtau], &z__[z_offset], ldz, &work[indwrk], &iinfo);
+        cupmtr_("L", uplo, "N", n, m, &ap[1], &work[indtau], &z__[z_offset], ldz, &work[indwrk],
+                &iinfo);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
 L20:
-    if (iscale == 1)
+    if(iscale == 1)
     {
-        if (*info == 0)
+        if(*info == 0)
         {
             imax = *m;
         }
@@ -541,28 +577,24 @@ L20:
     }
     /* If eigenvalues are not in order, then sort them, along with */
     /* eigenvectors. */
-    if (wantz)
+    if(wantz)
     {
         i__1 = *m - 1;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__ = 0;
             tmp1 = w[j];
             i__2 = *m;
-            for (jj = j + 1;
-                    jj <= i__2;
-                    ++jj)
+            for(jj = j + 1; jj <= i__2; ++jj)
             {
-                if (w[jj] < tmp1)
+                if(w[jj] < tmp1)
                 {
                     i__ = jj;
                     tmp1 = w[jj];
                 }
                 /* L30: */
             }
-            if (i__ != 0)
+            if(i__ != 0)
             {
                 itmp1 = iwork[indibl + i__ - 1];
                 w[i__] = w[j];
@@ -570,7 +602,7 @@ L20:
                 w[j] = tmp1;
                 iwork[indibl + j - 1] = itmp1;
                 cswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], &c__1);
-                if (*info != 0)
+                if(*info != 0)
                 {
                     itmp1 = ifail[i__];
                     ifail[i__] = ifail[j];
@@ -581,7 +613,7 @@ L20:
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHPEVX */
 }
 /* chpevx_ */

@@ -1,16 +1,25 @@
-/* ../netlib/ctgexc.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ctgexc.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CTGEXC */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CTGEXC + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctgexc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctgexc.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctgexc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctgexc.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctgexc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctgexc.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -50,7 +59,7 @@
 /* > \verbatim */
 /* > WANTQ is LOGICAL */
 /* > .TRUE. : update the left transformation matrix Q;
-*/
+ */
 /* > .FALSE.: do not update Q. */
 /* > \endverbatim */
 /* > */
@@ -58,7 +67,7 @@
 /* > \verbatim */
 /* > WANTZ is LOGICAL */
 /* > .TRUE. : update the right transformation matrix Z;
-*/
+ */
 /* > .FALSE.: do not update Z. */
 /* > \endverbatim */
 /* > */
@@ -106,7 +115,7 @@
 /* > \verbatim */
 /* > LDQ is INTEGER */
 /* > The leading dimension of the array Q. LDQ >= 1;
-*/
+ */
 /* > If WANTQ = .TRUE., LDQ >= N. */
 /* > \endverbatim */
 /* > */
@@ -122,7 +131,7 @@
 /* > \verbatim */
 /* > LDZ is INTEGER */
 /* > The leading dimension of the array Z. LDZ >= 1;
-*/
+ */
 /* > If WANTZ = .TRUE., LDZ >= N. */
 /* > \endverbatim */
 /* > */
@@ -191,15 +200,20 @@ Computing Eigenspaces with Specified */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ctgexc_(logical *wantq, logical *wantz, integer *n, complex *a, integer *lda, complex *b, integer *ldb, complex *q, integer *ldq, complex *z__, integer *ldz, integer *ifst, integer * ilst, integer *info)
+void ctgexc_(logical *wantq, logical *wantz, integer *n, complex *a, integer *lda, complex *b,
+             integer *ldb, complex *q, integer *ldq, complex *z__, integer *ldz, integer *ifst,
+             integer *ilst, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"ctgexc inputs: n %lld, lda %lld, ldb %lld, ldq %lld, ldz %lld, ifst %lld, ilst %lld",*n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
+    snprintf(buffer, 256,
+             "ctgexc inputs: n %lld, lda %lld, ldb %lld, ldq %lld, ldz %lld, ifst %lld, ilst %lld",
+             *n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
 #else
-    snprintf(buffer, 256,"ctgexc inputs: n %d, lda %d, ldb %d, ldq %d, ldz %d, ifst %d, ilst %d",*n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
+    snprintf(buffer, 256, "ctgexc inputs: n %d, lda %d, ldb %d, ldq %d, ldz %d, ifst %d, ilst %d",
+             *n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -208,7 +222,10 @@ int ctgexc_(logical *wantq, logical *wantz, integer *n, complex *a, integer *lda
     /* Local variables */
     integer here;
     extern /* Subroutine */
-    int ctgex2_(logical *, logical *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ctgex2_(logical *, logical *, integer *, complex *, integer *, complex *, integer *,
+                complex *, integer *, complex *, integer *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -241,65 +258,66 @@ int ctgexc_(logical *wantq, logical *wantz, integer *n, complex *a, integer *lda
     z__ -= z_offset;
     /* Function Body */
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldq < 1 || *wantq && *ldq < fla_max(1,*n))
+    else if(*ldq < 1 || *wantq && *ldq < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (*ldz < 1 || *wantz && *ldz < fla_max(1,*n))
+    else if(*ldz < 1 || *wantz && *ldz < fla_max(1, *n))
     {
         *info = -11;
     }
-    else if (*ifst < 1 || *ifst > *n)
+    else if(*ifst < 1 || *ifst > *n)
     {
         *info = -12;
     }
-    else if (*ilst < 1 || *ilst > *n)
+    else if(*ilst < 1 || *ilst > *n)
     {
         *info = -13;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CTGEXC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n <= 1)
+    if(*n <= 1)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (*ifst == *ilst)
+    if(*ifst == *ilst)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (*ifst < *ilst)
+    if(*ifst < *ilst)
     {
         here = *ifst;
-L10: /* Swap with next one below */
-        ctgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[ q_offset], ldq, &z__[z_offset], ldz, &here, info);
-        if (*info != 0)
+    L10: /* Swap with next one below */
+        ctgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
+                &z__[z_offset], ldz, &here, info);
+        if(*info != 0)
         {
             *ilst = here;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         ++here;
-        if (here < *ilst)
+        if(here < *ilst)
         {
             goto L10;
         }
@@ -308,16 +326,17 @@ L10: /* Swap with next one below */
     else
     {
         here = *ifst - 1;
-L20: /* Swap with next one above */
-        ctgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[ q_offset], ldq, &z__[z_offset], ldz, &here, info);
-        if (*info != 0)
+    L20: /* Swap with next one above */
+        ctgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
+                &z__[z_offset], ldz, &here, info);
+        if(*info != 0)
         {
             *ilst = here;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         --here;
-        if (here >= *ilst)
+        if(here >= *ilst)
         {
             goto L20;
         }
@@ -325,7 +344,7 @@ L20: /* Swap with next one above */
     }
     *ilst = here;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CTGEXC */
 }
 /* ctgexc_ */

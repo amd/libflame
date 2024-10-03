@@ -1,20 +1,30 @@
-/* ../netlib/sgeevx.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sgeevx.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__0 = 0;
 static integer c_n1 = -1;
-/* > \brief <b> SGEEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors for GE mat rices</b> */
+/* > \brief <b> SGEEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors
+ * for GE mat rices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SGEEVX + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgeevx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgeevx.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgeevx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgeevx.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgeevx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgeevx.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -77,15 +87,15 @@ static integer c_n1 = -1;
 /* > and/or permuted to improve the conditioning of its */
 /* > eigenvalues. */
 /* > = 'N': Do not diagonally scale or permute;
-*/
+ */
 /* > = 'P': Perform permutations to make the matrix more nearly */
 /* > upper triangular. Do not diagonally scale;
-*/
+ */
 /* > = 'S': Diagonally scale the matrix, i.e. replace A by */
 /* > D*A*D**(-1), where D is a diagonal matrix chosen */
 /* > to make the rows and columns of A more equal in */
 /* > norm. Do not permute;
-*/
+ */
 /* > = 'B': Both diagonally scale and permute A. */
 /* > */
 /* > Computed reciprocal condition numbers will be for the matrix */
@@ -97,7 +107,7 @@ static integer c_n1 = -1;
 /* > \verbatim */
 /* > JOBVL is CHARACTER*1 */
 /* > = 'N': left eigenvectors of A are not computed;
-*/
+ */
 /* > = 'V': left eigenvectors of A are computed. */
 /* > If SENSE = 'E' or 'B', JOBVL must = 'V'. */
 /* > \endverbatim */
@@ -106,7 +116,7 @@ static integer c_n1 = -1;
 /* > \verbatim */
 /* > JOBVR is CHARACTER*1 */
 /* > = 'N': right eigenvectors of A are not computed;
-*/
+ */
 /* > = 'V': right eigenvectors of A are computed. */
 /* > If SENSE = 'E' or 'B', JOBVR must = 'V'. */
 /* > \endverbatim */
@@ -116,11 +126,11 @@ static integer c_n1 = -1;
 /* > SENSE is CHARACTER*1 */
 /* > Determines which reciprocal condition numbers are computed. */
 /* > = 'N': None are computed;
-*/
+ */
 /* > = 'E': Computed for eigenvalues only;
-*/
+ */
 /* > = 'V': Computed for right eigenvectors only;
-*/
+ */
 /* > = 'B': Computed for eigenvalues and right eigenvectors. */
 /* > */
 /* > If SENSE = 'E' or 'B', both left and right eigenvectors */
@@ -303,7 +313,10 @@ elements 1:ILO-1 and i+1:N of WR */
 /* > \ingroup realGEeigen */
 /* ===================================================================== */
 /* Subroutine */
-int sgeevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, real *a, integer *lda, real *wr, real *wi, real * vl, integer *ldvl, real *vr, integer *ldvr, integer *ilo, integer * ihi, real *scale, real *abnrm, real *rconde, real *rcondv, real *work, integer *lwork, integer *iwork, integer *info)
+void sgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, real *a, integer *lda,
+             real *wr, real *wi, real *vl, integer *ldvl, real *vr, integer *ldvr, integer *ilo,
+             integer *ihi, real *scale, real *abnrm, real *rconde, real *rcondv, real *work,
+             integer *lwork, integer *iwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2, i__3;
@@ -320,40 +333,62 @@ int sgeevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, re
     real anrm;
     integer ierr, itau, iwrk, nout;
     extern /* Subroutine */
-    int srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+        void
+        srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     extern real snrm2_(integer *, real *, integer *);
     integer icond;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     extern real slapy2_(real *, real *);
     extern /* Subroutine */
-    int slabad_(real *, real *);
+        void
+        slabad_(real *, real *);
     logical scalea;
     real cscale;
     extern /* Subroutine */
-    int sgebak_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, integer *), sgebal_(char *, integer *, real *, integer *, integer *, integer *, real *, integer *);
+        void
+        sgebak_(char *, char *, integer *, integer *, integer *, real *, integer *, real *,
+                integer *, integer *),
+        sgebal_(char *, integer *, real *, integer *, integer *, integer *, real *, integer *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    int sgehrd_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        sgehrd_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *,
+                integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     logical select[1];
     real bignum;
     extern /* Subroutine */
-    int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+        void
+        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
+                integer *, integer *);
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slartg_(real *, real *, real *, real *, real *), sorghr_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *), shseqr_( char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, real *, integer *, real *, integer *, integer *);
+        void
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
+        slartg_(real *, real *, real *, real *, real *),
+        sorghr_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *,
+                integer *),
+        shseqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
+                real *, integer *, real *, integer *, integer *);
     integer minwrk, maxwrk;
     extern /* Subroutine */
-    int strsna_(char *, char *, logical *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *, integer *);
+        void
+        strsna_(char *, char *, logical *, integer *, real *, integer *, real *, integer *, real *,
+                integer *, real *, real *, integer *, integer *, real *, integer *, integer *,
+                integer *);
     logical wantvl, wntsnb;
     integer hswork;
     logical wntsne;
     real smlnum;
     logical lquery, wantvr, wntsnn, wntsnv;
     extern /* Subroutine */
-    int strevc3_(char *, char *, logical *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *, integer *);
+        void
+        strevc3_(char *, char *, logical *, integer *, real *, integer *, real *, integer *, real *,
+                 integer *, integer *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -397,41 +432,42 @@ int sgeevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, re
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
-    wantvl = lsame_(jobvl, "V");
-    wantvr = lsame_(jobvr, "V");
-    wntsnn = lsame_(sense, "N");
-    wntsne = lsame_(sense, "E");
-    wntsnv = lsame_(sense, "V");
-    wntsnb = lsame_(sense, "B");
-    if (! (lsame_(balanc, "N") || lsame_(balanc, "S") || lsame_(balanc, "P") || lsame_(balanc, "B")))
+    wantvl = lsame_(jobvl, "V", 1, 1);
+    wantvr = lsame_(jobvr, "V", 1, 1);
+    wntsnn = lsame_(sense, "N", 1, 1);
+    wntsne = lsame_(sense, "E", 1, 1);
+    wntsnv = lsame_(sense, "V", 1, 1);
+    wntsnb = lsame_(sense, "B", 1, 1);
+    if(!(lsame_(balanc, "N", 1, 1) || lsame_(balanc, "S", 1, 1) || lsame_(balanc, "P", 1, 1)
+         || lsame_(balanc, "B", 1, 1)))
     {
         *info = -1;
     }
-    else if (! wantvl && ! lsame_(jobvl, "N"))
+    else if(!wantvl && !lsame_(jobvl, "N", 1, 1))
     {
         *info = -2;
     }
-    else if (! wantvr && ! lsame_(jobvr, "N"))
+    else if(!wantvr && !lsame_(jobvr, "N", 1, 1))
     {
         *info = -3;
     }
-    else if (! (wntsnn || wntsne || wntsnb || wntsnv) || (wntsne || wntsnb) && ! (wantvl && wantvr))
+    else if(!(wntsnn || wntsne || wntsnb || wntsnv) || (wntsne || wntsnb) && !(wantvl && wantvr))
     {
         *info = -4;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldvl < 1 || wantvl && *ldvl < *n)
+    else if(*ldvl < 1 || wantvl && *ldvl < *n)
     {
         *info = -11;
     }
-    else if (*ldvr < 1 || wantvr && *ldvr < *n)
+    else if(*ldvr < 1 || wantvr && *ldvr < *n)
     {
         *info = -13;
     }
@@ -444,116 +480,124 @@ int sgeevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, re
     /* HSWORK refers to the workspace preferred by SHSEQR, as */
     /* calculated below. HSWORK is computed assuming ILO=1 and IHI=N, */
     /* the worst case.) */
-    if (*info == 0)
+    if(*info == 0)
     {
-        if (*n == 0)
+        if(*n == 0)
         {
             minwrk = 1;
             maxwrk = 1;
         }
         else
         {
-            maxwrk = *n + *n * ilaenv_(&c__1, "SGEHRD", " ", n, &c__1, n, & c__0);
-            if (wantvl)
+            maxwrk = *n + *n * ilaenv_(&c__1, "SGEHRD", " ", n, &c__1, n, &c__0);
+            if(wantvl)
             {
-                strevc3_("L", "B", select, n, &a[a_offset], lda, &vl[ vl_offset], ldvl, &vr[vr_offset], ldvr, n, &nout, & work[1], &c_n1, &ierr);
-                lwork_trevc__ = (integer) work[1];
+                strevc3_("L", "B", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl,
+                         &vr[vr_offset], ldvr, n, &nout, &work[1], &c_n1, &ierr);
+                lwork_trevc__ = (integer)work[1];
                 /* Computing MAX */
                 i__1 = maxwrk;
                 i__2 = *n + lwork_trevc__; // , expr subst
-                maxwrk = fla_max(i__1,i__2);
-                shseqr_("S", "V", n, &c__1, n, &a[a_offset], lda, &wr[1], &wi[ 1], &vl[vl_offset], ldvl, &work[1], &c_n1, info);
+                maxwrk = fla_max(i__1, i__2);
+                shseqr_("S", "V", n, &c__1, n, &a[a_offset], lda, &wr[1], &wi[1], &vl[vl_offset],
+                        ldvl, &work[1], &c_n1, info);
             }
-            else if (wantvr)
+            else if(wantvr)
             {
-                strevc3_("R", "B", select, n, &a[a_offset], lda, &vl[ vl_offset], ldvl, &vr[vr_offset], ldvr, n, &nout, & work[1], &c_n1, &ierr);
-                lwork_trevc__ = (integer) work[1];
+                strevc3_("R", "B", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl,
+                         &vr[vr_offset], ldvr, n, &nout, &work[1], &c_n1, &ierr);
+                lwork_trevc__ = (integer)work[1];
                 /* Computing MAX */
                 i__1 = maxwrk;
                 i__2 = *n + lwork_trevc__; // , expr subst
-                maxwrk = fla_max(i__1,i__2);
-                shseqr_("S", "V", n, &c__1, n, &a[a_offset], lda, &wr[1], &wi[ 1], &vr[vr_offset], ldvr, &work[1], &c_n1, info);
+                maxwrk = fla_max(i__1, i__2);
+                shseqr_("S", "V", n, &c__1, n, &a[a_offset], lda, &wr[1], &wi[1], &vr[vr_offset],
+                        ldvr, &work[1], &c_n1, info);
             }
             else
             {
-                if (wntsnn)
+                if(wntsnn)
                 {
-                    shseqr_("E", "N", n, &c__1, n, &a[a_offset], lda, &wr[1], &wi[1], &vr[vr_offset], ldvr, &work[1], &c_n1, info);
+                    shseqr_("E", "N", n, &c__1, n, &a[a_offset], lda, &wr[1], &wi[1],
+                            &vr[vr_offset], ldvr, &work[1], &c_n1, info);
                 }
                 else
                 {
-                    shseqr_("S", "N", n, &c__1, n, &a[a_offset], lda, &wr[1], &wi[1], &vr[vr_offset], ldvr, &work[1], &c_n1, info);
+                    shseqr_("S", "N", n, &c__1, n, &a[a_offset], lda, &wr[1], &wi[1],
+                            &vr[vr_offset], ldvr, &work[1], &c_n1, info);
                 }
             }
-            hswork = (integer) work[1];
-            if (! wantvl && ! wantvr)
+            hswork = (integer)work[1];
+            if(!wantvl && !wantvr)
             {
                 minwrk = *n << 1;
-                if (! wntsnn)
+                if(!wntsnn)
                 {
                     /* Computing MAX */
                     i__1 = minwrk;
                     i__2 = *n * *n + *n * 6; // , expr subst
-                    minwrk = fla_max(i__1,i__2);
+                    minwrk = fla_max(i__1, i__2);
                 }
-                maxwrk = fla_max(maxwrk,hswork);
-                if (! wntsnn)
+                maxwrk = fla_max(maxwrk, hswork);
+                if(!wntsnn)
                 {
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = *n * *n + *n * 6; // , expr subst
-                    maxwrk = fla_max(i__1,i__2);
+                    maxwrk = fla_max(i__1, i__2);
                 }
             }
             else
             {
                 minwrk = *n * 3;
-                if (! wntsnn && ! wntsne)
+                if(!wntsnn && !wntsne)
                 {
                     /* Computing MAX */
                     i__1 = minwrk;
                     i__2 = *n * *n + *n * 6; // , expr subst
-                    minwrk = fla_max(i__1,i__2);
+                    minwrk = fla_max(i__1, i__2);
                 }
-                maxwrk = fla_max(maxwrk,hswork);
+                maxwrk = fla_max(maxwrk, hswork);
                 /* Computing MAX */
                 i__1 = maxwrk;
-                i__2 = *n + (*n - 1) * ilaenv_(&c__1, "SORGHR", " ", n, &c__1, n, &c_n1); // , expr subst
-                maxwrk = fla_max(i__1,i__2);
-                if (! wntsnn && ! wntsne)
+                i__2 = *n
+                       + (*n - 1)
+                             * ilaenv_(&c__1, "SORGHR", " ", n, &c__1, n, &c_n1); // , expr subst
+                maxwrk = fla_max(i__1, i__2);
+                if(!wntsnn && !wntsne)
                 {
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = *n * *n + *n * 6; // , expr subst
-                    maxwrk = fla_max(i__1,i__2);
+                    maxwrk = fla_max(i__1, i__2);
                 }
                 /* Computing MAX */
                 i__1 = maxwrk;
                 i__2 = *n * 3; // , expr subst
-                maxwrk = fla_max(i__1,i__2);
+                maxwrk = fla_max(i__1, i__2);
             }
-            maxwrk = fla_max(maxwrk,minwrk);
+            maxwrk = fla_max(maxwrk, minwrk);
         }
-        work[1] = (real) maxwrk;
-        if (*lwork < minwrk && ! lquery)
+        work[1] = (real)maxwrk;
+        if(*lwork < minwrk && !lquery)
         {
             *info = -21;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SGEEVX", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
-        return 0;
+        return;
     }
     /* Get machine constants */
     eps = slamch_("P");
@@ -566,27 +610,27 @@ int sgeevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, re
     icond = 0;
     anrm = slange_("M", n, n, &a[a_offset], lda, dum);
     scalea = FALSE_;
-    if (anrm > 0.f && anrm < smlnum)
+    if(anrm > 0.f && anrm < smlnum)
     {
         scalea = TRUE_;
         cscale = smlnum;
     }
-    else if (anrm > bignum)
+    else if(anrm > bignum)
     {
         scalea = TRUE_;
         cscale = bignum;
     }
-    if (scalea)
+    if(scalea)
     {
-        slascl_("G", &c__0, &c__0, &anrm, &cscale, n, n, &a[a_offset], lda, & ierr);
+        slascl_("G", &c__0, &c__0, &anrm, &cscale, n, n, &a[a_offset], lda, &ierr);
     }
     /* Balance the matrix and compute ABNRM */
     sgebal_(balanc, n, &a[a_offset], lda, ilo, ihi, &scale[1], &ierr);
     *abnrm = slange_("1", n, n, &a[a_offset], lda, dum);
-    if (scalea)
+    if(scalea)
     {
         dum[0] = *abnrm;
-        slascl_("G", &c__0, &c__0, &cscale, &anrm, &c__1, &c__1, dum, &c__1, & ierr);
+        slascl_("G", &c__0, &c__0, &cscale, &anrm, &c__1, &c__1, dum, &c__1, &ierr);
         *abnrm = dum[0];
     }
     /* Reduce to upper Hessenberg form */
@@ -594,23 +638,24 @@ int sgeevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, re
     itau = 1;
     iwrk = itau + *n;
     i__1 = *lwork - iwrk + 1;
-    sgehrd_(n, ilo, ihi, &a[a_offset], lda, &work[itau], &work[iwrk], &i__1, & ierr);
-    if (wantvl)
+    sgehrd_(n, ilo, ihi, &a[a_offset], lda, &work[itau], &work[iwrk], &i__1, &ierr);
+    if(wantvl)
     {
         /* Want left eigenvectors */
         /* Copy Householder vectors to VL */
         *(unsigned char *)side = 'L';
-        slacpy_("L", n, n, &a[a_offset], lda, &vl[vl_offset], ldvl) ;
+        slacpy_("L", n, n, &a[a_offset], lda, &vl[vl_offset], ldvl);
         /* Generate orthogonal matrix in VL */
         /* (Workspace: need 2*N-1, prefer N+(N-1)*NB) */
         i__1 = *lwork - iwrk + 1;
-        sorghr_(n, ilo, ihi, &vl[vl_offset], ldvl, &work[itau], &work[iwrk], & i__1, &ierr);
+        sorghr_(n, ilo, ihi, &vl[vl_offset], ldvl, &work[itau], &work[iwrk], &i__1, &ierr);
         /* Perform QR iteration, accumulating Schur vectors in VL */
         /* (Workspace: need 1, prefer HSWORK (see comments) ) */
         iwrk = itau;
         i__1 = *lwork - iwrk + 1;
-        shseqr_("S", "V", n, ilo, ihi, &a[a_offset], lda, &wr[1], &wi[1], &vl[ vl_offset], ldvl, &work[iwrk], &i__1, info);
-        if (wantvr)
+        shseqr_("S", "V", n, ilo, ihi, &a[a_offset], lda, &wr[1], &wi[1], &vl[vl_offset], ldvl,
+                &work[iwrk], &i__1, info);
+        if(wantvr)
         {
             /* Want left and right eigenvectors */
             /* Copy Schur vectors to VR */
@@ -618,27 +663,28 @@ int sgeevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, re
             slacpy_("F", n, n, &vl[vl_offset], ldvl, &vr[vr_offset], ldvr);
         }
     }
-    else if (wantvr)
+    else if(wantvr)
     {
         /* Want right eigenvectors */
         /* Copy Householder vectors to VR */
         *(unsigned char *)side = 'R';
-        slacpy_("L", n, n, &a[a_offset], lda, &vr[vr_offset], ldvr) ;
+        slacpy_("L", n, n, &a[a_offset], lda, &vr[vr_offset], ldvr);
         /* Generate orthogonal matrix in VR */
         /* (Workspace: need 2*N-1, prefer N+(N-1)*NB) */
         i__1 = *lwork - iwrk + 1;
-        sorghr_(n, ilo, ihi, &vr[vr_offset], ldvr, &work[itau], &work[iwrk], & i__1, &ierr);
+        sorghr_(n, ilo, ihi, &vr[vr_offset], ldvr, &work[itau], &work[iwrk], &i__1, &ierr);
         /* Perform QR iteration, accumulating Schur vectors in VR */
         /* (Workspace: need 1, prefer HSWORK (see comments) ) */
         iwrk = itau;
         i__1 = *lwork - iwrk + 1;
-        shseqr_("S", "V", n, ilo, ihi, &a[a_offset], lda, &wr[1], &wi[1], &vr[ vr_offset], ldvr, &work[iwrk], &i__1, info);
+        shseqr_("S", "V", n, ilo, ihi, &a[a_offset], lda, &wr[1], &wi[1], &vr[vr_offset], ldvr,
+                &work[iwrk], &i__1, info);
     }
     else
     {
         /* Compute eigenvalues only */
         /* If condition numbers desired, compute Schur form */
-        if (wntsnn)
+        if(wntsnn)
         {
             *(unsigned char *)job = 'E';
         }
@@ -649,42 +695,43 @@ int sgeevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, re
         /* (Workspace: need 1, prefer HSWORK (see comments) ) */
         iwrk = itau;
         i__1 = *lwork - iwrk + 1;
-        shseqr_(job, "N", n, ilo, ihi, &a[a_offset], lda, &wr[1], &wi[1], &vr[ vr_offset], ldvr, &work[iwrk], &i__1, info);
+        shseqr_(job, "N", n, ilo, ihi, &a[a_offset], lda, &wr[1], &wi[1], &vr[vr_offset], ldvr,
+                &work[iwrk], &i__1, info);
     }
     /* If INFO .NE. 0 from SHSEQR, then quit */
-    if (*info != 0)
+    if(*info != 0)
     {
         goto L50;
     }
-    if (wantvl || wantvr)
+    if(wantvl || wantvr)
     {
         /* Compute left and/or right eigenvectors */
         /* (Workspace: need 3*N, prefer N + 2*N*NB) */
         i__1 = *lwork - iwrk + 1;
-        strevc3_(side, "B", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl, &vr[vr_offset], ldvr, n, &nout, &work[iwrk], &i__1, & ierr);
+        strevc3_(side, "B", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl, &vr[vr_offset],
+                 ldvr, n, &nout, &work[iwrk], &i__1, &ierr);
     }
     /* Compute condition numbers if desired */
     /* (Workspace: need N*N+6*N unless SENSE = 'E') */
-    if (! wntsnn)
+    if(!wntsnn)
     {
-        strsna_(sense, "A", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl, &vr[vr_offset], ldvr, &rconde[1], &rcondv[1], n, &nout, &work[iwrk], n, &iwork[1], &icond);
+        strsna_(sense, "A", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl, &vr[vr_offset],
+                ldvr, &rconde[1], &rcondv[1], n, &nout, &work[iwrk], n, &iwork[1], &icond);
     }
-    if (wantvl)
+    if(wantvl)
     {
         /* Undo balancing of left eigenvectors */
         sgebak_(balanc, "L", n, ilo, ihi, &scale[1], n, &vl[vl_offset], ldvl, &ierr);
         /* Normalize left eigenvectors and make largest component real */
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            if (wi[i__] == 0.f)
+            if(wi[i__] == 0.f)
             {
                 scl = 1.f / snrm2_(n, &vl[i__ * vl_dim1 + 1], &c__1);
                 sscal_(n, &scl, &vl[i__ * vl_dim1 + 1], &c__1);
             }
-            else if (wi[i__] > 0.f)
+            else if(wi[i__] > 0.f)
             {
                 r__1 = snrm2_(n, &vl[i__ * vl_dim1 + 1], &c__1);
                 r__2 = snrm2_(n, &vl[(i__ + 1) * vl_dim1 + 1], &c__1);
@@ -692,9 +739,7 @@ int sgeevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, re
                 sscal_(n, &scl, &vl[i__ * vl_dim1 + 1], &c__1);
                 sscal_(n, &scl, &vl[(i__ + 1) * vl_dim1 + 1], &c__1);
                 i__2 = *n;
-                for (k = 1;
-                        k <= i__2;
-                        ++k)
+                for(k = 1; k <= i__2; ++k)
                 {
                     /* Computing 2nd power */
                     r__1 = vl[k + i__ * vl_dim1];
@@ -705,28 +750,27 @@ int sgeevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, re
                 }
                 k = isamax_(n, &work[1], &c__1);
                 slartg_(&vl[k + i__ * vl_dim1], &vl[k + (i__ + 1) * vl_dim1], &cs, &sn, &r__);
-                srot_(n, &vl[i__ * vl_dim1 + 1], &c__1, &vl[(i__ + 1) * vl_dim1 + 1], &c__1, &cs, &sn);
+                srot_(n, &vl[i__ * vl_dim1 + 1], &c__1, &vl[(i__ + 1) * vl_dim1 + 1], &c__1, &cs,
+                      &sn);
                 vl[k + (i__ + 1) * vl_dim1] = 0.f;
             }
             /* L20: */
         }
     }
-    if (wantvr)
+    if(wantvr)
     {
         /* Undo balancing of right eigenvectors */
         sgebak_(balanc, "R", n, ilo, ihi, &scale[1], n, &vr[vr_offset], ldvr, &ierr);
         /* Normalize right eigenvectors and make largest component real */
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            if (wi[i__] == 0.f)
+            if(wi[i__] == 0.f)
             {
                 scl = 1.f / snrm2_(n, &vr[i__ * vr_dim1 + 1], &c__1);
                 sscal_(n, &scl, &vr[i__ * vr_dim1 + 1], &c__1);
             }
-            else if (wi[i__] > 0.f)
+            else if(wi[i__] > 0.f)
             {
                 r__1 = snrm2_(n, &vr[i__ * vr_dim1 + 1], &c__1);
                 r__2 = snrm2_(n, &vr[(i__ + 1) * vr_dim1 + 1], &c__1);
@@ -734,9 +778,7 @@ int sgeevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, re
                 sscal_(n, &scl, &vr[i__ * vr_dim1 + 1], &c__1);
                 sscal_(n, &scl, &vr[(i__ + 1) * vr_dim1 + 1], &c__1);
                 i__2 = *n;
-                for (k = 1;
-                        k <= i__2;
-                        ++k)
+                for(k = 1; k <= i__2; ++k)
                 {
                     /* Computing 2nd power */
                     r__1 = vr[k + i__ * vr_dim1];
@@ -747,7 +789,8 @@ int sgeevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, re
                 }
                 k = isamax_(n, &work[1], &c__1);
                 slartg_(&vr[k + i__ * vr_dim1], &vr[k + (i__ + 1) * vr_dim1], &cs, &sn, &r__);
-                srot_(n, &vr[i__ * vr_dim1 + 1], &c__1, &vr[(i__ + 1) * vr_dim1 + 1], &c__1, &cs, &sn);
+                srot_(n, &vr[i__ * vr_dim1 + 1], &c__1, &vr[(i__ + 1) * vr_dim1 + 1], &c__1, &cs,
+                      &sn);
                 vr[k + (i__ + 1) * vr_dim1] = 0.f;
             }
             /* L40: */
@@ -755,23 +798,23 @@ int sgeevx_(char *balanc, char *jobvl, char *jobvr, char * sense, integer *n, re
     }
     /* Undo scaling if necessary */
 L50:
-    if (scalea)
+    if(scalea)
     {
         i__1 = *n - *info;
         /* Computing MAX */
         i__3 = *n - *info;
-        i__2 = fla_max(i__3,1);
+        i__2 = fla_max(i__3, 1);
         slascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &wr[*info + 1], &i__2, &ierr);
         i__1 = *n - *info;
         /* Computing MAX */
         i__3 = *n - *info;
-        i__2 = fla_max(i__3,1);
+        i__2 = fla_max(i__3, 1);
         slascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &wi[*info + 1], &i__2, &ierr);
-        if (*info == 0)
+        if(*info == 0)
         {
-            if ((wntsnv || wntsnb) && icond == 0)
+            if((wntsnv || wntsnb) && icond == 0)
             {
-                slascl_("G", &c__0, &c__0, &cscale, &anrm, n, &c__1, &rcondv[ 1], n, &ierr);
+                slascl_("G", &c__0, &c__0, &cscale, &anrm, n, &c__1, &rcondv[1], n, &ierr);
             }
         }
         else
@@ -782,8 +825,8 @@ L50:
             slascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &wi[1], n, &ierr);
         }
     }
-    work[1] = (real) maxwrk;
-    return 0;
+    work[1] = (real)maxwrk;
+    return;
     /* End of SGEEVX */
 }
 /* sgeevx_ */

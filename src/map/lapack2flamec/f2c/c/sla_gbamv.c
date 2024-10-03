@@ -1,16 +1,25 @@
-/* ../netlib/sla_gbamv.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sla_gbamv.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLA_GBAMV performs a matrix-vector operation to calculate error bounds. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLA_GBAMV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sla_gba mv.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sla_gba
+ * mv.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sla_gba mv.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sla_gba
+ * mv.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sla_gba mv.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sla_gba
+ * mv.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -170,7 +179,8 @@
 /* > \ingroup realGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int sla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku, real *alpha, real *ab, integer *ldab, real * x, integer *incx, real *beta, real *y, integer *incy)
+void sla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku, real *alpha,
+                real *ab, integer *ldab, real *x, integer *incx, real *beta, real *y, integer *incy)
 {
     /* System generated locals */
     integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
@@ -187,7 +197,8 @@ int sla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku,
     real safe1;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -217,51 +228,51 @@ int sla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku,
     --y;
     /* Function Body */
     info = 0;
-    if (! (*trans == ilatrans_("N") || *trans == ilatrans_("T") || *trans == ilatrans_("C")))
+    if(!(*trans == ilatrans_("N") || *trans == ilatrans_("T") || *trans == ilatrans_("C")))
     {
         info = 1;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         info = 2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         info = 3;
     }
-    else if (*kl < 0 || *kl > *m - 1)
+    else if(*kl < 0 || *kl > *m - 1)
     {
         info = 4;
     }
-    else if (*ku < 0 || *ku > *n - 1)
+    else if(*ku < 0 || *ku > *n - 1)
     {
         info = 5;
     }
-    else if (*ldab < *kl + *ku + 1)
+    else if(*ldab < *kl + *ku + 1)
     {
         info = 6;
     }
-    else if (*incx == 0)
+    else if(*incx == 0)
     {
         info = 8;
     }
-    else if (*incy == 0)
+    else if(*incy == 0)
     {
         info = 11;
     }
-    if (info != 0)
+    if(info != 0)
     {
         xerbla_("SLA_GBAMV ", &info, (ftnlen)10);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
-    if (*m == 0 || *n == 0 || *alpha == 0.f && *beta == 1.f)
+    if(*m == 0 || *n == 0 || *alpha == 0.f && *beta == 1.f)
     {
-        return 0;
+        return;
     }
     /* Set LENX and LENY, the lengths of the vectors x and y, and set */
     /* up the start points in X and Y. */
-    if (*trans == ilatrans_("N"))
+    if(*trans == ilatrans_("N"))
     {
         lenx = *n;
         leny = *m;
@@ -271,7 +282,7 @@ int sla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku,
         lenx = *m;
         leny = *n;
     }
-    if (*incx > 0)
+    if(*incx > 0)
     {
         kx = 1;
     }
@@ -279,7 +290,7 @@ int sla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku,
     {
         kx = 1 - (lenx - 1) * *incx;
     }
-    if (*incy > 0)
+    if(*incy > 0)
     {
         ky = 1;
     }
@@ -298,21 +309,19 @@ int sla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku,
     kd = *ku + 1;
     ke = *kl + 1;
     iy = ky;
-    if (*incx == 1)
+    if(*incx == 1)
     {
-        if (*trans == ilatrans_("N"))
+        if(*trans == ilatrans_("N"))
         {
             i__1 = leny;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
-                if (*beta == 0.f)
+                if(*beta == 0.f)
                 {
                     symb_zero__ = TRUE_;
                     y[iy] = 0.f;
                 }
-                else if (y[iy] == 0.f)
+                else if(y[iy] == 0.f)
                 {
                     symb_zero__ = TRUE_;
                 }
@@ -321,23 +330,21 @@ int sla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku,
                     symb_zero__ = FALSE_;
                     y[iy] = *beta * (r__1 = y[iy], f2c_abs(r__1));
                 }
-                if (*alpha != 0.f)
+                if(*alpha != 0.f)
                 {
                     /* Computing MAX */
                     i__2 = i__ - *kl;
                     /* Computing MIN */
                     i__4 = i__ + *ku;
-                    i__3 = fla_min(i__4,lenx);
-                    for (j = fla_max(i__2,1);
-                            j <= i__3;
-                            ++j)
+                    i__3 = fla_min(i__4, lenx);
+                    for(j = fla_max(i__2, 1); j <= i__3; ++j)
                     {
-                        temp = (r__1 = ab[kd + i__ - j + j * ab_dim1], f2c_abs( r__1));
+                        temp = (r__1 = ab[kd + i__ - j + j * ab_dim1], f2c_abs(r__1));
                         symb_zero__ = symb_zero__ && (x[j] == 0.f || temp == 0.f);
                         y[iy] += *alpha * (r__1 = x[j], f2c_abs(r__1)) * temp;
                     }
                 }
-                if (! symb_zero__)
+                if(!symb_zero__)
                 {
                     y[iy] += r_sign(&safe1, &y[iy]);
                 }
@@ -347,16 +354,14 @@ int sla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku,
         else
         {
             i__1 = leny;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
-                if (*beta == 0.f)
+                if(*beta == 0.f)
                 {
                     symb_zero__ = TRUE_;
                     y[iy] = 0.f;
                 }
-                else if (y[iy] == 0.f)
+                else if(y[iy] == 0.f)
                 {
                     symb_zero__ = TRUE_;
                 }
@@ -365,23 +370,21 @@ int sla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku,
                     symb_zero__ = FALSE_;
                     y[iy] = *beta * (r__1 = y[iy], f2c_abs(r__1));
                 }
-                if (*alpha != 0.f)
+                if(*alpha != 0.f)
                 {
                     /* Computing MAX */
                     i__3 = i__ - *kl;
                     /* Computing MIN */
                     i__4 = i__ + *ku;
-                    i__2 = fla_min(i__4,lenx);
-                    for (j = fla_max(i__3,1);
-                            j <= i__2;
-                            ++j)
+                    i__2 = fla_min(i__4, lenx);
+                    for(j = fla_max(i__3, 1); j <= i__2; ++j)
                     {
-                        temp = (r__1 = ab[ke - i__ + j + i__ * ab_dim1], f2c_abs( r__1));
+                        temp = (r__1 = ab[ke - i__ + j + i__ * ab_dim1], f2c_abs(r__1));
                         symb_zero__ = symb_zero__ && (x[j] == 0.f || temp == 0.f);
                         y[iy] += *alpha * (r__1 = x[j], f2c_abs(r__1)) * temp;
                     }
                 }
-                if (! symb_zero__)
+                if(!symb_zero__)
                 {
                     y[iy] += r_sign(&safe1, &y[iy]);
                 }
@@ -391,19 +394,17 @@ int sla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku,
     }
     else
     {
-        if (*trans == ilatrans_("N"))
+        if(*trans == ilatrans_("N"))
         {
             i__1 = leny;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
-                if (*beta == 0.f)
+                if(*beta == 0.f)
                 {
                     symb_zero__ = TRUE_;
                     y[iy] = 0.f;
                 }
-                else if (y[iy] == 0.f)
+                else if(y[iy] == 0.f)
                 {
                     symb_zero__ = TRUE_;
                 }
@@ -412,25 +413,23 @@ int sla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku,
                     symb_zero__ = FALSE_;
                     y[iy] = *beta * (r__1 = y[iy], f2c_abs(r__1));
                 }
-                if (*alpha != 0.f)
+                if(*alpha != 0.f)
                 {
                     jx = kx;
                     /* Computing MAX */
                     i__2 = i__ - *kl;
                     /* Computing MIN */
                     i__4 = i__ + *ku;
-                    i__3 = fla_min(i__4,lenx);
-                    for (j = fla_max(i__2,1);
-                            j <= i__3;
-                            ++j)
+                    i__3 = fla_min(i__4, lenx);
+                    for(j = fla_max(i__2, 1); j <= i__3; ++j)
                     {
-                        temp = (r__1 = ab[kd + i__ - j + j * ab_dim1], f2c_abs( r__1));
+                        temp = (r__1 = ab[kd + i__ - j + j * ab_dim1], f2c_abs(r__1));
                         symb_zero__ = symb_zero__ && (x[jx] == 0.f || temp == 0.f);
                         y[iy] += *alpha * (r__1 = x[jx], f2c_abs(r__1)) * temp;
                         jx += *incx;
                     }
                 }
-                if (! symb_zero__)
+                if(!symb_zero__)
                 {
                     y[iy] += r_sign(&safe1, &y[iy]);
                 }
@@ -440,16 +439,14 @@ int sla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku,
         else
         {
             i__1 = leny;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
-                if (*beta == 0.f)
+                if(*beta == 0.f)
                 {
                     symb_zero__ = TRUE_;
                     y[iy] = 0.f;
                 }
-                else if (y[iy] == 0.f)
+                else if(y[iy] == 0.f)
                 {
                     symb_zero__ = TRUE_;
                 }
@@ -458,25 +455,23 @@ int sla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku,
                     symb_zero__ = FALSE_;
                     y[iy] = *beta * (r__1 = y[iy], f2c_abs(r__1));
                 }
-                if (*alpha != 0.f)
+                if(*alpha != 0.f)
                 {
                     jx = kx;
                     /* Computing MAX */
                     i__3 = i__ - *kl;
                     /* Computing MIN */
                     i__4 = i__ + *ku;
-                    i__2 = fla_min(i__4,lenx);
-                    for (j = fla_max(i__3,1);
-                            j <= i__2;
-                            ++j)
+                    i__2 = fla_min(i__4, lenx);
+                    for(j = fla_max(i__3, 1); j <= i__2; ++j)
                     {
-                        temp = (r__1 = ab[ke - i__ + j + i__ * ab_dim1], f2c_abs( r__1));
+                        temp = (r__1 = ab[ke - i__ + j + i__ * ab_dim1], f2c_abs(r__1));
                         symb_zero__ = symb_zero__ && (x[jx] == 0.f || temp == 0.f);
                         y[iy] += *alpha * (r__1 = x[jx], f2c_abs(r__1)) * temp;
                         jx += *incx;
                     }
                 }
-                if (! symb_zero__)
+                if(!symb_zero__)
                 {
                     y[iy] += r_sign(&safe1, &y[iy]);
                 }
@@ -484,7 +479,7 @@ int sla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku,
             }
         }
     }
-    return 0;
+    return;
     /* End of SLA_GBAMV */
 }
 /* sla_gbamv__ */

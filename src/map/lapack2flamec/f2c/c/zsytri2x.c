@@ -1,27 +1,28 @@
-/* ../netlib/zsytri2x.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zsytri2x.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    1.,0.
-}
-;
-static doublecomplex c_b2 =
-{
-    0.,0.
-}
-;
+static doublecomplex c_b1 = {1., 0.};
+static doublecomplex c_b2 = {0., 0.};
 /* > \brief \b ZSYTRI2X */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZSYTRI2X + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsytri2 x.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsytri2
+ * x.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsytri2 x.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsytri2
+ * x.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsytri2 x.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsytri2
+ * x.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -52,7 +53,7 @@ static doublecomplex c_b2 =
 /* > Specifies whether the details of the factorization are stored */
 /* > as an upper or lower triangular matrix. */
 /* > = 'U': Upper triangular, form is A = U*D*U**T;
-*/
+ */
 /* > = 'L': Lower triangular, form is A = L*D*L**T. */
 /* > \endverbatim */
 /* > */
@@ -120,10 +121,12 @@ the matrix is singular and its */
 /* > \ingroup complex16SYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *work, integer *nb, integer *info)
+void zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv,
+               doublecomplex *work, integer *nb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zsytri2x inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", nb %" FLA_IS "",*uplo, *n, *lda, *nb);
+    AOCL_DTL_SNPRINTF("zsytri2x inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", nb %" FLA_IS "",
+                      *uplo, *n, *lda, *nb);
     /* System generated locals */
     integer a_dim1, a_offset, work_dim1, work_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     doublecomplex z__1, z__2, z__3;
@@ -133,26 +136,37 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
     doublecomplex d__;
     integer i__, j, k;
     extern /* Subroutine */
-    int zsyswapr_(char *, integer *, doublecomplex *, integer *, integer *, integer *);
+        void
+        zsyswapr_(char *, integer *, doublecomplex *, integer *, integer *, integer *);
     doublecomplex t, ak;
     integer u11, ip, nnb, cut;
     doublecomplex akp1;
     integer invd;
     doublecomplex akkp1;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
-    int zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
+               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     integer count;
     logical upper;
     extern /* Subroutine */
-    int ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *, integer *);
     doublecomplex u01_i_j__, u11_i_j__;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), ztrtri_( char *, char *, integer *, doublecomplex *, integer *, integer *);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
+        ztrtri_(char *, char *, integer *, doublecomplex *, integer *, integer *);
     doublecomplex u01_ip1_j__, u11_ip1_j__;
     extern /* Subroutine */
-    int zsyconv_(char *, char *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *);
+        void
+        zsyconv_(char *, char *, integer *, doublecomplex *, integer *, integer *, doublecomplex *,
+                 integer *);
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -184,48 +198,46 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
     work -= work_offset;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
     /* Quick return if possible */
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZSYTRI2X", &i__1, (ftnlen)8);
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
-    if (*n == 0)
+    if(*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* Convert A */
     /* Workspace got Non-diag elements of D */
-    zsyconv_(uplo, "C", n, &a[a_offset], lda, &ipiv[1], &work[work_offset], & iinfo);
+    zsyconv_(uplo, "C", n, &a[a_offset], lda, &ipiv[1], &work[work_offset], &iinfo);
     /* Check that the diagonal matrix D is nonsingular. */
-    if (upper)
+    if(upper)
     {
         /* Upper triangular storage: examine D from bottom to top */
-        for (*info = *n;
-                *info >= 1;
-                --(*info))
+        for(*info = *n; *info >= 1; --(*info))
         {
             i__1 = *info + *info * a_dim1;
-            if (ipiv[*info] > 0 && (a[i__1].r == 0. && a[i__1].i == 0.))
+            if(ipiv[*info] > 0 && (a[i__1].r == 0. && a[i__1].i == 0.))
             {
-    AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                AOCL_DTL_TRACE_LOG_EXIT
+                return;
             }
         }
     }
@@ -233,15 +245,13 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
     {
         /* Lower triangular storage: examine D from top to bottom. */
         i__1 = *n;
-        for (*info = 1;
-                *info <= i__1;
-                ++(*info))
+        for(*info = 1; *info <= i__1; ++(*info))
         {
             i__2 = *info + *info * a_dim1;
-            if (ipiv[*info] > 0 && (a[i__2].r == 0. && a[i__2].i == 0.))
+            if(ipiv[*info] > 0 && (a[i__2].r == 0. && a[i__2].i == 0.))
             {
-    AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                AOCL_DTL_TRACE_LOG_EXIT
+                return;
             }
         }
     }
@@ -255,7 +265,7 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
     /* INVD is a block (N,2) */
     /* The first element of INVD is in WORK(1,INVD) */
     invd = *nb + 2;
-    if (upper)
+    if(upper)
     {
         /* invA = P * inv(U**T)*inv(D)*inv(U)*P**T. */
         ztrtri_(uplo, "U", n, &a[a_offset], lda, info);
@@ -263,7 +273,7 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
         k = 1;
         while(k <= *n)
         {
-            if (ipiv[k] > 0)
+            if(ipiv[k] > 0)
             {
                 /* 1 x 1 diagonal NNB */
                 i__1 = k + invd * work_dim1;
@@ -327,7 +337,7 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
         while(cut > 0)
         {
             nnb = *nb;
-            if (cut <= nnb)
+            if(cut <= nnb)
             {
                 nnb = cut;
             }
@@ -336,17 +346,15 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
                 count = 0;
                 /* count negative elements, */
                 i__1 = cut;
-                for (i__ = cut + 1 - nnb;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = cut + 1 - nnb; i__ <= i__1; ++i__)
                 {
-                    if (ipiv[i__] < 0)
+                    if(ipiv[i__] < 0)
                     {
                         ++count;
                     }
                 }
                 /* need a even number for a clear cut */
-                if (count % 2 == 1)
+                if(count % 2 == 1)
                 {
                     ++nnb;
                 }
@@ -354,14 +362,10 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
             cut -= nnb;
             /* U01 Block */
             i__1 = cut;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = nnb;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = i__ + j * work_dim1;
                     i__4 = i__ + (cut + j) * a_dim1;
@@ -371,26 +375,20 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
             }
             /* U11 Block */
             i__1 = nnb;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = u11 + i__ + i__ * work_dim1;
                 work[i__2].r = 1.;
                 work[i__2].i = 0.; // , expr subst
                 i__2 = i__ - 1;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = u11 + i__ + j * work_dim1;
                     work[i__3].r = 0.;
                     work[i__3].i = 0.; // , expr subst
                 }
                 i__2 = nnb;
-                for (j = i__ + 1;
-                        j <= i__2;
-                        ++j)
+                for(j = i__ + 1; j <= i__2; ++j)
                 {
                     i__3 = u11 + i__ + j * work_dim1;
                     i__4 = cut + i__ + (cut + j) * a_dim1;
@@ -402,18 +400,17 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
             i__ = 1;
             while(i__ <= cut)
             {
-                if (ipiv[i__] > 0)
+                if(ipiv[i__] > 0)
                 {
                     i__1 = nnb;
-                    for (j = 1;
-                            j <= i__1;
-                            ++j)
+                    for(j = 1; j <= i__1; ++j)
                     {
                         i__2 = i__ + j * work_dim1;
                         i__3 = i__ + invd * work_dim1;
                         i__4 = i__ + j * work_dim1;
                         z__1.r = work[i__3].r * work[i__4].r - work[i__3].i * work[i__4].i;
-                        z__1.i = work[i__3].r * work[ i__4].i + work[i__3].i * work[i__4].r; // , expr subst
+                        z__1.i = work[i__3].r * work[i__4].i
+                                 + work[i__3].i * work[i__4].r; // , expr subst
                         work[i__2].r = z__1.r;
                         work[i__2].i = z__1.i; // , expr subst
                     }
@@ -422,23 +419,23 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
                 else
                 {
                     i__1 = nnb;
-                    for (j = 1;
-                            j <= i__1;
-                            ++j)
+                    for(j = 1; j <= i__1; ++j)
                     {
                         i__2 = i__ + j * work_dim1;
                         u01_i_j__.r = work[i__2].r;
-                        u01_i_j__.i = work[i__2] .i; // , expr subst
+                        u01_i_j__.i = work[i__2].i; // , expr subst
                         i__2 = i__ + 1 + j * work_dim1;
                         u01_ip1_j__.r = work[i__2].r;
-                        u01_ip1_j__.i = work[ i__2].i; // , expr subst
+                        u01_ip1_j__.i = work[i__2].i; // , expr subst
                         i__2 = i__ + j * work_dim1;
                         i__3 = i__ + invd * work_dim1;
                         z__2.r = work[i__3].r * u01_i_j__.r - work[i__3].i * u01_i_j__.i;
-                        z__2.i = work[i__3].r * u01_i_j__.i + work[i__3].i * u01_i_j__.r; // , expr subst
+                        z__2.i = work[i__3].r * u01_i_j__.i
+                                 + work[i__3].i * u01_i_j__.r; // , expr subst
                         i__4 = i__ + (invd + 1) * work_dim1;
                         z__3.r = work[i__4].r * u01_ip1_j__.r - work[i__4].i * u01_ip1_j__.i;
-                        z__3.i = work[i__4].r * u01_ip1_j__.i + work[i__4].i * u01_ip1_j__.r; // , expr subst
+                        z__3.i = work[i__4].r * u01_ip1_j__.i
+                                 + work[i__4].i * u01_ip1_j__.r; // , expr subst
                         z__1.r = z__2.r + z__3.r;
                         z__1.i = z__2.i + z__3.i; // , expr subst
                         work[i__2].r = z__1.r;
@@ -446,10 +443,12 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
                         i__2 = i__ + 1 + j * work_dim1;
                         i__3 = i__ + 1 + invd * work_dim1;
                         z__2.r = work[i__3].r * u01_i_j__.r - work[i__3].i * u01_i_j__.i;
-                        z__2.i = work[i__3].r * u01_i_j__.i + work[i__3].i * u01_i_j__.r; // , expr subst
+                        z__2.i = work[i__3].r * u01_i_j__.i
+                                 + work[i__3].i * u01_i_j__.r; // , expr subst
                         i__4 = i__ + 1 + (invd + 1) * work_dim1;
                         z__3.r = work[i__4].r * u01_ip1_j__.r - work[i__4].i * u01_ip1_j__.i;
-                        z__3.i = work[i__4].r * u01_ip1_j__.i + work[i__4].i * u01_ip1_j__.r; // , expr subst
+                        z__3.i = work[i__4].r * u01_ip1_j__.i
+                                 + work[i__4].i * u01_ip1_j__.r; // , expr subst
                         z__1.r = z__2.r + z__3.r;
                         z__1.i = z__2.i + z__3.i; // , expr subst
                         work[i__2].r = z__1.r;
@@ -462,18 +461,17 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
             i__ = 1;
             while(i__ <= nnb)
             {
-                if (ipiv[cut + i__] > 0)
+                if(ipiv[cut + i__] > 0)
                 {
                     i__1 = nnb;
-                    for (j = i__;
-                            j <= i__1;
-                            ++j)
+                    for(j = i__; j <= i__1; ++j)
                     {
                         i__2 = u11 + i__ + j * work_dim1;
                         i__3 = cut + i__ + invd * work_dim1;
                         i__4 = u11 + i__ + j * work_dim1;
                         z__1.r = work[i__3].r * work[i__4].r - work[i__3].i * work[i__4].i;
-                        z__1.i = work[i__3].r * work[ i__4].i + work[i__3].i * work[i__4].r; // , expr subst
+                        z__1.i = work[i__3].r * work[i__4].i
+                                 + work[i__3].i * work[i__4].r; // , expr subst
                         work[i__2].r = z__1.r;
                         work[i__2].i = z__1.i; // , expr subst
                     }
@@ -482,25 +480,25 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
                 else
                 {
                     i__1 = nnb;
-                    for (j = i__;
-                            j <= i__1;
-                            ++j)
+                    for(j = i__; j <= i__1; ++j)
                     {
                         i__2 = u11 + i__ + j * work_dim1;
                         u11_i_j__.r = work[i__2].r;
-                        u11_i_j__.i = work[i__2] .i; // , expr subst
+                        u11_i_j__.i = work[i__2].i; // , expr subst
                         i__2 = u11 + i__ + 1 + j * work_dim1;
                         u11_ip1_j__.r = work[i__2].r;
-                        u11_ip1_j__.i = work[ i__2].i; // , expr subst
+                        u11_ip1_j__.i = work[i__2].i; // , expr subst
                         i__2 = u11 + i__ + j * work_dim1;
                         i__3 = cut + i__ + invd * work_dim1;
                         i__4 = u11 + i__ + j * work_dim1;
                         z__2.r = work[i__3].r * work[i__4].r - work[i__3].i * work[i__4].i;
-                        z__2.i = work[i__3].r * work[ i__4].i + work[i__3].i * work[i__4].r; // , expr subst
+                        z__2.i = work[i__3].r * work[i__4].i
+                                 + work[i__3].i * work[i__4].r; // , expr subst
                         i__5 = cut + i__ + (invd + 1) * work_dim1;
                         i__6 = u11 + i__ + 1 + j * work_dim1;
                         z__3.r = work[i__5].r * work[i__6].r - work[i__5].i * work[i__6].i;
-                        z__3.i = work[i__5].r * work[ i__6].i + work[i__5].i * work[i__6].r; // , expr subst
+                        z__3.i = work[i__5].r * work[i__6].i
+                                 + work[i__5].i * work[i__6].r; // , expr subst
                         z__1.r = z__2.r + z__3.r;
                         z__1.i = z__2.i + z__3.i; // , expr subst
                         work[i__2].r = z__1.r;
@@ -508,10 +506,12 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
                         i__2 = u11 + i__ + 1 + j * work_dim1;
                         i__3 = cut + i__ + 1 + invd * work_dim1;
                         z__2.r = work[i__3].r * u11_i_j__.r - work[i__3].i * u11_i_j__.i;
-                        z__2.i = work[i__3].r * u11_i_j__.i + work[i__3].i * u11_i_j__.r; // , expr subst
+                        z__2.i = work[i__3].r * u11_i_j__.i
+                                 + work[i__3].i * u11_i_j__.r; // , expr subst
                         i__4 = cut + i__ + 1 + (invd + 1) * work_dim1;
                         z__3.r = work[i__4].r * u11_ip1_j__.r - work[i__4].i * u11_ip1_j__.i;
-                        z__3.i = work[i__4].r * u11_ip1_j__.i + work[i__4].i * u11_ip1_j__.r; // , expr subst
+                        z__3.i = work[i__4].r * u11_ip1_j__.i
+                                 + work[i__4].i * u11_ip1_j__.r; // , expr subst
                         z__1.r = z__2.r + z__3.r;
                         z__1.i = z__2.i + z__3.i; // , expr subst
                         work[i__2].r = z__1.r;
@@ -522,16 +522,13 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
             }
             /* U11**T*invD1*U11->U11 */
             i__1 = *n + *nb + 1;
-            ztrmm_("L", "U", "T", "U", &nnb, &nnb, &c_b1, &a[cut + 1 + (cut + 1) * a_dim1], lda, &work[u11 + 1 + work_dim1], &i__1);
+            ztrmm_("L", "U", "T", "U", &nnb, &nnb, &c_b1, &a[cut + 1 + (cut + 1) * a_dim1], lda,
+                   &work[u11 + 1 + work_dim1], &i__1);
             i__1 = nnb;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = nnb;
-                for (j = i__;
-                        j <= i__2;
-                        ++j)
+                for(j = i__; j <= i__2; ++j)
                 {
                     i__3 = cut + i__ + (cut + j) * a_dim1;
                     i__4 = u11 + i__ + j * work_dim1;
@@ -542,17 +539,14 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
             /* U01**T*invD*U01->A(CUT+I,CUT+J) */
             i__1 = *n + *nb + 1;
             i__2 = *n + *nb + 1;
-            zgemm_("T", "N", &nnb, &nnb, &cut, &c_b1, &a[(cut + 1) * a_dim1 + 1], lda, &work[work_offset], &i__1, &c_b2, &work[u11 + 1 + work_dim1], &i__2);
+            zgemm_("T", "N", &nnb, &nnb, &cut, &c_b1, &a[(cut + 1) * a_dim1 + 1], lda,
+                   &work[work_offset], &i__1, &c_b2, &work[u11 + 1 + work_dim1], &i__2);
             /* U11 = U11**T*invD1*U11 + U01**T*invD*U01 */
             i__1 = nnb;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = nnb;
-                for (j = i__;
-                        j <= i__2;
-                        ++j)
+                for(j = i__; j <= i__2; ++j)
                 {
                     i__3 = cut + i__ + (cut + j) * a_dim1;
                     i__4 = cut + i__ + (cut + j) * a_dim1;
@@ -565,17 +559,14 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
             }
             /* U01 = U00**T*invD0*U01 */
             i__1 = *n + *nb + 1;
-            ztrmm_("L", uplo, "T", "U", &cut, &nnb, &c_b1, &a[a_offset], lda, &work[work_offset], &i__1);
+            ztrmm_("L", uplo, "T", "U", &cut, &nnb, &c_b1, &a[a_offset], lda, &work[work_offset],
+                   &i__1);
             /* Update U01 */
             i__1 = cut;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = nnb;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = i__ + (cut + j) * a_dim1;
                     i__4 = i__ + j * work_dim1;
@@ -589,14 +580,14 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
         i__ = 1;
         while(i__ <= *n)
         {
-            if (ipiv[i__] > 0)
+            if(ipiv[i__] > 0)
             {
                 ip = ipiv[i__];
-                if (i__ < ip)
+                if(i__ < ip)
                 {
                     zsyswapr_(uplo, n, &a[a_offset], lda, &i__, &ip);
                 }
-                if (i__ > ip)
+                if(i__ > ip)
                 {
                     zsyswapr_(uplo, n, &a[a_offset], lda, &ip, &i__);
                 }
@@ -605,12 +596,12 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
             {
                 ip = -ipiv[i__];
                 ++i__;
-                if (i__ - 1 < ip)
+                if(i__ - 1 < ip)
                 {
                     i__1 = i__ - 1;
                     zsyswapr_(uplo, n, &a[a_offset], lda, &i__1, &ip);
                 }
-                if (i__ - 1 > ip)
+                if(i__ - 1 > ip)
                 {
                     i__1 = i__ - 1;
                     zsyswapr_(uplo, n, &a[a_offset], lda, &ip, &i__1);
@@ -628,7 +619,7 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
         k = *n;
         while(k >= 1)
         {
-            if (ipiv[k] > 0)
+            if(ipiv[k] > 0)
             {
                 /* 1 x 1 diagonal NNB */
                 i__1 = k + invd * work_dim1;
@@ -692,7 +683,7 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
         while(cut < *n)
         {
             nnb = *nb;
-            if (cut + nnb >= *n)
+            if(cut + nnb >= *n)
             {
                 nnb = *n - cut;
             }
@@ -701,31 +692,25 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
                 count = 0;
                 /* count negative elements, */
                 i__1 = cut + nnb;
-                for (i__ = cut + 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = cut + 1; i__ <= i__1; ++i__)
                 {
-                    if (ipiv[i__] < 0)
+                    if(ipiv[i__] < 0)
                     {
                         ++count;
                     }
                 }
                 /* need a even number for a clear cut */
-                if (count % 2 == 1)
+                if(count % 2 == 1)
                 {
                     ++nnb;
                 }
             }
             /* L21 Block */
             i__1 = *n - cut - nnb;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = nnb;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = i__ + j * work_dim1;
                     i__4 = cut + nnb + i__ + (cut + j) * a_dim1;
@@ -735,26 +720,20 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
             }
             /* L11 Block */
             i__1 = nnb;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = u11 + i__ + i__ * work_dim1;
                 work[i__2].r = 1.;
                 work[i__2].i = 0.; // , expr subst
                 i__2 = nnb;
-                for (j = i__ + 1;
-                        j <= i__2;
-                        ++j)
+                for(j = i__ + 1; j <= i__2; ++j)
                 {
                     i__3 = u11 + i__ + j * work_dim1;
                     work[i__3].r = 0.;
                     work[i__3].i = 0.; // , expr subst
                 }
                 i__2 = i__ - 1;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = u11 + i__ + j * work_dim1;
                     i__4 = cut + i__ + (cut + j) * a_dim1;
@@ -766,18 +745,17 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
             i__ = *n - cut - nnb;
             while(i__ >= 1)
             {
-                if (ipiv[cut + nnb + i__] > 0)
+                if(ipiv[cut + nnb + i__] > 0)
                 {
                     i__1 = nnb;
-                    for (j = 1;
-                            j <= i__1;
-                            ++j)
+                    for(j = 1; j <= i__1; ++j)
                     {
                         i__2 = i__ + j * work_dim1;
                         i__3 = cut + nnb + i__ + invd * work_dim1;
                         i__4 = i__ + j * work_dim1;
                         z__1.r = work[i__3].r * work[i__4].r - work[i__3].i * work[i__4].i;
-                        z__1.i = work[i__3].r * work[ i__4].i + work[i__3].i * work[i__4].r; // , expr subst
+                        z__1.i = work[i__3].r * work[i__4].i
+                                 + work[i__3].i * work[i__4].r; // , expr subst
                         work[i__2].r = z__1.r;
                         work[i__2].i = z__1.i; // , expr subst
                     }
@@ -786,23 +764,23 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
                 else
                 {
                     i__1 = nnb;
-                    for (j = 1;
-                            j <= i__1;
-                            ++j)
+                    for(j = 1; j <= i__1; ++j)
                     {
                         i__2 = i__ + j * work_dim1;
                         u01_i_j__.r = work[i__2].r;
-                        u01_i_j__.i = work[i__2] .i; // , expr subst
+                        u01_i_j__.i = work[i__2].i; // , expr subst
                         i__2 = i__ - 1 + j * work_dim1;
                         u01_ip1_j__.r = work[i__2].r;
-                        u01_ip1_j__.i = work[ i__2].i; // , expr subst
+                        u01_ip1_j__.i = work[i__2].i; // , expr subst
                         i__2 = i__ + j * work_dim1;
                         i__3 = cut + nnb + i__ + invd * work_dim1;
                         z__2.r = work[i__3].r * u01_i_j__.r - work[i__3].i * u01_i_j__.i;
-                        z__2.i = work[i__3].r * u01_i_j__.i + work[i__3].i * u01_i_j__.r; // , expr subst
+                        z__2.i = work[i__3].r * u01_i_j__.i
+                                 + work[i__3].i * u01_i_j__.r; // , expr subst
                         i__4 = cut + nnb + i__ + (invd + 1) * work_dim1;
                         z__3.r = work[i__4].r * u01_ip1_j__.r - work[i__4].i * u01_ip1_j__.i;
-                        z__3.i = work[i__4].r * u01_ip1_j__.i + work[i__4].i * u01_ip1_j__.r; // , expr subst
+                        z__3.i = work[i__4].r * u01_ip1_j__.i
+                                 + work[i__4].i * u01_ip1_j__.r; // , expr subst
                         z__1.r = z__2.r + z__3.r;
                         z__1.i = z__2.i + z__3.i; // , expr subst
                         work[i__2].r = z__1.r;
@@ -810,10 +788,12 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
                         i__2 = i__ - 1 + j * work_dim1;
                         i__3 = cut + nnb + i__ - 1 + (invd + 1) * work_dim1;
                         z__2.r = work[i__3].r * u01_i_j__.r - work[i__3].i * u01_i_j__.i;
-                        z__2.i = work[i__3].r * u01_i_j__.i + work[i__3].i * u01_i_j__.r; // , expr subst
+                        z__2.i = work[i__3].r * u01_i_j__.i
+                                 + work[i__3].i * u01_i_j__.r; // , expr subst
                         i__4 = cut + nnb + i__ - 1 + invd * work_dim1;
                         z__3.r = work[i__4].r * u01_ip1_j__.r - work[i__4].i * u01_ip1_j__.i;
-                        z__3.i = work[i__4].r * u01_ip1_j__.i + work[i__4].i * u01_ip1_j__.r; // , expr subst
+                        z__3.i = work[i__4].r * u01_ip1_j__.i
+                                 + work[i__4].i * u01_ip1_j__.r; // , expr subst
                         z__1.r = z__2.r + z__3.r;
                         z__1.i = z__2.i + z__3.i; // , expr subst
                         work[i__2].r = z__1.r;
@@ -826,18 +806,17 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
             i__ = nnb;
             while(i__ >= 1)
             {
-                if (ipiv[cut + i__] > 0)
+                if(ipiv[cut + i__] > 0)
                 {
                     i__1 = nnb;
-                    for (j = 1;
-                            j <= i__1;
-                            ++j)
+                    for(j = 1; j <= i__1; ++j)
                     {
                         i__2 = u11 + i__ + j * work_dim1;
                         i__3 = cut + i__ + invd * work_dim1;
                         i__4 = u11 + i__ + j * work_dim1;
                         z__1.r = work[i__3].r * work[i__4].r - work[i__3].i * work[i__4].i;
-                        z__1.i = work[i__3].r * work[ i__4].i + work[i__3].i * work[i__4].r; // , expr subst
+                        z__1.i = work[i__3].r * work[i__4].i
+                                 + work[i__3].i * work[i__4].r; // , expr subst
                         work[i__2].r = z__1.r;
                         work[i__2].i = z__1.i; // , expr subst
                     }
@@ -846,24 +825,24 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
                 else
                 {
                     i__1 = nnb;
-                    for (j = 1;
-                            j <= i__1;
-                            ++j)
+                    for(j = 1; j <= i__1; ++j)
                     {
                         i__2 = u11 + i__ + j * work_dim1;
                         u11_i_j__.r = work[i__2].r;
-                        u11_i_j__.i = work[i__2] .i; // , expr subst
+                        u11_i_j__.i = work[i__2].i; // , expr subst
                         i__2 = u11 + i__ - 1 + j * work_dim1;
                         u11_ip1_j__.r = work[i__2].r;
-                        u11_ip1_j__.i = work[ i__2].i; // , expr subst
+                        u11_ip1_j__.i = work[i__2].i; // , expr subst
                         i__2 = u11 + i__ + j * work_dim1;
                         i__3 = cut + i__ + invd * work_dim1;
                         i__4 = u11 + i__ + j * work_dim1;
                         z__2.r = work[i__3].r * work[i__4].r - work[i__3].i * work[i__4].i;
-                        z__2.i = work[i__3].r * work[ i__4].i + work[i__3].i * work[i__4].r; // , expr subst
+                        z__2.i = work[i__3].r * work[i__4].i
+                                 + work[i__3].i * work[i__4].r; // , expr subst
                         i__5 = cut + i__ + (invd + 1) * work_dim1;
                         z__3.r = work[i__5].r * u11_ip1_j__.r - work[i__5].i * u11_ip1_j__.i;
-                        z__3.i = work[i__5].r * u11_ip1_j__.i + work[i__5].i * u11_ip1_j__.r; // , expr subst
+                        z__3.i = work[i__5].r * u11_ip1_j__.i
+                                 + work[i__5].i * u11_ip1_j__.r; // , expr subst
                         z__1.r = z__2.r + z__3.r;
                         z__1.i = z__2.i + z__3.i; // , expr subst
                         work[i__2].r = z__1.r;
@@ -871,10 +850,12 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
                         i__2 = u11 + i__ - 1 + j * work_dim1;
                         i__3 = cut + i__ - 1 + (invd + 1) * work_dim1;
                         z__2.r = work[i__3].r * u11_i_j__.r - work[i__3].i * u11_i_j__.i;
-                        z__2.i = work[i__3].r * u11_i_j__.i + work[i__3].i * u11_i_j__.r; // , expr subst
+                        z__2.i = work[i__3].r * u11_i_j__.i
+                                 + work[i__3].i * u11_i_j__.r; // , expr subst
                         i__4 = cut + i__ - 1 + invd * work_dim1;
                         z__3.r = work[i__4].r * u11_ip1_j__.r - work[i__4].i * u11_ip1_j__.i;
-                        z__3.i = work[i__4].r * u11_ip1_j__.i + work[i__4].i * u11_ip1_j__.r; // , expr subst
+                        z__3.i = work[i__4].r * u11_ip1_j__.i
+                                 + work[i__4].i * u11_ip1_j__.r; // , expr subst
                         z__1.r = z__2.r + z__3.r;
                         z__1.i = z__2.i + z__3.i; // , expr subst
                         work[i__2].r = z__1.r;
@@ -885,16 +866,13 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
             }
             /* L11**T*invD1*L11->L11 */
             i__1 = *n + *nb + 1;
-            ztrmm_("L", uplo, "T", "U", &nnb, &nnb, &c_b1, &a[cut + 1 + (cut + 1) * a_dim1], lda, &work[u11 + 1 + work_dim1], &i__1);
+            ztrmm_("L", uplo, "T", "U", &nnb, &nnb, &c_b1, &a[cut + 1 + (cut + 1) * a_dim1], lda,
+                   &work[u11 + 1 + work_dim1], &i__1);
             i__1 = nnb;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = i__;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = cut + i__ + (cut + j) * a_dim1;
                     i__4 = u11 + i__ + j * work_dim1;
@@ -902,23 +880,20 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
                     a[i__3].i = work[i__4].i; // , expr subst
                 }
             }
-            if (cut + nnb < *n)
+            if(cut + nnb < *n)
             {
                 /* L21**T*invD2*L21->A(CUT+I,CUT+J) */
                 i__1 = *n - nnb - cut;
                 i__2 = *n + *nb + 1;
                 i__3 = *n + *nb + 1;
-                zgemm_("T", "N", &nnb, &nnb, &i__1, &c_b1, &a[cut + nnb + 1 + (cut + 1) * a_dim1], lda, &work[work_offset], &i__2, & c_b2, &work[u11 + 1 + work_dim1], &i__3);
+                zgemm_("T", "N", &nnb, &nnb, &i__1, &c_b1, &a[cut + nnb + 1 + (cut + 1) * a_dim1],
+                       lda, &work[work_offset], &i__2, &c_b2, &work[u11 + 1 + work_dim1], &i__3);
                 /* L11 = L11**T*invD1*L11 + U01**T*invD*U01 */
                 i__1 = nnb;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = i__;
-                    for (j = 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = 1; j <= i__2; ++j)
                     {
                         i__3 = cut + i__ + (cut + j) * a_dim1;
                         i__4 = cut + i__ + (cut + j) * a_dim1;
@@ -932,17 +907,15 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
                 /* U01 = L22**T*invD2*L21 */
                 i__1 = *n - nnb - cut;
                 i__2 = *n + *nb + 1;
-                ztrmm_("L", uplo, "T", "U", &i__1, &nnb, &c_b1, &a[cut + nnb + 1 + (cut + nnb + 1) * a_dim1], lda, &work[ work_offset], &i__2);
+                ztrmm_("L", uplo, "T", "U", &i__1, &nnb, &c_b1,
+                       &a[cut + nnb + 1 + (cut + nnb + 1) * a_dim1], lda, &work[work_offset],
+                       &i__2);
                 /* Update L21 */
                 i__1 = *n - cut - nnb;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = nnb;
-                    for (j = 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = 1; j <= i__2; ++j)
                     {
                         i__3 = cut + nnb + i__ + (cut + j) * a_dim1;
                         i__4 = i__ + j * work_dim1;
@@ -955,14 +928,10 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
             {
                 /* L11 = L11**T*invD1*L11 */
                 i__1 = nnb;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = i__;
-                    for (j = 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = 1; j <= i__2; ++j)
                     {
                         i__3 = cut + i__ + (cut + j) * a_dim1;
                         i__4 = u11 + i__ + j * work_dim1;
@@ -978,14 +947,14 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
         i__ = *n;
         while(i__ >= 1)
         {
-            if (ipiv[i__] > 0)
+            if(ipiv[i__] > 0)
             {
                 ip = ipiv[i__];
-                if (i__ < ip)
+                if(i__ < ip)
                 {
                     zsyswapr_(uplo, n, &a[a_offset], lda, &i__, &ip);
                 }
-                if (i__ > ip)
+                if(i__ > ip)
                 {
                     zsyswapr_(uplo, n, &a[a_offset], lda, &ip, &i__);
                 }
@@ -993,11 +962,11 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
             else
             {
                 ip = -ipiv[i__];
-                if (i__ < ip)
+                if(i__ < ip)
                 {
                     zsyswapr_(uplo, n, &a[a_offset], lda, &i__, &ip);
                 }
-                if (i__ > ip)
+                if(i__ > ip)
                 {
                     zsyswapr_(uplo, n, &a[a_offset], lda, &ip, &i__);
                 }
@@ -1007,7 +976,7 @@ int zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *i
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZSYTRI2X */
 }
 /* zsytri2x_ */

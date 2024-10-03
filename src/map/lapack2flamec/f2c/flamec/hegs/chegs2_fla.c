@@ -1,23 +1,29 @@
-/* chegs2.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* chegs2.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {1.f, 0.f};
 static integer c__1 = 1;
-/* > \brief \b CHEGS2 reduces a Hermitian definite generalized eigenproblem to standard form, using the factor ization results obtained from cpotrf (unblocked algorithm). */
+/* > \brief \b CHEGS2 reduces a Hermitian definite generalized eigenproblem to standard form, using
+ * the factor ization results obtained from cpotrf (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CHEGS2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chegs2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chegs2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chegs2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chegs2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chegs2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chegs2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -52,7 +58,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > ITYPE is INTEGER */
 /* > = 1: compute inv(U**H)*A*inv(U) or inv(L)*A*inv(L**H);
-*/
+ */
 /* > = 2 or 3: compute U*A*U**H or L**H *A*L. */
 /* > \endverbatim */
 /* > */
@@ -121,7 +127,8 @@ static integer c__1 = 1;
 /* > \ingroup complexHEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int chegs2_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda, complex *b, integer *ldb, integer *info)
+void chegs2_fla(integer *itype, char *uplo, integer *n, complex *a, integer *lda, complex *b,
+                integer *ldb, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
@@ -132,13 +139,20 @@ int chegs2_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda
     complex ct;
     real akk, bkk;
     extern /* Subroutine */
-    int cher2_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+        void
+        cher2_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *,
+               integer *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+        void
+        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *), ctrsv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *), clacgv_( integer *, complex *, integer *), csscal_(integer *, real *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *),
+        ctrsv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *),
+        clacgv_(integer *, complex *, integer *), csscal_(integer *, real *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -168,42 +182,40 @@ int chegs2_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (*itype < 1 || *itype > 3)
+    upper = lsame_(uplo, "U", 1, 1);
+    if(*itype < 1 || *itype > 3)
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L"))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CHEGS2", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
-    if (*itype == 1)
+    if(*itype == 1)
     {
-        if (upper)
+        if(upper)
         {
             /* Compute inv(U**H)*A*inv(U) */
             i__1 = *n;
-            for (k = 1;
-                    k <= i__1;
-                    ++k)
+            for(k = 1; k <= i__1; ++k)
             {
                 /* Update the upper triangle of A(k:n,k:n) */
                 i__2 = k + k * a_dim1;
@@ -216,7 +228,7 @@ int chegs2_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda
                 i__2 = k + k * a_dim1;
                 a[i__2].r = akk;
                 a[i__2].i = 0.f; // , expr subst
-                if (k < *n)
+                if(k < *n)
                 {
                     i__2 = *n - k;
                     r__1 = 1.f / bkk;
@@ -229,17 +241,21 @@ int chegs2_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda
                     i__2 = *n - k;
                     clacgv_(&i__2, &b[k + (k + 1) * b_dim1], ldb);
                     i__2 = *n - k;
-                    caxpy_(&i__2, &ct, &b[k + (k + 1) * b_dim1], ldb, &a[k + ( k + 1) * a_dim1], lda);
+                    caxpy_(&i__2, &ct, &b[k + (k + 1) * b_dim1], ldb, &a[k + (k + 1) * a_dim1],
+                           lda);
                     i__2 = *n - k;
                     q__1.r = -1.f;
                     q__1.i = -0.f; // , expr subst
-                    cher2_(uplo, &i__2, &q__1, &a[k + (k + 1) * a_dim1], lda, &b[k + (k + 1) * b_dim1], ldb, &a[k + 1 + (k + 1) * a_dim1], lda);
+                    cher2_(uplo, &i__2, &q__1, &a[k + (k + 1) * a_dim1], lda,
+                           &b[k + (k + 1) * b_dim1], ldb, &a[k + 1 + (k + 1) * a_dim1], lda);
                     i__2 = *n - k;
-                    caxpy_(&i__2, &ct, &b[k + (k + 1) * b_dim1], ldb, &a[k + ( k + 1) * a_dim1], lda);
+                    caxpy_(&i__2, &ct, &b[k + (k + 1) * b_dim1], ldb, &a[k + (k + 1) * a_dim1],
+                           lda);
                     i__2 = *n - k;
                     clacgv_(&i__2, &b[k + (k + 1) * b_dim1], ldb);
                     i__2 = *n - k;
-                    ctrsv_(uplo, "Conjugate transpose", "Non-unit", &i__2, &b[ k + 1 + (k + 1) * b_dim1], ldb, &a[k + (k + 1) * a_dim1], lda);
+                    ctrsv_(uplo, "Conjugate transpose", "Non-unit", &i__2,
+                           &b[k + 1 + (k + 1) * b_dim1], ldb, &a[k + (k + 1) * a_dim1], lda);
                     i__2 = *n - k;
                     clacgv_(&i__2, &a[k + (k + 1) * a_dim1], lda);
                 }
@@ -250,9 +266,7 @@ int chegs2_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda
         {
             /* Compute inv(L)*A*inv(L**H) */
             i__1 = *n;
-            for (k = 1;
-                    k <= i__1;
-                    ++k)
+            for(k = 1; k <= i__1; ++k)
             {
                 /* Update the lower triangle of A(k:n,k:n) */
                 i__2 = k + k * a_dim1;
@@ -265,7 +279,7 @@ int chegs2_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda
                 i__2 = k + k * a_dim1;
                 a[i__2].r = akk;
                 a[i__2].i = 0.f; // , expr subst
-                if (k < *n)
+                if(k < *n)
                 {
                     i__2 = *n - k;
                     r__1 = 1.f / bkk;
@@ -274,15 +288,19 @@ int chegs2_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda
                     ct.r = r__1;
                     ct.i = 0.f; // , expr subst
                     i__2 = *n - k;
-                    caxpy_(&i__2, &ct, &b[k + 1 + k * b_dim1], &c__1, &a[k + 1 + k * a_dim1], &c__1);
+                    caxpy_(&i__2, &ct, &b[k + 1 + k * b_dim1], &c__1, &a[k + 1 + k * a_dim1],
+                           &c__1);
                     i__2 = *n - k;
                     q__1.r = -1.f;
                     q__1.i = -0.f; // , expr subst
-                    cher2_(uplo, &i__2, &q__1, &a[k + 1 + k * a_dim1], &c__1, &b[k + 1 + k * b_dim1], &c__1, &a[k + 1 + (k + 1) * a_dim1], lda);
+                    cher2_(uplo, &i__2, &q__1, &a[k + 1 + k * a_dim1], &c__1,
+                           &b[k + 1 + k * b_dim1], &c__1, &a[k + 1 + (k + 1) * a_dim1], lda);
                     i__2 = *n - k;
-                    caxpy_(&i__2, &ct, &b[k + 1 + k * b_dim1], &c__1, &a[k + 1 + k * a_dim1], &c__1);
+                    caxpy_(&i__2, &ct, &b[k + 1 + k * b_dim1], &c__1, &a[k + 1 + k * a_dim1],
+                           &c__1);
                     i__2 = *n - k;
-                    ctrsv_(uplo, "No transpose", "Non-unit", &i__2, &b[k + 1 + (k + 1) * b_dim1], ldb, &a[k + 1 + k * a_dim1], &c__1);
+                    ctrsv_(uplo, "No transpose", "Non-unit", &i__2, &b[k + 1 + (k + 1) * b_dim1],
+                           ldb, &a[k + 1 + k * a_dim1], &c__1);
                 }
                 /* L20: */
             }
@@ -290,13 +308,11 @@ int chegs2_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda
     }
     else
     {
-        if (upper)
+        if(upper)
         {
             /* Compute U*A*U**H */
             i__1 = *n;
-            for (k = 1;
-                    k <= i__1;
-                    ++k)
+            for(k = 1; k <= i__1; ++k)
             {
                 /* Update the upper triangle of A(1:k,1:k) */
                 i__2 = k + k * a_dim1;
@@ -304,14 +320,16 @@ int chegs2_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda
                 i__2 = k + k * b_dim1;
                 bkk = b[i__2].r;
                 i__2 = k - 1;
-                ctrmv_(uplo, "No transpose", "Non-unit", &i__2, &b[b_offset], ldb, &a[k * a_dim1 + 1], &c__1);
+                ctrmv_(uplo, "No transpose", "Non-unit", &i__2, &b[b_offset], ldb,
+                       &a[k * a_dim1 + 1], &c__1);
                 r__1 = akk * .5f;
                 ct.r = r__1;
                 ct.i = 0.f; // , expr subst
                 i__2 = k - 1;
                 caxpy_(&i__2, &ct, &b[k * b_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 i__2 = k - 1;
-                cher2_(uplo, &i__2, &c_b1, &a[k * a_dim1 + 1], &c__1, &b[k * b_dim1 + 1], &c__1, &a[a_offset], lda);
+                cher2_(uplo, &i__2, &c_b1, &a[k * a_dim1 + 1], &c__1, &b[k * b_dim1 + 1], &c__1,
+                       &a[a_offset], lda);
                 i__2 = k - 1;
                 caxpy_(&i__2, &ct, &b[k * b_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 i__2 = k - 1;
@@ -329,9 +347,7 @@ int chegs2_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda
         {
             /* Compute L**H *A*L */
             i__1 = *n;
-            for (k = 1;
-                    k <= i__1;
-                    ++k)
+            for(k = 1; k <= i__1; ++k)
             {
                 /* Update the lower triangle of A(1:k,1:k) */
                 i__2 = k + k * a_dim1;
@@ -341,7 +357,8 @@ int chegs2_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda
                 i__2 = k - 1;
                 clacgv_(&i__2, &a[k + a_dim1], lda);
                 i__2 = k - 1;
-                ctrmv_(uplo, "Conjugate transpose", "Non-unit", &i__2, &b[ b_offset], ldb, &a[k + a_dim1], lda);
+                ctrmv_(uplo, "Conjugate transpose", "Non-unit", &i__2, &b[b_offset], ldb,
+                       &a[k + a_dim1], lda);
                 r__1 = akk * .5f;
                 ct.r = r__1;
                 ct.i = 0.f; // , expr subst
@@ -350,7 +367,8 @@ int chegs2_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda
                 i__2 = k - 1;
                 caxpy_(&i__2, &ct, &b[k + b_dim1], ldb, &a[k + a_dim1], lda);
                 i__2 = k - 1;
-                cher2_(uplo, &i__2, &c_b1, &a[k + a_dim1], lda, &b[k + b_dim1], ldb, &a[a_offset], lda);
+                cher2_(uplo, &i__2, &c_b1, &a[k + a_dim1], lda, &b[k + b_dim1], ldb, &a[a_offset],
+                       lda);
                 i__2 = k - 1;
                 caxpy_(&i__2, &ct, &b[k + b_dim1], ldb, &a[k + a_dim1], lda);
                 i__2 = k - 1;
@@ -369,7 +387,7 @@ int chegs2_fla(integer *itype, char *uplo, integer *n, complex * a, integer *lda
             }
         }
     }
-    return 0;
+    return;
     /* End of CHEGS2 */
 }
 /* chegs2_ */

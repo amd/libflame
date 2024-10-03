@@ -1,5 +1,8 @@
-/* ../netlib/dtrevc.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dtrevc.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static logical c_false = FALSE_;
 static integer c__1 = 1;
@@ -13,11 +16,17 @@ static logical c_true = TRUE_;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DTREVC + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtrevc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtrevc.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtrevc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtrevc.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtrevc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtrevc.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -64,9 +73,9 @@ static logical c_true = TRUE_;
 /* > \verbatim */
 /* > SIDE is CHARACTER*1 */
 /* > = 'R': compute right eigenvectors only;
-*/
+ */
 /* > = 'L': compute left eigenvectors only;
-*/
+ */
 /* > = 'B': compute both right and left eigenvectors. */
 /* > \endverbatim */
 /* > */
@@ -74,10 +83,10 @@ static logical c_true = TRUE_;
 /* > \verbatim */
 /* > HOWMNY is CHARACTER*1 */
 /* > = 'A': compute all right and/or left eigenvectors;
-*/
+ */
 /* > = 'B': compute all right and/or left eigenvectors, */
 /* > backtransformed by the matrices in VR and/or VL;
-*/
+ */
 /* > = 'S': compute selected right and/or left eigenvectors, */
 /* > as indicated by the logical array SELECT. */
 /* > \endverbatim */
@@ -123,9 +132,9 @@ static logical c_true = TRUE_;
 /* > of Schur vectors returned by DHSEQR). */
 /* > On exit, if SIDE = 'L' or 'B', VL contains: */
 /* > if HOWMNY = 'A', the matrix Y of left eigenvectors of T;
-*/
+ */
 /* > if HOWMNY = 'B', the matrix Q*Y;
-*/
+ */
 /* > if HOWMNY = 'S', the left eigenvectors of T specified by */
 /* > SELECT, stored consecutively in the columns */
 /* > of VL, in the same order as their */
@@ -151,9 +160,9 @@ static logical c_true = TRUE_;
 /* > of Schur vectors returned by DHSEQR). */
 /* > On exit, if SIDE = 'R' or 'B', VR contains: */
 /* > if HOWMNY = 'A', the matrix X of right eigenvectors of T;
-*/
+ */
 /* > if HOWMNY = 'B', the matrix Q*X;
-*/
+ */
 /* > if HOWMNY = 'S', the right eigenvectors of T specified by */
 /* > SELECT, stored consecutively in the columns */
 /* > of VR, in the same order as their */
@@ -223,10 +232,14 @@ here the magnitude of a complex number */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dtrevc_(char *side, char *howmny, logical *select, integer *n, doublereal *t, integer *ldt, doublereal *vl, integer * ldvl, doublereal *vr, integer *ldvr, integer *mm, integer *m, doublereal *work, integer *info)
+void dtrevc_(char *side, char *howmny, logical *select, integer *n, doublereal *t, integer *ldt,
+             doublereal *vl, integer *ldvl, doublereal *vr, integer *ldvr, integer *mm, integer *m,
+             doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dtrevc inputs: side %c, howmny %c, n %" FLA_IS ", ldt %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS "",*side, *howmny, *n, *ldt, *ldvl, *ldvr, *mm);
+    AOCL_DTL_SNPRINTF("dtrevc inputs: side %c, howmny %c, n %" FLA_IS ", ldt %" FLA_IS
+                      ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS "",
+                      *side, *howmny, *n, *ldt, *ldvl, *ldvr, *mm);
     /* System generated locals */
     integer t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2, i__3;
     doublereal d__1, d__2, d__3, d__4;
@@ -235,7 +248,7 @@ int dtrevc_(char *side, char *howmny, logical *select, integer *n, doublereal *t
     /* Local variables */
     integer i__, j, k;
     doublereal x[4] /* was [2][2] */
-    ;
+        ;
     integer j1, j2, n2, ii, ki, ip, is;
     doublereal wi, wr, rec, ulp, beta, emax;
     logical pair;
@@ -247,26 +260,36 @@ int dtrevc_(char *side, char *howmny, logical *select, integer *n, doublereal *t
     doublereal vmax;
     integer jnxt;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
+               integer *, doublereal *, doublereal *, integer *);
     doublereal remax;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical leftv, bothv;
     extern /* Subroutine */
-    int daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+        void
+        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     doublereal vcrit;
     logical somev;
     doublereal xnorm;
     extern /* Subroutine */
-    int dlaln2_(logical *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlabad_(doublereal *, doublereal *);
+        void
+        dlaln2_(logical *, integer *, integer *, doublereal *, doublereal *, doublereal *,
+                integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *,
+                doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *),
+        dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     logical rightv;
     doublereal smlnum;
@@ -306,34 +329,34 @@ int dtrevc_(char *side, char *howmny, logical *select, integer *n, doublereal *t
     vr -= vr_offset;
     --work;
     /* Function Body */
-    bothv = lsame_(side, "B");
-    rightv = lsame_(side, "R") || bothv;
-    leftv = lsame_(side, "L") || bothv;
-    allv = lsame_(howmny, "A");
-    over = lsame_(howmny, "B");
-    somev = lsame_(howmny, "S");
+    bothv = lsame_(side, "B", 1, 1);
+    rightv = lsame_(side, "R", 1, 1) || bothv;
+    leftv = lsame_(side, "L", 1, 1) || bothv;
+    allv = lsame_(howmny, "A", 1, 1);
+    over = lsame_(howmny, "B", 1, 1);
+    somev = lsame_(howmny, "S", 1, 1);
     *info = 0;
-    if (! rightv && ! leftv)
+    if(!rightv && !leftv)
     {
         *info = -1;
     }
-    else if (! allv && ! over && ! somev)
+    else if(!allv && !over && !somev)
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*ldt < fla_max(1,*n))
+    else if(*ldt < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldvl < 1 || leftv && *ldvl < *n)
+    else if(*ldvl < 1 || leftv && *ldvl < *n)
     {
         *info = -8;
     }
-    else if (*ldvr < 1 || rightv && *ldvr < *n)
+    else if(*ldvr < 1 || rightv && *ldvr < *n)
     {
         *info = -10;
     }
@@ -342,27 +365,25 @@ int dtrevc_(char *side, char *howmny, logical *select, integer *n, doublereal *t
         /* Set M to the number of columns required to store the selected */
         /* eigenvectors, standardize the array SELECT if necessary, and */
         /* test MM. */
-        if (somev)
+        if(somev)
         {
             *m = 0;
             pair = FALSE_;
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
-                if (pair)
+                if(pair)
                 {
                     pair = FALSE_;
                     select[j] = FALSE_;
                 }
                 else
                 {
-                    if (j < *n)
+                    if(j < *n)
                     {
-                        if (t[j + 1 + j * t_dim1] == 0.)
+                        if(t[j + 1 + j * t_dim1] == 0.)
                         {
-                            if (select[j])
+                            if(select[j])
                             {
                                 ++(*m);
                             }
@@ -370,7 +391,7 @@ int dtrevc_(char *side, char *howmny, logical *select, integer *n, doublereal *t
                         else
                         {
                             pair = TRUE_;
-                            if (select[j] || select[j + 1])
+                            if(select[j] || select[j + 1])
                             {
                                 select[j] = TRUE_;
                                 *m += 2;
@@ -379,7 +400,7 @@ int dtrevc_(char *side, char *howmny, logical *select, integer *n, doublereal *t
                     }
                     else
                     {
-                        if (select[*n])
+                        if(select[*n])
                         {
                             ++(*m);
                         }
@@ -392,23 +413,23 @@ int dtrevc_(char *side, char *howmny, logical *select, integer *n, doublereal *t
         {
             *m = *n;
         }
-        if (*mm < *m)
+        if(*mm < *m)
         {
             *info = -11;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DTREVC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set the constants to control overflow. */
     unfl = dlamch_("Safe minimum");
@@ -421,15 +442,11 @@ int dtrevc_(char *side, char *howmny, logical *select, integer *n, doublereal *t
     /* part of T to control overflow in triangular solver. */
     work[1] = 0.;
     i__1 = *n;
-    for (j = 2;
-            j <= i__1;
-            ++j)
+    for(j = 2; j <= i__1; ++j)
     {
         work[j] = 0.;
         i__2 = j - 1;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             work[j] += (d__1 = t[i__ + j * t_dim1], f2c_abs(d__1));
             /* L20: */
@@ -441,41 +458,39 @@ int dtrevc_(char *side, char *howmny, logical *select, integer *n, doublereal *t
     /* 1, first of conjugate complex pair: (wr,wi) */
     /* -1, second of conjugate complex pair: (wr,wi) */
     n2 = *n << 1;
-    if (rightv)
+    if(rightv)
     {
         /* Compute right eigenvectors. */
         ip = 0;
         is = *m;
-        for (ki = *n;
-                ki >= 1;
-                --ki)
+        for(ki = *n; ki >= 1; --ki)
         {
-            if (ip == 1)
+            if(ip == 1)
             {
                 goto L130;
             }
-            if (ki == 1)
+            if(ki == 1)
             {
                 goto L40;
             }
-            if (t[ki + (ki - 1) * t_dim1] == 0.)
+            if(t[ki + (ki - 1) * t_dim1] == 0.)
             {
                 goto L40;
             }
             ip = -1;
-L40:
-            if (somev)
+        L40:
+            if(somev)
             {
-                if (ip == 0)
+                if(ip == 0)
                 {
-                    if (! select[ki])
+                    if(!select[ki])
                     {
                         goto L130;
                     }
                 }
                 else
                 {
-                    if (! select[ki - 1])
+                    if(!select[ki - 1])
                     {
                         goto L130;
                     }
@@ -484,22 +499,21 @@ L40:
             /* Compute the KI-th eigenvalue (WR,WI). */
             wr = t[ki + ki * t_dim1];
             wi = 0.;
-            if (ip != 0)
+            if(ip != 0)
             {
-                wi = sqrt((d__1 = t[ki + (ki - 1) * t_dim1], f2c_abs(d__1))) * sqrt((d__2 = t[ki - 1 + ki * t_dim1], f2c_abs(d__2)));
+                wi = sqrt((d__1 = t[ki + (ki - 1) * t_dim1], f2c_abs(d__1)))
+                     * sqrt((d__2 = t[ki - 1 + ki * t_dim1], f2c_abs(d__2)));
             }
             /* Computing MAX */
             d__1 = ulp * (f2c_abs(wr) + f2c_abs(wi));
-            smin = fla_max(d__1,smlnum);
-            if (ip == 0)
+            smin = fla_max(d__1, smlnum);
+            if(ip == 0)
             {
                 /* Real right eigenvector */
                 work[ki + *n] = 1.;
                 /* Form right-hand side */
                 i__1 = ki - 1;
-                for (k = 1;
-                        k <= i__1;
-                        ++k)
+                for(k = 1; k <= i__1; ++k)
                 {
                     work[k + *n] = -t[k + ki * t_dim1];
                     /* L50: */
@@ -507,41 +521,41 @@ L40:
                 /* Solve the upper quasi-triangular system: */
                 /* (T(1:KI-1,1:KI-1) - WR)*X = SCALE*WORK. */
                 jnxt = ki - 1;
-                for (j = ki - 1;
-                        j >= 1;
-                        --j)
+                for(j = ki - 1; j >= 1; --j)
                 {
-                    if (j > jnxt)
+                    if(j > jnxt)
                     {
                         goto L60;
                     }
                     j1 = j;
                     j2 = j;
                     jnxt = j - 1;
-                    if (j > 1)
+                    if(j > 1)
                     {
-                        if (t[j + (j - 1) * t_dim1] != 0.)
+                        if(t[j + (j - 1) * t_dim1] != 0.)
                         {
                             j1 = j - 1;
                             jnxt = j - 2;
                         }
                     }
-                    if (j1 == j2)
+                    if(j1 == j2)
                     {
                         /* 1-by-1 diagonal block */
-                        dlaln2_(&c_false, &c__1, &c__1, &smin, &c_b22, &t[j + j * t_dim1], ldt, &c_b22, &c_b22, &work[j + * n], n, &wr, &c_b25, x, &c__2, &scale, &xnorm, &ierr);
+                        dlaln2_(&c_false, &c__1, &c__1, &smin, &c_b22, &t[j + j * t_dim1], ldt,
+                                &c_b22, &c_b22, &work[j + *n], n, &wr, &c_b25, x, &c__2, &scale,
+                                &xnorm, &ierr);
                         /* Scale X(1,1) to avoid overflow when updating */
                         /* the right-hand side. */
-                        if (xnorm > 1.)
+                        if(xnorm > 1.)
                         {
-                            if (work[j] > bignum / xnorm)
+                            if(work[j] > bignum / xnorm)
                             {
                                 x[0] /= xnorm;
                                 scale /= xnorm;
                             }
                         }
                         /* Scale if necessary */
-                        if (scale != 1.)
+                        if(scale != 1.)
                         {
                             dscal_(&ki, &scale, &work[*n + 1], &c__1);
                         }
@@ -549,21 +563,23 @@ L40:
                         /* Update right-hand side */
                         i__1 = j - 1;
                         d__1 = -x[0];
-                        daxpy_(&i__1, &d__1, &t[j * t_dim1 + 1], &c__1, &work[ *n + 1], &c__1);
+                        daxpy_(&i__1, &d__1, &t[j * t_dim1 + 1], &c__1, &work[*n + 1], &c__1);
                     }
                     else
                     {
                         /* 2-by-2 diagonal block */
-                        dlaln2_(&c_false, &c__2, &c__1, &smin, &c_b22, &t[j - 1 + (j - 1) * t_dim1], ldt, &c_b22, &c_b22, & work[j - 1 + *n], n, &wr, &c_b25, x, &c__2, & scale, &xnorm, &ierr);
+                        dlaln2_(&c_false, &c__2, &c__1, &smin, &c_b22, &t[j - 1 + (j - 1) * t_dim1],
+                                ldt, &c_b22, &c_b22, &work[j - 1 + *n], n, &wr, &c_b25, x, &c__2,
+                                &scale, &xnorm, &ierr);
                         /* Scale X(1,1) and X(2,1) to avoid overflow when */
                         /* updating the right-hand side. */
-                        if (xnorm > 1.)
+                        if(xnorm > 1.)
                         {
                             /* Computing MAX */
                             d__1 = work[j - 1];
                             d__2 = work[j]; // , expr subst
-                            beta = fla_max(d__1,d__2);
-                            if (beta > bignum / xnorm)
+                            beta = fla_max(d__1, d__2);
+                            if(beta > bignum / xnorm)
                             {
                                 x[0] /= xnorm;
                                 x[1] /= xnorm;
@@ -571,7 +587,7 @@ L40:
                             }
                         }
                         /* Scale if necessary */
-                        if (scale != 1.)
+                        if(scale != 1.)
                         {
                             dscal_(&ki, &scale, &work[*n + 1], &c__1);
                         }
@@ -583,22 +599,19 @@ L40:
                         daxpy_(&i__1, &d__1, &t[(j - 1) * t_dim1 + 1], &c__1, &work[*n + 1], &c__1);
                         i__1 = j - 2;
                         d__1 = -x[1];
-                        daxpy_(&i__1, &d__1, &t[j * t_dim1 + 1], &c__1, &work[ *n + 1], &c__1);
+                        daxpy_(&i__1, &d__1, &t[j * t_dim1 + 1], &c__1, &work[*n + 1], &c__1);
                     }
-L60:
-                    ;
+                L60:;
                 }
                 /* Copy the vector x or Q*x to VR and normalize. */
-                if (! over)
+                if(!over)
                 {
-                    dcopy_(&ki, &work[*n + 1], &c__1, &vr[is * vr_dim1 + 1], & c__1);
+                    dcopy_(&ki, &work[*n + 1], &c__1, &vr[is * vr_dim1 + 1], &c__1);
                     ii = idamax_(&ki, &vr[is * vr_dim1 + 1], &c__1);
                     remax = 1. / (d__1 = vr[ii + is * vr_dim1], f2c_abs(d__1));
                     dscal_(&ki, &remax, &vr[is * vr_dim1 + 1], &c__1);
                     i__1 = *n;
-                    for (k = ki + 1;
-                            k <= i__1;
-                            ++k)
+                    for(k = ki + 1; k <= i__1; ++k)
                     {
                         vr[k + is * vr_dim1] = 0.;
                         /* L70: */
@@ -606,10 +619,11 @@ L60:
                 }
                 else
                 {
-                    if (ki > 1)
+                    if(ki > 1)
                     {
                         i__1 = ki - 1;
-                        dgemv_("N", n, &i__1, &c_b22, &vr[vr_offset], ldvr, & work[*n + 1], &c__1, &work[ki + *n], &vr[ki * vr_dim1 + 1], &c__1);
+                        dgemv_("N", n, &i__1, &c_b22, &vr[vr_offset], ldvr, &work[*n + 1], &c__1,
+                               &work[ki + *n], &vr[ki * vr_dim1 + 1], &c__1);
                     }
                     ii = idamax_(n, &vr[ki * vr_dim1 + 1], &c__1);
                     remax = 1. / (d__1 = vr[ii + ki * vr_dim1], f2c_abs(d__1));
@@ -622,7 +636,8 @@ L60:
                 /* Initial solve */
                 /* [ (T(KI-1,KI-1) T(KI-1,KI) ) - (WR + I* WI)]*X = 0. */
                 /* [ (T(KI,KI-1) T(KI,KI) ) ] */
-                if ((d__1 = t[ki - 1 + ki * t_dim1], f2c_abs(d__1)) >= (d__2 = t[ ki + (ki - 1) * t_dim1], f2c_abs(d__2)))
+                if((d__1 = t[ki - 1 + ki * t_dim1], f2c_abs(d__1))
+                   >= (d__2 = t[ki + (ki - 1) * t_dim1], f2c_abs(d__2)))
                 {
                     work[ki - 1 + *n] = 1.;
                     work[ki + n2] = wi / t[ki - 1 + ki * t_dim1];
@@ -636,9 +651,7 @@ L60:
                 work[ki - 1 + n2] = 0.;
                 /* Form right-hand side */
                 i__1 = ki - 2;
-                for (k = 1;
-                        k <= i__1;
-                        ++k)
+                for(k = 1; k <= i__1; ++k)
                 {
                     work[k + *n] = -work[ki - 1 + *n] * t[k + (ki - 1) * t_dim1];
                     work[k + n2] = -work[ki + n2] * t[k + ki * t_dim1];
@@ -647,34 +660,34 @@ L60:
                 /* Solve upper quasi-triangular system: */
                 /* (T(1:KI-2,1:KI-2) - (WR+i*WI))*X = SCALE*(WORK+i*WORK2) */
                 jnxt = ki - 2;
-                for (j = ki - 2;
-                        j >= 1;
-                        --j)
+                for(j = ki - 2; j >= 1; --j)
                 {
-                    if (j > jnxt)
+                    if(j > jnxt)
                     {
                         goto L90;
                     }
                     j1 = j;
                     j2 = j;
                     jnxt = j - 1;
-                    if (j > 1)
+                    if(j > 1)
                     {
-                        if (t[j + (j - 1) * t_dim1] != 0.)
+                        if(t[j + (j - 1) * t_dim1] != 0.)
                         {
                             j1 = j - 1;
                             jnxt = j - 2;
                         }
                     }
-                    if (j1 == j2)
+                    if(j1 == j2)
                     {
                         /* 1-by-1 diagonal block */
-                        dlaln2_(&c_false, &c__1, &c__2, &smin, &c_b22, &t[j + j * t_dim1], ldt, &c_b22, &c_b22, &work[j + * n], n, &wr, &wi, x, &c__2, &scale, &xnorm, & ierr);
+                        dlaln2_(&c_false, &c__1, &c__2, &smin, &c_b22, &t[j + j * t_dim1], ldt,
+                                &c_b22, &c_b22, &work[j + *n], n, &wr, &wi, x, &c__2, &scale,
+                                &xnorm, &ierr);
                         /* Scale X(1,1) and X(1,2) to avoid overflow when */
                         /* updating the right-hand side. */
-                        if (xnorm > 1.)
+                        if(xnorm > 1.)
                         {
-                            if (work[j] > bignum / xnorm)
+                            if(work[j] > bignum / xnorm)
                             {
                                 x[0] /= xnorm;
                                 x[2] /= xnorm;
@@ -682,7 +695,7 @@ L60:
                             }
                         }
                         /* Scale if necessary */
-                        if (scale != 1.)
+                        if(scale != 1.)
                         {
                             dscal_(&ki, &scale, &work[*n + 1], &c__1);
                             dscal_(&ki, &scale, &work[n2 + 1], &c__1);
@@ -692,24 +705,26 @@ L60:
                         /* Update the right-hand side */
                         i__1 = j - 1;
                         d__1 = -x[0];
-                        daxpy_(&i__1, &d__1, &t[j * t_dim1 + 1], &c__1, &work[ *n + 1], &c__1);
+                        daxpy_(&i__1, &d__1, &t[j * t_dim1 + 1], &c__1, &work[*n + 1], &c__1);
                         i__1 = j - 1;
                         d__1 = -x[2];
-                        daxpy_(&i__1, &d__1, &t[j * t_dim1 + 1], &c__1, &work[ n2 + 1], &c__1);
+                        daxpy_(&i__1, &d__1, &t[j * t_dim1 + 1], &c__1, &work[n2 + 1], &c__1);
                     }
                     else
                     {
                         /* 2-by-2 diagonal block */
-                        dlaln2_(&c_false, &c__2, &c__2, &smin, &c_b22, &t[j - 1 + (j - 1) * t_dim1], ldt, &c_b22, &c_b22, & work[j - 1 + *n], n, &wr, &wi, x, &c__2, & scale, &xnorm, &ierr);
+                        dlaln2_(&c_false, &c__2, &c__2, &smin, &c_b22, &t[j - 1 + (j - 1) * t_dim1],
+                                ldt, &c_b22, &c_b22, &work[j - 1 + *n], n, &wr, &wi, x, &c__2,
+                                &scale, &xnorm, &ierr);
                         /* Scale X to avoid overflow when updating */
                         /* the right-hand side. */
-                        if (xnorm > 1.)
+                        if(xnorm > 1.)
                         {
                             /* Computing MAX */
                             d__1 = work[j - 1];
                             d__2 = work[j]; // , expr subst
-                            beta = fla_max(d__1,d__2);
-                            if (beta > bignum / xnorm)
+                            beta = fla_max(d__1, d__2);
+                            if(beta > bignum / xnorm)
                             {
                                 rec = 1. / xnorm;
                                 x[0] *= rec;
@@ -720,7 +735,7 @@ L60:
                             }
                         }
                         /* Scale if necessary */
-                        if (scale != 1.)
+                        if(scale != 1.)
                         {
                             dscal_(&ki, &scale, &work[*n + 1], &c__1);
                             dscal_(&ki, &scale, &work[n2 + 1], &c__1);
@@ -735,41 +750,37 @@ L60:
                         daxpy_(&i__1, &d__1, &t[(j - 1) * t_dim1 + 1], &c__1, &work[*n + 1], &c__1);
                         i__1 = j - 2;
                         d__1 = -x[1];
-                        daxpy_(&i__1, &d__1, &t[j * t_dim1 + 1], &c__1, &work[ *n + 1], &c__1);
+                        daxpy_(&i__1, &d__1, &t[j * t_dim1 + 1], &c__1, &work[*n + 1], &c__1);
                         i__1 = j - 2;
                         d__1 = -x[2];
                         daxpy_(&i__1, &d__1, &t[(j - 1) * t_dim1 + 1], &c__1, &work[n2 + 1], &c__1);
                         i__1 = j - 2;
                         d__1 = -x[3];
-                        daxpy_(&i__1, &d__1, &t[j * t_dim1 + 1], &c__1, &work[ n2 + 1], &c__1);
+                        daxpy_(&i__1, &d__1, &t[j * t_dim1 + 1], &c__1, &work[n2 + 1], &c__1);
                     }
-L90:
-                    ;
+                L90:;
                 }
                 /* Copy the vector x or Q*x to VR and normalize. */
-                if (! over)
+                if(!over)
                 {
                     dcopy_(&ki, &work[*n + 1], &c__1, &vr[(is - 1) * vr_dim1 + 1], &c__1);
-                    dcopy_(&ki, &work[n2 + 1], &c__1, &vr[is * vr_dim1 + 1], & c__1);
+                    dcopy_(&ki, &work[n2 + 1], &c__1, &vr[is * vr_dim1 + 1], &c__1);
                     emax = 0.;
                     i__1 = ki;
-                    for (k = 1;
-                            k <= i__1;
-                            ++k)
+                    for(k = 1; k <= i__1; ++k)
                     {
                         /* Computing MAX */
                         d__3 = emax;
-                        d__4 = (d__1 = vr[k + (is - 1) * vr_dim1], f2c_abs(d__1)) + (d__2 = vr[k + is * vr_dim1], f2c_abs(d__2));  // , expr subst
-                        emax = fla_max(d__3,d__4);
+                        d__4 = (d__1 = vr[k + (is - 1) * vr_dim1], f2c_abs(d__1))
+                               + (d__2 = vr[k + is * vr_dim1], f2c_abs(d__2)); // , expr subst
+                        emax = fla_max(d__3, d__4);
                         /* L100: */
                     }
                     remax = 1. / emax;
                     dscal_(&ki, &remax, &vr[(is - 1) * vr_dim1 + 1], &c__1);
                     dscal_(&ki, &remax, &vr[is * vr_dim1 + 1], &c__1);
                     i__1 = *n;
-                    for (k = ki + 1;
-                            k <= i__1;
-                            ++k)
+                    for(k = ki + 1; k <= i__1; ++k)
                     {
                         vr[k + (is - 1) * vr_dim1] = 0.;
                         vr[k + is * vr_dim1] = 0.;
@@ -778,28 +789,29 @@ L90:
                 }
                 else
                 {
-                    if (ki > 2)
+                    if(ki > 2)
                     {
                         i__1 = ki - 2;
-                        dgemv_("N", n, &i__1, &c_b22, &vr[vr_offset], ldvr, & work[*n + 1], &c__1, &work[ki - 1 + *n], &vr[( ki - 1) * vr_dim1 + 1], &c__1);
+                        dgemv_("N", n, &i__1, &c_b22, &vr[vr_offset], ldvr, &work[*n + 1], &c__1,
+                               &work[ki - 1 + *n], &vr[(ki - 1) * vr_dim1 + 1], &c__1);
                         i__1 = ki - 2;
-                        dgemv_("N", n, &i__1, &c_b22, &vr[vr_offset], ldvr, & work[n2 + 1], &c__1, &work[ki + n2], &vr[ki * vr_dim1 + 1], &c__1);
+                        dgemv_("N", n, &i__1, &c_b22, &vr[vr_offset], ldvr, &work[n2 + 1], &c__1,
+                               &work[ki + n2], &vr[ki * vr_dim1 + 1], &c__1);
                     }
                     else
                     {
                         dscal_(n, &work[ki - 1 + *n], &vr[(ki - 1) * vr_dim1 + 1], &c__1);
-                        dscal_(n, &work[ki + n2], &vr[ki * vr_dim1 + 1], & c__1);
+                        dscal_(n, &work[ki + n2], &vr[ki * vr_dim1 + 1], &c__1);
                     }
                     emax = 0.;
                     i__1 = *n;
-                    for (k = 1;
-                            k <= i__1;
-                            ++k)
+                    for(k = 1; k <= i__1; ++k)
                     {
                         /* Computing MAX */
                         d__3 = emax;
-                        d__4 = (d__1 = vr[k + (ki - 1) * vr_dim1], f2c_abs(d__1)) + (d__2 = vr[k + ki * vr_dim1], f2c_abs(d__2));  // , expr subst
-                        emax = fla_max(d__3,d__4);
+                        d__4 = (d__1 = vr[k + (ki - 1) * vr_dim1], f2c_abs(d__1))
+                               + (d__2 = vr[k + ki * vr_dim1], f2c_abs(d__2)); // , expr subst
+                        emax = fla_max(d__3, d__4);
                         /* L120: */
                     }
                     remax = 1. / emax;
@@ -808,49 +820,47 @@ L90:
                 }
             }
             --is;
-            if (ip != 0)
+            if(ip != 0)
             {
                 --is;
             }
-L130:
-            if (ip == 1)
+        L130:
+            if(ip == 1)
             {
                 ip = 0;
             }
-            if (ip == -1)
+            if(ip == -1)
             {
                 ip = 1;
             }
             /* L140: */
         }
     }
-    if (leftv)
+    if(leftv)
     {
         /* Compute left eigenvectors. */
         ip = 0;
         is = 1;
         i__1 = *n;
-        for (ki = 1;
-                ki <= i__1;
-                ++ki)
+        for(ki = 1; ki <= i__1; ++ki)
         {
-            if (ip == -1)
+            if(ip == -1)
             {
                 goto L250;
             }
-            if (ki == *n)
+            if(ki == *n)
             {
                 goto L150;
             }
-            if (t[ki + 1 + ki * t_dim1] == 0.)
+            if(t[ki + 1 + ki * t_dim1] == 0.)
             {
                 goto L150;
             }
             ip = 1;
-L150:
-            if (somev)
+        L150:
+            if(somev)
             {
-                if (! select[ki])
+                if(!select[ki])
                 {
                     goto L250;
                 }
@@ -858,22 +868,21 @@ L150:
             /* Compute the KI-th eigenvalue (WR,WI). */
             wr = t[ki + ki * t_dim1];
             wi = 0.;
-            if (ip != 0)
+            if(ip != 0)
             {
-                wi = sqrt((d__1 = t[ki + (ki + 1) * t_dim1], f2c_abs(d__1))) * sqrt((d__2 = t[ki + 1 + ki * t_dim1], f2c_abs(d__2)));
+                wi = sqrt((d__1 = t[ki + (ki + 1) * t_dim1], f2c_abs(d__1)))
+                     * sqrt((d__2 = t[ki + 1 + ki * t_dim1], f2c_abs(d__2)));
             }
             /* Computing MAX */
             d__1 = ulp * (f2c_abs(wr) + f2c_abs(wi));
-            smin = fla_max(d__1,smlnum);
-            if (ip == 0)
+            smin = fla_max(d__1, smlnum);
+            if(ip == 0)
             {
                 /* Real left eigenvector. */
                 work[ki + *n] = 1.;
                 /* Form right-hand side */
                 i__2 = *n;
-                for (k = ki + 1;
-                        k <= i__2;
-                        ++k)
+                for(k = ki + 1; k <= i__2; ++k)
                 {
                     work[k + *n] = -t[ki + k * t_dim1];
                     /* L160: */
@@ -884,31 +893,29 @@ L150:
                 vcrit = bignum;
                 jnxt = ki + 1;
                 i__2 = *n;
-                for (j = ki + 1;
-                        j <= i__2;
-                        ++j)
+                for(j = ki + 1; j <= i__2; ++j)
                 {
-                    if (j < jnxt)
+                    if(j < jnxt)
                     {
                         goto L170;
                     }
                     j1 = j;
                     j2 = j;
                     jnxt = j + 1;
-                    if (j < *n)
+                    if(j < *n)
                     {
-                        if (t[j + 1 + j * t_dim1] != 0.)
+                        if(t[j + 1 + j * t_dim1] != 0.)
                         {
                             j2 = j + 1;
                             jnxt = j + 2;
                         }
                     }
-                    if (j1 == j2)
+                    if(j1 == j2)
                     {
                         /* 1-by-1 diagonal block */
                         /* Scale if necessary to avoid overflow when forming */
                         /* the right-hand side. */
-                        if (work[j] > vcrit)
+                        if(work[j] > vcrit)
                         {
                             rec = 1. / vmax;
                             i__3 = *n - ki + 1;
@@ -917,11 +924,14 @@ L150:
                             vcrit = bignum;
                         }
                         i__3 = j - ki - 1;
-                        work[j + *n] -= ddot_(&i__3, &t[ki + 1 + j * t_dim1], &c__1, &work[ki + 1 + *n], &c__1);
+                        work[j + *n] -= ddot_(&i__3, &t[ki + 1 + j * t_dim1], &c__1,
+                                              &work[ki + 1 + *n], &c__1);
                         /* Solve (T(J,J)-WR)**T*X = WORK */
-                        dlaln2_(&c_false, &c__1, &c__1, &smin, &c_b22, &t[j + j * t_dim1], ldt, &c_b22, &c_b22, &work[j + * n], n, &wr, &c_b25, x, &c__2, &scale, &xnorm, &ierr);
+                        dlaln2_(&c_false, &c__1, &c__1, &smin, &c_b22, &t[j + j * t_dim1], ldt,
+                                &c_b22, &c_b22, &work[j + *n], n, &wr, &c_b25, x, &c__2, &scale,
+                                &xnorm, &ierr);
                         /* Scale if necessary */
-                        if (scale != 1.)
+                        if(scale != 1.)
                         {
                             i__3 = *n - ki + 1;
                             dscal_(&i__3, &scale, &work[ki + *n], &c__1);
@@ -929,7 +939,7 @@ L150:
                         work[j + *n] = x[0];
                         /* Computing MAX */
                         d__2 = (d__1 = work[j + *n], f2c_abs(d__1));
-                        vmax = fla_max(d__2,vmax);
+                        vmax = fla_max(d__2, vmax);
                         vcrit = bignum / vmax;
                     }
                     else
@@ -940,8 +950,8 @@ L150:
                         /* Computing MAX */
                         d__1 = work[j];
                         d__2 = work[j + 1]; // , expr subst
-                        beta = fla_max(d__1,d__2);
-                        if (beta > vcrit)
+                        beta = fla_max(d__1, d__2);
+                        if(beta > vcrit)
                         {
                             rec = 1. / vmax;
                             i__3 = *n - ki + 1;
@@ -950,15 +960,19 @@ L150:
                             vcrit = bignum;
                         }
                         i__3 = j - ki - 1;
-                        work[j + *n] -= ddot_(&i__3, &t[ki + 1 + j * t_dim1], &c__1, &work[ki + 1 + *n], &c__1);
+                        work[j + *n] -= ddot_(&i__3, &t[ki + 1 + j * t_dim1], &c__1,
+                                              &work[ki + 1 + *n], &c__1);
                         i__3 = j - ki - 1;
-                        work[j + 1 + *n] -= ddot_(&i__3, &t[ki + 1 + (j + 1) * t_dim1], &c__1, &work[ki + 1 + *n], &c__1);
+                        work[j + 1 + *n] -= ddot_(&i__3, &t[ki + 1 + (j + 1) * t_dim1], &c__1,
+                                                  &work[ki + 1 + *n], &c__1);
                         /* Solve */
                         /* [T(J,J)-WR T(J,J+1) ]**T * X = SCALE*( WORK1 ) */
                         /* [T(J+1,J) T(J+1,J+1)-WR] ( WORK2 ) */
-                        dlaln2_(&c_true, &c__2, &c__1, &smin, &c_b22, &t[j + j * t_dim1], ldt, &c_b22, &c_b22, &work[j + * n], n, &wr, &c_b25, x, &c__2, &scale, &xnorm, &ierr);
+                        dlaln2_(&c_true, &c__2, &c__1, &smin, &c_b22, &t[j + j * t_dim1], ldt,
+                                &c_b22, &c_b22, &work[j + *n], n, &wr, &c_b25, x, &c__2, &scale,
+                                &xnorm, &ierr);
                         /* Scale if necessary */
-                        if (scale != 1.)
+                        if(scale != 1.)
                         {
                             i__3 = *n - ki + 1;
                             dscal_(&i__3, &scale, &work[ki + *n], &c__1);
@@ -968,15 +982,14 @@ L150:
                         /* Computing MAX */
                         d__3 = (d__1 = work[j + *n], f2c_abs(d__1));
                         d__4 = (d__2 = work[j + 1 + *n], f2c_abs(d__2));
-                        d__3 = fla_max( d__3,d__4); // ; expr subst
-                        vmax = fla_max(d__3,vmax);
+                        d__3 = fla_max(d__3, d__4); // ; expr subst
+                        vmax = fla_max(d__3, vmax);
                         vcrit = bignum / vmax;
                     }
-L170:
-                    ;
+                L170:;
                 }
                 /* Copy the vector x or Q*x to VL and normalize. */
-                if (! over)
+                if(!over)
                 {
                     i__2 = *n - ki + 1;
                     dcopy_(&i__2, &work[ki + *n], &c__1, &vl[ki + is * vl_dim1], &c__1);
@@ -986,9 +999,7 @@ L170:
                     i__2 = *n - ki + 1;
                     dscal_(&i__2, &remax, &vl[ki + is * vl_dim1], &c__1);
                     i__2 = ki - 1;
-                    for (k = 1;
-                            k <= i__2;
-                            ++k)
+                    for(k = 1; k <= i__2; ++k)
                     {
                         vl[k + is * vl_dim1] = 0.;
                         /* L180: */
@@ -996,10 +1007,12 @@ L170:
                 }
                 else
                 {
-                    if (ki < *n)
+                    if(ki < *n)
                     {
                         i__2 = *n - ki;
-                        dgemv_("N", n, &i__2, &c_b22, &vl[(ki + 1) * vl_dim1 + 1], ldvl, &work[ki + 1 + *n], &c__1, &work[ ki + *n], &vl[ki * vl_dim1 + 1], &c__1);
+                        dgemv_("N", n, &i__2, &c_b22, &vl[(ki + 1) * vl_dim1 + 1], ldvl,
+                               &work[ki + 1 + *n], &c__1, &work[ki + *n], &vl[ki * vl_dim1 + 1],
+                               &c__1);
                     }
                     ii = idamax_(n, &vl[ki * vl_dim1 + 1], &c__1);
                     remax = 1. / (d__1 = vl[ii + ki * vl_dim1], f2c_abs(d__1));
@@ -1012,7 +1025,8 @@ L170:
                 /* Initial solve: */
                 /* ((T(KI,KI) T(KI,KI+1) )**T - (WR - I* WI))*X = 0. */
                 /* ((T(KI+1,KI) T(KI+1,KI+1)) ) */
-                if ((d__1 = t[ki + (ki + 1) * t_dim1], f2c_abs(d__1)) >= (d__2 = t[ki + 1 + ki * t_dim1], f2c_abs(d__2)))
+                if((d__1 = t[ki + (ki + 1) * t_dim1], f2c_abs(d__1))
+                   >= (d__2 = t[ki + 1 + ki * t_dim1], f2c_abs(d__2)))
                 {
                     work[ki + *n] = wi / t[ki + (ki + 1) * t_dim1];
                     work[ki + 1 + n2] = 1.;
@@ -1026,12 +1040,10 @@ L170:
                 work[ki + n2] = 0.;
                 /* Form right-hand side */
                 i__2 = *n;
-                for (k = ki + 2;
-                        k <= i__2;
-                        ++k)
+                for(k = ki + 2; k <= i__2; ++k)
                 {
                     work[k + *n] = -work[ki + *n] * t[ki + k * t_dim1];
-                    work[k + n2] = -work[ki + 1 + n2] * t[ki + 1 + k * t_dim1] ;
+                    work[k + n2] = -work[ki + 1 + n2] * t[ki + 1 + k * t_dim1];
                     /* L190: */
                 }
                 /* Solve complex quasi-triangular system: */
@@ -1040,31 +1052,29 @@ L170:
                 vcrit = bignum;
                 jnxt = ki + 2;
                 i__2 = *n;
-                for (j = ki + 2;
-                        j <= i__2;
-                        ++j)
+                for(j = ki + 2; j <= i__2; ++j)
                 {
-                    if (j < jnxt)
+                    if(j < jnxt)
                     {
                         goto L200;
                     }
                     j1 = j;
                     j2 = j;
                     jnxt = j + 1;
-                    if (j < *n)
+                    if(j < *n)
                     {
-                        if (t[j + 1 + j * t_dim1] != 0.)
+                        if(t[j + 1 + j * t_dim1] != 0.)
                         {
                             j2 = j + 1;
                             jnxt = j + 2;
                         }
                     }
-                    if (j1 == j2)
+                    if(j1 == j2)
                     {
                         /* 1-by-1 diagonal block */
                         /* Scale if necessary to avoid overflow when */
                         /* forming the right-hand side elements. */
-                        if (work[j] > vcrit)
+                        if(work[j] > vcrit)
                         {
                             rec = 1. / vmax;
                             i__3 = *n - ki + 1;
@@ -1075,14 +1085,18 @@ L170:
                             vcrit = bignum;
                         }
                         i__3 = j - ki - 2;
-                        work[j + *n] -= ddot_(&i__3, &t[ki + 2 + j * t_dim1], &c__1, &work[ki + 2 + *n], &c__1);
+                        work[j + *n] -= ddot_(&i__3, &t[ki + 2 + j * t_dim1], &c__1,
+                                              &work[ki + 2 + *n], &c__1);
                         i__3 = j - ki - 2;
-                        work[j + n2] -= ddot_(&i__3, &t[ki + 2 + j * t_dim1], &c__1, &work[ki + 2 + n2], &c__1);
+                        work[j + n2] -= ddot_(&i__3, &t[ki + 2 + j * t_dim1], &c__1,
+                                              &work[ki + 2 + n2], &c__1);
                         /* Solve (T(J,J)-(WR-i*WI))*(X11+i*X12)= WK+I*WK2 */
                         d__1 = -wi;
-                        dlaln2_(&c_false, &c__1, &c__2, &smin, &c_b22, &t[j + j * t_dim1], ldt, &c_b22, &c_b22, &work[j + * n], n, &wr, &d__1, x, &c__2, &scale, &xnorm, & ierr);
+                        dlaln2_(&c_false, &c__1, &c__2, &smin, &c_b22, &t[j + j * t_dim1], ldt,
+                                &c_b22, &c_b22, &work[j + *n], n, &wr, &d__1, x, &c__2, &scale,
+                                &xnorm, &ierr);
                         /* Scale if necessary */
-                        if (scale != 1.)
+                        if(scale != 1.)
                         {
                             i__3 = *n - ki + 1;
                             dscal_(&i__3, &scale, &work[ki + *n], &c__1);
@@ -1095,7 +1109,7 @@ L170:
                         d__3 = (d__1 = work[j + *n], f2c_abs(d__1));
                         d__4 = (d__2 = work[j + n2], f2c_abs(d__2));
                         d__3 = fla_max(d__3, d__4); // ; expr subst
-                        vmax = fla_max(d__3,vmax);
+                        vmax = fla_max(d__3, vmax);
                         vcrit = bignum / vmax;
                     }
                     else
@@ -1106,8 +1120,8 @@ L170:
                         /* Computing MAX */
                         d__1 = work[j];
                         d__2 = work[j + 1]; // , expr subst
-                        beta = fla_max(d__1,d__2);
-                        if (beta > vcrit)
+                        beta = fla_max(d__1, d__2);
+                        if(beta > vcrit)
                         {
                             rec = 1. / vmax;
                             i__3 = *n - ki + 1;
@@ -1118,20 +1132,26 @@ L170:
                             vcrit = bignum;
                         }
                         i__3 = j - ki - 2;
-                        work[j + *n] -= ddot_(&i__3, &t[ki + 2 + j * t_dim1], &c__1, &work[ki + 2 + *n], &c__1);
+                        work[j + *n] -= ddot_(&i__3, &t[ki + 2 + j * t_dim1], &c__1,
+                                              &work[ki + 2 + *n], &c__1);
                         i__3 = j - ki - 2;
-                        work[j + n2] -= ddot_(&i__3, &t[ki + 2 + j * t_dim1], &c__1, &work[ki + 2 + n2], &c__1);
+                        work[j + n2] -= ddot_(&i__3, &t[ki + 2 + j * t_dim1], &c__1,
+                                              &work[ki + 2 + n2], &c__1);
                         i__3 = j - ki - 2;
-                        work[j + 1 + *n] -= ddot_(&i__3, &t[ki + 2 + (j + 1) * t_dim1], &c__1, &work[ki + 2 + *n], &c__1);
+                        work[j + 1 + *n] -= ddot_(&i__3, &t[ki + 2 + (j + 1) * t_dim1], &c__1,
+                                                  &work[ki + 2 + *n], &c__1);
                         i__3 = j - ki - 2;
-                        work[j + 1 + n2] -= ddot_(&i__3, &t[ki + 2 + (j + 1) * t_dim1], &c__1, &work[ki + 2 + n2], &c__1);
+                        work[j + 1 + n2] -= ddot_(&i__3, &t[ki + 2 + (j + 1) * t_dim1], &c__1,
+                                                  &work[ki + 2 + n2], &c__1);
                         /* Solve 2-by-2 complex linear equation */
                         /* ([T(j,j) T(j,j+1) ]**T-(wr-i*wi)*I)*X = SCALE*B */
                         /* ([T(j+1,j) T(j+1,j+1)] ) */
                         d__1 = -wi;
-                        dlaln2_(&c_true, &c__2, &c__2, &smin, &c_b22, &t[j + j * t_dim1], ldt, &c_b22, &c_b22, &work[j + * n], n, &wr, &d__1, x, &c__2, &scale, &xnorm, & ierr);
+                        dlaln2_(&c_true, &c__2, &c__2, &smin, &c_b22, &t[j + j * t_dim1], ldt,
+                                &c_b22, &c_b22, &work[j + *n], n, &wr, &d__1, x, &c__2, &scale,
+                                &xnorm, &ierr);
                         /* Scale if necessary */
-                        if (scale != 1.)
+                        if(scale != 1.)
                         {
                             i__3 = *n - ki + 1;
                             dscal_(&i__3, &scale, &work[ki + *n], &c__1);
@@ -1143,17 +1163,17 @@ L170:
                         work[j + 1 + *n] = x[1];
                         work[j + 1 + n2] = x[3];
                         /* Computing MAX */
-                        d__1 = f2c_abs(x[0]), d__2 = f2c_abs(x[2]), d__1 = fla_max(d__1, d__2), d__2 = f2c_abs(x[1]), d__1 = fla_max(d__1,d__2) ;
+                        d__1 = f2c_abs(x[0]), d__2 = f2c_abs(x[2]), d__1 = fla_max(d__1, d__2),
+                        d__2 = f2c_abs(x[1]), d__1 = fla_max(d__1, d__2);
                         d__2 = f2c_abs(x[3]);
-                        d__1 = fla_max(d__1,d__2); // ; expr subst
-                        vmax = fla_max(d__1,vmax);
+                        d__1 = fla_max(d__1, d__2); // ; expr subst
+                        vmax = fla_max(d__1, vmax);
                         vcrit = bignum / vmax;
                     }
-L200:
-                    ;
+                L200:;
                 }
                 /* Copy the vector x or Q*x to VL and normalize. */
-                if (! over)
+                if(!over)
                 {
                     i__2 = *n - ki + 1;
                     dcopy_(&i__2, &work[ki + *n], &c__1, &vl[ki + is * vl_dim1], &c__1);
@@ -1161,25 +1181,22 @@ L200:
                     dcopy_(&i__2, &work[ki + n2], &c__1, &vl[ki + (is + 1) * vl_dim1], &c__1);
                     emax = 0.;
                     i__2 = *n;
-                    for (k = ki;
-                            k <= i__2;
-                            ++k)
+                    for(k = ki; k <= i__2; ++k)
                     {
                         /* Computing MAX */
                         d__3 = emax;
-                        d__4 = (d__1 = vl[k + is * vl_dim1], f2c_abs( d__1)) + (d__2 = vl[k + (is + 1) * vl_dim1], f2c_abs(d__2)); // , expr subst
-                        emax = fla_max(d__3,d__4);
+                        d__4 = (d__1 = vl[k + is * vl_dim1], f2c_abs(d__1))
+                               + (d__2 = vl[k + (is + 1) * vl_dim1], f2c_abs(d__2)); // , expr subst
+                        emax = fla_max(d__3, d__4);
                         /* L220: */
                     }
                     remax = 1. / emax;
                     i__2 = *n - ki + 1;
                     dscal_(&i__2, &remax, &vl[ki + is * vl_dim1], &c__1);
                     i__2 = *n - ki + 1;
-                    dscal_(&i__2, &remax, &vl[ki + (is + 1) * vl_dim1], &c__1) ;
+                    dscal_(&i__2, &remax, &vl[ki + (is + 1) * vl_dim1], &c__1);
                     i__2 = ki - 1;
-                    for (k = 1;
-                            k <= i__2;
-                            ++k)
+                    for(k = 1; k <= i__2; ++k)
                     {
                         vl[k + is * vl_dim1] = 0.;
                         vl[k + (is + 1) * vl_dim1] = 0.;
@@ -1188,28 +1205,31 @@ L200:
                 }
                 else
                 {
-                    if (ki < *n - 1)
+                    if(ki < *n - 1)
                     {
                         i__2 = *n - ki - 1;
-                        dgemv_("N", n, &i__2, &c_b22, &vl[(ki + 2) * vl_dim1 + 1], ldvl, &work[ki + 2 + *n], &c__1, &work[ ki + *n], &vl[ki * vl_dim1 + 1], &c__1);
+                        dgemv_("N", n, &i__2, &c_b22, &vl[(ki + 2) * vl_dim1 + 1], ldvl,
+                               &work[ki + 2 + *n], &c__1, &work[ki + *n], &vl[ki * vl_dim1 + 1],
+                               &c__1);
                         i__2 = *n - ki - 1;
-                        dgemv_("N", n, &i__2, &c_b22, &vl[(ki + 2) * vl_dim1 + 1], ldvl, &work[ki + 2 + n2], &c__1, &work[ ki + 1 + n2], &vl[(ki + 1) * vl_dim1 + 1], & c__1);
+                        dgemv_("N", n, &i__2, &c_b22, &vl[(ki + 2) * vl_dim1 + 1], ldvl,
+                               &work[ki + 2 + n2], &c__1, &work[ki + 1 + n2],
+                               &vl[(ki + 1) * vl_dim1 + 1], &c__1);
                     }
                     else
                     {
-                        dscal_(n, &work[ki + *n], &vl[ki * vl_dim1 + 1], & c__1);
+                        dscal_(n, &work[ki + *n], &vl[ki * vl_dim1 + 1], &c__1);
                         dscal_(n, &work[ki + 1 + n2], &vl[(ki + 1) * vl_dim1 + 1], &c__1);
                     }
                     emax = 0.;
                     i__2 = *n;
-                    for (k = 1;
-                            k <= i__2;
-                            ++k)
+                    for(k = 1; k <= i__2; ++k)
                     {
                         /* Computing MAX */
                         d__3 = emax;
-                        d__4 = (d__1 = vl[k + ki * vl_dim1], f2c_abs( d__1)) + (d__2 = vl[k + (ki + 1) * vl_dim1], f2c_abs(d__2)); // , expr subst
-                        emax = fla_max(d__3,d__4);
+                        d__4 = (d__1 = vl[k + ki * vl_dim1], f2c_abs(d__1))
+                               + (d__2 = vl[k + (ki + 1) * vl_dim1], f2c_abs(d__2)); // , expr subst
+                        emax = fla_max(d__3, d__4);
                         /* L240: */
                     }
                     remax = 1. / emax;
@@ -1218,16 +1238,16 @@ L200:
                 }
             }
             ++is;
-            if (ip != 0)
+            if(ip != 0)
             {
                 ++is;
             }
-L250:
-            if (ip == -1)
+        L250:
+            if(ip == -1)
             {
                 ip = 0;
             }
-            if (ip == 1)
+            if(ip == 1)
             {
                 ip = -1;
             }
@@ -1235,8 +1255,7 @@ L250:
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DTREVC */
 }
 /* dtrevc_ */
-

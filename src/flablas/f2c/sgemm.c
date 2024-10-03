@@ -10,7 +10,7 @@ int sgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, real
     logical nota, notb;
     real temp;
     integer i__, j, l, ncola;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer nrowa, nrowb;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -126,8 +126,8 @@ int sgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, real
     c_offset = 1 + c_dim1 * 1;
     c__ -= c_offset;
     /* Function Body */
-    nota = lsame_(transa, "N");
-    notb = lsame_(transb, "N");
+    nota = lsame_(transa, "N", 1, 1);
+    notb = lsame_(transb, "N", 1, 1);
     if (nota)
     {
         nrowa = *m;
@@ -148,11 +148,11 @@ int sgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, real
     }
     /* Test the input parameters. */
     info = 0;
-    if (! nota && ! lsame_(transa, "C") && ! lsame_( transa, "T"))
+    if (! nota && ! lsame_(transa, "C", 1, 1) && ! lsame_(transa, "T", 1, 1))
     {
         info = 1;
     }
-    else if (! notb && ! lsame_(transb, "C") && ! lsame_(transb, "T"))
+    else if (! notb && ! lsame_(transb, "C", 1, 1) && ! lsame_(transb, "T", 1, 1))
     {
         info = 2;
     }

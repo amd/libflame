@@ -1,5 +1,8 @@
-/* ../netlib/dsbtrd.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dsbtrd.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b9 = 0.;
 static doublereal c_b10 = 1.;
@@ -10,11 +13,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DSBTRD + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsbtrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsbtrd.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsbtrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsbtrd.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsbtrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsbtrd.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -44,9 +53,9 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > VECT is CHARACTER*1 */
 /* > = 'N': do not form Q;
-*/
+ */
 /* > = 'V': form Q;
-*/
+ */
 /* > = 'U': update a matrix X, by forming X*Q. */
 /* > \endverbatim */
 /* > */
@@ -54,7 +63,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -79,7 +88,7 @@ static integer c__1 = 1;
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > On exit, the diagonal elements of AB are overwritten by the */
 /* > diagonal elements of the tridiagonal matrix T;
@@ -120,9 +129,9 @@ if VECT = 'N' or 'V', then Q need not be set. */
 /* > */
 /* > On exit: */
 /* > if VECT = 'V', Q contains the N-by-N orthogonal matrix Q;
-*/
+ */
 /* > if VECT = 'U', Q contains the product X*Q;
-*/
+ */
 /* > if VECT = 'N', the array Q is not referenced. */
 /* > \endverbatim */
 /* > */
@@ -162,25 +171,41 @@ if VECT = 'N' or 'V', then Q need not be set. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dsbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab, doublereal *d__, doublereal *e, doublereal *q, integer *ldq, doublereal *work, integer *info)
+void dsbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab,
+             doublereal *d__, doublereal *e, doublereal *q, integer *ldq, doublereal *work,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsbtrd inputs: vect %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS ", ldq %" FLA_IS "",*vect, *uplo, *n, *kd, *ldab, *ldq);
+    AOCL_DTL_SNPRINTF("dsbtrd inputs: vect %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS
+                      ", ldab %" FLA_IS ", ldq %" FLA_IS "",
+                      *vect, *uplo, *n, *kd, *ldab, *ldq);
     /* System generated locals */
     integer ab_dim1, ab_offset, q_dim1, q_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */
-    integer i__, j, k, l, i2, j1, j2, nq, nr, kd1, ibl, iqb, kdn, jin, nrt, kdm1, inca, jend, lend, jinc, incx, last;
+    integer i__, j, k, l, i2, j1, j2, nq, nr, kd1, ibl, iqb, kdn, jin, nrt, kdm1, inca, jend, lend,
+        jinc, incx, last;
     doublereal temp;
     extern /* Subroutine */
-    int drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
+        void
+        drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+              doublereal *);
     integer j1end, j1inc, iqend;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical initq, wantq, upper;
     extern /* Subroutine */
-    int dlar2v_(integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dlar2v_(integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *,
+                doublereal *, integer *);
     integer iqaend;
     extern /* Subroutine */
-    int dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dlargv_( integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlartv_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
+        dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        dlargv_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+                integer *),
+        dlartv_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+                doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -213,53 +238,53 @@ int dsbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublereal *ab, int
     q -= q_offset;
     --work;
     /* Function Body */
-    initq = lsame_(vect, "V");
-    wantq = initq || lsame_(vect, "U");
-    upper = lsame_(uplo, "U");
+    initq = lsame_(vect, "V", 1, 1);
+    wantq = initq || lsame_(vect, "U", 1, 1);
+    upper = lsame_(uplo, "U", 1, 1);
     kd1 = *kd + 1;
     kdm1 = *kd - 1;
     incx = *ldab - 1;
     iqend = 1;
     *info = 0;
-    if (! wantq && ! lsame_(vect, "N"))
+    if(!wantq && !lsame_(vect, "N", 1, 1))
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L"))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*kd < 0)
+    else if(*kd < 0)
     {
         *info = -4;
     }
-    else if (*ldab < kd1)
+    else if(*ldab < kd1)
     {
         *info = -6;
     }
-    else if (*ldq < fla_max(1,*n) && wantq)
+    else if(*ldq < fla_max(1, *n) && wantq)
     {
         *info = -10;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DSBTRD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize Q to the unit matrix, if needed */
-    if (initq)
+    if(initq)
     {
         dlaset_("Full", n, n, &c_b9, &c_b10, &q[q_offset], ldq);
     }
@@ -270,43 +295,39 @@ int dsbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublereal *ab, int
     inca = kd1 * *ldab;
     /* Computing MIN */
     i__1 = *n - 1;
-    kdn = fla_min(i__1,*kd);
-    if (upper)
+    kdn = fla_min(i__1, *kd);
+    if(upper)
     {
-        if (*kd > 1)
+        if(*kd > 1)
         {
             /* Reduce to tridiagonal form, working with upper triangle */
             nr = 0;
             j1 = kdn + 2;
             j2 = 1;
             i__1 = *n - 2;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 /* Reduce i-th row of matrix to tridiagonal form */
-                for (k = kdn + 1;
-                        k >= 2;
-                        --k)
+                for(k = kdn + 1; k >= 2; --k)
                 {
                     j1 += kdn;
                     j2 += kdn;
-                    if (nr > 0)
+                    if(nr > 0)
                     {
                         /* generate plane rotations to annihilate nonzero */
                         /* elements which have been created outside the band */
-                        dlargv_(&nr, &ab[(j1 - 1) * ab_dim1 + 1], &inca, & work[j1], &kd1, &d__[j1], &kd1);
+                        dlargv_(&nr, &ab[(j1 - 1) * ab_dim1 + 1], &inca, &work[j1], &kd1, &d__[j1],
+                                &kd1);
                         /* apply rotations from the right */
                         /* Dependent on the the number of diagonals either */
                         /* DLARTV or DROT is used */
-                        if (nr >= (*kd << 1) - 1)
+                        if(nr >= (*kd << 1) - 1)
                         {
                             i__2 = *kd - 1;
-                            for (l = 1;
-                                    l <= i__2;
-                                    ++l)
+                            for(l = 1; l <= i__2; ++l)
                             {
-                                dlartv_(&nr, &ab[l + 1 + (j1 - 1) * ab_dim1], &inca, &ab[l + j1 * ab_dim1], &inca, & d__[j1], &work[j1], &kd1);
+                                dlartv_(&nr, &ab[l + 1 + (j1 - 1) * ab_dim1], &inca,
+                                        &ab[l + j1 * ab_dim1], &inca, &d__[j1], &work[j1], &kd1);
                                 /* L10: */
                             }
                         }
@@ -315,49 +336,51 @@ int dsbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublereal *ab, int
                             jend = j1 + (nr - 1) * kd1;
                             i__2 = jend;
                             i__3 = kd1;
-                            for (jinc = j1;
-                                    i__3 < 0 ? jinc >= i__2 : jinc <= i__2;
-                                    jinc += i__3)
+                            for(jinc = j1; i__3 < 0 ? jinc >= i__2 : jinc <= i__2; jinc += i__3)
                             {
-                                drot_(&kdm1, &ab[(jinc - 1) * ab_dim1 + 2], & c__1, &ab[jinc * ab_dim1 + 1], &c__1, &d__[jinc], &work[jinc]);
+                                drot_(&kdm1, &ab[(jinc - 1) * ab_dim1 + 2], &c__1,
+                                      &ab[jinc * ab_dim1 + 1], &c__1, &d__[jinc], &work[jinc]);
                                 /* L20: */
                             }
                         }
                     }
-                    if (k > 2)
+                    if(k > 2)
                     {
-                        if (k <= *n - i__ + 1)
+                        if(k <= *n - i__ + 1)
                         {
                             /* generate plane rotation to annihilate a(i,i+k-1) */
                             /* within the band */
-                            dlartg_(&ab[*kd - k + 3 + (i__ + k - 2) * ab_dim1], &ab[*kd - k + 2 + (i__ + k - 1) * ab_dim1], &d__[i__ + k - 1], &work[i__ + k - 1], &temp);
+                            dlartg_(&ab[*kd - k + 3 + (i__ + k - 2) * ab_dim1],
+                                    &ab[*kd - k + 2 + (i__ + k - 1) * ab_dim1], &d__[i__ + k - 1],
+                                    &work[i__ + k - 1], &temp);
                             ab[*kd - k + 3 + (i__ + k - 2) * ab_dim1] = temp;
                             /* apply rotation from the right */
                             i__3 = k - 3;
-                            drot_(&i__3, &ab[*kd - k + 4 + (i__ + k - 2) * ab_dim1], &c__1, &ab[*kd - k + 3 + (i__ + k - 1) * ab_dim1], &c__1, &d__[i__ + k - 1], &work[i__ + k - 1]);
+                            drot_(&i__3, &ab[*kd - k + 4 + (i__ + k - 2) * ab_dim1], &c__1,
+                                  &ab[*kd - k + 3 + (i__ + k - 1) * ab_dim1], &c__1,
+                                  &d__[i__ + k - 1], &work[i__ + k - 1]);
                         }
                         ++nr;
                         j1 = j1 - kdn - 1;
                     }
                     /* apply plane rotations from both sides to diagonal */
                     /* blocks */
-                    if (nr > 0)
+                    if(nr > 0)
                     {
-                        dlar2v_(&nr, &ab[kd1 + (j1 - 1) * ab_dim1], &ab[kd1 + j1 * ab_dim1], &ab[*kd + j1 * ab_dim1], &inca, &d__[j1], &work[j1], &kd1);
+                        dlar2v_(&nr, &ab[kd1 + (j1 - 1) * ab_dim1], &ab[kd1 + j1 * ab_dim1],
+                                &ab[*kd + j1 * ab_dim1], &inca, &d__[j1], &work[j1], &kd1);
                     }
                     /* apply plane rotations from the left */
-                    if (nr > 0)
+                    if(nr > 0)
                     {
-                        if ((*kd << 1) - 1 < nr)
+                        if((*kd << 1) - 1 < nr)
                         {
                             /* Dependent on the the number of diagonals either */
                             /* DLARTV or DROT is used */
                             i__3 = *kd - 1;
-                            for (l = 1;
-                                    l <= i__3;
-                                    ++l)
+                            for(l = 1; l <= i__3; ++l)
                             {
-                                if (j2 + l > *n)
+                                if(j2 + l > *n)
                                 {
                                     nrt = nr - 1;
                                 }
@@ -365,9 +388,11 @@ int dsbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublereal *ab, int
                                 {
                                     nrt = nr;
                                 }
-                                if (nrt > 0)
+                                if(nrt > 0)
                                 {
-                                    dlartv_(&nrt, &ab[*kd - l + (j1 + l) * ab_dim1], &inca, &ab[*kd - l + 1 + (j1 + l) * ab_dim1], &inca, & d__[j1], &work[j1], &kd1);
+                                    dlartv_(&nrt, &ab[*kd - l + (j1 + l) * ab_dim1], &inca,
+                                            &ab[*kd - l + 1 + (j1 + l) * ab_dim1], &inca, &d__[j1],
+                                            &work[j1], &kd1);
                                 }
                                 /* L30: */
                             }
@@ -375,65 +400,66 @@ int dsbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublereal *ab, int
                         else
                         {
                             j1end = j1 + kd1 * (nr - 2);
-                            if (j1end >= j1)
+                            if(j1end >= j1)
                             {
                                 i__3 = j1end;
                                 i__2 = kd1;
-                                for (jin = j1;
-                                        i__2 < 0 ? jin >= i__3 : jin <= i__3;
-                                        jin += i__2)
+                                for(jin = j1; i__2 < 0 ? jin >= i__3 : jin <= i__3; jin += i__2)
                                 {
                                     i__4 = *kd - 1;
-                                    drot_(&i__4, &ab[*kd - 1 + (jin + 1) * ab_dim1], &incx, &ab[*kd + (jin + 1) * ab_dim1], &incx, &d__[jin], & work[jin]);
+                                    drot_(&i__4, &ab[*kd - 1 + (jin + 1) * ab_dim1], &incx,
+                                          &ab[*kd + (jin + 1) * ab_dim1], &incx, &d__[jin],
+                                          &work[jin]);
                                     /* L40: */
                                 }
                             }
                             /* Computing MIN */
                             i__2 = kdm1;
                             i__3 = *n - j2; // , expr subst
-                            lend = fla_min(i__2,i__3);
+                            lend = fla_min(i__2, i__3);
                             last = j1end + kd1;
-                            if (lend > 0)
+                            if(lend > 0)
                             {
-                                drot_(&lend, &ab[*kd - 1 + (last + 1) * ab_dim1], &incx, &ab[*kd + (last + 1) * ab_dim1], &incx, &d__[last], &work[ last]);
+                                drot_(&lend, &ab[*kd - 1 + (last + 1) * ab_dim1], &incx,
+                                      &ab[*kd + (last + 1) * ab_dim1], &incx, &d__[last],
+                                      &work[last]);
                             }
                         }
                     }
-                    if (wantq)
+                    if(wantq)
                     {
                         /* accumulate product of plane rotations in Q */
-                        if (initq)
+                        if(initq)
                         {
                             /* take advantage of the fact that Q was */
                             /* initially the Identity matrix */
-                            iqend = fla_max(iqend,j2);
+                            iqend = fla_max(iqend, j2);
                             /* Computing MAX */
                             i__2 = 0;
                             i__3 = k - 3; // , expr subst
-                            i2 = fla_max(i__2,i__3);
+                            i2 = fla_max(i__2, i__3);
                             iqaend = i__ * *kd + 1;
-                            if (k == 2)
+                            if(k == 2)
                             {
                                 iqaend += *kd;
                             }
-                            iqaend = fla_min(iqaend,iqend);
+                            iqaend = fla_min(iqaend, iqend);
                             i__2 = j2;
                             i__3 = kd1;
-                            for (j = j1;
-                                    i__3 < 0 ? j >= i__2 : j <= i__2;
-                                    j += i__3)
+                            for(j = j1; i__3 < 0 ? j >= i__2 : j <= i__2; j += i__3)
                             {
                                 ibl = i__ - i2 / kdm1;
                                 ++i2;
                                 /* Computing MAX */
                                 i__4 = 1;
                                 i__5 = j - ibl; // , expr subst
-                                iqb = fla_max(i__4,i__5);
+                                iqb = fla_max(i__4, i__5);
                                 nq = iqaend + 1 - iqb;
                                 /* Computing MIN */
                                 i__4 = iqaend + *kd;
-                                iqaend = fla_min(i__4,iqend);
-                                drot_(&nq, &q[iqb + (j - 1) * q_dim1], &c__1, &q[iqb + j * q_dim1], &c__1, &d__[j], &work[j]);
+                                iqaend = fla_min(i__4, iqend);
+                                drot_(&nq, &q[iqb + (j - 1) * q_dim1], &c__1, &q[iqb + j * q_dim1],
+                                      &c__1, &d__[j], &work[j]);
                                 /* L50: */
                             }
                         }
@@ -441,16 +467,15 @@ int dsbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublereal *ab, int
                         {
                             i__3 = j2;
                             i__2 = kd1;
-                            for (j = j1;
-                                    i__2 < 0 ? j >= i__3 : j <= i__3;
-                                    j += i__2)
+                            for(j = j1; i__2 < 0 ? j >= i__3 : j <= i__3; j += i__2)
                             {
-                                drot_(n, &q[(j - 1) * q_dim1 + 1], &c__1, &q[ j * q_dim1 + 1], &c__1, &d__[j], & work[j]);
+                                drot_(n, &q[(j - 1) * q_dim1 + 1], &c__1, &q[j * q_dim1 + 1], &c__1,
+                                      &d__[j], &work[j]);
                                 /* L60: */
                             }
                         }
                     }
-                    if (j2 + kdn > *n)
+                    if(j2 + kdn > *n)
                     {
                         /* adjust J2 to keep within the bounds of the matrix */
                         --nr;
@@ -458,9 +483,7 @@ int dsbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublereal *ab, int
                     }
                     i__2 = j2;
                     i__3 = kd1;
-                    for (j = j1;
-                            i__3 < 0 ? j >= i__2 : j <= i__2;
-                            j += i__3)
+                    for(j = j1; i__3 < 0 ? j >= i__2 : j <= i__2; j += i__3)
                     {
                         /* create nonzero element a(j-1,j+kd) outside the band */
                         /* and store it in WORK */
@@ -473,13 +496,11 @@ int dsbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublereal *ab, int
                 /* L90: */
             }
         }
-        if (*kd > 0)
+        if(*kd > 0)
         {
             /* copy off-diagonal elements to E */
             i__1 = *n - 1;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 e[i__] = ab[*kd + (i__ + 1) * ab_dim1];
                 /* L100: */
@@ -489,9 +510,7 @@ int dsbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublereal *ab, int
         {
             /* set E to zero if original matrix was diagonal */
             i__1 = *n - 1;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 e[i__] = 0.;
                 /* L110: */
@@ -499,9 +518,7 @@ int dsbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublereal *ab, int
         }
         /* copy diagonal elements to D */
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             d__[i__] = ab[kd1 + i__ * ab_dim1];
             /* L120: */
@@ -509,40 +526,37 @@ int dsbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublereal *ab, int
     }
     else
     {
-        if (*kd > 1)
+        if(*kd > 1)
         {
             /* Reduce to tridiagonal form, working with lower triangle */
             nr = 0;
             j1 = kdn + 2;
             j2 = 1;
             i__1 = *n - 2;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 /* Reduce i-th column of matrix to tridiagonal form */
-                for (k = kdn + 1;
-                        k >= 2;
-                        --k)
+                for(k = kdn + 1; k >= 2; --k)
                 {
                     j1 += kdn;
                     j2 += kdn;
-                    if (nr > 0)
+                    if(nr > 0)
                     {
                         /* generate plane rotations to annihilate nonzero */
                         /* elements which have been created outside the band */
-                        dlargv_(&nr, &ab[kd1 + (j1 - kd1) * ab_dim1], &inca, & work[j1], &kd1, &d__[j1], &kd1);
+                        dlargv_(&nr, &ab[kd1 + (j1 - kd1) * ab_dim1], &inca, &work[j1], &kd1,
+                                &d__[j1], &kd1);
                         /* apply plane rotations from one side */
                         /* Dependent on the the number of diagonals either */
                         /* DLARTV or DROT is used */
-                        if (nr > (*kd << 1) - 1)
+                        if(nr > (*kd << 1) - 1)
                         {
                             i__3 = *kd - 1;
-                            for (l = 1;
-                                    l <= i__3;
-                                    ++l)
+                            for(l = 1; l <= i__3; ++l)
                             {
-                                dlartv_(&nr, &ab[kd1 - l + (j1 - kd1 + l) * ab_dim1], &inca, &ab[kd1 - l + 1 + ( j1 - kd1 + l) * ab_dim1], &inca, &d__[ j1], &work[j1], &kd1);
+                                dlartv_(&nr, &ab[kd1 - l + (j1 - kd1 + l) * ab_dim1], &inca,
+                                        &ab[kd1 - l + 1 + (j1 - kd1 + l) * ab_dim1], &inca,
+                                        &d__[j1], &work[j1], &kd1);
                                 /* L130: */
                             }
                         }
@@ -551,51 +565,53 @@ int dsbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublereal *ab, int
                             jend = j1 + kd1 * (nr - 1);
                             i__3 = jend;
                             i__2 = kd1;
-                            for (jinc = j1;
-                                    i__2 < 0 ? jinc >= i__3 : jinc <= i__3;
-                                    jinc += i__2)
+                            for(jinc = j1; i__2 < 0 ? jinc >= i__3 : jinc <= i__3; jinc += i__2)
                             {
-                                drot_(&kdm1, &ab[*kd + (jinc - *kd) * ab_dim1], &incx, &ab[kd1 + (jinc - *kd) * ab_dim1], &incx, &d__[jinc], &work[ jinc]);
+                                drot_(&kdm1, &ab[*kd + (jinc - *kd) * ab_dim1], &incx,
+                                      &ab[kd1 + (jinc - *kd) * ab_dim1], &incx, &d__[jinc],
+                                      &work[jinc]);
                                 /* L140: */
                             }
                         }
                     }
-                    if (k > 2)
+                    if(k > 2)
                     {
-                        if (k <= *n - i__ + 1)
+                        if(k <= *n - i__ + 1)
                         {
                             /* generate plane rotation to annihilate a(i+k-1,i) */
                             /* within the band */
-                            dlartg_(&ab[k - 1 + i__ * ab_dim1], &ab[k + i__ * ab_dim1], &d__[i__ + k - 1], &work[i__ + k - 1], &temp);
+                            dlartg_(&ab[k - 1 + i__ * ab_dim1], &ab[k + i__ * ab_dim1],
+                                    &d__[i__ + k - 1], &work[i__ + k - 1], &temp);
                             ab[k - 1 + i__ * ab_dim1] = temp;
                             /* apply rotation from the left */
                             i__2 = k - 3;
                             i__3 = *ldab - 1;
                             i__4 = *ldab - 1;
-                            drot_(&i__2, &ab[k - 2 + (i__ + 1) * ab_dim1], & i__3, &ab[k - 1 + (i__ + 1) * ab_dim1], & i__4, &d__[i__ + k - 1], &work[i__ + k - 1]);
+                            drot_(&i__2, &ab[k - 2 + (i__ + 1) * ab_dim1], &i__3,
+                                  &ab[k - 1 + (i__ + 1) * ab_dim1], &i__4, &d__[i__ + k - 1],
+                                  &work[i__ + k - 1]);
                         }
                         ++nr;
                         j1 = j1 - kdn - 1;
                     }
                     /* apply plane rotations from both sides to diagonal */
                     /* blocks */
-                    if (nr > 0)
+                    if(nr > 0)
                     {
-                        dlar2v_(&nr, &ab[(j1 - 1) * ab_dim1 + 1], &ab[j1 * ab_dim1 + 1], &ab[(j1 - 1) * ab_dim1 + 2], & inca, &d__[j1], &work[j1], &kd1);
+                        dlar2v_(&nr, &ab[(j1 - 1) * ab_dim1 + 1], &ab[j1 * ab_dim1 + 1],
+                                &ab[(j1 - 1) * ab_dim1 + 2], &inca, &d__[j1], &work[j1], &kd1);
                     }
                     /* apply plane rotations from the right */
                     /* Dependent on the the number of diagonals either */
                     /* DLARTV or DROT is used */
-                    if (nr > 0)
+                    if(nr > 0)
                     {
-                        if (nr > (*kd << 1) - 1)
+                        if(nr > (*kd << 1) - 1)
                         {
                             i__2 = *kd - 1;
-                            for (l = 1;
-                                    l <= i__2;
-                                    ++l)
+                            for(l = 1; l <= i__2; ++l)
                             {
-                                if (j2 + l > *n)
+                                if(j2 + l > *n)
                                 {
                                     nrt = nr - 1;
                                 }
@@ -603,9 +619,11 @@ int dsbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublereal *ab, int
                                 {
                                     nrt = nr;
                                 }
-                                if (nrt > 0)
+                                if(nrt > 0)
                                 {
-                                    dlartv_(&nrt, &ab[l + 2 + (j1 - 1) * ab_dim1], &inca, &ab[l + 1 + j1 * ab_dim1], &inca, &d__[j1], &work[ j1], &kd1);
+                                    dlartv_(&nrt, &ab[l + 2 + (j1 - 1) * ab_dim1], &inca,
+                                            &ab[l + 1 + j1 * ab_dim1], &inca, &d__[j1], &work[j1],
+                                            &kd1);
                                 }
                                 /* L150: */
                             }
@@ -613,64 +631,65 @@ int dsbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublereal *ab, int
                         else
                         {
                             j1end = j1 + kd1 * (nr - 2);
-                            if (j1end >= j1)
+                            if(j1end >= j1)
                             {
                                 i__2 = j1end;
                                 i__3 = kd1;
-                                for (j1inc = j1;
-                                        i__3 < 0 ? j1inc >= i__2 : j1inc <= i__2;
-                                        j1inc += i__3)
+                                for(j1inc = j1; i__3 < 0 ? j1inc >= i__2 : j1inc <= i__2;
+                                    j1inc += i__3)
                                 {
-                                    drot_(&kdm1, &ab[(j1inc - 1) * ab_dim1 + 3], &c__1, &ab[j1inc * ab_dim1 + 2], &c__1, &d__[j1inc], &work[ j1inc]);
+                                    drot_(&kdm1, &ab[(j1inc - 1) * ab_dim1 + 3], &c__1,
+                                          &ab[j1inc * ab_dim1 + 2], &c__1, &d__[j1inc],
+                                          &work[j1inc]);
                                     /* L160: */
                                 }
                             }
                             /* Computing MIN */
                             i__3 = kdm1;
                             i__2 = *n - j2; // , expr subst
-                            lend = fla_min(i__3,i__2);
+                            lend = fla_min(i__3, i__2);
                             last = j1end + kd1;
-                            if (lend > 0)
+                            if(lend > 0)
                             {
-                                drot_(&lend, &ab[(last - 1) * ab_dim1 + 3], & c__1, &ab[last * ab_dim1 + 2], &c__1, &d__[last], &work[last]);
+                                drot_(&lend, &ab[(last - 1) * ab_dim1 + 3], &c__1,
+                                      &ab[last * ab_dim1 + 2], &c__1, &d__[last], &work[last]);
                             }
                         }
                     }
-                    if (wantq)
+                    if(wantq)
                     {
                         /* accumulate product of plane rotations in Q */
-                        if (initq)
+                        if(initq)
                         {
                             /* take advantage of the fact that Q was */
                             /* initially the Identity matrix */
-                            iqend = fla_max(iqend,j2);
+                            iqend = fla_max(iqend, j2);
                             /* Computing MAX */
                             i__3 = 0;
                             i__2 = k - 3; // , expr subst
-                            i2 = fla_max(i__3,i__2);
+                            i2 = fla_max(i__3, i__2);
                             iqaend = i__ * *kd + 1;
-                            if (k == 2)
+                            if(k == 2)
                             {
                                 iqaend += *kd;
                             }
-                            iqaend = fla_min(iqaend,iqend);
+                            iqaend = fla_min(iqaend, iqend);
                             i__3 = j2;
                             i__2 = kd1;
-                            for (j = j1;
-                                    i__2 < 0 ? j >= i__3 : j <= i__3;
-                                    j += i__2)
+                            for(j = j1; i__2 < 0 ? j >= i__3 : j <= i__3; j += i__2)
                             {
                                 ibl = i__ - i2 / kdm1;
                                 ++i2;
                                 /* Computing MAX */
                                 i__4 = 1;
                                 i__5 = j - ibl; // , expr subst
-                                iqb = fla_max(i__4,i__5);
+                                iqb = fla_max(i__4, i__5);
                                 nq = iqaend + 1 - iqb;
                                 /* Computing MIN */
                                 i__4 = iqaend + *kd;
-                                iqaend = fla_min(i__4,iqend);
-                                drot_(&nq, &q[iqb + (j - 1) * q_dim1], &c__1, &q[iqb + j * q_dim1], &c__1, &d__[j], &work[j]);
+                                iqaend = fla_min(i__4, iqend);
+                                drot_(&nq, &q[iqb + (j - 1) * q_dim1], &c__1, &q[iqb + j * q_dim1],
+                                      &c__1, &d__[j], &work[j]);
                                 /* L170: */
                             }
                         }
@@ -678,16 +697,15 @@ int dsbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublereal *ab, int
                         {
                             i__2 = j2;
                             i__3 = kd1;
-                            for (j = j1;
-                                    i__3 < 0 ? j >= i__2 : j <= i__2;
-                                    j += i__3)
+                            for(j = j1; i__3 < 0 ? j >= i__2 : j <= i__2; j += i__3)
                             {
-                                drot_(n, &q[(j - 1) * q_dim1 + 1], &c__1, &q[ j * q_dim1 + 1], &c__1, &d__[j], & work[j]);
+                                drot_(n, &q[(j - 1) * q_dim1 + 1], &c__1, &q[j * q_dim1 + 1], &c__1,
+                                      &d__[j], &work[j]);
                                 /* L180: */
                             }
                         }
                     }
-                    if (j2 + kdn > *n)
+                    if(j2 + kdn > *n)
                     {
                         /* adjust J2 to keep within the bounds of the matrix */
                         --nr;
@@ -695,14 +713,12 @@ int dsbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublereal *ab, int
                     }
                     i__3 = j2;
                     i__2 = kd1;
-                    for (j = j1;
-                            i__2 < 0 ? j >= i__3 : j <= i__3;
-                            j += i__2)
+                    for(j = j1; i__2 < 0 ? j >= i__3 : j <= i__3; j += i__2)
                     {
                         /* create nonzero element a(j+kd,j-1) outside the */
                         /* band and store it in WORK */
                         work[j + *kd] = work[j] * ab[kd1 + j * ab_dim1];
-                        ab[kd1 + j * ab_dim1] = d__[j] * ab[kd1 + j * ab_dim1] ;
+                        ab[kd1 + j * ab_dim1] = d__[j] * ab[kd1 + j * ab_dim1];
                         /* L190: */
                     }
                     /* L200: */
@@ -710,13 +726,11 @@ int dsbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublereal *ab, int
                 /* L210: */
             }
         }
-        if (*kd > 0)
+        if(*kd > 0)
         {
             /* copy off-diagonal elements to E */
             i__1 = *n - 1;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 e[i__] = ab[i__ * ab_dim1 + 2];
                 /* L220: */
@@ -726,9 +740,7 @@ int dsbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublereal *ab, int
         {
             /* set E to zero if original matrix was diagonal */
             i__1 = *n - 1;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 e[i__] = 0.;
                 /* L230: */
@@ -736,16 +748,14 @@ int dsbtrd_(char *vect, char *uplo, integer *n, integer *kd, doublereal *ab, int
         }
         /* copy diagonal elements to D */
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             d__[i__] = ab[i__ * ab_dim1 + 1];
             /* L240: */
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSBTRD */
 }
 /* dsbtrd_ */

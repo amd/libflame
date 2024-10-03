@@ -14,8 +14,8 @@ FLA_Error FLA_Max_abs_value( FLA_Obj A, FLA_Obj maxabs )
 {
   FLA_Datatype datatype;
   FLA_Datatype dt_maxabs;
-  dim_t        m_A, n_A;
-  dim_t        rs_A, cs_A;
+  fla_dim_t        m_A, n_A;
+  fla_dim_t        rs_A, cs_A;
 
   if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
     FLA_Max_abs_value_check( A, maxabs );

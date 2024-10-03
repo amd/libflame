@@ -1,28 +1,30 @@
-/* ../netlib/zlatrd.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zlatrd.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    0.,0.
-}
-;
-static doublecomplex c_b2 =
-{
-    1.,0.
-}
-;
+static doublecomplex c_b1 = {0., 0.};
+static doublecomplex c_b2 = {1., 0.};
 static integer c__1 = 1;
-/* > \brief \b ZLATRD reduces the first nb rows and columns of a symmetric/Hermitian matrix A to real tridiago nal form by an unitary similarity transformation. */
+/* > \brief \b ZLATRD reduces the first nb rows and columns of a symmetric/Hermitian matrix A to
+ * real tridiago nal form by an unitary similarity transformation. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLATRD + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlatrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlatrd.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlatrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlatrd.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlatrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlatrd.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -48,7 +50,7 @@ static integer c__1 = 1;
 /* > */
 /* > If UPLO = 'U', ZLATRD reduces the last NB rows and columns of a */
 /* > matrix, of which the upper triangle is supplied;
-*/
+ */
 /* > if UPLO = 'L', ZLATRD reduces the first NB rows and columns of a */
 /* > matrix, of which the lower triangle is supplied. */
 /* > */
@@ -94,7 +96,7 @@ static integer c__1 = 1;
 the elements above the diagonal */
 /* > with the array TAU, represent the unitary matrix Q as a */
 /* > product of elementary reflectors;
-*/
+ */
 /* > if UPLO = 'L', the first NB columns have been reduced to */
 /* > tridiagonal form, with the diagonal elements overwriting */
 /* > the diagonal elements of A;
@@ -115,7 +117,7 @@ the elements below the diagonal */
 /* > E is DOUBLE PRECISION array, dimension (N-1) */
 /* > If UPLO = 'U', E(n-nb:n-1) contains the superdiagonal */
 /* > elements of the last NB columns of the reduced matrix;
-*/
+ */
 /* > if UPLO = 'L', E(1:nb) contains the subdiagonal elements of */
 /* > the first NB columns of the reduced matrix. */
 /* > \endverbatim */
@@ -204,10 +206,13 @@ v(i+1:n) is stored on exit in A(i+1:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zlatrd_(char *uplo, integer *n, integer *nb, doublecomplex *a, integer *lda, doublereal *e, doublecomplex *tau, doublecomplex *w, integer *ldw)
+void zlatrd_(char *uplo, integer *n, integer *nb, doublecomplex *a, integer *lda, doublereal *e,
+             doublecomplex *tau, doublecomplex *w, integer *ldw)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlatrd inputs: uplo %c, n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldw %" FLA_IS "",*uplo, *n, *nb, *lda, *ldw);
+    AOCL_DTL_SNPRINTF("zlatrd inputs: uplo %c, n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS
+                      ", ldw %" FLA_IS "",
+                      *uplo, *n, *nb, *lda, *ldw);
     /* System generated locals */
     integer a_dim1, a_offset, w_dim1, w_offset, i__1, i__2, i__3;
     doublereal d__1;
@@ -215,13 +220,23 @@ int zlatrd_(char *uplo, integer *n, integer *nb, doublecomplex *a, integer *lda,
     /* Local variables */
     integer i__, iw;
     doublecomplex alpha;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
     extern /* Double Complex */
-    VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        VOID
+        zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
+                   integer *);
     extern /* Subroutine */
-    int zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zhemv_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *), zlacgv_(integer *, doublecomplex *, integer *);
+        void
+        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
+               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
+        zhemv_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
+               integer *, doublecomplex *, doublecomplex *, integer *),
+        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *),
+        zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -253,21 +268,19 @@ int zlatrd_(char *uplo, integer *n, integer *nb, doublecomplex *a, integer *lda,
     w_offset = 1 + w_dim1;
     w -= w_offset;
     /* Function Body */
-    if (*n <= 0)
+    if(*n <= 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
-    if (lsame_(uplo, "U"))
+    if(lsame_(uplo, "U", 1, 1))
     {
         /* Reduce last NB columns of upper triangle */
         i__1 = *n - *nb + 1;
-        for (i__ = *n;
-                i__ >= i__1;
-                --i__)
+        for(i__ = *n; i__ >= i__1; --i__)
         {
             iw = i__ - *n + *nb;
-            if (i__ < *n)
+            if(i__ < *n)
             {
                 /* Update A(1:i,i) */
                 i__2 = i__ + i__ * a_dim1;
@@ -280,7 +293,8 @@ int zlatrd_(char *uplo, integer *n, integer *nb, doublecomplex *a, integer *lda,
                 i__2 = *n - i__;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zgemv_("No transpose", &i__, &i__2, &z__1, &a[(i__ + 1) * a_dim1 + 1], lda, &w[i__ + (iw + 1) * w_dim1], ldw, & c_b2, &a[i__ * a_dim1 + 1], &c__1);
+                zgemv_("No transpose", &i__, &i__2, &z__1, &a[(i__ + 1) * a_dim1 + 1], lda,
+                       &w[i__ + (iw + 1) * w_dim1], ldw, &c_b2, &a[i__ * a_dim1 + 1], &c__1);
                 i__2 = *n - i__;
                 zlacgv_(&i__2, &w[i__ + (iw + 1) * w_dim1], ldw);
                 i__2 = *n - i__;
@@ -288,7 +302,8 @@ int zlatrd_(char *uplo, integer *n, integer *nb, doublecomplex *a, integer *lda,
                 i__2 = *n - i__;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zgemv_("No transpose", &i__, &i__2, &z__1, &w[(iw + 1) * w_dim1 + 1], ldw, &a[i__ + (i__ + 1) * a_dim1], lda, & c_b2, &a[i__ * a_dim1 + 1], &c__1);
+                zgemv_("No transpose", &i__, &i__2, &z__1, &w[(iw + 1) * w_dim1 + 1], ldw,
+                       &a[i__ + (i__ + 1) * a_dim1], lda, &c_b2, &a[i__ * a_dim1 + 1], &c__1);
                 i__2 = *n - i__;
                 zlacgv_(&i__2, &a[i__ + (i__ + 1) * a_dim1], lda);
                 i__2 = i__ + i__ * a_dim1;
@@ -297,7 +312,7 @@ int zlatrd_(char *uplo, integer *n, integer *nb, doublecomplex *a, integer *lda,
                 a[i__2].r = d__1;
                 a[i__2].i = 0.; // , expr subst
             }
-            if (i__ > 1)
+            if(i__ > 1)
             {
                 /* Generate elementary reflector H(i) to annihilate */
                 /* A(1:i-2,i) */
@@ -313,25 +328,32 @@ int zlatrd_(char *uplo, integer *n, integer *nb, doublecomplex *a, integer *lda,
                 a[i__2].i = 0.; // , expr subst
                 /* Compute W(1:i-1,i) */
                 i__2 = i__ - 1;
-                zhemv_("Upper", &i__2, &c_b2, &a[a_offset], lda, &a[i__ * a_dim1 + 1], &c__1, &c_b1, &w[iw * w_dim1 + 1], &c__1);
-                if (i__ < *n)
+                zhemv_("Upper", &i__2, &c_b2, &a[a_offset], lda, &a[i__ * a_dim1 + 1], &c__1, &c_b1,
+                       &w[iw * w_dim1 + 1], &c__1);
+                if(i__ < *n)
                 {
                     i__2 = i__ - 1;
                     i__3 = *n - i__;
-                    zgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &w[(iw + 1) * w_dim1 + 1], ldw, &a[i__ * a_dim1 + 1], & c__1, &c_b1, &w[i__ + 1 + iw * w_dim1], &c__1);
+                    zgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &w[(iw + 1) * w_dim1 + 1],
+                           ldw, &a[i__ * a_dim1 + 1], &c__1, &c_b1, &w[i__ + 1 + iw * w_dim1],
+                           &c__1);
                     i__2 = i__ - 1;
                     i__3 = *n - i__;
                     z__1.r = -1.;
                     z__1.i = -0.; // , expr subst
-                    zgemv_("No transpose", &i__2, &i__3, &z__1, &a[(i__ + 1) * a_dim1 + 1], lda, &w[i__ + 1 + iw * w_dim1], & c__1, &c_b2, &w[iw * w_dim1 + 1], &c__1);
+                    zgemv_("No transpose", &i__2, &i__3, &z__1, &a[(i__ + 1) * a_dim1 + 1], lda,
+                           &w[i__ + 1 + iw * w_dim1], &c__1, &c_b2, &w[iw * w_dim1 + 1], &c__1);
                     i__2 = i__ - 1;
                     i__3 = *n - i__;
-                    zgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[( i__ + 1) * a_dim1 + 1], lda, &a[i__ * a_dim1 + 1], &c__1, &c_b1, &w[i__ + 1 + iw * w_dim1], &c__1);
+                    zgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[(i__ + 1) * a_dim1 + 1],
+                           lda, &a[i__ * a_dim1 + 1], &c__1, &c_b1, &w[i__ + 1 + iw * w_dim1],
+                           &c__1);
                     i__2 = i__ - 1;
                     i__3 = *n - i__;
                     z__1.r = -1.;
                     z__1.i = -0.; // , expr subst
-                    zgemv_("No transpose", &i__2, &i__3, &z__1, &w[(iw + 1) * w_dim1 + 1], ldw, &w[i__ + 1 + iw * w_dim1], & c__1, &c_b2, &w[iw * w_dim1 + 1], &c__1);
+                    zgemv_("No transpose", &i__2, &i__3, &z__1, &w[(iw + 1) * w_dim1 + 1], ldw,
+                           &w[i__ + 1 + iw * w_dim1], &c__1, &c_b2, &w[iw * w_dim1 + 1], &c__1);
                 }
                 i__2 = i__ - 1;
                 zscal_(&i__2, &tau[i__ - 1], &w[iw * w_dim1 + 1], &c__1);
@@ -356,9 +378,7 @@ int zlatrd_(char *uplo, integer *n, integer *nb, doublecomplex *a, integer *lda,
     {
         /* Reduce first NB columns of lower triangle */
         i__1 = *nb;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* Update A(i:n,i) */
             i__2 = i__ + i__ * a_dim1;
@@ -372,7 +392,8 @@ int zlatrd_(char *uplo, integer *n, integer *nb, doublecomplex *a, integer *lda,
             i__3 = i__ - 1;
             z__1.r = -1.;
             z__1.i = -0.; // , expr subst
-            zgemv_("No transpose", &i__2, &i__3, &z__1, &a[i__ + a_dim1], lda, &w[i__ + w_dim1], ldw, &c_b2, &a[i__ + i__ * a_dim1], & c__1);
+            zgemv_("No transpose", &i__2, &i__3, &z__1, &a[i__ + a_dim1], lda, &w[i__ + w_dim1],
+                   ldw, &c_b2, &a[i__ + i__ * a_dim1], &c__1);
             i__2 = i__ - 1;
             zlacgv_(&i__2, &w[i__ + w_dim1], ldw);
             i__2 = i__ - 1;
@@ -381,7 +402,8 @@ int zlatrd_(char *uplo, integer *n, integer *nb, doublecomplex *a, integer *lda,
             i__3 = i__ - 1;
             z__1.r = -1.;
             z__1.i = -0.; // , expr subst
-            zgemv_("No transpose", &i__2, &i__3, &z__1, &w[i__ + w_dim1], ldw, &a[i__ + a_dim1], lda, &c_b2, &a[i__ + i__ * a_dim1], & c__1);
+            zgemv_("No transpose", &i__2, &i__3, &z__1, &w[i__ + w_dim1], ldw, &a[i__ + a_dim1],
+                   lda, &c_b2, &a[i__ + i__ * a_dim1], &c__1);
             i__2 = i__ - 1;
             zlacgv_(&i__2, &a[i__ + a_dim1], lda);
             i__2 = i__ + i__ * a_dim1;
@@ -389,7 +411,7 @@ int zlatrd_(char *uplo, integer *n, integer *nb, doublecomplex *a, integer *lda,
             d__1 = a[i__3].r;
             a[i__2].r = d__1;
             a[i__2].i = 0.; // , expr subst
-            if (i__ < *n)
+            if(i__ < *n)
             {
                 /* Generate elementary reflector H(i) to annihilate */
                 /* A(i+2:n,i) */
@@ -399,7 +421,7 @@ int zlatrd_(char *uplo, integer *n, integer *nb, doublecomplex *a, integer *lda,
                 i__2 = *n - i__;
                 /* Computing MIN */
                 i__3 = i__ + 2;
-                zlarfg_(&i__2, &alpha, &a[fla_min(i__3,*n) + i__ * a_dim1], &c__1, &tau[i__]);
+                zlarfg_(&i__2, &alpha, &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1, &tau[i__]);
                 i__2 = i__;
                 e[i__2] = alpha.r;
                 i__2 = i__ + 1 + i__ * a_dim1;
@@ -407,23 +429,28 @@ int zlatrd_(char *uplo, integer *n, integer *nb, doublecomplex *a, integer *lda,
                 a[i__2].i = 0.; // , expr subst
                 /* Compute W(i+1:n,i) */
                 i__2 = *n - i__;
-                zhemv_("Lower", &i__2, &c_b2, &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b1, &w[ i__ + 1 + i__ * w_dim1], &c__1);
+                zhemv_("Lower", &i__2, &c_b2, &a[i__ + 1 + (i__ + 1) * a_dim1], lda,
+                       &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b1, &w[i__ + 1 + i__ * w_dim1], &c__1);
                 i__2 = *n - i__;
                 i__3 = i__ - 1;
-                zgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &w[i__ + 1 + w_dim1], ldw, &a[i__ + 1 + i__ * a_dim1], &c__1, & c_b1, &w[i__ * w_dim1 + 1], &c__1);
-                i__2 = *n - i__;
-                i__3 = i__ - 1;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                zgemv_("No transpose", &i__2, &i__3, &z__1, &a[i__ + 1 + a_dim1], lda, &w[i__ * w_dim1 + 1], &c__1, &c_b2, &w[ i__ + 1 + i__ * w_dim1], &c__1);
-                i__2 = *n - i__;
-                i__3 = i__ - 1;
-                zgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[i__ + 1 + a_dim1], lda, &a[i__ + 1 + i__ * a_dim1], &c__1, & c_b1, &w[i__ * w_dim1 + 1], &c__1);
+                zgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &w[i__ + 1 + w_dim1], ldw,
+                       &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b1, &w[i__ * w_dim1 + 1], &c__1);
                 i__2 = *n - i__;
                 i__3 = i__ - 1;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zgemv_("No transpose", &i__2, &i__3, &z__1, &w[i__ + 1 + w_dim1], ldw, &w[i__ * w_dim1 + 1], &c__1, &c_b2, &w[ i__ + 1 + i__ * w_dim1], &c__1);
+                zgemv_("No transpose", &i__2, &i__3, &z__1, &a[i__ + 1 + a_dim1], lda,
+                       &w[i__ * w_dim1 + 1], &c__1, &c_b2, &w[i__ + 1 + i__ * w_dim1], &c__1);
+                i__2 = *n - i__;
+                i__3 = i__ - 1;
+                zgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[i__ + 1 + a_dim1], lda,
+                       &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b1, &w[i__ * w_dim1 + 1], &c__1);
+                i__2 = *n - i__;
+                i__3 = i__ - 1;
+                z__1.r = -1.;
+                z__1.i = -0.; // , expr subst
+                zgemv_("No transpose", &i__2, &i__3, &z__1, &w[i__ + 1 + w_dim1], ldw,
+                       &w[i__ * w_dim1 + 1], &c__1, &c_b2, &w[i__ + 1 + i__ * w_dim1], &c__1);
                 i__2 = *n - i__;
                 zscal_(&i__2, &tau[i__], &w[i__ + 1 + i__ * w_dim1], &c__1);
                 z__3.r = -.5;
@@ -432,19 +459,21 @@ int zlatrd_(char *uplo, integer *n, integer *nb, doublecomplex *a, integer *lda,
                 z__2.r = z__3.r * tau[i__2].r - z__3.i * tau[i__2].i;
                 z__2.i = z__3.r * tau[i__2].i + z__3.i * tau[i__2].r; // , expr subst
                 i__3 = *n - i__;
-                zdotc_f2c_(&z__4, &i__3, &w[i__ + 1 + i__ * w_dim1], &c__1, &a[ i__ + 1 + i__ * a_dim1], &c__1);
+                zdotc_f2c_(&z__4, &i__3, &w[i__ + 1 + i__ * w_dim1], &c__1,
+                           &a[i__ + 1 + i__ * a_dim1], &c__1);
                 z__1.r = z__2.r * z__4.r - z__2.i * z__4.i;
                 z__1.i = z__2.r * z__4.i + z__2.i * z__4.r; // , expr subst
                 alpha.r = z__1.r;
                 alpha.i = z__1.i; // , expr subst
                 i__2 = *n - i__;
-                zaxpy_(&i__2, &alpha, &a[i__ + 1 + i__ * a_dim1], &c__1, &w[ i__ + 1 + i__ * w_dim1], &c__1);
+                zaxpy_(&i__2, &alpha, &a[i__ + 1 + i__ * a_dim1], &c__1, &w[i__ + 1 + i__ * w_dim1],
+                       &c__1);
             }
             /* L20: */
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLATRD */
 }
 /* zlatrd_ */

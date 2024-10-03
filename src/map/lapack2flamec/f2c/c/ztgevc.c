@@ -1,16 +1,11 @@
-/* ../netlib/ztgevc.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ztgevc.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    0.,0.
-}
-;
-static doublecomplex c_b2 =
-{
-    1.,0.
-}
-;
+static doublecomplex c_b1 = {0., 0.};
+static doublecomplex c_b2 = {1., 0.};
 static integer c__1 = 1;
 /* > \brief \b ZTGEVC */
 /* =========== DOCUMENTATION =========== */
@@ -18,11 +13,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZTGEVC + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztgevc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztgevc.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztgevc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztgevc.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztgevc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztgevc.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -75,9 +76,9 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > SIDE is CHARACTER*1 */
 /* > = 'R': compute right eigenvectors only;
-*/
+ */
 /* > = 'L': compute left eigenvectors only;
-*/
+ */
 /* > = 'B': compute both right and left eigenvectors. */
 /* > \endverbatim */
 /* > */
@@ -85,10 +86,10 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > HOWMNY is CHARACTER*1 */
 /* > = 'A': compute all right and/or left eigenvectors;
-*/
+ */
 /* > = 'B': compute all right and/or left eigenvectors, */
 /* > backtransformed by the matrices in VR and/or VL;
-*/
+ */
 /* > = 'S': compute selected right and/or left eigenvectors, */
 /* > specified by the logical array SELECT. */
 /* > \endverbatim */
@@ -143,9 +144,9 @@ static integer c__1 = 1;
 /* > of left Schur vectors returned by ZHGEQZ). */
 /* > On exit, if SIDE = 'L' or 'B', VL contains: */
 /* > if HOWMNY = 'A', the matrix Y of left eigenvectors of (S,P);
-*/
+ */
 /* > if HOWMNY = 'B', the matrix Q*Y;
-*/
+ */
 /* > if HOWMNY = 'S', the left eigenvectors of (S,P) specified by */
 /* > SELECT, stored consecutively in the columns of */
 /* > VL, in the same order as their eigenvalues. */
@@ -167,9 +168,9 @@ static integer c__1 = 1;
 /* > of right Schur vectors returned by ZHGEQZ). */
 /* > On exit, if SIDE = 'R' or 'B', VR contains: */
 /* > if HOWMNY = 'A', the matrix X of right eigenvectors of (S,P);
-*/
+ */
 /* > if HOWMNY = 'B', the matrix Z*X;
-*/
+ */
 /* > if HOWMNY = 'S', the right eigenvectors of (S,P) specified by */
 /* > SELECT, stored consecutively in the columns of */
 /* > VR, in the same order as their eigenvalues. */
@@ -223,12 +224,19 @@ static integer c__1 = 1;
 /* > \ingroup complex16GEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex *s, integer *lds, doublecomplex *p, integer *ldp, doublecomplex *vl, integer *ldvl, doublecomplex *vr, integer * ldvr, integer *mm, integer *m, doublecomplex *work, doublereal *rwork, integer *info)
+void ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex *s, integer *lds,
+             doublecomplex *p, integer *ldp, doublecomplex *vl, integer *ldvl, doublecomplex *vr,
+             integer *ldvr, integer *mm, integer *m, doublecomplex *work, doublereal *rwork,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztgevc inputs: side %c, howmny %c, n %" FLA_IS ", lds %" FLA_IS ", ldp %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS ", m %" FLA_IS "",*side, *howmny, *n, *lds, *ldp, *ldvl, *ldvr, *mm, *m);
+    AOCL_DTL_SNPRINTF("ztgevc inputs: side %c, howmny %c, n %" FLA_IS ", lds %" FLA_IS
+                      ", ldp %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS
+                      ", m %" FLA_IS "",
+                      *side, *howmny, *n, *lds, *ldp, *ldvl, *ldvr, *mm, *m);
     /* System generated locals */
-    integer p_dim1, p_offset, s_dim1, s_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2, i__3, i__4, i__5;
+    integer p_dim1, p_offset, s_dim1, s_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2,
+        i__3, i__4, i__5;
     doublereal d__1, d__2, d__3, d__4, d__5, d__6;
     doublecomplex z__1, z__2, z__3, z__4;
     /* Builtin functions */
@@ -252,13 +260,16 @@ int ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex
     logical ilall;
     integer iside;
     doublereal sbeta;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal small_val;
-    logical compl;
+    logical compl ;
     doublereal anorm, bnorm;
     logical compr;
     extern /* Subroutine */
-    int zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), dlabad_(doublereal *, doublereal *);
+        void
+        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
+               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
+        dlabad_(doublereal *, doublereal *);
     logical ilbbad;
     doublereal acoefa, bcoefa, acoeff;
     doublecomplex bcoeff;
@@ -268,11 +279,13 @@ int ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex
     doublecomplex salpha;
     doublereal safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     logical ilcomp;
     extern /* Double Complex */
-    void zladiv_f2c_(doublecomplex *, doublecomplex *, doublecomplex *);
+        void
+        zladiv_f2c_(doublecomplex *, doublecomplex *, doublecomplex *);
     integer ihwmny;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -318,19 +331,19 @@ int ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex
     /* Function Body */
     ilall = FALSE_;
     ilback = FALSE_;
-    if (lsame_(howmny, "A"))
+    if(lsame_(howmny, "A", 1, 1))
     {
         ihwmny = 1;
         ilall = TRUE_;
         ilback = FALSE_;
     }
-    else if (lsame_(howmny, "S"))
+    else if(lsame_(howmny, "S", 1, 1))
     {
         ihwmny = 2;
         ilall = FALSE_;
         ilback = FALSE_;
     }
-    else if (lsame_(howmny, "B"))
+    else if(lsame_(howmny, "B", 1, 1))
     {
         ihwmny = 3;
         ilall = TRUE_;
@@ -340,19 +353,19 @@ int ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex
     {
         ihwmny = -1;
     }
-    if (lsame_(side, "R"))
+    if(lsame_(side, "R", 1, 1))
     {
         iside = 1;
         compl = FALSE_;
         compr = TRUE_;
     }
-    else if (lsame_(side, "L"))
+    else if(lsame_(side, "L", 1, 1))
     {
         iside = 2;
         compl = TRUE_;
         compr = FALSE_;
     }
-    else if (lsame_(side, "B"))
+    else if(lsame_(side, "B", 1, 1))
     {
         iside = 3;
         compl = TRUE_;
@@ -363,43 +376,41 @@ int ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex
         iside = -1;
     }
     *info = 0;
-    if (iside < 0)
+    if(iside < 0)
     {
         *info = -1;
     }
-    else if (ihwmny < 0)
+    else if(ihwmny < 0)
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*lds < fla_max(1,*n))
+    else if(*lds < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldp < fla_max(1,*n))
+    else if(*ldp < fla_max(1, *n))
     {
         *info = -8;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZTGEVC", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* Count the number of eigenvectors */
-    if (! ilall)
+    if(!ilall)
     {
         im = 0;
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
-            if (select[j])
+            if(select[j])
             {
                 ++im;
             }
@@ -413,45 +424,43 @@ int ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex
     /* Check diagonal of B */
     ilbbad = FALSE_;
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
-        if (d_imag(&p[j + j * p_dim1]) != 0.)
+        if(d_imag(&p[j + j * p_dim1]) != 0.)
         {
             ilbbad = TRUE_;
         }
         /* L20: */
     }
-    if (ilbbad)
+    if(ilbbad)
     {
         *info = -7;
     }
-    else if (compl && *ldvl < *n || *ldvl < 1)
+    else if(compl &&*ldvl < *n || *ldvl < 1)
     {
         *info = -10;
     }
-    else if (compr && *ldvr < *n || *ldvr < 1)
+    else if(compr && *ldvr < *n || *ldvr < 1)
     {
         *info = -12;
     }
-    else if (*mm < im)
+    else if(*mm < im)
     {
         *info = -13;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZTGEVC", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* Quick return if possible */
     *m = im;
-    if (*n == 0)
+    if(*n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* Machine Constants */
     safmin = dlamch_("Safe minimum");
@@ -471,48 +480,48 @@ int ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex
     rwork[1] = 0.;
     rwork[*n + 1] = 0.;
     i__1 = *n;
-    for (j = 2;
-            j <= i__1;
-            ++j)
+    for(j = 2; j <= i__1; ++j)
     {
         rwork[j] = 0.;
         rwork[*n + j] = 0.;
         i__2 = j - 1;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * s_dim1;
-            rwork[j] += (d__1 = s[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&s[i__ + j * s_dim1]), f2c_dabs(d__2));
+            rwork[j] += (d__1 = s[i__3].r, f2c_dabs(d__1))
+                        + (d__2 = d_imag(&s[i__ + j * s_dim1]), f2c_dabs(d__2));
             i__3 = i__ + j * p_dim1;
-            rwork[*n + j] += (d__1 = p[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(& p[i__ + j * p_dim1]), f2c_dabs(d__2));
+            rwork[*n + j] += (d__1 = p[i__3].r, f2c_dabs(d__1))
+                             + (d__2 = d_imag(&p[i__ + j * p_dim1]), f2c_dabs(d__2));
             /* L30: */
         }
         /* Computing MAX */
         i__2 = j + j * s_dim1;
         d__3 = anorm;
-        d__4 = rwork[j] + ((d__1 = s[i__2].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&s[j + j * s_dim1]), f2c_dabs(d__2))); // , expr subst
-        anorm = fla_max(d__3,d__4);
+        d__4 = rwork[j]
+               + ((d__1 = s[i__2].r, f2c_dabs(d__1))
+                  + (d__2 = d_imag(&s[j + j * s_dim1]), f2c_dabs(d__2))); // , expr subst
+        anorm = fla_max(d__3, d__4);
         /* Computing MAX */
         i__2 = j + j * p_dim1;
         d__3 = bnorm;
-        d__4 = rwork[*n + j] + ((d__1 = p[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&p[j + j * p_dim1]), f2c_dabs(d__2))); // , expr subst
-        bnorm = fla_max(d__3,d__4);
+        d__4 = rwork[*n + j]
+               + ((d__1 = p[i__2].r, f2c_dabs(d__1))
+                  + (d__2 = d_imag(&p[j + j * p_dim1]), f2c_dabs(d__2))); // , expr subst
+        bnorm = fla_max(d__3, d__4);
         /* L40: */
     }
-    ascale = 1. / fla_max(anorm,safmin);
-    bscale = 1. / fla_max(bnorm,safmin);
+    ascale = 1. / fla_max(anorm, safmin);
+    bscale = 1. / fla_max(bnorm, safmin);
     /* Left eigenvectors */
-    if (compl)
+    if(compl )
     {
         ieig = 0;
         /* Main loop over eigenvalues */
         i__1 = *n;
-        for (je = 1;
-                je <= i__1;
-                ++je)
+        for(je = 1; je <= i__1; ++je)
         {
-            if (ilall)
+            if(ilall)
             {
                 ilcomp = TRUE_;
             }
@@ -520,18 +529,19 @@ int ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex
             {
                 ilcomp = select[je];
             }
-            if (ilcomp)
+            if(ilcomp)
             {
                 ++ieig;
                 i__2 = je + je * s_dim1;
                 i__3 = je + je * p_dim1;
-                if ((d__2 = s[i__2].r, f2c_dabs(d__2)) + (d__3 = d_imag(&s[je + je * s_dim1]), f2c_dabs(d__3)) <= safmin && (d__1 = p[i__3].r, f2c_dabs(d__1)) <= safmin)
+                if((d__2 = s[i__2].r, f2c_dabs(d__2))
+                           + (d__3 = d_imag(&s[je + je * s_dim1]), f2c_dabs(d__3))
+                       <= safmin
+                   && (d__1 = p[i__3].r, f2c_dabs(d__1)) <= safmin)
                 {
                     /* Singular matrix pencil -- return unit eigenvector */
                     i__2 = *n;
-                    for (jr = 1;
-                            jr <= i__2;
-                            ++jr)
+                    for(jr = 1; jr <= i__2; ++jr)
                     {
                         i__3 = jr + ieig * vl_dim1;
                         vl[i__3].r = 0.;
@@ -550,10 +560,12 @@ int ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex
                 /* Computing MAX */
                 i__2 = je + je * s_dim1;
                 i__3 = je + je * p_dim1;
-                d__4 = ((d__2 = s[i__2].r, f2c_dabs(d__2)) + (d__3 = d_imag(&s[je + je * s_dim1]), f2c_dabs(d__3))) * ascale;
+                d__4 = ((d__2 = s[i__2].r, f2c_dabs(d__2))
+                        + (d__3 = d_imag(&s[je + je * s_dim1]), f2c_dabs(d__3)))
+                       * ascale;
                 d__5 = (d__1 = p[i__3].r, f2c_dabs(d__1)) * bscale;
-                d__4 = fla_max(d__4,d__5); // ; expr subst
-                temp = 1. / fla_max(d__4,safmin);
+                d__4 = fla_max(d__4, d__5); // ; expr subst
+                temp = 1. / fla_max(d__4, safmin);
                 i__2 = je + je * s_dim1;
                 z__2.r = temp * s[i__2].r;
                 z__2.i = temp * s[i__2].i; // , expr subst
@@ -570,30 +582,38 @@ int ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex
                 bcoeff.i = z__1.i; // , expr subst
                 /* Scale to avoid underflow */
                 lsa = f2c_dabs(sbeta) >= safmin && f2c_dabs(acoeff) < small_val;
-                lsb = (d__1 = salpha.r, f2c_dabs(d__1)) + (d__2 = d_imag(&salpha), f2c_dabs(d__2)) >= safmin && (d__3 = bcoeff.r, f2c_dabs(d__3)) + (d__4 = d_imag(&bcoeff), f2c_dabs(d__4)) < small_val;
+                lsb = (d__1 = salpha.r, f2c_dabs(d__1)) + (d__2 = d_imag(&salpha), f2c_dabs(d__2))
+                          >= safmin
+                      && (d__3 = bcoeff.r, f2c_dabs(d__3))
+                                 + (d__4 = d_imag(&bcoeff), f2c_dabs(d__4))
+                             < small_val;
                 scale = 1.;
-                if (lsa)
+                if(lsa)
                 {
-                    scale = small_val / f2c_dabs(sbeta) * fla_min(anorm,big);
+                    scale = small_val / f2c_dabs(sbeta) * fla_min(anorm, big);
                 }
-                if (lsb)
+                if(lsb)
                 {
                     /* Computing MAX */
                     d__3 = scale;
-                    d__4 = small_val / ((d__1 = salpha.r, f2c_dabs(d__1)) + (d__2 = d_imag(&salpha), f2c_dabs(d__2))) * fla_min( bnorm,big); // , expr subst
-                    scale = fla_max(d__3,d__4);
+                    d__4 = small_val
+                           / ((d__1 = salpha.r, f2c_dabs(d__1))
+                              + (d__2 = d_imag(&salpha), f2c_dabs(d__2)))
+                           * fla_min(bnorm, big); // , expr subst
+                    scale = fla_max(d__3, d__4);
                 }
-                if (lsa || lsb)
+                if(lsa || lsb)
                 {
                     /* Computing MIN */
                     /* Computing MAX */
                     d__5 = 1., d__6 = f2c_dabs(acoeff);
-                    d__5 = fla_max(d__5,d__6);
-                    d__6 = (d__1 = bcoeff.r, f2c_dabs(d__1)) + (d__2 = d_imag(&bcoeff), f2c_dabs(d__2)); // ; expr subst
+                    d__5 = fla_max(d__5, d__6);
+                    d__6 = (d__1 = bcoeff.r, f2c_dabs(d__1))
+                           + (d__2 = d_imag(&bcoeff), f2c_dabs(d__2)); // ; expr subst
                     d__3 = scale;
-                    d__4 = 1. / (safmin * fla_max(d__5,d__6)); // , expr subst
-                    scale = fla_min(d__3,d__4);
-                    if (lsa)
+                    d__4 = 1. / (safmin * fla_max(d__5, d__6)); // , expr subst
+                    scale = fla_min(d__3, d__4);
+                    if(lsa)
                     {
                         acoeff = ascale * (scale * sbeta);
                     }
@@ -601,7 +621,7 @@ int ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex
                     {
                         acoeff = scale * acoeff;
                     }
-                    if (lsb)
+                    if(lsb)
                     {
                         z__2.r = scale * salpha.r;
                         z__2.i = scale * salpha.i; // , expr subst
@@ -619,12 +639,11 @@ int ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex
                     }
                 }
                 acoefa = f2c_dabs(acoeff);
-                bcoefa = (d__1 = bcoeff.r, f2c_dabs(d__1)) + (d__2 = d_imag(& bcoeff), f2c_dabs(d__2));
+                bcoefa
+                    = (d__1 = bcoeff.r, f2c_dabs(d__1)) + (d__2 = d_imag(&bcoeff), f2c_dabs(d__2));
                 xmax = 1.;
                 i__2 = *n;
-                for (jr = 1;
-                        jr <= i__2;
-                        ++jr)
+                for(jr = 1; jr <= i__2; ++jr)
                 {
                     i__3 = jr;
                     work[i__3].r = 0.;
@@ -637,16 +656,14 @@ int ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex
                 /* Computing MAX */
                 d__1 = ulp * acoefa * anorm;
                 d__2 = ulp * bcoefa * bnorm;
-                d__1 = fla_max(d__1,d__2); // ; expr subst
-                dmin__ = fla_max(d__1,safmin);
+                d__1 = fla_max(d__1, d__2); // ; expr subst
+                dmin__ = fla_max(d__1, safmin);
                 /* H */
                 /* Triangular solve of (a A - b B) y = 0 */
                 /* H */
                 /* (rowwise in (a A - b B) , or columnwise in a A - b B) */
                 i__2 = *n;
-                for (j = je + 1;
-                        j <= i__2;
-                        ++j)
+                for(j = je + 1; j <= i__2; ++j)
                 {
                     /* Compute */
                     /* j-1 */
@@ -654,12 +671,10 @@ int ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex
                     /* k=je */
                     /* (Scale if necessary) */
                     temp = 1. / xmax;
-                    if (acoefa * rwork[j] + bcoefa * rwork[*n + j] > bignum * temp)
+                    if(acoefa * rwork[j] + bcoefa * rwork[*n + j] > bignum * temp)
                     {
                         i__3 = j - 1;
-                        for (jr = je;
-                                jr <= i__3;
-                                ++jr)
+                        for(jr = je; jr <= i__3; ++jr)
                         {
                             i__4 = jr;
                             i__5 = jr;
@@ -676,13 +691,11 @@ int ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex
                     sumb.r = 0.;
                     sumb.i = 0.; // , expr subst
                     i__3 = j - 1;
-                    for (jr = je;
-                            jr <= i__3;
-                            ++jr)
+                    for(jr = je; jr <= i__3; ++jr)
                     {
                         d_cnjg(&z__3, &s[jr + j * s_dim1]);
                         i__4 = jr;
-                        z__2.r = z__3.r * work[i__4].r - z__3.i * work[i__4] .i;
+                        z__2.r = z__3.r * work[i__4].r - z__3.i * work[i__4].i;
                         z__2.i = z__3.r * work[i__4].i + z__3.i * work[i__4].r; // , expr subst
                         z__1.r = suma.r + z__2.r;
                         z__1.i = suma.i + z__2.i; // , expr subst
@@ -690,7 +703,7 @@ int ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex
                         suma.i = z__1.i; // , expr subst
                         d_cnjg(&z__3, &p[jr + j * p_dim1]);
                         i__4 = jr;
-                        z__2.r = z__3.r * work[i__4].r - z__3.i * work[i__4] .i;
+                        z__2.r = z__3.r * work[i__4].r - z__3.i * work[i__4].i;
                         z__2.i = z__3.r * work[i__4].i + z__3.i * work[i__4].r; // , expr subst
                         z__1.r = sumb.r + z__2.r;
                         z__1.i = sumb.i + z__2.i; // , expr subst
@@ -714,28 +727,32 @@ int ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex
                     z__3.i = acoeff * s[i__3].i; // , expr subst
                     i__4 = j + j * p_dim1;
                     z__4.r = bcoeff.r * p[i__4].r - bcoeff.i * p[i__4].i;
-                    z__4.i = bcoeff.r * p[i__4].i + bcoeff.i * p[i__4] .r; // , expr subst
+                    z__4.i = bcoeff.r * p[i__4].i + bcoeff.i * p[i__4].r; // , expr subst
                     z__2.r = z__3.r - z__4.r;
                     z__2.i = z__3.i - z__4.i; // , expr subst
                     d_cnjg(&z__1, &z__2);
                     d__.r = z__1.r;
                     d__.i = z__1.i; // , expr subst
-                    if ((d__1 = d__.r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__), f2c_dabs( d__2)) <= dmin__)
+                    if((d__1 = d__.r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__), f2c_dabs(d__2))
+                       <= dmin__)
                     {
                         z__1.r = dmin__;
                         z__1.i = 0.; // , expr subst
                         d__.r = z__1.r;
                         d__.i = z__1.i; // , expr subst
                     }
-                    if ((d__1 = d__.r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__), f2c_dabs( d__2)) < 1.)
+                    if((d__1 = d__.r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__), f2c_dabs(d__2)) < 1.)
                     {
-                        if ((d__1 = sum.r, f2c_dabs(d__1)) + (d__2 = d_imag(&sum), f2c_dabs(d__2)) >= bignum * ((d__3 = d__.r, f2c_dabs( d__3)) + (d__4 = d_imag(&d__), f2c_dabs(d__4))))
+                        if((d__1 = sum.r, f2c_dabs(d__1)) + (d__2 = d_imag(&sum), f2c_dabs(d__2))
+                           >= bignum
+                                  * ((d__3 = d__.r, f2c_dabs(d__3))
+                                     + (d__4 = d_imag(&d__), f2c_dabs(d__4))))
                         {
-                            temp = 1. / ((d__1 = sum.r, f2c_dabs(d__1)) + (d__2 = d_imag(&sum), f2c_dabs(d__2)));
+                            temp = 1.
+                                   / ((d__1 = sum.r, f2c_dabs(d__1))
+                                      + (d__2 = d_imag(&sum), f2c_dabs(d__2)));
                             i__3 = j - 1;
-                            for (jr = je;
-                                    jr <= i__3;
-                                    ++jr)
+                            for(jr = je; jr <= i__3; ++jr)
                             {
                                 i__4 = jr;
                                 i__5 = jr;
@@ -761,15 +778,17 @@ int ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex
                     /* Computing MAX */
                     i__3 = j;
                     d__3 = xmax;
-                    d__4 = (d__1 = work[i__3].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&work[j]), f2c_dabs(d__2)); // , expr subst
-                    xmax = fla_max(d__3,d__4);
+                    d__4 = (d__1 = work[i__3].r, f2c_dabs(d__1))
+                           + (d__2 = d_imag(&work[j]), f2c_dabs(d__2)); // , expr subst
+                    xmax = fla_max(d__3, d__4);
                     /* L100: */
                 }
                 /* Back transform eigenvector if HOWMNY='B'. */
-                if (ilback)
+                if(ilback)
                 {
                     i__2 = *n + 1 - je;
-                    zgemv_("N", n, &i__2, &c_b2, &vl[je * vl_dim1 + 1], ldvl, &work[je], &c__1, &c_b1, &work[*n + 1], &c__1);
+                    zgemv_("N", n, &i__2, &c_b2, &vl[je * vl_dim1 + 1], ldvl, &work[je], &c__1,
+                           &c_b1, &work[*n + 1], &c__1);
                     isrc = 2;
                     ibeg = 1;
                 }
@@ -781,29 +800,27 @@ int ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex
                 /* Copy and scale eigenvector into column of VL */
                 xmax = 0.;
                 i__2 = *n;
-                for (jr = ibeg;
-                        jr <= i__2;
-                        ++jr)
+                for(jr = ibeg; jr <= i__2; ++jr)
                 {
                     /* Computing MAX */
                     i__3 = (isrc - 1) * *n + jr;
                     d__3 = xmax;
-                    d__4 = (d__1 = work[i__3].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&work[(isrc - 1) * *n + jr]), f2c_dabs( d__2)); // , expr subst
-                    xmax = fla_max(d__3,d__4);
+                    d__4 = (d__1 = work[i__3].r, f2c_dabs(d__1))
+                           + (d__2 = d_imag(&work[(isrc - 1) * *n + jr]),
+                              f2c_dabs(d__2)); // , expr subst
+                    xmax = fla_max(d__3, d__4);
                     /* L110: */
                 }
-                if (xmax > safmin)
+                if(xmax > safmin)
                 {
                     temp = 1. / xmax;
                     i__2 = *n;
-                    for (jr = ibeg;
-                            jr <= i__2;
-                            ++jr)
+                    for(jr = ibeg; jr <= i__2; ++jr)
                     {
                         i__3 = jr + ieig * vl_dim1;
                         i__4 = (isrc - 1) * *n + jr;
                         z__1.r = temp * work[i__4].r;
-                        z__1.i = temp * work[ i__4].i; // , expr subst
+                        z__1.i = temp * work[i__4].i; // , expr subst
                         vl[i__3].r = z__1.r;
                         vl[i__3].i = z__1.i; // , expr subst
                         /* L120: */
@@ -814,9 +831,7 @@ int ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex
                     ibeg = *n + 1;
                 }
                 i__2 = ibeg - 1;
-                for (jr = 1;
-                        jr <= i__2;
-                        ++jr)
+                for(jr = 1; jr <= i__2; ++jr)
                 {
                     i__3 = jr + ieig * vl_dim1;
                     vl[i__3].r = 0.;
@@ -824,20 +839,17 @@ int ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex
                     /* L130: */
                 }
             }
-L140:
-            ;
+        L140:;
         }
     }
     /* Right eigenvectors */
-    if (compr)
+    if(compr)
     {
         ieig = im + 1;
         /* Main loop over eigenvalues */
-        for (je = *n;
-                je >= 1;
-                --je)
+        for(je = *n; je >= 1; --je)
         {
-            if (ilall)
+            if(ilall)
             {
                 ilcomp = TRUE_;
             }
@@ -845,18 +857,19 @@ L140:
             {
                 ilcomp = select[je];
             }
-            if (ilcomp)
+            if(ilcomp)
             {
                 --ieig;
                 i__1 = je + je * s_dim1;
                 i__2 = je + je * p_dim1;
-                if ((d__2 = s[i__1].r, f2c_dabs(d__2)) + (d__3 = d_imag(&s[je + je * s_dim1]), f2c_dabs(d__3)) <= safmin && (d__1 = p[i__2].r, f2c_dabs(d__1)) <= safmin)
+                if((d__2 = s[i__1].r, f2c_dabs(d__2))
+                           + (d__3 = d_imag(&s[je + je * s_dim1]), f2c_dabs(d__3))
+                       <= safmin
+                   && (d__1 = p[i__2].r, f2c_dabs(d__1)) <= safmin)
                 {
                     /* Singular matrix pencil -- return unit eigenvector */
                     i__1 = *n;
-                    for (jr = 1;
-                            jr <= i__1;
-                            ++jr)
+                    for(jr = 1; jr <= i__1; ++jr)
                     {
                         i__2 = jr + ieig * vr_dim1;
                         vr[i__2].r = 0.;
@@ -874,10 +887,12 @@ L140:
                 /* Computing MAX */
                 i__1 = je + je * s_dim1;
                 i__2 = je + je * p_dim1;
-                d__4 = ((d__2 = s[i__1].r, f2c_dabs(d__2)) + (d__3 = d_imag(&s[je + je * s_dim1]), f2c_dabs(d__3))) * ascale;
+                d__4 = ((d__2 = s[i__1].r, f2c_dabs(d__2))
+                        + (d__3 = d_imag(&s[je + je * s_dim1]), f2c_dabs(d__3)))
+                       * ascale;
                 d__5 = (d__1 = p[i__2].r, f2c_dabs(d__1)) * bscale;
-                d__4 = fla_max(d__4,d__5); // ; expr subst
-                temp = 1. / fla_max(d__4,safmin);
+                d__4 = fla_max(d__4, d__5); // ; expr subst
+                temp = 1. / fla_max(d__4, safmin);
                 i__1 = je + je * s_dim1;
                 z__2.r = temp * s[i__1].r;
                 z__2.i = temp * s[i__1].i; // , expr subst
@@ -894,30 +909,38 @@ L140:
                 bcoeff.i = z__1.i; // , expr subst
                 /* Scale to avoid underflow */
                 lsa = f2c_dabs(sbeta) >= safmin && f2c_dabs(acoeff) < small_val;
-                lsb = (d__1 = salpha.r, f2c_dabs(d__1)) + (d__2 = d_imag(&salpha), f2c_dabs(d__2)) >= safmin && (d__3 = bcoeff.r, f2c_dabs(d__3)) + (d__4 = d_imag(&bcoeff), f2c_dabs(d__4)) < small_val;
+                lsb = (d__1 = salpha.r, f2c_dabs(d__1)) + (d__2 = d_imag(&salpha), f2c_dabs(d__2))
+                          >= safmin
+                      && (d__3 = bcoeff.r, f2c_dabs(d__3))
+                                 + (d__4 = d_imag(&bcoeff), f2c_dabs(d__4))
+                             < small_val;
                 scale = 1.;
-                if (lsa)
+                if(lsa)
                 {
-                    scale = small_val / f2c_dabs(sbeta) * fla_min(anorm,big);
+                    scale = small_val / f2c_dabs(sbeta) * fla_min(anorm, big);
                 }
-                if (lsb)
+                if(lsb)
                 {
                     /* Computing MAX */
                     d__3 = scale;
-                    d__4 = small_val / ((d__1 = salpha.r, f2c_dabs(d__1)) + (d__2 = d_imag(&salpha), f2c_dabs(d__2))) * fla_min( bnorm,big); // , expr subst
-                    scale = fla_max(d__3,d__4);
+                    d__4 = small_val
+                           / ((d__1 = salpha.r, f2c_dabs(d__1))
+                              + (d__2 = d_imag(&salpha), f2c_dabs(d__2)))
+                           * fla_min(bnorm, big); // , expr subst
+                    scale = fla_max(d__3, d__4);
                 }
-                if (lsa || lsb)
+                if(lsa || lsb)
                 {
                     /* Computing MIN */
                     /* Computing MAX */
                     d__5 = 1., d__6 = f2c_dabs(acoeff);
-                    d__5 = fla_max(d__5,d__6);
-                    d__6 = (d__1 = bcoeff.r, f2c_dabs(d__1)) + (d__2 = d_imag(&bcoeff), f2c_dabs(d__2)); // ; expr subst
+                    d__5 = fla_max(d__5, d__6);
+                    d__6 = (d__1 = bcoeff.r, f2c_dabs(d__1))
+                           + (d__2 = d_imag(&bcoeff), f2c_dabs(d__2)); // ; expr subst
                     d__3 = scale;
-                    d__4 = 1. / (safmin * fla_max(d__5,d__6)); // , expr subst
-                    scale = fla_min(d__3,d__4);
-                    if (lsa)
+                    d__4 = 1. / (safmin * fla_max(d__5, d__6)); // , expr subst
+                    scale = fla_min(d__3, d__4);
+                    if(lsa)
                     {
                         acoeff = ascale * (scale * sbeta);
                     }
@@ -925,7 +948,7 @@ L140:
                     {
                         acoeff = scale * acoeff;
                     }
-                    if (lsb)
+                    if(lsb)
                     {
                         z__2.r = scale * salpha.r;
                         z__2.i = scale * salpha.i; // , expr subst
@@ -943,12 +966,11 @@ L140:
                     }
                 }
                 acoefa = f2c_dabs(acoeff);
-                bcoefa = (d__1 = bcoeff.r, f2c_dabs(d__1)) + (d__2 = d_imag(& bcoeff), f2c_dabs(d__2));
+                bcoefa
+                    = (d__1 = bcoeff.r, f2c_dabs(d__1)) + (d__2 = d_imag(&bcoeff), f2c_dabs(d__2));
                 xmax = 1.;
                 i__1 = *n;
-                for (jr = 1;
-                        jr <= i__1;
-                        ++jr)
+                for(jr = 1; jr <= i__1; ++jr)
                 {
                     i__2 = jr;
                     work[i__2].r = 0.;
@@ -961,15 +983,13 @@ L140:
                 /* Computing MAX */
                 d__1 = ulp * acoefa * anorm;
                 d__2 = ulp * bcoefa * bnorm;
-                d__1 = fla_max(d__1,d__2); // ; expr subst
-                dmin__ = fla_max(d__1,safmin);
+                d__1 = fla_max(d__1, d__2); // ; expr subst
+                dmin__ = fla_max(d__1, safmin);
                 /* Triangular solve of (a A - b B) x = 0 (columnwise) */
                 /* WORK(1:j-1) contains sums w, */
                 /* WORK(j+1:JE) contains x */
                 i__1 = je - 1;
-                for (jr = 1;
-                        jr <= i__1;
-                        ++jr)
+                for(jr = 1; jr <= i__1; ++jr)
                 {
                     i__2 = jr;
                     i__3 = jr + je * s_dim1;
@@ -977,7 +997,7 @@ L140:
                     z__2.i = acoeff * s[i__3].i; // , expr subst
                     i__4 = jr + je * p_dim1;
                     z__3.r = bcoeff.r * p[i__4].r - bcoeff.i * p[i__4].i;
-                    z__3.i = bcoeff.r * p[i__4].i + bcoeff.i * p[i__4] .r; // , expr subst
+                    z__3.i = bcoeff.r * p[i__4].i + bcoeff.i * p[i__4].r; // , expr subst
                     z__1.r = z__2.r - z__3.r;
                     z__1.i = z__2.i - z__3.i; // , expr subst
                     work[i__2].r = z__1.r;
@@ -987,9 +1007,7 @@ L140:
                 i__1 = je;
                 work[i__1].r = 1.;
                 work[i__1].i = 0.; // , expr subst
-                for (j = je - 1;
-                        j >= 1;
-                        --j)
+                for(j = je - 1; j >= 1; --j)
                 {
                     /* Form x(j) := - w(j) / d */
                     /* with scaling and perturbation of the denominator */
@@ -998,29 +1016,34 @@ L140:
                     z__2.i = acoeff * s[i__1].i; // , expr subst
                     i__2 = j + j * p_dim1;
                     z__3.r = bcoeff.r * p[i__2].r - bcoeff.i * p[i__2].i;
-                    z__3.i = bcoeff.r * p[i__2].i + bcoeff.i * p[i__2] .r; // , expr subst
+                    z__3.i = bcoeff.r * p[i__2].i + bcoeff.i * p[i__2].r; // , expr subst
                     z__1.r = z__2.r - z__3.r;
                     z__1.i = z__2.i - z__3.i; // , expr subst
                     d__.r = z__1.r;
                     d__.i = z__1.i; // , expr subst
-                    if ((d__1 = d__.r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__), f2c_dabs( d__2)) <= dmin__)
+                    if((d__1 = d__.r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__), f2c_dabs(d__2))
+                       <= dmin__)
                     {
                         z__1.r = dmin__;
                         z__1.i = 0.; // , expr subst
                         d__.r = z__1.r;
                         d__.i = z__1.i; // , expr subst
                     }
-                    if ((d__1 = d__.r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__), f2c_dabs( d__2)) < 1.)
+                    if((d__1 = d__.r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__), f2c_dabs(d__2)) < 1.)
                     {
                         i__1 = j;
-                        if ((d__1 = work[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag( &work[j]), f2c_dabs(d__2)) >= bignum * ((d__3 = d__.r, f2c_dabs(d__3)) + (d__4 = d_imag(&d__), f2c_dabs( d__4))))
+                        if((d__1 = work[i__1].r, f2c_dabs(d__1))
+                               + (d__2 = d_imag(&work[j]), f2c_dabs(d__2))
+                           >= bignum
+                                  * ((d__3 = d__.r, f2c_dabs(d__3))
+                                     + (d__4 = d_imag(&d__), f2c_dabs(d__4))))
                         {
                             i__1 = j;
-                            temp = 1. / ((d__1 = work[i__1].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&work[j]), f2c_dabs(d__2)));
+                            temp = 1.
+                                   / ((d__1 = work[i__1].r, f2c_dabs(d__1))
+                                      + (d__2 = d_imag(&work[j]), f2c_dabs(d__2)));
                             i__1 = je;
-                            for (jr = 1;
-                                    jr <= i__1;
-                                    ++jr)
+                            for(jr = 1; jr <= i__1; ++jr)
                             {
                                 i__2 = jr;
                                 i__3 = jr;
@@ -1039,20 +1062,22 @@ L140:
                     zladiv_f2c_(&z__1, &z__2, &d__);
                     work[i__1].r = z__1.r;
                     work[i__1].i = z__1.i; // , expr subst
-                    if (j > 1)
+                    if(j > 1)
                     {
                         /* w = w + x(j)*(a S(*,j) - b P(*,j) ) with scaling */
                         i__1 = j;
-                        if ((d__1 = work[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag( &work[j]), f2c_dabs(d__2)) > 1.)
+                        if((d__1 = work[i__1].r, f2c_dabs(d__1))
+                               + (d__2 = d_imag(&work[j]), f2c_dabs(d__2))
+                           > 1.)
                         {
                             i__1 = j;
-                            temp = 1. / ((d__1 = work[i__1].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&work[j]), f2c_dabs(d__2)));
-                            if (acoefa * rwork[j] + bcoefa * rwork[*n + j] >= bignum * temp)
+                            temp = 1.
+                                   / ((d__1 = work[i__1].r, f2c_dabs(d__1))
+                                      + (d__2 = d_imag(&work[j]), f2c_dabs(d__2)));
+                            if(acoefa * rwork[j] + bcoefa * rwork[*n + j] >= bignum * temp)
                             {
                                 i__1 = je;
-                                for (jr = 1;
-                                        jr <= i__1;
-                                        ++jr)
+                                for(jr = 1; jr <= i__1; ++jr)
                                 {
                                     i__2 = jr;
                                     i__3 = jr;
@@ -1070,25 +1095,23 @@ L140:
                         ca.r = z__1.r;
                         ca.i = z__1.i; // , expr subst
                         i__1 = j;
-                        z__1.r = bcoeff.r * work[i__1].r - bcoeff.i * work[ i__1].i;
+                        z__1.r = bcoeff.r * work[i__1].r - bcoeff.i * work[i__1].i;
                         z__1.i = bcoeff.r * work[i__1].i + bcoeff.i * work[i__1].r; // , expr subst
                         cb.r = z__1.r;
                         cb.i = z__1.i; // , expr subst
                         i__1 = j - 1;
-                        for (jr = 1;
-                                jr <= i__1;
-                                ++jr)
+                        for(jr = 1; jr <= i__1; ++jr)
                         {
                             i__2 = jr;
                             i__3 = jr;
                             i__4 = jr + j * s_dim1;
                             z__3.r = ca.r * s[i__4].r - ca.i * s[i__4].i;
-                            z__3.i = ca.r * s[i__4].i + ca.i * s[i__4] .r; // , expr subst
+                            z__3.i = ca.r * s[i__4].i + ca.i * s[i__4].r; // , expr subst
                             z__2.r = work[i__3].r + z__3.r;
-                            z__2.i = work[ i__3].i + z__3.i; // , expr subst
+                            z__2.i = work[i__3].i + z__3.i; // , expr subst
                             i__5 = jr + j * p_dim1;
                             z__4.r = cb.r * p[i__5].r - cb.i * p[i__5].i;
-                            z__4.i = cb.r * p[i__5].i + cb.i * p[i__5] .r; // , expr subst
+                            z__4.i = cb.r * p[i__5].i + cb.i * p[i__5].r; // , expr subst
                             z__1.r = z__2.r - z__4.r;
                             z__1.i = z__2.i - z__4.i; // , expr subst
                             work[i__2].r = z__1.r;
@@ -1099,9 +1122,10 @@ L140:
                     /* L210: */
                 }
                 /* Back transform eigenvector if HOWMNY='B'. */
-                if (ilback)
+                if(ilback)
                 {
-                    zgemv_("N", n, &je, &c_b2, &vr[vr_offset], ldvr, &work[1], &c__1, &c_b1, &work[*n + 1], &c__1);
+                    zgemv_("N", n, &je, &c_b2, &vr[vr_offset], ldvr, &work[1], &c__1, &c_b1,
+                           &work[*n + 1], &c__1);
                     isrc = 2;
                     iend = *n;
                 }
@@ -1113,29 +1137,27 @@ L140:
                 /* Copy and scale eigenvector into column of VR */
                 xmax = 0.;
                 i__1 = iend;
-                for (jr = 1;
-                        jr <= i__1;
-                        ++jr)
+                for(jr = 1; jr <= i__1; ++jr)
                 {
                     /* Computing MAX */
                     i__2 = (isrc - 1) * *n + jr;
                     d__3 = xmax;
-                    d__4 = (d__1 = work[i__2].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&work[(isrc - 1) * *n + jr]), f2c_dabs( d__2)); // , expr subst
-                    xmax = fla_max(d__3,d__4);
+                    d__4 = (d__1 = work[i__2].r, f2c_dabs(d__1))
+                           + (d__2 = d_imag(&work[(isrc - 1) * *n + jr]),
+                              f2c_dabs(d__2)); // , expr subst
+                    xmax = fla_max(d__3, d__4);
                     /* L220: */
                 }
-                if (xmax > safmin)
+                if(xmax > safmin)
                 {
                     temp = 1. / xmax;
                     i__1 = iend;
-                    for (jr = 1;
-                            jr <= i__1;
-                            ++jr)
+                    for(jr = 1; jr <= i__1; ++jr)
                     {
                         i__2 = jr + ieig * vr_dim1;
                         i__3 = (isrc - 1) * *n + jr;
                         z__1.r = temp * work[i__3].r;
-                        z__1.i = temp * work[ i__3].i; // , expr subst
+                        z__1.i = temp * work[i__3].i; // , expr subst
                         vr[i__2].r = z__1.r;
                         vr[i__2].i = z__1.i; // , expr subst
                         /* L230: */
@@ -1146,9 +1168,7 @@ L140:
                     iend = 0;
                 }
                 i__1 = *n;
-                for (jr = iend + 1;
-                        jr <= i__1;
-                        ++jr)
+                for(jr = iend + 1; jr <= i__1; ++jr)
                 {
                     i__2 = jr + ieig * vr_dim1;
                     vr[i__2].r = 0.;
@@ -1156,12 +1176,11 @@ L140:
                     /* L240: */
                 }
             }
-L250:
-            ;
+        L250:;
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTGEVC */
 }
 /* ztgevc_ */

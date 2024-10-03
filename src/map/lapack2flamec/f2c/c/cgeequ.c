@@ -1,16 +1,25 @@
-/* ../netlib/cgeequ.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cgeequ.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CGEEQU */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CGEEQU + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgeequ. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgeequ.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgeequ. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgeequ.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgeequ. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgeequ.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -125,15 +134,16 @@
 /* > \ingroup complexGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cgeequ_(integer *m, integer *n, complex *a, integer *lda, real *r__, real *c__, real *rowcnd, real *colcnd, real *amax, integer *info)
+void cgeequ_(integer *m, integer *n, complex *a, integer *lda, real *r__, real *c__, real *rowcnd,
+             real *colcnd, real *amax, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgeequ inputs: m %lld, n %lld, lda %lld",*m, *n, *lda);
+    snprintf(buffer, 256, "cgeequ inputs: m %lld, n %lld, lda %lld", *m, *n, *lda);
 #else
-    snprintf(buffer, 256,"cgeequ inputs: m %d, n %d, lda %d",*m, *n, *lda);
+    snprintf(buffer, 256, "cgeequ inputs: m %d, n %d, lda %d", *m, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -147,7 +157,8 @@ int cgeequ_(integer *m, integer *n, complex *a, integer *lda, real *r__, real *c
     real rcmin, rcmax;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum, smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -182,62 +193,57 @@ int cgeequ_(integer *m, integer *n, complex *a, integer *lda, real *r__, real *c
     --c__;
     /* Function Body */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CGEEQU", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
         *rowcnd = 1.f;
         *colcnd = 1.f;
         *amax = 0.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants. */
     smlnum = slamch_("S");
     bignum = 1.f / smlnum;
     /* Compute row scale factors. */
     i__1 = *m;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         r__[i__] = 0.f;
         /* L10: */
     }
     /* Find the maximum element in each row. */
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         i__2 = *m;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             i__3 = i__ + j * a_dim1;
             r__3 = r__[i__];
-            r__4 = (r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // , expr subst
-            r__[i__] = fla_max(r__3,r__4);
+            r__4 = (r__1 = a[i__3].r, f2c_abs(r__1))
+                   + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)); // , expr subst
+            r__[i__] = fla_max(r__3, r__4);
             /* L20: */
         }
         /* L30: */
@@ -246,34 +252,30 @@ int cgeequ_(integer *m, integer *n, complex *a, integer *lda, real *r__, real *c
     rcmin = bignum;
     rcmax = 0.f;
     i__1 = *m;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* Computing MAX */
         r__1 = rcmax;
         r__2 = r__[i__]; // , expr subst
-        rcmax = fla_max(r__1,r__2);
+        rcmax = fla_max(r__1, r__2);
         /* Computing MIN */
         r__1 = rcmin;
         r__2 = r__[i__]; // , expr subst
-        rcmin = fla_min(r__1,r__2);
+        rcmin = fla_min(r__1, r__2);
         /* L40: */
     }
     *amax = rcmax;
-    if (rcmin == 0.f)
+    if(rcmin == 0.f)
     {
         /* Find the first zero scale factor and return an error code. */
         i__1 = *m;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            if (r__[i__] == 0.f)
+            if(r__[i__] == 0.f)
             {
                 *info = i__;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L50: */
         }
@@ -282,25 +284,21 @@ int cgeequ_(integer *m, integer *n, complex *a, integer *lda, real *r__, real *c
     {
         /* Invert the scale factors. */
         i__1 = *m;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* Computing MIN */
             /* Computing MAX */
             r__2 = r__[i__];
-            r__1 = fla_max(r__2,smlnum);
-            r__[i__] = 1.f / fla_min(r__1,bignum);
+            r__1 = fla_max(r__2, smlnum);
+            r__[i__] = 1.f / fla_min(r__1, bignum);
             /* L60: */
         }
         /* Compute ROWCND = fla_min(R(I)) / fla_max(R(I)) */
-        *rowcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+        *rowcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
     }
     /* Compute column scale factors */
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         c__[j] = 0.f;
         /* L70: */
@@ -308,20 +306,18 @@ int cgeequ_(integer *m, integer *n, complex *a, integer *lda, real *r__, real *c
     /* Find the maximum element in each column, */
     /* assuming the row scaling computed above. */
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         i__2 = *m;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             i__3 = i__ + j * a_dim1;
             r__3 = c__[j];
-            r__4 = ((r__1 = a[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2))) * r__[i__]; // , expr subst
-            c__[j] = fla_max(r__3,r__4);
+            r__4 = ((r__1 = a[i__3].r, f2c_abs(r__1))
+                    + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)))
+                   * r__[i__]; // , expr subst
+            c__[j] = fla_max(r__3, r__4);
             /* L80: */
         }
         /* L90: */
@@ -330,33 +326,29 @@ int cgeequ_(integer *m, integer *n, complex *a, integer *lda, real *r__, real *c
     rcmin = bignum;
     rcmax = 0.f;
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         /* Computing MIN */
         r__1 = rcmin;
         r__2 = c__[j]; // , expr subst
-        rcmin = fla_min(r__1,r__2);
+        rcmin = fla_min(r__1, r__2);
         /* Computing MAX */
         r__1 = rcmax;
         r__2 = c__[j]; // , expr subst
-        rcmax = fla_max(r__1,r__2);
+        rcmax = fla_max(r__1, r__2);
         /* L100: */
     }
-    if (rcmin == 0.f)
+    if(rcmin == 0.f)
     {
         /* Find the first zero scale factor and return an error code. */
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
-            if (c__[j] == 0.f)
+            if(c__[j] == 0.f)
             {
                 *info = *m + j;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* L110: */
         }
@@ -365,22 +357,20 @@ int cgeequ_(integer *m, integer *n, complex *a, integer *lda, real *r__, real *c
     {
         /* Invert the scale factors. */
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             /* Computing MIN */
             /* Computing MAX */
             r__2 = c__[j];
-            r__1 = fla_max(r__2,smlnum);
-            c__[j] = 1.f / fla_min(r__1,bignum);
+            r__1 = fla_max(r__2, smlnum);
+            c__[j] = 1.f / fla_min(r__1, bignum);
             /* L120: */
         }
         /* Compute COLCND = fla_min(C(J)) / fla_max(C(J)) */
-        *colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+        *colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGEEQU */
 }
 /* cgeequ_ */

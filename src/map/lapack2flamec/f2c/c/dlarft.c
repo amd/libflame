@@ -1,5 +1,8 @@
-/* ../netlib/dlarft.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlarft.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static doublereal c_b6 = 1.;
@@ -9,11 +12,17 @@ static doublereal c_b6 = 1.;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLARFT + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarft. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarft.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarft. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarft.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarft. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarft.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -35,7 +44,7 @@ static doublereal c_b6 = 1.;
 /* > of order n, which is defined as a product of k elementary reflectors. */
 /* > */
 /* > If DIRECT = 'F', H = H(1) H(2) . . . H(k) and T is upper triangular;
-*/
+ */
 /* > */
 /* > If DIRECT = 'B', H = H(k) . . . H(2) H(1) and T is lower triangular. */
 /* > */
@@ -155,21 +164,28 @@ if DIRECT = 'B', T is */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlarft_(char *direct, char *storev, integer *n, integer * k, doublereal *v, integer *ldv, doublereal *tau, doublereal *t, integer *ldt)
+void dlarft_(char *direct, char *storev, integer *n, integer *k, doublereal *v, integer *ldv,
+             doublereal *tau, doublereal *t, integer *ldt)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlarft inputs: direct %c, storev %c, n %" FLA_IS ", k %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS "",*direct, *storev, *n, *k, *ldv, *ldt);
+    AOCL_DTL_SNPRINTF("dlarft inputs: direct %c, storev %c, n %" FLA_IS ", k %" FLA_IS
+                      ", ldv %" FLA_IS ", ldt %" FLA_IS "",
+                      *direct, *storev, *n, *k, *ldv, *ldt);
     /* System generated locals */
     integer t_dim1, t_offset, v_dim1, v_offset, i__1, i__2, i__3;
     doublereal d__1;
     /* Local variables */
     integer i__, j, prevlastv;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
+               integer *, doublereal *, doublereal *, integer *);
     integer lastv;
     extern /* Subroutine */
-    int dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *), f90_exit_(void);
+        void
+        dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *),
+        f90_exit_(void);
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -198,27 +214,23 @@ int dlarft_(char *direct, char *storev, integer *n, integer * k, doublereal *v, 
     t_offset = 1 + t_dim1;
     t -= t_offset;
     /* Function Body */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    if (lsame_(direct, "F"))
+    if(lsame_(direct, "F", 1, 1))
     {
         prevlastv = *n;
         i__1 = *k;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            prevlastv = fla_max(i__,prevlastv);
-            if (tau[i__] == 0.)
+            prevlastv = fla_max(i__, prevlastv);
+            if(tau[i__] == 0.)
             {
                 /* H(i) = I */
                 i__2 = i__;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     t[j + i__ * t_dim1] = 0.;
                 }
@@ -226,67 +238,62 @@ int dlarft_(char *direct, char *storev, integer *n, integer * k, doublereal *v, 
             else
             {
                 /* general case */
-                if (lsame_(storev, "C"))
+                if(lsame_(storev, "C", 1, 1))
                 {
                     /* Skip any trailing zeros. */
                     i__2 = i__ + 1;
-                    for (lastv = *n;
-                            lastv >= i__2;
-                            --lastv)
+                    for(lastv = *n; lastv >= i__2; --lastv)
                     {
-                        if (v[lastv + i__ * v_dim1] != 0.)
+                        if(v[lastv + i__ * v_dim1] != 0.)
                         {
                             break;
                         }
                     }
                     i__2 = i__ - 1;
-                    for (j = 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = 1; j <= i__2; ++j)
                     {
                         t[j + i__ * t_dim1] = -tau[i__] * v[i__ + j * v_dim1];
                     }
-                    j = fla_min(lastv,prevlastv);
+                    j = fla_min(lastv, prevlastv);
                     /* T(1:i-1,i) := - tau(i) * V(i:j,1:i-1)**T * V(i:j,i) */
                     i__2 = j - i__;
                     i__3 = i__ - 1;
                     d__1 = -tau[i__];
-                    dgemv_("Transpose", &i__2, &i__3, &d__1, &v[i__ + 1 + v_dim1], ldv, &v[i__ + 1 + i__ * v_dim1], &c__1, & c_b6, &t[i__ * t_dim1 + 1], &c__1);
+                    dgemv_("Transpose", &i__2, &i__3, &d__1, &v[i__ + 1 + v_dim1], ldv,
+                           &v[i__ + 1 + i__ * v_dim1], &c__1, &c_b6, &t[i__ * t_dim1 + 1], &c__1);
                 }
                 else
                 {
                     /* Skip any trailing zeros. */
                     i__2 = i__ + 1;
-                    for (lastv = *n;
-                            lastv >= i__2;
-                            --lastv)
+                    for(lastv = *n; lastv >= i__2; --lastv)
                     {
-                        if (v[i__ + lastv * v_dim1] != 0.)
+                        if(v[i__ + lastv * v_dim1] != 0.)
                         {
                             break;
                         }
                     }
                     i__2 = i__ - 1;
-                    for (j = 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = 1; j <= i__2; ++j)
                     {
                         t[j + i__ * t_dim1] = -tau[i__] * v[j + i__ * v_dim1];
                     }
-                    j = fla_min(lastv,prevlastv);
+                    j = fla_min(lastv, prevlastv);
                     /* T(1:i-1,i) := - tau(i) * V(1:i-1,i:j) * V(i,i:j)**T */
                     i__2 = i__ - 1;
                     i__3 = j - i__;
                     d__1 = -tau[i__];
-                    dgemv_("No transpose", &i__2, &i__3, &d__1, &v[(i__ + 1) * v_dim1 + 1], ldv, &v[i__ + (i__ + 1) * v_dim1], ldv, &c_b6, &t[i__ * t_dim1 + 1], &c__1);
+                    dgemv_("No transpose", &i__2, &i__3, &d__1, &v[(i__ + 1) * v_dim1 + 1], ldv,
+                           &v[i__ + (i__ + 1) * v_dim1], ldv, &c_b6, &t[i__ * t_dim1 + 1], &c__1);
                 }
                 /* T(1:i-1,i) := T(1:i-1,1:i-1) * T(1:i-1,i) */
                 i__2 = i__ - 1;
-                dtrmv_("Upper", "No transpose", "Non-unit", &i__2, &t[ t_offset], ldt, &t[i__ * t_dim1 + 1], &c__1);
+                dtrmv_("Upper", "No transpose", "Non-unit", &i__2, &t[t_offset], ldt,
+                       &t[i__ * t_dim1 + 1], &c__1);
                 t[i__ + i__ * t_dim1] = tau[i__];
-                if (i__ > 1)
+                if(i__ > 1)
                 {
-                    prevlastv = fla_max(prevlastv,lastv);
+                    prevlastv = fla_max(prevlastv, lastv);
                 }
                 else
                 {
@@ -298,17 +305,13 @@ int dlarft_(char *direct, char *storev, integer *n, integer * k, doublereal *v, 
     else
     {
         prevlastv = 1;
-        for (i__ = *k;
-                i__ >= 1;
-                --i__)
+        for(i__ = *k; i__ >= 1; --i__)
         {
-            if (tau[i__] == 0.)
+            if(tau[i__] == 0.)
             {
                 /* H(i) = I */
                 i__1 = *k;
-                for (j = i__;
-                        j <= i__1;
-                        ++j)
+                for(j = i__; j <= i__1; ++j)
                 {
                     t[j + i__ * t_dim1] = 0.;
                 }
@@ -316,68 +319,65 @@ int dlarft_(char *direct, char *storev, integer *n, integer * k, doublereal *v, 
             else
             {
                 /* general case */
-                if (i__ < *k)
+                if(i__ < *k)
                 {
-                    if (lsame_(storev, "C"))
+                    if(lsame_(storev, "C", 1, 1))
                     {
                         /* Skip any leading zeros. */
                         i__1 = i__ - 1;
-                        for (lastv = 1;
-                                lastv <= i__1;
-                                ++lastv)
+                        for(lastv = 1; lastv <= i__1; ++lastv)
                         {
-                            if (v[lastv + i__ * v_dim1] != 0.)
+                            if(v[lastv + i__ * v_dim1] != 0.)
                             {
                                 break;
                             }
                         }
                         i__1 = *k;
-                        for (j = i__ + 1;
-                                j <= i__1;
-                                ++j)
+                        for(j = i__ + 1; j <= i__1; ++j)
                         {
                             t[j + i__ * t_dim1] = -tau[i__] * v[*n - *k + i__ + j * v_dim1];
                         }
-                        j = fla_max(lastv,prevlastv);
+                        j = fla_max(lastv, prevlastv);
                         /* T(i+1:k,i) = -tau(i) * V(j:n-k+i,i+1:k)**T * V(j:n-k+i,i) */
                         i__1 = *n - *k + i__ - j;
                         i__2 = *k - i__;
                         d__1 = -tau[i__];
-                        dgemv_("Transpose", &i__1, &i__2, &d__1, &v[j + (i__ + 1) * v_dim1], ldv, &v[j + i__ * v_dim1], & c__1, &c_b6, &t[i__ + 1 + i__ * t_dim1], & c__1);
+                        dgemv_("Transpose", &i__1, &i__2, &d__1, &v[j + (i__ + 1) * v_dim1], ldv,
+                               &v[j + i__ * v_dim1], &c__1, &c_b6, &t[i__ + 1 + i__ * t_dim1],
+                               &c__1);
                     }
                     else
                     {
                         /* Skip any leading zeros. */
                         i__1 = i__ - 1;
-                        for (lastv = 1;
-                                lastv <= i__1;
-                                ++lastv)
+                        for(lastv = 1; lastv <= i__1; ++lastv)
                         {
-                            if (v[i__ + lastv * v_dim1] != 0.)
+                            if(v[i__ + lastv * v_dim1] != 0.)
                             {
                                 break;
                             }
                         }
                         i__1 = *k;
-                        for (j = i__ + 1;
-                                j <= i__1;
-                                ++j)
+                        for(j = i__ + 1; j <= i__1; ++j)
                         {
                             t[j + i__ * t_dim1] = -tau[i__] * v[j + (*n - *k + i__) * v_dim1];
                         }
-                        j = fla_max(lastv,prevlastv);
+                        j = fla_max(lastv, prevlastv);
                         /* T(i+1:k,i) = -tau(i) * V(i+1:k,j:n-k+i) * V(i,j:n-k+i)**T */
                         i__1 = *k - i__;
                         i__2 = *n - *k + i__ - j;
                         d__1 = -tau[i__];
-                        dgemv_("No transpose", &i__1, &i__2, &d__1, &v[i__ + 1 + j * v_dim1], ldv, &v[i__ + j * v_dim1], ldv, &c_b6, &t[i__ + 1 + i__ * t_dim1], &c__1);
+                        dgemv_("No transpose", &i__1, &i__2, &d__1, &v[i__ + 1 + j * v_dim1], ldv,
+                               &v[i__ + j * v_dim1], ldv, &c_b6, &t[i__ + 1 + i__ * t_dim1], &c__1);
                     }
                     /* T(i+1:k,i) := T(i+1:k,i+1:k) * T(i+1:k,i) */
                     i__1 = *k - i__;
-                    dtrmv_("Lower", "No transpose", "Non-unit", &i__1, &t[i__ + 1 + (i__ + 1) * t_dim1], ldt, &t[i__ + 1 + i__ * t_dim1], &c__1) ;
-                    if (i__ > 1)
+                    dtrmv_("Lower", "No transpose", "Non-unit", &i__1,
+                           &t[i__ + 1 + (i__ + 1) * t_dim1], ldt, &t[i__ + 1 + i__ * t_dim1],
+                           &c__1);
+                    if(i__ > 1)
                     {
-                        prevlastv = fla_min(prevlastv,lastv);
+                        prevlastv = fla_min(prevlastv, lastv);
                     }
                     else
                     {
@@ -389,7 +389,7 @@ int dlarft_(char *direct, char *storev, integer *n, integer * k, doublereal *v, 
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLARFT */
 }
 /* dlarft_ */

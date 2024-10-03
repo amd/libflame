@@ -1,21 +1,31 @@
-/* ../netlib/ssyev.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ssyev.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
 static integer c__0 = 0;
 static real c_b17 = 1.f;
-/* > \brief <b> SSYEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for SY matr ices</b> */
+/* > \brief <b> SSYEV computes the eigenvalues and, optionally, the left and/or right eigenvectors
+ * for SY matr ices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SSYEV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssyev.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssyev.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssyev.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssyev.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssyev.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssyev.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -42,7 +52,7 @@ static real c_b17 = 1.f;
 /* > \verbatim */
 /* > JOBZ is CHARACTER*1 */
 /* > = 'N': Compute eigenvalues only;
-*/
+ */
 /* > = 'V': Compute eigenvalues and eigenvectors. */
 /* > \endverbatim */
 /* > */
@@ -50,7 +60,7 @@ static real c_b17 = 1.f;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -127,12 +137,14 @@ i */
 /* > \ingroup realSYeigen */
 /* ===================================================================== */
 /* Subroutine */
-int ssyev_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w, real *work, integer *lwork, integer *info)
+void ssyev_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w, real *work,
+            integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"ssyev inputs: jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*jobz, *uplo, *n, *lda);
+    snprintf(buffer, 256, "ssyev inputs: jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *jobz,
+             *uplo, *n, *lda);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -147,30 +159,39 @@ int ssyev_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w, r
     real anrm;
     integer imax;
     real rmin, rmax, sigma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     logical lower, wantz;
     integer iscale;
     extern real slamch_(char *);
     real safmin;
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern /* Subroutine */
-    int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+        void
+        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
+                integer *, integer *);
     integer indtau, indwrk;
     extern /* Subroutine */
-    int ssterf_(integer *, real *, real *, integer *);
+        void
+        ssterf_(integer *, real *, real *, integer *);
     extern real slansy_(char *, char *, integer *, real *, integer *, real *);
     integer llwork;
     real smlnum;
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    int sorgtr_(char *, integer *, real *, integer *, real *, real *, integer *, integer *), ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *), ssytrd_(char *, integer *, real *, integer *, real *, real *, real *, real *, integer *, integer *);
+        void
+        sorgtr_(char *, integer *, real *, integer *, real *, real *, integer *, integer *),
+        ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *),
+        ssytrd_(char *, integer *, real *, integer *, real *, real *, real *, real *, integer *,
+                integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -199,70 +220,70 @@ int ssyev_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w, r
     --w;
     --work;
     /* Function Body */
-    wantz = lsame_(jobz, "V");
-    lower = lsame_(uplo, "L");
+    wantz = lsame_(jobz, "V", 1, 1);
+    lower = lsame_(uplo, "L", 1, 1);
     lquery = *lwork == -1;
     *info = 0;
-    if (! (wantz || lsame_(jobz, "N")))
+    if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (lower || lsame_(uplo, "U")))
+    else if(!(lower || lsame_(uplo, "U", 1, 1)))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
         nb = ilaenv_(&c__1, "SSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
         /* Computing MAX */
         i__1 = 1;
         i__2 = (nb + 2) * *n; // , expr subst
-        lwkopt = fla_max(i__1,i__2);
-        work[1] = (real) lwkopt;
+        lwkopt = fla_max(i__1, i__2);
+        work[1] = (real)lwkopt;
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n * 3 - 1; // , expr subst
-        if (*lwork < fla_max(i__1,i__2) && ! lquery)
+        if(*lwork < fla_max(i__1, i__2) && !lquery)
         {
             *info = -8;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SSYEV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (*n == 1)
+    if(*n == 1)
     {
         w[1] = a[a_dim1 + 1];
         work[1] = 2.f;
-        if (wantz)
+        if(wantz)
         {
             a[a_dim1 + 1] = 1.f;
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = slamch_("Safe minimum");
@@ -274,17 +295,17 @@ int ssyev_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w, r
     /* Scale matrix to allowable range, if necessary. */
     anrm = slansy_("M", uplo, n, &a[a_offset], lda, &work[1]);
     iscale = 0;
-    if (anrm > 0.f && anrm < rmin)
+    if(anrm > 0.f && anrm < rmin)
     {
         iscale = 1;
         sigma = rmin / anrm;
     }
-    else if (anrm > rmax)
+    else if(anrm > rmax)
     {
         iscale = 1;
         sigma = rmax / anrm;
     }
-    if (iscale == 1)
+    if(iscale == 1)
     {
         slascl_(uplo, &c__0, &c__0, &c_b17, &sigma, n, n, &a[a_offset], lda, info);
     }
@@ -293,22 +314,23 @@ int ssyev_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w, r
     indtau = inde + *n;
     indwrk = indtau + *n;
     llwork = *lwork - indwrk + 1;
-    ssytrd_(uplo, n, &a[a_offset], lda, &w[1], &work[inde], &work[indtau], & work[indwrk], &llwork, &iinfo);
+    ssytrd_(uplo, n, &a[a_offset], lda, &w[1], &work[inde], &work[indtau], &work[indwrk], &llwork,
+            &iinfo);
     /* For eigenvalues only, call SSTERF. For eigenvectors, first call */
     /* SORGTR to generate the orthogonal matrix, then call SSTEQR. */
-    if (! wantz)
+    if(!wantz)
     {
         ssterf_(n, &w[1], &work[inde], info);
     }
     else
     {
-        sorgtr_(uplo, n, &a[a_offset], lda, &work[indtau], &work[indwrk], & llwork, &iinfo);
+        sorgtr_(uplo, n, &a[a_offset], lda, &work[indtau], &work[indwrk], &llwork, &iinfo);
         ssteqr_(jobz, n, &w[1], &work[inde], &a[a_offset], lda, &work[indtau], info);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
-    if (iscale == 1)
+    if(iscale == 1)
     {
-        if (*info == 0)
+        if(*info == 0)
         {
             imax = *n;
         }
@@ -320,9 +342,9 @@ int ssyev_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w, r
         sscal_(&imax, &r__1, &w[1], &c__1);
     }
     /* Set WORK(1) to optimal workspace size. */
-    work[1] = (real) lwkopt;
+    work[1] = (real)lwkopt;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYEV */
 }
 /* ssyev_ */

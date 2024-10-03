@@ -1,18 +1,28 @@
-/* ../netlib/dptsvx.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dptsvx.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief <b> DPTSVX computes the solution to system of linear equations A * X = B for PT matrices</b> */
+/* > \brief <b> DPTSVX computes the solution to system of linear equations A * X = B for PT
+ * matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DPTSVX + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dptsvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dptsvx.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dptsvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dptsvx.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dptsvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dptsvx.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -214,24 +224,39 @@ static integer c__1 = 1;
 /* > \ingroup doublePTsolve */
 /* ===================================================================== */
 /* Subroutine */
-int dptsvx_(char *fact, integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublereal *df, doublereal *ef, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal * rcond, doublereal *ferr, doublereal *berr, doublereal *work, integer * info)
+void dptsvx_(char *fact, integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublereal *df,
+             doublereal *ef, doublereal *b, integer *ldb, doublereal *x, integer *ldx,
+             doublereal *rcond, doublereal *ferr, doublereal *berr, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dptsvx inputs: fact %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *n, *nrhs, *ldb, *ldx);
+    AOCL_DTL_SNPRINTF("dptsvx inputs: fact %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS
+                      ", ldx %" FLA_IS "",
+                      *fact, *n, *nrhs, *ldb, *ldx);
     /* System generated locals */
     integer b_dim1, b_offset, x_dim1, x_offset, i__1;
     /* Local variables */
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal anorm;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
     extern /* Subroutine */
-    int dptcon_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dptrfs_( integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *), dpttrf_( integer *, doublereal *, doublereal *, integer *), dpttrs_( integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+        void
+        dptcon_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
+                integer *),
+        dptrfs_(integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
+                doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                doublereal *, integer *),
+        dpttrf_(integer *, doublereal *, doublereal *, integer *),
+        dpttrs_(integer *, integer *, doublereal *, doublereal *, doublereal *, integer *,
+                integer *);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -269,50 +294,50 @@ int dptsvx_(char *fact, integer *n, integer *nrhs, doublereal *d__, doublereal *
     --work;
     /* Function Body */
     *info = 0;
-    nofact = lsame_(fact, "N");
-    if (! nofact && ! lsame_(fact, "F"))
+    nofact = lsame_(fact, "N", 1, 1);
+    if(!nofact && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -3;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -11;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DPTSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    if (nofact)
+    if(nofact)
     {
         /* Compute the L*D*L**T (or U**T*D*U) factorization of A. */
         dcopy_(n, &d__[1], &c__1, &df[1], &c__1);
-        if (*n > 1)
+        if(*n > 1)
         {
             i__1 = *n - 1;
             dcopy_(&i__1, &e[1], &c__1, &ef[1], &c__1);
         }
         dpttrf_(n, &df[1], &ef[1], info);
         /* Return if INFO is non-zero. */
-        if (*info > 0)
+        if(*info > 0)
         {
             *rcond = 0.;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A. */
@@ -324,14 +349,15 @@ int dptsvx_(char *fact, integer *n, integer *nrhs, doublereal *d__, doublereal *
     dpttrs_(n, nrhs, &df[1], &ef[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solutions and */
     /* compute error bounds and backward error estimates for them. */
-    dptrfs_(n, nrhs, &d__[1], &e[1], &df[1], &ef[1], &b[b_offset], ldb, &x[ x_offset], ldx, &ferr[1], &berr[1], &work[1], info);
+    dptrfs_(n, nrhs, &d__[1], &e[1], &df[1], &ef[1], &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1],
+            &berr[1], &work[1], info);
     /* Set INFO = N+1 if the matrix is singular to working precision. */
-    if (*rcond < dlamch_("Epsilon"))
+    if(*rcond < dlamch_("Epsilon"))
     {
         *info = *n + 1;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DPTSVX */
 }
 /* dptsvx_ */

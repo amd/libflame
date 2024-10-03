@@ -1,11 +1,10 @@
-/* ../netlib/v3.9.0/zgesvdx.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/zgesvdx.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    0.,0.
-}
-;
+static doublecomplex c_b1 = {0., 0.};
 static integer c__6 = 6;
 static integer c__0 = 0;
 static integer c__1 = 1;
@@ -16,11 +15,17 @@ static integer c_n1 = -1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZGESVDX + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgesvdx .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgesvdx
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgesvdx .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgesvdx
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgesvdx .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgesvdx
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -73,7 +78,7 @@ they are real and non-negative, and */
 /* > = 'V': the first fla_min(m,n) columns of U (the left singular */
 /* > vectors) or as specified by RANGE are returned in */
 /* > the array U;
-*/
+ */
 /* > = 'N': no columns of U (no left singular vectors) are */
 /* > computed. */
 /* > \endverbatim */
@@ -86,7 +91,7 @@ they are real and non-negative, and */
 /* > = 'V': the first fla_min(m,n) rows of V**T (the right singular */
 /* > vectors) or as specified by RANGE are returned in */
 /* > the array VT;
-*/
+ */
 /* > = 'N': no rows of V**T (no right singular vectors) are */
 /* > computed. */
 /* > \endverbatim */
@@ -220,7 +225,7 @@ if */
 /* > \verbatim */
 /* > WORK is COMPLEX*16 array, dimension (MAX(1,LWORK)) */
 /* > On exit, if INFO = 0, WORK(1) returns the optimal LWORK;
-*/
+ */
 /* > \endverbatim */
 /* > */
 /* > \param[in] LWORK */
@@ -275,10 +280,16 @@ the routine */
 /* > \ingroup complex16GEsing */
 /* ===================================================================== */
 /* Subroutine */
-int zgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, doublecomplex *a, integer *lda, doublereal *vl, doublereal *vu, integer *il, integer *iu, integer *ns, doublereal *s, doublecomplex *u, integer *ldu, doublecomplex *vt, integer *ldvt, doublecomplex *work, integer *lwork, doublereal *rwork, integer * iwork, integer *info)
+void zgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, doublecomplex *a,
+              integer *lda, doublereal *vl, doublereal *vu, integer *il, integer *iu, integer *ns,
+              doublereal *s, doublecomplex *u, integer *ldu, doublecomplex *vt, integer *ldvt,
+              doublecomplex *work, integer *lwork, doublereal *rwork, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgesvdx inputs: jobu %c, jobvt %c, range %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", ns %" FLA_IS ", ldu %" FLA_IS ", ldvt %" FLA_IS "",*jobu, *jobvt, *range, *m, *n, *lda, *il, *iu, *ns, *ldu, *ldvt);
+    AOCL_DTL_SNPRINTF("zgesvdx inputs: jobu %c, jobvt %c, range %c, m %" FLA_IS ", n %" FLA_IS
+                      ", lda %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", ns %" FLA_IS
+                      ", ldu %" FLA_IS ", ldvt %" FLA_IS "",
+                      *jobu, *jobvt, *range, *m, *n, *lda, *il, *iu, *ns, *ldu, *ldvt);
     /* System generated locals */
     integer a_dim1, a_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__2, i__3, i__4, i__5;
     doublereal d__1;
@@ -298,30 +309,55 @@ int zgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, doub
     integer ierr, iqrf, itau;
     char jobz[1];
     logical vals;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iltgk, itemp, minmn, itaup, itauq, iutgk, itgkz, mnthr;
     logical wantu;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), zgebrd_(integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublereal *, integer *, integer *),
+        zgebrd_(integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
+                doublecomplex *, doublecomplex *, doublecomplex *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
+    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *,
+                              doublereal *);
     doublereal bignum;
     extern /* Subroutine */
-    int zgelqf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer * ), zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zgelqf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *,
+                integer *, integer *),
+        zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublecomplex *, integer *, integer *);
     char rngtgk[1];
     extern /* Subroutine */
-    int zgeqrf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, integer * );
+        void
+        zgeqrf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *,
+                integer *, integer *);
     integer itempr;
     extern /* Subroutine */
-    int zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
+                integer *),
+        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *);
     integer minwrk, maxwrk;
     doublereal smlnum;
     extern /* Subroutine */
-    int zunmbr_(char *, char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer * );
+        void
+        zunmbr_(char *, char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     logical lquery, wantvt;
     extern /* Subroutine */
-    int zunmlq_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *), dbdsvdx_(char *, char *, char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        zunmlq_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *),
+        zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *),
+        dbdsvdx_(char *, char *, char *, integer *, doublereal *, doublereal *, doublereal *,
+                 doublereal *, integer *, integer *, integer *, doublereal *, doublereal *,
+                 integer *, doublereal *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -363,11 +399,11 @@ int zgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, doub
     *ns = 0;
     *info = 0;
     lquery = *lwork == -1;
-    minmn = fla_min(*m,*n);
-    wantu = lsame_(jobu, "V");
-    wantvt = lsame_(jobvt, "V");
+    minmn = fla_min(*m, *n);
+    wantu = lsame_(jobu, "V", 1, 1);
+    wantvt = lsame_(jobvt, "V", 1, 1);
     mnthr = 0;
-    if (wantu || wantvt)
+    if(wantu || wantvt)
     {
         *(unsigned char *)jobz = 'V';
     }
@@ -375,74 +411,74 @@ int zgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, doub
     {
         *(unsigned char *)jobz = 'N';
     }
-    alls = lsame_(range, "A");
-    vals = lsame_(range, "V");
-    inds = lsame_(range, "I");
+    alls = lsame_(range, "A", 1, 1);
+    vals = lsame_(range, "V", 1, 1);
+    inds = lsame_(range, "I", 1, 1);
     *info = 0;
-    if (! lsame_(jobu, "V") && ! lsame_(jobu, "N"))
+    if(!lsame_(jobu, "V", 1, 1) && !lsame_(jobu, "N", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(jobvt, "V") && ! lsame_(jobvt, "N"))
+    else if(!lsame_(jobvt, "V", 1, 1) && !lsame_(jobvt, "N", 1, 1))
     {
         *info = -2;
     }
-    else if (! (alls || vals || inds))
+    else if(!(alls || vals || inds))
     {
         *info = -3;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -4;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -5;
     }
-    else if (*m > *lda)
+    else if(*m > *lda)
     {
         *info = -7;
     }
-    else if (minmn > 0)
+    else if(minmn > 0)
     {
-        if (vals)
+        if(vals)
         {
-            if (*vl < 0.)
+            if(*vl < 0.)
             {
                 *info = -8;
             }
-            else if (*vu <= *vl)
+            else if(*vu <= *vl)
             {
                 *info = -9;
             }
         }
-        else if (inds)
+        else if(inds)
         {
-            if (*il < 1 || *il > fla_max(1,minmn))
+            if(*il < 1 || *il > fla_max(1, minmn))
             {
                 *info = -10;
             }
-            else if (*iu < fla_min(minmn,*il) || *iu > minmn)
+            else if(*iu < fla_min(minmn, *il) || *iu > minmn)
             {
                 *info = -11;
             }
         }
-        if (*info == 0)
+        if(*info == 0)
         {
-            if (wantu && *ldu < *m)
+            if(wantu && *ldu < *m)
             {
                 *info = -15;
             }
-            else if (wantvt)
+            else if(wantvt)
             {
-                if (inds)
+                if(inds)
                 {
-                    if (*ldvt < *iu - *il + 1)
+                    if(*ldvt < *iu - *il + 1)
                     {
                         *info = -17;
                     }
                 }
-                else if (*ldvt < minmn)
+                else if(*ldvt < minmn)
                 {
                     *info = -17;
                 }
@@ -455,118 +491,134 @@ int zgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, doub
     /* as well as the preferred amount for good performance. */
     /* NB refers to the optimal block size for the immediately */
     /* following subroutine, as returned by ILAENV.) */
-    if (*info == 0)
+    if(*info == 0)
     {
         minwrk = 1;
         maxwrk = 1;
-        if (minmn > 0)
+        if(minmn > 0)
         {
-            if (*m >= *n)
+            if(*m >= *n)
             {
                 mnthr = ilaenv_(&c__6, "ZGESVD", ch__1, m, n, &c__0, &c__0);
-                if (*m >= mnthr)
+                if(*m >= mnthr)
                 {
                     /* Path 1 (M much larger than N) */
                     minwrk = *n * (*n + 5);
-                    maxwrk = *n + *n * ilaenv_(&c__1, "ZGEQRF", " ", m, n, & c_n1, &c_n1);
+                    maxwrk = *n + *n * ilaenv_(&c__1, "ZGEQRF", " ", m, n, &c_n1, &c_n1);
                     /* Computing MAX */
                     i__2 = maxwrk;
-                    i__3 = *n * *n + (*n << 1) + (*n << 1) * ilaenv_(&c__1, "ZGEBRD", " ", n, n, &c_n1, &c_n1); // , expr subst
-                    maxwrk = fla_max(i__2,i__3);
-                    if (wantu || wantvt)
+                    i__3
+                        = *n * *n + (*n << 1)
+                          + (*n << 1)
+                                * ilaenv_(&c__1, "ZGEBRD", " ", n, n, &c_n1, &c_n1); // , expr subst
+                    maxwrk = fla_max(i__2, i__3);
+                    if(wantu || wantvt)
                     {
                         /* Computing MAX */
                         i__2 = maxwrk;
-                        i__3 = *n * *n + (*n << 1) + *n * ilaenv_(&c__1, "ZUNMQR", "LN", n, n, n, &c_n1); // , expr subst
-                        maxwrk = fla_max(i__2,i__3);
+                        i__3
+                            = *n * *n + (*n << 1)
+                              + *n * ilaenv_(&c__1, "ZUNMQR", "LN", n, n, n, &c_n1); // , expr subst
+                        maxwrk = fla_max(i__2, i__3);
                     }
                 }
                 else
                 {
                     /* Path 2 (M at least N, but not much larger) */
                     minwrk = *n * 3 + *m;
-                    maxwrk = (*n << 1) + (*m + *n) * ilaenv_(&c__1, "ZGEBRD", " ", m, n, &c_n1, &c_n1);
-                    if (wantu || wantvt)
+                    maxwrk
+                        = (*n << 1) + (*m + *n) * ilaenv_(&c__1, "ZGEBRD", " ", m, n, &c_n1, &c_n1);
+                    if(wantu || wantvt)
                     {
                         /* Computing MAX */
                         i__2 = maxwrk;
-                        i__3 = (*n << 1) + *n * ilaenv_(&c__1, "ZUNMQR", "LN", n, n, n, &c_n1); // , expr subst
-                        maxwrk = fla_max(i__2,i__3);
+                        i__3
+                            = (*n << 1)
+                              + *n * ilaenv_(&c__1, "ZUNMQR", "LN", n, n, n, &c_n1); // , expr subst
+                        maxwrk = fla_max(i__2, i__3);
                     }
                 }
             }
             else
             {
                 mnthr = ilaenv_(&c__6, "ZGESVD", ch__1, m, n, &c__0, &c__0);
-                if (*n >= mnthr)
+                if(*n >= mnthr)
                 {
                     /* Path 1t (N much larger than M) */
                     minwrk = *m * (*m + 5);
-                    maxwrk = *m + *m * ilaenv_(&c__1, "ZGELQF", " ", m, n, & c_n1, &c_n1);
+                    maxwrk = *m + *m * ilaenv_(&c__1, "ZGELQF", " ", m, n, &c_n1, &c_n1);
                     /* Computing MAX */
                     i__2 = maxwrk;
-                    i__3 = *m * *m + (*m << 1) + (*m << 1) * ilaenv_(&c__1, "ZGEBRD", " ", m, m, &c_n1, &c_n1); // , expr subst
-                    maxwrk = fla_max(i__2,i__3);
-                    if (wantu || wantvt)
+                    i__3
+                        = *m * *m + (*m << 1)
+                          + (*m << 1)
+                                * ilaenv_(&c__1, "ZGEBRD", " ", m, m, &c_n1, &c_n1); // , expr subst
+                    maxwrk = fla_max(i__2, i__3);
+                    if(wantu || wantvt)
                     {
                         /* Computing MAX */
                         i__2 = maxwrk;
-                        i__3 = *m * *m + (*m << 1) + *m * ilaenv_(&c__1, "ZUNMQR", "LN", m, m, m, &c_n1); // , expr subst
-                        maxwrk = fla_max(i__2,i__3);
+                        i__3
+                            = *m * *m + (*m << 1)
+                              + *m * ilaenv_(&c__1, "ZUNMQR", "LN", m, m, m, &c_n1); // , expr subst
+                        maxwrk = fla_max(i__2, i__3);
                     }
                 }
                 else
                 {
                     /* Path 2t (N greater than M, but not much larger) */
                     minwrk = *m * 3 + *n;
-                    maxwrk = (*m << 1) + (*m + *n) * ilaenv_(&c__1, "ZGEBRD", " ", m, n, &c_n1, &c_n1);
-                    if (wantu || wantvt)
+                    maxwrk
+                        = (*m << 1) + (*m + *n) * ilaenv_(&c__1, "ZGEBRD", " ", m, n, &c_n1, &c_n1);
+                    if(wantu || wantvt)
                     {
                         /* Computing MAX */
                         i__2 = maxwrk;
-                        i__3 = (*m << 1) + *m * ilaenv_(&c__1, "ZUNMQR", "LN", m, m, m, &c_n1); // , expr subst
-                        maxwrk = fla_max(i__2,i__3);
+                        i__3
+                            = (*m << 1)
+                              + *m * ilaenv_(&c__1, "ZUNMQR", "LN", m, m, m, &c_n1); // , expr subst
+                        maxwrk = fla_max(i__2, i__3);
                     }
                 }
             }
         }
-        maxwrk = fla_max(maxwrk,minwrk);
-        d__1 = (doublereal) maxwrk;
+        maxwrk = fla_max(maxwrk, minwrk);
+        d__1 = (doublereal)maxwrk;
         z__1.r = d__1;
         z__1.i = 0.; // , expr subst
         work[1].r = z__1.r;
         work[1].i = z__1.i; // , expr subst
-        if (*lwork < minwrk && ! lquery)
+        if(*lwork < minwrk && !lquery)
         {
             *info = -19;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__2 = -(*info);
         xerbla_("ZGESVDX", &i__2, (ftnlen)7);
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* Quick return if possible */
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* Set singular values indices accord to RANGE='A'. */
-    if (alls)
+    if(alls)
     {
         *(unsigned char *)rngtgk = 'I';
         iltgk = 1;
-        iutgk = fla_min(*m,*n);
+        iutgk = fla_min(*m, *n);
     }
-    else if (inds)
+    else if(inds)
     {
         *(unsigned char *)rngtgk = 'I';
         iltgk = *il;
@@ -585,22 +637,22 @@ int zgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, doub
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
     anrm = zlange_("M", m, n, &a[a_offset], lda, dum);
     iscl = 0;
-    if (anrm > 0. && anrm < smlnum)
+    if(anrm > 0. && anrm < smlnum)
     {
         iscl = 1;
         zlascl_("G", &c__0, &c__0, &anrm, &smlnum, m, n, &a[a_offset], lda, info);
     }
-    else if (anrm > bignum)
+    else if(anrm > bignum)
     {
         iscl = 1;
         zlascl_("G", &c__0, &c__0, &anrm, &bignum, m, n, &a[a_offset], lda, info);
     }
-    if (*m >= *n)
+    if(*m >= *n)
     {
         /* A has at least as many rows as columns. If A has sufficiently */
         /* more rows than columns, first reduce A using the QR */
         /* decomposition. */
-        if (*m >= mnthr)
+        if(*m >= mnthr)
         {
             /* Path 1 (M much larger than N): */
             /* A = Q * R = Q * ( QB * B * PB**T ) */
@@ -627,25 +679,23 @@ int zgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, doub
             i__3 = *n - 1;
             zlaset_("L", &i__2, &i__3, &c_b1, &c_b1, &work[iqrf + 1], n);
             i__2 = *lwork - itemp + 1;
-            zgebrd_(n, n, &work[iqrf], n, &rwork[id], &rwork[ie], &work[itauq], &work[itaup], &work[itemp], &i__2, info);
+            zgebrd_(n, n, &work[iqrf], n, &rwork[id], &rwork[ie], &work[itauq], &work[itaup],
+                    &work[itemp], &i__2, info);
             itempr = itgkz + *n * ((*n << 1) + 1);
             /* Solve eigenvalue problem TGK*Z=Z*S. */
             /* (Workspace: need 2*N*N+14*N) */
             i__2 = *n << 1;
-            dbdsvdx_("U", jobz, rngtgk, n, &rwork[id], &rwork[ie], vl, vu, & iltgk, &iutgk, ns, &s[1], &rwork[itgkz], &i__2, &rwork[ itempr], &iwork[1], info) ;
+            dbdsvdx_("U", jobz, rngtgk, n, &rwork[id], &rwork[ie], vl, vu, &iltgk, &iutgk, ns,
+                     &s[1], &rwork[itgkz], &i__2, &rwork[itempr], &iwork[1], info);
             /* If needed, compute left singular vectors. */
-            if (wantu)
+            if(wantu)
             {
                 k = itgkz;
                 i__2 = *ns;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = *n;
-                    for (j = 1;
-                            j <= i__3;
-                            ++j)
+                    for(j = 1; j <= i__3; ++j)
                     {
                         i__4 = j + i__ * u_dim1;
                         i__5 = k;
@@ -662,25 +712,23 @@ int zgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, doub
                 /* Call ZUNMBR to compute QB*UB. */
                 /* (Workspace in WORK( ITEMP ): need N, prefer N*NB) */
                 i__2 = *lwork - itemp + 1;
-                zunmbr_("Q", "L", "N", n, ns, n, &work[iqrf], n, &work[itauq], &u[u_offset], ldu, &work[itemp], &i__2, info);
+                zunmbr_("Q", "L", "N", n, ns, n, &work[iqrf], n, &work[itauq], &u[u_offset], ldu,
+                        &work[itemp], &i__2, info);
                 /* Call ZUNMQR to compute Q*(QB*UB). */
                 /* (Workspace in WORK( ITEMP ): need N, prefer N*NB) */
                 i__2 = *lwork - itemp + 1;
-                zunmqr_("L", "N", m, ns, n, &a[a_offset], lda, &work[itau], & u[u_offset], ldu, &work[itemp], &i__2, info);
+                zunmqr_("L", "N", m, ns, n, &a[a_offset], lda, &work[itau], &u[u_offset], ldu,
+                        &work[itemp], &i__2, info);
             }
             /* If needed, compute right singular vectors. */
-            if (wantvt)
+            if(wantvt)
             {
                 k = itgkz + *n;
                 i__2 = *ns;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = *n;
-                    for (j = 1;
-                            j <= i__3;
-                            ++j)
+                    for(j = 1; j <= i__3; ++j)
                     {
                         i__4 = i__ + j * vt_dim1;
                         i__5 = k;
@@ -695,7 +743,8 @@ int zgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, doub
                 /* Call ZUNMBR to compute VB**T * PB**T */
                 /* (Workspace in WORK( ITEMP ): need N, prefer N*NB) */
                 i__2 = *lwork - itemp + 1;
-                zunmbr_("P", "R", "C", ns, n, n, &work[iqrf], n, &work[itaup], &vt[vt_offset], ldvt, &work[itemp], &i__2, info);
+                zunmbr_("P", "R", "C", ns, n, n, &work[iqrf], n, &work[itaup], &vt[vt_offset], ldvt,
+                        &work[itemp], &i__2, info);
             }
         }
         else
@@ -714,25 +763,23 @@ int zgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, doub
             ie = id + *n;
             itgkz = ie + *n;
             i__2 = *lwork - itemp + 1;
-            zgebrd_(m, n, &a[a_offset], lda, &rwork[id], &rwork[ie], &work[ itauq], &work[itaup], &work[itemp], &i__2, info);
+            zgebrd_(m, n, &a[a_offset], lda, &rwork[id], &rwork[ie], &work[itauq], &work[itaup],
+                    &work[itemp], &i__2, info);
             itempr = itgkz + *n * ((*n << 1) + 1);
             /* Solve eigenvalue problem TGK*Z=Z*S. */
             /* (Workspace: need 2*N*N+14*N) */
             i__2 = *n << 1;
-            dbdsvdx_("U", jobz, rngtgk, n, &rwork[id], &rwork[ie], vl, vu, & iltgk, &iutgk, ns, &s[1], &rwork[itgkz], &i__2, &rwork[ itempr], &iwork[1], info) ;
+            dbdsvdx_("U", jobz, rngtgk, n, &rwork[id], &rwork[ie], vl, vu, &iltgk, &iutgk, ns,
+                     &s[1], &rwork[itgkz], &i__2, &rwork[itempr], &iwork[1], info);
             /* If needed, compute left singular vectors. */
-            if (wantu)
+            if(wantu)
             {
                 k = itgkz;
                 i__2 = *ns;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = *n;
-                    for (j = 1;
-                            j <= i__3;
-                            ++j)
+                    for(j = 1; j <= i__3; ++j)
                     {
                         i__4 = j + i__ * u_dim1;
                         i__5 = k;
@@ -749,21 +796,18 @@ int zgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, doub
                 /* Call ZUNMBR to compute QB*UB. */
                 /* (Workspace in WORK( ITEMP ): need N, prefer N*NB) */
                 i__2 = *lwork - itemp + 1;
-                zunmbr_("Q", "L", "N", m, ns, n, &a[a_offset], lda, &work[ itauq], &u[u_offset], ldu, &work[itemp], &i__2, &ierr);
+                zunmbr_("Q", "L", "N", m, ns, n, &a[a_offset], lda, &work[itauq], &u[u_offset], ldu,
+                        &work[itemp], &i__2, &ierr);
             }
             /* If needed, compute right singular vectors. */
-            if (wantvt)
+            if(wantvt)
             {
                 k = itgkz + *n;
                 i__2 = *ns;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = *n;
-                    for (j = 1;
-                            j <= i__3;
-                            ++j)
+                    for(j = 1; j <= i__3; ++j)
                     {
                         i__4 = i__ + j * vt_dim1;
                         i__5 = k;
@@ -778,7 +822,8 @@ int zgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, doub
                 /* Call ZUNMBR to compute VB**T * PB**T */
                 /* (Workspace in WORK( ITEMP ): need N, prefer N*NB) */
                 i__2 = *lwork - itemp + 1;
-                zunmbr_("P", "R", "C", ns, n, n, &a[a_offset], lda, &work[ itaup], &vt[vt_offset], ldvt, &work[itemp], &i__2, & ierr);
+                zunmbr_("P", "R", "C", ns, n, n, &a[a_offset], lda, &work[itaup], &vt[vt_offset],
+                        ldvt, &work[itemp], &i__2, &ierr);
             }
         }
     }
@@ -786,7 +831,7 @@ int zgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, doub
     {
         /* A has more columns than rows. If A has sufficiently more */
         /* columns than rows, first reduce A using the LQ decomposition. */
-        if (*n >= mnthr)
+        if(*n >= mnthr)
         {
             /* Path 1t (N much larger than M): */
             /* A = L * Q = ( QB * B * PB**T ) * Q */
@@ -813,25 +858,23 @@ int zgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, doub
             i__3 = *m - 1;
             zlaset_("U", &i__2, &i__3, &c_b1, &c_b1, &work[ilqf + *m], m);
             i__2 = *lwork - itemp + 1;
-            zgebrd_(m, m, &work[ilqf], m, &rwork[id], &rwork[ie], &work[itauq], &work[itaup], &work[itemp], &i__2, info);
+            zgebrd_(m, m, &work[ilqf], m, &rwork[id], &rwork[ie], &work[itauq], &work[itaup],
+                    &work[itemp], &i__2, info);
             itempr = itgkz + *m * ((*m << 1) + 1);
             /* Solve eigenvalue problem TGK*Z=Z*S. */
             /* (Workspace: need 2*M*M+14*M) */
             i__2 = *m << 1;
-            dbdsvdx_("U", jobz, rngtgk, m, &rwork[id], &rwork[ie], vl, vu, & iltgk, &iutgk, ns, &s[1], &rwork[itgkz], &i__2, &rwork[ itempr], &iwork[1], info) ;
+            dbdsvdx_("U", jobz, rngtgk, m, &rwork[id], &rwork[ie], vl, vu, &iltgk, &iutgk, ns,
+                     &s[1], &rwork[itgkz], &i__2, &rwork[itempr], &iwork[1], info);
             /* If needed, compute left singular vectors. */
-            if (wantu)
+            if(wantu)
             {
                 k = itgkz;
                 i__2 = *ns;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = *m;
-                    for (j = 1;
-                            j <= i__3;
-                            ++j)
+                    for(j = 1; j <= i__3; ++j)
                     {
                         i__4 = j + i__ * u_dim1;
                         i__5 = k;
@@ -846,21 +889,18 @@ int zgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, doub
                 /* Call ZUNMBR to compute QB*UB. */
                 /* (Workspace in WORK( ITEMP ): need M, prefer M*NB) */
                 i__2 = *lwork - itemp + 1;
-                zunmbr_("Q", "L", "N", m, ns, m, &work[ilqf], m, &work[itauq], &u[u_offset], ldu, &work[itemp], &i__2, info);
+                zunmbr_("Q", "L", "N", m, ns, m, &work[ilqf], m, &work[itauq], &u[u_offset], ldu,
+                        &work[itemp], &i__2, info);
             }
             /* If needed, compute right singular vectors. */
-            if (wantvt)
+            if(wantvt)
             {
                 k = itgkz + *m;
                 i__2 = *ns;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = *m;
-                    for (j = 1;
-                            j <= i__3;
-                            ++j)
+                    for(j = 1; j <= i__3; ++j)
                     {
                         i__4 = i__ + j * vt_dim1;
                         i__5 = k;
@@ -877,11 +917,13 @@ int zgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, doub
                 /* Call ZUNMBR to compute (VB**T)*(PB**T) */
                 /* (Workspace in WORK( ITEMP ): need M, prefer M*NB) */
                 i__2 = *lwork - itemp + 1;
-                zunmbr_("P", "R", "C", ns, m, m, &work[ilqf], m, &work[itaup], &vt[vt_offset], ldvt, &work[itemp], &i__2, info);
+                zunmbr_("P", "R", "C", ns, m, m, &work[ilqf], m, &work[itaup], &vt[vt_offset], ldvt,
+                        &work[itemp], &i__2, info);
                 /* Call ZUNMLQ to compute ((VB**T)*(PB**T))*Q. */
                 /* (Workspace in WORK( ITEMP ): need M, prefer M*NB) */
                 i__2 = *lwork - itemp + 1;
-                zunmlq_("R", "N", ns, n, m, &a[a_offset], lda, &work[itau], & vt[vt_offset], ldvt, &work[itemp], &i__2, info);
+                zunmlq_("R", "N", ns, n, m, &a[a_offset], lda, &work[itau], &vt[vt_offset], ldvt,
+                        &work[itemp], &i__2, info);
             }
         }
         else
@@ -900,25 +942,23 @@ int zgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, doub
             ie = id + *m;
             itgkz = ie + *m;
             i__2 = *lwork - itemp + 1;
-            zgebrd_(m, n, &a[a_offset], lda, &rwork[id], &rwork[ie], &work[ itauq], &work[itaup], &work[itemp], &i__2, info);
+            zgebrd_(m, n, &a[a_offset], lda, &rwork[id], &rwork[ie], &work[itauq], &work[itaup],
+                    &work[itemp], &i__2, info);
             itempr = itgkz + *m * ((*m << 1) + 1);
             /* Solve eigenvalue problem TGK*Z=Z*S. */
             /* (Workspace: need 2*M*M+14*M) */
             i__2 = *m << 1;
-            dbdsvdx_("L", jobz, rngtgk, m, &rwork[id], &rwork[ie], vl, vu, & iltgk, &iutgk, ns, &s[1], &rwork[itgkz], &i__2, &rwork[ itempr], &iwork[1], info) ;
+            dbdsvdx_("L", jobz, rngtgk, m, &rwork[id], &rwork[ie], vl, vu, &iltgk, &iutgk, ns,
+                     &s[1], &rwork[itgkz], &i__2, &rwork[itempr], &iwork[1], info);
             /* If needed, compute left singular vectors. */
-            if (wantu)
+            if(wantu)
             {
                 k = itgkz;
                 i__2 = *ns;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = *m;
-                    for (j = 1;
-                            j <= i__3;
-                            ++j)
+                    for(j = 1; j <= i__3; ++j)
                     {
                         i__4 = j + i__ * u_dim1;
                         i__5 = k;
@@ -933,21 +973,18 @@ int zgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, doub
                 /* Call ZUNMBR to compute QB*UB. */
                 /* (Workspace in WORK( ITEMP ): need M, prefer M*NB) */
                 i__2 = *lwork - itemp + 1;
-                zunmbr_("Q", "L", "N", m, ns, n, &a[a_offset], lda, &work[ itauq], &u[u_offset], ldu, &work[itemp], &i__2, info);
+                zunmbr_("Q", "L", "N", m, ns, n, &a[a_offset], lda, &work[itauq], &u[u_offset], ldu,
+                        &work[itemp], &i__2, info);
             }
             /* If needed, compute right singular vectors. */
-            if (wantvt)
+            if(wantvt)
             {
                 k = itgkz + *m;
                 i__2 = *ns;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = *m;
-                    for (j = 1;
-                            j <= i__3;
-                            ++j)
+                    for(j = 1; j <= i__3; ++j)
                     {
                         i__4 = i__ + j * vt_dim1;
                         i__5 = k;
@@ -964,30 +1001,31 @@ int zgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, doub
                 /* Call ZUNMBR to compute VB**T * PB**T */
                 /* (Workspace in WORK( ITEMP ): need M, prefer M*NB) */
                 i__2 = *lwork - itemp + 1;
-                zunmbr_("P", "R", "C", ns, n, m, &a[a_offset], lda, &work[ itaup], &vt[vt_offset], ldvt, &work[itemp], &i__2, info);
+                zunmbr_("P", "R", "C", ns, n, m, &a[a_offset], lda, &work[itaup], &vt[vt_offset],
+                        ldvt, &work[itemp], &i__2, info);
             }
         }
     }
     /* Undo scaling if necessary */
-    if (iscl == 1)
+    if(iscl == 1)
     {
-        if (anrm > bignum)
+        if(anrm > bignum)
         {
-            dlascl_("G", &c__0, &c__0, &bignum, &anrm, &minmn, &c__1, &s[1], & minmn, info);
+            dlascl_("G", &c__0, &c__0, &bignum, &anrm, &minmn, &c__1, &s[1], &minmn, info);
         }
-        if (anrm < smlnum)
+        if(anrm < smlnum)
         {
-            dlascl_("G", &c__0, &c__0, &smlnum, &anrm, &minmn, &c__1, &s[1], & minmn, info);
+            dlascl_("G", &c__0, &c__0, &smlnum, &anrm, &minmn, &c__1, &s[1], &minmn, info);
         }
     }
     /* Return optimal workspace in WORK(1) */
-    d__1 = (doublereal) maxwrk;
+    d__1 = (doublereal)maxwrk;
     z__1.r = d__1;
     z__1.i = 0.; // , expr subst
     work[1].r = z__1.r;
     work[1].i = z__1.i; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGESVDX */
 }
 /* zgesvdx_ */

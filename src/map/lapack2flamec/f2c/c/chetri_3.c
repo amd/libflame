@@ -1,5 +1,8 @@
-/* ../netlib/v3.9.0/chetri_3.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/chetri_3.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -9,11 +12,17 @@ static integer c_n1 = -1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CHETRI_3 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetri_ 3.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetri_
+ * 3.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chetri_ 3.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chetri_
+ * 3.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetri_ 3.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetri_
+ * 3.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -54,7 +63,7 @@ static integer c_n1 = -1;
 /* > Specifies whether the details of the factorization are */
 /* > stored as an upper or lower triangular matrix. */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -71,7 +80,7 @@ static integer c_n1 = -1;
 /* > factors U or L as computed by CHETRF_RK and CHETRF_BK: */
 /* > a) ONLY diagonal elements of the Hermitian block diagonal */
 /* > matrix D on the diagonal of A, i.e. D(k,k) = A(k,k);
-*/
+ */
 /* > (superdiagonal (or subdiagonal) elements of D */
 /* > should be provided on entry in array E), and */
 /* > b) If UPLO = 'U': factor U in the superdiagonal part of A. */
@@ -82,7 +91,7 @@ static integer c_n1 = -1;
 /* > If UPLO = 'U': the upper triangular part of the inverse */
 /* > is formed and the part of A below the diagonal is not */
 /* > referenced;
-*/
+ */
 /* > If UPLO = 'L': the lower triangular part of the inverse */
 /* > is formed and the part of A above the diagonal is not */
 /* > referenced. */
@@ -101,7 +110,7 @@ static integer c_n1 = -1;
 /* > elements of the Hermitian block diagonal matrix D */
 /* > with 1-by-1 or 2-by-2 diagonal blocks, where */
 /* > If UPLO = 'U': E(i) = D(i-1,i),i=2:N, E(1) not referenced;
-*/
+ */
 /* > If UPLO = 'L': E(i) = D(i+1,i),i=1:N-1, E(N) not referenced. */
 /* > */
 /* > NOTE: For 1-by-1 diagonal block D(k), where */
@@ -128,7 +137,7 @@ static integer c_n1 = -1;
 /* > The length of WORK. LWORK >= (N+NB+1)*(NB+3). */
 /* > */
 /* > If LDWORK = -1, then a workspace query is assumed;
-*/
+ */
 /* > the routine only calculates the optimal size of the optimal */
 /* > size of the WORK array, returns this value as the first */
 /* > entry of the WORK array, and no error message related to */
@@ -163,15 +172,18 @@ the matrix is singular and its */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int chetri_3_(char *uplo, integer *n, complex *a, integer * lda, complex *e, integer *ipiv, complex *work, integer *lwork, integer *info)
+void chetri_3_(char *uplo, integer *n, complex *a, integer *lda, complex *e, integer *ipiv,
+               complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"chetri_3 inputs: uplo %c, n %lld, lda %lld, lwork %lld",*uplo, *n, *lda, *lwork);
+    snprintf(buffer, 256, "chetri_3 inputs: uplo %c, n %lld, lda %lld, lwork %lld", *uplo, *n, *lda,
+             *lwork);
 #else
-    snprintf(buffer, 256,"chetri_3 inputs: uplo %c, n %d, lda %d, lwork %d",*uplo, *n, *lda, *lwork);
+    snprintf(buffer, 256, "chetri_3 inputs: uplo %c, n %d, lda %d, lwork %d", *uplo, *n, *lda,
+             *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -179,12 +191,15 @@ int chetri_3_(char *uplo, integer *n, complex *a, integer * lda, complex *e, int
     integer a_dim1, a_offset, i__1, i__2;
     /* Local variables */
     extern /* Subroutine */
-    int chetri_3x_(char *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
+        void
+        chetri_3x_(char *, integer *, complex *, integer *, complex *, integer *, complex *,
+                   integer *, integer *);
     integer nb;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer lwkopt;
     logical lquery;
@@ -216,55 +231,55 @@ int chetri_3_(char *uplo, integer *n, complex *a, integer * lda, complex *e, int
     --work;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
     /* Determine the block size */
     /* Computing MAX */
     i__1 = 1;
     i__2 = ilaenv_(&c__1, "CHETRI_3", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
-    nb = fla_max(i__1,i__2);
+    nb = fla_max(i__1, i__2);
     lwkopt = (*n + nb + 1) * (nb + 3);
-    if (! upper && ! lsame_(uplo, "L"))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    else if (*lwork < lwkopt && ! lquery)
+    else if(*lwork < lwkopt && !lquery)
     {
         *info = -8;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CHETRI_3", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-        work[1].r = (real) lwkopt;
+        work[1].r = (real)lwkopt;
         work[1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     chetri_3x_(uplo, n, &a[a_offset], lda, &e[1], &ipiv[1], &work[1], &nb, info);
-    work[1].r = (real) lwkopt;
+    work[1].r = (real)lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHETRI_3 */
 }
 /* chetri_3__ */

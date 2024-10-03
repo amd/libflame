@@ -1,5 +1,8 @@
-/* ../netlib/dtgsy2.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dtgsy2.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__8 = 8;
 static integer c__1 = 1;
@@ -12,11 +15,17 @@ static doublereal c_b56 = 0.;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DTGSY2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtgsy2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtgsy2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtgsy2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtgsy2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtgsy2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtgsy2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -263,31 +272,55 @@ static doublereal c_b56 = 0.;
 /* > Umea University, S-901 87 Umea, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-int dtgsy2_(char *trans, integer *ijob, integer *m, integer * n, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *c__, integer *ldc, doublereal *d__, integer *ldd, doublereal *e, integer *lde, doublereal *f, integer *ldf, doublereal * scale, doublereal *rdsum, doublereal *rdscal, integer *iwork, integer *pq, integer *info)
+void dtgsy2_(char *trans, integer *ijob, integer *m, integer *n, doublereal *a, integer *lda,
+             doublereal *b, integer *ldb, doublereal *c__, integer *ldc, doublereal *d__,
+             integer *ldd, doublereal *e, integer *lde, doublereal *f, integer *ldf,
+             doublereal *scale, doublereal *rdsum, doublereal *rdscal, integer *iwork, integer *pq,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dtgsy2 inputs: trans %c, ijob %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldc %" FLA_IS ", ldd %" FLA_IS ", lde %" FLA_IS ", ldf %" FLA_IS "",*trans, *ijob, *m, *n, *lda, *ldb, *ldc, *ldd, *lde, *ldf);
+    AOCL_DTL_SNPRINTF("dtgsy2 inputs: trans %c, ijob %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS
+                      ", lda %" FLA_IS ", ldb %" FLA_IS ", ldc %" FLA_IS ", ldd %" FLA_IS
+                      ", lde %" FLA_IS ", ldf %" FLA_IS "",
+                      *trans, *ijob, *m, *n, *lda, *ldb, *ldc, *ldd, *lde, *ldf);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, d_dim1, d_offset, e_dim1, e_offset, f_dim1, f_offset, i__1, i__2, i__3;
+    integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, d_dim1, d_offset, e_dim1,
+        e_offset, f_dim1, f_offset, i__1, i__2, i__3;
     /* Local variables */
     integer i__, j, k, p, q;
     doublereal z__[64] /* was [8][8] */
-    ;
+        ;
     integer ie, je, mb, nb, ii, jj, is, js;
     doublereal rhs[8];
     integer isp1, jsp1;
     extern /* Subroutine */
-    int dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+              doublereal *, integer *);
     integer ierr, zdim, ipiv[8], jpiv[8];
     doublereal alpha;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *), dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *),
+        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dgesc2_(integer *, doublereal *, integer *, doublereal *, integer *, integer *, doublereal *), dgetc2_(integer *, doublereal *, integer *, integer *, integer *, integer *), dlatdf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+        void
+        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
+               integer *, doublereal *, doublereal *, integer *),
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *),
+        dgesc2_(integer *, doublereal *, integer *, doublereal *, integer *, integer *,
+                doublereal *),
+        dgetc2_(integer *, doublereal *, integer *, integer *, integer *, integer *),
+        dlatdf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                doublereal *, integer *, integer *);
     doublereal scaloc;
     extern /* Subroutine */
-    int dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -337,76 +370,76 @@ int dtgsy2_(char *trans, integer *ijob, integer *m, integer * n, doublereal *a, 
     /* Function Body */
     *info = 0;
     ierr = 0;
-    notran = lsame_(trans, "N");
-    if (! notran && ! lsame_(trans, "T"))
+    notran = lsame_(trans, "N", 1, 1);
+    if(!notran && !lsame_(trans, "T", 1, 1))
     {
         *info = -1;
     }
-    else if (notran)
+    else if(notran)
     {
-        if (*ijob < 0 || *ijob > 2)
+        if(*ijob < 0 || *ijob > 2)
         {
             *info = -2;
         }
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        if (*m <= 0)
+        if(*m <= 0)
         {
             *info = -3;
         }
-        else if (*n <= 0)
+        else if(*n <= 0)
         {
             *info = -4;
         }
-        else if (*lda < fla_max(1,*m))
+        else if(*lda < fla_max(1, *m))
         {
             *info = -6;
         }
-        else if (*ldb < fla_max(1,*n))
+        else if(*ldb < fla_max(1, *n))
         {
             *info = -8;
         }
-        else if (*ldc < fla_max(1,*m))
+        else if(*ldc < fla_max(1, *m))
         {
             *info = -10;
         }
-        else if (*ldd < fla_max(1,*m))
+        else if(*ldd < fla_max(1, *m))
         {
             *info = -12;
         }
-        else if (*lde < fla_max(1,*n))
+        else if(*lde < fla_max(1, *n))
         {
             *info = -14;
         }
-        else if (*ldf < fla_max(1,*m))
+        else if(*ldf < fla_max(1, *m))
         {
             *info = -16;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DTGSY2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine block structure of A */
     *pq = 0;
     p = 0;
     i__ = 1;
 L10:
-    if (i__ > *m)
+    if(i__ > *m)
     {
         goto L20;
     }
     ++p;
     iwork[p] = i__;
-    if (i__ == *m)
+    if(i__ == *m)
     {
         goto L20;
     }
-    if (a[i__ + 1 + i__ * a_dim1] != 0.)
+    if(a[i__ + 1 + i__ * a_dim1] != 0.)
     {
         i__ += 2;
     }
@@ -421,17 +454,17 @@ L20:
     q = p + 1;
     j = 1;
 L30:
-    if (j > *n)
+    if(j > *n)
     {
         goto L40;
     }
     ++q;
     iwork[q] = j;
-    if (j == *n)
+    if(j == *n)
     {
         goto L40;
     }
-    if (b[j + 1 + j * b_dim1] != 0.)
+    if(b[j + 1 + j * b_dim1] != 0.)
     {
         j += 2;
     }
@@ -443,7 +476,7 @@ L30:
 L40:
     iwork[q + 1] = *n + 1;
     *pq = p * (q - p - 1);
-    if (notran)
+    if(notran)
     {
         /* Solve (I, J) - subsystem */
         /* A(I, I) * R(I, J) - L(I, J) * B(J, J) = C(I, J) */
@@ -453,24 +486,20 @@ L40:
         *scale = 1.;
         scaloc = 1.;
         i__1 = q;
-        for (j = p + 2;
-                j <= i__1;
-                ++j)
+        for(j = p + 2; j <= i__1; ++j)
         {
             js = iwork[j];
             jsp1 = js + 1;
             je = iwork[j + 1] - 1;
             nb = je - js + 1;
-            for (i__ = p;
-                    i__ >= 1;
-                    --i__)
+            for(i__ = p; i__ >= 1; --i__)
             {
                 is = iwork[i__];
                 isp1 = is + 1;
                 ie = iwork[i__ + 1] - 1;
                 mb = ie - is + 1;
                 zdim = mb * nb << 1;
-                if (mb == 1 && nb == 1)
+                if(mb == 1 && nb == 1)
                 {
                     /* Build a 2-by-2 system Z * x = RHS */
                     z__[0] = a[is + is * a_dim1];
@@ -482,21 +511,19 @@ L40:
                     rhs[1] = f[is + js * f_dim1];
                     /* Solve Z * x = RHS */
                     dgetc2_(&zdim, z__, &c__8, ipiv, jpiv, &ierr);
-                    if (ierr > 0)
+                    if(ierr > 0)
                     {
                         *info = ierr;
                     }
-                    if (*ijob == 0)
+                    if(*ijob == 0)
                     {
                         dgesc2_(&zdim, z__, &c__8, rhs, ipiv, jpiv, &scaloc);
-                        if (scaloc != 1.)
+                        if(scaloc != 1.)
                         {
                             i__2 = *n;
-                            for (k = 1;
-                                    k <= i__2;
-                                    ++k)
+                            for(k = 1; k <= i__2; ++k)
                             {
-                                dscal_(m, &scaloc, &c__[k * c_dim1 + 1], & c__1);
+                                dscal_(m, &scaloc, &c__[k * c_dim1 + 1], &c__1);
                                 dscal_(m, &scaloc, &f[k * f_dim1 + 1], &c__1);
                                 /* L50: */
                             }
@@ -512,23 +539,27 @@ L40:
                     f[is + js * f_dim1] = rhs[1];
                     /* Substitute R(I, J) and L(I, J) into remaining */
                     /* equation. */
-                    if (i__ > 1)
+                    if(i__ > 1)
                     {
                         alpha = -rhs[0];
                         i__2 = is - 1;
-                        daxpy_(&i__2, &alpha, &a[is * a_dim1 + 1], &c__1, & c__[js * c_dim1 + 1], &c__1);
+                        daxpy_(&i__2, &alpha, &a[is * a_dim1 + 1], &c__1, &c__[js * c_dim1 + 1],
+                               &c__1);
                         i__2 = is - 1;
-                        daxpy_(&i__2, &alpha, &d__[is * d_dim1 + 1], &c__1, & f[js * f_dim1 + 1], &c__1);
+                        daxpy_(&i__2, &alpha, &d__[is * d_dim1 + 1], &c__1, &f[js * f_dim1 + 1],
+                               &c__1);
                     }
-                    if (j < q)
+                    if(j < q)
                     {
                         i__2 = *n - je;
-                        daxpy_(&i__2, &rhs[1], &b[js + (je + 1) * b_dim1], ldb, &c__[is + (je + 1) * c_dim1], ldc);
+                        daxpy_(&i__2, &rhs[1], &b[js + (je + 1) * b_dim1], ldb,
+                               &c__[is + (je + 1) * c_dim1], ldc);
                         i__2 = *n - je;
-                        daxpy_(&i__2, &rhs[1], &e[js + (je + 1) * e_dim1], lde, &f[is + (je + 1) * f_dim1], ldf);
+                        daxpy_(&i__2, &rhs[1], &e[js + (je + 1) * e_dim1], lde,
+                               &f[is + (je + 1) * f_dim1], ldf);
                     }
                 }
-                else if (mb == 1 && nb == 2)
+                else if(mb == 1 && nb == 2)
                 {
                     /* Build a 4-by-4 system Z * x = RHS */
                     z__[0] = a[is + is * a_dim1];
@@ -554,21 +585,19 @@ L40:
                     rhs[3] = f[is + jsp1 * f_dim1];
                     /* Solve Z * x = RHS */
                     dgetc2_(&zdim, z__, &c__8, ipiv, jpiv, &ierr);
-                    if (ierr > 0)
+                    if(ierr > 0)
                     {
                         *info = ierr;
                     }
-                    if (*ijob == 0)
+                    if(*ijob == 0)
                     {
                         dgesc2_(&zdim, z__, &c__8, rhs, ipiv, jpiv, &scaloc);
-                        if (scaloc != 1.)
+                        if(scaloc != 1.)
                         {
                             i__2 = *n;
-                            for (k = 1;
-                                    k <= i__2;
-                                    ++k)
+                            for(k = 1; k <= i__2; ++k)
                             {
-                                dscal_(m, &scaloc, &c__[k * c_dim1 + 1], & c__1);
+                                dscal_(m, &scaloc, &c__[k * c_dim1 + 1], &c__1);
                                 dscal_(m, &scaloc, &f[k * f_dim1 + 1], &c__1);
                                 /* L60: */
                             }
@@ -586,26 +615,32 @@ L40:
                     f[is + jsp1 * f_dim1] = rhs[3];
                     /* Substitute R(I, J) and L(I, J) into remaining */
                     /* equation. */
-                    if (i__ > 1)
+                    if(i__ > 1)
                     {
                         i__2 = is - 1;
-                        dger_(&i__2, &nb, &c_b27, &a[is * a_dim1 + 1], &c__1, rhs, &c__1, &c__[js * c_dim1 + 1], ldc);
+                        dger_(&i__2, &nb, &c_b27, &a[is * a_dim1 + 1], &c__1, rhs, &c__1,
+                              &c__[js * c_dim1 + 1], ldc);
                         i__2 = is - 1;
-                        dger_(&i__2, &nb, &c_b27, &d__[is * d_dim1 + 1], & c__1, rhs, &c__1, &f[js * f_dim1 + 1], ldf);
+                        dger_(&i__2, &nb, &c_b27, &d__[is * d_dim1 + 1], &c__1, rhs, &c__1,
+                              &f[js * f_dim1 + 1], ldf);
                     }
-                    if (j < q)
+                    if(j < q)
                     {
                         i__2 = *n - je;
-                        daxpy_(&i__2, &rhs[2], &b[js + (je + 1) * b_dim1], ldb, &c__[is + (je + 1) * c_dim1], ldc);
+                        daxpy_(&i__2, &rhs[2], &b[js + (je + 1) * b_dim1], ldb,
+                               &c__[is + (je + 1) * c_dim1], ldc);
                         i__2 = *n - je;
-                        daxpy_(&i__2, &rhs[2], &e[js + (je + 1) * e_dim1], lde, &f[is + (je + 1) * f_dim1], ldf);
+                        daxpy_(&i__2, &rhs[2], &e[js + (je + 1) * e_dim1], lde,
+                               &f[is + (je + 1) * f_dim1], ldf);
                         i__2 = *n - je;
-                        daxpy_(&i__2, &rhs[3], &b[jsp1 + (je + 1) * b_dim1], ldb, &c__[is + (je + 1) * c_dim1], ldc);
+                        daxpy_(&i__2, &rhs[3], &b[jsp1 + (je + 1) * b_dim1], ldb,
+                               &c__[is + (je + 1) * c_dim1], ldc);
                         i__2 = *n - je;
-                        daxpy_(&i__2, &rhs[3], &e[jsp1 + (je + 1) * e_dim1], lde, &f[is + (je + 1) * f_dim1], ldf);
+                        daxpy_(&i__2, &rhs[3], &e[jsp1 + (je + 1) * e_dim1], lde,
+                               &f[is + (je + 1) * f_dim1], ldf);
                     }
                 }
-                else if (mb == 2 && nb == 1)
+                else if(mb == 2 && nb == 1)
                 {
                     /* Build a 4-by-4 system Z * x = RHS */
                     z__[0] = a[is + is * a_dim1];
@@ -631,21 +666,19 @@ L40:
                     rhs[3] = f[isp1 + js * f_dim1];
                     /* Solve Z * x = RHS */
                     dgetc2_(&zdim, z__, &c__8, ipiv, jpiv, &ierr);
-                    if (ierr > 0)
+                    if(ierr > 0)
                     {
                         *info = ierr;
                     }
-                    if (*ijob == 0)
+                    if(*ijob == 0)
                     {
                         dgesc2_(&zdim, z__, &c__8, rhs, ipiv, jpiv, &scaloc);
-                        if (scaloc != 1.)
+                        if(scaloc != 1.)
                         {
                             i__2 = *n;
-                            for (k = 1;
-                                    k <= i__2;
-                                    ++k)
+                            for(k = 1; k <= i__2; ++k)
                             {
-                                dscal_(m, &scaloc, &c__[k * c_dim1 + 1], & c__1);
+                                dscal_(m, &scaloc, &c__[k * c_dim1 + 1], &c__1);
                                 dscal_(m, &scaloc, &f[k * f_dim1 + 1], &c__1);
                                 /* L70: */
                             }
@@ -663,22 +696,26 @@ L40:
                     f[isp1 + js * f_dim1] = rhs[3];
                     /* Substitute R(I, J) and L(I, J) into remaining */
                     /* equation. */
-                    if (i__ > 1)
+                    if(i__ > 1)
                     {
                         i__2 = is - 1;
-                        dgemv_("N", &i__2, &mb, &c_b27, &a[is * a_dim1 + 1], lda, rhs, &c__1, &c_b42, &c__[js * c_dim1 + 1], &c__1);
+                        dgemv_("N", &i__2, &mb, &c_b27, &a[is * a_dim1 + 1], lda, rhs, &c__1,
+                               &c_b42, &c__[js * c_dim1 + 1], &c__1);
                         i__2 = is - 1;
-                        dgemv_("N", &i__2, &mb, &c_b27, &d__[is * d_dim1 + 1], ldd, rhs, &c__1, &c_b42, &f[js * f_dim1 + 1], &c__1);
+                        dgemv_("N", &i__2, &mb, &c_b27, &d__[is * d_dim1 + 1], ldd, rhs, &c__1,
+                               &c_b42, &f[js * f_dim1 + 1], &c__1);
                     }
-                    if (j < q)
+                    if(j < q)
                     {
                         i__2 = *n - je;
-                        dger_(&mb, &i__2, &c_b42, &rhs[2], &c__1, &b[js + (je + 1) * b_dim1], ldb, &c__[is + (je + 1) * c_dim1], ldc);
+                        dger_(&mb, &i__2, &c_b42, &rhs[2], &c__1, &b[js + (je + 1) * b_dim1], ldb,
+                              &c__[is + (je + 1) * c_dim1], ldc);
                         i__2 = *n - je;
-                        dger_(&mb, &i__2, &c_b42, &rhs[2], &c__1, &e[js + (je + 1) * e_dim1], lde, &f[is + (je + 1) * f_dim1], ldf);
+                        dger_(&mb, &i__2, &c_b42, &rhs[2], &c__1, &e[js + (je + 1) * e_dim1], lde,
+                              &f[is + (je + 1) * f_dim1], ldf);
                     }
                 }
-                else if (mb == 2 && nb == 2)
+                else if(mb == 2 && nb == 2)
                 {
                     /* Build an 8-by-8 system Z * x = RHS */
                     dlaset_("F", &c__8, &c__8, &c_b56, &c_b56, z__, &c__8);
@@ -714,33 +751,29 @@ L40:
                     k = 1;
                     ii = mb * nb + 1;
                     i__2 = nb - 1;
-                    for (jj = 0;
-                            jj <= i__2;
-                            ++jj)
+                    for(jj = 0; jj <= i__2; ++jj)
                     {
-                        dcopy_(&mb, &c__[is + (js + jj) * c_dim1], &c__1, & rhs[k - 1], &c__1);
-                        dcopy_(&mb, &f[is + (js + jj) * f_dim1], &c__1, &rhs[ ii - 1], &c__1);
+                        dcopy_(&mb, &c__[is + (js + jj) * c_dim1], &c__1, &rhs[k - 1], &c__1);
+                        dcopy_(&mb, &f[is + (js + jj) * f_dim1], &c__1, &rhs[ii - 1], &c__1);
                         k += mb;
                         ii += mb;
                         /* L80: */
                     }
                     /* Solve Z * x = RHS */
                     dgetc2_(&zdim, z__, &c__8, ipiv, jpiv, &ierr);
-                    if (ierr > 0)
+                    if(ierr > 0)
                     {
                         *info = ierr;
                     }
-                    if (*ijob == 0)
+                    if(*ijob == 0)
                     {
                         dgesc2_(&zdim, z__, &c__8, rhs, ipiv, jpiv, &scaloc);
-                        if (scaloc != 1.)
+                        if(scaloc != 1.)
                         {
                             i__2 = *n;
-                            for (k = 1;
-                                    k <= i__2;
-                                    ++k)
+                            for(k = 1; k <= i__2; ++k)
                             {
-                                dscal_(m, &scaloc, &c__[k * c_dim1 + 1], & c__1);
+                                dscal_(m, &scaloc, &c__[k * c_dim1 + 1], &c__1);
                                 dscal_(m, &scaloc, &f[k * f_dim1 + 1], &c__1);
                                 /* L90: */
                             }
@@ -755,9 +788,7 @@ L40:
                     k = 1;
                     ii = mb * nb + 1;
                     i__2 = nb - 1;
-                    for (jj = 0;
-                            jj <= i__2;
-                            ++jj)
+                    for(jj = 0; jj <= i__2; ++jj)
                     {
                         dcopy_(&mb, &rhs[k - 1], &c__1, &c__[is + (js + jj) * c_dim1], &c__1);
                         dcopy_(&mb, &rhs[ii - 1], &c__1, &f[is + (js + jj) * f_dim1], &c__1);
@@ -767,20 +798,26 @@ L40:
                     }
                     /* Substitute R(I, J) and L(I, J) into remaining */
                     /* equation. */
-                    if (i__ > 1)
+                    if(i__ > 1)
                     {
                         i__2 = is - 1;
-                        dgemm_("N", "N", &i__2, &nb, &mb, &c_b27, &a[is * a_dim1 + 1], lda, rhs, &mb, &c_b42, &c__[js * c_dim1 + 1], ldc);
+                        dgemm_("N", "N", &i__2, &nb, &mb, &c_b27, &a[is * a_dim1 + 1], lda, rhs,
+                               &mb, &c_b42, &c__[js * c_dim1 + 1], ldc);
                         i__2 = is - 1;
-                        dgemm_("N", "N", &i__2, &nb, &mb, &c_b27, &d__[is * d_dim1 + 1], ldd, rhs, &mb, &c_b42, &f[js * f_dim1 + 1], ldf);
+                        dgemm_("N", "N", &i__2, &nb, &mb, &c_b27, &d__[is * d_dim1 + 1], ldd, rhs,
+                               &mb, &c_b42, &f[js * f_dim1 + 1], ldf);
                     }
-                    if (j < q)
+                    if(j < q)
                     {
                         k = mb * nb + 1;
                         i__2 = *n - je;
-                        dgemm_("N", "N", &mb, &i__2, &nb, &c_b42, &rhs[k - 1], &mb, &b[js + (je + 1) * b_dim1], ldb, &c_b42, &c__[is + (je + 1) * c_dim1], ldc);
+                        dgemm_("N", "N", &mb, &i__2, &nb, &c_b42, &rhs[k - 1], &mb,
+                               &b[js + (je + 1) * b_dim1], ldb, &c_b42,
+                               &c__[is + (je + 1) * c_dim1], ldc);
                         i__2 = *n - je;
-                        dgemm_("N", "N", &mb, &i__2, &nb, &c_b42, &rhs[k - 1], &mb, &e[js + (je + 1) * e_dim1], lde, &c_b42, &f[is + (je + 1) * f_dim1], ldf);
+                        dgemm_("N", "N", &mb, &i__2, &nb, &c_b42, &rhs[k - 1], &mb,
+                               &e[js + (je + 1) * e_dim1], lde, &c_b42, &f[is + (je + 1) * f_dim1],
+                               ldf);
                     }
                 }
                 /* L110: */
@@ -797,25 +834,21 @@ L40:
         *scale = 1.;
         scaloc = 1.;
         i__1 = p;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             is = iwork[i__];
             isp1 = is + 1;
             ie = iwork[i__ + 1] - 1;
             mb = ie - is + 1;
             i__2 = p + 2;
-            for (j = q;
-                    j >= i__2;
-                    --j)
+            for(j = q; j >= i__2; --j)
             {
                 js = iwork[j];
                 jsp1 = js + 1;
                 je = iwork[j + 1] - 1;
                 nb = je - js + 1;
                 zdim = mb * nb << 1;
-                if (mb == 1 && nb == 1)
+                if(mb == 1 && nb == 1)
                 {
                     /* Build a 2-by-2 system Z**T * x = RHS */
                     z__[0] = a[is + is * a_dim1];
@@ -827,17 +860,15 @@ L40:
                     rhs[1] = f[is + js * f_dim1];
                     /* Solve Z**T * x = RHS */
                     dgetc2_(&zdim, z__, &c__8, ipiv, jpiv, &ierr);
-                    if (ierr > 0)
+                    if(ierr > 0)
                     {
                         *info = ierr;
                     }
                     dgesc2_(&zdim, z__, &c__8, rhs, ipiv, jpiv, &scaloc);
-                    if (scaloc != 1.)
+                    if(scaloc != 1.)
                     {
                         i__3 = *n;
-                        for (k = 1;
-                                k <= i__3;
-                                ++k)
+                        for(k = 1; k <= i__3; ++k)
                         {
                             dscal_(m, &scaloc, &c__[k * c_dim1 + 1], &c__1);
                             dscal_(m, &scaloc, &f[k * f_dim1 + 1], &c__1);
@@ -850,26 +881,28 @@ L40:
                     f[is + js * f_dim1] = rhs[1];
                     /* Substitute R(I, J) and L(I, J) into remaining */
                     /* equation. */
-                    if (j > p + 2)
+                    if(j > p + 2)
                     {
                         alpha = rhs[0];
                         i__3 = js - 1;
-                        daxpy_(&i__3, &alpha, &b[js * b_dim1 + 1], &c__1, &f[ is + f_dim1], ldf);
+                        daxpy_(&i__3, &alpha, &b[js * b_dim1 + 1], &c__1, &f[is + f_dim1], ldf);
                         alpha = rhs[1];
                         i__3 = js - 1;
-                        daxpy_(&i__3, &alpha, &e[js * e_dim1 + 1], &c__1, &f[ is + f_dim1], ldf);
+                        daxpy_(&i__3, &alpha, &e[js * e_dim1 + 1], &c__1, &f[is + f_dim1], ldf);
                     }
-                    if (i__ < p)
+                    if(i__ < p)
                     {
                         alpha = -rhs[0];
                         i__3 = *m - ie;
-                        daxpy_(&i__3, &alpha, &a[is + (ie + 1) * a_dim1], lda, &c__[ie + 1 + js * c_dim1], &c__1);
+                        daxpy_(&i__3, &alpha, &a[is + (ie + 1) * a_dim1], lda,
+                               &c__[ie + 1 + js * c_dim1], &c__1);
                         alpha = -rhs[1];
                         i__3 = *m - ie;
-                        daxpy_(&i__3, &alpha, &d__[is + (ie + 1) * d_dim1], ldd, &c__[ie + 1 + js * c_dim1], &c__1);
+                        daxpy_(&i__3, &alpha, &d__[is + (ie + 1) * d_dim1], ldd,
+                               &c__[ie + 1 + js * c_dim1], &c__1);
                     }
                 }
-                else if (mb == 1 && nb == 2)
+                else if(mb == 1 && nb == 2)
                 {
                     /* Build a 4-by-4 system Z**T * x = RHS */
                     z__[0] = a[is + is * a_dim1];
@@ -895,17 +928,15 @@ L40:
                     rhs[3] = f[is + jsp1 * f_dim1];
                     /* Solve Z**T * x = RHS */
                     dgetc2_(&zdim, z__, &c__8, ipiv, jpiv, &ierr);
-                    if (ierr > 0)
+                    if(ierr > 0)
                     {
                         *info = ierr;
                     }
                     dgesc2_(&zdim, z__, &c__8, rhs, ipiv, jpiv, &scaloc);
-                    if (scaloc != 1.)
+                    if(scaloc != 1.)
                     {
                         i__3 = *n;
-                        for (k = 1;
-                                k <= i__3;
-                                ++k)
+                        for(k = 1; k <= i__3; ++k)
                         {
                             dscal_(m, &scaloc, &c__[k * c_dim1 + 1], &c__1);
                             dscal_(m, &scaloc, &f[k * f_dim1 + 1], &c__1);
@@ -920,26 +951,28 @@ L40:
                     f[is + jsp1 * f_dim1] = rhs[3];
                     /* Substitute R(I, J) and L(I, J) into remaining */
                     /* equation. */
-                    if (j > p + 2)
+                    if(j > p + 2)
                     {
                         i__3 = js - 1;
                         daxpy_(&i__3, rhs, &b[js * b_dim1 + 1], &c__1, &f[is + f_dim1], ldf);
                         i__3 = js - 1;
-                        daxpy_(&i__3, &rhs[1], &b[jsp1 * b_dim1 + 1], &c__1, & f[is + f_dim1], ldf);
+                        daxpy_(&i__3, &rhs[1], &b[jsp1 * b_dim1 + 1], &c__1, &f[is + f_dim1], ldf);
                         i__3 = js - 1;
-                        daxpy_(&i__3, &rhs[2], &e[js * e_dim1 + 1], &c__1, &f[ is + f_dim1], ldf);
+                        daxpy_(&i__3, &rhs[2], &e[js * e_dim1 + 1], &c__1, &f[is + f_dim1], ldf);
                         i__3 = js - 1;
-                        daxpy_(&i__3, &rhs[3], &e[jsp1 * e_dim1 + 1], &c__1, & f[is + f_dim1], ldf);
+                        daxpy_(&i__3, &rhs[3], &e[jsp1 * e_dim1 + 1], &c__1, &f[is + f_dim1], ldf);
                     }
-                    if (i__ < p)
+                    if(i__ < p)
                     {
                         i__3 = *m - ie;
-                        dger_(&i__3, &nb, &c_b27, &a[is + (ie + 1) * a_dim1], lda, rhs, &c__1, &c__[ie + 1 + js * c_dim1], ldc);
+                        dger_(&i__3, &nb, &c_b27, &a[is + (ie + 1) * a_dim1], lda, rhs, &c__1,
+                              &c__[ie + 1 + js * c_dim1], ldc);
                         i__3 = *m - ie;
-                        dger_(&i__3, &nb, &c_b27, &d__[is + (ie + 1) * d_dim1], ldd, &rhs[2], &c__1, &c__[ie + 1 + js * c_dim1], ldc);
+                        dger_(&i__3, &nb, &c_b27, &d__[is + (ie + 1) * d_dim1], ldd, &rhs[2], &c__1,
+                              &c__[ie + 1 + js * c_dim1], ldc);
                     }
                 }
-                else if (mb == 2 && nb == 1)
+                else if(mb == 2 && nb == 1)
                 {
                     /* Build a 4-by-4 system Z**T * x = RHS */
                     z__[0] = a[is + is * a_dim1];
@@ -965,17 +998,15 @@ L40:
                     rhs[3] = f[isp1 + js * f_dim1];
                     /* Solve Z**T * x = RHS */
                     dgetc2_(&zdim, z__, &c__8, ipiv, jpiv, &ierr);
-                    if (ierr > 0)
+                    if(ierr > 0)
                     {
                         *info = ierr;
                     }
                     dgesc2_(&zdim, z__, &c__8, rhs, ipiv, jpiv, &scaloc);
-                    if (scaloc != 1.)
+                    if(scaloc != 1.)
                     {
                         i__3 = *n;
-                        for (k = 1;
-                                k <= i__3;
-                                ++k)
+                        for(k = 1; k <= i__3; ++k)
                         {
                             dscal_(m, &scaloc, &c__[k * c_dim1 + 1], &c__1);
                             dscal_(m, &scaloc, &f[k * f_dim1 + 1], &c__1);
@@ -990,22 +1021,26 @@ L40:
                     f[isp1 + js * f_dim1] = rhs[3];
                     /* Substitute R(I, J) and L(I, J) into remaining */
                     /* equation. */
-                    if (j > p + 2)
+                    if(j > p + 2)
                     {
                         i__3 = js - 1;
-                        dger_(&mb, &i__3, &c_b42, rhs, &c__1, &b[js * b_dim1 + 1], &c__1, &f[is + f_dim1], ldf);
+                        dger_(&mb, &i__3, &c_b42, rhs, &c__1, &b[js * b_dim1 + 1], &c__1,
+                              &f[is + f_dim1], ldf);
                         i__3 = js - 1;
-                        dger_(&mb, &i__3, &c_b42, &rhs[2], &c__1, &e[js * e_dim1 + 1], &c__1, &f[is + f_dim1], ldf);
+                        dger_(&mb, &i__3, &c_b42, &rhs[2], &c__1, &e[js * e_dim1 + 1], &c__1,
+                              &f[is + f_dim1], ldf);
                     }
-                    if (i__ < p)
+                    if(i__ < p)
                     {
                         i__3 = *m - ie;
-                        dgemv_("T", &mb, &i__3, &c_b27, &a[is + (ie + 1) * a_dim1], lda, rhs, &c__1, &c_b42, &c__[ie + 1 + js * c_dim1], &c__1);
+                        dgemv_("T", &mb, &i__3, &c_b27, &a[is + (ie + 1) * a_dim1], lda, rhs, &c__1,
+                               &c_b42, &c__[ie + 1 + js * c_dim1], &c__1);
                         i__3 = *m - ie;
-                        dgemv_("T", &mb, &i__3, &c_b27, &d__[is + (ie + 1) * d_dim1], ldd, &rhs[2], &c__1, &c_b42, &c__[ie + 1 + js * c_dim1], &c__1);
+                        dgemv_("T", &mb, &i__3, &c_b27, &d__[is + (ie + 1) * d_dim1], ldd, &rhs[2],
+                               &c__1, &c_b42, &c__[ie + 1 + js * c_dim1], &c__1);
                     }
                 }
-                else if (mb == 2 && nb == 2)
+                else if(mb == 2 && nb == 2)
                 {
                     /* Build an 8-by-8 system Z**T * x = RHS */
                     dlaset_("F", &c__8, &c__8, &c_b56, &c_b56, z__, &c__8);
@@ -1041,29 +1076,25 @@ L40:
                     k = 1;
                     ii = mb * nb + 1;
                     i__3 = nb - 1;
-                    for (jj = 0;
-                            jj <= i__3;
-                            ++jj)
+                    for(jj = 0; jj <= i__3; ++jj)
                     {
-                        dcopy_(&mb, &c__[is + (js + jj) * c_dim1], &c__1, & rhs[k - 1], &c__1);
-                        dcopy_(&mb, &f[is + (js + jj) * f_dim1], &c__1, &rhs[ ii - 1], &c__1);
+                        dcopy_(&mb, &c__[is + (js + jj) * c_dim1], &c__1, &rhs[k - 1], &c__1);
+                        dcopy_(&mb, &f[is + (js + jj) * f_dim1], &c__1, &rhs[ii - 1], &c__1);
                         k += mb;
                         ii += mb;
                         /* L160: */
                     }
                     /* Solve Z**T * x = RHS */
                     dgetc2_(&zdim, z__, &c__8, ipiv, jpiv, &ierr);
-                    if (ierr > 0)
+                    if(ierr > 0)
                     {
                         *info = ierr;
                     }
                     dgesc2_(&zdim, z__, &c__8, rhs, ipiv, jpiv, &scaloc);
-                    if (scaloc != 1.)
+                    if(scaloc != 1.)
                     {
                         i__3 = *n;
-                        for (k = 1;
-                                k <= i__3;
-                                ++k)
+                        for(k = 1; k <= i__3; ++k)
                         {
                             dscal_(m, &scaloc, &c__[k * c_dim1 + 1], &c__1);
                             dscal_(m, &scaloc, &f[k * f_dim1 + 1], &c__1);
@@ -1075,9 +1106,7 @@ L40:
                     k = 1;
                     ii = mb * nb + 1;
                     i__3 = nb - 1;
-                    for (jj = 0;
-                            jj <= i__3;
-                            ++jj)
+                    for(jj = 0; jj <= i__3; ++jj)
                     {
                         dcopy_(&mb, &rhs[k - 1], &c__1, &c__[is + (js + jj) * c_dim1], &c__1);
                         dcopy_(&mb, &rhs[ii - 1], &c__1, &f[is + (js + jj) * f_dim1], &c__1);
@@ -1087,19 +1116,24 @@ L40:
                     }
                     /* Substitute R(I, J) and L(I, J) into remaining */
                     /* equation. */
-                    if (j > p + 2)
+                    if(j > p + 2)
                     {
                         i__3 = js - 1;
-                        dgemm_("N", "T", &mb, &i__3, &nb, &c_b42, &c__[is + js * c_dim1], ldc, &b[js * b_dim1 + 1], ldb, & c_b42, &f[is + f_dim1], ldf);
+                        dgemm_("N", "T", &mb, &i__3, &nb, &c_b42, &c__[is + js * c_dim1], ldc,
+                               &b[js * b_dim1 + 1], ldb, &c_b42, &f[is + f_dim1], ldf);
                         i__3 = js - 1;
-                        dgemm_("N", "T", &mb, &i__3, &nb, &c_b42, &f[is + js * f_dim1], ldf, &e[js * e_dim1 + 1], lde, & c_b42, &f[is + f_dim1], ldf);
+                        dgemm_("N", "T", &mb, &i__3, &nb, &c_b42, &f[is + js * f_dim1], ldf,
+                               &e[js * e_dim1 + 1], lde, &c_b42, &f[is + f_dim1], ldf);
                     }
-                    if (i__ < p)
+                    if(i__ < p)
                     {
                         i__3 = *m - ie;
-                        dgemm_("T", "N", &i__3, &nb, &mb, &c_b27, &a[is + (ie + 1) * a_dim1], lda, &c__[is + js * c_dim1], ldc, &c_b42, &c__[ie + 1 + js * c_dim1], ldc);
+                        dgemm_("T", "N", &i__3, &nb, &mb, &c_b27, &a[is + (ie + 1) * a_dim1], lda,
+                               &c__[is + js * c_dim1], ldc, &c_b42, &c__[ie + 1 + js * c_dim1],
+                               ldc);
                         i__3 = *m - ie;
-                        dgemm_("T", "N", &i__3, &nb, &mb, &c_b27, &d__[is + ( ie + 1) * d_dim1], ldd, &f[is + js * f_dim1], ldf, &c_b42, &c__[ie + 1 + js * c_dim1], ldc);
+                        dgemm_("T", "N", &i__3, &nb, &mb, &c_b27, &d__[is + (ie + 1) * d_dim1], ldd,
+                               &f[is + js * f_dim1], ldf, &c_b42, &c__[ie + 1 + js * c_dim1], ldc);
                     }
                 }
                 /* L190: */
@@ -1108,8 +1142,7 @@ L40:
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DTGSY2 */
 }
 /* dtgsy2_ */
-

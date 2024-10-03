@@ -1,16 +1,25 @@
-/* ../netlib/dgttrf.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dgttrf.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DGTTRF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DGTTRF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgttrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgttrf.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgttrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgttrf.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgttrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgttrf.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -112,10 +121,11 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup doubleGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dgttrf_(integer *n, doublereal *dl, doublereal *d__, doublereal *du, doublereal *du2, integer *ipiv, integer *info)
+void dgttrf_(integer *n, doublereal *dl, doublereal *d__, doublereal *du, doublereal *du2,
+             integer *ipiv, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgttrf inputs: n %" FLA_IS "",*n);
+    AOCL_DTL_SNPRINTF("dgttrf inputs: n %" FLA_IS "", *n);
     /* System generated locals */
     integer i__1;
     doublereal d__1, d__2;
@@ -123,7 +133,8 @@ int dgttrf_(integer *n, doublereal *dl, doublereal *d__, doublereal *du, doubler
     integer i__;
     doublereal fact, temp;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -150,46 +161,40 @@ int dgttrf_(integer *n, doublereal *dl, doublereal *d__, doublereal *du, doubler
     --dl;
     /* Function Body */
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
         i__1 = -(*info);
         xerbla_("DGTTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Initialize IPIV(i) = i and DU2(I) = 0 */
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         ipiv[i__] = i__;
         /* L10: */
     }
     i__1 = *n - 2;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         du2[i__] = 0.;
         /* L20: */
     }
     i__1 = *n - 2;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if ((d__1 = d__[i__], f2c_dabs(d__1)) >= (d__2 = dl[i__], f2c_dabs(d__2)))
+        if((d__1 = d__[i__], f2c_dabs(d__1)) >= (d__2 = dl[i__], f2c_dabs(d__2)))
         {
             /* No row interchange required, eliminate DL(I) */
-            if (d__[i__] != 0.)
+            if(d__[i__] != 0.)
             {
                 fact = dl[i__] / d__[i__];
                 dl[i__] = fact;
@@ -211,12 +216,12 @@ int dgttrf_(integer *n, doublereal *dl, doublereal *d__, doublereal *du, doubler
         }
         /* L30: */
     }
-    if (*n > 1)
+    if(*n > 1)
     {
         i__ = *n - 1;
-        if ((d__1 = d__[i__], f2c_dabs(d__1)) >= (d__2 = dl[i__], f2c_dabs(d__2)))
+        if((d__1 = d__[i__], f2c_dabs(d__1)) >= (d__2 = dl[i__], f2c_dabs(d__2)))
         {
-            if (d__[i__] != 0.)
+            if(d__[i__] != 0.)
             {
                 fact = dl[i__] / d__[i__];
                 dl[i__] = fact;
@@ -236,11 +241,9 @@ int dgttrf_(integer *n, doublereal *dl, doublereal *d__, doublereal *du, doubler
     }
     /* Check for a zero on the diagonal of U. */
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if (d__[i__] == 0.)
+        if(d__[i__] == 0.)
         {
             *info = i__;
             goto L50;
@@ -249,7 +252,7 @@ int dgttrf_(integer *n, doublereal *dl, doublereal *d__, doublereal *du, doubler
     }
 L50:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGTTRF */
 }
 /* dgttrf_ */

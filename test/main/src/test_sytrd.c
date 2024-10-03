@@ -6,22 +6,26 @@
 #include "test_prototype.h"
 
 /* Generates Orthogonal matrix from ORGTR() after SYTRD() call. */
-void invoke_sytrd(integer datatype, char *uplo, char compz, integer n, void *A, integer lda, void *D, void *E, integer *info)
+void invoke_sytrd(integer datatype, char *uplo, char compz, integer n, void *A, integer lda,
+                  void *D, void *E, integer *info)
 {
     void *tau = NULL, *work = NULL;
     integer lwork = -1;
 
-    create_vector(datatype, &tau, n-1);
-    switch (datatype)
+    if(!n)
+        return;
+
+    create_vector(datatype, &tau, n - 1);
+    switch(datatype)
     {
         case FLOAT:
         {
             create_vector(datatype, &work, 1);
-            
+
             fla_lapack_ssytrd(uplo, &n, NULL, &lda, NULL, NULL, tau, work, &lwork, info);
 
             /* Get work size */
-            lwork = get_work_value( datatype, work );
+            lwork = get_work_value(datatype, work);
             free_vector(work);
             create_vector(datatype, &work, lwork);
 
@@ -35,7 +39,7 @@ void invoke_sytrd(integer datatype, char *uplo, char compz, integer n, void *A, 
             fla_lapack_sorgtr(uplo, &n, NULL, &lda, tau, work, &lwork, info);
 
             /* Get work size */
-            lwork = get_work_value( datatype, work );
+            lwork = get_work_value(datatype, work);
             free_vector(work);
             create_vector(datatype, &work, lwork);
 
@@ -52,7 +56,7 @@ void invoke_sytrd(integer datatype, char *uplo, char compz, integer n, void *A, 
             fla_lapack_dsytrd(uplo, &n, NULL, &lda, NULL, NULL, tau, work, &lwork, info);
 
             /* Get work size */
-            lwork = get_work_value( datatype, work );
+            lwork = get_work_value(datatype, work);
             free_vector(work);
             create_vector(datatype, &work, lwork);
 
@@ -66,7 +70,7 @@ void invoke_sytrd(integer datatype, char *uplo, char compz, integer n, void *A, 
             fla_lapack_dorgtr(uplo, &n, NULL, &lda, tau, work, &lwork, info);
 
             /* Get work size */
-            lwork = get_work_value( datatype, work );
+            lwork = get_work_value(datatype, work);
             free_vector(work);
             create_vector(datatype, &work, lwork);
 
@@ -83,7 +87,7 @@ void invoke_sytrd(integer datatype, char *uplo, char compz, integer n, void *A, 
             fla_lapack_chetrd(uplo, &n, NULL, &lda, NULL, NULL, tau, work, &lwork, info);
 
             /* Get work size */
-            lwork = get_work_value( datatype, work );
+            lwork = get_work_value(datatype, work);
             free_vector(work);
             create_vector(datatype, &work, lwork);
 
@@ -97,7 +101,7 @@ void invoke_sytrd(integer datatype, char *uplo, char compz, integer n, void *A, 
             fla_lapack_cungtr(uplo, &n, NULL, &lda, tau, work, &lwork, info);
 
             /* Get work size */
-            lwork = get_work_value( datatype, work );
+            lwork = get_work_value(datatype, work);
             free_vector(work);
             create_vector(datatype, &work, lwork);
 
@@ -114,7 +118,7 @@ void invoke_sytrd(integer datatype, char *uplo, char compz, integer n, void *A, 
             fla_lapack_zhetrd(uplo, &n, NULL, &lda, NULL, NULL, tau, work, &lwork, info);
 
             /* Get work size */
-            lwork = get_work_value( datatype, work );
+            lwork = get_work_value(datatype, work);
             free_vector(work);
             create_vector(datatype, &work, lwork);
 
@@ -128,7 +132,7 @@ void invoke_sytrd(integer datatype, char *uplo, char compz, integer n, void *A, 
             fla_lapack_zungtr(uplo, &n, NULL, &lda, tau, work, &lwork, info);
 
             /* Get work size */
-            lwork = get_work_value( datatype, work );
+            lwork = get_work_value(datatype, work);
             free_vector(work);
             create_vector(datatype, &work, lwork);
 

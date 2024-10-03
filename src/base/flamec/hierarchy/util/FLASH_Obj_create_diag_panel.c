@@ -13,10 +13,10 @@
 FLA_Error FLASH_Obj_create_diag_panel( FLA_Obj A, FLA_Obj* U )
 {
 	FLA_Datatype datatype;
-	dim_t        b_flash;
-	dim_t        b_flash_last;
-	dim_t        n_blocks_min_dim;
-	dim_t        m_U, n_U;
+	fla_dim_t        b_flash;
+	fla_dim_t        b_flash_last;
+	fla_dim_t        n_blocks_min_dim;
+	fla_dim_t        m_U, n_U;
 
 	// Acquire the datatype of the matrix to be factored.
 	datatype = FLA_Obj_datatype( A );

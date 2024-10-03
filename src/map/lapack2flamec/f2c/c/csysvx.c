@@ -1,19 +1,29 @@
-/* ../netlib/csysvx.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/csysvx.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
-/* > \brief <b> CSYSVX computes the solution to system of linear equations A * X = B for SY matrices</b> */
+/* > \brief <b> CSYSVX computes the solution to system of linear equations A * X = B for SY
+ * matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CSYSVX + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csysvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csysvx.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csysvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csysvx.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csysvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csysvx.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -90,7 +100,7 @@ static integer c_n1 = -1;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -273,15 +283,24 @@ the routine */
 /* > \ingroup complexSYsolve */
 /* ===================================================================== */
 /* Subroutine */
-int csysvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, integer *lda, complex *af, integer *ldaf, integer * ipiv, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *ferr, real *berr, complex *work, integer *lwork, real *rwork, integer *info)
+void csysvx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *a, integer *lda,
+             complex *af, integer *ldaf, integer *ipiv, complex *b, integer *ldb, complex *x,
+             integer *ldx, real *rcond, real *ferr, real *berr, complex *work, integer *lwork,
+             real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"csysvx inputs: fact %c, uplo %c, n %lld, nrhs %lld, lda %lld, ldaf %lld, ldb %lld, ldx %lld, lwork %lld",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx, *lwork);
+    snprintf(buffer, 256,
+             "csysvx inputs: fact %c, uplo %c, n %lld, nrhs %lld, lda %lld, ldaf %lld, ldb %lld, "
+             "ldx %lld, lwork %lld",
+             *fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx, *lwork);
 #else
-    snprintf(buffer, 256,"csysvx inputs: fact %c, uplo %c, n %d, nrhs %d, lda %d, ldaf %d, ldb %d, ldx %d, lwork %d",*fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx, *lwork);
+    snprintf(
+        buffer, 256,
+        "csysvx inputs: fact %c, uplo %c, n %d, nrhs %d, lda %d, ldaf %d, ldb %d, ldx %d, lwork %d",
+        *fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx, *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -289,20 +308,31 @@ int csysvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, inte
     integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2;
     /* Local variables */
     integer nb;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real anorm;
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern real clansy_(char *, char *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    int csycon_(char *, integer *, complex *, integer *, integer *, real *, real *, complex *, integer *), csyrfs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *), csytrf_(char *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+        void
+        csycon_(char *, integer *, complex *, integer *, integer *, real *, real *, complex *,
+                integer *),
+        csyrfs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *,
+                complex *, integer *, complex *, integer *, real *, real *, complex *, real *,
+                integer *),
+        csytrf_(char *, integer *, complex *, integer *, integer *, complex *, integer *,
+                integer *);
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    int csytrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
+        void
+        csytrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *,
+                integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -344,37 +374,37 @@ int csysvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, inte
     --rwork;
     /* Function Body */
     *info = 0;
-    nofact = lsame_(fact, "N");
+    nofact = lsame_(fact, "N", 1, 1);
     lquery = *lwork == -1;
-    if (! nofact && ! lsame_(fact, "F"))
+    if(!nofact && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    else if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldaf < fla_max(1,*n))
+    else if(*ldaf < fla_max(1, *n))
     {
         *info = -8;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -11;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -13;
     }
@@ -383,51 +413,51 @@ int csysvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, inte
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n << 1; // , expr subst
-        if (*lwork < fla_max(i__1,i__2) && ! lquery)
+        if(*lwork < fla_max(i__1, i__2) && !lquery)
         {
             *info = -18;
         }
     }
-    if (*info == 0)
+    if(*info == 0)
     {
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n << 1; // , expr subst
-        lwkopt = fla_max(i__1,i__2);
-        if (nofact)
+        lwkopt = fla_max(i__1, i__2);
+        if(nofact)
         {
             nb = ilaenv_(&c__1, "CSYTRF", uplo, n, &c_n1, &c_n1, &c_n1);
             /* Computing MAX */
             i__1 = lwkopt;
             i__2 = *n * nb; // , expr subst
-            lwkopt = fla_max(i__1,i__2);
+            lwkopt = fla_max(i__1, i__2);
         }
-        work[1].r = (real) lwkopt;
+        work[1].r = (real)lwkopt;
         work[1].i = 0.f; // , expr subst
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CSYSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (nofact)
+    if(nofact)
     {
         /* Compute the factorization A = U*D*U**T or A = L*D*L**T. */
         clacpy_(uplo, n, n, &a[a_offset], lda, &af[af_offset], ldaf);
         csytrf_(uplo, n, &af[af_offset], ldaf, &ipiv[1], &work[1], lwork, info);
         /* Return if INFO is non-zero. */
-        if (*info > 0)
+        if(*info > 0)
         {
             *rcond = 0.f;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A. */
@@ -439,16 +469,17 @@ int csysvx_(char *fact, char *uplo, integer *n, integer * nrhs, complex *a, inte
     csytrs_(uplo, n, nrhs, &af[af_offset], ldaf, &ipiv[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solutions and */
     /* compute error bounds and backward error estimates for them. */
-    csyrfs_(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1], &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
+    csyrfs_(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1], &b[b_offset], ldb,
+            &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
     /* Set INFO = N+1 if the matrix is singular to working precision. */
-    if (*rcond < slamch_("Epsilon"))
+    if(*rcond < slamch_("Epsilon"))
     {
         *info = *n + 1;
     }
-    work[1].r = (real) lwkopt;
+    work[1].r = (real)lwkopt;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSYSVX */
 }
 /* csysvx_ */

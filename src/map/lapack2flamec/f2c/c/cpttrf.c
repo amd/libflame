@@ -1,16 +1,25 @@
-/* ../netlib/cpttrf.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cpttrf.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CPTTRF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CPTTRF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpttrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpttrf.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpttrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpttrf.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpttrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpttrf.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -79,15 +88,15 @@ if k < N, the factorization could not */
 /* > \ingroup complexPTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cpttrf_(integer *n, real *d__, complex *e, integer *info)
+void cpttrf_(integer *n, real *d__, complex *e, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cpttrf inputs: n %lld",*n);
+    snprintf(buffer, 256, "cpttrf inputs: n %lld", *n);
 #else
-    snprintf(buffer, 256,"cpttrf inputs: n %d",*n);
+    snprintf(buffer, 256, "cpttrf inputs: n %d", *n);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -101,7 +110,8 @@ int cpttrf_(integer *n, real *d__, complex *e, integer *info)
     integer i__, i4;
     real eii, eir;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -126,28 +136,26 @@ int cpttrf_(integer *n, real *d__, complex *e, integer *info)
     --d__;
     /* Function Body */
     *info = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
         i__1 = -(*info);
         xerbla_("CPTTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Compute the L*D*L**H (or U**H *D*U) factorization of A. */
     i4 = (*n - 1) % 4;
     i__1 = i4;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if (d__[i__] <= 0.f)
+        if(d__[i__] <= 0.f)
         {
             *info = i__;
             goto L20;
@@ -166,13 +174,11 @@ int cpttrf_(integer *n, real *d__, complex *e, integer *info)
         /* L10: */
     }
     i__1 = *n - 4;
-    for (i__ = i4 + 1;
-            i__ <= i__1;
-            i__ += 4)
+    for(i__ = i4 + 1; i__ <= i__1; i__ += 4)
     {
         /* Drop out of the loop if d(i) <= 0: the matrix is not positive */
         /* definite. */
-        if (d__[i__] <= 0.f)
+        if(d__[i__] <= 0.f)
         {
             *info = i__;
             goto L20;
@@ -189,7 +195,7 @@ int cpttrf_(integer *n, real *d__, complex *e, integer *info)
         e[i__2].r = q__1.r;
         e[i__2].i = q__1.i; // , expr subst
         d__[i__ + 1] = d__[i__ + 1] - f * eir - g * eii;
-        if (d__[i__ + 1] <= 0.f)
+        if(d__[i__ + 1] <= 0.f)
         {
             *info = i__ + 1;
             goto L20;
@@ -206,7 +212,7 @@ int cpttrf_(integer *n, real *d__, complex *e, integer *info)
         e[i__2].r = q__1.r;
         e[i__2].i = q__1.i; // , expr subst
         d__[i__ + 2] = d__[i__ + 2] - f * eir - g * eii;
-        if (d__[i__ + 2] <= 0.f)
+        if(d__[i__ + 2] <= 0.f)
         {
             *info = i__ + 2;
             goto L20;
@@ -223,7 +229,7 @@ int cpttrf_(integer *n, real *d__, complex *e, integer *info)
         e[i__2].r = q__1.r;
         e[i__2].i = q__1.i; // , expr subst
         d__[i__ + 3] = d__[i__ + 3] - f * eir - g * eii;
-        if (d__[i__ + 3] <= 0.f)
+        if(d__[i__ + 3] <= 0.f)
         {
             *info = i__ + 3;
             goto L20;
@@ -243,13 +249,13 @@ int cpttrf_(integer *n, real *d__, complex *e, integer *info)
         /* L110: */
     }
     /* Check d(n) for positive definiteness. */
-    if (d__[*n] <= 0.f)
+    if(d__[*n] <= 0.f)
     {
         *info = *n;
     }
 L20:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPTTRF */
 }
 /* cpttrf_ */

@@ -1,16 +1,25 @@
-/* ../netlib/claqhb.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/claqhb.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CLAQHB scales a Hermitian band matrix, using scaling factors computed by cpbequ. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLAQHB + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claqhb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claqhb.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claqhb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claqhb.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claqhb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claqhb.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -65,7 +74,7 @@
 /* > j-th column of A is stored in the j-th column of the array AB */
 /* > as follows: */
 /* > if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > */
 /* > On exit, if INFO = 0, the triangular factor U or L from the */
@@ -127,15 +136,17 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int claqhb_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, real *s, real *scond, real *amax, char *equed)
+void claqhb_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, real *s, real *scond,
+             real *amax, char *equed)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"claqhb inputs: uplo %c, n %lld, kd %lld, ldab %lld",*uplo, *n, *kd, *ldab);
+    snprintf(buffer, 256, "claqhb inputs: uplo %c, n %lld, kd %lld, ldab %lld", *uplo, *n, *kd,
+             *ldab);
 #else
-    snprintf(buffer, 256,"claqhb inputs: uplo %c, n %d, kd %d, ldab %d",*uplo, *n, *kd, *ldab);
+    snprintf(buffer, 256, "claqhb inputs: uplo %c, n %d, kd %d, ldab %d", *uplo, *n, *kd, *ldab);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -146,7 +157,7 @@ int claqhb_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, rea
     /* Local variables */
     integer i__, j;
     real cj, large;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real small_val;
     extern real slamch_(char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -174,16 +185,16 @@ int claqhb_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, rea
     ab -= ab_offset;
     --s;
     /* Function Body */
-    if (*n <= 0)
+    if(*n <= 0)
     {
         *(unsigned char *)equed = 'N';
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Initialize LARGE and SMALL. */
     small_val = slamch_("Safe minimum") / slamch_("Precision");
     large = 1.f / small_val;
-    if (*scond >= .1f && *amax >= small_val && *amax <= large)
+    if(*scond >= .1f && *amax >= small_val && *amax <= large)
     {
         /* No equilibration */
         *(unsigned char *)equed = 'N';
@@ -191,22 +202,18 @@ int claqhb_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, rea
     else
     {
         /* Replace A by diag(S) * A * diag(S). */
-        if (lsame_(uplo, "U"))
+        if(lsame_(uplo, "U", 1, 1))
         {
             /* Upper triangle of A is stored in band format. */
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 cj = s[j];
                 /* Computing MAX */
                 i__2 = 1;
                 i__3 = j - *kd; // , expr subst
                 i__4 = j - 1;
-                for (i__ = fla_max(i__2,i__3);
-                        i__ <= i__4;
-                        ++i__)
+                for(i__ = fla_max(i__2, i__3); i__ <= i__4; ++i__)
                 {
                     i__2 = *kd + 1 + i__ - j + j * ab_dim1;
                     r__1 = cj * s[i__];
@@ -229,9 +236,7 @@ int claqhb_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, rea
         {
             /* Lower triangle of A is stored. */
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 cj = s[j];
                 i__4 = j * ab_dim1 + 1;
@@ -242,10 +247,8 @@ int claqhb_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, rea
                 /* Computing MIN */
                 i__2 = *n;
                 i__3 = j + *kd; // , expr subst
-                i__4 = fla_min(i__2,i__3);
-                for (i__ = j + 1;
-                        i__ <= i__4;
-                        ++i__)
+                i__4 = fla_min(i__2, i__3);
+                for(i__ = j + 1; i__ <= i__4; ++i__)
                 {
                     i__2 = i__ + 1 - j + j * ab_dim1;
                     r__1 = cj * s[i__];
@@ -262,7 +265,7 @@ int claqhb_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, rea
         *(unsigned char *)equed = 'Y';
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAQHB */
 }
 /* claqhb_ */

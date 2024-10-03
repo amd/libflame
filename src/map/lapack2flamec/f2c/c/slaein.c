@@ -1,18 +1,28 @@
-/* ../netlib/slaein.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slaein.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b SLAEIN computes a specified right or left eigenvector of an upper Hessenberg matrix by inverse iteration. */
+/* > \brief \b SLAEIN computes a specified right or left eigenvector of an upper Hessenberg matrix
+ * by inverse iteration. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLAEIN + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaein. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaein.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaein. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaein.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaein. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaein.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -43,7 +53,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > RIGHTV is LOGICAL */
 /* > = .TRUE. : compute right eigenvector;
-*/
+ */
 /* > = .FALSE.: compute left eigenvector. */
 /* > \endverbatim */
 /* > */
@@ -106,7 +116,7 @@ if WI.ne.0.0 (complex eigenvalue), */
 /* > VR and VI contain the real and imaginary parts of the */
 /* > computed complex eigenvector. The eigenvector is normalized */
 /* > so that the component of largest magnitude has magnitude 1;
-*/
+ */
 /* > here the magnitude of a complex number (x,y) is taken to be */
 /* > |x| + |y|. */
 /* > VI is not referenced if WI = 0.0. */
@@ -165,7 +175,9 @@ VR is set to the */
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *ldh, real *wr, real *wi, real *vr, real *vi, real *b, integer *ldb, real *work, real *eps3, real *smlnum, real *bignum, integer *info)
+void slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *ldh, real *wr,
+             real *wi, real *vr, real *vi, real *b, integer *ldb, real *work, real *eps3,
+             real *smlnum, real *bignum, integer *info)
 {
     /* System generated locals */
     integer b_dim1, b_offset, h_dim1, h_offset, i__1, i__2, i__3, i__4;
@@ -182,7 +194,8 @@ int slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *ld
     extern real snrm2_(integer *, real *, integer *);
     real scale;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     char trans[1];
     real vcrit;
     extern real sasum_(integer *, real *, integer *);
@@ -191,11 +204,14 @@ int slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *ld
     real absbii, absbjj;
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    int sladiv_(real *, real *, real *, real *, real *, real *);
+        void
+        sladiv_(real *, real *, real *, real *, real *, real *);
     char normin[1];
     real nrmsml;
     extern /* Subroutine */
-    int slatrs_(char *, char *, char *, char *, integer *, real *, integer *, real *, real *, real *, integer *);
+        void
+        slatrs_(char *, char *, char *, char *, integer *, real *, integer *, real *, real *,
+                real *, integer *);
     real growto;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -231,23 +247,19 @@ int slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *ld
     *info = 0;
     /* GROWTO is the threshold used in the acceptance test for an */
     /* eigenvector. */
-    rootn = sqrt((real) (*n));
+    rootn = sqrt((real)(*n));
     growto = .1f / rootn;
     /* Computing MAX */
     r__1 = 1.f;
     r__2 = *eps3 * rootn; // , expr subst
-    nrmsml = fla_max(r__1,r__2) * *smlnum;
+    nrmsml = fla_max(r__1, r__2) * *smlnum;
     /* Form B = H - (WR,WI)*I (except that the subdiagonal elements and */
     /* the imaginary parts of the diagonal elements are not stored). */
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         i__2 = j - 1;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             b[i__ + j * b_dim1] = h__[i__ + j * h_dim1];
             /* L10: */
@@ -255,16 +267,14 @@ int slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *ld
         b[j + j * b_dim1] = h__[j + j * h_dim1] - *wr;
         /* L20: */
     }
-    if (*wi == 0.f)
+    if(*wi == 0.f)
     {
         /* Real eigenvalue. */
-        if (*noinit)
+        if(*noinit)
         {
             /* Set initial vector. */
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 vr[i__] = *eps3;
                 /* L30: */
@@ -274,28 +284,24 @@ int slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *ld
         {
             /* Scale supplied initial vector. */
             vnorm = snrm2_(n, &vr[1], &c__1);
-            r__1 = *eps3 * rootn / fla_max(vnorm,nrmsml);
+            r__1 = *eps3 * rootn / fla_max(vnorm, nrmsml);
             sscal_(n, &r__1, &vr[1], &c__1);
         }
-        if (*rightv)
+        if(*rightv)
         {
             /* LU decomposition with partial pivoting of B, replacing zero */
             /* pivots by EPS3. */
             i__1 = *n - 1;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 ei = h__[i__ + 1 + i__ * h_dim1];
-                if ((r__1 = b[i__ + i__ * b_dim1], f2c_abs(r__1)) < f2c_abs(ei))
+                if((r__1 = b[i__ + i__ * b_dim1], f2c_abs(r__1)) < f2c_abs(ei))
                 {
                     /* Interchange rows and eliminate. */
                     x = b[i__ + i__ * b_dim1] / ei;
                     b[i__ + i__ * b_dim1] = ei;
                     i__2 = *n;
-                    for (j = i__ + 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = i__ + 1; j <= i__2; ++j)
                     {
                         temp = b[i__ + 1 + j * b_dim1];
                         b[i__ + 1 + j * b_dim1] = b[i__ + j * b_dim1] - x * temp;
@@ -306,26 +312,24 @@ int slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *ld
                 else
                 {
                     /* Eliminate without interchange. */
-                    if (b[i__ + i__ * b_dim1] == 0.f)
+                    if(b[i__ + i__ * b_dim1] == 0.f)
                     {
                         b[i__ + i__ * b_dim1] = *eps3;
                     }
                     x = ei / b[i__ + i__ * b_dim1];
-                    if (x != 0.f)
+                    if(x != 0.f)
                     {
                         i__2 = *n;
-                        for (j = i__ + 1;
-                                j <= i__2;
-                                ++j)
+                        for(j = i__ + 1; j <= i__2; ++j)
                         {
-                            b[i__ + 1 + j * b_dim1] -= x * b[i__ + j * b_dim1] ;
+                            b[i__ + 1 + j * b_dim1] -= x * b[i__ + j * b_dim1];
                             /* L50: */
                         }
                     }
                 }
                 /* L60: */
             }
-            if (b[*n + *n * b_dim1] == 0.f)
+            if(b[*n + *n * b_dim1] == 0.f)
             {
                 b[*n + *n * b_dim1] = *eps3;
             }
@@ -335,20 +339,16 @@ int slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *ld
         {
             /* UL decomposition with partial pivoting of B, replacing zero */
             /* pivots by EPS3. */
-            for (j = *n;
-                    j >= 2;
-                    --j)
+            for(j = *n; j >= 2; --j)
             {
                 ej = h__[j + (j - 1) * h_dim1];
-                if ((r__1 = b[j + j * b_dim1], f2c_abs(r__1)) < f2c_abs(ej))
+                if((r__1 = b[j + j * b_dim1], f2c_abs(r__1)) < f2c_abs(ej))
                 {
                     /* Interchange columns and eliminate. */
                     x = b[j + j * b_dim1] / ej;
                     b[j + j * b_dim1] = ej;
                     i__1 = j - 1;
-                    for (i__ = 1;
-                            i__ <= i__1;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__1; ++i__)
                     {
                         temp = b[i__ + (j - 1) * b_dim1];
                         b[i__ + (j - 1) * b_dim1] = b[i__ + j * b_dim1] - x * temp;
@@ -359,17 +359,15 @@ int slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *ld
                 else
                 {
                     /* Eliminate without interchange. */
-                    if (b[j + j * b_dim1] == 0.f)
+                    if(b[j + j * b_dim1] == 0.f)
                     {
                         b[j + j * b_dim1] = *eps3;
                     }
                     x = ej / b[j + j * b_dim1];
-                    if (x != 0.f)
+                    if(x != 0.f)
                     {
                         i__1 = j - 1;
-                        for (i__ = 1;
-                                i__ <= i__1;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             b[i__ + (j - 1) * b_dim1] -= x * b[i__ + j * b_dim1];
                             /* L80: */
@@ -378,7 +376,7 @@ int slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *ld
                 }
                 /* L90: */
             }
-            if (b[b_dim1 + 1] == 0.f)
+            if(b[b_dim1 + 1] == 0.f)
             {
                 b[b_dim1 + 1] = *eps3;
             }
@@ -386,18 +384,17 @@ int slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *ld
         }
         *(unsigned char *)normin = 'N';
         i__1 = *n;
-        for (its = 1;
-                its <= i__1;
-                ++its)
+        for(its = 1; its <= i__1; ++its)
         {
             /* Solve U*x = scale*v for a right eigenvector */
             /* or U**T*x = scale*v for a left eigenvector, */
             /* overwriting x on v. */
-            slatrs_("Upper", trans, "Nonunit", normin, n, &b[b_offset], ldb, & vr[1], &scale, &work[1], &ierr);
+            slatrs_("Upper", trans, "Nonunit", normin, n, &b[b_offset], ldb, &vr[1], &scale,
+                    &work[1], &ierr);
             *(unsigned char *)normin = 'Y';
             /* Test for sufficient growth in the norm of v. */
             vnorm = sasum_(n, &vr[1], &c__1);
-            if (vnorm >= growto * scale)
+            if(vnorm >= growto * scale)
             {
                 goto L120;
             }
@@ -405,9 +402,7 @@ int slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *ld
             temp = *eps3 / (rootn + 1.f);
             vr[1] = *eps3;
             i__2 = *n;
-            for (i__ = 2;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 2; i__ <= i__2; ++i__)
             {
                 vr[i__] = temp;
                 /* L100: */
@@ -417,7 +412,7 @@ int slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *ld
         }
         /* Failure to find eigenvector in N iterations. */
         *info = 1;
-L120: /* Normalize eigenvector. */
+    L120: /* Normalize eigenvector. */
         i__ = isamax_(n, &vr[1], &c__1);
         r__2 = 1.f / (r__1 = vr[i__], f2c_abs(r__1));
         sscal_(n, &r__2, &vr[1], &c__1);
@@ -425,13 +420,11 @@ L120: /* Normalize eigenvector. */
     else
     {
         /* Complex eigenvalue. */
-        if (*noinit)
+        if(*noinit)
         {
             /* Set initial vector. */
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 vr[i__] = *eps3;
                 vi[i__] = 0.f;
@@ -444,11 +437,11 @@ L120: /* Normalize eigenvector. */
             r__1 = snrm2_(n, &vr[1], &c__1);
             r__2 = snrm2_(n, &vi[1], &c__1);
             norm = slapy2_(&r__1, &r__2);
-            rec = *eps3 * rootn / fla_max(norm,nrmsml);
+            rec = *eps3 * rootn / fla_max(norm, nrmsml);
             sscal_(n, &rec, &vr[1], &c__1);
             sscal_(n, &rec, &vi[1], &c__1);
         }
-        if (*rightv)
+        if(*rightv)
         {
             /* LU decomposition with partial pivoting of B, replacing zero */
             /* pivots by EPS3. */
@@ -456,21 +449,17 @@ L120: /* Normalize eigenvector. */
             /* B(j+1,i). */
             b[b_dim1 + 2] = -(*wi);
             i__1 = *n;
-            for (i__ = 2;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 2; i__ <= i__1; ++i__)
             {
                 b[i__ + 1 + b_dim1] = 0.f;
                 /* L140: */
             }
             i__1 = *n - 1;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 absbii = slapy2_(&b[i__ + i__ * b_dim1], &b[i__ + 1 + i__ * b_dim1]);
                 ei = h__[i__ + 1 + i__ * h_dim1];
-                if (absbii < f2c_abs(ei))
+                if(absbii < f2c_abs(ei))
                 {
                     /* Interchange rows and eliminate. */
                     xr = b[i__ + i__ * b_dim1] / ei;
@@ -478,9 +467,7 @@ L120: /* Normalize eigenvector. */
                     b[i__ + i__ * b_dim1] = ei;
                     b[i__ + 1 + i__ * b_dim1] = 0.f;
                     i__2 = *n;
-                    for (j = i__ + 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = i__ + 1; j <= i__2; ++j)
                     {
                         temp = b[i__ + 1 + j * b_dim1];
                         b[i__ + 1 + j * b_dim1] = b[i__ + j * b_dim1] - xr * temp;
@@ -496,7 +483,7 @@ L120: /* Normalize eigenvector. */
                 else
                 {
                     /* Eliminate without interchanging rows. */
-                    if (absbii == 0.f)
+                    if(absbii == 0.f)
                     {
                         b[i__ + i__ * b_dim1] = *eps3;
                         b[i__ + 1 + i__ * b_dim1] = 0.f;
@@ -506,12 +493,12 @@ L120: /* Normalize eigenvector. */
                     xr = b[i__ + i__ * b_dim1] * ei;
                     xi = -b[i__ + 1 + i__ * b_dim1] * ei;
                     i__2 = *n;
-                    for (j = i__ + 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = i__ + 1; j <= i__2; ++j)
                     {
-                        b[i__ + 1 + j * b_dim1] = b[i__ + 1 + j * b_dim1] - xr * b[i__ + j * b_dim1] + xi * b[j + 1 + i__ * b_dim1];
-                        b[j + 1 + (i__ + 1) * b_dim1] = -xr * b[j + 1 + i__ * b_dim1] - xi * b[i__ + j * b_dim1];
+                        b[i__ + 1 + j * b_dim1] = b[i__ + 1 + j * b_dim1] - xr * b[i__ + j * b_dim1]
+                                                  + xi * b[j + 1 + i__ * b_dim1];
+                        b[j + 1 + (i__ + 1) * b_dim1]
+                            = -xr * b[j + 1 + i__ * b_dim1] - xi * b[i__ + j * b_dim1];
                         /* L160: */
                     }
                     b[i__ + 2 + (i__ + 1) * b_dim1] -= *wi;
@@ -519,10 +506,11 @@ L120: /* Normalize eigenvector. */
                 /* Compute 1-norm of offdiagonal elements of i-th row. */
                 i__2 = *n - i__;
                 i__3 = *n - i__;
-                work[i__] = sasum_(&i__2, &b[i__ + (i__ + 1) * b_dim1], ldb) + sasum_(&i__3, &b[i__ + 2 + i__ * b_dim1], &c__1);
+                work[i__] = sasum_(&i__2, &b[i__ + (i__ + 1) * b_dim1], ldb)
+                            + sasum_(&i__3, &b[i__ + 2 + i__ * b_dim1], &c__1);
                 /* L170: */
             }
-            if (b[*n + *n * b_dim1] == 0.f && b[*n + 1 + *n * b_dim1] == 0.f)
+            if(b[*n + *n * b_dim1] == 0.f && b[*n + 1 + *n * b_dim1] == 0.f)
             {
                 b[*n + *n * b_dim1] = *eps3;
             }
@@ -539,20 +527,16 @@ L120: /* Normalize eigenvector. */
             /* B(j+1,i). */
             b[*n + 1 + *n * b_dim1] = *wi;
             i__1 = *n - 1;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 b[*n + 1 + j * b_dim1] = 0.f;
                 /* L180: */
             }
-            for (j = *n;
-                    j >= 2;
-                    --j)
+            for(j = *n; j >= 2; --j)
             {
                 ej = h__[j + (j - 1) * h_dim1];
                 absbjj = slapy2_(&b[j + j * b_dim1], &b[j + 1 + j * b_dim1]);
-                if (absbjj < f2c_abs(ej))
+                if(absbjj < f2c_abs(ej))
                 {
                     /* Interchange columns and eliminate */
                     xr = b[j + j * b_dim1] / ej;
@@ -560,9 +544,7 @@ L120: /* Normalize eigenvector. */
                     b[j + j * b_dim1] = ej;
                     b[j + 1 + j * b_dim1] = 0.f;
                     i__1 = j - 1;
-                    for (i__ = 1;
-                            i__ <= i__1;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__1; ++i__)
                     {
                         temp = b[i__ + (j - 1) * b_dim1];
                         b[i__ + (j - 1) * b_dim1] = b[i__ + j * b_dim1] - xr * temp;
@@ -578,7 +560,7 @@ L120: /* Normalize eigenvector. */
                 else
                 {
                     /* Eliminate without interchange. */
-                    if (absbjj == 0.f)
+                    if(absbjj == 0.f)
                     {
                         b[j + j * b_dim1] = *eps3;
                         b[j + 1 + j * b_dim1] = 0.f;
@@ -588,12 +570,13 @@ L120: /* Normalize eigenvector. */
                     xr = b[j + j * b_dim1] * ej;
                     xi = -b[j + 1 + j * b_dim1] * ej;
                     i__1 = j - 1;
-                    for (i__ = 1;
-                            i__ <= i__1;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__1; ++i__)
                     {
-                        b[i__ + (j - 1) * b_dim1] = b[i__ + (j - 1) * b_dim1] - xr * b[i__ + j * b_dim1] + xi * b[j + 1 + i__ * b_dim1];
-                        b[j + i__ * b_dim1] = -xr * b[j + 1 + i__ * b_dim1] - xi * b[i__ + j * b_dim1];
+                        b[i__ + (j - 1) * b_dim1] = b[i__ + (j - 1) * b_dim1]
+                                                    - xr * b[i__ + j * b_dim1]
+                                                    + xi * b[j + 1 + i__ * b_dim1];
+                        b[j + i__ * b_dim1]
+                            = -xr * b[j + 1 + i__ * b_dim1] - xi * b[i__ + j * b_dim1];
                         /* L200: */
                     }
                     b[j + (j - 1) * b_dim1] += *wi;
@@ -601,10 +584,11 @@ L120: /* Normalize eigenvector. */
                 /* Compute 1-norm of offdiagonal elements of j-th column. */
                 i__1 = j - 1;
                 i__2 = j - 1;
-                work[j] = sasum_(&i__1, &b[j * b_dim1 + 1], &c__1) + sasum_(& i__2, &b[j + 1 + b_dim1], ldb);
+                work[j] = sasum_(&i__1, &b[j * b_dim1 + 1], &c__1)
+                          + sasum_(&i__2, &b[j + 1 + b_dim1], ldb);
                 /* L210: */
             }
-            if (b[b_dim1 + 1] == 0.f && b[b_dim1 + 2] == 0.f)
+            if(b[b_dim1 + 1] == 0.f && b[b_dim1 + 2] == 0.f)
             {
                 b[b_dim1 + 1] = *eps3;
             }
@@ -614,9 +598,7 @@ L120: /* Normalize eigenvector. */
             i3 = 1;
         }
         i__1 = *n;
-        for (its = 1;
-                its <= i__1;
-                ++its)
+        for(its = 1; its <= i__1; ++its)
         {
             scale = 1.f;
             vmax = 1.f;
@@ -626,11 +608,9 @@ L120: /* Normalize eigenvector. */
             /* overwriting (xr,xi) on (vr,vi). */
             i__2 = i2;
             i__3 = i3;
-            for (i__ = i1;
-                    i__3 < 0 ? i__ >= i__2 : i__ <= i__2;
-                    i__ += i__3)
+            for(i__ = i1; i__3 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__3)
             {
-                if (work[i__] > vcrit)
+                if(work[i__] > vcrit)
                 {
                     rec = 1.f / vmax;
                     sscal_(n, &rec, &vr[1], &c__1);
@@ -641,12 +621,10 @@ L120: /* Normalize eigenvector. */
                 }
                 xr = vr[i__];
                 xi = vi[i__];
-                if (*rightv)
+                if(*rightv)
                 {
                     i__4 = *n;
-                    for (j = i__ + 1;
-                            j <= i__4;
-                            ++j)
+                    for(j = i__ + 1; j <= i__4; ++j)
                     {
                         xr = xr - b[i__ + j * b_dim1] * vr[j] + b[j + 1 + i__ * b_dim1] * vi[j];
                         xi = xi - b[i__ + j * b_dim1] * vi[j] - b[j + 1 + i__ * b_dim1] * vr[j];
@@ -656,22 +634,21 @@ L120: /* Normalize eigenvector. */
                 else
                 {
                     i__4 = i__ - 1;
-                    for (j = 1;
-                            j <= i__4;
-                            ++j)
+                    for(j = 1; j <= i__4; ++j)
                     {
                         xr = xr - b[j + i__ * b_dim1] * vr[j] + b[i__ + 1 + j * b_dim1] * vi[j];
                         xi = xi - b[j + i__ * b_dim1] * vi[j] - b[i__ + 1 + j * b_dim1] * vr[j];
                         /* L230: */
                     }
                 }
-                w = (r__1 = b[i__ + i__ * b_dim1], f2c_abs(r__1)) + (r__2 = b[i__ + 1 + i__ * b_dim1], f2c_abs(r__2));
-                if (w > *smlnum)
+                w = (r__1 = b[i__ + i__ * b_dim1], f2c_abs(r__1))
+                    + (r__2 = b[i__ + 1 + i__ * b_dim1], f2c_abs(r__2));
+                if(w > *smlnum)
                 {
-                    if (w < 1.f)
+                    if(w < 1.f)
                     {
                         w1 = f2c_abs(xr) + f2c_abs(xi);
-                        if (w1 > w * *bignum)
+                        if(w1 > w * *bignum)
                         {
                             rec = 1.f / w1;
                             sscal_(n, &rec, &vr[1], &c__1);
@@ -683,18 +660,17 @@ L120: /* Normalize eigenvector. */
                         }
                     }
                     /* Divide by diagonal element of B. */
-                    sladiv_(&xr, &xi, &b[i__ + i__ * b_dim1], &b[i__ + 1 + i__ * b_dim1], &vr[i__], &vi[i__]);
+                    sladiv_(&xr, &xi, &b[i__ + i__ * b_dim1], &b[i__ + 1 + i__ * b_dim1], &vr[i__],
+                            &vi[i__]);
                     /* Computing MAX */
-                    r__3 = (r__1 = vr[i__], f2c_abs(r__1)) + (r__2 = vi[i__], f2c_abs( r__2));
-                    vmax = fla_max(r__3,vmax);
+                    r__3 = (r__1 = vr[i__], f2c_abs(r__1)) + (r__2 = vi[i__], f2c_abs(r__2));
+                    vmax = fla_max(r__3, vmax);
                     vcrit = *bignum / vmax;
                 }
                 else
                 {
                     i__4 = *n;
-                    for (j = 1;
-                            j <= i__4;
-                            ++j)
+                    for(j = 1; j <= i__4; ++j)
                     {
                         vr[j] = 0.f;
                         vi[j] = 0.f;
@@ -710,7 +686,7 @@ L120: /* Normalize eigenvector. */
             }
             /* Test for sufficient growth in the norm of (VR,VI). */
             vnorm = sasum_(n, &vr[1], &c__1) + sasum_(n, &vi[1], &c__1);
-            if (vnorm >= growto * scale)
+            if(vnorm >= growto * scale)
             {
                 goto L280;
             }
@@ -719,9 +695,7 @@ L120: /* Normalize eigenvector. */
             vr[1] = *eps3;
             vi[1] = 0.f;
             i__3 = *n;
-            for (i__ = 2;
-                    i__ <= i__3;
-                    ++i__)
+            for(i__ = 2; i__ <= i__3; ++i__)
             {
                 vr[i__] = y;
                 vi[i__] = 0.f;
@@ -732,17 +706,16 @@ L120: /* Normalize eigenvector. */
         }
         /* Failure to find eigenvector in N iterations */
         *info = 1;
-L280: /* Normalize eigenvector. */
+    L280: /* Normalize eigenvector. */
         vnorm = 0.f;
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* Computing MAX */
             r__3 = vnorm;
-            r__4 = (r__1 = vr[i__], f2c_abs(r__1)) + (r__2 = vi[i__], f2c_abs(r__2));  // , expr subst
-            vnorm = fla_max(r__3,r__4);
+            r__4
+                = (r__1 = vr[i__], f2c_abs(r__1)) + (r__2 = vi[i__], f2c_abs(r__2)); // , expr subst
+            vnorm = fla_max(r__3, r__4);
             /* L290: */
         }
         r__1 = 1.f / vnorm;
@@ -750,7 +723,7 @@ L280: /* Normalize eigenvector. */
         r__1 = 1.f / vnorm;
         sscal_(n, &r__1, &vi[1], &c__1);
     }
-    return 0;
+    return;
     /* End of SLAEIN */
 }
 /* slaein_ */

@@ -176,24 +176,26 @@ int lapack_sormlq(char *side, char *trans, integer *m, integer *n, integer *k, r
     /* Local variables */
     logical left;
     integer i__;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer nbmin, iinfo, i1, i2, i3, ib, ic, jc;
     extern /* Subroutine */
     int lapack_sorml2(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *);
     integer nb, mi, ni, nq, nw;
     extern /* Subroutine */
-    int slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int slarft_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
+    void slarft_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
     logical notran;
     integer ldwork;
     char transt[1];
     integer lwkopt;
     logical lquery;
     integer iwt;
+#if FLA_OPENMP_MULTITHREADING
     int thread_id, actual_num_threads;
     integer index, mi_sub, ni_sub;
+#endif
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -229,8 +231,8 @@ int lapack_sormlq(char *side, char *trans, integer *m, integer *n, integer *k, r
     --work;
     /* Function Body */
     *info = 0;
-    left = lsame_(side, "L");
-    notran = lsame_(trans, "N");
+    left = lsame_(side, "L", 1, 1);
+    notran = lsame_(trans, "N", 1, 1);
     lquery = *lwork == -1;
     /* NQ is the order of Q and NW is the minimum dimension of WORK */
     if (left)
@@ -243,11 +245,11 @@ int lapack_sormlq(char *side, char *trans, integer *m, integer *n, integer *k, r
         nq = *n;
         nw = fla_max(1,*m);
     }
-    if (! left && ! lsame_(side, "R"))
+    if (! left && ! lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T"))
+    else if (! notran && ! lsame_(trans, "T", 1, 1))
     {
         *info = -2;
     }

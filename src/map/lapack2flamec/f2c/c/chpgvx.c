@@ -1,5 +1,8 @@
-/* ../netlib/chpgvx.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/chpgvx.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b CHPGVX */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CHPGVX + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chpgvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chpgvx.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chpgvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chpgvx.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chpgvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chpgvx.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -58,7 +67,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > JOBZ is CHARACTER*1 */
 /* > = 'N': Compute eigenvalues only;
-*/
+ */
 /* > = 'V': Compute eigenvalues and eigenvectors. */
 /* > \endverbatim */
 /* > */
@@ -66,10 +75,10 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > RANGE is CHARACTER*1 */
 /* > = 'A': all eigenvalues will be found;
-*/
+ */
 /* > = 'V': all eigenvalues in the half-open interval (VL,VU] */
 /* > will be found;
-*/
+ */
 /* > = 'I': the IL-th through IU-th eigenvalues will be found. */
 /* > \endverbatim */
 /* > */
@@ -77,7 +86,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangles of A and B are stored;
-*/
+ */
 /* > = 'L': Lower triangles of A and B are stored. */
 /* > \endverbatim */
 /* > */
@@ -94,7 +103,7 @@ static integer c__1 = 1;
 /* > A, packed columnwise in a linear array. The j-th column of A */
 /* > is stored in the array AP as follows: */
 /* > if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AP(i + (j-1)*(2*n-j)/2) = A(i,j) for j<=i<=n. */
 /* > */
 /* > On exit, the contents of AP are destroyed. */
@@ -107,7 +116,7 @@ static integer c__1 = 1;
 /* > B, packed columnwise in a linear array. The j-th column of B */
 /* > is stored in the array BP as follows: */
 /* > if UPLO = 'U', BP(i + (j-1)*j/2) = B(i,j) for 1<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', BP(i + (j-1)*(2*n-j)/2) = B(i,j) for j<=i<=n. */
 /* > */
 /* > On exit, the triangular factor U or L from the Cholesky */
@@ -201,7 +210,7 @@ IL = 1 and IU = 0 if N = 0. */
 /* > column of Z holding the eigenvector associated with W(i). */
 /* > The eigenvectors are normalized as follows: */
 /* > if ITYPE = 1 or 2, Z**H*B*Z = I;
-*/
+ */
 /* > if ITYPE = 3, Z**H*inv(B)*Z = I. */
 /* > */
 /* > If an eigenvector fails to converge, then that column of Z */
@@ -251,7 +260,7 @@ if RANGE = 'V', the exact value of M */
 /* > < 0: if INFO = -i, the i-th argument had an illegal value */
 /* > > 0: CPPTRF or CHPEVX returned an error code: */
 /* > <= N: if INFO = i, CHPEVX failed to converge;
-*/
+ */
 /* > i eigenvectors failed to converge. Their indices */
 /* > are stored in array IFAIL. */
 /* > > N: if INFO = N + i, for 1 <= i <= n, then the leading */
@@ -273,15 +282,24 @@ if RANGE = 'V', the exact value of M */
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-int chpgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, complex *ap, complex *bp, real *vl, real *vu, integer *il, integer *iu, real *abstol, integer *m, real *w, complex * z__, integer *ldz, complex *work, real *rwork, integer *iwork, integer *ifail, integer *info)
+void chpgvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, complex *ap,
+             complex *bp, real *vl, real *vu, integer *il, integer *iu, real *abstol, integer *m,
+             real *w, complex *z__, integer *ldz, complex *work, real *rwork, integer *iwork,
+             integer *ifail, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"chpgvx inputs: itype %lld, jobz %c, range %c, uplo %c, n %lld, il %lld, iu %lld, m %lld, ldz %lld",*itype, *jobz, *range, *uplo, *n, *il, *iu, *m, *ldz);
+    snprintf(buffer, 256,
+             "chpgvx inputs: itype %lld, jobz %c, range %c, uplo %c, n %lld, il %lld, iu %lld, m "
+             "%lld, ldz %lld",
+             *itype, *jobz, *range, *uplo, *n, *il, *iu, *m, *ldz);
 #else
-    snprintf(buffer, 256,"chpgvx inputs: itype %d, jobz %c, range %c, uplo %c, n %d, il %d, iu %d, m %d, ldz %d",*itype, *jobz, *range, *uplo, *n, *il, *iu, *m, *ldz);
+    snprintf(
+        buffer, 256,
+        "chpgvx inputs: itype %d, jobz %c, range %c, uplo %c, n %d, il %d, iu %d, m %d, ldz %d",
+        *itype, *jobz, *range, *uplo, *n, *il, *iu, *m, *ldz);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -289,16 +307,26 @@ int chpgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, co
     integer z_dim1, z_offset, i__1;
     /* Local variables */
     integer j;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     char trans[1];
     extern /* Subroutine */
-    int ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
+        void
+        ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *);
+        void
+        ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *);
     logical wantz, alleig, indeig, valeig;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), chpgst_( integer *, char *, integer *, complex *, complex *, integer *), chpevx_(char *, char *, char *, integer *, complex *, real *, real *, integer *, integer *, real *, integer *, real *, complex *, integer *, complex *, real *, integer *, integer *, integer *), cpptrf_(char *, integer *, complex *, integer *);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
+        chpgst_(integer *, char *, integer *, complex *, complex *, integer *),
+        chpevx_(char *, char *, char *, integer *, complex *, real *, real *, integer *, integer *,
+                real *, integer *, real *, complex *, integer *, complex *, real *, integer *,
+                integer *, integer *),
+        cpptrf_(char *, integer *, complex *, integer *);
     /* -- LAPACK driver routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -330,97 +358,98 @@ int chpgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, co
     --iwork;
     --ifail;
     /* Function Body */
-    wantz = lsame_(jobz, "V");
-    upper = lsame_(uplo, "U");
-    alleig = lsame_(range, "A");
-    valeig = lsame_(range, "V");
-    indeig = lsame_(range, "I");
+    wantz = lsame_(jobz, "V", 1, 1);
+    upper = lsame_(uplo, "U", 1, 1);
+    alleig = lsame_(range, "A", 1, 1);
+    valeig = lsame_(range, "V", 1, 1);
+    indeig = lsame_(range, "I", 1, 1);
     *info = 0;
-    if (*itype < 1 || *itype > 3)
+    if(*itype < 1 || *itype > 3)
     {
         *info = -1;
     }
-    else if (! (wantz || lsame_(jobz, "N")))
+    else if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (alleig || valeig || indeig))
+    else if(!(alleig || valeig || indeig))
     {
         *info = -3;
     }
-    else if (! (upper || lsame_(uplo, "L")))
+    else if(!(upper || lsame_(uplo, "L", 1, 1)))
     {
         *info = -4;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -5;
     }
     else
     {
-        if (valeig)
+        if(valeig)
         {
-            if (*n > 0 && *vu <= *vl)
+            if(*n > 0 && *vu <= *vl)
             {
                 *info = -9;
             }
         }
-        else if (indeig)
+        else if(indeig)
         {
-            if (*il < 1)
+            if(*il < 1)
             {
                 *info = -10;
             }
-            else if (*iu < fla_min(*n,*il) || *iu > *n)
+            else if(*iu < fla_min(*n, *il) || *iu > *n)
             {
                 *info = -11;
             }
         }
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        if (*ldz < 1 || wantz && *ldz < *n)
+        if(*ldz < 1 || wantz && *ldz < *n)
         {
             *info = -16;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CHPGVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Form a Cholesky factorization of B. */
     cpptrf_(uplo, n, &bp[1], info);
-    if (*info != 0)
+    if(*info != 0)
     {
         *info = *n + *info;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
     chpgst_(itype, uplo, n, &ap[1], &bp[1], info);
-    chpevx_(jobz, range, uplo, n, &ap[1], vl, vu, il, iu, abstol, m, &w[1], & z__[z_offset], ldz, &work[1], &rwork[1], &iwork[1], &ifail[1], info);
-    if (wantz)
+    chpevx_(jobz, range, uplo, n, &ap[1], vl, vu, il, iu, abstol, m, &w[1], &z__[z_offset], ldz,
+            &work[1], &rwork[1], &iwork[1], &ifail[1], info);
+    if(wantz)
     {
         /* Backtransform eigenvectors to the original problem. */
-        if (*info > 0)
+        if(*info > 0)
         {
             *m = *info - 1;
         }
-        if (*itype == 1 || *itype == 2)
+        if(*itype == 1 || *itype == 2)
         {
             /* For A*x=(lambda)*B*x and A*B*x=(lambda)*x;
-            */
+             */
             /* backtransform eigenvectors: x = inv(L)**H*y or inv(U)*y */
-            if (upper)
+            if(upper)
             {
                 *(unsigned char *)trans = 'N';
             }
@@ -429,20 +458,18 @@ int chpgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, co
                 *(unsigned char *)trans = 'C';
             }
             i__1 = *m;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 ctpsv_(uplo, trans, "Non-unit", n, &bp[1], &z__[j * z_dim1 + 1], &c__1);
                 /* L10: */
             }
         }
-        else if (*itype == 3)
+        else if(*itype == 3)
         {
             /* For B*A*x=(lambda)*x;
-            */
+             */
             /* backtransform eigenvectors: x = L*y or U**H*y */
-            if (upper)
+            if(upper)
             {
                 *(unsigned char *)trans = 'C';
             }
@@ -451,9 +478,7 @@ int chpgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, co
                 *(unsigned char *)trans = 'N';
             }
             i__1 = *m;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 ctpmv_(uplo, trans, "Non-unit", n, &bp[1], &z__[j * z_dim1 + 1], &c__1);
                 /* L20: */
@@ -461,7 +486,7 @@ int chpgvx_(integer *itype, char *jobz, char *range, char * uplo, integer *n, co
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHPGVX */
 }
 /* chpgvx_ */

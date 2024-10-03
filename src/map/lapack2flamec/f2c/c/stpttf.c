@@ -1,16 +1,25 @@
-/* ../netlib/stpttf.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/stpttf.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b STPTTF copies a triangular matrix from the standard packed format (TP) to the rectangular full packed format (TF). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download STPTTF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stpttf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stpttf.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stpttf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stpttf.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stpttf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stpttf.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -36,7 +45,7 @@
 /* > \verbatim */
 /* > TRANSR is CHARACTER*1 */
 /* > = 'N': ARF in Normal format is wanted;
-*/
+ */
 /* > = 'T': ARF in Conjugate-transpose format is wanted. */
 /* > \endverbatim */
 /* > */
@@ -44,7 +53,7 @@
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': A is upper triangular;
-*/
+ */
 /* > = 'L': A is lower triangular. */
 /* > \endverbatim */
 /* > */
@@ -61,7 +70,7 @@
 /* > columnwise in a linear array. The j-th column of A is stored */
 /* > in the array AP as follows: */
 /* > if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n. */
 /* > \endverbatim */
 /* > */
@@ -175,17 +184,18 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int stpttf_(char *transr, char *uplo, integer *n, real *ap, real *arf, integer *info)
+void stpttf_(char *transr, char *uplo, integer *n, real *ap, real *arf, integer *info)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
     /* Local variables */
     integer i__, j, k, n1, n2, ij, jp, js, lda, ijp;
     logical normaltransr;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -208,34 +218,34 @@ int stpttf_(char *transr, char *uplo, integer *n, real *ap, real *arf, integer *
     /* .. Executable Statements .. */
     /* Test the input parameters. */
     *info = 0;
-    normaltransr = lsame_(transr, "N");
-    lower = lsame_(uplo, "L");
-    if (! normaltransr && ! lsame_(transr, "T"))
+    normaltransr = lsame_(transr, "N", 1, 1);
+    lower = lsame_(uplo, "L", 1, 1);
+    if(!normaltransr && !lsame_(transr, "T", 1, 1))
     {
         *info = -1;
     }
-    else if (! lower && ! lsame_(uplo, "U"))
+    else if(!lower && !lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("STPTTF", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
-        return 0;
+        return;
     }
-    if (*n == 1)
+    if(*n == 1)
     {
-        if (normaltransr)
+        if(normaltransr)
         {
             arf[0] = ap[0];
         }
@@ -243,11 +253,11 @@ int stpttf_(char *transr, char *uplo, integer *n, real *ap, real *arf, integer *
         {
             arf[0] = ap[0];
         }
-        return 0;
+        return;
     }
     /* Size of array ARF(0:NT-1) */
     /* Set N1 and N2 depending on LOWER */
-    if (lower)
+    if(lower)
     {
         n2 = *n / 2;
         n1 = *n - n2;
@@ -262,7 +272,7 @@ int stpttf_(char *transr, char *uplo, integer *n, real *ap, real *arf, integer *
     /* set lda of ARF^C;
     ARF^C is (0:(N+1)/2-1,0:N-noe) */
     /* where noe = 0 if n is even, noe = 1 if n is odd */
-    if (*n % 2 == 0)
+    if(*n % 2 == 0)
     {
         k = *n / 2;
         nisodd = FALSE_;
@@ -274,31 +284,27 @@ int stpttf_(char *transr, char *uplo, integer *n, real *ap, real *arf, integer *
         lda = *n;
     }
     /* ARF^C has lda rows and n+1-noe cols */
-    if (! normaltransr)
+    if(!normaltransr)
     {
         lda = (*n + 1) / 2;
     }
     /* start execution: there are eight cases */
-    if (nisodd)
+    if(nisodd)
     {
         /* N is odd */
-        if (normaltransr)
+        if(normaltransr)
         {
             /* N is odd and TRANSR = 'N' */
-            if (lower)
+            if(lower)
             {
                 /* N is odd, TRANSR = 'N', and UPLO = 'L' */
                 ijp = 0;
                 jp = 0;
                 i__1 = n2;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__2 = *n - 1;
-                    for (i__ = j;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = j; i__ <= i__2; ++i__)
                     {
                         ij = i__ + jp;
                         arf[ij] = ap[ijp];
@@ -307,14 +313,10 @@ int stpttf_(char *transr, char *uplo, integer *n, real *ap, real *arf, integer *
                     jp += lda;
                 }
                 i__1 = n2 - 1;
-                for (i__ = 0;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 0; i__ <= i__1; ++i__)
                 {
                     i__2 = n2;
-                    for (j = i__ + 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = i__ + 1; j <= i__2; ++j)
                     {
                         ij = i__ + j * lda;
                         arf[ij] = ap[ijp];
@@ -327,15 +329,11 @@ int stpttf_(char *transr, char *uplo, integer *n, real *ap, real *arf, integer *
                 /* N is odd, TRANSR = 'N', and UPLO = 'U' */
                 ijp = 0;
                 i__1 = n1 - 1;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     ij = n2 + j;
                     i__2 = j;
-                    for (i__ = 0;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__2; ++i__)
                     {
                         arf[ij] = ap[ijp];
                         ++ijp;
@@ -344,15 +342,11 @@ int stpttf_(char *transr, char *uplo, integer *n, real *ap, real *arf, integer *
                 }
                 js = 0;
                 i__1 = *n - 1;
-                for (j = n1;
-                        j <= i__1;
-                        ++j)
+                for(j = n1; j <= i__1; ++j)
                 {
                     ij = js;
                     i__2 = js + j;
-                    for (ij = js;
-                            ij <= i__2;
-                            ++ij)
+                    for(ij = js; ij <= i__2; ++ij)
                     {
                         arf[ij] = ap[ijp];
                         ++ijp;
@@ -364,20 +358,16 @@ int stpttf_(char *transr, char *uplo, integer *n, real *ap, real *arf, integer *
         else
         {
             /* N is odd and TRANSR = 'T' */
-            if (lower)
+            if(lower)
             {
                 /* N is odd, TRANSR = 'T', and UPLO = 'L' */
                 ijp = 0;
                 i__1 = n2;
-                for (i__ = 0;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 0; i__ <= i__1; ++i__)
                 {
                     i__2 = *n * lda - 1;
                     i__3 = lda;
-                    for (ij = i__ * (lda + 1);
-                            i__3 < 0 ? ij >= i__2 : ij <= i__2;
-                            ij += i__3)
+                    for(ij = i__ * (lda + 1); i__3 < 0 ? ij >= i__2 : ij <= i__2; ij += i__3)
                     {
                         arf[ij] = ap[ijp];
                         ++ijp;
@@ -385,14 +375,10 @@ int stpttf_(char *transr, char *uplo, integer *n, real *ap, real *arf, integer *
                 }
                 js = 1;
                 i__1 = n2 - 1;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__3 = js + n2 - j - 1;
-                    for (ij = js;
-                            ij <= i__3;
-                            ++ij)
+                    for(ij = js; ij <= i__3; ++ij)
                     {
                         arf[ij] = ap[ijp];
                         ++ijp;
@@ -406,14 +392,10 @@ int stpttf_(char *transr, char *uplo, integer *n, real *ap, real *arf, integer *
                 ijp = 0;
                 js = n2 * lda;
                 i__1 = n1 - 1;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__3 = js + j;
-                    for (ij = js;
-                            ij <= i__3;
-                            ++ij)
+                    for(ij = js; ij <= i__3; ++ij)
                     {
                         arf[ij] = ap[ijp];
                         ++ijp;
@@ -421,15 +403,11 @@ int stpttf_(char *transr, char *uplo, integer *n, real *ap, real *arf, integer *
                     js += lda;
                 }
                 i__1 = n1;
-                for (i__ = 0;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 0; i__ <= i__1; ++i__)
                 {
                     i__3 = i__ + (n1 + i__) * lda;
                     i__2 = lda;
-                    for (ij = i__;
-                            i__2 < 0 ? ij >= i__3 : ij <= i__3;
-                            ij += i__2)
+                    for(ij = i__; i__2 < 0 ? ij >= i__3 : ij <= i__3; ij += i__2)
                     {
                         arf[ij] = ap[ijp];
                         ++ijp;
@@ -441,23 +419,19 @@ int stpttf_(char *transr, char *uplo, integer *n, real *ap, real *arf, integer *
     else
     {
         /* N is even */
-        if (normaltransr)
+        if(normaltransr)
         {
             /* N is even and TRANSR = 'N' */
-            if (lower)
+            if(lower)
             {
                 /* N is even, TRANSR = 'N', and UPLO = 'L' */
                 ijp = 0;
                 jp = 0;
                 i__1 = k - 1;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__2 = *n - 1;
-                    for (i__ = j;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = j; i__ <= i__2; ++i__)
                     {
                         ij = i__ + 1 + jp;
                         arf[ij] = ap[ijp];
@@ -466,14 +440,10 @@ int stpttf_(char *transr, char *uplo, integer *n, real *ap, real *arf, integer *
                     jp += lda;
                 }
                 i__1 = k - 1;
-                for (i__ = 0;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 0; i__ <= i__1; ++i__)
                 {
                     i__2 = k - 1;
-                    for (j = i__;
-                            j <= i__2;
-                            ++j)
+                    for(j = i__; j <= i__2; ++j)
                     {
                         ij = i__ + j * lda;
                         arf[ij] = ap[ijp];
@@ -486,15 +456,11 @@ int stpttf_(char *transr, char *uplo, integer *n, real *ap, real *arf, integer *
                 /* N is even, TRANSR = 'N', and UPLO = 'U' */
                 ijp = 0;
                 i__1 = k - 1;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     ij = k + 1 + j;
                     i__2 = j;
-                    for (i__ = 0;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__2; ++i__)
                     {
                         arf[ij] = ap[ijp];
                         ++ijp;
@@ -503,15 +469,11 @@ int stpttf_(char *transr, char *uplo, integer *n, real *ap, real *arf, integer *
                 }
                 js = 0;
                 i__1 = *n - 1;
-                for (j = k;
-                        j <= i__1;
-                        ++j)
+                for(j = k; j <= i__1; ++j)
                 {
                     ij = js;
                     i__2 = js + j;
-                    for (ij = js;
-                            ij <= i__2;
-                            ++ij)
+                    for(ij = js; ij <= i__2; ++ij)
                     {
                         arf[ij] = ap[ijp];
                         ++ijp;
@@ -523,20 +485,16 @@ int stpttf_(char *transr, char *uplo, integer *n, real *ap, real *arf, integer *
         else
         {
             /* N is even and TRANSR = 'T' */
-            if (lower)
+            if(lower)
             {
                 /* N is even, TRANSR = 'T', and UPLO = 'L' */
                 ijp = 0;
                 i__1 = k - 1;
-                for (i__ = 0;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 0; i__ <= i__1; ++i__)
                 {
                     i__2 = (*n + 1) * lda - 1;
                     i__3 = lda;
-                    for (ij = i__ + (i__ + 1) * lda;
-                            i__3 < 0 ? ij >= i__2 : ij <= i__2;
-                            ij += i__3)
+                    for(ij = i__ + (i__ + 1) * lda; i__3 < 0 ? ij >= i__2 : ij <= i__2; ij += i__3)
                     {
                         arf[ij] = ap[ijp];
                         ++ijp;
@@ -544,14 +502,10 @@ int stpttf_(char *transr, char *uplo, integer *n, real *ap, real *arf, integer *
                 }
                 js = 0;
                 i__1 = k - 1;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__3 = js + k - j - 1;
-                    for (ij = js;
-                            ij <= i__3;
-                            ++ij)
+                    for(ij = js; ij <= i__3; ++ij)
                     {
                         arf[ij] = ap[ijp];
                         ++ijp;
@@ -565,14 +519,10 @@ int stpttf_(char *transr, char *uplo, integer *n, real *ap, real *arf, integer *
                 ijp = 0;
                 js = (k + 1) * lda;
                 i__1 = k - 1;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__3 = js + j;
-                    for (ij = js;
-                            ij <= i__3;
-                            ++ij)
+                    for(ij = js; ij <= i__3; ++ij)
                     {
                         arf[ij] = ap[ijp];
                         ++ijp;
@@ -580,15 +530,11 @@ int stpttf_(char *transr, char *uplo, integer *n, real *ap, real *arf, integer *
                     js += lda;
                 }
                 i__1 = k - 1;
-                for (i__ = 0;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 0; i__ <= i__1; ++i__)
                 {
                     i__3 = i__ + (k + i__) * lda;
                     i__2 = lda;
-                    for (ij = i__;
-                            i__2 < 0 ? ij >= i__3 : ij <= i__3;
-                            ij += i__2)
+                    for(ij = i__; i__2 < 0 ? ij >= i__3 : ij <= i__3; ij += i__2)
                     {
                         arf[ij] = ap[ijp];
                         ++ijp;
@@ -597,7 +543,7 @@ int stpttf_(char *transr, char *uplo, integer *n, real *ap, real *arf, integer *
             }
         }
     }
-    return 0;
+    return;
     /* End of STPTTF */
 }
 /* stpttf_ */

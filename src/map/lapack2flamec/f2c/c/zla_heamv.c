@@ -1,16 +1,25 @@
-/* ../netlib/zla_heamv.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zla_heamv.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b ZLA_HEAMV computes a matrix-vector product using a Hermitian indefinite matrix to calculate err or bounds. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLA_HEAMV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zla_hea mv.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zla_hea
+ * mv.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zla_hea mv.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zla_hea
+ * mv.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zla_hea mv.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zla_hea
+ * mv.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -163,10 +172,13 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zla_heamv_(integer *uplo, integer *n, doublereal *alpha, doublecomplex *a, integer *lda, doublecomplex *x, integer *incx, doublereal *beta, doublereal *y, integer *incy)
+void zla_heamv_(integer *uplo, integer *n, doublereal *alpha, doublecomplex *a, integer *lda,
+                doublecomplex *x, integer *incx, doublereal *beta, doublereal *y, integer *incy)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zla_heamv inputs: uplo %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "", *uplo, *n, *lda, *incx, *incy);
+    AOCL_DTL_SNPRINTF("zla_heamv inputs: uplo %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
+                      ", incx %" FLA_IS ", incy %" FLA_IS "",
+                      *uplo, *n, *lda, *incx, *incy);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
     doublereal d__1, d__2;
@@ -179,7 +191,8 @@ int zla_heamv_(integer *uplo, integer *n, doublereal *alpha, doublecomplex *a, i
     doublereal temp, safe1;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilauplo_(char *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -214,40 +227,40 @@ int zla_heamv_(integer *uplo, integer *n, doublereal *alpha, doublecomplex *a, i
     --y;
     /* Function Body */
     info = 0;
-    if (*uplo != ilauplo_("U") && *uplo != ilauplo_("L") )
+    if(*uplo != ilauplo_("U") && *uplo != ilauplo_("L"))
     {
         info = 1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         info = 2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         info = 5;
     }
-    else if (*incx == 0)
+    else if(*incx == 0)
     {
         info = 7;
     }
-    else if (*incy == 0)
+    else if(*incy == 0)
     {
         info = 10;
     }
-    if (info != 0)
+    if(info != 0)
     {
         xerbla_("ZHEMV ", &info, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible. */
-    if (*n == 0 || *alpha == 0. && *beta == 1.)
+    if(*n == 0 || *alpha == 0. && *beta == 1.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Set up the start points in X and Y. */
-    if (*incx > 0)
+    if(*incx > 0)
     {
         kx = 1;
     }
@@ -255,7 +268,7 @@ int zla_heamv_(integer *uplo, integer *n, doublereal *alpha, doublecomplex *a, i
     {
         kx = 1 - (*n - 1) * *incx;
     }
-    if (*incy > 0)
+    if(*incy > 0)
     {
         ky = 1;
     }
@@ -272,21 +285,19 @@ int zla_heamv_(integer *uplo, integer *n, doublereal *alpha, doublecomplex *a, i
     /* the inexact flag. Still doesn't help change the iteration order */
     /* to per-column. */
     iy = ky;
-    if (*incx == 1)
+    if(*incx == 1)
     {
-        if (*uplo == ilauplo_("U"))
+        if(*uplo == ilauplo_("U"))
         {
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
-                if (*beta == 0.)
+                if(*beta == 0.)
                 {
                     symb_zero__ = TRUE_;
                     y[iy] = 0.;
                 }
-                else if (y[iy] == 0.)
+                else if(y[iy] == 0.)
                 {
                     symb_zero__ = TRUE_;
                 }
@@ -295,34 +306,40 @@ int zla_heamv_(integer *uplo, integer *n, doublereal *alpha, doublecomplex *a, i
                     symb_zero__ = FALSE_;
                     y[iy] = *beta * (d__1 = y[iy], f2c_dabs(d__1));
                 }
-                if (*alpha != 0.)
+                if(*alpha != 0.)
                 {
                     i__2 = i__;
-                    for (j = 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = 1; j <= i__2; ++j)
                     {
                         i__3 = j + i__ * a_dim1;
-                        temp = (d__1 = a[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag( &a[j + i__ * a_dim1]), f2c_dabs(d__2));
+                        temp = (d__1 = a[i__3].r, f2c_dabs(d__1))
+                               + (d__2 = d_imag(&a[j + i__ * a_dim1]), f2c_dabs(d__2));
                         i__3 = j;
-                        symb_zero__ = symb_zero__ && (x[i__3].r == 0. && x[ i__3].i == 0. || temp == 0.);
+                        symb_zero__
+                            = symb_zero__ && (x[i__3].r == 0. && x[i__3].i == 0. || temp == 0.);
                         i__3 = j;
-                        y[iy] += *alpha * ((d__1 = x[i__3].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&x[j]), f2c_dabs(d__2))) * temp;
+                        y[iy] += *alpha
+                                 * ((d__1 = x[i__3].r, f2c_dabs(d__1))
+                                    + (d__2 = d_imag(&x[j]), f2c_dabs(d__2)))
+                                 * temp;
                     }
                     i__2 = *n;
-                    for (j = i__ + 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = i__ + 1; j <= i__2; ++j)
                     {
                         i__3 = i__ + j * a_dim1;
-                        temp = (d__1 = a[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag( &a[i__ + j * a_dim1]), f2c_dabs(d__2));
+                        temp = (d__1 = a[i__3].r, f2c_dabs(d__1))
+                               + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2));
                         i__3 = j;
-                        symb_zero__ = symb_zero__ && (x[i__3].r == 0. && x[ i__3].i == 0. || temp == 0.);
+                        symb_zero__
+                            = symb_zero__ && (x[i__3].r == 0. && x[i__3].i == 0. || temp == 0.);
                         i__3 = j;
-                        y[iy] += *alpha * ((d__1 = x[i__3].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&x[j]), f2c_dabs(d__2))) * temp;
+                        y[iy] += *alpha
+                                 * ((d__1 = x[i__3].r, f2c_dabs(d__1))
+                                    + (d__2 = d_imag(&x[j]), f2c_dabs(d__2)))
+                                 * temp;
                     }
                 }
-                if (! symb_zero__)
+                if(!symb_zero__)
                 {
                     y[iy] += d_sign(&safe1, &y[iy]);
                 }
@@ -332,16 +349,14 @@ int zla_heamv_(integer *uplo, integer *n, doublereal *alpha, doublecomplex *a, i
         else
         {
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
-                if (*beta == 0.)
+                if(*beta == 0.)
                 {
                     symb_zero__ = TRUE_;
                     y[iy] = 0.;
                 }
-                else if (y[iy] == 0.)
+                else if(y[iy] == 0.)
                 {
                     symb_zero__ = TRUE_;
                 }
@@ -350,34 +365,40 @@ int zla_heamv_(integer *uplo, integer *n, doublereal *alpha, doublecomplex *a, i
                     symb_zero__ = FALSE_;
                     y[iy] = *beta * (d__1 = y[iy], f2c_dabs(d__1));
                 }
-                if (*alpha != 0.)
+                if(*alpha != 0.)
                 {
                     i__2 = i__;
-                    for (j = 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = 1; j <= i__2; ++j)
                     {
                         i__3 = i__ + j * a_dim1;
-                        temp = (d__1 = a[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag( &a[i__ + j * a_dim1]), f2c_dabs(d__2));
+                        temp = (d__1 = a[i__3].r, f2c_dabs(d__1))
+                               + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2));
                         i__3 = j;
-                        symb_zero__ = symb_zero__ && (x[i__3].r == 0. && x[ i__3].i == 0. || temp == 0.);
+                        symb_zero__
+                            = symb_zero__ && (x[i__3].r == 0. && x[i__3].i == 0. || temp == 0.);
                         i__3 = j;
-                        y[iy] += *alpha * ((d__1 = x[i__3].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&x[j]), f2c_dabs(d__2))) * temp;
+                        y[iy] += *alpha
+                                 * ((d__1 = x[i__3].r, f2c_dabs(d__1))
+                                    + (d__2 = d_imag(&x[j]), f2c_dabs(d__2)))
+                                 * temp;
                     }
                     i__2 = *n;
-                    for (j = i__ + 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = i__ + 1; j <= i__2; ++j)
                     {
                         i__3 = j + i__ * a_dim1;
-                        temp = (d__1 = a[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag( &a[j + i__ * a_dim1]), f2c_dabs(d__2));
+                        temp = (d__1 = a[i__3].r, f2c_dabs(d__1))
+                               + (d__2 = d_imag(&a[j + i__ * a_dim1]), f2c_dabs(d__2));
                         i__3 = j;
-                        symb_zero__ = symb_zero__ && (x[i__3].r == 0. && x[ i__3].i == 0. || temp == 0.);
+                        symb_zero__
+                            = symb_zero__ && (x[i__3].r == 0. && x[i__3].i == 0. || temp == 0.);
                         i__3 = j;
-                        y[iy] += *alpha * ((d__1 = x[i__3].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&x[j]), f2c_dabs(d__2))) * temp;
+                        y[iy] += *alpha
+                                 * ((d__1 = x[i__3].r, f2c_dabs(d__1))
+                                    + (d__2 = d_imag(&x[j]), f2c_dabs(d__2)))
+                                 * temp;
                     }
                 }
-                if (! symb_zero__)
+                if(!symb_zero__)
                 {
                     y[iy] += d_sign(&safe1, &y[iy]);
                 }
@@ -387,19 +408,17 @@ int zla_heamv_(integer *uplo, integer *n, doublereal *alpha, doublecomplex *a, i
     }
     else
     {
-        if (*uplo == ilauplo_("U"))
+        if(*uplo == ilauplo_("U"))
         {
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
-                if (*beta == 0.)
+                if(*beta == 0.)
                 {
                     symb_zero__ = TRUE_;
                     y[iy] = 0.;
                 }
-                else if (y[iy] == 0.)
+                else if(y[iy] == 0.)
                 {
                     symb_zero__ = TRUE_;
                 }
@@ -409,36 +428,42 @@ int zla_heamv_(integer *uplo, integer *n, doublereal *alpha, doublecomplex *a, i
                     y[iy] = *beta * (d__1 = y[iy], f2c_dabs(d__1));
                 }
                 jx = kx;
-                if (*alpha != 0.)
+                if(*alpha != 0.)
                 {
                     i__2 = i__;
-                    for (j = 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = 1; j <= i__2; ++j)
                     {
                         i__3 = j + i__ * a_dim1;
-                        temp = (d__1 = a[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag( &a[j + i__ * a_dim1]), f2c_dabs(d__2));
+                        temp = (d__1 = a[i__3].r, f2c_dabs(d__1))
+                               + (d__2 = d_imag(&a[j + i__ * a_dim1]), f2c_dabs(d__2));
                         i__3 = j;
-                        symb_zero__ = symb_zero__ && (x[i__3].r == 0. && x[ i__3].i == 0. || temp == 0.);
+                        symb_zero__
+                            = symb_zero__ && (x[i__3].r == 0. && x[i__3].i == 0. || temp == 0.);
                         i__3 = jx;
-                        y[iy] += *alpha * ((d__1 = x[i__3].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&x[jx]), f2c_dabs(d__2))) * temp;
+                        y[iy] += *alpha
+                                 * ((d__1 = x[i__3].r, f2c_dabs(d__1))
+                                    + (d__2 = d_imag(&x[jx]), f2c_dabs(d__2)))
+                                 * temp;
                         jx += *incx;
                     }
                     i__2 = *n;
-                    for (j = i__ + 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = i__ + 1; j <= i__2; ++j)
                     {
                         i__3 = i__ + j * a_dim1;
-                        temp = (d__1 = a[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag( &a[i__ + j * a_dim1]), f2c_dabs(d__2));
+                        temp = (d__1 = a[i__3].r, f2c_dabs(d__1))
+                               + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2));
                         i__3 = j;
-                        symb_zero__ = symb_zero__ && (x[i__3].r == 0. && x[ i__3].i == 0. || temp == 0.);
+                        symb_zero__
+                            = symb_zero__ && (x[i__3].r == 0. && x[i__3].i == 0. || temp == 0.);
                         i__3 = jx;
-                        y[iy] += *alpha * ((d__1 = x[i__3].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&x[jx]), f2c_dabs(d__2))) * temp;
+                        y[iy] += *alpha
+                                 * ((d__1 = x[i__3].r, f2c_dabs(d__1))
+                                    + (d__2 = d_imag(&x[jx]), f2c_dabs(d__2)))
+                                 * temp;
                         jx += *incx;
                     }
                 }
-                if (! symb_zero__)
+                if(!symb_zero__)
                 {
                     y[iy] += d_sign(&safe1, &y[iy]);
                 }
@@ -448,16 +473,14 @@ int zla_heamv_(integer *uplo, integer *n, doublereal *alpha, doublecomplex *a, i
         else
         {
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
-                if (*beta == 0.)
+                if(*beta == 0.)
                 {
                     symb_zero__ = TRUE_;
                     y[iy] = 0.;
                 }
-                else if (y[iy] == 0.)
+                else if(y[iy] == 0.)
                 {
                     symb_zero__ = TRUE_;
                 }
@@ -467,36 +490,42 @@ int zla_heamv_(integer *uplo, integer *n, doublereal *alpha, doublecomplex *a, i
                     y[iy] = *beta * (d__1 = y[iy], f2c_dabs(d__1));
                 }
                 jx = kx;
-                if (*alpha != 0.)
+                if(*alpha != 0.)
                 {
                     i__2 = i__;
-                    for (j = 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = 1; j <= i__2; ++j)
                     {
                         i__3 = i__ + j * a_dim1;
-                        temp = (d__1 = a[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag( &a[i__ + j * a_dim1]), f2c_dabs(d__2));
+                        temp = (d__1 = a[i__3].r, f2c_dabs(d__1))
+                               + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2));
                         i__3 = j;
-                        symb_zero__ = symb_zero__ && (x[i__3].r == 0. && x[ i__3].i == 0. || temp == 0.);
+                        symb_zero__
+                            = symb_zero__ && (x[i__3].r == 0. && x[i__3].i == 0. || temp == 0.);
                         i__3 = jx;
-                        y[iy] += *alpha * ((d__1 = x[i__3].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&x[jx]), f2c_dabs(d__2))) * temp;
+                        y[iy] += *alpha
+                                 * ((d__1 = x[i__3].r, f2c_dabs(d__1))
+                                    + (d__2 = d_imag(&x[jx]), f2c_dabs(d__2)))
+                                 * temp;
                         jx += *incx;
                     }
                     i__2 = *n;
-                    for (j = i__ + 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = i__ + 1; j <= i__2; ++j)
                     {
                         i__3 = j + i__ * a_dim1;
-                        temp = (d__1 = a[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag( &a[j + i__ * a_dim1]), f2c_dabs(d__2));
+                        temp = (d__1 = a[i__3].r, f2c_dabs(d__1))
+                               + (d__2 = d_imag(&a[j + i__ * a_dim1]), f2c_dabs(d__2));
                         i__3 = j;
-                        symb_zero__ = symb_zero__ && (x[i__3].r == 0. && x[ i__3].i == 0. || temp == 0.);
+                        symb_zero__
+                            = symb_zero__ && (x[i__3].r == 0. && x[i__3].i == 0. || temp == 0.);
                         i__3 = jx;
-                        y[iy] += *alpha * ((d__1 = x[i__3].r, f2c_dabs(d__1)) + ( d__2 = d_imag(&x[jx]), f2c_dabs(d__2))) * temp;
+                        y[iy] += *alpha
+                                 * ((d__1 = x[i__3].r, f2c_dabs(d__1))
+                                    + (d__2 = d_imag(&x[jx]), f2c_dabs(d__2)))
+                                 * temp;
                         jx += *incx;
                     }
                 }
-                if (! symb_zero__)
+                if(!symb_zero__)
                 {
                     y[iy] += d_sign(&safe1, &y[iy]);
                 }
@@ -505,7 +534,7 @@ int zla_heamv_(integer *uplo, integer *n, doublereal *alpha, doublecomplex *a, i
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLA_HEAMV */
 }
 /* zla_heamv__ */

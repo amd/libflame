@@ -7,16 +7,24 @@
     directory, or at http://opensource.org/licenses/BSD-3-Clause
 
 */
+/*
+ *  Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+ */
 
 FLA_Error FLA_Svd_ext_u_unb_var1( FLA_Svd_type jobu, FLA_Svd_type jobv, 
-                                  dim_t n_iter_max,
+                                  fla_dim_t n_iter_max,
                                   FLA_Obj A, FLA_Obj s, FLA_Obj V, FLA_Obj U,
-                                  dim_t k_accum,
-                                  dim_t b_alg );
+                                  fla_dim_t k_accum,
+                                  fla_dim_t b_alg );
 int lapack_dbdsqr(char *uplo, integer *n, integer *ncvt, integer *
 	          nru, integer *ncc, doublereal *d__, doublereal *e, doublereal *vt, 
 	          integer *ldvt, doublereal *u, integer *ldu, doublereal *c__, integer *
 	          ldc, doublereal *work, integer *info);
+int lapack_dbdsqr_small(char *uplo, integer *n, integer *ncvt, integer *nru,
+                                doublereal *d__, doublereal *e,
+                                doublereal *vt, integer *ldvt,
+                                doublereal *u, integer *ldu,
+                                integer *info);
 int lapack_dgebd2(integer *m, integer *n, doublereal *a, integer *
 	          lda, doublereal *d__, doublereal *e, doublereal *tauq, doublereal *
 	          taup, doublereal *work, integer *info);

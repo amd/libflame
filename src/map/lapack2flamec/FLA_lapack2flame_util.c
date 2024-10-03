@@ -13,12 +13,14 @@
 #ifdef FLA_ENABLE_LAPACK2FLAME
 
 // Init
-#define F77_fla_init                        F77_FUNC( fla_init, FLA_INIT )
-#define F77_fla_finalize                    F77_FUNC( fla_finalize , FLA_FINALIZE )
-#define F77_fla_initialized                 F77_FUNC( fla_initialized, FLA_INITIALIZED )
-#define F77_fla_memory_leak_counter_status  F77_FUNC( fla_memory_leak_counter_status, FLA_MEMORY_LEAK_COUNTER_STATUS )
-#define F77_fla_memory_leak_counter_set     F77_FUNC( fla_memory_leak_counter_set, FLA_MEMORY_LEAK_COUNTER_SET )
-#define F77_fla_obj_show                    F77_FUNC( fla_obj_show, FLA_OBJ_SHOW )
+#define F77_fla_init F77_FUNC(fla_init, FLA_INIT)
+#define F77_fla_finalize F77_FUNC(fla_finalize, FLA_FINALIZE)
+#define F77_fla_initialized F77_FUNC(fla_initialized, FLA_INITIALIZED)
+#define F77_fla_memory_leak_counter_status \
+    F77_FUNC(fla_memory_leak_counter_status, FLA_MEMORY_LEAK_COUNTER_STATUS)
+#define F77_fla_memory_leak_counter_set \
+    F77_FUNC(fla_memory_leak_counter_set, FLA_MEMORY_LEAK_COUNTER_SET)
+#define F77_fla_obj_show F77_FUNC(fla_obj_show, FLA_OBJ_SHOW)
 
 void F77_fla_init()
 {
@@ -28,140 +30,149 @@ void F77_fla_finalize()
 {
     FLA_Finalize();
 }
-void F77_fla_initialized( integer* ok )
+void F77_fla_initialized(integer *ok)
 {
     *ok = (FLA_Initialized() ? 1 : 0);
 }
-void F77_fla_memory_leak_counter_status( integer* stat )
+void F77_fla_memory_leak_counter_status(integer *stat)
 {
     *stat = (FLA_Memory_leak_counter_status() ? 1 : 0);
 }
-void F77_fla_memory_leak_counter_set( integer* stat )
+void F77_fla_memory_leak_counter_set(integer *stat)
 {
-    FLA_Memory_leak_counter_set( (*stat ? TRUE : FALSE) );
+    FLA_Memory_leak_counter_set((*stat ? TRUE : FALSE));
 }
-void F77_fla_obj_show( char* prefix, integer* m, integer* n, void* buffer, integer* ldim )
+void F77_fla_obj_show(char *prefix, integer *m, integer *n, void *buffer, integer *ldim)
 {
-     FLA_Error    init_result;
-     FLA_Datatype datatype;
-     FLA_Obj      A;
+    FLA_Error init_result;
+    FLA_Datatype datatype;
+    FLA_Obj A;
 
-     datatype = FLA_INT; 
+    datatype = FLA_INT;
 
-     switch( *prefix ) {
-     case 'i':
-     case 'I': datatype = FLA_INT;            break;
-     case 's':
-     case 'S': datatype = FLA_FLOAT;          break;
-     case 'd':
-     case 'D': datatype = FLA_DOUBLE;         break;
-     case 'c':
-     case 'C': datatype = FLA_COMPLEX;        break;
-     case 'z':
-     case 'Z': datatype = FLA_DOUBLE_COMPLEX; break;
-     default:
-       fprintf(stderr, "Invalid prefix %c, where i,s,d,c,z are allowed.\n", *prefix);
-       FLA_Abort();
-     }
+    switch(*prefix)
+    {
+        case 'i':
+        case 'I':
+            datatype = FLA_INT;
+            break;
+        case 's':
+        case 'S':
+            datatype = FLA_FLOAT;
+            break;
+        case 'd':
+        case 'D':
+            datatype = FLA_DOUBLE;
+            break;
+        case 'c':
+        case 'C':
+            datatype = FLA_COMPLEX;
+            break;
+        case 'z':
+        case 'Z':
+            datatype = FLA_DOUBLE_COMPLEX;
+            break;
+        default:
+            fprintf(stderr, "Invalid prefix %c, where i,s,d,c,z are allowed.\n", *prefix);
+            FLA_Abort();
+    }
 
-     FLA_Init_safe( &init_result );
+    FLA_Init_safe(&init_result);
 
-     FLA_Obj_create_without_buffer( datatype, *m, *n, &A );
-     FLA_Obj_attach_buffer( buffer, 1, *ldim, &A );
-     FLA_Obj_fshow( stdout, 
-                    "= F77_FLA_OBJ_SHOW =", A, "% 6.4e", 
-                    "=-=-=-=-=-=-=-=-=-=-\n");
-     FLA_Obj_free_without_buffer( &A );
+    FLA_Obj_create_without_buffer(datatype, *m, *n, &A);
+    FLA_Obj_attach_buffer(buffer, 1, *ldim, &A);
+    FLA_Obj_fshow(stdout, "= F77_FLA_OBJ_SHOW =", A, "% 6.4e", "=-=-=-=-=-=-=-=-=-=-\n");
+    FLA_Obj_free_without_buffer(&A);
 
-     FLA_Finalize_safe( init_result );
+    FLA_Finalize_safe(init_result);
 }
 
 // Transform tau.
-int FLAME_invert_stau( FLA_Obj t )
+int FLAME_invert_stau(FLA_Obj t)
 {
-    dim_t  m    = FLA_Obj_vector_dim( t );
-    dim_t  inc  = FLA_Obj_vector_inc( t );
-    float* buff = FLA_Obj_buffer_at_view( t );
-    float  one  = 1.0F;
-    float  zero = 0.0F;
-    float* chi;
-    int    i;
+    fla_dim_t m = FLA_Obj_vector_dim(t);
+    fla_dim_t inc = FLA_Obj_vector_inc(t);
+    float *buff = FLA_Obj_buffer_at_view(t);
+    float one = 1.0F;
+    float zero = 0.0F;
+    float *chi;
+    int i;
 
-    for ( i = 0; i < m; ++i )
+    for(i = 0; i < m; ++i)
     {
-        chi = buff + i*inc;
-        if ( *chi != zero )
-            *chi = ( one / *chi );
+        chi = buff + i * inc;
+        if(*chi != zero)
+            *chi = (one / *chi);
     }
     return 0;
 }
-int FLAME_invert_dtau( FLA_Obj t )
+int FLAME_invert_dtau(FLA_Obj t)
 {
-    dim_t   m    = FLA_Obj_vector_dim( t );
-    dim_t   inc  = FLA_Obj_vector_inc( t );
-    double* buff = FLA_Obj_buffer_at_view( t );
-    double  one  = 1.0;
-    double  zero = 0.0;
-    double* chi;
-    int     i;
+    fla_dim_t m = FLA_Obj_vector_dim(t);
+    fla_dim_t inc = FLA_Obj_vector_inc(t);
+    double *buff = FLA_Obj_buffer_at_view(t);
+    double one = 1.0;
+    double zero = 0.0;
+    double *chi;
+    int i;
 
-    for ( i = 0; i < m; ++i )
+    for(i = 0; i < m; ++i)
     {
-        chi = buff + i*inc;
-        if ( *chi != zero )
-            *chi = ( one / *chi );
+        chi = buff + i * inc;
+        if(*chi != zero)
+            *chi = (one / *chi);
     }
     return 0;
 }
-int FLAME_invert_ctau( FLA_Obj t )
+int FLAME_invert_ctau(FLA_Obj t)
 {
-    dim_t     m    = FLA_Obj_vector_dim( t );
-    dim_t     inc  = FLA_Obj_vector_inc( t );
-    scomplex* buff = FLA_Obj_buffer_at_view( t );
-    float     one  = 1.0F;
-    float     conjsign = one; // if conjugate -one;
-    float     zero = 0.0F;
-    float     temp, s, xr_s, xi_s;
-    scomplex* chi;
-    int       i;
+    fla_dim_t m = FLA_Obj_vector_dim(t);
+    fla_dim_t inc = FLA_Obj_vector_inc(t);
+    scomplex *buff = FLA_Obj_buffer_at_view(t);
+    float one = 1.0F;
+    float conjsign = one; // if conjugate -one;
+    float zero = 0.0F;
+    float temp, s, xr_s, xi_s;
+    scomplex *chi;
+    int i;
 
-    for ( i = 0; i < m; ++i )
+    for(i = 0; i < m; ++i)
     {
-        chi  = buff + i*inc;
-        s    = bl1_fmaxabs( chi->real, chi->imag );
-        if ( s != zero )
+        chi = buff + i * inc;
+        s = bl1_fmaxabs(chi->real, chi->imag);
+        if(s != zero)
         {
             xr_s = chi->real / s;
             xi_s = chi->imag / s;
             temp = xr_s * chi->real + xi_s * chi->imag;
-            chi->real =            xr_s / temp;
+            chi->real = xr_s / temp;
             chi->imag = conjsign * xi_s / temp;
         }
     }
     return 0;
 }
-int FLAME_invert_ztau( FLA_Obj t )
+int FLAME_invert_ztau(FLA_Obj t)
 {
-    dim_t     m    = FLA_Obj_vector_dim( t );
-    dim_t     inc  = FLA_Obj_vector_inc( t );
-    dcomplex* buff = FLA_Obj_buffer_at_view( t );
-    double    one  = 1.0;
-    double    conjsign = one; // if conjugate -one;
-    double    zero = 0.0;
-    double    temp, s, xr_s, xi_s;
-    dcomplex* chi;
-    int       i;
+    fla_dim_t m = FLA_Obj_vector_dim(t);
+    fla_dim_t inc = FLA_Obj_vector_inc(t);
+    dcomplex *buff = FLA_Obj_buffer_at_view(t);
+    double one = 1.0;
+    double conjsign = one; // if conjugate -one;
+    double zero = 0.0;
+    double temp, s, xr_s, xi_s;
+    dcomplex *chi;
+    int i;
 
-    for ( i = 0; i < m; ++i )
+    for(i = 0; i < m; ++i)
     {
-        chi  = buff + i*inc;
-        s    = bl1_fmaxabs( chi->real, chi->imag );
-        if ( s != zero )
+        chi = buff + i * inc;
+        s = bl1_fmaxabs(chi->real, chi->imag);
+        if(s != zero)
         {
             xr_s = chi->real / s;
             xi_s = chi->imag / s;
             temp = xr_s * chi->real + xi_s * chi->imag;
-            chi->real =            xr_s / temp;
+            chi->real = xr_s / temp;
             chi->imag = conjsign * xi_s / temp;
         }
     }
@@ -172,10 +183,10 @@ int FLAME_invert_ztau( FLA_Obj t )
 int FLAME_QR_piv_preorder( FLA_Obj A, int *jpiv_lapack, int *jpiv_fla )
 {
     FLA_Datatype datatype = FLA_Obj_datatype( A );
-    dim_t m_A  = FLA_Obj_length( A );
-    dim_t n_A  = FLA_Obj_width( A );
-    dim_t cs_A = FLA_Obj_col_stride( A );
-    dim_t rs_A = FLA_Obj_row_stride( A );
+    fla_dim_t m_A  = FLA_Obj_length( A );
+    fla_dim_t n_A  = FLA_Obj_width( A );
+    fla_dim_t cs_A = FLA_Obj_col_stride( A );
+    fla_dim_t rs_A = FLA_Obj_row_stride( A );
     int j, head;
 
     for ( j=0; j<n_A; ++j )
@@ -242,9 +253,5 @@ int FLAME_QR_piv_preorder( FLA_Obj A, int *jpiv_lapack, int *jpiv_fla )
     return 0;
 }
 */
-
-
-
-
 
 #endif

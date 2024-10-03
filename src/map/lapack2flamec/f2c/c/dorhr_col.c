@@ -1,5 +1,8 @@
-/* ../netlib/v3.9.0/dorhr_col.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/dorhr_col.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b7 = 1.;
 static integer c__1 = 1;
@@ -10,11 +13,17 @@ static doublereal c_b10 = -1.;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DORHR_COL + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dorhr_c ol.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dorhr_c
+ * ol.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dorhr_c ol.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dorhr_c
+ * ol.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorhr_c ol.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorhr_c
+ * ol.f"> */
 /* > [TXT]</a> */
 /* > */
 /* Definition: */
@@ -260,19 +269,29 @@ INB-by-M}
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int dorhr_col_(integer *m, integer *n, integer *nb, doublereal *a, integer *lda, doublereal *t, integer *ldt, doublereal * d__, integer *info)
+void dorhr_col_(integer *m, integer *n, integer *nb, doublereal *a, integer *lda, doublereal *t,
+                integer *ldt, doublereal *d__, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dorhr_col inputs: m %" FLA_IS ", n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS "", *m, *n, *nb, *lda, *ldt);
+    AOCL_DTL_SNPRINTF("dorhr_col inputs: m %" FLA_IS ", n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS
+                      ", ldt %" FLA_IS "",
+                      *m, *n, *nb, *lda, *ldt);
     /* System generated locals */
     integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
     integer nplusone, i__, j, jb, jnb;
     extern /* Subroutine */
-    int dlaorhr_col_getrfnp_(integer *, integer *, doublereal *, integer *, doublereal *, integer *), dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dlaorhr_col_getrfnp_(integer *, integer *, doublereal *, integer *, doublereal *,
+                             integer *),
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     integer iinfo;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer jbtemp1, jbtemp2;
     /* -- LAPACK computational routine (version 3.9.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -303,19 +322,19 @@ int dorhr_col_(integer *m, integer *n, integer *nb, doublereal *a, integer *lda,
     --d__;
     /* Function Body */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0 || *n > *m)
+    else if(*n < 0 || *n > *m)
     {
         *info = -2;
     }
-    else if (*nb < 1)
+    else if(*nb < 1)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -5;
     }
@@ -323,25 +342,25 @@ int dorhr_col_(integer *m, integer *n, integer *nb, doublereal *a, integer *lda,
     {
         /* Computing MAX */
         i__1 = 1;
-        i__2 = fla_min(*nb,*n); // , expr subst
-        if (*ldt < fla_max(i__1,i__2))
+        i__2 = fla_min(*nb, *n); // , expr subst
+        if(*ldt < fla_max(i__1, i__2))
         {
             *info = -7;
         }
     }
     /* Handle error in the input parameters. */
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DORHR_COL", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (fla_min(*m,*n) == 0)
+    if(fla_min(*m, *n) == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* On input, the M-by-N matrix A contains the orthogonal */
     /* M-by-N matrix Q_in. */
@@ -353,7 +372,7 @@ int dorhr_col_(integer *m, integer *n, integer *nb, doublereal *a, integer *lda,
     /* (1-1) Factor V1 and U. */
     dlaorhr_col_getrfnp_(n, n, &a[a_offset], lda, &d__[1], &iinfo);
     /* (1-2) Solve for V2. */
-    if (*m > *n)
+    if(*m > *n)
     {
         i__1 = *m - *n;
         dtrsm_("R", "U", "N", "N", &i__1, n, &c_b7, &a[a_offset], lda, &a[*n + 1 + a_dim1], lda);
@@ -367,14 +386,12 @@ int dorhr_col_(integer *m, integer *n, integer *nb, doublereal *a, integer *lda,
     nplusone = *n + 1;
     i__1 = *n;
     i__2 = *nb;
-    for (jb = 1;
-            i__2 < 0 ? jb >= i__1 : jb <= i__1;
-            jb += i__2)
+    for(jb = 1; i__2 < 0 ? jb >= i__1 : jb <= i__1; jb += i__2)
     {
         /* (2-0) Determine the column block size JNB. */
         /* Computing MIN */
         i__3 = nplusone - jb;
-        jnb = fla_min(i__3,*nb);
+        jnb = fla_min(i__3, *nb);
         /* (2-1) Copy the upper-triangular part of the current JNB-by-JNB */
         /* diagonal block U(JB) (of the N-by-N matrix U) stored */
         /* in A(JB:JB+JNB-1,JB:JB+JNB-1) into the upper-triangular part */
@@ -382,12 +399,10 @@ int dorhr_col_(integer *m, integer *n, integer *nb, doublereal *a, integer *lda,
         /* column-by-column, total JNB*(JNB+1)/2 elements. */
         jbtemp1 = jb - 1;
         i__3 = jb + jnb - 1;
-        for (j = jb;
-                j <= i__3;
-                ++j)
+        for(j = jb; j <= i__3; ++j)
         {
             i__4 = j - jbtemp1;
-            dcopy_(&i__4, &a[jb + j * a_dim1], &c__1, &t[j * t_dim1 + 1], & c__1);
+            dcopy_(&i__4, &a[jb + j * a_dim1], &c__1, &t[j * t_dim1 + 1], &c__1);
         }
         /* (2-2) Perform on the upper-triangular part of the current */
         /* JNB-by-JNB diagonal block U(JB) (of the N-by-N matrix U) stored */
@@ -400,11 +415,9 @@ int dorhr_col_(integer *m, integer *n, integer *nb, doublereal *a, integer *lda,
         /* U(JB) according to the sign of the diagonal element of the block */
         /* S(JB), i.e. S(J,J) that is stored in the array element D(J). */
         i__3 = jb + jnb - 1;
-        for (j = jb;
-                j <= i__3;
-                ++j)
+        for(j = jb; j <= i__3; ++j)
         {
-            if (d__[j] == 1.)
+            if(d__[j] == 1.)
             {
                 i__4 = j - jbtemp1;
                 dscal_(&i__4, &c_b10, &t[j * t_dim1 + 1], &c__1);
@@ -420,11 +433,11 @@ int dorhr_col_(integer *m, integer *n, integer *nb, doublereal *a, integer *lda,
         /* The N-by-N matrix V1 is the upper part */
         /* of the M-by-N lower-trapezoidal matrix V */
         /* stored in A(1:M,1:N);
-        */
+         */
         /* B(JB) is a JNB-by-JNB upper-triangular right-hand */
         /* side block, B(JB) = (-1)*U(JB)*S(JB), and */
         /* B(JB) is stored in T(1:JNB,JB:JB+JNB-1);
-        */
+         */
         /* X(JB) is a JNB-by-JNB upper-triangular solution */
         /* block, X(JB) is the upper-triangular block */
         /* reflector T(JB), and X(JB) is stored */
@@ -441,23 +454,20 @@ int dorhr_col_(integer *m, integer *n, integer *nb, doublereal *a, integer *lda,
         /* (2-3a) Set the elements to zero. */
         jbtemp2 = jb - 2;
         i__3 = jb + jnb - 2;
-        for (j = jb;
-                j <= i__3;
-                ++j)
+        for(j = jb; j <= i__3; ++j)
         {
             i__4 = *nb;
-            for (i__ = j - jbtemp2;
-                    i__ <= i__4;
-                    ++i__)
+            for(i__ = j - jbtemp2; i__ <= i__4; ++i__)
             {
                 t[i__ + j * t_dim1] = 0.;
             }
         }
         /* (2-3b) Perform the triangular solve. */
-        dtrsm_("R", "L", "T", "U", &jnb, &jnb, &c_b7, &a[jb + jb * a_dim1], lda, &t[jb * t_dim1 + 1], ldt);
+        dtrsm_("R", "L", "T", "U", &jnb, &jnb, &c_b7, &a[jb + jb * a_dim1], lda,
+               &t[jb * t_dim1 + 1], ldt);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DORHR_COL */
 }
 /* dorhr_col__ */

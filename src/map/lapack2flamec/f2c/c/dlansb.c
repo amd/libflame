@@ -1,18 +1,28 @@
-/* dlansb.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dlansb.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b DLANSB returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, or the ele ment of largest absolute value of a symmetric band matrix. */
+/* > \brief \b DLANSB returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
+ * or the ele ment of largest absolute value of a symmetric band matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLANSB + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlansb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlansb.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlansb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlansb.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlansb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlansb.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -91,7 +101,7 @@ static integer c__1 = 1;
 /* > stored in the first K+1 rows of AB. The j-th column of A is */
 /* > stored in the j-th column of the array AB as follows: */
 /* > if UPLO = 'U', AB(k+1+i-j,j) = A(i,j) for fla_max(1,j-k)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(n,j+k). */
 /* > \endverbatim */
 /* > */
@@ -116,10 +126,13 @@ otherwise, */
 /* > \author NAG Ltd. */
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
-doublereal dlansb_(char *norm, char *uplo, integer *n, integer *k, doublereal *ab, integer *ldab, doublereal *work)
+doublereal dlansb_(char *norm, char *uplo, integer *n, integer *k, doublereal *ab, integer *ldab,
+                   doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlansb inputs: norm %c, uplo %c, n %" FLA_IS ", k %" FLA_IS ", ldab %" FLA_IS "",*norm, *uplo, *n, *k, *ldab);
+    AOCL_DTL_SNPRINTF("dlansb inputs: norm %c, uplo %c, n %" FLA_IS ", k %" FLA_IS ", ldab %" FLA_IS
+                      "",
+                      *norm, *uplo, *n, *k, *ldab);
     /* System generated locals */
     integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     doublereal ret_val, d__1;
@@ -128,10 +141,11 @@ doublereal dlansb_(char *norm, char *uplo, integer *n, integer *k, doublereal *a
     /* Local variables */
     integer i__, j, l;
     doublereal sum, absa, scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal value;
     extern /* Subroutine */
-    int dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
+        void
+        dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -158,30 +172,26 @@ doublereal dlansb_(char *norm, char *uplo, integer *n, integer *k, doublereal *a
     --work;
     /* Function Body */
     value = 0.;
-    if (*n == 0)
+    if(*n == 0)
     {
         value = 0.;
     }
-    else if (lsame_(norm, "M"))
+    else if(lsame_(norm, "M", 1, 1))
     {
         /* Find fla_max(abs(A(i,j))). */
         value = 0.;
-        if (lsame_(uplo, "U"))
+        if(lsame_(uplo, "U", 1, 1))
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 /* Computing MAX */
                 i__2 = *k + 2 - j;
                 i__3 = *k + 1;
-                for (i__ = fla_max(i__2,1);
-                        i__ <= i__3;
-                        ++i__)
+                for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
                 {
                     sum = (d__1 = ab[i__ + j * ab_dim1], f2c_abs(d__1));
-                    if (value < sum || sum != sum)
+                    if(value < sum || sum != sum)
                     {
                         value = sum;
                     }
@@ -193,20 +203,16 @@ doublereal dlansb_(char *norm, char *uplo, integer *n, integer *k, doublereal *a
         else
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 /* Computing MIN */
                 i__2 = *n + 1 - j;
                 i__4 = *k + 1; // , expr subst
-                i__3 = fla_min(i__2,i__4);
-                for (i__ = 1;
-                        i__ <= i__3;
-                        ++i__)
+                i__3 = fla_min(i__2, i__4);
+                for(i__ = 1; i__ <= i__3; ++i__)
                 {
                     sum = (d__1 = ab[i__ + j * ab_dim1], f2c_abs(d__1));
-                    if (value < sum || sum != sum)
+                    if(value < sum || sum != sum)
                     {
                         value = sum;
                     }
@@ -216,16 +222,14 @@ doublereal dlansb_(char *norm, char *uplo, integer *n, integer *k, doublereal *a
             }
         }
     }
-    else if (lsame_(norm, "I") || lsame_(norm, "O") || *(unsigned char *)norm == '1')
+    else if(lsame_(norm, "I", 1, 1) || lsame_(norm, "O", 1, 1) || *(unsigned char *)norm == '1')
     {
         /* Find normI(A) ( = norm1(A), since A is symmetric). */
         value = 0.;
-        if (lsame_(uplo, "U"))
+        if(lsame_(uplo, "U", 1, 1))
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 sum = 0.;
                 l = *k + 1 - j;
@@ -233,9 +237,7 @@ doublereal dlansb_(char *norm, char *uplo, integer *n, integer *k, doublereal *a
                 i__3 = 1;
                 i__2 = j - *k; // , expr subst
                 i__4 = j - 1;
-                for (i__ = fla_max(i__3,i__2);
-                        i__ <= i__4;
-                        ++i__)
+                for(i__ = fla_max(i__3, i__2); i__ <= i__4; ++i__)
                 {
                     absa = (d__1 = ab[l + i__ + j * ab_dim1], f2c_abs(d__1));
                     sum += absa;
@@ -246,12 +248,10 @@ doublereal dlansb_(char *norm, char *uplo, integer *n, integer *k, doublereal *a
                 /* L60: */
             }
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 sum = work[i__];
-                if (value < sum || sum != sum)
+                if(value < sum || sum != sum)
                 {
                     value = sum;
                 }
@@ -261,34 +261,28 @@ doublereal dlansb_(char *norm, char *uplo, integer *n, integer *k, doublereal *a
         else
         {
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 work[i__] = 0.;
                 /* L80: */
             }
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 sum = work[j] + (d__1 = ab[j * ab_dim1 + 1], f2c_abs(d__1));
                 l = 1 - j;
                 /* Computing MIN */
                 i__3 = *n;
                 i__2 = j + *k; // , expr subst
-                i__4 = fla_min(i__3,i__2);
-                for (i__ = j + 1;
-                        i__ <= i__4;
-                        ++i__)
+                i__4 = fla_min(i__3, i__2);
+                for(i__ = j + 1; i__ <= i__4; ++i__)
                 {
                     absa = (d__1 = ab[l + i__ + j * ab_dim1], f2c_abs(d__1));
                     sum += absa;
                     work[i__] += absa;
                     /* L90: */
                 }
-                if (value < sum || sum != sum)
+                if(value < sum || sum != sum)
                 {
                     value = sum;
                 }
@@ -296,26 +290,24 @@ doublereal dlansb_(char *norm, char *uplo, integer *n, integer *k, doublereal *a
             }
         }
     }
-    else if (lsame_(norm, "F") || lsame_(norm, "E"))
+    else if(lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
     {
         /* Find normF(A). */
         scale = 0.;
         sum = 1.;
-        if (*k > 0)
+        if(*k > 0)
         {
-            if (lsame_(uplo, "U"))
+            if(lsame_(uplo, "U", 1, 1))
             {
                 i__1 = *n;
-                for (j = 2;
-                        j <= i__1;
-                        ++j)
+                for(j = 2; j <= i__1; ++j)
                 {
                     /* Computing MIN */
                     i__3 = j - 1;
-                    i__4 = fla_min(i__3,*k);
+                    i__4 = fla_min(i__3, *k);
                     /* Computing MAX */
                     i__2 = *k + 2 - j;
-                    dlassq_(&i__4, &ab[fla_max(i__2,1) + j * ab_dim1], &c__1, & scale, &sum);
+                    dlassq_(&i__4, &ab[fla_max(i__2, 1) + j * ab_dim1], &c__1, &scale, &sum);
                     /* L110: */
                 }
                 l = *k + 1;
@@ -323,13 +315,11 @@ doublereal dlansb_(char *norm, char *uplo, integer *n, integer *k, doublereal *a
             else
             {
                 i__1 = *n - 1;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     /* Computing MIN */
                     i__3 = *n - j;
-                    i__4 = fla_min(i__3,*k);
+                    i__4 = fla_min(i__3, *k);
                     dlassq_(&i__4, &ab[j * ab_dim1 + 2], &c__1, &scale, &sum);
                     /* L120: */
                 }

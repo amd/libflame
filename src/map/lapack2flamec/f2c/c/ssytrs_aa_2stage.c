@@ -1,5 +1,8 @@
-/* ../netlib/v3.9.0/ssytrs_aa_2stage.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/ssytrs_aa_2stage.f -- translated by f2c (version 20160102). You must link the
+ resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
+ Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
+ with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static real c_b10 = 1.f;
@@ -10,11 +13,17 @@ static integer c_n1 = -1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SSYTRS_AA_2STAGE + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssytrs_ aa_2stage.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssytrs_
+ * aa_2stage.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssytrs_ aa_2stage.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssytrs_
+ * aa_2stage.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytrs_ aa_2stage.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytrs_
+ * aa_2stage.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -46,7 +55,7 @@ static integer c_n1 = -1;
 /* > Specifies whether the details of the factorization are stored */
 /* > as an upper or lower triangular matrix. */
 /* > = 'U': Upper triangular, form is A = U**T*T*U;
-*/
+ */
 /* > = 'L': Lower triangular, form is A = L*T*L**T. */
 /* > \endverbatim */
 /* > */
@@ -130,22 +139,33 @@ static integer c_n1 = -1;
 /* > \ingroup realSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int ssytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *tb, integer *ltb, integer *ipiv, integer *ipiv2, real *b, integer *ldb, integer *info)
+void ssytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *tb,
+                       integer *ltb, integer *ipiv, integer *ipiv2, real *b, integer *ldb,
+                       integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"ssytrs_aa_2stage inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ltb %" FLA_IS ", ldb %%" FLA_IS "",*uplo, *n, *nrhs, *lda, *ltb, *ldb);
+    snprintf(buffer, 256,
+             "ssytrs_aa_2stage inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
+             ", ltb %" FLA_IS ", ldb %%" FLA_IS "",
+             *uplo, *n, *nrhs, *lda, *ltb, *ldb);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     integer nb, ldtb;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    int strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer * ), xerbla_(const char *srname, const integer *info, ftnlen srname_len), sgbtrs_(char *, integer *, integer *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *), slaswp_(integer *, real *, integer *, integer *, integer *, integer *, integer *);
+        void
+        strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
+               real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        sgbtrs_(char *, integer *, integer *, integer *, integer *, real *, integer *, integer *,
+                real *, integer *, integer *),
+        slaswp_(integer *, real *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -177,66 +197,68 @@ int ssytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, real *a, integer *l
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ltb < *n << 2)
+    else if(*ltb < *n << 2)
     {
         *info = -7;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -11;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SSYTRS_AA_2STAGE", &i__1, (ftnlen)16);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0 || *nrhs == 0)
+    if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Read NB and compute LDTB */
-    nb = (integer) tb[1];
+    nb = (integer)tb[1];
     ldtb = *ltb / *n;
-    if (upper)
+    if(upper)
     {
         /* Solve A*X = B, where A = U**T*T*U. */
-        if (*n > nb)
+        if(*n > nb)
         {
             /* Pivot, P**T * B -> B */
             i__1 = nb + 1;
             slaswp_(nrhs, &b[b_offset], ldb, &i__1, n, &ipiv[1], &c__1);
             /* Compute (U**T \ B) -> B [ (U**T \P**T * B) ] */
             i__1 = *n - nb;
-            strsm_("L", "U", "T", "U", &i__1, nrhs, &c_b10, &a[(nb + 1) * a_dim1 + 1], lda, &b[nb + 1 + b_dim1], ldb);
+            strsm_("L", "U", "T", "U", &i__1, nrhs, &c_b10, &a[(nb + 1) * a_dim1 + 1], lda,
+                   &b[nb + 1 + b_dim1], ldb);
         }
         /* Compute T \ B -> B [ T \ (U**T \P**T * B) ] */
         sgbtrs_("N", n, &nb, &nb, nrhs, &tb[1], &ldtb, &ipiv2[1], &b[b_offset], ldb, info);
-        if (*n > nb)
+        if(*n > nb)
         {
             /* Compute (U \ B) -> B [ U \ (T \ (U**T \P**T * B) ) ] */
             i__1 = *n - nb;
-            strsm_("L", "U", "N", "U", &i__1, nrhs, &c_b10, &a[(nb + 1) * a_dim1 + 1], lda, &b[nb + 1 + b_dim1], ldb);
+            strsm_("L", "U", "N", "U", &i__1, nrhs, &c_b10, &a[(nb + 1) * a_dim1 + 1], lda,
+                   &b[nb + 1 + b_dim1], ldb);
             /* Pivot, P * B -> B [ P * (U \ (T \ (U**T \P**T * B) )) ] */
             i__1 = nb + 1;
             slaswp_(nrhs, &b[b_offset], ldb, &i__1, n, &ipiv[1], &c_n1);
@@ -245,30 +267,31 @@ int ssytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, real *a, integer *l
     else
     {
         /* Solve A*X = B, where A = L*T*L**T. */
-        if (*n > nb)
+        if(*n > nb)
         {
             /* Pivot, P**T * B -> B */
             i__1 = nb + 1;
             slaswp_(nrhs, &b[b_offset], ldb, &i__1, n, &ipiv[1], &c__1);
             /* Compute (L \ B) -> B [ (L \P**T * B) ] */
             i__1 = *n - nb;
-            strsm_("L", "L", "N", "U", &i__1, nrhs, &c_b10, &a[nb + 1 + a_dim1], lda, &b[nb + 1 + b_dim1], ldb);
+            strsm_("L", "L", "N", "U", &i__1, nrhs, &c_b10, &a[nb + 1 + a_dim1], lda,
+                   &b[nb + 1 + b_dim1], ldb);
         }
         /* Compute T \ B -> B [ T \ (L \P**T * B) ] */
         sgbtrs_("N", n, &nb, &nb, nrhs, &tb[1], &ldtb, &ipiv2[1], &b[b_offset], ldb, info);
-        if (*n > nb)
+        if(*n > nb)
         {
             /* Compute (L**T \ B) -> B [ L**T \ (T \ (L \P**T * B) ) ] */
             i__1 = *n - nb;
-            strsm_("L", "L", "T", "U", &i__1, nrhs, &c_b10, &a[nb + 1 + a_dim1], lda, &b[nb + 1 + b_dim1], ldb);
+            strsm_("L", "L", "T", "U", &i__1, nrhs, &c_b10, &a[nb + 1 + a_dim1], lda,
+                   &b[nb + 1 + b_dim1], ldb);
             /* Pivot, P * B -> B [ P * (L**T \ (T \ (L \P**T * B) )) ] */
             i__1 = nb + 1;
             slaswp_(nrhs, &b[b_offset], ldb, &i__1, n, &ipiv[1], &c_n1);
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SSYTRS_AA_2STAGE */
 }
 /* ssytrs_aa_2stage__ */
-

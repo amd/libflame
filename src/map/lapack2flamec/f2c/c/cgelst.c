@@ -1,26 +1,32 @@
-/* cgelst.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* cgelst.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    0.f,0.f
-}
-;
+static complex c_b1 = {0.f, 0.f};
 static integer c__1 = 1;
 static integer c_n1 = -1;
 static integer c__2 = 2;
 static integer c__0 = 0;
-/* > \brief <b> CGELST solves overdetermined or underdetermined systems for GE matrices using QR or LQ factori zation with compact WY representation of Q.</b> */
+/* > \brief <b> CGELST solves overdetermined or underdetermined systems for GE matrices using QR or
+ * LQ factori zation with compact WY representation of Q.</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CGELST + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgelst. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgelst.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgelst. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgelst.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgelst. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgelst.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -72,7 +78,7 @@ they are stored as the columns of the */
 /* > \verbatim */
 /* > TRANS is CHARACTER*1 */
 /* > = 'N': the linear system involves A;
-*/
+ */
 /* > = 'C': the linear system involves A**H. */
 /* > \endverbatim */
 /* > */
@@ -102,7 +108,7 @@ they are stored as the columns of the */
 /* > On exit, */
 /* > if M >= N, A is overwritten by details of its QR */
 /* > factorization as returned by CGEQRT;
-*/
+ */
 /* > if M < N, A is overwritten by details of its LQ */
 /* > factorization as returned by CGELQT. */
 /* > \endverbatim */
@@ -127,13 +133,13 @@ B is M-by-NRHS if TRANS = 'N', or N-by-NRHS */
 the residual sum of squares for the */
 /* > solution in each column is given by the sum of squares of */
 /* > modulus of elements N+1 to M in that column;
-*/
+ */
 /* > if TRANS = 'N' and m < n, rows 1 to N of B contain the */
 /* > minimum norm solution vectors;
-*/
+ */
 /* > if TRANS = 'C' and m >= n, rows 1 to M of B contain the */
 /* > minimum norm solution vectors;
-*/
+ */
 /* > if TRANS = 'C' and m < n, rows 1 to M of B contain the */
 /* > least squares solution vectors;
 the residual sum of squares */
@@ -198,10 +204,13 @@ the least squares solution could not be */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int cgelst_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, integer *lda, complex *b, integer *ldb, complex * work, integer *lwork, integer *info)
+void cgelst_(char *trans, integer *m, integer *n, integer *nrhs, complex *a, integer *lda,
+             complex *b, integer *ldb, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("cgelst inputs: trans %c, m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*trans, *m, *n, *nrhs, *lda, *ldb);
+    AOCL_DTL_SNPRINTF("cgelst inputs: trans %c, m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS
+                      ", lda %" FLA_IS ", ldb %" FLA_IS "",
+                      *trans, *m, *n, *nrhs, *lda, *ldb);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
     real r__1;
@@ -211,30 +220,45 @@ int cgelst_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, int
     integer brow;
     logical tpsd;
     integer iascl, ibscl;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer nbmin;
     real rwork[1];
     integer lwopt;
     extern /* Subroutine */
-    int slabad_(real *, real *);
+        void
+        slabad_(real *, real *);
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    int clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *);
+        void
+        clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *,
+                integer *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int cgelqt_(integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *);
+        void
+        cgelqt_(integer *, integer *, integer *, complex *, integer *, complex *, integer *,
+                complex *, integer *);
     integer scllen;
     real bignum;
     extern /* Subroutine */
-    int cgeqrt_(integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *);
+        void
+        cgeqrt_(integer *, integer *, integer *, complex *, integer *, complex *, integer *,
+                complex *, integer *);
     integer mnnrhs;
     real smlnum;
     logical lquery;
     extern /* Subroutine */
-    int ctrtrs_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *), cgemlqt_(char *, char *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *), cgemqrt_(char *, char *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *);
+        void
+        ctrtrs_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *,
+                integer *, integer *),
+        cgemlqt_(char *, char *, integer *, integer *, integer *, integer *, complex *, integer *,
+                 complex *, integer *, complex *, integer *, complex *, integer *),
+        cgemqrt_(char *, char *, integer *, integer *, integer *, integer *, complex *, integer *,
+                 complex *, integer *, complex *, integer *, complex *, integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -267,33 +291,33 @@ int cgelst_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, int
     --work;
     /* Function Body */
     *info = 0;
-    mn = fla_min(*m,*n);
+    mn = fla_min(*m, *n);
     lquery = *lwork == -1;
-    if (! (lsame_(trans, "N") || lsame_(trans, "C")))
+    if(!(lsame_(trans, "N", 1, 1) || lsame_(trans, "C", 1, 1)))
     {
         *info = -1;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -6;
     }
     else /* if(complicated condition) */
     {
         /* Computing fla_max */
-        i__1 = fla_max(1,*m);
-        if (*ldb < fla_max(i__1,*n))
+        i__1 = fla_max(1, *m);
+        if(*ldb < fla_max(i__1, *n))
         {
             *info = -8;
         }
@@ -301,58 +325,58 @@ int cgelst_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, int
         {
             /* Computing fla_max */
             i__1 = 1;
-            i__2 = mn + fla_max(mn,*nrhs); // , expr subst
-            if (*lwork < fla_max(i__1,i__2) && ! lquery)
+            i__2 = mn + fla_max(mn, *nrhs); // , expr subst
+            if(*lwork < fla_max(i__1, i__2) && !lquery)
             {
                 *info = -10;
             }
         }
     }
     /* Figure out optimal block size and optimal workspace size */
-    if (*info == 0 || *info == -10)
+    if(*info == 0 || *info == -10)
     {
         tpsd = TRUE_;
-        if (lsame_(trans, "N"))
+        if(lsame_(trans, "N", 1, 1))
         {
             tpsd = FALSE_;
         }
         nb = ilaenv_(&c__1, "CGELST", " ", m, n, &c_n1, &c_n1);
-        mnnrhs = fla_max(mn,*nrhs);
+        mnnrhs = fla_max(mn, *nrhs);
         /* Computing fla_max */
         i__1 = 1;
         i__2 = (mn + mnnrhs) * nb; // , expr subst
-        lwopt = fla_max(i__1,i__2);
-        r__1 = (real) lwopt;
+        lwopt = fla_max(i__1, i__2);
+        r__1 = (real)lwopt;
         work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CGELST ", &i__1, (ftnlen)7);
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* Quick return if possible */
     /* Computing fla_min */
-    i__1 = fla_min(*m,*n);
-    if (fla_min(i__1,*nrhs) == 0)
+    i__1 = fla_min(*m, *n);
+    if(fla_min(i__1, *nrhs) == 0)
     {
-        i__1 = fla_max(*m,*n);
+        i__1 = fla_max(*m, *n);
         claset_("Full", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
-        r__1 = (real) lwopt;
+        r__1 = (real)lwopt;
         work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* *GEQRT and *GELQT routines cannot accept NB larger than fla_min(M,N) */
-    if (nb > mn)
+    if(nb > mn)
     {
         nb = mn;
     }
@@ -362,13 +386,13 @@ int cgelst_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, int
     /* Computing fla_min */
     i__1 = nb;
     i__2 = *lwork / (mn + mnnrhs); // , expr subst
-    nb = fla_min(i__1,i__2);
+    nb = fla_min(i__1, i__2);
     /* The minimum value of NB, when blocked code is used */
     /* Computing fla_max */
     i__1 = 2;
     i__2 = ilaenv_(&c__2, "CGELST", " ", m, n, &c_n1, &c_n1); // , expr subst
-    nbmin = fla_max(i__1,i__2);
-    if (nb < nbmin)
+    nbmin = fla_max(i__1, i__2);
+    if(nb < nbmin)
     {
         nb = 1;
     }
@@ -379,56 +403,56 @@ int cgelst_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, int
     /* Scale A, B if fla_max element outside range [SMLNUM,BIGNUM] */
     anrm = clange_("M", m, n, &a[a_offset], lda, rwork);
     iascl = 0;
-    if (anrm > 0.f && anrm < smlnum)
+    if(anrm > 0.f && anrm < smlnum)
     {
         /* Scale matrix norm up to SMLNUM */
         clascl_("G", &c__0, &c__0, &anrm, &smlnum, m, n, &a[a_offset], lda, info);
         iascl = 1;
     }
-    else if (anrm > bignum)
+    else if(anrm > bignum)
     {
         /* Scale matrix norm down to BIGNUM */
         clascl_("G", &c__0, &c__0, &anrm, &bignum, m, n, &a[a_offset], lda, info);
         iascl = 2;
     }
-    else if (anrm == 0.f)
+    else if(anrm == 0.f)
     {
         /* Matrix all zero. Return zero solution. */
-        i__1 = fla_max(*m,*n);
+        i__1 = fla_max(*m, *n);
         claset_("Full", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
-        r__1 = (real) lwopt;
+        r__1 = (real)lwopt;
         work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     brow = *m;
-    if (tpsd)
+    if(tpsd)
     {
         brow = *n;
     }
     bnrm = clange_("M", &brow, nrhs, &b[b_offset], ldb, rwork);
     ibscl = 0;
-    if (bnrm > 0.f && bnrm < smlnum)
+    if(bnrm > 0.f && bnrm < smlnum)
     {
         /* Scale matrix norm up to SMLNUM */
         clascl_("G", &c__0, &c__0, &bnrm, &smlnum, &brow, nrhs, &b[b_offset], ldb, info);
         ibscl = 1;
     }
-    else if (bnrm > bignum)
+    else if(bnrm > bignum)
     {
         /* Scale matrix norm down to BIGNUM */
         clascl_("G", &c__0, &c__0, &bnrm, &bignum, &brow, nrhs, &b[b_offset], ldb, info);
         ibscl = 2;
     }
-    if (*m >= *n)
+    if(*m >= *n)
     {
         /* M > N: */
         /* Compute the blocked QR factorization of A, */
         /* using the compact WY representation of Q, */
         /* workspace at least N, optimally N*NB. */
         cgeqrt_(m, n, &nb, &a[a_offset], lda, &work[1], &nb, &work[mn * nb + 1], info);
-        if (! tpsd)
+        if(!tpsd)
         {
             /* M > N, A is not transposed: */
             /* Overdetermined system of equations, */
@@ -436,13 +460,15 @@ int cgelst_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, int
             /* Compute B(1:M,1:NRHS) := Q**T * B(1:M,1:NRHS), */
             /* using the compact WY representation of Q, */
             /* workspace at least NRHS, optimally NRHS*NB. */
-            cgemqrt_("Left", "Conjugate transpose", m, nrhs, n, &nb, &a[ a_offset], lda, &work[1], &nb, &b[b_offset], ldb, &work[ mn * nb + 1], info);
+            cgemqrt_("Left", "Conjugate transpose", m, nrhs, n, &nb, &a[a_offset], lda, &work[1],
+                     &nb, &b[b_offset], ldb, &work[mn * nb + 1], info);
             /* Compute B(1:N,1:NRHS) := inv(R) * B(1:N,1:NRHS) */
-            ctrtrs_("Upper", "No transpose", "Non-unit", n, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
-            if (*info > 0)
+            ctrtrs_("Upper", "No transpose", "Non-unit", n, nrhs, &a[a_offset], lda, &b[b_offset],
+                    ldb, info);
+            if(*info > 0)
             {
-    AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                AOCL_DTL_TRACE_LOG_EXIT
+                return;
             }
             scllen = *n;
         }
@@ -453,23 +479,20 @@ int cgelst_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, int
             /* minimum norm solution of A**T * X = B. */
             /* Compute B := inv(R**T) * B in two row blocks of B. */
             /* Block 1: B(1:N,1:NRHS) := inv(R**T) * B(1:N,1:NRHS) */
-            ctrtrs_("Upper", "Conjugate transpose", "Non-unit", n, nrhs, &a[ a_offset], lda, &b[b_offset], ldb, info);
-            if (*info > 0)
+            ctrtrs_("Upper", "Conjugate transpose", "Non-unit", n, nrhs, &a[a_offset], lda,
+                    &b[b_offset], ldb, info);
+            if(*info > 0)
             {
-    AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                AOCL_DTL_TRACE_LOG_EXIT
+                return;
             }
             /* Block 2: Zero out all rows below the N-th row in B: */
             /* B(N+1:M,1:NRHS) = ZERO */
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = *m;
-                for (i__ = *n + 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = *n + 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__ + j * b_dim1;
                     b[i__3].r = 0.f;
@@ -479,7 +502,8 @@ int cgelst_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, int
             /* Compute B(1:M,1:NRHS) := Q(1:N,:) * B(1:N,1:NRHS), */
             /* using the compact WY representation of Q, */
             /* workspace at least NRHS, optimally NRHS*NB. */
-            cgemqrt_("Left", "No transpose", m, nrhs, n, &nb, &a[a_offset], lda, &work[1], &nb, &b[b_offset], ldb, &work[mn * nb + 1], info);
+            cgemqrt_("Left", "No transpose", m, nrhs, n, &nb, &a[a_offset], lda, &work[1], &nb,
+                     &b[b_offset], ldb, &work[mn * nb + 1], info);
             scllen = *m;
         }
     }
@@ -490,30 +514,27 @@ int cgelst_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, int
         /* using the compact WY representation of Q, */
         /* workspace at least M, optimally M*NB. */
         cgelqt_(m, n, &nb, &a[a_offset], lda, &work[1], &nb, &work[mn * nb + 1], info);
-        if (! tpsd)
+        if(!tpsd)
         {
             /* M < N, A is not transposed: */
             /* Underdetermined system of equations, */
             /* minimum norm solution of A * X = B. */
             /* Compute B := inv(L) * B in two row blocks of B. */
             /* Block 1: B(1:M,1:NRHS) := inv(L) * B(1:M,1:NRHS) */
-            ctrtrs_("Lower", "No transpose", "Non-unit", m, nrhs, &a[a_offset], lda, &b[b_offset], ldb, info);
-            if (*info > 0)
+            ctrtrs_("Lower", "No transpose", "Non-unit", m, nrhs, &a[a_offset], lda, &b[b_offset],
+                    ldb, info);
+            if(*info > 0)
             {
-    AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                AOCL_DTL_TRACE_LOG_EXIT
+                return;
             }
             /* Block 2: Zero out all rows below the M-th row in B: */
             /* B(M+1:N,1:NRHS) = ZERO */
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = *n;
-                for (i__ = *m + 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = *m + 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__ + j * b_dim1;
                     b[i__3].r = 0.f;
@@ -523,7 +544,8 @@ int cgelst_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, int
             /* Compute B(1:N,1:NRHS) := Q(1:N,:)**T * B(1:M,1:NRHS), */
             /* using the compact WY representation of Q, */
             /* workspace at least NRHS, optimally NRHS*NB. */
-            cgemlqt_("Left", "Conjugate transpose", n, nrhs, m, &nb, &a[ a_offset], lda, &work[1], &nb, &b[b_offset], ldb, &work[ mn * nb + 1], info);
+            cgemlqt_("Left", "Conjugate transpose", n, nrhs, m, &nb, &a[a_offset], lda, &work[1],
+                     &nb, &b[b_offset], ldb, &work[mn * nb + 1], info);
             scllen = *n;
         }
         else
@@ -534,39 +556,41 @@ int cgelst_(char *trans, integer *m, integer *n, integer * nrhs, complex *a, int
             /* Compute B(1:N,1:NRHS) := Q * B(1:N,1:NRHS), */
             /* using the compact WY representation of Q, */
             /* workspace at least NRHS, optimally NRHS*NB. */
-            cgemlqt_("Left", "No transpose", n, nrhs, m, &nb, &a[a_offset], lda, &work[1], &nb, &b[b_offset], ldb, &work[mn * nb + 1], info);
+            cgemlqt_("Left", "No transpose", n, nrhs, m, &nb, &a[a_offset], lda, &work[1], &nb,
+                     &b[b_offset], ldb, &work[mn * nb + 1], info);
             /* Compute B(1:M,1:NRHS) := inv(L**T) * B(1:M,1:NRHS) */
-            ctrtrs_("Lower", "Conjugate transpose", "Non-unit", m, nrhs, &a[ a_offset], lda, &b[b_offset], ldb, info);
-            if (*info > 0)
+            ctrtrs_("Lower", "Conjugate transpose", "Non-unit", m, nrhs, &a[a_offset], lda,
+                    &b[b_offset], ldb, info);
+            if(*info > 0)
             {
-    AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                AOCL_DTL_TRACE_LOG_EXIT
+                return;
             }
             scllen = *m;
         }
     }
     /* Undo scaling */
-    if (iascl == 1)
+    if(iascl == 1)
     {
         clascl_("G", &c__0, &c__0, &anrm, &smlnum, &scllen, nrhs, &b[b_offset], ldb, info);
     }
-    else if (iascl == 2)
+    else if(iascl == 2)
     {
         clascl_("G", &c__0, &c__0, &anrm, &bignum, &scllen, nrhs, &b[b_offset], ldb, info);
     }
-    if (ibscl == 1)
+    if(ibscl == 1)
     {
         clascl_("G", &c__0, &c__0, &smlnum, &bnrm, &scllen, nrhs, &b[b_offset], ldb, info);
     }
-    else if (ibscl == 2)
+    else if(ibscl == 2)
     {
         clascl_("G", &c__0, &c__0, &bignum, &bnrm, &scllen, nrhs, &b[b_offset], ldb, info);
     }
-    r__1 = (real) lwopt;
+    r__1 = (real)lwopt;
     work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CGELST */
 }
 /* cgelst_ */

@@ -12,19 +12,19 @@
 
 FLA_Error FLASH_Part_create_2x1( FLA_Obj A,    FLA_Obj* AT,
                                                FLA_Obj* AB,
-                                 dim_t n_rows, FLA_Side side )
+                                 fla_dim_t n_rows, FLA_Side side )
 {
 	FLA_Datatype dt_A;
-	dim_t        m_A,  n_A;
-	dim_t        m_A_base, n_A_base;
-	dim_t        m_AT, n_AT;
-	dim_t        m_AB, n_AB;
-	dim_t        depth;
-	dim_t*       b_m;
-	dim_t*       b_n;
-	dim_t        offm_A,  offn_A;
-	dim_t        offm_AT, offn_AT;
-	dim_t        offm_AB, offn_AB;
+	fla_dim_t        m_A,  n_A;
+	fla_dim_t        m_A_base, n_A_base;
+	fla_dim_t        m_AT, n_AT;
+	fla_dim_t        m_AB, n_AB;
+	fla_dim_t        depth;
+	fla_dim_t*       b_m;
+	fla_dim_t*       b_n;
+	fla_dim_t        offm_A,  offn_A;
+	fla_dim_t        offm_AT, offn_AT;
+	fla_dim_t        offm_AB, offn_AB;
 
 	if ( FLA_Check_error_level() == FLA_FULL_ERROR_CHECKING )
 		FLA_Part_2x1_check( A,    AT,
@@ -46,8 +46,8 @@ FLA_Error FLASH_Part_create_2x1( FLA_Obj A,    FLA_Obj* AT,
 
 	// Allocate a pair of temporary arrays for the blocksizes, whose lengths
 	// are equal to the object's hierarchical depth.
-	b_m = ( dim_t* ) FLA_malloc( depth * sizeof( dim_t ) );
-	b_n = ( dim_t* ) FLA_malloc( depth * sizeof( dim_t ) );
+	b_m = ( fla_dim_t* ) FLA_malloc( depth * sizeof( fla_dim_t ) );
+	b_n = ( fla_dim_t* ) FLA_malloc( depth * sizeof( fla_dim_t ) );
 
 	// Accumulate the blocksizes into the blocksize buffers.
 	FLASH_Obj_blocksizes( A, b_m, b_n );
@@ -101,19 +101,19 @@ printf( "AB is      %d %d\n", FLA_Obj_length( *AB ), FLA_Obj_width( *AB ) );
 }
 
 FLA_Error FLASH_Part_create_1x2( FLA_Obj A,    FLA_Obj* AL, FLA_Obj* AR,
-                                 dim_t n_cols, FLA_Side side )
+                                 fla_dim_t n_cols, FLA_Side side )
 {
 	FLA_Datatype dt_A;
-	dim_t        m_A,  n_A;
-	dim_t        m_A_base, n_A_base;
-	dim_t        m_AL, n_AL;
-	dim_t        m_AR, n_AR;
-	dim_t        depth;
-	dim_t*       b_m;
-	dim_t*       b_n;
-	dim_t        offm_A,  offn_A;
-	dim_t        offm_AL, offn_AL;
-	dim_t        offm_AR, offn_AR;
+	fla_dim_t        m_A,  n_A;
+	fla_dim_t        m_A_base, n_A_base;
+	fla_dim_t        m_AL, n_AL;
+	fla_dim_t        m_AR, n_AR;
+	fla_dim_t        depth;
+	fla_dim_t*       b_m;
+	fla_dim_t*       b_n;
+	fla_dim_t        offm_A,  offn_A;
+	fla_dim_t        offm_AL, offn_AL;
+	fla_dim_t        offm_AR, offn_AR;
 
 	if ( FLA_Check_error_level() == FLA_FULL_ERROR_CHECKING )
 		FLA_Part_1x2_check( A,    AL, AR,     n_cols, side );
@@ -134,8 +134,8 @@ FLA_Error FLASH_Part_create_1x2( FLA_Obj A,    FLA_Obj* AL, FLA_Obj* AR,
 
 	// Allocate a pair of temporary arrays for the blocksizes, whose lengths
 	// are equal to the object's hierarchical depth.
-	b_m = ( dim_t* ) FLA_malloc( depth * sizeof( dim_t ) );
-	b_n = ( dim_t* ) FLA_malloc( depth * sizeof( dim_t ) );
+	b_m = ( fla_dim_t* ) FLA_malloc( depth * sizeof( fla_dim_t ) );
+	b_n = ( fla_dim_t* ) FLA_malloc( depth * sizeof( fla_dim_t ) );
 
 	// Accumulate the blocksizes into the blocksize buffers.
 	FLASH_Obj_blocksizes( A, b_m, b_n );
@@ -176,23 +176,23 @@ FLA_Error FLASH_Part_create_1x2( FLA_Obj A,    FLA_Obj* AL, FLA_Obj* AR,
 
 FLA_Error FLASH_Part_create_2x2( FLA_Obj A,    FLA_Obj* ATL, FLA_Obj* ATR,
                                                FLA_Obj* ABL, FLA_Obj* ABR,
-                                 dim_t n_rows, dim_t n_cols, FLA_Side side )
+                                 fla_dim_t n_rows, fla_dim_t n_cols, FLA_Side side )
 {
 	FLA_Datatype dt_A;
-	dim_t        m_A_base, n_A_base;
-	dim_t        m_A,  n_A;
-	dim_t        m_ATL, n_ATL;
-	dim_t        m_ABL, n_ABL;
-	dim_t        m_ATR, n_ATR;
-	dim_t        m_ABR, n_ABR;
-	dim_t        depth;
-	dim_t*       b_m;
-	dim_t*       b_n;
-	dim_t        offm_A,  offn_A;
-	dim_t        offm_ATL, offn_ATL;
-	dim_t        offm_ABL, offn_ABL;
-	dim_t        offm_ATR, offn_ATR;
-	dim_t        offm_ABR, offn_ABR;
+	fla_dim_t        m_A_base, n_A_base;
+	fla_dim_t        m_A,  n_A;
+	fla_dim_t        m_ATL, n_ATL;
+	fla_dim_t        m_ABL, n_ABL;
+	fla_dim_t        m_ATR, n_ATR;
+	fla_dim_t        m_ABR, n_ABR;
+	fla_dim_t        depth;
+	fla_dim_t*       b_m;
+	fla_dim_t*       b_n;
+	fla_dim_t        offm_A,  offn_A;
+	fla_dim_t        offm_ATL, offn_ATL;
+	fla_dim_t        offm_ABL, offn_ABL;
+	fla_dim_t        offm_ATR, offn_ATR;
+	fla_dim_t        offm_ABR, offn_ABR;
 
 	if ( FLA_Check_error_level() == FLA_FULL_ERROR_CHECKING )
 		FLA_Part_2x2_check( A,   ATL, ATR,
@@ -218,8 +218,8 @@ FLA_Error FLASH_Part_create_2x2( FLA_Obj A,    FLA_Obj* ATL, FLA_Obj* ATR,
 
 	// Allocate a pair of temporary arrays for the blocksizes, whose lengths
 	// are equal to the object's hierarchical depth.
-	b_m = ( dim_t* ) FLA_malloc( depth * sizeof( dim_t ) );
-	b_n = ( dim_t* ) FLA_malloc( depth * sizeof( dim_t ) );
+	b_m = ( fla_dim_t* ) FLA_malloc( depth * sizeof( fla_dim_t ) );
+	b_n = ( fla_dim_t* ) FLA_malloc( depth * sizeof( fla_dim_t ) );
 
 	// Accumulate the blocksizes into the blocksize buffers.
 	FLASH_Obj_blocksizes( A, b_m, b_n );
@@ -272,7 +272,7 @@ FLA_Error FLASH_Part_create_2x2( FLA_Obj A,    FLA_Obj* ATL, FLA_Obj* ATR,
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLASH_Obj_adjust_views( FLA_Bool attach_buffer, dim_t offm, dim_t offn, dim_t m, dim_t n, FLA_Obj A, FLA_Obj* S )
+FLA_Error FLASH_Obj_adjust_views( FLA_Bool attach_buffer, fla_dim_t offm, fla_dim_t offn, fla_dim_t m, fla_dim_t n, FLA_Obj A, FLA_Obj* S )
 {
 	
 	FLASH_Obj_adjust_views_hierarchy( attach_buffer, offm, offn, m, n, A, S );
@@ -280,7 +280,7 @@ FLA_Error FLASH_Obj_adjust_views( FLA_Bool attach_buffer, dim_t offm, dim_t offn
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLASH_Obj_adjust_views_hierarchy( FLA_Bool attach_buffer, dim_t offm, dim_t offn, dim_t m, dim_t n, FLA_Obj A, FLA_Obj* S )
+FLA_Error FLASH_Obj_adjust_views_hierarchy( FLA_Bool attach_buffer, fla_dim_t offm, fla_dim_t offn, fla_dim_t m, fla_dim_t n, FLA_Obj A, FLA_Obj* S )
 {
 	FLA_Obj ATL, ATR,
 	        ABL, ABR;
@@ -351,24 +351,24 @@ FLA_Error FLASH_Obj_adjust_views_hierarchy( FLA_Bool attach_buffer, dim_t offm, 
 		FLA_Obj S1T,           S01,
 		        S1B,           S11,
 		                       S21;
-		dim_t b_m_full;
-		dim_t b_n_full;
-		dim_t offm_relA;
-		dim_t offn_relA;
-		dim_t offm_abs;
-		dim_t offn_abs;
-		dim_t offm_cur;
-		dim_t offn_cur;
-		dim_t offm_rem;
-		dim_t offn_rem;
-		dim_t offm_next;
-		dim_t offn_next;
-		dim_t m_next;
-		dim_t n_next;
-		dim_t m_ahead;
-		dim_t n_ahead;
-		dim_t m_behind;
-		dim_t n_behind;
+		fla_dim_t b_m_full;
+		fla_dim_t b_n_full;
+		fla_dim_t offm_relA;
+		fla_dim_t offn_relA;
+		fla_dim_t offm_abs;
+		fla_dim_t offn_abs;
+		fla_dim_t offm_cur;
+		fla_dim_t offn_cur;
+		fla_dim_t offm_rem;
+		fla_dim_t offn_rem;
+		fla_dim_t offm_next;
+		fla_dim_t offn_next;
+		fla_dim_t m_next;
+		fla_dim_t n_next;
+		fla_dim_t m_ahead;
+		fla_dim_t n_ahead;
+		fla_dim_t m_behind;
+		fla_dim_t n_behind;
 
 		// Acquire the scalar length and width of the top-left (full) block
 		// at the current hierarchical level.
@@ -597,14 +597,14 @@ FLA_Error FLASH_Part_free_2x2( FLA_Obj* ATL, FLA_Obj* ATR,
 	return FLA_SUCCESS;
 }
 
-dim_t FLASH_Obj_scalar_length( FLA_Obj H )
+fla_dim_t FLASH_Obj_scalar_length( FLA_Obj H )
 {
 	FLA_Obj  HT,              H0,
 	         HB,              H1,
 	                          H2;
 	FLA_Obj* H1p;
 
-	dim_t b = 0;
+	fla_dim_t b = 0;
 
 	if ( FLA_Obj_elemtype( H ) == FLA_SCALAR )
 		return FLA_Obj_length( H );
@@ -638,12 +638,12 @@ dim_t FLASH_Obj_scalar_length( FLA_Obj H )
 	return b;
 }
 
-dim_t FLASH_Obj_scalar_width( FLA_Obj H )
+fla_dim_t FLASH_Obj_scalar_width( FLA_Obj H )
 {
 	FLA_Obj  HL,    HR,       H0,  H1,  H2;
 	FLA_Obj* H1p;
 
-	dim_t b = 0;
+	fla_dim_t b = 0;
 
 	if ( FLA_Obj_elemtype( H ) == FLA_SCALAR )
 		return FLA_Obj_width( H );
@@ -672,25 +672,25 @@ dim_t FLASH_Obj_scalar_width( FLA_Obj H )
 	return b;
 }
 
-dim_t FLASH_Obj_scalar_min_dim( FLA_Obj H )
+fla_dim_t FLASH_Obj_scalar_min_dim( FLA_Obj H )
 {
 	return fla_min( FLASH_Obj_scalar_length( H ),
 	            FLASH_Obj_scalar_width( H ) );
 }
 
-dim_t FLASH_Obj_scalar_max_dim( FLA_Obj H )
+fla_dim_t FLASH_Obj_scalar_max_dim( FLA_Obj H )
 {
 	return fla_max( FLASH_Obj_scalar_length( H ),
 	            FLASH_Obj_scalar_width( H ) );
 }
 
-dim_t FLASH_Obj_scalar_vector_dim( FLA_Obj H )
+fla_dim_t FLASH_Obj_scalar_vector_dim( FLA_Obj H )
 {
 	return ( FLASH_Obj_scalar_length( H ) == 1 ? FLASH_Obj_scalar_width( H )
 	                                           : FLASH_Obj_scalar_length( H ) );
 }
 
-dim_t FLASH_Obj_scalar_row_offset( FLA_Obj H )
+fla_dim_t FLASH_Obj_scalar_row_offset( FLA_Obj H )
 {
 	if ( FLA_Obj_elemtype( H ) == FLA_SCALAR )
 	{
@@ -698,14 +698,14 @@ dim_t FLASH_Obj_scalar_row_offset( FLA_Obj H )
 	}
 	else
 	{
-		dim_t b_m = FLASH_Obj_scalar_length_tl( H );
+		fla_dim_t b_m = FLASH_Obj_scalar_length_tl( H );
 
 		return FLA_Obj_row_offset( H ) * b_m + 
 		       FLASH_Obj_scalar_row_offset( *FLASH_OBJ_PTR_AT( H ) );
 	}
 }
 
-dim_t FLASH_Obj_scalar_col_offset( FLA_Obj H )
+fla_dim_t FLASH_Obj_scalar_col_offset( FLA_Obj H )
 {
 	if ( FLA_Obj_elemtype( H ) == FLA_SCALAR )
 	{
@@ -713,14 +713,14 @@ dim_t FLASH_Obj_scalar_col_offset( FLA_Obj H )
 	}
 	else
 	{
-		dim_t b_n = FLASH_Obj_scalar_width_tl( H );
+		fla_dim_t b_n = FLASH_Obj_scalar_width_tl( H );
 
 		return FLA_Obj_col_offset( H ) * b_n + 
 		       FLASH_Obj_scalar_col_offset( *FLASH_OBJ_PTR_AT( H ) );
 	}
 }
 
-dim_t FLASH_Obj_scalar_length_tl( FLA_Obj H )
+fla_dim_t FLASH_Obj_scalar_length_tl( FLA_Obj H )
 {
 	if ( FLA_Obj_elemtype( H ) == FLA_SCALAR )
 	{
@@ -734,7 +734,7 @@ dim_t FLASH_Obj_scalar_length_tl( FLA_Obj H )
 	}
 }
 
-dim_t FLASH_Obj_scalar_width_tl( FLA_Obj H )
+fla_dim_t FLASH_Obj_scalar_width_tl( FLA_Obj H )
 {
 	if ( FLA_Obj_elemtype( H ) == FLA_SCALAR )
 	{
@@ -757,10 +757,10 @@ FLA_Error FLASH_Obj_show( char* header, FLA_Obj H, char* elem_format, char* foot
 	}
 	else
 	{
-		dim_t m_scalar;
-		dim_t i_view;
-		dim_t i_abs;
-		dim_t offm_scalar;
+		fla_dim_t m_scalar;
+		fla_dim_t i_view;
+		fla_dim_t i_abs;
+		fla_dim_t offm_scalar;
 
 		// We want to print all m rows in the FLASH view.
 		m_scalar = FLASH_Obj_scalar_length( H );
@@ -790,15 +790,15 @@ FLA_Error FLASH_Obj_show( char* header, FLA_Obj H, char* elem_format, char* foot
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLASH_Obj_show_hierarchy( FLA_Obj H, dim_t i, char* elem_format )
+FLA_Error FLASH_Obj_show_hierarchy( FLA_Obj H, fla_dim_t i, char* elem_format )
 {
 	if ( FLA_Obj_elemtype( H ) == FLA_SCALAR )
 	{
 		FLA_Datatype datatype = FLA_Obj_datatype( H );
-		dim_t        m        = FLA_Obj_width( H );
-		dim_t        rs       = FLA_Obj_row_stride( H );
-		dim_t        cs       = FLA_Obj_col_stride( H );
-		dim_t        j;
+		fla_dim_t        m        = FLA_Obj_width( H );
+		fla_dim_t        rs       = FLA_Obj_row_stride( H );
+		fla_dim_t        cs       = FLA_Obj_col_stride( H );
+		fla_dim_t        j;
 
 		// At this point, i is an absolute row index. We subtract out the
 		// row offset of the view so that the index is relative to the view.
@@ -866,9 +866,9 @@ FLA_Error FLASH_Obj_show_hierarchy( FLA_Obj H, dim_t i, char* elem_format )
 		FLA_Obj  HT,
 		         HB;
 		FLA_Obj  HBL,  HBR,     H10, H11, H12;
-		dim_t b_m_scalar;
-		dim_t offm_local;
-		dim_t i_next;
+		fla_dim_t b_m_scalar;
+		fla_dim_t offm_local;
+		fla_dim_t i_next;
 
 		// Get the scalar length of the top-left block.
 		b_m_scalar = FLASH_Obj_scalar_length_tl( H );

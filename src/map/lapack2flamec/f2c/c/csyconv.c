@@ -1,16 +1,25 @@
-/* ../netlib/csyconv.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/csyconv.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CSYCONV */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CSYCONV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csyconv .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csyconv
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csyconv .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csyconv
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csyconv .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csyconv
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -41,7 +50,7 @@
 /* > Specifies whether the details of the factorization are stored */
 /* > as an upper or lower triangular matrix. */
 /* > = 'U': Upper triangular, form is A = U*D*U**T;
-*/
+ */
 /* > = 'L': Lower triangular, form is A = L*D*L**T. */
 /* > \endverbatim */
 /* > */
@@ -101,15 +110,17 @@
 /* > \ingroup complexSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int csyconv_(char *uplo, char *way, integer *n, complex *a, integer *lda, integer *ipiv, complex *e, integer *info)
+void csyconv_(char *uplo, char *way, integer *n, complex *a, integer *lda, integer *ipiv,
+              complex *e, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"csyconv inputs: uplo %c, way %c, n %lld, lda %lld",*uplo, *way, *n, *lda);
+    snprintf(buffer, 256, "csyconv inputs: uplo %c, way %c, n %lld, lda %lld", *uplo, *way, *n,
+             *lda);
 #else
-    snprintf(buffer, 256,"csyconv inputs: uplo %c, way %c, n %d, lda %d",*uplo, *way, *n, *lda);
+    snprintf(buffer, 256, "csyconv inputs: uplo %c, way %c, n %d, lda %d", *uplo, *way, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -118,10 +129,11 @@ int csyconv_(char *uplo, char *way, integer *n, complex *a, integer *lda, intege
     /* Local variables */
     integer i__, j, ip;
     complex temp;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical convert;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -147,50 +159,50 @@ int csyconv_(char *uplo, char *way, integer *n, complex *a, integer *lda, intege
     --e;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    convert = lsame_(way, "C");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    convert = lsame_(way, "C", 1, 1);
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (! convert && ! lsame_(way, "R"))
+    else if(!convert && !lsame_(way, "R", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CSYCONV", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (upper)
+    if(upper)
     {
         /* A is UPPER */
         /* Convert A (A is upper) */
         /* Convert VALUE */
-        if (convert)
+        if(convert)
         {
             i__ = *n;
             e[1].r = 0.f;
             e[1].i = 0.f; // , expr subst
             while(i__ > 1)
             {
-                if (ipiv[i__] < 0)
+                if(ipiv[i__] < 0)
                 {
                     i__1 = i__;
                     i__2 = i__ - 1 + i__ * a_dim1;
@@ -216,15 +228,13 @@ int csyconv_(char *uplo, char *way, integer *n, complex *a, integer *lda, intege
             i__ = *n;
             while(i__ >= 1)
             {
-                if (ipiv[i__] > 0)
+                if(ipiv[i__] > 0)
                 {
                     ip = ipiv[i__];
-                    if (i__ < *n)
+                    if(i__ < *n)
                     {
                         i__1 = *n;
-                        for (j = i__ + 1;
-                                j <= i__1;
-                                ++j)
+                        for(j = i__ + 1; j <= i__1; ++j)
                         {
                             i__2 = ip + j * a_dim1;
                             temp.r = a[i__2].r;
@@ -243,12 +253,10 @@ int csyconv_(char *uplo, char *way, integer *n, complex *a, integer *lda, intege
                 else
                 {
                     ip = -ipiv[i__];
-                    if (i__ < *n)
+                    if(i__ < *n)
                     {
                         i__1 = *n;
-                        for (j = i__ + 1;
-                                j <= i__1;
-                                ++j)
+                        for(j = i__ + 1; j <= i__1; ++j)
                         {
                             i__2 = ip + j * a_dim1;
                             temp.r = a[i__2].r;
@@ -275,15 +283,13 @@ int csyconv_(char *uplo, char *way, integer *n, complex *a, integer *lda, intege
             i__ = 1;
             while(i__ <= *n)
             {
-                if (ipiv[i__] > 0)
+                if(ipiv[i__] > 0)
                 {
                     ip = ipiv[i__];
-                    if (i__ < *n)
+                    if(i__ < *n)
                     {
                         i__1 = *n;
-                        for (j = i__ + 1;
-                                j <= i__1;
-                                ++j)
+                        for(j = i__ + 1; j <= i__1; ++j)
                         {
                             i__2 = ip + j * a_dim1;
                             temp.r = a[i__2].r;
@@ -302,12 +308,10 @@ int csyconv_(char *uplo, char *way, integer *n, complex *a, integer *lda, intege
                 {
                     ip = -ipiv[i__];
                     ++i__;
-                    if (i__ < *n)
+                    if(i__ < *n)
                     {
                         i__1 = *n;
-                        for (j = i__ + 1;
-                                j <= i__1;
-                                ++j)
+                        for(j = i__ + 1; j <= i__1; ++j)
                         {
                             i__2 = ip + j * a_dim1;
                             temp.r = a[i__2].r;
@@ -328,7 +332,7 @@ int csyconv_(char *uplo, char *way, integer *n, complex *a, integer *lda, intege
             i__ = *n;
             while(i__ > 1)
             {
-                if (ipiv[i__] < 0)
+                if(ipiv[i__] < 0)
                 {
                     i__1 = i__ - 1 + i__ * a_dim1;
                     i__2 = i__;
@@ -343,7 +347,7 @@ int csyconv_(char *uplo, char *way, integer *n, complex *a, integer *lda, intege
     else
     {
         /* A is LOWER */
-        if (convert)
+        if(convert)
         {
             /* Convert A (A is lower) */
             /* Convert VALUE */
@@ -353,7 +357,7 @@ int csyconv_(char *uplo, char *way, integer *n, complex *a, integer *lda, intege
             e[i__1].i = 0.f; // , expr subst
             while(i__ <= *n)
             {
-                if (i__ < *n && ipiv[i__] < 0)
+                if(i__ < *n && ipiv[i__] < 0)
                 {
                     i__1 = i__;
                     i__2 = i__ + 1 + i__ * a_dim1;
@@ -379,15 +383,13 @@ int csyconv_(char *uplo, char *way, integer *n, complex *a, integer *lda, intege
             i__ = 1;
             while(i__ <= *n)
             {
-                if (ipiv[i__] > 0)
+                if(ipiv[i__] > 0)
                 {
                     ip = ipiv[i__];
-                    if (i__ > 1)
+                    if(i__ > 1)
                     {
                         i__1 = i__ - 1;
-                        for (j = 1;
-                                j <= i__1;
-                                ++j)
+                        for(j = 1; j <= i__1; ++j)
                         {
                             i__2 = ip + j * a_dim1;
                             temp.r = a[i__2].r;
@@ -406,12 +408,10 @@ int csyconv_(char *uplo, char *way, integer *n, complex *a, integer *lda, intege
                 else
                 {
                     ip = -ipiv[i__];
-                    if (i__ > 1)
+                    if(i__ > 1)
                     {
                         i__1 = i__ - 1;
-                        for (j = 1;
-                                j <= i__1;
-                                ++j)
+                        for(j = 1; j <= i__1; ++j)
                         {
                             i__2 = ip + j * a_dim1;
                             temp.r = a[i__2].r;
@@ -438,15 +438,13 @@ int csyconv_(char *uplo, char *way, integer *n, complex *a, integer *lda, intege
             i__ = *n;
             while(i__ >= 1)
             {
-                if (ipiv[i__] > 0)
+                if(ipiv[i__] > 0)
                 {
                     ip = ipiv[i__];
-                    if (i__ > 1)
+                    if(i__ > 1)
                     {
                         i__1 = i__ - 1;
-                        for (j = 1;
-                                j <= i__1;
-                                ++j)
+                        for(j = 1; j <= i__1; ++j)
                         {
                             i__2 = i__ + j * a_dim1;
                             temp.r = a[i__2].r;
@@ -465,12 +463,10 @@ int csyconv_(char *uplo, char *way, integer *n, complex *a, integer *lda, intege
                 {
                     ip = -ipiv[i__];
                     --i__;
-                    if (i__ > 1)
+                    if(i__ > 1)
                     {
                         i__1 = i__ - 1;
-                        for (j = 1;
-                                j <= i__1;
-                                ++j)
+                        for(j = 1; j <= i__1; ++j)
                         {
                             i__2 = i__ + 1 + j * a_dim1;
                             temp.r = a[i__2].r;
@@ -491,7 +487,7 @@ int csyconv_(char *uplo, char *way, integer *n, complex *a, integer *lda, intege
             i__ = 1;
             while(i__ <= *n - 1)
             {
-                if (ipiv[i__] < 0)
+                if(ipiv[i__] < 0)
                 {
                     i__1 = i__ + 1 + i__ * a_dim1;
                     i__2 = i__;
@@ -504,7 +500,7 @@ int csyconv_(char *uplo, char *way, integer *n, complex *a, integer *lda, intege
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSYCONV */
 }
 /* csyconv_ */

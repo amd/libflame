@@ -1,16 +1,25 @@
-/* ../netlib/dla_lin_berr.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dla_lin_berr.f -- translated by f2c (version 20100827). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLA_LIN_BERR computes a component-wise relative backward error. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLA_LIN_BERR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dla_lin _berr.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dla_lin
+ * _berr.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dla_lin _berr.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dla_lin
+ * _berr.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dla_lin _berr.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dla_lin
+ * _berr.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -87,10 +96,12 @@
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dla_lin_berr_(integer *n, integer *nz, integer *nrhs, doublereal *res, doublereal *ayb, doublereal *berr)
+void dla_lin_berr_(integer *n, integer *nz, integer *nrhs, doublereal *res, doublereal *ayb,
+                   doublereal *berr)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dla_lin_berr inputs: n %" FLA_IS ", nz %" FLA_IS ", nrhs %" FLA_IS "",*n, *nz, *nrhs);
+    AOCL_DTL_SNPRINTF("dla_lin_berr inputs: n %" FLA_IS ", nz %" FLA_IS ", nrhs %" FLA_IS "", *n,
+                      *nz, *nrhs);
     /* System generated locals */
     integer ayb_dim1, ayb_offset, res_dim1, res_offset, i__1, i__2;
     doublereal d__1;
@@ -129,28 +140,25 @@ int dla_lin_berr_(integer *n, integer *nz, integer *nrhs, doublereal *res, doubl
     safe1 = dlamch_("Safe minimum");
     safe1 = (*nz + 1) * safe1;
     i__1 = *nrhs;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         berr[j] = 0.;
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
-            if (ayb[i__ + j * ayb_dim1] != 0.)
+            if(ayb[i__ + j * ayb_dim1] != 0.)
             {
-                tmp = (safe1 + (d__1 = res[i__ + j * res_dim1], f2c_dabs(d__1))) / ayb[i__ + j * ayb_dim1];
+                tmp = (safe1 + (d__1 = res[i__ + j * res_dim1], f2c_dabs(d__1)))
+                      / ayb[i__ + j * ayb_dim1];
                 /* Computing MAX */
                 d__1 = berr[j];
-                berr[j] = fla_max(d__1,tmp);
+                berr[j] = fla_max(d__1, tmp);
             }
             /* If AYB is exactly 0.0 (and if computed by SLA_yyAMV), then we know */
             /* the true residual also must be exactly 0.0. */
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* dla_lin_berr__ */

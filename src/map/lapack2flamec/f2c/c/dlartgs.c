@@ -1,16 +1,25 @@
-/* ../netlib/dlartgs.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlartgs.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLARTGS generates a plane rotation designed to introduce a bulge in implicit QR iteration for t he bidiagonal SVD problem. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLARTGS + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlartgs .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlartgs
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlartgs .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlartgs
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlartgs .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlartgs
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -76,7 +85,7 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dlartgs_(doublereal *x, doublereal *y, doublereal *sigma, doublereal *cs, doublereal *sn)
+void dlartgs_(doublereal *x, doublereal *y, doublereal *sigma, doublereal *cs, doublereal *sn)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlartgs inputs : x %lf, y %lf, sigma %lf", *x, *y, *sigma);
@@ -84,7 +93,8 @@ int dlartgs_(doublereal *x, doublereal *y, doublereal *sigma, doublereal *cs, do
     extern doublereal dlamch_(char *);
     doublereal thresh;
     extern /* Subroutine */
-    int dlartgp_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dlartgp_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -103,14 +113,14 @@ int dlartgs_(doublereal *x, doublereal *y, doublereal *sigma, doublereal *cs, do
     thresh = dlamch_("E");
     /* Compute the first column of B**T*B - SIGMA^2*I, up to a scale */
     /* factor. */
-    if (*sigma == 0. && f2c_abs(*x) < thresh || f2c_abs(*x) == *sigma && *y == 0.)
+    if(*sigma == 0. && f2c_abs(*x) < thresh || f2c_abs(*x) == *sigma && *y == 0.)
     {
         z__ = 0.;
         w = 0.;
     }
-    else if (*sigma == 0.)
+    else if(*sigma == 0.)
     {
-        if (*x >= 0.)
+        if(*x >= 0.)
         {
             z__ = *x;
             w = *y;
@@ -121,14 +131,14 @@ int dlartgs_(doublereal *x, doublereal *y, doublereal *sigma, doublereal *cs, do
             w = -(*y);
         }
     }
-    else if (f2c_abs(*x) < thresh)
+    else if(f2c_abs(*x) < thresh)
     {
         z__ = -(*sigma) * *sigma;
         w = 0.;
     }
     else
     {
-        if (*x >= 0.)
+        if(*x >= 0.)
         {
             s = 1.;
         }
@@ -141,12 +151,12 @@ int dlartgs_(doublereal *x, doublereal *y, doublereal *sigma, doublereal *cs, do
     }
     /* Generate the rotation. */
     /* CALL DLARTGP( Z, W, CS, SN, R ) might seem more natural;
-    */
+     */
     /* reordering the arguments ensures that if Z = 0 then the rotation */
     /* is by PI/2. */
     dlartgp_(&w, &z__, sn, cs, &r__);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End DLARTGS */
 }
 /* dlartgs_ */

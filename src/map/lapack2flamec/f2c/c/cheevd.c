@@ -1,21 +1,31 @@
-/* cheevd.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* cheevd.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
 static integer c__0 = 0;
 static real c_b18 = 1.f;
-/* > \brief <b> CHEEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors for HE mat rices</b> */
+/* > \brief <b> CHEEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors
+ * for HE mat rices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CHEEVD + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cheevd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cheevd.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cheevd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cheevd.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cheevd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cheevd.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -53,7 +63,7 @@ static real c_b18 = 1.f;
 /* > \verbatim */
 /* > JOBZ is CHARACTER*1 */
 /* > = 'N': Compute eigenvalues only;
-*/
+ */
 /* > = 'V': Compute eigenvalues and eigenvectors. */
 /* > \endverbatim */
 /* > */
@@ -61,7 +71,7 @@ static real c_b18 = 1.f;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -175,7 +185,7 @@ the */
 /* > to converge;
 i off-diagonal elements of an intermediate */
 /* > tridiagonal form did not converge to zero;
-*/
+ */
 /* > if INFO = i and JOBZ = 'V', then the algorithm failed */
 /* > to compute an eigenvalue while working on the submatrix */
 /* > lying in rows and columns INFO/(N+1) through */
@@ -200,10 +210,13 @@ i off-diagonal elements of an intermediate */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cheevd_(char *jobz, char *uplo, integer *n, complex *a, integer *lda, real *w, complex *work, integer *lwork, real *rwork, integer *lrwork, integer *iwork, integer *liwork, integer *info)
+void cheevd_(char *jobz, char *uplo, integer *n, complex *a, integer *lda, real *w, complex *work,
+             integer *lwork, real *rwork, integer *lrwork, integer *iwork, integer *liwork,
+             integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("cheevd inputs: jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*jobz, *uplo, *n, *lda);
+    AOCL_DTL_SNPRINTF("cheevd inputs: jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *jobz,
+                      *uplo, *n, *lda);
     integer a_dim1, a_offset, i__1, i__2;
     real r__1;
     /* Builtin functions */
@@ -216,10 +229,11 @@ int cheevd_(char *jobz, char *uplo, integer *n, complex *a, integer *lda, real *
     real rmin, rmax;
     integer lopt;
     real sigma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     integer lwmin, liopt;
     logical lower;
     integer llrwk, lropt;
@@ -228,21 +242,32 @@ int cheevd_(char *jobz, char *uplo, integer *n, complex *a, integer *lda, real *
     extern real clanhe_(char *, char *, integer *, complex *, integer *, real *);
     integer iscale;
     extern /* Subroutine */
-    int clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *, integer *, integer *), cstedc_(char *, integer *, real *, real *, complex *, integer *, complex *, integer *, real *, integer *, integer *, integer *, integer *);
+        void
+        clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *,
+                integer *, integer *),
+        cstedc_(char *, integer *, real *, real *, complex *, integer *, complex *, integer *,
+                real *, integer *, integer *, integer *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int chetrd_(char *, integer *, complex *, integer *, real *, real *, complex *, complex *, integer *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *);
+        void
+        chetrd_(char *, integer *, complex *, integer *, real *, real *, complex *, complex *,
+                integer *, integer *),
+        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *);
     real safmin;
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer indtau, indrwk, indwrk, liwmin;
     extern /* Subroutine */
-    int ssterf_(integer *, real *, real *, integer *);
+        void
+        ssterf_(integer *, real *, real *, integer *);
     integer lrwmin;
     extern /* Subroutine */
-    int cunmtr_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, integer *);
+        void
+        cunmtr_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *,
+                complex *, integer *, complex *, integer *, integer *);
     integer llwork;
     real smlnum;
     logical lquery;
@@ -276,29 +301,29 @@ int cheevd_(char *jobz, char *uplo, integer *n, complex *a, integer *lda, real *
     --rwork;
     --iwork;
     /* Function Body */
-    wantz = lsame_(jobz, "V");
-    lower = lsame_(uplo, "L");
+    wantz = lsame_(jobz, "V", 1, 1);
+    lower = lsame_(uplo, "L", 1, 1);
     lquery = *lwork == -1 || *lrwork == -1 || *liwork == -1;
     *info = 0;
-    if (! (wantz || lsame_(jobz, "N")))
+    if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (lower || lsame_(uplo, "U")))
+    else if(!(lower || lsame_(uplo, "U", 1, 1)))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        if (*n <= 1)
+        if(*n <= 1)
         {
             lwmin = 1;
             lrwmin = 1;
@@ -309,7 +334,7 @@ int cheevd_(char *jobz, char *uplo, integer *n, complex *a, integer *lda, real *
         }
         else
         {
-            if (wantz)
+            if(wantz)
             {
                 lwmin = (*n << 1) + *n * *n;
                 /* Computing 2nd power */
@@ -326,7 +351,7 @@ int cheevd_(char *jobz, char *uplo, integer *n, complex *a, integer *lda, real *
             /* Computing MAX */
             i__1 = lwmin;
             i__2 = *n + *n * ilaenv_(&c__1, "CHETRD", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
-            lopt = fla_max(i__1,i__2);
+            lopt = fla_max(i__1, i__2);
             lropt = lrwmin;
             liopt = liwmin;
         }
@@ -334,49 +359,49 @@ int cheevd_(char *jobz, char *uplo, integer *n, complex *a, integer *lda, real *
         work[1].i = 0.f; // , expr subst
         rwork[1] = sroundup_lwork(&lropt);
         iwork[1] = liopt;
-        if (*lwork < lwmin && ! lquery)
+        if(*lwork < lwmin && !lquery)
         {
             *info = -8;
         }
-        else if (*lrwork < lrwmin && ! lquery)
+        else if(*lrwork < lrwmin && !lquery)
         {
             *info = -10;
         }
-        else if (*liwork < liwmin && ! lquery)
+        else if(*liwork < liwmin && !lquery)
         {
             *info = -12;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CHEEVD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    if (*n == 1)
+    if(*n == 1)
     {
         i__1 = a_dim1 + 1;
         w[1] = a[i__1].r;
-        if (wantz)
+        if(wantz)
         {
             i__1 = a_dim1 + 1;
             a[i__1].r = 1.f;
             a[i__1].i = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants. */
     safmin = slamch_("Safe minimum");
@@ -388,17 +413,17 @@ int cheevd_(char *jobz, char *uplo, integer *n, complex *a, integer *lda, real *
     /* Scale matrix to allowable range, if necessary. */
     anrm = clanhe_("M", uplo, n, &a[a_offset], lda, &rwork[1]);
     iscale = 0;
-    if (anrm > 0.f && anrm < rmin)
+    if(anrm > 0.f && anrm < rmin)
     {
         iscale = 1;
         sigma = rmin / anrm;
     }
-    else if (anrm > rmax)
+    else if(anrm > rmax)
     {
         iscale = 1;
         sigma = rmax / anrm;
     }
-    if (iscale == 1)
+    if(iscale == 1)
     {
         clascl_(uplo, &c__0, &c__0, &c_b18, &sigma, n, n, &a[a_offset], lda, info);
     }
@@ -411,26 +436,29 @@ int cheevd_(char *jobz, char *uplo, integer *n, complex *a, integer *lda, real *
     llwork = *lwork - indwrk + 1;
     llwrk2 = *lwork - indwk2 + 1;
     llrwk = *lrwork - indrwk + 1;
-    chetrd_(uplo, n, &a[a_offset], lda, &w[1], &rwork[inde], &work[indtau], & work[indwrk], &llwork, &iinfo);
+    chetrd_(uplo, n, &a[a_offset], lda, &w[1], &rwork[inde], &work[indtau], &work[indwrk], &llwork,
+            &iinfo);
     /* For eigenvalues only, call SSTERF. For eigenvectors, first call */
     /* CSTEDC to generate the eigenvector matrix, WORK(INDWRK), of the */
     /* tridiagonal matrix, then call CUNMTR to multiply it to the */
     /* Householder transformations represented as Householder vectors in */
     /* A. */
-    if (! wantz)
+    if(!wantz)
     {
         ssterf_(n, &w[1], &rwork[inde], info);
     }
     else
     {
-        cstedc_("I", n, &w[1], &rwork[inde], &work[indwrk], n, &work[indwk2], &llwrk2, &rwork[indrwk], &llrwk, &iwork[1], liwork, info);
-        cunmtr_("L", uplo, "N", n, n, &a[a_offset], lda, &work[indtau], &work[ indwrk], n, &work[indwk2], &llwrk2, &iinfo);
+        cstedc_("I", n, &w[1], &rwork[inde], &work[indwrk], n, &work[indwk2], &llwrk2,
+                &rwork[indrwk], &llrwk, &iwork[1], liwork, info);
+        cunmtr_("L", uplo, "N", n, n, &a[a_offset], lda, &work[indtau], &work[indwrk], n,
+                &work[indwk2], &llwrk2, &iinfo);
         clacpy_("A", n, n, &work[indwrk], n, &a[a_offset], lda);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
-    if (iscale == 1)
+    if(iscale == 1)
     {
-        if (*info == 0)
+        if(*info == 0)
         {
             imax = *n;
         }
@@ -446,7 +474,7 @@ int cheevd_(char *jobz, char *uplo, integer *n, complex *a, integer *lda, real *
     rwork[1] = sroundup_lwork(&lropt);
     iwork[1] = liopt;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of CHEEVD */
 }
 /* cheevd_ */

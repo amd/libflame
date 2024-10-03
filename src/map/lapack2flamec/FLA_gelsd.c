@@ -12,9 +12,9 @@
 
 #ifdef FLA_ENABLE_LAPACK2FLAME
 
-#include "FLA_lapack2flame_util_defs.h"
-#include "FLA_lapack2flame_return_defs.h"
 #include "FLA_lapack2flame_prototypes.h"
+#include "FLA_lapack2flame_return_defs.h"
+#include "FLA_lapack2flame_util_defs.h"
 
 /*
   GELSD computes the minimum-norm solution to a real linear least
@@ -51,143 +51,119 @@
   At this moment, this routine is redirected to GELSS.
 */
 
-#define LAPACK_gelsd_real(prefix)                                       \
-  int F77_ ## prefix ## gelsd( integer* m,                                  \
-                               integer* n,                                  \
-                               integer* nrhs,                               \
-                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
-                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_B, integer* ldim_B, \
-                               PREFIX2LAPACK_REALDEF(prefix)* buff_s,   \
-                               PREFIX2LAPACK_REALDEF(prefix)* rcond,    \
-                               integer* rank,                               \
-                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_w, integer* lwork, \
-                               integer* iwork,                              \
-                               integer* info )
+#define LAPACK_gelsd_real(prefix)                                                                 \
+    void F77_##prefix##gelsd(                                                                     \
+        integer *m, integer *n, integer *nrhs, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A,            \
+        integer * ldim_A, PREFIX2LAPACK_TYPEDEF(prefix) * buff_B, integer * ldim_B,               \
+        PREFIX2LAPACK_REALDEF(prefix) * buff_s, PREFIX2LAPACK_REALDEF(prefix) * rcond,            \
+        integer * rank, PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * lwork, integer * iwork, \
+        integer * info)
 
-#define LAPACK_gelsd_real_body(prefix)                                  \
-  F77_ ## prefix ## gelss( m, n, nrhs,                                  \
-                           buff_A, ldim_A,                              \
-                           buff_B, ldim_B,                              \
-                           buff_s, rcond, rank,                         \
-                           buff_w, lwork, info);                        \
-
-
+#define LAPACK_gelsd_real_body(prefix)                                                           \
+    F77_##prefix##gelss(m, n, nrhs, buff_A, ldim_A, buff_B, ldim_B, buff_s, rcond, rank, buff_w, \
+                        lwork, info);
 
 LAPACK_gelsd_real(s)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sgelsd inputs: m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", rank %" FLA_IS "", *m, *n, *nrhs, *ldim_A, *ldim_B, *rank);
+    AOCL_DTL_SNPRINTF("sgelsd inputs: m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS ", rank %" FLA_IS "",
+                      *m, *n, *nrhs, *ldim_A, *ldim_B, *rank);
     {
-        LAPACK_RETURN_CHECK_VAR1( sgelsd_check( m, n, nrhs,
-                                           buff_A, ldim_A,
-                                           buff_B, ldim_B,
-                                           buff_s, rcond, rank,
-                                           buff_w, lwork,
-                                           iwork,
-                                           info ), fla_error )
+        LAPACK_RETURN_CHECK_VAR1(sgelsd_check(m, n, nrhs, buff_A, ldim_A, buff_B, ldim_B, buff_s,
+                                              rcond, rank, buff_w, lwork, iwork, info),
+                                 fla_error)
     }
-    if(fla_error==LAPACK_SUCCESS)
+    if(fla_error == LAPACK_SUCCESS)
     {
         LAPACK_gelsd_real_body(s)
-       /** fla_error set to 0 on LAPACK_SUCCESS */
-        fla_error = 0;
+            /** fla_error set to 0 on LAPACK_SUCCESS */
+            fla_error
+            = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_gelsd_real(d)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgelsd inputs: m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", rank %" FLA_IS "", *m, *n, *nrhs, *ldim_A, *ldim_B, *rank);
+    AOCL_DTL_SNPRINTF("dgelsd inputs: m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS ", rank %" FLA_IS "",
+                      *m, *n, *nrhs, *ldim_A, *ldim_B, *rank);
     {
-        LAPACK_RETURN_CHECK_VAR1(dgelsd_check(m, n, nrhs,
-                                              buff_A, ldim_A,
-                                              buff_B, ldim_B,
-                                              buff_s, rcond, rank,
-                                              buff_w, lwork,
-                                              iwork,
-                                              info), fla_error)
+        LAPACK_RETURN_CHECK_VAR1(dgelsd_check(m, n, nrhs, buff_A, ldim_A, buff_B, ldim_B, buff_s,
+                                              rcond, rank, buff_w, lwork, iwork, info),
+                                 fla_error)
     }
-    if (fla_error == LAPACK_SUCCESS)
+    if(fla_error == LAPACK_SUCCESS)
     {
         LAPACK_gelsd_real_body(d)
-      /** fla_error set to 0 on LAPACK_SUCCESS */
-        fla_error = 0;
+            /** fla_error set to 0 on LAPACK_SUCCESS */
+            fla_error
+            = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 
-#define LAPACK_gelsd_complex(prefix)                                    \
-  int F77_ ## prefix ## gelsd( integer* m,                                  \
-                               integer* n,                                  \
-                               integer* nrhs,                               \
-                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_A, integer* ldim_A, \
-                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_B, integer* ldim_B, \
-                               PREFIX2LAPACK_REALDEF(prefix)* buff_s,   \
-                               PREFIX2LAPACK_REALDEF(prefix)* rcond,    \
-                               integer* rank,                               \
-                               PREFIX2LAPACK_TYPEDEF(prefix)* buff_w, integer* lwork, \
-                               PREFIX2LAPACK_REALDEF(prefix)* buff_r,   \
-                               integer* iwork,                              \
-                               integer* info )
+#define LAPACK_gelsd_complex(prefix)                                                   \
+    void F77_##prefix##gelsd(                                                          \
+        integer *m, integer *n, integer *nrhs, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
+        integer * ldim_A, PREFIX2LAPACK_TYPEDEF(prefix) * buff_B, integer * ldim_B,    \
+        PREFIX2LAPACK_REALDEF(prefix) * buff_s, PREFIX2LAPACK_REALDEF(prefix) * rcond, \
+        integer * rank, PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * lwork,       \
+        PREFIX2LAPACK_REALDEF(prefix) * buff_r, integer * iwork, integer * info)
 
-#define LAPACK_gelsd_complex_body(prefix)                               \
-  F77_ ## prefix ## gelss( m, n, nrhs,                                  \
-                           buff_A, ldim_A,                              \
-                           buff_B, ldim_B,                              \
-                           buff_s, rcond, rank,                         \
-                           buff_w, lwork, buff_r, info);                \
-
+#define LAPACK_gelsd_complex_body(prefix)                                                        \
+    F77_##prefix##gelss(m, n, nrhs, buff_A, ldim_A, buff_B, ldim_B, buff_s, rcond, rank, buff_w, \
+                        lwork, buff_r, info);
 
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX
 LAPACK_gelsd_complex(c)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("cgelsd inputs: m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", rank %" FLA_IS "", *m, *n, *nrhs, *ldim_A, *ldim_B, *rank);
+    AOCL_DTL_SNPRINTF("cgelsd inputs: m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS ", rank %" FLA_IS "",
+                      *m, *n, *nrhs, *ldim_A, *ldim_B, *rank);
     {
-        LAPACK_RETURN_CHECK_VAR1( cgelsd_check( m, n, nrhs,
-                                           buff_A, ldim_A,
-                                           buff_B, ldim_B,
-                                           buff_s, rcond, rank,
-                                           buff_w, lwork,
-                                           buff_r, iwork,
-                                           info ), fla_error )
+        LAPACK_RETURN_CHECK_VAR1(cgelsd_check(m, n, nrhs, buff_A, ldim_A, buff_B, ldim_B, buff_s,
+                                              rcond, rank, buff_w, lwork, buff_r, iwork, info),
+                                 fla_error)
     }
-    if (fla_error == LAPACK_SUCCESS)
+    if(fla_error == LAPACK_SUCCESS)
     {
         LAPACK_gelsd_complex_body(c)
-        /** fla_error set to 0 on LAPACK_SUCCESS */
-        fla_error = 0;
+            /** fla_error set to 0 on LAPACK_SUCCESS */
+            fla_error
+            = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 LAPACK_gelsd_complex(z)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgelsd inputs: m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", rank %" FLA_IS "", *m, *n, *nrhs, *ldim_A, *ldim_B, *rank);
+    AOCL_DTL_SNPRINTF("zgelsd inputs: m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS ", rank %" FLA_IS "",
+                      *m, *n, *nrhs, *ldim_A, *ldim_B, *rank);
     {
-        LAPACK_RETURN_CHECK_VAR1(zgelsd_check(m, n, nrhs,
-                                              buff_A, ldim_A,
-                                              buff_B, ldim_B,
-                                              buff_s, rcond, rank,
-                                              buff_w, lwork,
-                                              buff_r, iwork,
-                                              info), fla_error)
+        LAPACK_RETURN_CHECK_VAR1(zgelsd_check(m, n, nrhs, buff_A, ldim_A, buff_B, ldim_B, buff_s,
+                                              rcond, rank, buff_w, lwork, buff_r, iwork, info),
+                                 fla_error)
     }
-    if (fla_error == LAPACK_SUCCESS)
+    if(fla_error == LAPACK_SUCCESS)
     {
         LAPACK_gelsd_complex_body(z)
-             /** fla_error set to 0 on LAPACK_SUCCESS */
-        fla_error = 0;
+            /** fla_error set to 0 on LAPACK_SUCCESS */
+            fla_error
+            = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return fla_error;
+    return;
 }
 #endif
 

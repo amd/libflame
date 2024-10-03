@@ -4,18 +4,19 @@
 extern "C" {
 #endif
 
- ftnint
+ftnint
 #ifdef KR_headers
-signal_(sigp, proc) integer *sigp; sig_pf proc;
+    signal_(sigp, proc) integer *sigp;
+sig_pf proc;
 #else
-signal_(integer *sigp, sig_pf proc)
+    signal_(integer *sigp, sig_pf proc)
 #endif
 {
-	int sig;
-	sig = (int)*sigp;
+    int sig;
+    sig = (int)*sigp;
 
-	return (ftnint)signal(sig, proc);
-	}
+    return (ftnint)signal(sig, proc);
+}
 #ifdef __cplusplus
 }
 #endif

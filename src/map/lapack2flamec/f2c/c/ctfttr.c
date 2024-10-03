@@ -1,16 +1,25 @@
-/* ../netlib/ctfttr.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ctfttr.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CTFTTR copies a triangular matrix from the rectangular full packed format (TF) to the standard full format (TR). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CTFTTR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctfttr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctfttr.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctfttr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctfttr.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctfttr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctfttr.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -37,16 +46,16 @@
 /* > \verbatim */
 /* > TRANSR is CHARACTER*1 */
 /* > = 'N': ARF is in Normal format;
-*/
+ */
 /* > = 'C': ARF is in Conjugate-transpose format;
-*/
+ */
 /* > \endverbatim */
 /* > */
 /* > \param[in] UPLO */
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': A is upper triangular;
-*/
+ */
 /* > = 'L': A is lower triangular. */
 /* > \endverbatim */
 /* > */
@@ -205,15 +214,18 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, integer *lda, integer *info)
+void ctfttr_(char *transr, char *uplo, integer *n, complex *arf, complex *a, integer *lda,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"ctfttr inputs: transr %c, uplo %c, n %lld, lda %lld",*transr, *uplo, *n, *lda);
+    snprintf(buffer, 256, "ctfttr inputs: transr %c, uplo %c, n %lld, lda %lld", *transr, *uplo, *n,
+             *lda);
 #else
-    snprintf(buffer, 256,"ctfttr inputs: transr %c, uplo %c, n %d, lda %d",*transr, *uplo, *n, *lda);
+    snprintf(buffer, 256, "ctfttr inputs: transr %c, uplo %c, n %d, lda %d", *transr, *uplo, *n,
+             *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -225,10 +237,11 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
     /* Local variables */
     integer i__, j, k, l, n1, n2, ij, nt, nx2, np1x2;
     logical normaltransr;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -257,37 +270,37 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
     a -= a_offset;
     /* Function Body */
     *info = 0;
-    normaltransr = lsame_(transr, "N");
-    lower = lsame_(uplo, "L");
-    if (! normaltransr && ! lsame_(transr, "C"))
+    normaltransr = lsame_(transr, "N", 1, 1);
+    lower = lsame_(uplo, "L", 1, 1);
+    if(!normaltransr && !lsame_(transr, "C", 1, 1))
     {
         *info = -1;
     }
-    else if (! lower && ! lsame_(uplo, "U"))
+    else if(!lower && !lsame_(uplo, "U", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CTFTTR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n <= 1)
+    if(*n <= 1)
     {
-        if (*n == 1)
+        if(*n == 1)
         {
-            if (normaltransr)
+            if(normaltransr)
             {
                 a[0].r = arf[0].r;
                 a[0].i = arf[0].i; // , expr subst
@@ -300,12 +313,12 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
             }
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Size of array ARF(1:2,0:nt-1) */
     nt = *n * (*n + 1) / 2;
     /* set N1 and N2 depending on LOWER: for N even N1=N2=K */
-    if (lower)
+    if(lower)
     {
         n2 = *n / 2;
         n1 = *n - n2;
@@ -318,11 +331,11 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
     /* If N is odd, set NISODD = .TRUE., LDA=N+1 and A is (N+1)--by--K2. */
     /* If N is even, set K = N/2 and NISODD = .FALSE., LDA=N and A is */
     /* N--by--(N+1)/2. */
-    if (*n % 2 == 0)
+    if(*n % 2 == 0)
     {
         k = *n / 2;
         nisodd = FALSE_;
-        if (! lower)
+        if(!lower)
         {
             np1x2 = *n + *n + 2;
         }
@@ -330,18 +343,18 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
     else
     {
         nisodd = TRUE_;
-        if (! lower)
+        if(!lower)
         {
             nx2 = *n + *n;
         }
     }
-    if (nisodd)
+    if(nisodd)
     {
         /* N is odd */
-        if (normaltransr)
+        if(normaltransr)
         {
             /* N is odd and TRANSR = 'N' */
-            if (lower)
+            if(lower)
             {
                 /* SRPA for LOWER, NORMAL and N is odd ( a(0:n-1,0:n1-1) ) */
                 /* T1 -> a(0,0), T2 -> a(0,1), S -> a(n1,0) */
@@ -349,14 +362,10 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
                 lda=n */
                 ij = 0;
                 i__1 = n2;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__2 = n2 + j;
-                    for (i__ = n1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = n1; i__ <= i__2; ++i__)
                     {
                         i__3 = n2 + j + i__ * a_dim1;
                         r_cnjg(&q__1, &arf[ij]);
@@ -365,9 +374,7 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
                         ++ij;
                     }
                     i__2 = *n - 1;
-                    for (i__ = j;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = j; i__ <= i__2; ++i__)
                     {
                         i__3 = i__ + j * a_dim1;
                         i__4 = ij;
@@ -385,14 +392,10 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
                 lda=n */
                 ij = nt - *n;
                 i__1 = n1;
-                for (j = *n - 1;
-                        j >= i__1;
-                        --j)
+                for(j = *n - 1; j >= i__1; --j)
                 {
                     i__2 = j;
-                    for (i__ = 0;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__2; ++i__)
                     {
                         i__3 = i__ + j * a_dim1;
                         i__4 = ij;
@@ -401,9 +404,7 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
                         ++ij;
                     }
                     i__2 = n1 - 1;
-                    for (l = j - n1;
-                            l <= i__2;
-                            ++l)
+                    for(l = j - n1; l <= i__2; ++l)
                     {
                         i__3 = j - n1 + l * a_dim1;
                         r_cnjg(&q__1, &arf[ij]);
@@ -418,7 +419,7 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
         else
         {
             /* N is odd and TRANSR = 'C' */
-            if (lower)
+            if(lower)
             {
                 /* SRPA for LOWER, TRANSPOSE and N is odd */
                 /* T1 -> A(0,0) , T2 -> A(1,0) , S -> A(0,n1) */
@@ -426,14 +427,10 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
                 lda=n1 */
                 ij = 0;
                 i__1 = n2 - 1;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__2 = j;
-                    for (i__ = 0;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__2; ++i__)
                     {
                         i__3 = j + i__ * a_dim1;
                         r_cnjg(&q__1, &arf[ij]);
@@ -442,9 +439,7 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
                         ++ij;
                     }
                     i__2 = *n - 1;
-                    for (i__ = n1 + j;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = n1 + j; i__ <= i__2; ++i__)
                     {
                         i__3 = i__ + (n1 + j) * a_dim1;
                         i__4 = ij;
@@ -454,14 +449,10 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
                     }
                 }
                 i__1 = *n - 1;
-                for (j = n2;
-                        j <= i__1;
-                        ++j)
+                for(j = n2; j <= i__1; ++j)
                 {
                     i__2 = n1 - 1;
-                    for (i__ = 0;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__2; ++i__)
                     {
                         i__3 = j + i__ * a_dim1;
                         r_cnjg(&q__1, &arf[ij]);
@@ -479,14 +470,10 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
                 lda = n2 */
                 ij = 0;
                 i__1 = n1;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__2 = *n - 1;
-                    for (i__ = n1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = n1; i__ <= i__2; ++i__)
                     {
                         i__3 = j + i__ * a_dim1;
                         r_cnjg(&q__1, &arf[ij]);
@@ -496,14 +483,10 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
                     }
                 }
                 i__1 = n1 - 1;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__2 = j;
-                    for (i__ = 0;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__2; ++i__)
                     {
                         i__3 = i__ + j * a_dim1;
                         i__4 = ij;
@@ -512,9 +495,7 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
                         ++ij;
                     }
                     i__2 = *n - 1;
-                    for (l = n2 + j;
-                            l <= i__2;
-                            ++l)
+                    for(l = n2 + j; l <= i__2; ++l)
                     {
                         i__3 = n2 + j + l * a_dim1;
                         r_cnjg(&q__1, &arf[ij]);
@@ -529,10 +510,10 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
     else
     {
         /* N is even */
-        if (normaltransr)
+        if(normaltransr)
         {
             /* N is even and TRANSR = 'N' */
-            if (lower)
+            if(lower)
             {
                 /* SRPA for LOWER, NORMAL, and N is even ( a(0:n,0:k-1) ) */
                 /* T1 -> a(1,0), T2 -> a(0,0), S -> a(k+1,0) */
@@ -540,14 +521,10 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
                 lda=n+1 */
                 ij = 0;
                 i__1 = k - 1;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__2 = k + j;
-                    for (i__ = k;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = k; i__ <= i__2; ++i__)
                     {
                         i__3 = k + j + i__ * a_dim1;
                         r_cnjg(&q__1, &arf[ij]);
@@ -556,9 +533,7 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
                         ++ij;
                     }
                     i__2 = *n - 1;
-                    for (i__ = j;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = j; i__ <= i__2; ++i__)
                     {
                         i__3 = i__ + j * a_dim1;
                         i__4 = ij;
@@ -576,14 +551,10 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
                 lda=n+1 */
                 ij = nt - *n - 1;
                 i__1 = k;
-                for (j = *n - 1;
-                        j >= i__1;
-                        --j)
+                for(j = *n - 1; j >= i__1; --j)
                 {
                     i__2 = j;
-                    for (i__ = 0;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__2; ++i__)
                     {
                         i__3 = i__ + j * a_dim1;
                         i__4 = ij;
@@ -592,9 +563,7 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
                         ++ij;
                     }
                     i__2 = k - 1;
-                    for (l = j - k;
-                            l <= i__2;
-                            ++l)
+                    for(l = j - k; l <= i__2; ++l)
                     {
                         i__3 = j - k + l * a_dim1;
                         r_cnjg(&q__1, &arf[ij]);
@@ -609,7 +578,7 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
         else
         {
             /* N is even and TRANSR = 'C' */
-            if (lower)
+            if(lower)
             {
                 /* SRPA for LOWER, TRANSPOSE and N is even (see paper, A=B) */
                 /* T1 -> A(0,1) , T2 -> A(0,0) , S -> A(0,k+1) : */
@@ -618,9 +587,7 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
                 ij = 0;
                 j = k;
                 i__1 = *n - 1;
-                for (i__ = k;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = k; i__ <= i__1; ++i__)
                 {
                     i__2 = i__ + j * a_dim1;
                     i__3 = ij;
@@ -629,14 +596,10 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
                     ++ij;
                 }
                 i__1 = k - 2;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__2 = j;
-                    for (i__ = 0;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__2; ++i__)
                     {
                         i__3 = j + i__ * a_dim1;
                         r_cnjg(&q__1, &arf[ij]);
@@ -645,9 +608,7 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
                         ++ij;
                     }
                     i__2 = *n - 1;
-                    for (i__ = k + 1 + j;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = k + 1 + j; i__ <= i__2; ++i__)
                     {
                         i__3 = i__ + (k + 1 + j) * a_dim1;
                         i__4 = ij;
@@ -657,14 +618,10 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
                     }
                 }
                 i__1 = *n - 1;
-                for (j = k - 1;
-                        j <= i__1;
-                        ++j)
+                for(j = k - 1; j <= i__1; ++j)
                 {
                     i__2 = k - 1;
-                    for (i__ = 0;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__2; ++i__)
                     {
                         i__3 = j + i__ * a_dim1;
                         r_cnjg(&q__1, &arf[ij]);
@@ -682,14 +639,10 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
                 lda=k */
                 ij = 0;
                 i__1 = k;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__2 = *n - 1;
-                    for (i__ = k;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = k; i__ <= i__2; ++i__)
                     {
                         i__3 = j + i__ * a_dim1;
                         r_cnjg(&q__1, &arf[ij]);
@@ -699,14 +652,10 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
                     }
                 }
                 i__1 = k - 2;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__2 = j;
-                    for (i__ = 0;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__2; ++i__)
                     {
                         i__3 = i__ + j * a_dim1;
                         i__4 = ij;
@@ -715,9 +664,7 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
                         ++ij;
                     }
                     i__2 = *n - 1;
-                    for (l = k + 1 + j;
-                            l <= i__2;
-                            ++l)
+                    for(l = k + 1 + j; l <= i__2; ++l)
                     {
                         i__3 = k + 1 + j + l * a_dim1;
                         r_cnjg(&q__1, &arf[ij]);
@@ -728,9 +675,7 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
                 }
                 /* Note that here J = K-1 */
                 i__1 = j;
-                for (i__ = 0;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 0; i__ <= i__1; ++i__)
                 {
                     i__2 = i__ + j * a_dim1;
                     i__3 = ij;
@@ -742,7 +687,7 @@ int ctfttr_(char *transr, char *uplo, integer *n, complex * arf, complex *a, int
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CTFTTR */
 }
 /* ctfttr_ */

@@ -1,5 +1,8 @@
-/* dhgeqz.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dhgeqz.f -- translated by f2c (version 20160102). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 
 /*
     Modifications Copyright (c) 2023 Advanced Micro Devices, Inc.  All rights reserved.
@@ -16,11 +19,17 @@ static integer c__3 = 3;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DHGEQZ + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dhgeqz. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dhgeqz.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dhgeqz. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dhgeqz.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dhgeqz. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dhgeqz.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -103,7 +112,7 @@ static integer c__3 = 3;
 /* > \verbatim */
 /* > JOB is CHARACTER*1 */
 /* > = 'E': Compute eigenvalues only;
-*/
+ */
 /* > = 'S': Compute eigenvalues and the Schur form. */
 /* > \endverbatim */
 /* > */
@@ -111,10 +120,10 @@ static integer c__3 = 3;
 /* > \verbatim */
 /* > COMPQ is CHARACTER*1 */
 /* > = 'N': Left Schur vectors (Q) are not computed;
-*/
+ */
 /* > = 'I': Q is initialized to the unit matrix and the matrix Q */
 /* > of left Schur vectors of (H,T) is returned;
-*/
+ */
 /* > = 'V': Q must contain an orthogonal matrix Q1 on entry and */
 /* > the product Q1*Q is returned. */
 /* > \endverbatim */
@@ -123,10 +132,10 @@ static integer c__3 = 3;
 /* > \verbatim */
 /* > COMPZ is CHARACTER*1 */
 /* > = 'N': Right Schur vectors (Z) are not computed;
-*/
+ */
 /* > = 'I': Z is initialized to the unit matrix and the matrix Z */
 /* > of right Schur vectors of (H,T) is returned;
-*/
+ */
 /* > = 'V': Z must contain an orthogonal matrix Z1 on entry and */
 /* > the product Z1*Z is returned. */
 /* > \endverbatim */
@@ -174,7 +183,7 @@ if N = 0, ILO=1 and IHI=0. */
 /* > On entry, the N-by-N upper triangular matrix T. */
 /* > On exit, if JOB = 'S', T contains the upper triangular */
 /* > matrix P from the generalized Schur factorization;
-*/
+ */
 /* > 2-by-2 diagonal blocks of P corresponding to 2-by-2 blocks of S */
 /* > are reduced to positive diagonal form, i.e., if H(j+1,j) is */
 /* > non-zero, then T(j+1,j) = T(j,j+1) = 0, T(j,j) > 0, and */
@@ -306,41 +315,61 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dhgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublereal *h__, integer *ldh, doublereal *t, integer *ldt, doublereal *alphar, doublereal *alphai, doublereal * beta, doublereal *q, integer *ldq, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *info)
+void dhgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi,
+             doublereal *h__, integer *ldh, doublereal *t, integer *ldt, doublereal *alphar,
+             doublereal *alphai, doublereal *beta, doublereal *q, integer *ldq, doublereal *z__,
+             integer *ldz, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dhgeqz inputs: job %c, compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", ldh %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS "",*job, *compq, *compz, *n, *ilo, *ihi, *ldh, *ldt, *ldq, *ldz, *lwork);
+    AOCL_DTL_SNPRINTF("dhgeqz inputs: job %c, compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS
+                      ", ihi %" FLA_IS ", ldh %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS
+                      ", ldz %" FLA_IS ", lwork %" FLA_IS "",
+                      *job, *compq, *compz, *n, *ilo, *ihi, *ldh, *ldt, *ldq, *ldz, *lwork);
 
-    extern fla_context global_context;
-    extern int fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublereal *h__, integer *ldh, doublereal *t, integer *ldt, doublereal *alphar, doublereal *alphai, doublereal * beta, doublereal *q, integer *ldq, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *info);
-    extern int fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublereal *h__, integer *ldh, doublereal *t, integer *ldt, doublereal *alphar, doublereal *alphai, doublereal * beta, doublereal *q, integer *ldq, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *info);
+    extern fla_context fla_global_context;
+    extern void fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo,
+                               integer *ihi, doublereal *h__, integer *ldh, doublereal *t,
+                               integer *ldt, doublereal *alphar, doublereal *alphai,
+                               doublereal *beta, doublereal *q, integer *ldq, doublereal *z__,
+                               integer *ldz, doublereal *work, integer *lwork, integer *info);
+    extern void fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *ilo,
+                                  integer *ihi, doublereal *h__, integer *ldh, doublereal *t,
+                                  integer *ldt, doublereal *alphar, doublereal *alphai,
+                                  doublereal *beta, doublereal *q, integer *ldq, doublereal *z__,
+                                  integer *ldz, doublereal *work, integer *lwork, integer *info);
 
     /* Initialize global context data */
     aocl_fla_init();
 
-    int retval = 0;
 #if FLA_ENABLE_AMD_OPT
-    if (global_context.is_avx2)
+    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
-      retval = fla_dhgeqz_opt(job, compq, compz, n, ilo, ihi, h__, ldh, t, ldt, alphar, alphai, beta, q, ldq, z__, ldz, work, lwork, info);
+        fla_dhgeqz_opt(job, compq, compz, n, ilo, ihi, h__, ldh, t, ldt, alphar, alphai, beta, q,
+                       ldq, z__, ldz, work, lwork, info);
     }
     else
     {
-      retval = fla_dhgeqz_native(job, compq, compz, n, ilo, ihi, h__, ldh, t, ldt, alphar, alphai, beta, q, ldq, z__, ldz, work, lwork, info);
+        fla_dhgeqz_native(job, compq, compz, n, ilo, ihi, h__, ldh, t, ldt, alphar, alphai, beta, q,
+                          ldq, z__, ldz, work, lwork, info);
     }
 #else
-      retval = fla_dhgeqz_native(job, compq, compz, n, ilo, ihi, h__, ldh, t, ldt, alphar, alphai, beta, q, ldq, z__, ldz, work, lwork, info);
+    fla_dhgeqz_native(job, compq, compz, n, ilo, ihi, h__, ldh, t, ldt, alphar, alphai, beta, q,
+                      ldq, z__, ldz, work, lwork, info);
 #endif
 
     AOCL_DTL_TRACE_LOG_EXIT
-    return retval;
+    return;
 }
 
 #if FLA_ENABLE_AMD_OPT
-int fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublereal *h__, integer *ldh, doublereal *t, integer *ldt, doublereal *alphar, doublereal *alphai, doublereal * beta, doublereal *q, integer *ldq, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *info)
+void fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi,
+                    doublereal *h__, integer *ldh, doublereal *t, integer *ldt, doublereal *alphar,
+                    doublereal *alphai, doublereal *beta, doublereal *q, integer *ldq,
+                    doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *info)
 {
     /* System generated locals */
-    integer h_dim1, h_offset, q_dim1, q_offset, t_dim1, t_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4;
+    integer h_dim1, h_offset, q_dim1, q_offset, t_dim1, t_offset, z_dim1, z_offset, i__1, i__2,
+        i__3, i__4;
     doublereal d__1, d__2, d__3, d__4, d__5;
     /* Builtin functions */
     double sqrt(doublereal);
@@ -353,38 +382,46 @@ int fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo
     integer in;
     doublereal u12, w11, w12, w21;
     integer jr;
-    doublereal cz, w22, sl, wi, sr, vs, wr, b1a, b2a, a1i, a2i, b1i, b2i, a1r, a2r, b1r, b2r, wr2, ad11, ad12, ad21, ad22, c11i, c22i;
+    doublereal cz, w22, sl, wi, sr, vs, wr, b1a, b2a, a1i, a2i, b1i, b2i, a1r, a2r, b1r, b2r, wr2,
+        ad11, ad12, ad21, ad22, c11i, c22i;
     integer jch;
     doublereal c11r, c22r;
     logical ilq;
     doublereal u12l, tau, sqi;
     logical ilz;
     doublereal ulp, sqr, szi, szr, ad11l, ad12l, ad21l, ad22l, ad32l, wabs, atol, btol, temp;
-    extern
-    int dlag2_( doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    extern void dlag2_(doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                       doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal temp2, s1inv, scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iiter, ilast, jiter;
     doublereal anorm, bnorm;
     integer maxit;
     doublereal tempi, tempr;
-    extern doublereal dlapy2_(doublereal *, doublereal *), dlapy3_(doublereal *, doublereal *, doublereal *);
+    extern doublereal dlapy2_(doublereal *, doublereal *),
+        dlapy3_(doublereal *, doublereal *, doublereal *);
     extern /* Subroutine */
-    int dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
+                doublereal *, doublereal *, doublereal *);
     logical ilazr2;
     doublereal ascale, bscale;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+        void
+        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     extern doublereal dlanhs_(char *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */
-    int dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
+        void
+        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     doublereal safmin;
     extern /* Subroutine */
-    int dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal safmax;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal eshift;
     logical ilschr;
     integer icompq, ilastm, ischur;
@@ -416,8 +453,10 @@ int fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo
     /* Decode JOB, COMPQ, COMPZ */
     /* Parameter adjustments */
 
-    extern int fla_dhrot3(integer *n, doublereal *a, integer *lda, doublereal *v, doublereal *tau);
-    extern int fla_drot(integer *n, doublereal *dx, integer *incx, doublereal *dy, integer *incy, doublereal *c__, doublereal *s);
+    extern int fla_dhrot3(integer * n, doublereal * a, integer * lda, doublereal * v,
+                          doublereal * tau);
+    extern int fla_drot(integer * n, doublereal * dx, integer * incx, doublereal * dy,
+                        integer * incy, doublereal * c__, doublereal * s);
 
     h_dim1 = *ldh;
     h_offset = 1 + h_dim1;
@@ -439,12 +478,12 @@ int fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo
     ilz = FALSE_;
     ilq = FALSE_;
     ilschr = FALSE_;
-    if (lsame_(job, "E"))
+    if(lsame_(job, "E", 1, 1))
     {
         ilschr = FALSE_;
         ischur = 1;
     }
-    else if (lsame_(job, "S"))
+    else if(lsame_(job, "S", 1, 1))
     {
         ilschr = TRUE_;
         ischur = 2;
@@ -453,17 +492,17 @@ int fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo
     {
         ischur = 0;
     }
-    if (lsame_(compq, "N"))
+    if(lsame_(compq, "N", 1, 1))
     {
         ilq = FALSE_;
         icompq = 1;
     }
-    else if (lsame_(compq, "V"))
+    else if(lsame_(compq, "V", 1, 1))
     {
         ilq = TRUE_;
         icompq = 2;
     }
-    else if (lsame_(compq, "I"))
+    else if(lsame_(compq, "I", 1, 1))
     {
         ilq = TRUE_;
         icompq = 3;
@@ -472,17 +511,17 @@ int fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo
     {
         icompq = 0;
     }
-    if (lsame_(compz, "N"))
+    if(lsame_(compz, "N", 1, 1))
     {
         ilz = FALSE_;
         icompz = 1;
     }
-    else if (lsame_(compz, "V"))
+    else if(lsame_(compz, "V", 1, 1))
     {
         ilz = TRUE_;
         icompz = 2;
     }
-    else if (lsame_(compz, "I"))
+    else if(lsame_(compz, "I", 1, 1))
     {
         ilz = TRUE_;
         icompz = 3;
@@ -493,74 +532,74 @@ int fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo
     }
     /* Check Argument Values */
     *info = 0;
-    work[1] = (doublereal) fla_max(1,*n);
+    work[1] = (doublereal)fla_max(1, *n);
     lquery = *lwork == -1;
-    if (ischur == 0)
+    if(ischur == 0)
     {
         *info = -1;
     }
-    else if (icompq == 0)
+    else if(icompq == 0)
     {
         *info = -2;
     }
-    else if (icompz == 0)
+    else if(icompz == 0)
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*ilo < 1)
+    else if(*ilo < 1)
     {
         *info = -5;
     }
-    else if (*ihi > *n || *ihi < *ilo - 1)
+    else if(*ihi > *n || *ihi < *ilo - 1)
     {
         *info = -6;
     }
-    else if (*ldh < *n)
+    else if(*ldh < *n)
     {
         *info = -8;
     }
-    else if (*ldt < *n)
+    else if(*ldt < *n)
     {
         *info = -10;
     }
-    else if (*ldq < 1 || ilq && *ldq < *n)
+    else if(*ldq < 1 || ilq && *ldq < *n)
     {
         *info = -15;
     }
-    else if (*ldz < 1 || ilz && *ldz < *n)
+    else if(*ldz < 1 || ilz && *ldz < *n)
     {
         *info = -17;
     }
-    else if (*lwork < fla_max(1,*n) && ! lquery)
+    else if(*lwork < fla_max(1, *n) && !lquery)
     {
         *info = -19;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DHGEQZ", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n <= 0)
+    if(*n <= 0)
     {
         work[1] = 1.;
-        return 0;
+        return;
     }
     /* Initialize Q and Z */
-    if (icompq == 3)
+    if(icompq == 3)
     {
         dlaset_("Full", n, n, &c_b12, &c_b13, &q[q_offset], ldq);
     }
-    if (icompz == 3)
+    if(icompz == 3)
     {
         dlaset_("Full", n, n, &c_b12, &c_b13, &z__[z_offset], ldz);
     }
@@ -574,27 +613,23 @@ int fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo
     /* Computing MAX */
     d__1 = safmin;
     d__2 = ulp * anorm; // , expr subst
-    atol = fla_max(d__1,d__2);
+    atol = fla_max(d__1, d__2);
     /* Computing MAX */
     d__1 = safmin;
     d__2 = ulp * bnorm; // , expr subst
-    btol = fla_max(d__1,d__2);
-    ascale = 1. / fla_max(safmin,anorm);
-    bscale = 1. / fla_max(safmin,bnorm);
+    btol = fla_max(d__1, d__2);
+    ascale = 1. / fla_max(safmin, anorm);
+    bscale = 1. / fla_max(safmin, bnorm);
     /* Set Eigenvalues IHI+1:N */
     i__1 = *n;
-    for (j = *ihi + 1;
-            j <= i__1;
-            ++j)
+    for(j = *ihi + 1; j <= i__1; ++j)
     {
-        if (t[j + j * t_dim1] < 0.)
+        if(t[j + j * t_dim1] < 0.)
         {
-            if (ilschr)
+            if(ilschr)
             {
                 i__2 = j;
-                for (jr = 1;
-                        jr <= i__2;
-                        ++jr)
+                for(jr = 1; jr <= i__2; ++jr)
                 {
                     h__[jr + j * h_dim1] = -h__[jr + j * h_dim1];
                     t[jr + j * t_dim1] = -t[jr + j * t_dim1];
@@ -606,12 +641,10 @@ int fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo
                 h__[j + j * h_dim1] = -h__[j + j * h_dim1];
                 t[j + j * t_dim1] = -t[j + j * t_dim1];
             }
-            if (ilz)
+            if(ilz)
             {
                 i__2 = *n;
-                for (jr = 1;
-                        jr <= i__2;
-                        ++jr)
+                for(jr = 1; jr <= i__2; ++jr)
                 {
                     z__[jr + j * z_dim1] = -z__[jr + j * z_dim1];
                     /* L20: */
@@ -624,7 +657,7 @@ int fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo
         /* L30: */
     }
     /* If IHI < ILO, skip QZ steps */
-    if (*ihi < *ilo)
+    if(*ihi < *ilo)
     {
         goto L380;
     }
@@ -635,13 +668,13 @@ int fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo
     /* Row operations modify columns whatever:ILASTM. */
     /* If only eigenvalues are being computed, then */
     /* IFRSTM is the row of the last splitting row above row ILAST;
-    */
+     */
     /* this is always at least ILO. */
     /* IITER counts iterations since the last eigenvalue was found, */
     /* to tell when to use an extraordinary shift. */
     /* MAXIT is the maximum number of QZ sweeps allowed. */
     ilast = *ihi;
-    if (ilschr)
+    if(ilschr)
     {
         ifrstm = 1;
         ilastm = *n;
@@ -655,15 +688,13 @@ int fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo
     eshift = 0.;
     maxit = (*ihi - *ilo + 1) * 30;
     i__1 = maxit;
-    for (jiter = 1;
-            jiter <= i__1;
-            ++jiter)
+    for(jiter = 1; jiter <= i__1; ++jiter)
     {
         /* Split the matrix if possible. */
         /* Two tests: */
         /* 1: H(j,j-1)=0 or j=ILO */
         /* 2: T(j,j)=0 */
-        if (ilast == *ilo)
+        if(ilast == *ilo)
         {
             /* Special case: j=ILAST */
             goto L80;
@@ -672,8 +703,11 @@ int fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo
         {
             /* Computing MAX */
             d__4 = safmin;
-            d__5 = ulp * ((d__1 = h__[ilast + ilast * h_dim1], f2c_abs(d__1)) + (d__2 = h__[ilast - 1 + (ilast - 1) * h_dim1], f2c_abs(d__2)));  // , expr subst
-            if ((d__3 = h__[ilast + (ilast - 1) * h_dim1], f2c_abs(d__3)) <= fla_max( d__4,d__5))
+            d__5 = ulp
+                   * ((d__1 = h__[ilast + ilast * h_dim1], f2c_abs(d__1))
+                      + (d__2 = h__[ilast - 1 + (ilast - 1) * h_dim1],
+                         f2c_abs(d__2))); // , expr subst
+            if((d__3 = h__[ilast + (ilast - 1) * h_dim1], f2c_abs(d__3)) <= fla_max(d__4, d__5))
             {
                 h__[ilast + (ilast - 1) * h_dim1] = 0.;
                 goto L80;
@@ -681,20 +715,20 @@ int fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo
         }
         /* Computing MAX */
         d__4 = safmin;
-        d__5 = ulp * ((d__1 = t[ilast - 1 + ilast * t_dim1], f2c_abs(d__1)) + (d__2 = t[ilast - 1 + (ilast - 1) * t_dim1], f2c_abs( d__2))); // , expr subst
-        if ((d__3 = t[ilast + ilast * t_dim1], f2c_abs(d__3)) <= fla_max(d__4,d__5))
+        d__5 = ulp
+               * ((d__1 = t[ilast - 1 + ilast * t_dim1], f2c_abs(d__1))
+                  + (d__2 = t[ilast - 1 + (ilast - 1) * t_dim1], f2c_abs(d__2))); // , expr subst
+        if((d__3 = t[ilast + ilast * t_dim1], f2c_abs(d__3)) <= fla_max(d__4, d__5))
         {
             t[ilast + ilast * t_dim1] = 0.;
             goto L70;
         }
         /* General case: j<ILAST */
         i__2 = *ilo;
-        for (j = ilast - 1;
-                j >= i__2;
-                --j)
+        for(j = ilast - 1; j >= i__2; --j)
         {
             /* Test 1: for H(j,j-1)=0 or j=ILO */
-            if (j == *ilo)
+            if(j == *ilo)
             {
                 ilazro = TRUE_;
             }
@@ -702,8 +736,10 @@ int fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo
             {
                 /* Computing MAX */
                 d__4 = safmin;
-                d__5 = ulp * ((d__1 = h__[j + j * h_dim1], f2c_abs( d__1)) + (d__2 = h__[j - 1 + (j - 1) * h_dim1], f2c_abs( d__2))); // , expr subst
-                if ((d__3 = h__[j + (j - 1) * h_dim1], f2c_abs(d__3)) <= fla_max(d__4, d__5))
+                d__5 = ulp
+                       * ((d__1 = h__[j + j * h_dim1], f2c_abs(d__1))
+                          + (d__2 = h__[j - 1 + (j - 1) * h_dim1], f2c_abs(d__2))); // , expr subst
+                if((d__3 = h__[j + (j - 1) * h_dim1], f2c_abs(d__3)) <= fla_max(d__4, d__5))
                 {
                     h__[j + (j - 1) * h_dim1] = 0.;
                     ilazro = TRUE_;
@@ -715,29 +751,30 @@ int fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo
             }
             /* Test 2: for T(j,j)=0 */
             temp = (d__1 = t[j + (j + 1) * t_dim1], f2c_abs(d__1));
-            if (j > *ilo)
+            if(j > *ilo)
             {
                 temp += (d__1 = t[j - 1 + j * t_dim1], f2c_abs(d__1));
             }
             /* Computing MAX */
             d__2 = safmin;
             d__3 = ulp * temp; // , expr subst
-            if ((d__1 = t[j + j * t_dim1], f2c_abs(d__1)) < fla_max(d__2,d__3))
+            if((d__1 = t[j + j * t_dim1], f2c_abs(d__1)) < fla_max(d__2, d__3))
             {
                 t[j + j * t_dim1] = 0.;
                 /* Test 1a: Check for 2 consecutive small subdiagonals in A */
                 ilazr2 = FALSE_;
-                if (! ilazro)
+                if(!ilazro)
                 {
                     temp = (d__1 = h__[j + (j - 1) * h_dim1], f2c_abs(d__1));
                     temp2 = (d__1 = h__[j + j * h_dim1], f2c_abs(d__1));
-                    tempr = fla_max(temp,temp2);
-                    if (tempr < 1. && tempr != 0.)
+                    tempr = fla_max(temp, temp2);
+                    if(tempr < 1. && tempr != 0.)
                     {
                         temp /= tempr;
                         temp2 /= tempr;
                     }
-                    if (temp * (ascale * (d__1 = h__[j + 1 + j * h_dim1], f2c_abs( d__1))) <= temp2 * (ascale * atol))
+                    if(temp * (ascale * (d__1 = h__[j + 1 + j * h_dim1], f2c_abs(d__1)))
+                       <= temp2 * (ascale * atol))
                     {
                         ilazr2 = TRUE_;
                     }
@@ -747,32 +784,34 @@ int fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo
                 /* at the top. (I.e., at the J-th row/column) The leading */
                 /* diagonal element of the remainder can also be zero, so */
                 /* this may have to be done repeatedly. */
-                if (ilazro || ilazr2)
+                if(ilazro || ilazr2)
                 {
                     i__3 = ilast - 1;
-                    for (jch = j;
-                            jch <= i__3;
-                            ++jch)
+                    for(jch = j; jch <= i__3; ++jch)
                     {
                         temp = h__[jch + jch * h_dim1];
-                        dlartg_(&temp, &h__[jch + 1 + jch * h_dim1], &c__, &s, &h__[jch + jch * h_dim1]);
+                        dlartg_(&temp, &h__[jch + 1 + jch * h_dim1], &c__, &s,
+                                &h__[jch + jch * h_dim1]);
                         h__[jch + 1 + jch * h_dim1] = 0.;
                         i__4 = ilastm - jch;
-                        fla_drot(&i__4, &h__[jch + (jch + 1) * h_dim1], ldh, & h__[jch + 1 + (jch + 1) * h_dim1], ldh, &c__, &s);
+                        fla_drot(&i__4, &h__[jch + (jch + 1) * h_dim1], ldh,
+                                 &h__[jch + 1 + (jch + 1) * h_dim1], ldh, &c__, &s);
                         i__4 = ilastm - jch;
-                        fla_drot(&i__4, &t[jch + (jch + 1) * t_dim1], ldt, &t[ jch + 1 + (jch + 1) * t_dim1], ldt, &c__, &s);
-                        if (ilq)
+                        fla_drot(&i__4, &t[jch + (jch + 1) * t_dim1], ldt,
+                                 &t[jch + 1 + (jch + 1) * t_dim1], ldt, &c__, &s);
+                        if(ilq)
                         {
-                            fla_drot(n, &q[jch * q_dim1 + 1], &c__1, &q[(jch + 1) * q_dim1 + 1], &c__1, &c__, &s);
+                            fla_drot(n, &q[jch * q_dim1 + 1], &c__1, &q[(jch + 1) * q_dim1 + 1],
+                                     &c__1, &c__, &s);
                         }
-                        if (ilazr2)
+                        if(ilazr2)
                         {
                             h__[jch + (jch - 1) * h_dim1] *= c__;
                         }
                         ilazr2 = FALSE_;
-                        if ((d__1 = t[jch + 1 + (jch + 1) * t_dim1], f2c_abs(d__1) ) >= btol)
+                        if((d__1 = t[jch + 1 + (jch + 1) * t_dim1], f2c_abs(d__1)) >= btol)
                         {
-                            if (jch + 1 >= ilast)
+                            if(jch + 1 >= ilast)
                             {
                                 goto L80;
                             }
@@ -792,41 +831,47 @@ int fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo
                     /* Only test 2 passed -- chase the zero to T(ILAST,ILAST) */
                     /* Then process as in the case T(ILAST,ILAST)=0 */
                     i__3 = ilast - 1;
-                    for (jch = j;
-                            jch <= i__3;
-                            ++jch)
+                    for(jch = j; jch <= i__3; ++jch)
                     {
                         temp = t[jch + (jch + 1) * t_dim1];
-                        dlartg_(&temp, &t[jch + 1 + (jch + 1) * t_dim1], &c__, &s, &t[jch + (jch + 1) * t_dim1]);
+                        dlartg_(&temp, &t[jch + 1 + (jch + 1) * t_dim1], &c__, &s,
+                                &t[jch + (jch + 1) * t_dim1]);
                         t[jch + 1 + (jch + 1) * t_dim1] = 0.;
-                        if (jch < ilastm - 1)
+                        if(jch < ilastm - 1)
                         {
                             i__4 = ilastm - jch - 1;
-                            fla_drot(&i__4, &t[jch + (jch + 2) * t_dim1], ldt, & t[jch + 1 + (jch + 2) * t_dim1], ldt, & c__, &s);
+                            fla_drot(&i__4, &t[jch + (jch + 2) * t_dim1], ldt,
+                                     &t[jch + 1 + (jch + 2) * t_dim1], ldt, &c__, &s);
                         }
                         i__4 = ilastm - jch + 2;
-                        fla_drot(&i__4, &h__[jch + (jch - 1) * h_dim1], ldh, & h__[jch + 1 + (jch - 1) * h_dim1], ldh, &c__, &s);
-                        if (ilq)
+                        fla_drot(&i__4, &h__[jch + (jch - 1) * h_dim1], ldh,
+                                 &h__[jch + 1 + (jch - 1) * h_dim1], ldh, &c__, &s);
+                        if(ilq)
                         {
-                            fla_drot(n, &q[jch * q_dim1 + 1], &c__1, &q[(jch + 1) * q_dim1 + 1], &c__1, &c__, &s);
+                            fla_drot(n, &q[jch * q_dim1 + 1], &c__1, &q[(jch + 1) * q_dim1 + 1],
+                                     &c__1, &c__, &s);
                         }
                         temp = h__[jch + 1 + jch * h_dim1];
-                        dlartg_(&temp, &h__[jch + 1 + (jch - 1) * h_dim1], & c__, &s, &h__[jch + 1 + jch * h_dim1]);
+                        dlartg_(&temp, &h__[jch + 1 + (jch - 1) * h_dim1], &c__, &s,
+                                &h__[jch + 1 + jch * h_dim1]);
                         h__[jch + 1 + (jch - 1) * h_dim1] = 0.;
                         i__4 = jch + 1 - ifrstm;
-                        fla_drot(&i__4, &h__[ifrstm + jch * h_dim1], &c__1, &h__[ ifrstm + (jch - 1) * h_dim1], &c__1, &c__, &s) ;
+                        fla_drot(&i__4, &h__[ifrstm + jch * h_dim1], &c__1,
+                                 &h__[ifrstm + (jch - 1) * h_dim1], &c__1, &c__, &s);
                         i__4 = jch - ifrstm;
-                        fla_drot(&i__4, &t[ifrstm + jch * t_dim1], &c__1, &t[ ifrstm + (jch - 1) * t_dim1], &c__1, &c__, &s) ;
-                        if (ilz)
+                        fla_drot(&i__4, &t[ifrstm + jch * t_dim1], &c__1,
+                                 &t[ifrstm + (jch - 1) * t_dim1], &c__1, &c__, &s);
+                        if(ilz)
                         {
-                            fla_drot(n, &z__[jch * z_dim1 + 1], &c__1, &z__[(jch - 1) * z_dim1 + 1], &c__1, &c__, &s);
+                            fla_drot(n, &z__[jch * z_dim1 + 1], &c__1, &z__[(jch - 1) * z_dim1 + 1],
+                                     &c__1, &c__, &s);
                         }
                         /* L50: */
                     }
                     goto L70;
                 }
             }
-            else if (ilazro)
+            else if(ilazro)
             {
                 /* Only test 1 passed -- work on J:ILAST */
                 ifirst = j;
@@ -840,29 +885,30 @@ int fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo
         goto L420;
         /* T(ILAST,ILAST)=0 -- clear H(ILAST,ILAST-1) to split off a */
         /* 1x1 block. */
-L70:
+    L70:
         temp = h__[ilast + ilast * h_dim1];
-        dlartg_(&temp, &h__[ilast + (ilast - 1) * h_dim1], &c__, &s, &h__[ ilast + ilast * h_dim1]);
+        dlartg_(&temp, &h__[ilast + (ilast - 1) * h_dim1], &c__, &s, &h__[ilast + ilast * h_dim1]);
         h__[ilast + (ilast - 1) * h_dim1] = 0.;
         i__2 = ilast - ifrstm;
-        fla_drot(&i__2, &h__[ifrstm + ilast * h_dim1], &c__1, &h__[ifrstm + ( ilast - 1) * h_dim1], &c__1, &c__, &s);
+        fla_drot(&i__2, &h__[ifrstm + ilast * h_dim1], &c__1, &h__[ifrstm + (ilast - 1) * h_dim1],
+                 &c__1, &c__, &s);
         i__2 = ilast - ifrstm;
-        fla_drot(&i__2, &t[ifrstm + ilast * t_dim1], &c__1, &t[ifrstm + (ilast - 1) * t_dim1], &c__1, &c__, &s);
-        if (ilz)
+        fla_drot(&i__2, &t[ifrstm + ilast * t_dim1], &c__1, &t[ifrstm + (ilast - 1) * t_dim1],
+                 &c__1, &c__, &s);
+        if(ilz)
         {
-            fla_drot(n, &z__[ilast * z_dim1 + 1], &c__1, &z__[(ilast - 1) * z_dim1 + 1], &c__1, &c__, &s);
+            fla_drot(n, &z__[ilast * z_dim1 + 1], &c__1, &z__[(ilast - 1) * z_dim1 + 1], &c__1,
+                     &c__, &s);
         }
         /* H(ILAST,ILAST-1)=0 -- Standardize B, set ALPHAR, ALPHAI, */
         /* and BETA */
-L80:
-        if (t[ilast + ilast * t_dim1] < 0.)
+    L80:
+        if(t[ilast + ilast * t_dim1] < 0.)
         {
-            if (ilschr)
+            if(ilschr)
             {
                 i__2 = ilast;
-                for (j = ifrstm;
-                        j <= i__2;
-                        ++j)
+                for(j = ifrstm; j <= i__2; ++j)
                 {
                     h__[j + ilast * h_dim1] = -h__[j + ilast * h_dim1];
                     t[j + ilast * t_dim1] = -t[j + ilast * t_dim1];
@@ -874,12 +920,10 @@ L80:
                 h__[ilast + ilast * h_dim1] = -h__[ilast + ilast * h_dim1];
                 t[ilast + ilast * t_dim1] = -t[ilast + ilast * t_dim1];
             }
-            if (ilz)
+            if(ilz)
             {
                 i__2 = *n;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     z__[j + ilast * z_dim1] = -z__[j + ilast * z_dim1];
                     /* L100: */
@@ -891,17 +935,17 @@ L80:
         beta[ilast] = t[ilast + ilast * t_dim1];
         /* Go to next block -- exit if finished. */
         --ilast;
-        if (ilast < *ilo)
+        if(ilast < *ilo)
         {
             goto L380;
         }
         /* Reset counters */
         iiter = 0;
         eshift = 0.;
-        if (! ilschr)
+        if(!ilschr)
         {
             ilastm = ilast;
-            if (ifrstm > ilast)
+            if(ifrstm > ilast)
             {
                 ifrstm = *ilo;
             }
@@ -910,9 +954,9 @@ L80:
         /* QZ step */
         /* This iteration only involves rows/columns IFIRST:ILAST. We */
         /* assume IFIRST < ILAST, and that the diagonal of B is non-zero. */
-L110:
+    L110:
         ++iiter;
-        if (! ilschr)
+        if(!ilschr)
         {
             ifrstm = ifirst;
         }
@@ -920,17 +964,19 @@ L110:
         /* At this point, IFIRST < ILAST, and the diagonal elements of */
         /* T(IFIRST:ILAST,IFIRST,ILAST) are larger than BTOL (in */
         /* magnitude) */
-        if (iiter / 10 * 10 == iiter)
+        if(iiter / 10 * 10 == iiter)
         {
             /* Exceptional shift. Chosen for no particularly good reason. */
             /* (Single shift only.) */
-            if ((doublereal) maxit * safmin * (d__1 = h__[ilast + (ilast - 1) * h_dim1], f2c_abs(d__1)) < (d__2 = t[ilast - 1 + (ilast - 1) * t_dim1], f2c_abs(d__2)))
+            if((doublereal)maxit * safmin
+                   * (d__1 = h__[ilast + (ilast - 1) * h_dim1], f2c_abs(d__1))
+               < (d__2 = t[ilast - 1 + (ilast - 1) * t_dim1], f2c_abs(d__2)))
             {
-                eshift = h__[ilast + (ilast - 1) * h_dim1] / t[ilast - 1 + ( ilast - 1) * t_dim1];
+                eshift = h__[ilast + (ilast - 1) * h_dim1] / t[ilast - 1 + (ilast - 1) * t_dim1];
             }
             else
             {
-                eshift += 1. / (safmin * (doublereal) maxit);
+                eshift += 1. / (safmin * (doublereal)maxit);
             }
             s1 = 1.;
             wr = eshift;
@@ -941,8 +987,12 @@ L110:
             /* bottom-right 2x2 block of A and B. The first eigenvalue */
             /* returned by DLAG2 is the Wilkinson shift (AEP p.512), */
             d__1 = safmin * 100.;
-            dlag2_(&h__[ilast - 1 + (ilast - 1) * h_dim1], ldh, &t[ilast - 1 + (ilast - 1) * t_dim1], ldt, &d__1, &s1, &s2, &wr, &wr2, &wi);
-            if ((d__1 = wr / s1 * t[ilast + ilast * t_dim1] - h__[ilast + ilast * h_dim1], f2c_abs(d__1)) > (d__2 = wr2 / s2 * t[ilast + ilast * t_dim1] - h__[ilast + ilast * h_dim1], f2c_abs(d__2) ))
+            dlag2_(&h__[ilast - 1 + (ilast - 1) * h_dim1], ldh,
+                   &t[ilast - 1 + (ilast - 1) * t_dim1], ldt, &d__1, &s1, &s2, &wr, &wr2, &wi);
+            if((d__1 = wr / s1 * t[ilast + ilast * t_dim1] - h__[ilast + ilast * h_dim1],
+                f2c_abs(d__1))
+               > (d__2 = wr2 / s2 * t[ilast + ilast * t_dim1] - h__[ilast + ilast * h_dim1],
+                  f2c_abs(d__2)))
             {
                 temp = wr;
                 wr = wr2;
@@ -954,19 +1004,19 @@ L110:
             /* Computing MAX */
             /* Computing MAX */
             d__3 = 1., d__4 = f2c_abs(wr);
-            d__3 = fla_max(d__3,d__4);
+            d__3 = fla_max(d__3, d__4);
             d__4 = f2c_abs(wi); // ; expr subst
             d__1 = s1;
-            d__2 = safmin * fla_max(d__3,d__4); // , expr subst
-            temp = fla_max(d__1,d__2);
-            if (wi != 0.)
+            d__2 = safmin * fla_max(d__3, d__4); // , expr subst
+            temp = fla_max(d__1, d__2);
+            if(wi != 0.)
             {
                 goto L200;
             }
         }
         /* Fiddle with shift to avoid overflow */
-        temp = fla_min(ascale,1.) * (safmax * .5);
-        if (s1 > temp)
+        temp = fla_min(ascale, 1.) * (safmax * .5);
+        if(s1 > temp)
         {
             scale = temp / s1;
         }
@@ -974,67 +1024,65 @@ L110:
         {
             scale = 1.;
         }
-        temp = fla_min(bscale,1.) * (safmax * .5);
-        if (f2c_abs(wr) > temp)
+        temp = fla_min(bscale, 1.) * (safmax * .5);
+        if(f2c_abs(wr) > temp)
         {
             /* Computing MIN */
             d__1 = scale;
             d__2 = temp / f2c_abs(wr); // , expr subst
-            scale = fla_min(d__1,d__2);
+            scale = fla_min(d__1, d__2);
         }
         s1 = scale * s1;
         wr = scale * wr;
         /* Now check for two consecutive small subdiagonals. */
         i__2 = ifirst + 1;
-        for (j = ilast - 1;
-                j >= i__2;
-                --j)
+        for(j = ilast - 1; j >= i__2; --j)
         {
             istart = j;
             temp = (d__1 = s1 * h__[j + (j - 1) * h_dim1], f2c_abs(d__1));
             temp2 = (d__1 = s1 * h__[j + j * h_dim1] - wr * t[j + j * t_dim1], f2c_abs(d__1));
-            tempr = fla_max(temp,temp2);
-            if (tempr < 1. && tempr != 0.)
+            tempr = fla_max(temp, temp2);
+            if(tempr < 1. && tempr != 0.)
             {
                 temp /= tempr;
                 temp2 /= tempr;
             }
-            if ((d__1 = ascale * h__[j + 1 + j * h_dim1] * temp, f2c_abs(d__1)) <= ascale * atol * temp2)
+            if((d__1 = ascale * h__[j + 1 + j * h_dim1] * temp, f2c_abs(d__1))
+               <= ascale * atol * temp2)
             {
                 goto L130;
             }
             /* L120: */
         }
         istart = ifirst;
-L130: /* Do an implicit single-shift QZ sweep. */
+    L130: /* Do an implicit single-shift QZ sweep. */
         /* Initial Q */
         temp = s1 * h__[istart + istart * h_dim1] - wr * t[istart + istart * t_dim1];
         temp2 = s1 * h__[istart + 1 + istart * h_dim1];
         dlartg_(&temp, &temp2, &c__, &s, &tempr);
         /* Sweep */
         i__2 = ilast - 1;
-        for (j = istart;
-                j <= i__2;
-                ++j)
+        for(j = istart; j <= i__2; ++j)
         {
-            if (j > istart)
+            if(j > istart)
             {
                 temp = h__[j + (j - 1) * h_dim1];
-                dlartg_(&temp, &h__[j + 1 + (j - 1) * h_dim1], &c__, &s, &h__[ j + (j - 1) * h_dim1]);
+                dlartg_(&temp, &h__[j + 1 + (j - 1) * h_dim1], &c__, &s,
+                        &h__[j + (j - 1) * h_dim1]);
                 h__[j + 1 + (j - 1) * h_dim1] = 0.;
             }
             i__3 = ilastm - j + 1;
-            fla_drot(&i__3, &h__[j + j * h_dim1], &h_dim1, &h__[j + 1 + j * h_dim1], &h_dim1, &c__, &s);
-            fla_drot(&i__3,   &t[j + j * t_dim1], &t_dim1,   &t[j + 1 + j * t_dim1], &t_dim1, &c__, &s);
-            if (ilq)
+            fla_drot(&i__3, &h__[j + j * h_dim1], &h_dim1, &h__[j + 1 + j * h_dim1], &h_dim1, &c__,
+                     &s);
+            fla_drot(&i__3, &t[j + j * t_dim1], &t_dim1, &t[j + 1 + j * t_dim1], &t_dim1, &c__, &s);
+            if(ilq)
             {
                 i__3 = *n;
-                for (jr = 1;
-                        jr <= i__3;
-                        ++jr)
+                for(jr = 1; jr <= i__3; ++jr)
                 {
                     temp = c__ * q[jr + j * q_dim1] + s * q[jr + (j + 1) * q_dim1];
-                    q[jr + (j + 1) * q_dim1] = -s * q[jr + j * q_dim1] + c__ * q[jr + (j + 1) * q_dim1];
+                    q[jr + (j + 1) * q_dim1]
+                        = -s * q[jr + j * q_dim1] + c__ * q[jr + (j + 1) * q_dim1];
                     q[jr + j * q_dim1] = temp;
                     /* L150: */
                 }
@@ -1044,20 +1092,21 @@ L130: /* Do an implicit single-shift QZ sweep. */
             t[j + 1 + j * t_dim1] = 0.;
             /* Computing MIN */
             i__4 = j + 2;
-            i__3 = fla_min(i__4,ilast) - ifrstm + 1;
-            fla_drot(&i__3, &h__[ifrstm + (j + 1) * h_dim1], &c__1, &h__[ifrstm + j * h_dim1], &c__1, &c__, &s);
+            i__3 = fla_min(i__4, ilast) - ifrstm + 1;
+            fla_drot(&i__3, &h__[ifrstm + (j + 1) * h_dim1], &c__1, &h__[ifrstm + j * h_dim1],
+                     &c__1, &c__, &s);
             i__3 = j - ifrstm + 1;
-            fla_drot(&i__3, &t[ifrstm + (j + 1) * t_dim1], &c__1, &t[ifrstm + j * t_dim1], &c__1, &c__, &s);
+            fla_drot(&i__3, &t[ifrstm + (j + 1) * t_dim1], &c__1, &t[ifrstm + j * t_dim1], &c__1,
+                     &c__, &s);
 
-            if (ilz)
+            if(ilz)
             {
                 i__3 = *n;
-                for (jr = 1;
-                        jr <= i__3;
-                        ++jr)
+                for(jr = 1; jr <= i__3; ++jr)
                 {
                     temp = c__ * z__[jr + (j + 1) * z_dim1] + s * z__[jr + j * z_dim1];
-                    z__[jr + j * z_dim1] = -s * z__[jr + (j + 1) * z_dim1] + c__ * z__[jr + j * z_dim1];
+                    z__[jr + j * z_dim1]
+                        = -s * z__[jr + (j + 1) * z_dim1] + c__ * z__[jr + j * z_dim1];
                     z__[jr + (j + 1) * z_dim1] = temp;
                     /* L180: */
                 }
@@ -1070,16 +1119,17 @@ L130: /* Do an implicit single-shift QZ sweep. */
         /* but only if the block is at least 3x3. */
         /* This code may break if this point is reached with */
         /* a 2x2 block with real eigenvalues. */
-L200:
-        if (ifirst + 1 == ilast)
+    L200:
+        if(ifirst + 1 == ilast)
         {
             /* Special case -- 2x2 block with complex eigenvectors */
             /* Step 1: Standardize, that is, rotate so that */
             /* ( B11 0 ) */
             /* B = ( ) with B11 non-negative. */
             /* ( 0 B22 ) */
-            dlasv2_(&t[ilast - 1 + (ilast - 1) * t_dim1], &t[ilast - 1 + ilast * t_dim1], &t[ilast + ilast * t_dim1], &b22, &b11, & sr, &cr, &sl, &cl);
-            if (b11 < 0.)
+            dlasv2_(&t[ilast - 1 + (ilast - 1) * t_dim1], &t[ilast - 1 + ilast * t_dim1],
+                    &t[ilast + ilast * t_dim1], &b22, &b11, &sr, &cr, &sl, &cl);
+            if(b11 < 0.)
             {
                 cr = -cr;
                 sr = -sr;
@@ -1087,49 +1137,51 @@ L200:
                 b22 = -b22;
             }
             i__2 = ilastm + 1 - ifirst;
-            fla_drot(&i__2, &h__[ilast - 1 + (ilast - 1) * h_dim1], ldh, &h__[ ilast + (ilast - 1) * h_dim1], ldh, &cl, &sl);
+            fla_drot(&i__2, &h__[ilast - 1 + (ilast - 1) * h_dim1], ldh,
+                     &h__[ilast + (ilast - 1) * h_dim1], ldh, &cl, &sl);
             i__2 = ilast + 1 - ifrstm;
-            fla_drot(&i__2, &h__[ifrstm + (ilast - 1) * h_dim1], &c__1, &h__[ ifrstm + ilast * h_dim1], &c__1, &cr, &sr);
-            if (ilast < ilastm)
+            fla_drot(&i__2, &h__[ifrstm + (ilast - 1) * h_dim1], &c__1,
+                     &h__[ifrstm + ilast * h_dim1], &c__1, &cr, &sr);
+            if(ilast < ilastm)
             {
                 i__2 = ilastm - ilast;
-                fla_drot(&i__2, &t[ilast - 1 + (ilast + 1) * t_dim1], ldt, &t[ ilast + (ilast + 1) * t_dim1], ldt, &cl, &sl);
+                fla_drot(&i__2, &t[ilast - 1 + (ilast + 1) * t_dim1], ldt,
+                         &t[ilast + (ilast + 1) * t_dim1], ldt, &cl, &sl);
             }
-            if (ifrstm < ilast - 1)
+            if(ifrstm < ilast - 1)
             {
                 i__2 = ifirst - ifrstm;
-                fla_drot(&i__2, &t[ifrstm + (ilast - 1) * t_dim1], &c__1, &t[ ifrstm + ilast * t_dim1], &c__1, &cr, &sr);
+                fla_drot(&i__2, &t[ifrstm + (ilast - 1) * t_dim1], &c__1,
+                         &t[ifrstm + ilast * t_dim1], &c__1, &cr, &sr);
             }
-            if (ilq)
+            if(ilq)
             {
-                fla_drot(n, &q[(ilast - 1) * q_dim1 + 1], &c__1, &q[ilast * q_dim1 + 1], &c__1, &cl, &sl);
+                fla_drot(n, &q[(ilast - 1) * q_dim1 + 1], &c__1, &q[ilast * q_dim1 + 1], &c__1, &cl,
+                         &sl);
             }
-            if (ilz)
+            if(ilz)
             {
-                fla_drot(n, &z__[(ilast - 1) * z_dim1 + 1], &c__1, &z__[ilast * z_dim1 + 1], &c__1, &cr, &sr);
+                fla_drot(n, &z__[(ilast - 1) * z_dim1 + 1], &c__1, &z__[ilast * z_dim1 + 1], &c__1,
+                         &cr, &sr);
             }
             t[ilast - 1 + (ilast - 1) * t_dim1] = b11;
             t[ilast - 1 + ilast * t_dim1] = 0.;
             t[ilast + (ilast - 1) * t_dim1] = 0.;
             t[ilast + ilast * t_dim1] = b22;
             /* If B22 is negative, negate column ILAST */
-            if (b22 < 0.)
+            if(b22 < 0.)
             {
                 i__2 = ilast;
-                for (j = ifrstm;
-                        j <= i__2;
-                        ++j)
+                for(j = ifrstm; j <= i__2; ++j)
                 {
                     h__[j + ilast * h_dim1] = -h__[j + ilast * h_dim1];
                     t[j + ilast * t_dim1] = -t[j + ilast * t_dim1];
                     /* L210: */
                 }
-                if (ilz)
+                if(ilz)
                 {
                     i__2 = *n;
-                    for (j = 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = 1; j <= i__2; ++j)
                     {
                         z__[j + ilast * z_dim1] = -z__[j + ilast * z_dim1];
                         /* L220: */
@@ -1140,10 +1192,11 @@ L200:
             /* Step 2: Compute ALPHAR, ALPHAI, and BETA (see refs.) */
             /* Recompute shift */
             d__1 = safmin * 100.;
-            dlag2_(&h__[ilast - 1 + (ilast - 1) * h_dim1], ldh, &t[ilast - 1 + (ilast - 1) * t_dim1], ldt, &d__1, &s1, &temp, &wr, & temp2, &wi);
+            dlag2_(&h__[ilast - 1 + (ilast - 1) * h_dim1], ldh,
+                   &t[ilast - 1 + (ilast - 1) * t_dim1], ldt, &d__1, &s1, &temp, &wr, &temp2, &wi);
             /* If standardization has perturbed the shift onto real line, */
             /* do another (real single-shift) QR step. */
-            if (wi == 0.)
+            if(wi == 0.)
             {
                 goto L350;
             }
@@ -1164,7 +1217,8 @@ L200:
             c21 = s1 * a21;
             c22r = s1 * a22 - wr * b22;
             c22i = -wi * b22;
-            if (f2c_abs(c11r) + f2c_abs(c11i) + f2c_abs(c12) > f2c_abs(c21) + f2c_abs(c22r) + f2c_abs( c22i))
+            if(f2c_abs(c11r) + f2c_abs(c11i) + f2c_abs(c12)
+               > f2c_abs(c21) + f2c_abs(c22r) + f2c_abs(c22i))
             {
                 t1 = dlapy3_(&c12, &c11r, &c11i);
                 cz = c12 / t1;
@@ -1174,7 +1228,7 @@ L200:
             else
             {
                 cz = dlapy2_(&c22r, &c22i);
-                if (cz <= safmin)
+                if(cz <= safmin)
                 {
                     cz = 0.;
                     szr = 1.;
@@ -1197,7 +1251,7 @@ L200:
             an = f2c_abs(a11) + f2c_abs(a12) + f2c_abs(a21) + f2c_abs(a22);
             bn = f2c_abs(b11) + f2c_abs(b22);
             wabs = f2c_abs(wr) + f2c_abs(wi);
-            if (s1 * an > wabs * bn)
+            if(s1 * an > wabs * bn)
             {
                 cq = cz * b11;
                 sqr = szr * b22;
@@ -1210,7 +1264,7 @@ L200:
                 a2r = cz * a21 + szr * a22;
                 a2i = szi * a22;
                 cq = dlapy2_(&a1r, &a1i);
-                if (cq <= safmin)
+                if(cq <= safmin)
                 {
                     cq = 0.;
                     sqr = 1.;
@@ -1246,17 +1300,17 @@ L200:
             alphai[ilast] = -(wi * b2a) * s1inv;
             /* Step 3: Go to next block -- exit if finished. */
             ilast = ifirst - 1;
-            if (ilast < *ilo)
+            if(ilast < *ilo)
             {
                 goto L380;
             }
             /* Reset counters */
             iiter = 0;
             eshift = 0.;
-            if (! ilschr)
+            if(!ilschr)
             {
                 ilastm = ilast;
-                if (ifrstm > ilast)
+                if(ifrstm > ilast)
                 {
                     ifrstm = *ilo;
                 }
@@ -1273,64 +1327,72 @@ L200:
             /* so compute 1st column of (A B ) - c A B + d */
             /* using the formula in QZIT (from EISPACK) */
             /* We assume that the block is at least 3x3 */
-            ad11 = ascale * h__[ilast - 1 + (ilast - 1) * h_dim1] / (bscale * t[ilast - 1 + (ilast - 1) * t_dim1]);
-            ad21 = ascale * h__[ilast + (ilast - 1) * h_dim1] / (bscale * t[ ilast - 1 + (ilast - 1) * t_dim1]);
-            ad12 = ascale * h__[ilast - 1 + ilast * h_dim1] / (bscale * t[ ilast + ilast * t_dim1]);
+            ad11 = ascale * h__[ilast - 1 + (ilast - 1) * h_dim1]
+                   / (bscale * t[ilast - 1 + (ilast - 1) * t_dim1]);
+            ad21 = ascale * h__[ilast + (ilast - 1) * h_dim1]
+                   / (bscale * t[ilast - 1 + (ilast - 1) * t_dim1]);
+            ad12 = ascale * h__[ilast - 1 + ilast * h_dim1] / (bscale * t[ilast + ilast * t_dim1]);
             ad22 = ascale * h__[ilast + ilast * h_dim1] / (bscale * t[ilast + ilast * t_dim1]);
             u12 = t[ilast - 1 + ilast * t_dim1] / t[ilast + ilast * t_dim1];
-            ad11l = ascale * h__[ifirst + ifirst * h_dim1] / (bscale * t[ ifirst + ifirst * t_dim1]);
-            ad21l = ascale * h__[ifirst + 1 + ifirst * h_dim1] / (bscale * t[ ifirst + ifirst * t_dim1]);
-            ad12l = ascale * h__[ifirst + (ifirst + 1) * h_dim1] / (bscale * t[ifirst + 1 + (ifirst + 1) * t_dim1]);
-            ad22l = ascale * h__[ifirst + 1 + (ifirst + 1) * h_dim1] / ( bscale * t[ifirst + 1 + (ifirst + 1) * t_dim1]);
-            ad32l = ascale * h__[ifirst + 2 + (ifirst + 1) * h_dim1] / ( bscale * t[ifirst + 1 + (ifirst + 1) * t_dim1]);
+            ad11l = ascale * h__[ifirst + ifirst * h_dim1] / (bscale * t[ifirst + ifirst * t_dim1]);
+            ad21l = ascale * h__[ifirst + 1 + ifirst * h_dim1]
+                    / (bscale * t[ifirst + ifirst * t_dim1]);
+            ad12l = ascale * h__[ifirst + (ifirst + 1) * h_dim1]
+                    / (bscale * t[ifirst + 1 + (ifirst + 1) * t_dim1]);
+            ad22l = ascale * h__[ifirst + 1 + (ifirst + 1) * h_dim1]
+                    / (bscale * t[ifirst + 1 + (ifirst + 1) * t_dim1]);
+            ad32l = ascale * h__[ifirst + 2 + (ifirst + 1) * h_dim1]
+                    / (bscale * t[ifirst + 1 + (ifirst + 1) * t_dim1]);
             u12l = t[ifirst + (ifirst + 1) * t_dim1] / t[ifirst + 1 + (ifirst + 1) * t_dim1];
-            v[0] = (ad11 - ad11l) * (ad22 - ad11l) - ad12 * ad21 + ad21 * u12 * ad11l + (ad12l - ad11l * u12l) * ad21l;
-            v[1] = (ad22l - ad11l - ad21l * u12l - (ad11 - ad11l) - (ad22 - ad11l) + ad21 * u12) * ad21l;
+            v[0] = (ad11 - ad11l) * (ad22 - ad11l) - ad12 * ad21 + ad21 * u12 * ad11l
+                   + (ad12l - ad11l * u12l) * ad21l;
+            v[1] = (ad22l - ad11l - ad21l * u12l - (ad11 - ad11l) - (ad22 - ad11l) + ad21 * u12)
+                   * ad21l;
             v[2] = ad32l * ad21l;
             istart = ifirst;
             dlarfg_(&c__3, v, &v[1], &c__1, &tau);
             v[0] = 1.;
             /* Sweep */
             i__2 = ilast - 2;
-            for (j = istart;
-                    j <= i__2;
-                    ++j)
+            for(j = istart; j <= i__2; ++j)
             {
                 /* All but last elements: use 3x3 Householder transforms. */
                 /* Zero (j-1)st column of A */
-                if (j > istart)
+                if(j > istart)
                 {
                     v[0] = h__[j + (j - 1) * h_dim1];
                     v[1] = h__[j + 1 + (j - 1) * h_dim1];
                     v[2] = h__[j + 2 + (j - 1) * h_dim1];
-                    dlarfg_(&c__3, &h__[j + (j - 1) * h_dim1], &v[1], &c__1, & tau);
+                    dlarfg_(&c__3, &h__[j + (j - 1) * h_dim1], &v[1], &c__1, &tau);
                     v[0] = 1.;
                     h__[j + 1 + (j - 1) * h_dim1] = 0.;
                     h__[j + 2 + (j - 1) * h_dim1] = 0.;
                 }
                 i__3 = ilastm;
-                for (jc = j;
-                        jc <= i__3;
-                        ++jc)
+                for(jc = j; jc <= i__3; ++jc)
                 {
-                    temp = tau * (h__[j + jc * h_dim1] + v[1] * h__[j + 1 + jc * h_dim1] + v[2] * h__[j + 2 + jc * h_dim1]);
+                    temp = tau
+                           * (h__[j + jc * h_dim1] + v[1] * h__[j + 1 + jc * h_dim1]
+                              + v[2] * h__[j + 2 + jc * h_dim1]);
                     h__[j + jc * h_dim1] -= temp;
                     h__[j + 1 + jc * h_dim1] -= temp * v[1];
                     h__[j + 2 + jc * h_dim1] -= temp * v[2];
-                    temp2 = tau * (t[j + jc * t_dim1] + v[1] * t[j + 1 + jc * t_dim1] + v[2] * t[j + 2 + jc * t_dim1]);
+                    temp2 = tau
+                            * (t[j + jc * t_dim1] + v[1] * t[j + 1 + jc * t_dim1]
+                               + v[2] * t[j + 2 + jc * t_dim1]);
                     t[j + jc * t_dim1] -= temp2;
                     t[j + 1 + jc * t_dim1] -= temp2 * v[1];
                     t[j + 2 + jc * t_dim1] -= temp2 * v[2];
                     /* L230: */
                 }
-                if (ilq)
+                if(ilq)
                 {
                     i__3 = *n;
-                    for (jr = 1;
-                            jr <= i__3;
-                            ++jr)
+                    for(jr = 1; jr <= i__3; ++jr)
                     {
-                        temp = tau * (q[jr + j * q_dim1] + v[1] * q[jr + (j + 1) * q_dim1] + v[2] * q[jr + (j + 2) * q_dim1] );
+                        temp = tau
+                               * (q[jr + j * q_dim1] + v[1] * q[jr + (j + 1) * q_dim1]
+                                  + v[2] * q[jr + (j + 2) * q_dim1]);
                         q[jr + j * q_dim1] -= temp;
                         q[jr + (j + 1) * q_dim1] -= temp * v[1];
                         q[jr + (j + 2) * q_dim1] -= temp * v[2];
@@ -1343,19 +1405,19 @@ L200:
                 /* Computing MAX */
                 d__3 = (d__1 = t[j + 1 + (j + 1) * t_dim1], f2c_abs(d__1));
                 d__4 = (d__2 = t[j + 1 + (j + 2) * t_dim1], f2c_abs(d__2)); // , expr subst
-                temp = fla_max(d__3,d__4);
+                temp = fla_max(d__3, d__4);
                 /* Computing MAX */
                 d__3 = (d__1 = t[j + 2 + (j + 1) * t_dim1], f2c_abs(d__1));
                 d__4 = (d__2 = t[j + 2 + (j + 2) * t_dim1], f2c_abs(d__2)); // , expr subst
-                temp2 = fla_max(d__3,d__4);
-                if (fla_max(temp,temp2) < safmin)
+                temp2 = fla_max(d__3, d__4);
+                if(fla_max(temp, temp2) < safmin)
                 {
                     scale = 0.;
                     u1 = 1.;
                     u2 = 0.;
                     goto L250;
                 }
-                else if (temp >= temp2)
+                else if(temp >= temp2)
                 {
                     w11 = t[j + 1 + (j + 1) * t_dim1];
                     w21 = t[j + 2 + (j + 1) * t_dim1];
@@ -1374,7 +1436,7 @@ L200:
                     u1 = t[j + 2 + j * t_dim1];
                 }
                 /* Swap columns if nec. */
-                if (f2c_abs(w12) > f2c_abs(w11))
+                if(f2c_abs(w12) > f2c_abs(w11))
                 {
                     ilpivt = TRUE_;
                     temp = w12;
@@ -1391,29 +1453,29 @@ L200:
                 w21 = 0.;
                 /* Compute SCALE */
                 scale = 1.;
-                if (f2c_abs(w22) < safmin)
+                if(f2c_abs(w22) < safmin)
                 {
                     scale = 0.;
                     u2 = 1.;
                     u1 = -w12 / w11;
                     goto L250;
                 }
-                if (f2c_abs(w22) < f2c_abs(u2))
+                if(f2c_abs(w22) < f2c_abs(u2))
                 {
                     scale = (d__1 = w22 / u2, f2c_abs(d__1));
                 }
-                if (f2c_abs(w11) < f2c_abs(u1))
+                if(f2c_abs(w11) < f2c_abs(u1))
                 {
                     /* Computing MIN */
                     d__2 = scale;
                     d__3 = (d__1 = w11 / u1, f2c_abs(d__1)); // , expr subst
-                    scale = fla_min(d__2,d__3);
+                    scale = fla_min(d__2, d__3);
                 }
                 /* Solve */
                 u2 = scale * u2 / w22;
                 u1 = (scale * u1 - w12 * u2) / w11;
-L250:
-                if (ilpivt)
+            L250:
+                if(ilpivt)
                 {
                     temp = u2;
                     u2 = u1;
@@ -1435,7 +1497,7 @@ L250:
                 /* Apply transformations from the right. */
                 /* Computing MIN */
                 i__4 = j + 3;
-                i__3 = fla_min(i__4,ilast);
+                i__3 = fla_min(i__4, ilast);
 
                 i__3 = i__3 - ifrstm + 1;
                 fla_dhrot3(&i__3, &h__[ifrstm - 1 + (j - 1) * h_dim1], &h_dim1, v, &tau);
@@ -1443,14 +1505,14 @@ L250:
 
                 i__3 = i__3 - ifrstm + 1;
                 fla_dhrot3(&i__3, &t[ifrstm - 1 + (j - 1) * t_dim1], &t_dim1, v, &tau);
-                if (ilz)
+                if(ilz)
                 {
                     i__3 = *n;
-                    for (jr = 1;
-                            jr <= i__3;
-                            ++jr)
+                    for(jr = 1; jr <= i__3; ++jr)
                     {
-                        temp = tau * (z__[jr + j * z_dim1] + v[1] * z__[jr + ( j + 1) * z_dim1] + v[2] * z__[jr + (j + 2) * z_dim1]);
+                        temp = tau
+                               * (z__[jr + j * z_dim1] + v[1] * z__[jr + (j + 1) * z_dim1]
+                                  + v[2] * z__[jr + (j + 2) * z_dim1]);
                         z__[jr + j * z_dim1] -= temp;
                         z__[jr + (j + 1) * z_dim1] -= temp * v[1];
                         z__[jr + (j + 2) * z_dim1] -= temp * v[2];
@@ -1468,27 +1530,25 @@ L250:
             dlartg_(&temp, &h__[j + 1 + (j - 1) * h_dim1], &c__, &s, &h__[j + (j - 1) * h_dim1]);
             h__[j + 1 + (j - 1) * h_dim1] = 0.;
             i__2 = ilastm;
-            for (jc = j;
-                    jc <= i__2;
-                    ++jc)
+            for(jc = j; jc <= i__2; ++jc)
             {
                 temp = c__ * h__[j + jc * h_dim1] + s * h__[j + 1 + jc * h_dim1];
-                h__[j + 1 + jc * h_dim1] = -s * h__[j + jc * h_dim1] + c__ * h__[j + 1 + jc * h_dim1];
+                h__[j + 1 + jc * h_dim1]
+                    = -s * h__[j + jc * h_dim1] + c__ * h__[j + 1 + jc * h_dim1];
                 h__[j + jc * h_dim1] = temp;
                 temp2 = c__ * t[j + jc * t_dim1] + s * t[j + 1 + jc * t_dim1];
                 t[j + 1 + jc * t_dim1] = -s * t[j + jc * t_dim1] + c__ * t[j + 1 + jc * t_dim1];
                 t[j + jc * t_dim1] = temp2;
                 /* L300: */
             }
-            if (ilq)
+            if(ilq)
             {
                 i__2 = *n;
-                for (jr = 1;
-                        jr <= i__2;
-                        ++jr)
+                for(jr = 1; jr <= i__2; ++jr)
                 {
                     temp = c__ * q[jr + j * q_dim1] + s * q[jr + (j + 1) * q_dim1];
-                    q[jr + (j + 1) * q_dim1] = -s * q[jr + j * q_dim1] + c__ * q[jr + (j + 1) * q_dim1];
+                    q[jr + (j + 1) * q_dim1]
+                        = -s * q[jr + j * q_dim1] + c__ * q[jr + (j + 1) * q_dim1];
                     q[jr + j * q_dim1] = temp;
                     /* L310: */
                 }
@@ -1498,9 +1558,7 @@ L250:
             dlartg_(&temp, &t[j + 1 + j * t_dim1], &c__, &s, &t[j + 1 + (j + 1) * t_dim1]);
             t[j + 1 + j * t_dim1] = 0.;
             i__2 = ilast;
-            for (jr = ifrstm;
-                    jr <= i__2;
-                    ++jr)
+            for(jr = ifrstm; jr <= i__2; ++jr)
             {
                 temp = c__ * h__[jr + (j + 1) * h_dim1] + s * h__[jr + j * h_dim1];
                 h__[jr + j * h_dim1] = -s * h__[jr + (j + 1) * h_dim1] + c__ * h__[jr + j * h_dim1];
@@ -1508,24 +1566,21 @@ L250:
                 /* L320: */
             }
             i__2 = ilast - 1;
-            for (jr = ifrstm;
-                    jr <= i__2;
-                    ++jr)
+            for(jr = ifrstm; jr <= i__2; ++jr)
             {
-                temp = c__ * t[jr + (j + 1) * t_dim1] + s * t[jr + j * t_dim1] ;
-                t[jr + j * t_dim1] = -s * t[jr + (j + 1) * t_dim1] + c__ * t[ jr + j * t_dim1];
+                temp = c__ * t[jr + (j + 1) * t_dim1] + s * t[jr + j * t_dim1];
+                t[jr + j * t_dim1] = -s * t[jr + (j + 1) * t_dim1] + c__ * t[jr + j * t_dim1];
                 t[jr + (j + 1) * t_dim1] = temp;
                 /* L330: */
             }
-            if (ilz)
+            if(ilz)
             {
                 i__2 = *n;
-                for (jr = 1;
-                        jr <= i__2;
-                        ++jr)
+                for(jr = 1; jr <= i__2; ++jr)
                 {
                     temp = c__ * z__[jr + (j + 1) * z_dim1] + s * z__[jr + j * z_dim1];
-                    z__[jr + j * z_dim1] = -s * z__[jr + (j + 1) * z_dim1] + c__ * z__[jr + j * z_dim1];
+                    z__[jr + j * z_dim1]
+                        = -s * z__[jr + (j + 1) * z_dim1] + c__ * z__[jr + j * z_dim1];
                     z__[jr + (j + 1) * z_dim1] = temp;
                     /* L340: */
                 }
@@ -1534,8 +1589,8 @@ L250:
         }
         goto L350;
         /* End of iteration loop */
-L350: /* L360: */
-        ;
+    L350: /* L360: */
+          ;
     }
     /* Drop-through = non-convergence */
     *info = ilast;
@@ -1543,18 +1598,14 @@ L350: /* L360: */
     /* Successful completion of all QZ steps */
 L380: /* Set Eigenvalues 1:ILO-1 */
     i__1 = *ilo - 1;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
-        if (t[j + j * t_dim1] < 0.)
+        if(t[j + j * t_dim1] < 0.)
         {
-            if (ilschr)
+            if(ilschr)
             {
                 i__2 = j;
-                for (jr = 1;
-                        jr <= i__2;
-                        ++jr)
+                for(jr = 1; jr <= i__2; ++jr)
                 {
                     h__[jr + j * h_dim1] = -h__[jr + j * h_dim1];
                     t[jr + j * t_dim1] = -t[jr + j * t_dim1];
@@ -1566,12 +1617,10 @@ L380: /* Set Eigenvalues 1:ILO-1 */
                 h__[j + j * h_dim1] = -h__[j + j * h_dim1];
                 t[j + j * t_dim1] = -t[j + j * t_dim1];
             }
-            if (ilz)
+            if(ilz)
             {
                 i__2 = *n;
-                for (jr = 1;
-                        jr <= i__2;
-                        ++jr)
+                for(jr = 1; jr <= i__2; ++jr)
                 {
                     z__[jr + j * z_dim1] = -z__[jr + j * z_dim1];
                     /* L400: */
@@ -1587,16 +1636,21 @@ L380: /* Set Eigenvalues 1:ILO-1 */
     *info = 0;
     /* Exit (other than argument error) -- return optimal workspace size */
 L420:
-    work[1] = (doublereal) (*n);
-    return 0;
+    work[1] = (doublereal)(*n);
+    return;
     /* End of DHGEQZ */
 }
 #endif
 
-int fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublereal *h__, integer *ldh, doublereal *t, integer *ldt, doublereal *alphar, doublereal *alphai, doublereal * beta, doublereal *q, integer *ldq, doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *info)
+void fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi,
+                       doublereal *h__, integer *ldh, doublereal *t, integer *ldt,
+                       doublereal *alphar, doublereal *alphai, doublereal *beta, doublereal *q,
+                       integer *ldq, doublereal *z__, integer *ldz, doublereal *work,
+                       integer *lwork, integer *info)
 {
     /* System generated locals */
-    integer h_dim1, h_offset, q_dim1, q_offset, t_dim1, t_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4;
+    integer h_dim1, h_offset, q_dim1, q_offset, t_dim1, t_offset, z_dim1, z_offset, i__1, i__2,
+        i__3, i__4;
     doublereal d__1, d__2, d__3, d__4, d__5;
     /* Builtin functions */
     double sqrt(doublereal);
@@ -1609,39 +1663,48 @@ int fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *
     integer in;
     doublereal u12, w11, w12, w21;
     integer jr;
-    doublereal cz, w22, sl, wi, sr, vs, wr, b1a, b2a, a1i, a2i, b1i, b2i, a1r, a2r, b1r, b2r, wr2, ad11, ad12, ad21, ad22, c11i, c22i;
+    doublereal cz, w22, sl, wi, sr, vs, wr, b1a, b2a, a1i, a2i, b1i, b2i, a1r, a2r, b1r, b2r, wr2,
+        ad11, ad12, ad21, ad22, c11i, c22i;
     integer jch;
     doublereal c11r, c22r;
     logical ilq;
     doublereal u12l, tau, sqi;
     logical ilz;
     doublereal ulp, sqr, szi, szr, ad11l, ad12l, ad21l, ad22l, ad32l, wabs, atol, btol, temp;
-    extern
-    int dlag2_( doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    extern void dlag2_(doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                       doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal temp2, s1inv, scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iiter, ilast, jiter;
     doublereal anorm, bnorm;
     integer maxit;
     doublereal tempi, tempr;
-    extern doublereal dlapy2_(doublereal *, doublereal *), dlapy3_(doublereal *, doublereal *, doublereal *);
+    extern doublereal dlapy2_(doublereal *, doublereal *),
+        dlapy3_(doublereal *, doublereal *, doublereal *);
     extern /* Subroutine */
-    int dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
+                doublereal *, doublereal *, doublereal *);
     logical ilazr2;
-    extern int drot_(integer *n, doublereal *dx, integer *incx, doublereal *dy, integer *incy, doublereal *c__, doublereal *s);
+    extern void drot_(integer * n, doublereal * dx, integer * incx, doublereal * dy, integer * incy,
+                      doublereal * c__, doublereal * s);
     doublereal ascale, bscale;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+        void
+        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     extern doublereal dlanhs_(char *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */
-    int dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
+        void
+        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     doublereal safmin;
     extern /* Subroutine */
-    int dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal safmax;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal eshift;
     logical ilschr;
     integer icompq, ilastm, ischur;
@@ -1673,7 +1736,6 @@ int fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *
     /* Decode JOB, COMPQ, COMPZ */
     /* Parameter adjustments */
 
-
     h_dim1 = *ldh;
     h_offset = 1 + h_dim1;
     h__ -= h_offset;
@@ -1694,12 +1756,12 @@ int fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *
     ilz = FALSE_;
     ilq = FALSE_;
     ilschr = FALSE_;
-    if (lsame_(job, "E"))
+    if(lsame_(job, "E", 1, 1))
     {
         ilschr = FALSE_;
         ischur = 1;
     }
-    else if (lsame_(job, "S"))
+    else if(lsame_(job, "S", 1, 1))
     {
         ilschr = TRUE_;
         ischur = 2;
@@ -1708,17 +1770,17 @@ int fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *
     {
         ischur = 0;
     }
-    if (lsame_(compq, "N"))
+    if(lsame_(compq, "N", 1, 1))
     {
         ilq = FALSE_;
         icompq = 1;
     }
-    else if (lsame_(compq, "V"))
+    else if(lsame_(compq, "V", 1, 1))
     {
         ilq = TRUE_;
         icompq = 2;
     }
-    else if (lsame_(compq, "I"))
+    else if(lsame_(compq, "I", 1, 1))
     {
         ilq = TRUE_;
         icompq = 3;
@@ -1727,17 +1789,17 @@ int fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *
     {
         icompq = 0;
     }
-    if (lsame_(compz, "N"))
+    if(lsame_(compz, "N", 1, 1))
     {
         ilz = FALSE_;
         icompz = 1;
     }
-    else if (lsame_(compz, "V"))
+    else if(lsame_(compz, "V", 1, 1))
     {
         ilz = TRUE_;
         icompz = 2;
     }
-    else if (lsame_(compz, "I"))
+    else if(lsame_(compz, "I", 1, 1))
     {
         ilz = TRUE_;
         icompz = 3;
@@ -1748,74 +1810,74 @@ int fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *
     }
     /* Check Argument Values */
     *info = 0;
-    work[1] = (doublereal) fla_max(1,*n);
+    work[1] = (doublereal)fla_max(1, *n);
     lquery = *lwork == -1;
-    if (ischur == 0)
+    if(ischur == 0)
     {
         *info = -1;
     }
-    else if (icompq == 0)
+    else if(icompq == 0)
     {
         *info = -2;
     }
-    else if (icompz == 0)
+    else if(icompz == 0)
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*ilo < 1)
+    else if(*ilo < 1)
     {
         *info = -5;
     }
-    else if (*ihi > *n || *ihi < *ilo - 1)
+    else if(*ihi > *n || *ihi < *ilo - 1)
     {
         *info = -6;
     }
-    else if (*ldh < *n)
+    else if(*ldh < *n)
     {
         *info = -8;
     }
-    else if (*ldt < *n)
+    else if(*ldt < *n)
     {
         *info = -10;
     }
-    else if (*ldq < 1 || ilq && *ldq < *n)
+    else if(*ldq < 1 || ilq && *ldq < *n)
     {
         *info = -15;
     }
-    else if (*ldz < 1 || ilz && *ldz < *n)
+    else if(*ldz < 1 || ilz && *ldz < *n)
     {
         *info = -17;
     }
-    else if (*lwork < fla_max(1,*n) && ! lquery)
+    else if(*lwork < fla_max(1, *n) && !lquery)
     {
         *info = -19;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DHGEQZ", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n <= 0)
+    if(*n <= 0)
     {
         work[1] = 1.;
-        return 0;
+        return;
     }
     /* Initialize Q and Z */
-    if (icompq == 3)
+    if(icompq == 3)
     {
         dlaset_("Full", n, n, &c_b12, &c_b13, &q[q_offset], ldq);
     }
-    if (icompz == 3)
+    if(icompz == 3)
     {
         dlaset_("Full", n, n, &c_b12, &c_b13, &z__[z_offset], ldz);
     }
@@ -1829,27 +1891,23 @@ int fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *
     /* Computing MAX */
     d__1 = safmin;
     d__2 = ulp * anorm; // , expr subst
-    atol = fla_max(d__1,d__2);
+    atol = fla_max(d__1, d__2);
     /* Computing MAX */
     d__1 = safmin;
     d__2 = ulp * bnorm; // , expr subst
-    btol = fla_max(d__1,d__2);
-    ascale = 1. / fla_max(safmin,anorm);
-    bscale = 1. / fla_max(safmin,bnorm);
+    btol = fla_max(d__1, d__2);
+    ascale = 1. / fla_max(safmin, anorm);
+    bscale = 1. / fla_max(safmin, bnorm);
     /* Set Eigenvalues IHI+1:N */
     i__1 = *n;
-    for (j = *ihi + 1;
-            j <= i__1;
-            ++j)
+    for(j = *ihi + 1; j <= i__1; ++j)
     {
-        if (t[j + j * t_dim1] < 0.)
+        if(t[j + j * t_dim1] < 0.)
         {
-            if (ilschr)
+            if(ilschr)
             {
                 i__2 = j;
-                for (jr = 1;
-                        jr <= i__2;
-                        ++jr)
+                for(jr = 1; jr <= i__2; ++jr)
                 {
                     h__[jr + j * h_dim1] = -h__[jr + j * h_dim1];
                     t[jr + j * t_dim1] = -t[jr + j * t_dim1];
@@ -1861,12 +1919,10 @@ int fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *
                 h__[j + j * h_dim1] = -h__[j + j * h_dim1];
                 t[j + j * t_dim1] = -t[j + j * t_dim1];
             }
-            if (ilz)
+            if(ilz)
             {
                 i__2 = *n;
-                for (jr = 1;
-                        jr <= i__2;
-                        ++jr)
+                for(jr = 1; jr <= i__2; ++jr)
                 {
                     z__[jr + j * z_dim1] = -z__[jr + j * z_dim1];
                     /* L20: */
@@ -1879,7 +1935,7 @@ int fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *
         /* L30: */
     }
     /* If IHI < ILO, skip QZ steps */
-    if (*ihi < *ilo)
+    if(*ihi < *ilo)
     {
         goto L380;
     }
@@ -1890,13 +1946,13 @@ int fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *
     /* Row operations modify columns whatever:ILASTM. */
     /* If only eigenvalues are being computed, then */
     /* IFRSTM is the row of the last splitting row above row ILAST;
-    */
+     */
     /* this is always at least ILO. */
     /* IITER counts iterations since the last eigenvalue was found, */
     /* to tell when to use an extraordinary shift. */
     /* MAXIT is the maximum number of QZ sweeps allowed. */
     ilast = *ihi;
-    if (ilschr)
+    if(ilschr)
     {
         ifrstm = 1;
         ilastm = *n;
@@ -1910,15 +1966,13 @@ int fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *
     eshift = 0.;
     maxit = (*ihi - *ilo + 1) * 30;
     i__1 = maxit;
-    for (jiter = 1;
-            jiter <= i__1;
-            ++jiter)
+    for(jiter = 1; jiter <= i__1; ++jiter)
     {
         /* Split the matrix if possible. */
         /* Two tests: */
         /* 1: H(j,j-1)=0 or j=ILO */
         /* 2: T(j,j)=0 */
-        if (ilast == *ilo)
+        if(ilast == *ilo)
         {
             /* Special case: j=ILAST */
             goto L80;
@@ -1927,8 +1981,11 @@ int fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *
         {
             /* Computing MAX */
             d__4 = safmin;
-            d__5 = ulp * ((d__1 = h__[ilast + ilast * h_dim1], f2c_abs(d__1)) + (d__2 = h__[ilast - 1 + (ilast - 1) * h_dim1], f2c_abs(d__2)));  // , expr subst
-            if ((d__3 = h__[ilast + (ilast - 1) * h_dim1], f2c_abs(d__3)) <= fla_max( d__4,d__5))
+            d__5 = ulp
+                   * ((d__1 = h__[ilast + ilast * h_dim1], f2c_abs(d__1))
+                      + (d__2 = h__[ilast - 1 + (ilast - 1) * h_dim1],
+                         f2c_abs(d__2))); // , expr subst
+            if((d__3 = h__[ilast + (ilast - 1) * h_dim1], f2c_abs(d__3)) <= fla_max(d__4, d__5))
             {
                 h__[ilast + (ilast - 1) * h_dim1] = 0.;
                 goto L80;
@@ -1936,20 +1993,20 @@ int fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *
         }
         /* Computing MAX */
         d__4 = safmin;
-        d__5 = ulp * ((d__1 = t[ilast - 1 + ilast * t_dim1], f2c_abs(d__1)) + (d__2 = t[ilast - 1 + (ilast - 1) * t_dim1], f2c_abs( d__2))); // , expr subst
-        if ((d__3 = t[ilast + ilast * t_dim1], f2c_abs(d__3)) <= fla_max(d__4,d__5))
+        d__5 = ulp
+               * ((d__1 = t[ilast - 1 + ilast * t_dim1], f2c_abs(d__1))
+                  + (d__2 = t[ilast - 1 + (ilast - 1) * t_dim1], f2c_abs(d__2))); // , expr subst
+        if((d__3 = t[ilast + ilast * t_dim1], f2c_abs(d__3)) <= fla_max(d__4, d__5))
         {
             t[ilast + ilast * t_dim1] = 0.;
             goto L70;
         }
         /* General case: j<ILAST */
         i__2 = *ilo;
-        for (j = ilast - 1;
-                j >= i__2;
-                --j)
+        for(j = ilast - 1; j >= i__2; --j)
         {
             /* Test 1: for H(j,j-1)=0 or j=ILO */
-            if (j == *ilo)
+            if(j == *ilo)
             {
                 ilazro = TRUE_;
             }
@@ -1957,8 +2014,10 @@ int fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *
             {
                 /* Computing MAX */
                 d__4 = safmin;
-                d__5 = ulp * ((d__1 = h__[j + j * h_dim1], f2c_abs( d__1)) + (d__2 = h__[j - 1 + (j - 1) * h_dim1], f2c_abs( d__2))); // , expr subst
-                if ((d__3 = h__[j + (j - 1) * h_dim1], f2c_abs(d__3)) <= fla_max(d__4, d__5))
+                d__5 = ulp
+                       * ((d__1 = h__[j + j * h_dim1], f2c_abs(d__1))
+                          + (d__2 = h__[j - 1 + (j - 1) * h_dim1], f2c_abs(d__2))); // , expr subst
+                if((d__3 = h__[j + (j - 1) * h_dim1], f2c_abs(d__3)) <= fla_max(d__4, d__5))
                 {
                     h__[j + (j - 1) * h_dim1] = 0.;
                     ilazro = TRUE_;
@@ -1970,29 +2029,30 @@ int fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *
             }
             /* Test 2: for T(j,j)=0 */
             temp = (d__1 = t[j + (j + 1) * t_dim1], f2c_abs(d__1));
-            if (j > *ilo)
+            if(j > *ilo)
             {
                 temp += (d__1 = t[j - 1 + j * t_dim1], f2c_abs(d__1));
             }
             /* Computing MAX */
             d__2 = safmin;
             d__3 = ulp * temp; // , expr subst
-            if ((d__1 = t[j + j * t_dim1], f2c_abs(d__1)) < fla_max(d__2,d__3))
+            if((d__1 = t[j + j * t_dim1], f2c_abs(d__1)) < fla_max(d__2, d__3))
             {
                 t[j + j * t_dim1] = 0.;
                 /* Test 1a: Check for 2 consecutive small subdiagonals in A */
                 ilazr2 = FALSE_;
-                if (! ilazro)
+                if(!ilazro)
                 {
                     temp = (d__1 = h__[j + (j - 1) * h_dim1], f2c_abs(d__1));
                     temp2 = (d__1 = h__[j + j * h_dim1], f2c_abs(d__1));
-                    tempr = fla_max(temp,temp2);
-                    if (tempr < 1. && tempr != 0.)
+                    tempr = fla_max(temp, temp2);
+                    if(tempr < 1. && tempr != 0.)
                     {
                         temp /= tempr;
                         temp2 /= tempr;
                     }
-                    if (temp * (ascale * (d__1 = h__[j + 1 + j * h_dim1], f2c_abs( d__1))) <= temp2 * (ascale * atol))
+                    if(temp * (ascale * (d__1 = h__[j + 1 + j * h_dim1], f2c_abs(d__1)))
+                       <= temp2 * (ascale * atol))
                     {
                         ilazr2 = TRUE_;
                     }
@@ -2002,32 +2062,34 @@ int fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *
                 /* at the top. (I.e., at the J-th row/column) The leading */
                 /* diagonal element of the remainder can also be zero, so */
                 /* this may have to be done repeatedly. */
-                if (ilazro || ilazr2)
+                if(ilazro || ilazr2)
                 {
                     i__3 = ilast - 1;
-                    for (jch = j;
-                            jch <= i__3;
-                            ++jch)
+                    for(jch = j; jch <= i__3; ++jch)
                     {
                         temp = h__[jch + jch * h_dim1];
-                        dlartg_(&temp, &h__[jch + 1 + jch * h_dim1], &c__, &s, &h__[jch + jch * h_dim1]);
+                        dlartg_(&temp, &h__[jch + 1 + jch * h_dim1], &c__, &s,
+                                &h__[jch + jch * h_dim1]);
                         h__[jch + 1 + jch * h_dim1] = 0.;
                         i__4 = ilastm - jch;
-                        drot_(&i__4, &h__[jch + (jch + 1) * h_dim1], ldh, & h__[jch + 1 + (jch + 1) * h_dim1], ldh, &c__, &s);
+                        drot_(&i__4, &h__[jch + (jch + 1) * h_dim1], ldh,
+                              &h__[jch + 1 + (jch + 1) * h_dim1], ldh, &c__, &s);
                         i__4 = ilastm - jch;
-                        drot_(&i__4, &t[jch + (jch + 1) * t_dim1], ldt, &t[ jch + 1 + (jch + 1) * t_dim1], ldt, &c__, &s);
-                        if (ilq)
+                        drot_(&i__4, &t[jch + (jch + 1) * t_dim1], ldt,
+                              &t[jch + 1 + (jch + 1) * t_dim1], ldt, &c__, &s);
+                        if(ilq)
                         {
-                            drot_(n, &q[jch * q_dim1 + 1], &c__1, &q[(jch + 1) * q_dim1 + 1], &c__1, &c__, &s);
+                            drot_(n, &q[jch * q_dim1 + 1], &c__1, &q[(jch + 1) * q_dim1 + 1], &c__1,
+                                  &c__, &s);
                         }
-                        if (ilazr2)
+                        if(ilazr2)
                         {
                             h__[jch + (jch - 1) * h_dim1] *= c__;
                         }
                         ilazr2 = FALSE_;
-                        if ((d__1 = t[jch + 1 + (jch + 1) * t_dim1], f2c_abs(d__1) ) >= btol)
+                        if((d__1 = t[jch + 1 + (jch + 1) * t_dim1], f2c_abs(d__1)) >= btol)
                         {
-                            if (jch + 1 >= ilast)
+                            if(jch + 1 >= ilast)
                             {
                                 goto L80;
                             }
@@ -2047,41 +2109,47 @@ int fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *
                     /* Only test 2 passed -- chase the zero to T(ILAST,ILAST) */
                     /* Then process as in the case T(ILAST,ILAST)=0 */
                     i__3 = ilast - 1;
-                    for (jch = j;
-                            jch <= i__3;
-                            ++jch)
+                    for(jch = j; jch <= i__3; ++jch)
                     {
                         temp = t[jch + (jch + 1) * t_dim1];
-                        dlartg_(&temp, &t[jch + 1 + (jch + 1) * t_dim1], &c__, &s, &t[jch + (jch + 1) * t_dim1]);
+                        dlartg_(&temp, &t[jch + 1 + (jch + 1) * t_dim1], &c__, &s,
+                                &t[jch + (jch + 1) * t_dim1]);
                         t[jch + 1 + (jch + 1) * t_dim1] = 0.;
-                        if (jch < ilastm - 1)
+                        if(jch < ilastm - 1)
                         {
                             i__4 = ilastm - jch - 1;
-                            drot_(&i__4, &t[jch + (jch + 2) * t_dim1], ldt, & t[jch + 1 + (jch + 2) * t_dim1], ldt, & c__, &s);
+                            drot_(&i__4, &t[jch + (jch + 2) * t_dim1], ldt,
+                                  &t[jch + 1 + (jch + 2) * t_dim1], ldt, &c__, &s);
                         }
                         i__4 = ilastm - jch + 2;
-                        drot_(&i__4, &h__[jch + (jch - 1) * h_dim1], ldh, & h__[jch + 1 + (jch - 1) * h_dim1], ldh, &c__, &s);
-                        if (ilq)
+                        drot_(&i__4, &h__[jch + (jch - 1) * h_dim1], ldh,
+                              &h__[jch + 1 + (jch - 1) * h_dim1], ldh, &c__, &s);
+                        if(ilq)
                         {
-                            drot_(n, &q[jch * q_dim1 + 1], &c__1, &q[(jch + 1) * q_dim1 + 1], &c__1, &c__, &s);
+                            drot_(n, &q[jch * q_dim1 + 1], &c__1, &q[(jch + 1) * q_dim1 + 1], &c__1,
+                                  &c__, &s);
                         }
                         temp = h__[jch + 1 + jch * h_dim1];
-                        dlartg_(&temp, &h__[jch + 1 + (jch - 1) * h_dim1], & c__, &s, &h__[jch + 1 + jch * h_dim1]);
+                        dlartg_(&temp, &h__[jch + 1 + (jch - 1) * h_dim1], &c__, &s,
+                                &h__[jch + 1 + jch * h_dim1]);
                         h__[jch + 1 + (jch - 1) * h_dim1] = 0.;
                         i__4 = jch + 1 - ifrstm;
-                        drot_(&i__4, &h__[ifrstm + jch * h_dim1], &c__1, &h__[ ifrstm + (jch - 1) * h_dim1], &c__1, &c__, &s) ;
+                        drot_(&i__4, &h__[ifrstm + jch * h_dim1], &c__1,
+                              &h__[ifrstm + (jch - 1) * h_dim1], &c__1, &c__, &s);
                         i__4 = jch - ifrstm;
-                        drot_(&i__4, &t[ifrstm + jch * t_dim1], &c__1, &t[ ifrstm + (jch - 1) * t_dim1], &c__1, &c__, &s) ;
-                        if (ilz)
+                        drot_(&i__4, &t[ifrstm + jch * t_dim1], &c__1,
+                              &t[ifrstm + (jch - 1) * t_dim1], &c__1, &c__, &s);
+                        if(ilz)
                         {
-                            drot_(n, &z__[jch * z_dim1 + 1], &c__1, &z__[(jch - 1) * z_dim1 + 1], &c__1, &c__, &s);
+                            drot_(n, &z__[jch * z_dim1 + 1], &c__1, &z__[(jch - 1) * z_dim1 + 1],
+                                  &c__1, &c__, &s);
                         }
                         /* L50: */
                     }
                     goto L70;
                 }
             }
-            else if (ilazro)
+            else if(ilazro)
             {
                 /* Only test 1 passed -- work on J:ILAST */
                 ifirst = j;
@@ -2095,29 +2163,30 @@ int fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *
         goto L420;
         /* T(ILAST,ILAST)=0 -- clear H(ILAST,ILAST-1) to split off a */
         /* 1x1 block. */
-L70:
+    L70:
         temp = h__[ilast + ilast * h_dim1];
-        dlartg_(&temp, &h__[ilast + (ilast - 1) * h_dim1], &c__, &s, &h__[ ilast + ilast * h_dim1]);
+        dlartg_(&temp, &h__[ilast + (ilast - 1) * h_dim1], &c__, &s, &h__[ilast + ilast * h_dim1]);
         h__[ilast + (ilast - 1) * h_dim1] = 0.;
         i__2 = ilast - ifrstm;
-        drot_(&i__2, &h__[ifrstm + ilast * h_dim1], &c__1, &h__[ifrstm + ( ilast - 1) * h_dim1], &c__1, &c__, &s);
+        drot_(&i__2, &h__[ifrstm + ilast * h_dim1], &c__1, &h__[ifrstm + (ilast - 1) * h_dim1],
+              &c__1, &c__, &s);
         i__2 = ilast - ifrstm;
-        drot_(&i__2, &t[ifrstm + ilast * t_dim1], &c__1, &t[ifrstm + (ilast - 1) * t_dim1], &c__1, &c__, &s);
-        if (ilz)
+        drot_(&i__2, &t[ifrstm + ilast * t_dim1], &c__1, &t[ifrstm + (ilast - 1) * t_dim1], &c__1,
+              &c__, &s);
+        if(ilz)
         {
-            drot_(n, &z__[ilast * z_dim1 + 1], &c__1, &z__[(ilast - 1) * z_dim1 + 1], &c__1, &c__, &s);
+            drot_(n, &z__[ilast * z_dim1 + 1], &c__1, &z__[(ilast - 1) * z_dim1 + 1], &c__1, &c__,
+                  &s);
         }
         /* H(ILAST,ILAST-1)=0 -- Standardize B, set ALPHAR, ALPHAI, */
         /* and BETA */
-L80:
-        if (t[ilast + ilast * t_dim1] < 0.)
+    L80:
+        if(t[ilast + ilast * t_dim1] < 0.)
         {
-            if (ilschr)
+            if(ilschr)
             {
                 i__2 = ilast;
-                for (j = ifrstm;
-                        j <= i__2;
-                        ++j)
+                for(j = ifrstm; j <= i__2; ++j)
                 {
                     h__[j + ilast * h_dim1] = -h__[j + ilast * h_dim1];
                     t[j + ilast * t_dim1] = -t[j + ilast * t_dim1];
@@ -2129,12 +2198,10 @@ L80:
                 h__[ilast + ilast * h_dim1] = -h__[ilast + ilast * h_dim1];
                 t[ilast + ilast * t_dim1] = -t[ilast + ilast * t_dim1];
             }
-            if (ilz)
+            if(ilz)
             {
                 i__2 = *n;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     z__[j + ilast * z_dim1] = -z__[j + ilast * z_dim1];
                     /* L100: */
@@ -2146,17 +2213,17 @@ L80:
         beta[ilast] = t[ilast + ilast * t_dim1];
         /* Go to next block -- exit if finished. */
         --ilast;
-        if (ilast < *ilo)
+        if(ilast < *ilo)
         {
             goto L380;
         }
         /* Reset counters */
         iiter = 0;
         eshift = 0.;
-        if (! ilschr)
+        if(!ilschr)
         {
             ilastm = ilast;
-            if (ifrstm > ilast)
+            if(ifrstm > ilast)
             {
                 ifrstm = *ilo;
             }
@@ -2165,9 +2232,9 @@ L80:
         /* QZ step */
         /* This iteration only involves rows/columns IFIRST:ILAST. We */
         /* assume IFIRST < ILAST, and that the diagonal of B is non-zero. */
-L110:
+    L110:
         ++iiter;
-        if (! ilschr)
+        if(!ilschr)
         {
             ifrstm = ifirst;
         }
@@ -2175,17 +2242,19 @@ L110:
         /* At this point, IFIRST < ILAST, and the diagonal elements of */
         /* T(IFIRST:ILAST,IFIRST,ILAST) are larger than BTOL (in */
         /* magnitude) */
-        if (iiter / 10 * 10 == iiter)
+        if(iiter / 10 * 10 == iiter)
         {
             /* Exceptional shift. Chosen for no particularly good reason. */
             /* (Single shift only.) */
-            if ((doublereal) maxit * safmin * (d__1 = h__[ilast + (ilast - 1) * h_dim1], f2c_abs(d__1)) < (d__2 = t[ilast - 1 + (ilast - 1) * t_dim1], f2c_abs(d__2)))
+            if((doublereal)maxit * safmin
+                   * (d__1 = h__[ilast + (ilast - 1) * h_dim1], f2c_abs(d__1))
+               < (d__2 = t[ilast - 1 + (ilast - 1) * t_dim1], f2c_abs(d__2)))
             {
-                eshift = h__[ilast + (ilast - 1) * h_dim1] / t[ilast - 1 + ( ilast - 1) * t_dim1];
+                eshift = h__[ilast + (ilast - 1) * h_dim1] / t[ilast - 1 + (ilast - 1) * t_dim1];
             }
             else
             {
-                eshift += 1. / (safmin * (doublereal) maxit);
+                eshift += 1. / (safmin * (doublereal)maxit);
             }
             s1 = 1.;
             wr = eshift;
@@ -2196,8 +2265,12 @@ L110:
             /* bottom-right 2x2 block of A and B. The first eigenvalue */
             /* returned by DLAG2 is the Wilkinson shift (AEP p.512), */
             d__1 = safmin * 100.;
-            dlag2_(&h__[ilast - 1 + (ilast - 1) * h_dim1], ldh, &t[ilast - 1 + (ilast - 1) * t_dim1], ldt, &d__1, &s1, &s2, &wr, &wr2, &wi);
-            if ((d__1 = wr / s1 * t[ilast + ilast * t_dim1] - h__[ilast + ilast * h_dim1], f2c_abs(d__1)) > (d__2 = wr2 / s2 * t[ilast + ilast * t_dim1] - h__[ilast + ilast * h_dim1], f2c_abs(d__2) ))
+            dlag2_(&h__[ilast - 1 + (ilast - 1) * h_dim1], ldh,
+                   &t[ilast - 1 + (ilast - 1) * t_dim1], ldt, &d__1, &s1, &s2, &wr, &wr2, &wi);
+            if((d__1 = wr / s1 * t[ilast + ilast * t_dim1] - h__[ilast + ilast * h_dim1],
+                f2c_abs(d__1))
+               > (d__2 = wr2 / s2 * t[ilast + ilast * t_dim1] - h__[ilast + ilast * h_dim1],
+                  f2c_abs(d__2)))
             {
                 temp = wr;
                 wr = wr2;
@@ -2209,19 +2282,19 @@ L110:
             /* Computing MAX */
             /* Computing MAX */
             d__3 = 1., d__4 = f2c_abs(wr);
-            d__3 = fla_max(d__3,d__4);
+            d__3 = fla_max(d__3, d__4);
             d__4 = f2c_abs(wi); // ; expr subst
             d__1 = s1;
-            d__2 = safmin * fla_max(d__3,d__4); // , expr subst
-            temp = fla_max(d__1,d__2);
-            if (wi != 0.)
+            d__2 = safmin * fla_max(d__3, d__4); // , expr subst
+            temp = fla_max(d__1, d__2);
+            if(wi != 0.)
             {
                 goto L200;
             }
         }
         /* Fiddle with shift to avoid overflow */
-        temp = fla_min(ascale,1.) * (safmax * .5);
-        if (s1 > temp)
+        temp = fla_min(ascale, 1.) * (safmax * .5);
+        if(s1 > temp)
         {
             scale = temp / s1;
         }
@@ -2229,77 +2302,73 @@ L110:
         {
             scale = 1.;
         }
-        temp = fla_min(bscale,1.) * (safmax * .5);
-        if (f2c_abs(wr) > temp)
+        temp = fla_min(bscale, 1.) * (safmax * .5);
+        if(f2c_abs(wr) > temp)
         {
             /* Computing MIN */
             d__1 = scale;
             d__2 = temp / f2c_abs(wr); // , expr subst
-            scale = fla_min(d__1,d__2);
+            scale = fla_min(d__1, d__2);
         }
         s1 = scale * s1;
         wr = scale * wr;
         /* Now check for two consecutive small subdiagonals. */
         i__2 = ifirst + 1;
-        for (j = ilast - 1;
-                j >= i__2;
-                --j)
+        for(j = ilast - 1; j >= i__2; --j)
         {
             istart = j;
             temp = (d__1 = s1 * h__[j + (j - 1) * h_dim1], f2c_abs(d__1));
             temp2 = (d__1 = s1 * h__[j + j * h_dim1] - wr * t[j + j * t_dim1], f2c_abs(d__1));
-            tempr = fla_max(temp,temp2);
-            if (tempr < 1. && tempr != 0.)
+            tempr = fla_max(temp, temp2);
+            if(tempr < 1. && tempr != 0.)
             {
                 temp /= tempr;
                 temp2 /= tempr;
             }
-            if ((d__1 = ascale * h__[j + 1 + j * h_dim1] * temp, f2c_abs(d__1)) <= ascale * atol * temp2)
+            if((d__1 = ascale * h__[j + 1 + j * h_dim1] * temp, f2c_abs(d__1))
+               <= ascale * atol * temp2)
             {
                 goto L130;
             }
             /* L120: */
         }
         istart = ifirst;
-L130: /* Do an implicit single-shift QZ sweep. */
+    L130: /* Do an implicit single-shift QZ sweep. */
         /* Initial Q */
         temp = s1 * h__[istart + istart * h_dim1] - wr * t[istart + istart * t_dim1];
         temp2 = s1 * h__[istart + 1 + istart * h_dim1];
         dlartg_(&temp, &temp2, &c__, &s, &tempr);
         /* Sweep */
         i__2 = ilast - 1;
-        for (j = istart;
-                j <= i__2;
-                ++j)
+        for(j = istart; j <= i__2; ++j)
         {
-            if (j > istart)
+            if(j > istart)
             {
                 temp = h__[j + (j - 1) * h_dim1];
-                dlartg_(&temp, &h__[j + 1 + (j - 1) * h_dim1], &c__, &s, &h__[ j + (j - 1) * h_dim1]);
+                dlartg_(&temp, &h__[j + 1 + (j - 1) * h_dim1], &c__, &s,
+                        &h__[j + (j - 1) * h_dim1]);
                 h__[j + 1 + (j - 1) * h_dim1] = 0.;
             }
             i__3 = ilastm;
-            for (jc = j;
-                    jc <= i__3;
-                    ++jc)
+            for(jc = j; jc <= i__3; ++jc)
             {
                 temp = c__ * h__[j + jc * h_dim1] + s * h__[j + 1 + jc * h_dim1];
-                h__[j + 1 + jc * h_dim1] = -s * h__[j + jc * h_dim1] + c__ * h__[j + 1 + jc * h_dim1];
+                h__[j + 1 + jc * h_dim1]
+                    = -s * h__[j + jc * h_dim1] + c__ * h__[j + 1 + jc * h_dim1];
                 h__[j + jc * h_dim1] = temp;
                 temp2 = c__ * t[j + jc * t_dim1] + s * t[j + 1 + jc * t_dim1];
                 t[j + 1 + jc * t_dim1] = -s * t[j + jc * t_dim1] + c__ * t[j + 1 + jc * t_dim1];
                 t[j + jc * t_dim1] = temp2;
                 /* L140: */
             }
-            if (ilq)
+            if(ilq)
             {
                 i__3 = *n;
-                for (jr = 1;
-                        jr <= i__3;
-                        ++jr)
+                for(jr = 1; jr <= i__3; ++jr)
                 {
                     temp = c__ * q[jr + j * q_dim1] + s * q[jr + (j + 1) * q_dim1];
-                    q[jr + (j + 1) * q_dim1] = -s * q[jr + j * q_dim1] + c__ * q[jr + (j + 1) * q_dim1];
+                    q[jr + (j + 1) * q_dim1]
+                        = -s * q[jr + j * q_dim1] + c__ * q[jr + (j + 1) * q_dim1];
                     q[jr + j * q_dim1] = temp;
                     /* L150: */
                 }
@@ -2309,10 +2378,8 @@ L130: /* Do an implicit single-shift QZ sweep. */
             t[j + 1 + j * t_dim1] = 0.;
             /* Computing MIN */
             i__4 = j + 2;
-            i__3 = fla_min(i__4,ilast);
-            for (jr = ifrstm;
-                    jr <= i__3;
-                    ++jr)
+            i__3 = fla_min(i__4, ilast);
+            for(jr = ifrstm; jr <= i__3; ++jr)
             {
                 temp = c__ * h__[jr + (j + 1) * h_dim1] + s * h__[jr + j * h_dim1];
                 h__[jr + j * h_dim1] = -s * h__[jr + (j + 1) * h_dim1] + c__ * h__[jr + j * h_dim1];
@@ -2320,24 +2387,21 @@ L130: /* Do an implicit single-shift QZ sweep. */
                 /* L160: */
             }
             i__3 = j;
-            for (jr = ifrstm;
-                    jr <= i__3;
-                    ++jr)
+            for(jr = ifrstm; jr <= i__3; ++jr)
             {
-                temp = c__ * t[jr + (j + 1) * t_dim1] + s * t[jr + j * t_dim1] ;
-                t[jr + j * t_dim1] = -s * t[jr + (j + 1) * t_dim1] + c__ * t[ jr + j * t_dim1];
+                temp = c__ * t[jr + (j + 1) * t_dim1] + s * t[jr + j * t_dim1];
+                t[jr + j * t_dim1] = -s * t[jr + (j + 1) * t_dim1] + c__ * t[jr + j * t_dim1];
                 t[jr + (j + 1) * t_dim1] = temp;
                 /* L170: */
             }
-            if (ilz)
+            if(ilz)
             {
                 i__3 = *n;
-                for (jr = 1;
-                        jr <= i__3;
-                        ++jr)
+                for(jr = 1; jr <= i__3; ++jr)
                 {
                     temp = c__ * z__[jr + (j + 1) * z_dim1] + s * z__[jr + j * z_dim1];
-                    z__[jr + j * z_dim1] = -s * z__[jr + (j + 1) * z_dim1] + c__ * z__[jr + j * z_dim1];
+                    z__[jr + j * z_dim1]
+                        = -s * z__[jr + (j + 1) * z_dim1] + c__ * z__[jr + j * z_dim1];
                     z__[jr + (j + 1) * z_dim1] = temp;
                     /* L180: */
                 }
@@ -2350,16 +2414,17 @@ L130: /* Do an implicit single-shift QZ sweep. */
         /* but only if the block is at least 3x3. */
         /* This code may break if this point is reached with */
         /* a 2x2 block with real eigenvalues. */
-L200:
-        if (ifirst + 1 == ilast)
+    L200:
+        if(ifirst + 1 == ilast)
         {
             /* Special case -- 2x2 block with complex eigenvectors */
             /* Step 1: Standardize, that is, rotate so that */
             /* ( B11 0 ) */
             /* B = ( ) with B11 non-negative. */
             /* ( 0 B22 ) */
-            dlasv2_(&t[ilast - 1 + (ilast - 1) * t_dim1], &t[ilast - 1 + ilast * t_dim1], &t[ilast + ilast * t_dim1], &b22, &b11, & sr, &cr, &sl, &cl);
-            if (b11 < 0.)
+            dlasv2_(&t[ilast - 1 + (ilast - 1) * t_dim1], &t[ilast - 1 + ilast * t_dim1],
+                    &t[ilast + ilast * t_dim1], &b22, &b11, &sr, &cr, &sl, &cl);
+            if(b11 < 0.)
             {
                 cr = -cr;
                 sr = -sr;
@@ -2367,49 +2432,51 @@ L200:
                 b22 = -b22;
             }
             i__2 = ilastm + 1 - ifirst;
-            drot_(&i__2, &h__[ilast - 1 + (ilast - 1) * h_dim1], ldh, &h__[ ilast + (ilast - 1) * h_dim1], ldh, &cl, &sl);
+            drot_(&i__2, &h__[ilast - 1 + (ilast - 1) * h_dim1], ldh,
+                  &h__[ilast + (ilast - 1) * h_dim1], ldh, &cl, &sl);
             i__2 = ilast + 1 - ifrstm;
-            drot_(&i__2, &h__[ifrstm + (ilast - 1) * h_dim1], &c__1, &h__[ ifrstm + ilast * h_dim1], &c__1, &cr, &sr);
-            if (ilast < ilastm)
+            drot_(&i__2, &h__[ifrstm + (ilast - 1) * h_dim1], &c__1, &h__[ifrstm + ilast * h_dim1],
+                  &c__1, &cr, &sr);
+            if(ilast < ilastm)
             {
                 i__2 = ilastm - ilast;
-                drot_(&i__2, &t[ilast - 1 + (ilast + 1) * t_dim1], ldt, &t[ ilast + (ilast + 1) * t_dim1], ldt, &cl, &sl);
+                drot_(&i__2, &t[ilast - 1 + (ilast + 1) * t_dim1], ldt,
+                      &t[ilast + (ilast + 1) * t_dim1], ldt, &cl, &sl);
             }
-            if (ifrstm < ilast - 1)
+            if(ifrstm < ilast - 1)
             {
                 i__2 = ifirst - ifrstm;
-                drot_(&i__2, &t[ifrstm + (ilast - 1) * t_dim1], &c__1, &t[ ifrstm + ilast * t_dim1], &c__1, &cr, &sr);
+                drot_(&i__2, &t[ifrstm + (ilast - 1) * t_dim1], &c__1, &t[ifrstm + ilast * t_dim1],
+                      &c__1, &cr, &sr);
             }
-            if (ilq)
+            if(ilq)
             {
-                drot_(n, &q[(ilast - 1) * q_dim1 + 1], &c__1, &q[ilast * q_dim1 + 1], &c__1, &cl, &sl);
+                drot_(n, &q[(ilast - 1) * q_dim1 + 1], &c__1, &q[ilast * q_dim1 + 1], &c__1, &cl,
+                      &sl);
             }
-            if (ilz)
+            if(ilz)
             {
-                drot_(n, &z__[(ilast - 1) * z_dim1 + 1], &c__1, &z__[ilast * z_dim1 + 1], &c__1, &cr, &sr);
+                drot_(n, &z__[(ilast - 1) * z_dim1 + 1], &c__1, &z__[ilast * z_dim1 + 1], &c__1,
+                      &cr, &sr);
             }
             t[ilast - 1 + (ilast - 1) * t_dim1] = b11;
             t[ilast - 1 + ilast * t_dim1] = 0.;
             t[ilast + (ilast - 1) * t_dim1] = 0.;
             t[ilast + ilast * t_dim1] = b22;
             /* If B22 is negative, negate column ILAST */
-            if (b22 < 0.)
+            if(b22 < 0.)
             {
                 i__2 = ilast;
-                for (j = ifrstm;
-                        j <= i__2;
-                        ++j)
+                for(j = ifrstm; j <= i__2; ++j)
                 {
                     h__[j + ilast * h_dim1] = -h__[j + ilast * h_dim1];
                     t[j + ilast * t_dim1] = -t[j + ilast * t_dim1];
                     /* L210: */
                 }
-                if (ilz)
+                if(ilz)
                 {
                     i__2 = *n;
-                    for (j = 1;
-                            j <= i__2;
-                            ++j)
+                    for(j = 1; j <= i__2; ++j)
                     {
                         z__[j + ilast * z_dim1] = -z__[j + ilast * z_dim1];
                         /* L220: */
@@ -2420,10 +2487,11 @@ L200:
             /* Step 2: Compute ALPHAR, ALPHAI, and BETA (see refs.) */
             /* Recompute shift */
             d__1 = safmin * 100.;
-            dlag2_(&h__[ilast - 1 + (ilast - 1) * h_dim1], ldh, &t[ilast - 1 + (ilast - 1) * t_dim1], ldt, &d__1, &s1, &temp, &wr, & temp2, &wi);
+            dlag2_(&h__[ilast - 1 + (ilast - 1) * h_dim1], ldh,
+                   &t[ilast - 1 + (ilast - 1) * t_dim1], ldt, &d__1, &s1, &temp, &wr, &temp2, &wi);
             /* If standardization has perturbed the shift onto real line, */
             /* do another (real single-shift) QR step. */
-            if (wi == 0.)
+            if(wi == 0.)
             {
                 goto L350;
             }
@@ -2444,7 +2512,8 @@ L200:
             c21 = s1 * a21;
             c22r = s1 * a22 - wr * b22;
             c22i = -wi * b22;
-            if (f2c_abs(c11r) + f2c_abs(c11i) + f2c_abs(c12) > f2c_abs(c21) + f2c_abs(c22r) + f2c_abs( c22i))
+            if(f2c_abs(c11r) + f2c_abs(c11i) + f2c_abs(c12)
+               > f2c_abs(c21) + f2c_abs(c22r) + f2c_abs(c22i))
             {
                 t1 = dlapy3_(&c12, &c11r, &c11i);
                 cz = c12 / t1;
@@ -2454,7 +2523,7 @@ L200:
             else
             {
                 cz = dlapy2_(&c22r, &c22i);
-                if (cz <= safmin)
+                if(cz <= safmin)
                 {
                     cz = 0.;
                     szr = 1.;
@@ -2477,7 +2546,7 @@ L200:
             an = f2c_abs(a11) + f2c_abs(a12) + f2c_abs(a21) + f2c_abs(a22);
             bn = f2c_abs(b11) + f2c_abs(b22);
             wabs = f2c_abs(wr) + f2c_abs(wi);
-            if (s1 * an > wabs * bn)
+            if(s1 * an > wabs * bn)
             {
                 cq = cz * b11;
                 sqr = szr * b22;
@@ -2490,7 +2559,7 @@ L200:
                 a2r = cz * a21 + szr * a22;
                 a2i = szi * a22;
                 cq = dlapy2_(&a1r, &a1i);
-                if (cq <= safmin)
+                if(cq <= safmin)
                 {
                     cq = 0.;
                     sqr = 1.;
@@ -2526,17 +2595,17 @@ L200:
             alphai[ilast] = -(wi * b2a) * s1inv;
             /* Step 3: Go to next block -- exit if finished. */
             ilast = ifirst - 1;
-            if (ilast < *ilo)
+            if(ilast < *ilo)
             {
                 goto L380;
             }
             /* Reset counters */
             iiter = 0;
             eshift = 0.;
-            if (! ilschr)
+            if(!ilschr)
             {
                 ilastm = ilast;
-                if (ifrstm > ilast)
+                if(ifrstm > ilast)
                 {
                     ifrstm = *ilo;
                 }
@@ -2553,64 +2622,72 @@ L200:
             /* so compute 1st column of (A B ) - c A B + d */
             /* using the formula in QZIT (from EISPACK) */
             /* We assume that the block is at least 3x3 */
-            ad11 = ascale * h__[ilast - 1 + (ilast - 1) * h_dim1] / (bscale * t[ilast - 1 + (ilast - 1) * t_dim1]);
-            ad21 = ascale * h__[ilast + (ilast - 1) * h_dim1] / (bscale * t[ ilast - 1 + (ilast - 1) * t_dim1]);
-            ad12 = ascale * h__[ilast - 1 + ilast * h_dim1] / (bscale * t[ ilast + ilast * t_dim1]);
+            ad11 = ascale * h__[ilast - 1 + (ilast - 1) * h_dim1]
+                   / (bscale * t[ilast - 1 + (ilast - 1) * t_dim1]);
+            ad21 = ascale * h__[ilast + (ilast - 1) * h_dim1]
+                   / (bscale * t[ilast - 1 + (ilast - 1) * t_dim1]);
+            ad12 = ascale * h__[ilast - 1 + ilast * h_dim1] / (bscale * t[ilast + ilast * t_dim1]);
             ad22 = ascale * h__[ilast + ilast * h_dim1] / (bscale * t[ilast + ilast * t_dim1]);
             u12 = t[ilast - 1 + ilast * t_dim1] / t[ilast + ilast * t_dim1];
-            ad11l = ascale * h__[ifirst + ifirst * h_dim1] / (bscale * t[ ifirst + ifirst * t_dim1]);
-            ad21l = ascale * h__[ifirst + 1 + ifirst * h_dim1] / (bscale * t[ ifirst + ifirst * t_dim1]);
-            ad12l = ascale * h__[ifirst + (ifirst + 1) * h_dim1] / (bscale * t[ifirst + 1 + (ifirst + 1) * t_dim1]);
-            ad22l = ascale * h__[ifirst + 1 + (ifirst + 1) * h_dim1] / ( bscale * t[ifirst + 1 + (ifirst + 1) * t_dim1]);
-            ad32l = ascale * h__[ifirst + 2 + (ifirst + 1) * h_dim1] / ( bscale * t[ifirst + 1 + (ifirst + 1) * t_dim1]);
+            ad11l = ascale * h__[ifirst + ifirst * h_dim1] / (bscale * t[ifirst + ifirst * t_dim1]);
+            ad21l = ascale * h__[ifirst + 1 + ifirst * h_dim1]
+                    / (bscale * t[ifirst + ifirst * t_dim1]);
+            ad12l = ascale * h__[ifirst + (ifirst + 1) * h_dim1]
+                    / (bscale * t[ifirst + 1 + (ifirst + 1) * t_dim1]);
+            ad22l = ascale * h__[ifirst + 1 + (ifirst + 1) * h_dim1]
+                    / (bscale * t[ifirst + 1 + (ifirst + 1) * t_dim1]);
+            ad32l = ascale * h__[ifirst + 2 + (ifirst + 1) * h_dim1]
+                    / (bscale * t[ifirst + 1 + (ifirst + 1) * t_dim1]);
             u12l = t[ifirst + (ifirst + 1) * t_dim1] / t[ifirst + 1 + (ifirst + 1) * t_dim1];
-            v[0] = (ad11 - ad11l) * (ad22 - ad11l) - ad12 * ad21 + ad21 * u12 * ad11l + (ad12l - ad11l * u12l) * ad21l;
-            v[1] = (ad22l - ad11l - ad21l * u12l - (ad11 - ad11l) - (ad22 - ad11l) + ad21 * u12) * ad21l;
+            v[0] = (ad11 - ad11l) * (ad22 - ad11l) - ad12 * ad21 + ad21 * u12 * ad11l
+                   + (ad12l - ad11l * u12l) * ad21l;
+            v[1] = (ad22l - ad11l - ad21l * u12l - (ad11 - ad11l) - (ad22 - ad11l) + ad21 * u12)
+                   * ad21l;
             v[2] = ad32l * ad21l;
             istart = ifirst;
             dlarfg_(&c__3, v, &v[1], &c__1, &tau);
             v[0] = 1.;
             /* Sweep */
             i__2 = ilast - 2;
-            for (j = istart;
-                    j <= i__2;
-                    ++j)
+            for(j = istart; j <= i__2; ++j)
             {
                 /* All but last elements: use 3x3 Householder transforms. */
                 /* Zero (j-1)st column of A */
-                if (j > istart)
+                if(j > istart)
                 {
                     v[0] = h__[j + (j - 1) * h_dim1];
                     v[1] = h__[j + 1 + (j - 1) * h_dim1];
                     v[2] = h__[j + 2 + (j - 1) * h_dim1];
-                    dlarfg_(&c__3, &h__[j + (j - 1) * h_dim1], &v[1], &c__1, & tau);
+                    dlarfg_(&c__3, &h__[j + (j - 1) * h_dim1], &v[1], &c__1, &tau);
                     v[0] = 1.;
                     h__[j + 1 + (j - 1) * h_dim1] = 0.;
                     h__[j + 2 + (j - 1) * h_dim1] = 0.;
                 }
                 i__3 = ilastm;
-                for (jc = j;
-                        jc <= i__3;
-                        ++jc)
+                for(jc = j; jc <= i__3; ++jc)
                 {
-                    temp = tau * (h__[j + jc * h_dim1] + v[1] * h__[j + 1 + jc * h_dim1] + v[2] * h__[j + 2 + jc * h_dim1]);
+                    temp = tau
+                           * (h__[j + jc * h_dim1] + v[1] * h__[j + 1 + jc * h_dim1]
+                              + v[2] * h__[j + 2 + jc * h_dim1]);
                     h__[j + jc * h_dim1] -= temp;
                     h__[j + 1 + jc * h_dim1] -= temp * v[1];
                     h__[j + 2 + jc * h_dim1] -= temp * v[2];
-                    temp2 = tau * (t[j + jc * t_dim1] + v[1] * t[j + 1 + jc * t_dim1] + v[2] * t[j + 2 + jc * t_dim1]);
+                    temp2 = tau
+                            * (t[j + jc * t_dim1] + v[1] * t[j + 1 + jc * t_dim1]
+                               + v[2] * t[j + 2 + jc * t_dim1]);
                     t[j + jc * t_dim1] -= temp2;
                     t[j + 1 + jc * t_dim1] -= temp2 * v[1];
                     t[j + 2 + jc * t_dim1] -= temp2 * v[2];
                     /* L230: */
                 }
-                if (ilq)
+                if(ilq)
                 {
                     i__3 = *n;
-                    for (jr = 1;
-                            jr <= i__3;
-                            ++jr)
+                    for(jr = 1; jr <= i__3; ++jr)
                     {
-                        temp = tau * (q[jr + j * q_dim1] + v[1] * q[jr + (j + 1) * q_dim1] + v[2] * q[jr + (j + 2) * q_dim1] );
+                        temp = tau
+                               * (q[jr + j * q_dim1] + v[1] * q[jr + (j + 1) * q_dim1]
+                                  + v[2] * q[jr + (j + 2) * q_dim1]);
                         q[jr + j * q_dim1] -= temp;
                         q[jr + (j + 1) * q_dim1] -= temp * v[1];
                         q[jr + (j + 2) * q_dim1] -= temp * v[2];
@@ -2623,19 +2700,19 @@ L200:
                 /* Computing MAX */
                 d__3 = (d__1 = t[j + 1 + (j + 1) * t_dim1], f2c_abs(d__1));
                 d__4 = (d__2 = t[j + 1 + (j + 2) * t_dim1], f2c_abs(d__2)); // , expr subst
-                temp = fla_max(d__3,d__4);
+                temp = fla_max(d__3, d__4);
                 /* Computing MAX */
                 d__3 = (d__1 = t[j + 2 + (j + 1) * t_dim1], f2c_abs(d__1));
                 d__4 = (d__2 = t[j + 2 + (j + 2) * t_dim1], f2c_abs(d__2)); // , expr subst
-                temp2 = fla_max(d__3,d__4);
-                if (fla_max(temp,temp2) < safmin)
+                temp2 = fla_max(d__3, d__4);
+                if(fla_max(temp, temp2) < safmin)
                 {
                     scale = 0.;
                     u1 = 1.;
                     u2 = 0.;
                     goto L250;
                 }
-                else if (temp >= temp2)
+                else if(temp >= temp2)
                 {
                     w11 = t[j + 1 + (j + 1) * t_dim1];
                     w21 = t[j + 2 + (j + 1) * t_dim1];
@@ -2654,7 +2731,7 @@ L200:
                     u1 = t[j + 2 + j * t_dim1];
                 }
                 /* Swap columns if nec. */
-                if (f2c_abs(w12) > f2c_abs(w11))
+                if(f2c_abs(w12) > f2c_abs(w11))
                 {
                     ilpivt = TRUE_;
                     temp = w12;
@@ -2671,29 +2748,29 @@ L200:
                 w21 = 0.;
                 /* Compute SCALE */
                 scale = 1.;
-                if (f2c_abs(w22) < safmin)
+                if(f2c_abs(w22) < safmin)
                 {
                     scale = 0.;
                     u2 = 1.;
                     u1 = -w12 / w11;
                     goto L250;
                 }
-                if (f2c_abs(w22) < f2c_abs(u2))
+                if(f2c_abs(w22) < f2c_abs(u2))
                 {
                     scale = (d__1 = w22 / u2, f2c_abs(d__1));
                 }
-                if (f2c_abs(w11) < f2c_abs(u1))
+                if(f2c_abs(w11) < f2c_abs(u1))
                 {
                     /* Computing MIN */
                     d__2 = scale;
                     d__3 = (d__1 = w11 / u1, f2c_abs(d__1)); // , expr subst
-                    scale = fla_min(d__2,d__3);
+                    scale = fla_min(d__2, d__3);
                 }
                 /* Solve */
                 u2 = scale * u2 / w22;
                 u1 = (scale * u1 - w12 * u2) / w11;
-L250:
-                if (ilpivt)
+            L250:
+                if(ilpivt)
                 {
                     temp = u2;
                     u2 = u1;
@@ -2715,13 +2792,13 @@ L250:
                 /* Apply transformations from the right. */
                 /* Computing MIN */
                 i__4 = j + 3;
-                i__3 = fla_min(i__4,ilast);
+                i__3 = fla_min(i__4, ilast);
 
-                for (jr = ifrstm;
-                        jr <= i__3;
-                        ++jr)
+                for(jr = ifrstm; jr <= i__3; ++jr)
                 {
-                    temp = tau * (h__[jr + j * h_dim1] + v[1] * h__[jr + (j + 1) * h_dim1] + v[2] * h__[jr + (j + 2) * h_dim1]);
+                    temp = tau
+                           * (h__[jr + j * h_dim1] + v[1] * h__[jr + (j + 1) * h_dim1]
+                              + v[2] * h__[jr + (j + 2) * h_dim1]);
                     h__[jr + j * h_dim1] -= temp;
                     h__[jr + (j + 1) * h_dim1] -= temp * v[1];
                     h__[jr + (j + 2) * h_dim1] -= temp * v[2];
@@ -2729,24 +2806,24 @@ L250:
                 }
                 i__3 = j + 2;
 
-                for (jr = ifrstm;
-                        jr <= i__3;
-                        ++jr)
+                for(jr = ifrstm; jr <= i__3; ++jr)
                 {
-                    temp = tau * (t[jr + j * t_dim1] + v[1] * t[jr + (j + 1) * t_dim1] + v[2] * t[jr + (j + 2) * t_dim1]);
+                    temp = tau
+                           * (t[jr + j * t_dim1] + v[1] * t[jr + (j + 1) * t_dim1]
+                              + v[2] * t[jr + (j + 2) * t_dim1]);
                     t[jr + j * t_dim1] -= temp;
                     t[jr + (j + 1) * t_dim1] -= temp * v[1];
                     t[jr + (j + 2) * t_dim1] -= temp * v[2];
                     /* L270: */
                 }
-                if (ilz)
+                if(ilz)
                 {
                     i__3 = *n;
-                    for (jr = 1;
-                            jr <= i__3;
-                            ++jr)
+                    for(jr = 1; jr <= i__3; ++jr)
                     {
-                        temp = tau * (z__[jr + j * z_dim1] + v[1] * z__[jr + ( j + 1) * z_dim1] + v[2] * z__[jr + (j + 2) * z_dim1]);
+                        temp = tau
+                               * (z__[jr + j * z_dim1] + v[1] * z__[jr + (j + 1) * z_dim1]
+                                  + v[2] * z__[jr + (j + 2) * z_dim1]);
                         z__[jr + j * z_dim1] -= temp;
                         z__[jr + (j + 1) * z_dim1] -= temp * v[1];
                         z__[jr + (j + 2) * z_dim1] -= temp * v[2];
@@ -2764,27 +2841,25 @@ L250:
             dlartg_(&temp, &h__[j + 1 + (j - 1) * h_dim1], &c__, &s, &h__[j + (j - 1) * h_dim1]);
             h__[j + 1 + (j - 1) * h_dim1] = 0.;
             i__2 = ilastm;
-            for (jc = j;
-                    jc <= i__2;
-                    ++jc)
+            for(jc = j; jc <= i__2; ++jc)
             {
                 temp = c__ * h__[j + jc * h_dim1] + s * h__[j + 1 + jc * h_dim1];
-                h__[j + 1 + jc * h_dim1] = -s * h__[j + jc * h_dim1] + c__ * h__[j + 1 + jc * h_dim1];
+                h__[j + 1 + jc * h_dim1]
+                    = -s * h__[j + jc * h_dim1] + c__ * h__[j + 1 + jc * h_dim1];
                 h__[j + jc * h_dim1] = temp;
                 temp2 = c__ * t[j + jc * t_dim1] + s * t[j + 1 + jc * t_dim1];
                 t[j + 1 + jc * t_dim1] = -s * t[j + jc * t_dim1] + c__ * t[j + 1 + jc * t_dim1];
                 t[j + jc * t_dim1] = temp2;
                 /* L300: */
             }
-            if (ilq)
+            if(ilq)
             {
                 i__2 = *n;
-                for (jr = 1;
-                        jr <= i__2;
-                        ++jr)
+                for(jr = 1; jr <= i__2; ++jr)
                 {
                     temp = c__ * q[jr + j * q_dim1] + s * q[jr + (j + 1) * q_dim1];
-                    q[jr + (j + 1) * q_dim1] = -s * q[jr + j * q_dim1] + c__ * q[jr + (j + 1) * q_dim1];
+                    q[jr + (j + 1) * q_dim1]
+                        = -s * q[jr + j * q_dim1] + c__ * q[jr + (j + 1) * q_dim1];
                     q[jr + j * q_dim1] = temp;
                     /* L310: */
                 }
@@ -2794,9 +2869,7 @@ L250:
             dlartg_(&temp, &t[j + 1 + j * t_dim1], &c__, &s, &t[j + 1 + (j + 1) * t_dim1]);
             t[j + 1 + j * t_dim1] = 0.;
             i__2 = ilast;
-            for (jr = ifrstm;
-                    jr <= i__2;
-                    ++jr)
+            for(jr = ifrstm; jr <= i__2; ++jr)
             {
                 temp = c__ * h__[jr + (j + 1) * h_dim1] + s * h__[jr + j * h_dim1];
                 h__[jr + j * h_dim1] = -s * h__[jr + (j + 1) * h_dim1] + c__ * h__[jr + j * h_dim1];
@@ -2804,24 +2877,21 @@ L250:
                 /* L320: */
             }
             i__2 = ilast - 1;
-            for (jr = ifrstm;
-                    jr <= i__2;
-                    ++jr)
+            for(jr = ifrstm; jr <= i__2; ++jr)
             {
-                temp = c__ * t[jr + (j + 1) * t_dim1] + s * t[jr + j * t_dim1] ;
-                t[jr + j * t_dim1] = -s * t[jr + (j + 1) * t_dim1] + c__ * t[ jr + j * t_dim1];
+                temp = c__ * t[jr + (j + 1) * t_dim1] + s * t[jr + j * t_dim1];
+                t[jr + j * t_dim1] = -s * t[jr + (j + 1) * t_dim1] + c__ * t[jr + j * t_dim1];
                 t[jr + (j + 1) * t_dim1] = temp;
                 /* L330: */
             }
-            if (ilz)
+            if(ilz)
             {
                 i__2 = *n;
-                for (jr = 1;
-                        jr <= i__2;
-                        ++jr)
+                for(jr = 1; jr <= i__2; ++jr)
                 {
                     temp = c__ * z__[jr + (j + 1) * z_dim1] + s * z__[jr + j * z_dim1];
-                    z__[jr + j * z_dim1] = -s * z__[jr + (j + 1) * z_dim1] + c__ * z__[jr + j * z_dim1];
+                    z__[jr + j * z_dim1]
+                        = -s * z__[jr + (j + 1) * z_dim1] + c__ * z__[jr + j * z_dim1];
                     z__[jr + (j + 1) * z_dim1] = temp;
                     /* L340: */
                 }
@@ -2830,8 +2900,8 @@ L250:
         }
         goto L350;
         /* End of iteration loop */
-L350: /* L360: */
-        ;
+    L350: /* L360: */
+          ;
     }
     /* Drop-through = non-convergence */
     *info = ilast;
@@ -2839,18 +2909,14 @@ L350: /* L360: */
     /* Successful completion of all QZ steps */
 L380: /* Set Eigenvalues 1:ILO-1 */
     i__1 = *ilo - 1;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
-        if (t[j + j * t_dim1] < 0.)
+        if(t[j + j * t_dim1] < 0.)
         {
-            if (ilschr)
+            if(ilschr)
             {
                 i__2 = j;
-                for (jr = 1;
-                        jr <= i__2;
-                        ++jr)
+                for(jr = 1; jr <= i__2; ++jr)
                 {
                     h__[jr + j * h_dim1] = -h__[jr + j * h_dim1];
                     t[jr + j * t_dim1] = -t[jr + j * t_dim1];
@@ -2862,12 +2928,10 @@ L380: /* Set Eigenvalues 1:ILO-1 */
                 h__[j + j * h_dim1] = -h__[j + j * h_dim1];
                 t[j + j * t_dim1] = -t[j + j * t_dim1];
             }
-            if (ilz)
+            if(ilz)
             {
                 i__2 = *n;
-                for (jr = 1;
-                        jr <= i__2;
-                        ++jr)
+                for(jr = 1; jr <= i__2; ++jr)
                 {
                     z__[jr + j * z_dim1] = -z__[jr + j * z_dim1];
                     /* L400: */
@@ -2883,9 +2947,8 @@ L380: /* Set Eigenvalues 1:ILO-1 */
     *info = 0;
     /* Exit (other than argument error) -- return optimal workspace size */
 L420:
-    work[1] = (doublereal) (*n);
-    return 0;
+    work[1] = (doublereal)(*n);
+    return;
     /* End of DHGEQZ */
 }
 /* dhgeqz_ */
-

@@ -33,13 +33,13 @@
 
 int fla_pthread_mutex_lock(fla_pthread_mutex_t *mutex)
 {
-    //return pthread_mutex_lock( mutex );
+    // return pthread_mutex_lock( mutex );
     return 0;
 }
 
 int fla_pthread_mutex_unlock(fla_pthread_mutex_t *mutex)
 {
-    //return pthread_mutex_unlock( mutex );
+    // return pthread_mutex_unlock( mutex );
     return 0;
 }
 
@@ -47,7 +47,7 @@ int fla_pthread_mutex_unlock(fla_pthread_mutex_t *mutex)
 
 void fla_pthread_once(fla_pthread_once_t *once, void (*init)(void))
 {
-    //pthread_once( once, init );
+    // pthread_once( once, init );
     return;
 }
 
@@ -74,8 +74,7 @@ int fla_pthread_mutex_unlock(fla_pthread_mutex_t *mutex)
 
 // -- pthread_once() --
 
-static FLA_Bool
-    fla_init_once_wrapper(fla_pthread_once_t *once, void *param, void **context)
+static FLA_Bool fla_init_once_wrapper(fla_pthread_once_t *once, void *param, void **context)
 {
     (void)once;
     (void)context;
@@ -120,15 +119,24 @@ void fla_pthread_once(fla_pthread_once_t *once, void (*init)(void))
 
 // The global fla_context structure, which holds the global thread count
 // and ISA settings
-fla_context global_context = FLA_CONTEXT_INITIALIZER;
+fla_context fla_global_context = FLA_CONTEXT_INITIALIZER;
 
 // The global fla_context structure, which holds the updated thread-local
 // thread count
-TLS_CLASS_SPEC fla_tl_context tl_context = FLA_TL_CONTEXT_INITIALIZER;
-TLS_CLASS_SPEC FLA_Bool tl_context_init = FALSE;
+TLS_CLASS_SPEC fla_tl_context_t fla_tl_context = FLA_TL_CONTEXT_INITIALIZER;
+TLS_CLASS_SPEC FLA_Bool fla_tl_context_init = FALSE;
+
+// variable to check if cpu archtecture is explicitly set
+TLS_CLASS_SPEC fla_dim_t __attribute__((unused)) fla_req_id = -1;
+
+// Variable to get the ISA architecture to use
+TLS_CLASS_SPEC fla_arch_t fla_arch_id = -1;
+
+// Keep track if AOCL_ENABLE_INSTRUCTIONS environment variable was set.
+TLS_CLASS_SPEC bool __attribute__((unused)) fla_aocl_e_i = FALSE;
 
 // A mutex to allow synchronous access to global_thread.
-fla_pthread_mutex_t global_thread_mutex = FLA_PTHREAD_MUTEX_INITIALIZER;
+TLS_CLASS_SPEC fla_pthread_mutex_t fla_global_thread_mutex = FLA_PTHREAD_MUTEX_INITIALIZER;
 
 /********************************************************************************
  * \brief fla_env_get_var is a function used to query the environment
@@ -158,7 +166,103 @@ int fla_env_get_var(const char *env, int fallback)
     return r_val;
 }
 
-// This updates global_context
+/* Get value of AOCL_ENABLE_INSTRUCTIONS environment variable if set*/
+int fla_env_get_var_arch_type(const char *env, int fallback)
+{
+    int r_val, size, i;
+    char *str;
+    str = getenv(env);
+
+    if(str != NULL)
+    {
+        // If there was no error, convert the string to an integer
+        r_val = (int)strtol(str, NULL, 10);
+
+        if(r_val == 0)
+        {
+            // Look for non-numeric values
+
+            // convert string to lowercase
+            size = strlen(str);
+            for(i = 0; i <= size; i++)
+            {
+                str[i] = tolower(str[i]);
+            }
+
+            if(strcmp(str, "avx512") == 0)
+            {
+                r_val = FLA_ARCH_AVX512;
+            }
+            else if(strcmp(str, "avx2") == 0)
+            {
+                r_val = FLA_ARCH_AVX2;
+            }
+            else if(strcmp(str, "avx") == 0)
+            {
+                r_val = FLA_ARCH_AVX;
+            }
+            else if(strcmp(str, "sse2") == 0)
+            {
+                r_val = FLA_ARCH_SSE2;
+            }
+            else if(strcmp(str, "generic") == 0)
+            {
+                r_val = FLA_ARCH_GENERIC;
+            }
+            else
+            {
+                // Invalid value was set for env variable
+                // Print error message and abort
+                FLA_Print_message(
+                    "Invalid architecture id value set for env var AOCL_ENABLE_INSTRUCTIONS.",
+                    __FILE__, __LINE__);
+                FLA_Abort();
+            }
+        }
+        else
+        {
+            // Invalid value was set for env variable
+            // Print error message and abort
+            FLA_Print_message(
+                "Invalid architecture id value set for env var AOCL_ENABLE_INSTRUCTIONS.", __FILE__,
+                __LINE__);
+            FLA_Abort();
+        }
+    }
+    else
+    {
+        r_val = fallback;
+    }
+
+    return r_val;
+}
+
+/* Return the CPU ISA architecture to use */
+fla_arch_t fla_arch_query_id(void)
+{
+    return fla_arch_id;
+}
+
+/* Return boolean that indicates if AOCL_ENABLE_INSTRUCTIONS environment variable has been set */
+bool fla_aocl_enable_instruction_query(void)
+{
+    return fla_aocl_e_i;
+}
+
+/* Get value of AOCL_ENABLE_INSTRUCTIONS environment variable
+ * Sets boolean fla_aocl_e_i if vaalid value returned*/
+void fla_get_arch_info_from_env(fla_context *context)
+{
+    fla_req_id = fla_env_get_var_arch_type("AOCL_ENABLE_INSTRUCTIONS", -1);
+    if(fla_req_id != -1)
+    {
+        fla_aocl_e_i = TRUE;
+    }
+}
+
+/* Update global_context if FLA_NUM_THREADS is set
+ * OpenMP threading is set in subsequent call to
+ * fla_thread_update_rntm_from_env() */
 void fla_thread_init_rntm_from_env(fla_context *context)
 {
     int nt;
@@ -188,39 +292,40 @@ void fla_thread_init_rntm_from_env(fla_context *context)
     context->libflame_mt = libflame_mt;
 }
 
-// This updates tl_context
-void fla_thread_update_rntm_from_env(fla_tl_context *context)
+/* Update global context and thread local context
+ * with appropriate threads to use*/
+void fla_thread_update_rntm_from_env(fla_tl_context_t *context)
 {
 
 #ifdef FLA_OPENMP_MULTITHREADING
 
-    if( !tl_context_init )
+    if( !fla_tl_context_init )
     {
         // On first call for each thread, need to check settings from
         // BLIS environment variables in global_context. First, set
-        // tl_context_init to TRUE for subsequent calls.
-        tl_context_init = TRUE;
+        // fla_tl_context_init to TRUE for subsequent calls.
+        fla_tl_context_init = TRUE;
 
         // Acquire the mutex protecting global_thread.
-        fla_pthread_mutex_lock(&global_thread_mutex);
+        fla_pthread_mutex_lock(&fla_global_thread_mutex);
 
         // Copy values from global_context.
-        context->num_threads = global_context.num_threads;
-        context->libflame_mt = global_context.libflame_mt;
+        context->num_threads = fla_global_context.num_threads;
+        context->libflame_mt = fla_global_context.libflame_mt;
 
         // Release the mutex protecting global_thread.
-        fla_pthread_mutex_unlock(&global_thread_mutex);
+        fla_pthread_mutex_unlock(&fla_global_thread_mutex);
     }
 
     // If FLA_NUM_THREADS was not set, read OpenMP's omp_get_max_threads()
     // to get maximum number of threads that library can use. We also
     // need to consider the number of active OpenMP levels and which
     // level we are at.
-    if( !context->libflame_mt )
+    if(!context->libflame_mt)
     {
         int active_level = omp_get_active_level();
         int max_levels = omp_get_max_active_levels();
-        if ( active_level < max_levels )
+        if(active_level < max_levels)
         {
             context->num_threads = omp_get_max_threads();
         }
@@ -232,10 +337,10 @@ void fla_thread_update_rntm_from_env(fla_tl_context *context)
 
 #else
 
-    if( !tl_context_init )
+    if( !fla_tl_context_init )
     {
-        // First, set tl_context_init to TRUE for subsequent calls.
-        tl_context_init = TRUE;
+        // First, set fla_tl_context_init to TRUE for subsequent calls.
+        fla_tl_context_init = TRUE;
 
         // Always set maximum threads as 1. These should never be
         // changed so only set on first call.
@@ -244,20 +349,52 @@ void fla_thread_update_rntm_from_env(fla_tl_context *context)
     }
 
 #endif
-
 }
 
+/* Find the ISA to use for code execution paths
+ * based on target CPU architecture and preference
+ * set by user using AOCL_ENABLE_INSTRUCTIONS env
+ * variable */
 void fla_isa_init(fla_context *context)
 {
+    fla_arch_id = FLA_ARCH_GENERIC;
+
     // Check if the target supports AVX2
     if(alcpu_flag_is_available(ALC_E_FLAG_AVX2))
     {
         context->is_avx2 = TRUE;
+        fla_arch_id = FLA_ARCH_AVX2;
     }
-    if (alcpu_flag_is_available(ALC_E_FLAG_AVX512F))
+    if(alcpu_flag_is_available(ALC_E_FLAG_AVX512F))
     {
         context->is_avx512 = TRUE;
+        fla_arch_id = FLA_ARCH_AVX512;
     }
+
+    // Check user has set AOCL_ENABLE_INSTRUCTIONS env variable
+    fla_get_arch_info_from_env(context);
+
+    if(fla_aocl_e_i)
+    {
+        // We always select the best suitable ISA. If user has chosen
+        // higher level ISA than supported by target CPU, we choose
+        // best supported architecture on target CPU.
+        // If user has chosen a lower level ISA, then same will
+        // be used
+
+        if(fla_req_id == FLA_ARCH_AVX2 && fla_arch_id == FLA_ARCH_AVX512)
+        {
+            fla_arch_id = FLA_ARCH_AVX2;
+        }
+        else if(fla_req_id < FLA_ARCH_AVX2)
+        {
+            // For any ISA path less than AVX2, we set generic(c reference) code path
+            fla_arch_id = FLA_ARCH_GENERIC;
+        }
+    }
+
+    // set the ARCH ID to use
+    context->arch_id = fla_arch_id;
 }
 
 // -----------------------------------------------------------------------------
@@ -265,10 +402,10 @@ void fla_context_init(void)
 {
     // Read the environment variables and use them to initialize the
     // global runtime object.
-    fla_thread_init_rntm_from_env(&global_context);
+    fla_thread_init_rntm_from_env(&fla_global_context);
 
-    // Read target ISA if it supports avx512
-    fla_isa_init(&global_context);
+    // Read target ISA path to run
+    fla_isa_init(&fla_global_context);
 }
 
 // -----------------------------------------------------------------------------
@@ -281,7 +418,7 @@ void fla_context_finalize(void) {}
 // pthread_once() is guaranteed to execute exactly once among all threads that
 // pass in this control object. Thus, we need one for initialization and a
 // separate one for finalization.
-static fla_pthread_once_t once_init     = FLA_PTHREAD_ONCE_INIT;
+static fla_pthread_once_t once_init = FLA_PTHREAD_ONCE_INIT;
 static fla_pthread_once_t once_finalize = FLA_PTHREAD_ONCE_INIT;
 
 void aocl_fla_init(void)
@@ -301,9 +438,9 @@ int fla_thread_get_num_threads(void)
 
     // Update the OpenMP information from the runtime, unless FLA_NUM_THREADS
     // was set or fla_thread_set_num_threads() was called.
-    fla_thread_update_rntm_from_env(&tl_context);
+    fla_thread_update_rntm_from_env(&fla_tl_context);
 
-    return tl_context.num_threads;
+    return fla_tl_context.num_threads;
 }
 
 void fla_thread_set_num_threads(int n_threads)
@@ -315,9 +452,8 @@ void fla_thread_set_num_threads(int n_threads)
     aocl_fla_init();
 
     // Update values in tl_context for future reference
-    tl_context.num_threads = n_threads;
-    tl_context.libflame_mt = TRUE;
+    fla_tl_context.num_threads = n_threads;
+    fla_tl_context.libflame_mt = TRUE;
 
 #endif
-
 }

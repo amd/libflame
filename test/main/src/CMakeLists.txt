@@ -1,9 +1,11 @@
 ###############################################################################
-# Copyright (C) 2022, Advanced Micro Devices, Inc. All rights reserved.
+# Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 ###############################################################################
 
 target_sources(${PROJECT_NAME}
      PRIVATE
+${CMAKE_CURRENT_SOURCE_DIR}/test_gbtrf.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_gbtrs.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_sytrd.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_steqr.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_stevd.c
@@ -38,7 +40,14 @@ ${CMAKE_CURRENT_SOURCE_DIR}/test_rot.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_lartg.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_org2r.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_syevx.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_gtsv.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_gesvdx.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_gels.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_larfg.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_gelsd.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_lapack.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_lapack.h
 ${CMAKE_CURRENT_SOURCE_DIR}/test_routines.h
-)
+${CMAKE_CURRENT_SOURCE_DIR}/test_gelss.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_sytrf.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_larf.c)

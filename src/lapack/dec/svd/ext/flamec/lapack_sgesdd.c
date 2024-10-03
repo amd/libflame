@@ -235,39 +235,39 @@ int lapack_sgesdd(char *jobz, integer *m, integer *n, real *a, integer *lda, rea
     integer lwork_sgelqf_mn__, lwork_sgeqrf_mn__, iscl, lwork_sorglq_mn__, lwork_sorglq_nn__;
     real anrm;
     integer idum[1], ierr, itau, lwork_sorgqr_mm__, lwork_sorgqr_mn__, lwork_sormbr_qln_mm__, lwork_sormbr_qln_mn__, lwork_sormbr_qln_nn__, lwork_sormbr_prt_mm__, lwork_sormbr_prt_mn__, lwork_sormbr_prt_nn__, i__;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer chunk;
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
+    void sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *);
     integer minmn, wrkbl, itaup, itauq, mnthr;
     logical wntqa;
     integer nwork;
     logical wntqn, wntqo, wntqs;
     integer ie, il, ir, bdspac, iu;
     extern /* Subroutine */
-    int sbdsdc_(char *, char *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
+    void sbdsdc_(char *, char *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
     extern /* Subroutine */
     int lapack_sgebrd(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *, integer *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern /* Subroutine */
-    int sgelqf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *), slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+    void sgelqf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *), slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     extern logical sisnan_(real *);
     extern /* Subroutine */
-    int sorgbr_(char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
+    void sorgbr_(char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
     integer ldwrkl;
     extern /* Subroutine */
     int lapack_sormbr(char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
     integer ldwrkr, minwrk, ldwrku, maxwrk;
     extern /* Subroutine */
-    int sorglq_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
+    void sorglq_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
     integer ldwkvt;
     real smlnum;
     logical wntqas;
     extern /* Subroutine */
-    int sorgqr_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
+    void sorgqr_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
     logical lquery;
     integer blk;
     real dum[1], eps;
@@ -312,11 +312,11 @@ int lapack_sgesdd(char *jobz, integer *m, integer *n, real *a, integer *lda, rea
     /* Function Body */
     *info = 0;
     minmn = fla_min(*m,*n);
-    wntqa = lsame_(jobz, "A");
-    wntqs = lsame_(jobz, "S");
+    wntqa = lsame_(jobz, "A", 1, 1);
+    wntqs = lsame_(jobz, "S", 1, 1);
     wntqas = wntqa || wntqs;
-    wntqo = lsame_(jobz, "O");
-    wntqn = lsame_(jobz, "N");
+    wntqo = lsame_(jobz, "O", 1, 1);
+    wntqn = lsame_(jobz, "N", 1, 1);
     lquery = *lwork == -1;
     if (! (wntqa || wntqs || wntqo || wntqn))
     {

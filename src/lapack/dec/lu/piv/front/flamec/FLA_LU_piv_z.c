@@ -12,11 +12,12 @@
 #define FLA_LU_SMALL_BLOCK_SIZE 4096
 #define FLA_LU_SMALL_DIM 32
 
+#ifdef FLA_ENABLE_AMD_OPT
 static dcomplex z__1 = { -1, 0};
 static dcomplex c_b1 = {1.,0.};
 static integer c__1 = 1;
 
-#ifdef FLA_ENABLE_AMD_OPT
+
 
 void FLA_get_optimum_params_zgetrf(integer m, integer n, integer *nb, int *n_threads)
 {
@@ -325,18 +326,7 @@ int FLA_LU_piv_z_var0(integer *m, integer *n, dcomplex *a, integer *lda, integer
 int FLA_LU_piv_z_parallel( integer *m, integer *n, dcomplex *a, integer *lda, integer *ipiv, integer *info)
 {
 
-#if FLA_ENABLE_AOCL_BLAS
-    if(*m < 3000 || *n < 3000)
-    {
-        FLA_LU_piv_z_var1_parallel( m, n, a, lda, ipiv, info);
-    }
-    else
-    {
-        FLA_LU_piv_z_var2_parallel( m, n, a, lda, ipiv, info);
-    }
-#else
     FLA_LU_piv_z_var1_parallel( m, n, a, lda, ipiv, info);
-#endif
 
     return 0;
 }
@@ -564,7 +554,7 @@ void parallel_gemm_kernel(obj_t* alpha, obj_t* a, obj_t* b, obj_t* beta, obj_t* 
     thrinfo_t* thread = NULL;
 
     // Query the thread's id from OpenMP.
-    const dim_t tid = omp_get_thread_num();
+    const fla_dim_t tid = omp_get_thread_num();
 
     // Use the thread id to access the appropriate pool_t* within the array_t
     bli_sba_rntm_set_pool( tid, array, rntm_p );
@@ -603,8 +593,8 @@ int FLA_LU_piv_z_var2_parallel( integer *m, integer *n, dcomplex *a, integer *ld
     obj_t       co     = BLIS_OBJECT_INITIALIZER;
     const num_t dt     = BLIS_DCOMPLEX;
     integer   m0, n0, k0;
-    dim_t       m0_a, n0_a;
-    dim_t       m0_b, n0_b;
+    fla_dim_t       m0_a, n0_a;
+    fla_dim_t       m0_b, n0_b;
     trans_t blis_transa, blis_transb;
     cntx_t* cntx = NULL;
     rntm_t* rntm = NULL;

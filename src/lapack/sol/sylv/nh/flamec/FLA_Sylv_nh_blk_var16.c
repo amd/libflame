@@ -22,7 +22,7 @@ FLA_Error FLA_Sylv_nh_blk_var16( FLA_Obj isgn, FLA_Obj A, FLA_Obj B, FLA_Obj C, 
           CB,              C1,
                            C2;
 
-  dim_t b;
+  fla_dim_t b;
 
   FLA_Part_2x2( A,    &ATL, &ATR,
                       &ABL, &ABR,     0, 0, FLA_BR );

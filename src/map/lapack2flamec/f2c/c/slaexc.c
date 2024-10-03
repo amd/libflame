@@ -1,5 +1,8 @@
-/* ../netlib/slaexc.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slaexc.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__4 = 4;
@@ -7,17 +10,24 @@ static logical c_false = FALSE_;
 static integer c_n1 = -1;
 static integer c__2 = 2;
 static integer c__3 = 3;
-/* > \brief \b SLAEXC swaps adjacent diagonal blocks of a real upper quasi-triangular matrix in Schur canonica l form, by an orthogonal similarity transformation. */
+/* > \brief \b SLAEXC swaps adjacent diagonal blocks of a real upper quasi-triangular matrix in
+ * Schur canonica l form, by an orthogonal similarity transformation. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLAEXC + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaexc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaexc.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaexc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaexc.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaexc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaexc.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -52,7 +62,7 @@ each 2-by-2 diagonal block */
 /* > \verbatim */
 /* > WANTQ is LOGICAL */
 /* > = .TRUE. : accumulate the transformation in the matrix Q;
-*/
+ */
 /* > = .FALSE.: do not accumulate the transformation. */
 /* > \endverbatim */
 /* > */
@@ -134,17 +144,18 @@ the blocks are not swapped and T and Q are */
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int slaexc_(logical *wantq, integer *n, real *t, integer * ldt, real *q, integer *ldq, integer *j1, integer *n1, integer *n2, real *work, integer *info)
+void slaexc_(logical *wantq, integer *n, real *t, integer *ldt, real *q, integer *ldq, integer *j1,
+             integer *n1, integer *n2, real *work, integer *info)
 {
     /* System generated locals */
     integer q_dim1, q_offset, t_dim1, t_offset, i__1;
     real r__1, r__2, r__3;
     /* Local variables */
     real d__[16] /* was [4][4] */
-    ;
+        ;
     integer k;
     real u[3], x[4] /* was [2][2] */
-    ;
+        ;
     integer j2, j3, j4;
     real u1[3], u2[3];
     integer nd;
@@ -152,16 +163,24 @@ int slaexc_(logical *wantq, integer *n, real *t, integer * ldt, real *q, integer
     integer ierr;
     real temp;
     extern /* Subroutine */
-    int srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+        void
+        srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     real scale, dnorm, xnorm;
     extern /* Subroutine */
-    int slanv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *, real *), slasy2_(logical *, logical *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, integer *, real *, integer *);
+        void
+        slanv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *, real *),
+        slasy2_(logical *, logical *, integer *, integer *, integer *, real *, integer *, real *,
+                integer *, real *, integer *, real *, real *, integer *, real *, integer *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    int slarfg_(integer *, real *, real *, integer *, real *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *), slartg_(real *, real *, real *, real *, real *);
+        void
+        slarfg_(integer *, real *, real *, integer *, real *),
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
+        slartg_(real *, real *, real *, real *, real *);
     real thresh;
     extern /* Subroutine */
-    int slarfx_(char *, integer *, integer *, real *, real *, real *, integer *, real *);
+        void
+        slarfx_(char *, integer *, integer *, real *, real *, real *, integer *, real *);
     real smlnum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -196,18 +215,18 @@ int slaexc_(logical *wantq, integer *n, real *t, integer * ldt, real *q, integer
     /* Function Body */
     *info = 0;
     /* Quick return if possible */
-    if (*n == 0 || *n1 == 0 || *n2 == 0)
+    if(*n == 0 || *n1 == 0 || *n2 == 0)
     {
-        return 0;
+        return;
     }
-    if (*j1 + *n1 > *n)
+    if(*j1 + *n1 > *n)
     {
-        return 0;
+        return;
     }
     j2 = *j1 + 1;
     j3 = *j1 + 2;
     j4 = *j1 + 3;
-    if (*n1 == 1 && *n2 == 1)
+    if(*n1 == 1 && *n2 == 1)
     {
         /* Swap two 1-by-1 blocks. */
         t11 = t[*j1 + *j1 * t_dim1];
@@ -216,7 +235,7 @@ int slaexc_(logical *wantq, integer *n, real *t, integer * ldt, real *q, integer
         r__1 = t22 - t11;
         slartg_(&t[*j1 + j2 * t_dim1], &r__1, &cs, &sn, &temp);
         /* Apply transformation to the matrix T. */
-        if (j3 <= *n)
+        if(j3 <= *n)
         {
             i__1 = *n - *j1 - 1;
             srot_(&i__1, &t[*j1 + j3 * t_dim1], ldt, &t[j2 + j3 * t_dim1], ldt, &cs, &sn);
@@ -225,7 +244,7 @@ int slaexc_(logical *wantq, integer *n, real *t, integer * ldt, real *q, integer
         srot_(&i__1, &t[*j1 * t_dim1 + 1], &c__1, &t[j2 * t_dim1 + 1], &c__1, &cs, &sn);
         t[*j1 + *j1 * t_dim1] = t22;
         t[j2 + j2 * t_dim1] = t11;
-        if (*wantq)
+        if(*wantq)
         {
             /* Accumulate transformation in the matrix Q. */
             srot_(n, &q[*j1 * q_dim1 + 1], &c__1, &q[j2 * q_dim1 + 1], &c__1, &cs, &sn);
@@ -245,21 +264,22 @@ int slaexc_(logical *wantq, integer *n, real *t, integer * ldt, real *q, integer
         smlnum = slamch_("S") / eps;
         /* Computing MAX */
         r__1 = eps * 10.f * dnorm;
-        thresh = fla_max(r__1,smlnum);
+        thresh = fla_max(r__1, smlnum);
         /* Solve T11*X - X*T22 = scale*T12 for X. */
-        slasy2_(&c_false, &c_false, &c_n1, n1, n2, d__, &c__4, &d__[*n1 + 1 + (*n1 + 1 << 2) - 5], &c__4, &d__[(*n1 + 1 << 2) - 4], &c__4, & scale, x, &c__2, &xnorm, &ierr);
+        slasy2_(&c_false, &c_false, &c_n1, n1, n2, d__, &c__4, &d__[*n1 + 1 + (*n1 + 1 << 2) - 5],
+                &c__4, &d__[(*n1 + 1 << 2) - 4], &c__4, &scale, x, &c__2, &xnorm, &ierr);
         /* Swap the adjacent diagonal blocks. */
         k = *n1 + *n1 + *n2 - 3;
-        switch (k)
+        switch(k)
         {
-        case 1:
-            goto L10;
-        case 2:
-            goto L20;
-        case 3:
-            goto L30;
+            case 1:
+                goto L10;
+            case 2:
+                goto L20;
+            case 3:
+                goto L30;
         }
-L10: /* N1 = 1, N2 = 2: generate elementary reflector H so that: */
+    L10: /* N1 = 1, N2 = 2: generate elementary reflector H so that: */
         /* ( scale, X11, X12 ) H = ( 0, 0, * ) */
         u[0] = scale;
         u[1] = x[0];
@@ -273,26 +293,26 @@ L10: /* N1 = 1, N2 = 2: generate elementary reflector H so that: */
         /* Test whether to reject swap. */
         /* Computing MAX */
         r__2 = f2c_abs(d__[2]), r__3 = f2c_abs(d__[6]);
-        r__2 = fla_max(r__2,r__3);
+        r__2 = fla_max(r__2, r__3);
         r__3 = (r__1 = d__[10] - t11, f2c_abs(r__1)); // ; expr subst
-        if (fla_max(r__2,r__3) > thresh)
+        if(fla_max(r__2, r__3) > thresh)
         {
             goto L50;
         }
         /* Accept swap: apply transformation to the entire matrix T. */
         i__1 = *n - *j1 + 1;
-        slarfx_("L", &c__3, &i__1, u, &tau, &t[*j1 + *j1 * t_dim1], ldt, & work[1]);
+        slarfx_("L", &c__3, &i__1, u, &tau, &t[*j1 + *j1 * t_dim1], ldt, &work[1]);
         slarfx_("R", &j2, &c__3, u, &tau, &t[*j1 * t_dim1 + 1], ldt, &work[1]);
         t[j3 + *j1 * t_dim1] = 0.f;
         t[j3 + j2 * t_dim1] = 0.f;
         t[j3 + j3 * t_dim1] = t11;
-        if (*wantq)
+        if(*wantq)
         {
             /* Accumulate transformation in the matrix Q. */
-            slarfx_("R", n, &c__3, u, &tau, &q[*j1 * q_dim1 + 1], ldq, &work[ 1]);
+            slarfx_("R", n, &c__3, u, &tau, &q[*j1 * q_dim1 + 1], ldq, &work[1]);
         }
         goto L40;
-L20: /* N1 = 2, N2 = 1: generate elementary reflector H so that: */
+    L20: /* N1 = 2, N2 = 1: generate elementary reflector H so that: */
         /* H ( -X11 ) = ( * ) */
         /* ( -X21 ) = ( 0 ) */
         /* ( scale ) = ( 0 ) */
@@ -308,26 +328,26 @@ L20: /* N1 = 2, N2 = 1: generate elementary reflector H so that: */
         /* Test whether to reject swap. */
         /* Computing MAX */
         r__2 = f2c_abs(d__[1]), r__3 = f2c_abs(d__[2]);
-        r__2 = fla_max(r__2,r__3);
+        r__2 = fla_max(r__2, r__3);
         r__3 = (r__1 = d__[0] - t33, f2c_abs(r__1)); // ; expr subst
-        if (fla_max(r__2,r__3) > thresh)
+        if(fla_max(r__2, r__3) > thresh)
         {
             goto L50;
         }
         /* Accept swap: apply transformation to the entire matrix T. */
         slarfx_("R", &j3, &c__3, u, &tau, &t[*j1 * t_dim1 + 1], ldt, &work[1]);
         i__1 = *n - *j1;
-        slarfx_("L", &c__3, &i__1, u, &tau, &t[*j1 + j2 * t_dim1], ldt, &work[ 1]);
+        slarfx_("L", &c__3, &i__1, u, &tau, &t[*j1 + j2 * t_dim1], ldt, &work[1]);
         t[*j1 + *j1 * t_dim1] = t33;
         t[j2 + *j1 * t_dim1] = 0.f;
         t[j3 + *j1 * t_dim1] = 0.f;
-        if (*wantq)
+        if(*wantq)
         {
             /* Accumulate transformation in the matrix Q. */
-            slarfx_("R", n, &c__3, u, &tau, &q[*j1 * q_dim1 + 1], ldq, &work[ 1]);
+            slarfx_("R", n, &c__3, u, &tau, &q[*j1 * q_dim1 + 1], ldq, &work[1]);
         }
         goto L40;
-L30: /* N1 = 2, N2 = 2: generate elementary reflectors H(1) and H(2) so */
+    L30: /* N1 = 2, N2 = 2: generate elementary reflectors H(1) and H(2) so */
         /* that: */
         /* H(2) H(1) ( -X11 -X12 ) = ( * * ) */
         /* ( -X21 -X22 ) ( 0 * ) */
@@ -345,74 +365,79 @@ L30: /* N1 = 2, N2 = 2: generate elementary reflectors H(1) and H(2) so */
         slarfg_(&c__3, u2, &u2[1], &c__1, &tau2);
         u2[0] = 1.f;
         /* Perform swap provisionally on diagonal block in D. */
-        slarfx_("L", &c__3, &c__4, u1, &tau1, d__, &c__4, &work[1]) ;
-        slarfx_("R", &c__4, &c__3, u1, &tau1, d__, &c__4, &work[1]) ;
+        slarfx_("L", &c__3, &c__4, u1, &tau1, d__, &c__4, &work[1]);
+        slarfx_("R", &c__4, &c__3, u1, &tau1, d__, &c__4, &work[1]);
         slarfx_("L", &c__3, &c__4, u2, &tau2, &d__[1], &c__4, &work[1]);
         slarfx_("R", &c__4, &c__3, u2, &tau2, &d__[4], &c__4, &work[1]);
         /* Test whether to reject swap. */
         /* Computing MAX */
-        r__1 = f2c_abs(d__[2]), r__2 = f2c_abs(d__[6]), r__1 = fla_max(r__1,r__2), r__2 = f2c_abs(d__[3]);
-        r__1 = fla_max(r__1,r__2);
+        r__1 = f2c_abs(d__[2]), r__2 = f2c_abs(d__[6]), r__1 = fla_max(r__1, r__2),
+        r__2 = f2c_abs(d__[3]);
+        r__1 = fla_max(r__1, r__2);
         r__2 = f2c_abs(d__[7]); // ; expr subst
-        if (fla_max(r__1,r__2) > thresh)
+        if(fla_max(r__1, r__2) > thresh)
         {
             goto L50;
         }
         /* Accept swap: apply transformation to the entire matrix T. */
         i__1 = *n - *j1 + 1;
-        slarfx_("L", &c__3, &i__1, u1, &tau1, &t[*j1 + *j1 * t_dim1], ldt, & work[1]);
-        slarfx_("R", &j4, &c__3, u1, &tau1, &t[*j1 * t_dim1 + 1], ldt, &work[ 1]);
+        slarfx_("L", &c__3, &i__1, u1, &tau1, &t[*j1 + *j1 * t_dim1], ldt, &work[1]);
+        slarfx_("R", &j4, &c__3, u1, &tau1, &t[*j1 * t_dim1 + 1], ldt, &work[1]);
         i__1 = *n - *j1 + 1;
-        slarfx_("L", &c__3, &i__1, u2, &tau2, &t[j2 + *j1 * t_dim1], ldt, & work[1]);
-        slarfx_("R", &j4, &c__3, u2, &tau2, &t[j2 * t_dim1 + 1], ldt, &work[1] );
+        slarfx_("L", &c__3, &i__1, u2, &tau2, &t[j2 + *j1 * t_dim1], ldt, &work[1]);
+        slarfx_("R", &j4, &c__3, u2, &tau2, &t[j2 * t_dim1 + 1], ldt, &work[1]);
         t[j3 + *j1 * t_dim1] = 0.f;
         t[j3 + j2 * t_dim1] = 0.f;
         t[j4 + *j1 * t_dim1] = 0.f;
         t[j4 + j2 * t_dim1] = 0.f;
-        if (*wantq)
+        if(*wantq)
         {
             /* Accumulate transformation in the matrix Q. */
-            slarfx_("R", n, &c__3, u1, &tau1, &q[*j1 * q_dim1 + 1], ldq, & work[1]);
-            slarfx_("R", n, &c__3, u2, &tau2, &q[j2 * q_dim1 + 1], ldq, &work[ 1]);
+            slarfx_("R", n, &c__3, u1, &tau1, &q[*j1 * q_dim1 + 1], ldq, &work[1]);
+            slarfx_("R", n, &c__3, u2, &tau2, &q[j2 * q_dim1 + 1], ldq, &work[1]);
         }
-L40:
-        if (*n2 == 2)
+    L40:
+        if(*n2 == 2)
         {
             /* Standardize new 2-by-2 block T11 */
-            slanv2_(&t[*j1 + *j1 * t_dim1], &t[*j1 + j2 * t_dim1], &t[j2 + * j1 * t_dim1], &t[j2 + j2 * t_dim1], &wr1, &wi1, &wr2, & wi2, &cs, &sn);
+            slanv2_(&t[*j1 + *j1 * t_dim1], &t[*j1 + j2 * t_dim1], &t[j2 + *j1 * t_dim1],
+                    &t[j2 + j2 * t_dim1], &wr1, &wi1, &wr2, &wi2, &cs, &sn);
             i__1 = *n - *j1 - 1;
-            srot_(&i__1, &t[*j1 + (*j1 + 2) * t_dim1], ldt, &t[j2 + (*j1 + 2) * t_dim1], ldt, &cs, &sn);
+            srot_(&i__1, &t[*j1 + (*j1 + 2) * t_dim1], ldt, &t[j2 + (*j1 + 2) * t_dim1], ldt, &cs,
+                  &sn);
             i__1 = *j1 - 1;
-            srot_(&i__1, &t[*j1 * t_dim1 + 1], &c__1, &t[j2 * t_dim1 + 1], & c__1, &cs, &sn);
-            if (*wantq)
+            srot_(&i__1, &t[*j1 * t_dim1 + 1], &c__1, &t[j2 * t_dim1 + 1], &c__1, &cs, &sn);
+            if(*wantq)
             {
-                srot_(n, &q[*j1 * q_dim1 + 1], &c__1, &q[j2 * q_dim1 + 1], & c__1, &cs, &sn);
+                srot_(n, &q[*j1 * q_dim1 + 1], &c__1, &q[j2 * q_dim1 + 1], &c__1, &cs, &sn);
             }
         }
-        if (*n1 == 2)
+        if(*n1 == 2)
         {
             /* Standardize new 2-by-2 block T22 */
             j3 = *j1 + *n2;
             j4 = j3 + 1;
-            slanv2_(&t[j3 + j3 * t_dim1], &t[j3 + j4 * t_dim1], &t[j4 + j3 * t_dim1], &t[j4 + j4 * t_dim1], &wr1, &wi1, &wr2, &wi2, & cs, &sn);
-            if (j3 + 2 <= *n)
+            slanv2_(&t[j3 + j3 * t_dim1], &t[j3 + j4 * t_dim1], &t[j4 + j3 * t_dim1],
+                    &t[j4 + j4 * t_dim1], &wr1, &wi1, &wr2, &wi2, &cs, &sn);
+            if(j3 + 2 <= *n)
             {
                 i__1 = *n - j3 - 1;
-                srot_(&i__1, &t[j3 + (j3 + 2) * t_dim1], ldt, &t[j4 + (j3 + 2) * t_dim1], ldt, &cs, &sn);
+                srot_(&i__1, &t[j3 + (j3 + 2) * t_dim1], ldt, &t[j4 + (j3 + 2) * t_dim1], ldt, &cs,
+                      &sn);
             }
             i__1 = j3 - 1;
-            srot_(&i__1, &t[j3 * t_dim1 + 1], &c__1, &t[j4 * t_dim1 + 1], & c__1, &cs, &sn);
-            if (*wantq)
+            srot_(&i__1, &t[j3 * t_dim1 + 1], &c__1, &t[j4 * t_dim1 + 1], &c__1, &cs, &sn);
+            if(*wantq)
             {
-                srot_(n, &q[j3 * q_dim1 + 1], &c__1, &q[j4 * q_dim1 + 1], & c__1, &cs, &sn);
+                srot_(n, &q[j3 * q_dim1 + 1], &c__1, &q[j4 * q_dim1 + 1], &c__1, &cs, &sn);
             }
         }
     }
-    return 0;
+    return;
     /* Exit with INFO = 1 if swap was rejected. */
 L50:
     *info = 1;
-    return 0;
+    return;
     /* End of SLAEXC */
 }
 /* slaexc_ */

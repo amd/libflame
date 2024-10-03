@@ -1,5 +1,8 @@
-/* dlassq.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dlassq.f -- translated by f2c (version 20160102). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h"
 /* > \brief \b DLASSQ updates a sum of squares represented in scaled form. */
 /* =========== DOCUMENTATION =========== */
@@ -7,11 +10,17 @@
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLASSQ + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlassq.f90"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlassq.f90">
+ */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlassq.f90"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlassq.f90">
+ */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlassq.f90"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlassq.f90">
+ */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -112,9 +121,10 @@
 
 /* la_isnan__ */
 /* Subroutine */
-int dlassq_(integer *n, doublereal *x, integer *incx, doublereal *scl, doublereal *sumsq) {
+void dlassq_(integer *n, doublereal *x, integer *incx, doublereal *scl, doublereal *sumsq)
+{
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlassq inputs: n %" FLA_IS ", incx %" FLA_IS "",*n, *incx);
+    AOCL_DTL_SNPRINTF("dlassq inputs: n %" FLA_IS ", incx %" FLA_IS "", *n, *incx);
     /* System generated locals */
     integer i__1;
     doublereal r__1, r__2;
@@ -141,18 +151,22 @@ int dlassq_(integer *n, doublereal *x, integer *incx, doublereal *scl, doublerea
 
     /* .. */
     /* Quick return if possible */
-    if (*scl != *scl || *sumsq != *sumsq) {
-        return 0;
+    if(*scl != *scl || *sumsq != *sumsq)
+    {
+        return;
     }
-    if (*sumsq == 0.) {
+    if(*sumsq == 0.)
+    {
         *scl = 1.;
     }
-    if (*scl == 0.) {
+    if(*scl == 0.)
+    {
         *scl = 1.;
         *sumsq = 0.;
     }
-    if (*n <= 0) {
-        return 0;
+    if(*n <= 0)
+    {
+        return;
     }
     /* Compute the sum of squares in 3 accumulators: */
     /* abig -- sums of squares scaled down to avoid overflow */
@@ -166,28 +180,32 @@ int dlassq_(integer *n, doublereal *x, integer *incx, doublereal *scl, doublerea
     amed = 0.;
     abig = 0.;
     ix = 1;
-    if (*incx < 0) {
+    if(*incx < 0)
+    {
         ix = 1 - (*n - 1) * *incx;
     }
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__) {
+    for(i__ = 1; i__ <= i__1; ++i__)
+    {
         ax = f2c_dabs(x[ix]);
-        if (ax > tbig) {
+        if(ax > tbig)
+        {
             /* Computing 2nd power */
             r__1 = ax * sbig;
             abig += r__1 * r__1;
             notbig = FALSE_;
         }
-        else if (ax < tsml) {
-            if (notbig) {
+        else if(ax < tsml)
+        {
+            if(notbig)
+            {
                 /* Computing 2nd power */
                 r__1 = ax * ssml;
                 asml += r__1 * r__1;
             }
         }
-        else {
+        else
+        {
             /* Computing 2nd power */
             r__1 = ax;
             amed += r__1 * r__1;
@@ -195,46 +213,57 @@ int dlassq_(integer *n, doublereal *x, integer *incx, doublereal *scl, doublerea
         ix += *incx;
     }
     /* Put the existing sum of squares into one of the accumulators */
-    if (*sumsq > 0.) {
+    if(*sumsq > 0.)
+    {
         ax = *scl * sqrt(*sumsq);
-        if (ax > tbig) {
+        if(ax > tbig)
+        {
             /* Computing 2nd power */
             r__1 = *scl * sbig;
-            abig += (r__1 * r__1)* *sumsq;
+            abig += (r__1 * r__1) * *sumsq;
             notbig = FALSE_;
         }
-        else if (ax < tsml) {
-            if (notbig) {
+        else if(ax < tsml)
+        {
+            if(notbig)
+            {
                 /* Computing 2nd power */
                 r__1 = *scl * ssml;
-                asml += (r__1 * r__1)* *sumsq;
+                asml += (r__1 * r__1) * *sumsq;
             }
         }
-        else {
+        else
+        {
             /* Computing 2nd power */
             r__1 = *scl;
-            amed += (r__1 * r__1)* *sumsq;
+            amed += (r__1 * r__1) * *sumsq;
         }
     }
     /* Combine abig and amed or amed and asml if more than one */
     /* accumulator was used. */
-    if (abig > 0.) {
-        if (amed > 0. || amed != amed) {
+    if(abig > 0.)
+    {
+        if(amed > 0. || amed != amed)
+        {
             abig += amed * sbig * sbig;
         }
         *scl = 1. / sbig;
         *sumsq = abig;
     }
-    else if (asml > 0.) {
+    else if(asml > 0.)
+    {
         /* Combine amed and asml if asml > 0. */
-        if (amed > 0. ||  amed != amed) {
+        if(amed > 0. || amed != amed)
+        {
             amed = sqrt(amed);
             asml = sqrt(asml) / ssml;
-            if (asml > amed) {
+            if(asml > amed)
+            {
                 ymin = amed;
                 ymax = asml;
             }
-            else {
+            else
+            {
                 ymin = asml;
                 ymax = amed;
             }
@@ -245,17 +274,19 @@ int dlassq_(integer *n, doublereal *x, integer *incx, doublereal *scl, doublerea
             r__2 = ymin / ymax;
             *sumsq = r__1 * r__1 * (r__2 * r__2 + 1.);
         }
-        else {
+        else
+        {
             *scl = 1. / ssml;
             *sumsq = asml;
         }
     }
-    else {
+    else
+    {
         /* Otherwise all values are mid-range or zero */
         *scl = 1.;
         *sumsq = amed;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* dlassq_ */

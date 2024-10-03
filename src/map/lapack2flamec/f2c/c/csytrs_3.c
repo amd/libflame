@@ -1,22 +1,27 @@
-/* ../netlib/v3.9.0/csytrs_3.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/csytrs_3.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {1.f, 0.f};
 /* > \brief \b CSYTRS_3 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CSYTRS_3 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csytrs_ 3.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csytrs_
+ * 3.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csytrs_ 3.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csytrs_
+ * 3.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csytrs_ 3.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csytrs_
+ * 3.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -56,7 +61,7 @@ static complex c_b1 =
 /* > Specifies whether the details of the factorization are */
 /* > stored as an upper or lower triangular matrix: */
 /* > = 'U': Upper triangular, form is A = P*U*D*(U**T)*(P**T);
-*/
+ */
 /* > = 'L': Lower triangular, form is A = P*L*D*(L**T)*(P**T). */
 /* > \endverbatim */
 /* > */
@@ -80,7 +85,7 @@ static complex c_b1 =
 /* > as computed by CSYTRF_RK and CSYTRF_BK: */
 /* > a) ONLY diagonal elements of the symmetric block diagonal */
 /* > matrix D on the diagonal of A, i.e. D(k,k) = A(k,k);
-*/
+ */
 /* > (superdiagonal (or subdiagonal) elements of D */
 /* > should be provided on entry in array E), and */
 /* > b) If UPLO = 'U': factor U in the superdiagonal part of A. */
@@ -100,7 +105,7 @@ static complex c_b1 =
 /* > elements of the symmetric block diagonal matrix D */
 /* > with 1-by-1 or 2-by-2 diagonal blocks, where */
 /* > If UPLO = 'U': E(i) = D(i-1,i),i=2:N, E(1) not referenced;
-*/
+ */
 /* > If UPLO = 'L': E(i) = D(i+1,i),i=1:N-1, E(N) not referenced. */
 /* > */
 /* > NOTE: For 1-by-1 diagonal block D(k), where */
@@ -158,15 +163,18 @@ static complex c_b1 =
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int csytrs_3_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, complex *e, integer *ipiv, complex *b, integer *ldb, integer *info)
+void csytrs_3_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, complex *e,
+               integer *ipiv, complex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"csytrs_3 inputs: uplo %c, n %lld, nrhs %lld, lda %lld, ldb %lld",*uplo, *n, *nrhs, *lda, *ldb);
+    snprintf(buffer, 256, "csytrs_3 inputs: uplo %c, n %lld, nrhs %lld, lda %lld, ldb %lld", *uplo,
+             *n, *nrhs, *lda, *ldb);
 #else
-    snprintf(buffer, 256,"csytrs_3 inputs: uplo %c, n %d, nrhs %d, lda %d, ldb %d",*uplo, *n, *nrhs, *lda, *ldb);
+    snprintf(buffer, 256, "csytrs_3 inputs: uplo %c, n %d, nrhs %d, lda %d, ldb %d", *uplo, *n,
+             *nrhs, *lda, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -181,14 +189,19 @@ int csytrs_3_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, c
     integer kp;
     complex akm1, bkm1, akm1k;
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+        void
+        cscal_(integer *, complex *, complex *, integer *);
+    extern logical lsame_(char *, char *, integer, integer);
     complex denom;
     extern /* Subroutine */
-    int cswap_(integer *, complex *, integer *, complex *, integer *), ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
+        void
+        cswap_(integer *, complex *, integer *, complex *, integer *),
+        ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
+               integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -220,41 +233,41 @@ int csytrs_3_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, c
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -9;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CSYTRS_3", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0 || *nrhs == 0)
+    if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (upper)
+    if(upper)
     {
         /* Begin Upper */
         /* Solve A*X = B, where A = U*D*U**T. */
@@ -264,28 +277,26 @@ int csytrs_3_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, c
         /* (We can do the simple loop over IPIV with decrement -1, */
         /* since the ABS value of IPIV(I) represents the row index */
         /* of the interchange with row i in both 1x1 and 2x2 pivot cases) */
-        for (k = *n;
-                k >= 1;
-                --k)
+        for(k = *n; k >= 1; --k)
         {
             kp = (i__1 = ipiv[k], f2c_abs(i__1));
-            if (kp != k)
+            if(kp != k)
             {
                 cswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
         }
         /* Compute (U \P**T * B) -> B [ (U \P**T * B) ] */
-        ctrsm_("L", "U", "N", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[ b_offset], ldb);
+        ctrsm_("L", "U", "N", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
         /* Compute D \ B -> B [ D \ (U \P**T * B) ] */
         i__ = *n;
         while(i__ >= 1)
         {
-            if (ipiv[i__] > 0)
+            if(ipiv[i__] > 0)
             {
                 c_div(&q__1, &c_b1, &a[i__ + i__ * a_dim1]);
                 cscal_(nrhs, &q__1, &b[i__ + b_dim1], ldb);
             }
-            else if (i__ > 1)
+            else if(i__ > 1)
             {
                 i__1 = i__;
                 akm1k.r = e[i__1].r;
@@ -303,9 +314,7 @@ int csytrs_3_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, c
                 denom.r = q__1.r;
                 denom.i = q__1.i; // , expr subst
                 i__1 = *nrhs;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     c_div(&q__1, &b[i__ - 1 + j * b_dim1], &akm1k);
                     bkm1.r = q__1.r;
@@ -335,7 +344,7 @@ int csytrs_3_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, c
             --i__;
         }
         /* Compute (U**T \ B) -> B [ U**T \ (D \ (U \P**T * B) ) ] */
-        ctrsm_("L", "U", "T", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[ b_offset], ldb);
+        ctrsm_("L", "U", "T", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
         /* P * B [ P * (U**T \ (D \ (U \P**T * B) )) ] */
         /* Interchange rows K and IPIV(K) of matrix B in reverse order */
         /* from the formation order of IPIV(I) vector for Upper case. */
@@ -343,12 +352,10 @@ int csytrs_3_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, c
         /* since the ABS value of IPIV( I ) represents the row index */
         /* of the interchange with row i in both 1x1 and 2x2 pivot cases) */
         i__1 = *n;
-        for (k = 1;
-                k <= i__1;
-                ++k)
+        for(k = 1; k <= i__1; ++k)
         {
             kp = (i__2 = ipiv[k], f2c_abs(i__2));
-            if (kp != k)
+            if(kp != k)
             {
                 cswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
@@ -365,28 +372,26 @@ int csytrs_3_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, c
         /* since the ABS value of IPIV(I) represents the row index */
         /* of the interchange with row i in both 1x1 and 2x2 pivot cases) */
         i__1 = *n;
-        for (k = 1;
-                k <= i__1;
-                ++k)
+        for(k = 1; k <= i__1; ++k)
         {
             kp = (i__2 = ipiv[k], f2c_abs(i__2));
-            if (kp != k)
+            if(kp != k)
             {
                 cswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
         }
         /* Compute (L \P**T * B) -> B [ (L \P**T * B) ] */
-        ctrsm_("L", "L", "N", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[ b_offset], ldb);
+        ctrsm_("L", "L", "N", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
         /* Compute D \ B -> B [ D \ (L \P**T * B) ] */
         i__ = 1;
         while(i__ <= *n)
         {
-            if (ipiv[i__] > 0)
+            if(ipiv[i__] > 0)
             {
                 c_div(&q__1, &c_b1, &a[i__ + i__ * a_dim1]);
                 cscal_(nrhs, &q__1, &b[i__ + b_dim1], ldb);
             }
-            else if (i__ < *n)
+            else if(i__ < *n)
             {
                 i__1 = i__;
                 akm1k.r = e[i__1].r;
@@ -404,9 +409,7 @@ int csytrs_3_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, c
                 denom.r = q__1.r;
                 denom.i = q__1.i; // , expr subst
                 i__1 = *nrhs;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     c_div(&q__1, &b[i__ + j * b_dim1], &akm1k);
                     bkm1.r = q__1.r;
@@ -436,19 +439,17 @@ int csytrs_3_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, c
             ++i__;
         }
         /* Compute (L**T \ B) -> B [ L**T \ (D \ (L \P**T * B) ) ] */
-        ctrsm_("L", "L", "T", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[ b_offset], ldb);
+        ctrsm_("L", "L", "T", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
         /* P * B [ P * (L**T \ (D \ (L \P**T * B) )) ] */
         /* Interchange rows K and IPIV(K) of matrix B in reverse order */
         /* from the formation order of IPIV(I) vector for Lower case. */
         /* (We can do the simple loop over IPIV with decrement -1, */
         /* since the ABS value of IPIV(I) represents the row index */
         /* of the interchange with row i in both 1x1 and 2x2 pivot cases) */
-        for (k = *n;
-                k >= 1;
-                --k)
+        for(k = *n; k >= 1; --k)
         {
             kp = (i__1 = ipiv[k], f2c_abs(i__1));
-            if (kp != k)
+            if(kp != k)
             {
                 cswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
@@ -456,8 +457,7 @@ int csytrs_3_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, c
         /* END Lower */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSYTRS_3 */
 }
 /* csytrs_3__ */
-

@@ -1,5 +1,8 @@
-/* ../netlib/v3.9.0/chb2st_kernels.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/chb2st_kernels.f -- translated by f2c (version 20160102). You must link the
+ resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
+ Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
+ with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b CHB2ST_KERNELS */
@@ -9,11 +12,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CHB2ST_KERNELS + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chb2st_ kernels.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chb2st_
+ * kernels.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chb2st_ kernels.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chb2st_
+ * kernels.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chb2st_ kernels.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chb2st_
+ * kernels.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -158,15 +167,23 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int chb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, integer *ed, integer *sweep, integer *n, integer * nb, integer *ib, complex *a, integer *lda, complex *v, complex *tau, integer *ldvt, complex *work)
+void chb2st_kernels_(char *uplo, logical *wantz, integer *ttype, integer *st, integer *ed,
+                     integer *sweep, integer *n, integer *nb, integer *ib, complex *a, integer *lda,
+                     complex *v, complex *tau, integer *ldvt, complex *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"chb2st_kernels inputs: uplo %c, ttype %lld, st %lld, ed %lld, sweep %lld, n %lld, nb %lld, ib %lld, lda %lld, ldvt %lld",*uplo, *ttype, *st, *ed, *sweep, *n, *nb, *ib, *lda, *ldvt);
+    snprintf(buffer, 256,
+             "chb2st_kernels inputs: uplo %c, ttype %lld, st %lld, ed %lld, sweep %lld, n %lld, nb "
+             "%lld, ib %lld, lda %lld, ldvt %lld",
+             *uplo, *ttype, *st, *ed, *sweep, *n, *nb, *ib, *lda, *ldvt);
 #else
-    snprintf(buffer, 256,"chb2st_kernels inputs: uplo %c, ttype %d, st %d, ed %d, sweep %d, n %d, nb %d, ib %d, lda %d, ldvt %d",*uplo, *ttype, *st, *ed, *sweep, *n, *nb, *ib, *lda, *ldvt);
+    snprintf(buffer, 256,
+             "chb2st_kernels inputs: uplo %c, ttype %d, st %d, ed %d, sweep %d, n %d, nb %d, ib "
+             "%d, lda %d, ldvt %d",
+             *uplo, *ttype, *st, *ed, *sweep, *n, *nb, *ib, *lda, *ldvt);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -179,12 +196,17 @@ int chb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, in
     integer i__, j1, j2, lm, ln;
     complex ctmp;
     integer dpos, vpos;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    int clarfg_(integer *, complex *, complex *, integer *, complex *);
+        void
+        clarfg_(integer *, complex *, complex *, integer *, complex *);
     extern /* Subroutine */
-    int clarfx_(char *, integer *, integer *, complex *, complex *, complex *, integer *, complex *), clarfy_( char *, integer *, complex *, integer *, complex *, complex *, integer *, complex *);
+        void
+        clarfx_(char *, integer *, integer *, complex *, complex *, complex *, integer *,
+                complex *),
+        clarfy_(char *, integer *, complex *, integer *, complex *, complex *, integer *,
+                complex *);
     integer ofdpos, taupos;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -214,8 +236,8 @@ int chb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, in
     --tau;
     --work;
     /* Function Body */
-    upper = lsame_(uplo, "U");
-    if (upper)
+    upper = lsame_(uplo, "U", 1, 1);
+    if(upper)
     {
         dpos = (*nb << 1) + 1;
         ofdpos = *nb << 1;
@@ -226,9 +248,9 @@ int chb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, in
         ofdpos = 2;
     }
     /* Upper case */
-    if (upper)
+    if(upper)
     {
-        if (*wantz)
+        if(*wantz)
         {
             vpos = (*sweep - 1) % 2 * *n + *st;
             taupos = (*sweep - 1) % 2 * *n + *st;
@@ -238,16 +260,14 @@ int chb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, in
             vpos = (*sweep - 1) % 2 * *n + *st;
             taupos = (*sweep - 1) % 2 * *n + *st;
         }
-        if (*ttype == 1)
+        if(*ttype == 1)
         {
             lm = *ed - *st + 1;
             i__1 = vpos;
             v[i__1].r = 1.f;
             v[i__1].i = 0.f; // , expr subst
             i__1 = lm - 1;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = vpos + i__;
                 r_cnjg(&q__1, &a[ofdpos - i__ + (*st + i__) * a_dim1]);
@@ -270,27 +290,28 @@ int chb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, in
             i__1 = *lda - 1;
             clarfy_(uplo, &lm, &v[vpos], &c__1, &q__1, &a[dpos + *st * a_dim1], &i__1, &work[1]);
         }
-        if (*ttype == 3)
+        if(*ttype == 3)
         {
             lm = *ed - *st + 1;
             r_cnjg(&q__1, &tau[taupos]);
             i__1 = *lda - 1;
             clarfy_(uplo, &lm, &v[vpos], &c__1, &q__1, &a[dpos + *st * a_dim1], &i__1, &work[1]);
         }
-        if (*ttype == 2)
+        if(*ttype == 2)
         {
             j1 = *ed + 1;
             /* Computing MIN */
             i__1 = *ed + *nb;
-            j2 = fla_min(i__1,*n);
+            j2 = fla_min(i__1, *n);
             ln = *ed - *st + 1;
             lm = j2 - j1 + 1;
-            if (lm > 0)
+            if(lm > 0)
             {
                 r_cnjg(&q__1, &tau[taupos]);
                 i__1 = *lda - 1;
-                clarfx_("Left", &ln, &lm, &v[vpos], &q__1, &a[dpos - *nb + j1 * a_dim1], &i__1, &work[1]);
-                if (*wantz)
+                clarfx_("Left", &ln, &lm, &v[vpos], &q__1, &a[dpos - *nb + j1 * a_dim1], &i__1,
+                        &work[1]);
+                if(*wantz)
                 {
                     vpos = (*sweep - 1) % 2 * *n + j1;
                     taupos = (*sweep - 1) % 2 * *n + j1;
@@ -304,9 +325,7 @@ int chb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, in
                 v[i__1].r = 1.f;
                 v[i__1].i = 0.f; // , expr subst
                 i__1 = lm - 1;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = vpos + i__;
                     r_cnjg(&q__1, &a[dpos - *nb - i__ + (j1 + i__) * a_dim1]);
@@ -326,14 +345,15 @@ int chb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, in
                 a[i__1].i = ctmp.i; // , expr subst
                 i__1 = ln - 1;
                 i__2 = *lda - 1;
-                clarfx_("Right", &i__1, &lm, &v[vpos], &tau[taupos], &a[dpos - *nb + 1 + j1 * a_dim1], &i__2, &work[1]);
+                clarfx_("Right", &i__1, &lm, &v[vpos], &tau[taupos],
+                        &a[dpos - *nb + 1 + j1 * a_dim1], &i__2, &work[1]);
             }
         }
         /* Lower case */
     }
     else
     {
-        if (*wantz)
+        if(*wantz)
         {
             vpos = (*sweep - 1) % 2 * *n + *st;
             taupos = (*sweep - 1) % 2 * *n + *st;
@@ -343,16 +363,14 @@ int chb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, in
             vpos = (*sweep - 1) % 2 * *n + *st;
             taupos = (*sweep - 1) % 2 * *n + *st;
         }
-        if (*ttype == 1)
+        if(*ttype == 1)
         {
             lm = *ed - *st + 1;
             i__1 = vpos;
             v[i__1].r = 1.f;
             v[i__1].i = 0.f; // , expr subst
             i__1 = lm - 1;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = vpos + i__;
                 i__3 = ofdpos + i__ + (*st - 1) * a_dim1;
@@ -369,26 +387,27 @@ int chb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, in
             i__1 = *lda - 1;
             clarfy_(uplo, &lm, &v[vpos], &c__1, &q__1, &a[dpos + *st * a_dim1], &i__1, &work[1]);
         }
-        if (*ttype == 3)
+        if(*ttype == 3)
         {
             lm = *ed - *st + 1;
             r_cnjg(&q__1, &tau[taupos]);
             i__1 = *lda - 1;
             clarfy_(uplo, &lm, &v[vpos], &c__1, &q__1, &a[dpos + *st * a_dim1], &i__1, &work[1]);
         }
-        if (*ttype == 2)
+        if(*ttype == 2)
         {
             j1 = *ed + 1;
             /* Computing MIN */
             i__1 = *ed + *nb;
-            j2 = fla_min(i__1,*n);
+            j2 = fla_min(i__1, *n);
             ln = *ed - *st + 1;
             lm = j2 - j1 + 1;
-            if (lm > 0)
+            if(lm > 0)
             {
                 i__1 = *lda - 1;
-                clarfx_("Right", &lm, &ln, &v[vpos], &tau[taupos], &a[dpos + * nb + *st * a_dim1], &i__1, &work[1]);
-                if (*wantz)
+                clarfx_("Right", &lm, &ln, &v[vpos], &tau[taupos], &a[dpos + *nb + *st * a_dim1],
+                        &i__1, &work[1]);
+                if(*wantz)
                 {
                     vpos = (*sweep - 1) % 2 * *n + j1;
                     taupos = (*sweep - 1) % 2 * *n + j1;
@@ -402,9 +421,7 @@ int chb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, in
                 v[i__1].r = 1.f;
                 v[i__1].i = 0.f; // , expr subst
                 i__1 = lm - 1;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = vpos + i__;
                     i__3 = dpos + *nb + i__ + *st * a_dim1;
@@ -415,16 +432,17 @@ int chb2st_kernels_(char *uplo, logical *wantz, integer * ttype, integer *st, in
                     a[i__2].i = 0.f; // , expr subst
                     /* L40: */
                 }
-                clarfg_(&lm, &a[dpos + *nb + *st * a_dim1], &v[vpos + 1], & c__1, &tau[taupos]);
+                clarfg_(&lm, &a[dpos + *nb + *st * a_dim1], &v[vpos + 1], &c__1, &tau[taupos]);
                 i__1 = ln - 1;
                 r_cnjg(&q__1, &tau[taupos]);
                 i__2 = *lda - 1;
-                clarfx_("Left", &lm, &i__1, &v[vpos], &q__1, &a[dpos + *nb - 1 + (*st + 1) * a_dim1], &i__2, &work[1]);
+                clarfx_("Left", &lm, &i__1, &v[vpos], &q__1,
+                        &a[dpos + *nb - 1 + (*st + 1) * a_dim1], &i__2, &work[1]);
             }
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* END OF CHB2ST_KERNELS */
 }
 /* chb2st_kernels__ */

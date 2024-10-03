@@ -1,5 +1,8 @@
-/* ../netlib/ztgsy2.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ztgsy2.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__2 = 2;
 static integer c__1 = 1;
@@ -9,11 +12,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZTGSY2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztgsy2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztgsy2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztgsy2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztgsy2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztgsy2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztgsy2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -245,27 +254,45 @@ static integer c__1 = 1;
 /* > Umea University, S-901 87 Umea, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-int ztgsy2_(char *trans, integer *ijob, integer *m, integer * n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *c__, integer *ldc, doublecomplex *d__, integer *ldd, doublecomplex *e, integer *lde, doublecomplex *f, integer *ldf, doublereal *scale, doublereal *rdsum, doublereal *rdscal, integer * info)
+void ztgsy2_(char *trans, integer *ijob, integer *m, integer *n, doublecomplex *a, integer *lda,
+             doublecomplex *b, integer *ldb, doublecomplex *c__, integer *ldc, doublecomplex *d__,
+             integer *ldd, doublecomplex *e, integer *lde, doublecomplex *f, integer *ldf,
+             doublereal *scale, doublereal *rdsum, doublereal *rdscal, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztgsy2 inputs: trans %c, ijob %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldc %" FLA_IS ", ldd %" FLA_IS ", lde %" FLA_IS ", ldf %" FLA_IS "",*trans, *ijob, *m, *n, *lda, *ldb, *ldc, *ldd, *lde, *ldf);
+    AOCL_DTL_SNPRINTF("ztgsy2 inputs: trans %c, ijob %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS
+                      ", lda %" FLA_IS ", ldb %" FLA_IS ", ldc %" FLA_IS ", ldd %" FLA_IS
+                      ", lde %" FLA_IS ", ldf %" FLA_IS "",
+                      *trans, *ijob, *m, *n, *lda, *ldb, *ldc, *ldd, *lde, *ldf);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, d_dim1, d_offset, e_dim1, e_offset, f_dim1, f_offset, i__1, i__2, i__3, i__4;
+    integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, d_dim1, d_offset, e_dim1,
+        e_offset, f_dim1, f_offset, i__1, i__2, i__3, i__4;
     doublecomplex z__1, z__2, z__3, z__4, z__5, z__6;
     /* Builtin functions */
     void d_cnjg(doublecomplex *, doublecomplex *);
     /* Local variables */
     integer i__, j, k;
     doublecomplex z__[4] /* was [2][2] */
-    , rhs[2];
+        ,
+        rhs[2];
     integer ierr, ipiv[2], jpiv[2];
     doublecomplex alpha;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zgesc2_( integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublereal *), zgetc2_(integer *, doublecomplex *, integer *, integer *, integer *, integer *);
+        void
+        zscal_(integer *, doublecomplex *, doublecomplex *, integer *),
+        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zgesc2_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *,
+                doublereal *),
+        zgetc2_(integer *, doublecomplex *, integer *, integer *, integer *, integer *);
     doublereal scaloc;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlatdf_( integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *, doublereal *, integer *, integer *);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
+        zlatdf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *,
+                doublereal *, integer *, integer *);
     logical notran;
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -312,61 +339,61 @@ int ztgsy2_(char *trans, integer *ijob, integer *m, integer * n, doublecomplex *
     /* Function Body */
     *info = 0;
     ierr = 0;
-    notran = lsame_(trans, "N");
-    if (! notran && ! lsame_(trans, "C"))
+    notran = lsame_(trans, "N", 1, 1);
+    if(!notran && !lsame_(trans, "C", 1, 1))
     {
         *info = -1;
     }
-    else if (notran)
+    else if(notran)
     {
-        if (*ijob < 0 || *ijob > 2)
+        if(*ijob < 0 || *ijob > 2)
         {
             *info = -2;
         }
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        if (*m <= 0)
+        if(*m <= 0)
         {
             *info = -3;
         }
-        else if (*n <= 0)
+        else if(*n <= 0)
         {
             *info = -4;
         }
-        else if (*lda < fla_max(1,*m))
+        else if(*lda < fla_max(1, *m))
         {
             *info = -6;
         }
-        else if (*ldb < fla_max(1,*n))
+        else if(*ldb < fla_max(1, *n))
         {
             *info = -8;
         }
-        else if (*ldc < fla_max(1,*m))
+        else if(*ldc < fla_max(1, *m))
         {
             *info = -10;
         }
-        else if (*ldd < fla_max(1,*m))
+        else if(*ldd < fla_max(1, *m))
         {
             *info = -12;
         }
-        else if (*lde < fla_max(1,*n))
+        else if(*lde < fla_max(1, *n))
         {
             *info = -14;
         }
-        else if (*ldf < fla_max(1,*m))
+        else if(*ldf < fla_max(1, *m))
         {
             *info = -16;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZTGSY2", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
-    if (notran)
+    if(notran)
     {
         /* Solve (I, J) - system */
         /* A(I, I) * R(I, J) - L(I, J) * B(J, J) = C(I, J) */
@@ -376,13 +403,9 @@ int ztgsy2_(char *trans, integer *ijob, integer *m, integer * n, doublecomplex *
         *scale = 1.;
         scaloc = 1.;
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
-            for (i__ = *m;
-                    i__ >= 1;
-                    --i__)
+            for(i__ = *m; i__ >= 1; --i__)
             {
                 /* Build 2 by 2 system */
                 i__2 = i__ + i__ * a_dim1;
@@ -410,19 +433,17 @@ int ztgsy2_(char *trans, integer *ijob, integer *m, integer * n, doublecomplex *
                 rhs[1].i = f[i__2].i; // , expr subst
                 /* Solve Z * x = RHS */
                 zgetc2_(&c__2, z__, &c__2, ipiv, jpiv, &ierr);
-                if (ierr > 0)
+                if(ierr > 0)
                 {
                     *info = ierr;
                 }
-                if (*ijob == 0)
+                if(*ijob == 0)
                 {
                     zgesc2_(&c__2, z__, &c__2, rhs, ipiv, jpiv, &scaloc);
-                    if (scaloc != 1.)
+                    if(scaloc != 1.)
                     {
                         i__2 = *n;
-                        for (k = 1;
-                                k <= i__2;
-                                ++k)
+                        for(k = 1; k <= i__2; ++k)
                         {
                             z__1.r = scaloc;
                             z__1.i = 0.; // , expr subst
@@ -447,7 +468,7 @@ int ztgsy2_(char *trans, integer *ijob, integer *m, integer * n, doublecomplex *
                 f[i__2].r = rhs[1].r;
                 f[i__2].i = rhs[1].i; // , expr subst
                 /* Substitute R(I, J) and L(I, J) into remaining equation. */
-                if (i__ > 1)
+                if(i__ > 1)
                 {
                     z__1.r = -rhs[0].r;
                     z__1.i = -rhs[0].i; // , expr subst
@@ -458,12 +479,14 @@ int ztgsy2_(char *trans, integer *ijob, integer *m, integer * n, doublecomplex *
                     i__2 = i__ - 1;
                     zaxpy_(&i__2, &alpha, &d__[i__ * d_dim1 + 1], &c__1, &f[j * f_dim1 + 1], &c__1);
                 }
-                if (j < *n)
+                if(j < *n)
                 {
                     i__2 = *n - j;
-                    zaxpy_(&i__2, &rhs[1], &b[j + (j + 1) * b_dim1], ldb, & c__[i__ + (j + 1) * c_dim1], ldc);
+                    zaxpy_(&i__2, &rhs[1], &b[j + (j + 1) * b_dim1], ldb,
+                           &c__[i__ + (j + 1) * c_dim1], ldc);
                     i__2 = *n - j;
-                    zaxpy_(&i__2, &rhs[1], &e[j + (j + 1) * e_dim1], lde, &f[ i__ + (j + 1) * f_dim1], ldf);
+                    zaxpy_(&i__2, &rhs[1], &e[j + (j + 1) * e_dim1], lde,
+                           &f[i__ + (j + 1) * f_dim1], ldf);
                 }
                 /* L20: */
             }
@@ -479,13 +502,9 @@ int ztgsy2_(char *trans, integer *ijob, integer *m, integer * n, doublecomplex *
         *scale = 1.;
         scaloc = 1.;
         i__1 = *m;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            for (j = *n;
-                    j >= 1;
-                    --j)
+            for(j = *n; j >= 1; --j)
             {
                 /* Build 2 by 2 system Z**H */
                 d_cnjg(&z__1, &a[i__ + i__ * a_dim1]);
@@ -513,17 +532,15 @@ int ztgsy2_(char *trans, integer *ijob, integer *m, integer * n, doublecomplex *
                 rhs[1].i = f[i__2].i; // , expr subst
                 /* Solve Z**H * x = RHS */
                 zgetc2_(&c__2, z__, &c__2, ipiv, jpiv, &ierr);
-                if (ierr > 0)
+                if(ierr > 0)
                 {
                     *info = ierr;
                 }
                 zgesc2_(&c__2, z__, &c__2, rhs, ipiv, jpiv, &scaloc);
-                if (scaloc != 1.)
+                if(scaloc != 1.)
                 {
                     i__2 = *n;
-                    for (k = 1;
-                            k <= i__2;
-                            ++k)
+                    for(k = 1; k <= i__2; ++k)
                     {
                         z__1.r = scaloc;
                         z__1.i = 0.; // , expr subst
@@ -544,9 +561,7 @@ int ztgsy2_(char *trans, integer *ijob, integer *m, integer * n, doublecomplex *
                 f[i__2].i = rhs[1].i; // , expr subst
                 /* Substitute R(I, J) and L(I, J) into remaining equation. */
                 i__2 = j - 1;
-                for (k = 1;
-                        k <= i__2;
-                        ++k)
+                for(k = 1; k <= i__2; ++k)
                 {
                     i__3 = i__ + k * f_dim1;
                     i__4 = i__ + k * f_dim1;
@@ -565,9 +580,7 @@ int ztgsy2_(char *trans, integer *ijob, integer *m, integer * n, doublecomplex *
                     /* L50: */
                 }
                 i__2 = *m;
-                for (k = i__ + 1;
-                        k <= i__2;
-                        ++k)
+                for(k = i__ + 1; k <= i__2; ++k)
                 {
                     i__3 = k + j * c_dim1;
                     i__4 = k + j * c_dim1;
@@ -591,7 +604,7 @@ int ztgsy2_(char *trans, integer *ijob, integer *m, integer * n, doublecomplex *
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTGSY2 */
 }
 /* ztgsy2_ */

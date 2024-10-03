@@ -1,20 +1,21 @@
 /*
-    Copyright (C) 2022, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
 
 /* Local prototypes */
-void fla_test_lartg_experiment(test_params_t *params, integer  datatype, integer  p_cur, integer  q_cur, integer pci,
-                                    integer n_repeats, integer einfo, double* perf, double* t, double* residual);
-void prepare_lartg_run(integer datatype, void *f, void *g, void *r, void *c, void *s, 
-integer n_repeats, double* time_min_);
+void fla_test_lartg_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *t, double *residual);
+void prepare_lartg_run(integer datatype, void *f, void *g, void *r, void *c, void *s,
+                       integer n_repeats, double *time_min_);
 void invoke_lartg(integer datatype, void *f, void *g, void *c, void *s, void *r);
 
-void fla_test_lartg(integer argc, char ** argv, test_params_t *params)
+void fla_test_lartg(integer argc, char **argv, test_params_t *params)
 {
-    char* op_str = "Auxilary routines";
-    char* front_str = "LARTG";
+    char *op_str = "Auxilary routines";
+    char *front_str = "LARTG";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
     integer i, num_types;
     integer datatype, n_repeats;
@@ -29,42 +30,35 @@ void fla_test_lartg(integer argc, char ** argv, test_params_t *params)
         num_types = params->aux_paramslist[0].num_data_types;
         n_repeats = params->aux_paramslist[0].num_repeats;
 
-        if (n_repeats > 0)
+        if(n_repeats > 0)
         {
             /* Loop over the requested datatypes. */
-            for ( i = 0; i < num_types; ++i )
+            for(i = 0; i < num_types; ++i)
             {
-                datatype = params->datatype[i];
-                stype    = params->datatype_char[i];
+                datatype = params->aux_paramslist[0].data_types[i];
+                stype    = params->aux_paramslist[0].data_types_char[i];
 
                 /* Call the test code */
-                fla_test_lartg_experiment(params, datatype,
-                                          2, i_one,
-                                          0,
-                                          n_repeats, einfo,
-                                          &perf, &time_min, &residual);
+                fla_test_lartg_experiment(params, datatype, 2, i_one, 0, n_repeats, einfo, &perf,
+                                          &time_min, &residual);
                 /* Print the results */
-                fla_test_print_status(front_str,
-                                     stype,
-                                     RECT_INPUT,
-                                     2, i_one,
-                                     residual, params->aux_paramslist[0].aux_threshold,
-                                     time_min, perf);
+                fla_test_print_status(front_str, stype, RECT_INPUT, 2, i_one, residual,
+                                      params->aux_paramslist[0].aux_threshold, time_min, perf);
                 tests_not_run = 0;
             }
         }
     }
-    if (argc == 5)
+    if(argc == 5)
     {
         FLA_TEST_PARSE_LAST_ARG(argv[4]);
     }
 
-    if (argc >= 4 && argc <= 5)
+    if(argc >= 4 && argc <= 5)
     {
         /* Test with parameters from commandline */
         /* Parse the arguments */
         num_types = strlen(argv[2]);
-        
+
         n_repeats = strtoimax(argv[3], &endptr, CLI_DECIMAL_BASE);
 
         if(n_repeats > 0)
@@ -89,18 +83,11 @@ void fla_test_lartg(integer argc, char ** argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_lartg_experiment(params, datatype,
-                                          2, i_one,
-                                          0,
-                                          n_repeats, einfo,
-                                          &perf, &time_min, &residual);
+                fla_test_lartg_experiment(params, datatype, 2, i_one, 0, n_repeats, einfo, &perf,
+                                          &time_min, &residual);
                 /* Print the results */
-                fla_test_print_status(front_str,
-                                      stype,
-                                      RECT_INPUT,
-                                      2, i_one,
-                                      residual, params->aux_paramslist[0].aux_threshold,
-                                      time_min, perf);
+                fla_test_print_status(front_str, stype, RECT_INPUT, 2, i_one, residual,
+                                      params->aux_paramslist[0].aux_threshold, time_min, perf);
                 tests_not_run = 0;
             }
         }
@@ -116,7 +103,7 @@ void fla_test_lartg(integer argc, char ** argv, test_params_t *params)
     {
         printf("\nInvalid datatypes specified, choose valid datatypes from 'sdcz'\n\n");
     }
-    if (g_ext_fptr != NULL)
+    if(g_ext_fptr != NULL)
     {
         fclose(g_ext_fptr);
         g_ext_fptr = NULL;
@@ -125,18 +112,11 @@ void fla_test_lartg(integer argc, char ** argv, test_params_t *params)
     return;
 }
 
-void fla_test_lartg_experiment(test_params_t *params,
-    integer  datatype,
-    integer  p_cur,
-    integer  q_cur,
-    integer pci,
-    integer n_repeats,
-    integer einfo,
-    double* perf,
-    double* t,
-    double* residual)
+void fla_test_lartg_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *t, double *residual)
 {
-    void  *s = NULL, *c = NULL;
+    void *s = NULL, *c = NULL;
     void *f = NULL, *g = NULL, *r = NULL;
     double time_min = 1e9;
 
@@ -151,7 +131,7 @@ void fla_test_lartg_experiment(test_params_t *params,
     create_vector(datatype, &f, 1);
     create_vector(datatype, &g, 1);
     create_vector(datatype, &r, 1);
-    
+
     if(g_ext_fptr != NULL)
     {
         init_vector_from_file(datatype, f, 1, 1, g_ext_fptr);
@@ -159,9 +139,9 @@ void fla_test_lartg_experiment(test_params_t *params,
     }
     else
     {
-        rand_vector(datatype, f, 1, 1);
-        rand_vector(datatype, g, 1, 1);
-    } 
+        rand_vector(datatype, 1, f, 1, d_zero, d_zero, 'R');
+        rand_vector(datatype, 1, g, 1, d_zero, d_zero, 'R');
+    }
     /* call to API */
     prepare_lartg_run(datatype, f, g, r, c, s, n_repeats, &time_min);
 
@@ -174,7 +154,7 @@ void fla_test_lartg_experiment(test_params_t *params,
     }
     /* Compute the performance of the best experiment repeat */
     *perf = (double)(6.0) / time_min / FLOPS_PER_UNIT_PERF;
-    
+
     /* output validation */
     validate_lartg(datatype, f, g, r, c, s, residual);
 
@@ -186,19 +166,13 @@ void fla_test_lartg_experiment(test_params_t *params,
     free_vector(r);
 }
 
-void prepare_lartg_run(integer datatype,
-    void *f,
-    void *g,
-    void *r,
-    void *c,
-    void *s,
-    integer n_repeats,
-    double* time_min_)
+void prepare_lartg_run(integer datatype, void *f, void *g, void *r, void *c, void *s,
+                       integer n_repeats, double *time_min_)
 {
     integer i;
     double time_min = 1e9, exe_time;
 
-    for (i = 0; i < n_repeats; ++i)
+    for(i = 0; i < n_repeats; ++i)
     {
         exe_time = fla_test_clock();
 
@@ -220,24 +194,24 @@ void invoke_lartg(integer datatype, void *f, void *g, void *c, void *s, void *r)
     {
         case FLOAT:
         {
-            fla_lapack_slartg(f, g, (float *) c, (float *)s, r);
+            fla_lapack_slartg(f, g, (float *)c, (float *)s, r);
             break;
         }
 
         case DOUBLE:
         {
-            fla_lapack_dlartg(f, g, (double *) c, (double *)s, r);
+            fla_lapack_dlartg(f, g, (double *)c, (double *)s, r);
             break;
         }
         case COMPLEX:
         {
-           fla_lapack_clartg(f, g, (float *) c, ((scomplex *)s), r);
-           break;
+            fla_lapack_clartg(f, g, (float *)c, ((scomplex *)s), r);
+            break;
         }
 
         case DOUBLE_COMPLEX:
         {
-            fla_lapack_zlartg(f, g, (double *) c, ((dcomplex *)s), r);
+            fla_lapack_zlartg(f, g, (double *)c, ((dcomplex *)s), r);
             break;
         }
     }

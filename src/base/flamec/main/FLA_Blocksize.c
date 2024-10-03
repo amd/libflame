@@ -33,7 +33,7 @@ long fla_goto_gemm_blocksize[4][4];
 
 
 
-fla_blocksize_t* FLA_Blocksize_create( dim_t b_s, dim_t b_d, dim_t b_c, dim_t b_z )
+fla_blocksize_t* FLA_Blocksize_create( fla_dim_t b_s, fla_dim_t b_d, fla_dim_t b_c, fla_dim_t b_z )
 {
 	fla_blocksize_t* bp;
 	
@@ -51,7 +51,7 @@ fla_blocksize_t* FLA_Blocksize_create( dim_t b_s, dim_t b_d, dim_t b_c, dim_t b_
 }
 
 
-void FLA_Blocksize_set( fla_blocksize_t* bp, dim_t b_s, dim_t b_d, dim_t b_c, dim_t b_z )
+void FLA_Blocksize_set( fla_blocksize_t* bp, fla_dim_t b_s, fla_dim_t b_d, fla_dim_t b_c, fla_dim_t b_z )
 {
 	// Assign the provided blocksize values into the corresponding fields.
     if ( b_s != 0 ) bp->s = b_s;
@@ -73,10 +73,10 @@ void FLA_Blocksize_scale( fla_blocksize_t* bp, double factor )
 	}
 	
 	// Assign the provided blocksize values into the corresponding fields.
-	bp->s = ( dim_t )( ( double ) bp->s * factor );
-	bp->d = ( dim_t )( ( double ) bp->d * factor );
-	bp->c = ( dim_t )( ( double ) bp->c * factor );
-	bp->z = ( dim_t )( ( double ) bp->z * factor );
+	bp->s = ( fla_dim_t )( ( double ) bp->s * factor );
+	bp->d = ( fla_dim_t )( ( double ) bp->d * factor );
+	bp->c = ( fla_dim_t )( ( double ) bp->c * factor );
+	bp->z = ( fla_dim_t )( ( double ) bp->z * factor );
 }
 
 
@@ -113,9 +113,9 @@ void FLA_Blocksize_free( fla_blocksize_t* bp )
 }
 
 
-dim_t FLA_Blocksize_extract( FLA_Datatype dt, fla_blocksize_t* bp )
+fla_dim_t FLA_Blocksize_extract( FLA_Datatype dt, fla_blocksize_t* bp )
 {
-	dim_t     b = 0;
+	fla_dim_t     b = 0;
 	FLA_Error e_val;
 
 	// Verify that the given blocksize pointer is valid.
@@ -158,9 +158,9 @@ fla_blocksize_t* FLA_Query_blocksizes( FLA_Dimension dim )
 }
 
 
-dim_t FLA_Query_blocksize( FLA_Datatype dt, FLA_Dimension dim )
+fla_dim_t FLA_Query_blocksize( FLA_Datatype dt, FLA_Dimension dim )
 {
-	dim_t b_val = 0;
+	fla_dim_t b_val = 0;
 
 #ifdef FLA_ENABLE_GOTO_INTERFACES
 
@@ -206,7 +206,7 @@ dim_t FLA_Query_blocksize( FLA_Datatype dt, FLA_Dimension dim )
 	dim_index = dim & FLA_DIM_INDEX_MASK;
 
 	// Index into the array and choose the appropriate blocksize.
-	b_val = ( dim_t ) fla_goto_gemm_blocksize[dt_index][dim_index];
+	b_val = ( fla_dim_t ) fla_goto_gemm_blocksize[dt_index][dim_index];
 
 #else
 
@@ -231,13 +231,13 @@ dim_t FLA_Query_blocksize( FLA_Datatype dt, FLA_Dimension dim )
 }
 
 
-dim_t FLA_Determine_blocksize( FLA_Obj A_unproc, FLA_Quadrant to_dir, fla_blocksize_t* bp )
+fla_dim_t FLA_Determine_blocksize( FLA_Obj A_unproc, FLA_Quadrant to_dir, fla_blocksize_t* bp )
 {
 	FLA_Error    e_val;
 	FLA_Datatype datatype;
-	dim_t        A_unproc_size;
-	dim_t        typed_blocksize;
-	dim_t        b;
+	fla_dim_t        A_unproc_size;
+	fla_dim_t        typed_blocksize;
+	fla_dim_t        b;
 
 	// Determine the size of the remaining portion of the matrix.
 	A_unproc_size = FLA_determine_matrix_size( A_unproc, to_dir );
@@ -264,9 +264,9 @@ dim_t FLA_Determine_blocksize( FLA_Obj A_unproc, FLA_Quadrant to_dir, fla_blocks
 }
 
 
-dim_t FLA_determine_matrix_size( FLA_Obj A_unproc, FLA_Quadrant to_dir )
+fla_dim_t FLA_determine_matrix_size( FLA_Obj A_unproc, FLA_Quadrant to_dir )
 {
-	dim_t r_val = 0;
+	fla_dim_t r_val = 0;
 
 	// Determine the size of the matrix dimension along which we are moving.
 	switch( to_dir )

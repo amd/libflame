@@ -1,17 +1,16 @@
 /* slamchtst.f -- translated by f2c (version 20061008).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+    on Microsoft Windows system, link with libf2c.lib;
+    on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+    or, if you install libf2c.a in a standard place, with -lf2c -lm
+    -- in that order, at the end of the command line, as in
+        cc *.o -lf2c -lm
+    Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+        http://www.netlib.org/f2c/libf2c.zip
 */
 
 #include "FLA_f2c.h"
-
 
 /* Table of constant values */
 
@@ -26,27 +25,24 @@ int MAIN__(void)
     real r__1;
 
     /* Builtin functions */
-    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen),
-            e_wsle(void);
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), e_wsle(void);
 
     /* Local variables */
     real t, rnd, eps, base, emin, prec, emax, rmin, rmax, sfmin;
     extern doublereal slamch_(char *);
 
     /* Fortran I/O blocks */
-    static cilist io___11 = { 0, 6, 0, 0, 0 };
-    static cilist io___12 = { 0, 6, 0, 0, 0 };
-    static cilist io___13 = { 0, 6, 0, 0, 0 };
-    static cilist io___14 = { 0, 6, 0, 0, 0 };
-    static cilist io___15 = { 0, 6, 0, 0, 0 };
-    static cilist io___16 = { 0, 6, 0, 0, 0 };
-    static cilist io___17 = { 0, 6, 0, 0, 0 };
-    static cilist io___18 = { 0, 6, 0, 0, 0 };
-    static cilist io___19 = { 0, 6, 0, 0, 0 };
-    static cilist io___20 = { 0, 6, 0, 0, 0 };
-    static cilist io___21 = { 0, 6, 0, 0, 0 };
-
-
+    static cilist io___11 = {0, 6, 0, 0, 0};
+    static cilist io___12 = {0, 6, 0, 0, 0};
+    static cilist io___13 = {0, 6, 0, 0, 0};
+    static cilist io___14 = {0, 6, 0, 0, 0};
+    static cilist io___15 = {0, 6, 0, 0, 0};
+    static cilist io___16 = {0, 6, 0, 0, 0};
+    static cilist io___17 = {0, 6, 0, 0, 0};
+    static cilist io___18 = {0, 6, 0, 0, 0};
+    static cilist io___19 = {0, 6, 0, 0, 0};
+    static cilist io___20 = {0, 6, 0, 0, 0};
+    static cilist io___21 = {0, 6, 0, 0, 0};
 
     /*  -- LAPACK test routine (version 3.2) -- */
     /*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
@@ -118,8 +114,8 @@ int MAIN__(void)
     return 0;
 } /* MAIN__ */
 
-/* Main program alias */ int test2_ ()
+/* Main program alias */ int test2_()
 {
-    MAIN__ ();
+    MAIN__();
     return 0;
 }

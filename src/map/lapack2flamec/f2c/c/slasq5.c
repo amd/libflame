@@ -1,16 +1,25 @@
-/* ../netlib/slasq5.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slasq5.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLASQ5 computes one dqds transform in ping-pong form. Used by sbdsqr and sstegr. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLASQ5 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasq5. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasq5.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasq5. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasq5.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasq5. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasq5.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -117,12 +126,13 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int slasq5_(integer *i0, integer *n0, real *z__, integer *pp, real *tau, real *sigma, real *dmin__, real *dmin1, real *dmin2, real *dn, real *dnm1, real *dnm2, logical *ieee, real *eps)
+void slasq5_(integer *i0, integer *n0, real *z__, integer *pp, real *tau, real *sigma, real *dmin__,
+             real *dmin1, real *dmin2, real *dn, real *dnm1, real *dnm2, logical *ieee, real *eps)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slasq5 inputs: i0 %d, n0 %d, pp %d",*i0, *n0, *pp);
+    snprintf(buffer, 256, "slasq5 inputs: i0 %d, n0 %d, pp %d", *i0, *n0, *pp);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -151,59 +161,55 @@ int slasq5_(integer *i0, integer *n0, real *z__, integer *pp, real *tau, real *s
     /* Parameter adjustments */
     --z__;
     /* Function Body */
-    if (*n0 - *i0 - 1 <= 0)
+    if(*n0 - *i0 - 1 <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     dthresh = *eps * (*sigma + *tau);
-    if (*tau < dthresh * .5f)
+    if(*tau < dthresh * .5f)
     {
         *tau = 0.f;
     }
-    if (*tau != 0.f)
+    if(*tau != 0.f)
     {
         j4 = (*i0 << 2) + *pp - 3;
         emin = z__[j4 + 4];
         d__ = z__[j4] - *tau;
         *dmin__ = d__;
         *dmin1 = -z__[j4];
-        if (*ieee)
+        if(*ieee)
         {
             /* Code for IEEE arithmetic. */
-            if (*pp == 0)
+            if(*pp == 0)
             {
                 i__1 = *n0 - 3 << 2;
-                for (j4 = *i0 << 2;
-                        j4 <= i__1;
-                        j4 += 4)
+                for(j4 = *i0 << 2; j4 <= i__1; j4 += 4)
                 {
                     z__[j4 - 2] = d__ + z__[j4 - 1];
                     temp = z__[j4 + 1] / z__[j4 - 2];
                     d__ = d__ * temp - *tau;
-                    *dmin__ = fla_min(*dmin__,d__);
+                    *dmin__ = fla_min(*dmin__, d__);
                     z__[j4] = z__[j4 - 1] * temp;
                     /* Computing MIN */
                     r__1 = z__[j4];
-                    emin = fla_min(r__1,emin);
+                    emin = fla_min(r__1, emin);
                     /* L10: */
                 }
             }
             else
             {
                 i__1 = *n0 - 3 << 2;
-                for (j4 = *i0 << 2;
-                        j4 <= i__1;
-                        j4 += 4)
+                for(j4 = *i0 << 2; j4 <= i__1; j4 += 4)
                 {
                     z__[j4 - 3] = d__ + z__[j4];
                     temp = z__[j4 + 2] / z__[j4 - 3];
                     d__ = d__ * temp - *tau;
-                    *dmin__ = fla_min(*dmin__,d__);
+                    *dmin__ = fla_min(*dmin__, d__);
                     z__[j4 - 1] = z__[j4] * temp;
                     /* Computing MIN */
                     r__1 = z__[j4 - 1];
-                    emin = fla_min(r__1,emin);
+                    emin = fla_min(r__1, emin);
                     /* L20: */
                 }
             }
@@ -215,67 +221,63 @@ int slasq5_(integer *i0, integer *n0, real *z__, integer *pp, real *tau, real *s
             z__[j4 - 2] = *dnm2 + z__[j4p2];
             z__[j4] = z__[j4p2 + 2] * (z__[j4p2] / z__[j4 - 2]);
             *dnm1 = z__[j4p2 + 2] * (*dnm2 / z__[j4 - 2]) - *tau;
-            *dmin__ = fla_min(*dmin__,*dnm1);
+            *dmin__ = fla_min(*dmin__, *dnm1);
             *dmin1 = *dmin__;
             j4 += 4;
             j4p2 = j4 + (*pp << 1) - 1;
             z__[j4 - 2] = *dnm1 + z__[j4p2];
             z__[j4] = z__[j4p2 + 2] * (z__[j4p2] / z__[j4 - 2]);
             *dn = z__[j4p2 + 2] * (*dnm1 / z__[j4 - 2]) - *tau;
-            *dmin__ = fla_min(*dmin__,*dn);
+            *dmin__ = fla_min(*dmin__, *dn);
         }
         else
         {
             /* Code for non IEEE arithmetic. */
-            if (*pp == 0)
+            if(*pp == 0)
             {
                 i__1 = *n0 - 3 << 2;
-                for (j4 = *i0 << 2;
-                        j4 <= i__1;
-                        j4 += 4)
+                for(j4 = *i0 << 2; j4 <= i__1; j4 += 4)
                 {
                     z__[j4 - 2] = d__ + z__[j4 - 1];
-                    if (d__ < 0.f)
+                    if(d__ < 0.f)
                     {
                         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                        return 0;
+                        return;
                     }
                     else
                     {
                         z__[j4] = z__[j4 + 1] * (z__[j4 - 1] / z__[j4 - 2]);
                         d__ = z__[j4 + 1] * (d__ / z__[j4 - 2]) - *tau;
                     }
-                    *dmin__ = fla_min(*dmin__,d__);
+                    *dmin__ = fla_min(*dmin__, d__);
                     /* Computing MIN */
                     r__1 = emin;
                     r__2 = z__[j4]; // , expr subst
-                    emin = fla_min(r__1,r__2);
+                    emin = fla_min(r__1, r__2);
                     /* L30: */
                 }
             }
             else
             {
                 i__1 = *n0 - 3 << 2;
-                for (j4 = *i0 << 2;
-                        j4 <= i__1;
-                        j4 += 4)
+                for(j4 = *i0 << 2; j4 <= i__1; j4 += 4)
                 {
                     z__[j4 - 3] = d__ + z__[j4];
-                    if (d__ < 0.f)
+                    if(d__ < 0.f)
                     {
                         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                        return 0;
+                        return;
                     }
                     else
                     {
                         z__[j4 - 1] = z__[j4 + 2] * (z__[j4] / z__[j4 - 3]);
                         d__ = z__[j4 + 2] * (d__ / z__[j4 - 3]) - *tau;
                     }
-                    *dmin__ = fla_min(*dmin__,d__);
+                    *dmin__ = fla_min(*dmin__, d__);
                     /* Computing MIN */
                     r__1 = emin;
                     r__2 = z__[j4 - 1]; // , expr subst
-                    emin = fla_min(r__1,r__2);
+                    emin = fla_min(r__1, r__2);
                     /* L40: */
                 }
             }
@@ -285,32 +287,32 @@ int slasq5_(integer *i0, integer *n0, real *z__, integer *pp, real *tau, real *s
             j4 = (*n0 - 2 << 2) - *pp;
             j4p2 = j4 + (*pp << 1) - 1;
             z__[j4 - 2] = *dnm2 + z__[j4p2];
-            if (*dnm2 < 0.f)
+            if(*dnm2 < 0.f)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             else
             {
                 z__[j4] = z__[j4p2 + 2] * (z__[j4p2] / z__[j4 - 2]);
                 *dnm1 = z__[j4p2 + 2] * (*dnm2 / z__[j4 - 2]) - *tau;
             }
-            *dmin__ = fla_min(*dmin__,*dnm1);
+            *dmin__ = fla_min(*dmin__, *dnm1);
             *dmin1 = *dmin__;
             j4 += 4;
             j4p2 = j4 + (*pp << 1) - 1;
             z__[j4 - 2] = *dnm1 + z__[j4p2];
-            if (*dnm1 < 0.f)
+            if(*dnm1 < 0.f)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             else
             {
                 z__[j4] = z__[j4p2 + 2] * (z__[j4p2] / z__[j4 - 2]);
                 *dn = z__[j4p2 + 2] * (*dnm1 / z__[j4 - 2]) - *tau;
             }
-            *dmin__ = fla_min(*dmin__,*dn);
+            *dmin__ = fla_min(*dmin__, *dn);
         }
     }
     else
@@ -321,50 +323,46 @@ int slasq5_(integer *i0, integer *n0, real *z__, integer *pp, real *tau, real *s
         d__ = z__[j4] - *tau;
         *dmin__ = d__;
         *dmin1 = -z__[j4];
-        if (*ieee)
+        if(*ieee)
         {
             /* Code for IEEE arithmetic. */
-            if (*pp == 0)
+            if(*pp == 0)
             {
                 i__1 = *n0 - 3 << 2;
-                for (j4 = *i0 << 2;
-                        j4 <= i__1;
-                        j4 += 4)
+                for(j4 = *i0 << 2; j4 <= i__1; j4 += 4)
                 {
                     z__[j4 - 2] = d__ + z__[j4 - 1];
                     temp = z__[j4 + 1] / z__[j4 - 2];
                     d__ = d__ * temp - *tau;
-                    if (d__ < dthresh)
+                    if(d__ < dthresh)
                     {
                         d__ = 0.f;
                     }
-                    *dmin__ = fla_min(*dmin__,d__);
+                    *dmin__ = fla_min(*dmin__, d__);
                     z__[j4] = z__[j4 - 1] * temp;
                     /* Computing MIN */
                     r__1 = z__[j4];
-                    emin = fla_min(r__1,emin);
+                    emin = fla_min(r__1, emin);
                     /* L50: */
                 }
             }
             else
             {
                 i__1 = *n0 - 3 << 2;
-                for (j4 = *i0 << 2;
-                        j4 <= i__1;
-                        j4 += 4)
+                for(j4 = *i0 << 2; j4 <= i__1; j4 += 4)
                 {
                     z__[j4 - 3] = d__ + z__[j4];
                     temp = z__[j4 + 2] / z__[j4 - 3];
                     d__ = d__ * temp - *tau;
-                    if (d__ < dthresh)
+                    if(d__ < dthresh)
                     {
                         d__ = 0.f;
                     }
-                    *dmin__ = fla_min(*dmin__,d__);
+                    *dmin__ = fla_min(*dmin__, d__);
                     z__[j4 - 1] = z__[j4] * temp;
                     /* Computing MIN */
                     r__1 = z__[j4 - 1];
-                    emin = fla_min(r__1,emin);
+                    emin = fla_min(r__1, emin);
                     /* L60: */
                 }
             }
@@ -376,75 +374,71 @@ int slasq5_(integer *i0, integer *n0, real *z__, integer *pp, real *tau, real *s
             z__[j4 - 2] = *dnm2 + z__[j4p2];
             z__[j4] = z__[j4p2 + 2] * (z__[j4p2] / z__[j4 - 2]);
             *dnm1 = z__[j4p2 + 2] * (*dnm2 / z__[j4 - 2]) - *tau;
-            *dmin__ = fla_min(*dmin__,*dnm1);
+            *dmin__ = fla_min(*dmin__, *dnm1);
             *dmin1 = *dmin__;
             j4 += 4;
             j4p2 = j4 + (*pp << 1) - 1;
             z__[j4 - 2] = *dnm1 + z__[j4p2];
             z__[j4] = z__[j4p2 + 2] * (z__[j4p2] / z__[j4 - 2]);
             *dn = z__[j4p2 + 2] * (*dnm1 / z__[j4 - 2]) - *tau;
-            *dmin__ = fla_min(*dmin__,*dn);
+            *dmin__ = fla_min(*dmin__, *dn);
         }
         else
         {
             /* Code for non IEEE arithmetic. */
-            if (*pp == 0)
+            if(*pp == 0)
             {
                 i__1 = *n0 - 3 << 2;
-                for (j4 = *i0 << 2;
-                        j4 <= i__1;
-                        j4 += 4)
+                for(j4 = *i0 << 2; j4 <= i__1; j4 += 4)
                 {
                     z__[j4 - 2] = d__ + z__[j4 - 1];
-                    if (d__ < 0.f)
+                    if(d__ < 0.f)
                     {
                         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                        return 0;
+                        return;
                     }
                     else
                     {
                         z__[j4] = z__[j4 + 1] * (z__[j4 - 1] / z__[j4 - 2]);
                         d__ = z__[j4 + 1] * (d__ / z__[j4 - 2]) - *tau;
                     }
-                    if (d__ < dthresh)
+                    if(d__ < dthresh)
                     {
                         d__ = 0.f;
                     }
-                    *dmin__ = fla_min(*dmin__,d__);
+                    *dmin__ = fla_min(*dmin__, d__);
                     /* Computing MIN */
                     r__1 = emin;
                     r__2 = z__[j4]; // , expr subst
-                    emin = fla_min(r__1,r__2);
+                    emin = fla_min(r__1, r__2);
                     /* L70: */
                 }
             }
             else
             {
                 i__1 = *n0 - 3 << 2;
-                for (j4 = *i0 << 2;
-                        j4 <= i__1;
-                        j4 += 4)
+                for(j4 = *i0 << 2; j4 <= i__1; j4 += 4)
                 {
                     z__[j4 - 3] = d__ + z__[j4];
-                    if (d__ < 0.f)
+                    if(d__ < 0.f)
                     {
                         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                        return 0;
+                        return;
                     }
                     else
                     {
                         z__[j4 - 1] = z__[j4 + 2] * (z__[j4] / z__[j4 - 3]);
                         d__ = z__[j4 + 2] * (d__ / z__[j4 - 3]) - *tau;
                     }
-                    if (d__ < dthresh)
+                    if(d__ < dthresh)
                     {
                         d__ = 0.f;
                     }
-                    *dmin__ = fla_min(*dmin__,d__);
+                    *dmin__ = fla_min(*dmin__, d__);
                     /* Computing MIN */
                     r__1 = emin;
                     r__2 = z__[j4 - 1]; // , expr subst
-                    emin = fla_min(r__1,r__2);
+                    emin = fla_min(r__1, r__2);
                     /* L80: */
                 }
             }
@@ -454,38 +448,38 @@ int slasq5_(integer *i0, integer *n0, real *z__, integer *pp, real *tau, real *s
             j4 = (*n0 - 2 << 2) - *pp;
             j4p2 = j4 + (*pp << 1) - 1;
             z__[j4 - 2] = *dnm2 + z__[j4p2];
-            if (*dnm2 < 0.f)
+            if(*dnm2 < 0.f)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             else
             {
                 z__[j4] = z__[j4p2 + 2] * (z__[j4p2] / z__[j4 - 2]);
                 *dnm1 = z__[j4p2 + 2] * (*dnm2 / z__[j4 - 2]) - *tau;
             }
-            *dmin__ = fla_min(*dmin__,*dnm1);
+            *dmin__ = fla_min(*dmin__, *dnm1);
             *dmin1 = *dmin__;
             j4 += 4;
             j4p2 = j4 + (*pp << 1) - 1;
             z__[j4 - 2] = *dnm1 + z__[j4p2];
-            if (*dnm1 < 0.f)
+            if(*dnm1 < 0.f)
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             else
             {
                 z__[j4] = z__[j4p2 + 2] * (z__[j4p2] / z__[j4 - 2]);
                 *dn = z__[j4p2 + 2] * (*dnm1 / z__[j4 - 2]) - *tau;
             }
-            *dmin__ = fla_min(*dmin__,*dn);
+            *dmin__ = fla_min(*dmin__, *dn);
         }
     }
     z__[j4 + 2] = *dn;
     z__[(*n0 << 2) - *pp] = emin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLASQ5 */
 }
 /* slasq5_ */

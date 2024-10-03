@@ -10,15 +10,15 @@ LINKER         := $(CC)
 RM_RF          := rm -rf
 OMP_LIB        := -fopenmp
 CPPFLAGS       :=
-CFLAGS         := -std=c11 -D_GNU_SOURCE -O2 -Wall -Wno-comment ${OMP_LIB}
+CFLAGS         := -std=c11 -D_GNU_SOURCE -O2 -Wall -Wno-unused-function -Wno-comment ${OMP_LIB}
 LDFLAGS        := -lstdc++ -lm -lpthread $(OMP_LIB)
 
 #
 # --- LIBFLAME \ LAPACK library ------------------------------------------------
 #
-LIB_PATH          := ../../lib/x86_64-unknown-linux-gnu/
+LIB_PATH          := ../../lib
 LIBFLAME          := $(LIB_PATH)/libflame.a
-LAPACK_INC_PATH   := ../../include/x86_64-unknown-linux-gnu/
+LAPACK_INC_PATH   := ../../include
 
 #
 # --- BLAS library -------------------------------------------------------------

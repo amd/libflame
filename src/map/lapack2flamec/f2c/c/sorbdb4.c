@@ -1,5 +1,8 @@
-/* ../netlib/sorbdb4.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/sorbdb4.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static real c_b5 = -1.f;
@@ -9,11 +12,17 @@ static real c_b5 = -1.f;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SORBDB4 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorbdb4 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorbdb4
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorbdb4 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorbdb4
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorbdb4 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorbdb4
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -202,12 +211,15 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sorbdb4_(integer *m, integer *p, integer *q, real *x11, integer *ldx11, real *x21, integer *ldx21, real *theta, real *phi, real *taup1, real *taup2, real *tauq1, real *phantom, real *work, integer *lwork, integer *info)
+void sorbdb4_(integer *m, integer *p, integer *q, real *x11, integer *ldx11, real *x21,
+              integer *ldx21, real *theta, real *phi, real *taup1, real *taup2, real *tauq1,
+              real *phantom, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"sorbdb4 inputs: m %d, p %d, q %d, ldx11 %d, ldx21 %d",*m, *p, *q, *ldx11, *ldx21);
+    snprintf(buffer, 256, "sorbdb4 inputs: m %d, p %d, q %d, ldx11 %d, ldx21 %d", *m, *p, *q,
+             *ldx11, *ldx21);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -222,15 +234,22 @@ int sorbdb4_(integer *m, integer *p, integer *q, real *x11, integer *ldx11, real
     real s;
     integer childinfo;
     extern /* Subroutine */
-    int srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+        void
+        srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     extern real snrm2_(integer *, real *, integer *);
     integer ilarf, llarf;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *), slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        sscal_(integer *, real *, real *, integer *),
+        slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
     integer iorbdb5, lorbdb5;
     extern /* Subroutine */
-    int sorbdb5_(integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *), slarfgp_(integer *, real *, real *, integer *, real *);
+        void
+        sorbdb5_(integer *, integer *, integer *, real *, integer *, real *, integer *, real *,
+                 integer *, real *, integer *, real *, integer *, integer *),
+        slarfgp_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -269,19 +288,19 @@ int sorbdb4_(integer *m, integer *p, integer *q, real *x11, integer *ldx11, real
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*p < *m - *q || *m - *p < *m - *q)
+    else if(*p < *m - *q || *m - *p < *m - *q)
     {
         *info = -2;
     }
-    else if (*q < *m - *q || *q > *m)
+    else if(*q < *m - *q || *q > *m)
     {
         *info = -3;
     }
-    else if (*ldx11 < fla_max(1,*p))
+    else if(*ldx11 < fla_max(1, *p))
     {
         *info = -5;
     }
@@ -290,67 +309,64 @@ int sorbdb4_(integer *m, integer *p, integer *q, real *x11, integer *ldx11, real
         /* Computing MAX */
         i__1 = 1;
         i__2 = *m - *p; // , expr subst
-        if (*ldx21 < fla_max(i__1,i__2))
+        if(*ldx21 < fla_max(i__1, i__2))
         {
             *info = -7;
         }
     }
     /* Compute workspace */
-    if (*info == 0)
+    if(*info == 0)
     {
         ilarf = 2;
         /* Computing MAX */
         i__1 = *q - 1, i__2 = *p - 1;
-        i__1 = fla_max(i__1,i__2);
+        i__1 = fla_max(i__1, i__2);
         i__2 = *m - *p - 1; // ; expr subst
-        llarf = fla_max(i__1,i__2);
+        llarf = fla_max(i__1, i__2);
         iorbdb5 = 2;
         lorbdb5 = *q;
         lworkopt = ilarf + llarf - 1;
         /* Computing MAX */
         i__1 = lworkopt;
         i__2 = iorbdb5 + lorbdb5 - 1; // , expr subst
-        lworkopt = fla_max(i__1,i__2);
+        lworkopt = fla_max(i__1, i__2);
         lworkmin = lworkopt;
-        work[1] = (real) lworkopt;
-        if (*lwork < lworkmin && ! lquery)
+        work[1] = (real)lworkopt;
+        if(*lwork < lworkmin && !lquery)
         {
             *info = -14;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SORBDB4", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Reduce columns 1, ..., M-Q of X11 and X21 */
     i__1 = *m - *q;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if (i__ == 1)
+        if(i__ == 1)
         {
             i__2 = *m;
-            for (j = 1;
-                    j <= i__2;
-                    ++j)
+            for(j = 1; j <= i__2; ++j)
             {
                 phantom[j] = 0.f;
             }
             i__2 = *m - *p;
-            sorbdb5_(p, &i__2, q, &phantom[1], &c__1, &phantom[*p + 1], &c__1, &x11[x11_offset], ldx11, &x21[x21_offset], ldx21, &work[ iorbdb5], &lorbdb5, &childinfo);
+            sorbdb5_(p, &i__2, q, &phantom[1], &c__1, &phantom[*p + 1], &c__1, &x11[x11_offset],
+                     ldx11, &x21[x21_offset], ldx21, &work[iorbdb5], &lorbdb5, &childinfo);
             sscal_(p, &c_b5, &phantom[1], &c__1);
             slarfgp_(p, &phantom[1], &phantom[2], &c__1, &taup1[1]);
             i__2 = *m - *p;
-            slarfgp_(&i__2, &phantom[*p + 1], &phantom[*p + 2], &c__1, &taup2[ 1]);
+            slarfgp_(&i__2, &phantom[*p + 1], &phantom[*p + 2], &c__1, &taup2[1]);
             theta[i__] = atan2(phantom[1], phantom[*p + 1]);
             c__ = cos(theta[i__]);
             s = sin(theta[i__]);
@@ -358,46 +374,57 @@ int sorbdb4_(integer *m, integer *p, integer *q, real *x11, integer *ldx11, real
             phantom[*p + 1] = 1.f;
             slarf_("L", p, q, &phantom[1], &c__1, &taup1[1], &x11[x11_offset], ldx11, &work[ilarf]);
             i__2 = *m - *p;
-            slarf_("L", &i__2, q, &phantom[*p + 1], &c__1, &taup2[1], &x21[ x21_offset], ldx21, &work[ilarf]);
+            slarf_("L", &i__2, q, &phantom[*p + 1], &c__1, &taup2[1], &x21[x21_offset], ldx21,
+                   &work[ilarf]);
         }
         else
         {
             i__2 = *p - i__ + 1;
             i__3 = *m - *p - i__ + 1;
             i__4 = *q - i__ + 1;
-            sorbdb5_(&i__2, &i__3, &i__4, &x11[i__ + (i__ - 1) * x11_dim1], & c__1, &x21[i__ + (i__ - 1) * x21_dim1], &c__1, &x11[i__ + i__ * x11_dim1], ldx11, &x21[i__ + i__ * x21_dim1], ldx21, &work[iorbdb5], &lorbdb5, &childinfo);
+            sorbdb5_(&i__2, &i__3, &i__4, &x11[i__ + (i__ - 1) * x11_dim1], &c__1,
+                     &x21[i__ + (i__ - 1) * x21_dim1], &c__1, &x11[i__ + i__ * x11_dim1], ldx11,
+                     &x21[i__ + i__ * x21_dim1], ldx21, &work[iorbdb5], &lorbdb5, &childinfo);
             i__2 = *p - i__ + 1;
             sscal_(&i__2, &c_b5, &x11[i__ + (i__ - 1) * x11_dim1], &c__1);
             i__2 = *p - i__ + 1;
-            slarfgp_(&i__2, &x11[i__ + (i__ - 1) * x11_dim1], &x11[i__ + 1 + ( i__ - 1) * x11_dim1], &c__1, &taup1[i__]);
+            slarfgp_(&i__2, &x11[i__ + (i__ - 1) * x11_dim1], &x11[i__ + 1 + (i__ - 1) * x11_dim1],
+                     &c__1, &taup1[i__]);
             i__2 = *m - *p - i__ + 1;
-            slarfgp_(&i__2, &x21[i__ + (i__ - 1) * x21_dim1], &x21[i__ + 1 + ( i__ - 1) * x21_dim1], &c__1, &taup2[i__]);
-            theta[i__] = atan2(x11[i__ + (i__ - 1) * x11_dim1], x21[i__ + ( i__ - 1) * x21_dim1]);
+            slarfgp_(&i__2, &x21[i__ + (i__ - 1) * x21_dim1], &x21[i__ + 1 + (i__ - 1) * x21_dim1],
+                     &c__1, &taup2[i__]);
+            theta[i__] = atan2(x11[i__ + (i__ - 1) * x11_dim1], x21[i__ + (i__ - 1) * x21_dim1]);
             c__ = cos(theta[i__]);
             s = sin(theta[i__]);
             x11[i__ + (i__ - 1) * x11_dim1] = 1.f;
             x21[i__ + (i__ - 1) * x21_dim1] = 1.f;
             i__2 = *p - i__ + 1;
             i__3 = *q - i__ + 1;
-            slarf_("L", &i__2, &i__3, &x11[i__ + (i__ - 1) * x11_dim1], &c__1, &taup1[i__], &x11[i__ + i__ * x11_dim1], ldx11, &work[ ilarf]);
+            slarf_("L", &i__2, &i__3, &x11[i__ + (i__ - 1) * x11_dim1], &c__1, &taup1[i__],
+                   &x11[i__ + i__ * x11_dim1], ldx11, &work[ilarf]);
             i__2 = *m - *p - i__ + 1;
             i__3 = *q - i__ + 1;
-            slarf_("L", &i__2, &i__3, &x21[i__ + (i__ - 1) * x21_dim1], &c__1, &taup2[i__], &x21[i__ + i__ * x21_dim1], ldx21, &work[ ilarf]);
+            slarf_("L", &i__2, &i__3, &x21[i__ + (i__ - 1) * x21_dim1], &c__1, &taup2[i__],
+                   &x21[i__ + i__ * x21_dim1], ldx21, &work[ilarf]);
         }
         i__2 = *q - i__ + 1;
         r__1 = -c__;
-        srot_(&i__2, &x11[i__ + i__ * x11_dim1], ldx11, &x21[i__ + i__ * x21_dim1], ldx21, &s, &r__1);
+        srot_(&i__2, &x11[i__ + i__ * x11_dim1], ldx11, &x21[i__ + i__ * x21_dim1], ldx21, &s,
+              &r__1);
         i__2 = *q - i__ + 1;
-        slarfgp_(&i__2, &x21[i__ + i__ * x21_dim1], &x21[i__ + (i__ + 1) * x21_dim1], ldx21, &tauq1[i__]);
+        slarfgp_(&i__2, &x21[i__ + i__ * x21_dim1], &x21[i__ + (i__ + 1) * x21_dim1], ldx21,
+                 &tauq1[i__]);
         c__ = x21[i__ + i__ * x21_dim1];
         x21[i__ + i__ * x21_dim1] = 1.f;
         i__2 = *p - i__;
         i__3 = *q - i__ + 1;
-        slarf_("R", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], ldx21, &tauq1[ i__], &x11[i__ + 1 + i__ * x11_dim1], ldx11, &work[ilarf]);
+        slarf_("R", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], ldx21, &tauq1[i__],
+               &x11[i__ + 1 + i__ * x11_dim1], ldx11, &work[ilarf]);
         i__2 = *m - *p - i__;
         i__3 = *q - i__ + 1;
-        slarf_("R", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], ldx21, &tauq1[ i__], &x21[i__ + 1 + i__ * x21_dim1], ldx21, &work[ilarf]);
-        if (i__ < *m - *q)
+        slarf_("R", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], ldx21, &tauq1[i__],
+               &x21[i__ + 1 + i__ * x21_dim1], ldx21, &work[ilarf]);
+        if(i__ < *m - *q)
         {
             i__2 = *p - i__;
             /* Computing 2nd power */
@@ -411,36 +438,36 @@ int sorbdb4_(integer *m, integer *p, integer *q, real *x11, integer *ldx11, real
     }
     /* Reduce the bottom-right portion of X11 to [ I 0 ] */
     i__1 = *p;
-    for (i__ = *m - *q + 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = *m - *q + 1; i__ <= i__1; ++i__)
     {
         i__2 = *q - i__ + 1;
-        slarfgp_(&i__2, &x11[i__ + i__ * x11_dim1], &x11[i__ + (i__ + 1) * x11_dim1], ldx11, &tauq1[i__]);
+        slarfgp_(&i__2, &x11[i__ + i__ * x11_dim1], &x11[i__ + (i__ + 1) * x11_dim1], ldx11,
+                 &tauq1[i__]);
         x11[i__ + i__ * x11_dim1] = 1.f;
         i__2 = *p - i__;
         i__3 = *q - i__ + 1;
-        slarf_("R", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], ldx11, &tauq1[ i__], &x11[i__ + 1 + i__ * x11_dim1], ldx11, &work[ilarf]);
+        slarf_("R", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], ldx11, &tauq1[i__],
+               &x11[i__ + 1 + i__ * x11_dim1], ldx11, &work[ilarf]);
         i__2 = *q - *p;
         i__3 = *q - i__ + 1;
-        slarf_("R", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], ldx11, &tauq1[ i__], &x21[*m - *q + 1 + i__ * x21_dim1], ldx21, &work[ilarf]);
+        slarf_("R", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], ldx11, &tauq1[i__],
+               &x21[*m - *q + 1 + i__ * x21_dim1], ldx21, &work[ilarf]);
     }
     /* Reduce the bottom-right portion of X21 to [ 0 I ] */
     i__1 = *q;
-    for (i__ = *p + 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = *p + 1; i__ <= i__1; ++i__)
     {
         i__2 = *q - i__ + 1;
-        slarfgp_(&i__2, &x21[*m - *q + i__ - *p + i__ * x21_dim1], &x21[*m - * q + i__ - *p + (i__ + 1) * x21_dim1], ldx21, &tauq1[i__]);
+        slarfgp_(&i__2, &x21[*m - *q + i__ - *p + i__ * x21_dim1],
+                 &x21[*m - *q + i__ - *p + (i__ + 1) * x21_dim1], ldx21, &tauq1[i__]);
         x21[*m - *q + i__ - *p + i__ * x21_dim1] = 1.f;
         i__2 = *q - i__;
         i__3 = *q - i__ + 1;
-        slarf_("R", &i__2, &i__3, &x21[*m - *q + i__ - *p + i__ * x21_dim1], ldx21, &tauq1[i__], &x21[*m - *q + i__ - *p + 1 + i__ * x21_dim1], ldx21, &work[ilarf]);
+        slarf_("R", &i__2, &i__3, &x21[*m - *q + i__ - *p + i__ * x21_dim1], ldx21, &tauq1[i__],
+               &x21[*m - *q + i__ - *p + 1 + i__ * x21_dim1], ldx21, &work[ilarf]);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SORBDB4 */
 }
 /* sorbdb4_ */
-

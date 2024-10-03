@@ -1,5 +1,8 @@
-/* stgsja.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* stgsja.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b13 = 0.f;
 static real c_b14 = 1.f;
@@ -11,11 +14,17 @@ static real c_b43 = -1.f;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download STGSJA + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stgsja. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stgsja.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stgsja. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stgsja.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stgsja. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stgsja.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -48,13 +57,13 @@ static real c_b43 = -1.f;
 /* > */
 /* > N-K-L K L */
 /* > A = K ( 0 A12 A13 ) if M-K-L >= 0;
-*/
+ */
 /* > L ( 0 0 A23 ) */
 /* > M-K-L ( 0 0 0 ) */
 /* > */
 /* > N-K-L K L */
 /* > A = K ( 0 A12 A13 ) if M-K-L < 0;
-*/
+ */
 /* > M-K ( 0 0 A23 ) */
 /* > */
 /* > N-K-L K L */
@@ -133,10 +142,10 @@ A23 is L-by-L upper triangular if M-K-L >= 0, */
 /* > JOBU is CHARACTER*1 */
 /* > = 'U': U must contain an orthogonal matrix U1 on entry, and */
 /* > the product U1*U is returned;
-*/
+ */
 /* > = 'I': U is initialized to the unit matrix, and the */
 /* > orthogonal matrix U is returned;
-*/
+ */
 /* > = 'N': U is not computed. */
 /* > \endverbatim */
 /* > */
@@ -145,10 +154,10 @@ A23 is L-by-L upper triangular if M-K-L >= 0, */
 /* > JOBV is CHARACTER*1 */
 /* > = 'V': V must contain an orthogonal matrix V1 on entry, and */
 /* > the product V1*V is returned;
-*/
+ */
 /* > = 'I': V is initialized to the unit matrix, and the */
 /* > orthogonal matrix V is returned;
-*/
+ */
 /* > = 'N': V is not computed. */
 /* > \endverbatim */
 /* > */
@@ -157,10 +166,10 @@ A23 is L-by-L upper triangular if M-K-L >= 0, */
 /* > JOBQ is CHARACTER*1 */
 /* > = 'Q': Q must contain an orthogonal matrix Q1 on entry, and */
 /* > the product Q1*Q is returned;
-*/
+ */
 /* > = 'I': Q is initialized to the unit matrix, and the */
 /* > orthogonal matrix Q is returned;
-*/
+ */
 /* > = 'N': Q is not computed. */
 /* > \endverbatim */
 /* > */
@@ -252,7 +261,7 @@ A23 is L-by-L upper triangular if M-K-L >= 0, */
 /* > */
 /* > On exit, ALPHA and BETA contain the generalized singular */
 /* > value pairs of A and B;
-*/
+ */
 /* > ALPHA(1:K) = 1, */
 /* > BETA(1:K) = 0, */
 /* > and if M-K-L >= 0, */
@@ -273,7 +282,7 @@ A23 is L-by-L upper triangular if M-K-L >= 0, */
 /* > the orthogonal matrix returned by SGGSVP). */
 /* > On exit, */
 /* > if JOBU = 'I', U contains the orthogonal matrix U;
-*/
+ */
 /* > if JOBU = 'U', U contains the product U1*U. */
 /* > If JOBU = 'N', U is not referenced. */
 /* > \endverbatim */
@@ -293,7 +302,7 @@ LDU >= 1 otherwise. */
 /* > the orthogonal matrix returned by SGGSVP). */
 /* > On exit, */
 /* > if JOBV = 'I', V contains the orthogonal matrix V;
-*/
+ */
 /* > if JOBV = 'V', V contains the product V1*V. */
 /* > If JOBV = 'N', V is not referenced. */
 /* > \endverbatim */
@@ -313,7 +322,7 @@ LDV >= 1 otherwise. */
 /* > the orthogonal matrix returned by SGGSVP). */
 /* > On exit, */
 /* > if JOBQ = 'I', Q contains the orthogonal matrix Q;
-*/
+ */
 /* > if JOBQ = 'Q', Q contains the product Q1*Q. */
 /* > If JOBQ = 'N', Q is not referenced. */
 /* > \endverbatim */
@@ -383,30 +392,49 @@ V1**T *B13*Q1 = S1*R1, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int stgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer *n, integer *k, integer *l, real *a, integer *lda, real *b, integer *ldb, real *tola, real *tolb, real *alpha, real * beta, real *u, integer *ldu, real *v, integer *ldv, real *q, integer * ldq, real *work, integer *ncycle, integer *info)
+void stgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer *n, integer *k,
+             integer *l, real *a, integer *lda, real *b, integer *ldb, real *tola, real *tolb,
+             real *alpha, real *beta, real *u, integer *ldu, real *v, integer *ldv, real *q,
+             integer *ldq, real *work, integer *ncycle, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("stgsja inputs: jobu %c, jobv %c, jobq %c, m %" FLA_IS ", p %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldu %" FLA_IS ", ldv %" FLA_IS ", ldq %" FLA_IS ", ncycle %" FLA_IS "",*jobu, *jobv, *jobq, *m, *p, *n, *k, *l, *lda, *ldb, *ldu, *ldv, *ldq, *ncycle);
+    AOCL_DTL_SNPRINTF("stgsja inputs: jobu %c, jobv %c, jobq %c, m %" FLA_IS ", p %" FLA_IS
+                      ", n %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS
+                      ", ldu %" FLA_IS ", ldv %" FLA_IS ", ldq %" FLA_IS ", ncycle %" FLA_IS "",
+                      *jobu, *jobv, *jobq, *m, *p, *n, *k, *l, *lda, *ldb, *ldu, *ldv, *ldq,
+                      *ncycle);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1, v_offset, i__1, i__2, i__3, i__4;
+    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1,
+        v_offset, i__1, i__2, i__3, i__4;
     real r__1;
     /* Local variables */
     integer i__, j;
     real a1, a2, a3, b1, b2, b3, csq, csu, csv, snq, rwk, snu, snv;
     extern /* Subroutine */
-    int srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+        void
+        srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     real gamma;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *);
     logical initq, initu, initv, wantq, upper;
     real error, ssmin;
     logical wantu, wantv;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *), slags2_(logical *, real *, real *, real *, real *, real *, real *, real *, real *, real *, real *, real *, real *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *),
+        slags2_(logical *, real *, real *, real *, real *, real *, real *, real *, real *, real *,
+                real *, real *, real *);
     integer kcycle;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slapll_( integer *, real *, integer *, real *, integer *, real *), slartg_( real *, real *, real *, real *, real *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
+        slapll_(integer *, real *, integer *, real *, integer *, real *),
+        slartg_(real *, real *, real *, real *, real *),
+        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     real hugenum;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -449,110 +477,104 @@ int stgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer 
     --work;
     /* Function Body */
     hugenum = 3.40282347e38f;
-    initu = lsame_(jobu, "I");
-    wantu = initu || lsame_(jobu, "U");
-    initv = lsame_(jobv, "I");
-    wantv = initv || lsame_(jobv, "V");
-    initq = lsame_(jobq, "I");
-    wantq = initq || lsame_(jobq, "Q");
+    initu = lsame_(jobu, "I", 1, 1);
+    wantu = initu || lsame_(jobu, "U", 1, 1);
+    initv = lsame_(jobv, "I", 1, 1);
+    wantv = initv || lsame_(jobv, "V", 1, 1);
+    initq = lsame_(jobq, "I", 1, 1);
+    wantq = initq || lsame_(jobq, "Q", 1, 1);
     *info = 0;
-    if (! (initu || wantu || lsame_(jobu, "N")))
+    if(!(initu || wantu || lsame_(jobu, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (initv || wantv || lsame_(jobv, "N")))
+    else if(!(initv || wantv || lsame_(jobv, "N", 1, 1)))
     {
         *info = -2;
     }
-    else if (! (initq || wantq || lsame_(jobq, "N")))
+    else if(!(initq || wantq || lsame_(jobq, "N", 1, 1)))
     {
         *info = -3;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -4;
     }
-    else if (*p < 0)
+    else if(*p < 0)
     {
         *info = -5;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -6;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -10;
     }
-    else if (*ldb < fla_max(1,*p))
+    else if(*ldb < fla_max(1, *p))
     {
         *info = -12;
     }
-    else if (*ldu < 1 || wantu && *ldu < *m)
+    else if(*ldu < 1 || wantu && *ldu < *m)
     {
         *info = -18;
     }
-    else if (*ldv < 1 || wantv && *ldv < *p)
+    else if(*ldv < 1 || wantv && *ldv < *p)
     {
         *info = -20;
     }
-    else if (*ldq < 1 || wantq && *ldq < *n)
+    else if(*ldq < 1 || wantq && *ldq < *n)
     {
         *info = -22;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("STGSJA", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* Initialize U, V and Q, if necessary */
-    if (initu)
+    if(initu)
     {
         slaset_("Full", m, m, &c_b13, &c_b14, &u[u_offset], ldu);
     }
-    if (initv)
+    if(initv)
     {
         slaset_("Full", p, p, &c_b13, &c_b14, &v[v_offset], ldv);
     }
-    if (initq)
+    if(initq)
     {
         slaset_("Full", n, n, &c_b13, &c_b14, &q[q_offset], ldq);
     }
     /* Loop until convergence */
     upper = FALSE_;
-    for (kcycle = 1;
-            kcycle <= 40;
-            ++kcycle)
+    for(kcycle = 1; kcycle <= 40; ++kcycle)
     {
-        upper = ! upper;
+        upper = !upper;
         i__1 = *l - 1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = *l;
-            for (j = i__ + 1;
-                    j <= i__2;
-                    ++j)
+            for(j = i__ + 1; j <= i__2; ++j)
             {
                 a1 = 0.f;
                 a2 = 0.f;
                 a3 = 0.f;
-                if (*k + i__ <= *m)
+                if(*k + i__ <= *m)
                 {
                     a1 = a[*k + i__ + (*n - *l + i__) * a_dim1];
                 }
-                if (*k + j <= *m)
+                if(*k + j <= *m)
                 {
                     a3 = a[*k + j + (*n - *l + j) * a_dim1];
                 }
                 b1 = b[i__ + (*n - *l + i__) * b_dim1];
                 b3 = b[j + (*n - *l + j) * b_dim1];
-                if (upper)
+                if(upper)
                 {
-                    if (*k + i__ <= *m)
+                    if(*k + i__ <= *m)
                     {
                         a2 = a[*k + i__ + (*n - *l + j) * a_dim1];
                     }
@@ -560,30 +582,34 @@ int stgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer 
                 }
                 else
                 {
-                    if (*k + j <= *m)
+                    if(*k + j <= *m)
                     {
                         a2 = a[*k + j + (*n - *l + i__) * a_dim1];
                     }
                     b2 = b[j + (*n - *l + i__) * b_dim1];
                 }
-                slags2_(&upper, &a1, &a2, &a3, &b1, &b2, &b3, &csu, &snu, & csv, &snv, &csq, &snq);
+                slags2_(&upper, &a1, &a2, &a3, &b1, &b2, &b3, &csu, &snu, &csv, &snv, &csq, &snq);
                 /* Update (K+I)-th and (K+J)-th rows of matrix A: U**T *A */
-                if (*k + j <= *m)
+                if(*k + j <= *m)
                 {
-                    srot_(l, &a[*k + j + (*n - *l + 1) * a_dim1], lda, &a[*k + i__ + (*n - *l + 1) * a_dim1], lda, &csu, &snu);
+                    srot_(l, &a[*k + j + (*n - *l + 1) * a_dim1], lda,
+                          &a[*k + i__ + (*n - *l + 1) * a_dim1], lda, &csu, &snu);
                 }
                 /* Update I-th and J-th rows of matrix B: V**T *B */
-                srot_(l, &b[j + (*n - *l + 1) * b_dim1], ldb, &b[i__ + (*n - * l + 1) * b_dim1], ldb, &csv, &snv);
+                srot_(l, &b[j + (*n - *l + 1) * b_dim1], ldb, &b[i__ + (*n - *l + 1) * b_dim1], ldb,
+                      &csv, &snv);
                 /* Update (N-L+I)-th and (N-L+J)-th columns of matrices */
                 /* A and B: A*Q and B*Q */
                 /* Computing MIN */
                 i__4 = *k + *l;
-                i__3 = fla_min(i__4,*m);
-                srot_(&i__3, &a[(*n - *l + j) * a_dim1 + 1], &c__1, &a[(*n - * l + i__) * a_dim1 + 1], &c__1, &csq, &snq);
-                srot_(l, &b[(*n - *l + j) * b_dim1 + 1], &c__1, &b[(*n - *l + i__) * b_dim1 + 1], &c__1, &csq, &snq);
-                if (upper)
+                i__3 = fla_min(i__4, *m);
+                srot_(&i__3, &a[(*n - *l + j) * a_dim1 + 1], &c__1,
+                      &a[(*n - *l + i__) * a_dim1 + 1], &c__1, &csq, &snq);
+                srot_(l, &b[(*n - *l + j) * b_dim1 + 1], &c__1, &b[(*n - *l + i__) * b_dim1 + 1],
+                      &c__1, &csq, &snq);
+                if(upper)
                 {
-                    if (*k + i__ <= *m)
+                    if(*k + i__ <= *m)
                     {
                         a[*k + i__ + (*n - *l + j) * a_dim1] = 0.f;
                     }
@@ -591,30 +617,32 @@ int stgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer 
                 }
                 else
                 {
-                    if (*k + j <= *m)
+                    if(*k + j <= *m)
                     {
                         a[*k + j + (*n - *l + i__) * a_dim1] = 0.f;
                     }
                     b[j + (*n - *l + i__) * b_dim1] = 0.f;
                 }
                 /* Update orthogonal matrices U, V, Q, if desired. */
-                if (wantu && *k + j <= *m)
+                if(wantu && *k + j <= *m)
                 {
-                    srot_(m, &u[(*k + j) * u_dim1 + 1], &c__1, &u[(*k + i__) * u_dim1 + 1], &c__1, &csu, &snu);
+                    srot_(m, &u[(*k + j) * u_dim1 + 1], &c__1, &u[(*k + i__) * u_dim1 + 1], &c__1,
+                          &csu, &snu);
                 }
-                if (wantv)
+                if(wantv)
                 {
                     srot_(p, &v[j * v_dim1 + 1], &c__1, &v[i__ * v_dim1 + 1], &c__1, &csv, &snv);
                 }
-                if (wantq)
+                if(wantq)
                 {
-                    srot_(n, &q[(*n - *l + j) * q_dim1 + 1], &c__1, &q[(*n - * l + i__) * q_dim1 + 1], &c__1, &csq, &snq);
+                    srot_(n, &q[(*n - *l + j) * q_dim1 + 1], &c__1,
+                          &q[(*n - *l + i__) * q_dim1 + 1], &c__1, &csq, &snq);
                 }
                 /* L10: */
             }
             /* L20: */
         }
-        if (! upper)
+        if(!upper)
         {
             /* The matrices A13 and B13 were lower triangular at the start */
             /* of the cycle, and are now upper triangular. */
@@ -624,21 +652,19 @@ int stgsja_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer 
             /* Computing MIN */
             i__2 = *l;
             i__3 = *m - *k; // , expr subst
-            i__1 = fla_min(i__2,i__3);
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            i__1 = fla_min(i__2, i__3);
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = *l - i__ + 1;
-                scopy_(&i__2, &a[*k + i__ + (*n - *l + i__) * a_dim1], lda, & work[1], &c__1);
+                scopy_(&i__2, &a[*k + i__ + (*n - *l + i__) * a_dim1], lda, &work[1], &c__1);
                 i__2 = *l - i__ + 1;
-                scopy_(&i__2, &b[i__ + (*n - *l + i__) * b_dim1], ldb, &work[* l + 1], &c__1);
+                scopy_(&i__2, &b[i__ + (*n - *l + i__) * b_dim1], ldb, &work[*l + 1], &c__1);
                 i__2 = *l - i__ + 1;
                 slapll_(&i__2, &work[1], &c__1, &work[*l + 1], &c__1, &ssmin);
-                error = fla_max(error,ssmin);
+                error = fla_max(error, ssmin);
                 /* L30: */
             }
-            if (f2c_abs(error) <= fla_min(*tola,*tolb))
+            if(f2c_abs(error) <= fla_min(*tola, *tolb))
             {
                 goto L50;
             }
@@ -653,9 +679,7 @@ L50: /* If ERROR <= MIN(TOLA,TOLB), then the algorithm has converged. */
     /* Compute the generalized singular value pairs (ALPHA, BETA), and */
     /* set the triangular matrix R to array A. */
     i__1 = *k;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         alpha[i__] = 1.f;
         beta[i__] = 0.f;
@@ -664,29 +688,27 @@ L50: /* If ERROR <= MIN(TOLA,TOLB), then the algorithm has converged. */
     /* Computing MIN */
     i__2 = *l;
     i__3 = *m - *k; // , expr subst
-    i__1 = fla_min(i__2,i__3);
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    i__1 = fla_min(i__2, i__3);
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         a1 = a[*k + i__ + (*n - *l + i__) * a_dim1];
         b1 = b[i__ + (*n - *l + i__) * b_dim1];
         gamma = b1 / a1;
-        if (gamma <= hugenum && gamma >= -hugenum)
+        if(gamma <= hugenum && gamma >= -hugenum)
         {
             /* change sign if necessary */
-            if (gamma < 0.f)
+            if(gamma < 0.f)
             {
                 i__2 = *l - i__ + 1;
-                sscal_(&i__2, &c_b43, &b[i__ + (*n - *l + i__) * b_dim1], ldb) ;
-                if (wantv)
+                sscal_(&i__2, &c_b43, &b[i__ + (*n - *l + i__) * b_dim1], ldb);
+                if(wantv)
                 {
                     sscal_(p, &c_b43, &v[i__ * v_dim1 + 1], &c__1);
                 }
             }
             r__1 = f2c_abs(gamma);
             slartg_(&r__1, &c_b14, &beta[*k + i__], &alpha[*k + i__], &rwk);
-            if (alpha[*k + i__] >= beta[*k + i__])
+            if(alpha[*k + i__] >= beta[*k + i__])
             {
                 i__2 = *l - i__ + 1;
                 r__1 = 1.f / alpha[*k + i__];
@@ -698,7 +720,8 @@ L50: /* If ERROR <= MIN(TOLA,TOLB), then the algorithm has converged. */
                 r__1 = 1.f / beta[*k + i__];
                 sscal_(&i__2, &r__1, &b[i__ + (*n - *l + i__) * b_dim1], ldb);
                 i__2 = *l - i__ + 1;
-                scopy_(&i__2, &b[i__ + (*n - *l + i__) * b_dim1], ldb, &a[*k + i__ + (*n - *l + i__) * a_dim1], lda);
+                scopy_(&i__2, &b[i__ + (*n - *l + i__) * b_dim1], ldb,
+                       &a[*k + i__ + (*n - *l + i__) * a_dim1], lda);
             }
         }
         else
@@ -706,26 +729,23 @@ L50: /* If ERROR <= MIN(TOLA,TOLB), then the algorithm has converged. */
             alpha[*k + i__] = 0.f;
             beta[*k + i__] = 1.f;
             i__2 = *l - i__ + 1;
-            scopy_(&i__2, &b[i__ + (*n - *l + i__) * b_dim1], ldb, &a[*k + i__ + (*n - *l + i__) * a_dim1], lda);
+            scopy_(&i__2, &b[i__ + (*n - *l + i__) * b_dim1], ldb,
+                   &a[*k + i__ + (*n - *l + i__) * a_dim1], lda);
         }
         /* L70: */
     }
     /* Post-assignment */
     i__1 = *k + *l;
-    for (i__ = *m + 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = *m + 1; i__ <= i__1; ++i__)
     {
         alpha[i__] = 0.f;
         beta[i__] = 1.f;
         /* L80: */
     }
-    if (*k + *l < *n)
+    if(*k + *l < *n)
     {
         i__1 = *n;
-        for (i__ = *k + *l + 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = *k + *l + 1; i__ <= i__1; ++i__)
         {
             alpha[i__] = 0.f;
             beta[i__] = 0.f;
@@ -735,7 +755,7 @@ L50: /* If ERROR <= MIN(TOLA,TOLB), then the algorithm has converged. */
 L100:
     *ncycle = kcycle;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of STGSJA */
 }
 /* stgsja_ */

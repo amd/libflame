@@ -1,20 +1,30 @@
-/* ../netlib/dlasd8.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlasd8.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__0 = 0;
 static doublereal c_b8 = 1.;
-/* > \brief \b DLASD8 finds the square roots of the roots of the secular equation, and stores, for each elemen t in D, the distance to its two nearest poles. Used by sbdsdc. */
+/* > \brief \b DLASD8 finds the square roots of the roots of the secular equation, and stores, for
+ * each elemen t in D, the distance to its two nearest poles. Used by sbdsdc. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLASD8 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasd8. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasd8.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasd8. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasd8.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasd8. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasd8.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -155,10 +165,13 @@ static doublereal c_b8 = 1.;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlasd8_(integer *icompq, integer *k, doublereal *d__, doublereal *z__, doublereal *vf, doublereal *vl, doublereal *difl, doublereal *difr, integer *lddifr, doublereal *dsigma, doublereal * work, integer *info)
+void dlasd8_(integer *icompq, integer *k, doublereal *d__, doublereal *z__, doublereal *vf,
+             doublereal *vl, doublereal *difl, doublereal *difr, integer *lddifr,
+             doublereal *dsigma, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlasd8 inputs: icompq %" FLA_IS ", k %" FLA_IS ", lddifr %" FLA_IS "",*icompq, *k, *lddifr);
+    AOCL_DTL_SNPRINTF("dlasd8 inputs: icompq %" FLA_IS ", k %" FLA_IS ", lddifr %" FLA_IS "",
+                      *icompq, *k, *lddifr);
     /* System generated locals */
     integer difr_dim1, difr_offset, i__1, i__2;
     doublereal d__1, d__2;
@@ -174,10 +187,17 @@ int dlasd8_(integer *icompq, integer *k, doublereal *d__, doublereal *z__, doubl
     integer iwk2i, iwk3i;
     doublereal diflj, difrj, dsigj;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern doublereal dlamc3_(doublereal *, doublereal *);
     extern /* Subroutine */
-    int dlasd4_(integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlasd4_(integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
+                doublereal *, doublereal *, integer *),
+        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
+                doublereal *, integer *, integer *),
+        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal dsigjp;
     /* -- LAPACK auxiliary routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -214,37 +234,37 @@ int dlasd8_(integer *icompq, integer *k, doublereal *d__, doublereal *z__, doubl
     /* Function Body */
     *info = 0;
     difrj = 0.;
-    if (*icompq < 0 || *icompq > 1)
+    if(*icompq < 0 || *icompq > 1)
     {
         *info = -1;
     }
-    else if (*k < 1)
+    else if(*k < 1)
     {
         *info = -2;
     }
-    else if (*lddifr < *k)
+    else if(*lddifr < *k)
     {
         *info = -9;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DLASD8", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*k == 1)
+    if(*k == 1)
     {
         d__[1] = f2c_abs(z__[1]);
         difl[1] = d__[1];
-        if (*icompq == 1)
+        if(*icompq == 1)
         {
             difl[2] = 1.;
             difr[(difr_dim1 << 1) + 1] = 1.;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Modify values DSIGMA(i) to make sure all DSIGMA(i)-DSIGMA(j) can */
     /* be computed with high relative accuracy (barring over/underflow). */
@@ -264,9 +284,7 @@ int dlasd8_(integer *icompq, integer *k, doublereal *d__, doublereal *z__, doubl
     /* 2*DLAMBDA(I) to prevent optimizing compilers from eliminating */
     /* this code. */
     i__1 = *k;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         dsigma[i__] = dlamc3_(&dsigma[i__], &dsigma[i__]) - dsigma[i__];
         /* L10: */
@@ -286,43 +304,37 @@ int dlasd8_(integer *icompq, integer *k, doublereal *d__, doublereal *z__, doubl
     /* Compute the updated singular values, the arrays DIFL, DIFR, */
     /* and the updated Z. */
     i__1 = *k;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
-        dlasd4_(k, &j, &dsigma[1], &z__[1], &work[iwk1], &rho, &d__[j], &work[ iwk2], info);
+        dlasd4_(k, &j, &dsigma[1], &z__[1], &work[iwk1], &rho, &d__[j], &work[iwk2], info);
         /* If the root finder fails, report the convergence failure. */
-        if (*info != 0)
+        if(*info != 0)
         {
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         work[iwk3i + j] = work[iwk3i + j] * work[j] * work[iwk2i + j];
         difl[j] = -work[j];
         difr[j + difr_dim1] = -work[j + 1];
         i__2 = j - 1;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
-            work[iwk3i + i__] = work[iwk3i + i__] * work[i__] * work[iwk2i + i__] / (dsigma[i__] - dsigma[j]) / (dsigma[i__] + dsigma[ j]);
+            work[iwk3i + i__] = work[iwk3i + i__] * work[i__] * work[iwk2i + i__]
+                                / (dsigma[i__] - dsigma[j]) / (dsigma[i__] + dsigma[j]);
             /* L20: */
         }
         i__2 = *k;
-        for (i__ = j + 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = j + 1; i__ <= i__2; ++i__)
         {
-            work[iwk3i + i__] = work[iwk3i + i__] * work[i__] * work[iwk2i + i__] / (dsigma[i__] - dsigma[j]) / (dsigma[i__] + dsigma[ j]);
+            work[iwk3i + i__] = work[iwk3i + i__] * work[i__] * work[iwk2i + i__]
+                                / (dsigma[i__] - dsigma[j]) / (dsigma[i__] + dsigma[j]);
             /* L30: */
         }
         /* L40: */
     }
     /* Compute updated Z. */
     i__1 = *k;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         d__2 = sqrt((d__1 = work[iwk3i + i__], f2c_abs(d__1)));
         z__[i__] = d_sign(&d__2, &z__[i__]);
@@ -330,31 +342,25 @@ int dlasd8_(integer *icompq, integer *k, doublereal *d__, doublereal *z__, doubl
     }
     /* Update VF and VL. */
     i__1 = *k;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         diflj = difl[j];
         dj = d__[j];
         dsigj = -dsigma[j];
-        if (j < *k)
+        if(j < *k)
         {
             difrj = -difr[j + difr_dim1];
             dsigjp = -dsigma[j + 1];
         }
         work[j] = -z__[j] / diflj / (dsigma[j] + dj);
         i__2 = j - 1;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
-            work[i__] = z__[i__] / (dlamc3_(&dsigma[i__], &dsigj) - diflj) / ( dsigma[i__] + dj);
+            work[i__] = z__[i__] / (dlamc3_(&dsigma[i__], &dsigj) - diflj) / (dsigma[i__] + dj);
             /* L60: */
         }
         i__2 = *k;
-        for (i__ = j + 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = j + 1; i__ <= i__2; ++i__)
         {
             work[i__] = z__[i__] / (dlamc3_(&dsigma[i__], &dsigjp) + difrj) / (dsigma[i__] + dj);
             /* L70: */
@@ -362,7 +368,7 @@ int dlasd8_(integer *icompq, integer *k, doublereal *d__, doublereal *z__, doubl
         temp = dnrm2_(k, &work[1], &c__1);
         work[iwk2i + j] = ddot_(k, &work[1], &c__1, &vf[1], &c__1) / temp;
         work[iwk3i + j] = ddot_(k, &work[1], &c__1, &vl[1], &c__1) / temp;
-        if (*icompq == 1)
+        if(*icompq == 1)
         {
             difr[j + (difr_dim1 << 1)] = temp;
         }
@@ -371,7 +377,7 @@ int dlasd8_(integer *icompq, integer *k, doublereal *d__, doublereal *z__, doubl
     dcopy_(k, &work[iwk2], &c__1, &vf[1], &c__1);
     dcopy_(k, &work[iwk3], &c__1, &vl[1], &c__1);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLASD8 */
 }
 /* dlasd8_ */

@@ -1,16 +1,25 @@
-/* ../netlib/zlasr.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zlasr.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b ZLASR applies a sequence of plane rotations to a general rectangular matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLASR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlasr.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlasr.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlasr.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlasr.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlasr.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlasr.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -186,10 +195,13 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doublereal *c__, doublereal *s, doublecomplex *a, integer *lda)
+void zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doublereal *c__,
+            doublereal *s, doublecomplex *a, integer *lda)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlasr inputs: side %c, pivot %c, direct %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*side, *pivot, *direct, *m, *n, *lda);
+    AOCL_DTL_SNPRINTF("zlasr inputs: side %c, pivot %c, direct %c, m %" FLA_IS ", n %" FLA_IS
+                      ", lda %" FLA_IS "",
+                      *side, *pivot, *direct, *m, *n, *lda);
 
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
@@ -197,10 +209,11 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
     /* Local variables */
     integer i__, j, info;
     doublecomplex temp;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal ctemp, stemp;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -230,62 +243,58 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
     a -= a_offset;
     /* Function Body */
     info = 0;
-    if (! (lsame_(side, "L") || lsame_(side, "R")))
+    if(!(lsame_(side, "L", 1, 1) || lsame_(side, "R", 1, 1)))
     {
         info = 1;
     }
-    else if (! (lsame_(pivot, "V") || lsame_(pivot, "T") || lsame_(pivot, "B")))
+    else if(!(lsame_(pivot, "V", 1, 1) || lsame_(pivot, "T", 1, 1) || lsame_(pivot, "B", 1, 1)))
     {
         info = 2;
     }
-    else if (! (lsame_(direct, "F") || lsame_(direct, "B")))
+    else if(!(lsame_(direct, "F", 1, 1) || lsame_(direct, "B", 1, 1)))
     {
         info = 3;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         info = 4;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         info = 5;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         info = 9;
     }
-    if (info != 0)
+    if(info != 0)
     {
         xerbla_("ZLASR ", &info, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    if (lsame_(side, "L"))
+    if(lsame_(side, "L", 1, 1))
     {
         /* Form P * A */
-        if (lsame_(pivot, "V"))
+        if(lsame_(pivot, "V", 1, 1))
         {
-            if (lsame_(direct, "F"))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *m - 1;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1. || stemp != 0.)
+                    if(ctemp != 1. || stemp != 0.)
                     {
                         i__2 = *n;
-                        for (i__ = 1;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             i__3 = j + 1 + i__ * a_dim1;
                             temp.r = a[i__3].r;
@@ -295,7 +304,7 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                             z__2.i = ctemp * temp.i; // , expr subst
                             i__4 = j + i__ * a_dim1;
                             z__3.r = stemp * a[i__4].r;
-                            z__3.i = stemp * a[ i__4].i; // , expr subst
+                            z__3.i = stemp * a[i__4].i; // , expr subst
                             z__1.r = z__2.r - z__3.r;
                             z__1.i = z__2.i - z__3.i; // , expr subst
                             a[i__3].r = z__1.r;
@@ -305,7 +314,7 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                             z__2.i = stemp * temp.i; // , expr subst
                             i__4 = j + i__ * a_dim1;
                             z__3.r = ctemp * a[i__4].r;
-                            z__3.i = ctemp * a[ i__4].i; // , expr subst
+                            z__3.i = ctemp * a[i__4].i; // , expr subst
                             z__1.r = z__2.r + z__3.r;
                             z__1.i = z__2.i + z__3.i; // , expr subst
                             a[i__3].r = z__1.r;
@@ -316,20 +325,16 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                     /* L20: */
                 }
             }
-            else if (lsame_(direct, "B"))
+            else if(lsame_(direct, "B", 1, 1))
             {
-                for (j = *m - 1;
-                        j >= 1;
-                        --j)
+                for(j = *m - 1; j >= 1; --j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1. || stemp != 0.)
+                    if(ctemp != 1. || stemp != 0.)
                     {
                         i__1 = *n;
-                        for (i__ = 1;
-                                i__ <= i__1;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             i__2 = j + 1 + i__ * a_dim1;
                             temp.r = a[i__2].r;
@@ -339,7 +344,7 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                             z__2.i = ctemp * temp.i; // , expr subst
                             i__3 = j + i__ * a_dim1;
                             z__3.r = stemp * a[i__3].r;
-                            z__3.i = stemp * a[ i__3].i; // , expr subst
+                            z__3.i = stemp * a[i__3].i; // , expr subst
                             z__1.r = z__2.r - z__3.r;
                             z__1.i = z__2.i - z__3.i; // , expr subst
                             a[i__2].r = z__1.r;
@@ -349,7 +354,7 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                             z__2.i = stemp * temp.i; // , expr subst
                             i__3 = j + i__ * a_dim1;
                             z__3.r = ctemp * a[i__3].r;
-                            z__3.i = ctemp * a[ i__3].i; // , expr subst
+                            z__3.i = ctemp * a[i__3].i; // , expr subst
                             z__1.r = z__2.r + z__3.r;
                             z__1.i = z__2.i + z__3.i; // , expr subst
                             a[i__2].r = z__1.r;
@@ -361,23 +366,19 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                 }
             }
         }
-        else if (lsame_(pivot, "T"))
+        else if(lsame_(pivot, "T", 1, 1))
         {
-            if (lsame_(direct, "F"))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *m;
-                for (j = 2;
-                        j <= i__1;
-                        ++j)
+                for(j = 2; j <= i__1; ++j)
                 {
                     ctemp = c__[j - 1];
                     stemp = s[j - 1];
-                    if (ctemp != 1. || stemp != 0.)
+                    if(ctemp != 1. || stemp != 0.)
                     {
                         i__2 = *n;
-                        for (i__ = 1;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             i__3 = j + i__ * a_dim1;
                             temp.r = a[i__3].r;
@@ -387,7 +388,7 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                             z__2.i = ctemp * temp.i; // , expr subst
                             i__4 = i__ * a_dim1 + 1;
                             z__3.r = stemp * a[i__4].r;
-                            z__3.i = stemp * a[ i__4].i; // , expr subst
+                            z__3.i = stemp * a[i__4].i; // , expr subst
                             z__1.r = z__2.r - z__3.r;
                             z__1.i = z__2.i - z__3.i; // , expr subst
                             a[i__3].r = z__1.r;
@@ -397,7 +398,7 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                             z__2.i = stemp * temp.i; // , expr subst
                             i__4 = i__ * a_dim1 + 1;
                             z__3.r = ctemp * a[i__4].r;
-                            z__3.i = ctemp * a[ i__4].i; // , expr subst
+                            z__3.i = ctemp * a[i__4].i; // , expr subst
                             z__1.r = z__2.r + z__3.r;
                             z__1.i = z__2.i + z__3.i; // , expr subst
                             a[i__3].r = z__1.r;
@@ -408,20 +409,16 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                     /* L60: */
                 }
             }
-            else if (lsame_(direct, "B"))
+            else if(lsame_(direct, "B", 1, 1))
             {
-                for (j = *m;
-                        j >= 2;
-                        --j)
+                for(j = *m; j >= 2; --j)
                 {
                     ctemp = c__[j - 1];
                     stemp = s[j - 1];
-                    if (ctemp != 1. || stemp != 0.)
+                    if(ctemp != 1. || stemp != 0.)
                     {
                         i__1 = *n;
-                        for (i__ = 1;
-                                i__ <= i__1;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             i__2 = j + i__ * a_dim1;
                             temp.r = a[i__2].r;
@@ -431,7 +428,7 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                             z__2.i = ctemp * temp.i; // , expr subst
                             i__3 = i__ * a_dim1 + 1;
                             z__3.r = stemp * a[i__3].r;
-                            z__3.i = stemp * a[ i__3].i; // , expr subst
+                            z__3.i = stemp * a[i__3].i; // , expr subst
                             z__1.r = z__2.r - z__3.r;
                             z__1.i = z__2.i - z__3.i; // , expr subst
                             a[i__2].r = z__1.r;
@@ -441,7 +438,7 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                             z__2.i = stemp * temp.i; // , expr subst
                             i__3 = i__ * a_dim1 + 1;
                             z__3.r = ctemp * a[i__3].r;
-                            z__3.i = ctemp * a[ i__3].i; // , expr subst
+                            z__3.i = ctemp * a[i__3].i; // , expr subst
                             z__1.r = z__2.r + z__3.r;
                             z__1.i = z__2.i + z__3.i; // , expr subst
                             a[i__2].r = z__1.r;
@@ -453,23 +450,19 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                 }
             }
         }
-        else if (lsame_(pivot, "B"))
+        else if(lsame_(pivot, "B", 1, 1))
         {
-            if (lsame_(direct, "F"))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *m - 1;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1. || stemp != 0.)
+                    if(ctemp != 1. || stemp != 0.)
                     {
                         i__2 = *n;
-                        for (i__ = 1;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             i__3 = j + i__ * a_dim1;
                             temp.r = a[i__3].r;
@@ -477,7 +470,7 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                             i__3 = j + i__ * a_dim1;
                             i__4 = *m + i__ * a_dim1;
                             z__2.r = stemp * a[i__4].r;
-                            z__2.i = stemp * a[ i__4].i; // , expr subst
+                            z__2.i = stemp * a[i__4].i; // , expr subst
                             z__3.r = ctemp * temp.r;
                             z__3.i = ctemp * temp.i; // , expr subst
                             z__1.r = z__2.r + z__3.r;
@@ -487,7 +480,7 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                             i__3 = *m + i__ * a_dim1;
                             i__4 = *m + i__ * a_dim1;
                             z__2.r = ctemp * a[i__4].r;
-                            z__2.i = ctemp * a[ i__4].i; // , expr subst
+                            z__2.i = ctemp * a[i__4].i; // , expr subst
                             z__3.r = stemp * temp.r;
                             z__3.i = stemp * temp.i; // , expr subst
                             z__1.r = z__2.r - z__3.r;
@@ -500,20 +493,16 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                     /* L100: */
                 }
             }
-            else if (lsame_(direct, "B"))
+            else if(lsame_(direct, "B", 1, 1))
             {
-                for (j = *m - 1;
-                        j >= 1;
-                        --j)
+                for(j = *m - 1; j >= 1; --j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1. || stemp != 0.)
+                    if(ctemp != 1. || stemp != 0.)
                     {
                         i__1 = *n;
-                        for (i__ = 1;
-                                i__ <= i__1;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             i__2 = j + i__ * a_dim1;
                             temp.r = a[i__2].r;
@@ -521,7 +510,7 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                             i__2 = j + i__ * a_dim1;
                             i__3 = *m + i__ * a_dim1;
                             z__2.r = stemp * a[i__3].r;
-                            z__2.i = stemp * a[ i__3].i; // , expr subst
+                            z__2.i = stemp * a[i__3].i; // , expr subst
                             z__3.r = ctemp * temp.r;
                             z__3.i = ctemp * temp.i; // , expr subst
                             z__1.r = z__2.r + z__3.r;
@@ -531,7 +520,7 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                             i__2 = *m + i__ * a_dim1;
                             i__3 = *m + i__ * a_dim1;
                             z__2.r = ctemp * a[i__3].r;
-                            z__2.i = ctemp * a[ i__3].i; // , expr subst
+                            z__2.i = ctemp * a[i__3].i; // , expr subst
                             z__3.r = stemp * temp.r;
                             z__3.i = stemp * temp.i; // , expr subst
                             z__1.r = z__2.r - z__3.r;
@@ -546,26 +535,22 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
             }
         }
     }
-    else if (lsame_(side, "R"))
+    else if(lsame_(side, "R", 1, 1))
     {
         /* Form A * P**T */
-        if (lsame_(pivot, "V"))
+        if(lsame_(pivot, "V", 1, 1))
         {
-            if (lsame_(direct, "F"))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *n - 1;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1. || stemp != 0.)
+                    if(ctemp != 1. || stemp != 0.)
                     {
                         i__2 = *m;
-                        for (i__ = 1;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             i__3 = i__ + (j + 1) * a_dim1;
                             temp.r = a[i__3].r;
@@ -575,7 +560,7 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                             z__2.i = ctemp * temp.i; // , expr subst
                             i__4 = i__ + j * a_dim1;
                             z__3.r = stemp * a[i__4].r;
-                            z__3.i = stemp * a[ i__4].i; // , expr subst
+                            z__3.i = stemp * a[i__4].i; // , expr subst
                             z__1.r = z__2.r - z__3.r;
                             z__1.i = z__2.i - z__3.i; // , expr subst
                             a[i__3].r = z__1.r;
@@ -585,7 +570,7 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                             z__2.i = stemp * temp.i; // , expr subst
                             i__4 = i__ + j * a_dim1;
                             z__3.r = ctemp * a[i__4].r;
-                            z__3.i = ctemp * a[ i__4].i; // , expr subst
+                            z__3.i = ctemp * a[i__4].i; // , expr subst
                             z__1.r = z__2.r + z__3.r;
                             z__1.i = z__2.i + z__3.i; // , expr subst
                             a[i__3].r = z__1.r;
@@ -596,20 +581,16 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                     /* L140: */
                 }
             }
-            else if (lsame_(direct, "B"))
+            else if(lsame_(direct, "B", 1, 1))
             {
-                for (j = *n - 1;
-                        j >= 1;
-                        --j)
+                for(j = *n - 1; j >= 1; --j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1. || stemp != 0.)
+                    if(ctemp != 1. || stemp != 0.)
                     {
                         i__1 = *m;
-                        for (i__ = 1;
-                                i__ <= i__1;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             i__2 = i__ + (j + 1) * a_dim1;
                             temp.r = a[i__2].r;
@@ -619,7 +600,7 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                             z__2.i = ctemp * temp.i; // , expr subst
                             i__3 = i__ + j * a_dim1;
                             z__3.r = stemp * a[i__3].r;
-                            z__3.i = stemp * a[ i__3].i; // , expr subst
+                            z__3.i = stemp * a[i__3].i; // , expr subst
                             z__1.r = z__2.r - z__3.r;
                             z__1.i = z__2.i - z__3.i; // , expr subst
                             a[i__2].r = z__1.r;
@@ -629,7 +610,7 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                             z__2.i = stemp * temp.i; // , expr subst
                             i__3 = i__ + j * a_dim1;
                             z__3.r = ctemp * a[i__3].r;
-                            z__3.i = ctemp * a[ i__3].i; // , expr subst
+                            z__3.i = ctemp * a[i__3].i; // , expr subst
                             z__1.r = z__2.r + z__3.r;
                             z__1.i = z__2.i + z__3.i; // , expr subst
                             a[i__2].r = z__1.r;
@@ -641,23 +622,19 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                 }
             }
         }
-        else if (lsame_(pivot, "T"))
+        else if(lsame_(pivot, "T", 1, 1))
         {
-            if (lsame_(direct, "F"))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *n;
-                for (j = 2;
-                        j <= i__1;
-                        ++j)
+                for(j = 2; j <= i__1; ++j)
                 {
                     ctemp = c__[j - 1];
                     stemp = s[j - 1];
-                    if (ctemp != 1. || stemp != 0.)
+                    if(ctemp != 1. || stemp != 0.)
                     {
                         i__2 = *m;
-                        for (i__ = 1;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             i__3 = i__ + j * a_dim1;
                             temp.r = a[i__3].r;
@@ -667,7 +644,7 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                             z__2.i = ctemp * temp.i; // , expr subst
                             i__4 = i__ + a_dim1;
                             z__3.r = stemp * a[i__4].r;
-                            z__3.i = stemp * a[ i__4].i; // , expr subst
+                            z__3.i = stemp * a[i__4].i; // , expr subst
                             z__1.r = z__2.r - z__3.r;
                             z__1.i = z__2.i - z__3.i; // , expr subst
                             a[i__3].r = z__1.r;
@@ -677,7 +654,7 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                             z__2.i = stemp * temp.i; // , expr subst
                             i__4 = i__ + a_dim1;
                             z__3.r = ctemp * a[i__4].r;
-                            z__3.i = ctemp * a[ i__4].i; // , expr subst
+                            z__3.i = ctemp * a[i__4].i; // , expr subst
                             z__1.r = z__2.r + z__3.r;
                             z__1.i = z__2.i + z__3.i; // , expr subst
                             a[i__3].r = z__1.r;
@@ -688,20 +665,16 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                     /* L180: */
                 }
             }
-            else if (lsame_(direct, "B"))
+            else if(lsame_(direct, "B", 1, 1))
             {
-                for (j = *n;
-                        j >= 2;
-                        --j)
+                for(j = *n; j >= 2; --j)
                 {
                     ctemp = c__[j - 1];
                     stemp = s[j - 1];
-                    if (ctemp != 1. || stemp != 0.)
+                    if(ctemp != 1. || stemp != 0.)
                     {
                         i__1 = *m;
-                        for (i__ = 1;
-                                i__ <= i__1;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             i__2 = i__ + j * a_dim1;
                             temp.r = a[i__2].r;
@@ -711,7 +684,7 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                             z__2.i = ctemp * temp.i; // , expr subst
                             i__3 = i__ + a_dim1;
                             z__3.r = stemp * a[i__3].r;
-                            z__3.i = stemp * a[ i__3].i; // , expr subst
+                            z__3.i = stemp * a[i__3].i; // , expr subst
                             z__1.r = z__2.r - z__3.r;
                             z__1.i = z__2.i - z__3.i; // , expr subst
                             a[i__2].r = z__1.r;
@@ -721,7 +694,7 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                             z__2.i = stemp * temp.i; // , expr subst
                             i__3 = i__ + a_dim1;
                             z__3.r = ctemp * a[i__3].r;
-                            z__3.i = ctemp * a[ i__3].i; // , expr subst
+                            z__3.i = ctemp * a[i__3].i; // , expr subst
                             z__1.r = z__2.r + z__3.r;
                             z__1.i = z__2.i + z__3.i; // , expr subst
                             a[i__2].r = z__1.r;
@@ -733,23 +706,19 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                 }
             }
         }
-        else if (lsame_(pivot, "B"))
+        else if(lsame_(pivot, "B", 1, 1))
         {
-            if (lsame_(direct, "F"))
+            if(lsame_(direct, "F", 1, 1))
             {
                 i__1 = *n - 1;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1. || stemp != 0.)
+                    if(ctemp != 1. || stemp != 0.)
                     {
                         i__2 = *m;
-                        for (i__ = 1;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__2; ++i__)
                         {
                             i__3 = i__ + j * a_dim1;
                             temp.r = a[i__3].r;
@@ -757,7 +726,7 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                             i__3 = i__ + j * a_dim1;
                             i__4 = i__ + *n * a_dim1;
                             z__2.r = stemp * a[i__4].r;
-                            z__2.i = stemp * a[ i__4].i; // , expr subst
+                            z__2.i = stemp * a[i__4].i; // , expr subst
                             z__3.r = ctemp * temp.r;
                             z__3.i = ctemp * temp.i; // , expr subst
                             z__1.r = z__2.r + z__3.r;
@@ -767,7 +736,7 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                             i__3 = i__ + *n * a_dim1;
                             i__4 = i__ + *n * a_dim1;
                             z__2.r = ctemp * a[i__4].r;
-                            z__2.i = ctemp * a[ i__4].i; // , expr subst
+                            z__2.i = ctemp * a[i__4].i; // , expr subst
                             z__3.r = stemp * temp.r;
                             z__3.i = stemp * temp.i; // , expr subst
                             z__1.r = z__2.r - z__3.r;
@@ -780,20 +749,16 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                     /* L220: */
                 }
             }
-            else if (lsame_(direct, "B"))
+            else if(lsame_(direct, "B", 1, 1))
             {
-                for (j = *n - 1;
-                        j >= 1;
-                        --j)
+                for(j = *n - 1; j >= 1; --j)
                 {
                     ctemp = c__[j];
                     stemp = s[j];
-                    if (ctemp != 1. || stemp != 0.)
+                    if(ctemp != 1. || stemp != 0.)
                     {
                         i__1 = *m;
-                        for (i__ = 1;
-                                i__ <= i__1;
-                                ++i__)
+                        for(i__ = 1; i__ <= i__1; ++i__)
                         {
                             i__2 = i__ + j * a_dim1;
                             temp.r = a[i__2].r;
@@ -801,7 +766,7 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                             i__2 = i__ + j * a_dim1;
                             i__3 = i__ + *n * a_dim1;
                             z__2.r = stemp * a[i__3].r;
-                            z__2.i = stemp * a[ i__3].i; // , expr subst
+                            z__2.i = stemp * a[i__3].i; // , expr subst
                             z__3.r = ctemp * temp.r;
                             z__3.i = ctemp * temp.i; // , expr subst
                             z__1.r = z__2.r + z__3.r;
@@ -811,7 +776,7 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
                             i__2 = i__ + *n * a_dim1;
                             i__3 = i__ + *n * a_dim1;
                             z__2.r = ctemp * a[i__3].r;
-                            z__2.i = ctemp * a[ i__3].i; // , expr subst
+                            z__2.i = ctemp * a[i__3].i; // , expr subst
                             z__3.r = stemp * temp.r;
                             z__3.i = stemp * temp.i; // , expr subst
                             z__1.r = z__2.r - z__3.r;
@@ -827,7 +792,7 @@ int zlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, double
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLASR */
 }
 /* zlasr_ */

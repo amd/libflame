@@ -1,20 +1,30 @@
-/* ../netlib/dsposv.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dsposv.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b10 = -1.;
 static doublereal c_b11 = 1.;
 static integer c__1 = 1;
-/* > \brief <b> DSPOSV computes the solution to system of linear equations A * X = B for PO matrices</b> */
+/* > \brief <b> DSPOSV computes the solution to system of linear equations A * X = B for PO
+ * matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DSPOSV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsposv. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsposv.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsposv. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsposv.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsposv. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsposv.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -73,7 +83,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -189,10 +199,14 @@ static integer c__1 = 1;
 /* > \ingroup doublePOsolve */
 /* ===================================================================== */
 /* Subroutine */
-int dsposv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal * x, integer *ldx, doublereal *work, real *swork, integer *iter, integer *info)
+void dsposv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b,
+             integer *ldb, doublereal *x, integer *ldx, doublereal *work, real *swork,
+             integer *iter, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dsposv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*uplo, *n, *nrhs, *lda, *ldb, *ldx);
+    AOCL_DTL_SNPRINTF("dsposv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS ", ldx %" FLA_IS "",
+                      *uplo, *n, *nrhs, *lda, *ldb, *ldx);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, work_dim1, work_offset, x_dim1, x_offset, i__1;
     doublereal d__1;
@@ -204,17 +218,30 @@ int dsposv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, 
     integer ptsa;
     doublereal rnrm, xnrm;
     integer ptsx;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iiter;
     extern /* Subroutine */
-    int daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dsymm_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dlag2s_(integer *, integer *, doublereal *, integer *, real *, integer *, integer *), slag2d_(integer *, integer *, real *, integer *, doublereal *, integer *, integer *), dlat2s_(char *, integer *, doublereal *, integer *, real *, integer *, integer *);
+        void
+        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *),
+        dsymm_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *,
+               doublereal *, integer *, doublereal *, doublereal *, integer *),
+        dlag2s_(integer *, integer *, doublereal *, integer *, real *, integer *, integer *),
+        slag2d_(integer *, integer *, real *, integer *, doublereal *, integer *, integer *),
+        dlat2s_(char *, integer *, doublereal *, integer *, real *, integer *, integer *);
     extern doublereal dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern doublereal dlansy_(char *, char *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */
-    int dpotrf_(char *, integer *, doublereal *, integer *, integer *), dpotrs_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *), spotrf_(char *, integer *, real *, integer *, integer *), spotrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
+        void
+        dpotrf_(char *, integer *, doublereal *, integer *, integer *),
+        dpotrs_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *,
+                integer *),
+        spotrf_(char *, integer *, real *, integer *, integer *),
+        spotrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -251,46 +278,46 @@ int dsposv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, 
     *info = 0;
     *iter = 0;
     /* Test the input parameters. */
-    if (! lsame_(uplo, "U") && ! lsame_(uplo, "L"))
+    if(!lsame_(uplo, "U", 1, 1) && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -9;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DSPOSV", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if (N.EQ.0). */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Skip single precision iterative refinement if a priori slower */
     /* than double precision factorization. */
-    if (FALSE_)
+    if(FALSE_)
     {
         *iter = -1;
         goto L40;
@@ -298,14 +325,14 @@ int dsposv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, 
     /* Compute some constants. */
     anrm = dlansy_("I", uplo, n, &a[a_offset], lda, &work[work_offset]);
     eps = dlamch_("Epsilon");
-    cte = anrm * eps * sqrt((doublereal) (*n)) * 1.;
+    cte = anrm * eps * sqrt((doublereal)(*n)) * 1.;
     /* Set the indices PTSA, PTSX for referencing SA and SX in SWORK. */
     ptsa = 1;
     ptsx = ptsa + *n * *n;
     /* Convert B from double precision to single precision and store the */
     /* result in SX. */
     dlag2s_(n, nrhs, &b[b_offset], ldb, &swork[ptsx], n, info);
-    if (*info != 0)
+    if(*info != 0)
     {
         *iter = -2;
         goto L40;
@@ -313,14 +340,14 @@ int dsposv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, 
     /* Convert A from double precision to single precision and store the */
     /* result in SA. */
     dlat2s_(uplo, n, &a[a_offset], lda, &swork[ptsa], n, info);
-    if (*info != 0)
+    if(*info != 0)
     {
         *iter = -2;
         goto L40;
     }
     /* Compute the Cholesky factorization of SA. */
     spotrf_(uplo, n, &swork[ptsa], n, info);
-    if (*info != 0)
+    if(*info != 0)
     {
         *iter = -3;
         goto L40;
@@ -331,17 +358,17 @@ int dsposv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, 
     slag2d_(n, nrhs, &swork[ptsx], n, &x[x_offset], ldx, info);
     /* Compute R = B - AX (R is WORK). */
     dlacpy_("All", n, nrhs, &b[b_offset], ldb, &work[work_offset], n);
-    dsymm_("Left", uplo, n, nrhs, &c_b10, &a[a_offset], lda, &x[x_offset], ldx, &c_b11, &work[work_offset], n);
+    dsymm_("Left", uplo, n, nrhs, &c_b10, &a[a_offset], lda, &x[x_offset], ldx, &c_b11,
+           &work[work_offset], n);
     /* Check whether the NRHS normwise backward errors satisfy the */
     /* stopping criterion. If yes, set ITER=0 and return. */
     i__1 = *nrhs;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         xnrm = (d__1 = x[idamax_(n, &x[i__ * x_dim1 + 1], &c__1) + i__ * x_dim1], f2c_abs(d__1));
-        rnrm = (d__1 = work[idamax_(n, &work[i__ * work_dim1 + 1], &c__1) + i__ * work_dim1], f2c_abs(d__1));
-        if (rnrm > xnrm * cte)
+        rnrm = (d__1 = work[idamax_(n, &work[i__ * work_dim1 + 1], &c__1) + i__ * work_dim1],
+                f2c_abs(d__1));
+        if(rnrm > xnrm * cte)
         {
             goto L10;
         }
@@ -350,16 +377,14 @@ int dsposv_(char *uplo, integer *n, integer *nrhs, doublereal *a, integer *lda, 
     /* stopping criterion. We are good to exit. */
     *iter = 0;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 L10:
-    for (iiter = 1;
-            iiter <= 30;
-            ++iiter)
+    for(iiter = 1; iiter <= 30; ++iiter)
     {
         /* Convert R (in WORK) from double precision to single precision */
         /* and store the result in SX. */
         dlag2s_(n, nrhs, &work[work_offset], n, &swork[ptsx], n, info);
-        if (*info != 0)
+        if(*info != 0)
         {
             *iter = -2;
             goto L40;
@@ -370,25 +395,24 @@ L10:
         /* iterate. */
         slag2d_(n, nrhs, &swork[ptsx], n, &work[work_offset], n, info);
         i__1 = *nrhs;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             daxpy_(n, &c_b11, &work[i__ * work_dim1 + 1], &c__1, &x[i__ * x_dim1 + 1], &c__1);
         }
         /* Compute R = B - AX (R is WORK). */
         dlacpy_("All", n, nrhs, &b[b_offset], ldb, &work[work_offset], n);
-        dsymm_("L", uplo, n, nrhs, &c_b10, &a[a_offset], lda, &x[x_offset], ldx, &c_b11, &work[work_offset], n);
+        dsymm_("L", uplo, n, nrhs, &c_b10, &a[a_offset], lda, &x[x_offset], ldx, &c_b11,
+               &work[work_offset], n);
         /* Check whether the NRHS normwise backward errors satisfy the */
         /* stopping criterion. If yes, set ITER=IITER>0 and return. */
         i__1 = *nrhs;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            xnrm = (d__1 = x[idamax_(n, &x[i__ * x_dim1 + 1], &c__1) + i__ * x_dim1], f2c_abs(d__1));
-            rnrm = (d__1 = work[idamax_(n, &work[i__ * work_dim1 + 1], &c__1) + i__ * work_dim1], f2c_abs(d__1));
-            if (rnrm > xnrm * cte)
+            xnrm
+                = (d__1 = x[idamax_(n, &x[i__ * x_dim1 + 1], &c__1) + i__ * x_dim1], f2c_abs(d__1));
+            rnrm = (d__1 = work[idamax_(n, &work[i__ * work_dim1 + 1], &c__1) + i__ * work_dim1],
+                    f2c_abs(d__1));
+            if(rnrm > xnrm * cte)
             {
                 goto L20;
             }
@@ -397,9 +421,9 @@ L10:
         /* stopping criterion, we are good to exit. */
         *iter = iiter;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
-L20: /* L30: */
-        ;
+        return;
+    L20: /* L30: */
+         ;
     }
     /* If we are at this place of the code, this is because we have */
     /* performed ITER=ITERMAX iterations and never satisfied the */
@@ -409,15 +433,15 @@ L20: /* L30: */
 L40: /* Single-precision iterative refinement failed to converge to a */
     /* satisfactory solution, so we resort to double precision. */
     dpotrf_(uplo, n, &a[a_offset], lda, info);
-    if (*info != 0)
+    if(*info != 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     dlacpy_("All", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
     dpotrs_(uplo, n, nrhs, &a[a_offset], lda, &x[x_offset], ldx, info);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSPOSV. */
 }
 /* dsposv_ */

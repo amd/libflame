@@ -1,11 +1,10 @@
-/* ../netlib/v3.9.0/zlaunhr_col_getrfnp.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/zlaunhr_col_getrfnp.f -- translated by f2c (version 20160102). You must link the
+ resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
+ Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
+ with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    1.,0.
-}
-;
+static doublecomplex c_b1 = {1., 0.};
 static integer c__1 = 1;
 static integer c_n1 = -1;
 /* > \brief \b ZLAUNHR_COL_GETRFNP */
@@ -14,11 +13,17 @@ static integer c_n1 = -1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLAUNHR_COL_GETRFNP + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaunhr _col_getrfnp.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaunhr
+ * _col_getrfnp.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaunhr _col_getrfnp.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaunhr
+ * _col_getrfnp.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaunhr _col_getrfnp.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaunhr
+ * _col_getrfnp.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -49,11 +54,11 @@ static integer c_n1 = -1;
 /* > element at each step of "modified" Gaussian elimination is */
 /* > at least one in absolute value (so that division-by-zero not */
 /* > not possible during the division by the diagonal element);
-*/
+ */
 /* > */
 /* > L is a M-by-N lower triangular matrix with unit diagonal elements */
 /* > (lower trapezoidal if M > N);
-*/
+ */
 /* > */
 /* > and U is a M-by-N upper triangular matrix */
 /* > (upper trapezoidal if M < N). */
@@ -143,20 +148,29 @@ the unit diagonal elements of L are not stored. */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-int zlaunhr_col_getrfnp_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *d__, integer *info)
+void zlaunhr_col_getrfnp_(integer *m, integer *n, doublecomplex *a, integer *lda,
+                          doublecomplex *d__, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlaunhr_col_getrfnp inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",*m, *n, *lda);
+    AOCL_DTL_SNPRINTF("zlaunhr_col_getrfnp inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",
+                      *m, *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
     doublecomplex z__1;
     /* Local variables */
     integer j, jb, nb;
     extern /* Subroutine */
-    int zlaunhr_col_getrfnp2_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zlaunhr_col_getrfnp2_(integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                              integer *);
     integer iinfo;
     extern /* Subroutine */
-    int zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *), ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
+               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
+        ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.9.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -186,34 +200,34 @@ int zlaunhr_col_getrfnp_(integer *m, integer *n, doublecomplex *a, integer *lda,
     --d__;
     /* Function Body */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZLAUNHR_COL_GETRFNP", &i__1, (ftnlen)19);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (fla_min(*m,*n) == 0)
+    if(fla_min(*m, *n) == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Determine the block size for this environment. */
     nb = ilaenv_(&c__1, "ZLAUNHR_COL_GETRFNP", " ", m, n, &c_n1, &c_n1);
-    if (nb <= 1 || nb >= fla_min(*m,*n))
+    if(nb <= 1 || nb >= fla_min(*m, *n))
     {
         /* Use unblocked code. */
         zlaunhr_col_getrfnp2_(m, n, &a[a_offset], lda, &d__[1], info);
@@ -221,38 +235,38 @@ int zlaunhr_col_getrfnp_(integer *m, integer *n, doublecomplex *a, integer *lda,
     else
     {
         /* Use blocked code. */
-        i__1 = fla_min(*m,*n);
+        i__1 = fla_min(*m, *n);
         i__2 = nb;
-        for (j = 1;
-                i__2 < 0 ? j >= i__1 : j <= i__1;
-                j += i__2)
+        for(j = 1; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2)
         {
             /* Computing MIN */
-            i__3 = fla_min(*m,*n) - j + 1;
-            jb = fla_min(i__3,nb);
+            i__3 = fla_min(*m, *n) - j + 1;
+            jb = fla_min(i__3, nb);
             /* Factor diagonal and subdiagonal blocks. */
             i__3 = *m - j + 1;
-            zlaunhr_col_getrfnp2_(&i__3, &jb, &a[j + j * a_dim1], lda, &d__[ j], &iinfo);
-            if (j + jb <= *n)
+            zlaunhr_col_getrfnp2_(&i__3, &jb, &a[j + j * a_dim1], lda, &d__[j], &iinfo);
+            if(j + jb <= *n)
             {
                 /* Compute block row of U. */
                 i__3 = *n - j - jb + 1;
-                ztrsm_("Left", "Lower", "No transpose", "Unit", &jb, &i__3, & c_b1, &a[j + j * a_dim1], lda, &a[j + (j + jb) * a_dim1], lda);
-                if (j + jb <= *m)
+                ztrsm_("Left", "Lower", "No transpose", "Unit", &jb, &i__3, &c_b1,
+                       &a[j + j * a_dim1], lda, &a[j + (j + jb) * a_dim1], lda);
+                if(j + jb <= *m)
                 {
                     /* Update trailing submatrix. */
                     i__3 = *m - j - jb + 1;
                     i__4 = *n - j - jb + 1;
                     z__1.r = -1.;
                     z__1.i = -0.; // , expr subst
-                    zgemm_("No transpose", "No transpose", &i__3, &i__4, &jb, &z__1, &a[j + jb + j * a_dim1], lda, &a[j + (j + jb) * a_dim1], lda, &c_b1, &a[j + jb + (j + jb) * a_dim1], lda);
+                    zgemm_("No transpose", "No transpose", &i__3, &i__4, &jb, &z__1,
+                           &a[j + jb + j * a_dim1], lda, &a[j + (j + jb) * a_dim1], lda, &c_b1,
+                           &a[j + jb + (j + jb) * a_dim1], lda);
                 }
             }
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLAUNHR_COL_GETRFNP */
 }
 /* zlaunhr_col_getrfnp__ */
-

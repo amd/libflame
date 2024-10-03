@@ -1,18 +1,28 @@
-/* ../netlib/cpbsvx.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cpbsvx.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief <b> CPBSVX computes the solution to system of linear equations A * X = B for OTHER matrices</b> */
+/* > \brief <b> CPBSVX computes the solution to system of linear equations A * X = B for OTHER
+ * matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CPBSVX + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpbsvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpbsvx.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpbsvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpbsvx.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpbsvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpbsvx.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -105,7 +115,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -139,7 +149,7 @@ static integer c__1 = 1;
 /* > equilibrated matrix diag(S)*A*diag(S). The j-th column of A */
 /* > is stored in the j-th column of the array AB as follows: */
 /* > if UPLO = 'U', AB(KD+1+i-j,j) = A(i,j) for fla_max(1,j-KD)<=i<=j;
-*/
+ */
 /* > if UPLO = 'L', AB(1+i-j,j) = A(i,j) for j<=i<=fla_min(N,j+KD). */
 /* > See below for further details. */
 /* > */
@@ -333,43 +343,67 @@ if EQUED = 'Y', */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, complex *ab, integer *ldab, complex *afb, integer * ldafb, char *equed, real *s, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *ferr, real *berr, complex *work, real *rwork, integer *info)
+void cpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, complex *ab,
+             integer *ldab, complex *afb, integer *ldafb, char *equed, real *s, complex *b,
+             integer *ldb, complex *x, integer *ldx, real *rcond, real *ferr, real *berr,
+             complex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cpbsvx inputs: fact %c, uplo %c, n %lld, kd %lld, nrhs %lld, ldab %lld, ldafb %lld, equed %c, ldb %lld, ldx %lld",*fact, *uplo, *n, *kd, *nrhs, *ldab, *ldafb, *equed, *ldb, *ldx);
+    snprintf(buffer, 256,
+             "cpbsvx inputs: fact %c, uplo %c, n %lld, kd %lld, nrhs %lld, ldab %lld, ldafb %lld, "
+             "equed %c, ldb %lld, ldx %lld",
+             *fact, *uplo, *n, *kd, *nrhs, *ldab, *ldafb, *equed, *ldb, *ldx);
 #else
-    snprintf(buffer, 256,"cpbsvx inputs: fact %c, uplo %c, n %d, kd %d, nrhs %d, ldab %d, ldafb %d, equed %c, ldb %d, ldx %d",*fact, *uplo, *n, *kd, *nrhs, *ldab, *ldafb, *equed, *ldb, *ldx);
+    snprintf(buffer, 256,
+             "cpbsvx inputs: fact %c, uplo %c, n %d, kd %d, nrhs %d, ldab %d, ldafb %d, equed %c, "
+             "ldb %d, ldx %d",
+             *fact, *uplo, *n, *kd, *nrhs, *ldab, *ldafb, *equed, *ldb, *ldx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5;
+    integer ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
+        i__2, i__3, i__4, i__5;
     real r__1, r__2;
     complex q__1;
     /* Local variables */
     integer i__, j, j1, j2;
     real amax, smin, smax;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real scond, anorm;
     extern /* Subroutine */
-    int ccopy_(integer *, complex *, integer *, complex *, integer *);
+        void
+        ccopy_(integer *, complex *, integer *, complex *, integer *);
     logical equil, rcequ, upper;
     extern real clanhb_(char *, char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    int claqhb_(char *, integer *, integer *, complex *, integer *, real *, real *, real *, char *), cpbcon_(char *, integer *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *);
+        void
+        claqhb_(char *, integer *, integer *, complex *, integer *, real *, real *, real *, char *),
+        cpbcon_(char *, integer *, integer *, complex *, integer *, real *, real *, complex *,
+                real *, integer *);
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
-    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), cpbequ_(char *, integer *, integer *, complex *, integer *, real *, real *, real *, integer *), cpbrfs_( char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, real *, integer *);
+        void
+        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        cpbequ_(char *, integer *, integer *, complex *, integer *, real *, real *, real *,
+                integer *),
+        cpbrfs_(char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *,
+                complex *, integer *, complex *, integer *, real *, real *, complex *, real *,
+                integer *);
     real bignum;
     extern /* Subroutine */
-    int cpbtrf_(char *, integer *, integer *, complex *, integer *, integer *);
+        void
+        cpbtrf_(char *, integer *, integer *, complex *, integer *, integer *);
     integer infequ;
     extern /* Subroutine */
-    int cpbtrs_(char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *);
+        void
+        cpbtrs_(char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *,
+                integer *);
     real smlnum;
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -411,131 +445,125 @@ int cpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, comp
     --rwork;
     /* Function Body */
     *info = 0;
-    nofact = lsame_(fact, "N");
-    equil = lsame_(fact, "E");
-    upper = lsame_(uplo, "U");
+    nofact = lsame_(fact, "N", 1, 1);
+    equil = lsame_(fact, "E", 1, 1);
+    upper = lsame_(uplo, "U", 1, 1);
     smlnum = 0.f;
     bignum = 0.f;
-    if (nofact || equil)
+    if(nofact || equil)
     {
         *(unsigned char *)equed = 'N';
         rcequ = FALSE_;
     }
     else
     {
-        rcequ = lsame_(equed, "Y");
+        rcequ = lsame_(equed, "Y", 1, 1);
         smlnum = slamch_("Safe minimum");
         bignum = 1.f / smlnum;
     }
     /* Test the input parameters. */
-    if (! nofact && ! equil && ! lsame_(fact, "F"))
+    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L"))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*kd < 0)
+    else if(*kd < 0)
     {
         *info = -4;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -5;
     }
-    else if (*ldab < *kd + 1)
+    else if(*ldab < *kd + 1)
     {
         *info = -7;
     }
-    else if (*ldafb < *kd + 1)
+    else if(*ldafb < *kd + 1)
     {
         *info = -9;
     }
-    else if (lsame_(fact, "F") && ! (rcequ || lsame_( equed, "N")))
+    else if(lsame_(fact, "F", 1, 1) && !(rcequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -10;
     }
     else
     {
-        if (rcequ)
+        if(rcequ)
         {
             smin = bignum;
             smax = 0.f;
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 /* Computing MIN */
                 r__1 = smin;
                 r__2 = s[j]; // , expr subst
-                smin = fla_min(r__1,r__2);
+                smin = fla_min(r__1, r__2);
                 /* Computing MAX */
                 r__1 = smax;
                 r__2 = s[j]; // , expr subst
-                smax = fla_max(r__1,r__2);
+                smax = fla_max(r__1, r__2);
                 /* L10: */
             }
-            if (smin <= 0.f)
+            if(smin <= 0.f)
             {
                 *info = -11;
             }
-            else if (*n > 0)
+            else if(*n > 0)
             {
-                scond = fla_max(smin,smlnum) / fla_min(smax,bignum);
+                scond = fla_max(smin, smlnum) / fla_min(smax, bignum);
             }
             else
             {
                 scond = 1.f;
             }
         }
-        if (*info == 0)
+        if(*info == 0)
         {
-            if (*ldb < fla_max(1,*n))
+            if(*ldb < fla_max(1, *n))
             {
                 *info = -13;
             }
-            else if (*ldx < fla_max(1,*n))
+            else if(*ldx < fla_max(1, *n))
             {
                 *info = -15;
             }
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CPBSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (equil)
+    if(equil)
     {
         /* Compute row and column scalings to equilibrate the matrix A. */
-        cpbequ_(uplo, n, kd, &ab[ab_offset], ldab, &s[1], &scond, &amax, & infequ);
-        if (infequ == 0)
+        cpbequ_(uplo, n, kd, &ab[ab_offset], ldab, &s[1], &scond, &amax, &infequ);
+        if(infequ == 0)
         {
             /* Equilibrate the matrix. */
             claqhb_(uplo, n, kd, &ab[ab_offset], ldab, &s[1], &scond, &amax, equed);
-            rcequ = lsame_(equed, "Y");
+            rcequ = lsame_(equed, "Y", 1, 1);
         }
     }
     /* Scale the right-hand side. */
-    if (rcequ)
+    if(rcequ)
     {
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *n;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__;
@@ -549,34 +577,31 @@ int cpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, comp
             /* L30: */
         }
     }
-    if (nofact || equil)
+    if(nofact || equil)
     {
         /* Compute the Cholesky factorization A = U**H *U or A = L*L**H. */
-        if (upper)
+        if(upper)
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 /* Computing MAX */
                 i__2 = j - *kd;
-                j1 = fla_max(i__2,1);
+                j1 = fla_max(i__2, 1);
                 i__2 = j - j1 + 1;
-                ccopy_(&i__2, &ab[*kd + 1 - j + j1 + j * ab_dim1], &c__1, & afb[*kd + 1 - j + j1 + j * afb_dim1], &c__1);
+                ccopy_(&i__2, &ab[*kd + 1 - j + j1 + j * ab_dim1], &c__1,
+                       &afb[*kd + 1 - j + j1 + j * afb_dim1], &c__1);
                 /* L40: */
             }
         }
         else
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 /* Computing MIN */
                 i__2 = j + *kd;
-                j2 = fla_min(i__2,*n);
+                j2 = fla_min(i__2, *n);
                 i__2 = j2 - j + 1;
                 ccopy_(&i__2, &ab[j * ab_dim1 + 1], &c__1, &afb[j * afb_dim1 + 1], &c__1);
                 /* L50: */
@@ -584,36 +609,33 @@ int cpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, comp
         }
         cpbtrf_(uplo, n, kd, &afb[afb_offset], ldafb, info);
         /* Return if INFO is non-zero. */
-        if (*info > 0)
+        if(*info > 0)
         {
             *rcond = 0.f;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A. */
     anorm = clanhb_("1", uplo, n, kd, &ab[ab_offset], ldab, &rwork[1]);
     /* Compute the reciprocal of the condition number of A. */
-    cpbcon_(uplo, n, kd, &afb[afb_offset], ldafb, &anorm, rcond, &work[1], & rwork[1], info);
+    cpbcon_(uplo, n, kd, &afb[afb_offset], ldafb, &anorm, rcond, &work[1], &rwork[1], info);
     /* Compute the solution matrix X. */
     clacpy_("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
     cpbtrs_(uplo, n, kd, nrhs, &afb[afb_offset], ldafb, &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    cpbrfs_(uplo, n, kd, nrhs, &ab[ab_offset], ldab, &afb[afb_offset], ldafb, &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
+    cpbrfs_(uplo, n, kd, nrhs, &ab[ab_offset], ldab, &afb[afb_offset], ldafb, &b[b_offset], ldb,
+            &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
-    if (rcequ)
+    if(rcequ)
     {
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *n;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * x_dim1;
                 i__4 = i__;
@@ -627,21 +649,19 @@ int cpbsvx_(char *fact, char *uplo, integer *n, integer *kd, integer *nrhs, comp
             /* L70: */
         }
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             ferr[j] /= scond;
             /* L80: */
         }
     }
     /* Set INFO = N+1 if the matrix is singular to working precision. */
-    if (*rcond < slamch_("Epsilon"))
+    if(*rcond < slamch_("Epsilon"))
     {
         *info = *n + 1;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPBSVX */
 }
 /* cpbsvx_ */

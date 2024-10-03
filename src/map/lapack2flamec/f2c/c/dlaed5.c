@@ -1,16 +1,25 @@
-/* ../netlib/dlaed5.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlaed5.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLAED5 used by sstedc. Solves the 2-by-2 secular equation. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLAED5 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaed5. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaed5.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaed5. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaed5.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaed5. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaed5.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -94,10 +103,11 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlaed5_(integer *i__, doublereal *d__, doublereal *z__, doublereal *delta, doublereal *rho, doublereal *dlam)
+void dlaed5_(integer *i__, doublereal *d__, doublereal *z__, doublereal *delta, doublereal *rho,
+             doublereal *dlam)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaed5 inputs: i__ %" FLA_IS "",*i__);
+    AOCL_DTL_SNPRINTF("dlaed5 inputs: i__ %" FLA_IS "", *i__);
     /* System generated locals */
     doublereal d__1;
     /* Builtin functions */
@@ -126,10 +136,10 @@ int dlaed5_(integer *i__, doublereal *d__, doublereal *z__, doublereal *delta, d
     --d__;
     /* Function Body */
     del = d__[2] - d__[1];
-    if (*i__ == 1)
+    if(*i__ == 1)
     {
         w = *rho * 2. * (z__[2] * z__[2] - z__[1] * z__[1]) / del + 1.;
-        if (w > 0.)
+        if(w > 0.)
         {
             b = del + *rho * (z__[1] * z__[1] + z__[2] * z__[2]);
             c__ = *rho * z__[1] * z__[1] * del;
@@ -143,7 +153,7 @@ int dlaed5_(integer *i__, doublereal *d__, doublereal *z__, doublereal *delta, d
         {
             b = -del + *rho * (z__[1] * z__[1] + z__[2] * z__[2]);
             c__ = *rho * z__[2] * z__[2] * del;
-            if (b > 0.)
+            if(b > 0.)
             {
                 tau = c__ * -2. / (b + sqrt(b * b + c__ * 4.));
             }
@@ -164,7 +174,7 @@ int dlaed5_(integer *i__, doublereal *d__, doublereal *z__, doublereal *delta, d
         /* Now I=2 */
         b = -del + *rho * (z__[1] * z__[1] + z__[2] * z__[2]);
         c__ = *rho * z__[2] * z__[2] * del;
-        if (b > 0.)
+        if(b > 0.)
         {
             tau = (b + sqrt(b * b + c__ * 4.)) / 2.;
         }
@@ -180,7 +190,7 @@ int dlaed5_(integer *i__, doublereal *d__, doublereal *z__, doublereal *delta, d
         delta[2] /= temp;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End OF DLAED5 */
 }
 /* dlaed5_ */

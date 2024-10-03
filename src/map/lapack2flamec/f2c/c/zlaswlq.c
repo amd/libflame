@@ -1,5 +1,8 @@
-/* zlaswlq.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* zlaswlq.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__0 = 0;
 /* > \brief \b ZLASWLQ */
@@ -28,7 +31,7 @@ static integer c__0 = 0;
 /* > Q is a n-by-N orthogonal matrix, stored on exit in an implicit */
 /* > form in the elements above the diagonal of the array A and in */
 /* > the elements of the array T;
-*/
+ */
 /* > L is a lower-triangular M-by-M matrix stored on exit in */
 /* > the elements on and below the diagonal of the array A. */
 /* > 0 is a M-by-(N-M) zero matrix, if M < N, and is not stored. */
@@ -67,7 +70,7 @@ static integer c__0 = 0;
 /* > On entry, the M-by-N matrix A. */
 /* > On exit, the elements on and below the diagonal */
 /* > of the array contain the N-by-N lower triangular matrix L;
-*/
+ */
 /* > the elements above the diagonal represent Q by the rows */
 /* > of blocked V (see Further Details). */
 /* > */
@@ -157,19 +160,29 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zlaswlq_(integer *m, integer *n, integer *mb, integer * nb, doublecomplex *a, integer *lda, doublecomplex *t, integer *ldt, doublecomplex *work, integer *lwork, integer *info)
+void zlaswlq_(integer *m, integer *n, integer *mb, integer *nb, doublecomplex *a, integer *lda,
+              doublecomplex *t, integer *ldt, doublecomplex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlaswlq inputs: m %" FLA_IS ", n %" FLA_IS ", mb %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS ", lwork %" FLA_IS "",*m, *n, *mb, *nb, *lda, *ldt, *lwork);
+    AOCL_DTL_SNPRINTF("zlaswlq inputs: m %" FLA_IS ", n %" FLA_IS ", mb %" FLA_IS ", nb %" FLA_IS
+                      ", lda %" FLA_IS ", ldt %" FLA_IS ", lwork %" FLA_IS "",
+                      *m, *n, *mb, *nb, *lda, *ldt, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3;
     /* Local variables */
     integer i__, ii, kk, ctr;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zgelqt_( integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
+        zgelqt_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *, doublecomplex *, integer *);
     logical lquery;
     extern /* Subroutine */
-    int ztplqt_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        ztplqt_(integer *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. -- */
@@ -198,91 +211,91 @@ int zlaswlq_(integer *m, integer *n, integer *mb, integer * nb, doublecomplex *a
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0 || *n < *m)
+    else if(*n < 0 || *n < *m)
     {
         *info = -2;
     }
-    else if (*mb < 1 || *mb > *m && *m > 0)
+    else if(*mb < 1 || *mb > *m && *m > 0)
     {
         *info = -3;
     }
-    else if (*nb <= 0)
+    else if(*nb <= 0)
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -6;
     }
-    else if (*ldt < *mb)
+    else if(*ldt < *mb)
     {
         *info = -8;
     }
-    else if (*lwork < *m * *mb && ! lquery)
+    else if(*lwork < *m * *mb && !lquery)
     {
         *info = -10;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
         i__1 = *mb * *m;
-        work[1].r = (doublereal) i__1;
+        work[1].r = (doublereal)i__1;
         work[1].i = 0.; // , expr subst
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZLASWLQ", &i__1, (ftnlen)7);
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* Quick return if possible */
-    if (fla_min(*m,*n) == 0)
+    if(fla_min(*m, *n) == 0)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* The LQ Decomposition */
-    if (*m >= *n || *nb <= *m || *nb >= *n)
+    if(*m >= *n || *nb <= *m || *nb >= *n)
     {
         zgelqt_(m, n, mb, &a[a_offset], lda, &t[t_offset], ldt, &work[1], info);
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     kk = (*n - *m) % (*nb - *m);
     ii = *n - kk + 1;
     /* Compute the LQ factorization of the first block A(1:M,1:NB) */
-    zgelqt_(m, nb, mb, &a[a_dim1 + 1], lda, &t[t_offset], ldt, &work[1], info) ;
+    zgelqt_(m, nb, mb, &a[a_dim1 + 1], lda, &t[t_offset], ldt, &work[1], info);
     ctr = 1;
     i__1 = ii - *nb + *m;
     i__2 = *nb - *m;
-    for (i__ = *nb + 1;
-            i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
-            i__ += i__2)
+    for(i__ = *nb + 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
     {
         /* Compute the QR factorization of the current block A(1:M,I:I+NB-M) */
         i__3 = *nb - *m;
-        ztplqt_(m, &i__3, &c__0, mb, &a[a_dim1 + 1], lda, &a[i__ * a_dim1 + 1], lda, &t[(ctr * *m + 1) * t_dim1 + 1], ldt, &work[1], info);
+        ztplqt_(m, &i__3, &c__0, mb, &a[a_dim1 + 1], lda, &a[i__ * a_dim1 + 1], lda,
+                &t[(ctr * *m + 1) * t_dim1 + 1], ldt, &work[1], info);
         ++ctr;
     }
     /* Compute the QR factorization of the last block A(1:M,II:N) */
-    if (ii <= *n)
+    if(ii <= *n)
     {
-        ztplqt_(m, &kk, &c__0, mb, &a[a_dim1 + 1], lda, &a[ii * a_dim1 + 1], lda, &t[(ctr * *m + 1) * t_dim1 + 1], ldt, &work[1], info);
+        ztplqt_(m, &kk, &c__0, mb, &a[a_dim1 + 1], lda, &a[ii * a_dim1 + 1], lda,
+                &t[(ctr * *m + 1) * t_dim1 + 1], ldt, &work[1], info);
     }
     i__2 = *m * *mb;
-    work[1].r = (doublereal) i__2;
+    work[1].r = (doublereal)i__2;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLASWLQ */
 }
 /* zlaswlq_ */

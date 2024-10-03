@@ -1,5 +1,8 @@
-/* zlartg.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* zlartg.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Subroutine */
 /* > \brief \b ZLARTG generates a plane rotation with real cosine and complex sine. */
 
@@ -114,13 +117,15 @@
 /* >  https://doi.org/10.1145/3061665 */
 /* > */
 /* > \endverbatim */
-int zlartg_(doublecomplex *f, doublecomplex *g, doublereal * c__, doublecomplex *s, doublecomplex *r__)
+void zlartg_(doublecomplex *f, doublecomplex *g, doublereal *c__, doublecomplex *s,
+             doublecomplex *r__)
 {
     AOCL_DTL_TRACE_ENTRY_INDENT
     doublecomplex z__1, z__2, z__3;
     /* Builtin functions */
     double sqrt(doublereal), d_imag(doublecomplex *);
-    void d_cnjg(doublecomplex *, doublecomplex *), z_div(doublecomplex *, doublecomplex *, doublecomplex *);
+    void d_cnjg(doublecomplex *, doublecomplex *),
+        z_div(doublecomplex *, doublecomplex *, doublecomplex *);
     /* Local variables */
     doublereal d__, u, v, w, f1, f2, g1, g2, h2;
     doublereal d__1, d__2, d__3, d__4;
@@ -137,16 +142,16 @@ int zlartg_(doublecomplex *f, doublecomplex *g, doublereal * c__, doublecomplex 
     rtmin = sqrt(safmin);
     /* .. */
     /* .. Executable Statements .. */
-    if (g->r == 0. && g->i == 0.)
+    if(g->r == 0. && g->i == 0.)
     {
         *c__ = 1.;
         s->r = 0., s->i = 0.;
         r__->r = f->r, r__->i = f->i;
     }
-    else if (f->r == 0. && f->i == 0.)
+    else if(f->r == 0. && f->i == 0.)
     {
         *c__ = 0.;
-        if (g->r == 0.)
+        if(g->r == 0.)
         {
             d__2 = (d__1 = d_imag(g), f2c_dabs(d__1));
             r__->r = d__2, r__->i = 0.;
@@ -154,7 +159,7 @@ int zlartg_(doublecomplex *f, doublecomplex *g, doublereal * c__, doublecomplex 
             z_div(&z__1, &z__2, r__);
             s->r = z__1.r, s->i = z__1.i;
         }
-        else if (d_imag(g) == 0.)
+        else if(d_imag(g) == 0.)
         {
             d__2 = (d__1 = g->r, f2c_dabs(d__1));
             r__->r = d__2, r__->i = 0.;
@@ -166,10 +171,10 @@ int zlartg_(doublecomplex *f, doublecomplex *g, doublereal * c__, doublecomplex 
         {
             /* Computing MAX */
             d__3 = (d__1 = g->r, f2c_dabs(d__1));
-            d__4 = (d__2 = d_imag(g), f2c_dabs( d__2)); // , expr subst
-            g1 = fla_max(d__3,d__4);
+            d__4 = (d__2 = d_imag(g), f2c_dabs(d__2)); // , expr subst
+            g1 = fla_max(d__3, d__4);
             rtmax = sqrt(safmax / 2);
-            if (g1 > rtmin && g1 < rtmax)
+            if(g1 > rtmin && g1 < rtmax)
             {
                 /* Use unscaled algorithm */
                 /* The following two lines can be replaced by `d = f2c_dabs( g )`. */
@@ -191,8 +196,8 @@ int zlartg_(doublecomplex *f, doublecomplex *g, doublereal * c__, doublecomplex 
                 /* Use scaled algorithm */
                 /* Computing MIN */
                 d__1 = safmax;
-                d__2 = fla_max(safmin,g1); // , expr subst
-                u = fla_min(d__1,d__2);
+                d__2 = fla_max(safmin, g1); // , expr subst
+                u = fla_min(d__1, d__2);
                 z__1.r = g->r / u;
                 z__1.i = g->i / u; // , expr subst
                 gs.r = z__1.r;
@@ -219,13 +224,13 @@ int zlartg_(doublecomplex *f, doublecomplex *g, doublereal * c__, doublecomplex 
         /* Computing MAX */
         d__3 = (d__1 = f->r, f2c_dabs(d__1));
         d__4 = (d__2 = d_imag(f), f2c_dabs(d__2)); // , expr subst
-        f1 = fla_max(d__3,d__4);
+        f1 = fla_max(d__3, d__4);
         /* Computing MAX */
         d__3 = (d__1 = g->r, f2c_dabs(d__1));
         d__4 = (d__2 = d_imag(g), f2c_dabs(d__2)); // , expr subst
-        g1 = fla_max(d__3,d__4);
+        g1 = fla_max(d__3, d__4);
         rtmax = sqrt(safmax / 4);
-        if (f1 > rtmin && f1 < rtmax && g1 > rtmin && g1 < rtmax)
+        if(f1 > rtmin && f1 < rtmax && g1 > rtmin && g1 < rtmax)
         {
             /* Use unscaled algorithm */
             /* Computing 2nd power */
@@ -240,7 +245,7 @@ int zlartg_(doublecomplex *f, doublecomplex *g, doublereal * c__, doublecomplex 
             g2 = d__1 * d__1 + d__2 * d__2;
             h2 = f2 + g2;
             /* safmin <= f2 <= h2 <= safmax */
-            if (f2 >= h2 * safmin)
+            if(f2 >= h2 * safmin)
             {
                 /* safmin <= f2/h2 <= 1, and h2/f2 is finite */
                 *c__ = sqrt(f2 / h2);
@@ -248,7 +253,7 @@ int zlartg_(doublecomplex *f, doublecomplex *g, doublereal * c__, doublecomplex 
                 z__1.i = f->i / *c__; // , expr subst
                 r__->r = z__1.r, r__->i = z__1.i;
                 rtmax *= 2;
-                if (f2 > rtmin && h2 < rtmax)
+                if(f2 > rtmin && h2 < rtmax)
                 {
                     /* safmin <= sqrt( f2*h2 ) <= safmax */
                     d_cnjg(&z__2, g);
@@ -279,7 +284,7 @@ int zlartg_(doublecomplex *f, doublecomplex *g, doublereal * c__, doublecomplex 
                 /* g2 >> f2, which means that h2 = g2. */
                 d__ = sqrt(f2 * h2);
                 *c__ = f2 / d__;
-                if (*c__ >= safmin)
+                if(*c__ >= safmin)
                 {
                     z__1.r = f->r / *c__;
                     z__1.i = f->i / *c__; // , expr subst
@@ -307,10 +312,10 @@ int zlartg_(doublecomplex *f, doublecomplex *g, doublereal * c__, doublecomplex 
             /* Use scaled algorithm */
             /* Computing MIN */
             /* Computing MAX */
-            d__3 = fla_max(safmin,f1);
+            d__3 = fla_max(safmin, f1);
             d__1 = safmax;
-            d__2 = fla_max(d__3,g1); // , expr subst
-            u = fla_min(d__1,d__2);
+            d__2 = fla_max(d__3, g1); // , expr subst
+            u = fla_min(d__1, d__2);
             z__1.r = g->r / u;
             z__1.i = g->i / u; // , expr subst
             gs.r = z__1.r;
@@ -320,14 +325,14 @@ int zlartg_(doublecomplex *f, doublecomplex *g, doublereal * c__, doublecomplex 
             /* Computing 2nd power */
             d__2 = d_imag(&gs);
             g2 = d__1 * d__1 + d__2 * d__2;
-            if (f1 / u < rtmin)
+            if(f1 / u < rtmin)
             {
                 /* f is not well-scaled when scaled by g1. */
                 /* Use a different scaling for f. */
                 /* Computing MIN */
                 d__1 = safmax;
-                d__2 = fla_max(safmin,f1); // , expr subst
-                v = fla_min(d__1,d__2);
+                d__2 = fla_max(safmin, f1); // , expr subst
+                v = fla_min(d__1, d__2);
                 w = v / u;
                 z__1.r = f->r / v;
                 z__1.i = f->i / v; // , expr subst
@@ -358,7 +363,7 @@ int zlartg_(doublecomplex *f, doublecomplex *g, doublereal * c__, doublecomplex 
                 h2 = f2 + g2;
             }
             /* safmin <= f2 <= h2 <= safmax */
-            if (f2 >= h2 * safmin)
+            if(f2 >= h2 * safmin)
             {
                 /* safmin <= f2/h2 <= 1, and h2/f2 is finite */
                 *c__ = sqrt(f2 / h2);
@@ -366,7 +371,7 @@ int zlartg_(doublecomplex *f, doublecomplex *g, doublereal * c__, doublecomplex 
                 z__1.i = fs.i / *c__; // , expr subst
                 r__->r = z__1.r, r__->i = z__1.i;
                 rtmax *= 2;
-                if (f2 > rtmin && h2 < rtmax)
+                if(f2 > rtmin && h2 < rtmax)
                 {
                     /* safmin <= sqrt( f2*h2 ) <= safmax */
                     d_cnjg(&z__2, &gs);
@@ -397,7 +402,7 @@ int zlartg_(doublecomplex *f, doublecomplex *g, doublereal * c__, doublecomplex 
                 /* g2 >> f2, which means that h2 = g2. */
                 d__ = sqrt(f2 * h2);
                 *c__ = f2 / d__;
-                if (*c__ >= safmin)
+                if(*c__ >= safmin)
                 {
                     z__1.r = fs.r / *c__;
                     z__1.i = fs.i / *c__; // , expr subst
@@ -427,6 +432,6 @@ int zlartg_(doublecomplex *f, doublecomplex *g, doublereal * c__, doublecomplex 
         }
     }
     AOCL_DTL_TRACE_EXIT_INDENT
-    return 0;
+    return;
 }
 /* zlartg_ */

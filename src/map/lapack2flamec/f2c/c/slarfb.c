@@ -1,5 +1,8 @@
-/* ../netlib/slarfb.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slarfb.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static real c_b14 = 1.f;
@@ -10,11 +13,17 @@ static real c_b25 = -1.f;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLARFB + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarfb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarfb.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarfb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarfb.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarfb. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarfb.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -104,9 +113,9 @@ static real c_b25 = -1.f;
 /* > LDV is INTEGER */
 /* > The leading dimension of the array V. */
 /* > If STOREV = 'C' and SIDE = 'L', LDV >= fla_max(1,M);
-*/
+ */
 /* > if STOREV = 'C' and SIDE = 'R', LDV >= fla_max(1,N);
-*/
+ */
 /* > if STOREV = 'R', LDV >= K. */
 /* > \endverbatim */
 /* > */
@@ -146,7 +155,7 @@ static real c_b25 = -1.f;
 /* > LDWORK is INTEGER */
 /* > The leading dimension of the array WORK. */
 /* > If SIDE = 'L', LDWORK >= fla_max(1,N);
-*/
+ */
 /* > if SIDE = 'R', LDWORK >= fla_max(1,M). */
 /* > \endverbatim */
 /* Authors: */
@@ -188,21 +197,32 @@ the corresponding */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slarfb_(char *side, char *trans, char *direct, char * storev, integer *m, integer *n, integer *k, real *v, integer *ldv, real *t, integer *ldt, real *c__, integer *ldc, real *work, integer * ldwork)
+void slarfb_(char *side, char *trans, char *direct, char *storev, integer *m, integer *n,
+             integer *k, real *v, integer *ldv, real *t, integer *ldt, real *c__, integer *ldc,
+             real *work, integer *ldwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slarfb inputs: side %c, trans %c, direct %c, storev %c, m %d, n %d, k %d, ldv %d, ldt %d, ldc %d",*side, *trans, *direct, *storev, *m, *n, *k, *ldv, *ldt, *ldc);
+    snprintf(buffer, 256,
+             "slarfb inputs: side %c, trans %c, direct %c, storev %c, m %d, n %d, k %d, ldv %d, "
+             "ldt %d, ldc %d",
+             *side, *trans, *direct, *storev, *m, *n, *k, *ldv, *ldt, *ldc);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1, i__2;
+    integer c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1,
+        i__2;
     /* Local variables */
     integer i__, j;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *);
+        void
+        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
+               integer *, real *, real *, integer *),
+        scopy_(integer *, real *, integer *, real *, integer *),
+        strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
+               real *, integer *);
     char transt[1];
     /* -- LAPACK auxiliary routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -237,12 +257,12 @@ int slarfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
     work_offset = 1 + work_dim1;
     work -= work_offset;
     /* Function Body */
-    if (*m <= 0 || *n <= 0)
+    if(*m <= 0 || *n <= 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (lsame_(trans, "N"))
+    if(lsame_(trans, "N", 1, 1))
     {
         *(unsigned char *)transt = 'T';
     }
@@ -250,56 +270,55 @@ int slarfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
     {
         *(unsigned char *)transt = 'N';
     }
-    if (lsame_(storev, "C"))
+    if(lsame_(storev, "C", 1, 1))
     {
-        if (lsame_(direct, "F"))
+        if(lsame_(direct, "F", 1, 1))
         {
             /* Let V = ( V1 ) (first K rows) */
             /* ( V2 ) */
             /* where V1 is unit lower triangular. */
-            if (lsame_(side, "L"))
+            if(lsame_(side, "L", 1, 1))
             {
                 /* Form H * C or H**T * C where C = ( C1 ) */
                 /* ( C2 ) */
                 /* W := C**T * V = (C1**T * V1 + C2**T * V2) (stored in WORK) */
                 /* W := C1**T */
                 i__1 = *k;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     scopy_(n, &c__[j + c_dim1], ldc, &work[j * work_dim1 + 1], &c__1);
                     /* L10: */
                 }
                 /* W := W * V1 */
-                strmm_("Right", "Lower", "No transpose", "Unit", n, k, &c_b14, &v[v_offset], ldv, &work[work_offset], ldwork);
-                if (*m > *k)
+                strmm_("Right", "Lower", "No transpose", "Unit", n, k, &c_b14, &v[v_offset], ldv,
+                       &work[work_offset], ldwork);
+                if(*m > *k)
                 {
                     /* W := W + C2**T * V2 */
                     i__1 = *m - *k;
-                    sgemm_("Transpose", "No transpose", n, k, &i__1, &c_b14, & c__[*k + 1 + c_dim1], ldc, &v[*k + 1 + v_dim1], ldv, &c_b14, &work[work_offset], ldwork);
+                    sgemm_("Transpose", "No transpose", n, k, &i__1, &c_b14, &c__[*k + 1 + c_dim1],
+                           ldc, &v[*k + 1 + v_dim1], ldv, &c_b14, &work[work_offset], ldwork);
                 }
                 /* W := W * T**T or W * T */
-                strmm_("Right", "Upper", transt, "Non-unit", n, k, &c_b14, &t[ t_offset], ldt, &work[work_offset], ldwork);
+                strmm_("Right", "Upper", transt, "Non-unit", n, k, &c_b14, &t[t_offset], ldt,
+                       &work[work_offset], ldwork);
                 /* C := C - V * W**T */
-                if (*m > *k)
+                if(*m > *k)
                 {
                     /* C2 := C2 - V2 * W**T */
                     i__1 = *m - *k;
-                    sgemm_("No transpose", "Transpose", &i__1, n, k, &c_b25, & v[*k + 1 + v_dim1], ldv, &work[work_offset], ldwork, &c_b14, &c__[*k + 1 + c_dim1], ldc);
+                    sgemm_("No transpose", "Transpose", &i__1, n, k, &c_b25, &v[*k + 1 + v_dim1],
+                           ldv, &work[work_offset], ldwork, &c_b14, &c__[*k + 1 + c_dim1], ldc);
                 }
                 /* W := W * V1**T */
-                strmm_("Right", "Lower", "Transpose", "Unit", n, k, &c_b14, & v[v_offset], ldv, &work[work_offset], ldwork);
+                strmm_("Right", "Lower", "Transpose", "Unit", n, k, &c_b14, &v[v_offset], ldv,
+                       &work[work_offset], ldwork);
                 /* C1 := C1 - W**T */
                 i__1 = *k;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = *n;
-                    for (i__ = 1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         c__[j + i__ * c_dim1] -= work[i__ + j * work_dim1];
                         /* L20: */
@@ -307,48 +326,49 @@ int slarfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
                     /* L30: */
                 }
             }
-            else if (lsame_(side, "R"))
+            else if(lsame_(side, "R", 1, 1))
             {
                 /* Form C * H or C * H**T where C = ( C1 C2 ) */
                 /* W := C * V = (C1*V1 + C2*V2) (stored in WORK) */
                 /* W := C1 */
                 i__1 = *k;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     scopy_(m, &c__[j * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1], &c__1);
                     /* L40: */
                 }
                 /* W := W * V1 */
-                strmm_("Right", "Lower", "No transpose", "Unit", m, k, &c_b14, &v[v_offset], ldv, &work[work_offset], ldwork);
-                if (*n > *k)
+                strmm_("Right", "Lower", "No transpose", "Unit", m, k, &c_b14, &v[v_offset], ldv,
+                       &work[work_offset], ldwork);
+                if(*n > *k)
                 {
                     /* W := W + C2 * V2 */
                     i__1 = *n - *k;
-                    sgemm_("No transpose", "No transpose", m, k, &i__1, & c_b14, &c__[(*k + 1) * c_dim1 + 1], ldc, &v[*k + 1 + v_dim1], ldv, &c_b14, &work[work_offset], ldwork);
+                    sgemm_("No transpose", "No transpose", m, k, &i__1, &c_b14,
+                           &c__[(*k + 1) * c_dim1 + 1], ldc, &v[*k + 1 + v_dim1], ldv, &c_b14,
+                           &work[work_offset], ldwork);
                 }
                 /* W := W * T or W * T**T */
-                strmm_("Right", "Upper", trans, "Non-unit", m, k, &c_b14, &t[ t_offset], ldt, &work[work_offset], ldwork);
+                strmm_("Right", "Upper", trans, "Non-unit", m, k, &c_b14, &t[t_offset], ldt,
+                       &work[work_offset], ldwork);
                 /* C := C - W * V**T */
-                if (*n > *k)
+                if(*n > *k)
                 {
                     /* C2 := C2 - W * V2**T */
                     i__1 = *n - *k;
-                    sgemm_("No transpose", "Transpose", m, &i__1, k, &c_b25, & work[work_offset], ldwork, &v[*k + 1 + v_dim1], ldv, &c_b14, &c__[(*k + 1) * c_dim1 + 1], ldc);
+                    sgemm_("No transpose", "Transpose", m, &i__1, k, &c_b25, &work[work_offset],
+                           ldwork, &v[*k + 1 + v_dim1], ldv, &c_b14, &c__[(*k + 1) * c_dim1 + 1],
+                           ldc);
                 }
                 /* W := W * V1**T */
-                strmm_("Right", "Lower", "Transpose", "Unit", m, k, &c_b14, & v[v_offset], ldv, &work[work_offset], ldwork);
+                strmm_("Right", "Lower", "Transpose", "Unit", m, k, &c_b14, &v[v_offset], ldv,
+                       &work[work_offset], ldwork);
                 /* C1 := C1 - W */
                 i__1 = *k;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = *m;
-                    for (i__ = 1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         c__[i__ + j * c_dim1] -= work[i__ + j * work_dim1];
                         /* L50: */
@@ -362,49 +382,48 @@ int slarfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
             /* Let V = ( V1 ) */
             /* ( V2 ) (last K rows) */
             /* where V2 is unit upper triangular. */
-            if (lsame_(side, "L"))
+            if(lsame_(side, "L", 1, 1))
             {
                 /* Form H * C or H**T * C where C = ( C1 ) */
                 /* ( C2 ) */
                 /* W := C**T * V = (C1**T * V1 + C2**T * V2) (stored in WORK) */
                 /* W := C2**T */
                 i__1 = *k;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     scopy_(n, &c__[*m - *k + j + c_dim1], ldc, &work[j * work_dim1 + 1], &c__1);
                     /* L70: */
                 }
                 /* W := W * V2 */
-                strmm_("Right", "Upper", "No transpose", "Unit", n, k, &c_b14, &v[*m - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
-                if (*m > *k)
+                strmm_("Right", "Upper", "No transpose", "Unit", n, k, &c_b14,
+                       &v[*m - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
+                if(*m > *k)
                 {
                     /* W := W + C1**T * V1 */
                     i__1 = *m - *k;
-                    sgemm_("Transpose", "No transpose", n, k, &i__1, &c_b14, & c__[c_offset], ldc, &v[v_offset], ldv, &c_b14, & work[work_offset], ldwork);
+                    sgemm_("Transpose", "No transpose", n, k, &i__1, &c_b14, &c__[c_offset], ldc,
+                           &v[v_offset], ldv, &c_b14, &work[work_offset], ldwork);
                 }
                 /* W := W * T**T or W * T */
-                strmm_("Right", "Lower", transt, "Non-unit", n, k, &c_b14, &t[ t_offset], ldt, &work[work_offset], ldwork);
+                strmm_("Right", "Lower", transt, "Non-unit", n, k, &c_b14, &t[t_offset], ldt,
+                       &work[work_offset], ldwork);
                 /* C := C - V * W**T */
-                if (*m > *k)
+                if(*m > *k)
                 {
                     /* C1 := C1 - V1 * W**T */
                     i__1 = *m - *k;
-                    sgemm_("No transpose", "Transpose", &i__1, n, k, &c_b25, & v[v_offset], ldv, &work[work_offset], ldwork, & c_b14, &c__[c_offset], ldc) ;
+                    sgemm_("No transpose", "Transpose", &i__1, n, k, &c_b25, &v[v_offset], ldv,
+                           &work[work_offset], ldwork, &c_b14, &c__[c_offset], ldc);
                 }
                 /* W := W * V2**T */
-                strmm_("Right", "Upper", "Transpose", "Unit", n, k, &c_b14, & v[*m - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
+                strmm_("Right", "Upper", "Transpose", "Unit", n, k, &c_b14,
+                       &v[*m - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
                 /* C2 := C2 - W**T */
                 i__1 = *k;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = *n;
-                    for (i__ = 1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         c__[*m - *k + j + i__ * c_dim1] -= work[i__ + j * work_dim1];
                         /* L80: */
@@ -412,48 +431,48 @@ int slarfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
                     /* L90: */
                 }
             }
-            else if (lsame_(side, "R"))
+            else if(lsame_(side, "R", 1, 1))
             {
                 /* Form C * H or C * H' where C = ( C1 C2 ) */
                 /* W := C * V = (C1*V1 + C2*V2) (stored in WORK) */
                 /* W := C2 */
                 i__1 = *k;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
-                    scopy_(m, &c__[(*n - *k + j) * c_dim1 + 1], &c__1, &work[ j * work_dim1 + 1], &c__1);
+                    scopy_(m, &c__[(*n - *k + j) * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1],
+                           &c__1);
                     /* L100: */
                 }
                 /* W := W * V2 */
-                strmm_("Right", "Upper", "No transpose", "Unit", m, k, &c_b14, &v[*n - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
-                if (*n > *k)
+                strmm_("Right", "Upper", "No transpose", "Unit", m, k, &c_b14,
+                       &v[*n - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
+                if(*n > *k)
                 {
                     /* W := W + C1 * V1 */
                     i__1 = *n - *k;
-                    sgemm_("No transpose", "No transpose", m, k, &i__1, & c_b14, &c__[c_offset], ldc, &v[v_offset], ldv, & c_b14, &work[work_offset], ldwork);
+                    sgemm_("No transpose", "No transpose", m, k, &i__1, &c_b14, &c__[c_offset], ldc,
+                           &v[v_offset], ldv, &c_b14, &work[work_offset], ldwork);
                 }
                 /* W := W * T or W * T**T */
-                strmm_("Right", "Lower", trans, "Non-unit", m, k, &c_b14, &t[ t_offset], ldt, &work[work_offset], ldwork);
+                strmm_("Right", "Lower", trans, "Non-unit", m, k, &c_b14, &t[t_offset], ldt,
+                       &work[work_offset], ldwork);
                 /* C := C - W * V**T */
-                if (*n > *k)
+                if(*n > *k)
                 {
                     /* C1 := C1 - W * V1**T */
                     i__1 = *n - *k;
-                    sgemm_("No transpose", "Transpose", m, &i__1, k, &c_b25, & work[work_offset], ldwork, &v[v_offset], ldv, & c_b14, &c__[c_offset], ldc) ;
+                    sgemm_("No transpose", "Transpose", m, &i__1, k, &c_b25, &work[work_offset],
+                           ldwork, &v[v_offset], ldv, &c_b14, &c__[c_offset], ldc);
                 }
                 /* W := W * V2**T */
-                strmm_("Right", "Upper", "Transpose", "Unit", m, k, &c_b14, & v[*n - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
+                strmm_("Right", "Upper", "Transpose", "Unit", m, k, &c_b14,
+                       &v[*n - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
                 /* C2 := C2 - W */
                 i__1 = *k;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = *m;
-                    for (i__ = 1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         c__[i__ + (*n - *k + j) * c_dim1] -= work[i__ + j * work_dim1];
                         /* L110: */
@@ -463,55 +482,54 @@ int slarfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
             }
         }
     }
-    else if (lsame_(storev, "R"))
+    else if(lsame_(storev, "R", 1, 1))
     {
-        if (lsame_(direct, "F"))
+        if(lsame_(direct, "F", 1, 1))
         {
             /* Let V = ( V1 V2 ) (V1: first K columns) */
             /* where V1 is unit upper triangular. */
-            if (lsame_(side, "L"))
+            if(lsame_(side, "L", 1, 1))
             {
                 /* Form H * C or H**T * C where C = ( C1 ) */
                 /* ( C2 ) */
                 /* W := C**T * V**T = (C1**T * V1**T + C2**T * V2**T) (stored in WORK) */
                 /* W := C1**T */
                 i__1 = *k;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     scopy_(n, &c__[j + c_dim1], ldc, &work[j * work_dim1 + 1], &c__1);
                     /* L130: */
                 }
                 /* W := W * V1**T */
-                strmm_("Right", "Upper", "Transpose", "Unit", n, k, &c_b14, & v[v_offset], ldv, &work[work_offset], ldwork);
-                if (*m > *k)
+                strmm_("Right", "Upper", "Transpose", "Unit", n, k, &c_b14, &v[v_offset], ldv,
+                       &work[work_offset], ldwork);
+                if(*m > *k)
                 {
                     /* W := W + C2**T * V2**T */
                     i__1 = *m - *k;
-                    sgemm_("Transpose", "Transpose", n, k, &i__1, &c_b14, & c__[*k + 1 + c_dim1], ldc, &v[(*k + 1) * v_dim1 + 1], ldv, &c_b14, &work[work_offset], ldwork);
+                    sgemm_("Transpose", "Transpose", n, k, &i__1, &c_b14, &c__[*k + 1 + c_dim1],
+                           ldc, &v[(*k + 1) * v_dim1 + 1], ldv, &c_b14, &work[work_offset], ldwork);
                 }
                 /* W := W * T**T or W * T */
-                strmm_("Right", "Upper", transt, "Non-unit", n, k, &c_b14, &t[ t_offset], ldt, &work[work_offset], ldwork);
+                strmm_("Right", "Upper", transt, "Non-unit", n, k, &c_b14, &t[t_offset], ldt,
+                       &work[work_offset], ldwork);
                 /* C := C - V**T * W**T */
-                if (*m > *k)
+                if(*m > *k)
                 {
                     /* C2 := C2 - V2**T * W**T */
                     i__1 = *m - *k;
-                    sgemm_("Transpose", "Transpose", &i__1, n, k, &c_b25, &v[( *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork, &c_b14, &c__[*k + 1 + c_dim1], ldc);
+                    sgemm_("Transpose", "Transpose", &i__1, n, k, &c_b25, &v[(*k + 1) * v_dim1 + 1],
+                           ldv, &work[work_offset], ldwork, &c_b14, &c__[*k + 1 + c_dim1], ldc);
                 }
                 /* W := W * V1 */
-                strmm_("Right", "Upper", "No transpose", "Unit", n, k, &c_b14, &v[v_offset], ldv, &work[work_offset], ldwork);
+                strmm_("Right", "Upper", "No transpose", "Unit", n, k, &c_b14, &v[v_offset], ldv,
+                       &work[work_offset], ldwork);
                 /* C1 := C1 - W**T */
                 i__1 = *k;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = *n;
-                    for (i__ = 1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         c__[j + i__ * c_dim1] -= work[i__ + j * work_dim1];
                         /* L140: */
@@ -519,48 +537,49 @@ int slarfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
                     /* L150: */
                 }
             }
-            else if (lsame_(side, "R"))
+            else if(lsame_(side, "R", 1, 1))
             {
                 /* Form C * H or C * H**T where C = ( C1 C2 ) */
                 /* W := C * V**T = (C1*V1**T + C2*V2**T) (stored in WORK) */
                 /* W := C1 */
                 i__1 = *k;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     scopy_(m, &c__[j * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1], &c__1);
                     /* L160: */
                 }
                 /* W := W * V1**T */
-                strmm_("Right", "Upper", "Transpose", "Unit", m, k, &c_b14, & v[v_offset], ldv, &work[work_offset], ldwork);
-                if (*n > *k)
+                strmm_("Right", "Upper", "Transpose", "Unit", m, k, &c_b14, &v[v_offset], ldv,
+                       &work[work_offset], ldwork);
+                if(*n > *k)
                 {
                     /* W := W + C2 * V2**T */
                     i__1 = *n - *k;
-                    sgemm_("No transpose", "Transpose", m, k, &i__1, &c_b14, & c__[(*k + 1) * c_dim1 + 1], ldc, &v[(*k + 1) * v_dim1 + 1], ldv, &c_b14, &work[work_offset], ldwork);
+                    sgemm_("No transpose", "Transpose", m, k, &i__1, &c_b14,
+                           &c__[(*k + 1) * c_dim1 + 1], ldc, &v[(*k + 1) * v_dim1 + 1], ldv, &c_b14,
+                           &work[work_offset], ldwork);
                 }
                 /* W := W * T or W * T**T */
-                strmm_("Right", "Upper", trans, "Non-unit", m, k, &c_b14, &t[ t_offset], ldt, &work[work_offset], ldwork);
+                strmm_("Right", "Upper", trans, "Non-unit", m, k, &c_b14, &t[t_offset], ldt,
+                       &work[work_offset], ldwork);
                 /* C := C - W * V */
-                if (*n > *k)
+                if(*n > *k)
                 {
                     /* C2 := C2 - W * V2 */
                     i__1 = *n - *k;
-                    sgemm_("No transpose", "No transpose", m, &i__1, k, & c_b25, &work[work_offset], ldwork, &v[(*k + 1) * v_dim1 + 1], ldv, &c_b14, &c__[(*k + 1) * c_dim1 + 1], ldc);
+                    sgemm_("No transpose", "No transpose", m, &i__1, k, &c_b25, &work[work_offset],
+                           ldwork, &v[(*k + 1) * v_dim1 + 1], ldv, &c_b14,
+                           &c__[(*k + 1) * c_dim1 + 1], ldc);
                 }
                 /* W := W * V1 */
-                strmm_("Right", "Upper", "No transpose", "Unit", m, k, &c_b14, &v[v_offset], ldv, &work[work_offset], ldwork);
+                strmm_("Right", "Upper", "No transpose", "Unit", m, k, &c_b14, &v[v_offset], ldv,
+                       &work[work_offset], ldwork);
                 /* C1 := C1 - W */
                 i__1 = *k;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = *m;
-                    for (i__ = 1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         c__[i__ + j * c_dim1] -= work[i__ + j * work_dim1];
                         /* L170: */
@@ -573,49 +592,48 @@ int slarfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         {
             /* Let V = ( V1 V2 ) (V2: last K columns) */
             /* where V2 is unit lower triangular. */
-            if (lsame_(side, "L"))
+            if(lsame_(side, "L", 1, 1))
             {
                 /* Form H * C or H**T * C where C = ( C1 ) */
                 /* ( C2 ) */
                 /* W := C**T * V**T = (C1**T * V1**T + C2**T * V2**T) (stored in WORK) */
                 /* W := C2**T */
                 i__1 = *k;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     scopy_(n, &c__[*m - *k + j + c_dim1], ldc, &work[j * work_dim1 + 1], &c__1);
                     /* L190: */
                 }
                 /* W := W * V2**T */
-                strmm_("Right", "Lower", "Transpose", "Unit", n, k, &c_b14, & v[(*m - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
-                if (*m > *k)
+                strmm_("Right", "Lower", "Transpose", "Unit", n, k, &c_b14,
+                       &v[(*m - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
+                if(*m > *k)
                 {
                     /* W := W + C1**T * V1**T */
                     i__1 = *m - *k;
-                    sgemm_("Transpose", "Transpose", n, k, &i__1, &c_b14, & c__[c_offset], ldc, &v[v_offset], ldv, &c_b14, & work[work_offset], ldwork);
+                    sgemm_("Transpose", "Transpose", n, k, &i__1, &c_b14, &c__[c_offset], ldc,
+                           &v[v_offset], ldv, &c_b14, &work[work_offset], ldwork);
                 }
                 /* W := W * T**T or W * T */
-                strmm_("Right", "Lower", transt, "Non-unit", n, k, &c_b14, &t[ t_offset], ldt, &work[work_offset], ldwork);
+                strmm_("Right", "Lower", transt, "Non-unit", n, k, &c_b14, &t[t_offset], ldt,
+                       &work[work_offset], ldwork);
                 /* C := C - V**T * W**T */
-                if (*m > *k)
+                if(*m > *k)
                 {
                     /* C1 := C1 - V1**T * W**T */
                     i__1 = *m - *k;
-                    sgemm_("Transpose", "Transpose", &i__1, n, k, &c_b25, &v[ v_offset], ldv, &work[work_offset], ldwork, & c_b14, &c__[c_offset], ldc);
+                    sgemm_("Transpose", "Transpose", &i__1, n, k, &c_b25, &v[v_offset], ldv,
+                           &work[work_offset], ldwork, &c_b14, &c__[c_offset], ldc);
                 }
                 /* W := W * V2 */
-                strmm_("Right", "Lower", "No transpose", "Unit", n, k, &c_b14, &v[(*m - *k + 1) * v_dim1 + 1], ldv, &work[ work_offset], ldwork);
+                strmm_("Right", "Lower", "No transpose", "Unit", n, k, &c_b14,
+                       &v[(*m - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
                 /* C2 := C2 - W**T */
                 i__1 = *k;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = *n;
-                    for (i__ = 1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         c__[*m - *k + j + i__ * c_dim1] -= work[i__ + j * work_dim1];
                         /* L200: */
@@ -623,48 +641,48 @@ int slarfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
                     /* L210: */
                 }
             }
-            else if (lsame_(side, "R"))
+            else if(lsame_(side, "R", 1, 1))
             {
                 /* Form C * H or C * H**T where C = ( C1 C2 ) */
                 /* W := C * V**T = (C1*V1**T + C2*V2**T) (stored in WORK) */
                 /* W := C2 */
                 i__1 = *k;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
-                    scopy_(m, &c__[(*n - *k + j) * c_dim1 + 1], &c__1, &work[ j * work_dim1 + 1], &c__1);
+                    scopy_(m, &c__[(*n - *k + j) * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1],
+                           &c__1);
                     /* L220: */
                 }
                 /* W := W * V2**T */
-                strmm_("Right", "Lower", "Transpose", "Unit", m, k, &c_b14, & v[(*n - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
-                if (*n > *k)
+                strmm_("Right", "Lower", "Transpose", "Unit", m, k, &c_b14,
+                       &v[(*n - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
+                if(*n > *k)
                 {
                     /* W := W + C1 * V1**T */
                     i__1 = *n - *k;
-                    sgemm_("No transpose", "Transpose", m, k, &i__1, &c_b14, & c__[c_offset], ldc, &v[v_offset], ldv, &c_b14, & work[work_offset], ldwork);
+                    sgemm_("No transpose", "Transpose", m, k, &i__1, &c_b14, &c__[c_offset], ldc,
+                           &v[v_offset], ldv, &c_b14, &work[work_offset], ldwork);
                 }
                 /* W := W * T or W * T**T */
-                strmm_("Right", "Lower", trans, "Non-unit", m, k, &c_b14, &t[ t_offset], ldt, &work[work_offset], ldwork);
+                strmm_("Right", "Lower", trans, "Non-unit", m, k, &c_b14, &t[t_offset], ldt,
+                       &work[work_offset], ldwork);
                 /* C := C - W * V */
-                if (*n > *k)
+                if(*n > *k)
                 {
                     /* C1 := C1 - W * V1 */
                     i__1 = *n - *k;
-                    sgemm_("No transpose", "No transpose", m, &i__1, k, & c_b25, &work[work_offset], ldwork, &v[v_offset], ldv, &c_b14, &c__[c_offset], ldc);
+                    sgemm_("No transpose", "No transpose", m, &i__1, k, &c_b25, &work[work_offset],
+                           ldwork, &v[v_offset], ldv, &c_b14, &c__[c_offset], ldc);
                 }
                 /* W := W * V2 */
-                strmm_("Right", "Lower", "No transpose", "Unit", m, k, &c_b14, &v[(*n - *k + 1) * v_dim1 + 1], ldv, &work[ work_offset], ldwork);
+                strmm_("Right", "Lower", "No transpose", "Unit", m, k, &c_b14,
+                       &v[(*n - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
                 /* C1 := C1 - W */
                 i__1 = *k;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = *m;
-                    for (i__ = 1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         c__[i__ + (*n - *k + j) * c_dim1] -= work[i__ + j * work_dim1];
                         /* L230: */
@@ -675,7 +693,7 @@ int slarfb_(char *side, char *trans, char *direct, char * storev, integer *m, in
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLARFB */
 }
 /* slarfb_ */

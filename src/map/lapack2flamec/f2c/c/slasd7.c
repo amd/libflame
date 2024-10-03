@@ -1,18 +1,28 @@
-/* ../netlib/slasd7.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slasd7.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b SLASD7 merges the two sets of singular values together into a single sorted set. Then it tries to deflate the size of the problem. Used by sbdsdc. */
+/* > \brief \b SLASD7 merges the two sets of singular values together into a single sorted set. Then
+ * it tries to deflate the size of the problem. Used by sbdsdc. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLASD7 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasd7. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasd7.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasd7. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasd7.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasd7. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasd7.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -268,12 +278,18 @@ and entries in the second half */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *k, real *d__, real *z__, real *zw, real *vf, real *vfw, real *vl, real *vlw, real *alpha, real *beta, real *dsigma, integer *idx, integer *idxp, integer *idxq, integer *perm, integer * givptr, integer *givcol, integer *ldgcol, real *givnum, integer * ldgnum, real *c__, real *s, integer *info)
+void slasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *k, real *d__,
+             real *z__, real *zw, real *vf, real *vfw, real *vl, real *vlw, real *alpha, real *beta,
+             real *dsigma, integer *idx, integer *idxp, integer *idxq, integer *perm,
+             integer *givptr, integer *givcol, integer *ldgcol, real *givnum, integer *ldgnum,
+             real *c__, real *s, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slasd7 inputs: icompq %d, nl %d, nr %d, sqre %d, idxq %d, ldgcol %d, ldgnum %d",*icompq, *nl, *nr, *sqre,  *idxq,  *ldgcol, *ldgnum);
+    snprintf(buffer, 256,
+             "slasd7 inputs: icompq %d, nl %d, nr %d, sqre %d, idxq %d, ldgcol %d, ldgnum %d",
+             *icompq, *nl, *nr, *sqre, *idxq, *ldgcol, *ldgnum);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -286,13 +302,19 @@ int slasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *k
     real eps, tau, tol;
     integer nlp1, nlp2, idxi, idxj;
     extern /* Subroutine */
-    int srot_(integer *, real *, integer *, real *, integer *, real *, real *);
+        void
+        srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     integer idxjp, jprev;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *);
     extern real slapy2_(real *, real *), slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slamrg_( integer *, integer *, real *, integer *, integer *, integer *);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
+        slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
     real hlftol;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -339,40 +361,40 @@ int slasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *k
     n = *nl + *nr + 1;
     m = n + *sqre;
     jprev = 0;
-    if (*icompq < 0 || *icompq > 1)
+    if(*icompq < 0 || *icompq > 1)
     {
         *info = -1;
     }
-    else if (*nl < 1)
+    else if(*nl < 1)
     {
         *info = -2;
     }
-    else if (*nr < 1)
+    else if(*nr < 1)
     {
         *info = -3;
     }
-    else if (*sqre < 0 || *sqre > 1)
+    else if(*sqre < 0 || *sqre > 1)
     {
         *info = -4;
     }
-    else if (*ldgcol < n)
+    else if(*ldgcol < n)
     {
         *info = -22;
     }
-    else if (*ldgnum < n)
+    else if(*ldgnum < n)
     {
         *info = -24;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SLASD7", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     nlp1 = *nl + 1;
     nlp2 = *nl + 2;
-    if (*icompq == 1)
+    if(*icompq == 1)
     {
         *givptr = 0;
     }
@@ -381,9 +403,7 @@ int slasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *k
     z1 = *alpha * vl[nlp1];
     vl[nlp1] = 0.f;
     tau = vf[nlp1];
-    for (i__ = *nl;
-            i__ >= 1;
-            --i__)
+    for(i__ = *nl; i__ >= 1; --i__)
     {
         z__[i__ + 1] = *alpha * vl[i__];
         vl[i__] = 0.f;
@@ -395,9 +415,7 @@ int slasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *k
     vf[1] = tau;
     /* Generate the second part of the vector Z. */
     i__1 = m;
-    for (i__ = nlp2;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = nlp2; i__ <= i__1; ++i__)
     {
         z__[i__] = *beta * vf[i__];
         vf[i__] = 0.f;
@@ -405,18 +423,14 @@ int slasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *k
     }
     /* Sort the singular values into increasing order */
     i__1 = n;
-    for (i__ = nlp2;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = nlp2; i__ <= i__1; ++i__)
     {
         idxq[i__] += nlp1;
         /* L30: */
     }
     /* DSIGMA, IDXC, IDXC, and ZW are used as storage space. */
     i__1 = n;
-    for (i__ = 2;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 2; i__ <= i__1; ++i__)
     {
         dsigma[i__] = d__[idxq[i__]];
         zw[i__] = z__[idxq[i__]];
@@ -426,9 +440,7 @@ int slasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *k
     }
     slamrg_(nl, nr, &dsigma[2], &c__1, &c__1, &idx[2]);
     i__1 = n;
-    for (i__ = 2;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 2; i__ <= i__1; ++i__)
     {
         idxi = idx[i__] + 1;
         d__[i__] = dsigma[idxi];
@@ -442,10 +454,10 @@ int slasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *k
     /* Computing MAX */
     r__1 = f2c_abs(*alpha);
     r__2 = f2c_abs(*beta); // , expr subst
-    tol = fla_max(r__1,r__2);
+    tol = fla_max(r__1, r__2);
     /* Computing MAX */
     r__2 = (r__1 = d__[n], f2c_abs(r__1));
-    tol = eps * 64.f * fla_max(r__2,tol);
+    tol = eps * 64.f * fla_max(r__2, tol);
     /* There are 2 kinds of deflation -- first a value in the z-vector */
     /* is small, second two (or more) singular values are very close */
     /* together (their difference is (*small_val). */
@@ -464,16 +476,14 @@ int slasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *k
     *k = 1;
     k2 = n + 1;
     i__1 = n;
-    for (j = 2;
-            j <= i__1;
-            ++j)
+    for(j = 2; j <= i__1; ++j)
     {
-        if ((r__1 = z__[j], f2c_abs(r__1)) <= tol)
+        if((r__1 = z__[j], f2c_abs(r__1)) <= tol)
         {
             /* Deflate due to small z component. */
             --k2;
             idxp[k2] = j;
-            if (j == n)
+            if(j == n)
             {
                 goto L100;
             }
@@ -489,11 +499,11 @@ L70:
     j = jprev;
 L80:
     ++j;
-    if (j > n)
+    if(j > n)
     {
         goto L90;
     }
-    if ((r__1 = z__[j], f2c_abs(r__1)) <= tol)
+    if((r__1 = z__[j], f2c_abs(r__1)) <= tol)
     {
         /* Deflate due to small z component. */
         --k2;
@@ -502,7 +512,7 @@ L80:
     else
     {
         /* Check if singular values are close enough to allow deflation. */
-        if ((r__1 = d__[j] - d__[jprev], f2c_abs(r__1)) <= tol)
+        if((r__1 = d__[j] - d__[jprev], f2c_abs(r__1)) <= tol)
         {
             /* Deflation is possible. */
             *s = z__[jprev];
@@ -515,16 +525,16 @@ L80:
             *c__ /= tau;
             *s = -(*s) / tau;
             /* Record the appropriate Givens rotation */
-            if (*icompq == 1)
+            if(*icompq == 1)
             {
                 ++(*givptr);
                 idxjp = idxq[idx[jprev] + 1];
                 idxj = idxq[idx[j] + 1];
-                if (idxjp <= nlp1)
+                if(idxjp <= nlp1)
                 {
                     --idxjp;
                 }
-                if (idxj <= nlp1)
+                if(idxj <= nlp1)
                 {
                     --idxj;
                 }
@@ -558,9 +568,7 @@ L100: /* Sort the singular values into DSIGMA. The singular values which */
     /* were not deflated go into the first K slots of DSIGMA, except */
     /* that DSIGMA(1) is treated separately. */
     i__1 = n;
-    for (j = 2;
-            j <= i__1;
-            ++j)
+    for(j = 2; j <= i__1; ++j)
     {
         jp = idxp[j];
         dsigma[j] = d__[jp];
@@ -568,16 +576,14 @@ L100: /* Sort the singular values into DSIGMA. The singular values which */
         vlw[j] = vl[jp];
         /* L110: */
     }
-    if (*icompq == 1)
+    if(*icompq == 1)
     {
         i__1 = n;
-        for (j = 2;
-                j <= i__1;
-                ++j)
+        for(j = 2; j <= i__1; ++j)
         {
             jp = idxp[j];
             perm[j] = idxq[idx[jp] + 1];
-            if (perm[j] <= nlp1)
+            if(perm[j] <= nlp1)
             {
                 --perm[j];
             }
@@ -592,14 +598,14 @@ L100: /* Sort the singular values into DSIGMA. The singular values which */
     /* VL(M). */
     dsigma[1] = 0.f;
     hlftol = tol / 2.f;
-    if (f2c_abs(dsigma[2]) <= hlftol)
+    if(f2c_abs(dsigma[2]) <= hlftol)
     {
         dsigma[2] = hlftol;
     }
-    if (m > n)
+    if(m > n)
     {
         z__[1] = slapy2_(&z1, &z__[m]);
-        if (z__[1] <= tol)
+        if(z__[1] <= tol)
         {
             *c__ = 1.f;
             *s = 0.f;
@@ -615,7 +621,7 @@ L100: /* Sort the singular values into DSIGMA. The singular values which */
     }
     else
     {
-        if (f2c_abs(z1) <= tol)
+        if(f2c_abs(z1) <= tol)
         {
             z__[1] = tol;
         }
@@ -632,7 +638,7 @@ L100: /* Sort the singular values into DSIGMA. The singular values which */
     i__1 = n - 1;
     scopy_(&i__1, &vlw[2], &c__1, &vl[2], &c__1);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLASD7 */
 }
 /* slasd7_ */

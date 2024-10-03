@@ -1,18 +1,28 @@
-/* zlanhe.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* zlanhe.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b ZLANHE returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, or the ele ment of largest absolute value of a complex Hermitian matrix. */
+/* > \brief \b ZLANHE returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
+ * or the ele ment of largest absolute value of a complex Hermitian matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLANHE + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlanhe. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlanhe.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlanhe. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlanhe.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlanhe. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlanhe.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -111,10 +121,12 @@ otherwise, */
 /* > \author NAG Ltd. */
 /* > \ingroup complex16HEauxiliary */
 /* ===================================================================== */
-doublereal zlanhe_(char *norm, char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal *work)
+doublereal zlanhe_(char *norm, char *uplo, integer *n, doublecomplex *a, integer *lda,
+                   doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlanhe inputs: norm %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*norm, *uplo, *n, *lda);
+    AOCL_DTL_SNPRINTF("zlanhe inputs: norm %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *norm,
+                      *uplo, *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     doublereal ret_val, d__1;
@@ -123,11 +135,12 @@ doublereal zlanhe_(char *norm, char *uplo, integer *n, doublecomplex *a, integer
     /* Local variables */
     integer i__, j;
     doublereal sum, absa, scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal value;
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
-    int zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
+        void
+        zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -154,28 +167,24 @@ doublereal zlanhe_(char *norm, char *uplo, integer *n, doublecomplex *a, integer
     --work;
     /* Function Body */
     value = 0.;
-    if (*n == 0)
+    if(*n == 0)
     {
         value = 0.;
     }
-    else if (lsame_(norm, "M"))
+    else if(lsame_(norm, "M", 1, 1))
     {
         /* Find fla_max(abs(A(i,j))). */
         value = 0.;
-        if (lsame_(uplo, "U"))
+        if(lsame_(uplo, "U", 1, 1))
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j - 1;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     sum = z_abs(&a[i__ + j * a_dim1]);
-                    if (value < sum || disnan_(&sum))
+                    if(value < sum || disnan_(&sum))
                     {
                         value = sum;
                     }
@@ -183,7 +192,7 @@ doublereal zlanhe_(char *norm, char *uplo, integer *n, doublecomplex *a, integer
                 }
                 i__2 = j + j * a_dim1;
                 sum = (d__1 = a[i__2].r, f2c_abs(d__1));
-                if (value < sum || disnan_(&sum))
+                if(value < sum || disnan_(&sum))
                 {
                     value = sum;
                 }
@@ -193,23 +202,19 @@ doublereal zlanhe_(char *norm, char *uplo, integer *n, doublecomplex *a, integer
         else
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j + j * a_dim1;
                 sum = (d__1 = a[i__2].r, f2c_abs(d__1));
-                if (value < sum || disnan_(&sum))
+                if(value < sum || disnan_(&sum))
                 {
                     value = sum;
                 }
                 i__2 = *n;
-                for (i__ = j + 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = j + 1; i__ <= i__2; ++i__)
                 {
                     sum = z_abs(&a[i__ + j * a_dim1]);
-                    if (value < sum || disnan_(&sum))
+                    if(value < sum || disnan_(&sum))
                     {
                         value = sum;
                     }
@@ -219,22 +224,18 @@ doublereal zlanhe_(char *norm, char *uplo, integer *n, doublecomplex *a, integer
             }
         }
     }
-    else if (lsame_(norm, "I") || lsame_(norm, "O") || *(unsigned char *)norm == '1')
+    else if(lsame_(norm, "I", 1, 1) || lsame_(norm, "O", 1, 1) || *(unsigned char *)norm == '1')
     {
         /* Find normI(A) ( = norm1(A), since A is hermitian). */
         value = 0.;
-        if (lsame_(uplo, "U"))
+        if(lsame_(uplo, "U", 1, 1))
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 sum = 0.;
                 i__2 = j - 1;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     absa = z_abs(&a[i__ + j * a_dim1]);
                     sum += absa;
@@ -246,12 +247,10 @@ doublereal zlanhe_(char *norm, char *uplo, integer *n, doublecomplex *a, integer
                 /* L60: */
             }
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 sum = work[i__];
-                if (value < sum || disnan_(&sum))
+                if(value < sum || disnan_(&sum))
                 {
                     value = sum;
                 }
@@ -261,31 +260,25 @@ doublereal zlanhe_(char *norm, char *uplo, integer *n, doublecomplex *a, integer
         else
         {
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 work[i__] = 0.;
                 /* L80: */
             }
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j + j * a_dim1;
                 sum = work[j] + (d__1 = a[i__2].r, f2c_abs(d__1));
                 i__2 = *n;
-                for (i__ = j + 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = j + 1; i__ <= i__2; ++i__)
                 {
                     absa = z_abs(&a[i__ + j * a_dim1]);
                     sum += absa;
                     work[i__] += absa;
                     /* L90: */
                 }
-                if (value < sum || disnan_(&sum))
+                if(value < sum || disnan_(&sum))
                 {
                     value = sum;
                 }
@@ -293,17 +286,15 @@ doublereal zlanhe_(char *norm, char *uplo, integer *n, doublecomplex *a, integer
             }
         }
     }
-    else if (lsame_(norm, "F") || lsame_(norm, "E"))
+    else if(lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
     {
         /* Find normF(A). */
         scale = 0.;
         sum = 1.;
-        if (lsame_(uplo, "U"))
+        if(lsame_(uplo, "U", 1, 1))
         {
             i__1 = *n;
-            for (j = 2;
-                    j <= i__1;
-                    ++j)
+            for(j = 2; j <= i__1; ++j)
             {
                 i__2 = j - 1;
                 zlassq_(&i__2, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
@@ -313,9 +304,7 @@ doublereal zlanhe_(char *norm, char *uplo, integer *n, doublecomplex *a, integer
         else
         {
             i__1 = *n - 1;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = *n - j;
                 zlassq_(&i__2, &a[j + 1 + j * a_dim1], &c__1, &scale, &sum);
@@ -324,16 +313,14 @@ doublereal zlanhe_(char *norm, char *uplo, integer *n, doublecomplex *a, integer
         }
         sum *= 2;
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + i__ * a_dim1;
-            if (a[i__2].r != 0.)
+            if(a[i__2].r != 0.)
             {
                 i__2 = i__ + i__ * a_dim1;
                 absa = (d__1 = a[i__2].r, f2c_abs(d__1));
-                if (scale < absa)
+                if(scale < absa)
                 {
                     /* Computing 2nd power */
                     d__1 = scale / absa;

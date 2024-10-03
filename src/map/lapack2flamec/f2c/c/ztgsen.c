@@ -1,5 +1,8 @@
-/* ../netlib/ztgsen.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ztgsen.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b ZTGSEN */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZTGSEN + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztgsen. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztgsen.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztgsen. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztgsen.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztgsen. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztgsen.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -87,7 +96,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > WANTQ is LOGICAL */
 /* > .TRUE. : update the left transformation matrix Q;
-*/
+ */
 /* > .FALSE.: do not update Q. */
 /* > \endverbatim */
 /* > */
@@ -95,7 +104,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > WANTZ is LOGICAL */
 /* > .TRUE. : update the right transformation matrix Z;
-*/
+ */
 /* > .FALSE.: do not update Z. */
 /* > \endverbatim */
 /* > */
@@ -261,9 +270,9 @@ the routine */
 /* > LIWORK is INTEGER */
 /* > The dimension of the array IWORK. LIWORK >= 1. */
 /* > If IJOB = 1, 2 or 4, LIWORK >= N+2;
-*/
+ */
 /* > If IJOB = 3 or 5, LIWORK >= MAX(N+2, 2*M*(N-M));
-*/
+ */
 /* > */
 /* > If LIWORK = -1, then a workspace query is assumed;
 the */
@@ -428,12 +437,19 @@ Computing Eigenspaces with Specified */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ztgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *alpha, doublecomplex * beta, doublecomplex *q, integer *ldq, doublecomplex *z__, integer * ldz, integer *m, doublereal *pl, doublereal *pr, doublereal *dif, doublecomplex *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+void ztgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, integer *n,
+             doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *alpha,
+             doublecomplex *beta, doublecomplex *q, integer *ldq, doublecomplex *z__, integer *ldz,
+             integer *m, doublereal *pl, doublereal *pr, doublereal *dif, doublecomplex *work,
+             integer *lwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ztgsen inputs: ijob %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", m %" FLA_IS "",*ijob, *n, *lda, *ldb, *ldq, *ldz, *m);
+    AOCL_DTL_SNPRINTF("ztgsen inputs: ijob %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", m %" FLA_IS "",
+                      *ijob, *n, *lda, *ldb, *ldq, *ldz, *m);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2, i__3;
+    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
+        i__3;
     doublecomplex z__1, z__2;
     /* Builtin functions */
     double sqrt(doublereal), z_abs(doublecomplex *);
@@ -445,23 +461,36 @@ int ztgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
     doublecomplex temp1, temp2;
     integer isave[3];
     extern /* Subroutine */
-    int zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
     logical wantd;
     integer lwmin;
     logical wantp;
     extern /* Subroutine */
-    int zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
+        void
+        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     logical wantd1, wantd2;
     extern doublereal dlamch_(char *);
     doublereal dscale, rdscal, safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer liwmin;
     extern /* Subroutine */
-    int zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), ztgexc_(logical *, logical *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, integer *), zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
+        void
+        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *),
+        ztgexc_(logical *, logical *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *,
+                integer *, integer *),
+        zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
     logical lquery;
     extern /* Subroutine */
-    int ztgsyl_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, integer *, integer *);
+        void
+        ztgsyl_(char *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
+                doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
+                doublecomplex *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -507,36 +536,36 @@ int ztgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1 || *liwork == -1;
-    if (*ijob < 0 || *ijob > 5)
+    if(*ijob < 0 || *ijob > 5)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (*ldq < 1 || *wantq && *ldq < *n)
+    else if(*ldq < 1 || *wantq && *ldq < *n)
     {
         *info = -13;
     }
-    else if (*ldz < 1 || *wantz && *ldz < *n)
+    else if(*ldz < 1 || *wantz && *ldz < *n)
     {
         *info = -15;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZTGSEN", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     ierr = 0;
     wantp = *ijob == 1 || *ijob >= 4;
@@ -546,12 +575,10 @@ int ztgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
     /* Set M to the dimension of the specified pair of deflating */
     /* subspaces. */
     *m = 0;
-    if (! lquery || *ijob != 0)
+    if(!lquery || *ijob != 0)
     {
         i__1 = *n;
-        for (k = 1;
-                k <= i__1;
-                ++k)
+        for(k = 1; k <= i__1; ++k)
         {
             i__2 = k;
             i__3 = k + k * a_dim1;
@@ -561,16 +588,16 @@ int ztgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
             i__3 = k + k * b_dim1;
             beta[i__2].r = b[i__3].r;
             beta[i__2].i = b[i__3].i; // , expr subst
-            if (k < *n)
+            if(k < *n)
             {
-                if (select[k])
+                if(select[k])
                 {
                     ++(*m);
                 }
             }
             else
             {
-                if (select[*n])
+                if(select[*n])
                 {
                     ++(*m);
                 }
@@ -578,73 +605,71 @@ int ztgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
             /* L10: */
         }
     }
-    if (*ijob == 1 || *ijob == 2 || *ijob == 4)
+    if(*ijob == 1 || *ijob == 2 || *ijob == 4)
     {
         /* Computing MAX */
         i__1 = 1;
         i__2 = (*m << 1) * (*n - *m); // , expr subst
-        lwmin = fla_max(i__1,i__2);
+        lwmin = fla_max(i__1, i__2);
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n + 2; // , expr subst
-        liwmin = fla_max(i__1,i__2);
+        liwmin = fla_max(i__1, i__2);
     }
-    else if (*ijob == 3 || *ijob == 5)
+    else if(*ijob == 3 || *ijob == 5)
     {
         /* Computing MAX */
         i__1 = 1;
         i__2 = (*m << 2) * (*n - *m); // , expr subst
-        lwmin = fla_max(i__1,i__2);
+        lwmin = fla_max(i__1, i__2);
         /* Computing MAX */
         i__1 = 1, i__2 = (*m << 1) * (*n - *m);
-        i__1 = fla_max(i__1,i__2);
+        i__1 = fla_max(i__1, i__2);
         i__2 = *n + 2; // ; expr subst
-        liwmin = fla_max(i__1,i__2);
+        liwmin = fla_max(i__1, i__2);
     }
     else
     {
         lwmin = 1;
         liwmin = 1;
     }
-    work[1].r = (doublereal) lwmin;
+    work[1].r = (doublereal)lwmin;
     work[1].i = 0.; // , expr subst
     iwork[1] = liwmin;
-    if (*lwork < lwmin && ! lquery)
+    if(*lwork < lwmin && !lquery)
     {
         *info = -21;
     }
-    else if (*liwork < liwmin && ! lquery)
+    else if(*liwork < liwmin && !lquery)
     {
         *info = -23;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZTGSEN", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* Quick return if possible. */
-    if (*m == *n || *m == 0)
+    if(*m == *n || *m == 0)
     {
-        if (wantp)
+        if(wantp)
         {
             *pl = 1.;
             *pr = 1.;
         }
-        if (wantd)
+        if(wantd)
         {
             dscale = 0.;
             dsum = 1.;
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 zlassq_(n, &a[i__ * a_dim1 + 1], &c__1, &dscale, &dsum);
                 zlassq_(n, &b[i__ * b_dim1 + 1], &c__1, &dscale, &dsum);
@@ -660,30 +685,29 @@ int ztgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
     /* Collect the selected blocks at the top-left corner of (A, B). */
     ks = 0;
     i__1 = *n;
-    for (k = 1;
-            k <= i__1;
-            ++k)
+    for(k = 1; k <= i__1; ++k)
     {
         swap = select[k];
-        if (swap)
+        if(swap)
         {
             ++ks;
             /* Swap the K-th block to position KS. Compute unitary Q */
             /* and Z that will swap adjacent diagonal blocks in (A, B). */
-            if (k != ks)
+            if(k != ks)
             {
-                ztgexc_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq, &z__[z_offset], ldz, &k, &ks, & ierr);
+                ztgexc_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
+                        &z__[z_offset], ldz, &k, &ks, &ierr);
             }
-            if (ierr > 0)
+            if(ierr > 0)
             {
                 /* Swap is rejected: exit. */
                 *info = 1;
-                if (wantp)
+                if(wantp)
                 {
                     *pl = 0.;
                     *pr = 0.;
                 }
-                if (wantd)
+                if(wantd)
                 {
                     dif[1] = 0.;
                     dif[2] = 0.;
@@ -693,7 +717,7 @@ int ztgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
         }
         /* L30: */
     }
-    if (wantp)
+    if(wantp)
     {
         /* Solve generalized Sylvester equation for R and L: */
         /* A11 * R - L * A22 = A12 */
@@ -705,7 +729,9 @@ int ztgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
         zlacpy_("Full", &n1, &n2, &b[i__ * b_dim1 + 1], ldb, &work[n1 * n2 + 1], &n1);
         ijb = 0;
         i__1 = *lwork - (n1 << 1) * n2;
-        ztgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1], lda, &work[1], &n1, &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 1], &n1, &dscale, &dif[1], & work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &ierr);
+        ztgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1], lda, &work[1], &n1,
+                &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 1], &n1, &dscale,
+                &dif[1], &work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &ierr);
         /* Estimate the reciprocal of norms of "projections" onto */
         /* left and right eigenspaces */
         rdscal = 0.;
@@ -713,7 +739,7 @@ int ztgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
         i__1 = n1 * n2;
         zlassq_(&i__1, &work[1], &c__1, &rdscal, &dsum);
         *pl = rdscal * sqrt(dsum);
-        if (*pl == 0.)
+        if(*pl == 0.)
         {
             *pl = 1.;
         }
@@ -726,7 +752,7 @@ int ztgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
         i__1 = n1 * n2;
         zlassq_(&i__1, &work[n1 * n2 + 1], &c__1, &rdscal, &dsum);
         *pr = rdscal * sqrt(dsum);
-        if (*pr == 0.)
+        if(*pr == 0.)
         {
             *pr = 1.;
         }
@@ -735,10 +761,10 @@ int ztgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
             *pr = dscale / (sqrt(dscale * dscale / *pr + *pr) * sqrt(*pr));
         }
     }
-    if (wantd)
+    if(wantd)
     {
         /* Compute estimates Difu and Difl. */
-        if (wantd1)
+        if(wantd1)
         {
             n1 = *m;
             n2 = *n - *m;
@@ -746,10 +772,14 @@ int ztgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
             ijb = 3;
             /* Frobenius norm-based Difu estimate. */
             i__1 = *lwork - (n1 << 1) * n2;
-            ztgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1], lda, &work[1], &n1, &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 1], &n1, &dscale, & dif[1], &work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], & ierr);
+            ztgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1], lda, &work[1],
+                    &n1, &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 1], &n1,
+                    &dscale, &dif[1], &work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &ierr);
             /* Frobenius norm-based Difl estimate. */
             i__1 = *lwork - (n1 << 1) * n2;
-            ztgsyl_("N", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, &a[ a_offset], lda, &work[1], &n2, &b[i__ + i__ * b_dim1], ldb, &b[b_offset], ldb, &work[n1 * n2 + 1], &n2, &dscale, &dif[2], &work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], & ierr);
+            ztgsyl_("N", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, &a[a_offset], lda, &work[1],
+                    &n2, &b[i__ + i__ * b_dim1], ldb, &b[b_offset], ldb, &work[n1 * n2 + 1], &n2,
+                    &dscale, &dif[2], &work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &ierr);
         }
         else
         {
@@ -764,41 +794,53 @@ int ztgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
             ijb = 0;
             mn2 = (n1 << 1) * n2;
             /* 1-norm-based estimate of Difu. */
-L40:
+        L40:
             zlacn2_(&mn2, &work[mn2 + 1], &work[1], &dif[1], &kase, isave);
-            if (kase != 0)
+            if(kase != 0)
             {
-                if (kase == 1)
+                if(kase == 1)
                 {
                     /* Solve generalized Sylvester equation */
                     i__1 = *lwork - (n1 << 1) * n2;
-                    ztgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1], lda, &work[1], &n1, &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 1], &n1, &dscale, &dif[1], &work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &ierr);
+                    ztgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1], lda,
+                            &work[1], &n1, &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb,
+                            &work[n1 * n2 + 1], &n1, &dscale, &dif[1], &work[(n1 * n2 << 1) + 1],
+                            &i__1, &iwork[1], &ierr);
                 }
                 else
                 {
                     /* Solve the transposed variant. */
                     i__1 = *lwork - (n1 << 1) * n2;
-                    ztgsyl_("C", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1], lda, &work[1], &n1, &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 1], &n1, &dscale, &dif[1], &work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &ierr);
+                    ztgsyl_("C", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1], lda,
+                            &work[1], &n1, &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb,
+                            &work[n1 * n2 + 1], &n1, &dscale, &dif[1], &work[(n1 * n2 << 1) + 1],
+                            &i__1, &iwork[1], &ierr);
                 }
                 goto L40;
             }
             dif[1] = dscale / dif[1];
             /* 1-norm-based estimate of Difl. */
-L50:
+        L50:
             zlacn2_(&mn2, &work[mn2 + 1], &work[1], &dif[2], &kase, isave);
-            if (kase != 0)
+            if(kase != 0)
             {
-                if (kase == 1)
+                if(kase == 1)
                 {
                     /* Solve generalized Sylvester equation */
                     i__1 = *lwork - (n1 << 1) * n2;
-                    ztgsyl_("N", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, &a[a_offset], lda, &work[1], &n2, &b[i__ + i__ * b_dim1], ldb, &b[b_offset], ldb, &work[n1 * n2 + 1], &n2, &dscale, &dif[2], &work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &ierr);
+                    ztgsyl_("N", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, &a[a_offset], lda,
+                            &work[1], &n2, &b[i__ + i__ * b_dim1], ldb, &b[b_offset], ldb,
+                            &work[n1 * n2 + 1], &n2, &dscale, &dif[2], &work[(n1 * n2 << 1) + 1],
+                            &i__1, &iwork[1], &ierr);
                 }
                 else
                 {
                     /* Solve the transposed variant. */
                     i__1 = *lwork - (n1 << 1) * n2;
-                    ztgsyl_("C", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, &a[a_offset], lda, &work[1], &n2, &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 1], &n2, &dscale, &dif[2], &work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &ierr);
+                    ztgsyl_("C", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, &a[a_offset], lda,
+                            &work[1], &n2, &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb,
+                            &work[n1 * n2 + 1], &n2, &dscale, &dif[2], &work[(n1 * n2 << 1) + 1],
+                            &i__1, &iwork[1], &ierr);
                 }
                 goto L50;
             }
@@ -809,12 +851,10 @@ L50:
     /* of the generalized Schur form) and Store the generalized */
     /* eigenvalues of reordered pair (A, B) */
     i__1 = *n;
-    for (k = 1;
-            k <= i__1;
-            ++k)
+    for(k = 1; k <= i__1; ++k)
     {
         dscale = z_abs(&b[k + k * b_dim1]);
-        if (dscale > safmin)
+        if(dscale > safmin)
         {
             i__2 = k + k * b_dim1;
             z__2.r = b[i__2].r / dscale;
@@ -834,7 +874,7 @@ L50:
             zscal_(&i__2, &temp1, &b[k + (k + 1) * b_dim1], ldb);
             i__2 = *n - k + 1;
             zscal_(&i__2, &temp1, &a[k + k * a_dim1], lda);
-            if (*wantq)
+            if(*wantq)
             {
                 zscal_(n, &temp2, &q[k * q_dim1 + 1], &c__1);
             }
@@ -856,11 +896,11 @@ L50:
         /* L60: */
     }
 L70:
-    work[1].r = (doublereal) lwmin;
+    work[1].r = (doublereal)lwmin;
     work[1].i = 0.; // , expr subst
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZTGSEN */
 }
 /* ztgsen_ */

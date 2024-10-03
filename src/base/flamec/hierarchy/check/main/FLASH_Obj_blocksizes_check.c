@@ -10,7 +10,7 @@
 
 #include "FLAME.h"
 
-FLA_Error FLASH_Obj_blocksizes_check( FLA_Obj H, dim_t* b_m, dim_t* b_n )
+FLA_Error FLASH_Obj_blocksizes_check( FLA_Obj H, fla_dim_t* b_m, fla_dim_t* b_n )
 {
   FLA_Error e_val;
 

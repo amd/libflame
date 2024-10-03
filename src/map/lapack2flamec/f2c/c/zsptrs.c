@@ -1,11 +1,10 @@
-/* ../netlib/zsptrs.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zsptrs.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    1.,0.
-}
-;
+static doublecomplex c_b1 = {1., 0.};
 static integer c__1 = 1;
 /* > \brief \b ZSPTRS */
 /* =========== DOCUMENTATION =========== */
@@ -13,11 +12,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZSPTRS + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsptrs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsptrs.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsptrs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsptrs.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsptrs. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsptrs.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -48,7 +53,7 @@ static integer c__1 = 1;
 /* > Specifies whether the details of the factorization are stored */
 /* > as an upper or lower triangular matrix. */
 /* > = 'U': Upper triangular, form is A = U*D*U**T;
-*/
+ */
 /* > = 'L': Lower triangular, form is A = L*D*L**T. */
 /* > \endverbatim */
 /* > */
@@ -109,10 +114,12 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int zsptrs_(char *uplo, integer *n, integer *nrhs, doublecomplex *ap, integer *ipiv, doublecomplex *b, integer *ldb, integer *info)
+void zsptrs_(char *uplo, integer *n, integer *nrhs, doublecomplex *ap, integer *ipiv,
+             doublecomplex *b, integer *ldb, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zsptrs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",*uplo, *n, *nrhs, *ldb);
+    AOCL_DTL_SNPRINTF("zsptrs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",
+                      *uplo, *n, *nrhs, *ldb);
 
     /* System generated locals */
     integer b_dim1, b_offset, i__1, i__2;
@@ -124,13 +131,20 @@ int zsptrs_(char *uplo, integer *n, integer *nrhs, doublecomplex *ap, integer *i
     doublecomplex ak, bk;
     integer kc, kp;
     doublecomplex akm1, bkm1, akm1k;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublecomplex denom;
     extern /* Subroutine */
-    int zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zscal_(integer *, doublecomplex *, doublecomplex *, integer *),
+        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
+               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
+               integer *, doublecomplex *, integer *),
+        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -159,37 +173,37 @@ int zsptrs_(char *uplo, integer *n, integer *nrhs, doublecomplex *ap, integer *i
     b -= b_offset;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -3;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -7;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZSPTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0 || *nrhs == 0)
+    if(*n == 0 || *nrhs == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    if (upper)
+    if(upper)
     {
         /* Solve A*X = B, where A = U*D*U**T. */
         /* First solve U*D*X = B, overwriting B with X. */
@@ -197,18 +211,18 @@ int zsptrs_(char *uplo, integer *n, integer *nrhs, doublecomplex *ap, integer *i
         /* 1 or 2, depending on the size of the diagonal blocks. */
         k = *n;
         kc = *n * (*n + 1) / 2 + 1;
-L10: /* If K < 1, exit from loop. */
-        if (k < 1)
+    L10: /* If K < 1, exit from loop. */
+        if(k < 1)
         {
             goto L30;
         }
         kc -= k;
-        if (ipiv[k] > 0)
+        if(ipiv[k] > 0)
         {
             /* 1 x 1 diagonal block */
             /* Interchange rows K and IPIV(K). */
             kp = ipiv[k];
-            if (kp != k)
+            if(kp != k)
             {
                 zswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
@@ -217,7 +231,7 @@ L10: /* If K < 1, exit from loop. */
             i__1 = k - 1;
             z__1.r = -1.;
             z__1.i = -0.; // , expr subst
-            zgeru_(&i__1, nrhs, &z__1, &ap[kc], &c__1, &b[k + b_dim1], ldb, & b[b_dim1 + 1], ldb);
+            zgeru_(&i__1, nrhs, &z__1, &ap[kc], &c__1, &b[k + b_dim1], ldb, &b[b_dim1 + 1], ldb);
             /* Multiply by the inverse of the diagonal block. */
             z_div(&z__1, &c_b1, &ap[kc + k - 1]);
             zscal_(nrhs, &z__1, &b[k + b_dim1], ldb);
@@ -228,7 +242,7 @@ L10: /* If K < 1, exit from loop. */
             /* 2 x 2 diagonal block */
             /* Interchange rows K-1 and -IPIV(K). */
             kp = -ipiv[k];
-            if (kp != k - 1)
+            if(kp != k - 1)
             {
                 zswap_(nrhs, &b[k - 1 + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
@@ -237,11 +251,12 @@ L10: /* If K < 1, exit from loop. */
             i__1 = k - 2;
             z__1.r = -1.;
             z__1.i = -0.; // , expr subst
-            zgeru_(&i__1, nrhs, &z__1, &ap[kc], &c__1, &b[k + b_dim1], ldb, & b[b_dim1 + 1], ldb);
+            zgeru_(&i__1, nrhs, &z__1, &ap[kc], &c__1, &b[k + b_dim1], ldb, &b[b_dim1 + 1], ldb);
             i__1 = k - 2;
             z__1.r = -1.;
             z__1.i = -0.; // , expr subst
-            zgeru_(&i__1, nrhs, &z__1, &ap[kc - (k - 1)], &c__1, &b[k - 1 + b_dim1], ldb, &b[b_dim1 + 1], ldb);
+            zgeru_(&i__1, nrhs, &z__1, &ap[kc - (k - 1)], &c__1, &b[k - 1 + b_dim1], ldb,
+                   &b[b_dim1 + 1], ldb);
             /* Multiply by the inverse of the diagonal block. */
             i__1 = kc + k - 2;
             akm1k.r = ap[i__1].r;
@@ -259,9 +274,7 @@ L10: /* If K < 1, exit from loop. */
             denom.r = z__1.r;
             denom.i = z__1.i; // , expr subst
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 z_div(&z__1, &b[k - 1 + j * b_dim1], &akm1k);
                 bkm1.r = z__1.r;
@@ -291,17 +304,17 @@ L10: /* If K < 1, exit from loop. */
             k += -2;
         }
         goto L10;
-L30: /* Next solve U**T*X = B, overwriting B with X. */
+    L30: /* Next solve U**T*X = B, overwriting B with X. */
         /* K is the main loop index, increasing from 1 to N in steps of */
         /* 1 or 2, depending on the size of the diagonal blocks. */
         k = 1;
         kc = 1;
-L40: /* If K > N, exit from loop. */
-        if (k > *n)
+    L40: /* If K > N, exit from loop. */
+        if(k > *n)
         {
             goto L50;
         }
-        if (ipiv[k] > 0)
+        if(ipiv[k] > 0)
         {
             /* 1 x 1 diagonal block */
             /* Multiply by inv(U**T(K)), where U(K) is the transformation */
@@ -309,10 +322,11 @@ L40: /* If K > N, exit from loop. */
             i__1 = k - 1;
             z__1.r = -1.;
             z__1.i = -0.; // , expr subst
-            zgemv_("Transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb, &ap[kc], &c__1, &c_b1, &b[k + b_dim1], ldb);
+            zgemv_("Transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb, &ap[kc], &c__1, &c_b1,
+                   &b[k + b_dim1], ldb);
             /* Interchange rows K and IPIV(K). */
             kp = ipiv[k];
-            if (kp != k)
+            if(kp != k)
             {
                 zswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
@@ -327,14 +341,16 @@ L40: /* If K > N, exit from loop. */
             i__1 = k - 1;
             z__1.r = -1.;
             z__1.i = -0.; // , expr subst
-            zgemv_("Transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb, &ap[kc], &c__1, &c_b1, &b[k + b_dim1], ldb);
+            zgemv_("Transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb, &ap[kc], &c__1, &c_b1,
+                   &b[k + b_dim1], ldb);
             i__1 = k - 1;
             z__1.r = -1.;
             z__1.i = -0.; // , expr subst
-            zgemv_("Transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb, &ap[kc + k], &c__1, &c_b1, &b[k + 1 + b_dim1], ldb);
+            zgemv_("Transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb, &ap[kc + k], &c__1, &c_b1,
+                   &b[k + 1 + b_dim1], ldb);
             /* Interchange rows K and -IPIV(K). */
             kp = -ipiv[k];
-            if (kp != k)
+            if(kp != k)
             {
                 zswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
@@ -342,8 +358,7 @@ L40: /* If K > N, exit from loop. */
             k += 2;
         }
         goto L40;
-L50:
-        ;
+    L50:;
     }
     else
     {
@@ -353,28 +368,29 @@ L50:
         /* 1 or 2, depending on the size of the diagonal blocks. */
         k = 1;
         kc = 1;
-L60: /* If K > N, exit from loop. */
-        if (k > *n)
+    L60: /* If K > N, exit from loop. */
+        if(k > *n)
         {
             goto L80;
         }
-        if (ipiv[k] > 0)
+        if(ipiv[k] > 0)
         {
             /* 1 x 1 diagonal block */
             /* Interchange rows K and IPIV(K). */
             kp = ipiv[k];
-            if (kp != k)
+            if(kp != k)
             {
                 zswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
             /* Multiply by inv(L(K)), where L(K) is the transformation */
             /* stored in column K of A. */
-            if (k < *n)
+            if(k < *n)
             {
                 i__1 = *n - k;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zgeru_(&i__1, nrhs, &z__1, &ap[kc + 1], &c__1, &b[k + b_dim1], ldb, &b[k + 1 + b_dim1], ldb);
+                zgeru_(&i__1, nrhs, &z__1, &ap[kc + 1], &c__1, &b[k + b_dim1], ldb,
+                       &b[k + 1 + b_dim1], ldb);
             }
             /* Multiply by the inverse of the diagonal block. */
             z_div(&z__1, &c_b1, &ap[kc]);
@@ -387,22 +403,24 @@ L60: /* If K > N, exit from loop. */
             /* 2 x 2 diagonal block */
             /* Interchange rows K+1 and -IPIV(K). */
             kp = -ipiv[k];
-            if (kp != k + 1)
+            if(kp != k + 1)
             {
                 zswap_(nrhs, &b[k + 1 + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
             /* Multiply by inv(L(K)), where L(K) is the transformation */
             /* stored in columns K and K+1 of A. */
-            if (k < *n - 1)
+            if(k < *n - 1)
             {
                 i__1 = *n - k - 1;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zgeru_(&i__1, nrhs, &z__1, &ap[kc + 2], &c__1, &b[k + b_dim1], ldb, &b[k + 2 + b_dim1], ldb);
+                zgeru_(&i__1, nrhs, &z__1, &ap[kc + 2], &c__1, &b[k + b_dim1], ldb,
+                       &b[k + 2 + b_dim1], ldb);
                 i__1 = *n - k - 1;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zgeru_(&i__1, nrhs, &z__1, &ap[kc + *n - k + 2], &c__1, &b[k + 1 + b_dim1], ldb, &b[k + 2 + b_dim1], ldb);
+                zgeru_(&i__1, nrhs, &z__1, &ap[kc + *n - k + 2], &c__1, &b[k + 1 + b_dim1], ldb,
+                       &b[k + 2 + b_dim1], ldb);
             }
             /* Multiply by the inverse of the diagonal block. */
             i__1 = kc + 1;
@@ -421,9 +439,7 @@ L60: /* If K > N, exit from loop. */
             denom.r = z__1.r;
             denom.i = z__1.i; // , expr subst
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 z_div(&z__1, &b[k + j * b_dim1], &akm1k);
                 bkm1.r = z__1.r;
@@ -453,32 +469,33 @@ L60: /* If K > N, exit from loop. */
             k += 2;
         }
         goto L60;
-L80: /* Next solve L**T*X = B, overwriting B with X. */
+    L80: /* Next solve L**T*X = B, overwriting B with X. */
         /* K is the main loop index, decreasing from N to 1 in steps of */
         /* 1 or 2, depending on the size of the diagonal blocks. */
         k = *n;
         kc = *n * (*n + 1) / 2 + 1;
-L90: /* If K < 1, exit from loop. */
-        if (k < 1)
+    L90: /* If K < 1, exit from loop. */
+        if(k < 1)
         {
             goto L100;
         }
         kc -= *n - k + 1;
-        if (ipiv[k] > 0)
+        if(ipiv[k] > 0)
         {
             /* 1 x 1 diagonal block */
             /* Multiply by inv(L**T(K)), where L(K) is the transformation */
             /* stored in column K of A. */
-            if (k < *n)
+            if(k < *n)
             {
                 i__1 = *n - k;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zgemv_("Transpose", &i__1, nrhs, &z__1, &b[k + 1 + b_dim1], ldb, &ap[kc + 1], &c__1, &c_b1, &b[k + b_dim1], ldb);
+                zgemv_("Transpose", &i__1, nrhs, &z__1, &b[k + 1 + b_dim1], ldb, &ap[kc + 1], &c__1,
+                       &c_b1, &b[k + b_dim1], ldb);
             }
             /* Interchange rows K and IPIV(K). */
             kp = ipiv[k];
-            if (kp != k)
+            if(kp != k)
             {
                 zswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
@@ -489,20 +506,22 @@ L90: /* If K < 1, exit from loop. */
             /* 2 x 2 diagonal block */
             /* Multiply by inv(L**T(K-1)), where L(K-1) is the transformation */
             /* stored in columns K-1 and K of A. */
-            if (k < *n)
+            if(k < *n)
             {
                 i__1 = *n - k;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zgemv_("Transpose", &i__1, nrhs, &z__1, &b[k + 1 + b_dim1], ldb, &ap[kc + 1], &c__1, &c_b1, &b[k + b_dim1], ldb);
+                zgemv_("Transpose", &i__1, nrhs, &z__1, &b[k + 1 + b_dim1], ldb, &ap[kc + 1], &c__1,
+                       &c_b1, &b[k + b_dim1], ldb);
                 i__1 = *n - k;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zgemv_("Transpose", &i__1, nrhs, &z__1, &b[k + 1 + b_dim1], ldb, &ap[kc - (*n - k)], &c__1, &c_b1, &b[k - 1 + b_dim1], ldb);
+                zgemv_("Transpose", &i__1, nrhs, &z__1, &b[k + 1 + b_dim1], ldb, &ap[kc - (*n - k)],
+                       &c__1, &c_b1, &b[k - 1 + b_dim1], ldb);
             }
             /* Interchange rows K and -IPIV(K). */
             kp = -ipiv[k];
-            if (kp != k)
+            if(kp != k)
             {
                 zswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
@@ -510,11 +529,10 @@ L90: /* If K < 1, exit from loop. */
             k += -2;
         }
         goto L90;
-L100:
-        ;
+    L100:;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZSPTRS */
 }
 /* zsptrs_ */

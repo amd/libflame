@@ -1,5 +1,8 @@
-/* ../netlib/dopmtr.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dopmtr.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b DOPMTR */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DOPMTR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dopmtr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dopmtr.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dopmtr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dopmtr.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dopmtr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dopmtr.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -43,7 +52,7 @@ static integer c__1 = 1;
 /* > storage: */
 /* > */
 /* > if UPLO = 'U', Q = H(nq-1) . . . H(2) H(1);
-*/
+ */
 /* > */
 /* > if UPLO = 'L', Q = H(1) H(2) . . . H(nq-1). */
 /* > \endverbatim */
@@ -53,7 +62,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > SIDE is CHARACTER*1 */
 /* > = 'L': apply Q or Q**T from the Left;
-*/
+ */
 /* > = 'R': apply Q or Q**T from the Right. */
 /* > \endverbatim */
 /* > */
@@ -62,7 +71,7 @@ static integer c__1 = 1;
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangular packed storage used in previous */
 /* > call to DSPTRD;
-*/
+ */
 /* > = 'L': Lower triangular packed storage used in previous */
 /* > call to DSPTRD. */
 /* > \endverbatim */
@@ -71,7 +80,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > TRANS is CHARACTER*1 */
 /* > = 'N': No transpose, apply Q;
-*/
+ */
 /* > = 'T': Transpose, apply Q**T. */
 /* > \endverbatim */
 /* > */
@@ -141,10 +150,13 @@ static integer c__1 = 1;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doublereal *ap, doublereal *tau, doublereal *c__, integer *ldc, doublereal *work, integer *info)
+void dopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doublereal *ap,
+             doublereal *tau, doublereal *c__, integer *ldc, doublereal *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dopmtr inputs: side %c, uplo %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", ldc %" FLA_IS "",*side, *uplo, *trans, *m, *n, *ldc);
+    AOCL_DTL_SNPRINTF("dopmtr inputs: side %c, uplo %c, trans %c, m %" FLA_IS ", n %" FLA_IS
+                      ", ldc %" FLA_IS "",
+                      *side, *uplo, *trans, *m, *n, *ldc);
     /* System generated locals */
     integer c_dim1, c_offset, i__1, i__2;
     /* Local variables */
@@ -152,11 +164,14 @@ int dopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doubler
     doublereal aii;
     logical left;
     extern /* Subroutine */
-    int dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *);
-    extern logical lsame_(char *, char *);
+        void
+        dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, forwrd;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -188,11 +203,11 @@ int dopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doubler
     --work;
     /* Function Body */
     *info = 0;
-    left = lsame_(side, "L");
-    notran = lsame_(trans, "N");
-    upper = lsame_(uplo, "U");
+    left = lsame_(side, "L", 1, 1);
+    notran = lsame_(trans, "N", 1, 1);
+    upper = lsame_(uplo, "U", 1, 1);
     /* NQ is the order of Q */
-    if (left)
+    if(left)
     {
         nq = *m;
     }
@@ -200,48 +215,48 @@ int dopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doubler
     {
         nq = *n;
     }
-    if (! left && ! lsame_(side, "R"))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! upper && ! lsame_(uplo, "L"))
+    else if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -2;
     }
-    else if (! notran && ! lsame_(trans, "T"))
+    else if(!notran && !lsame_(trans, "T", 1, 1))
     {
         *info = -3;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -4;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -5;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -9;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DOPMTR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    if (upper)
+    if(upper)
     {
         /* Q was determined by a call to DSPTRD with UPLO = 'U' */
-        forwrd = left && notran || ! left && ! notran;
-        if (forwrd)
+        forwrd = left && notran || !left && !notran;
+        if(forwrd)
         {
             i1 = 1;
             i2 = nq - 1;
@@ -255,7 +270,7 @@ int dopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doubler
             i3 = -1;
             ii = nq * (nq + 1) / 2 - 1;
         }
-        if (left)
+        if(left)
         {
             ni = *n;
         }
@@ -265,11 +280,9 @@ int dopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doubler
         }
         i__1 = i2;
         i__2 = i3;
-        for (i__ = i1;
-                i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
-                i__ += i__2)
+        for(i__ = i1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
         {
-            if (left)
+            if(left)
             {
                 /* H(i) is applied to C(1:i,1:n) */
                 mi = i__;
@@ -282,9 +295,10 @@ int dopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doubler
             /* Apply H(i) */
             aii = ap[ii];
             ap[ii] = 1.;
-            dlarf_(side, &mi, &ni, &ap[ii - i__ + 1], &c__1, &tau[i__], &c__[ c_offset], ldc, &work[1]);
+            dlarf_(side, &mi, &ni, &ap[ii - i__ + 1], &c__1, &tau[i__], &c__[c_offset], ldc,
+                   &work[1]);
             ap[ii] = aii;
-            if (forwrd)
+            if(forwrd)
             {
                 ii = ii + i__ + 2;
             }
@@ -298,8 +312,8 @@ int dopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doubler
     else
     {
         /* Q was determined by a call to DSPTRD with UPLO = 'L'. */
-        forwrd = left && ! notran || ! left && notran;
-        if (forwrd)
+        forwrd = left && !notran || !left && notran;
+        if(forwrd)
         {
             i1 = 1;
             i2 = nq - 1;
@@ -313,7 +327,7 @@ int dopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doubler
             i3 = -1;
             ii = nq * (nq + 1) / 2 - 1;
         }
-        if (left)
+        if(left)
         {
             ni = *n;
             jc = 1;
@@ -325,13 +339,11 @@ int dopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doubler
         }
         i__2 = i2;
         i__1 = i3;
-        for (i__ = i1;
-                i__1 < 0 ? i__ >= i__2 : i__ <= i__2;
-                i__ += i__1)
+        for(i__ = i1; i__1 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__1)
         {
             aii = ap[ii];
             ap[ii] = 1.;
-            if (left)
+            if(left)
             {
                 /* H(i) is applied to C(i+1:m,1:n) */
                 mi = *m - i__;
@@ -344,9 +356,10 @@ int dopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doubler
                 jc = i__ + 1;
             }
             /* Apply H(i) */
-            dlarf_(side, &mi, &ni, &ap[ii], &c__1, &tau[i__], &c__[ic + jc * c_dim1], ldc, &work[1]);
+            dlarf_(side, &mi, &ni, &ap[ii], &c__1, &tau[i__], &c__[ic + jc * c_dim1], ldc,
+                   &work[1]);
             ap[ii] = aii;
-            if (forwrd)
+            if(forwrd)
             {
                 ii = ii + nq - i__ + 1;
             }
@@ -358,7 +371,7 @@ int dopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doubler
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DOPMTR */
 }
 /* dopmtr_ */

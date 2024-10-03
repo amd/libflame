@@ -37,7 +37,7 @@ int main(integer argc, char *argv[])
     i,
     n_param_combos = N_PARAM_COMBOS;
 
-  dim_t nb_alg, n_threads;
+  fla_dim_t nb_alg, n_threads;
   
   char *colors = "brkgmcbrkgmcbrkgmc";
   char *ticks  = "o+*xso+*xso+*xso+*xs";

@@ -1,5 +1,8 @@
-/* ../netlib/dtgsna.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dtgsna.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static doublereal c_b19 = 1.;
@@ -13,11 +16,17 @@ static integer c__3 = 3;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DTGSNA + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtgsna. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtgsna.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtgsna. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtgsna.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtgsna. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtgsna.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -59,9 +68,9 @@ static integer c__3 = 3;
 /* > Specifies whether condition numbers are required for */
 /* > eigenvalues (S) or eigenvectors (DIF): */
 /* > = 'E': for eigenvalues only (S);
-*/
+ */
 /* > = 'V': for eigenvectors only (DIF);
-*/
+ */
 /* > = 'B': for both eigenvalues and eigenvectors (S and DIF). */
 /* > \endverbatim */
 /* > */
@@ -69,7 +78,7 @@ static integer c__3 = 3;
 /* > \verbatim */
 /* > HOWMNY is CHARACTER*1 */
 /* > = 'A': compute condition numbers for all eigenpairs;
-*/
+ */
 /* > = 'S': compute condition numbers for selected eigenpairs */
 /* > specified by the array SELECT. */
 /* > \endverbatim */
@@ -379,10 +388,16 @@ Computing Eigenspaces with Specified */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dtgsna_(char *job, char *howmny, logical *select, integer *n, doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *vl, integer *ldvl, doublereal *vr, integer *ldvr, doublereal *s, doublereal *dif, integer *mm, integer *m, doublereal * work, integer *lwork, integer *iwork, integer *info)
+void dtgsna_(char *job, char *howmny, logical *select, integer *n, doublereal *a, integer *lda,
+             doublereal *b, integer *ldb, doublereal *vl, integer *ldvl, doublereal *vr,
+             integer *ldvr, doublereal *s, doublereal *dif, integer *mm, integer *m,
+             doublereal *work, integer *lwork, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dtgsna inputs: job %c, howmny %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS ", lwork %" FLA_IS "",*job, *howmny, *n, *lda, *ldb, *ldvl, *ldvr, *mm, *lwork);
+    AOCL_DTL_SNPRINTF("dtgsna inputs: job %c, howmny %c, n %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS
+                      ", lwork %" FLA_IS "",
+                      *job, *howmny, *n, *lda, *ldb, *ldvl, *ldvr, *mm, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2;
     doublereal d__1, d__2;
@@ -402,12 +417,16 @@ int dtgsna_(char *job, char *howmny, logical *select, integer *n, doublereal *a,
     integer ilst;
     doublereal rnrm;
     extern /* Subroutine */
-    int dlag2_(doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dlag2_(doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+               doublereal *, doublereal *, doublereal *, doublereal *);
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     doublereal root1, root2, scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+        void
+        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
+               integer *, doublereal *, doublereal *, integer *);
     doublereal uhavi, uhbvi, tmpii;
     integer lwmin;
     logical wants;
@@ -417,11 +436,20 @@ int dtgsna_(char *job, char *howmny, logical *select, integer *n, doublereal *a,
     extern doublereal dlamch_(char *);
     doublereal alphai, alphar;
     extern /* Subroutine */
-    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dtgexc_(logical *, logical *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *, integer *);
+        void
+        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        dtgexc_(logical *, logical *, integer *, doublereal *, integer *, doublereal *, integer *,
+                doublereal *, integer *, doublereal *, integer *, integer *, integer *,
+                doublereal *, integer *, integer *);
     logical wantbh, wantdf, somcon;
     doublereal alprqt;
     extern /* Subroutine */
-    int dtgsyl_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *);
+        void
+        dtgsyl_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *,
+                integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+                integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *,
+                integer *, integer *, integer *);
     doublereal smlnum;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -466,38 +494,38 @@ int dtgsna_(char *job, char *howmny, logical *select, integer *n, doublereal *a,
     --work;
     --iwork;
     /* Function Body */
-    wantbh = lsame_(job, "B");
-    wants = lsame_(job, "E") || wantbh;
-    wantdf = lsame_(job, "V") || wantbh;
-    somcon = lsame_(howmny, "S");
+    wantbh = lsame_(job, "B", 1, 1);
+    wants = lsame_(job, "E", 1, 1) || wantbh;
+    wantdf = lsame_(job, "V", 1, 1) || wantbh;
+    somcon = lsame_(howmny, "S", 1, 1);
     *info = 0;
     lquery = *lwork == -1;
     cond = 0.;
-    if (! wants && ! wantdf)
+    if(!wants && !wantdf)
     {
         *info = -1;
     }
-    else if (! lsame_(howmny, "A") && ! somcon)
+    else if(!lsame_(howmny, "A", 1, 1) && !somcon)
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -6;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -8;
     }
-    else if (wants && *ldvl < *n)
+    else if(wants && *ldvl < *n)
     {
         *info = -10;
     }
-    else if (wants && *ldvr < *n)
+    else if(wants && *ldvr < *n)
     {
         *info = -12;
     }
@@ -505,26 +533,24 @@ int dtgsna_(char *job, char *howmny, logical *select, integer *n, doublereal *a,
     {
         /* Set M to the number of eigenpairs for which condition numbers */
         /* are required, and test MM. */
-        if (somcon)
+        if(somcon)
         {
             *m = 0;
             pair = FALSE_;
             i__1 = *n;
-            for (k = 1;
-                    k <= i__1;
-                    ++k)
+            for(k = 1; k <= i__1; ++k)
             {
-                if (pair)
+                if(pair)
                 {
                     pair = FALSE_;
                 }
                 else
                 {
-                    if (k < *n)
+                    if(k < *n)
                     {
-                        if (a[k + 1 + k * a_dim1] == 0.)
+                        if(a[k + 1 + k * a_dim1] == 0.)
                         {
-                            if (select[k])
+                            if(select[k])
                             {
                                 ++(*m);
                             }
@@ -532,7 +558,7 @@ int dtgsna_(char *job, char *howmny, logical *select, integer *n, doublereal *a,
                         else
                         {
                             pair = TRUE_;
-                            if (select[k] || select[k + 1])
+                            if(select[k] || select[k + 1])
                             {
                                 *m += 2;
                             }
@@ -540,7 +566,7 @@ int dtgsna_(char *job, char *howmny, logical *select, integer *n, doublereal *a,
                     }
                     else
                     {
-                        if (select[*n])
+                        if(select[*n])
                         {
                             ++(*m);
                         }
@@ -553,11 +579,11 @@ int dtgsna_(char *job, char *howmny, logical *select, integer *n, doublereal *a,
         {
             *m = *n;
         }
-        if (*n == 0)
+        if(*n == 0)
         {
             lwmin = 1;
         }
-        else if (lsame_(job, "V") || lsame_(job, "B"))
+        else if(lsame_(job, "V", 1, 1) || lsame_(job, "B", 1, 1))
         {
             lwmin = (*n << 1) * (*n + 2) + 16;
         }
@@ -565,33 +591,33 @@ int dtgsna_(char *job, char *howmny, logical *select, integer *n, doublereal *a,
         {
             lwmin = *n;
         }
-        work[1] = (doublereal) lwmin;
-        if (*mm < *m)
+        work[1] = (doublereal)lwmin;
+        if(*mm < *m)
         {
             *info = -15;
         }
-        else if (*lwork < lwmin && ! lquery)
+        else if(*lwork < lwmin && !lquery)
         {
             *info = -18;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DTGSNA", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Get machine constants */
     eps = dlamch_("P");
@@ -599,48 +625,46 @@ int dtgsna_(char *job, char *howmny, logical *select, integer *n, doublereal *a,
     ks = 0;
     pair = FALSE_;
     i__1 = *n;
-    for (k = 1;
-            k <= i__1;
-            ++k)
+    for(k = 1; k <= i__1; ++k)
     {
         /* Determine whether A(k,k) begins a 1-by-1 or 2-by-2 block. */
-        if (pair)
+        if(pair)
         {
             pair = FALSE_;
             goto L20;
         }
         else
         {
-            if (k < *n)
+            if(k < *n)
             {
                 pair = a[k + 1 + k * a_dim1] != 0.;
             }
         }
         /* Determine whether condition numbers are required for the k-th */
         /* eigenpair. */
-        if (somcon)
+        if(somcon)
         {
-            if (pair)
+            if(pair)
             {
-                if (! select[k] && ! select[k + 1])
+                if(!select[k] && !select[k + 1])
                 {
                     goto L20;
                 }
             }
             else
             {
-                if (! select[k])
+                if(!select[k])
                 {
                     goto L20;
                 }
             }
         }
         ++ks;
-        if (wants)
+        if(wants)
         {
             /* Compute the reciprocal condition number of the k-th */
             /* eigenvalue. */
-            if (pair)
+            if(pair)
             {
                 /* Complex eigenvalue pair. */
                 d__1 = dnrm2_(n, &vr[ks * vr_dim1 + 1], &c__1);
@@ -649,20 +673,24 @@ int dtgsna_(char *job, char *howmny, logical *select, integer *n, doublereal *a,
                 d__1 = dnrm2_(n, &vl[ks * vl_dim1 + 1], &c__1);
                 d__2 = dnrm2_(n, &vl[(ks + 1) * vl_dim1 + 1], &c__1);
                 lnrm = dlapy2_(&d__1, &d__2);
-                dgemv_("N", n, n, &c_b19, &a[a_offset], lda, &vr[ks * vr_dim1 + 1], &c__1, &c_b21, &work[1], &c__1);
-                tmprr = ddot_(n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], & c__1);
+                dgemv_("N", n, n, &c_b19, &a[a_offset], lda, &vr[ks * vr_dim1 + 1], &c__1, &c_b21,
+                       &work[1], &c__1);
+                tmprr = ddot_(n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
                 tmpri = ddot_(n, &work[1], &c__1, &vl[(ks + 1) * vl_dim1 + 1], &c__1);
-                dgemv_("N", n, n, &c_b19, &a[a_offset], lda, &vr[(ks + 1) * vr_dim1 + 1], &c__1, &c_b21, &work[1], &c__1);
+                dgemv_("N", n, n, &c_b19, &a[a_offset], lda, &vr[(ks + 1) * vr_dim1 + 1], &c__1,
+                       &c_b21, &work[1], &c__1);
                 tmpii = ddot_(n, &work[1], &c__1, &vl[(ks + 1) * vl_dim1 + 1], &c__1);
-                tmpir = ddot_(n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], & c__1);
+                tmpir = ddot_(n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
                 uhav = tmprr + tmpii;
                 uhavi = tmpir - tmpri;
-                dgemv_("N", n, n, &c_b19, &b[b_offset], ldb, &vr[ks * vr_dim1 + 1], &c__1, &c_b21, &work[1], &c__1);
-                tmprr = ddot_(n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], & c__1);
+                dgemv_("N", n, n, &c_b19, &b[b_offset], ldb, &vr[ks * vr_dim1 + 1], &c__1, &c_b21,
+                       &work[1], &c__1);
+                tmprr = ddot_(n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
                 tmpri = ddot_(n, &work[1], &c__1, &vl[(ks + 1) * vl_dim1 + 1], &c__1);
-                dgemv_("N", n, n, &c_b19, &b[b_offset], ldb, &vr[(ks + 1) * vr_dim1 + 1], &c__1, &c_b21, &work[1], &c__1);
+                dgemv_("N", n, n, &c_b19, &b[b_offset], ldb, &vr[(ks + 1) * vr_dim1 + 1], &c__1,
+                       &c_b21, &work[1], &c__1);
                 tmpii = ddot_(n, &work[1], &c__1, &vl[(ks + 1) * vl_dim1 + 1], &c__1);
-                tmpir = ddot_(n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], & c__1);
+                tmpir = ddot_(n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
                 uhbv = tmprr + tmpii;
                 uhbvi = tmpir - tmpri;
                 uhav = dlapy2_(&uhav, &uhavi);
@@ -676,12 +704,14 @@ int dtgsna_(char *job, char *howmny, logical *select, integer *n, doublereal *a,
                 /* Real eigenvalue. */
                 rnrm = dnrm2_(n, &vr[ks * vr_dim1 + 1], &c__1);
                 lnrm = dnrm2_(n, &vl[ks * vl_dim1 + 1], &c__1);
-                dgemv_("N", n, n, &c_b19, &a[a_offset], lda, &vr[ks * vr_dim1 + 1], &c__1, &c_b21, &work[1], &c__1);
-                uhav = ddot_(n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1) ;
-                dgemv_("N", n, n, &c_b19, &b[b_offset], ldb, &vr[ks * vr_dim1 + 1], &c__1, &c_b21, &work[1], &c__1);
-                uhbv = ddot_(n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1) ;
+                dgemv_("N", n, n, &c_b19, &a[a_offset], lda, &vr[ks * vr_dim1 + 1], &c__1, &c_b21,
+                       &work[1], &c__1);
+                uhav = ddot_(n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
+                dgemv_("N", n, n, &c_b19, &b[b_offset], ldb, &vr[ks * vr_dim1 + 1], &c__1, &c_b21,
+                       &work[1], &c__1);
+                uhbv = ddot_(n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
                 cond = dlapy2_(&uhav, &uhbv);
-                if (cond == 0.)
+                if(cond == 0.)
                 {
                     s[ks] = -1.;
                 }
@@ -691,16 +721,16 @@ int dtgsna_(char *job, char *howmny, logical *select, integer *n, doublereal *a,
                 }
             }
         }
-        if (wantdf)
+        if(wantdf)
         {
-            if (*n == 1)
+            if(*n == 1)
             {
                 dif[ks] = dlapy2_(&a[a_dim1 + 1], &b[b_dim1 + 1]);
                 goto L20;
             }
             /* Estimate the reciprocal condition number of the k-th */
             /* eigenvectors. */
-            if (pair)
+            if(pair)
             {
                 /* Copy the 2-by 2 pencil beginning at (A(k,k), B(k, k)). */
                 /* Compute the eigenvalue(s) at position K. */
@@ -713,7 +743,8 @@ int dtgsna_(char *job, char *howmny, logical *select, integer *n, doublereal *a,
                 work[7] = b[k + (k + 1) * b_dim1];
                 work[8] = b[k + 1 + (k + 1) * b_dim1];
                 d__1 = smlnum * eps;
-                dlag2_(&work[1], &c__2, &work[5], &c__2, &d__1, &beta, dummy1, &alphar, dummy, &alphai);
+                dlag2_(&work[1], &c__2, &work[5], &c__2, &d__1, &beta, dummy1, &alphar, dummy,
+                       &alphai);
                 alprqt = 1.;
                 c1 = (alphar * alphar + alphai * alphai + beta * beta) * 2.;
                 c2 = beta * 4. * beta * alphai * alphai;
@@ -723,7 +754,7 @@ int dtgsna_(char *job, char *howmny, logical *select, integer *n, doublereal *a,
                 /* Computing MIN */
                 d__1 = sqrt(root1);
                 d__2 = sqrt(root2); // , expr subst
-                cond = fla_min(d__1,d__2);
+                cond = fla_min(d__1, d__2);
             }
             /* Copy the matrix (A, B) to the array WORK and swap the */
             /* diagonal block beginning at A(k,k) to the (1,1) position. */
@@ -732,8 +763,9 @@ int dtgsna_(char *job, char *howmny, logical *select, integer *n, doublereal *a,
             ifst = k;
             ilst = 1;
             i__2 = *lwork - (*n << 1) * *n;
-            dtgexc_(&c_false, &c_false, n, &work[1], n, &work[*n * *n + 1], n, dummy, &c__1, dummy1, &c__1, &ifst, &ilst, &work[(*n * * n << 1) + 1], &i__2, &ierr);
-            if (ierr > 0)
+            dtgexc_(&c_false, &c_false, n, &work[1], n, &work[*n * *n + 1], n, dummy, &c__1, dummy1,
+                    &c__1, &ifst, &ilst, &work[(*n * *n << 1) + 1], &i__2, &ierr);
+            if(ierr > 0)
             {
                 /* Ill-conditioned problem - swap rejected. */
                 dif[ks] = 0.;
@@ -746,12 +778,12 @@ int dtgsna_(char *job, char *howmny, logical *select, integer *n, doublereal *a,
                 /* B22 * R - L * B11 = B12, */
                 /* and compute estimate of Difl((A11,B11), (A22, B22)). */
                 n1 = 1;
-                if (work[2] != 0.)
+                if(work[2] != 0.)
                 {
                     n1 = 2;
                 }
                 n2 = *n - n1;
-                if (n2 == 0)
+                if(n2 == 0)
                 {
                     dif[ks] = cond;
                 }
@@ -760,30 +792,32 @@ int dtgsna_(char *job, char *howmny, logical *select, integer *n, doublereal *a,
                     i__ = *n * *n + 1;
                     iz = (*n << 1) * *n + 1;
                     i__2 = *lwork - (*n << 1) * *n;
-                    dtgsyl_("N", &c__3, &n2, &n1, &work[*n * n1 + n1 + 1], n, &work[1], n, &work[n1 + 1], n, &work[*n * n1 + n1 + i__], n, &work[i__], n, &work[n1 + i__], n, & scale, &dif[ks], &work[iz + 1], &i__2, &iwork[1], &ierr);
-                    if (pair)
+                    dtgsyl_("N", &c__3, &n2, &n1, &work[*n * n1 + n1 + 1], n, &work[1], n,
+                            &work[n1 + 1], n, &work[*n * n1 + n1 + i__], n, &work[i__], n,
+                            &work[n1 + i__], n, &scale, &dif[ks], &work[iz + 1], &i__2, &iwork[1],
+                            &ierr);
+                    if(pair)
                     {
                         /* Computing MIN */
-                        d__1 = fla_max(1.,alprqt) * dif[ks];
-                        dif[ks] = fla_min(d__1,cond);
+                        d__1 = fla_max(1., alprqt) * dif[ks];
+                        dif[ks] = fla_min(d__1, cond);
                     }
                 }
             }
-            if (pair)
+            if(pair)
             {
                 dif[ks + 1] = dif[ks];
             }
         }
-        if (pair)
+        if(pair)
         {
             ++ks;
         }
-L20:
-        ;
+    L20:;
     }
-    work[1] = (doublereal) lwmin;
+    work[1] = (doublereal)lwmin;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DTGSNA */
 }
 /* dtgsna_ */

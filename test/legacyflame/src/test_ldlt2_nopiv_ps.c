@@ -14,18 +14,6 @@
 // static variables
 static char* op_str                   = "Partial / Incomplete LDLT(2) factorization without Pivoting";
 
-extern float  slansy_( char *, char *, integer *, float  *, integer *, float  * );
-extern double dlansy_( char *, char *, integer *, double *, integer *, double * );
-extern float  clansy_( char *, char *, integer *, scomplex *, integer *, float * );
-extern double zlansy_( char *, char *, integer *, dcomplex *, integer *, double * );
-
-extern int sspffrt2_( float  *ap, integer *n, integer * ncolm, float  *work, float  *work2 );
-extern int dspffrt2_( double *ap, integer *n, integer * ncolm, double *work, double *work2 );
-extern int cspffrt2_( scomplex *ap, integer *n, integer * ncolm, scomplex *work, scomplex *work2 );
-extern int zspffrt2_( dcomplex *ap, integer *n, integer * ncolm, dcomplex *work, dcomplex *work2 );
-
-extern float slamch_(char *cmach);
-extern double dlamch_(char *cmach);
 
 /*************************************************************************/
 /*                     SINGLE PRECISION ROUTINES                         */

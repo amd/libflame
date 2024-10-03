@@ -16,7 +16,7 @@ FLA_Error FLA_Trmm_rut_blk_var3( FLA_Diag diagA, FLA_Obj alpha, FLA_Obj A, FLA_O
           BB,              B1,
                            B2;
 
-  dim_t b;
+  fla_dim_t b;
 
   FLA_Part_2x1( B,    &BT, 
                       &BB,            0, FLA_TOP );

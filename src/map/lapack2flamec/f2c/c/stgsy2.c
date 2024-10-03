@@ -1,5 +1,8 @@
-/* ../netlib/stgsy2.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/stgsy2.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__8 = 8;
 static integer c__1 = 1;
@@ -12,11 +15,17 @@ static real c_b56 = 0.f;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download STGSY2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stgsy2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stgsy2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stgsy2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stgsy2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stgsy2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stgsy2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -263,33 +272,56 @@ static real c_b56 = 0.f;
 /* > Umea University, S-901 87 Umea, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-int stgsy2_(char *trans, integer *ijob, integer *m, integer * n, real *a, integer *lda, real *b, integer *ldb, real *c__, integer * ldc, real *d__, integer *ldd, real *e, integer *lde, real *f, integer *ldf, real *scale, real *rdsum, real *rdscal, integer *iwork, integer *pq, integer *info)
+void stgsy2_(char *trans, integer *ijob, integer *m, integer *n, real *a, integer *lda, real *b,
+             integer *ldb, real *c__, integer *ldc, real *d__, integer *ldd, real *e, integer *lde,
+             real *f, integer *ldf, real *scale, real *rdsum, real *rdscal, integer *iwork,
+             integer *pq, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"stgsy2 inputs: trans %c, ijob %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldc %" FLA_IS ", ldd %" FLA_IS ", lde %" FLA_IS ", ldf %" FLA_IS "",*trans, *ijob, *m, *n, *lda, *ldb, *ldc, *ldd, *lde, *ldf);
+    snprintf(buffer, 256,
+             "stgsy2 inputs: trans %c, ijob %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
+             ", ldb %" FLA_IS ", ldc %" FLA_IS ", ldd %" FLA_IS ", lde %" FLA_IS ", ldf %" FLA_IS
+             "",
+             *trans, *ijob, *m, *n, *lda, *ldb, *ldc, *ldd, *lde, *ldf);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, d_dim1, d_offset, e_dim1, e_offset, f_dim1, f_offset, i__1, i__2, i__3;
+    integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, d_dim1, d_offset, e_dim1,
+        e_offset, f_dim1, f_offset, i__1, i__2, i__3;
     /* Local variables */
     integer i__, j, k, p, q;
     real z__[64] /* was [8][8] */
-    ;
+        ;
     integer ie, je, mb, nb, ii, jj, is, js;
     real rhs[8];
     integer isp1, jsp1;
     extern /* Subroutine */
-    int sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
+        void
+        sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+              integer *);
     integer ierr, zdim, ipiv[8], jpiv[8];
     real alpha;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *), sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), sgesc2_(integer *, real *, integer *, real *, integer *, integer *, real *), sgetc2_(integer *, real *, integer *, integer *, integer *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *),
+        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
+               integer *, real *, real *, integer *),
+        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+               real *, integer *),
+        scopy_(integer *, real *, integer *, real *, integer *),
+        saxpy_(integer *, real *, real *, integer *, real *, integer *),
+        sgesc2_(integer *, real *, integer *, real *, integer *, integer *, real *),
+        sgetc2_(integer *, real *, integer *, integer *, integer *, integer *);
     real scaloc;
     extern /* Subroutine */
-    int slatdf_(integer *, integer *, real *, integer *, real *, real *, real *, integer *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+        void
+        slatdf_(integer *, integer *, real *, integer *, real *, real *, real *, integer *,
+                integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     logical notran;
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -339,76 +371,76 @@ int stgsy2_(char *trans, integer *ijob, integer *m, integer * n, real *a, intege
     /* Function Body */
     *info = 0;
     ierr = 0;
-    notran = lsame_(trans, "N");
-    if (! notran && ! lsame_(trans, "T"))
+    notran = lsame_(trans, "N", 1, 1);
+    if(!notran && !lsame_(trans, "T", 1, 1))
     {
         *info = -1;
     }
-    else if (notran)
+    else if(notran)
     {
-        if (*ijob < 0 || *ijob > 2)
+        if(*ijob < 0 || *ijob > 2)
         {
             *info = -2;
         }
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        if (*m <= 0)
+        if(*m <= 0)
         {
             *info = -3;
         }
-        else if (*n <= 0)
+        else if(*n <= 0)
         {
             *info = -4;
         }
-        else if (*lda < fla_max(1,*m))
+        else if(*lda < fla_max(1, *m))
         {
             *info = -6;
         }
-        else if (*ldb < fla_max(1,*n))
+        else if(*ldb < fla_max(1, *n))
         {
             *info = -8;
         }
-        else if (*ldc < fla_max(1,*m))
+        else if(*ldc < fla_max(1, *m))
         {
             *info = -10;
         }
-        else if (*ldd < fla_max(1,*m))
+        else if(*ldd < fla_max(1, *m))
         {
             *info = -12;
         }
-        else if (*lde < fla_max(1,*n))
+        else if(*lde < fla_max(1, *n))
         {
             *info = -14;
         }
-        else if (*ldf < fla_max(1,*m))
+        else if(*ldf < fla_max(1, *m))
         {
             *info = -16;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("STGSY2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Determine block structure of A */
     *pq = 0;
     p = 0;
     i__ = 1;
 L10:
-    if (i__ > *m)
+    if(i__ > *m)
     {
         goto L20;
     }
     ++p;
     iwork[p] = i__;
-    if (i__ == *m)
+    if(i__ == *m)
     {
         goto L20;
     }
-    if (a[i__ + 1 + i__ * a_dim1] != 0.f)
+    if(a[i__ + 1 + i__ * a_dim1] != 0.f)
     {
         i__ += 2;
     }
@@ -423,17 +455,17 @@ L20:
     q = p + 1;
     j = 1;
 L30:
-    if (j > *n)
+    if(j > *n)
     {
         goto L40;
     }
     ++q;
     iwork[q] = j;
-    if (j == *n)
+    if(j == *n)
     {
         goto L40;
     }
-    if (b[j + 1 + j * b_dim1] != 0.f)
+    if(b[j + 1 + j * b_dim1] != 0.f)
     {
         j += 2;
     }
@@ -445,7 +477,7 @@ L30:
 L40:
     iwork[q + 1] = *n + 1;
     *pq = p * (q - p - 1);
-    if (notran)
+    if(notran)
     {
         /* Solve (I, J) - subsystem */
         /* A(I, I) * R(I, J) - L(I, J) * B(J, J) = C(I, J) */
@@ -455,24 +487,20 @@ L40:
         *scale = 1.f;
         scaloc = 1.f;
         i__1 = q;
-        for (j = p + 2;
-                j <= i__1;
-                ++j)
+        for(j = p + 2; j <= i__1; ++j)
         {
             js = iwork[j];
             jsp1 = js + 1;
             je = iwork[j + 1] - 1;
             nb = je - js + 1;
-            for (i__ = p;
-                    i__ >= 1;
-                    --i__)
+            for(i__ = p; i__ >= 1; --i__)
             {
                 is = iwork[i__];
                 isp1 = is + 1;
                 ie = iwork[i__ + 1] - 1;
                 mb = ie - is + 1;
                 zdim = mb * nb << 1;
-                if (mb == 1 && nb == 1)
+                if(mb == 1 && nb == 1)
                 {
                     /* Build a 2-by-2 system Z * x = RHS */
                     z__[0] = a[is + is * a_dim1];
@@ -484,21 +512,19 @@ L40:
                     rhs[1] = f[is + js * f_dim1];
                     /* Solve Z * x = RHS */
                     sgetc2_(&zdim, z__, &c__8, ipiv, jpiv, &ierr);
-                    if (ierr > 0)
+                    if(ierr > 0)
                     {
                         *info = ierr;
                     }
-                    if (*ijob == 0)
+                    if(*ijob == 0)
                     {
                         sgesc2_(&zdim, z__, &c__8, rhs, ipiv, jpiv, &scaloc);
-                        if (scaloc != 1.f)
+                        if(scaloc != 1.f)
                         {
                             i__2 = *n;
-                            for (k = 1;
-                                    k <= i__2;
-                                    ++k)
+                            for(k = 1; k <= i__2; ++k)
                             {
-                                sscal_(m, &scaloc, &c__[k * c_dim1 + 1], & c__1);
+                                sscal_(m, &scaloc, &c__[k * c_dim1 + 1], &c__1);
                                 sscal_(m, &scaloc, &f[k * f_dim1 + 1], &c__1);
                                 /* L50: */
                             }
@@ -514,23 +540,27 @@ L40:
                     f[is + js * f_dim1] = rhs[1];
                     /* Substitute R(I, J) and L(I, J) into remaining */
                     /* equation. */
-                    if (i__ > 1)
+                    if(i__ > 1)
                     {
                         alpha = -rhs[0];
                         i__2 = is - 1;
-                        saxpy_(&i__2, &alpha, &a[is * a_dim1 + 1], &c__1, & c__[js * c_dim1 + 1], &c__1);
+                        saxpy_(&i__2, &alpha, &a[is * a_dim1 + 1], &c__1, &c__[js * c_dim1 + 1],
+                               &c__1);
                         i__2 = is - 1;
-                        saxpy_(&i__2, &alpha, &d__[is * d_dim1 + 1], &c__1, & f[js * f_dim1 + 1], &c__1);
+                        saxpy_(&i__2, &alpha, &d__[is * d_dim1 + 1], &c__1, &f[js * f_dim1 + 1],
+                               &c__1);
                     }
-                    if (j < q)
+                    if(j < q)
                     {
                         i__2 = *n - je;
-                        saxpy_(&i__2, &rhs[1], &b[js + (je + 1) * b_dim1], ldb, &c__[is + (je + 1) * c_dim1], ldc);
+                        saxpy_(&i__2, &rhs[1], &b[js + (je + 1) * b_dim1], ldb,
+                               &c__[is + (je + 1) * c_dim1], ldc);
                         i__2 = *n - je;
-                        saxpy_(&i__2, &rhs[1], &e[js + (je + 1) * e_dim1], lde, &f[is + (je + 1) * f_dim1], ldf);
+                        saxpy_(&i__2, &rhs[1], &e[js + (je + 1) * e_dim1], lde,
+                               &f[is + (je + 1) * f_dim1], ldf);
                     }
                 }
-                else if (mb == 1 && nb == 2)
+                else if(mb == 1 && nb == 2)
                 {
                     /* Build a 4-by-4 system Z * x = RHS */
                     z__[0] = a[is + is * a_dim1];
@@ -556,21 +586,19 @@ L40:
                     rhs[3] = f[is + jsp1 * f_dim1];
                     /* Solve Z * x = RHS */
                     sgetc2_(&zdim, z__, &c__8, ipiv, jpiv, &ierr);
-                    if (ierr > 0)
+                    if(ierr > 0)
                     {
                         *info = ierr;
                     }
-                    if (*ijob == 0)
+                    if(*ijob == 0)
                     {
                         sgesc2_(&zdim, z__, &c__8, rhs, ipiv, jpiv, &scaloc);
-                        if (scaloc != 1.f)
+                        if(scaloc != 1.f)
                         {
                             i__2 = *n;
-                            for (k = 1;
-                                    k <= i__2;
-                                    ++k)
+                            for(k = 1; k <= i__2; ++k)
                             {
-                                sscal_(m, &scaloc, &c__[k * c_dim1 + 1], & c__1);
+                                sscal_(m, &scaloc, &c__[k * c_dim1 + 1], &c__1);
                                 sscal_(m, &scaloc, &f[k * f_dim1 + 1], &c__1);
                                 /* L60: */
                             }
@@ -588,26 +616,32 @@ L40:
                     f[is + jsp1 * f_dim1] = rhs[3];
                     /* Substitute R(I, J) and L(I, J) into remaining */
                     /* equation. */
-                    if (i__ > 1)
+                    if(i__ > 1)
                     {
                         i__2 = is - 1;
-                        sger_(&i__2, &nb, &c_b27, &a[is * a_dim1 + 1], &c__1, rhs, &c__1, &c__[js * c_dim1 + 1], ldc);
+                        sger_(&i__2, &nb, &c_b27, &a[is * a_dim1 + 1], &c__1, rhs, &c__1,
+                              &c__[js * c_dim1 + 1], ldc);
                         i__2 = is - 1;
-                        sger_(&i__2, &nb, &c_b27, &d__[is * d_dim1 + 1], & c__1, rhs, &c__1, &f[js * f_dim1 + 1], ldf);
+                        sger_(&i__2, &nb, &c_b27, &d__[is * d_dim1 + 1], &c__1, rhs, &c__1,
+                              &f[js * f_dim1 + 1], ldf);
                     }
-                    if (j < q)
+                    if(j < q)
                     {
                         i__2 = *n - je;
-                        saxpy_(&i__2, &rhs[2], &b[js + (je + 1) * b_dim1], ldb, &c__[is + (je + 1) * c_dim1], ldc);
+                        saxpy_(&i__2, &rhs[2], &b[js + (je + 1) * b_dim1], ldb,
+                               &c__[is + (je + 1) * c_dim1], ldc);
                         i__2 = *n - je;
-                        saxpy_(&i__2, &rhs[2], &e[js + (je + 1) * e_dim1], lde, &f[is + (je + 1) * f_dim1], ldf);
+                        saxpy_(&i__2, &rhs[2], &e[js + (je + 1) * e_dim1], lde,
+                               &f[is + (je + 1) * f_dim1], ldf);
                         i__2 = *n - je;
-                        saxpy_(&i__2, &rhs[3], &b[jsp1 + (je + 1) * b_dim1], ldb, &c__[is + (je + 1) * c_dim1], ldc);
+                        saxpy_(&i__2, &rhs[3], &b[jsp1 + (je + 1) * b_dim1], ldb,
+                               &c__[is + (je + 1) * c_dim1], ldc);
                         i__2 = *n - je;
-                        saxpy_(&i__2, &rhs[3], &e[jsp1 + (je + 1) * e_dim1], lde, &f[is + (je + 1) * f_dim1], ldf);
+                        saxpy_(&i__2, &rhs[3], &e[jsp1 + (je + 1) * e_dim1], lde,
+                               &f[is + (je + 1) * f_dim1], ldf);
                     }
                 }
-                else if (mb == 2 && nb == 1)
+                else if(mb == 2 && nb == 1)
                 {
                     /* Build a 4-by-4 system Z * x = RHS */
                     z__[0] = a[is + is * a_dim1];
@@ -633,21 +667,19 @@ L40:
                     rhs[3] = f[isp1 + js * f_dim1];
                     /* Solve Z * x = RHS */
                     sgetc2_(&zdim, z__, &c__8, ipiv, jpiv, &ierr);
-                    if (ierr > 0)
+                    if(ierr > 0)
                     {
                         *info = ierr;
                     }
-                    if (*ijob == 0)
+                    if(*ijob == 0)
                     {
                         sgesc2_(&zdim, z__, &c__8, rhs, ipiv, jpiv, &scaloc);
-                        if (scaloc != 1.f)
+                        if(scaloc != 1.f)
                         {
                             i__2 = *n;
-                            for (k = 1;
-                                    k <= i__2;
-                                    ++k)
+                            for(k = 1; k <= i__2; ++k)
                             {
-                                sscal_(m, &scaloc, &c__[k * c_dim1 + 1], & c__1);
+                                sscal_(m, &scaloc, &c__[k * c_dim1 + 1], &c__1);
                                 sscal_(m, &scaloc, &f[k * f_dim1 + 1], &c__1);
                                 /* L70: */
                             }
@@ -665,22 +697,26 @@ L40:
                     f[isp1 + js * f_dim1] = rhs[3];
                     /* Substitute R(I, J) and L(I, J) into remaining */
                     /* equation. */
-                    if (i__ > 1)
+                    if(i__ > 1)
                     {
                         i__2 = is - 1;
-                        sgemv_("N", &i__2, &mb, &c_b27, &a[is * a_dim1 + 1], lda, rhs, &c__1, &c_b42, &c__[js * c_dim1 + 1], &c__1);
+                        sgemv_("N", &i__2, &mb, &c_b27, &a[is * a_dim1 + 1], lda, rhs, &c__1,
+                               &c_b42, &c__[js * c_dim1 + 1], &c__1);
                         i__2 = is - 1;
-                        sgemv_("N", &i__2, &mb, &c_b27, &d__[is * d_dim1 + 1], ldd, rhs, &c__1, &c_b42, &f[js * f_dim1 + 1], &c__1);
+                        sgemv_("N", &i__2, &mb, &c_b27, &d__[is * d_dim1 + 1], ldd, rhs, &c__1,
+                               &c_b42, &f[js * f_dim1 + 1], &c__1);
                     }
-                    if (j < q)
+                    if(j < q)
                     {
                         i__2 = *n - je;
-                        sger_(&mb, &i__2, &c_b42, &rhs[2], &c__1, &b[js + (je + 1) * b_dim1], ldb, &c__[is + (je + 1) * c_dim1], ldc);
+                        sger_(&mb, &i__2, &c_b42, &rhs[2], &c__1, &b[js + (je + 1) * b_dim1], ldb,
+                              &c__[is + (je + 1) * c_dim1], ldc);
                         i__2 = *n - je;
-                        sger_(&mb, &i__2, &c_b42, &rhs[2], &c__1, &e[js + (je + 1) * e_dim1], lde, &f[is + (je + 1) * f_dim1], ldf);
+                        sger_(&mb, &i__2, &c_b42, &rhs[2], &c__1, &e[js + (je + 1) * e_dim1], lde,
+                              &f[is + (je + 1) * f_dim1], ldf);
                     }
                 }
-                else if (mb == 2 && nb == 2)
+                else if(mb == 2 && nb == 2)
                 {
                     /* Build an 8-by-8 system Z * x = RHS */
                     slaset_("F", &c__8, &c__8, &c_b56, &c_b56, z__, &c__8);
@@ -716,33 +752,29 @@ L40:
                     k = 1;
                     ii = mb * nb + 1;
                     i__2 = nb - 1;
-                    for (jj = 0;
-                            jj <= i__2;
-                            ++jj)
+                    for(jj = 0; jj <= i__2; ++jj)
                     {
-                        scopy_(&mb, &c__[is + (js + jj) * c_dim1], &c__1, & rhs[k - 1], &c__1);
-                        scopy_(&mb, &f[is + (js + jj) * f_dim1], &c__1, &rhs[ ii - 1], &c__1);
+                        scopy_(&mb, &c__[is + (js + jj) * c_dim1], &c__1, &rhs[k - 1], &c__1);
+                        scopy_(&mb, &f[is + (js + jj) * f_dim1], &c__1, &rhs[ii - 1], &c__1);
                         k += mb;
                         ii += mb;
                         /* L80: */
                     }
                     /* Solve Z * x = RHS */
                     sgetc2_(&zdim, z__, &c__8, ipiv, jpiv, &ierr);
-                    if (ierr > 0)
+                    if(ierr > 0)
                     {
                         *info = ierr;
                     }
-                    if (*ijob == 0)
+                    if(*ijob == 0)
                     {
                         sgesc2_(&zdim, z__, &c__8, rhs, ipiv, jpiv, &scaloc);
-                        if (scaloc != 1.f)
+                        if(scaloc != 1.f)
                         {
                             i__2 = *n;
-                            for (k = 1;
-                                    k <= i__2;
-                                    ++k)
+                            for(k = 1; k <= i__2; ++k)
                             {
-                                sscal_(m, &scaloc, &c__[k * c_dim1 + 1], & c__1);
+                                sscal_(m, &scaloc, &c__[k * c_dim1 + 1], &c__1);
                                 sscal_(m, &scaloc, &f[k * f_dim1 + 1], &c__1);
                                 /* L90: */
                             }
@@ -757,9 +789,7 @@ L40:
                     k = 1;
                     ii = mb * nb + 1;
                     i__2 = nb - 1;
-                    for (jj = 0;
-                            jj <= i__2;
-                            ++jj)
+                    for(jj = 0; jj <= i__2; ++jj)
                     {
                         scopy_(&mb, &rhs[k - 1], &c__1, &c__[is + (js + jj) * c_dim1], &c__1);
                         scopy_(&mb, &rhs[ii - 1], &c__1, &f[is + (js + jj) * f_dim1], &c__1);
@@ -769,20 +799,26 @@ L40:
                     }
                     /* Substitute R(I, J) and L(I, J) into remaining */
                     /* equation. */
-                    if (i__ > 1)
+                    if(i__ > 1)
                     {
                         i__2 = is - 1;
-                        sgemm_("N", "N", &i__2, &nb, &mb, &c_b27, &a[is * a_dim1 + 1], lda, rhs, &mb, &c_b42, &c__[js * c_dim1 + 1], ldc);
+                        sgemm_("N", "N", &i__2, &nb, &mb, &c_b27, &a[is * a_dim1 + 1], lda, rhs,
+                               &mb, &c_b42, &c__[js * c_dim1 + 1], ldc);
                         i__2 = is - 1;
-                        sgemm_("N", "N", &i__2, &nb, &mb, &c_b27, &d__[is * d_dim1 + 1], ldd, rhs, &mb, &c_b42, &f[js * f_dim1 + 1], ldf);
+                        sgemm_("N", "N", &i__2, &nb, &mb, &c_b27, &d__[is * d_dim1 + 1], ldd, rhs,
+                               &mb, &c_b42, &f[js * f_dim1 + 1], ldf);
                     }
-                    if (j < q)
+                    if(j < q)
                     {
                         k = mb * nb + 1;
                         i__2 = *n - je;
-                        sgemm_("N", "N", &mb, &i__2, &nb, &c_b42, &rhs[k - 1], &mb, &b[js + (je + 1) * b_dim1], ldb, &c_b42, &c__[is + (je + 1) * c_dim1], ldc);
+                        sgemm_("N", "N", &mb, &i__2, &nb, &c_b42, &rhs[k - 1], &mb,
+                               &b[js + (je + 1) * b_dim1], ldb, &c_b42,
+                               &c__[is + (je + 1) * c_dim1], ldc);
                         i__2 = *n - je;
-                        sgemm_("N", "N", &mb, &i__2, &nb, &c_b42, &rhs[k - 1], &mb, &e[js + (je + 1) * e_dim1], lde, &c_b42, &f[is + (je + 1) * f_dim1], ldf);
+                        sgemm_("N", "N", &mb, &i__2, &nb, &c_b42, &rhs[k - 1], &mb,
+                               &e[js + (je + 1) * e_dim1], lde, &c_b42, &f[is + (je + 1) * f_dim1],
+                               ldf);
                     }
                 }
                 /* L110: */
@@ -799,25 +835,21 @@ L40:
         *scale = 1.f;
         scaloc = 1.f;
         i__1 = p;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             is = iwork[i__];
             isp1 = is + 1;
             ie = iwork[i__ + 1] - 1;
             mb = ie - is + 1;
             i__2 = p + 2;
-            for (j = q;
-                    j >= i__2;
-                    --j)
+            for(j = q; j >= i__2; --j)
             {
                 js = iwork[j];
                 jsp1 = js + 1;
                 je = iwork[j + 1] - 1;
                 nb = je - js + 1;
                 zdim = mb * nb << 1;
-                if (mb == 1 && nb == 1)
+                if(mb == 1 && nb == 1)
                 {
                     /* Build a 2-by-2 system Z**T * x = RHS */
                     z__[0] = a[is + is * a_dim1];
@@ -829,17 +861,15 @@ L40:
                     rhs[1] = f[is + js * f_dim1];
                     /* Solve Z**T * x = RHS */
                     sgetc2_(&zdim, z__, &c__8, ipiv, jpiv, &ierr);
-                    if (ierr > 0)
+                    if(ierr > 0)
                     {
                         *info = ierr;
                     }
                     sgesc2_(&zdim, z__, &c__8, rhs, ipiv, jpiv, &scaloc);
-                    if (scaloc != 1.f)
+                    if(scaloc != 1.f)
                     {
                         i__3 = *n;
-                        for (k = 1;
-                                k <= i__3;
-                                ++k)
+                        for(k = 1; k <= i__3; ++k)
                         {
                             sscal_(m, &scaloc, &c__[k * c_dim1 + 1], &c__1);
                             sscal_(m, &scaloc, &f[k * f_dim1 + 1], &c__1);
@@ -852,26 +882,28 @@ L40:
                     f[is + js * f_dim1] = rhs[1];
                     /* Substitute R(I, J) and L(I, J) into remaining */
                     /* equation. */
-                    if (j > p + 2)
+                    if(j > p + 2)
                     {
                         alpha = rhs[0];
                         i__3 = js - 1;
-                        saxpy_(&i__3, &alpha, &b[js * b_dim1 + 1], &c__1, &f[ is + f_dim1], ldf);
+                        saxpy_(&i__3, &alpha, &b[js * b_dim1 + 1], &c__1, &f[is + f_dim1], ldf);
                         alpha = rhs[1];
                         i__3 = js - 1;
-                        saxpy_(&i__3, &alpha, &e[js * e_dim1 + 1], &c__1, &f[ is + f_dim1], ldf);
+                        saxpy_(&i__3, &alpha, &e[js * e_dim1 + 1], &c__1, &f[is + f_dim1], ldf);
                     }
-                    if (i__ < p)
+                    if(i__ < p)
                     {
                         alpha = -rhs[0];
                         i__3 = *m - ie;
-                        saxpy_(&i__3, &alpha, &a[is + (ie + 1) * a_dim1], lda, &c__[ie + 1 + js * c_dim1], &c__1);
+                        saxpy_(&i__3, &alpha, &a[is + (ie + 1) * a_dim1], lda,
+                               &c__[ie + 1 + js * c_dim1], &c__1);
                         alpha = -rhs[1];
                         i__3 = *m - ie;
-                        saxpy_(&i__3, &alpha, &d__[is + (ie + 1) * d_dim1], ldd, &c__[ie + 1 + js * c_dim1], &c__1);
+                        saxpy_(&i__3, &alpha, &d__[is + (ie + 1) * d_dim1], ldd,
+                               &c__[ie + 1 + js * c_dim1], &c__1);
                     }
                 }
-                else if (mb == 1 && nb == 2)
+                else if(mb == 1 && nb == 2)
                 {
                     /* Build a 4-by-4 system Z**T * x = RHS */
                     z__[0] = a[is + is * a_dim1];
@@ -897,17 +929,15 @@ L40:
                     rhs[3] = f[is + jsp1 * f_dim1];
                     /* Solve Z**T * x = RHS */
                     sgetc2_(&zdim, z__, &c__8, ipiv, jpiv, &ierr);
-                    if (ierr > 0)
+                    if(ierr > 0)
                     {
                         *info = ierr;
                     }
                     sgesc2_(&zdim, z__, &c__8, rhs, ipiv, jpiv, &scaloc);
-                    if (scaloc != 1.f)
+                    if(scaloc != 1.f)
                     {
                         i__3 = *n;
-                        for (k = 1;
-                                k <= i__3;
-                                ++k)
+                        for(k = 1; k <= i__3; ++k)
                         {
                             sscal_(m, &scaloc, &c__[k * c_dim1 + 1], &c__1);
                             sscal_(m, &scaloc, &f[k * f_dim1 + 1], &c__1);
@@ -922,26 +952,28 @@ L40:
                     f[is + jsp1 * f_dim1] = rhs[3];
                     /* Substitute R(I, J) and L(I, J) into remaining */
                     /* equation. */
-                    if (j > p + 2)
+                    if(j > p + 2)
                     {
                         i__3 = js - 1;
                         saxpy_(&i__3, rhs, &b[js * b_dim1 + 1], &c__1, &f[is + f_dim1], ldf);
                         i__3 = js - 1;
-                        saxpy_(&i__3, &rhs[1], &b[jsp1 * b_dim1 + 1], &c__1, & f[is + f_dim1], ldf);
+                        saxpy_(&i__3, &rhs[1], &b[jsp1 * b_dim1 + 1], &c__1, &f[is + f_dim1], ldf);
                         i__3 = js - 1;
-                        saxpy_(&i__3, &rhs[2], &e[js * e_dim1 + 1], &c__1, &f[ is + f_dim1], ldf);
+                        saxpy_(&i__3, &rhs[2], &e[js * e_dim1 + 1], &c__1, &f[is + f_dim1], ldf);
                         i__3 = js - 1;
-                        saxpy_(&i__3, &rhs[3], &e[jsp1 * e_dim1 + 1], &c__1, & f[is + f_dim1], ldf);
+                        saxpy_(&i__3, &rhs[3], &e[jsp1 * e_dim1 + 1], &c__1, &f[is + f_dim1], ldf);
                     }
-                    if (i__ < p)
+                    if(i__ < p)
                     {
                         i__3 = *m - ie;
-                        sger_(&i__3, &nb, &c_b27, &a[is + (ie + 1) * a_dim1], lda, rhs, &c__1, &c__[ie + 1 + js * c_dim1], ldc);
+                        sger_(&i__3, &nb, &c_b27, &a[is + (ie + 1) * a_dim1], lda, rhs, &c__1,
+                              &c__[ie + 1 + js * c_dim1], ldc);
                         i__3 = *m - ie;
-                        sger_(&i__3, &nb, &c_b27, &d__[is + (ie + 1) * d_dim1], ldd, &rhs[2], &c__1, &c__[ie + 1 + js * c_dim1], ldc);
+                        sger_(&i__3, &nb, &c_b27, &d__[is + (ie + 1) * d_dim1], ldd, &rhs[2], &c__1,
+                              &c__[ie + 1 + js * c_dim1], ldc);
                     }
                 }
-                else if (mb == 2 && nb == 1)
+                else if(mb == 2 && nb == 1)
                 {
                     /* Build a 4-by-4 system Z**T * x = RHS */
                     z__[0] = a[is + is * a_dim1];
@@ -967,17 +999,15 @@ L40:
                     rhs[3] = f[isp1 + js * f_dim1];
                     /* Solve Z**T * x = RHS */
                     sgetc2_(&zdim, z__, &c__8, ipiv, jpiv, &ierr);
-                    if (ierr > 0)
+                    if(ierr > 0)
                     {
                         *info = ierr;
                     }
                     sgesc2_(&zdim, z__, &c__8, rhs, ipiv, jpiv, &scaloc);
-                    if (scaloc != 1.f)
+                    if(scaloc != 1.f)
                     {
                         i__3 = *n;
-                        for (k = 1;
-                                k <= i__3;
-                                ++k)
+                        for(k = 1; k <= i__3; ++k)
                         {
                             sscal_(m, &scaloc, &c__[k * c_dim1 + 1], &c__1);
                             sscal_(m, &scaloc, &f[k * f_dim1 + 1], &c__1);
@@ -992,22 +1022,26 @@ L40:
                     f[isp1 + js * f_dim1] = rhs[3];
                     /* Substitute R(I, J) and L(I, J) into remaining */
                     /* equation. */
-                    if (j > p + 2)
+                    if(j > p + 2)
                     {
                         i__3 = js - 1;
-                        sger_(&mb, &i__3, &c_b42, rhs, &c__1, &b[js * b_dim1 + 1], &c__1, &f[is + f_dim1], ldf);
+                        sger_(&mb, &i__3, &c_b42, rhs, &c__1, &b[js * b_dim1 + 1], &c__1,
+                              &f[is + f_dim1], ldf);
                         i__3 = js - 1;
-                        sger_(&mb, &i__3, &c_b42, &rhs[2], &c__1, &e[js * e_dim1 + 1], &c__1, &f[is + f_dim1], ldf);
+                        sger_(&mb, &i__3, &c_b42, &rhs[2], &c__1, &e[js * e_dim1 + 1], &c__1,
+                              &f[is + f_dim1], ldf);
                     }
-                    if (i__ < p)
+                    if(i__ < p)
                     {
                         i__3 = *m - ie;
-                        sgemv_("T", &mb, &i__3, &c_b27, &a[is + (ie + 1) * a_dim1], lda, rhs, &c__1, &c_b42, &c__[ie + 1 + js * c_dim1], &c__1);
+                        sgemv_("T", &mb, &i__3, &c_b27, &a[is + (ie + 1) * a_dim1], lda, rhs, &c__1,
+                               &c_b42, &c__[ie + 1 + js * c_dim1], &c__1);
                         i__3 = *m - ie;
-                        sgemv_("T", &mb, &i__3, &c_b27, &d__[is + (ie + 1) * d_dim1], ldd, &rhs[2], &c__1, &c_b42, &c__[ie + 1 + js * c_dim1], &c__1);
+                        sgemv_("T", &mb, &i__3, &c_b27, &d__[is + (ie + 1) * d_dim1], ldd, &rhs[2],
+                               &c__1, &c_b42, &c__[ie + 1 + js * c_dim1], &c__1);
                     }
                 }
-                else if (mb == 2 && nb == 2)
+                else if(mb == 2 && nb == 2)
                 {
                     /* Build an 8-by-8 system Z**T * x = RHS */
                     slaset_("F", &c__8, &c__8, &c_b56, &c_b56, z__, &c__8);
@@ -1043,29 +1077,25 @@ L40:
                     k = 1;
                     ii = mb * nb + 1;
                     i__3 = nb - 1;
-                    for (jj = 0;
-                            jj <= i__3;
-                            ++jj)
+                    for(jj = 0; jj <= i__3; ++jj)
                     {
-                        scopy_(&mb, &c__[is + (js + jj) * c_dim1], &c__1, & rhs[k - 1], &c__1);
-                        scopy_(&mb, &f[is + (js + jj) * f_dim1], &c__1, &rhs[ ii - 1], &c__1);
+                        scopy_(&mb, &c__[is + (js + jj) * c_dim1], &c__1, &rhs[k - 1], &c__1);
+                        scopy_(&mb, &f[is + (js + jj) * f_dim1], &c__1, &rhs[ii - 1], &c__1);
                         k += mb;
                         ii += mb;
                         /* L160: */
                     }
                     /* Solve Z**T * x = RHS */
                     sgetc2_(&zdim, z__, &c__8, ipiv, jpiv, &ierr);
-                    if (ierr > 0)
+                    if(ierr > 0)
                     {
                         *info = ierr;
                     }
                     sgesc2_(&zdim, z__, &c__8, rhs, ipiv, jpiv, &scaloc);
-                    if (scaloc != 1.f)
+                    if(scaloc != 1.f)
                     {
                         i__3 = *n;
-                        for (k = 1;
-                                k <= i__3;
-                                ++k)
+                        for(k = 1; k <= i__3; ++k)
                         {
                             sscal_(m, &scaloc, &c__[k * c_dim1 + 1], &c__1);
                             sscal_(m, &scaloc, &f[k * f_dim1 + 1], &c__1);
@@ -1077,9 +1107,7 @@ L40:
                     k = 1;
                     ii = mb * nb + 1;
                     i__3 = nb - 1;
-                    for (jj = 0;
-                            jj <= i__3;
-                            ++jj)
+                    for(jj = 0; jj <= i__3; ++jj)
                     {
                         scopy_(&mb, &rhs[k - 1], &c__1, &c__[is + (js + jj) * c_dim1], &c__1);
                         scopy_(&mb, &rhs[ii - 1], &c__1, &f[is + (js + jj) * f_dim1], &c__1);
@@ -1089,19 +1117,24 @@ L40:
                     }
                     /* Substitute R(I, J) and L(I, J) into remaining */
                     /* equation. */
-                    if (j > p + 2)
+                    if(j > p + 2)
                     {
                         i__3 = js - 1;
-                        sgemm_("N", "T", &mb, &i__3, &nb, &c_b42, &c__[is + js * c_dim1], ldc, &b[js * b_dim1 + 1], ldb, & c_b42, &f[is + f_dim1], ldf);
+                        sgemm_("N", "T", &mb, &i__3, &nb, &c_b42, &c__[is + js * c_dim1], ldc,
+                               &b[js * b_dim1 + 1], ldb, &c_b42, &f[is + f_dim1], ldf);
                         i__3 = js - 1;
-                        sgemm_("N", "T", &mb, &i__3, &nb, &c_b42, &f[is + js * f_dim1], ldf, &e[js * e_dim1 + 1], lde, & c_b42, &f[is + f_dim1], ldf);
+                        sgemm_("N", "T", &mb, &i__3, &nb, &c_b42, &f[is + js * f_dim1], ldf,
+                               &e[js * e_dim1 + 1], lde, &c_b42, &f[is + f_dim1], ldf);
                     }
-                    if (i__ < p)
+                    if(i__ < p)
                     {
                         i__3 = *m - ie;
-                        sgemm_("T", "N", &i__3, &nb, &mb, &c_b27, &a[is + (ie + 1) * a_dim1], lda, &c__[is + js * c_dim1], ldc, &c_b42, &c__[ie + 1 + js * c_dim1], ldc);
+                        sgemm_("T", "N", &i__3, &nb, &mb, &c_b27, &a[is + (ie + 1) * a_dim1], lda,
+                               &c__[is + js * c_dim1], ldc, &c_b42, &c__[ie + 1 + js * c_dim1],
+                               ldc);
                         i__3 = *m - ie;
-                        sgemm_("T", "N", &i__3, &nb, &mb, &c_b27, &d__[is + ( ie + 1) * d_dim1], ldd, &f[is + js * f_dim1], ldf, &c_b42, &c__[ie + 1 + js * c_dim1], ldc);
+                        sgemm_("T", "N", &i__3, &nb, &mb, &c_b27, &d__[is + (ie + 1) * d_dim1], ldd,
+                               &f[is + js * f_dim1], ldf, &c_b42, &c__[ie + 1 + js * c_dim1], ldc);
                     }
                 }
                 /* L190: */
@@ -1110,8 +1143,7 @@ L40:
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of STGSY2 */
 }
 /* stgsy2_ */
-

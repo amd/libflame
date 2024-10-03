@@ -1,16 +1,25 @@
-/* ../netlib/slasq6.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slasq6.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLASQ6 computes one dqd transform in ping-pong form. Used by sbdsqr and sstegr. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLASQ6 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasq6. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasq6.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasq6. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasq6.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasq6. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasq6.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -104,7 +113,8 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int slasq6_(integer *i0, integer *n0, real *z__, integer *pp, real *dmin__, real *dmin1, real *dmin2, real *dn, real *dnm1, real * dnm2)
+void slasq6_(integer *i0, integer *n0, real *z__, integer *pp, real *dmin__, real *dmin1,
+             real *dmin2, real *dn, real *dnm1, real *dnm2)
 {
     /* System generated locals */
     integer i__1;
@@ -136,31 +146,29 @@ int slasq6_(integer *i0, integer *n0, real *z__, integer *pp, real *dmin__, real
     /* Parameter adjustments */
     --z__;
     /* Function Body */
-    if (*n0 - *i0 - 1 <= 0)
+    if(*n0 - *i0 - 1 <= 0)
     {
-        return 0;
+        return;
     }
     safmin = slamch_("Safe minimum");
     j4 = (*i0 << 2) + *pp - 3;
     emin = z__[j4 + 4];
     d__ = z__[j4];
     *dmin__ = d__;
-    if (*pp == 0)
+    if(*pp == 0)
     {
         i__1 = *n0 - 3 << 2;
-        for (j4 = *i0 << 2;
-                j4 <= i__1;
-                j4 += 4)
+        for(j4 = *i0 << 2; j4 <= i__1; j4 += 4)
         {
             z__[j4 - 2] = d__ + z__[j4 - 1];
-            if (z__[j4 - 2] == 0.f)
+            if(z__[j4 - 2] == 0.f)
             {
                 z__[j4] = 0.f;
                 d__ = z__[j4 + 1];
                 *dmin__ = d__;
                 emin = 0.f;
             }
-            else if (safmin * z__[j4 + 1] < z__[j4 - 2] && safmin * z__[j4 - 2] < z__[j4 + 1])
+            else if(safmin * z__[j4 + 1] < z__[j4 - 2] && safmin * z__[j4 - 2] < z__[j4 + 1])
             {
                 temp = z__[j4 + 1] / z__[j4 - 2];
                 z__[j4] = z__[j4 - 1] * temp;
@@ -171,30 +179,28 @@ int slasq6_(integer *i0, integer *n0, real *z__, integer *pp, real *dmin__, real
                 z__[j4] = z__[j4 + 1] * (z__[j4 - 1] / z__[j4 - 2]);
                 d__ = z__[j4 + 1] * (d__ / z__[j4 - 2]);
             }
-            *dmin__ = fla_min(*dmin__,d__);
+            *dmin__ = fla_min(*dmin__, d__);
             /* Computing MIN */
             r__1 = emin;
             r__2 = z__[j4]; // , expr subst
-            emin = fla_min(r__1,r__2);
+            emin = fla_min(r__1, r__2);
             /* L10: */
         }
     }
     else
     {
         i__1 = *n0 - 3 << 2;
-        for (j4 = *i0 << 2;
-                j4 <= i__1;
-                j4 += 4)
+        for(j4 = *i0 << 2; j4 <= i__1; j4 += 4)
         {
             z__[j4 - 3] = d__ + z__[j4];
-            if (z__[j4 - 3] == 0.f)
+            if(z__[j4 - 3] == 0.f)
             {
                 z__[j4 - 1] = 0.f;
                 d__ = z__[j4 + 2];
                 *dmin__ = d__;
                 emin = 0.f;
             }
-            else if (safmin * z__[j4 + 2] < z__[j4 - 3] && safmin * z__[j4 - 3] < z__[j4 + 2])
+            else if(safmin * z__[j4 + 2] < z__[j4 - 3] && safmin * z__[j4 - 3] < z__[j4 + 2])
             {
                 temp = z__[j4 + 2] / z__[j4 - 3];
                 z__[j4 - 1] = z__[j4] * temp;
@@ -205,11 +211,11 @@ int slasq6_(integer *i0, integer *n0, real *z__, integer *pp, real *dmin__, real
                 z__[j4 - 1] = z__[j4 + 2] * (z__[j4] / z__[j4 - 3]);
                 d__ = z__[j4 + 2] * (d__ / z__[j4 - 3]);
             }
-            *dmin__ = fla_min(*dmin__,d__);
+            *dmin__ = fla_min(*dmin__, d__);
             /* Computing MIN */
             r__1 = emin;
             r__2 = z__[j4 - 1]; // , expr subst
-            emin = fla_min(r__1,r__2);
+            emin = fla_min(r__1, r__2);
             /* L20: */
         }
     }
@@ -219,14 +225,14 @@ int slasq6_(integer *i0, integer *n0, real *z__, integer *pp, real *dmin__, real
     j4 = (*n0 - 2 << 2) - *pp;
     j4p2 = j4 + (*pp << 1) - 1;
     z__[j4 - 2] = *dnm2 + z__[j4p2];
-    if (z__[j4 - 2] == 0.f)
+    if(z__[j4 - 2] == 0.f)
     {
         z__[j4] = 0.f;
         *dnm1 = z__[j4p2 + 2];
         *dmin__ = *dnm1;
         emin = 0.f;
     }
-    else if (safmin * z__[j4p2 + 2] < z__[j4 - 2] && safmin * z__[j4 - 2] < z__[j4p2 + 2])
+    else if(safmin * z__[j4p2 + 2] < z__[j4 - 2] && safmin * z__[j4 - 2] < z__[j4p2 + 2])
     {
         temp = z__[j4p2 + 2] / z__[j4 - 2];
         z__[j4] = z__[j4p2] * temp;
@@ -237,19 +243,19 @@ int slasq6_(integer *i0, integer *n0, real *z__, integer *pp, real *dmin__, real
         z__[j4] = z__[j4p2 + 2] * (z__[j4p2] / z__[j4 - 2]);
         *dnm1 = z__[j4p2 + 2] * (*dnm2 / z__[j4 - 2]);
     }
-    *dmin__ = fla_min(*dmin__,*dnm1);
+    *dmin__ = fla_min(*dmin__, *dnm1);
     *dmin1 = *dmin__;
     j4 += 4;
     j4p2 = j4 + (*pp << 1) - 1;
     z__[j4 - 2] = *dnm1 + z__[j4p2];
-    if (z__[j4 - 2] == 0.f)
+    if(z__[j4 - 2] == 0.f)
     {
         z__[j4] = 0.f;
         *dn = z__[j4p2 + 2];
         *dmin__ = *dn;
         emin = 0.f;
     }
-    else if (safmin * z__[j4p2 + 2] < z__[j4 - 2] && safmin * z__[j4 - 2] < z__[j4p2 + 2])
+    else if(safmin * z__[j4p2 + 2] < z__[j4 - 2] && safmin * z__[j4 - 2] < z__[j4p2 + 2])
     {
         temp = z__[j4p2 + 2] / z__[j4 - 2];
         z__[j4] = z__[j4p2] * temp;
@@ -260,10 +266,10 @@ int slasq6_(integer *i0, integer *n0, real *z__, integer *pp, real *dmin__, real
         z__[j4] = z__[j4p2 + 2] * (z__[j4p2] / z__[j4 - 2]);
         *dn = z__[j4p2 + 2] * (*dnm1 / z__[j4 - 2]);
     }
-    *dmin__ = fla_min(*dmin__,*dn);
+    *dmin__ = fla_min(*dmin__, *dn);
     z__[j4 + 2] = *dn;
     z__[(*n0 << 2) - *pp] = emin;
-    return 0;
+    return;
     /* End of SLASQ6 */
 }
 /* slasq6_ */

@@ -1,5 +1,8 @@
-/* ../netlib/zlaic1.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zlaic1.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b ZLAIC1 applies one step of incremental condition estimation. */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLAIC1 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaic1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaic1.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaic1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaic1.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaic1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaic1.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -123,10 +132,11 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, doublecomplex *w, doublecomplex *gamma, doublereal * sestpr, doublecomplex *s, doublecomplex *c__)
+void zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, doublecomplex *w,
+             doublecomplex *gamma, doublereal *sestpr, doublecomplex *s, doublecomplex *c__)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlaic1 inputs: job %" FLA_IS ", j %" FLA_IS "",*job, *j);
+    AOCL_DTL_SNPRINTF("zlaic1 inputs: job %" FLA_IS ", j %" FLA_IS "", *job, *j);
     /* System generated locals */
     doublereal d__1, d__2;
     doublecomplex z__1, z__2, z__3, z__4, z__5, z__6;
@@ -142,7 +152,9 @@ int zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, double
     doublecomplex alpha;
     doublereal norma;
     extern /* Double Complex */
-    VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        VOID
+        zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
+                   integer *);
     extern doublereal dlamch_(char *);
     doublereal absgam, absalp;
     doublecomplex cosine;
@@ -176,14 +188,14 @@ int zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, double
     absalp = z_abs(&alpha);
     absgam = z_abs(gamma);
     absest = f2c_dabs(*sest);
-    if (*job == 1)
+    if(*job == 1)
     {
         /* Estimating largest singular value */
         /* special cases */
-        if (*sest == 0.)
+        if(*sest == 0.)
         {
-            s1 = fla_max(absgam,absalp);
-            if (s1 == 0.)
+            s1 = fla_max(absgam, absalp);
+            if(s1 == 0.)
             {
                 s->r = 0., s->i = 0.;
                 c__->r = 1., c__->i = 0.;
@@ -216,24 +228,24 @@ int zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, double
                 *sestpr = s1 * tmp;
             }
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
-        else if (absgam <= eps * absest)
+        else if(absgam <= eps * absest)
         {
             s->r = 1., s->i = 0.;
             c__->r = 0., c__->i = 0.;
-            tmp = fla_max(absest,absalp);
+            tmp = fla_max(absest, absalp);
             s1 = absest / tmp;
             s2 = absalp / tmp;
             *sestpr = tmp * sqrt(s1 * s1 + s2 * s2);
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
-        else if (absalp <= eps * absest)
+        else if(absalp <= eps * absest)
         {
             s1 = absgam;
             s2 = absest;
-            if (s1 <= s2)
+            if(s1 <= s2)
             {
                 s->r = 1., s->i = 0.;
                 c__->r = 0., c__->i = 0.;
@@ -246,13 +258,13 @@ int zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, double
                 *sestpr = s1;
             }
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
-        else if (absest <= eps * absalp || absest <= eps * absgam)
+        else if(absest <= eps * absalp || absest <= eps * absgam)
         {
             s1 = absgam;
             s2 = absalp;
-            if (s1 <= s2)
+            if(s1 <= s2)
             {
                 tmp = s1 / s2;
                 scl = sqrt(tmp * tmp + 1.);
@@ -285,7 +297,7 @@ int zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, double
                 c__->r = z__1.r, c__->i = z__1.i;
             }
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         else
         {
@@ -295,7 +307,7 @@ int zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, double
             b = (1. - zeta1 * zeta1 - zeta2 * zeta2) * .5;
             d__1 = zeta1 * zeta1;
             c__->r = d__1, c__->i = 0.;
-            if (b > 0.)
+            if(b > 0.)
             {
                 d__1 = b * b;
                 z__4.r = d__1 + c__->r;
@@ -351,17 +363,17 @@ int zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, double
             c__->r = z__1.r, c__->i = z__1.i;
             *sestpr = sqrt(t + 1.) * absest;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
-    else if (*job == 2)
+    else if(*job == 2)
     {
         /* Estimating smallest singular value */
         /* special cases */
-        if (*sest == 0.)
+        if(*sest == 0.)
         {
             *sestpr = 0.;
-            if (fla_max(absgam,absalp) == 0.)
+            if(fla_max(absgam, absalp) == 0.)
             {
                 sine.r = 1.;
                 sine.i = 0.; // , expr subst
@@ -382,7 +394,7 @@ int zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, double
             /* Computing MAX */
             d__1 = z_abs(&sine);
             d__2 = z_abs(&cosine); // , expr subst
-            s1 = fla_max(d__1,d__2);
+            s1 = fla_max(d__1, d__2);
             z__1.r = sine.r / s1;
             z__1.i = sine.i / s1; // , expr subst
             s->r = z__1.r, s->i = z__1.i;
@@ -406,21 +418,21 @@ int zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, double
             z__1.i = c__->i / tmp; // , expr subst
             c__->r = z__1.r, c__->i = z__1.i;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
-        else if (absgam <= eps * absest)
+        else if(absgam <= eps * absest)
         {
             s->r = 0., s->i = 0.;
             c__->r = 1., c__->i = 0.;
             *sestpr = absgam;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
-        else if (absalp <= eps * absest)
+        else if(absalp <= eps * absest)
         {
             s1 = absgam;
             s2 = absest;
-            if (s1 <= s2)
+            if(s1 <= s2)
             {
                 s->r = 0., s->i = 0.;
                 c__->r = 1., c__->i = 0.;
@@ -433,13 +445,13 @@ int zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, double
                 *sestpr = s2;
             }
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
-        else if (absest <= eps * absalp || absest <= eps * absgam)
+        else if(absest <= eps * absalp || absest <= eps * absgam)
         {
             s1 = absgam;
             s2 = absalp;
-            if (s1 <= s2)
+            if(s1 <= s2)
             {
                 tmp = s1 / s2;
                 scl = sqrt(tmp * tmp + 1.);
@@ -480,7 +492,7 @@ int zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, double
                 c__->r = z__1.r, c__->i = z__1.i;
             }
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         else
         {
@@ -490,10 +502,10 @@ int zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, double
             /* Computing MAX */
             d__1 = zeta1 * zeta1 + 1. + zeta1 * zeta2;
             d__2 = zeta1 * zeta2 + zeta2 * zeta2; // , expr subst
-            norma = fla_max(d__1,d__2);
+            norma = fla_max(d__1, d__2);
             /* See if root is closer to zero or to ONE */
             test = (zeta1 - zeta2) * 2. * (zeta1 + zeta2) + 1.;
-            if (test >= 0.)
+            if(test >= 0.)
             {
                 /* root is close to zero, compute directly */
                 b = (zeta1 * zeta1 + zeta2 * zeta2 + 1.) * .5;
@@ -529,7 +541,7 @@ int zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, double
                 b = (zeta2 * zeta2 + zeta1 * zeta1 - 1.) * .5;
                 d__1 = zeta1 * zeta1;
                 c__->r = d__1, c__->i = 0.;
-                if (b >= 0.)
+                if(b >= 0.)
                 {
                     z__2.r = -c__->r;
                     z__2.i = -c__->i; // , expr subst
@@ -588,11 +600,11 @@ int zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, double
             z__1.i = cosine.i / tmp; // , expr subst
             c__->r = z__1.r, c__->i = z__1.i;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLAIC1 */
 }
 /* zlaic1_ */

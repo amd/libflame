@@ -73,61 +73,6 @@ FLA_Error FLA_Tevd_iteracc_v_opd_var3( integer       m_A,
 		                                    buff_ls, inc_ls,
 		                                    buff_pu, inc_pu,
 		                                    &k );
-/*
-			FLA_Tevd_find_perfshift_opd( m_ATL,
-			                             m_U,
-			                             buff_d, inc_d,
-			                             buff_e, inc_e,
-			                             buff_l, inc_l,
-			                             buff_ls, inc_ls,
-			                             buff_pu, inc_pu,
-			                             &pshift );
-
-		for ( k = 0; k < k_left; ++k )
-		{
-			// Mark the shift as used.
-			//pshift = *(buff_l + ij_shift * inc_l);
-			//*(buff_ls + ij_shift * inc_ls) = 0;
-			//printf( "using pshift %22.15e\n", pshift );
-			//printf( "using pshift %f\n", pshift );
-
-			r_val = FLA_Tevd_francis_v_opd_var1( m_ATL,
-			                                     &pshift,
-			                                     g1,     rs_G,
-			                                     buff_d, inc_d,
-			                                     buff_e, inc_e );
-			g1 += cs_G;
-
-			// Check for internal deflation.
-			if ( r_val != FLA_SUCCESS )
-			{
-//#ifdef PRINTF
-//				printf( "FLA_Tevd_eigval_v_opt_var1: Internal deflation in col %d, eig %d\n", r_val, m_A - 1 );
-//				printf( "FLA_Tevd_eigval_v_opt_var1: alpha11         = %23.19e\n", buff_d[r_val*inc_d] );
-//				printf( "FLA_Tevd_eigval_v_opt_var1: alpha21 alpha22 = %23.19e %23.19e\n", buff_e[r_val*inc_e], buff_d[(r_val+1)*inc_d] );
-//#endif
-	
-				//printf( "found internal deflation in column %d\n", r_val );
-				// Set the off-diagonal element to zero.
-				buff_e[ r_val*inc_e ] = 0.0;
-				break;
-			}
-			else
-			{
-				double e_last    = buff_e[ (m_ATL-2)*inc_e ];
-				double d_last_m1 = buff_d[ (m_ATL-2)*inc_d ];
-				double d_last    = buff_d[ (m_ATL-1)*inc_d ];
-				r_val = i;
-
-				if ( MAC_Tevd_eigval_converged_opd( eps, safmin, d_last_m1, e_last, d_last ) )
-				{
-					//printf( "zeroing %22.15e\n", buff_e[ (m_ATL-2)*inc_e ] );
-					buff_e[ (m_ATL-2)*inc_e ] = 0.0;
-					break;
-				}
-			}
-		}
-*/
 
 		// If the eigenvalue search did not result in any deflation, return.
 		if ( r_val == FLA_FAILURE && k_iter == n_G )

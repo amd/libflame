@@ -1,18 +1,28 @@
-/* ../netlib/zgbsvx.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zgbsvx.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief <b> ZGBSVX computes the solution to system of linear equations A * X = B for GB matrices</b> */
+/* > \brief <b> ZGBSVX computes the solution to system of linear equations A * X = B for GB
+ * matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZGBSVX + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgbsvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgbsvx.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgbsvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgbsvx.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgbsvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgbsvx.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -231,7 +241,7 @@ otherwise, it is an */
 /* > multiplied on the left by diag(R);
 if EQUED = 'N' or 'C', R */
 /* > is not accessed. R is an input argument if FACT = 'F';
-*/
+ */
 /* > otherwise, R is an output argument. If FACT = 'F' and */
 /* > EQUED = 'R' or 'B', each element of R must be positive. */
 /* > \endverbatim */
@@ -243,7 +253,7 @@ if EQUED = 'N' or 'C', R */
 /* > multiplied on the right by diag(C);
 if EQUED = 'N' or 'R', C */
 /* > is not accessed. C is an input argument if FACT = 'F';
-*/
+ */
 /* > otherwise, C is an output argument. If FACT = 'F' and */
 /* > EQUED = 'C' or 'B', each element of C must be positive. */
 /* > \endverbatim */
@@ -254,10 +264,10 @@ if EQUED = 'N' or 'R', C */
 /* > On entry, the right hand side matrix B. */
 /* > On exit, */
 /* > if EQUED = 'N', B is not modified;
-*/
+ */
 /* > if TRANS = 'N' and EQUED = 'R' or 'B', B is overwritten by */
 /* > diag(R)*B;
-*/
+ */
 /* > if TRANS = 'T' or 'C' and EQUED = 'C' or 'B', B is */
 /* > overwritten by diag(C)*B. */
 /* > \endverbatim */
@@ -363,13 +373,21 @@ if EQUED = 'N' or 'R', C */
 /* > \ingroup complex16GBsolve */
 /* ===================================================================== */
 /* Subroutine */
-int zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, doublecomplex *ab, integer *ldab, doublecomplex *afb, integer *ldafb, integer *ipiv, char *equed, doublereal *r__, doublereal *c__, doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *ferr, doublereal *berr, doublecomplex *work, doublereal *rwork, integer * info)
+void zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integer *nrhs,
+             doublecomplex *ab, integer *ldab, doublecomplex *afb, integer *ldafb, integer *ipiv,
+             char *equed, doublereal *r__, doublereal *c__, doublecomplex *b, integer *ldb,
+             doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *ferr, doublereal *berr,
+             doublecomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zgbsvx inputs: fact %c, trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldx);
+    AOCL_DTL_SNPRINTF("zgbsvx inputs: fact %c, trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
+                      ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ", ldb %" FLA_IS
+                      ", ldx %" FLA_IS "",
+                      *fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldx);
 
     /* System generated locals */
-    integer ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5;
+    integer ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
+        i__2, i__3, i__4, i__5;
     doublereal d__1, d__2;
     doublecomplex z__1;
     /* Builtin functions */
@@ -378,32 +396,53 @@ int zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integ
     integer i__, j, j1, j2;
     doublereal amax;
     char norm[1];
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal rcmin, rcmax, anorm;
     logical equil;
     extern /* Subroutine */
-    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     doublereal colcnd;
     logical nofact;
-    extern doublereal zlangb_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublereal *);
+    extern doublereal zlangb_(char *, integer *, integer *, integer *, doublecomplex *, integer *,
+                              doublereal *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), zlaqgb_( integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, char *);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
+        zlaqgb_(integer *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, char *);
     doublereal bignum;
     extern /* Subroutine */
-    int zgbcon_(char *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *);
+        void
+        zgbcon_(char *, integer *, integer *, integer *, doublecomplex *, integer *, integer *,
+                doublereal *, doublereal *, doublecomplex *, doublereal *, integer *);
     integer infequ;
     logical colequ;
-    extern doublereal zlantb_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *, doublereal *);
+    extern doublereal zlantb_(char *, char *, char *, integer *, integer *, doublecomplex *,
+                              integer *, doublereal *);
     doublereal rowcnd;
     extern /* Subroutine */
-    int zgbequ_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), zgbrfs_( char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *), zgbtrf_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, integer *);
+        void
+        zgbequ_(integer *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *),
+        zgbrfs_(char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *,
+                doublecomplex *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *),
+        zgbtrf_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *,
+                integer *);
     logical notran;
     extern /* Subroutine */
-    int zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *);
     doublereal smlnum;
     extern /* Subroutine */
-    int zgbtrs_(char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
+        void
+        zgbtrs_(char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *,
+                integer *, doublecomplex *, integer *, integer *);
     logical rowequ;
     doublereal rpvgrw;
     /* -- LAPACK driver routine (version 3.4.1) -- */
@@ -451,12 +490,12 @@ int zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integ
     --rwork;
     /* Function Body */
     *info = 0;
-    nofact = lsame_(fact, "N");
-    equil = lsame_(fact, "E");
-    notran = lsame_(trans, "N");
+    nofact = lsame_(fact, "N", 1, 1);
+    equil = lsame_(fact, "E", 1, 1);
+    notran = lsame_(trans, "N", 1, 1);
     smlnum = 0.;
     bignum = 0.;
-    if (nofact || equil)
+    if(nofact || equil)
     {
         *(unsigned char *)equed = 'N';
         rowequ = FALSE_;
@@ -464,165 +503,159 @@ int zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integ
     }
     else
     {
-        rowequ = lsame_(equed, "R") || lsame_(equed, "B");
-        colequ = lsame_(equed, "C") || lsame_(equed, "B");
+        rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
+        colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
         smlnum = dlamch_("Safe minimum");
         bignum = 1. / smlnum;
     }
     /* Test the input parameters. */
-    if (! nofact && ! equil && ! lsame_(fact, "F"))
+    if(!nofact && !equil && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T") && ! lsame_(trans, "C"))
+    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*kl < 0)
+    else if(*kl < 0)
     {
         *info = -4;
     }
-    else if (*ku < 0)
+    else if(*ku < 0)
     {
         *info = -5;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -6;
     }
-    else if (*ldab < *kl + *ku + 1)
+    else if(*ldab < *kl + *ku + 1)
     {
         *info = -8;
     }
-    else if (*ldafb < (*kl << 1) + *ku + 1)
+    else if(*ldafb < (*kl << 1) + *ku + 1)
     {
         *info = -10;
     }
-    else if (lsame_(fact, "F") && ! (rowequ || colequ || lsame_(equed, "N")))
+    else if(lsame_(fact, "F", 1, 1) && !(rowequ || colequ || lsame_(equed, "N", 1, 1)))
     {
         *info = -12;
     }
     else
     {
-        if (rowequ)
+        if(rowequ)
         {
             rcmin = bignum;
             rcmax = 0.;
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 /* Computing MIN */
                 d__1 = rcmin;
                 d__2 = r__[j]; // , expr subst
-                rcmin = fla_min(d__1,d__2);
+                rcmin = fla_min(d__1, d__2);
                 /* Computing MAX */
                 d__1 = rcmax;
                 d__2 = r__[j]; // , expr subst
-                rcmax = fla_max(d__1,d__2);
+                rcmax = fla_max(d__1, d__2);
                 /* L10: */
             }
-            if (rcmin <= 0.)
+            if(rcmin <= 0.)
             {
                 *info = -13;
             }
-            else if (*n > 0)
+            else if(*n > 0)
             {
-                rowcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+                rowcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
             }
             else
             {
                 rowcnd = 1.;
             }
         }
-        if (colequ && *info == 0)
+        if(colequ && *info == 0)
         {
             rcmin = bignum;
             rcmax = 0.;
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 /* Computing MIN */
                 d__1 = rcmin;
                 d__2 = c__[j]; // , expr subst
-                rcmin = fla_min(d__1,d__2);
+                rcmin = fla_min(d__1, d__2);
                 /* Computing MAX */
                 d__1 = rcmax;
                 d__2 = c__[j]; // , expr subst
-                rcmax = fla_max(d__1,d__2);
+                rcmax = fla_max(d__1, d__2);
                 /* L20: */
             }
-            if (rcmin <= 0.)
+            if(rcmin <= 0.)
             {
                 *info = -14;
             }
-            else if (*n > 0)
+            else if(*n > 0)
             {
-                colcnd = fla_max(rcmin,smlnum) / fla_min(rcmax,bignum);
+                colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
             }
             else
             {
                 colcnd = 1.;
             }
         }
-        if (*info == 0)
+        if(*info == 0)
         {
-            if (*ldb < fla_max(1,*n))
+            if(*ldb < fla_max(1, *n))
             {
                 *info = -16;
             }
-            else if (*ldx < fla_max(1,*n))
+            else if(*ldx < fla_max(1, *n))
             {
                 *info = -18;
             }
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZGBSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    if (equil)
+    if(equil)
     {
         /* Compute row and column scalings to equilibrate the matrix A. */
-        zgbequ_(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], &rowcnd, &colcnd, &amax, &infequ);
-        if (infequ == 0)
+        zgbequ_(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], &rowcnd, &colcnd, &amax,
+                &infequ);
+        if(infequ == 0)
         {
             /* Equilibrate the matrix. */
-            zlaqgb_(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], & rowcnd, &colcnd, &amax, equed);
-            rowequ = lsame_(equed, "R") || lsame_(equed, "B");
-            colequ = lsame_(equed, "C") || lsame_(equed, "B");
+            zlaqgb_(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], &rowcnd, &colcnd, &amax,
+                    equed);
+            rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
+            colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
         }
     }
     /* Scale the right hand side. */
-    if (notran)
+    if(notran)
     {
-        if (rowequ)
+        if(rowequ)
         {
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = *n;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__ + j * b_dim1;
                     i__4 = i__;
                     i__5 = i__ + j * b_dim1;
                     z__1.r = r__[i__4] * b[i__5].r;
-                    z__1.i = r__[i__4] * b[ i__5].i; // , expr subst
+                    z__1.i = r__[i__4] * b[i__5].i; // , expr subst
                     b[i__3].r = z__1.r;
                     b[i__3].i = z__1.i; // , expr subst
                     /* L30: */
@@ -631,23 +664,19 @@ int zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integ
             }
         }
     }
-    else if (colequ)
+    else if(colequ)
     {
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = *n;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__;
                 i__5 = i__ + j * b_dim1;
                 z__1.r = c__[i__4] * b[i__5].r;
-                z__1.i = c__[i__4] * b[i__5] .i; // , expr subst
+                z__1.i = c__[i__4] * b[i__5].i; // , expr subst
                 b[i__3].r = z__1.r;
                 b[i__3].i = z__1.i; // , expr subst
                 /* L50: */
@@ -655,50 +684,45 @@ int zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integ
             /* L60: */
         }
     }
-    if (nofact || equil)
+    if(nofact || equil)
     {
         /* Compute the LU factorization of the band matrix A. */
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             /* Computing MAX */
             i__2 = j - *ku;
-            j1 = fla_max(i__2,1);
+            j1 = fla_max(i__2, 1);
             /* Computing MIN */
             i__2 = j + *kl;
-            j2 = fla_min(i__2,*n);
+            j2 = fla_min(i__2, *n);
             i__2 = j2 - j1 + 1;
-            zcopy_(&i__2, &ab[*ku + 1 - j + j1 + j * ab_dim1], &c__1, &afb[* kl + *ku + 1 - j + j1 + j * afb_dim1], &c__1);
+            zcopy_(&i__2, &ab[*ku + 1 - j + j1 + j * ab_dim1], &c__1,
+                   &afb[*kl + *ku + 1 - j + j1 + j * afb_dim1], &c__1);
             /* L70: */
         }
         zgbtrf_(n, n, kl, ku, &afb[afb_offset], ldafb, &ipiv[1], info);
         /* Return if INFO is non-zero. */
-        if (*info > 0)
+        if(*info > 0)
         {
             /* Compute the reciprocal pivot growth factor of the */
             /* leading rank-deficient INFO columns of A. */
             anorm = 0.;
             i__1 = *info;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 /* Computing MAX */
                 i__2 = *ku + 2 - j;
                 /* Computing MIN */
                 i__4 = *n + *ku + 1 - j;
                 i__5 = *kl + *ku + 1; // , expr subst
-                i__3 = fla_min(i__4,i__5);
-                for (i__ = fla_max(i__2,1);
-                        i__ <= i__3;
-                        ++i__)
+                i__3 = fla_min(i__4, i__5);
+                for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
                 {
                     /* Computing MAX */
                     d__1 = anorm;
                     d__2 = z_abs(&ab[i__ + j * ab_dim1]); // , expr subst
-                    anorm = fla_max(d__1,d__2);
+                    anorm = fla_max(d__1, d__2);
                     /* L80: */
                 }
                 /* L90: */
@@ -706,12 +730,13 @@ int zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integ
             /* Computing MIN */
             i__3 = *info - 1;
             i__2 = *kl + *ku; // , expr subst
-            i__1 = fla_min(i__3,i__2);
+            i__1 = fla_min(i__3, i__2);
             /* Computing MAX */
             i__4 = 1;
             i__5 = *kl + *ku + 2 - *info; // , expr subst
-            rpvgrw = zlantb_("M", "U", "N", info, &i__1, &afb[fla_max(i__4,i__5) + afb_dim1], ldafb, &rwork[1]);
-            if (rpvgrw == 0.)
+            rpvgrw = zlantb_("M", "U", "N", info, &i__1, &afb[fla_max(i__4, i__5) + afb_dim1],
+                             ldafb, &rwork[1]);
+            if(rpvgrw == 0.)
             {
                 rpvgrw = 1.;
             }
@@ -722,12 +747,12 @@ int zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integ
             rwork[1] = rpvgrw;
             *rcond = 0.;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A and the */
     /* reciprocal pivot growth factor RPVGRW. */
-    if (notran)
+    if(notran)
     {
         *(unsigned char *)norm = '1';
     }
@@ -737,8 +762,8 @@ int zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integ
     }
     anorm = zlangb_(norm, n, kl, ku, &ab[ab_offset], ldab, &rwork[1]);
     i__1 = *kl + *ku;
-    rpvgrw = zlantb_("M", "U", "N", n, &i__1, &afb[afb_offset], ldafb, &rwork[ 1]);
-    if (rpvgrw == 0.)
+    rpvgrw = zlantb_("M", "U", "N", n, &i__1, &afb[afb_offset], ldafb, &rwork[1]);
+    if(rpvgrw == 0.)
     {
         rpvgrw = 1.;
     }
@@ -747,34 +772,32 @@ int zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integ
         rpvgrw = zlangb_("M", n, kl, ku, &ab[ab_offset], ldab, &rwork[1]) / rpvgrw;
     }
     /* Compute the reciprocal of the condition number of A. */
-    zgbcon_(norm, n, kl, ku, &afb[afb_offset], ldafb, &ipiv[1], &anorm, rcond, &work[1], &rwork[1], info);
+    zgbcon_(norm, n, kl, ku, &afb[afb_offset], ldafb, &ipiv[1], &anorm, rcond, &work[1], &rwork[1],
+            info);
     /* Compute the solution matrix X. */
     zlacpy_("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
-    zgbtrs_(trans, n, kl, ku, nrhs, &afb[afb_offset], ldafb, &ipiv[1], &x[ x_offset], ldx, info);
+    zgbtrs_(trans, n, kl, ku, nrhs, &afb[afb_offset], ldafb, &ipiv[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    zgbrfs_(trans, n, kl, ku, nrhs, &ab[ab_offset], ldab, &afb[afb_offset], ldafb, &ipiv[1], &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], & berr[1], &work[1], &rwork[1], info);
+    zgbrfs_(trans, n, kl, ku, nrhs, &ab[ab_offset], ldab, &afb[afb_offset], ldafb, &ipiv[1],
+            &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
-    if (notran)
+    if(notran)
     {
-        if (colequ)
+        if(colequ)
         {
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__3 = *n;
-                for (i__ = 1;
-                        i__ <= i__3;
-                        ++i__)
+                for(i__ = 1; i__ <= i__3; ++i__)
                 {
                     i__2 = i__ + j * x_dim1;
                     i__4 = i__;
                     i__5 = i__ + j * x_dim1;
                     z__1.r = c__[i__4] * x[i__5].r;
-                    z__1.i = c__[i__4] * x[ i__5].i; // , expr subst
+                    z__1.i = c__[i__4] * x[i__5].i; // , expr subst
                     x[i__2].r = z__1.r;
                     x[i__2].i = z__1.i; // , expr subst
                     /* L100: */
@@ -782,32 +805,26 @@ int zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integ
                 /* L110: */
             }
             i__1 = *nrhs;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 ferr[j] /= colcnd;
                 /* L120: */
             }
         }
     }
-    else if (rowequ)
+    else if(rowequ)
     {
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__3 = *n;
-            for (i__ = 1;
-                    i__ <= i__3;
-                    ++i__)
+            for(i__ = 1; i__ <= i__3; ++i__)
             {
                 i__2 = i__ + j * x_dim1;
                 i__4 = i__;
                 i__5 = i__ + j * x_dim1;
                 z__1.r = r__[i__4] * x[i__5].r;
-                z__1.i = r__[i__4] * x[i__5] .i; // , expr subst
+                z__1.i = r__[i__4] * x[i__5].i; // , expr subst
                 x[i__2].r = z__1.r;
                 x[i__2].i = z__1.i; // , expr subst
                 /* L130: */
@@ -815,22 +832,20 @@ int zgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integ
             /* L140: */
         }
         i__1 = *nrhs;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             ferr[j] /= rowcnd;
             /* L150: */
         }
     }
     /* Set INFO = N+1 if the matrix is singular to working precision. */
-    if (*rcond < dlamch_("Epsilon"))
+    if(*rcond < dlamch_("Epsilon"))
     {
         *info = *n + 1;
     }
     rwork[1] = rpvgrw;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZGBSVX */
 }
 /* zgbsvx_ */

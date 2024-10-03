@@ -1,5 +1,8 @@
-/* ../netlib/csytri2.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/csytri2.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -9,11 +12,17 @@ static integer c_n1 = -1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CSYTRI2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csytri2 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csytri2
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csytri2 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csytri2
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csytri2 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csytri2
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -45,7 +54,7 @@ static integer c_n1 = -1;
 /* > Specifies whether the details of the factorization are stored */
 /* > as an upper or lower triangular matrix. */
 /* > = 'U': Upper triangular, form is A = U*D*U**T;
-*/
+ */
 /* > = 'L': Lower triangular, form is A = L*D*L**T. */
 /* > \endverbatim */
 /* > */
@@ -120,15 +129,18 @@ the matrix is singular and its */
 /* > \ingroup complexSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int csytri2_(char *uplo, integer *n, complex *a, integer * lda, integer *ipiv, complex *work, integer *lwork, integer *info)
+void csytri2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, complex *work,
+              integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"csytri2 inputs: uplo %c, n %lld, lda %lld, lwork %lld",*uplo, *n, *lda, *lwork);
+    snprintf(buffer, 256, "csytri2 inputs: uplo %c, n %lld, lda %lld, lwork %lld", *uplo, *n, *lda,
+             *lwork);
 #else
-    snprintf(buffer, 256,"csytri2 inputs: uplo %c, n %d, lda %d, lwork %d",*uplo, *n, *lda, *lwork);
+    snprintf(buffer, 256, "csytri2 inputs: uplo %c, n %d, lda %d, lwork %d", *uplo, *n, *lda,
+             *lwork);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -136,15 +148,19 @@ int csytri2_(char *uplo, integer *n, complex *a, integer * lda, integer *ipiv, c
     integer a_dim1, a_offset, i__1;
     /* Local variables */
     extern /* Subroutine */
-    int csytri2x_(char *, integer *, complex *, integer *, integer *, complex *, integer *, integer *);
-    extern logical lsame_(char *, char *);
+        void
+        csytri2x_(char *, integer *, complex *, integer *, integer *, complex *, integer *,
+                  integer *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer nbmax;
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int csytri_(char *, integer *, complex *, integer *, integer *, complex *, integer *);
+        void
+        csytri_(char *, integer *, complex *, integer *, integer *, complex *, integer *);
     logical lquery;
     integer minsize;
     /* -- LAPACK computational routine (version 3.8.0) -- */
@@ -172,11 +188,11 @@ int csytri2_(char *uplo, integer *n, complex *a, integer * lda, integer *ipiv, c
     --work;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
+    upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
     /* Get blocksize */
     nbmax = ilaenv_(&c__1, "CSYTRI2", uplo, n, &c_n1, &c_n1, &c_n1);
-    if (nbmax >= *n)
+    if(nbmax >= *n)
     {
         minsize = *n;
     }
@@ -184,43 +200,43 @@ int csytri2_(char *uplo, integer *n, complex *a, integer * lda, integer *ipiv, c
     {
         minsize = (*n + nbmax + 1) * (nbmax + 3);
     }
-    if (! upper && ! lsame_(uplo, "L"))
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    else if (*lwork < minsize && ! lquery)
+    else if(*lwork < minsize && !lquery)
     {
         *info = -7;
     }
     /* Quick return if possible */
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CSYTRI2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-        work[1].r = (real) minsize;
+        work[1].r = (real)minsize;
         work[1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (nbmax >= *n)
+    if(nbmax >= *n)
     {
         csytri_(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], info);
     }
@@ -229,7 +245,7 @@ int csytri2_(char *uplo, integer *n, complex *a, integer * lda, integer *ipiv, c
         csytri2x_(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], &nbmax, info);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CSYTRI2 */
 }
 /* csytri2_ */

@@ -1,32 +1,34 @@
-/* ../netlib/clabrd.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/clabrd.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 /*
  *  Copyright (c) 2021-2023 Advanced Micro Devices, Inc.  All rights reserved.
  */
 #include "FLA_f2c.h" /* Table of constant values */
 
-static complex c_b1 =
-{
-    0.f,0.f
-}
-;
-static complex c_b2 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {0.f, 0.f};
+static complex c_b2 = {1.f, 0.f};
 static integer c__1 = 1;
-/* > \brief \b CLABRD reduces the first nb rows and columns of a general matrix to a bidiagonal form. */
+/* > \brief \b CLABRD reduces the first nb rows and columns of a general matrix to a bidiagonal
+ * form. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLABRD + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clabrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clabrd.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clabrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clabrd.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clabrd. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clabrd.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -220,36 +222,51 @@ tauq is stored in TAUQ(i) and taup in TAUP(i). */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int clabrd_(integer *m, integer *n, integer *nb, complex *a, integer *lda, real *d__, real *e, complex *tauq, complex *taup, complex *x, integer *ldx, complex *y, integer *ldy)
+void clabrd_(integer *m, integer *n, integer *nb, complex *a, integer *lda, real *d__, real *e,
+             complex *tauq, complex *taup, complex *x, integer *ldx, complex *y, integer *ldy)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "clabrd inputs: m %lld, n %lld, nb %lld, lda %lld, ldx %lld, ldy %lld", *m, *n, *nb, *lda, *ldx, *ldy);
+    snprintf(buffer, 256, "clabrd inputs: m %lld, n %lld, nb %lld, lda %lld, ldx %lld, ldy %lld",
+             *m, *n, *nb, *lda, *ldx, *ldy);
 #else
-    snprintf(buffer, 256, "clabrd inputs: m %d, n %d, nb %d, lda %d, ldx %d, ldy %d", *m, *n, *nb, *lda, *ldx, *ldy);
+    snprintf(buffer, 256, "clabrd inputs: m %d, n %d, nb %d, lda %d, ldx %d, ldy %d", *m, *n, *nb,
+             *lda, *ldx, *ldy);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-    extern int fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, real *d__, real *e, complex *tauq, complex *taup, complex *x, integer *ldx, complex *y, integer *ldy);
+    extern void fla_clabrd(integer * m, integer * n, integer * nb, complex * a, integer * lda,
+                           real * d__, real * e, complex * tauq, complex * taup, complex * x,
+                           integer * ldx, complex * y, integer * ldy);
 
-    int ret_val = fla_clabrd(m, n, nb, a, lda, d__, e, tauq, taup, x, ldx, y, ldy);
+    fla_clabrd(m, n, nb, a, lda, d__, e, tauq, taup, x, ldx, y, ldy);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return ret_val;
+    return;
 }
 
-int fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, real *d__, real *e, complex *tauq, complex *taup, complex *x, integer *ldx, complex *y, integer *ldy)
+void fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, real *d__, real *e,
+                complex *tauq, complex *taup, complex *x, integer *ldx, complex *y, integer *ldy)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, x_dim1, x_offset, y_dim1, y_offset, i__1, i__2, i__3, i__4, i__5;
+    integer a_dim1, a_offset, x_dim1, x_offset, y_dim1, y_offset, i__1, i__2, i__3;
     complex q__1;
     /* Local variables */
     integer i__;
+    int thread_id;
     complex alpha;
-    int thread_id, actual_num_threads;
+#if FLA_OPENMP_MULTITHREADING
+    integer  i__4, i__5;
+    int actual_num_threads;
+#endif
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *), cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *), clarfg_(integer *, complex *, complex *, integer *, complex *), clacgv_(integer *, complex *, integer *);
+        void
+        cscal_(integer *, complex *, complex *, integer *),
+        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
+               complex *, complex *, integer *),
+        clarfg_(integer *, complex *, complex *, integer *, complex *),
+        clacgv_(integer *, complex *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -289,31 +306,29 @@ int fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, re
     y -= y_offset;
 
     /* Function Body */
-    if (*m <= 0 || *n <= 0)
+    if(*m <= 0 || *n <= 0)
     {
-        return 0;
+        return;
     }
 
 #ifdef FLA_OPENMP_MULTITHREADING
     /* Get optimum thread number for CLABRD*/
-    FLA_Thread_optimum( FLA_LABRD, &actual_num_threads);
+    FLA_Thread_optimum(FLA_LABRD, &actual_num_threads);
 #endif
 
-    if (*m >= *n)
+    if(*m >= *n)
     {
         /* Reduce to upper bidiagonal form */
         i__1 = *nb;
 #ifdef FLA_OPENMP_MULTITHREADING
-        #pragma omp parallel num_threads(actual_num_threads) private(i__, i__2, i__3, i__4, i__5, thread_id)
+#pragma omp parallel num_threads(actual_num_threads) private(i__, i__2, i__3, i__4, i__5, thread_id)
         {
             thread_id = omp_get_thread_num();
 #else
         {
             thread_id = 0;
 #endif
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 if(thread_id == 0)
                 {
@@ -324,14 +339,16 @@ int fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, re
                     i__3 = i__ - 1;
                     q__1.r = -1.f;
                     q__1.i = -0.f; // , expr subst
-                    cgemv_("No transpose", &i__2, &i__3, &q__1, &a[i__ + a_dim1], lda, &y[i__ + y_dim1], ldy, &c_b2, &a[i__ + i__ * a_dim1], & c__1);
+                    cgemv_("No transpose", &i__2, &i__3, &q__1, &a[i__ + a_dim1], lda,
+                           &y[i__ + y_dim1], ldy, &c_b2, &a[i__ + i__ * a_dim1], &c__1);
                     i__2 = i__ - 1;
                     clacgv_(&i__2, &y[i__ + y_dim1], ldy);
                     i__2 = *m - i__ + 1;
                     i__3 = i__ - 1;
                     q__1.r = -1.f;
                     q__1.i = -0.f; // , expr subst
-                    cgemv_("No transpose", &i__2, &i__3, &q__1, &x[i__ + x_dim1], ldx, &a[i__ * a_dim1 + 1], &c__1, &c_b2, &a[i__ + i__ * a_dim1], &c__1);
+                    cgemv_("No transpose", &i__2, &i__3, &q__1, &x[i__ + x_dim1], ldx,
+                           &a[i__ * a_dim1 + 1], &c__1, &c_b2, &a[i__ + i__ * a_dim1], &c__1);
                     /* Generate reflection Q(i) to annihilate A(i+1:m,i) */
                     i__2 = i__ + i__ * a_dim1;
                     alpha.r = a[i__2].r;
@@ -339,11 +356,11 @@ int fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, re
                     i__2 = *m - i__ + 1;
                     /* Computing MIN */
                     i__3 = i__ + 1;
-                    clarfg_(&i__2, &alpha, &a[fla_min(i__3,*m) + i__ * a_dim1], &c__1, & tauq[i__]);
+                    clarfg_(&i__2, &alpha, &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1, &tauq[i__]);
                     i__2 = i__;
                     d__[i__2] = alpha.r;
                 }
-                if (i__ < *n)
+                if(i__ < *n)
                 {
                     if(thread_id == 0)
                     {
@@ -357,30 +374,40 @@ int fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, re
 #ifdef FLA_OPENMP_MULTITHREADING
                     /* Determine the sub partition range of current thread */
                     FLA_Thread_get_subrange(thread_id, actual_num_threads, i__3, &i__4, &i__5);
-                    #pragma omp barrier
-                    cgemv_("Conjugate transpose", &i__2, &i__4, &c_b2, &a[i__ + ( i__5 + i__ + 1) * a_dim1], lda, &a[i__ + i__ * a_dim1], & c__1, &c_b1, &y[ i__5 + i__ + 1 + i__ * y_dim1], &c__1);
-                    #pragma omp barrier
+#pragma omp barrier
+                    cgemv_("Conjugate transpose", &i__2, &i__4, &c_b2,
+                           &a[i__ + (i__5 + i__ + 1) * a_dim1], lda, &a[i__ + i__ * a_dim1], &c__1,
+                           &c_b1, &y[i__5 + i__ + 1 + i__ * y_dim1], &c__1);
+#pragma omp barrier
 #else
-                    cgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[i__ + ( i__ + 1) * a_dim1], lda, &a[i__ + i__ * a_dim1], & c__1, &c_b1, &y[i__ + 1 + i__ * y_dim1], &c__1);
+                    cgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[i__ + (i__ + 1) * a_dim1],
+                           lda, &a[i__ + i__ * a_dim1], &c__1, &c_b1, &y[i__ + 1 + i__ * y_dim1],
+                           &c__1);
 #endif
                     if(thread_id == 0)
                     {
                         i__2 = *m - i__ + 1;
                         i__3 = i__ - 1;
-                        cgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[i__ + a_dim1], lda, &a[i__ + i__ * a_dim1], &c__1, &c_b1, & y[i__ * y_dim1 + 1], &c__1);
+                        cgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[i__ + a_dim1], lda,
+                               &a[i__ + i__ * a_dim1], &c__1, &c_b1, &y[i__ * y_dim1 + 1], &c__1);
                         i__2 = *n - i__;
                         i__3 = i__ - 1;
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemv_("No transpose", &i__2, &i__3, &q__1, &y[i__ + 1 + y_dim1], ldy, &y[i__ * y_dim1 + 1], &c__1, &c_b2, &y[ i__ + 1 + i__ * y_dim1], &c__1);
+                        cgemv_("No transpose", &i__2, &i__3, &q__1, &y[i__ + 1 + y_dim1], ldy,
+                               &y[i__ * y_dim1 + 1], &c__1, &c_b2, &y[i__ + 1 + i__ * y_dim1],
+                               &c__1);
                         i__2 = *m - i__ + 1;
                         i__3 = i__ - 1;
-                        cgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &x[i__ + x_dim1], ldx, &a[i__ + i__ * a_dim1], &c__1, &c_b1, & y[i__ * y_dim1 + 1], &c__1);
+                        cgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &x[i__ + x_dim1], ldx,
+                               &a[i__ + i__ * a_dim1], &c__1, &c_b1, &y[i__ * y_dim1 + 1], &c__1);
                         i__2 = i__ - 1;
                         i__3 = *n - i__;
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemv_("Conjugate transpose", &i__2, &i__3, &q__1, &a[(i__ + 1) * a_dim1 + 1], lda, &y[i__ * y_dim1 + 1], &c__1, & c_b2, &y[i__ + 1 + i__ * y_dim1], &c__1);
+                        cgemv_("Conjugate transpose", &i__2, &i__3, &q__1,
+                               &a[(i__ + 1) * a_dim1 + 1], lda, &y[i__ * y_dim1 + 1], &c__1, &c_b2,
+                               &y[i__ + 1 + i__ * y_dim1], &c__1);
                         i__2 = *n - i__;
                         cscal_(&i__2, &tauq[i__], &y[i__ + 1 + i__ * y_dim1], &c__1);
                         /* Update A(i,i+1:n) */
@@ -390,7 +417,8 @@ int fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, re
                         i__2 = *n - i__;
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemv_("No transpose", &i__2, &i__, &q__1, &y[i__ + 1 + y_dim1], ldy, &a[i__ + a_dim1], lda, &c_b2, &a[i__ + ( i__ + 1) * a_dim1], lda);
+                        cgemv_("No transpose", &i__2, &i__, &q__1, &y[i__ + 1 + y_dim1], ldy,
+                               &a[i__ + a_dim1], lda, &c_b2, &a[i__ + (i__ + 1) * a_dim1], lda);
                         clacgv_(&i__, &a[i__ + a_dim1], lda);
                         i__2 = i__ - 1;
                         clacgv_(&i__2, &x[i__ + x_dim1], ldx);
@@ -398,7 +426,9 @@ int fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, re
                         i__3 = *n - i__;
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemv_("Conjugate transpose", &i__2, &i__3, &q__1, &a[(i__ + 1) * a_dim1 + 1], lda, &x[i__ + x_dim1], ldx, &c_b2, & a[i__ + (i__ + 1) * a_dim1], lda);
+                        cgemv_("Conjugate transpose", &i__2, &i__3, &q__1,
+                               &a[(i__ + 1) * a_dim1 + 1], lda, &x[i__ + x_dim1], ldx, &c_b2,
+                               &a[i__ + (i__ + 1) * a_dim1], lda);
                         i__2 = i__ - 1;
                         clacgv_(&i__2, &x[i__ + x_dim1], ldx);
                         /* Generate reflection P(i) to annihilate A(i,i+2:n) */
@@ -408,7 +438,8 @@ int fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, re
                         i__2 = *n - i__;
                         /* Computing MIN */
                         i__3 = i__ + 2;
-                        clarfg_(&i__2, &alpha, &a[i__ + fla_min(i__3,*n) * a_dim1], lda, & taup[i__]);
+                        clarfg_(&i__2, &alpha, &a[i__ + fla_min(i__3, *n) * a_dim1], lda,
+                                &taup[i__]);
                         i__2 = i__;
                         e[i__2] = alpha.r;
                         i__2 = i__ + (i__ + 1) * a_dim1;
@@ -421,28 +452,41 @@ int fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, re
 #ifdef FLA_OPENMP_MULTITHREADING
                     /* Determine the sub partition range of current thread */
                     FLA_Thread_get_subrange(thread_id, actual_num_threads, i__2, &i__4, &i__5);
-                    #pragma omp barrier
-                    cgemv_("No transpose", &i__4, &i__3, &c_b2, &a[ i__5 + i__ + 1 + (i__ + 1) * a_dim1], lda, &a[i__ + (i__ + 1) * a_dim1], lda, &c_b1, &x[ i__5 + i__ + 1 + i__ * x_dim1], &c__1);
-                    #pragma omp barrier
+#pragma omp barrier
+                    cgemv_("No transpose", &i__4, &i__3, &c_b2,
+                           &a[i__5 + i__ + 1 + (i__ + 1) * a_dim1], lda,
+                           &a[i__ + (i__ + 1) * a_dim1], lda, &c_b1,
+                           &x[i__5 + i__ + 1 + i__ * x_dim1], &c__1);
+#pragma omp barrier
 #else
-                    cgemv_("No transpose", &i__2, &i__3, &c_b2, &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &a[i__ + (i__ + 1) * a_dim1], lda, &c_b1, &x[i__ + 1 + i__ * x_dim1], &c__1);
+                    cgemv_("No transpose", &i__2, &i__3, &c_b2, &a[i__ + 1 + (i__ + 1) * a_dim1],
+                           lda, &a[i__ + (i__ + 1) * a_dim1], lda, &c_b1,
+                           &x[i__ + 1 + i__ * x_dim1], &c__1);
 #endif
                     if(thread_id == 0)
                     {
                         i__2 = *n - i__;
-                        cgemv_("Conjugate transpose", &i__2, &i__, &c_b2, &y[i__ + 1 + y_dim1], ldy, &a[i__ + (i__ + 1) * a_dim1], lda, & c_b1, &x[i__ * x_dim1 + 1], &c__1);
+                        cgemv_("Conjugate transpose", &i__2, &i__, &c_b2, &y[i__ + 1 + y_dim1], ldy,
+                               &a[i__ + (i__ + 1) * a_dim1], lda, &c_b1, &x[i__ * x_dim1 + 1],
+                               &c__1);
                         i__2 = *m - i__;
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemv_("No transpose", &i__2, &i__, &q__1, &a[i__ + 1 + a_dim1], lda, &x[i__ * x_dim1 + 1], &c__1, &c_b2, &x[ i__ + 1 + i__ * x_dim1], &c__1);
+                        cgemv_("No transpose", &i__2, &i__, &q__1, &a[i__ + 1 + a_dim1], lda,
+                               &x[i__ * x_dim1 + 1], &c__1, &c_b2, &x[i__ + 1 + i__ * x_dim1],
+                               &c__1);
                         i__2 = i__ - 1;
                         i__3 = *n - i__;
-                        cgemv_("No transpose", &i__2, &i__3, &c_b2, &a[(i__ + 1) * a_dim1 + 1], lda, &a[i__ + (i__ + 1) * a_dim1], lda, & c_b1, &x[i__ * x_dim1 + 1], &c__1);
+                        cgemv_("No transpose", &i__2, &i__3, &c_b2, &a[(i__ + 1) * a_dim1 + 1], lda,
+                               &a[i__ + (i__ + 1) * a_dim1], lda, &c_b1, &x[i__ * x_dim1 + 1],
+                               &c__1);
                         i__2 = *m - i__;
                         i__3 = i__ - 1;
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemv_("No transpose", &i__2, &i__3, &q__1, &x[i__ + 1 + x_dim1], ldx, &x[i__ * x_dim1 + 1], &c__1, &c_b2, &x[ i__ + 1 + i__ * x_dim1], &c__1);
+                        cgemv_("No transpose", &i__2, &i__3, &q__1, &x[i__ + 1 + x_dim1], ldx,
+                               &x[i__ * x_dim1 + 1], &c__1, &c_b2, &x[i__ + 1 + i__ * x_dim1],
+                               &c__1);
                         i__2 = *m - i__;
                         cscal_(&i__2, &taup[i__], &x[i__ + 1 + i__ * x_dim1], &c__1);
                         i__2 = *n - i__;
@@ -458,16 +502,14 @@ int fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, re
         /* Reduce to lower bidiagonal form */
         i__1 = *nb;
 #ifdef FLA_OPENMP_MULTITHREADING
-        #pragma omp parallel num_threads(actual_num_threads) private(i__, i__2, i__3, i__4, i__5, thread_id)
+#pragma omp parallel num_threads(actual_num_threads) private(i__, i__2, i__3, i__4, i__5, thread_id)
         {
             thread_id = omp_get_thread_num();
 #else
         {
             thread_id = 0;
 #endif
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 if(thread_id == 0)
                 {
@@ -480,7 +522,8 @@ int fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, re
                     i__3 = i__ - 1;
                     q__1.r = -1.f;
                     q__1.i = -0.f; // , expr subst
-                    cgemv_("No transpose", &i__2, &i__3, &q__1, &y[i__ + y_dim1], ldy, &a[i__ + a_dim1], lda, &c_b2, &a[i__ + i__ * a_dim1], lda);
+                    cgemv_("No transpose", &i__2, &i__3, &q__1, &y[i__ + y_dim1], ldy,
+                           &a[i__ + a_dim1], lda, &c_b2, &a[i__ + i__ * a_dim1], lda);
                     i__2 = i__ - 1;
                     clacgv_(&i__2, &a[i__ + a_dim1], lda);
                     i__2 = i__ - 1;
@@ -489,7 +532,8 @@ int fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, re
                     i__3 = *n - i__ + 1;
                     q__1.r = -1.f;
                     q__1.i = -0.f; // , expr subst
-                    cgemv_("Conjugate transpose", &i__2, &i__3, &q__1, &a[i__ * a_dim1 + 1], lda, &x[i__ + x_dim1], ldx, &c_b2, &a[i__ + i__ * a_dim1], lda);
+                    cgemv_("Conjugate transpose", &i__2, &i__3, &q__1, &a[i__ * a_dim1 + 1], lda,
+                           &x[i__ + x_dim1], ldx, &c_b2, &a[i__ + i__ * a_dim1], lda);
                     i__2 = i__ - 1;
                     clacgv_(&i__2, &x[i__ + x_dim1], ldx);
                     /* Generate reflection P(i) to annihilate A(i,i+1:n) */
@@ -499,11 +543,11 @@ int fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, re
                     i__2 = *n - i__ + 1;
                     /* Computing MIN */
                     i__3 = i__ + 1;
-                    clarfg_(&i__2, &alpha, &a[i__ + fla_min(i__3,*n) * a_dim1], lda, & taup[i__]);
+                    clarfg_(&i__2, &alpha, &a[i__ + fla_min(i__3, *n) * a_dim1], lda, &taup[i__]);
                     i__2 = i__;
                     d__[i__2] = alpha.r;
                 }
-                if (i__ < *m)
+                if(i__ < *m)
                 {
                     if(thread_id == 0)
                     {
@@ -517,30 +561,39 @@ int fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, re
 #ifdef FLA_OPENMP_MULTITHREADING
                     /* Determine the sub partition range of current thread */
                     FLA_Thread_get_subrange(thread_id, actual_num_threads, i__2, &i__4, &i__5);
-                    #pragma omp barrier
-                    cgemv_("No transpose", &i__4, &i__3, &c_b2, &a[i__5 + i__ + 1 + i__ * a_dim1], lda, &a[i__ + i__ * a_dim1], lda, &c_b1, &x[ i__5 + i__ + 1 + i__ * x_dim1], &c__1);
-                    #pragma omp barrier
+#pragma omp barrier
+                    cgemv_("No transpose", &i__4, &i__3, &c_b2, &a[i__5 + i__ + 1 + i__ * a_dim1],
+                           lda, &a[i__ + i__ * a_dim1], lda, &c_b1,
+                           &x[i__5 + i__ + 1 + i__ * x_dim1], &c__1);
+#pragma omp barrier
 #else
-                    cgemv_("No transpose", &i__2, &i__3, &c_b2, &a[i__ + 1 + i__ * a_dim1], lda, &a[i__ + i__ * a_dim1], lda, &c_b1, &x[ i__ + 1 + i__ * x_dim1], &c__1);
+                    cgemv_("No transpose", &i__2, &i__3, &c_b2, &a[i__ + 1 + i__ * a_dim1], lda,
+                           &a[i__ + i__ * a_dim1], lda, &c_b1, &x[i__ + 1 + i__ * x_dim1], &c__1);
 #endif
                     if(thread_id == 0)
                     {
                         i__2 = *n - i__ + 1;
                         i__3 = i__ - 1;
-                        cgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &y[i__ + y_dim1], ldy, &a[i__ + i__ * a_dim1], lda, &c_b1, &x[ i__ * x_dim1 + 1], &c__1);
+                        cgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &y[i__ + y_dim1], ldy,
+                               &a[i__ + i__ * a_dim1], lda, &c_b1, &x[i__ * x_dim1 + 1], &c__1);
                         i__2 = *m - i__;
                         i__3 = i__ - 1;
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemv_("No transpose", &i__2, &i__3, &q__1, &a[i__ + 1 + a_dim1], lda, &x[i__ * x_dim1 + 1], &c__1, &c_b2, &x[ i__ + 1 + i__ * x_dim1], &c__1);
+                        cgemv_("No transpose", &i__2, &i__3, &q__1, &a[i__ + 1 + a_dim1], lda,
+                               &x[i__ * x_dim1 + 1], &c__1, &c_b2, &x[i__ + 1 + i__ * x_dim1],
+                               &c__1);
                         i__2 = i__ - 1;
                         i__3 = *n - i__ + 1;
-                        cgemv_("No transpose", &i__2, &i__3, &c_b2, &a[i__ * a_dim1 + 1], lda, &a[i__ + i__ * a_dim1], lda, &c_b1, &x[i__ * x_dim1 + 1], &c__1);
+                        cgemv_("No transpose", &i__2, &i__3, &c_b2, &a[i__ * a_dim1 + 1], lda,
+                               &a[i__ + i__ * a_dim1], lda, &c_b1, &x[i__ * x_dim1 + 1], &c__1);
                         i__2 = *m - i__;
                         i__3 = i__ - 1;
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemv_("No transpose", &i__2, &i__3, &q__1, &x[i__ + 1 + x_dim1], ldx, &x[i__ * x_dim1 + 1], &c__1, &c_b2, &x[ i__ + 1 + i__ * x_dim1], &c__1);
+                        cgemv_("No transpose", &i__2, &i__3, &q__1, &x[i__ + 1 + x_dim1], ldx,
+                               &x[i__ * x_dim1 + 1], &c__1, &c_b2, &x[i__ + 1 + i__ * x_dim1],
+                               &c__1);
                         i__2 = *m - i__;
                         cscal_(&i__2, &taup[i__], &x[i__ + 1 + i__ * x_dim1], &c__1);
                         i__2 = *n - i__ + 1;
@@ -552,13 +605,16 @@ int fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, re
                         i__3 = i__ - 1;
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemv_("No transpose", &i__2, &i__3, &q__1, &a[i__ + 1 + a_dim1], lda, &y[i__ + y_dim1], ldy, &c_b2, &a[i__ + 1 + i__ * a_dim1], &c__1);
+                        cgemv_("No transpose", &i__2, &i__3, &q__1, &a[i__ + 1 + a_dim1], lda,
+                               &y[i__ + y_dim1], ldy, &c_b2, &a[i__ + 1 + i__ * a_dim1], &c__1);
                         i__2 = i__ - 1;
                         clacgv_(&i__2, &y[i__ + y_dim1], ldy);
                         i__2 = *m - i__;
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemv_("No transpose", &i__2, &i__, &q__1, &x[i__ + 1 + x_dim1], ldx, &a[i__ * a_dim1 + 1], &c__1, &c_b2, &a[ i__ + 1 + i__ * a_dim1], &c__1);
+                        cgemv_("No transpose", &i__2, &i__, &q__1, &x[i__ + 1 + x_dim1], ldx,
+                               &a[i__ * a_dim1 + 1], &c__1, &c_b2, &a[i__ + 1 + i__ * a_dim1],
+                               &c__1);
                         /* Generate reflection Q(i) to annihilate A(i+2:m,i) */
                         i__2 = i__ + 1 + i__ * a_dim1;
                         alpha.r = a[i__2].r;
@@ -566,7 +622,8 @@ int fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, re
                         i__2 = *m - i__;
                         /* Computing MIN */
                         i__3 = i__ + 2;
-                        clarfg_(&i__2, &alpha, &a[fla_min(i__3,*m) + i__ * a_dim1], &c__1, &tauq[i__]);
+                        clarfg_(&i__2, &alpha, &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1,
+                                &tauq[i__]);
                         i__2 = i__;
                         e[i__2] = alpha.r;
                         i__2 = i__ + 1 + i__ * a_dim1;
@@ -579,28 +636,40 @@ int fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, re
 #ifdef FLA_OPENMP_MULTITHREADING
                     /* Determine the sub partition range of current thread */
                     FLA_Thread_get_subrange(thread_id, actual_num_threads, i__3, &i__4, &i__5);
-                    #pragma omp barrier
-                    cgemv_("Conjugate transpose", &i__2, &i__4, &c_b2, &a[i__ + 1 + (i__5 + i__ + 1) * a_dim1], lda, &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b1, &y[i__5 + i__ + 1 + i__ * y_dim1], &c__1);
-                    #pragma omp barrier
+#pragma omp barrier
+                    cgemv_("Conjugate transpose", &i__2, &i__4, &c_b2,
+                           &a[i__ + 1 + (i__5 + i__ + 1) * a_dim1], lda, &a[i__ + 1 + i__ * a_dim1],
+                           &c__1, &c_b1, &y[i__5 + i__ + 1 + i__ * y_dim1], &c__1);
+#pragma omp barrier
 #else
-                    cgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b1, &y[i__ + 1 + i__ * y_dim1], &c__1);
+                    cgemv_("Conjugate transpose", &i__2, &i__3, &c_b2,
+                           &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &a[i__ + 1 + i__ * a_dim1], &c__1,
+                           &c_b1, &y[i__ + 1 + i__ * y_dim1], &c__1);
 #endif
                     if(thread_id == 0)
                     {
                         i__2 = *m - i__;
                         i__3 = i__ - 1;
-                        cgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[i__ + 1 + a_dim1], lda, &a[i__ + 1 + i__ * a_dim1], &c__1, & c_b1, &y[i__ * y_dim1 + 1], &c__1);
+                        cgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[i__ + 1 + a_dim1],
+                               lda, &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b1, &y[i__ * y_dim1 + 1],
+                               &c__1);
                         i__2 = *n - i__;
                         i__3 = i__ - 1;
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemv_("No transpose", &i__2, &i__3, &q__1, &y[i__ + 1 + y_dim1], ldy, &y[i__ * y_dim1 + 1], &c__1, &c_b2, &y[ i__ + 1 + i__ * y_dim1], &c__1);
+                        cgemv_("No transpose", &i__2, &i__3, &q__1, &y[i__ + 1 + y_dim1], ldy,
+                               &y[i__ * y_dim1 + 1], &c__1, &c_b2, &y[i__ + 1 + i__ * y_dim1],
+                               &c__1);
                         i__2 = *m - i__;
-                        cgemv_("Conjugate transpose", &i__2, &i__, &c_b2, &x[i__ + 1 + x_dim1], ldx, &a[i__ + 1 + i__ * a_dim1], &c__1, & c_b1, &y[i__ * y_dim1 + 1], &c__1);
+                        cgemv_("Conjugate transpose", &i__2, &i__, &c_b2, &x[i__ + 1 + x_dim1], ldx,
+                               &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b1, &y[i__ * y_dim1 + 1],
+                               &c__1);
                         i__2 = *n - i__;
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemv_("Conjugate transpose", &i__, &i__2, &q__1, &a[(i__ + 1) * a_dim1 + 1], lda, &y[i__ * y_dim1 + 1], &c__1, & c_b2, &y[i__ + 1 + i__ * y_dim1], &c__1);
+                        cgemv_("Conjugate transpose", &i__, &i__2, &q__1,
+                               &a[(i__ + 1) * a_dim1 + 1], lda, &y[i__ * y_dim1 + 1], &c__1, &c_b2,
+                               &y[i__ + 1 + i__ * y_dim1], &c__1);
                         i__2 = *n - i__;
                         cscal_(&i__2, &tauq[i__], &y[i__ + 1 + i__ * y_dim1], &c__1);
                     }
@@ -617,7 +686,7 @@ int fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, re
             }
         }
     }
-    return 0;
+    return;
     /* End of CLABRD */
 }
 /* clabrd_ */

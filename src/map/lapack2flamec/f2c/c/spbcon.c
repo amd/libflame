@@ -1,5 +1,8 @@
-/* ../netlib/spbcon.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/spbcon.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b SPBCON */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SPBCON + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spbcon. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spbcon.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spbcon. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spbcon.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spbcon. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spbcon.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -46,7 +55,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangular factor stored in AB;
-*/
+ */
 /* > = 'L': Lower triangular factor stored in AB. */
 /* > \endverbatim */
 /* > */
@@ -71,7 +80,7 @@ static integer c__1 = 1;
 /* > first KD+1 rows of the array. The j-th column of U or L is */
 /* > stored in the j-th column of the array AB as follows: */
 /* > if UPLO ='U', AB(kd+1+i-j,j) = U(i,j) for fla_max(1,j-kd)<=i<=j;
-*/
+ */
 /* > if UPLO ='L', AB(1+i-j,j) = L(i,j) for j<=i<=fla_min(n,j+kd). */
 /* > \endverbatim */
 /* > */
@@ -121,12 +130,13 @@ static integer c__1 = 1;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int spbcon_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, real *anorm, real *rcond, real *work, integer *iwork, integer *info)
+void spbcon_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, real *anorm, real *rcond,
+             real *work, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"spbcon inputs: uplo %c, n %d, kd %d, ldab %d",*uplo, *n, *kd, *ldab);
+    snprintf(buffer, 256, "spbcon inputs: uplo %c, n %d, kd %d, ldab %d", *uplo, *n, *kd, *ldab);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -135,22 +145,27 @@ int spbcon_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, real *
     /* Local variables */
     integer ix, kase;
     real scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Subroutine */
-    int srscl_(integer *, real *, real *, integer *);
+        void
+        srscl_(integer *, real *, real *, integer *);
     logical upper;
     extern /* Subroutine */
-    int slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
+        void
+        slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     real scalel;
     extern real slamch_(char *);
     real scaleu;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     real ainvnm;
     extern /* Subroutine */
-    int slatbs_(char *, char *, char *, char *, integer *, integer *, real *, integer *, real *, real *, real *, integer *);
+        void
+        slatbs_(char *, char *, char *, char *, integer *, integer *, real *, integer *, real *,
+                real *, real *, integer *);
     char normin[1];
     real smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -184,46 +199,46 @@ int spbcon_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, real *
     --iwork;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*kd < 0)
+    else if(*kd < 0)
     {
         *info = -3;
     }
-    else if (*ldab < *kd + 1)
+    else if(*ldab < *kd + 1)
     {
         *info = -5;
     }
-    else if (*anorm < 0.f)
+    else if(*anorm < 0.f)
     {
         *info = -6;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SPBCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
     *rcond = 0.f;
-    if (*n == 0)
+    if(*n == 0)
     {
         *rcond = 1.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    else if (*anorm == 0.f)
+    else if(*anorm == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     smlnum = slamch_("Safe minimum");
     /* Estimate the 1-norm of the inverse. */
@@ -231,30 +246,34 @@ int spbcon_(char *uplo, integer *n, integer *kd, real *ab, integer *ldab, real *
     *(unsigned char *)normin = 'N';
 L10:
     slacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
-    if (kase != 0)
+    if(kase != 0)
     {
-        if (upper)
+        if(upper)
         {
             /* Multiply by inv(U**T). */
-            slatbs_("Upper", "Transpose", "Non-unit", normin, n, kd, &ab[ ab_offset], ldab, &work[1], &scalel, &work[(*n << 1) + 1], info);
+            slatbs_("Upper", "Transpose", "Non-unit", normin, n, kd, &ab[ab_offset], ldab, &work[1],
+                    &scalel, &work[(*n << 1) + 1], info);
             *(unsigned char *)normin = 'Y';
             /* Multiply by inv(U). */
-            slatbs_("Upper", "No transpose", "Non-unit", normin, n, kd, &ab[ ab_offset], ldab, &work[1], &scaleu, &work[(*n << 1) + 1], info);
+            slatbs_("Upper", "No transpose", "Non-unit", normin, n, kd, &ab[ab_offset], ldab,
+                    &work[1], &scaleu, &work[(*n << 1) + 1], info);
         }
         else
         {
             /* Multiply by inv(L). */
-            slatbs_("Lower", "No transpose", "Non-unit", normin, n, kd, &ab[ ab_offset], ldab, &work[1], &scalel, &work[(*n << 1) + 1], info);
+            slatbs_("Lower", "No transpose", "Non-unit", normin, n, kd, &ab[ab_offset], ldab,
+                    &work[1], &scalel, &work[(*n << 1) + 1], info);
             *(unsigned char *)normin = 'Y';
             /* Multiply by inv(L**T). */
-            slatbs_("Lower", "Transpose", "Non-unit", normin, n, kd, &ab[ ab_offset], ldab, &work[1], &scaleu, &work[(*n << 1) + 1], info);
+            slatbs_("Lower", "Transpose", "Non-unit", normin, n, kd, &ab[ab_offset], ldab, &work[1],
+                    &scaleu, &work[(*n << 1) + 1], info);
         }
         /* Multiply by 1/SCALE if doing so will not cause overflow. */
         scale = scalel * scaleu;
-        if (scale != 1.f)
+        if(scale != 1.f)
         {
             ix = isamax_(n, &work[1], &c__1);
-            if (scale < (r__1 = work[ix], f2c_abs(r__1)) * smlnum || scale == 0.f)
+            if(scale < (r__1 = work[ix], f2c_abs(r__1)) * smlnum || scale == 0.f)
             {
                 goto L20;
             }
@@ -263,13 +282,13 @@ L10:
         goto L10;
     }
     /* Compute the estimate of the reciprocal condition number. */
-    if (ainvnm != 0.f)
+    if(ainvnm != 0.f)
     {
         *rcond = 1.f / ainvnm / *anorm;
     }
 L20:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SPBCON */
 }
 /* spbcon_ */

@@ -1,16 +1,11 @@
-/* claqz0.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* claqz0.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    0.f,0.f
-}
-;
-static complex c_b2 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {0.f, 0.f};
+static complex c_b2 = {1.f, 0.f};
 static integer c__12 = 12;
 static integer c__13 = 13;
 static integer c__14 = 14;
@@ -24,11 +19,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLAQZ0 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/CLAQZ0. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/CLAQZ0.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/CLAQZ0. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/CLAQZ0.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/CLAQZ0. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/CLAQZ0.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -109,7 +110,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > WANTS is CHARACTER*1 */
 /* > = 'E': Compute eigenvalues only;
-*/
+ */
 /* > = 'S': Compute eigenvalues and the Schur form. */
 /* > \endverbatim */
 /* > */
@@ -117,10 +118,10 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > WANTQ is CHARACTER*1 */
 /* > = 'N': Left Schur vectors (Q) are not computed;
-*/
+ */
 /* > = 'I': Q is initialized to the unit matrix and the matrix Q */
 /* > of left Schur vectors of (A,B) is returned;
-*/
+ */
 /* > = 'V': Q must contain an unitary matrix Q1 on entry and */
 /* > the product Q1*Q is returned. */
 /* > \endverbatim */
@@ -129,10 +130,10 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > WANTZ is CHARACTER*1 */
 /* > = 'N': Right Schur vectors (Z) are not computed;
-*/
+ */
 /* > = 'I': Z is initialized to the unit matrix and the matrix Z */
 /* > of right Schur vectors of (A,B) is returned;
-*/
+ */
 /* > = 'V': Z must contain an unitary matrix Z1 on entry and */
 /* > the product Z1*Z is returned. */
 /* > \endverbatim */
@@ -291,10 +292,14 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int claqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, integer *ihi, complex *a, integer *lda, complex *b, integer *ldb, complex *alpha, complex *beta, complex *q, integer *ldq, complex *z__, integer *ldz, complex *work, integer *lwork, real * rwork, integer *rec, integer *info)
+void claqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, integer *ihi,
+             complex *a, integer *lda, complex *b, integer *ldb, complex *alpha, complex *beta,
+             complex *q, integer *ldq, complex *z__, integer *ldz, complex *work, integer *lwork,
+             real *rwork, integer *rec, integer *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
+    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
+        i__3, i__4, i__5;
     real r__1, r__2;
     complex q__1, q__2;
     /* Builtin functions */
@@ -314,30 +319,46 @@ int claqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
     integer nmin;
     complex temp;
     extern /* Subroutine */
-    int crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
+        void
+        crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
     integer n_undeflated__;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iiter;
     real bnorm;
     integer maxit, rcost, istop;
     extern /* Subroutine */
-    int claqz2_(logical *, logical *, logical *, integer *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, complex *, complex *, complex *, integer *, complex *, integer *, complex *, integer *, real *, integer *, integer *), claqz3_(logical *, logical *, logical *, integer *, integer *, integer *, integer *, integer *, complex *, complex *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *);
+        void
+        claqz2_(logical *, logical *, logical *, integer *, integer *, integer *, integer *,
+                complex *, integer *, complex *, integer *, complex *, integer *, complex *,
+                integer *, integer *, integer *, complex *, complex *, complex *, integer *,
+                complex *, integer *, complex *, integer *, real *, integer *, integer *),
+        claqz3_(logical *, logical *, logical *, integer *, integer *, integer *, integer *,
+                integer *, complex *, complex *, complex *, integer *, complex *, integer *,
+                complex *, integer *, complex *, integer *, complex *, integer *, complex *,
+                integer *, complex *, integer *, integer *);
     integer itemp1, itemp2;
     extern /* Subroutine */
-    int slabad_(real *, real *);
+        void
+        slabad_(real *, real *);
     integer nibble;
     extern real slamch_(char *);
     integer nblock;
     extern real clanhs_(char *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    int claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *), clartg_(complex *, complex *, real *, complex *, complex *);
+        void
+        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
+        clartg_(complex *, complex *, real *, complex *, complex *);
     real safmin;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real safmax;
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int chgeqz_(char *, char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, complex *, complex *, complex *, integer *, complex *, integer *, complex *, integer *, real *, integer *);
+        void
+        chgeqz_(char *, char *, char *, integer *, integer *, integer *, complex *, integer *,
+                complex *, integer *, complex *, complex *, complex *, integer *, complex *,
+                integer *, complex *, integer *, real *, integer *);
     complex eshift;
     char jbcmpz[3];
     integer iwantq, iwants, istart;
@@ -370,12 +391,12 @@ int claqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
     /* Function Body */
     eshift.r = 0.f;
     eshift.i = 0.f;
-    if (lsame_(wants, "E"))
+    if(lsame_(wants, "E", 1, 1))
     {
         ilschur = FALSE_;
         iwants = 1;
     }
-    else if (lsame_(wants, "S"))
+    else if(lsame_(wants, "S", 1, 1))
     {
         ilschur = TRUE_;
         iwants = 2;
@@ -384,17 +405,17 @@ int claqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
     {
         iwants = 0;
     }
-    if (lsame_(wantq, "N"))
+    if(lsame_(wantq, "N", 1, 1))
     {
         ilq = FALSE_;
         iwantq = 1;
     }
-    else if (lsame_(wantq, "V"))
+    else if(lsame_(wantq, "V", 1, 1))
     {
         ilq = TRUE_;
         iwantq = 2;
     }
-    else if (lsame_(wantq, "I"))
+    else if(lsame_(wantq, "I", 1, 1))
     {
         ilq = TRUE_;
         iwantq = 3;
@@ -403,17 +424,17 @@ int claqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
     {
         iwantq = 0;
     }
-    if (lsame_(wantz, "N"))
+    if(lsame_(wantz, "N", 1, 1))
     {
         ilz = FALSE_;
         iwantz = 1;
     }
-    else if (lsame_(wantz, "V"))
+    else if(lsame_(wantz, "V", 1, 1))
     {
         ilz = TRUE_;
         iwantz = 2;
     }
-    else if (lsame_(wantz, "I"))
+    else if(lsame_(wantz, "I", 1, 1))
     {
         ilz = TRUE_;
         iwantz = 3;
@@ -424,58 +445,58 @@ int claqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
     }
     /* Check Argument Values */
     *info = 0;
-    if (iwants == 0)
+    if(iwants == 0)
     {
         *info = -1;
     }
-    else if (iwantq == 0)
+    else if(iwantq == 0)
     {
         *info = -2;
     }
-    else if (iwantz == 0)
+    else if(iwantz == 0)
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*ilo < 1)
+    else if(*ilo < 1)
     {
         *info = -5;
     }
-    else if (*ihi > *n || *ihi < *ilo - 1)
+    else if(*ihi > *n || *ihi < *ilo - 1)
     {
         *info = -6;
     }
-    else if (*lda < *n)
+    else if(*lda < *n)
     {
         *info = -8;
     }
-    else if (*ldb < *n)
+    else if(*ldb < *n)
     {
         *info = -10;
     }
-    else if (*ldq < 1 || ilq && *ldq < *n)
+    else if(*ldq < 1 || ilq && *ldq < *n)
     {
         *info = -15;
     }
-    else if (*ldz < 1 || ilz && *ldz < *n)
+    else if(*ldz < 1 || ilz && *ldz < *n)
     {
         *info = -17;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CLAQZ0", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n <= 0)
+    if(*n <= 0)
     {
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
-        return 0;
+        return;
     }
     /* Get the parameters */
     *(unsigned char *)jbcmpz = *(unsigned char *)wants;
@@ -483,40 +504,45 @@ int claqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
     *(unsigned char *)&jbcmpz[2] = *(unsigned char *)wantz;
     nmin = ilaenv_(&c__12, "CLAQZ0", jbcmpz, n, ilo, ihi, lwork);
     nwr = ilaenv_(&c__13, "CLAQZ0", jbcmpz, n, ilo, ihi, lwork);
-    nwr = fla_max(2,nwr);
+    nwr = fla_max(2, nwr);
     /* Computing MIN */
     i__1 = *ihi - *ilo + 1;
     i__2 = (*n - 1) / 3;
-    i__1 = fla_min(i__1,i__2); // ; expr subst
-    nwr = fla_min(i__1,nwr);
+    i__1 = fla_min(i__1, i__2); // ; expr subst
+    nwr = fla_min(i__1, nwr);
     nibble = ilaenv_(&c__14, "CLAQZ0", jbcmpz, n, ilo, ihi, lwork);
     nsr = ilaenv_(&c__15, "CLAQZ0", jbcmpz, n, ilo, ihi, lwork);
     /* Computing MIN */
     i__1 = nsr, i__2 = (*n + 6) / 9;
-    i__1 = fla_min(i__1,i__2);
-    i__2 = *ihi - * ilo; // ; expr subst
-    nsr = fla_min(i__1,i__2);
+    i__1 = fla_min(i__1, i__2);
+    i__2 = *ihi - *ilo; // ; expr subst
+    nsr = fla_min(i__1, i__2);
     /* Computing MAX */
     i__1 = 2;
     i__2 = nsr - nsr % 2; // , expr subst
-    nsr = fla_max(i__1,i__2);
+    nsr = fla_max(i__1, i__2);
     rcost = ilaenv_(&c__17, "CLAQZ0", jbcmpz, n, ilo, ihi, lwork);
-    itemp1 = (integer) (nsr / sqrt((nsr << 1) / ((real) rcost / 100 * *n) + 1) );
+    itemp1 = (integer)(nsr / sqrt((nsr << 1) / ((real)rcost / 100 * *n) + 1));
     itemp1 = ((itemp1 - 1) / 4 << 2) + 4;
     nbr = nsr + itemp1;
-    if (*n < nmin || *rec >= 2)
+    if(*n < nmin || *rec >= 2)
     {
-        chgeqz_(wants, wantq, wantz, n, ilo, ihi, &a[a_offset], lda, &b[ b_offset], ldb, &alpha[1], &beta[1], &q[q_offset], ldq, &z__[ z_offset], ldz, &work[1], lwork, &rwork[1], info);
-        return 0;
+        chgeqz_(wants, wantq, wantz, n, ilo, ihi, &a[a_offset], lda, &b[b_offset], ldb, &alpha[1],
+                &beta[1], &q[q_offset], ldq, &z__[z_offset], ldz, &work[1], lwork, &rwork[1], info);
+        return;
     }
     /* Find out required workspace */
     /* Workspace query to CLAQZ2 */
-    nw = fla_max(nwr,nmin);
-    claqz2_(&ilschur, &ilq, &ilz, n, ilo, ihi, &nw, &a[a_offset], lda, &b[ b_offset], ldb, &q[q_offset], ldq, &z__[z_offset], ldz, & n_undeflated__, &n_deflated__, &alpha[1], &beta[1], &work[1], &nw, &work[1], &nw, &work[1], &c_n1, &rwork[1], rec, &aed_info__);
-    itemp1 = (integer) work[1].r;
+    nw = fla_max(nwr, nmin);
+    claqz2_(&ilschur, &ilq, &ilz, n, ilo, ihi, &nw, &a[a_offset], lda, &b[b_offset], ldb,
+            &q[q_offset], ldq, &z__[z_offset], ldz, &n_undeflated__, &n_deflated__, &alpha[1],
+            &beta[1], &work[1], &nw, &work[1], &nw, &work[1], &c_n1, &rwork[1], rec, &aed_info__);
+    itemp1 = (integer)work[1].r;
     /* Workspace query to CLAQZ3 */
-    claqz3_(&ilschur, &ilq, &ilz, n, ilo, ihi, &nsr, &nbr, &alpha[1], &beta[1], &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq, &z__[ z_offset], ldz, &work[1], &nbr, &work[1], &nbr, &work[1], &c_n1, & sweep_info__);
-    itemp2 = (integer) work[1].r;
+    claqz3_(&ilschur, &ilq, &ilz, n, ilo, ihi, &nsr, &nbr, &alpha[1], &beta[1], &a[a_offset], lda,
+            &b[b_offset], ldb, &q[q_offset], ldq, &z__[z_offset], ldz, &work[1], &nbr, &work[1],
+            &nbr, &work[1], &c_n1, &sweep_info__);
+    itemp2 = (integer)work[1].r;
     /* Computing MAX */
     /* Computing 2nd power */
     i__3 = nw;
@@ -524,29 +550,29 @@ int claqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
     i__4 = nbr;
     i__1 = itemp1 + (i__3 * i__3 << 1);
     i__2 = itemp2 + (i__4 * i__4 << 1); // , expr subst
-    lworkreq = fla_max(i__1,i__2);
-    if (*lwork == -1)
+    lworkreq = fla_max(i__1, i__2);
+    if(*lwork == -1)
     {
-        r__1 = (real) lworkreq;
+        r__1 = (real)lworkreq;
         work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
-        return 0;
+        return;
     }
-    else if (*lwork < lworkreq)
+    else if(*lwork < lworkreq)
     {
         *info = -19;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         xerbla_("CLAQZ0", info, (ftnlen)6);
-        return 0;
+        return;
     }
     /* Initialize Q and Z */
-    if (iwantq == 3)
+    if(iwantq == 3)
     {
         claset_("FULL", n, n, &c_b1, &c_b2, &q[q_offset], ldq);
     }
-    if (iwantz == 3)
+    if(iwantz == 3)
     {
         claset_("FULL", n, n, &c_b1, &c_b2, &z__[z_offset], ldz);
     }
@@ -555,28 +581,26 @@ int claqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
     safmax = 1.f / safmin;
     slabad_(&safmin, &safmax);
     ulp = slamch_("PRECISION");
-    smlnum = safmin * ((real) (*n) / ulp);
+    smlnum = safmin * ((real)(*n) / ulp);
     i__1 = *ihi - *ilo + 1;
     bnorm = clanhs_("F", &i__1, &b[*ilo + *ilo * b_dim1], ldb, &rwork[1]);
     /* Computing MAX */
     r__1 = safmin;
     r__2 = ulp * bnorm; // , expr subst
-    btol = fla_max(r__1,r__2);
+    btol = fla_max(r__1, r__2);
     istart = *ilo;
     istop = *ihi;
     maxit = (*ihi - *ilo + 1) * 30;
     ld = 0;
     i__1 = maxit;
-    for (iiter = 1;
-            iiter <= i__1;
-            ++iiter)
+    for(iiter = 1; iiter <= i__1; ++iiter)
     {
-        if (iiter >= maxit)
+        if(iiter >= maxit)
         {
             *info = istop + 1;
             goto L80;
         }
-        if (istart + 1 >= istop)
+        if(istart + 1 >= istop)
         {
             istop = istart;
             break;
@@ -584,8 +608,10 @@ int claqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
         /* Check deflations at the end */
         /* Computing MAX */
         r__1 = smlnum;
-        r__2 = ulp * (c_abs(&a[istop + istop * a_dim1]) + c_abs(&a[istop - 1 + (istop - 1) * a_dim1])); // , expr subst
-        if (c_abs(&a[istop + (istop - 1) * a_dim1]) <= fla_max(r__1,r__2))
+        r__2 = ulp
+               * (c_abs(&a[istop + istop * a_dim1])
+                  + c_abs(&a[istop - 1 + (istop - 1) * a_dim1])); // , expr subst
+        if(c_abs(&a[istop + (istop - 1) * a_dim1]) <= fla_max(r__1, r__2))
         {
             i__2 = istop + (istop - 1) * a_dim1;
             a[i__2].r = 0.f;
@@ -598,8 +624,10 @@ int claqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
         /* Check deflations at the start */
         /* Computing MAX */
         r__1 = smlnum;
-        r__2 = ulp * (c_abs(&a[istart + istart * a_dim1]) + c_abs(&a[istart + 1 + (istart + 1) * a_dim1])); // , expr subst
-        if (c_abs(&a[istart + 1 + istart * a_dim1]) <= fla_max(r__1,r__2))
+        r__2 = ulp
+               * (c_abs(&a[istart + istart * a_dim1])
+                  + c_abs(&a[istart + 1 + (istart + 1) * a_dim1])); // , expr subst
+        if(c_abs(&a[istart + 1 + istart * a_dim1]) <= fla_max(r__1, r__2))
         {
             i__2 = istart + 1 + istart * a_dim1;
             a[i__2].r = 0.f;
@@ -609,21 +637,21 @@ int claqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
             eshift.r = 0.f;
             eshift.i = 0.f; // , expr subst
         }
-        if (istart + 1 >= istop)
+        if(istart + 1 >= istop)
         {
             break;
         }
         /* Check interior deflations */
         istart2 = istart;
         i__2 = istart + 1;
-        for (k = istop;
-                k >= i__2;
-                --k)
+        for(k = istop; k >= i__2; --k)
         {
             /* Computing MAX */
             r__1 = smlnum;
-            r__2 = ulp * (c_abs(&a[k + k * a_dim1]) + c_abs(&a[ k - 1 + (k - 1) * a_dim1])); // , expr subst
-            if (c_abs(&a[k + (k - 1) * a_dim1]) <= fla_max(r__1,r__2))
+            r__2 = ulp
+                   * (c_abs(&a[k + k * a_dim1])
+                      + c_abs(&a[k - 1 + (k - 1) * a_dim1])); // , expr subst
+            if(c_abs(&a[k + (k - 1) * a_dim1]) <= fla_max(r__1, r__2))
             {
                 i__3 = k + (k - 1) * a_dim1;
                 a[i__3].r = 0.f;
@@ -633,7 +661,7 @@ int claqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
             }
         }
         /* Get range to apply rotations to */
-        if (ilschur)
+        if(ilschur)
         {
             istartm = 1;
             istopm = *n;
@@ -648,16 +676,15 @@ int claqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
         k = istop;
         while(k >= istart2)
         {
-            if (c_abs(&b[k + k * b_dim1]) < btol)
+            if(c_abs(&b[k + k * b_dim1]) < btol)
             {
                 /* A diagonal element of B is negligable, move it */
                 /* to the top and deflate it */
                 i__2 = istart2 + 1;
-                for (k2 = k;
-                        k2 >= i__2;
-                        --k2)
+                for(k2 = k; k2 >= i__2; --k2)
                 {
-                    clartg_(&b[k2 - 1 + k2 * b_dim1], &b[k2 - 1 + (k2 - 1) * b_dim1], &c1, &s1, &temp);
+                    clartg_(&b[k2 - 1 + k2 * b_dim1], &b[k2 - 1 + (k2 - 1) * b_dim1], &c1, &s1,
+                            &temp);
                     i__3 = k2 - 1 + k2 * b_dim1;
                     b[i__3].r = temp.r;
                     b[i__3].i = temp.i; // , expr subst
@@ -665,18 +692,22 @@ int claqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
                     b[i__3].r = 0.f;
                     b[i__3].i = 0.f; // , expr subst
                     i__3 = k2 - 2 - istartm + 1;
-                    crot_(&i__3, &b[istartm + k2 * b_dim1], &c__1, &b[istartm + (k2 - 1) * b_dim1], &c__1, &c1, &s1);
+                    crot_(&i__3, &b[istartm + k2 * b_dim1], &c__1, &b[istartm + (k2 - 1) * b_dim1],
+                          &c__1, &c1, &s1);
                     /* Computing MIN */
                     i__4 = k2 + 1;
-                    i__3 = fla_min(i__4,istop) - istartm + 1;
-                    crot_(&i__3, &a[istartm + k2 * a_dim1], &c__1, &a[istartm + (k2 - 1) * a_dim1], &c__1, &c1, &s1);
-                    if (ilz)
+                    i__3 = fla_min(i__4, istop) - istartm + 1;
+                    crot_(&i__3, &a[istartm + k2 * a_dim1], &c__1, &a[istartm + (k2 - 1) * a_dim1],
+                          &c__1, &c1, &s1);
+                    if(ilz)
                     {
-                        crot_(n, &z__[k2 * z_dim1 + 1], &c__1, &z__[(k2 - 1) * z_dim1 + 1], &c__1, &c1, &s1);
+                        crot_(n, &z__[k2 * z_dim1 + 1], &c__1, &z__[(k2 - 1) * z_dim1 + 1], &c__1,
+                              &c1, &s1);
                     }
-                    if (k2 < istop)
+                    if(k2 < istop)
                     {
-                        clartg_(&a[k2 + (k2 - 1) * a_dim1], &a[k2 + 1 + (k2 - 1) * a_dim1], &c1, &s1, &temp);
+                        clartg_(&a[k2 + (k2 - 1) * a_dim1], &a[k2 + 1 + (k2 - 1) * a_dim1], &c1,
+                                &s1, &temp);
                         i__3 = k2 + (k2 - 1) * a_dim1;
                         a[i__3].r = temp.r;
                         a[i__3].i = temp.i; // , expr subst
@@ -684,19 +715,23 @@ int claqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
                         a[i__3].r = 0.f;
                         a[i__3].i = 0.f; // , expr subst
                         i__3 = istopm - k2 + 1;
-                        crot_(&i__3, &a[k2 + k2 * a_dim1], lda, &a[k2 + 1 + k2 * a_dim1], lda, &c1, &s1);
+                        crot_(&i__3, &a[k2 + k2 * a_dim1], lda, &a[k2 + 1 + k2 * a_dim1], lda, &c1,
+                              &s1);
                         i__3 = istopm - k2 + 1;
-                        crot_(&i__3, &b[k2 + k2 * b_dim1], ldb, &b[k2 + 1 + k2 * b_dim1], ldb, &c1, &s1);
-                        if (ilq)
+                        crot_(&i__3, &b[k2 + k2 * b_dim1], ldb, &b[k2 + 1 + k2 * b_dim1], ldb, &c1,
+                              &s1);
+                        if(ilq)
                         {
                             r_cnjg(&q__1, &s1);
-                            crot_(n, &q[k2 * q_dim1 + 1], &c__1, &q[(k2 + 1) * q_dim1 + 1], &c__1, &c1, &q__1);
+                            crot_(n, &q[k2 * q_dim1 + 1], &c__1, &q[(k2 + 1) * q_dim1 + 1], &c__1,
+                                  &c1, &q__1);
                         }
                     }
                 }
-                if (istart2 < istop)
+                if(istart2 < istop)
                 {
-                    clartg_(&a[istart2 + istart2 * a_dim1], &a[istart2 + 1 + istart2 * a_dim1], &c1, &s1, &temp);
+                    clartg_(&a[istart2 + istart2 * a_dim1], &a[istart2 + 1 + istart2 * a_dim1], &c1,
+                            &s1, &temp);
                     i__2 = istart2 + istart2 * a_dim1;
                     a[i__2].r = temp.r;
                     a[i__2].i = temp.i; // , expr subst
@@ -704,13 +739,16 @@ int claqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
                     a[i__2].r = 0.f;
                     a[i__2].i = 0.f; // , expr subst
                     i__2 = istopm - (istart2 + 1) + 1;
-                    crot_(&i__2, &a[istart2 + (istart2 + 1) * a_dim1], lda, & a[istart2 + 1 + (istart2 + 1) * a_dim1], lda, &c1, &s1);
+                    crot_(&i__2, &a[istart2 + (istart2 + 1) * a_dim1], lda,
+                          &a[istart2 + 1 + (istart2 + 1) * a_dim1], lda, &c1, &s1);
                     i__2 = istopm - (istart2 + 1) + 1;
-                    crot_(&i__2, &b[istart2 + (istart2 + 1) * b_dim1], ldb, & b[istart2 + 1 + (istart2 + 1) * b_dim1], ldb, &c1, &s1);
-                    if (ilq)
+                    crot_(&i__2, &b[istart2 + (istart2 + 1) * b_dim1], ldb,
+                          &b[istart2 + 1 + (istart2 + 1) * b_dim1], ldb, &c1, &s1);
+                    if(ilq)
                     {
                         r_cnjg(&q__1, &s1);
-                        crot_(n, &q[istart2 * q_dim1 + 1], &c__1, &q[(istart2 + 1) * q_dim1 + 1], &c__1, &c1, &q__1);
+                        crot_(n, &q[istart2 * q_dim1 + 1], &c__1, &q[(istart2 + 1) * q_dim1 + 1],
+                              &c__1, &c1, &q__1);
                     }
                 }
                 ++istart2;
@@ -719,7 +757,7 @@ int claqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
         }
         /* istart2 now points to the top of the bottom right */
         /* unreduced Hessenberg block */
-        if (istart2 >= istop)
+        if(istart2 >= istop)
         {
             istop = istart2 - 1;
             ld = 0;
@@ -730,12 +768,12 @@ int claqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
         nw = nwr;
         nshifts = nsr;
         nblock = nbr;
-        if (istop - istart2 + 1 < nmin)
+        if(istop - istart2 + 1 < nmin)
         {
             /* Setting nw to the size of the subblock will make AED deflate */
             /* all the eigenvalues. This is slightly more efficient than just */
             /* using CHGEQZ because the off diagonal part gets updated via BLAS. */
-            if (istop - istart + 1 < nmin)
+            if(istop - istart + 1 < nmin)
             {
                 nw = istop - istart + 1;
                 istart2 = istart;
@@ -753,15 +791,19 @@ int claqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
         /* Computing 2nd power */
         i__5 = nw;
         i__4 = *lwork - (i__5 * i__5 << 1);
-        claqz2_(&ilschur, &ilq, &ilz, n, &istart2, &istop, &nw, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq, &z__[z_offset], ldz, &n_undeflated__, &n_deflated__, &alpha[1], &beta[1], & work[1], &nw, &work[i__2 * i__2 + 1], &nw, &work[(i__3 * i__3 << 1) + 1], &i__4, &rwork[1], rec, &aed_info__);
-        if (n_deflated__ > 0)
+        claqz2_(&ilschur, &ilq, &ilz, n, &istart2, &istop, &nw, &a[a_offset], lda, &b[b_offset],
+                ldb, &q[q_offset], ldq, &z__[z_offset], ldz, &n_undeflated__, &n_deflated__,
+                &alpha[1], &beta[1], &work[1], &nw, &work[i__2 * i__2 + 1], &nw,
+                &work[(i__3 * i__3 << 1) + 1], &i__4, &rwork[1], rec, &aed_info__);
+        if(n_deflated__ > 0)
         {
             istop -= n_deflated__;
             ld = 0;
             eshift.r = 0.f;
             eshift.i = 0.f; // , expr subst
         }
-        if (n_deflated__ * 100 > nibble * (n_deflated__ + n_undeflated__) || istop - istart2 + 1 < nmin)
+        if(n_deflated__ * 100 > nibble * (n_deflated__ + n_undeflated__)
+           || istop - istart2 + 1 < nmin)
         {
             /* AED has uncovered many eigenvalues. Skip a QZ sweep and run */
             /* AED again. */
@@ -771,21 +813,23 @@ int claqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
         /* Computing MIN */
         i__2 = nshifts;
         i__3 = istop - istart2; // , expr subst
-        ns = fla_min(i__2,i__3);
-        ns = fla_min(ns,n_undeflated__);
+        ns = fla_min(i__2, i__3);
+        ns = fla_min(ns, n_undeflated__);
         shiftpos = istop - n_deflated__ - n_undeflated__ + 1;
-        if (ld % 6 == 0)
+        if(ld % 6 == 0)
         {
             /* Exceptional shift. Chosen for no particularly good reason. */
-            if ((real) maxit * safmin * c_abs(&a[istop + (istop - 1) * a_dim1] ) < c_abs(&a[istop - 1 + (istop - 1) * a_dim1]))
+            if((real)maxit * safmin * c_abs(&a[istop + (istop - 1) * a_dim1])
+               < c_abs(&a[istop - 1 + (istop - 1) * a_dim1]))
             {
-                c_div(&q__1, &a[istop + (istop - 1) * a_dim1], &b[istop - 1 + (istop - 1) * b_dim1]);
+                c_div(&q__1, &a[istop + (istop - 1) * a_dim1],
+                      &b[istop - 1 + (istop - 1) * b_dim1]);
                 eshift.r = q__1.r;
                 eshift.i = q__1.i; // , expr subst
             }
             else
             {
-                r__1 = safmin * (real) maxit;
+                r__1 = safmin * (real)maxit;
                 q__2.r = 1.f / r__1;
                 q__2.i = 0.f / r__1; // , expr subst
                 q__1.r = eshift.r + q__2.r;
@@ -809,15 +853,20 @@ int claqz0_(char *wants, char *wantq, char *wantz, integer * n, integer *ilo, in
         /* Computing 2nd power */
         i__5 = nblock;
         i__4 = *lwork - (i__5 * i__5 << 1);
-        claqz3_(&ilschur, &ilq, &ilz, n, &istart2, &istop, &ns, &nblock, & alpha[shiftpos], &beta[shiftpos], &a[a_offset], lda, &b[ b_offset], ldb, &q[q_offset], ldq, &z__[z_offset], ldz, &work[ 1], &nblock, &work[i__2 * i__2 + 1], &nblock, &work[(i__3 * i__3 << 1) + 1], &i__4, &sweep_info__);
+        claqz3_(&ilschur, &ilq, &ilz, n, &istart2, &istop, &ns, &nblock, &alpha[shiftpos],
+                &beta[shiftpos], &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
+                &z__[z_offset], ldz, &work[1], &nblock, &work[i__2 * i__2 + 1], &nblock,
+                &work[(i__3 * i__3 << 1) + 1], &i__4, &sweep_info__);
     }
     /* Call CHGEQZ to normalize the eigenvalue blocks and set the eigenvalues */
     /* If all the eigenvalues have been found, CHGEQZ will not do any iterations */
     /* and only normalize the blocks. In case of a rare convergence failure, */
     /* the single shift might perform better. */
 L80:
-    chgeqz_(wants, wantq, wantz, n, ilo, ihi, &a[a_offset], lda, &b[b_offset], ldb, &alpha[1], &beta[1], &q[q_offset], ldq, &z__[z_offset], ldz, &work[1], lwork, &rwork[1], &norm_info__);
+    chgeqz_(wants, wantq, wantz, n, ilo, ihi, &a[a_offset], lda, &b[b_offset], ldb, &alpha[1],
+            &beta[1], &q[q_offset], ldq, &z__[z_offset], ldz, &work[1], lwork, &rwork[1],
+            &norm_info__);
     *info = norm_info__;
-    return 0;
+    return;
 }
 /* claqz0_ */

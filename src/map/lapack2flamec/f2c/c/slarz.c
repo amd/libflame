@@ -1,5 +1,8 @@
-/* ../netlib/slarz.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slarz.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static real c_b5 = 1.f;
@@ -9,11 +12,17 @@ static real c_b5 = 1.f;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLARZ + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarz.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarz.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarz.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarz.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarz.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarz.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -133,12 +142,14 @@ static real c_b5 = 1.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slarz_(char *side, integer *m, integer *n, integer *l, real *v, integer *incv, real *tau, real *c__, integer *ldc, real * work)
+void slarz_(char *side, integer *m, integer *n, integer *l, real *v, integer *incv, real *tau,
+            real *c__, integer *ldc, real *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slarz inputs: side %c, m %d, n %d, l %d, incv %d, ldc %d",*side, *m, *n, *l, *incv, *ldc);
+    snprintf(buffer, 256, "slarz inputs: side %c, m %d, n %d, l %d, incv %d, ldc %d", *side, *m, *n,
+             *l, *incv, *ldc);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -146,10 +157,16 @@ int slarz_(char *side, integer *m, integer *n, integer *l, real *v, integer *inc
     real r__1;
     /* Local variables */
     extern /* Subroutine */
-    int sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
-    extern logical lsame_(char *, char *);
+        void
+        sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+              integer *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *);
+        void
+        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+               real *, integer *),
+        scopy_(integer *, real *, integer *, real *, integer *),
+        saxpy_(integer *, real *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -173,15 +190,16 @@ int slarz_(char *side, integer *m, integer *n, integer *l, real *v, integer *inc
     c__ -= c_offset;
     --work;
     /* Function Body */
-    if (lsame_(side, "L"))
+    if(lsame_(side, "L", 1, 1))
     {
         /* Form H * C */
-        if (*tau != 0.f)
+        if(*tau != 0.f)
         {
             /* w( 1:n ) = C( 1, 1:n ) */
             scopy_(n, &c__[c_offset], ldc, &work[1], &c__1);
             /* w( 1:n ) = w( 1:n ) + C( m-l+1:m, 1:n )**T * v( 1:l ) */
-            sgemv_("Transpose", l, n, &c_b5, &c__[*m - *l + 1 + c_dim1], ldc, &v[1], incv, &c_b5, &work[1], &c__1);
+            sgemv_("Transpose", l, n, &c_b5, &c__[*m - *l + 1 + c_dim1], ldc, &v[1], incv, &c_b5,
+                   &work[1], &c__1);
             /* C( 1, 1:n ) = C( 1, 1:n ) - tau * w( 1:n ) */
             r__1 = -(*tau);
             saxpy_(n, &r__1, &work[1], &c__1, &c__[c_offset], ldc);
@@ -194,12 +212,13 @@ int slarz_(char *side, integer *m, integer *n, integer *l, real *v, integer *inc
     else
     {
         /* Form C * H */
-        if (*tau != 0.f)
+        if(*tau != 0.f)
         {
             /* w( 1:m ) = C( 1:m, 1 ) */
             scopy_(m, &c__[c_offset], &c__1, &work[1], &c__1);
             /* w( 1:m ) = w( 1:m ) + C( 1:m, n-l+1:n, 1:n ) * v( 1:l ) */
-            sgemv_("No transpose", m, l, &c_b5, &c__[(*n - *l + 1) * c_dim1 + 1], ldc, &v[1], incv, &c_b5, &work[1], &c__1);
+            sgemv_("No transpose", m, l, &c_b5, &c__[(*n - *l + 1) * c_dim1 + 1], ldc, &v[1], incv,
+                   &c_b5, &work[1], &c__1);
             /* C( 1:m, 1 ) = C( 1:m, 1 ) - tau * w( 1:m ) */
             r__1 = -(*tau);
             saxpy_(m, &r__1, &work[1], &c__1, &c__[c_offset], &c__1);
@@ -210,7 +229,7 @@ int slarz_(char *side, integer *m, integer *n, integer *l, real *v, integer *inc
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLARZ */
 }
 /* slarz_ */

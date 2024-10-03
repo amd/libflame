@@ -53,23 +53,24 @@ endif
 
 # --- Important directories for source code and build products ---
 
-SRC_DIR             := src
-CONFIG_DIR          := config
-OBJ_DIR             := obj
-LIB_DIR             := lib
-INC_DIR             := include
-LAPACKE_DIR         := lapacke
-AOCLDTL_DIR         := aocl_dtl
-LAPACKE_SRC_DIR     := LAPACKE/src
-LAPACKE_UTIL_DIR    := LAPACKE/utils
-TEST_DIR            := test/legacyflame
-TEST_DIR_MAIN_TEST  := test/main
-CPP_TEST_DIR        := testcpp
-LAPACKE_S_SRC_PATH  := $(SRC_DIR)/$(LAPACKE_DIR)/$(LAPACKE_SRC_DIR)
-LAPACKE_U_SRC_PATH  := $(SRC_DIR)/$(LAPACKE_DIR)/$(LAPACKE_UTIL_DIR)
-LIBAOCLUTILS_DIR    := libaoclutils
-LIBAOCLUTILS_REPO   := aocl-utils
+SRC_DIR              := src
+CONFIG_DIR           := config
+OBJ_DIR              := obj
+LIB_DIR              := lib
+INC_DIR              := include
+LAPACKE_DIR          := lapacke
+AOCLDTL_DIR          := aocl_dtl
+LAPACKE_SRC_DIR      := LAPACKE/src
+LAPACKE_UTIL_DIR     := LAPACKE/utils
+TEST_DIR             := test/legacyflame
+TEST_DIR_MAIN_TEST   := test/main
+CPP_TEST_DIR         := testcpp
+LAPACKE_S_SRC_PATH   := $(SRC_DIR)/$(LAPACKE_DIR)/$(LAPACKE_SRC_DIR)
+LAPACKE_U_SRC_PATH   := $(SRC_DIR)/$(LAPACKE_DIR)/$(LAPACKE_UTIL_DIR)
+LIBAOCLUTILS_DIR     := libaoclutils
+LIBAOCLUTILS_REPO    := aocl-utils
 LIBAOCLUTILS_OBJ_DIR := libaoclutils_objdir
+SCRIPTS_DIR          := scripts
 
 # Use the system type to name the config, object, and library directories.
 # These directories are special in that they will contain products specific
@@ -351,6 +352,7 @@ MK_EXC_HEADER_PATHS := ./src/lapack/x86/
 MK_EXC_HEADER_PATHS += ./src/lapack/x86/avx2/
 MK_EXC_HEADER_PATHS += ./src/lapack/x86/avx512/
 MK_EXC_HEADER_PATHS += ./src/lapack/x86/front/
+MK_EXC_HEADER_PATHS += ./src/lapack/x86/generic/
 
 # Remove the header paths in exclude list
 MK_HEADER_DIR_PATHS := $(filter-out $(MK_EXC_HEADER_PATHS), $(MK_HEADER_DIR_PATHS))
@@ -541,7 +543,7 @@ ifeq ($(MAKEFILE_FRAGMENTS_PRESENT),no)
 endif
 
 aoclutillib:
-	bash script_aoclutil.sh LIBAOCLUTILS_GIT_URL=$(LIBAOCLUTILS_GIT_URL) LIBAOCLUTILS_GIT_TAG=$(LIBAOCLUTILS_GIT_TAG)
+	bash $(SCRIPTS_DIR)/script_aoclutil.sh LIBAOCLUTILS_GIT_URL=$(LIBAOCLUTILS_GIT_URL) LIBAOCLUTILS_GIT_TAG=$(LIBAOCLUTILS_GIT_TAG)
 	
 # --- Cosolidated header creation ---
 

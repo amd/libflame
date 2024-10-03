@@ -1,21 +1,31 @@
-/* ../netlib/slasd1.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slasd1.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__0 = 0;
 static real c_b7 = 1.f;
 static integer c__1 = 1;
 static integer c_n1 = -1;
-/* > \brief \b SLASD1 computes the SVD of an upper bidiagonal matrix B of the specified size. Used by sbdsdc. */
+/* > \brief \b SLASD1 computes the SVD of an upper bidiagonal matrix B of the specified size. Used
+ * by sbdsdc. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLASD1 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasd1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasd1.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasd1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasd1.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasd1. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasd1.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -198,7 +208,9 @@ VT(NL+2:M, NL+2:M)**T contains */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slasd1_(integer *nl, integer *nr, integer *sqre, real * d__, real *alpha, real *beta, real *u, integer *ldu, real *vt, integer *ldvt, integer *idxq, integer *iwork, real *work, integer * info)
+void slasd1_(integer *nl, integer *nr, integer *sqre, real *d__, real *alpha, real *beta, real *u,
+             integer *ldu, real *vt, integer *ldvt, integer *idxq, integer *iwork, real *work,
+             integer *info)
 {
     /* System generated locals */
     integer u_dim1, u_offset, vt_dim1, vt_offset, i__1;
@@ -206,10 +218,22 @@ int slasd1_(integer *nl, integer *nr, integer *sqre, real * d__, real *alpha, re
     /* Local variables */
     integer i__, k, m, n, n1, n2, iq, iz, iu2, ldq, idx, ldu2, ivt2, idxc, idxp, ldvt2;
     extern /* Subroutine */
-    int slasd2_(integer *, integer *, integer *, integer *, real *, real *, real *, real *, real *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *, integer *, integer *, integer *, integer *, integer *), slasd3_(integer *, integer *, integer *, integer *, real *, real *, integer *, real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *);
+        void
+        slasd2_(integer *, integer *, integer *, integer *, real *, real *, real *, real *, real *,
+                integer *, real *, integer *, real *, real *, integer *, real *, integer *,
+                integer *, integer *, integer *, integer *, integer *, integer *),
+        slasd3_(integer *, integer *, integer *, integer *, real *, real *, integer *, real *,
+                real *, integer *, real *, integer *, real *, integer *, real *, integer *,
+                integer *, integer *, real *, integer *);
     integer isigma;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slascl_( char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
+        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
+                integer *, integer *),
+        slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
     real orgnrm;
     integer coltyp;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -244,23 +268,23 @@ int slasd1_(integer *nl, integer *nr, integer *sqre, real * d__, real *alpha, re
     --work;
     /* Function Body */
     *info = 0;
-    if (*nl < 1)
+    if(*nl < 1)
     {
         *info = -1;
     }
-    else if (*nr < 1)
+    else if(*nr < 1)
     {
         *info = -2;
     }
-    else if (*sqre < 0 || *sqre > 1)
+    else if(*sqre < 0 || *sqre > 1)
     {
         *info = -3;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SLASD1", &i__1, (ftnlen)6);
-        return 0;
+        return;
     }
     n = *nl + *nr + 1;
     m = n + *sqre;
@@ -282,14 +306,12 @@ int slasd1_(integer *nl, integer *nr, integer *sqre, real * d__, real *alpha, re
     /* Computing MAX */
     r__1 = f2c_abs(*alpha);
     r__2 = f2c_abs(*beta); // , expr subst
-    orgnrm = fla_max(r__1,r__2);
+    orgnrm = fla_max(r__1, r__2);
     d__[*nl + 1] = 0.f;
     i__1 = n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if ((r__1 = d__[i__], f2c_abs(r__1)) > orgnrm)
+        if((r__1 = d__[i__], f2c_abs(r__1)) > orgnrm)
         {
             orgnrm = (r__1 = d__[i__], f2c_abs(r__1));
         }
@@ -299,13 +321,17 @@ int slasd1_(integer *nl, integer *nr, integer *sqre, real * d__, real *alpha, re
     *alpha /= orgnrm;
     *beta /= orgnrm;
     /* Deflate singular values. */
-    slasd2_(nl, nr, sqre, &k, &d__[1], &work[iz], alpha, beta, &u[u_offset], ldu, &vt[vt_offset], ldvt, &work[isigma], &work[iu2], &ldu2, & work[ivt2], &ldvt2, &iwork[idxp], &iwork[idx], &iwork[idxc], & idxq[1], &iwork[coltyp], info);
+    slasd2_(nl, nr, sqre, &k, &d__[1], &work[iz], alpha, beta, &u[u_offset], ldu, &vt[vt_offset],
+            ldvt, &work[isigma], &work[iu2], &ldu2, &work[ivt2], &ldvt2, &iwork[idxp], &iwork[idx],
+            &iwork[idxc], &idxq[1], &iwork[coltyp], info);
     /* Solve Secular Equation and update singular vectors. */
     ldq = k;
-    slasd3_(nl, nr, sqre, &k, &d__[1], &work[iq], &ldq, &work[isigma], &u[ u_offset], ldu, &work[iu2], &ldu2, &vt[vt_offset], ldvt, &work[ ivt2], &ldvt2, &iwork[idxc], &iwork[coltyp], &work[iz], info);
-    if (*info != 0)
+    slasd3_(nl, nr, sqre, &k, &d__[1], &work[iq], &ldq, &work[isigma], &u[u_offset], ldu,
+            &work[iu2], &ldu2, &vt[vt_offset], ldvt, &work[ivt2], &ldvt2, &iwork[idxc],
+            &iwork[coltyp], &work[iz], info);
+    if(*info != 0)
     {
-        return 0;
+        return;
     }
     /* Unscale. */
     slascl_("G", &c__0, &c__0, &c_b7, &orgnrm, &n, &c__1, &d__[1], &n, info);
@@ -313,7 +339,7 @@ int slasd1_(integer *nl, integer *nr, integer *sqre, real * d__, real *alpha, re
     n1 = k;
     n2 = n - k;
     slamrg_(&n1, &n2, &d__[1], &c__1, &c_n1, &idxq[1]);
-    return 0;
+    return;
     /* End of SLASD1 */
 }
 /* slasd1_ */

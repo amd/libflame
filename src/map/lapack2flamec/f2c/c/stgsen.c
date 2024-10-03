@@ -1,5 +1,8 @@
-/* ../netlib/stgsen.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/stgsen.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__2 = 2;
@@ -10,11 +13,17 @@ static real c_b28 = 1.f;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download STGSEN + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stgsen. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stgsen.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stgsen. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stgsen.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stgsen. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stgsen.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -90,7 +99,7 @@ static real c_b28 = 1.f;
 /* > \verbatim */
 /* > WANTQ is LOGICAL */
 /* > .TRUE. : update the left transformation matrix Q;
-*/
+ */
 /* > .FALSE.: do not update Q. */
 /* > \endverbatim */
 /* > */
@@ -98,7 +107,7 @@ static real c_b28 = 1.f;
 /* > \verbatim */
 /* > WANTZ is LOGICAL */
 /* > .TRUE. : update the right transformation matrix Z;
-*/
+ */
 /* > .FALSE.: do not update Z. */
 /* > \endverbatim */
 /* > */
@@ -191,7 +200,7 @@ The leading M */
 /* > \verbatim */
 /* > LDQ is INTEGER */
 /* > The leading dimension of the array Q. LDQ >= 1;
-*/
+ */
 /* > and if WANTQ = .TRUE., LDQ >= N. */
 /* > \endverbatim */
 /* > */
@@ -211,7 +220,7 @@ The leading M */
 /* > \verbatim */
 /* > LDZ is INTEGER */
 /* > The leading dimension of the array Z. LDZ >= 1;
-*/
+ */
 /* > If WANTZ = .TRUE., LDZ >= N. */
 /* > \endverbatim */
 /* > */
@@ -450,12 +459,18 @@ Computing Eigenspaces with Specified */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int stgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, integer *n, real *a, integer *lda, real *b, integer * ldb, real *alphar, real *alphai, real *beta, real *q, integer *ldq, real *z__, integer *ldz, integer *m, real *pl, real *pr, real *dif, real *work, integer *lwork, integer *iwork, integer *liwork, integer * info)
+void stgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, integer *n, real *a,
+             integer *lda, real *b, integer *ldb, real *alphar, real *alphai, real *beta, real *q,
+             integer *ldq, real *z__, integer *ldz, integer *m, real *pl, real *pr, real *dif,
+             real *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"stgsen inputs: ijob %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS "",*ijob, *n, *lda, *ldb, *ldq, *ldz);
+    snprintf(buffer, 256,
+             "stgsen inputs: ijob %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS
+             ", ldq %" FLA_IS ", ldz %" FLA_IS "",
+             *ijob, *n, *lda, *ldb, *ldq, *ldz);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -472,25 +487,38 @@ int stgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
     real dsum;
     logical swap;
     extern /* Subroutine */
-    int slag2_(real *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *);
+        void
+        slag2_(real *, integer *, real *, integer *, real *, real *, real *, real *, real *,
+               real *);
     integer isave[3];
     logical wantd;
     integer lwmin;
     logical wantp;
     extern /* Subroutine */
-    int slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
+        void
+        slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     logical wantd1, wantd2;
     real dscale, rdscal;
     extern real slamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), slacpy_( char *, integer *, integer *, real *, integer *, real *, integer * ), stgexc_(logical *, logical *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *, integer *);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
+        stgexc_(logical *, logical *, integer *, real *, integer *, real *, integer *, real *,
+                integer *, real *, integer *, integer *, integer *, real *, integer *, integer *);
     integer liwmin;
     extern /* Subroutine */
-    int slassq_(integer *, real *, integer *, real *, real *);
+        void
+        slassq_(integer *, real *, integer *, real *, real *);
     real smlnum;
     logical lquery;
     extern /* Subroutine */
-    int stgsyl_(char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *, integer *);
+        void
+        stgsyl_(char *, integer *, integer *, integer *, real *, integer *, real *, integer *,
+                real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *,
+                real *, real *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -537,36 +565,36 @@ int stgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1 || *liwork == -1;
-    if (*ijob < 0 || *ijob > 5)
+    if(*ijob < 0 || *ijob > 5)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -9;
     }
-    else if (*ldq < 1 || *wantq && *ldq < *n)
+    else if(*ldq < 1 || *wantq && *ldq < *n)
     {
         *info = -14;
     }
-    else if (*ldz < 1 || *wantz && *ldz < *n)
+    else if(*ldz < 1 || *wantz && *ldz < *n)
     {
         *info = -16;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("STGSEN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Get machine constants */
     eps = slamch_("P");
@@ -580,24 +608,22 @@ int stgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
     /* subspaces. */
     *m = 0;
     pair = FALSE_;
-    if (! lquery || *ijob != 0)
+    if(!lquery || *ijob != 0)
     {
         i__1 = *n;
-        for (k = 1;
-                k <= i__1;
-                ++k)
+        for(k = 1; k <= i__1; ++k)
         {
-            if (pair)
+            if(pair)
             {
                 pair = FALSE_;
             }
             else
             {
-                if (k < *n)
+                if(k < *n)
                 {
-                    if (a[k + 1 + k * a_dim1] == 0.f)
+                    if(a[k + 1 + k * a_dim1] == 0.f)
                     {
-                        if (select[k])
+                        if(select[k])
                         {
                             ++(*m);
                         }
@@ -605,7 +631,7 @@ int stgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
                     else
                     {
                         pair = TRUE_;
-                        if (select[k] || select[k + 1])
+                        if(select[k] || select[k + 1])
                         {
                             *m += 2;
                         }
@@ -613,7 +639,7 @@ int stgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
                 }
                 else
                 {
-                    if (select[*n])
+                    if(select[*n])
                     {
                         ++(*m);
                     }
@@ -622,77 +648,75 @@ int stgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
             /* L10: */
         }
     }
-    if (*ijob == 1 || *ijob == 2 || *ijob == 4)
+    if(*ijob == 1 || *ijob == 2 || *ijob == 4)
     {
         /* Computing MAX */
         i__1 = 1, i__2 = (*n << 2) + 16;
-        i__1 = fla_max(i__1,i__2);
+        i__1 = fla_max(i__1, i__2);
         i__2 = (*m << 1) * (*n - *m); // ; expr subst
-        lwmin = fla_max(i__1,i__2);
+        lwmin = fla_max(i__1, i__2);
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n + 6; // , expr subst
-        liwmin = fla_max(i__1,i__2);
+        liwmin = fla_max(i__1, i__2);
     }
-    else if (*ijob == 3 || *ijob == 5)
+    else if(*ijob == 3 || *ijob == 5)
     {
         /* Computing MAX */
         i__1 = 1, i__2 = (*n << 2) + 16;
-        i__1 = fla_max(i__1,i__2);
+        i__1 = fla_max(i__1, i__2);
         i__2 = (*m << 2) * (*n - *m); // ; expr subst
-        lwmin = fla_max(i__1,i__2);
+        lwmin = fla_max(i__1, i__2);
         /* Computing MAX */
         i__1 = 1, i__2 = (*m << 1) * (*n - *m);
-        i__1 = fla_max(i__1,i__2);
+        i__1 = fla_max(i__1, i__2);
         i__2 = *n + 6; // ; expr subst
-        liwmin = fla_max(i__1,i__2);
+        liwmin = fla_max(i__1, i__2);
     }
     else
     {
         /* Computing MAX */
         i__1 = 1;
         i__2 = (*n << 2) + 16; // , expr subst
-        lwmin = fla_max(i__1,i__2);
+        lwmin = fla_max(i__1, i__2);
         liwmin = 1;
     }
-    work[1] = (real) lwmin;
+    work[1] = (real)lwmin;
     iwork[1] = liwmin;
-    if (*lwork < lwmin && ! lquery)
+    if(*lwork < lwmin && !lquery)
     {
         *info = -22;
     }
-    else if (*liwork < liwmin && ! lquery)
+    else if(*liwork < liwmin && !lquery)
     {
         *info = -24;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("STGSEN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
-    if (*m == *n || *m == 0)
+    if(*m == *n || *m == 0)
     {
-        if (wantp)
+        if(wantp)
         {
             *pl = 1.f;
             *pr = 1.f;
         }
-        if (wantd)
+        if(wantd)
         {
             dscale = 0.f;
             dsum = 1.f;
             i__1 = *n;
-            for (i__ = 1;
-                    i__ <= i__1;
-                    ++i__)
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
                 slassq_(n, &a[i__ * a_dim1 + 1], &c__1, &dscale, &dsum);
                 slassq_(n, &b[i__ * b_dim1 + 1], &c__1, &dscale, &dsum);
@@ -707,26 +731,24 @@ int stgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
     ks = 0;
     pair = FALSE_;
     i__1 = *n;
-    for (k = 1;
-            k <= i__1;
-            ++k)
+    for(k = 1; k <= i__1; ++k)
     {
-        if (pair)
+        if(pair)
         {
             pair = FALSE_;
         }
         else
         {
             swap = select[k];
-            if (k < *n)
+            if(k < *n)
             {
-                if (a[k + 1 + k * a_dim1] != 0.f)
+                if(a[k + 1 + k * a_dim1] != 0.f)
                 {
                     pair = TRUE_;
                     swap = swap || select[k + 1];
                 }
             }
-            if (swap)
+            if(swap)
             {
                 ++ks;
                 /* Swap the K-th block to position KS. */
@@ -734,27 +756,28 @@ int stgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
                 /* by orthogonal transformation matrices and update */
                 /* Q and Z accordingly (if requested): */
                 kk = k;
-                if (k != ks)
+                if(k != ks)
                 {
-                    stgexc_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq, &z__[z_offset], ldz, &kk, &ks, &work[1], lwork, &ierr);
+                    stgexc_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
+                            ldq, &z__[z_offset], ldz, &kk, &ks, &work[1], lwork, &ierr);
                 }
-                if (ierr > 0)
+                if(ierr > 0)
                 {
                     /* Swap is rejected: exit. */
                     *info = 1;
-                    if (wantp)
+                    if(wantp)
                     {
                         *pl = 0.f;
                         *pr = 0.f;
                     }
-                    if (wantd)
+                    if(wantd)
                     {
                         dif[1] = 0.f;
                         dif[2] = 0.f;
                     }
                     goto L60;
                 }
-                if (pair)
+                if(pair)
                 {
                     ++ks;
                 }
@@ -762,7 +785,7 @@ int stgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
         }
         /* L30: */
     }
-    if (wantp)
+    if(wantp)
     {
         /* Solve generalized Sylvester equation for R and L */
         /* and compute PL and PR. */
@@ -773,7 +796,9 @@ int stgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
         slacpy_("Full", &n1, &n2, &a[i__ * a_dim1 + 1], lda, &work[1], &n1);
         slacpy_("Full", &n1, &n2, &b[i__ * b_dim1 + 1], ldb, &work[n1 * n2 + 1], &n1);
         i__1 = *lwork - (n1 << 1) * n2;
-        stgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1], lda, &work[1], &n1, &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 1], &n1, &dscale, &dif[1], & work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &ierr);
+        stgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1], lda, &work[1], &n1,
+                &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 1], &n1, &dscale,
+                &dif[1], &work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &ierr);
         /* Estimate the reciprocal of norms of "projections" onto left */
         /* and right eigenspaces. */
         rdscal = 0.f;
@@ -781,7 +806,7 @@ int stgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
         i__1 = n1 * n2;
         slassq_(&i__1, &work[1], &c__1, &rdscal, &dsum);
         *pl = rdscal * sqrt(dsum);
-        if (*pl == 0.f)
+        if(*pl == 0.f)
         {
             *pl = 1.f;
         }
@@ -794,7 +819,7 @@ int stgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
         i__1 = n1 * n2;
         slassq_(&i__1, &work[n1 * n2 + 1], &c__1, &rdscal, &dsum);
         *pr = rdscal * sqrt(dsum);
-        if (*pr == 0.f)
+        if(*pr == 0.f)
         {
             *pr = 1.f;
         }
@@ -803,10 +828,10 @@ int stgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
             *pr = dscale / (sqrt(dscale * dscale / *pr + *pr) * sqrt(*pr));
         }
     }
-    if (wantd)
+    if(wantd)
     {
         /* Compute estimates of Difu and Difl. */
-        if (wantd1)
+        if(wantd1)
         {
             n1 = *m;
             n2 = *n - *m;
@@ -814,10 +839,14 @@ int stgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
             ijb = 3;
             /* Frobenius norm-based Difu-estimate. */
             i__1 = *lwork - (n1 << 1) * n2;
-            stgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1], lda, &work[1], &n1, &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 1], &n1, &dscale, & dif[1], &work[(n1 << 1) * n2 + 1], &i__1, &iwork[1], & ierr);
+            stgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1], lda, &work[1],
+                    &n1, &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 1], &n1,
+                    &dscale, &dif[1], &work[(n1 << 1) * n2 + 1], &i__1, &iwork[1], &ierr);
             /* Frobenius norm-based Difl-estimate. */
             i__1 = *lwork - (n1 << 1) * n2;
-            stgsyl_("N", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, &a[ a_offset], lda, &work[1], &n2, &b[i__ + i__ * b_dim1], ldb, &b[b_offset], ldb, &work[n1 * n2 + 1], &n2, &dscale, &dif[2], &work[(n1 << 1) * n2 + 1], &i__1, &iwork[1], & ierr);
+            stgsyl_("N", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, &a[a_offset], lda, &work[1],
+                    &n2, &b[i__ + i__ * b_dim1], ldb, &b[b_offset], ldb, &work[n1 * n2 + 1], &n2,
+                    &dscale, &dif[2], &work[(n1 << 1) * n2 + 1], &i__1, &iwork[1], &ierr);
         }
         else
         {
@@ -832,41 +861,53 @@ int stgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, inte
             ijb = 0;
             mn2 = (n1 << 1) * n2;
             /* 1-norm-based estimate of Difu. */
-L40:
+        L40:
             slacn2_(&mn2, &work[mn2 + 1], &work[1], &iwork[1], &dif[1], &kase, isave);
-            if (kase != 0)
+            if(kase != 0)
             {
-                if (kase == 1)
+                if(kase == 1)
                 {
                     /* Solve generalized Sylvester equation. */
                     i__1 = *lwork - (n1 << 1) * n2;
-                    stgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1], lda, &work[1], &n1, &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 1], &n1, &dscale, &dif[1], &work[(n1 << 1) * n2 + 1], &i__1, &iwork[1], &ierr);
+                    stgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1], lda,
+                            &work[1], &n1, &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb,
+                            &work[n1 * n2 + 1], &n1, &dscale, &dif[1], &work[(n1 << 1) * n2 + 1],
+                            &i__1, &iwork[1], &ierr);
                 }
                 else
                 {
                     /* Solve the transposed variant. */
                     i__1 = *lwork - (n1 << 1) * n2;
-                    stgsyl_("T", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1], lda, &work[1], &n1, &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 1], &n1, &dscale, &dif[1], &work[(n1 << 1) * n2 + 1], &i__1, &iwork[1], &ierr);
+                    stgsyl_("T", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1], lda,
+                            &work[1], &n1, &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb,
+                            &work[n1 * n2 + 1], &n1, &dscale, &dif[1], &work[(n1 << 1) * n2 + 1],
+                            &i__1, &iwork[1], &ierr);
                 }
                 goto L40;
             }
             dif[1] = dscale / dif[1];
             /* 1-norm-based estimate of Difl. */
-L50:
+        L50:
             slacn2_(&mn2, &work[mn2 + 1], &work[1], &iwork[1], &dif[2], &kase, isave);
-            if (kase != 0)
+            if(kase != 0)
             {
-                if (kase == 1)
+                if(kase == 1)
                 {
                     /* Solve generalized Sylvester equation. */
                     i__1 = *lwork - (n1 << 1) * n2;
-                    stgsyl_("N", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, &a[a_offset], lda, &work[1], &n2, &b[i__ + i__ * b_dim1], ldb, &b[b_offset], ldb, &work[n1 * n2 + 1], &n2, &dscale, &dif[2], &work[(n1 << 1) * n2 + 1], &i__1, &iwork[1], &ierr);
+                    stgsyl_("N", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, &a[a_offset], lda,
+                            &work[1], &n2, &b[i__ + i__ * b_dim1], ldb, &b[b_offset], ldb,
+                            &work[n1 * n2 + 1], &n2, &dscale, &dif[2], &work[(n1 << 1) * n2 + 1],
+                            &i__1, &iwork[1], &ierr);
                 }
                 else
                 {
                     /* Solve the transposed variant. */
                     i__1 = *lwork - (n1 << 1) * n2;
-                    stgsyl_("T", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, &a[a_offset], lda, &work[1], &n2, &b[i__ + i__ * b_dim1], ldb, &b[b_offset], ldb, &work[n1 * n2 + 1], &n2, &dscale, &dif[2], &work[(n1 << 1) * n2 + 1], &i__1, &iwork[1], &ierr);
+                    stgsyl_("T", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, &a[a_offset], lda,
+                            &work[1], &n2, &b[i__ + i__ * b_dim1], ldb, &b[b_offset], ldb,
+                            &work[n1 * n2 + 1], &n2, &dscale, &dif[2], &work[(n1 << 1) * n2 + 1],
+                            &i__1, &iwork[1], &ierr);
                 }
                 goto L50;
             }
@@ -877,24 +918,22 @@ L60: /* Compute generalized eigenvalues of reordered pair (A, B) and */
     /* normalize the generalized Schur form. */
     pair = FALSE_;
     i__1 = *n;
-    for (k = 1;
-            k <= i__1;
-            ++k)
+    for(k = 1; k <= i__1; ++k)
     {
-        if (pair)
+        if(pair)
         {
             pair = FALSE_;
         }
         else
         {
-            if (k < *n)
+            if(k < *n)
             {
-                if (a[k + 1 + k * a_dim1] != 0.f)
+                if(a[k + 1 + k * a_dim1] != 0.f)
                 {
                     pair = TRUE_;
                 }
             }
-            if (pair)
+            if(pair)
             {
                 /* Compute the eigenvalue(s) at position K. */
                 work[1] = a[k + k * a_dim1];
@@ -906,22 +945,21 @@ L60: /* Compute generalized eigenvalues of reordered pair (A, B) and */
                 work[7] = b[k + (k + 1) * b_dim1];
                 work[8] = b[k + 1 + (k + 1) * b_dim1];
                 r__1 = smlnum * eps;
-                slag2_(&work[1], &c__2, &work[5], &c__2, &r__1, &beta[k], & beta[k + 1], &alphar[k], &alphar[k + 1], &alphai[k]);
+                slag2_(&work[1], &c__2, &work[5], &c__2, &r__1, &beta[k], &beta[k + 1], &alphar[k],
+                       &alphar[k + 1], &alphai[k]);
                 alphai[k + 1] = -alphai[k];
             }
             else
             {
-                if (r_sign(&c_b28, &b[k + k * b_dim1]) < 0.f)
+                if(r_sign(&c_b28, &b[k + k * b_dim1]) < 0.f)
                 {
                     /* If B(K,K) is negative, make it positive */
                     i__2 = *n;
-                    for (i__ = 1;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__2; ++i__)
                     {
                         a[k + i__ * a_dim1] = -a[k + i__ * a_dim1];
                         b[k + i__ * b_dim1] = -b[k + i__ * b_dim1];
-                        if (*wantq)
+                        if(*wantq)
                         {
                             q[i__ + k * q_dim1] = -q[i__ + k * q_dim1];
                         }
@@ -935,11 +973,10 @@ L60: /* Compute generalized eigenvalues of reordered pair (A, B) and */
         }
         /* L70: */
     }
-    work[1] = (real) lwmin;
+    work[1] = (real)lwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of STGSEN */
 }
 /* stgsen_ */
-

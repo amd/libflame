@@ -1,18 +1,28 @@
-/* ../netlib/dgtsvx.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dgtsvx.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief <b> DGTSVX computes the solution to system of linear equations A * X = B for GT matrices <b> */
+/* > \brief <b> DGTSVX computes the solution to system of linear equations A * X = B for GT matrices
+ * <b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DGTSVX + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgtsvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgtsvx.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgtsvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgtsvx.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgtsvx. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgtsvx.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -180,7 +190,7 @@ DL, D, DU, DLF, DF, DUF, DU2 and IPIV */
 /* > */
 /* > If FACT = 'N', then IPIV is an output argument and on exit */
 /* > contains the pivot indices from the LU factorization of A;
-*/
+ */
 /* > row i of the matrix was interchanged with row IPIV(i). */
 /* > IPIV(i) will always be either i or i+1;
 IPIV(i) = i indicates */
@@ -281,25 +291,45 @@ IPIV(i) = i indicates */
 /* > \ingroup doubleGTsolve */
 /* ===================================================================== */
 /* Subroutine */
-int dgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *dl, doublereal *d__, doublereal *du, doublereal * dlf, doublereal *df, doublereal *duf, doublereal *du2, integer *ipiv, doublereal *b, integer *ldb, doublereal *x, integer *ldx, doublereal * rcond, doublereal *ferr, doublereal *berr, doublereal *work, integer * iwork, integer *info)
+void dgtsvx_(char *fact, char *trans, integer *n, integer *nrhs, doublereal *dl, doublereal *d__,
+             doublereal *du, doublereal *dlf, doublereal *df, doublereal *duf, doublereal *du2,
+             integer *ipiv, doublereal *b, integer *ldb, doublereal *x, integer *ldx,
+             doublereal *rcond, doublereal *ferr, doublereal *berr, doublereal *work,
+             integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgtsvx inputs: fact %c, trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*fact, *trans, *n, *nrhs, *ldb, *ldx);
+    AOCL_DTL_SNPRINTF("dgtsvx inputs: fact %c, trans %c, n %" FLA_IS ", nrhs %" FLA_IS
+                      ", ldb %" FLA_IS ", ldx %" FLA_IS "",
+                      *fact, *trans, *n, *nrhs, *ldb, *ldx);
     /* System generated locals */
     integer b_dim1, b_offset, x_dim1, x_offset, i__1;
     /* Local variables */
     char norm[1];
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal anorm;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
-    extern doublereal dlamch_(char *), dlangt_(char *, integer *, doublereal *, doublereal *, doublereal *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    extern doublereal dlamch_(char *),
+        dlangt_(char *, integer *, doublereal *, doublereal *, doublereal *);
     logical nofact;
     extern /* Subroutine */
-    int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), dgtcon_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), dgtrfs_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *), dgttrf_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+        void
+        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        dgtcon_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
+                integer *, doublereal *, doublereal *, doublereal *, integer *, integer *),
+        dgtrfs_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *,
+                doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *,
+                integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *,
+                integer *, integer *),
+        dgttrf_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *,
+                integer *);
     logical notran;
     extern /* Subroutine */
-    int dgttrs_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dgttrs_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *,
+                doublereal *, integer *, doublereal *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -341,44 +371,44 @@ int dgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *dl,
     --iwork;
     /* Function Body */
     *info = 0;
-    nofact = lsame_(fact, "N");
-    notran = lsame_(trans, "N");
-    if (! nofact && ! lsame_(fact, "F"))
+    nofact = lsame_(fact, "N", 1, 1);
+    notran = lsame_(trans, "N", 1, 1);
+    if(!nofact && !lsame_(fact, "F", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T") && ! lsame_(trans, "C"))
+    else if(!notran && !lsame_(trans, "T", 1, 1) && !lsame_(trans, "C", 1, 1))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (*nrhs < 0)
+    else if(*nrhs < 0)
     {
         *info = -4;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -14;
     }
-    else if (*ldx < fla_max(1,*n))
+    else if(*ldx < fla_max(1, *n))
     {
         *info = -16;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DGTSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    if (nofact)
+    if(nofact)
     {
         /* Compute the LU factorization of A. */
         dcopy_(n, &d__[1], &c__1, &df[1], &c__1);
-        if (*n > 1)
+        if(*n > 1)
         {
             i__1 = *n - 1;
             dcopy_(&i__1, &dl[1], &c__1, &dlf[1], &c__1);
@@ -387,15 +417,15 @@ int dgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *dl,
         }
         dgttrf_(n, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1], info);
         /* Return if INFO is non-zero. */
-        if (*info > 0)
+        if(*info > 0)
         {
             *rcond = 0.;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
     }
     /* Compute the norm of the matrix A. */
-    if (notran)
+    if(notran)
     {
         *(unsigned char *)norm = '1';
     }
@@ -405,20 +435,22 @@ int dgtsvx_(char *fact, char *trans, integer *n, integer * nrhs, doublereal *dl,
     }
     anorm = dlangt_(norm, n, &dl[1], &d__[1], &du[1]);
     /* Compute the reciprocal of the condition number of A. */
-    dgtcon_(norm, n, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1], &anorm, rcond, &work[1], &iwork[1], info);
+    dgtcon_(norm, n, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1], &anorm, rcond, &work[1],
+            &iwork[1], info);
     /* Compute the solution vectors X. */
     dlacpy_("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
-    dgttrs_(trans, n, nrhs, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1], &x[ x_offset], ldx, info);
+    dgttrs_(trans, n, nrhs, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solutions and */
     /* compute error bounds and backward error estimates for them. */
-    dgtrfs_(trans, n, nrhs, &dl[1], &d__[1], &du[1], &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1], &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &iwork[1], info);
+    dgtrfs_(trans, n, nrhs, &dl[1], &d__[1], &du[1], &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1],
+            &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &iwork[1], info);
     /* Set INFO = N+1 if the matrix is singular to working precision. */
-    if (*rcond < dlamch_("Epsilon"))
+    if(*rcond < dlamch_("Epsilon"))
     {
         *info = *n + 1;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DGTSVX */
 }
 /* dgtsvx_ */

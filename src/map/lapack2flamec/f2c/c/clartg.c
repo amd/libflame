@@ -1,16 +1,25 @@
-/* ../netlib/clartg.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/clartg.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CLARTG generates a plane rotation with real cosine and complex sine. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/  */
 /* > \htmlonly */
 /* > Download CLARTG + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clartg. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clartg.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clartg. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clartg.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clartg. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clartg.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -89,7 +98,7 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int clartg_(complex *f, complex *g, real *cs, complex *sn, complex *r__)
+void clartg_(complex *f, complex *g, real *cs, complex *sn, complex *r__)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* System generated locals */
@@ -97,7 +106,8 @@ int clartg_(complex *f, complex *g, real *cs, complex *sn, complex *r__)
     real r__1, r__2, r__3, r__4, r__5, r__6, r__7, r__8, r__9, r__10;
     complex q__1, q__2, q__3;
     /* Builtin functions */
-    double log(doublereal), pow_ri(real *, integer *), r_imag(complex *), c_abs(complex *), sqrt(doublereal);
+    double log(doublereal), pow_ri(real *, integer *), r_imag(complex *), c_abs(complex *),
+        sqrt(doublereal);
     /* Local variables */
     real d__;
     integer i__;
@@ -135,7 +145,7 @@ int clartg_(complex *f, complex *g, real *cs, complex *sn, complex *r__)
     safmin = slamch_("S");
     eps = slamch_("E");
     r__1 = slamch_("B");
-    i__1 = (integer) (log(safmin / eps) / log(slamch_("B")) / 2.f);
+    i__1 = (integer)(log(safmin / eps) / log(slamch_("B")) / 2.f);
     safmn2 = pow_ri(&r__1, &i__1);
     safmx2 = 1.f / safmn2;
     /* Computing MAX */
@@ -145,17 +155,17 @@ int clartg_(complex *f, complex *g, real *cs, complex *sn, complex *r__)
     /* Computing MAX */
     r__9 = (r__3 = g->r, f2c_abs(r__3));
     r__10 = (r__4 = g->i, f2c_abs(r__4)); // , expr subst
-    r__5 = fla_max(r__7,r__8);
-    r__6 = fla_max(r__9,r__10); // , expr subst
-    scale = fla_max(r__5,r__6);
+    r__5 = fla_max(r__7, r__8);
+    r__6 = fla_max(r__9, r__10); // , expr subst
+    scale = fla_max(r__5, r__6);
     fs.r = f->r;
     fs.i = f->i; // , expr subst
     gs.r = g->r;
     gs.i = g->i; // , expr subst
     count = 0;
-    if (scale >= safmx2)
+    if(scale >= safmx2)
     {
-L10:
+    L10:
         ++count;
         q__1.r = safmn2 * fs.r;
         q__1.i = safmn2 * fs.i; // , expr subst
@@ -166,23 +176,23 @@ L10:
         gs.r = q__1.r;
         gs.i = q__1.i; // , expr subst
         scale *= safmn2;
-        if (scale >= safmx2)
+        if(scale >= safmx2)
         {
             goto L10;
         }
     }
-    else if (scale <= safmn2)
+    else if(scale <= safmn2)
     {
         r__1 = c_abs(g);
-        if (g->r == 0.f && g->i == 0.f || sisnan_(&r__1))
+        if(g->r == 0.f && g->i == 0.f || sisnan_(&r__1))
         {
             *cs = 1.f;
             sn->r = 0.f, sn->i = 0.f;
             r__->r = f->r, r__->i = f->i;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
-L20:
+    L20:
         --count;
         q__1.r = safmx2 * fs.r;
         q__1.i = safmx2 * fs.i; // , expr subst
@@ -193,7 +203,7 @@ L20:
         gs.r = q__1.r;
         gs.i = q__1.i; // , expr subst
         scale *= safmx2;
-        if (scale <= safmn2)
+        if(scale <= safmn2)
         {
             goto L20;
         }
@@ -208,10 +218,10 @@ L20:
     /* Computing 2nd power */
     r__2 = gs.i;
     g2 = r__1 * r__1 + r__2 * r__2;
-    if (f2 <= fla_max(g2,1.f) * safmin)
+    if(f2 <= fla_max(g2, 1.f) * safmin)
     {
         /* This is a rare case: F is very small. */
-        if (f->r == 0.f && f->i == 0.f)
+        if(f->r == 0.f && f->i == 0.f)
         {
             *cs = 0.f;
             r__2 = g->r;
@@ -228,7 +238,7 @@ L20:
             q__1.i = r__2; // , expr subst
             sn->r = q__1.r, sn->i = q__1.i;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         r__1 = fs.r;
         r__2 = fs.i;
@@ -249,7 +259,7 @@ L20:
         /* Computing MAX */
         r__3 = (r__1 = f->r, f2c_abs(r__1));
         r__4 = (r__2 = f->i, f2c_abs(r__2)); // , expr subst
-        if (fla_max(r__3,r__4) > 1.f)
+        if(fla_max(r__3, r__4) > 1.f)
         {
             r__1 = f->r;
             r__2 = f->i;
@@ -313,14 +323,12 @@ L20:
         q__1.r = sn->r * q__2.r - sn->i * q__2.i;
         q__1.i = sn->r * q__2.i + sn->i * q__2.r; // , expr subst
         sn->r = q__1.r, sn->i = q__1.i;
-        if (count != 0)
+        if(count != 0)
         {
-            if (count > 0)
+            if(count > 0)
             {
                 i__1 = count;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     q__1.r = safmx2 * r__->r;
                     q__1.i = safmx2 * r__->i; // , expr subst
@@ -331,9 +339,7 @@ L20:
             else
             {
                 i__1 = -count;
-                for (i__ = 1;
-                        i__ <= i__1;
-                        ++i__)
+                for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     q__1.r = safmn2 * r__->r;
                     q__1.i = safmn2 * r__->i; // , expr subst
@@ -344,7 +350,7 @@ L20:
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLARTG */
 }
 /* clartg_ */

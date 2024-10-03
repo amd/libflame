@@ -1,22 +1,27 @@
-/* ../netlib/ctfsm.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/ctfsm.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {1.f, 0.f};
 /* > \brief \b CTFSM solves a matrix equation (one operand is a triangular matrix in RFP format). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CTFSM + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctfsm.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctfsm.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctfsm.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctfsm.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctfsm.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctfsm.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -57,7 +62,7 @@ static complex c_b1 =
 /* > \verbatim */
 /* > TRANSR is CHARACTER*1 */
 /* > = 'N': The Normal Form of RFP A is stored;
-*/
+ */
 /* > = 'C': The Conjugate-transpose Form of RFP A is stored. */
 /* > \endverbatim */
 /* > */
@@ -143,7 +148,7 @@ static complex c_b1 =
 /* > NT = N*(N+1)/2. On entry, the matrix A in RFP Format. */
 /* > RFP Format is described by TRANSR, UPLO and N as follows: */
 /* > If TRANSR='N' then RFP A is (0:N,0:K-1) when N is even;
-*/
+ */
 /* > K=N/2. RFP A is (0:N-1,0:K) when N is odd;
 K=N/2. If */
 /* > TRANSR = 'C' then RFP is the Conjugate-transpose of RFP A as */
@@ -292,15 +297,21 @@ K=N/2. If */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integer *m, integer *n, complex *alpha, complex *a, complex *b, integer *ldb)
+void ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integer *m, integer *n,
+            complex *alpha, complex *a, complex *b, integer *ldb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"ctfsm inputs: transr %c, side %c, uplo %c, trans %c, diag %c, m %lld, n %lld, ldb %lld",*transr, *side, *uplo, *trans, *diag, *m, *n, *ldb);
+    snprintf(
+        buffer, 256,
+        "ctfsm inputs: transr %c, side %c, uplo %c, trans %c, diag %c, m %lld, n %lld, ldb %lld",
+        *transr, *side, *uplo, *trans, *diag, *m, *n, *ldb);
 #else
-    snprintf(buffer, 256,"ctfsm inputs: transr %c, side %c, uplo %c, trans %c, diag %c, m %d, n %d, ldb %d",*transr, *side, *uplo, *trans, *diag, *m, *n, *ldb);
+    snprintf(buffer, 256,
+             "ctfsm inputs: transr %c, side %c, uplo %c, trans %c, diag %c, m %d, n %d, ldb %d",
+             *transr, *side, *uplo, *trans, *diag, *m, *n, *ldb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -311,12 +322,17 @@ int ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
     integer i__, j, k, m1, m2, n1, n2, info;
     logical normaltransr;
     extern /* Subroutine */
-    int cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *);
+        void
+        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
+               complex *, integer *, complex *, complex *, integer *);
     logical lside;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     logical lower;
     extern /* Subroutine */
-    int ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
+               integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical misodd, nisodd, notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -346,67 +362,63 @@ int ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
     b -= b_offset;
     /* Function Body */
     info = 0;
-    normaltransr = lsame_(transr, "N");
-    lside = lsame_(side, "L");
-    lower = lsame_(uplo, "L");
-    notrans = lsame_(trans, "N");
-    if (! normaltransr && ! lsame_(transr, "C"))
+    normaltransr = lsame_(transr, "N", 1, 1);
+    lside = lsame_(side, "L", 1, 1);
+    lower = lsame_(uplo, "L", 1, 1);
+    notrans = lsame_(trans, "N", 1, 1);
+    if(!normaltransr && !lsame_(transr, "C", 1, 1))
     {
         info = -1;
     }
-    else if (! lside && ! lsame_(side, "R"))
+    else if(!lside && !lsame_(side, "R", 1, 1))
     {
         info = -2;
     }
-    else if (! lower && ! lsame_(uplo, "U"))
+    else if(!lower && !lsame_(uplo, "U", 1, 1))
     {
         info = -3;
     }
-    else if (! notrans && ! lsame_(trans, "C"))
+    else if(!notrans && !lsame_(trans, "C", 1, 1))
     {
         info = -4;
     }
-    else if (! lsame_(diag, "N") && ! lsame_(diag, "U"))
+    else if(!lsame_(diag, "N", 1, 1) && !lsame_(diag, "U", 1, 1))
     {
         info = -5;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         info = -6;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         info = -7;
     }
-    else if (*ldb < fla_max(1,*m))
+    else if(*ldb < fla_max(1, *m))
     {
         info = -11;
     }
-    if (info != 0)
+    if(info != 0)
     {
         i__1 = -info;
         xerbla_("CTFSM ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return when ( (N.EQ.0).OR.(M.EQ.0) ) */
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return when ALPHA.EQ.(0E+0,0E+0) */
-    if (alpha->r == 0.f && alpha->i == 0.f)
+    if(alpha->r == 0.f && alpha->i == 0.f)
     {
         i__1 = *n - 1;
-        for (j = 0;
-                j <= i__1;
-                ++j)
+        for(j = 0; j <= i__1; ++j)
         {
             i__2 = *m - 1;
-            for (i__ = 0;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 0; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * b_dim1;
                 b[i__3].r = 0.f;
@@ -416,15 +428,15 @@ int ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
             /* L20: */
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (lside)
+    if(lside)
     {
         /* SIDE = 'L' */
         /* A is M-by-M. */
         /* If M is odd, set NISODD = .TRUE., and M1 and M2. */
         /* If M is even, NISODD = .FALSE., and M. */
-        if (*m % 2 == 0)
+        if(*m % 2 == 0)
         {
             misodd = FALSE_;
             k = *m / 2;
@@ -432,7 +444,7 @@ int ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
         else
         {
             misodd = TRUE_;
-            if (lower)
+            if(lower)
             {
                 m2 = *m / 2;
                 m1 = *m - m2;
@@ -443,29 +455,30 @@ int ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
                 m2 = *m - m1;
             }
         }
-        if (misodd)
+        if(misodd)
         {
             /* SIDE = 'L' and N is odd */
-            if (normaltransr)
+            if(normaltransr)
             {
                 /* SIDE = 'L', N is odd, and TRANSR = 'N' */
-                if (lower)
+                if(lower)
                 {
                     /* SIDE ='L', N is odd, TRANSR = 'N', and UPLO = 'L' */
-                    if (notrans)
+                    if(notrans)
                     {
                         /* SIDE ='L', N is odd, TRANSR = 'N', UPLO = 'L', and */
                         /* TRANS = 'N' */
-                        if (*m == 1)
+                        if(*m == 1)
                         {
-                            ctrsm_("L", "L", "N", diag, &m1, n, alpha, a, m, & b[b_offset], ldb);
+                            ctrsm_("L", "L", "N", diag, &m1, n, alpha, a, m, &b[b_offset], ldb);
                         }
                         else
                         {
-                            ctrsm_("L", "L", "N", diag, &m1, n, alpha, a, m, & b[b_offset], ldb);
+                            ctrsm_("L", "L", "N", diag, &m1, n, alpha, a, m, &b[b_offset], ldb);
                             q__1.r = -1.f;
                             q__1.i = -0.f; // , expr subst
-                            cgemm_("N", "N", &m2, n, &m1, &q__1, &a[m1], m, & b[b_offset], ldb, alpha, &b[m1], ldb);
+                            cgemm_("N", "N", &m2, n, &m1, &q__1, &a[m1], m, &b[b_offset], ldb,
+                                   alpha, &b[m1], ldb);
                             ctrsm_("L", "U", "C", diag, &m2, n, &c_b1, &a[*m], m, &b[m1], ldb);
                         }
                     }
@@ -473,31 +486,33 @@ int ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
                     {
                         /* SIDE ='L', N is odd, TRANSR = 'N', UPLO = 'L', and */
                         /* TRANS = 'C' */
-                        if (*m == 1)
+                        if(*m == 1)
                         {
-                            ctrsm_("L", "L", "C", diag, &m1, n, alpha, a, m, & b[b_offset], ldb);
+                            ctrsm_("L", "L", "C", diag, &m1, n, alpha, a, m, &b[b_offset], ldb);
                         }
                         else
                         {
                             ctrsm_("L", "U", "N", diag, &m2, n, alpha, &a[*m], m, &b[m1], ldb);
                             q__1.r = -1.f;
                             q__1.i = -0.f; // , expr subst
-                            cgemm_("C", "N", &m1, n, &m2, &q__1, &a[m1], m, & b[m1], ldb, alpha, &b[b_offset], ldb);
-                            ctrsm_("L", "L", "C", diag, &m1, n, &c_b1, a, m, & b[b_offset], ldb);
+                            cgemm_("C", "N", &m1, n, &m2, &q__1, &a[m1], m, &b[m1], ldb, alpha,
+                                   &b[b_offset], ldb);
+                            ctrsm_("L", "L", "C", diag, &m1, n, &c_b1, a, m, &b[b_offset], ldb);
                         }
                     }
                 }
                 else
                 {
                     /* SIDE ='L', N is odd, TRANSR = 'N', and UPLO = 'U' */
-                    if (! notrans)
+                    if(!notrans)
                     {
                         /* SIDE ='L', N is odd, TRANSR = 'N', UPLO = 'U', and */
                         /* TRANS = 'N' */
                         ctrsm_("L", "L", "N", diag, &m1, n, alpha, &a[m2], m, &b[b_offset], ldb);
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemm_("C", "N", &m2, n, &m1, &q__1, a, m, &b[ b_offset], ldb, alpha, &b[m1], ldb);
+                        cgemm_("C", "N", &m2, n, &m1, &q__1, a, m, &b[b_offset], ldb, alpha, &b[m1],
+                               ldb);
                         ctrsm_("L", "U", "C", diag, &m2, n, &c_b1, &a[m1], m, &b[m1], ldb);
                     }
                     else
@@ -507,7 +522,8 @@ int ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
                         ctrsm_("L", "U", "N", diag, &m2, n, alpha, &a[m1], m, &b[m1], ldb);
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemm_("N", "N", &m1, n, &m2, &q__1, a, m, &b[m1], ldb, alpha, &b[b_offset], ldb);
+                        cgemm_("N", "N", &m1, n, &m2, &q__1, a, m, &b[m1], ldb, alpha, &b[b_offset],
+                               ldb);
                         ctrsm_("L", "L", "C", diag, &m1, n, &c_b1, &a[m2], m, &b[b_offset], ldb);
                     }
                 }
@@ -515,14 +531,14 @@ int ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
             else
             {
                 /* SIDE = 'L', N is odd, and TRANSR = 'C' */
-                if (lower)
+                if(lower)
                 {
                     /* SIDE ='L', N is odd, TRANSR = 'C', and UPLO = 'L' */
-                    if (notrans)
+                    if(notrans)
                     {
                         /* SIDE ='L', N is odd, TRANSR = 'C', UPLO = 'L', and */
                         /* TRANS = 'N' */
-                        if (*m == 1)
+                        if(*m == 1)
                         {
                             ctrsm_("L", "U", "C", diag, &m1, n, alpha, a, &m1, &b[b_offset], ldb);
                         }
@@ -531,7 +547,8 @@ int ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
                             ctrsm_("L", "U", "C", diag, &m1, n, alpha, a, &m1, &b[b_offset], ldb);
                             q__1.r = -1.f;
                             q__1.i = -0.f; // , expr subst
-                            cgemm_("C", "N", &m2, n, &m1, &q__1, &a[m1 * m1], &m1, &b[b_offset], ldb, alpha, &b[m1], ldb);
+                            cgemm_("C", "N", &m2, n, &m1, &q__1, &a[m1 * m1], &m1, &b[b_offset],
+                                   ldb, alpha, &b[m1], ldb);
                             ctrsm_("L", "L", "N", diag, &m2, n, &c_b1, &a[1], &m1, &b[m1], ldb);
                         }
                     }
@@ -539,7 +556,7 @@ int ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
                     {
                         /* SIDE ='L', N is odd, TRANSR = 'C', UPLO = 'L', and */
                         /* TRANS = 'C' */
-                        if (*m == 1)
+                        if(*m == 1)
                         {
                             ctrsm_("L", "U", "N", diag, &m1, n, alpha, a, &m1, &b[b_offset], ldb);
                         }
@@ -548,7 +565,8 @@ int ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
                             ctrsm_("L", "L", "C", diag, &m2, n, alpha, &a[1], &m1, &b[m1], ldb);
                             q__1.r = -1.f;
                             q__1.i = -0.f; // , expr subst
-                            cgemm_("N", "N", &m1, n, &m2, &q__1, &a[m1 * m1], &m1, &b[m1], ldb, alpha, &b[b_offset], ldb);
+                            cgemm_("N", "N", &m1, n, &m2, &q__1, &a[m1 * m1], &m1, &b[m1], ldb,
+                                   alpha, &b[b_offset], ldb);
                             ctrsm_("L", "U", "N", diag, &m1, n, &c_b1, a, &m1, &b[b_offset], ldb);
                         }
                     }
@@ -556,14 +574,16 @@ int ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
                 else
                 {
                     /* SIDE ='L', N is odd, TRANSR = 'C', and UPLO = 'U' */
-                    if (! notrans)
+                    if(!notrans)
                     {
                         /* SIDE ='L', N is odd, TRANSR = 'C', UPLO = 'U', and */
                         /* TRANS = 'N' */
-                        ctrsm_("L", "U", "C", diag, &m1, n, alpha, &a[m2 * m2], &m2, &b[b_offset], ldb);
+                        ctrsm_("L", "U", "C", diag, &m1, n, alpha, &a[m2 * m2], &m2, &b[b_offset],
+                               ldb);
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemm_("N", "N", &m2, n, &m1, &q__1, a, &m2, &b[ b_offset], ldb, alpha, &b[m1], ldb);
+                        cgemm_("N", "N", &m2, n, &m1, &q__1, a, &m2, &b[b_offset], ldb, alpha,
+                               &b[m1], ldb);
                         ctrsm_("L", "L", "N", diag, &m2, n, &c_b1, &a[m1 * m2], &m2, &b[m1], ldb);
                     }
                     else
@@ -573,8 +593,10 @@ int ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
                         ctrsm_("L", "L", "C", diag, &m2, n, alpha, &a[m1 * m2], &m2, &b[m1], ldb);
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemm_("C", "N", &m1, n, &m2, &q__1, a, &m2, &b[m1], ldb, alpha, &b[b_offset], ldb);
-                        ctrsm_("L", "U", "N", diag, &m1, n, &c_b1, &a[m2 * m2], &m2, &b[b_offset], ldb);
+                        cgemm_("C", "N", &m1, n, &m2, &q__1, a, &m2, &b[m1], ldb, alpha,
+                               &b[b_offset], ldb);
+                        ctrsm_("L", "U", "N", diag, &m1, n, &c_b1, &a[m2 * m2], &m2, &b[b_offset],
+                               ldb);
                     }
                 }
             }
@@ -582,84 +604,91 @@ int ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
         else
         {
             /* SIDE = 'L' and N is even */
-            if (normaltransr)
+            if(normaltransr)
             {
                 /* SIDE = 'L', N is even, and TRANSR = 'N' */
-                if (lower)
+                if(lower)
                 {
                     /* SIDE ='L', N is even, TRANSR = 'N', and UPLO = 'L' */
-                    if (notrans)
+                    if(notrans)
                     {
                         /* SIDE ='L', N is even, TRANSR = 'N', UPLO = 'L', */
                         /* and TRANS = 'N' */
                         i__1 = *m + 1;
-                        ctrsm_("L", "L", "N", diag, &k, n, alpha, &a[1], & i__1, &b[b_offset], ldb);
+                        ctrsm_("L", "L", "N", diag, &k, n, alpha, &a[1], &i__1, &b[b_offset], ldb);
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
                         i__1 = *m + 1;
-                        cgemm_("N", "N", &k, n, &k, &q__1, &a[k + 1], &i__1, & b[b_offset], ldb, alpha, &b[k], ldb);
+                        cgemm_("N", "N", &k, n, &k, &q__1, &a[k + 1], &i__1, &b[b_offset], ldb,
+                               alpha, &b[k], ldb);
                         i__1 = *m + 1;
-                        ctrsm_("L", "U", "C", diag, &k, n, &c_b1, a, &i__1, & b[k], ldb);
+                        ctrsm_("L", "U", "C", diag, &k, n, &c_b1, a, &i__1, &b[k], ldb);
                     }
                     else
                     {
                         /* SIDE ='L', N is even, TRANSR = 'N', UPLO = 'L', */
                         /* and TRANS = 'C' */
                         i__1 = *m + 1;
-                        ctrsm_("L", "U", "N", diag, &k, n, alpha, a, &i__1, & b[k], ldb);
+                        ctrsm_("L", "U", "N", diag, &k, n, alpha, a, &i__1, &b[k], ldb);
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
                         i__1 = *m + 1;
-                        cgemm_("C", "N", &k, n, &k, &q__1, &a[k + 1], &i__1, & b[k], ldb, alpha, &b[b_offset], ldb);
+                        cgemm_("C", "N", &k, n, &k, &q__1, &a[k + 1], &i__1, &b[k], ldb, alpha,
+                               &b[b_offset], ldb);
                         i__1 = *m + 1;
-                        ctrsm_("L", "L", "C", diag, &k, n, &c_b1, &a[1], & i__1, &b[b_offset], ldb);
+                        ctrsm_("L", "L", "C", diag, &k, n, &c_b1, &a[1], &i__1, &b[b_offset], ldb);
                     }
                 }
                 else
                 {
                     /* SIDE ='L', N is even, TRANSR = 'N', and UPLO = 'U' */
-                    if (! notrans)
+                    if(!notrans)
                     {
                         /* SIDE ='L', N is even, TRANSR = 'N', UPLO = 'U', */
                         /* and TRANS = 'N' */
                         i__1 = *m + 1;
-                        ctrsm_("L", "L", "N", diag, &k, n, alpha, &a[k + 1], & i__1, &b[b_offset], ldb);
+                        ctrsm_("L", "L", "N", diag, &k, n, alpha, &a[k + 1], &i__1, &b[b_offset],
+                               ldb);
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
                         i__1 = *m + 1;
-                        cgemm_("C", "N", &k, n, &k, &q__1, a, &i__1, &b[ b_offset], ldb, alpha, &b[k], ldb);
+                        cgemm_("C", "N", &k, n, &k, &q__1, a, &i__1, &b[b_offset], ldb, alpha,
+                               &b[k], ldb);
                         i__1 = *m + 1;
-                        ctrsm_("L", "U", "C", diag, &k, n, &c_b1, &a[k], & i__1, &b[k], ldb);
+                        ctrsm_("L", "U", "C", diag, &k, n, &c_b1, &a[k], &i__1, &b[k], ldb);
                     }
                     else
                     {
                         /* SIDE ='L', N is even, TRANSR = 'N', UPLO = 'U', */
                         /* and TRANS = 'C' */
                         i__1 = *m + 1;
-                        ctrsm_("L", "U", "N", diag, &k, n, alpha, &a[k], & i__1, &b[k], ldb);
+                        ctrsm_("L", "U", "N", diag, &k, n, alpha, &a[k], &i__1, &b[k], ldb);
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
                         i__1 = *m + 1;
-                        cgemm_("N", "N", &k, n, &k, &q__1, a, &i__1, &b[k], ldb, alpha, &b[b_offset], ldb);
+                        cgemm_("N", "N", &k, n, &k, &q__1, a, &i__1, &b[k], ldb, alpha,
+                               &b[b_offset], ldb);
                         i__1 = *m + 1;
-                        ctrsm_("L", "L", "C", diag, &k, n, &c_b1, &a[k + 1], & i__1, &b[b_offset], ldb);
+                        ctrsm_("L", "L", "C", diag, &k, n, &c_b1, &a[k + 1], &i__1, &b[b_offset],
+                               ldb);
                     }
                 }
             }
             else
             {
                 /* SIDE = 'L', N is even, and TRANSR = 'C' */
-                if (lower)
+                if(lower)
                 {
                     /* SIDE ='L', N is even, TRANSR = 'C', and UPLO = 'L' */
-                    if (notrans)
+                    if(notrans)
                     {
                         /* SIDE ='L', N is even, TRANSR = 'C', UPLO = 'L', */
                         /* and TRANS = 'N' */
-                        ctrsm_("L", "U", "C", diag, &k, n, alpha, &a[k], &k, & b[b_offset], ldb);
+                        ctrsm_("L", "U", "C", diag, &k, n, alpha, &a[k], &k, &b[b_offset], ldb);
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemm_("C", "N", &k, n, &k, &q__1, &a[k * (k + 1)], & k, &b[b_offset], ldb, alpha, &b[k], ldb);
+                        cgemm_("C", "N", &k, n, &k, &q__1, &a[k * (k + 1)], &k, &b[b_offset], ldb,
+                               alpha, &b[k], ldb);
                         ctrsm_("L", "L", "N", diag, &k, n, &c_b1, a, &k, &b[k], ldb);
                     }
                     else
@@ -669,32 +698,37 @@ int ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
                         ctrsm_("L", "L", "C", diag, &k, n, alpha, a, &k, &b[k], ldb);
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemm_("N", "N", &k, n, &k, &q__1, &a[k * (k + 1)], & k, &b[k], ldb, alpha, &b[b_offset], ldb);
-                        ctrsm_("L", "U", "N", diag, &k, n, &c_b1, &a[k], &k, & b[b_offset], ldb);
+                        cgemm_("N", "N", &k, n, &k, &q__1, &a[k * (k + 1)], &k, &b[k], ldb, alpha,
+                               &b[b_offset], ldb);
+                        ctrsm_("L", "U", "N", diag, &k, n, &c_b1, &a[k], &k, &b[b_offset], ldb);
                     }
                 }
                 else
                 {
                     /* SIDE ='L', N is even, TRANSR = 'C', and UPLO = 'U' */
-                    if (! notrans)
+                    if(!notrans)
                     {
                         /* SIDE ='L', N is even, TRANSR = 'C', UPLO = 'U', */
                         /* and TRANS = 'N' */
-                        ctrsm_("L", "U", "C", diag, &k, n, alpha, &a[k * (k + 1)], &k, &b[b_offset], ldb);
+                        ctrsm_("L", "U", "C", diag, &k, n, alpha, &a[k * (k + 1)], &k, &b[b_offset],
+                               ldb);
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemm_("N", "N", &k, n, &k, &q__1, a, &k, &b[b_offset], ldb, alpha, &b[k], ldb);
-                        ctrsm_("L", "L", "N", diag, &k, n, &c_b1, &a[k * k], & k, &b[k], ldb);
+                        cgemm_("N", "N", &k, n, &k, &q__1, a, &k, &b[b_offset], ldb, alpha, &b[k],
+                               ldb);
+                        ctrsm_("L", "L", "N", diag, &k, n, &c_b1, &a[k * k], &k, &b[k], ldb);
                     }
                     else
                     {
                         /* SIDE ='L', N is even, TRANSR = 'C', UPLO = 'U', */
                         /* and TRANS = 'C' */
-                        ctrsm_("L", "L", "C", diag, &k, n, alpha, &a[k * k], & k, &b[k], ldb);
+                        ctrsm_("L", "L", "C", diag, &k, n, alpha, &a[k * k], &k, &b[k], ldb);
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemm_("C", "N", &k, n, &k, &q__1, a, &k, &b[k], ldb, alpha, &b[b_offset], ldb);
-                        ctrsm_("L", "U", "N", diag, &k, n, &c_b1, &a[k * (k + 1)], &k, &b[b_offset], ldb);
+                        cgemm_("C", "N", &k, n, &k, &q__1, a, &k, &b[k], ldb, alpha, &b[b_offset],
+                               ldb);
+                        ctrsm_("L", "U", "N", diag, &k, n, &c_b1, &a[k * (k + 1)], &k, &b[b_offset],
+                               ldb);
                     }
                 }
             }
@@ -706,7 +740,7 @@ int ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
         /* A is N-by-N. */
         /* If N is odd, set NISODD = .TRUE., and N1 and N2. */
         /* If N is even, NISODD = .FALSE., and K. */
-        if (*n % 2 == 0)
+        if(*n % 2 == 0)
         {
             nisodd = FALSE_;
             k = *n / 2;
@@ -714,7 +748,7 @@ int ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
         else
         {
             nisodd = TRUE_;
-            if (lower)
+            if(lower)
             {
                 n2 = *n / 2;
                 n1 = *n - n2;
@@ -725,23 +759,24 @@ int ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
                 n2 = *n - n1;
             }
         }
-        if (nisodd)
+        if(nisodd)
         {
             /* SIDE = 'R' and N is odd */
-            if (normaltransr)
+            if(normaltransr)
             {
                 /* SIDE = 'R', N is odd, and TRANSR = 'N' */
-                if (lower)
+                if(lower)
                 {
                     /* SIDE ='R', N is odd, TRANSR = 'N', and UPLO = 'L' */
-                    if (notrans)
+                    if(notrans)
                     {
                         /* SIDE ='R', N is odd, TRANSR = 'N', UPLO = 'L', and */
                         /* TRANS = 'N' */
                         ctrsm_("R", "U", "C", diag, m, &n2, alpha, &a[*n], n, &b[n1 * b_dim1], ldb);
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemm_("N", "N", m, &n1, &n2, &q__1, &b[n1 * b_dim1], ldb, &a[n1], n, alpha, b, ldb);
+                        cgemm_("N", "N", m, &n1, &n2, &q__1, &b[n1 * b_dim1], ldb, &a[n1], n, alpha,
+                               b, ldb);
                         ctrsm_("R", "L", "N", diag, m, &n1, &c_b1, a, n, b, ldb);
                     }
                     else
@@ -751,21 +786,23 @@ int ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
                         ctrsm_("R", "L", "C", diag, m, &n1, alpha, a, n, b, ldb);
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemm_("N", "C", m, &n2, &n1, &q__1, b, ldb, &a[n1], n, alpha, &b[n1 * b_dim1], ldb);
+                        cgemm_("N", "C", m, &n2, &n1, &q__1, b, ldb, &a[n1], n, alpha,
+                               &b[n1 * b_dim1], ldb);
                         ctrsm_("R", "U", "N", diag, m, &n2, &c_b1, &a[*n], n, &b[n1 * b_dim1], ldb);
                     }
                 }
                 else
                 {
                     /* SIDE ='R', N is odd, TRANSR = 'N', and UPLO = 'U' */
-                    if (notrans)
+                    if(notrans)
                     {
                         /* SIDE ='R', N is odd, TRANSR = 'N', UPLO = 'U', and */
                         /* TRANS = 'N' */
                         ctrsm_("R", "L", "C", diag, m, &n1, alpha, &a[n2], n, b, ldb);
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemm_("N", "N", m, &n2, &n1, &q__1, b, ldb, a, n, alpha, &b[n1 * b_dim1], ldb);
+                        cgemm_("N", "N", m, &n2, &n1, &q__1, b, ldb, a, n, alpha, &b[n1 * b_dim1],
+                               ldb);
                         ctrsm_("R", "U", "N", diag, m, &n2, &c_b1, &a[n1], n, &b[n1 * b_dim1], ldb);
                     }
                     else
@@ -775,7 +812,8 @@ int ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
                         ctrsm_("R", "U", "C", diag, m, &n2, alpha, &a[n1], n, &b[n1 * b_dim1], ldb);
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemm_("N", "C", m, &n1, &n2, &q__1, &b[n1 * b_dim1], ldb, a, n, alpha, b, ldb);
+                        cgemm_("N", "C", m, &n1, &n2, &q__1, &b[n1 * b_dim1], ldb, a, n, alpha, b,
+                               ldb);
                         ctrsm_("R", "L", "N", diag, m, &n1, &c_b1, &a[n2], n, b, ldb);
                     }
                 }
@@ -783,17 +821,19 @@ int ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
             else
             {
                 /* SIDE = 'R', N is odd, and TRANSR = 'C' */
-                if (lower)
+                if(lower)
                 {
                     /* SIDE ='R', N is odd, TRANSR = 'C', and UPLO = 'L' */
-                    if (notrans)
+                    if(notrans)
                     {
                         /* SIDE ='R', N is odd, TRANSR = 'C', UPLO = 'L', and */
                         /* TRANS = 'N' */
-                        ctrsm_("R", "L", "N", diag, m, &n2, alpha, &a[1], &n1, &b[n1 * b_dim1], ldb);
+                        ctrsm_("R", "L", "N", diag, m, &n2, alpha, &a[1], &n1, &b[n1 * b_dim1],
+                               ldb);
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemm_("N", "C", m, &n1, &n2, &q__1, &b[n1 * b_dim1], ldb, &a[n1 * n1], &n1, alpha, b, ldb);
+                        cgemm_("N", "C", m, &n1, &n2, &q__1, &b[n1 * b_dim1], ldb, &a[n1 * n1], &n1,
+                               alpha, b, ldb);
                         ctrsm_("R", "U", "C", diag, m, &n1, &c_b1, a, &n1, b, ldb);
                     }
                     else
@@ -803,31 +843,37 @@ int ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
                         ctrsm_("R", "U", "N", diag, m, &n1, alpha, a, &n1, b, ldb);
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemm_("N", "N", m, &n2, &n1, &q__1, b, ldb, &a[n1 * n1], &n1, alpha, &b[n1 * b_dim1], ldb);
-                        ctrsm_("R", "L", "C", diag, m, &n2, &c_b1, &a[1], &n1, &b[n1 * b_dim1], ldb);
+                        cgemm_("N", "N", m, &n2, &n1, &q__1, b, ldb, &a[n1 * n1], &n1, alpha,
+                               &b[n1 * b_dim1], ldb);
+                        ctrsm_("R", "L", "C", diag, m, &n2, &c_b1, &a[1], &n1, &b[n1 * b_dim1],
+                               ldb);
                     }
                 }
                 else
                 {
                     /* SIDE ='R', N is odd, TRANSR = 'C', and UPLO = 'U' */
-                    if (notrans)
+                    if(notrans)
                     {
                         /* SIDE ='R', N is odd, TRANSR = 'C', UPLO = 'U', and */
                         /* TRANS = 'N' */
                         ctrsm_("R", "U", "N", diag, m, &n1, alpha, &a[n2 * n2], &n2, b, ldb);
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemm_("N", "C", m, &n2, &n1, &q__1, b, ldb, a, &n2, alpha, &b[n1 * b_dim1], ldb);
-                        ctrsm_("R", "L", "C", diag, m, &n2, &c_b1, &a[n1 * n2], &n2, &b[n1 * b_dim1], ldb);
+                        cgemm_("N", "C", m, &n2, &n1, &q__1, b, ldb, a, &n2, alpha, &b[n1 * b_dim1],
+                               ldb);
+                        ctrsm_("R", "L", "C", diag, m, &n2, &c_b1, &a[n1 * n2], &n2,
+                               &b[n1 * b_dim1], ldb);
                     }
                     else
                     {
                         /* SIDE ='R', N is odd, TRANSR = 'C', UPLO = 'U', and */
                         /* TRANS = 'C' */
-                        ctrsm_("R", "L", "N", diag, m, &n2, alpha, &a[n1 * n2], &n2, &b[n1 * b_dim1], ldb);
+                        ctrsm_("R", "L", "N", diag, m, &n2, alpha, &a[n1 * n2], &n2,
+                               &b[n1 * b_dim1], ldb);
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemm_("N", "N", m, &n1, &n2, &q__1, &b[n1 * b_dim1], ldb, a, &n2, alpha, b, ldb);
+                        cgemm_("N", "N", m, &n1, &n2, &q__1, &b[n1 * b_dim1], ldb, a, &n2, alpha, b,
+                               ldb);
                         ctrsm_("R", "U", "C", diag, m, &n1, &c_b1, &a[n2 * n2], &n2, b, ldb);
                     }
                 }
@@ -836,84 +882,91 @@ int ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
         else
         {
             /* SIDE = 'R' and N is even */
-            if (normaltransr)
+            if(normaltransr)
             {
                 /* SIDE = 'R', N is even, and TRANSR = 'N' */
-                if (lower)
+                if(lower)
                 {
                     /* SIDE ='R', N is even, TRANSR = 'N', and UPLO = 'L' */
-                    if (notrans)
+                    if(notrans)
                     {
                         /* SIDE ='R', N is even, TRANSR = 'N', UPLO = 'L', */
                         /* and TRANS = 'N' */
                         i__1 = *n + 1;
-                        ctrsm_("R", "U", "C", diag, m, &k, alpha, a, &i__1, & b[k * b_dim1], ldb);
+                        ctrsm_("R", "U", "C", diag, m, &k, alpha, a, &i__1, &b[k * b_dim1], ldb);
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
                         i__1 = *n + 1;
-                        cgemm_("N", "N", m, &k, &k, &q__1, &b[k * b_dim1], ldb, &a[k + 1], &i__1, alpha, b, ldb);
+                        cgemm_("N", "N", m, &k, &k, &q__1, &b[k * b_dim1], ldb, &a[k + 1], &i__1,
+                               alpha, b, ldb);
                         i__1 = *n + 1;
-                        ctrsm_("R", "L", "N", diag, m, &k, &c_b1, &a[1], & i__1, b, ldb);
+                        ctrsm_("R", "L", "N", diag, m, &k, &c_b1, &a[1], &i__1, b, ldb);
                     }
                     else
                     {
                         /* SIDE ='R', N is even, TRANSR = 'N', UPLO = 'L', */
                         /* and TRANS = 'C' */
                         i__1 = *n + 1;
-                        ctrsm_("R", "L", "C", diag, m, &k, alpha, &a[1], & i__1, b, ldb);
+                        ctrsm_("R", "L", "C", diag, m, &k, alpha, &a[1], &i__1, b, ldb);
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
                         i__1 = *n + 1;
-                        cgemm_("N", "C", m, &k, &k, &q__1, b, ldb, &a[k + 1], &i__1, alpha, &b[k * b_dim1], ldb);
+                        cgemm_("N", "C", m, &k, &k, &q__1, b, ldb, &a[k + 1], &i__1, alpha,
+                               &b[k * b_dim1], ldb);
                         i__1 = *n + 1;
-                        ctrsm_("R", "U", "N", diag, m, &k, &c_b1, a, &i__1, & b[k * b_dim1], ldb);
+                        ctrsm_("R", "U", "N", diag, m, &k, &c_b1, a, &i__1, &b[k * b_dim1], ldb);
                     }
                 }
                 else
                 {
                     /* SIDE ='R', N is even, TRANSR = 'N', and UPLO = 'U' */
-                    if (notrans)
+                    if(notrans)
                     {
                         /* SIDE ='R', N is even, TRANSR = 'N', UPLO = 'U', */
                         /* and TRANS = 'N' */
                         i__1 = *n + 1;
-                        ctrsm_("R", "L", "C", diag, m, &k, alpha, &a[k + 1], & i__1, b, ldb);
+                        ctrsm_("R", "L", "C", diag, m, &k, alpha, &a[k + 1], &i__1, b, ldb);
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
                         i__1 = *n + 1;
-                        cgemm_("N", "N", m, &k, &k, &q__1, b, ldb, a, &i__1, alpha, &b[k * b_dim1], ldb);
+                        cgemm_("N", "N", m, &k, &k, &q__1, b, ldb, a, &i__1, alpha, &b[k * b_dim1],
+                               ldb);
                         i__1 = *n + 1;
-                        ctrsm_("R", "U", "N", diag, m, &k, &c_b1, &a[k], & i__1, &b[k * b_dim1], ldb);
+                        ctrsm_("R", "U", "N", diag, m, &k, &c_b1, &a[k], &i__1, &b[k * b_dim1],
+                               ldb);
                     }
                     else
                     {
                         /* SIDE ='R', N is even, TRANSR = 'N', UPLO = 'U', */
                         /* and TRANS = 'C' */
                         i__1 = *n + 1;
-                        ctrsm_("R", "U", "C", diag, m, &k, alpha, &a[k], & i__1, &b[k * b_dim1], ldb);
+                        ctrsm_("R", "U", "C", diag, m, &k, alpha, &a[k], &i__1, &b[k * b_dim1],
+                               ldb);
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
                         i__1 = *n + 1;
-                        cgemm_("N", "C", m, &k, &k, &q__1, &b[k * b_dim1], ldb, a, &i__1, alpha, b, ldb);
+                        cgemm_("N", "C", m, &k, &k, &q__1, &b[k * b_dim1], ldb, a, &i__1, alpha, b,
+                               ldb);
                         i__1 = *n + 1;
-                        ctrsm_("R", "L", "N", diag, m, &k, &c_b1, &a[k + 1], & i__1, b, ldb);
+                        ctrsm_("R", "L", "N", diag, m, &k, &c_b1, &a[k + 1], &i__1, b, ldb);
                     }
                 }
             }
             else
             {
                 /* SIDE = 'R', N is even, and TRANSR = 'C' */
-                if (lower)
+                if(lower)
                 {
                     /* SIDE ='R', N is even, TRANSR = 'C', and UPLO = 'L' */
-                    if (notrans)
+                    if(notrans)
                     {
                         /* SIDE ='R', N is even, TRANSR = 'C', UPLO = 'L', */
                         /* and TRANS = 'N' */
                         ctrsm_("R", "L", "N", diag, m, &k, alpha, a, &k, &b[k * b_dim1], ldb);
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemm_("N", "C", m, &k, &k, &q__1, &b[k * b_dim1], ldb, &a[(k + 1) * k], &k, alpha, b, ldb);
+                        cgemm_("N", "C", m, &k, &k, &q__1, &b[k * b_dim1], ldb, &a[(k + 1) * k], &k,
+                               alpha, b, ldb);
                         ctrsm_("R", "U", "C", diag, m, &k, &c_b1, &a[k], &k, b, ldb);
                     }
                     else
@@ -923,31 +976,36 @@ int ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
                         ctrsm_("R", "U", "N", diag, m, &k, alpha, &a[k], &k, b, ldb);
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemm_("N", "N", m, &k, &k, &q__1, b, ldb, &a[(k + 1) * k], &k, alpha, &b[k * b_dim1], ldb);
+                        cgemm_("N", "N", m, &k, &k, &q__1, b, ldb, &a[(k + 1) * k], &k, alpha,
+                               &b[k * b_dim1], ldb);
                         ctrsm_("R", "L", "C", diag, m, &k, &c_b1, a, &k, &b[k * b_dim1], ldb);
                     }
                 }
                 else
                 {
                     /* SIDE ='R', N is even, TRANSR = 'C', and UPLO = 'U' */
-                    if (notrans)
+                    if(notrans)
                     {
                         /* SIDE ='R', N is even, TRANSR = 'C', UPLO = 'U', */
                         /* and TRANS = 'N' */
                         ctrsm_("R", "U", "N", diag, m, &k, alpha, &a[(k + 1) * k], &k, b, ldb);
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemm_("N", "C", m, &k, &k, &q__1, b, ldb, a, &k, alpha, &b[k * b_dim1], ldb);
-                        ctrsm_("R", "L", "C", diag, m, &k, &c_b1, &a[k * k], & k, &b[k * b_dim1], ldb);
+                        cgemm_("N", "C", m, &k, &k, &q__1, b, ldb, a, &k, alpha, &b[k * b_dim1],
+                               ldb);
+                        ctrsm_("R", "L", "C", diag, m, &k, &c_b1, &a[k * k], &k, &b[k * b_dim1],
+                               ldb);
                     }
                     else
                     {
                         /* SIDE ='R', N is even, TRANSR = 'C', UPLO = 'U', */
                         /* and TRANS = 'C' */
-                        ctrsm_("R", "L", "N", diag, m, &k, alpha, &a[k * k], & k, &b[k * b_dim1], ldb);
+                        ctrsm_("R", "L", "N", diag, m, &k, alpha, &a[k * k], &k, &b[k * b_dim1],
+                               ldb);
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemm_("N", "N", m, &k, &k, &q__1, &b[k * b_dim1], ldb, a, &k, alpha, b, ldb);
+                        cgemm_("N", "N", m, &k, &k, &q__1, &b[k * b_dim1], ldb, a, &k, alpha, b,
+                               ldb);
                         ctrsm_("R", "U", "C", diag, m, &k, &c_b1, &a[(k + 1) * k], &k, b, ldb);
                     }
                 }
@@ -955,7 +1013,7 @@ int ctfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, intege
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CTFSM */
 }
 /* ctfsm_ */

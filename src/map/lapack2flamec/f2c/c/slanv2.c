@@ -1,18 +1,28 @@
-/* slanv2.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* slanv2.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b6 = 1.f;
-/* > \brief \b SLANV2 computes the Schur factorization of a real 2-by-2 nonsymmetric matrix in standard form. */
+/* > \brief \b SLANV2 computes the Schur factorization of a real 2-by-2 nonsymmetric matrix in
+ * standard form. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLANV2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slanv2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slanv2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slanv2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slanv2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slanv2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slanv2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -114,7 +124,8 @@ static real c_b6 = 1.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slanv2_(real *a, real *b, real *c__, real *d__, real * rt1r, real *rt1i, real *rt2r, real *rt2i, real *cs, real *sn)
+void slanv2_(real *a, real *b, real *c__, real *d__, real *rt1r, real *rt1i, real *rt2r, real *rt2i,
+             real *cs, real *sn)
 {
     AOCL_DTL_TRACE_LOG_INIT
     real r__1, r__2;
@@ -144,15 +155,15 @@ int slanv2_(real *a, real *b, real *c__, real *d__, real * rt1r, real *rt1i, rea
     safmin = slamch_("S");
     eps = slamch_("P");
     r__1 = slamch_("B");
-    i__1 = (integer) (log(safmin / eps) / log(slamch_("B")) / 2.f);
+    i__1 = (integer)(log(safmin / eps) / log(slamch_("B")) / 2.f);
     safmn2 = pow_ri(&r__1, &i__1);
     safmx2 = 1.f / safmn2;
-    if (*c__ == 0.f)
+    if(*c__ == 0.f)
     {
         *cs = 1.f;
         *sn = 0.f;
     }
-    else if (*b == 0.f)
+    else if(*b == 0.f)
     {
         /* Swap rows and columns */
         *cs = 0.f;
@@ -163,7 +174,7 @@ int slanv2_(real *a, real *b, real *c__, real *d__, real * rt1r, real *rt1i, rea
         *b = -(*c__);
         *c__ = 0.f;
     }
-    else if (*a - *d__ == 0.f && r_sign(&c_b6, b) != r_sign(&c_b6, c__))
+    else if(*a - *d__ == 0.f && r_sign(&c_b6, b) != r_sign(&c_b6, c__))
     {
         *cs = 1.f;
         *sn = 0.f;
@@ -175,18 +186,18 @@ int slanv2_(real *a, real *b, real *c__, real *d__, real * rt1r, real *rt1i, rea
         /* Computing MAX */
         r__1 = f2c_abs(*b);
         r__2 = f2c_abs(*c__); // , expr subst
-        bcmax = fla_max(r__1,r__2);
+        bcmax = fla_max(r__1, r__2);
         /* Computing MIN */
         r__1 = f2c_abs(*b);
         r__2 = f2c_abs(*c__); // , expr subst
-        bcmis = fla_min(r__1,r__2) * r_sign(&c_b6, b) * r_sign(&c_b6, c__);
+        bcmis = fla_min(r__1, r__2) * r_sign(&c_b6, b) * r_sign(&c_b6, c__);
         /* Computing MAX */
         r__1 = f2c_abs(p);
-        scale = fla_max(r__1,bcmax);
+        scale = fla_max(r__1, bcmax);
         z__ = p / scale * p + bcmax / scale * bcmis;
         /* If Z is of the order of the machine accuracy, postpone the */
         /* decision on the nature of eigenvalues */
-        if (z__ >= eps * 4.f)
+        if(z__ >= eps * 4.f)
         {
             /* Real eigenvalues. Compute A and D. */
             r__1 = sqrt(scale) * sqrt(z__);
@@ -206,26 +217,26 @@ int slanv2_(real *a, real *b, real *c__, real *d__, real * rt1r, real *rt1i, rea
             /* Make diagonal elements equal. */
             count = 0;
             sigma = *b + *c__;
-L10:
+        L10:
             ++count;
             /* Computing MAX */
             r__1 = f2c_abs(temp);
             r__2 = f2c_abs(sigma); // , expr subst
-            scale = fla_max(r__1,r__2);
-            if (scale >= safmx2)
+            scale = fla_max(r__1, r__2);
+            if(scale >= safmx2)
             {
                 sigma *= safmn2;
                 temp *= safmn2;
-                if (count <= 20)
+                if(count <= 20)
                 {
                     goto L10;
                 }
             }
-            if (scale <= safmn2)
+            if(scale <= safmn2)
             {
                 sigma *= safmx2;
                 temp *= safmx2;
-                if (count <= 20)
+                if(count <= 20)
                 {
                     goto L10;
                 }
@@ -249,11 +260,11 @@ L10:
             temp = (*a + *d__) * .5f;
             *a = temp;
             *d__ = temp;
-            if (*c__ != 0.f)
+            if(*c__ != 0.f)
             {
-                if (*b != 0.f)
+                if(*b != 0.f)
                 {
-                    if (r_sign(&c_b6, b) == r_sign(&c_b6, c__))
+                    if(r_sign(&c_b6, b) == r_sign(&c_b6, c__))
                     {
                         /* Real eigenvalues: reduce to upper triangular form */
                         sab = sqrt((f2c_abs(*b)));
@@ -286,7 +297,7 @@ L10:
     /* Store eigenvalues in (RT1R,RT1I) and (RT2R,RT2I). */
     *rt1r = *a;
     *rt2r = *d__;
-    if (*c__ == 0.f)
+    if(*c__ == 0.f)
     {
         *rt1i = 0.f;
         *rt2i = 0.f;
@@ -297,7 +308,7 @@ L10:
         *rt2i = -(*rt1i);
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SLANV2 */
 }
 /* slanv2_ */

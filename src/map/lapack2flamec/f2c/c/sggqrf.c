@@ -1,5 +1,8 @@
-/* sggqrf.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* sggqrf.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -9,11 +12,17 @@ static integer c_n1 = -1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SGGQRF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sggqrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sggqrf.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sggqrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sggqrf.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sggqrf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sggqrf.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -112,7 +121,7 @@ the elements below the diagonal, */
 /* > On entry, the N-by-P matrix B. */
 /* > On exit, if N <= P, the upper triangle of the subarray */
 /* > B(1:N,P-N+1:P) contains the N-by-N upper triangular matrix T;
-*/
+ */
 /* > if N > P, the elements on and above the (N-P)-th subdiagonal */
 /* > contain the N-by-P upper trapezoidal matrix T;
 the remaining */
@@ -208,23 +217,31 @@ v(1:p-k+i-1) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int sggqrf_(integer *n, integer *m, integer *p, real *a, integer *lda, real *taua, real *b, integer *ldb, real *taub, real * work, integer *lwork, integer *info)
+void sggqrf_(integer *n, integer *m, integer *p, real *a, integer *lda, real *taua, real *b,
+             integer *ldb, real *taub, real *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sggqrf inputs: n %" FLA_IS ", m %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",*n, *m, *p, *lda, *ldb);
+    AOCL_DTL_SNPRINTF("sggqrf inputs: n %" FLA_IS ", m %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS "",
+                      *n, *m, *p, *lda, *ldb);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     /* Local variables */
     integer nb, nb1, nb2, nb3, lopt;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *), sgerqf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer * );
+        void
+        sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *),
+        sgerqf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     extern /* Subroutine */
-    int sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
+        void
+        sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
+                integer *, real *, integer *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -259,73 +276,74 @@ int sggqrf_(integer *n, integer *m, integer *p, real *a, integer *lda, real *tau
     nb2 = ilaenv_(&c__1, "SGERQF", " ", n, p, &c_n1, &c_n1);
     nb3 = ilaenv_(&c__1, "SORMQR", " ", n, m, p, &c_n1);
     /* Computing MAX */
-    i__1 = fla_max(nb1,nb2);
-    nb = fla_max(i__1,nb3);
+    i__1 = fla_max(nb1, nb2);
+    nb = fla_max(i__1, nb3);
     /* Computing MAX */
-    i__1 = fla_max(*n,*m);
-    lwkopt = fla_max(i__1,*p) * nb;
-    work[1] = (real) lwkopt;
+    i__1 = fla_max(*n, *m);
+    lwkopt = fla_max(i__1, *p) * nb;
+    work[1] = (real)lwkopt;
     lquery = *lwork == -1;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -1;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -2;
     }
-    else if (*p < 0)
+    else if(*p < 0)
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*n))
+    else if(*ldb < fla_max(1, *n))
     {
         *info = -8;
     }
     else /* if(complicated condition) */
     {
         /* Computing MAX */
-        i__1 = fla_max(1,*n);
-        i__1 = fla_max(i__1,*m); // , expr subst
-        if (*lwork < fla_max(i__1,*p) && ! lquery)
+        i__1 = fla_max(1, *n);
+        i__1 = fla_max(i__1, *m); // , expr subst
+        if(*lwork < fla_max(i__1, *p) && !lquery)
         {
             *info = -11;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SGGQRF", &i__1, (ftnlen)6);
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* QR factorization of N-by-M matrix A: A = Q*R */
     sgeqrf_(n, m, &a[a_offset], lda, &taua[1], &work[1], lwork, info);
-    lopt = (integer) work[1];
+    lopt = (integer)work[1];
     /* Update B := Q**T*B. */
-    i__1 = fla_min(*n,*m);
-    sormqr_("Left", "Transpose", n, p, &i__1, &a[a_offset], lda, &taua[1], &b[ b_offset], ldb, &work[1], lwork, info);
+    i__1 = fla_min(*n, *m);
+    sormqr_("Left", "Transpose", n, p, &i__1, &a[a_offset], lda, &taua[1], &b[b_offset], ldb,
+            &work[1], lwork, info);
     /* Computing MAX */
     i__1 = lopt;
-    i__2 = (integer) work[1]; // , expr subst
-    lopt = fla_max(i__1,i__2);
+    i__2 = (integer)work[1]; // , expr subst
+    lopt = fla_max(i__1, i__2);
     /* RQ factorization of N-by-P matrix B: B = T*Z. */
     sgerqf_(n, p, &b[b_offset], ldb, &taub[1], &work[1], lwork, info);
     /* Computing MAX */
     i__1 = lopt;
-    i__2 = (integer) work[1]; // , expr subst
-    work[1] = (real) fla_max(i__1,i__2);
+    i__2 = (integer)work[1]; // , expr subst
+    work[1] = (real)fla_max(i__1, i__2);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SGGQRF */
 }
 /* sggqrf_ */

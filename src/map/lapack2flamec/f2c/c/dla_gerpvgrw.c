@@ -1,16 +1,25 @@
-/* ../netlib/dla_gerpvgrw.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dla_gerpvgrw.f -- translated by f2c (version 20100827). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLA_GERPVGRW */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLA_GERPVGRW + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dla_ger pvgrw.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dla_ger
+ * pvgrw.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dla_ger pvgrw.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dla_ger
+ * pvgrw.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dla_ger pvgrw.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dla_ger
+ * pvgrw.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -84,10 +93,13 @@
 /* > \date November 2011 */
 /* > \ingroup doubleGEcomputational */
 /* ===================================================================== */
-doublereal dla_gerpvgrw_(integer *n, integer *ncols, doublereal *a, integer * lda, doublereal *af, integer *ldaf)
+doublereal dla_gerpvgrw_(integer *n, integer *ncols, doublereal *a, integer *lda, doublereal *af,
+                         integer *ldaf)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dla_gerpvgrw inputs: n %" FLA_IS ", ncols %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS "",*n, *ncols, *lda, *ldaf);
+    AOCL_DTL_SNPRINTF("dla_gerpvgrw inputs: n %" FLA_IS ", ncols %" FLA_IS ", lda %" FLA_IS
+                      ", ldaf %" FLA_IS "",
+                      *n, *ncols, *lda, *ldaf);
     /* System generated locals */
     integer a_dim1, a_offset, af_dim1, af_offset, i__1, i__2;
     doublereal ret_val, d__1, d__2;
@@ -118,35 +130,29 @@ doublereal dla_gerpvgrw_(integer *n, integer *ncols, doublereal *a, integer * ld
     /* Function Body */
     rpvgrw = 1.;
     i__1 = *ncols;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         amax = 0.;
         umax = 0.;
         i__2 = *n;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             d__2 = (d__1 = a[i__ + j * a_dim1], f2c_dabs(d__1));
-            amax = fla_max(d__2,amax);
+            amax = fla_max(d__2, amax);
         }
         i__2 = j;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             d__2 = (d__1 = af[i__ + j * af_dim1], f2c_dabs(d__1));
-            umax = fla_max(d__2,umax);
+            umax = fla_max(d__2, umax);
         }
-        if (umax != 0.)
+        if(umax != 0.)
         {
             /* Computing MIN */
             d__1 = amax / umax;
-            rpvgrw = fla_min(d__1,rpvgrw);
+            rpvgrw = fla_min(d__1, rpvgrw);
         }
     }
     ret_val = rpvgrw;

@@ -1,5 +1,8 @@
-/* ../netlib/dlarz.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlarz.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static doublereal c_b5 = 1.;
@@ -9,11 +12,17 @@ static doublereal c_b5 = 1.;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLARZ + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarz.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarz.f
+ * "> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarz.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarz.f
+ * "> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarz.f "> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarz.f
+ * "> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -133,19 +142,28 @@ static doublereal c_b5 = 1.;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlarz_(char *side, integer *m, integer *n, integer *l, doublereal *v, integer *incv, doublereal *tau, doublereal *c__, integer *ldc, doublereal *work)
+void dlarz_(char *side, integer *m, integer *n, integer *l, doublereal *v, integer *incv,
+            doublereal *tau, doublereal *c__, integer *ldc, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlarz inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", incv %" FLA_IS ", ldc %" FLA_IS "",*side, *m, *n, *l, *incv, *ldc);
+    AOCL_DTL_SNPRINTF("dlarz inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS
+                      ", incv %" FLA_IS ", ldc %" FLA_IS "",
+                      *side, *m, *n, *l, *incv, *ldc);
     /* System generated locals */
     integer c_dim1, c_offset;
     doublereal d__1;
     /* Local variables */
     extern /* Subroutine */
-    int dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
-    extern logical lsame_(char *, char *);
+        void
+        dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
+              doublereal *, integer *);
+    extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
-    int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *) ;
+        void
+        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
+               integer *, doublereal *, doublereal *, integer *),
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -169,15 +187,16 @@ int dlarz_(char *side, integer *m, integer *n, integer *l, doublereal *v, intege
     c__ -= c_offset;
     --work;
     /* Function Body */
-    if (lsame_(side, "L"))
+    if(lsame_(side, "L", 1, 1))
     {
         /* Form H * C */
-        if (*tau != 0.)
+        if(*tau != 0.)
         {
             /* w( 1:n ) = C( 1, 1:n ) */
             dcopy_(n, &c__[c_offset], ldc, &work[1], &c__1);
             /* w( 1:n ) = w( 1:n ) + C( m-l+1:m, 1:n )**T * v( 1:l ) */
-            dgemv_("Transpose", l, n, &c_b5, &c__[*m - *l + 1 + c_dim1], ldc, &v[1], incv, &c_b5, &work[1], &c__1);
+            dgemv_("Transpose", l, n, &c_b5, &c__[*m - *l + 1 + c_dim1], ldc, &v[1], incv, &c_b5,
+                   &work[1], &c__1);
             /* C( 1, 1:n ) = C( 1, 1:n ) - tau * w( 1:n ) */
             d__1 = -(*tau);
             daxpy_(n, &d__1, &work[1], &c__1, &c__[c_offset], ldc);
@@ -190,12 +209,13 @@ int dlarz_(char *side, integer *m, integer *n, integer *l, doublereal *v, intege
     else
     {
         /* Form C * H */
-        if (*tau != 0.)
+        if(*tau != 0.)
         {
             /* w( 1:m ) = C( 1:m, 1 ) */
             dcopy_(m, &c__[c_offset], &c__1, &work[1], &c__1);
             /* w( 1:m ) = w( 1:m ) + C( 1:m, n-l+1:n, 1:n ) * v( 1:l ) */
-            dgemv_("No transpose", m, l, &c_b5, &c__[(*n - *l + 1) * c_dim1 + 1], ldc, &v[1], incv, &c_b5, &work[1], &c__1);
+            dgemv_("No transpose", m, l, &c_b5, &c__[(*n - *l + 1) * c_dim1 + 1], ldc, &v[1], incv,
+                   &c_b5, &work[1], &c__1);
             /* C( 1:m, 1 ) = C( 1:m, 1 ) - tau * w( 1:m ) */
             d__1 = -(*tau);
             daxpy_(m, &d__1, &work[1], &c__1, &c__[c_offset], &c__1);
@@ -206,7 +226,7 @@ int dlarz_(char *side, integer *m, integer *n, integer *l, doublereal *v, intege
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLARZ */
 }
 /* dlarz_ */

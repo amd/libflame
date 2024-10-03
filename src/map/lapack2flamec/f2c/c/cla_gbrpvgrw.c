@@ -1,16 +1,25 @@
-/* ../netlib/cla_gbrpvgrw.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cla_gbrpvgrw.f -- translated by f2c (version 20100827). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CLA_GBRPVGRW computes the reciprocal pivot growth factor norm(A)/norm(U) for a general banded m atrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLA_GBRPVGRW + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cla_gbr pvgrw.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cla_gbr
+ * pvgrw.f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cla_gbr pvgrw.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cla_gbr
+ * pvgrw.f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cla_gbr pvgrw.f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cla_gbr
+ * pvgrw.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -101,15 +110,19 @@
 /* > \date September 2012 */
 /* > \ingroup complexGBcomputational */
 /* ===================================================================== */
-real cla_gbrpvgrw_(integer *n, integer *kl, integer *ku, integer *ncols, complex *ab, integer *ldab, complex *afb, integer *ldafb)
+real cla_gbrpvgrw_(integer *n, integer *kl, integer *ku, integer *ncols, complex *ab, integer *ldab,
+                   complex *afb, integer *ldafb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cla_gbrpvgrw inputs: n %lld, kl %lld, ku %lld, ncols %lld, ldab %lld, ldafb %lld",*n, *kl, *ku, *ncols, *ldab, *ldafb);
+    snprintf(buffer, 256,
+             "cla_gbrpvgrw inputs: n %lld, kl %lld, ku %lld, ncols %lld, ldab %lld, ldafb %lld", *n,
+             *kl, *ku, *ncols, *ldab, *ldafb);
 #else
-    snprintf(buffer, 256,"cla_gbrpvgrw inputs: n %d, kl %d, ku %d, ncols %d, ldab %d, ldafb %d",*n, *kl, *ku, *ncols, *ldab, *ldafb);
+    snprintf(buffer, 256, "cla_gbrpvgrw inputs: n %d, kl %d, ku %d, ncols %d, ldab %d, ldafb %d",
+             *n, *kl, *ku, *ncols, *ldab, *ldafb);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -150,9 +163,7 @@ real cla_gbrpvgrw_(integer *n, integer *kl, integer *ku, integer *ncols, complex
     rpvgrw = 1.f;
     kd = *ku + 1;
     i__1 = *ncols;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         amax = 0.f;
         umax = 0.f;
@@ -160,33 +171,31 @@ real cla_gbrpvgrw_(integer *n, integer *kl, integer *ku, integer *ncols, complex
         i__2 = j - *ku;
         /* Computing MIN */
         i__4 = j + *kl;
-        i__3 = fla_min(i__4,*n);
-        for (i__ = fla_max(i__2,1);
-                i__ <= i__3;
-                ++i__)
+        i__3 = fla_min(i__4, *n);
+        for(i__ = fla_max(i__2, 1); i__ <= i__3; ++i__)
         {
             /* Computing MAX */
             i__2 = kd + i__ - j + j * ab_dim1;
-            r__3 = (r__1 = ab[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&ab[kd + i__ - j + j * ab_dim1]), f2c_abs(r__2));
-            amax = fla_max(r__3,amax);
+            r__3 = (r__1 = ab[i__2].r, f2c_abs(r__1))
+                   + (r__2 = r_imag(&ab[kd + i__ - j + j * ab_dim1]), f2c_abs(r__2));
+            amax = fla_max(r__3, amax);
         }
         /* Computing MAX */
         i__3 = j - *ku;
         i__2 = j;
-        for (i__ = fla_max(i__3,1);
-                i__ <= i__2;
-                ++i__)
+        for(i__ = fla_max(i__3, 1); i__ <= i__2; ++i__)
         {
             /* Computing MAX */
             i__3 = kd + i__ - j + j * afb_dim1;
-            r__3 = (r__1 = afb[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&afb[kd + i__ - j + j * afb_dim1]), f2c_abs(r__2));
-            umax = fla_max(r__3,umax);
+            r__3 = (r__1 = afb[i__3].r, f2c_abs(r__1))
+                   + (r__2 = r_imag(&afb[kd + i__ - j + j * afb_dim1]), f2c_abs(r__2));
+            umax = fla_max(r__3, umax);
         }
-        if (umax != 0.f)
+        if(umax != 0.f)
         {
             /* Computing MIN */
             r__1 = amax / umax;
-            rpvgrw = fla_min(r__1,rpvgrw);
+            rpvgrw = fla_min(r__1, rpvgrw);
         }
     }
     ret_val = rpvgrw;

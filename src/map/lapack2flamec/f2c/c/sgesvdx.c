@@ -1,5 +1,8 @@
-/* ../netlib/v3.9.0/sgesvdx.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/sgesvdx.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__6 = 6;
 static integer c__0 = 0;
@@ -12,11 +15,17 @@ static real c_b109 = 0.f;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SGESVDX + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgesvdx .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgesvdx
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgesvdx .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgesvdx
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgesvdx .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgesvdx
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -68,7 +77,7 @@ they are real and non-negative, and */
 /* > = 'V': the first fla_min(m,n) columns of U (the left singular */
 /* > vectors) or as specified by RANGE are returned in */
 /* > the array U;
-*/
+ */
 /* > = 'N': no columns of U (no left singular vectors) are */
 /* > computed. */
 /* > \endverbatim */
@@ -81,7 +90,7 @@ they are real and non-negative, and */
 /* > = 'V': the first fla_min(m,n) rows of V**T (the right singular */
 /* > vectors) or as specified by RANGE are returned in */
 /* > the array VT;
-*/
+ */
 /* > = 'N': no rows of V**T (no right singular vectors) are */
 /* > computed. */
 /* > \endverbatim */
@@ -215,7 +224,7 @@ if */
 /* > \verbatim */
 /* > WORK is REAL array, dimension (MAX(1,LWORK)) */
 /* > On exit, if INFO = 0, WORK(1) returns the optimal LWORK;
-*/
+ */
 /* > \endverbatim */
 /* > */
 /* > \param[in] LWORK */
@@ -264,7 +273,10 @@ the routine */
 /* > \ingroup realGEsing */
 /* ===================================================================== */
 /* Subroutine */
-int sgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, real *a, integer *lda, real *vl, real *vu, integer *il, integer *iu, integer *ns, real *s, real *u, integer *ldu, real *vt, integer *ldvt, real *work, integer *lwork, integer *iwork, integer * info)
+void sgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, real *a, integer *lda,
+              real *vl, real *vu, integer *il, integer *iu, integer *ns, real *s, real *u,
+              integer *ldu, real *vt, integer *ldvt, real *work, integer *lwork, integer *iwork,
+              integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__2, i__3;
@@ -283,32 +295,50 @@ int sgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, real
     integer ierr, iqrf, itau;
     char jobz[1];
     logical vals;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iltgk, itemp, minmn, itaup, itauq, iutgk, itgkz, mnthr;
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *);
     logical wantu;
     extern /* Subroutine */
-    int sgebrd_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, integer *, integer *);
+        void
+        sgebrd_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *,
+                integer *, integer *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;
     extern /* Subroutine */
-    int sgelqf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *), slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *);
+        void
+        sgelqf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *),
+        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
+                integer *, integer *);
     extern /* Subroutine */
-    int sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+        void
+        sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *),
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     char rngtgk[1];
     extern /* Subroutine */
-    int slaset_(char *, integer *, integer *, real *, real *, real *, integer *), sormbr_(char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
+        void
+        slaset_(char *, integer *, integer *, real *, real *, real *, integer *),
+        sormbr_(char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *,
+                real *, integer *, real *, integer *, integer *);
     integer minwrk, maxwrk;
     real smlnum;
     extern /* Subroutine */
-    int sormlq_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
+        void
+        sormlq_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
+                integer *, real *, integer *, integer *);
     logical lquery, wantvt;
     extern /* Subroutine */
-    int sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *), sbdsvdx_(char *, char *, char *, integer *, real *, real *, real *, real *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, integer *);
+        void
+        sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
+                integer *, real *, integer *, integer *),
+        sbdsvdx_(char *, char *, char *, integer *, real *, real *, real *, real *, integer *,
+                 integer *, integer *, real *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -349,11 +379,11 @@ int sgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, real
     *ns = 0;
     *info = 0;
     lquery = *lwork == -1;
-    minmn = fla_min(*m,*n);
-    wantu = lsame_(jobu, "V");
-    wantvt = lsame_(jobvt, "V");
+    minmn = fla_min(*m, *n);
+    wantu = lsame_(jobu, "V", 1, 1);
+    wantvt = lsame_(jobvt, "V", 1, 1);
     mnthr = 0;
-    if (wantu || wantvt)
+    if(wantu || wantvt)
     {
         *(unsigned char *)jobz = 'V';
     }
@@ -361,74 +391,74 @@ int sgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, real
     {
         *(unsigned char *)jobz = 'N';
     }
-    alls = lsame_(range, "A");
-    vals = lsame_(range, "V");
-    inds = lsame_(range, "I");
+    alls = lsame_(range, "A", 1, 1);
+    vals = lsame_(range, "V", 1, 1);
+    inds = lsame_(range, "I", 1, 1);
     *info = 0;
-    if (! lsame_(jobu, "V") && ! lsame_(jobu, "N"))
+    if(!lsame_(jobu, "V", 1, 1) && !lsame_(jobu, "N", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(jobvt, "V") && ! lsame_(jobvt, "N"))
+    else if(!lsame_(jobvt, "V", 1, 1) && !lsame_(jobvt, "N", 1, 1))
     {
         *info = -2;
     }
-    else if (! (alls || vals || inds))
+    else if(!(alls || vals || inds))
     {
         *info = -3;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -4;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -5;
     }
-    else if (*m > *lda)
+    else if(*m > *lda)
     {
         *info = -7;
     }
-    else if (minmn > 0)
+    else if(minmn > 0)
     {
-        if (vals)
+        if(vals)
         {
-            if (*vl < 0.f)
+            if(*vl < 0.f)
             {
                 *info = -8;
             }
-            else if (*vu <= *vl)
+            else if(*vu <= *vl)
             {
                 *info = -9;
             }
         }
-        else if (inds)
+        else if(inds)
         {
-            if (*il < 1 || *il > fla_max(1,minmn))
+            if(*il < 1 || *il > fla_max(1, minmn))
             {
                 *info = -10;
             }
-            else if (*iu < fla_min(minmn,*il) || *iu > minmn)
+            else if(*iu < fla_min(minmn, *il) || *iu > minmn)
             {
                 *info = -11;
             }
         }
-        if (*info == 0)
+        if(*info == 0)
         {
-            if (wantu && *ldu < *m)
+            if(wantu && *ldu < *m)
             {
                 *info = -15;
             }
-            else if (wantvt)
+            else if(wantvt)
             {
-                if (inds)
+                if(inds)
                 {
-                    if (*ldvt < *iu - *il + 1)
+                    if(*ldvt < *iu - *il + 1)
                     {
                         *info = -17;
                     }
                 }
-                else if (*ldvt < minmn)
+                else if(*ldvt < minmn)
                 {
                     *info = -17;
                 }
@@ -441,145 +471,177 @@ int sgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, real
     /* as well as the preferred amount for good performance. */
     /* NB refers to the optimal block size for the immediately */
     /* following subroutine, as returned by ILAENV.) */
-    if (*info == 0)
+    if(*info == 0)
     {
         minwrk = 1;
         maxwrk = 1;
-        if (minmn > 0)
+        if(minmn > 0)
         {
-            if (*m >= *n)
+            if(*m >= *n)
             {
                 mnthr = ilaenv_(&c__6, "SGESVD", ch__1, m, n, &c__0, &c__0);
-                if (*m >= mnthr)
+                if(*m >= mnthr)
                 {
                     /* Path 1 (M much larger than N) */
-                    maxwrk = *n + *n * ilaenv_(&c__1, "SGEQRF", " ", m, n, & c_n1, &c_n1);
+                    maxwrk = *n + *n * ilaenv_(&c__1, "SGEQRF", " ", m, n, &c_n1, &c_n1);
                     /* Computing MAX */
                     i__2 = maxwrk;
-                    i__3 = *n * (*n + 5) + (*n << 1) * ilaenv_( &c__1, "SGEBRD", " ", n, n, &c_n1, &c_n1); // , expr subst
-                    maxwrk = fla_max(i__2,i__3);
-                    if (wantu)
+                    i__3
+                        = *n * (*n + 5)
+                          + (*n << 1)
+                                * ilaenv_(&c__1, "SGEBRD", " ", n, n, &c_n1, &c_n1); // , expr subst
+                    maxwrk = fla_max(i__2, i__3);
+                    if(wantu)
                     {
                         /* Computing MAX */
                         i__2 = maxwrk;
-                        i__3 = *n * (*n * 3 + 6) + *n * ilaenv_(&c__1, "SORMQR", " ", n, n, &c_n1, & c_n1); // , expr subst
-                        maxwrk = fla_max(i__2,i__3);
+                        i__3 = *n * (*n * 3 + 6)
+                               + *n
+                                     * ilaenv_(&c__1, "SORMQR", " ", n, n, &c_n1,
+                                               &c_n1); // , expr subst
+                        maxwrk = fla_max(i__2, i__3);
                     }
-                    if (wantvt)
+                    if(wantvt)
                     {
                         /* Computing MAX */
                         i__2 = maxwrk;
-                        i__3 = *n * (*n * 3 + 6) + *n * ilaenv_(&c__1, "SORMLQ", " ", n, n, &c_n1, & c_n1); // , expr subst
-                        maxwrk = fla_max(i__2,i__3);
+                        i__3 = *n * (*n * 3 + 6)
+                               + *n
+                                     * ilaenv_(&c__1, "SORMLQ", " ", n, n, &c_n1,
+                                               &c_n1); // , expr subst
+                        maxwrk = fla_max(i__2, i__3);
                     }
                     minwrk = *n * (*n * 3 + 20);
                 }
                 else
                 {
                     /* Path 2 (M at least N, but not much larger) */
-                    maxwrk = (*n << 2) + (*m + *n) * ilaenv_(&c__1, "SGEBRD", " ", m, n, &c_n1, &c_n1);
-                    if (wantu)
+                    maxwrk
+                        = (*n << 2) + (*m + *n) * ilaenv_(&c__1, "SGEBRD", " ", m, n, &c_n1, &c_n1);
+                    if(wantu)
                     {
                         /* Computing MAX */
                         i__2 = maxwrk;
-                        i__3 = *n * ((*n << 1) + 5) + *n * ilaenv_(&c__1, "SORMQR", " ", n, n, &c_n1, & c_n1); // , expr subst
-                        maxwrk = fla_max(i__2,i__3);
+                        i__3 = *n * ((*n << 1) + 5)
+                               + *n
+                                     * ilaenv_(&c__1, "SORMQR", " ", n, n, &c_n1,
+                                               &c_n1); // , expr subst
+                        maxwrk = fla_max(i__2, i__3);
                     }
-                    if (wantvt)
+                    if(wantvt)
                     {
                         /* Computing MAX */
                         i__2 = maxwrk;
-                        i__3 = *n * ((*n << 1) + 5) + *n * ilaenv_(&c__1, "SORMLQ", " ", n, n, &c_n1, & c_n1); // , expr subst
-                        maxwrk = fla_max(i__2,i__3);
+                        i__3 = *n * ((*n << 1) + 5)
+                               + *n
+                                     * ilaenv_(&c__1, "SORMLQ", " ", n, n, &c_n1,
+                                               &c_n1); // , expr subst
+                        maxwrk = fla_max(i__2, i__3);
                     }
                     /* Computing MAX */
                     i__2 = *n * ((*n << 1) + 19);
                     i__3 = (*n << 2) + *m; // , expr subst
-                    minwrk = fla_max(i__2,i__3);
+                    minwrk = fla_max(i__2, i__3);
                 }
             }
             else
             {
                 mnthr = ilaenv_(&c__6, "SGESVD", ch__1, m, n, &c__0, &c__0);
-                if (*n >= mnthr)
+                if(*n >= mnthr)
                 {
                     /* Path 1t (N much larger than M) */
-                    maxwrk = *m + *m * ilaenv_(&c__1, "SGELQF", " ", m, n, & c_n1, &c_n1);
+                    maxwrk = *m + *m * ilaenv_(&c__1, "SGELQF", " ", m, n, &c_n1, &c_n1);
                     /* Computing MAX */
                     i__2 = maxwrk;
-                    i__3 = *m * (*m + 5) + (*m << 1) * ilaenv_( &c__1, "SGEBRD", " ", m, m, &c_n1, &c_n1); // , expr subst
-                    maxwrk = fla_max(i__2,i__3);
-                    if (wantu)
+                    i__3
+                        = *m * (*m + 5)
+                          + (*m << 1)
+                                * ilaenv_(&c__1, "SGEBRD", " ", m, m, &c_n1, &c_n1); // , expr subst
+                    maxwrk = fla_max(i__2, i__3);
+                    if(wantu)
                     {
                         /* Computing MAX */
                         i__2 = maxwrk;
-                        i__3 = *m * (*m * 3 + 6) + *m * ilaenv_(&c__1, "SORMQR", " ", m, m, &c_n1, & c_n1); // , expr subst
-                        maxwrk = fla_max(i__2,i__3);
+                        i__3 = *m * (*m * 3 + 6)
+                               + *m
+                                     * ilaenv_(&c__1, "SORMQR", " ", m, m, &c_n1,
+                                               &c_n1); // , expr subst
+                        maxwrk = fla_max(i__2, i__3);
                     }
-                    if (wantvt)
+                    if(wantvt)
                     {
                         /* Computing MAX */
                         i__2 = maxwrk;
-                        i__3 = *m * (*m * 3 + 6) + *m * ilaenv_(&c__1, "SORMLQ", " ", m, m, &c_n1, & c_n1); // , expr subst
-                        maxwrk = fla_max(i__2,i__3);
+                        i__3 = *m * (*m * 3 + 6)
+                               + *m
+                                     * ilaenv_(&c__1, "SORMLQ", " ", m, m, &c_n1,
+                                               &c_n1); // , expr subst
+                        maxwrk = fla_max(i__2, i__3);
                     }
                     minwrk = *m * (*m * 3 + 20);
                 }
                 else
                 {
                     /* Path 2t (N at least M, but not much larger) */
-                    maxwrk = (*m << 2) + (*m + *n) * ilaenv_(&c__1, "SGEBRD", " ", m, n, &c_n1, &c_n1);
-                    if (wantu)
+                    maxwrk
+                        = (*m << 2) + (*m + *n) * ilaenv_(&c__1, "SGEBRD", " ", m, n, &c_n1, &c_n1);
+                    if(wantu)
                     {
                         /* Computing MAX */
                         i__2 = maxwrk;
-                        i__3 = *m * ((*m << 1) + 5) + *m * ilaenv_(&c__1, "SORMQR", " ", m, m, &c_n1, & c_n1); // , expr subst
-                        maxwrk = fla_max(i__2,i__3);
+                        i__3 = *m * ((*m << 1) + 5)
+                               + *m
+                                     * ilaenv_(&c__1, "SORMQR", " ", m, m, &c_n1,
+                                               &c_n1); // , expr subst
+                        maxwrk = fla_max(i__2, i__3);
                     }
-                    if (wantvt)
+                    if(wantvt)
                     {
                         /* Computing MAX */
                         i__2 = maxwrk;
-                        i__3 = *m * ((*m << 1) + 5) + *m * ilaenv_(&c__1, "SORMLQ", " ", m, m, &c_n1, & c_n1); // , expr subst
-                        maxwrk = fla_max(i__2,i__3);
+                        i__3 = *m * ((*m << 1) + 5)
+                               + *m
+                                     * ilaenv_(&c__1, "SORMLQ", " ", m, m, &c_n1,
+                                               &c_n1); // , expr subst
+                        maxwrk = fla_max(i__2, i__3);
                     }
                     /* Computing MAX */
                     i__2 = *m * ((*m << 1) + 19);
                     i__3 = (*m << 2) + *n; // , expr subst
-                    minwrk = fla_max(i__2,i__3);
+                    minwrk = fla_max(i__2, i__3);
                 }
             }
         }
-        maxwrk = fla_max(maxwrk,minwrk);
-        work[1] = (real) maxwrk;
-        if (*lwork < minwrk && ! lquery)
+        maxwrk = fla_max(maxwrk, minwrk);
+        work[1] = (real)maxwrk;
+        if(*lwork < minwrk && !lquery)
         {
             *info = -19;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__2 = -(*info);
         xerbla_("SGESVDX", &i__2, (ftnlen)7);
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*m == 0 || *n == 0)
+    if(*m == 0 || *n == 0)
     {
-        return 0;
+        return;
     }
     /* Set singular values indices accord to RANGE. */
-    if (alls)
+    if(alls)
     {
         *(unsigned char *)rngtgk = 'I';
         iltgk = 1;
-        iutgk = fla_min(*m,*n);
+        iutgk = fla_min(*m, *n);
     }
-    else if (inds)
+    else if(inds)
     {
         *(unsigned char *)rngtgk = 'I';
         iltgk = *il;
@@ -598,22 +660,22 @@ int sgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, real
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
     anrm = slange_("M", m, n, &a[a_offset], lda, dum);
     iscl = 0;
-    if (anrm > 0.f && anrm < smlnum)
+    if(anrm > 0.f && anrm < smlnum)
     {
         iscl = 1;
         slascl_("G", &c__0, &c__0, &anrm, &smlnum, m, n, &a[a_offset], lda, info);
     }
-    else if (anrm > bignum)
+    else if(anrm > bignum)
     {
         iscl = 1;
         slascl_("G", &c__0, &c__0, &anrm, &bignum, m, n, &a[a_offset], lda, info);
     }
-    if (*m >= *n)
+    if(*m >= *n)
     {
         /* A has at least as many rows as columns. If A has sufficiently */
         /* more rows than columns, first reduce A using the QR */
         /* decomposition. */
-        if (*m >= mnthr)
+        if(*m >= mnthr)
         {
             /* Path 1 (M much larger than N): */
             /* A = Q * R = Q * ( QB * B * PB**T ) */
@@ -639,21 +701,21 @@ int sgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, real
             i__3 = *n - 1;
             slaset_("L", &i__2, &i__3, &c_b109, &c_b109, &work[iqrf + 1], n);
             i__2 = *lwork - itemp + 1;
-            sgebrd_(n, n, &work[iqrf], n, &work[id], &work[ie], &work[itauq], &work[itaup], &work[itemp], &i__2, info);
+            sgebrd_(n, n, &work[iqrf], n, &work[id], &work[ie], &work[itauq], &work[itaup],
+                    &work[itemp], &i__2, info);
             /* Solve eigenvalue problem TGK*Z=Z*S. */
             /* (Workspace: need 14*N + 2*N*(N+1)) */
             itgkz = itemp;
             itemp = itgkz + *n * ((*n << 1) + 1);
             i__2 = *n << 1;
-            sbdsvdx_("U", jobz, rngtgk, n, &work[id], &work[ie], vl, vu, & iltgk, &iutgk, ns, &s[1], &work[itgkz], &i__2, &work[ itemp], &iwork[1], info);
+            sbdsvdx_("U", jobz, rngtgk, n, &work[id], &work[ie], vl, vu, &iltgk, &iutgk, ns, &s[1],
+                     &work[itgkz], &i__2, &work[itemp], &iwork[1], info);
             /* If needed, compute left singular vectors. */
-            if (wantu)
+            if(wantu)
             {
                 j = itgkz;
                 i__2 = *ns;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     scopy_(n, &work[j], &c__1, &u[i__ * u_dim1 + 1], &c__1);
                     j += *n << 1;
@@ -663,20 +725,20 @@ int sgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, real
                 /* Call SORMBR to compute QB*UB. */
                 /* (Workspace in WORK( ITEMP ): need N, prefer N*NB) */
                 i__2 = *lwork - itemp + 1;
-                sormbr_("Q", "L", "N", n, ns, n, &work[iqrf], n, &work[itauq], &u[u_offset], ldu, &work[itemp], &i__2, info);
+                sormbr_("Q", "L", "N", n, ns, n, &work[iqrf], n, &work[itauq], &u[u_offset], ldu,
+                        &work[itemp], &i__2, info);
                 /* Call SORMQR to compute Q*(QB*UB). */
                 /* (Workspace in WORK( ITEMP ): need N, prefer N*NB) */
                 i__2 = *lwork - itemp + 1;
-                sormqr_("L", "N", m, ns, n, &a[a_offset], lda, &work[itau], & u[u_offset], ldu, &work[itemp], &i__2, info);
+                sormqr_("L", "N", m, ns, n, &a[a_offset], lda, &work[itau], &u[u_offset], ldu,
+                        &work[itemp], &i__2, info);
             }
             /* If needed, compute right singular vectors. */
-            if (wantvt)
+            if(wantvt)
             {
                 j = itgkz + *n;
                 i__2 = *ns;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     scopy_(n, &work[j], &c__1, &vt[i__ + vt_dim1], ldvt);
                     j += *n << 1;
@@ -684,7 +746,8 @@ int sgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, real
                 /* Call SORMBR to compute VB**T * PB**T */
                 /* (Workspace in WORK( ITEMP ): need N, prefer N*NB) */
                 i__2 = *lwork - itemp + 1;
-                sormbr_("P", "R", "T", ns, n, n, &work[iqrf], n, &work[itaup], &vt[vt_offset], ldvt, &work[itemp], &i__2, info);
+                sormbr_("P", "R", "T", ns, n, n, &work[iqrf], n, &work[itaup], &vt[vt_offset], ldvt,
+                        &work[itemp], &i__2, info);
             }
         }
         else
@@ -702,21 +765,21 @@ int sgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, real
             itaup = itauq + *n;
             itemp = itaup + *n;
             i__2 = *lwork - itemp + 1;
-            sgebrd_(m, n, &a[a_offset], lda, &work[id], &work[ie], &work[ itauq], &work[itaup], &work[itemp], &i__2, info);
+            sgebrd_(m, n, &a[a_offset], lda, &work[id], &work[ie], &work[itauq], &work[itaup],
+                    &work[itemp], &i__2, info);
             /* Solve eigenvalue problem TGK*Z=Z*S. */
             /* (Workspace: need 14*N + 2*N*(N+1)) */
             itgkz = itemp;
             itemp = itgkz + *n * ((*n << 1) + 1);
             i__2 = *n << 1;
-            sbdsvdx_("U", jobz, rngtgk, n, &work[id], &work[ie], vl, vu, & iltgk, &iutgk, ns, &s[1], &work[itgkz], &i__2, &work[ itemp], &iwork[1], info);
+            sbdsvdx_("U", jobz, rngtgk, n, &work[id], &work[ie], vl, vu, &iltgk, &iutgk, ns, &s[1],
+                     &work[itgkz], &i__2, &work[itemp], &iwork[1], info);
             /* If needed, compute left singular vectors. */
-            if (wantu)
+            if(wantu)
             {
                 j = itgkz;
                 i__2 = *ns;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     scopy_(n, &work[j], &c__1, &u[i__ * u_dim1 + 1], &c__1);
                     j += *n << 1;
@@ -726,16 +789,15 @@ int sgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, real
                 /* Call SORMBR to compute QB*UB. */
                 /* (Workspace in WORK( ITEMP ): need N, prefer N*NB) */
                 i__2 = *lwork - itemp + 1;
-                sormbr_("Q", "L", "N", m, ns, n, &a[a_offset], lda, &work[ itauq], &u[u_offset], ldu, &work[itemp], &i__2, &ierr);
+                sormbr_("Q", "L", "N", m, ns, n, &a[a_offset], lda, &work[itauq], &u[u_offset], ldu,
+                        &work[itemp], &i__2, &ierr);
             }
             /* If needed, compute right singular vectors. */
-            if (wantvt)
+            if(wantvt)
             {
                 j = itgkz + *n;
                 i__2 = *ns;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     scopy_(n, &work[j], &c__1, &vt[i__ + vt_dim1], ldvt);
                     j += *n << 1;
@@ -743,7 +805,8 @@ int sgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, real
                 /* Call SORMBR to compute VB**T * PB**T */
                 /* (Workspace in WORK( ITEMP ): need N, prefer N*NB) */
                 i__2 = *lwork - itemp + 1;
-                sormbr_("P", "R", "T", ns, n, n, &a[a_offset], lda, &work[ itaup], &vt[vt_offset], ldvt, &work[itemp], &i__2, & ierr);
+                sormbr_("P", "R", "T", ns, n, n, &a[a_offset], lda, &work[itaup], &vt[vt_offset],
+                        ldvt, &work[itemp], &i__2, &ierr);
             }
         }
     }
@@ -751,7 +814,7 @@ int sgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, real
     {
         /* A has more columns than rows. If A has sufficiently more */
         /* columns than rows, first reduce A using the LQ decomposition. */
-        if (*n >= mnthr)
+        if(*n >= mnthr)
         {
             /* Path 1t (N much larger than M): */
             /* A = L * Q = ( QB * B * PB**T ) * Q */
@@ -777,21 +840,21 @@ int sgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, real
             i__3 = *m - 1;
             slaset_("U", &i__2, &i__3, &c_b109, &c_b109, &work[ilqf + *m], m);
             i__2 = *lwork - itemp + 1;
-            sgebrd_(m, m, &work[ilqf], m, &work[id], &work[ie], &work[itauq], &work[itaup], &work[itemp], &i__2, info);
+            sgebrd_(m, m, &work[ilqf], m, &work[id], &work[ie], &work[itauq], &work[itaup],
+                    &work[itemp], &i__2, info);
             /* Solve eigenvalue problem TGK*Z=Z*S. */
             /* (Workspace: need 2*M*M+14*M) */
             itgkz = itemp;
             itemp = itgkz + *m * ((*m << 1) + 1);
             i__2 = *m << 1;
-            sbdsvdx_("U", jobz, rngtgk, m, &work[id], &work[ie], vl, vu, & iltgk, &iutgk, ns, &s[1], &work[itgkz], &i__2, &work[ itemp], &iwork[1], info);
+            sbdsvdx_("U", jobz, rngtgk, m, &work[id], &work[ie], vl, vu, &iltgk, &iutgk, ns, &s[1],
+                     &work[itgkz], &i__2, &work[itemp], &iwork[1], info);
             /* If needed, compute left singular vectors. */
-            if (wantu)
+            if(wantu)
             {
                 j = itgkz;
                 i__2 = *ns;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     scopy_(m, &work[j], &c__1, &u[i__ * u_dim1 + 1], &c__1);
                     j += *m << 1;
@@ -799,16 +862,15 @@ int sgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, real
                 /* Call SORMBR to compute QB*UB. */
                 /* (Workspace in WORK( ITEMP ): need M, prefer M*NB) */
                 i__2 = *lwork - itemp + 1;
-                sormbr_("Q", "L", "N", m, ns, m, &work[ilqf], m, &work[itauq], &u[u_offset], ldu, &work[itemp], &i__2, info);
+                sormbr_("Q", "L", "N", m, ns, m, &work[ilqf], m, &work[itauq], &u[u_offset], ldu,
+                        &work[itemp], &i__2, info);
             }
             /* If needed, compute right singular vectors. */
-            if (wantvt)
+            if(wantvt)
             {
                 j = itgkz + *m;
                 i__2 = *ns;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     scopy_(m, &work[j], &c__1, &vt[i__ + vt_dim1], ldvt);
                     j += *m << 1;
@@ -818,11 +880,13 @@ int sgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, real
                 /* Call SORMBR to compute (VB**T)*(PB**T) */
                 /* (Workspace in WORK( ITEMP ): need M, prefer M*NB) */
                 i__2 = *lwork - itemp + 1;
-                sormbr_("P", "R", "T", ns, m, m, &work[ilqf], m, &work[itaup], &vt[vt_offset], ldvt, &work[itemp], &i__2, info);
+                sormbr_("P", "R", "T", ns, m, m, &work[ilqf], m, &work[itaup], &vt[vt_offset], ldvt,
+                        &work[itemp], &i__2, info);
                 /* Call SORMLQ to compute ((VB**T)*(PB**T))*Q. */
                 /* (Workspace in WORK( ITEMP ): need M, prefer M*NB) */
                 i__2 = *lwork - itemp + 1;
-                sormlq_("R", "N", ns, n, m, &a[a_offset], lda, &work[itau], & vt[vt_offset], ldvt, &work[itemp], &i__2, info);
+                sormlq_("R", "N", ns, n, m, &a[a_offset], lda, &work[itau], &vt[vt_offset], ldvt,
+                        &work[itemp], &i__2, info);
             }
         }
         else
@@ -840,21 +904,21 @@ int sgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, real
             itaup = itauq + *m;
             itemp = itaup + *m;
             i__2 = *lwork - itemp + 1;
-            sgebrd_(m, n, &a[a_offset], lda, &work[id], &work[ie], &work[ itauq], &work[itaup], &work[itemp], &i__2, info);
+            sgebrd_(m, n, &a[a_offset], lda, &work[id], &work[ie], &work[itauq], &work[itaup],
+                    &work[itemp], &i__2, info);
             /* Solve eigenvalue problem TGK*Z=Z*S. */
             /* (Workspace: need 2*M*M+14*M) */
             itgkz = itemp;
             itemp = itgkz + *m * ((*m << 1) + 1);
             i__2 = *m << 1;
-            sbdsvdx_("L", jobz, rngtgk, m, &work[id], &work[ie], vl, vu, & iltgk, &iutgk, ns, &s[1], &work[itgkz], &i__2, &work[ itemp], &iwork[1], info);
+            sbdsvdx_("L", jobz, rngtgk, m, &work[id], &work[ie], vl, vu, &iltgk, &iutgk, ns, &s[1],
+                     &work[itgkz], &i__2, &work[itemp], &iwork[1], info);
             /* If needed, compute left singular vectors. */
-            if (wantu)
+            if(wantu)
             {
                 j = itgkz;
                 i__2 = *ns;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     scopy_(m, &work[j], &c__1, &u[i__ * u_dim1 + 1], &c__1);
                     j += *m << 1;
@@ -862,16 +926,15 @@ int sgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, real
                 /* Call SORMBR to compute QB*UB. */
                 /* (Workspace in WORK( ITEMP ): need M, prefer M*NB) */
                 i__2 = *lwork - itemp + 1;
-                sormbr_("Q", "L", "N", m, ns, n, &a[a_offset], lda, &work[ itauq], &u[u_offset], ldu, &work[itemp], &i__2, info);
+                sormbr_("Q", "L", "N", m, ns, n, &a[a_offset], lda, &work[itauq], &u[u_offset], ldu,
+                        &work[itemp], &i__2, info);
             }
             /* If needed, compute right singular vectors. */
-            if (wantvt)
+            if(wantvt)
             {
                 j = itgkz + *m;
                 i__2 = *ns;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     scopy_(m, &work[j], &c__1, &vt[i__ + vt_dim1], ldvt);
                     j += *m << 1;
@@ -881,25 +944,26 @@ int sgesvdx_(char *jobu, char *jobvt, char *range, integer * m, integer *n, real
                 /* Call SORMBR to compute VB**T * PB**T */
                 /* (Workspace in WORK( ITEMP ): need M, prefer M*NB) */
                 i__2 = *lwork - itemp + 1;
-                sormbr_("P", "R", "T", ns, n, m, &a[a_offset], lda, &work[ itaup], &vt[vt_offset], ldvt, &work[itemp], &i__2, info);
+                sormbr_("P", "R", "T", ns, n, m, &a[a_offset], lda, &work[itaup], &vt[vt_offset],
+                        ldvt, &work[itemp], &i__2, info);
             }
         }
     }
     /* Undo scaling if necessary */
-    if (iscl == 1)
+    if(iscl == 1)
     {
-        if (anrm > bignum)
+        if(anrm > bignum)
         {
-            slascl_("G", &c__0, &c__0, &bignum, &anrm, &minmn, &c__1, &s[1], & minmn, info);
+            slascl_("G", &c__0, &c__0, &bignum, &anrm, &minmn, &c__1, &s[1], &minmn, info);
         }
-        if (anrm < smlnum)
+        if(anrm < smlnum)
         {
-            slascl_("G", &c__0, &c__0, &smlnum, &anrm, &minmn, &c__1, &s[1], & minmn, info);
+            slascl_("G", &c__0, &c__0, &smlnum, &anrm, &minmn, &c__1, &s[1], &minmn, info);
         }
     }
     /* Return optimal workspace in WORK(1) */
-    work[1] = (real) maxwrk;
-    return 0;
+    work[1] = (real)maxwrk;
+    return;
     /* End of SGESVDX */
 }
 /* sgesvdx_ */

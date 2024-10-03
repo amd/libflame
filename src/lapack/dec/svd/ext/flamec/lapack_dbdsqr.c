@@ -266,22 +266,22 @@
  doublereal unfl, sinl, cosr, smin, smax, sinr;
 #ifndef FLA_ENABLE_AOCL_BLAS
  extern /* Subroutine */
- int drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *), dlas2_( doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+ void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *), dlas2_( doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
  extern logical lsame_(char *, char *, integer a, integer b);
 #endif
  doublereal oldcs;
  extern /* Subroutine */
- int dlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
+ void dlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
  integer oldll;
  doublereal shift, sigmn, oldsn;
  /* Subroutine */
  doublereal sminl, sigmx;
  logical lower;
  extern /* Subroutine */
- int dlasq1_(integer *, doublereal *, doublereal *, doublereal *, integer *), dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+ void dlasq1_(integer *, doublereal *, doublereal *, doublereal *, integer *), dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
  extern doublereal dlamch_(char *);
  extern /* Subroutine */
- int dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+ void dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
  doublereal sminoa, thresh;
  logical rotate;
  doublereal tolmul;
@@ -636,6 +636,7 @@
  /* Save cosines and sines for later singular vector updates */
  cs = 1.;
  oldcs = 1.;
+ oldsn = 0.;
  i__1 = m - 1;
  for (i__ = ll;
  i__ <= i__1;

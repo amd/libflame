@@ -1,16 +1,25 @@
-/* ../netlib/slapll.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slapll.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLAPLL measures the linear dependence of two vectors. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLAPLL + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slapll. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slapll.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slapll. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slapll.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slapll. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slapll.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -88,7 +97,7 @@
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int slapll_(integer *n, real *x, integer *incx, real *y, integer *incy, real *ssmin)
+void slapll_(integer *n, real *x, integer *incx, real *y, integer *incy, real *ssmin)
 {
     /* System generated locals */
     integer i__1;
@@ -96,10 +105,13 @@ int slapll_(integer *n, real *x, integer *incx, real *y, integer *incy, real *ss
     real c__, a11, a12, a22, tau;
     extern real sdot_(integer *, real *, integer *, real *, integer *);
     extern /* Subroutine */
-    int slas2_(real *, real *, real *, real *, real *) ;
+        void
+        slas2_(real *, real *, real *, real *, real *);
     real ssmax;
     extern /* Subroutine */
-    int saxpy_(integer *, real *, real *, integer *, real *, integer *), slarfg_(integer *, real *, real *, integer *, real *);
+        void
+        saxpy_(integer *, real *, real *, integer *, real *, integer *),
+        slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -123,10 +135,10 @@ int slapll_(integer *n, real *x, integer *incx, real *y, integer *incy, real *ss
     --y;
     --x;
     /* Function Body */
-    if (*n <= 1)
+    if(*n <= 1)
     {
         *ssmin = 0.f;
-        return 0;
+        return;
     }
     /* Compute the QR factorization of the N-by-2 matrix ( X Y ) */
     slarfg_(n, &x[1], &x[*incx + 1], incx, &tau);
@@ -140,7 +152,7 @@ int slapll_(integer *n, real *x, integer *incx, real *y, integer *incy, real *ss
     a22 = y[*incy + 1];
     /* Compute the SVD of 2-by-2 Upper triangular matrix. */
     slas2_(&a11, &a12, &a22, ssmin, &ssmax);
-    return 0;
+    return;
     /* End of SLAPLL */
 }
 /* slapll_ */

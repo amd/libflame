@@ -1,18 +1,28 @@
-/* slacn2.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* slacn2.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b SLACN2 estimates the 1-norm of a square matrix, using reverse communication for evaluating matr ix-vector products. */
+/* > \brief \b SLACN2 estimates the 1-norm of a square matrix, using reverse communication for
+ * evaluating matr ix-vector products. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLACN2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slacn2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slacn2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slacn2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slacn2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slacn2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slacn2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -121,10 +131,12 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slacn2_(integer *n, real *v, real *x, integer *isgn, real *est, integer *kase, integer *isave)
+void slacn2_(integer *n, real *v, real *x, integer *isgn, real *est, integer *kase, integer *isave)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("slacn2 inputs: n %" FLA_IS ", isgn %" FLA_IS ", kase %" FLA_IS ", isave %" FLA_IS "",*n, *isgn, *kase, *isave);
+    AOCL_DTL_SNPRINTF("slacn2 inputs: n %" FLA_IS ", isgn %" FLA_IS ", kase %" FLA_IS
+                      ", isave %" FLA_IS "",
+                      *n, *isgn, *kase, *isave);
     /* System generated locals */
     integer i__1;
     real r__1;
@@ -136,7 +148,8 @@ int slacn2_(integer *n, real *v, real *x, integer *isgn, real *est, integer *kas
     integer jlast;
     extern real sasum_(integer *, real *, integer *);
     extern /* Subroutine */
-    int scopy_(integer *, real *, integer *, real *, integer *);
+        void
+        scopy_(integer *, real *, integer *, real *, integer *);
     extern integer isamax_(integer *, real *, integer *);
     real altsgn, estold;
     /* -- LAPACK auxiliary routine -- */
@@ -164,38 +177,36 @@ int slacn2_(integer *n, real *v, real *x, integer *isgn, real *est, integer *kas
     --x;
     --v;
     /* Function Body */
-    if (*kase == 0)
+    if(*kase == 0)
     {
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
-            x[i__] = 1.f / (real) (*n);
+            x[i__] = 1.f / (real)(*n);
             /* L10: */
         }
         *kase = 1;
         isave[1] = 1;
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
-    switch (isave[1])
+    switch(isave[1])
     {
-    case 1:
-        goto L20;
-    case 2:
-        goto L40;
-    case 3:
-        goto L70;
-    case 4:
-        goto L110;
-    case 5:
-        goto L140;
+        case 1:
+            goto L20;
+        case 2:
+            goto L40;
+        case 3:
+            goto L70;
+        case 4:
+            goto L110;
+        case 5:
+            goto L140;
     }
     /* ................ ENTRY (ISAVE( 1 ) = 1) */
     /* FIRST ITERATION. X HAS BEEN OVERWRITTEN BY A*X. */
 L20:
-    if (*n == 1)
+    if(*n == 1)
     {
         v[1] = x[1];
         *est = f2c_abs(v[1]);
@@ -204,11 +215,9 @@ L20:
     }
     *est = sasum_(n, &x[1], &c__1);
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if (x[i__] >= 0.f)
+        if(x[i__] >= 0.f)
         {
             x[i__] = 1.f;
         }
@@ -222,7 +231,7 @@ L20:
     *kase = 2;
     isave[1] = 2;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* ................ ENTRY (ISAVE( 1 ) = 2) */
     /* FIRST ITERATION. X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X. */
 L40:
@@ -231,9 +240,7 @@ L40:
     /* MAIN LOOP - ITERATIONS 2,3,...,ITMAX. */
 L50:
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         x[i__] = 0.f;
         /* L60: */
@@ -242,7 +249,7 @@ L50:
     *kase = 1;
     isave[1] = 3;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* ................ ENTRY (ISAVE( 1 ) = 3) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L70:
@@ -250,11 +257,9 @@ L70:
     estold = *est;
     *est = sasum_(n, &v[1], &c__1);
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if (x[i__] >= 0.f)
+        if(x[i__] >= 0.f)
         {
             xs = 1.f;
         }
@@ -262,7 +267,7 @@ L70:
         {
             xs = -1.f;
         }
-        if (fla_i_nint(&xs) != isgn[i__])
+        if(fla_i_nint(&xs) != isgn[i__])
         {
             goto L90;
         }
@@ -271,16 +276,14 @@ L70:
     /* REPEATED SIGN VECTOR DETECTED, HENCE ALGORITHM HAS CONVERGED. */
     goto L120;
 L90: /* TEST FOR CYCLING. */
-    if (*est <= estold)
+    if(*est <= estold)
     {
         goto L120;
     }
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if (x[i__] >= 0.f)
+        if(x[i__] >= 0.f)
         {
             x[i__] = 1.f;
         }
@@ -294,13 +297,13 @@ L90: /* TEST FOR CYCLING. */
     *kase = 2;
     isave[1] = 4;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* ................ ENTRY (ISAVE( 1 ) = 4) */
     /* X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X. */
 L110:
     jlast = isave[2];
     isave[2] = isamax_(n, &x[1], &c__1);
-    if (x[jlast] != (r__1 = x[isave[2]], f2c_abs(r__1)) && isave[3] < 5)
+    if(x[jlast] != (r__1 = x[isave[2]], f2c_abs(r__1)) && isave[3] < 5)
     {
         ++isave[3];
         goto L50;
@@ -309,23 +312,21 @@ L110:
 L120:
     altsgn = 1.f;
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        x[i__] = altsgn * ((real) (i__ - 1) / (real) (*n - 1) + 1.f);
+        x[i__] = altsgn * ((real)(i__ - 1) / (real)(*n - 1) + 1.f);
         altsgn = -altsgn;
         /* L130: */
     }
     *kase = 1;
     isave[1] = 5;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* ................ ENTRY (ISAVE( 1 ) = 5) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L140:
-    temp = sasum_(n, &x[1], &c__1) / (real) (*n * 3) * 2.f;
-    if (temp > *est)
+    temp = sasum_(n, &x[1], &c__1) / (real)(*n * 3) * 2.f;
+    if(temp > *est)
     {
         scopy_(n, &x[1], &c__1, &v[1], &c__1);
         *est = temp;
@@ -333,7 +334,7 @@ L140:
 L150:
     *kase = 0;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SLACN2 */
 }
 /* slacn2_ */

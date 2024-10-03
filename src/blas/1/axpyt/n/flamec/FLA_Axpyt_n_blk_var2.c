@@ -20,7 +20,7 @@ FLA_Error FLA_Axpyt_n_blk_var2( FLA_Obj alpha, FLA_Obj A, FLA_Obj B, fla_axpyt_t
           BB,              B1,
                            B2;
 
-  dim_t b;
+  fla_dim_t b;
 
   FLA_Part_2x1( A,    &AT, 
                       &AB,            0, FLA_BOTTOM );

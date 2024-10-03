@@ -1,11 +1,10 @@
-/* ../netlib/v3.9.0/cpotrf2.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/v3.9.0/cpotrf2.f -- translated by f2c (version 20160102). You must link the resulting
+ object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
+ systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
+ -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
+ libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 =
-{
-    1.f,0.f
-}
-;
+static complex c_b1 = {1.f, 0.f};
 static real c_b11 = -1.f;
 static real c_b12 = 1.f;
 /* > \brief \b CPOTRF2 */
@@ -52,7 +51,7 @@ static real c_b12 = 1.f;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -102,15 +101,15 @@ static real c_b12 = 1.f;
 /* > \ingroup complexPOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int cpotrf2_(char *uplo, integer *n, complex *a, integer * lda, integer *info)
+void cpotrf2_(char *uplo, integer *n, complex *a, integer *lda, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cpotrf2 inputs: uplo %c, n %lld, lda %lld",*uplo, *n, *lda);
+    snprintf(buffer, 256, "cpotrf2 inputs: uplo %c, n %lld, lda %lld", *uplo, *n, *lda);
 #else
-    snprintf(buffer, 256,"cpotrf2 inputs: uplo %c, n %d, lda %d",*uplo, *n, *lda);
+    snprintf(buffer, 256, "cpotrf2 inputs: uplo %c, n %d, lda %d", *uplo, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -123,14 +122,19 @@ int cpotrf2_(char *uplo, integer *n, complex *a, integer * lda, integer *info)
     integer n1, n2;
     real ajj;
     extern /* Subroutine */
-    int cherk_(char *, char *, integer *, integer *, real *, complex *, integer *, real *, complex *, integer *);
-    extern logical lsame_(char *, char *);
+        void
+        cherk_(char *, char *, integer *, integer *, real *, complex *, integer *, real *,
+               complex *, integer *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
-    int ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *);
+        void
+        ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
+               integer *, complex *, integer *);
     logical upper;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern logical sisnan_(real *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -159,43 +163,43 @@ int cpotrf2_(char *uplo, integer *n, complex *a, integer * lda, integer *info)
     a -= a_offset;
     /* Function Body */
     *info = 0;
-    upper = lsame_(uplo, "U");
-    if (! upper && ! lsame_(uplo, "L"))
+    upper = lsame_(uplo, "U", 1, 1);
+    if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CPOTRF2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* N=1 case */
-    if (*n == 1)
+    if(*n == 1)
     {
         /* Test for non-positive-definiteness */
         i__1 = a_dim1 + 1;
         ajj = a[i__1].r;
-        if (ajj <= 0.f || sisnan_(&ajj))
+        if(ajj <= 0.f || sisnan_(&ajj))
         {
             *info = 1;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         /* Factor */
         i__1 = a_dim1 + 1;
@@ -210,45 +214,49 @@ int cpotrf2_(char *uplo, integer *n, complex *a, integer * lda, integer *info)
         n2 = *n - n1;
         /* Factor A11 */
         cpotrf2_(uplo, &n1, &a[a_dim1 + 1], lda, &iinfo);
-        if (iinfo != 0)
+        if(iinfo != 0)
         {
             *info = iinfo;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-            return 0;
+            return;
         }
         /* Compute the Cholesky factorization A = U**H*U */
-        if (upper)
+        if(upper)
         {
             /* Update and scale A12 */
-            ctrsm_("L", "U", "C", "N", &n1, &n2, &c_b1, &a[a_dim1 + 1], lda, & a[(n1 + 1) * a_dim1 + 1], lda);
+            ctrsm_("L", "U", "C", "N", &n1, &n2, &c_b1, &a[a_dim1 + 1], lda,
+                   &a[(n1 + 1) * a_dim1 + 1], lda);
             /* Update and factor A22 */
-            cherk_(uplo, "C", &n2, &n1, &c_b11, &a[(n1 + 1) * a_dim1 + 1], lda, &c_b12, &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
+            cherk_(uplo, "C", &n2, &n1, &c_b11, &a[(n1 + 1) * a_dim1 + 1], lda, &c_b12,
+                   &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
             cpotrf2_(uplo, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &iinfo);
-            if (iinfo != 0)
+            if(iinfo != 0)
             {
                 *info = iinfo + n1;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
             /* Compute the Cholesky factorization A = L*L**H */
         }
         else
         {
             /* Update and scale A21 */
-            ctrsm_("R", "L", "C", "N", &n2, &n1, &c_b1, &a[a_dim1 + 1], lda, & a[n1 + 1 + a_dim1], lda);
+            ctrsm_("R", "L", "C", "N", &n2, &n1, &c_b1, &a[a_dim1 + 1], lda, &a[n1 + 1 + a_dim1],
+                   lda);
             /* Update and factor A22 */
-            cherk_(uplo, "N", &n2, &n1, &c_b11, &a[n1 + 1 + a_dim1], lda, & c_b12, &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
+            cherk_(uplo, "N", &n2, &n1, &c_b11, &a[n1 + 1 + a_dim1], lda, &c_b12,
+                   &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
             cpotrf2_(uplo, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &iinfo);
-            if (iinfo != 0)
+            if(iinfo != 0)
             {
                 *info = iinfo + n1;
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                return 0;
+                return;
             }
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CPOTRF2 */
 }
 /* cpotrf2_ */

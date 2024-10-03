@@ -1,5 +1,8 @@
-/* dlatsqr.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dlatsqr.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__0 = 0;
 /* > \brief \b DLATSQR */
@@ -29,7 +32,7 @@ static integer c__0 = 0;
 /* > Q is a M-by-M orthogonal matrix, stored on exit in an implicit */
 /* > form in the elements below the diagonal of the array A and in */
 /* > the elements of the array T;
-*/
+ */
 /* > */
 /* > R is an upper-triangular N-by-N matrix, stored on exit in */
 /* > the elements on and above the diagonal of the array A. */
@@ -71,7 +74,7 @@ static integer c__0 = 0;
 /* > On entry, the M-by-N matrix A. */
 /* > On exit, the elements on and above the diagonal */
 /* > of the array contain the N-by-N upper triangular matrix R;
-*/
+ */
 /* > the elements below the diagonal represent Q by the columns */
 /* > of blocked V (see Further Details). */
 /* > \endverbatim */
@@ -159,16 +162,26 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int dlatsqr_(integer *m, integer *n, integer *mb, integer * nb, doublereal *a, integer *lda, doublereal *t, integer *ldt, doublereal *work, integer *lwork, integer *info)
+void dlatsqr_(integer *m, integer *n, integer *mb, integer *nb, doublereal *a, integer *lda,
+              doublereal *t, integer *ldt, doublereal *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlatsqr inputs: m %" FLA_IS ", n %" FLA_IS ", mb %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS ", lwork %" FLA_IS "",*m, *n, *mb, *nb, *lda, *ldt, *lwork);
+    AOCL_DTL_SNPRINTF("dlatsqr inputs: m %" FLA_IS ", n %" FLA_IS ", mb %" FLA_IS ", nb %" FLA_IS
+                      ", lda %" FLA_IS ", ldt %" FLA_IS ", lwork %" FLA_IS "",
+                      *m, *n, *mb, *nb, *lda, *ldt, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3;
     /* Local variables */
     integer i__, ii, kk, ctr;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len), dgeqrt_( integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dtpqrt_( integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern /* Subroutine */
+        void
+        dgeqrt_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *,
+                doublereal *, integer *),
+        dtpqrt_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *,
+                integer *, doublereal *, integer *, doublereal *, integer *);
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -198,87 +211,87 @@ int dlatsqr_(integer *m, integer *n, integer *mb, integer * nb, doublereal *a, i
     /* Function Body */
     *info = 0;
     lquery = *lwork == -1;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0 || *m < *n)
+    else if(*n < 0 || *m < *n)
     {
         *info = -2;
     }
-    else if (*mb < 1)
+    else if(*mb < 1)
     {
         *info = -3;
     }
-    else if (*nb < 1 || *nb > *n && *n > 0)
+    else if(*nb < 1 || *nb > *n && *n > 0)
     {
         *info = -4;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -6;
     }
-    else if (*ldt < *nb)
+    else if(*ldt < *nb)
     {
         *info = -8;
     }
-    else if (*lwork < *n * *nb && ! lquery)
+    else if(*lwork < *n * *nb && !lquery)
     {
         *info = -10;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        work[1] = (doublereal) (*nb * *n);
+        work[1] = (doublereal)(*nb * *n);
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DLATSQR", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (fla_min(*m,*n) == 0)
+    if(fla_min(*m, *n) == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* The QR Decomposition */
-    if (*mb <= *n || *mb >= *m)
+    if(*mb <= *n || *mb >= *m)
     {
         dgeqrt_(m, n, nb, &a[a_offset], lda, &t[t_offset], ldt, &work[1], info);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     kk = (*m - *n) % (*mb - *n);
     ii = *m - kk + 1;
     /* Compute the QR factorization of the first block A(1:MB,1:N) */
-    dgeqrt_(mb, n, nb, &a[a_dim1 + 1], lda, &t[t_offset], ldt, &work[1], info) ;
+    dgeqrt_(mb, n, nb, &a[a_dim1 + 1], lda, &t[t_offset], ldt, &work[1], info);
     ctr = 1;
     i__1 = ii - *mb + *n;
     i__2 = *mb - *n;
-    for (i__ = *mb + 1;
-            i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
-            i__ += i__2)
+    for(i__ = *mb + 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
     {
         /* Compute the QR factorization of the current block A(I:I+MB-N,1:N) */
         i__3 = *mb - *n;
-        dtpqrt_(&i__3, n, &c__0, nb, &a[a_dim1 + 1], lda, &a[i__ + a_dim1], lda, &t[(ctr * *n + 1) * t_dim1 + 1], ldt, &work[1], info);
+        dtpqrt_(&i__3, n, &c__0, nb, &a[a_dim1 + 1], lda, &a[i__ + a_dim1], lda,
+                &t[(ctr * *n + 1) * t_dim1 + 1], ldt, &work[1], info);
         ++ctr;
     }
     /* Compute the QR factorization of the last block A(II:M,1:N) */
-    if (ii <= *m)
+    if(ii <= *m)
     {
-        dtpqrt_(&kk, n, &c__0, nb, &a[a_dim1 + 1], lda, &a[ii + a_dim1], lda, &t[(ctr * *n + 1) * t_dim1 + 1], ldt, &work[1], info);
+        dtpqrt_(&kk, n, &c__0, nb, &a[a_dim1 + 1], lda, &a[ii + a_dim1], lda,
+                &t[(ctr * *n + 1) * t_dim1 + 1], ldt, &work[1], info);
     }
-    work[1] = (doublereal) (*n * *nb);
+    work[1] = (doublereal)(*n * *nb);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLATSQR */
 }
 /* dlatsqr_ */

@@ -1,16 +1,25 @@
-/* ../netlib/dlaln2.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlaln2.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLALN2 solves a 1-by-1 or 2-by-2 linear system of equations of the specified form. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLALN2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaln2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaln2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaln2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaln2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaln2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaln2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -203,27 +212,20 @@
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doublereal *ca, doublereal *a, integer *lda, doublereal *d1, doublereal *d2, doublereal *b, integer *ldb, doublereal *wr, doublereal *wi, doublereal *x, integer *ldx, doublereal *scale, doublereal *xnorm, integer *info)
+void dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doublereal *ca,
+             doublereal *a, integer *lda, doublereal *d1, doublereal *d2, doublereal *b,
+             integer *ldb, doublereal *wr, doublereal *wi, doublereal *x, integer *ldx,
+             doublereal *scale, doublereal *xnorm, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaln2 inputs: na %" FLA_IS ", nw %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",*na, *nw, *lda, *ldb, *ldx);
+    AOCL_DTL_SNPRINTF("dlaln2 inputs: na %" FLA_IS ", nw %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS
+                      ", ldx %" FLA_IS "",
+                      *na, *nw, *lda, *ldb, *ldx);
     /* Initialized data */
-    logical zswap[4] =
-    {
-        FALSE_,FALSE_,TRUE_,TRUE_
-    }
-    ;
-    logical rswap[4] =
-    {
-        FALSE_,TRUE_,FALSE_,TRUE_
-    }
-    ;
+    logical zswap[4] = {FALSE_, FALSE_, TRUE_, TRUE_};
+    logical rswap[4] = {FALSE_, TRUE_, FALSE_, TRUE_};
     integer ipivot[16] /* was [4][4] */
-    =
-    {
-        1,2,3,4,2,1,4,3,3,4,1,2, 4,3,2,1
-    }
-    ;
+        = {1, 2, 3, 4, 2, 1, 4, 3, 3, 4, 1, 2, 4, 3, 2, 1};
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, x_dim1, x_offset;
     doublereal d__1, d__2, d__3, d__4, d__5, d__6;
@@ -232,7 +234,8 @@ int dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doubler
     integer j;
 #define ci (equiv_0)
 #define cr (equiv_1)
-    doublereal bi1, bi2, br1, br2, xi1, xi2, xr1, xr2, ci21, ci22, cr21, cr22, li21, csi, ui11, lr21, ui12, ui22;
+    doublereal bi1, bi2, br1, br2, xi1, xi2, xr1, xr2, ci21, ci22, cr21, cr22, li21, csi, ui11,
+        lr21, ui12, ui22;
 #define civ (equiv_0)
     doublereal csr, ur11, ur12, ur22;
 #define crv (equiv_1)
@@ -241,7 +244,8 @@ int dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doubler
     doublereal bnorm, cnorm, smini;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int dladiv_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dladiv_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal bignum, smlnum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -283,22 +287,22 @@ int dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doubler
     /* Compute BIGNUM */
     smlnum = 2. * dlamch_("Safe minimum");
     bignum = 1. / smlnum;
-    smini = fla_max(*smin,smlnum);
+    smini = fla_max(*smin, smlnum);
     /* Don't check for input errors */
     *info = 0;
     /* Standard Initializations */
     *scale = 1.;
-    if (*na == 1)
+    if(*na == 1)
     {
         /* 1 x 1 (i.e., scalar) system C X = B */
-        if (*nw == 1)
+        if(*nw == 1)
         {
             /* Real 1x1 system. */
             /* C = ca A - w D */
             csr = *ca * a[a_dim1 + 1] - *wr * *d1;
             cnorm = f2c_dabs(csr);
             /* If | C | < SMINI, use C = SMINI */
-            if (cnorm < smini)
+            if(cnorm < smini)
             {
                 csr = smini;
                 cnorm = smini;
@@ -306,9 +310,9 @@ int dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doubler
             }
             /* Check scaling for X = B / C */
             bnorm = (d__1 = b[b_dim1 + 1], f2c_dabs(d__1));
-            if (cnorm < 1. && bnorm > 1.)
+            if(cnorm < 1. && bnorm > 1.)
             {
-                if (bnorm > bignum * cnorm)
+                if(bnorm > bignum * cnorm)
                 {
                     *scale = 1. / bnorm;
                 }
@@ -325,7 +329,7 @@ int dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doubler
             csi = -(*wi) * *d1;
             cnorm = f2c_dabs(csr) + f2c_dabs(csi);
             /* If | C | < SMINI, use C = SMINI */
-            if (cnorm < smini)
+            if(cnorm < smini)
             {
                 csr = smini;
                 csi = 0.;
@@ -333,10 +337,11 @@ int dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doubler
                 *info = 1;
             }
             /* Check scaling for X = B / C */
-            bnorm = (d__1 = b[b_dim1 + 1], f2c_dabs(d__1)) + (d__2 = b[(b_dim1 << 1) + 1], f2c_dabs(d__2));
-            if (cnorm < 1. && bnorm > 1.)
+            bnorm = (d__1 = b[b_dim1 + 1], f2c_dabs(d__1))
+                    + (d__2 = b[(b_dim1 << 1) + 1], f2c_dabs(d__2));
+            if(cnorm < 1. && bnorm > 1.)
             {
-                if (bnorm > bignum * cnorm)
+                if(bnorm > bignum * cnorm)
                 {
                     *scale = 1. / bnorm;
                 }
@@ -345,7 +350,8 @@ int dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doubler
             d__1 = *scale * b[b_dim1 + 1];
             d__2 = *scale * b[(b_dim1 << 1) + 1];
             dladiv_(&d__1, &d__2, &csr, &csi, &x[x_dim1 + 1], &x[(x_dim1 << 1) + 1]);
-            *xnorm = (d__1 = x[x_dim1 + 1], f2c_dabs(d__1)) + (d__2 = x[(x_dim1 << 1) + 1], f2c_dabs(d__2));
+            *xnorm = (d__1 = x[x_dim1 + 1], f2c_dabs(d__1))
+                     + (d__2 = x[(x_dim1 << 1) + 1], f2c_dabs(d__2));
         }
     }
     else
@@ -354,7 +360,7 @@ int dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doubler
         /* Compute the real part of C = ca A - w D (or ca A**T - w D ) */
         cr[0] = *ca * a[a_dim1 + 1] - *wr * *d1;
         cr[3] = *ca * a[(a_dim1 << 1) + 2] - *wr * *d2;
-        if (*ltrans)
+        if(*ltrans)
         {
             cr[2] = *ca * a[a_dim1 + 2];
             cr[1] = *ca * a[(a_dim1 << 1) + 1];
@@ -364,17 +370,15 @@ int dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doubler
             cr[1] = *ca * a[a_dim1 + 2];
             cr[2] = *ca * a[(a_dim1 << 1) + 1];
         }
-        if (*nw == 1)
+        if(*nw == 1)
         {
             /* Real 2x2 system (w is real) */
             /* Find the largest element in C */
             cmax = 0.;
             icmax = 0;
-            for (j = 1;
-                    j <= 4;
-                    ++j)
+            for(j = 1; j <= 4; ++j)
             {
-                if ((d__1 = crv[j - 1], f2c_dabs(d__1)) > cmax)
+                if((d__1 = crv[j - 1], f2c_dabs(d__1)) > cmax)
                 {
                     cmax = (d__1 = crv[j - 1], f2c_dabs(d__1));
                     icmax = j;
@@ -382,15 +386,15 @@ int dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doubler
                 /* L10: */
             }
             /* If norm(C) < SMINI, use SMINI*identity. */
-            if (cmax < smini)
+            if(cmax < smini)
             {
                 /* Computing MAX */
                 d__3 = (d__1 = b[b_dim1 + 1], f2c_dabs(d__1));
-                d__4 = (d__2 = b[ b_dim1 + 2], f2c_dabs(d__2)); // , expr subst
-                bnorm = fla_max(d__3,d__4);
-                if (smini < 1. && bnorm > 1.)
+                d__4 = (d__2 = b[b_dim1 + 2], f2c_dabs(d__2)); // , expr subst
+                bnorm = fla_max(d__3, d__4);
+                if(smini < 1. && bnorm > 1.)
                 {
-                    if (bnorm > bignum * smini)
+                    if(bnorm > bignum * smini)
                     {
                         *scale = 1. / bnorm;
                     }
@@ -401,7 +405,7 @@ int dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doubler
                 *xnorm = temp * bnorm;
                 *info = 1;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* Gaussian elimination with complete pivoting. */
             ur11 = crv[icmax - 1];
@@ -412,12 +416,12 @@ int dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doubler
             lr21 = ur11r * cr21;
             ur22 = cr22 - ur12 * lr21;
             /* If smaller pivot < SMINI, use SMINI */
-            if (f2c_dabs(ur22) < smini)
+            if(f2c_dabs(ur22) < smini)
             {
                 ur22 = smini;
                 *info = 1;
             }
-            if (rswap[icmax - 1])
+            if(rswap[icmax - 1])
             {
                 br1 = b[b_dim1 + 2];
                 br2 = b[b_dim1 + 1];
@@ -431,17 +435,17 @@ int dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doubler
             /* Computing MAX */
             d__2 = (d__1 = br1 * (ur22 * ur11r), f2c_dabs(d__1));
             d__3 = f2c_dabs(br2); // , expr subst
-            bbnd = fla_max(d__2,d__3);
-            if (bbnd > 1. && f2c_dabs(ur22) < 1.)
+            bbnd = fla_max(d__2, d__3);
+            if(bbnd > 1. && f2c_dabs(ur22) < 1.)
             {
-                if (bbnd >= bignum * f2c_dabs(ur22))
+                if(bbnd >= bignum * f2c_dabs(ur22))
                 {
                     *scale = 1. / bbnd;
                 }
             }
             xr2 = br2 * *scale / ur22;
             xr1 = *scale * br1 * ur11r - xr2 * (ur11r * ur12);
-            if (zswap[icmax - 1])
+            if(zswap[icmax - 1])
             {
                 x[x_dim1 + 1] = xr2;
                 x[x_dim1 + 2] = xr1;
@@ -454,11 +458,11 @@ int dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doubler
             /* Computing MAX */
             d__1 = f2c_dabs(xr1);
             d__2 = f2c_dabs(xr2); // , expr subst
-            *xnorm = fla_max(d__1,d__2);
+            *xnorm = fla_max(d__1, d__2);
             /* Further scaling if norm(A) norm(X) > overflow */
-            if (*xnorm > 1. && cmax > 1.)
+            if(*xnorm > 1. && cmax > 1.)
             {
-                if (*xnorm > bignum / cmax)
+                if(*xnorm > bignum / cmax)
                 {
                     temp = cmax / bignum;
                     x[x_dim1 + 1] = temp * x[x_dim1 + 1];
@@ -478,27 +482,28 @@ int dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doubler
             ci[3] = -(*wi) * *d2;
             cmax = 0.;
             icmax = 0;
-            for (j = 1;
-                    j <= 4;
-                    ++j)
+            for(j = 1; j <= 4; ++j)
             {
-                if ((d__1 = crv[j - 1], f2c_dabs(d__1)) + (d__2 = civ[j - 1], f2c_dabs( d__2)) > cmax)
+                if((d__1 = crv[j - 1], f2c_dabs(d__1)) + (d__2 = civ[j - 1], f2c_dabs(d__2)) > cmax)
                 {
-                    cmax = (d__1 = crv[j - 1], f2c_dabs(d__1)) + (d__2 = civ[j - 1], f2c_dabs(d__2));
+                    cmax
+                        = (d__1 = crv[j - 1], f2c_dabs(d__1)) + (d__2 = civ[j - 1], f2c_dabs(d__2));
                     icmax = j;
                 }
                 /* L20: */
             }
             /* If norm(C) < SMINI, use SMINI*identity. */
-            if (cmax < smini)
+            if(cmax < smini)
             {
                 /* Computing MAX */
-                d__5 = (d__1 = b[b_dim1 + 1], f2c_dabs(d__1)) + (d__2 = b[(b_dim1 << 1) + 1], f2c_dabs(d__2));
-                d__6 = (d__3 = b[b_dim1 + 2], f2c_dabs(d__3)) + (d__4 = b[(b_dim1 << 1) + 2], f2c_dabs(d__4)); // , expr subst
-                bnorm = fla_max(d__5,d__6);
-                if (smini < 1. && bnorm > 1.)
+                d__5 = (d__1 = b[b_dim1 + 1], f2c_dabs(d__1))
+                       + (d__2 = b[(b_dim1 << 1) + 1], f2c_dabs(d__2));
+                d__6 = (d__3 = b[b_dim1 + 2], f2c_dabs(d__3))
+                       + (d__4 = b[(b_dim1 << 1) + 2], f2c_dabs(d__4)); // , expr subst
+                bnorm = fla_max(d__5, d__6);
+                if(smini < 1. && bnorm > 1.)
                 {
-                    if (bnorm > bignum * smini)
+                    if(bnorm > bignum * smini)
                     {
                         *scale = 1. / bnorm;
                     }
@@ -511,7 +516,7 @@ int dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doubler
                 *xnorm = temp * bnorm;
                 *info = 1;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
             /* Gaussian elimination with complete pivoting. */
             ur11 = crv[icmax - 1];
@@ -522,10 +527,10 @@ int dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doubler
             ui12 = civ[ipivot[(icmax << 2) - 2] - 1];
             cr22 = crv[ipivot[(icmax << 2) - 1] - 1];
             ci22 = civ[ipivot[(icmax << 2) - 1] - 1];
-            if (icmax == 1 || icmax == 4)
+            if(icmax == 1 || icmax == 4)
             {
                 /* Code when off-diagonals of pivoted C are real */
-                if (f2c_dabs(ur11) > f2c_dabs(ui11))
+                if(f2c_dabs(ur11) > f2c_dabs(ui11))
                 {
                     temp = ui11 / ur11;
                     /* Computing 2nd power */
@@ -562,13 +567,13 @@ int dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doubler
             }
             u22abs = f2c_dabs(ur22) + f2c_dabs(ui22);
             /* If smaller pivot < SMINI, use SMINI */
-            if (u22abs < smini)
+            if(u22abs < smini)
             {
                 ur22 = smini;
                 ui22 = 0.;
                 *info = 1;
             }
-            if (rswap[icmax - 1])
+            if(rswap[icmax - 1])
             {
                 br2 = b[b_dim1 + 1];
                 br1 = b[b_dim1 + 2];
@@ -585,12 +590,12 @@ int dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doubler
             br2 = br2 - lr21 * br1 + li21 * bi1;
             bi2 = bi2 - li21 * br1 - lr21 * bi1;
             /* Computing MAX */
-            d__1 = (f2c_dabs(br1) + f2c_dabs(bi1)) * (u22abs * (f2c_dabs(ur11r) + f2c_dabs(ui11r)) );
+            d__1 = (f2c_dabs(br1) + f2c_dabs(bi1)) * (u22abs * (f2c_dabs(ur11r) + f2c_dabs(ui11r)));
             d__2 = f2c_dabs(br2) + f2c_dabs(bi2); // , expr subst
-            bbnd = fla_max(d__1,d__2);
-            if (bbnd > 1. && u22abs < 1.)
+            bbnd = fla_max(d__1, d__2);
+            if(bbnd > 1. && u22abs < 1.)
             {
-                if (bbnd >= bignum * u22abs)
+                if(bbnd >= bignum * u22abs)
                 {
                     *scale = 1. / bbnd;
                     br1 = *scale * br1;
@@ -602,7 +607,7 @@ int dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doubler
             dladiv_(&br2, &bi2, &ur22, &ui22, &xr2, &xi2);
             xr1 = ur11r * br1 - ui11r * bi1 - ur12s * xr2 + ui12s * xi2;
             xi1 = ui11r * br1 + ur11r * bi1 - ui12s * xr2 - ur12s * xi2;
-            if (zswap[icmax - 1])
+            if(zswap[icmax - 1])
             {
                 x[x_dim1 + 1] = xr2;
                 x[x_dim1 + 2] = xr1;
@@ -619,11 +624,11 @@ int dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doubler
             /* Computing MAX */
             d__1 = f2c_dabs(xr1) + f2c_dabs(xi1);
             d__2 = f2c_dabs(xr2) + f2c_dabs(xi2); // , expr subst
-            *xnorm = fla_max(d__1,d__2);
+            *xnorm = fla_max(d__1, d__2);
             /* Further scaling if norm(A) norm(X) > overflow */
-            if (*xnorm > 1. && cmax > 1.)
+            if(*xnorm > 1. && cmax > 1.)
             {
-                if (*xnorm > bignum / cmax)
+                if(*xnorm > bignum / cmax)
                 {
                     temp = cmax / bignum;
                     x[x_dim1 + 1] = temp * x[x_dim1 + 1];
@@ -637,7 +642,7 @@ int dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doubler
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLALN2 */
 }
 /* dlaln2_ */

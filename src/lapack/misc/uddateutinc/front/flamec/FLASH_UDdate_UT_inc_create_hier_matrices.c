@@ -10,13 +10,13 @@
 
 #include "FLAME.h"
 
-FLA_Error FLASH_UDdate_UT_inc_create_hier_matrices( FLA_Obj R_flat, FLA_Obj C_flat, FLA_Obj D_flat, dim_t depth, dim_t* b_flash, dim_t b_alg, FLA_Obj* R, FLA_Obj* C, FLA_Obj* D, FLA_Obj* T, FLA_Obj* W )
+FLA_Error FLASH_UDdate_UT_inc_create_hier_matrices( FLA_Obj R_flat, FLA_Obj C_flat, FLA_Obj D_flat, fla_dim_t depth, fla_dim_t* b_flash, fla_dim_t b_alg, FLA_Obj* R, FLA_Obj* C, FLA_Obj* D, FLA_Obj* T, FLA_Obj* W )
 {
 	FLA_Datatype datatype;
-	dim_t        m_T, n_T;
-	dim_t        m_W, n_W;
-	dim_t        m_C;
-	dim_t        m_D;
+	fla_dim_t        m_T, n_T;
+	fla_dim_t        m_W, n_W;
+	fla_dim_t        m_C;
+	fla_dim_t        m_D;
 	
 	// *** The current UDdate_UT_inc algorithm implemented assumes that
 	// the matrix has a hierarchical depth of 1. We check for that here
@@ -77,17 +77,17 @@ FLA_Error FLASH_UDdate_UT_inc_create_hier_matrices( FLA_Obj R_flat, FLA_Obj C_fl
 }
 
 
-dim_t FLASH_UDdate_UT_inc_determine_alg_blocksize( FLA_Obj R )
+fla_dim_t FLASH_UDdate_UT_inc_determine_alg_blocksize( FLA_Obj R )
 {
-	dim_t b_alg;
-	dim_t b_flash;
+	fla_dim_t b_alg;
+	fla_dim_t b_flash;
 
 	// Acquire the storage blocksize.
 	b_flash = FLA_Obj_length( *FLASH_OBJ_PTR_AT( R ) );
 
 	// Scale the storage blocksize by a pre-defined scalar to arrive at a
 	// reasonable algorithmic blocksize, but make sure it's at least 1.
-	b_alg = ( dim_t ) fla_max( ( double ) b_flash * FLA_UDDATE_INNER_TO_OUTER_B_RATIO, 1 );
+	b_alg = ( fla_dim_t ) fla_max( ( double ) b_flash * FLA_UDDATE_INNER_TO_OUTER_B_RATIO, 1 );
 
 	return b_alg;
 }

@@ -1,20 +1,31 @@
-/* ../netlib/stpqrt2.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/stpqrt2.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static real c_b5 = 1.f;
 static real c_b17 = 0.f;
-/* > \brief \b STPQRT2 computes a QR factorization of a real or complex "triangular-pentagonal" matrix, which is composed of a triangular block and a pentagonal block, using the compact WY representation for Q. */
+/* > \brief \b STPQRT2 computes a QR factorization of a real or complex "triangular-pentagonal"
+ * matrix, which is composed of a triangular block and a pentagonal block, using the compact WY
+ * representation for Q. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download STPQRT2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stpqrt2 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stpqrt2
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stpqrt2 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stpqrt2
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stpqrt2 .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stpqrt2
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -165,12 +176,16 @@ that is, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int stpqrt2_(integer *m, integer *n, integer *l, real *a, integer *lda, real *b, integer *ldb, real *t, integer *ldt, integer * info)
+void stpqrt2_(integer *m, integer *n, integer *l, real *a, integer *lda, real *b, integer *ldb,
+              real *t, integer *ldt, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"stpqrt2 inputs: m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldt %" FLA_IS "",*m, *n, *l, *lda, *ldb, *ldt);
+    snprintf(buffer, 256,
+             "stpqrt2 inputs: m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS
+             ", ldb %" FLA_IS ", ldt %" FLA_IS "",
+             *m, *n, *l, *lda, *ldb, *ldt);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -178,10 +193,17 @@ int stpqrt2_(integer *m, integer *n, integer *l, real *a, integer *lda, real *b,
     /* Local variables */
     integer i__, j, p, mp, np;
     extern /* Subroutine */
-    int sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
+        void
+        sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+              integer *);
     real alpha;
     extern /* Subroutine */
-    int sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *), strmv_(char *, char *, char *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
+        void
+        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
+               real *, integer *),
+        strmv_(char *, char *, char *, integer *, real *, integer *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -213,116 +235,108 @@ int stpqrt2_(integer *m, integer *n, integer *l, real *a, integer *lda, real *b,
     t -= t_offset;
     /* Function Body */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*l < 0 || *l > fla_min(*m,*n))
+    else if(*l < 0 || *l > fla_min(*m, *n))
     {
         *info = -3;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*ldb < fla_max(1,*m))
+    else if(*ldb < fla_max(1, *m))
     {
         *info = -7;
     }
-    else if (*ldt < fla_max(1,*n))
+    else if(*ldt < fla_max(1, *n))
     {
         *info = -9;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("STPQRT2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*n == 0 || *m == 0)
+    if(*n == 0 || *m == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* Generate elementary reflector H(I) to annihilate B(:,I) */
-        p = *m - *l + fla_min(*l,i__);
+        p = *m - *l + fla_min(*l, i__);
         i__2 = p + 1;
-        slarfg_(&i__2, &a[i__ + i__ * a_dim1], &b[i__ * b_dim1 + 1], &c__1, & t[i__ + t_dim1]);
-        if (i__ < *n)
+        slarfg_(&i__2, &a[i__ + i__ * a_dim1], &b[i__ * b_dim1 + 1], &c__1, &t[i__ + t_dim1]);
+        if(i__ < *n)
         {
             /* W(1:N-I) := C(I:M,I+1:N)^H * C(I:M,I) [use W = T(:,N)] */
             i__2 = *n - i__;
-            for (j = 1;
-                    j <= i__2;
-                    ++j)
+            for(j = 1; j <= i__2; ++j)
             {
                 t[j + *n * t_dim1] = a[i__ + (i__ + j) * a_dim1];
             }
             i__2 = *n - i__;
-            sgemv_("T", &p, &i__2, &c_b5, &b[(i__ + 1) * b_dim1 + 1], ldb, &b[ i__ * b_dim1 + 1], &c__1, &c_b5, &t[*n * t_dim1 + 1], & c__1);
+            sgemv_("T", &p, &i__2, &c_b5, &b[(i__ + 1) * b_dim1 + 1], ldb, &b[i__ * b_dim1 + 1],
+                   &c__1, &c_b5, &t[*n * t_dim1 + 1], &c__1);
             /* C(I:M,I+1:N) = C(I:m,I+1:N) + alpha*C(I:M,I)*W(1:N-1)^H */
             alpha = -t[i__ + t_dim1];
             i__2 = *n - i__;
-            for (j = 1;
-                    j <= i__2;
-                    ++j)
+            for(j = 1; j <= i__2; ++j)
             {
                 a[i__ + (i__ + j) * a_dim1] += alpha * t[j + *n * t_dim1];
             }
             i__2 = *n - i__;
-            sger_(&p, &i__2, &alpha, &b[i__ * b_dim1 + 1], &c__1, &t[*n * t_dim1 + 1], &c__1, &b[(i__ + 1) * b_dim1 + 1], ldb);
+            sger_(&p, &i__2, &alpha, &b[i__ * b_dim1 + 1], &c__1, &t[*n * t_dim1 + 1], &c__1,
+                  &b[(i__ + 1) * b_dim1 + 1], ldb);
         }
     }
     i__1 = *n;
-    for (i__ = 2;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 2; i__ <= i__1; ++i__)
     {
         /* T(1:I-1,I) := C(I:M,1:I-1)^H * (alpha * C(I:M,I)) */
         alpha = -t[i__ + t_dim1];
         i__2 = i__ - 1;
-        for (j = 1;
-                j <= i__2;
-                ++j)
+        for(j = 1; j <= i__2; ++j)
         {
             t[j + i__ * t_dim1] = 0.f;
         }
         /* Computing MIN */
         i__2 = i__ - 1;
-        p = fla_min(i__2,*l);
+        p = fla_min(i__2, *l);
         /* Computing MIN */
         i__2 = *m - *l + 1;
-        mp = fla_min(i__2,*m);
+        mp = fla_min(i__2, *m);
         /* Computing MIN */
         i__2 = p + 1;
-        np = fla_min(i__2,*n);
+        np = fla_min(i__2, *n);
         /* Triangular part of B2 */
         i__2 = p;
-        for (j = 1;
-                j <= i__2;
-                ++j)
+        for(j = 1; j <= i__2; ++j)
         {
             t[j + i__ * t_dim1] = alpha * b[*m - *l + j + i__ * b_dim1];
         }
         strmv_("U", "T", "N", &p, &b[mp + b_dim1], ldb, &t[i__ * t_dim1 + 1], &c__1);
         /* Rectangular part of B2 */
         i__2 = i__ - 1 - p;
-        sgemv_("T", l, &i__2, &alpha, &b[mp + np * b_dim1], ldb, &b[mp + i__ * b_dim1], &c__1, &c_b17, &t[np + i__ * t_dim1], &c__1);
+        sgemv_("T", l, &i__2, &alpha, &b[mp + np * b_dim1], ldb, &b[mp + i__ * b_dim1], &c__1,
+               &c_b17, &t[np + i__ * t_dim1], &c__1);
         /* B1 */
         i__2 = *m - *l;
         i__3 = i__ - 1;
-        sgemv_("T", &i__2, &i__3, &alpha, &b[b_offset], ldb, &b[i__ * b_dim1 + 1], &c__1, &c_b5, &t[i__ * t_dim1 + 1], &c__1);
+        sgemv_("T", &i__2, &i__3, &alpha, &b[b_offset], ldb, &b[i__ * b_dim1 + 1], &c__1, &c_b5,
+               &t[i__ * t_dim1 + 1], &c__1);
         /* T(1:I-1,I) := T(1:I-1,1:I-1) * T(1:I-1,I) */
         i__2 = i__ - 1;
         strmv_("U", "N", "N", &i__2, &t[t_offset], ldt, &t[i__ * t_dim1 + 1], &c__1);
@@ -332,7 +346,6 @@ int stpqrt2_(integer *m, integer *n, integer *l, real *a, integer *lda, real *b,
     }
     /* End of STPQRT2 */
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
 }
 /* stpqrt2_ */
-

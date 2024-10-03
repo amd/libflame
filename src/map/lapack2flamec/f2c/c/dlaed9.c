@@ -1,18 +1,28 @@
-/* ../netlib/dlaed9.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlaed9.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b DLAED9 used by sstedc. Finds the roots of the secular equation and updates the eigenvectors. Us ed when the original matrix is dense. */
+/* > \brief \b DLAED9 used by sstedc. Finds the roots of the secular equation and updates the
+ * eigenvectors. Us ed when the original matrix is dense. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLAED9 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaed9. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaed9.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaed9. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaed9.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaed9. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaed9.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -142,10 +152,14 @@ static integer c__1 = 1;
 /* > at Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-int dlaed9_(integer *k, integer *kstart, integer *kstop, integer *n, doublereal *d__, doublereal *q, integer *ldq, doublereal * rho, doublereal *dlamda, doublereal *w, doublereal *s, integer *lds, integer *info)
+void dlaed9_(integer *k, integer *kstart, integer *kstop, integer *n, doublereal *d__,
+             doublereal *q, integer *ldq, doublereal *rho, doublereal *dlamda, doublereal *w,
+             doublereal *s, integer *lds, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaed9 inputs: k %" FLA_IS ", kstart %" FLA_IS ", kstop %" FLA_IS ", n %" FLA_IS ", ldq %" FLA_IS ", lds %" FLA_IS "",*k, *kstart, *kstop, *n, *ldq, *lds);
+    AOCL_DTL_SNPRINTF("dlaed9 inputs: k %" FLA_IS ", kstart %" FLA_IS ", kstop %" FLA_IS
+                      ", n %" FLA_IS ", ldq %" FLA_IS ", lds %" FLA_IS "",
+                      *k, *kstart, *kstop, *n, *ldq, *lds);
     /* System generated locals */
     integer q_dim1, q_offset, s_dim1, s_offset, i__1, i__2;
     doublereal d__1;
@@ -156,10 +170,14 @@ int dlaed9_(integer *k, integer *kstart, integer *kstop, integer *n, doublereal 
     doublereal temp;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dlaed4_(integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        dlaed4_(integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
+                doublereal *, integer *);
     extern doublereal dlamc3_(doublereal *, doublereal *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -191,42 +209,42 @@ int dlaed9_(integer *k, integer *kstart, integer *kstop, integer *n, doublereal 
     s -= s_offset;
     /* Function Body */
     *info = 0;
-    if (*k < 0)
+    if(*k < 0)
     {
         *info = -1;
     }
-    else if (*kstart < 1 || *kstart > fla_max(1,*k))
+    else if(*kstart < 1 || *kstart > fla_max(1, *k))
     {
         *info = -2;
     }
-    else if (fla_max(1,*kstop) < *kstart || *kstop > fla_max(1,*k))
+    else if(fla_max(1, *kstop) < *kstart || *kstop > fla_max(1, *k))
     {
         *info = -3;
     }
-    else if (*n < *k)
+    else if(*n < *k)
     {
         *info = -4;
     }
-    else if (*ldq < fla_max(1,*k))
+    else if(*ldq < fla_max(1, *k))
     {
         *info = -7;
     }
-    else if (*lds < fla_max(1,*k))
+    else if(*lds < fla_max(1, *k))
     {
         *info = -12;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DLAED9", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*k == 0)
+    if(*k == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Modify values DLAMDA(i) to make sure all DLAMDA(i)-DLAMDA(j) can */
     /* be computed with high relative accuracy (barring over/underflow). */
@@ -246,37 +264,29 @@ int dlaed9_(integer *k, integer *kstart, integer *kstop, integer *n, doublereal 
     /* 2*DLAMBDA(I) to prevent optimizing compilers from eliminating */
     /* this code. */
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         dlamda[i__] = dlamc3_(&dlamda[i__], &dlamda[i__]) - dlamda[i__];
         /* L10: */
     }
     i__1 = *kstop;
-    for (j = *kstart;
-            j <= i__1;
-            ++j)
+    for(j = *kstart; j <= i__1; ++j)
     {
         dlaed4_(k, &j, &dlamda[1], &w[1], &q[j * q_dim1 + 1], rho, &d__[j], info);
         /* If the zero finder fails, the computation is terminated. */
-        if (*info != 0)
+        if(*info != 0)
         {
             goto L120;
         }
         /* L20: */
     }
-    if (*k == 1 || *k == 2)
+    if(*k == 1 || *k == 2)
     {
         i__1 = *k;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = *k;
-            for (j = 1;
-                    j <= i__2;
-                    ++j)
+            for(j = 1; j <= i__2; ++j)
             {
                 s[j + i__ * s_dim1] = q[j + i__ * q_dim1];
                 /* L30: */
@@ -291,22 +301,16 @@ int dlaed9_(integer *k, integer *kstart, integer *kstop, integer *n, doublereal 
     i__1 = *ldq + 1;
     dcopy_(k, &q[q_offset], &i__1, &w[1], &c__1);
     i__1 = *k;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         i__2 = j - 1;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             w[i__] *= q[i__ + j * q_dim1] / (dlamda[i__] - dlamda[j]);
             /* L50: */
         }
         i__2 = *k;
-        for (i__ = j + 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = j + 1; i__ <= i__2; ++i__)
         {
             w[i__] *= q[i__ + j * q_dim1] / (dlamda[i__] - dlamda[j]);
             /* L60: */
@@ -314,9 +318,7 @@ int dlaed9_(integer *k, integer *kstart, integer *kstop, integer *n, doublereal 
         /* L70: */
     }
     i__1 = *k;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         d__1 = sqrt(-w[i__]);
         w[i__] = d_sign(&d__1, &s[i__ + s_dim1]);
@@ -324,23 +326,17 @@ int dlaed9_(integer *k, integer *kstart, integer *kstop, integer *n, doublereal 
     }
     /* Compute eigenvectors of the modified rank-1 modification. */
     i__1 = *k;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         i__2 = *k;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             q[i__ + j * q_dim1] = w[i__] / q[i__ + j * q_dim1];
             /* L90: */
         }
         temp = dnrm2_(k, &q[j * q_dim1 + 1], &c__1);
         i__2 = *k;
-        for (i__ = 1;
-                i__ <= i__2;
-                ++i__)
+        for(i__ = 1; i__ <= i__2; ++i__)
         {
             s[i__ + j * s_dim1] = q[i__ + j * q_dim1] / temp;
             /* L100: */
@@ -349,7 +345,7 @@ int dlaed9_(integer *k, integer *kstart, integer *kstop, integer *n, doublereal 
     }
 L120:
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLAED9 */
 }
 /* dlaed9_ */

@@ -1,16 +1,25 @@
-/* slarnv.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* slarnv.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLARNV returns a vector of random numbers from a uniform or normal distribution. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLARNV + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarnv. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarnv.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarnv. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarnv.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarnv. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarnv.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -83,10 +92,11 @@ the array */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int slarnv_(integer *idist, integer *iseed, integer *n, real *x)
+void slarnv_(integer *idist, integer *iseed, integer *n, real *x)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("slarnv inputs: idist %" FLA_IS ", iseed %" FLA_IS ", n %" FLA_IS "",*idist, *iseed, *n);
+    AOCL_DTL_SNPRINTF("slarnv inputs: idist %" FLA_IS ", iseed %" FLA_IS ", n %" FLA_IS "", *idist,
+                      *iseed, *n);
     /* System generated locals */
     integer i__1, i__2, i__3;
     /* Builtin functions */
@@ -96,7 +106,8 @@ int slarnv_(integer *idist, integer *iseed, integer *n, real *x)
     real u[128];
     integer il, iv, il2;
     extern /* Subroutine */
-    int slaruv_(integer *, integer *, real *);
+        void
+        slaruv_(integer *, integer *, real *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -121,15 +132,13 @@ int slarnv_(integer *idist, integer *iseed, integer *n, real *x)
     --iseed;
     /* Function Body */
     i__1 = *n;
-    for (iv = 1;
-            iv <= i__1;
-            iv += 64)
+    for(iv = 1; iv <= i__1; iv += 64)
     {
         /* Computing MIN */
         i__2 = 64;
         i__3 = *n - iv + 1; // , expr subst
-        il = fla_min(i__2,i__3);
-        if (*idist == 3)
+        il = fla_min(i__2, i__3);
+        if(*idist == 3)
         {
             il2 = il << 1;
         }
@@ -140,46 +149,42 @@ int slarnv_(integer *idist, integer *iseed, integer *n, real *x)
         /* Call SLARUV to generate IL2 numbers from a uniform (0,1) */
         /* distribution (IL2 <= LV) */
         slaruv_(&iseed[1], &il2, u);
-        if (*idist == 1)
+        if(*idist == 1)
         {
             /* Copy generated numbers */
             i__2 = il;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 x[iv + i__ - 1] = u[i__ - 1];
                 /* L10: */
             }
         }
-        else if (*idist == 2)
+        else if(*idist == 2)
         {
             /* Convert generated numbers to uniform (-1,1) distribution */
             i__2 = il;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 x[iv + i__ - 1] = u[i__ - 1] * 2.f - 1.f;
                 /* L20: */
             }
         }
-        else if (*idist == 3)
+        else if(*idist == 3)
         {
             /* Convert generated numbers to normal (0,1) distribution */
             i__2 = il;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
-                x[iv + i__ - 1] = sqrt(log(u[(i__ << 1) - 2]) * -2.f) * cos(u[ (i__ << 1) - 1] * 6.28318530717958647692528676655900576839f);
+                x[iv + i__ - 1]
+                    = sqrt(log(u[(i__ << 1) - 2]) * -2.f)
+                      * cos(u[(i__ << 1) - 1] * 6.28318530717958647692528676655900576839f);
                 /* L30: */
             }
         }
         /* L40: */
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of SLARNV */
 }
 /* slarnv_ */

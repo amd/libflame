@@ -1,16 +1,25 @@
-/* ../netlib/slasq3.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slasq3.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLASQ3 checks for deflation, computes a shift and calls dqds. Used by sbdsqr. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLASQ3 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasq3. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasq3.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasq3. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasq3.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasq3. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasq3.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -166,12 +175,17 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int slasq3_(integer *i0, integer *n0, real *z__, integer *pp, real *dmin__, real *sigma, real *desig, real *qmax, integer *nfail, integer *iter, integer *ndiv, logical *ieee, integer *ttype, real * dmin1, real *dmin2, real *dn, real *dn1, real *dn2, real *g, real * tau)
+void slasq3_(integer *i0, integer *n0, real *z__, integer *pp, real *dmin__, real *sigma,
+             real *desig, real *qmax, integer *nfail, integer *iter, integer *ndiv, logical *ieee,
+             integer *ttype, real *dmin1, real *dmin2, real *dn, real *dn1, real *dn2, real *g,
+             real *tau)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
-    snprintf(buffer, 256,"slasq3 inputs: i0 %d, n0 %d, pp %d, nfail %d, iter %d, ndiv %d, ttype %d",*i0, *n0, *pp, *nfail, *iter, *ndiv, *ttype);
+    snprintf(buffer, 256,
+             "slasq3 inputs: i0 %d, n0 %d, pp %d, nfail %d, iter %d, ndiv %d, ttype %d", *i0, *n0,
+             *pp, *nfail, *iter, *ndiv, *ttype);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
@@ -186,7 +200,13 @@ int slasq3_(integer *i0, integer *n0, real *z__, integer *pp, real *dmin__, real
     integer n0in, ipn4;
     real tol2, temp;
     extern /* Subroutine */
-    int slasq4_(integer *, integer *, real *, integer *, integer *, real *, real *, real *, real *, real *, real *, real *, integer *, real *), slasq5_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *, real *, real *, logical *, real *), slasq6_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *, real *);
+        void
+        slasq4_(integer *, integer *, real *, integer *, integer *, real *, real *, real *, real *,
+                real *, real *, real *, integer *, real *),
+        slasq5_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *,
+                real *, real *, real *, logical *, real *),
+        slasq6_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *,
+                real *);
     extern real slamch_(char *);
     extern logical sisnan_(real *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
@@ -220,22 +240,22 @@ int slasq3_(integer *i0, integer *n0, real *z__, integer *pp, real *dmin__, real
     tol2 = r__1 * r__1;
     /* Check for deflation. */
 L10:
-    if (*n0 < *i0)
+    if(*n0 < *i0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    if (*n0 == *i0)
+    if(*n0 == *i0)
     {
         goto L20;
     }
     nn = (*n0 << 2) + *pp;
-    if (*n0 == *i0 + 1)
+    if(*n0 == *i0 + 1)
     {
         goto L40;
     }
     /* Check whether E(N0-1) is negligible, 1 eigenvalue. */
-    if (z__[nn - 5] > tol2 * (*sigma + z__[nn - 3]) && z__[nn - (*pp << 1) - 4] > tol2 * z__[nn - 7])
+    if(z__[nn - 5] > tol2 * (*sigma + z__[nn - 3]) && z__[nn - (*pp << 1) - 4] > tol2 * z__[nn - 7])
     {
         goto L30;
     }
@@ -245,22 +265,22 @@ L20:
     goto L10;
     /* Check whether E(N0-2) is negligible, 2 eigenvalues. */
 L30:
-    if (z__[nn - 9] > tol2 * *sigma && z__[nn - (*pp << 1) - 8] > tol2 * z__[ nn - 11])
+    if(z__[nn - 9] > tol2 * *sigma && z__[nn - (*pp << 1) - 8] > tol2 * z__[nn - 11])
     {
         goto L50;
     }
 L40:
-    if (z__[nn - 3] > z__[nn - 7])
+    if(z__[nn - 3] > z__[nn - 7])
     {
         s = z__[nn - 3];
         z__[nn - 3] = z__[nn - 7];
         z__[nn - 7] = s;
     }
     t = (z__[nn - 7] - z__[nn - 3] + z__[nn - 5]) * .5f;
-    if (z__[nn - 5] > z__[nn - 3] * tol2 && t != 0.f)
+    if(z__[nn - 5] > z__[nn - 3] * tol2 && t != 0.f)
     {
         s = z__[nn - 3] * (z__[nn - 5] / t);
-        if (s <= t)
+        if(s <= t)
         {
             s = z__[nn - 3] * (z__[nn - 5] / (t * (sqrt(s / t + 1.f) + 1.f)));
         }
@@ -277,20 +297,18 @@ L40:
     *n0 += -2;
     goto L10;
 L50:
-    if (*pp == 2)
+    if(*pp == 2)
     {
         *pp = 0;
     }
     /* Reverse the qd-array, if warranted. */
-    if (*dmin__ <= 0.f || *n0 < n0in)
+    if(*dmin__ <= 0.f || *n0 < n0in)
     {
-        if (z__[(*i0 << 2) + *pp - 3] * 1.5f < z__[(*n0 << 2) + *pp - 3])
+        if(z__[(*i0 << 2) + *pp - 3] * 1.5f < z__[(*n0 << 2) + *pp - 3])
         {
             ipn4 = *i0 + *n0 << 2;
             i__1 = *i0 + *n0 - 1 << 1;
-            for (j4 = *i0 << 2;
-                    j4 <= i__1;
-                    j4 += 4)
+            for(j4 = *i0 << 2; j4 <= i__1; j4 += 4)
             {
                 temp = z__[j4 - 3];
                 z__[j4 - 3] = z__[ipn4 - j4 - 3];
@@ -306,7 +324,7 @@ L50:
                 z__[ipn4 - j4 - 4] = temp;
                 /* L60: */
             }
-            if (*n0 - *i0 <= 4)
+            if(*n0 - *i0 <= 4)
             {
                 z__[(*n0 << 2) + *pp - 1] = z__[(*i0 << 2) + *pp - 1];
                 z__[(*n0 << 2) - *pp] = z__[(*i0 << 2) - *pp];
@@ -314,22 +332,22 @@ L50:
             /* Computing MIN */
             r__1 = *dmin2;
             r__2 = z__[(*n0 << 2) + *pp - 1]; // , expr subst
-            *dmin2 = fla_min(r__1,r__2);
+            *dmin2 = fla_min(r__1, r__2);
             /* Computing MIN */
-            r__1 = z__[(*n0 << 2) + *pp - 1], r__2 = z__[(*i0 << 2) + *pp - 1] ;
-            r__1 = fla_min(r__1,r__2);
+            r__1 = z__[(*n0 << 2) + *pp - 1], r__2 = z__[(*i0 << 2) + *pp - 1];
+            r__1 = fla_min(r__1, r__2);
             r__2 = z__[(*i0 << 2) + *pp + 3]; // ; expr subst
-            z__[(*n0 << 2) + *pp - 1] = fla_min(r__1,r__2);
+            z__[(*n0 << 2) + *pp - 1] = fla_min(r__1, r__2);
             /* Computing MIN */
             r__1 = z__[(*n0 << 2) - *pp], r__2 = z__[(*i0 << 2) - *pp];
-            r__1 = fla_min(r__1,r__2);
+            r__1 = fla_min(r__1, r__2);
             r__2 = z__[(*i0 << 2) - *pp + 4]; // ; expr subst
-            z__[(*n0 << 2) - *pp] = fla_min(r__1,r__2);
+            z__[(*n0 << 2) - *pp] = fla_min(r__1, r__2);
             /* Computing MAX */
             r__1 = *qmax, r__2 = z__[(*i0 << 2) + *pp - 3];
             r__1 = fla_max(r__1, r__2);
             r__2 = z__[(*i0 << 2) + *pp + 1]; // ; expr subst
-            *qmax = fla_max(r__1,r__2);
+            *qmax = fla_max(r__1, r__2);
             *dmin__ = -0.f;
         }
     }
@@ -341,28 +359,29 @@ L70:
     *ndiv += *n0 - *i0 + 2;
     ++(*iter);
     /* Check status. */
-    if (*dmin__ >= 0.f && *dmin1 >= 0.f)
+    if(*dmin__ >= 0.f && *dmin1 >= 0.f)
     {
         /* Success. */
         goto L90;
     }
-    else if (*dmin__ < 0.f && *dmin1 > 0.f && z__[(*n0 - 1 << 2) - *pp] < tol * (*sigma + *dn1) && f2c_abs(*dn) < tol * *sigma)
+    else if(*dmin__ < 0.f && *dmin1 > 0.f && z__[(*n0 - 1 << 2) - *pp] < tol * (*sigma + *dn1)
+            && f2c_abs(*dn) < tol * *sigma)
     {
         /* Convergence hidden by negative DN. */
         z__[(*n0 - 1 << 2) - *pp + 2] = 0.f;
         *dmin__ = 0.f;
         goto L90;
     }
-    else if (*dmin__ < 0.f)
+    else if(*dmin__ < 0.f)
     {
         /* TAU too big. Select new TAU and try again. */
         ++(*nfail);
-        if (*ttype < -22)
+        if(*ttype < -22)
         {
             /* Failed twice. Play it safe. */
             *tau = 0.f;
         }
-        else if (*dmin1 > 0.f)
+        else if(*dmin1 > 0.f)
         {
             /* Late failure. Gives excellent shift. */
             *tau = (*tau + *dmin__) * (1.f - eps * 2.f);
@@ -376,10 +395,10 @@ L70:
         }
         goto L70;
     }
-    else if (sisnan_(dmin__))
+    else if(sisnan_(dmin__))
     {
         /* NaN. */
-        if (*tau == 0.f)
+        if(*tau == 0.f)
         {
             goto L80;
         }
@@ -401,7 +420,7 @@ L80:
     ++(*iter);
     *tau = 0.f;
 L90:
-    if (*tau < *sigma)
+    if(*tau < *sigma)
     {
         *desig += *tau;
         t = *sigma + *desig;
@@ -414,8 +433,7 @@ L90:
     }
     *sigma = t;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of SLASQ3 */
 }
 /* slasq3_ */
-

@@ -1,19 +1,30 @@
 /*
-    Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
 
 // Local prototypes.
-void fla_test_potrs_experiment(test_params_t *params, integer datatype, integer  p_cur, integer  q_cur, integer  pci, integer  n_repeats, integer einfo, double* perf, double* time_min,double* residual);
-void prepare_potrs_run(char* uplo, integer m, integer nrhs, void *A, integer lda, integer datatype, void *b, integer ldb, integer n_repeats, double* time_min_, integer *info);
-void invoke_potrs(char* uplo, integer datatype, integer* m, void* A, integer* lda, integer *nrhs, void* b, integer* ldb, integer* info);
+void fla_test_potrs_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *time_min, double *residual);
+void prepare_potrs_run(char *uplo, integer m, integer nrhs, void *A, integer lda, integer datatype,
+                       void *b, integer ldb, integer n_repeats, double *time_min_, integer *info,
+                       integer test_lapacke_interface, int matrix_layout);
+void invoke_potrs(char *uplo, integer datatype, integer *m, void *A, integer *lda, integer *nrhs,
+                  void *b, integer *ldb, integer *info);
+double prepare_lapacke_potrs_run(integer datatype, int matrix_layout, char *uplo, integer m,
+                                 integer nrhs, void *A, integer lda, void *b, integer ldb,
+                                 integer *info);
+integer invoke_lapacke_potrs(integer datatype, int matrix_layout, char uplo, integer n,
+                             integer nrhs, const void *a, integer lda, void *b, integer ldb);
 
-void fla_test_potrs(integer argc, char ** argv, test_params_t *params)
+void fla_test_potrs(integer argc, char **argv, test_params_t *params)
 {
-    char* op_str = "Cholesky factorization";
-    char* front_str = "POTRS";
+    char *op_str = "Cholesky factorization";
+    char *front_str = "POTRS";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
+    params->imatrix_char = '\0';
 
     if(argc == 1)
     {
@@ -23,11 +34,11 @@ void fla_test_potrs(integer argc, char ** argv, test_params_t *params)
         fla_test_op_driver(front_str, SQUARE_INPUT, params, LIN, fla_test_potrs_experiment);
         tests_not_run = 0;
     }
-    if (argc == 10)
+    if(argc == 10)
     {
         FLA_TEST_PARSE_LAST_ARG(argv[9]);
     }
-    if (argc >= 9 && argc <= 10)
+    if(argc >= 9 && argc <= 10)
     {
         /* Test with parameters from commandline */
         integer i, num_types, N;
@@ -43,7 +54,7 @@ void fla_test_potrs(integer argc, char ** argv, test_params_t *params)
         params->lin_solver_paramslist[0].nrhs = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].ldb = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
-        
+
         n_repeats = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
 
         if(n_repeats > 0)
@@ -68,18 +79,12 @@ void fla_test_potrs(integer argc, char ** argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_potrs_experiment(params, datatype,
-                                          N, N,
-                                          0,
-                                          n_repeats, einfo,
-                                          &perf, &time_min, &residual);
+                fla_test_potrs_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
+                                          &time_min, &residual);
                 /* Print the results */
-                fla_test_print_status(front_str,
-                                      stype,
-                                      SQUARE_INPUT,
-                                      N, N,
-                                      residual, params->lin_solver_paramslist[0].solver_threshold,
-                                      time_min, perf);
+                fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
+                                      params->lin_solver_paramslist[0].solver_threshold, time_min,
+                                      perf);
                 tests_not_run = 0;
             }
         }
@@ -95,25 +100,17 @@ void fla_test_potrs(integer argc, char ** argv, test_params_t *params)
     {
         printf("\nInvalid datatypes specified, choose valid datatypes from 'sdcz'\n\n");
     }
-    if (g_ext_fptr != NULL)
+    if(g_ext_fptr != NULL)
     {
         fclose(g_ext_fptr);
         g_ext_fptr = NULL;
     }
     return;
-
 }
 
-void fla_test_potrs_experiment(test_params_t *params,
-    integer  datatype,
-    integer  p_cur,
-    integer  q_cur,
-    integer  pci,
-    integer  n_repeats,
-    integer  einfo,
-    double* perf,
-    double* t,
-    double* residual)
+void fla_test_potrs_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *t, double *residual)
 {
     integer n, info = 0, nrhs, lda, ldb, vinfo = 0;
     void *A = NULL, *A_test = NULL;
@@ -121,47 +118,51 @@ void fla_test_potrs_experiment(test_params_t *params,
     void *B_test = NULL;
     double time_min = 1e9;
     char uplo = params->lin_solver_paramslist[pci].Uplo;
+
+    integer test_lapacke_interface = params->test_lapacke_interface;
+    int layout = params->matrix_major;
+
     nrhs = params->lin_solver_paramslist[pci].nrhs;
     *residual = params->lin_solver_paramslist[pci].solver_threshold;
     /* Get input matrix dimensions. */
-    n= p_cur;
+    n = p_cur;
     lda = params->lin_solver_paramslist[pci].lda;
     ldb = params->lin_solver_paramslist[pci].ldb;
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if (config_data)
+    if(config_data)
     {
-        if (lda == -1)
+        if(lda == -1)
         {
-            lda = fla_max(1,n);
+            lda = fla_max(1, n);
         }
-        if (ldb == -1)
+        if(ldb == -1)
         {
-            ldb = fla_max(1,n);
+            ldb = fla_max(1, n);
         }
     }
 
     /* Create input matrix parameters */
-    create_matrix(datatype, &A, lda, n);
-    create_matrix(datatype, &A_test, lda, n);
-    create_matrix(datatype, &B, ldb, nrhs);
-    create_matrix(datatype, &X, n, nrhs);
-    create_matrix(datatype, &B_test, ldb, nrhs);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, nrhs, &B, ldb);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, nrhs, &X, ldb);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, nrhs, &B_test, ldb);
 
     /* Initialize input symmetric positive definite matrix A */
     reset_matrix(datatype, n, n, A, lda);
-    if (g_ext_fptr != NULL)
+    if((!FLA_EXTREME_CASE_TEST) && (g_ext_fptr == NULL))
     {
-        /* Initialize input matrix with custom data */
-        init_matrix_from_file(datatype, A, n, n, lda, g_ext_fptr);
-        init_matrix_from_file(datatype, B, n, nrhs, ldb, g_ext_fptr);
+        rand_spd_matrix(datatype, &uplo, A, n, lda);
+        /* Initialize input matrix with random numbers */
+        rand_matrix(datatype, B, n, nrhs, ldb);
     }
     else
     {
-        /* Initialize input matrix with random numbers */
-        rand_spd_matrix(datatype, &uplo, &A, n, lda);
-        rand_matrix(datatype, B, n, nrhs, ldb);
+        /* Initialize input matrix with custom data */
+        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+        init_matrix(datatype, B, n, nrhs, ldb, g_ext_fptr, params->imatrix_char);
     }
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
     /* cholesky factorisation of A as input to potrs */
@@ -170,41 +171,42 @@ void fla_test_potrs_experiment(test_params_t *params,
     copy_matrix(datatype, "full", n, nrhs, B, ldb, B_test, ldb);
 
     /* Invoke potrs API to find x using Ax-b */
-    prepare_potrs_run(&uplo, n, nrhs, A, lda, datatype, B_test, ldb, n_repeats, &time_min, &info);
+    prepare_potrs_run(&uplo, n, nrhs, A, lda, datatype, B_test, ldb, n_repeats, &time_min, &info,
+                      test_lapacke_interface, layout);
     copy_matrix(datatype, "full", n, nrhs, B_test, ldb, X, n);
     /* execution time */
     *t = time_min;
     /* Compute the performance of the best experiment repeat. */
     /* (2.0)m^2 flops for Ax=b computation. */
-    *perf = (double)((2.0 * n * n * n) - ((2.0 / 3.0) * n * n * n)) / time_min / FLOPS_PER_UNIT_PERF;
+    *perf
+        = (double)((2.0 * n * n * n) - ((2.0 / 3.0) * n * n * n)) / time_min / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         *perf *= 4.0;
 
     /* Validate potrs call by computing Ax-b */
-    if(info == 0)
+    if((info == 0) && (!FLA_EXTREME_CASE_TEST))
         validate_potrs(n, nrhs, A_test, lda, X, B, ldb, datatype, residual, &vinfo);
-
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    /* check for output matrix when inputs as extreme values */
+    else if(FLA_EXTREME_CASE_TEST)
+    {
+        if((!check_extreme_value(datatype, n, nrhs, B_test, ldb, params->imatrix_char)))
+        {
+            *residual = DBL_MAX;
+        }
+    }
+    else
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     free_matrix(A);
     free_matrix(A_test);
     free_matrix(B_test);
     free_matrix(B);
     free_matrix(X);
-
 }
 
-void prepare_potrs_run(char* uplo, 
-    integer n,
-    integer nrhs,
-    void *A,
-    integer lda,
-    integer datatype,
-    void *B,
-    integer ldb,
-    integer n_repeats,
-    double* time_min_,
-    integer* info)
+void prepare_potrs_run(char *uplo, integer n, integer nrhs, void *A, integer lda, integer datatype,
+                       void *B, integer ldb, integer n_repeats, double *time_min_, integer *info,
+                       integer test_lapacke_interface, int layout)
 {
     void *A_save = NULL, *B_test = NULL;
     double time_min = 1e9, exe_time;
@@ -212,19 +214,30 @@ void prepare_potrs_run(char* uplo,
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
-    create_matrix(datatype, &A_save, lda, n);
-    create_matrix(datatype, &B_test, ldb, nrhs);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_save, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, nrhs, &B_test, ldb);
 
     *info = 0;
-    for (i = 0; i < n_repeats && *info == 0; ++i)
+    for(i = 0; i < n_repeats && *info == 0; ++i)
     {
         /* Restore input matrix A value and allocate memory to output buffers
         for each iteration */
         copy_matrix(datatype, "full", n, n, A, lda, A_save, lda);
         copy_matrix(datatype, "full", n, nrhs, B, ldb, B_test, ldb);
-        exe_time = fla_test_clock();
-        invoke_potrs(uplo, datatype, &n, A_save, &lda, &nrhs, B_test, &ldb, info);
-        exe_time = fla_test_clock() - exe_time;
+        /* Check if LAPACKE interface is enabled */
+        if(test_lapacke_interface == 1)
+        {
+            exe_time = prepare_lapacke_potrs_run(datatype, layout, uplo, n, nrhs, A_save, lda,
+                                                 B_test, ldb, info);
+        }
+        else
+        {
+            exe_time = fla_test_clock();
+            /* Call LAPACK potrs API */
+            invoke_potrs(uplo, datatype, &n, A_save, &lda, &nrhs, B_test, &ldb, info);
+
+            exe_time = fla_test_clock() - exe_time;
+        }
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);
     }
@@ -234,14 +247,49 @@ void prepare_potrs_run(char* uplo,
     free_vector(B_test);
 }
 
-void invoke_potrs(char* uplo, integer datatype,
-    integer* n,
-    void* A,
-    integer* lda,
-    integer *nrhs,
-    void* B,
-    integer* ldb,
-    integer* info)
+double prepare_lapacke_potrs_run(integer datatype, int layout, char *uplo, integer n,
+                                 integer nrhs, void *A_save, integer lda, void *B_test, integer ldb,
+                                 integer *info)
+{
+    double exe_time;
+    integer lda_t = lda;
+    integer ldb_t = ldb;
+    void *A_t = NULL, *B_t = NULL;
+    A_t = A_save;
+    B_t = B_test;
+    /* In case of row_major matrix layout,
+       convert input matrix to row_major */
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        lda_t = fla_max(1, n);
+        ldb_t = fla_max(1, nrhs);
+        /* Create temporary buffers for converting matrix layout */
+        create_matrix(datatype, layout, n, n, &A_t, lda_t);
+        create_matrix(datatype, layout, n, nrhs, &B_t, ldb_t);
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, A_save, lda, A_t, lda_t);
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, nrhs, B_test, ldb, B_t, ldb_t);
+    }
+    exe_time = fla_test_clock();
+
+    *info = invoke_lapacke_potrs(datatype, layout, *uplo, n, nrhs, A_t, lda_t, B_t, ldb_t);
+
+    exe_time = fla_test_clock() - exe_time;
+
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        /* In case of row_major matrix layout, convert output matrices
+           to column_major layout */
+        convert_matrix_layout(layout, datatype, n, n, A_t, lda_t, A_save, lda);
+        convert_matrix_layout(layout, datatype, n, nrhs, B_t, ldb_t, B_test, ldb);
+        /* free temporary buffers */
+        free_matrix(A_t);
+        free_matrix(B_t);
+    }
+    return exe_time;
+}
+
+void invoke_potrs(char *uplo, integer datatype, integer *n, void *A, integer *lda, integer *nrhs,
+                  void *B, integer *ldb, integer *info)
 {
     switch(datatype)
     {
@@ -266,4 +314,34 @@ void invoke_potrs(char* uplo, integer datatype,
             break;
         }
     }
+}
+
+integer invoke_lapacke_potrs(integer datatype, int layout, char uplo, integer n, integer nrhs,
+                             const void *A, integer lda, void *B, integer ldb)
+{
+    integer info = 0;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            info = LAPACKE_spotrs(layout, uplo, n, nrhs, A, lda, B, ldb);
+            break;
+        }
+        case DOUBLE:
+        {
+            info = LAPACKE_dpotrs(layout, uplo, n, nrhs, A, lda, B, ldb);
+            break;
+        }
+        case COMPLEX:
+        {
+            info = LAPACKE_cpotrs(layout, uplo, n, nrhs, A, lda, B, ldb);
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            info = LAPACKE_zpotrs(layout, uplo, n, nrhs, A, lda, B, ldb);
+            break;
+        }
+    }
+    return info;
 }

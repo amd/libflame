@@ -10,11 +10,11 @@
 
 #include "FLAME.h"
 
-FLA_Error FLASH_CAQR_UT_inc_create_hier_matrices( dim_t p, FLA_Obj A_flat, dim_t depth, dim_t* b_flash, dim_t b_alg, FLA_Obj* A, FLA_Obj* ATW, FLA_Obj* R, FLA_Obj* RTW )
+FLA_Error FLASH_CAQR_UT_inc_create_hier_matrices( fla_dim_t p, FLA_Obj A_flat, fla_dim_t depth, fla_dim_t* b_flash, fla_dim_t b_alg, FLA_Obj* A, FLA_Obj* ATW, FLA_Obj* R, FLA_Obj* RTW )
 {
 	FLA_Datatype datatype;
-	dim_t        m, n;
-	dim_t        nb_part;
+	fla_dim_t        m, n;
+	fla_dim_t        nb_part;
 	
 	// *** The current CAQR_UT_inc algorithm implemented assumes that
 	// the matrix has a hierarchical depth of 1.
@@ -74,8 +74,8 @@ FLA_Error FLASH_CAQR_UT_inc_create_hier_matrices( dim_t p, FLA_Obj A_flat, dim_t
 
 FLA_Error FLASH_CAQR_UT_inc_adjust_views( FLA_Obj A, FLA_Obj TW )
 {
-	dim_t b_flash;
-	dim_t n, n_last;
+	fla_dim_t b_flash;
+	fla_dim_t n, n_last;
 
 	// We can query b_flash as the width of the top-left element of TW.
 	b_flash = FLASH_Obj_scalar_width_tl( TW );
@@ -133,17 +133,17 @@ FLA_Error FLASH_CAQR_UT_inc_adjust_views( FLA_Obj A, FLA_Obj TW )
 }
 
 
-dim_t FLASH_CAQR_UT_inc_determine_alg_blocksize( FLA_Obj A )
+fla_dim_t FLASH_CAQR_UT_inc_determine_alg_blocksize( FLA_Obj A )
 {
-	dim_t b_alg;
-	dim_t b_flash;
+	fla_dim_t b_alg;
+	fla_dim_t b_flash;
 
 	// Acquire the storage blocksize.
 	b_flash = FLA_Obj_length( *FLASH_OBJ_PTR_AT( A ) );
 
 	// Scale the storage blocksize by a pre-defined scalar to arrive at a
 	// reasonable algorithmic blocksize, but make sure it's at least 1.
-	b_alg = ( dim_t ) fla_max( ( double ) b_flash * FLA_CAQR_INNER_TO_OUTER_B_RATIO, 1 );
+	b_alg = ( fla_dim_t ) fla_max( ( double ) b_flash * FLA_CAQR_INNER_TO_OUTER_B_RATIO, 1 );
 
 	return b_alg;
 }

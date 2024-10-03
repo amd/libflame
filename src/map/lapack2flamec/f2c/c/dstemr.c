@@ -1,5 +1,8 @@
-/* ../netlib/dstemr.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dstemr.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static doublereal c_b18 = .001;
@@ -9,11 +12,17 @@ static doublereal c_b18 = .001;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DSTEMR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dstemr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dstemr.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dstemr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dstemr.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dstemr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dstemr.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -94,7 +103,7 @@ static doublereal c_b18 = .001;
 /* > \verbatim */
 /* > JOBZ is CHARACTER*1 */
 /* > = 'N': Compute eigenvalues only;
-*/
+ */
 /* > = 'V': Compute eigenvalues and eigenvectors. */
 /* > \endverbatim */
 /* > */
@@ -312,10 +321,15 @@ the */
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-int dstemr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e, doublereal *vl, doublereal *vu, integer *il, integer *iu, integer *m, doublereal *w, doublereal *z__, integer *ldz, integer *nzc, integer *isuppz, logical *tryrac, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+void dstemr_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e, doublereal *vl,
+             doublereal *vu, integer *il, integer *iu, integer *m, doublereal *w, doublereal *z__,
+             integer *ldz, integer *nzc, integer *isuppz, logical *tryrac, doublereal *work,
+             integer *lwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dstemr inputs: jobz %c, range %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", ldz %" FLA_IS ", nzc %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",*jobz, *range, *n, *il, *iu, *ldz, *nzc, *lwork, *liwork);
+    AOCL_DTL_SNPRINTF("dstemr inputs: jobz %c, range %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS
+                      ", ldz %" FLA_IS ", nzc %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",
+                      *jobz, *range, *n, *il, *iu, *ldz, *nzc, *lwork, *liwork);
     /* System generated locals */
     integer z_dim1, z_offset, i__1, i__2;
     doublereal d__1, d__2;
@@ -335,21 +349,27 @@ int dstemr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e
     integer itmp;
     doublereal tnrm;
     extern /* Subroutine */
-    int dlae2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dlae2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     integer inde2, itmp2;
     doublereal rtol1, rtol2;
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal scale;
     integer indgp;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo, iindw, ilast;
     extern /* Subroutine */
-    int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+        void
+        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
+        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer lwmin;
     logical wantz;
     extern /* Subroutine */
-    int dlaev2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+        void
+        dlaev2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
+                doublereal *);
     extern doublereal dlamch_(char *);
     logical alleig;
     integer ibegin;
@@ -357,16 +377,33 @@ int dstemr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e
     integer iindbl;
     logical valeig;
     extern /* Subroutine */
-    int dlarrc_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *), dlarre_(char *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *);
+        void
+        dlarrc_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
+                doublereal *, integer *, integer *, integer *, integer *),
+        dlarre_(char *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *,
+                doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *,
+                integer *, integer *, doublereal *, doublereal *, doublereal *, integer *,
+                integer *, doublereal *, doublereal *, doublereal *, integer *, integer *);
     integer wbegin;
     doublereal safmin;
     extern /* Subroutine */
-    int dlarrj_(integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        dlarrj_(integer *, doublereal *, doublereal *, integer *, integer *, doublereal *,
+                integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *,
+                doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     integer inderr, iindwk, indgrs, offset;
     extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
     extern /* Subroutine */
-    int dlarrr_(integer *, doublereal *, doublereal *, integer *), dlarrv_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlasrt_(char *, integer *, doublereal *, integer *);
+        void
+        dlarrr_(integer *, doublereal *, doublereal *, integer *),
+        dlarrv_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
+                integer *, integer *, integer *, integer *, doublereal *, doublereal *,
+                doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *,
+                doublereal *, doublereal *, integer *, integer *, doublereal *, integer *,
+                integer *),
+        dlasrt_(char *, integer *, doublereal *, integer *);
     doublereal thresh;
     integer iinspl, ifirst, indwrk, liwmin, nzcmin;
     doublereal pivmin;
@@ -406,16 +443,16 @@ int dstemr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e
     --work;
     --iwork;
     /* Function Body */
-    wantz = lsame_(jobz, "V");
-    alleig = lsame_(range, "A");
-    valeig = lsame_(range, "V");
-    indeig = lsame_(range, "I");
+    wantz = lsame_(jobz, "V", 1, 1);
+    alleig = lsame_(range, "A", 1, 1);
+    valeig = lsame_(range, "V", 1, 1);
+    indeig = lsame_(range, "I", 1, 1);
     lquery = *lwork == -1 || *liwork == -1;
     zquery = *nzc == -1;
     /* DSTEMR needs WORK of size 6*N, IWORK of size 3*N. */
     /* In addition, DLARRE needs WORK of size 6*N, IWORK of size 5*N. */
     /* Furthermore, DLARRV needs WORK of size 12*N, IWORK of size 7*N. */
-    if (wantz)
+    if(wantz)
     {
         lwmin = *n * 18;
         liwmin = *n * 10;
@@ -431,7 +468,7 @@ int dstemr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e
     iil = 0;
     iiu = 0;
     nsplit = 0;
-    if (valeig)
+    if(valeig)
     {
         /* We do not reference VL, VU in the cases RANGE = 'I','A' */
         /* The interval (WL, WU] contains all the wanted eigenvalues. */
@@ -439,46 +476,46 @@ int dstemr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e
         wl = *vl;
         wu = *vu;
     }
-    else if (indeig)
+    else if(indeig)
     {
         /* We do not reference IL, IU in the cases RANGE = 'V','A' */
         iil = *il;
         iiu = *iu;
     }
     *info = 0;
-    if (! (wantz || lsame_(jobz, "N")))
+    if(!(wantz || lsame_(jobz, "N", 1, 1)))
     {
         *info = -1;
     }
-    else if (! (alleig || valeig || indeig))
+    else if(!(alleig || valeig || indeig))
     {
         *info = -2;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -3;
     }
-    else if (valeig && *n > 0 && wu <= wl)
+    else if(valeig && *n > 0 && wu <= wl)
     {
         *info = -7;
     }
-    else if (indeig && (iil < 1 || iil > *n))
+    else if(indeig && (iil < 1 || iil > *n))
     {
         *info = -8;
     }
-    else if (indeig && (iiu < iil || iiu > *n))
+    else if(indeig && (iiu < iil || iiu > *n))
     {
         *info = -9;
     }
-    else if (*ldz < 1 || wantz && *ldz < *n)
+    else if(*ldz < 1 || wantz && *ldz < *n)
     {
         *info = -13;
     }
-    else if (*lwork < lwmin && ! lquery)
+    else if(*lwork < lwmin && !lquery)
     {
         *info = -17;
     }
-    else if (*liwork < liwmin && ! lquery)
+    else if(*liwork < liwmin && !lquery)
     {
         *info = -19;
     }
@@ -491,20 +528,20 @@ int dstemr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e
     /* Computing MIN */
     d__1 = sqrt(bignum);
     d__2 = 1. / sqrt(sqrt(safmin)); // , expr subst
-    rmax = fla_min(d__1,d__2);
-    if (*info == 0)
+    rmax = fla_min(d__1, d__2);
+    if(*info == 0)
     {
-        work[1] = (doublereal) lwmin;
+        work[1] = (doublereal)lwmin;
         iwork[1] = liwmin;
-        if (wantz && alleig)
+        if(wantz && alleig)
         {
             nzcmin = *n;
         }
-        else if (wantz && valeig)
+        else if(wantz && valeig)
         {
-            dlarrc_("T", n, vl, vu, &d__[1], &e[1], &safmin, &nzcmin, &itmp, & itmp2, info);
+            dlarrc_("T", n, vl, vu, &d__[1], &e[1], &safmin, &nzcmin, &itmp, &itmp2, info);
         }
-        else if (wantz && indeig)
+        else if(wantz && indeig)
         {
             nzcmin = iiu - iil + 1;
         }
@@ -513,80 +550,80 @@ int dstemr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e
             /* WANTZ .EQ. FALSE. */
             nzcmin = 0;
         }
-        if (zquery && *info == 0)
+        if(zquery && *info == 0)
         {
-            z__[z_dim1 + 1] = (doublereal) nzcmin;
+            z__[z_dim1 + 1] = (doublereal)nzcmin;
         }
-        else if (*nzc < nzcmin && ! zquery)
+        else if(*nzc < nzcmin && !zquery)
         {
             *info = -14;
         }
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("DSTEMR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    else if (lquery || zquery)
+    else if(lquery || zquery)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     /* Handle N = 0, 1, and 2 cases immediately */
     *m = 0;
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    if (*n == 1)
+    if(*n == 1)
     {
-        if (alleig || indeig)
+        if(alleig || indeig)
         {
             *m = 1;
             w[1] = d__[1];
         }
         else
         {
-            if (wl < d__[1] && wu >= d__[1])
+            if(wl < d__[1] && wu >= d__[1])
             {
                 *m = 1;
                 w[1] = d__[1];
             }
         }
-        if (wantz && ! zquery)
+        if(wantz && !zquery)
         {
             z__[z_dim1 + 1] = 1.;
             isuppz[1] = 1;
             isuppz[2] = 1;
         }
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
-    if (*n == 2)
+    if(*n == 2)
     {
-        if (! wantz)
+        if(!wantz)
         {
             dlae2_(&d__[1], &e[1], &d__[2], &r1, &r2);
         }
-        else if (wantz && ! zquery)
+        else if(wantz && !zquery)
         {
             dlaev2_(&d__[1], &e[1], &d__[2], &r1, &r2, &cs, &sn);
         }
-        if (alleig || valeig && r2 > wl && r2 <= wu || indeig && iil == 1)
+        if(alleig || valeig && r2 > wl && r2 <= wu || indeig && iil == 1)
         {
             ++(*m);
             w[*m] = r2;
-            if (wantz && ! zquery)
+            if(wantz && !zquery)
             {
                 z__[*m * z_dim1 + 1] = -sn;
                 z__[*m * z_dim1 + 2] = cs;
                 /* Note: At most one of SN and CS can be zero. */
-                if (sn != 0.)
+                if(sn != 0.)
                 {
-                    if (cs != 0.)
+                    if(cs != 0.)
                     {
                         isuppz[(*m << 1) - 1] = 1;
                         isuppz[*m * 2] = 2;
@@ -604,18 +641,18 @@ int dstemr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e
                 }
             }
         }
-        if (alleig || valeig && r1 > wl && r1 <= wu || indeig && iiu == 2)
+        if(alleig || valeig && r1 > wl && r1 <= wu || indeig && iiu == 2)
         {
             ++(*m);
             w[*m] = r1;
-            if (wantz && ! zquery)
+            if(wantz && !zquery)
             {
                 z__[*m * z_dim1 + 1] = cs;
                 z__[*m * z_dim1 + 2] = sn;
                 /* Note: At most one of SN and CS can be zero. */
-                if (sn != 0.)
+                if(sn != 0.)
                 {
-                    if (cs != 0.)
+                    if(cs != 0.)
                     {
                         isuppz[(*m << 1) - 1] = 1;
                         isuppz[*m * 2] = 2;
@@ -656,21 +693,21 @@ int dstemr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e
         /* RMAX threshold. */
         scale = 1.;
         tnrm = dlanst_("M", n, &d__[1], &e[1]);
-        if (tnrm > 0. && tnrm < rmin)
+        if(tnrm > 0. && tnrm < rmin)
         {
             scale = rmin / tnrm;
         }
-        else if (tnrm > rmax)
+        else if(tnrm > rmax)
         {
             scale = rmax / tnrm;
         }
-        if (scale != 1.)
+        if(scale != 1.)
         {
             dscal_(n, &scale, &d__[1], &c__1);
             i__1 = *n - 1;
             dscal_(&i__1, &scale, &e[1], &c__1);
             tnrm *= scale;
-            if (valeig)
+            if(valeig)
             {
                 /* If eigenvalues in interval have to be found, */
                 /* scale (WL, WU] accordingly */
@@ -685,7 +722,7 @@ int dstemr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e
         /* A negative THRESH forces the old splitting criterion based on the */
         /* size of the off-diagonal. A positive THRESH switches to splitting */
         /* which preserves relative accuracy. */
-        if (*tryrac)
+        if(*tryrac)
         {
             /* Test whether the matrix warrants the more expensive relative approach. */
             dlarrr_(n, &d__[1], &e[1], &iinfo);
@@ -696,7 +733,7 @@ int dstemr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e
             iinfo = -1;
         }
         /* Set the splitting criterion */
-        if (iinfo == 0)
+        if(iinfo == 0)
         {
             thresh = eps;
         }
@@ -706,16 +743,14 @@ int dstemr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e
             /* relative accuracy is desired but T does not guarantee it */
             *tryrac = FALSE_;
         }
-        if (*tryrac)
+        if(*tryrac)
         {
             /* Copy original diagonal, needed to guarantee relative accuracy */
             dcopy_(n, &d__[1], &c__1, &work[indd], &c__1);
         }
         /* Store the squares of the offdiagonal values of T */
         i__1 = *n - 1;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             /* Computing 2nd power */
             d__1 = e[j];
@@ -723,7 +758,7 @@ int dstemr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e
             /* L5: */
         }
         /* Set the tolerance parameters for bisection */
-        if (! wantz)
+        if(!wantz)
         {
             /* DLARRE computes the eigenvalues to full precision. */
             rtol1 = eps * 4.;
@@ -739,28 +774,34 @@ int dstemr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e
             /* Computing MAX */
             d__1 = sqrt(eps) * .005;
             d__2 = eps * 4.; // , expr subst
-            rtol2 = fla_max(d__1,d__2);
+            rtol2 = fla_max(d__1, d__2);
         }
-        dlarre_(range, n, &wl, &wu, &iil, &iiu, &d__[1], &e[1], &work[inde2], &rtol1, &rtol2, &thresh, &nsplit, &iwork[iinspl], m, &w[1], & work[inderr], &work[indgp], &iwork[iindbl], &iwork[iindw], & work[indgrs], &pivmin, &work[indwrk], &iwork[iindwk], &iinfo);
-        if (iinfo != 0)
+        dlarre_(range, n, &wl, &wu, &iil, &iiu, &d__[1], &e[1], &work[inde2], &rtol1, &rtol2,
+                &thresh, &nsplit, &iwork[iinspl], m, &w[1], &work[inderr], &work[indgp],
+                &iwork[iindbl], &iwork[iindw], &work[indgrs], &pivmin, &work[indwrk],
+                &iwork[iindwk], &iinfo);
+        if(iinfo != 0)
         {
             *info = f2c_abs(iinfo) + 10;
             AOCL_DTL_TRACE_LOG_EXIT
-            return 0;
+            return;
         }
         /* Note that if RANGE .NE. 'V', DLARRE computes bounds on the desired */
         /* part of the spectrum. All desired eigenvalues are contained in */
         /* (WL,WU] */
-        if (wantz)
+        if(wantz)
         {
             /* Compute the desired eigenvectors corresponding to the computed */
             /* eigenvalues */
-            dlarrv_(n, &wl, &wu, &d__[1], &e[1], &pivmin, &iwork[iinspl], m, & c__1, m, &c_b18, &rtol1, &rtol2, &w[1], &work[inderr], & work[indgp], &iwork[iindbl], &iwork[iindw], &work[indgrs], &z__[z_offset], ldz, &isuppz[1], &work[indwrk], &iwork[ iindwk], &iinfo);
-            if (iinfo != 0)
+            dlarrv_(n, &wl, &wu, &d__[1], &e[1], &pivmin, &iwork[iinspl], m, &c__1, m, &c_b18,
+                    &rtol1, &rtol2, &w[1], &work[inderr], &work[indgp], &iwork[iindbl],
+                    &iwork[iindw], &work[indgrs], &z__[z_offset], ldz, &isuppz[1], &work[indwrk],
+                    &iwork[iindwk], &iinfo);
+            if(iinfo != 0)
             {
                 *info = f2c_abs(iinfo) + 20;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
         }
         else
@@ -771,40 +812,36 @@ int dstemr_(char *jobz, char *range, integer *n, doublereal * d__, doublereal *e
             /* to apply the corresponding shifts from DLARRE to obtain the */
             /* eigenvalues of the original matrix. */
             i__1 = *m;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 itmp = iwork[iindbl + j - 1];
                 w[j] += e[iwork[iinspl + itmp - 1]];
                 /* L20: */
             }
         }
-        if (*tryrac)
+        if(*tryrac)
         {
             /* Refine computed eigenvalues so that they are relatively accurate */
             /* with respect to the original matrix T. */
             ibegin = 1;
             wbegin = 1;
             i__1 = iwork[iindbl + *m - 1];
-            for (jblk = 1;
-                    jblk <= i__1;
-                    ++jblk)
+            for(jblk = 1; jblk <= i__1; ++jblk)
             {
                 iend = iwork[iinspl + jblk - 1];
                 in = iend - ibegin + 1;
                 wend = wbegin - 1;
                 /* check if any eigenvalues have to be refined in this block */
-L36:
-                if (wend < *m)
+            L36:
+                if(wend < *m)
                 {
-                    if (iwork[iindbl + wend] == jblk)
+                    if(iwork[iindbl + wend] == jblk)
                     {
                         ++wend;
                         goto L36;
                     }
                 }
-                if (wend < wbegin)
+                if(wend < wbegin)
                 {
                     ibegin = iend + 1;
                     goto L39;
@@ -813,15 +850,16 @@ L36:
                 ifirst = iwork[iindw + wbegin - 1];
                 ilast = iwork[iindw + wend - 1];
                 rtol2 = eps * 4.;
-                dlarrj_(&in, &work[indd + ibegin - 1], &work[inde2 + ibegin - 1], &ifirst, &ilast, &rtol2, &offset, &w[wbegin], & work[inderr + wbegin - 1], &work[indwrk], &iwork[ iindwk], &pivmin, &tnrm, &iinfo);
+                dlarrj_(&in, &work[indd + ibegin - 1], &work[inde2 + ibegin - 1], &ifirst, &ilast,
+                        &rtol2, &offset, &w[wbegin], &work[inderr + wbegin - 1], &work[indwrk],
+                        &iwork[iindwk], &pivmin, &tnrm, &iinfo);
                 ibegin = iend + 1;
                 wbegin = wend + 1;
-L39:
-                ;
+            L39:;
             }
         }
         /* If matrix was scaled, then rescale eigenvalues appropriately. */
-        if (scale != 1.)
+        if(scale != 1.)
         {
             d__1 = 1. / scale;
             dscal_(m, &d__1, &w[1], &c__1);
@@ -829,44 +867,40 @@ L39:
     }
     /* If eigenvalues are not in increasing order, then sort them, */
     /* possibly along with eigenvectors. */
-    if (nsplit > 1 || *n == 2)
+    if(nsplit > 1 || *n == 2)
     {
-        if (! wantz)
+        if(!wantz)
         {
             dlasrt_("I", m, &w[1], &iinfo);
-            if (iinfo != 0)
+            if(iinfo != 0)
             {
                 *info = 3;
                 AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                return;
             }
         }
         else
         {
             i__1 = *m - 1;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__ = 0;
                 tmp = w[j];
                 i__2 = *m;
-                for (jj = j + 1;
-                        jj <= i__2;
-                        ++jj)
+                for(jj = j + 1; jj <= i__2; ++jj)
                 {
-                    if (w[jj] < tmp)
+                    if(w[jj] < tmp)
                     {
                         i__ = jj;
                         tmp = w[jj];
                     }
                     /* L50: */
                 }
-                if (i__ != 0)
+                if(i__ != 0)
                 {
                     w[i__] = w[j];
                     w[j] = tmp;
-                    if (wantz)
+                    if(wantz)
                     {
                         dswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], &c__1);
                         itmp = isuppz[(i__ << 1) - 1];
@@ -881,11 +915,10 @@ L39:
             }
         }
     }
-    work[1] = (doublereal) lwmin;
+    work[1] = (doublereal)lwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DSTEMR */
 }
 /* dstemr_ */
-

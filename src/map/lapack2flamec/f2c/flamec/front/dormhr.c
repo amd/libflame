@@ -1,5 +1,8 @@
-/* ../netlib/dormhr.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dormhr.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -9,11 +12,17 @@ static integer c_n1 = -1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DORMHR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dormhr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dormhr.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dormhr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dormhr.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dormhr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dormhr.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -50,7 +59,7 @@ static integer c_n1 = -1;
 /* > \verbatim */
 /* > SIDE is CHARACTER*1 */
 /* > = 'L': apply Q or Q**T from the Left;
-*/
+ */
 /* > = 'R': apply Q or Q**T from the Right. */
 /* > \endverbatim */
 /* > */
@@ -58,7 +67,7 @@ static integer c_n1 = -1;
 /* > \verbatim */
 /* > TRANS is CHARACTER*1 */
 /* > = 'N': No transpose, apply Q;
-*/
+ */
 /* > = 'T': Transpose, apply Q**T. */
 /* > \endverbatim */
 /* > */
@@ -88,7 +97,7 @@ static integer c_n1 = -1;
 /* > submatrix Q(ilo+1:ihi,ilo+1:ihi). */
 /* > If SIDE = 'L', then 1 <= ILO <= IHI <= M, if M > 0, and */
 /* > ILO = 1 and IHI = 0, if M = 0;
-*/
+ */
 /* > if SIDE = 'R', then 1 <= ILO <= IHI <= N, if N > 0, and */
 /* > ILO = 1 and IHI = 0, if N = 0. */
 /* > \endverbatim */
@@ -143,7 +152,7 @@ LDA >= fla_max(1,N) if SIDE = 'R'. */
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. */
 /* > If SIDE = 'L', LWORK >= fla_max(1,N);
-*/
+ */
 /* > if SIDE = 'R', LWORK >= fla_max(1,M). */
 /* > For optimum performance LWORK >= N*NB if SIDE = 'L', and */
 /* > LWORK >= M*NB if SIDE = 'R', where NB is the optimal */
@@ -172,7 +181,9 @@ the routine */
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int dormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integer *ihi, doublereal *a, integer *lda, doublereal * tau, doublereal *c__, integer *ldc, doublereal *work, integer *lwork, integer *info)
+void dormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integer *ihi,
+             doublereal *a, integer *lda, doublereal *tau, doublereal *c__, integer *ldc,
+             doublereal *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__2;
@@ -183,13 +194,16 @@ int dormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integ
     /* Local variables */
     integer i1, i2, nb, mi, nh, ni, nq, nw;
     logical left;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
-    int dormqr_fla(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+        void
+        dormqr_fla(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
+                   doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -223,10 +237,10 @@ int dormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integ
     /* Function Body */
     *info = 0;
     nh = *ihi - *ilo;
-    left = lsame_(side, "L");
+    left = lsame_(side, "L", 1, 1);
     lquery = *lwork == -1;
     /* NQ is the order of Q and NW is the minimum dimension of WORK */
-    if (left)
+    if(left)
     {
         nq = *m;
         nw = *n;
@@ -236,45 +250,45 @@ int dormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integ
         nq = *n;
         nw = *m;
     }
-    if (! left && ! lsame_(side, "R"))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! lsame_(trans, "N") && ! lsame_(trans, "T"))
+    else if(!lsame_(trans, "N", 1, 1) && !lsame_(trans, "T", 1, 1))
     {
         *info = -2;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*ilo < 1 || *ilo > fla_max(1,nq))
+    else if(*ilo < 1 || *ilo > fla_max(1, nq))
     {
         *info = -5;
     }
-    else if (*ihi < fla_min(*ilo,nq) || *ihi > nq)
+    else if(*ihi < fla_min(*ilo, nq) || *ihi > nq)
     {
         *info = -6;
     }
-    else if (*lda < fla_max(1,nq))
+    else if(*lda < fla_max(1, nq))
     {
         *info = -8;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -11;
     }
-    else if (*lwork < fla_max(1,nw) && ! lquery)
+    else if(*lwork < fla_max(1, nw) && !lquery)
     {
         *info = -13;
     }
-    if (*info == 0)
+    if(*info == 0)
     {
-        if (left)
+        if(left)
         {
             nb = ilaenv_(&c__1, "DORMQR", ch__1, &nh, n, &nh, &c_n1);
         }
@@ -282,26 +296,26 @@ int dormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integ
         {
             nb = ilaenv_(&c__1, "DORMQR", ch__1, m, &nh, &nh, &c_n1);
         }
-        lwkopt = fla_max(1,nw) * nb;
-        work[1] = (doublereal) lwkopt;
+        lwkopt = fla_max(1, nw) * nb;
+        work[1] = (doublereal)lwkopt;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__2 = -(*info);
         xerbla_("DORMHR", &i__2, (ftnlen)6);
-        return 0;
+        return;
     }
-    else if (lquery)
+    else if(lquery)
     {
-        return 0;
+        return;
     }
     /* Quick return if possible */
-    if (*m == 0 || *n == 0 || nh == 0)
+    if(*m == 0 || *n == 0 || nh == 0)
     {
         work[1] = 1.;
-        return 0;
+        return;
     }
-    if (left)
+    if(left)
     {
         mi = nh;
         ni = *n;
@@ -315,9 +329,10 @@ int dormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integ
         i1 = 1;
         i2 = *ilo + 1;
     }
-    dormqr_fla(side, trans, &mi, &ni, &nh, &a[*ilo + 1 + *ilo * a_dim1], lda, & tau[*ilo], &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
-    work[1] = (doublereal) lwkopt;
-    return 0;
+    dormqr_fla(side, trans, &mi, &ni, &nh, &a[*ilo + 1 + *ilo * a_dim1], lda, &tau[*ilo],
+               &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
+    work[1] = (doublereal)lwkopt;
+    return;
     /* End of DORMHR */
 }
 /* dormhr_ */

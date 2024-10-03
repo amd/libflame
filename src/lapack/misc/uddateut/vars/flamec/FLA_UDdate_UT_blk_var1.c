@@ -28,7 +28,7 @@ FLA_Error FLA_UDdate_UT_blk_var1( FLA_Obj R,
 
   FLA_Obj W12T, W12B;
 
-  dim_t   b_alg, b;
+  fla_dim_t   b_alg, b;
 
   // Query the algorithmic blocksize by inspecting the length of T.
   b_alg = FLA_Obj_length( T );

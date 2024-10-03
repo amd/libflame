@@ -1,18 +1,28 @@
-/* ../netlib/dlansf.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlansf.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b DLANSF returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, or the ele ment of largest absolute value of a symmetric matrix in RFP format. */
+/* > \brief \b DLANSF returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
+ * or the ele ment of largest absolute value of a symmetric matrix in RFP format. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLANSF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlansf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlansf.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlansf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlansf.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlansf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlansf.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -66,7 +76,7 @@ static integer c__1 = 1;
 /* > Specifies whether the RFP format of A is normal or */
 /* > transposed format. */
 /* > = 'N': RFP format is Normal;
-*/
+ */
 /* > = 'T': RFP format is Transpose. */
 /* > \endverbatim */
 /* > */
@@ -76,7 +86,7 @@ static integer c__1 = 1;
 /* > On entry, UPLO specifies whether the RFP matrix A came from */
 /* > an upper or lower triangular matrix as follows: */
 /* > = 'U': RFP A came from an upper triangular matrix;
-*/
+ */
 /* > = 'L': RFP A came from a lower triangular matrix. */
 /* > \endverbatim */
 /* > */
@@ -90,7 +100,7 @@ static integer c__1 = 1;
 /* > \param[in] A */
 /* > \verbatim */
 /* > A is DOUBLE PRECISION array, dimension ( N*(N+1)/2 );
-*/
+ */
 /* > On entry, the upper (if UPLO = 'U') or lower (if UPLO = 'L') */
 /* > part of the symmetric matrix A stored in RFP format. See the */
 /* > "Notes" below for more details. */
@@ -199,10 +209,12 @@ otherwise, */
 /* > 04 14 24 34 44 43 44 22 32 42 52 */
 /* > \endverbatim */
 /* ===================================================================== */
-doublereal dlansf_(char *norm, char *transr, char *uplo, integer *n, doublereal *a, doublereal *work)
+doublereal dlansf_(char *norm, char *transr, char *uplo, integer *n, doublereal *a,
+                   doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlansf inputs: norm %c, transr %c, uplo %c, n %" FLA_IS "",*norm, *transr, *uplo, *n);
+    AOCL_DTL_SNPRINTF("dlansf inputs: norm %c, transr %c, uplo %c, n %" FLA_IS "", *norm, *transr,
+                      *uplo, *n);
     /* System generated locals */
     integer i__1, i__2;
     doublereal ret_val, d__1;
@@ -215,11 +227,12 @@ doublereal dlansf_(char *norm, char *transr, char *uplo, integer *n, doublereal 
     doublereal aa;
     integer lda, ifm, noe, ilu;
     doublereal temp, scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal value;
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
-    int dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
+        void
+        dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -241,13 +254,13 @@ doublereal dlansf_(char *norm, char *transr, char *uplo, integer *n, doublereal 
     /* .. */
     /* .. Executable Statements .. */
     value = 0.;
-    if (*n == 0)
+    if(*n == 0)
     {
         ret_val = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
         return ret_val;
     }
-    else if (*n == 1)
+    else if(*n == 1)
     {
         ret_val = f2c_abs(a[0]);
         AOCL_DTL_TRACE_LOG_EXIT
@@ -255,28 +268,28 @@ doublereal dlansf_(char *norm, char *transr, char *uplo, integer *n, doublereal 
     }
     /* set noe = 1 if n is odd. if n is even set noe=0 */
     noe = 1;
-    if (*n % 2 == 0)
+    if(*n % 2 == 0)
     {
         noe = 0;
     }
     /* set ifm = 0 when form='T or 't' and 1 otherwise */
     ifm = 1;
-    if (lsame_(transr, "T"))
+    if(lsame_(transr, "T", 1, 1))
     {
         ifm = 0;
     }
     /* set ilu = 0 when uplo='U or 'u' and 1 otherwise */
     ilu = 1;
-    if (lsame_(uplo, "U"))
+    if(lsame_(uplo, "U", 1, 1))
     {
         ilu = 0;
     }
     /* set lda = (n+1)/2 when ifm = 0 */
     /* set lda = n when ifm = 1 and noe = 1 */
     /* set lda = n+1 when ifm = 1 and noe = 0 */
-    if (ifm == 1)
+    if(ifm == 1)
     {
-        if (noe == 1)
+        if(noe == 1)
         {
             lda = *n;
         }
@@ -291,29 +304,25 @@ doublereal dlansf_(char *norm, char *transr, char *uplo, integer *n, doublereal 
         /* ifm=0 */
         lda = (*n + 1) / 2;
     }
-    if (lsame_(norm, "M"))
+    if(lsame_(norm, "M", 1, 1))
     {
         /* Find fla_max(f2c_abs(A(i,j))). */
         k = (*n + 1) / 2;
         value = 0.;
-        if (noe == 1)
+        if(noe == 1)
         {
             /* n is odd */
-            if (ifm == 1)
+            if(ifm == 1)
             {
                 /* A is n by k */
                 i__1 = k - 1;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__2 = *n - 1;
-                    for (i__ = 0;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__2; ++i__)
                     {
                         temp = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
-                        if (value < temp || disnan_(&temp))
+                        if(value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
@@ -325,17 +334,13 @@ doublereal dlansf_(char *norm, char *transr, char *uplo, integer *n, doublereal 
                 /* xpose case;
                 A is k by n */
                 i__1 = *n - 1;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__2 = k - 1;
-                    for (i__ = 0;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__2; ++i__)
                     {
                         temp = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
-                        if (value < temp || disnan_(&temp))
+                        if(value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
@@ -346,21 +351,17 @@ doublereal dlansf_(char *norm, char *transr, char *uplo, integer *n, doublereal 
         else
         {
             /* n is even */
-            if (ifm == 1)
+            if(ifm == 1)
             {
                 /* A is n+1 by k */
                 i__1 = k - 1;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__2 = *n;
-                    for (i__ = 0;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__2; ++i__)
                     {
                         temp = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
-                        if (value < temp || disnan_(&temp))
+                        if(value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
@@ -372,17 +373,13 @@ doublereal dlansf_(char *norm, char *transr, char *uplo, integer *n, doublereal 
                 /* xpose case;
                 A is k by n+1 */
                 i__1 = *n;
-                for (j = 0;
-                        j <= i__1;
-                        ++j)
+                for(j = 0; j <= i__1; ++j)
                 {
                     i__2 = k - 1;
-                    for (i__ = 0;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__2; ++i__)
                     {
                         temp = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
-                        if (value < temp || disnan_(&temp))
+                        if(value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
@@ -391,34 +388,28 @@ doublereal dlansf_(char *norm, char *transr, char *uplo, integer *n, doublereal 
             }
         }
     }
-    else if (lsame_(norm, "I") || lsame_(norm, "O") || *(unsigned char *)norm == '1')
+    else if(lsame_(norm, "I", 1, 1) || lsame_(norm, "O", 1, 1) || *(unsigned char *)norm == '1')
     {
         /* Find normI(A) ( = norm1(A), since A is symmetric). */
-        if (ifm == 1)
+        if(ifm == 1)
         {
             k = *n / 2;
-            if (noe == 1)
+            if(noe == 1)
             {
                 /* n is odd */
-                if (ilu == 0)
+                if(ilu == 0)
                 {
                     i__1 = k - 1;
-                    for (i__ = 0;
-                            i__ <= i__1;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__1; ++i__)
                     {
                         work[i__] = 0.;
                     }
                     i__1 = k;
-                    for (j = 0;
-                            j <= i__1;
-                            ++j)
+                    for(j = 0; j <= i__1; ++j)
                     {
                         s = 0.;
                         i__2 = k + j - 1;
-                        for (i__ = 0;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 0; i__ <= i__2; ++i__)
                         {
                             aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
                             /* -> A(i,j+k) */
@@ -428,7 +419,7 @@ doublereal dlansf_(char *norm, char *transr, char *uplo, integer *n, doublereal 
                         aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
                         /* -> A(j+k,j+k) */
                         work[j + k] = s + aa;
-                        if (i__ == k + k)
+                        if(i__ == k + k)
                         {
                             goto L10;
                         }
@@ -438,9 +429,7 @@ doublereal dlansf_(char *norm, char *transr, char *uplo, integer *n, doublereal 
                         work[j] += aa;
                         s = 0.;
                         i__2 = k - 1;
-                        for (l = j + 1;
-                                l <= i__2;
-                                ++l)
+                        for(l = j + 1; l <= i__2; ++l)
                         {
                             ++i__;
                             aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
@@ -450,15 +439,13 @@ doublereal dlansf_(char *norm, char *transr, char *uplo, integer *n, doublereal 
                         }
                         work[j] += s;
                     }
-L10:
+                L10:
                     value = work[0];
                     i__1 = *n - 1;
-                    for (i__ = 1;
-                            i__ <= i__1;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__1; ++i__)
                     {
                         temp = work[i__];
-                        if (value < temp || disnan_(&temp))
+                        if(value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
@@ -470,28 +457,22 @@ L10:
                     ++k;
                     /* k=(n+1)/2 for n odd and ilu=1 */
                     i__1 = *n - 1;
-                    for (i__ = k;
-                            i__ <= i__1;
-                            ++i__)
+                    for(i__ = k; i__ <= i__1; ++i__)
                     {
                         work[i__] = 0.;
                     }
-                    for (j = k - 1;
-                            j >= 0;
-                            --j)
+                    for(j = k - 1; j >= 0; --j)
                     {
                         s = 0.;
                         i__1 = j - 2;
-                        for (i__ = 0;
-                                i__ <= i__1;
-                                ++i__)
+                        for(i__ = 0; i__ <= i__1; ++i__)
                         {
                             aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
                             /* -> A(j+k,i+k) */
                             s += aa;
                             work[i__ + k] += aa;
                         }
-                        if (j > 0)
+                        if(j > 0)
                         {
                             aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
                             /* -> A(j+k,j+k) */
@@ -505,9 +486,7 @@ L10:
                         work[j] = aa;
                         s = 0.;
                         i__1 = *n - 1;
-                        for (l = j + 1;
-                                l <= i__1;
-                                ++l)
+                        for(l = j + 1; l <= i__1; ++l)
                         {
                             ++i__;
                             aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
@@ -519,12 +498,10 @@ L10:
                     }
                     value = work[0];
                     i__1 = *n - 1;
-                    for (i__ = 1;
-                            i__ <= i__1;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__1; ++i__)
                     {
                         temp = work[i__];
-                        if (value < temp || disnan_(&temp))
+                        if(value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
@@ -534,25 +511,19 @@ L10:
             else
             {
                 /* n is even */
-                if (ilu == 0)
+                if(ilu == 0)
                 {
                     i__1 = k - 1;
-                    for (i__ = 0;
-                            i__ <= i__1;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__1; ++i__)
                     {
                         work[i__] = 0.;
                     }
                     i__1 = k - 1;
-                    for (j = 0;
-                            j <= i__1;
-                            ++j)
+                    for(j = 0; j <= i__1; ++j)
                     {
                         s = 0.;
                         i__2 = k + j - 1;
-                        for (i__ = 0;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 0; i__ <= i__2; ++i__)
                         {
                             aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
                             /* -> A(i,j+k) */
@@ -568,9 +539,7 @@ L10:
                         work[j] += aa;
                         s = 0.;
                         i__2 = k - 1;
-                        for (l = j + 1;
-                                l <= i__2;
-                                ++l)
+                        for(l = j + 1; l <= i__2; ++l)
                         {
                             ++i__;
                             aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
@@ -582,12 +551,10 @@ L10:
                     }
                     value = work[0];
                     i__1 = *n - 1;
-                    for (i__ = 1;
-                            i__ <= i__1;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__1; ++i__)
                     {
                         temp = work[i__];
-                        if (value < temp || disnan_(&temp))
+                        if(value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
@@ -597,21 +564,15 @@ L10:
                 {
                     /* ilu = 1 */
                     i__1 = *n - 1;
-                    for (i__ = k;
-                            i__ <= i__1;
-                            ++i__)
+                    for(i__ = k; i__ <= i__1; ++i__)
                     {
                         work[i__] = 0.;
                     }
-                    for (j = k - 1;
-                            j >= 0;
-                            --j)
+                    for(j = k - 1; j >= 0; --j)
                     {
                         s = 0.;
                         i__1 = j - 1;
-                        for (i__ = 0;
-                                i__ <= i__1;
-                                ++i__)
+                        for(i__ = 0; i__ <= i__1; ++i__)
                         {
                             aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
                             /* -> A(j+k,i+k) */
@@ -629,9 +590,7 @@ L10:
                         work[j] = aa;
                         s = 0.;
                         i__1 = *n - 1;
-                        for (l = j + 1;
-                                l <= i__1;
-                                ++l)
+                        for(l = j + 1; l <= i__1; ++l)
                         {
                             ++i__;
                             aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
@@ -643,12 +602,10 @@ L10:
                     }
                     value = work[0];
                     i__1 = *n - 1;
-                    for (i__ = 1;
-                            i__ <= i__1;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__1; ++i__)
                     {
                         temp = work[i__];
-                        if (value < temp || disnan_(&temp))
+                        if(value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
@@ -660,32 +617,26 @@ L10:
         {
             /* ifm=0 */
             k = *n / 2;
-            if (noe == 1)
+            if(noe == 1)
             {
                 /* n is odd */
-                if (ilu == 0)
+                if(ilu == 0)
                 {
                     n1 = k;
                     /* n/2 */
                     ++k;
                     /* k is the row size and lda */
                     i__1 = *n - 1;
-                    for (i__ = n1;
-                            i__ <= i__1;
-                            ++i__)
+                    for(i__ = n1; i__ <= i__1; ++i__)
                     {
                         work[i__] = 0.;
                     }
                     i__1 = n1 - 1;
-                    for (j = 0;
-                            j <= i__1;
-                            ++j)
+                    for(j = 0; j <= i__1; ++j)
                     {
                         s = 0.;
                         i__2 = k - 1;
-                        for (i__ = 0;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 0; i__ <= i__2; ++i__)
                         {
                             aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
                             /* A(j,n1+i) */
@@ -698,9 +649,7 @@ L10:
                     s = (d__1 = a[j * lda], f2c_abs(d__1));
                     /* A(k-1,k-1) */
                     i__1 = k - 1;
-                    for (i__ = 1;
-                            i__ <= i__1;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__1; ++i__)
                     {
                         aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
                         /* A(k-1,i+n1) */
@@ -709,15 +658,11 @@ L10:
                     }
                     work[j] += s;
                     i__1 = *n - 1;
-                    for (j = k;
-                            j <= i__1;
-                            ++j)
+                    for(j = k; j <= i__1; ++j)
                     {
                         s = 0.;
                         i__2 = j - k - 1;
-                        for (i__ = 0;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 0; i__ <= i__2; ++i__)
                         {
                             aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
                             /* A(i,j-k) */
@@ -733,9 +678,7 @@ L10:
                         s = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
                         /* A(j,j) */
                         i__2 = *n - 1;
-                        for (l = j + 1;
-                                l <= i__2;
-                                ++l)
+                        for(l = j + 1; l <= i__2; ++l)
                         {
                             ++i__;
                             aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
@@ -747,12 +690,10 @@ L10:
                     }
                     value = work[0];
                     i__1 = *n - 1;
-                    for (i__ = 1;
-                            i__ <= i__1;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__1; ++i__)
                     {
                         temp = work[i__];
-                        if (value < temp || disnan_(&temp))
+                        if(value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
@@ -764,23 +705,17 @@ L10:
                     ++k;
                     /* k=(n+1)/2 for n odd and ilu=1 */
                     i__1 = *n - 1;
-                    for (i__ = k;
-                            i__ <= i__1;
-                            ++i__)
+                    for(i__ = k; i__ <= i__1; ++i__)
                     {
                         work[i__] = 0.;
                     }
                     i__1 = k - 2;
-                    for (j = 0;
-                            j <= i__1;
-                            ++j)
+                    for(j = 0; j <= i__1; ++j)
                     {
                         /* process */
                         s = 0.;
                         i__2 = j - 1;
-                        for (i__ = 0;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 0; i__ <= i__2; ++i__)
                         {
                             aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
                             /* A(j,i) */
@@ -797,9 +732,7 @@ L10:
                         aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
                         s = aa;
                         i__2 = *n - 1;
-                        for (l = k + j + 1;
-                                l <= i__2;
-                                ++l)
+                        for(l = k + j + 1; l <= i__2; ++l)
                         {
                             ++i__;
                             aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
@@ -812,9 +745,7 @@ L10:
                     /* j=k-1 is special :process col A(k-1,0:k-1) */
                     s = 0.;
                     i__1 = k - 2;
-                    for (i__ = 0;
-                            i__ <= i__1;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__1; ++i__)
                     {
                         aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
                         /* A(k,i) */
@@ -828,16 +759,12 @@ L10:
                     work[i__] = s;
                     /* done with col j=k+1 */
                     i__1 = *n - 1;
-                    for (j = k;
-                            j <= i__1;
-                            ++j)
+                    for(j = k; j <= i__1; ++j)
                     {
                         /* process col j of A = A(j,0:k-1) */
                         s = 0.;
                         i__2 = k - 1;
-                        for (i__ = 0;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 0; i__ <= i__2; ++i__)
                         {
                             aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
                             /* A(j,i) */
@@ -848,12 +775,10 @@ L10:
                     }
                     value = work[0];
                     i__1 = *n - 1;
-                    for (i__ = 1;
-                            i__ <= i__1;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__1; ++i__)
                     {
                         temp = work[i__];
-                        if (value < temp || disnan_(&temp))
+                        if(value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
@@ -863,25 +788,19 @@ L10:
             else
             {
                 /* n is even */
-                if (ilu == 0)
+                if(ilu == 0)
                 {
                     i__1 = *n - 1;
-                    for (i__ = k;
-                            i__ <= i__1;
-                            ++i__)
+                    for(i__ = k; i__ <= i__1; ++i__)
                     {
                         work[i__] = 0.;
                     }
                     i__1 = k - 1;
-                    for (j = 0;
-                            j <= i__1;
-                            ++j)
+                    for(j = 0; j <= i__1; ++j)
                     {
                         s = 0.;
                         i__2 = k - 1;
-                        for (i__ = 0;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 0; i__ <= i__2; ++i__)
                         {
                             aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
                             /* A(j,i+k) */
@@ -895,9 +814,7 @@ L10:
                     /* A(k,k) */
                     s = aa;
                     i__1 = k - 1;
-                    for (i__ = 1;
-                            i__ <= i__1;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__1; ++i__)
                     {
                         aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
                         /* A(k,k+i) */
@@ -906,15 +823,11 @@ L10:
                     }
                     work[j] += s;
                     i__1 = *n - 1;
-                    for (j = k + 1;
-                            j <= i__1;
-                            ++j)
+                    for(j = k + 1; j <= i__1; ++j)
                     {
                         s = 0.;
                         i__2 = j - 2 - k;
-                        for (i__ = 0;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 0; i__ <= i__2; ++i__)
                         {
                             aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
                             /* A(i,j-k-1) */
@@ -931,9 +844,7 @@ L10:
                         /* A(j,j) */
                         s = aa;
                         i__2 = *n - 1;
-                        for (l = j + 1;
-                                l <= i__2;
-                                ++l)
+                        for(l = j + 1; l <= i__2; ++l)
                         {
                             ++i__;
                             aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
@@ -946,9 +857,7 @@ L10:
                     /* j=n */
                     s = 0.;
                     i__1 = k - 2;
-                    for (i__ = 0;
-                            i__ <= i__1;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__1; ++i__)
                     {
                         aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
                         /* A(i,k-1) */
@@ -962,12 +871,10 @@ L10:
                     work[i__] += s;
                     value = work[0];
                     i__1 = *n - 1;
-                    for (i__ = 1;
-                            i__ <= i__1;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__1; ++i__)
                     {
                         temp = work[i__];
-                        if (value < temp || disnan_(&temp))
+                        if(value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
@@ -977,9 +884,7 @@ L10:
                 {
                     /* ilu=1 */
                     i__1 = *n - 1;
-                    for (i__ = k;
-                            i__ <= i__1;
-                            ++i__)
+                    for(i__ = k; i__ <= i__1; ++i__)
                     {
                         work[i__] = 0.;
                     }
@@ -987,9 +892,7 @@ L10:
                     s = f2c_abs(a[0]);
                     /* A(k,k) */
                     i__1 = k - 1;
-                    for (i__ = 1;
-                            i__ <= i__1;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__1; ++i__)
                     {
                         aa = (d__1 = a[i__], f2c_abs(d__1));
                         /* A(k+i,k) */
@@ -998,16 +901,12 @@ L10:
                     }
                     work[k] += s;
                     i__1 = k - 1;
-                    for (j = 1;
-                            j <= i__1;
-                            ++j)
+                    for(j = 1; j <= i__1; ++j)
                     {
                         /* process */
                         s = 0.;
                         i__2 = j - 2;
-                        for (i__ = 0;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 0; i__ <= i__2; ++i__)
                         {
                             aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
                             /* A(j-1,i) */
@@ -1024,9 +923,7 @@ L10:
                         aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
                         s = aa;
                         i__2 = *n - 1;
-                        for (l = k + j + 1;
-                                l <= i__2;
-                                ++l)
+                        for(l = k + j + 1; l <= i__2; ++l)
                         {
                             ++i__;
                             aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
@@ -1039,9 +936,7 @@ L10:
                     /* j=k is special :process col A(k,0:k-1) */
                     s = 0.;
                     i__1 = k - 2;
-                    for (i__ = 0;
-                            i__ <= i__1;
-                            ++i__)
+                    for(i__ = 0; i__ <= i__1; ++i__)
                     {
                         aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
                         /* A(k,i) */
@@ -1055,16 +950,12 @@ L10:
                     work[i__] = s;
                     /* done with col j=k+1 */
                     i__1 = *n;
-                    for (j = k + 1;
-                            j <= i__1;
-                            ++j)
+                    for(j = k + 1; j <= i__1; ++j)
                     {
                         /* process col j-1 of A = A(j-1,0:k-1) */
                         s = 0.;
                         i__2 = k - 1;
-                        for (i__ = 0;
-                                i__ <= i__2;
-                                ++i__)
+                        for(i__ = 0; i__ <= i__2; ++i__)
                         {
                             aa = (d__1 = a[i__ + j * lda], f2c_abs(d__1));
                             /* A(j-1,i) */
@@ -1075,12 +966,10 @@ L10:
                     }
                     value = work[0];
                     i__1 = *n - 1;
-                    for (i__ = 1;
-                            i__ <= i__1;
-                            ++i__)
+                    for(i__ = 1; i__ <= i__1; ++i__)
                     {
                         temp = work[i__];
-                        if (value < temp || disnan_(&temp))
+                        if(value < temp || disnan_(&temp))
                         {
                             value = temp;
                         }
@@ -1089,34 +978,30 @@ L10:
             }
         }
     }
-    else if (lsame_(norm, "F") || lsame_(norm, "E"))
+    else if(lsame_(norm, "F", 1, 1) || lsame_(norm, "E", 1, 1))
     {
         /* Find normF(A). */
         k = (*n + 1) / 2;
         scale = 0.;
         s = 1.;
-        if (noe == 1)
+        if(noe == 1)
         {
             /* n is odd */
-            if (ifm == 1)
+            if(ifm == 1)
             {
                 /* A is normal */
-                if (ilu == 0)
+                if(ilu == 0)
                 {
                     /* A is upper */
                     i__1 = k - 3;
-                    for (j = 0;
-                            j <= i__1;
-                            ++j)
+                    for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 2;
                         dlassq_(&i__2, &a[k + j + 1 + j * lda], &c__1, &scale, &s);
                         /* L at A(k,0) */
                     }
                     i__1 = k - 1;
-                    for (j = 0;
-                            j <= i__1;
-                            ++j)
+                    for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k + j - 1;
                         dlassq_(&i__2, &a[j * lda], &c__1, &scale, &s);
@@ -1136,18 +1021,14 @@ L10:
                 {
                     /* ilu=1 & A is lower */
                     i__1 = k - 1;
-                    for (j = 0;
-                            j <= i__1;
-                            ++j)
+                    for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = *n - j - 1;
-                        dlassq_(&i__2, &a[j + 1 + j * lda], &c__1, &scale, &s) ;
+                        dlassq_(&i__2, &a[j + 1 + j * lda], &c__1, &scale, &s);
                         /* trap L at A(0,0) */
                     }
                     i__1 = k - 2;
-                    for (j = 0;
-                            j <= i__1;
-                            ++j)
+                    for(j = 0; j <= i__1; ++j)
                     {
                         dlassq_(&j, &a[(j + 1) * lda], &c__1, &scale, &s);
                         /* U at A(0,1) */
@@ -1166,32 +1047,26 @@ L10:
             else
             {
                 /* A is xpose */
-                if (ilu == 0)
+                if(ilu == 0)
                 {
                     /* A**T is upper */
                     i__1 = k - 2;
-                    for (j = 1;
-                            j <= i__1;
-                            ++j)
+                    for(j = 1; j <= i__1; ++j)
                     {
                         dlassq_(&j, &a[(k + j) * lda], &c__1, &scale, &s);
                         /* U at A(0,k) */
                     }
                     i__1 = k - 2;
-                    for (j = 0;
-                            j <= i__1;
-                            ++j)
+                    for(j = 0; j <= i__1; ++j)
                     {
                         dlassq_(&k, &a[j * lda], &c__1, &scale, &s);
                         /* k by k-1 rect. at A(0,0) */
                     }
                     i__1 = k - 2;
-                    for (j = 0;
-                            j <= i__1;
-                            ++j)
+                    for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 1;
-                        dlassq_(&i__2, &a[j + 1 + (j + k - 1) * lda], &c__1, & scale, &s);
+                        dlassq_(&i__2, &a[j + 1 + (j + k - 1) * lda], &c__1, &scale, &s);
                         /* L at A(0,k-1) */
                     }
                     s += s;
@@ -1208,28 +1083,22 @@ L10:
                 {
                     /* A**T is lower */
                     i__1 = k - 1;
-                    for (j = 1;
-                            j <= i__1;
-                            ++j)
+                    for(j = 1; j <= i__1; ++j)
                     {
                         dlassq_(&j, &a[j * lda], &c__1, &scale, &s);
                         /* U at A(0,0) */
                     }
                     i__1 = *n - 1;
-                    for (j = k;
-                            j <= i__1;
-                            ++j)
+                    for(j = k; j <= i__1; ++j)
                     {
                         dlassq_(&k, &a[j * lda], &c__1, &scale, &s);
                         /* k by k-1 rect. at A(0,k) */
                     }
                     i__1 = k - 3;
-                    for (j = 0;
-                            j <= i__1;
-                            ++j)
+                    for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 2;
-                        dlassq_(&i__2, &a[j + 2 + j * lda], &c__1, &scale, &s) ;
+                        dlassq_(&i__2, &a[j + 2 + j * lda], &c__1, &scale, &s);
                         /* L at A(1,0) */
                     }
                     s += s;
@@ -1247,25 +1116,21 @@ L10:
         else
         {
             /* n is even */
-            if (ifm == 1)
+            if(ifm == 1)
             {
                 /* A is normal */
-                if (ilu == 0)
+                if(ilu == 0)
                 {
                     /* A is upper */
                     i__1 = k - 2;
-                    for (j = 0;
-                            j <= i__1;
-                            ++j)
+                    for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 1;
                         dlassq_(&i__2, &a[k + j + 2 + j * lda], &c__1, &scale, &s);
                         /* L at A(k+1,0) */
                     }
                     i__1 = k - 1;
-                    for (j = 0;
-                            j <= i__1;
-                            ++j)
+                    for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k + j;
                         dlassq_(&i__2, &a[j * lda], &c__1, &scale, &s);
@@ -1284,18 +1149,14 @@ L10:
                 {
                     /* ilu=1 & A is lower */
                     i__1 = k - 1;
-                    for (j = 0;
-                            j <= i__1;
-                            ++j)
+                    for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = *n - j - 1;
-                        dlassq_(&i__2, &a[j + 2 + j * lda], &c__1, &scale, &s) ;
+                        dlassq_(&i__2, &a[j + 2 + j * lda], &c__1, &scale, &s);
                         /* trap L at A(1,0) */
                     }
                     i__1 = k - 1;
-                    for (j = 1;
-                            j <= i__1;
-                            ++j)
+                    for(j = 1; j <= i__1; ++j)
                     {
                         dlassq_(&j, &a[j * lda], &c__1, &scale, &s);
                         /* U at A(0,0) */
@@ -1313,32 +1174,26 @@ L10:
             else
             {
                 /* A is xpose */
-                if (ilu == 0)
+                if(ilu == 0)
                 {
                     /* A**T is upper */
                     i__1 = k - 1;
-                    for (j = 1;
-                            j <= i__1;
-                            ++j)
+                    for(j = 1; j <= i__1; ++j)
                     {
                         dlassq_(&j, &a[(k + 1 + j) * lda], &c__1, &scale, &s);
                         /* U at A(0,k+1) */
                     }
                     i__1 = k - 1;
-                    for (j = 0;
-                            j <= i__1;
-                            ++j)
+                    for(j = 0; j <= i__1; ++j)
                     {
                         dlassq_(&k, &a[j * lda], &c__1, &scale, &s);
                         /* k by k rect. at A(0,0) */
                     }
                     i__1 = k - 2;
-                    for (j = 0;
-                            j <= i__1;
-                            ++j)
+                    for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 1;
-                        dlassq_(&i__2, &a[j + 1 + (j + k) * lda], &c__1, & scale, &s);
+                        dlassq_(&i__2, &a[j + 1 + (j + k) * lda], &c__1, &scale, &s);
                         /* L at A(0,k) */
                     }
                     s += s;
@@ -1354,28 +1209,22 @@ L10:
                 {
                     /* A**T is lower */
                     i__1 = k - 1;
-                    for (j = 1;
-                            j <= i__1;
-                            ++j)
+                    for(j = 1; j <= i__1; ++j)
                     {
                         dlassq_(&j, &a[(j + 1) * lda], &c__1, &scale, &s);
                         /* U at A(0,1) */
                     }
                     i__1 = *n;
-                    for (j = k + 1;
-                            j <= i__1;
-                            ++j)
+                    for(j = k + 1; j <= i__1; ++j)
                     {
                         dlassq_(&k, &a[j * lda], &c__1, &scale, &s);
                         /* k by k rect. at A(0,k+1) */
                     }
                     i__1 = k - 2;
-                    for (j = 0;
-                            j <= i__1;
-                            ++j)
+                    for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 1;
-                        dlassq_(&i__2, &a[j + 1 + j * lda], &c__1, &scale, &s) ;
+                        dlassq_(&i__2, &a[j + 1 + j * lda], &c__1, &scale, &s);
                         /* L at A(0,0) */
                     }
                     s += s;

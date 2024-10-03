@@ -1,18 +1,28 @@
-/* ../netlib/cgeql2.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/cgeql2.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b CGEQL2 computes the QL factorization of a general rectangular matrix using an unblocked algorit hm. */
+/* > \brief \b CGEQL2 computes the QL factorization of a general rectangular matrix using an
+ * unblocked algorit hm. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CGEQL2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgeql2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgeql2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgeql2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgeql2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgeql2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgeql2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -52,10 +62,10 @@ static integer c__1 = 1;
 /* > On entry, the m by n matrix A. */
 /* > On exit, if m >= n, the lower triangle of the subarray */
 /* > A(m-n+1:m,1:n) contains the n by n lower triangular matrix L;
-*/
+ */
 /* > if m <= n, the elements on and below the (n-m)-th */
 /* > superdiagonal contain the m by n lower trapezoidal matrix L;
-*/
+ */
 /* > the remaining elements, with the array TAU, represent the */
 /* > unitary matrix Q as a product of elementary reflectors */
 /* > (see Further Details). */
@@ -114,15 +124,16 @@ v(1:m-k+i-1) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int cgeql2_(integer *m, integer *n, complex *a, integer *lda, complex *tau, complex *work, integer *info)
+void cgeql2_(integer *m, integer *n, complex *a, integer *lda, complex *tau, complex *work,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"cgeql2 inputs: m %lld, n %lld, lda %lld",*m, *n, *lda);
+    snprintf(buffer, 256, "cgeql2 inputs: m %lld, n %lld, lda %lld", *m, *n, *lda);
 #else
-    snprintf(buffer, 256,"cgeql2 inputs: m %d, n %d, lda %d",*m, *n, *lda);
+    snprintf(buffer, 256, "cgeql2 inputs: m %d, n %d, lda %d", *m, *n, *lda);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -135,7 +146,11 @@ int cgeql2_(integer *m, integer *n, complex *a, integer *lda, complex *tau, comp
     integer i__, k;
     complex alpha;
     extern /* Subroutine */
-    int clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *), clarfg_(integer *, complex *, complex *, integer *, complex *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+               complex *),
+        clarfg_(integer *, complex *, complex *, integer *, complex *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -163,29 +178,27 @@ int cgeql2_(integer *m, integer *n, complex *a, integer *lda, complex *tau, comp
     --work;
     /* Function Body */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CGEQL2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
-    k = fla_min(*m,*n);
-    for (i__ = k;
-            i__ >= 1;
-            --i__)
+    k = fla_min(*m, *n);
+    for(i__ = k; i__ >= 1; --i__)
     {
         /* Generate elementary reflector H(i) to annihilate */
         /* A(1:m-k+i-1,n-k+i) */
@@ -193,7 +206,7 @@ int cgeql2_(integer *m, integer *n, complex *a, integer *lda, complex *tau, comp
         alpha.r = a[i__1].r;
         alpha.i = a[i__1].i; // , expr subst
         i__1 = *m - k + i__;
-        clarfg_(&i__1, &alpha, &a[(*n - k + i__) * a_dim1 + 1], &c__1, &tau[ i__]);
+        clarfg_(&i__1, &alpha, &a[(*n - k + i__) * a_dim1 + 1], &c__1, &tau[i__]);
         /* Apply H(i)**H to A(1:m-k+i,1:n-k+i-1) from the left */
         i__1 = *m - k + i__ + (*n - k + i__) * a_dim1;
         a[i__1].r = 1.f;
@@ -201,14 +214,15 @@ int cgeql2_(integer *m, integer *n, complex *a, integer *lda, complex *tau, comp
         i__1 = *m - k + i__;
         i__2 = *n - k + i__ - 1;
         r_cnjg(&q__1, &tau[i__]);
-        clarf_("Left", &i__1, &i__2, &a[(*n - k + i__) * a_dim1 + 1], &c__1, & q__1, &a[a_offset], lda, &work[1]);
+        clarf_("Left", &i__1, &i__2, &a[(*n - k + i__) * a_dim1 + 1], &c__1, &q__1, &a[a_offset],
+               lda, &work[1]);
         i__1 = *m - k + i__ + (*n - k + i__) * a_dim1;
         a[i__1].r = alpha.r;
         a[i__1].i = alpha.i; // , expr subst
         /* L10: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CGEQL2 */
 }
 /* cgeql2_ */

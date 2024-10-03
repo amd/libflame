@@ -1,16 +1,25 @@
-/* ../netlib/slarrc.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/slarrc.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLARRC computes the number of eigenvalues of the symmetric tridiagonal matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SLARRC + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarrc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarrc.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarrc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarrc.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarrc. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarrc.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -121,7 +130,8 @@
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-int slarrc_(char *jobt, integer *n, real *vl, real *vu, real *d__, real *e, real *pivmin, integer *eigcnt, integer *lcnt, integer * rcnt, integer *info)
+void slarrc_(char *jobt, integer *n, real *vl, real *vu, real *d__, real *e, real *pivmin,
+             integer *eigcnt, integer *lcnt, integer *rcnt, integer *info)
 {
     /* System generated locals */
     integer i__1;
@@ -130,7 +140,7 @@ int slarrc_(char *jobt, integer *n, real *vl, real *vu, real *d__, real *e, real
     integer i__;
     real sl, su, tmp, tmp2;
     logical matt;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     real lpivot, rpivot;
     /* -- LAPACK auxiliary routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -154,42 +164,40 @@ int slarrc_(char *jobt, integer *n, real *vl, real *vu, real *d__, real *e, real
     /* Function Body */
     *info = 0;
     /* Quick return if possible */
-    if (*n <= 0)
+    if(*n <= 0)
     {
-        return 0;
+        return;
     }
     *lcnt = 0;
     *rcnt = 0;
     *eigcnt = 0;
-    matt = lsame_(jobt, "T");
-    if (matt)
+    matt = lsame_(jobt, "T", 1, 1);
+    if(matt)
     {
         /* Sturm sequence count on T */
         lpivot = d__[1] - *vl;
         rpivot = d__[1] - *vu;
-        if (lpivot <= 0.f)
+        if(lpivot <= 0.f)
         {
             ++(*lcnt);
         }
-        if (rpivot <= 0.f)
+        if(rpivot <= 0.f)
         {
             ++(*rcnt);
         }
         i__1 = *n - 1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* Computing 2nd power */
             r__1 = e[i__];
             tmp = r__1 * r__1;
             lpivot = d__[i__ + 1] - *vl - tmp / lpivot;
             rpivot = d__[i__ + 1] - *vu - tmp / rpivot;
-            if (lpivot <= 0.f)
+            if(lpivot <= 0.f)
             {
                 ++(*lcnt);
             }
-            if (rpivot <= 0.f)
+            if(rpivot <= 0.f)
             {
                 ++(*rcnt);
             }
@@ -202,23 +210,21 @@ int slarrc_(char *jobt, integer *n, real *vl, real *vu, real *d__, real *e, real
         sl = -(*vl);
         su = -(*vu);
         i__1 = *n - 1;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             lpivot = d__[i__] + sl;
             rpivot = d__[i__] + su;
-            if (lpivot <= 0.f)
+            if(lpivot <= 0.f)
             {
                 ++(*lcnt);
             }
-            if (rpivot <= 0.f)
+            if(rpivot <= 0.f)
             {
                 ++(*rcnt);
             }
             tmp = e[i__] * d__[i__] * e[i__];
             tmp2 = tmp / lpivot;
-            if (tmp2 == 0.f)
+            if(tmp2 == 0.f)
             {
                 sl = tmp - *vl;
             }
@@ -227,7 +233,7 @@ int slarrc_(char *jobt, integer *n, real *vl, real *vu, real *d__, real *e, real
                 sl = sl * tmp2 - *vl;
             }
             tmp2 = tmp / rpivot;
-            if (tmp2 == 0.f)
+            if(tmp2 == 0.f)
             {
                 su = tmp - *vu;
             }
@@ -239,17 +245,17 @@ int slarrc_(char *jobt, integer *n, real *vl, real *vu, real *d__, real *e, real
         }
         lpivot = d__[*n] + sl;
         rpivot = d__[*n] + su;
-        if (lpivot <= 0.f)
+        if(lpivot <= 0.f)
         {
             ++(*lcnt);
         }
-        if (rpivot <= 0.f)
+        if(rpivot <= 0.f)
         {
             ++(*rcnt);
         }
     }
     *eigcnt = *rcnt - *lcnt;
-    return 0;
+    return;
     /* end of SLARRC */
 }
 /* slarrc_ */

@@ -10,7 +10,7 @@
 
 #include "FLAME.h"
 
-FLA_Error FLASH_Obj_attach_buffer_check( void *buffer, dim_t rs, dim_t cs, FLA_Obj* H )
+FLA_Error FLASH_Obj_attach_buffer_check( void *buffer, fla_dim_t rs, fla_dim_t cs, FLA_Obj* H )
 {
   FLA_Error e_val;
 

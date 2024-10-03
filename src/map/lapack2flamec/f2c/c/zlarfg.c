@@ -1,25 +1,30 @@
 /*
     Copyright (c) 2019-2023 Advanced Micro Devices, Inc.
 */
-/* ../netlib/zlarfg.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zlarfg.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b5 =
-{
-    1.,0.
-}
-;
+static doublecomplex c_b5 = {1., 0.};
 /* > \brief \b ZLARFG generates an elementary reflector (Householder matrix). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLARFG + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlarfg. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlarfg.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlarfg. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlarfg.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlarfg. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlarfg.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -101,10 +106,10 @@ static doublecomplex c_b5 =
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int zlarfg_(integer *n, doublecomplex *alpha, doublecomplex * x, integer *incx, doublecomplex *tau)
+void zlarfg_(integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx, doublecomplex *tau)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlarfg inputs: n %" FLA_IS ", incx %" FLA_IS "",*n, *incx);
+    AOCL_DTL_SNPRINTF("zlarfg inputs: n %" FLA_IS ", incx %" FLA_IS "", *n, *incx);
 
     /* System generated locals */
     integer i__1;
@@ -116,14 +121,17 @@ int zlarfg_(integer *n, doublecomplex *alpha, doublecomplex * x, integer *incx, 
     integer j, knt;
     doublereal beta, alphi, alphr;
     doublereal xnorm;
-    extern doublereal dlapy3_(doublereal *, doublereal *, doublereal *), dznrm2_(integer *, doublecomplex *, integer *), dlamch_(char *);
+    extern doublereal dlapy3_(doublereal *, doublereal *, doublereal *),
+        dznrm2_(integer *, doublecomplex *, integer *), dlamch_(char *);
     doublereal safmin;
     extern /* Subroutine */
-    int zdscal_(integer *, doublereal *, doublecomplex *, integer *);
+        void
+        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal rsafmn;
     extern /* Double Complex */
-    void zladiv_f2c_(doublecomplex *, doublecomplex *, doublecomplex *);
-    extern int zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zladiv_f2c_(doublecomplex *, doublecomplex *, doublecomplex *);
+    extern void zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
     extern int fla_zscal(integer *, doublecomplex *, doublecomplex *, integer *);
     /* -- LAPACK auxiliary routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -152,17 +160,17 @@ int zlarfg_(integer *n, doublecomplex *alpha, doublecomplex * x, integer *incx, 
 
     --x;
     /* Function Body */
-    if (*n <= 0)
+    if(*n <= 0)
     {
         tau->r = 0., tau->i = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     i__1 = *n - 1;
     xnorm = dznrm2_(&i__1, &x[1], incx);
     alphr = alpha->r;
     alphi = alpha->i;
-    if (xnorm == 0. && alphi == 0.)
+    if(xnorm == 0. && alphi == 0.)
     {
         /* H = I */
         tau->r = 0., tau->i = 0.;
@@ -175,18 +183,18 @@ int zlarfg_(integer *n, doublecomplex *alpha, doublecomplex * x, integer *incx, 
         safmin = dlamch_("S") / dlamch_("E");
         rsafmn = 1. / safmin;
         knt = 0;
-        if (f2c_abs(beta) < safmin)
+        if(f2c_abs(beta) < safmin)
         {
             /* XNORM, BETA may be inaccurate;
             scale X and recompute them */
-L10:
+        L10:
             ++knt;
             i__1 = *n - 1;
             zdscal_(&i__1, &rsafmn, &x[1], incx);
             beta *= rsafmn;
             alphi *= rsafmn;
             alphr *= rsafmn;
-            if (f2c_abs(beta) < safmin && knt < 20)
+            if(f2c_abs(beta) < safmin && knt < 20)
             {
                 goto L10;
             }
@@ -218,9 +226,7 @@ L10:
 
         /* If ALPHA is subnormal, it may lose relative accuracy */
         i__1 = knt;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             beta *= safmin;
             /* L20: */
@@ -228,8 +234,7 @@ L10:
         alpha->r = beta, alpha->i = 0.;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLARFG */
 }
 /* zlarfg_ */
-

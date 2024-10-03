@@ -1,5 +1,8 @@
-/* zheequb.f -- translated by f2c (version 20190311). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* zheequb.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b ZHEEQUB */
@@ -8,11 +11,17 @@ static integer c__1 = 1;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZHEEQUB + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zheequb .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zheequb
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zheequb .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zheequb
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zheequb .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zheequb
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -46,7 +55,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > UPLO is CHARACTER*1 */
 /* > = 'U': Upper triangle of A is stored;
-*/
+ */
 /* > = 'L': Lower triangle of A is stored. */
 /* > \endverbatim */
 /* > */
@@ -120,16 +129,18 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int zheequb_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal *s, doublereal *scond, doublereal *amax, doublecomplex *work, integer *info)
+void zheequb_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal *s,
+              doublereal *scond, doublereal *amax, doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zheequb inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "",*uplo, *n, *lda);
+    AOCL_DTL_SNPRINTF("zheequb inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal d__1, d__2, d__3, d__4;
     doublecomplex z__1, z__2;
     /* Builtin functions */
-    double d_imag(doublecomplex *), sqrt(doublereal), log(doublereal), pow_di( doublereal *, integer *);
+    double d_imag(doublecomplex *), sqrt(doublereal), log(doublereal),
+        pow_di(doublereal *, integer *);
     /* Local variables */
     doublereal d__;
     integer i__, j;
@@ -138,14 +149,16 @@ int zheequb_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal 
     doublereal avg, std, tol, base;
     integer iter;
     doublereal smin, smax, scale;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     doublereal sumsq;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum, smlnum;
     extern /* Subroutine */
-    int zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
+        void
+        zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -178,162 +191,154 @@ int zheequb_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal 
     --work;
     /* Function Body */
     *info = 0;
-    if (! (lsame_(uplo, "U") || lsame_(uplo, "L")))
+    if(!(lsame_(uplo, "U", 1, 1) || lsame_(uplo, "L", 1, 1)))
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*n))
+    else if(*lda < fla_max(1, *n))
     {
         *info = -4;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("ZHEEQUB", &i__1, (ftnlen)7);
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
-    up = lsame_(uplo, "U");
+    up = lsame_(uplo, "U", 1, 1);
     *amax = 0.;
     /* Quick return if possible. */
-    if (*n == 0)
+    if(*n == 0)
     {
         *scond = 1.;
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         s[i__] = 0.;
     }
     *amax = 0.;
-    if (up)
+    if(up)
     {
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j - 1;
-            for (i__ = 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = 1; i__ <= i__2; ++i__)
             {
                 /* Computing MAX */
                 i__3 = i__ + j * a_dim1;
                 d__3 = s[i__];
-                d__4 = (d__1 = a[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2)); // , expr subst
-                s[i__] = fla_max(d__3,d__4);
+                d__4 = (d__1 = a[i__3].r, f2c_dabs(d__1))
+                       + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2)); // , expr subst
+                s[i__] = fla_max(d__3, d__4);
                 /* Computing MAX */
                 i__3 = i__ + j * a_dim1;
                 d__3 = s[j];
-                d__4 = (d__1 = a[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2)); // , expr subst
-                s[j] = fla_max(d__3,d__4);
+                d__4 = (d__1 = a[i__3].r, f2c_dabs(d__1))
+                       + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2)); // , expr subst
+                s[j] = fla_max(d__3, d__4);
                 /* Computing MAX */
                 i__3 = i__ + j * a_dim1;
                 d__3 = *amax;
-                d__4 = (d__1 = a[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2)); // , expr subst
-                *amax = fla_max(d__3,d__4);
+                d__4 = (d__1 = a[i__3].r, f2c_dabs(d__1))
+                       + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2)); // , expr subst
+                *amax = fla_max(d__3, d__4);
             }
             /* Computing MAX */
             i__2 = j + j * a_dim1;
             d__3 = s[j];
-            d__4 = (d__1 = a[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[j + j * a_dim1]), f2c_dabs(d__2)); // , expr subst
-            s[j] = fla_max(d__3,d__4);
+            d__4 = (d__1 = a[i__2].r, f2c_dabs(d__1))
+                   + (d__2 = d_imag(&a[j + j * a_dim1]), f2c_dabs(d__2)); // , expr subst
+            s[j] = fla_max(d__3, d__4);
             /* Computing MAX */
             i__2 = j + j * a_dim1;
             d__3 = *amax;
-            d__4 = (d__1 = a[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[j + j * a_dim1]), f2c_dabs(d__2)); // , expr subst
-            *amax = fla_max(d__3,d__4);
+            d__4 = (d__1 = a[i__2].r, f2c_dabs(d__1))
+                   + (d__2 = d_imag(&a[j + j * a_dim1]), f2c_dabs(d__2)); // , expr subst
+            *amax = fla_max(d__3, d__4);
         }
     }
     else
     {
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             /* Computing MAX */
             i__2 = j + j * a_dim1;
             d__3 = s[j];
-            d__4 = (d__1 = a[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[j + j * a_dim1]), f2c_dabs(d__2)); // , expr subst
-            s[j] = fla_max(d__3,d__4);
+            d__4 = (d__1 = a[i__2].r, f2c_dabs(d__1))
+                   + (d__2 = d_imag(&a[j + j * a_dim1]), f2c_dabs(d__2)); // , expr subst
+            s[j] = fla_max(d__3, d__4);
             /* Computing MAX */
             i__2 = j + j * a_dim1;
             d__3 = *amax;
-            d__4 = (d__1 = a[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[j + j * a_dim1]), f2c_dabs(d__2)); // , expr subst
-            *amax = fla_max(d__3,d__4);
+            d__4 = (d__1 = a[i__2].r, f2c_dabs(d__1))
+                   + (d__2 = d_imag(&a[j + j * a_dim1]), f2c_dabs(d__2)); // , expr subst
+            *amax = fla_max(d__3, d__4);
             i__2 = *n;
-            for (i__ = j + 1;
-                    i__ <= i__2;
-                    ++i__)
+            for(i__ = j + 1; i__ <= i__2; ++i__)
             {
                 /* Computing MAX */
                 i__3 = i__ + j * a_dim1;
                 d__3 = s[i__];
-                d__4 = (d__1 = a[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2)); // , expr subst
-                s[i__] = fla_max(d__3,d__4);
+                d__4 = (d__1 = a[i__3].r, f2c_dabs(d__1))
+                       + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2)); // , expr subst
+                s[i__] = fla_max(d__3, d__4);
                 /* Computing MAX */
                 i__3 = i__ + j * a_dim1;
                 d__3 = s[j];
-                d__4 = (d__1 = a[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2)); // , expr subst
-                s[j] = fla_max(d__3,d__4);
+                d__4 = (d__1 = a[i__3].r, f2c_dabs(d__1))
+                       + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2)); // , expr subst
+                s[j] = fla_max(d__3, d__4);
                 /* Computing MAX */
                 i__3 = i__ + j * a_dim1;
                 d__3 = *amax;
-                d__4 = (d__1 = a[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2)); // , expr subst
-                *amax = fla_max(d__3,d__4);
+                d__4 = (d__1 = a[i__3].r, f2c_dabs(d__1))
+                       + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2)); // , expr subst
+                *amax = fla_max(d__3, d__4);
             }
         }
     }
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         s[j] = 1. / s[j];
     }
     tol = 1. / sqrt(*n * 2.);
-    for (iter = 1;
-            iter <= 100;
-            ++iter)
+    for(iter = 1; iter <= 100; ++iter)
     {
         scale = 0.;
         sumsq = 0.;
         /* beta = |A|s */
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__;
             work[i__2].r = 0.;
             work[i__2].i = 0.; // , expr subst
         }
-        if (up)
+        if(up)
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j - 1;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__;
                     i__4 = i__;
                     i__5 = i__ + j * a_dim1;
-                    d__3 = ((d__1 = a[i__5].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[ i__ + j * a_dim1]), f2c_dabs(d__2))) * s[j];
+                    d__3 = ((d__1 = a[i__5].r, f2c_dabs(d__1))
+                            + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2)))
+                           * s[j];
                     z__1.r = work[i__4].r + d__3;
                     z__1.i = work[i__4].i; // , expr subst
                     work[i__3].r = z__1.r;
@@ -341,7 +346,9 @@ int zheequb_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal 
                     i__3 = j;
                     i__4 = j;
                     i__5 = i__ + j * a_dim1;
-                    d__3 = ((d__1 = a[i__5].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[ i__ + j * a_dim1]), f2c_dabs(d__2))) * s[i__];
+                    d__3 = ((d__1 = a[i__5].r, f2c_dabs(d__1))
+                            + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2)))
+                           * s[i__];
                     z__1.r = work[i__4].r + d__3;
                     z__1.i = work[i__4].i; // , expr subst
                     work[i__3].r = z__1.r;
@@ -350,7 +357,9 @@ int zheequb_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal 
                 i__2 = j;
                 i__3 = j;
                 i__4 = j + j * a_dim1;
-                d__3 = ((d__1 = a[i__4].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[j + j * a_dim1]), f2c_dabs(d__2))) * s[j];
+                d__3 = ((d__1 = a[i__4].r, f2c_dabs(d__1))
+                        + (d__2 = d_imag(&a[j + j * a_dim1]), f2c_dabs(d__2)))
+                       * s[j];
                 z__1.r = work[i__3].r + d__3;
                 z__1.i = work[i__3].i; // , expr subst
                 work[i__2].r = z__1.r;
@@ -360,27 +369,27 @@ int zheequb_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal 
         else
         {
             i__1 = *n;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j;
                 i__3 = j;
                 i__4 = j + j * a_dim1;
-                d__3 = ((d__1 = a[i__4].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[j + j * a_dim1]), f2c_dabs(d__2))) * s[j];
+                d__3 = ((d__1 = a[i__4].r, f2c_dabs(d__1))
+                        + (d__2 = d_imag(&a[j + j * a_dim1]), f2c_dabs(d__2)))
+                       * s[j];
                 z__1.r = work[i__3].r + d__3;
                 z__1.i = work[i__3].i; // , expr subst
                 work[i__2].r = z__1.r;
                 work[i__2].i = z__1.i; // , expr subst
                 i__2 = *n;
-                for (i__ = j + 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = j + 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__;
                     i__4 = i__;
                     i__5 = i__ + j * a_dim1;
-                    d__3 = ((d__1 = a[i__5].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[ i__ + j * a_dim1]), f2c_dabs(d__2))) * s[j];
+                    d__3 = ((d__1 = a[i__5].r, f2c_dabs(d__1))
+                            + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2)))
+                           * s[j];
                     z__1.r = work[i__4].r + d__3;
                     z__1.i = work[i__4].i; // , expr subst
                     work[i__3].r = z__1.r;
@@ -388,7 +397,9 @@ int zheequb_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal 
                     i__3 = j;
                     i__4 = j;
                     i__5 = i__ + j * a_dim1;
-                    d__3 = ((d__1 = a[i__5].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[ i__ + j * a_dim1]), f2c_dabs(d__2))) * s[i__];
+                    d__3 = ((d__1 = a[i__5].r, f2c_dabs(d__1))
+                            + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2)))
+                           * s[i__];
                     z__1.r = work[i__4].r + d__3;
                     z__1.i = work[i__4].i; // , expr subst
                     work[i__3].r = z__1.r;
@@ -399,9 +410,7 @@ int zheequb_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal 
         /* avg = s^T beta / n */
         avg = 0.;
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__;
             i__3 = i__;
@@ -412,9 +421,7 @@ int zheequb_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal 
         avg /= *n;
         std = 0.;
         i__1 = *n << 1;
-        for (i__ = *n + 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = *n + 1; i__ <= i__1; ++i__)
         {
             i__2 = i__;
             i__3 = i__ - *n;
@@ -428,17 +435,16 @@ int zheequb_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal 
         }
         zlassq_(n, &work[*n + 1], &c__1, &scale, &sumsq);
         std = scale * sqrt(sumsq / *n);
-        if (std < tol * avg)
+        if(std < tol * avg)
         {
             goto L999;
         }
         i__1 = *n;
-        for (i__ = 1;
-                i__ <= i__1;
-                ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + i__ * a_dim1;
-            t = (d__1 = a[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[i__ + i__ * a_dim1]), f2c_dabs(d__2));
+            t = (d__1 = a[i__2].r, f2c_dabs(d__1))
+                + (d__2 = d_imag(&a[i__ + i__ * a_dim1]), f2c_dabs(d__2));
             si = s[i__];
             c2 = (*n - 1) * t;
             i__2 = i__;
@@ -446,24 +452,23 @@ int zheequb_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal 
             i__2 = i__;
             c0 = -(t * si) * si + work[i__2].r * 2 * si - *n * avg;
             d__ = c1 * c1 - c0 * 4 * c2;
-            if (d__ <= 0.)
+            if(d__ <= 0.)
             {
                 *info = -1;
-    AOCL_DTL_TRACE_LOG_EXIT
-                return 0;
+                AOCL_DTL_TRACE_LOG_EXIT
+                return;
             }
             si = c0 * -2 / (c1 + sqrt(d__));
             d__ = si - s[i__];
             u = 0.;
-            if (up)
+            if(up)
             {
                 i__2 = i__;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = j + i__ * a_dim1;
-                    t = (d__1 = a[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[j + i__ * a_dim1]), f2c_dabs(d__2));
+                    t = (d__1 = a[i__3].r, f2c_dabs(d__1))
+                        + (d__2 = d_imag(&a[j + i__ * a_dim1]), f2c_dabs(d__2));
                     u += s[j] * t;
                     i__3 = j;
                     i__4 = j;
@@ -474,12 +479,11 @@ int zheequb_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal 
                     work[i__3].i = z__1.i; // , expr subst
                 }
                 i__2 = *n;
-                for (j = i__ + 1;
-                        j <= i__2;
-                        ++j)
+                for(j = i__ + 1; j <= i__2; ++j)
                 {
                     i__3 = i__ + j * a_dim1;
-                    t = (d__1 = a[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2));
+                    t = (d__1 = a[i__3].r, f2c_dabs(d__1))
+                        + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2));
                     u += s[j] * t;
                     i__3 = j;
                     i__4 = j;
@@ -493,12 +497,11 @@ int zheequb_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal 
             else
             {
                 i__2 = i__;
-                for (j = 1;
-                        j <= i__2;
-                        ++j)
+                for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = i__ + j * a_dim1;
-                    t = (d__1 = a[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2));
+                    t = (d__1 = a[i__3].r, f2c_dabs(d__1))
+                        + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2));
                     u += s[j] * t;
                     i__3 = j;
                     i__4 = j;
@@ -509,12 +512,11 @@ int zheequb_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal 
                     work[i__3].i = z__1.i; // , expr subst
                 }
                 i__2 = *n;
-                for (j = i__ + 1;
-                        j <= i__2;
-                        ++j)
+                for(j = i__ + 1; j <= i__2; ++j)
                 {
                     i__3 = j + i__ * a_dim1;
-                    t = (d__1 = a[i__3].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[j + i__ * a_dim1]), f2c_dabs(d__2));
+                    t = (d__1 = a[i__3].r, f2c_dabs(d__1))
+                        + (d__2 = d_imag(&a[j + i__ * a_dim1]), f2c_dabs(d__2));
                     u += s[j] * t;
                     i__3 = j;
                     i__4 = j;
@@ -539,23 +541,21 @@ L999:
     base = dlamch_("B");
     u = 1. / log(base);
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
-        i__2 = (integer) (u * log(s[i__] * t));
+        i__2 = (integer)(u * log(s[i__] * t));
         s[i__] = pow_di(&base, &i__2);
         /* Computing MIN */
         d__1 = smin;
         d__2 = s[i__]; // , expr subst
-        smin = fla_min(d__1,d__2);
+        smin = fla_min(d__1, d__2);
         /* Computing MAX */
         d__1 = smax;
         d__2 = s[i__]; // , expr subst
-        smax = fla_max(d__1,d__2);
+        smax = fla_max(d__1, d__2);
     }
-    *scond = fla_max(smin,smlnum) / fla_min(smax,bignum);
+    *scond = fla_max(smin, smlnum) / fla_min(smax, bignum);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
 }
 /* zheequb_ */

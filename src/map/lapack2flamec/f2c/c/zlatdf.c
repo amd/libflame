@@ -1,25 +1,31 @@
-/* ../netlib/zlatdf.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/zlatdf.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 =
-{
-    1.,0.
-}
-;
+static doublecomplex c_b1 = {1., 0.};
 static integer c__1 = 1;
 static integer c_n1 = -1;
 static doublereal c_b24 = 1.;
-/* > \brief \b ZLATDF uses the LU factorization of the n-by-n matrix computed by sgetc2 and computes a contrib ution to the reciprocal Dif-estimate. */
+/* > \brief \b ZLATDF uses the LU factorization of the n-by-n matrix computed by sgetc2 and computes
+ * a contrib ution to the reciprocal Dif-estimate. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download ZLATDF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlatdf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlatdf.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlatdf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlatdf.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlatdf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlatdf.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -162,10 +168,13 @@ for 1 <= j <= N, column j of the */
 /* > 1995. */
 /* ===================================================================== */
 /* Subroutine */
-int zlatdf_(integer *ijob, integer *n, doublecomplex *z__, integer *ldz, doublecomplex *rhs, doublereal *rdsum, doublereal * rdscal, integer *ipiv, integer *jpiv)
+void zlatdf_(integer *ijob, integer *n, doublecomplex *z__, integer *ldz, doublecomplex *rhs,
+             doublereal *rdsum, doublereal *rdscal, integer *ipiv, integer *jpiv)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlatdf inputs: ijob %" FLA_IS ", n %" FLA_IS ", ldz %" FLA_IS ", rdsum %lf, rdscal %lf",*ijob, *n, *ldz, *rdsum, *rdscal);
+    AOCL_DTL_SNPRINTF("zlatdf inputs: ijob %" FLA_IS ", n %" FLA_IS ", ldz %" FLA_IS
+                      ", rdsum %lf, rdscal %lf",
+                      *ijob, *n, *ldz, *rdsum, *rdscal);
     /* System generated locals */
     integer z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
     doublecomplex z__1, z__2, z__3;
@@ -180,19 +189,30 @@ int zlatdf_(integer *ijob, integer *n, doublecomplex *z__, integer *ldz, doublec
     doublecomplex temp, work[8];
     doublereal scale;
     extern /* Subroutine */
-    int zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
+        void
+        zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
     doublecomplex pmone;
     extern /* Double Complex */
-    VOID zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        VOID
+        zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
+                   integer *);
     doublereal rtemp, sminu, rwork[2];
     extern /* Subroutine */
-    int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+        void
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     doublereal splus;
     extern /* Subroutine */
-    int zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zgesc2_( integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublereal *), zgecon_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, doublereal *, integer *);
+        void
+        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zgesc2_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *,
+                doublereal *),
+        zgecon_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
+                doublecomplex *, doublereal *, integer *);
     extern doublereal dzasum_(integer *, doublecomplex *, integer *);
     extern /* Subroutine */
-    int zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *), zlaswp_(integer *, doublecomplex *, integer *, integer *, integer *, integer *, integer *);
+        void
+        zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *),
+        zlaswp_(integer *, doublecomplex *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -223,7 +243,7 @@ int zlatdf_(integer *ijob, integer *n, doublecomplex *z__, integer *ldz, doublec
     --ipiv;
     --jpiv;
     /* Function Body */
-    if (*ijob != 2)
+    if(*ijob != 2)
     {
         /* Apply permutations IPIV to RHS */
         i__1 = *n - 1;
@@ -234,9 +254,7 @@ int zlatdf_(integer *ijob, integer *n, doublecomplex *z__, integer *ldz, doublec
         pmone.r = z__1.r;
         pmone.i = z__1.i; // , expr subst
         i__1 = *n - 1;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             i__2 = j;
             z__1.r = rhs[i__2].r + 1.;
@@ -252,20 +270,21 @@ int zlatdf_(integer *ijob, integer *n, doublecomplex *z__, integer *ldz, doublec
             /* Lockahead for L- part RHS(1:N-1) = +-1 */
             /* SPLUS and SMIN computed more efficiently than in BSOLVE[1]. */
             i__2 = *n - j;
-            zdotc_f2c_(&z__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &z__[j + 1 + j * z_dim1], &c__1);
+            zdotc_f2c_(&z__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &z__[j + 1 + j * z_dim1],
+                       &c__1);
             splus += z__1.r;
             i__2 = *n - j;
             zdotc_f2c_(&z__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &rhs[j + 1], &c__1);
             sminu = z__1.r;
             i__2 = j;
             splus *= rhs[i__2].r;
-            if (splus > sminu)
+            if(splus > sminu)
             {
                 i__2 = j;
                 rhs[i__2].r = bp.r;
                 rhs[i__2].i = bp.i; // , expr subst
             }
-            else if (sminu > splus)
+            else if(sminu > splus)
             {
                 i__2 = j;
                 rhs[i__2].r = bm.r;
@@ -317,9 +336,7 @@ int zlatdf_(integer *ijob, integer *n, doublecomplex *z__, integer *ldz, doublec
         rhs[i__1].i = z__1.i; // , expr subst
         splus = 0.;
         sminu = 0.;
-        for (i__ = *n;
-                i__ >= 1;
-                --i__)
+        for(i__ = *n; i__ >= 1; --i__)
         {
             z_div(&z__1, &c_b1, &z__[i__ + i__ * z_dim1]);
             temp.r = z__1.r;
@@ -337,9 +354,7 @@ int zlatdf_(integer *ijob, integer *n, doublecomplex *z__, integer *ldz, doublec
             rhs[i__1].r = z__1.r;
             rhs[i__1].i = z__1.i; // , expr subst
             i__1 = *n;
-            for (k = i__ + 1;
-                    k <= i__1;
-                    ++k)
+            for(k = i__ + 1; k <= i__1; ++k)
             {
                 i__2 = i__ - 1;
                 i__3 = i__ - 1;
@@ -371,7 +386,7 @@ int zlatdf_(integer *ijob, integer *n, doublecomplex *z__, integer *ldz, doublec
             sminu += z_abs(&rhs[i__]);
             /* L30: */
         }
-        if (splus > sminu)
+        if(splus > sminu)
         {
             zcopy_(n, work, &c__1, &rhs[1], &c__1);
         }
@@ -380,8 +395,8 @@ int zlatdf_(integer *ijob, integer *n, doublecomplex *z__, integer *ldz, doublec
         zlaswp_(&c__1, &rhs[1], ldz, &c__1, &i__1, &jpiv[1], &c_n1);
         /* Compute the sum of squares */
         zlassq_(n, &rhs[1], &c__1, rdscal, rdsum);
-    AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* ENTRY IJOB = 2 */
     /* Compute approximate nullvector XM of Z */
@@ -403,14 +418,14 @@ int zlatdf_(integer *ijob, integer *n, doublecomplex *z__, integer *ldz, doublec
     zaxpy_(n, &z__1, xm, &c__1, &rhs[1], &c__1);
     zgesc2_(n, &z__[z_offset], ldz, &rhs[1], &ipiv[1], &jpiv[1], &scale);
     zgesc2_(n, &z__[z_offset], ldz, xp, &ipiv[1], &jpiv[1], &scale);
-    if (dzasum_(n, xp, &c__1) > dzasum_(n, &rhs[1], &c__1))
+    if(dzasum_(n, xp, &c__1) > dzasum_(n, &rhs[1], &c__1))
     {
         zcopy_(n, xp, &c__1, &rhs[1], &c__1);
     }
     /* Compute the sum of squares */
     zlassq_(n, &rhs[1], &c__1, rdscal, rdsum);
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of ZLATDF */
 }
 /* zlatdf_ */

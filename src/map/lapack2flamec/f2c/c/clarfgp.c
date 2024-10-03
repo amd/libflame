@@ -1,22 +1,28 @@
-/* ../netlib/clarfgp.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/clarfgp.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b5 =
-{
-    1.f,0.f
-}
-;
-/* > \brief \b CLARFGP generates an elementary reflector (Householder matrix) with non-negative beta. */
+static complex c_b5 = {1.f, 0.f};
+/* > \brief \b CLARFGP generates an elementary reflector (Householder matrix) with non-negative
+ * beta. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLARFGP + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clarfgp .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clarfgp
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clarfgp .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clarfgp
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarfgp .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarfgp
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -96,15 +102,15 @@ static complex c_b5 =
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int clarfgp_(integer *n, complex *alpha, complex *x, integer *incx, complex *tau)
+void clarfgp_(integer *n, complex *alpha, complex *x, integer *incx, complex *tau)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"clarfgp inputs: n %lld, incx %lld",*n, *incx);
+    snprintf(buffer, 256, "clarfgp inputs: n %lld, incx %lld", *n, *incx);
 #else
-    snprintf(buffer, 256,"clarfgp inputs: n %d, incx %d",*n, *incx);
+    snprintf(buffer, 256, "clarfgp inputs: n %d, incx %d", *n, *incx);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -120,14 +126,18 @@ int clarfgp_(integer *n, complex *alpha, complex *x, integer *incx, complex *tau
     integer knt;
     real beta;
     extern /* Subroutine */
-    int cscal_(integer *, complex *, complex *, integer *);
+        void
+        cscal_(integer *, complex *, complex *, integer *);
     real alphi, alphr, xnorm;
-    extern real scnrm2_(integer *, complex *, integer *), slapy2_(real *, real *), slapy3_(real *, real *, real *);
+    extern real scnrm2_(integer *, complex *, integer *), slapy2_(real *, real *),
+        slapy3_(real *, real *, real *);
     extern /* Complex */
-    void cladiv_f2c_(complex *, complex *, complex *);
+        void
+        cladiv_f2c_(complex *, complex *, complex *);
     extern real slamch_(char *);
     extern /* Subroutine */
-    int csscal_(integer *, real *, complex *, integer *);
+        void
+        csscal_(integer *, real *, complex *, integer *);
     real bignum, smlnum;
     /* -- LAPACK auxiliary routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -152,23 +162,23 @@ int clarfgp_(integer *n, complex *alpha, complex *x, integer *incx, complex *tau
     /* Parameter adjustments */
     --x;
     /* Function Body */
-    if (*n <= 0)
+    if(*n <= 0)
     {
         tau->r = 0.f, tau->i = 0.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     i__1 = *n - 1;
     xnorm = scnrm2_(&i__1, &x[1], incx);
     alphr = alpha->r;
     alphi = r_imag(alpha);
-    if (xnorm == 0.f)
+    if(xnorm == 0.f)
     {
         /* H = [1-alpha/f2c_abs(alpha) 0;
         0 I], sign chosen so ALPHA >= 0. */
-        if (alphi == 0.f)
+        if(alphi == 0.f)
         {
-            if (alphr >= 0.f)
+            if(alphr >= 0.f)
             {
                 /* When TAU.eq.ZERO, the vector is special-cased to be */
                 /* all zeros in the application routines. We do not need */
@@ -181,9 +191,7 @@ int clarfgp_(integer *n, complex *alpha, complex *x, integer *incx, complex *tau
                 /* zero checks when TAU.ne.ZERO, and we must clear X. */
                 tau->r = 2.f, tau->i = 0.f;
                 i__1 = *n - 1;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = (j - 1) * *incx + 1;
                     x[i__2].r = 0.f;
@@ -204,9 +212,7 @@ int clarfgp_(integer *n, complex *alpha, complex *x, integer *incx, complex *tau
             q__1.i = r__2; // , expr subst
             tau->r = q__1.r, tau->i = q__1.i;
             i__1 = *n - 1;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 i__2 = (j - 1) * *incx + 1;
                 x[i__2].r = 0.f;
@@ -223,18 +229,18 @@ int clarfgp_(integer *n, complex *alpha, complex *x, integer *incx, complex *tau
         smlnum = slamch_("S") / slamch_("E");
         bignum = 1.f / smlnum;
         knt = 0;
-        if (f2c_abs(beta) < smlnum)
+        if(f2c_abs(beta) < smlnum)
         {
             /* XNORM, BETA may be inaccurate;
             scale X and recompute them */
-L10:
+        L10:
             ++knt;
             i__1 = *n - 1;
             csscal_(&i__1, &bignum, &x[1], incx);
             beta *= bignum;
             alphi *= bignum;
             alphr *= bignum;
-            if (f2c_abs(beta) < smlnum && knt < 20)
+            if(f2c_abs(beta) < smlnum && knt < 20)
             {
                 goto L10;
             }
@@ -252,7 +258,7 @@ L10:
         q__1.r = alpha->r + beta;
         q__1.i = alpha->i; // , expr subst
         alpha->r = q__1.r, alpha->i = q__1.i;
-        if (beta < 0.f)
+        if(beta < 0.f)
         {
             beta = -beta;
             q__2.r = -alpha->r;
@@ -277,7 +283,7 @@ L10:
         }
         cladiv_f2c_(&q__1, &c_b5, alpha);
         alpha->r = q__1.r, alpha->i = q__1.i;
-        if (c_abs(tau) <= smlnum)
+        if(c_abs(tau) <= smlnum)
         {
             /* In the case where the computed TAU ends up being a denormalized number, */
             /* it loses relative accuracy. This is a BIG problem. Solution: flush TAU */
@@ -286,9 +292,9 @@ L10:
             /* (Thanks Pat. Thanks MathWorks.) */
             alphr = savealpha.r;
             alphi = r_imag(&savealpha);
-            if (alphi == 0.f)
+            if(alphi == 0.f)
             {
-                if (alphr >= 0.f)
+                if(alphr >= 0.f)
                 {
                     tau->r = 0.f, tau->i = 0.f;
                 }
@@ -296,9 +302,7 @@ L10:
                 {
                     tau->r = 2.f, tau->i = 0.f;
                     i__1 = *n - 1;
-                    for (j = 1;
-                            j <= i__1;
-                            ++j)
+                    for(j = 1; j <= i__1; ++j)
                     {
                         i__2 = (j - 1) * *incx + 1;
                         x[i__2].r = 0.f;
@@ -318,9 +322,7 @@ L10:
                 q__1.i = r__2; // , expr subst
                 tau->r = q__1.r, tau->i = q__1.i;
                 i__1 = *n - 1;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = (j - 1) * *incx + 1;
                     x[i__2].r = 0.f;
@@ -337,9 +339,7 @@ L10:
         }
         /* If BETA is subnormal, it may lose relative accuracy */
         i__1 = knt;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             beta *= smlnum;
             /* L20: */
@@ -347,8 +347,7 @@ L10:
         alpha->r = beta, alpha->i = 0.f;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLARFGP */
 }
 /* clarfgp_ */
-

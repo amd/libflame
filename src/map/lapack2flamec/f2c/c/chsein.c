@@ -1,5 +1,8 @@
-/* ../netlib/chsein.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/chsein.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static logical c_false = FALSE_;
 static logical c_true = TRUE_;
@@ -9,11 +12,17 @@ static logical c_true = TRUE_;
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CHSEIN + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chsein. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chsein.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chsein. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chsein.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chsein. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chsein.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -53,9 +62,9 @@ static logical c_true = TRUE_;
 /* > \verbatim */
 /* > SIDE is CHARACTER*1 */
 /* > = 'R': compute right eigenvectors only;
-*/
+ */
 /* > = 'L': compute left eigenvectors only;
-*/
+ */
 /* > = 'B': compute both right and left eigenvectors. */
 /* > \endverbatim */
 /* > */
@@ -80,7 +89,7 @@ thus, if */
 /* > \verbatim */
 /* > INITV is CHARACTER*1 */
 /* > = 'N': no initial vectors are supplied;
-*/
+ */
 /* > = 'U': user-supplied initial vectors are stored in the arrays */
 /* > VL and/or VR. */
 /* > \endverbatim */
@@ -244,15 +253,23 @@ here the magnitude of a complex number */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int chsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n, complex *h__, integer *ldh, complex *w, complex * vl, integer *ldvl, complex *vr, integer *ldvr, integer *mm, integer * m, complex *work, real *rwork, integer *ifaill, integer *ifailr, integer *info)
+void chsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n, complex *h__,
+             integer *ldh, complex *w, complex *vl, integer *ldvl, complex *vr, integer *ldvr,
+             integer *mm, integer *m, complex *work, real *rwork, integer *ifaill, integer *ifailr,
+             integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"chsein inputs: side %c, eigsrc %c, initv %c, n %lld, ldh %lld, ldvl %lld, ldvr %lld, mm %lld",*side, *eigsrc, *initv, *n, *ldh, *ldvl, *ldvr, *mm);
+    snprintf(buffer, 256,
+             "chsein inputs: side %c, eigsrc %c, initv %c, n %lld, ldh %lld, ldvl %lld, ldvr %lld, "
+             "mm %lld",
+             *side, *eigsrc, *initv, *n, *ldh, *ldvl, *ldvr, *mm);
 #else
-    snprintf(buffer, 256,"chsein inputs: side %c, eigsrc %c, initv %c, n %d, ldh %d, ldvl %d, ldvr %d, mm %d",*side, *eigsrc, *initv, *n, *ldh, *ldvl, *ldvr, *mm);
+    snprintf(buffer, 256,
+             "chsein inputs: side %c, eigsrc %c, initv %c, n %d, ldh %d, ldvl %d, ldvr %d, mm %d",
+             *side, *eigsrc, *initv, *n, *ldh, *ldvl, *ldvr, *mm);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -267,15 +284,18 @@ int chsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n,
     complex wk;
     integer kln;
     real ulp, eps3, unfl;
-    extern logical lsame_(char *, char *);
+    extern logical lsame_(char *, char *, integer, integer);
     integer iinfo;
     logical leftv, bothv;
     real hnorm;
     extern /* Subroutine */
-    int claein_(logical *, logical *, integer *, complex *, integer *, complex *, complex *, complex *, integer *, real *, real *, real *, integer *);
+        void
+        claein_(logical *, logical *, integer *, complex *, integer *, complex *, complex *,
+                complex *, integer *, real *, real *, real *, integer *);
     extern real slamch_(char *), clanhs_(char *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
-    int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern logical sisnan_(real *);
     logical noinit;
     integer ldwork;
@@ -323,70 +343,69 @@ int chsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n,
     --ifaill;
     --ifailr;
     /* Function Body */
-    bothv = lsame_(side, "B");
-    rightv = lsame_(side, "R") || bothv;
-    leftv = lsame_(side, "L") || bothv;
-    fromqr = lsame_(eigsrc, "Q");
-    noinit = lsame_(initv, "N");
+    eps3 = 0.f;
+    bothv = lsame_(side, "B", 1, 1);
+    rightv = lsame_(side, "R", 1, 1) || bothv;
+    leftv = lsame_(side, "L", 1, 1) || bothv;
+    fromqr = lsame_(eigsrc, "Q", 1, 1);
+    noinit = lsame_(initv, "N", 1, 1);
     /* Set M to the number of columns required to store the selected */
     /* eigenvectors. */
     *m = 0;
     i__1 = *n;
-    for (k = 1;
-            k <= i__1;
-            ++k)
+    for(k = 1; k <= i__1; ++k)
     {
-        if (select[k])
+        if(select[k])
         {
             ++(*m);
         }
         /* L10: */
     }
     *info = 0;
-    if (! rightv && ! leftv)
+    if(!rightv && !leftv)
     {
         *info = -1;
     }
-    else if (! fromqr && ! lsame_(eigsrc, "N"))
+    else if(!fromqr && !lsame_(eigsrc, "N", 1, 1))
     {
         *info = -2;
     }
-    else if (! noinit && ! lsame_(initv, "U"))
+    else if(!noinit && !lsame_(initv, "U", 1, 1))
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -5;
     }
-    else if (*ldh < fla_max(1,*n))
+    else if(*ldh < fla_max(1, *n))
     {
         *info = -7;
     }
-    else if (*ldvl < 1 || leftv && *ldvl < *n)
+    else if(*ldvl < 1 || leftv && *ldvl < *n)
     {
         *info = -10;
     }
-    else if (*ldvr < 1 || rightv && *ldvr < *n)
+    else if(*ldvr < 1 || rightv && *ldvr < *n)
     {
         *info = -12;
     }
-    else if (*mm < *m)
+    else if(*mm < *m)
     {
         *info = -13;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CHSEIN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Quick return if possible. */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Set machine-dependent constants. */
     unfl = slamch_("Safe minimum");
@@ -395,7 +414,7 @@ int chsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n,
     ldwork = *n;
     kl = 1;
     kln = 0;
-    if (fromqr)
+    if(fromqr)
     {
         kr = 0;
     }
@@ -405,14 +424,12 @@ int chsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n,
     }
     ks = 1;
     i__1 = *n;
-    for (k = 1;
-            k <= i__1;
-            ++k)
+    for(k = 1; k <= i__1; ++k)
     {
-        if (select[k])
+        if(select[k])
         {
             /* Compute eigenvector(s) corresponding to W(K). */
-            if (fromqr)
+            if(fromqr)
             {
                 /* If affiliation of eigenvalues is known, check whether */
                 /* the matrix splits. */
@@ -423,51 +440,47 @@ int chsein_(char *side, char *eigsrc, char *initv, logical * select, integer *n,
                 /* submatrix H(KL:N,KL:N) for a left eigenvector, and with */
                 /* the submatrix H(1:KR,1:KR) for a right eigenvector. */
                 i__2 = kl + 1;
-                for (i__ = k;
-                        i__ >= i__2;
-                        --i__)
+                for(i__ = k; i__ >= i__2; --i__)
                 {
                     i__3 = i__ + (i__ - 1) * h_dim1;
-                    if (h__[i__3].r == 0.f && h__[i__3].i == 0.f)
+                    if(h__[i__3].r == 0.f && h__[i__3].i == 0.f)
                     {
                         goto L30;
                     }
                     /* L20: */
                 }
-L30:
+            L30:
                 kl = i__;
-                if (k > kr)
+                if(k > kr)
                 {
                     i__2 = *n - 1;
-                    for (i__ = k;
-                            i__ <= i__2;
-                            ++i__)
+                    for(i__ = k; i__ <= i__2; ++i__)
                     {
                         i__3 = i__ + 1 + i__ * h_dim1;
-                        if (h__[i__3].r == 0.f && h__[i__3].i == 0.f)
+                        if(h__[i__3].r == 0.f && h__[i__3].i == 0.f)
                         {
                             goto L50;
                         }
                         /* L40: */
                     }
-L50:
+                L50:
                     kr = i__;
                 }
             }
-            if (kl != kln)
+            if(kl != kln)
             {
                 kln = kl;
                 /* Compute infinity-norm of submatrix H(KL:KR,KL:KR) if it */
                 /* has not ben computed before. */
                 i__2 = kr - kl + 1;
-                hnorm = clanhs_("I", &i__2, &h__[kl + kl * h_dim1], ldh, & rwork[1]);
-                if (sisnan_(&hnorm))
+                hnorm = clanhs_("I", &i__2, &h__[kl + kl * h_dim1], ldh, &rwork[1]);
+                if(sisnan_(&hnorm))
                 {
                     *info = -6;
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-                    return 0;
+                    return;
                 }
-                else if (hnorm > 0.f)
+                else if(hnorm > 0.f)
                 {
                     eps3 = hnorm * ulp;
                 }
@@ -482,18 +495,17 @@ L50:
             i__2 = k;
             wk.r = w[i__2].r;
             wk.i = w[i__2].i; // , expr subst
-L60:
+        L60:
             i__2 = kl;
-            for (i__ = k - 1;
-                    i__ >= i__2;
-                    --i__)
+            for(i__ = k - 1; i__ >= i__2; --i__)
             {
                 i__3 = i__;
                 q__2.r = w[i__3].r - wk.r;
                 q__2.i = w[i__3].i - wk.i; // , expr subst
                 q__1.r = q__2.r;
                 q__1.i = q__2.i; // , expr subst
-                if (select[i__] && (r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2)) < eps3)
+                if(select[i__]
+                   && (r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2)) < eps3)
                 {
                     q__1.r = wk.r + eps3;
                     q__1.i = wk.i; // , expr subst
@@ -506,12 +518,14 @@ L60:
             i__2 = k;
             w[i__2].r = wk.r;
             w[i__2].i = wk.i; // , expr subst
-            if (leftv)
+            if(leftv)
             {
                 /* Compute left eigenvector. */
                 i__2 = *n - kl + 1;
-                claein_(&c_false, &noinit, &i__2, &h__[kl + kl * h_dim1], ldh, &wk, &vl[kl + ks * vl_dim1], &work[1], &ldwork, & rwork[1], &eps3, &smlnum, &iinfo);
-                if (iinfo > 0)
+                claein_(&c_false, &noinit, &i__2, &h__[kl + kl * h_dim1], ldh, &wk,
+                        &vl[kl + ks * vl_dim1], &work[1], &ldwork, &rwork[1], &eps3, &smlnum,
+                        &iinfo);
+                if(iinfo > 0)
                 {
                     ++(*info);
                     ifaill[ks] = k;
@@ -521,9 +535,7 @@ L60:
                     ifaill[ks] = 0;
                 }
                 i__2 = kl - 1;
-                for (i__ = 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__ + ks * vl_dim1;
                     vl[i__3].r = 0.f;
@@ -531,11 +543,12 @@ L60:
                     /* L80: */
                 }
             }
-            if (rightv)
+            if(rightv)
             {
                 /* Compute right eigenvector. */
-                claein_(&c_true, &noinit, &kr, &h__[h_offset], ldh, &wk, &vr[ ks * vr_dim1 + 1], &work[1], &ldwork, &rwork[1], & eps3, &smlnum, &iinfo);
-                if (iinfo > 0)
+                claein_(&c_true, &noinit, &kr, &h__[h_offset], ldh, &wk, &vr[ks * vr_dim1 + 1],
+                        &work[1], &ldwork, &rwork[1], &eps3, &smlnum, &iinfo);
+                if(iinfo > 0)
                 {
                     ++(*info);
                     ifailr[ks] = k;
@@ -545,9 +558,7 @@ L60:
                     ifailr[ks] = 0;
                 }
                 i__2 = *n;
-                for (i__ = kr + 1;
-                        i__ <= i__2;
-                        ++i__)
+                for(i__ = kr + 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__ + ks * vr_dim1;
                     vr[i__3].r = 0.f;
@@ -560,7 +571,7 @@ L60:
         /* L100: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CHSEIN */
 }
 /* chsein_ */

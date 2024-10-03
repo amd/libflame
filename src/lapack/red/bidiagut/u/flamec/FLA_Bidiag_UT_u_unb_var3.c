@@ -67,8 +67,8 @@ FLA_Error FLA_Bidiag_UT_u_step_unb_var3( FLA_Obj A, FLA_Obj T, FLA_Obj S )
            v21_b;
 
   FLA_Datatype datatype_A;
-  dim_t        m_A, n_A;
-  dim_t        b_alg;
+  fla_dim_t        m_A, n_A;
+  fla_dim_t        b_alg;
 
 
   b_alg      = FLA_Obj_length( T );

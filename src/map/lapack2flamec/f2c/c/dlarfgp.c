@@ -1,16 +1,25 @@
-/* ../netlib/dlarfgp.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/dlarfgp.f -- translated by f2c (version 20160102). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b DLARFGP generates an elementary reflector (Householder matrix) with non-negative beta. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DLARFGP + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarfgp .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarfgp
+ * .f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarfgp .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarfgp
+ * .f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarfgp .f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarfgp
+ * .f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -90,10 +99,10 @@
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-int dlarfgp_(integer *n, doublereal *alpha, doublereal *x, integer *incx, doublereal *tau)
+void dlarfgp_(integer *n, doublereal *alpha, doublereal *x, integer *incx, doublereal *tau)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlarfgp inputs: n %" FLA_IS ", incx %" FLA_IS "",*n, *incx);
+    AOCL_DTL_SNPRINTF("dlarfgp inputs: n %" FLA_IS ", incx %" FLA_IS "", *n, *incx);
     /* System generated locals */
     integer i__1;
     doublereal d__1;
@@ -106,7 +115,8 @@ int dlarfgp_(integer *n, doublereal *alpha, doublereal *x, integer *incx, double
     doublereal beta;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     extern /* Subroutine */
-    int dscal_(integer *, doublereal *, doublereal *, integer *);
+        void
+        dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal xnorm;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
     doublereal bignum, smlnum;
@@ -133,19 +143,19 @@ int dlarfgp_(integer *n, doublereal *alpha, doublereal *x, integer *incx, double
     /* Parameter adjustments */
     --x;
     /* Function Body */
-    if (*n <= 0)
+    if(*n <= 0)
     {
         *tau = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
-        return 0;
+        return;
     }
     i__1 = *n - 1;
     xnorm = dnrm2_(&i__1, &x[1], incx);
-    if (xnorm == 0.)
+    if(xnorm == 0.)
     {
         /* H = [+/-1, 0;
         I], sign chosen so ALPHA >= 0 */
-        if (*alpha >= 0.)
+        if(*alpha >= 0.)
         {
             /* When TAU.eq.ZERO, the vector is special-cased to be */
             /* all zeros in the application routines. We do not need */
@@ -158,9 +168,7 @@ int dlarfgp_(integer *n, doublereal *alpha, doublereal *x, integer *incx, double
             /* zero checks when TAU.ne.ZERO, and we must clear X. */
             *tau = 2.;
             i__1 = *n - 1;
-            for (j = 1;
-                    j <= i__1;
-                    ++j)
+            for(j = 1; j <= i__1; ++j)
             {
                 x[(j - 1) * *incx + 1] = 0.;
             }
@@ -174,18 +182,18 @@ int dlarfgp_(integer *n, doublereal *alpha, doublereal *x, integer *incx, double
         beta = d_sign(&d__1, alpha);
         smlnum = dlamch_("S") / dlamch_("E");
         knt = 0;
-        if (f2c_abs(beta) < smlnum)
+        if(f2c_abs(beta) < smlnum)
         {
             /* XNORM, BETA may be inaccurate;
             scale X and recompute them */
             bignum = 1. / smlnum;
-L10:
+        L10:
             ++knt;
             i__1 = *n - 1;
             dscal_(&i__1, &bignum, &x[1], incx);
             beta *= bignum;
             *alpha *= bignum;
-            if (f2c_abs(beta) < smlnum && knt < 20)
+            if(f2c_abs(beta) < smlnum && knt < 20)
             {
                 goto L10;
             }
@@ -197,7 +205,7 @@ L10:
         }
         savealpha = *alpha;
         *alpha += beta;
-        if (beta < 0.)
+        if(beta < 0.)
         {
             beta = -beta;
             *tau = -(*alpha) / beta;
@@ -208,14 +216,14 @@ L10:
             *tau = *alpha / beta;
             *alpha = -(*alpha);
         }
-        if (f2c_abs(*tau) <= smlnum)
+        if(f2c_abs(*tau) <= smlnum)
         {
             /* In the case where the computed TAU ends up being a denormalized number, */
             /* it loses relative accuracy. This is a BIG problem. Solution: flush TAU */
             /* to ZERO. This explains the next IF statement. */
             /* (Bug report provided by Pat Quillen from MathWorks on Jul 29, 2009.) */
             /* (Thanks Pat. Thanks MathWorks.) */
-            if (savealpha >= 0.)
+            if(savealpha >= 0.)
             {
                 *tau = 0.;
             }
@@ -223,9 +231,7 @@ L10:
             {
                 *tau = 2.;
                 i__1 = *n - 1;
-                for (j = 1;
-                        j <= i__1;
-                        ++j)
+                for(j = 1; j <= i__1; ++j)
                 {
                     x[(j - 1) * *incx + 1] = 0.;
                 }
@@ -241,9 +247,7 @@ L10:
         }
         /* If BETA is subnormal, it may lose relative accuracy */
         i__1 = knt;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             beta *= smlnum;
             /* L20: */
@@ -251,7 +255,7 @@ L10:
         *alpha = beta;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return 0;
+    return;
     /* End of DLARFGP */
 }
 /* dlarfgp_ */

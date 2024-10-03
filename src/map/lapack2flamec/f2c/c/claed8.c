@@ -1,19 +1,29 @@
-/* ../netlib/claed8.f -- translated by f2c (version 20100827). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ../netlib/claed8.f -- translated by f2c (version 20100827). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b3 = -1.f;
 static integer c__1 = 1;
-/* > \brief \b CLAED8 used by sstedc. Merges eigenvalues and deflates secular equation. Used when the original matrix is dense. */
+/* > \brief \b CLAED8 used by sstedc. Merges eigenvalues and deflates secular equation. Used when
+ * the original matrix is dense. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download CLAED8 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claed8. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claed8.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claed8. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claed8.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claed8. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claed8.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -215,15 +225,24 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int claed8_(integer *k, integer *n, integer *qsiz, complex * q, integer *ldq, real *d__, real *rho, integer *cutpnt, real *z__, real *dlamda, complex *q2, integer *ldq2, real *w, integer *indxp, integer *indx, integer *indxq, integer *perm, integer *givptr, integer *givcol, real *givnum, integer *info)
+void claed8_(integer *k, integer *n, integer *qsiz, complex *q, integer *ldq, real *d__, real *rho,
+             integer *cutpnt, real *z__, real *dlamda, complex *q2, integer *ldq2, real *w,
+             integer *indxp, integer *indx, integer *indxq, integer *perm, integer *givptr,
+             integer *givcol, real *givnum, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,"claed8 inputs: k %lld, n %lld, qsiz %lld, ldq %lld, cutpnt %lld, ldq2 %lld, indxp %lld, indx %lld, indxq %lld",*k, *n, *qsiz, *ldq, *cutpnt, *ldq2, *indxp, *indx, *indxq);
+    snprintf(buffer, 256,
+             "claed8 inputs: k %lld, n %lld, qsiz %lld, ldq %lld, cutpnt %lld, ldq2 %lld, indxp "
+             "%lld, indx %lld, indxq %lld",
+             *k, *n, *qsiz, *ldq, *cutpnt, *ldq2, *indxp, *indx, *indxq);
 #else
-    snprintf(buffer, 256,"claed8 inputs: k %d, n %d, qsiz %d, ldq %d, cutpnt %d, ldq2 %d, indxp %d, indx %d, indxq %d",*k, *n, *qsiz, *ldq, *cutpnt, *ldq2, *indxp, *indx, *indxq);
+    snprintf(buffer, 256,
+             "claed8 inputs: k %d, n %d, qsiz %d, ldq %d, cutpnt %d, ldq2 %d, indxp %d, indx %d, "
+             "indxq %d",
+             *k, *n, *qsiz, *ldq, *cutpnt, *ldq2, *indxp, *indx, *indxq);
 #endif
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
@@ -240,13 +259,20 @@ int claed8_(integer *k, integer *n, integer *qsiz, complex * q, integer *ldq, re
     real eps, tau, tol;
     integer jlam, imax, jmax;
     extern /* Subroutine */
-    int sscal_(integer *, real *, real *, integer *), ccopy_(integer *, complex *, integer *, complex *, integer *), csrot_(integer *, complex *, integer *, complex *, integer *, real *, real *), scopy_(integer *, real *, integer *, real *, integer *);
+        void
+        sscal_(integer *, real *, real *, integer *),
+        ccopy_(integer *, complex *, integer *, complex *, integer *),
+        csrot_(integer *, complex *, integer *, complex *, integer *, real *, real *),
+        scopy_(integer *, real *, integer *, real *, integer *);
     extern real slapy2_(real *, real *), slamch_(char *);
     extern /* Subroutine */
-    int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        void
+        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
-    int slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
+        void
+        slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -288,32 +314,32 @@ int claed8_(integer *k, integer *n, integer *qsiz, complex * q, integer *ldq, re
     /* Function Body */
     *info = 0;
     jlam = 0;
-    if (*n < 0)
+    if(*n < 0)
     {
         *info = -2;
     }
-    else if (*qsiz < *n)
+    else if(*qsiz < *n)
     {
         *info = -3;
     }
-    else if (*ldq < fla_max(1,*n))
+    else if(*ldq < fla_max(1, *n))
     {
         *info = -5;
     }
-    else if (*cutpnt < fla_min(1,*n) || *cutpnt > *n)
+    else if(*cutpnt < fla_min(1, *n) || *cutpnt > *n)
     {
         *info = -8;
     }
-    else if (*ldq2 < fla_max(1,*n))
+    else if(*ldq2 < fla_max(1, *n))
     {
         *info = -12;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("CLAED8", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* Need to initialize GIVPTR to O here in case of quick exit */
     /* to prevent an unspecified code behavior (usually sigfault) */
@@ -321,24 +347,22 @@ int claed8_(integer *k, integer *n, integer *qsiz, complex * q, integer *ldq, re
     /* (or at least some IWORK entries which used in *laed7 for GIVPTR). */
     *givptr = 0;
     /* Quick return if possible */
-    if (*n == 0)
+    if(*n == 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     n1 = *cutpnt;
     n2 = *n - n1;
     n1p1 = n1 + 1;
-    if (*rho < 0.f)
+    if(*rho < 0.f)
     {
         sscal_(&n2, &c_b3, &z__[n1p1], &c__1);
     }
     /* Normalize z so that norm(z) = 1 */
     t = 1.f / sqrt(2.f);
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         indx[j] = j;
         /* L10: */
@@ -347,17 +371,13 @@ int claed8_(integer *k, integer *n, integer *qsiz, complex * q, integer *ldq, re
     *rho = (r__1 = *rho * 2.f, f2c_abs(r__1));
     /* Sort the eigenvalues into increasing order */
     i__1 = *n;
-    for (i__ = *cutpnt + 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = *cutpnt + 1; i__ <= i__1; ++i__)
     {
         indxq[i__] += *cutpnt;
         /* L20: */
     }
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         dlamda[i__] = d__[indxq[i__]];
         w[i__] = z__[indxq[i__]];
@@ -367,9 +387,7 @@ int claed8_(integer *k, integer *n, integer *qsiz, complex * q, integer *ldq, re
     j = *cutpnt + 1;
     slamrg_(&n1, &n2, &dlamda[1], &c__1, &c__1, &indx[1]);
     i__1 = *n;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         d__[i__] = dlamda[indx[i__]];
         z__[i__] = w[indx[i__]];
@@ -383,13 +401,11 @@ int claed8_(integer *k, integer *n, integer *qsiz, complex * q, integer *ldq, re
     /* If the rank-1 modifier is small enough, no more needs to be done */
     /* -- except to reorganize Q so that its columns correspond with the */
     /* elements in D. */
-    if (*rho * (r__1 = z__[imax], f2c_abs(r__1)) <= tol)
+    if(*rho * (r__1 = z__[imax], f2c_abs(r__1)) <= tol)
     {
         *k = 0;
         i__1 = *n;
-        for (j = 1;
-                j <= i__1;
-                ++j)
+        for(j = 1; j <= i__1; ++j)
         {
             perm[j] = indxq[indx[j]];
             ccopy_(qsiz, &q[perm[j] * q_dim1 + 1], &c__1, &q2[j * q2_dim1 + 1], &c__1);
@@ -397,7 +413,7 @@ int claed8_(integer *k, integer *n, integer *qsiz, complex * q, integer *ldq, re
         }
         clacpy_("A", qsiz, n, &q2[q2_dim1 + 1], ldq2, &q[q_dim1 + 1], ldq);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return 0;
+        return;
     }
     /* If there are multiple eigenvalues then the problem deflates. Here */
     /* the number of equal eigenvalues are found. As each equal */
@@ -407,16 +423,14 @@ int claed8_(integer *k, integer *n, integer *qsiz, complex * q, integer *ldq, re
     *k = 0;
     k2 = *n + 1;
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
-        if (*rho * (r__1 = z__[j], f2c_abs(r__1)) <= tol)
+        if(*rho * (r__1 = z__[j], f2c_abs(r__1)) <= tol)
         {
             /* Deflate due to small z component. */
             --k2;
             indxp[k2] = j;
-            if (j == *n)
+            if(j == *n)
             {
                 goto L100;
             }
@@ -430,11 +444,11 @@ int claed8_(integer *k, integer *n, integer *qsiz, complex * q, integer *ldq, re
     }
 L70:
     ++j;
-    if (j > *n)
+    if(j > *n)
     {
         goto L90;
     }
-    if (*rho * (r__1 = z__[j], f2c_abs(r__1)) <= tol)
+    if(*rho * (r__1 = z__[j], f2c_abs(r__1)) <= tol)
     {
         /* Deflate due to small z component. */
         --k2;
@@ -451,7 +465,7 @@ L70:
         t = d__[j] - d__[jlam];
         c__ /= tau;
         s = -s / tau;
-        if ((r__1 = t * c__ * s, f2c_abs(r__1)) <= tol)
+        if((r__1 = t * c__ * s, f2c_abs(r__1)) <= tol)
         {
             /* Deflation is possible. */
             z__[j] = tau;
@@ -462,16 +476,17 @@ L70:
             givcol[(*givptr << 1) + 2] = indxq[indx[j]];
             givnum[(*givptr << 1) + 1] = c__;
             givnum[(*givptr << 1) + 2] = s;
-            csrot_(qsiz, &q[indxq[indx[jlam]] * q_dim1 + 1], &c__1, &q[indxq[ indx[j]] * q_dim1 + 1], &c__1, &c__, &s);
+            csrot_(qsiz, &q[indxq[indx[jlam]] * q_dim1 + 1], &c__1, &q[indxq[indx[j]] * q_dim1 + 1],
+                   &c__1, &c__, &s);
             t = d__[jlam] * c__ * c__ + d__[j] * s * s;
             d__[j] = d__[jlam] * s * s + d__[j] * c__ * c__;
             d__[jlam] = t;
             --k2;
             i__ = 1;
-L80:
-            if (k2 + i__ <= *n)
+        L80:
+            if(k2 + i__ <= *n)
             {
-                if (d__[jlam] < d__[indxp[k2 + i__]])
+                if(d__[jlam] < d__[indxp[k2 + i__]])
                 {
                     indxp[k2 + i__ - 1] = indxp[k2 + i__];
                     indxp[k2 + i__] = jlam;
@@ -509,27 +524,26 @@ L100: /* Sort the eigenvalues and corresponding eigenvectors into DLAMDA */
     /* deflated go into the first K slots of DLAMDA and Q2 respectively, */
     /* while those which were deflated go into the last N - K slots. */
     i__1 = *n;
-    for (j = 1;
-            j <= i__1;
-            ++j)
+    for(j = 1; j <= i__1; ++j)
     {
         jp = indxp[j];
         dlamda[j] = d__[jp];
         perm[j] = indxq[indx[jp]];
-        ccopy_(qsiz, &q[perm[j] * q_dim1 + 1], &c__1, &q2[j * q2_dim1 + 1], & c__1);
+        ccopy_(qsiz, &q[perm[j] * q_dim1 + 1], &c__1, &q2[j * q2_dim1 + 1], &c__1);
         /* L110: */
     }
     /* The deflated eigenvalues and their corresponding vectors go back */
     /* into the last N - K slots of D and Q respectively. */
-    if (*k < *n)
+    if(*k < *n)
     {
         i__1 = *n - *k;
         scopy_(&i__1, &dlamda[*k + 1], &c__1, &d__[*k + 1], &c__1);
         i__1 = *n - *k;
-        clacpy_("A", qsiz, &i__1, &q2[(*k + 1) * q2_dim1 + 1], ldq2, &q[(*k + 1) * q_dim1 + 1], ldq);
+        clacpy_("A", qsiz, &i__1, &q2[(*k + 1) * q2_dim1 + 1], ldq2, &q[(*k + 1) * q_dim1 + 1],
+                ldq);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return 0;
+    return;
     /* End of CLAED8 */
 }
 /* claed8_ */

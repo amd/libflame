@@ -9,6 +9,8 @@ endif()
 # Added test to run main test suite
 foreach(CONFIG_TYPE "long" "medium" "short" "micro")
     add_test(NAME main_test_${CONFIG_TYPE} COMMAND ${CTEST_MAIN_COMMAND}  --config-dir=${CONFIG_TYPE} WORKING_DIRECTORY ${CTEST_WORKING_DIR})
+    add_test(NAME lapacke_test_col_major_${CONFIG_TYPE} COMMAND ${CTEST_MAIN_COMMAND} --config-dir=${CONFIG_TYPE} --lapacke=column_major WORKING_DIRECTORY ${CTEST_WORKING_DIR})
+    add_test(NAME lapacke_test_row_major_${CONFIG_TYPE} COMMAND ${CTEST_MAIN_COMMAND} --config-dir=${CONFIG_TYPE} --lapacke=row_major WORKING_DIRECTORY ${CTEST_WORKING_DIR})
 endforeach()
 
 #Example to add further tests to ctest

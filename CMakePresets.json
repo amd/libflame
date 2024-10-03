@@ -1,0 +1,14 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 26,
+    "patch": 0
+  },
+  "include": [
+    "cmake/presets/linux-make-gcc.json",
+    "cmake/presets/linux-make-aocc.json",
+    "cmake/presets/win-msvc.json",
+    "cmake/presets/win-ninja.json"
+  ]
+}

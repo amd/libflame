@@ -290,6 +290,7 @@ void chegvd_(integer *itype, char *jobz, char *uplo, integer *n, complex *a, int
         cpotrf_(char *, integer *, complex *, integer *, integer *);
     integer liwmin, lrwmin;
     logical lquery;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -373,9 +374,9 @@ void chegvd_(integer *itype, char *jobz, char *uplo, integer *n, complex *a, int
     }
     if(*info == 0)
     {
-        work[1].r = (real)lopt;
+        work[1].r = sroundup_lwork(&lopt);
         work[1].i = 0.f; // , expr subst
-        rwork[1] = (real)lropt;
+        rwork[1] = sroundup_lwork(&lropt);
         iwork[1] = liopt;
         if(*lwork < lwmin && !lquery)
         {
@@ -467,9 +468,9 @@ void chegvd_(integer *itype, char *jobz, char *uplo, integer *n, complex *a, int
                    lda);
         }
     }
-    work[1].r = (real)lopt;
+    work[1].r = sroundup_lwork(&lopt);
     work[1].i = 0.f; // , expr subst
-    rwork[1] = (real)lropt;
+    rwork[1] = sroundup_lwork(&lropt);
     iwork[1] = liopt;
     AOCL_DTL_TRACE_LOG_EXIT
     return;

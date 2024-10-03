@@ -270,6 +270,7 @@ void dsygvd_(integer *itype, char *jobz, char *uplo, integer *n, doublereal *a, 
         dsygst_(integer *, char *, integer *, doublereal *, integer *, doublereal *, integer *,
                 integer *);
     logical lquery;
+    extern doublereal droundup_lwork(integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -351,7 +352,7 @@ void dsygvd_(integer *itype, char *jobz, char *uplo, integer *n, doublereal *a, 
     }
     if(*info == 0)
     {
-        work[1] = (doublereal)lopt;
+        work[1] = droundup_lwork(&lopt);
         iwork[1] = liopt;
         if(*lwork < lwmin && !lquery)
         {
@@ -434,7 +435,7 @@ void dsygvd_(integer *itype, char *jobz, char *uplo, integer *n, doublereal *a, 
                    lda);
         }
     }
-    work[1] = (doublereal)lopt;
+    work[1] = droundup_lwork(&lopt);
     iwork[1] = liopt;
     AOCL_DTL_TRACE_LOG_EXIT
     return;

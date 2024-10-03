@@ -273,6 +273,7 @@ void ssygvd_(integer *itype, char *jobz, char *uplo, integer *n, real *a, intege
     extern /* Subroutine */
         void
         ssygst_(integer *, char *, integer *, real *, integer *, real *, integer *, integer *);
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -354,7 +355,7 @@ void ssygvd_(integer *itype, char *jobz, char *uplo, integer *n, real *a, intege
     }
     if(*info == 0)
     {
-        work[1] = (real)lopt;
+        work[1] = sroundup_lwork(&lopt);
         iwork[1] = liopt;
         if(*lwork < lwmin && !lquery)
         {
@@ -437,7 +438,7 @@ void ssygvd_(integer *itype, char *jobz, char *uplo, integer *n, real *a, intege
                    lda);
         }
     }
-    work[1] = (real)lopt;
+    work[1] = sroundup_lwork(&lopt);
     iwork[1] = liopt;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

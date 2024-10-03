@@ -1,7 +1,7 @@
 ###############################################################################
 # Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
 ###############################################################################
-cmake_minimum_required(VERSION 3.22.0)
+cmake_minimum_required(VERSION 3.26.0)
 
 project(test_dgetrf)
 

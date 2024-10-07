@@ -1,13 +1,8 @@
-/* ../netlib/slarre.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-
-/*
-*     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
-*/
-
+/* ./slarre.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__2 = 2;
@@ -63,7 +58,7 @@ static integer c__2 = 2;
 /* > SSTEMR to compute the eigenvectors of T. */
 /* > The accuracy varies depending on whether bisection is used to */
 /* > find a few eigenvalues or the dqds algorithm (subroutine SLASQ2) to */
-/* > conpute all and then discard any unwanted one. */
+/* > compute all and then discard any unwanted one. */
 /* > As an added benefit, SLARRE also outputs the n */
 /* > Gerschgorin intervals for the matrices L_i D_i L_i^T. */
 /* > \endverbatim */
@@ -287,8 +282,7 @@ IBLOCK(i)=1 if eigenvalue */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date June 2016 */
-/* > \ingroup OTHERauxiliary */
+/* > \ingroup larre */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -372,10 +366,9 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
     extern /* Subroutine */
         void
         slarnv_(integer *, integer *, integer *, real *);
-    /* -- LAPACK auxiliary routine (version 3.8.0) -- */
+    /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -413,6 +406,8 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
     mb = 0;
     irange = 0;
     cnt1 = cnt2 = 0;
+    *nsplit = 0;
+    *m = 0;
     /* Quick return if possible */
     if(*n <= 0)
     {
@@ -431,7 +426,6 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
     {
         irange = 2;
     }
-    *m = 0;
     /* Get machine constants */
     safmin = slamch_("S");
     eps = slamch_("P");
@@ -1092,6 +1086,6 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
     L170:;
     }
     return;
-    /* end of SLARRE */
+    /* End of SLARRE */
 }
 /* slarre_ */

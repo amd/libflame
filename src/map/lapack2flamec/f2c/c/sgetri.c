@@ -1,8 +1,8 @@
-/* ../netlib/sgetri.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sgetri.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -114,8 +114,7 @@ the matrix is */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup realGEcomputational */
+/* > \ingroup getri */
 /* ===================================================================== */
 /* Subroutine */
 void sgetri_(integer *n, real *a, integer *lda, integer *ipiv, real *work, integer *lwork,
@@ -141,10 +140,10 @@ void sgetri_(integer *n, real *a, integer *lda, integer *ipiv, real *work, integ
     extern /* Subroutine */
         void
         strtri_(char *, char *, integer *, real *, integer *, integer *);
-    /* -- LAPACK computational routine (version 3.4.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -172,7 +171,7 @@ void sgetri_(integer *n, real *a, integer *lda, integer *ipiv, real *work, integ
     *info = 0;
     nb = ilaenv_(&c__1, "SGETRI", " ", n, &c_n1, &c_n1, &c_n1);
     lwkopt = *n * nb;
-    work[1] = (real)lwkopt;
+    work[1] = sroundup_lwork(&lwkopt);
     lquery = *lwork == -1;
     if(*n < 0)
     {
@@ -300,7 +299,7 @@ void sgetri_(integer *n, real *a, integer *lda, integer *ipiv, real *work, integ
         }
         /* L60: */
     }
-    work[1] = (real)iws;
+    work[1] = sroundup_lwork(&iws);
     return;
     /* End of SGETRI */
 }

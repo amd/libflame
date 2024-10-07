@@ -1,8 +1,8 @@
-/* ../netlib/sorbdb5.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sorbdb5.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SORBDB5 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -34,7 +34,7 @@
 /* REAL Q1(LDQ1,*), Q2(LDQ2,*), WORK(*), X1(*), X2(*) */
 /* .. */
 /* > \par Purpose: */
-/* > ============= */
+/* ============= */
 /* > */
 /* >\verbatim */
 /* > */
@@ -146,8 +146,7 @@
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date July 2012 */
-/* > \ingroup realOTHERcomputational */
+/* > \ingroup unbdb5 */
 /* ===================================================================== */
 /* Subroutine */
 void sorbdb5_(integer *m1, integer *m2, integer *n, real *x1, integer *incx1, real *x2,
@@ -164,20 +163,26 @@ void sorbdb5_(integer *m1, integer *m2, integer *n, real *x1, integer *incx1, re
 #endif
     /* System generated locals */
     integer q1_dim1, q1_offset, q2_dim1, q2_offset, i__1, i__2;
+    real r__1;
+    /* Builtin functions */
+    double sqrt(doublereal);
     /* Local variables */
     integer i__, j, childinfo;
+    real scl, eps, ssq, norm;
     extern real snrm2_(integer *, real *, integer *);
     extern /* Subroutine */
         void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+        sscal_(integer *, real *, real *, integer *);
+    extern real slamch_(char *);
     extern /* Subroutine */
         void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        slassq_(integer *, real *, integer *, real *, real *),
         sorbdb6_(integer *, integer *, integer *, real *, integer *, real *, integer *, real *,
                  integer *, real *, integer *, real *, integer *, integer *);
-    /* -- LAPACK computational routine (version 3.5.0) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* July 2012 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -242,18 +247,36 @@ void sorbdb5_(integer *m1, integer *m2, integer *n, real *x1, integer *incx1, re
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SORBDB5", &i__1, (ftnlen)7);
+        xerbla_("SORBDB5", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    /* Project X onto the orthogonal complement of Q */
-    sorbdb6_(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1, &q2[q2_offset], ldq2,
-             &work[1], lwork, &childinfo);
-    /* If the projection is nonzero, then return */
-    if(snrm2_(m1, &x1[1], incx1) != 0.f || snrm2_(m2, &x2[1], incx2) != 0.f)
+    eps = slamch_("Precision");
+    /* Project X onto the orthogonal complement of Q if X is nonzero */
+    scl = 0.f;
+    ssq = 0.f;
+    slassq_(m1, &x1[1], incx1, &scl, &ssq);
+    slassq_(m2, &x2[1], incx2, &scl, &ssq);
+    norm = scl * sqrt(ssq);
+    if(norm > (*n * eps))
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
+        /* Scale vector to unit norm to avoid problems in the caller code. */
+        /* Computing the reciprocal is undesirable but */
+        /* * xLASCL cannot be used because of the vector increments and */
+        /* * the round-off error has a negligible impact on */
+        /* orthogonalization. */
+        r__1 = 1.f / norm;
+        sscal_(m1, &r__1, &x1[1], incx1);
+        r__1 = 1.f / norm;
+        sscal_(m2, &r__1, &x2[1], incx2);
+        sorbdb6_(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1, &q2[q2_offset],
+                 ldq2, &work[1], lwork, &childinfo);
+        /* If the projection is nonzero, then return */
+        if(snrm2_(m1, &x1[1], incx1) != 0.f || snrm2_(m2, &x2[1], incx2) != 0.f)
+        {
+            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            return;
+        }
     }
     /* Project each standard basis vector e_1,...,e_M1 in turn, stopping */
     /* when a nonzero projection is found */

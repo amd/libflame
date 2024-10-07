@@ -1,12 +1,12 @@
-/* ../netlib/slasd8.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./slasd8.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__0 = 0;
-static real c_b8 = 1.f;
+static real c_b7 = 1.f;
 /* > \brief \b SLASD8 finds the square roots of the roots of the secular equation, and stores, for
  * each elemen t in D, the distance to its two nearest poles. Used by sbdsdc. */
 /* =========== DOCUMENTATION =========== */
@@ -127,14 +127,12 @@ static real c_b8 = 1.f;
 /* > The leading dimension of DIFR, must be at least K. */
 /* > \endverbatim */
 /* > */
-/* > \param[in,out] DSIGMA */
+/* > \param[in] DSIGMA */
 /* > \verbatim */
 /* > DSIGMA is REAL array, dimension ( K ) */
 /* > On entry, the first K elements of this array contain the old */
 /* > roots of the deflated updating problem. These are the poles */
 /* > of the secular equation. */
-/* > On exit, the elements of DSIGMA may be very slightly altered */
-/* > in value. */
 /* > \endverbatim */
 /* > */
 /* > \param[out] WORK */
@@ -155,8 +153,7 @@ static real c_b8 = 1.f;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date June 2017 */
-/* > \ingroup OTHERauxiliary */
+/* > \ingroup lasd8 */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -202,10 +199,9 @@ void slasd8_(integer *icompq, integer *k, real *d__, real *z__, real *vf, real *
         slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
                 integer *, integer *),
         slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
-    /* -- LAPACK auxiliary routine (version 3.7.1) -- */
+    /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2017 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -269,29 +265,6 @@ void slasd8_(integer *icompq, integer *k, real *d__, real *z__, real *vf, real *
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    /* Modify values DSIGMA(i) to make sure all DSIGMA(i)-DSIGMA(j) can */
-    /* be computed with high relative accuracy (barring over/underflow). */
-    /* This is a problem on machines without a guard digit in */
-    /* add/subtract (Cray XMP, Cray YMP, Cray C 90 and Cray 2). */
-    /* The following code replaces DSIGMA(I) by 2*DSIGMA(I)-DSIGMA(I), */
-    /* which on any of these machines zeros out the bottommost */
-    /* bit of DSIGMA(I) if it is 1;
-    this makes the subsequent */
-    /* subtractions DSIGMA(I)-DSIGMA(J) unproblematic when cancellation */
-    /* occurs. On binary machines with a guard digit (almost all */
-    /* machines) it does not change DSIGMA(I) at all. On hexadecimal */
-    /* and decimal machines with a guard digit, it slightly */
-    /* changes the bottommost bits of DSIGMA(I). It does not account */
-    /* for hexadecimal or decimal machines without guard digits */
-    /* (we know of none). We use a subroutine call to compute */
-    /* 2*DLAMBDA(I) to prevent optimizing compilers from eliminating */
-    /* this code. */
-    i__1 = *k;
-    for(i__ = 1; i__ <= i__1; ++i__)
-    {
-        dsigma[i__] = slamc3_(&dsigma[i__], &dsigma[i__]) - dsigma[i__];
-        /* L10: */
-    }
     /* Book keeping. */
     iwk1 = 1;
     iwk2 = iwk1 + *k;
@@ -300,10 +273,10 @@ void slasd8_(integer *icompq, integer *k, real *d__, real *z__, real *vf, real *
     iwk3i = iwk3 - 1;
     /* Normalize Z. */
     rho = snrm2_(k, &z__[1], &c__1);
-    slascl_("G", &c__0, &c__0, &rho, &c_b8, k, &c__1, &z__[1], k, info);
+    slascl_("G", &c__0, &c__0, &rho, &c_b7, k, &c__1, &z__[1], k, info);
     rho *= rho;
     /* Initialize WORK(IWK3). */
-    slaset_("A", k, &c__1, &c_b8, &c_b8, &work[iwk3], k);
+    slaset_("A", k, &c__1, &c_b7, &c_b7, &work[iwk3], k);
     /* Compute the updated singular values, the arrays DIFL, DIFR, */
     /* and the updated Z. */
     i__1 = *k;
@@ -356,6 +329,9 @@ void slasd8_(integer *icompq, integer *k, real *d__, real *z__, real *vf, real *
             dsigjp = -dsigma[j + 1];
         }
         work[j] = -z__[j] / diflj / (dsigma[j] + dj);
+        /* Use calls to the subroutine SLAMC3 to enforce the parentheses */
+        /* (x+y)+z. The goal is to prevent optimizing compilers */
+        /* from doing x+(y+z). */
         i__2 = j - 1;
         for(i__ = 1; i__ <= i__2; ++i__)
         {

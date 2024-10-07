@@ -1,8 +1,8 @@
-/* ../netlib/stgsen.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./stgsen.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__2 = 2;
@@ -317,8 +317,7 @@ the problem is very ill-conditioned. */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date June 2016 */
-/* > \ingroup realOTHERcomputational */
+/* > \ingroup tgsen */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -404,7 +403,7 @@ the problem is very ill-conditioned. */
 /* > coalesce with an eigenvalue of (A22, B22) under perturbation (E,F), */
 /* > (i.e. (A + E, B + F), is */
 /* > */
-/* > x = fla_min(Difu,Difl)/((1/(PL*PL)+1/(PR*PR))**(1/2)+2*max(1/PL,1/PR)). */
+/* > x = fla_min(Difu,Difl)/((1/(PL*PL)+1/(PR*PR))**(1/2)+2*fla_max(1/PL,1/PR)). */
 /* > */
 /* > An approximate bound on x can be computed from DIF(1:2), PL and PR. */
 /* > */
@@ -502,9 +501,7 @@ void stgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
     extern real slamch_(char *);
     extern /* Subroutine */
         void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
         slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
         stgexc_(logical *, logical *, integer *, real *, integer *, real *, integer *, real *,
                 integer *, real *, integer *, integer *, integer *, real *, integer *, integer *);
@@ -519,10 +516,10 @@ void stgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
         stgsyl_(char *, integer *, integer *, integer *, real *, integer *, real *, integer *,
                 real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *,
                 real *, real *, integer *, integer *, integer *);
-    /* -- LAPACK computational routine (version 3.7.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -681,7 +678,7 @@ void stgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
         lwmin = fla_max(i__1, i__2);
         liwmin = 1;
     }
-    work[1] = (real)lwmin;
+    work[1] = sroundup_lwork(&lwmin);
     iwork[1] = liwmin;
     if(*lwork < lwmin && !lquery)
     {
@@ -860,7 +857,7 @@ void stgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
             i__ = n1 + 1;
             ijb = 0;
             mn2 = (n1 << 1) * n2;
-            /* 1-norm-based estimate of Difu. */
+        /* 1-norm-based estimate of Difu. */
         L40:
             slacn2_(&mn2, &work[mn2 + 1], &work[1], &iwork[1], &dif[1], &kase, isave);
             if(kase != 0)
@@ -886,7 +883,7 @@ void stgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
                 goto L40;
             }
             dif[1] = dscale / dif[1];
-            /* 1-norm-based estimate of Difl. */
+        /* 1-norm-based estimate of Difl. */
         L50:
             slacn2_(&mn2, &work[mn2 + 1], &work[1], &iwork[1], &dif[2], &kase, isave);
             if(kase != 0)
@@ -973,7 +970,7 @@ L60: /* Compute generalized eigenvalues of reordered pair (A, B) and */
         }
         /* L70: */
     }
-    work[1] = (real)lwmin;
+    work[1] = sroundup_lwork(&lwmin);
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

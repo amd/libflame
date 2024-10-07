@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/strevc3.f -- translated by f2c (version 20160102). You must link the resulting
- object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
- systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
- -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./strevc3.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -230,9 +230,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2017 */
-/* @generated from dtrevc3.f, fortran d -> s, Tue Apr 19 01:47:44 2016 */
-/* > \ingroup realOTHERcomputational */
+/* > \ingroup trevc3 */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -263,7 +261,8 @@ void strevc3_(char *side, char *howmny, logical *select, integer *n, real *t, in
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__2, i__3, i__4;
+    address a__1[2];
+    integer t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1[2], i__2, i__3, i__4;
     real r__1, r__2, r__3, r__4;
     char ch__1[2];
     /* Builtin functions */
@@ -309,8 +308,7 @@ void strevc3_(char *side, char *howmny, logical *select, integer *n, real *t, in
         void
         saxpy_(integer *, real *, real *, integer *, real *, integer *),
         slaln2_(logical *, integer *, integer *, real *, real *, real *, integer *, real *, real *,
-                real *, integer *, real *, real *, real *, integer *, real *, real *, integer *),
-        slabad_(real *, real *);
+                real *, integer *, real *, real *, real *, integer *, real *, real *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
         void
@@ -326,10 +324,9 @@ void strevc3_(char *side, char *howmny, logical *select, integer *n, real *t, in
     integer maxwrk;
     real smlnum;
     logical lquery;
-    /* -- LAPACK computational routine (version 3.8.0) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2017 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -370,7 +367,10 @@ void strevc3_(char *side, char *howmny, logical *select, integer *n, real *t, in
     somev = lsame_(howmny, "S", 1, 1);
     *info = 0;
     nb = ilaenv_(&c__1, "STREVC", ch__1, n, &c_n1, &c_n1, &c_n1);
-    maxwrk = *n + (*n << 1) * nb;
+    /* Computing MAX */
+    i__2 = 1;
+    i__3 = *n + (*n << 1) * nb; // , expr subst
+    maxwrk = fla_max(i__2, i__3);
     work[1] = (real)maxwrk;
     lquery = *lwork == -1;
     if(!rightv && !leftv)
@@ -499,7 +499,6 @@ void strevc3_(char *side, char *howmny, logical *select, integer *n, real *t, in
     /* Set the constants to control overflow. */
     unfl = slamch_("Safe minimum");
     ovfl = 1.f / unfl;
-    slabad_(&unfl, &ovfl);
     ulp = slamch_("Precision");
     smlnum = unfl * (*n / ulp);
     bignum = (1.f - ulp) / smlnum;

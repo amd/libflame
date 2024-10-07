@@ -280,9 +280,6 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
         wv_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7;
     real r__1, r__2, r__3, r__4, r__5;
     /* Local variables */
-    extern /* Subroutine */
-        int
-        f90_cycle_(void);
     integer i__, j, k, m, i2, k1, i4;
     real t1, t2, t3, h11, h12, h21, h22;
     integer m22, ns, nu;
@@ -303,8 +300,7 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
     integer krcol, nbmps;
     extern /* Subroutine */
         void
-        slaqr1_(integer *, real *, integer *, real *, real *, real *, real *, real *),
-        slabad_(real *, real *);
+        slaqr1_(integer *, real *, integer *, real *, real *, real *, real *, real *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
@@ -400,7 +396,6 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
     /* ==== Machine constants for deflation ==== */
     safmin = slamch_("SAFE MINIMUM");
     safmax = 1.f / safmin;
-    slabad_(&safmin, &safmax);
     ulp = slamch_("PRECISION");
     smlnum = safmin * ((real)(*n) / ulp);
     /* ==== Use accumulated reflections to update far-from-diagonal */

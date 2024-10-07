@@ -1,8 +1,8 @@
-/* ../netlib/sgesc2.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sgesc2.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -97,7 +97,7 @@ for 1 <= j <= N, column j of the */
 /* > \verbatim */
 /* > SCALE is REAL */
 /* > On exit, SCALE contains the scale factor. SCALE is chosen */
-/* > 0 <= SCALE <= 1 to prevent owerflow in the solution. */
+/* > 0 <= SCALE <= 1 to prevent overflow in the solution. */
 /* > \endverbatim */
 /* Authors: */
 /* ======== */
@@ -105,8 +105,7 @@ for 1 <= j <= N, column j of the */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date September 2012 */
-/* > \ingroup realGEauxiliary */
+/* > \ingroup gesc2 */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -125,8 +124,7 @@ void sgesc2_(integer *n, real *a, integer *lda, real *rhs, integer *ipiv, intege
     real eps, temp;
     extern /* Subroutine */
         void
-        sscal_(integer *, real *, real *, integer *),
-        slabad_(real *, real *);
+        sscal_(integer *, real *, real *, integer *);
     extern real slamch_(char *);
     real bignum;
     extern integer isamax_(integer *, real *, integer *);
@@ -134,10 +132,9 @@ void sgesc2_(integer *n, real *a, integer *lda, real *rhs, integer *ipiv, intege
         void
         slaswp_(integer *, real *, integer *, integer *, integer *, integer *, integer *);
     real smlnum;
-    /* -- LAPACK auxiliary routine (version 3.4.2) -- */
+    /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* September 2012 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -154,7 +151,7 @@ void sgesc2_(integer *n, real *a, integer *lda, real *rhs, integer *ipiv, intege
     /* .. Intrinsic Functions .. */
     /* .. */
     /* .. Executable Statements .. */
-    /* Set constant to control owerflow */
+    /* Set constant to control overflow */
     /* Parameter adjustments */
     a_dim1 = *lda;
     a_offset = 1 + a_dim1;
@@ -166,7 +163,6 @@ void sgesc2_(integer *n, real *a, integer *lda, real *rhs, integer *ipiv, intege
     eps = slamch_("P");
     smlnum = slamch_("S") / eps;
     bignum = 1.f / smlnum;
-    slabad_(&smlnum, &bignum);
     /* Apply permutations IPIV to RHS */
     i__1 = *n - 1;
     slaswp_(&c__1, &rhs[1], lda, &c__1, &i__1, &ipiv[1], &c__1);

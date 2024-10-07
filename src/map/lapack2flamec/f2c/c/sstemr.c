@@ -1,8 +1,8 @@
-/* ../netlib/sstemr.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sstemr.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static real c_b18 = .003f;
@@ -141,13 +141,17 @@ static real c_b18 = .003f;
 /* > \param[in] VL */
 /* > \verbatim */
 /* > VL is REAL */
+/* > */
+/* > If RANGE='V', the lower bound of the interval to */
+/* > be searched for eigenvalues. VL < VU. */
+/* > Not referenced if RANGE = 'A' or 'I'. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] VU */
 /* > \verbatim */
 /* > VU is REAL */
 /* > */
-/* > If RANGE='V', the lower and upper bounds of the interval to */
+/* > If RANGE='V', the upper bound of the interval to */
 /* > be searched for eigenvalues. VL < VU. */
 /* > Not referenced if RANGE = 'A' or 'I'. */
 /* > \endverbatim */
@@ -155,14 +159,19 @@ static real c_b18 = .003f;
 /* > \param[in] IL */
 /* > \verbatim */
 /* > IL is INTEGER */
+/* > */
+/* > If RANGE='I', the index of the */
+/* > smallest eigenvalue to be returned. */
+/* > 1 <= IL <= IU <= N, if N > 0. */
+/* > Not referenced if RANGE = 'A' or 'V'. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] IU */
 /* > \verbatim */
 /* > IU is INTEGER */
 /* > */
-/* > If RANGE='I', the indices (in ascending order) of the */
-/* > smallest and largest eigenvalues to be returned. */
+/* > If RANGE='I', the index of the */
+/* > largest eigenvalue to be returned. */
 /* > 1 <= IL <= IU <= N, if N > 0. */
 /* > Not referenced if RANGE = 'A' or 'V'. */
 /* > \endverbatim */
@@ -220,7 +229,7 @@ the */
 /* > */
 /* > \param[out] ISUPPZ */
 /* > \verbatim */
-/* > ISUPPZ is INTEGER ARRAY, dimension ( 2*max(1,M) ) */
+/* > ISUPPZ is INTEGER array, dimension ( 2*fla_max(1,M) ) */
 /* > The support of the eigenvectors in Z, i.e., the indices */
 /* > indicating the nonzero elements in Z. The i-th computed eigenvector */
 /* > is nonzero only in elements ISUPPZ( 2*i-1 ) through */
@@ -231,13 +240,13 @@ the */
 /* > \param[in,out] TRYRAC */
 /* > \verbatim */
 /* > TRYRAC is LOGICAL */
-/* > If TRYRAC.EQ..TRUE., indicates that the code should check whether */
+/* > If TRYRAC = .TRUE., indicates that the code should check whether */
 /* > the tridiagonal matrix defines its eigenvalues to high relative */
 /* > accuracy. If so, the code uses relative-accuracy preserving */
 /* > algorithms that might be (a bit) slower depending on the matrix. */
 /* > If the matrix does not define its eigenvalues to high relative */
 /* > accuracy, the code can uses possibly faster algorithms. */
-/* > If TRYRAC.EQ..FALSE., the code is not required to guarantee */
+/* > If TRYRAC = .FALSE., the code is not required to guarantee */
 /* > relatively accurate eigenvalues and can use the fastest possible */
 /* > techniques. */
 /* > On exit, a .TRUE. TRYRAC will be set to .FALSE. if the matrix */
@@ -300,8 +309,7 @@ the */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2013 */
-/* > \ingroup realOTHERcomputational */
+/* > \ingroup stemr */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -309,7 +317,8 @@ the */
 /* > Jim Demmel, University of California, Berkeley, USA \n */
 /* > Inderjit Dhillon, University of Texas, Austin, USA \n */
 /* > Osni Marques, LBNL/NERSC, USA \n */
-/* > Christof Voemel, University of California, Berkeley, USA */
+/* > Christof Voemel, University of California, Berkeley, USA \n */
+/* > Aravindh Krishnamoorthy, FAU, Erlangen, Germany \n */
 /* ===================================================================== */
 /* Subroutine */
 void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, real *vu,
@@ -405,10 +414,11 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
         void
         slasrt_(char *, integer *, real *, integer *);
     logical lquery, zquery;
-    /* -- LAPACK computational routine (version 3.5.0) -- */
+    extern real sroundup_lwork(integer *);
+    logical laeswap;
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2013 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -444,6 +454,7 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
     indeig = lsame_(range, "I", 1, 1);
     lquery = *lwork == -1 || *liwork == -1;
     zquery = *nzc == -1;
+    laeswap = FALSE_;
     /* SSTEMR needs WORK of size 6*N, IWORK of size 3*N. */
     /* In addition, SLARRE needs WORK of size 6*N, IWORK of size 5*N. */
     /* Furthermore, SLARRV needs WORK of size 12*N, IWORK of size 7*N. */
@@ -526,7 +537,7 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
     rmax = fla_min(r__1, r__2);
     if(*info == 0)
     {
-        work[1] = (real)lwmin;
+        work[1] = sroundup_lwork(&lwmin);
         iwork[1] = liwmin;
         if(wantz && alleig)
         {
@@ -607,14 +618,32 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
         {
             slaev2_(&d__[1], &e[1], &d__[2], &r1, &r2, &cs, &sn);
         }
+        /* D/S/LAE2 and D/S/LAEV2 outputs satisfy |R1| >= |R2|. However, */
+        /* the following code requires R1 >= R2. Hence, we correct */
+        /* the order of R1, R2, CS, SN if R1 < R2 before further processing. */
+        if(r1 < r2)
+        {
+            e[2] = r1;
+            r1 = r2;
+            r2 = e[2];
+            laeswap = TRUE_;
+        }
         if(alleig || valeig && r2 > wl && r2 <= wu || indeig && iil == 1)
         {
             ++(*m);
             w[*m] = r2;
             if(wantz && !zquery)
             {
-                z__[*m * z_dim1 + 1] = -sn;
-                z__[*m * z_dim1 + 2] = cs;
+                if(laeswap)
+                {
+                    z__[*m * z_dim1 + 1] = cs;
+                    z__[*m * z_dim1 + 2] = sn;
+                }
+                else
+                {
+                    z__[*m * z_dim1 + 1] = -sn;
+                    z__[*m * z_dim1 + 2] = cs;
+                }
                 /* Note: At most one of SN and CS can be zero. */
                 if(sn != 0.f)
                 {
@@ -642,8 +671,16 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
             w[*m] = r1;
             if(wantz && !zquery)
             {
-                z__[*m * z_dim1 + 1] = cs;
-                z__[*m * z_dim1 + 2] = sn;
+                if(laeswap)
+                {
+                    z__[*m * z_dim1 + 1] = -sn;
+                    z__[*m * z_dim1 + 2] = cs;
+                }
+                else
+                {
+                    z__[*m * z_dim1 + 1] = cs;
+                    z__[*m * z_dim1 + 2] = sn;
+                }
                 /* Note: At most one of SN and CS can be zero. */
                 if(sn != 0.f)
                 {
@@ -829,7 +866,7 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
                 iend = iwork[iinspl + jblk - 1];
                 in = iend - ibegin + 1;
                 wend = wbegin - 1;
-                /* check if any eigenvalues have to be refined in this block */
+            /* check if any eigenvalues have to be refined in this block */
             L36:
                 if(wend < *m)
                 {
@@ -913,7 +950,7 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
             }
         }
     }
-    work[1] = (real)lwmin;
+    work[1] = sroundup_lwork(&lwmin);
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

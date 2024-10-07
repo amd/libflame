@@ -1,8 +1,8 @@
-/* ../netlib/strsyl.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./strsyl.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static logical c_false = FALSE_;
@@ -165,8 +165,7 @@ perturbed */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup realSYcomputational */
+/* > \ingroup trsyl */
 /* ===================================================================== */
 /* Subroutine */
 void strsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, real *a, integer *lda,
@@ -207,8 +206,7 @@ void strsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, re
         slaln2_(logical *, integer *, integer *, real *, real *, real *, integer *, real *, real *,
                 real *, integer *, real *, real *, real *, integer *, real *, real *, integer *),
         slasy2_(logical *, logical *, integer *, integer *, integer *, real *, integer *, real *,
-                integer *, real *, integer *, real *, real *, integer *, real *, integer *),
-        slabad_(real *, real *);
+                integer *, real *, integer *, real *, real *, integer *, real *, integer *);
     real scaloc;
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
@@ -217,10 +215,9 @@ void strsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, re
     real bignum;
     logical notrna, notrnb;
     real smlnum;
-    /* -- LAPACK computational routine (version 3.4.0) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -304,7 +301,6 @@ void strsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, re
     eps = slamch_("P");
     smlnum = slamch_("S");
     bignum = 1.f / smlnum;
-    slabad_(&smlnum, &bignum);
     smlnum = smlnum * (real)(*m * *n) / eps;
     bignum = 1.f / smlnum;
     /* Computing MAX */

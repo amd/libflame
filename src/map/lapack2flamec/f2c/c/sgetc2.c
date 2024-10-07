@@ -1,8 +1,8 @@
-/* ../netlib/sgetc2.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sgetc2.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static real c_b10 = -1.f;
@@ -103,8 +103,7 @@ for 1 <= j <= N, column j of the */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date June 2016 */
-/* > \ingroup realGEauxiliary */
+/* > \ingroup getc2 */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -128,14 +127,12 @@ void sgetc2_(integer *n, real *a, integer *lda, integer *ipiv, integer *jpiv, in
     real smin, xmax;
     extern /* Subroutine */
         void
-        sswap_(integer *, real *, integer *, real *, integer *),
-        slabad_(real *, real *);
+        sswap_(integer *, real *, integer *, real *, integer *);
     extern real slamch_(char *);
     real bignum, smlnum;
-    /* -- LAPACK auxiliary routine (version 3.7.0) -- */
+    /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -172,7 +169,6 @@ void sgetc2_(integer *n, real *a, integer *lda, integer *ipiv, integer *jpiv, in
     eps = slamch_("P");
     smlnum = slamch_("S") / eps;
     bignum = 1.f / smlnum;
-    slabad_(&smlnum, &bignum);
     /* Handle the case N=1 by itself */
     if(*n == 1)
     {

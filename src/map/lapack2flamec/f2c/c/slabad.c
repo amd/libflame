@@ -1,8 +1,8 @@
-/* ../netlib/slabad.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./slabad.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLABAD */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -43,8 +43,7 @@
 /* > \verbatim */
 /* > SMALL_VAL is REAL */
 /* > On entry, the underflow threshold as computed by SLAMCH. */
-/* > On exit, if LOG10(LARGE) is sufficiently large, the square */
-/* > root of SMALL_VAL, otherwise unchanged. */
+/* > On exit, the unchanged value SMALL_VAL. */
 /* > \endverbatim */
 /* > */
 /* > \param[in,out] LARGE */
@@ -75,11 +74,10 @@ void slabad_(real *small_val, real *large)
     /* .. Executable Statements .. */
     /* If it looks like we're on a Cray, take the square root of */
     /* SMALL_VAL and LARGE to avoid overflow and underflow problems. */
-    if(r_lg10(large) > 2e3f)
-    {
-        *small_val = sqrt(*small_val);
-        *large = sqrt(*large);
-    }
+    /* IF( LOG10( LARGE ).GT.2000. ) THEN */
+    /* SMALL_VAL = SQRT( SMALL_VAL ) */
+    /* LARGE = SQRT( LARGE ) */
+    /* END IF */
     return;
     /* End of SLABAD */
 }

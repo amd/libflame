@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/sgelqt3.f -- translated by f2c (version 20160102). You must link the resulting
- object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
- systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
- -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sgelqt3.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b7 = 1.f;
 static real c_b19 = -1.f;
@@ -21,7 +21,7 @@ static real c_b19 = -1.f;
 /* > */
 /* > \verbatim */
 /* > */
-/* > DGELQT3 recursively computes a LQ factorization of a real M-by-N */
+/* > SGELQT3 recursively computes a LQ factorization of a real M-by-N */
 /* > matrix A, using the compact WY representation of Q. */
 /* > */
 /* > Based on the algorithm of Elmroth and Gustavson, */
@@ -85,8 +85,7 @@ the elements below the diagonal are not used. */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2017 */
-/* > \ingroup doubleGEcomputational */
+/* > \ingroup gelqt3 */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -127,10 +126,9 @@ void sgelqt3_(integer *m, integer *n, real *a, integer *lda, real *t, integer *l
                real *, integer *),
         xerbla_(const char *srname, const integer *info, ftnlen srname_len),
         slarfg_(integer *, real *, real *, integer *, real *);
-    /* -- LAPACK computational routine (version 3.8.0) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2017 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -176,8 +174,8 @@ void sgelqt3_(integer *m, integer *n, real *a, integer *lda, real *t, integer *l
     }
     if(*m == 1)
     {
-        /* Compute Householder transform when N=1 */
-        slarfg_(n, &a[a_offset], &a[fla_min(2, *n) * a_dim1 + 1], lda, &t[t_offset]);
+        /* Compute Householder transform when M=1 */
+        slarfg_(n, &a[a_dim1 + 1], &a[fla_min(2, *n) * a_dim1 + 1], lda, &t[t_dim1 + 1]);
     }
     else
     {

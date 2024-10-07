@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/ssytrf_rk.f -- translated by f2c (version 20160102). You must link the resulting
- object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
- systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
- -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./ssytrf_rk.f -- translated by f2c (version 20190311). You must link the resulting object file
+ with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -236,8 +236,7 @@ static integer c__2 = 2;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date December 2016 */
-/* > \ingroup singleSYcomputational */
+/* > \ingroup hetrf_rk */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -290,10 +289,10 @@ void ssytrf_rk_(char *uplo, integer *n, real *a, integer *lda, real *e, integer 
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
-    /* -- LAPACK computational routine (version 3.7.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* December 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -340,8 +339,11 @@ void ssytrf_rk_(char *uplo, integer *n, real *a, integer *lda, real *e, integer 
     {
         /* Determine the block size */
         nb = ilaenv_(&c__1, "SSYTRF_RK", uplo, n, &c_n1, &c_n1, &c_n1);
-        lwkopt = *n * nb;
-        work[1] = (real)lwkopt;
+        /* Computing MAX */
+        i__1 = 1;
+        i__2 = *n * nb; // , expr subst
+        lwkopt = fla_max(i__1, i__2);
+        work[1] = sroundup_lwork(&lwkopt);
     }
     if(*info != 0)
     {
@@ -398,18 +400,11 @@ void ssytrf_rk_(char *uplo, integer *n, real *a, integer *lda, real *e, integer 
             /* update columns 1:k-kb */
             slasyf_rk_(uplo, &k, &nb, &kb, &a[a_offset], lda, &e[1], &ipiv[1], &work[1], &ldwork,
                        &iinfo);
-            FILE *fptr = fopen("program.txt", "a");
-            fprintf(fptr, "slasyf_rk_=%f\n", a[a_offset]);
-            fclose(fptr);
         }
         else
         {
             /* Use unblocked code to factorize columns 1:k of A */
             ssytf2_rk_(uplo, &k, &a[a_offset], lda, &e[1], &ipiv[1], &iinfo);
-            FILE *fptr = fopen("program.txt", "a");
-            fprintf(fptr, "ssytf2_rk_=%f\n", a[a_offset]);
-            fclose(fptr);
-
             kb = k;
         }
         /* Set INFO on the first occurrence of a zero pivot */
@@ -441,8 +436,8 @@ void ssytrf_rk_(char *uplo, integer *n, real *a, integer *lda, real *e, integer 
         /* Decrease K and return to the start of the main loop */
         k -= kb;
         goto L10;
-        /* This label is the exit from main loop over K decreasing */
-        /* from N to 1 in steps of KB */
+    /* This label is the exit from main loop over K decreasing */
+    /* from N to 1 in steps of KB */
     L15:;
     }
     else
@@ -465,9 +460,6 @@ void ssytrf_rk_(char *uplo, integer *n, real *a, integer *lda, real *e, integer 
             i__1 = *n - k + 1;
             slasyf_rk_(uplo, &i__1, &nb, &kb, &a[k + k * a_dim1], lda, &e[k], &ipiv[k], &work[1],
                        &ldwork, &iinfo);
-            FILE *fptr = fopen("program.txt", "a");
-            fprintf(fptr, "slasyf_rk__=%f\n", a[k + k * a_dim1]);
-            fclose(fptr);
         }
         else
         {
@@ -475,9 +467,6 @@ void ssytrf_rk_(char *uplo, integer *n, real *a, integer *lda, real *e, integer 
             i__1 = *n - k + 1;
             ssytf2_rk_(uplo, &i__1, &a[k + k * a_dim1], lda, &e[k], &ipiv[k], &iinfo);
             kb = *n - k + 1;
-            FILE *fptr = fopen("program.txt", "a");
-            fprintf(fptr, "ssytf2_rk_=%f\n", a[k + k * a_dim1]);
-            fclose(fptr);
         }
         /* Set INFO on the first occurrence of a zero pivot */
         if(*info == 0 && iinfo > 0)
@@ -520,12 +509,12 @@ void ssytrf_rk_(char *uplo, integer *n, real *a, integer *lda, real *e, integer 
         /* Increase K and return to the start of the main loop */
         k += kb;
         goto L20;
-        /* This label is the exit from main loop over K increasing */
-        /* from 1 to N in steps of KB */
+    /* This label is the exit from main loop over K increasing */
+    /* from 1 to N in steps of KB */
     L35: /* End Lower */
          ;
     }
-    work[1] = (real)lwkopt;
+    work[1] = sroundup_lwork(&lwkopt);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of SSYTRF_RK */

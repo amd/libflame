@@ -1,10 +1,10 @@
-/* ../netlib/sspgvd.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sspgvd.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 /* > \brief \b SSPGVD */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -243,7 +243,8 @@ void sspgvd_(integer *itype, char *jobz, char *uplo, integer *n, real *ap, real 
     extern /* Subroutine */
         void
         sspgst_(integer *, char *, integer *, real *, real *, integer *);
-    /* -- LAPACK driver routine (version 3.4.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -317,7 +318,7 @@ void sspgvd_(integer *itype, char *jobz, char *uplo, integer *n, real *ap, real 
                 lwmin = *n << 1;
             }
         }
-        work[1] = (real)lwmin;
+        work[1] = sroundup_lwork(&lwmin);
         iwork[1] = liwmin;
         if(*lwork < lwmin && !lquery)
         {
@@ -360,11 +361,11 @@ void sspgvd_(integer *itype, char *jobz, char *uplo, integer *n, real *ap, real 
             info);
     /* Computing MAX */
     r__1 = (real)lwmin;
-    lwmin = fla_max(r__1, work[1]);
+    lwmin = (integer)fla_max(r__1, work[1]);
     /* Computing MAX */
     r__1 = (real)liwmin;
     r__2 = (real)iwork[1]; // , expr subst
-    liwmin = fla_max(r__1, r__2);
+    liwmin = (integer)fla_max(r__1, r__2);
     if(wantz)
     {
         /* Backtransform eigenvectors to the original problem. */
@@ -414,7 +415,7 @@ void sspgvd_(integer *itype, char *jobz, char *uplo, integer *n, real *ap, real 
             }
         }
     }
-    work[1] = (real)lwmin;
+    work[1] = sroundup_lwork(&lwmin);
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

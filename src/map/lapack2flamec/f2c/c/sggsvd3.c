@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/sggsvd3.f -- translated by f2c (version 20160102). You must link the resulting
- object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
- systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
- -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sggsvd3.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c_n1 = -1;
 static integer c__1 = 1;
@@ -336,8 +336,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date August 2015 */
-/* > \ingroup realGEsing */
+/* > \ingroup ggsvd3 */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -377,9 +376,7 @@ void sggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, intege
     integer ncycle;
     extern /* Subroutine */
         void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
         stgsja_(char *, char *, char *, integer *, integer *, integer *, integer *, integer *,
                 real *, integer *, real *, integer *, real *, real *, real *, real *, real *,
                 integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
@@ -390,10 +387,10 @@ void sggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, intege
         sggsvp3_(char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *,
                  integer *, real *, real *, integer *, integer *, real *, integer *, real *,
                  integer *, real *, integer *, integer *, real *, real *, integer *, integer *);
-    /* -- LAPACK driver routine (version 3.7.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* August 2015 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -496,7 +493,7 @@ void sggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, intege
         i__1 = *n << 1;
         lwkopt = fla_max(i__1, lwkopt);
         lwkopt = fla_max(1, lwkopt);
-        work[1] = (real)lwkopt;
+        work[1] = sroundup_lwork(&lwkopt);
     }
     if(*info != 0)
     {
@@ -562,7 +559,7 @@ void sggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, intege
         }
         /* L20: */
     }
-    work[1] = (real)lwkopt;
+    work[1] = sroundup_lwork(&lwkopt);
     return;
     /* End of SGGSVD3 */
 }

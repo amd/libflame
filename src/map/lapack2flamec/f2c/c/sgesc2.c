@@ -1,8 +1,8 @@
-/* ../netlib/sgesc2.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sgesc2.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -140,8 +140,7 @@ void aocl_lapack_sgesc2(aocl_int64_t *n, real *a, aocl_int64_t *lda, real *rhs, 
     real eps, temp;
     extern /* Subroutine */
         void
-        sscal_(integer *, real *, real *, integer *),
-        slabad_(real *, real *);
+        sscal_(integer *, real *, real *, integer *);
     extern real slamch_(char *);
     real bignum;
     extern integer isamax_(integer *, real *, integer *);
@@ -179,6 +178,7 @@ void aocl_lapack_sgesc2(aocl_int64_t *n, real *a, aocl_int64_t *lda, real *rhs, 
     /* Function Body */
     eps = slamch_("P");
     smlnum = slamch_("S") / eps;
+    bignum = 1.f / smlnum;
     /* Apply permutations IPIV to RHS */
     i__1 = *n - 1;
     aocl_lapack_slaswp(&c__1, &rhs[1], lda, &c__1, &i__1, &ipiv[1], &c__1);

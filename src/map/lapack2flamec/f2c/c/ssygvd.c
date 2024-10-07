@@ -1,8 +1,8 @@
-/* ../netlib/ssygvd.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./ssygvd.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b11 = 1.f;
 /* > \brief \b SSYGVD */
@@ -267,7 +267,7 @@ void ssygvd_(integer *itype, char *jobz, char *uplo, integer *n, real *a, intege
         void
         ssygst_(integer *, char *, integer *, real *, integer *, real *, integer *, integer *);
     extern real sroundup_lwork(integer *);
-    /* -- LAPACK driver routine (version 3.4.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -389,11 +389,11 @@ void ssygvd_(integer *itype, char *jobz, char *uplo, integer *n, real *a, intege
     ssyevd_(jobz, uplo, n, &a[a_offset], lda, &w[1], &work[1], lwork, &iwork[1], liwork, info);
     /* Computing MAX */
     r__1 = (real)lopt;
-    lopt = fla_max(r__1, work[1]);
+    lopt = (integer)fla_max(r__1, work[1]);
     /* Computing MAX */
     r__1 = (real)liopt;
     r__2 = (real)iwork[1]; // , expr subst
-    liopt = fla_max(r__1, r__2);
+    liopt = (integer)fla_max(r__1, r__2);
     if(wantz && *info == 0)
     {
         /* Backtransform eigenvectors to the original problem. */

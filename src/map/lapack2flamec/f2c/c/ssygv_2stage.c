@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/ssygv_2stage.f -- translated by f2c (version 20160102). You must link the
- resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
- Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
- with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./ssygv_2stage.f -- translated by f2c (version 20190311). You must link the resulting object file
+ with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -157,7 +157,7 @@ static real c_b26 = 1.f;
 /* > If JOBZ = 'N' and N > 1, LWORK must be queried. */
 /* > LWORK = MAX(1, dimension) where */
 /* > dimension = fla_max(stage1,stage2) + (KD+1)*N + 2*N */
-/* > = N*KD + N*max(KD+1,FACTOPTNB) */
+/* > = N*KD + N*fla_max(KD+1,FACTOPTNB) */
 /* > + fla_max(2*KD*KD, KD*NTHREADS) */
 /* > + (KD+1)*N + 2*N */
 /* > where KD is the blocking size of the reduction, */
@@ -186,7 +186,7 @@ the routine */
 /* > tridiagonal form did not converge to zero;
  */
 /* > > N: if INFO = N + i, for 1 <= i <= N, then the leading */
-/* > minor of order i of B is not positive definite. */
+/* > principal minor of order i of B is not positive. */
 /* > The factorization of B could not be completed and */
 /* > no eigenvalues or eigenvectors were computed. */
 /* > \endverbatim */
@@ -196,8 +196,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2017 */
-/* > \ingroup realSYeigen */
+/* > \ingroup hegv_2stage */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -273,10 +272,10 @@ void ssygv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, real *a, 
     extern /* Subroutine */
         void
         ssygst_(integer *, char *, integer *, real *, integer *, real *, integer *, integer *);
-    /* -- LAPACK driver routine (version 3.8.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2017 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -415,7 +414,7 @@ void ssygv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, real *a, 
                    &a[a_offset], lda);
         }
     }
-    work[1] = (real)lwmin;
+    work[1] = sroundup_lwork(&lwmin);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of SSYGV_2STAGE */

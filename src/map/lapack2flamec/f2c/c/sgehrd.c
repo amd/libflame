@@ -1,8 +1,8 @@
-/* ../netlib/sgehrd.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sgehrd.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -129,8 +129,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date December 2016 */
-/* > \ingroup realGEcomputational */
+/* > \ingroup gehrd */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -167,9 +166,9 @@ v(i+2:ihi) is stored on */
 /* > modified element of the upper Hessenberg matrix H, and vi denotes an */
 /* > element of the vector defining H(i). */
 /* > */
-/* > This file is a slight modification of LAPACK-3.0's DGEHRD */
+/* > This file is a slight modification of LAPACK-3.0's SGEHRD */
 /* > subroutine incorporating improvements proposed by Quintana-Orti and */
-/* > Van de Geijn (2006). (See DLAHR2.) */
+/* > Van de Geijn (2006). (See SLAHR2.) */
 /* > \endverbatim */
 /* > */
 /* ===================================================================== */
@@ -199,10 +198,10 @@ void sgehrd_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
-    /* -- LAPACK computational routine (version 3.7.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* December 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -258,7 +257,7 @@ void sgehrd_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real
         i__2 = ilaenv_(&c__1, "SGEHRD", " ", n, ilo, ihi, &c_n1); // , expr subst
         nb = fla_min(i__1, i__2);
         lwkopt = *n * nb + 4160;
-        work[1] = (real)lwkopt;
+        work[1] = sroundup_lwork(&lwkopt);
     }
     if(*info != 0)
     {
@@ -383,7 +382,7 @@ void sgehrd_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real
     }
     /* Use unblocked code to reduce the rest of the matrix */
     sgehd2_(n, &i__, ihi, &a[a_offset], lda, &tau[1], &work[1], &iinfo);
-    work[1] = (real)lwkopt;
+    work[1] = sroundup_lwork(&lwkopt);
     return;
     /* End of SGEHRD */
 }

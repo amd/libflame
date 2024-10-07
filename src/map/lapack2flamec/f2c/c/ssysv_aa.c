@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/ssysv_aa.f -- translated by f2c (version 20160102). You must link the resulting
- object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
- systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
- -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./ssysv_aa.f -- translated by f2c (version 20190311). You must link the resulting object file
+ with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c_n1 = -1;
 /* > \brief <b> SSYSV_AA computes the solution to system of linear equations A * X = B for SY
@@ -157,8 +157,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2017 */
-/* > \ingroup realSYsolve */
+/* > \ingroup hesv_aa */
 /* ===================================================================== */
 /* Subroutine */
 void ssysv_aa_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, integer *ipiv, real *b,
@@ -188,10 +187,10 @@ void ssysv_aa_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, int
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lwkopt;
     logical lquery;
-    /* -- LAPACK driver routine (version 3.8.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2017 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -257,7 +256,7 @@ void ssysv_aa_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, int
                    info);
         lwkopt_sytrs__ = (integer)work[1];
         lwkopt = fla_max(lwkopt_sytrf__, lwkopt_sytrs__);
-        work[1] = (real)lwkopt;
+        work[1] = sroundup_lwork(&lwkopt);
     }
     if(*info != 0)
     {
@@ -279,7 +278,7 @@ void ssysv_aa_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, int
         ssytrs_aa_(uplo, n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb, &work[1], lwork,
                    info);
     }
-    work[1] = (real)lwkopt;
+    work[1] = sroundup_lwork(&lwkopt);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of SSYSV_AA */

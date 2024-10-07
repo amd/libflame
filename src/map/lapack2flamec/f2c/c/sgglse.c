@@ -1,4 +1,4 @@
-/* sgglse.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./sgglse.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -178,7 +178,7 @@ the least squares solution could not */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup realOTHERsolve */
+/* > \ingroup gglse */
 /* ===================================================================== */
 /* Subroutine */
 void sgglse_(integer *m, integer *n, integer *p, real *a, integer *lda, real *b, integer *ldb,
@@ -215,6 +215,7 @@ void sgglse_(integer *m, integer *n, integer *p, real *a, integer *lda, real *b,
                 integer *, real *, integer *, integer *),
         strtrs_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *,
                 integer *);
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -291,7 +292,7 @@ void sgglse_(integer *m, integer *n, integer *p, real *a, integer *lda, real *b,
             lwkmin = *m + *n + *p;
             lwkopt = *p + mn + fla_max(*m, *n) * nb;
         }
-        work[1] = (real)lwkopt;
+        work[1] = sroundup_lwork(&lwkopt);
         if(*lwork < lwkmin && !lquery)
         {
             *info = -12;

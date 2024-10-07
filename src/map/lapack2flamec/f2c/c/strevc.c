@@ -1,8 +1,8 @@
-/* ../netlib/strevc.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./strevc.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static logical c_false = FALSE_;
 static aocl_int64_t c__1 = 1;
@@ -282,8 +282,7 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
         void
         saxpy_(integer *, real *, real *, integer *, real *, integer *),
         slaln2_(logical *, integer *, integer *, real *, real *, real *, integer *, real *, real *,
-                real *, integer *, real *, real *, real *, integer *, real *, real *, integer *),
-        slabad_(real *, real *);
+                real *, integer *, real *, real *, real *, integer *, real *, real *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
         void
@@ -430,6 +429,7 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
     }
     /* Set the constants to control overflow. */
     unfl = slamch_("Safe minimum");
+    ovfl = 1.f / unfl;
     ulp = slamch_("Precision");
     smlnum = unfl * (*n / ulp);
     bignum = (1.f - ulp) / smlnum;

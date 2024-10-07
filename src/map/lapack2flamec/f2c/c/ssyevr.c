@@ -1,8 +1,8 @@
-/* ../netlib/ssyevr.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./ssyevr.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__10 = 10;
 static integer c__1 = 1;
@@ -420,7 +420,8 @@ void ssyevr_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *
                 integer *, real *, integer *, integer *),
         ssytrd_(char *, integer *, real *, integer *, real *, real *, real *, real *, integer *,
                 integer *);
-    /* -- LAPACK driver routine (version 3.4.2) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -526,7 +527,7 @@ void ssyevr_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *
         /* Computing MAX */
         i__1 = (nb + 1) * *n;
         lwkopt = fla_max(i__1, lwmin);
-        work[1] = (real)lwkopt;
+        work[1] = sroundup_lwork(&lwkopt);
         iwork[1] = liwmin;
         if(*lwork < lwmin && !lquery)
         {
@@ -715,7 +716,7 @@ void ssyevr_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *
                     &z__[z_offset], ldz, n, &isuppz[1], &tryrac, &work[indwk], lwork, &iwork[1],
                     liwork, info);
             /* Apply orthogonal matrix used in reduction to tridiagonal */
-            /* form to eigenvectors returned by SSTEIN. */
+            /* form to eigenvectors returned by SSTEMR. */
             if(wantz && *info == 0)
             {
                 indwkn = inde;
@@ -803,7 +804,7 @@ L30:
         }
     }
     /* Set WORK(1) to optimal workspace size. */
-    work[1] = (real)lwkopt;
+    work[1] = sroundup_lwork(&lwkopt);
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

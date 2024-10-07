@@ -1,4 +1,4 @@
-/* shgeqz.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./shgeqz.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -294,7 +294,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup realGEcomputational */
+/* > \ingroup hgeqz */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -328,7 +328,7 @@ void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
     /* Local variables */
     real c__;
     integer j;
-    real s, v[3], s1, s2, t1, u1, u2, a11, a12, a21, a22, b11, b22, c12, c21;
+    real s, v[3], s1, s2, t1, t2, t3, u1, u2, a11, a12, a21, a22, b11, b22, c12, c21;
     integer jc;
     real an, bn, cl, cq, cr;
     integer in;
@@ -382,6 +382,7 @@ void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
     logical ilazro;
     integer icompz, ifirst, ifrstm, istart;
     logical ilpivt, lquery;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -821,8 +822,8 @@ void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
         /* (Drop-through is "impossible") */
         *info = *n + 1;
         goto L420;
-        /* T(ILAST,ILAST)=0 -- clear H(ILAST,ILAST-1) to split off a */
-        /* 1x1 block. */
+    /* T(ILAST,ILAST)=0 -- clear H(ILAST,ILAST-1) to split off a */
+    /* 1x1 block. */
     L70:
         temp = h__[ilast + ilast * h_dim1];
         slartg_(&temp, &h__[ilast + (ilast - 1) * h_dim1], &c__, &s, &h__[ilast + ilast * h_dim1]);
@@ -838,8 +839,8 @@ void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
             srot_(n, &z__[ilast * z_dim1 + 1], &c__1, &z__[(ilast - 1) * z_dim1 + 1], &c__1, &c__,
                   &s);
         }
-        /* H(ILAST,ILAST-1)=0 -- Standardize B, set ALPHAR, ALPHAI, */
-        /* and BETA */
+    /* H(ILAST,ILAST-1)=0 -- Standardize B, set ALPHAR, ALPHAI, */
+    /* and BETA */
     L80:
         if(t[ilast + ilast * t_dim1] < 0.f)
         {
@@ -889,9 +890,9 @@ void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
             }
         }
         goto L350;
-        /* QZ step */
-        /* This iteration only involves rows/columns IFIRST:ILAST. We */
-        /* assume IFIRST < ILAST, and that the diagonal of B is non-zero. */
+    /* QZ step */
+    /* This iteration only involves rows/columns IFIRST:ILAST. We */
+    /* assume IFIRST < ILAST, and that the diagonal of B is non-zero. */
     L110:
         ++iiter;
         if(!ilschr)
@@ -1068,11 +1069,11 @@ void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
             /* L190: */
         }
         goto L350;
-        /* Use Francis double-shift */
-        /* Note: the Francis double-shift should work with real shifts, */
-        /* but only if the block is at least 3x3. */
-        /* This code may break if this point is reached with */
-        /* a 2x2 block with real eigenvalues. */
+    /* Use Francis double-shift */
+    /* Note: the Francis double-shift should work with real shifts, */
+    /* but only if the block is at least 3x3. */
+    /* This code may break if this point is reached with */
+    /* a 2x2 block with real eigenvalues. */
     L200:
         if(ifirst + 1 == ilast)
         {
@@ -1322,21 +1323,21 @@ void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
                     h__[j + 1 + (j - 1) * h_dim1] = 0.f;
                     h__[j + 2 + (j - 1) * h_dim1] = 0.f;
                 }
+                t2 = tau * v[1];
+                t3 = tau * v[2];
                 i__3 = ilastm;
                 for(jc = j; jc <= i__3; ++jc)
                 {
-                    temp = tau
-                           * (h__[j + jc * h_dim1] + v[1] * h__[j + 1 + jc * h_dim1]
-                              + v[2] * h__[j + 2 + jc * h_dim1]);
-                    h__[j + jc * h_dim1] -= temp;
-                    h__[j + 1 + jc * h_dim1] -= temp * v[1];
-                    h__[j + 2 + jc * h_dim1] -= temp * v[2];
-                    temp2 = tau
-                            * (t[j + jc * t_dim1] + v[1] * t[j + 1 + jc * t_dim1]
-                               + v[2] * t[j + 2 + jc * t_dim1]);
-                    t[j + jc * t_dim1] -= temp2;
-                    t[j + 1 + jc * t_dim1] -= temp2 * v[1];
-                    t[j + 2 + jc * t_dim1] -= temp2 * v[2];
+                    temp = h__[j + jc * h_dim1] + v[1] * h__[j + 1 + jc * h_dim1]
+                           + v[2] * h__[j + 2 + jc * h_dim1];
+                    h__[j + jc * h_dim1] -= temp * tau;
+                    h__[j + 1 + jc * h_dim1] -= temp * t2;
+                    h__[j + 2 + jc * h_dim1] -= temp * t3;
+                    temp2 = t[j + jc * t_dim1] + v[1] * t[j + 1 + jc * t_dim1]
+                            + v[2] * t[j + 2 + jc * t_dim1];
+                    t[j + jc * t_dim1] -= temp2 * tau;
+                    t[j + 1 + jc * t_dim1] -= temp2 * t2;
+                    t[j + 2 + jc * t_dim1] -= temp2 * t3;
                     /* L230: */
                 }
                 if(ilq)
@@ -1344,12 +1345,11 @@ void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
                     i__3 = *n;
                     for(jr = 1; jr <= i__3; ++jr)
                     {
-                        temp = tau
-                               * (q[jr + j * q_dim1] + v[1] * q[jr + (j + 1) * q_dim1]
-                                  + v[2] * q[jr + (j + 2) * q_dim1]);
-                        q[jr + j * q_dim1] -= temp;
-                        q[jr + (j + 1) * q_dim1] -= temp * v[1];
-                        q[jr + (j + 2) * q_dim1] -= temp * v[2];
+                        temp = q[jr + j * q_dim1] + v[1] * q[jr + (j + 1) * q_dim1]
+                               + v[2] * q[jr + (j + 2) * q_dim1];
+                        q[jr + j * q_dim1] -= temp * tau;
+                        q[jr + (j + 1) * q_dim1] -= temp * t2;
+                        q[jr + (j + 2) * q_dim1] -= temp * t3;
                         /* L240: */
                     }
                 }
@@ -1449,28 +1449,28 @@ void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
                 v[1] = vs * u1;
                 v[2] = vs * u2;
                 /* Apply transformations from the right. */
+                t2 = tau * v[1];
+                t3 = tau * v[2];
                 /* Computing MIN */
                 i__4 = j + 3;
                 i__3 = fla_min(i__4, ilast);
                 for(jr = ifrstm; jr <= i__3; ++jr)
                 {
-                    temp = tau
-                           * (h__[jr + j * h_dim1] + v[1] * h__[jr + (j + 1) * h_dim1]
-                              + v[2] * h__[jr + (j + 2) * h_dim1]);
-                    h__[jr + j * h_dim1] -= temp;
-                    h__[jr + (j + 1) * h_dim1] -= temp * v[1];
-                    h__[jr + (j + 2) * h_dim1] -= temp * v[2];
+                    temp = h__[jr + j * h_dim1] + v[1] * h__[jr + (j + 1) * h_dim1]
+                           + v[2] * h__[jr + (j + 2) * h_dim1];
+                    h__[jr + j * h_dim1] -= temp * tau;
+                    h__[jr + (j + 1) * h_dim1] -= temp * t2;
+                    h__[jr + (j + 2) * h_dim1] -= temp * t3;
                     /* L260: */
                 }
                 i__3 = j + 2;
                 for(jr = ifrstm; jr <= i__3; ++jr)
                 {
-                    temp = tau
-                           * (t[jr + j * t_dim1] + v[1] * t[jr + (j + 1) * t_dim1]
-                              + v[2] * t[jr + (j + 2) * t_dim1]);
-                    t[jr + j * t_dim1] -= temp;
-                    t[jr + (j + 1) * t_dim1] -= temp * v[1];
-                    t[jr + (j + 2) * t_dim1] -= temp * v[2];
+                    temp = t[jr + j * t_dim1] + v[1] * t[jr + (j + 1) * t_dim1]
+                           + v[2] * t[jr + (j + 2) * t_dim1];
+                    t[jr + j * t_dim1] -= temp * tau;
+                    t[jr + (j + 1) * t_dim1] -= temp * t2;
+                    t[jr + (j + 2) * t_dim1] -= temp * t3;
                     /* L270: */
                 }
                 if(ilz)
@@ -1478,12 +1478,11 @@ void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
                     i__3 = *n;
                     for(jr = 1; jr <= i__3; ++jr)
                     {
-                        temp = tau
-                               * (z__[jr + j * z_dim1] + v[1] * z__[jr + (j + 1) * z_dim1]
-                                  + v[2] * z__[jr + (j + 2) * z_dim1]);
-                        z__[jr + j * z_dim1] -= temp;
-                        z__[jr + (j + 1) * z_dim1] -= temp * v[1];
-                        z__[jr + (j + 2) * z_dim1] -= temp * v[2];
+                        temp = z__[jr + j * z_dim1] + v[1] * z__[jr + (j + 1) * z_dim1]
+                               + v[2] * z__[jr + (j + 2) * z_dim1];
+                        z__[jr + j * z_dim1] -= temp * tau;
+                        z__[jr + (j + 1) * z_dim1] -= temp * t2;
+                        z__[jr + (j + 2) * z_dim1] -= temp * t3;
                         /* L280: */
                     }
                 }
@@ -1556,14 +1555,14 @@ void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
             /* End of Double-Shift code */
         }
         goto L350;
-        /* End of iteration loop */
+    /* End of iteration loop */
     L350: /* L360: */
           ;
     }
     /* Drop-through = non-convergence */
     *info = ilast;
     goto L420;
-    /* Successful completion of all QZ steps */
+/* Successful completion of all QZ steps */
 L380: /* Set Eigenvalues 1:ILO-1 */
     i__1 = *ilo - 1;
     for(j = 1; j <= i__1; ++j)
@@ -1602,9 +1601,9 @@ L380: /* Set Eigenvalues 1:ILO-1 */
     }
     /* Normal Termination */
     *info = 0;
-    /* Exit (other than argument error) -- return optimal workspace size */
+/* Exit (other than argument error) -- return optimal workspace size */
 L420:
-    work[1] = (real)(*n);
+    work[1] = sroundup_lwork(n);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SHGEQZ */

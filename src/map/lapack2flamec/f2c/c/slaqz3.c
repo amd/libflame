@@ -1,4 +1,4 @@
-/* slaqz3.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./slaqz3.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -232,7 +232,7 @@ the routine */
 /* ======== */
 /* > \author Thijs Steel, KU Leuven */
 /* > \date May 2020 */
-/* > \ingroup doubleGEcomputational */
+/* > \ingroup laqz3 */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
@@ -283,8 +283,7 @@ void slaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
                 integer *, integer *, integer *),
         slaqz2_(logical *, logical *, integer *, integer *, integer *, integer *, real *, integer *,
                 real *, integer *, integer *, integer *, real *, integer *, integer *, integer *,
-                real *, integer *),
-        slabad_(real *, real *);
+                real *, integer *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
@@ -300,6 +299,7 @@ void slaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
         slartg_(real *, real *, real *, real *, real *);
     integer istopm;
     real smlnum;
+    extern real sroundup_lwork(integer *);
     integer istartm;
     /* Arguments */
     /* Parameters */
@@ -370,7 +370,7 @@ void slaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
     if(*lwork == -1)
     {
         /* workspace query, quick return */
-        work[1] = (real)lworkreq;
+        work[1] = sroundup_lwork(&lworkreq);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -388,7 +388,6 @@ void slaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
     /* Get machine constants */
     safmin = slamch_("SAFE MINIMUM");
     safmax = 1.f / safmin;
-    slabad_(&safmin, &safmax);
     ulp = slamch_("PRECISION");
     smlnum = safmin * ((real)(*n) / ulp);
     if(*ihi == kwtop)

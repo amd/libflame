@@ -1,12 +1,12 @@
-/* ../netlib/slaed8.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./slaed8.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b3 = -1.f;
 static integer c__1 = 1;
-/* > \brief \b SLAED8 used by sstedc. Merges eigenvalues and deflates secular equation. Used when
+/* > \brief \b SLAED8 used by SSTEDC. Merges eigenvalues and deflates secular equation. Used when
  * the original matrix is dense. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -239,7 +239,7 @@ static integer c__1 = 1;
 /* ===================================================================== */
 /* Subroutine */
 void slaed8_(integer *icompq, integer *k, integer *n, integer *qsiz, real *d__, real *q,
-             integer *ldq, integer *indxq, real *rho, integer *cutpnt, real *z__, real *dlamda,
+             integer *ldq, integer *indxq, real *rho, integer *cutpnt, real *z__, real *dlambda,
              real *q2, integer *ldq2, real *w, integer *perm, integer *givptr, integer *givcol,
              real *givnum, integer *indxp, integer *indx, integer *info)
 {
@@ -305,7 +305,7 @@ void aocl_lapack_slaed8(aocl_int64_t *icompq, aocl_int64_t *k, aocl_int64_t *n, 
         void
         slamrg_(integer *, integer *, real *, integer *, integer *, integer *),
         slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
-    /* -- LAPACK computational routine (version 3.4.2) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -418,7 +418,7 @@ void aocl_lapack_slaed8(aocl_int64_t *icompq, aocl_int64_t *k, aocl_int64_t *n, 
     }
     i__ = 1;
     j = *cutpnt + 1;
-    aocl_lapack_slamrg(&n1, &n2, &dlambda[1], &c__1, &c__1, &indx[1]);
+    slamrg_(&n1, &n2, &dlambda[1], &c__1, &c__1, &indx[1]);
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
@@ -427,8 +427,8 @@ void aocl_lapack_slaed8(aocl_int64_t *icompq, aocl_int64_t *k, aocl_int64_t *n, 
         /* L40: */
     }
     /* Calculate the allowable deflation tolerance */
-    imax = aocl_blas_isamax(n, &z__[1], &c__1);
-    jmax = aocl_blas_isamax(n, &d__[1], &c__1);
+    imax = isamax_(n, &z__[1], &c__1);
+    jmax = isamax_(n, &d__[1], &c__1);
     eps = slamch_("Epsilon");
     tol = eps * 8.f * (r__1 = d__[jmax], f2c_abs(r__1));
     /* If the rank-1 modifier is small enough, no more needs to be done */
@@ -556,7 +556,7 @@ L80:
             ++(*k);
             w[*k] = z__[jlam];
             dlambda[*k] = d__[jlam];
-            indxp[*k] = (aocl_int_t)(jlam);
+            indxp[*k] = jlam;
             jlam = j;
         }
     }
@@ -565,7 +565,7 @@ L100: /* Record the last eigenvalue. */
     ++(*k);
     w[*k] = z__[jlam];
     dlambda[*k] = d__[jlam];
-    indxp[*k] = (aocl_int_t)(jlam);
+    indxp[*k] = jlam;
 L110: /* Sort the eigenvalues and corresponding eigenvectors into DLAMBDA */
     /* and Q2 respectively. The eigenvalues/vectors which were not */
     /* deflated go into the first K slots of DLAMBDA and Q2 respectively, */
@@ -600,12 +600,12 @@ L110: /* Sort the eigenvalues and corresponding eigenvectors into DLAMBDA */
         if(*icompq == 0)
         {
             i__1 = *n - *k;
-            aocl_blas_scopy(&i__1, &dlambda[*k + 1], &c__1, &d__[*k + 1], &c__1);
+            scopy_(&i__1, &dlambda[*k + 1], &c__1, &d__[*k + 1], &c__1);
         }
         else
         {
             i__1 = *n - *k;
-            aocl_blas_scopy(&i__1, &dlambda[*k + 1], &c__1, &d__[*k + 1], &c__1);
+            scopy_(&i__1, &dlambda[*k + 1], &c__1, &d__[*k + 1], &c__1);
             i__1 = *n - *k;
             slacpy_("A", qsiz, &i__1, &q2[(*k + 1) * q2_dim1 + 1], ldq2, &q[(*k + 1) * q_dim1 + 1],
                     ldq);

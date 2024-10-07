@@ -1,8 +1,8 @@
-/* ../netlib/ssbgvd.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./ssbgvd.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b12 = 1.f;
 static real c_b13 = 0.f;
@@ -49,12 +49,6 @@ static real c_b13 = 0.f;
 /* > banded, and B is also positive definite. If eigenvectors are */
 /* > desired, it uses a divide and conquer algorithm. */
 /* > */
-/* > The divide and conquer algorithm makes very mild assumptions about */
-/* > floating point arithmetic. It will work on machines with a guard */
-/* > digit in add/subtract, or on those binary machines without guard */
-/* > digits which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or */
-/* > Cray-2. It could conceivably fail on hexadecimal or decimal machines */
-/* > without guard digits, but we know of none. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -222,8 +216,7 @@ the */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date June 2016 */
-/* > \ingroup realOTHEReigen */
+/* > \ingroup hbgvd */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -259,9 +252,7 @@ void ssbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, real 
     integer indwk2, llwrk2;
     extern /* Subroutine */
         void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
         sstedc_(char *, integer *, real *, real *, real *, integer *, real *, integer *, integer *,
                 integer *, integer *),
         slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
@@ -275,10 +266,10 @@ void ssbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, real 
                 integer *, real *, integer *, real *, integer *),
         ssterf_(integer *, real *, real *, integer *);
     logical lquery;
-    /* -- LAPACK driver routine (version 3.7.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -363,7 +354,7 @@ void ssbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, real 
     }
     if(*info == 0)
     {
-        work[1] = (real)lwmin;
+        work[1] = sroundup_lwork(&lwmin);
         iwork[1] = liwmin;
         if(*lwork < lwmin && !lquery)
         {
@@ -431,7 +422,7 @@ void ssbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, real 
                &work[indwk2], n);
         slacpy_("A", n, n, &work[indwk2], n, &z__[z_offset], ldz);
     }
-    work[1] = (real)lwmin;
+    work[1] = sroundup_lwork(&lwmin);
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

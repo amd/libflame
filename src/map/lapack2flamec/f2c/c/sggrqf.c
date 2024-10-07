@@ -1,4 +1,4 @@
-/* sggrqf.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./sggrqf.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -152,7 +152,7 @@ the elements below the diagonal, */
 /* > \verbatim */
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. LWORK >= fla_max(1,N,M,P). */
-/* > For optimum performance LWORK >= fla_max(N,M,P)*max(NB1,NB2,NB3), */
+/* > For optimum performance LWORK >= fla_max(N,M,P)*fla_max(NB1,NB2,NB3), */
 /* > where NB1 is the optimal blocksize for the RQ factorization */
 /* > of an M-by-N matrix, NB2 is the optimal blocksize for the */
 /* > QR factorization of a P-by-N matrix, and NB3 is the optimal */
@@ -177,7 +177,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup realOTHERcomputational */
+/* > \ingroup ggrqf */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -241,6 +241,7 @@ void sggrqf_(integer *m, integer *p, integer *n, real *a, integer *lda, real *ta
         void
         sormrq_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
                 integer *, real *, integer *, integer *);
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -280,7 +281,7 @@ void sggrqf_(integer *m, integer *p, integer *n, real *a, integer *lda, real *ta
     /* Computing MAX */
     i__1 = fla_max(*n, *m);
     lwkopt = fla_max(i__1, *p) * nb;
-    work[1] = (real)lwkopt;
+    work[1] = sroundup_lwork(&lwkopt);
     lquery = *lwork == -1;
     if(*m < 0)
     {
@@ -343,7 +344,8 @@ void sggrqf_(integer *m, integer *p, integer *n, real *a, integer *lda, real *ta
     /* Computing MAX */
     i__1 = lopt;
     i__2 = (integer)work[1]; // , expr subst
-    work[1] = (real)fla_max(i__1, i__2);
+    lwkopt = fla_max(i__1, i__2);
+    work[1] = sroundup_lwork(&lwkopt);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGGRQF */

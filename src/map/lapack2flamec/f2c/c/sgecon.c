@@ -1,8 +1,8 @@
-/* ../netlib/sgecon.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sgecon.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 /* > \brief \b SGECON */
@@ -165,8 +165,8 @@ void sgecon_(char *norm, integer *n, real *a, integer *lda, real *anorm, real *r
         void
         slatrs_(char *, char *, char *, char *, integer *, real *, integer *, real *, real *,
                 real *, integer *);
-    real smlnum;
-    /* -- LAPACK computational routine (version 3.4.0) -- */
+    real smlnum, hugeval;
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -234,6 +234,19 @@ void sgecon_(char *norm, integer *n, real *a, integer *lda, real *anorm, real *r
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
+    else if(sisnan_(anorm))
+    {
+        *rcond = *anorm;
+        *info = -5;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return;
+    }
+    else if(*anorm > hugeval)
+    {
+        *info = -5;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return;
+    }
     smlnum = slamch_("Safe minimum");
     /* Estimate the norm of inv(A). */
     ainvnm = 0.f;
@@ -291,7 +304,7 @@ L10:
     else
     {
         *info = 1;
-        AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* Check for NaNs and Infs */
@@ -299,8 +312,8 @@ L10:
     {
         *info = 1;
     }
-L20:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+L20:
     return;
     /* End of SGECON */
 }

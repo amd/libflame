@@ -1,4 +1,4 @@
-/* slatrs.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./slatrs.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -160,7 +160,7 @@ static real c_b46 = .5f;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup realOTHERauxiliary */
+/* > \ingroup latrs */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -274,7 +274,7 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
     aocl_int64_t imax;
     real tmax, tjjs;
     extern real sdot_(integer *, real *, integer *, real *, integer *);
-    real xmax, grow, sumj;
+    real xmax, grow, sumj, work[1];
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
         void
@@ -428,7 +428,7 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                 {
                     /* Computing MAX */
                     i__2 = j - 1;
-                    r__1 = slange_("M", &i__2, &c__1, &a[j * a_dim1 + 1], &c__1, &sumj);
+                    r__1 = slange_("M", &i__2, &c__1, &a[j * a_dim1 + 1], &c__1, work);
                     tmax = fla_max(r__1, tmax);
                 }
             }
@@ -440,7 +440,7 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                 {
                     /* Computing MAX */
                     i__2 = *n - j;
-                    r__1 = slange_("M", &i__2, &c__1, &a[j + 1 + j * a_dim1], &c__1, &sumj);
+                    r__1 = slange_("M", &i__2, &c__1, &a[j + 1 + j * a_dim1], &c__1, work);
                     tmax = fla_max(r__1, tmax);
                 }
             }
@@ -517,8 +517,8 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
             /* A is non-unit triangular. */
             /* Compute GROW = 1/G(j) and XBND = 1/M(j). */
             /* Initially, G(0) = max{
-            x(i), i=1,...,n}
-            . */
+           x(i), i=1,...,n}
+           . */
             grow = 1.f / fla_max(xbnd, smlnum);
             xbnd = grow;
             i__1 = jlast;
@@ -601,8 +601,8 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
             /* A is non-unit triangular. */
             /* Compute GROW = 1/G(j) and XBND = 1/M(j). */
             /* Initially, M(0) = max{
-            x(i), i=1,...,n}
-            . */
+           x(i), i=1,...,n}
+           . */
             grow = 1.f / fla_max(xbnd, smlnum);
             xbnd = grow;
             i__1 = jlast;

@@ -1,13 +1,8 @@
-/* ../netlib/strsna.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-
-/*
-*     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
-*/
-
+/* ./strsna.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static logical c_true = TRUE_;
@@ -228,8 +223,7 @@ and if JOB = 'V' or 'B', LDWORK >= N. */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup realOTHERcomputational */
+/* > \ingroup trsna */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -319,11 +313,7 @@ void strsna_(char *job, char *howmny, logical *select, integer *n, real *t, inte
     extern /* Subroutine */
         void
         slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
-    extern real slapy2_(real *, real *);
-    extern /* Subroutine */
-        void
-        slabad_(real *, real *);
-    extern real slamch_(char *);
+    extern real slapy2_(real *, real *), slamch_(char *);
     extern /* Subroutine */
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -341,10 +331,9 @@ void strsna_(char *job, char *howmny, logical *select, integer *n, real *t, inte
                 real *, integer *);
     real smlnum;
     logical wantsp;
-    /* -- LAPACK computational routine (version 3.4.0) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -509,7 +498,6 @@ void strsna_(char *job, char *howmny, logical *select, integer *n, real *t, inte
     eps = slamch_("P");
     smlnum = slamch_("S") / eps;
     bignum = 1.f / smlnum;
-    slabad_(&smlnum, &bignum);
     ks = 0;
     pair = FALSE_;
     i__1 = *n;

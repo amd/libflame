@@ -1,8 +1,8 @@
-/* ../netlib/ssbevd.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./ssbevd.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b11 = 1.f;
 static real c_b18 = 0.f;
@@ -48,12 +48,6 @@ static integer c__1 = 1;
 /* > a real symmetric band matrix A. If eigenvectors are desired, it uses */
 /* > a divide and conquer algorithm. */
 /* > */
-/* > The divide and conquer algorithm makes very mild assumptions about */
-/* > floating point arithmetic. It will work on machines with a guard */
-/* > digit in add/subtract, or on those binary machines without guard */
-/* > digits which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or */
-/* > Cray-2. It could conceivably fail on hexadecimal or decimal machines */
-/* > without guard digits, but we know of none. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -194,8 +188,7 @@ i */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date December 2016 */
-/* > \ingroup realOTHEReigen */
+/* > \ingroup hbevd */
 /* ===================================================================== */
 /* Subroutine */
 void ssbevd_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, integer *ldab, real *w,
@@ -252,10 +245,10 @@ void ssbevd_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, integer 
         ssterf_(integer *, real *, real *, integer *);
     real smlnum;
     logical lquery;
-    /* -- LAPACK driver routine (version 3.7.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* December 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -334,7 +327,7 @@ void ssbevd_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, integer 
     }
     if(*info == 0)
     {
-        work[1] = (real)lwmin;
+        work[1] = sroundup_lwork(&lwmin);
         iwork[1] = liwmin;
         if(*lwork < lwmin && !lquery)
         {
@@ -430,7 +423,7 @@ void ssbevd_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, integer 
         r__1 = 1.f / sigma;
         sscal_(n, &r__1, &w[1], &c__1);
     }
-    work[1] = (real)lwmin;
+    work[1] = sroundup_lwork(&lwmin);
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

@@ -1,9 +1,9 @@
-/* ../netlib/ssbgv.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b SSBGST */
+/* ./ssbgv.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+#include "FLA_f2c.h" /* > \brief \b SSBGV */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -172,8 +172,7 @@
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup realOTHEReigen */
+/* > \ingroup hbgv */
 /* ===================================================================== */
 /* Subroutine */
 void ssbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, real *ab, integer *ldab,
@@ -209,10 +208,9 @@ void ssbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, real *
                 integer *, real *, integer *, real *, integer *),
         ssterf_(integer *, real *, real *, integer *),
         ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
-    /* -- LAPACK driver routine (version 3.4.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -277,7 +275,7 @@ void ssbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, real *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSBGV ", &i__1, (ftnlen)6);
+        xerbla_("SSBGV", &i__1, (ftnlen)5);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }

@@ -1,8 +1,8 @@
-/* ../netlib/stgevc.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./stgevc.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static logical c_true = TRUE_;
 static integer c__2 = 2;
@@ -61,7 +61,7 @@ static logical c_false = FALSE_;
 /* > */
 /* > S*x = w*P*x, (y**H)*S = w*(y**H)*P, */
 /* > */
-/* > where y**H denotes the conjugate tranpose of y. */
+/* > where y**H denotes the conjugate transpose of y. */
 /* > The eigenvalues are not input to this routine, but are computed */
 /* > directly from the diagonal blocks of S and P. */
 /* > */
@@ -240,8 +240,7 @@ static logical c_false = FALSE_;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup realGEcomputational */
+/* > \ingroup tgevc */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -357,9 +356,6 @@ void stgevc_(char *side, char *howmny, logical *select, integer *n, real *s, int
     logical ilabad, ilbbad;
     real acoefa, bcoefa, cimaga, cimagb;
     logical ilback;
-    extern /* Subroutine */
-        void
-        slabad_(real *, real *);
     real bcoefi, ascale, bscale, creala, crealb, bcoefr;
     extern real slamch_(char *);
     real salfar, safmin;
@@ -372,10 +368,9 @@ void stgevc_(char *side, char *howmny, logical *select, integer *n, real *s, int
         void
         slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     integer ihwmny;
-    /* -- LAPACK computational routine (version 3.4.0) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -586,7 +581,6 @@ void stgevc_(char *side, char *howmny, logical *select, integer *n, real *s, int
     /* Machine Constants */
     safmin = slamch_("Safe minimum");
     big = 1.f / safmin;
-    slabad_(&safmin, &big);
     ulp = slamch_("Epsilon") * slamch_("Base");
     small_val = safmin * *n / ulp;
     big = 1.f / small_val;

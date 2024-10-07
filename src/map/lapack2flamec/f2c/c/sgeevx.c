@@ -1,8 +1,8 @@
-/* ../netlib/sgeevx.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sgeevx.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__0 = 0;
@@ -308,9 +308,8 @@ elements 1:ILO-1 and i+1:N of WR */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date June 2016 */
 /* @generated from dgeevx.f, fortran d -> s, Tue Apr 19 01:47:44 2016 */
-/* > \ingroup realGEeigen */
+/* > \ingroup geevx */
 /* ===================================================================== */
 /* Subroutine */
 void sgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, real *a, integer *lda,
@@ -342,9 +341,6 @@ void sgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, re
         void
         sscal_(integer *, real *, real *, integer *);
     extern real slapy2_(real *, real *);
-    extern /* Subroutine */
-        void
-        slabad_(real *, real *);
     logical scalea;
     real cscale;
     extern /* Subroutine */
@@ -389,10 +385,10 @@ void sgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, re
         void
         strevc3_(char *, char *, logical *, integer *, real *, integer *, real *, integer *, real *,
                  integer *, integer *, integer *, real *, integer *, integer *);
-    /* -- LAPACK driver routine (version 3.7.1) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -578,7 +574,7 @@ void sgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, re
             }
             maxwrk = fla_max(maxwrk, minwrk);
         }
-        work[1] = (real)maxwrk;
+        work[1] = sroundup_lwork(&maxwrk);
         if(*lwork < minwrk && !lquery)
         {
             *info = -21;
@@ -603,7 +599,6 @@ void sgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, re
     eps = slamch_("P");
     smlnum = slamch_("S");
     bignum = 1.f / smlnum;
-    slabad_(&smlnum, &bignum);
     smlnum = sqrt(smlnum) / eps;
     bignum = 1.f / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
@@ -796,7 +791,7 @@ void sgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, re
             /* L40: */
         }
     }
-    /* Undo scaling if necessary */
+/* Undo scaling if necessary */
 L50:
     if(scalea)
     {
@@ -825,7 +820,7 @@ L50:
             slascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &wi[1], n, &ierr);
         }
     }
-    work[1] = (real)maxwrk;
+    work[1] = sroundup_lwork(&maxwrk);
     return;
     /* End of SGEEVX */
 }

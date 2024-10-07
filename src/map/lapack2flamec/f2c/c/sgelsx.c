@@ -198,8 +198,7 @@ void sgelsx_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
                real *, integer *),
         slaic1_(integer *, integer *, real *, real *, real *, real *, real *, real *, real *),
         sorm2r_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
-                integer *, real *, integer *),
-        slabad_(real *, real *);
+                integer *, real *, integer *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
         void
@@ -294,7 +293,6 @@ void sgelsx_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
     /* Get machine parameters */
     smlnum = slamch_("S") / slamch_("P");
     bignum = 1.f / smlnum;
-    slabad_(&smlnum, &bignum);
     /* Scale A, B if max elements outside range [SMLNUM,BIGNUM] */
     anrm = slange_("M", m, n, &a[a_offset], lda, &work[1]);
     iascl = 0;

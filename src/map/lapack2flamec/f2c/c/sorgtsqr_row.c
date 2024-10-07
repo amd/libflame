@@ -1,4 +1,4 @@
-/* sorgtsqr_row.f -- translated by f2c (version 20160102). You must link the resulting object file
+/* ./sorgtsqr_row.f -- translated by f2c (version 20190311). You must link the resulting object file
  with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
@@ -140,7 +140,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > LDT is INTEGER */
 /* > The leading dimension of the array T. */
-/* > LDT >= fla_max(1,fla_min(NB,N)). */
+/* > LDT >= fla_max(1,min(NB,N)). */
 /* > \endverbatim */
 /* > */
 /* > \param[out] WORK */
@@ -174,7 +174,7 @@ static integer c__1 = 1;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup sigleOTHERcomputational */
+/* > \ingroup ungtsqr_row */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -204,12 +204,11 @@ void sorgtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, real *a, in
         ;
     extern /* Subroutine */
         void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
         slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     logical lquery;
     integer nblocal, kb_last__;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -223,6 +222,8 @@ void sorgtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, real *a, in
     /* .. Local Scalars .. */
     /* .. */
     /* .. Local Arrays .. */
+    /* .. */
+    /* .. External Functions .. */
     /* .. */
     /* .. External Subroutines .. */
     /* .. */
@@ -293,13 +294,13 @@ void sorgtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, real *a, in
     }
     else if(lquery)
     {
-        work[1] = (real)lworkopt;
+        work[1] = sroundup_lwork(&lworkopt);
         return;
     }
     /* Quick return if possible */
     if(fla_min(*m, *n) == 0)
     {
-        work[1] = (real)lworkopt;
+        work[1] = sroundup_lwork(&lworkopt);
         return;
     }
     /* (0) Set the upper-triangular part of the matrix A to zero and */
@@ -390,7 +391,7 @@ void sorgtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, real *a, in
                          lda, &a[kb + knb + kb * a_dim1], lda, &work[1], &knb);
         }
     }
-    work[1] = (real)lworkopt;
+    work[1] = sroundup_lwork(&lworkopt);
     return;
     /* End of SORGTSQR_ROW */
 }

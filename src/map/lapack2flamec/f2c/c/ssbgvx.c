@@ -1,13 +1,13 @@
-/* ../netlib/ssbgvx.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./ssbgvx.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static real c_b25 = 1.f;
 static real c_b27 = 0.f;
-/* > \brief \b SSBGST */
+/* > \brief \b SSBGVX */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -161,13 +161,17 @@ static real c_b27 = 0.f;
 /* > \param[in] VL */
 /* > \verbatim */
 /* > VL is REAL */
+/* > */
+/* > If RANGE='V', the lower bound of the interval to */
+/* > be searched for eigenvalues. VL < VU. */
+/* > Not referenced if RANGE = 'A' or 'I'. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] VU */
 /* > \verbatim */
 /* > VU is REAL */
 /* > */
-/* > If RANGE='V', the lower and upper bounds of the interval to */
+/* > If RANGE='V', the upper bound of the interval to */
 /* > be searched for eigenvalues. VL < VU. */
 /* > Not referenced if RANGE = 'A' or 'I'. */
 /* > \endverbatim */
@@ -175,14 +179,20 @@ static real c_b27 = 0.f;
 /* > \param[in] IL */
 /* > \verbatim */
 /* > IL is INTEGER */
+/* > */
+/* > If RANGE='I', the index of the */
+/* > smallest eigenvalue to be returned. */
+/* > 1 <= IL <= IU <= N, if N > 0;
+IL = 1 and IU = 0 if N = 0. */
+/* > Not referenced if RANGE = 'A' or 'V'. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] IU */
 /* > \verbatim */
 /* > IU is INTEGER */
 /* > */
-/* > If RANGE='I', the indices (in ascending order) of the */
-/* > smallest and largest eigenvalues to be returned. */
+/* > If RANGE='I', the index of the */
+/* > largest eigenvalue to be returned. */
 /* > 1 <= IL <= IU <= N, if N > 0;
 IL = 1 and IU = 0 if N = 0. */
 /* > Not referenced if RANGE = 'A' or 'V'. */
@@ -242,12 +252,12 @@ IL = 1 and IU = 0 if N = 0. */
 /* > */
 /* > \param[out] WORK */
 /* > \verbatim */
-/* > WORK is REAL array, dimension (7N) */
+/* > WORK is REAL array, dimension (7*N) */
 /* > \endverbatim */
 /* > */
 /* > \param[out] IWORK */
 /* > \verbatim */
-/* > IWORK is INTEGER array, dimension (5N) */
+/* > IWORK is INTEGER array, dimension (5*N) */
 /* > \endverbatim */
 /* > */
 /* > \param[out] IFAIL */
@@ -262,14 +272,14 @@ IL = 1 and IU = 0 if N = 0. */
 /* > \param[out] INFO */
 /* > \verbatim */
 /* > INFO is INTEGER */
-/* > = 0 : successful exit */
-/* > < 0 : if INFO = -i, the i-th argument had an illegal value */
+/* > = 0: successful exit */
+/* > < 0: if INFO = -i, the i-th argument had an illegal value */
 /* > <= N: if INFO = i, then i eigenvectors failed to converge. */
 /* > Their indices are stored in IFAIL. */
-/* > > N : SPBSTF returned an error code;
+/* > > N: SPBSTF returned an error code;
 i.e., */
 /* > if INFO = N + i, for 1 <= i <= N, then the leading */
-/* > minor of order i of B is not positive definite. */
+/* > principal minor of order i of B is not positive. */
 /* > The factorization of B could not be completed and */
 /* > no eigenvalues or eigenvectors were computed. */
 /* > \endverbatim */
@@ -279,8 +289,7 @@ i.e., */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup realOTHEReigen */
+/* > \ingroup hbgvx */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -323,9 +332,7 @@ void ssbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
         void
         scopy_(integer *, real *, integer *, real *, integer *),
         sswap_(integer *, real *, integer *, real *, integer *);
-    logical wantz, alleig, indeig;
-    integer indibl;
-    logical valeig;
+    logical wantz, alleig, indeig, valeig;
     extern /* Subroutine */
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -351,10 +358,9 @@ void ssbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
                 real *, integer *, integer *, real *, integer *, integer *, real *, integer *,
                 integer *),
         ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
-    /* -- LAPACK driver routine (version 3.4.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -486,7 +492,6 @@ void ssbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
     ssbgst_(jobz, uplo, n, ka, kb, &ab[ab_offset], ldab, &bb[bb_offset], ldbb, &q[q_offset], ldq,
             &work[1], &iinfo);
     /* Reduce symmetric band matrix to tridiagonal form. */
-    indibl = 1;
     indd = 1;
     inde = indd + *n;
     indwrk = inde + *n;
@@ -552,14 +557,14 @@ void ssbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
     {
         *(unsigned char *)order = 'E';
     }
-    indisp = indibl + *n;
+    indisp = *n + 1;
     indiwo = indisp + *n;
     sstebz_(range, order, n, vl, vu, il, iu, abstol, &work[indd], &work[inde], m, &nsplit, &w[1],
-            &iwork[indibl], &iwork[indisp], &work[indwrk], &iwork[indiwo], info);
+            &iwork[1], &iwork[indisp], &work[indwrk], &iwork[indiwo], info);
     if(wantz)
     {
-        sstein_(n, &work[indd], &work[inde], m, &w[1], &iwork[indibl], &iwork[indisp],
-                &z__[z_offset], ldz, &work[indwrk], &iwork[indiwo], &ifail[1], info);
+        sstein_(n, &work[indd], &work[inde], m, &w[1], &iwork[1], &iwork[indisp], &z__[z_offset],
+                ldz, &work[indwrk], &iwork[indiwo], &ifail[1], info);
         /* Apply transformation matrix used in reduction to tridiagonal */
         /* form to eigenvectors returned by SSTEIN. */
         i__1 = *m;
@@ -592,11 +597,11 @@ L30: /* If eigenvalues are not in order, then sort them, along with */
             }
             if(i__ != 0)
             {
-                itmp1 = iwork[indibl + i__ - 1];
+                itmp1 = iwork[i__];
                 w[i__] = w[j];
-                iwork[indibl + i__ - 1] = iwork[indibl + j - 1];
+                iwork[i__] = iwork[j];
                 w[j] = tmp1;
-                iwork[indibl + j - 1] = itmp1;
+                iwork[j] = itmp1;
                 sswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], &c__1);
                 if(*info != 0)
                 {

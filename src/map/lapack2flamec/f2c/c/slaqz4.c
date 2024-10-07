@@ -1,4 +1,4 @@
-/* slaqz4.f -- translated by f2c (version 20160102). You must link the resulting object file with
+/* ./slaqz4.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -205,7 +205,7 @@ the routine */
 /* ======== */
 /* > \author Thijs Steel, KU Leuven */
 /* > \date May 2020 */
-/* > \ingroup doubleGEcomputational */
+/* > \ingroup laqz4 */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
@@ -250,7 +250,9 @@ void slaqz4_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
         slaset_(char *, integer *, integer *, real *, real *, real *, integer *),
         slartg_(real *, real *, real *, real *, real *),
         slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
-    integer istopb, swidth, istopm, sheight, istartb, istartm;
+    integer istopb, swidth, istopm, sheight;
+    extern real sroundup_lwork(integer *);
+    integer istartb, istartm;
     /* Function arguments */
     /* Parameters */
     /* Local scalars */
@@ -287,7 +289,8 @@ void slaqz4_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
     if(*lwork == -1)
     {
         /* workspace query, quick return */
-        work[1] = (real)(*n * *nblock_desired__);
+        i__1 = *n * *nblock_desired__;
+        work[1] = sroundup_lwork(&i__1);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

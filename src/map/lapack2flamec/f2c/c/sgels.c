@@ -1,8 +1,8 @@
-/* ../netlib/sgels.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sgels.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -57,7 +57,7 @@ static integer c__0 = 0;
 /* > an underdetermined system A * X = B. */
 /* > */
 /* > 3. If TRANS = 'T' and m >= n: find the minimum norm solution of */
-/* > an undetermined system A**T * X = B. */
+/* > an underdetermined system A**T * X = B. */
 /* > */
 /* > 4. If TRANS = 'T' and m < n: find the least squares solution of */
 /* > an overdetermined system, i.e., solve the least squares problem */
@@ -189,8 +189,7 @@ the least squares solution could not be */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup realGEsolve */
+/* > \ingroup gels */
 /* ===================================================================== */
 /* Subroutine */
 void sgels_(char *trans, integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *b,
@@ -207,9 +206,6 @@ void sgels_(char *trans, integer *m, integer *n, integer *nrhs, real *a, integer
     extern logical lsame_(char *, char *, integer, integer);
     integer wsize;
     real rwork[1];
-    extern /* Subroutine */
-        void
-        slabad_(real *, real *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
         void
@@ -236,10 +232,10 @@ void sgels_(char *trans, integer *m, integer *n, integer *nrhs, real *a, integer
                 integer *, real *, integer *, integer *),
         strtrs_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *,
                 integer *);
-    /* -- LAPACK driver routine (version 3.4.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -358,7 +354,7 @@ void sgels_(char *trans, integer *m, integer *n, integer *nrhs, real *a, integer
         i__1 = 1;
         i__2 = mn + fla_max(mn, *nrhs) * nb; // , expr subst
         wsize = fla_max(i__1, i__2);
-        work[1] = (real)wsize;
+        work[1] = sroundup_lwork(&wsize);
     }
     if(*info != 0)
     {
@@ -382,7 +378,6 @@ void sgels_(char *trans, integer *m, integer *n, integer *nrhs, real *a, integer
     /* Get machine parameters */
     smlnum = slamch_("S") / slamch_("P");
     bignum = 1.f / smlnum;
-    slabad_(&smlnum, &bignum);
     /* Scale A, B if max element outside range [SMLNUM,BIGNUM] */
     anrm = slange_("M", m, n, &a[a_offset], lda, rwork);
     iascl = 0;
@@ -449,7 +444,7 @@ void sgels_(char *trans, integer *m, integer *n, integer *nrhs, real *a, integer
         }
         else
         {
-            /* Overdetermined system of equations A**T * X = B */
+            /* Underdetermined system of equations A**T * X = B */
             /* B(1:N,1:NRHS) := inv(R**T) * B(1:N,1:NRHS) */
             strtrs_("Upper", "Transpose", "Non-unit", n, nrhs, &a[a_offset], lda, &b[b_offset], ldb,
                     info);
@@ -548,7 +543,7 @@ void sgels_(char *trans, integer *m, integer *n, integer *nrhs, real *a, integer
         slascl_("G", &c__0, &c__0, &bignum, &bnrm, &scllen, nrhs, &b[b_offset], ldb, info);
     }
 L50:
-    work[1] = (real)wsize;
+    work[1] = sroundup_lwork(&wsize);
     return;
     /* End of SGELS */
 }

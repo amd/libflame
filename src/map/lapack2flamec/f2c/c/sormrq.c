@@ -1,8 +1,8 @@
-/* ../netlib/sormrq.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sormrq.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -168,8 +168,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date December 2016 */
-/* > \ingroup realOTHERcomputational */
+/* > \ingroup unmrq */
 /* ===================================================================== */
 /* Subroutine */
 void sormrq_(char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda,
@@ -183,7 +182,8 @@ void sormrq_(char *side, char *trans, integer *m, integer *n, integer *k, real *
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__4, i__5;
+    address a__1[2];
+    integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__3[2], i__4, i__5;
     char ch__1[2];
     /* Builtin functions */
     /* Subroutine */
@@ -209,10 +209,10 @@ void sormrq_(char *side, char *trans, integer *m, integer *n, integer *k, real *
     char transt[1];
     integer lwkopt;
     logical lquery;
-    /* -- LAPACK computational routine (version 3.7.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* December 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -302,7 +302,7 @@ void sormrq_(char *side, char *trans, integer *m, integer *n, integer *k, real *
             /* Computing MIN */
             lwkopt = nw * nb + 4160;
         }
-        work[1] = (real)lwkopt;
+        work[1] = sroundup_lwork(&lwkopt);
     }
     if(*info != 0)
     {
@@ -402,7 +402,7 @@ void sormrq_(char *side, char *trans, integer *m, integer *n, integer *k, real *
             /* L10: */
         }
     }
-    work[1] = (real)lwkopt;
+    work[1] = sroundup_lwork(&lwkopt);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of SORMRQ */

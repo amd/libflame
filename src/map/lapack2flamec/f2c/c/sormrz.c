@@ -1,4 +1,4 @@
-/* sormrz.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./sormrz.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -176,7 +176,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup realOTHERcomputational */
+/* > \ingroup unmrz */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -198,7 +198,8 @@ void sormrz_(char *side, char *trans, integer *m, integer *n, integer *k, intege
                       ", l %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",
                       *side, *trans, *m, *n, *k, *l, *lda, *ldc);
     /* System generated locals */
-    integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__4, i__5;
+    address a__1[2];
+    integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__3[2], i__4, i__5;
     char ch__1[2];
     /* Builtin functions */
     /* Subroutine */
@@ -226,6 +227,7 @@ void sormrz_(char *side, char *trans, integer *m, integer *n, integer *k, intege
         slarzt_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
     integer lwkopt;
     logical lquery;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -323,7 +325,7 @@ void sormrz_(char *side, char *trans, integer *m, integer *n, integer *k, intege
             nb = fla_min(i__1, i__2);
             lwkopt = nw * nb + 4160;
         }
-        work[1] = (real)lwkopt;
+        work[1] = sroundup_lwork(&lwkopt);
     }
     if(*info != 0)
     {
@@ -428,7 +430,7 @@ void sormrz_(char *side, char *trans, integer *m, integer *n, integer *k, intege
             /* L10: */
         }
     }
-    work[1] = (real)lwkopt;
+    work[1] = sroundup_lwork(&lwkopt);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SORMRZ */

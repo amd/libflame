@@ -1,13 +1,13 @@
-/* ../netlib/slaed3.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./slaed3.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-static real c_b22 = 1.f;
-static real c_b23 = 0.f;
-/* > \brief \b SLAED3 used by sstedc. Finds the roots of the secular equation and updates the
+static real c_b21 = 1.f;
+static real c_b22 = 0.f;
+/* > \brief \b SLAED3 used by SSTEDC. Finds the roots of the secular equation and updates the
  * eigenvectors. Us ed when the original matrix is tridiagonal. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -29,7 +29,7 @@ static real c_b23 = 0.f;
 /* > \endhtmlonly */
 /* Definition: */
 /* =========== */
-/* SUBROUTINE SLAED3( K, N, N1, D, Q, LDQ, RHO, DLAMDA, Q2, INDX, */
+/* SUBROUTINE SLAED3( K, N, N1, D, Q, LDQ, RHO, DLAMBDA, Q2, INDX, */
 /* CTOT, W, S, INFO ) */
 /* .. Scalar Arguments .. */
 /* INTEGER INFO, K, LDQ, N, N1 */
@@ -37,7 +37,7 @@ static real c_b23 = 0.f;
 /* .. */
 /* .. Array Arguments .. */
 /* INTEGER CTOT( * ), INDX( * ) */
-/* REAL D( * ), DLAMDA( * ), Q( LDQ, * ), Q2( * ), */
+/* REAL D( * ), DLAMBDA( * ), Q( LDQ, * ), Q2( * ), */
 /* $ S( * ), W( * ) */
 /* .. */
 /* > \par Purpose: */
@@ -52,12 +52,6 @@ static real c_b23 = 0.f;
 /* > being combined by the matrix of eigenvectors of the K-by-K system */
 /* > which is solved here. */
 /* > */
-/* > This code makes very mild assumptions about floating point */
-/* > arithmetic. It will work on machines with a guard digit in */
-/* > add/subtract, or on those binary machines without guard digits */
-/* > which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or Cray-2. */
-/* > It could conceivably fail on hexadecimal or decimal machines */
-/* > without guard digits, but we know of none. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -110,19 +104,17 @@ static real c_b23 = 0.f;
 /* > RHO >= 0 required. */
 /* > \endverbatim */
 /* > */
-/* > \param[in,out] DLAMDA */
+/* > \param[in] DLAMBDA */
 /* > \verbatim */
-/* > DLAMDA is REAL array, dimension (K) */
+/* > DLAMBDA is REAL array, dimension (K) */
 /* > The first K elements of this array contain the old roots */
 /* > of the deflated updating problem. These are the poles */
-/* > of the secular equation. May be changed on output by */
-/* > having lowest order bit set to zero on Cray X-MP, Cray Y-MP, */
-/* > Cray-2, or Cray C-90, as described above. */
+/* > of the secular equation. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] Q2 */
 /* > \verbatim */
-/* > Q2 is REAL array, dimension (LDQ2, N) */
+/* > Q2 is REAL array, dimension (LDQ2*N) */
 /* > The first K columns of this matrix contain the non-deflated */
 /* > eigenvectors for the split problem. */
 /* > \endverbatim */
@@ -173,8 +165,7 @@ static real c_b23 = 0.f;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date September 2012 */
-/* > \ingroup auxOTHERcomputational */
+/* > \ingroup laed3 */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -185,7 +176,7 @@ static real c_b23 = 0.f;
 /* ===================================================================== */
 /* Subroutine */
 void slaed3_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *ldq, real *rho,
-             real *dlamda, real *q2, integer *indx, integer *ctot, real *w, real *s, integer *info)
+             real *dlambda, real *q2, integer *indx, integer *ctot, real *w, real *s, integer *info)
 {
     /* System generated locals */
     integer q_dim1, q_offset, i__1, i__2;
@@ -201,19 +192,13 @@ void slaed3_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *l
         sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
                integer *, real *, real *, integer *),
         scopy_(integer *, real *, integer *, real *, integer *),
-        slaed4_(integer *, integer *, real *, real *, real *, real *, real *, integer *);
-    extern real slamc3_(real *, real *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
+        slaed4_(integer *, integer *, real *, real *, real *, real *, real *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
         slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
         slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
-    /* -- LAPACK computational routine (version 3.4.2) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* September 2012 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -236,7 +221,7 @@ void slaed3_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *l
     q_dim1 = *ldq;
     q_offset = 1 + q_dim1;
     q -= q_offset;
-    --dlamda;
+    --dlambda;
     --q2;
     --indx;
     --ctot;
@@ -267,33 +252,10 @@ void slaed3_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *l
     {
         return;
     }
-    /* Modify values DLAMDA(i) to make sure all DLAMDA(i)-DLAMDA(j) can */
-    /* be computed with high relative accuracy (barring over/underflow). */
-    /* This is a problem on machines without a guard digit in */
-    /* add/subtract (Cray XMP, Cray YMP, Cray C 90 and Cray 2). */
-    /* The following code replaces DLAMDA(I) by 2*DLAMDA(I)-DLAMDA(I), */
-    /* which on any of these machines zeros out the bottommost */
-    /* bit of DLAMDA(I) if it is 1;
-    this makes the subsequent */
-    /* subtractions DLAMDA(I)-DLAMDA(J) unproblematic when cancellation */
-    /* occurs. On binary machines with a guard digit (almost all */
-    /* machines) it does not change DLAMDA(I) at all. On hexadecimal */
-    /* and decimal machines with a guard digit, it slightly */
-    /* changes the bottommost bits of DLAMDA(I). It does not account */
-    /* for hexadecimal or decimal machines without guard digits */
-    /* (we know of none). We use a subroutine call to compute */
-    /* 2*DLAMBDA(I) to prevent optimizing compilers from eliminating */
-    /* this code. */
-    i__1 = *k;
-    for(i__ = 1; i__ <= i__1; ++i__)
-    {
-        dlamda[i__] = slamc3_(&dlamda[i__], &dlamda[i__]) - dlamda[i__];
-        /* L10: */
-    }
     i__1 = *k;
     for(j = 1; j <= i__1; ++j)
     {
-        slaed4_(k, &j, &dlamda[1], &w[1], &q[j * q_dim1 + 1], rho, &d__[j], info);
+        slaed4_(k, &j, &dlambda[1], &w[1], &q[j * q_dim1 + 1], rho, &d__[j], info);
         /* If the zero finder fails, the computation is terminated. */
         if(*info != 0)
         {
@@ -331,13 +293,13 @@ void slaed3_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *l
         i__2 = j - 1;
         for(i__ = 1; i__ <= i__2; ++i__)
         {
-            w[i__] *= q[i__ + j * q_dim1] / (dlamda[i__] - dlamda[j]);
+            w[i__] *= q[i__ + j * q_dim1] / (dlambda[i__] - dlambda[j]);
             /* L40: */
         }
         i__2 = *k;
         for(i__ = j + 1; i__ <= i__2; ++i__)
         {
-            w[i__] *= q[i__ + j * q_dim1] / (dlamda[i__] - dlamda[j]);
+            w[i__] *= q[i__ + j * q_dim1] / (dlambda[i__] - dlambda[j]);
             /* L50: */
         }
         /* L60: */
@@ -369,7 +331,7 @@ void slaed3_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *l
         }
         /* L100: */
     }
-    /* Compute the updated eigenvectors. */
+/* Compute the updated eigenvectors. */
 L110:
     n2 = *n - *n1;
     n12 = ctot[1] + ctot[2];
@@ -378,21 +340,21 @@ L110:
     iq2 = *n1 * n12 + 1;
     if(n23 != 0)
     {
-        sgemm_("N", "N", &n2, k, &n23, &c_b22, &q2[iq2], &n2, &s[1], &n23, &c_b23,
+        sgemm_("N", "N", &n2, k, &n23, &c_b21, &q2[iq2], &n2, &s[1], &n23, &c_b22,
                &q[*n1 + 1 + q_dim1], ldq);
     }
     else
     {
-        slaset_("A", &n2, k, &c_b23, &c_b23, &q[*n1 + 1 + q_dim1], ldq);
+        slaset_("A", &n2, k, &c_b22, &c_b22, &q[*n1 + 1 + q_dim1], ldq);
     }
     slacpy_("A", &n12, k, &q[q_offset], ldq, &s[1], &n12);
     if(n12 != 0)
     {
-        sgemm_("N", "N", n1, k, &n12, &c_b22, &q2[1], n1, &s[1], &n12, &c_b23, &q[q_offset], ldq);
+        sgemm_("N", "N", n1, k, &n12, &c_b21, &q2[1], n1, &s[1], &n12, &c_b22, &q[q_offset], ldq);
     }
     else
     {
-        slaset_("A", n1, k, &c_b23, &c_b23, &q[q_dim1 + 1], ldq);
+        slaset_("A", n1, k, &c_b22, &c_b22, &q[q_dim1 + 1], ldq);
     }
 L120:
     return;

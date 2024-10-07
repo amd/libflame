@@ -1,8 +1,8 @@
-/* ../netlib/strsen.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./strsen.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c_n1 = -1;
 /* > \brief \b STRSEN */
@@ -246,8 +246,7 @@ S and */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date April 2012 */
-/* > \ingroup realOTHERcomputational */
+/* > \ingroup trsen */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -376,10 +375,10 @@ void strsen_(char *job, char *compq, logical *select, integer *n, real *t, integ
         void
         strsyl_(char *, char *, integer *, integer *, integer *, real *, integer *, real *,
                 integer *, real *, integer *, real *, integer *);
-    /* -- LAPACK computational routine (version 3.4.1) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* April 2012 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -515,7 +514,7 @@ void strsen_(char *job, char *compq, logical *select, integer *n, real *t, integ
     }
     if(*info == 0)
     {
-        work[1] = (real)lwmin;
+        work[1] = sroundup_lwork(&lwmin);
         iwork[1] = liwmin;
     }
     if(*info != 0)
@@ -660,7 +659,7 @@ L40: /* Store the output eigenvalues in WR and WI. */
         }
         /* L60: */
     }
-    work[1] = (real)lwmin;
+    work[1] = sroundup_lwork(&lwmin);
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

@@ -1,4 +1,4 @@
-/* sgelss.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./sgelss.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -111,14 +111,14 @@ they are stored as the columns of the */
 /* > \param[in] LDB */
 /* > \verbatim */
 /* > LDB is INTEGER */
-/* > The leading dimension of the array B. LDB >= fla_max(1,max(M,N)). */
+/* > The leading dimension of the array B. LDB >= fla_max(1,fla_max(M,N)). */
 /* > \endverbatim */
 /* > */
 /* > \param[out] S */
 /* > \verbatim */
 /* > S is REAL array, dimension (fla_min(M,N)) */
 /* > The singular values of A in decreasing order. */
-/* > The condition number of A in the 2-norm = S(1)/S (fla_min(m,n)). */
+/* > The condition number of A in the 2-norm = S(1)/S(fla_min(m,n)). */
 /* > \endverbatim */
 /* > */
 /* > \param[in] RCOND */
@@ -146,7 +146,7 @@ they are stored as the columns of the */
 /* > \verbatim */
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. LWORK >= 1, and also: */
-/* > LWORK >= 3*min(M,N) + fla_max( 2*min(M,N), fla_max(M,N), NRHS ) */
+/* > LWORK >= 3*fla_min(M,N) + fla_max( 2*fla_min(M,N), fla_max(M,N), NRHS ) */
 /* > For good performance, LWORK should generally be larger. */
 /* > */
 /* > If LWORK = -1, then a workspace query is assumed;
@@ -172,7 +172,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup realGEsolve */
+/* > \ingroup gelss */
 /* ===================================================================== */
 /* Subroutine */
 void sgelss_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb,
@@ -207,8 +207,7 @@ void sgelss_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
     integer mnthr, iwork;
     extern /* Subroutine */
         void
-        scopy_(integer *, real *, integer *, real *, integer *),
-        slabad_(real *, real *);
+        scopy_(integer *, real *, integer *, real *, integer *);
     integer bdspac;
     extern /* Subroutine */
         void
@@ -248,6 +247,7 @@ void sgelss_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
         void
         sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
                 integer *, real *, integer *, integer *);
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -481,7 +481,7 @@ void sgelss_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
             }
             maxwrk = fla_max(minwrk, maxwrk);
         }
-        work[1] = (real)maxwrk;
+        work[1] = sroundup_lwork(&maxwrk);
         if(*lwork < minwrk && !lquery)
         {
             *info = -12;
@@ -511,7 +511,6 @@ void sgelss_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
     sfmin = slamch_("S");
     smlnum = sfmin / eps;
     bignum = 1.f / smlnum;
-    slabad_(&smlnum, &bignum);
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
     anrm = slange_("M", m, n, &a[a_offset], lda, &work[1]);
     iascl = 0;
@@ -657,7 +656,7 @@ void sgelss_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
                 /* L20: */
             }
         }
-        else
+        else if(*nrhs == 1)
         {
             sgemv_("T", n, n, &c_b83, &a[a_offset], lda, &b[b_offset], &c__1, &c_b50, &work[1],
                    &c__1);
@@ -777,7 +776,7 @@ void sgelss_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
                     /* L40: */
                 }
             }
-            else
+            else if(*nrhs == 1)
             {
                 sgemv_("T", m, m, &c_b83, &work[il], &ldwork, &b[b_dim1 + 1], &c__1, &c_b50,
                        &work[iwork], &c__1);
@@ -874,7 +873,7 @@ void sgelss_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
                     /* L60: */
                 }
             }
-            else
+            else if(*nrhs == 1)
             {
                 sgemv_("T", m, n, &c_b83, &a[a_offset], lda, &b[b_offset], &c__1, &c_b50, &work[1],
                        &c__1);
@@ -902,7 +901,7 @@ void sgelss_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
         slascl_("G", &c__0, &c__0, &bignum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
     }
 L70:
-    work[1] = (real)maxwrk;
+    work[1] = sroundup_lwork(&maxwrk);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGELSS */

@@ -1,8 +1,8 @@
-/* ../netlib/slaruv.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./slaruv.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLARUV returns a vector of n random real numbers from a uniform distribution. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -138,7 +138,7 @@ void slaruv_(integer *iseed, integer *n, real *x)
     /* System generated locals */
     aocl_int64_t i__1;
     /* Local variables */
-    aocl_int64_t i__, i1, i2, i3, i4, it1, it2, it3, it4;
+    integer i__, i1, i2, i3, i4, it1, it2, it3, it4;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -165,7 +165,7 @@ void slaruv_(integer *iseed, integer *n, real *x)
     /* Quick return for N < 1 */
     if(*n < 1)
     {
-        AOCL_DTL_TRACE_LOG_EXIT
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     i1 = iseed[1];

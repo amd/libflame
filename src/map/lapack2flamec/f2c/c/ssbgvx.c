@@ -1,8 +1,8 @@
-/* ../netlib/ssbgvx.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./ssbgvx.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static real c_b25 = 1.f;
@@ -333,9 +333,7 @@ void ssbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
         void
         scopy_(integer *, real *, integer *, real *, integer *),
         sswap_(integer *, real *, integer *, real *, integer *);
-    logical wantz, alleig, indeig;
-    integer indibl;
-    logical valeig;
+    logical wantz, alleig, indeig, valeig;
     extern /* Subroutine */
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -361,7 +359,7 @@ void ssbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
                 real *, integer *, integer *, real *, integer *, integer *, real *, integer *,
                 integer *),
         ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
-    /* -- LAPACK driver routine (version 3.4.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -495,7 +493,6 @@ void ssbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
     ssbgst_(jobz, uplo, n, ka, kb, &ab[ab_offset], ldab, &bb[bb_offset], ldbb, &q[q_offset], ldq,
             &work[1], &iinfo);
     /* Reduce symmetric band matrix to tridiagonal form. */
-    indibl = 1;
     indd = 1;
     inde = indd + *n;
     indwrk = inde + *n;
@@ -561,14 +558,14 @@ void ssbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
     {
         *(unsigned char *)order = 'E';
     }
-    indisp = indibl + *n;
+    indisp = *n + 1;
     indiwo = indisp + *n;
     sstebz_(range, order, n, vl, vu, il, iu, abstol, &work[indd], &work[inde], m, &nsplit, &w[1],
-            &iwork[indibl], &iwork[indisp], &work[indwrk], &iwork[indiwo], info);
+            &iwork[1], &iwork[indisp], &work[indwrk], &iwork[indiwo], info);
     if(wantz)
     {
-        sstein_(n, &work[indd], &work[inde], m, &w[1], &iwork[indibl], &iwork[indisp],
-                &z__[z_offset], ldz, &work[indwrk], &iwork[indiwo], &ifail[1], info);
+        sstein_(n, &work[indd], &work[inde], m, &w[1], &iwork[1], &iwork[indisp], &z__[z_offset],
+                ldz, &work[indwrk], &iwork[indiwo], &ifail[1], info);
         /* Apply transformation matrix used in reduction to tridiagonal */
         /* form to eigenvectors returned by SSTEIN. */
         i__1 = *m;
@@ -605,7 +602,7 @@ L30: /* If eigenvalues are not in order, then sort them, along with */
                 w[i__] = w[j];
                 iwork[i__] = iwork[j];
                 w[j] = tmp1;
-                iwork[indibl + j - 1] = itmp1;
+                iwork[j] = itmp1;
                 sswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], &c__1);
                 if(*info != 0)
                 {

@@ -1,8 +1,8 @@
-/* ../netlib/slarfgp.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./slarfgp.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLARFGP generates an elementary reflector (Householder matrix) with non-negative beta. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -73,7 +73,7 @@
 /* > \param[in,out] X */
 /* > \verbatim */
 /* > X is REAL array, dimension */
-/* > (1+(N-2)*f2c_abs(INCX)) */
+/* > (1+(N-2)*abs(INCX)) */
 /* > On entry, the vector x. */
 /* > On exit, it is overwritten with the vector v. */
 /* > \endverbatim */
@@ -95,8 +95,7 @@
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2017 */
-/* > \ingroup realOTHERauxiliary */
+/* > \ingroup larfgp */
 /* ===================================================================== */
 /* Subroutine */
 void slarfgp_(integer *n, real *alpha, real *x, integer *incx, real *tau)
@@ -108,7 +107,7 @@ void slarfgp_(integer *n, real *alpha, real *x, integer *incx, real *tau)
     double r_sign(real *, real *);
     /* Local variables */
     integer j;
-    real savealpha;
+    real savealpha, eps;
     integer knt;
     real beta;
     extern real snrm2_(integer *, real *, integer *);
@@ -118,10 +117,9 @@ void slarfgp_(integer *n, real *alpha, real *x, integer *incx, real *tau)
     real xnorm;
     extern real slapy2_(real *, real *), slamch_(char *);
     real bignum, smlnum;
-    /* -- LAPACK auxiliary routine (version 3.8.0) -- */
+    /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2017 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -146,9 +144,10 @@ void slarfgp_(integer *n, real *alpha, real *x, integer *incx, real *tau)
         *tau = 0.f;
         return;
     }
+    eps = slamch_("Precision");
     i__1 = *n - 1;
     xnorm = snrm2_(&i__1, &x[1], incx);
-    if(xnorm == 0.f)
+    if(xnorm <= eps * f2c_abs(*alpha))
     {
         /* H = [+/-1, 0;
         I], sign chosen so ALPHA >= 0. */

@@ -1,4 +1,4 @@
-/* sgetsls.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./sgetsls.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -160,7 +160,7 @@ the least squares solution could not be */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup realGEsolve */
+/* > \ingroup getsls */
 /* ===================================================================== */
 /* Subroutine */
 void sgetsls_(char *trans, integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *b,
@@ -190,9 +190,6 @@ void sgetsls_(char *trans, integer *m, integer *n, integer *nrhs, real *a, integ
         sgeqr_(integer *, integer *, real *, integer *, real *, integer *, real *, integer *,
                integer *);
     real workq[1];
-    extern /* Subroutine */
-        void
-        slabad_(real *, real *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
         void
@@ -215,6 +212,7 @@ void sgetsls_(char *trans, integer *m, integer *n, integer *nrhs, real *a, integ
         void
         strtrs_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *,
                 integer *);
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -330,12 +328,12 @@ void sgetsls_(char *trans, integer *m, integer *n, integer *nrhs, real *a, integ
         {
             *info = -10;
         }
-        work[1] = (real)wsizeo;
+        work[1] = sroundup_lwork(&wsizeo);
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGETSLS", &i__1, (ftnlen)7);
+        xerbla_("SGETSLS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -343,7 +341,7 @@ void sgetsls_(char *trans, integer *m, integer *n, integer *nrhs, real *a, integ
     {
         if(*lwork == -2)
         {
-            work[1] = (real)wsizem;
+            work[1] = sroundup_lwork(&wsizem);
         }
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -371,7 +369,6 @@ void sgetsls_(char *trans, integer *m, integer *n, integer *nrhs, real *a, integ
     /* Get machine parameters */
     smlnum = slamch_("S") / slamch_("P");
     bignum = 1.f / smlnum;
-    slabad_(&smlnum, &bignum);
     /* Scale A, B if max element outside range [SMLNUM,BIGNUM] */
     anrm = slange_("M", m, n, &a[a_offset], lda, &work[1]);
     iascl = 0;
@@ -528,7 +525,8 @@ void sgetsls_(char *trans, integer *m, integer *n, integer *nrhs, real *a, integ
         slascl_("G", &c__0, &c__0, &bignum, &bnrm, &scllen, nrhs, &b[b_offset], ldb, info);
     }
 L50:
-    work[1] = (real)(tszo + lwo);
+    i__1 = tszo + lwo;
+    work[1] = sroundup_lwork(&i__1);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGETSLS */

@@ -1,8 +1,8 @@
-/* ../netlib/sstevr.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sstevr.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__10 = 10;
 static integer c__1 = 1;
@@ -298,8 +298,7 @@ the */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date June 2016 */
-/* > \ingroup realOTHEReigen */
+/* > \ingroup stevr */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -379,10 +378,10 @@ void sstevr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
                 integer *, real *, real *, integer *, integer *, integer *, logical *, real *,
                 integer *, integer *, integer *, integer *);
     logical lquery;
-    /* -- LAPACK driver routine (version 3.7.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -468,7 +467,7 @@ void sstevr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
     }
     if(*info == 0)
     {
-        work[1] = (real)lwmin;
+        work[1] = sroundup_lwork(&lwmin);
         iwork[1] = liwmin;
         if(*lwork < lwmin && !lquery)
         {
@@ -634,7 +633,7 @@ void sstevr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
         sstein_(n, &d__[1], &e[1], m, &w[1], &iwork[indibl], &iwork[indisp], &z__[z_offset], ldz,
                 &work[1], &iwork[indiwo], &iwork[indifl], info);
     }
-    /* If matrix was scaled, then rescale eigenvalues appropriately. */
+/* If matrix was scaled, then rescale eigenvalues appropriately. */
 L10:
     if(iscale == 1)
     {
@@ -679,7 +678,7 @@ L10:
     }
     /* Causes problems with tests 19 & 20: */
     /* IF (wantz .and. INDEIG ) Z( 1,1) = Z(1,1) / 1.002 + .002 */
-    work[1] = (real)lwmin;
+    work[1] = sroundup_lwork(&lwmin);
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

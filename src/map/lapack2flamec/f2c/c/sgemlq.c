@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/sgemlq.f -- translated by f2c (version 20160102). You must link the resulting
- object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
- systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
- -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sgemlq.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SGEMLQ */
 /* Definition: */
 /* =========== */
@@ -162,6 +162,8 @@
 /* > Further Details in SLAMSWLQ or SGEMLQT. */
 /* > \endverbatim */
 /* > */
+/* > \ingroup gemlq */
+/* > */
 /* ===================================================================== */
 /* Subroutine */
 void sgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda,
@@ -179,18 +181,19 @@ void sgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, real *
     logical left, tran;
     extern logical lsame_(char *, char *, integer, integer);
     logical right;
+    integer nblcks;
     extern /* Subroutine */
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, lquery;
+    extern real sroundup_lwork(integer *);
     extern /* Subroutine */
         void
         sgemlqt_(char *, char *, integer *, integer *, integer *, integer *, real *, integer *,
                  real *, integer *, real *, integer *, real *, integer *);
-    /* -- LAPACK computational routine (version 3.7.0) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* December 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -198,6 +201,8 @@ void sgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, real *
     /* ===================================================================== */
     /* .. */
     /* .. Local Scalars .. */
+    /* .. */
+    /* .. External Functions .. */
     /* .. */
     /* .. External Functions .. */
     /* .. */
@@ -233,6 +238,21 @@ void sgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, real *
     {
         lw = *m * mb;
         mn = *n;
+    }
+    if(nb > *k && mn > *k)
+    {
+        if((mn - *k) % (nb - *k) == 0)
+        {
+            nblcks = (mn - *k) / (nb - *k);
+        }
+        else
+        {
+            nblcks = (mn - *k) / (nb - *k) + 1;
+        }
+    }
+    else
+    {
+        nblcks = 1;
     }
     *info = 0;
     if(!left && !right)
@@ -273,7 +293,7 @@ void sgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, real *
     }
     if(*info == 0)
     {
-        work[1] = (real)lw;
+        work[1] = sroundup_lwork(&lw);
     }
     if(*info != 0)
     {
@@ -304,7 +324,7 @@ void sgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, real *
         slamswlq_(side, trans, m, n, k, &mb, &nb, &a[a_offset], lda, &t[6], &mb, &c__[c_offset],
                   ldc, &work[1], lwork, info);
     }
-    work[1] = (real)lw;
+    work[1] = sroundup_lwork(&lw);
     return;
     /* End of SGEMLQ */
 }

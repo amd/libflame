@@ -1,8 +1,8 @@
-/* ../netlib/sstemr.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sstemr.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static real c_b18 = .003f;
@@ -414,6 +414,7 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
         void
         slasrt_(char *, integer *, real *, integer *);
     logical lquery, zquery;
+    extern real sroundup_lwork(integer *);
     logical laeswap;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -536,7 +537,7 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
     rmax = fla_min(r__1, r__2);
     if(*info == 0)
     {
-        work[1] = (real)lwmin;
+        work[1] = sroundup_lwork(&lwmin);
         iwork[1] = liwmin;
         if(wantz && alleig)
         {
@@ -617,14 +618,32 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
         {
             slaev2_(&d__[1], &e[1], &d__[2], &r1, &r2, &cs, &sn);
         }
+        /* D/S/LAE2 and D/S/LAEV2 outputs satisfy |R1| >= |R2|. However, */
+        /* the following code requires R1 >= R2. Hence, we correct */
+        /* the order of R1, R2, CS, SN if R1 < R2 before further processing. */
+        if(r1 < r2)
+        {
+            e[2] = r1;
+            r1 = r2;
+            r2 = e[2];
+            laeswap = TRUE_;
+        }
         if(alleig || valeig && r2 > wl && r2 <= wu || indeig && iil == 1)
         {
             ++(*m);
             w[*m] = r2;
             if(wantz && !zquery)
             {
-                z__[*m * z_dim1 + 1] = -sn;
-                z__[*m * z_dim1 + 2] = cs;
+                if(laeswap)
+                {
+                    z__[*m * z_dim1 + 1] = cs;
+                    z__[*m * z_dim1 + 2] = sn;
+                }
+                else
+                {
+                    z__[*m * z_dim1 + 1] = -sn;
+                    z__[*m * z_dim1 + 2] = cs;
+                }
                 /* Note: At most one of SN and CS can be zero. */
                 if(sn != 0.f)
                 {
@@ -652,8 +671,16 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
             w[*m] = r1;
             if(wantz && !zquery)
             {
-                z__[*m * z_dim1 + 1] = cs;
-                z__[*m * z_dim1 + 2] = sn;
+                if(laeswap)
+                {
+                    z__[*m * z_dim1 + 1] = -sn;
+                    z__[*m * z_dim1 + 2] = cs;
+                }
+                else
+                {
+                    z__[*m * z_dim1 + 1] = cs;
+                    z__[*m * z_dim1 + 2] = sn;
+                }
                 /* Note: At most one of SN and CS can be zero. */
                 if(sn != 0.f)
                 {
@@ -839,7 +866,7 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
                 iend = iwork[iinspl + jblk - 1];
                 in = iend - ibegin + 1;
                 wend = wbegin - 1;
-                /* check if any eigenvalues have to be refined in this block */
+            /* check if any eigenvalues have to be refined in this block */
             L36:
                 if(wend < *m)
                 {
@@ -924,7 +951,7 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
             }
         }
     }
-    work[1] = (real)lwmin;
+    work[1] = sroundup_lwork(&lwmin);
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

@@ -1,4 +1,4 @@
-/* sgelq.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./sgelq.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -168,6 +168,8 @@ static integer c__2 = 2;
 /* > the LQ factorization. */
 /* > \endverbatim */
 /* > */
+/* > \ingroup gelq */
+/* > */
 /* ===================================================================== */
 /* Subroutine */
 void sgelq_(integer *m, integer *n, real *a, integer *lda, real *t, integer *tsize, real *work,
@@ -193,6 +195,7 @@ void sgelq_(integer *m, integer *n, real *a, integer *lda, real *t, integer *tsi
                 integer *);
     logical lminws, lquery;
     integer mintsz;
+    extern real sroundup_lwork(integer *);
     extern /* Subroutine */
         void
         slaswlq_(integer *, integer *, integer *, integer *, real *, integer *, real *, integer *,
@@ -368,17 +371,17 @@ void sgelq_(integer *m, integer *n, real *a, integer *lda, real *t, integer *tsi
         t[3] = (real)nb;
         if(minw)
         {
-            work[1] = (real)lwmin;
+            work[1] = sroundup_lwork(&lwmin);
         }
         else
         {
-            work[1] = (real)lwreq;
+            work[1] = sroundup_lwork(&lwreq);
         }
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGELQ", &i__1, (ftnlen)5);
+        xerbla_("SGELQ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -402,7 +405,7 @@ void sgelq_(integer *m, integer *n, real *a, integer *lda, real *t, integer *tsi
     {
         slaswlq_(m, n, &mb, &nb, &a[a_offset], lda, &t[6], &mb, &work[1], lwork, info);
     }
-    work[1] = (real)lwreq;
+    work[1] = sroundup_lwork(&lwreq);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGELQ */

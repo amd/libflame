@@ -1,8 +1,8 @@
-/* ../netlib/sgebal.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sgebal.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 /* > \brief \b SGEBAL */
@@ -193,9 +193,9 @@ void aocl_lapack_sgebal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
     real r__1, r__2;
     /* Local variables */
     real c__, f, g;
-    aocl_int64_t i__, j, k, l;
+    integer i__, j, k, l;
     real r__, s, ca, ra;
-    integer ica, ira, iexc;
+    integer ica, ira;
     extern real snrm2_(integer *, real *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
@@ -256,13 +256,11 @@ void aocl_lapack_sgebal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
         xerbla_("SGEBAL", &i__1, (ftnlen)6);
         return;
     }
-    k = 1;
-    l = *n;
+    /* Quick returns. */
     if(*n == 0)
     {
         *ilo = 1;
         *ihi = 0;
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(lsame_(job, "N", 1, 1))
@@ -274,47 +272,20 @@ void aocl_lapack_sgebal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
         }
         *ilo = 1;
         *ihi = *n;
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if(lsame_(job, "S", 1, 1))
+    /* Permutation to isolate eigenvalues if possible. */
+    k = 1;
+    l = *n;
+    if(!lsame_(job, "S", 1, 1))
     {
-        goto L120;
-    }
-    /* Permutation to isolate eigenvalues if possible */
-    goto L50;
-    /* Row and column exchange. */
-L20:
-    scale[m] = (real)j;
-    if(j == m)
-    {
-        goto L30;
-    }
-    sswap_(&l, &a[j * a_dim1 + 1], &c__1, &a[m * a_dim1 + 1], &c__1);
-    i__1 = *n - k + 1;
-    sswap_(&i__1, &a[j + k * a_dim1], lda, &a[m + k * a_dim1], lda);
-L30:
-    switch(iexc)
-    {
-        case 1:
-            goto L40;
-        case 2:
-            goto L80;
-    }
-    /* Search for rows isolating an eigenvalue and push them down. */
-L40:
-    if(l == 1)
-    {
-        goto L210;
-    }
-    --l;
-L50:
-    for(j = l; j >= 1; --j)
-    {
-        i__1 = l;
-        for(i__ = 1; i__ <= i__1; ++i__)
+        /* Row and column exchange. */
+        noconv = TRUE_;
+        while(noconv)
         {
-            if(i__ == j)
+            /* Search for rows isolating an eigenvalue and push them down. */
+            noconv = FALSE_;
+            for(i__ = l; i__ >= 1; --i__)
             {
                 canswap = TRUE_;
                 i__1 = l;
@@ -331,44 +302,28 @@ L50:
                     scale[l] = (real)i__;
                     if(i__ != l)
                     {
-                        aocl_blas_sswap(&l, &a[i__ * a_dim1 + 1], &c__1, &a[l * a_dim1 + 1], &c__1);
+                        sswap_(&l, &a[i__ * a_dim1 + 1], &c__1, &a[l * a_dim1 + 1], &c__1);
                         i__1 = *n - k + 1;
-                        aocl_blas_sswap(&i__1, &a[i__ + k * a_dim1], lda, &a[l + k * a_dim1], lda);
+                        sswap_(&i__1, &a[i__ + k * a_dim1], lda, &a[l + k * a_dim1], lda);
                     }
                     noconv = TRUE_;
                     if(l == 1)
                     {
                         *ilo = 1;
                         *ihi = 1;
-                        AOCL_DTL_TRACE_LOG_EXIT
                         return;
                     }
                     --l;
                 }
             }
-            if(a[j + i__ * a_dim1] != 0.f)
-            {
-                goto L70;
-            }
-        L60:;
         }
-        m = l;
-        iexc = 1;
-        goto L20;
-    L70:;
-    }
-    goto L90;
-    /* Search for columns isolating an eigenvalue and push them left. */
-L80:
-    ++k;
-L90:
-    i__1 = l;
-    for(j = k; j <= i__1; ++j)
-    {
-        i__2 = l;
-        for(i__ = k; i__ <= i__2; ++i__)
+        noconv = TRUE_;
+        while(noconv)
         {
-            if(i__ == j)
+            /* Search for columns isolating an eigenvalue and push them left. */
+            noconv = FALSE_;
+            i__1 = l;
+            for(j = k; j <= i__1; ++j)
             {
                 canswap = TRUE_;
                 i__2 = l;
@@ -385,24 +340,15 @@ L90:
                     scale[k] = (real)j;
                     if(j != k)
                     {
-                        aocl_blas_sswap(&l, &a[j * a_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
+                        sswap_(&l, &a[j * a_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
                         i__2 = *n - k + 1;
-                        aocl_blas_sswap(&i__2, &a[j + k * a_dim1], lda, &a[k + k * a_dim1], lda);
+                        sswap_(&i__2, &a[j + k * a_dim1], lda, &a[k + k * a_dim1], lda);
                     }
                     noconv = TRUE_;
                     ++k;
                 }
             }
-            if(a[i__ + j * a_dim1] != 0.f)
-            {
-                goto L110;
-            }
-        L100:;
         }
-        m = k;
-        iexc = 2;
-        goto L20;
-    L110:;
     }
     /* Initialize SCALE for non-permuted submatrix. */
     i__1 = l;
@@ -410,11 +356,11 @@ L90:
     {
         scale[i__] = 1.f;
     }
+    /* If we only had to permute, we are done. */
     if(lsame_(job, "P", 1, 1))
     {
         *ilo = k;
         *ihi = l;
-        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Balance the submatrix in rows K to L. */
@@ -423,63 +369,21 @@ L90:
     sfmax1 = 1.f / sfmin1;
     sfmin2 = sfmin1 * 2.f;
     sfmax2 = 1.f / sfmin2;
-L140:
-    noconv = FALSE_;
-    i__1 = l;
-    for(i__ = k; i__ <= i__1; ++i__)
+    noconv = TRUE_;
+    while(noconv)
     {
-        i__2 = l - k + 1;
-        c__ = snrm2_(&i__2, &a[k + i__ * a_dim1], &c__1);
-        i__2 = l - k + 1;
-        r__ = snrm2_(&i__2, &a[i__ + k * a_dim1], lda);
-        ica = isamax_(&l, &a[i__ * a_dim1 + 1], &c__1);
-        ca = (r__1 = a[ica + i__ * a_dim1], f2c_abs(r__1));
-        i__2 = *n - k + 1;
-        ira = isamax_(&i__2, &a[i__ + k * a_dim1], lda);
-        ra = (r__1 = a[i__ + (ira + k - 1) * a_dim1], f2c_abs(r__1));
-        /* Guard against zero C or R due to underflow. */
-        if(c__ == 0.f || r__ == 0.f)
-        {
-            goto L200;
-        }
-        g = r__ / 2.f;
-        f = 1.f;
-        s = c__ + r__;
-    L160: /* Computing MAX */
-        r__1 = fla_max(f, c__);
-        /* Computing MIN */
-        r__2 = fla_min(r__, g);
-        if(c__ >= g || fla_max(r__1, ca) >= sfmax2 || fla_min(r__2, ra) <= sfmin2)
-        {
-            goto L170;
-        }
-        f *= 2.f;
-        c__ *= 2.f;
-        ca *= 2.f;
-        r__ /= 2.f;
-        g /= 2.f;
-        ra /= 2.f;
-        goto L160;
-    L170:
-        g = c__ / 2.f;
-    L180: /* Computing MIN */
-        r__1 = fla_min(f, c__);
-        r__1 = fla_min(r__1, g); // , expr subst
-        if(g < r__ || fla_max(r__, ra) >= sfmax2 || fla_min(r__1, ca) <= sfmin2)
-        {
-            goto L190;
-        }
-        r__1 = c__ + f + ca + r__ + g + ra;
-        if(sisnan_(&r__1))
+        noconv = FALSE_;
+        i__1 = l;
+        for(i__ = k; i__ <= i__1; ++i__)
         {
             i__2 = l - k + 1;
-            c__ = aocl_blas_snrm2(&i__2, &a[k + i__ * a_dim1], &c__1);
+            c__ = snrm2_(&i__2, &a[k + i__ * a_dim1], &c__1);
             i__2 = l - k + 1;
-            r__ = aocl_blas_snrm2(&i__2, &a[i__ + k * a_dim1], lda);
-            ica = aocl_blas_isamax(&l, &a[i__ * a_dim1 + 1], &c__1);
+            r__ = snrm2_(&i__2, &a[i__ + k * a_dim1], lda);
+            ica = isamax_(&l, &a[i__ * a_dim1 + 1], &c__1);
             ca = (r__1 = a[ica + i__ * a_dim1], f2c_abs(r__1));
             i__2 = *n - k + 1;
-            ira = aocl_blas_isamax(&i__2, &a[i__ + k * a_dim1], lda);
+            ira = isamax_(&i__2, &a[i__ + k * a_dim1], lda);
             ra = (r__1 = a[i__ + (ira + k - 1) * a_dim1], f2c_abs(r__1));
             /* Guard against zero C or R due to underflow. */
             if(c__ == 0.f || r__ == 0.f)
@@ -487,38 +391,18 @@ L140:
                 continue;
             }
             /* Exit if NaN to avoid infinite loop */
-            *info = -3;
-            i__2 = -(*info);
-            xerbla_("SGEBAL", &i__2, (ftnlen)6);
-            return;
-        }
-        f /= 2.f;
-        c__ /= 2.f;
-        g /= 2.f;
-        ca /= 2.f;
-        r__ *= 2.f;
-        ra *= 2.f;
-        goto L180;
-        /* Now balance. */
-    L190:
-        if(c__ + r__ >= s * .95f)
-        {
-            goto L200;
-        }
-        if(f < 1.f && scale[i__] < 1.f)
-        {
-            if(f * scale[i__] <= sfmin1)
+            r__1 = c__ + ca + r__ + ra;
+            if(sisnan_(&r__1))
             {
                 *info = -3;
                 i__2 = -(*info);
-                aocl_blas_xerbla("SGEBAL", &i__2, (ftnlen)6);
-                AOCL_DTL_TRACE_LOG_EXIT
+                xerbla_("SGEBAL", &i__2, (ftnlen)6);
                 return;
             }
-        }
-        if(f > 1.f && scale[i__] > 1.f)
-        {
-            if(scale[i__] >= sfmax1 / f)
+            g = r__ / 2.f;
+            f = 1.f;
+            s = c__ + r__;
+            for(;;)
             {
                 /* while(complicated condition) */
                 /* Computing MAX */
@@ -573,22 +457,10 @@ L140:
             scale[i__] *= f;
             noconv = TRUE_;
             i__2 = *n - k + 1;
-            aocl_blas_sscal(&i__2, &g, &a[i__ + k * a_dim1], lda);
-            aocl_blas_sscal(&l, &f, &a[i__ * a_dim1 + 1], &c__1);
+            sscal_(&i__2, &g, &a[i__ + k * a_dim1], lda);
+            sscal_(&l, &f, &a[i__ * a_dim1 + 1], &c__1);
         }
-        g = 1.f / f;
-        scale[i__] *= f;
-        noconv = TRUE_;
-        i__2 = *n - k + 1;
-        sscal_(&i__2, &g, &a[i__ + k * a_dim1], lda);
-        sscal_(&l, &f, &a[i__ * a_dim1 + 1], &c__1);
-    L200:;
     }
-    if(noconv)
-    {
-        goto L140;
-    }
-L210:
     *ilo = k;
     *ihi = l;
     return;

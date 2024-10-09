@@ -1,11 +1,12 @@
-/* dgeqrf.f -- translated by f2c (version 20000121). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
+/* dgeqrf.f -- translated by f2c (version 20000121). You must link the resulting object file with
+ * the libraries: -lf2c -lm (in that order) */
 /******************************************************************************
-* Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
-*******************************************************************************/
+ * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 #include "FLA_f2c.h" /* Table of constant values */
 #include "fla_lapack_x86_common.h"
-#ifndef FLA_ENABLE_AMD_OPT
- static integer c__1 = 1;
+#if !FLA_ENABLE_AMD_OPT
+static integer c__1 = 1;
 #endif
 static integer c_n1 = -1;
 static integer c__3 = 3;
@@ -209,11 +210,23 @@ void dgeqrf_fla(integer *m, integer *n, doublereal *a, integer *lda, doublereal 
     --work;
     /* Function Body */
     *info = 0;
-#ifdef FLA_ENABLE_AMD_OPT
-    nb = FLA_GEQRF_BLOCK_SIZE;
+#if FLA_ENABLE_AMD_OPT
+    if(*m >= 2000 && *n >= 2000)
+    {
+        nb = 64;
+    }
+    else if(*m >= 1000 && *n >= 1000)
+    {
+        nb = 60;
+    }
+    else
+    {
+        nb = 32;
+    }
 #else
     nb = ilaenv_(&c__1, "DGEQRF", " ", m, n, &c_n1, &c_n1);
 #endif
+
     lwkopt = *n * nb;
     work[1] = (doublereal)lwkopt;
     lquery = *lwork == -1;

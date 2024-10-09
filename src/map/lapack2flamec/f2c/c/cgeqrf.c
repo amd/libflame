@@ -3,18 +3,16 @@
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/******************************************************************************
+ * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 #include "FLA_f2c.h" /* Table of constant values */
 #if !FLA_ENABLE_AMD_OPT
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 #endif
-static aocl_int64_t c_n1 = -1;
-static aocl_int64_t c__3 = 3;
-static aocl_int64_t c__2 = 2;
-
-extern int fla_thread_get_num_threads();
-
-integer get_block_size_cgeqrf(aocl_int64_t *m, aocl_int64_t *n);
-
+static integer c_n1 = -1;
+static integer c__3 = 3;
+static integer c__2 = 2;
 /* > \brief \b CGEQRF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -214,7 +212,22 @@ void cgeqrf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
     /* Function Body */
     k = fla_min(*m, *n);
     *info = 0;
+#if FLA_ENABLE_AMD_OPT
+    if(*m >= 600 && *n >= 600)
+    {
+        nb = 64;
+    }
+    else if(*m >= 100 && *n >= 100)
+    {
+        nb = 48;
+    }
+    else
+    {
+        nb = 32;
+    }
+#else
     nb = ilaenv_(&c__1, "CGEQRF", " ", m, n, &c_n1, &c_n1);
+#endif
     lquery = *lwork == -1;
     if(*m < 0)
     {

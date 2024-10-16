@@ -7302,10 +7302,10 @@ $as_echo_n "checking for (guessing) appropriate ${CC_VENDOR} optimization flags.
 		else
 				case ${CC_VENDOR} in
 						gcc)
-				fla_c_opt_flags='-mtune=native -mavx2 -mfma -O3 -fopenmp'
+				fla_c_opt_flags='-mtune=native -mavx2 -mfma -O3'
 			;;
 						clang)
-				fla_c_opt_flags='-mtune=native -mavx2 -mfma -O3 -fopenmp'
+				fla_c_opt_flags='-mtune=native -mavx2 -mfma -O3'
 			;;
 						icc)
 				fla_c_opt_flags='-O3'
@@ -7362,6 +7362,11 @@ $as_echo_n "checking for (guessing) appropriate ${CC_VENDOR} optimization flags.
 			;;
 		esac
 	fi
+
+	if test "$enable_multithreading" = "openmp"; then
+		fla_c_opt_flags="$fla_c_opt_flags -fopenmp"
+	fi
+
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $fla_c_opt_flags" >&5
 $as_echo "$fla_c_opt_flags" >&6; }

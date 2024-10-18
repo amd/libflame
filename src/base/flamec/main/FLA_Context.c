@@ -22,7 +22,7 @@
  * ************************************************************************ */
 
 #include "FLAME.h"
-#include "alci/arch.h"
+#include "Capi/au/cpuid/cpuid.h"
 
 #if defined(FLA_NO_CONTEXT)
 
@@ -213,9 +213,8 @@ int fla_env_get_var_arch_type(const char *env, int fallback)
             {
                 // Invalid value was set for env variable
                 // Print error message and abort
-                FLA_Print_message(
-                    "Invalid architecture id value set for env var AOCL_ENABLE_INSTRUCTIONS.",
-                    __FILE__, __LINE__);
+                fprintf(stderr,
+                    "Invalid architecture id value set for env var AOCL_ENABLE_INSTRUCTIONS.\n");
                 FLA_Abort();
             }
         }
@@ -223,9 +222,8 @@ int fla_env_get_var_arch_type(const char *env, int fallback)
         {
             // Invalid value was set for env variable
             // Print error message and abort
-            FLA_Print_message(
-                "Invalid architecture id value set for env var AOCL_ENABLE_INSTRUCTIONS.", __FILE__,
-                __LINE__);
+            fprintf(stderr,
+                    "Invalid architecture id value set for env var AOCL_ENABLE_INSTRUCTIONS.\n");
             FLA_Abort();
         }
     }
@@ -358,14 +356,19 @@ void fla_thread_update_rntm_from_env(fla_tl_context_t *context)
 void fla_isa_init(fla_context *context)
 {
     fla_arch_id = FLA_ARCH_GENERIC;
+    const char* const flags_array[] = {"avx2", "avx512f"};
+    au_cpu_num_t cpu_num = AU_CURRENT_CPU_NUM;
 
-    // Check if the target supports AVX2
-    if(alcpu_flag_is_available(ALC_E_FLAG_AVX2))
+    bool result = au_cpuid_has_flags(cpu_num, flags_array, 1);
+
+    // Check if the target supports AVX2/AVX512
+    if(result)
     {
         context->is_avx2 = TRUE;
         fla_arch_id = FLA_ARCH_AVX2;
     }
-    if(alcpu_flag_is_available(ALC_E_FLAG_AVX512F))
+    result = au_cpuid_has_flags(cpu_num, &flags_array[1], 1);
+    if(result)
     {
         context->is_avx512 = TRUE;
         fla_arch_id = FLA_ARCH_AVX512;

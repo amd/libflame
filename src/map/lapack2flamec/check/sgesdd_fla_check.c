@@ -79,8 +79,8 @@ int sgesdd_fla_check(char *jobu, char *jobvt, integer *m, integer *n, float *a, 
     {
         *info = -8;
     }
-    else if(*ldvt < 1 || wntua && *ldvt < *n || wntus && *ldvt < minmn
-            || wntuo && *m >= *n && *ldvt < *n)
+    else if(*ldvt < 1 || wntva && *ldvt < *n || wntvs && *ldvt < minmn
+            || wntvo && *m >= *n && *ldvt < *n)
     {
         *info = -10;
     }
@@ -680,7 +680,7 @@ int sgesdd_fla_check(char *jobu, char *jobvt, integer *m, integer *n, float *a, 
     if(*info != 0)
     {
         i__2 = -(*info);
-        xerbla_("SGESVD", &i__2, (ftnlen)6);
+        xerbla_("SGESDD", &i__2, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     else if(lquery)

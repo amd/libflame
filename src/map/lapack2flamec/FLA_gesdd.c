@@ -63,7 +63,7 @@
 #define LAPACK_gesdd_complex_body(prefix)                                                  \
     char jobu[1], jobv[1];                                                                 \
                                                                                            \
-    if(*jobz == 'O')                                                                       \
+    if(lsame_(jobz, "O", 1, 1))                                                            \
     {                                                                                      \
         if(*m >= *n)                                                                       \
         {                                                                                  \
@@ -105,7 +105,7 @@ LAPACK_gesdd_real(s)
         {
             char jobu[1], jobv[1];
 
-            if(*jobz == 'O')
+            if(lsame_(jobz, "O", 1, 1))
             {
                 if(*m >= *n)
                 {
@@ -155,7 +155,7 @@ LAPACK_gesdd_real(s)
     {
         char jobu[1], jobv[1];
 
-        if(*jobz == 'O')
+        if(lsame_(jobz, "O", 1, 1))
         {
             if(*m >= *n)
             {
@@ -224,7 +224,7 @@ LAPACK_gesdd_real(d)
     {
         char jobu[1], jobv[1];
 
-        if(*jobz == 'O')
+        if(lsame_(jobz, "O", 1, 1))
         {
             if(*m >= *n)
             {

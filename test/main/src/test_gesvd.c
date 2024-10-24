@@ -139,7 +139,7 @@ void fla_test_gesvd_experiment(test_params_t *params, integer datatype, integer 
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
                                double *perf, double *time_min, double *residual)
 {
-    integer m, n, lda, ldu, ldvt;
+    integer m, n, lda, ldu, ldvt, n_U, m_V, ns;
     integer info = 0, vinfo = 0;
     char jobu, jobvt;
     void *A = NULL, *U = NULL, *V = NULL, *s = NULL, *A_test = NULL, *s_test = NULL, *scal = NULL;
@@ -154,7 +154,7 @@ void fla_test_gesvd_experiment(test_params_t *params, integer datatype, integer 
 
     m = p_cur;
     n = q_cur;
-
+    ns = fla_min(m, n);
     lda = params->svd_paramslist[pci].lda;
     ldu = params->svd_paramslist[pci].ldu;
     ldvt = params->svd_paramslist[pci].ldvt;
@@ -191,7 +191,7 @@ void fla_test_gesvd_experiment(test_params_t *params, integer datatype, integer 
             }
             else if(jobvt != 'N')
             {
-                ldvt = fla_min(m, n);
+                ldvt = ns;
             }
             else
             {
@@ -199,10 +199,20 @@ void fla_test_gesvd_experiment(test_params_t *params, integer datatype, integer 
             }
         }
     }
-    /* Create input matrix parameters. */
+
+    n_U = (jobu != 'A') ? ns : m;
+    m_V = (jobvt != 'A') ? ns : n;
+
+    /* Create input matrix parameters */
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
-    create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &U, ldu);
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &V, ldvt);
+    if(jobu != 'N' && jobu != 'O')
+    {
+        create_matrix(datatype, LAPACK_COL_MAJOR, m, n_U, &U, ldu);
+    }
+    if(jobvt != 'N' && jobvt != 'O')
+    {
+        create_matrix(datatype, LAPACK_COL_MAJOR, m_V, n, &V, ldvt);
+    }
     create_realtype_vector(datatype, &s, fla_min(m, n));
     create_realtype_vector(datatype, &s_test, fla_min(m, n));
 
@@ -280,8 +290,14 @@ void fla_test_gesvd_experiment(test_params_t *params, integer datatype, integer 
     }
     free_matrix(A);
     free_matrix(A_test);
-    free_matrix(U);
-    free_matrix(V);
+    if(jobu != 'N' && jobu != 'O')
+    {
+        free_matrix(U);
+    }
+    if(jobvt != 'N' && jobvt != 'O')
+    {
+        free_matrix(V);
+    }
     free_vector(s);
     free_vector(s_test);
 }
@@ -340,8 +356,14 @@ void prepare_gesvd_run(char *jobu, char *jobvt, integer m_A, integer n_A, void *
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
         copy_matrix(datatype, "full", m_A, n_A, A_save, lda, A, lda);
-        create_matrix(datatype, LAPACK_COL_MAJOR, m_A, m_A, &U_test, ldu);
-        create_matrix(datatype, LAPACK_COL_MAJOR, n_A, n_A, &V_test, ldvt);
+        if(*jobu != 'N' && *jobu != 'O')
+        {
+            create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_U, &U_test, ldu);
+        }
+        if(*jobvt != 'N' && *jobvt != 'O')
+        {
+            create_matrix(datatype, LAPACK_COL_MAJOR, m_V, n_A, &V_test, ldvt);
+        }
         create_realtype_vector(datatype, &s_test, min_m_n);
         create_vector(datatype, &work, lwork);
 
@@ -371,16 +393,28 @@ void prepare_gesvd_run(char *jobu, char *jobvt, integer m_A, integer n_A, void *
         time_min = fla_min(time_min, exe_time);
 
         /* Make a copy of the output buffers. This is required to validate the API functionality. */
-        copy_matrix(datatype, "full", m_A, n_U, U_test, ldu, U, ldu);
-        copy_matrix(datatype, "full", m_V, n_A, V_test, ldvt, V, ldvt);
+        if(*jobu != 'N' && *jobu != 'O')
+        {
+            copy_matrix(datatype, "full", m_A, n_U, U_test, ldu, U, ldu);
+        }
+        if(*jobvt != 'N' && *jobvt != 'O')
+        {
+            copy_matrix(datatype, "full", m_V, n_A, V_test, ldvt, V, ldvt);
+        }
         copy_realtype_vector(datatype, min_m_n, s_test, 1, s, 1);
 
         /* Free up the output buffers */
         free_vector(work);
         if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
             free_vector(rwork);
-        free_matrix(U_test);
-        free_matrix(V_test);
+        if(*jobu != 'N' && *jobu != 'O')
+        {
+            free_matrix(U_test);
+        }
+        if(*jobvt != 'N' && *jobvt != 'O')
+        {
+            free_matrix(V_test);
+        }
         free_vector(s_test);
     }
 

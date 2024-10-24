@@ -138,7 +138,7 @@ void fla_test_gesdd_experiment(test_params_t *params, integer datatype, integer 
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
                                double *perf, double *time_min, double *residual)
 {
-    integer m, n, lda, ldu, ldvt;
+    integer m, n, lda, ldu, ldvt, n_U, m_V, ns;
     integer info = 0, vinfo = 0;
     char jobz;
     void *A = NULL, *U = NULL, *V = NULL, *s = NULL, *A_test = NULL, *s_in = NULL, *scal = NULL;
@@ -152,7 +152,7 @@ void fla_test_gesdd_experiment(test_params_t *params, integer datatype, integer 
 
     m = p_cur;
     n = q_cur;
-
+    ns = fla_min(m, n);
     lda = params->svd_paramslist[pci].lda;
     ldu = params->svd_paramslist[pci].ldu;
     ldvt = params->svd_paramslist[pci].ldvt;
@@ -189,7 +189,7 @@ void fla_test_gesdd_experiment(test_params_t *params, integer datatype, integer 
             }
             else if(jobz == 'S')
             {
-                ldvt = fla_min(m, n);
+                ldvt = ns;
             }
             else
             {
@@ -198,10 +198,28 @@ void fla_test_gesdd_experiment(test_params_t *params, integer datatype, integer 
         }
     }
 
+    n_U = (jobz == 'S') ? ns : m;
+    m_V = (jobz == 'S') ? ns : n;
+
     /* Create input matrix parameters */
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
-    create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &U, ldu);
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &V, ldvt);
+    if (jobz != 'N')
+    {
+        if (jobz == 'A' || jobz == 'S')
+        {
+            create_matrix(datatype, LAPACK_COL_MAJOR, m, n_U, &U, ldu);
+            create_matrix(datatype, LAPACK_COL_MAJOR, m_V, n, &V, ldvt);
+        }
+        else if (jobz == 'O' && m >= n)
+        {
+            create_matrix(datatype, LAPACK_COL_MAJOR, m_V, n, &V, ldvt);
+        }
+        else
+        {
+            create_matrix(datatype, LAPACK_COL_MAJOR, m, n_U, &U, ldu);
+        }
+    }
+
     create_realtype_vector(datatype, &s, fla_min(m, n));
 
     if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
@@ -255,11 +273,19 @@ void fla_test_gesdd_experiment(test_params_t *params, integer datatype, integer 
     /* Free up the buffers */
     free_matrix(A);
     free_matrix(A_test);
-    free_matrix(U);
-    free_matrix(V);
+    if(jobz == 'A' || jobz == 'S' || (jobz == 'O' && m < n))
+    {
+        free_matrix(U);
+    }
+    if(jobz == 'A' || jobz == 'S' || (jobz == 'O' && m >= n))
+    {
+        free_matrix(V);
+    }
     free_vector(s);
     if((g_ext_fptr == NULL) && !(params->imatrix_char))
+    {
         free_vector(s_in);
+    }
     if(FLA_OVERFLOW_UNDERFLOW_TEST)
     {
         free_vector(scal);
@@ -270,7 +296,7 @@ void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer ld
                        integer ldu, void *V, integer ldvt, integer datatype, integer n_repeats,
                        double *time_min_, integer *info, integer test_lapacke_interface, int layout)
 {
-    integer min_m_n, max_m_n;
+    integer min_m_n, max_m_n, n_U, m_V;
     void *A_save, *s_test, *work, *iwork, *rwork;
     void *U_test, *V_test;
     integer lwork, liwork, lrwork;
@@ -279,6 +305,8 @@ void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer ld
 
     min_m_n = fla_min(m_A, n_A);
     max_m_n = fla_max(m_A, n_A);
+    n_U = (*jobz == 'S') ? min_m_n : m_A;
+    m_V = (*jobz == 'S') ? min_m_n : n_A;
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
@@ -322,9 +350,22 @@ void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer ld
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
         copy_matrix(datatype, "full", m_A, n_A, A_save, lda, A, lda);
-
-        create_matrix(datatype, LAPACK_COL_MAJOR, m_A, m_A, &U_test, lda);
-        create_matrix(datatype, LAPACK_COL_MAJOR, n_A, n_A, &V_test, ldvt);
+        if (*jobz != 'N')
+        {
+            if (*jobz == 'A' || *jobz == 'S')
+            {
+                create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_U, &U_test, ldu);
+                create_matrix(datatype, LAPACK_COL_MAJOR, m_V, n_A, &V_test, ldvt);
+            }
+            else if (*jobz == 'O' && m_A >= n_A)
+            {
+                create_matrix(datatype, LAPACK_COL_MAJOR, m_V, n_A, &V_test, ldvt);
+            }
+            else
+            {
+                create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_U, &U_test, ldu);
+            }
+        }
         create_realtype_vector(datatype, &s_test, min_m_n);
         create_vector(datatype, &work, lwork);
         create_vector(INTEGER, &iwork, liwork);
@@ -354,18 +395,39 @@ void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer ld
         time_min = fla_min(time_min, exe_time);
 
         /* Make a copy of the output buffers. This is required to validate the API functionality.*/
-        copy_matrix(datatype, "full", m_A, m_A, U_test, ldu, U, ldu);
-        copy_matrix(datatype, "full", n_A, n_A, V_test, ldvt, V, ldvt);
+        if (*jobz != 'N')
+        {
+            if (*jobz == 'A' || *jobz == 'S')
+            {
+                copy_matrix(datatype, "full", m_A, n_U, U_test, ldu, U, ldu);
+                copy_matrix(datatype, "full", m_V, n_A, V_test, ldvt, V, ldvt);
+            }
+            else if (*jobz == 'O' && m_A >= n_A)
+            {
+                copy_matrix(datatype, "full", m_V, n_A, V_test, ldvt, V, ldvt);
+            }
+            else
+            {
+                copy_matrix(datatype, "full", m_A, n_U, U_test, ldu, U, ldu);
+            }
+        }
         copy_realtype_vector(datatype, min_m_n, s_test, 1, s, 1);
 
         /* Free up the output buffers */
         free_vector(work);
         free_vector(iwork);
         if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+        {
             free_vector(rwork);
-
-        free_matrix(U_test);
-        free_matrix(V_test);
+        }
+        if(*jobz == 'A' || *jobz == 'S' || (*jobz == 'O' && m_A < n_A))
+        {
+            free_matrix(U_test);
+        }
+        if(*jobz == 'A' || *jobz == 'S' || (*jobz == 'O' && m_A >= n_A))
+        {
+            free_matrix(V_test);
+        }
         free_vector(s_test);
     }
 

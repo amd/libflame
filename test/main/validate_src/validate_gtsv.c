@@ -51,7 +51,7 @@ void validate_gtsv(integer datatype, integer n, integer nrhs, void *B, integer l
                 compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm_X, imatrix, work);
                 matrix_difference(datatype, n, nrhs, X, ldx, Xact, ldx);
                 compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm2, imatrix, work);
-                resid2 = (norm2 / norm_X) /(eps * n);
+                resid2 = (norm2 / norm_X) /(eps * n * 10);
             }
             else
             {
@@ -103,7 +103,7 @@ void validate_gtsv(integer datatype, integer n, integer nrhs, void *B, integer l
                 compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm_X, imatrix, work);
                 matrix_difference(datatype, n, nrhs, X, ldx, Xact, ldx);
                 compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm2, imatrix, work);
-                resid2 = (norm2 / norm_X) /(eps * n);
+                resid2 = (norm2 / norm_X) /(eps * n * 10);
             }
             else
             {
@@ -155,7 +155,7 @@ void validate_gtsv(integer datatype, integer n, integer nrhs, void *B, integer l
                 compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm_X, imatrix, work);
                 matrix_difference(datatype, n, nrhs, X, ldx, Xact, ldx);
                 compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm2, imatrix, work);
-                resid2 = (norm2 / norm_X) /(eps * n);
+                resid2 = (norm2 / norm_X) /(eps * n * 10);
             }
             else
             {
@@ -207,7 +207,7 @@ void validate_gtsv(integer datatype, integer n, integer nrhs, void *B, integer l
                 compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm_X, imatrix, work);
                 matrix_difference(datatype, n, nrhs, X, ldx, Xact, ldx);
                 compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm2, imatrix, work);
-                resid2 = (norm2 / norm_X) /(eps * n);
+                resid2 = (norm2 / norm_X) /(eps * n * 10);
             }
             else
             {

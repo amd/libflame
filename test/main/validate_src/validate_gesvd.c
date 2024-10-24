@@ -16,9 +16,10 @@ void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void
     if(m == 0 || n == 0)
         return;
     void *sigma = NULL, *Usigma = NULL;
-    void *work = NULL;
+    void *work = NULL, *U_temp = NULL, *V_temp = NULL;
+    integer n_U, m_V, ns = fla_min(m, n), ldu_t = ldu, ldvt_t = ldvt;
+
     *info = 0;
-    integer n_U, m_V, ns = fla_min(m, n);
     n_U = (*jobu != 'A') ? ns : m;
     m_V = (*jobvt != 'A') ? ns : n;
 
@@ -27,12 +28,35 @@ void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void
     reset_matrix(datatype, m, n, Usigma, m);
 
     diagonalize_realtype_vector(datatype, s, sigma, m, n, m);
+    /* In case of JOBU/JOBVT = O, modify ldu, ldvt to make use of the same U,V
+       buffers for further validation similar to JOBZ=A/S */
+    if(*jobu == 'O')
+    {
+        ldu = m;
+    }
+    else if(*jobvt == 'O')
+    {
+        ldvt = n;
+    }
+    /* Create temporary buffers(U_temp, V_temp) and copy U,V or A contents
+       to use them commonly across all cases JOBZ=A/S/O */
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &U_temp, ldu);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &V_temp, ldvt);
+
+    if(*jobu == 'A' || *jobu == 'S')
+    {
+        copy_matrix(datatype, "FULL", m, n_U, U, ldu_t, U_temp, ldu);
+    }
+    if(*jobvt == 'A' || *jobvt == 'S')
+    {
+        copy_matrix(datatype, "FULL", m_V, n, V, ldvt_t, V_temp, ldvt);
+    }
     /* If jobu or jobvt is 'O' .The first min(m,n) columns/rows of singular vectors
        are overwritten on A output matrix (A_test).*/
     if(*jobu == 'O')
-        copy_matrix(datatype, "FULL", m, fla_min(m, n), A_test, lda, U, ldu);
+        copy_matrix(datatype, "FULL", m, n_U, A_test, lda, U_temp, ldu);
     else if(*jobvt == 'O')
-        copy_matrix(datatype, "FULL", fla_min(m, n), n, A_test, lda, V, ldvt);
+        copy_matrix(datatype, "FULL", m_V, n, A_test, lda, V_temp, ldvt);
 
     switch(datatype)
     {
@@ -57,8 +81,10 @@ void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void
                 }
                 else
                     norm_A = fla_lapack_slange("F", &m, &n, A, &lda, work);
-                sgemm_("N", "N", &m, &n, &n_U, &s_one, U, &ldu, sigma, &m, &s_zero, Usigma, &m);
-                sgemm_("N", "N", &m, &n, &m_V, &s_one, Usigma, &m, V, &ldvt, &s_n_one, A, &lda);
+                sgemm_("N", "N", &m, &n, &n_U, &s_one, U_temp, &ldu, sigma, &m, &s_zero, Usigma,
+                       &m);
+                sgemm_("N", "N", &m, &n, &m_V, &s_one, Usigma, &m, V_temp, &ldvt, &s_n_one, A,
+                       &lda);
                 if(imatrix == 'O')
                 {
                     for(int i = 0; i < n; i++)
@@ -76,12 +102,12 @@ void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void
             /* Test 2
                compute norm(I - U'*U) / (N * EPS)*/
             if(*jobu != 'N')
-                resid2 = (float)check_orthogonal_matrix('T', datatype, U, ns, m, ns, ldu);
+                resid2 = (float)check_orthogonal_matrix('T', datatype, U_temp, ns, m, ns, ldu);
 
             /* Test 3
                compute norm(I - V*V') / (N * EPS)*/
             if(*jobvt != 'N')
-                resid3 = (float)check_orthogonal_matrix('N', datatype, V, ns, n, ns, ldvt);
+                resid3 = (float)check_orthogonal_matrix('N', datatype, V_temp, ns, n, ns, ldvt);
 
             /* Test 4
                Test to Check order of Singular SVD values (positive and non-decreasing) */
@@ -132,8 +158,10 @@ void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void
                 }
                 else
                     norm_A = fla_lapack_dlange("F", &m, &n, A, &lda, work);
-                dgemm_("N", "N", &m, &n, &n_U, &d_one, U, &ldu, sigma, &m, &d_zero, Usigma, &m);
-                dgemm_("N", "N", &m, &n, &m_V, &d_one, Usigma, &m, V, &ldvt, &d_n_one, A, &lda);
+                dgemm_("N", "N", &m, &n, &n_U, &d_one, U_temp, &ldu, sigma, &m, &d_zero, Usigma,
+                       &m);
+                dgemm_("N", "N", &m, &n, &m_V, &d_one, Usigma, &m, V_temp, &ldvt, &d_n_one, A,
+                       &lda);
                 norm = fla_lapack_dlange("F", &m, &n, A, &lda, work);
                 if(imatrix == 'O')
                 {
@@ -153,12 +181,12 @@ void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void
             /* Test 2
                compute norm(I - U'*U) / (N * EPS)*/
             if(*jobu != 'N')
-                resid2 = check_orthogonal_matrix('T', datatype, U, ns, m, ns, ldu);
+                resid2 = check_orthogonal_matrix('T', datatype, U_temp, ns, m, ns, ldu);
 
             /* Test 3
                compute norm(I - V*V') / (N * EPS)*/
             if(*jobvt != 'N')
-                resid3 = check_orthogonal_matrix('N', datatype, V, ns, n, ns, ldvt);
+                resid3 = check_orthogonal_matrix('N', datatype, V_temp, ns, n, ns, ldvt);
 
             /* Test 4
                Test to Check order of Singular SVD values (positive and non-decreasing) */
@@ -208,8 +236,10 @@ void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void
                 }
                 else
                     norm_A = fla_lapack_clange("F", &m, &n, A, &lda, work);
-                cgemm_("N", "N", &m, &n, &n_U, &c_one, U, &ldu, sigma, &m, &c_zero, Usigma, &m);
-                cgemm_("N", "N", &m, &n, &m_V, &c_one, Usigma, &m, V, &ldvt, &c_n_one, A, &lda);
+                cgemm_("N", "N", &m, &n, &n_U, &c_one, U_temp, &ldu, sigma, &m, &c_zero, Usigma,
+                       &m);
+                cgemm_("N", "N", &m, &n, &m_V, &c_one, Usigma, &m, V_temp, &ldvt, &c_n_one, A,
+                       &lda);
 
                 if(imatrix == 'O')
                 {
@@ -228,12 +258,12 @@ void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void
             /* Test 2
                compute norm(I - U'*U) / (N * EPS)*/
             if(*jobu != 'N')
-                resid2 = (float)check_orthogonal_matrix('C', datatype, U, ns, m, ns, ldu);
+                resid2 = (float)check_orthogonal_matrix('C', datatype, U_temp, ns, m, ns, ldu);
 
             /* Test 3
                compute norm(I - V*V') / (N * EPS)*/
             if(*jobvt != 'N')
-                resid3 = (float)check_orthogonal_matrix('N', datatype, V, ns, n, ns, ldvt);
+                resid3 = (float)check_orthogonal_matrix('N', datatype, V_temp, ns, n, ns, ldvt);
 
             /* Test 4
                Test to Check order of Singular SVD values (positive and non-decreasing) */
@@ -284,8 +314,10 @@ void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void
                 }
                 else
                     norm_A = fla_lapack_zlange("F", &m, &n, A, &lda, work);
-                zgemm_("N", "N", &m, &n, &n_U, &z_one, U, &ldu, sigma, &m, &z_zero, Usigma, &m);
-                zgemm_("N", "N", &m, &n, &m_V, &z_one, Usigma, &m, V, &ldvt, &z_n_one, A, &lda);
+                zgemm_("N", "N", &m, &n, &n_U, &z_one, U_temp, &ldu, sigma, &m, &z_zero, Usigma,
+                       &m);
+                zgemm_("N", "N", &m, &n, &m_V, &z_one, Usigma, &m, V_temp, &ldvt, &z_n_one, A,
+                       &lda);
                 if(imatrix == 'O')
                 {
                     for(int i = 0; i < n; i++)
@@ -304,11 +336,11 @@ void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void
             /* Test 2
                compute norm(I - U'*U) / (N * EPS)*/
             if(*jobu != 'N')
-                resid2 = check_orthogonal_matrix('C', datatype, U, ns, m, ns, ldu);
+                resid2 = check_orthogonal_matrix('C', datatype, U_temp, ns, m, ns, ldu);
             /* Test 3
                compute norm(I - V*V') / (N * EPS)*/
             if(*jobvt != 'N')
-                resid3 = check_orthogonal_matrix('N', datatype, V, ns, n, ns, ldvt);
+                resid3 = check_orthogonal_matrix('N', datatype, V_temp, ns, n, ns, ldvt);
 
             /* Test 4
                Test to Check order of Singular SVD values (positive and non-decreasing) */
@@ -339,6 +371,8 @@ void validate_gesvd(char *jobu, char *jobvt, integer m, integer n, void *A, void
             break;
         }
     }
+    free_matrix(U_temp);
+    free_matrix(V_temp);
     free_matrix(sigma);
     free_matrix(Usigma);
 }

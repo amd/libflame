@@ -190,7 +190,8 @@ void fla_test_stevd_experiment(test_params_t *params, integer datatype, integer 
     {
         /* Generate input from known eigen values */
         create_realtype_vector(datatype, &L, n);
-        generate_matrix_from_EVs(datatype, range, n, A, lda, L, STEVD_VL, STEVD_VU);
+        generate_matrix_from_EVs(datatype, range, n, A, lda, L, STEVD_VL, STEVD_VU,
+                                 USE_ABS_EIGEN_VALUES);
         if(FLA_OVERFLOW_UNDERFLOW_TEST)
         {
             create_realtype_vector(get_datatype(datatype), &scal, n);
@@ -408,8 +409,8 @@ void invoke_stevd(integer datatype, char *jobz, integer *n, void *z, integer *ld
     }
 }
 
-integer invoke_lapacke_stevd(integer datatype, int layout, char jobz, integer n, void *d,
-                             void *e, void *z, integer ldz)
+integer invoke_lapacke_stevd(integer datatype, int layout, char jobz, integer n, void *d, void *e,
+                             void *z, integer ldz)
 {
     integer info = 0;
     switch(datatype)

@@ -350,6 +350,9 @@
 #define fla_lapack_csytrf CSYTRF_
 #define fla_lapack_zsytrf ZSYTRF_
 
+#define fla_lapack_chetrf_rook CHETRF_ROOK_
+#define fla_lapack_zhetrf_rook ZHETRF_ROOK_
+
 #elif(UPPER)
 
 #define fla_lapack_sladiv SLADIV
@@ -635,6 +638,9 @@
 #define fla_lapack_dsytrf DSYTRF
 #define fla_lapack_csytrf CSYTRF
 #define fla_lapack_zsytrf ZSYTRF
+
+#define fla_lapack_chetrf_rook CHETRF_ROOK
+#define fla_lapack_zhetrf_rook ZHETRF_ROOK
 
 #elif(LOWER)
 
@@ -922,6 +928,9 @@
 #define fla_lapack_csytrf csytrf
 #define fla_lapack_zsytrf zsytrf
 
+#define fla_lapack_chetrf_rook chetrf_rook
+#define fla_lapack_zhetrf_rook zhetrf_rook
+
 #else
 
 #define fla_lapack_sladiv sladiv_
@@ -1207,6 +1216,9 @@
 #define fla_lapack_dsytrf dsytrf_
 #define fla_lapack_csytrf csytrf_
 #define fla_lapack_zsytrf zsytrf_
+
+#define fla_lapack_chetrf_rook chetrf_rook_
+#define fla_lapack_zhetrf_rook zhetrf_rook_
 
 #define fla_lapack_ssygvd ssygvd_
 #define fla_lapack_dsygvd dsygvd_
@@ -1555,6 +1567,10 @@ lapack_int LAPACKE_csytrf(int matrix_layout, char uplo, lapack_int n, lapack_com
                           lapack_int lda, lapack_int *ipiv);
 lapack_int LAPACKE_zsytrf(int matrix_layout, char uplo, lapack_int n, lapack_complex_double *a,
                           lapack_int lda, lapack_int *ipiv);
+lapack_int LAPACKE_chetrf_rook(int matrix_layout, char uplo, lapack_int n, lapack_complex_float *a,
+                               lapack_int lda, lapack_int *ipiv);
+lapack_int LAPACKE_zhetrf_rook(int matrix_layout, char uplo, lapack_int n, lapack_complex_double *a,
+                               lapack_int lda, lapack_int *ipiv);
 lapack_int LAPACKE_sgelss(int matrix_layout, lapack_int m, lapack_int n, lapack_int nrhs, float *a,
                           lapack_int lda, float *b, lapack_int ldb, float *s, float rcond,
                           lapack_int *rank);

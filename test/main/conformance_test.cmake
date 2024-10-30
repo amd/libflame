@@ -260,7 +260,11 @@ set(NEGATIVE_TEST_CASES "ggevx sdcz A V V B 10 10 10 10 10 -1 1 --einfo=-1"
             "ung2r cz -1 -1 1 1 --einfo=-1"
             "ung2r cz 1 -1 1 1 --einfo=-2"
             "org2r sd 1 1 -1 1 --einfo=-5"
-            "ung2r cz 1 1 -1 1 --einfo=-5")
+            "ung2r cz 1 1 -1 1 --einfo=-5"
+            "hetrf_rook cz A 5 5 -1 1 --einfo=-1"
+            "hetrf_rook cz U -1 5 -1 1 --einfo=-2"
+            "hetrf_rook cz U 5 4 -1 1 --einfo=-4"
+            "hetrf_rook cz U 5 5 0 1 --einfo=-7")
 
 set(CORNER_TEST_CASES "gehrd sdcz 0 1 0 1 -1 1 --einfo=0"
             "gehrd sdcz 0 1 0 1 1 1 --einfo=0"
@@ -1174,6 +1178,14 @@ set(EXTREMEVALUE_TEST_CASES "gehrd sdcz 15 1 10 15 15 1 --imatrix=N"
             "larf sdcz L 150 100 1 150 1 --imatrix=I"
             "larf sdcz R 150 100 1 150 1 --imatrix=A"
             "larf sdcz L 150 100 1 150 1 --imatrix=F"
+            "hetrf_rook cz L 100 100 -1 1 --imatrix=A"
+            "hetrf_rook cz U 100 100 -1 1 --imatrix=A"
+            "hetrf_rook cz L 50 50 -1 1 --imatrix=F"
+            "hetrf_rook cz U 50 50 -1 1 --imatrix=F"
+            "hetrf_rook cz L 100 100 -1 1 --imatrix=I"
+            "hetrf_rook cz U 100 100 -1 1 --imatrix=I"
+            "hetrf_rook cz L 50 50 -1 1 --imatrix=N"
+            "hetrf_rook cz U 50 50 -1 1 --imatrix=N"
             )
 
 set(TEST_NUM 1)

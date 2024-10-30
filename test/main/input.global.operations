@@ -48,3 +48,4 @@
 1   sytrf   LDLT factorization                            (0 = disable; 1 = enable; 2 = enable only this)
 1   larf    Applies householder reflector                 (0 = disable; 1 = enable; 2 = enable only this)
 1   sygvd   Eigen Values and Vectors                      (0 = disable; 1 = enable; 2 = enable only this)
+1   hetrf_rook   LDLH factorization                       (0 = disable; 1 = enable; 2 = enable only this)

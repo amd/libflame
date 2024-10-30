@@ -19,8 +19,8 @@ void invoke_steqr(integer datatype, char *compz, integer *n, void *z, integer *l
                   void *e, void *work, integer *info);
 double prepare_lapacke_steqr_run(integer datatype, int matrix_layout, char *compz, integer n,
                                  void *Z, integer ldz, void *D, void *E, integer *info);
-integer invoke_lapacke_steqr(integer datatype, int matrix_layout, char compz, integer n,
-                             void *d, void *e, void *z, integer ldz);
+integer invoke_lapacke_steqr(integer datatype, int matrix_layout, char compz, integer n, void *d,
+                             void *e, void *z, integer ldz);
 
 #define STEQR_VL 0.1
 #define STEQR_VU 1000
@@ -209,7 +209,8 @@ void fla_test_steqr_experiment(test_params_t *params, integer datatype, integer 
     else
     {
         create_realtype_vector(datatype, &L, n);
-        generate_matrix_from_EVs(datatype, range, n, A, lda, L, STEQR_VL, STEQR_VU);
+        generate_matrix_from_EVs(datatype, range, n, A, lda, L, STEQR_VL, STEQR_VU,
+                                 USE_ABS_EIGEN_VALUES);
         if(FLA_OVERFLOW_UNDERFLOW_TEST)
         {
             create_realtype_vector(get_datatype(datatype), &scal, n);
@@ -412,8 +413,8 @@ void invoke_steqr(integer datatype, char *compz, integer *n, void *z, integer *l
     }
 }
 
-integer invoke_lapacke_steqr(integer datatype, int layout, char compz, integer n, void *d,
-                             void *e, void *z, integer ldz)
+integer invoke_lapacke_steqr(integer datatype, int layout, char compz, integer n, void *d, void *e,
+                             void *z, integer ldz)
 {
     integer info = 0;
     switch(datatype)

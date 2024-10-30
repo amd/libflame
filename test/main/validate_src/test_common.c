@@ -971,7 +971,7 @@ void rand_spd_matrix(integer datatype, char *uplo, void *A, integer m, integer l
     /*  Initialize input matrix A by generating values in given range (VL, VU)
      *  using eigen values function.
      */
-    generate_matrix_from_EVs(datatype, 'V', m, A, lda, L, RSPD_VL, RSPD_VU);
+    generate_matrix_from_EVs(datatype, 'V', m, A, lda, L, RSPD_VL, RSPD_VU, USE_ABS_EIGEN_VALUES);
 
     /* Force the matrix to be exactly symmetric
      * by copying lower half to upper half or vice versa
@@ -3444,7 +3444,7 @@ void init_vector_spec_rand_in(integer datatype, void *A, integer M, integer incx
     */
     if(M > 10)
     {
-        span = (M) * 0.2;
+        span = (M)*0.2;
     }
     else
     {
@@ -4183,8 +4183,39 @@ integer compare_realtype_vector(integer datatype, integer vect_len, void *A, int
  *               Q  is an orthogonal matrix with corresponding
  *                  eigen vectors as its rows.
  */
+
+/*
+ * Randomly set some of the eigen values in L to positive and some of them to negative
+ */
+
+void convert_signed_eigen_values(integer datatype, void *L, integer n)
+{
+    integer i;
+    integer tmp;
+    for(i = 0; i < n; i++)
+    {
+        tmp = rand();
+        if(tmp % 2 == 0)
+        {
+            switch(datatype)
+            {
+                case COMPLEX:
+                {
+                    ((float *)L)[i] = -((float *)L)[i];
+                    break;
+                }
+                case DOUBLE_COMPLEX:
+                {
+                    ((double *)L)[i] = -((double *)L)[i];
+                    break;
+                }
+            }
+        }
+    }
+}
+
 void generate_matrix_from_EVs(integer datatype, char range, integer n, void *A, integer lda,
-                              void *L, double vl, double vu)
+                              void *L, double vl, double vu, integer randomize_sign)
 {
     void *X = NULL, *Q = NULL;
     integer realtype, info = 0;
@@ -4193,6 +4224,11 @@ void generate_matrix_from_EVs(integer datatype, char range, integer n, void *A, 
     /* Generate random vector of size n with values ranging
     between (vl, vu) */
     rand_vector(realtype, n, L, i_one, vl, vu, range);
+
+    if(randomize_sign == USE_SIGNED_EIGEN_VALUES)
+    {
+        convert_signed_eigen_values(datatype, L, n);
+    }
 
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &X, n);
     rand_matrix(datatype, X, n, n, n);
@@ -6633,6 +6669,46 @@ void get_min_of_values(integer datatype, void *a, void *b, void *min_val)
                 = fla_min(FLA_FABS(((dcomplex *)a)->imag), FLA_FABS(((dcomplex *)b)->imag));
             *(double *)min_val = fla_min(real_min, imag_min);
             break;
+        }
+    }
+}
+
+/* Negate the off-diagonal element of the 2x2 diagonal block.
+   Used for the hetrf_rook test case
+*/
+void negate_off_diagonal_element_imag(integer datatype, void *D, integer n, integer k,
+                                      integer position)
+{
+    if(position == LOWER_OFF_DIAGONAL_ELEMENT)
+    {
+        switch(datatype)
+        {
+            case COMPLEX:
+            {
+                (((scomplex *)D)[(k - 1) * n + k]).imag = -(((scomplex *)D)[(k - 1) * n + k]).imag;
+                break;
+            }
+            case DOUBLE_COMPLEX:
+            {
+                (((dcomplex *)D)[(k - 1) * n + k]).imag = -(((dcomplex *)D)[(k - 1) * n + k]).imag;
+                break;
+            }
+        }
+    }
+    else
+    {
+        switch(datatype)
+        {
+            case COMPLEX:
+            {
+                (((scomplex *)D)[(k + 1) * n + k]).imag = -(((scomplex *)D)[(k + 1) * n + k]).imag;
+                break;
+            }
+            case DOUBLE_COMPLEX:
+            {
+                (((dcomplex *)D)[(k + 1) * n + k]).imag = -(((dcomplex *)D)[(k + 1) * n + k]).imag;
+                break;
+            }
         }
     }
 }

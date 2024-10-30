@@ -246,7 +246,7 @@ void fla_test_syevx_experiment(test_params_t *params, integer datatype, integer 
             When range = V, generate EVs in given range (vl,vu)  */
         create_realtype_vector(datatype, &L, n);
         generate_matrix_from_EVs(datatype, range, n, A, lda, L, get_realtype_value(datatype, vl),
-                                 get_realtype_value(datatype, vu));
+                                 get_realtype_value(datatype, vu), USE_ABS_EIGEN_VALUES);
 
         if(FLA_OVERFLOW_UNDERFLOW_TEST)
         {
@@ -448,8 +448,8 @@ double prepare_lapacke_syevx_run(integer datatype, int layout, char *jobz, char 
     exe_time = fla_test_clock();
 
     /* call LAPACKE syev API */
-    *info = invoke_lapacke_syevx(datatype, layout, *jobz, *range, *uplo, n, A_t, lda_t, vl, vu, il, iu,
-                                 abstol, m, w, Z_t, ldz_t, ifail);
+    *info = invoke_lapacke_syevx(datatype, layout, *jobz, *range, *uplo, n, A_t, lda_t, vl, vu, il,
+                                 iu, abstol, m, w, Z_t, ldz_t, ifail);
 
     exe_time = fla_test_clock() - exe_time;
     if(layout == LAPACK_ROW_MAJOR)

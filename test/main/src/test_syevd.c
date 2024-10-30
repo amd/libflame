@@ -175,7 +175,8 @@ void fla_test_syevd_experiment(test_params_t *params, integer datatype, integer 
         /*  Creating input matrix A by generating random eigen values.
             When range = V, generate EVs in given range (vl,vu)  */
         create_realtype_vector(datatype, &L, n);
-        generate_matrix_from_EVs(datatype, range, n, A, lda, L, SYEVD_VL, n * SYEVD_VU);
+        generate_matrix_from_EVs(datatype, range, n, A, lda, L, SYEVD_VL, n * SYEVD_VU,
+                                 USE_ABS_EIGEN_VALUES);
         if(FLA_OVERFLOW_UNDERFLOW_TEST)
         {
             create_realtype_vector(get_datatype(datatype), &scal, 1);

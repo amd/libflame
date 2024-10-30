@@ -162,7 +162,8 @@ void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer 
     {
         /* Generating input matrix with condition number < 1000 */
         create_realtype_vector(datatype, &L, n);
-        generate_matrix_from_EVs(datatype, 'V', n, A, lda, L, SYTRF_VL, SYTRF_VU);
+        generate_matrix_from_EVs(datatype, 'V', n, A, lda, L, SYTRF_VL, SYTRF_VU,
+                                 USE_ABS_EIGEN_VALUES);
         form_symmetric_matrix(datatype, n, A, lda, "S");
         free_vector(L);
         /* Oveflow or underflow test initialization */

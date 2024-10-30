@@ -10,6 +10,11 @@ static integer c__1 = 1;
 static integer c_n1 = -1;
 static integer c__3 = 3;
 static integer c__2 = 2;
+
+extern int fla_thread_get_num_threads();
+
+integer get_block_size_sgeqrf(integer *m, integer *n);
+
 /* > \brief \b SGEQRF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -151,6 +156,7 @@ v(i+1:m) is stored on exit in A(i+1:m,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
+
 void sgeqrf_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *work,
                 integer *lwork, integer *info)
 {
@@ -206,18 +212,7 @@ void sgeqrf_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *
     *info = 0;
 
 #if FLA_ENABLE_AMD_OPT
-    if(*m >= 3000 && *n >= 3000)
-    {
-        nb = 60;
-    }
-    else if(*m >= 1000 && *n >= 1000)
-    {
-        nb = 48;
-    }
-    else
-    {
-        nb = 24;
-    }
+    nb = get_block_size_sgeqrf(m, n);
 #else
     nb = ilaenv_(&c__1, "SGEQRF", " ", m, n, &c_n1, &c_n1);
 #endif
@@ -363,4 +358,42 @@ void sgeqrf_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *
     return;
     /* End of SGEQRF */
 }
+
+integer get_block_size_sgeqrf(integer *m, integer *n)
+{
+    integer block_size;
+
+    /* Set block_size=32 for small sizes */
+    if(*m <= 17 && *n <= 17)
+    {
+        block_size = 32;
+    }
+    else
+    {
+        int num_threads = fla_thread_get_num_threads();
+
+        if(num_threads == 1)
+        {
+            if(*m >= 3000 && *n >= 3000)
+            {
+                block_size = 60;
+            }
+            else if(*m >= 1000 && *n >= 1000)
+            {
+                block_size = 48;
+            }
+            else
+            {
+                block_size = 24;
+            }
+        }
+        else
+        {
+            block_size = 32;
+        }
+    }
+
+    return block_size;
+}
+
 /* sgeqrf_ */

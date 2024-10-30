@@ -22,6 +22,16 @@
 #define LAPACK_ROW_MAJOR 101
 #define LAPACK_COL_MAJOR 102
 
+#define USE_ABS_EIGEN_VALUES 1
+#define USE_SIGNED_EIGEN_VALUES 0
+
+/* The macros below are used for deciding which position of the off-diagonal
+ * element of 2x2 diagonal block needs to be negated.
+ * Used for the hetrf_rook test case
+ */
+#define LOWER_OFF_DIAGONAL_ELEMENT 0
+#define HIGHER_OFF_DIAGONAL_ELEMENT 1
+
 // global variables
 extern integer i_zero, i_one, i_n_one;
 extern float s_zero, s_one, s_n_one;
@@ -29,6 +39,8 @@ extern double d_zero, d_one, d_n_one;
 extern scomplex c_zero, c_one, c_n_one;
 extern dcomplex z_zero, z_one, z_n_one;
 extern int matrix_layout;
+extern integer abs_eigen_values;
+extern integer signed_eigen_values;
 
 #define DRAND() ((double)rand() / ((double)RAND_MAX / 2.0F)) - 1.0F
 #define SRAND() (float)((double)rand() / ((double)RAND_MAX / 2.0F)) - 1.0F
@@ -253,7 +265,7 @@ integer compare_realtype_vector(integer datatype, integer vect_len, void *A, int
 /* Create input matrix A(symmetric) by randomly generating eigen values(EVs) in given range (vl,vu)
  */
 void generate_matrix_from_EVs(integer datatype, char range, integer n, void *A, integer lda,
-                              void *L, double vl, double vu);
+                              void *L, double vl, double vu, integer randomize_sign);
 /* Initialize band matrix with random values.
 Note: Input buffer A has to be allocated by caller.*/
 void rand_band_matrix(integer datatype, integer M, integer N, integer kl, integer ku, void *A,
@@ -348,4 +360,9 @@ void fla_invoke_trmm(integer datatype, char *side, char *uplo, char *transa, cha
 void get_max_of_values(integer datatype, void *a, void *b, void *max_val);
 /* Gets the minimum absolute values of the two input values */
 void get_min_of_values(integer datatype, void *a, void *b, void *min_val);
+/* Negate the off-diagonal element of the 2x2 diagonal block.
+ * Used for the hetrf_rook test case
+ */
+void negate_off_diagonal_element_imag(integer datatype, void *D, integer n, integer k,
+                                      integer position);
 #endif // TEST_COMMON_H

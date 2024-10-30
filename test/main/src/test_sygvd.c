@@ -190,7 +190,7 @@ void fla_test_sygvd_experiment(test_params_t *params, integer datatype, integer 
 
         /* Genrating random spd matrix with known chol factor */
         /* Evals is used here as temporary buffer */
-        generate_matrix_from_EVs(datatype, 'V', n, U, lda, EVals, 0.1, 1.0);
+        generate_matrix_from_EVs(datatype, 'V', n, U, lda, EVals, 0.1, 1.0, USE_ABS_EIGEN_VALUES);
         get_triangular_matrix("U", datatype, n, n, U, lda, 1);
 
         /* B = U**{T|C} U */
@@ -201,7 +201,7 @@ void fla_test_sygvd_experiment(test_params_t *params, integer datatype, integer 
            where L is a diagonal matrix with diagonal values as eigen values
            and Q is orthogonal matrix denoting the eigen vectors
          */
-        generate_matrix_from_EVs(datatype, range, n, C, lda, EVals, 0.0, 0.0);
+        generate_matrix_from_EVs(datatype, range, n, C, lda, EVals, 0.0, 0.0, USE_ABS_EIGEN_VALUES);
 
         switch(itype)
         {

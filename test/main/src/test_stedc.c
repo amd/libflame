@@ -18,8 +18,8 @@ void invoke_stedc(integer datatype, char *compz, integer *n, void *D, void *E, v
                   integer *iwork, integer *liwork, integer *info);
 double prepare_lapacke_stedc_run(integer datatype, int matrix_layout, char *compz, integer n,
                                  void *D, void *E, void *Z, integer ldz, integer *info);
-integer invoke_lapacke_stedc(integer datatype, int matrix_layout, char compz, integer n,
-                             void *d, void *e, void *z, integer ldz);
+integer invoke_lapacke_stedc(integer datatype, int matrix_layout, char compz, integer n, void *d,
+                             void *e, void *z, integer ldz);
 
 #define STEDC_VL 0.1
 #define STEDC_VU 1000
@@ -222,7 +222,8 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
     else
     {
         create_realtype_vector(datatype, &L, n);
-        generate_matrix_from_EVs(datatype, range, n, A, lda, L, STEDC_VL, STEDC_VU);
+        generate_matrix_from_EVs(datatype, range, n, A, lda, L, STEDC_VL, STEDC_VU,
+                                 USE_ABS_EIGEN_VALUES);
         if(FLA_OVERFLOW_UNDERFLOW_TEST)
         {
             create_realtype_vector(get_datatype(datatype), &scal, n);
@@ -514,8 +515,8 @@ void invoke_stedc(integer datatype, char *compz, integer *n, void *D, void *E, v
     }
 }
 
-integer invoke_lapacke_stedc(integer datatype, int layout, char compz, integer n, void *D,
-                             void *E, void *Z, integer ldz)
+integer invoke_lapacke_stedc(integer datatype, int layout, char compz, integer n, void *D, void *E,
+                             void *Z, integer ldz)
 {
     integer info = 0;
     switch(datatype)

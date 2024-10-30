@@ -155,6 +155,8 @@ void validate_gelsd(integer m, integer n, integer NRHS, void *A, integer lda, vo
 
 void validate_sytrf(char *uplo, integer n, integer lda, void *A_res, integer datatype,
                     integer *ipiv, double *residual, integer *info, void *A);
+void validate_hetrf_rook(char *uplo, integer n, integer lda, void *A_res, integer datatype,
+                         integer *ipiv, double *residual, integer *info, void *A);
 
 /* GGEV API validate case for JOBVL= JOBVR = N */
 void validate_ggev_EVs(integer m, void *alpha, void *alphar, void *alphai, void *beta,

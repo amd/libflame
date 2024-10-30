@@ -41,3 +41,4 @@
 1   gbtrf   LU factorization of banded matrix             (0 = disable; 1 = enable; 2 = enable only this)
 1   gbtrs   Linear solver of banded matrix                (0 = disable; 1 = enable; 2 = enable only this)
 1   sygvd   Eigen Values and Vectors                      (0 = disable; 1 = enable; 2 = enable only this)
+1   hetrf_rook LDLH factorization                         (0 = disable; 1 = enable; 2 = enable only this)

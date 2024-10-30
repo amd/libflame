@@ -45,6 +45,7 @@ void fla_test_gbtrs(integer argc, char **argv, test_params_t *params);
 void fla_test_gelsd(integer argc, char **argv, test_params_t *params);
 void fla_test_gelss(integer argc, char **argv, test_params_t *params);
 void fla_test_sytrf(integer argc, char **argv, test_params_t *params);
+void fla_test_hetrf_rook(integer argc, char **argv, test_params_t *params);
 void fla_test_larf(integer argc, char **argv, test_params_t *params);
 void fla_test_sygvd(integer argc, char **argv, test_params_t *params);
 
@@ -79,7 +80,8 @@ OPERATIONS API_test_functions[]
        {AUX_ID, "larfg", fla_test_larfg},     {SVD_ID, "gesvdx", fla_test_gesvdx},
        {LIN_ID, "gelsd", fla_test_gelsd},     {LIN_ID, "gelss", fla_test_gelss},
        {LIN_ID, "sytrf", fla_test_sytrf},     {AUX_ID, "larf", fla_test_larf},
-       {EIG_ID, "sygvd", fla_test_sygvd},     {AUX_ID, "hegvd", fla_test_sygvd}};
+       {EIG_ID, "sygvd", fla_test_sygvd},     {AUX_ID, "hegvd", fla_test_sygvd},
+       {LIN_ID, "hetrf_rook", fla_test_hetrf_rook}};
 
 /* Add test API's group entry below */
 char *API_test_group[] = {"LIN", "EIG", "SVD", "AUX"};

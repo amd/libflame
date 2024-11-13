@@ -472,6 +472,13 @@ typedef struct AUX_paramlist_t
     char data_types_char[MAX_NUM_DATATYPES];
 } AUX_paramlist;
 
+typedef enum {
+    LAPACK_TEST,
+    LAPACKE_ROW_TEST,
+    LAPACKE_COLUMN_TEST,
+    LAPACK_CPP_TEST
+} test_interface;
+
 typedef struct
 {
     char *datatype_char;
@@ -483,6 +490,7 @@ typedef struct
     integer p_inc;
     integer p_nfact;
     integer test_lapacke_interface;
+    test_interface interfacetype;
     int matrix_major;
     char imatrix_char;
 
@@ -562,5 +570,5 @@ double fla_test_clock(void);
 void fla_test_get_time_unit(char *scale, double *time);
 integer fla_test_get_group_id(char *buffer);
 void fla_check_lapacke_interface(integer *arg_count, char **argv, test_params_t *params);
-
+void fla_check_interface(integer *arg_count, char **argv, test_params_t *params);
 #endif // TEST_LAPACK_H

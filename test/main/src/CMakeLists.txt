@@ -53,3 +53,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/test_sytrf.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_hetrf_rook.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_larf.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_sygvd.c)
+
+if(ENABLE_CPP_TEST)
+add_subdirectory(cpp)
+endif()

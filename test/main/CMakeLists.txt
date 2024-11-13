@@ -1,5 +1,5 @@
 ###############################################################################
-# Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+# Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 ###############################################################################
 if(WIN32)
     project(test_libFLAME_main)
@@ -11,6 +11,14 @@ message(STATUS "TEST EXE NAME ${PROJECT_NAME}")
 option (ENABLE_ILP64 "Enable ILP64" OFF)
 
 option (ENABLE_MEM_UNALIGNED "Allocate unaligned memory" OFF)
+
+option (ENABLE_CPP_TEST "Enable CPP test support in test suite" OFF)
+
+if (${ENABLE_CPP_TEST} MATCHES "ON")
+add_definitions(-DENABLE_CPP_TEST=1)
+else()
+add_definitions(-DENABLE_CPP_TEST=0)
+endif()
 
 set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin")
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin") 
@@ -107,7 +115,17 @@ else(BLAS_HEADER_PATH)
    message(STATUS "--> BLAS header file path not provided")
 endif()
 
+# Compile options to ignore warnings in Windows.
+# TODO: warnings are suppressed temporarily & need to rework.
+if(WIN32)
+target_compile_options(${PROJECT_NAME} PRIVATE
+                        -Wno-comment -Wno-unused-function
+                        -Wno-macro-redefined -Wno-parentheses-equality
+                        -Wno-format)
+endif()
+
 target_include_directories("${PROJECT_NAME}" PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_include_directories("${PROJECT_NAME}" PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/cpp)
 target_include_directories("${PROJECT_NAME}" PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/validate_src)
 
 add_subdirectory(src)

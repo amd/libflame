@@ -3,13 +3,16 @@
 */
 
 #include "test_lapack.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 /* Local prototypes */
 void fla_test_lartg_experiment(test_params_t *params, integer datatype, integer p_cur,
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
                                double *perf, double *t, double *residual);
 void prepare_lartg_run(integer datatype, void *f, void *g, void *r, void *c, void *s,
-                       integer n_repeats, double *time_min_);
+                       integer n_repeats, double *time_min_, integer interfacetype);
 void invoke_lartg(integer datatype, void *f, void *g, void *c, void *s, void *r);
 
 void fla_test_lartg(integer argc, char **argv, test_params_t *params)
@@ -119,6 +122,7 @@ void fla_test_lartg_experiment(test_params_t *params, integer datatype, integer 
     void *s = NULL, *c = NULL;
     void *f = NULL, *g = NULL, *r = NULL;
     double time_min = 1e9;
+    integer interfacetype = params->interfacetype;
 
     integer realtype;
     realtype = get_realtype(datatype);
@@ -143,7 +147,7 @@ void fla_test_lartg_experiment(test_params_t *params, integer datatype, integer 
         rand_vector(datatype, 1, g, 1, d_zero, d_zero, 'R');
     }
     /* call to API */
-    prepare_lartg_run(datatype, f, g, r, c, s, n_repeats, &time_min);
+    prepare_lartg_run(datatype, f, g, r, c, s, n_repeats, &time_min, interfacetype);
 
     /* execution time */
     *t = time_min;
@@ -167,20 +171,29 @@ void fla_test_lartg_experiment(test_params_t *params, integer datatype, integer 
 }
 
 void prepare_lartg_run(integer datatype, void *f, void *g, void *r, void *c, void *s,
-                       integer n_repeats, double *time_min_)
+                       integer n_repeats, double *time_min_, integer interfacetype)
 {
     integer i;
     double time_min = 1e9, exe_time;
 
     for(i = 0; i < n_repeats; ++i)
     {
-        exe_time = fla_test_clock();
-
-        /*  call  lartg API */
-        invoke_lartg(datatype, f, g, c, s, r);
-
-        exe_time = fla_test_clock() - exe_time;
-
+#if ENABLE_CPP_TEST
+        if(interfacetype == LAPACK_CPP_TEST)
+        {
+            exe_time = fla_test_clock();
+            /* Call lartg CPP API */
+            invoke_cpp_lartg(datatype, f, g, c, s, r);
+            exe_time = fla_test_clock() - exe_time;
+        }
+        else
+#endif
+        {
+            exe_time = fla_test_clock();
+            /* Call lartg API */
+            invoke_lartg(datatype, f, g, c, s, r);
+            exe_time = fla_test_clock() - exe_time;
+        }
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);
     }

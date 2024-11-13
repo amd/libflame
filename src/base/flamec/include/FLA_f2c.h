@@ -15,7 +15,9 @@
 #include <string.h>
 #include <stdlib.h> 
 #include <math.h>
+#ifndef __cplusplus
 #include <complex.h>
+#endif
 #undef complex
 #include "FLA_config.h"
 #include "FLA_macro_defs.h"

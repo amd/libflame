@@ -12797,6 +12797,7 @@ normwise error bounds \endverbatim
     /** @defgroup hetrf_aa hetrf_aa
      * @ingroup LDL_computation LDL_computation
      * @{
+     */
     /*! @brief HETRF_AA computes the factorization of a complex hermitian matrix A
 
  * @details
@@ -13330,6 +13331,107 @@ normwise error bounds \endverbatim
         hetrf_aa_2stage(uplo, n, a, lda, tb, ltb, ipiv, ipiv2, work, lwork, info);
     }
     /** @}*/ // end of hetrf_aa_2stage
+
+    /** @}*/ // end of LDL_computation
+
+    /** @defgroup hetrf_rook
+     * @ingroup LDL_computation LDL_computation
+     * @{
+     */
+    /*! @brief HETRF_ROOK computes the factorization of a complex hermitian matrix A
+
+ * @details
+ * \b Purpose:
+    \verbatim
+    HETRF_ROOK computes the factorization of a complex Hermitian matrix A
+    using the bounded Bunch-Kaufman ("rook") diagonal pivoting method.
+   T he form of the factorization is
+
+      A = U*D*U**T  or  A = L*D*L**T
+
+    where U (or L) is a product of permutation and unit upper (lower)
+    triangular matrices, and D is Hermitian and block diagonal with
+    1-by-1 and 2-by-2 diagonal blocks.
+
+    This is the blocked version of the algorithm, calling Level 3 BLAS.
+    \endverbatim
+
+ * @param[in] UPLO
+          UPLO is CHARACTER*1 \n
+          = 'U':  Upper triangle of A is stored; \n
+          = 'L':  Lower triangle of A is stored. \n
+ * @param[in] N
+          N is INTEGER \n
+          The order of the matrix A.  N >= 0. \n
+ * @param[in,out] A
+          A is COMPLEX array, dimension (LDA,N) \n
+          On entry, the Hermitian matrix A.  If UPLO = 'U', the leading
+          N-by-N upper triangular part of A contains the upper
+          triangular part of the matrix A, and the strictly lower
+          triangular part of A is not referenced.  If UPLO = 'L', the
+          leading N-by-N lower triangular part of A contains the lower
+          triangular part of the matrix A, and the strictly upper
+          triangular part of A is not referenced. \n
+ \n
+          On exit, the block diagonal matrix D and the multipliers used
+          to obtain the factor U or L (see below for further details). \n
+ * @param[in] LDA
+          LDA is INTEGER \n
+          The leading dimension of the array A.  LDA >= fla_max(1,N). \n
+ * @param[out] IPIV
+          IPIV is INTEGER array, dimension (N) \n
+          Details of the interchanges and the block structure of D.
+ \n
+          If UPLO = 'U': \n
+             Only the last KB elements of IPIV are set.
+ \n
+             If IPIV(k) > 0, then rows and columns k and IPIV(k) were
+             interchanged and D(k,k) is a 1-by-1 diagonal block.
+ \n
+             If IPIV(k) < 0 and IPIV(k-1) < 0, then rows and
+             columns k and -IPIV(k) were interchanged and rows and
+             columns k-1 and -IPIV(k-1) were inerchaged,
+             D(k-1:k,k-1:k) is a 2-by-2 diagonal block.
+ \n
+          If UPLO = 'L': \n
+             Only the first KB elements of IPIV are set.
+ \n
+             If IPIV(k) > 0, then rows and columns k and IPIV(k)
+             were interchanged and D(k,k) is a 1-by-1 diagonal block.
+ \n
+             If IPIV(k) < 0 and IPIV(k+1) < 0, then rows and
+             columns k and -IPIV(k) were interchanged and rows and
+             columns k+1 and -IPIV(k+1) were inerchaged,
+             D(k:k+1,k:k+1) is a 2-by-2 diagonal block. \n
+ * @param[out]	WORK
+          WORK is COMPLEX array, dimension (MAX(1,LWORK)). \n
+          On exit, if INFO = 0, WORK(1) returns the optimal LWORK. \n
+ * @param[in]	LWORK
+          LWORK is INTEGER \n
+          The length of WORK.  LWORK >=1.  For best performance
+          LWORK >= N*NB, where NB is the block size returned by ILAENV. \n
+ \n
+          If LWORK = -1, then a workspace query is assumed; the routine
+          only calculates the optimal size of the WORK array, returns
+          this value as the first entry of the WORK array, and no error
+          message related to LWORK is issued by XERBLA. \n
+ * @param[out]	INFO
+          INFO is INTEGER \n
+          = 0:  successful exit \n
+          < 0:  if INFO = -i, the i-th argument had an illegal value \n
+          > 0:  if INFO = i, D(i,i) is exactly zero.  The factorization
+                has been completed, but the block diagonal matrix D is
+                exactly singular, and division by zero will occur if it
+                is used to solve a system of equations. \n
+
+ *  * */
+    template <typename T>
+    void hetrf_rook(char* uplo, integer* n, T* a, integer* lda, integer* ipiv,
+                    T* work, integer* lwork, integer* info)
+    {
+        hetrf_rook(uplo, n, a, lda, ipiv, work, lwork, info);
+    }
+    /** @}*/ // end of hetrf_rook
 
     /** @}*/ // end of LDL_computation
 
@@ -16222,10 +16324,11 @@ normwise error bounds \endverbatim
     /** @defgroup Singular Singular Value Decomposition (SVD)
      * @ingroup LAPACK
      * @{
-
+     */
      /** @defgroup SVD SVD Computational Routines
      * @ingroup Singular
      * @{
+     */
 
     /** @defgroup gesvd gesvd
      * @ingroup SVD
@@ -21913,7 +22016,7 @@ for GE matrices(enabling conditions)
           SCALE is REAL array, dimension (N) \n
           Details of the permutations and scaling factors applied
           when balancin - computes row and column scaling to reduce condition number of matrix.  If
-P@j) is the index of the row and column interchanged wit/*!h row and column j, and D(j) is the
+P@j) is the index of the row and column interchanged with row and column j, and D(j) is the
 scaling factor applied to row and column j, then SCALE(J) = P(J),    for J = 1,...,ILO-1 = D(J), for
 J = ILO,...,IHI = P(J)     for J = IHI+1,...,N. The order in which the interchanges are made is N to
 IHI+1, then 1 to ILO-1. \n
@@ -22045,7 +22148,7 @@ IHI+1, then 1 to ILO-1. \n
                          pairs for which SELECT is true for either
                          eigenvalue count as  - computes row and column scaling to reduce condition
  number of matrix \n
- * @param[out] WR/*!
+ * @param[out] WR
           WR is REAL array, dimension (N) \n
  * @param[out] WI
           WI is REAL array, dimension (N) \n
@@ -22211,7 +22314,7 @@ IHI+1, then 1 to ILO-1. \n
           conjugate pairs of eigenvalues appear consecutively with the
           eigenvalue having the positive imaginary part fir -
           computes row and column scaling to reduce condition number of matrix \n
- * @param[out] VS/*!
+ * @param[out] VS
           VS is REAL array, dimension (LDVS,N) \n
           If JOBVS = 'V', VS contains the orthogonal matrix Z of Schur
           vectors. \n
@@ -39225,7 +39328,7 @@ factorization formed by ?geqrt.
  * @param[in] LDV
           LDV is INTEGER \n
           The leading dimension of the array V. \n
-          If SIDE = 'L', L/*!DA >= fla_max(1,M); \n
+          If SIDE = 'L', LDA >= fla_max(1,M); \n
           if SIDE = 'R', LDA >= fla_max(1,N). \n
  * @param[in] T
           T is REAL array, dimension (LDT,K) \n
@@ -41197,7 +41300,7 @@ factorization formed by ?geqrt.
          the elements above the diagonal are used to store part of the
          data structure to represent -
          computes row and column scaling to reduce condition number of matrix \n
-* @param[in] LDA/*!
+* @param[in] LDA
          LDA is INTEGER \n
          The leading dimension of the array A.  LDA >= fla_max(1,M). \n
 * @param[out] T

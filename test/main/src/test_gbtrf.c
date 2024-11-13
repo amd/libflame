@@ -3,6 +3,9 @@
 */
 
 #include "test_lapack.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 /* Local prototypes */
 void fla_test_gbtrf_experiment(test_params_t *params, integer datatype, integer p_cur,
@@ -10,7 +13,7 @@ void fla_test_gbtrf_experiment(test_params_t *params, integer datatype, integer 
                                double *perf, double *t, double *residual);
 void prepare_gbtrf_run(integer m_A, integer n_A, integer kl, integer ku, void *ab, integer ldab,
                        integer *ipiv, integer datatype, integer n_repeats, double *time_min_,
-                       integer *info, integer test_lapacke_interface, integer matrix_layout);
+                       integer *info, integer interfacetype, integer matrix_layout);
 void invoke_gbtrf(integer datatype, integer *m, integer *n, integer *kl, integer *ku, void *ab,
                   integer *ldab, integer *ipiv, integer *info);
 double prepare_lapacke_gbtrf_run(integer datatype, integer matrix_layout, integer m_A, integer n_A,
@@ -117,7 +120,7 @@ void fla_test_gbtrf_experiment(test_params_t *params, integer datatype, integer 
     void *AB, *AB_test, *A;
     double time_min = 1e9;
 
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     integer layout = params->matrix_major;
 
     /* Determine the dimensions*/
@@ -182,7 +185,7 @@ void fla_test_gbtrf_experiment(test_params_t *params, integer datatype, integer 
 
     /* call to API */
     prepare_gbtrf_run(m, n, kl, ku, AB_test, ldab, IPIV, datatype, n_repeats, &time_min, &info,
-                      test_lapacke_interface, layout);
+                      interfacetype, layout);
 
     /* execution time */
     *t = time_min;
@@ -220,7 +223,7 @@ void fla_test_gbtrf_experiment(test_params_t *params, integer datatype, integer 
 
 void prepare_gbtrf_run(integer m_A, integer n_A, integer kl, integer ku, void *AB, integer ldab,
                        integer *IPIV, integer datatype, integer n_repeats, double *time_min_,
-                       integer *info, integer test_lapacke_interface, integer layout)
+                       integer *info, integer interfacetype, integer layout)
 {
     integer i;
     void *AB_save;
@@ -237,18 +240,24 @@ void prepare_gbtrf_run(integer m_A, integer n_A, integer kl, integer ku, void *A
         copy_matrix(datatype, "full", ldab, n_A, AB, ldab, AB_save, ldab);
 
         /* Check if LAPACKE interface is enabled */
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time = prepare_lapacke_gbtrf_run(datatype, layout, m_A, n_A, kl, ku, AB_save, ldab,
                                                  IPIV, info);
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST)   /* Call CPP gbtrf API */
+        {
+            exe_time = fla_test_clock();
+            invoke_cpp_gbtrf(datatype, &m_A, &n_A, &kl, &ku, AB_save, &ldab, IPIV, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();
-
-            /* Call LAPACK getrf API */
+            /* Call LAPACK gbtrf API */
             invoke_gbtrf(datatype, &m_A, &n_A, &kl, &ku, AB_save, &ldab, IPIV, info);
-
             exe_time = fla_test_clock() - exe_time;
         }
 

@@ -3,6 +3,9 @@
 */
 
 #include "test_lapack.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 #define GETRI_VL 0.1
 #define GETRI_VU 10
@@ -15,7 +18,7 @@ void fla_test_getri_experiment(test_params_t *params, integer datatype, integer 
                                double *perf, double *t, double *residual);
 void prepare_getri_run(integer n_A, void *A, integer lda, integer *ipiv, integer datatype,
                        integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, int matrix_layout);
+                       integer interfacetype, int matrix_layout);
 void invoke_getri(integer datatype, integer *n, void *a, integer *lda, integer *ipiv, void *work,
                   integer *lwork, integer *info);
 double prepare_lapacke_getri_run(integer datatype, int matrix_layout, integer m_A, integer n_A,
@@ -55,8 +58,7 @@ void fla_test_getri(integer argc, char **argv, test_params_t *params)
         num_types = strlen(argv[2]);
         N = strtoimax(argv[3], &endptr, CLI_DECIMAL_BASE);
         /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
-        if((g_ext_fptr == NULL) && params->test_lapacke_interface
-           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
         {
             row_major_getri_lda = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
             params->lin_solver_paramslist[0].lda = N;
@@ -130,7 +132,7 @@ void fla_test_getri_experiment(test_params_t *params, integer datatype, integer 
     char range = 'U';
     double time_min = 1e9;
 
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
 
     /* Determine the dimensions*/
@@ -175,7 +177,7 @@ void fla_test_getri_experiment(test_params_t *params, integer datatype, integer 
 
     /* call to API */
     prepare_getri_run(n, A_test, lda, IPIV, datatype, n_repeats, &time_min, &info,
-                      test_lapacke_interface, layout);
+                      interfacetype, layout);
 
     /* execution time */
     *t = time_min;
@@ -210,7 +212,7 @@ void fla_test_getri_experiment(test_params_t *params, integer datatype, integer 
 
 void prepare_getri_run(integer n_A, void *A, integer lda, integer *IPIV, integer datatype,
                        integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, int layout)
+                       integer interfacetype, int layout)
 {
     integer lwork;
     integer i;
@@ -225,16 +227,27 @@ void prepare_getri_run(integer n_A, void *A, integer lda, integer *IPIV, integer
     /* Make a workspace query the first time through. This will provide us with
      and ideal workspace size based on an internal block size.
      NOTE: LAPACKE interface handles workspace query internally */
-    if((test_lapacke_interface == 0) && (g_lwork <= 0))
+    if((interfacetype != LAPACKE_ROW_TEST) && (interfacetype != LAPACKE_COLUMN_TEST) && (g_lwork <= 0))
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
 
         // call to  getri API
-        invoke_getri(datatype, &n_A, NULL, &lda, NULL, work, &lwork, info);
+#if ENABLE_CPP_TEST
+        if(interfacetype == LAPACK_CPP_TEST)   /* Call CPP getri API */
+        {
+            exe_time = fla_test_clock();
+            invoke_cpp_getri(datatype, &n_A, NULL, &lda, NULL, work, &lwork, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+        else
+#endif
+        {
+            invoke_getri(datatype, &n_A, NULL, &lda, NULL, work, &lwork, info);
+        }
         if(*info == 0)
         {
-            // Get work siz`e
+            // Get work size
             lwork = get_work_value(datatype, work);
         }
 
@@ -259,11 +272,19 @@ void prepare_getri_run(integer n_A, void *A, integer lda, integer *IPIV, integer
             call  getri API with AFACT to get A INV */
         invoke_getrf(datatype, &n_A, &n_A, A_save, &lda, IPIV, info);
         /* Check if LAPACKE interface is enabled */
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time
                 = prepare_lapacke_getri_run(datatype, layout, n_A, n_A, A_save, lda, IPIV, info);
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST)   /* Call CPP getri API */
+        {
+            exe_time = fla_test_clock();
+            invoke_cpp_getri(datatype, &n_A, A_save, &lda, IPIV, work, &lwork, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();

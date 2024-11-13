@@ -3,6 +3,9 @@
 */
 
 #include "test_lapack.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 /* Local prototypes */
 void fla_test_gbtrs_experiment(test_params_t *params, integer datatype, integer p_cur,
@@ -11,7 +14,7 @@ void fla_test_gbtrs_experiment(test_params_t *params, integer datatype, integer 
 void prepare_gbtrs_run(char trans, integer n_A, integer kl, integer ku, integer nrhs, void *ab,
                        integer ldab, integer *ipiv, void *b, integer ldb, integer datatype,
                        integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, integer matrix_layout);
+                       integer interfacetype, integer matrix_layout);
 void invoke_gbtrs(integer datatype, char *trans, integer *n, integer *kl, integer *ku,
                   integer *nrhs, void *ab, integer *ldab, integer *ipiv, void *b, integer *ldb,
                   integer *info);
@@ -126,7 +129,7 @@ void fla_test_gbtrs_experiment(test_params_t *params, integer datatype, integer 
     void *B, *X, *A = NULL;
     double time_min = 1e9;
     
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     integer layout = params->matrix_major;
 
     /* Determine the dimensions*/
@@ -208,14 +211,23 @@ void fla_test_gbtrs_experiment(test_params_t *params, integer datatype, integer 
         /* Save the original matrix AB */
         copy_matrix(datatype, "full", ldab, n, AB, ldab, AB_test, ldab);
 
-        invoke_gbtrf(datatype, &n, &n, &kl, &ku, AB_test, &ldab, IPIV, &info);
+#if ENABLE_CPP_TEST
+        if(interfacetype == LAPACK_CPP_TEST)   /* Call CPP gbtrf API */
+        {
+            invoke_cpp_gbtrf(datatype, &n, &n, &kl, &ku, AB_test, &ldab, IPIV, &info);
+        }
+        else
+#endif
+        {
+            invoke_gbtrf(datatype, &n, &n, &kl, &ku, AB_test, &ldab, IPIV, &info);
+        }
     }
     /* Save the original matrix B */
     copy_matrix(datatype, "full", n, nrhs, B, ldb, X, ldb);
 
     /* call to API */
     prepare_gbtrs_run(trans, n, kl, ku, nrhs, AB_test, ldab, IPIV, X, ldb, datatype, n_repeats,
-                      &time_min, &info, test_lapacke_interface, layout);
+                      &time_min, &info, interfacetype, layout);
     /* execution time */
     *t = time_min;
 
@@ -261,7 +273,7 @@ void fla_test_gbtrs_experiment(test_params_t *params, integer datatype, integer 
 void prepare_gbtrs_run(char trans, integer n_A, integer kl, integer ku, integer nrhs, void *AB,
                        integer ldab, integer *IPIV, void *B, integer ldb, integer datatype,
                        integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, integer layout)
+                       integer interfacetype, integer layout)
 {
     integer i;
     void *B_save;
@@ -277,16 +289,25 @@ void prepare_gbtrs_run(char trans, integer n_A, integer kl, integer ku, integer 
         copy_matrix(datatype, "full", n_A, nrhs, B, ldb, B_save, ldb);
 
         /* Check if LAPACKE interface is enabled */
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time = prepare_lapacke_gbtrs_run(datatype, layout, trans, n_A, kl, ku, nrhs, AB,
                                                  ldab, IPIV, B_save, ldb, info);
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST)   /* Call CPP gbtrs API */
+        {
+            exe_time = fla_test_clock();
+            invoke_cpp_gbtrs(datatype, &trans, &n_A, &kl, &ku, &nrhs, AB, &ldab, IPIV, B_save, &ldb,
+                             info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();
 
-            /* Call LAPACK getrf API */
+            /* Call LAPACK gbtrs API */
             invoke_gbtrs(datatype, &trans, &n_A, &kl, &ku, &nrhs, AB, &ldab, IPIV, B_save, &ldb,
                          info);
 

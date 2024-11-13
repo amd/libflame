@@ -3,6 +3,9 @@
 */
 
 #include "test_lapack.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 #define GETRS_VL 0.1
 #define GETRS_VU 10
@@ -16,7 +19,7 @@ void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer 
                                double *perf, double *t, double *residual);
 void prepare_getrs_run(char *trans, integer m_A, integer n_A, void *A, integer lda, void *B,
                        integer ldb, integer *ipiv, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer test_lapacke_interface,
+                       double *time_min_, integer *info, integer interfacetype,
                        int matrix_layout);
 void invoke_getrs(integer datatype, char *trans, integer *nrhs, integer *n, void *a, integer *lda,
                   integer *ipiv, void *b, integer *ldb, integer *info);
@@ -61,8 +64,7 @@ void fla_test_getrs(integer argc, char **argv, test_params_t *params)
         N = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].nrhs = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
         /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
-        if((g_ext_fptr == NULL) && params->test_lapacke_interface
-           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
         {
             row_major_getrs_lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
             row_major_getrs_ldb = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
@@ -139,7 +141,7 @@ void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer 
     double time_min = 1e9;
     char TRANS = params->lin_solver_paramslist[pci].transr;
 
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
 
     *residual = params->lin_solver_paramslist[pci].solver_threshold;
@@ -202,7 +204,7 @@ void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer 
 
     /* call to API */
     prepare_getrs_run(&TRANS, n, NRHS, A_test, lda, B, ldb, IPIV, datatype, n_repeats, &time_min,
-                      &info, test_lapacke_interface, layout);
+                      &info, interfacetype, layout);
     copy_matrix(datatype, "full", n, NRHS, B, ldb, X, ldb);
     /* execution time */
     *t = time_min;
@@ -244,7 +246,7 @@ void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer 
 
 void prepare_getrs_run(char *TRANS, integer n_A, integer nrhs, void *A, integer lda, void *B,
                        integer ldb, integer *IPIV, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer test_lapacke_interface,
+                       double *time_min_, integer *info, integer interfacetype,
                        int layout)
 {
     integer i;
@@ -264,11 +266,19 @@ void prepare_getrs_run(char *TRANS, integer n_A, integer nrhs, void *A, integer 
         copy_matrix(datatype, "full", n_A, nrhs, B, ldb, B_test, ldb);
 
         /* Check if LAPACKE interface is enabled */
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time = prepare_lapacke_getrs_run(datatype, layout, TRANS, n_A, nrhs, A_save, lda,
                                                  B_test, ldb, IPIV, info);
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST)   /* Call CPP getrs API */
+        {
+            exe_time = fla_test_clock();
+            invoke_cpp_getrs(datatype, TRANS, &n_A, &nrhs, A_save, &lda, IPIV, B_test, &ldb, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();

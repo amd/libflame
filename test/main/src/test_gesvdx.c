@@ -4,9 +4,10 @@
 
 /* GESVDX API */
 
-#include "test_common.h"
 #include "test_lapack.h"
-#include "test_prototype.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 integer row_major_gesvdx_lda;
 integer row_major_gesvdx_ldu;
@@ -20,7 +21,7 @@ void prepare_gesvdx_run(char *jobu, char *jobvt, char *range, integer m_A, integ
                         integer lda, void *vl, void *vu, integer il, integer iu, integer *ns,
                         void *s, void *U, integer ldu, void *V, integer ldvt, integer datatype,
                         integer n_repeats, double *time_min_, integer *info,
-                        integer test_lapacke_interface, int matrix_layout);
+                        integer interfacetype, int matrix_layout);
 void invoke_gesvdx(integer datatype, char *jobu, char *jobvt, char *range, integer *m, integer *n,
                    void *a, integer *lda, void *vl, void *vu, integer *il, integer *iu, integer *ns,
                    void *s, void *u, integer *ldu, void *vt, integer *ldvt, void *work,
@@ -74,8 +75,7 @@ void fla_test_gesvdx(integer argc, char **argv, test_params_t *params)
         params->svd_paramslist[0].il = strtoimax(argv[11], &endptr, CLI_DECIMAL_BASE);
         params->svd_paramslist[0].iu = strtoimax(argv[12], &endptr, CLI_DECIMAL_BASE);
         /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
-        if((g_ext_fptr == NULL) && params->test_lapacke_interface
-           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
         {
             row_major_gesvdx_lda = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
             row_major_gesvdx_ldu = strtoimax(argv[13], &endptr, CLI_DECIMAL_BASE);
@@ -154,7 +154,7 @@ void fla_test_gesvdx_experiment(test_params_t *params, integer datatype, integer
     integer info = 0;
     void *A = NULL, *U = NULL, *V = NULL, *s = NULL, *A_test = NULL, *s_test = NULL, *scal = NULL;
 
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
 
     /* Get input matrix dimensions. */
@@ -261,7 +261,7 @@ void fla_test_gesvdx_experiment(test_params_t *params, integer datatype, integer
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
     prepare_gesvdx_run(&jobu, &jobvt, &range, m, n, A_test, lda, vl, vu, il, iu, &ns, s, U, ldu, V,
-                       ldvt, datatype, n_repeats, time_min, &info, test_lapacke_interface, layout);
+                       ldvt, datatype, n_repeats, time_min, &info, interfacetype, layout);
 
     /* Performance Computation
      * Singular values only, 4mn^2 - 4n^3/3 flops
@@ -326,7 +326,7 @@ void prepare_gesvdx_run(char *jobu, char *jobvt, char *range, integer m_A, integ
                         integer lda, void *vl, void *vu, integer il, integer iu, integer *ns,
                         void *s, void *U, integer ldu, void *V, integer ldvt, integer datatype,
                         integer n_repeats, double *time_min_, integer *info,
-                        integer test_lapacke_interface, int layout)
+                        integer interfacetype, int layout)
 {
     integer min_m_n, max_m_n;
     void *A_save, *s_test;
@@ -355,8 +355,18 @@ void prepare_gesvdx_run(char *jobu, char *jobvt, char *range, integer m_A, integ
         lwork = -1;
         create_vector(datatype, &work, 1);
         /* call gesvdx API */
-        invoke_gesvdx(datatype, jobu, jobvt, range, &m_A, &n_A, NULL, &lda, vl, vu, &il, &iu, ns,
-                      NULL, NULL, &ldu, NULL, &ldvt, work, &lwork, iwork, NULL, info);
+#if ENABLE_CPP_TEST
+        if(interfacetype == LAPACK_CPP_TEST)
+        {
+            invoke_cpp_gesvdx(datatype, jobu, jobvt, range, &m_A, &n_A, NULL, &lda, vl, vu, &il, &iu, ns,
+                            NULL, NULL, &ldu, NULL, &ldvt, work, &lwork, iwork, NULL, info);
+        }
+        else
+#endif
+        {
+            invoke_gesvdx(datatype, jobu, jobvt, range, &m_A, &n_A, NULL, &lda, vl, vu, &il, &iu, ns,
+                        NULL, NULL, &ldu, NULL, &ldvt, work, &lwork, iwork, NULL, info);
+        }
         if(*info == 0)
         {
             /* Get the work size */
@@ -385,12 +395,22 @@ void prepare_gesvdx_run(char *jobu, char *jobvt, char *range, integer m_A, integ
             rwork = NULL;
 
         /* Check if LAPACKE is enabled */
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time = prepare_lapacke_gesvdx_run(datatype, layout, jobu, jobvt, range, m_A, n_A, A,
                                                   lda, vl, vu, il, iu, ns, s_test, U_test, ldu,
                                                   V_test, ldvt, work, &lwork, iwork, rwork, info);
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST)
+        {
+            exe_time = fla_test_clock();
+            /* call CPP gesvdx API  */
+            invoke_cpp_gesvdx(datatype, jobu, jobvt, range, &m_A, &n_A, A, &lda, vl, vu, &il, &iu, ns,
+                              s_test, U_test, &ldu, V_test, &ldvt, work, &lwork, iwork, rwork, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();

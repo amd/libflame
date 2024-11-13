@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #ifdef __cplusplus
@@ -11,154 +11,72 @@ void invoke_cpp_gbtrs(integer datatype, char *trans, integer *n, integer *kl, in
                       integer *nrhs, void *ab, integer *ldab, integer *ipiv, void *b, integer *ldb,
                       integer *info);
 void invoke_cpp_geev(integer datatype, char *jobvl, char *jobvr, integer *n, void *a, integer *lda,
-                     void *wr, void *wi, void *w, void *vl, integer *ldvl, void *vr, integer *ldvr,
-                     void *work, integer *lwork, void *rwork, integer *info);
-void invoke_cpp_geevx(integer datatype, char *balanc, char *jobvl, char *jobvr, char *sense,
-                      integer *n, void *a, integer *lda, void *wr, void *wi, void *w, void *vl,
-                      integer *ldvl, void *vr, integer *ldvr, integer *ilo, integer *ihi,
-                      void *scale, void *abnrm, void *rconde, void *rcondv, void *work,
-                      integer *lwork, void *rwork, integer *iwork, integer *info);
-void invoke_cpp_gehrd(integer datatype, integer *n, integer *ilo, integer *ihi, void *A,
-                      integer *lda, void *tau, void *work, integer *lwork, integer *info);
+                    void *wr, void *wi, void *w, void *vl, integer *ldvl, void *vr, integer *ldvr,
+                    void *work, integer *lwork, void *rwork, integer *info);
+void invoke_cpp_geevx(integer datatype, char *balanc, char *jobvl, char *jobvr, char *sense, integer *n,
+                  void *a, integer *lda, void *wr, void *wi, void *w, void *vl, integer *ldvl,
+                  void *vr, integer *ldvr, integer *ilo, integer *ihi, void *scale, void *abnrm,
+                  void *rconde, void *rcondv, void *work, integer *lwork, void *rwork,
+                  integer *iwork, integer *info);
+void invoke_cpp_gehrd(integer datatype, integer *n, integer *ilo, integer *ihi, void *A, integer *lda,
+                  void *tau, void *work, integer *lwork, integer *info);
 void invoke_cpp_gelqf(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau,
-                      void *work, integer *lwork, integer *info);
+                  void *work, integer *lwork, integer *info);
 void invoke_cpp_gels(integer datatype, char *trans, integer *m, integer *n, integer *nrhs, void *A,
-                     integer *lda, void *B, integer *ldb, void *work, integer *lwork,
-                     integer *info);
-void invoke_cpp_gelsd(integer datatype, integer *m, integer *n, integer *nrhs, void *a,
-                      integer *lda, void *b, integer *ldb, void *s, void *rcond, integer *rank,
-                      void *work, integer *lwork, void *rwork, integer *iwork, integer *info);
-void invoke_cpp_gelss(integer datatype, integer *m, integer *n, integer *nrhs, void *A,
-                      integer *lda, void *B, integer *ldb, void *s, void *rcond, integer *rank,
-                      void *work, integer *lwork, void *rwork, integer *info);
-void invoke_cpp_geqp3(integer datatype, integer *m, integer *n, void *a, integer *lda,
-                      integer *jpvt, void *tau, void *work, integer *lwork, void *rwork,
-                      integer *info);
-void invoke_cpp_geqrf(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau,
-                      void *work, integer *lwork, integer *info);
-void invoke_cpp_gerq2(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau,
-                      void *work, integer *info);
-void invoke_cpp_gerqf(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau,
-                      void *work, integer *lwork, integer *info);
-void invoke_cpp_gesdd(integer datatype, char *jobz, integer *m, integer *n, void *a, integer *lda,
-                      void *s, void *u, integer *ldu, void *vt, integer *ldvt, void *work,
+                     integer *lda, void *B, integer *ldb, void *work, integer *lwork, integer *info);
+void invoke_cpp_gelsd(integer datatype, integer *m, integer *n, integer *nrhs, void *a, integer *lda,
+                      void *b, integer *ldb, void *s, void *rcond, integer *rank, void *work,
                       integer *lwork, void *rwork, integer *iwork, integer *info);
-void invoke_cpp_gesv(integer datatype, integer *n, integer *nrhs, void *a, integer *lda,
-                     integer *ipiv, void *b, integer *ldb, integer *info);
-void invoke_cpp_gesvd(integer datatype, char *jobu, char *jobvt, integer *m, integer *n, void *a,
-                      integer *lda, void *s, void *u, integer *ldu, void *vt, integer *ldvt,
+void invoke_cpp_gelss(integer datatype, integer *m, integer *n, integer *nrhs, void *A, integer *lda,
+                      void *B, integer *ldb, void *s, void *rcond, integer *rank, void *work,
+                      integer *lwork, void *rwork, integer *info);
+void invoke_cpp_geqp3(integer datatype, integer *m, integer *n, void *a, integer *lda, integer* jpvt, void *tau,
                       void *work, integer *lwork, void *rwork, integer *info);
-void invoke_cpp_gesvdx(integer datatype, char *jobu, char *jobvt, char *range, integer *m,
-                       integer *n, void *a, integer *lda, void *vl, void *vu, integer *il,
-                       integer *iu, integer *ns, void *s, void *u, integer *ldu, void *vt,
-                       integer *ldvt, void *work, integer *lwork, integer *iwork, void *rwork,
-                       integer *info);
-void invoke_cpp_getrf(integer datatype, integer *m, integer *n, void *a, integer *lda,
-                      integer *ipiv, integer *info);
-void invoke_cpp_getri(integer datatype, integer *n, void *a, integer *lda, integer *ipiv,
-                      void *work, integer *lwork, integer *info);
-void invoke_cpp_getrs(integer datatype, char *trans, integer *n, integer *nrhs, void *a,
-                      integer *lda, integer *ipiv, void *b, integer *ldb, integer *info);
-void invoke_cpp_ggev(integer datatype, char *jobvl, char *jobvr, integer *n, void *a, integer *lda,
-                     void *b, integer *ldb, void *alpha, void *alphar, void *alphai, void *beta,
-                     void *vl, integer *ldvl, void *vr, integer *ldvr, void *work, integer *lwork,
-                     void *rwork, integer *info);
-void invoke_cpp_ggevx(integer datatype, char *balanc, char *jobvl, char *jobvr, char *sense,
-                      integer *n, void *a, integer *lda, void *b, integer *ldb, void *alpha,
-                      void *alphar, void *alphai, void *beta, void *vl, integer *ldvl, void *vr,
-                      integer *ldvr, integer *ilo, integer *ihi, void *lscale, void *rscale,
-                      void *abnrm, void *bbnrm, void *rconde, void *rcondv, void *work,
-                      integer *lwork, void *rwork, integer *iwork, integer *bwork, integer *info);
-void invoke_cpp_gghrd(integer datatype, char *compq, char *compz, integer *n, integer *ilo,
-                      integer *ihi, void *a, integer *lda, void *b, integer *ldb, void *q,
-                      integer *ldq, void *z, integer *ldz, integer *info);
-void invoke_cpp_gtsv(integer datatype, integer *n, integer *nrhs, void *dl, void *d, void *du,
+void invoke_cpp_geqrf(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau,
+                    void *work, integer *lwork, integer *info);
+void invoke_cpp_gesdd(integer datatype, char *jobz, integer *m, integer *n, void *a, integer *lda,
+                    void *s, void *u, integer *ldu, void *vt, integer *ldvt, void *work,
+                    integer *lwork, void *rwork, integer *iwork, integer *info);
+void invoke_cpp_gesv(integer datatype, integer *n, integer *nrhs, void *a, integer *lda, integer *ipiv,
                      void *b, integer *ldb, integer *info);
+void invoke_cpp_gesvd(integer datatype, char *jobu, char *jobvt, integer *m, integer *n, void *a,
+                      integer *lda, void *s, void *u, integer *ldu, void *vt, integer *ldvt, void *work,
+                      integer *lwork, void *rwork, integer *info);
+void invoke_cpp_gesvdx(integer datatype, char *jobu, char *jobvt, char *range, integer *m, integer *n,
+                    void *a, integer *lda, void *vl, void *vu, integer *il, integer *iu, integer *ns,
+                    void *s, void *u, integer *ldu, void *vt, integer *ldvt, void *work,
+                    integer *lwork, integer *iwork, void *rwork, integer *info);
+void invoke_cpp_getrf(integer datatype, integer *m, integer *n, void *a, integer *lda, integer *ipiv,
+                    integer *info);
+void invoke_cpp_getri(integer datatype, integer *n, void *a, integer *lda, integer *ipiv, void *work,
+                      integer *lwork, integer *info);
+void invoke_cpp_getrs(integer datatype, char *trans, integer *n, integer *nrhs, void *a, integer *lda,
+                      integer *ipiv, void *b, integer *ldb, integer *info);
+void invoke_cpp_ggev(integer datatype, char *jobvl, char *jobvr, integer *n, void *a, integer *lda,
+                 void *b, integer *ldb, void *alpha, void *alphar, void *alphai, void *beta,
+                 void *vl, integer *ldvl, void *vr, integer *ldvr, void *work, integer *lwork,
+                 void *rwork, integer *info);
+void invoke_cpp_ggevx(integer datatype, char *balanc, char *jobvl, char *jobvr, char *sense, integer *n,
+                      void *a, integer *lda, void *b, integer *ldb, void *alpha, void *alphar,
+                      void *alphai, void *beta, void *vl, integer *ldvl, void *vr, integer *ldvr,
+                      integer *ilo, integer *ihi, void *lscale, void *rscale, void *abnrm, void *bbnrm,
+                      void *rconde, void *rcondv, void *work, integer *lwork, void *rwork,
+                      integer *iwork, integer *bwork, integer *info);
+void invoke_cpp_gghrd(integer datatype, char *compq, char *compz, integer *n, integer *ilo,
+                      integer *ihi, void *a, integer *lda, void *b, integer *ldb, void *q, integer *ldq,
+                      void *z, integer *ldz, integer *info);
+void invoke_cpp_gtsv(integer datatype, integer *n, integer *nrhs, void *dl, void *d, void *du, void *b,
+                     integer *ldb, integer *info);
 void invoke_cpp_hetrf_rook(integer datatype, char *uplo, integer *n, void *a, integer *lda,
                            integer *ipiv, void *work, integer *lwork, integer *info);
-void invoke_cpp_hgeqz(integer datatype, char *job, char *compq, char *compz, integer *n,
-                      integer *ilo, integer *ihi, void *h, integer *ldh, void *t, integer *ldt,
-                      void *alpha, void *alphar, void *alphai, void *beta, void *q, integer *ldq,
-                      void *z, integer *ldz, void *work, integer *lwork, void *rwork,
-                      integer *info);
-void invoke_cpp_hseqr(integer datatype, char *job, char *compz, integer *n, integer *ilo,
-                      integer *ihi, void *h, integer *ldh, void *w, void *wr, void *wi, void *z,
-                      integer *ldz, void *work, integer *lwork, integer *info);
-void invoke_cpp_larf(integer datatype, char *side, integer *m, integer *n, void *v, integer *incv,
-                     void *tau, void *c__, integer *ldc__, void *work);
-void invoke_cpp_larfg(integer datatype, integer *n, void *x, integer *incx, integer *abs_incx,
-                      void *tau);
+void invoke_cpp_hgeqz(integer datatype, char *job, char *compq, char *compz, integer *n, integer *ilo,
+                      integer *ihi, void *h, integer *ldh, void *t, integer *ldt, void *alpha,
+                      void *alphar, void *alphai, void *beta, void *q, integer *ldq, void *z,
+                      integer *ldz, void *work, integer *lwork, void *rwork, integer *info);
+void invoke_cpp_hseqr(integer datatype, char *job, char *compz, integer *n, integer *ilo, integer *ihi,
+                      void *h, integer *ldh, void *w, void *wr, void *wi, void *z, integer *ldz,
+                      void *work, integer *lwork, integer *info);
 void invoke_cpp_lartg(integer datatype, void *f, void *g, void *c, void *s, void *r);
-void invoke_cpp_org2r(integer datatype, integer *m, integer *n, integer *min_A, void *a,
-                      integer *lda, void *tau, void *work, integer *info);
-void invoke_cpp_orgqr(integer datatype, integer *m, integer *n, integer *min_A, void *a,
-                      integer *lda, void *tau, void *work, integer *lwork, integer *info);
-void invoke_cpp_potrf(char *uplo, integer datatype, integer *m, void *a, integer *lda,
-                      integer *info);
-void invoke_cpp_potrs(char *uplo, integer datatype, integer *n, void *A, integer *lda,
-                      integer *nrhs, void *B, integer *ldb, integer *info);
-void invoke_cpp_rot(integer datatype, integer *n, void *cx, integer *incx, void *cy, integer *incy,
-                    void *c, void *s);
-void invoke_cpp_stedc(integer datatype, char *compz, integer *n, void *D, void *E, void *Z,
-                      integer *ldz, void *work, integer *lwork, void *rwork, integer *lrwork,
-                      integer *iwork, integer *liwork, integer *info);
-void invoke_cpp_gecon(integer datatype, char *norm, integer *n, void *A, integer *lda, void *anorm,
-                      void *rcond, void *work, void *lrwork, integer *info);
-void invoke_cpp_hetrf(integer datatype, char *uplo, integer *n, void *A, integer *lda,
-                      integer *ipiv, void *work, integer *lwork, integer *info);
-void invoke_cpp_hetri_rook(integer datatype, char *uplo, integer *n, void *a, integer *lda,
-                           integer *ipiv, void *work, integer *info);
-void invoke_cpp_ormqr(integer datatype, char *side, char *trans, integer *m, integer *n, integer *k,
-                      void *A, integer *lda, void *tau, void *C, integer *ldc, void *work,
-                      integer *lwork, integer *info);
-void invoke_cpp_gejsv(integer datatype, char *joba, char *jobu, char *jobv, char *jobr, char *jobt,
-                      char *jobp, integer *m, integer *n, void *A, integer *lda, void *S, void *U,
-                      integer *ldu, void *V, integer *ldv, void *work, integer *lwork, void *rwork,
-                      integer *lrwork, integer *iwork, integer *info);
-void invoke_cpp_labrd(integer datatype, integer *m, integer *n, integer *nb, void *a, integer *lda,
-                      void *d, void *e, void *tauq, void *taup, void *x, integer *ldx, void *y,
-                      integer *ldy);
-void invoke_cpp_sytrd(integer datatype, char *uplo, integer *n, void *A, integer *lda, void *D,
-                      void *E, void *tau, void *work, integer *lwork, integer *info);
-void invoke_cpp_lange(integer datatype, char *norm_type, integer *m, integer *n, void *A,
-                      integer *lda, void *work, void *result);
-void invoke_cpp_steqr(integer datatype, char *compz, integer *n, void *z, integer *ldz, void *d,
-                      void *e, void *work, integer *info);
-void invoke_cpp_stevd(integer datatype, char *jobz, integer *n, void *z, integer *ldz, void *d,
-                      void *e, void *work, integer *lwork, integer *iwork, integer *liwork,
-                      integer *info);
-void invoke_cpp_syev(integer datatype, char *jobz, char *uplo, integer *n, void *a, integer *lda,
-                     void *w, void *work, integer *lwork, void *rwork, integer *info);
-void invoke_cpp_syevd(integer datatype, char *jobz, char *uplo, integer *n, void *a, integer *lda,
-                      void *w, void *work, integer *lwork, void *rwork, integer *lrwork,
-                      integer *iwork, integer *liwork, integer *info);
-void invoke_cpp_syevx(integer datatype, char *jobz, char *range, char *uplo, integer *n, void *a,
-                      integer *lda, void *vl, void *vu, integer *il, integer *iu, void *abstol,
-                      integer *m, void *w, void *z, integer *ldz, void *work, integer *lwork,
-                      void *rwork, integer *iwork, void *ifail, integer *info);
-void invoke_cpp_sygvd(integer datatype, integer *itype, char *jobz, char *uplo, integer *n, void *a,
-                      integer *lda, void *b, integer *ldb, void *w, void *work, integer *lwork,
-                      void *rwork, integer *lrwork, integer *iwork, integer *liwork, integer *info);
-void invoke_cpp_sytrf_rook(integer datatype, char *uplo, integer *n, void *a, integer *lda,
-                           integer *ipiv, void *work, integer *lwork, integer *info);
-void invoke_cpp_sytrf(integer datatype, char *uplo, integer *n, void *a, integer *lda,
-                      integer *ipiv, void *work, integer *lwork, integer *info);
-void invoke_cpp_ormlq(integer datatype, char *side, char *trans, integer *m, integer *n, integer *k,
-                      void *A, integer *lda, void *tau, void *C, integer *ldc, void *work,
-                      integer *lwork, integer *info);
-void invoke_cpp_potri(char *uplo, integer datatype, integer *n, void *a, integer *lda,
-                      integer *info);
-void invoke_cpp_gebrd(integer datatype, integer *m, integer *n, void *a, integer *lda, void *d,
-                      void *e, void *tauq, void *taup, void *work, integer *lwork, integer *info);
-void invoke_cpp_trtri(integer datatype, char *uplo, char *diag, integer *n, void *a, integer *lda,
-                      integer *info);
-void invoke_cpp_trtrs(char *uplo, char *trans, char *diag, integer datatype, integer *n, void *a,
-                      integer *lda, integer *nrhs, void *b, integer *ldb, integer *info);
-void invoke_cpp_geqpf(integer datatype, integer *m, integer *n, void *a, integer *lda,
-                      integer *jpvt, void *tau, void *work, void *rwork, integer *info);
-void invoke_cpp_bdsqr(integer datatype, char *uplo, integer *n, integer *ncvt, integer *nru,
-                      integer *ncc, void *d, void *e, void *vt, integer *ldvt, void *u,
-                      integer *ldu, void *c, integer *ldc, void *work, integer *info);
 #ifdef __cplusplus
 }
 #endif

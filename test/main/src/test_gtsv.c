@@ -3,6 +3,9 @@
 */
 
 #include "test_lapack.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 integer row_major_gtsv_ldb;
 
@@ -12,7 +15,7 @@ void fla_test_gtsv_experiment(test_params_t *params, integer datatype, integer p
                               double *t, double *residual);
 void prepare_gtsv_run(integer n_A, integer nrhs, void *dl, void *d, void *du, void *B, integer ldb,
                       integer datatype, integer n_repeats, double *time_min_, integer *info,
-                      integer test_lapacke_interface, integer layout);
+                      integer interfacetype, integer layout);
 void invoke_gtsv(integer datatype, integer *nrhs, integer *n, void *dl, void *d, void *du, void *b,
                  integer *ldb, integer *info);
 integer invoke_lapacke_gtsv(integer datatype, integer layout, integer n, integer nrhs, void *dl,
@@ -53,8 +56,7 @@ void fla_test_gtsv(integer argc, char **argv, test_params_t *params)
         num_types = strlen(argv[2]);
         N = strtoimax(argv[3], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].nrhs = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
-        if((g_ext_fptr == NULL) && params->test_lapacke_interface
-           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
         {
             row_major_gtsv_ldb = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
             params->lin_solver_paramslist[0].ldb = N;
@@ -127,7 +129,7 @@ void fla_test_gtsv_experiment(test_params_t *params, integer datatype, integer p
     void *dl_save, *d_save, *du_save, *B_save;
     void *A = NULL, *scal = NULL;
     double time_min = 1e9;
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     integer layout = params->matrix_major;
     *residual = params->lin_solver_paramslist[pci].solver_threshold;
     /* Determine the dimensions*/
@@ -221,7 +223,7 @@ void fla_test_gtsv_experiment(test_params_t *params, integer datatype, integer p
     copy_matrix(datatype, "full", n, NRHS, B, ldb, B_save, ldb);
 
     prepare_gtsv_run(n, NRHS, dl_save, d_save, du_save, B_save, ldb, datatype, n_repeats, &time_min,
-                     &info, test_lapacke_interface, layout);
+                     &info, interfacetype, layout);
 
     /* Execution time */
     *t = time_min;
@@ -269,7 +271,7 @@ void fla_test_gtsv_experiment(test_params_t *params, integer datatype, integer p
 
 void prepare_gtsv_run(integer n_A, integer nrhs, void *dl, void *d, void *du, void *B, integer ldb,
                       integer datatype, integer n_repeats, double *time_min_, integer *info,
-                      integer test_lapacke_interface, integer layout)
+                      integer interfacetype, integer layout)
 {
     integer i;
     void *dl_test, *d_test, *du_test, *B_test;
@@ -292,11 +294,19 @@ void prepare_gtsv_run(integer n_A, integer nrhs, void *dl, void *d, void *du, vo
         copy_vector(datatype, n_A - 1, du, i_one, du_test, i_one);
         copy_matrix(datatype, "full", n_A, nrhs, B, ldb, B_test, ldb);
 
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time = prepare_lapacke_gtsv_run(datatype, layout, n_A, nrhs, dl_test, d_test,
                                                 du_test, B_test, ldb, info);
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST)   /* Call CPP gtsv API */
+        {
+            exe_time = fla_test_clock();
+            invoke_cpp_gtsv(datatype, &n_A, &nrhs, dl_test, d_test, du_test, B_test, &ldb, info);;
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();
@@ -383,7 +393,7 @@ double prepare_lapacke_gtsv_run(integer datatype, integer layout, integer n, int
     return exe_time;
 }
 
-/* LARFG API call interface - Linear Solve for General Tridiagonal Matrix */
+/* GTSV API call interface - Linear Solve for General Tridiagonal Matrix */
 void invoke_gtsv(integer datatype, integer *n, integer *nrhs, void *dl, void *d, void *du, void *b,
                  integer *ldb, integer *info)
 {

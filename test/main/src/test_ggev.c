@@ -3,6 +3,9 @@
 */
 
 #include "test_lapack.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 integer row_major_ggev_lda;
 integer row_major_ggev_ldb;
@@ -16,7 +19,7 @@ void fla_test_ggev_experiment(test_params_t *params, integer datatype, integer p
 void prepare_ggev_run(char *jobvl, char *jobvr, integer n, void *a, integer lda, void *b,
                       integer ldb, void *alpha, void *alphar, void *alphai, void *beta, void *vl,
                       integer ldvl, void *vr, integer ldvr, integer datatype, integer n_repeats,
-                      double *time_min_, integer *info, integer test_lapacke_interface,
+                      double *time_min_, integer *info, integer interfacetype,
                       int matrix_layout);
 void invoke_ggev(integer datatype, char *jobvl, char *jobvr, integer *n, void *a, integer *lda,
                  void *b, integer *ldb, void *alpha, void *alphar, void *alphai, void *beta,
@@ -65,8 +68,7 @@ void fla_test_ggev(integer argc, char **argv, test_params_t *params)
         params->eig_non_sym_paramslist[0].jobvsr = argv[4][0];
         N = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
         /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
-        if((g_ext_fptr == NULL) && params->test_lapacke_interface
-           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
         {
             row_major_ggev_lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
             row_major_ggev_ldb = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
@@ -153,7 +155,7 @@ void fla_test_ggev_experiment(test_params_t *params, integer datatype, integer p
     char JOBVL = params->eig_non_sym_paramslist[pci].jobvsl;
     char JOBVR = params->eig_non_sym_paramslist[pci].jobvsr;
 
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
 
     /* Get input matrix dimensions */
@@ -234,7 +236,7 @@ void fla_test_ggev_experiment(test_params_t *params, integer datatype, integer p
     copy_matrix(datatype, "full", m, m, B, ldb, B_test, ldb);
 
     prepare_ggev_run(&JOBVL, &JOBVR, m, A_test, lda, B_test, ldb, alpha, alphar, alphai, beta, VL,
-                     ldvl, VR, ldvr, datatype, n_repeats, &time_min, &info, test_lapacke_interface,
+                     ldvl, VR, ldvr, datatype, n_repeats, &time_min, &info, interfacetype,
                      layout);
 
     /* execution time */
@@ -283,7 +285,7 @@ void fla_test_ggev_experiment(test_params_t *params, integer datatype, integer p
 
                 prepare_ggev_run("V", &JOBVR, m, A_copy, lda, B_copy, ldb, alpha_copy, alphar_copy,
                                  alphai_copy, beta_copy, VL_copy, m, NULL, ldvr, datatype,
-                                 n_repeats, &time_min_copy, &info, test_lapacke_interface, layout);
+                                 n_repeats, &time_min_copy, &info, interfacetype, layout);
                 /* Valdiate eigen values from both the runs
                   (JOBVL = JOBVR = N with that of JOBVL = V and JOBVR = N)*/
                 if(info == 0)
@@ -342,7 +344,7 @@ void fla_test_ggev_experiment(test_params_t *params, integer datatype, integer p
 void prepare_ggev_run(char *jobvl, char *jobvr, integer n_A, void *A, integer lda, void *B,
                       integer ldb, void *alpha, void *alphar, void *alphai, void *beta, void *VL,
                       integer ldvl, void *VR, integer ldvr, integer datatype, integer n_repeats,
-                      double *time_min_, integer *info, integer test_lapacke_interface,
+                      double *time_min_, integer *info, integer interfacetype,
                       int layout)
 {
     void *A_save = NULL, *B_save = NULL, *work = NULL, *rwork = NULL;
@@ -360,14 +362,24 @@ void prepare_ggev_run(char *jobvl, char *jobvr, integer n_A, void *A, integer ld
     /* Make a workspace query the first time through. This will provide us with
        and ideal workspace size based on an internal block size.
        NOTE: LAPACKE interface handles workspace query internally */
-    if((test_lapacke_interface == 0) && (g_lwork <= 0))
+    if((interfacetype != LAPACKE_COLUMN_TEST) && (interfacetype != LAPACKE_ROW_TEST) && (g_lwork <= 0))
     {
         lwork = -1;
         create_vector(datatype, &work, 8 * n_A);
 
-        /* call to  ggev API to get work query */
-        invoke_ggev(datatype, jobvl, jobvr, &n_A, NULL, &lda, NULL, &ldb, NULL, NULL, NULL, NULL,
-                    NULL, &ldvl, NULL, &ldvr, work, &lwork, rwork, info);
+        /* call to ggev API to get work query */
+#if ENABLE_CPP_TEST
+        if(interfacetype == LAPACK_CPP_TEST)
+        {
+            invoke_cpp_ggev(datatype, jobvl, jobvr, &n_A, NULL, &lda, NULL, &ldb, NULL, NULL, NULL, NULL,
+                            NULL, &ldvl, NULL, &ldvr, work, &lwork, rwork, info);
+        }
+        else
+#endif
+        {
+            invoke_ggev(datatype, jobvl, jobvr, &n_A, NULL, &lda, NULL, &ldb, NULL, NULL, NULL, NULL,
+                        NULL, &ldvl, NULL, &ldvr, work, &lwork, rwork, info);
+        }
         if(*info == 0)
         {
             /* Get work size */
@@ -395,12 +407,21 @@ void prepare_ggev_run(char *jobvl, char *jobvr, integer n_A, void *A, integer ld
             create_realtype_vector(datatype, &rwork, 8 * n_A);
         }
         /* Check if LAPACKE interface is enabled */
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time
                 = prepare_lapacke_ggev_run(datatype, layout, jobvl, jobvr, n_A, A, lda, B, ldb,
                                            alpha, alphar, alphai, beta, VL, ldvl, VR, ldvr, info);
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST)   /* Call CPP ggev API */
+        {
+            exe_time = fla_test_clock();
+            invoke_cpp_ggev(datatype, jobvl, jobvr, &n_A, A, &lda, B, &ldb, alpha, alphar, alphai, beta,
+                            VL, &ldvl, VR, &ldvr, work, &lwork, rwork, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();

@@ -3,6 +3,9 @@
 */
 
 #include "test_lapack.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 #define GELSD_VL 0.1
 #define GELSD_VU 10
@@ -17,7 +20,7 @@ void fla_test_gelsd_experiment(test_params_t *params, integer datatype, integer 
 void prepare_gelsd_run(integer m_A, integer n_A, integer nrhs, void *A, integer lda, void *B,
                        integer ldb, void *s, void *rcond, integer *rank, integer datatype,
                        integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, integer layout);
+                       integer interfacetype, integer layout);
 void invoke_gelsd(integer datatype, integer *m, integer *n, integer *nrhs, void *a, integer *lda,
                   void *b, integer *ldb, void *s, void *rcond, integer *rank, void *work,
                   integer *lwork, void *rwork, integer *iwork, integer *info);
@@ -62,8 +65,7 @@ void fla_test_gelsd(integer argc, char **argv, test_params_t *params)
         M = strtoimax(argv[3], &endptr, CLI_DECIMAL_BASE);
         N = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].nrhs = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
-        if((g_ext_fptr == NULL) && params->test_lapacke_interface
-           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
         {
             row_major_gelsd_lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
             row_major_gelsd_ldb = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
@@ -141,7 +143,7 @@ void fla_test_gelsd_experiment(test_params_t *params, integer datatype, integer 
     void *S = NULL, *rcond = NULL, *s_test = NULL;
     double time_min = 1e9;
     char range = 'U';
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     integer layout = params->matrix_major;
 
     *residual = params->lin_solver_paramslist[pci].solver_threshold;
@@ -213,7 +215,7 @@ void fla_test_gelsd_experiment(test_params_t *params, integer datatype, integer 
 
     /* call to API */
     prepare_gelsd_run(m, n, NRHS, A_save, lda, B_save, ldb, S, rcond, &rank, datatype, n_repeats,
-                      &time_min, &info, test_lapacke_interface, layout);
+                      &time_min, &info, interfacetype, layout);
     /* execution time */
     *t = time_min;
 
@@ -259,7 +261,7 @@ void fla_test_gelsd_experiment(test_params_t *params, integer datatype, integer 
 void prepare_gelsd_run(integer m_A, integer n_A, integer nrhs, void *A, integer lda, void *B,
                        integer ldb, void *s, void *rcond, integer *rank, integer datatype,
                        integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, integer layout)
+                       integer interfacetype, integer layout)
 {
     integer i, lwork, liwork = 1, lrwork = 1, realtype;
     void *A_test, *B_test;
@@ -275,16 +277,26 @@ void prepare_gelsd_run(integer m_A, integer n_A, integer nrhs, void *A, integer 
     /* Make a workspace query the first time through. This will provide us with
      and ideal workspace size based on an internal block size.
      NOTE: LAPACKE interface handles workspace query internally */
-    if((test_lapacke_interface == 0) && (g_lwork <= 0))
+    if((interfacetype != LAPACKE_COLUMN_TEST) && (interfacetype != LAPACKE_ROW_TEST) && (g_lwork <= 0))
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
         create_vector(realtype, &rwork, 1);
         create_vector(INTEGER, &iwork, 1);
 
-        /* call to  gelsd API */
-        invoke_gelsd(datatype, &m_A, &n_A, &nrhs, NULL, &lda, NULL, &ldb, NULL, rcond, rank, work,
-                     &lwork, rwork, iwork, info);
+        /* call to  gelsd API to get lwork*/
+#if ENABLE_CPP_TEST
+        if(interfacetype == LAPACK_CPP_TEST)
+        {
+            invoke_cpp_gelsd(datatype, &m_A, &n_A, &nrhs, NULL, &lda, NULL, &ldb, NULL, rcond, rank, work,
+                             &lwork, rwork, iwork, info);
+        }
+        else
+#endif
+        {
+            invoke_gelsd(datatype, &m_A, &n_A, &nrhs, NULL, &lda, NULL, &ldb, NULL, rcond, rank, work,
+                         &lwork, rwork, iwork, info);
+        }
         /* Get work size */
         if(*info == 0)
         {
@@ -317,19 +329,27 @@ void prepare_gelsd_run(integer m_A, integer n_A, integer nrhs, void *A, integer 
             create_realtype_vector(datatype, &rwork, fla_max(1, lrwork));
         else
             rwork = NULL;
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time = prepare_lapacke_gelsd_run(datatype, layout, m_A, n_A, nrhs, A_test, lda,
                                                  B_test, ldb, s, rcond, rank, info);
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST)
+        {
+            exe_time = fla_test_clock();
+            /* Call CPP gelsd API */
+            invoke_cpp_gelsd(datatype, &m_A, &n_A, &nrhs, A_test, &lda, B_test, &ldb, s, rcond, rank,
+                             work, &lwork, rwork, iwork, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();
-
             /* call to API */
             invoke_gelsd(datatype, &m_A, &n_A, &nrhs, A_test, &lda, B_test, &ldb, s, rcond, rank,
                          work, &lwork, rwork, iwork, info);
-
             exe_time = fla_test_clock() - exe_time;
         }
         /* Get the best execution time */

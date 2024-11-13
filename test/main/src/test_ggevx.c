@@ -1,8 +1,11 @@
 /*
-    Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 integer row_major_ggevx_lda;
 integer row_major_ggevx_ldb;
@@ -18,7 +21,7 @@ void prepare_ggevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, inte
                        void *beta, void *VL, integer ldvl, void *VR, integer ldvr, integer *ilo,
                        integer *ihi, void *lscale, void *rscale, void *abnrm, void *bbnrm,
                        void *rconde, void *rcondv, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer test_lapacke_interface,
+                       double *time_min_, integer *info, integer interfacetype,
                        int matrix_layout);
 void invoke_ggevx(integer datatype, char *balanc, char *jobvl, char *jobvr, char *sense, integer *n,
                   void *a, integer *lda, void *b, integer *ldb, void *alpha, void *alphar,
@@ -77,8 +80,7 @@ void fla_test_ggevx(integer argc, char **argv, test_params_t *params)
         params->eig_non_sym_paramslist[0].sense_ggevx = argv[6][0];
         N = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
         /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
-        if((g_ext_fptr == NULL) && params->test_lapacke_interface
-           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
         {
             row_major_ggevx_lda = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
             row_major_ggevx_ldb = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
@@ -170,7 +172,7 @@ void fla_test_ggevx_experiment(test_params_t *params, integer datatype, integer 
     char BALANC = params->eig_non_sym_paramslist[pci].balance_ggevx;
     char SENSE = params->eig_non_sym_paramslist[pci].sense_ggevx;
 
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
 
     *residual = params->eig_non_sym_paramslist[pci].GenNonSymEigProblem_threshold;
@@ -256,7 +258,7 @@ void fla_test_ggevx_experiment(test_params_t *params, integer datatype, integer 
 
     prepare_ggevx_run(&BALANC, &JOBVL, &JOBVR, &SENSE, n, A, lda, B, ldb, alpha, alphar, alphai,
                       beta, VL, ldvl, VR, ldvr, &ilo, &ihi, lscale, rscale, abnrm, bbnrm, rconde,
-                      rcondv, datatype, n_repeats, &time_min, &info, test_lapacke_interface,
+                      rcondv, datatype, n_repeats, &time_min, &info, interfacetype,
                       layout);
 
     /* execution time */
@@ -307,7 +309,7 @@ void prepare_ggevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, inte
                        void *beta, void *VL, integer ldvl, void *VR, integer ldvr, integer *ilo,
                        integer *ihi, void *lscale, void *rscale, void *abnrm, void *bbnrm,
                        void *rconde, void *rcondv, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer test_lapacke_interface,
+                       double *time_min_, integer *info, integer interfacetype,
                        int layout)
 {
     void *A_save = NULL, *B_save = NULL, *work = NULL, *rwork = NULL, *iwork = NULL, *bwork = NULL;
@@ -335,15 +337,26 @@ void prepare_ggevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, inte
     /* Make a workspace query the first time through. This will provide us with
      and ideal workspace size based on an internal block size.
      NOTE: LAPACKE interface handles workspace query internally */
-    if((test_lapacke_interface == 0) && (g_lwork <= 0))
+    if((interfacetype != LAPACKE_COLUMN_TEST) && (interfacetype != LAPACKE_ROW_TEST) && (g_lwork <= 0))
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
 
-        /* call to  ggevx API */
-        invoke_ggevx(datatype, balanc, jobvl, jobvr, sense, &n_A, A, &lda, B, &ldb, alpha, alphar,
-                     alphai, beta, VL, &ldvl, VR, &ldvr, ilo, ihi, lscale, rscale, abnrm, bbnrm,
-                     rconde, rcondv, work, &lwork, rwork, iwork, bwork, info);
+        /* call to ggevx API */
+#if ENABLE_CPP_TEST
+        if(interfacetype == LAPACK_CPP_TEST)
+        {
+            invoke_cpp_ggevx(datatype, balanc, jobvl, jobvr, sense, &n_A, A, &lda, B, &ldb, alpha, alphar,
+                            alphai, beta, VL, &ldvl, VR, &ldvr, ilo, ihi, lscale, rscale, abnrm, bbnrm,
+                            rconde, rcondv, work, &lwork, rwork, iwork, bwork, info);
+        }
+        else
+#endif
+        {
+            invoke_ggevx(datatype, balanc, jobvl, jobvr, sense, &n_A, A, &lda, B, &ldb, alpha, alphar,
+                        alphai, beta, VL, &ldvl, VR, &ldvr, ilo, ihi, lscale, rscale, abnrm, bbnrm,
+                        rconde, rcondv, work, &lwork, rwork, iwork, bwork, info);
+        }
         if(*info == 0)
         {
             /* Get work size */
@@ -370,13 +383,24 @@ void prepare_ggevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, inte
         create_vector(datatype, &work, lwork);
 
         /* Check if LAPACKE interface is enabled */
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time = prepare_lapacke_ggevx_run(datatype, layout, balanc, jobvl, jobvr, sense, n_A,
                                                  A, lda, B, ldb, alpha, alphar, alphai, beta, VL,
                                                  ldvl, VR, ldvr, ilo, ihi, lscale, rscale, abnrm,
                                                  bbnrm, rconde, rcondv, info);
         }
+#if ENABLE_CPP_TEST
+        if(interfacetype == LAPACK_CPP_TEST)
+        {
+            exe_time = fla_test_clock();
+            /* Call CPP ggevx API */
+            invoke_cpp_ggevx(datatype, balanc, jobvl, jobvr, sense, &n_A, A, &lda, B, &ldb, alpha,
+                            alphar, alphai, beta, VL, &ldvl, VR, &ldvr, ilo, ihi, lscale, rscale,
+                            abnrm, bbnrm, rconde, rcondv, work, &lwork, rwork, iwork, bwork, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();

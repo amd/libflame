@@ -2,9 +2,10 @@
  * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 
-#include "test_common.h"
 #include "test_lapack.h"
-#include "test_prototype.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 #define HETRF_ROOK_VU 10.0 // Maximum eigen value for condition number.
 #define HETRF_ROOK_VL 0.01 // Minimum eigen value for condition number.
@@ -18,7 +19,7 @@ void fla_test_hetrf_rook_experiment(test_params_t *params, integer datatype, int
                                     double *perf, double *t, double *residual);
 void prepare_hetrf_rook_run(integer datatype, integer n, void *A, char uplo, integer lda,
                             integer *ipiv, void *work, integer lwork, integer n_repeats,
-                            double *time_min_, integer *info, integer test_lapacke_interface,
+                            double *time_min_, integer *info, integer interfacetype,
                             integer mlayout);
 double prepare_lapacke_hetrf_rook_run(integer datatype, integer layout, char uplo, integer n,
                                       void *A, integer lda, void *ipiv, integer *info);
@@ -56,8 +57,7 @@ void fla_test_hetrf_rook(integer argc, char **argv, test_params_t *params)
         num_types = strlen(argv[2]);
         N = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].Uplo = argv[3][0];
-        if((g_ext_fptr == NULL) && params->test_lapacke_interface
-           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
         {
             row_major_hetrf_rook_lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
             params->lin_solver_paramslist[0].lda = N;
@@ -126,7 +126,7 @@ void fla_test_hetrf_rook_experiment(test_params_t *params, integer datatype, int
     integer n, lda, lwork = -1, info = 0;
     void *A = NULL, *A_test = NULL, *ipiv = NULL, *work = NULL, *L = NULL;
     char uplo;
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     integer layout = params->matrix_major;
 
     /* Determine the dimensions */
@@ -179,7 +179,7 @@ void fla_test_hetrf_rook_experiment(test_params_t *params, integer datatype, int
 
     /* call to API */
     prepare_hetrf_rook_run(datatype, n, A_test, uplo, lda, ipiv, work, lwork, n_repeats, t, &info,
-                           test_lapacke_interface, layout);
+                           interfacetype, layout);
 
     /* Performance computation */
     *perf = (double)(n * n * n) * (1.0 / 3.0) / *t / FLOPS_PER_UNIT_PERF;
@@ -209,7 +209,7 @@ void fla_test_hetrf_rook_experiment(test_params_t *params, integer datatype, int
 
 void prepare_hetrf_rook_run(integer datatype, integer n, void *A, char uplo, integer lda,
                             integer *ipiv, void *work, integer lwork, integer n_repeats,
-                            double *time_min_, integer *info, integer test_lapacke_interface,
+                            double *time_min_, integer *info, integer interfacetype,
                             integer layout)
 {
     integer i;
@@ -221,12 +221,24 @@ void prepare_hetrf_rook_run(integer datatype, integer n, void *A, char uplo, int
     /* Make a workspace query the first time through. This will provide us with
      and ideal workspace size based on an internal block size.
      NOTE: LAPACKE interface handles workspace query internally */
-    if((test_lapacke_interface == 0) && (g_lwork == -1))
+    if((interfacetype != LAPACKE_COLUMN_TEST) && (interfacetype != LAPACKE_ROW_TEST) && (g_lwork == -1))
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
+
         /* Getting lwork from api by passing lwork = -1 */
-        invoke_hetrf_rook(datatype, &uplo, &n, NULL, &lda, ipiv, work, &lwork, info);
+#if ENABLE_CPP_TEST
+        if(interfacetype == LAPACK_CPP_TEST)
+        {
+            exe_time = fla_test_clock();
+            invoke_cpp_hetrf_rook(datatype, &uplo, &n, NULL, &lda, ipiv, work, &lwork, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+        else
+#endif
+        {
+            invoke_hetrf_rook(datatype, &uplo, &n, NULL, &lda, ipiv, work, &lwork, info);
+        }
         if(*info == 0)
         {
             lwork = get_work_value(datatype, work);
@@ -247,11 +259,19 @@ void prepare_hetrf_rook_run(integer datatype, integer n, void *A, char uplo, int
 
         /* Create work buffer */
         create_vector(datatype, &work, lwork);
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time = prepare_lapacke_hetrf_rook_run(datatype, layout, uplo, n, A_save, lda, ipiv,
                                                       info);
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST)   /* Call CPP hetrf_rook API */
+        {
+            exe_time = fla_test_clock();
+            invoke_cpp_hetrf_rook(datatype, &uplo, &n, A_save, &lda, ipiv, work, &lwork, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();

@@ -2,9 +2,10 @@
     Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
-#include "test_common.h"
 #include "test_lapack.h"
-#include "test_prototype.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 integer row_major_gesdd_lda;
 integer row_major_gesdd_ldu;
@@ -16,7 +17,7 @@ void fla_test_gesdd_experiment(test_params_t *params, integer datatype, integer 
                                double *perf, double *t, double *residual);
 void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer lda, void *s, void *U,
                        integer ldu, void *V, integer ldvt, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer test_lapacke_interface,
+                       double *time_min_, integer *info, integer interfacetype,
                        int matrix_layout);
 void invoke_gesdd(integer datatype, char *jobz, integer *m, integer *n, void *a, integer *lda,
                   void *s, void *u, integer *ldu, void *vt, integer *ldvt, void *work,
@@ -62,8 +63,7 @@ void fla_test_gesdd(integer argc, char **argv, test_params_t *params)
         M = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
         N = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
         /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
-        if((g_ext_fptr == NULL) && params->test_lapacke_interface
-           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
         {
             row_major_gesdd_lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
             row_major_gesdd_ldu = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
@@ -143,7 +143,7 @@ void fla_test_gesdd_experiment(test_params_t *params, integer datatype, integer 
     char jobz;
     void *A = NULL, *U = NULL, *V = NULL, *s = NULL, *A_test = NULL, *s_in = NULL, *scal = NULL;
 
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
 
     /* Get input matrix dimensions.*/
@@ -244,7 +244,7 @@ void fla_test_gesdd_experiment(test_params_t *params, integer datatype, integer 
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
     prepare_gesdd_run(&jobz, m, n, A_test, lda, s, U, ldu, V, ldvt, datatype, n_repeats, time_min,
-                      &info, test_lapacke_interface, layout);
+                      &info, interfacetype, layout);
 
     /* performance computation
        6mn^2 + 8n^3 flops */
@@ -294,7 +294,7 @@ void fla_test_gesdd_experiment(test_params_t *params, integer datatype, integer 
 
 void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer lda, void *s, void *U,
                        integer ldu, void *V, integer ldvt, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer test_lapacke_interface, int layout)
+                       double *time_min_, integer *info, integer interfacetype, int layout)
 {
     integer min_m_n, max_m_n, n_U, m_V;
     void *A_save, *s_test, *work, *iwork, *rwork;
@@ -321,14 +321,24 @@ void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer ld
     /* Make a workspace query the first time through. This will provide us with
      and ideal workspace size based on an internal block size.
      NOTE: LAPACKE interface handles workspace query internally */
-    if((test_lapacke_interface == 0) && (g_lwork <= 0))
+    if((interfacetype != LAPACKE_COLUMN_TEST) && (interfacetype != LAPACKE_ROW_TEST) && (g_lwork <= 0))
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
 
         /* call to  gesdd API */
-        invoke_gesdd(datatype, jobz, &m_A, &n_A, NULL, &lda, NULL, NULL, &ldu, NULL, &ldvt, work,
-                     &lwork, NULL, NULL, info);
+#if ENABLE_CPP_TEST
+        if(interfacetype == LAPACK_CPP_TEST)
+        {
+            invoke_cpp_gesdd(datatype, jobz, &m_A, &n_A, NULL, &lda, NULL, NULL, &ldu, NULL, &ldvt, work,
+                            &lwork, NULL, NULL, info);
+        }
+        else
+#endif
+        {
+            invoke_gesdd(datatype, jobz, &m_A, &n_A, NULL, &lda, NULL, NULL, &ldu, NULL, &ldvt, work,
+                        &lwork, NULL, NULL, info);
+        }
         if(*info == 0)
         {
             /* Get work size */
@@ -376,18 +386,26 @@ void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer ld
             rwork = NULL;
 
         /* Check if LAPACKE interface is enabled */
-        if(test_lapacke_interface == 1)
+        /* And call to gesdd API based on interface type. */
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time = prepare_lapacke_gesdd_run(datatype, layout, jobz, m_A, n_A, A, lda, s_test,
                                                  U_test, ldu, V_test, ldvt, info);
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST)
+        {
+            exe_time = fla_test_clock();
+            invoke_cpp_gesdd(datatype, jobz, &m_A, &n_A, A, &lda, s_test, U_test, &ldu, V_test, &ldvt,
+                            work, &lwork, rwork, iwork, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();
-            /* call to API */
             invoke_gesdd(datatype, jobz, &m_A, &n_A, A, &lda, s_test, U_test, &ldu, V_test, &ldvt,
-                         work, &lwork, rwork, iwork, info);
-
+                        work, &lwork, rwork, iwork, info);
             exe_time = fla_test_clock() - exe_time;
         }
 

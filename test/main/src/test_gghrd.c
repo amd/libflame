@@ -3,6 +3,9 @@
 */
 
 #include "test_lapack.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 integer row_major_gghrd_lda;
 integer row_major_gghrd_ldb;
@@ -16,7 +19,7 @@ void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer 
 void prepare_gghrd_run(char *compq, char *compz, integer n, integer *ilo, integer *ihi, void *a,
                        integer lda, void *b, integer ldb, void *q, integer ldq, void *z,
                        integer ldz, integer datatype, integer n_repeats, double *time_min_,
-                       integer *info, integer test_lapacke_interface, int matrix_layout);
+                       integer *info, integer interfacetype, int matrix_layout);
 void invoke_gghrd(integer datatype, char *compq, char *compz, integer *n, integer *ilo,
                   integer *ihi, void *a, integer *lda, void *b, integer *ldb, void *q, integer *ldq,
                   void *z, integer *ldz, integer *info);
@@ -61,8 +64,7 @@ void fla_test_gghrd(integer argc, char **argv, test_params_t *params)
         params->lin_solver_paramslist[0].ilo = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].ihi = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
         /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
-        if((g_ext_fptr == NULL) && params->test_lapacke_interface
-           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
         {
             row_major_gghrd_lda = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
             row_major_gghrd_ldb = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
@@ -152,7 +154,7 @@ void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer 
          *Z_ntest = NULL;
     char compz, compq;
 
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
 
     /* Get input matrix dimensions. */
@@ -284,7 +286,7 @@ void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer 
     }
 
     prepare_gghrd_run(&compq, &compz, n, &ilo, &ihi, A_test, lda, B_test, ldb, Q_test, ldq, Z_test,
-                      ldz, datatype, n_repeats, time_min, &info, test_lapacke_interface, layout);
+                      ldz, datatype, n_repeats, time_min, &info, interfacetype, layout);
 
     /* If compq=N or/and compz=N, in addition to the first api call, also execute
        second api call with compq=I and compz=I. And validate the H and T matrices from
@@ -307,7 +309,7 @@ void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer 
         set_identity_matrix(datatype, n, n, Z_ntest, ldzn);
         prepare_gghrd_run(&compnq, &compnz, n, &ilo, &ihi, A_ntest, lda, B_ntest, ldb, Q_ntest,
                           ldqn, Z_ntest, ldzn, datatype, n_repeats, &time_minn, &info,
-                          test_lapacke_interface, layout);
+                          interfacetype, layout);
         free_matrix(Q_ntest);
         free_matrix(Z_ntest);
     }
@@ -398,7 +400,7 @@ void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer 
 void prepare_gghrd_run(char *compq, char *compz, integer n, integer *ilo, integer *ihi, void *A,
                        integer lda, void *B, integer ldb, void *Q, integer ldq, void *Z,
                        integer ldz, integer datatype, integer n_repeats, double *time_min_,
-                       integer *info, integer test_lapacke_interface, int layout)
+                       integer *info, integer interfacetype, int layout)
 {
     void *A_save = NULL, *B_save = NULL, *Q_save = NULL, *Z_save = NULL;
     integer i;
@@ -434,11 +436,21 @@ void prepare_gghrd_run(char *compq, char *compz, integer n, integer *ilo, intege
             copy_matrix(datatype, "full", n, n, Z_save, ldz, Z, ldz);
 
         /* Check if LAPACKE interface is enabled */
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time = prepare_lapacke_gghrd_run(datatype, layout, compq, compz, n, ilo, ihi, A,
                                                  lda, B, ldb, Q, ldq, Z, ldz, info);
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST)
+        {
+            exe_time = fla_test_clock();
+            /* Call CPP gghrd API */
+            invoke_cpp_gghrd(datatype, compq, compz, &n, ilo, ihi, A, &lda, B, &ldb, Q, &ldq, Z, &ldz,
+                             info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();

@@ -115,6 +115,11 @@ int main(int argc, char **argv)
     /* Check for LAPACKE interface testing */
     fla_check_lapacke_interface(&arg_count, argv, &params);
 
+    if(params.test_lapacke_interface != 1)
+    {
+        fla_check_interface(&arg_count, argv, &params);
+    }
+
     /* Checking for the cmd option or config file option */
     int cmd_option = fla_check_cmd_config_dir(arg_count, argv);
 
@@ -147,7 +152,7 @@ int main(int argc, char **argv)
         aocl_fla_set_progress(test_progress);
 #endif
 
-        if(params.test_lapacke_interface == 1)
+        if((params.test_lapacke_interface == 1) || (params.interfacetype == LAPACKE_ROW_TEST) || (params.interfacetype == LAPACKE_COLUMN_TEST))
             fla_test_lapack_suite(LAPACKE_OPERATIONS_FILENAME, &params);
         else
             /* Test the LAPACK-level operations. */
@@ -186,6 +191,9 @@ void fla_check_lapacke_interface(integer *arg_count, char **argv, test_params_t 
     integer len_column_major = strlen(column_major);
     integer index;
 
+    /* Initialize interfacetype with lapacke.*/
+    params->interfacetype = LAPACKE_COLUMN_TEST;
+
     /* check all the input args excluding first argument test_lapack.x
        for '--lapacke=' string */
     for(index = 1; index < *arg_count; index++)
@@ -201,9 +209,14 @@ void fla_check_lapacke_interface(integer *arg_count, char **argv, test_params_t 
             }
             /* Check user input is row/column major*/
             if(!(strncmp(major, row_major, len_row_major)))
+            {
                 lapacke_major = LAPACK_ROW_MAJOR;
+                params->interfacetype = LAPACKE_ROW_TEST;
+            }
             else if(!(strncmp(major, column_major, len_column_major)))
+            {
                 lapacke_major = LAPACK_COL_MAJOR;
+            }
             else /* assign default value as column major */
             {
                 printf("\nWarning: Matrix layout '%s' is invalid,", major);
@@ -217,6 +230,87 @@ void fla_check_lapacke_interface(integer *arg_count, char **argv, test_params_t 
         }
     }
     params->test_lapacke_interface = enable_lapacke;
+    params->matrix_major = lapacke_major;
+}
+
+/* Function to configure appropriate interface to test */
+void fla_check_interface(integer *arg_count, char **argv, test_params_t *params)
+{
+    char *interface_test = "--interface=";
+    char *row_major = "lapacke_row";
+    char *column_major = "lapacke_column";
+    char *cpp_test = "cpp";
+    char *lapack_test = "lapack";
+    char *interface_buff = NULL;
+    int lapacke_major = LAPACK_COL_MAJOR;
+    integer enable_lapacke = 0, interfacetype = LAPACK_TEST;
+    integer len_interface_test = strlen(interface_test);
+    integer len_row_major = strlen(row_major);
+    integer len_column_major = strlen(column_major);
+    integer len_cpp_test = strlen(cpp_test);
+    integer len_lapack_test = strlen(lapack_test);
+    integer index;
+
+    /* check all the input args excluding first argument test_lapack.x
+       for '--lapacke=' string */
+    for(index = 1; index < *arg_count; index++)
+    {
+        if(!(strncmp(argv[index], interface_test, len_interface_test)))
+        {
+            interface_buff = argv[index] + len_interface_test;
+
+            for(int i = 0; i < strlen(argv[index]); i++)
+            {
+                interface_buff[i] = tolower(interface_buff[i]);
+            }
+
+            /* Check for specific interface like lapacke, cpp, lapack.*/
+            if(!(strncmp(interface_buff, row_major, len_row_major)) &&
+                (len_row_major == strlen(interface_buff)))
+            {
+                enable_lapacke = 1;
+                lapacke_major = LAPACK_ROW_MAJOR;
+                interfacetype = LAPACKE_ROW_TEST;
+            }
+            else if(!(strncmp(interface_buff, column_major, len_column_major)) &&
+                    (len_column_major == strlen(interface_buff)))
+            {
+                enable_lapacke = 1;
+                lapacke_major = LAPACK_COL_MAJOR;
+                interfacetype = LAPACKE_COLUMN_TEST;
+            }
+            else if(!(strncmp(interface_buff, cpp_test, len_cpp_test)) &&
+                    (len_cpp_test == strlen(interface_buff)))
+            {
+                interfacetype = LAPACK_CPP_TEST;
+#if (!ENABLE_CPP_TEST)
+                {
+                    printf("\nENABLE_CPP_TEST flag is disabled to use CPP interface, please enable and rebuild.\n");
+                    printf("Hence assigning default interface: lapack\n");
+                    interfacetype = LAPACK_TEST;
+                }
+#endif
+            }
+            else if(!(strncmp(interface_buff, lapack_test, len_lapack_test)) &&
+                    (len_lapack_test == strlen(interface_buff)))
+            /* assign default interface as lapack */
+            {
+                interfacetype = LAPACK_TEST;
+            }
+            else
+            {
+                printf("\nWarning: Interface '%s' is invalid,", interface_buff);
+                printf(" assigning default interface: lapack\n");
+                interfacetype = LAPACK_TEST;
+            }
+            /* Decrement argument count to fall back to exisiting design of
+               checking input filename or get config file data*/
+            *arg_count = *arg_count - 1;
+            break;
+        }
+    }
+    params->test_lapacke_interface = enable_lapacke;
+    params->interfacetype = interfacetype;
     params->matrix_major = lapacke_major;
 }
 

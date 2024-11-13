@@ -3,6 +3,9 @@
 */
 
 #include "test_lapack.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 integer row_major_hseqr_ldh;
 integer row_major_hseqr_ldz;
@@ -14,7 +17,7 @@ void fla_test_hseqr_experiment(test_params_t *params, integer datatype, integer 
 void prepare_hseqr_run(char *job, char *compz, integer n, integer *ilo, integer *ihi, void *h,
                        integer ldh, void *w, void *wr, void *wi, void *z, integer ldz,
                        integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, int matrix_layout);
+                       integer interfacetype, int matrix_layout);
 void invoke_hseqr(integer datatype, char *job, char *compz, integer *n, integer *ilo, integer *ihi,
                   void *h, integer *ldh, void *w, void *wr, void *wi, void *z, integer *ldz,
                   void *work, integer *lwork, integer *info);
@@ -58,8 +61,7 @@ void fla_test_hseqr(integer argc, char **argv, test_params_t *params)
         params->eig_sym_paramslist[0].ilo = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
         params->eig_sym_paramslist[0].ihi = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
         /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
-        if((g_ext_fptr == NULL) && params->test_lapacke_interface
-           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
         {
             row_major_hseqr_ldh = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
             row_major_hseqr_ldz = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
@@ -136,7 +138,7 @@ void fla_test_hseqr_experiment(test_params_t *params, integer datatype, integer 
     char job;
     char compz;
 
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
 
     /* Get input matrix dimensions. */
@@ -222,7 +224,7 @@ void fla_test_hseqr_experiment(test_params_t *params, integer datatype, integer 
     copy_matrix(datatype, "full", n, n, Z, ldz, Z_Test, ldz);
 
     prepare_hseqr_run(&job, &compz, n, &ilo, &ihi, H_test, ldh, w, wr, wi, Z_Test, ldz, datatype,
-                      n_repeats, time_min, &info, test_lapacke_interface, layout);
+                      n_repeats, time_min, &info, interfacetype, layout);
 
     /* Performance computation
        (7)n^3 flops for eigen vectors for real
@@ -288,7 +290,7 @@ void fla_test_hseqr_experiment(test_params_t *params, integer datatype, integer 
 void prepare_hseqr_run(char *job, char *compz, integer n, integer *ilo, integer *ihi, void *H,
                        integer ldh, void *w, void *wr, void *wi, void *Z, integer ldz,
                        integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, int layout)
+                       integer interfacetype, int layout)
 {
     void *H_save = NULL, *work = NULL, *Z_save = NULL;
     integer i, lwork;
@@ -304,14 +306,25 @@ void prepare_hseqr_run(char *job, char *compz, integer n, integer *ilo, integer 
     /* Make a workspace query the first time through. This will provide us with
      and ideal workspace size based on an internal block size.
      NOTE: LAPACKE interface handles workspace query internally */
-    if((test_lapacke_interface == 0) && (g_lwork <= 0))
+    if((interfacetype != LAPACKE_COLUMN_TEST) && (interfacetype != LAPACKE_ROW_TEST) && (g_lwork <= 0))
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
 
-        /* call to  hseqr API */
-        invoke_hseqr(datatype, job, compz, &n, ilo, ihi, NULL, &ldh, NULL, NULL, NULL, NULL, &ldz,
-                     work, &lwork, info);
+#if ENABLE_CPP_TEST
+        /* call to CPP hseqr API */
+        if(interfacetype == LAPACK_CPP_TEST)
+        {
+            invoke_cpp_hseqr(datatype, job, compz, &n, ilo, ihi, NULL, &ldh, NULL, NULL, NULL, NULL, &ldz,
+                             work, &lwork, info);
+        }
+        else
+#endif
+        {
+            /* call to hseqr API */
+            invoke_hseqr(datatype, job, compz, &n, ilo, ihi, NULL, &ldh, NULL, NULL, NULL, NULL, &ldz,
+                         work, &lwork, info);
+        }
 
         /* Output buffers will be freshly allocated for each iterations, free up
         the current output buffers.*/
@@ -338,11 +351,20 @@ void prepare_hseqr_run(char *job, char *compz, integer n, integer *ilo, integer 
         create_vector(datatype, &work, lwork);
 
         /* Check if LAPACKE interface is enabled */
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time = prepare_lapacke_hseqr_run(datatype, layout, job, compz, n, ilo, ihi, H, ldh,
                                                  w, wr, wi, Z, ldz, info);
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST)   /* Call CPP hseqr API */
+        {
+            exe_time = fla_test_clock();
+            invoke_cpp_hseqr(datatype, job, compz, &n, ilo, ihi, H, &ldh, w, wr, wi, Z, &ldz, work,
+                             &lwork, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();

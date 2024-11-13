@@ -312,5 +312,20 @@ NOTE:
    1) Default layout is set to Column_major. In case user specifies
       anything other than row_major/column_major, matrix layout is
       considered to be column_major.
-   2) LAPACKE interface testing is only supported for config based tests.
 
+12. Common interface support:
+   Test suite supports the interfaces as follows:
+   a. "--interface=lapack" : Uses LAPACK interface for testing.
+   b. "--interface=lapacke_row" : Uses LAPACKE interface with row major for testing.
+   c. "--interface=lapacke_column" : Uses LAPACKE interface with column major for testing.
+   d. "--interface=cpp" : Uses CPP interface for testing.
+
+   Note :
+   1) In case user specifies anything incorrect, default interface is set to "lapack".
+   2) Above "--lapacke" option will be removed once all test cases supports common interface.
+   3) ENABLE_CPP_TEST flag is used to enable/disable CPP interface, it is disabled by default.
+   4) If ENABLE_CPP_TEST is disabled & "--interface=cpp" is used, then warning is returned and
+      uses LAPACK interface as default.
+
+   Example: ./test_lapack.x --interface=cpp    --> for CPP interface
+            ./test_lapack.x --interface=lapacke_column --> for column major layout of lapacke interface

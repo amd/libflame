@@ -3,6 +3,9 @@
 */
 
 #include "test_lapack.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 #define GETRF_VL 0.1
 #define GETRF_VU 10
@@ -15,7 +18,7 @@ void fla_test_getrf_experiment(test_params_t *params, integer datatype, integer 
                                double *perf, double *t, double *residual);
 void prepare_getrf_run(integer m_A, integer n_A, void *A, integer lda, integer *ipiv,
                        integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, int matrix_layout);
+                       integer interfacetype, int matrix_layout);
 void invoke_getrf(integer datatype, integer *m, integer *n, void *a, integer *lda, integer *ipiv,
                   integer *info);
 double prepare_lapacke_getrf_run(integer datatype, int matrix_layout, integer m_A, integer n_A,
@@ -55,8 +58,7 @@ void fla_test_getrf(integer argc, char **argv, test_params_t *params)
         M = strtoimax(argv[3], &endptr, CLI_DECIMAL_BASE);
         N = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
         /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
-        if((g_ext_fptr == NULL) && params->test_lapacke_interface
-           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
         {
             row_major_getrf_lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
             params->lin_solver_paramslist[0].lda = N;
@@ -128,7 +130,7 @@ void fla_test_getrf_experiment(test_params_t *params, integer datatype, integer 
     char range = 'U';
     double time_min = 1e9;
 
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
 
     /* Determine the dimensions*/
@@ -173,7 +175,7 @@ void fla_test_getrf_experiment(test_params_t *params, integer datatype, integer 
 
     /* call to API */
     prepare_getrf_run(m, n, A_test, lda, IPIV, datatype, n_repeats, &time_min, &info,
-                      test_lapacke_interface, layout);
+                      interfacetype, layout);
 
     /* execution time */
     *t = time_min;
@@ -220,7 +222,7 @@ void fla_test_getrf_experiment(test_params_t *params, integer datatype, integer 
 
 void prepare_getrf_run(integer m_A, integer n_A, void *A, integer lda, integer *IPIV,
                        integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, int layout)
+                       integer interfacetype, int layout)
 {
     integer i;
     void *A_save;
@@ -238,11 +240,19 @@ void prepare_getrf_run(integer m_A, integer n_A, void *A, integer lda, integer *
         copy_matrix(datatype, "full", m_A, n_A, A, lda, A_save, lda);
 
         /* Check if LAPACKE interface is enabled */
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time
                 = prepare_lapacke_getrf_run(datatype, layout, m_A, n_A, A_save, lda, IPIV, info);
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST)   /* Call CPP getrf API */
+        {
+            exe_time = fla_test_clock();
+            invoke_cpp_getrf(datatype, &m_A, &n_A, A_save, &lda, IPIV, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();

@@ -2,9 +2,10 @@
     Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
-#include "test_common.h"
 #include "test_lapack.h"
-#include "test_prototype.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 #define GELSS_VL 0.1
 #define GELSS_VU 10
@@ -21,7 +22,7 @@ void fla_test_gelss_experiment(test_params_t *params, integer datatype, integer 
 void prepare_gelss_run(integer datatype, integer m, integer n, integer nrhs, void *A, integer lda,
                        void *B, integer ldb, void *s, void *rcond, integer *rank, void *work,
                        integer lwork, void *rwork, integer n_repeats, double *time_min_,
-                       integer *info, integer test_lapacke_interface, integer layout);
+                       integer *info, integer interfacetype, integer layout);
 integer invoke_lapacke_gelss(integer datatype, integer layout, integer m, integer n, integer nrhs,
                              void *A, integer lda, void *B, integer ldb, void *s, void *rcond,
                              integer *rank);
@@ -63,8 +64,7 @@ void fla_test_gelss(integer argc, char **argv, test_params_t *params)
         N = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].nrhs = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].rcond = atof(argv[8]);
-        if((g_ext_fptr == NULL) && params->test_lapacke_interface
-           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
         {
             row_major_gelss_lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
             row_major_gelss_ldb = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
@@ -139,7 +139,7 @@ void fla_test_gelss_experiment(test_params_t *params, integer datatype, integer 
     void *A = NULL, *A_test = NULL, *B = NULL, *B_test = NULL, *work = NULL, *s = NULL,
          *rwork = NULL, *rcond = NULL, *s_test = NULL;
     char range = 'U';
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     integer layout = params->matrix_major;
 
     create_realtype_vector(datatype, &rcond, 1);
@@ -212,7 +212,7 @@ void fla_test_gelss_experiment(test_params_t *params, integer datatype, integer 
 
     /* call to API */
     prepare_gelss_run(datatype, m, n, nrhs, A_test, lda, B_test, ldb, s, rcond, &rank, work, lwork,
-                      rwork, n_repeats, t, &info, test_lapacke_interface, layout);
+                      rwork, n_repeats, t, &info, interfacetype, layout);
 
     /* performance computation */
     if(m >= n)
@@ -257,7 +257,7 @@ void fla_test_gelss_experiment(test_params_t *params, integer datatype, integer 
 void prepare_gelss_run(integer datatype, integer m, integer n, integer nrhs, void *A, integer lda,
                        void *B, integer ldb, void *s, void *rcond, integer *rank, void *work,
                        integer lwork, void *rwork, integer n_repeats, double *time_min,
-                       integer *info, integer test_lapacke_interface, integer layout)
+                       integer *info, integer interfacetype, integer layout)
 {
     integer i;
     void *A_save = NULL, *B_save = NULL;
@@ -270,14 +270,24 @@ void prepare_gelss_run(integer datatype, integer m, integer n, integer nrhs, voi
     /* Make a workspace query the first time through. This will provide us with
      and ideal workspace size based on an internal block size.
      NOTE: LAPACKE interface handles workspace query internally */
-    if((test_lapacke_interface == 0) && (g_lwork <= 0))
+    if((interfacetype != LAPACKE_COLUMN_TEST) && (interfacetype != LAPACKE_ROW_TEST) && (g_lwork <= 0))
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
 
         /* Getting lwork from api by passing lwork = -1 */
-        invoke_gelss(datatype, &m, &n, &nrhs, NULL, &lda, NULL, &ldb, s, rcond, rank, work, &lwork,
-                     rwork, info);
+#if ENABLE_CPP_TEST
+        if(interfacetype == LAPACK_CPP_TEST)
+        {
+            invoke_cpp_gelss(datatype, &m, &n, &nrhs, NULL, &lda, NULL, &ldb, s, rcond, rank, work, &lwork,
+                            rwork, info);
+        }
+        else
+#endif
+        {
+            invoke_gelss(datatype, &m, &n, &nrhs, NULL, &lda, NULL, &ldb, s, rcond, rank, work, &lwork,
+                        rwork, info);
+        }
         if(*info == 0)
         {
             lwork = get_work_value(datatype, work);
@@ -298,16 +308,26 @@ void prepare_gelss_run(integer datatype, integer m, integer n, integer nrhs, voi
 
         /* Create work buffer */
         create_vector(datatype, &work, lwork);
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time = prepare_lapacke_gelss_run(datatype, layout, m, n, nrhs, A_save, lda, B_save,
                                                  ldb, s, rcond, rank, info);
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST)
+        {
+            exe_time = fla_test_clock();
+            /* Call CPP gelss API */
+            invoke_cpp_gelss(datatype, &m, &n, &nrhs, A_save, &lda, B_save, &ldb, s, rcond, rank, work,
+                            &lwork, rwork, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();
 
-            /*  call to API */
+            /* Call to gelss API */
             invoke_gelss(datatype, &m, &n, &nrhs, A_save, &lda, B_save, &ldb, s, rcond, rank, work,
                          &lwork, rwork, info);
 

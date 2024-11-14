@@ -1894,8 +1894,8 @@ void scale_matrix_overflow_underflow_hseqr(integer datatype, integer n, void *A,
 }
 
 /* Scaling matrix with values around overflow underflow for GEHRD */
-void scale_matrix_underflow_overflow_gehrd(integer datatype, integer n, void *A,
-                                           integer lda, char imatrix_char)
+void scale_matrix_underflow_overflow_gehrd(integer datatype, integer n, void *A, integer lda,
+                                           char imatrix_char)
 {
     void *max_min = NULL, *scal = NULL;
     double tuning_val = 1.0;
@@ -1936,8 +1936,8 @@ void scale_matrix_underflow_overflow_gehrd(integer datatype, integer n, void *A,
 }
 
 /* Scaling matrix with values around overflow underflow for GGHRD */
-void scale_matrix_underflow_overflow_gghrd(integer datatype, integer n, void *A,
-                                           integer lda, char imatrix_char)
+void scale_matrix_underflow_overflow_gghrd(integer datatype, integer n, void *A, integer lda,
+                                           char imatrix_char)
 {
     void *max_min = NULL, *scal = NULL;
     double tuning_val = 1.0;
@@ -1975,4 +1975,98 @@ void scale_matrix_underflow_overflow_gghrd(integer datatype, integer n, void *A,
     /* free vectors */
     free_vector(max_min);
     free_vector(scal);
+}
+
+/* Scaling matrix with values around overflow, underflow for SYGVD/HEGVD */
+void scale_matrix_underflow_overflow_sygvd(integer datatype, integer n, void *A, integer lda,
+                                           void *B, integer ldb, integer itype, char imatrix_char,
+                                           void *scal)
+{
+    void *max_min;
+    double tuning_val = 1.0;
+
+    create_vector(get_realtype(datatype), &max_min, 1);
+
+    if(imatrix_char == 'O')
+    {
+        /*Intialize the ratios with maximum of datatype value*/
+        void *maxA;
+        void *maxB;
+        create_vector(get_realtype(datatype), &maxA, 1);
+        create_vector(get_realtype(datatype), &maxB, 1);
+
+        get_max_from_matrix(datatype, A, maxA, n, n, lda);
+        get_max_from_matrix(datatype, B, maxB, n, n, ldb);
+        get_max_of_values(get_realtype(datatype), maxA, maxB, max_min);
+
+        if(itype == 1)
+        {
+            tuning_val = 4.0;
+        }
+        else
+        {
+            if(n <= 140)
+            {
+                tuning_val = 2.0;
+            }
+            else
+            {
+                tuning_val = 3.0;
+            }
+        }
+
+        free_vector(maxA);
+        free_vector(maxB);
+    }
+    else if(imatrix_char == 'U')
+    {
+        void *minA;
+        void *minB;
+        create_vector(get_realtype(datatype), &minA, 1);
+        create_vector(get_realtype(datatype), &minB, 1);
+        /* Get minimum value from matrix */
+        get_min_from_matrix(datatype, A, minA, n, n, lda);
+        get_min_from_matrix(datatype, B, minB, n, n, ldb);
+        get_min_of_values(get_realtype(datatype), minA, minB, max_min);
+    }
+
+    calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
+
+    switch(itype)
+    {
+        case 1:
+            /* Scaling the matrix A and B with scal */
+            scal_matrix(datatype, scal, A, n, n, lda, i_one);
+            scal_matrix(datatype, scal, B, n, n, ldb, i_one);
+            break;
+        case 2:
+        case 3:
+            switch(get_realtype(datatype))
+            {
+                case FLOAT:
+                {
+                    int exp;
+                    frexpf(*((float *)scal), &exp);
+                    exp >>= 1;
+                    float scaleA = ldexpf(1.0, exp);
+                    float scaleB = *((float *)scal) / scaleA;
+                    scal_matrix(datatype, &scaleA, A, n, n, lda, i_one);
+                    scal_matrix(datatype, &scaleB, B, n, n, ldb, i_one);
+                    break;
+                }
+                case DOUBLE:
+                {
+                    int expd;
+                    frexp(*((double *)scal), &expd);
+                    expd >>= 1;
+                    double scaleAd = ldexp(1.0, expd);
+                    double scaleBd = *((double *)scal) / scaleAd;
+                    scal_matrix(datatype, &scaleAd, A, n, n, lda, i_one);
+                    scal_matrix(datatype, &scaleBd, B, n, n, ldb, i_one);
+                    break;
+                }
+            }
+    }
+
+    free_vector(max_min);
 }

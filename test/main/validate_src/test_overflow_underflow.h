@@ -139,9 +139,13 @@ void scale_matrix_overflow_underflow_hgeqz_B(integer datatype, integer n, void *
 void scale_matrix_overflow_underflow_hseqr(integer datatype, integer n, void *A, integer lda,
                                            char imatrix_char, void *scal);
 /* Scaling matrix with values around overflow underflow for GEHRD */
-void scale_matrix_underflow_overflow_gehrd(integer datatype, integer n, void *A,
-                                           integer lda, char imatrix_char);
+void scale_matrix_underflow_overflow_gehrd(integer datatype, integer n, void *A, integer lda,
+                                           char imatrix_char);
 /* Scaling matrix with values around overflow underflow for GGHRD */
-void scale_matrix_underflow_overflow_gghrd(integer datatype, integer n, void *A,
-                                           integer lda, char imatrix_char);
+void scale_matrix_underflow_overflow_gghrd(integer datatype, integer n, void *A, integer lda,
+                                           char imatrix_char);
+/* Scaling matrix with values around overflow, underflow for SYGVD/HEGVD */
+void scale_matrix_underflow_overflow_sygvd(integer datatype, integer n, void *A, integer lda,
+                                           void *B, integer ldb, integer itype, char imatrix_char,
+                                           void *scal);
 #endif // TEST_OVERFLOW_UNDERFLOW_H

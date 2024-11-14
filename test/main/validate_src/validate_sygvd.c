@@ -64,7 +64,7 @@
     {                                                                                       \
         realtype norm, norm_orig, resid;                                                    \
         /* Test 1 */                                                                        \
-        /* Calculating norm_orig based on itype */                                          \
+        /* Calculating LHS part of equation based on itype */                               \
         switch(itype)                                                                       \
         {                                                                                   \
             case 1:                                                                         \
@@ -82,8 +82,11 @@
                 fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, P, &lda, X, &lda, Z, &lda); \
                 break;                                                                      \
         }                                                                                   \
-        norm_orig = invoke_lange(type_prefix, "1", &n, &n, A, &lda, work)                   \
-                    * invoke_lange(type_prefix, "1", &n, &n, X, &lda, work);                \
+        norm_orig = invoke_lange(type_prefix, "1", &n, &n, Z, &lda, work);                  \
+        if(norm_orig < ufmin)                                                               \
+        {                                                                                   \
+            norm_orig = ufmin;                                                              \
+        }                                                                                   \
         /* F = X * lambda */                                                                \
         multiply_matrix_diag_vector(datatype, n, n, X, lda, lambda_out, 1);                 \
         switch(itype)                                                                       \
@@ -139,7 +142,7 @@
     {                                                                                       \
         realtype norm, norm_L, eps, resid3;                                                 \
         eps = invoke_lamch(realtype_prefix, "P");                                           \
-        if((imatrix == 'O' || imatrix == 'U') && (scal != NULL))                            \
+        if(itype == 2 || itype == 3)                                                        \
         {                                                                                   \
             invoke_scal(realtype_prefix, &n, scal, lambda_orig, &i_one);                    \
         }                                                                                   \
@@ -154,15 +157,16 @@
 #define invoke_tests(realtype, realtype_prefix, type_prefix) \
     {                                                        \
         realtype eps = invoke_lamch(realtype_prefix, "P");   \
+        realtype ufmin = invoke_lamch(realtype_prefix, "U"); \
         test_1_body(realtype, realtype_prefix, type_prefix); \
         test_2_body(realtype, realtype_prefix, type_prefix); \
         test_3_body(realtype, realtype_prefix, type_prefix); \
     }
 
 void validate_sygvd(integer itype, char *jobz, char *range, char *uplo, integer n, void *A,
-                    void *A_test, integer lda, void *B, void *B_test, integer ldb, void *Q,
-                    integer ldq, integer il, integer iu, void *lambda_orig, void *lambda_out,
-                    void *ifail, integer datatype, double *residual, char imatrix, void *scal)
+                    void *A_test, integer lda, void *B, void *B_test, integer ldb, integer il,
+                    integer iu, void *lambda_orig, void *lambda_out, void *ifail, integer datatype,
+                    double *residual, char imatrix, void *scal)
 {
     if(n == 0)
         return;
@@ -199,7 +203,7 @@ void validate_sygvd(integer itype, char *jobz, char *range, char *uplo, integer 
 
             create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &X, lda);
             reset_matrix(datatype, n, n, X, lda);
-            /* Copy the eigen values to X */
+            /* Copy the eigen vectors to X */
             copy_matrix(datatype, "full", n, n, A_test, lda, X, lda);
 
             create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &X_inv, lda);
@@ -254,10 +258,10 @@ void validate_sygvd(integer itype, char *jobz, char *range, char *uplo, integer 
                 case 3:
                     /* inv(X) = X' inv(B) = X' inv(U) * inv(L) */
                     /* P = X' * inv(U) */
-                    fla_invoke_trsm(datatype, "R", "U", "N", "N", &n, &n, U, &ldq, P, &lda);
+                    fla_invoke_trsm(datatype, "R", "U", "N", "N", &n, &n, U, &lda, P, &lda);
                     copy_matrix(datatype, "full", n, n, P, lda, X_inv, lda);
                     /* X_inv = P * inv(L) = X' * inv(U) * inv(L) */
-                    fla_invoke_trsm(datatype, "R", "L", "N", "N", &n, &n, L, &ldq, X_inv, &lda);
+                    fla_invoke_trsm(datatype, "R", "L", "N", "N", &n, &n, L, &lda, X_inv, &lda);
                     break;
             }
 

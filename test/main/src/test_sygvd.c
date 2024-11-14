@@ -45,7 +45,7 @@ void fla_test_sygvd(integer argc, char **argv, test_params_t *params)
     }
     if(argc == 13)
     {
-        FLA_TEST_PARSE_LAST_ARG(argv[11]);
+        FLA_TEST_PARSE_LAST_ARG(argv[12]);
     }
     if(argc >= 12 && argc <= 13)
     {
@@ -130,8 +130,8 @@ void fla_test_sygvd_experiment(test_params_t *params, integer datatype, integer 
     integer n, lda, info = 0, itype = 1;
     char jobz, uplo, range = 'R';
     void *A = NULL, *w = NULL, *A_test = NULL, *EVals = NULL;
-    void *B = NULL, *B_test = NULL, *U = NULL;
-    void *C = NULL, *temp = NULL;
+    void *B = NULL, *B_test = NULL, *U = NULL, *C = NULL;
+    void *scal = NULL, *temp = NULL;
 
     integer test_lapacke_interface = params->test_lapacke_interface;
     int layout = params->matrix_major;
@@ -159,30 +159,43 @@ void fla_test_sygvd_experiment(test_params_t *params, integer datatype, integer 
     /* Create input matrix parameters */
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &B, lda);
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &U, lda);
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &C, lda);
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &temp, lda);
 
     create_realtype_vector(datatype, &w, n);
 
-    if(g_ext_fptr != NULL || (params->imatrix_char))
+    create_realtype_vector(get_realtype(datatype), &scal, 1);
+
+    switch(get_realtype(datatype))
+    {
+        case FLOAT:
+            *(float *)scal = s_one;
+            break;
+        case DOUBLE:
+            *(double *)scal = d_one;
+            break;
+    }
+
+    if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
     {
         /* Initialize input matrix with custom data */
         init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+        init_matrix(datatype, B, n, n, lda, g_ext_fptr, params->imatrix_char);
     }
     else
     {
-        /* Random upper triangular matrix with good condition number*/
-        get_well_conditioned_triangular_matrix(datatype, "U", n, U, lda);
-
-        /* Generate symmetric positive definite matrix using cholesky factor U
-            B = U**{T|C} U, if datatype is real then tranaspose will be
-            taken, other if complex then conjugate transpose is taken
-         */
-        fla_invoke_gemm(datatype, GET_TRANS_STR(datatype), "N", &n, &n, &n, U, &lda, U, &lda, B,
-                        &lda);
 
         create_realtype_vector(datatype, &EVals, n);
+        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &U, lda);
+        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &C, lda);
+        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &temp, lda);
+
+        /* Genrating random spd matrix with known chol factor */
+        /* Evals is used here as temporary buffer */
+        generate_matrix_from_EVs(datatype, 'V', n, U, lda, EVals, 0.1, 1.0);
+        get_triangular_matrix("U", datatype, n, n, U, lda, 1);
+
+        /* B = U**{T|C} U */
+        fla_invoke_gemm(datatype, GET_TRANS_STR(datatype), "N", &n, &n, &n, U, &lda, U, &lda, B,
+                        &lda);
 
         /* Genarate matrix C such that C = Q * lambda * Q'
            where L is a diagonal matrix with diagonal values as eigen values
@@ -233,13 +246,17 @@ void fla_test_sygvd_experiment(test_params_t *params, integer datatype, integer 
                                 A, &lda);
                 break;
         }
+
+        free_matrix(U);
+        free_matrix(C);
+        free_matrix(temp);
     }
 
-    /* Free temp buffers */
-    free_matrix(C);
-    C = NULL;
-    free_matrix(temp);
-    temp = NULL;
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
+    {
+        scale_matrix_underflow_overflow_sygvd(datatype, n, A, lda, B, lda, itype,
+                                              params->imatrix_char, scal);
+    }
 
     /* Make a copy of input matrix A and B. This is required to validate the API functionality.*/
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
@@ -263,8 +280,8 @@ void fla_test_sygvd_experiment(test_params_t *params, integer datatype, integer 
     /* output validation */
     if((info == 0) && (!FLA_EXTREME_CASE_TEST))
     {
-        validate_sygvd(itype, &jobz, &range, &uplo, n, A, A_test, lda, B, B_test, lda, U, lda, 0, 0,
-                       EVals, w, NULL, datatype, residual, params->imatrix_char, NULL);
+        validate_sygvd(itype, &jobz, &range, &uplo, n, A, A_test, lda, B, B_test, lda, 0, 0, EVals,
+                       w, NULL, datatype, residual, params->imatrix_char, scal);
     }
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
@@ -283,10 +300,11 @@ void fla_test_sygvd_experiment(test_params_t *params, integer datatype, integer 
     free_matrix(A_test);
     free_matrix(B);
     free_matrix(B_test);
-    free_matrix(U);
 
+    free_vector(scal);
     free_vector(w);
-    if((g_ext_fptr == NULL) && !(params->imatrix_char))
+
+    if((g_ext_fptr == NULL) && (!FLA_EXTREME_CASE_TEST))
         free_vector(EVals);
 }
 
@@ -345,7 +363,7 @@ void prepare_sygvd_run(integer itype, char *jobz, char *uplo, integer n, void *A
     for(i = 0; i < n_repeats && *info == 0; ++i)
     {
         /* Restore input matrix A and B value and allocate memory to output buffers
-           for each iteration*/
+           for each iteration */
         copy_matrix(datatype, "full", n, n, A_save, lda, A, lda);
         copy_matrix(datatype, "full", n, n, B_save, ldb, B, ldb);
 
@@ -386,6 +404,7 @@ void prepare_sygvd_run(integer itype, char *jobz, char *uplo, integer n, void *A
     *time_min_ = time_min;
 
     free_matrix(A_save);
+    free_matrix(B_save);
 }
 
 double prepare_lapacke_sygvd_run(integer datatype, int itype, int layout, char *jobz, char *uplo,

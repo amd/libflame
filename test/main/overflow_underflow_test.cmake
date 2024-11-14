@@ -396,6 +396,20 @@ set(OVERFLOW_UNDERFLOW_VALUES_TEST_CASES "gehrd sdcz 15 1 10 15 15 1 --imatrix=O
             "hseqr sdcz S I 75 1 75 100 100 -1 1 --imatrix=O"
             "hseqr sdcz E V 200 1 200 500 500 -1 1 --imatrix=O"
             "hseqr sdcz S V 200 1 200 500 500 -1 1 --imatrix=O"
+            "sygvd sdcz 1 V U 50 50 -1 -1 -1 1 --imatrix=O"
+            "sygvd sdcz 2 V U 150 150 -1 -1 -1 1 --imatrix=O"
+            "sygvd sdcz 3 V U 72 72 -1 -1 -1 1 --imatrix=O"
+            "sygvd sdcz 1 V U 500 500 -1 -1 -1 1 --imatrix=O"
+            "sygvd sdcz 2 V U 230 230 -1 -1 -1 1 --imatrix=O"
+            "sygvd sdcz 3 V U 8 8 -1 -1 -1 1 --imatrix=O"
+            "sygvd sdcz 1 V U 64 64 -1 -1 -1 1 --imatrix=O"
+            "sygvd sdcz 1 V U 50 50 -1 -1 -1 1 --imatrix=U"
+            "sygvd sdcz 2 V U 150 150 -1 -1 -1 1 --imatrix=U"
+            "sygvd sdcz 3 V U 72 72 -1 -1 -1 1 --imatrix=U"
+            "sygvd sdcz 1 V U 500 500 -1 -1 -1 1 --imatrix=U"
+            "sygvd sdcz 2 V U 230 230 -1 -1 -1 1 --imatrix=U"
+            "sygvd sdcz 3 V U 8 8 -1 -1 -1 1 --imatrix=U"
+            "sygvd sdcz 1 V U 64 64 -1 -1 -1 1 --imatrix=U"
 )
 
 foreach(ou_vals_test_cases IN LISTS OVERFLOW_UNDERFLOW_VALUES_TEST_CASES)

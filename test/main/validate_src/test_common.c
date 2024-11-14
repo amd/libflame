@@ -6481,129 +6481,6 @@ typedef union
     double d;
 } compositereal_t;
 
-/* Randomly generated triangular matrices have bad condition number.
-   This function genreates comparatively well conditioned triangular matrices
-   by multiplying a randim matrix with itself and then making it triangular
-
-   The genreated matrix will be non singular matrix and the matrix is scaled
-   such that the determinant is not too large or too small
- */
-void get_well_conditioned_triangular_matrix(integer datatype, char *uplo, integer n, void *A,
-                                            integer lda)
-{
-    if(A == NULL || n <= 0 || lda <= 0)
-    {
-        return;
-    }
-
-    void *P = NULL;
-
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &P, lda);
-    reset_matrix(datatype, n, n, P, lda);
-
-    for(integer i = 0; i < n; i++)
-    {
-        switch(datatype)
-        {
-            case FLOAT:
-                rand_vector(datatype, n, &((float *)P)[i * lda], 1, MAX_FLT_DIFF, 1.0, 'V');
-                break;
-            case DOUBLE:
-                rand_vector(datatype, n, &((double *)P)[i * lda], 1, MAX_DBL_DIFF, 1.0, 'V');
-                break;
-            case COMPLEX:
-                rand_vector(datatype, n, &((complex *)P)[i * lda], 1, MAX_FLT_DIFF, 1.0, 'V');
-                break;
-            case DOUBLE_COMPLEX:
-                rand_vector(datatype, n, &((doublecomplex *)P)[i * lda], 1, MAX_DBL_DIFF, 1.0, 'V');
-                break;
-        }
-    }
-
-    fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, P, &lda, P, &lda, A, &lda);
-
-    get_triangular_matrix(uplo, datatype, n, n, A, lda, TRUE);
-
-    compositereal_t mean_val, scale_factor;
-
-    get_mean_of_absolutes_of_diag(datatype, n, A, lda, &mean_val);
-
-    switch(get_realtype(datatype))
-    {
-        case FLOAT:
-            scale_factor.s = 1.0f / mean_val.s;
-            break;
-        case DOUBLE:
-            scale_factor.d = 1.0 / mean_val.d;
-            break;
-    }
-
-    scal_matrix(datatype, &scale_factor, A, n, n, lda, 1);
-
-    free_matrix(P);
-}
-
-/* Get the mean of absolute values of diagonal elements of the matrix
-   K = SUM(ABS(A(i, i))) / n  for 0 <= i < n
-   For comple matrices,
-   K = (SUM(ABS(Re(A(i, i))) / n)  + (SUM(ABS(Im(A(i, i))) / n)  for 0 <= i < n
- */
-void get_mean_of_absolutes_of_diag(integer datatype, integer n, void *A, integer lda, void *mean)
-{
-    if(A == NULL || n <= 0 || lda <= 0)
-    {
-        return;
-    }
-
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            float abs_sum = 0.0f;
-            for(integer i = 0; i < n; i++)
-            {
-                abs_sum += FLA_FABS(((float *)A)[i * lda + i]);
-            }
-            *((float *)mean) = abs_sum / (float)n;
-        }
-        break;
-        case DOUBLE:
-        {
-            double abs_sum = 0.0;
-            for(integer i = 0; i < n; i++)
-            {
-                abs_sum += FLA_FABS(((double *)A)[i * lda + i]);
-            }
-            *((double *)mean) = abs_sum / (double)n;
-        }
-        break;
-        case COMPLEX:
-        {
-            float abs_sum_r = 0.0f;
-            float abs_sum_i = 0.0f;
-            for(integer i = 0; i < n; i++)
-            {
-                abs_sum_r += FLA_FABS(((complex *)A)[i * lda + i].r);
-                abs_sum_i += FLA_FABS(((complex *)A)[i * lda + i].i);
-            }
-            *((float *)mean) = (abs_sum_r / (float)n) + (abs_sum_i / (float)n);
-        }
-        break;
-        case DOUBLE_COMPLEX:
-        {
-            double abs_sum_r = 0.0;
-            double abs_sum_i = 0.0;
-            for(integer i = 0; i < n; i++)
-            {
-                abs_sum_r += FLA_FABS(((doublecomplex *)A)[i * lda + i].r);
-                abs_sum_i += FLA_FABS(((doublecomplex *)A)[i * lda + i].i);
-            }
-            *((double *)mean) = (abs_sum_r / (double)n) + (abs_sum_i / (double)n);
-        }
-        break;
-    }
-}
-
 /* Convert the given banded storage matrix from column major layout to row major layout and vice
    versa NOTE: matrix_layout is the existing layout of the given input matrix 'AB' */
 void convert_banded_matrix_layout(int matrix_layout, integer datatype, integer m, integer n,
@@ -6686,4 +6563,76 @@ void convert_banded_matrix_layout(int matrix_layout, integer datatype, integer m
         }
     }
     return;
+}
+
+/* Gets the maximum absolute values of the two input values */
+void get_max_of_values(integer datatype, void *a, void *b, void *max_val)
+{
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            *(float *)max_val = fla_max(FLA_FABS(*(float *)a), FLA_FABS(*(float *)b));
+            break;
+        }
+        case DOUBLE:
+        {
+            *(double *)max_val = fla_max(FLA_FABS(*(double *)a), FLA_FABS(*(double *)b));
+            break;
+        }
+        case COMPLEX:
+        {
+            float real_max
+                = fla_max(FLA_FABS(((scomplex *)a)->real), FLA_FABS(((scomplex *)b)->real));
+            float imag_max
+                = fla_max(FLA_FABS(((scomplex *)a)->imag), FLA_FABS(((scomplex *)b)->imag));
+            *(float *)max_val = fla_max(real_max, imag_max);
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            double real_max
+                = fla_max(FLA_FABS(((dcomplex *)a)->real), FLA_FABS(((dcomplex *)b)->real));
+            double imag_max
+                = fla_max(FLA_FABS(((dcomplex *)a)->imag), FLA_FABS(((dcomplex *)b)->imag));
+            *(double *)max_val = fla_max(real_max, imag_max);
+            break;
+        }
+    }
+}
+
+/* Gets the minimum absolute values of the two input values */
+void get_min_of_values(integer datatype, void *a, void *b, void *min_val)
+{
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            *(float *)min_val = fla_min(FLA_FABS(*(float *)a), FLA_FABS(*(float *)b));
+            break;
+        }
+        case DOUBLE:
+        {
+            *(double *)min_val = fla_min(FLA_FABS(*(double *)a), FLA_FABS(*(double *)b));
+            break;
+        }
+        case COMPLEX:
+        {
+            float real_min
+                = fla_min(FLA_FABS(((scomplex *)a)->real), FLA_FABS(((scomplex *)b)->real));
+            float imag_min
+                = fla_min(FLA_FABS(((scomplex *)a)->imag), FLA_FABS(((scomplex *)b)->imag));
+            *(float *)min_val = fla_min(real_min, imag_min);
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            double real_min
+                = fla_min(FLA_FABS(((dcomplex *)a)->real), FLA_FABS(((dcomplex *)b)->real));
+            double imag_min
+                = fla_min(FLA_FABS(((dcomplex *)a)->imag), FLA_FABS(((dcomplex *)b)->imag));
+            *(double *)min_val = fla_min(real_min, imag_min);
+            break;
+        }
+    }
 }

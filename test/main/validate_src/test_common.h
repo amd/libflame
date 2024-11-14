@@ -343,19 +343,9 @@ void fla_invoke_trsm(integer datatype, char *side, char *uplo, char *transa, cha
  */
 void fla_invoke_trmm(integer datatype, char *side, char *uplo, char *transa, char *diag, integer *m,
                      integer *n, void *a, integer *lda, void *b, integer *ldb);
-/* Randomly generated triangular matrices have bad condition number.
-   This function genreates comparatively well conditioned triangular matrices
-   by multiplying a randim matrix with itself and then making it triangular
 
-   The genreated matrix will be non singular matrix and the matrix is scaled
-   such that the determinant is not too large or too small
- */
-void get_well_conditioned_triangular_matrix(integer datatype, char *uplo, integer n, void *A,
-                                            integer lda);
-/* Get the mean of absolute values of diagonal elements of the matrix
-   K = SUM(ABS(A(i, i))) / n  for 0 <= i < n
-   For comple matrices,
-   K = (SUM(ABS(Re(A(i, i))) / n)  + (SUM(ABS(Im(A(i, i))) / n)  for 0 <= i < n
- */
-void get_mean_of_absolutes_of_diag(integer datatype, integer n, void *A, integer lda, void *mean);
+/* Gets the maximum absolute values of the two input values */
+void get_max_of_values(integer datatype, void *a, void *b, void *max_val);
+/* Gets the minimum absolute values of the two input values */
+void get_min_of_values(integer datatype, void *a, void *b, void *min_val);
 #endif // TEST_COMMON_H

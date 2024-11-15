@@ -26,7 +26,7 @@ void fla_dgesvd_nn_small1T_avx2(integer *m, integer *n, doublereal *a, integer *
 
     integer ie;
     integer itauq, itaup;
-    integer i__1, rlen, knt;
+    integer rlen, knt;
 
     /* indices for partitioning work buffer */
     ie = 1;

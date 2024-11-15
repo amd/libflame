@@ -24,7 +24,7 @@ void fla_dgesvd_small6T_avx2(integer *m, integer *n, doublereal *a, integer *lda
 
     integer iu, ie;
     integer itau, itauq, itaup;
-    integer i__1, rlen, knt;
+    integer rlen, knt;
     integer c__1 = 1;
 
     doublereal *tau, *tauq, *taup;

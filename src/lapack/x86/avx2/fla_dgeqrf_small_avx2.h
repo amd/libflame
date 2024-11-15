@@ -287,7 +287,7 @@
         }                                                             \
     }
 
-#define FLA_LARF_APPLY_DSMALL_COL(i, m, n, r, tau)                  \
+#define FLA_LARF_APPLY_DSMALL_COL(i, m, n, r, ldr, tau)             \
     if(xnorm != 0.) /* Sub-diagonal elements are already zero */    \
     {                                                               \
         /* Part 2: Apply the Householder rotation              */   \
@@ -295,7 +295,7 @@
         /*    A = A - tau * v * v**T * A                       */   \
         /*      = A - v * tau * (A**T * v)**T                  */   \
                                                                     \
-        A = &r[i + (i + 1) * *lda];                                 \
+        A = &r[i + (i + 1) * *ldr];                                 \
         arows = *m - i + 1;                                         \
         acols = *n - i;                                             \
         v[1] = 1.;                                                  \
@@ -305,7 +305,7 @@
         /* Compute A**T * v */                                      \
         for(j = 1; j <= acols; j++) /* for every column c_A of A */ \
         {                                                           \
-            ac = &A[(j - 1) * *lda - 1];                            \
+            ac = &A[(j - 1) * *ldr - 1];                            \
                                                                     \
             /* Compute tmp = c_A**T . v */                          \
             dtmp = 0;                                               \
@@ -582,75 +582,72 @@
         v[1] = beta;                                                   \
     }
 
-#define FLA_LARF_GEN_DSMALL_ROW(i, m, n, tau)                       \
+#define FLA_LARF_GEN_DSMALL_ROW(i, m, n, iptr, ldia, tau)           \
     /* Compute norm2 */                                             \
-    xnorm = dnrm2_(&rlen, &iptr[2 * *lda], lda);                    \
+    xnorm = dnrm2_(&rlen, &iptr[2 * *ldia], ldia);                  \
     if(xnorm == 0.)                                                 \
     {                                                               \
         tau[i] = 0.;                                                \
-        beta = iptr[*lda];                                          \
+        beta = iptr[*ldia];                                         \
     }                                                               \
     else                                                            \
     {                                                               \
         knt = 0;                                                    \
         v = iptr;                                                   \
-        alpha = v[*lda];                                            \
-        d__1 = dlapy2_(&v[*lda], &xnorm);                           \
+        alpha = v[*ldia];                                           \
+        d__1 = dlapy2_(&v[*ldia], &xnorm);                          \
         beta = -d_sign(&d__1, &alpha);                              \
         if(f2c_abs(beta) < safmin)                                  \
         {                                                           \
             for(knt = 0; f2c_abs(beta) < safmin && knt < 20; knt++) \
             {                                                       \
-                i__1 = *n - 1;                                      \
-                dscal_(&i__1, &rsafmin, &v[2 * *lda], lda);         \
+                dscal_(&rlen, &rsafmin, &v[2 * *ldia], ldia);       \
                 beta *= rsafmin;                                    \
                 alpha *= rsafmin;                                   \
             }                                                       \
             /* New BETA is at most 1, at least SAFMIN */            \
-            i__1 = rlen;                                            \
-            xnorm = dnrm2_(&i__1, &v[2 * *lda], lda);               \
+            xnorm = dnrm2_(&rlen, &v[2 * *ldia], ldia);             \
             d__1 = dlapy2_(&alpha, &xnorm);                         \
             beta = -d_sign(&d__1, &alpha);                          \
         }                                                           \
         tau[i] = (beta - alpha) / beta;                             \
-        i__1 = rlen;                                                \
         d__1 = 1. / (alpha - beta);                                 \
-        dscal_(&i__1, &d__1, &v[2 * *lda], lda);                    \
+        dscal_(&rlen, &d__1, &v[2 * *ldia], ldia);                  \
         for(j = 1; j <= knt; ++j)                                   \
         {                                                           \
             beta *= safmin;                                         \
         }                                                           \
     }
 
-#define FLA_LARF_APPLY_DSMALL_ROW(i, m, n, tau)                           \
-    if(xnorm == 0.)                                                       \
-    {                                                                     \
-        tau[i] = 0.;                                                      \
-    }                                                                     \
-    else                                                                  \
-    {                                                                     \
-        /* for every row ac of A(i+1:nr,i+1:nc) */                        \
-        ac = iptr;                                                        \
-        v[*lda] = 1;                                                      \
-        for(j = 1; j <= slen; j++)                                        \
-        {                                                                 \
-            dtmp = 0;                                                     \
-            /* w = (ac .* v) */                                           \
-            for(k = 1; k <= rlen + 1; k++)                                \
-            {                                                             \
-                dtmp = dtmp + ac[j + k * *lda] * v[k * *lda];             \
-            }                                                             \
-                                                                          \
-            /* (ac .* v) * tau */                                         \
-            dtmp = dtmp * tau[i];                                         \
-                                                                          \
-            /* ac = ac - ac * dtmp */                                     \
-            for(k = 1; k <= rlen + 1; k++)                                \
-            {                                                             \
-                ac[j + k * *lda] = ac[j + k * *lda] - v[k * *lda] * dtmp; \
-            }                                                             \
-        }                                                                 \
-        v[*lda] = beta;                                                   \
+#define FLA_LARF_APPLY_DSMALL_ROW(i, m, n, iptr, ldia, tau)                  \
+    if(xnorm == 0.)                                                          \
+    {                                                                        \
+        tau[i] = 0.;                                                         \
+    }                                                                        \
+    else                                                                     \
+    {                                                                        \
+        /* for every row ac of A(i+1:nr,i+1:nc) */                           \
+        ac = iptr;                                                           \
+        v[*ldia] = 1;                                                        \
+        for(j = 1; j <= slen; j++)                                           \
+        {                                                                    \
+            dtmp = 0;                                                        \
+            /* w = (ac .* v) */                                              \
+            for(k = 1; k <= rlen + 1; k++)                                   \
+            {                                                                \
+                dtmp = dtmp + ac[j + k * *ldia] * v[k * *ldia];              \
+            }                                                                \
+                                                                             \
+            /* (ac .* v) * tau */                                            \
+            dtmp = dtmp * tau[i];                                            \
+                                                                             \
+            /* ac = ac - ac * dtmp */                                        \
+            for(k = 1; k <= rlen + 1; k++)                                   \
+            {                                                                \
+                ac[j + k * *ldia] = ac[j + k * *ldia] - v[k * *ldia] * dtmp; \
+            }                                                                \
+        }                                                                    \
+        v[*ldia] = beta;                                                     \
     }
 
 #define FLA_LARF_UAPPLY_DSMALL_SQR(m, a, lda, tauq, u, ldu, twork)              \

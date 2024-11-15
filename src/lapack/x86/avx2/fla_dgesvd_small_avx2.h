@@ -34,7 +34,7 @@ doublereal d_sign(doublereal *, doublereal *);
              * elements below diagonal A(i+1:nr,i) */                    \
             FLA_LARF_GEN_DSMALL_COL(i, &nr, &nc, qtau);                  \
             /* Apply the reflector on A(i:nr,i+1:nc) from the left */    \
-            FLA_LARF_APPLY_DSMALL_COL(i, &nr, &nc, ia, qtau);            \
+            FLA_LARF_APPLY_DSMALL_COL(i, &nr, &nc, ia, ldia, qtau);      \
         }                                                                \
         else                                                             \
         {                                                                \
@@ -59,9 +59,9 @@ doublereal d_sign(doublereal *, doublereal *);
             /* Generate elementary reflector to annihilate               \
              * elements to the right of current row's                    \
              * super diagonalA(i,i+2:nr) */                              \
-            FLA_LARF_GEN_DSMALL_ROW(i, &nr, &nc, tau);                   \
+            FLA_LARF_GEN_DSMALL_ROW(i, &nr, &nc, iptr, ldia, tau);       \
             /* Apply the reflector on A(i+1:nr,i+1:nc) from the right */ \
-            FLA_LARF_APPLY_DSMALL_ROW(i, &nr, &nc, tau);                 \
+            FLA_LARF_APPLY_DSMALL_ROW(i, &nr, &nc, iptr, ldia, tau);     \
         }                                                                \
         if(rlen >= 0)                                                    \
             ev[i] = iptr[*ldia];                                         \

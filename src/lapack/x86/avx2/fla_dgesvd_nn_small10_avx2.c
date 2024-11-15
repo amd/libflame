@@ -31,7 +31,7 @@ void fla_dgesvd_xx_small10_avx2(integer wntus, integer wntvs, integer *m, intege
 
     integer ie;
     integer itauq, itaup;
-    integer i__1, rlen, knt;
+    integer rlen, knt;
 
     /* indices for partitioning work buffer */
     ie = 1;

@@ -23,7 +23,7 @@ void fla_dgesvd_xs_small10T_avx2(integer *m, integer *n, doublereal *a, integer 
 
     integer ie;
     integer itauq, itaup;
-    integer i__1, rlen, knt;
+    integer rlen, knt;
     integer tm, tn;
     integer c__1 = 1;
 
@@ -58,9 +58,9 @@ void fla_dgesvd_xs_small10T_avx2(integer *m, integer *n, doublereal *a, integer 
         slen = *m - 1;
         iptr = a + 1;
         tau = taup;
-        FLA_LARF_GEN_DSMALL_ROW(1, m, n, tau);
+        FLA_LARF_GEN_DSMALL_ROW(1, m, n, iptr, lda, tau);
         s[1] = beta;
-        FLA_LARF_APPLY_DSMALL_ROW(1, m, n, tau);
+        FLA_LARF_APPLY_DSMALL_ROW(1, m, n, iptr, lda, tau);
 
         /* Upper Bidiagonalize the matrix excluding the first row */
         tm = *m - 1;

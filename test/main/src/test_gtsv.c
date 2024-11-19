@@ -22,6 +22,7 @@ double prepare_lapacke_gtsv_run(integer datatype, integer layout, integer n, int
 
 void fla_test_gtsv(integer argc, char **argv, test_params_t *params)
 {
+    srand(13); /* Setting the seed for random input genetation values */
     char *op_str = "Linear Solve for General Tridiagonal matrix";
     char *front_str = "GTSV";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
@@ -150,7 +151,6 @@ void fla_test_gtsv_experiment(test_params_t *params, integer datatype, integer p
     create_vector(datatype, &d, n);
     create_vector(datatype, &du, n - 1);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, NRHS, &B, ldb);
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, NRHS, &xact, ldb);
 
     if(g_ext_fptr != NULL || FLA_EXTREME_CASE_TEST)
     {
@@ -166,6 +166,7 @@ void fla_test_gtsv_experiment(test_params_t *params, integer datatype, integer p
         }
         else
         {
+            create_matrix(datatype, LAPACK_COL_MAJOR, n, NRHS, &xact, ldb);
             /* Initializing expected solution xact without extreme values
              * Extreme values will be introduced in the next step */
             init_matrix(datatype, xact, n, NRHS, ldx, g_ext_fptr, '\0');
@@ -176,6 +177,8 @@ void fla_test_gtsv_experiment(test_params_t *params, integer datatype, integer p
     }
     else
     {
+        create_matrix(datatype, LAPACK_COL_MAJOR, n, NRHS, &xact, ldb);
+
         /* Initializing tridiagonal vectors */
         init_vector(datatype, dl, n - 1, i_one, g_ext_fptr, params->imatrix_char);
         init_vector(datatype, d, n, i_one, g_ext_fptr, params->imatrix_char);
@@ -255,7 +258,8 @@ void fla_test_gtsv_experiment(test_params_t *params, integer datatype, integer p
     free_vector(d_save);
     free_vector(du_save);
     free_matrix(B_save);
-    free_matrix(xact);
+    if(g_ext_fptr == NULL || FLA_EXTREME_CASE_TEST)
+        free_matrix(xact);
     if(FLA_OVERFLOW_UNDERFLOW_TEST)
     {
         free_matrix(A);

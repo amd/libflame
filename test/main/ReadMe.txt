@@ -133,7 +133,8 @@ below.
 
    NOTE: Method to pass customised input data:
          Customised input matrices can be copied to a file and passed(as the last argument)
-         to the API through command line.
+         to the API through command line. Input matrix data is assumed to be in column major
+         format. (All the elements of a column are continously copied to the file)
 
       Ex: ./test_lapack.x GGEVX d P N N E 10 10 10 10 10 -1 100 inputdata.txt
           where inputdata.txt file is in the same location as the test_lapack.x

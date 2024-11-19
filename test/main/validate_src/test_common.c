@@ -1929,7 +1929,7 @@ void get_min_from_array(integer datatype, void *arr, void *min_val, integer n)
         }
     }
 }
-/* Reading matrix input data from a file */
+/* Reading matrix input data from a file in column major format m-rows, n-columns */
 void init_matrix_from_file(integer datatype, void *A, integer m, integer n, integer lda, FILE *fptr)
 {
     int i, j;
@@ -1941,12 +1941,12 @@ void init_matrix_from_file(integer datatype, void *A, integer m, integer n, inte
         {
             float num;
 
-            for(i = 0; i < m; i++)
+            for(j = 0; j < n; j++)
             {
-                for(j = 0; j < n; j++)
+                for(i = 0; i < m; i++)
                 {
                     fscanf(fptr, "%f", &num);
-                    ((float *)A)[i * lda + j] = num;
+                    ((float *)A)[i + j * lda] = num;
                 }
             }
             break;
@@ -1956,12 +1956,12 @@ void init_matrix_from_file(integer datatype, void *A, integer m, integer n, inte
         {
             double num;
 
-            for(i = 0; i < m; i++)
+            for(j = 0; j < n; j++)
             {
-                for(j = 0; j < n; j++)
+                for(i = 0; i < m; i++)
                 {
                     fscanf(fptr, "%lf", &num);
-                    ((double *)A)[i * lda + j] = num;
+                    ((double *)A)[i + j * lda] = num;
                 }
             }
             break;
@@ -1971,14 +1971,14 @@ void init_matrix_from_file(integer datatype, void *A, integer m, integer n, inte
         {
             float num;
 
-            for(i = 0; i < m; i++)
+            for(j = 0; j < n; j++)
             {
-                for(j = 0; j < n; j++)
+                for(i = 0; i < m; i++)
                 {
                     fscanf(fptr, "%f", &num);
-                    ((scomplex *)A)[i * lda + j].real = num;
+                    ((scomplex *)A)[i + j * lda].real = num;
                     fscanf(fptr, "%f", &num);
-                    ((scomplex *)A)[i * lda + j].imag = num;
+                    ((scomplex *)A)[i + j * lda].imag = num;
                 }
             }
             break;
@@ -1988,14 +1988,14 @@ void init_matrix_from_file(integer datatype, void *A, integer m, integer n, inte
         {
             double num;
 
-            for(i = 0; i < m; i++)
+            for(j = 0; j < n; j++)
             {
-                for(j = 0; j < n; j++)
+                for(i = 0; i < m; i++)
                 {
                     fscanf(fptr, "%lf", &num);
-                    ((dcomplex *)A)[i * lda + j].real = num;
+                    ((dcomplex *)A)[i + j * lda].real = num;
                     fscanf(fptr, "%lf", &num);
-                    ((dcomplex *)A)[i * lda + j].imag = num;
+                    ((dcomplex *)A)[i + j * lda].imag = num;
                 }
             }
             break;
@@ -3444,7 +3444,7 @@ void init_vector_spec_rand_in(integer datatype, void *A, integer M, integer incx
     */
     if(M > 10)
     {
-        span = (M)*0.2;
+        span = (M) * 0.2;
     }
     else
     {

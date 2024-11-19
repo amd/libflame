@@ -123,6 +123,9 @@
 
 #endif
 
+/* Macro to access array item pointers stored in column major order */
+#define M_PTR(A, r, c, lda) ((A) + (((c) * (lda)) + (r)))
+
 // LDLT Factorization for packed matrices uses different threshold to choose
 // between blocked /  unblocked variants and also the blocksize for the blocked
 // variant. The thresholds and blocksizes re defined here

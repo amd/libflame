@@ -10,11 +10,11 @@
 #include "fla_lapack_x86_common.h"
 
 #ifdef FLA_ENABLE_AMD_OPT
-static doublereal d__1 = -1;
-static doublereal c_b1 = 1;
+static real d__1 = -1;
+static real c_b1 = 1;
 extern int fla_thread_get_num_threads(void);
 
-void FLA_get_optimum_params_dgetrf(integer m, integer n, integer *nb, int *n_threads)
+void FLA_get_optimum_params_sgetrf(integer m, integer n, integer *nb, int *n_threads)
 {
     int available_n_threads;
 
@@ -66,7 +66,7 @@ void FLA_get_optimum_params_dgetrf(integer m, integer n, integer *nb, int *n_thr
 }
 
 /* LU factorization blocked varaiant */
-int FLA_LU_piv_d_parallel(integer *m, integer *n, doublereal *a, integer *lda, integer *ipiv,
+int FLA_LU_piv_s_parallel(integer *m, integer *n, real *a, integer *lda, integer *ipiv,
                           integer *info)
 {
 #ifdef FLA_OPENMP_MULTITHREADING
@@ -75,8 +75,6 @@ int FLA_LU_piv_d_parallel(integer *m, integer *n, doublereal *a, integer *lda, i
     integer i__, j, s, iinfo;
     integer jb, jb_prev, jb_offset, nb;
     integer c__1 = 1;
-#define a_subscr(a_1, a_2) (a_2) * a_dim1 + a_1
-#define a_ref(a_1, a_2) a[a_subscr(a_1, a_2)]
     int threads_id, n_threads;
 
     /* Function Body */
@@ -104,12 +102,12 @@ int FLA_LU_piv_d_parallel(integer *m, integer *n, doublereal *a, integer *lda, i
         return 0;
 
     /* Determine optimum block and thread size for this environment */
-    FLA_get_optimum_params_dgetrf(*m, *n, &nb, &n_threads);
+    FLA_get_optimum_params_sgetrf(*m, *n, &nb, &n_threads);
 
-    /* call sequencial algorithm for single thread*/
+    /* call sequencial algorithm for single thread */
     if(n_threads == 1)
     {
-        dgetrf2_(m, n, a, lda, ipiv, info);
+        sgetrf2_(m, n, a, lda, ipiv, info);
         return *info;
     }
 
@@ -149,7 +147,7 @@ int FLA_LU_piv_d_parallel(integer *m, integer *n, doublereal *a, integer *lda, i
 
     /* Compute L00 and U00 of diagonal blocks */
     i__3 = *m - j + 1;
-    dgetrf2_(&i__3, &jb, M_PTR(a, j, j, a_dim1), lda, &ipiv[j], &iinfo);
+    sgetrf2_(&i__3, &jb, M_PTR(a, j, j, a_dim1), lda, &ipiv[j], &iinfo);
 
     if(*info == 0 && iinfo > 0)
         *info = iinfo + j - 1;
@@ -163,7 +161,7 @@ int FLA_LU_piv_d_parallel(integer *m, integer *n, doublereal *a, integer *lda, i
     }
 
 #pragma omp parallel num_threads(n_threads) private(i__3, i__4, i__5, i__6, i__7, i__8, j, s, jb, \
-                                                        jb_prev, jb_offset, threads_id)
+                                                    jb_prev, jb_offset, threads_id)
     {
         threads_id = omp_get_thread_num();
         for(j = 1; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2)
@@ -179,12 +177,11 @@ int FLA_LU_piv_d_parallel(integer *m, integer *n, doublereal *a, integer *lda, i
                 i__3 = *n - j - jb_prev + 1;
                 i__4 = j + jb_prev - 1;
                 i__3 = fla_min(i__3, jb_prev);
-                dlaswp_(&i__3, M_PTR(a, 1, j + jb_prev, a_dim1), lda, &j, &i__4, &ipiv[1],
-                        &c__1);
+                slaswp_(&i__3, M_PTR(a, 1, j + jb_prev, a_dim1), lda, &j, &i__4, &ipiv[1], &c__1);
                 /* compute U10 */
                 i__3 = *n - j - jb_prev + 1;
                 i__3 = fla_min(i__3, jb_prev);
-                dtrsm_("Left", "Lower", "No transpose", "Unit", &jb_prev, &i__3, &c_b1,
+                strsm_("Left", "Lower", "No transpose", "Unit", &jb_prev, &i__3, &c_b1,
                        M_PTR(a, j, j, a_dim1), lda, M_PTR(a, j, j + jb_prev, a_dim1), lda);
                 /* compute L11 * U11 */
                 if(j + jb_prev <= *m)
@@ -193,10 +190,9 @@ int FLA_LU_piv_d_parallel(integer *m, integer *n, doublereal *a, integer *lda, i
                     i__3 = *m - j - jb_prev + 1;
                     i__4 = *n - j - jb_prev + 1;
                     i__4 = fla_min(i__4, jb_prev);
-                    dgemm_("No transpose", "No transpose", &i__3, &i__4, &jb_prev, &d__1,
-                           M_PTR(a, j + jb_prev, j, a_dim1), lda,
-                           M_PTR(a, j, j + jb_prev, a_dim1), lda, &c_b1,
-                           M_PTR(a, j + jb_prev, j + jb_prev, a_dim1), lda);
+                    sgemm_("No transpose", "No transpose", &i__3, &i__4, &jb_prev, &d__1,
+                           M_PTR(a, j + jb_prev, j, a_dim1), lda, M_PTR(a, j, j + jb_prev, a_dim1), lda,
+                           &c_b1, M_PTR(a, j + jb_prev, j + jb_prev, a_dim1), lda);
                 }
 
                 if(s <= i__1)
@@ -207,7 +203,7 @@ int FLA_LU_piv_d_parallel(integer *m, integer *n, doublereal *a, integer *lda, i
 
                     /* Compute L00 and U00 of diagonal blocks */
                     i__3 = *m - s + 1;
-                    dgetrf2_(&i__3, &jb, M_PTR(a, s, s, a_dim1), lda, &ipiv[s], &iinfo);
+                    sgetrf2_(&i__3, &jb, M_PTR(a, s, s, a_dim1), lda, &ipiv[s], &iinfo);
 
                     if(*info == 0 && iinfo > 0)
                         *info = iinfo + s - 1;
@@ -233,15 +229,14 @@ int FLA_LU_piv_d_parallel(integer *m, integer *n, doublereal *a, integer *lda, i
                     i__3 = *n - j - jb_prev + 1 - jb_prev;
                     i__4 = j + jb_prev - 1;
                     FLA_Thread_get_subrange(threads_id - 1, n_threads - 1, i__3, &i__5, &i__6);
-                    dlaswp_(&i__5, M_PTR(a, 1, j + jb_offset + i__6, a_dim1), lda, &j, &i__4,
+                    slaswp_(&i__5, M_PTR(a, 1, j + jb_offset + i__6, a_dim1), lda, &j, &i__4,
                             &ipiv[1], &c__1);
 
                     /* compute U10 */
                     i__3 = *n - j - jb_prev + 1 - jb_prev;
                     FLA_Thread_get_subrange(threads_id - 1, n_threads - 1, i__3, &i__5, &i__6);
-                    dtrsm_("Left", "Lower", "No transpose", "Unit", &jb_prev, &i__5, &c_b1,
-                           M_PTR(a, j, j, a_dim1), lda,
-                           M_PTR(a, j, j + jb_offset + i__6, a_dim1), lda);
+                    strsm_("Left", "Lower", "No transpose", "Unit", &jb_prev, &i__5, &c_b1,
+                           M_PTR(a, j, j, a_dim1), lda, M_PTR(a, j, j + jb_offset + i__6, a_dim1), lda);
 
                     /* compute L11 * U11 */
                     if(j + jb_prev <= *m)
@@ -250,7 +245,7 @@ int FLA_LU_piv_d_parallel(integer *m, integer *n, doublereal *a, integer *lda, i
                         i__3 = *m - j - jb_prev + 1;
                         i__4 = *n - j - jb_prev + 1 - jb_prev;
                         FLA_Thread_get_subrange(threads_id - 1, n_threads - 1, i__4, &i__7, &i__8);
-                        dgemm_("No transpose", "No transpose", &i__3, &i__7, &jb_prev, &d__1,
+                        sgemm_("No transpose", "No transpose", &i__3, &i__7, &jb_prev, &d__1,
                                M_PTR(a, j + jb_prev, j, a_dim1), lda,
                                M_PTR(a, j, j + jb_offset + i__8, a_dim1), lda, &c_b1,
                                M_PTR(a, j + jb_prev, j + jb_offset + i__8, a_dim1), lda);
@@ -273,17 +268,15 @@ int FLA_LU_piv_d_parallel(integer *m, integer *n, doublereal *a, integer *lda, i
             i__3 = j - 1;
             i__4 = j + jb - 1;
             FLA_Thread_get_subrange(threads_id, n_threads, i__3, &i__5, &i__6);
-            dlaswp_(&i__5, (doublereal *)&a[a_offset + (i__6 * a_dim1)], lda, &j, &i__4, &ipiv[1],
-                    &c__1);
+            slaswp_(&i__5, (real *)&a[a_offset + (i__6 * a_dim1)], lda, &j, &i__4, &ipiv[1], &c__1);
 #pragma omp barrier
         }
     }
 #else
-    dgetrf2_(m, n, a, lda, ipiv,info);
+    sgetrf2_(m, n, a, lda, ipiv, info);
 #endif
 
     return *info;
 }
 
 #endif
-

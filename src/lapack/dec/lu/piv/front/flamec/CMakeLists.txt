@@ -1,4 +1,4 @@
-##Copyright (C) 2020, Advanced Micro Devices, Inc.## 
+##Copyright (C) 2024, Advanced Micro Devices, Inc.## 
 target_sources("${PROJECT_NAME}" 
      PRIVATE
 ${CMAKE_CURRENT_SOURCE_DIR}/FLA_LU_piv.c
@@ -17,5 +17,5 @@ ${CMAKE_CURRENT_SOURCE_DIR}/lapack_zgetrf.c
 ${CMAKE_CURRENT_SOURCE_DIR}/lapack_zgetf2.c
 ${CMAKE_CURRENT_SOURCE_DIR}/FLA_LU_piv_z.c
 ${CMAKE_CURRENT_SOURCE_DIR}/FLA_LU_piv_small_s.c
-
-	)
+${CMAKE_CURRENT_SOURCE_DIR}/FLA_LU_piv_s.c
+)

@@ -23,6 +23,8 @@ ${CMAKE_CURRENT_SOURCE_DIR}/fla_dgesvd_nn_small1T_avx2.c
 ${CMAKE_CURRENT_SOURCE_DIR}/fla_dgetrs_small_trsm_ll_avx2.c
 ${CMAKE_CURRENT_SOURCE_DIR}/fla_dlange_kernels_avx2.c
 ${CMAKE_CURRENT_SOURCE_DIR}/fla_dlarf_kernels_avx2.c
+${CMAKE_CURRENT_SOURCE_DIR}/fla_sgetrf_small_avx2.c
+${CMAKE_CURRENT_SOURCE_DIR}/fla_lu_piv_small_s_update_tr_matrix_avx2.c
 )
 
 if(WIN32)

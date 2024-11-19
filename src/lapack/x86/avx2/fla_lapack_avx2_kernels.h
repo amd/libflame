@@ -29,7 +29,11 @@ int fla_sger_avx2(integer *m, integer *n, real *alpha, real *x, integer *incx, r
                   integer *incy, real *a, integer *lda);
 integer fla_dgetrf_small_avx2(integer *m, integer *n, doublereal *a, integer *lda, integer *ipiv,
                               integer *info);
+integer fla_sgetrf_small_avx2(integer *m, integer *n, real *a, integer *lda, integer *ipiv,
+                              integer *info);
 void fla_lu_piv_small_d_update_tr_matrix_avx2(integer i_1, integer mi, integer ni, doublereal *acur,
+                                              integer lda_t);
+void fla_lu_piv_small_s_update_tr_matrix_avx2(integer i_1, integer mi, integer ni, real *acur,
                                               integer lda_t);
 int fla_dgetrs_small_trsm_ll_avx2(char *trans, integer *n, integer *nrhs, doublereal *a,
                                   integer *lda, integer *ipiv, doublereal *b, integer *ldb,

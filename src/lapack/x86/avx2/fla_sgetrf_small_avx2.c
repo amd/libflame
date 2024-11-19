@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) 2023-2026, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2023-24, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 
 #include "FLAME.h"
@@ -13,32 +13,27 @@
  * All the computations are done inline without using
  * corresponding BLAS APIs to reduce function overheads.
  */
-aocl_int64_t fla_sgetrf_small_avx2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int_t *ipiv,
-                              aocl_int64_t *info)
+integer fla_sgetrf_small_avx2(integer *m, integer *n, real *a, integer *lda, integer *ipiv,
+                              integer *info)
 {
-    aocl_int64_t mi = *m, ni = *n, n_t = *n;
-    aocl_int64_t i, i_1, lda_t;
+    integer mi, ni;
+    integer i, i_1, lda_t;
+
     real max_val, t_val;
     real *acur, *apiv, *asrc;
-    aocl_int64_t p_idx;
-    aocl_int64_t min_m_n = fla_min(mi, ni);
-    static TLS_CLASS_SPEC aocl_int_t safemin_init = 1;
-    static TLS_CLASS_SPEC real safemin;
-
-    if(safemin_init)
-    {
-        safemin = slamch_("S");
-        safemin_init = 0;
-    }
-
+    integer p_idx;
+    integer min_m_n = fla_min(*m, *n);
     lda_t = *lda;
 
-    for(i = 0; i < min_m_n; i++, mi--, ni--)
+    for(i = 0; i < min_m_n; i++)
     {
+        mi = *m - i;
+        ni = *n - i;
+
         acur = &a[i + lda_t * i];
 
         /* Find the pivot element */
-        max_val = 0.0f;
+        max_val = 0;
         p_idx = i;
         for(i_1 = 0; i_1 < mi; i_1++)
         {
@@ -53,26 +48,26 @@ aocl_int64_t fla_sgetrf_small_avx2(aocl_int64_t *m, aocl_int64_t *n, real *a, ao
 
         apiv = a + p_idx;
         asrc = a + i;
-        ipiv[i] = (aocl_int_t)(p_idx + 1);
+        ipiv[i] = p_idx + 1;
 
         /* Swap rows and calculate a column of L */
-        if(max_val != 0.0f)
+        if(max_val != 0.0)
         {
             /* Swap entire rows */
             if(p_idx != i)
             {
-                for(i_1 = 0; i_1 < n_t; i_1++)
+                for(i_1 = 0; i_1 < *n; i_1++)
                 {
                     t_val = apiv[i_1 * lda_t];
-                    apiv[i_1 * lda_t] = asrc[i_1 * lda_t];
-                    asrc[i_1 * lda_t] = t_val;
+                    apiv[i_1 * *lda] = asrc[i_1 * lda_t];
+                    asrc[i_1 * *lda] = t_val;
                 }
             }
 
             /* Calculate scalefactors (L)  & update trailing matrix */
             if(mi > 1)
             {
-                fla_lu_piv_small_s_update_tr_matrix_avx2(1, mi, ni, acur, lda_t, safemin);
+                fla_lu_piv_small_s_update_tr_matrix_avx2(1, mi, ni, acur, *lda);
             }
         }
         else

@@ -160,8 +160,8 @@ set(DGESVD_TEST_CASES "gesvd d A S 124 15 124 124 15 -1 1"
 
 #Performance tests for ZGETRF
 foreach(FUNCTION "getrf")
-    foreach(PREC "z") 
-        foreach(SIZE_N "8" "16" "32" "64" "128" "256" "512" "1024")
+    foreach(PREC "s" "d" "z") 
+        foreach(SIZE_N "2" "3" "4" "5" "8" "16" "32" "64" "128" "256" "512" "1024")
             add_test(NAME LU_FACTORIZATION_${PREC}${FUNCTION}_${SIZE_N}x${SIZE_N} COMMAND ${CTEST_MAIN_COMMAND} ${FUNCTION} ${PREC} ${SIZE_N} ${SIZE_N} ${SIZE_N} 1)
             set_property(TEST LU_FACTORIZATION_${PREC}${FUNCTION}_${SIZE_N}x${SIZE_N} PROPERTY ENVIRONMENT "OMP_NUM_THREADS=1")
         endforeach(SIZE_N)

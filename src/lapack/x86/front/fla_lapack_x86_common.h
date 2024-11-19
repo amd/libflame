@@ -43,8 +43,6 @@ void fla_dgesvd_xs_small10T(integer *m, integer *n, doublereal *a, integer *lda,
                             doublereal *work, integer *info);
 int fla_dgetrs_small_notrans(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda,
                              integer *ipiv, doublereal *b, integer *ldb, integer *info);
-int fla_dgetrs_small_notrans(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda,
-                             integer *ipiv, doublereal *b, integer *ldb, integer *info);
 void lapack_getri_small_d(integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *work,
                           integer *info);
 doublereal fla_get_max_abs_element_vector(integer m, doublereal *a, integer a_dim);

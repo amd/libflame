@@ -67,5 +67,17 @@ doublereal d_sign(doublereal *, doublereal *);
             ev[i] = iptr[*ldia];                                         \
     }
 
+#define FLA_COMPUTE_VT_2X2(vt, ldvt, s1, s2, cr, sr) \
+    doublereal scl1, scl2;                           \
+                                                     \
+    scl1 = (s1 < 0.) ? -1. : 1.;                     \
+    scl2 = (s2 < 0.) ? -1. : 1.;                     \
+                                                     \
+    vt[1 + *ldvt] = scl1 * cr;                       \
+    vt[2 + *ldvt] = scl2 * -sr;                      \
+                                                     \
+    vt[1 + 2 * *ldvt] = scl1 * sr;                   \
+    vt[2 + 2 * *ldvt] = scl2 * cr;
+
 #endif /* FLA_ENABLE_AMD_OPT */
 #endif /* FLA_DGESVD_SMALL_AVX2_DEFS_H */

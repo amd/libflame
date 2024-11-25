@@ -96,7 +96,7 @@ void fla_dgesvd_xs_small10T_avx2(integer *m, integer *n, doublereal *a, integer 
     }
 
     /* Generate Ql (from bidiag) in u from a */
-    u[1 + *ldu] = 1.;
+    u[1 + *ldu] = 1.0;
     if(*m > 2)
     {
         /* iteration corresponding to (m - 2) HH(m-2) */
@@ -109,17 +109,19 @@ void fla_dgesvd_xs_small10T_avx2(integer *m, integer *n, doublereal *a, integer 
         u[*m + (*m - 1) * *ldu] = dtmp; /* tau * v2 */
         u[*m - 1 + *m * *ldu] = dtmp; /* tau * v2 */
         u[*m + *m * *ldu] = 1.0 + (dtmp * d__1); /* 1 - tau * v2^2 */
+
+        u[*m + *ldu] = 0.;
+        u[*m - 1 + *ldu] = 0.;
+        u[1 + *m * *ldu] = 0.;
+        u[1 + (*m - 1) * *ldu] = 0.;
     }
     else if(*m > 1)
     {
+        /* 2x2 case where where U is identity */
         u[1 + *ldu] = 1.0;
-        u[2 + *ldu] = 0;
-        u[1 + 2 * *ldu] = 0;
+        u[2 + *ldu] = 0.;
+        u[1 + 2 * *ldu] = 0.;
         u[2 + 2 * *ldu] = 1.0;
-    }
-    else
-    {
-        u[1 + *ldu] = 1.0;
     }
     /* for HH vectors [m-3:1] */
     for(i = *m - 3; i >= 1; i--)
@@ -152,6 +154,10 @@ void fla_dgesvd_xs_small10T_avx2(integer *m, integer *n, doublereal *a, integer 
                 u[k + j * *ldu] = u[k + j * *ldu] + a[k + i * *lda] * u[i + 1 + j * *ldu];
             }
         }
+
+        /* Initialize 1st row/col elements */
+        u[i + 1 + *ldu] = 0.;
+        u[1 + (i + 1) * *ldu] = 0.;
     }
 
     lapack_dbdsqr_small("L", m, n, m, &s[1], &e[1], &vt[1 + *ldvt], ldvt, &u[1 + *ldu], ldu, info);

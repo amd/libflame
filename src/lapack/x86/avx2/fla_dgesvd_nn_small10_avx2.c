@@ -129,21 +129,14 @@ void fla_dgesvd_xx_small10_avx2(integer wntus, integer wntvs, integer *m, intege
     {
         /* 2 by 2 block, handle separately */
         doublereal sigmn, sigmx, sinr, cosr, sinl, cosl;
-        doublereal scl1, scl2;
 
         dlasv2_(&s[1], &e[1], &s[2], &sigmn, &sigmx, &sinr, &cosr, &sinl, &cosl);
-        scl1 = (sigmx < 0.) ? -1. : 1.;
-        scl2 = (sigmn < 0.) ? -1. : 1.;
         s[1] = f2c_abs(sigmx);
         s[2] = f2c_abs(sigmn);
         /* Compute singular vectors, if desired */
         if(ncvt > 0)
         {
-            vt[1 + *ldvt] = scl1 * cosr;
-            vt[2 + *ldvt] = scl1 * -sinr;
-
-            vt[1 + 2 * *ldvt] = scl2 * sinr;
-            vt[2 + 2 * *ldvt] = scl2 * cosr;
+            FLA_COMPUTE_VT_2X2(vt, ldvt, sigmx, sigmn, cosr, sinr);
         }
         if(nru > 0)
         {

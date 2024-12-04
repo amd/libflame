@@ -61,7 +61,7 @@ void calculate_svd_scale_value(integer datatype, integer m, integer n, void *A, 
 
     if(imatrix == 'O')
     {
-        /*Intialize the ratios with maximum of datatype value*/
+        /*Initialize the ratios with maximum of datatype value*/
         flt_ratio = FLT_MAX;
         dbl_ratio = DBL_MAX;
         void *max;
@@ -97,7 +97,7 @@ void calculate_svd_scale_value(integer datatype, integer m, integer n, void *A, 
         create_vector(get_realtype(datatype), &min, 1);
         /* Get minimum value from matrix */
         get_min_from_matrix(datatype, A, min, m, n, lda);
-        /* Intialize with minimum of datatype value */
+        /* Initialize with minimum of datatype value */
         flt_ratio = FLT_MIN;
         dbl_ratio = DBL_MIN;
         compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, min);
@@ -127,7 +127,7 @@ void calculate_asym_scale_value(integer datatype, integer m, integer n, void *A,
     }
     if(imatrix == 'O')
     {
-        /*Intialize the ratios with maximum of datatype value*/
+        /*Initialize the ratios with maximum of datatype value*/
         flt_ratio = FLT_MAX;
         dbl_ratio = DBL_MAX;
         void *max;
@@ -168,7 +168,7 @@ void calculate_asym_scale_value(integer datatype, integer m, integer n, void *A,
         create_vector(get_realtype(datatype), &min, 1);
         /* Get minimum value from matrix */
         get_min_from_matrix(datatype, A, min, m, n, lda);
-        /* Intialize with minimum of datatype value */
+        /* Initialize with minimum of datatype value */
         flt_ratio = FLT_MIN;
         dbl_ratio = DBL_MIN;
         compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, min);
@@ -657,7 +657,7 @@ void calculate_gtsvA_scale_value(integer datatype, integer m, integer n, void *A
 
     if(imatrix == 'O')
     {
-        /*Intialize the ratios with maximum of datatype value*/
+        /*Initialize the ratios with maximum of datatype value*/
         flt_ratio = FLT_MAX;
         dbl_ratio = DBL_MAX;
         void *max;
@@ -733,7 +733,7 @@ void calculate_gtsvA_scale_value(integer datatype, integer m, integer n, void *A
         create_vector(get_realtype(datatype), &min, 1);
         /* Get minimum value from matrix */
         get_min_from_matrix(datatype, A, min, m, n, lda);
-        /* Intialize with minimum of datatype value */
+        /* Initialize with minimum of datatype value */
         flt_ratio = FLT_MIN;
         dbl_ratio = DBL_MIN;
         compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, min);
@@ -1039,7 +1039,7 @@ void scale_matrix_underflow_overflow_stedc(integer datatype, integer n, void *A,
     }
     if(*imatrix_char == 'O')
     {
-        /*Intialize the ratios with maximum of datatype value*/
+        /*Initialize the ratios with maximum of datatype value*/
         flt_ratio = FLT_MAX;
         dbl_ratio = DBL_MAX;
         void *max;
@@ -1080,7 +1080,7 @@ void scale_matrix_underflow_overflow_stedc(integer datatype, integer n, void *A,
         create_vector(get_realtype(datatype), &min, 1);
         /* Get minimum value from matrix */
         get_min_from_matrix(datatype, A, min, n, n, lda);
-        /* Intialize with minimum of datatype value */
+        /* Initialize with minimum of datatype value */
         flt_ratio = FLT_MIN;
         dbl_ratio = DBL_MIN;
         compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, min);
@@ -1107,7 +1107,7 @@ void scale_matrix_underflow_overflow_stevd(integer datatype, integer n, void *A,
     }
     if(*imatrix_char == 'O')
     {
-        /*Intialize the ratios with maximum of datatype value*/
+        /*Initialize the ratios with maximum of datatype value*/
         flt_ratio = FLT_MAX;
         dbl_ratio = DBL_MAX;
         void *max;
@@ -1148,7 +1148,7 @@ void scale_matrix_underflow_overflow_stevd(integer datatype, integer n, void *A,
         create_vector(get_realtype(datatype), &min, 1);
         /* Get minimum value from matrix */
         get_min_from_matrix(datatype, A, min, n, n, lda);
-        /* Intialize with minimum of datatype value */
+        /* Initialize with minimum of datatype value */
         flt_ratio = FLT_MIN;
         dbl_ratio = DBL_MIN;
         compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, min);
@@ -1175,7 +1175,7 @@ void scale_matrix_underflow_overflow_syev(integer datatype, integer n, void *A, 
     }
     if(*imatrix_char == 'O')
     {
-        /*Intialize the ratios with maximum of datatype value*/
+        /*Initialize the ratios with maximum of datatype value*/
         flt_ratio = FLT_MAX;
         dbl_ratio = DBL_MAX;
         void *max;
@@ -1216,7 +1216,7 @@ void scale_matrix_underflow_overflow_syev(integer datatype, integer n, void *A, 
         create_vector(get_realtype(datatype), &min, 1);
         /* Get minimum value from matrix */
         get_min_from_matrix(datatype, A, min, n, n, lda);
-        /* Intialize with minimum of datatype value */
+        /* Initialize with minimum of datatype value */
         flt_ratio = FLT_MIN;
         dbl_ratio = DBL_MIN;
         compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, min);
@@ -1243,7 +1243,7 @@ void scale_matrix_underflow_overflow_steqr(integer datatype, integer n, void *A,
     }
     if(*imatrix_char == 'O')
     {
-        /*Intialize the ratios with maximum of datatype value*/
+        /*Initialize the ratios with maximum of datatype value*/
         flt_ratio = FLT_MAX;
         dbl_ratio = DBL_MAX;
         void *max;
@@ -1284,7 +1284,7 @@ void scale_matrix_underflow_overflow_steqr(integer datatype, integer n, void *A,
         create_vector(get_realtype(datatype), &min, 1);
         /* Get minimum value from matrix */
         get_min_from_matrix(datatype, A, min, n, n, lda);
-        /* Intialize with minimum of datatype value */
+        /* Initialize with minimum of datatype value */
         flt_ratio = FLT_MIN;
         dbl_ratio = DBL_MIN;
         compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, min);
@@ -1602,7 +1602,7 @@ void scale_matrix_underflow_overflow_syevd(integer datatype, integer n, void *A,
 
     if(*imatrix_char == 'O')
     {
-        /*Intialize the ratios with maximum of datatype value*/
+        /*Initialize the ratios with maximum of datatype value*/
         flt_ratio = FLT_MAX;
         dbl_ratio = DBL_MAX;
         void *max;
@@ -1643,7 +1643,7 @@ void scale_matrix_underflow_overflow_syevd(integer datatype, integer n, void *A,
         create_vector(get_realtype(datatype), &min, 1);
         /* Get minimum value from matrix */
         get_min_from_matrix(datatype, A, min, n, n, lda);
-        /* Intialize with minimum of datatype value */
+        /* Initialize with minimum of datatype value */
         flt_ratio = FLT_MIN;
         dbl_ratio = DBL_MIN;
         compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, min);
@@ -2053,7 +2053,7 @@ void scale_matrix_underflow_overflow_sygvd(integer datatype, integer n, void *A,
 
     if(imatrix_char == 'O')
     {
-        /*Intialize the ratios with maximum of datatype value*/
+        /*Initialize the ratios with maximum of datatype value*/
         void *maxA;
         void *maxB;
         create_vector(get_realtype(datatype), &maxA, 1);

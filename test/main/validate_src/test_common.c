@@ -2097,7 +2097,7 @@ void get_generic_triangular_matrix(integer datatype, integer N, void *A, integer
     if(LDA < N)
         return;
 
-    /* Intialize matrix with random values */
+    /* Initialize matrix with random values */
     if(!AInitialized)
     {
         rand_matrix(datatype, A, N, N, LDA);
@@ -3024,7 +3024,7 @@ double svd_check_order(integer datatype, void *s, integer m, integer n, double r
     return resid;
 }
 
-/* Intialize matrix with special values*/
+/* Initialize matrix with special values*/
 void init_matrix_spec_in(integer datatype, void *A, integer M, integer N, integer LDA, char type)
 {
     integer i, j;
@@ -3101,7 +3101,7 @@ void init_matrix_spec_in(integer datatype, void *A, integer M, integer N, intege
     }
 }
 
-/* Intialize matrix with special values in random locations */
+/* Initialize matrix with special values in random locations */
 void init_matrix_spec_rand_in(integer datatype, void *A, integer M, integer N, integer LDA,
                               char type)
 {
@@ -3452,7 +3452,7 @@ integer check_extreme_value(integer datatype, integer M, integer N, void *A, int
     return 0;
 }
 
-/* Intialize vector with special values */
+/* Initialize vector with special values */
 void init_vector_spec_in(integer datatype, void *A, integer M, integer incx, char type)
 {
     integer i;
@@ -3514,7 +3514,7 @@ void init_vector_spec_in(integer datatype, void *A, integer M, integer incx, cha
         }
     }
 }
-/* Intialize vector with special values in random locations */
+/* Initialize vector with special values in random locations */
 void init_vector_spec_rand_in(integer datatype, void *A, integer M, integer incx, char type)
 {
     integer rows, span;
@@ -3638,7 +3638,7 @@ void init_vector_spec_rand_in(integer datatype, void *A, integer M, integer incx
     return;
 }
 
-/*Intialize matrix according to given input*/
+/*Initialize matrix according to given input*/
 void init_matrix(integer datatype, void *A, integer M, integer N, integer LDA, FILE *g_ext_fptr,
                  char imatrix_char)
 {
@@ -3820,7 +3820,7 @@ double is_value_zero(integer datatype, void *value, double residual)
     return resid;
 }
 
-/*Intialize vector according to given input*/
+/*Initialize vector according to given input*/
 void init_vector(integer datatype, void *A, integer M, integer incx, FILE *g_ext_fptr,
                  char ivector_char)
 {
@@ -4496,7 +4496,7 @@ void get_band_storage_matrix(integer datatype, integer M, integer N, integer kl,
     }
 }
 
-/* Intialize matrix with special values in random locations of band matrix */
+/* Initialize matrix with special values in random locations of band matrix */
 void init_matrix_spec_rand_band_matrix_in(integer datatype, void *A, integer M, integer N,
                                           integer LDA, integer kl, integer ku, char type)
 {

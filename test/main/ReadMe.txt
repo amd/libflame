@@ -204,19 +204,19 @@ NOTE:
 
 6. Tests with invalid input parameters using --einfo option:
 
-Â Â  Tests to check proper functioning of APIs while sending invalid value for any of the input parameters
-Â Â  can be done using --einfo option. This option is available only through command-line execution.
+   Tests to check proper functioning of APIs while sending invalid value for any of the input parameters
+   can be done using --einfo option. This option is available only through command-line execution.
 
-Â Â  Example:
-Â Â Â  ./test_lapack.x GGEVX d P N N E -10 10 10 10 10 -1 100 --einfo=-5
+   Example:
+    ./test_lapack.x GGEVX d P N N E -10 10 10 10 10 -1 100 --einfo=-5
 
-Â Â  In the above example, the value of the M has been given -10 which is an invalid value.
-Â Â  The --einfo parameter states the expected value of 'info' coming out of GGEVX API given the invalid input.
-Â Â  The test-suite checks the actual value of 'info' against this expected value and reurns PASS if they match
-Â Â  and FAIL if they don't.
+   In the above example, the value of the M has been given -10 which is an invalid value.
+   The --einfo parameter states the expected value of 'info' coming out of GGEVX API given the invalid input.
+   The test-suite checks the actual value of 'info' against this expected value and reurns PASS if they match
+   and FAIL if they don't.
 
-Â Â  All parameter related testing commands are compiled in test/main/scripts run_negative_test_cases.py which
-Â Â  can be used for this purpose.
+   All parameter related testing commands are compiled in test/main/scripts run_negative_test_cases.py which
+   can be used for this purpose.
 
 7. Tests with special inputs using --imatrix option for extreme values test:
 
@@ -232,10 +232,10 @@ NOTE:
     ./test_lapack.x GESV d 10 10 10 10 1 --imatrix=F
 
    Test behaviour for --imatrix=
-   N:intialize the matrix with NAN values in all locations
-   I:intialize the matrix with INFINITY values in all locations
-   A:intialize the matrix with the NAN values in few random locations
-   F:intialize the matrix with the INFINITY values in few random locations
+   N:initialize the matrix with NAN values in all locations
+   I:initialize the matrix with INFINITY values in all locations
+   A:initialize the matrix with the NAN values in few random locations
+   F:initialize the matrix with the INFINITY values in few random locations
 
 8. Tests with special inputs using --imatrix option for overflow/underflow test:
 

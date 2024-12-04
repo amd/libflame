@@ -192,9 +192,9 @@ void init_matrix_from_file(integer datatype, void *A, integer m, integer n, inte
                            FILE *fptr);
 /* Reading vector input data from a file */
 void init_vector_from_file(integer datatype, void *A, integer m, integer inc, FILE *fptr);
-/* Intialize vector with special values */
+/* Initialize vector with special values */
 void init_vector_spec_in(integer datatype, void *A, integer M, integer incx, char type);
-/* Intialize matrix with special values in random locations of band matrix */
+/* Initialize matrix with special values in random locations of band matrix */
 void init_matrix_spec_rand_band_matrix_in(integer datatype, void *A, integer M, integer N,
                                           integer LDA, integer kl, integer ku, char type);
 /* Allocate dynamic memory. If FLA_MEM_UNALIGNED is set, unaligned memory is allocated */
@@ -255,18 +255,18 @@ void create_svd_matrix(integer datatype, char range, integer m, integer n, void 
                        integer lda, void *S, double vl, double vu, integer il, integer iu,
                        integer info);
 void get_abs_vector_value(integer datatype, void *S, integer M, integer inc);
-/* Intialize matrix with special values*/
+/* Initialize matrix with special values*/
 void init_matrix_spec_in(integer datatype, void *A, integer M, integer N, integer LDA, char type);
-/*Intialize matrix according to given input*/
+/*Initialize matrix according to given input*/
 void init_matrix(integer datatype, void *A, integer M, integer N, integer LDA, FILE *g_ext_fptr,
                  char imatrix_char);
-/* Intialize matrix with special values in random locations */
+/* Initialize matrix with special values in random locations */
 void init_matrix_spec_rand_in(integer datatype, void *A, integer M, integer N, integer LDA,
                               char type);
 /*Test to check the extreme values propagation in output matrix */
 integer check_extreme_value(integer datatype, integer M, integer N, void *A, integer LDA,
                             char type);
-/*Intialize vector according to given input*/
+/*Initialize vector according to given input*/
 void init_vector(integer datatype, void *A, integer M, integer incx, FILE *g_ext_fptr,
                  char ivector_char);
 /*Initialize vector with special values*/

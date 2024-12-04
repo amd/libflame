@@ -1,6 +1,7 @@
 /*
 
     Copyright (C) 2014, The University of Texas at Austin
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 
     This file is part of libflame and is available under the 3-Clause
     BSD license, which can be found in the LICENSE file at the top-level
@@ -115,7 +116,7 @@ void libfla_test_uddateutinc_experiment( test_params_t params,
 	FLA_Random_matrix( C_flat );
 	FLA_Random_matrix( D_flat );
 
-	// Intialize the test factorization.
+	// Initialize the test factorization.
 	FLA_Set( FLA_ZERO, R_flat );
 	FLA_Herk_external( FLA_UPPER_TRIANGULAR, FLA_CONJ_TRANSPOSE, FLA_ONE, B_flat, FLA_ONE, R_flat );
 	FLA_Herk_external( FLA_UPPER_TRIANGULAR, FLA_CONJ_TRANSPOSE, FLA_ONE, D_flat, FLA_ONE, R_flat );

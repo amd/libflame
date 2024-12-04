@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -167,7 +167,7 @@ void fla_test_gehrd_experiment(test_params_t *params, integer datatype, integer 
             scale_matrix_underflow_overflow_gehrd(datatype, n, A, lda, params->imatrix_char);
             AInitialized = 1;
         }
-        /* Intialize matrix H with ILO and IHI conditions to generate hessenberg matrix */
+        /* Initialize matrix H with ILO and IHI conditions to generate hessenberg matrix */
         get_generic_triangular_matrix(datatype, n, A, lda, ilo, ihi, AInitialized);
     }
 

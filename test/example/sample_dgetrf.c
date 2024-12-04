@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2023 - 2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*
@@ -20,7 +20,7 @@ void rand_matrix(void *A, integer M, integer N, integer LDA);
 
 int main(int argc, char **argv)
 {
-    /* Intialize input matrix sizes */
+    /* Initialize input matrix sizes */
     integer M = 10, N = 10, LDA = 10;
     double *A;
     integer *ipiv;
@@ -30,7 +30,7 @@ int main(int argc, char **argv)
     A = (double *)malloc(LDA * N * sizeof(double));
     ipiv = (integer *)malloc(N * sizeof(double));
 
-    /* Intialize matrix with random values */
+    /* Initialize matrix with random values */
     rand_matrix(A, M, N, LDA);
 
     printf("Started execution of DGETRF API \n");
@@ -45,7 +45,7 @@ int main(int argc, char **argv)
     return 0;
 }
 
-/* Intialize the matrix with random values */
+/* Initialize the matrix with random values */
 void rand_matrix(void *A, integer M, integer N, integer LDA)
 {
     integer i, j;

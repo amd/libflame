@@ -1,33 +1,34 @@
 /******************************************************************************
- * Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 
 #include "test_common.h"
 #include "test_lapack.h"
 #include "test_prototype.h"
 
-#define SYTRF_VU 10.0 // Maximum eigen value for condition number.
-#define SYTRF_VL 0.01 // Minimum eigen value for condition number.
+#define SYTRF_ROOK_VU 10.0 // Maximum eigen value for condition number.
+#define SYTRF_ROOK_VL 0.01 // Minimum eigen value for condition number.
 
-integer row_major_sytrf_lda;
+integer row_major_sytrf_rook_lda;
 
-void invoke_sytrf(integer datatype, char *uplo, integer *n, void *a, integer *lda, integer *ipiv,
-                  void *work, integer *lwork, integer *info);
-void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *t, double *residual);
-void prepare_sytrf_run(integer datatype, integer n, void *A, char uplo, integer lda, integer *ipiv,
-                       void *work, integer lwork, integer n_repeats, double *time_min_,
-                       integer *info, integer test_lapacke_interface, integer mlayout);
-double prepare_lapacke_sytrf_run(integer datatype, integer layout, char uplo, integer n, void *A,
-                                 integer lda, void *ipiv, integer *info);
-integer invoke_lapacke_sytrf(integer datatype, integer layout, char uplo, integer n, void *a,
-                             integer lda, integer *ipiv);
+void invoke_sytrf_rook(integer datatype, char *uplo, integer *n, void *a, integer *lda,
+                       integer *ipiv, void *work, integer *lwork, integer *info);
+void fla_test_sytrf_rook_experiment(test_params_t *params, integer datatype, integer p_cur,
+                                    integer q_cur, integer pci, integer n_repeats, integer einfo,
+                                    double *perf, double *t, double *residual);
+void prepare_sytrf_rook_run(integer datatype, integer n, void *A, char uplo, integer lda,
+                            integer *ipiv, void *work, integer lwork, integer n_repeats,
+                            double *time_min_, integer *info, integer test_lapacke_interface,
+                            integer mlayout);
+double prepare_lapacke_sytrf_rook_run(integer datatype, integer layout, char uplo, integer n,
+                                      void *A, integer lda, void *ipiv, integer *info);
+integer invoke_lapacke_sytrf_rook(integer datatype, integer layout, char uplo, integer n, void *a,
+                                  integer lda, integer *ipiv);
 
-void fla_test_sytrf(integer argc, char **argv, test_params_t *params)
+void fla_test_sytrf_rook(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "LDL**T / U**TDU factorization";
-    char *front_str = "SYTRF";
+    char *front_str = "SYTRF_ROOK";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
     params->imatrix_char = '\0';
     if(argc == 1)
@@ -36,7 +37,7 @@ void fla_test_sytrf(integer argc, char **argv, test_params_t *params)
         g_lwork = -1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
-        fla_test_op_driver(front_str, SQUARE_INPUT, params, LIN, fla_test_sytrf_experiment);
+        fla_test_op_driver(front_str, SQUARE_INPUT, params, LIN, fla_test_sytrf_rook_experiment);
         tests_not_run = 0;
     }
     if(argc == 9)
@@ -58,7 +59,7 @@ void fla_test_sytrf(integer argc, char **argv, test_params_t *params)
         if((g_ext_fptr == NULL) && params->test_lapacke_interface
            && (params->matrix_major == LAPACK_ROW_MAJOR))
         {
-            row_major_sytrf_lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
+            row_major_sytrf_rook_lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
             params->lin_solver_paramslist[0].lda = N;
         }
         else
@@ -90,8 +91,8 @@ void fla_test_sytrf(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_sytrf_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
-                                          &time_min, &residual);
+                fla_test_sytrf_rook_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
+                                               &time_min, &residual);
 
                 /* Print the result */
                 fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
@@ -104,8 +105,8 @@ void fla_test_sytrf(integer argc, char **argv, test_params_t *params)
     /* Print error message */
     if(tests_not_run)
     {
-        printf("\nIllegal arguments for sytrf\n");
-        printf("./<EXE> sytrf <precisions - sdcz> <UPLO> <N> <LDA> <LWORK> <repeats>\n");
+        printf("\nIllegal arguments for sytrf_rook\n");
+        printf("./<EXE> sytrf_rook <precisions - sdcz> <UPLO> <N> <LDA> <LWORK> <repeats>\n");
     }
     if(invalid_dtype)
     {
@@ -118,16 +119,16 @@ void fla_test_sytrf(integer argc, char **argv, test_params_t *params)
     }
 }
 
-void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *t, double *residual)
+void fla_test_sytrf_rook_experiment(test_params_t *params, integer datatype, integer p_cur,
+                                    integer q_cur, integer pci, integer n_repeats, integer einfo,
+                                    double *perf, double *t, double *residual)
 {
     integer n, lda, lwork = -1, info = 0;
     void *A = NULL, *A_test = NULL, *ipiv = NULL, *work = NULL, *L = NULL;
     char uplo;
     integer test_lapacke_interface = params->test_lapacke_interface;
     integer layout = params->matrix_major;
-    char *test_name = "SYTRF";
+    char *test_name = "SYTRF_ROOK";
 
     /* Determine the dimensions */
     n = p_cur;
@@ -163,7 +164,7 @@ void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer 
     {
         /* Generating input matrix with condition number < 1000 */
         create_realtype_vector(datatype, &L, n);
-        generate_matrix_from_EVs(datatype, 'V', n, A, lda, L, SYTRF_VL, SYTRF_VU,
+        generate_matrix_from_EVs(datatype, 'V', n, A, lda, L, SYTRF_ROOK_VL, SYTRF_ROOK_VU,
                                  USE_ABS_EIGEN_VALUES);
         form_symmetric_matrix(datatype, n, A, lda, "S");
         free_vector(L);
@@ -178,8 +179,8 @@ void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer 
     copy_matrix(datatype, "full", lda, n, A, lda, A_test, lda);
 
     /* call to API */
-    prepare_sytrf_run(datatype, n, A_test, uplo, lda, ipiv, work, lwork, n_repeats, t, &info,
-                      test_lapacke_interface, layout);
+    prepare_sytrf_rook_run(datatype, n, A_test, uplo, lda, ipiv, work, lwork, n_repeats, t, &info,
+                           test_lapacke_interface, layout);
 
     /* Performance computation */
     *perf = (double)(n * n * n) * (1.0 / 3.0) / *t / FLOPS_PER_UNIT_PERF;
@@ -208,9 +209,10 @@ void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer 
     free_matrix(A_test);
 }
 
-void prepare_sytrf_run(integer datatype, integer n, void *A, char uplo, integer lda, integer *ipiv,
-                       void *work, integer lwork, integer n_repeats, double *time_min_,
-                       integer *info, integer test_lapacke_interface, integer layout)
+void prepare_sytrf_rook_run(integer datatype, integer n, void *A, char uplo, integer lda,
+                            integer *ipiv, void *work, integer lwork, integer n_repeats,
+                            double *time_min_, integer *info, integer test_lapacke_interface,
+                            integer layout)
 {
     integer i;
     void *A_save = NULL;
@@ -226,7 +228,7 @@ void prepare_sytrf_run(integer datatype, integer n, void *A, char uplo, integer 
         lwork = -1;
         create_vector(datatype, &work, 1);
         /* Getting lwork from api by passing lwork = -1 */
-        invoke_sytrf(datatype, &uplo, &n, NULL, &lda, ipiv, work, &lwork, info);
+        invoke_sytrf_rook(datatype, &uplo, &n, NULL, &lda, ipiv, work, &lwork, info);
         if(*info == 0)
         {
             lwork = get_work_value(datatype, work);
@@ -249,15 +251,15 @@ void prepare_sytrf_run(integer datatype, integer n, void *A, char uplo, integer 
         create_vector(datatype, &work, lwork);
         if(test_lapacke_interface == 1)
         {
-            exe_time
-                = prepare_lapacke_sytrf_run(datatype, layout, uplo, n, A_save, lda, ipiv, info);
+            exe_time = prepare_lapacke_sytrf_rook_run(datatype, layout, uplo, n, A_save, lda, ipiv,
+                                                      info);
         }
         else
         {
             exe_time = fla_test_clock();
 
             /*  call to API */
-            invoke_sytrf(datatype, &uplo, &n, A_save, &lda, ipiv, work, &lwork, info);
+            invoke_sytrf_rook(datatype, &uplo, &n, A_save, &lda, ipiv, work, &lwork, info);
 
             exe_time = fla_test_clock() - exe_time;
         }
@@ -274,8 +276,8 @@ void prepare_sytrf_run(integer datatype, integer n, void *A, char uplo, integer 
     free_matrix(A_save);
 }
 
-double prepare_lapacke_sytrf_run(integer datatype, integer layout, char uplo, integer n, void *A,
-                                 integer lda, void *ipiv, integer *info)
+double prepare_lapacke_sytrf_rook_run(integer datatype, integer layout, char uplo, integer n,
+                                      void *A, integer lda, void *ipiv, integer *info)
 {
     double exe_time = 0;
     integer lda_t = lda;
@@ -283,7 +285,7 @@ double prepare_lapacke_sytrf_run(integer datatype, integer layout, char uplo, in
     A_t = A;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_sytrf_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_sytrf_rook_lda, lda_t);
 
     /* In case of row_major matrix layout,
        convert input matrix to row_major */
@@ -295,8 +297,8 @@ double prepare_lapacke_sytrf_run(integer datatype, integer layout, char uplo, in
 
     exe_time = fla_test_clock();
 
-    /* call to LAPACKE sytrf API */
-    *info = invoke_lapacke_sytrf(datatype, layout, uplo, n, A_t, lda_t, ipiv);
+    /* call to LAPACKE sytrf_rook API */
+    *info = invoke_lapacke_sytrf_rook(datatype, layout, uplo, n, A_t, lda_t, ipiv);
 
     exe_time = fla_test_clock() - exe_time;
 
@@ -312,71 +314,71 @@ double prepare_lapacke_sytrf_run(integer datatype, integer layout, char uplo, in
 }
 
 /*
-SYTRF_API calls LAPACK interface for factorization
-of a real symmetric matrix A using the Bunch-Kaufman
-diagonal pivoting method(A = LDL*T or A = U*TDU)
+SYTRF_ROOK_API calls LAPACK interface for factorization
+of a real symmetric matrix A using the bounded Bunch-Kaufman ("rook")
+diagonal pivoting method(A = LDL**T or A = U**TDU)
 */
-void invoke_sytrf(integer datatype, char *uplo, integer *n, void *a, integer *lda, integer *ipiv,
-                  void *work, integer *lwork, integer *info)
+void invoke_sytrf_rook(integer datatype, char *uplo, integer *n, void *a, integer *lda,
+                       integer *ipiv, void *work, integer *lwork, integer *info)
 {
     switch(datatype)
     {
         case FLOAT:
         {
-            fla_lapack_ssytrf(uplo, n, a, lda, ipiv, work, lwork, info);
+            fla_lapack_ssytrf_rook(uplo, n, a, lda, ipiv, work, lwork, info);
             break;
         }
 
         case DOUBLE:
         {
-            fla_lapack_dsytrf(uplo, n, a, lda, ipiv, work, lwork, info);
+            fla_lapack_dsytrf_rook(uplo, n, a, lda, ipiv, work, lwork, info);
             break;
         }
 
         case COMPLEX:
         {
-            fla_lapack_csytrf(uplo, n, a, lda, ipiv, work, lwork, info);
+            fla_lapack_csytrf_rook(uplo, n, a, lda, ipiv, work, lwork, info);
             break;
         }
 
         case DOUBLE_COMPLEX:
         {
-            fla_lapack_zsytrf(uplo, n, a, lda, ipiv, work, lwork, info);
+            fla_lapack_zsytrf_rook(uplo, n, a, lda, ipiv, work, lwork, info);
             break;
         }
     }
 }
 
 /*
-LAPACKE SYTRF API invoke function
+LAPACKE SYTRF_ROOK API invoke function
 */
-integer invoke_lapacke_sytrf(integer datatype, integer layout, char uplo, integer n, void *a,
-                             integer lda, integer *ipiv)
+integer invoke_lapacke_sytrf_rook(integer datatype, integer layout, char uplo, integer n, void *a,
+                                  integer lda, integer *ipiv)
 {
     integer info = 0;
     switch(datatype)
     {
         case FLOAT:
         {
-            info = LAPACKE_ssytrf(layout, uplo, n, a, lda, ipiv);
+            info = LAPACKE_ssytrf_rook(layout, uplo, n, a, lda, ipiv);
             break;
         }
 
         case DOUBLE:
         {
-            info = LAPACKE_dsytrf(layout, uplo, n, a, lda, ipiv);
+            info = LAPACKE_dsytrf_rook(layout, uplo, n, a, lda, ipiv);
             break;
         }
 
         case COMPLEX:
         {
-            info = LAPACKE_csytrf(layout, uplo, n, a, lda, ipiv);
+            info = LAPACKE_csytrf_rook(layout, uplo, n, a, lda, ipiv);
             break;
         }
 
         case DOUBLE_COMPLEX:
         {
-            info = LAPACKE_zsytrf(layout, uplo, n, a, lda, ipiv);
+            info = LAPACKE_zsytrf_rook(layout, uplo, n, a, lda, ipiv);
             break;
         }
     }

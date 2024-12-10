@@ -127,6 +127,7 @@ void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer 
     char uplo;
     integer test_lapacke_interface = params->test_lapacke_interface;
     integer layout = params->matrix_major;
+    char *test_name = "SYTRF";
 
     /* Determine the dimensions */
     n = p_cur;
@@ -188,7 +189,7 @@ void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer 
     /* Output validataion */
     if((!FLA_EXTREME_CASE_TEST) && info >= 0)
     {
-        validate_sytrf(&uplo, n, lda, A_test, datatype, ipiv, residual, &info, A);
+        validate_sytrf(&uplo, n, lda, A_test, datatype, ipiv, residual, &info, A, test_name);
         info = 0;
     }
     else if(FLA_EXTREME_CASE_TEST)

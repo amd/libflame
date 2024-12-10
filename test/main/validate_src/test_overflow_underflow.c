@@ -535,6 +535,7 @@ void scale_matrix_overflow_underflow_hetrf_rook(integer datatype, integer m, voi
     free_vector(max_min);
     free_vector(scal);
 }
+
 /* Scale matrix with values around overflow underflow for sytrf */
 void scale_matrix_overflow_underflow_sytrf(integer datatype, integer m, void *A, integer lda,
                                            char imatrix_char)

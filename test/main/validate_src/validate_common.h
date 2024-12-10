@@ -154,7 +154,8 @@ void validate_gelsd(integer m, integer n, integer NRHS, void *A, integer lda, vo
                     double *residual, char imatrix);
 
 void validate_sytrf(char *uplo, integer n, integer lda, void *A_res, integer datatype,
-                    integer *ipiv, double *residual, integer *info, void *A);
+                    integer *ipiv, double *residual, integer *info, void *A, char *test_name);
+
 void validate_hetrf_rook(char *uplo, integer n, integer lda, void *A_res, integer datatype,
                          integer *ipiv, double *residual, integer *info, void *A);
 

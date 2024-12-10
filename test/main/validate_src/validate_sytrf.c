@@ -9,7 +9,7 @@
 #include "test_common.h"
 
 void validate_sytrf(char *uplo, integer n, integer lda, void *A_res, integer datatype,
-                    integer *ipiv, double *residual, integer *info, void *A)
+                    integer *ipiv, double *residual, integer *info, void *A, char *test_name)
 {
     if(n == 0)
     {
@@ -148,7 +148,14 @@ void validate_sytrf(char *uplo, integer n, integer lda, void *A_res, integer dat
              * Compute norm(A_res'*B - X)/(norm(X) * eps * n)
              */
             sgemv_("N", &n, &n, &s_one, A, &lda, X, &i_one, &s_zero, B, &i_one);
-            ssytrs_(uplo, &n, &i_one, A_res, &lda, ipiv, B, &n, info);
+            if(!strcmp(test_name, "SYTRF"))
+            {
+                ssytrs_(uplo, &n, &i_one, A_res, &lda, ipiv, B, &n, info);
+            }
+            else if(!strcmp(test_name, "SYTRF_ROOK"))
+            {
+                ssytrs_rook_(uplo, &n, &i_one, A_res, &lda, ipiv, B, &n, info);
+            }
             norm_a = fla_lapack_slange("1", &n, &i_one, X, &i_one, NULL);
             saxpy_(&n, &s_n_one, B, &i_one, X, &i_one);
             norm = fla_lapack_slange("1", &n, &i_one, X, &i_one, NULL);
@@ -178,7 +185,14 @@ void validate_sytrf(char *uplo, integer n, integer lda, void *A_res, integer dat
              * Compute norm(A_res'*B - X)/(norm(X) * eps * n)
              */
             dgemv_("N", &n, &n, &d_one, A, &lda, X, &i_one, &d_zero, B, &i_one);
-            dsytrs_(uplo, &n, &i_one, A_res, &lda, ipiv, B, &n, info);
+            if(!strcmp(test_name, "SYTRF"))
+            {
+                dsytrs_(uplo, &n, &i_one, A_res, &lda, ipiv, B, &n, info);
+            }
+            else if(!strcmp(test_name, "SYTRF_ROOK"))
+            {
+                dsytrs_rook_(uplo, &n, &i_one, A_res, &lda, ipiv, B, &n, info);
+            }
             norm_a = fla_lapack_dlange("1", &n, &i_one, X, &i_one, NULL);
             daxpy_(&n, &d_n_one, B, &i_one, X, &i_one);
             norm = fla_lapack_dlange("1", &n, &i_one, X, &i_one, NULL);
@@ -208,7 +222,14 @@ void validate_sytrf(char *uplo, integer n, integer lda, void *A_res, integer dat
              *Compute norm(A_res'*B - X)/(norm(X) * eps * n)
              */
             cgemv_("N", &n, &n, &c_one, A, &lda, X, &i_one, &c_zero, B, &i_one);
-            csytrs_(uplo, &n, &i_one, A_res, &lda, ipiv, B, &n, info);
+            if(!strcmp(test_name, "SYTRF"))
+            {
+                csytrs_(uplo, &n, &i_one, A_res, &lda, ipiv, B, &n, info);
+            }
+            else if(!strcmp(test_name, "SYTRF_ROOK"))
+            {
+                csytrs_rook_(uplo, &n, &i_one, A_res, &lda, ipiv, B, &n, info);
+            }
             norm_a = fla_lapack_clange("1", &n, &i_one, X, &i_one, NULL);
             caxpy_(&n, &c_n_one, X, &i_one, B, &i_one);
             norm = fla_lapack_clange("1", &n, &i_one, B, &i_one, NULL);
@@ -239,7 +260,14 @@ void validate_sytrf(char *uplo, integer n, integer lda, void *A_res, integer dat
              * Compute norm(A_res'*B - X)/(norm(X) * eps * n)
              */
             zgemv_("N", &n, &n, &z_one, A, &lda, X, &i_one, &z_zero, B, &i_one);
-            zsytrs_(uplo, &n, &i_one, A_res, &lda, ipiv, B, &n, info);
+            if(!strcmp(test_name, "SYTRF"))
+            {
+                zsytrs_(uplo, &n, &i_one, A_res, &lda, ipiv, B, &n, info);
+            }
+            else if(!strcmp(test_name, "SYTRF_ROOK"))
+            {
+                zsytrs_rook_(uplo, &n, &i_one, A_res, &lda, ipiv, B, &n, info);
+            }
             norm_a = fla_lapack_zlange("1", &n, &i_one, X, &i_one, NULL);
             zaxpy_(&n, &z_n_one, X, &i_one, B, &i_one);
             norm = fla_lapack_zlange("1", &n, &i_one, B, &i_one, NULL);

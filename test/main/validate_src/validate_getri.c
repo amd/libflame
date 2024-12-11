@@ -70,7 +70,6 @@ void validate_getri(integer m_A, integer n_A, void *A, void *A_inv, integer lda,
             /* compute I - A' * A */
             cgemm_("N", "N", &m_A, &n_A, &m_A, &c_n_one, A_inv, &lda, A, &lda, &c_one, a_temp,
                    &m_A);
-
             compute_matrix_norm(datatype, NORM, m_A, m_A, a_temp, m_A, &norm, imatrix, work);
             /* Compute norm(I - A'*A) / (N * norm(A) * norm(AINV) * EPS)*/
             *residual = (double)(norm / (norm_I * eps * n_A));

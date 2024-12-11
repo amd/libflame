@@ -2,14 +2,14 @@
  * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 
-/*! @file validate_hetrf_rook.c
- *  @brief Defines validate function of HETRF_ROOK() to use in test suite.
+/*! @file validate_hetrf.c
+ *  @brief Defines validate function of HETRF() to use in test suite.
  *  */
 
 #include "test_common.h"
 
-void validate_hetrf_rook(char *uplo, integer n, integer lda, void *A_res, integer datatype,
-                         integer *ipiv, double *residual, integer *info, void *A)
+void validate_hetrf(char *uplo, integer n, integer lda, void *A_res, integer datatype,
+                    integer *ipiv, double *residual, integer *info, void *A, char *test_name)
 {
     if(n == 0)
     {
@@ -53,10 +53,14 @@ void validate_hetrf_rook(char *uplo, integer n, integer lda, void *A_res, intege
             set_identity_matrix(datatype, n, n, A_val, n);
             /* U is a product of terms P(k) * U(k) where k decreases from n to 1 in steps of 1 or 2.
              * P(k) is a permutation matrix as defined by ipiv(k) */
-            /* if ipiv(k) < 0 && ipiv(k-1) < 0, then rows k and -ipiv(k) of A_val are exchanged and
-             * rows k-1 and -ipiv(k-1) of A_val are interchanged, D(k-1:k,k-1:k) is a 2-by-2
-             * diagonal block */
-            if(ipiv[k] < 0 && k > 0 && ipiv[k - 1] < 0)
+            /* If test_name = HETRF and ipiv(k) = ipiv(k-1) < 0, then rows k-1 and -ipiv(k) of A_val
+          are interchanged and D(k-1:k,k-1:k) is a 2-by-2 diagonal block
+            */
+            /* If test_name = HETRF_ROOK and ipiv(k) < 0 && ipiv(k-1) < 0, then rows k and -ipiv(k)
+             * of A_val are exchanged and rows k-1 and -ipiv(k-1) of A_val are interchanged,
+             * D(k-1:k,k-1:k) is a 2-by-2 diagonal block */
+            if((!strcmp(test_name, "HETRF") && ipiv[k] < 0 && ipiv[k] == ipiv[k - 1])
+               || (!strcmp(test_name, "HETRF_ROOK") && ipiv[k] < 0 && k > 0 && ipiv[k - 1] < 0))
             {
                 /* Blocked Diagonal */
                 s = 2;
@@ -70,8 +74,16 @@ void validate_hetrf_rook(char *uplo, integer n, integer lda, void *A_res, intege
                  * as negative of itself */
                 negate_off_diagonal_element_imag(datatype, D, n, k, LOWER_OFF_DIAGONAL_ELEMENT);
                 /* Swapping rows according to ipiv */
-                swap_row_col(datatype, &n, A_val, n, &n, &n, (-1 * (ipiv[k - 1])) - 1, 0, k - 1, 0);
-                swap_row_col(datatype, &n, A_val, n, &n, &n, (-1 * (ipiv[k])) - 1, 0, k, 0);
+                if(!strcmp(test_name, "HETRF"))
+                {
+                    swap_row_col(datatype, &n, A_val, n, &n, &n, (-1 * (ipiv[k])) - 1, 0, k - 1, 0);
+                }
+                else
+                {
+                    swap_row_col(datatype, &n, A_val, n, &n, &n, (-1 * (ipiv[k - 1])) - 1, 0, k - 1,
+                                 0);
+                    swap_row_col(datatype, &n, A_val, n, &n, &n, (-1 * (ipiv[k])) - 1, 0, k, 0);
+                }
             }
             /* if ipiv(k) > 0, then rows and columns k and ipiv(k) of A_val are
              interchanged and D(k,k) is a 1-by-1 diagonal block */
@@ -107,10 +119,14 @@ void validate_hetrf_rook(char *uplo, integer n, integer lda, void *A_res, intege
             set_identity_matrix(datatype, n, n, A_val, n);
             /* L is a product of terms P(k) * L(k) where k increases from 1 to n in steps of 1 or 2.
              * P(k) is a permutation matrix as defined by ipiv(k) */
-            /* If ipiv(k) < 0 and ipiv(k+1) < 0, then rows k and -ipiv(k) of A_val are interchanged
-             * and rows k+1 and -ipiv(k+1) of A_val are interchaged, D(k:k+1,k:k+1) is a 2-by-2
-             * diagonal block */
-            if(k < n - 1 && ipiv[k] < 0 && ipiv[k + 1] < 0)
+            /* If test_name = HETRF and ipiv(k) = ipiv(k+1) < 0, then rows k+1 and -ipiv(k) of A_val
+          are interchanged and D(k:k+1,k:k+1) is a 2-by-2 diagonal block.
+            */
+            /* If test_name = HETRF_ROOK and ipiv(k) < 0 and ipiv(k+1) < 0, then rows k and -ipiv(k)
+             * of A_val are interchanged and rows k+1 and -ipiv(k+1) of A_val are interchaged,
+             * D(k:k+1,k:k+1) is a 2-by-2 diagonal block */
+            if((!strcmp(test_name, "HETRF") && k < n - 1 && ipiv[k] < 0 && ipiv[k] == ipiv[k + 1])
+               || (!strcmp(test_name, "HETRF_ROOK") && k < n - 1 && ipiv[k] < 0 && ipiv[k + 1] < 0))
             {
                 /* Blocked Diagonal */
                 s = 2;
@@ -123,8 +139,16 @@ void validate_hetrf_rook(char *uplo, integer n, integer lda, void *A_res, intege
                  * as negative of itself */
                 negate_off_diagonal_element_imag(datatype, D, n, k, HIGHER_OFF_DIAGONAL_ELEMENT);
                 /* Swapping rows according to ipiv */
-                swap_row_col(datatype, &n, A_val, n, &n, &n, (-1 * (ipiv[k + 1])) - 1, 0, k + 1, 0);
-                swap_row_col(datatype, &n, A_val, n, &n, &n, (-1 * (ipiv[k])) - 1, 0, k, 0);
+                if(!strcmp(test_name, "HETRF"))
+                {
+                    swap_row_col(datatype, &n, A_val, n, &n, &n, (-1 * (ipiv[k])) - 1, 0, k + 1, 0);
+                }
+                else
+                {
+                    swap_row_col(datatype, &n, A_val, n, &n, &n, (-1 * (ipiv[k + 1])) - 1, 0, k + 1,
+                                 0);
+                    swap_row_col(datatype, &n, A_val, n, &n, &n, (-1 * (ipiv[k])) - 1, 0, k, 0);
+                }
             }
             /* If ipiv(k) > 0, then rows k and ipiv(k) of A_val are interchanged and D(k,k) is a
              * 1-by-1 diagonal block */
@@ -159,7 +183,14 @@ void validate_hetrf_rook(char *uplo, integer n, integer lda, void *A_res, intege
              *Compute norm(A'*B - X)/(norm(X) * eps * n)
              */
             cgemv_("N", &n, &n, &c_one, A, &lda, X, &i_one, &c_zero, B, &i_one);
-            chetrs_rook_(uplo, &n, &i_one, A_res, &lda, ipiv, B, &n, info);
+            if(!strcmp(test_name, "HETRF"))
+            {
+                chetrs_(uplo, &n, &i_one, A_res, &lda, ipiv, B, &n, info);
+            }
+            else
+            {
+                chetrs_rook_(uplo, &n, &i_one, A_res, &lda, ipiv, B, &n, info);
+            }
             norm_a = fla_lapack_clange("1", &n, &i_one, X, &i_one, NULL);
             caxpy_(&n, &c_n_one, X, &i_one, B, &i_one);
             norm = fla_lapack_clange("1", &n, &i_one, B, &i_one, NULL);
@@ -190,7 +221,14 @@ void validate_hetrf_rook(char *uplo, integer n, integer lda, void *A_res, intege
              * Compute norm(A'*B - X)/(norm(X) * eps * n)
              */
             zgemv_("N", &n, &n, &z_one, A, &lda, X, &i_one, &z_zero, B, &i_one);
-            zhetrs_rook_(uplo, &n, &i_one, A_res, &lda, ipiv, B, &n, info);
+            if(!strcmp(test_name, "HETRF"))
+            {
+                zhetrs_(uplo, &n, &i_one, A_res, &lda, ipiv, B, &n, info);
+            }
+            else
+            {
+                zhetrs_rook_(uplo, &n, &i_one, A_res, &lda, ipiv, B, &n, info);
+            }
             norm_a = fla_lapack_zlange("1", &n, &i_one, X, &i_one, NULL);
             zaxpy_(&n, &z_n_one, X, &i_one, B, &i_one);
             norm = fla_lapack_zlange("1", &n, &i_one, B, &i_one, NULL);

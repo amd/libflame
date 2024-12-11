@@ -79,7 +79,7 @@ void fla_test_hetrf_rook(integer argc, char **argv, test_params_t *params)
                 datatype = get_datatype(stype);
 
                 /* Check for invalid datatype */
-                if(datatype == FLOAT || datatype == DOUBLE ||  datatype == INVALID_TYPE)
+                if(datatype == FLOAT || datatype == DOUBLE || datatype == INVALID_TYPE)
                 {
                     invalid_dtype = 1;
                     continue;
@@ -128,6 +128,7 @@ void fla_test_hetrf_rook_experiment(test_params_t *params, integer datatype, int
     char uplo;
     integer interfacetype = params->interfacetype;
     integer layout = params->matrix_major;
+    char *test_name = "HETRF_ROOK";
 
     /* Determine the dimensions */
     n = p_cur;
@@ -156,7 +157,7 @@ void fla_test_hetrf_rook_experiment(test_params_t *params, integer datatype, int
         init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
         if(params->imatrix_char != NULL)
         {
-            form_symmetric_matrix(datatype, n, A, lda, "C");
+            form_symmetric_matrix(datatype, n, A, lda, "C", 'U');
         }
     }
     else
@@ -165,7 +166,7 @@ void fla_test_hetrf_rook_experiment(test_params_t *params, integer datatype, int
         create_realtype_vector(datatype, &L, n);
         generate_matrix_from_EVs(datatype, 'V', n, A, lda, L, HETRF_ROOK_VL, HETRF_ROOK_VU,
                                  USE_SIGNED_EIGEN_VALUES);
-        form_symmetric_matrix(datatype, n, A, lda, "C");
+        form_symmetric_matrix(datatype, n, A, lda, "C", 'U');
         free_vector(L);
         /* Oveflow or underflow test initialization */
         if(FLA_OVERFLOW_UNDERFLOW_TEST)
@@ -188,7 +189,7 @@ void fla_test_hetrf_rook_experiment(test_params_t *params, integer datatype, int
     /* Output validataion */
     if((!FLA_EXTREME_CASE_TEST) && info >= 0)
     {
-        validate_hetrf_rook(&uplo, n, lda, A_test, datatype, ipiv, residual, &info, A);
+        validate_hetrf(&uplo, n, lda, A_test, datatype, ipiv, residual, &info, A, test_name);
         info = 0;
     }
     else if(FLA_EXTREME_CASE_TEST)

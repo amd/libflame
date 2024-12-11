@@ -2,34 +2,36 @@
  * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 
+#include "test_common.h"
 #include "test_lapack.h"
+#include "test_prototype.h"
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
 
-#define HETRF_ROOK_VU 10.0 // Maximum eigen value for condition number.
-#define HETRF_ROOK_VL 0.01 // Minimum eigen value for condition number.
+#define HETRF_VU 8.0 // Maximum eigen value for condition number.
+#define HETRF_VL 0.01 // Minimum eigen value for condition number.
 
-integer row_major_hetrf_rook_lda;
+integer row_major_hetrf_lda;
 
-void invoke_hetrf_rook(integer datatype, char *uplo, integer *n, void *a, integer *lda,
-                       integer *ipiv, void *work, integer *lwork, integer *info);
-void fla_test_hetrf_rook_experiment(test_params_t *params, integer datatype, integer p_cur,
-                                    integer q_cur, integer pci, integer n_repeats, integer einfo,
-                                    double *perf, double *t, double *residual);
-void prepare_hetrf_rook_run(integer datatype, integer n, void *A, char uplo, integer lda,
-                            integer *ipiv, void *work, integer lwork, integer n_repeats,
-                            double *time_min_, integer *info, integer interfacetype,
-                            integer mlayout);
-double prepare_lapacke_hetrf_rook_run(integer datatype, integer layout, char uplo, integer n,
-                                      void *A, integer lda, void *ipiv, integer *info);
-integer invoke_lapacke_hetrf_rook(integer datatype, integer layout, char uplo, integer n, void *a,
-                                  integer lda, integer *ipiv);
+void invoke_hetrf(integer datatype, char *uplo, integer *n, void *a, integer *lda, integer *ipiv,
+                  void *work, integer *lwork, integer *info);
+void fla_test_hetrf_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *t, double *residual);
+void prepare_hetrf_run(integer datatype, integer n, void *A, char uplo, integer lda, integer *ipiv,
+                       void *work, integer lwork, integer n_repeats, double *time_min_,
+                       integer *info, integer interfacetype, integer mlayout);
+double prepare_lapacke_hetrf_run(integer datatype, integer layout, char uplo, integer n, void *A,
+                                 integer lda, void *ipiv, integer *info);
+integer invoke_lapacke_hetrf(integer datatype, integer layout, char uplo, integer n, void *a,
+                             integer lda, integer *ipiv);
 
-void fla_test_hetrf_rook(integer argc, char **argv, test_params_t *params)
+void fla_test_hetrf(integer argc, char **argv, test_params_t *params)
 {
+    srand(14);
     char *op_str = "LDL**H / UDU**H factorization";
-    char *front_str = "HETRF_ROOK";
+    char *front_str = "HETRF";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
     params->imatrix_char = '\0';
     if(argc == 1)
@@ -38,7 +40,7 @@ void fla_test_hetrf_rook(integer argc, char **argv, test_params_t *params)
         g_lwork = -1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
-        fla_test_op_driver(front_str, SQUARE_INPUT, params, LIN, fla_test_hetrf_rook_experiment);
+        fla_test_op_driver(front_str, SQUARE_INPUT, params, LIN, fla_test_hetrf_experiment);
         tests_not_run = 0;
     }
     if(argc == 9)
@@ -59,7 +61,7 @@ void fla_test_hetrf_rook(integer argc, char **argv, test_params_t *params)
         params->lin_solver_paramslist[0].Uplo = argv[3][0];
         if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
         {
-            row_major_hetrf_rook_lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
+            row_major_hetrf_lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
             params->lin_solver_paramslist[0].lda = N;
         }
         else
@@ -91,8 +93,8 @@ void fla_test_hetrf_rook(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_hetrf_rook_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
-                                               &time_min, &residual);
+                fla_test_hetrf_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
+                                          &time_min, &residual);
 
                 /* Print the result */
                 fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
@@ -105,8 +107,8 @@ void fla_test_hetrf_rook(integer argc, char **argv, test_params_t *params)
     /* Print error message */
     if(tests_not_run)
     {
-        printf("\nIllegal arguments for hetrf_rook\n");
-        printf("./<EXE> hetrf_rook <precisions - cz> <UPLO> <N> <LDA> <LWORK> <repeats>\n");
+        printf("\nIllegal arguments for hetrf\n");
+        printf("./<EXE> hetrf <precisions - cz> <UPLO> <N> <LDA> <LWORK> <repeats>\n");
     }
     if(invalid_dtype)
     {
@@ -119,16 +121,16 @@ void fla_test_hetrf_rook(integer argc, char **argv, test_params_t *params)
     }
 }
 
-void fla_test_hetrf_rook_experiment(test_params_t *params, integer datatype, integer p_cur,
-                                    integer q_cur, integer pci, integer n_repeats, integer einfo,
-                                    double *perf, double *t, double *residual)
+void fla_test_hetrf_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *t, double *residual)
 {
     integer n, lda, lwork = -1, info = 0;
     void *A = NULL, *A_test = NULL, *ipiv = NULL, *work = NULL, *L = NULL;
     char uplo;
     integer interfacetype = params->interfacetype;
     integer layout = params->matrix_major;
-    char *test_name = "HETRF_ROOK";
+    char *test_name = "HETRF";
 
     /* Determine the dimensions */
     n = p_cur;
@@ -164,14 +166,14 @@ void fla_test_hetrf_rook_experiment(test_params_t *params, integer datatype, int
     {
         /* Create input matrix (hermitian) */
         create_realtype_vector(datatype, &L, n);
-        generate_matrix_from_EVs(datatype, 'V', n, A, lda, L, HETRF_ROOK_VL, HETRF_ROOK_VU,
+        generate_matrix_from_EVs(datatype, 'V', n, A, lda, L, HETRF_VL, HETRF_VU,
                                  USE_SIGNED_EIGEN_VALUES);
         form_symmetric_matrix(datatype, n, A, lda, "C", 'U');
         free_vector(L);
         /* Oveflow or underflow test initialization */
         if(FLA_OVERFLOW_UNDERFLOW_TEST)
         {
-            scale_matrix_overflow_underflow_hetrf_rook(datatype, n, A, lda, params->imatrix_char);
+            scale_matrix_overflow_underflow_hetrf(datatype, n, A, lda, params->imatrix_char);
         }
     }
 
@@ -179,13 +181,12 @@ void fla_test_hetrf_rook_experiment(test_params_t *params, integer datatype, int
     copy_matrix(datatype, "full", lda, n, A, lda, A_test, lda);
 
     /* call to API */
-    prepare_hetrf_rook_run(datatype, n, A_test, uplo, lda, ipiv, work, lwork, n_repeats, t, &info,
-                           interfacetype, layout);
+    prepare_hetrf_run(datatype, n, A_test, uplo, lda, ipiv, work, lwork, n_repeats, t, &info,
+                      interfacetype, layout);
 
     /* Performance computation */
     *perf = (double)(n * n * n) * (1.0 / 3.0) / *t / FLOPS_PER_UNIT_PERF;
     *perf *= 4.0;
-
     /* Output validataion */
     if((!FLA_EXTREME_CASE_TEST) && info >= 0)
     {
@@ -208,10 +209,9 @@ void fla_test_hetrf_rook_experiment(test_params_t *params, integer datatype, int
     free_matrix(A_test);
 }
 
-void prepare_hetrf_rook_run(integer datatype, integer n, void *A, char uplo, integer lda,
-                            integer *ipiv, void *work, integer lwork, integer n_repeats,
-                            double *time_min_, integer *info, integer interfacetype,
-                            integer layout)
+void prepare_hetrf_run(integer datatype, integer n, void *A, char uplo, integer lda, integer *ipiv,
+                       void *work, integer lwork, integer n_repeats, double *time_min_,
+                       integer *info, integer interfacetype, integer layout)
 {
     integer i;
     void *A_save = NULL;
@@ -222,24 +222,12 @@ void prepare_hetrf_rook_run(integer datatype, integer n, void *A, char uplo, int
     /* Make a workspace query the first time through. This will provide us with
      and ideal workspace size based on an internal block size.
      NOTE: LAPACKE interface handles workspace query internally */
-    if((interfacetype != LAPACKE_COLUMN_TEST) && (interfacetype != LAPACKE_ROW_TEST) && (g_lwork == -1))
+    if(g_lwork == -1)
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
-
         /* Getting lwork from api by passing lwork = -1 */
-#if ENABLE_CPP_TEST
-        if(interfacetype == LAPACK_CPP_TEST)
-        {
-            exe_time = fla_test_clock();
-            invoke_cpp_hetrf_rook(datatype, &uplo, &n, NULL, &lda, ipiv, work, &lwork, info);
-            exe_time = fla_test_clock() - exe_time;
-        }
-        else
-#endif
-        {
-            invoke_hetrf_rook(datatype, &uplo, &n, NULL, &lda, ipiv, work, &lwork, info);
-        }
+        invoke_hetrf(datatype, &uplo, &n, NULL, &lda, ipiv, work, &lwork, info);
         if(*info == 0)
         {
             lwork = get_work_value(datatype, work);
@@ -262,14 +250,16 @@ void prepare_hetrf_rook_run(integer datatype, integer n, void *A, char uplo, int
         create_vector(datatype, &work, lwork);
         if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
-            exe_time = prepare_lapacke_hetrf_rook_run(datatype, layout, uplo, n, A_save, lda, ipiv,
-                                                      info);
+            exe_time
+                = prepare_lapacke_hetrf_run(datatype, layout, uplo, n, A_save, lda, ipiv, info);
         }
 #if ENABLE_CPP_TEST
-        else if(interfacetype == LAPACK_CPP_TEST)   /* Call CPP hetrf_rook API */
+        else if(interfacetype == LAPACK_CPP_TEST)
         {
             exe_time = fla_test_clock();
-            invoke_cpp_hetrf_rook(datatype, &uplo, &n, A_save, &lda, ipiv, work, &lwork, info);
+            /* Call CPP gecon API */
+            invoke_cpp_hetrf(datatype, &uplo, &n, A_save, &lda, ipiv, work, &lwork, info);
+
             exe_time = fla_test_clock() - exe_time;
         }
 #endif
@@ -278,7 +268,7 @@ void prepare_hetrf_rook_run(integer datatype, integer n, void *A, char uplo, int
             exe_time = fla_test_clock();
 
             /*  call to API */
-            invoke_hetrf_rook(datatype, &uplo, &n, A_save, &lda, ipiv, work, &lwork, info);
+            invoke_hetrf(datatype, &uplo, &n, A_save, &lda, ipiv, work, &lwork, info);
 
             exe_time = fla_test_clock() - exe_time;
         }
@@ -295,8 +285,8 @@ void prepare_hetrf_rook_run(integer datatype, integer n, void *A, char uplo, int
     free_matrix(A_save);
 }
 
-double prepare_lapacke_hetrf_rook_run(integer datatype, integer layout, char uplo, integer n,
-                                      void *A, integer lda, void *ipiv, integer *info)
+double prepare_lapacke_hetrf_run(integer datatype, integer layout, char uplo, integer n, void *A,
+                                 integer lda, void *ipiv, integer *info)
 {
     double exe_time = 0;
     integer lda_t = lda;
@@ -304,7 +294,7 @@ double prepare_lapacke_hetrf_rook_run(integer datatype, integer layout, char upl
     A_t = A;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_hetrf_rook_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_hetrf_lda, lda_t);
 
     /* In case of row_major matrix layout,
        convert input matrix to row_major */
@@ -316,8 +306,8 @@ double prepare_lapacke_hetrf_rook_run(integer datatype, integer layout, char upl
 
     exe_time = fla_test_clock();
 
-    /* call to LAPACKE hetrf_rook API */
-    *info = invoke_lapacke_hetrf_rook(datatype, layout, uplo, n, A_t, lda_t, ipiv);
+    /* call to LAPACKE hetrf API */
+    *info = invoke_lapacke_hetrf(datatype, layout, uplo, n, A_t, lda_t, ipiv);
 
     exe_time = fla_test_clock() - exe_time;
 
@@ -333,48 +323,48 @@ double prepare_lapacke_hetrf_rook_run(integer datatype, integer layout, char upl
 }
 
 /*
-HETRF_ROOK_API calls LAPACK interface for factorization
-of a complex hermitian matrix A using the bounded
-Bunch-Kaufman("rook") diagonal pivoting method
+HETRF_API calls LAPACK interface for factorization
+of a complex hermitian matrix A using the
+Bunch-Kaufman diagonal pivoting method
 (A = L*D*L**H or A = U*D*U**H)
 */
-void invoke_hetrf_rook(integer datatype, char *uplo, integer *n, void *a, integer *lda,
-                       integer *ipiv, void *work, integer *lwork, integer *info)
+void invoke_hetrf(integer datatype, char *uplo, integer *n, void *a, integer *lda, integer *ipiv,
+                  void *work, integer *lwork, integer *info)
 {
     switch(datatype)
     {
         case COMPLEX:
         {
-            fla_lapack_chetrf_rook(uplo, n, a, lda, ipiv, work, lwork, info);
+            fla_lapack_chetrf(uplo, n, a, lda, ipiv, work, lwork, info);
             break;
         }
 
         case DOUBLE_COMPLEX:
         {
-            fla_lapack_zhetrf_rook(uplo, n, a, lda, ipiv, work, lwork, info);
+            fla_lapack_zhetrf(uplo, n, a, lda, ipiv, work, lwork, info);
             break;
         }
     }
 }
 
 /*
-LAPACKE HETRF_ROOK API invoke function
+LAPACKE HETRF API invoke function
 */
-integer invoke_lapacke_hetrf_rook(integer datatype, integer layout, char uplo, integer n, void *a,
-                                  integer lda, integer *ipiv)
+integer invoke_lapacke_hetrf(integer datatype, integer layout, char uplo, integer n, void *a,
+                             integer lda, integer *ipiv)
 {
     integer info = 0;
     switch(datatype)
     {
         case COMPLEX:
         {
-            info = LAPACKE_chetrf_rook(layout, uplo, n, a, lda, ipiv);
+            info = LAPACKE_chetrf(layout, uplo, n, a, lda, ipiv);
             break;
         }
 
         case DOUBLE_COMPLEX:
         {
-            info = LAPACKE_zhetrf_rook(layout, uplo, n, a, lda, ipiv);
+            info = LAPACKE_zhetrf(layout, uplo, n, a, lda, ipiv);
             break;
         }
     }

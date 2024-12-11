@@ -158,6 +158,8 @@ void validate_sytrf(char *uplo, integer n, integer lda, void *A_res, integer dat
 
 void validate_hetrf_rook(char *uplo, integer n, integer lda, void *A_res, integer datatype,
                          integer *ipiv, double *residual, integer *info, void *A);
+void validate_hetrf(char *uplo, integer n, integer lda, void *A_res, integer datatype,
+                    integer *ipiv, double *residual, integer *info, void *A, char *test_name);
 
 /* GGEV API validate case for JOBVL= JOBVR = N */
 void validate_ggev_EVs(integer m, void *alpha, void *alphar, void *alphai, void *beta,
@@ -179,4 +181,6 @@ void validate_gecon(integer datatype, char norm, integer n, void *A, void *A_sav
 void validate_getrfnpi(integer m_A, integer n_A, integer nfact, void *A, void *A_test, integer lda,
                        integer *IPIV, integer datatype, double *residual, integer *info,
                        char imatrix);
+void validate_hetri_rook(char uplo, integer n, void *A, void *A_inv, integer lda, integer *ipiv,
+                         integer datatype, double *residual, integer *info, char imatrix);
 #endif // VALIDATE_COMMON_H

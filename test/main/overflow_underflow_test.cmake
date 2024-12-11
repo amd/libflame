@@ -130,6 +130,14 @@ set(OVERFLOW_UNDERFLOW_VALUES_TEST_CASES "gehrd sdcz 15 1 10 15 15 1 --imatrix=O
             "sytrf_rook sdcz U 553 600 -1 1 --imatrix=U"
             "sytrf_rook sdcz L 553 600 -1 1 --imatrix=O"
             "sytrf_rook sdcz U 553 600 -1 1 --imatrix=O"
+            "hetrf cz L 100 1000 -1 1 --imatrix=U"
+            "hetrf cz U 100 1000 -1 1 --imatrix=U"
+            "hetrf cz L 100 1000 -1 1 --imatrix=O"
+            "hetrf cz U 100 1000 -1 1 --imatrix=O"
+            "hetrf cz L 500 600 -1 1 --imatrix=U"
+            "hetrf cz U 500 600 -1 1 --imatrix=U"
+            "hetrf cz L 500 600 -1 1 --imatrix=O"
+            "hetrf cz U 500 600 -1 1 --imatrix=O"
             "hetrf_rook cz L 100 1000 -1 1 --imatrix=U"
             "hetrf_rook cz U 100 1000 -1 1 --imatrix=U"
             "hetrf_rook cz L 100 1000 -1 1 --imatrix=O"
@@ -460,6 +468,10 @@ set(OVERFLOW_UNDERFLOW_VALUES_TEST_CASES "gehrd sdcz 15 1 10 15 15 1 --imatrix=O
             "getrfnpi sdcz 650 500 1 650 1 --imatrix=O"
             "getrfnpi sdcz 1500 1600 500 1600 1 --imatrix=U"
             "getrfnpi sdcz 1500 1500 500 1600 1 --imatrix=O"
+            "hetri_rook cz U 10 10 1 --imatrix-char=O"
+            "hetri_rook cz U 15 15 1 --imatrix-char=U"
+            "hetri_rook cz L 80 100 1 --imatrix-char=O"
+            "hetri_rook cz L 105 220 1 --imatrix-char=U"
 )
 
 foreach(ou_vals_test_cases IN LISTS OVERFLOW_UNDERFLOW_VALUES_TEST_CASES)

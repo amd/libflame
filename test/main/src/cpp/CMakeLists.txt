@@ -50,5 +50,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/invoke_potrs.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_rot.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_stedc.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_gecon.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_hetrf.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_hetri_rook.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_common.hh
 )

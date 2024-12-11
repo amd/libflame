@@ -87,7 +87,6 @@
 
 LAPACK_gesdd_real(s)
 {
-    int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgesdd inputs: jobz %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
                       ", ldu %" FLA_IS ", ldvt %" FLA_IS ", lwork %" FLA_IS "",
@@ -106,6 +105,7 @@ LAPACK_gesdd_real(s)
     }
 #else
     {
+        int fla_error = LAPACK_SUCCESS;
         char jobu[1], jobv[1];
 
         if(lsame_(jobz, "O", 1, 1))
@@ -145,7 +145,6 @@ LAPACK_gesdd_real(s)
 
 LAPACK_gesdd_real(d)
 {
-    int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgesdd inputs: jobz %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
                       ", ldu %" FLA_IS ", ldvt %" FLA_IS ", lwork %" FLA_IS "",
@@ -165,6 +164,7 @@ LAPACK_gesdd_real(d)
     }
 #else
     {
+        int fla_error = LAPACK_SUCCESS;
         char jobu[1], jobv[1];
 
         if(lsame_(jobz, "O", 1, 1))

@@ -1,13 +1,13 @@
-/* ../netlib/dlasd3.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./dlasd3.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__0 = 0;
-static doublereal c_b13 = 1.;
-static doublereal c_b26 = 0.;
+static doublereal c_b12 = 1.;
+static doublereal c_b25 = 0.;
 /* > \brief \b DLASD3 finds all square roots of the roots of the secular equation, as defined by the
  * values in D and Z, and then updates the singular vectors by matrix multiplication. Used by
  * sbdsdc. */
@@ -54,13 +54,6 @@ static doublereal c_b26 = 0.;
 /* > appropriate calls to DLASD4 and then updates the singular */
 /* > vectors by matrix multiplication. */
 /* > */
-/* > This code makes very mild assumptions about floating point */
-/* > arithmetic. It will work on machines with a guard digit in */
-/* > add/subtract, or on those binary machines without guard digits */
-/* > which subtract like the Cray XMP, Cray YMP, Cray C 90, or Cray 2. */
-/* > It could conceivably fail on hexadecimal or decimal machines */
-/* > without guard digits, but we know of none. */
-/* > */
 /* > DLASD3 is called from DLASD1. */
 /* > \endverbatim */
 /* Arguments: */
@@ -102,8 +95,7 @@ static doublereal c_b26 = 0.;
 /* > */
 /* > \param[out] Q */
 /* > \verbatim */
-/* > Q is DOUBLE PRECISION array, */
-/* > dimension at least (LDQ,K). */
+/* > Q is DOUBLE PRECISION array, dimension (LDQ,K) */
 /* > \endverbatim */
 /* > */
 /* > \param[in] LDQ */
@@ -133,7 +125,7 @@ static doublereal c_b26 = 0.;
 /* > The leading dimension of the array U. LDU >= N. */
 /* > \endverbatim */
 /* > */
-/* > \param[in,out] U2 */
+/* > \param[in] U2 */
 /* > \verbatim */
 /* > U2 is DOUBLE PRECISION array, dimension (LDU2, N) */
 /* > The first K columns of this matrix contain the non-deflated */
@@ -197,7 +189,7 @@ the second */
 /* > type is any column which has been deflated. */
 /* > \endverbatim */
 /* > */
-/* > \param[in] Z */
+/* > \param[in,out] Z */
 /* > \verbatim */
 /* > Z is DOUBLE PRECISION array, dimension (K) */
 /* > The first K elements of this array contain the components */
@@ -217,8 +209,7 @@ the second */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date September 2012 */
-/* > \ingroup auxOTHERauxiliary */
+/* > \ingroup lasd3 */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -258,7 +249,6 @@ void dlasd3_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d_
         void
         dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer ktemp;
-    extern doublereal dlamc3_(doublereal *, doublereal *);
     extern /* Subroutine */
         void
         dlasd4_(integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
@@ -267,10 +257,9 @@ void dlasd3_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d_
                 doublereal *, integer *, integer *),
         dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    /* -- LAPACK auxiliary routine (version 3.4.2) -- */
+    /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* September 2012 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -361,7 +350,7 @@ void dlasd3_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d_
     /* Quick return if possible */
     if(*k == 1)
     {
-        d__[1] = f2c_dabs(z__[1]);
+        d__[1] = f2c_abs(z__[1]);
         dcopy_(&m, &vt2[vt2_dim1 + 1], ldvt2, &vt[vt_dim1 + 1], ldvt);
         if(z__[1] > 0.)
         {
@@ -379,34 +368,11 @@ void dlasd3_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d_
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    /* Modify values DSIGMA(i) to make sure all DSIGMA(i)-DSIGMA(j) can */
-    /* be computed with high relative accuracy (barring over/underflow). */
-    /* This is a problem on machines without a guard digit in */
-    /* add/subtract (Cray XMP, Cray YMP, Cray C 90 and Cray 2). */
-    /* The following code replaces DSIGMA(I) by 2*DSIGMA(I)-DSIGMA(I), */
-    /* which on any of these machines zeros out the bottommost */
-    /* bit of DSIGMA(I) if it is 1;
-    this makes the subsequent */
-    /* subtractions DSIGMA(I)-DSIGMA(J) unproblematic when cancellation */
-    /* occurs. On binary machines with a guard digit (almost all */
-    /* machines) it does not change DSIGMA(I) at all. On hexadecimal */
-    /* and decimal machines with a guard digit, it slightly */
-    /* changes the bottommost bits of DSIGMA(I). It does not account */
-    /* for hexadecimal or decimal machines without guard digits */
-    /* (we know of none). We use a subroutine call to compute */
-    /* 2*DSIGMA(I) to prevent optimizing compilers from eliminating */
-    /* this code. */
-    i__1 = *k;
-    for(i__ = 1; i__ <= i__1; ++i__)
-    {
-        dsigma[i__] = dlamc3_(&dsigma[i__], &dsigma[i__]) - dsigma[i__];
-        /* L20: */
-    }
     /* Keep a copy of Z. */
     dcopy_(k, &z__[1], &c__1, &q[q_offset], &c__1);
     /* Normalize Z. */
     rho = dnrm2_(k, &z__[1], &c__1);
-    dlascl_("G", &c__0, &c__0, &rho, &c_b13, k, &c__1, &z__[1], k, info);
+    dlascl_("G", &c__0, &c__0, &rho, &c_b12, k, &c__1, &z__[1], k, info);
     rho *= rho;
     /* Find the new singular values. */
     i__1 = *k;
@@ -414,7 +380,7 @@ void dlasd3_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d_
     {
         dlasd4_(k, &j, &dsigma[1], &z__[1], &u[j * u_dim1 + 1], &rho, &d__[j], &vt[j * vt_dim1 + 1],
                 info);
-        /* If the zero finder fails, the computation is terminated. */
+        /* If the zero finder fails, report the convergence failure. */
         if(*info != 0)
         {
             AOCL_DTL_TRACE_LOG_EXIT
@@ -441,7 +407,7 @@ void dlasd3_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d_
                         / (dsigma[i__] + dsigma[j + 1]);
             /* L50: */
         }
-        d__2 = sqrt((d__1 = z__[i__], f2c_dabs(d__1)));
+        d__2 = sqrt((d__1 = z__[i__], f2c_abs(d__1)));
         z__[i__] = d_sign(&d__2, &q[i__ + q_dim1]);
         /* L60: */
     }
@@ -473,26 +439,26 @@ void dlasd3_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d_
     /* Update the left singular vector matrix. */
     if(*k == 2)
     {
-        dgemm_("N", "N", &n, k, k, &c_b13, &u2[u2_offset], ldu2, &q[q_offset], ldq, &c_b26,
+        dgemm_("N", "N", &n, k, k, &c_b12, &u2[u2_offset], ldu2, &q[q_offset], ldq, &c_b25,
                &u[u_offset], ldu);
         goto L100;
     }
     if(ctot[1] > 0)
     {
-        dgemm_("N", "N", nl, k, &ctot[1], &c_b13, &u2[(u2_dim1 << 1) + 1], ldu2, &q[q_dim1 + 2],
-               ldq, &c_b26, &u[u_dim1 + 1], ldu);
+        dgemm_("N", "N", nl, k, &ctot[1], &c_b12, &u2[(u2_dim1 << 1) + 1], ldu2, &q[q_dim1 + 2],
+               ldq, &c_b25, &u[u_dim1 + 1], ldu);
         if(ctot[3] > 0)
         {
             ktemp = ctot[1] + 2 + ctot[2];
-            dgemm_("N", "N", nl, k, &ctot[3], &c_b13, &u2[ktemp * u2_dim1 + 1], ldu2,
-                   &q[ktemp + q_dim1], ldq, &c_b13, &u[u_dim1 + 1], ldu);
+            dgemm_("N", "N", nl, k, &ctot[3], &c_b12, &u2[ktemp * u2_dim1 + 1], ldu2,
+                   &q[ktemp + q_dim1], ldq, &c_b12, &u[u_dim1 + 1], ldu);
         }
     }
     else if(ctot[3] > 0)
     {
         ktemp = ctot[1] + 2 + ctot[2];
-        dgemm_("N", "N", nl, k, &ctot[3], &c_b13, &u2[ktemp * u2_dim1 + 1], ldu2,
-               &q[ktemp + q_dim1], ldq, &c_b26, &u[u_dim1 + 1], ldu);
+        dgemm_("N", "N", nl, k, &ctot[3], &c_b12, &u2[ktemp * u2_dim1 + 1], ldu2,
+               &q[ktemp + q_dim1], ldq, &c_b25, &u[u_dim1 + 1], ldu);
     }
     else
     {
@@ -501,9 +467,9 @@ void dlasd3_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d_
     dcopy_(k, &q[q_dim1 + 1], ldq, &u[nlp1 + u_dim1], ldu);
     ktemp = ctot[1] + 2;
     ctemp = ctot[2] + ctot[3];
-    dgemm_("N", "N", nr, k, &ctemp, &c_b13, &u2[nlp2 + ktemp * u2_dim1], ldu2, &q[ktemp + q_dim1],
-           ldq, &c_b26, &u[nlp2 + u_dim1], ldu);
-    /* Generate the right singular vectors. */
+    dgemm_("N", "N", nr, k, &ctemp, &c_b12, &u2[nlp2 + ktemp * u2_dim1], ldu2, &q[ktemp + q_dim1],
+           ldq, &c_b25, &u[nlp2 + u_dim1], ldu);
+/* Generate the right singular vectors. */
 L100:
     i__1 = *k;
     for(i__ = 1; i__ <= i__1; ++i__)
@@ -522,19 +488,19 @@ L100:
     /* Update the right singular vector matrix. */
     if(*k == 2)
     {
-        dgemm_("N", "N", k, &m, k, &c_b13, &q[q_offset], ldq, &vt2[vt2_offset], ldvt2, &c_b26,
+        dgemm_("N", "N", k, &m, k, &c_b12, &q[q_offset], ldq, &vt2[vt2_offset], ldvt2, &c_b25,
                &vt[vt_offset], ldvt);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     ktemp = ctot[1] + 1;
-    dgemm_("N", "N", k, &nlp1, &ktemp, &c_b13, &q[q_dim1 + 1], ldq, &vt2[vt2_dim1 + 1], ldvt2,
-           &c_b26, &vt[vt_dim1 + 1], ldvt);
+    dgemm_("N", "N", k, &nlp1, &ktemp, &c_b12, &q[q_dim1 + 1], ldq, &vt2[vt2_dim1 + 1], ldvt2,
+           &c_b25, &vt[vt_dim1 + 1], ldvt);
     ktemp = ctot[1] + 2 + ctot[2];
     if(ktemp <= *ldvt2)
     {
-        dgemm_("N", "N", k, &nlp1, &ctot[3], &c_b13, &q[ktemp * q_dim1 + 1], ldq,
-               &vt2[ktemp + vt2_dim1], ldvt2, &c_b13, &vt[vt_dim1 + 1], ldvt);
+        dgemm_("N", "N", k, &nlp1, &ctot[3], &c_b12, &q[ktemp * q_dim1 + 1], ldq,
+               &vt2[ktemp + vt2_dim1], ldvt2, &c_b12, &vt[vt_dim1 + 1], ldvt);
     }
     ktemp = ctot[1] + 1;
     nrp1 = *nr + *sqre;
@@ -554,8 +520,8 @@ L100:
         }
     }
     ctemp = ctot[2] + 1 + ctot[3];
-    dgemm_("N", "N", k, &nrp1, &ctemp, &c_b13, &q[ktemp * q_dim1 + 1], ldq,
-           &vt2[ktemp + nlp2 * vt2_dim1], ldvt2, &c_b26, &vt[nlp2 * vt_dim1 + 1], ldvt);
+    dgemm_("N", "N", k, &nrp1, &ctemp, &c_b12, &q[ktemp * q_dim1 + 1], ldq,
+           &vt2[ktemp + nlp2 * vt2_dim1], ldvt2, &c_b25, &vt[nlp2 * vt_dim1 + 1], ldvt);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of DLASD3 */

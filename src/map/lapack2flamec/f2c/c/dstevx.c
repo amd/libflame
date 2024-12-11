@@ -1,8 +1,8 @@
-/* ../netlib/dstevx.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./dstevx.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief <b> DSTEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors
@@ -262,7 +262,7 @@ void dstevx_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e
     logical wantz;
     extern doublereal dlamch_(char *);
     logical alleig, indeig;
-    aocl_int64_t iscale;
+    integer iscale;
     logical valeig;
     doublereal safmin;
     extern /* Subroutine */
@@ -448,7 +448,6 @@ void dstevx_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e
     /* If all eigenvalues are desired and ABSTOL is less than zero, then */
     /* call DSTERF or SSTEQR. If this fails for some eigenvalue, then */
     /* try DSTEBZ. */
-    indibl = 1;
     test = FALSE_;
     if(indeig)
     {
@@ -497,13 +496,13 @@ void dstevx_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e
         *(unsigned char *)order = 'E';
     }
     indwrk = 1;
-    indisp = indibl + *n;
+    indisp = *n + 1;
     indiwo = indisp + *n;
     dstebz_(range, order, n, &vll, &vuu, il, iu, abstol, &d__[1], &e[1], m, &nsplit, &w[1],
-            &iwork[indibl], &iwork[indisp], &work[indwrk], &iwork[indiwo], info);
+            &iwork[1], &iwork[indisp], &work[indwrk], &iwork[indiwo], info);
     if(wantz)
     {
-        dstein_(n, &d__[1], &e[1], m, &w[1], &iwork[indibl], &iwork[indisp], &z__[z_offset], ldz,
+        dstein_(n, &d__[1], &e[1], m, &w[1], &iwork[1], &iwork[indisp], &z__[z_offset], ldz,
                 &work[indwrk], &iwork[indiwo], &ifail[1], info);
     }
 /* If matrix was scaled, then rescale eigenvalues appropriately. */
@@ -546,7 +545,7 @@ L20:
                 w[i__] = w[j];
                 iwork[i__] = iwork[j];
                 w[j] = tmp1;
-                iwork[indibl + j - 1] = itmp1;
+                iwork[j] = itmp1;
                 dswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], &c__1);
                 if(*info != 0)
                 {

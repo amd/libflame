@@ -1,8 +1,8 @@
-/* ../netlib/dgels.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./dgels.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
@@ -210,9 +210,6 @@ void dgels_(char *trans, integer *m, integer *n, integer *nrhs, doublereal *a, i
     extern logical lsame_(char *, char *, integer, integer);
     integer wsize;
     doublereal rwork[1];
-    extern /* Subroutine */
-        void
-        dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *),
         dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */
@@ -240,7 +237,7 @@ void dgels_(char *trans, integer *m, integer *n, integer *nrhs, doublereal *a, i
         void
         dtrtrs_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *,
                 integer *, integer *);
-    /* -- LAPACK driver routine (version 3.4.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */

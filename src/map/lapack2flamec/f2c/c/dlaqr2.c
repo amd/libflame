@@ -1,8 +1,8 @@
-/* ../netlib/dlaqr2.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./dlaqr2.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
@@ -324,8 +324,7 @@ void dlaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     extern /* Subroutine */
         void
         dlanv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
-                doublereal *, doublereal *, doublereal *, doublereal *),
-        dlabad_(doublereal *, doublereal *);
+                doublereal *, doublereal *, doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
         void
@@ -349,7 +348,7 @@ void dlaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
                 doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     logical sorted;
     doublereal smlnum;
-    aocl_int64_t lwkopt;
+    integer lwkopt;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -437,6 +436,7 @@ void dlaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     }
     /* ==== Machine constants ==== */
     safmin = dlamch_("SAFE MINIMUM");
+    safmax = 1. / safmin;
     ulp = dlamch_("PRECISION");
     smlnum = safmin * ((doublereal)(*n) / ulp);
     /* ==== Setup deflation window ==== */

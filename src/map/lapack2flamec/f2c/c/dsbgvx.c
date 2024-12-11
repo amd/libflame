@@ -1,8 +1,8 @@
-/* ../netlib/dsbgvx.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./dsbgvx.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static doublereal c_b25 = 1.;
@@ -328,9 +328,7 @@ void dsbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
         void
         dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
         dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
-    logical upper, wantz, alleig, indeig;
-    integer indibl;
-    logical valeig;
+    logical upper, wantz, alleig, indeig, valeig;
     extern /* Subroutine */
         void
         dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
@@ -358,7 +356,7 @@ void dsbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
         dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *,
                 doublereal *, integer *);
     integer nsplit;
-    /* -- LAPACK driver routine (version 3.4.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -492,7 +490,6 @@ void dsbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
     dsbgst_(jobz, uplo, n, ka, kb, &ab[ab_offset], ldab, &bb[bb_offset], ldbb, &q[q_offset], ldq,
             &work[1], &iinfo);
     /* Reduce symmetric band matrix to tridiagonal form. */
-    indibl = 1;
     indd = 1;
     inde = indd + *n;
     indwrk = inde + *n;
@@ -558,14 +555,14 @@ void dsbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
     {
         *(unsigned char *)order = 'E';
     }
-    indisp = indibl + *n;
+    indisp = *n + 1;
     indiwo = indisp + *n;
     dstebz_(range, order, n, vl, vu, il, iu, abstol, &work[indd], &work[inde], m, &nsplit, &w[1],
-            &iwork[indibl], &iwork[indisp], &work[indwrk], &iwork[indiwo], info);
+            &iwork[1], &iwork[indisp], &work[indwrk], &iwork[indiwo], info);
     if(wantz)
     {
-        dstein_(n, &work[indd], &work[inde], m, &w[1], &iwork[indibl], &iwork[indisp],
-                &z__[z_offset], ldz, &work[indwrk], &iwork[indiwo], &ifail[1], info);
+        dstein_(n, &work[indd], &work[inde], m, &w[1], &iwork[1], &iwork[indisp], &z__[z_offset],
+                ldz, &work[indwrk], &iwork[indiwo], &ifail[1], info);
         /* Apply transformation matrix used in reduction to tridiagonal */
         /* form to eigenvectors returned by DSTEIN. */
         i__1 = *m;
@@ -602,7 +599,7 @@ L30: /* If eigenvalues are not in order, then sort them, along with */
                 w[i__] = w[j];
                 iwork[i__] = iwork[j];
                 w[j] = tmp1;
-                iwork[indibl + j - 1] = itmp1;
+                iwork[j] = itmp1;
                 dswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], &c__1);
                 if(*info != 0)
                 {

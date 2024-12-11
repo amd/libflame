@@ -1,14 +1,14 @@
-/* ../netlib/v3.9.0/dggev3.f -- translated by f2c (version 20160102). You must link the resulting
- object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
- systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
- -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./dggev3.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c_n1 = -1;
 static integer c__1 = 1;
 static integer c__0 = 0;
-static doublereal c_b38 = 0.;
-static doublereal c_b39 = 1.;
+static doublereal c_b40 = 0.;
+static doublereal c_b41 = 1.;
 /* > \brief <b> DGGEV3 computes the eigenvalues and, optionally, the left and/or right eigenvectors
  * for GE mat rices (blocked algorithm)</b> */
 /* =========== DOCUMENTATION =========== */
@@ -217,7 +217,7 @@ the routine */
 /* > The QZ iteration failed. No eigenvectors have been */
 /* > calculated, but ALPHAR(j), ALPHAI(j), and BETA(j) */
 /* > should be correct for j=INFO+1,...,N. */
-/* > > N: =N+1: other than QZ iteration failed in DHGEQZ. */
+/* > > N: =N+1: other than QZ iteration failed in DLAQZ0. */
 /* > =N+2: error return from DTGEVC. */
 /* > \endverbatim */
 /* Authors: */
@@ -226,8 +226,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date January 2015 */
-/* > \ingroup doubleGEeigen */
+/* > \ingroup ggev3 */
 /* ===================================================================== */
 /* Subroutine */
 void dggev3_(char *jobvl, char *jobvr, integer *n, doublereal *a, integer *lda, doublereal *b,
@@ -263,7 +262,6 @@ void dggev3_(char *jobvl, char *jobvr, integer *n, doublereal *a, integer *lda, 
     integer irows;
     extern /* Subroutine */
         void
-        dlabad_(doublereal *, doublereal *),
         dggbak_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
                 integer *, doublereal *, integer *, integer *),
         dggbal_(char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *,
@@ -306,10 +304,9 @@ void dggev3_(char *jobvl, char *jobvr, integer *n, doublereal *a, integer *lda, 
     doublereal smlnum;
     integer lwkopt;
     logical lquery;
-    /* -- LAPACK driver routine (version 3.6.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* January 2015 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -479,7 +476,7 @@ void dggev3_(char *jobvl, char *jobvr, integer *n, doublereal *a, integer *lda, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGGEV3 ", &i__1, (ftnlen)7);
+        xerbla_("DGGEV3 ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -498,7 +495,6 @@ void dggev3_(char *jobvl, char *jobvr, integer *n, doublereal *a, integer *lda, 
     eps = dlamch_("P");
     smlnum = dlamch_("S");
     bignum = 1. / smlnum;
-    dlabad_(&smlnum, &bignum);
     smlnum = sqrt(smlnum) / eps;
     bignum = 1. / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
@@ -562,7 +558,7 @@ void dggev3_(char *jobvl, char *jobvr, integer *n, doublereal *a, integer *lda, 
     /* Initialize VL */
     if(ilvl)
     {
-        dlaset_("Full", n, n, &c_b38, &c_b39, &vl[vl_offset], ldvl);
+        dlaset_("Full", n, n, &c_b40, &c_b41, &vl[vl_offset], ldvl);
         if(irows > 1)
         {
             i__1 = irows - 1;
@@ -577,7 +573,7 @@ void dggev3_(char *jobvl, char *jobvr, integer *n, doublereal *a, integer *lda, 
     /* Initialize VR */
     if(ilvr)
     {
-        dlaset_("Full", n, n, &c_b38, &c_b39, &vr[vr_offset], ldvr);
+        dlaset_("Full", n, n, &c_b40, &c_b41, &vr[vr_offset], ldvr);
     }
     /* Reduce to generalized Hessenberg form */
     if(ilv)
@@ -783,7 +779,7 @@ void dggev3_(char *jobvl, char *jobvr, integer *n, doublereal *a, integer *lda, 
         }
         /* End of eigenvector calculation */
     }
-    /* Undo scaling if necessary */
+/* Undo scaling if necessary */
 L110:
     if(ilascl)
     {

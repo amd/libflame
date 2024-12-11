@@ -1,8 +1,8 @@
-/* ../netlib/dgees.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./dgees.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__0 = 0;
@@ -220,11 +220,10 @@ if */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup doubleGEeigen */
+/* > \ingroup gees */
 /* ===================================================================== */
 /* Subroutine */
-void dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, integer *lda,
+void dgees_(char *jobvs, char *sort, L_fp select, integer *n, doublereal *a, integer *lda,
             integer *sdim, doublereal *wr, doublereal *wi, doublereal *vs, integer *ldvs,
             doublereal *work, integer *lwork, logical *bwork, integer *info)
 {
@@ -252,7 +251,6 @@ void dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, i
     logical cursl;
     extern /* Subroutine */
         void
-        dlabad_(doublereal *, doublereal *),
         dgebak_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
                 doublereal *, integer *, integer *),
         dgebal_(char *, integer *, doublereal *, integer *, integer *, integer *, doublereal *,
@@ -286,10 +284,9 @@ void dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, i
     doublereal smlnum;
     integer hswork;
     logical wantst, lquery, wantvs;
-    /* -- LAPACK driver routine (version 3.4.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -420,7 +417,6 @@ void dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, i
     eps = dlamch_("P");
     smlnum = dlamch_("S");
     bignum = 1. / smlnum;
-    dlabad_(&smlnum, &bignum);
     smlnum = sqrt(smlnum) / eps;
     bignum = 1. / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */

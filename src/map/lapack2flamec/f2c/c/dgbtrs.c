@@ -11,12 +11,12 @@ static doublereal c_b7 = -1.;
 static integer c__1 = 1;
 static doublereal c_b23 = 1.;
 
-
 #if FLA_ENABLE_AOCL_BLAS
 
 /* This function is an implementation of dgbtrs using AOCL-BLAS compute kernels */
-void dgbtrs_aocl_blas_ver(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, doublereal *ab,
-             integer *ldab, integer *ipiv, doublereal *b, integer *ldb, integer *info)
+void dgbtrs_aocl_blas_ver(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs,
+                          doublereal *ab, integer *ldab, integer *ipiv, doublereal *b, integer *ldb,
+                          integer *info)
 {
     integer ab_dim1, ab_offset, b_dim1, b_offset, i__1, i__2, i__3;
     integer i__, j, l, kd, lm;
@@ -25,12 +25,13 @@ void dgbtrs_aocl_blas_ver(char *trans, integer *n, integer *kl, integer *ku, int
     doublereal alpha;
     doublereal *x, *y, *r;
 
-    /* Make a copy of AOCL-BLAS framework context. This information is needed to query the architecture specific details of compute kernel */
-    cntx_t* cntx = bli_gks_query_cntx();
+    /* Make a copy of AOCL-BLAS framework context. This information is needed to query the
+     * architecture specific details of compute kernel */
+    cntx_t *cntx = bli_gks_query_cntx();
 
     /* Query names of compute kernel from AOCL-BLAS framework context */
-    dswapv_ker_ft dswap_blas_ptr = bli_cntx_get_l1v_ker_dt(BLIS_DOUBLE, BLIS_SWAPV_KER, cntx );
-    daxpyv_ker_ft daxpy_blas_ptr = bli_cntx_get_l1v_ker_dt(BLIS_DOUBLE, BLIS_AXPYV_KER, cntx );
+    dswapv_ker_ft dswap_blas_ptr = bli_cntx_get_l1v_ker_dt(BLIS_DOUBLE, BLIS_SWAPV_KER, cntx);
+    daxpyv_ker_ft daxpy_blas_ptr = bli_cntx_get_l1v_ker_dt(BLIS_DOUBLE, BLIS_AXPYV_KER, cntx);
 
     /* Parameter adjustments */
     ab_dim1 = *ldab;
@@ -40,7 +41,7 @@ void dgbtrs_aocl_blas_ver(char *trans, integer *n, integer *kl, integer *ku, int
     b_dim1 = *ldb;
     b_offset = 1 + b_dim1;
     b -= b_offset;
-    
+
     /* Function Body */
     *info = 0;
     notran = lsame_(trans, "N", 1, 1);
@@ -102,7 +103,8 @@ void dgbtrs_aocl_blas_ver(char *trans, integer *n, integer *kl, integer *ku, int
                 if(l != j)
                 {
                     /* dswap_blas_ptr swaps two vectors using AOCL-BLAS */
-                    dswap_blas_ptr((dim_t)*nrhs, &b[l + b_dim1], (dim_t)*ldb, &b[j + b_dim1], (dim_t)*ldb, cntx);
+                    dswap_blas_ptr((dim_t)*nrhs, &b[l + b_dim1], (dim_t)*ldb, &b[j + b_dim1],
+                                   (dim_t)*ldb, cntx);
                 }
 
                 x = &ab[kd + 1 + j * ab_dim1];
@@ -115,7 +117,8 @@ void dgbtrs_aocl_blas_ver(char *trans, integer *n, integer *kl, integer *ku, int
 
                     if(alpha)
                         /* daxpy_blas_ptr performs the operation y = alpha * x + y */
-                        daxpy_blas_ptr(BLIS_NO_CONJUGATE, (dim_t)lm, &alpha, x, (dim_t)c__1, &r[i * i__3], (dim_t)c__1, cntx);
+                        daxpy_blas_ptr(BLIS_NO_CONJUGATE, (dim_t)lm, &alpha, x, (dim_t)c__1,
+                                       &r[i * i__3], (dim_t)c__1, cntx);
                 }
             }
         }
@@ -163,7 +166,6 @@ void dgbtrs_aocl_blas_ver(char *trans, integer *n, integer *kl, integer *ku, int
 }
 
 #endif
-
 
 /* > \brief \b DGBTRS */
 /* =========== DOCUMENTATION =========== */
@@ -323,7 +325,7 @@ void dgbtrs_(char *trans, integer *n, integer *kl, integer *ku, integer *nrhs, d
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
 #endif
-    
+
     logical lnoti;
     logical notran;
     /* -- LAPACK computational routine (version 3.4.0) -- */

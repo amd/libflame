@@ -1,8 +1,8 @@
-/* ../netlib/dgees.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./dgees.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__0 = 0;
@@ -223,7 +223,7 @@ if */
 /* > \ingroup gees */
 /* ===================================================================== */
 /* Subroutine */
-void dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, integer *lda,
+void dgees_(char *jobvs, char *sort, L_fp select, integer *n, doublereal *a, integer *lda,
             integer *sdim, doublereal *wr, doublereal *wi, doublereal *vs, integer *ldvs,
             doublereal *work, integer *lwork, logical *bwork, integer *info)
 {
@@ -251,7 +251,6 @@ void dgees_(char *jobvs, char *sort, L_fpd2 select, integer *n, doublereal *a, i
     logical cursl;
     extern /* Subroutine */
         void
-        dlabad_(doublereal *, doublereal *),
         dgebak_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
                 doublereal *, integer *, integer *),
         dgebal_(char *, integer *, doublereal *, integer *, integer *, integer *, doublereal *,

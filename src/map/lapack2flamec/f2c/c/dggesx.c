@@ -1,8 +1,8 @@
-/* ../netlib/dggesx.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./dggesx.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c__0 = 0;
@@ -145,13 +145,13 @@ i.e. if either */
 /* > \verbatim */
 /* > SENSE is CHARACTER*1 */
 /* > Determines which reciprocal condition numbers are computed. */
-/* > = 'N' : None are computed;
+/* > = 'N': None are computed;
  */
-/* > = 'E' : Computed for average of selected eigenvalues only;
+/* > = 'E': Computed for average of selected eigenvalues only;
  */
-/* > = 'V' : Computed for selected deflating subspaces only;
+/* > = 'V': Computed for selected deflating subspaces only;
  */
-/* > = 'B' : Computed for both. */
+/* > = 'B': Computed for both. */
 /* > If SENSE = 'E', 'V', or 'B', SORT must equal 'S'. */
 /* > \endverbatim */
 /* > */
@@ -375,7 +375,7 @@ the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, char *sense, integer *n,
+void dggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp selctg, char *sense, integer *n,
              doublereal *a, integer *lda, doublereal *b, integer *ldb, integer *sdim,
              doublereal *alphar, doublereal *alphai, doublereal *beta, doublereal *vsl,
              integer *ldvsl, doublereal *vsr, integer *ldvsr, doublereal *rconde,
@@ -408,7 +408,6 @@ void dggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, char *sense,
     integer irows;
     extern /* Subroutine */
         void
-        dlabad_(doublereal *, doublereal *),
         dggbak_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
                 integer *, doublereal *, integer *, integer *),
         dggbal_(char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *,

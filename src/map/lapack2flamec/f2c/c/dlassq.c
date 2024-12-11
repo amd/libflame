@@ -116,7 +116,7 @@
 /* > https://doi.org/10.1145/355769.355771 */
 /* > */
 /* > \endverbatim */
-/* > \ingroup OTHERauxiliary */
+/* > \ingroup lassq */
 /* ===================================================================== */
 
 /* la_isnan__ */
@@ -218,18 +218,29 @@ void dlassq_(integer *n, doublereal *x, integer *incx, doublereal *scl, doublere
         ax = *scl * sqrt(*sumsq);
         if(ax > tbig)
         {
-            /* Computing 2nd power */
-            r__1 = *scl * sbig;
-            abig += (r__1 * r__1) * *sumsq;
-            notbig = FALSE_;
+            if(*scl > 1.0)
+            {
+                *scl *= sbig;
+                abig += (*scl) * (*scl) * (*sumsq);
+            }
+            else
+            {
+                abig += (*scl) * (*scl) * (sbig * (sbig * (*sumsq)));
+            }
         }
         else if(ax < tsml)
         {
             if(notbig)
             {
-                /* Computing 2nd power */
-                r__1 = *scl * ssml;
-                asml += (r__1 * r__1) * *sumsq;
+                if(*scl < 1.0)
+                {
+                    *scl *= ssml;
+                    asml += (*scl) * (*scl) * (*sumsq);
+                }
+                else
+                {
+                    asml += (*scl) * (*scl) * (ssml * (ssml * (*sumsq)));
+                }
             }
         }
         else

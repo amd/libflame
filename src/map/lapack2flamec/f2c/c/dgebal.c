@@ -1,8 +1,8 @@
-/* ../netlib/dgebal.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./dgebal.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 /* > \brief \b DGEBAL */
@@ -173,9 +173,9 @@ void dgebal_(char *job, integer *n, doublereal *a, integer *lda, integer *ilo, i
     doublereal d__1, d__2;
     /* Local variables */
     doublereal c__, f, g;
-    aocl_int64_t i__, j, k, l;
+    integer i__, j, k, l;
     doublereal r__, s, ca, ra;
-    integer ica, ira, iexc;
+    integer ica, ira;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     extern /* Subroutine */
         void
@@ -190,7 +190,7 @@ void dgebal_(char *job, integer *n, doublereal *a, integer *lda, integer *ilo, i
     extern /* Subroutine */
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    logical noconv;
+    logical noconv, canswap;
     /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -237,8 +237,7 @@ void dgebal_(char *job, integer *n, doublereal *a, integer *lda, integer *ilo, i
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    k = 1;
-    l = *n;
+    /* Quick returns. */
     if(*n == 0)
     {
         *ilo = 1;
@@ -258,44 +257,18 @@ void dgebal_(char *job, integer *n, doublereal *a, integer *lda, integer *ilo, i
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if(lsame_(job, "S", 1, 1))
+    /* Permutation to isolate eigenvalues if possible. */
+    k = 1;
+    l = *n;
+    if(!lsame_(job, "S", 1, 1))
     {
-        goto L120;
-    }
-    /* Permutation to isolate eigenvalues if possible */
-    goto L50;
-    /* Row and column exchange. */
-L20:
-    scale[m] = (doublereal)j;
-    if(j == m)
-    {
-        goto L30;
-    }
-    dswap_(&l, &a[j * a_dim1 + 1], &c__1, &a[m * a_dim1 + 1], &c__1);
-    i__1 = *n - k + 1;
-    dswap_(&i__1, &a[j + k * a_dim1], lda, &a[m + k * a_dim1], lda);
-L30:
-    switch(iexc)
-    {
-        case 1:
-            goto L40;
-        case 2:
-            goto L80;
-    }
-    /* Search for rows isolating an eigenvalue and push them down. */
-L40:
-    if(l == 1)
-    {
-        goto L210;
-    }
-    --l;
-L50:
-    for(j = l; j >= 1; --j)
-    {
-        i__1 = l;
-        for(i__ = 1; i__ <= i__1; ++i__)
+        /* Row and column exchange. */
+        noconv = TRUE_;
+        while(noconv)
         {
-            if(i__ == j)
+            /* Search for rows isolating an eigenvalue and push them down. */
+            noconv = FALSE_;
+            for(i__ = l; i__ >= 1; --i__)
             {
                 canswap = TRUE_;
                 i__1 = l;
@@ -312,9 +285,9 @@ L50:
                     scale[l] = (doublereal)i__;
                     if(i__ != l)
                     {
-                        aocl_blas_dswap(&l, &a[i__ * a_dim1 + 1], &c__1, &a[l * a_dim1 + 1], &c__1);
+                        dswap_(&l, &a[i__ * a_dim1 + 1], &c__1, &a[l * a_dim1 + 1], &c__1);
                         i__1 = *n - k + 1;
-                        aocl_blas_dswap(&i__1, &a[i__ + k * a_dim1], lda, &a[l + k * a_dim1], lda);
+                        dswap_(&i__1, &a[i__ + k * a_dim1], lda, &a[l + k * a_dim1], lda);
                     }
                     noconv = TRUE_;
                     if(l == 1)
@@ -327,29 +300,14 @@ L50:
                     --l;
                 }
             }
-            if(a[j + i__ * a_dim1] != 0.)
-            {
-                goto L70;
-            }
-        L60:;
         }
-        m = l;
-        iexc = 1;
-        goto L20;
-    L70:;
-    }
-    goto L90;
-    /* Search for columns isolating an eigenvalue and push them left. */
-L80:
-    ++k;
-L90:
-    i__1 = l;
-    for(j = k; j <= i__1; ++j)
-    {
-        i__2 = l;
-        for(i__ = k; i__ <= i__2; ++i__)
+        noconv = TRUE_;
+        while(noconv)
         {
-            if(i__ == j)
+            /* Search for columns isolating an eigenvalue and push them left. */
+            noconv = FALSE_;
+            i__1 = l;
+            for(j = k; j <= i__1; ++j)
             {
                 canswap = TRUE_;
                 i__2 = l;
@@ -366,24 +324,15 @@ L90:
                     scale[k] = (doublereal)j;
                     if(j != k)
                     {
-                        aocl_blas_dswap(&l, &a[j * a_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
+                        dswap_(&l, &a[j * a_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
                         i__2 = *n - k + 1;
-                        aocl_blas_dswap(&i__2, &a[j + k * a_dim1], lda, &a[k + k * a_dim1], lda);
+                        dswap_(&i__2, &a[j + k * a_dim1], lda, &a[k + k * a_dim1], lda);
                     }
                     noconv = TRUE_;
                     ++k;
                 }
             }
-            if(a[i__ + j * a_dim1] != 0.)
-            {
-                goto L110;
-            }
-        L100:;
         }
-        m = k;
-        iexc = 2;
-        goto L20;
-    L110:;
     }
     /* Initialize SCALE for non-permuted submatrix. */
     i__1 = l;
@@ -391,6 +340,7 @@ L90:
     {
         scale[i__] = 1.;
     }
+    /* If we only had to permute, we are done. */
     if(lsame_(job, "P", 1, 1))
     {
         *ilo = k;
@@ -404,47 +354,21 @@ L90:
     sfmax1 = 1. / sfmin1;
     sfmin2 = sfmin1 * 2.;
     sfmax2 = 1. / sfmin2;
-L140:
-    noconv = FALSE_;
-    i__1 = l;
-    for(i__ = k; i__ <= i__1; ++i__)
+    noconv = TRUE_;
+    while(noconv)
     {
-        i__2 = l - k + 1;
-        c__ = dnrm2_(&i__2, &a[k + i__ * a_dim1], &c__1);
-        i__2 = l - k + 1;
-        r__ = dnrm2_(&i__2, &a[i__ + k * a_dim1], lda);
-        ica = idamax_(&l, &a[i__ * a_dim1 + 1], &c__1);
-        ca = (d__1 = a[ica + i__ * a_dim1], f2c_dabs(d__1));
-        i__2 = *n - k + 1;
-        ira = idamax_(&i__2, &a[i__ + k * a_dim1], lda);
-        ra = (d__1 = a[i__ + (ira + k - 1) * a_dim1], f2c_dabs(d__1));
-        /* Guard against zero C or R due to underflow. */
-        if(c__ == 0. || r__ == 0.)
-        {
-            goto L200;
-        }
-        g = r__ / 2.;
-        f = 1.;
-        s = c__ + r__;
-    L160: /* Computing MAX */
-        d__1 = fla_max(f, c__);
-        /* Computing MIN */
-        d__2 = fla_min(r__, g);
-        if(c__ >= g || fla_max(d__1, ca) >= sfmax2 || fla_min(d__2, ra) <= sfmin2)
-        {
-            goto L170;
-        }
-        d__1 = c__ + f + ca + r__ + g + ra;
-        if(disnan_(&d__1))
+        noconv = FALSE_;
+        i__1 = l;
+        for(i__ = k; i__ <= i__1; ++i__)
         {
             i__2 = l - k + 1;
-            c__ = aocl_blas_dnrm2(&i__2, &a[k + i__ * a_dim1], &c__1);
+            c__ = dnrm2_(&i__2, &a[k + i__ * a_dim1], &c__1);
             i__2 = l - k + 1;
-            r__ = aocl_blas_dnrm2(&i__2, &a[i__ + k * a_dim1], lda);
-            ica = aocl_blas_idamax(&l, &a[i__ * a_dim1 + 1], &c__1);
+            r__ = dnrm2_(&i__2, &a[i__ + k * a_dim1], lda);
+            ica = idamax_(&l, &a[i__ * a_dim1 + 1], &c__1);
             ca = (d__1 = a[ica + i__ * a_dim1], f2c_abs(d__1));
             i__2 = *n - k + 1;
-            ira = aocl_blas_idamax(&i__2, &a[i__ + k * a_dim1], lda);
+            ira = idamax_(&i__2, &a[i__ + k * a_dim1], lda);
             ra = (d__1 = a[i__ + (ira + k - 1) * a_dim1], f2c_abs(d__1));
             /* Guard against zero C or R due to underflow. */
             if(c__ == 0. || r__ == 0.)
@@ -452,55 +376,19 @@ L140:
                 continue;
             }
             /* Exit if NaN to avoid infinite loop */
-            *info = -3;
-            i__2 = -(*info);
-            xerbla_("DGEBAL", &i__2, (ftnlen)6);
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
-        }
-        f *= 2.;
-        c__ *= 2.;
-        ca *= 2.;
-        r__ /= 2.;
-        g /= 2.;
-        ra /= 2.;
-        goto L160;
-    L170:
-        g = c__ / 2.;
-    L180: /* Computing MIN */
-        d__1 = fla_min(f, c__);
-        d__1 = fla_min(d__1, g); // , expr subst
-        if(g < r__ || fla_max(r__, ra) >= sfmax2 || fla_min(d__1, ca) <= sfmin2)
-        {
-            goto L190;
-        }
-        f /= 2.;
-        c__ /= 2.;
-        g /= 2.;
-        ca /= 2.;
-        r__ *= 2.;
-        ra *= 2.;
-        goto L180;
-        /* Now balance. */
-    L190:
-        if(c__ + r__ >= s * .95)
-        {
-            goto L200;
-        }
-        if(f < 1. && scale[i__] < 1.)
-        {
-            if(f * scale[i__] <= sfmin1)
+            d__1 = c__ + ca + r__ + ra;
+            if(disnan_(&d__1))
             {
                 *info = -3;
                 i__2 = -(*info);
-                aocl_blas_xerbla("DGEBAL", &i__2, (ftnlen)6);
+                xerbla_("DGEBAL", &i__2, (ftnlen)6);
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
-        }
-        if(f > 1. && scale[i__] > 1.)
-        {
-            if(scale[i__] >= sfmax1 / f)
+            g = r__ / 2.;
+            f = 1.;
+            s = c__ + r__;
+            for(;;)
             {
                 /* while(complicated condition) */
                 /* Computing MAX */
@@ -555,22 +443,10 @@ L140:
             scale[i__] *= f;
             noconv = TRUE_;
             i__2 = *n - k + 1;
-            aocl_blas_dscal(&i__2, &g, &a[i__ + k * a_dim1], lda);
-            aocl_blas_dscal(&l, &f, &a[i__ * a_dim1 + 1], &c__1);
+            dscal_(&i__2, &g, &a[i__ + k * a_dim1], lda);
+            dscal_(&l, &f, &a[i__ * a_dim1 + 1], &c__1);
         }
-        g = 1. / f;
-        scale[i__] *= f;
-        noconv = TRUE_;
-        i__2 = *n - k + 1;
-        dscal_(&i__2, &g, &a[i__ + k * a_dim1], lda);
-        dscal_(&l, &f, &a[i__ * a_dim1 + 1], &c__1);
-    L200:;
     }
-    if(noconv)
-    {
-        goto L140;
-    }
-L210:
     *ilo = k;
     *ihi = l;
     AOCL_DTL_TRACE_LOG_EXIT

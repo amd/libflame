@@ -367,8 +367,7 @@ void dlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
                 integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *,
                 doublereal *, integer *, doublereal *, integer *, doublereal *, integer *,
                 doublereal *, integer *, doublereal *, integer *, doublereal *, integer *,
-                integer *),
-        dlabad_(doublereal *, doublereal *);
+                integer *);
     extern doublereal dlamch_(char *);
     integer nibble, nblock;
     extern doublereal dlanhs_(char *, integer *, doublereal *, integer *, doublereal *);
@@ -611,7 +610,6 @@ void dlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
     /* Get machine constants */
     safmin = dlamch_("SAFE MINIMUM");
     safmax = 1. / safmin;
-    dlabad_(&safmin, &safmax);
     ulp = dlamch_("PRECISION");
     smlnum = safmin * ((doublereal)(*n) / ulp);
     i__1 = *ihi - *ilo + 1;
@@ -855,7 +853,7 @@ void dlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
         i__3 = istop - istart2; // , expr subst
         ns = fla_min(i__2, i__3);
         ns = fla_min(ns, n_undeflated__);
-        shiftpos = istop - n_deflated__ - n_undeflated__ + 1;
+        shiftpos = istop - n_undeflated__ + 1;
         /* Shuffle shifts to put double shifts in front */
         /* This ensures that we don't split up a double shift */
         i__2 = shiftpos + n_undeflated__ - 1;

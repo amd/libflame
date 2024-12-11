@@ -1,8 +1,8 @@
-/* ../netlib/dlaqr3.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./dlaqr3.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -110,7 +110,7 @@ static integer c__12 = 12;
 /* > \param[in] NW */
 /* > \verbatim */
 /* > NW is INTEGER */
-/* > Deflation window size. 1 .LE. NW .LE. (KBOT-KTOP+1). */
+/* > Deflation window size. 1 <= NW <= (KBOT-KTOP+1). */
 /* > \endverbatim */
 /* > */
 /* > \param[in,out] H */
@@ -126,9 +126,9 @@ static integer c__12 = 12;
 /* > */
 /* > \param[in] LDH */
 /* > \verbatim */
-/* > LDH is integer */
+/* > LDH is INTEGER */
 /* > Leading dimension of H just as declared in the calling */
-/* > subroutine. N .LE. LDH */
+/* > subroutine. N <= LDH */
 /* > \endverbatim */
 /* > */
 /* > \param[in] ILOZ */
@@ -140,7 +140,7 @@ static integer c__12 = 12;
 /* > \verbatim */
 /* > IHIZ is INTEGER */
 /* > Specify the rows of Z to which transformations must be */
-/* > applied if WANTZ is .TRUE.. 1 .LE. ILOZ .LE. IHIZ .LE. N. */
+/* > applied if WANTZ is .TRUE.. 1 <= ILOZ <= IHIZ <= N. */
 /* > \endverbatim */
 /* > */
 /* > \param[in,out] Z */
@@ -148,20 +148,20 @@ static integer c__12 = 12;
 /* > Z is DOUBLE PRECISION array, dimension (LDZ,N) */
 /* > IF WANTZ is .TRUE., then on output, the orthogonal */
 /* > similarity transformation mentioned above has been */
-/* > accumulated into Z(ILOZ:IHIZ,ILO:IHI) from the right. */
+/* > accumulated into Z(ILOZ:IHIZ,ILOZ:IHIZ) from the right. */
 /* > If WANTZ is .FALSE., then Z is unreferenced. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] LDZ */
 /* > \verbatim */
-/* > LDZ is integer */
+/* > LDZ is INTEGER */
 /* > The leading dimension of Z just as declared in the */
-/* > calling subroutine. 1 .LE. LDZ. */
+/* > calling subroutine. 1 <= LDZ. */
 /* > \endverbatim */
 /* > */
 /* > \param[out] NS */
 /* > \verbatim */
-/* > NS is integer */
+/* > NS is INTEGER */
 /* > The number of unconverged (ie approximate) eigenvalues */
 /* > returned in SR and SI that may be used as shifts by the */
 /* > calling subroutine. */
@@ -169,7 +169,7 @@ static integer c__12 = 12;
 /* > */
 /* > \param[out] ND */
 /* > \verbatim */
-/* > ND is integer */
+/* > ND is INTEGER */
 /* > The number of converged eigenvalues uncovered by this */
 /* > subroutine. */
 /* > \endverbatim */
@@ -199,15 +199,15 @@ static integer c__12 = 12;
 /* > */
 /* > \param[in] LDV */
 /* > \verbatim */
-/* > LDV is integer scalar */
+/* > LDV is INTEGER */
 /* > The leading dimension of V just as declared in the */
-/* > calling subroutine. NW .LE. LDV */
+/* > calling subroutine. NW <= LDV */
 /* > \endverbatim */
 /* > */
 /* > \param[in] NH */
 /* > \verbatim */
-/* > NH is integer scalar */
-/* > The number of columns of T. NH.GE.NW. */
+/* > NH is INTEGER */
+/* > The number of columns of T. NH >= NW. */
 /* > \endverbatim */
 /* > */
 /* > \param[out] T */
@@ -217,16 +217,16 @@ static integer c__12 = 12;
 /* > */
 /* > \param[in] LDT */
 /* > \verbatim */
-/* > LDT is integer */
+/* > LDT is INTEGER */
 /* > The leading dimension of T just as declared in the */
-/* > calling subroutine. NW .LE. LDT */
+/* > calling subroutine. NW <= LDT */
 /* > \endverbatim */
 /* > */
 /* > \param[in] NV */
 /* > \verbatim */
-/* > NV is integer */
+/* > NV is INTEGER */
 /* > The number of rows of work array WV available for */
-/* > workspace. NV.GE.NW. */
+/* > workspace. NV >= NW. */
 /* > \endverbatim */
 /* > */
 /* > \param[out] WV */
@@ -236,9 +236,9 @@ static integer c__12 = 12;
 /* > */
 /* > \param[in] LDWV */
 /* > \verbatim */
-/* > LDWV is integer */
+/* > LDWV is INTEGER */
 /* > The leading dimension of W just as declared in the */
-/* > calling subroutine. NW .LE. LDV */
+/* > calling subroutine. NW <= LDV */
 /* > \endverbatim */
 /* > */
 /* > \param[out] WORK */
@@ -250,7 +250,7 @@ static integer c__12 = 12;
 /* > */
 /* > \param[in] LWORK */
 /* > \verbatim */
-/* > LWORK is integer */
+/* > LWORK is INTEGER */
 /* > The dimension of the work array WORK. LWORK = 2*NW */
 /* > suffices, but greater efficiency may result from larger */
 /* > values of LWORK. */
@@ -268,8 +268,7 @@ DLAQR3 */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date September 2012 */
-/* > \ingroup doubleOTHERauxiliary */
+/* > \ingroup laqr3 */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -323,8 +322,7 @@ void dlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
                 doublereal *, doublereal *, doublereal *, doublereal *),
         dlaqr4_(logical *, logical *, integer *, integer *, integer *, doublereal *, integer *,
                 doublereal *, doublereal *, integer *, integer *, doublereal *, integer *,
-                doublereal *, integer *, integer *),
-        dlabad_(doublereal *, doublereal *);
+                doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
         void
@@ -348,10 +346,9 @@ void dlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     logical sorted;
     doublereal smlnum;
     integer lwkopt;
-    /* -- LAPACK auxiliary routine (version 3.4.2) -- */
+    /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* September 2012 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -443,7 +440,6 @@ void dlaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     /* ==== Machine constants ==== */
     safmin = dlamch_("SAFE MINIMUM");
     safmax = 1. / safmin;
-    dlabad_(&safmin, &safmax);
     ulp = dlamch_("PRECISION");
     smlnum = safmin * ((doublereal)(*n) / ulp);
     /* ==== Setup deflation window ==== */

@@ -1,4 +1,4 @@
-/* dgetsls.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./dgetsls.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -160,7 +160,7 @@ the least squares solution could not be */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup doubleGEsolve */
+/* > \ingroup getsls */
 /* ===================================================================== */
 /* Subroutine */
 void dgetsls_(char *trans, integer *m, integer *n, integer *nrhs, doublereal *a, integer *lda,
@@ -190,9 +190,6 @@ void dgetsls_(char *trans, integer *m, integer *n, integer *nrhs, doublereal *a,
                integer *, integer *);
     integer maxmn;
     doublereal workq[1];
-    extern /* Subroutine */
-        void
-        dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *),
         dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */
@@ -371,7 +368,6 @@ void dgetsls_(char *trans, integer *m, integer *n, integer *nrhs, doublereal *a,
     /* Get machine parameters */
     smlnum = dlamch_("S") / dlamch_("P");
     bignum = 1. / smlnum;
-    dlabad_(&smlnum, &bignum);
     /* Scale A, B if max element outside range [SMLNUM,BIGNUM] */
     anrm = dlange_("M", m, n, &a[a_offset], lda, &work[1]);
     iascl = 0;

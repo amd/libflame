@@ -1,4 +1,4 @@
-/* dlatrs.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./dlatrs.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -160,7 +160,7 @@ static doublereal c_b46 = .5;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup doubleOTHERauxiliary */
+/* > \ingroup latrs */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -257,7 +257,7 @@ void dlatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal xbnd;
     integer imax;
-    doublereal tmax, tjjs, xmax, grow, sumj;
+    doublereal tmax, tjjs, xmax, grow, sumj, work[1];
     extern /* Subroutine */
         void
         dscal_(integer *, doublereal *, doublereal *, integer *);
@@ -294,6 +294,8 @@ void dlatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
     /* .. Parameters .. */
     /* .. */
     /* .. Local Scalars .. */
+    /* .. */
+    /* .. Local Arrays .. */
     /* .. */
     /* .. External Functions .. */
     /* .. */
@@ -416,7 +418,7 @@ void dlatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
                 {
                     /* Computing MAX */
                     i__2 = j - 1;
-                    d__1 = dlange_("M", &i__2, &c__1, &a[j * a_dim1 + 1], &c__1, &sumj);
+                    d__1 = dlange_("M", &i__2, &c__1, &a[j * a_dim1 + 1], &c__1, work);
                     tmax = fla_max(d__1, tmax);
                 }
             }
@@ -428,7 +430,7 @@ void dlatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
                 {
                     /* Computing MAX */
                     i__2 = *n - j;
-                    d__1 = dlange_("M", &i__2, &c__1, &a[j + 1 + j * a_dim1], &c__1, &sumj);
+                    d__1 = dlange_("M", &i__2, &c__1, &a[j + 1 + j * a_dim1], &c__1, work);
                     tmax = fla_max(d__1, tmax);
                 }
             }
@@ -506,8 +508,8 @@ void dlatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
             /* A is non-unit triangular. */
             /* Compute GROW = 1/G(j) and XBND = 1/M(j). */
             /* Initially, G(0) = max{
-            x(i), i=1,...,n}
-            . */
+           x(i), i=1,...,n}
+           . */
             grow = 1. / fla_max(xbnd, smlnum);
             xbnd = grow;
             i__1 = jlast;
@@ -543,8 +545,8 @@ void dlatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
         {
             /* A is unit triangular. */
             /* Compute GROW = 1/G(j), where G(0) = max{
-            x(i), i=1,...,n}
-            . */
+           x(i), i=1,...,n}
+           . */
             /* Computing MIN */
             d__1 = 1.;
             d__2 = 1. / fla_max(xbnd, smlnum); // , expr subst
@@ -590,8 +592,8 @@ void dlatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
             /* A is non-unit triangular. */
             /* Compute GROW = 1/G(j) and XBND = 1/M(j). */
             /* Initially, M(0) = max{
-            x(i), i=1,...,n}
-            . */
+           x(i), i=1,...,n}
+           . */
             grow = 1. / fla_max(xbnd, smlnum);
             xbnd = grow;
             i__1 = jlast;
@@ -623,8 +625,8 @@ void dlatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
         {
             /* A is unit triangular. */
             /* Compute GROW = 1/G(j), where G(0) = max{
-            x(i), i=1,...,n}
-            . */
+           x(i), i=1,...,n}
+           . */
             /* Computing MIN */
             d__1 = 1.;
             d__2 = 1. / fla_max(xbnd, smlnum); // , expr subst

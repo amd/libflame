@@ -1,14 +1,14 @@
-/* ../netlib/v3.9.0/dgges3.f -- translated by f2c (version 20160102). You must link the resulting
- object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
- systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
- -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./dgges3.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c_n1 = -1;
 static integer c__1 = 1;
 static integer c__0 = 0;
-static doublereal c_b36 = 0.;
-static doublereal c_b37 = 1.;
+static doublereal c_b37 = 0.;
+static doublereal c_b38 = 1.;
 /* > \brief <b> DGGES3 computes the eigenvalues, the Schur form, and, optionally, the matrix of
  * Schur vectors for GE matrices (blocked algorithm)</b> */
 /* =========== DOCUMENTATION =========== */
@@ -271,7 +271,7 @@ the routine */
 /* > The QZ iteration failed. (A,B) are not in Schur */
 /* > form, but ALPHAR(j), ALPHAI(j), and BETA(j) should */
 /* > be correct for j=INFO+1,...,N. */
-/* > > N: =N+1: other than QZ iteration failed in DHGEQZ. */
+/* > > N: =N+1: other than QZ iteration failed in DLAQZ0. */
 /* > =N+2: after reordering, roundoff changed values of */
 /* > some complex eigenvalues so that leading */
 /* > eigenvalues in the Generalized Schur form no */
@@ -285,11 +285,10 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date January 2015 */
-/* > \ingroup doubleGEeigen */
+/* > \ingroup gges3 */
 /* ===================================================================== */
 /* Subroutine */
-void dgges3_(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, integer *n, doublereal *a,
+void dgges3_(char *jobvsl, char *jobvsr, char *sort, L_fp selctg, integer *n, doublereal *a,
              integer *lda, doublereal *b, integer *ldb, integer *sdim, doublereal *alphar,
              doublereal *alphai, doublereal *beta, doublereal *vsl, integer *ldvsl, doublereal *vsr,
              integer *ldvsr, doublereal *work, integer *lwork, logical *bwork, integer *info)
@@ -323,7 +322,6 @@ void dgges3_(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, integer *n, 
     integer irows;
     extern /* Subroutine */
         void
-        dlabad_(doublereal *, doublereal *),
         dggbak_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
                 integer *, doublereal *, integer *, integer *),
         dggbal_(char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *,
@@ -373,10 +371,9 @@ void dgges3_(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, integer *n, 
     doublereal smlnum;
     logical wantst, lquery;
     integer lwkopt;
-    /* -- LAPACK driver routine (version 3.6.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* January 2015 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -537,7 +534,7 @@ void dgges3_(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, integer *n, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGGES3 ", &i__1, (ftnlen)7);
+        xerbla_("DGGES3 ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -557,7 +554,6 @@ void dgges3_(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, integer *n, 
     eps = dlamch_("P");
     safmin = dlamch_("S");
     safmax = 1. / safmin;
-    dlabad_(&safmin, &safmax);
     smlnum = sqrt(safmin) / eps;
     bignum = 1. / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
@@ -614,7 +610,7 @@ void dgges3_(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, integer *n, 
     /* Initialize VSL */
     if(ilvsl)
     {
-        dlaset_("Full", n, n, &c_b36, &c_b37, &vsl[vsl_offset], ldvsl);
+        dlaset_("Full", n, n, &c_b37, &c_b38, &vsl[vsl_offset], ldvsl);
         if(irows > 1)
         {
             i__1 = irows - 1;
@@ -629,7 +625,7 @@ void dgges3_(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, integer *n, 
     /* Initialize VSR */
     if(ilvsr)
     {
-        dlaset_("Full", n, n, &c_b36, &c_b37, &vsr[vsr_offset], ldvsr);
+        dlaset_("Full", n, n, &c_b37, &c_b38, &vsr[vsr_offset], ldvsr);
     }
     /* Reduce to generalized Hessenberg form */
     i__1 = *lwork + 1 - iwrk;

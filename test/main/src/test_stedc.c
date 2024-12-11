@@ -215,7 +215,7 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
             else if(FLA_EXTREME_CASE_TEST)
             {
                 /* Get the symmetric/hermitian matrix.*/
-                form_symmetric_matrix(datatype, n, A, lda, "C");
+                form_symmetric_matrix(datatype, n, A, lda, "C", 'U');
                 /* Initialize Q matrix */
                 init_matrix(datatype, Q, n, n, lda, g_ext_fptr, params->imatrix_char);
             }

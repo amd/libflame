@@ -10,7 +10,6 @@
 #define LIBFLAME_INTERFACE_HH
 
 #include "libflame.hh"
-
 namespace libflame
 {
     /** @defgroup AOCL_LAPACK AOCL-LAPACK
@@ -4804,7 +4803,7 @@ along with error bounds
         \verbatim
          GERQF computes an RQ factorization of a real M-by-N matrix A:
          A = R * Q.
-        \endverbatim 
+        \endverbatim
 
      * @param[in] M
               M is INTEGER \n
@@ -4830,10 +4829,10 @@ along with error bounds
               TAU is REAL array, dimension (min(M,N)) \n
               The scalar factors of the elementary reflectors (see Further
               Details). \n
-     * @param[out]	WORK	
+     * @param[out]	WORK
               WORK is COMPLEX array, dimension (MAX(1,LWORK)) \n
               On exit, if INFO = 0, WORK(1) returns the optimal LWORK. \n
-     * @param[in]	LWORK	
+     * @param[in]	LWORK
               LWORK is INTEGER \n
               The dimension of the array WORK.  LWORK >= fla_max(1,M).
               For optimum performance LWORK >= M*NB, where NB is
@@ -4843,14 +4842,15 @@ along with error bounds
               only calculates the optimal size of the WORK array, returns
               this value as the first entry of the WORK array, and no error
               message related to LWORK is issued by XERBLA. \n
-     * @param[out]	INFO	
+     * @param[out]	INFO
               INFO is INTEGER \n
               = 0:  successful exit \n
               < 0:  if INFO = -i, the i-th argument had an illegal value \n
 
      *  * */
-    template< typename T >
-    void gerqf(integer* m, integer* n, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
+    template <typename T>
+    void gerqf(integer *m, integer *n, T *a, integer *lda, T *tau, T *work, integer *lwork,
+               integer *info)
     {
         gerqf(m, n, a, lda, tau, work, lwork, info);
     }
@@ -12856,6 +12856,145 @@ normwise error bounds \endverbatim
     }
     /** @}*/ // end of sytrs_aa
 
+    /** @defgroup hetrf hetrf
+     * @ingroup LDL_computation LDL_computation
+     * @{
+     */
+    /*! @brief HETRF computes the factorization of a complex Hermitian matrix A
+
+ * @details
+ * \b Purpose:
+    \verbatim
+     HETRF computes the factorization of a complex Hermitian matrix A
+     using the Bunch-Kaufman diagonal pivoting method.  The form of the
+     factorization is
+
+        A = U*D*U**H  or  A = L*D*L**H
+
+     where U (or L) is a product of permutation and unit upper (lower)
+     triangular matrices, and D is Hermitian and block diagonal with
+     1-by-1 and 2-by-2 diagonal blocks.
+
+     This is the blocked version of the algorithm, calling Level 3 BLAS.
+    \endverbatim
+
+ * @param[in] UPLO
+          UPLO is CHARACTER*1 \n
+          = 'U':  Upper triangle of A is stored; \n
+          = 'L':  Lower triangle of A is stored. \n
+ * @param[in] N
+          N is INTEGER \n
+          The order of the matrix A.  N >= 0. \n
+ * @param[in,out] A
+          A is COMPLEX array, dimension (LDA,N) \n
+          On entry, the Hermitian matrix A.  If UPLO = 'U', the leading
+          N-by-N upper triangular part of A contains the upper
+          triangular part of the matrix A, and the strictly lower
+          triangular part of A is not referenced.  If UPLO = 'L', the
+          leading N-by-N lower triangular part of A contains the lower
+          triangular part of the matrix A, and the strictly upper
+          triangular part of A is not referenced. \n
+ \n
+          On exit, the block diagonal matrix D and the multipliers used
+          to obtain the factor U or L (see below for further details). \n
+ * @param[in] LDA
+          LDA is INTEGER \n
+          The leading dimension of the array A.  LDA >= fla_max(1,N). \n
+ * @param[out] IPIV
+          IPIV is INTEGER array, dimension (N) \n
+          Details of the interchanges and the block structure of D.
+          If IPIV(k) > 0, then rows and columns k and IPIV(k) were
+          interchanged and D(k,k) is a 1-by-1 diagonal block.
+          If UPLO = 'U' and IPIV(k) = IPIV(k-1) < 0, then rows and
+          columns k-1 and -IPIV(k) were interchanged and D(k-1:k,k-1:k)
+          is a 2-by-2 diagonal block.  If UPLO = 'L' and IPIV(k) =
+          IPIV(k+1) < 0, then rows and columns k+1 and -IPIV(k) were
+          interchanged and D(k:k+1,k:k+1) is a 2-by-2 diagonal block. \n
+ * @param[out]	WORK
+          WORK is COMPLEX array, dimension (MAX(1,LWORK)) \n
+          On exit, if INFO = 0, WORK(1) returns the optimal LWORK. \n
+ * @param[in]	LWORK
+          LWORK is INTEGER \n
+          The length of WORK.  LWORK >=1.  For best performance
+          LWORK >= N*NB, where NB is the block size returned by ILAENV. \n
+ * @param[out]	INFO
+          INFO is INTEGER \n
+          = 0:  successful exit \n
+          < 0:  if INFO = -i, the i-th argument had an illegal value \n
+          > 0:  if INFO = i, D(i,i) is exactly zero.  The factorization
+                has been completed, but the block diagonal matrix D is
+                exactly singular, and division by zero will occur if it
+                is used to solve a system of equations. \n
+
+ *  * */
+    template <typename T>
+    void hetrf(char *uplo, integer *n, T *a, integer *lda, integer *ipiv, T *work, integer *lwork,
+               integer *info)
+    {
+        hetrf(uplo, n, a, lda, ipiv, work, lwork, info);
+    }
+    /** @}*/ // end of hetrf
+
+    /** @defgroup hetri_rook hetri_rook
+     * @ingroup LDL_computation LDL_computation
+     * @{
+     */
+    /*! @brief HETRI_ROOK computes the inverse of HE matrix using the factorization \n
+       obtained with the bounded Bunch-Kaufman ("rook") diagonal pivoting method
+
+    * @details
+    * \b Purpose:
+       \verbatim
+       HETRI_ROOK computes the inverse of a complex Hermitian indefinite matrix
+       A using the factorization A = U*D*U**H or A = L*D*L**H computed by
+       HETRF_ROOK.
+       \endverbatim
+
+    * @param[in] UPLO
+             UPLO is CHARACTER*1 \n
+             Specifies whether the details of the factorization are stored
+             as an upper or lower triangular matrix. \n
+             = 'U':  Upper triangular, form is A = U*D*U**H; \n
+             = 'L':  Lower triangular, form is A = L*D*L**H. \n
+    * @param[in] N
+             N is INTEGER \n
+             The order of the matrix A.  N >= 0. \n
+    * @param[in,out] A
+             A is COMPLEX array, dimension (LDA,N) \n
+             On entry, the block diagonal matrix D and the multipliers
+             used to obtain the factor U or L as computed by CHETRF_ROOK. \n
+    \n
+             On exit, if INFO = 0, the (Hermitian) inverse of the original
+             matrix.  If UPLO = 'U', the upper triangular part of the
+             inverse is formed and the part of A below the diagonal is not
+             referenced; if UPLO = 'L' the lower triangular part of the
+             inverse is formed and the part of A above the diagonal is
+             not referenced. \n
+    * @param[in] LDA
+             LDA is INTEGER \n
+             The leading dimension of the array A.  LDA >= fla_max(1,N). \n
+    * @param[in] IPIV
+             IPIV is INTEGER array, dimension (N) \n
+             Details of the interchanges and the block structure of D
+             as determined by CHETRF_ROOK. \n
+    * @param[out] WORK
+             WORK is COMPLEX array, dimension (N) \n
+    * @param[out] INFO
+             INFO is INTEGER \n
+             = 0: successful exit \n
+             < 0: if INFO = -i, the i-th argument had an illegal value \n
+             > 0: if INFO = i, D(i,i) = 0; the matrix is singular and its
+                   inverse could not be computed. \n
+
+    *  * */
+    template <typename T>
+    void hetri_rook(char *uplo, integer *n, T *a, integer *lda, integer *ipiv, T *work,
+                    integer *info)
+    {
+        hetri_rook(uplo, n, a, lda, ipiv, work, info);
+    }
+    /** @}*/ // end of hetri_rook
+
     /** @defgroup hetrf_aa hetrf_aa
      * @ingroup LDL_computation LDL_computation
      * @{
@@ -13488,8 +13627,8 @@ normwise error bounds \endverbatim
 
  *  * */
     template <typename T>
-    void hetrf_rook(char* uplo, integer* n, T* a, integer* lda, integer* ipiv,
-                    T* work, integer* lwork, integer* info)
+    void hetrf_rook(char *uplo, integer *n, T *a, integer *lda, integer *ipiv, T *work,
+                    integer *lwork, integer *info)
     {
         hetrf_rook(uplo, n, a, lda, ipiv, work, lwork, info);
     }
@@ -16387,7 +16526,7 @@ normwise error bounds \endverbatim
      * @ingroup LAPACK
      * @{
      */
-     /** @defgroup SVD SVD Computational Routines
+    /** @defgroup SVD SVD Computational Routines
      * @ingroup Singular
      * @{
      */
@@ -49029,44 +49168,45 @@ determined by sgerqf
      * @ingroup L1
      * @{
      */
-     /*! @brief ROT applies a plane rotation with real cosine and complex sine to a pair of complex vectors
+    /*! @brief ROT applies a plane rotation with real cosine and complex sine to a pair of complex
+     vectors
 
-      * @details
-      * \b Purpose:
-          \verbatim 
-           ROT   applies a plane rotation, where the cos (C) is real and the
-           sin (S) is complex, and the vectors CX and CY are complex.
-          \endverbatim  
+     * @details
+     * \b Purpose:
+         \verbatim
+          ROT   applies a plane rotation, where the cos (C) is real and the
+          sin (S) is complex, and the vectors CX and CY are complex.
+         \endverbatim
 
-      * @param[in] N
-               N is INTEGER \n
-               The number of elements in the vectors CX and CY. \n
-      * @param[in,out] CX
-               CX is COMPLEX array, dimension (N) \n
-               On input, the vector X.
-               On output, CX is overwritten with C*X + S*Y. \n
-      * @param[in] INCX
-               INCX is INTEGER \n
-               The increment between successive values of CY.  INCX <> 0. \n
-      * @param[in,out] CY
-               CY is COMPLEX array, dimension (N) \n
-               On input, the vector Y.
-               On output, CY is overwritten with -CONJG(S)*X + C*Y. \n
-      * @param[in] INCY
-               INCY is INTEGER \n
-               The increment between successive values of CY.  INCX <> 0. \n
-      * @param[in] C
-               C is REAL \n
-      * @param[in] S
-               S is COMPLEX \n
-               C and S define a rotation \n
-                  [  C          S  ] \n
-                  [ -conjg(S)   C  ] \n
-               where C*C + S*CONJG(S) = 1.0. \n
+     * @param[in] N
+              N is INTEGER \n
+              The number of elements in the vectors CX and CY. \n
+     * @param[in,out] CX
+              CX is COMPLEX array, dimension (N) \n
+              On input, the vector X.
+              On output, CX is overwritten with C*X + S*Y. \n
+     * @param[in] INCX
+              INCX is INTEGER \n
+              The increment between successive values of CY.  INCX <> 0. \n
+     * @param[in,out] CY
+              CY is COMPLEX array, dimension (N) \n
+              On input, the vector Y.
+              On output, CY is overwritten with -CONJG(S)*X + C*Y. \n
+     * @param[in] INCY
+              INCY is INTEGER \n
+              The increment between successive values of CY.  INCX <> 0. \n
+     * @param[in] C
+              C is REAL \n
+     * @param[in] S
+              S is COMPLEX \n
+              C and S define a rotation \n
+                 [  C          S  ] \n
+                 [ -conjg(S)   C  ] \n
+              where C*C + S*CONJG(S) = 1.0. \n
 
-      *  * */
-    template< typename T, typename Ta >
-    void rot(integer *n, T *cx, integer *incx, T * cy, integer *incy, Ta *c, T *s)
+     *  * */
+    template <typename T, typename Ta>
+    void rot(integer *n, T *cx, integer *incx, T *cy, integer *incy, Ta *c, T *s)
     {
         rot(n, cx, incx, cy, incy, c, s);
     }

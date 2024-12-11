@@ -600,7 +600,7 @@ void rand_sym_matrix(integer datatype, void *A, integer M, integer N, integer LD
     }
 }
 
-/* Copy a matrix */
+/* Copy matrix A into matrix B*/
 void copy_matrix(integer datatype, char *uplo, integer M, integer N, void *A, integer LDA, void *B,
                  integer LDB)
 {
@@ -980,7 +980,7 @@ void rand_spd_matrix(integer datatype, char *uplo, void *A, integer m, integer l
     {
         type = "S";
     }
-    form_symmetric_matrix(datatype, m, A, lda, type);
+    form_symmetric_matrix(datatype, m, A, lda, type, 'U');
 
     free_vector(L);
 }
@@ -5596,10 +5596,12 @@ void fla_invoke_gemm(integer datatype, char *transA, char *transB, integer *m, i
 /* Generate a symmetric or hermitian matrix from existing matrix A
  * If type = "C" hermitian matrix formed.
  * If type = "S" symmetric matrix is formed.
+ * If uplo = 'L' lower triangular part of the matrix is copied to upper triangular part in hermitian matrix.
+ * Else upper triangular part of the matrix is copied to lower triangular part in hermitian matrix.
  */
-void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, char *type)
+void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, char *type, char uplo)
 {
-    integer i, j, conj = 1;
+    integer i, j, conj = 1, i_temp, j_temp;
     if(lda < n)
     {
         return;
@@ -5616,7 +5618,14 @@ void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, ch
             {
                 for(j = i; j < n; j++)
                 {
-                    ((float *)A)[i * lda + j] = ((float *)A)[j * lda + i];
+                    i_temp = i;
+                    j_temp = j;
+                    if(uplo == 'L')
+                    {
+                        i_temp = j;
+                        j_temp = i;
+                    }
+                    ((float *)A)[i_temp * lda + j_temp] = ((float *)A)[j_temp * lda + i_temp];
                 }
             }
             break;
@@ -5627,7 +5636,14 @@ void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, ch
             {
                 for(j = i; j < n; j++)
                 {
-                    ((double *)A)[i * lda + j] = ((double *)A)[j * lda + i];
+                    i_temp = i;
+                    j_temp = j;
+                    if(uplo == 'L')
+                    {
+                        i_temp = j;
+                        j_temp = i;
+                    }
+                    ((double *)A)[i_temp * lda + j_temp] = ((double *)A)[j_temp * lda + i_temp];
                 }
             }
             break;
@@ -5646,8 +5662,15 @@ void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, ch
                         }
                         continue;
                     }
-                    ((scomplex *)A)[j * lda + i].real = ((scomplex *)A)[i * lda + j].real;
-                    ((scomplex *)A)[j * lda + i].imag = conj * ((scomplex *)A)[i * lda + j].imag;
+                    i_temp = i;
+                    j_temp = j;
+                    if(uplo == 'L')
+                    {
+                        i_temp = j;
+                        j_temp = i;
+                    }
+                    ((scomplex *)A)[i_temp * lda + j_temp].real = ((scomplex *)A)[j_temp * lda + i_temp].real;
+                    ((scomplex *)A)[i_temp * lda + j_temp].imag = conj * ((scomplex *)A)[j_temp * lda + i_temp].imag;
                 }
             }
             break;
@@ -5666,8 +5689,15 @@ void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, ch
                         }
                         continue;
                     }
-                    ((dcomplex *)A)[j * lda + i].real = ((dcomplex *)A)[i * lda + j].real;
-                    ((dcomplex *)A)[j * lda + i].imag = conj * ((dcomplex *)A)[i * lda + j].imag;
+                    i_temp = i;
+                    j_temp = j;
+                    if(uplo == 'L')
+                    {
+                        i_temp = j;
+                        j_temp = i;
+                    }
+                    ((dcomplex *)A)[i_temp * lda + j_temp].real = ((dcomplex *)A)[j_temp * lda + i_temp].real;
+                    ((dcomplex *)A)[i_temp * lda + j_temp].imag = conj * ((dcomplex *)A)[j_temp * lda + i_temp].imag;
                 }
             }
             break;
@@ -6766,7 +6796,7 @@ void get_min_of_values(integer datatype, void *a, void *b, void *min_val)
 }
 
 /* Negate the off-diagonal element of the 2x2 diagonal block.
-   Used for the hetrf_rook test case
+   Used for the hetrf/hetrf_rook test case
 */
 void negate_off_diagonal_element_imag(integer datatype, void *D, integer n, integer k,
                                       integer position)

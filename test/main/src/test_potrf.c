@@ -158,7 +158,7 @@ void fla_test_potrf_experiment(test_params_t *params, integer datatype, integer 
             {
                 type = "S";
             }
-            form_symmetric_matrix(datatype, m, A, lda, type);
+            form_symmetric_matrix(datatype, m, A, lda, type, 'U');
         }
     }
     else

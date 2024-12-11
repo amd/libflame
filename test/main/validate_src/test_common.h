@@ -38,7 +38,7 @@ enum TRIANGULAR_MATRIX_DIAG_TYPE
 
 /* The macros below are used for deciding which position of the off-diagonal
  * element of 2x2 diagonal block needs to be negated.
- * Used for the hetrf_rook test case
+ * Used for the hetrf/hetrf_rook test case
  */
 #define LOWER_OFF_DIAGONAL_ELEMENT 0
 #define HIGHER_OFF_DIAGONAL_ELEMENT 1
@@ -326,8 +326,10 @@ void residual_sum_of_squares(int datatype, integer m, integer n, integer nrhs, v
 /* Generate a symmetric or hermitian matrix from existing matrix A
  * If type = "C" hermitian matrix formed.
  * If type = "S" symmetric matrix is formed.
+ * If uplo = 'L' lower triangular part of the matrix is copied to upper triangular part in hermitian matrix.
+ * Else upper triangular part of the matrix is copied to lower triangular part in hermitian matrix.
  */
-void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, char *type);
+void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, char *type, char uplo);
 /* Scaling the matrix by x scalar */
 void scal_matrix(integer datatype, void *x, void *A, integer m, integer n, integer lda,
                  integer inc);
@@ -384,7 +386,7 @@ void get_max_of_values(integer datatype, void *a, void *b, void *max_val);
 /* Gets the minimum absolute values of the two input values */
 void get_min_of_values(integer datatype, void *a, void *b, void *min_val);
 /* Negate the off-diagonal element of the 2x2 diagonal block.
- * Used for the hetrf_rook test case
+ * Used for the hetrf/hetrf_rook test case
  */
 void negate_off_diagonal_element_imag(integer datatype, void *D, integer n, integer k,
                                       integer position);

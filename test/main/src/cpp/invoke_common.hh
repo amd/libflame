@@ -104,6 +104,10 @@ void invoke_cpp_stedc(integer datatype, char *compz, integer *n, void *D, void *
                       integer *iwork, integer *liwork, integer *info);
 void invoke_cpp_gecon(integer datatype, char *norm, integer *n, void *A, integer *lda, void *anorm,
                   void *rcond, void *work, void *lrwork, integer *info);
+void invoke_cpp_hetrf(integer datatype, char *uplo, integer *n, void *A, integer *lda,
+                      integer *ipiv, void *work, integer *lwork, integer *info);
+void invoke_cpp_hetri_rook(integer datatype, char *uplo, integer *n, void *a, integer *lda,
+                           integer *ipiv, void *work, integer *info);
 #ifdef __cplusplus
 }
 #endif

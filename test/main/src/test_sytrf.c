@@ -156,7 +156,7 @@ void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer 
         init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
         if(params->imatrix_char != NULL)
         {
-            form_symmetric_matrix(datatype, n, A, lda, "S");
+            form_symmetric_matrix(datatype, n, A, lda, "S", 'U');
         }
     }
     else
@@ -165,7 +165,7 @@ void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer 
         create_realtype_vector(datatype, &L, n);
         generate_matrix_from_EVs(datatype, 'V', n, A, lda, L, SYTRF_VL, SYTRF_VU,
                                  USE_ABS_EIGEN_VALUES);
-        form_symmetric_matrix(datatype, n, A, lda, "S");
+        form_symmetric_matrix(datatype, n, A, lda, "S", 'U');
         free_vector(L);
         /* Oveflow or underflow test initialization */
         if(FLA_OVERFLOW_UNDERFLOW_TEST)

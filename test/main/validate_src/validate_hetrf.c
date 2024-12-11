@@ -1,38 +1,26 @@
-/*
-    Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
-*/
+/******************************************************************************
+ * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 
 /*! @file validate_hetrf.c
  *  @brief Defines validate function of HETRF() to use in test suite.
  *  */
 
 #include "test_common.h"
-#include "test_prototype.h"
 
-extern double perf;
-extern double time_min;
-
-void validate_hetrf(char *tst_api, char *uplo, integer n, integer lda, void *A_res,
-                    integer datatype, integer *ipiv, double err_thresh, void *A, void *params)
+void validate_hetrf(char *uplo, integer n, integer lda, void *A_res, integer datatype,
+                    integer *ipiv, double *residual, integer *info, void *A, char *test_name)
 {
+    if(n == 0)
+    {
+        return;
+    }
     void *work = NULL;
     void *D = NULL;
     void *A_val = NULL;
     void *temp = NULL;
     void *X = NULL;
     void *B = NULL;
-    integer info;
-    double residual, resid1 = 0., resid2 = 0.;
-
-    /* Early return conditions */
-    if(n == 0)
-    {
-        FLA_TEST_PRINT_STATUS_AND_RETURN(n, n, err_thresh);
-    }
-    /* print overall status if incoming threshold is
-     * an extreme value indicating that API returned
-     * unexpected info value */
-    FLA_TEST_PRINT_INVALID_STATUS(n, n, err_thresh);
 
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &D, n);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_val, n);
@@ -51,7 +39,7 @@ void validate_hetrf(char *tst_api, char *uplo, integer n, integer lda, void *A_r
 
     integer s = 1, k;
 
-    if(same_char(*uplo, 'U'))
+    if(uplo[0] == 'U' || uplo[0] == 'u')
     {
         for(k = n - 1; k >= 0; k = k - s)
         {
@@ -65,14 +53,14 @@ void validate_hetrf(char *tst_api, char *uplo, integer n, integer lda, void *A_r
             set_identity_matrix(datatype, n, n, A_val, n);
             /* U is a product of terms P(k) * U(k) where k decreases from n to 1 in steps of 1 or 2.
              * P(k) is a permutation matrix as defined by ipiv(k) */
-            /* If tst_api = HETRF and ipiv(k) = ipiv(k-1) < 0, then rows k-1 and -ipiv(k) of A_val
+            /* If test_name = HETRF and ipiv(k) = ipiv(k-1) < 0, then rows k-1 and -ipiv(k) of A_val
           are interchanged and D(k-1:k,k-1:k) is a 2-by-2 diagonal block
             */
-            /* If tst_api = HETRF_ROOK and ipiv(k) < 0 && ipiv(k-1) < 0, then rows k and -ipiv(k)
+            /* If test_name = HETRF_ROOK and ipiv(k) < 0 && ipiv(k-1) < 0, then rows k and -ipiv(k)
              * of A_val are exchanged and rows k-1 and -ipiv(k-1) of A_val are interchanged,
              * D(k-1:k,k-1:k) is a 2-by-2 diagonal block */
-            if((!strcmp(tst_api, "HETRF") && ipiv[k] < 0 && ipiv[k] == ipiv[k - 1])
-               || (!strcmp(tst_api, "HETRF_ROOK") && ipiv[k] < 0 && k > 0 && ipiv[k - 1] < 0))
+            if((!strcmp(test_name, "HETRF") && ipiv[k] < 0 && ipiv[k] == ipiv[k - 1])
+               || (!strcmp(test_name, "HETRF_ROOK") && ipiv[k] < 0 && k > 0 && ipiv[k - 1] < 0))
             {
                 /* Blocked Diagonal */
                 s = 2;
@@ -86,7 +74,7 @@ void validate_hetrf(char *tst_api, char *uplo, integer n, integer lda, void *A_r
                  * as negative of itself */
                 negate_off_diagonal_element_imag(datatype, D, n, k, LOWER_OFF_DIAGONAL_ELEMENT);
                 /* Swapping rows according to ipiv */
-                if(!strcmp(tst_api, "HETRF"))
+                if(!strcmp(test_name, "HETRF"))
                 {
                     swap_row_col(datatype, &n, A_val, n, &n, &n, (-1 * (ipiv[k])) - 1, 0, k - 1, 0);
                 }
@@ -115,11 +103,10 @@ void validate_hetrf(char *tst_api, char *uplo, integer n, integer lda, void *A_r
             }
             copy_matrix(datatype, "full", n, n, temp, n, work, n);
             /* Forming triangular matrix U from U(k) * U(k-1) * U(k-2) ... */
-            fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, d_one, work, &n, A_val, &n, d_zero,
-                            temp, &n);
+            fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, work, &n, A_val, &n, temp, &n);
         }
     }
-    else if(same_char(*uplo, 'L'))
+    else if(uplo[0] == 'L' || uplo[0] == 'l')
     {
         for(k = 0; k <= n - 1; k += s)
         {
@@ -132,14 +119,14 @@ void validate_hetrf(char *tst_api, char *uplo, integer n, integer lda, void *A_r
             set_identity_matrix(datatype, n, n, A_val, n);
             /* L is a product of terms P(k) * L(k) where k increases from 1 to n in steps of 1 or 2.
              * P(k) is a permutation matrix as defined by ipiv(k) */
-            /* If tst_api = HETRF and ipiv(k) = ipiv(k+1) < 0, then rows k+1 and -ipiv(k) of A_val
+            /* If test_name = HETRF and ipiv(k) = ipiv(k+1) < 0, then rows k+1 and -ipiv(k) of A_val
           are interchanged and D(k:k+1,k:k+1) is a 2-by-2 diagonal block.
             */
-            /* If tst_api = HETRF_ROOK and ipiv(k) < 0 and ipiv(k+1) < 0, then rows k and -ipiv(k)
+            /* If test_name = HETRF_ROOK and ipiv(k) < 0 and ipiv(k+1) < 0, then rows k and -ipiv(k)
              * of A_val are interchanged and rows k+1 and -ipiv(k+1) of A_val are interchaged,
              * D(k:k+1,k:k+1) is a 2-by-2 diagonal block */
-            if((!strcmp(tst_api, "HETRF") && k < n - 1 && ipiv[k] < 0 && ipiv[k] == ipiv[k + 1])
-               || (!strcmp(tst_api, "HETRF_ROOK") && k < n - 1 && ipiv[k] < 0 && ipiv[k + 1] < 0))
+            if((!strcmp(test_name, "HETRF") && k < n - 1 && ipiv[k] < 0 && ipiv[k] == ipiv[k + 1])
+               || (!strcmp(test_name, "HETRF_ROOK") && k < n - 1 && ipiv[k] < 0 && ipiv[k + 1] < 0))
             {
                 /* Blocked Diagonal */
                 s = 2;
@@ -152,7 +139,7 @@ void validate_hetrf(char *tst_api, char *uplo, integer n, integer lda, void *A_r
                  * as negative of itself */
                 negate_off_diagonal_element_imag(datatype, D, n, k, HIGHER_OFF_DIAGONAL_ELEMENT);
                 /* Swapping rows according to ipiv */
-                if(!strcmp(tst_api, "HETRF"))
+                if(!strcmp(test_name, "HETRF"))
                 {
                     swap_row_col(datatype, &n, A_val, n, &n, &n, (-1 * (ipiv[k])) - 1, 0, k + 1, 0);
                 }
@@ -183,80 +170,85 @@ void validate_hetrf(char *tst_api, char *uplo, integer n, integer lda, void *A_r
             copy_matrix(datatype, "full", n, n, temp, n, work, n);
 
             /* Forming triangular matrix L from L(1) * L(2) * L(3) ... */
-            fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, d_one, work, &n, A_val, &n, d_zero,
-                            temp, &n);
+            fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, work, &n, A_val, &n, temp, &n);
         }
     }
     switch(datatype)
     {
         case COMPLEX:
         {
-            float norm_a, norm;
+            float norm_a, eps, resid1, resid2, norm;
+            eps = fla_lapack_slamch("E");
             /* Test-1
              *Compute norm(A'*B - X)/(norm(X) * eps * n)
              */
             cgemv_("N", &n, &n, &c_one, A, &lda, X, &i_one, &c_zero, B, &i_one);
-            if(!strcmp(tst_api, "HETRF"))
+            if(!strcmp(test_name, "HETRF"))
             {
-                chetrs_(uplo, &n, &i_one, A_res, &lda, ipiv, B, &n, &info);
+                chetrs_(uplo, &n, &i_one, A_res, &lda, ipiv, B, &n, info);
             }
             else
             {
-                chetrs_rook_(uplo, &n, &i_one, A_res, &lda, ipiv, B, &n, &info);
+                chetrs_rook_(uplo, &n, &i_one, A_res, &lda, ipiv, B, &n, info);
             }
             norm_a = fla_lapack_clange("1", &n, &i_one, X, &i_one, NULL);
             caxpy_(&n, &c_n_one, X, &i_one, B, &i_one);
             norm = fla_lapack_clange("1", &n, &i_one, B, &i_one, NULL);
-            resid1 = fla_compute_residual(datatype, 'E', norm, norm_a, n, params);
+            resid1 = norm / (eps * norm_a * n);
 
             /* Test-2
              * Compute norm(A-(U*D*U**T))/(norm(A) * eps * n)
              */
-            if(info > 0)
+            if(*info > 0)
             {
-                ((scomplex *)D)[info * n + info].real = 0;
-                ((scomplex *)D)[info * n + info].imag = 0;
+                ((scomplex *)D)[(*info) * n + *info].real = 0;
+                ((scomplex *)D)[(*info) * n + *info].imag = 0;
             }
             norm_a = fla_lapack_clange("1", &n, &n, A, &lda, NULL);
             cgemm_("N", "N", &n, &n, &n, &c_one, temp, &n, D, &n, &c_zero, A_val, &n);
             cgemm_("N", "C", &n, &n, &n, &c_one, A_val, &n, temp, &n, &c_n_one, A, &lda);
             norm = fla_lapack_clange("1", &n, &n, A, &lda, NULL);
-            resid2 = fla_compute_residual(datatype, 'E', norm, norm_a, n, params);
+            resid2 = norm / (eps * norm_a * n);
+
+            *residual = (double)fla_max(resid1, resid2);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm_a, norm;
+            double norm_a, eps, resid1, resid2, norm;
+            eps = fla_lapack_dlamch("E");
             /* Test-1
              * Compute norm(A'*B - X)/(norm(X) * eps * n)
              */
             zgemv_("N", &n, &n, &z_one, A, &lda, X, &i_one, &z_zero, B, &i_one);
-            if(!strcmp(tst_api, "HETRF"))
+            if(!strcmp(test_name, "HETRF"))
             {
-                zhetrs_(uplo, &n, &i_one, A_res, &lda, ipiv, B, &n, &info);
+                zhetrs_(uplo, &n, &i_one, A_res, &lda, ipiv, B, &n, info);
             }
             else
             {
-                zhetrs_rook_(uplo, &n, &i_one, A_res, &lda, ipiv, B, &n, &info);
+                zhetrs_rook_(uplo, &n, &i_one, A_res, &lda, ipiv, B, &n, info);
             }
             norm_a = fla_lapack_zlange("1", &n, &i_one, X, &i_one, NULL);
             zaxpy_(&n, &z_n_one, X, &i_one, B, &i_one);
             norm = fla_lapack_zlange("1", &n, &i_one, B, &i_one, NULL);
-            resid1 = fla_compute_residual(datatype, 'E', norm, norm_a, n, params);
+            resid1 = norm / (eps * norm_a * n);
 
             /* Test-2
              * Compute norm(A-(U*D*U**T))/(norm(A) * eps * n)
              */
-            if(info > 0)
+            if(*info > 0)
             {
-                ((dcomplex *)D)[info * n + info].real = 0;
-                ((dcomplex *)D)[info * n + info].imag = 0;
+                ((dcomplex *)D)[(*info) * n + *info].real = 0;
+                ((dcomplex *)D)[(*info) * n + *info].imag = 0;
             }
             norm_a = fla_lapack_zlange("1", &n, &n, A, &lda, NULL);
             zgemm_("N", "N", &n, &n, &n, &z_one, temp, &n, D, &n, &z_zero, A_val, &n);
             zgemm_("N", "C", &n, &n, &n, &z_one, A_val, &n, temp, &n, &z_n_one, A, &lda);
             norm = fla_lapack_zlange("1", &n, &n, A, &lda, NULL);
-            resid2 = fla_compute_residual(datatype, 'E', norm, norm_a, n, params);
+            resid2 = norm / (eps * norm_a * n);
+
+            *residual = (double)fla_max(resid1, resid2);
             break;
         }
     }
@@ -266,9 +258,4 @@ void validate_hetrf(char *tst_api, char *uplo, integer n, integer lda, void *A_r
     free_matrix(temp);
     free_matrix(D);
     free_matrix(work);
-
-    residual = fla_test_max(resid1, resid2);
-    FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
-    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
-    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
 }

@@ -54,3 +54,5 @@
 1   gecon  Estimates reciprocal of the condition number   (0 = disable; 1 = enable; 2 = enable only this)
 1   getrfnp LU factorization (No Pivoting)                (0 = disable; 1 = enable; 2 = enable only this)
 1   getrfnpi  LU factorization (No Pivot, Partial Factor) (0 = disable; 1 = enable; 2 = enable only this)
+1   hetrf   LDLH factorization                            (0 = disable; 1 = enable; 2 = enable only this)
+1   hetri_rook   LDLH factorization                       (0 = disable; 1 = enable; 2 = enable only this)

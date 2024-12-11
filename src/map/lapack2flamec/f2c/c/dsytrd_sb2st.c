@@ -598,7 +598,7 @@ void dsytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
 #else
                         dsb2st_kernels_(uplo, &wantq, &ttype, &stind, &edind, &sweepid, n, kd, &ib,
                                         &work[inda], &lda, &hous[indv], &hous[indtau], &ldv,
-                                        &work[indw + tid * *kd]);
+                                        &work[indw]);
 #endif
                                 if(blklastind >= *n - 1)
                                 {

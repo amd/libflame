@@ -1,4 +1,4 @@
-/* dtgex2.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./dtgex2.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -191,7 +191,7 @@ the blocks are */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup doubleGEauxiliary */
+/* > \ingroup tgex2 */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -277,7 +277,7 @@ void dtgex2_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer 
     integer linfo;
     doublereal ircop[16] /* was [4][4] */
         ;
-    integer iwork[4];
+    integer iwork[6];
     extern /* Subroutine */
         void
         dlagv2_(doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *,
@@ -764,7 +764,7 @@ void dtgex2_(logical *wantq, logical *wantz, integer *n, doublereal *a, integer 
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    /* Exit with INFO = 1 if swap was rejected. */
+/* Exit with INFO = 1 if swap was rejected. */
 L70:
     *info = 1;
     AOCL_DTL_TRACE_LOG_EXIT

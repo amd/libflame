@@ -163,7 +163,7 @@ doublereal dlange_(char *norm, integer *m, integer *n, doublereal *a, integer *l
     value = 0.;
     j_a_dim = 0;
 
-    //initialize AOCL context
+    // initialize AOCL context
     aocl_fla_init();
 
     if(fla_min(*m, *n) == 0)
@@ -178,22 +178,23 @@ doublereal dlange_(char *norm, integer *m, integer *n, doublereal *a, integer *l
         for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
-	    j_a_dim = j * a_dim1;
+            j_a_dim = j * a_dim1;
 
 #if FLA_ENABLE_AMD_OPT
-	    /* Select optimized path for AMD architecture*/
+            /* Select optimized path for AMD architecture*/
             temp = fla_get_max_abs_element_vector(i__2, a, j_a_dim);
 
-	    if (value < temp) value = temp;
+            if(value < temp)
+                value = temp;
 #else
             for(i__ = 1; i__ <= i__2; ++i__)
             {
-		temp = (d__1 = a[i__ + j_a_dim], f2c_abs(d__1));
+                temp = (d__1 = a[i__ + j_a_dim], f2c_abs(d__1));
                 if(value < temp || temp != temp)
                 {
                     value = temp;
                 }
-	    }
+            }
 #endif
         }
     }

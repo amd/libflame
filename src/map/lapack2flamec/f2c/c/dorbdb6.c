@@ -1,4 +1,4 @@
-/* dorbdb6.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./dorbdb6.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -49,9 +49,8 @@ static doublereal c_b13 = -1.;
 /* > with respect to the columns of */
 /* > Q = [ Q1 ] . */
 /* > [ Q2 ] */
-/* > The Euclidean norm of X must be one and the columns of Q must be */
-/* > orthonormal. The orthogonalized vector will be zero if and only if it */
-/* > lies entirely in the range of Q. */
+/* > The columns of Q must be orthonormal. The orthogonalized vector will */
+/* > be zero if and only if it lies entirely in the range of Q. */
 /* > */
 /* > The projection is computed with at most two iterations of the */
 /* > classical Gram-Schmidt algorithm, see */
@@ -155,7 +154,7 @@ static doublereal c_b13 = -1.;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup doubleOTHERcomputational */
+/* > \ingroup unbdb6 */
 /* ===================================================================== */
 /* Subroutine */
 void dorbdb6_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *incx1, doublereal *x2,
@@ -182,9 +181,7 @@ void dorbdb6_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *inc
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
         void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
         dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -258,13 +255,14 @@ void dorbdb6_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *inc
         return;
     }
     eps = dlamch_("Precision");
+    /* Compute the Euclidean norm of X */
+    scl = 0.;
+    ssq = 0.;
+    dlassq_(m1, &x1[1], incx1, &scl, &ssq);
+    dlassq_(m2, &x2[1], incx2, &scl, &ssq);
+    norm = scl * sqrt(ssq);
     /* First, project X onto the orthogonal complement of Q's column */
     /* space */
-    /* Christoph Conrads: In debugging mode the norm should be computed */
-    /* and an assertion added comparing the norm with one. Alas, Fortran */
-    /* never made it into 1989 when assert() was introduced into the C */
-    /* programming language. */
-    norm = 1.;
     if(*m1 == 0)
     {
         i__1 = *n;
@@ -288,7 +286,7 @@ void dorbdb6_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *inc
     /* If projection is sufficiently large in norm, then stop. */
     /* If projection is zero, then stop. */
     /* Otherwise, project again. */
-    if(norm_new__ >= norm * .01)
+    if(norm_new__ >= norm * .83)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -339,7 +337,7 @@ void dorbdb6_(integer *m1, integer *m2, integer *n, doublereal *x1, integer *inc
     /* If second projection is sufficiently large in norm, then do */
     /* nothing more. Alternatively, if it shrunk significantly, then */
     /* truncate it to zero. */
-    if(norm_new__ < norm * .01)
+    if(norm_new__ < norm * .83)
     {
         i__1 = (*m1 - 1) * *incx1 + 1;
         i__2 = *incx1;

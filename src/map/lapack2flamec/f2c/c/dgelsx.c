@@ -204,8 +204,7 @@ void dgelsx_(integer *m, integer *n, integer *nrhs, doublereal *a, integer *lda,
         dlaic1_(integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
                 doublereal *, doublereal *, doublereal *),
         dorm2r_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
-                doublereal *, doublereal *, integer *, doublereal *, integer *),
-        dlabad_(doublereal *, doublereal *);
+                doublereal *, doublereal *, integer *, doublereal *, integer *);
     extern doublereal dlamch_(char *),
         dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */

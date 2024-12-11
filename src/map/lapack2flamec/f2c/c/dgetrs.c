@@ -205,7 +205,8 @@ void dgetrs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda
 
 #ifdef FLA_ENABLE_AMD_OPT
     /* Take small DGETRS path (NOTRANS) for size between 3 to 8 and NRHS <= N */
-    if((*n) > 2 && (*n) <= 8 && ((*nrhs) <= (*n)) && lsame_(trans, "N", 1, 1) && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
+    if((*n) > 2 && (*n) <= 8 && ((*nrhs) <= (*n)) && lsame_(trans, "N", 1, 1)
+       && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
         fla_dgetrs_small_notrans(trans, n, nrhs, a, lda, ipiv, b, ldb, info);
         AOCL_DTL_TRACE_LOG_EXIT

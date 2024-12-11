@@ -174,10 +174,12 @@ extern FILE *g_ext_fptr;
     }
 
 /* Macro to skip complex and double complex tests of not supported APIs */
-#define FLA_SKIP_TEST(datatype_char, func_str)                                                    \
-    ((((datatype_char == 'c' || datatype_char == 'z') && strcmp(func_str, "STEVD") == 0)          \
-      || ((datatype_char == 's' || datatype_char == 'd') && strcmp(func_str, "HETRF_ROOK") == 0)) \
-         ? TRUE                                                                                   \
+#define FLA_SKIP_TEST(datatype_char, func_str)                                           \
+    ((((datatype_char == 'c' || datatype_char == 'z') && strcmp(func_str, "STEVD") == 0) \
+      || ((datatype_char == 's' || datatype_char == 'd')                                 \
+          && (strcmp(func_str, "HETRF") == 0 || strcmp(func_str, "HETRF_ROOK") == 0    \
+        || strcmp(func_str, "HETRI_ROOK") == 0)))   \
+         ? TRUE                                                                          \
          : FALSE)
 
 /* Assign leading dimension value based on matrix layout and cmdline/config inputs */

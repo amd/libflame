@@ -42,10 +42,12 @@ ${CMAKE_CURRENT_SOURCE_DIR}/validate_syev.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_gesvdx.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_gelsd.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_sytrf.c
-${CMAKE_CURRENT_SOURCE_DIR}/validate_hetrf_rook.c
+${CMAKE_CURRENT_SOURCE_DIR}/validate_hetrf.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_larf.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_sygvd.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_lange.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_gecon.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_getrfnpi.c
+${CMAKE_CURRENT_SOURCE_DIR}/validate_hetri_rook.c
 )
+

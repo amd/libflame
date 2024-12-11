@@ -378,6 +378,11 @@
 #define fla_lapack_cgetrfnpi CGETRFNPI_
 #define fla_lapack_zgetrfnpi ZGETRFNPI_
 
+#define fla_lapack_chetrf CHETRF_
+#define fla_lapack_zhetrf ZHETRF_
+
+#define fla_lapack_chetri_rook CHETRI_ROOK_
+#define fla_lapack_zhetri_rook ZHETRI_ROOK_
 #elif(UPPER)
 
 #define fla_lapack_sladiv SLADIV
@@ -692,6 +697,11 @@
 #define fla_lapack_cgetrfnpi CGETRFNPI
 #define fla_lapack_zgetrfnpi ZGETRFNPI
 
+#define fla_lapack_chetrf CHETRF
+#define fla_lapack_zhetrf ZHETRF
+
+#define fla_lapack_chetri_rook CHETRI_ROOK
+#define fla_lapack_zhetri_rook ZHETRI_ROOK
 #elif(LOWER)
 
 #define fla_lapack_sladiv sladiv
@@ -985,6 +995,8 @@
 
 #define fla_lapack_chetrf_rook chetrf_rook
 #define fla_lapack_zhetrf_rook zhetrf_rook
+#define fla_lapack_chetrf chetrf
+#define fla_lapack_zhetrf zhetrf
 
 #define fla_lapack_ssygvd ssygvd
 #define fla_lapack_dsygvd dsygvd
@@ -1006,6 +1018,8 @@
 #define fla_lapack_cgetrfnpi cgetrfnpi
 #define fla_lapack_zgetrfnpi zgetrfnpi
 
+#define fla_lapack_chetri_rook chetri_rook
+#define fla_lapack_zhetri_rook zhetri_rook
 #else
 
 #define fla_lapack_sladiv sladiv_
@@ -1300,6 +1314,9 @@
 #define fla_lapack_chetrf_rook chetrf_rook_
 #define fla_lapack_zhetrf_rook zhetrf_rook_
 
+#define fla_lapack_chetrf chetrf_
+#define fla_lapack_zhetrf zhetrf_
+
 #define fla_lapack_ssygvd ssygvd_
 #define fla_lapack_dsygvd dsygvd_
 #define fla_lapack_chegvd chegvd_
@@ -1320,6 +1337,8 @@
 #define fla_lapack_cgetrfnpi cgetrfnpi_
 #define fla_lapack_zgetrfnpi zgetrfnpi_
 
+#define fla_lapack_chetri_rook chetri_rook_
+#define fla_lapack_zhetri_rook zhetri_rook_
 #endif /*if UPPER_*/
 
 /* These functions are API invoking functions used in other API test codes */
@@ -1335,6 +1354,8 @@ extern void invoke_geev(integer datatype, char *jobvl, char *jobvr, integer *n, 
                         integer *lda, void *wr, void *wi, void *w, void *vl, integer *ldvl,
                         void *vr, integer *ldvr, void *work, integer *lwork, void *rwork,
                         integer *info);
+extern void invoke_hetrf_rook(integer datatype, char *uplo, integer *n, void *a, integer *lda,
+                       integer *ipiv, void *work, integer *lwork, integer *info);
 /* Generates Orthogonal matrix from ORGTR() after SYTRD() call. */
 extern void invoke_sytrd(integer datatype, char *uplo, char compz, integer n, void *A, integer lda,
                          void *D, void *E, integer *info);
@@ -1676,6 +1697,10 @@ lapack_int LAPACKE_chetrf_rook(int matrix_layout, char uplo, lapack_int n, lapac
                                lapack_int lda, lapack_int *ipiv);
 lapack_int LAPACKE_zhetrf_rook(int matrix_layout, char uplo, lapack_int n, lapack_complex_double *a,
                                lapack_int lda, lapack_int *ipiv);
+lapack_int LAPACKE_chetrf(int matrix_layout, char uplo, lapack_int n, lapack_complex_float *a,
+                          lapack_int lda, lapack_int *ipiv);
+lapack_int LAPACKE_zhetrf(int matrix_layout, char uplo, lapack_int n, lapack_complex_double *a,
+                          lapack_int lda, lapack_int *ipiv);
 lapack_int LAPACKE_sgelss(int matrix_layout, lapack_int m, lapack_int n, lapack_int nrhs, float *a,
                           lapack_int lda, float *b, lapack_int ldb, float *s, float rcond,
                           lapack_int *rank);

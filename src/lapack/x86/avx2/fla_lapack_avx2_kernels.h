@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2023-2025, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 #ifndef FLA_LAPACK_AVX2_KERNELS_DEFS_H
 #define FLA_LAPACK_AVX2_KERNELS_DEFS_H
@@ -60,5 +60,6 @@ void fla_dgesvd_xs_small10T_avx2(integer *m, integer *n, doublereal *a, integer 
 doublereal fla_get_max_abs_element_vector_avx2(integer m, doublereal *a, integer a_dim);
 void fla_dlarf_left_apply_incv1_avx2(integer m, integer n, doublereal *a_buff, integer ldr,
                                      doublereal *v, doublereal tau, doublereal *work);
+doublereal fla_dnrm2_blas_avx2(integer *sd, doublereal *a, integer *inc);
 #endif /* FLA_ENABLE_AMD_OPT */
 #endif /* FLA_LAPACK_AVX2_KERNELS_DEFS_H */

@@ -4,10 +4,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
-static aocl_int64_t c__3 = 3;
-static aocl_int64_t c__2 = 2;
+static integer c__1 = 1;
+static integer c_n1 = -1;
+static integer c__3 = 3;
+static integer c__2 = 2;
 /* > \brief \b DGEQP3RK computes a truncated Householder QR factorization with column pivoting of a
  * real m-by- n matrix A by using Level 3 BLAS and overwrites a real m-by-nrhs matrix B with Q**T *
  * B. */
@@ -597,61 +597,50 @@ P(K) is represented by JPIV, */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void dgeqp3rk_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, aocl_int_t *kmax, doublereal *abstol,
-               doublereal *reltol, doublereal *a, aocl_int_t *lda, aocl_int_t *k,
-               doublereal *maxc2nrmk, doublereal *relmaxc2nrmk, aocl_int_t *jpiv, doublereal *tau,
-               doublereal *work, aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_dgeqp3rk(m, n, nrhs, kmax, abstol, reltol, a, lda, k, maxc2nrmk, relmaxc2nrmk, jpiv,
-                         tau, work, lwork, iwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t kmax_64 = *kmax;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_dgeqp3rk(&m_64, &n_64, &nrhs_64, &kmax_64, abstol, reltol, a, &lda_64, &k_64,
-                         maxc2nrmk, relmaxc2nrmk, jpiv, tau, work, &lwork_64, iwork, &info_64);
-
-    *k = (aocl_int_t)k_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_dgeqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, aocl_int64_t *kmax,
-                          doublereal *abstol, doublereal *reltol, doublereal *a, aocl_int64_t *lda,
-                          aocl_int64_t *k, doublereal *maxc2nrmk, doublereal *relmaxc2nrmk,
-                          aocl_int_t *jpiv, doublereal *tau, doublereal *work, aocl_int64_t *lwork,
-                          aocl_int_t *iwork, aocl_int64_t *info)
+void dgeqp3rk_(integer *m, integer *n, integer *nrhs, integer *kmax, doublereal *abstol,
+               doublereal *reltol, doublereal *a, integer *lda, integer *k, doublereal *maxc2nrmk,
+               doublereal *relmaxc2nrmk, integer *jpiv, doublereal *tau, doublereal *work,
+               integer *lwork, integer *iwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgeqp3rk inputs: m %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS ",kmax %" FLA_IS
-                      ",lda %" FLA_IS ",lwork %" FLA_IS "",
-                      *m, *n, *nrhs, *kmax, *lda, *lwork);
+                      ",lda %" FLA_IS ",k %" FLA_IS ",jpiv %" FLA_IS ",lwork %" FLA_IS
+                      ",iwork %" FLA_IS "",
+                      *m, *n, *nrhs, *kmax, *lda, *k, *jpiv, *lwork, *iwork);
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1, i__2;
+    integer a_dim1, a_offset, i__1, i__2;
     doublereal d__1, d__2;
     /* Local variables */
+    extern /* Subroutine */
+        void
+        dlaqp2rk_(integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *,
+                  integer *, doublereal *, doublereal *, integer *, integer *, doublereal *,
+                  doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
+                  integer *),
+        dlaqp3rk_(integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *,
+                  integer *, doublereal *, doublereal *, integer *, logical *, integer *,
+                  doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *,
+                  doublereal *, doublereal *, integer *, integer *, integer *);
     doublereal maxc2nrm;
-    aocl_int64_t j, jmaxc2nrm, jb, nb, kf, nx, kp1, jbf;
+    integer j, jmaxc2nrm, jb, nb, kf, nx, kp1, jbf;
     doublereal eps;
-    aocl_int64_t iws;
+    integer iws;
     logical done;
-    aocl_int64_t jmax;
-    aocl_int64_t jmaxb, nbmin, iinfo, n_sub__, minmn;
+    integer jmax;
+    extern doublereal dnrm2_(integer *, doublereal *, integer *);
+    integer jmaxb, nbmin, iinfo, n_sub__, minmn;
     extern doublereal dlamch_(char *);
+    extern integer idamax_(integer *, doublereal *, integer *);
     doublereal safmin;
+    extern /* Subroutine */
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern logical disnan_(doublereal *);
-    aocl_int64_t lwkopt;
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    integer lwkopt;
     logical lquery;
     doublereal hugeval;
-    aocl_int64_t ioffset;
+    integer ioffset;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -721,7 +710,6 @@ void aocl_lapack_dgeqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, 
     /* (3) when routine exits. */
     /* Here, IWS is the miminum workspace required for unblocked */
     /* code. */
-    nb = aocl_lapack_ilaenv(&c__1, "DGEQP3RK", " ", m, n, &c_n1, &c_n1);
     if(*info == 0)
     {
         minmn = fla_min(*m, *n);
@@ -742,6 +730,7 @@ void aocl_lapack_dgeqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, 
             /* TOTAL_WORK_SIZE = 3*N + NRHS - 1 */
             iws = *n * 3 + *nrhs - 1;
             /* Assign to NB optimal block size. */
+            nb = ilaenv_(&c__1, "DGEQP3RK", " ", m, n, &c_n1, &c_n1);
             /* A formula for the optimal workspace size in case of using */
             /* both unblocked BLAS 2 in DLAQP2RK and blocked BLAS 3 code */
             /* in DLAQP3RK. */
@@ -769,7 +758,7 @@ void aocl_lapack_dgeqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("DGEQP3RK", &i__1, (ftnlen)6);
+        xerbla_("DGEQP3RK", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -793,7 +782,7 @@ void aocl_lapack_dgeqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, 
     i__1 = *n;
     for(j = 1; j <= i__1; ++j)
     {
-        jpiv[j] = (aocl_int_t)(j);
+        jpiv[j] = j;
     }
     /* ================================================================== */
     /* Initialize storage for partial and exact column 2-norms. */
@@ -808,13 +797,13 @@ void aocl_lapack_dgeqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, 
     i__1 = *n;
     for(j = 1; j <= i__1; ++j)
     {
-        work[j] = aocl_blas_dnrm2(m, &a[j * a_dim1 + 1], &c__1);
+        work[j] = dnrm2_(m, &a[j * a_dim1 + 1], &c__1);
         work[*n + j] = work[j];
     }
     /* ================================================================== */
     /* Compute the pivot column index and the maximum column 2-norm */
     /* for the whole original matrix stored in A(1:M,1:N). */
-    kp1 = aocl_blas_idamax(n, &work[1], &c__1);
+    kp1 = idamax_(n, &work[1], &c__1);
     maxc2nrm = work[kp1];
     /* ==================================================================. */
     if(disnan_(&maxc2nrm))
@@ -926,7 +915,7 @@ void aocl_lapack_dgeqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, 
         /* (for N less than NX, unblocked code should be used). */
         /* Computing MAX */
         i__1 = 0;
-        i__2 = aocl_lapack_ilaenv(&c__3, "DGEQP3RK", " ", m, n, &c_n1, &c_n1); // , expr subst
+        i__2 = ilaenv_(&c__3, "DGEQP3RK", " ", m, n, &c_n1, &c_n1); // , expr subst
         nx = fla_max(i__1, i__2);
         if(nx < minmn)
         {
@@ -939,8 +928,7 @@ void aocl_lapack_dgeqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, 
                 nb = (*lwork - (*n << 1)) / (*n + 1);
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = aocl_lapack_ilaenv(&c__2, "DGEQP3RK", " ", m, n, &c_n1,
-                                          &c_n1); // , expr subst
+                i__2 = ilaenv_(&c__2, "DGEQP3RK", " ", m, n, &c_n1, &c_n1); // , expr subst
                 nbmin = fla_max(i__1, i__2);
             }
         }
@@ -985,10 +973,10 @@ void aocl_lapack_dgeqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, 
             ioffset = j - 1;
             /* Factorize JB columns among the columns A(J:N). */
             i__1 = *n + *nrhs - j + 1;
-            aocl_lapack_dlaqp3rk(m, &n_sub__, nrhs, &ioffset, &jb, abstol, reltol, &kp1, &maxc2nrm,
-                                 &a[j * a_dim1 + 1], lda, &done, &jbf, maxc2nrmk, relmaxc2nrmk,
-                                 &jpiv[j], &tau[j], &work[j], &work[*n + j], &work[(*n << 1) + 1],
-                                 &work[(*n << 1) + jb + 1], &i__1, &iwork[1], &iinfo);
+            dlaqp3rk_(m, &n_sub__, nrhs, &ioffset, &jb, abstol, reltol, &kp1, &maxc2nrm,
+                      &a[j * a_dim1 + 1], lda, &done, &jbf, maxc2nrmk, relmaxc2nrmk, &jpiv[j],
+                      &tau[j], &work[j], &work[*n + j], &work[(*n << 1) + 1],
+                      &work[(*n << 1) + jb + 1], &i__1, &iwork[1], &iinfo);
             /* Set INFO on the first occurence of Inf. */
             if(iinfo > n_sub__ && *info == 0)
             {
@@ -1037,9 +1025,9 @@ void aocl_lapack_dgeqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, 
         n_sub__ = *n - j + 1;
         ioffset = j - 1;
         i__1 = jmax - j + 1;
-        aocl_lapack_dlaqp2rk(m, &n_sub__, nrhs, &ioffset, &i__1, abstol, reltol, &kp1, &maxc2nrm,
-                             &a[j * a_dim1 + 1], lda, &kf, maxc2nrmk, relmaxc2nrmk, &jpiv[j],
-                             &tau[j], &work[j], &work[*n + j], &work[(*n << 1) + 1], &iinfo);
+        dlaqp2rk_(m, &n_sub__, nrhs, &ioffset, &i__1, abstol, reltol, &kp1, &maxc2nrm,
+                  &a[j * a_dim1 + 1], lda, &kf, maxc2nrmk, relmaxc2nrmk, &jpiv[j], &tau[j],
+                  &work[j], &work[*n + j], &work[(*n << 1) + 1], &iinfo);
         /* ABSTOL or RELTOL criterion is satisfied when the number of */
         /* the factorized columns KF is smaller then the number */
         /* of columns JMAX-J+1 supplied to be factorized by the */
@@ -1075,7 +1063,7 @@ void aocl_lapack_dgeqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, 
         if(*k < minmn)
         {
             i__1 = *n - *k;
-            jmaxc2nrm = *k + aocl_blas_idamax(&i__1, &work[*k + 1], &c__1);
+            jmaxc2nrm = *k + idamax_(&i__1, &work[*k + 1], &c__1);
             *maxc2nrmk = work[jmaxc2nrm];
             if(*k == 0)
             {

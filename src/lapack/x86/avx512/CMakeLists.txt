@@ -1,4 +1,4 @@
-##Copyright (C) 2023-24, Advanced Micro Devices, Inc. All rights reserved.##
+##Copyright (C) 2023-25, Advanced Micro Devices, Inc. All rights reserved.##
 
 add_library(FLA_LAPACK_AVX512
      OBJECT
@@ -14,6 +14,7 @@ add_library(FLA_LAPACK_AVX512
      ${CMAKE_CURRENT_SOURCE_DIR}/fla_sscal_ix1_avx512.c
      ${CMAKE_CURRENT_SOURCE_DIR}/fla_zscal_ix1_avx512.c
      ${CMAKE_CURRENT_SOURCE_DIR}/fla_dlarf_kernels_avx512.c
+     ${CMAKE_CURRENT_SOURCE_DIR}/fla_dnrm2_blas_avx512.c
 )
 
 if(WIN32)

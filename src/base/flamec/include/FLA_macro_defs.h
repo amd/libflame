@@ -9,7 +9,7 @@
 */
 
 /*
-    Modifications Copyright (c) 2021-2024 Advanced Micro Devices, Inc.  All rights reserved.
+    Modifications Copyright (c) 2021-2025 Advanced Micro Devices, Inc.  All rights reserved.
 */
 
 
@@ -279,6 +279,9 @@
 #define FLA_ZGERC_INLINE_SMALL_THRESH1  (32)
 #define FLA_ZSCAL_INLINE_SMALL          (128)
 #define FLA_ZUNGQR_BLOCK_SMALL_THRESH   (32)
+
+// DNRM2 threshold numbers to chose AVX kernel
+#define FLA_DNRM2_SMALL_THRESH0  (15)
 
 // GEQP3 , threshold numbers to chose paths for performance
 #define FLA_IDAMAX_INLINE_SMALL_THRESH   (128)

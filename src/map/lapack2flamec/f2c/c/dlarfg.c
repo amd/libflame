@@ -118,7 +118,6 @@ void dlarfg_(integer *n, doublereal *alpha, doublereal *x, integer *incx, double
     /* Local variables */
     integer j, knt;
     doublereal beta;
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
     extern /* Subroutine */
         void
         dscal_(integer *, doublereal *, doublereal *, integer *);
@@ -126,6 +125,9 @@ void dlarfg_(integer *n, doublereal *alpha, doublereal *x, integer *incx, double
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
 #if FLA_ENABLE_AMD_OPT
     extern int fla_dscal(integer * n, doublereal * da, doublereal * dx, integer * incx);
+    extern doublereal fla_dnrm2_blas_kernel(integer *, doublereal *, integer *);
+#else
+    extern doublereal dnrm2_(integer *, doublereal *, integer *);
 #endif
     static TLS_CLASS_SPEC integer r_once = 1;
     static TLS_CLASS_SPEC doublereal safmin, rsafmn;
@@ -161,7 +163,11 @@ void dlarfg_(integer *n, doublereal *alpha, doublereal *x, integer *incx, double
     }
 
     i__1 = *n - 1;
+#if FLA_ENABLE_AMD_OPT
+    xnorm = fla_dnrm2_blas_kernel(&i__1, &x[1], incx);
+#else
     xnorm = dnrm2_(&i__1, &x[1], incx);
+#endif
     if(xnorm == 0.)
     {
         /* H = I */
@@ -195,7 +201,11 @@ void dlarfg_(integer *n, doublereal *alpha, doublereal *x, integer *incx, double
             }
             /* New BETA is at most 1, at least SAFMIN */
             i__1 = *n - 1;
+#if FLA_ENABLE_AMD_OPT
+            xnorm = fla_dnrm2_blas_kernel(&i__1, &x[1], incx);
+#else
             xnorm = dnrm2_(&i__1, &x[1], incx);
+#endif
             d__1 = dlapy2_(alpha, &xnorm);
             beta = -d_sign(&d__1, alpha);
         }

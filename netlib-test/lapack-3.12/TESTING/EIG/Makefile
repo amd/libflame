@@ -42,8 +42,7 @@ AEIGTST = \
    ilaenv.o \
    xerbla.o \
    xlaenv.o \
-   chkxer.o \
-   aocl_lapack_ilaenv.o
+   chkxer.o
 
 SCIGTST = slafts.o slahd2.o slasum.o slatb9.o sstech.o sstect.o \
    ssvdch.o ssvdct.o ssxt1.o

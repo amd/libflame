@@ -1,14 +1,14 @@
 /******************************************************************************
- * * Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
+ * * Copyright (C) 2023-2025, Advanced Micro Devices, Inc. All rights reserved.
  * *******************************************************************************/
 /*! @file fla_lapack_x86_common.c
  *  @brief Common front-end functions
  *         to choose optimized paths
  *  *  */
 
+#include "fla_lapack_x86_common.h"
 #include "fla_lapack_avx2_kernels.h"
 #include "fla_lapack_avx512_kernels.h"
-#include "fla_lapack_x86_common.h"
 
 #if FLA_ENABLE_AMD_OPT
 
@@ -52,7 +52,8 @@ int fla_drot(integer *n, doublereal *dx, integer *incx, doublereal *dy, integer 
              doublereal *c__, doublereal *s)
 {
 #ifndef FLA_ENABLE_AOCL_BLAS
-    extern void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
+    extern void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+                      doublereal *);
 #endif
 
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
@@ -116,15 +117,16 @@ void fla_dscal(integer *n, doublereal *da, doublereal *dx, integer *incx)
     /* Initialize global context data */
     aocl_fla_init();
 
-    if(*incx == 1 && *da != 0 && *n >= 1 && *n <= FLA_DSCAL_INLINE_SMALL && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
+    if(*incx == 1 && *da != 0 && *n >= 1 && *n <= FLA_DSCAL_INLINE_SMALL
+       && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
         if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
         {
-           fla_dscal_ix1_avx512(n, da, dx, incx);
+            fla_dscal_ix1_avx512(n, da, dx, incx);
         }
         else
         {
-           fla_dscal_ix1_avx2(n, da, dx, incx);
+            fla_dscal_ix1_avx2(n, da, dx, incx);
         }
     }
     else
@@ -175,7 +177,8 @@ void fla_sscal(integer *n, real *alpha, real *x, integer *incx)
     aocl_fla_init();
 
     /* Take AVX path only for increment equal to 1 */
-    if(*incx == 1 &&  *alpha != 0 && *n >= 1 && *n <= FLA_SSCAL_INLINE_SMALL && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
+    if(*incx == 1 && *alpha != 0 && *n >= 1 && *n <= FLA_SSCAL_INLINE_SMALL
+       && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
         if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
         {
@@ -354,11 +357,11 @@ doublereal fla_get_max_abs_element_vector(integer m, doublereal *a, integer a_di
     return value;
 }
 
-/* DLARF for small sizes 
+/* DLARF for small sizes
  * To be used only when vectorized code via avx2/avx512 is enabled
  * */
 void fla_dlarf_small_incv1_simd(integer m, integer n, doublereal *a_buff, integer ldr,
-                                        doublereal *v, doublereal ntau, doublereal *work)
+                                doublereal *v, doublereal ntau, doublereal *work)
 {
     /* Select AVX512 kernel based on preset threshold and ISA support  */
     if(m > FLA_DGEMV_DGER_SIMD_AVX512_THRESH_M && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
@@ -372,4 +375,24 @@ void fla_dlarf_small_incv1_simd(integer m, integer n, doublereal *a_buff, intege
     return;
 }
 
+/* dnrm2 for small input sizes */
+doublereal fla_dnrm2_blas_kernel(integer *sd, doublereal *a, integer *inc)
+{
+    doublereal value = 0.;
+    /* TODO : Call DNRM2 AVX2 and AVX512 kernels using AOCL_BLAS_ENABLE 
+       feature and call directly */
+    if(*sd > FLA_DNRM2_SMALL_THRESH0 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
+    {
+        value = fla_dnrm2_blas_avx512(sd, a, inc);
+    }
+    else if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
+    {
+        value = fla_dnrm2_blas_avx2(sd, a, inc);
+    }
+    else
+    {
+        value = dnrm2_(sd, a, inc);
+    }
+    return value;
+}
 #endif

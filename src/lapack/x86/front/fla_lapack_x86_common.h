@@ -1,5 +1,5 @@
 /******************************************************************************
- * * Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
+ * * Copyright (C) 2023-2025, Advanced Micro Devices, Inc. All rights reserved.
  * *******************************************************************************/
 
 /*! @file fla_lapack_x86_common.c
@@ -46,4 +46,5 @@ int fla_dgetrs_small_notrans(char *trans, integer *n, integer *nrhs, doublereal 
 void lapack_getri_small_d(integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *work,
                           integer *info);
 doublereal fla_get_max_abs_element_vector(integer m, doublereal *a, integer a_dim);
+doublereal fla_dnrm2_blas_kernel(integer *sd, doublereal *a, integer *inc);
 #endif

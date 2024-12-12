@@ -157,9 +157,9 @@ void dlaqp2_(integer *m, integer *n, integer *offset, doublereal *a, integer *ld
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    aocl_int64_t i__, j, mn;
+    integer i__, j, mn;
     doublereal aii, vn1_j;
-    aocl_int64_t pvt;
+    integer pvt;
     doublereal temp;
     doublereal temp2, tol3z;
     extern /* Subroutine */
@@ -176,6 +176,11 @@ void dlaqp2_(integer *m, integer *n, integer *offset, doublereal *a, integer *ld
         dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern integer fla_idamax(integer *, doublereal *, integer *);
+#if FLA_ENABLE_AMD_OPT
+    extern doublereal fla_dnrm2_blas_kernel(integer *, doublereal *, integer *);
+#else
+    extern doublereal dnrm2_(integer *, doublereal *, integer *);
+#endif
     /* -- LAPACK auxiliary routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -265,12 +270,13 @@ void dlaqp2_(integer *m, integer *n, integer *offset, doublereal *a, integer *ld
         i__2 = *n;
         for(j = i__ + 1; j <= i__2; ++j)
         {
-            if(vn1[j] != 0.)
+            vn1_j = vn1[j];
+            if(vn1_j != 0.)
             {
                 /* NOTE: The following 4 lines follow from the analysis in */
                 /* Lapack Working Note 176. */
                 /* Computing 2nd power */
-                d__2 = (d__1 = a[offpi + j * a_dim1], f2c_dabs(d__1)) / vn1[j];
+                d__2 = a[offpi + j * a_dim1] / vn1_j;
                 temp = 1. - d__2 * d__2;
                 temp = fla_max(temp, 0.);
                 /* Computing 2nd power */
@@ -281,8 +287,12 @@ void dlaqp2_(integer *m, integer *n, integer *offset, doublereal *a, integer *ld
                     if(offpi < *m)
                     {
                         i__3 = *m - offpi;
-                        vn1[j] = dnrm2_(&i__3, &a[offpi + 1 + j * a_dim1], &c__1);
-                        vn2[j] = vn1[j];
+#if FLA_ENABLE_AMD_OPT
+                        vn1_j = fla_dnrm2_blas_kernel(&i__3, &a[offpi + 1 + j * a_dim1], &c__1);
+#else
+                        vn1_j = dnrm2_(&i__3, &a[offpi + 1 + j * a_dim1], &c__1);
+#endif
+                        vn2[j] = vn1_j;
                     }
                     else
                     {

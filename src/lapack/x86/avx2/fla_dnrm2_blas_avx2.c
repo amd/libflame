@@ -24,7 +24,7 @@ static inline int bli_horizontal_or_df(__m256d a)
     return !_mm256_testz_pd(a, a);
 }
 
-doublereal fla_dnrm2_blas_avx2(aocl_int64_t *sd, doublereal *a, aocl_int64_t *incx)
+doublereal fla_dnrm2_blas_avx2(integer *sd, doublereal *a, integer *incx)
 {
     double sumsq = 0;
 
@@ -47,7 +47,7 @@ doublereal fla_dnrm2_blas_avx2(aocl_int64_t *sd, doublereal *a, aocl_int64_t *in
     double scale;
     int isbig = FALSE;
 
-    aocl_int64_t i = 0;
+    integer i = 0;
 
     if(*incx == 1)
     {
@@ -259,9 +259,8 @@ doublereal fla_dnrm2_blas_avx2(aocl_int64_t *sd, doublereal *a, aocl_int64_t *in
     for(; i < *sd; i += 1)
     {
         abs_chi = fabs(*xt);
-
-        /* check for numerical limit and NAN */
-        if(((abs_chi <= thres_big) && (abs_chi >= thres_sml)) || (abs_chi != abs_chi))
+        
+        if((abs_chi <= thres_big) && (abs_chi >= thres_sml))
         {
             sum_med += abs_chi * abs_chi;
         }

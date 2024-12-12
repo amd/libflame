@@ -17,7 +17,7 @@ typedef union
     double d[8] __attribute__((aligned(64)));
 } v8df_t;
 /* dnrm2 for small sizes */
-doublereal fla_dnrm2_blas_avx512(aocl_int64_t *sd, doublereal *a, aocl_int64_t *incx)
+doublereal fla_dnrm2_blas_avx512(integer *sd, doublereal *a, integer *incx)
 {
     // Local variables and pointers used for the computation
     double sumsq = 0;
@@ -47,7 +47,7 @@ doublereal fla_dnrm2_blas_avx512(aocl_int64_t *sd, doublereal *a, aocl_int64_t *
     int isbig = FALSE;
 
     // Iterator
-    aocl_int64_t i = 0;
+    integer i = 0;
 
     // In case of unit-strided input
     if(*incx == 1)
@@ -591,8 +591,7 @@ doublereal fla_dnrm2_blas_avx512(aocl_int64_t *sd, doublereal *a, aocl_int64_t *
         {
             abs_chi = fabs(*xt);
             // Most likely case: medium values, not over/under-flow.
-            /* check for numerical limit and NAN */
-            if(((abs_chi <= thresh_big) && (abs_chi >= thresh_sml)) || (abs_chi != abs_chi))
+            if((abs_chi <= thresh_big) && (abs_chi >= thresh_sml))
             {
                 sum_med += abs_chi * abs_chi;
             }

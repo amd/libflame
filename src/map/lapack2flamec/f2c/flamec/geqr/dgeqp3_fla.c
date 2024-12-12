@@ -160,7 +160,6 @@ void dgeqp3_fla(integer *m, integer *n, doublereal *a, integer *lda, integer *jp
     integer a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
     integer j, jb, na, nb, sm, sn, nx, fjb, iws, nfxd;
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
     integer nbmin, minmn;
     extern /* Subroutine */
         void
@@ -184,6 +183,11 @@ void dgeqp3_fla(integer *m, integer *n, doublereal *a, integer *lda, integer *jp
         void
         dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
                 doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+#if FLA_ENABLE_AMD_OPT
+    extern doublereal fla_dnrm2_blas_kernel(integer *, doublereal *, integer *);
+#else
+    extern doublereal dnrm2_(integer *, doublereal *, integer *);
+#endif
     integer lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
@@ -360,7 +364,11 @@ void dgeqp3_fla(integer *m, integer *n, doublereal *a, integer *lda, integer *jp
         i__1 = *n;
         for(j = nfxd + 1; j <= i__1; ++j)
         {
+#if FLA_ENABLE_AMD_OPT
+            work[j] = fla_dnrm2_blas_kernel(&sm, &a[nfxd + 1 + j * a_dim1], &c__1);
+#else
             work[j] = dnrm2_(&sm, &a[nfxd + 1 + j * a_dim1], &c__1);
+#endif
             work[*n + j] = work[j];
             /* L20: */
         }

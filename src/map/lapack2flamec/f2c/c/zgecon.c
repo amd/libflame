@@ -1,8 +1,8 @@
-/* ../netlib/zgecon.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./zgecon.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b ZGECON */
@@ -109,7 +109,15 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > INFO is INTEGER */
 /* > = 0: successful exit */
-/* > < 0: if INFO = -i, the i-th argument had an illegal value */
+/* > < 0: if INFO = -i, the i-th argument had an illegal value. */
+/* > NaNs are illegal values for ANORM, and they propagate to */
+/* > the output parameter RCOND. */
+/* > Infinity is illegal for ANORM, and it propagates to the output */
+/* > parameter RCOND as 0. */
+/* > = 1: if RCOND = NaN, or */
+/* > RCOND = Inf, or */
+/* > the computed norm of the inverse of A is 0. */
+/* > In the latter, RCOND = 0 is returned. */
 /* > \endverbatim */
 /* Authors: */
 /* ======== */
@@ -117,8 +125,7 @@ static integer c__1 = 1;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup complex16GEcomputational */
+/* > \ingroup gecon */
 /* ===================================================================== */
 /* Subroutine */
 void zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal *anorm,
@@ -126,7 +133,6 @@ void zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal 
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgecon inputs: norm %c, n %" FLA_IS ", lda %" FLA_IS "", *norm, *n, *lda);
-
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
     doublereal d__1, d__2;
@@ -144,6 +150,7 @@ void zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal 
         void
         zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
+    extern logical disnan_(doublereal *);
     extern /* Subroutine */
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -159,10 +166,10 @@ void zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal 
         void
         zlatrs_(char *, char *, char *, char *, integer *, doublecomplex *, integer *,
                 doublecomplex *, doublereal *, doublereal *, integer *);
-    /* -- LAPACK computational routine (version 3.4.0) -- */
+    doublereal hugeval;
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -185,7 +192,6 @@ void zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal 
     /* .. Statement Function definitions .. */
     /* .. */
     /* .. Executable Statements .. */
-    /* Test the input parameters. */
     /* Parameter adjustments */
     a_dim1 = *lda;
     a_offset = 1 + a_dim1;
@@ -193,6 +199,8 @@ void zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal 
     --work;
     --rwork;
     /* Function Body */
+    hugeval = dlamch_("Overflow");
+    /* Test the input parameters. */
     *info = 0;
     onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
     if(!onenrm && !lsame_(norm, "I", 1, 1))
@@ -228,6 +236,19 @@ void zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal 
     }
     else if(*anorm == 0.)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
+    }
+    else if(disnan_(anorm))
+    {
+        *rcond = *anorm;
+        *info = -5;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
+    }
+    else if(*anorm > hugeval)
+    {
+        *info = -5;
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -289,8 +310,19 @@ L10:
     {
         *rcond = 1. / ainvnm / *anorm;
     }
-L20:
+    else
+    {
+        *info = 1;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
+    }
+    /* Check for NaNs and Infs */
+    if(disnan_(rcond) || *rcond > hugeval)
+    {
+        *info = 1;
+    }
     AOCL_DTL_TRACE_LOG_EXIT
+L20:
     return;
     /* End of ZGECON */
 }

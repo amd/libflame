@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/zggev3.f -- translated by f2c (version 20160102). You must link the resulting
- object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
- systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
- -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./zggev3.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublecomplex c_b1 = {0., 0.};
 static doublecomplex c_b2 = {1., 0.};
@@ -146,7 +146,7 @@ static integer c__0 = 0;
 /* > stored one after another in the columns of VL, in the same */
 /* > order as their eigenvalues. */
 /* > Each eigenvector is scaled so the largest component has */
-/* > abs(real part) + abs(imag. part) = 1. */
+/* > f2c_dabs(real part) + f2c_dabs(imag. part) = 1. */
 /* > Not referenced if JOBVL = 'N'. */
 /* > \endverbatim */
 /* > */
@@ -164,7 +164,7 @@ static integer c__0 = 0;
 /* > stored one after another in the columns of VR, in the same */
 /* > order as their eigenvalues. */
 /* > Each eigenvector is scaled so the largest component has */
-/* > abs(real part) + abs(imag. part) = 1. */
+/* > f2c_dabs(real part) + f2c_dabs(imag. part) = 1. */
 /* > Not referenced if JOBVR = 'N'. */
 /* > \endverbatim */
 /* > */
@@ -207,8 +207,8 @@ the routine */
 /* > The QZ iteration failed. No eigenvectors have been */
 /* > calculated, but ALPHA(j) and BETA(j) should be */
 /* > correct for j=INFO+1,...,N. */
-/* > > N: =N+1: other then QZ iteration failed in DHGEQZ, */
-/* > =N+2: error return from DTGEVC. */
+/* > > N: =N+1: other then QZ iteration failed in ZHGEQZ, */
+/* > =N+2: error return from ZTGEVC. */
 /* > \endverbatim */
 /* Authors: */
 /* ======== */
@@ -216,8 +216,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date January 2015 */
-/* > \ingroup complex16GEeigen */
+/* > \ingroup ggev3 */
 /* ===================================================================== */
 /* Subroutine */
 void zggev3_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *lda, doublecomplex *b,
@@ -251,8 +250,7 @@ void zggev3_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *ld
         void
         zgghd3_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
                 doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-                doublecomplex *, integer *, integer *),
-        dlabad_(doublereal *, doublereal *);
+                doublecomplex *, integer *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
         void
@@ -302,10 +300,9 @@ void zggev3_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *ld
                 doublecomplex *, integer *, integer *),
         zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
                 doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
-    /* -- LAPACK driver routine (version 3.6.1) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* January 2015 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -481,7 +478,7 @@ void zggev3_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *ld
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGGEV3 ", &i__1, (ftnlen)7);
+        xerbla_("ZGGEV3", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -500,7 +497,6 @@ void zggev3_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *ld
     eps = dlamch_("E") * dlamch_("B");
     smlnum = dlamch_("S");
     bignum = 1. / smlnum;
-    dlabad_(&smlnum, &bignum);
     smlnum = sqrt(smlnum) / eps;
     bignum = 1. / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
@@ -667,9 +663,8 @@ void zggev3_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *ld
                     /* Computing MAX */
                     i__3 = jr + jc * vl_dim1;
                     d__3 = temp;
-                    d__4
-                        = (d__1 = vl[i__3].r, f2c_dabs(d__1))
-                          + (d__2 = d_imag(&vl[jr + jc * vl_dim1]), f2c_dabs(d__2)); // , expr subst
+                    d__4 = (d__1 = vl[i__3].r, f2c_dabs(d__1))
+                           + (d__2 = d_imag(&vl[jr + jc * vl_dim1]), f2c_dabs(d__2)); // , expr subst
                     temp = fla_max(d__3, d__4);
                     /* L10: */
                 }
@@ -706,9 +701,8 @@ void zggev3_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *ld
                     /* Computing MAX */
                     i__3 = jr + jc * vr_dim1;
                     d__3 = temp;
-                    d__4
-                        = (d__1 = vr[i__3].r, f2c_dabs(d__1))
-                          + (d__2 = d_imag(&vr[jr + jc * vr_dim1]), f2c_dabs(d__2)); // , expr subst
+                    d__4 = (d__1 = vr[i__3].r, f2c_dabs(d__1))
+                           + (d__2 = d_imag(&vr[jr + jc * vr_dim1]), f2c_dabs(d__2)); // , expr subst
                     temp = fla_max(d__3, d__4);
                     /* L40: */
                 }
@@ -732,7 +726,7 @@ void zggev3_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *ld
             }
         }
     }
-    /* Undo scaling if necessary */
+/* Undo scaling if necessary */
 L70:
     if(ilascl)
     {

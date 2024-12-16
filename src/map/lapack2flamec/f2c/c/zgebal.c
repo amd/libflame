@@ -1,8 +1,8 @@
-/* ../netlib/zgebal.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./zgebal.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b ZGEBAL */
@@ -96,7 +96,7 @@ and second, applying a diagonal similarity transformation */
 /* > \param[out] IHI */
 /* > \verbatim */
 /* > IHI is INTEGER */
-/* > ILO and IHI are set to INTEGER such that on exit */
+/* > ILO and IHI are set to integers such that on exit */
 /* > A(i,j) = 0 if i > j and j = 1,...,ILO-1 or I = IHI+1,...,N. */
 /* > If JOB = 'N' or 'S', ILO = 1 and IHI = N. */
 /* > \endverbatim */
@@ -127,8 +127,7 @@ and second, applying a diagonal similarity transformation */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date June 2017 */
-/* > \ingroup complex16GEcomputational */
+/* > \ingroup gebal */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -159,6 +158,9 @@ and second, applying a diagonal similarity transformation */
 /* > */
 /* > Modified by Tzu-Yi Chen, Computer Science Division, University of */
 /* > California at Berkeley, USA */
+/* > */
+/* > Refactored by Evert Provoost, Department of Computer Science, */
+/* > KU Leuven, Belgium */
 /* > \endverbatim */
 /* > */
 /* ===================================================================== */
@@ -175,9 +177,9 @@ void zgebal_(char *job, integer *n, doublecomplex *a, integer *lda, integer *ilo
     double d_imag(doublecomplex *), z_abs(doublecomplex *);
     /* Local variables */
     doublereal c__, f, g;
-    integer i__, j, k, l, m;
+    integer i__, j, k, l;
     doublereal r__, s, ca, ra;
-    integer ica, ira, iexc;
+    integer ica, ira;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
         void
@@ -187,16 +189,14 @@ void zgebal_(char *job, integer *n, doublecomplex *a, integer *lda, integer *ilo
     extern logical disnan_(doublereal *);
     extern /* Subroutine */
         void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
         zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     extern integer izamax_(integer *, doublecomplex *, integer *);
     logical noconv;
-    /* -- LAPACK computational routine (version 3.7.1) -- */
+    logical canswap;
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2017 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -239,11 +239,13 @@ void zgebal_(char *job, integer *n, doublecomplex *a, integer *lda, integer *ilo
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    k = 1;
-    l = *n;
+    /* Quick returns. */
     if(*n == 0)
     {
-        goto L210;
+        *ilo = 1;
+        *ihi = 0;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     if(lsame_(job, "N", 1, 1))
     {
@@ -251,203 +253,204 @@ void zgebal_(char *job, integer *n, doublecomplex *a, integer *lda, integer *ilo
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             scale[i__] = 1.;
-            /* L10: */
         }
-        goto L210;
+        *ilo = 1;
+        *ihi = *n;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
-    if(lsame_(job, "S", 1, 1))
+    /* Permutation to isolate eigenvalues if possible. */
+    k = 1;
+    l = *n;
+    if(!lsame_(job, "S", 1, 1))
     {
-        goto L120;
-    }
-    /* Permutation to isolate eigenvalues if possible */
-    goto L50;
-    /* Row and column exchange. */
-L20:
-    scale[m] = (doublereal)j;
-    if(j == m)
-    {
-        goto L30;
-    }
-    zswap_(&l, &a[j * a_dim1 + 1], &c__1, &a[m * a_dim1 + 1], &c__1);
-    i__1 = *n - k + 1;
-    zswap_(&i__1, &a[j + k * a_dim1], lda, &a[m + k * a_dim1], lda);
-L30:
-    switch(iexc)
-    {
-        case 1:
-            goto L40;
-        case 2:
-            goto L80;
-    }
-    /* Search for rows isolating an eigenvalue and push them down. */
-L40:
-    if(l == 1)
-    {
-        goto L210;
-    }
-    --l;
-L50:
-    for(j = l; j >= 1; --j)
-    {
-        i__1 = l;
-        for(i__ = 1; i__ <= i__1; ++i__)
+        /* Row and column exchange. */
+        noconv = TRUE_;
+        while(noconv)
         {
-            if(i__ == j)
+            /* Search for rows isolating an eigenvalue and push them down. */
+            noconv = FALSE_;
+            for(i__ = l; i__ >= 1; --i__)
             {
-                goto L60;
+                canswap = TRUE_;
+                i__1 = l;
+                for(j = 1; j <= i__1; ++j)
+                {
+                    i__2 = i__ + j * a_dim1;
+                    if(i__ != j && (a[i__2].r != 0. || d_imag(&a[i__ + j * a_dim1]) != 0.))
+                    {
+                        canswap = FALSE_;
+                        break;
+                    }
+                }
+                if(canswap)
+                {
+                    scale[l] = (doublereal)i__;
+                    if(i__ != l)
+                    {
+                        zswap_(&l, &a[i__ * a_dim1 + 1], &c__1, &a[l * a_dim1 + 1], &c__1);
+                        i__1 = *n - k + 1;
+                        zswap_(&i__1, &a[i__ + k * a_dim1], lda, &a[l + k * a_dim1], lda);
+                    }
+                    noconv = TRUE_;
+                    if(l == 1)
+                    {
+                        *ilo = 1;
+                        *ihi = 1;
+                        AOCL_DTL_TRACE_LOG_EXIT
+                        return;
+                    }
+                    --l;
+                }
             }
-            i__2 = j + i__ * a_dim1;
-            if(a[i__2].r != 0. || d_imag(&a[j + i__ * a_dim1]) != 0.)
-            {
-                goto L70;
-            }
-        L60:;
         }
-        m = l;
-        iexc = 1;
-        goto L20;
-    L70:;
-    }
-    goto L90;
-    /* Search for columns isolating an eigenvalue and push them left. */
-L80:
-    ++k;
-L90:
-    i__1 = l;
-    for(j = k; j <= i__1; ++j)
-    {
-        i__2 = l;
-        for(i__ = k; i__ <= i__2; ++i__)
+        noconv = TRUE_;
+        while(noconv)
         {
-            if(i__ == j)
+            /* Search for columns isolating an eigenvalue and push them left. */
+            noconv = FALSE_;
+            i__1 = l;
+            for(j = k; j <= i__1; ++j)
             {
-                goto L100;
+                canswap = TRUE_;
+                i__2 = l;
+                for(i__ = k; i__ <= i__2; ++i__)
+                {
+                    i__3 = i__ + j * a_dim1;
+                    if(i__ != j && (a[i__3].r != 0. || d_imag(&a[i__ + j * a_dim1]) != 0.))
+                    {
+                        canswap = FALSE_;
+                        break;
+                    }
+                }
+                if(canswap)
+                {
+                    scale[k] = (doublereal)j;
+                    if(j != k)
+                    {
+                        zswap_(&l, &a[j * a_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
+                        i__2 = *n - k + 1;
+                        zswap_(&i__2, &a[j + k * a_dim1], lda, &a[k + k * a_dim1], lda);
+                    }
+                    noconv = TRUE_;
+                    ++k;
+                }
             }
-            i__3 = i__ + j * a_dim1;
-            if(a[i__3].r != 0. || d_imag(&a[i__ + j * a_dim1]) != 0.)
-            {
-                goto L110;
-            }
-        L100:;
         }
-        m = k;
-        iexc = 2;
-        goto L20;
-    L110:;
     }
-L120:
+    /* Initialize SCALE for non-permuted submatrix. */
     i__1 = l;
     for(i__ = k; i__ <= i__1; ++i__)
     {
         scale[i__] = 1.;
-        /* L130: */
     }
+    /* If we only had to permute, we are done. */
     if(lsame_(job, "P", 1, 1))
     {
-        goto L210;
+        *ilo = k;
+        *ihi = l;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
     /* Balance the submatrix in rows K to L. */
-    /* Iterative loop for norm reduction */
+    /* Iterative loop for norm reduction. */
     sfmin1 = dlamch_("S") / dlamch_("P");
     sfmax1 = 1. / sfmin1;
     sfmin2 = sfmin1 * 2.;
     sfmax2 = 1. / sfmin2;
-L140:
-    noconv = FALSE_;
-    i__1 = l;
-    for(i__ = k; i__ <= i__1; ++i__)
+    noconv = TRUE_;
+    while(noconv)
     {
-        i__2 = l - k + 1;
-        c__ = dznrm2_(&i__2, &a[k + i__ * a_dim1], &c__1);
-        i__2 = l - k + 1;
-        r__ = dznrm2_(&i__2, &a[i__ + k * a_dim1], lda);
-        ica = izamax_(&l, &a[i__ * a_dim1 + 1], &c__1);
-        ca = z_abs(&a[ica + i__ * a_dim1]);
-        i__2 = *n - k + 1;
-        ira = izamax_(&i__2, &a[i__ + k * a_dim1], lda);
-        ra = z_abs(&a[i__ + (ira + k - 1) * a_dim1]);
-        /* Guard against zero C or R due to underflow. */
-        if(c__ == 0. || r__ == 0.)
+        noconv = FALSE_;
+        i__1 = l;
+        for(i__ = k; i__ <= i__1; ++i__)
         {
-            goto L200;
-        }
-        g = r__ / 2.;
-        f = 1.;
-        s = c__ + r__;
-    L160: /* Computing MAX */
-        d__1 = fla_max(f, c__);
-        /* Computing MIN */
-        d__2 = fla_min(r__, g);
-        if(c__ >= g || fla_max(d__1, ca) >= sfmax2 || fla_min(d__2, ra) <= sfmin2)
-        {
-            goto L170;
-        }
-        d__1 = c__ + f + ca + r__ + g + ra;
-        if(disnan_(&d__1))
-        {
+            i__2 = l - k + 1;
+            c__ = dznrm2_(&i__2, &a[k + i__ * a_dim1], &c__1);
+            i__2 = l - k + 1;
+            r__ = dznrm2_(&i__2, &a[i__ + k * a_dim1], lda);
+            ica = izamax_(&l, &a[i__ * a_dim1 + 1], &c__1);
+            ca = z_abs(&a[ica + i__ * a_dim1]);
+            i__2 = *n - k + 1;
+            ira = izamax_(&i__2, &a[i__ + k * a_dim1], lda);
+            ra = z_abs(&a[i__ + (ira + k - 1) * a_dim1]);
+            /* Guard against zero C or R due to underflow. */
+            if(c__ == 0. || r__ == 0.)
+            {
+                continue;
+            }
             /* Exit if NaN to avoid infinite loop */
-            *info = -3;
-            i__2 = -(*info);
-            xerbla_("ZGEBAL", &i__2, (ftnlen)6);
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
-        }
-        f *= 2.;
-        c__ *= 2.;
-        ca *= 2.;
-        r__ /= 2.;
-        g /= 2.;
-        ra /= 2.;
-        goto L160;
-    L170:
-        g = c__ / 2.;
-    L180: /* Computing MIN */
-        d__1 = fla_min(f, c__);
-        d__1 = fla_min(d__1, g); // , expr subst
-        if(g < r__ || fla_max(r__, ra) >= sfmax2 || fla_min(d__1, ca) <= sfmin2)
-        {
-            goto L190;
-        }
-        f /= 2.;
-        c__ /= 2.;
-        g /= 2.;
-        ca /= 2.;
-        r__ *= 2.;
-        ra *= 2.;
-        goto L180;
-        /* Now balance. */
-    L190:
-        if(c__ + r__ >= s * .95)
-        {
-            goto L200;
-        }
-        if(f < 1. && scale[i__] < 1.)
-        {
-            if(f * scale[i__] <= sfmin1)
+            d__1 = c__ + ca + r__ + ra;
+            if(disnan_(&d__1))
             {
-                goto L200;
+                *info = -3;
+                i__2 = -(*info);
+                xerbla_("ZGEBAL", &i__2, (ftnlen)6);
+                AOCL_DTL_TRACE_LOG_EXIT
+                return;
             }
-        }
-        if(f > 1. && scale[i__] > 1.)
-        {
-            if(scale[i__] >= sfmax1 / f)
+            g = r__ / 2.;
+            f = 1.;
+            s = c__ + r__;
+            for(;;)
             {
-                goto L200;
+                /* while(complicated condition) */
+                /* Computing MAX */
+                d__1 = fla_max(f, c__);
+                /* Computing MIN */
+                d__2 = fla_min(r__, g);
+                if(!(c__ < g && fla_max(d__1, ca) < sfmax2 && fla_min(d__2, ra) > sfmin2))
+                    break;
+                f *= 2.;
+                c__ *= 2.;
+                ca *= 2.;
+                r__ /= 2.;
+                g /= 2.;
+                ra /= 2.;
             }
+            g = c__ / 2.;
+            for(;;)
+            {
+                /* while(complicated condition) */
+                /* Computing MIN */
+                d__1 = fla_min(f, c__);
+                d__1 = fla_min(d__1, g); // , expr subst
+                if(!(g >= r__ && fla_max(r__, ra) < sfmax2 && fla_min(d__1, ca) > sfmin2))
+                    break;
+                f /= 2.;
+                c__ /= 2.;
+                g /= 2.;
+                ca /= 2.;
+                r__ *= 2.;
+                ra *= 2.;
+            }
+            /* Now balance. */
+            if(c__ + r__ >= s * .95)
+            {
+                continue;
+            }
+            if(f < 1. && scale[i__] < 1.)
+            {
+                if(f * scale[i__] <= sfmin1)
+                {
+                    continue;
+                }
+            }
+            if(f > 1. && scale[i__] > 1.)
+            {
+                if(scale[i__] >= sfmax1 / f)
+                {
+                    continue;
+                }
+            }
+            g = 1. / f;
+            scale[i__] *= f;
+            noconv = TRUE_;
+            i__2 = *n - k + 1;
+            zdscal_(&i__2, &g, &a[i__ + k * a_dim1], lda);
+            zdscal_(&l, &f, &a[i__ * a_dim1 + 1], &c__1);
         }
-        g = 1. / f;
-        scale[i__] *= f;
-        noconv = TRUE_;
-        i__2 = *n - k + 1;
-        zdscal_(&i__2, &g, &a[i__ + k * a_dim1], lda);
-        zdscal_(&l, &f, &a[i__ * a_dim1 + 1], &c__1);
-    L200:;
     }
-    if(noconv)
-    {
-        goto L140;
-    }
-L210:
     *ilo = k;
     *ihi = l;
     AOCL_DTL_TRACE_LOG_EXIT

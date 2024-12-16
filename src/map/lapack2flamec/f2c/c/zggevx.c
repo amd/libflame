@@ -1,8 +1,8 @@
-/* ../netlib/zggevx.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./zggevx.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublecomplex c_b1 = {0., 0.};
 static doublecomplex c_b2 = {1., 0.};
@@ -349,8 +349,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date April 2012 */
-/* > \ingroup complex16GEeigen */
+/* > \ingroup ggevx */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -415,9 +414,6 @@ void zggevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, do
     integer icols;
     logical noscl;
     integer irows;
-    extern /* Subroutine */
-        void
-        dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
         void
@@ -484,10 +480,9 @@ void zggevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, do
                 doublecomplex *, integer *, integer *),
         zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
                 doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
-    /* -- LAPACK driver routine (version 3.7.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* April 2012 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -681,7 +676,6 @@ void zggevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, do
     eps = dlamch_("P");
     smlnum = dlamch_("S");
     bignum = 1. / smlnum;
-    dlabad_(&smlnum, &bignum);
     smlnum = sqrt(smlnum) / eps;
     bignum = 1. / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
@@ -857,8 +851,8 @@ void zggevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, do
         }
         if(!wantsn)
         {
-            /* compute eigenvectors (DTGEVC) and estimate condition */
-            /* numbers (DTGSNA). Note that the definition of the condition */
+            /* compute eigenvectors (ZTGEVC) and estimate condition */
+            /* numbers (ZTGSNA). Note that the definition of the condition */
             /* number is not invariant under transformation (u,v) to */
             /* (Q*u, Z*v), where (u,v) are eigenvectors of the generalized */
             /* Schur form (S,T), Q and Z are orthogonal matrices. In order */
@@ -971,7 +965,7 @@ void zggevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, do
         L80:;
         }
     }
-    /* Undo scaling if necessary */
+/* Undo scaling if necessary */
 L90:
     if(ilascl)
     {

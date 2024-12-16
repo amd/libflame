@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/zgelqt3.f -- translated by f2c (version 20160102). You must link the resulting
- object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
- systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
- -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./zgelqt3.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublecomplex c_b1 = {1., 0.};
 /* > \brief \b ZGELQT3 recursively computes a LQ factorization of a general real or complex matrix
@@ -11,7 +11,7 @@ static doublecomplex c_b1 = {1., 0.};
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
-/* > Download DGEQRT3 + dependencies */
+/* > Download ZGELQT3 + dependencies */
 /* > <a
  * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgelqt3
  * .f"> */
@@ -39,7 +39,7 @@ static doublecomplex c_b1 = {1., 0.};
 /* > */
 /* > \verbatim */
 /* > */
-/* > DGELQT3 recursively computes a LQ factorization of a complex M-by-N */
+/* > ZGELQT3 recursively computes a LQ factorization of a complex M-by-N */
 /* > matrix A, using the compact WY representation of Q. */
 /* > */
 /* > Based on the algorithm of Elmroth and Gustavson, */
@@ -62,7 +62,7 @@ static doublecomplex c_b1 = {1., 0.};
 /* > \param[in,out] A */
 /* > \verbatim */
 /* > A is COMPLEX*16 array, dimension (LDA,N) */
-/* > On entry, the real M-by-N matrix A. On exit, the elements on and */
+/* > On entry, the complex M-by-N matrix A. On exit, the elements on and */
 /* > below the diagonal contain the N-by-N lower triangular matrix L;
 the */
 /* > elements above the diagonal are the rows of V. See below for */
@@ -103,8 +103,7 @@ the elements below the diagonal are not used. */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2017 */
-/* > \ingroup doubleGEcomputational */
+/* > \ingroup gelqt3 */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -138,7 +137,6 @@ void zgelqt3_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomp
     AOCL_DTL_SNPRINTF("zgelqt3 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS
                       "",
                       *m, *n, *lda, *ldt);
-
     /* System generated locals */
     integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4, i__5;
     doublecomplex z__1;
@@ -154,10 +152,9 @@ void zgelqt3_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomp
                doublecomplex *, integer *, doublecomplex *, integer *),
         xerbla_(const char *srname, const integer *info, ftnlen srname_len),
         zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
-    /* -- LAPACK computational routine (version 3.8.0) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2017 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -204,7 +201,7 @@ void zgelqt3_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomp
     }
     if(*m == 1)
     {
-        /* Compute Householder transform when N=1 */
+        /* Compute Householder transform when M=1 */
         zlarfg_(n, &a[a_offset], &a[fla_min(2, *n) * a_dim1 + 1], lda, &t[t_offset]);
         i__1 = t_dim1 + 1;
         d_cnjg(&z__1, &t[t_dim1 + 1]);

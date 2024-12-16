@@ -276,9 +276,6 @@ void zlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
     void d_cnjg(dcomplex *, dcomplex *);
     double d_imag(dcomplex *);
     /* Local variables */
-    extern /* Subroutine */
-        int
-        f90_cycle_(void);
     integer j, k, m, i2, k1, i4;
     doublecomplex t1, t2, t3;
     doublereal h11, h12, h21, h22;
@@ -297,7 +294,6 @@ void zlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
         void
         zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
                integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
-        dlabad_(doublereal *, doublereal *),
         zlaqr1_(integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *,
                 doublecomplex *);
     extern doublereal dlamch_(char *);
@@ -377,6 +373,7 @@ void zlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
     ns = *nshfts - *nshfts % 2;
     /* ==== Machine constants for deflation ==== */
     safmin = dlamch_("SAFE MINIMUM");
+    safmax = 1. / safmin;
     ulp = dlamch_("PRECISION");
     smlnum = safmin * ((doublereal)(*n) / ulp);
     /* ==== Use accumulated reflections to update far-from-diagonal */

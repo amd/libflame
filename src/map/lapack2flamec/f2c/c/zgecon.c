@@ -1,8 +1,8 @@
-/* ../netlib/zgecon.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./zgecon.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZGECON */
@@ -133,7 +133,6 @@ void zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal 
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgecon inputs: norm %c, n %" FLA_IS ", lda %" FLA_IS "", *norm, *n, *lda);
-
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1;
     doublereal d__1, d__2;
@@ -151,6 +150,7 @@ void zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal 
         void
         zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
+    extern logical disnan_(doublereal *);
     extern /* Subroutine */
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -165,7 +165,8 @@ void zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal 
         void
         zlatrs_(char *, char *, char *, char *, integer *, doublecomplex *, integer *,
                 doublecomplex *, doublereal *, doublereal *, integer *);
-    /* -- LAPACK computational routine (version 3.4.0) -- */
+    doublereal hugeval;
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -234,6 +235,19 @@ void zgecon_(char *norm, integer *n, doublecomplex *a, integer *lda, doublereal 
     }
     else if(*anorm == 0.)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
+    }
+    else if(disnan_(anorm))
+    {
+        *rcond = *anorm;
+        *info = -5;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
+    }
+    else if(*anorm > hugeval)
+    {
+        *info = -5;
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -308,7 +322,6 @@ L10:
     }
     AOCL_DTL_TRACE_LOG_EXIT
 L20:
-    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZGECON */
 }

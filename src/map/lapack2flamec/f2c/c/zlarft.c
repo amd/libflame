@@ -190,8 +190,7 @@ void zlarft_(char *direct, char *storev, integer *n, integer *k, doublecomplex *
     extern /* Subroutine */
         void
         ztrmv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *,
-               integer *),
-        f90_exit_(void);
+               integer *);
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

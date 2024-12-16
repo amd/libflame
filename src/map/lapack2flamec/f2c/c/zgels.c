@@ -1,8 +1,8 @@
-/* ../netlib/zgels.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./zgels.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublecomplex c_b1 = {0., 0.};
 static integer c__1 = 1;
@@ -198,7 +198,6 @@ void zgels_(char *trans, integer *m, integer *n, integer *nrhs, doublecomplex *a
     AOCL_DTL_SNPRINTF("zgels inputs: trans %c, m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS
                       ", lda %" FLA_IS ", ldb %" FLA_IS "",
                       *trans, *m, *n, *nrhs, *lda, *ldb);
-
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
     doublereal d__1;
@@ -211,9 +210,6 @@ void zgels_(char *trans, integer *m, integer *n, integer *nrhs, doublecomplex *a
     extern logical lsame_(char *, char *, integer, integer);
     integer wsize;
     doublereal rwork[1];
-    extern /* Subroutine */
-        void
-        dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
         void
@@ -243,7 +239,7 @@ void zgels_(char *trans, integer *m, integer *n, integer *nrhs, doublecomplex *a
                 doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *),
         ztrtrs_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *,
                 doublecomplex *, integer *, integer *);
-    /* -- LAPACK driver routine (version 3.4.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */

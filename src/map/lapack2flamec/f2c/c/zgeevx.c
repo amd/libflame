@@ -1,8 +1,8 @@
-/* ../netlib/zgeevx.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./zgeevx.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__0 = 0;
@@ -291,9 +291,8 @@ elements 1:ILO-1 and i+1:N of W */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date June 2016 */
 /* @precisions fortran z -> c */
-/* > \ingroup complex16GEeigen */
+/* > \ingroup geevx */
 /* ===================================================================== */
 /* Subroutine */
 void zgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, doublecomplex *a,
@@ -325,8 +324,7 @@ void zgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, do
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
         void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *),
-        dlabad_(doublereal *, doublereal *);
+        zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
     extern doublereal dznrm2_(integer *, doublecomplex *, integer *);
     logical scalea;
     extern doublereal dlamch_(char *);
@@ -382,10 +380,9 @@ void zgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, do
         ztrevc3_(char *, char *, logical *, integer *, doublecomplex *, integer *, doublecomplex *,
                  integer *, doublecomplex *, integer *, integer *, integer *, doublecomplex *,
                  integer *, doublereal *, integer *, integer *);
-    /* -- LAPACK driver routine (version 3.7.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -594,7 +591,6 @@ void zgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, do
     eps = dlamch_("P");
     smlnum = dlamch_("S");
     bignum = 1. / smlnum;
-    dlabad_(&smlnum, &bignum);
     smlnum = sqrt(smlnum) / eps;
     bignum = 1. / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
@@ -795,7 +791,7 @@ void zgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, do
             /* L40: */
         }
     }
-    /* Undo scaling if necessary */
+/* Undo scaling if necessary */
 L50:
     if(scalea)
     {

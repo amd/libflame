@@ -1,13 +1,8 @@
-/* ../netlib/zlatps.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-
-/*
-*     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
-*/
-
+/* ./zlatps.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static doublereal c_b36 = .5;
@@ -159,8 +154,7 @@ static doublereal c_b36 = .5;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2017 */
-/* > \ingroup complex16OTHERauxiliary */
+/* > \ingroup latps */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -246,7 +240,6 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlatps inputs: uplo %c, trans %c, diag %c, normin %c, n %" FLA_IS "", *uplo,
                       *trans, *diag, *normin, *n);
-
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5;
     doublereal d__1, d__2, d__3, d__4;
@@ -272,26 +265,23 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
     integer jlast;
     doublecomplex csumj;
     extern /* Double Complex */
-        VOID
+        void
         zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
                    integer *);
     logical upper;
     extern /* Double Complex */
-        VOID
+        void
         zdotu_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
                    integer *);
     extern /* Subroutine */
         void
         zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
-        ztpsv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *),
-        dlabad_(doublereal *, doublereal *);
+        ztpsv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
         void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
         zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal bignum;
     extern integer izamax_(integer *, doublecomplex *, integer *);
@@ -303,10 +293,9 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
     extern doublereal dzasum_(integer *, doublecomplex *, integer *);
     doublereal smlnum;
     logical nounit;
-    /* -- LAPACK auxiliary routine (version 3.8.0) -- */
+    /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2017 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -376,7 +365,6 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
     /* Determine machine dependent parameters to control overflow. */
     smlnum = dlamch_("Safe minimum");
     bignum = 1. / smlnum;
-    dlabad_(&smlnum, &bignum);
     smlnum /= dlamch_("Precision");
     bignum = 1. / smlnum;
     *scale = 1.;
@@ -464,8 +452,8 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
             /* A is non-unit triangular. */
             /* Compute GROW = 1/G(j) and XBND = 1/M(j). */
             /* Initially, G(0) = max{
-            x(i), i=1,...,n}
-            . */
+           x(i), i=1,...,n}
+           . */
             grow = .5 / fla_max(xbnd, smlnum);
             xbnd = grow;
             ip = jfirst * (jfirst + 1) / 2;
@@ -516,8 +504,8 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
         {
             /* A is unit triangular. */
             /* Compute GROW = 1/G(j), where G(0) = max{
-            x(i), i=1,...,n}
-            . */
+           x(i), i=1,...,n}
+           . */
             /* Computing MIN */
             d__1 = 1.;
             d__2 = .5 / fla_max(xbnd, smlnum); // , expr subst
@@ -563,8 +551,8 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
             /* A is non-unit triangular. */
             /* Compute GROW = 1/G(j) and XBND = 1/M(j). */
             /* Initially, M(0) = max{
-            x(i), i=1,...,n}
-            . */
+           x(i), i=1,...,n}
+           . */
             grow = .5 / fla_max(xbnd, smlnum);
             xbnd = grow;
             ip = jfirst * (jfirst + 1) / 2;
@@ -611,8 +599,8 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
         {
             /* A is unit triangular. */
             /* Compute GROW = 1/G(j), where G(0) = max{
-            x(i), i=1,...,n}
-            . */
+           x(i), i=1,...,n}
+           . */
             /* Computing MIN */
             d__1 = 1.;
             d__2 = .5 / fla_max(xbnd, smlnum); // , expr subst

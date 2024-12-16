@@ -1,4 +1,4 @@
-/* zlaqz0.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./zlaqz0.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -102,7 +102,7 @@ static integer c__1 = 1;
 /* > Anal., 29(2006), pp. 199--227. */
 /* > */
 /* > Ref: T. Steel, D. Camps, K. Meerbergen, R. Vandebril "A multishift, */
-/* > multipole rational QZ method with agressive early deflation" */
+/* > multipole rational QZ method with aggressive early deflation" */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -289,7 +289,7 @@ the routine */
 /* ======== */
 /* > \author Thijs Steel, KU Leuven */
 /* > \date May 2020 */
-/* > \ingroup complex16GEcomputational */
+/* > \ingroup laqz0 */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
@@ -314,9 +314,6 @@ void zlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
         z_div(doublecomplex *, doublecomplex *, doublecomplex *);
     /* Local variables */
     integer aed_info__;
-    extern /* Subroutine */
-        int
-        f90_cycle_(void);
     integer shiftpos, lworkreq, k;
     doublereal c1;
     integer k2;
@@ -339,7 +336,6 @@ void zlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
     integer maxit, rcost, istop, itemp1, itemp2;
     extern /* Subroutine */
         void
-        dlabad_(doublereal *, doublereal *),
         zlaqz2_(logical *, logical *, logical *, integer *, integer *, integer *, integer *,
                 doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
                 doublecomplex *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
@@ -378,9 +374,6 @@ void zlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
                 integer *);
     doublereal smlnum;
     integer istopm, iwantz, istart2;
-    extern /* Subroutine */
-        int
-        f90_exit_(void);
     logical ilschur;
     integer nshifts, istartm;
     /* Arguments */
@@ -601,7 +594,6 @@ void zlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
     /* Get machine constants */
     safmin = dlamch_("SAFE MINIMUM");
     safmax = 1. / safmin;
-    dlabad_(&safmin, &safmax);
     ulp = dlamch_("PRECISION");
     smlnum = safmin * ((doublereal)(*n) / ulp);
     i__1 = *ihi - *ilo + 1;
@@ -700,7 +692,7 @@ void zlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
         {
             if(z_abs(&b[k + k * b_dim1]) < btol)
             {
-                /* A diagonal element of B is negligable, move it */
+                /* A diagonal element of B is negligible, move it */
                 /* to the top and deflate it */
                 i__2 = istart2 + 1;
                 for(k2 = k; k2 >= i__2; --k2)
@@ -837,7 +829,7 @@ void zlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
         i__3 = istop - istart2; // , expr subst
         ns = fla_min(i__2, i__3);
         ns = fla_min(ns, n_undeflated__);
-        shiftpos = istop - n_deflated__ - n_undeflated__ + 1;
+        shiftpos = istop - n_undeflated__ + 1;
         if(ld % 6 == 0)
         {
             /* Exceptional shift. Chosen for no particularly good reason. */

@@ -211,8 +211,7 @@ void zgelsx_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *l
         ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
                doublecomplex *, integer *, doublecomplex *, integer *),
         zlaic1_(integer *, integer *, doublecomplex *, doublereal *, doublecomplex *,
-                doublecomplex *, doublereal *, doublecomplex *, doublecomplex *),
-        dlabad_(doublereal *, doublereal *);
+                doublecomplex *, doublereal *, doublecomplex *, doublecomplex *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
         void
@@ -316,7 +315,6 @@ void zgelsx_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *l
     /* Get machine parameters */
     smlnum = dlamch_("S") / dlamch_("P");
     bignum = 1. / smlnum;
-    dlabad_(&smlnum, &bignum);
     /* Scale A, B if max elements outside range [SMLNUM,BIGNUM] */
     anrm = zlange_("M", m, n, &a[a_offset], lda, &rwork[1]);
     iascl = 0;

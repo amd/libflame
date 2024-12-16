@@ -5420,6 +5420,7 @@ void residual_sum_of_squares(int datatype, integer m, integer n, integer nrhs, v
             break;
         }
     }
+    *resid /= n;
 }
 
 /* swap row or column in a matrix

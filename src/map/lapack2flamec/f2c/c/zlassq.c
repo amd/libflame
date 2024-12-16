@@ -1,8 +1,8 @@
-/* ../netlib/zlassq.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./zlassq.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b ZLASSQ updates a sum of squares represented in scaled form. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -11,15 +11,15 @@
 /* > Download ZLASSQ + dependencies */
 /* > <a
  * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlassq.
- * f"> */
+ * f90"> */
 /* > [TGZ]</a> */
 /* > <a
  * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlassq.
- * f"> */
+ * f90"> */
 /* > [ZIP]</a> */
 /* > <a
  * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlassq.
- * f"> */
+ * f90"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -30,78 +30,93 @@
 /* DOUBLE PRECISION SCALE, SUMSQ */
 /* .. */
 /* .. Array Arguments .. */
-/* COMPLEX*16 X( * ) */
+/* DOUBLE COMPLEX X( * ) */
 /* .. */
 /* > \par Purpose: */
 /* ============= */
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZLASSQ returns the values scl and ssq such that */
+/* > ZLASSQ returns the values scale_out and sumsq_out such that */
 /* > */
-/* > ( scl**2 )*ssq = x( 1 )**2 +...+ x( n )**2 + ( scale**2 )*sumsq, */
+/* > (scale_out**2)*sumsq_out = x( 1 )**2 +...+ x( n )**2 + (scale**2)*sumsq, */
 /* > */
-/* > where x( i ) = f2c_dabs( X( 1 + ( i - 1 )*INCX ) ). The value of sumsq is */
-/* > assumed to be at least unity and the value of ssq will then satisfy */
+/* > where x( i ) = X( 1 + ( i - 1 )*INCX ). The value of sumsq is */
+/* > assumed to be non-negative. */
 /* > */
-/* > 1.0 .le. ssq .le. ( sumsq + 2*n ). */
+/* > scale and sumsq must be supplied in SCALE and SUMSQ and */
+/* > scale_out and sumsq_out are overwritten on SCALE and SUMSQ respectively. */
 /* > */
-/* > scale is assumed to be non-negative and scl returns the value */
-/* > */
-/* > scl = fla_max( scale, f2c_dabs( real( x( i ) ) ), f2c_dabs( aimag( x( i ) ) ) ), */
-/* > i */
-/* > */
-/* > scale and sumsq must be supplied in SCALE and SUMSQ respectively. */
-/* > SCALE and SUMSQ are overwritten by scl and ssq respectively. */
-/* > */
-/* > The routine makes only one pass through the vector X. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
 /* > \param[in] N */
 /* > \verbatim */
 /* > N is INTEGER */
-/* > The number of elements to be used from the vector X. */
+/* > The number of elements to be used from the vector x. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] X */
 /* > \verbatim */
-/* > X is COMPLEX*16 array, dimension (N) */
-/* > The vector x as described above. */
+/* > X is DOUBLE COMPLEX array, dimension (1+(N-1)*abs(INCX)) */
+/* > The vector for which a scaled sum of squares is computed. */
 /* > x( i ) = X( 1 + ( i - 1 )*INCX ), 1 <= i <= n. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] INCX */
 /* > \verbatim */
 /* > INCX is INTEGER */
-/* > The increment between successive values of the vector X. */
-/* > INCX > 0. */
+/* > The increment between successive values of the vector x. */
+/* > If INCX > 0, X(1+(i-1)*INCX) = x(i) for 1 <= i <= n */
+/* > If INCX < 0, X(1-(n-i)*INCX) = x(i) for 1 <= i <= n */
+/* > If INCX = 0, x isn't a vector so there is no need to call */
+/* > this subroutine. If you call it anyway, it will count x(1) */
+/* > in the vector norm N times. */
 /* > \endverbatim */
 /* > */
 /* > \param[in,out] SCALE */
 /* > \verbatim */
 /* > SCALE is DOUBLE PRECISION */
 /* > On entry, the value scale in the equation above. */
-/* > On exit, SCALE is overwritten with the value scl . */
+/* > On exit, SCALE is overwritten by scale_out, the scaling factor */
+/* > for the sum of squares. */
 /* > \endverbatim */
 /* > */
 /* > \param[in,out] SUMSQ */
 /* > \verbatim */
 /* > SUMSQ is DOUBLE PRECISION */
 /* > On entry, the value sumsq in the equation above. */
-/* > On exit, SUMSQ is overwritten with the value ssq . */
+/* > On exit, SUMSQ is overwritten by sumsq_out, the basic sum of */
+/* > squares from which scale_out has been factored out. */
 /* > \endverbatim */
 /* Authors: */
 /* ======== */
-/* > \author Univ. of Tennessee */
-/* > \author Univ. of California Berkeley */
-/* > \author Univ. of Colorado Denver */
-/* > \author NAG Ltd. */
-/* > \date September 2012 */
-/* > \ingroup complex16OTHERauxiliary */
+/* > \author Edward Anderson, Lockheed Martin */
+/* > \par Contributors: */
+/* ================== */
+/* > */
+/* > Weslley Pereira, University of Colorado Denver, USA */
+/* > Nick Papior, Technical University of Denmark, DK */
+/* > \par Further Details: */
+/* ===================== */
+/* > */
+/* > \verbatim */
+/* > */
+/* > Anderson E. (2017) */
+/* > Algorithm 978: Safe Scaling in the Level 1 BLAS */
+/* > ACM Trans Math Softw 44:1--28 */
+/* > https://doi.org/10.1145/3061665 */
+/* > */
+/* > Blue, James L. (1978) */
+/* > A Portable Fortran Program to Find the Euclidean Norm of a Vector */
+/* > ACM Trans Math Softw 4:15--23 */
+/* > https://doi.org/10.1145/355769.355771 */
+/* > */
+/* > \endverbatim */
+/* > \ingroup lassq */
 /* ===================================================================== */
 /* Subroutine */
-void zlassq_(integer *n, doublecomplex *x, integer *incx, doublereal *scl, doublereal *sumsq)
+void zlassq_(integer *n, doublecomplex *x, integer *incx, doublereal *scale, doublereal *sumsq)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlassq inputs: n %" FLA_IS ", incx %" FLA_IS ", scl %lf, sumsq %lf", *n,
@@ -110,25 +125,30 @@ void zlassq_(integer *n, doublecomplex *x, integer *incx, doublereal *scl, doubl
     integer i__1, i__2;
     doublereal r__1, r__2;
     /* Builtin functions */
-    double pow_ri(doublereal *, integer *), d_imag(doublecomplex *), sqrt(doublereal);
-    /* Local variables */
+    double d_imag(doublecomplex *), sqrt(doublereal);
     extern logical disnan_(doublereal *);
+    /* Local variables */
     integer i__;
     doublereal ax;
     integer ix;
-    doublereal sbi, abig, amed, sbig, tbig, asml, ymin, ssml, tsml, ymax;
+    doublereal abig, amed, sbig, tbig, asml, ymin, ymax, tsml, ssml;
     logical notbig;
-    /* ...Translated by Pacific-Sierra Research vf90 Personal 3.4N3 09:17:33 8/30/21 */
+    /* ...Translated by Pacific-Sierra Research vf90 Personal 3.4N3 01:10:50 11/27/24 */
     /* ...Switches: */
     /* use LA_CONSTANTS, & */
-    /* only: wp=>sp, zero=>szero, one=>sone, & */
-    /* sbig=>ssbig, ssml=>sssml, tbig=>stbig, tsml=>stsml */
+    /* only: wp=>dp, zero=>dzero, one=>done, & */
+    /* sbig=>dsbig, ssml=>dssml, tbig=>dtbig, tsml=>dtsml */
     /* use LA_XISNAN */
+    /* -- LAPACK auxiliary routine -- */
+    /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
+    /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
     /* .. */
     /* .. Local Scalars .. */
+    /* .. */
+    /* Quick return if possible */
     /* Parameter adjustments */
     --x;
     /* Function Body */
@@ -136,21 +156,20 @@ void zlassq_(integer *n, doublecomplex *x, integer *incx, doublereal *scl, doubl
     tbig = 1.9979190722022350E+146;
     ssml = 4.4989137945431964E+161;
     sbig = 1.1113793747425387E-162;
-    sbi = 0.;
     /* .. */
     /* Quick return if possible */
-    if(disnan_(scl) || disnan_(sumsq))
+    if(disnan_(scale) || disnan_(sumsq))
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*sumsq == 0.)
     {
-        *scl = 1.;
+        *scale = 1.;
     }
-    if(*scl == 0.)
+    if(*scale == 0.)
     {
-        *scl = 1.;
+        *scale = 1.;
         *sumsq = 0.;
     }
     if(*n <= 0)
@@ -229,28 +248,39 @@ void zlassq_(integer *n, doublecomplex *x, integer *incx, doublereal *scl, doubl
     /* Put the existing sum of squares into one of the accumulators */
     if(*sumsq > 0.f)
     {
-        ax = *scl * sqrt(*sumsq);
+        ax = *scale * sqrt(*sumsq);
         if(ax > tbig)
         {
-            /* Computing 2nd power */
-            r__1 = *scl * sbig;
-            abig += (r__1 * r__1) * *sumsq;
-            notbig = FALSE_;
+            if(*scale > 1.)
+            {
+                *scale *= sbig;
+                abig += *scale * (*scale * *sumsq);
+            }
+            else
+            {
+                /* sumsq > tbig^2 => (sbig * (sbig * sumsq)) is representable */
+                abig += *scale * (*scale * (sbig * (sbig * *sumsq)));
+            }
         }
         else if(ax < tsml)
         {
             if(notbig)
             {
-                /* Computing 2nd power */
-                r__1 = *scl * ssml;
-                asml += (r__1 * r__1) * *sumsq;
+                if(*scale < 1.)
+                {
+                    *scale *= ssml;
+                    asml += *scale * (*scale * *sumsq);
+                }
+                else
+                {
+                    /* sumsq < tsml^2 => (ssml * (ssml * sumsq)) is representa */
+                    asml += *scale * (*scale * (ssml * (ssml * *sumsq)));
+                }
             }
         }
         else
         {
-            /* Computing 2nd power */
-            r__1 = *scl;
-            amed += (r__1 * r__1) * *sumsq;
+            amed += *scale * (*scale * *sumsq);
         }
     }
     /* Combine abig and amed or amed and asml if more than one */
@@ -259,9 +289,9 @@ void zlassq_(integer *n, doublecomplex *x, integer *incx, doublereal *scl, doubl
     {
         if(amed > 0. || disnan_(&amed))
         {
-            abig += amed * sbig * sbi;
+            abig += amed * sbig * sbig;
         }
-        *scl = 1. / sbig;
+        *scale = 1. / sbig;
         *sumsq = abig;
     }
     else if(asml > 0.)
@@ -281,23 +311,23 @@ void zlassq_(integer *n, doublecomplex *x, integer *incx, doublereal *scl, doubl
                 ymin = asml;
                 ymax = amed;
             }
-            *scl = 1.;
+            *scale = 1.;
             /* Computing 2nd power */
             r__1 = ymax;
             /* Computing 2nd power */
             r__2 = ymin / ymax;
-            *sumsq = r__1 * r__1 * (r__2 * r__2 + 1.);
+            *sumsq = r__1 * r__1 * (1. + r__2 * r__2);
         }
         else
         {
-            *scl = 1. / ssml;
+            *scale = 1. / ssml;
             *sumsq = asml;
         }
     }
     else
     {
         /* Otherwise all values are mid-range or zero */
-        *scl = 1.;
+        *scale = 1.;
         *sumsq = amed;
     }
     AOCL_DTL_TRACE_LOG_EXIT

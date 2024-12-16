@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/zheevx_2stage.f -- translated by f2c (version 20160102). You must link the
- resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
- Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
- with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./zheevx_2stage.f -- translated by f2c (version 20190311). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -275,8 +275,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date June 2016 */
-/* > \ingroup complex16HEeigen */
+/* > \ingroup heevx_2stage */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -367,9 +366,7 @@ void zheevx_2stage_(char *jobz, char *range, char *uplo, integer *n, doublecompl
     doublereal safmin;
     extern /* Subroutine */
         void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
         zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal abstll, bignum;
     extern doublereal zlanhe_(char *, char *, integer *, doublecomplex *, integer *, doublereal *);
@@ -402,10 +399,9 @@ void zheevx_2stage_(char *jobz, char *range, char *uplo, integer *n, doublecompl
         zunmtr_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *,
                 doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     integer indhous;
-    /* -- LAPACK driver routine (version 3.8.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -699,7 +695,7 @@ void zheevx_2stage_(char *jobz, char *range, char *uplo, integer *n, doublecompl
         zunmtr_("L", uplo, "N", n, m, &a[a_offset], lda, &work[indtau], &z__[z_offset], ldz,
                 &work[indwrk], &llwork, &iinfo);
     }
-    /* If matrix was scaled, then rescale eigenvalues appropriately. */
+/* If matrix was scaled, then rescale eigenvalues appropriately. */
 L40:
     if(iscale == 1)
     {

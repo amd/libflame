@@ -1,8 +1,8 @@
-/* ../netlib/zgges.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./zgges.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublecomplex c_b1 = {0., 0.};
 static doublecomplex c_b2 = {1., 0.};
@@ -262,7 +262,7 @@ the routine */
 /* > eigenvalues in the Generalized Schur form no */
 /* > longer satisfy SELCTG=.TRUE. This could also */
 /* > be caused due to scaling. */
-/* > =N+3: reordering falied in ZTGSEN. */
+/* > =N+3: reordering failed in ZTGSEN. */
 /* > \endverbatim */
 /* Authors: */
 /* ======== */
@@ -270,11 +270,10 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup complex16GEeigen */
+/* > \ingroup gges */
 /* ===================================================================== */
 /* Subroutine */
-void zgges_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, integer *n, doublecomplex *a,
+void zgges_(char *jobvsl, char *jobvsr, char *sort, L_fp selctg, integer *n, doublecomplex *a,
             integer *lda, doublecomplex *b, integer *ldb, integer *sdim, doublecomplex *alpha,
             doublecomplex *beta, doublecomplex *vsl, integer *ldvsl, doublecomplex *vsr,
             integer *ldvsr, doublecomplex *work, integer *lwork, doublereal *rwork, logical *bwork,
@@ -300,9 +299,6 @@ void zgges_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, integer *n, d
     integer ileft, icols;
     logical cursl, ilvsl, ilvsr;
     integer irwrk, irows;
-    extern /* Subroutine */
-        void
-        dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
         void
@@ -358,10 +354,9 @@ void zgges_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, integer *n, d
                 doublecomplex *, integer *, integer *),
         zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
                 doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
-    /* -- LAPACK driver routine (version 3.4.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -525,7 +520,6 @@ void zgges_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, integer *n, d
     eps = dlamch_("P");
     smlnum = dlamch_("S");
     bignum = 1. / smlnum;
-    dlabad_(&smlnum, &bignum);
     smlnum = sqrt(smlnum) / eps;
     bignum = 1. / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */

@@ -1,8 +1,8 @@
-/* ../netlib/zhpevx.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./zhpevx.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief <b> ZHPEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors
@@ -106,12 +106,15 @@ static integer c__1 = 1;
 /* > \param[in] VL */
 /* > \verbatim */
 /* > VL is DOUBLE PRECISION */
+/* > If RANGE='V', the lower bound of the interval to */
+/* > be searched for eigenvalues. VL < VU. */
+/* > Not referenced if RANGE = 'A' or 'I'. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] VU */
 /* > \verbatim */
 /* > VU is DOUBLE PRECISION */
-/* > If RANGE='V', the lower and upper bounds of the interval to */
+/* > If RANGE='V', the upper bound of the interval to */
 /* > be searched for eigenvalues. VL < VU. */
 /* > Not referenced if RANGE = 'A' or 'I'. */
 /* > \endverbatim */
@@ -119,13 +122,18 @@ static integer c__1 = 1;
 /* > \param[in] IL */
 /* > \verbatim */
 /* > IL is INTEGER */
+/* > If RANGE='I', the index of the */
+/* > smallest eigenvalue to be returned. */
+/* > 1 <= IL <= IU <= N, if N > 0;
+IL = 1 and IU = 0 if N = 0. */
+/* > Not referenced if RANGE = 'A' or 'V'. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] IU */
 /* > \verbatim */
 /* > IU is INTEGER */
-/* > If RANGE='I', the indices (in ascending order) of the */
-/* > smallest and largest eigenvalues to be returned. */
+/* > If RANGE='I', the index of the */
+/* > largest eigenvalue to be returned. */
 /* > 1 <= IL <= IU <= N, if N > 0;
 IL = 1 and IU = 0 if N = 0. */
 /* > Not referenced if RANGE = 'A' or 'V'. */
@@ -232,8 +240,7 @@ if RANGE = 'V', the exact value of M */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup complex16OTHEReigen */
+/* > \ingroup hpevx */
 /* ===================================================================== */
 /* Subroutine */
 void zhpevx_(char *jobz, char *range, char *uplo, integer *n, doublecomplex *ap, doublereal *vl,
@@ -275,14 +282,12 @@ void zhpevx_(char *jobz, char *range, char *uplo, integer *n, doublecomplex *ap,
         zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     logical alleig, indeig;
-    integer iscale, indibl;
+    integer iscale;
     logical valeig;
     doublereal safmin;
     extern /* Subroutine */
         void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
         zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal abstll, bignum;
     integer indiwk, indisp, indtau;
@@ -308,10 +313,9 @@ void zhpevx_(char *jobz, char *range, char *uplo, integer *n, doublecomplex *ap,
                 doublecomplex *, integer *),
         zupmtr_(char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *,
                 doublecomplex *, integer *, doublecomplex *, integer *);
-    /* -- LAPACK driver routine (version 3.4.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -485,7 +489,6 @@ void zhpevx_(char *jobz, char *range, char *uplo, integer *n, doublecomplex *ap,
     /* If all eigenvalues are desired and ABSTOL is less than or equal */
     /* to zero, then call DSTERF or ZUPGTR and ZSTEQR. If this fails */
     /* for some eigenvalue, then try DSTEBZ. */
-    indibl = 1;
     test = FALSE_;
     if(indeig)
     {
@@ -536,21 +539,21 @@ void zhpevx_(char *jobz, char *range, char *uplo, integer *n, doublecomplex *ap,
     {
         *(unsigned char *)order = 'E';
     }
-    indisp = indibl + *n;
+    indisp = *n + 1;
     indiwk = indisp + *n;
     dstebz_(range, order, n, &vll, &vuu, il, iu, &abstll, &rwork[indd], &rwork[inde], m, &nsplit,
-            &w[1], &iwork[indibl], &iwork[indisp], &rwork[indrwk], &iwork[indiwk], info);
+            &w[1], &iwork[1], &iwork[indisp], &rwork[indrwk], &iwork[indiwk], info);
     if(wantz)
     {
-        zstein_(n, &rwork[indd], &rwork[inde], m, &w[1], &iwork[indibl], &iwork[indisp],
-                &z__[z_offset], ldz, &rwork[indrwk], &iwork[indiwk], &ifail[1], info);
+        zstein_(n, &rwork[indd], &rwork[inde], m, &w[1], &iwork[1], &iwork[indisp], &z__[z_offset],
+                ldz, &rwork[indrwk], &iwork[indiwk], &ifail[1], info);
         /* Apply unitary matrix used in reduction to tridiagonal */
         /* form to eigenvectors returned by ZSTEIN. */
         indwrk = indtau + *n;
         zupmtr_("L", uplo, "N", n, m, &ap[1], &work[indtau], &z__[z_offset], ldz, &work[indwrk],
                 &iinfo);
     }
-    /* If matrix was scaled, then rescale eigenvalues appropriately. */
+/* If matrix was scaled, then rescale eigenvalues appropriately. */
 L20:
     if(iscale == 1)
     {
@@ -586,11 +589,11 @@ L20:
             }
             if(i__ != 0)
             {
-                itmp1 = iwork[indibl + i__ - 1];
+                itmp1 = iwork[i__];
                 w[i__] = w[j];
-                iwork[indibl + i__ - 1] = iwork[indibl + j - 1];
+                iwork[i__] = iwork[j];
                 w[j] = tmp1;
-                iwork[indibl + j - 1] = itmp1;
+                iwork[j] = itmp1;
                 zswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], &c__1);
                 if(*info != 0)
                 {

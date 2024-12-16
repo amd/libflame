@@ -1,4 +1,4 @@
-/* zgelst.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./zgelst.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -150,12 +150,12 @@ the residual sum of squares */
 /* > \param[in] LDB */
 /* > \verbatim */
 /* > LDB is INTEGER */
-/* > The leading dimension of the array B. LDB >= fla_max(1,M,N). */
+/* > The leading dimension of the array B. LDB >= MAX(1,M,N). */
 /* > \endverbatim */
 /* > */
 /* > \param[out] WORK */
 /* > \verbatim */
-/* > WORK is COMPLEX*16 array, dimension (fla_max(1,LWORK)) */
+/* > WORK is COMPLEX*16 array, dimension (MAX(1,LWORK)) */
 /* > On exit, if INFO = 0, WORK(1) returns the optimal LWORK. */
 /* > \endverbatim */
 /* > */
@@ -192,7 +192,7 @@ the least squares solution could not be */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup complex16GEsolve */
+/* > \ingroup gelst */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -224,9 +224,6 @@ void zgelst_(char *trans, integer *m, integer *n, integer *nrhs, doublecomplex *
     integer nbmin;
     doublereal rwork[1];
     integer lwopt;
-    extern /* Subroutine */
-        void
-        dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
         void
@@ -319,7 +316,7 @@ void zgelst_(char *trans, integer *m, integer *n, integer *nrhs, doublecomplex *
     }
     else /* if(complicated condition) */
     {
-        /* Computing fla_max */
+        /* Computing MAX */
         i__1 = fla_max(1, *m);
         if(*ldb < fla_max(i__1, *n))
         {
@@ -327,7 +324,7 @@ void zgelst_(char *trans, integer *m, integer *n, integer *nrhs, doublecomplex *
         }
         else /* if(complicated condition) */
         {
-            /* Computing fla_max */
+            /* Computing MAX */
             i__1 = 1;
             i__2 = mn + fla_max(mn, *nrhs); // , expr subst
             if(*lwork < fla_max(i__1, i__2) && !lquery)
@@ -346,7 +343,7 @@ void zgelst_(char *trans, integer *m, integer *n, integer *nrhs, doublecomplex *
         }
         nb = ilaenv_(&c__1, "ZGELST", " ", m, n, &c_n1, &c_n1);
         mnnrhs = fla_max(mn, *nrhs);
-        /* Computing fla_max */
+        /* Computing MAX */
         i__1 = 1;
         i__2 = (mn + mnnrhs) * nb; // , expr subst
         lwopt = fla_max(i__1, i__2);
@@ -357,7 +354,7 @@ void zgelst_(char *trans, integer *m, integer *n, integer *nrhs, doublecomplex *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGELST ", &i__1, (ftnlen)7);
+        xerbla_("ZGELST", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -367,7 +364,7 @@ void zgelst_(char *trans, integer *m, integer *n, integer *nrhs, doublecomplex *
         return;
     }
     /* Quick return if possible */
-    /* Computing fla_min */
+    /* Computing MIN */
     i__1 = fla_min(*m, *n);
     if(fla_min(i__1, *nrhs) == 0)
     {
@@ -387,12 +384,12 @@ void zgelst_(char *trans, integer *m, integer *n, integer *nrhs, doublecomplex *
     /* Determine the block size from the supplied LWORK */
     /* ( at this stage we know that LWORK >= (minimum required workspace, */
     /* but it may be less than optimal) */
-    /* Computing fla_min */
+    /* Computing MIN */
     i__1 = nb;
     i__2 = *lwork / (mn + mnnrhs); // , expr subst
     nb = fla_min(i__1, i__2);
     /* The minimum value of NB, when blocked code is used */
-    /* Computing fla_max */
+    /* Computing MAX */
     i__1 = 2;
     i__2 = ilaenv_(&c__2, "ZGELST", " ", m, n, &c_n1, &c_n1); // , expr subst
     nbmin = fla_max(i__1, i__2);
@@ -403,8 +400,7 @@ void zgelst_(char *trans, integer *m, integer *n, integer *nrhs, doublecomplex *
     /* Get machine parameters */
     smlnum = dlamch_("S") / dlamch_("P");
     bignum = 1. / smlnum;
-    dlabad_(&smlnum, &bignum);
-    /* Scale A, B if fla_max element outside range [SMLNUM,BIGNUM] */
+    /* Scale A, B if max element outside range [SMLNUM,BIGNUM] */
     anrm = zlange_("M", m, n, &a[a_offset], lda, rwork);
     iascl = 0;
     if(anrm > 0. && anrm < smlnum)
@@ -460,7 +456,7 @@ void zgelst_(char *trans, integer *m, integer *n, integer *nrhs, doublecomplex *
         {
             /* M > N, A is not transposed: */
             /* Overdetermined system of equations, */
-            /* least-squares problem, fla_min || A * X - B ||. */
+            /* least-squares problem, min || A * X - B ||. */
             /* Compute B(1:M,1:NRHS) := Q**T * B(1:M,1:NRHS), */
             /* using the compact WY representation of Q, */
             /* workspace at least NRHS, optimally NRHS*NB. */
@@ -556,7 +552,7 @@ void zgelst_(char *trans, integer *m, integer *n, integer *nrhs, doublecomplex *
         {
             /* M < N, A is transposed: */
             /* Overdetermined system of equations, */
-            /* least-squares problem, fla_min || A**T * X - B ||. */
+            /* least-squares problem, min || A**T * X - B ||. */
             /* Compute B(1:N,1:NRHS) := Q * B(1:N,1:NRHS), */
             /* using the compact WY representation of Q, */
             /* workspace at least NRHS, optimally NRHS*NB. */

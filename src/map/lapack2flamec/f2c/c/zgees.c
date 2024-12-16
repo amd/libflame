@@ -1,8 +1,8 @@
-/* ../netlib/zgees.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./zgees.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__0 = 0;
@@ -198,11 +198,10 @@ elements 1:ILO-1 and i+1:N of W */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup complex16GEeigen */
+/* > \ingroup gees */
 /* ===================================================================== */
 /* Subroutine */
-void zgees_(char *jobvs, char *sort, L_fpz1 select, integer *n, doublecomplex *a, integer *lda,
+void zgees_(char *jobvs, char *sort, L_fp select, integer *n, doublecomplex *a, integer *lda,
             integer *sdim, doublecomplex *w, doublecomplex *vs, integer *ldvs, doublecomplex *work,
             integer *lwork, doublereal *rwork, logical *bwork, integer *info)
 {
@@ -225,8 +224,7 @@ void zgees_(char *jobvs, char *sort, L_fpz1 select, integer *n, doublecomplex *a
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
         void
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        dlabad_(doublereal *, doublereal *);
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     logical scalea;
     extern doublereal dlamch_(char *);
     doublereal cscale;
@@ -266,10 +264,9 @@ void zgees_(char *jobvs, char *sort, L_fpz1 select, integer *n, doublecomplex *a
         ztrsen_(char *, char *, logical *, integer *, doublecomplex *, integer *, doublecomplex *,
                 integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *,
                 integer *, integer *);
-    /* -- LAPACK driver routine (version 3.4.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -396,7 +393,6 @@ void zgees_(char *jobvs, char *sort, L_fpz1 select, integer *n, doublecomplex *a
     eps = dlamch_("P");
     smlnum = dlamch_("S");
     bignum = 1. / smlnum;
-    dlabad_(&smlnum, &bignum);
     smlnum = sqrt(smlnum) / eps;
     bignum = 1. / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */

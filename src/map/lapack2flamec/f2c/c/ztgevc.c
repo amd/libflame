@@ -1,8 +1,8 @@
-/* ../netlib/ztgevc.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./ztgevc.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublecomplex c_b1 = {0., 0.};
 static doublecomplex c_b2 = {1., 0.};
@@ -59,7 +59,7 @@ static integer c__1 = 1;
 /* > */
 /* > S*x = w*P*x, (y**H)*S = w*(y**H)*P, */
 /* > */
-/* > where y**H denotes the conjugate tranpose of y. */
+/* > where y**H denotes the conjugate transpose of y. */
 /* > The eigenvalues are not input to this routine, but are computed */
 /* > directly from the diagonal elements of S and P. */
 /* > */
@@ -164,7 +164,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > VR is COMPLEX*16 array, dimension (LDVR,MM) */
 /* > On entry, if SIDE = 'R' or 'B' and HOWMNY = 'B', VR must */
-/* > contain an N-by-N matrix Q (usually the unitary matrix Z */
+/* > contain an N-by-N matrix Z (usually the unitary matrix Z */
 /* > of right Schur vectors returned by ZHGEQZ). */
 /* > On exit, if SIDE = 'R' or 'B', VR contains: */
 /* > if HOWMNY = 'A', the matrix X of right eigenvectors of (S,P);
@@ -220,8 +220,7 @@ static integer c__1 = 1;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup complex16GEcomputational */
+/* > \ingroup tgevc */
 /* ===================================================================== */
 /* Subroutine */
 void ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex *s, integer *lds,
@@ -268,8 +267,7 @@ void ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
     extern /* Subroutine */
         void
         zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
-               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
-        dlabad_(doublereal *, doublereal *);
+               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     logical ilbbad;
     doublereal acoefa, bcoefa, acoeff;
     doublecomplex bcoeff;
@@ -287,10 +285,9 @@ void ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
         void
         zladiv_f2c_(doublecomplex *, doublecomplex *, doublecomplex *);
     integer ihwmny;
-    /* -- LAPACK computational routine (version 3.4.0) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -465,7 +462,6 @@ void ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
     /* Machine Constants */
     safmin = dlamch_("Safe minimum");
     big = 1. / safmin;
-    dlabad_(&safmin, &big);
     ulp = dlamch_("Epsilon") * dlamch_("Base");
     small_val = safmin * *n / ulp;
     big = 1. / small_val;
@@ -584,8 +580,7 @@ void ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
                 lsa = f2c_dabs(sbeta) >= safmin && f2c_dabs(acoeff) < small_val;
                 lsb = (d__1 = salpha.r, f2c_dabs(d__1)) + (d__2 = d_imag(&salpha), f2c_dabs(d__2))
                           >= safmin
-                      && (d__3 = bcoeff.r, f2c_dabs(d__3))
-                                 + (d__4 = d_imag(&bcoeff), f2c_dabs(d__4))
+                      && (d__3 = bcoeff.r, f2c_dabs(d__3)) + (d__4 = d_imag(&bcoeff), f2c_dabs(d__4))
                              < small_val;
                 scale = 1.;
                 if(lsa)
@@ -639,8 +634,7 @@ void ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
                     }
                 }
                 acoefa = f2c_dabs(acoeff);
-                bcoefa
-                    = (d__1 = bcoeff.r, f2c_dabs(d__1)) + (d__2 = d_imag(&bcoeff), f2c_dabs(d__2));
+                bcoefa = (d__1 = bcoeff.r, f2c_dabs(d__1)) + (d__2 = d_imag(&bcoeff), f2c_dabs(d__2));
                 xmax = 1.;
                 i__2 = *n;
                 for(jr = 1; jr <= i__2; ++jr)
@@ -911,8 +905,7 @@ void ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
                 lsa = f2c_dabs(sbeta) >= safmin && f2c_dabs(acoeff) < small_val;
                 lsb = (d__1 = salpha.r, f2c_dabs(d__1)) + (d__2 = d_imag(&salpha), f2c_dabs(d__2))
                           >= safmin
-                      && (d__3 = bcoeff.r, f2c_dabs(d__3))
-                                 + (d__4 = d_imag(&bcoeff), f2c_dabs(d__4))
+                      && (d__3 = bcoeff.r, f2c_dabs(d__3)) + (d__4 = d_imag(&bcoeff), f2c_dabs(d__4))
                              < small_val;
                 scale = 1.;
                 if(lsa)
@@ -966,8 +959,7 @@ void ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
                     }
                 }
                 acoefa = f2c_dabs(acoeff);
-                bcoefa
-                    = (d__1 = bcoeff.r, f2c_dabs(d__1)) + (d__2 = d_imag(&bcoeff), f2c_dabs(d__2));
+                bcoefa = (d__1 = bcoeff.r, f2c_dabs(d__1)) + (d__2 = d_imag(&bcoeff), f2c_dabs(d__2));
                 xmax = 1.;
                 i__1 = *n;
                 for(jr = 1; jr <= i__1; ++jr)

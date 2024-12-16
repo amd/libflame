@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/zhbev_2stage.f -- translated by f2c (version 20160102). You must link the
- resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
- Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
- with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./zhbev_2stage.f -- translated by f2c (version 20190311). You must link the resulting object file
+ with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__2 = 2;
 static integer c_n1 = -1;
@@ -181,8 +181,7 @@ i */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2017 */
-/* > \ingroup complex16OTHEReigen */
+/* > \ingroup hbev_2stage */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -274,10 +273,9 @@ void zhbev_2stage_(char *jobz, char *uplo, integer *n, integer *kd, doublecomple
         zsteqr_(char *, integer *, doublereal *, doublereal *, doublecomplex *, integer *,
                 doublereal *, integer *);
     integer indhous;
-    /* -- LAPACK driver routine (version 3.8.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2017 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -359,7 +357,7 @@ void zhbev_2stage_(char *jobz, char *uplo, integer *n, integer *kd, doublecomple
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHBEV_2STAGE ", &i__1, (ftnlen)13);
+        xerbla_("ZHBEV_2STAGE", &i__1, (ftnlen)12);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

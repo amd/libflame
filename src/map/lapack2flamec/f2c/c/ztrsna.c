@@ -1,8 +1,8 @@
-/* ../netlib/ztrsna.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./ztrsna.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b ZTRSNA */
@@ -203,8 +203,7 @@ and if JOB = 'V' or 'B', LDWORK >= N. */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2017 */
-/* > \ingroup complex16OTHERcomputational */
+/* > \ingroup trsna */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -276,7 +275,7 @@ void ztrsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex
     extern logical lsame_(char *, char *, integer, integer);
     integer isave[3];
     extern /* Double Complex */
-        VOID
+        void
         zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
                    integer *);
     doublecomplex dummy[1];
@@ -284,8 +283,7 @@ void ztrsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex
     doublereal xnorm;
     extern /* Subroutine */
         void
-        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *),
-        dlabad_(doublereal *, doublereal *);
+        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dznrm2_(integer *, doublecomplex *, integer *), dlamch_(char *);
     extern /* Subroutine */
         void
@@ -310,10 +308,9 @@ void ztrsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex
                 doublecomplex *, doublereal *, doublereal *, integer *),
         ztrexc_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
                 integer *, integer *, integer *);
-    /* -- LAPACK computational routine (version 3.8.0) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2017 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -449,7 +446,6 @@ void ztrsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex
     eps = dlamch_("P");
     smlnum = dlamch_("S") / eps;
     bignum = 1. / smlnum;
-    dlabad_(&smlnum, &bignum);
     ks = 1;
     i__1 = *n;
     for(k = 1; k <= i__1; ++k)

@@ -1,8 +1,8 @@
-/* ../netlib/zgelsy.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./zgelsy.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublecomplex c_b1 = {0., 0.};
 static doublecomplex c_b2 = {1., 0.};
@@ -222,7 +222,6 @@ void zgelsy_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *l
     AOCL_DTL_SNPRINTF("zgelsy inputs: m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
                       ", ldb %" FLA_IS "",
                       *m, *n, *nrhs, *lda, *ldb);
-
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2;
@@ -243,7 +242,6 @@ void zgelsy_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *l
                doublecomplex *, integer *, doublecomplex *, integer *),
         zlaic1_(integer *, integer *, doublecomplex *, doublereal *, doublecomplex *,
                 doublecomplex *, doublereal *, doublecomplex *, doublecomplex *),
-        dlabad_(doublereal *, doublereal *),
         zgeqp3_(integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *,
                 doublecomplex *, integer *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
@@ -272,7 +270,7 @@ void zgelsy_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *l
                 integer *),
         ztzrzf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *,
                 integer *, integer *);
-    /* -- LAPACK driver routine (version 3.4.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */

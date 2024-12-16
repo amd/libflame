@@ -239,7 +239,6 @@ void zlaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
         void
         zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
                integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
-        dlabad_(doublereal *, doublereal *),
         zlaqz1_(logical *, logical *, integer *, integer *, integer *, integer *, doublecomplex *,
                 integer *, doublecomplex *, integer *, integer *, integer *, doublecomplex *,
                 integer *, integer *, integer *, doublecomplex *, integer *);
@@ -315,7 +314,6 @@ void zlaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
     /* Get machine constants */
     safmin = dlamch_("SAFE MINIMUM");
     safmax = 1. / safmin;
-    dlabad_(&safmin, &safmax);
     if(*ilo >= *ihi)
     {
         AOCL_DTL_TRACE_LOG_EXIT

@@ -1,8 +1,8 @@
-/* ../netlib/zlaqr2.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./zlaqr2.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublecomplex c_b1 = {0., 0.};
 static doublecomplex c_b2 = {1., 0.};
@@ -315,8 +315,7 @@ void zlaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     integer kwtop;
     extern /* Subroutine */
         void
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        dlabad_(doublereal *, doublereal *);
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     doublereal safmin, safmax;
     extern /* Subroutine */
@@ -341,7 +340,7 @@ void zlaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
         zunmhr_(char *, char *, integer *, integer *, integer *, integer *, doublecomplex *,
                 integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *,
                 integer *);
-    /* -- LAPACK auxiliary routine (version 3.4.2) -- */
+    /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -436,6 +435,7 @@ void zlaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     }
     /* ==== Machine constants ==== */
     safmin = dlamch_("SAFE MINIMUM");
+    safmax = 1. / safmin;
     ulp = dlamch_("PRECISION");
     smlnum = safmin * ((doublereal)(*n) / ulp);
     /* ==== Setup deflation window ==== */
@@ -470,8 +470,7 @@ void zlaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
         d__6 = ulp
                * ((d__1 = h__[i__1].r, f2c_dabs(d__1))
                   + (d__2 = d_imag(&h__[kwtop + kwtop * h_dim1]), f2c_dabs(d__2))); // , expr subst
-        if((d__3 = s.r, f2c_dabs(d__3)) + (d__4 = d_imag(&s), f2c_dabs(d__4))
-           <= fla_max(d__5, d__6))
+        if((d__3 = s.r, f2c_dabs(d__3)) + (d__4 = d_imag(&s), f2c_dabs(d__4)) <= fla_max(d__5, d__6))
         {
             *ns = 0;
             *nd = 1;

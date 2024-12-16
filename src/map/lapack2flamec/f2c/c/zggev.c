@@ -1,8 +1,8 @@
-/* ../netlib/zggev.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./zggev.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublecomplex c_b1 = {0., 0.};
 static doublecomplex c_b2 = {1., 0.};
@@ -247,9 +247,6 @@ void zggev_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *lda
     integer iwrk;
     extern logical lsame_(char *, char *, integer, integer);
     integer ileft, icols, irwrk, irows;
-    extern /* Subroutine */
-        void
-        dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
         void
@@ -305,7 +302,7 @@ void zggev_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *lda
                 doublecomplex *, integer *, integer *),
         zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
                 doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
-    /* -- LAPACK driver routine (version 3.4.1) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -640,9 +637,8 @@ void zggev_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *lda
                     /* Computing MAX */
                     i__3 = jr + jc * vl_dim1;
                     d__3 = temp;
-                    d__4
-                        = (d__1 = vl[i__3].r, f2c_dabs(d__1))
-                          + (d__2 = d_imag(&vl[jr + jc * vl_dim1]), f2c_dabs(d__2)); // , expr subst
+                    d__4 = (d__1 = vl[i__3].r, f2c_dabs(d__1))
+                           + (d__2 = d_imag(&vl[jr + jc * vl_dim1]), f2c_dabs(d__2)); // , expr subst
                     temp = fla_max(d__3, d__4);
                     /* L10: */
                 }
@@ -679,9 +675,8 @@ void zggev_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *lda
                     /* Computing MAX */
                     i__3 = jr + jc * vr_dim1;
                     d__3 = temp;
-                    d__4
-                        = (d__1 = vr[i__3].r, f2c_dabs(d__1))
-                          + (d__2 = d_imag(&vr[jr + jc * vr_dim1]), f2c_dabs(d__2)); // , expr subst
+                    d__4 = (d__1 = vr[i__3].r, f2c_dabs(d__1))
+                           + (d__2 = d_imag(&vr[jr + jc * vr_dim1]), f2c_dabs(d__2)); // , expr subst
                     temp = fla_max(d__3, d__4);
                     /* L40: */
                 }

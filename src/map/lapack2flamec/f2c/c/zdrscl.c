@@ -1,8 +1,8 @@
-/* ../netlib/zdrscl.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./zdrscl.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b ZDRSCL multiplies a vector by the reciprocal of a real scalar. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -59,7 +59,7 @@
 /* > \param[in,out] SX */
 /* > \verbatim */
 /* > SX is COMPLEX*16 array, dimension */
-/* > (1+(N-1)*f2c_dabs(INCX)) */
+/* > (1+(N-1)*abs(INCX)) */
 /* > The n-element vector x. */
 /* > \endverbatim */
 /* > */
@@ -80,26 +80,11 @@
 /* Subroutine */
 void zdrscl_(integer *n, doublereal *sa, doublecomplex *sx, integer *incx)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zdrscl(n, sa, sx, incx);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-
-    aocl_lapack_zdrscl(&n_64, sa, sx, &incx_64);
-#endif
-}
-
-void aocl_lapack_zdrscl(aocl_int64_t *n, doublereal *sa, dcomplex *sx, aocl_int64_t *incx)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zdrscl inputs: n %" FLA_IS ", incx %" FLA_IS " n", *n, *incx);
     doublereal mul, cden;
     logical done;
     doublereal cnum, cden1, cnum1;
-    extern /* Subroutine */
-        void
-        dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
         void
@@ -125,10 +110,6 @@ void aocl_lapack_zdrscl(aocl_int64_t *n, doublereal *sa, dcomplex *sx, aocl_int6
     /* .. */
     /* .. Executable Statements .. */
     /* Quick return if possible */
-    /* Logging and tracing code */
-    AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zdrscl inputs: n %" FLA_IS ", incx %" FLA_IS " \n", *n, *incx);
-
     /* Parameter adjustments */
     --sx;
     /* Function Body */

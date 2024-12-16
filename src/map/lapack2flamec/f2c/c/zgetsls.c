@@ -1,4 +1,4 @@
-/* zgetsls.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./zgetsls.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -160,7 +160,7 @@ the least squares solution could not be */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup complex16GEsolve */
+/* > \ingroup getsls */
 /* ===================================================================== */
 /* Subroutine */
 void zgetsls_(char *trans, integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *lda,
@@ -170,7 +170,6 @@ void zgetsls_(char *trans, integer *m, integer *n, integer *nrhs, doublecomplex 
     AOCL_DTL_SNPRINTF("zgetsls inputs: trans %c, m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS
                       ", lda %" FLA_IS ", ldb %" FLA_IS "",
                       *trans, *m, *n, *nrhs, *lda, *ldb);
-
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
     doublereal d__1;
@@ -192,9 +191,6 @@ void zgetsls_(char *trans, integer *m, integer *n, integer *nrhs, doublecomplex 
         zgeqr_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
                doublecomplex *, integer *, integer *);
     doublecomplex workq[1];
-    extern /* Subroutine */
-        void
-        dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
         void
@@ -382,7 +378,6 @@ void zgetsls_(char *trans, integer *m, integer *n, integer *nrhs, doublecomplex 
     /* Get machine parameters */
     smlnum = dlamch_("S") / dlamch_("P");
     bignum = 1. / smlnum;
-    dlabad_(&smlnum, &bignum);
     /* Scale A, B if max element outside range [SMLNUM,BIGNUM] */
     anrm = zlange_("M", m, n, &a[a_offset], lda, dum);
     iascl = 0;

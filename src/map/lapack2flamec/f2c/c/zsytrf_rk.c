@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/zsytrf_rk.f -- translated by f2c (version 20160102). You must link the resulting
- object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
- systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
- -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./zsytrf_rk.f -- translated by f2c (version 20190311). You must link the resulting object file
+ with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -236,8 +236,7 @@ static integer c__2 = 2;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date December 2016 */
-/* > \ingroup complex16SYcomputational */
+/* > \ingroup hetrf_rk */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -288,10 +287,9 @@ void zsytrf_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
-    /* -- LAPACK computational routine (version 3.7.0) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* December 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -338,7 +336,10 @@ void zsytrf_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
     {
         /* Determine the block size */
         nb = ilaenv_(&c__1, "ZSYTRF_RK", uplo, n, &c_n1, &c_n1, &c_n1);
-        lwkopt = *n * nb;
+        /* Computing MAX */
+        i__1 = 1;
+        i__2 = *n * nb; // , expr subst
+        lwkopt = fla_max(i__1, i__2);
         work[1].r = (doublereal)lwkopt;
         work[1].i = 0.; // , expr subst
     }
@@ -433,8 +434,8 @@ void zsytrf_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
         /* Decrease K and return to the start of the main loop */
         k -= kb;
         goto L10;
-        /* This label is the exit from main loop over K decreasing */
-        /* from N to 1 in steps of KB */
+    /* This label is the exit from main loop over K decreasing */
+    /* from N to 1 in steps of KB */
     L15:;
     }
     else
@@ -506,8 +507,8 @@ void zsytrf_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
         /* Increase K and return to the start of the main loop */
         k += kb;
         goto L20;
-        /* This label is the exit from main loop over K increasing */
-        /* from 1 to N in steps of KB */
+    /* This label is the exit from main loop over K increasing */
+    /* from 1 to N in steps of KB */
     L35: /* End Lower */
          ;
     }

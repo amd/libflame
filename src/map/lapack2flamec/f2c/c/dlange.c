@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 /*
- *     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+ *     Modifications Copyright (c) 2024-2025 Advanced Micro Devices, Inc.  All rights reserved.
  */
 #include "FLA_f2c.h" /* Table of constant values */
 #include "fla_lapack_x86_common.h"
@@ -163,7 +163,7 @@ doublereal dlange_(char *norm, integer *m, integer *n, doublereal *a, integer *l
     value = 0.;
     j_a_dim = 0;
 
-    // initialize AOCL context
+    /* initialize AOCL context */
     aocl_fla_init();
 
     if(fla_min(*m, *n) == 0)
@@ -182,7 +182,7 @@ doublereal dlange_(char *norm, integer *m, integer *n, doublereal *a, integer *l
 
 #if FLA_ENABLE_AMD_OPT
             /* Select optimized path for AMD architecture*/
-            temp = fla_get_max_abs_element_vector(i__2, a, j_a_dim);
+            temp = fla_get_max_dabs_element_vector(i__2, a, j_a_dim);
 
             if(value < temp)
                 value = temp;

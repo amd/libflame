@@ -6,6 +6,9 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/*
+ *     Modifications Copyright (c) 2025 Advanced Micro Devices, Inc.  All rights reserved.
+ */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublecomplex c_b1 = {1., 0.};
 static doublecomplex c_b2 = {0., 0.};
@@ -146,6 +149,10 @@ void zlarf_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv,
     logical applyleft;
     extern logical lsame_(char *, char *, integer, integer);
     integer lastc;
+#if FLA_ENABLE_AMD_OPT
+    void fla_zlarf_left_invc1_opt(integer m, integer n, doublecomplex * a_buff, integer ldr,
+                                  doublecomplex * v, doublecomplex * ntau, doublecomplex * work);
+#endif
     extern /* Subroutine */
         void
         zgerc_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
@@ -232,42 +239,29 @@ void zlarf_(char *side, integer *m, integer *n, doublecomplex *v, integer *incv,
         /* Form H * C */
         if(lastv > 0)
         {
+            z__1.r = -tau->r;
+            z__1.i = -tau->i; // , expr subst
+#ifdef FLA_ENABLE_AMD_OPT
+            if(*incv == c__1 /*  && lastc < FLA_ZGEMV_ZGER_SMALL_THRESH_C */)
+            {
+                aocl_fla_init();
+                /* Apply optimised kernel */
+                fla_zlarf_left_invc1_opt(*m, *n, c__, *ldc, v, &z__1, work);
+            }
+            else
+            {
+                /* Original code */
+                /* w(1:lastc,1) := C(1:lastv,1:lastc)**H * v(1:lastv,1) */
+                zgemv_("Conjugate transpose", &lastv, &lastc, &c_b1, &c__[c_offset], ldc, &v[1],
+                       incv, &c_b2, &work[1], &c__1);
+                /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**H */
+                zgerc_(&lastv, &lastc, &z__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
+            }
+#else
             /* w(1:lastc,1) := C(1:lastv,1:lastc)**H * v(1:lastv,1) */
             zgemv_("Conjugate transpose", &lastv, &lastc, &c_b1, &c__[c_offset], ldc, &v[1], incv,
                    &c_b2, &work[1], &c__1);
             /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**H */
-            z__1.r = -tau->r;
-            z__1.i = -tau->i; // , expr subst
-#ifdef FLA_ENABLE_AMD_OPT
-            /* performs rank 1 operation when increment is 1 and lastc,lastv are within defined
-             * threshold */
-            if(*incv == c__1 && lastc <= FLA_ZGERC_INLINE_SMALL_THRESH0
-               && lastv <= FLA_ZGERC_INLINE_SMALL_THRESH1)
-            {
-                doublereal yr, yi;
-                doublecomplex temp;
-                for(integer j = 1; j <= lastc; ++j)
-                {
-                    yr = work[j].r;
-                    yi = work[j].i;
-                    if(yr != 0. || yi != 0.)
-                    {
-                        temp.r = z__1.r * yr + z__1.i * yi, temp.i = -z__1.r * yi + z__1.i * yr;
-                        for(integer i = 1; i <= lastv; ++i)
-                        {
-                            /* performs A := alpha*x*conjg( y' ) + A */
-                            integer index = i + j * *ldc;
-                            c__[index].r += v[i].r * temp.r - v[i].i * temp.i,
-                                c__[index].i += v[i].r * temp.i + v[i].i * temp.r;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                zgerc_(&lastv, &lastc, &z__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
-            }
-#else
             zgerc_(&lastv, &lastc, &z__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
 #endif
         }

@@ -7,7 +7,7 @@ add_library(FLA_LAPACK_AVX512
      ${CMAKE_CURRENT_SOURCE_DIR}/fla_sgetrf_small_avx512.c
      ${CMAKE_CURRENT_SOURCE_DIR}/fla_zgetrf_small_avx512.c
      ${CMAKE_CURRENT_SOURCE_DIR}/fla_dscal_ix1_avx512.c
-     ${CMAKE_CURRENT_SOURCE_DIR}/fla_dlange_kernels_avx512.c
+     ${CMAKE_CURRENT_SOURCE_DIR}/fla_lange_kernels_avx512.c
      ${CMAKE_CURRENT_SOURCE_DIR}/fla_drot_avx512.c
      ${CMAKE_CURRENT_SOURCE_DIR}/fla_zrot_avx512.c
      ${CMAKE_CURRENT_SOURCE_DIR}/fla_dhrot3_avx512.c
@@ -15,6 +15,7 @@ add_library(FLA_LAPACK_AVX512
      ${CMAKE_CURRENT_SOURCE_DIR}/fla_zscal_ix1_avx512.c
      ${CMAKE_CURRENT_SOURCE_DIR}/fla_dlarf_kernels_avx512.c
      ${CMAKE_CURRENT_SOURCE_DIR}/fla_dnrm2_blas_avx512.c
+     ${CMAKE_CURRENT_SOURCE_DIR}/fla_zlarf_kernels_avx512.c
 )
 
 if(WIN32)

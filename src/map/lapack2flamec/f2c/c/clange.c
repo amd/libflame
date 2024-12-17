@@ -3,7 +3,11 @@
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/*
+ *     Modifications Copyright (c) 2025 Advanced Micro Devices, Inc.  All rights reserved.
+ */
 #include "FLA_f2c.h" /* Table of constant values */
+
 static integer c__1 = 1;
 /* > \brief \b CLANGE returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest
  * absolute value of any element of a general rectangular matrix. */
@@ -114,6 +118,7 @@ otherwise, WORK is not */
 /* ===================================================================== */
 real clange_(char *norm, integer *m, integer *n, complex *a, integer *lda, real *work)
 {
+    real fla_get_max_cabs_element_vector(integer m, complex * a, integer a_dim);
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
@@ -130,7 +135,7 @@ real clange_(char *norm, integer *m, integer *n, complex *a, integer *lda, real 
     /* Builtin functions */
     double c_abs(complex *), sqrt(doublereal);
     /* Local variables */
-    integer i__, j;
+    integer i__, j, j_a_dim;
     real sum, temp, scale;
     extern logical lsame_(char *, char *, integer, integer);
     real value;
@@ -164,6 +169,10 @@ real clange_(char *norm, integer *m, integer *n, complex *a, integer *lda, real 
     --work;
     /* Function Body */
     value = 0.f;
+
+    /* initialize AOCL context */
+    aocl_fla_init();
+
     if(fla_min(*m, *n) == 0)
     {
         value = 0.f;
@@ -176,6 +185,15 @@ real clange_(char *norm, integer *m, integer *n, complex *a, integer *lda, real 
         for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
+            j_a_dim = j * a_dim1;
+
+#if FLA_ENABLE_AMD_OPT
+            /* Select optimized path for AMD architecture*/
+            temp = fla_get_max_cabs_element_vector(i__2, a, j_a_dim);
+
+            if(value < temp)
+                value = temp;
+#else
             for(i__ = 1; i__ <= i__2; ++i__)
             {
                 temp = c_abs(&a[i__ + j * a_dim1]);
@@ -185,6 +203,7 @@ real clange_(char *norm, integer *m, integer *n, complex *a, integer *lda, real 
                 }
                 /* L10: */
             }
+#endif
             /* L20: */
         }
     }

@@ -2106,6 +2106,7 @@ void scale_matrix_underflow_overflow_lange(integer datatype, integer m, integer 
     double tuning_val = 1.0;
     create_vector(get_realtype(datatype), &max_min, 1);
 
+    /* Deciding the scale factor for overflow case */
     if(imatrix_char == 'O')
     {
         get_max_from_matrix(datatype, A, max_min, m, n, lda);
@@ -2115,8 +2116,12 @@ void scale_matrix_underflow_overflow_lange(integer datatype, integer m, integer 
             case 'M':
                 /* Only one max item is found
                    So directly the max value can be set
-                */
-                tuning_val = 1.0;
+                For real numbers tunung value would be 1
+                For complex numbers set the tuning value to 2 */
+                if (datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+                {
+                    tuning_val = 2.0;
+                }
                 break;
             case '1':
                 /* Sum of absolute values of each column
@@ -2157,25 +2162,10 @@ void scale_matrix_underflow_overflow_lange(integer datatype, integer m, integer 
 
     calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
 
-    /* Since for Frobenius norm square is taken, take square root of the scale value
-       Also for complex number, square root of the sum of squares is taken
-       so scaling such that the sum of squares does not overflow
-    */
-    if(norm_type == 'f' || datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
-    {
-        if(get_realtype(datatype) == FLOAT)
-        {
-            ((float *)scal)[0] = sqrt(((float *)scal)[0]);
-        }
-        else if(get_realtype(datatype) == DOUBLE)
-        {
-            ((double *)scal)[0] = sqrt(((double *)scal)[0]);
-        }
-    }
-
     /* Scaling the matrix A with scal */
     scal_matrix(datatype, scal, A, m, n, lda, i_one);
 
     /* free vectors */
     free_vector(max_min);
 }
+

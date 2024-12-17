@@ -3,7 +3,12 @@
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/*
+ *     Modifications Copyright (c) 2025 Advanced Micro Devices, Inc.  All rights reserved.
+ */
 #include "FLA_f2c.h" /* Table of constant values */
+#include "fla_lapack_x86_common.h"
+
 static integer c__1 = 1;
 /* > \brief \b SLANGE returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest
  * absolute value of any element of a general rectangular matrix. */
@@ -122,7 +127,7 @@ real slange_(char *norm, integer *m, integer *n, real *a, integer *lda, real *wo
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j;
+    integer i__, j, j_a_dim;
     real sum, temp, scale;
     extern logical lsame_(char *, char *, integer, integer);
     real value;
@@ -155,6 +160,10 @@ real slange_(char *norm, integer *m, integer *n, real *a, integer *lda, real *wo
     --work;
     /* Function Body */
     value = 0.f;
+
+    /* initialize AOCL context */
+    aocl_fla_init();
+
     if(fla_min(*m, *n) == 0)
     {
         value = 0.f;
@@ -167,6 +176,15 @@ real slange_(char *norm, integer *m, integer *n, real *a, integer *lda, real *wo
         for(j = 1; j <= i__1; ++j)
         {
             i__2 = *m;
+            j_a_dim = j * a_dim1;
+
+#if FLA_ENABLE_AMD_OPT
+            /* Select optimized path for AMD architecture*/
+            temp = fla_get_max_sabs_element_vector(i__2, a, j_a_dim);
+
+            if(value < temp)
+                value = temp;
+#else
             for(i__ = 1; i__ <= i__2; ++i__)
             {
                 temp = (r__1 = a[i__ + j * a_dim1], f2c_abs(r__1));
@@ -176,6 +194,7 @@ real slange_(char *norm, integer *m, integer *n, real *a, integer *lda, real *wo
                 }
                 /* L10: */
             }
+#endif
             /* L20: */
         }
     }

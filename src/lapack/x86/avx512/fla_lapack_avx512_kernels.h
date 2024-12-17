@@ -25,10 +25,15 @@ integer fla_sgetrf_small_avx512(integer *m, integer *n, real *a, integer *lda, i
 int fla_dscal_ix1_avx512(integer *n, doublereal *da, doublereal *dx, integer *incx);
 int fla_sscal_ix1_avx512(integer *n, real *alpha, real *x);
 int fla_zscal_ix1_avx512(integer *n, doublecomplex *alpha, doublecomplex *x);
-doublereal fla_get_max_abs_element_vector_avx512(integer m, doublereal *a, integer a_dim);
+doublereal fla_get_max_dabs_element_vector_avx512(integer m, doublereal *a, integer a_dim);
+real fla_get_max_sabs_element_vector_avx512(integer m, real *a, integer a_dim);
+doublereal fla_get_max_zabs_element_vector_avx512(integer m, doublecomplex *a, integer a_dim);
+real fla_get_max_cabs_element_vector_avx512(integer m, complex *a, integer a_dim);
 void fla_dlarf_left_apply_incv1_avx512(integer m, integer n, doublereal *a_buff, integer ldr,
                                         doublereal *v, doublereal ntau, doublereal *work);
 doublereal fla_dnrm2_blas_avx512(integer *sd, doublereal *a, integer *inc);
+void fla_zlarf_left_apply_incv1_avx512(integer m, integer n, doublecomplex *a_buff, integer ldr,
+                                       doublecomplex *v, doublecomplex *ntau, doublecomplex *work);
 
 #endif
 #endif

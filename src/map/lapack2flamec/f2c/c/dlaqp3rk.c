@@ -413,8 +413,8 @@ void dlaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaqp3rk inputs: m %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS
                       ",ioffset %" FLA_IS ",nb %" FLA_IS ",kp1 %" FLA_IS ",lda %" FLA_IS
-                      ",kb %" FLA_IS ",jpiv %" FLA_IS ",ldf %" FLA_IS ",iwork %" FLA_IS "",
-                      *m, *n, *nrhs, *ioffset, *nb, *kp1, *lda, *kb, *jpiv, *ldf, *iwork);
+                      ",ldf %" FLA_IS "",
+                      *m, *n, *nrhs, *ioffset, *nb, *kp1, *lda, *ldf);
     /* System generated locals */
     integer a_dim1, a_offset, f_dim1, f_offset, i__1, i__2;
     doublereal d__1, d__2;

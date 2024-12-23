@@ -1,4 +1,4 @@
-/* ./dgeqp3rk.f -- translated by f2c (version 20190311). You must link the resulting object file
+/* ./zgeqp3rk.f -- translated by f2c (version 20190311). You must link the resulting object file
  with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
@@ -8,32 +8,32 @@ static integer c__1 = 1;
 static integer c_n1 = -1;
 static integer c__3 = 3;
 static integer c__2 = 2;
-/* > \brief \b DGEQP3RK computes a truncated Householder QR factorization with column pivoting of a
- * real m-by- n matrix A by using Level 3 BLAS and overwrites a real m-by-nrhs matrix B with Q**T *
- * B. */
+/* > \brief \b ZGEQP3RK computes a truncated Householder QR factorization with column pivoting of a
+ * complex m- by-n matrix A by using Level 3 BLAS and overwrites m-by-nrhs matrix B with Q**H * B.
+ */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
-/* > Download DGEQP3RK + dependencies */
+/* > Download ZGEQP3RK + dependencies */
 /* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgeqp3r
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgeqp3r
  * k.f"> */
 /* > [TGZ]</a> */
 /* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgeqp3r
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgeqp3r
  * k.f"> */
 /* > [ZIP]</a> */
 /* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgeqp3r
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgeqp3r
  * k.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
 /* =========== */
-/* SUBROUTINE DGEQP3RK( M, N, NRHS, KMAX, ABSTOL, RELTOL, A, LDA, */
+/* SUBROUTINE ZGEQP3RK( M, N, NRHS, KMAX, ABSTOL, RELTOL, A, LDA, */
 /* $ K, MAXC2NRMK, RELMAXC2NRMK, JPIV, TAU, */
-/* $ WORK, LWORK, IWORK, INFO ) */
+/* $ WORK, LWORK, RWORK, IWORK, INFO ) */
 /* IMPLICIT NONE */
 /* .. Scalar Arguments .. */
 /* INTEGER INFO, K, KMAX, LDA, LWORK, M, N, NRHS */
@@ -41,17 +41,18 @@ static integer c__2 = 2;
 /* .. */
 /* .. Array Arguments .. */
 /* INTEGER IWORK( * ), JPIV( * ) */
-/* DOUBLE PRECISION A( LDA, * ), TAU( * ), WORK( * ) */
+/* DOUBLE PRECISION RWORK( * ) */
+/* COMPLEX*16 A( LDA, * ), TAU( * ), WORK( * ) */
 /* .. */
 /* > \par Purpose: */
 /* ============= */
 /* > */
 /* > \verbatim */
 /* > */
-/* > DGEQP3RK performs two tasks simultaneously: */
+/* > ZGEQP3RK performs two tasks simultaneously: */
 /* > */
 /* > Task 1: The routine computes a truncated (rank K) or full rank */
-/* > Householder QR factorization with column pivoting of a real */
+/* > Householder QR factorization with column pivoting of a complex */
 /* > M-by-N matrix A using Level 3 BLAS. K is the number of columns */
 /* > that were factorized, i.e. factorization rank of the */
 /* > factor R, K <= fla_min(M,N). */
@@ -65,7 +66,7 @@ static integer c__2 = 2;
 /* > */
 /* > P(K) is an N-by-N permutation matrix;
  */
-/* > Q(K) is an M-by-M orthogonal matrix;
+/* > Q(K) is an M-by-M unitary matrix;
  */
 /* > R(K)_approx = ( R11(K), R12(K) ) is a rank K approximation of the */
 /* > full rank factor R with K-by-K upper-triangular */
@@ -80,8 +81,8 @@ static integer c__2 = 2;
  */
 /* > 0 is a an (M-K)-by-K zero matrix. */
 /* > */
-/* > Task 2: At the same time, the routine overwrites a real M-by-NRHS */
-/* > matrix B with Q(K)**T * B using Level 3 BLAS. */
+/* > Task 2: At the same time, the routine overwrites a complex M-by-NRHS */
+/* > matrix B with Q(K)**H * B using Level 3 BLAS. */
 /* > */
 /* > ===================================================================== */
 /* > */
@@ -141,14 +142,14 @@ P(K) is represented by JPIV, */
 /* > column 2-norm of the original matrix A, which is equal */
 /* > to f2c_abs(R(1,1)), ( if K = fla_min(M,N), RELMAXC2NRMK = 0.0 );
  */
-/* > e) Q(K)**T * B, the matrix B with the orthogonal */
-/* > transformation Q(K)**T applied on the left. */
+/* > e) Q(K)**H * B, the matrix B with the unitary */
+/* > transformation Q(K)**H applied on the left. */
 /* > */
 /* > The N-by-N permutation matrix P(K) is stored in a compact form in */
 /* > the integer array JPIV. For 1 <= j <= N, column j */
 /* > of the matrix A was interchanged with column JPIV(j). */
 /* > */
-/* > The M-by-M orthogonal matrix Q is represented as a product */
+/* > The M-by-M unitary matrix Q is represented as a product */
 /* > of elementary Householder reflectors */
 /* > */
 /* > Q(K) = H(1) * H(2) * . . . * H(K), */
@@ -157,12 +158,12 @@ P(K) is represented by JPIV, */
 /* > */
 /* > Each H(j) has the form */
 /* > */
-/* > H(j) = I - tau * v * v**T, */
+/* > H(j) = I - tau * v * v**H, */
 /* > */
 /* > where 1 <= j <= K and */
 /* > I is an M-by-M identity matrix, */
-/* > tau is a real scalar, */
-/* > v is a real vector with v(1:j-1) = 0 and v(j) = 1. */
+/* > tau is a complex scalar, */
+/* > v is a complex vector with v(1:j-1) = 0 and v(j) = 1. */
 /* > */
 /* > v(j+1:M) is stored on exit in A(j+1:M,j) and tau in TAU(j). */
 /* > */
@@ -255,10 +256,10 @@ P(K) is represented by JPIV, */
 /* > The third factorization stopping criterion, cannot be NaN. */
 /* > */
 /* > The tolerance (stopping threshold) for the ratio */
-/* > f2c_abs(R(K+1,K+1))/abs(R(1,1)) of the maximum column 2-norm of */
+/* > f2c_abs(R(K+1,K+1))/f2c_abs(R(1,1)) of the maximum column 2-norm of */
 /* > the residual matrix R22(K) to the maximum column 2-norm of */
 /* > the original matrix A. The algorithm converges (stops the */
-/* > factorization), when f2c_abs(R(K+1,K+1))/abs(R(1,1)) A is less */
+/* > factorization), when f2c_abs(R(K+1,K+1))/f2c_abs(R(1,1)) A is less */
 /* > than or equal to RELTOL. Let EPS = DLAMCH('E'). */
 /* > */
 /* > a) If RELTOL is NaN, then no computation is performed */
@@ -288,12 +289,12 @@ P(K) is represented by JPIV, */
 /* > modified, and the matrix A is itself the residual. */
 /* > */
 /* > NOTE: We recommend that RELTOL satisfy */
-/* > fla_min( fla_max(M,N)*EPS, sqrt(EPS) ) <= RELTOL */
+/* > fla_min( 10*fla_max(M,N)*EPS, sqrt(EPS) ) <= RELTOL */
 /* > \endverbatim */
 /* > */
 /* > \param[in,out] A */
 /* > \verbatim */
-/* > A is DOUBLE PRECISION array, dimension (LDA,N+NRHS) */
+/* > A is COMPLEX*16 array, dimension (LDA,N+NRHS) */
 /* > */
 /* > On entry: */
 /* > */
@@ -315,14 +316,14 @@ P(K) is represented by JPIV, */
 /* > */
 /* > 1. The elements below the diagonal of the subarray */
 /* > A(1:M,1:K) together with TAU(1:K) represent the */
-/* > orthogonal matrix Q(K) as a product of K Householder */
+/* > unitary matrix Q(K) as a product of K Householder */
 /* > elementary reflectors. */
 /* > */
 /* > 2. The elements on and above the diagonal of */
 /* > the subarray A(1:K,1:N) contain K-by-N */
 /* > upper-trapezoidal matrix */
 /* > R(K)_approx = ( R11(K), R12(K) ). */
-/* > NOTE: If K=min(M,N), i.e. full rank factorization, */
+/* > NOTE: If K=fla_min(M,N), i.e. full rank factorization, */
 /* > then R_approx(K) is the full factor R which */
 /* > is upper-trapezoidal. If, in addition, M>=N, */
 /* > then R is upper-triangular. */
@@ -331,7 +332,7 @@ P(K) is represented by JPIV, */
 /* > rectangular matrix R(K)_residual = R22(K). */
 /* > */
 /* > b) If NRHS > 0, the subarray A(1:M,N+1:N+NRHS) contains */
-/* > the M-by-NRHS product Q(K)**T * B. */
+/* > the M-by-NRHS product Q(K)**H * B. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] LDA */
@@ -403,7 +404,7 @@ P(K) is represented by JPIV, */
 /* > then RELMAXC2NRMK = 0.0. */
 /* > */
 /* > NOTE: RELMAXC2NRMK in the factorization step K would equal */
-/* > f2c_abs(R(K+1,K+1))/abs(R(1,1)) in the next factorization */
+/* > f2c_abs(R(K+1,K+1))/f2c_abs(R(1,1)) in the next factorization */
 /* > step K+1. */
 /* > \endverbatim */
 /* > */
@@ -421,7 +422,7 @@ P(K) is represented by JPIV, */
 /* > */
 /* > \param[out] TAU */
 /* > \verbatim */
-/* > TAU is DOUBLE PRECISION array, dimension (min(M,N)) */
+/* > TAU is COMPLEX*16 array, dimension (fla_min(M,N)) */
 /* > The scalar factors of the elementary reflectors. */
 /* > */
 /* > If 0 < K <= fla_min(M,N), only the elements TAU(1:K) of */
@@ -437,7 +438,7 @@ P(K) is represented by JPIV, */
 /* > */
 /* > \param[out] WORK */
 /* > \verbatim */
-/* > WORK is DOUBLE PRECISION array, dimension (MAX(1,LWORK)) */
+/* > WORK is COMPLEX*16 array, dimension (MAX(1,LWORK)) */
 /* > On exit, if INFO = 0, WORK(1) returns the optimal LWORK. */
 /* > \endverbatim */
 /* > */
@@ -445,9 +446,9 @@ P(K) is represented by JPIV, */
 /* > \verbatim */
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. */
-/* . LWORK >= (3*N + NRHS - 1) */
-/* > For optimal performance LWORK >= (2*N + NB*( N+NRHS+1 )), */
-/* > where NB is the optimal block size for DGEQP3RK returned */
+/* . LWORK >= N+NRHS-1 */
+/* > For optimal performance LWORK >= NB*( N+NRHS+1 ), */
+/* > where NB is the optimal block size for ZGEQP3RK returned */
 /* > by ILAENV. Minimal block size MINNB=2. */
 /* > */
 /* > NOTE: The decision, whether to use unblocked BLAS 2 */
@@ -465,12 +466,17 @@ P(K) is represented by JPIV, */
 /* > by XERBLA. */
 /* > \endverbatim */
 /* > */
+/* > \param[out] RWORK */
+/* > \verbatim */
+/* > RWORK is DOUBLE PRECISION array, dimension (2*N) */
+/* > \endverbatim */
+/* > */
 /* > \param[out] IWORK */
 /* > \verbatim */
 /* > IWORK is INTEGER array, dimension (N-1). */
 /* > Is a work array. ( IWORK is used to store indices */
 /* > of "bad" columns for norm downdating in the residual */
-/* > matrix in the blocked step auxiliary subroutine DLAQP3RK ). */
+/* > matrix in the blocked step auxiliary subroutine ZLAQP3RK ). */
 /* > \endverbatim */
 /* > */
 /* > \param[out] INFO */
@@ -512,9 +518,9 @@ P(K) is represented by JPIV, */
 /* > \par Further Details: */
 /* ===================== */
 /* > \verbatim */
-/* > DGEQP3RK is based on the same BLAS3 Householder QR factorization */
-/* > algorithm with column pivoting as in DGEQP3 routine which uses */
-/* > DLARFG routine to generate Householder reflectors */
+/* > ZGEQP3RK is based on the same BLAS3 Householder QR factorization */
+/* > algorithm with column pivoting as in ZGEQP3 routine which uses */
+/* > ZLARFG routine to generate Householder reflectors */
 /* > for QR factorization. */
 /* > */
 /* > We can also write: */
@@ -597,38 +603,38 @@ P(K) is represented by JPIV, */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void dgeqp3rk_(integer *m, integer *n, integer *nrhs, integer *kmax, doublereal *abstol,
-               doublereal *reltol, doublereal *a, integer *lda, integer *k, doublereal *maxc2nrmk,
-               doublereal *relmaxc2nrmk, integer *jpiv, doublereal *tau, doublereal *work,
-               integer *lwork, integer *iwork, integer *info)
+void zgeqp3rk_(integer *m, integer *n, integer *nrhs, integer *kmax, doublereal *abstol,
+               doublereal *reltol, doublecomplex *a, integer *lda, integer *k,
+               doublereal *maxc2nrmk, doublereal *relmaxc2nrmk, integer *jpiv, doublecomplex *tau,
+               doublecomplex *work, integer *lwork, doublereal *rwork, integer *iwork,
+               integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgeqp3rk inputs: m %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS ",kmax %" FLA_IS
+    AOCL_DTL_SNPRINTF("zgeqp3rk inputs: m %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS ",kmax %" FLA_IS
                       ",lda %" FLA_IS ",lwork %" FLA_IS "",
                       *m, *n, *nrhs, *kmax, *lda, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     doublereal d__1, d__2;
+    doublecomplex z__1;
     /* Local variables */
+    doublereal maxc2nrm;
     extern /* Subroutine */
         void
-        dlaqp2rk_(integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *,
-                  integer *, doublereal *, doublereal *, integer *, integer *, doublereal *,
-                  doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
-                  integer *),
-        dlaqp3rk_(integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *,
-                  integer *, doublereal *, doublereal *, integer *, logical *, integer *,
-                  doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *,
-                  doublereal *, doublereal *, integer *, integer *, integer *);
-    doublereal maxc2nrm;
+        zlaqp2rk_(integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *,
+                  integer *, doublereal *, doublecomplex *, integer *, integer *, doublereal *,
+                  doublereal *, integer *, doublecomplex *, doublereal *, doublereal *,
+                  doublecomplex *, integer *),
+        zlaqp3rk_(integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *,
+                  integer *, doublereal *, doublecomplex *, integer *, logical *, integer *,
+                  doublereal *, doublereal *, integer *, doublecomplex *, doublereal *,
+                  doublereal *, doublecomplex *, doublecomplex *, integer *, integer *, integer *);
     integer j, jmaxc2nrm, jb, nb, kf, nx, kp1, jbf;
     doublereal eps;
     integer iws;
     logical done;
-    integer jmax;
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
-    integer jmaxb, nbmin, iinfo, n_sub__, minmn;
-    extern doublereal dlamch_(char *);
+    integer jmax, jmaxb, nbmin, iinfo, n_sub__, minmn;
+    extern doublereal dznrm2_(integer *, doublecomplex *, integer *), dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     doublereal safmin;
     extern /* Subroutine */
@@ -668,6 +674,7 @@ void dgeqp3rk_(integer *m, integer *n, integer *nrhs, integer *kmax, doublereal 
     --jpiv;
     --tau;
     --work;
+    --rwork;
     --iwork;
     /* Function Body */
     *info = 0;
@@ -720,33 +727,34 @@ void dgeqp3rk_(integer *m, integer *n, integer *nrhs, integer *kmax, doublereal 
         else
         {
             /* Minimal workspace size in case of using only unblocked */
-            /* BLAS 2 code in DLAQP2RK. */
-            /* 1) DGEQP3RK and DLAQP2RK: 2*N to store full and partial */
-            /* column 2-norms. */
-            /* 2) DLAQP2RK: N+NRHS-1 to use in WORK array that is used */
-            /* in DLARF subroutine inside DLAQP2RK to apply an */
+            /* BLAS 2 code in ZLAQP2RK. */
+            /* 1) ZLAQP2RK: N+NRHS-1 to use in WORK array that is used */
+            /* in ZLARF subroutine inside ZLAQP2RK to apply an */
             /* elementary reflector from the left. */
             /* TOTAL_WORK_SIZE = 3*N + NRHS - 1 */
-            iws = *n * 3 + *nrhs - 1;
+            iws = *n + *nrhs - 1;
             /* Assign to NB optimal block size. */
-            nb = ilaenv_(&c__1, "DGEQP3RK", " ", m, n, &c_n1, &c_n1);
+            nb = ilaenv_(&c__1, "ZGEQP3RK", " ", m, n, &c_n1, &c_n1);
             /* A formula for the optimal workspace size in case of using */
-            /* both unblocked BLAS 2 in DLAQP2RK and blocked BLAS 3 code */
-            /* in DLAQP3RK. */
-            /* 1) DGEQP3RK, DLAQP2RK, DLAQP3RK: 2*N to store full and */
+            /* both unblocked BLAS 2 in ZLAQP2RK and blocked BLAS 3 code */
+            /* in ZLAQP3RK. */
+            /* 1) ZGEQP3RK, ZLAQP2RK, ZLAQP3RK: 2*N to store full and */
             /* partial column 2-norms. */
-            /* 2) DLAQP2RK: N+NRHS-1 to use in WORK array that is used */
-            /* in DLARF subroutine to apply an elementary reflector */
+            /* 2) ZLAQP2RK: N+NRHS-1 to use in WORK array that is used */
+            /* in ZLARF subroutine to apply an elementary reflector */
             /* from the left. */
-            /* 3) DLAQP3RK: NB*(N+NRHS) to use in the work array F that */
+            /* 3) ZLAQP3RK: NB*(N+NRHS) to use in the work array F that */
             /* is used to apply a block reflector from */
             /* the left. */
-            /* 4) DLAQP3RK: NB to use in the auxilixary array AUX. */
+            /* 4) ZLAQP3RK: NB to use in the auxilixary array AUX. */
             /* Sizes (2) and ((3) + (4)) should intersect, therefore */
             /* TOTAL_WORK_SIZE = 2*N + NB*( N+NRHS+1 ), given NBMIN=2. */
             lwkopt = (*n << 1) + nb * (*n + *nrhs + 1);
         }
-        work[1] = (doublereal)lwkopt;
+        z__1.r = (doublereal)lwkopt;
+        z__1.i = 0.; // , expr subst
+        work[1].r = z__1.r;
+        work[1].i = z__1.i; // , expr subst
         if(*lwork < iws && !lquery)
         {
             *info = -15;
@@ -757,7 +765,7 @@ void dgeqp3rk_(integer *m, integer *n, integer *nrhs, integer *kmax, doublereal 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGEQP3RK", &i__1, (ftnlen)6);
+        xerbla_("ZGEQP3RK", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -772,7 +780,10 @@ void dgeqp3rk_(integer *m, integer *n, integer *nrhs, integer *kmax, doublereal 
         *k = 0;
         *maxc2nrmk = 0.;
         *relmaxc2nrmk = 0.;
-        work[1] = (doublereal)lwkopt;
+        z__1.r = (doublereal)lwkopt;
+        z__1.i = 0.; // , expr subst
+        work[1].r = z__1.r;
+        work[1].i = z__1.i; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -796,14 +807,13 @@ void dgeqp3rk_(integer *m, integer *n, integer *nrhs, integer *kmax, doublereal 
     i__1 = *n;
     for(j = 1; j <= i__1; ++j)
     {
-        work[j] = dnrm2_(m, &a[j * a_dim1 + 1], &c__1);
-        work[*n + j] = work[j];
+        rwork[j] = dznrm2_(m, &a[j * a_dim1 + 1], &c__1);
+        rwork[*n + j] = rwork[j];
     }
     /* ================================================================== */
     /* Compute the pivot column index and the maximum column 2-norm */
     /* for the whole original matrix stored in A(1:M,1:N). */
-    kp1 = idamax_(n, &work[1], &c__1);
-    maxc2nrm = work[kp1];
+    kp1 = idamax_(n, &rwork[1], &c__1);
     /* ==================================================================. */
     if(disnan_(&maxc2nrm))
     {
@@ -816,7 +826,10 @@ void dgeqp3rk_(integer *m, integer *n, integer *nrhs, integer *kmax, doublereal 
         *maxc2nrmk = maxc2nrm;
         *relmaxc2nrmk = maxc2nrm;
         /* Array TAU is not set and contains undefined elements. */
-        work[1] = (doublereal)lwkopt;
+        z__1.r = (doublereal)lwkopt;
+        z__1.i = 0.; // , expr subst
+        work[1].r = z__1.r;
+        work[1].i = z__1.i; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -831,9 +844,14 @@ void dgeqp3rk_(integer *m, integer *n, integer *nrhs, integer *kmax, doublereal 
         i__1 = minmn;
         for(j = 1; j <= i__1; ++j)
         {
-            tau[j] = 0.;
+            i__2 = j;
+            tau[i__2].r = 0.;
+            tau[i__2].i = 0.; // , expr subst
         }
-        work[1] = (doublereal)lwkopt;
+        z__1.r = (doublereal)lwkopt;
+        z__1.i = 0.; // , expr subst
+        work[1].r = z__1.r;
+        work[1].i = z__1.i; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -857,9 +875,14 @@ void dgeqp3rk_(integer *m, integer *n, integer *nrhs, integer *kmax, doublereal 
         i__1 = minmn;
         for(j = 1; j <= i__1; ++j)
         {
-            tau[j] = 0.;
+            i__2 = j;
+            tau[i__2].r = 0.;
+            tau[i__2].i = 0.; // , expr subst
         }
-        work[1] = (doublereal)lwkopt;
+        z__1.r = (doublereal)lwkopt;
+        z__1.i = 0.; // , expr subst
+        work[1].r = z__1.r;
+        work[1].i = z__1.i; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -896,9 +919,14 @@ void dgeqp3rk_(integer *m, integer *n, integer *nrhs, integer *kmax, doublereal 
         i__1 = minmn;
         for(j = 1; j <= i__1; ++j)
         {
-            tau[j] = 0.;
+            i__2 = j;
+            tau[i__2].r = 0.;
+            tau[i__2].i = 0.; // , expr subst
         }
-        work[1] = (doublereal)lwkopt;
+        z__1.r = (doublereal)lwkopt;
+        z__1.i = 0.; // , expr subst
+        work[1].r = z__1.r;
+        work[1].i = z__1.i; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -914,7 +942,7 @@ void dgeqp3rk_(integer *m, integer *n, integer *nrhs, integer *kmax, doublereal 
         /* (for N less than NX, unblocked code should be used). */
         /* Computing MAX */
         i__1 = 0;
-        i__2 = ilaenv_(&c__3, "DGEQP3RK", " ", m, n, &c_n1, &c_n1); // , expr subst
+        i__2 = ilaenv_(&c__3, "ZGEQP3RK", " ", m, n, &c_n1, &c_n1); // , expr subst
         nx = fla_max(i__1, i__2);
         if(nx < minmn)
         {
@@ -927,7 +955,7 @@ void dgeqp3rk_(integer *m, integer *n, integer *nrhs, integer *kmax, doublereal 
                 nb = (*lwork - (*n << 1)) / (*n + 1);
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = ilaenv_(&c__2, "DGEQP3RK", " ", m, n, &c_n1, &c_n1); // , expr subst
+                i__2 = ilaenv_(&c__2, "ZGEQP3RK", " ", m, n, &c_n1, &c_n1); // , expr subst
                 nbmin = fla_max(i__1, i__2);
             }
         }
@@ -972,10 +1000,10 @@ void dgeqp3rk_(integer *m, integer *n, integer *nrhs, integer *kmax, doublereal 
             ioffset = j - 1;
             /* Factorize JB columns among the columns A(J:N). */
             i__1 = *n + *nrhs - j + 1;
-            dlaqp3rk_(m, &n_sub__, nrhs, &ioffset, &jb, abstol, reltol, &kp1, &maxc2nrm,
+            zlaqp3rk_(m, &n_sub__, nrhs, &ioffset, &jb, abstol, reltol, &kp1, &maxc2nrm,
                       &a[j * a_dim1 + 1], lda, &done, &jbf, maxc2nrmk, relmaxc2nrmk, &jpiv[j],
-                      &tau[j], &work[j], &work[*n + j], &work[(*n << 1) + 1],
-                      &work[(*n << 1) + jb + 1], &i__1, &iwork[1], &iinfo);
+                      &tau[j], &rwork[j], &rwork[*n + j], &work[1], &work[jb + 1], &i__1, &iwork[1],
+                      &iinfo);
             /* Set INFO on the first occurence of Inf. */
             if(iinfo > n_sub__ && *info == 0)
             {
@@ -1004,7 +1032,10 @@ void dgeqp3rk_(integer *m, integer *n, integer *nrhs, integer *kmax, doublereal 
                     *info = ioffset + iinfo;
                 }
                 /* Return from the routine. */
-                work[1] = (doublereal)lwkopt;
+                z__1.r = (doublereal)lwkopt;
+                z__1.i = 0.; // , expr subst
+                work[1].r = z__1.r;
+                work[1].i = z__1.i; // , expr subst
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
@@ -1024,9 +1055,9 @@ void dgeqp3rk_(integer *m, integer *n, integer *nrhs, integer *kmax, doublereal 
         n_sub__ = *n - j + 1;
         ioffset = j - 1;
         i__1 = jmax - j + 1;
-        dlaqp2rk_(m, &n_sub__, nrhs, &ioffset, &i__1, abstol, reltol, &kp1, &maxc2nrm,
+        zlaqp2rk_(m, &n_sub__, nrhs, &ioffset, &i__1, abstol, reltol, &kp1, &maxc2nrm,
                   &a[j * a_dim1 + 1], lda, &kf, maxc2nrmk, relmaxc2nrmk, &jpiv[j], &tau[j],
-                  &work[j], &work[*n + j], &work[(*n << 1) + 1], &iinfo);
+                  &rwork[j], &rwork[*n + j], &work[1], &iinfo);
         /* ABSTOL or RELTOL criterion is satisfied when the number of */
         /* the factorized columns KF is smaller then the number */
         /* of columns JMAX-J+1 supplied to be factorized by the */
@@ -1062,8 +1093,8 @@ void dgeqp3rk_(integer *m, integer *n, integer *nrhs, integer *kmax, doublereal 
         if(*k < minmn)
         {
             i__1 = *n - *k;
-            jmaxc2nrm = *k + idamax_(&i__1, &work[*k + 1], &c__1);
-            *maxc2nrmk = work[jmaxc2nrm];
+            jmaxc2nrm = *k + idamax_(&i__1, &rwork[*k + 1], &c__1);
+            *maxc2nrmk = rwork[jmaxc2nrm];
             if(*k == 0)
             {
                 *relmaxc2nrmk = 1.;
@@ -1075,14 +1106,24 @@ void dgeqp3rk_(integer *m, integer *n, integer *nrhs, integer *kmax, doublereal 
             i__1 = minmn;
             for(j = *k + 1; j <= i__1; ++j)
             {
-                tau[j] = 0.;
+                i__2 = j;
+                tau[i__2].r = 0.;
+                tau[i__2].i = 0.; // , expr subst
             }
+        }
+        else
+        {
+            *maxc2nrmk = 0.;
+            *relmaxc2nrmk = 0.;
         }
         /* END IF( J.LE.JMAX ) THEN */
     }
-    work[1] = (doublereal)lwkopt;
+    z__1.r = (doublereal)lwkopt;
+    z__1.i = 0.; // , expr subst
+    work[1].r = z__1.r;
+    work[1].i = z__1.i; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
-    /* End of DGEQP3RK */
+    /* End of ZGEQP3RK */
 }
-/* dgeqp3rk_ */
+/* zgeqp3rk_ */

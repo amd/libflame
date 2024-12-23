@@ -1,36 +1,36 @@
-/* ./dlaqp3rk.f -- translated by f2c (version 20190311). You must link the resulting object file
+/* ./zlaqp3rk.f -- translated by f2c (version 20190311). You must link the resulting object file
  with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
+static doublecomplex c_b1 = {0., 0.};
+static doublecomplex c_b2 = {1., 0.};
 static integer c__1 = 1;
-static doublereal c_b7 = -1.;
-static doublereal c_b8 = 1.;
-static doublereal c_b30 = 0.;
-/* > \brief \b DLAQP3RK computes a step of truncated QR factorization with column pivoting of a real
- * m-by-n ma trix A using Level 3 BLAS and overwrites a real m-by-nrhs matrix B with Q**T * B. */
+/* > \brief \b ZLAQP3RK computes a step of truncated QR factorization with column pivoting of a
+ * complex m-by-n matrix A using Level 3 BLAS and overwrites a complex m-by-nrhs matrix B with Q**H
+ * * B. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
-/* > Download DLAQP3RK + dependencies */
+/* > Download ZLAQP3RK + dependencies */
 /* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaqp3r
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaqp3r
  * k.f"> */
 /* > [TGZ]</a> */
 /* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaqp3r
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaqp3r
  * k.f"> */
 /* > [ZIP]</a> */
 /* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaqp3r
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaqp3r
  * k.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
 /* =========== */
-/* SUBROUTINE DLAQP3RK( M, N, NRHS, IOFFSET, NB, ABSTOL, */
+/* SUBROUTINE ZLAQP3RK( M, N, NRHS, IOFFSET, NB, ABSTOL, */
 /* $ RELTOL, KP1, MAXC2NRM, A, LDA, DONE, KB, */
 /* $ MAXC2NRMK, RELMAXC2NRMK, JPIV, TAU, */
 /* $ VN1, VN2, AUXV, F, LDF, IWORK, INFO ) */
@@ -40,24 +40,19 @@ static doublereal c_b30 = 0.;
 /* $ NB, NRHS */
 /* DOUBLE PRECISION ABSTOL, MAXC2NRM, MAXC2NRMK, RELMAXC2NRMK, */
 /* $ RELTOL */
-/* .. Scalar Arguments .. */
-/* LOGICAL DONE */
-/* INTEGER KB, LDA, LDF, M, N, NB, NRHS, IOFFSET */
-/* DOUBLE PRECISION ABSTOL, MAXC2NRM, MAXC2NRMK, RELMAXC2NRMK, */
-/* $ RELTOL */
 /* .. */
 /* .. Array Arguments .. */
 /* INTEGER IWORK( * ), JPIV( * ) */
-/* DOUBLE PRECISION A( LDA, * ), AUXV( * ), F( LDF, * ), TAU( * ), */
-/* $ VN1( * ), VN2( * ) */
+/* DOUBLE PRECISION VN1( * ), VN2( * ) */
+/* COMPLEX*16 A( LDA, * ), AUXV( * ), F( LDF, * ), TAU( * ) */
 /* .. */
 /* > \par Purpose: */
 /* ============= */
 /* > */
 /* > \verbatim */
 /* > */
-/* > DLAQP3RK computes a step of truncated QR factorization with column */
-/* > pivoting of a real M-by-N matrix A block A(IOFFSET+1:M,1:N) */
+/* > ZLAQP3RK computes a step of truncated QR factorization with column */
+/* > pivoting of a complex M-by-N matrix A block A(IOFFSET+1:M,1:N) */
 /* > by using Level 3 BLAS as */
 /* > */
 /* > A * P(KB) = Q(KB) * R(KB). */
@@ -70,7 +65,7 @@ static doublereal c_b30 = 0.;
 /* > Block A(1:IOFFSET,1:N) is accordingly pivoted, but not factorized. */
 /* > */
 /* > The routine also overwrites the right-hand-sides B matrix stored */
-/* > in A(IOFFSET+1:M,1:N+1:N+NRHS) with Q(KB)**T * B. */
+/* > in A(IOFFSET+1:M,1:N+1:N+NRHS) with Q(KB)**H * B. */
 /* > */
 /* > Cases when the number of factorized columns KB < NB: */
 /* > */
@@ -186,20 +181,20 @@ static doublereal c_b30 = 0.;
 /* > KP1 is INTEGER */
 /* > The index of the column with the maximum 2-norm in */
 /* > the whole original matrix A_orig determined in the */
-/* > main routine DGEQP3RK. 1 <= KP1 <= N_orig. */
+/* > main routine ZGEQP3RK. 1 <= KP1 <= N_orig. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] MAXC2NRM */
 /* > \verbatim */
 /* > MAXC2NRM is DOUBLE PRECISION */
 /* > The maximum column 2-norm of the whole original */
-/* > matrix A_orig computed in the main routine DGEQP3RK. */
+/* > matrix A_orig computed in the main routine ZGEQP3RK. */
 /* > MAXC2NRM >= 0. */
 /* > \endverbatim */
 /* > */
 /* > \param[in,out] A */
 /* > \verbatim */
-/* > A is DOUBLE PRECISION array, dimension (LDA,N+NRHS) */
+/* > A is COMPLEX*16 array, dimension (LDA,N+NRHS) */
 /* > On entry: */
 /* > the M-by-N matrix A and M-by-NRHS matrix B, as in */
 /* > */
@@ -209,7 +204,7 @@ static doublereal c_b30 = 0.;
 /* > On exit: */
 /* > 1. The elements in block A(IOFFSET+1:M,1:KB) below */
 /* > the diagonal together with the array TAU represent */
-/* > the orthogonal matrix Q(KB) as a product of elementary */
+/* > the unitary matrix Q(KB) as a product of elementary */
 /* > reflectors. */
 /* > 2. The upper triangular block of the matrix A stored */
 /* > in A(IOFFSET+1:M,1:KB) is the triangular factor obtained. */
@@ -221,7 +216,7 @@ static doublereal c_b30 = 0.;
 /* > if NRHS > 0, the right part of the block */
 /* > A(IOFFSET+1:M,N+1:N+NRHS) contains the block of */
 /* > the right-hand-side matrix B. Both these blocks have been */
-/* > updated by multiplication from the left by Q(KB)**T. */
+/* > updated by multiplication from the left by Q(KB)**H. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] LDA */
@@ -280,7 +275,7 @@ static doublereal c_b30 = 0.;
 /* > */
 /* > \param[out] TAU */
 /* > \verbatim */
-/* > TAU is DOUBLE PRECISION array, dimension (min(M-IOFFSET,N)) */
+/* > TAU is COMPLEX*16 array, dimension (fla_min(M-IOFFSET,N)) */
 /* > The scalar factors of the elementary reflectors. */
 /* > \endverbatim */
 /* > */
@@ -298,14 +293,14 @@ static doublereal c_b30 = 0.;
 /* > */
 /* > \param[out] AUXV */
 /* > \verbatim */
-/* > AUXV is DOUBLE PRECISION array, dimension (NB) */
+/* > AUXV is COMPLEX*16 array, dimension (NB) */
 /* > Auxiliary vector. */
 /* > \endverbatim */
 /* > */
 /* > \param[out] F */
 /* > \verbatim */
-/* > F is DOUBLE PRECISION array, dimension (LDF,NB) */
-/* > Matrix F**T = L*(Y**T)*A. */
+/* > F is COMPLEX*16 array, dimension (LDF,NB) */
+/* > Matrix F**H = L*(Y**H)*A. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] LDF */
@@ -403,46 +398,46 @@ static doublereal c_b30 = 0.;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void dlaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer *nb,
+void zlaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer *nb,
                doublereal *abstol, doublereal *reltol, integer *kp1, doublereal *maxc2nrm,
-               doublereal *a, integer *lda, logical *done, integer *kb, doublereal *maxc2nrmk,
-               doublereal *relmaxc2nrmk, integer *jpiv, doublereal *tau, doublereal *vn1,
-               doublereal *vn2, doublereal *auxv, doublereal *f, integer *ldf, integer *iwork,
+               doublecomplex *a, integer *lda, logical *done, integer *kb, doublereal *maxc2nrmk,
+               doublereal *relmaxc2nrmk, integer *jpiv, doublecomplex *tau, doublereal *vn1,
+               doublereal *vn2, doublecomplex *auxv, doublecomplex *f, integer *ldf, integer *iwork,
                integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaqp3rk inputs: m %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS
+    AOCL_DTL_SNPRINTF("zlaqp3rk inputs: m %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS
                       ",ioffset %" FLA_IS ",nb %" FLA_IS ",kp1 %" FLA_IS ",lda %" FLA_IS
                       ",ldf %" FLA_IS "",
                       *m, *n, *nrhs, *ioffset, *nb, *kp1, *lda, *ldf);
     /* System generated locals */
-    integer a_dim1, a_offset, f_dim1, f_offset, i__1, i__2;
+    integer a_dim1, a_offset, f_dim1, f_offset, i__1, i__2, i__3;
     doublereal d__1, d__2;
+    doublecomplex z__1;
     /* Builtin functions */
     double sqrt(doublereal);
+    void d_cnjg(doublecomplex *, doublecomplex *);
+    double d_imag(doublecomplex *), z_abs(doublecomplex *);
     /* Local variables */
     integer i__, j, k, minmnfact, minmnupdt, if__, kp;
-    doublereal aik, temp;
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
-    doublereal temp2, tol3z;
-    extern /* Subroutine */
-        void
-        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *),
-        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
-               integer *, doublereal *, doublereal *, integer *);
+    doublecomplex aik;
+    doublereal temp, temp2, tol3z;
     integer itemp;
     extern /* Subroutine */
         void
-        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
-    extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
+               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
+        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
+               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
+        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    extern doublereal dznrm2_(integer *, doublecomplex *, integer *), dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern logical disnan_(doublereal *);
     integer lsticc;
-    doublereal hugeval;
+    extern /* Subroutine */
+        void
+        zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+    doublereal taunan, hugeval;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -547,12 +542,14 @@ void dlaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
                 /* residual right hand sides exist. This occurs */
                 /* when ( NRHS != 0 AND KB <= (M-IOFFSET) ): */
                 /* A(I+1:M,N+1:N+NRHS) := A(I+1:M,N+1:N+NRHS) - */
-                /* A(I+1:M,1:KB) * F(N+1:N+NRHS,1:KB)**T. */
+                /* A(I+1:M,1:KB) * F(N+1:N+NRHS,1:KB)**H. */
                 if(*nrhs > 0 && *kb < *m - *ioffset)
                 {
                     i__1 = *m - if__;
-                    dgemm_("No transpose", "Transpose", &i__1, nrhs, kb, &c_b7,
-                           &a[if__ + 1 + a_dim1], lda, &f[*n + 1 + f_dim1], ldf, &c_b8,
+                    z__1.r = -1.;
+                    z__1.i = -0.; // , expr subst
+                    zgemm_("No transpose", "Conjugate transpose", &i__1, nrhs, kb, &z__1,
+                           &a[if__ + 1 + a_dim1], lda, &f[*n + 1 + f_dim1], ldf, &c_b2,
                            &a[if__ + 1 + (*n + 1) * a_dim1], lda);
                 }
                 /* There is no need to recompute the 2-norm of the */
@@ -588,23 +585,27 @@ void dlaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
                 /* residual right hand sides exist. This occurs */
                 /* when ( NRHS != 0 AND KB <= (M-IOFFSET) ): */
                 /* A(I+1:M,N+1:N+NRHS) := A(I+1:M,N+1:N+NRHS) - */
-                /* A(I+1:M,1:KB) * F(N+1:N+NRHS,1:KB)**T. */
+                /* A(I+1:M,1:KB) * F(N+1:N+NRHS,1:KB)**H. */
                 if(*nrhs > 0 && *kb < *m - *ioffset)
                 {
                     i__1 = *m - if__;
-                    dgemm_("No transpose", "Transpose", &i__1, nrhs, kb, &c_b7,
-                           &a[if__ + 1 + a_dim1], lda, &f[*n + 1 + f_dim1], ldf, &c_b8,
+                    z__1.r = -1.;
+                    z__1.i = -0.; // , expr subst
+                    zgemm_("No transpose", "Conjugate transpose", &i__1, nrhs, kb, &z__1,
+                           &a[if__ + 1 + a_dim1], lda, &f[*n + 1 + f_dim1], ldf, &c_b2,
                            &a[if__ + 1 + (*n + 1) * a_dim1], lda);
                 }
                 /* There is no need to recompute the 2-norm of the */
                 /* difficult columns, since we stop the factorization. */
                 /* Set TAUs corresponding to the columns that were not */
-                /* factorized to ZERO, i.e. set TAU(KB+1:MINMNFACT) = ZERO, */
-                /* which is equivalent to seting TAU(K:MINMNFACT) = ZERO. */
+                /* factorized to ZERO, i.e. set TAU(KB+1:MINMNFACT) = CZERO, */
+                /* which is equivalent to seting TAU(K:MINMNFACT) = CZERO. */
                 i__1 = minmnfact;
                 for(j = k; j <= i__1; ++j)
                 {
-                    tau[j] = 0.;
+                    i__2 = j;
+                    tau[i__2].r = 0.;
+                    tau[i__2].i = 0.; // , expr subst
                 }
                 /* Return from the routine. */
                 AOCL_DTL_TRACE_LOG_EXIT
@@ -653,24 +654,28 @@ void dlaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
                 /* A(I+1:M,KB+1:N+NRHS) exists. This occurs when */
                 /* KB < MINMNUPDT = fla_min( M-IOFFSET, N+NRHS ): */
                 /* A(IF+1:M,K+1:N+NRHS) := A(IF+1:M,KB+1:N+NRHS) - */
-                /* A(IF+1:M,1:KB) * F(KB+1:N+NRHS,1:KB)**T. */
+                /* A(IF+1:M,1:KB) * F(KB+1:N+NRHS,1:KB)**H. */
                 if(*kb < minmnupdt)
                 {
                     i__1 = *m - if__;
                     i__2 = *n + *nrhs - *kb;
-                    dgemm_("No transpose", "Transpose", &i__1, &i__2, kb, &c_b7,
-                           &a[if__ + 1 + a_dim1], lda, &f[*kb + 1 + f_dim1], ldf, &c_b8,
+                    z__1.r = -1.;
+                    z__1.i = -0.; // , expr subst
+                    zgemm_("No transpose", "Conjugate transpose", &i__1, &i__2, kb, &z__1,
+                           &a[if__ + 1 + a_dim1], lda, &f[*kb + 1 + f_dim1], ldf, &c_b2,
                            &a[if__ + 1 + (*kb + 1) * a_dim1], lda);
                 }
                 /* There is no need to recompute the 2-norm of the */
                 /* difficult columns, since we stop the factorization. */
                 /* Set TAUs corresponding to the columns that were not */
-                /* factorized to ZERO, i.e. set TAU(KB+1:MINMNFACT) = ZERO, */
-                /* which is equivalent to seting TAU(K:MINMNFACT) = ZERO. */
+                /* factorized to ZERO, i.e. set TAU(KB+1:MINMNFACT) = CZERO, */
+                /* which is equivalent to seting TAU(K:MINMNFACT) = CZERO. */
                 i__1 = minmnfact;
                 for(j = k; j <= i__1; ++j)
                 {
-                    tau[j] = 0.;
+                    i__2 = j;
+                    tau[i__2].r = 0.;
+                    tau[i__2].i = 0.; // , expr subst
                 }
                 /* Return from the routine. */
                 AOCL_DTL_TRACE_LOG_EXIT
@@ -694,9 +699,9 @@ void dlaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
         /* the original matrix A_orig, not the block A(1:M,1:N). */
         if(kp != k)
         {
-            dswap_(m, &a[kp * a_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
+            zswap_(m, &a[kp * a_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
             i__1 = k - 1;
-            dswap_(&i__1, &f[kp + f_dim1], ldf, &f[k + f_dim1], ldf);
+            zswap_(&i__1, &f[kp + f_dim1], ldf, &f[k + f_dim1], ldf);
             vn1[kp] = vn1[k];
             vn2[kp] = vn2[k];
             itemp = jpiv[kp];
@@ -704,34 +709,73 @@ void dlaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
             jpiv[k] = itemp;
         }
         /* Apply previous Householder reflectors to column K: */
-        /* A(I:M,K) := A(I:M,K) - A(I:M,1:K-1)*F(K,1:K-1)**T. */
+        /* A(I:M,K) := A(I:M,K) - A(I:M,1:K-1)*F(K,1:K-1)**H. */
         if(k > 1)
         {
+            i__1 = k - 1;
+            for(j = 1; j <= i__1; ++j)
+            {
+                i__2 = k + j * f_dim1;
+                d_cnjg(&z__1, &f[k + j * f_dim1]);
+                f[i__2].r = z__1.r;
+                f[i__2].i = z__1.i; // , expr subst
+            }
             i__1 = *m - i__ + 1;
             i__2 = k - 1;
-            dgemv_("No transpose", &i__1, &i__2, &c_b7, &a[i__ + a_dim1], lda, &f[k + f_dim1], ldf,
-                   &c_b8, &a[i__ + k * a_dim1], &c__1);
+            z__1.r = -1.;
+            z__1.i = -0.; // , expr subst
+            zgemv_("No transpose", &i__1, &i__2, &z__1, &a[i__ + a_dim1], lda, &f[k + f_dim1], ldf,
+                   &c_b2, &a[i__ + k * a_dim1], &c__1);
+            i__1 = k - 1;
+            for(j = 1; j <= i__1; ++j)
+            {
+                i__2 = k + j * f_dim1;
+                d_cnjg(&z__1, &f[k + j * f_dim1]);
+                f[i__2].r = z__1.r;
+                f[i__2].i = z__1.i; // , expr subst
+            }
         }
         /* Generate elementary reflector H(k) using the column A(I:M,K). */
         if(i__ < *m)
         {
             i__1 = *m - i__ + 1;
-            dlarfg_(&i__1, &a[i__ + k * a_dim1], &a[i__ + 1 + k * a_dim1], &c__1, &tau[k]);
+            zlarfg_(&i__1, &a[i__ + k * a_dim1], &a[i__ + 1 + k * a_dim1], &c__1, &tau[k]);
         }
         else
         {
-            tau[k] = 0.;
+            i__1 = k;
+            tau[i__1].r = 0.;
+            tau[i__1].i = 0.; // , expr subst
         }
         /* Check if TAU(K) contains NaN, set INFO parameter */
         /* to the column number where NaN is found and return from */
         /* the routine. */
         /* NOTE: There is no need to check TAU(K) for Inf, */
-        /* since DLARFG cannot produce TAU(K) or Householder vector */
+        /* since ZLARFG cannot produce TAU(KK) or Householder vector */
         /* below the diagonal containing Inf. Only BETA on the diagonal, */
-        /* returned by DLARFG can contain Inf, which requires */
+        /* returned by ZLARFG can contain Inf, which requires */
         /* TAU(K) to contain NaN. Therefore, this case of generating Inf */
-        /* by DLARFG is covered by checking TAU(K) for NaN. */
-        if(disnan_(&tau[k]))
+        /* by ZLARFG is covered by checking TAU(K) for NaN. */
+        i__1 = k;
+        d__1 = tau[i__1].r;
+        if(disnan_(&d__1))
+        {
+            i__1 = k;
+            taunan = tau[i__1].r;
+        }
+        else /* if(complicated condition) */
+        {
+            d__1 = d_imag(&tau[k]);
+            if(disnan_(&d__1))
+            {
+                taunan = d_imag(&tau[k]);
+            }
+            else
+            {
+                taunan = 0.;
+            }
+        }
+        if(disnan_(&taunan))
         {
             *done = TRUE_;
             /* Set KB, the number of factorized partial columns */
@@ -744,8 +788,8 @@ void dlaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
             if__ = i__ - 1;
             *info = k;
             /* Set MAXC2NRMK and RELMAXC2NRMK to NaN. */
-            *maxc2nrmk = tau[k];
-            *relmaxc2nrmk = tau[k];
+            *maxc2nrmk = taunan;
+            *relmaxc2nrmk = taunan;
             /* There is no need to apply the block reflector to the */
             /* residual of the matrix A stored in A(KB+1:M,KB+1:N), */
             /* since the submatrix contains NaN and we stop */
@@ -755,12 +799,15 @@ void dlaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
             /* residual right hand sides exist. This occurs */
             /* when ( NRHS != 0 AND KB <= (M-IOFFSET) ): */
             /* A(I+1:M,N+1:N+NRHS) := A(I+1:M,N+1:N+NRHS) - */
-            /* A(I+1:M,1:KB) * F(N+1:N+NRHS,1:KB)**T. */
+            /* A(I+1:M,1:KB) * F(N+1:N+NRHS,1:KB)**H. */
             if(*nrhs > 0 && *kb < *m - *ioffset)
             {
                 i__1 = *m - if__;
-                dgemm_("No transpose", "Transpose", &i__1, nrhs, kb, &c_b7, &a[if__ + 1 + a_dim1],
-                       lda, &f[*n + 1 + f_dim1], ldf, &c_b8, &a[if__ + 1 + (*n + 1) * a_dim1], lda);
+                z__1.r = -1.;
+                z__1.i = -0.; // , expr subst
+                zgemm_("No transpose", "Conjugate transpose", &i__1, nrhs, kb, &z__1,
+                       &a[if__ + 1 + a_dim1], lda, &f[*n + 1 + f_dim1], ldf, &c_b2,
+                       &a[if__ + 1 + (*n + 1) * a_dim1], lda);
             }
             /* There is no need to recompute the 2-norm of the */
             /* difficult columns, since we stop the factorization. */
@@ -771,51 +818,63 @@ void dlaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
             return;
         }
         /* =============================================================== */
-        aik = a[i__ + k * a_dim1];
-        a[i__ + k * a_dim1] = 1.;
+        i__1 = i__ + k * a_dim1;
+        aik.r = a[i__1].r;
+        aik.i = a[i__1].i; // , expr subst
+        i__1 = i__ + k * a_dim1;
+        a[i__1].r = 1.;
+        a[i__1].i = 0.; // , expr subst
         /* =============================================================== */
         /* Compute the current K-th column of F: */
-        /* 1) F(K+1:N,K) := tau(K) * A(I:M,K+1:N)**T * A(I:M,K). */
+        /* 1) F(K+1:N,K) := tau(K) * A(I:M,K+1:N)**H * A(I:M,K). */
         if(k < *n + *nrhs)
         {
             i__1 = *m - i__ + 1;
             i__2 = *n + *nrhs - k;
-            dgemv_("Transpose", &i__1, &i__2, &tau[k], &a[i__ + (k + 1) * a_dim1], lda,
-                   &a[i__ + k * a_dim1], &c__1, &c_b30, &f[k + 1 + k * f_dim1], &c__1);
+            zgemv_("Conjugate transpose", &i__1, &i__2, &tau[k], &a[i__ + (k + 1) * a_dim1], lda,
+                   &a[i__ + k * a_dim1], &c__1, &c_b1, &f[k + 1 + k * f_dim1], &c__1);
         }
         /* 2) Zero out elements above and on the diagonal of the */
         /* column K in matrix F, i.e elements F(1:K,K). */
         i__1 = k;
         for(j = 1; j <= i__1; ++j)
         {
-            f[j + k * f_dim1] = 0.;
+            i__2 = j + k * f_dim1;
+            f[i__2].r = 0.;
+            f[i__2].i = 0.; // , expr subst
         }
         /* 3) Incremental updating of the K-th column of F: */
-        /* F(1:N,K) := F(1:N,K) - tau(K) * F(1:N,1:K-1) * A(I:M,1:K-1)**T */
+        /* F(1:N,K) := F(1:N,K) - tau(K) * F(1:N,1:K-1) * A(I:M,1:K-1)**H */
         /* * A(I:M,K). */
         if(k > 1)
         {
             i__1 = *m - i__ + 1;
             i__2 = k - 1;
-            d__1 = -tau[k];
-            dgemv_("Transpose", &i__1, &i__2, &d__1, &a[i__ + a_dim1], lda, &a[i__ + k * a_dim1],
-                   &c__1, &c_b30, &auxv[1], &c__1);
+            i__3 = k;
+            z__1.r = -tau[i__3].r;
+            z__1.i = -tau[i__3].i; // , expr subst
+            zgemv_("Conjugate Transpose", &i__1, &i__2, &z__1, &a[i__ + a_dim1], lda,
+                   &a[i__ + k * a_dim1], &c__1, &c_b1, &auxv[1], &c__1);
             i__1 = *n + *nrhs;
             i__2 = k - 1;
-            dgemv_("No transpose", &i__1, &i__2, &c_b8, &f[f_dim1 + 1], ldf, &auxv[1], &c__1, &c_b8,
+            zgemv_("No transpose", &i__1, &i__2, &c_b2, &f[f_dim1 + 1], ldf, &auxv[1], &c__1, &c_b2,
                    &f[k * f_dim1 + 1], &c__1);
         }
         /* =============================================================== */
         /* Update the current I-th row of A: */
         /* A(I,K+1:N+NRHS) := A(I,K+1:N+NRHS) */
-        /* - A(I,1:K)*F(K+1:N+NRHS,1:K)**T. */
+        /* - A(I,1:K)*F(K+1:N+NRHS,1:K)**H. */
         if(k < *n + *nrhs)
         {
             i__1 = *n + *nrhs - k;
-            dgemv_("No transpose", &i__1, &k, &c_b7, &f[k + 1 + f_dim1], ldf, &a[i__ + a_dim1], lda,
-                   &c_b8, &a[i__ + (k + 1) * a_dim1], lda);
+            z__1.r = -1.;
+            z__1.i = -0.; // , expr subst
+            zgemm_("No transpose", "Conjugate transpose", &c__1, &i__1, &k, &z__1, &a[i__ + a_dim1],
+                   lda, &f[k + 1 + f_dim1], ldf, &c_b2, &a[i__ + (k + 1) * a_dim1], lda);
         }
-        a[i__ + k * a_dim1] = aik;
+        i__1 = i__ + k * a_dim1;
+        a[i__1].r = aik.r;
+        a[i__1].i = aik.i; // , expr subst
         /* Update the partial column 2-norms for the residual matrix, */
         /* only if the residual matrix A(I+1:M,K+1:N) exists, i.e. */
         /* when K < MINMNFACT = fla_min( M-IOFFSET, N ). */
@@ -828,7 +887,7 @@ void dlaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
                 {
                     /* NOTE: The following lines follow from the analysis in */
                     /* Lapack Working Note 176. */
-                    temp = (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1)) / vn1[j];
+                    temp = z_abs(&a[i__ + j * a_dim1]) / vn1[j];
                     /* Computing MAX */
                     d__1 = 0.;
                     d__2 = (temp + 1.) * (1. - temp); // , expr subst
@@ -871,13 +930,16 @@ void dlaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
     /* exist, i.e. if the submatrix A(I+1:M,KB+1:N+NRHS) exists. */
     /* This occurs when KB < MINMNUPDT = fla_min( M-IOFFSET, N+NRHS ): */
     /* A(IF+1:M,K+1:N+NRHS) := A(IF+1:M,KB+1:N+NRHS) - */
-    /* A(IF+1:M,1:KB) * F(KB+1:N+NRHS,1:KB)**T. */
+    /* A(IF+1:M,1:KB) * F(KB+1:N+NRHS,1:KB)**H. */
     if(*kb < minmnupdt)
     {
         i__1 = *m - if__;
         i__2 = *n + *nrhs - *kb;
-        dgemm_("No transpose", "Transpose", &i__1, &i__2, kb, &c_b7, &a[if__ + 1 + a_dim1], lda,
-               &f[*kb + 1 + f_dim1], ldf, &c_b8, &a[if__ + 1 + (*kb + 1) * a_dim1], lda);
+        z__1.r = -1.;
+        z__1.i = -0.; // , expr subst
+        zgemm_("No transpose", "Conjugate transpose", &i__1, &i__2, kb, &z__1,
+               &a[if__ + 1 + a_dim1], lda, &f[*kb + 1 + f_dim1], ldf, &c_b2,
+               &a[if__ + 1 + (*kb + 1) * a_dim1], lda);
     }
     /* Recompute the 2-norm of the difficult columns. */
     /* Loop over the index of the difficult columns from the largest */
@@ -891,10 +953,10 @@ void dlaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
         /* Compute the 2-norm explicilty for the last difficult column and */
         /* save it in the partial and exact 2-norm vectors VN1 and VN2. */
         /* NOTE: The computation of VN1( LSTICC ) relies on the fact that */
-        /* DNRM2 does not fail on vectors with norm below the value of */
+        /* DZNRM2 does not fail on vectors with norm below the value of */
         /* SQRT(DLAMCH('S')) */
         i__1 = *m - if__;
-        vn1[lsticc] = dnrm2_(&i__1, &a[if__ + 1 + lsticc * a_dim1], &c__1);
+        vn1[lsticc] = dznrm2_(&i__1, &a[if__ + 1 + lsticc * a_dim1], &c__1);
         vn2[lsticc] = vn1[lsticc];
         /* Downdate the index of the last difficult column to */
         /* the index of the previous difficult column. */
@@ -902,6 +964,6 @@ void dlaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;
-    /* End of DLAQP3RK */
+    /* End of ZLAQP3RK */
 }
-/* dlaqp3rk_ */
+/* zlaqp3rk_ */

@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {0., 0.};
-static aocl_int64_t c_n1 = -1;
+static complex c_b1 = {0.f, 0.f};
+static integer c_n1 = -1;
 /* > \brief \b ZGEDMDQ computes the Dynamic Mode Decomposition (DMD) for a pair of data snapshot
  * matrices. */
 /* =========== DOCUMENTATION =========== */
@@ -454,8 +454,8 @@ K) contains */
 /* > elementary reflectors as returned by ZGEQRF of the */
 /* > M-by-N input matrix F. */
 /* > If the call to ZGEDMDQ is only workspace query, then */
-/* > ZWORK(1) contains the minimal scomplex workspace length and */
-/* > ZWORK(2) is the optimal scomplex workspace length. */
+/* > ZWORK(1) contains the minimal complex workspace length and */
+/* > ZWORK(2) is the optimal complex workspace length. */
 /* > Hence, the length of work is at least 2. */
 /* > See the description of LZWORK. */
 /* > \endverbatim */
@@ -559,45 +559,12 @@ LIWORK >=1 */
 /* ............................................................. */
 /* ............................................................. */
 /* Subroutine */
-/** Generated wrapper function */
-void zgedmdq_(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, aocl_int_t *whtsvd, aocl_int_t *m, aocl_int_t *n, dcomplex *f, aocl_int_t *ldf, dcomplex *x, aocl_int_t *ldx, dcomplex *y, aocl_int_t *ldy, aocl_int_t *nrnk, doublereal *tol, aocl_int_t *k, dcomplex *eigs, dcomplex *z__, aocl_int_t *ldz, doublereal *res, dcomplex *b, aocl_int_t *ldb, dcomplex *v, aocl_int_t *ldv, dcomplex *s, aocl_int_t *lds, dcomplex *zwork, aocl_int_t *lzwork, doublereal *work, aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zgedmdq(jobs, jobz, jobr, jobq, jobt, jobf, whtsvd, m, n, f, ldf, x, ldx, y, ldy, nrnk, tol, k, eigs, z__, ldz, res, b, ldb, v, ldv, s, lds, zwork, lzwork, work, lwork, iwork, liwork, info);
-#else
-    aocl_int64_t whtsvd_64 = *whtsvd;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldf_64 = *ldf;
-    aocl_int64_t ldx_64 = *ldx;
-    aocl_int64_t ldy_64 = *ldy;
-    aocl_int64_t nrnk_64 = *nrnk;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldv_64 = *ldv;
-    aocl_int64_t lds_64 = *lds;
-    aocl_int64_t lzwork_64 = *lzwork;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t liwork_64 = *liwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zgedmdq(jobs, jobz, jobr, jobq, jobt, jobf, &whtsvd_64, &m_64, &n_64, f, &ldf_64, x, &ldx_64, y, &ldy_64, &nrnk_64, tol, &k_64, eigs, z__, &ldz_64, res, b, &ldb_64, v, &ldv_64, s, &lds_64, zwork, &lzwork_64, work, &lwork_64, iwork, &liwork_64, &info_64);
-
-    *k = (aocl_int_t)k_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf,
-              aocl_int64_t *whtsvd, aocl_int64_t *m, aocl_int64_t *n, dcomplex *f,
-              aocl_int64_t *ldf, dcomplex *x, aocl_int64_t *ldx, dcomplex *y,
-              aocl_int64_t *ldy, aocl_int64_t *nrnk, doublereal *tol, aocl_int64_t *k,
-              dcomplex *eigs, dcomplex *z__, aocl_int64_t *ldz, doublereal *res,
-              dcomplex *b, aocl_int64_t *ldb, dcomplex *v, aocl_int64_t *ldv,
-              dcomplex *s, aocl_int64_t *lds, dcomplex *zwork, aocl_int64_t *lzwork,
-              doublereal *work, aocl_int64_t *lwork, aocl_int_t *iwork, aocl_int64_t *liwork,
-              aocl_int64_t *info)
+void zgedmdq_(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf,
+              integer *whtsvd, integer *m, integer *n, complex *f, integer *ldf, complex *x,
+              integer *ldx, complex *y, integer *ldy, integer *nrnk, real *tol, integer *k,
+              complex *eigs, complex *z__, integer *ldz, real *res, complex *b, integer *ldb,
+              complex *v, integer *ldv, complex *s, integer *lds, complex *zwork, integer *lzwork,
+              real *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF(
@@ -608,24 +575,43 @@ void aocl_lapack_zgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *j
         *jobs, *jobz, *jobr, *jobq, *jobt, *jobf, *whtsvd, *m, *n, *ldf, *ldx, *ldy, *nrnk, *ldz,
         *ldb, *ldv, *lds, *lwork, *liwork);
     /* System generated locals */
-    aocl_int64_t f_dim1, f_offset, x_dim1, x_offset, y_dim1, y_offset, z_dim1, z_offset, b_dim1,
+    integer f_dim1, f_offset, x_dim1, x_offset, y_dim1, y_offset, z_dim1, z_offset, b_dim1,
         b_offset, v_dim1, v_offset, s_dim1, s_offset, i__1, i__2;
     /* Local variables */
-    aocl_int64_t info1;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer info1;
+    extern logical lsame_(char *, char *, integer, integer);
     char jobvl[1];
-    aocl_int64_t minmn;
+    integer minmn;
     logical wantq;
-    aocl_int64_t mlwqr, olwqr;
+    integer mlwqr, olwqr;
     logical wntex;
-    aocl_int64_t mlwdmd, olwdmd;
+    extern /* Subroutine */
+        void
+        zgedmd_(char *, char *, char *, char *, integer *, integer *, integer *, complex *,
+                integer *, complex *, integer *, integer *, real *, integer *, complex *, complex *,
+                integer *, real *, complex *, integer *, complex *, integer *, complex *, integer *,
+                complex *, integer *, real *, integer *, integer *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    integer mlwdmd, olwdmd;
     logical sccolx, sccoly;
-    aocl_int64_t iminwr;
+    extern /* Subroutine */
+        void
+        zgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+                integer *),
+        zlacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
+        zlaset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
+    integer iminwr;
     logical wntvec, wntvcf;
-    aocl_int64_t mlwgqr;
+    integer mlwgqr;
     logical wntref;
-    aocl_int64_t mlwork, olwgqr, olwork, mlrwrk, mlwmqr, olwmqr;
+    integer mlwork, olwgqr, olwork, mlrwrk, mlwmqr, olwmqr;
     logical lquery, wntres, wnttrf, wntvcq;
+    extern /* Subroutine */
+        void
+        zungqr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
+                integer *, integer *),
+        zunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
+                complex *, integer *, complex *, integer *, integer *);
     /* ...Translated by Pacific-Sierra Research vf90 Personal 3.4N3 02:55:35 10/25/24 */
     /* ...Switches: */
     /* -- LAPACK driver routine -- */
@@ -739,7 +725,7 @@ void aocl_lapack_zgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *j
     {
         *info = -16;
     }
-    else if(*tol < 0. || *tol >= 1.)
+    else if(*tol < 0.f || *tol >= 1.f)
     {
         *info = -17;
     }
@@ -781,12 +767,12 @@ void aocl_lapack_zgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *j
             if(lquery)
             {
                 iwork[1] = 1;
-                zwork[1].real = 2.;
-                zwork[1].imag = 0.; // , expr subst
-                zwork[2].real = 2.;
-                zwork[2].imag = 0.; // , expr subst
-                work[1] = 2.;
-                work[2] = 2.;
+                zwork[1].r = 2.f;
+                zwork[1].i = 0.f; // , expr subst
+                zwork[2].r = 2.f;
+                zwork[2].i = 0.f; // , expr subst
+                work[1] = 2.f;
+                work[2] = 2.f;
             }
             else
             {
@@ -805,19 +791,19 @@ void aocl_lapack_zgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *j
         mlwork = fla_max(i__1, i__2);
         if(lquery)
         {
-            aocl_lapack_zgeqrf(m, n, &f[f_offset], ldf, &zwork[1], &zwork[1], &c_n1, &info1);
-            olwqr = (integer)zwork[1].real;
+            zgeqrf_(m, n, &f[f_offset], ldf, &zwork[1], &zwork[1], &c_n1, &info1);
+            olwqr = (integer)zwork[1].r;
             /* Computing MAX */
             i__1 = 2;
             i__2 = minmn + olwqr; // , expr subst
             olwork = fla_max(i__1, i__2);
         }
         i__1 = *n - 1;
-        aocl_lapack_zgedmd(jobs, jobvl, jobr, jobf, whtsvd, &minmn, &i__1, &x[x_offset], ldx, &y[y_offset],
+        zgedmd_(jobs, jobvl, jobr, jobf, whtsvd, &minmn, &i__1, &x[x_offset], ldx, &y[y_offset],
                 ldy, nrnk, tol, k, &eigs[1], &z__[z_offset], ldz, &res[1], &b[b_offset], ldb,
                 &v[v_offset], ldv, &s[s_offset], lds, &zwork[1], &c_n1, &work[1], &c_n1, &iwork[1],
                 &c_n1, &info1);
-        mlwdmd = (integer)zwork[1].real;
+        mlwdmd = (integer)zwork[1].r;
         /* Computing MAX */
         i__1 = mlwork;
         i__2 = minmn + mlwdmd; // , expr subst
@@ -829,7 +815,7 @@ void aocl_lapack_zgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *j
         iminwr = fla_max(1, iwork[1]);
         if(lquery)
         {
-            olwdmd = (integer)zwork[2].real;
+            olwdmd = (integer)zwork[2].r;
             /* Computing MAX */
             i__1 = olwork;
             i__2 = minmn + olwdmd; // , expr subst
@@ -844,9 +830,9 @@ void aocl_lapack_zgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *j
             mlwork = fla_max(i__1, i__2);
             if(lquery)
             {
-                aocl_lapack_zunmqr("L", "N", m, n, &minmn, &f[f_offset], ldf, &zwork[1],
-                                   &z__[z_offset], ldz, &zwork[1], &c_n1, &info1);
-                olwmqr = (integer)zwork[1].real;
+                zunmqr_("L", "N", m, n, &minmn, &f[f_offset], ldf, &zwork[1], &z__[z_offset], ldz,
+                        &zwork[1], &c_n1, &info1);
+                olwmqr = (integer)zwork[1].r;
                 /* Computing MAX */
                 i__1 = olwork;
                 i__2 = minmn + olwmqr; // , expr subst
@@ -862,9 +848,8 @@ void aocl_lapack_zgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *j
             mlwork = fla_max(i__1, i__2);
             if(lquery)
             {
-                aocl_lapack_zungqr(m, &minmn, &minmn, &f[f_offset], ldf, &zwork[1], &zwork[1],
-                                   &c_n1, &info1);
-                olwgqr = (integer)zwork[1].real;
+                zungqr_(m, &minmn, &minmn, &f[f_offset], ldf, &zwork[1], &zwork[1], &c_n1, &info1);
+                olwgqr = (integer)zwork[1].r;
                 /* Computing MAX */
                 i__1 = olwork;
                 i__2 = minmn + olwgqr; // , expr subst
@@ -887,20 +872,20 @@ void aocl_lapack_zgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *j
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZGEDMDQ", &i__1, (ftnlen)7);
+        xerbla_("ZGEDMDQ", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
         /* Return minimal and optimal workspace sizes */
-        iwork[1] = (aocl_int_t)(iminwr);
-        zwork[1].real = (doublereal)mlwork;
-        zwork[1].imag = 0.; // , expr subst
-        zwork[2].real = (doublereal)olwork;
-        zwork[2].imag = 0.; // , expr subst
-        work[1] = (doublereal)mlrwrk;
-        work[2] = (doublereal)mlrwrk;
+        iwork[1] = iminwr;
+        zwork[1].r = (real)mlwork;
+        zwork[1].i = 0.f; // , expr subst
+        zwork[2].r = (real)olwork;
+        zwork[2].i = 0.f; // , expr subst
+        work[1] = (real)mlrwrk;
+        work[2] = (real)mlrwrk;
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -910,27 +895,27 @@ void aocl_lapack_zgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *j
     /* For large scale computation with M >> N, at this place */
     /* one can use an out of core QRF. */
     i__1 = *lzwork - minmn;
-    aocl_lapack_zgeqrf(m, n, &f[f_offset], ldf, &zwork[1], &zwork[minmn + 1], &i__1, &info1);
+    zgeqrf_(m, n, &f[f_offset], ldf, &zwork[1], &zwork[minmn + 1], &i__1, &info1);
     /* Define X and Y as the snapshots representations in the */
     /* orthogonal basis computed in the QR factorization. */
     /* X corresponds to the leading N-1 and Y to the trailing */
     /* N-1 snapshots. */
     i__1 = *n - 1;
-    aocl_lapack_zlaset("L", &minmn, &i__1, &c_b1, &c_b1, &x[x_offset], ldx);
+    zlaset_("L", &minmn, &i__1, &c_b1, &c_b1, &x[x_offset], ldx);
     i__1 = *n - 1;
-    aocl_lapack_zlacpy("U", &minmn, &i__1, &f[f_offset], ldf, &x[x_offset], ldx);
+    zlacpy_("U", &minmn, &i__1, &f[f_offset], ldf, &x[x_offset], ldx);
     i__1 = *n - 1;
-    aocl_lapack_zlacpy("A", &minmn, &i__1, &f[(f_dim1 << 1) + 1], ldf, &y[y_offset], ldy);
+    zlacpy_("A", &minmn, &i__1, &f[(f_dim1 << 1) + 1], ldf, &y[y_offset], ldy);
     if(*m >= 3)
     {
         i__1 = minmn - 2;
         i__2 = *n - 2;
-        aocl_lapack_zlaset("L", &i__1, &i__2, &c_b1, &c_b1, &y[y_dim1 + 3], ldy);
+        zlaset_("L", &i__1, &i__2, &c_b1, &c_b1, &y[y_dim1 + 3], ldy);
     }
     /* Compute the DMD of the projected snapshot pairs (X,Y) */
     i__1 = *n - 1;
     i__2 = *lzwork - minmn;
-    aocl_lapack_zgedmd(jobs, jobvl, jobr, jobf, whtsvd, &minmn, &i__1, &x[x_offset], ldx, &y[y_offset], ldy,
+    zgedmd_(jobs, jobvl, jobr, jobf, whtsvd, &minmn, &i__1, &x[x_offset], ldx, &y[y_offset], ldy,
             nrnk, tol, k, &eigs[1], &z__[z_offset], ldz, &res[1], &b[b_offset], ldb, &v[v_offset],
             ldv, &s[s_offset], lds, &zwork[minmn + 1], &i__2, &work[1], lwork, &iwork[1], liwork,
             &info1);
@@ -953,11 +938,11 @@ void aocl_lapack_zgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *j
         if(*m > minmn)
         {
             i__1 = *m - minmn;
-            aocl_lapack_zlaset("A", &i__1, k, &c_b1, &c_b1, &z__[minmn + 1 + z_dim1], ldz);
+            zlaset_("A", &i__1, k, &c_b1, &c_b1, &z__[minmn + 1 + z_dim1], ldz);
         }
         i__1 = *lzwork - minmn;
-        aocl_lapack_zunmqr("L", "N", m, k, &minmn, &f[f_offset], ldf, &zwork[1], &z__[z_offset],
-                           ldz, &zwork[minmn + 1], &i__1, &info1);
+        zunmqr_("L", "N", m, k, &minmn, &f[f_offset], ldf, &zwork[1], &z__[z_offset], ldz,
+                &zwork[minmn + 1], &i__1, &info1);
     }
     else if(wntvcf)
     {
@@ -967,15 +952,15 @@ void aocl_lapack_zgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *j
         /* the SVD/POD_basis returned by ZGEDMD in X) and the */
         /* second factor (the eigenvectors of the Rayleigh */
         /* quotient) is in the array V, as returned by ZGEDMD. */
-        aocl_lapack_zlacpy("A", n, k, &x[x_offset], ldx, &z__[z_offset], ldz);
+        zlacpy_("A", n, k, &x[x_offset], ldx, &z__[z_offset], ldz);
         if(*m > *n)
         {
             i__1 = *m - *n;
-            aocl_lapack_zlaset("A", &i__1, k, &c_b1, &c_b1, &z__[*n + 1 + z_dim1], ldz);
+            zlaset_("A", &i__1, k, &c_b1, &c_b1, &z__[*n + 1 + z_dim1], ldz);
         }
         i__1 = *lzwork - minmn;
-        aocl_lapack_zunmqr("L", "N", m, k, &minmn, &f[f_offset], ldf, &zwork[1], &z__[z_offset],
-                           ldz, &zwork[minmn + 1], &i__1, &info1);
+        zunmqr_("L", "N", m, k, &minmn, &f[f_offset], ldf, &zwork[1], &z__[z_offset], ldz,
+                &zwork[minmn + 1], &i__1, &info1);
     }
     /* Some optional output variables: */
     /* The upper triangular factor R in the initial QR */
@@ -986,14 +971,13 @@ void aocl_lapack_zgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *j
     if(wnttrf)
     {
         /* Return the upper triangular R in Y */
-        aocl_lapack_zlaset("A", &minmn, n, &c_b1, &c_b1, &y[y_offset], ldy);
-        aocl_lapack_zlacpy("U", &minmn, n, &f[f_offset], ldf, &y[y_offset], ldy);
+        zlaset_("A", &minmn, n, &c_b1, &c_b1, &y[y_offset], ldy);
+        zlacpy_("U", &minmn, n, &f[f_offset], ldf, &y[y_offset], ldy);
     }
     if(wantq)
     {
         i__1 = *lzwork - minmn;
-        aocl_lapack_zungqr(m, &minmn, &minmn, &f[f_offset], ldf, &zwork[1], &zwork[minmn + 1],
-                           &i__1, &info1);
+        zungqr_(m, &minmn, &minmn, &f[f_offset], ldf, &zwork[1], &zwork[minmn + 1], &i__1, &info1);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

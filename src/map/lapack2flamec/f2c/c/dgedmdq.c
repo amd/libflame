@@ -589,10 +589,10 @@ void dgedmdq_(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgedmdq inputs: jobs %\c ,jobz %\c ,jobr %\c ,jobq %\c ,jobt %\c ,jobf %\c "
                       ",whtsvd %" FLA_IS ",m %" FLA_IS ",n %" FLA_IS ",ldf %" FLA_IS ",ldx %" FLA_IS
-                      ",ldy %" FLA_IS ",nrnk %" FLA_IS ",k %" FLA_IS ",ldz %" FLA_IS ",ldb %" FLA_IS
+                      ",ldy %" FLA_IS ",nrnk %" FLA_IS ",ldz %" FLA_IS ",ldb %" FLA_IS
                       ",ldv %" FLA_IS ",lds %" FLA_IS ",lwork %" FLA_IS ",liwork %" FLA_IS "",
                       *jobs, *jobz, *jobr, *jobq, *jobt, *jobf, *whtsvd, *m, *n, *ldf, *ldx, *ldy,
-                      *nrnk, *k, *ldz, *ldb, *ldv, *lds, *lwork, *liwork);
+                      *nrnk, *ldz, *ldb, *ldv, *lds, *lwork, *liwork);
     /* System generated locals */
     integer f_dim1, f_offset, x_dim1, x_offset, y_dim1, y_offset, z_dim1, z_offset, b_dim1,
         b_offset, v_dim1, v_offset, s_dim1, s_offset, i__1, i__2;

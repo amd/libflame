@@ -4,13 +4,13 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {1., 0.};
-static dcomplex c_b2 = {0., 0.};
-static aocl_int64_t c_n1 = -1;
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c__0 = 0;
-static doublereal c_b54 = 1.;
-static doublereal c_b64 = 0.;
+static complex c_b1 = {1.f, 0.f};
+static complex c_b2 = {0.f, 0.f};
+static integer c_n1 = -1;
+static integer c__1 = 1;
+static integer c__0 = 0;
+static real c_b54 = 1.f;
+static real c_b64 = 0.f;
 /* > \brief \b ZGEDMD computes the Dynamic Mode Decomposition (DMD) for a pair of data snapshot
  * matrices. */
 /* =========== DOCUMENTATION =========== */
@@ -382,12 +382,12 @@ see further */
 /* > \param[out] ZWORK */
 /* > \verbatim */
 /* > ZWORK (workspace/output) COMPLEX LZWORK-by-1 array */
-/* > ZWORK is used as scomplex workspace in the scomplex SVD, as */
+/* > ZWORK is used as complex workspace in the complex SVD, as */
 /* > specified by WHTSVD (1,2, 3 or 4) and for ZGEEV for computing */
 /* > the eigenvalues of a Rayleigh quotient. */
 /* > If the call to ZGEDMD is only workspace query, then */
-/* > ZWORK(1) contains the minimal scomplex workspace length and */
-/* > ZWORK(2) is the optimal scomplex workspace length. */
+/* > ZWORK(1) contains the minimal complex workspace length and */
+/* > ZWORK(2) is the optimal complex workspace length. */
 /* > Hence, the length of work is at least 2. */
 /* > See the description of LZWORK. */
 /* > \endverbatim */
@@ -504,84 +504,89 @@ LIWORK >=1 */
 /* ............................................................. */
 /* ............................................................. */
 /* Subroutine */
-/** Generated wrapper function */
-void zgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int_t *whtsvd, aocl_int_t *m, aocl_int_t *n, dcomplex *x, aocl_int_t *ldx, dcomplex *y, aocl_int_t *ldy, aocl_int_t *nrnk, doublereal *tol, aocl_int_t *k, dcomplex *eigs, dcomplex *z__, aocl_int_t *ldz, doublereal *res, dcomplex *b, aocl_int_t *ldb, dcomplex *w, aocl_int_t *ldw, dcomplex *s, aocl_int_t *lds, dcomplex *zwork, aocl_int_t *lzwork, doublereal *rwork, aocl_int_t *lrwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zgedmd(jobs, jobz, jobr, jobf, whtsvd, m, n, x, ldx, y, ldy, nrnk, tol, k, eigs, z__, ldz, res, b, ldb, w, ldw, s, lds, zwork, lzwork, rwork, lrwork, iwork, liwork, info);
-#else
-    aocl_int64_t whtsvd_64 = *whtsvd;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldx_64 = *ldx;
-    aocl_int64_t ldy_64 = *ldy;
-    aocl_int64_t nrnk_64 = *nrnk;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldw_64 = *ldw;
-    aocl_int64_t lds_64 = *lds;
-    aocl_int64_t lzwork_64 = *lzwork;
-    aocl_int64_t lrwork_64 = *lrwork;
-    aocl_int64_t liwork_64 = *liwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_zgedmd(jobs, jobz, jobr, jobf, &whtsvd_64, &m_64, &n_64, x, &ldx_64, y, &ldy_64, &nrnk_64, tol, &k_64, eigs, z__, &ldz_64, res, b, &ldb_64, w, &ldw_64, s, &lds_64, zwork, &lzwork_64, rwork, &lrwork_64, iwork, &liwork_64, &info_64);
-
-    *k = (aocl_int_t)k_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int64_t *whtsvd, aocl_int64_t *m,
-             aocl_int64_t *n, dcomplex *x, aocl_int64_t *ldx, dcomplex *y,
-             aocl_int64_t *ldy, aocl_int64_t *nrnk, doublereal *tol, aocl_int64_t *k,
-             dcomplex *eigs, dcomplex *z__, aocl_int64_t *ldz, doublereal *res,
-             dcomplex *b, aocl_int64_t *ldb, dcomplex *w, aocl_int64_t *ldw,
-             dcomplex *s, aocl_int64_t *lds, dcomplex *zwork, aocl_int64_t *lzwork,
-             doublereal *rwork, aocl_int64_t *lrwork, aocl_int_t *iwork, aocl_int64_t *liwork,
-             aocl_int64_t *info)
+void zgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, integer *m,
+             integer *n, complex *x, integer *ldx, complex *y, integer *ldy, integer *nrnk,
+             real *tol, integer *k, complex *eigs, complex *z__, integer *ldz, real *res,
+             complex *b, integer *ldb, complex *w, integer *ldw, complex *s, integer *lds,
+             complex *zwork, integer *lzwork, real *rwork, integer *lrwork, integer *iwork,
+             integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgedmd inputs: jobs %c, jobz %c, jobr %c, jobf %c, whtsvd %" FLA_IS
                       ", m %" FLA_IS ", n %" FLA_IS ", ldx %" FLA_IS,
                       ", ldy %" FLA_IS ", nrnk %" FLA_IS ", ldz %" FLA_IS ", ldb %" FLA_IS
-                      ", ldw %" FLA_IS ", lds %" FLA_IS ", lzwork %" FLA_IS ", lrwork %" FLA_IS
-                      ", liwork %" FLA_IS "",
+                      ", ldw %" FLA_IS ", lds %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",
                       *jobs, *jobz, *jobr, *jobf, *whtsvd, *m, *n, *ldx, *ldy, *nrnk, *ldz, *ldb,
-                      *ldw, *lds, *lzwork, *lrwork, *liwork);
+                      *ldw, *lds, *lwork, *liwork);
     /* System generated locals */
-    aocl_int64_t x_dim1, x_offset, y_dim1, y_offset, z_dim1, z_offset, b_dim1, b_offset, w_dim1,
+    integer x_dim1, x_offset, y_dim1, y_offset, z_dim1, z_offset, b_dim1, b_offset, w_dim1,
         w_offset, s_dim1, s_offset, i__1, i__2, i__3, i__4, i__5, i__6;
-    doublereal r__1;
+    real r__1;
     doublereal d__1;
-    dcomplex q__1, q__2;
+    complex q__1, q__2;
     /* Builtin functions */
-    double sqrt(doublereal), c_abs(dcomplex *);
+    double sqrt(doublereal), c_abs(complex *);
     /* Local variables */
-    aocl_int64_t i__, j;
-    doublereal ofl, ssum;
-    aocl_int64_t info1, info2;
-    doublereal xscl1, xscl2, scale;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    integer i__, j;
+    real ofl, ssum;
+    integer info1, info2;
+    real xscl1, xscl2, scale;
+    extern logical lsame_(char *, char *, integer, integer);
     logical badxy;
-    doublereal small_val;
+    real small_val;
+    extern /* Subroutine */
+        void
+        zgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
+               complex *, integer *, complex *, complex *, integer *);
     char jobzl[1];
+    extern /* Subroutine */
+        void
+        zgeev_(char *, char *, integer *, complex *, integer *, complex *, complex *, integer *,
+               complex *, integer *, complex *, integer *, real *, integer *);
     logical wntex;
-    extern doublereal dlamch_(char *);
-    extern logical disnan_(doublereal *);
+    extern /* Subroutine */
+        void
+        zaxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    extern real dznrm2_(integer *, complex *, integer *), dlamch_(char *);
+    extern logical disnan_(real *);
+    extern /* Subroutine */
+        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     char t_or_n__[1];
+    extern /* Subroutine */
+        void
+        zdscal_(integer *, real *, complex *, integer *),
+        zgesdd_(char *, integer *, integer *, complex *, integer *, real *, complex *, integer *,
+                complex *, integer *, complex *, integer *, real *, integer *, integer *),
+        zlascl_();
+    extern integer izamax_(integer *, complex *, integer *);
     logical sccolx, sccoly;
-    aocl_int64_t lwrsdd, mwrsdd;
-    aocl_int64_t iminwr;
+    integer lwrsdd, mwrsdd;
+    extern /* Subroutine */
+        void
+        zgesvd_(char *, char *, integer *, integer *, complex *, integer *, real *, complex *,
+                integer *, complex *, integer *, complex *, integer *, real *, integer *),
+        zlacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *);
+    integer iminwr;
     logical wntref, wntvec;
-    doublereal rootsc;
-    aocl_int64_t lwrkev, mlwork, mwrkev, numrnk, olwork, lwrsvd, mwrsvd, mlrwrk;
+    real rootsc;
+    integer lwrkev, mlwork, mwrkev, numrnk, olwork, lwrsvd, mwrsvd, mlrwrk;
     logical lquery, wntres;
     char jsvopt[1];
-    aocl_int64_t lwrsvj, mwrsvj;
-    doublereal rdummy[2];
-    aocl_int64_t lwrsvq, mwrsvq;
+    integer lwrsvj, mwrsvj;
+    real rdummy[2];
+    extern /* Subroutine */
+        void
+        zgejsv_(char *, char *, char *, char *, char *, char *, integer *, integer *, complex *,
+                integer *, real *, complex *, integer *, complex *, integer *, complex *, integer *,
+                real *, integer *, integer *, integer *),
+        zlassq_(integer *, complex *, integer *, real *, real *);
+    integer lwrsvq, mwrsvq;
+    extern /* Subroutine */
+        void
+        zgesvdq_(char *, char *, char *, char *, char *, integer *, integer *, complex *, integer *,
+                 real *, complex *, integer *, complex *, integer *, integer *, integer *,
+                 integer *, complex *, integer *, real *, integer *, integer *);
     /* ...Translated by Pacific-Sierra Research vf90 Personal 3.4N3 02:54:45 10/25/24 */
     /* ...Switches: */
     /* -- LAPACK driver routine -- */
@@ -679,7 +684,7 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
     {
         *info = -12;
     }
-    else if(*tol < 0. || *tol >= 1.)
+    else if(*tol < 0.f || *tol >= 1.f)
     {
         *info = -13;
     }
@@ -714,11 +719,11 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
             if(lquery)
             {
                 iwork[1] = 1;
-                rwork[1] = 1.;
-                zwork[1].real = 2.;
-                zwork[1].imag = 0.; // , expr subst
-                zwork[2].real = 2.;
-                zwork[2].imag = 0.; // , expr subst
+                rwork[1] = 1.f;
+                zwork[1].r = 2.f;
+                zwork[1].i = 0.f; // , expr subst
+                zwork[2].r = 2.f;
+                zwork[2].i = 0.f; // , expr subst
             }
             else
             {
@@ -748,9 +753,9 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
             mlrwrk = fla_max(i__1, i__2);
             if(lquery)
             {
-                aocl_lapack_zgesvd("O", "S", m, n, &x[x_offset], ldx, &rwork[1], &b[b_offset], ldb,
-                                   &w[w_offset], ldw, &zwork[1], &c_n1, rdummy, &info1);
-                lwrsvd = (integer)zwork[1].real;
+                zgesvd_("O", "S", m, n, &x[x_offset], ldx, &rwork[1], &b[b_offset], ldb,
+                        &w[w_offset], ldw, &zwork[1], &c_n1, rdummy, &info1);
+                lwrsvd = (integer)zwork[1].r;
                 olwork = fla_max(2, lwrsvd);
             }
         }
@@ -780,11 +785,11 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
             mlrwrk = fla_max(i__1, i__2);
             if(lquery)
             {
-                aocl_lapack_zgesdd("O", m, n, &x[x_offset], ldx, &rwork[1], &b[b_offset], ldb,
-                                   &w[w_offset], ldw, &zwork[1], &c_n1, rdummy, &iwork[1], &info1);
+                zgesdd_("O", m, n, &x[x_offset], ldx, &rwork[1], &b[b_offset], ldb, &w[w_offset],
+                        ldw, &zwork[1], &c_n1, rdummy, &iwork[1], &info1);
                 /* Computing MAX */
                 i__1 = mwrsdd;
-                i__2 = (integer)zwork[1].real; // , expr subst
+                i__2 = (integer)zwork[1].r; // , expr subst
                 lwrsdd = fla_max(i__1, i__2);
                 /* Possible bug in ZGESDD optimal workspace size. */
                 olwork = fla_max(2, lwrsdd);
@@ -792,11 +797,11 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         }
         else if(*whtsvd == 3)
         {
-            aocl_lapack_zgesvdq("H", "P", "N", "R", "R", m, n, &x[x_offset], ldx, &rwork[1],
-                                &z__[z_offset], ldz, &w[w_offset], ldw, &numrnk, &iwork[1], &c_n1,
-                                &zwork[1], &c_n1, rdummy, &c_n1, &info1);
+            zgesvdq_("H", "P", "N", "R", "R", m, n, &x[x_offset], ldx, &rwork[1], &z__[z_offset],
+                     ldz, &w[w_offset], ldw, &numrnk, &iwork[1], &c_n1, &zwork[1], &c_n1, rdummy,
+                     &c_n1, &info1);
             iminwr = iwork[1];
-            mwrsvq = (integer)zwork[2].real;
+            mwrsvq = (integer)zwork[2].r;
             mlwork = fla_max(2, mwrsvq);
             /* Computing MAX */
             i__1 = mlrwrk;
@@ -804,18 +809,18 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
             mlrwrk = fla_max(i__1, i__2);
             if(lquery)
             {
-                lwrsvq = (integer)zwork[1].real;
+                lwrsvq = (integer)zwork[1].r;
                 olwork = fla_max(2, lwrsvq);
             }
         }
         else if(*whtsvd == 4)
         {
             *(unsigned char *)jsvopt = 'J';
-            aocl_lapack_zgejsv("F", "U", jsvopt, "R", "N", "P", m, n, &x[x_offset], ldx, &rwork[1],
-                               &z__[z_offset], ldz, &w[w_offset], ldw, &zwork[1], &c_n1, rdummy,
-                               &c_n1, &iwork[1], &info1);
+            zgejsv_("F", "U", jsvopt, "R", "N", "P", m, n, &x[x_offset], ldx, &rwork[1],
+                    &z__[z_offset], ldz, &w[w_offset], ldw, &zwork[1], &c_n1, rdummy, &c_n1,
+                    &iwork[1], &info1);
             iminwr = iwork[1];
-            mwrsvj = (integer)zwork[2].real;
+            mwrsvj = (integer)zwork[2].r;
             mlwork = fla_max(2, mwrsvj);
             /* Computing MAX */
             /* Computing MAX */
@@ -826,7 +831,7 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
             mlrwrk = fla_max(i__1, i__2);
             if(lquery)
             {
-                lwrsvj = (integer)zwork[1].real;
+                lwrsvj = (integer)zwork[1].r;
                 olwork = fla_max(2, lwrsvj);
             }
         }
@@ -850,9 +855,9 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         mlrwrk = fla_max(i__1, i__2);
         if(lquery)
         {
-            aocl_lapack_zgeev("N", jobzl, n, &s[s_offset], lds, &eigs[1], &w[w_offset], ldw,
-                              &w[w_offset], ldw, &zwork[1], &c_n1, &rwork[1], &info1);
-            lwrkev = (integer)zwork[1].real;
+            zgeev_("N", jobzl, n, &s[s_offset], lds, &eigs[1], &w[w_offset], ldw, &w[w_offset], ldw,
+                   &zwork[1], &c_n1, &rwork[1], &info1);
+            lwrkev = (integer)zwork[1].r;
             olwork = fla_max(olwork, lwrkev);
         }
         if(*liwork < iminwr && !lquery)
@@ -871,19 +876,19 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZGEDMD", &i__1, (ftnlen)6);
+        xerbla_("ZGEDMD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
         /* Return minimal and optimal workspace sizes */
-        iwork[1] = (aocl_int_t)(iminwr);
-        rwork[1] = (doublereal)mlrwrk;
-        zwork[1].real = (doublereal)mlwork;
-        zwork[1].imag = 0.; // , expr subst
-        zwork[2].real = (doublereal)olwork;
-        zwork[2].imag = 0.; // , expr subst
+        iwork[1] = iminwr;
+        rwork[1] = (real)mlrwrk;
+        zwork[1].r = (real)mlwork;
+        zwork[1].i = 0.f; // , expr subst
+        zwork[2].r = (real)olwork;
+        zwork[2].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -903,16 +908,16 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* WORK(i) = DZNRM2( M, X(1,i), 1 ) */
-            scale = 0.;
-            aocl_lapack_zlassq(m, &x[i__ * x_dim1 + 1], &c__1, &scale, &ssum);
+            scale = 0.f;
+            zlassq_(m, &x[i__ * x_dim1 + 1], &c__1, &scale, &ssum);
             if(disnan_(&scale) || disnan_(&ssum))
             {
                 *k = 0;
                 *info = -8;
                 i__2 = -(*info);
-                aocl_blas_xerbla("ZGEDMD", &i__2, (ftnlen)6);
+                xerbla_("ZGEDMD", &i__2, (ftnlen)6);
             }
-            if(scale != 0. && ssum != 0.)
+            if(scale != 0.f && ssum != 0.f)
             {
                 rootsc = sqrt(ssum);
                 if(scale >= ofl / rootsc)
@@ -927,24 +932,24 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
                     /* underflow may occur in the smallest entries */
                     /* of X(:,i). The relative backward and forward */
                     /* errors are small in the ell_2 norm. */
-                    r__1 = 1. / rootsc;
-                    aocl_lapack_zlascl("G", &c__0, &c__0, &scale, &r__1, m, &c__1,
-                                       &x[i__ * x_dim1 + 1], ldx, &info2);
+                    r__1 = 1.f / rootsc;
+                    zlascl_("G", &c__0, &c__0, &scale, &r__1, m, &c__1, &x[i__ * x_dim1 + 1], ldx,
+                            &info2);
                     rwork[i__] = -scale * (rootsc / (doublereal)(*m));
                 }
                 else
                 {
                     /* X(:,i) will be scaled to unit 2-norm */
                     rwork[i__] = scale * rootsc;
-                    aocl_lapack_zlascl("G", &c__0, &c__0, &rwork[i__], &c_b54, m, &c__1,
-                                       &x[i__ * x_dim1 + 1], ldx, &info2);
+                    zlascl_("G", &c__0, &c__0, &rwork[i__], &c_b54, m, &c__1, &x[i__ * x_dim1 + 1],
+                            ldx, &info2);
                     /* X(1:M,i) = (ONE/RWORK(i)) * X(1:M,i) ! INTRINSIC */
                     /* LAPACK CALL */
                 }
             }
             else
             {
-                rwork[i__] = 0.;
+                rwork[i__] = 0.f;
                 ++(*k);
             }
         }
@@ -955,7 +960,7 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
             *k = 0;
             *info = -8;
             i__1 = -(*info);
-            aocl_blas_xerbla("ZGEDMD", &i__1, (ftnlen)6);
+            xerbla_("ZGEDMD", &i__1, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
@@ -963,22 +968,22 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* Now, apply the same scaling to the columns of Y. */
-            if(rwork[i__] > 0.)
+            if(rwork[i__] > 0.f)
             {
                 /* ! BLAS CALL */
-                r__1 = 1. / rwork[i__];
-                aocl_blas_zdscal(m, &r__1, &y[i__ * y_dim1 + 1], &c__1);
+                r__1 = 1.f / rwork[i__];
+                zdscal_(m, &r__1, &y[i__ * y_dim1 + 1], &c__1);
                 /* Y(1:M,i) = (ONE/RWORK(i)) * Y(1:M,i) ! INTRINSIC */
             }
-            else if(rwork[i__] < 0.)
+            else if(rwork[i__] < 0.f)
             {
                 r__1 = -rwork[i__];
-                d__1 = 1. / (doublereal)(*m);
-                aocl_lapack_zlascl("G", &c__0, &c__0, &r__1, &d__1, m, &c__1, &y[i__ * y_dim1 + 1],
-                                   ldy, &info2);
+                d__1 = 1.f / (doublereal)(*m);
+                zlascl_("G", &c__0, &c__0, &r__1, &d__1, m, &c__1, &y[i__ * y_dim1 + 1], ldy,
+                        &info2);
                 /* LAPACK CALL */
             }
-            else if(c_abs(&y[aocl_blas_izamax(m, &y[i__ * y_dim1 + 1], &c__1) + i__ * y_dim1]) != 0.)
+            else if(c_abs(&y[izamax_(m, &y[i__ * y_dim1 + 1], &c__1) + i__ * y_dim1]) != 0.f)
             {
                 /* X(:,i) is zero vector. For consistency, */
                 /* Y(:,i) should also be zero. If Y(:,i) is not */
@@ -991,7 +996,7 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
                 /* ! BLAS CALL */
                 if(lsame_(jobs, "C", 1, 1))
                 {
-                    aocl_blas_zdscal(m, &c_b64, &y[i__ * y_dim1 + 1], &c__1);
+                    zdscal_(m, &c_b64, &y[i__ * y_dim1 + 1], &c__1);
                 }
             }
         }
@@ -1005,16 +1010,16 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* RWORK(i) = DZNRM2( M, Y(1,i), 1 ) */
-            scale = 0.;
-            aocl_lapack_zlassq(m, &y[i__ * y_dim1 + 1], &c__1, &scale, &ssum);
+            scale = 0.f;
+            zlassq_(m, &y[i__ * y_dim1 + 1], &c__1, &scale, &ssum);
             if(disnan_(&scale) || disnan_(&ssum))
             {
                 *k = 0;
                 *info = -10;
                 i__2 = -(*info);
-                aocl_blas_xerbla("ZGEDMD", &i__2, (ftnlen)6);
+                xerbla_("ZGEDMD", &i__2, (ftnlen)6);
             }
-            if(scale != 0. && ssum != 0.)
+            if(scale != 0.f && ssum != 0.f)
             {
                 rootsc = sqrt(ssum);
                 if(scale >= ofl / rootsc)
@@ -1029,46 +1034,46 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
                     /* underflow may occur in the smallest entries */
                     /* of Y(:,i). The relative backward and forward */
                     /* errors are small in the ell_2 norm. */
-                    r__1 = 1. / rootsc;
-                    aocl_lapack_zlascl("G", &c__0, &c__0, &scale, &r__1, m, &c__1,
-                                       &y[i__ * y_dim1 + 1], ldy, &info2);
+                    r__1 = 1.f / rootsc;
+                    zlascl_("G", &c__0, &c__0, &scale, &r__1, m, &c__1, &y[i__ * y_dim1 + 1], ldy,
+                            &info2);
                     rwork[i__] = -scale * (rootsc / (doublereal)(*m));
                 }
                 else
                 {
                     /* Y(:,i) will be scaled to unit 2-norm */
                     rwork[i__] = scale * rootsc;
-                    aocl_lapack_zlascl("G", &c__0, &c__0, &rwork[i__], &c_b54, m, &c__1,
-                                       &y[i__ * y_dim1 + 1], ldy, &info2);
+                    zlascl_("G", &c__0, &c__0, &rwork[i__], &c_b54, m, &c__1, &y[i__ * y_dim1 + 1],
+                            ldy, &info2);
                     /* Y(1:M,i) = (ONE/RWORK(i)) * Y(1:M,i) ! INTRINSIC */
                     /* LAPACK CALL */
                 }
             }
             else
             {
-                rwork[i__] = 0.;
+                rwork[i__] = 0.f;
             }
         }
         i__1 = *n;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* Now, apply the same scaling to the columns of X. */
-            if(rwork[i__] > 0.)
+            if(rwork[i__] > 0.f)
             {
                 /* ! BLAS CALL */
-                r__1 = 1. / rwork[i__];
-                aocl_blas_zdscal(m, &r__1, &x[i__ * x_dim1 + 1], &c__1);
+                r__1 = 1.f / rwork[i__];
+                zdscal_(m, &r__1, &x[i__ * x_dim1 + 1], &c__1);
                 /* X(1:M,i) = (ONE/RWORK(i)) * X(1:M,i) ! INTRINSIC */
             }
-            else if(rwork[i__] < 0.)
+            else if(rwork[i__] < 0.f)
             {
                 r__1 = -rwork[i__];
-                d__1 = 1. / (doublereal)(*m);
-                aocl_lapack_zlascl("G", &c__0, &c__0, &r__1, &d__1, m, &c__1, &x[i__ * x_dim1 + 1],
-                                   ldx, &info2);
+                d__1 = 1.f / (doublereal)(*m);
+                zlascl_("G", &c__0, &c__0, &r__1, &d__1, m, &c__1, &x[i__ * x_dim1 + 1], ldx,
+                        &info2);
                 /* LAPACK CALL */
             }
-            else if(c_abs(&x[aocl_blas_izamax(m, &x[i__ * x_dim1 + 1], &c__1) + i__ * x_dim1]) != 0.)
+            else if(c_abs(&x[izamax_(m, &x[i__ * x_dim1 + 1], &c__1) + i__ * x_dim1]) != 0.f)
             {
                 /* Y(:,i) is zero vector. If X(:,i) is not */
                 /* zero, then a warning flag is raised. */
@@ -1087,37 +1092,37 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
     numrnk = *n;
     if(*whtsvd == 1)
     {
-        aocl_lapack_zgesvd("O", "S", m, n, &x[x_offset], ldx, &rwork[1], &b[b_offset], ldb,
-                           &w[w_offset], ldw, &zwork[1], lzwork, &rwork[*n + 1], &info1);
+        zgesvd_("O", "S", m, n, &x[x_offset], ldx, &rwork[1], &b[b_offset], ldb, &w[w_offset], ldw,
+                &zwork[1], lzwork, &rwork[*n + 1], &info1);
         /* LAPACK CALL */
         *(unsigned char *)t_or_n__ = 'C';
     }
     else if(*whtsvd == 2)
     {
-        aocl_lapack_zgesdd("O", m, n, &x[x_offset], ldx, &rwork[1], &b[b_offset], ldb, &w[w_offset],
-                           ldw, &zwork[1], lzwork, &rwork[*n + 1], &iwork[1], &info1);
+        zgesdd_("O", m, n, &x[x_offset], ldx, &rwork[1], &b[b_offset], ldb, &w[w_offset], ldw,
+                &zwork[1], lzwork, &rwork[*n + 1], &iwork[1], &info1);
         /* LAPACK CALL */
         *(unsigned char *)t_or_n__ = 'C';
     }
     else if(*whtsvd == 3)
     {
         i__1 = *lrwork - *n;
-        aocl_lapack_zgesvdq("H", "P", "N", "R", "R", m, n, &x[x_offset], ldx, &rwork[1],
-                            &z__[z_offset], ldz, &w[w_offset], ldw, &numrnk, &iwork[1], liwork,
-                            &zwork[1], lzwork, &rwork[*n + 1], &i__1, &info1);
+        zgesvdq_("H", "P", "N", "R", "R", m, n, &x[x_offset], ldx, &rwork[1], &z__[z_offset], ldz,
+                 &w[w_offset], ldw, &numrnk, &iwork[1], liwork, &zwork[1], lzwork, &rwork[*n + 1],
+                 &i__1, &info1);
         /* ! LAPACK CALL */
         /* LAPACK CALL */
-        aocl_lapack_zlacpy("A", m, &numrnk, &z__[z_offset], ldz, &x[x_offset], ldx);
+        zlacpy_("A", m, &numrnk, &z__[z_offset], ldz, &x[x_offset], ldx);
         *(unsigned char *)t_or_n__ = 'C';
     }
     else if(*whtsvd == 4)
     {
         i__1 = *lrwork - *n;
-        aocl_lapack_zgejsv("F", "U", jsvopt, "R", "N", "P", m, n, &x[x_offset], ldx, &rwork[1],
-                           &z__[z_offset], ldz, &w[w_offset], ldw, &zwork[1], lzwork,
-                           &rwork[*n + 1], &i__1, &iwork[1], &info1);
+        zgejsv_("F", "U", jsvopt, "R", "N", "P", m, n, &x[x_offset], ldx, &rwork[1], &z__[z_offset],
+                ldz, &w[w_offset], ldw, &zwork[1], lzwork, &rwork[*n + 1], &i__1, &iwork[1],
+                &info1);
         /* LAPACK CALL */
-        aocl_lapack_zlacpy("A", m, n, &z__[z_offset], ldz, &x[x_offset], ldx);
+        zlacpy_("A", m, n, &z__[z_offset], ldz, &x[x_offset], ldx);
         /* LAPACK CALL */
         *(unsigned char *)t_or_n__ = 'N';
         xscl1 = rwork[*n + 1];
@@ -1130,7 +1135,7 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         /* to rescale the data (X and Y). */
         if(xscl1 != xscl2)
         {
-            aocl_lapack_zlascl("G", &c__0, &c__0, &xscl1, &xscl2, m, n, &y[y_offset], ldy, &info2);
+            zlascl_("G", &c__0, &c__0, &xscl1, &xscl2, m, n, &y[y_offset], ldy, &info2);
         }
     }
     if(info1 > 0)
@@ -1141,7 +1146,7 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if(rwork[1] == 0.)
+    if(rwork[1] == 0.f)
     {
         /* The largest computed singular value of (scaled) */
         /* X is zero. Return error code -8 */
@@ -1149,7 +1154,7 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         *k = 0;
         *info = -8;
         i__1 = -(*info);
-        aocl_blas_xerbla("ZGEDMD", &i__1, (ftnlen)6);
+        xerbla_("ZGEDMD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -1213,8 +1218,8 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* ! BLAS CALL */
-            r__1 = 1. / rwork[i__];
-            aocl_blas_zdscal(n, &r__1, &w[i__ * w_dim1 + 1], &c__1);
+            r__1 = 1.f / rwork[i__];
+            zdscal_(n, &r__1, &w[i__ * w_dim1 + 1], &c__1);
             /* W(1:N,i) = (ONE/RWORK(i)) * W(1:N,i) ! INTRINSIC */
         }
     }
@@ -1230,7 +1235,7 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         i__1 = *k;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            rwork[*n + i__] = 1. / rwork[i__];
+            rwork[*n + i__] = 1.f / rwork[i__];
         }
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
@@ -1240,13 +1245,13 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
             {
                 i__3 = i__ + j * w_dim1;
                 i__4 = *n + i__;
-                q__2.real = rwork[i__4];
-                q__2.imag = 0.; // , expr subst
+                q__2.r = rwork[i__4];
+                q__2.i = 0.f; // , expr subst
                 i__5 = i__ + j * w_dim1;
-                q__1.real = q__2.real * w[i__5].real - q__2.imag * w[i__5].imag;
-                q__1.imag = q__2.real * w[i__5].imag + q__2.imag * w[i__5].real; // , expr subst
-                w[i__3].real = q__1.real;
-                w[i__3].imag = q__1.imag; // , expr subst
+                q__1.r = q__2.r * w[i__5].r - q__2.i * w[i__5].i;
+                q__1.i = q__2.r * w[i__5].i + q__2.i * w[i__5].r; // , expr subst
+                w[i__3].r = q__1.r;
+                w[i__3].i = q__1.i; // , expr subst
             }
         }
     }
@@ -1255,8 +1260,8 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         /* Need A*U(:,1:K)=Y*V_k*inv(diag(WORK(1:K))) */
         /* for computing the refined Ritz vectors */
         /* (optionally, outside ZGEDMD). */
-        aocl_blas_zgemm("N", t_or_n__, m, k, n, &c_b1, &y[y_offset], ldy, &w[w_offset], ldw, &c_b2,
-                        &z__[z_offset], ldz);
+        zgemm_("N", t_or_n__, m, k, n, &c_b1, &y[y_offset], ldy, &w[w_offset], ldw, &c_b2,
+               &z__[z_offset], ldz);
         /* Z(1:M,1:K)=MATMUL(Y(1:M,1:N),TRANSPOSE(CONJG(W(1:K,1:N)))) ! */
         /* Z(1:M,1:K)=MATMUL(Y(1:M,1:N),W(1:N,1:K)) ! */
         /* At this point Z contains */
@@ -1265,11 +1270,11 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         /* This matrix is returned in the array B and */
         /* it can be used to compute refined Ritz vectors. */
         /* BLAS CALL */
-        aocl_lapack_zlacpy("A", m, k, &z__[z_offset], ldz, &b[b_offset], ldb);
+        zlacpy_("A", m, k, &z__[z_offset], ldz, &b[b_offset], ldb);
         /* B(1:M,1:K) = Z(1:M,1:K) ! INTRINSIC */
         /* BLAS CALL */
-        aocl_blas_zgemm("C", "N", k, k, m, &c_b1, &x[x_offset], ldx, &z__[z_offset], ldz, &c_b2,
-                        &s[s_offset], lds);
+        zgemm_("C", "N", k, k, m, &c_b1, &x[x_offset], ldx, &z__[z_offset], ldz, &c_b2,
+               &s[s_offset], lds);
         /* S(1:K,1:K) = MATMUL(TRANSPOSE(CONJG(X(1:M,1:K))),Z(1:M,1:K)) */
         /* At this point S = U^H * A * U is the Rayleigh quotient. */
         /* BLAS CALL */
@@ -1279,12 +1284,12 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         /* A * U(:,1:K) is not explicitly needed and the */
         /* computation is organized differently. The Rayleigh */
         /* quotient is computed more efficiently. */
-        aocl_blas_zgemm("C", "N", k, n, m, &c_b1, &x[x_offset], ldx, &y[y_offset], ldy, &c_b2,
-                        &z__[z_offset], ldz);
+        zgemm_("C", "N", k, n, m, &c_b1, &x[x_offset], ldx, &y[y_offset], ldy, &c_b2,
+               &z__[z_offset], ldz);
         /* Z(1:K,1:N) = MATMUL( TRANSPOSE(CONJG(X(1:M,1:K))), Y(1:M,1:N) */
         /* BLAS CALL */
-        aocl_blas_zgemm("N", t_or_n__, k, k, n, &c_b1, &z__[z_offset], ldz, &w[w_offset], ldw,
-                        &c_b2, &s[s_offset], lds);
+        zgemm_("N", t_or_n__, k, k, n, &c_b1, &z__[z_offset], ldz, &w[w_offset], ldw, &c_b2,
+               &s[s_offset], lds);
         /* S(1:K,1:K) = MATMUL(Z(1:K,1:N),TRANSPOSE(CONJG(W(1:K,1:N)))) ! */
         /* S(1:K,1:K) = MATMUL(Z(1:K,1:N),(W(1:N,1:K))) ! */
         /* At this point S = U^H * A * U is the Rayleigh quotient. */
@@ -1295,18 +1300,18 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         {
             if(lsame_(t_or_n__, "N", 1, 1))
             {
-                aocl_lapack_zlacpy("A", n, k, &w[w_offset], ldw, &z__[z_offset], ldz);
+                zlacpy_("A", n, k, &w[w_offset], ldw, &z__[z_offset], ldz);
             }
             else
             {
-                aocl_lapack_zlacpy("A", k, n, &w[w_offset], ldw, &z__[z_offset], ldz);
+                zlacpy_("A", k, n, &w[w_offset], ldw, &z__[z_offset], ldz);
             }
         }
     }
     /* <5> Compute the Ritz values and (if requested) the */
     /* right eigenvectors of the Rayleigh quotient. */
-    aocl_lapack_zgeev("N", jobzl, k, &s[s_offset], lds, &eigs[1], &w[w_offset], ldw, &w[w_offset],
-                      ldw, &zwork[1], lzwork, &rwork[*n + 1], &info1);
+    zgeev_("N", jobzl, k, &s[s_offset], lds, &eigs[1], &w[w_offset], ldw, &w[w_offset], ldw,
+           &zwork[1], lzwork, &rwork[*n + 1], &info1);
     /* W(1:K,1:K) contains the eigenvectors of the Rayleigh */
     /* quotient. See the description of Z. */
     /* Also, see the description of ZGEEV. */
@@ -1331,8 +1336,8 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
                 /* A*U(:,1:K) already computed and stored in Z. */
                 /* For the residuals, need Y = A * U(:,1;
                K) * W. */
-                aocl_blas_zgemm("N", "N", m, k, k, &c_b1, &z__[z_offset], ldz, &w[w_offset], ldw,
-                                &c_b2, &y[y_offset], ldy);
+                zgemm_("N", "N", m, k, k, &c_b1, &z__[z_offset], ldz, &w[w_offset], ldw, &c_b2,
+                       &y[y_offset], ldy);
                 /* Y(1:M,1:K) = Z(1:M,1:K) * W(1:K,1:K) ! INTRINSIC */
                 /* This frees Z;
                 Y contains A * U(:,1:K) * W. */
@@ -1342,19 +1347,19 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
             {
                 /* Compute S = V_k * Sigma_k^(-1) * W, where */
                 /* V_k * Sigma_k^(-1) (or its adjoint) is stored in Z */
-                aocl_blas_zgemm(t_or_n__, "N", n, k, k, &c_b1, &z__[z_offset], ldz, &w[w_offset],
-                                ldw, &c_b2, &s[s_offset], lds);
+                zgemm_(t_or_n__, "N", n, k, k, &c_b1, &z__[z_offset], ldz, &w[w_offset], ldw, &c_b2,
+                       &s[s_offset], lds);
                 /* Then, compute Z = Y * S = */
                 /* = Y * V_k * Sigma_k^(-1) * W(1:K,1:K) = */
                 /* = A * U(:,1:K) * W(1:K,1:K) */
-                aocl_blas_zgemm("N", "N", m, k, n, &c_b1, &y[y_offset], ldy, &s[s_offset], lds,
-                                &c_b2, &z__[z_offset], ldz);
+                zgemm_("N", "N", m, k, n, &c_b1, &y[y_offset], ldy, &s[s_offset], lds, &c_b2,
+                       &z__[z_offset], ldz);
                 /* Save a copy of Z into Y and free Z for holding */
                 /* the Ritz vectors. */
-                aocl_lapack_zlacpy("A", m, k, &z__[z_offset], ldz, &y[y_offset], ldy);
+                zlacpy_("A", m, k, &z__[z_offset], ldz, &y[y_offset], ldy);
                 if(wntex)
                 {
-                    aocl_lapack_zlacpy("A", m, k, &z__[z_offset], ldz, &b[b_offset], ldb);
+                    zlacpy_("A", m, k, &z__[z_offset], ldz, &b[b_offset], ldb);
                 }
             }
         }
@@ -1362,13 +1367,13 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         {
             /* Compute S = V_k * Sigma_k^(-1) * W, where */
             /* V_k * Sigma_k^(-1) is stored in Z */
-            aocl_blas_zgemm(t_or_n__, "N", n, k, k, &c_b1, &z__[z_offset], ldz, &w[w_offset], ldw,
-                            &c_b2, &s[s_offset], lds);
+            zgemm_(t_or_n__, "N", n, k, k, &c_b1, &z__[z_offset], ldz, &w[w_offset], ldw, &c_b2,
+                   &s[s_offset], lds);
             /* Then, compute Z = Y * S = */
             /* = Y * V_k * Sigma_k^(-1) * W(1:K,1:K) = */
             /* = A * U(:,1:K) * W(1:K,1:K) */
-            aocl_blas_zgemm("N", "N", m, k, n, &c_b1, &y[y_offset], ldy, &s[s_offset], lds, &c_b2,
-                            &b[b_offset], ldb);
+            zgemm_("N", "N", m, k, n, &c_b1, &y[y_offset], ldy, &s[s_offset], lds, &c_b2,
+                   &b[b_offset], ldb);
             /* The above call replaces the following two calls */
             /* that were used in the developing-testing phase. */
             /* CALL ZGEMM( 'N', 'N', M, K, N, ZONE, Y, LDY, S, & */
@@ -1380,8 +1385,8 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         /* Compute the Ritz vectors */
         if(wntvec)
         {
-            aocl_blas_zgemm("N", "N", m, k, k, &c_b1, &x[x_offset], ldx, &w[w_offset], ldw, &c_b2,
-                            &z__[z_offset], ldz);
+            zgemm_("N", "N", m, k, k, &c_b1, &x[x_offset], ldx, &w[w_offset], ldw, &c_b2,
+                   &z__[z_offset], ldz);
         }
         /* Z(1:M,1:K) = MATMUL(X(1:M,1:K), W(1:K,1:K)) ! INTRINSIC */
         /* BLAS CALL */
@@ -1392,12 +1397,11 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
             {
                 /* ! BLAS CALL */
                 i__2 = i__;
-                q__1.real = -eigs[i__2].real;
-                q__1.imag = -eigs[i__2].imag; // , expr subst
-                aocl_blas_zaxpy(m, &q__1, &z__[i__ * z_dim1 + 1], &c__1, &y[i__ * y_dim1 + 1],
-                                &c__1);
+                q__1.r = -eigs[i__2].r;
+                q__1.i = -eigs[i__2].i; // , expr subst
+                zaxpy_(m, &q__1, &z__[i__ * z_dim1 + 1], &c__1, &y[i__ * y_dim1 + 1], &c__1);
                 /* Y(1:M,i) = Y(1:M,i) - EIGS(i) * Z(1:M,i) ! INTR */
-                res[i__] = aocl_blas_dznrm2(m, &y[i__ * y_dim1 + 1], &c__1);
+                res[i__] = dznrm2_(m, &y[i__ * y_dim1 + 1], &c__1);
                 /* BLAS CALL */
             }
         }

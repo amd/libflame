@@ -604,9 +604,8 @@ void dgeqp3rk_(integer *m, integer *n, integer *nrhs, integer *kmax, doublereal 
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgeqp3rk inputs: m %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS ",kmax %" FLA_IS
-                      ",lda %" FLA_IS ",k %" FLA_IS ",jpiv %" FLA_IS ",lwork %" FLA_IS
-                      ",iwork %" FLA_IS "",
-                      *m, *n, *nrhs, *kmax, *lda, *k, *jpiv, *lwork, *iwork);
+                      ",lda %" FLA_IS ",lwork %" FLA_IS "",
+                      *m, *n, *nrhs, *kmax, *lda, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     doublereal d__1, d__2;

@@ -37,7 +37,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZRSCL multiplies an n-element scomplex vector x by the scomplex scalar */
+/* > ZRSCL multiplies an n-element complex vector x by the complex scalar */
 /* > 1/a. This is done without overflow or underflow as long as */
 /* > the final result x/a does not overflow or underflow. */
 /* > \endverbatim */
@@ -78,32 +78,26 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void zrscl_(aocl_int_t *n, dcomplex *a, dcomplex *x, aocl_int_t *incx)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_zrscl(n, a, x, incx);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-
-    aocl_lapack_zrscl(&n_64, a, x, &incx_64);
-#endif
-}
-
-void aocl_lapack_zrscl(aocl_int64_t *n, dcomplex *a, dcomplex *x, aocl_int64_t *incx)
+void zrscl_(integer *n, doublecomplex *a, doublecomplex *x, integer *incx)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zrscl inputs: n %" FLA_IS ",incx %" FLA_IS "", *n, *incx);
     /* System generated locals */
     doublereal d__1, d__2;
-    dcomplex z__1;
+    doublecomplex z__1;
     /* Builtin functions */
-    double d_imag(dcomplex *);
+    double d_imag(doublecomplex *);
     /* Local variables */
     doublereal ai, ar, ui, ov, ur, absi, absr;
+    extern /* Subroutine */
+        void
+        zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     doublereal safmin, safmax;
+    extern /* Subroutine */
+        void
+        zdscal_(integer *, doublereal *, doublecomplex *, integer *),
+        zdrscl_(integer *, doublereal *, doublecomplex *, integer *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -137,14 +131,14 @@ void aocl_lapack_zrscl(aocl_int64_t *n, dcomplex *a, dcomplex *x, aocl_int64_t *
     safmax = 1. / safmin;
     ov = dlamch_("O");
     /* Initialize constants related to A. */
-    ar = a->real;
+    ar = a->r;
     ai = d_imag(a);
     absr = f2c_dabs(ar);
     absi = f2c_dabs(ai);
     if(ai == 0.)
     {
         /* If alpha is real, then we can use csrscl */
-        aocl_lapack_zdrscl(n, &ar, &x[1], incx);
+        zdrscl_(n, &ar, &x[1], incx);
     }
     else if(ar == 0.)
     {
@@ -152,26 +146,26 @@ void aocl_lapack_zrscl(aocl_int64_t *n, dcomplex *a, dcomplex *x, aocl_int64_t *
         /* alpha were real. */
         if(absi > safmax)
         {
-            aocl_blas_zdscal(n, &safmin, &x[1], incx);
+            zdscal_(n, &safmin, &x[1], incx);
             d__1 = -safmax / ai;
-            z__1.real = 0.;
-            z__1.imag = d__1; // , expr subst
-            aocl_blas_zscal(n, &z__1, &x[1], incx);
+            z__1.r = 0.;
+            z__1.i = d__1; // , expr subst
+            zscal_(n, &z__1, &x[1], incx);
         }
         else if(absi < safmin)
         {
             d__1 = -safmin / ai;
-            z__1.real = 0.;
-            z__1.imag = d__1; // , expr subst
-            aocl_blas_zscal(n, &z__1, &x[1], incx);
-            aocl_blas_zdscal(n, &safmax, &x[1], incx);
+            z__1.r = 0.;
+            z__1.i = d__1; // , expr subst
+            zscal_(n, &z__1, &x[1], incx);
+            zdscal_(n, &safmax, &x[1], incx);
         }
         else
         {
             d__1 = -1. / ai;
-            z__1.real = 0.;
-            z__1.imag = d__1; // , expr subst
-            aocl_blas_zscal(n, &z__1, &x[1], incx);
+            z__1.r = 0.;
+            z__1.i = d__1; // , expr subst
+            zscal_(n, &z__1, &x[1], incx);
         }
     }
     else
@@ -190,10 +184,10 @@ void aocl_lapack_zrscl(aocl_int64_t *n, dcomplex *a, dcomplex *x, aocl_int64_t *
             /* This means that both alphaR and alphaI are very small. */
             d__1 = safmin / ur;
             d__2 = -safmin / ui;
-            z__1.real = d__1;
-            z__1.imag = d__2; // , expr subst
-            aocl_blas_zscal(n, &z__1, &x[1], incx);
-            aocl_blas_zdscal(n, &safmax, &x[1], incx);
+            z__1.r = d__1;
+            z__1.i = d__2; // , expr subst
+            zscal_(n, &z__1, &x[1], incx);
+            zdscal_(n, &safmax, &x[1], incx);
         }
         else if(f2c_dabs(ur) > safmax || f2c_dabs(ui) > safmax)
         {
@@ -202,13 +196,13 @@ void aocl_lapack_zrscl(aocl_int64_t *n, dcomplex *a, dcomplex *x, aocl_int64_t *
                 /* This means that a and b are both Inf. No need for scaling. */
                 d__1 = 1. / ur;
                 d__2 = -1. / ui;
-                z__1.real = d__1;
-                z__1.imag = d__2; // , expr subst
-                aocl_blas_zscal(n, &z__1, &x[1], incx);
+                z__1.r = d__1;
+                z__1.i = d__2; // , expr subst
+                zscal_(n, &z__1, &x[1], incx);
             }
             else
             {
-                aocl_blas_zdscal(n, &safmin, &x[1], incx);
+                zdscal_(n, &safmin, &x[1], incx);
                 if(f2c_dabs(ur) > ov || f2c_dabs(ui) > ov)
                 {
                     /* Infs were generated. We do proper scaling to avoid them. */
@@ -226,17 +220,17 @@ void aocl_lapack_zrscl(aocl_int64_t *n, dcomplex *a, dcomplex *x, aocl_int64_t *
                     }
                     d__1 = 1. / ur;
                     d__2 = -1. / ui;
-                    z__1.real = d__1;
-                    z__1.imag = d__2; // , expr subst
-                    aocl_blas_zscal(n, &z__1, &x[1], incx);
+                    z__1.r = d__1;
+                    z__1.i = d__2; // , expr subst
+                    zscal_(n, &z__1, &x[1], incx);
                 }
                 else
                 {
                     d__1 = safmax / ur;
                     d__2 = -safmax / ui;
-                    z__1.real = d__1;
-                    z__1.imag = d__2; // , expr subst
-                    aocl_blas_zscal(n, &z__1, &x[1], incx);
+                    z__1.r = d__1;
+                    z__1.i = d__2; // , expr subst
+                    zscal_(n, &z__1, &x[1], incx);
                 }
             }
         }
@@ -244,9 +238,9 @@ void aocl_lapack_zrscl(aocl_int64_t *n, dcomplex *a, dcomplex *x, aocl_int64_t *
         {
             d__1 = 1. / ur;
             d__2 = -1. / ui;
-            z__1.real = d__1;
-            z__1.imag = d__2; // , expr subst
-            aocl_blas_zscal(n, &z__1, &x[1], incx);
+            z__1.r = d__1;
+            z__1.i = d__2; // , expr subst
+            zscal_(n, &z__1, &x[1], incx);
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

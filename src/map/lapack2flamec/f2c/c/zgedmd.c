@@ -1,57 +1,58 @@
-/* ./dgedmd.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./zgedmd.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
+static complex c_b1 = {1.f, 0.f};
+static complex c_b2 = {0.f, 0.f};
 static integer c_n1 = -1;
 static integer c__1 = 1;
 static integer c__0 = 0;
-static doublereal c_b45 = 1.f;
-static doublereal c_b55 = 0.f;
-static integer c__2 = 2;
-static doublereal c_b153 = -1.f;
-/* > \brief \b DGEDMD computes the Dynamic Mode Decomposition (DMD) for a pair of data snapshot
+static real c_b54 = 1.f;
+static real c_b64 = 0.f;
+/* > \brief \b ZGEDMD computes the Dynamic Mode Decomposition (DMD) for a pair of data snapshot
  * matrices. */
 /* =========== DOCUMENTATION =========== */
 /* Definition: */
 /* =========== */
-/* SUBROUTINE DGEDMD( JOBS, JOBZ, JOBR, JOBF, WHTSVD, & */
+/* SUBROUTINE ZGEDMD( JOBS, JOBZ, JOBR, JOBF, WHTSVD, & */
 /* M, N, X, LDX, Y, LDY, NRNK, TOL, & */
-/* K, REIG, IMEIG, Z, LDZ, RES, & */
-/* B, LDB, W, LDW, S, LDS, & */
-/* WORK, LWORK, IWORK, LIWORK, INFO ) */
-/* ..... */
-/* USE, INTRINSIC :: iso_fortran_env, only: real64 */
+/* K, EIGS, Z, LDZ, RES, B, LDB, & */
+/* W, LDW, S, LDS, ZWORK, LZWORK, & */
+/* RWORK, LRWORK, IWORK, LIWORK, INFO ) */
+/* ...... */
+/* USE iso_fortran_env */
 /* IMPLICIT NONE */
 /* INTEGER, PARAMETER :: WP = real64 */
-/* ..... */
+/* ...... */
 /* Scalar arguments */
 /* CHARACTER, INTENT(IN) :: JOBS, JOBZ, JOBR, JOBF */
 /* INTEGER, INTENT(IN) :: WHTSVD, M, N, LDX, LDY, & */
 /* NRNK, LDZ, LDB, LDW, LDS, & */
-/* LWORK, LIWORK */
+/* LIWORK, LRWORK, LZWORK */
 /* INTEGER, INTENT(OUT) :: K, INFO */
-/* doublereal, INTENT(IN) :: TOL */
+/* REAL, INTENT(IN) :: TOL */
 /* Array arguments */
-/* doublereal, INTENT(INOUT) :: X(LDX,*), Y(LDY,*) */
-/* doublereal, INTENT(OUT) :: Z(LDZ,*), B(LDB,*), & */
+/* COMPLEX, INTENT(INOUT) :: X(LDX,*), Y(LDY,*) */
+/* COMPLEX, INTENT(OUT) :: Z(LDZ,*), B(LDB,*), & */
 /* W(LDW,*), S(LDS,*) */
-/* doublereal, INTENT(OUT) :: REIG(*), IMEIG(*), & */
-/* RES(*) */
-/* doublereal, INTENT(OUT) :: WORK(*) */
+/* COMPLEX, INTENT(OUT) :: EIGS(*) */
+/* COMPLEX, INTENT(OUT) :: ZWORK(*) */
+/* REAL, INTENT(OUT) :: RES(*) */
+/* REAL, INTENT(OUT) :: RWORK(*) */
 /* INTEGER, INTENT(OUT) :: IWORK(*) */
 /* ............................................................ */
 /* > \par Purpose: */
 /* ============= */
 /* > \verbatim */
-/* > DGEDMD computes the Dynamic Mode Decomposition (DMD) for */
+/* > ZGEDMD computes the Dynamic Mode Decomposition (DMD) for */
 /* > a pair of data snapshot matrices. For the input matrices */
 /* > X and Y such that Y = A*X with an unaccessible matrix */
-/* > A, DGEDMD computes a certain number of Ritz pairs of A using */
+/* > A, ZGEDMD computes a certain number of Ritz pairs of A using */
 /* > the standard Rayleigh-Ritz extraction from a subspace of */
 /* > range(X) that is determined using the leading left singular */
-/* > vectors of X. Optionally, DGEDMD returns the residuals */
+/* > vectors of X. Optionally, ZGEDMD returns the residuals */
 /* > of the computed Ritz pairs, the information needed for */
 /* > a refinement of the Ritz vectors, or the eigenvectors of */
 /* > the Exact DMD. */
@@ -106,12 +107,12 @@ drmac@math.hr */
 /* > Approved for Public Release, Distribution Unlimited. */
 /* > Cleared by DARPA on September 29, 2022 */
 /* > \endverbatim */
-/* ...................................................................... */
+/* ............................................................ */
 /* Arguments */
 /* ========= */
 /* > \param[in] JOBS */
 /* > \verbatim */
-/* > JOBS (input) is CHARACTER*1 */
+/* > JOBS (input) CHARACTER*1 */
 /* > Determines whether the initial data snapshots are scaled */
 /* > by a diagonal matrix. */
 /* > 'S' :: The data snapshots matrices X and Y are multiplied */
@@ -177,14 +178,14 @@ drmac@math.hr */
 */
 /* > Allows for a selection of the SVD algorithm from the */
 /* > LAPACK library. */
-/* > 1 :: DGESVD (the QR SVD algorithm) */
-/* > 2 :: DGESDD (the Divide and Conquer algorithm;
+/* > 1 :: ZGESVD (the QR SVD algorithm) */
+/* > 2 :: ZGESDD (the Divide and Conquer algorithm;
 if enough */
 /* > workspace available, this is the fastest option) */
-/* > 3 :: DGESVDQ (the preconditioned QR SVD ;
+/* > 3 :: ZGESVDQ (the preconditioned QR SVD ;
 this and 4 */
 /* > are the most accurate options) */
-/* > 4 :: DGEJSV (the preconditioned Jacobi SVD;
+/* > 4 :: ZGEJSV (the preconditioned Jacobi SVD;
 this and 3 */
 /* > are the most accurate options) */
 /* > For the four methods above, a significant difference in */
@@ -212,9 +213,9 @@ this and 3 */
 /* > (the number of columns of X and Y). */
 /* > \endverbatim */
 /* ..... */
-/* > \param[in,out] X */
+/* > \param[in] LDX */
 /* > \verbatim */
-/* > X (input/output) doublereal M-by-N array */
+/* > X (input/output) COMPLEX M-by-N array */
 /* > > On entry, X contains the data snapshot matrix X. It is */
 /* > assumed that the column norms of X are in the range of */
 /* > the normalized floating point numbers. */
@@ -223,17 +224,14 @@ this and 3 */
 /* > data matrix X, U(:,1:K). All N columns of X contain all */
 /* > left singular vectors of the input matrix X. */
 /* > See the descriptions of K, Z and W. */
-/* > \endverbatim */
 /* ..... */
-/* > \param[in] LDX */
-/* > \verbatim */
 /* > LDX (input) INTEGER, LDX >= M */
 /* > The leading dimension of the array X. */
 /* > \endverbatim */
 /* ..... */
 /* > \param[in,out] Y */
 /* > \verbatim */
-/* > Y (input/workspace/output) doublereal M-by-N array */
+/* > Y (input/workspace/output) COMPLEX M-by-N array */
 /* > > On entry, Y contains the data snapshot matrix Y */
 /* > < On exit, */
 /* > If JOBR == 'R', the leading K columns of Y contain */
@@ -256,14 +254,13 @@ this and 3 */
 /* > i.e. how to truncate small singular values of the input */
 /* > matrix X. On input, if */
 /* > NRNK = -1 :: i-th singular value sigma(i) is truncated */
-/* > if sigma(i) <= TOL*sigma(1). */
+/* > if sigma(i) <= TOL*sigma(1) */
 /* > This option is recommended. */
 /* > NRNK = -2 :: i-th singular value sigma(i) is truncated */
 /* > if sigma(i) <= TOL*sigma(i-1) */
 /* > This option is included for R&D purposes. */
 /* > It requires highly accurate SVD, which */
 /* > may not be feasible. */
-/* > */
 /* > The numerical rank can be enforced by using positive */
 /* > value of NRNK as follows: */
 /* > 0 < NRNK <= N :: at most NRNK largest singular values */
@@ -277,7 +274,7 @@ this and 3 */
 /* ..... */
 /* > \param[in] TOL */
 /* > \verbatim */
-/* > TOL (input) doublereal, 0 <= TOL < 1 */
+/* > TOL (input) REAL, 0 <= TOL < 1 */
 /* > The tolerance for truncating small singular values. */
 /* > See the description of NRNK. */
 /* > \endverbatim */
@@ -292,61 +289,26 @@ this and 3 */
 /* > See the descriptions of NRNK and TOL. */
 /* > \endverbatim */
 /* ..... */
-/* > \param[out] REIG */
+/* > \param[out] EIGS */
 /* > \verbatim */
-/* > REIG (output) doublereal N-by-1 array */
-/* > The leading K (K<=N) entries of REIG contain */
-/* > the doublereal parts of the computed eigenvalues */
-/* > REIG(1:K) + sqrt(-1)*IMEIG(1:K). */
-/* > See the descriptions of K, IMEIG, and Z. */
-/* > \endverbatim */
-/* ..... */
-/* > \param[out] IMEIG */
-/* > \verbatim */
-/* > IMEIG (output) doublereal N-by-1 array */
-/* > The leading K (K<=N) entries of IMEIG contain */
-/* > the imaginary parts of the computed eigenvalues */
-/* > REIG(1:K) + sqrt(-1)*IMEIG(1:K). */
-/* > The eigenvalues are determined as follows: */
-/* > If IMEIG(i) == 0, then the corresponding eigenvalue is */
-/* > doublereal, LAMBDA(i) = REIG(i). */
-/* > If IMEIG(i)>0, then the corresponding complex */
-/* > conjugate pair of eigenvalues reads */
-/* > LAMBDA(i) = REIG(i) + sqrt(-1)*IMAG(i) */
-/* > LAMBDA(i+1) = REIG(i) - sqrt(-1)*IMAG(i) */
-/* > That is, complex conjugate pairs have consecutive */
-/* > indices (i,i+1), with the positive imaginary part */
-/* > listed first. */
-/* > See the descriptions of K, REIG, and Z. */
+/* > EIGS (output) COMPLEX N-by-1 array */
+/* > The leading K (K<=N) entries of EIGS contain */
+/* > the computed eigenvalues (Ritz values). */
+/* > See the descriptions of K, and Z. */
 /* > \endverbatim */
 /* ..... */
 /* > \param[out] Z */
 /* > \verbatim */
-/* > Z (workspace/output) doublereal M-by-N array */
-/* > If JOBZ =='V' then */
-/* > Z contains doublereal Ritz vectors as follows: */
-/* > If IMEIG(i)=0, then Z(:,i) is an eigenvector of */
-/* > the i-th Ritz value;
+/* > Z (workspace/output) COMPLEX M-by-N array */
+/* > If JOBZ =='V' then Z contains the Ritz vectors. Z(:,i) */
+/* > is an eigenvector of the i-th Ritz value;
 ||Z(:,i)||_2=1. */
-/* > If IMEIG(i) > 0 (and IMEIG(i+1) < 0) then */
-/* > [Z(:,i) Z(:,i+1)] span an invariant subspace and */
-/* > the Ritz values extracted from this subspace are */
-/* > REIG(i) + sqrt(-1)*IMEIG(i) and */
-/* > REIG(i) - sqrt(-1)*IMEIG(i). */
-/* > The corresponding eigenvectors are */
-/* > Z(:,i) + sqrt(-1)*Z(:,i+1) and */
-/* > Z(:,i) - sqrt(-1)*Z(:,i+1), respectively. */
-/* > || Z(:,i:i+1)||_F = 1. */
-/* > If JOBZ == 'F', then the above descriptions hold for */
-/* > the columns of X(:,1:K)*W(1:K,1:K), where the columns */
+/* > If JOBZ == 'F', then the Z(:,i)'s are given implicitly as */
+/* > the columns of X(:,1:K)*W(1:K,1:K), i.e. X(:,1:K)*W(:,i) */
+/* > is an eigenvector corresponding to EIGS(i). The columns */
 /* > of W(1:k,1:K) are the computed eigenvectors of the */
-/* > K-by-K Rayleigh quotient. The columns of W(1:K,1:K) */
-/* > are similarly structured: If IMEIG(i) == 0 then */
-/* > X(:,1:K)*W(:,i) is an eigenvector, and if IMEIG(i)>0 */
-/* > then X(:,1:K)*W(:,i)+sqrt(-1)*X(:,1:K)*W(:,i+1) and */
-/* > X(:,1:K)*W(:,i)-sqrt(-1)*X(:,1:K)*W(:,i+1) */
-/* > are the eigenvectors of LAMBDA(i), LAMBDA(i+1). */
-/* > See the descriptions of REIG, IMEIG, X and W. */
+/* > K-by-K Rayleigh quotient. */
+/* > See the descriptions of EIGS, X and W. */
 /* > \endverbatim */
 /* ..... */
 /* > \param[in] LDZ */
@@ -357,33 +319,21 @@ this and 3 */
 /* ..... */
 /* > \param[out] RES */
 /* > \verbatim */
-/* > RES (output) doublereal N-by-1 array */
+/* > RES (output) REAL N-by-1 array */
 /* > RES(1:K) contains the residuals for the K computed */
-/* > Ritz pairs. */
-/* > If LAMBDA(i) is doublereal, then */
-/* > RES(i) = || A * Z(:,i) - LAMBDA(i)*Z(:,i))||_2. */
-/* > If [LAMBDA(i), LAMBDA(i+1)] is a complex conjugate pair */
-/* > then */
-/* > RES(i)=RES(i+1) = || A * Z(:,i:i+1) - Z(:,i:i+1) *B||_F */
-/* > where B = [ doublereal(LAMBDA(i)) imag(LAMBDA(i)) ] */
-/* > [-imag(LAMBDA(i)) doublereal(LAMBDA(i)) ]. */
-/* > It holds that */
-/* > RES(i) = || A*ZC(:,i) - LAMBDA(i) *ZC(:,i) ||_2 */
-/* > RES(i+1) = || A*ZC(:,i+1) - LAMBDA(i+1)*ZC(:,i+1) ||_2 */
-/* > where ZC(:,i) = Z(:,i) + sqrt(-1)*Z(:,i+1) */
-/* > ZC(:,i+1) = Z(:,i) - sqrt(-1)*Z(:,i+1) */
-/* > See the description of REIG, IMEIG and Z. */
+/* > Ritz pairs, */
+/* > RES(i) = || A * Z(:,i) - EIGS(i)*Z(:,i))||_2. */
+/* > See the description of EIGS and Z. */
 /* > \endverbatim */
 /* ..... */
 /* > \param[out] B */
 /* > \verbatim */
-/* > B (output) doublereal M-by-N array. */
+/* > B (output) COMPLEX M-by-N array. */
 /* > IF JOBF =='R', B(1:M,1:K) contains A*U(:,1:K), and can */
 /* > be used for computing the refined vectors;
 see further */
 /* > details in the provided references. */
-/* > If JOBF == 'E', B(1:M,1;
-K) contains */
+/* > If JOBF == 'E', B(1:M,1:K) contains */
 /* > A*U(:,1:K)*W(1:K,1:K), which are the vectors from the */
 /* > Exact DMD, up to scaling by the inverse eigenvalues. */
 /* > If JOBF =='N', then B is not referenced. */
@@ -398,11 +348,10 @@ K) contains */
 /* ..... */
 /* > \param[out] W */
 /* > \verbatim */
-/* > W (workspace/output) doublereal N-by-N array */
+/* > W (workspace/output) COMPLEX N-by-N array */
 /* > On exit, W(1:K,1:K) contains the K computed */
-/* > eigenvectors of the matrix Rayleigh quotient (doublereal and */
-/* > imaginary parts for each complex conjugate pair of the */
-/* > eigenvalues). The Ritz vectors (returned in Z) are the */
+/* > eigenvectors of the matrix Rayleigh quotient. */
+/* > The Ritz vectors (returned in Z) are the */
 /* > product of X (containing a POD basis for the input */
 /* > matrix X) and W. See the descriptions of K, S, X and Z. */
 /* > W is also used as a workspace to temporarily store the */
@@ -417,10 +366,10 @@ K) contains */
 /* ..... */
 /* > \param[out] S */
 /* > \verbatim */
-/* > S (workspace/output) doublereal N-by-N array */
+/* > S (workspace/output) COMPLEX N-by-N array */
 /* > The array S(1:K,1:K) is used for the matrix Rayleigh */
 /* > quotient. This content is overwritten during */
-/* > the eigenvalue decomposition by DGEEV. */
+/* > the eigenvalue decomposition by ZGEEV. */
 /* > See the description of K. */
 /* > \endverbatim */
 /* ..... */
@@ -430,65 +379,77 @@ K) contains */
 /* > The leading dimension of the array S. */
 /* > \endverbatim */
 /* ..... */
-/* > \param[out] WORK */
+/* > \param[out] ZWORK */
 /* > \verbatim */
-/* > WORK (workspace/output) doublereal LWORK-by-1 array */
-/* > On exit, WORK(1:N) contains the singular values of */
+/* > ZWORK (workspace/output) COMPLEX LZWORK-by-1 array */
+/* > ZWORK is used as complex workspace in the complex SVD, as */
+/* > specified by WHTSVD (1,2, 3 or 4) and for ZGEEV for computing */
+/* > the eigenvalues of a Rayleigh quotient. */
+/* > If the call to ZGEDMD is only workspace query, then */
+/* > ZWORK(1) contains the minimal complex workspace length and */
+/* > ZWORK(2) is the optimal complex workspace length. */
+/* > Hence, the length of work is at least 2. */
+/* > See the description of LZWORK. */
+/* > \endverbatim */
+/* ..... */
+/* > \param[in] LZWORK */
+/* > \verbatim */
+/* > LZWORK (input) INTEGER */
+/* > The minimal length of the workspace vector ZWORK. */
+/* > LZWORK is calculated as MAX(LZWORK_SVD, LZWORK_ZGEEV), */
+/* > where LZWORK_ZGEEV = MAX( 1, 2*N ) and the minimal */
+/* > LZWORK_SVD is calculated as follows */
+/* > If WHTSVD == 1 :: ZGESVD :: */
+/* > LZWORK_SVD = MAX(1,2*MIN(M,N)+MAX(M,N)) */
+/* > If WHTSVD == 2 :: ZGESDD :: */
+/* > LZWORK_SVD = 2*MIN(M,N)*MIN(M,N)+2*MIN(M,N)+MAX(M,N) */
+/* > If WHTSVD == 3 :: ZGESVDQ :: */
+/* > LZWORK_SVD = obtainable by a query */
+/* > If WHTSVD == 4 :: ZGEJSV :: */
+/* > LZWORK_SVD = obtainable by a query */
+/* > If on entry LZWORK = -1, then a workspace query is */
+/* > assumed and the procedure only computes the minimal */
+/* > and the optimal workspace lengths and returns them in */
+/* > LZWORK(1) and LZWORK(2), respectively. */
+/* > \endverbatim */
+/* ..... */
+/* > \param[out] RWORK */
+/* > \verbatim */
+/* > RWORK (workspace/output) REAL LRWORK-by-1 array */
+/* > On exit, RWORK(1:N) contains the singular values of */
 /* > X (for JOBS=='N') or column scaled X (JOBS=='S', 'C'). */
-/* > If WHTSVD==4, then WORK(N+1) and WORK(N+2) contain */
-/* > scaling factor WORK(N+2)/WORK(N+1) used to scale X */
+/* > If WHTSVD==4, then RWORK(N+1) and RWORK(N+2) contain */
+/* > scaling factor RWORK(N+2)/RWORK(N+1) used to scale X */
 /* > and Y to avoid overflow in the SVD of X. */
 /* > This may be of interest if the scaling option is off */
 /* > and as many as possible smallest eigenvalues are */
 /* > desired to the highest feasible accuracy. */
-/* > If the call to DGEDMD is only workspace query, then */
-/* > WORK(1) contains the minimal workspace length and */
-/* > WORK(2) is the optimal workspace length. Hence, the */
-/* > leng of work is at least 2. */
-/* > See the description of LWORK. */
+/* > If the call to ZGEDMD is only workspace query, then */
+/* > RWORK(1) contains the minimal workspace length. */
+/* > See the description of LRWORK. */
 /* > \endverbatim */
 /* ..... */
-/* > \param[in] LWORK */
+/* > \param[in] LRWORK */
 /* > \verbatim */
-/* > LWORK (input) INTEGER */
-/* > The minimal length of the workspace vector WORK. */
-/* > LWORK is calculated as follows: */
-/* > If WHTSVD == 1 :: */
-/* > If JOBZ == 'V', then */
-/* > LWORK >= MAX(2, N + LWORK_SVD, N+MAX(1,4*N)). */
-/* > If JOBZ == 'N' then */
-/* > LWORK >= MAX(2, N + LWORK_SVD, N+MAX(1,3*N)). */
-/* > Here LWORK_SVD = MAX(1,3*N+M,5*N) is the minimal */
-/* > workspace length of DGESVD. */
-/* > If WHTSVD == 2 :: */
-/* > If JOBZ == 'V', then */
-/* > LWORK >= MAX(2, N + LWORK_SVD, N+MAX(1,4*N)) */
-/* > If JOBZ == 'N', then */
-/* > LWORK >= MAX(2, N + LWORK_SVD, N+MAX(1,3*N)) */
-/* > Here LWORK_SVD = MAX(M, 5*N*N+4*N)+3*N*N is the */
-/* > minimal workspace length of DGESDD. */
-/* > If WHTSVD == 3 :: */
-/* > If JOBZ == 'V', then */
-/* > LWORK >= MAX(2, N+LWORK_SVD,N+MAX(1,4*N)) */
-/* > If JOBZ == 'N', then */
-/* > LWORK >= MAX(2, N+LWORK_SVD,N+MAX(1,3*N)) */
-/* > Here LWORK_SVD = N+M+MAX(3*N+1, */
-/* > MAX(1,3*N+M,5*N),MAX(1,N)) */
-/* > is the minimal workspace length of DGESVDQ. */
-/* > If WHTSVD == 4 :: */
-/* > If JOBZ == 'V', then */
-/* > LWORK >= MAX(2, N+LWORK_SVD,N+MAX(1,4*N)) */
-/* > If JOBZ == 'N', then */
-/* > LWORK >= MAX(2, N+LWORK_SVD,N+MAX(1,3*N)) */
-/* > Here LWORK_SVD = MAX(7,2*M+N,6*N+2*N*N) is the */
-/* > minimal workspace length of DGEJSV. */
-/* > The above expressions are not simplified in order to */
-/* > make the usage of WORK more transparent, and for */
-/* > easier checking. In any case, LWORK >= 2. */
-/* > If on entry LWORK = -1, then a workspace query is */
+/* > LRWORK (input) INTEGER */
+/* > The minimal length of the workspace vector RWORK. */
+/* > LRWORK is calculated as follows: */
+/* > LRWORK = MAX(1, N+LRWORK_SVD,N+LRWORK_ZGEEV), where */
+/* > LRWORK_ZGEEV = MAX(1,2*N) and RWORK_SVD is the real workspace */
+/* > for the SVD subroutine determined by the input parameter */
+/* > WHTSVD. */
+/* > If WHTSVD == 1 :: ZGESVD :: */
+/* > LRWORK_SVD = 5*MIN(M,N) */
+/* > If WHTSVD == 2 :: ZGESDD :: */
+/* > LRWORK_SVD = MAX(5*MIN(M,N)*MIN(M,N)+7*MIN(M,N), */
+/* > 2*MAX(M,N)*MIN(M,N)+2*MIN(M,N)*MIN(M,N)+MIN(M,N) ) ) */
+/* > If WHTSVD == 3 :: ZGESVDQ :: */
+/* > LRWORK_SVD = obtainable by a query */
+/* > If WHTSVD == 4 :: ZGEJSV :: */
+/* > LRWORK_SVD = obtainable by a query */
+/* > If on entry LRWORK = -1, then a workspace query is */
 /* > assumed and the procedure only computes the minimal */
-/* > and the optimal workspace lengths for both WORK and */
-/* > IWORK. See the descriptions of WORK and IWORK. */
+/* > real workspace length and returns it in RWORK(1). */
 /* > \endverbatim */
 /* ..... */
 /* > \param[out] IWORK */
@@ -512,8 +473,8 @@ LIWORK >=1 */
 /* > If WHTSVD == 4, then LIWORK >= MAX(3,M+3*N) */
 /* > If on entry LIWORK = -1, then a workspace query is */
 /* > assumed and the procedure only computes the minimal */
-/* > and the optimal workspace lengths for both WORK and */
-/* > IWORK. See the descriptions of WORK and IWORK. */
+/* > and the optimal workspace lengths for ZWORK, RWORK and */
+/* > IWORK. See the descriptions of ZWORK, RWORK and IWORK. */
 /* > \endverbatim */
 /* ..... */
 /* > \param[out] INFO */
@@ -543,102 +504,99 @@ LIWORK >=1 */
 /* ............................................................. */
 /* ............................................................. */
 /* Subroutine */
-void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, integer *m,
-             integer *n, doublereal *x, integer *ldx, doublereal *y, integer *ldy, integer *nrnk,
-             doublereal *tol, integer *k, doublereal *reig, doublereal *imeig, doublereal *z__,
-             integer *ldz, doublereal *res, doublereal *b, integer *ldb, doublereal *w,
-             integer *ldw, doublereal *s, integer *lds, doublereal *work, integer *lwork,
-             integer *iwork, integer *liwork, integer *info)
+void zgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, integer *m,
+             integer *n, complex *x, integer *ldx, complex *y, integer *ldy, integer *nrnk,
+             real *tol, integer *k, complex *eigs, complex *z__, integer *ldz, real *res,
+             complex *b, integer *ldb, complex *w, integer *ldw, complex *s, integer *lds,
+             complex *zwork, integer *lzwork, real *rwork, integer *lrwork, integer *iwork,
+             integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgedmd inputs: jobs %c ,jobz %c ,jobr %c ,jobf %c ,whtsvd %" FLA_IS
-                      ",m %" FLA_IS ",n %" FLA_IS ",ldx %" FLA_IS ",ldy %" FLA_IS ",nrnk %" FLA_IS
-                      ",ldz %" FLA_IS ", ldb %" FLA_IS ",ldw %" FLA_IS ",lds %" FLA_IS
-                      ",lwork %" FLA_IS ",liwork %" FLA_IS "",
+    AOCL_DTL_SNPRINTF("zgedmd inputs: jobs %c, jobz %c, jobr %c, jobf %c, whtsvd %" FLA_IS
+                      ", m %" FLA_IS ", n %" FLA_IS ", ldx %" FLA_IS,
+                      ", ldy %" FLA_IS ", nrnk %" FLA_IS ", ldz %" FLA_IS ", ldb %" FLA_IS
+                      ", ldw %" FLA_IS ", lds %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",
                       *jobs, *jobz, *jobr, *jobf, *whtsvd, *m, *n, *ldx, *ldy, *nrnk, *ldz, *ldb,
                       *ldw, *lds, *lwork, *liwork);
     /* System generated locals */
     integer x_dim1, x_offset, y_dim1, y_offset, z_dim1, z_offset, b_dim1, b_offset, w_dim1,
         w_offset, s_dim1, s_offset, i__1, i__2, i__3, i__4, i__5, i__6;
-    doublereal r__1;
+    real r__1;
     doublereal d__1;
+    complex q__1, q__2;
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(doublereal), c_abs(complex *);
     /* Local variables */
     integer i__, j;
-    doublereal ab[4] /* was [2][2] */
-        ,
-        ofl, ssum;
+    real ofl, ssum;
     integer info1, info2;
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
-    doublereal xscl1, xscl2;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
-    doublereal scale;
-    extern /* Subroutine */
-        void
-        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *),
-        dgeev_(char *, char *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-               doublereal *, integer *, doublereal *, integer *, doublereal *, integer *,
-               integer *);
+    real xscl1, xscl2, scale;
     extern logical lsame_(char *, char *, integer, integer);
     logical badxy;
-    doublereal small_val;
+    real small_val;
+    extern /* Subroutine */
+        void
+        zgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
+               complex *, integer *, complex *, complex *, integer *);
     char jobzl[1];
     extern /* Subroutine */
         void
-        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+        zgeev_(char *, char *, integer *, complex *, integer *, complex *, complex *, integer *,
+               complex *, integer *, complex *, integer *, real *, integer *);
     logical wntex;
-    extern doublereal dlamch_(char *),
-        dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */
         void
-        dgesdd_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *),
-        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublereal *, integer *, integer *);
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern logical disnan_(doublereal *);
+        zaxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    extern real dznrm2_(integer *, complex *, integer *), dlamch_(char *);
+    extern logical disnan_(real *);
     extern /* Subroutine */
         void
-        dgesvd_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *,
-                doublereal *, integer *, doublereal *, integer *, doublereal *, integer *,
-                integer *),
-        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     char t_or_n__[1];
     extern /* Subroutine */
         void
-        dgejsv_(char *, char *, char *, char *, char *, char *, integer *, integer *, doublereal *,
-                integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
-                doublereal *, integer *, integer *, integer *),
-        dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
+        zdscal_(integer *, real *, complex *, integer *),
+        zgesdd_(char *, integer *, integer *, complex *, integer *, real *, complex *, integer *,
+                complex *, integer *, complex *, integer *, real *, integer *, integer *),
+        zlascl_();
+    extern integer izamax_(integer *, complex *, integer *);
     logical sccolx, sccoly;
-    integer lwrsdd, mwrsdd, iminwr;
-    logical wntref, wntvec;
-    doublereal rootsc;
-    integer lwrkev, mlwork, mwrkev, numrnk, olwork;
-    doublereal rdummy[2];
-    integer lwrsvd, mwrsvd;
-    logical lquery, wntres;
-    char jsvopt[1];
-    integer mwrsvj, lwrsvq, mwrsvq;
-    doublereal rdummy2[2];
+    integer lwrsdd, mwrsdd;
     extern /* Subroutine */
         void
-        dgesvdq_(char *, char *, char *, char *, char *, integer *, integer *, doublereal *,
-                 integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
-                 integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *,
-                 integer *);
-    /* ...Translated by Pacific-Sierra Research vf90 Personal 3.4N3 00:59:19 11/11/24 */
+        zgesvd_(char *, char *, integer *, integer *, complex *, integer *, real *, complex *,
+                integer *, complex *, integer *, complex *, integer *, real *, integer *),
+        zlacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *);
+    integer iminwr;
+    logical wntref, wntvec;
+    real rootsc;
+    integer lwrkev, mlwork, mwrkev, numrnk, olwork, lwrsvd, mwrsvd, mlrwrk;
+    logical lquery, wntres;
+    char jsvopt[1];
+    integer lwrsvj, mwrsvj;
+    real rdummy[2];
+    extern /* Subroutine */
+        void
+        zgejsv_(char *, char *, char *, char *, char *, char *, integer *, integer *, complex *,
+                integer *, real *, complex *, integer *, complex *, integer *, complex *, integer *,
+                real *, integer *, integer *, integer *),
+        zlassq_(integer *, complex *, integer *, real *, real *);
+    integer lwrsvq, mwrsvq;
+    extern /* Subroutine */
+        void
+        zgesvdq_(char *, char *, char *, char *, char *, integer *, integer *, complex *, integer *,
+                 real *, complex *, integer *, complex *, integer *, integer *, integer *,
+                 integer *, complex *, integer *, real *, integer *, integer *);
+    /* ...Translated by Pacific-Sierra Research vf90 Personal 3.4N3 02:54:45 10/25/24 */
     /* ...Switches: */
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by University of -- */
     /* -- Tennessee, University of California Berkeley, University of -- */
     /* -- Colorado Denver and NAG Ltd.. -- */
     /* ..... */
+    /* USE iso_fortran_env */
+    /* IMPLICIT NONE */
+    /* INTEGER, PARAMETER :: WP = real64 */
     /* Scalar arguments */
     /* ~~~~~~~~~~~~~~~~ */
     /* Array arguments */
@@ -660,8 +618,7 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
     y_dim1 = *ldy;
     y_offset = 1 + y_dim1;
     y -= y_offset;
-    --reig;
-    --imeig;
+    --eigs;
     z_dim1 = *ldz;
     z_offset = 1 + z_dim1;
     z__ -= z_offset;
@@ -675,7 +632,8 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
     s_dim1 = *lds;
     s_offset = 1 + s_dim1;
     s -= s_offset;
-    --work;
+    --zwork;
+    --rwork;
     --iwork;
     /* Function Body */
     wntres = lsame_(jobr, "R", 1, 1);
@@ -685,7 +643,7 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
     wntref = lsame_(jobf, "R", 1, 1);
     wntex = lsame_(jobf, "E", 1, 1);
     *info = 0;
-    lquery = *lwork == -1 || *liwork == -1;
+    lquery = *lzwork == -1 || *liwork == -1 || *lrwork == -1;
     if(!(sccolx || sccoly || lsame_(jobs, "N", 1, 1)))
     {
         *info = -1;
@@ -732,19 +690,19 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
     }
     else if(*ldz < *m)
     {
-        *info = -18;
+        *info = -17;
     }
     else if((wntref || wntex) && *ldb < *m)
     {
-        *info = -21;
+        *info = -20;
     }
     else if(*ldw < *n)
     {
-        *info = -23;
+        *info = -22;
     }
     else if(*lds < *n)
     {
-        *info = -25;
+        *info = -24;
     }
     if(*info == 0)
     {
@@ -761,8 +719,11 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
             if(lquery)
             {
                 iwork[1] = 1;
-                work[1] = 2.f;
-                work[2] = 2.f;
+                rwork[1] = 1.f;
+                zwork[1].r = 2.f;
+                zwork[1].i = 0.f; // , expr subst
+                zwork[2].r = 2.f;
+                zwork[2].i = 0.f; // , expr subst
             }
             else
             {
@@ -772,127 +733,106 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
-        mlwork = fla_max(2, *n);
-        olwork = fla_max(2, *n);
         iminwr = 1;
+        mlrwrk = fla_max(1, *n);
+        mlwork = 2;
+        olwork = 2;
         if(*whtsvd == 1)
         {
             /* The following is specified as the minimal */
-            /* length of WORK in the definition of DGESVD: */
-            /* MWRSVD = MAX(1,3*MIN(M,N)+MAX(M,N),5*MIN(M,N)) */
+            /* length of WORK in the definition of ZGESVD: */
+            /* MWRSVD = MAX(1,2*MIN(M,N)+MAX(M,N)) */
             /* Computing MAX */
-            /* Computing MAX */
-            i__3 = 1;
-            i__4 = fla_min(*m, *n) * 3 + fla_max(*m, *n); // , expr subst
-            i__1 = fla_max(i__3, i__4);
-            i__2 = fla_min(*m, *n) * 5; // , expr subst
+            i__1 = 1;
+            i__2 = (fla_min(*m, *n) << 1) + fla_max(*m, *n); // , expr subst
             mwrsvd = fla_max(i__1, i__2);
+            mlwork = fla_max(2, mwrsvd);
             /* Computing MAX */
-            i__1 = mlwork;
-            i__2 = *n + mwrsvd; // , expr subst
-            mlwork = fla_max(i__1, i__2);
+            i__1 = mlrwrk;
+            i__2 = *n + fla_min(*m, *n) * 5; // , expr subst
+            mlrwrk = fla_max(i__1, i__2);
             if(lquery)
             {
-                dgesvd_("O", "S", m, n, &x[x_offset], ldx, &work[1], &b[b_offset], ldb,
-                        &w[w_offset], ldw, rdummy, &c_n1, &info1);
-                /* Computing MAX */
-                i__1 = mwrsvd;
-                i__2 = (integer)rdummy[0]; // , expr subst
-                lwrsvd = fla_max(i__1, i__2);
-                /* Computing MAX */
-                i__1 = olwork;
-                i__2 = *n + lwrsvd; // , expr subst
-                olwork = fla_max(i__1, i__2);
+                zgesvd_("O", "S", m, n, &x[x_offset], ldx, &rwork[1], &b[b_offset], ldb,
+                        &w[w_offset], ldw, &zwork[1], &c_n1, rdummy, &info1);
+                lwrsvd = (integer)zwork[1].r;
+                olwork = fla_max(2, lwrsvd);
             }
         }
         else if(*whtsvd == 2)
         {
             /* The following is specified as the minimal */
-            /* length of WORK in the definition of DGESDD: */
-            /* MWRSDD = 3*MIN(M,N)*MIN(M,N) + */
-            /* MAX( MAX(M,N),5*MIN(M,N)*MIN(M,N)+4*MIN(M,N) ) */
+            /* length of WORK in the definition of ZGESDD: */
+            /* MWRSDD = 2*fla_min(M,N)*fla_min(M,N)+2*fla_min(M,N)+max(M,N). */
+            /* RWORK length: 5*MIN(M,N)*MIN(M,N)+7*MIN(M,N) */
+            /* In LAPACK 3.10.1 RWORK is defined differently. */
+            /* Below we take max over the two versions. */
             /* IMINWR = 8*MIN(M,N) */
-            /* Computing MAX */
-            i__1 = fla_max(*m, *n);
-            i__2 = fla_min(*m, *n) * 5 * fla_min(*m, *n) + (fla_min(*m, *n) << 2); // , expr subst
-            mwrsdd = fla_min(*m, *n) * 3 * fla_min(*m, *n) + fla_max(i__1, i__2);
-            /* Computing MAX */
-            i__1 = mlwork;
-            i__2 = *n + mwrsdd; // , expr subst
-            mlwork = fla_max(i__1, i__2);
+            mwrsdd = (fla_min(*m, *n) << 1) * fla_min(*m, *n) + (fla_min(*m, *n) << 1)
+                     + fla_max(*m, *n);
+            mlwork = fla_max(2, mwrsdd);
             iminwr = fla_min(*m, *n) << 3;
+            /* Computing MAX */
+            /* Computing MAX */
+            /* Computing MAX */
+            i__5 = fla_min(*m, *n) * 5 * fla_min(*m, *n) + fla_min(*m, *n) * 7;
+            i__6 = fla_min(*m, *n) * 5 * fla_min(*m, *n) + fla_min(*m, *n) * 5; // , expr subst
+            i__3 = fla_max(i__5, i__6);
+            i__4 = (fla_max(*m, *n) << 1) * fla_min(*m, *n)
+                   + (fla_min(*m, *n) << 1) * fla_min(*m, *n) + fla_min(*m, *n); // , expr subst
+            i__1 = mlrwrk;
+            i__2 = *n + fla_max(i__3, i__4); // , expr subst
+            mlrwrk = fla_max(i__1, i__2);
             if(lquery)
             {
-                dgesdd_("O", m, n, &x[x_offset], ldx, &work[1], &b[b_offset], ldb, &w[w_offset],
-                        ldw, rdummy, &c_n1, &iwork[1], &info1);
+                zgesdd_("O", m, n, &x[x_offset], ldx, &rwork[1], &b[b_offset], ldb, &w[w_offset],
+                        ldw, &zwork[1], &c_n1, rdummy, &iwork[1], &info1);
                 /* Computing MAX */
                 i__1 = mwrsdd;
-                i__2 = (integer)rdummy[0]; // , expr subst
+                i__2 = (integer)zwork[1].r; // , expr subst
                 lwrsdd = fla_max(i__1, i__2);
-                /* Computing MAX */
-                i__1 = olwork;
-                i__2 = *n + lwrsdd; // , expr subst
-                olwork = fla_max(i__1, i__2);
+                /* Possible bug in ZGESDD optimal workspace size. */
+                olwork = fla_max(2, lwrsdd);
             }
         }
         else if(*whtsvd == 3)
         {
-            /* LWQP3 = 3*N+1 */
-            /* LWORQ = MAX(N, 1) */
-            /* MWRSVD = MAX(1,3*MIN(M,N)+MAX(M,N),5*MIN(M,N)) */
-            /* MWRSVQ = N + MAX( LWQP3, MWRSVD, LWORQ ) + MAX(M,2) */
-            /* MLWORK = N + MWRSVQ */
-            /* IMINWR = M+N-1 */
-            dgesvdq_("H", "P", "N", "R", "R", m, n, &x[x_offset], ldx, &work[1], &z__[z_offset],
-                     ldz, &w[w_offset], ldw, &numrnk, &iwork[1], &c_n1, rdummy, &c_n1, rdummy2,
+            zgesvdq_("H", "P", "N", "R", "R", m, n, &x[x_offset], ldx, &rwork[1], &z__[z_offset],
+                     ldz, &w[w_offset], ldw, &numrnk, &iwork[1], &c_n1, &zwork[1], &c_n1, rdummy,
                      &c_n1, &info1);
             iminwr = iwork[1];
-            mwrsvq = (integer)rdummy[1];
+            mwrsvq = (integer)zwork[2].r;
+            mlwork = fla_max(2, mwrsvq);
             /* Computing MAX */
-            i__1 = mlwork;
-            i__2 = *n + mwrsvq + (integer)rdummy2[0]; // , expr subst
-            mlwork = fla_max(i__1, i__2);
+            i__1 = mlrwrk;
+            i__2 = *n + (integer)rdummy[0]; // , expr subst
+            mlrwrk = fla_max(i__1, i__2);
             if(lquery)
             {
-                /* Computing MAX */
-                // i__1 = mwrsvq;
-                // i__2 = (integer)rdummy[0]; // , expr subst
-                lwrsvq = (integer)rdummy[0]; // , expr subst
-                // lwrsvq = fla_max(i__1, i__2);
-                /* Computing MAX */
-                i__1 = olwork;
-                i__2 = *n + lwrsvq + (integer)rdummy2[0]; // , expr subst
-                olwork = fla_max(i__1, i__2);
+                lwrsvq = (integer)zwork[1].r;
+                olwork = fla_max(2, lwrsvq);
             }
         }
         else if(*whtsvd == 4)
         {
             *(unsigned char *)jsvopt = 'J';
-            /* MWRSVJ = MAX( 7, 2*M+N, 6*N+2*N*N ) ! for JSVOPT='V' */
+            zgejsv_("F", "U", jsvopt, "R", "N", "P", m, n, &x[x_offset], ldx, &rwork[1],
+                    &z__[z_offset], ldz, &w[w_offset], ldw, &zwork[1], &c_n1, rdummy, &c_n1,
+                    &iwork[1], &info1);
+            iminwr = iwork[1];
+            mwrsvj = (integer)zwork[2].r;
+            mlwork = fla_max(2, mwrsvj);
             /* Computing MAX */
             /* Computing MAX */
-            /* Computing MAX */
-            i__5 = 7;
-            i__6 = (*m << 1) + *n; // , expr subst
-            i__3 = fla_max(i__5, i__6);
-            i__4 = (*n << 2) + *n * *n; // , expr subst
-            i__1 = fla_max(i__3, i__4);
-            i__2 = (*n << 1) + *n * *n + 6; // , expr subst
-            mwrsvj = fla_max(i__1, i__2);
-            /* Computing MAX */
-            i__1 = mlwork;
-            i__2 = *n + mwrsvj; // , expr subst
-            mlwork = fla_max(i__1, i__2);
-            /* Computing MAX */
-            i__1 = 3;
-            i__2 = *m + *n * 3; // , expr subst
-            iminwr = fla_max(i__1, i__2);
+            i__3 = 7;
+            i__4 = (integer)rdummy[0]; // , expr subst
+            i__1 = mlrwrk;
+            i__2 = *n + fla_max(i__3, i__4); // , expr subst
+            mlrwrk = fla_max(i__1, i__2);
             if(lquery)
             {
-                /* Computing MAX */
-                i__1 = olwork;
-                i__2 = *n + mwrsvj; // , expr subst
-                olwork = fla_max(i__1, i__2);
+                lwrsvj = (integer)zwork[1].r;
+                olwork = fla_max(2, lwrsvj);
             }
         }
         if(wntvec || wntex || lsame_(jobz, "F", 1, 1))
@@ -903,51 +843,40 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
         {
             *(unsigned char *)jobzl = 'N';
         }
-        /* Workspace calculation to the DGEEV call */
-        if(lsame_(jobzl, "V", 1, 1))
-        {
-            /* Computing MAX */
-            i__1 = 1;
-            i__2 = *n << 2; // , expr subst
-            mwrkev = fla_max(i__1, i__2);
-        }
-        else
-        {
-            /* Computing MAX */
-            i__1 = 1;
-            i__2 = *n * 3; // , expr subst
-            mwrkev = fla_max(i__1, i__2);
-        }
+        /* Workspace calculation to the ZGEEV call */
         /* Computing MAX */
-        i__1 = mlwork;
-        i__2 = *n + mwrkev; // , expr subst
-        mlwork = fla_max(i__1, i__2);
+        i__1 = 1;
+        i__2 = *n << 1; // , expr subst
+        mwrkev = fla_max(i__1, i__2);
+        mlwork = fla_max(mlwork, mwrkev);
+        /* Computing MAX */
+        i__1 = mlrwrk;
+        i__2 = *n + (*n << 1); // , expr subst
+        mlrwrk = fla_max(i__1, i__2);
         if(lquery)
         {
-            dgeev_("N", jobzl, n, &s[s_offset], lds, &reig[1], &imeig[1], &w[w_offset], ldw,
-                   &w[w_offset], ldw, rdummy, &c_n1, &info1);
-            /* Computing MAX */
-            i__1 = mwrkev;
-            i__2 = (integer)rdummy[0]; // , expr subst
-            lwrkev = fla_max(i__1, i__2);
-            /* Computing MAX */
-            i__1 = olwork;
-            i__2 = *n + lwrkev; // , expr subst
-            olwork = fla_max(i__1, i__2);
+            zgeev_("N", jobzl, n, &s[s_offset], lds, &eigs[1], &w[w_offset], ldw, &w[w_offset], ldw,
+                   &zwork[1], &c_n1, &rwork[1], &info1);
+            lwrkev = (integer)zwork[1].r;
+            olwork = fla_max(olwork, lwrkev);
         }
         if(*liwork < iminwr && !lquery)
         {
-            *info = -29;
+            *info = -30;
         }
-        if(*lwork < mlwork && !lquery)
+        if(*lrwork < mlrwrk && !lquery)
         {
-            *info = -27;
+            *info = -28;
+        }
+        if(*lzwork < mlwork && !lquery)
+        {
+            *info = -26;
         }
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGEDMD", &i__1, (ftnlen)6);
+        xerbla_("ZGEDMD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -955,8 +884,11 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
     {
         /* Return minimal and optimal workspace sizes */
         iwork[1] = iminwr;
-        work[1] = (doublereal)mlwork;
-        work[2] = (doublereal)olwork;
+        rwork[1] = (real)mlrwrk;
+        zwork[1].r = (real)mlwork;
+        zwork[1].i = 0.f; // , expr subst
+        zwork[2].r = (real)olwork;
+        zwork[2].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -970,21 +902,20 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
     {
         /* The columns of X will be normalized. */
         /* To prevent overflows, the column norms of X are */
-        /* carefully computed using DLASSQ. */
+        /* carefully computed using ZLASSQ. */
         *k = 0;
         i__1 = *n;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            /* WORK(i) = DNRM2( M, X(1,i), 1 ) */
-            ssum = 1.f;
+            /* WORK(i) = DZNRM2( M, X(1,i), 1 ) */
             scale = 0.f;
-            dlassq_(m, &x[i__ * x_dim1 + 1], &c__1, &scale, &ssum);
+            zlassq_(m, &x[i__ * x_dim1 + 1], &c__1, &scale, &ssum);
             if(disnan_(&scale) || disnan_(&ssum))
             {
                 *k = 0;
                 *info = -8;
                 i__2 = -(*info);
-                xerbla_("DGEDMD", &i__2, (ftnlen)6);
+                xerbla_("ZGEDMD", &i__2, (ftnlen)6);
             }
             if(scale != 0.f && ssum != 0.f)
             {
@@ -995,30 +926,30 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
                     /* is scaled by */
                     /* ( ONE / ROOTSC ) / SCALE = 1/||X(:,i)||_2. */
                     /* Next, the norm of X(:,i) is stored without */
-                    /* overflow as WORK(i) = - SCALE * (ROOTSC/M), */
+                    /* overflow as RWORK(i) = - SCALE * (ROOTSC/M), */
                     /* the minus sign indicating the 1/M factor. */
                     /* Scaling is performed without overflow, and */
                     /* underflow may occur in the smallest entries */
                     /* of X(:,i). The relative backward and forward */
                     /* errors are small in the ell_2 norm. */
                     r__1 = 1.f / rootsc;
-                    dlascl_("G", &c__0, &c__0, &scale, &r__1, m, &c__1, &x[i__ * x_dim1 + 1], m,
+                    zlascl_("G", &c__0, &c__0, &scale, &r__1, m, &c__1, &x[i__ * x_dim1 + 1], ldx,
                             &info2);
-                    work[i__] = -scale * (rootsc / (doublereal)(*m));
+                    rwork[i__] = -scale * (rootsc / (doublereal)(*m));
                 }
                 else
                 {
                     /* X(:,i) will be scaled to unit 2-norm */
-                    work[i__] = scale * rootsc;
-                    dlascl_("G", &c__0, &c__0, &work[i__], &c_b45, m, &c__1, &x[i__ * x_dim1 + 1],
-                            m, &info2);
-                    /* X(1:M,i) = (ONE/WORK(i)) * X(1:M,i) ! INTRINSIC */
+                    rwork[i__] = scale * rootsc;
+                    zlascl_("G", &c__0, &c__0, &rwork[i__], &c_b54, m, &c__1, &x[i__ * x_dim1 + 1],
+                            ldx, &info2);
+                    /* X(1:M,i) = (ONE/RWORK(i)) * X(1:M,i) ! INTRINSIC */
                     /* LAPACK CALL */
                 }
             }
             else
             {
-                work[i__] = 0.f;
+                rwork[i__] = 0.f;
                 ++(*k);
             }
         }
@@ -1029,7 +960,7 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
             *k = 0;
             *info = -8;
             i__1 = -(*info);
-            xerbla_("DGEDMD", &i__1, (ftnlen)6);
+            xerbla_("ZGEDMD", &i__1, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
@@ -1037,21 +968,22 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* Now, apply the same scaling to the columns of Y. */
-            if(work[i__] > 0.f)
+            if(rwork[i__] > 0.f)
             {
                 /* ! BLAS CALL */
-                r__1 = 1.f / work[i__];
-                dscal_(m, &r__1, &y[i__ * y_dim1 + 1], &c__1);
-                /* Y(1:M,i) = (ONE/WORK(i)) * Y(1:M,i) ! INTRINSIC */
+                r__1 = 1.f / rwork[i__];
+                zdscal_(m, &r__1, &y[i__ * y_dim1 + 1], &c__1);
+                /* Y(1:M,i) = (ONE/RWORK(i)) * Y(1:M,i) ! INTRINSIC */
             }
-            else if(work[i__] < 0.f)
+            else if(rwork[i__] < 0.f)
             {
-                r__1 = -work[i__];
+                r__1 = -rwork[i__];
                 d__1 = 1.f / (doublereal)(*m);
-                dlascl_("G", &c__0, &c__0, &r__1, &d__1, m, &c__1, &y[i__ * y_dim1 + 1], m, &info2);
+                zlascl_("G", &c__0, &c__0, &r__1, &d__1, m, &c__1, &y[i__ * y_dim1 + 1], ldy,
+                        &info2);
                 /* LAPACK CALL */
             }
-            else if(y[idamax_(m, &y[i__ * y_dim1 + 1], &c__1) + i__ * y_dim1] != 0.f)
+            else if(c_abs(&y[izamax_(m, &y[i__ * y_dim1 + 1], &c__1) + i__ * y_dim1]) != 0.f)
             {
                 /* X(:,i) is zero vector. For consistency, */
                 /* Y(:,i) should also be zero. If Y(:,i) is not */
@@ -1064,7 +996,7 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
                 /* ! BLAS CALL */
                 if(lsame_(jobs, "C", 1, 1))
                 {
-                    dscal_(m, &c_b55, &y[i__ * y_dim1 + 1], &c__1);
+                    zdscal_(m, &c_b64, &y[i__ * y_dim1 + 1], &c__1);
                 }
             }
         }
@@ -1073,20 +1005,19 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
     {
         /* The columns of Y will be normalized. */
         /* To prevent overflows, the column norms of Y are */
-        /* carefully computed using DLASSQ. */
+        /* carefully computed using ZLASSQ. */
         i__1 = *n;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            /* WORK(i) = DNRM2( M, Y(1,i), 1 ) */
-            ssum = 1.f;
+            /* RWORK(i) = DZNRM2( M, Y(1,i), 1 ) */
             scale = 0.f;
-            dlassq_(m, &y[i__ * y_dim1 + 1], &c__1, &scale, &ssum);
+            zlassq_(m, &y[i__ * y_dim1 + 1], &c__1, &scale, &ssum);
             if(disnan_(&scale) || disnan_(&ssum))
             {
                 *k = 0;
                 *info = -10;
                 i__2 = -(*info);
-                xerbla_("DGEDMD", &i__2, (ftnlen)6);
+                xerbla_("ZGEDMD", &i__2, (ftnlen)6);
             }
             if(scale != 0.f && ssum != 0.f)
             {
@@ -1097,51 +1028,52 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
                     /* is scaled by */
                     /* ( ONE / ROOTSC ) / SCALE = 1/||Y(:,i)||_2. */
                     /* Next, the norm of Y(:,i) is stored without */
-                    /* overflow as WORK(i) = - SCALE * (ROOTSC/M), */
+                    /* overflow as RWORK(i) = - SCALE * (ROOTSC/M), */
                     /* the minus sign indicating the 1/M factor. */
                     /* Scaling is performed without overflow, and */
                     /* underflow may occur in the smallest entries */
                     /* of Y(:,i). The relative backward and forward */
                     /* errors are small in the ell_2 norm. */
                     r__1 = 1.f / rootsc;
-                    dlascl_("G", &c__0, &c__0, &scale, &r__1, m, &c__1, &y[i__ * y_dim1 + 1], m,
+                    zlascl_("G", &c__0, &c__0, &scale, &r__1, m, &c__1, &y[i__ * y_dim1 + 1], ldy,
                             &info2);
-                    work[i__] = -scale * (rootsc / (doublereal)(*m));
+                    rwork[i__] = -scale * (rootsc / (doublereal)(*m));
                 }
                 else
                 {
-                    /* X(:,i) will be scaled to unit 2-norm */
-                    work[i__] = scale * rootsc;
-                    dlascl_("G", &c__0, &c__0, &work[i__], &c_b45, m, &c__1, &y[i__ * y_dim1 + 1],
-                            m, &info2);
-                    /* Y(1:M,i) = (ONE/WORK(i)) * Y(1:M,i) ! INTRINSIC */
+                    /* Y(:,i) will be scaled to unit 2-norm */
+                    rwork[i__] = scale * rootsc;
+                    zlascl_("G", &c__0, &c__0, &rwork[i__], &c_b54, m, &c__1, &y[i__ * y_dim1 + 1],
+                            ldy, &info2);
+                    /* Y(1:M,i) = (ONE/RWORK(i)) * Y(1:M,i) ! INTRINSIC */
                     /* LAPACK CALL */
                 }
             }
             else
             {
-                work[i__] = 0.f;
+                rwork[i__] = 0.f;
             }
         }
         i__1 = *n;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* Now, apply the same scaling to the columns of X. */
-            if(work[i__] > 0.f)
+            if(rwork[i__] > 0.f)
             {
                 /* ! BLAS CALL */
-                r__1 = 1.f / work[i__];
-                dscal_(m, &r__1, &x[i__ * x_dim1 + 1], &c__1);
-                /* X(1:M,i) = (ONE/WORK(i)) * X(1:M,i) ! INTRINSIC */
+                r__1 = 1.f / rwork[i__];
+                zdscal_(m, &r__1, &x[i__ * x_dim1 + 1], &c__1);
+                /* X(1:M,i) = (ONE/RWORK(i)) * X(1:M,i) ! INTRINSIC */
             }
-            else if(work[i__] < 0.f)
+            else if(rwork[i__] < 0.f)
             {
-                r__1 = -work[i__];
+                r__1 = -rwork[i__];
                 d__1 = 1.f / (doublereal)(*m);
-                dlascl_("G", &c__0, &c__0, &r__1, &d__1, m, &c__1, &x[i__ * x_dim1 + 1], m, &info2);
+                zlascl_("G", &c__0, &c__0, &r__1, &d__1, m, &c__1, &x[i__ * x_dim1 + 1], ldx,
+                        &info2);
                 /* LAPACK CALL */
             }
-            else if(x[idamax_(m, &x[i__ * x_dim1 + 1], &c__1) + i__ * x_dim1] != 0.f)
+            else if(c_abs(&x[izamax_(m, &x[i__ * x_dim1 + 1], &c__1) + i__ * x_dim1]) != 0.f)
             {
                 /* Y(:,i) is zero vector. If X(:,i) is not */
                 /* zero, then a warning flag is raised. */
@@ -1160,52 +1092,50 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
     numrnk = *n;
     if(*whtsvd == 1)
     {
-        i__1 = *lwork - *n;
-        dgesvd_("O", "S", m, n, &x[x_offset], ldx, &work[1], &b[b_offset], ldb, &w[w_offset], ldw,
-                &work[*n + 1], &i__1, &info1);
+        zgesvd_("O", "S", m, n, &x[x_offset], ldx, &rwork[1], &b[b_offset], ldb, &w[w_offset], ldw,
+                &zwork[1], lzwork, &rwork[*n + 1], &info1);
         /* LAPACK CALL */
-        *(unsigned char *)t_or_n__ = 'T';
+        *(unsigned char *)t_or_n__ = 'C';
     }
     else if(*whtsvd == 2)
     {
-        i__1 = *lwork - *n;
-        dgesdd_("O", m, n, &x[x_offset], ldx, &work[1], &b[b_offset], ldb, &w[w_offset], ldw,
-                &work[*n + 1], &i__1, &iwork[1], &info1);
+        zgesdd_("O", m, n, &x[x_offset], ldx, &rwork[1], &b[b_offset], ldb, &w[w_offset], ldw,
+                &zwork[1], lzwork, &rwork[*n + 1], &iwork[1], &info1);
         /* LAPACK CALL */
-        *(unsigned char *)t_or_n__ = 'T';
+        *(unsigned char *)t_or_n__ = 'C';
     }
     else if(*whtsvd == 3)
     {
+        i__1 = *lrwork - *n;
+        zgesvdq_("H", "P", "N", "R", "R", m, n, &x[x_offset], ldx, &rwork[1], &z__[z_offset], ldz,
+                 &w[w_offset], ldw, &numrnk, &iwork[1], liwork, &zwork[1], lzwork, &rwork[*n + 1],
+                 &i__1, &info1);
         /* ! LAPACK CALL */
-        i__1 = *lwork - *n - fla_max(2, *m);
-        i__2 = fla_max(2, *m);
-        dgesvdq_("H", "P", "N", "R", "R", m, n, &x[x_offset], ldx, &work[1], &z__[z_offset], ldz,
-                 &w[w_offset], ldw, &numrnk, &iwork[1], liwork, &work[*n + fla_max(2, *m) + 1],
-                 &i__1, &work[*n + 1], &i__2, &info1);
-        /* ! LAPACK CALL */
-        dlacpy_("A", m, &numrnk, &z__[z_offset], ldz, &x[x_offset], ldx);
-        *(unsigned char *)t_or_n__ = 'T';
+        /* LAPACK CALL */
+        zlacpy_("A", m, &numrnk, &z__[z_offset], ldz, &x[x_offset], ldx);
+        *(unsigned char *)t_or_n__ = 'C';
     }
     else if(*whtsvd == 4)
     {
-        /* ! LAPACK CALL */
-        i__1 = *lwork - *n;
-        dgejsv_("F", "U", jsvopt, "N", "N", "P", m, n, &x[x_offset], ldx, &work[1], &z__[z_offset],
-                ldz, &w[w_offset], ldw, &work[*n + 1], &i__1, &iwork[1], &info1);
-        dlacpy_("A", m, n, &z__[z_offset], ldz, &x[x_offset], ldx);
+        i__1 = *lrwork - *n;
+        zgejsv_("F", "U", jsvopt, "R", "N", "P", m, n, &x[x_offset], ldx, &rwork[1], &z__[z_offset],
+                ldz, &w[w_offset], ldw, &zwork[1], lzwork, &rwork[*n + 1], &i__1, &iwork[1],
+                &info1);
+        /* LAPACK CALL */
+        zlacpy_("A", m, n, &z__[z_offset], ldz, &x[x_offset], ldx);
         /* LAPACK CALL */
         *(unsigned char *)t_or_n__ = 'N';
-        xscl1 = work[*n + 1];
-        xscl2 = work[*n + 2];
+        xscl1 = rwork[*n + 1];
+        xscl2 = rwork[*n + 2];
         /* This is an exceptional situation. If the */
         /* data matrices are not scaled and the */
         /* largest singular value of X overflows. */
-        /* In that case DGEJSV can return the SVD */
+        /* In that case ZGEJSV can return the SVD */
         /* in scaled form. The scaling factor can be used */
         /* to rescale the data (X and Y). */
         if(xscl1 != xscl2)
         {
-            dlascl_("G", &c__0, &c__0, &xscl1, &xscl2, m, n, &y[y_offset], ldy, &info2);
+            zlascl_("G", &c__0, &c__0, &xscl1, &xscl2, m, n, &y[y_offset], ldy, &info2);
         }
     }
     if(info1 > 0)
@@ -1216,7 +1146,7 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if(work[1] == 0.f)
+    if(rwork[1] == 0.f)
     {
         /* The largest computed singular value of (scaled) */
         /* X is zero. Return error code -8 */
@@ -1224,7 +1154,7 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
         *k = 0;
         *info = -8;
         i__1 = -(*info);
-        xerbla_("DGEDMD", &i__1, (ftnlen)6);
+        xerbla_("ZGEDMD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -1237,7 +1167,7 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
         i__1 = numrnk;
         for(i__ = 2; i__ <= i__1; ++i__)
         {
-            if(work[i__] <= work[1] * *tol || work[i__] <= small_val)
+            if(rwork[i__] <= rwork[1] * *tol || rwork[i__] <= small_val)
             {
                 goto L2;
             }
@@ -1251,7 +1181,7 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
         i__1 = numrnk - 1;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            if(work[i__ + 1] <= work[i__] * *tol || work[i__] <= small_val)
+            if(rwork[i__ + 1] <= rwork[i__] * *tol || rwork[i__] <= small_val)
             {
                 goto L3;
             }
@@ -1265,7 +1195,7 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
         i__1 = *nrnk;
         for(i__ = 2; i__ <= i__1; ++i__)
         {
-            if(work[i__] <= small_val)
+            if(rwork[i__] <= small_val)
             {
                 goto L4;
             }
@@ -1275,12 +1205,12 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
     }
     /* Now, U = X(1:M,1:K) is the SVD/POD basis for the */
     /* snapshot data in the input matrix X. */
-    /* <4> Compute the Rayleigh quotient S = U^T * A * U. */
+    /* <4> Compute the Rayleigh quotient S = U^H * A * U. */
     /* Depending on the requested outputs, the computation */
     /* is organized to compute additional auxiliary */
     /* matrices (for the residuals and refinements). */
     /* In all formulas below, we need V_k*Sigma_k^(-1) */
-    /* where either V_k is in W(1:N,1:K), or V_k^T is in */
+    /* where either V_k is in W(1:N,1:K), or V_k^H is in */
     /* W(1:K,1:N). Here Sigma_k=diag(WORK(1:K)). */
     if(lsame_(t_or_n__, "N", 1, 1))
     {
@@ -1288,24 +1218,24 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* ! BLAS CALL */
-            r__1 = 1.f / work[i__];
-            dscal_(n, &r__1, &w[i__ * w_dim1 + 1], &c__1);
-            /* W(1:N,i) = (ONE/WORK(i)) * W(1:N,i) ! INTRINSIC */
+            r__1 = 1.f / rwork[i__];
+            zdscal_(n, &r__1, &w[i__ * w_dim1 + 1], &c__1);
+            /* W(1:N,i) = (ONE/RWORK(i)) * W(1:N,i) ! INTRINSIC */
         }
     }
     else
     {
         /* This non-unit stride access is due to the fact */
-        /* that DGESVD, DGESVDQ and DGESDD return the */
-        /* transposed matrix of the right singular vectors. */
+        /* that ZGESVD, ZGESVDQ and ZGESDD return the */
+        /* adjoint matrix of the right singular vectors. */
         /* DO i = 1, K */
-        /* CALL DSCAL( N, ONE/WORK(i), W(i,1), LDW ) ! BLAS CALL */
-        /* ! W(i,1:N) = (ONE/WORK(i)) * W(i,1:N) ! INTRINSIC */
+        /* CALL ZDSCAL( N, ONE/RWORK(i), W(i,1), LDW ) ! BLAS CALL */
+        /* ! W(i,1:N) = (ONE/RWORK(i)) * W(i,1:N) ! INTRINSIC */
         /* END DO */
         i__1 = *k;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            work[*n + i__] = 1.f / work[i__];
+            rwork[*n + i__] = 1.f / rwork[i__];
         }
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
@@ -1313,7 +1243,15 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
             i__2 = *k;
             for(i__ = 1; i__ <= i__2; ++i__)
             {
-                w[i__ + j * w_dim1] = work[*n + i__] * w[i__ + j * w_dim1];
+                i__3 = i__ + j * w_dim1;
+                i__4 = *n + i__;
+                q__2.r = rwork[i__4];
+                q__2.i = 0.f; // , expr subst
+                i__5 = i__ + j * w_dim1;
+                q__1.r = q__2.r * w[i__5].r - q__2.i * w[i__5].i;
+                q__1.i = q__2.r * w[i__5].i + q__2.i * w[i__5].r; // , expr subst
+                w[i__3].r = q__1.r;
+                w[i__3].i = q__1.i; // , expr subst
             }
         }
     }
@@ -1321,24 +1259,24 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
     {
         /* Need A*U(:,1:K)=Y*V_k*inv(diag(WORK(1:K))) */
         /* for computing the refined Ritz vectors */
-        /* (optionally, outside DGEDMD). */
-        dgemm_("N", t_or_n__, m, k, n, &c_b45, &y[y_offset], ldy, &w[w_offset], ldw, &c_b55,
+        /* (optionally, outside ZGEDMD). */
+        zgemm_("N", t_or_n__, m, k, n, &c_b1, &y[y_offset], ldy, &w[w_offset], ldw, &c_b2,
                &z__[z_offset], ldz);
-        /* Z(1:M,1:K)=MATMUL(Y(1:M,1:N),TRANSPOSE(W(1:K,1:N))) ! INTRI */
-        /* Z(1:M,1:K)=MATMUL(Y(1:M,1:N),W(1:N,1:K)) ! INTRI */
+        /* Z(1:M,1:K)=MATMUL(Y(1:M,1:N),TRANSPOSE(CONJG(W(1:K,1:N)))) ! */
+        /* Z(1:M,1:K)=MATMUL(Y(1:M,1:N),W(1:N,1:K)) ! */
         /* At this point Z contains */
         /* A * U(:,1:K) = Y * V_k * Sigma_k^(-1), and */
         /* this is needed for computing the residuals. */
         /* This matrix is returned in the array B and */
         /* it can be used to compute refined Ritz vectors. */
         /* BLAS CALL */
-        dlacpy_("A", m, k, &z__[z_offset], ldz, &b[b_offset], ldb);
+        zlacpy_("A", m, k, &z__[z_offset], ldz, &b[b_offset], ldb);
         /* B(1:M,1:K) = Z(1:M,1:K) ! INTRINSIC */
         /* BLAS CALL */
-        dgemm_("T", "N", k, k, m, &c_b45, &x[x_offset], ldx, &z__[z_offset], ldz, &c_b55,
+        zgemm_("C", "N", k, k, m, &c_b1, &x[x_offset], ldx, &z__[z_offset], ldz, &c_b2,
                &s[s_offset], lds);
-        /* S(1:K,1:K) = MATMUL(TANSPOSE(X(1:M,1:K)),Z(1:M,1:K)) ! INTRI */
-        /* At this point S = U^T * A * U is the Rayleigh quotient. */
+        /* S(1:K,1:K) = MATMUL(TRANSPOSE(CONJG(X(1:M,1:K))),Z(1:M,1:K)) */
+        /* At this point S = U^H * A * U is the Rayleigh quotient. */
         /* BLAS CALL */
     }
     else
@@ -1346,53 +1284,41 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
         /* A * U(:,1:K) is not explicitly needed and the */
         /* computation is organized differently. The Rayleigh */
         /* quotient is computed more efficiently. */
-        dgemm_("T", "N", k, n, m, &c_b45, &x[x_offset], ldx, &y[y_offset], ldy, &c_b55,
+        zgemm_("C", "N", k, n, m, &c_b1, &x[x_offset], ldx, &y[y_offset], ldy, &c_b2,
                &z__[z_offset], ldz);
-        /* Z(1:K,1:N) = MATMUL( TRANSPOSE(X(1:M,1:K)), Y(1:M,1:N) ) ! IN */
-        /* In the two DGEMM calls here, can use K for LDZ. */
+        /* Z(1:K,1:N) = MATMUL( TRANSPOSE(CONJG(X(1:M,1:K))), Y(1:M,1:N) */
         /* BLAS CALL */
-        dgemm_("N", t_or_n__, k, k, n, &c_b45, &z__[z_offset], ldz, &w[w_offset], ldw, &c_b55,
+        zgemm_("N", t_or_n__, k, k, n, &c_b1, &z__[z_offset], ldz, &w[w_offset], ldw, &c_b2,
                &s[s_offset], lds);
-        /* S(1:K,1:K) = MATMUL(Z(1:K,1:N),TRANSPOSE(W(1:K,1:N))) ! INTRIN */
-        /* S(1:K,1:K) = MATMUL(Z(1:K,1:N),(W(1:N,1:K))) ! INTRIN */
-        /* At this point S = U^T * A * U is the Rayleigh quotient. */
+        /* S(1:K,1:K) = MATMUL(Z(1:K,1:N),TRANSPOSE(CONJG(W(1:K,1:N)))) ! */
+        /* S(1:K,1:K) = MATMUL(Z(1:K,1:N),(W(1:N,1:K))) ! */
+        /* At this point S = U^H * A * U is the Rayleigh quotient. */
         /* If the residuals are requested, save scaled V_k into Z. */
-        /* Recall that V_k or V_k^T is stored in W. */
+        /* Recall that V_k or V_k^H is stored in W. */
         /* BLAS CALL */
         if(wntres || wntex)
         {
             if(lsame_(t_or_n__, "N", 1, 1))
             {
-                dlacpy_("A", n, k, &w[w_offset], ldw, &z__[z_offset], ldz);
+                zlacpy_("A", n, k, &w[w_offset], ldw, &z__[z_offset], ldz);
             }
             else
             {
-                dlacpy_("A", k, n, &w[w_offset], ldw, &z__[z_offset], ldz);
+                zlacpy_("A", k, n, &w[w_offset], ldw, &z__[z_offset], ldz);
             }
         }
     }
     /* <5> Compute the Ritz values and (if requested) the */
     /* right eigenvectors of the Rayleigh quotient. */
-    i__1 = *lwork - *n;
-    dgeev_("N", jobzl, k, &s[s_offset], lds, &reig[1], &imeig[1], &w[w_offset], ldw, &w[w_offset],
-           ldw, &work[*n + 1], &i__1, &info1);
+    zgeev_("N", jobzl, k, &s[s_offset], lds, &eigs[1], &w[w_offset], ldw, &w[w_offset], ldw,
+           &zwork[1], lzwork, &rwork[*n + 1], &info1);
     /* W(1:K,1:K) contains the eigenvectors of the Rayleigh */
-    /* quotient. Even in the case of complex spectrum, all */
-    /* computation is done in doublereal arithmetic. REIG and */
-    /* IMEIG are the doublereal and the imaginary parts of the */
-    /* eigenvalues, so that the spectrum is given as */
-    /* REIG(:) + sqrt(-1)*IMEIG(:). Complex conjugate pairs */
-    /* are listed at consecutive positions. For such a */
-    /* complex conjugate pair of the eigenvalues, the */
-    /* corresponding eigenvectors are also a complex */
-    /* conjugate pair with the doublereal and imaginary parts */
-    /* stored column-wise in W at the corresponding */
-    /* consecutive column indices. See the description of Z. */
-    /* Also, see the description of DGEEV. */
+    /* quotient. See the description of Z. */
+    /* Also, see the description of ZGEEV. */
     /* LAPACK CALL */
     if(info1 > 0)
     {
-        /* DGEEV failed to compute the eigenvalues and */
+        /* ZGEEV failed to compute the eigenvalues and */
         /* eigenvectors of the Rayleigh quotient. */
         *info = 3;
         AOCL_DTL_TRACE_LOG_EXIT
@@ -1410,7 +1336,7 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
                 /* A*U(:,1:K) already computed and stored in Z. */
                 /* For the residuals, need Y = A * U(:,1;
                K) * W. */
-                dgemm_("N", "N", m, k, k, &c_b45, &z__[z_offset], ldz, &w[w_offset], ldw, &c_b55,
+                zgemm_("N", "N", m, k, k, &c_b1, &z__[z_offset], ldz, &w[w_offset], ldw, &c_b2,
                        &y[y_offset], ldy);
                 /* Y(1:M,1:K) = Z(1:M,1:K) * W(1:K,1:K) ! INTRINSIC */
                 /* This frees Z;
@@ -1420,20 +1346,20 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
             else
             {
                 /* Compute S = V_k * Sigma_k^(-1) * W, where */
-                /* V_k * Sigma_k^(-1) is stored in Z */
-                dgemm_(t_or_n__, "N", n, k, k, &c_b45, &z__[z_offset], ldz, &w[w_offset], ldw,
-                       &c_b55, &s[s_offset], lds);
+                /* V_k * Sigma_k^(-1) (or its adjoint) is stored in Z */
+                zgemm_(t_or_n__, "N", n, k, k, &c_b1, &z__[z_offset], ldz, &w[w_offset], ldw, &c_b2,
+                       &s[s_offset], lds);
                 /* Then, compute Z = Y * S = */
                 /* = Y * V_k * Sigma_k^(-1) * W(1:K,1:K) = */
                 /* = A * U(:,1:K) * W(1:K,1:K) */
-                dgemm_("N", "N", m, k, n, &c_b45, &y[y_offset], ldy, &s[s_offset], lds, &c_b55,
+                zgemm_("N", "N", m, k, n, &c_b1, &y[y_offset], ldy, &s[s_offset], lds, &c_b2,
                        &z__[z_offset], ldz);
                 /* Save a copy of Z into Y and free Z for holding */
                 /* the Ritz vectors. */
-                dlacpy_("A", m, k, &z__[z_offset], ldz, &y[y_offset], ldy);
+                zlacpy_("A", m, k, &z__[z_offset], ldz, &y[y_offset], ldy);
                 if(wntex)
                 {
-                    dlacpy_("A", m, k, &z__[z_offset], ldz, &b[b_offset], ldb);
+                    zlacpy_("A", m, k, &z__[z_offset], ldz, &b[b_offset], ldb);
                 }
             }
         }
@@ -1441,76 +1367,49 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
         {
             /* Compute S = V_k * Sigma_k^(-1) * W, where */
             /* V_k * Sigma_k^(-1) is stored in Z */
-            dgemm_(t_or_n__, "N", n, k, k, &c_b45, &z__[z_offset], ldz, &w[w_offset], ldw, &c_b55,
+            zgemm_(t_or_n__, "N", n, k, k, &c_b1, &z__[z_offset], ldz, &w[w_offset], ldw, &c_b2,
                    &s[s_offset], lds);
             /* Then, compute Z = Y * S = */
             /* = Y * V_k * Sigma_k^(-1) * W(1:K,1:K) = */
             /* = A * U(:,1:K) * W(1:K,1:K) */
-            dgemm_("N", "N", m, k, n, &c_b45, &y[y_offset], ldy, &s[s_offset], lds, &c_b55,
+            zgemm_("N", "N", m, k, n, &c_b1, &y[y_offset], ldy, &s[s_offset], lds, &c_b2,
                    &b[b_offset], ldb);
             /* The above call replaces the following two calls */
             /* that were used in the developing-testing phase. */
-            /* CALL DGEMM( 'N', 'N', M, K, N, ONE, Y, LDY, S, & */
-            /* LDS, ZERO, Z, LDZ) */
+            /* CALL ZGEMM( 'N', 'N', M, K, N, ZONE, Y, LDY, S, & */
+            /* LDS, ZZERO, Z, LDZ) */
             /* Save a copy of Z into B and free Z for holding */
             /* the Ritz vectors. */
-            /* CALL DLACPY( 'A', M, K, Z, LDZ, B, LDB ) */
+            /* CALL ZLACPY( 'A', M, K, Z, LDZ, B, LDB ) */
         }
-        /* Compute the doublereal form of the Ritz vectors */
+        /* Compute the Ritz vectors */
         if(wntvec)
         {
-            dgemm_("N", "N", m, k, k, &c_b45, &x[x_offset], ldx, &w[w_offset], ldw, &c_b55,
+            zgemm_("N", "N", m, k, k, &c_b1, &x[x_offset], ldx, &w[w_offset], ldw, &c_b2,
                    &z__[z_offset], ldz);
         }
         /* Z(1:M,1:K) = MATMUL(X(1:M,1:K), W(1:K,1:K)) ! INTRINSIC */
         /* BLAS CALL */
         if(wntres)
         {
-            i__ = 1;
-        L5:
-            if(i__ <= *k)
+            i__1 = *k;
+            for(i__ = 1; i__ <= i__1; ++i__)
             {
-                if(imeig[i__] == 0.f)
-                {
-                    /* have a doublereal eigenvalue with doublereal eigenvector */
-                    /* ! BLAS CALL */
-                    r__1 = -reig[i__];
-                    daxpy_(m, &r__1, &z__[i__ * z_dim1 + 1], &c__1, &y[i__ * y_dim1 + 1], &c__1);
-                    /* Y(1:M,i) = Y(1:M,i) - REIG(i) * Z(1:M,i) ! */
-                    res[i__] = dnrm2_(m, &y[i__ * y_dim1 + 1], &c__1);
-                    /* BLAS CALL */
-                    ++i__;
-                }
-                else
-                {
-                    /* Have a complex conjugate pair */
-                    /* REIG(i) +- sqrt(-1)*IMEIG(i). */
-                    /* Since all computation is done in doublereal */
-                    /* arithmetic, the formula for the residual */
-                    /* is recast for doublereal representation of the */
-                    /* complex conjugate eigenpair. See the */
-                    /* description of RES. */
-                    ab[0] = reig[i__];
-                    ab[1] = -imeig[i__];
-                    ab[2] = imeig[i__];
-                    ab[3] = reig[i__];
-                    dgemm_("N", "N", m, &c__2, &c__2, &c_b153, &z__[i__ * z_dim1 + 1], ldz, ab,
-                           &c__2, &c_b45, &y[i__ * y_dim1 + 1], ldy);
-                    /* Y(1:M,i:i+1) = Y(1:M,i:i+1) - Z(1:M,i:i+1) * AB ! INT */
-                    /* ! LAPACK CALL */
-                    /* BLAS CALL */
-                    res[i__] = dlange_("F", m, &c__2, &y[i__ * y_dim1 + 1], ldy, &work[*n + 1]);
-                    res[i__ + 1] = res[i__];
-                    i__ += 2;
-                }
-                goto L5;
+                /* ! BLAS CALL */
+                i__2 = i__;
+                q__1.r = -eigs[i__2].r;
+                q__1.i = -eigs[i__2].i; // , expr subst
+                zaxpy_(m, &q__1, &z__[i__ * z_dim1 + 1], &c__1, &y[i__ * y_dim1 + 1], &c__1);
+                /* Y(1:M,i) = Y(1:M,i) - EIGS(i) * Z(1:M,i) ! INTR */
+                res[i__] = dznrm2_(m, &y[i__ * y_dim1 + 1], &c__1);
+                /* BLAS CALL */
             }
         }
     }
     if(*whtsvd == 4)
     {
-        work[*n + 1] = xscl1;
-        work[*n + 2] = xscl2;
+        rwork[*n + 1] = xscl1;
+        rwork[*n + 2] = xscl2;
     }
     /* Successful exit. */
     if(!badxy)
@@ -1528,4 +1427,4 @@ void dgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
     return;
     /* ...... */
 }
-/* dgedmd_ */
+/* zgedmd_ */

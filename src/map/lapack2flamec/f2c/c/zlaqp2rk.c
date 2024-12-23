@@ -1,33 +1,33 @@
-/* ./dlaqp2rk.f -- translated by f2c (version 20190311). You must link the resulting object file
+/* ./zlaqp2rk.f -- translated by f2c (version 20190311). You must link the resulting object file
  with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b DLAQP2RK computes truncated QR factorization with column pivoting of a real matrix
- * block using Level 2 BLAS and overwrites a real m-by-nrhs matrix B with Q**T * B. */
+/* > \brief \b ZLAQP2RK computes truncated QR factorization with column pivoting of a complex matrix
+ * block usi ng Level 2 BLAS and overwrites a complex m-by-nrhs matrix B with Q**H * B. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
-/* > Download DLAQP2RK + dependencies */
+/* > Download ZLAQP2RK + dependencies */
 /* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaqp2r
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaqp2r
  * k.f"> */
 /* > [TGZ]</a> */
 /* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaqp2r
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaqp2r
  * k.f"> */
 /* > [ZIP]</a> */
 /* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaqp2r
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaqp2r
  * k.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
 /* =========== */
-/* SUBROUTINE DLAQP2RK( M, N, NRHS, IOFFSET, KMAX, ABSTOL, RELTOL, */
+/* SUBROUTINE ZLAQP2RK( M, N, NRHS, IOFFSET, KMAX, ABSTOL, RELTOL, */
 /* $ KP1, MAXC2NRM, A, LDA, K, MAXC2NRMK, */
 /* $ RELMAXC2NRMK, JPIV, TAU, VN1, VN2, WORK, */
 /* $ INFO ) */
@@ -39,16 +39,17 @@ static integer c__1 = 1;
 /* .. */
 /* .. Array Arguments .. */
 /* INTEGER JPIV( * ) */
-/* DOUBLE PRECISION A( LDA, * ), TAU( * ), VN1( * ), VN2( * ), */
-/* $ WORK( * ) */
+/* DOUBLE PRECISION VN1( * ), VN2( * ) */
+/* COMPLEX*16 A( LDA, * ), TAU( * ), WORK( * ) */
+/* $ */
 /* .. */
 /* > \par Purpose: */
 /* ============= */
 /* > */
 /* > \verbatim */
 /* > */
-/* > DLAQP2RK computes a truncated (rank K) or full rank Householder QR */
-/* > factorization with column pivoting of a real matrix */
+/* > ZLAQP2RK computes a truncated (rank K) or full rank Householder QR */
+/* > factorization with column pivoting of the complex matrix */
 /* > block A(IOFFSET+1:M,1:N) as */
 /* > */
 /* > A * P(K) = Q(K) * R(K). */
@@ -57,7 +58,7 @@ static integer c__1 = 1;
 /* > is accordingly pivoted, but not factorized. */
 /* > */
 /* > The routine also overwrites the right-hand-sides matrix block B */
-/* > stored in A(IOFFSET+1:M,N+1:N+NRHS) with Q(K)**T * B. */
+/* > stored in A(IOFFSET+1:M,N+1:N+NRHS) with Q(K)**H * B. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -158,20 +159,20 @@ static integer c__1 = 1;
 /* > KP1 is INTEGER */
 /* > The index of the column with the maximum 2-norm in */
 /* > the whole original matrix A_orig determined in the */
-/* > main routine DGEQP3RK. 1 <= KP1 <= N_orig_mat. */
+/* > main routine ZGEQP3RK. 1 <= KP1 <= N_orig_mat. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] MAXC2NRM */
 /* > \verbatim */
 /* > MAXC2NRM is DOUBLE PRECISION */
 /* > The maximum column 2-norm of the whole original */
-/* > matrix A_orig computed in the main routine DGEQP3RK. */
+/* > matrix A_orig computed in the main routine ZGEQP3RK. */
 /* > MAXC2NRM >= 0. */
 /* > \endverbatim */
 /* > */
 /* > \param[in,out] A */
 /* > \verbatim */
-/* > A is DOUBLE PRECISION array, dimension (LDA,N+NRHS) */
+/* > A is COMPLEX*16 array, dimension (LDA,N+NRHS) */
 /* > On entry: */
 /* > the M-by-N matrix A and M-by-NRHS matrix B, as in */
 /* > */
@@ -181,7 +182,7 @@ static integer c__1 = 1;
 /* > On exit: */
 /* > 1. The elements in block A(IOFFSET+1:M,1:K) below */
 /* > the diagonal together with the array TAU represent */
-/* > the orthogonal matrix Q(K) as a product of elementary */
+/* > the unitary matrix Q(K) as a product of elementary */
 /* > reflectors. */
 /* > 2. The upper triangular block of the matrix A stored */
 /* > in A(IOFFSET+1:M,1:K) is the triangular factor obtained. */
@@ -193,7 +194,7 @@ static integer c__1 = 1;
 /* > if NRHS > 0, the right part of the block */
 /* > A(IOFFSET+1:M,N+1:N+NRHS) contains the block of */
 /* > the right-hand-side matrix B. Both these blocks have been */
-/* > updated by multiplication from the left by Q(K)**T. */
+/* > updated by multiplication from the left by Q(K)**H. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] LDA */
@@ -238,7 +239,7 @@ static integer c__1 = 1;
 /* > */
 /* > \param[out] TAU */
 /* > \verbatim */
-/* > TAU is DOUBLE PRECISION array, dimension (min(M-IOFFSET,N)) */
+/* > TAU is COMPLEX*16 array, dimension (fla_min(M-IOFFSET,N)) */
 /* > The scalar factors of the elementary reflectors. */
 /* > \endverbatim */
 /* > */
@@ -256,8 +257,8 @@ static integer c__1 = 1;
 /* > */
 /* > \param[out] WORK */
 /* > \verbatim */
-/* > WORK is DOUBLE PRECISION array, dimension (N-1) */
-/* > Used in DLARF subroutine to apply an elementary */
+/* > WORK is COMPLEX*16 array, dimension (N-1) */
+/* > Used in ZLARF subroutine to apply an elementary */
 /* > reflector from the left. */
 /* > \endverbatim */
 /* > */
@@ -342,41 +343,41 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void dlaqp2rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer *kmax,
+void zlaqp2rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer *kmax,
                doublereal *abstol, doublereal *reltol, integer *kp1, doublereal *maxc2nrm,
-               doublereal *a, integer *lda, integer *k, doublereal *maxc2nrmk,
-               doublereal *relmaxc2nrmk, integer *jpiv, doublereal *tau, doublereal *vn1,
-               doublereal *vn2, doublereal *work, integer *info)
+               doublecomplex *a, integer *lda, integer *k, doublereal *maxc2nrmk,
+               doublereal *relmaxc2nrmk, integer *jpiv, doublecomplex *tau, doublereal *vn1,
+               doublereal *vn2, doublecomplex *work, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaqp2rk inputs: m %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS
+    AOCL_DTL_SNPRINTF("zlaqp2rk inputs: m %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS
                       ",ioffset %" FLA_IS ",kmax %" FLA_IS ",kp1 %" FLA_IS ",lda %" FLA_IS "",
                       *m, *n, *nrhs, *ioffset, *kmax, *kp1, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
-    doublereal d__1, d__2;
+    doublereal d__1;
+    doublecomplex z__1;
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(doublereal), d_imag(doublecomplex *);
+    void d_cnjg(doublecomplex *, doublecomplex *);
+    double z_abs(doublecomplex *);
     /* Local variables */
     integer i__, j, jmaxc2nrm, minmnfact, minmnupdt, kk, kp;
-    doublereal aikk, temp;
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
-    doublereal temp2, tol3z;
-    extern /* Subroutine */
-        void
-        dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *);
+    doublecomplex aikk;
+    doublereal temp, temp2, tol3z;
     integer itemp;
     extern /* Subroutine */
         void
-        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
-    extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+        zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *),
+        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    extern doublereal dznrm2_(integer *, doublecomplex *, integer *), dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern logical disnan_(doublereal *);
-    doublereal hugeval;
+    extern /* Subroutine */
+        void
+        zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+    doublereal taunan, hugeval;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -486,11 +487,13 @@ void dlaqp2rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
                 *k = kk - 1;
                 *relmaxc2nrmk = 0.;
                 /* Set TAUs corresponding to the columns that were not */
-                /* factorized to ZERO, i.e. set TAU(KK:MINMNFACT) to ZERO. */
+                /* factorized to ZERO, i.e. set TAU(KK:MINMNFACT) to CZERO. */
                 i__2 = minmnfact;
                 for(j = kk; j <= i__2; ++j)
                 {
-                    tau[j] = 0.;
+                    i__3 = j;
+                    tau[i__3].r = 0.;
+                    tau[i__3].i = 0.; // , expr subst
                 }
                 /* Return from the routine. */
                 AOCL_DTL_TRACE_LOG_EXIT
@@ -525,11 +528,13 @@ void dlaqp2rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
                 /* Set K, the number of factorized columns. */
                 *k = kk - 1;
                 /* Set TAUs corresponding to the columns that were not */
-                /* factorized to ZERO, i.e. set TAU(KK:MINMNFACT) to ZERO. */
+                /* factorized to ZERO, i.e. set TAU(KK:MINMNFACT) to CZERO. */
                 i__2 = minmnfact;
                 for(j = kk; j <= i__2; ++j)
                 {
-                    tau[j] = 0.;
+                    i__3 = j;
+                    tau[i__3].r = 0.;
+                    tau[i__3].i = 0.; // , expr subst
                 }
                 /* Return from the routine. */
                 AOCL_DTL_TRACE_LOG_EXIT
@@ -552,7 +557,7 @@ void dlaqp2rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
         /* the original matrix A, not the block A(1:M,1:N). */
         if(kp != kk)
         {
-            dswap_(m, &a[kp * a_dim1 + 1], &c__1, &a[kk * a_dim1 + 1], &c__1);
+            zswap_(m, &a[kp * a_dim1 + 1], &c__1, &a[kk * a_dim1 + 1], &c__1);
             vn1[kp] = vn1[kk];
             vn2[kp] = vn2[kk];
             itemp = jpiv[kp];
@@ -562,43 +567,64 @@ void dlaqp2rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
         /* Generate elementary reflector H(KK) using the column A(I:M,KK), */
         /* if the column has more than one element, otherwise */
         /* the elementary reflector would be an identity matrix, */
-        /* and TAU(KK) = ZERO. */
+        /* and TAU(KK) = CZERO. */
         if(i__ < *m)
         {
             i__2 = *m - i__ + 1;
-            dlarfg_(&i__2, &a[i__ + kk * a_dim1], &a[i__ + 1 + kk * a_dim1], &c__1, &tau[kk]);
+            zlarfg_(&i__2, &a[i__ + kk * a_dim1], &a[i__ + 1 + kk * a_dim1], &c__1, &tau[kk]);
         }
         else
         {
-            tau[kk] = 0.;
+            i__2 = kk;
+            tau[i__2].r = 0.;
+            tau[i__2].i = 0.; // , expr subst
         }
         /* Check if TAU(KK) contains NaN, set INFO parameter */
         /* to the column number where NaN is found and return from */
         /* the routine. */
         /* NOTE: There is no need to check TAU(KK) for Inf, */
-        /* since DLARFG cannot produce TAU(KK) or Householder vector */
+        /* since ZLARFG cannot produce TAU(KK) or Householder vector */
         /* below the diagonal containing Inf. Only BETA on the diagonal, */
-        /* returned by DLARFG can contain Inf, which requires */
+        /* returned by ZLARFG can contain Inf, which requires */
         /* TAU(KK) to contain NaN. Therefore, this case of generating Inf */
-        /* by DLARFG is covered by checking TAU(KK) for NaN. */
-        if(disnan_(&tau[kk]))
+        /* by ZLARFG is covered by checking TAU(KK) for NaN. */
+        i__2 = kk;
+        d__1 = tau[i__2].r;
+        if(disnan_(&d__1))
+        {
+            i__2 = kk;
+            taunan = tau[i__2].r;
+        }
+        else /* if(complicated condition) */
+        {
+            d__1 = d_imag(&tau[kk]);
+            if(disnan_(&d__1))
+            {
+                taunan = d_imag(&tau[kk]);
+            }
+            else
+            {
+                taunan = 0.;
+            }
+        }
+        if(disnan_(&taunan))
         {
             *k = kk - 1;
             *info = kk;
             /* Set MAXC2NRMK and RELMAXC2NRMK to NaN. */
-            *maxc2nrmk = tau[kk];
-            *relmaxc2nrmk = tau[kk];
+            *maxc2nrmk = taunan;
+            *relmaxc2nrmk = taunan;
             /* Array TAU(KK:MINMNFACT) is not set and contains */
             /* undefined elements, except the first element TAU(KK) = NaN. */
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
-        /* Apply H(KK)**T to A(I:M,KK+1:N+NRHS) from the left. */
+        /* Apply H(KK)**H to A(I:M,KK+1:N+NRHS) from the left. */
         /* ( If M >= N, then at KK = N there is no residual matrix, */
         /* i.e. no columns of A to update, only columns of B. */
         /* If M < N, then at KK = M-IOFFSET, I = M and we have a */
         /* one-row residual matrix in A and the elementary */
-        /* reflector is a unit matrix, TAU(KK) = ZERO, i.e. no update */
+        /* reflector is a unit matrix, TAU(KK) = CZERO, i.e. no update */
         /* is needed for the residual matrix in A and the */
         /* right-hand-side-matrix in B. */
         /* Therefore, we update only if */
@@ -606,13 +632,20 @@ void dlaqp2rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
         /* condition is satisfied, not only KK < N+NRHS ) */
         if(kk < minmnupdt)
         {
-            aikk = a[i__ + kk * a_dim1];
-            a[i__ + kk * a_dim1] = 1.;
+            i__2 = i__ + kk * a_dim1;
+            aikk.r = a[i__2].r;
+            aikk.i = a[i__2].i; // , expr subst
+            i__2 = i__ + kk * a_dim1;
+            a[i__2].r = 1.;
+            a[i__2].i = 0.; // , expr subst
             i__2 = *m - i__ + 1;
             i__3 = *n + *nrhs - kk;
-            dlarf_("Left", &i__2, &i__3, &a[i__ + kk * a_dim1], &c__1, &tau[kk],
+            d_cnjg(&z__1, &tau[kk]);
+            zlarf_("Left", &i__2, &i__3, &a[i__ + kk * a_dim1], &c__1, &z__1,
                    &a[i__ + (kk + 1) * a_dim1], lda, &work[1]);
-            a[i__ + kk * a_dim1] = aikk;
+            i__2 = i__ + kk * a_dim1;
+            a[i__2].r = aikk.r;
+            a[i__2].i = aikk.i; // , expr subst
         }
         if(kk < minmnfact)
         {
@@ -627,8 +660,8 @@ void dlaqp2rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
                     /* NOTE: The following lines follow from the analysis in */
                     /* Lapack Working Note 176. */
                     /* Computing 2nd power */
-                    d__2 = (d__1 = a[i__ + j * a_dim1], f2c_abs(d__1)) / vn1[j];
-                    temp = 1. - d__2 * d__2;
+                    d__1 = z_abs(&a[i__ + j * a_dim1]) / vn1[j];
+                    temp = 1. - d__1 * d__1;
                     temp = fla_max(temp, 0.);
                     /* Computing 2nd power */
                     d__1 = vn1[j] / vn2[j];
@@ -640,7 +673,7 @@ void dlaqp2rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
                         /* and store it in both partial 2-norm vector VN1 */
                         /* and exact column 2-norm vector VN2. */
                         i__3 = *m - i__;
-                        vn1[j] = dnrm2_(&i__3, &a[i__ + 1 + j * a_dim1], &c__1);
+                        vn1[j] = dznrm2_(&i__3, &a[i__ + 1 + j * a_dim1], &c__1);
                         vn2[j] = vn1[j];
                     }
                     else
@@ -684,14 +717,16 @@ void dlaqp2rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
     }
     /* We reached the end of the loop, i.e. all KMAX columns were */
     /* factorized, set TAUs corresponding to the columns that were */
-    /* not factorized to ZERO, i.e. TAU(K+1:MINMNFACT) set to ZERO. */
+    /* not factorized to ZERO, i.e. TAU(K+1:MINMNFACT) set to CZERO. */
     i__1 = minmnfact;
     for(j = *k + 1; j <= i__1; ++j)
     {
-        tau[j] = 0.;
+        i__2 = j;
+        tau[i__2].r = 0.;
+        tau[i__2].i = 0.; // , expr subst
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;
-    /* End of DLAQP2RK */
+    /* End of ZLAQP2RK */
 }
-/* dlaqp2rk_ */
+/* zlaqp2rk_ */

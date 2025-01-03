@@ -1,25 +1,28 @@
 /*
-    Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
+#include "test_common.h"
 #include "test_lapack.h"
+#include "test_prototype.h"
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
-#include <invoke_lapacke.h>
 
 integer row_major_gecon_lda;
 
-void fla_test_gecon_experiment(char *tst_api, test_params_t *params, integer datatype,
-                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
-                               integer einfo);
+void fla_test_gecon_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *t, double *residual);
 void prepare_gecon_run(integer datatype, char *norm, integer n, void *A, integer lda, void *anorm,
-                       void *rcond, void *work, void *lrwork, integer *info, integer interfacetype,
-                       integer layout, test_params_t *params);
+                       void *rcond, void *work, void *lrwork, integer n_repeats, double *time_min,
+                       integer *info, integer interfacetype, integer layout);
 double prepare_lapacke_gecon_run(integer datatype, integer layout, char norm, integer n, void *A,
                                  integer lda, void *anorm, void *rcond, integer *info);
 void invoke_gecon(integer datatype, char *norm, integer *n, void *A, integer *lda, void *anorm,
                   void *rcond, void *work, void *lrwork, integer *info);
+integer invoke_lapacke_gecon(integer datatype, integer layout, char norm, integer n, void *A,
+                             integer lda, void *anorm, void *rcond);
 
 void fla_test_gecon(integer argc, char **argv, test_params_t *params)
 {
@@ -30,7 +33,7 @@ void fla_test_gecon(integer argc, char **argv, test_params_t *params)
 
     if(argc == 1)
     {
-        g_config_data = 1;
+        config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, LIN, fla_test_gecon_experiment);
@@ -44,6 +47,7 @@ void fla_test_gecon(integer argc, char **argv, test_params_t *params)
     {
         integer i, num_types, N;
         integer datatype, n_repeats;
+        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -64,7 +68,6 @@ void fla_test_gecon(integer argc, char **argv, test_params_t *params)
         }
 
         n_repeats = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
-        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -88,7 +91,13 @@ void fla_test_gecon(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_gecon_experiment(front_str, params, datatype, N, N, 0, n_repeats, einfo);
+                fla_test_gecon_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
+                                          &time_min, &residual);
+
+                /* Print the result */
+                fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
+                                      params->lin_solver_paramslist[0].solver_threshold, time_min,
+                                      perf);
                 tests_not_run = 0;
             }
         }
@@ -111,28 +120,26 @@ void fla_test_gecon(integer argc, char **argv, test_params_t *params)
     return;
 }
 
-void fla_test_gecon_experiment(char *tst_api, test_params_t *params, integer datatype,
-                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
-                               integer einfo)
+void fla_test_gecon_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *t, double *residual)
 {
     integer n, lda, info = 0;
     void *A = NULL, *work = NULL, *rcond = NULL, *anorm = NULL, *lrwork = NULL, *ipiv = NULL,
          *s_test_in = NULL, *A_save = NULL;
     char norm;
-    double residual, err_thresh;
     integer interfacetype = params->interfacetype;
     integer layout = params->matrix_major, getrfinfo = 0;
-    void *filename = NULL;
 
     /* Determine the dimensions */
     n = p_cur;
     lda = params->lin_solver_paramslist[pci].lda;
     norm = params->lin_solver_paramslist[pci].norm_gbcon;
-    err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
+    *residual = params->lin_solver_paramslist[pci].solver_threshold;
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(g_config_data)
+    if(config_data)
     {
         if(lda == -1)
         {
@@ -152,117 +159,86 @@ void fla_test_gecon_experiment(char *tst_api, test_params_t *params, integer dat
         create_vector(DOUBLE, &lrwork, 2 * n);
     create_realtype_vector(datatype, &rcond, 1);
     create_realtype_vector(datatype, &anorm, 1);
+    create_realtype_vector(datatype, &s_test_in, n);
 
-    if(!FLA_BRT_VERIFICATION_RUN)
+    /* Initialize the test matrices */
+    if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
     {
-        /* Initialize the test matrices */
-        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
-        {
-            init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
-            compute_matrix_norm(datatype, norm, n, n, A, lda, anorm, norm, work);
-        }
-        else
-        { /*Generating specific input matrix */
-            create_realtype_vector(datatype, &s_test_in, n);
-            create_svd_matrix(datatype, 'U', n, n, A, lda, s_test_in, 0.1, 100, i_zero, i_zero,
-                              getrfinfo);
-            compute_matrix_norm(datatype, norm, n, n, A, lda, anorm, norm, work);
-            if(FLA_OVERFLOW_UNDERFLOW_TEST)
-            {
-                scale_matrix_underflow_overflow_getrf(datatype, n, n, A, lda, params->imatrix_char);
-            }
-            create_vector(INTEGER, &ipiv, n);
-            getrfinfo = 0;
-            invoke_getrf(datatype, &n, &n, A, &lda, ipiv, &getrfinfo);
-            copy_matrix(datatype, "Full", n, n, A, lda, A_save, lda);
-            free_vector(ipiv);
-        }
+        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+        compute_matrix_norm(datatype, norm, n, n, A, lda, anorm, norm, work);
     }
-
-    /* This macro is used in the BRT test cases for the following purposes:
-     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
-     * reference
-     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
-     * passed as input to the API
-     * */
-    FLA_BRT_PROCESS_TWO_INPUT(datatype, n, n, A, lda, get_realtype(datatype), 1, 1, anorm, 1, "cdd",
-                              norm, n, lda)
+    else
+    { /*Generating specific input matrix */
+        create_svd_matrix(datatype, 'U', n, n, A, lda, s_test_in, 0.1, 100, i_zero, i_zero,
+                          getrfinfo);
+        compute_matrix_norm(datatype, norm, n, n, A, lda, anorm, norm, work);
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            scale_matrix_underflow_overflow_getrf(datatype, n, n, A, lda, params->imatrix_char);
+        }
+        create_vector(INTEGER, &ipiv, n);
+        getrfinfo = 0;
+        invoke_getrf(datatype, &n, &n, A, &lda, ipiv, &getrfinfo);
+        copy_matrix(datatype, "Full", n, n, A, lda, A_save, lda);
+    }
+    /* Save the original matrix */
 
     /* call to API */
-    prepare_gecon_run(datatype, &norm, n, A, lda, anorm, rcond, work, lrwork, &info, interfacetype,
-                      layout, params);
+    prepare_gecon_run(datatype, &norm, n, A, lda, anorm, rcond, work, lrwork, n_repeats, t, &info,
+                      interfacetype, layout);
 
     /* Performance computation */
 
-    perf = (double)(2.0 * n * n) / time_min / FLOPS_PER_UNIT_PERF;
+    *perf = (double)(2 * (n * n)) / *t / FLOPS_PER_UNIT_PERF;
 
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
-        perf *= 4.0;
+        *perf *= 4.0;
 
     /* Output validataion */
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    IF_FLA_BRT_VALIDATION(
-        n, n, store_outputs_base(filename, params, 0, 1, get_realtype(datatype), 1, rcond),
-        validate_gecon(tst_api, datatype, norm, n, A, A_save, lda, residual, params->imatrix_char,
-                       params),
-        check_reproducibility_base(filename, params, 0, 1, get_realtype(datatype), 1, rcond))
-    else if(FLA_SKIP_VALIDATION_MODE)
+    if(info == 0 && !FLA_EXTREME_CASE_TEST)
     {
-        /* Skip validation for performance modes */
-        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
-    }
-    else if(!FLA_EXTREME_CASE_TEST)
-    {
-        validate_gecon(tst_api, datatype, norm, n, A, A_save, lda, residual, params->imatrix_char,
-                       params);
+        validate_gecon(datatype, norm, n, A, A_save, lda, residual, params->imatrix_char);
     }
     /* check for output matrix when inputs as extreme values */
-    else
+    else if(FLA_EXTREME_CASE_TEST)
     {
         if(!check_extreme_value(datatype, n, n, A, lda, params->imatrix_char))
         {
-            residual = DBL_MAX;
+            *residual = DBL_MAX;
         }
-        else
-        {
-            residual = err_thresh;
-        }
-        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     }
+    else
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up buffers */
-    if(!FLA_BRT_VERIFICATION_RUN)
-    {
-        free_vector(s_test_in);
-    }
-free_buffers:
-    FLA_FREE_FILENAME(filename);
     free_matrix(A);
     free_matrix(A_save);
+    free_vector(ipiv);
     free_vector(work);
+    free_vector(s_test_in);
     free_vector(anorm);
     free_vector(rcond);
     free_vector(lrwork);
 }
 
 void prepare_gecon_run(integer datatype, char *norm, integer n, void *A, integer lda, void *anorm,
-                       void *rcond, void *work, void *lrwork, integer *info, integer interfacetype,
-                       integer layout, test_params_t *params)
+                       void *rcond, void *work, void *lrwork, integer n_repeats, double *time_min,
+                       integer *info, integer interfacetype, integer layout)
 {
-    integer lwork = 4 * n;
+    integer i, lwork = 4 * n;
     void *A_save = NULL;
-    double exe_time;
+    double time_min_ = 1e9, exe_time;
 
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_save, lda);
 
-    /* Workspace size calculations for scomplex datatype */
+    /* Workspace size calculations for complex datatype */
     if(datatype == COMPLEX && datatype == DOUBLE_COMPLEX)
     {
         lwork = 2 * n;
     }
 
     *info = 0;
-    FLA_EXEC_LOOP_BEGIN
+    for(i = 0; i < n_repeats && *info == 0; i++)
     {
         /* Copy original input */
         copy_matrix(datatype, "full", lda, n, A, lda, A_save, lda);
@@ -295,11 +271,12 @@ void prepare_gecon_run(integer datatype, char *norm, integer n, void *A, integer
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Update ctx and loop conditions */
-        FLA_EXEC_LOOP_UPDATE_WITH_INFO
+        /* Get the best execution time */
+        time_min_ = fla_min(time_min_, exe_time);
 
         free_vector(work);
     }
+    *time_min = time_min_;
 
     /* Save the output to vector A */
     copy_matrix(datatype, "full", lda, n, A_save, lda, A, lda);
@@ -317,7 +294,7 @@ double prepare_lapacke_gecon_run(integer datatype, integer layout, char norm, in
     A_t = A;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_gecon_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_gecon_lda, lda_t);
     /* In case of row_major matrix layout,
        convert input matrix to row_major */
     if(layout == LAPACK_ROW_MAJOR)
@@ -380,4 +357,41 @@ void invoke_gecon(integer datatype, char *norm, integer *n, void *A, integer *ld
             break;
         }
     }
+}
+
+/*
+LAPACKE gecon API invoke function
+*/
+
+integer invoke_lapacke_gecon(integer datatype, integer layout, char norm, integer n, void *A,
+                             integer lda, void *anorm, void *rcond)
+{
+    integer info = 0;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            info = LAPACKE_sgecon(layout, norm, n, A, lda, *(float *)anorm, (float *)rcond);
+            break;
+        }
+
+        case DOUBLE:
+        {
+            info = LAPACKE_dgecon(layout, norm, n, A, lda, *(double *)anorm, (double *)rcond);
+            break;
+        }
+
+        case COMPLEX:
+        {
+            info = LAPACKE_cgecon(layout, norm, n, A, lda, *(float *)anorm, (float *)rcond);
+            break;
+        }
+
+        case DOUBLE_COMPLEX:
+        {
+            info = LAPACKE_zgecon(layout, norm, n, A, lda, *(double *)anorm, (double *)rcond);
+            break;
+        }
+    }
+    return info;
 }

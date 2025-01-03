@@ -133,8 +133,12 @@ extern FILE *g_ext_fptr;
     }
 
 #define FLA_TEST_CHECK_EINFO(residual, info, einfo) \
-    if(info != einfo)                               \
-        *residual = DBL_MAX;
+{                                                   \
+    if(einfo == 0 && info < 0)                      \
+        *residual = DBL_MIN;                        \
+    else if(info != einfo)                          \
+        *residual = DBL_MAX;                        \
+}
 
 #define FLA_EXTREME_CASE_TEST                                                                  \
     (params->imatrix_char == 'A' || params->imatrix_char == 'F' || params->imatrix_char == 'N' \

@@ -102,6 +102,8 @@ void invoke_cpp_rot(integer datatype, integer *n, void *cx, integer *incx, void 
 void invoke_cpp_stedc(integer datatype, char *compz, integer *n, void *D, void *E, void *Z,
                       integer *ldz, void *work, integer *lwork, void *rwork, integer *lrwork,
                       integer *iwork, integer *liwork, integer *info);
+void invoke_cpp_gecon(integer datatype, char *norm, integer *n, void *A, integer *lda, void *anorm,
+                  void *rcond, void *work, void *lrwork, integer *info);
 #ifdef __cplusplus
 }
 #endif

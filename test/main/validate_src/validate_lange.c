@@ -7,7 +7,6 @@
  *  */
 
 #include "test_common.h"
-#include "test_prototype.h"
 
 /* Used for scaling during sum of squares calculation */
 #define float_sbig 1.32348898E-23f
@@ -41,14 +40,14 @@
             }                                                                                     \
             case COMPLEX:                                                                         \
             {                                                                                     \
-                _Fcomplex z_ = {((scomplex *)A)[i + j * lda].real, ((scomplex *)A)[i + j * lda].imag};    \
+                _Fcomplex z_ = {((complex *)A)[i + j * lda].r, ((complex *)A)[i + j * lda].i};    \
                 result = cabsf(z_);                                                               \
                 break;                                                                            \
             }                                                                                     \
             case DOUBLE_COMPLEX:                                                                  \
             {                                                                                     \
                 _Dcomplex z_                                                                      \
-                    = {((dcomplex *)A)[i + j * lda].real, ((dcomplex *)A)[i + j * lda].imag}; \
+                    = {((doublecomplex *)A)[i + j * lda].r, ((doublecomplex *)A)[i + j * lda].i}; \
                 result = cabs(z_);                                                                \
                 break;                                                                            \
             }                                                                                     \
@@ -66,11 +65,11 @@
                 result = FLA_FABS(((double *)A)[i + j * lda]);                                    \
                 break;                                                                            \
             case COMPLEX:                                                                         \
-                result = cabs(((scomplex *)A)[i + j * lda].real + I * ((scomplex *)A)[i + j * lda].imag); \
+                result = cabs(((complex *)A)[i + j * lda].r + I * ((complex *)A)[i + j * lda].i); \
                 break;                                                                            \
             case DOUBLE_COMPLEX:                                                                  \
-                result = cabs(((dcomplex *)A)[i + j * lda].real                                 \
-                              + I * ((dcomplex *)A)[i + j * lda].imag);                         \
+                result = cabs(((doublecomplex *)A)[i + j * lda].r                                 \
+                              + I * ((doublecomplex *)A)[i + j * lda].i);                         \
                 break;                                                                            \
         }                                                                                         \
     }
@@ -87,10 +86,10 @@
                 result = FLA_FABS(((double *)A)[i + j * lda]);          \
                 break;                                                  \
             case COMPLEX:                                               \
-                result = FLA_FABS(((scomplex *)A)[i + j * lda].real);       \
+                result = FLA_FABS(((complex *)A)[i + j * lda].r);       \
                 break;                                                  \
             case DOUBLE_COMPLEX:                                        \
-                result = FLA_FABS(((dcomplex *)A)[i + j * lda].real); \
+                result = FLA_FABS(((doublecomplex *)A)[i + j * lda].r); \
                 break;                                                  \
         }                                                               \
     }
@@ -100,10 +99,10 @@
         switch(datatype)                                                \
         {                                                               \
             case COMPLEX:                                               \
-                result = FLA_FABS(((scomplex *)A)[i + j * lda].imag);       \
+                result = FLA_FABS(((complex *)A)[i + j * lda].i);       \
                 break;                                                  \
             case DOUBLE_COMPLEX:                                        \
-                result = FLA_FABS(((dcomplex *)A)[i + j * lda].imag); \
+                result = FLA_FABS(((doublecomplex *)A)[i + j * lda].i); \
                 break;                                                  \
             default:                                                    \
                 result = 0.0;                                           \
@@ -127,16 +126,16 @@
             }                                                                         \
             case COMPLEX:                                                             \
             {                                                                         \
-                scomplex *C = (scomplex *)A;                                            \
-                result = (C[i + j * lda].real * C[i + j * lda].real)                        \
-                         + (C[i + j * lda].imag * C[i + j * lda].imag);                     \
+                complex *C = (complex *)A;                                            \
+                result = (C[i + j * lda].r * C[i + j * lda].r)                        \
+                         + (C[i + j * lda].i * C[i + j * lda].i);                     \
                 break;                                                                \
             }                                                                         \
             case DOUBLE_COMPLEX:                                                      \
             {                                                                         \
-                dcomplex *C = (dcomplex *)A;                                \
-                result = (C[i + j * lda].real * C[i + j * lda].real)                        \
-                         + (C[i + j * lda].imag * C[i + j * lda].imag);                     \
+                doublecomplex *C = (doublecomplex *)A;                                \
+                result = (C[i + j * lda].r * C[i + j * lda].r)                        \
+                         + (C[i + j * lda].i * C[i + j * lda].i);                     \
                 break;                                                                \
             }                                                                         \
         }                                                                             \
@@ -144,7 +143,7 @@
 
 #define GET_MNORM(realtype, datatype, A, m, n, lda, resultp)  \
     {                                                         \
-        size_t i, j;                                          \
+        integer i, j;                                         \
         realtype max_val = 0.0;                               \
         realtype abs_val;                                     \
         for(j = 0; j < n; j++)                                \
@@ -152,7 +151,7 @@
             for(i = 0; i < m; i++)                            \
             {                                                 \
                 GET_ABS_VAL(datatype, A, i, j, lda, abs_val); \
-                max_val = fla_test_max(max_val, abs_val);     \
+                max_val = fla_max(max_val, abs_val);          \
             }                                                 \
         }                                                     \
         *(realtype *)resultp = max_val;                       \
@@ -160,7 +159,7 @@
 
 #define GET_1NORM(realtype, datatype, A, m, n, lda, resultp)  \
     {                                                         \
-        size_t i, j;                                          \
+        integer i, j;                                         \
         realtype max_val = 0.0, col_sum = 0.0;                \
         double abs_val;                                       \
         for(j = 0; j < n; j++)                                \
@@ -171,14 +170,14 @@
                 GET_ABS_VAL(datatype, A, i, j, lda, abs_val); \
                 col_sum += abs_val;                           \
             }                                                 \
-            max_val = fla_test_max(max_val, col_sum);         \
+            max_val = fla_max(max_val, col_sum);              \
         }                                                     \
         *(realtype *)resultp = max_val;                       \
     }
 
 #define GET_INORM(realtype, datatype, A, m, n, lda, resultp)          \
     {                                                                 \
-        size_t i, j;                                                  \
+        integer i, j;                                                 \
         realtype max_val = 0.0;                                       \
         double abs_val;                                               \
         realtype *row_sums;                                           \
@@ -194,7 +193,7 @@
         }                                                             \
         for(i = 0; i < m; i++)                                        \
         {                                                             \
-            max_val = fla_test_max(max_val, row_sums[i]);             \
+            max_val = fla_max(max_val, row_sums[i]);                  \
         }                                                             \
         free_vector(row_sums);                                        \
         *(realtype *)resultp = max_val;                               \
@@ -202,7 +201,7 @@
 
 #define GET_FNORM(realtype, datatype, A, m, n, lda, resultp)            \
     {                                                                   \
-        size_t i, j;                                                    \
+        integer i, j;                                                   \
         integer notbig = 1;                                             \
         realtype sqrsum = 0., scl = 1.;                                 \
         realtype abig, amed, asml, abs_val, t__;                        \
@@ -292,7 +291,7 @@
                 {                                                       \
                     amed = sqrt(amed);                                  \
                     asml = sqrt(asml) / x_ssml(realtype);               \
-                    realtype ymax = fla_test_max(amed, asml);           \
+                    realtype ymax = fla_max(amed, asml);                \
                     realtype ymin = fla_min(amed, asml);                \
                     realtype t1 = ymin / ymax;                          \
                     scl = 1.;                                           \
@@ -340,21 +339,10 @@
         }                                                        \
     }
 
-void validate_lange(char *tst_api, integer datatype, char norm_type, integer m, integer n,
-                    integer lda, void *A, void *result, double err_thresh, void *params)
+void validate_lange(integer datatype, char norm_type, integer m, integer n, integer lda, void *A,
+                    void *result, double *residual)
 {
     void *calculated_value;
-    double residual;
-
-    /* Early return conditions */
-    if(m == 0 || n == 0)
-    {
-        FLA_TEST_PRINT_STATUS_AND_RETURN(m, n, err_thresh);
-    }
-    /* print overall status if incoming threshold is
-     * an extreme value indicating that API returned
-     * unexpected info value */
-    FLA_TEST_PRINT_INVALID_STATUS(m, n, err_thresh);
 
     create_vector(get_realtype(datatype), &calculated_value, 1);
 
@@ -389,40 +377,34 @@ void validate_lange(char *tst_api, integer datatype, char norm_type, integer m, 
         case FLOAT:
         {
             double res_value = *(float *)result - *(float *)calculated_value;
-            residual = FLA_FABS(res_value);
+            *residual = FLA_FABS(res_value);
             float eps = slamch_("P");
-            if(same_char(norm_type, 'F') && residual > (m * n * eps))
+            if(norm_type == 'F' && *residual > (m * n * eps))
             {
-                residual = DBL_MAX;
+                *residual = DBL_MAX;
             }
-            else if(!same_char(norm_type, 'F') && residual > eps)
+            else if(norm_type != 'F' && *residual > eps)
             {
-                residual = DBL_MAX;
+                *residual = DBL_MAX;
             }
             break;
         }
         case DOUBLE:
         {
             double res_value = *(double *)result - *(double *)calculated_value;
-            residual = FLA_FABS(res_value);
+            *residual = FLA_FABS(res_value);
             double eps = dlamch_("P");
-            if(same_char(norm_type, 'F') && residual > (m * n * eps))
+            if(norm_type == 'F' && *residual > (m * n * eps))
             {
-                residual = DBL_MAX;
+                *residual = DBL_MAX;
             }
-            else if(!same_char(norm_type, 'F') && residual > eps)
+            else if(norm_type != 'F' && *residual > eps)
             {
-                residual = DBL_MAX;
+                *residual = DBL_MAX;
             }
             break;
         }
-        default:
-            residual = err_thresh;
-            break;
     }
 
     free_vector(calculated_value);
-
-    FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
-    FLA_PRINT_SUBTEST_STATUS(residual, err_thresh, "01");
 }

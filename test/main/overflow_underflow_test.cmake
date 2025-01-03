@@ -430,6 +430,8 @@ set(OVERFLOW_UNDERFLOW_VALUES_TEST_CASES "gehrd sdcz 15 1 10 15 15 1 --imatrix=O
             "sygvd sdcz 2 V U 230 230 -1 -1 -1 1 --imatrix=U"
             "sygvd sdcz 3 V U 8 8 -1 -1 -1 1 --imatrix=U"
             "sygvd sdcz 1 V U 64 64 -1 -1 -1 1 --imatrix=U"
+            "lange sdcz M1IF 500 500 500 100 --imatrix-char=O"
+            "lange sdcz M1IF 500 500 500 100 --imatrix-char=U"
 )
 
 foreach(ou_vals_test_cases IN LISTS OVERFLOW_UNDERFLOW_VALUES_TEST_CASES)

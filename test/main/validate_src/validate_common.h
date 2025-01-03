@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 
 /*! @file validate_common.h
@@ -168,4 +168,8 @@ void validate_sygvd(integer itype, char *jobz, char *range, char *uplo, integer 
                     void *A_test, integer lda, void *B, void *B_test, integer ldb, integer il,
                     integer iu, void *lambda_orig, void *lambda_out, void *ifail, integer datatype,
                     double *residual, char imatrix, void *scal);
+
+/* Validate function for lange */
+void validate_lange(integer datatype, char norm_type, integer m, integer n, integer lda, void *A,
+                    void *result, double *residual);
 #endif // VALIDATE_COMMON_H

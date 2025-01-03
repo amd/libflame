@@ -6814,3 +6814,102 @@ integer fla_validate_lange_norm_types(char *src_norm_str, char *dst_norm_str, in
     free(parsed_norm_str);
     return idx > 0 ? 0 : -1;
 }
+
+/* Sets the matrix index bounds for the given uplo and i values for compare_matrix function*/
+void set_matrix_bounds(char *uplo, integer i, integer m, integer *j_start, integer *j_end)
+{
+    if(*uplo == 'U')
+    {
+        *j_start = 0;
+        *j_end = fla_min(i, m);
+    }
+    else if(*uplo == 'L')
+    {
+        *j_start = i;
+        *j_end = m;
+    }
+    else
+    {
+        *j_start = 0;
+        *j_end = m;
+    }
+}
+
+/* Comparison of matrix
+ * Compare matrix A with matrix B
+ * if uplo = 'U' upper triangular part is compared.
+ * if uplo = 'L' lower triangular part is compared.
+ * else full matrix is compared.
+ * Retruns 0 if there is a mismatch
+ * Returns 1 if A and B are identical */
+integer compare_matrix(integer datatype, char *uplo, integer m, integer n, void *A, integer lda,
+                       void *B, integer ldb)
+{
+    integer i, j, j_start = 0, j_end = m;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            for(i = 0; i < n; i++)
+            {
+                set_matrix_bounds(uplo, i, m, &j_start, &j_end);
+                for(j = j_start; j < j_end; j++)
+                {
+                    if(((float *)A)[i * lda + j] != ((float *)B)[i * ldb + j])
+                    {
+                        return 0;
+                    }
+                }
+            }
+            break;
+        }
+        case DOUBLE:
+        {
+            for(i = 0; i < n; i++)
+            {
+                set_matrix_bounds(uplo, i, m, &j_start, &j_end);
+                for(j = j_start; j < j_end; j++)
+                {
+                    if(((double *)A)[i * lda + j] != ((double *)B)[i * ldb + j])
+                    {
+                        return 0;
+                    }
+                }
+            }
+            break;
+        }
+        case COMPLEX:
+        {
+            for(i = 0; i < n; i++)
+            {
+                set_matrix_bounds(uplo, i, m, &j_start, &j_end);
+                for(j = j_start; j < j_end; j++)
+                {
+                    if((((scomplex *)A)[i * lda + j].real != ((scomplex *)B)[i * ldb + j].real)
+                       && (((scomplex *)A)[i * lda + j].imag != ((scomplex *)B)[i * ldb + j].imag))
+                    {
+                        return 0;
+                    }
+                }
+            }
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            for(i = 0; i < n; i++)
+            {
+                set_matrix_bounds(uplo, i, m, &j_start, &j_end);
+                for(j = j_start; j < j_end; j++)
+                {
+                    if((((dcomplex *)A)[i * lda + j].real != ((dcomplex *)B)[i * ldb + j].real)
+                       && (((dcomplex *)A)[i * lda + j].imag != ((dcomplex *)B)[i * ldb + j].imag))
+                    {
+                        return 0;
+                    }
+                }
+            }
+            break;
+        }
+    }
+    return 1;
+}

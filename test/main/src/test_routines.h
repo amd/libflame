@@ -50,6 +50,7 @@ void fla_test_sytrf_rook(integer argc, char **argv, test_params_t *params);
 void fla_test_larf(integer argc, char **argv, test_params_t *params);
 void fla_test_sygvd(integer argc, char **argv, test_params_t *params);
 void fla_test_lange(integer argc, char **argv, test_params_t *params);
+void fla_test_gecon(integer argc, char **argv, test_params_t *params);
 
 #define LIN_ID 0
 #define EIG_ID 1
@@ -84,7 +85,7 @@ OPERATIONS API_test_functions[]
        {LIN_ID, "sytrf", fla_test_sytrf},     {AUX_ID, "larf", fla_test_larf},
        {EIG_ID, "sygvd", fla_test_sygvd},     {AUX_ID, "hegvd", fla_test_sygvd},
        {LIN_ID, "hetrf_rook", fla_test_hetrf_rook}, {LIN_ID, "sytrf_rook", fla_test_sytrf_rook},
-       {AUX_ID, "lange", fla_test_lange}};
+       {AUX_ID, "lange", fla_test_lange},     {LIN_ID, "gecon", fla_test_gecon}};
 
 /* Add test API's group entry below */
 char *API_test_group[] = {"LIN", "EIG", "SVD", "AUX"};

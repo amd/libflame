@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2024, Advanced Micro Devices, Inc.
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc.
 */
 
 #include "test_common.h"
@@ -1402,6 +1402,31 @@ integer get_datatype(char stype)
         datatype = INVALID_TYPE;
 
     return datatype;
+}
+
+/* Get datatype char for a given datatype */
+char get_datatype_char(integer datatype)
+{
+    char stype;
+    switch(datatype)
+    {
+        case FLOAT:
+            stype = 's';
+            break;
+        case DOUBLE:
+            stype = 'd';
+            break;
+        case COMPLEX:
+            stype = 'c';
+            break;
+        case DOUBLE_COMPLEX:
+            stype = 'z';
+            break;
+        default:
+            stype = 'i';
+            break;
+    }
+    return stype;
 }
 
 /* Get realtype of given datatype. */
@@ -6712,4 +6737,80 @@ void negate_off_diagonal_element_imag(integer datatype, void *D, integer n, inte
             }
         }
     }
+}
+
+/* Validates and parses the norm types to be tested for lange API */
+integer fla_validate_lange_norm_types(char *src_norm_str, char *dst_norm_str, integer max_len)
+{
+    if(!src_norm_str || !dst_norm_str)
+    {
+        return -1;
+    }
+
+    char *parsed_norm_str;
+    integer norm_flags = 0b1111;
+    integer idx = 0;
+
+    parsed_norm_str = (char *)malloc(max_len * sizeof(char));
+    for(integer i = 0; i < max_len; i++)
+    {
+        char norm_char = toupper(src_norm_str[i]);
+
+        if(norm_char == '\0')
+        {
+            break;
+        }
+
+        switch(norm_char)
+        {
+            case 'M':
+            {
+                if(norm_flags & 0b1)
+                {
+                    parsed_norm_str[idx++] = 'M';
+                    norm_flags &= ~0b1;
+                }
+                break;
+            }
+            case '1':
+            case 'O':
+            {
+                if(norm_flags & 0b10)
+                {
+                    parsed_norm_str[idx++] = '1';
+                    norm_flags &= ~0b10;
+                }
+                break;
+            }
+            case 'I':
+            {
+                if(norm_flags & 0b100)
+                {
+                    parsed_norm_str[idx++] = 'I';
+                    norm_flags &= ~0b100;
+                }
+                break;
+            }
+            case 'F':
+            case 'E':
+            {
+                if(norm_flags & 0b1000)
+                {
+                    parsed_norm_str[idx++] = 'F';
+                    norm_flags &= ~0b1000;
+                }
+                break;
+            }
+        }
+    }
+    for(integer i = 0; i < idx; i++)
+    {
+        dst_norm_str[i] = parsed_norm_str[i];
+    }
+    for(integer i = idx; i < max_len; i++)
+    {
+        dst_norm_str[i] = '\0';
+    }
+    free(parsed_norm_str);
+    return idx > 0 ? 0 : -1;
 }

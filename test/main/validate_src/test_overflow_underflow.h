@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 
 /*! @file test_overflow_underflow.h
@@ -150,5 +150,9 @@ void scale_matrix_underflow_overflow_gghrd(integer datatype, integer n, void *A,
 /* Scaling matrix with values around overflow, underflow for SYGVD/HEGVD */
 void scale_matrix_underflow_overflow_sygvd(integer datatype, integer n, void *A, integer lda,
                                            void *B, integer ldb, integer itype, char imatrix_char,
+                                           void *scal);
+/* Scaing matrix with values around overflow, underflow for lange */
+void scale_matrix_underflow_overflow_lange(integer datatype, integer m, integer n, void *A,
+                                           integer lda, char norm_type, char imatrix_char,
                                            void *scal);
 #endif // TEST_OVERFLOW_UNDERFLOW_H

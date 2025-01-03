@@ -1,5 +1,5 @@
 ###############################################################################
-# Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
+# Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 ###############################################################################
 
 target_sources(${PROJECT_NAME}
@@ -53,7 +53,8 @@ ${CMAKE_CURRENT_SOURCE_DIR}/test_sytrf.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_hetrf_rook.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_sytrf_rook.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_larf.c
-${CMAKE_CURRENT_SOURCE_DIR}/test_sygvd.c)
+${CMAKE_CURRENT_SOURCE_DIR}/test_sygvd.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_lange.c)
 
 if(ENABLE_CPP_TEST)
 add_subdirectory(cpp)

@@ -1,26 +1,24 @@
 /*
-    Copyright (C) 2025-2026, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
-#if ENABLE_CPP_TEST
-#include <invoke_common.hh>
-#endif
 
 /* Local prototypes */
 integer i_abs(integer *x);
-void fla_test_lange_experiment(char *tst_api, test_params_t *params, integer datatype,
-                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
-                               integer einfo);
+void fla_test_lange_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *exec_time, double *residual);
 void prepare_lange_run(integer datatype, char norm_type, void *A, integer m, integer n, integer lda,
-                       void *result, integer interfacetype, test_params_t *params);
+                       void *result, integer n_repeats, double *time_min_);
 void invoke_lange(integer datatype, char *norm_type, integer *m, integer *n, void *A, integer *lda,
                   void *work, void *result);
 
 void fla_test_lange(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "Auxilary routines";
-    char front_str[8] = "LANGE  \0";
+    char *front_str = malloc(8);
+    strcpy(front_str, "LANGE ");
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
     integer invalid_normtype = 0;
 
@@ -35,6 +33,7 @@ void fla_test_lange(integer argc, char **argv, test_params_t *params)
                                || fla_validate_lange_norm_types(
                                    params->aux_paramslist[i].norm_types_str,
                                    params->aux_paramslist[i].norm_types_str, MAX_NUM_NORMTYPES);
+            params->aux_paramslist[i].front_str = front_str;
         }
         if(!invalid_normtype)
         {
@@ -52,6 +51,7 @@ void fla_test_lange(integer argc, char **argv, test_params_t *params)
         /* Test with parameters from commandline */
         integer i, num_types, M, N;
         integer datatype, n_repeats;
+        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -65,11 +65,11 @@ void fla_test_lange(integer argc, char **argv, test_params_t *params)
         params->aux_paramslist[0].lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
 
         n_repeats = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
-        params->n_repeats = n_repeats;
 
         // set the threshold
         params->aux_paramslist[0].aux_threshold = CLI_NORM_THRESH;
         // set front string
+        params->aux_paramslist[0].front_str = front_str;
 
         if(n_repeats > 0 && !invalid_normtype)
         {
@@ -91,7 +91,11 @@ void fla_test_lange(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_lange_experiment(front_str, params, datatype, M, N, 0, n_repeats, einfo);
+                fla_test_lange_experiment(params, datatype, M, N, 0, n_repeats, einfo, &perf,
+                                          &time_min, &residual);
+                /* Print the results */
+                fla_test_print_status(front_str, stype, RECT_INPUT, M, N, residual,
+                                      params->aux_paramslist[0].aux_threshold, time_min, perf);
                 tests_not_run = 0;
             }
         }
@@ -118,24 +122,22 @@ void fla_test_lange(integer argc, char **argv, test_params_t *params)
         fclose(g_ext_fptr);
         g_ext_fptr = NULL;
     }
+    free(front_str);
     return;
 }
 
-void fla_test_lange_experiment(char *tst_api, test_params_t *params, integer datatype,
-                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
-                               integer einfo)
+void fla_test_lange_experiment(test_params_t *params, integer datatype, integer p_cur,
+                               integer q_cur, integer pci, integer n_repeats, integer einfo,
+                               double *perf, double *exec_time, double *residual)
 {
-    void *A, *A_save, *scal;
+    void *A, *scal;
     void *result;
+    double time_min;
     integer m = p_cur;
     integer n = q_cur;
     integer lda = params->aux_paramslist[pci].lda;
     integer i;
-    double residual, err_thresh;
-    integer interfacetype = params->interfacetype;
-    void *filename = NULL;
 
-    err_thresh = params->aux_paramslist[pci].aux_threshold;
     if(lda == -1)
     {
         lda = fla_max(1, m);
@@ -144,134 +146,108 @@ void fla_test_lange_experiment(char *tst_api, test_params_t *params, integer dat
     /* If lda is less than m, then result with invalid param */
     if(lda < m)
     {
-        time_min = perf = 0.;
-        FLA_PRINT_TEST_STATUS(m, n, DBL_MIN, err_thresh);
+        *residual = DBL_MIN;
+        *exec_time = 0.0;
+        *perf = 0.0;
         return;
     }
 
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
-    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_save, lda);
     create_vector(get_realtype(datatype), &result, 1);
     create_vector(get_realtype(datatype), &scal, 1);
 
     for(i = 0; i < MAX_NUM_NORMTYPES; i++)
     {
+
         char test_norm_type = params->aux_paramslist[pci].norm_types_str[i];
-        tst_api[5] = test_norm_type;
         if(test_norm_type == '\0')
         {
             break;
         }
-
-        residual = err_thresh;
+        
+        *residual = 0.0;
         time_min = 1e9;
 
-        if(!FLA_BRT_VERIFICATION_RUN)
+        if(g_ext_fptr != NULL)
         {
-            if(g_ext_fptr != NULL || FLA_EXTREME_CASE_TEST)
-            {
-                /* Initialize input vectors with custom data */
-                init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
-            }
-            else
-            {
-                /* Initialize input matrix with random numbers */
-                rand_matrix(datatype, A, m, n, lda);
-            }
-
-            if(FLA_OVERFLOW_UNDERFLOW_TEST)
-            {
-                scale_matrix_underflow_overflow_lange(datatype, m, n, A, lda, test_norm_type,
-                                                      params->imatrix_char, scal);
-            }
-        }
-        FLA_BRT_PROCESS_SINGLE_INPUT(datatype, m, n, A, lda, "cddd", test_norm_type, m, n, lda)
-
-        /* Save A before API call for input arg preservation check */
-        copy_matrix(datatype, "full", m, n, A, lda, A_save, lda);
-
-        prepare_lange_run(datatype, test_norm_type, A, m, n, lda, result, interfacetype, params);
-
-        if(time_min == d_zero)
-        {
-            time_min = 1e-9;
-        }
-        /* Compute the performance of the best experiment repeat */
-        /* 4*n */
-        perf = (double)(4.0 * m * n) / time_min / FLOPS_PER_UNIT_PERF;
-        if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
-        {
-            perf *= 2.0;
-        }
-
-        /* output validation */
-        IF_FLA_BRT_VALIDATION(
-            m, n, store_outputs_base(filename, params, 0, 1, get_realtype(datatype), 1, result),
-            validate_lange(tst_api, datatype, test_norm_type, m, n, lda, A, A_save, result,
-                           residual, params),
-            check_reproducibility_base(filename, params, 0, 1, get_realtype(datatype), 1, result))
-        else if(!FLA_EXTREME_CASE_TEST)
-        {
-            validate_lange(tst_api, datatype, test_norm_type, m, n, lda, A, A_save, result,
-                           residual, params);
+            /* Initialize input vectors with custom data */
+            init_matrix_from_file(datatype, A, m, n, lda, g_ext_fptr);
         }
         else
         {
-            if((!check_extreme_value(datatype, 1, 1, result, 1, params->imatrix_char)))
-            {
-                residual = DBL_MAX;
-            }
-            else
-            {
-                residual = err_thresh;
-            }
-            FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
+            /* Initialize input matrix with random numbers */
+            rand_matrix(datatype, A, m, n, lda);
         }
-        fla_test_runtime_ctx_reset(params);
+
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            scale_matrix_underflow_overflow_lange(datatype, m, n, A, lda, test_norm_type,
+                                                  params->imatrix_char, scal);
+        }
+
+        prepare_lange_run(datatype, test_norm_type, A, m, n, lda, result, n_repeats, &time_min);
+
+        /* execution time */
+        *exec_time = time_min;
+        if(time_min == d_zero)
+        {
+            *exec_time = 1e-9;
+        }
+        /* Compute the performance of the best experiment repeat */
+        /* 4*n */
+        *perf = (double)(4.0 * m * n) / time_min / FLOPS_PER_UNIT_PERF;
+        if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+        {
+            *perf *= 2;
+        }
+
+        /* output validation */
+        validate_lange(datatype, test_norm_type, m, n, lda, A, result, residual);
+        // update the front str to the norm type
+        params->aux_paramslist[pci].front_str[5] = test_norm_type;
+        /* If this is not the last norm type, then print the result
+           The result for the last norm type will be printed by the
+           driver code*/
+        if((i != MAX_NUM_NORMTYPES - 1)
+           && params->aux_paramslist[pci].norm_types_str[i + 1] != '\0')
+        {
+            fla_test_print_status(params->aux_paramslist[pci].front_str,
+                                  get_datatype_char(datatype), RECT_INPUT, m, n, *residual,
+                                  params->aux_paramslist[pci].aux_threshold, time_min, *perf);
+        }
     }
 
     /* Free up the buffers */
-free_buffers:
-    FLA_FREE_FILENAME(filename)
     free_matrix(A);
-    free_matrix(A_save);
     free_vector(result);
     free_vector(scal);
 }
 
 void prepare_lange_run(integer datatype, char norm_type, void *A, integer m, integer n, integer lda,
-                       void *result, integer interfacetype, test_params_t *params)
+                       void *result, integer n_repeats, double *time_min_)
 {
+    integer i;
     void *work = NULL;
-    double exe_time;
+    double exe_time, time_min = 1e9;
 
-    if(same_char(norm_type, 'I'))
+    if(norm_type == 'I')
     {
         create_vector(get_realtype(datatype), &work, m);
     }
 
-    FLA_EXEC_LOOP_BEGIN
+    for(i = 0; i < n_repeats; ++i)
     {
-#if ENABLE_CPP_TEST
-        if(interfacetype == LAPACK_CPP_TEST) /* Call CPP LANGE API */
-        {
-            exe_time = fla_test_clock();
-            invoke_cpp_lange(datatype, &norm_type, &m, &n, A, &lda, work, result);
-            exe_time = fla_test_clock() - exe_time;
-        }
-        else
-#endif
-        {
-            exe_time = fla_test_clock();
-            /*  call lange API */
-            invoke_lange(datatype, &norm_type, &m, &n, A, &lda, work, result);
-            exe_time = fla_test_clock() - exe_time;
-        }
-        /* Update ctx and loop conditions */
-        FLA_EXEC_LOOP_UPDATE_NO_INFO
+        exe_time = fla_test_clock();
+        /*  call lange API */
+        invoke_lange(datatype, &norm_type, &m, &n, A, &lda, work, result);
+        exe_time = fla_test_clock() - exe_time;
+        /* Get the best execution time */
+        time_min = fla_min(time_min, exe_time);
     }
 
-    if(same_char(norm_type, 'I'))
+    *time_min_ = time_min;
+
+    if(norm_type == 'I')
     {
         free_vector(work);
     }

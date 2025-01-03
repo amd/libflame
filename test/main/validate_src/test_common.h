@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 
 /*! @file test_common.h
@@ -99,6 +99,8 @@ void create_matrix(integer datatype, int matrix_layout, integer M, integer N, vo
                    integer lda);
 void create_realtype_matrix(integer datatype, void **A, integer M, integer N);
 integer get_datatype(char stype);
+/* Get datatype char for a given datatype */
+char get_datatype_char(integer datatype);
 integer get_realtype(integer datatype);
 double get_realtype_value(integer datatype, void *value);
 void create_block_diagonal_matrix(integer datatype, void *wr, void *wi, void *lambda, integer m,
@@ -365,4 +367,6 @@ void get_min_of_values(integer datatype, void *a, void *b, void *min_val);
  */
 void negate_off_diagonal_element_imag(integer datatype, void *D, integer n, integer k,
                                       integer position);
+/* Validates and parses norm types to be tested for lange API */
+integer fla_validate_lange_norm_types(char *src_norm_str, char *dst_norm_str, integer max_len);
 #endif // TEST_COMMON_H

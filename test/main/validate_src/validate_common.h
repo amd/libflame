@@ -172,4 +172,8 @@ void validate_sygvd(integer itype, char *jobz, char *range, char *uplo, integer 
 /* Validate function for lange */
 void validate_lange(integer datatype, char norm_type, integer m, integer n, integer lda, void *A,
                     void *result, double *residual);
+
+void validate_gecon(integer datatype, char norm, integer n, void *A, void *A_save, integer lda,
+                    double *residual, char imatrix_char);
+
 #endif // VALIDATE_COMMON_H

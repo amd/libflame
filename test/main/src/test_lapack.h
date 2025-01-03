@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #ifndef TEST_LAPACK_H
@@ -35,6 +35,8 @@
 #define MAX_NUM_STORAGE 4
 #define MAX_NUM_DATATYPES 4
 #define FLOPS_PER_UNIT_PERF 1e9
+
+#define MAX_NUM_NORMTYPES 4
 
 #define DISABLE_ALL 0
 #define SPECIFY 1
@@ -133,12 +135,12 @@ extern FILE *g_ext_fptr;
     }
 
 #define FLA_TEST_CHECK_EINFO(residual, info, einfo) \
-{                                                   \
-    if(einfo == 0 && info < 0)                      \
-        *residual = DBL_MIN;                        \
-    else if(info != einfo)                          \
-        *residual = DBL_MAX;                        \
-}
+    {                                               \
+        if(einfo == 0 && info < 0)                  \
+            *residual = DBL_MIN;                    \
+        else if(info != einfo)                      \
+            *residual = DBL_MAX;                    \
+    }
 
 #define FLA_EXTREME_CASE_TEST                                                                  \
     (params->imatrix_char == 'A' || params->imatrix_char == 'F' || params->imatrix_char == 'N' \
@@ -470,13 +472,21 @@ typedef struct AUX_paramlist_t
     integer lda; // Leading dimension of Array A. LDA >= fla_max(1, n)
     integer incx; // The increment between successive values of CX
     integer incy; // The increment between successive values of CY
-
     /* Parameter for 'larfg' API */
     char side; // The side (either L or R) for larf. L means left and R means right
     char data_types_char[MAX_NUM_DATATYPES];
+    /* Norm types to be tested for lange APIs
+        M: max absolute value
+        1/O: 1-norm
+        I: infinity norm
+        F/E: Frobenius norm  */
+    char norm_types_str[MAX_NUM_NORMTYPES];
+    /* The display name of the API being tested */
+    char *front_str;
 } AUX_paramlist;
 
-typedef enum {
+typedef enum
+{
     LAPACK_TEST,
     LAPACKE_ROW_TEST,
     LAPACKE_COLUMN_TEST,

@@ -1,5 +1,5 @@
 ###############################################################################
-# Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
+# Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 ###############################################################################
 
 target_sources(${PROJECT_NAME}
@@ -45,5 +45,6 @@ ${CMAKE_CURRENT_SOURCE_DIR}/validate_sytrf.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_hetrf_rook.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_larf.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_sygvd.c
+${CMAKE_CURRENT_SOURCE_DIR}/validate_lange.c
 )
 

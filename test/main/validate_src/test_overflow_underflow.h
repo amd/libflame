@@ -155,4 +155,7 @@ void scale_matrix_underflow_overflow_sygvd(integer datatype, integer n, void *A,
 void scale_matrix_underflow_overflow_lange(integer datatype, integer m, integer n, void *A,
                                            integer lda, char norm_type, char imatrix_char,
                                            void *scal);
+/* Scaling matrix with values around overflow, underflow for GECON */
+void scale_matrix_underflow_overflow_gecon(integer datatype, integer n, void *A, integer lda,
+                                           char imatrix_char);
 #endif // TEST_OVERFLOW_UNDERFLOW_H

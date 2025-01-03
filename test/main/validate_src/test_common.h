@@ -369,4 +369,8 @@ void negate_off_diagonal_element_imag(integer datatype, void *D, integer n, inte
                                       integer position);
 /* Validates and parses norm types to be tested for lange API */
 integer fla_validate_lange_norm_types(char *src_norm_str, char *dst_norm_str, integer max_len);
+/* Comparison of matrix
+ * Compare matrix A with matrix B*/
+integer compare_matrix(integer datatype, char *uplo, integer m, integer n, void *A, integer lda,
+                       void *B, integer ldb);
 #endif // TEST_COMMON_H

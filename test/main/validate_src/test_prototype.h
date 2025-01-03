@@ -358,6 +358,11 @@
 #define fla_lapack_chetrf_rook CHETRF_ROOK_
 #define fla_lapack_zhetrf_rook ZHETRF_ROOK_
 
+#define fla_lapack_sgecon SGECON_
+#define fla_lapack_dgecon DGECON_
+#define fla_lapack_cgecon CGECON_
+#define fla_lapack_zgecon ZGECON_
+
 #elif(UPPER)
 
 #define fla_lapack_sladiv SLADIV
@@ -652,6 +657,11 @@
 #define fla_lapack_chetrf_rook CHETRF_ROOK
 #define fla_lapack_zhetrf_rook ZHETRF_ROOK
 
+#define fla_lapack_sgecon SGECON
+#define fla_lapack_dgecon DGECON
+#define fla_lapack_cgecon CGECON
+#define fla_lapack_zgecon ZGECON
+
 #elif(LOWER)
 
 #define fla_lapack_sladiv sladiv
@@ -945,6 +955,11 @@
 
 #define fla_lapack_chetrf_rook chetrf_rook
 #define fla_lapack_zhetrf_rook zhetrf_rook
+
+#define fla_lapack_sgecon sgecon
+#define fla_lapack_dgecon dgecon
+#define fla_lapack_cgecon cgecon
+#define fla_lapack_zgecon zgecon
 
 #else
 
@@ -1245,11 +1260,18 @@
 #define fla_lapack_chegvd chegvd_
 #define fla_lapack_zhegvd zhegvd_
 
+#define fla_lapack_sgecon sgecon_
+#define fla_lapack_dgecon dgecon_
+#define fla_lapack_cgecon cgecon_
+#define fla_lapack_zgecon zgecon_
+
 #endif /*if UPPER_*/
 
 /* These functions are API invoking functions used in other API test codes */
 extern void invoke_getrf(integer datatype, integer *m, integer *n, void *a, integer *lda,
                          integer *ipiv, integer *info);
+extern void invoke_getri(integer datatype, integer *n, void *a, integer *lda, integer *ipiv,
+                         void *work, integer *lwork, integer *info);
 extern void invoke_potrf(char *uplo, integer datatype, integer *m, void *a, integer *lda,
                          integer *info);
 extern void invoke_geqrf(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau,
@@ -1723,4 +1745,13 @@ lapack_int LAPACKE_cgbtrs(int matrix_layout, char trans, lapack_int n, lapack_in
 lapack_int LAPACKE_zgbtrs(int matrix_layout, char trans, lapack_int n, lapack_int kl, lapack_int ku,
                           lapack_int nrhs, const lapack_complex_double *ab, lapack_int ldab,
                           const lapack_int *ipiv, lapack_complex_double *b, lapack_int ldb);
+lapack_int LAPACKE_sgecon(int matrix_layout, char norm, lapack_int n, const float *a,
+                          lapack_int lda, float anorm, float *rcond);
+lapack_int LAPACKE_dgecon(int matrix_layout, char norm, lapack_int n, const double *a,
+                          lapack_int lda, double anorm, double *rcond);
+lapack_int LAPACKE_cgecon(int matrix_layout, char norm, lapack_int n, const lapack_complex_float *a,
+                          lapack_int lda, float anorm, float *rcond);
+lapack_int LAPACKE_zgecon(int matrix_layout, char norm, lapack_int n,
+                          const lapack_complex_double *a, lapack_int lda, double anorm,
+                          double *rcond);
 #endif // TEST_PROTOTYPE_H

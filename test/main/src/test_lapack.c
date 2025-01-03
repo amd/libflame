@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022 - 2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022 - 2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "ctype.h"
@@ -152,7 +152,8 @@ int main(int argc, char **argv)
         aocl_fla_set_progress(test_progress);
 #endif
 
-        if((params.test_lapacke_interface == 1) || (params.interfacetype == LAPACKE_ROW_TEST) || (params.interfacetype == LAPACKE_COLUMN_TEST))
+        if((params.test_lapacke_interface == 1) || (params.interfacetype == LAPACKE_ROW_TEST)
+           || (params.interfacetype == LAPACKE_COLUMN_TEST))
             fla_test_lapack_suite(LAPACKE_OPERATIONS_FILENAME, &params);
         else
             /* Test the LAPACK-level operations. */
@@ -265,34 +266,35 @@ void fla_check_interface(integer *arg_count, char **argv, test_params_t *params)
             }
 
             /* Check for specific interface like lapacke, cpp, lapack.*/
-            if(!(strncmp(interface_buff, row_major, len_row_major)) &&
-                (len_row_major == strlen(interface_buff)))
+            if(!(strncmp(interface_buff, row_major, len_row_major))
+               && (len_row_major == strlen(interface_buff)))
             {
                 enable_lapacke = 1;
                 lapacke_major = LAPACK_ROW_MAJOR;
                 interfacetype = LAPACKE_ROW_TEST;
             }
-            else if(!(strncmp(interface_buff, column_major, len_column_major)) &&
-                    (len_column_major == strlen(interface_buff)))
+            else if(!(strncmp(interface_buff, column_major, len_column_major))
+                    && (len_column_major == strlen(interface_buff)))
             {
                 enable_lapacke = 1;
                 lapacke_major = LAPACK_COL_MAJOR;
                 interfacetype = LAPACKE_COLUMN_TEST;
             }
-            else if(!(strncmp(interface_buff, cpp_test, len_cpp_test)) &&
-                    (len_cpp_test == strlen(interface_buff)))
+            else if(!(strncmp(interface_buff, cpp_test, len_cpp_test))
+                    && (len_cpp_test == strlen(interface_buff)))
             {
                 interfacetype = LAPACK_CPP_TEST;
-#if (!ENABLE_CPP_TEST)
+#if(!ENABLE_CPP_TEST)
                 {
-                    printf("\nENABLE_CPP_TEST flag is disabled to use CPP interface, please enable and rebuild.\n");
+                    printf("\nENABLE_CPP_TEST flag is disabled to use CPP interface, please enable "
+                           "and rebuild.\n");
                     printf("Hence assigning default interface: lapack\n");
                     interfacetype = LAPACK_TEST;
                 }
 #endif
             }
-            else if(!(strncmp(interface_buff, lapack_test, len_lapack_test)) &&
-                    (len_lapack_test == strlen(interface_buff)))
+            else if(!(strncmp(interface_buff, lapack_test, len_lapack_test))
+                    && (len_lapack_test == strlen(interface_buff)))
             /* assign default interface as lapack */
             {
                 interfacetype = LAPACK_TEST;
@@ -2198,6 +2200,7 @@ void fla_test_read_aux_params(const char *file_name, test_params_t *params)
     integer num_tests;
     integer ndata_types;
     integer num_ranges;
+    integer len;
 
     str = &line[0];
     fp = fopen(file_name, "r");
@@ -2353,6 +2356,24 @@ void fla_test_read_aux_params(const char *file_name, test_params_t *params)
     for(i = 0; i < NUM_SUB_TESTS; i++)
     {
         fscanf(fp, "%f", &(params->aux_paramslist[i].aux_threshold));
+        CHECK_LINE_SKIP();
+    }
+
+    fscanf(fp, "%s", &line[0]); // Norm types
+    for(i = 0; i < NUM_SUB_TESTS; i++)
+    {
+        fscanf(fp, "%s", str);
+        len = strlen(str);
+        len = fla_min(len, MAX_NUM_NORMTYPES);
+        for(j = 0; j < len; j++)
+        {
+            params->aux_paramslist[i].norm_types_str[j] = str[j];
+        }
+        for(j = len; j < MAX_NUM_NORMTYPES; j++)
+        {
+            params->aux_paramslist[i].norm_types_str[j] = '\0';
+        }
+
         CHECK_LINE_SKIP();
     }
 

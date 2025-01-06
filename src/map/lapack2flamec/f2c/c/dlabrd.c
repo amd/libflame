@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 /*
- *  Copyright (c) 2021-2023 Advanced Micro Devices, Inc.  All rights reserved.
+ *  Copyright (c) 2021-2025 Advanced Micro Devices, Inc.  All rights reserved.
  */
 #include "FLA_f2c.h" /* Table of constant values */
 
@@ -12,6 +12,7 @@ static doublereal c_b4 = -1.;
 static doublereal c_b5 = 1.;
 static integer c__1 = 1;
 static doublereal c_b16 = 0.;
+static int get_opt_threads_dlabrd(integer m, integer n);
 /* > \brief \b DLABRD reduces the first nb rows and columns of a general matrix to a bidiagonal
  * form. */
 /* =========== DOCUMENTATION =========== */
@@ -304,7 +305,7 @@ void fla_dlabrd(integer *m, integer *n, integer *nb, doublereal *a, integer *lda
 
 #ifdef FLA_OPENMP_MULTITHREADING
     /* Get optimum thread number for DLABRD*/
-    FLA_Thread_optimum(FLA_LABRD, &actual_num_threads);
+    actual_num_threads = get_opt_threads_dlabrd(*m, *n);
 #endif
 
     if(*m >= *n)
@@ -588,3 +589,32 @@ void fla_dlabrd(integer *m, integer *n, integer *nb, doublereal *a, integer *lda
     /* End of DLABRD */
 }
 /* dlabrd_ */
+
+// DLABRD, size thresholds to choose number of threads
+// TODO: Move the macro definitions to corresponding headers
+#define FLA_DLABRD_THREADS_THRESH0   (1200)
+#define FLA_DLABRD_THREADS_THRESH1   (1900)
+
+extern int fla_thread_get_num_threads();
+static int get_opt_threads_dlabrd(integer m, integer n)
+{
+    integer min_m_n = fla_min(m, n);
+    int num_threads;
+
+    if(min_m_n < FLA_DLABRD_THREADS_THRESH0)
+    {
+        num_threads = 1;
+    }
+    else if(min_m_n < FLA_DLABRD_THREADS_THRESH1)
+    {
+        num_threads = 64;
+    }
+    else
+    {
+        num_threads = 128;
+    }
+
+    num_threads = fla_min(num_threads, fla_thread_get_num_threads());
+
+    return num_threads;
+}

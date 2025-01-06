@@ -1,15 +1,15 @@
 /* dormqr.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 /*
- *  Copyright (c) 2021-2023 Advanced Micro Devices, Inc.  All rights reserved.
+ *  Copyright (c) 2021-2025 Advanced Micro Devices, Inc.  All rights reserved.
  */
-#include "FLAME.h"
 #include "FLA_f2c.h" /* Table of constant values */
 
 static integer c__1 = 1;
 static integer c_n1 = -1;
 static integer c__2 = 2;
 static integer c__65 = 65;
+static int get_opt_threads_dormqr(integer m, integer n);
 /* > \brief \b DORMQR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -325,7 +325,7 @@ int lapack_dormqr(char *side, char *trans, integer *m, integer *n, integer *k, d
 
 #ifdef FLA_OPENMP_MULTITHREADING
         /* Get optimum thread number for DORMQR*/
-        FLA_Thread_optimum( FLA_ORMQR, &actual_num_threads);
+        actual_num_threads = get_opt_threads_dormqr(*m, *n);
         #pragma omp parallel num_threads(actual_num_threads) private(i__, thread_id, mi_sub, ni_sub, index)
         {
             thread_id = omp_get_thread_num();
@@ -391,3 +391,42 @@ int lapack_dormqr(char *side, char *trans, integer *m, integer *n, integer *k, d
     /* End of DORMQR */
 }
 /* lapack_dormqr */
+
+// DORMQR, size thresholds to choose number of threads
+// TODO: Move the macro definitions to corresponding headers
+#define FLA_DORMQR_THREADS_THRESH0   (450)
+#define FLA_DORMQR_THREADS_THRESH1   (790)
+#define FLA_DORMQR_THREADS_THRESH2   (2400)
+#define FLA_DORMQR_THREADS_THRESH3   (5000)
+
+extern int fla_thread_get_num_threads();
+static int get_opt_threads_dormqr(integer m, integer n)
+{
+    integer min_m_n = fla_min(m, n);
+    int num_threads;
+
+    if(min_m_n < FLA_DORMQR_THREADS_THRESH0)
+    {
+        num_threads = 1;
+    }
+    else if(min_m_n < FLA_DORMQR_THREADS_THRESH1)
+    {
+        num_threads = 8;
+    }
+    else if(min_m_n < FLA_DORMQR_THREADS_THRESH2)
+    {
+        num_threads = 12;
+    }
+    else if(min_m_n < FLA_DORMQR_THREADS_THRESH3)
+    {
+        num_threads = 32;
+    }
+    else
+    {
+        num_threads = 64;
+    }
+
+    num_threads = fla_min(num_threads, fla_thread_get_num_threads());
+
+    return num_threads;
+}

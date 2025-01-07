@@ -584,5 +584,5 @@ double fla_test_clock(void);
 void fla_test_get_time_unit(char *scale, double *time);
 integer fla_test_get_group_id(char *buffer);
 void fla_check_lapacke_interface(integer *arg_count, char **argv, test_params_t *params);
-void fla_check_interface(integer *arg_count, char **argv, test_params_t *params);
+bool fla_check_interface(integer *arg_count, char **argv, test_params_t *params);
 #endif // TEST_LAPACK_H

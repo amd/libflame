@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) 2021-2024, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2021-2025, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 
 /*! @file libflame_interface.hh
@@ -4793,6 +4793,68 @@ along with error bounds
                n_err_bnds, err_bnds_norm, err_bnds_comp, nparams, params, work, rwork, info);
     }
     /** @}*/ // end of gerfsx
+
+    /** @defgroup gerqf gerqf
+     * @ingroup RQ_factorization RQ_factorization
+     * @{
+     */
+    /*! @brief GERQF computes a RQ factorization of a M-by-N matrix
+     * @details
+     * \b Purpose:
+        \verbatim
+         GERQF computes an RQ factorization of a real M-by-N matrix A:
+         A = R * Q.
+        \endverbatim 
+
+     * @param[in] M
+              M is INTEGER \n
+              The number of rows of the matrix A.  M >= 0. \n
+     * @param[in] N
+              N is INTEGER \n
+              The number of columns of the matrix A.  N >= 0. \n
+     * @param[in,out] A
+              A is REAL array, dimension (LDA,N) \n
+              On entry, the M-by-N matrix A. \n
+              On exit,
+              if m <= n, the upper triangle of the subarray
+              A(1:m,n-m+1:n) contains the M-by-M upper triangular matrix R; \n
+              if m >= n, the elements on and above the (m-n)-th subdiagonal
+              contain the M-by-N upper trapezoidal matrix R;
+              the remaining elements, with the array TAU, represent the
+              orthogonal matrix Q as a product of min(m,n) elementary
+              reflectors (see Further Details). \n
+     * @param[in] LDA
+              LDA is INTEGER \n
+              The leading dimension of the array A.  LDA >= fla_max(1,M). \n
+     * @param[out] TAU
+              TAU is REAL array, dimension (min(M,N)) \n
+              The scalar factors of the elementary reflectors (see Further
+              Details). \n
+     * @param[out]	WORK	
+              WORK is COMPLEX array, dimension (MAX(1,LWORK)) \n
+              On exit, if INFO = 0, WORK(1) returns the optimal LWORK. \n
+     * @param[in]	LWORK	
+              LWORK is INTEGER \n
+              The dimension of the array WORK.  LWORK >= fla_max(1,M).
+              For optimum performance LWORK >= M*NB, where NB is
+              the optimal blocksize. \n
+ \n
+              If LWORK = -1, then a workspace query is assumed; the routine
+              only calculates the optimal size of the WORK array, returns
+              this value as the first entry of the WORK array, and no error
+              message related to LWORK is issued by XERBLA. \n
+     * @param[out]	INFO	
+              INFO is INTEGER \n
+              = 0:  successful exit \n
+              < 0:  if INFO = -i, the i-th argument had an illegal value \n
+
+     *  * */
+    template< typename T >
+    void gerqf(integer* m, integer* n, T* a, integer* lda, T* tau, T* work, integer* lwork, integer* info)
+    {
+        gerqf(m, n, a, lda, tau, work, lwork, info);
+    }
+    /** @}*/ // end of gerqf
 
     /** @defgroup geequ geequ
      * @ingroup LU_Computational LU_Computational
@@ -48962,6 +49024,53 @@ determined by sgerqf
         lassq(n, x, incx, scale, sumsq);
     }
     /** @}*/ // end of lassq
+
+    /** @defgroup rot rot
+     * @ingroup L1
+     * @{
+     */
+     /*! @brief ROT applies a plane rotation with real cosine and complex sine to a pair of complex vectors
+
+      * @details
+      * \b Purpose:
+          \verbatim 
+           ROT   applies a plane rotation, where the cos (C) is real and the
+           sin (S) is complex, and the vectors CX and CY are complex.
+          \endverbatim  
+
+      * @param[in] N
+               N is INTEGER \n
+               The number of elements in the vectors CX and CY. \n
+      * @param[in,out] CX
+               CX is COMPLEX array, dimension (N) \n
+               On input, the vector X.
+               On output, CX is overwritten with C*X + S*Y. \n
+      * @param[in] INCX
+               INCX is INTEGER \n
+               The increment between successive values of CY.  INCX <> 0. \n
+      * @param[in,out] CY
+               CY is COMPLEX array, dimension (N) \n
+               On input, the vector Y.
+               On output, CY is overwritten with -CONJG(S)*X + C*Y. \n
+      * @param[in] INCY
+               INCY is INTEGER \n
+               The increment between successive values of CY.  INCX <> 0. \n
+      * @param[in] C
+               C is REAL \n
+      * @param[in] S
+               S is COMPLEX \n
+               C and S define a rotation \n
+                  [  C          S  ] \n
+                  [ -conjg(S)   C  ] \n
+               where C*C + S*CONJG(S) = 1.0. \n
+
+      *  * */
+    template< typename T, typename Ta >
+    void rot(integer *n, T *cx, integer *incx, T * cy, integer *incy, Ta *c, T *s)
+    {
+        rot(n, cx, incx, cy, incy, c, s);
+    }
+    /** @}*/ // end of rot
 
     /** @defgroup rscl rscl
      * @ingroup L1

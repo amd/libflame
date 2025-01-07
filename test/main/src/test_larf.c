@@ -1,8 +1,11 @@
 /*
-    Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 /* Local prototypes */
 void fla_test_larf_experiment(test_params_t *params, integer datatype, integer p_cur, integer q_cur,
@@ -10,7 +13,7 @@ void fla_test_larf_experiment(test_params_t *params, integer datatype, integer p
                               double *t, double *residual);
 void prepare_larf_run(integer datatype, char side, integer m, integer n, void *v, integer incv,
                       void *tau, void *c__, integer ldc__, void *c__out, integer ldc__out,
-                      void *work, integer n_repeats, double *time_min_);
+                      void *work, integer n_repeats, double *time_min_, integer interfacetype);
 void invoke_larf(integer datatype, char *side, integer *m, integer *n, void *v, integer *incv,
                  void *tau, void *c__, integer *ldc, void *work);
 void invoke_larfg(integer datatype, integer *n, void *x, integer *incx, integer *abs_incx,
@@ -119,6 +122,7 @@ void fla_test_larf_experiment(test_params_t *params, integer datatype, integer p
     char side = params->aux_paramslist[pci].side;
     integer incv = params->aux_paramslist[pci].incv;
     integer ldc = params->aux_paramslist[pci].ldc;
+    integer interfacetype = params->interfacetype;
 
     m = p_cur;
     n = q_cur;
@@ -172,7 +176,7 @@ void fla_test_larf_experiment(test_params_t *params, integer datatype, integer p
 
     /* call to API */
     prepare_larf_run(datatype, side, m, n, v, incv, tau, c__, ldc, c__out, ldc, work, n_repeats,
-                     &time_min);
+                     &time_min, interfacetype);
     /* execution time */
     *t = time_min;
     if(time_min == d_zero)
@@ -210,7 +214,7 @@ void fla_test_larf_experiment(test_params_t *params, integer datatype, integer p
 
 void prepare_larf_run(integer datatype, char side, integer m, integer n, void *v, integer incv,
                       void *tau, void *c__, integer ldc__, void *c__out, integer ldc__out,
-                      void *work, integer n_repeats, double *time_min_)
+                      void *work, integer n_repeats, double *time_min_, integer interfacetype)
 {
     integer i;
     double time_min = 1e9, exe_time;
@@ -219,12 +223,22 @@ void prepare_larf_run(integer datatype, char side, integer m, integer n, void *v
     {
         copy_matrix(datatype, "full", m, n, c__, ldc__, c__out, ldc__out);
 
-        exe_time = fla_test_clock();
-
-        /*  call  larf API */
-        invoke_larf(datatype, &side, &m, &n, v, &incv, tau, c__out, &ldc__out, work);
-
-        exe_time = fla_test_clock() - exe_time;
+#if ENABLE_CPP_TEST
+        if(interfacetype == LAPACK_CPP_TEST)
+        {
+            exe_time = fla_test_clock();
+            /* Call larf CPP API */
+            invoke_cpp_larf(datatype, &side, &m, &n, v, &incv, tau, c__out, &ldc__out, work);
+            exe_time = fla_test_clock() - exe_time;
+        }
+        else
+#endif
+        {
+            exe_time = fla_test_clock();
+            /* call larf API */
+            invoke_larf(datatype, &side, &m, &n, v, &incv, tau, c__out, &ldc__out, work);
+            exe_time = fla_test_clock() - exe_time;
+        }
 
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);

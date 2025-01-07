@@ -1,8 +1,11 @@
 /*
-    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 integer row_major_potrs_lda;
 integer row_major_potrs_ldb;
@@ -13,7 +16,7 @@ void fla_test_potrs_experiment(test_params_t *params, integer datatype, integer 
                                double *perf, double *time_min, double *residual);
 void prepare_potrs_run(char *uplo, integer m, integer nrhs, void *A, integer lda, integer datatype,
                        void *b, integer ldb, integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, int matrix_layout);
+                       integer interfacetype, int matrix_layout);
 void invoke_potrs(char *uplo, integer datatype, integer *m, void *A, integer *lda, integer *nrhs,
                   void *b, integer *ldb, integer *info);
 double prepare_lapacke_potrs_run(integer datatype, int matrix_layout, char *uplo, integer m,
@@ -56,8 +59,7 @@ void fla_test_potrs(integer argc, char **argv, test_params_t *params)
         N = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].nrhs = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
         /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
-        if((g_ext_fptr == NULL) && params->test_lapacke_interface
-           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
         {
             row_major_potrs_lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
             row_major_potrs_ldb = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
@@ -134,7 +136,7 @@ void fla_test_potrs_experiment(test_params_t *params, integer datatype, integer 
     double time_min = 1e9;
     char uplo = params->lin_solver_paramslist[pci].Uplo;
 
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
 
     nrhs = params->lin_solver_paramslist[pci].nrhs;
@@ -194,7 +196,7 @@ void fla_test_potrs_experiment(test_params_t *params, integer datatype, integer 
 
     /* Invoke potrs API to find x using Ax-b */
     prepare_potrs_run(&uplo, n, nrhs, A, lda, datatype, B_test, ldb, n_repeats, &time_min, &info,
-                      test_lapacke_interface, layout);
+                      interfacetype, layout);
     copy_matrix(datatype, "full", n, nrhs, B_test, ldb, X, n);
     /* execution time */
     *t = time_min;
@@ -233,7 +235,7 @@ void fla_test_potrs_experiment(test_params_t *params, integer datatype, integer 
 
 void prepare_potrs_run(char *uplo, integer n, integer nrhs, void *A, integer lda, integer datatype,
                        void *B, integer ldb, integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, int layout)
+                       integer interfacetype, int layout)
 {
     void *A_save = NULL, *B_test = NULL;
     double time_min = 1e9, exe_time;
@@ -252,11 +254,20 @@ void prepare_potrs_run(char *uplo, integer n, integer nrhs, void *A, integer lda
         copy_matrix(datatype, "full", n, n, A, lda, A_save, lda);
         copy_matrix(datatype, "full", n, nrhs, B, ldb, B_test, ldb);
         /* Check if LAPACKE interface is enabled */
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time = prepare_lapacke_potrs_run(datatype, layout, uplo, n, nrhs, A_save, lda,
                                                  B_test, ldb, info);
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST)
+        {
+            exe_time = fla_test_clock();
+            /* Call CPP potrs API */
+            invoke_cpp_potrs(uplo, datatype, &n, A_save, &lda, &nrhs, B_test, &ldb, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();
@@ -274,8 +285,8 @@ void prepare_potrs_run(char *uplo, integer n, integer nrhs, void *A, integer lda
     free_vector(B_test);
 }
 
-double prepare_lapacke_potrs_run(integer datatype, int layout, char *uplo, integer n,
-                                 integer nrhs, void *A_save, integer lda, void *B_test, integer ldb,
+double prepare_lapacke_potrs_run(integer datatype, int layout, char *uplo, integer n, integer nrhs,
+                                 void *A_save, integer lda, void *B_test, integer ldb,
                                  integer *info)
 {
     double exe_time;

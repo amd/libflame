@@ -1,17 +1,19 @@
 /*
-    Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2023-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
-#include "test_common.h"
 #include "test_lapack.h"
-#include "test_prototype.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 /* Local prototypes.*/
 void fla_test_org2r_experiment(test_params_t *params, integer datatype, integer p_cur,
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
                                double *perf, double *t, double *residual);
 void prepare_org2r_run(integer m, integer n, void *A, integer lda, void *T, void *work,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info);
+                       integer datatype, integer n_repeats, double *time_min_, integer *info,
+                       integer interfacetype);
 void invoke_org2r(integer datatype, integer *m, integer *n, integer *min_A, void *a, integer *lda,
                   void *tau, void *work, integer *info);
 
@@ -113,6 +115,7 @@ void fla_test_org2r_experiment(test_params_t *params, integer datatype, integer 
     void *work = NULL, *work_test = NULL;
     void *Q = NULL, *R = NULL;
     integer lwork = -1, info = 0, vinfo = 0;
+    integer interfacetype = params->interfacetype;
 
     /* Get input matrix dimensions.*/
     m = p_cur;
@@ -190,7 +193,8 @@ void fla_test_org2r_experiment(test_params_t *params, integer datatype, integer 
         copy_matrix(datatype, "full", m, n, A_test, lda, Q, lda);
 
         /*invoke org2r API */
-        prepare_org2r_run(m, n, Q, lda, T_test, work_test, datatype, n_repeats, time_min, &info);
+        prepare_org2r_run(m, n, Q, lda, T_test, work_test, datatype, n_repeats, time_min, &info,
+                          interfacetype);
 
         /* performance computation
            (2/3)*n2*(3m - n) */
@@ -226,7 +230,8 @@ void fla_test_org2r_experiment(test_params_t *params, integer datatype, integer 
 }
 
 void prepare_org2r_run(integer m, integer n, void *A, integer lda, void *T, void *work,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info)
+                       integer datatype, integer n_repeats, double *time_min_, integer *info,
+                       integer interfacetype)
 {
     integer i;
     void *A_save = NULL;
@@ -244,12 +249,24 @@ void prepare_org2r_run(integer m, integer n, void *A, integer lda, void *T, void
            for each iteration*/
         copy_matrix(datatype, "full", m, n, A_save, lda, A, lda);
 
-        exe_time = fla_test_clock();
+#if ENABLE_CPP_TEST
+        if(interfacetype == LAPACK_CPP_TEST)
+        {
+            exe_time = fla_test_clock();
+            /* Call CPP org2r API */
+            invoke_cpp_org2r(datatype, &m, &n, &n, A, &lda, T, work, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+        else
+#endif
+        {
+            exe_time = fla_test_clock();
 
-        /* Call to  org2r API */
-        invoke_org2r(datatype, &m, &n, &n, A, &lda, T, work, info);
+            /* Call LAPACK org2r API */
+            invoke_org2r(datatype, &m, &n, &n, A, &lda, T, work, info);
 
-        exe_time = fla_test_clock() - exe_time;
+            exe_time = fla_test_clock() - exe_time;
+        }
 
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);

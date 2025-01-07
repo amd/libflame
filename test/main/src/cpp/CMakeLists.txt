@@ -1,5 +1,5 @@
 ###############################################################################
-# Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
+# Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
 ###############################################################################
 
 target_include_directories("${PROJECT_NAME}" PRIVATE ${CMAKE_SOURCE_DIR}/src/src_cpp)
@@ -24,6 +24,8 @@ ${CMAKE_CURRENT_SOURCE_DIR}/invoke_gelsd.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_gelss.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_geqp3.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_geqrf.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_gerq2.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_gerqf.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_gesdd.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_gesv.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_gesvd.cc
@@ -38,6 +40,14 @@ ${CMAKE_CURRENT_SOURCE_DIR}/invoke_gtsv.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_hetrf_rook.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_hgeqz.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_hseqr.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_larf.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_larfg.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_lartg.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_org2r.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_orgqr.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_potrf.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_potrs.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_rot.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_stedc.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_common.hh
 )

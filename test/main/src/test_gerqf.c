@@ -1,8 +1,11 @@
 /*
-    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 integer row_major_gerqf_lda;
 
@@ -11,8 +14,8 @@ void fla_test_gerqf_experiment(test_params_t *params, integer datatype, integer 
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
                                double *perf, double *t, double *residual);
 void prepare_gerqf_run(integer m_A, integer n_A, void *A, integer lda, void *T, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, int matrix_layout);
+                       integer n_repeats, double *time_min_, integer *info, integer interfacetype,
+                       int matrix_layout);
 void invoke_gerqf(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau,
                   void *work, integer *lwork, integer *info);
 double prepare_lapacke_gerqf_run(integer datatype, int matrix_layout, integer m_A, integer n_A,
@@ -52,8 +55,7 @@ void fla_test_gerqf(integer argc, char **argv, test_params_t *params)
         M = strtoimax(argv[3], &endptr, CLI_DECIMAL_BASE);
         N = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
         /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
-        if((g_ext_fptr == NULL) && params->test_lapacke_interface
-           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
         {
             row_major_gerqf_lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
             params->lin_solver_paramslist[0].lda = N;
@@ -127,7 +129,7 @@ void fla_test_gerqf_experiment(test_params_t *params, integer datatype, integer 
     void *A, *A_test, *T;
     double time_min = 1e9;
 
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
 
     // Get input matrix dimensions.
@@ -160,8 +162,8 @@ void fla_test_gerqf_experiment(test_params_t *params, integer datatype, integer 
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
-    prepare_gerqf_run(m, n, A_test, lda, T, datatype, n_repeats, &time_min, &info,
-                      test_lapacke_interface, layout);
+    prepare_gerqf_run(m, n, A_test, lda, T, datatype, n_repeats, &time_min, &info, interfacetype,
+                      layout);
 
     // Execution time
     *t = time_min;
@@ -198,8 +200,8 @@ void fla_test_gerqf_experiment(test_params_t *params, integer datatype, integer 
 }
 
 void prepare_gerqf_run(integer m_A, integer n_A, void *A, integer lda, void *T, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, int layout)
+                       integer n_repeats, double *time_min_, integer *info, integer interfacetype,
+                       int layout)
 {
     integer min_A, i;
     void *A_save, *T_test, *work;
@@ -216,16 +218,26 @@ void prepare_gerqf_run(integer m_A, integer n_A, void *A, integer lda, void *T, 
     /* Make a workspace query the first time. This will provide us with
        and ideal workspace size based on internal block size.
        NOTE: LAPACKE interface handles workspace query internally */
-    if((test_lapacke_interface == 0) && (g_lwork <= 0))
+    if((interfacetype != LAPACKE_COLUMN_TEST) && (interfacetype != LAPACKE_ROW_TEST)
+       && (g_lwork <= 0))
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
 
-        // call to  gerqf API
-        invoke_gerqf(datatype, &m_A, &n_A, NULL, &lda, NULL, work, &lwork, info);
+        /* call to gerqf API */
+#if ENABLE_CPP_TEST
+        if(interfacetype == LAPACK_CPP_TEST)
+        {
+            invoke_cpp_gerqf(datatype, &m_A, &n_A, NULL, &lda, NULL, work, &lwork, info);
+        }
+        else
+#endif
+        {
+            invoke_gerqf(datatype, &m_A, &n_A, NULL, &lda, NULL, work, &lwork, info);
+        }
         if(*info == 0)
         {
-            // Get work size
+            /* Get work size */
             lwork = get_work_value(datatype, work);
         }
 
@@ -252,10 +264,19 @@ void prepare_gerqf_run(integer m_A, integer n_A, void *A, integer lda, void *T, 
         create_vector(datatype, &work, lwork);
 
         /* Check if LAPACKE interface is enabled */
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time = prepare_lapacke_gerqf_run(datatype, layout, m_A, n_A, A, lda, T_test, info);
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST)
+        {
+            exe_time = fla_test_clock();
+            /* Call CPP gerqf API */
+            invoke_cpp_gerqf(datatype, &m_A, &n_A, A, &lda, T_test, work, &lwork, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();
@@ -281,8 +302,8 @@ void prepare_gerqf_run(integer m_A, integer n_A, void *A, integer lda, void *T, 
     free_matrix(A_save);
 }
 
-double prepare_lapacke_gerqf_run(integer datatype, int layout, integer m_A, integer n_A,
-                                 void *A, integer lda, void *T, integer *info)
+double prepare_lapacke_gerqf_run(integer datatype, int layout, integer m_A, integer n_A, void *A,
+                                 integer lda, void *T, integer *info)
 {
     double exe_time;
     integer lda_t = lda;

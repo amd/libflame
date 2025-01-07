@@ -1,10 +1,11 @@
 /*
-    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
-#include "test_common.h"
 #include "test_lapack.h"
-#include "test_prototype.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 integer row_major_orgqr_lda;
 
@@ -14,7 +15,7 @@ void fla_test_orgqr_experiment(test_params_t *params, integer datatype, integer 
                                double *perf, double *t, double *residual);
 void prepare_orgqr_run(integer m, integer n, void *A, integer lda, void *T, void *work,
                        integer *lwork, integer datatype, integer n_repeats, double *time_min_,
-                       integer *info, integer test_lapacke_interface, int matrix_layout);
+                       integer *info, integer interfacetype, int matrix_layout);
 void invoke_orgqr(integer datatype, integer *m, integer *n, integer *min_A, void *a, integer *lda,
                   void *tau, void *work, integer *lwork, integer *info);
 double prepare_lapacke_orgqr_run(integer datatype, int matrix_layout, integer m, integer n, void *A,
@@ -55,8 +56,7 @@ void fla_test_orgqr(integer argc, char **argv, test_params_t *params)
         M = strtoimax(argv[3], &endptr, CLI_DECIMAL_BASE);
         N = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
         /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
-        if((g_ext_fptr == NULL) && params->test_lapacke_interface
-           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
         {
             row_major_orgqr_lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
             params->lin_solver_paramslist[0].lda = N;
@@ -131,7 +131,7 @@ void fla_test_orgqr_experiment(test_params_t *params, integer datatype, integer 
     void *Q = NULL, *R = NULL;
     integer lwork = -1, info = 0, vinfo = 0;
 
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
 
     /* Get input matrix dimensions.*/
@@ -216,7 +216,7 @@ void fla_test_orgqr_experiment(test_params_t *params, integer datatype, integer 
 
         /*invoke orgqr API */
         prepare_orgqr_run(m, n, Q, lda, T_test, work_test, &lwork, datatype, n_repeats, time_min,
-                          &info, test_lapacke_interface, layout);
+                          &info, interfacetype, layout);
 
         /* performance computation
            (2/3)*n2*(3m - n) */
@@ -253,7 +253,7 @@ void fla_test_orgqr_experiment(test_params_t *params, integer datatype, integer 
 
 void prepare_orgqr_run(integer m, integer n, void *A, integer lda, void *T, void *work,
                        integer *lwork, integer datatype, integer n_repeats, double *time_min_,
-                       integer *info, integer test_lapacke_interface, int layout)
+                       integer *info, integer interfacetype, int layout)
 {
     integer i;
     void *A_save = NULL;
@@ -272,10 +272,19 @@ void prepare_orgqr_run(integer m, integer n, void *A, integer lda, void *T, void
         copy_matrix(datatype, "full", m, n, A_save, lda, A, lda);
 
         /* Check if LAPACKE interface is enabled */
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time = prepare_lapacke_orgqr_run(datatype, layout, m, n, A, lda, T, info);
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST)
+        {
+            exe_time = fla_test_clock();
+            /* Call CPP orgqr API */
+            invoke_cpp_orgqr(datatype, &m, &n, &n, A, &lda, T, work, lwork, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();

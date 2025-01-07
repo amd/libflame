@@ -1,15 +1,18 @@
 /*
-    Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 /* Local prototypes */
 void fla_test_larfg_experiment(test_params_t *params, integer datatype, integer p_cur,
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
                                double *perf, double *t, double *residual);
 void prepare_larfg_run(integer datatype, integer n_A, integer incx, void *x, void *tau,
-                       integer n_repeats, double *time_min_, integer test_lapacke_interface);
+                       integer n_repeats, double *time_min_, integer interfacetype);
 void invoke_larfg(integer datatype, integer *n, void *x, integer *incx, integer *abs_incx,
                   void *tau);
 integer invoke_lapacke_larfg(integer datatype, integer *n, void *x, integer *incx,
@@ -111,7 +114,7 @@ void fla_test_larfg_experiment(test_params_t *params, integer datatype, integer 
     void *x, *x_test, *tau = NULL;
     double time_min = 1e9;
     double alpha_real, alpha_imag;
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
 
     incx = params->aux_paramslist[pci].incx_larfg;
     alpha_real = params->aux_paramslist[pci].alpha_real;
@@ -145,7 +148,7 @@ void fla_test_larfg_experiment(test_params_t *params, integer datatype, integer 
     copy_vector(datatype, n, x, inc_x, x_test, inc_x);
 
     /* call to API */
-    prepare_larfg_run(datatype, n, incx, x_test, tau, n_repeats, &time_min, test_lapacke_interface);
+    prepare_larfg_run(datatype, n, incx, x_test, tau, n_repeats, &time_min, interfacetype);
     /* execution time */
     *t = time_min;
     if(time_min == d_zero)
@@ -179,7 +182,7 @@ void fla_test_larfg_experiment(test_params_t *params, integer datatype, integer 
 }
 
 void prepare_larfg_run(integer datatype, integer n_A, integer incx, void *x, void *tau,
-                       integer n_repeats, double *time_min_, integer test_lapacke_interface)
+                       integer n_repeats, double *time_min_, integer interfacetype)
 {
     integer i, x_length;
     double time_min = 1e9, exe_time;
@@ -194,7 +197,7 @@ void prepare_larfg_run(integer datatype, integer n_A, integer incx, void *x, voi
         copy_vector(datatype, x_length, x, 1, x_save, 1);
 
         /* Check if LAPACKE interface is enabled */
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time = fla_test_clock();
 
@@ -202,6 +205,14 @@ void prepare_larfg_run(integer datatype, integer n_A, integer incx, void *x, voi
 
             exe_time = fla_test_clock() - exe_time;
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST) /* Call CPP larfg API */
+        {
+            exe_time = fla_test_clock();
+            invoke_cpp_larfg(datatype, &n_A, x_save, &incx, &inc_x, tau);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();

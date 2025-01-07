@@ -1,8 +1,11 @@
 /*
-    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 integer row_major_stedc_ldz;
 
@@ -12,7 +15,7 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
                                double *perf, double *t, double *residual);
 void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, integer ldz,
                        integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, int matrix_layout);
+                       integer interfacetype, int matrix_layout);
 void invoke_stedc(integer datatype, char *compz, integer *n, void *D, void *E, void *Z,
                   integer *ldz, void *work, integer *lwork, void *rwork, integer *lrwork,
                   integer *iwork, integer *liwork, integer *info);
@@ -59,8 +62,7 @@ void fla_test_stedc(integer argc, char **argv, test_params_t *params)
         params->eig_sym_paramslist[0].compz = argv[3][0];
         N = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
         /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
-        if((g_ext_fptr == NULL) && params->test_lapacke_interface
-           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
         {
             row_major_stedc_ldz = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
             params->eig_sym_paramslist[0].ldz = N;
@@ -137,7 +139,7 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
     char compz, uplo, range = 'V';
     double resid;
 
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
 
     /* Get input matrix dimensions. */
@@ -250,7 +252,7 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
     copy_vector(realtype, n - 1, E, 1, E_test, 1);
 
     prepare_stedc_run(&compz, n, D_test, E_test, Z_test, ldz, datatype, n_repeats, &time_min, &info,
-                      test_lapacke_interface, layout);
+                      interfacetype, layout);
 
     /* Execution time. */
     *t = time_min;
@@ -318,7 +320,7 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
 
 void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, integer ldz,
                        integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, int layout)
+                       integer interfacetype, int layout)
 {
     integer index, lwork, liwork, lrwork, realtype;
     void *D_save = NULL, *E_save = NULL, *E_test = NULL, *Z_save = NULL;
@@ -340,7 +342,7 @@ void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, intege
 
     /* Call to STEDC() API to get work buffers size.
        NOTE: LAPACKE interface handles workspace query internally */
-    if((test_lapacke_interface == 0)
+    if((interfacetype != LAPACKE_COLUMN_TEST) && (interfacetype != LAPACKE_ROW_TEST)
        && (g_lwork == -1 || g_liwork == -1
            || ((datatype == COMPLEX || datatype == DOUBLE_COMPLEX) && g_lrwork == -1)))
     {
@@ -352,8 +354,18 @@ void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, intege
         lwork = g_lwork;
         liwork = g_liwork;
         lrwork = g_lrwork;
-        invoke_stedc(datatype, compz, &n, D, E_test, Z, &ldz, work, &lwork, rwork, &lrwork, iwork,
-                     &liwork, info);
+#if ENABLE_CPP_TEST
+        if(interfacetype == LAPACK_CPP_TEST)
+        {
+            invoke_cpp_stedc(datatype, compz, &n, D, E_test, Z, &ldz, work, &lwork, rwork, &lrwork,
+                             iwork, &liwork, info);
+        }
+        else
+#endif
+        {
+            invoke_stedc(datatype, compz, &n, D, E_test, Z, &ldz, work, &lwork, rwork, &lrwork,
+                         iwork, &liwork, info);
+        }
 
         /* Get work buffers size. */
         if(*info == 0)
@@ -409,11 +421,21 @@ void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, intege
         reset_vector(INTEGER, iwork, liwork, 1);
 
         /* Check if LAPACKE interface is enabled */
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time
                 = prepare_lapacke_stedc_run(datatype, layout, compz, n, D, E_test, Z, ldz, info);
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST)
+        {
+            exe_time = fla_test_clock();
+            /* Call CPP stedc API */
+            invoke_cpp_stedc(datatype, compz, &n, D, E_test, Z, &ldz, work, &lwork, rwork, &lrwork,
+                             iwork, &liwork, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();

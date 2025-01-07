@@ -1,5 +1,5 @@
 ###############################################################################
-# Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
+# Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 ###############################################################################
 # 
 # Makefile for libflame test suite driver.
@@ -15,7 +15,7 @@ LDFLAGS        := -lstdc++ -lm -lpthread $(OMP_LIB)
 
 ifndef $(ENABLE_CPP_TEST)
 # Flag to enable CPP test
-ENABLE_CPP_TEST := 0
+ENABLE_CPP_TEST := 1
 endif
 
 #

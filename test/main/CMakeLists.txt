@@ -1,5 +1,5 @@
 ###############################################################################
-# Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
+# Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 ###############################################################################
 if(WIN32)
     project(test_libFLAME_main)
@@ -12,13 +12,14 @@ option (ENABLE_ILP64 "Enable ILP64" OFF)
 
 option (ENABLE_MEM_UNALIGNED "Allocate unaligned memory" OFF)
 
-option (ENABLE_CPP_TEST "Enable CPP test support in test suite" OFF)
+option (ENABLE_CPP_TEST "Enable CPP test support in test suite" ON)
 
 if (${ENABLE_CPP_TEST} MATCHES "ON")
 add_definitions(-DENABLE_CPP_TEST=1)
 else()
 add_definitions(-DENABLE_CPP_TEST=0)
 endif()
+message(STATUS "Enabled ENABLE_CPP_TEST : ${ENABLE_CPP_TEST}")
 
 set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin")
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin") 
@@ -125,8 +126,10 @@ target_compile_options(${PROJECT_NAME} PRIVATE
 endif()
 
 target_include_directories("${PROJECT_NAME}" PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
-target_include_directories("${PROJECT_NAME}" PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/cpp)
 target_include_directories("${PROJECT_NAME}" PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/validate_src)
+if(ENABLE_CPP_TEST)
+target_include_directories("${PROJECT_NAME}" PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/cpp)
+endif()
 
 add_subdirectory(src)
 add_subdirectory(validate_src)

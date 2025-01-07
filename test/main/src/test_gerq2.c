@@ -1,15 +1,18 @@
 /*
-    Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 // Local prototypes.
 void fla_test_gerq2_experiment(test_params_t *params, integer datatype, integer p_cur,
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
                                double *perf, double *t, double *residual);
 void prepare_gerq2_run(integer m_A, integer n_A, void *A, integer lda, void *T, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info);
+                       integer n_repeats, double *time_min_, integer *info, integer interfacetype);
 void invoke_gerq2(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau,
                   void *work, integer *info);
 
@@ -108,6 +111,7 @@ void fla_test_gerq2_experiment(test_params_t *params, integer datatype, integer 
     integer info = 0, vinfo = 0;
     void *A = NULL, *A_test = NULL, *T = NULL;
     double time_min = 1e9;
+    integer interfacetype = params->interfacetype;
 
     // Get input matrix dimensions.
     m = p_cur;
@@ -139,7 +143,7 @@ void fla_test_gerq2_experiment(test_params_t *params, integer datatype, integer 
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
-    prepare_gerq2_run(m, n, A_test, lda, T, datatype, n_repeats, &time_min, &info);
+    prepare_gerq2_run(m, n, A_test, lda, T, datatype, n_repeats, &time_min, &info, interfacetype);
 
     // execution time
     *t = time_min;
@@ -176,7 +180,7 @@ void fla_test_gerq2_experiment(test_params_t *params, integer datatype, integer 
 }
 
 void prepare_gerq2_run(integer m_A, integer n_A, void *A, integer lda, void *T, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info)
+                       integer n_repeats, double *time_min_, integer *info, integer interfacetype)
 {
     integer min_A, i;
     void *A_save = NULL, *T_test = NULL, *work = NULL;
@@ -198,12 +202,23 @@ void prepare_gerq2_run(integer m_A, integer n_A, void *A, integer lda, void *T, 
         create_vector(datatype, &T_test, min_A);
         create_vector(datatype, &work, m_A);
 
-        exe_time = fla_test_clock();
+#if ENABLE_CPP_TEST
+        if(interfacetype == LAPACK_CPP_TEST) /* Call CPP gerq2 API */
+        {
+            exe_time = fla_test_clock();
+            invoke_cpp_gerq2(datatype, &m_A, &n_A, A, &lda, T_test, work, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+        else
+#endif
+        {
+            exe_time = fla_test_clock();
 
-        // call to gerq2 API
-        invoke_gerq2(datatype, &m_A, &n_A, A, &lda, T_test, work, info);
+            // call to gerq2 API
+            invoke_gerq2(datatype, &m_A, &n_A, A, &lda, T_test, work, info);
 
-        exe_time = fla_test_clock() - exe_time;
+            exe_time = fla_test_clock() - exe_time;
+        }
 
         // Get the best execution time
         time_min = fla_min(time_min, exe_time);

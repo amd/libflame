@@ -321,11 +321,12 @@ NOTE:
    d. "--interface=cpp" : Uses CPP interface for testing.
 
    Note :
-   1) In case user specifies anything incorrect, default interface is set to "lapack".
+   1) In case user specifies anything incorrect, returns error and prints all interfaces.
    2) Above "--lapacke" option will be removed once all test cases supports common interface.
-   3) ENABLE_CPP_TEST flag is used to enable/disable CPP interface, it is disabled by default.
-   4) If ENABLE_CPP_TEST is disabled & "--interface=cpp" is used, then warning is returned and
-      uses LAPACK interface as default.
+   3) ENABLE_CPP_TEST flag is used to enable/disable CPP interface, it is enabled by default.
+   4) If ENABLE_CPP_TEST is disabled & "--interface=cpp" is used, then returns error to enable
+      ENABLE_CPP_TEST flag. Also the test cases which are not yet implemented in cpp,
+      uses LAPACK interface.
 
    Example: ./test_lapack.x --interface=cpp    --> for CPP interface
             ./test_lapack.x --interface=lapacke_column --> for column major layout of lapacke interface

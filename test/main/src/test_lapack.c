@@ -90,6 +90,7 @@ int main(int argc, char **argv)
     test_params_t params;
     integer vers_major, vers_minor, vers_patch;
     integer arg_count = argc;
+    bool status;
 
     ilaver_(&vers_major, &vers_minor, &vers_patch);
 
@@ -117,7 +118,12 @@ int main(int argc, char **argv)
 
     if(params.test_lapacke_interface != 1)
     {
-        fla_check_interface(&arg_count, argv, &params);
+        status = fla_check_interface(&arg_count, argv, &params);
+        /* Check status and return */
+        if(status == FALSE)
+        {
+            return -1;
+        }
     }
 
     /* Checking for the cmd option or config file option */
@@ -234,8 +240,9 @@ void fla_check_lapacke_interface(integer *arg_count, char **argv, test_params_t 
     params->matrix_major = lapacke_major;
 }
 
-/* Function to configure appropriate interface to test */
-void fla_check_interface(integer *arg_count, char **argv, test_params_t *params)
+/* Function to configure appropriate interface to test
+   Returns true if interface is valid, returns false otherwise */
+bool fla_check_interface(integer *arg_count, char **argv, test_params_t *params)
 {
     char *interface_test = "--interface=";
     char *row_major = "lapacke_row";
@@ -253,7 +260,7 @@ void fla_check_interface(integer *arg_count, char **argv, test_params_t *params)
     integer index;
 
     /* check all the input args excluding first argument test_lapack.x
-       for '--lapacke=' string */
+       for '--interface=' string */
     for(index = 1; index < *arg_count; index++)
     {
         if(!(strncmp(argv[index], interface_test, len_interface_test)))
@@ -286,10 +293,9 @@ void fla_check_interface(integer *arg_count, char **argv, test_params_t *params)
                 interfacetype = LAPACK_CPP_TEST;
 #if(!ENABLE_CPP_TEST)
                 {
-                    printf("\nENABLE_CPP_TEST flag is disabled to use CPP interface, please enable "
-                           "and rebuild.\n");
-                    printf("Hence assigning default interface: lapack\n");
-                    interfacetype = LAPACK_TEST;
+                    printf("\nError: ENABLE_CPP_TEST flag is disabled to use CPP interface, please "
+                           "enable and rebuild.\n");
+                    return FALSE;
                 }
 #endif
             }
@@ -301,9 +307,10 @@ void fla_check_interface(integer *arg_count, char **argv, test_params_t *params)
             }
             else
             {
-                printf("\nWarning: Interface '%s' is invalid,", interface_buff);
-                printf(" assigning default interface: lapack\n");
-                interfacetype = LAPACK_TEST;
+                printf("\nError: Interface '%s' is invalid,", interface_buff);
+                printf(" Please provide valid interface: \n lapack, lapacke_row, lapacke_column, "
+                       "cpp\n");
+                return FALSE;
             }
             /* Decrement argument count to fall back to exisiting design of
                checking input filename or get config file data*/
@@ -314,6 +321,7 @@ void fla_check_interface(integer *arg_count, char **argv, test_params_t *params)
     params->test_lapacke_interface = enable_lapacke;
     params->interfacetype = interfacetype;
     params->matrix_major = lapacke_major;
+    return TRUE;
 }
 
 /* Function for checking cmd option or config file directory */

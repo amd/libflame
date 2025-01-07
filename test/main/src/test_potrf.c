@@ -1,10 +1,11 @@
 /*
-    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
-#include "test_common.h"
 #include "test_lapack.h"
-#include "test_prototype.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 integer row_major_potrf_lda;
 
@@ -13,8 +14,8 @@ void fla_test_potrf_experiment(test_params_t *params, integer datatype, integer 
                                integer q_cur, integer pci, integer n_repeats, integer einfo,
                                double *perf, double *time_min, double *residual);
 void prepare_potrf_run(char *uplo, integer m, void *A, integer lda, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, int matrix_layout);
+                       integer n_repeats, double *time_min_, integer *info, integer interfacetype,
+                       int matrix_layout);
 void invoke_potrf(char *uplo, integer datatype, integer *m, void *a, integer *lda, integer *info);
 double prepare_lapacke_potrf_run(integer datatype, int matrix_layout, char *uplo, integer m,
                                  void *A, integer lda, integer *info);
@@ -53,8 +54,7 @@ void fla_test_potrf(integer argc, char **argv, test_params_t *params)
         params->lin_solver_paramslist[0].Uplo = argv[3][0];
         N = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
         /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
-        if((g_ext_fptr == NULL) && params->test_lapacke_interface
-           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
         {
             row_major_potrf_lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
             params->lin_solver_paramslist[0].lda = N;
@@ -125,7 +125,7 @@ void fla_test_potrf_experiment(test_params_t *params, integer datatype, integer 
     void *A = NULL, *A_test = NULL;
     char uplo = params->lin_solver_paramslist[pci].Uplo;
 
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
 
     *residual = params->lin_solver_paramslist[pci].solver_threshold;
@@ -175,8 +175,8 @@ void fla_test_potrf_experiment(test_params_t *params, integer datatype, integer 
     create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &A_test, lda);
     copy_matrix(datatype, "full", m, m, A, lda, A_test, lda);
 
-    prepare_potrf_run(&uplo, m, A_test, lda, datatype, n_repeats, time_min, &info,
-                      test_lapacke_interface, layout);
+    prepare_potrf_run(&uplo, m, A_test, lda, datatype, n_repeats, time_min, &info, interfacetype,
+                      layout);
 
     /* Compute the performance of the best experiment repeat */
     /* (1/3)m^3 for real and (4/3)m^3 for complex*/
@@ -201,8 +201,8 @@ void fla_test_potrf_experiment(test_params_t *params, integer datatype, integer 
 }
 
 void prepare_potrf_run(char *uplo, integer m, void *A, integer lda, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, int layout)
+                       integer n_repeats, double *time_min_, integer *info, integer interfacetype,
+                       int layout)
 {
     void *A_save = NULL;
     double time_min = 1e9, exe_time;
@@ -220,10 +220,19 @@ void prepare_potrf_run(char *uplo, integer m, void *A, integer lda, integer data
         for each iteration */
         copy_matrix(datatype, "full", m, m, A_save, lda, A, lda);
         /* Check if LAPACKE interface is enabled */
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time = prepare_lapacke_potrf_run(datatype, layout, uplo, m, A, lda, info);
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST)
+        {
+            exe_time = fla_test_clock();
+            /* Call CPP potrf API */
+            invoke_cpp_potrf(uplo, datatype, &m, A, &lda, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();

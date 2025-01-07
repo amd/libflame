@@ -1,8 +1,11 @@
 /*
-    Copyright (C) 2022, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 /* Local prototypes */
 integer i_abs(integer *x);
@@ -10,7 +13,7 @@ void fla_test_rot_experiment(test_params_t *params, integer datatype, integer p_
                              integer pci, integer n_repeats, integer einfo, double *perf, double *t,
                              double *residual);
 void prepare_rot_run(integer datatype, integer n_A, void *cx, integer incx, void *cy, integer incy,
-                     void *c, void *s, integer n_repeats, double *time_min_);
+                     void *c, void *s, integer n_repeats, double *time_min_, integer interfacetype);
 void invoke_rot(integer datatype, integer *n, void *cx, integer *incx, void *cy, integer *incy,
                 void *c, void *s);
 extern void invoke_lartg(integer datatype, void *f, void *g, void *c, void *s, void *r);
@@ -107,10 +110,11 @@ void fla_test_rot_experiment(test_params_t *params, integer datatype, integer p_
 {
     integer n, incx, incy;
     void *cx = NULL, *cy = NULL, *s = NULL, *c = NULL;
-    ;
+
     void *f = NULL, *g = NULL, *r = NULL;
     void *cx_test = NULL, *cy_test = NULL;
     double time_min = 1e9;
+    integer interfacetype = params->interfacetype;
 
     integer realtype;
     realtype = get_realtype(datatype);
@@ -161,7 +165,7 @@ void fla_test_rot_experiment(test_params_t *params, integer datatype, integer p_
     copy_vector(datatype, 1 + (n - 1) * fla_i_abs(&incx), cx, i_one, cx_test, i_one);
     copy_vector(datatype, 1 + (n - 1) * fla_i_abs(&incy), cy, i_one, cy_test, i_one);
     /* call to API */
-    prepare_rot_run(datatype, n, cx, incx, cy, incy, c, s, n_repeats, &time_min);
+    prepare_rot_run(datatype, n, cx, incx, cy, incy, c, s, n_repeats, &time_min, interfacetype);
 
     /* execution time */
     *t = time_min;
@@ -189,7 +193,7 @@ void fla_test_rot_experiment(test_params_t *params, integer datatype, integer p_
 }
 
 void prepare_rot_run(integer datatype, integer n_A, void *cx, integer incx, void *cy, integer incy,
-                     void *c, void *s, integer n_repeats, double *time_min_)
+                     void *c, void *s, integer n_repeats, double *time_min_, integer interfacetype)
 {
     integer i;
     void *cx_save = NULL, *cy_save = NULL;
@@ -204,12 +208,22 @@ void prepare_rot_run(integer datatype, integer n_A, void *cx, integer incx, void
         copy_vector(datatype, 1 + (n_A - 1) * fla_i_abs(&incx), cx, i_one, cx_save, i_one);
         copy_vector(datatype, 1 + (n_A - 1) * fla_i_abs(&incy), cy, i_one, cy_save, i_one);
 
-        exe_time = fla_test_clock();
-
-        /*  call  rot API */
-        invoke_rot(datatype, &n_A, cx_save, &incx, cy_save, &incy, c, s);
-
-        exe_time = fla_test_clock() - exe_time;
+#if ENABLE_CPP_TEST
+        if(interfacetype == LAPACK_CPP_TEST)
+        {
+            exe_time = fla_test_clock();
+            /* Call CPP rot API */
+            invoke_cpp_rot(datatype, &n_A, cx_save, &incx, cy_save, &incy, c, s);
+            exe_time = fla_test_clock() - exe_time;
+        }
+        else
+#endif
+        {
+            /* Call LAPACK rot API */
+            exe_time = fla_test_clock();
+            invoke_rot(datatype, &n_A, cx_save, &incx, cy_save, &incy, c, s);
+            exe_time = fla_test_clock() - exe_time;
+        }
 
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);

@@ -52,7 +52,7 @@ AOCL-LAPACK can be linked with any Netlib BLAS compliant library when compiled w
 `cmake -DENABLE_AMD_AOCC_FLAGS=ON -DENABLE_AOCL_BLAS=ON ...`
 
 The path of AOCL-BLAS library can be provided in one of the following methods
-1. Set "AOCL_ROOT" environment variable to the root path where AOCL-BLAS library `($AOCL_ROOT/lib)` and header files `("$AOCL_ROOT"/include)` are located.
+1. Set "AOCL_ROOT" environment variable to the root path where AOCL-BLAS library `($AOCL_ROOT/lib)` and header files `("$AOCL_ROOT"/include)` are located. AOCL_ROOT must ideally be path where all AOCL libraries are installed including AOCL-Utils and AOCL-BLAS.
 `export AOCL_ROOT=<path to AOCL-BLAS>`
 
 2. Specify root path of AOCL-BLAS library through cmake option "AOCL_ROOT"
@@ -64,7 +64,11 @@ Linking with AOCL Utilities library
 ------------------------------------
 AOCL-LAPACK depends on AOCL Utilities library, AOCL-Utils for certain functions including CPU architecture detection at runtime. The default build of AOCL-LAPACK requires path to AOCL-Utils header files to be set as follows
 
-- For CMake based build, ensure header file path of AOCL-Utils is  set using LIBAOCLUTILS_INCLUDE_PATH option.
+- For CMake build, the path of AOCL-Utils library can be provided in one of the following methods 
+1. Set "AOCL_ROOT" environment variable to the root path where AOCL-Utils library  header files `("$AOCL_ROOT"/include)` are located. AOCL_ROOT must ideally be path where all AOCL libraries are installed including AOCL-Utils and AOCL-BLAS.
+`export AOCL_ROOT=<path to AOCL-Utils>`
+
+2. Set LIBAOCLUTILS_INCLUDE_PATH option.
 
         cmake ../ -DENABLE_AMD_FLAGS=ON -DLIBAOCLUTILS_INCLUDE_PATH=<path/to/libaoclutils/header/files>
 

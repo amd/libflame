@@ -79,7 +79,7 @@ message("LF_ISA_CONFIG selected:${LF_ISA_CONFIG}")
 set(LIBAOCLUTILS_PROJECT "libaoclutils")
 set(LIBAOCLUTILS_INSTALL_DIR_NAME "install-aoclutils")
 set(LIBAOCLUTILS_GIT_URL "https://github.com/amd/aocl-utils.git" CACHE STRING "libaoclutils repository URL to be used")
-set(LIBAOCLUTILS_GIT_TAG "4.1" CACHE STRING "libaoclutils repository tag to be used")
+set(LIBAOCLUTILS_GIT_TAG "5.0" CACHE STRING "libaoclutils repository tag to be used")
 
 if(UNIX)
 	set(LIBAOCLUTILS_SHAREDLIB "libaoclutils.so")
@@ -524,11 +524,32 @@ if(ENABLE_LAPACKE_LSAME_FORTRAN_STRLEN)
     add_definitions(-DLAPACK_LSAME_FORTRAN_STRLEN_END)
 endif()
 
+# Include the AOCL-BLAS path check cmake directory
+include(cmake/find_dep_libs.cmake)
+
 # AOCL-BLAS library linking option. If ENABLE_AOCL_BLAS is set, then the AOCL-BLAS library will be linked.
 # Note: This block has to come after the FLA_ENABLE_ILP64 block, as that decides the type of AOCL-BLAS library thats linked.
 if (ENABLE_AOCL_BLAS)
-       message(STATUS "AOCL-BLAS library linking option selected")
-       include(cmake/find_aocl-blas.cmake)
+    message(STATUS "AOCL-BLAS library linking option selected")
+
+	if(NOT BLAS_LIBRARY)
+		message (FATAL_ERROR "Error: Either AOCL_ROOT environment variable is not set or could not find a suitable installation of AOCL-BLAS Library in \$AOCL_ROOT=${AOCL_ROOT}")
+	endif()
+endif()
+
+# If the external BLAS library path is not set, then check if the BLAS_LIBRARY is set from AOCL_ROOT environment. 
+# If it is set, then use the BLAS_LIBRARY path as the AOCL-BLAS path.
+if ((ENABLE_AOCL_BLAS OR NOT (CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH AND EXT_BLAS_LIBNAME AND BLAS_HEADER_PATH))
+	AND (WIN32 OR BUILD_TEST OR BUILD_LEGACY_TEST OR BUILD_NETLIB_TEST) 
+	AND BLAS_LIBRARY)
+
+	if (ENABLE_AOCL_BLAS AND (CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH OR EXT_BLAS_LIBNAME OR BLAS_HEADER_PATH))
+		message(WARNING "CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH and/or EXT_BLAS_LIBNAME are set. These will be ignored since BLAS library will be chosen from AOCL_ROOT path when ENABLE_AOCL_BLAS is set")
+	endif()
+
+	set(CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH ${BLAS_LIB_PATH})
+	set(EXT_BLAS_LIBNAME ${BLAS_LIB_NAME})
+	set(BLAS_HEADER_PATH ${BLAS_INCLUDE_DIR})
 endif()
 
 if(ENABLE_AMD_OPT)
@@ -1030,29 +1051,20 @@ endif ()
 	target_include_directories(${PROJECT_NAME} PUBLIC src/lapack/x86/front)
 	target_include_directories(${PROJECT_NAME} PUBLIC src/lapack/x86/generic)
 
-# IF AOCL-UTILS paths is not provided by user, try to get it with pkg-config
-if (NOT LIBAOCLUTILS_INCLUDE_PATH AND NOT LIBAOCLUTILS_LIBRARY_PATH)
-	find_package(PkgConfig)
-	if (PKG_CONFIG_FOUND)
-		pkg_check_modules(AOCLUTILS aocl-utils)
-		if (AOCLUTILS_FOUND)
-			set(LIBAOCLUTILS_INCLUDE_PATH ${AOCLUTILS_INCLUDE_DIRS})
-			set(LIBAOCLUTILS_LIBRARY_PATH ${AOCLUTILS_LINK_LIBRARIES})
-
-			# If static build is selected, then link with libaoclutils
-			# static library. 
-			if (NOT BUILD_SHARED_LIBS AND NOT WIN32)
-				get_filename_component(LIBAOCLUTILS_LIBRARY_DIR ${LIBAOCLUTILS_LIBRARY_PATH} DIRECTORY)
-				get_filename_component(LIBAOCLUTILS_LIBRARY_NAME ${LIBAOCLUTILS_LIBRARY_PATH} NAME_WE)
-				set(LIBAOCLUTILS_LIBRARY_PATH ${LIBAOCLUTILS_LIBRARY_DIR}/${LIBAOCLUTILS_LIBRARY_NAME}.a)
-			endif()
-
-			message(STATUS "Found AOCL-UTILS include path using pkg-config: " ${LIBAOCLUTILS_INCLUDE_PATH})
-			message(STATUS "Found AOCL-UTILS library path using pkg-config: " ${LIBAOCLUTILS_LIBRARY_PATH})
-
-		endif()
+# IF AOCL-UTILS paths is not provided by user, try to get it from AOCL_ROOT environment vriable
+if (NOT LIBAOCLUTILS_INCLUDE_PATH OR NOT LIBAOCLUTILS_LIBRARY_PATH )
+	if (AOCL_UTILS_LIBRARY)
+		set(LIBAOCLUTILS_INCLUDE_PATH ${AOCL_UTILS_INCLUDE_DIR})
+		set(LIBAOCLUTILS_LIBRARY_PATH ${AOCL_UTILS_LIBRARY})
+	else()
+		message(FATAL_ERROR "AOCL-UTILS library path not provided! Set AOCL-UTILS library path using flag LIBAOCLUTILS_LIBRARY_PATH or AOCL_ROOT environment variable")
 	endif()
+else()
+	message(STATUS "AOCL-UTILS library path provided by user")
 endif()
+
+message(STATUS "AOCL-UTILS library path : ${LIBAOCLUTILS_LIBRARY_PATH}")
+message(STATUS "AOCL-UTILS library headers path : ${LIBAOCLUTILS_INCLUDE_PATH}")
 
 #If embedding AOCL-UTILS library in AOCL-LAPACK option is selected
 if(ENABLE_EMBED_AOCLUTILS)
@@ -1175,24 +1187,20 @@ add_definitions(-DEXPMODULE)
 add_subdirectory(src)
 
 if (BUILD_TEST OR BUILD_LEGACY_TEST OR BUILD_NETLIB_TEST)
-	if(NOT CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH OR NOT EXT_BLAS_LIBNAME)
-		# Get the path of directory using pkg-config
-		find_package(PkgConfig)
-		if (PKG_CONFIG_FOUND)
-			pkg_check_modules(BLIS blis)
-			if (BLIS_FOUND)
-				if (NOT BLAS_HEADER_PATH)
-					set(BLAS_HEADER_PATH ${BLIS_INCLUDE_DIRS})
-				endif()
-				message(STATUS "Found BLAS library path using pkg-config : " ${BLIS_LINK_LIBRARIES})
-			endif()
-		endif()
-		if (NOT BLIS_FOUND)
-			message(FATAL_ERROR "BLAS library path not set! Please set the same using CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH \
-			option or make sure blis pkg-config file is in PKG_CONFIG_PATH")
-		endif()
+
+	if (NOT CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH OR NOT EXT_BLAS_LIBNAME)
+		message(FATAL_ERROR "BLAS library path not set! Please set the same using CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH option or AOCL_ROOT environment variable or make sure blis pkg-config file is in PKG_CONFIG_PATH")
 	endif()
 
+	if(BUILD_TEST AND NOT ENABLE_AOCL_BLAS AND NOT BLAS_HEADER_PATH)
+		message(FATAL_ERROR "BLAS header path not set! Please set the same using BLAS_HEADER_PATH option")
+	endif()
+
+	# print paths of external libraries
+	message(STATUS "External BLAS library path for test suite: ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}")
+	message(STATUS "External BLAS library name for test suite: ${EXT_BLAS_LIBNAME}")
+	message(STATUS "External BLAS header path for test suite: ${BLAS_HEADER_PATH}")
+	
 	# if user wants to run tests on an external lapack library
 	# needs to be modified for external lapack libraries same way as done for blas
 	if((NOT EXT_LAPACK_LIBRARY_PATH) OR (NOT EXT_LAPACK_LIBNAME))
@@ -1220,9 +1228,9 @@ if (BUILD_TEST OR BUILD_LEGACY_TEST OR BUILD_NETLIB_TEST)
 		message(STATUS "Missing External lapack library. Using ${LIBFLAME_LIBRARY_OUTPUT_PATH}/${LIBFLAME_LIB_NAME} ")
 	elseif(NOT EXISTS ${EXT_LAPACK_LIBRARY_PATH}/${EXT_LAPACK_LIBNAME})
 		message(FATAL_ERROR "\n Invalid path to lapack Library \n \
-	${EXT_LAPACK_LIBRARY_PATH}/${EXT_LAPACK_LIBNAME} \
-	Does not exist.\n Please check the path again, or avoid passing \n \
-	-DEXT_LAPACK_LIBRARY_PATH and -DEXT_LAPACK_LIBNAME to use libflame")
+		${EXT_LAPACK_LIBRARY_PATH}/${EXT_LAPACK_LIBNAME} \
+		Does not exist.\n Please check the path again, or avoid passing \n \
+		-DEXT_LAPACK_LIBRARY_PATH and -DEXT_LAPACK_LIBNAME to use libflame")
 	endif()
 
 endif()
@@ -1238,52 +1246,66 @@ if (BUILD_TEST OR BUILD_LEGACY_TEST)
 		message(FATAL_ERROR "aocl-utils library path not set! Please set the same using LIBAOCLUTILS_LIBRARY_PATH \
 		option or make sure aocl-utils pkg-config file is in PKG_CONFIG_PATH")
 	endif()
-
+		
 	if(UNIX)
-		# CHECKS if blas library exists
-		set(BLAS_LIB_LIST ${EXT_BLAS_LIBNAME})
+		# CHECKS if blas library path is explicitly set
+		if (CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH AND EXT_BLAS_LIBNAME AND (NOT ENABLE_AOCL_BLAS))
+			# CHECKS if blas library exists
+			set(BLAS_LIB_LIST ${EXT_BLAS_LIBNAME})
 
-		# If there are multiple libraries that are part of given BLAS, each will be separated by space
-		separate_arguments(BLAS_LIB_LIST)
-		message(STATUS "BLAS library provided ${BLAS_LIB_LIST}")
-		foreach(BLAS_LIB ${BLAS_LIB_LIST})
-			if(NOT EXISTS ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${BLAS_LIB})
-				message(FATAL_ERROR "\n Invalid path to BLAS Library \n \
-				${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME} \
-				Does not exist.\n Please check the path again")
-			endif()
-		endforeach()
+			# If there are multiple libraries that are part of given BLAS, each will be separated by space
+			separate_arguments(BLAS_LIB_LIST)
 
-		foreach(BLAS_LIB ${BLAS_LIB_LIST})
-			list(APPEND BLAS_LINK_LIST ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${BLAS_LIB})
-		endforeach()
+			foreach(BLAS_LIB ${BLAS_LIB_LIST})
+				if(NOT EXISTS ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${BLAS_LIB})
+					message(FATAL_ERROR "\n Invalid path to BLAS Library \n \
+					${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME} \
+					Does not exist.\n Please check the path again")
+				endif()
+			endforeach()
 
-		if(NOT BLAS_LINK_LIST AND BLIS_LINK_LIBRARIES)
-			list(APPEND BLAS_LINK_LIST ${BLIS_LINK_LIBRARIES})
+			foreach(BLAS_LIB ${BLAS_LIB_LIST})
+				list(APPEND BLAS_LINK_LIST ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${BLAS_LIB})
+			endforeach()
+	
+		elseif(ENABLE_AOCL_BLAS)
+			# If BLAS library is provided from environment, then use it
+			list(APPEND BLAS_LINK_LIST ${BLAS_LIBRARY})
+			set(BLAS_HEADER_PATH ${BLAS_INCLUDE_DIR})			
+			message(STATUS "BLAS library from environment")
 		endif()
 
 		set_target_properties(aoclutils PROPERTIES
 		IMPORTED_LOCATION ${LIBAOCLUTILS_LIBRARY_PATH}
 		POSITION_INDEPENDENT_CODE ON
 		)
+
 	elseif(WIN32)
-		# CHECKS if blas library exists
-       		if(NOT EXISTS ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME})
-               		message(FATAL_ERROR "\n Invalid path to BLAS Library \n \
-			${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME} \
-			Does not exist.\n Please check the path again")
+		# CHECKS if blas library is explicitly set
+		if (CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH AND EXT_BLAS_LIBNAME AND (NOT ENABLE_AOCL_BLAS))
+			if(NOT EXISTS ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME})
+				message(FATAL_ERROR "\n Invalid path to BLAS Library \n \
+					${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME} \
+					Does not exist.\n Please check the path again")
+			endif()
+
+			set_target_properties(blas PROPERTIES
+			IMPORTED_IMPLIB ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME}
+			POSITION_INDEPENDENT_CODE ON
+			)
+		elseif (ENABLE_AOCL_BLAS)
+			# If BLAS library is provided from environment, then use it
+			set_target_properties(blas PROPERTIES
+			IMPORTED_IMPLIB ${BLAS_LIBRARY}}
+			POSITION_INDEPENDENT_CODE ON
+			)
 		endif()
 
-		set_target_properties(blas PROPERTIES
-		IMPORTED_IMPLIB ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME}
-		POSITION_INDEPENDENT_CODE ON
-		)
 		set_target_properties(aoclutils PROPERTIES
 		IMPORTED_IMPLIB ${LIBAOCLUTILS_LIBRARY_PATH}
 		POSITION_INDEPENDENT_CODE ON
 		)
 	endif()
-	#add_subdirectory(testcpp)
 endif()
 
 if(BUILD_TEST)
@@ -1297,17 +1319,6 @@ if (BUILD_NETLIB_TEST)
 
 	if (BUILD_SHARED_LIBS)
 		message(FATAL_ERROR "Netlib test is not supported for shared library build")
-	endif()
-
-	if ((NOT (CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH) OR NOT (EXT_BLAS_LIBNAME)) AND BLIS_LINK_LIBRARIES)
-		get_filename_component(BLAS_LIB_PATH ${BLIS_LINK_LIBRARIES} DIRECTORY)
-		get_filename_component(BLAS_LIB_NAME_WE ${BLIS_LINK_LIBRARIES} NAME_WE)
-		if(NOT EXISTS ${BLAS_LIB_PATH}/${BLAS_LIB_NAME_WE}${CMAKE_STATIC_LIBRARY_SUFFIX})
-			message(FATAL_ERROR "Need static BLAS library to build netlib test. Please provide the path to the static BLAS library using
-			\nEXT_BLAS_LIBNAME and CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH")
-		endif()
-		set(EXT_BLAS_LIBNAME ${BLAS_LIB_NAME_WE}${CMAKE_STATIC_LIBRARY_SUFFIX})
-		set(CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH ${BLAS_LIB_PATH})
 	endif()
 
 	if(WIN32)

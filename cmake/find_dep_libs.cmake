@@ -24,7 +24,7 @@
 # ============= aocl function ================
 function(aocl_libs)
 
-  IF(FLA_ENABLE_ILP64)
+  IF(FLA_ENABLE_ILP64) 
     SET(ILP_DIR "ILP64")
   ELSE(FLA_ENABLE_ILP64)
     SET(ILP_DIR "LP64")
@@ -33,7 +33,7 @@ function(aocl_libs)
   IF(WIN32)
     SET(CMAKE_FIND_LIBRARY_PREFIXES "")
     SET(CMAKE_FIND_LIBRARY_SUFFIXES ".lib")
-
+    
     if(FLA_OPENMP_MULTITHREADING)
       IF(BUILD_SHARED_LIBS)
         SET(BLAS_LIB_NAME "AOCL-LibBlis-Win-MT-dll")
@@ -52,7 +52,7 @@ function(aocl_libs)
     IF(BUILD_SHARED_LIBS)
       SET(UTILS_LIB_NAME "libaoclutils")
     ELSE(BUILD_SHARED_LIBS)
-      SET(UTILS_LIB_NAME "libaoclutils_static")
+      SET(BLAS_LIB_NAME "libaoclutils_static")
     ENDIF(BUILD_SHARED_LIBS)
 
     find_library(AOCL_BLAS_LIB
@@ -80,19 +80,19 @@ function(aocl_libs)
 
     # add aocl-utils headers
     find_path(AOCL_UTILS_INCLUDE_DIR
-    NAMES alci/alci_c.h  alci/alci.h  alci/arch.h  alci/enum.h  alci/macros.h
+    NAMES alci_c.h  alci.h  arch.h  enum.h  macros.h
     HINTS ${AOCL_ROOT}/amd-utils ${AOCL_ROOT}
-    PATH_SUFFIXES "include/${ILP_DIR}" "include_${ILP_DIR}" "include"
+    PATH_SUFFIXES "include/${ILP_DIR}/alci" "include_${ILP_DIR}/alci" "include/alci"
     DOC "AOCL-UTILS headers"
     )
 
-  ELSE(WIN32)
+  ELSE(WIN32)   
     SET(CMAKE_FIND_LIBRARY_PREFIXES "lib")
     IF(BUILD_SHARED_LIBS)
       SET(CMAKE_FIND_LIBRARY_SUFFIXES ".so")
     ELSE(BUILD_SHARED_LIBS)
       SET(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
-    ENDIF(BUILD_SHARED_LIBS)
+    ENDIF(BUILD_SHARED_LIBS) 
 
     IF(FLA_OPENMP_MULTITHREADING)
       SET(BLAS_LIB_NAME "blis-mt")
@@ -108,7 +108,7 @@ function(aocl_libs)
     PATH_SUFFIXES "lib/${ILP_DIR}" "lib_${ILP_DIR}" "lib"
     DOC "AOCL-BLAS library"
     )
-
+    
     # find aoclutils library
     find_library(AOCL_UTILS_LIB
     NAMES ${UTILS_LIB_NAME}
@@ -166,32 +166,33 @@ unset(BLAS_INCLUDE_DIR)
 set(AOCL_UTILS_LIBRARY)
 unset(AOCL_UTILS_INCLUDE_DIR)
 
-if(AOCL_ROOT)
-    message(STATUS "AOCL_ROOT set from cmake option is ${AOCL_ROOT}")
-    if(NOT EXISTS ${AOCL_ROOT})
-      message(FATAL_ERROR "\n Invalid path to AOCL_ROOT \n")
-    endif()
-elseif(DEFINED ENV{AOCL_ROOT})
+if(DEFINED ENV{AOCL_ROOT})            
     SET(AOCL_ROOT $ENV{AOCL_ROOT})
     message(STATUS "AOCL_ROOT set via environment variable is ${AOCL_ROOT}")
     if(NOT EXISTS ${AOCL_ROOT})
-        message(FATAL_ERROR "\n Invalid path to AOCL_ROOT \n")
+			message(FATAL_ERROR "\n Invalid path to AOCL_ROOT \n")
+		endif()
+elseif(AOCL_ROOT)
+    SET(AOCL_ROOT ${AOCL_ROOT})
+    message(STATUS "AOCL_ROOT set from cmake option is ${AOCL_ROOT}")
+    if(NOT EXISTS ${AOCL_ROOT})
+      message(FATAL_ERROR "\n Invalid path to AOCL_ROOT \n")
     endif()
 else()
       # if aocl-root is not set then check using pkg-config by default
       find_package(PkgConfig)
       if (PKG_CONFIG_FOUND)
-        pkg_check_modules(PKG_AOCL_BLAS ${REQ_BLAS_PKGNAME})
-        if (PKG_AOCL_BLAS_FOUND AND UNIX)
-          set (AOCL_BLAS_INCLUDE_DIR ${PKG_AOCL_BLAS_INCLUDE_DIRS})
-          get_filename_component(BLAS_LIB_PATH ${PKG_AOCL_BLAS_LINK_LIBRARIES} DIRECTORY)
-          get_filename_component(BLAS_LIB_NAME_WE ${PKG_AOCL_BLAS_LINK_LIBRARIES} NAME_WE)
+        pkg_check_modules(BLIS blis)
+        if (BLIS_FOUND AND UNIX)
+          set (AOCL_BLAS_INCLUDE_DIR ${BLIS_INCLUDE_DIRS})
+          get_filename_component(BLIS_LIB_PATH ${BLIS_LINK_LIBRARIES} DIRECTORY)
+          get_filename_component(BLIS_LIB_NAME ${BLIS_LINK_LIBRARIES} NAME_WE)
+
           if (BUILD_SHARED_LIBS)
-            set (BLAS_LIB_NAME ${BLAS_LIB_NAME_WE}.so)
+            set (BLAS_LIBRARY ${BLIS_LIB_PATH}/${BLIS_LIB_NAME}.so)
           else()
-            set (BLAS_LIB_NAME ${BLAS_LIB_NAME_WE}.a)
+            set (BLAS_LIBRARY ${BLIS_LIB_PATH}/${BLIS_LIB_NAME}.a)
           endif()
-          set (BLAS_LIBRARY ${BLAS_LIB_PATH}/${BLAS_LIB_NAME})
           message(STATUS "Found AOCL-BLAS library using pkg-config: ${BLAS_LIBRARY}")
         endif()
 
@@ -208,7 +209,7 @@ else()
           endif()
           message(STATUS "Found AOCL-UTILS library using pkg-config: ${AOCL_UTILS_LIBRARY}")
         endif()
-      endif()
+      endif()      
 
       set(AOCL_ROOT ${CMAKE_INSTALL_PREFIX})
 endif()

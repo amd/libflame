@@ -5,7 +5,7 @@ LIBAOCLUTILS_DIR=libaoclutils
 LIBAOCLUTILS_OBJ_DIR=libaoclutils_objdir
 LIBAOCLUTILS_STATICLIB=libaoclutils.a
 LIBAOCLUTILS_GIT_URL=https://github.com/amd/aocl-utils.git
-LIBAOCLUTILS_GIT_TAG="4.1"
+LIBAOCLUTILS_GIT_TAG="5.0"
 LIBAOCLUTILS_GIT_REPO=aocl-utils
 
 for ARG in "$@"

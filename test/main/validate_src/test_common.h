@@ -1,6 +1,6 @@
-/******************************************************************************
- * Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
- *******************************************************************************/
+/*
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+*/
 
 /*! @file test_common.h
  *  @brief Defines function declarations to use in APIs of test suite.
@@ -44,14 +44,15 @@ enum TRIANGULAR_MATRIX_DIAG_TYPE
 #define HIGHER_OFF_DIAGONAL_ELEMENT 1
 
 // global variables
+
+extern double perf;
+extern double time_min;
 extern integer i_zero, i_one, i_n_one;
 extern float s_zero, s_one, s_n_one;
 extern double d_zero, d_one, d_n_one;
 extern scomplex c_zero, c_one, c_n_one;
 extern dcomplex z_zero, z_one, z_n_one;
 extern int matrix_layout;
-extern integer abs_eigen_values;
-extern integer signed_eigen_values;
 
 #define DRAND() ((double)rand() / ((double)RAND_MAX / 2.0F)) - 1.0F
 #define SRAND() (float)((double)rand() / ((double)RAND_MAX / 2.0F)) - 1.0F
@@ -70,6 +71,9 @@ extern integer signed_eigen_values;
 #define DOUBLE_COMPLEX 106
 #define INVALID_TYPE -106
 
+#define RECT_INPUT 0
+#define SQUARE_INPUT 1
+
 #define MAX_FLT_DIFF 0.00001 // Maximum allowed difference for float comparision
 #define MAX_DBL_DIFF 0.0000000001 // Maximum allowed difference for double comparision
 
@@ -82,6 +86,45 @@ extern integer signed_eigen_values;
 #else
 #define FT_IS "d"
 #endif
+
+/* function call for status print */
+void fla_test_print_status(char *func_str, char datatype_char, integer sqr_inp, integer p_cur,
+                           integer q_cur, double residual, double thresh, double time, double perf);
+
+/* print overall test status */
+#define FLA_PRINT_TEST_STATUS(p, q, residual, err_thresh) \
+    char dtype = get_datatype_char(datatype);             \
+    fla_test_print_status(tst_api, dtype, RECT_INPUT, p, q, residual, err_thresh, time_min, perf);
+
+/* print sub-test details in case of failure */
+#define FLA_PRINT_SUBTEST_STATUS(residual, err_thresh, idx)           \
+    if((residual > err_thresh) || (isnan(residual)))                  \
+    {                                                                 \
+        printf("%s TEST %s Failed with residual", tst_api, idx);      \
+        printf(" %-7.2le (ULIMIT: %-7.2le)\n", residual, err_thresh); \
+    }
+
+#define FLA_TEST_PRINT_INVALID_STATUS(p, q, err_resid) \
+    if(err_resid == DBL_MIN || err_resid == DBL_MAX)   \
+    {                                                  \
+        FLA_PRINT_TEST_STATUS(p, q, err_resid, 0);     \
+        return;                                        \
+    }                                                  \
+    else if(err_resid == -1) /* -ve test pass */       \
+    {                                                  \
+        FLA_PRINT_TEST_STATUS(p, q, 0, 2);             \
+        return;                                        \
+    }
+
+#define FLA_TEST_PRINT_STATUS_AND_RETURN(p, q, err_resid)        \
+    {                                                            \
+        FLA_TEST_PRINT_INVALID_STATUS(p, q, err_resid)           \
+        FLA_PRINT_TEST_STATUS(p, q, err_thresh, err_thresh * 2); \
+        return;                                                  \
+    }
+
+/* Max function with NAN checks */
+double fla_test_max(double v1, double v2);
 
 /* Integer absolute function */
 integer fla_i_abs(integer *x);
@@ -109,6 +152,7 @@ void copy_realtype_vector(integer datatype, integer M, void *A, integer LDA, voi
 void create_matrix(integer datatype, int matrix_layout, integer M, integer N, void **A,
                    integer lda);
 void create_realtype_matrix(integer datatype, void **A, integer M, integer N);
+char get_datatype_char(integer stype);
 integer get_datatype(char stype);
 /* Get datatype char for a given datatype */
 char get_datatype_char(integer datatype);
@@ -326,10 +370,12 @@ void residual_sum_of_squares(int datatype, integer m, integer n, integer nrhs, v
 /* Generate a symmetric or hermitian matrix from existing matrix A
  * If type = "C" hermitian matrix formed.
  * If type = "S" symmetric matrix is formed.
- * If uplo = 'L' lower triangular part of the matrix is copied to upper triangular part in hermitian matrix.
- * Else upper triangular part of the matrix is copied to lower triangular part in hermitian matrix.
+ * If uplo = 'L' lower triangular part of the matrix is copied to upper triangular part in hermitian
+ * matrix. Else upper triangular part of the matrix is copied to lower triangular part in hermitian
+ * matrix.
  */
-void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, char *type, char uplo);
+void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, char *type,
+                           char uplo);
 /* Scaling the matrix by x scalar */
 void scal_matrix(integer datatype, void *x, void *A, integer m, integer n, integer lda,
                  integer inc);

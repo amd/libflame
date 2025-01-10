@@ -7,12 +7,14 @@
 #include <invoke_common.hh>
 #endif
 
+extern double perf;
+extern double time_min;
 integer row_major_stedc_ldz;
 
 /* Local prototypes. */
-void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *t, double *residual);
+void fla_test_stedc_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo);
 void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, integer ldz,
                        integer datatype, integer n_repeats, double *time_min_, integer *info,
                        integer interfacetype, int matrix_layout);
@@ -53,7 +55,6 @@ void fla_test_stedc(integer argc, char **argv, test_params_t *params)
         /* Test with parameters from commandline */
         integer i, num_types, N;
         integer datatype, n_repeats;
-        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -99,12 +100,7 @@ void fla_test_stedc(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_stedc_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
-                                          &time_min, &residual);
-                /* Print the results */
-                fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
-                                      params->eig_sym_paramslist[0].threshold_value, time_min,
-                                      perf);
+                fla_test_stedc_experiment(front_str, params, datatype, N, N, 0, n_repeats, einfo);
                 tests_not_run = 0;
             }
         }
@@ -128,16 +124,15 @@ void fla_test_stedc(integer argc, char **argv, test_params_t *params)
     }
 }
 
-void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *t, double *residual)
+void fla_test_stedc_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo)
 {
     integer n, info = 0, realtype, lda, ldz;
     void *D = NULL, *D_test = NULL, *E = NULL, *E_test = NULL, *Z_test = NULL;
     void *Z = NULL, *A = NULL, *L = NULL, *Q = NULL, *scal = NULL;
-    double time_min = 1e9;
     char compz, uplo, range = 'V';
-    double resid;
+    double residual, err_thresh;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
@@ -148,7 +143,7 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
     /* Initialize parameter needed for STEDC() call. */
     compz = params->eig_sym_paramslist[pci].compz;
     ldz = params->eig_sym_paramslist[pci].ldz;
-    *residual = params->eig_sym_paramslist[pci].threshold_value;
+    err_thresh = params->eig_sym_paramslist[pci].threshold_value;
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
@@ -195,22 +190,12 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
             if(g_ext_fptr)
             {
                 copy_matrix(datatype, "full", n, n, A, lda, Q, lda);
-                resid = check_orthogonality(datatype, Q, n, n, lda);
-                if(resid < *residual)
-                {
-                    /* Input matrix is orthogonal matrix for file inputs.
-                       So get the symmetric/hermitian matrix using:
-                       A = Q * T * (Q**T) */
-                    copy_sym_tridiag_matrix(datatype, D, E, n, n, Z, ldz);
-                    fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, Q, &lda, Z, &ldz, Z_test, &ldz);
-                    fla_invoke_gemm(datatype, "N", "T", &n, &n, &n, Z_test, &ldz, Q, &lda, A, &lda);
-                }
-                else
-                {
-                    printf("Error: Input matrix A is not orthogonal\n");
-                    *residual = DBL_MAX;
-                    return;
-                }
+                /* Input matrix is assumed to be orthogonal matrix for file inputs.
+                 * So get the symmetric/hermitian matrix using:
+                 * A = Q * T * (Q**T) */
+                copy_sym_tridiag_matrix(datatype, D, E, n, n, Z, ldz);
+                fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, Q, &lda, Z, &ldz, Z_test, &ldz);
+                fla_invoke_gemm(datatype, "N", "T", &n, &n, &n, Z_test, &ldz, Q, &lda, A, &lda);
             }
             else if(FLA_EXTREME_CASE_TEST)
             {
@@ -254,35 +239,35 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
     prepare_stedc_run(&compz, n, D_test, E_test, Z_test, ldz, datatype, n_repeats, &time_min, &info,
                       interfacetype, layout);
 
-    /* Execution time. */
-    *t = time_min;
     /* Performance computation
        (6)n^3 flops for eigen vectors
        (4/3)n^3 flops for eigen values. */
-    *perf = (double)((4.0 / 3.0) * n * n * n) / *t / FLOPS_PER_UNIT_PERF;
+    perf = (double)((4.0 / 3.0) * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     if(compz != 'N')
     {
-        *perf += (double)(6 * n * n * n) / *t / FLOPS_PER_UNIT_PERF;
+        perf += (double)(6 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     }
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
     {
-        *perf *= 2.0;
+        perf *= 2.0;
     }
 
     /* Output validation. */
-    if(!FLA_EXTREME_CASE_TEST && (info == 0))
+    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    if(!FLA_EXTREME_CASE_TEST)
     {
-        validate_syev(&compz, &range, n, Z, Z_test, ldz, 0, 0, L, D_test, NULL, datatype, residual,
-                      params->imatrix_char, scal);
+        validate_syev(tst_api, &compz, &range, n, Z, Z_test, ldz, 0, 0, L, D_test, NULL, datatype,
+                      residual, params->imatrix_char, scal);
     }
     /* Check for output matrix & vectors when inputs are extreme values */
-    else if(FLA_EXTREME_CASE_TEST)
+    else
     {
+        residual = err_thresh;
         if(compz == 'N')
         {
             if(!check_extreme_value(datatype, n, 1, D_test, 1, params->imatrix_char))
             {
-                *residual = DBL_MAX;
+                residual = DBL_MAX;
             }
         }
         else
@@ -290,13 +275,10 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
             if(!check_extreme_value(datatype, n, n, Z_test, lda, params->imatrix_char)
                && !check_extreme_value(datatype, n, 1, D_test, 1, params->imatrix_char))
             {
-                *residual = DBL_MAX;
+                residual = DBL_MAX;
             }
         }
-    }
-    else
-    {
-        FLA_TEST_CHECK_EINFO(residual, info, einfo);
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     }
 
     /* Free up buffers. */
@@ -325,7 +307,7 @@ void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, intege
     integer index, lwork, liwork, lrwork, realtype;
     void *D_save = NULL, *E_save = NULL, *E_test = NULL, *Z_save = NULL;
     void *work = NULL, *iwork = NULL, *rwork = NULL;
-    double time_min = 1e9, exe_time;
+    double t_min = 1e9, exe_time;
 
     /* Make a copy of the input matrices. Same input values will be passed in
        each itertaion.*/
@@ -447,9 +429,9 @@ void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, intege
         }
 
         /* Get the best execution time. */
-        time_min = fla_min(time_min, exe_time);
+        t_min = fla_min(t_min, exe_time);
     }
-    *time_min_ = time_min;
+    *time_min_ = t_min;
 
     /* Free up buffers. */
     if(*compz == 'V')

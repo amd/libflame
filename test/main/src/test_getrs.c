@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -10,17 +10,18 @@
 #define GETRS_VL 0.1
 #define GETRS_VU 10
 
+extern double perf;
+extern double time_min;
 integer row_major_getrs_lda;
 integer row_major_getrs_ldb;
 
 /* Local prototypes */
-void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *t, double *residual);
+void fla_test_getrs_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo);
 void prepare_getrs_run(char *trans, integer m_A, integer n_A, void *A, integer lda, void *B,
                        integer ldb, integer *ipiv, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer interfacetype,
-                       int matrix_layout);
+                       double *time_min_, integer *info, integer interfacetype, int matrix_layout);
 void invoke_getrs(integer datatype, char *trans, integer *nrhs, integer *n, void *a, integer *lda,
                   integer *ipiv, void *b, integer *ldb, integer *info);
 double prepare_lapacke_getrs_run(integer datatype, int matrix_layout, char *trans, integer n,
@@ -54,7 +55,6 @@ void fla_test_getrs(integer argc, char **argv, test_params_t *params)
         /* Test with parameters from commandline */
         integer i, num_types, N;
         integer datatype, n_repeats;
-        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -101,12 +101,7 @@ void fla_test_getrs(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_getrs_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
-                                          &time_min, &residual);
-                /* Print the results */
-                fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
-                                      params->lin_solver_paramslist[0].solver_threshold, time_min,
-                                      perf);
+                fla_test_getrs_experiment(front_str, params, datatype, N, N, 0, n_repeats, einfo);
                 tests_not_run = 0;
             }
         }
@@ -129,22 +124,22 @@ void fla_test_getrs(integer argc, char **argv, test_params_t *params)
     }
 }
 
-void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *t, double *residual)
+void fla_test_getrs_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo)
 {
     integer n, lda, ldb, NRHS;
-    integer info = 0, vinfo = 0;
+    integer info = 0;
     void *IPIV, *s_test = NULL;
     char range = 'U';
     void *A, *A_test, *B, *B_save, *X, *scal = NULL;
-    double time_min = 1e9;
     char TRANS = params->lin_solver_paramslist[pci].transr;
+    double residual, err_thresh;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
 
-    *residual = params->lin_solver_paramslist[pci].solver_threshold;
+    err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
     NRHS = params->lin_solver_paramslist[pci].nrhs;
 
     /* Determine the dimensions*/
@@ -206,29 +201,33 @@ void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer 
     prepare_getrs_run(&TRANS, n, NRHS, A_test, lda, B, ldb, IPIV, datatype, n_repeats, &time_min,
                       &info, interfacetype, layout);
     copy_matrix(datatype, "full", n, NRHS, B, ldb, X, ldb);
-    /* execution time */
-    *t = time_min;
 
     /* performance computation */
     /* 2*n^2 * nrhs flops */
-    *perf = (double)(2.0 * n * n * NRHS) / time_min / FLOPS_PER_UNIT_PERF;
+    perf = (double)(2.0 * n * n * NRHS) / time_min / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
-        *perf *= 4.0;
+        perf *= 4.0;
 
     /* output validation */
-    if(info == 0 && !FLA_EXTREME_CASE_TEST)
-        validate_getrs(&TRANS, n, NRHS, A, lda, B_save, ldb, X, datatype, residual, &vinfo,
+    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    if(!FLA_EXTREME_CASE_TEST)
+    {
+        validate_getrs(tst_api, &TRANS, n, NRHS, A, lda, B_save, ldb, X, datatype, residual,
                        params->imatrix_char, scal);
+    }
     /* check for output matrix when inputs as extreme values */
-    else if(FLA_EXTREME_CASE_TEST)
+    else
     {
         if(!check_extreme_value(datatype, n, NRHS, B, ldb, params->imatrix_char))
         {
-            *residual = DBL_MAX;
+            residual = DBL_MAX;
         }
+        else
+        {
+            residual = err_thresh;
+        }
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     }
-    else
-        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up the buffers */
     free_matrix(A);
@@ -246,12 +245,11 @@ void fla_test_getrs_experiment(test_params_t *params, integer datatype, integer 
 
 void prepare_getrs_run(char *TRANS, integer n_A, integer nrhs, void *A, integer lda, void *B,
                        integer ldb, integer *IPIV, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer interfacetype,
-                       int layout)
+                       double *time_min_, integer *info, integer interfacetype, int layout)
 {
     integer i;
     void *A_save, *B_test;
-    double time_min = 1e9, exe_time;
+    double t_min = 1e9, exe_time;
 
     /* Save the original matrix */
     create_matrix(datatype, LAPACK_COL_MAJOR, n_A, n_A, &A_save, lda);
@@ -272,7 +270,7 @@ void prepare_getrs_run(char *TRANS, integer n_A, integer nrhs, void *A, integer 
                                                  B_test, ldb, IPIV, info);
         }
 #if ENABLE_CPP_TEST
-        else if(interfacetype == LAPACK_CPP_TEST)   /* Call CPP getrs API */
+        else if(interfacetype == LAPACK_CPP_TEST) /* Call CPP getrs API */
         {
             exe_time = fla_test_clock();
             invoke_cpp_getrs(datatype, TRANS, &n_A, &nrhs, A_save, &lda, IPIV, B_test, &ldb, info);
@@ -289,10 +287,10 @@ void prepare_getrs_run(char *TRANS, integer n_A, integer nrhs, void *A, integer 
         }
 
         /* Get the best execution time */
-        time_min = fla_min(time_min, exe_time);
+        t_min = fla_min(t_min, exe_time);
     }
 
-    *time_min_ = time_min;
+    *time_min_ = t_min;
     /*  Save the final result to B matrix*/
     copy_matrix(datatype, "full", n_A, nrhs, B_test, ldb, B, ldb);
 

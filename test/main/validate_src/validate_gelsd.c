@@ -1,6 +1,6 @@
-/******************************************************************************
- * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
- *******************************************************************************/
+/*
+    Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
+*/
 
 /* > \brief \b validate_gelsd.c                                              */
 /* =========== DOCUMENTATION ===========                                     */
@@ -35,28 +35,39 @@
 
 #include "test_common.h"
 
-void validate_gelsd(integer m, integer n, integer nrhs, void *A, integer lda, void *B, integer ldb,
-                    void *S, void *X, void *rcond, integer *rank, integer datatype,
-                    double *residual, char imatrix)
-{
-    if(m == 0 || n == 0 || nrhs == 0)
-        return;
+extern double perf;
+extern double time_min;
 
+void validate_gelsd(char *tst_api, integer m, integer n, integer nrhs, void *A, integer lda,
+                    void *B, integer ldb, void *S, void *X, void *rcond, integer *rank,
+                    integer datatype, double err_thresh, char imatrix)
+{
     void *work = NULL;
     char NORM = '1';
-    double resid1;
     integer ldx;
     ldx = ldb;
+    double residual, resid1 = 0., resid2 = 0.;
+    double resid3 = 0., resid4 = 0.;
+
+    /* Early return conditions */
+    if(m == 0 || n == 0 || nrhs == 0)
+    {
+        FLA_TEST_PRINT_STATUS_AND_RETURN(m, n, err_thresh);
+    }
+    /* print overall status if incoming threshold is
+     * an extreme value indicating that API returned
+     * unexpected info value */
+    FLA_TEST_PRINT_INVALID_STATUS(m, n, err_thresh);
 
     /* Test SVD
        Check the order of Singular values generated */
-    resid1 = svd_check_order(datatype, S, m, n, *residual);
+    resid1 = svd_check_order(datatype, S, m, n, err_thresh);
 
     switch(datatype)
     {
         case FLOAT:
         {
-            float norm_a, norm_b, norm_x, eps, resid2, norm = 0;
+            float norm_a, norm_b, norm_x, eps, norm = 0;
             eps = fla_lapack_slamch("E");
 
             /* Test 1 */
@@ -65,7 +76,7 @@ void validate_gelsd(integer m, integer n, integer nrhs, void *A, integer lda, vo
                by the sum of squares of elements n+1:m in that column */
             if((m >= n) && (*rank == n))
             {
-                residual_sum_of_squares(datatype, m, n, nrhs, X, ldb, residual);
+                residual_sum_of_squares(datatype, m, n, nrhs, X, ldb, &resid2);
             }
             else
             {
@@ -79,7 +90,8 @@ void validate_gelsd(integer m, integer n, integer nrhs, void *A, integer lda, vo
                 sgemm_("N", "N", &m, &nrhs, &n, &s_n_one, A, &lda, X, &ldx, &s_one, B, &ldb);
                 compute_matrix_norm(datatype, NORM, m, nrhs, B, ldb, &norm, imatrix, work);
 
-                resid2 = (norm / norm_a) / (norm_x * fla_max(m, fla_max(n, nrhs)) * norm_b * eps);
+                resid3 = (double)(norm / norm_a)
+                         / (norm_x * fla_max(m, fla_max(n, nrhs)) * norm_b * eps);
 
                 /* Test 3
                  * checks whether X is in the row space of A or A'
@@ -91,16 +103,15 @@ void validate_gelsd(integer m, integer n, integer nrhs, void *A, integer lda, vo
                  */
                 /*if(!((imatrix == 'U') || (imatrix == 'O')))
                 {
-                    check_vector_in_rowspace(datatype, "N", m, n, nrhs, A, lda, X, ldb, resid);
+                    check_vector_in_rowspace(datatype, "N", m, n, nrhs, A, lda, X, ldb, resid4);
                 }
                 */
-                *residual = resid2;
             }
             break;
         }
         case DOUBLE:
         {
-            double norm_a, norm_b, norm_x, eps, resid2, norm = 0;
+            double norm_a, norm_b, norm_x, eps, norm = 0;
             eps = fla_lapack_dlamch("E");
 
             /* Test 1 */
@@ -109,7 +120,7 @@ void validate_gelsd(integer m, integer n, integer nrhs, void *A, integer lda, vo
                by the sum of squares of elements n+1:m in that column*/
             if((m >= n) && (*rank == n))
             {
-                residual_sum_of_squares(datatype, m, n, nrhs, X, ldb, residual);
+                residual_sum_of_squares(datatype, m, n, nrhs, X, ldb, &resid2);
             }
             else
             {
@@ -122,7 +133,8 @@ void validate_gelsd(integer m, integer n, integer nrhs, void *A, integer lda, vo
                 dgemm_("N", "N", &m, &nrhs, &n, &d_n_one, A, &lda, X, &ldx, &d_one, B, &ldb);
                 compute_matrix_norm(datatype, NORM, m, nrhs, B, ldb, &norm, imatrix, work);
 
-                resid2 = (norm / norm_a) / (norm_x * fla_max(m, fla_max(n, nrhs)) * norm_b * eps);
+                resid3 = (double)(norm / norm_a)
+                         / (norm_x * fla_max(m, fla_max(n, nrhs)) * norm_b * eps);
 
                 /* Test 3
                  * checks whether X is in the row space of A or A'
@@ -134,15 +146,14 @@ void validate_gelsd(integer m, integer n, integer nrhs, void *A, integer lda, vo
                  */
                 /*if(!((imatrix == 'U') || (imatrix == 'O')))
                 {
-                    check_vector_in_rowspace(datatype, "N", m, n, nrhs, A, lda, X, ldb, resid);
+                    check_vector_in_rowspace(datatype, "N", m, n, nrhs, A, lda, X, ldb, resid4);
                 }*/
-                *residual = resid2;
             }
             break;
         }
         case COMPLEX:
         {
-            float norm_a, norm_b, norm_x, eps, resid2, norm = 0;
+            float norm_a, norm_b, norm_x, eps, norm = 0;
             eps = fla_lapack_slamch("E");
 
             /* Test 1 */
@@ -151,7 +162,7 @@ void validate_gelsd(integer m, integer n, integer nrhs, void *A, integer lda, vo
                by the sum of squares of elements n+1:m in that column*/
             if((m >= n) && (*rank == n))
             {
-                residual_sum_of_squares(datatype, m, n, nrhs, X, ldb, residual);
+                residual_sum_of_squares(datatype, m, n, nrhs, X, ldb, &resid2);
             }
             else
             {
@@ -165,7 +176,8 @@ void validate_gelsd(integer m, integer n, integer nrhs, void *A, integer lda, vo
                 cgemm_("N", "N", &m, &nrhs, &n, &c_n_one, A, &lda, X, &ldx, &c_one, B, &ldb);
                 compute_matrix_norm(datatype, NORM, m, nrhs, B, ldb, &norm, imatrix, work);
 
-                resid2 = (norm / norm_a) / (norm_x * fla_max(m, fla_max(n, nrhs)) * norm_b * eps);
+                resid3 = (double)(norm / norm_a)
+                         / (norm_x * fla_max(m, fla_max(n, nrhs)) * norm_b * eps);
 
                 /* Test 3
                  * checks whether X is in the row space of A or A'
@@ -177,15 +189,14 @@ void validate_gelsd(integer m, integer n, integer nrhs, void *A, integer lda, vo
                  */
                 /*if(!((imatrix == 'U') || (imatrix == 'O')))
                 {
-                    check_vector_in_rowspace(datatype, "N", m, n, nrhs, A, lda, X, ldb, resid);
+                    check_vector_in_rowspace(datatype, "N", m, n, nrhs, A, lda, X, ldb, resid4);
                 }*/
-                *residual = resid2;
             }
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm_a, norm_b, norm_x, eps, resid2, norm = 0;
+            double norm_a, norm_b, norm_x, eps, norm = 0;
             eps = fla_lapack_dlamch("E");
 
             /* Test 1 */
@@ -194,7 +205,7 @@ void validate_gelsd(integer m, integer n, integer nrhs, void *A, integer lda, vo
                by the sum of squares of elements n+1:m in that column*/
             if((m >= n) && (*rank == n))
             {
-                residual_sum_of_squares(datatype, m, n, nrhs, X, ldb, residual);
+                residual_sum_of_squares(datatype, m, n, nrhs, X, ldb, &resid2);
             }
             else
             {
@@ -208,7 +219,8 @@ void validate_gelsd(integer m, integer n, integer nrhs, void *A, integer lda, vo
                 zgemm_("N", "N", &m, &nrhs, &n, &z_n_one, A, &lda, X, &ldx, &z_one, B, &ldb);
                 compute_matrix_norm(datatype, NORM, m, nrhs, B, ldb, &norm, imatrix, work);
 
-                resid2 = (norm / norm_a) / (norm_x * fla_max(m, fla_max(n, nrhs)) * norm_b * eps);
+                resid3 = (double)(norm / norm_a)
+                         / (norm_x * fla_max(m, fla_max(n, nrhs)) * norm_b * eps);
 
                 /* Test 3
                  * checks whether X is in the row space of A or A'
@@ -220,12 +232,19 @@ void validate_gelsd(integer m, integer n, integer nrhs, void *A, integer lda, vo
                  */
                 /*if(!((imatrix == 'U') || (imatrix == 'O')))
                 {
-                    check_vector_in_rowspace(datatype, "N", m, n, nrhs, A, lda, X, ldb, resid);
+                    check_vector_in_rowspace(datatype, "N", m, n, nrhs, A, lda, X, ldb, resid4);
                 }*/
-                *residual = resid2;
             }
             break;
         }
     }
-    *residual = fla_max(*residual, resid1);
+    residual = fla_test_max(resid1, resid2);
+    residual = fla_test_max(resid3, residual);
+    residual = fla_test_max(resid4, residual);
+
+    FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
+    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
+    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
+    FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
 }

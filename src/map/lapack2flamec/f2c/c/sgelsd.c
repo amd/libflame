@@ -301,6 +301,7 @@ void sgelsd_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
     minmn = fla_min(*m, *n);
     maxmn = fla_max(*m, *n);
     lquery = *lwork == -1;
+    wlalsd = 0;
     if(*m < 0)
     {
         *info = -1;
@@ -327,6 +328,7 @@ void sgelsd_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
     /* as well as the preferred amount for good performance. */
     /* NB refers to the optimal block size for the immediately */
     /* following subroutine, as returned by ILAENV.) */
+    mnthr = ilaenv_(&c__6, "SGELSD", " ", m, n, nrhs, &c_n1);
     if(*info == 0)
     {
         minwrk = 1;
@@ -335,7 +337,6 @@ void sgelsd_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
         if(minmn > 0)
         {
             smlsiz = ilaenv_(&c__9, "SGELSD", " ", &c__0, &c__0, &c__0, &c__0);
-            mnthr = ilaenv_(&c__6, "SGELSD", " ", m, n, nrhs, &c_n1);
             /* Computing MAX */
             i__1 = (integer)(log((real)minmn / (real)(smlsiz + 1)) / log(2.f)) + 1;
             nlvl = fla_max(i__1, 0);

@@ -252,7 +252,7 @@ void dlahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
     extern /* Subroutine */
         void
         dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
-    doublereal safmin, safmax, rtdisc, smlnum;
+    doublereal safmin, rtdisc, smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -315,7 +315,6 @@ void dlahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
     nz = *ihiz - *iloz + 1;
     /* Set machine-dependent constants for the stopping criterion. */
     safmin = dlamch_("SAFE MINIMUM");
-    safmax = 1. / safmin;
     ulp = dlamch_("PRECISION");
     smlnum = safmin * ((doublereal)nh / ulp);
     /* I1 and I2 are the indices of the first row and last column of H */

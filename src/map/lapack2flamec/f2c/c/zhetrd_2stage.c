@@ -253,7 +253,7 @@ void zhetrd_2stage_(char *vect, char *uplo, integer *n, doublecomplex *a, intege
     integer lwrk, wpos;
     extern logical lsame_(char *, char *, integer, integer);
     integer abpos, lhmin, lwmin;
-    logical wantq, upper;
+    logical upper;
     extern /* Subroutine */
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -286,7 +286,6 @@ void zhetrd_2stage_(char *vect, char *uplo, integer *n, doublecomplex *a, intege
     --work;
     /* Function Body */
     *info = 0;
-    wantq = lsame_(vect, "V", 1, 1);
     upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1 || *lhous2 == -1;
     /* Determine the block size, the workspace size and the hous size. */

@@ -201,9 +201,8 @@ void dsyevd_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, do
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    doublereal eps;
     integer inde;
-    doublereal anrm, rmin, rmax;
+    doublereal anrm;
     integer lopt;
     extern /* Subroutine */
         void
@@ -222,12 +221,10 @@ void dsyevd_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, do
         dstedc_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *,
                 doublereal *, integer *, integer *, integer *, integer *),
         dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
-    doublereal safmin;
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    doublereal bignum;
     integer indtau;
     extern /* Subroutine */
         void
@@ -241,8 +238,9 @@ void dsyevd_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, do
         dsytrd_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *,
                 doublereal *, doublereal *, integer *, integer *);
     integer llwork;
-    doublereal smlnum;
     logical lquery;
+    static TLS_CLASS_SPEC integer r_once = 1;
+    static TLS_CLASS_SPEC doublereal safmin, eps, smlnum, bignum, rmin, rmax;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -361,12 +359,16 @@ void dsyevd_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, do
         return;
     }
     /* Get machine constants. */
-    safmin = dlamch_("Safe minimum");
-    eps = dlamch_("Precision");
-    smlnum = safmin / eps;
-    bignum = 1. / smlnum;
-    rmin = sqrt(smlnum);
-    rmax = sqrt(bignum);
+    if(r_once)
+    {
+        safmin = dlamch_("Safe minimum");
+        eps = dlamch_("Precision");
+        smlnum = safmin / eps;
+        bignum = 1. / smlnum;
+        rmin = sqrt(smlnum);
+        rmax = sqrt(bignum);
+        r_once = 0;
+    }
     /* Scale matrix to allowable range, if necessary. */
     anrm = dlansy_("M", uplo, n, &a[a_offset], lda, &work[1]);
     iscale = 0;

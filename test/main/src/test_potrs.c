@@ -7,13 +7,15 @@
 #include <invoke_common.hh>
 #endif
 
+extern double perf;
+extern double time_min;
 integer row_major_potrs_lda;
 integer row_major_potrs_ldb;
 
 /* Local prototypes */
-void fla_test_potrs_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *time_min, double *residual);
+void fla_test_potrs_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo);
 void prepare_potrs_run(char *uplo, integer m, integer nrhs, void *A, integer lda, integer datatype,
                        void *b, integer ldb, integer n_repeats, double *time_min_, integer *info,
                        integer interfacetype, int matrix_layout);
@@ -49,7 +51,6 @@ void fla_test_potrs(integer argc, char **argv, test_params_t *params)
         /* Test with parameters from commandline */
         integer i, num_types, N;
         integer datatype, n_repeats;
-        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -96,12 +97,7 @@ void fla_test_potrs(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_potrs_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
-                                          &time_min, &residual);
-                /* Print the results */
-                fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
-                                      params->lin_solver_paramslist[0].solver_threshold, time_min,
-                                      perf);
+                fla_test_potrs_experiment(front_str, params, datatype, N, N, 0, n_repeats, einfo);
                 tests_not_run = 0;
             }
         }
@@ -125,22 +121,22 @@ void fla_test_potrs(integer argc, char **argv, test_params_t *params)
     return;
 }
 
-void fla_test_potrs_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *t, double *residual)
+void fla_test_potrs_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo)
 {
-    integer n, info = 0, nrhs, lda, ldb, vinfo = 0;
+    integer n, info = 0, nrhs, lda, ldb;
     void *A = NULL, *A_test = NULL, *scal = NULL;
     void *B = NULL, *X = NULL;
     void *B_test = NULL;
-    double time_min = 1e9;
     char uplo = params->lin_solver_paramslist[pci].Uplo;
+    double residual, err_thresh;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
 
     nrhs = params->lin_solver_paramslist[pci].nrhs;
-    *residual = params->lin_solver_paramslist[pci].solver_threshold;
+    err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
     /* Get input matrix dimensions. */
     n = p_cur;
     lda = params->lin_solver_paramslist[pci].lda;
@@ -198,29 +194,33 @@ void fla_test_potrs_experiment(test_params_t *params, integer datatype, integer 
     prepare_potrs_run(&uplo, n, nrhs, A, lda, datatype, B_test, ldb, n_repeats, &time_min, &info,
                       interfacetype, layout);
     copy_matrix(datatype, "full", n, nrhs, B_test, ldb, X, n);
-    /* execution time */
-    *t = time_min;
+
     /* Compute the performance of the best experiment repeat. */
     /* (2.0)m^2 flops for Ax=b computation. */
-    *perf
-        = (double)((2.0 * n * n * n) - ((2.0 / 3.0) * n * n * n)) / time_min / FLOPS_PER_UNIT_PERF;
+    perf = (double)((2.0 * n * n * n) - ((2.0 / 3.0) * n * n * n)) / time_min / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
-        *perf *= 4.0;
+        perf *= 4.0;
 
     /* Validate potrs call by computing Ax-b */
-    if((info == 0) && (!FLA_EXTREME_CASE_TEST))
-        validate_potrs(n, nrhs, A_test, lda, X, B, ldb, datatype, residual, &vinfo,
+    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    if(!FLA_EXTREME_CASE_TEST)
+    {
+        validate_potrs(tst_api, n, nrhs, A_test, lda, X, B, ldb, datatype, residual,
                        params->imatrix_char);
+    }
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
     {
         if((!check_extreme_value(datatype, n, nrhs, B_test, ldb, params->imatrix_char)))
         {
-            *residual = DBL_MAX;
+            residual = DBL_MAX;
         }
+        else
+        {
+            residual = err_thresh;
+        }
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     }
-    else
-        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     free_matrix(A);
     free_matrix(A_test);
@@ -238,7 +238,7 @@ void prepare_potrs_run(char *uplo, integer n, integer nrhs, void *A, integer lda
                        integer interfacetype, int layout)
 {
     void *A_save = NULL, *B_test = NULL;
-    double time_min = 1e9, exe_time;
+    double t_min = 1e9, exe_time;
     integer i;
 
     /* Make a copy of the input matrix A. Same input values will be passed in
@@ -277,10 +277,10 @@ void prepare_potrs_run(char *uplo, integer n, integer nrhs, void *A, integer lda
             exe_time = fla_test_clock() - exe_time;
         }
         /* Get the best execution time */
-        time_min = fla_min(time_min, exe_time);
+        t_min = fla_min(t_min, exe_time);
     }
     copy_matrix(datatype, "full", n, nrhs, B_test, ldb, B, ldb);
-    *time_min_ = time_min;
+    *time_min_ = t_min;
     free_matrix(A_save);
     free_vector(B_test);
 }

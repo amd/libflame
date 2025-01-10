@@ -1,17 +1,19 @@
 /*
-    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_common.h"
 #include "test_lapack.h"
 #include "test_prototype.h"
 
+extern double perf;
+extern double time_min;
 integer row_major_stevd_ldz;
 
 /* Local prototypes.*/
-void fla_test_stevd_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *t, double *residual);
+void fla_test_stevd_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo);
 void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, void *E,
                        integer datatype, integer n_repeats, double *time_min_, integer *info,
                        integer test_lapacke_interface, int matrix_layout);
@@ -50,7 +52,6 @@ void fla_test_stevd(integer argc, char **argv, test_params_t *params)
         /* Test with parameters from commandline */
         integer i, num_types, N;
         integer datatype, n_repeats;
-        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -95,12 +96,7 @@ void fla_test_stevd(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_stevd_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
-                                          &time_min, &residual);
-                /* Print the results */
-                fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
-                                      params->eig_sym_paramslist[0].threshold_value, time_min,
-                                      perf);
+                fla_test_stevd_experiment(front_str, params, datatype, N, N, 0, n_repeats, einfo);
                 tests_not_run = 0;
             }
         }
@@ -124,9 +120,9 @@ void fla_test_stevd(integer argc, char **argv, test_params_t *params)
     }
 }
 
-void fla_test_stevd_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *time_min, double *residual)
+void fla_test_stevd_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo)
 {
     integer n, ldz, lda;
     integer info = 0;
@@ -136,6 +132,7 @@ void fla_test_stevd_experiment(test_params_t *params, integer datatype, integer 
     void *E = NULL, *E_test = NULL;
     void *Q = NULL, *A = NULL, *L = NULL, *scal = NULL;
     char range = 'V', uplo = 'U';
+    double residual, err_thresh;
 
     integer test_lapacke_interface = params->test_lapacke_interface;
     int layout = params->matrix_major;
@@ -143,7 +140,7 @@ void fla_test_stevd_experiment(test_params_t *params, integer datatype, integer 
     /* Get input matrix dimensions.*/
     jobz = params->eig_sym_paramslist[pci].jobz;
     ldz = params->eig_sym_paramslist[pci].ldz;
-    *residual = params->eig_sym_paramslist[pci].threshold_value;
+    err_thresh = params->eig_sym_paramslist[pci].threshold_value;
 
     /* Return if datatype passed is not float/double.*/
     if((datatype != FLOAT) && (datatype != DOUBLE))
@@ -209,22 +206,23 @@ void fla_test_stevd_experiment(test_params_t *params, integer datatype, integer 
     copy_vector(datatype, n, D, 1, D_test, 1);
     copy_vector(datatype, n - 1, E, 1, E_test, 1);
 
-    prepare_stevd_run(&jobz, n, Z_test, ldz, D_test, E_test, datatype, n_repeats, time_min, &info,
+    prepare_stevd_run(&jobz, n, Z_test, ldz, D_test, E_test, datatype, n_repeats, &time_min, &info,
                       test_lapacke_interface, layout);
 
     /* performance computation
         6 * n^3 + n^2 flops for eigen vectors
         6 * n^2 flops for eigen values */
     if(jobz == 'V')
-        *perf = (double)((6.0 * n * n * n) + (n * n)) / *time_min / FLOPS_PER_UNIT_PERF;
+        perf = (double)((6.0 * n * n * n) + (n * n)) / time_min / FLOPS_PER_UNIT_PERF;
     else
-        *perf = (double)(6.0 * n * n) / *time_min / FLOPS_PER_UNIT_PERF;
+        perf = (double)(6.0 * n * n) / time_min / FLOPS_PER_UNIT_PERF;
 
     /* output validation */
-    if(!FLA_EXTREME_CASE_TEST && (info == 0))
+    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    if(!FLA_EXTREME_CASE_TEST)
     {
-        validate_syev(&jobz, &range, n, Z, Z_test, ldz, 0, 0, L, D_test, NULL, datatype, residual,
-                      params->imatrix_char, scal);
+        validate_syev(tst_api, &jobz, &range, n, Z, Z_test, ldz, 0, 0, L, D_test, NULL, datatype,
+                      residual, params->imatrix_char, scal);
     }
     /* Check for output matrix & vectors when inputs are extreme values */
     else if(FLA_EXTREME_CASE_TEST)
@@ -233,17 +231,18 @@ void fla_test_stevd_experiment(test_params_t *params, integer datatype, integer 
            && (!check_extreme_value(datatype, n, n, Z_test, ldz, params->imatrix_char)
                && !check_extreme_value(datatype, 1, n, D_test, 1, params->imatrix_char)))
         {
-            *residual = DBL_MAX;
+            residual = DBL_MAX;
         }
         else if((jobz == 'N')
                 && !check_extreme_value(datatype, 1, n, D_test, 1, params->imatrix_char))
         {
-            *residual = DBL_MAX;
+            residual = DBL_MAX;
         }
-    }
-    else
-    {
-        FLA_TEST_CHECK_EINFO(residual, info, einfo);
+        else
+        {
+            residual = err_thresh;
+        }
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     }
 
     /* Free up the buffers */
@@ -272,7 +271,7 @@ void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, voi
     void *Z_save, *D_save, *E_save, *work, *iwork;
     integer lwork, liwork;
     integer i;
-    double time_min = 1e9, exe_time;
+    double t_min = 1e9, exe_time;
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
@@ -342,10 +341,10 @@ void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, voi
         }
 
         /* Get the best execution time */
-        time_min = fla_min(time_min, exe_time);
+        t_min = fla_min(t_min, exe_time);
     }
 
-    *time_min_ = time_min;
+    *time_min_ = t_min;
 
     /* Free up the buffers */
     free_matrix(Z_save);

@@ -7,12 +7,14 @@
 #include <invoke_common.hh>
 #endif
 
+extern double perf;
+extern double time_min;
 integer row_major_gehrd_lda;
 
 /* Local prototypes */
-void fla_test_gehrd_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *t, double *residual);
+void fla_test_gehrd_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo);
 void prepare_gehrd_run(integer n, integer *ilo, integer *ihi, void *A, integer lda, void *tau,
                        integer datatype, integer n_repeats, double *time_min_, integer *info,
                        integer interfacetype, int matrix_layout);
@@ -44,7 +46,6 @@ void fla_test_gehrd(integer argc, char **argv, test_params_t *params)
     {
         integer i, num_types, N;
         integer datatype, n_repeats;
-        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -88,12 +89,7 @@ void fla_test_gehrd(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_gehrd_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
-                                          &time_min, &residual);
-                /* Print the results */
-                fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
-                                      params->lin_solver_paramslist[0].solver_threshold, time_min,
-                                      perf);
+                fla_test_gehrd_experiment(front_str, params, datatype, N, N, 0, n_repeats, einfo);
                 tests_not_run = 0;
             }
         }
@@ -116,13 +112,14 @@ void fla_test_gehrd(integer argc, char **argv, test_params_t *params)
     }
 }
 
-void fla_test_gehrd_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *time_min, double *residual)
+void fla_test_gehrd_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo)
 {
     integer n, lda, AInitialized = 0;
-    integer ilo, ihi, info = 0, vinfo = 0;
+    integer ilo, ihi, info = 0;
     void *A = NULL, *A_Test = NULL, *tau = NULL;
+    double residual, err_thresh;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
@@ -142,7 +139,7 @@ void fla_test_gehrd_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Initialize parameter needed for gehrd() call. */
-    *residual = params->lin_solver_paramslist[pci].solver_threshold;
+    err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
     ilo = params->lin_solver_paramslist[pci].ilo;
     ihi = params->lin_solver_paramslist[pci].ihi;
 
@@ -175,7 +172,7 @@ void fla_test_gehrd_experiment(test_params_t *params, integer datatype, integer 
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_Test, lda);
     copy_matrix(datatype, "full", n, n, A, lda, A_Test, lda);
 
-    prepare_gehrd_run(n, &ilo, &ihi, A_Test, lda, tau, datatype, n_repeats, time_min, &info,
+    prepare_gehrd_run(n, &ilo, &ihi, A_Test, lda, tau, datatype, n_repeats, &time_min, &info,
                       interfacetype, layout);
 
     /* Performance computation
@@ -183,30 +180,29 @@ void fla_test_gehrd_experiment(test_params_t *params, integer datatype, integer 
        4*((2/3)*(ihi - ilo)^2(2ihi + 2ilo + 3n)) flops for complex values */
 
     if(datatype == FLOAT || datatype == DOUBLE)
-        *perf = (double)((2.0 / 3.0) * pow((ihi - ilo), 2) * (2 * ihi + 2 * ilo + 3 * n))
-                / *time_min / FLOPS_PER_UNIT_PERF;
+        perf = (double)((2.0 / 3.0) * pow((ihi - ilo), 2) * (2 * ihi + 2 * ilo + 3 * n)) / time_min
+               / FLOPS_PER_UNIT_PERF;
     else
-        *perf = (double)(4.0 * ((2.0 / 3.0) * pow((ihi - ilo), 2) * (2 * ihi + 2 * ilo + 3 * n)))
-                / *time_min / FLOPS_PER_UNIT_PERF;
+        perf = (double)(4.0 * ((2.0 / 3.0) * pow((ihi - ilo), 2) * (2 * ihi + 2 * ilo + 3 * n)))
+               / time_min / FLOPS_PER_UNIT_PERF;
 
     /* Output Validation */
-    if(info == 0)
+    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    if(!FLA_EXTREME_CASE_TEST)
     {
-        if(!FLA_EXTREME_CASE_TEST)
-        {
-            validate_gehrd(n, ilo, ihi, A, A_Test, lda, tau, datatype, residual, &vinfo);
-        }
-        else
-        {
-            if((!check_extreme_value(datatype, n, n, A_Test, lda, params->imatrix_char)))
-            {
-                *residual = DBL_MAX;
-            }
-        }
+        validate_gehrd(tst_api, n, ilo, ihi, A, A_Test, lda, tau, datatype, residual);
     }
     else
     {
-        FLA_TEST_CHECK_EINFO(residual, info, einfo);
+        if((!check_extreme_value(datatype, n, n, A_Test, lda, params->imatrix_char)))
+        {
+            residual = DBL_MAX;
+        }
+        else
+        {
+            residual = err_thresh;
+        }
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     }
 
     /* Free up the buffers */
@@ -221,7 +217,7 @@ void prepare_gehrd_run(integer n, integer *ilo, integer *ihi, void *A, integer l
 {
     void *A_save = NULL, *work = NULL, *tau_test = NULL;
     integer i, lwork;
-    double time_min = 1e9, exe_time;
+    double t_min = 1e9, exe_time;
 
     /* Make a copy of the input matrix A. Same input values will be passed in each itertaion.*/
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_save, lda);
@@ -230,7 +226,8 @@ void prepare_gehrd_run(integer n, integer *ilo, integer *ihi, void *A, integer l
     /* Make a workspace query the first time through. This will provide us with
        and ideal workspace size based on an internal block size.
        NOTE: LAPACKE interface handles workspace query internally */
-    if((interfacetype != LAPACKE_COLUMN_TEST) && (interfacetype != LAPACKE_ROW_TEST) && (g_lwork <= 0))
+    if((interfacetype != LAPACKE_COLUMN_TEST) && (interfacetype != LAPACKE_ROW_TEST)
+       && (g_lwork <= 0))
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
@@ -295,7 +292,7 @@ void prepare_gehrd_run(integer n, integer *ilo, integer *ihi, void *A, integer l
         }
 
         /* Get the best execution time */
-        time_min = fla_min(time_min, exe_time);
+        t_min = fla_min(t_min, exe_time);
 
         copy_vector(datatype, n - 1, tau_test, 1, tau, 1);
 
@@ -303,7 +300,7 @@ void prepare_gehrd_run(integer n, integer *ilo, integer *ihi, void *A, integer l
         free_vector(work);
         free_vector(tau_test);
     }
-    *time_min_ = time_min;
+    *time_min_ = t_min;
 
     free_matrix(A_save);
 }

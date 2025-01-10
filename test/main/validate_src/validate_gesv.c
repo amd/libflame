@@ -1,6 +1,6 @@
-/******************************************************************************
- * Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
- *******************************************************************************/
+/*
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+*/
 
 /*! @file validate_gesv.c
  *  @brief Defines validate function of GESV() to use in test suite.
@@ -8,22 +8,34 @@
 
 #include "test_common.h"
 
-void validate_gesv(integer n, integer nrhs, void *A, integer lda, void *B, integer ldb, void *X,
-                   integer datatype, double *residual, integer *info, char imatrix, void *scal)
+extern double perf;
+extern double time_min;
+
+void validate_gesv(char *tst_api, integer n, integer nrhs, void *A, integer lda, void *B,
+                   integer ldb, void *X, integer datatype, double err_thresh, char imatrix,
+                   void *scal)
 {
-    if(n == 0 || nrhs == 0)
-        return;
     void *work = NULL;
     char NORM = '1';
     integer ldx;
-    *info = 0;
     ldx = ldb;
+    double residual;
+
+    /* Early return conditions */
+    if(n == 0 || nrhs == 0)
+    {
+        FLA_TEST_PRINT_STATUS_AND_RETURN(n, n, err_thresh);
+    }
+    /* print overall status if incoming threshold is
+     * an extreme value indicating that API returned
+     * unexpected info value */
+    FLA_TEST_PRINT_INVALID_STATUS(n, n, err_thresh);
 
     switch(datatype)
     {
         case FLOAT:
         {
-            float norm_x, norm, eps, resid;
+            float norm_x, norm, eps;
 
             /* Test 1 */
             /* Compute AX-B */
@@ -36,14 +48,12 @@ void validate_gesv(integer n, integer nrhs, void *A, integer lda, void *B, integ
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm_x, imatrix, work);
             eps = fla_lapack_slamch("E");
 
-            resid = norm / (norm_x * n * eps);
-
-            *residual = (double)resid;
+            residual = norm / (norm_x * n * eps);
             break;
         }
         case DOUBLE:
         {
-            double norm_x, norm, eps, resid;
+            double norm_x, norm, eps;
 
             /* Test 1 */
             /* Compute AX-B */
@@ -56,14 +66,12 @@ void validate_gesv(integer n, integer nrhs, void *A, integer lda, void *B, integ
             eps = fla_lapack_dlamch("E");
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
 
-            resid = norm / (norm_x * n * eps);
-
-            *residual = (double)resid;
+            residual = norm / (norm_x * n * eps);
             break;
         }
         case COMPLEX:
         {
-            float norm_x, norm, eps, resid;
+            float norm_x, norm, eps;
 
             /* Test 1 */
             /* Compute AX-B */
@@ -76,14 +84,12 @@ void validate_gesv(integer n, integer nrhs, void *A, integer lda, void *B, integ
             eps = fla_lapack_slamch("E");
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
 
-            resid = norm / (norm_x * n * eps);
-
-            *residual = (double)resid;
+            residual = norm / (norm_x * n * eps);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm_x, norm, eps, resid;
+            double norm_x, norm, eps;
 
             /* Test 1 */
             /* Compute AX-B */
@@ -96,10 +102,14 @@ void validate_gesv(integer n, integer nrhs, void *A, integer lda, void *B, integ
             eps = fla_lapack_dlamch("E");
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
 
-            resid = norm / (norm_x * n * eps);
-
-            *residual = (double)resid;
+            residual = norm / (norm_x * n * eps);
             break;
         }
+        default:
+            residual = err_thresh;
+            break;
     }
+
+    FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    FLA_PRINT_SUBTEST_STATUS(residual, err_thresh, "01");
 }

@@ -104,6 +104,68 @@ void calculate_svd_scale_value(integer datatype, integer m, integer n, void *A, 
         free_vector(min);
     }
 }
+/* Initializing svd matrix with values around overflow underflow (GESVD) */
+void init_matrix_overflow_underflow_svdx(integer datatype, integer m, integer n, void *A,
+                                         integer lda, char imatrix, void *scal)
+{
+    /* Find factor to scale up/down the matrix */
+    calculate_svdx_scale_value(datatype, m, n, A, lda, imatrix, scal);
+    /* Scaling the matrix A by x scalar */
+    scal_matrix(datatype, scal, A, m, n, lda, i_one);
+}
+
+/* Calculating the scaling value with respect to max and min for SVD */
+void calculate_svdx_scale_value(integer datatype, integer m, integer n, void *A, integer lda,
+                                char imatrix, void *scal)
+{
+    float flt_ratio;
+    double dbl_ratio;
+
+    if(imatrix == 'O')
+    {
+        /*Intialize the ratios with maximum of datatype value*/
+        flt_ratio = FLT_MAX;
+        dbl_ratio = DBL_MAX;
+        void *max;
+        create_vector(get_realtype(datatype), &max, 1);
+        get_max_from_matrix(datatype, A, max, m, n, lda);
+        /* The ratio is modified w.r.t dimension, to avoid inf in output */
+        if(fla_max(m, n) <= 50)
+        {
+            flt_ratio = flt_ratio / 25.00;
+            dbl_ratio = dbl_ratio / 78.00;
+        }
+        else if(fla_max(m, n) <= 500)
+        {
+            flt_ratio = flt_ratio / 15.00;
+            dbl_ratio = dbl_ratio / 13.00;
+        }
+        else if(fla_max(m, n) <= 1000)
+        {
+            flt_ratio = flt_ratio / 15.00;
+            dbl_ratio = dbl_ratio / 17.00;
+        }
+        else
+        {
+            flt_ratio = flt_ratio / 50.00;
+            dbl_ratio = dbl_ratio / 50.00;
+        }
+        compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, max);
+        free_vector(max);
+    }
+    else if(imatrix == 'U')
+    {
+        void *min;
+        create_vector(get_realtype(datatype), &min, 1);
+        /* Get minimum value from matrix */
+        get_min_from_matrix(datatype, A, min, m, n, lda);
+        /* Intialize with minimum of datatype value */
+        flt_ratio = FLT_MIN;
+        dbl_ratio = DBL_MIN;
+        compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, min);
+        free_vector(min);
+    }
+}
 
 /* Initializing asymmetrix matrix with values around overflow underflow (GEEV)*/
 void init_matrix_overflow_underflow_asym(integer datatype, integer m, integer n, void *A,
@@ -361,7 +423,7 @@ void scale_matrix_underflow_overflow_getrf(integer datatype, integer m, integer 
         }
         else if(m == n && m < 100)
         {
-            tuning_val = 13.0;
+            tuning_val = 15.0;
         }
         else if(m == n && m < 450)
         {
@@ -528,11 +590,11 @@ void scale_matrix_overflow_underflow_hetrf(integer datatype, integer m, void *A,
         }
         else if(m < 200)
         {
-            tuning_val = 35.0;
+            tuning_val = 37.0;
         }
         else
         {
-            tuning_val = 130.0;
+            tuning_val = 335.0;
         }
     }
     if(imatrix_char == 'U')
@@ -564,7 +626,7 @@ void scale_matrix_overflow_underflow_hetrf_rook(integer datatype, integer m, voi
     else if(imatrix_char == 'O')
     {
         get_max_from_matrix(datatype, A, max_min, m, m, lda);
-        calculate_scale_value(datatype, scal, max_min, 45.0, imatrix_char);
+        calculate_scale_value(datatype, scal, max_min, 146.0, imatrix_char);
     }
     /* Scaling the matrix A with scal */
     scal_matrix(datatype, scal, A, m, m, lda, i_one);
@@ -2156,7 +2218,7 @@ void scale_matrix_underflow_overflow_lange(integer datatype, integer m, integer 
                    So directly the max value can be set
                 For real numbers tunung value would be 1
                 For complex numbers set the tuning value to 2 */
-                if (datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+                if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
                 {
                     tuning_val = 2.0;
                 }
@@ -2208,7 +2270,7 @@ void scale_matrix_underflow_overflow_lange(integer datatype, integer m, integer 
 }
 /* Scale matrix with values around overflow underflow for hetri_rook */
 void scale_matrix_overflow_underflow_hetri_rook(integer datatype, integer n, void *A, integer lda,
-                                           char imatrix_char)
+                                                char imatrix_char)
 {
     void *max_min = NULL, *scal = NULL;
     double tuning_val = 1.0;

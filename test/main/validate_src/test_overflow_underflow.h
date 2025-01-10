@@ -14,15 +14,19 @@
 
 #include <float.h>
 
-/* Initializing matrix with values around overflow underflow */
+/* Initializing matrix with values around overflow underflow for SVD */
 void init_matrix_overflow_underflow_svd(integer datatype, integer m, integer n, void *A,
                                         integer lda, char imatrix, void *scal);
+void init_matrix_overflow_underflow_svdx(integer datatype, integer m, integer n, void *A,
+                                         integer lda, char imatrix, void *scal);
 /* Initializing asymmetrix matrix with values around overflow underflow (GEEV)*/
 void init_matrix_overflow_underflow_asym(integer datatype, integer m, integer n, void *A,
                                          integer lda, char imatrix, void *scal);
 /* Calculating the scaling value with respect to max and min for SVD */
 void calculate_svd_scale_value(integer datatype, integer m, integer n, void *A, integer lda,
                                char imatrix, void *scal);
+void calculate_svdx_scale_value(integer datatype, integer m, integer n, void *A, integer lda,
+                                char imatrix, void *scal);
 /* Calculating the scaling value with respect to max and min for ASYM */
 void calculate_asym_scale_value(integer datatype, integer m, integer n, void *A, integer lda,
                                 char imatrix, void *scal);

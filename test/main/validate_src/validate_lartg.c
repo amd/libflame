@@ -1,15 +1,27 @@
-/******************************************************************************
- * Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
- *******************************************************************************/
+/*
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+*/
 
 /*! @file validate_rot.c
- *  @brief Defines validate function of ROT() to use in test suite.
+ *  @brief Defines validate function of LARTG() to use in test suite.
  *  */
 
 #include "test_common.h"
-void validate_lartg(integer datatype, void *f, void *g, void *r, void *c, void *s, double *residual)
+
+extern double perf;
+extern double time_min;
+
+void validate_lartg(char *tst_api, integer datatype, void *f, void *g, void *r, void *c, void *s,
+                    double err_thresh)
 {
     void *out_zero = NULL;
+    double residual, resid1 = 0., resid2 = 0.;
+
+    /* print overall status if incoming threshold is
+     * an extreme value indicating that API returned
+     * unexpected info value */
+    FLA_TEST_PRINT_INVALID_STATUS(2, 1, err_thresh);
+
     create_vector(datatype, &out_zero, 1);
     reset_vector(datatype, out_zero, 1, 1);
 
@@ -17,8 +29,6 @@ void validate_lartg(integer datatype, void *f, void *g, void *r, void *c, void *
     {
         case FLOAT:
         {
-            float resid1 = 0.0;
-            float resid2 = 0.0;
             float eps, norm_r, norm_f, norm_res, norm_1;
             float res = 0.0;
 
@@ -43,18 +53,13 @@ void validate_lartg(integer datatype, void *f, void *g, void *r, void *c, void *
             /*r-f*/
             saxpy_(&i_one, &s_n_one, f, &i_one, r, &i_one);
             saxpy_(&i_one, &s_n_one, g, &i_one, out_zero, &i_one);
-
             norm_f = snrm2_(&i_one, r, &i_one);
             resid2 = (norm_f / norm_r / eps);
-
-            *residual = (double)fla_max(resid1, resid2);
             break;
         }
 
         case DOUBLE:
         {
-            double resid1 = 0.0;
-            double resid2 = 0.0;
             double eps, norm_r, norm_f, norm_res, norm_1;
             double res = 0.0;
 
@@ -82,15 +87,11 @@ void validate_lartg(integer datatype, void *f, void *g, void *r, void *c, void *
             daxpy_(&i_one, &d_n_one, g, &i_one, out_zero, &i_one);
             norm_f = dnrm2_(&i_one, r, &i_one);
             resid2 = (norm_f / norm_r / eps);
-
-            *residual = (double)fla_max(resid1, resid2);
             break;
         }
 
         case COMPLEX:
         {
-            float resid1 = 0.0;
-            float resid2 = 0.0;
             float eps, norm_r, norm_f, norm_res, norm_1;
             float res = 0.0;
             ;
@@ -121,15 +122,11 @@ void validate_lartg(integer datatype, void *f, void *g, void *r, void *c, void *
             caxpy_(&i_one, &c_n_one, g, &i_one, out_zero, &i_one);
             norm_f = scnrm2_(&i_one, r, &i_one);
             resid2 = (norm_f / norm_r / eps);
-
-            *residual = (double)fla_max(resid1, resid2);
             break;
         }
 
         case DOUBLE_COMPLEX:
         {
-            double resid1 = 0.0;
-            double resid2 = 0.0;
             double eps, norm_r, norm_f, norm_res, norm_1;
             double res = 0.0;
 
@@ -159,10 +156,13 @@ void validate_lartg(integer datatype, void *f, void *g, void *r, void *c, void *
             zaxpy_(&i_one, &z_n_one, g, &i_one, out_zero, &i_one);
             norm_f = dznrm2_(&i_one, r, &i_one);
             resid2 = (norm_f / norm_r / eps);
-
-            *residual = (double)fla_max(resid1, resid2);
             break;
         }
     }
     free_vector(out_zero);
+
+    residual = fla_test_max(resid1, resid2);
+    FLA_PRINT_TEST_STATUS(2, 1, residual, err_thresh);
+    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -7,18 +7,19 @@
 #include <invoke_common.hh>
 #endif
 
+extern double perf;
+extern double time_min;
 integer row_major_gesdd_lda;
 integer row_major_gesdd_ldu;
 integer row_major_gesdd_ldvt;
 
 /* Local prototypes.*/
-void fla_test_gesdd_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *t, double *residual);
+void fla_test_gesdd_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo);
 void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer lda, void *s, void *U,
                        integer ldu, void *V, integer ldvt, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer interfacetype,
-                       int matrix_layout);
+                       double *time_min_, integer *info, integer interfacetype, int matrix_layout);
 void invoke_gesdd(integer datatype, char *jobz, integer *m, integer *n, void *a, integer *lda,
                   void *s, void *u, integer *ldu, void *vt, integer *ldvt, void *work,
                   integer *lwork, void *rwork, integer *iwork, integer *info);
@@ -53,7 +54,6 @@ void fla_test_gesdd(integer argc, char **argv, test_params_t *params)
     {
         integer i, num_types, N, M;
         integer datatype, n_repeats;
-        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -105,11 +105,7 @@ void fla_test_gesdd(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_gesdd_experiment(params, datatype, M, N, 0, n_repeats, einfo, &perf,
-                                          &time_min, &residual);
-                /* Print the results */
-                fla_test_print_status(front_str, stype, RECT_INPUT, M, N, residual,
-                                      params->svd_paramslist[0].svd_threshold, time_min, perf);
+                fla_test_gesdd_experiment(front_str, params, datatype, M, N, 0, n_repeats, einfo);
                 tests_not_run = 0;
             }
         }
@@ -134,21 +130,22 @@ void fla_test_gesdd(integer argc, char **argv, test_params_t *params)
     return;
 }
 
-void fla_test_gesdd_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *time_min, double *residual)
+void fla_test_gesdd_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo)
 {
     integer m, n, lda, ldu, ldvt, n_U, m_V, ns;
-    integer info = 0, vinfo = 0;
+    integer info = 0;
     char jobz;
     void *A = NULL, *U = NULL, *V = NULL, *s = NULL, *A_test = NULL, *s_in = NULL, *scal = NULL;
+    double residual, err_thresh;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
 
     /* Get input matrix dimensions.*/
     jobz = params->svd_paramslist[pci].jobu_gesvd;
-    *residual = params->svd_paramslist[pci].svd_threshold;
+    err_thresh = params->svd_paramslist[pci].svd_threshold;
 
     m = p_cur;
     n = q_cur;
@@ -203,14 +200,14 @@ void fla_test_gesdd_experiment(test_params_t *params, integer datatype, integer 
 
     /* Create input matrix parameters */
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
-    if (jobz != 'N')
+    if(jobz != 'N')
     {
-        if (jobz == 'A' || jobz == 'S')
+        if(jobz == 'A' || jobz == 'S')
         {
             create_matrix(datatype, LAPACK_COL_MAJOR, m, n_U, &U, ldu);
             create_matrix(datatype, LAPACK_COL_MAJOR, m_V, n, &V, ldvt);
         }
-        else if (jobz == 'O' && m >= n)
+        else if(jobz == 'O' && m >= n)
         {
             create_matrix(datatype, LAPACK_COL_MAJOR, m_V, n, &V, ldvt);
         }
@@ -243,32 +240,38 @@ void fla_test_gesdd_experiment(test_params_t *params, integer datatype, integer 
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
-    prepare_gesdd_run(&jobz, m, n, A_test, lda, s, U, ldu, V, ldvt, datatype, n_repeats, time_min,
+    prepare_gesdd_run(&jobz, m, n, A_test, lda, s, U, ldu, V, ldvt, datatype, n_repeats, &time_min,
                       &info, interfacetype, layout);
 
     /* performance computation
        6mn^2 + 8n^3 flops */
     if(m >= n)
-        *perf = (double)((6.0 * m * n * n) + (8.0 * n * n * n)) / *time_min / FLOPS_PER_UNIT_PERF;
+        perf = (double)((6.0 * m * n * n) + (8.0 * n * n * n)) / time_min / FLOPS_PER_UNIT_PERF;
     else
-        *perf = (double)((6.0 * n * m * m) + ((8.0) * m * m * m)) / *time_min / FLOPS_PER_UNIT_PERF;
+        perf = (double)((6.0 * n * m * m) + ((8.0) * m * m * m)) / time_min / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
-        *perf *= 4.0;
+        perf *= 4.0;
 
     /* output validation */
-    if(info == 0 && (FLA_OVERFLOW_UNDERFLOW_TEST || (!FLA_EXTREME_CASE_TEST)))
-        validate_gesdd(&jobz, m, n, A, A_test, lda, s, s_in, U, ldu, V, ldvt, datatype, residual,
-                       &vinfo, params->imatrix_char, scal);
+    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    if(!FLA_EXTREME_CASE_TEST)
+    {
+        validate_gesdd(tst_api, &jobz, m, n, A, A_test, lda, s, s_in, U, ldu, V, ldvt, datatype,
+                       residual, params->imatrix_char, scal);
+    }
     /* check for output matrix when inputs as extreme values */
-    else if(FLA_EXTREME_CASE_TEST)
+    else
     {
         if(!check_extreme_value(datatype, m, n, A_test, lda, params->imatrix_char))
         {
-            *residual = DBL_MAX;
+            residual = DBL_MAX;
         }
+        else
+        {
+            residual = err_thresh;
+        }
+        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
     }
-    else
-        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up the buffers */
     free_matrix(A);
@@ -301,7 +304,7 @@ void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer ld
     void *U_test, *V_test;
     integer lwork, liwork, lrwork;
     integer i;
-    double time_min = 1e9, exe_time;
+    double t_min = 1e9, exe_time;
 
     min_m_n = fla_min(m_A, n_A);
     max_m_n = fla_max(m_A, n_A);
@@ -321,7 +324,8 @@ void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer ld
     /* Make a workspace query the first time through. This will provide us with
      and ideal workspace size based on an internal block size.
      NOTE: LAPACKE interface handles workspace query internally */
-    if((interfacetype != LAPACKE_COLUMN_TEST) && (interfacetype != LAPACKE_ROW_TEST) && (g_lwork <= 0))
+    if((interfacetype != LAPACKE_COLUMN_TEST) && (interfacetype != LAPACKE_ROW_TEST)
+       && (g_lwork <= 0))
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
@@ -330,14 +334,14 @@ void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer ld
 #if ENABLE_CPP_TEST
         if(interfacetype == LAPACK_CPP_TEST)
         {
-            invoke_cpp_gesdd(datatype, jobz, &m_A, &n_A, NULL, &lda, NULL, NULL, &ldu, NULL, &ldvt, work,
-                            &lwork, NULL, NULL, info);
+            invoke_cpp_gesdd(datatype, jobz, &m_A, &n_A, NULL, &lda, NULL, NULL, &ldu, NULL, &ldvt,
+                             work, &lwork, NULL, NULL, info);
         }
         else
 #endif
         {
-            invoke_gesdd(datatype, jobz, &m_A, &n_A, NULL, &lda, NULL, NULL, &ldu, NULL, &ldvt, work,
-                        &lwork, NULL, NULL, info);
+            invoke_gesdd(datatype, jobz, &m_A, &n_A, NULL, &lda, NULL, NULL, &ldu, NULL, &ldvt,
+                         work, &lwork, NULL, NULL, info);
         }
         if(*info == 0)
         {
@@ -360,14 +364,14 @@ void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer ld
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
         copy_matrix(datatype, "full", m_A, n_A, A_save, lda, A, lda);
-        if (*jobz != 'N')
+        if(*jobz != 'N')
         {
-            if (*jobz == 'A' || *jobz == 'S')
+            if(*jobz == 'A' || *jobz == 'S')
             {
                 create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_U, &U_test, ldu);
                 create_matrix(datatype, LAPACK_COL_MAJOR, m_V, n_A, &V_test, ldvt);
             }
-            else if (*jobz == 'O' && m_A >= n_A)
+            else if(*jobz == 'O' && m_A >= n_A)
             {
                 create_matrix(datatype, LAPACK_COL_MAJOR, m_V, n_A, &V_test, ldvt);
             }
@@ -396,8 +400,8 @@ void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer ld
         else if(interfacetype == LAPACK_CPP_TEST)
         {
             exe_time = fla_test_clock();
-            invoke_cpp_gesdd(datatype, jobz, &m_A, &n_A, A, &lda, s_test, U_test, &ldu, V_test, &ldvt,
-                            work, &lwork, rwork, iwork, info);
+            invoke_cpp_gesdd(datatype, jobz, &m_A, &n_A, A, &lda, s_test, U_test, &ldu, V_test,
+                             &ldvt, work, &lwork, rwork, iwork, info);
             exe_time = fla_test_clock() - exe_time;
         }
 #endif
@@ -405,22 +409,22 @@ void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer ld
         {
             exe_time = fla_test_clock();
             invoke_gesdd(datatype, jobz, &m_A, &n_A, A, &lda, s_test, U_test, &ldu, V_test, &ldvt,
-                        work, &lwork, rwork, iwork, info);
+                         work, &lwork, rwork, iwork, info);
             exe_time = fla_test_clock() - exe_time;
         }
 
         /* Get the best execution time */
-        time_min = fla_min(time_min, exe_time);
+        t_min = fla_min(t_min, exe_time);
 
         /* Make a copy of the output buffers. This is required to validate the API functionality.*/
-        if (*jobz != 'N')
+        if(*jobz != 'N')
         {
-            if (*jobz == 'A' || *jobz == 'S')
+            if(*jobz == 'A' || *jobz == 'S')
             {
                 copy_matrix(datatype, "full", m_A, n_U, U_test, ldu, U, ldu);
                 copy_matrix(datatype, "full", m_V, n_A, V_test, ldvt, V, ldvt);
             }
-            else if (*jobz == 'O' && m_A >= n_A)
+            else if(*jobz == 'O' && m_A >= n_A)
             {
                 copy_matrix(datatype, "full", m_V, n_A, V_test, ldvt, V, ldvt);
             }
@@ -449,7 +453,7 @@ void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer ld
         free_vector(s_test);
     }
 
-    *time_min_ = time_min;
+    *time_min_ = t_min;
 
     free_matrix(A_save);
 }

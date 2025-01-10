@@ -1,6 +1,6 @@
-/******************************************************************************
- * Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
- *******************************************************************************/
+/*
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+*/
 
 /*! @file validate_geevx.c
  *  @brief Defines validate function of GEEVX() to use in test suite.
@@ -8,20 +8,32 @@
 
 #include "test_common.h"
 
+extern double perf;
+extern double time_min;
+
 /* TODO validation of balanced matrix and condition numbers for eigen values and eigen vectors */
-void validate_geevx(char *jobvl, char *jobvr, char *sense, char *balanc, integer m, void *A,
-                    void *A_test, integer lda, void *VL, integer ldvl, void *VR, integer ldvr,
-                    void *w, void *wr, void *wi, void *scale, void *abnrm, void *rconde,
-                    void *rcondv, integer datatype, char imatrix, void *scal, double *residual,
-                    integer *info, void *wr_in, void *wi_in)
+void validate_geevx(char *tst_api, char *jobvl, char *jobvr, char *sense, char *balanc, integer m,
+                    void *A, void *A_test, integer lda, void *VL, integer ldvl, void *VR,
+                    integer ldvr, void *w, void *wr, void *wi, void *scale, void *abnrm,
+                    void *rconde, void *rcondv, integer datatype, char imatrix, void *scal,
+                    double err_thresh, void *wr_in, void *wi_in)
 {
-    if(m == 0)
-        return;
     void *work = NULL;
     void *lambda = NULL, *Vlambda = NULL;
     char NORM = 'F';
-    *info = 0;
     integer incr = m + 1;
+    double residual;
+    double resid1 = 0., resid2 = 0., resid3 = 0., resid4 = 0.;
+
+    /* Early return conditions */
+    if(m == 0)
+    {
+        FLA_TEST_PRINT_STATUS_AND_RETURN(m, m, err_thresh);
+    }
+    /* print overall status if incoming threshold is
+     * an extreme value indicating that API returned
+     * unexpected info value */
+    FLA_TEST_PRINT_INVALID_STATUS(m, m, err_thresh);
 
     create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &lambda, m);
     create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &Vlambda, m);
@@ -44,8 +56,8 @@ void validate_geevx(char *jobvl, char *jobvr, char *sense, char *balanc, integer
     {
         case FLOAT:
         {
-            float norm, norm_A, norm_W, resid1, resid2, eps;
-            norm = norm_A = norm_W = resid1 = resid2 = 0.f;
+            float norm, norm_A, norm_W, eps;
+            norm = norm_A = norm_W = 0.f;
             eps = fla_lapack_slamch("P");
             if(*jobvr == 'V')
             {
@@ -72,7 +84,6 @@ void validate_geevx(char *jobvl, char *jobvr, char *sense, char *balanc, integer
                 compute_matrix_norm(datatype, NORM, m, m, Vlambda, m, &norm, imatrix, work);
                 resid2 = norm / (eps * norm_A * (float)m);
             }
-            *residual = (double)fla_max(resid1, resid2);
             if(wr_in != NULL && wi_in != NULL)
             {
                 /* Test 3: In case of specific input generation, compare input and
@@ -86,20 +97,19 @@ void validate_geevx(char *jobvl, char *jobvr, char *sense, char *balanc, integer
                 compute_matrix_norm(datatype, NORM, m, i_one, wr_in, i_one, &norm_W, imatrix, work);
                 saxpy_(&m, &s_n_one, wr, &i_one, wr_in, &i_one);
                 compute_matrix_norm(datatype, NORM, m, i_one, wr_in, i_one, &norm, imatrix, work);
-                resid1 = norm / (eps * norm_W * m);
+                resid3 = norm / (eps * norm_W * m);
 
                 compute_matrix_norm(datatype, NORM, m, i_one, wi_in, i_one, &norm_W, imatrix, work);
                 saxpy_(&m, &s_n_one, wi, &i_one, wi_in, &i_one);
                 compute_matrix_norm(datatype, NORM, m, i_one, wi_in, i_one, &norm, imatrix, work);
-                resid2 = norm / (eps * norm_W * m);
-                *residual = (double)fla_max(*residual, (double)fla_max(resid1, resid2));
+                resid4 = norm / (eps * norm_W * m);
             }
             break;
         }
         case DOUBLE:
         {
-            double norm, norm_A, norm_W, eps, resid1, resid2;
-            norm = norm_A = norm_W = resid1 = resid2 = 0.;
+            double norm, norm_A, norm_W, eps;
+            norm = norm_A = norm_W = 0.;
             eps = fla_lapack_dlamch("P");
 
             if(*jobvr == 'V')
@@ -128,7 +138,6 @@ void validate_geevx(char *jobvl, char *jobvr, char *sense, char *balanc, integer
                 compute_matrix_norm(datatype, NORM, m, m, Vlambda, m, &norm, imatrix, work);
                 resid2 = norm / (eps * norm_A * (double)m);
             }
-            *residual = (double)fla_max(resid1, resid2);
             if(wr_in != NULL && wi_in != NULL)
             {
                 /* Test 3: In case of specific input generation, compare input and
@@ -142,20 +151,19 @@ void validate_geevx(char *jobvl, char *jobvr, char *sense, char *balanc, integer
                 compute_matrix_norm(datatype, NORM, m, i_one, wr_in, i_one, &norm_W, imatrix, work);
                 daxpy_(&m, &d_n_one, wr, &i_one, wr_in, &i_one);
                 compute_matrix_norm(datatype, NORM, m, i_one, wr_in, i_one, &norm, imatrix, work);
-                resid1 = norm / (eps * norm_W * m);
+                resid3 = norm / (eps * norm_W * m);
 
                 compute_matrix_norm(datatype, NORM, m, i_one, wi_in, i_one, &norm_W, imatrix, work);
                 daxpy_(&m, &d_n_one, wi, &i_one, wi_in, &i_one);
                 compute_matrix_norm(datatype, NORM, m, i_one, wi_in, i_one, &norm, imatrix, work);
-                resid2 = norm / (eps * norm_W * m);
-                *residual = fla_max(*residual, fla_max(resid1, resid2));
+                resid4 = norm / (eps * norm_W * m);
             }
             break;
         }
         case COMPLEX:
         {
-            float norm, norm_A, norm_W, eps, resid1, resid2, resid3;
-            norm = norm_A = norm_W = resid1 = resid2 = resid3 = 0.f;
+            float norm, norm_A, norm_W, eps;
+            norm = norm_A = norm_W = 0.f;
             eps = fla_lapack_slamch("P");
             /* Scaleup the output during underflow to avoid
              the very least values during validation*/
@@ -189,7 +197,6 @@ void validate_geevx(char *jobvl, char *jobvr, char *sense, char *balanc, integer
                 compute_matrix_norm(datatype, NORM, m, m, Vlambda, m, &norm, imatrix, work);
                 resid2 = norm / (eps * norm_A * (float)m);
             }
-            *residual = (double)fla_max(resid1, resid2);
             if(wr_in != NULL)
             {
                 /* Test 3: In case of specific input generation, compare input and
@@ -204,14 +211,13 @@ void validate_geevx(char *jobvl, char *jobvr, char *sense, char *balanc, integer
                 caxpy_(&m, &c_n_one, w, &i_one, wr_in, &i_one);
                 compute_matrix_norm(datatype, NORM, m, i_one, wr_in, i_one, &norm, imatrix, work);
                 resid3 = norm / (eps * norm_W * m);
-                *residual = (double)fla_max(*residual, resid3);
             }
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm, norm_A, norm_W, eps, resid1, resid2, resid3;
-            norm = norm_A = norm_W = resid1 = resid2 = 0.;
+            double norm, norm_A, norm_W, eps;
+            norm = norm_A = norm_W = 0.;
             eps = fla_lapack_dlamch("P");
             /* Scaleup the output during underflow to avoid
              the very least values during validation*/
@@ -244,7 +250,6 @@ void validate_geevx(char *jobvl, char *jobvr, char *sense, char *balanc, integer
                 compute_matrix_norm(datatype, NORM, m, m, Vlambda, m, &norm, imatrix, work);
                 resid2 = norm / (eps * norm_A * (double)m);
             }
-            *residual = fla_max(resid1, resid2);
             if(wr_in != NULL)
             {
                 /* Test 3: In case of specific input generation, compare input and
@@ -259,11 +264,20 @@ void validate_geevx(char *jobvl, char *jobvr, char *sense, char *balanc, integer
                 zaxpy_(&m, &z_n_one, w, &i_one, wr_in, &i_one);
                 compute_matrix_norm(datatype, NORM, m, i_one, wr_in, i_one, &norm, imatrix, work);
                 resid3 = norm / (eps * norm_W * m);
-                *residual = fla_max(*residual, resid3);
             }
             break;
         }
     }
     free_matrix(lambda);
     free_matrix(Vlambda);
+
+    residual = fla_test_max(resid1, resid2);
+    residual = fla_test_max(resid3, residual);
+    residual = fla_test_max(resid4, residual);
+
+    FLA_PRINT_TEST_STATUS(m, m, residual, err_thresh);
+    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
+    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
+    FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
 }

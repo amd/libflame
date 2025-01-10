@@ -7,12 +7,14 @@
 #include <invoke_common.hh>
 #endif
 
+extern double perf;
+extern double time_min;
 integer row_major_potrf_lda;
 
 /* Local prototypes.*/
-void fla_test_potrf_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *time_min, double *residual);
+void fla_test_potrf_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo);
 void prepare_potrf_run(char *uplo, integer m, void *A, integer lda, integer datatype,
                        integer n_repeats, double *time_min_, integer *info, integer interfacetype,
                        int matrix_layout);
@@ -45,7 +47,6 @@ void fla_test_potrf(integer argc, char **argv, test_params_t *params)
     {
         integer i, num_types, N;
         integer datatype, n_repeats;
-        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -87,12 +88,7 @@ void fla_test_potrf(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_potrf_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
-                                          &time_min, &residual);
-                /* Print the results */
-                fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
-                                      params->lin_solver_paramslist[0].solver_threshold, time_min,
-                                      perf);
+                fla_test_potrf_experiment(front_str, params, datatype, N, N, 0, n_repeats, einfo);
                 tests_not_run = 0;
             }
         }
@@ -116,19 +112,20 @@ void fla_test_potrf(integer argc, char **argv, test_params_t *params)
     return;
 }
 
-void fla_test_potrf_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *time_min, double *residual)
+void fla_test_potrf_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo)
 {
     integer m, lda;
-    integer info = 0, vinfo = 0;
+    integer info = 0;
     void *A = NULL, *A_test = NULL;
     char uplo = params->lin_solver_paramslist[pci].Uplo;
+    double residual, err_thresh;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
 
-    *residual = params->lin_solver_paramslist[pci].solver_threshold;
+    err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
 
     /* Get input matrix dimensions */
     m = p_cur;
@@ -175,26 +172,32 @@ void fla_test_potrf_experiment(test_params_t *params, integer datatype, integer 
     create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &A_test, lda);
     copy_matrix(datatype, "full", m, m, A, lda, A_test, lda);
 
-    prepare_potrf_run(&uplo, m, A_test, lda, datatype, n_repeats, time_min, &info, interfacetype,
+    prepare_potrf_run(&uplo, m, A_test, lda, datatype, n_repeats, &time_min, &info, interfacetype,
                       layout);
 
     /* Compute the performance of the best experiment repeat */
     /* (1/3)m^3 for real and (4/3)m^3 for complex*/
-    *perf = (double)(1.0 / 3.0 * m * m * m) / *time_min / FLOPS_PER_UNIT_PERF;
+    perf = (double)(1.0 / 3.0 * m * m * m) / time_min / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
-        *perf *= 4.0;
+        perf *= 4.0;
 
-    if((!FLA_EXTREME_CASE_TEST) && info == 0)
-        validate_potrf(&uplo, m, A, A_test, lda, datatype, residual, &vinfo);
+    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    if(!FLA_EXTREME_CASE_TEST)
+    {
+        validate_potrf(tst_api, &uplo, m, A, A_test, lda, datatype, residual);
+    }
     else if(FLA_EXTREME_CASE_TEST)
     {
         if((!check_extreme_value(datatype, m, m, A_test, lda, params->imatrix_char)))
         {
-            *residual = DBL_MAX;
+            residual = DBL_MAX;
         }
+        else
+        {
+            residual = err_thresh;
+        }
+        FLA_PRINT_TEST_STATUS(m, m, residual, err_thresh);
     }
-    else
-        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     free_matrix(A);
     free_matrix(A_test);
@@ -205,7 +208,7 @@ void prepare_potrf_run(char *uplo, integer m, void *A, integer lda, integer data
                        int layout)
 {
     void *A_save = NULL;
-    double time_min = 1e9, exe_time;
+    double t_min = 1e9, exe_time;
     integer i;
 
     /* Make a copy of the input matrix A. Same input values will be passed in
@@ -242,10 +245,10 @@ void prepare_potrf_run(char *uplo, integer m, void *A, integer lda, integer data
             exe_time = fla_test_clock() - exe_time;
         }
         /* Get the best execution time */
-        time_min = fla_min(time_min, exe_time);
+        t_min = fla_min(t_min, exe_time);
     }
 
-    *time_min_ = time_min;
+    *time_min_ = t_min;
     free_matrix(A_save);
 }
 

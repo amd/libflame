@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -7,13 +7,15 @@
 #include <invoke_common.hh>
 #endif
 
+extern double perf;
+extern double time_min;
 integer row_major_hseqr_ldh;
 integer row_major_hseqr_ldz;
 
 /* Local prototypes */
-void fla_test_hseqr_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *t, double *residual);
+void fla_test_hseqr_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo);
 void prepare_hseqr_run(char *job, char *compz, integer n, integer *ilo, integer *ihi, void *h,
                        integer ldh, void *w, void *wr, void *wi, void *z, integer ldz,
                        integer datatype, integer n_repeats, double *time_min_, integer *info,
@@ -49,7 +51,6 @@ void fla_test_hseqr(integer argc, char **argv, test_params_t *params)
     {
         integer i, num_types, N;
         integer datatype, n_repeats;
-        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -98,12 +99,7 @@ void fla_test_hseqr(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_hseqr_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
-                                          &time_min, &residual);
-                /* Print the results */
-                fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
-                                      params->eig_sym_paramslist[0].threshold_value, time_min,
-                                      perf);
+                fla_test_hseqr_experiment(front_str, params, datatype, N, N, 0, n_repeats, einfo);
                 tests_not_run = 0;
             }
         }
@@ -127,16 +123,17 @@ void fla_test_hseqr(integer argc, char **argv, test_params_t *params)
     }
 }
 
-void fla_test_hseqr_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *time_min, double *residual)
+void fla_test_hseqr_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo)
 {
     integer n, ldz, ldh;
-    integer ilo, ihi, info = 0, vinfo = 0;
+    integer ilo, ihi, info = 0;
     void *H = NULL, *w = NULL, *wr = NULL, *wi = NULL, *Z = NULL, *H_test = NULL, *Z_Test = NULL,
          *wr_in = NULL, *wi_in = NULL, *scal_H = NULL;
     char job;
     char compz;
+    double residual, err_thresh;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
@@ -150,7 +147,7 @@ void fla_test_hseqr_experiment(test_params_t *params, integer datatype, integer 
     /* Initialize parameter needed for HSEQR() call. */
     job = params->eig_sym_paramslist[pci].job_seqr;
     compz = params->eig_sym_paramslist[pci].compz_hseqr;
-    *residual = params->eig_sym_paramslist[pci].threshold_value;
+    err_thresh = params->eig_sym_paramslist[pci].threshold_value;
     ilo = params->eig_sym_paramslist[pci].ilo;
     ihi = params->eig_sym_paramslist[pci].ihi;
 
@@ -224,7 +221,7 @@ void fla_test_hseqr_experiment(test_params_t *params, integer datatype, integer 
     copy_matrix(datatype, "full", n, n, Z, ldz, Z_Test, ldz);
 
     prepare_hseqr_run(&job, &compz, n, &ilo, &ihi, H_test, ldh, w, wr, wi, Z_Test, ldz, datatype,
-                      n_repeats, time_min, &info, interfacetype, layout);
+                      n_repeats, &time_min, &info, interfacetype, layout);
 
     /* Performance computation
        (7)n^3 flops for eigen vectors for real
@@ -237,33 +234,36 @@ void fla_test_hseqr_experiment(test_params_t *params, integer datatype, integer 
     if(compz == 'N')
     {
         if(datatype == FLOAT || datatype == DOUBLE)
-            *perf = (double)(7.0 * n * n * n) / *time_min / FLOPS_PER_UNIT_PERF;
+            perf = (double)(7.0 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
         else
-            *perf = (double)(25.0 * n * n * n) / *time_min / FLOPS_PER_UNIT_PERF;
+            perf = (double)(25.0 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     }
     else if(compz == 'I')
     {
         if(datatype == FLOAT || datatype == DOUBLE)
-            *perf = (double)(10.0 * n * n * n) / *time_min / FLOPS_PER_UNIT_PERF;
+            perf = (double)(10.0 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
         else
-            *perf = (double)(35.0 * n * n * n) / *time_min / FLOPS_PER_UNIT_PERF;
+            perf = (double)(35.0 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     }
     else
     {
         if(datatype == FLOAT || datatype == DOUBLE)
-            *perf = (double)(20.0 * n * n * n) / *time_min / FLOPS_PER_UNIT_PERF;
+            perf = (double)(20.0 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
         else
-            *perf = (double)(70.0 * n * n * n) / *time_min / FLOPS_PER_UNIT_PERF;
+            perf = (double)(70.0 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     }
 
     /* Output Validation */
-    if(info == 0)
-        validate_hseqr(&job, &compz, n, H, H_test, ldh, Z, Z_Test, ldz, wr, wr_in, wi, wi_in, w,
-                       datatype, residual, &vinfo, &ilo, &ihi, params->imatrix_char, scal_H);
-
-    /* test info only for negative test cases */
-    if(info < 0)
-        FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    if(!FLA_EXTREME_CASE_TEST)
+    {
+        validate_hseqr(tst_api, &job, &compz, n, H, H_test, ldh, Z, Z_Test, ldz, wr, wr_in, wi,
+                       wi_in, w, datatype, residual, &ilo, &ihi, params->imatrix_char, scal_H);
+    }
+    else
+    {
+        printf("Extreme Value tests not supported for xHSEQR APIs\n");
+    }
 
     /* Free up the buffers */
     free_matrix(H);
@@ -294,7 +294,7 @@ void prepare_hseqr_run(char *job, char *compz, integer n, integer *ilo, integer 
 {
     void *H_save = NULL, *work = NULL, *Z_save = NULL;
     integer i, lwork;
-    double time_min = 1e9, exe_time;
+    double t_min = 1e9, exe_time;
 
     /* Make a copy of the input matrix H and Z. Same input values will be passed in each
      * itertaion.*/
@@ -306,7 +306,8 @@ void prepare_hseqr_run(char *job, char *compz, integer n, integer *ilo, integer 
     /* Make a workspace query the first time through. This will provide us with
      and ideal workspace size based on an internal block size.
      NOTE: LAPACKE interface handles workspace query internally */
-    if((interfacetype != LAPACKE_COLUMN_TEST) && (interfacetype != LAPACKE_ROW_TEST) && (g_lwork <= 0))
+    if((interfacetype != LAPACKE_COLUMN_TEST) && (interfacetype != LAPACKE_ROW_TEST)
+       && (g_lwork <= 0))
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
@@ -315,15 +316,15 @@ void prepare_hseqr_run(char *job, char *compz, integer n, integer *ilo, integer 
         /* call to CPP hseqr API */
         if(interfacetype == LAPACK_CPP_TEST)
         {
-            invoke_cpp_hseqr(datatype, job, compz, &n, ilo, ihi, NULL, &ldh, NULL, NULL, NULL, NULL, &ldz,
-                             work, &lwork, info);
+            invoke_cpp_hseqr(datatype, job, compz, &n, ilo, ihi, NULL, &ldh, NULL, NULL, NULL, NULL,
+                             &ldz, work, &lwork, info);
         }
         else
 #endif
         {
             /* call to hseqr API */
-            invoke_hseqr(datatype, job, compz, &n, ilo, ihi, NULL, &ldh, NULL, NULL, NULL, NULL, &ldz,
-                         work, &lwork, info);
+            invoke_hseqr(datatype, job, compz, &n, ilo, ihi, NULL, &ldh, NULL, NULL, NULL, NULL,
+                         &ldz, work, &lwork, info);
         }
 
         /* Output buffers will be freshly allocated for each iterations, free up
@@ -357,7 +358,7 @@ void prepare_hseqr_run(char *job, char *compz, integer n, integer *ilo, integer 
                                                  w, wr, wi, Z, ldz, info);
         }
 #if ENABLE_CPP_TEST
-        else if(interfacetype == LAPACK_CPP_TEST)   /* Call CPP hseqr API */
+        else if(interfacetype == LAPACK_CPP_TEST) /* Call CPP hseqr API */
         {
             exe_time = fla_test_clock();
             invoke_cpp_hseqr(datatype, job, compz, &n, ilo, ihi, H, &ldh, w, wr, wi, Z, &ldz, work,
@@ -376,12 +377,12 @@ void prepare_hseqr_run(char *job, char *compz, integer n, integer *ilo, integer 
         }
 
         /* Get the best execution time */
-        time_min = fla_min(time_min, exe_time);
+        t_min = fla_min(t_min, exe_time);
 
         /* Free up the output buffers */
         free_vector(work);
     }
-    *time_min_ = time_min;
+    *time_min_ = t_min;
 
     free(H_save);
     free(Z_save);

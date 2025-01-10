@@ -7,10 +7,12 @@
 #include <invoke_common.hh>
 #endif
 
+extern double perf;
+extern double time_min;
 /* Local prototypes.*/
-void fla_test_org2r_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *t, double *residual);
+void fla_test_org2r_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo);
 void prepare_org2r_run(integer m, integer n, void *A, integer lda, void *T, void *work,
                        integer datatype, integer n_repeats, double *time_min_, integer *info,
                        integer interfacetype);
@@ -41,7 +43,6 @@ void fla_test_org2r(integer argc, char **argv, test_params_t *params)
     {
         integer i, num_types, N, M;
         integer datatype, n_repeats;
-        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -76,12 +77,7 @@ void fla_test_org2r(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_org2r_experiment(params, datatype, M, N, 0, n_repeats, einfo, &perf,
-                                          &time_min, &residual);
-                /* Print the results */
-                fla_test_print_status(front_str, stype, RECT_INPUT, M, N, residual,
-                                      params->lin_solver_paramslist[0].solver_threshold, time_min,
-                                      perf);
+                fla_test_org2r_experiment(front_str, params, datatype, M, N, 0, n_repeats, einfo);
                 tests_not_run = 0;
             }
         }
@@ -106,24 +102,25 @@ void fla_test_org2r(integer argc, char **argv, test_params_t *params)
     return;
 }
 
-void fla_test_org2r_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *time_min, double *residual)
+void fla_test_org2r_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo)
 {
     integer m, n, lda;
     void *A = NULL, *A_test = NULL, *T_test = NULL;
     void *work = NULL, *work_test = NULL;
     void *Q = NULL, *R = NULL;
-    integer lwork = -1, info = 0, vinfo = 0;
     integer interfacetype = params->interfacetype;
+    integer lwork = -1, info = 0;
+    double residual, err_thresh;
 
     /* Get input matrix dimensions.*/
     m = p_cur;
     n = q_cur;
     lda = params->lin_solver_paramslist[pci].lda;
-    *time_min = 0.;
-    *perf = 0.;
-    *residual = params->lin_solver_paramslist[pci].solver_threshold;
+    time_min = 0.;
+    perf = 0.;
+    err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
@@ -193,30 +190,36 @@ void fla_test_org2r_experiment(test_params_t *params, integer datatype, integer 
         copy_matrix(datatype, "full", m, n, A_test, lda, Q, lda);
 
         /*invoke org2r API */
-        prepare_org2r_run(m, n, Q, lda, T_test, work_test, datatype, n_repeats, time_min, &info,
+        prepare_org2r_run(m, n, Q, lda, T_test, work_test, datatype, n_repeats, &time_min, &info,
                           interfacetype);
 
         /* performance computation
            (2/3)*n2*(3m - n) */
-        *perf = (double)((2.0 * m * n * n) - ((2.0 / 3.0) * n * n * n)) / *time_min
-                / FLOPS_PER_UNIT_PERF;
+        perf = (double)((2.0 * m * n * n) - ((2.0 / 3.0) * n * n * n)) / time_min
+               / FLOPS_PER_UNIT_PERF;
         if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
-            *perf *= 4.0;
+            perf *= 4.0;
 
         /* output validation */
-        if((!FLA_EXTREME_CASE_TEST || FLA_OVERFLOW_UNDERFLOW_TEST) && info == 0)
-            validate_orgqr(m, n, A, lda, Q, R, work_test, datatype, residual, &vinfo,
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
+        if(!FLA_EXTREME_CASE_TEST)
+        {
+            validate_orgqr(tst_api, m, n, A, lda, Q, R, work_test, datatype, residual,
                            params->imatrix_char);
+        }
         /* check for output matrix when inputs as extreme values */
-        else if(FLA_EXTREME_CASE_TEST)
+        else
         {
             if(!check_extreme_value(datatype, m, n, Q, lda, params->imatrix_char))
             {
-                *residual = DBL_MAX;
+                residual = DBL_MAX;
             }
+            else
+            {
+                residual = err_thresh;
+            }
+            FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
         }
-        else
-            FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
         /* Free up the buffers */
         free_matrix(A);
@@ -235,7 +238,7 @@ void prepare_org2r_run(integer m, integer n, void *A, integer lda, void *T, void
 {
     integer i;
     void *A_save = NULL;
-    double time_min = 1e9, exe_time;
+    double t_min = 1e9, exe_time;
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
@@ -269,10 +272,10 @@ void prepare_org2r_run(integer m, integer n, void *A, integer lda, void *T, void
         }
 
         /* Get the best execution time */
-        time_min = fla_min(time_min, exe_time);
+        t_min = fla_min(t_min, exe_time);
     }
 
-    *time_min_ = time_min;
+    *time_min_ = t_min;
 
     free_matrix(A_save);
 }

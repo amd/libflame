@@ -1,29 +1,38 @@
-/******************************************************************************
- * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
- *******************************************************************************/
+/*
+    Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
+*/
 
 /*! @file validate_larfg.c
  *  @brief Defines validate function of LARFG() to use in test suite.
  *  */
 #include "test_common.h"
 
-void validate_larfg(integer datatype, integer n, integer incx, integer x_length, void *x, void *v,
-                    void *tau, double *residual)
+extern double perf;
+extern double time_min;
+
+void validate_larfg(char *tst_api, integer datatype, integer n, integer incx, integer x_length,
+                    void *x, void *v, void *tau, double err_thresh)
 {
+    void *beta, *x_temp, *v_temp, *work;
+    double residual;
+
     /* Early return for n <= 0, tau = 0.0f */
     if(n <= 0)
     {
-        *residual = is_value_zero(datatype, tau, *residual);
-        return;
+        residual = is_value_zero(datatype, tau, err_thresh);
+        FLA_TEST_PRINT_STATUS_AND_RETURN(n, n, err_thresh);
     }
     /* return invalid param for incx < 1 */
     if(incx < 1)
     {
-        *residual = DBL_MIN;
+        residual = DBL_MIN;
         return;
     }
+    /* print overall status if incoming threshold is
+     * an extreme value indicating that API returned
+     * unexpected info value */
+    FLA_TEST_PRINT_INVALID_STATUS(n, n, err_thresh);
 
-    void *beta, *x_temp, *v_temp, *work;
     create_vector(datatype, &work, i_one);
     create_vector(datatype, &x_temp, n);
     create_vector(datatype, &v_temp, n);
@@ -39,7 +48,7 @@ void validate_larfg(integer datatype, integer n, integer incx, integer x_length,
     {
         case FLOAT:
         {
-            float norm, norm_beta, eps, resid1;
+            float norm, norm_beta, eps;
             ((float *)v)[0] = s_one;
             /* v_temp consists of [1, v(output)] elements */
             copy_vector(datatype, n, v, incx, v_temp, 1);
@@ -56,13 +65,12 @@ void validate_larfg(integer datatype, integer n, integer incx, integer x_length,
             slarf_("L", &n, &i_one, v_temp, &i_one, tau, x_temp, &n, work);
             saxpy_(&n, &s_n_one, x_temp, &i_one, beta, &i_one);
             norm = fla_lapack_slange("1", &n, &i_one, beta, &i_one, work);
-            resid1 = norm / (eps * norm_beta * n);
-            *residual = (double)resid1;
+            residual = (double)(norm / (eps * norm_beta * n));
             break;
         }
         case DOUBLE:
         {
-            double norm, norm_beta, eps, resid1;
+            double norm, norm_beta, eps;
             ((double *)v)[0] = d_one;
             /* v_temp consists of [1, v(output)] elements */
             copy_vector(datatype, n, v, incx, v_temp, 1);
@@ -79,13 +87,12 @@ void validate_larfg(integer datatype, integer n, integer incx, integer x_length,
             dlarf_("L", &n, &i_one, v_temp, &i_one, tau, x_temp, &n, work);
             daxpy_(&n, &d_n_one, x_temp, &i_one, beta, &i_one);
             norm = fla_lapack_dlange("1", &n, &i_one, beta, &i_one, work);
-            resid1 = norm / (eps * norm_beta * n);
-            *residual = resid1;
+            residual = norm / (eps * norm_beta * n);
             break;
         }
         case COMPLEX:
         {
-            float norm, norm_beta, eps, resid1;
+            float norm, norm_beta, eps;
             ((scomplex *)v)[0] = c_one;
             /* v_temp consists of [1, v(output)] elements */
             copy_vector(datatype, n, v, incx, v_temp, 1);
@@ -105,13 +112,12 @@ void validate_larfg(integer datatype, integer n, integer incx, integer x_length,
             clarf_("L", &n, &i_one, v_temp, &i_one, tau, x_temp, &n, work);
             caxpy_(&n, &c_n_one, x_temp, &i_one, beta, &i_one);
             norm = fla_lapack_clange("1", &n, &i_one, beta, &i_one, work);
-            resid1 = norm / (eps * norm_beta * n);
-            *residual = (double)resid1;
+            residual = (double)(norm / (eps * norm_beta * n));
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm, norm_beta, eps, resid1;
+            double norm, norm_beta, eps;
             ((dcomplex *)v)[0] = z_one;
             /* v_temp consists of [1, v(output)] elements */
             copy_vector(datatype, n, v, incx, v_temp, 1);
@@ -131,13 +137,18 @@ void validate_larfg(integer datatype, integer n, integer incx, integer x_length,
             zlarf_("L", &n, &i_one, v_temp, &i_one, tau, x_temp, &n, work);
             zaxpy_(&n, &z_n_one, x_temp, &i_one, beta, &i_one);
             norm = fla_lapack_zlange("1", &n, &i_one, beta, &i_one, work);
-            resid1 = norm / (eps * norm_beta * n);
-            *residual = resid1;
+            residual = norm / (eps * norm_beta * n);
             break;
         }
+        default:
+            residual = err_thresh;
+            break;
     }
     free_vector(beta);
     free_vector(v_temp);
     free_vector(x_temp);
     free_vector(work);
+
+    FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    FLA_PRINT_SUBTEST_STATUS(residual, err_thresh, "01");
 }

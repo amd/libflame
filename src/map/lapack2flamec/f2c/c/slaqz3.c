@@ -289,7 +289,6 @@ void slaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
     extern /* Subroutine */
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    real safmax;
     extern /* Subroutine */
         void
         slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
@@ -387,7 +386,6 @@ void slaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
     }
     /* Get machine constants */
     safmin = slamch_("SAFE MINIMUM");
-    safmax = 1.f / safmin;
     ulp = slamch_("PRECISION");
     smlnum = safmin * ((real)(*n) / ulp);
     if(*ihi == kwtop)

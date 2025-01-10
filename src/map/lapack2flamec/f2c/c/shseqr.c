@@ -7,7 +7,6 @@
 static real c_b11 = 0.f;
 static real c_b12 = 1.f;
 static integer c__12 = 12;
-static integer c__2 = 2;
 static integer c__49 = 49;
 /* > \brief \b SHSEQR */
 /* =========== DOCUMENTATION =========== */
@@ -325,8 +324,7 @@ void shseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, rea
                       ", ihi %" FLA_IS ", ldh %" FLA_IS ", ldz %" FLA_IS "",
                       *job, *compz, *n, *ilo, *ihi, *ldh, *ldz);
     /* System generated locals */
-    address a__1[2];
-    integer h_dim1, h_offset, z_dim1, z_offset, i__1, i__2[2], i__3;
+    integer h_dim1, h_offset, z_dim1, z_offset, i__1, i__3;
     real r__1;
     char ch__1[2];
     /* Builtin functions */

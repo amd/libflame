@@ -134,7 +134,7 @@ void zgetc2_(integer *n, doublecomplex *a, integer *lda, integer *ipiv, integer 
                integer *, doublecomplex *, integer *),
         zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
-    doublereal bignum, smlnum;
+    doublereal smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -174,7 +174,6 @@ void zgetc2_(integer *n, doublecomplex *a, integer *lda, integer *ipiv, integer 
     /* Set constants to control overflow */
     eps = dlamch_("P");
     smlnum = dlamch_("S") / eps;
-    bignum = 1. / smlnum;
     /* Handle the case N=1 by itself */
     if(*n == 1)
     {

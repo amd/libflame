@@ -129,7 +129,7 @@ void sgetc2_(integer *n, real *a, integer *lda, integer *ipiv, integer *jpiv, in
         void
         sswap_(integer *, real *, integer *, real *, integer *);
     extern real slamch_(char *);
-    real bignum, smlnum;
+    real smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -168,7 +168,6 @@ void sgetc2_(integer *n, real *a, integer *lda, integer *ipiv, integer *jpiv, in
     /* Set constants to control overflow */
     eps = slamch_("P");
     smlnum = slamch_("S") / eps;
-    bignum = 1.f / smlnum;
     /* Handle the case N=1 by itself */
     if(*n == 1)
     {

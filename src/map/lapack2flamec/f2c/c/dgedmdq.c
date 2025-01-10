@@ -694,6 +694,7 @@ void dgedmdq_(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *
     minmn = fla_min(*m, *n);
     *info = 0;
     lquery = *lwork == -1 || *liwork == -1;
+    olwork = fla_min(*m, *n);
     if(!(sccolx || sccoly || lsame_(jobs, "N", 1, 1)))
     {
         *info = -1;

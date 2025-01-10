@@ -310,7 +310,7 @@ void dlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
     extern /* Subroutine */
         void
         dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
-    doublereal safmax, refsum, smlnum;
+    doublereal refsum, smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -394,7 +394,6 @@ void dlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
     ns = *nshfts - *nshfts % 2;
     /* ==== Machine constants for deflation ==== */
     safmin = dlamch_("SAFE MINIMUM");
-    safmax = 1. / safmin;
     ulp = dlamch_("PRECISION");
     smlnum = safmin * ((doublereal)(*n) / ulp);
     /* ==== Use accumulated reflections to update far-from-diagonal */

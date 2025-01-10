@@ -338,7 +338,6 @@ void dlaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     extern /* Subroutine */
         void
         dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
-    doublereal safmax;
     extern /* Subroutine */
         void
         dtrexc_(char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *,
@@ -435,7 +434,6 @@ void dlaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     }
     /* ==== Machine constants ==== */
     safmin = dlamch_("SAFE MINIMUM");
-    safmax = 1. / safmin;
     ulp = dlamch_("PRECISION");
     smlnum = safmin * ((doublereal)(*n) / ulp);
     /* ==== Setup deflation window ==== */

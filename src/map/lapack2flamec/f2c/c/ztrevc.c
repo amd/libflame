@@ -243,7 +243,7 @@ void ztrevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
     integer i__, j, k, ii, ki, is;
     doublereal ulp;
     logical allv;
-    doublereal unfl, ovfl, smin;
+    doublereal unfl, smin;
     logical over;
     doublereal scale;
     extern logical lsame_(char *, char *, integer, integer);
@@ -377,7 +377,6 @@ void ztrevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
     }
     /* Set the constants to control overflow. */
     unfl = dlamch_("Safe minimum");
-    ovfl = 1. / unfl;
     ulp = dlamch_("Precision");
     smlnum = unfl * (*n / ulp);
     /* Store the diagonal elements of T in working array WORK. */

@@ -197,8 +197,8 @@ void zgelss_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *l
     integer i__, bl, ie, il, mm;
     doublecomplex dum[1];
     doublereal eps, thr, anrm, bnrm;
-    integer itau, lwork_zgebrd__, lwork_zgelqf__, lwork_zgeqrf__, lwork_zungbr__, lwork_zunmbr__,
-        iascl, ibscl, lwork_zunmlq__, chunk, lwork_zunmqr__;
+    integer itau, lwork_zgebrd__, lwork_zgelqf__, lwork_zungbr__, lwork_zunmbr__,
+        iascl, ibscl, lwork_zunmlq__, chunk;
     doublereal sfmin;
     integer minmn;
     extern /* Subroutine */
@@ -342,11 +342,9 @@ void zgelss_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *l
                 /* columns */
                 /* Compute space needed for ZGEQRF */
                 zgeqrf_(m, n, &a[a_offset], lda, dum, dum, &c_n1, info);
-                lwork_zgeqrf__ = (integer)dum[0].r;
                 /* Compute space needed for ZUNMQR */
                 zunmqr_("L", "C", m, nrhs, n, &a[a_offset], lda, dum, &b[b_offset], ldb, dum, &c_n1,
                         info);
-                lwork_zunmqr__ = (integer)dum[0].r;
                 mm = *n;
                 /* Computing MAX */
                 i__1 = maxwrk;

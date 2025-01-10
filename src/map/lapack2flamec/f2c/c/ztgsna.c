@@ -335,7 +335,7 @@ void ztgsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex
     double z_abs(doublecomplex *);
     /* Local variables */
     integer i__, k, n1, n2, ks;
-    doublereal eps, cond;
+    doublereal cond;
     integer ierr, ifst;
     doublereal lnrm;
     doublecomplex yhax, yhbx;
@@ -359,7 +359,6 @@ void ztgsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex
     extern /* Subroutine */
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    doublereal bignum;
     logical wantbh, wantdf, somcon;
     extern /* Subroutine */
         void
@@ -368,7 +367,6 @@ void ztgsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex
         ztgexc_(logical *, logical *, integer *, doublecomplex *, integer *, doublecomplex *,
                 integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *,
                 integer *, integer *);
-    doublereal smlnum;
     logical lquery;
     extern /* Subroutine */
         void
@@ -513,10 +511,6 @@ void ztgsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    /* Get machine constants */
-    eps = dlamch_("P");
-    smlnum = dlamch_("S") / eps;
-    bignum = 1. / smlnum;
     ks = 0;
     i__1 = *n;
     for(k = 1; k <= i__1; ++k)

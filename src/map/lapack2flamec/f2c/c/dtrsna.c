@@ -371,6 +371,7 @@ void dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t
     wantsp = lsame_(job, "V", 1, 1) || wantbh;
     somcon = lsame_(howmny, "S", 1, 1);
     *info = 0;
+    dumm = 0.;
     if(!wants && !wantsp)
     {
         *info = -1;

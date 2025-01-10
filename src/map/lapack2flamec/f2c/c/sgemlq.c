@@ -181,7 +181,6 @@ void sgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, real *
     logical left, tran;
     extern logical lsame_(char *, char *, integer, integer);
     logical right;
-    integer nblcks;
     extern /* Subroutine */
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -238,21 +237,6 @@ void sgemlq_(char *side, char *trans, integer *m, integer *n, integer *k, real *
     {
         lw = *m * mb;
         mn = *n;
-    }
-    if(nb > *k && mn > *k)
-    {
-        if((mn - *k) % (nb - *k) == 0)
-        {
-            nblcks = (mn - *k) / (nb - *k);
-        }
-        else
-        {
-            nblcks = (mn - *k) / (nb - *k) + 1;
-        }
-    }
-    else
-    {
-        nblcks = 1;
     }
     *info = 0;
     if(!left && !right)

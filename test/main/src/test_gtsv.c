@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -7,12 +7,13 @@
 #include <invoke_common.hh>
 #endif
 
+extern double perf;
+extern double time_min;
 integer row_major_gtsv_ldb;
 
 /* Local prototypes */
-void fla_test_gtsv_experiment(test_params_t *params, integer datatype, integer p_cur, integer q_cur,
-                              integer pci, integer n_repeats, integer einfo, double *perf,
-                              double *t, double *residual);
+void fla_test_gtsv_experiment(char *tst_api, test_params_t *params, integer datatype, integer p_cur,
+                              integer q_cur, integer pci, integer n_repeats, integer einfo);
 void prepare_gtsv_run(integer n_A, integer nrhs, void *dl, void *d, void *du, void *B, integer ldb,
                       integer datatype, integer n_repeats, double *time_min_, integer *info,
                       integer interfacetype, integer layout);
@@ -48,7 +49,6 @@ void fla_test_gtsv(integer argc, char **argv, test_params_t *params)
         /* Test with parameters from commandline */
         integer i, num_types, N;
         integer datatype, n_repeats;
-        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -89,12 +89,7 @@ void fla_test_gtsv(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_gtsv_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
-                                         &time_min, &residual);
-                /* Print the results */
-                fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
-                                      params->lin_solver_paramslist[0].solver_threshold, time_min,
-                                      perf);
+                fla_test_gtsv_experiment(front_str, params, datatype, N, N, 0, n_repeats, einfo);
                 tests_not_run = 0;
             }
         }
@@ -119,23 +114,24 @@ void fla_test_gtsv(integer argc, char **argv, test_params_t *params)
     return;
 }
 
-void fla_test_gtsv_experiment(test_params_t *params, integer datatype, integer p_cur, integer q_cur,
-                              integer pci, integer n_repeats, integer einfo, double *perf,
-                              double *t, double *residual)
+void fla_test_gtsv_experiment(char *tst_api, test_params_t *params, integer datatype, integer p_cur,
+                              integer q_cur, integer pci, integer n_repeats, integer einfo)
 {
     integer n, ldb, ldx, NRHS;
     integer info = 0;
     void *dl, *d, *du, *B, *xact = NULL;
     void *dl_save, *d_save, *du_save, *B_save;
     void *A = NULL, *scal = NULL;
-    double time_min = 1e9;
     integer interfacetype = params->interfacetype;
     integer layout = params->matrix_major;
-    *residual = params->lin_solver_paramslist[pci].solver_threshold;
+    double residual, err_thresh;
+
     /* Determine the dimensions*/
     n = p_cur;
     NRHS = params->lin_solver_paramslist[pci].nrhs;
     ldb = params->lin_solver_paramslist[pci].ldb;
+
+    err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
@@ -225,31 +221,34 @@ void fla_test_gtsv_experiment(test_params_t *params, integer datatype, integer p
     prepare_gtsv_run(n, NRHS, dl_save, d_save, du_save, B_save, ldb, datatype, n_repeats, &time_min,
                      &info, interfacetype, layout);
 
-    /* Execution time */
-    *t = time_min;
-
     /* Performance computation */
-    *perf = (double)(4.0 * (n - 1) * NRHS) / time_min / FLOPS_PER_UNIT_PERF;
+    perf = (double)(4.0 * (n - 1) * NRHS) / time_min / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
-        *perf *= 4.0;
+        perf *= 4.0;
 
     /* Output Validation */
-    if((info == 0) && (!FLA_EXTREME_CASE_TEST))
-        validate_gtsv(datatype, n, NRHS, B, ldb, B_save, xact, ldb, dl, d, du, dl_save, d_save,
-                      du_save, info, scal, params->imatrix_char, residual);
+    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    if(!FLA_EXTREME_CASE_TEST)
+    {
+        validate_gtsv(tst_api, datatype, n, NRHS, B, ldb, B_save, xact, ldb, dl, d, du, dl_save,
+                      d_save, du_save, scal, params->imatrix_char, residual);
+    }
     /* check for output matrix when inputs as extreme values */
-    else if(FLA_EXTREME_CASE_TEST)
+    else
     {
         if((!check_extreme_value(datatype, n, NRHS, dl_save, ldb, params->imatrix_char))
            && (!check_extreme_value(datatype, n, NRHS, d_save, ldb, params->imatrix_char))
            && (!check_extreme_value(datatype, n, NRHS, du_save, ldb, params->imatrix_char))
            && (!check_extreme_value(datatype, n, NRHS, B_save, ldb, params->imatrix_char)))
         {
-            *residual = DBL_MAX;
+            residual = DBL_MAX;
         }
+        else
+        {
+            residual = err_thresh;
+        }
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     }
-    else
-        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up the buffers */
     free_vector(dl);
@@ -275,7 +274,7 @@ void prepare_gtsv_run(integer n_A, integer nrhs, void *dl, void *d, void *du, vo
 {
     integer i;
     void *dl_test, *d_test, *du_test, *B_test;
-    double time_min = 1e9, exe_time;
+    double t_min = 1e9, exe_time;
 
     /* Make a copy of the input tridiagonal vectors and matrix. Same input values will be passed in
      * each itertaion.*/
@@ -300,10 +299,11 @@ void prepare_gtsv_run(integer n_A, integer nrhs, void *dl, void *d, void *du, vo
                                                 du_test, B_test, ldb, info);
         }
 #if ENABLE_CPP_TEST
-        else if(interfacetype == LAPACK_CPP_TEST)   /* Call CPP gtsv API */
+        else if(interfacetype == LAPACK_CPP_TEST) /* Call CPP gtsv API */
         {
             exe_time = fla_test_clock();
-            invoke_cpp_gtsv(datatype, &n_A, &nrhs, dl_test, d_test, du_test, B_test, &ldb, info);;
+            invoke_cpp_gtsv(datatype, &n_A, &nrhs, dl_test, d_test, du_test, B_test, &ldb, info);
+            ;
             exe_time = fla_test_clock() - exe_time;
         }
 #endif
@@ -318,10 +318,10 @@ void prepare_gtsv_run(integer n_A, integer nrhs, void *dl, void *d, void *du, vo
         }
 
         /* Get the best execution time */
-        time_min = fla_min(time_min, exe_time);
+        t_min = fla_min(t_min, exe_time);
     }
 
-    *time_min_ = time_min;
+    *time_min_ = t_min;
     /* Make a copy of output buffers. This is required to validate the API functionality */
     copy_vector(datatype, n_A - 1, dl_test, i_one, dl, i_one);
     copy_vector(datatype, n_A, d_test, i_one, d, i_one);

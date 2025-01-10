@@ -1,6 +1,6 @@
-/******************************************************************************
- * Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
- *******************************************************************************/
+/*
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+*/
 
 /*! @file validate_ggevx.c
  *  @brief Defines validate function of GGEVX() to use in test suite.
@@ -8,16 +8,27 @@
 
 #include "test_common.h"
 
-void validate_ggevx(char *balanc, char *jobvl, char *jobvr, char *sense, integer n, void *A,
-                    integer lda, void *B, integer ldb, void *alpha, void *alphar, void *alphai,
-                    void *beta, void *VL, integer ldvl, void *VR, integer ldvr, integer datatype,
-                    double *residual, integer *info)
+extern double perf;
+extern double time_min;
+
+void validate_ggevx(char *tst_api, char *balanc, char *jobvl, char *jobvr, char *sense, integer n,
+                    void *A, integer lda, void *B, integer ldb, void *alpha, void *alphar,
+                    void *alphai, void *beta, void *VL, integer ldvl, void *VR, integer ldvr,
+                    integer datatype, double err_thresh)
 {
-    if(n == 0)
-        return;
     integer i, j;
     void *work = NULL;
-    *info = 0;
+    double residual;
+
+    /* Early return conditions */
+    if(n == 0)
+    {
+        FLA_TEST_PRINT_STATUS_AND_RETURN(n, n, err_thresh);
+    }
+    /* print overall status if incoming threshold is
+     * an extreme value indicating that API returned
+     * unexpected info value */
+    FLA_TEST_PRINT_INVALID_STATUS(n, n, err_thresh);
 
     switch(datatype)
     {
@@ -56,7 +67,7 @@ void validate_ggevx(char *balanc, char *jobvl, char *jobvr, char *sense, integer
                         alphac.imag = ((float *)alphai)[i];
                         /* alpha*B*vr(i) - beta*a*vr(i) */
                         scgemv('N', 0, n, n, &alphac, B, ldb, VRC, i_one, s_n_one, YC, i_one);
-                        max_val = fla_max(max_val, scnrm2_(&n, YC, &i_one));
+                        max_val = fla_test_max(max_val, scnrm2_(&n, YC, &i_one));
 
                         reset_matrix(COMPLEX, n, 1, YC, lda);
                         alphac.real = ((float *)beta)[i + 1];
@@ -73,7 +84,7 @@ void validate_ggevx(char *balanc, char *jobvl, char *jobvr, char *sense, integer
                         /* alpha*B*vr(i) - beta*a*vr(i) */
                         scgemv('N', 0, n, n, &alphac, B, ldb, VRC, i_one, s_n_one, YC, i_one);
                         i++;
-                        max_val = fla_max(max_val, scnrm2_(&n, YC, &i_one));
+                        max_val = fla_test_max(max_val, scnrm2_(&n, YC, &i_one));
                     }
                     else
                     {
@@ -89,7 +100,7 @@ void validate_ggevx(char *balanc, char *jobvl, char *jobvr, char *sense, integer
                         alphar_t = ((float *)alphar)[i];
                         sgemv_("N", &n, &n, &alphar_t, B, &ldb, VRTemp, &i_one, &s_n_one, Y,
                                &i_one);
-                        max_val = fla_max(max_val, snrm2_(&n, Y, &i_one));
+                        max_val = fla_test_max(max_val, snrm2_(&n, Y, &i_one));
                     }
                 }
                 free_vector(VRC);
@@ -118,7 +129,7 @@ void validate_ggevx(char *balanc, char *jobvl, char *jobvr, char *sense, integer
                         alphac.imag = -((float *)alphai)[i];
                         /* alpha*B*vr(i) - beta*a*vr(i) */
                         scgemv('T', 0, n, n, &alphac, B, ldb, VLC, i_one, s_n_one, YC, i_one);
-                        max_val = fla_max(max_val, scnrm2_(&n, YC, &i_one));
+                        max_val = fla_test_max(max_val, scnrm2_(&n, YC, &i_one));
 
                         reset_matrix(COMPLEX, n, 1, YC, lda);
                         alphac.real = ((float *)beta)[i + 1];
@@ -135,7 +146,7 @@ void validate_ggevx(char *balanc, char *jobvl, char *jobvr, char *sense, integer
                         /* alpha*B*vr(i) - beta*a*vr(i) */
                         scgemv('T', 0, n, n, &alphac, B, ldb, VLC, i_one, s_n_one, YC, i_one);
                         i++;
-                        max_val = fla_max(max_val, scnrm2_(&n, YC, &i_one));
+                        max_val = fla_test_max(max_val, scnrm2_(&n, YC, &i_one));
                     }
                     else
                     {
@@ -151,14 +162,14 @@ void validate_ggevx(char *balanc, char *jobvl, char *jobvr, char *sense, integer
                         alphar_t = ((float *)alphar)[i];
                         sgemv_("C", &n, &n, &alphar_t, B, &ldb, VLTemp, &i_one, &s_n_one, Y,
                                &i_one);
-                        max_val = fla_max(max_val, snrm2_(&n, Y, &i_one));
+                        max_val = fla_test_max(max_val, snrm2_(&n, Y, &i_one));
                     }
                 }
                 free_vector(VLC);
                 free_vector(VLTemp);
             }
 
-            *residual = (double)max_val / (eps * norm_A * (float)n);
+            residual = (double)max_val / (eps * norm_A * (float)n);
             free_vector(Y);
             free_vector(YC);
             break;
@@ -200,7 +211,7 @@ void validate_ggevx(char *balanc, char *jobvl, char *jobvr, char *sense, integer
                         /* alpha*B*vr(i) - beta*a*vr(i) */
                         dzgemm_("N", "N", &n, &i_one, &n, &alphac, B, &ldb, VRC, &ldvr, &z_n_one,
                                 YC, &n);
-                        max_val = fla_max(max_val, dznrm2_(&n, YC, &i_one));
+                        max_val = fla_test_max(max_val, dznrm2_(&n, YC, &i_one));
 
                         reset_matrix(DOUBLE_COMPLEX, n, 1, YC, lda);
                         alphac.real = ((double *)beta)[i + 1];
@@ -219,7 +230,7 @@ void validate_ggevx(char *balanc, char *jobvl, char *jobvr, char *sense, integer
                         dzgemm_("N", "N", &n, &i_one, &n, &alphac, B, &ldb, VRC, &ldvr, &z_n_one,
                                 YC, &n);
                         i++;
-                        max_val = fla_max(max_val, dznrm2_(&n, YC, &i_one));
+                        max_val = fla_test_max(max_val, dznrm2_(&n, YC, &i_one));
                     }
                     else
                     {
@@ -235,7 +246,7 @@ void validate_ggevx(char *balanc, char *jobvl, char *jobvr, char *sense, integer
                         alphar_t = ((double *)alphar)[i];
                         dgemv_("N", &n, &n, &alphar_t, B, &ldb, VRTemp, &i_one, &d_n_one, Y,
                                &i_one);
-                        max_val = fla_max(max_val, dnrm2_(&n, Y, &i_one));
+                        max_val = fla_test_max(max_val, dnrm2_(&n, Y, &i_one));
                     }
                 }
                 free_vector(VRC);
@@ -267,7 +278,7 @@ void validate_ggevx(char *balanc, char *jobvl, char *jobvr, char *sense, integer
                         /* alpha*B*vr(i) - beta*a*vr(i) */
                         dzgemm_("C", "N", &n, &i_one, &n, &alphac, B, &ldb, VLC, &ldvl, &z_n_one,
                                 YC, &n);
-                        max_val = fla_max(max_val, dznrm2_(&n, YC, &i_one));
+                        max_val = fla_test_max(max_val, dznrm2_(&n, YC, &i_one));
 
                         reset_matrix(DOUBLE_COMPLEX, n, 1, YC, lda);
                         alphac.real = ((double *)beta)[i + 1];
@@ -286,7 +297,7 @@ void validate_ggevx(char *balanc, char *jobvl, char *jobvr, char *sense, integer
                         dzgemm_("C", "N", &n, &i_one, &n, &alphac, B, &ldb, VLC, &ldvl, &z_n_one,
                                 YC, &n);
                         i++;
-                        max_val = fla_max(max_val, dznrm2_(&n, YC, &i_one));
+                        max_val = fla_test_max(max_val, dznrm2_(&n, YC, &i_one));
                     }
                     else
                     {
@@ -302,14 +313,14 @@ void validate_ggevx(char *balanc, char *jobvl, char *jobvr, char *sense, integer
                         alphar_t = ((double *)alphar)[i];
                         dgemv_("C", &n, &n, &alphar_t, B, &ldb, VLTemp, &i_one, &d_n_one, Y,
                                &i_one);
-                        max_val = fla_max(max_val, dnrm2_(&n, Y, &i_one));
+                        max_val = fla_test_max(max_val, dnrm2_(&n, Y, &i_one));
                     }
                 }
                 free_vector(VLC);
                 free_vector(VLTemp);
             }
 
-            *residual = (double)max_val / (eps * norm_A * (double)n);
+            residual = (double)max_val / (eps * norm_A * (double)n);
             free_vector(Y);
             free_vector(YC);
             break;
@@ -343,7 +354,7 @@ void validate_ggevx(char *balanc, char *jobvl, char *jobvr, char *sense, integer
                     /* alpha * B * VR - beta * A * VR */
                     alphar_t = ((scomplex *)alpha)[i];
                     cgemv_("N", &n, &n, &alphar_t, B, &ldb, VRTemp, &i_one, &c_n_one, Y, &i_one);
-                    max_val = fla_max(max_val, scnrm2_(&n, Y, &i_one));
+                    max_val = fla_test_max(max_val, scnrm2_(&n, Y, &i_one));
                 }
             }
 
@@ -365,11 +376,11 @@ void validate_ggevx(char *balanc, char *jobvl, char *jobvr, char *sense, integer
                     ((scomplex *)alpha)[i].imag = -((scomplex *)alpha)[i].imag;
                     alphar_t = ((scomplex *)alpha)[i];
                     cgemv_("C", &n, &n, &alphar_t, B, &ldb, VLTemp, &i_one, &c_n_one, Y, &i_one);
-                    max_val = fla_max(max_val, scnrm2_(&n, Y, &i_one));
+                    max_val = fla_test_max(max_val, scnrm2_(&n, Y, &i_one));
                 }
             }
 
-            *residual = (double)max_val / (eps * norm_A * (float)n);
+            residual = (double)max_val / (eps * norm_A * (float)n);
             free_vector(VLTemp);
             free_vector(Y);
             free_vector(VRTemp);
@@ -407,7 +418,7 @@ void validate_ggevx(char *balanc, char *jobvl, char *jobvr, char *sense, integer
                     alphar_t = ((dcomplex *)alpha)[i];
                     zgemv_("NoTran", &n, &n, &alphar_t, B, &ldb, VRTemp, &i_one, &z_n_one, Y,
                            &i_one);
-                    max_val = fla_max(max_val, dznrm2_(&n, Y, &i_one));
+                    max_val = fla_test_max(max_val, dznrm2_(&n, Y, &i_one));
                 }
             }
 
@@ -429,15 +440,21 @@ void validate_ggevx(char *balanc, char *jobvl, char *jobvr, char *sense, integer
                     ((dcomplex *)alpha)[i].imag = -((dcomplex *)alpha)[i].imag;
                     alphar_t = ((dcomplex *)alpha)[i];
                     zgemv_("C", &n, &n, &alphar_t, B, &ldb, VLTemp, &i_one, &z_n_one, Y, &i_one);
-                    max_val = fla_max(max_val, dznrm2_(&n, Y, &i_one));
+                    max_val = fla_test_max(max_val, dznrm2_(&n, Y, &i_one));
                 }
             }
 
-            *residual = (double)max_val / (eps * norm_A * (double)n);
+            residual = (double)max_val / (eps * norm_A * (double)n);
             free_vector(VLTemp);
             free_vector(Y);
             free_vector(VRTemp);
             break;
         }
+        default:
+            residual = err_thresh;
+            break;
     }
+
+    FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    FLA_PRINT_SUBTEST_STATUS(residual, err_thresh, "01");
 }

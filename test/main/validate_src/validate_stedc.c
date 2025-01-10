@@ -1,6 +1,6 @@
-/******************************************************************************
- * Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
- *******************************************************************************/
+/*
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+*/
 
 /*! @file validate_stedc.c
  *  @brief Defines validate function of STEDC() to use in test suite.
@@ -8,20 +8,30 @@
 
 #include "test_common.h"
 
+extern double perf;
+extern double time_min;
+
 /* This function will validate STEDC() output eigenvectors and orthogonal
    matrices only if compz != N, as output will not be generated
    if compz = N.*/
-void validate_stedc(char compz, integer n, void *D_test, void *Z_input, void *Z, integer ldz,
-                    integer datatype, double *residual, integer *info)
+void validate_stedc(char *tst_api, char compz, integer n, void *D_test, void *Z_input, void *Z,
+                    integer ldz, integer datatype, double err_thresh)
 {
-    if(n == 0)
-        return;
     void *lambda = NULL, *zlambda = NULL;
     void *work = NULL;
-    *info = 0;
+    double residual, resid1 = 0., resid2 = 0.;
 
+    /* Early return conditions */
+    if(n == 0)
+    {
+        FLA_TEST_PRINT_STATUS_AND_RETURN(n, n, err_thresh);
+    }
     if(compz == 'N')
         return;
+    /* print overall status if incoming threshold is
+     * an extreme value indicating that API returned
+     * unexpected info value */
+    FLA_TEST_PRINT_INVALID_STATUS(n, n, err_thresh);
 
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &lambda, n);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &zlambda, n);
@@ -32,7 +42,7 @@ void validate_stedc(char compz, integer n, void *D_test, void *Z_input, void *Z,
     {
         case FLOAT:
         {
-            float norm, norm_A, eps, resid1 = 0, resid2 = 0;
+            float norm, norm_A, eps;
 
             eps = fla_lapack_slamch("P");
             /* Test 1 - Check for Eigen vectors and Eigen values.
@@ -45,13 +55,12 @@ void validate_stedc(char compz, integer n, void *D_test, void *Z_input, void *Z,
             /* Test 2 - Check for orthogonality of matrix.
                compute norm(I - Z*Z') / (N * EPS)*/
             resid2 = (float)check_orthogonality(datatype, Z, n, n, ldz);
-            *residual = (double)fla_max(resid1, resid2);
             break;
         }
 
         case DOUBLE:
         {
-            double norm, norm_A, eps, resid1 = 0, resid2 = 0;
+            double norm, norm_A, eps;
 
             eps = fla_lapack_dlamch("P");
             /* Test 1 - Check for Eigen vectors and Eigen values.
@@ -64,13 +73,12 @@ void validate_stedc(char compz, integer n, void *D_test, void *Z_input, void *Z,
             /* Test 2 - Check for orthogonality of matrix.
                compute norm(I - Z*Z') / (N * EPS)*/
             resid2 = check_orthogonality(datatype, Z, n, n, ldz);
-            *residual = (double)fla_max(resid1, resid2);
             break;
         }
 
         case COMPLEX:
         {
-            float norm, norm_A, eps, resid1 = 0, resid2 = 0;
+            float norm, norm_A, eps;
 
             eps = fla_lapack_slamch("P");
             /* Test 1 - Check for Eigen vectors and Eigen values.
@@ -83,13 +91,12 @@ void validate_stedc(char compz, integer n, void *D_test, void *Z_input, void *Z,
             /* Test 2 - Check for orthogonality of matrix.
                compute norm(I - Z*Z') / (N * EPS)*/
             resid2 = (float)check_orthogonality(datatype, Z, n, n, ldz);
-            *residual = (double)fla_max(resid1, resid2);
             break;
         }
 
         case DOUBLE_COMPLEX:
         {
-            double norm, norm_A, eps, resid1 = 0, resid2 = 0;
+            double norm, norm_A, eps;
 
             eps = fla_lapack_dlamch("P");
             /* Test 1 - Check for Eigen vectors and Eigen values.
@@ -103,10 +110,14 @@ void validate_stedc(char compz, integer n, void *D_test, void *Z_input, void *Z,
             /* Test 2 - Check for orthogonality of matrix.
                compute norm(I - Z*Z') / (N * EPS)*/
             resid2 = check_orthogonality(datatype, Z, n, n, ldz);
-            *residual = (double)fla_max(resid1, resid2);
             break;
         }
     }
     free_matrix(lambda);
     free_matrix(zlambda);
+
+    residual = fla_test_max(resid1, resid2);
+    FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
 }

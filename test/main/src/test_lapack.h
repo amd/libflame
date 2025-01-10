@@ -43,9 +43,6 @@
 #define DISABLE 0
 #define ENABLE 1
 
-#define RECT_INPUT 0
-#define SQUARE_INPUT 1
-
 #define CLI_NORM_THRESH 30.0
 #define CLI_DECIMAL_BASE 10
 
@@ -137,9 +134,21 @@ extern FILE *g_ext_fptr;
 #define FLA_TEST_CHECK_EINFO(residual, info, einfo) \
     {                                               \
         if(einfo == 0 && info < 0)                  \
-            *residual = DBL_MIN;                    \
+        {                                           \
+            residual = DBL_MIN;                     \
+        }                                           \
         else if(info != einfo)                      \
-            *residual = DBL_MAX;                    \
+        {                                           \
+            residual = DBL_MAX;                     \
+        }                                           \
+        else if(einfo != 0 && (info == einfo))      \
+        {                                           \
+            residual = -1;                          \
+        }                                           \
+        else                                        \
+        {                                           \
+            residual = err_thresh;                  \
+        }                                           \
     }
 
 #define FLA_EXTREME_CASE_TEST                                                                  \
@@ -248,9 +257,10 @@ typedef struct Lin_solver_paramlist_t
 /* struct to hold eigen parameters */
 typedef struct EIG_paramlist_t
 {
-    real VL;
-    real VU;
-    real abstol;
+    float VL;
+    float VU;
+    float abstol;
+    float threshold_value; // threshold value for EIG
     integer num_ranges; // number of ranges to run
     integer m_range_start;
     integer m_range_end;
@@ -263,7 +273,6 @@ typedef struct EIG_paramlist_t
     integer num_data_types;
     integer data_types[MAX_NUM_DATATYPES];
     integer matrix_layout;
-    integer threshold_value; // threshold value for EIG
     integer nrhs; // number of rhight hand sides
     integer lda; //  leading dimension of the array a
     integer ldb; //  leading dimension of the array b
@@ -307,7 +316,7 @@ typedef struct EIG_Non_symmetric_paramlist_t
     /* Thresholds for the APIs  */
     float gghrd_threshold; // threshold for the gghrd API
     float ggbal_threshold; // threshold for the ggbal API
-    float GenNonSymEigProblem_threshold; // threshold for the ggbal API
+    float GenNonSymEigProblem_threshold; // threshold for the Non-sym Eigen APIs
 
     integer num_ranges; // number of ranges to run
     integer m_range_start;
@@ -483,8 +492,6 @@ typedef struct AUX_paramlist_t
         I: infinity norm
         F/E: Frobenius norm  */
     char norm_types_str[MAX_NUM_NORMTYPES];
-    /* The display name of the API being tested */
-    char *front_str;
 } AUX_paramlist;
 
 typedef enum
@@ -567,18 +574,14 @@ void fla_test_read_aux_params(const char *input_filename, test_params_t *params)
 void fla_test_lapack_suite(char *input_filename, test_params_t *params);
 
 void fla_test_op_driver(char *func_str, integer square_inp, test_params_t *params, integer api_type,
-                        void (*f_exp)(test_params_t *, // params
+                        void (*f_exp)(char *, // API_test string
+                                      test_params_t *, // params
                                       integer, // datatype
                                       integer, // p_cur
                                       integer, // q_cur
                                       integer, // pci (param combo counter)
                                       integer, // n_repeats
-                                      integer, // einfo
-                                      double *, // perf
-                                      double *, // time
-                                      double *)); // residual
-void fla_test_print_status(char *func_str, char datatype_char, integer sqr_inp, integer p_cur,
-                           integer q_cur, double residual, double thresh, double time, double perf);
+                                      integer));
 void fla_test_print_summary();
 void fla_test_build_function_string(char *func_base_str, char *impl_var_str, char *func_str);
 void fill_string_with_n_spaces(char *str, integer n_spaces);

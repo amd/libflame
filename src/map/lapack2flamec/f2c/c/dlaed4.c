@@ -144,7 +144,7 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaed4 inputs: n %" FLA_IS ", i__ %" FLA_IS "", *n, *i__);
     /* System generated locals */
-    aocl_int64_t i__1, i__2;
+    integer i__1, i__2, i__3;
     doublereal d__1;
     /* Builtin functions */
     double sqrt(doublereal);
@@ -154,9 +154,9 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
     doublereal w;
     aocl_int64_t ii;
     doublereal dw, zz[3];
-    aocl_int64_t ip1;
+    integer ip1;
     doublereal del, eta, phi, tau, psi;
-    aocl_int64_t iim1, iip1;
+    integer iim1, iip1;
     doublereal dphi, dpsi;
     aocl_int64_t iter;
     doublereal temp, prew, temp1, dltlb, dltub, midpt;
@@ -171,6 +171,9 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
     extern doublereal dlamch_(char *);
     logical orgati;
     doublereal erretm, rhoinv;
+    static TLS_CLASS_SPEC doublereal eps;
+    static TLS_CLASS_SPEC integer r_once = 1;
+
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -503,20 +506,21 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
         psi = 0.;
         phi = 0.;
         i__1 = *n;
-        for(j = 1; j <= i__1; ++j)
+        i__2 = *i__ - 1;
+        i__3 = *i__ + 2;
+
+        for(j = 1; j <= i__2; ++j)
         {
             delta[j] = d__[j] - d__[*i__] - midpt;
-            /* L100: */
-        }
-        psi = 0.;
-        i__1 = *i__ - 1;
-        for(j = 1; j <= i__1; ++j)
-        {
             psi += z__[j] * z__[j] / delta[j];
         }
-        phi = 0.;
-        i__1 = *i__ + 2;
-        for(j = *n; j >= i__1; --j)
+        
+        delta[j] = d__[j] - d__[*i__] - midpt;
+        j++;
+        delta[j] = d__[j] - d__[*i__] - midpt;
+        j++;
+
+        for(; j <= i__1; ++j)
         {
             delta[j] = d__[j] - d__[*i__] - midpt;
             phi += z__[j] * z__[j] / delta[j];

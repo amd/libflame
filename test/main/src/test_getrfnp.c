@@ -7,10 +7,12 @@
 #define GETRFNP_VL 0.1
 #define GETRFNP_VU 10
 
+extern double perf;
+extern double time_min;
 /* Local prototypes */
-void fla_test_getrfnp_experiment(test_params_t *params, integer datatype, integer p_cur,
-                                 integer q_cur, integer pci, integer n_repeats, integer einfo,
-                                 double *perf, double *t, double *residual);
+void fla_test_getrfnp_experiment(char *tst_api, test_params_t *params, integer datatype,
+                                 integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                                 integer einfo);
 void prepare_getrfnp_run(integer m_A, integer n_A, void *A, integer lda, integer datatype,
                          integer n_repeats, double *time_min_, integer *info, integer interfacetype,
                          int matrix_layout);
@@ -39,7 +41,6 @@ void fla_test_getrfnp(integer argc, char **argv, test_params_t *params)
     {
         integer i, num_types, M, N;
         integer datatype, n_repeats;
-        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -72,12 +73,7 @@ void fla_test_getrfnp(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_getrfnp_experiment(params, datatype, M, N, 0, n_repeats, einfo, &perf,
-                                            &time_min, &residual);
-                /* Print the results */
-                fla_test_print_status(front_str, stype, RECT_INPUT, M, N, residual,
-                                      params->lin_solver_paramslist[0].solver_threshold, time_min,
-                                      perf);
+                fla_test_getrfnp_experiment(front_str, params, datatype, M, N, 0, n_repeats, einfo);
                 tests_not_run = 0;
             }
         }
@@ -102,15 +98,15 @@ void fla_test_getrfnp(integer argc, char **argv, test_params_t *params)
     return;
 }
 
-void fla_test_getrfnp_experiment(test_params_t *params, integer datatype, integer p_cur,
-                                 integer q_cur, integer pci, integer n_repeats, integer einfo,
-                                 double *perf, double *t, double *residual)
+void fla_test_getrfnp_experiment(char *tst_api, test_params_t *params, integer datatype,
+                                 integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                                 integer einfo)
 {
-    integer m, n, lda, info = 0, vinfo = 0, i__, min_mn, max_mn;
+    integer m, n, lda, info = 0, i__, min_mn, max_mn;
     void *IPIV = NULL, *A = NULL, *A_test = NULL, *s_test = NULL;
     void *A_copy;
     char range = 'U';
-    double time_min = 1e9;
+    double residual, err_thresh;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
@@ -119,7 +115,7 @@ void fla_test_getrfnp_experiment(test_params_t *params, integer datatype, intege
     m = p_cur;
     n = q_cur;
     lda = params->lin_solver_paramslist[pci].lda;
-    *residual = params->lin_solver_paramslist[pci].solver_threshold;
+    err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
@@ -177,18 +173,15 @@ void fla_test_getrfnp_experiment(test_params_t *params, integer datatype, intege
     prepare_getrfnp_run(m, n, A_test, lda, datatype, n_repeats, &time_min, &info, interfacetype,
                         layout);
 
-    /* execution time */
-    *t = time_min;
-
     /* performance computation */
     min_mn = fla_min(m, n);
     max_mn = fla_max(m, n);
 
-    *perf = ((1.0 / 3.0) * min_mn * min_mn * (3.0 * max_mn - min_mn)) / time_min
-            / FLOPS_PER_UNIT_PERF;
+    perf = ((1.0 / 3.0) * min_mn * min_mn * (3.0 * max_mn - min_mn)) / time_min
+           / FLOPS_PER_UNIT_PERF;
 
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
-        *perf *= 4.0;
+        perf *= 4.0;
 
     /* Fill IPIV specifiying that no permutation has been done */
     for(i__ = 0; i__ < fla_min(m, n); ++i__)
@@ -197,21 +190,25 @@ void fla_test_getrfnp_experiment(test_params_t *params, integer datatype, intege
     }
 
     /* output validation */
-    if((!FLA_EXTREME_CASE_TEST) && info == 0)
+    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    if(!FLA_EXTREME_CASE_TEST)
     {
-        validate_getrf(m, n, A, A_test, lda, IPIV, datatype, residual, &vinfo,
+        validate_getrf(tst_api, m, n, A, A_test, lda, IPIV, datatype, residual,
                        params->imatrix_char);
     }
     /* check for output matrix when inputs as extreme values */
-    else if(FLA_EXTREME_CASE_TEST)
+    else
     {
         if((!check_extreme_value(datatype, m, n, A_test, lda, params->imatrix_char)))
         {
-            *residual = DBL_MAX;
+            residual = DBL_MAX;
         }
+        else
+        {
+            residual = err_thresh;
+        }
+        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
     }
-    else
-        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up the buffers */
     free_matrix(A);
@@ -226,7 +223,7 @@ void prepare_getrfnp_run(integer m_A, integer n_A, void *A, integer lda, integer
 {
     integer i;
     void *A_save;
-    double time_min = 1e9, exe_time;
+    double t_min = 1e9, exe_time;
 
     /* Save the original matrix */
     create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_A, &A_save, lda);
@@ -245,10 +242,10 @@ void prepare_getrfnp_run(integer m_A, integer n_A, void *A, integer lda, integer
         exe_time = fla_test_clock() - exe_time;
 
         /* Get the best execution time */
-        time_min = fla_min(time_min, exe_time);
+        t_min = fla_min(t_min, exe_time);
     }
 
-    *time_min_ = time_min;
+    *time_min_ = t_min;
     /*  Save the AFACT to matrix A */
     copy_matrix(datatype, "full", m_A, n_A, A_save, lda, A, lda);
     free_matrix(A_save);

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -7,10 +7,12 @@
 #include <invoke_common.hh>
 #endif
 
+extern double perf;
+extern double time_min;
 /* Local prototypes */
-void fla_test_lartg_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *t, double *residual);
+void fla_test_lartg_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo);
 void prepare_lartg_run(integer datatype, void *f, void *g, void *r, void *c, void *s,
                        integer n_repeats, double *time_min_, integer interfacetype);
 void invoke_lartg(integer datatype, void *f, void *g, void *c, void *s, void *r);
@@ -22,7 +24,6 @@ void fla_test_lartg(integer argc, char **argv, test_params_t *params)
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
     integer i, num_types;
     integer datatype, n_repeats;
-    double perf, time_min, residual;
     char stype, type_flag[4] = {0};
     char *endptr;
 
@@ -39,14 +40,11 @@ void fla_test_lartg(integer argc, char **argv, test_params_t *params)
             for(i = 0; i < num_types; ++i)
             {
                 datatype = params->aux_paramslist[0].data_types[i];
-                stype    = params->aux_paramslist[0].data_types_char[i];
+                stype = params->aux_paramslist[0].data_types_char[i];
 
                 /* Call the test code */
-                fla_test_lartg_experiment(params, datatype, 2, i_one, 0, n_repeats, einfo, &perf,
-                                          &time_min, &residual);
-                /* Print the results */
-                fla_test_print_status(front_str, stype, RECT_INPUT, 2, i_one, residual,
-                                      params->aux_paramslist[0].aux_threshold, time_min, perf);
+                fla_test_lartg_experiment(front_str, params, datatype, 2, i_one, 0, n_repeats,
+                                          einfo);
                 tests_not_run = 0;
             }
         }
@@ -86,11 +84,8 @@ void fla_test_lartg(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_lartg_experiment(params, datatype, 2, i_one, 0, n_repeats, einfo, &perf,
-                                          &time_min, &residual);
-                /* Print the results */
-                fla_test_print_status(front_str, stype, RECT_INPUT, 2, i_one, residual,
-                                      params->aux_paramslist[0].aux_threshold, time_min, perf);
+                fla_test_lartg_experiment(front_str, params, datatype, 2, i_one, 0, n_repeats,
+                                          einfo);
                 tests_not_run = 0;
             }
         }
@@ -115,19 +110,19 @@ void fla_test_lartg(integer argc, char **argv, test_params_t *params)
     return;
 }
 
-void fla_test_lartg_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *t, double *residual)
+void fla_test_lartg_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo)
 {
     void *s = NULL, *c = NULL;
     void *f = NULL, *g = NULL, *r = NULL;
-    double time_min = 1e9;
+    double err_thresh;
     integer interfacetype = params->interfacetype;
 
     integer realtype;
     realtype = get_realtype(datatype);
 
-    *residual = params->aux_paramslist[pci].aux_threshold;
+    err_thresh = params->aux_paramslist[pci].aux_threshold;
 
     create_vector(realtype, &c, 1);
     create_vector(datatype, &s, 1);
@@ -150,17 +145,15 @@ void fla_test_lartg_experiment(test_params_t *params, integer datatype, integer 
     prepare_lartg_run(datatype, f, g, r, c, s, n_repeats, &time_min, interfacetype);
 
     /* execution time */
-    *t = time_min;
     if(time_min == d_zero)
     {
         time_min = 1e-9;
-        *t = time_min;
     }
     /* Compute the performance of the best experiment repeat */
-    *perf = (double)(6.0) / time_min / FLOPS_PER_UNIT_PERF;
+    perf = (double)(6.0) / time_min / FLOPS_PER_UNIT_PERF;
 
     /* output validation */
-    validate_lartg(datatype, f, g, r, c, s, residual);
+    validate_lartg(tst_api, datatype, f, g, r, c, s, err_thresh);
 
     /* Free up the buffers */
     free_vector(c);
@@ -174,7 +167,7 @@ void prepare_lartg_run(integer datatype, void *f, void *g, void *r, void *c, voi
                        integer n_repeats, double *time_min_, integer interfacetype)
 {
     integer i;
-    double time_min = 1e9, exe_time;
+    double t_min = 1e9, exe_time;
 
     for(i = 0; i < n_repeats; ++i)
     {
@@ -195,10 +188,10 @@ void prepare_lartg_run(integer datatype, void *f, void *g, void *r, void *c, voi
             exe_time = fla_test_clock() - exe_time;
         }
         /* Get the best execution time */
-        time_min = fla_min(time_min, exe_time);
+        t_min = fla_min(t_min, exe_time);
     }
 
-    *time_min_ = time_min;
+    *time_min_ = t_min;
 }
 
 void invoke_lartg(integer datatype, void *f, void *g, void *c, void *s, void *r)

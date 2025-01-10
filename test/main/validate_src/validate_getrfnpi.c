@@ -9,46 +9,45 @@
 #include "test_common.h"
 
 /* Validates bottom left submatrix of array A */
-#define validate_getrfnpi_test_L_BL_block(x, nrm_prefix, mat_type, realtype)              \
-    realtype norm_A_BL = 0, norm = 0, resid;                                              \
-    copy_matrix(datatype, "full", m_BL, n_BL, (mat_type *)A + nfact, lda, L_BL, m_BL);    \
-    if(imatrix == 'O')                                                                    \
-    {                                                                                     \
-        for(int i = 0; i < n_BL; i++)                                                     \
-        {                                                                                 \
-            /* To handle large size values nrm2 is used */                                \
-            mat_type *vector = (mat_type *)L_BL + i * m_BL;                               \
-            norm_A_BL = fla_max(norm_A_BL, nrm_prefix##nrm2_(&m_BL, vector, &i_one));     \
-        }                                                                                 \
-    }                                                                                     \
-    else                                                                                  \
-    {                                                                                     \
-        norm_A_BL = fla_lapack_##x##lange("F", &m_BL, &n_BL, L_BL, &m_BL, NULL);          \
-    }                                                                                     \
-    /* (L_BL * U_TL) = A_BL */                                                            \
-    x##trsm_("R", "U", "N", "N", &m_BL, &n_BL, &x##_one, A_test, &lda, L_BL, &m_BL);      \
-    /* Compare value result and calculated value for L_BL */                              \
-    matrix_difference(datatype, m_BL, n_BL, L_BL, m_BL, (mat_type *)A_test + nfact, lda); \
-    /* Calculate norm */                                                                  \
-    if(imatrix == 'O')                                                                    \
-    {                                                                                     \
-        for(int i = 0; i < n_BL; i++)                                                     \
-        {                                                                                 \
-            /* To handle large size values nrm2 is used */                                \
-            mat_type *vector = (mat_type *)L_BL + i * m_BL;                               \
-            norm = fla_max(norm, nrm_prefix##nrm2_(&m_BL, vector, &i_one));               \
-        }                                                                                 \
-    }                                                                                     \
-    else                                                                                  \
-    {                                                                                     \
-        norm = fla_lapack_##x##lange("F", &m_BL, &n_BL, L_BL, &m_BL, NULL);               \
-    }                                                                                     \
-    resid = (norm / norm_A_BL) / (n_BL * eps);                                            \
-    *residual = (double)fla_max(*residual, resid);
+#define validate_getrfnpi_test_L_BL_block(x, nrm_prefix, mat_type, realtype)               \
+    realtype norm_A_BL = 0, norm = 0;                                                      \
+    copy_matrix(datatype, "full", m_BL, n_BL, (mat_type *)A + nfact, lda, L_BL, m_BL);     \
+    if(imatrix == 'O')                                                                     \
+    {                                                                                      \
+        for(int i = 0; i < n_BL; i++)                                                      \
+        {                                                                                  \
+            /* To handle large size values nrm2 is used */                                 \
+            mat_type *vector = (mat_type *)L_BL + i * m_BL;                                \
+            norm_A_BL = fla_test_max(norm_A_BL, nrm_prefix##nrm2_(&m_BL, vector, &i_one)); \
+        }                                                                                  \
+    }                                                                                      \
+    else                                                                                   \
+    {                                                                                      \
+        norm_A_BL = fla_lapack_##x##lange("F", &m_BL, &n_BL, L_BL, &m_BL, NULL);           \
+    }                                                                                      \
+    /* (L_BL * U_TL) = A_BL */                                                             \
+    x##trsm_("R", "U", "N", "N", &m_BL, &n_BL, &x##_one, A_test, &lda, L_BL, &m_BL);       \
+    /* Compare value result and calculated value for L_BL */                               \
+    matrix_difference(datatype, m_BL, n_BL, L_BL, m_BL, (mat_type *)A_test + nfact, lda);  \
+    /* Calculate norm */                                                                   \
+    if(imatrix == 'O')                                                                     \
+    {                                                                                      \
+        for(int i = 0; i < n_BL; i++)                                                      \
+        {                                                                                  \
+            /* To handle large size values nrm2 is used */                                 \
+            mat_type *vector = (mat_type *)L_BL + i * m_BL;                                \
+            norm = fla_test_max(norm, nrm_prefix##nrm2_(&m_BL, vector, &i_one));           \
+        }                                                                                  \
+    }                                                                                      \
+    else                                                                                   \
+    {                                                                                      \
+        norm = fla_lapack_##x##lange("F", &m_BL, &n_BL, L_BL, &m_BL, NULL);                \
+    }                                                                                      \
+    resid3 = (norm / norm_A_BL) / (n_BL * eps);
 
 /* Validates top right submatrix of array A */
 #define validate_getrfnpi_test_U_TR_block(x, nrm_prefix, mat_type, realtype)                    \
-    realtype norm_A_TR = 0, norm = 0, resid;                                                    \
+    realtype norm_A_TR = 0, norm = 0;                                                           \
     copy_matrix(datatype, "full", m_TR, n_TR, (mat_type *)A + nfact * lda, lda, U_TR, m_TR);    \
     if(imatrix == 'O')                                                                          \
     {                                                                                           \
@@ -56,7 +55,7 @@
         {                                                                                       \
             /* To handle large size values nrm2 is used */                                      \
             mat_type *vector = (mat_type *)U_TR + i * m_TR;                                     \
-            norm_A_TR = fla_max(norm_A_TR, nrm_prefix##nrm2_(&m_TR, vector, &i_one));           \
+            norm_A_TR = fla_test_max(norm_A_TR, nrm_prefix##nrm2_(&m_TR, vector, &i_one));      \
         }                                                                                       \
     }                                                                                           \
     else                                                                                        \
@@ -74,20 +73,19 @@
         {                                                                                       \
             /* To handle large size values nrm2 is used */                                      \
             mat_type *vector = (mat_type *)U_TR + i * m_TR;                                     \
-            norm = fla_max(norm, nrm_prefix##nrm2_(&m_TR, vector, &i_one));                     \
+            norm = fla_test_max(norm, nrm_prefix##nrm2_(&m_TR, vector, &i_one));                \
         }                                                                                       \
     }                                                                                           \
     else                                                                                        \
     {                                                                                           \
         norm = fla_lapack_##x##lange("F", &m_TR, &n_TR, U_TR, &m_TR, NULL);                     \
     }                                                                                           \
-    resid = (norm / norm_A_TR) / (n_TR * eps);                                                  \
-    *residual = (double)fla_max(*residual, resid);
+    resid4 = (norm / norm_A_TR) / (n_TR * eps);
 
 /* Validates if the bottom right submatrix has been correctly updated by
    getrfnpi */
 #define validate_getrfnpi_test_BR_block(x, nrm_prefix, mat_type, realtype)                        \
-    realtype norm_A_BR = 0, norm = 0, resid;                                                      \
+    realtype norm_A_BR = 0, norm = 0;                                                             \
     copy_matrix(datatype, "full", m_BR, n_BR, (mat_type *)A + nfact * lda + nfact, lda, A_BR,     \
                 m_BR);                                                                            \
     if(imatrix == 'O')                                                                            \
@@ -96,7 +94,7 @@
         {                                                                                         \
             /* To handle large size values nrm2 is used */                                        \
             mat_type *vector = (mat_type *)A_BR + i * m_BR;                                       \
-            norm_A_BR = fla_max(norm_A_BR, nrm_prefix##nrm2_(&m_BR, vector, &i_one));             \
+            norm_A_BR = fla_test_max(norm_A_BR, nrm_prefix##nrm2_(&m_BR, vector, &i_one));        \
         }                                                                                         \
     }                                                                                             \
     else                                                                                          \
@@ -116,15 +114,14 @@
         {                                                                                         \
             /* To handle large size values nrm2 is used */                                        \
             mat_type *vector = (mat_type *)A_BR + i * m_BR;                                       \
-            norm = fla_max(norm, nrm_prefix##nrm2_(&m_BR, vector, &i_one));                       \
+            norm = fla_test_max(norm, nrm_prefix##nrm2_(&m_BR, vector, &i_one));                  \
         }                                                                                         \
     }                                                                                             \
     else                                                                                          \
     {                                                                                             \
         norm = fla_lapack_##x##lange("F", &m_BR, &n_BR, A_BR, &m_BR, NULL);                       \
     }                                                                                             \
-    resid = (norm / norm_A_BR) / (n_BR * eps);                                                    \
-    *residual = (double)fla_max(*residual, resid);
+    resid5 = (norm / norm_A_BR) / (n_BR * eps);
 
 #define validate_getrfnpi_run_tests(x, nrm_prefix, mat_type, realtype)        \
     /* If the size of bottom left submatrix is non zero, then validate        \
@@ -152,19 +149,29 @@
         free_matrix(A_BR);                                                    \
     }
 
-void validate_getrfnpi(integer m_A, integer n_A, integer nfact, void *A, void *A_test, integer lda,
-                       integer *IPIV, integer datatype, double *residual, integer *info,
-                       char imatrix)
+void validate_getrfnpi(char *tst_api, integer m_A, integer n_A, integer nfact, void *A,
+                       void *A_test, integer lda, integer *IPIV, integer datatype,
+                       double err_thresh, char imatrix)
 {
-    if(m_A == 0 || n_A == 0 || nfact == 0)
-        return;
     /* System generated locals */
     integer m_BR, n_BR, m_BL, n_BL, m_TR, n_TR;
     void *A_BR, *L_BL, *U_TR;
-    *info = 0;
+    double residual, resid1 = 0., resid2 = 0.;
+    double resid3 = 0., resid4 = 0., resid5 = 0.;
+
+    /* Early return conditions */
+    if(m_A == 0 || n_A == 0 || nfact == 0)
+    {
+        FLA_TEST_PRINT_STATUS_AND_RETURN(m_A, n_A, err_thresh);
+    }
+    /* print overall status if incoming threshold is
+     * an extreme value indicating that API returned
+     * unexpected info value */
+    FLA_TEST_PRINT_INVALID_STATUS(m_A, n_A, err_thresh);
 
     /* Call validate getrf on factored block */
-    validate_getrf(nfact, nfact, A, A_test, lda, IPIV, datatype, residual, info, imatrix);
+    validate_getrf_internal(nfact, nfact, A, A_test, lda, IPIV, datatype, imatrix, &resid1,
+                            &resid2);
 
     m_BR = m_A - nfact;
     n_BR = n_A - nfact;
@@ -199,5 +206,20 @@ void validate_getrfnpi(integer m_A, integer n_A, integer nfact, void *A, void *A
             validate_getrfnpi_run_tests(z, dz, dcomplex, doublereal);
             break;
         }
+        default:
+            resid3 = resid4 = resid5 = 0.;
+            break;
     }
+
+    residual = fla_test_max(resid1, resid2);
+    residual = fla_test_max(resid3, residual);
+    residual = fla_test_max(resid4, residual);
+    residual = fla_test_max(resid5, residual);
+
+    FLA_PRINT_TEST_STATUS(m_A, n_A, residual, err_thresh);
+    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
+    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
+    FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
+    FLA_PRINT_SUBTEST_STATUS(resid5, err_thresh, "05");
 }

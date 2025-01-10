@@ -1,6 +1,6 @@
-/******************************************************************************
- * Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
- *******************************************************************************/
+/*
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+*/
 
 /*! @file validate_spffrt2.c
  *  @brief Defines validate function of SPFFRT2() to use in test suite.
@@ -8,14 +8,26 @@
 
 #include "test_common.h"
 
-void validate_spffrt2(integer n, integer ncolm, void *A, void *AP, integer datatype,
-                      double *residual)
+extern double perf;
+extern double time_min;
+
+void validate_spffrt2(char *tst_api, integer n, integer ncolm, void *A, void *AP, integer datatype,
+                      double err_thresh)
 {
-    if(n == 0 || ncolm == 0)
-        return;
     integer i, j, di;
     void *work = NULL;
     void *L = NULL, *D = NULL, *T = NULL;
+    double residual = 0.;
+
+    /* Early return conditions */
+    if(n == 0 || ncolm == 0)
+    {
+        FLA_TEST_PRINT_STATUS_AND_RETURN(n, ncolm, err_thresh);
+    }
+    /* print overall status if incoming threshold is
+     * an extreme value indicating that API returned
+     * unexpected info value */
+    FLA_TEST_PRINT_INVALID_STATUS(n, ncolm, err_thresh);
 
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &L, n);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &D, n);
@@ -30,7 +42,7 @@ void validate_spffrt2(integer n, integer ncolm, void *A, void *AP, integer datat
     {
         case FLOAT:
         {
-            float norma, norm, eps, resid;
+            float norma, norm, eps;
             /* Test 1 */
             /* Unpack L, D and L' */
             di = 0;
@@ -67,13 +79,12 @@ void validate_spffrt2(integer n, integer ncolm, void *A, void *AP, integer datat
             sgemm_("N", "T", &n, &n, &n, &s_n_one, T, &n, L, &n, &s_one, A, &n);
             // norm = slansy_("1", "L", &n, A, &n, work);
             norm = slange_("1", &n, &n, A, &n, work);
-            resid = norm / (eps * norma * (float)n);
-            *residual = (double)resid;
+            residual = norm / (eps * norma * (float)n);
             break;
         }
         case DOUBLE:
         {
-            double norma, norm, eps, resid;
+            double norma, norm, eps;
             /* Test 1 */
             /* Unpack L, D and L' */
             di = 0;
@@ -107,13 +118,12 @@ void validate_spffrt2(integer n, integer ncolm, void *A, void *AP, integer datat
             /* Compute (L * D * L') - A */
             dgemm_("N", "T", &n, &n, &n, &d_one, T, &n, L, &n, &d_n_one, A, &n);
             norm = dlange_("1", &n, &n, A, &n, work);
-            resid = norm / (eps * norma * (double)n);
-            *residual = (double)resid;
+            residual = norm / (eps * norma * (double)n);
             break;
         }
         case COMPLEX:
         {
-            float norma, norm, eps, resid;
+            float norma, norm, eps;
             /* Test 1 */
             /* Unpack L, D and L' */
             di = 0;
@@ -153,13 +163,12 @@ void validate_spffrt2(integer n, integer ncolm, void *A, void *AP, integer datat
             /* Compute (L * D * L') - A */
             cgemm_("N", "T", &n, &n, &n, &c_one, T, &n, L, &n, &c_n_one, A, &n);
             norm = clange_("1", &n, &n, A, &n, work);
-            resid = norm / (eps * norma * (float)n);
-            *residual = (double)resid;
+            residual = norm / (eps * norma * (float)n);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norma, norm, eps, resid;
+            double norma, norm, eps;
             /* Test 1 */
             /* Unpack L, D and L' */
             di = 0;
@@ -199,16 +208,20 @@ void validate_spffrt2(integer n, integer ncolm, void *A, void *AP, integer datat
             /* Compute (L * D * L') -A */
             zgemm_("N", "T", &n, &n, &n, &z_one, T, &n, L, &n, &z_n_one, A, &n);
             norm = zlange_("1", &n, &n, A, &n, work);
-            resid = norm / (eps * norma * (double)n);
-            *residual = (double)resid;
+            residual = norm / (eps * norma * (double)n);
             break;
         }
+        default:
+            residual = err_thresh;
+            break;
     }
-
-    *residual = *residual / 10.0;
 
     free_vector(work);
     free_matrix(L);
     free_matrix(D);
     free_matrix(T);
+
+    residual = residual / 10.0;
+    FLA_PRINT_TEST_STATUS(n, ncolm, residual, err_thresh);
+    FLA_PRINT_SUBTEST_STATUS(residual, err_thresh, "01");
 }

@@ -1,6 +1,6 @@
-/******************************************************************************
- * Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
- *******************************************************************************/
+/*
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+*/
 
 /*! @file validate_orgqr.c
  *  @brief Defines validate function of ORGQR() to use in test suite.
@@ -8,13 +8,24 @@
 
 #include "test_common.h"
 
-void validate_orgqr(integer m, integer n, void *A, integer lda, void *Q, void *R, void *work,
-                    integer datatype, double *residual, integer *info, char imatrix)
+extern double perf;
+extern double time_min;
+
+void validate_orgqr(char *tst_api, integer m, integer n, void *A, integer lda, void *Q, void *R,
+                    void *work, integer datatype, double err_thresh, char imatrix)
 {
-    if(m == 0 || n == 0)
-        return;
     integer k;
-    *info = 0;
+    double residual, resid1 = 0., resid2 = 0.;
+
+    /* Early return conditions */
+    if(m == 0 || n == 0)
+    {
+        FLA_TEST_PRINT_STATUS_AND_RETURN(m, n, err_thresh);
+    }
+    /* print overall status if incoming threshold is
+     * an extreme value indicating that API returned
+     * unexpected info value */
+    FLA_TEST_PRINT_INVALID_STATUS(m, n, err_thresh);
 
     k = m;
     char NORM = '1';
@@ -23,7 +34,7 @@ void validate_orgqr(integer m, integer n, void *A, integer lda, void *Q, void *R
     {
         case FLOAT:
         {
-            float norm, norm_A, eps, resid1, resid2;
+            float norm, norm_A, eps;
             eps = fla_lapack_slamch("P");
 
             /* Test 1
@@ -37,13 +48,11 @@ void validate_orgqr(integer m, integer n, void *A, integer lda, void *Q, void *R
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
             resid2 = (float)check_orthogonality(datatype, Q, m, n, lda);
-
-            *residual = (double)fla_max(resid1, resid2);
             break;
         }
         case DOUBLE:
         {
-            double norm, norm_A, eps, resid1, resid2;
+            double norm, norm_A, eps;
             eps = fla_lapack_dlamch("P");
 
             /* Test 1
@@ -57,13 +66,11 @@ void validate_orgqr(integer m, integer n, void *A, integer lda, void *Q, void *R
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
             resid2 = check_orthogonality(datatype, Q, m, n, lda);
-
-            *residual = (double)fla_max(resid1, resid2);
             break;
         }
         case COMPLEX:
         {
-            float norm, norm_A, eps, resid1, resid2;
+            float norm, norm_A, eps;
             eps = fla_lapack_slamch("P");
 
             /* Test 1
@@ -77,13 +84,11 @@ void validate_orgqr(integer m, integer n, void *A, integer lda, void *Q, void *R
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
             resid2 = (float)check_orthogonality(datatype, Q, m, n, lda);
-
-            *residual = (double)fla_max(resid1, resid2);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm, norm_A, eps, resid1, resid2;
+            double norm, norm_A, eps;
             eps = fla_lapack_dlamch("P");
 
             /* Test 1
@@ -97,9 +102,12 @@ void validate_orgqr(integer m, integer n, void *A, integer lda, void *Q, void *R
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
             resid2 = check_orthogonality(datatype, Q, m, n, lda);
-
-            *residual = (double)fla_max(resid1, resid2);
             break;
         }
     }
+
+    residual = fla_test_max(resid1, resid2);
+    FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
+    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
 }

@@ -1,6 +1,6 @@
-/******************************************************************************
- * Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
- *******************************************************************************/
+/*
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+*/
 
 /*! @file validate_gerqf.c
  *  @brief Defines validate function of GERQF() to use in test suite.
@@ -8,15 +8,27 @@
 
 #include "test_common.h"
 
-void validate_gerqf(integer m_A, integer n_A, void *A, void *A_test, integer lda, void *T_test,
-                    integer datatype, double *residual, integer *info)
+extern double perf;
+extern double time_min;
+
+void validate_gerqf(char *tst_api, integer m_A, integer n_A, void *A, void *A_test, integer lda,
+                    void *T_test, integer datatype, double err_thresh)
 {
-    if(m_A == 0 || n_A == 0)
-        return;
     void *R, *Q, *work = NULL;
     integer min_A, diff_A;
     integer lwork = -1;
-    *info = 0;
+    integer info = 0;
+    double residual, resid1 = 0., resid2 = 0.;
+
+    /* Early return conditions */
+    if(m_A == 0 || n_A == 0)
+    {
+        FLA_TEST_PRINT_STATUS_AND_RETURN(m_A, n_A, err_thresh);
+    }
+    /* print overall status if incoming threshold is
+     * an extreme value indicating that API returned
+     * unexpected info value */
+    FLA_TEST_PRINT_INVALID_STATUS(m_A, n_A, err_thresh);
 
     min_A = fla_min(m_A, n_A);
 
@@ -54,19 +66,19 @@ void validate_gerqf(integer m_A, integer n_A, void *A, void *A_test, integer lda
         case FLOAT:
         {
             float twork;
-            float norm, norm_A, eps, resid1, resid2;
+            float norm, norm_A, eps;
 
             /* sorgrq api generates the Q martrix using the elementary reflectors and scalar
                factor values*/
-            fla_lapack_sorgrq(&n_A, &n_A, &min_A, NULL, &n_A, NULL, &twork, &lwork, info);
-            if(*info < 0)
+            fla_lapack_sorgrq(&n_A, &n_A, &min_A, NULL, &n_A, NULL, &twork, &lwork, &info);
+            if(info < 0)
                 break;
 
             lwork = twork;
             create_vector(datatype, &work, lwork);
 
-            fla_lapack_sorgrq(&n_A, &n_A, &min_A, Q, &n_A, T_test, work, &lwork, info);
-            if(*info < 0)
+            fla_lapack_sorgrq(&n_A, &n_A, &min_A, Q, &n_A, T_test, work, &lwork, &info);
+            if(info < 0)
                 break;
 
             /* Test 1
@@ -84,27 +96,24 @@ void validate_gerqf(integer m_A, integer n_A, void *A, void *A_test, integer lda
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
             resid2 = (float)check_orthogonality(datatype, Q, n_A, n_A, n_A);
-
-            *residual = (double)fla_max(resid1, resid2);
-
             break;
         }
         case DOUBLE:
         {
             double twork;
-            double norm, norm_A, eps, resid1, resid2;
+            double norm, norm_A, eps;
 
             /* dorgrq api generates the Q martrix using the elementary reflectors and scalar
                factor values*/
-            fla_lapack_dorgrq(&n_A, &n_A, &min_A, NULL, &n_A, NULL, &twork, &lwork, info);
-            if(*info < 0)
+            fla_lapack_dorgrq(&n_A, &n_A, &min_A, NULL, &n_A, NULL, &twork, &lwork, &info);
+            if(info < 0)
                 break;
 
             lwork = twork;
             create_vector(datatype, &work, lwork);
 
-            fla_lapack_dorgrq(&n_A, &n_A, &min_A, Q, &n_A, T_test, work, &lwork, info);
-            if(*info < 0)
+            fla_lapack_dorgrq(&n_A, &n_A, &min_A, Q, &n_A, T_test, work, &lwork, &info);
+            if(info < 0)
                 break;
 
             /* Test 1
@@ -121,26 +130,24 @@ void validate_gerqf(integer m_A, integer n_A, void *A, void *A_test, integer lda
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
             resid2 = (float)check_orthogonality(datatype, Q, n_A, n_A, n_A);
-
-            *residual = (double)fla_max(resid1, resid2);
             break;
         }
         case COMPLEX:
         {
             scomplex twork;
-            float norm, norm_A, eps, resid1, resid2;
+            float norm, norm_A, eps;
 
             /* dorgrq api generates the Q martrix using the elementary reflectors and scalar
                factor values*/
-            fla_lapack_cungrq(&n_A, &n_A, &min_A, NULL, &n_A, NULL, &twork, &lwork, info);
-            if(*info < 0)
+            fla_lapack_cungrq(&n_A, &n_A, &min_A, NULL, &n_A, NULL, &twork, &lwork, &info);
+            if(info < 0)
                 break;
 
             lwork = twork.real;
             create_vector(datatype, &work, lwork);
 
-            fla_lapack_cungrq(&n_A, &n_A, &min_A, Q, &n_A, T_test, work, &lwork, info);
-            if(*info < 0)
+            fla_lapack_cungrq(&n_A, &n_A, &min_A, Q, &n_A, T_test, work, &lwork, &info);
+            if(info < 0)
                 break;
 
             /* Test 1
@@ -156,26 +163,24 @@ void validate_gerqf(integer m_A, integer n_A, void *A, void *A_test, integer lda
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
             resid2 = (float)check_orthogonality(datatype, Q, n_A, n_A, n_A);
-
-            *residual = (double)fla_max(resid1, resid2);
             break;
         }
         case DOUBLE_COMPLEX:
         {
             dcomplex twork;
-            double norm, norm_A, eps, resid1, resid2;
+            double norm, norm_A, eps;
 
             /* dorgrq api generates the Q martrix using the elementary reflectors and scalar
                factor values*/
-            fla_lapack_zungrq(&n_A, &n_A, &min_A, NULL, &n_A, NULL, &twork, &lwork, info);
-            if(*info < 0)
+            fla_lapack_zungrq(&n_A, &n_A, &min_A, NULL, &n_A, NULL, &twork, &lwork, &info);
+            if(info < 0)
                 break;
 
             lwork = twork.real;
             create_vector(datatype, &work, lwork);
 
-            fla_lapack_zungrq(&n_A, &n_A, &min_A, Q, &n_A, T_test, work, &lwork, info);
-            if(*info < 0)
+            fla_lapack_zungrq(&n_A, &n_A, &min_A, Q, &n_A, T_test, work, &lwork, &info);
+            if(info < 0)
                 break;
 
             /* Test 1
@@ -191,8 +196,6 @@ void validate_gerqf(integer m_A, integer n_A, void *A, void *A_test, integer lda
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
             resid2 = check_orthogonality(datatype, Q, n_A, n_A, n_A);
-
-            *residual = (double)fla_max(resid1, resid2);
             break;
         }
     }
@@ -201,4 +204,9 @@ void validate_gerqf(integer m_A, integer n_A, void *A, void *A_test, integer lda
     free_matrix(R);
     free_matrix(Q);
     free_vector(work);
+
+    residual = fla_test_max(resid1, resid2);
+    FLA_PRINT_TEST_STATUS(m_A, n_A, residual, err_thresh);
+    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
 }

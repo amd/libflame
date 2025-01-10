@@ -6,9 +6,9 @@
 
 /* Local prototypes */
 integer i_abs(integer *x);
-void fla_test_lange_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *exec_time, double *residual);
+void fla_test_lange_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo);
 void prepare_lange_run(integer datatype, char norm_type, void *A, integer m, integer n, integer lda,
                        void *result, integer n_repeats, double *time_min_);
 void invoke_lange(integer datatype, char *norm_type, integer *m, integer *n, void *A, integer *lda,
@@ -17,8 +17,7 @@ void invoke_lange(integer datatype, char *norm_type, integer *m, integer *n, voi
 void fla_test_lange(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "Auxilary routines";
-    char *front_str = malloc(8);
-    strcpy(front_str, "LANGE ");
+    char front_str[8] = "LANGE  \0";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
     integer invalid_normtype = 0;
 
@@ -33,7 +32,6 @@ void fla_test_lange(integer argc, char **argv, test_params_t *params)
                                || fla_validate_lange_norm_types(
                                    params->aux_paramslist[i].norm_types_str,
                                    params->aux_paramslist[i].norm_types_str, MAX_NUM_NORMTYPES);
-            params->aux_paramslist[i].front_str = front_str;
         }
         if(!invalid_normtype)
         {
@@ -51,7 +49,6 @@ void fla_test_lange(integer argc, char **argv, test_params_t *params)
         /* Test with parameters from commandline */
         integer i, num_types, M, N;
         integer datatype, n_repeats;
-        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -69,7 +66,6 @@ void fla_test_lange(integer argc, char **argv, test_params_t *params)
         // set the threshold
         params->aux_paramslist[0].aux_threshold = CLI_NORM_THRESH;
         // set front string
-        params->aux_paramslist[0].front_str = front_str;
 
         if(n_repeats > 0 && !invalid_normtype)
         {
@@ -91,11 +87,7 @@ void fla_test_lange(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_lange_experiment(params, datatype, M, N, 0, n_repeats, einfo, &perf,
-                                          &time_min, &residual);
-                /* Print the results */
-                fla_test_print_status(front_str, stype, RECT_INPUT, M, N, residual,
-                                      params->aux_paramslist[0].aux_threshold, time_min, perf);
+                fla_test_lange_experiment(front_str, params, datatype, M, N, 0, n_repeats, einfo);
                 tests_not_run = 0;
             }
         }
@@ -122,22 +114,22 @@ void fla_test_lange(integer argc, char **argv, test_params_t *params)
         fclose(g_ext_fptr);
         g_ext_fptr = NULL;
     }
-    free(front_str);
     return;
 }
 
-void fla_test_lange_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *exec_time, double *residual)
+void fla_test_lange_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo)
 {
     void *A, *scal;
     void *result;
-    double time_min;
     integer m = p_cur;
     integer n = q_cur;
     integer lda = params->aux_paramslist[pci].lda;
     integer i;
+    double residual, err_thresh;
 
+    err_thresh = params->aux_paramslist[pci].aux_threshold;
     if(lda == -1)
     {
         lda = fla_max(1, m);
@@ -146,9 +138,8 @@ void fla_test_lange_experiment(test_params_t *params, integer datatype, integer 
     /* If lda is less than m, then result with invalid param */
     if(lda < m)
     {
-        *residual = DBL_MIN;
-        *exec_time = 0.0;
-        *perf = 0.0;
+        time_min = perf = 0.;
+        FLA_PRINT_TEST_STATUS(m, n, DBL_MIN, err_thresh);
         return;
     }
 
@@ -164,8 +155,8 @@ void fla_test_lange_experiment(test_params_t *params, integer datatype, integer 
         {
             break;
         }
-        
-        *residual = 0.0;
+
+        residual = err_thresh;
         time_min = 1e9;
 
         if(g_ext_fptr != NULL)
@@ -188,33 +179,20 @@ void fla_test_lange_experiment(test_params_t *params, integer datatype, integer 
         prepare_lange_run(datatype, test_norm_type, A, m, n, lda, result, n_repeats, &time_min);
 
         /* execution time */
-        *exec_time = time_min;
         if(time_min == d_zero)
         {
-            *exec_time = 1e-9;
+            time_min = 1e-9;
         }
         /* Compute the performance of the best experiment repeat */
         /* 4*n */
-        *perf = (double)(4.0 * m * n) / time_min / FLOPS_PER_UNIT_PERF;
+        perf = (double)(4.0 * m * n) / time_min / FLOPS_PER_UNIT_PERF;
         if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         {
-            *perf *= 2;
+            perf *= 2;
         }
 
         /* output validation */
-        validate_lange(datatype, test_norm_type, m, n, lda, A, result, residual);
-        // update the front str to the norm type
-        params->aux_paramslist[pci].front_str[5] = test_norm_type;
-        /* If this is not the last norm type, then print the result
-           The result for the last norm type will be printed by the
-           driver code*/
-        if((i != MAX_NUM_NORMTYPES - 1)
-           && params->aux_paramslist[pci].norm_types_str[i + 1] != '\0')
-        {
-            fla_test_print_status(params->aux_paramslist[pci].front_str,
-                                  get_datatype_char(datatype), RECT_INPUT, m, n, *residual,
-                                  params->aux_paramslist[pci].aux_threshold, time_min, *perf);
-        }
+        validate_lange(tst_api, datatype, test_norm_type, m, n, lda, A, result, residual);
     }
 
     /* Free up the buffers */

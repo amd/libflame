@@ -4,12 +4,12 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static aocl_int64_t c_n1 = -1;
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c__0 = 0;
+static integer c_n1 = -1;
+static integer c__1 = 1;
+static integer c__0 = 0;
 static real c_b46 = 1.f;
 static real c_b56 = 0.f;
-static aocl_int64_t c__2 = 2;
+static integer c__2 = 2;
 static real c_b154 = -1.f;
 /* > \brief \b SGEDMD computes the Dynamic Mode Decomposition (DMD) for a pair of data snapshot
  * matrices. */
@@ -310,11 +310,11 @@ this and 3 */
 /* > The eigenvalues are determined as follows: */
 /* > If IMEIG(i) == 0, then the corresponding eigenvalue is */
 /* > real, LAMBDA(i) = REIG(i). */
-/* > If IMEIG(i)>0, then the corresponding scomplex */
+/* > If IMEIG(i)>0, then the corresponding complex */
 /* > conjugate pair of eigenvalues reads */
 /* > LAMBDA(i) = REIG(i) + sqrt(-1)*IMAG(i) */
 /* > LAMBDA(i+1) = REIG(i) - sqrt(-1)*IMAG(i) */
-/* > That is, scomplex conjugate pairs have consecutive */
+/* > That is, complex conjugate pairs have consecutive */
 /* > indices (i,i+1), with the positive imaginary part */
 /* > listed first. */
 /* > See the descriptions of K, REIG, and Z. */
@@ -362,7 +362,7 @@ this and 3 */
 /* > Ritz pairs. */
 /* > If LAMBDA(i) is real, then */
 /* > RES(i) = || A * Z(:,i) - LAMBDA(i)*Z(:,i))||_2. */
-/* > If [LAMBDA(i), LAMBDA(i+1)] is a scomplex conjugate pair */
+/* > If [LAMBDA(i), LAMBDA(i+1)] is a complex conjugate pair */
 /* > then */
 /* > RES(i)=RES(i+1) = || A * Z(:,i:i+1) - Z(:,i:i+1) *B||_F */
 /* > where B = [ real(LAMBDA(i)) imag(LAMBDA(i)) ] */
@@ -401,7 +401,7 @@ K) contains */
 /* > W (workspace/output) REAL N-by-N array */
 /* > On exit, W(1:K,1:K) contains the K computed */
 /* > eigenvectors of the matrix Rayleigh quotient (real and */
-/* > imaginary parts for each scomplex conjugate pair of the */
+/* > imaginary parts for each complex conjugate pair of the */
 /* > eigenvalues). The Ritz vectors (returned in Z) are the */
 /* > product of X (containing a POD basis for the input */
 /* > matrix X) and W. See the descriptions of K, S, X and Z. */
@@ -543,40 +543,11 @@ LIWORK >=1 */
 /* ............................................................. */
 /* ............................................................. */
 /* Subroutine */
-/** Generated wrapper function */
-void sgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int_t *whtsvd, aocl_int_t *m, aocl_int_t *n, real *x, aocl_int_t *ldx, real *y, aocl_int_t *ldy, aocl_int_t *nrnk, real *tol, aocl_int_t *k, real *reig, real *imeig, real *z__, aocl_int_t *ldz, real *res, real *b, aocl_int_t *ldb, real *w, aocl_int_t *ldw, real *s, aocl_int_t *lds, real *work, aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgedmd(jobs, jobz, jobr, jobf, whtsvd, m, n, x, ldx, y, ldy, nrnk, tol, k, reig, imeig, z__, ldz, res, b, ldb, w, ldw, s, lds, work, lwork, iwork, liwork, info);
-#else
-    aocl_int64_t whtsvd_64 = *whtsvd;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldx_64 = *ldx;
-    aocl_int64_t ldy_64 = *ldy;
-    aocl_int64_t nrnk_64 = *nrnk;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldw_64 = *ldw;
-    aocl_int64_t lds_64 = *lds;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t liwork_64 = *liwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sgedmd(jobs, jobz, jobr, jobf, &whtsvd_64, &m_64, &n_64, x, &ldx_64, y, &ldy_64, &nrnk_64, tol, &k_64, reig, imeig, z__, &ldz_64, res, b, &ldb_64, w, &ldw_64, s, &lds_64, work, &lwork_64, iwork, &liwork_64, &info_64);
-
-    *k = (aocl_int_t)k_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int64_t *whtsvd, aocl_int64_t *m,
-             aocl_int64_t *n, real *x, aocl_int64_t *ldx, real *y, aocl_int64_t *ldy,
-             aocl_int64_t *nrnk, real *tol, aocl_int64_t *k, real *reig, real *imeig, real *z__,
-             aocl_int64_t *ldz, real *res, real *b, aocl_int64_t *ldb, real *w, aocl_int64_t *ldw,
-             real *s, aocl_int64_t *lds, real *work, aocl_int64_t *lwork, aocl_int_t *iwork,
-             aocl_int64_t *liwork, aocl_int64_t *info)
+void sgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, integer *m,
+             integer *n, real *x, integer *ldx, real *y, integer *ldy, integer *nrnk, real *tol,
+             integer *k, real *reig, real *imeig, real *z__, integer *ldz, real *res, real *b,
+             integer *ldb, real *w, integer *ldw, real *s, integer *lds, real *work, integer *lwork,
+             integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgedmd inputs: jobs %c ,jobz %c ,jobr %c ,jobf %c ,whtsvd %" FLA_IS
@@ -587,38 +558,80 @@ void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
                       *ldw, *lds, *lwork, *liwork);
 
     /* System generated locals */
-    aocl_int64_t x_dim1, x_offset, y_dim1, y_offset, z_dim1, z_offset, b_dim1, b_offset, w_dim1,
+    integer x_dim1, x_offset, y_dim1, y_offset, z_dim1, z_offset, b_dim1, b_offset, w_dim1,
         w_offset, s_dim1, s_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     real r__1, r__2;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    aocl_int64_t i__, j;
+    integer i__, j;
     real ab[4] /* was [2][2] */
         ,
         ofl, ssum;
-    aocl_int64_t info1, info2;
+    integer info1, info2;
     real xscl1, xscl2;
+    extern real snrm2_(integer *, real *, integer *);
     real scale;
-    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    extern logical lsame_(char *, char *, integer, integer);
+    extern /* Subroutine */
+        void
+        sscal_(integer *, real *, real *, integer *);
     logical badxy;
     real small_val;
+    extern /* Subroutine */
+        void
+        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
+               integer *, real *, real *, integer *),
+        sgeev_(char *, char *, integer *, real *, integer *, real *, real *, real *, integer *,
+               real *, integer *, real *, integer *, integer *);
     char jobzl[1];
+    extern /* Subroutine */
+        void
+        saxpy_(integer *, real *, real *, integer *, real *, integer *);
     logical wntex;
+    extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
+    extern /* Subroutine */
+        void
+        sgesdd_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *,
+                integer *, real *, integer *, integer *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     char t_or_n__[1];
+    extern /* Subroutine */
+        void
+        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
+                integer *, integer *);
+    extern integer isamax_(integer *, real *, integer *);
     logical sccolx, sccoly;
     extern logical sisnan_(real *);
-    aocl_int64_t lwrsdd, mwrsdd;
-    aocl_int64_t iminwr;
+    extern /* Subroutine */
+        void
+        sgesvd_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *,
+                real *, integer *, real *, integer *, integer *);
+    integer lwrsdd, mwrsdd;
+    extern /* Subroutine */
+        void
+        sgejsv_(char *, char *, char *, char *, char *, char *, integer *, integer *, real *,
+                integer *, real *, real *, integer *, real *, integer *, real *, integer *,
+                integer *, integer *),
+        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    integer iminwr;
     logical wntref, wntvec;
     real rootsc;
-    aocl_int64_t lwrkev, mlwork, mwrkev, numrnk, olwork;
+    integer lwrkev, mlwork, mwrkev, numrnk, olwork;
     real rdummy[2];
-    aocl_int64_t lwrsvd, mwrsvd;
+    integer lwrsvd, mwrsvd;
     logical lquery, wntres;
     char jsvopt[1];
-    aocl_int64_t mwrsvj, lwrsvq, mwrsvq;
+    extern /* Subroutine */
+        void
+        slassq_(integer *, real *, integer *, real *, real *);
+    integer mwrsvj, lwrsvq, mwrsvq;
     real rdummy2[2];
+    extern /* Subroutine */
+        void
+        sgesvdq_(char *, char *, char *, char *, char *, integer *, integer *, real *, integer *,
+                 real *, real *, integer *, real *, integer *, integer *, integer *, integer *,
+                 real *, integer *, real *, integer *, integer *);
     /* ...Translated by Pacific-Sierra Research vf90 Personal 3.4N3 04:19:00 10/24/24 */
     /* ...Switches: */
     /* -- LAPACK driver routine -- */
@@ -780,8 +793,8 @@ void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
             mlwork = fla_max(i__1, i__2);
             if(lquery)
             {
-                aocl_lapack_sgesvd("O", "S", m, n, &x[x_offset], ldx, &work[1], &b[b_offset], ldb,
-                                   &w[w_offset], ldw, rdummy, &c_n1, &info1);
+                sgesvd_("O", "S", m, n, &x[x_offset], ldx, &work[1], &b[b_offset], ldb,
+                        &w[w_offset], ldw, rdummy, &c_n1, &info1);
                 /* Computing MAX */
                 i__1 = mwrsvd;
                 i__2 = (integer)rdummy[0]; // , expr subst
@@ -810,8 +823,8 @@ void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
             iminwr = fla_min(*m, *n) << 3;
             if(lquery)
             {
-                aocl_lapack_sgesdd("O", m, n, &x[x_offset], ldx, &work[1], &b[b_offset], ldb,
-                                   &w[w_offset], ldw, rdummy, &c_n1, &iwork[1], &info1);
+                sgesdd_("O", m, n, &x[x_offset], ldx, &work[1], &b[b_offset], ldb, &w[w_offset],
+                        ldw, rdummy, &c_n1, &iwork[1], &info1);
                 /* Computing MAX */
                 i__1 = mwrsdd;
                 i__2 = (integer)rdummy[0]; // , expr subst
@@ -830,9 +843,9 @@ void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
             /* MWRSVQ = N + MAX( LWQP3, MWRSVD, LWORQ )+ MAX(M,2) */
             /* MLWORK = N + MWRSVQ */
             /* IMINWR = M+N-1 */
-            aocl_lapack_sgesvdq("H", "P", "N", "R", "R", m, n, &x[x_offset], ldx, &work[1],
-                                &z__[z_offset], ldz, &w[w_offset], ldw, &numrnk, &iwork[1], &c_n1,
-                                rdummy, &c_n1, rdummy2, &c_n1, &info1);
+            sgesvdq_("H", "P", "N", "R", "R", m, n, &x[x_offset], ldx, &work[1], &z__[z_offset],
+                     ldz, &w[w_offset], ldw, &numrnk, &iwork[1], &c_n1, rdummy, &c_n1, rdummy2,
+                     &c_n1, &info1);
             iminwr = iwork[1];
             mwrsvq = (integer)rdummy[1];
             /* Computing MAX */
@@ -907,8 +920,8 @@ void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         mlwork = fla_max(i__1, i__2);
         if(lquery)
         {
-            aocl_lapack_sgeev("N", jobzl, n, &s[s_offset], lds, &reig[1], &imeig[1], &w[w_offset],
-                              ldw, &w[w_offset], ldw, rdummy, &c_n1, &info1);
+            sgeev_("N", jobzl, n, &s[s_offset], lds, &reig[1], &imeig[1], &w[w_offset], ldw,
+                   &w[w_offset], ldw, rdummy, &c_n1, &info1);
             /* Computing MAX */
             i__1 = mwrkev;
             i__2 = (integer)rdummy[0]; // , expr subst
@@ -930,14 +943,14 @@ void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("SGEDMD", &i__1, (ftnlen)6);
+        xerbla_("SGEDMD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
         /* Return minimal and optimal workspace sizes */
-        iwork[1] = (aocl_int_t)(iminwr);
+        iwork[1] = iminwr;
         work[1] = (real)mlwork;
         work[2] = (real)olwork;
         AOCL_DTL_TRACE_LOG_EXIT
@@ -959,15 +972,14 @@ void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* WORK(i) = DNRM2( M, X(1,i), 1 ) */
-            ssum = 1.f;
             scale = 0.f;
-            aocl_lapack_slassq(m, &x[i__ * x_dim1 + 1], &c__1, &scale, &ssum);
+            slassq_(m, &x[i__ * x_dim1 + 1], &c__1, &scale, &ssum);
             if(sisnan_(&scale) || sisnan_(&ssum))
             {
                 *k = 0;
                 *info = -8;
                 i__2 = -(*info);
-                aocl_blas_xerbla("SGEDMD", &i__2, (ftnlen)6);
+                xerbla_("SGEDMD", &i__2, (ftnlen)6);
             }
             if(scale != 0.f && ssum != 0.f)
             {
@@ -985,16 +997,16 @@ void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
                     /* of X(:,i). The relative backward and forward */
                     /* errors are small in the ell_2 norm. */
                     r__1 = 1.f / rootsc;
-                    aocl_lapack_slascl("G", &c__0, &c__0, &scale, &r__1, m, &c__1,
-                                       &x[i__ * x_dim1 + 1], m, &info2);
+                    slascl_("G", &c__0, &c__0, &scale, &r__1, m, &c__1, &x[i__ * x_dim1 + 1], m,
+                            &info2);
                     work[i__] = -scale * (rootsc / (real)(*m));
                 }
                 else
                 {
                     /* X(:,i) will be scaled to unit 2-norm */
                     work[i__] = scale * rootsc;
-                    aocl_lapack_slascl("G", &c__0, &c__0, &work[i__], &c_b46, m, &c__1,
-                                       &x[i__ * x_dim1 + 1], m, &info2);
+                    slascl_("G", &c__0, &c__0, &work[i__], &c_b46, m, &c__1, &x[i__ * x_dim1 + 1],
+                            m, &info2);
                     /* X(1:M,i) = (ONE/WORK(i)) * X(1:M,i) ! INTRINSIC */
                     /* LAPACK CALL */
                 }
@@ -1012,7 +1024,7 @@ void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
             *k = 0;
             *info = -8;
             i__1 = -(*info);
-            aocl_blas_xerbla("SGEDMD", &i__1, (ftnlen)6);
+            xerbla_("SGEDMD", &i__1, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
@@ -1024,18 +1036,17 @@ void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
             {
                 /* ! BLAS CALL */
                 r__1 = 1.f / work[i__];
-                aocl_blas_sscal(m, &r__1, &y[i__ * y_dim1 + 1], &c__1);
+                sscal_(m, &r__1, &y[i__ * y_dim1 + 1], &c__1);
                 /* Y(1:M,i) = (ONE/WORK(i)) * Y(1:M,i) ! INTRINSIC */
             }
             else if(work[i__] < 0.f)
             {
                 r__1 = -work[i__];
                 r__2 = 1.f / (real)(*m);
-                aocl_lapack_slascl("G", &c__0, &c__0, &r__1, &r__2, m, &c__1, &y[i__ * y_dim1 + 1],
-                                   m, &info2);
+                slascl_("G", &c__0, &c__0, &r__1, &r__2, m, &c__1, &y[i__ * y_dim1 + 1], m, &info2);
                 /* LAPACK CALL */
             }
-            else if(y[aocl_blas_isamax(m, &y[i__ * y_dim1 + 1], &c__1) + i__ * y_dim1] != 0.f)
+            else if(y[isamax_(m, &y[i__ * y_dim1 + 1], &c__1) + i__ * y_dim1] != 0.f)
             {
                 /* X(:,i) is zero vector. For consistency, */
                 /* Y(:,i) should also be zero. If Y(:,i) is not */
@@ -1048,7 +1059,7 @@ void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
                 /* ! BLAS CALL */
                 if(lsame_(jobs, "C", 1, 1))
                 {
-                    aocl_blas_sscal(m, &c_b56, &y[i__ * y_dim1 + 1], &c__1);
+                    sscal_(m, &c_b56, &y[i__ * y_dim1 + 1], &c__1);
                 }
             }
         }
@@ -1062,15 +1073,14 @@ void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* WORK(i) = DNRM2( M, Y(1,i), 1 ) */
-            ssum = 1.f;
             scale = 0.f;
-            aocl_lapack_slassq(m, &y[i__ * y_dim1 + 1], &c__1, &scale, &ssum);
+            slassq_(m, &y[i__ * y_dim1 + 1], &c__1, &scale, &ssum);
             if(sisnan_(&scale) || sisnan_(&ssum))
             {
                 *k = 0;
                 *info = -10;
                 i__2 = -(*info);
-                aocl_blas_xerbla("SGEDMD", &i__2, (ftnlen)6);
+                xerbla_("SGEDMD", &i__2, (ftnlen)6);
             }
             if(scale != 0.f && ssum != 0.f)
             {
@@ -1088,16 +1098,16 @@ void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
                     /* of Y(:,i). The relative backward and forward */
                     /* errors are small in the ell_2 norm. */
                     r__1 = 1.f / rootsc;
-                    aocl_lapack_slascl("G", &c__0, &c__0, &scale, &r__1, m, &c__1,
-                                       &y[i__ * y_dim1 + 1], m, &info2);
+                    slascl_("G", &c__0, &c__0, &scale, &r__1, m, &c__1, &y[i__ * y_dim1 + 1], m,
+                            &info2);
                     work[i__] = -scale * (rootsc / (real)(*m));
                 }
                 else
                 {
                     /* X(:,i) will be scaled to unit 2-norm */
                     work[i__] = scale * rootsc;
-                    aocl_lapack_slascl("G", &c__0, &c__0, &work[i__], &c_b46, m, &c__1,
-                                       &y[i__ * y_dim1 + 1], m, &info2);
+                    slascl_("G", &c__0, &c__0, &work[i__], &c_b46, m, &c__1, &y[i__ * y_dim1 + 1],
+                            m, &info2);
                     /* Y(1:M,i) = (ONE/WORK(i)) * Y(1:M,i) ! INTRINSIC */
                     /* LAPACK CALL */
                 }
@@ -1115,18 +1125,17 @@ void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
             {
                 /* ! BLAS CALL */
                 r__1 = 1.f / work[i__];
-                aocl_blas_sscal(m, &r__1, &x[i__ * x_dim1 + 1], &c__1);
+                sscal_(m, &r__1, &x[i__ * x_dim1 + 1], &c__1);
                 /* X(1:M,i) = (ONE/WORK(i)) * X(1:M,i) ! INTRINSIC */
             }
             else if(work[i__] < 0.f)
             {
                 r__1 = -work[i__];
                 r__2 = 1.f / (real)(*m);
-                aocl_lapack_slascl("G", &c__0, &c__0, &r__1, &r__2, m, &c__1, &x[i__ * x_dim1 + 1],
-                                   m, &info2);
+                slascl_("G", &c__0, &c__0, &r__1, &r__2, m, &c__1, &x[i__ * x_dim1 + 1], m, &info2);
                 /* LAPACK CALL */
             }
-            else if(x[aocl_blas_isamax(m, &x[i__ * x_dim1 + 1], &c__1) + i__ * x_dim1] != 0.f)
+            else if(x[isamax_(m, &x[i__ * x_dim1 + 1], &c__1) + i__ * x_dim1] != 0.f)
             {
                 /* Y(:,i) is zero vector. If X(:,i) is not */
                 /* zero, then a warning flag is raised. */
@@ -1146,16 +1155,16 @@ void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
     if(*whtsvd == 1)
     {
         i__1 = *lwork - *n;
-        aocl_lapack_sgesvd("O", "S", m, n, &x[x_offset], ldx, &work[1], &b[b_offset], ldb,
-                           &w[w_offset], ldw, &work[*n + 1], &i__1, &info1);
+        sgesvd_("O", "S", m, n, &x[x_offset], ldx, &work[1], &b[b_offset], ldb, &w[w_offset], ldw,
+                &work[*n + 1], &i__1, &info1);
         /* LAPACK CALL */
         *(unsigned char *)t_or_n__ = 'T';
     }
     else if(*whtsvd == 2)
     {
         i__1 = *lwork - *n;
-        aocl_lapack_sgesdd("O", m, n, &x[x_offset], ldx, &work[1], &b[b_offset], ldb, &w[w_offset],
-                           ldw, &work[*n + 1], &i__1, &iwork[1], &info1);
+        sgesdd_("O", m, n, &x[x_offset], ldx, &work[1], &b[b_offset], ldb, &w[w_offset], ldw,
+                &work[*n + 1], &i__1, &iwork[1], &info1);
         /* LAPACK CALL */
         *(unsigned char *)t_or_n__ = 'T';
     }
@@ -1164,21 +1173,20 @@ void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         /* ! LAPACK CALL */
         i__1 = *lwork - *n - fla_max(2, *m);
         i__2 = fla_max(2, *m);
-        aocl_lapack_sgesvdq("H", "P", "N", "R", "R", m, n, &x[x_offset], ldx, &work[1],
-                            &z__[z_offset], ldz, &w[w_offset], ldw, &numrnk, &iwork[1], liwork,
-                            &work[*n + fla_max(2, *m) + 1], &i__1, &work[*n + 1], &i__2, &info1);
+        sgesvdq_("H", "P", "N", "R", "R", m, n, &x[x_offset], ldx, &work[1], &z__[z_offset], ldz,
+                 &w[w_offset], ldw, &numrnk, &iwork[1], liwork, &work[*n + fla_max(2, *m) + 1],
+                 &i__1, &work[*n + 1], &i__2, &info1);
         /* ! LAPACK CALL */
-        aocl_lapack_slacpy("A", m, &numrnk, &z__[z_offset], ldz, &x[x_offset], ldx);
+        slacpy_("A", m, &numrnk, &z__[z_offset], ldz, &x[x_offset], ldx);
         *(unsigned char *)t_or_n__ = 'T';
     }
     else if(*whtsvd == 4)
     {
         /* ! LAPACK CALL */
         i__1 = *lwork - *n;
-        aocl_lapack_sgejsv("F", "U", jsvopt, "N", "N", "P", m, n, &x[x_offset], ldx, &work[1],
-                           &z__[z_offset], ldz, &w[w_offset], ldw, &work[*n + 1], &i__1, &iwork[1],
-                           &info1);
-        aocl_lapack_slacpy("A", m, n, &z__[z_offset], ldz, &x[x_offset], ldx);
+        sgejsv_("F", "U", jsvopt, "N", "N", "P", m, n, &x[x_offset], ldx, &work[1], &z__[z_offset],
+                ldz, &w[w_offset], ldw, &work[*n + 1], &i__1, &iwork[1], &info1);
+        slacpy_("A", m, n, &z__[z_offset], ldz, &x[x_offset], ldx);
         /* LAPACK CALL */
         *(unsigned char *)t_or_n__ = 'N';
         xscl1 = work[*n + 1];
@@ -1191,7 +1199,7 @@ void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         /* to rescale the data (X and Y). */
         if(xscl1 != xscl2)
         {
-            aocl_lapack_slascl("G", &c__0, &c__0, &xscl1, &xscl2, m, n, &y[y_offset], ldy, &info2);
+            slascl_("G", &c__0, &c__0, &xscl1, &xscl2, m, n, &y[y_offset], ldy, &info2);
         }
     }
     if(info1 > 0)
@@ -1210,7 +1218,7 @@ void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         *k = 0;
         *info = -8;
         i__1 = -(*info);
-        aocl_blas_xerbla("SGEDMD", &i__1, (ftnlen)6);
+        xerbla_("SGEDMD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -1275,7 +1283,7 @@ void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         {
             /* ! BLAS CALL */
             r__1 = 1.f / work[i__];
-            aocl_blas_sscal(n, &r__1, &w[i__ * w_dim1 + 1], &c__1);
+            sscal_(n, &r__1, &w[i__ * w_dim1 + 1], &c__1);
             /* W(1:N,i) = (ONE/WORK(i)) * W(1:N,i) ! INTRINSIC */
         }
     }
@@ -1308,8 +1316,8 @@ void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         /* Need A*U(:,1:K)=Y*V_k*inv(diag(WORK(1:K))) */
         /* for computing the refined Ritz vectors */
         /* (optionally, outside SGEDMD). */
-        aocl_blas_sgemm("N", t_or_n__, m, k, n, &c_b46, &y[y_offset], ldy, &w[w_offset], ldw,
-                        &c_b56, &z__[z_offset], ldz);
+        sgemm_("N", t_or_n__, m, k, n, &c_b46, &y[y_offset], ldy, &w[w_offset], ldw, &c_b56,
+               &z__[z_offset], ldz);
         /* Z(1:M,1:K)=MATMUL(Y(1:M,1:N),TRANSPOSE(W(1:K,1:N))) ! INTRI */
         /* Z(1:M,1:K)=MATMUL(Y(1:M,1:N),W(1:N,1:K)) ! INTRI */
         /* At this point Z contains */
@@ -1318,11 +1326,11 @@ void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         /* This matrix is returned in the array B and */
         /* it can be used to compute refined Ritz vectors. */
         /* BLAS CALL */
-        aocl_lapack_slacpy("A", m, k, &z__[z_offset], ldz, &b[b_offset], ldb);
+        slacpy_("A", m, k, &z__[z_offset], ldz, &b[b_offset], ldb);
         /* B(1:M,1:K) = Z(1:M,1:K) ! INTRINSIC */
         /* BLAS CALL */
-        aocl_blas_sgemm("T", "N", k, k, m, &c_b46, &x[x_offset], ldx, &z__[z_offset], ldz, &c_b56,
-                        &s[s_offset], lds);
+        sgemm_("T", "N", k, k, m, &c_b46, &x[x_offset], ldx, &z__[z_offset], ldz, &c_b56,
+               &s[s_offset], lds);
         /* S(1:K,1:K) = MATMUL(TANSPOSE(X(1:M,1:K)),Z(1:M,1:K)) ! INTRI */
         /* At this point S = U^T * A * U is the Rayleigh quotient. */
         /* BLAS CALL */
@@ -1332,13 +1340,13 @@ void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         /* A * U(:,1:K) is not explicitly needed and the */
         /* computation is organized differently. The Rayleigh */
         /* quotient is computed more efficiently. */
-        aocl_blas_sgemm("T", "N", k, n, m, &c_b46, &x[x_offset], ldx, &y[y_offset], ldy, &c_b56,
-                        &z__[z_offset], ldz);
+        sgemm_("T", "N", k, n, m, &c_b46, &x[x_offset], ldx, &y[y_offset], ldy, &c_b56,
+               &z__[z_offset], ldz);
         /* Z(1:K,1:N) = MATMUL( TRANSPOSE(X(1:M,1:K)), Y(1:M,1:N) ) ! IN */
         /* In the two SGEMM calls here, can use K for LDZ */
         /* BLAS CALL */
-        aocl_blas_sgemm("N", t_or_n__, k, k, n, &c_b46, &z__[z_offset], ldz, &w[w_offset], ldw,
-                        &c_b56, &s[s_offset], lds);
+        sgemm_("N", t_or_n__, k, k, n, &c_b46, &z__[z_offset], ldz, &w[w_offset], ldw, &c_b56,
+               &s[s_offset], lds);
         /* S(1:K,1:K) = MATMUL(Z(1:K,1:N),TRANSPOSE(W(1:K,1:N))) ! INTRIN */
         /* S(1:K,1:K) = MATMUL(Z(1:K,1:N),(W(1:N,1:K))) ! INTRIN */
         /* At this point S = U^T * A * U is the Rayleigh quotient. */
@@ -1349,28 +1357,28 @@ void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         {
             if(lsame_(t_or_n__, "N", 1, 1))
             {
-                aocl_lapack_slacpy("A", n, k, &w[w_offset], ldw, &z__[z_offset], ldz);
+                slacpy_("A", n, k, &w[w_offset], ldw, &z__[z_offset], ldz);
             }
             else
             {
-                aocl_lapack_slacpy("A", k, n, &w[w_offset], ldw, &z__[z_offset], ldz);
+                slacpy_("A", k, n, &w[w_offset], ldw, &z__[z_offset], ldz);
             }
         }
     }
     /* <5> Compute the Ritz values and (if requested) the */
     /* right eigenvectors of the Rayleigh quotient. */
     i__1 = *lwork - *n;
-    aocl_lapack_sgeev("N", jobzl, k, &s[s_offset], lds, &reig[1], &imeig[1], &w[w_offset], ldw,
-                      &w[w_offset], ldw, &work[*n + 1], &i__1, &info1);
+    sgeev_("N", jobzl, k, &s[s_offset], lds, &reig[1], &imeig[1], &w[w_offset], ldw, &w[w_offset],
+           ldw, &work[*n + 1], &i__1, &info1);
     /* W(1:K,1:K) contains the eigenvectors of the Rayleigh */
-    /* quotient. Even in the case of scomplex spectrum, all */
+    /* quotient. Even in the case of complex spectrum, all */
     /* computation is done in real arithmetic. REIG and */
     /* IMEIG are the real and the imaginary parts of the */
     /* eigenvalues, so that the spectrum is given as */
     /* REIG(:) + sqrt(-1)*IMEIG(:). Complex conjugate pairs */
     /* are listed at consecutive positions. For such a */
-    /* scomplex conjugate pair of the eigenvalues, the */
-    /* corresponding eigenvectors are also a scomplex */
+    /* complex conjugate pair of the eigenvalues, the */
+    /* corresponding eigenvectors are also a complex */
     /* conjugate pair with the real and imaginary parts */
     /* stored column-wise in W at the corresponding */
     /* consecutive column indices. See the description of Z. */
@@ -1396,8 +1404,8 @@ void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
                 /* A*U(:,1:K) already computed and stored in Z. */
                 /* For the residuals, need Y = A * U(:,1;
                K) * W. */
-                aocl_blas_sgemm("N", "N", m, k, k, &c_b46, &z__[z_offset], ldz, &w[w_offset], ldw,
-                                &c_b56, &y[y_offset], ldy);
+                sgemm_("N", "N", m, k, k, &c_b46, &z__[z_offset], ldz, &w[w_offset], ldw, &c_b56,
+                       &y[y_offset], ldy);
                 /* Y(1:M,1:K) = Z(1:M,1:K) * W(1:K,1:K) ! INTRINSIC */
                 /* This frees Z;
                 Y contains A * U(:,1:K) * W. */
@@ -1407,19 +1415,19 @@ void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
             {
                 /* Compute S = V_k * Sigma_k^(-1) * W, where */
                 /* V_k * Sigma_k^(-1) is stored in Z */
-                aocl_blas_sgemm(t_or_n__, "N", n, k, k, &c_b46, &z__[z_offset], ldz, &w[w_offset],
-                                ldw, &c_b56, &s[s_offset], lds);
+                sgemm_(t_or_n__, "N", n, k, k, &c_b46, &z__[z_offset], ldz, &w[w_offset], ldw,
+                       &c_b56, &s[s_offset], lds);
                 /* Then, compute Z = Y * S = */
                 /* = Y * V_k * Sigma_k^(-1) * W(1:K,1:K) = */
                 /* = A * U(:,1:K) * W(1:K,1:K) */
-                aocl_blas_sgemm("N", "N", m, k, n, &c_b46, &y[y_offset], ldy, &s[s_offset], lds,
-                                &c_b56, &z__[z_offset], ldz);
+                sgemm_("N", "N", m, k, n, &c_b46, &y[y_offset], ldy, &s[s_offset], lds, &c_b56,
+                       &z__[z_offset], ldz);
                 /* Save a copy of Z into Y and free Z for holding */
                 /* the Ritz vectors. */
-                aocl_lapack_slacpy("A", m, k, &z__[z_offset], ldz, &y[y_offset], ldy);
+                slacpy_("A", m, k, &z__[z_offset], ldz, &y[y_offset], ldy);
                 if(wntex)
                 {
-                    aocl_lapack_slacpy("A", m, k, &z__[z_offset], ldz, &b[b_offset], ldb);
+                    slacpy_("A", m, k, &z__[z_offset], ldz, &b[b_offset], ldb);
                 }
             }
         }
@@ -1427,13 +1435,13 @@ void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         {
             /* Compute S = V_k * Sigma_k^(-1) * W, where */
             /* V_k * Sigma_k^(-1) is stored in Z */
-            aocl_blas_sgemm(t_or_n__, "N", n, k, k, &c_b46, &z__[z_offset], ldz, &w[w_offset], ldw,
-                            &c_b56, &s[s_offset], lds);
+            sgemm_(t_or_n__, "N", n, k, k, &c_b46, &z__[z_offset], ldz, &w[w_offset], ldw, &c_b56,
+                   &s[s_offset], lds);
             /* Then, compute Z = Y * S = */
             /* = Y * V_k * Sigma_k^(-1) * W(1:K,1:K) = */
             /* = A * U(:,1:K) * W(1:K,1:K) */
-            aocl_blas_sgemm("N", "N", m, k, n, &c_b46, &y[y_offset], ldy, &s[s_offset], lds, &c_b56,
-                            &b[b_offset], ldb);
+            sgemm_("N", "N", m, k, n, &c_b46, &y[y_offset], ldy, &s[s_offset], lds, &c_b56,
+                   &b[b_offset], ldb);
             /* The above call replaces the following two calls */
             /* that were used in the developing-testing phase. */
             /* CALL SGEMM( 'N', 'N', M, K, N, ONE, Y, LDY, S, & */
@@ -1445,8 +1453,8 @@ void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         /* Compute the real form of the Ritz vectors */
         if(wntvec)
         {
-            aocl_blas_sgemm("N", "N", m, k, k, &c_b46, &x[x_offset], ldx, &w[w_offset], ldw, &c_b56,
-                            &z__[z_offset], ldz);
+            sgemm_("N", "N", m, k, k, &c_b46, &x[x_offset], ldx, &w[w_offset], ldw, &c_b56,
+                   &z__[z_offset], ldz);
         }
         /* Z(1:M,1:K) = MATMUL(X(1:M,1:K), W(1:K,1:K)) ! INTRINSIC */
         /* BLAS CALL */
@@ -1461,33 +1469,31 @@ void aocl_lapack_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
                     /* have a real eigenvalue with real eigenvector */
                     /* ! BLAS CALL */
                     r__1 = -reig[i__];
-                    aocl_blas_saxpy(m, &r__1, &z__[i__ * z_dim1 + 1], &c__1, &y[i__ * y_dim1 + 1],
-                                    &c__1);
+                    saxpy_(m, &r__1, &z__[i__ * z_dim1 + 1], &c__1, &y[i__ * y_dim1 + 1], &c__1);
                     /* Y(1:M,i) = Y(1:M,i) - REIG(i) * Z(1:M,i) ! */
-                    res[i__] = aocl_blas_snrm2(m, &y[i__ * y_dim1 + 1], &c__1);
+                    res[i__] = snrm2_(m, &y[i__ * y_dim1 + 1], &c__1);
                     /* BLAS CALL */
                     ++i__;
                 }
                 else
                 {
-                    /* Have a scomplex conjugate pair */
+                    /* Have a complex conjugate pair */
                     /* REIG(i) +- sqrt(-1)*IMEIG(i). */
                     /* Since all computation is done in real */
                     /* arithmetic, the formula for the residual */
                     /* is recast for real representation of the */
-                    /* scomplex conjugate eigenpair. See the */
+                    /* complex conjugate eigenpair. See the */
                     /* description of RES. */
                     ab[0] = reig[i__];
                     ab[1] = -imeig[i__];
                     ab[2] = imeig[i__];
                     ab[3] = reig[i__];
-                    aocl_blas_sgemm("N", "N", m, &c__2, &c__2, &c_b154, &z__[i__ * z_dim1 + 1], ldz,
-                                    ab, &c__2, &c_b46, &y[i__ * y_dim1 + 1], ldy);
+                    sgemm_("N", "N", m, &c__2, &c__2, &c_b154, &z__[i__ * z_dim1 + 1], ldz, ab,
+                           &c__2, &c_b46, &y[i__ * y_dim1 + 1], ldy);
                     /* Y(1:M,i:i+1) = Y(1:M,i:i+1) - Z(1:M,i:i+1) * AB ! INT */
                     /* ! LAPACK CALL */
                     /* BLAS CALL */
-                    res[i__] = aocl_lapack_slange("F", m, &c__2, &y[i__ * y_dim1 + 1], ldy,
-                                                  &work[*n + 1]);
+                    res[i__] = slange_("F", m, &c__2, &y[i__ * y_dim1 + 1], ldy, &work[*n + 1]);
                     res[i__ + 1] = res[i__];
                     i__ += 2;
                 }

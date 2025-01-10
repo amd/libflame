@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2023-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -7,15 +7,17 @@
 #include <invoke_common.hh>
 #endif
 
+extern double perf;
+extern double time_min;
 integer row_major_gghrd_lda;
 integer row_major_gghrd_ldb;
 integer row_major_gghrd_ldq;
 integer row_major_gghrd_ldz;
 
 /* Local prototypes */
-void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *t, double *residual);
+void fla_test_gghrd_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo);
 void prepare_gghrd_run(char *compq, char *compz, integer n, integer *ilo, integer *ihi, void *a,
                        integer lda, void *b, integer ldb, void *q, integer ldq, void *z,
                        integer ldz, integer datatype, integer n_repeats, double *time_min_,
@@ -52,7 +54,6 @@ void fla_test_gghrd(integer argc, char **argv, test_params_t *params)
     {
         integer i, num_types, N;
         integer datatype, n_repeats;
-        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -109,12 +110,8 @@ void fla_test_gghrd(integer argc, char **argv, test_params_t *params)
                     type_flag[datatype - FLOAT] = 1;
 
                     /* Call the test code */
-                    fla_test_gghrd_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
-                                              &time_min, &residual);
-                    /* Print the results */
-                    fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
-                                          params->lin_solver_paramslist[0].solver_threshold,
-                                          time_min, perf);
+                    fla_test_gghrd_experiment(front_str, params, datatype, N, N, 0, n_repeats,
+                                              einfo);
                     tests_not_run = 0;
                 }
             }
@@ -143,9 +140,9 @@ void fla_test_gghrd(integer argc, char **argv, test_params_t *params)
     }
 }
 
-void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *time_min, double *residual)
+void fla_test_gghrd_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo)
 {
     integer n, ldz, lda, ldb, ldq;
     integer ilo, ihi, info = 0, ABInitialized = 0;
@@ -153,6 +150,7 @@ void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer 
          *Z_test = NULL, *temp = NULL, *A_ntest = NULL, *B_ntest = NULL, *Q_ntest = NULL,
          *Z_ntest = NULL;
     char compz, compq;
+    double residual, err_thresh;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
@@ -167,7 +165,7 @@ void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer 
     /* Initialize parameter */
     compz = params->lin_solver_paramslist[pci].compz_gghrd;
     compq = params->lin_solver_paramslist[pci].compq_gghrd;
-    *residual = params->lin_solver_paramslist[pci].solver_threshold;
+    err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
     ilo = params->lin_solver_paramslist[pci].ilo;
     ihi = params->lin_solver_paramslist[pci].ihi;
 
@@ -286,7 +284,7 @@ void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer 
     }
 
     prepare_gghrd_run(&compq, &compz, n, &ilo, &ihi, A_test, lda, B_test, ldb, Q_test, ldq, Z_test,
-                      ldz, datatype, n_repeats, time_min, &info, interfacetype, layout);
+                      ldz, datatype, n_repeats, &time_min, &info, interfacetype, layout);
 
     /* If compq=N or/and compz=N, in addition to the first api call, also execute
        second api call with compq=I and compz=I. And validate the H and T matrices from
@@ -324,55 +322,61 @@ void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer 
     if(compz == 'N')
     {
         if(datatype == FLOAT || datatype == DOUBLE)
-            *perf = (double)(7.0 * n * n * n) / *time_min / FLOPS_PER_UNIT_PERF;
+            perf = (double)(7.0 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
         else
-            *perf = (double)(25.0 * n * n * n) / *time_min / FLOPS_PER_UNIT_PERF;
+            perf = (double)(25.0 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     }
     else if(compz == 'I')
     {
         if(datatype == FLOAT || datatype == DOUBLE)
-            *perf = (double)(10.0 * n * n * n) / *time_min / FLOPS_PER_UNIT_PERF;
+            perf = (double)(10.0 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
         else
-            *perf = (double)(35.0 * n * n * n) / *time_min / FLOPS_PER_UNIT_PERF;
+            perf = (double)(35.0 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     }
     else
     {
         if(datatype == FLOAT || datatype == DOUBLE)
-            *perf = (double)(20.0 * n * n * n) / *time_min / FLOPS_PER_UNIT_PERF;
+            perf = (double)(20.0 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
         else
-            *perf = (double)(70.0 * n * n * n) / *time_min / FLOPS_PER_UNIT_PERF;
+            perf = (double)(70.0 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     }
 
     /* Output Validation */
-    if(info == 0)
+    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    if(!FLA_EXTREME_CASE_TEST)
     {
-        if(!FLA_EXTREME_CASE_TEST)
+        if(compq == 'N' || compz == 'N')
         {
-            if(compq == 'N' || compz == 'N')
-            {
-                /* Validation for compq=N or/and compz=N case */
-                validate_gghrd(&compq, &compz, n, A_test, A_ntest, lda, B_test, B_ntest, ldb, Q,
-                               Q_test, ldq, Z, Z_test, ldz, datatype, residual);
-            }
-            else
-            {
-                /* Validation for other cases */
-                validate_gghrd(&compq, &compz, n, A, A_test, lda, B, B_test, ldb, Q, Q_test, ldq, Z,
-                               Z_test, ldz, datatype, residual);
-            }
+            /* Validation for compq=N or/and compz=N case */
+            validate_gghrd(tst_api, &compq, &compz, n, A_test, A_ntest, lda, B_test, B_ntest,
+                           ldb, Q, Q_test, ldq, Z, Z_test, ldz, datatype, residual);
         }
-        else if((params->imatrix_char == 'N') || (params->imatrix_char == 'A'))
+        else
         {
-            if((!check_extreme_value(datatype, n, n, A_test, lda, params->imatrix_char))
-               && (!check_extreme_value(datatype, n, n, B_test, ldb, params->imatrix_char)))
-            {
-                *residual = DBL_MAX;
-            }
+            /* Validation for other cases */
+            validate_gghrd(tst_api, &compq, &compz, n, A, A_test, lda, B, B_test, ldb, Q,
+                           Q_test, ldq, Z, Z_test, ldz, datatype, residual);
         }
     }
     else
     {
-        FLA_TEST_CHECK_EINFO(residual, info, einfo);
+        if((params->imatrix_char == 'N') || (params->imatrix_char == 'A'))
+        {
+            if((!check_extreme_value(datatype, n, n, A_test, lda, params->imatrix_char))
+               && (!check_extreme_value(datatype, n, n, B_test, ldb, params->imatrix_char)))
+            {
+                residual = DBL_MAX;
+            }
+            else
+            {
+                residual = err_thresh;
+            }
+            FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+        }
+        else
+        {
+            printf("Extreme Value tests not supported for xGGHRD APIs\n");
+        }
     }
 
     /* Free up the buffers */
@@ -404,7 +408,7 @@ void prepare_gghrd_run(char *compq, char *compz, integer n, integer *ilo, intege
 {
     void *A_save = NULL, *B_save = NULL, *Q_save = NULL, *Z_save = NULL;
     integer i;
-    double time_min = 1e9, exe_time;
+    double t_min = 1e9, exe_time;
 
     /* Make a copy of the input matrix A,B,Q and Z. Same input values will be passed in each
      * itertaion.*/
@@ -462,9 +466,9 @@ void prepare_gghrd_run(char *compq, char *compz, integer n, integer *ilo, intege
         }
 
         /* Get the best execution time */
-        time_min = fla_min(time_min, exe_time);
+        t_min = fla_min(t_min, exe_time);
     }
-    *time_min_ = time_min;
+    *time_min_ = t_min;
 
     free_matrix(A_save);
     free_matrix(B_save);

@@ -1,6 +1,6 @@
-/******************************************************************************
- * Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
- *******************************************************************************/
+/*
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+*/
 
 /*! @file validate_syevd.c
  *  @brief Defines validate function of SYEVD() to use in test suite.
@@ -8,12 +8,24 @@
 
 #include "test_common.h"
 
-void validate_syevd(char *jobz, integer n, void *A, void *A_test, integer lda, void *w,
-                    integer datatype, double *residual, integer *info)
+extern double perf;
+extern double time_min;
+
+void validate_syevd(char *tst_api, char *jobz, integer n, void *A, void *A_test, integer lda,
+                    void *w, integer datatype, double err_thresh)
 {
+    double residual, resid1 = 0., resid2 = 0.;
+
+    /* Early return conditions */
     if(n == 0)
-        return;
-    *info = 0;
+    {
+        FLA_TEST_PRINT_STATUS_AND_RETURN(n, n, err_thresh);
+    }
+    /* print overall status if incoming threshold is
+     * an extreme value indicating that API returned
+     * unexpected info value */
+    FLA_TEST_PRINT_INVALID_STATUS(n, n, err_thresh);
+
     if(*jobz != 'N')
     {
         void *lambda = NULL, *zlambda = NULL, *Z = NULL;
@@ -34,7 +46,7 @@ void validate_syevd(char *jobz, integer n, void *A, void *A_test, integer lda, v
         {
             case FLOAT:
             {
-                float norm, norm_A, eps, resid1, resid2;
+                float norm, norm_A, eps;
                 eps = fla_lapack_slamch("P");
 
                 /* Test 1
@@ -48,14 +60,12 @@ void validate_syevd(char *jobz, integer n, void *A, void *A_test, integer lda, v
                 /* Test 2
                    compute norm(I - Z'*Z) / (N * EPS)*/
                 resid2 = (float)check_orthogonality(datatype, Z, n, n, lda);
-
-                *residual = (double)fla_max(resid1, resid2);
                 break;
             }
 
             case DOUBLE:
             {
-                double norm, norm_A, eps, resid1, resid2;
+                double norm, norm_A, eps;
                 eps = fla_lapack_dlamch("P");
 
                 /* Test 1
@@ -69,14 +79,12 @@ void validate_syevd(char *jobz, integer n, void *A, void *A_test, integer lda, v
                 /* Test 2
                    compute norm(I - Z'*Z) / (N * EPS)*/
                 resid2 = check_orthogonality(datatype, Z, n, n, lda);
-
-                *residual = (double)fla_max(resid1, resid2);
                 break;
             }
 
             case COMPLEX:
             {
-                float norm, norm_A, eps, resid1, resid2;
+                float norm, norm_A, eps;
                 eps = fla_lapack_slamch("P");
 
                 /* Test 1
@@ -90,14 +98,12 @@ void validate_syevd(char *jobz, integer n, void *A, void *A_test, integer lda, v
                 /* Test 2
                    compute norm(I - Z'*Z) / (N * EPS)*/
                 resid2 = (float)check_orthogonality(datatype, Z, n, n, lda);
-
-                *residual = (double)fla_max(resid1, resid2);
                 break;
             }
 
             case DOUBLE_COMPLEX:
             {
-                double norm, norm_A, eps, resid1, resid2;
+                double norm, norm_A, eps;
                 eps = fla_lapack_dlamch("P");
 
                 /* Test 1
@@ -111,8 +117,6 @@ void validate_syevd(char *jobz, integer n, void *A, void *A_test, integer lda, v
                 /* Test 2
                    compute norm(I - Z'*Z) / (N * EPS)*/
                 resid2 = check_orthogonality(datatype, Z, n, n, lda);
-
-                *residual = (double)fla_max(resid1, resid2);
                 break;
             }
         }
@@ -120,4 +124,9 @@ void validate_syevd(char *jobz, integer n, void *A, void *A_test, integer lda, v
         free_matrix(zlambda);
         free_matrix(Z);
     }
+
+    residual = fla_test_max(resid1, resid2);
+    FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
 }

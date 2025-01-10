@@ -256,7 +256,7 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
     real wi, wr, rec, ulp, beta, emax;
     logical pair, allv;
     integer ierr;
-    real unfl, ovfl, smin;
+    real unfl, smin;
     extern real sdot_(integer *, real *, integer *, real *, integer *);
     logical over;
     real vmax;
@@ -431,7 +431,6 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
     }
     /* Set the constants to control overflow. */
     unfl = slamch_("Safe minimum");
-    ovfl = 1.f / unfl;
     ulp = slamch_("Precision");
     smlnum = unfl * (*n / ulp);
     bignum = (1.f - ulp) / smlnum;

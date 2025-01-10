@@ -247,7 +247,7 @@ void zlahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
         void
         zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
-    doublereal safmin, safmax;
+    doublereal safmin;
     extern /* Subroutine */
         void
         zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
@@ -382,7 +382,6 @@ void zlahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
     nz = *ihiz - *iloz + 1;
     /* Set machine-dependent constants for the stopping criterion. */
     safmin = dlamch_("SAFE MINIMUM");
-    safmax = 1. / safmin;
     ulp = dlamch_("PRECISION");
     smlnum = safmin * ((doublereal)nh / ulp);
     /* I1 and I2 are the indices of the first row and last column of H */

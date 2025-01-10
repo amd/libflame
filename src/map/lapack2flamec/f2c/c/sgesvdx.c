@@ -6,7 +6,6 @@
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__6 = 6;
 static integer c__0 = 0;
-static integer c__2 = 2;
 static integer c__1 = 1;
 static integer c_n1 = -1;
 static real c_b109 = 0.f;
@@ -279,8 +278,7 @@ void sgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, real
               integer *info)
 {
     /* System generated locals */
-    address a__1[2];
-    integer a_dim1, a_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__1[2], i__2, i__3;
+    integer a_dim1, a_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__2, i__3;
     char ch__1[2];
     /* Builtin functions */
     /* Subroutine */
@@ -317,7 +315,6 @@ void sgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, real
         sgelqf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *),
         slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
                 integer *, integer *);
-    real abstol;
     extern /* Subroutine */
         void
         sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *),
@@ -382,7 +379,6 @@ void sgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, real
     /* Function Body */
     *ns = 0;
     *info = 0;
-    abstol = slamch_("S") * 2;
     lquery = *lwork == -1;
     minmn = fla_min(*m, *n);
     wantu = lsame_(jobu, "V", 1, 1);

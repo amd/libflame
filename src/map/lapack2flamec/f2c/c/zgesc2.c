@@ -135,7 +135,6 @@ void zgesc2_(integer *n, doublecomplex *a, integer *lda, doublecomplex *rhs, int
         void
         zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
-    doublereal bignum;
     extern integer izamax_(integer *, doublecomplex *, integer *);
     doublereal smlnum;
     extern /* Subroutine */
@@ -171,7 +170,6 @@ void zgesc2_(integer *n, doublecomplex *a, integer *lda, doublecomplex *rhs, int
     /* Function Body */
     eps = dlamch_("P");
     smlnum = dlamch_("S") / eps;
-    bignum = 1. / smlnum;
     /* Apply permutations IPIV to RHS */
     i__1 = *n - 1;
     zlaswp_(&c__1, &rhs[1], lda, &c__1, &i__1, &ipiv[1], &c__1);

@@ -8,7 +8,6 @@ static doublecomplex c_b1 = {0., 0.};
 static doublecomplex c_b2 = {1., 0.};
 static integer c__1 = 1;
 static integer c_n1 = -1;
-static integer c__2 = 2;
 /* > \brief \b ZTREVC3 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -264,8 +263,7 @@ void ztrevc3_(char *side, char *howmny, logical *select, integer *n, doublecompl
                       ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS ", m %" FLA_IS "",
                       *side, *howmny, *n, *ldt, *ldvl, *ldvr, *mm, *m);
     /* System generated locals */
-    address a__1[2];
-    integer t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2[2], i__3, i__4,
+    integer t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__3, i__4,
         i__5, i__6;
     doublereal d__1, d__2, d__3;
     doublecomplex z__1, z__2;
@@ -279,7 +277,7 @@ void ztrevc3_(char *side, char *howmny, logical *select, integer *n, doublecompl
     integer i__, j, k, nb, ii, ki, is, iv;
     doublereal ulp;
     logical allv;
-    doublereal unfl, ovfl, smin;
+    doublereal unfl, smin;
     logical over;
     doublereal scale;
     extern logical lsame_(char *, char *, integer, integer);
@@ -471,7 +469,6 @@ void ztrevc3_(char *side, char *howmny, logical *select, integer *n, doublecompl
     }
     /* Set the constants to control overflow. */
     unfl = dlamch_("Safe minimum");
-    ovfl = 1. / unfl;
     ulp = dlamch_("Precision");
     smlnum = unfl * (*n / ulp);
     /* Store the diagonal elements of T in working array WORK. */

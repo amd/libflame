@@ -306,7 +306,6 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
     extern /* Subroutine */
         void
         slarfg_(integer *, real *, real *, integer *, real *);
-    real safmax;
     extern /* Subroutine */
         void
         slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
@@ -395,7 +394,6 @@ void slaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
     ns = *nshfts - *nshfts % 2;
     /* ==== Machine constants for deflation ==== */
     safmin = slamch_("SAFE MINIMUM");
-    safmax = 1.f / safmin;
     ulp = slamch_("PRECISION");
     smlnum = safmin * ((real)(*n) / ulp);
     /* ==== Use accumulated reflections to update far-from-diagonal */

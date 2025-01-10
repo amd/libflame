@@ -366,7 +366,6 @@ void aocl_lapack_slaqr3(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
                 integer *);
     real safmin;
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    real safmax;
     extern /* Subroutine */
         void
         slarfg_(integer *, real *, real *, integer *, real *),
@@ -474,7 +473,6 @@ void aocl_lapack_slaqr3(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     }
     /* ==== Machine constants ==== */
     safmin = slamch_("SAFE MINIMUM");
-    safmax = 1.f / safmin;
     ulp = slamch_("PRECISION");
     smlnum = safmin * ((real)(*n) / ulp);
     /* ==== Setup deflation window ==== */

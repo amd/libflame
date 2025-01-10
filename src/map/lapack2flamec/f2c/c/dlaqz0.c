@@ -378,7 +378,6 @@ void dlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
     extern /* Subroutine */
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    doublereal safmax;
     extern /* Subroutine */
         void
         dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
@@ -609,7 +608,6 @@ void dlaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
     }
     /* Get machine constants */
     safmin = dlamch_("SAFE MINIMUM");
-    safmax = 1. / safmin;
     ulp = dlamch_("PRECISION");
     smlnum = safmin * ((doublereal)(*n) / ulp);
     i__1 = *ihi - *ilo + 1;

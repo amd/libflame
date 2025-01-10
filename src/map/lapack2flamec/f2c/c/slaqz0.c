@@ -365,7 +365,6 @@ void slaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
     extern /* Subroutine */
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    real safmax;
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real eshift;
     char jbcmpz[3];
@@ -597,7 +596,6 @@ void slaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
     }
     /* Get machine constants */
     safmin = slamch_("SAFE MINIMUM");
-    safmax = 1.f / safmin;
     ulp = slamch_("PRECISION");
     smlnum = safmin * ((real)(*n) / ulp);
     i__1 = *ihi - *ilo + 1;

@@ -288,7 +288,6 @@ void zlaqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
     extern /* Subroutine */
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    doublereal safmax;
     extern /* Subroutine */
         void
         zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
@@ -386,7 +385,6 @@ void zlaqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
     }
     /* Get machine constants */
     safmin = dlamch_("SAFE MINIMUM");
-    safmax = 1. / safmin;
     ulp = dlamch_("PRECISION");
     smlnum = safmin * ((doublereal)(*n) / ulp);
     if(*ihi == kwtop)

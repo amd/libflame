@@ -257,8 +257,7 @@ void dtrevc3_(char *side, char *howmny, logical *select, integer *n, doublereal 
                       ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS ", lwork %" FLA_IS "",
                       *side, *howmny, *n, *ldt, *ldvl, *ldvr, *mm, *lwork);
     /* System generated locals */
-    address a__1[2];
-    integer t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1[2], i__2, i__3, i__4;
+    integer t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__2, i__3, i__4;
     doublereal d__1, d__2, d__3, d__4;
     char ch__1[2];
     /* Builtin functions */
@@ -277,7 +276,7 @@ void dtrevc3_(char *side, char *howmny, logical *select, integer *n, doublereal 
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical allv;
     integer ierr;
-    doublereal unfl, ovfl, smin;
+    doublereal unfl, smin;
     logical over;
     doublereal vmax;
     integer jnxt;
@@ -499,7 +498,6 @@ void dtrevc3_(char *side, char *howmny, logical *select, integer *n, doublereal 
     }
     /* Set the constants to control overflow. */
     unfl = dlamch_("Safe minimum");
-    ovfl = 1. / unfl;
     ulp = dlamch_("Precision");
     smlnum = unfl * (*n / ulp);
     bignum = (1. - ulp) / smlnum;

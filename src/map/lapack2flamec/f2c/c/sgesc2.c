@@ -142,7 +142,6 @@ void aocl_lapack_sgesc2(aocl_int64_t *n, real *a, aocl_int64_t *lda, real *rhs, 
         void
         sscal_(integer *, real *, real *, integer *);
     extern real slamch_(char *);
-    real bignum;
     extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
         void
@@ -178,7 +177,6 @@ void aocl_lapack_sgesc2(aocl_int64_t *n, real *a, aocl_int64_t *lda, real *rhs, 
     /* Function Body */
     eps = slamch_("P");
     smlnum = slamch_("S") / eps;
-    bignum = 1.f / smlnum;
     /* Apply permutations IPIV to RHS */
     i__1 = *n - 1;
     aocl_lapack_slaswp(&c__1, &rhs[1], lda, &c__1, &i__1, &ipiv[1], &c__1);

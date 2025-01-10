@@ -150,14 +150,15 @@ void dlaed6_(integer *kniter, logical *orgati, doublereal *rho, doublereal *d__,
     /* Local variables */
     doublereal a, b, c__, f;
     integer i__;
-    doublereal fc, df, ddf, lbd, eta, ubd, eps, base;
+    doublereal fc, df, ddf, lbd, eta, ubd;
     integer iter;
     doublereal temp, temp1, temp2, temp3, temp4;
     logical scale;
     integer niter;
-    doublereal small1, small2, sminv1, sminv2;
     extern doublereal dlamch_(char *);
     doublereal dscale[3], sclfac, zscale[3], erretm, sclinv;
+    static TLS_CLASS_SPEC doublereal eps, base, small1, sminv1, small2, sminv2;
+    static TLS_CLASS_SPEC integer r_once = 1;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -271,13 +272,17 @@ void dlaed6_(integer *kniter, logical *orgati, doublereal *rho, doublereal *d__,
     /* modified by Sven: parameters SMALL1, SMINV1, SMALL2, */
     /* SMINV2, EPS are not SAVEd anymore between one call to the */
     /* others but recomputed at each call */
-    eps = dlamch_("Epsilon");
-    base = dlamch_("Base");
-    i__1 = (integer)(log(dlamch_("SafMin")) / log(base) / 3.);
-    small1 = pow_di(&base, &i__1);
-    sminv1 = 1. / small1;
-    small2 = small1 * small1;
-    sminv2 = sminv1 * sminv1;
+    if(r_once)
+    {
+        eps = dlamch_("Epsilon");
+        base = dlamch_("Base");
+        i__1 = (integer)(log(dlamch_("SafMin")) / log(base) / 3.);
+        small1 = pow_di(&base, &i__1);
+        sminv1 = 1. / small1;
+        small2 = small1 * small1;
+        sminv2 = sminv1 * sminv1;
+        r_once = 0;
+    }
     /* Determine if scaling of inputs necessary to avoid overflow */
     /* when computing 1/TEMP**3 */
     if(*orgati)

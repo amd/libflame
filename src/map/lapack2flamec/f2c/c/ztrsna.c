@@ -288,7 +288,6 @@ void ztrsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex
     extern /* Subroutine */
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    doublereal bignum;
     logical wantbh;
     extern integer izamax_(integer *, doublecomplex *, integer *);
     logical somcon;
@@ -445,7 +444,6 @@ void ztrsna_(char *job, char *howmny, logical *select, integer *n, doublecomplex
     /* Get machine constants */
     eps = dlamch_("P");
     smlnum = dlamch_("S") / eps;
-    bignum = 1. / smlnum;
     ks = 1;
     i__1 = *n;
     for(k = 1; k <= i__1; ++k)

@@ -371,7 +371,7 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
                 doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *,
                 doublereal *, doublereal *, integer *, integer *, doublereal *, integer *,
                 integer *);
-    integer irange, idiscl, idumma[1];
+    integer irange, idiscl, idumma[1] = {0};
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer idiscu;
     logical ncnvrg, toofew;

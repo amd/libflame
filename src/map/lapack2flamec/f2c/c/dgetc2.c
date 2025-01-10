@@ -131,7 +131,7 @@ void dgetc2_(integer *n, doublereal *a, integer *lda, integer *ipiv, integer *jp
         void
         dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
-    doublereal bignum, smlnum;
+    doublereal smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -171,7 +171,6 @@ void dgetc2_(integer *n, doublereal *a, integer *lda, integer *ipiv, integer *jp
     /* Set constants to control overflow */
     eps = dlamch_("P");
     smlnum = dlamch_("S") / eps;
-    bignum = 1. / smlnum;
     /* Handle the case N=1 by itself */
     if(*n == 1)
     {

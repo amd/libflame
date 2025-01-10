@@ -144,7 +144,7 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaed4 inputs: n %" FLA_IS ", i__ %" FLA_IS "", *n, *i__);
     /* System generated locals */
-    integer i__1;
+    integer i__1, i__2, i__3;
     doublereal d__1;
     /* Builtin functions */
     double sqrt(doublereal);
@@ -155,7 +155,7 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
     integer ii;
     doublereal dw, zz[3];
     integer ip1;
-    doublereal del, eta, phi, eps, tau, psi;
+    doublereal del, eta, phi, tau, psi;
     integer iim1, iip1;
     doublereal dphi, dpsi;
     integer iter;
@@ -171,6 +171,9 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
     extern doublereal dlamch_(char *);
     logical orgati;
     doublereal erretm, rhoinv;
+    static TLS_CLASS_SPEC doublereal eps;
+    static TLS_CLASS_SPEC integer r_once = 1;
+
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -216,8 +219,13 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
         return;
     }
     /* Compute machine epsilon */
-    eps = dlamch_("Epsilon");
+    if(r_once)
+    {
+        eps = dlamch_("Epsilon");
+        r_once = 0;
+    }
     rhoinv = 1. / *rho;
+
     /* The case I = N */
     if(*i__ == *n)
     {
@@ -495,25 +503,27 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
         /* Calculate initial guess */
         del = d__[ip1] - d__[*i__];
         midpt = del / 2.;
+        psi = 0.;
+        phi = 0.;
         i__1 = *n;
-        for(j = 1; j <= i__1; ++j)
+        i__2 = *i__ - 1;
+        i__3 = *i__ + 2;
+
+        for(j = 1; j <= i__2; ++j)
         {
             delta[j] = d__[j] - d__[*i__] - midpt;
-            /* L100: */
-        }
-        psi = 0.;
-        i__1 = *i__ - 1;
-        for(j = 1; j <= i__1; ++j)
-        {
             psi += z__[j] * z__[j] / delta[j];
-            /* L110: */
         }
-        phi = 0.;
-        i__1 = *i__ + 2;
-        for(j = *n; j >= i__1; --j)
+        
+        delta[j] = d__[j] - d__[*i__] - midpt;
+        j++;
+        delta[j] = d__[j] - d__[*i__] - midpt;
+        j++;
+
+        for(; j <= i__1; ++j)
         {
+            delta[j] = d__[j] - d__[*i__] - midpt;
             phi += z__[j] * z__[j] / delta[j];
-            /* L120: */
         }
         c__ = rhoinv + psi + phi;
         w = c__ + z__[*i__] * z__[*i__] / delta[*i__] + z__[ip1] * z__[ip1] / delta[ip1];

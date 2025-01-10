@@ -192,7 +192,12 @@ void dlarfg_(integer *n, doublereal *alpha, doublereal *x, integer *incx, double
         L10:
             ++knt;
             i__1 = *n - 1;
+#if FLA_ENABLE_AMD_OPT
+        /* Inline DSCAL for small sizes */
+            fla_dscal(&i__1, &rsafmn, &x[1], incx);
+#else
             dscal_(&i__1, &rsafmn, &x[1], incx);
+#endif
             beta *= rsafmn;
             *alpha *= rsafmn;
             if(f2c_abs(beta) < safmin && knt < 20)

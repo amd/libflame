@@ -151,7 +151,7 @@
             for(i = 0; i < m; i++)                            \
             {                                                 \
                 GET_ABS_VAL(datatype, A, i, j, lda, abs_val); \
-                max_val = fla_max(max_val, abs_val);          \
+                max_val = fla_test_max(max_val, abs_val);     \
             }                                                 \
         }                                                     \
         *(realtype *)resultp = max_val;                       \
@@ -170,7 +170,7 @@
                 GET_ABS_VAL(datatype, A, i, j, lda, abs_val); \
                 col_sum += abs_val;                           \
             }                                                 \
-            max_val = fla_max(max_val, col_sum);              \
+            max_val = fla_test_max(max_val, col_sum);         \
         }                                                     \
         *(realtype *)resultp = max_val;                       \
     }
@@ -193,7 +193,7 @@
         }                                                             \
         for(i = 0; i < m; i++)                                        \
         {                                                             \
-            max_val = fla_max(max_val, row_sums[i]);                  \
+            max_val = fla_test_max(max_val, row_sums[i]);             \
         }                                                             \
         free_vector(row_sums);                                        \
         *(realtype *)resultp = max_val;                               \
@@ -291,7 +291,7 @@
                 {                                                       \
                     amed = sqrt(amed);                                  \
                     asml = sqrt(asml) / x_ssml(realtype);               \
-                    realtype ymax = fla_max(amed, asml);                \
+                    realtype ymax = fla_test_max(amed, asml);           \
                     realtype ymin = fla_min(amed, asml);                \
                     realtype t1 = ymin / ymax;                          \
                     scl = 1.;                                           \
@@ -339,10 +339,21 @@
         }                                                        \
     }
 
-void validate_lange(integer datatype, char norm_type, integer m, integer n, integer lda, void *A,
-                    void *result, double *residual)
+void validate_lange(char *tst_api, integer datatype, char norm_type, integer m, integer n,
+                    integer lda, void *A, void *result, double err_thresh)
 {
     void *calculated_value;
+    double residual;
+
+    /* Early return conditions */
+    if(m == 0 || n == 0)
+    {
+        FLA_TEST_PRINT_STATUS_AND_RETURN(m, n, err_thresh);
+    }
+    /* print overall status if incoming threshold is
+     * an extreme value indicating that API returned
+     * unexpected info value */
+    FLA_TEST_PRINT_INVALID_STATUS(m, n, err_thresh);
 
     create_vector(get_realtype(datatype), &calculated_value, 1);
 
@@ -377,34 +388,41 @@ void validate_lange(integer datatype, char norm_type, integer m, integer n, inte
         case FLOAT:
         {
             double res_value = *(float *)result - *(float *)calculated_value;
-            *residual = FLA_FABS(res_value);
+            residual = FLA_FABS(res_value);
             float eps = slamch_("P");
-            if(norm_type == 'F' && *residual > (m * n * eps))
+            if(norm_type == 'F' && residual > (m * n * eps))
             {
-                *residual = DBL_MAX;
+                residual = DBL_MAX;
             }
-            else if(norm_type != 'F' && *residual > eps)
+            else if(norm_type != 'F' && residual > eps)
             {
-                *residual = DBL_MAX;
+                residual = DBL_MAX;
             }
             break;
         }
         case DOUBLE:
         {
             double res_value = *(double *)result - *(double *)calculated_value;
-            *residual = FLA_FABS(res_value);
+            residual = FLA_FABS(res_value);
             double eps = dlamch_("P");
-            if(norm_type == 'F' && *residual > (m * n * eps))
+            if(norm_type == 'F' && residual > (m * n * eps))
             {
-                *residual = DBL_MAX;
+                residual = DBL_MAX;
             }
-            else if(norm_type != 'F' && *residual > eps)
+            else if(norm_type != 'F' && residual > eps)
             {
-                *residual = DBL_MAX;
+                residual = DBL_MAX;
             }
             break;
         }
+        default:
+            residual = err_thresh;
+            break;
     }
 
     free_vector(calculated_value);
+
+    tst_api[5] = norm_type;
+    FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
+    FLA_PRINT_SUBTEST_STATUS(residual, err_thresh, "01");
 }

@@ -1,6 +1,6 @@
-/******************************************************************************
- * Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
- *******************************************************************************/
+/*
+    Copyright (C) 2023-2025, Advanced Micro Devices, Inc. All rights reserved.
+*/
 
 #include "test_common.h"
 #include "test_lapack.h"
@@ -9,13 +9,15 @@
 #define SYTRF_VU 10.0 // Maximum eigen value for condition number.
 #define SYTRF_VL 0.01 // Minimum eigen value for condition number.
 
+extern double perf;
+extern double time_min;
 integer row_major_sytrf_lda;
 
 void invoke_sytrf(integer datatype, char *uplo, integer *n, void *a, integer *lda, integer *ipiv,
                   void *work, integer *lwork, integer *info);
-void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *t, double *residual);
+void fla_test_sytrf_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo);
 void prepare_sytrf_run(integer datatype, integer n, void *A, char uplo, integer lda, integer *ipiv,
                        void *work, integer lwork, integer n_repeats, double *time_min_,
                        integer *info, integer test_lapacke_interface, integer mlayout);
@@ -47,7 +49,6 @@ void fla_test_sytrf(integer argc, char **argv, test_params_t *params)
     {
         integer i, num_types, N;
         integer datatype, n_repeats;
-        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -90,13 +91,7 @@ void fla_test_sytrf(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_sytrf_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
-                                          &time_min, &residual);
-
-                /* Print the result */
-                fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
-                                      params->lin_solver_paramslist[0].solver_threshold, time_min,
-                                      perf);
+                fla_test_sytrf_experiment(front_str, params, datatype, N, N, 0, n_repeats, einfo);
                 tests_not_run = 0;
             }
         }
@@ -118,21 +113,22 @@ void fla_test_sytrf(integer argc, char **argv, test_params_t *params)
     }
 }
 
-void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *t, double *residual)
+void fla_test_sytrf_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo)
 {
     integer n, lda, lwork = -1, info = 0;
     void *A = NULL, *A_test = NULL, *ipiv = NULL, *work = NULL, *L = NULL;
     char uplo;
+    double residual, err_thresh;
+
     integer test_lapacke_interface = params->test_lapacke_interface;
     integer layout = params->matrix_major;
-    char *test_name = "SYTRF";
 
     /* Determine the dimensions */
     n = p_cur;
     lda = params->lin_solver_paramslist[pci].lda;
-    *residual = params->lin_solver_paramslist[pci].solver_threshold;
+    err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
     uplo = params->lin_solver_paramslist[pci].Uplo;
 
     /* If leading dimensions = -1, set them to default value
@@ -178,29 +174,32 @@ void fla_test_sytrf_experiment(test_params_t *params, integer datatype, integer 
     copy_matrix(datatype, "full", lda, n, A, lda, A_test, lda);
 
     /* call to API */
-    prepare_sytrf_run(datatype, n, A_test, uplo, lda, ipiv, work, lwork, n_repeats, t, &info,
-                      test_lapacke_interface, layout);
+    prepare_sytrf_run(datatype, n, A_test, uplo, lda, ipiv, work, lwork, n_repeats, &time_min,
+                      &info, test_lapacke_interface, layout);
 
     /* Performance computation */
-    *perf = (double)(n * n * n) * (1.0 / 3.0) / *t / FLOPS_PER_UNIT_PERF;
+    perf = (double)(n * n * n) * (1.0 / 3.0) / time_min / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
-        *perf *= 4.0;
+        perf *= 4.0;
 
     /* Output validataion */
-    if((!FLA_EXTREME_CASE_TEST) && info >= 0)
+    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    if(!FLA_EXTREME_CASE_TEST)
     {
-        validate_sytrf(&uplo, n, lda, A_test, datatype, ipiv, residual, &info, A, test_name);
-        info = 0;
+        validate_sytrf(tst_api, &uplo, n, lda, A_test, datatype, ipiv, residual, A);
     }
     else if(FLA_EXTREME_CASE_TEST)
     {
         if((!check_extreme_value(datatype, n, n, A_test, lda, params->imatrix_char)))
         {
-            *residual = DBL_MAX;
+            residual = DBL_MAX;
         }
+        else
+        {
+            residual = err_thresh;
+        }
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     }
-    else
-        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up buffers */
     free_vector(ipiv);
@@ -214,7 +213,7 @@ void prepare_sytrf_run(integer datatype, integer n, void *A, char uplo, integer 
 {
     integer i;
     void *A_save = NULL;
-    double time_min = 1e9, exe_time;
+    double t_min = 1e9, exe_time;
 
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_save, lda);
 
@@ -262,12 +261,12 @@ void prepare_sytrf_run(integer datatype, integer n, void *A, char uplo, integer 
             exe_time = fla_test_clock() - exe_time;
         }
         /* Get the best execution time */
-        time_min = fla_min(time_min, exe_time);
+        t_min = fla_min(t_min, exe_time);
 
         free_vector(work);
     }
 
-    *time_min_ = time_min;
+    *time_min_ = t_min;
 
     /* Save the output to vector A */
     copy_matrix(datatype, "full", lda, n, A_save, lda, A, lda);

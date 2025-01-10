@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -7,20 +7,21 @@
 #include <invoke_common.hh>
 #endif
 
+extern double perf;
+extern double time_min;
 integer row_major_geevx_lda;
 integer row_major_geevx_ldvl;
 integer row_major_geevx_ldvr;
 
 /* Local prototypes.*/
-void fla_test_geevx_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *t, double *residual);
+void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo);
 void prepare_geevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, integer n, void *a,
                        integer lda, void *wr, void *wi, void *w, void *vl, integer ldvl, void *vr,
                        integer ldvr, integer *ilo, integer *ihi, void *scale, void *abnrm,
                        void *rconde, void *rcondv, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer interfacetype,
-                       int matrix_layout);
+                       double *time_min_, integer *info, integer interfacetype, int matrix_layout);
 void invoke_geevx(integer datatype, char *balanc, char *jobvl, char *jobvr, char *sense, integer *n,
                   void *a, integer *lda, void *wr, void *wi, void *w, void *vl, integer *ldvl,
                   void *vr, integer *ldvr, integer *ilo, integer *ihi, void *scale, void *abnrm,
@@ -63,7 +64,6 @@ void fla_test_geevx(integer argc, char **argv, test_params_t *params)
         /* Test with parameters from commandline */
         integer i, num_types, N;
         integer datatype, n_repeats;
-        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -115,13 +115,7 @@ void fla_test_geevx(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_geevx_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
-                                          &time_min, &residual);
-                /* Print the results */
-                fla_test_print_status(
-                    front_str, stype, SQUARE_INPUT, N, N, residual,
-                    params->eig_non_sym_paramslist[0].GenNonSymEigProblem_threshold, time_min,
-                    perf);
+                fla_test_geevx_experiment(front_str, params, datatype, N, N, 0, n_repeats, einfo);
                 tests_not_run = 0;
             }
         }
@@ -146,17 +140,18 @@ void fla_test_geevx(integer argc, char **argv, test_params_t *params)
     return;
 }
 
-void fla_test_geevx_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *time_min, double *residual)
+void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo)
 {
     integer m, lda, ldvl, ldvr;
-    integer info = 0, vinfo = 0;
+    integer info = 0;
     integer ilo, ihi;
     void *A = NULL, *wr = NULL, *wi = NULL, *w = NULL, *VL = NULL, *VR = NULL;
     void *scale = NULL, *abnrm = NULL, *rconde = NULL, *rcondv = NULL;
     void *A_test = NULL, *L = NULL, *wr_in = NULL, *wi_in = NULL, *scal = NULL;
     char balanc, jobvl, jobvr, sense;
+    double residual, err_thresh;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
@@ -167,7 +162,7 @@ void fla_test_geevx_experiment(test_params_t *params, integer datatype, integer 
     ldvl = params->eig_non_sym_paramslist[pci].ldvl;
     ldvr = params->eig_non_sym_paramslist[pci].ldvr;
 
-    *residual = params->eig_non_sym_paramslist[pci].GenNonSymEigProblem_threshold;
+    err_thresh = params->eig_non_sym_paramslist[pci].GenNonSymEigProblem_threshold;
     balanc = params->eig_non_sym_paramslist[pci].balance_ggevx;
     jobvl = params->eig_non_sym_paramslist[pci].jobvsl;
     jobvr = params->eig_non_sym_paramslist[pci].jobvsr;
@@ -266,34 +261,40 @@ void fla_test_geevx_experiment(test_params_t *params, integer datatype, integer 
     copy_matrix(datatype, "full", m, m, A, lda, A_test, lda);
 
     prepare_geevx_run(&balanc, &jobvl, &jobvr, &sense, m, A_test, lda, wr, wi, w, VL, ldvl, VR,
-                      ldvr, &ilo, &ihi, scale, abnrm, rconde, rcondv, datatype, n_repeats, time_min,
-                      &info, interfacetype, layout);
+                      ldvr, &ilo, &ihi, scale, abnrm, rconde, rcondv, datatype, n_repeats,
+                      &time_min, &info, interfacetype, layout);
 
     /* performance computation
        4/3 m^3 flops if job = 'N'
        8/3 m^3 + m^2 flops if job = 'V' */
     if(jobvl == 'N' && jobvr == 'N')
-        *perf = (double)((4.0 / 3.0) * m * m * m) / *time_min / FLOPS_PER_UNIT_PERF;
+        perf = (double)((4.0 / 3.0) * m * m * m) / time_min / FLOPS_PER_UNIT_PERF;
     else
-        *perf = (double)(((8.0 / 3.0) * m * m * m) + (m * m)) / *time_min / FLOPS_PER_UNIT_PERF;
+        perf = (double)(((8.0 / 3.0) * m * m * m) + (m * m)) / time_min / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
-        *perf *= 4.0;
+        perf *= 4.0;
 
     /* output validation */
-    if(info == 0 && (FLA_OVERFLOW_UNDERFLOW_TEST || (!FLA_EXTREME_CASE_TEST)))
-        validate_geevx(&jobvl, &jobvr, &sense, &balanc, m, A, A_test, lda, VL, ldvl, VR, ldvr, w,
-                       wr, wi, scale, abnrm, rconde, rcondv, datatype, params->imatrix_char, scal,
-                       residual, &vinfo, wr_in, wi_in);
+    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    if(!FLA_EXTREME_CASE_TEST)
+    {
+        validate_geevx(tst_api, &jobvl, &jobvr, &sense, &balanc, m, A, A_test, lda, VL, ldvl, VR,
+                       ldvr, w, wr, wi, scale, abnrm, rconde, rcondv, datatype,
+                       params->imatrix_char, scal, residual, wr_in, wi_in);
+    }
     /* check for output matrix when inputs as extreme values */
-    else if(FLA_EXTREME_CASE_TEST)
+    else
     {
         if(!check_extreme_value(datatype, m, m, A_test, lda, params->imatrix_char))
         {
-            *residual = DBL_MAX;
+            residual = DBL_MAX;
         }
+        else
+        {
+            residual = err_thresh;
+        }
+        FLA_PRINT_TEST_STATUS(m, m, residual, err_thresh);
     }
-    else
-        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up the buffers */
     free_matrix(A);
@@ -331,13 +332,12 @@ void prepare_geevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, inte
                        integer lda, void *wr, void *wi, void *w, void *VL, integer ldvl, void *VR,
                        integer ldvr, integer *ilo, integer *ihi, void *scale, void *abnrm,
                        void *rconde, void *rcondv, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer interfacetype,
-                       int layout)
+                       double *time_min_, integer *info, integer interfacetype, int layout)
 {
     void *A_save = NULL, *rwork = NULL, *iwork = NULL, *work = NULL;
     integer lwork, liwork, lrwork;
     integer i;
-    double time_min = 1e9, exe_time;
+    double t_min = 1e9, exe_time;
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
@@ -356,7 +356,8 @@ void prepare_geevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, inte
     /* Make a workspace query the first time through. This will provide us with
      and ideal workspace size based on an internal block size.
      NOTE: LAPACKE interface handles workspace query internally */
-    if((interfacetype != LAPACKE_COLUMN_TEST) && (interfacetype != LAPACKE_ROW_TEST) && (g_lwork <= 0))
+    if((interfacetype != LAPACKE_COLUMN_TEST) && (interfacetype != LAPACKE_ROW_TEST)
+       && (g_lwork <= 0))
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
@@ -365,16 +366,16 @@ void prepare_geevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, inte
         /* call to  geevx API */
         if(interfacetype == LAPACK_CPP_TEST)
         {
-            invoke_cpp_geevx(datatype, balanc, jobvl, jobvr, sense, &m_A, NULL, &lda, NULL, NULL, NULL,
-                            NULL, &ldvl, NULL, &ldvr, ilo, ihi, NULL, NULL, NULL, NULL, work, &lwork,
-                            rwork, NULL, info);
+            invoke_cpp_geevx(datatype, balanc, jobvl, jobvr, sense, &m_A, NULL, &lda, NULL, NULL,
+                             NULL, NULL, &ldvl, NULL, &ldvr, ilo, ihi, NULL, NULL, NULL, NULL, work,
+                             &lwork, rwork, NULL, info);
         }
         else
 #endif
         {
             invoke_geevx(datatype, balanc, jobvl, jobvr, sense, &m_A, NULL, &lda, NULL, NULL, NULL,
-                        NULL, &ldvl, NULL, &ldvr, ilo, ihi, NULL, NULL, NULL, NULL, work, &lwork,
-                        rwork, NULL, info);
+                         NULL, &ldvl, NULL, &ldvr, ilo, ihi, NULL, NULL, NULL, NULL, work, &lwork,
+                         rwork, NULL, info);
         }
         if(*info == 0)
         {
@@ -420,17 +421,17 @@ void prepare_geevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, inte
                                                  scale, abnrm, rconde, rcondv, info);
         }
 #if ENABLE_CPP_TEST
-        else if(interfacetype == LAPACK_CPP_TEST)   /* Call CPP geevx API */
+        else if(interfacetype == LAPACK_CPP_TEST) /* Call CPP geevx API */
         {
             exe_time = fla_test_clock();
-            invoke_cpp_geevx(datatype, balanc, jobvl, jobvr, sense, &m_A, A, &lda, wr, wi, w, VL, &ldvl,
-                            VR, &ldvr, ilo, ihi, scale, abnrm, rconde, rcondv, work, &lwork, rwork,
-                            iwork, info);
+            invoke_cpp_geevx(datatype, balanc, jobvl, jobvr, sense, &m_A, A, &lda, wr, wi, w, VL,
+                             &ldvl, VR, &ldvr, ilo, ihi, scale, abnrm, rconde, rcondv, work, &lwork,
+                             rwork, iwork, info);
 
             exe_time = fla_test_clock() - exe_time;
         }
 #endif
-        else    /* Call LAPACK geevx API */
+        else /* Call LAPACK geevx API */
         {
             exe_time = fla_test_clock();
             invoke_geevx(datatype, balanc, jobvl, jobvr, sense, &m_A, A, &lda, wr, wi, w, VL, &ldvl,
@@ -440,7 +441,7 @@ void prepare_geevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, inte
             exe_time = fla_test_clock() - exe_time;
         }
         /* Get the best execution time */
-        time_min = fla_min(time_min, exe_time);
+        t_min = fla_min(t_min, exe_time);
 
         /* Free up the output buffers */
         free_vector(work);
@@ -453,7 +454,7 @@ void prepare_geevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, inte
             free_vector(iwork);
         }
     }
-    *time_min_ = time_min;
+    *time_min_ = t_min;
 
     free_matrix(A_save);
 }

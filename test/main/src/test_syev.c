@@ -1,17 +1,18 @@
 /*
-    Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2023-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_common.h"
 #include "test_lapack.h"
 #include "test_prototype.h"
 
+extern double perf;
+extern double time_min;
 integer row_major_syev_lda;
 
 /* Local prototypes.*/
-void fla_test_syev_experiment(test_params_t *params, integer datatype, integer p_cur, integer q_cur,
-                              integer pci, integer n_repeats, integer einfo, double *perf,
-                              double *t, double *residual);
+void fla_test_syev_experiment(char *tst_api, test_params_t *params, integer datatype, integer p_cur,
+                              integer q_cur, integer pci, integer n_repeats, integer einfo);
 void prepare_syev_run(char *jobz, char *uplo, integer n, void *A, integer lda, void *w,
                       integer datatype, integer n_repeats, double *time_min_, integer *info,
                       integer test_lapacke_interface, int matrix_layout);
@@ -48,7 +49,6 @@ void fla_test_syev(integer argc, char **argv, test_params_t *params)
     {
         integer i, num_types, N;
         integer datatype, n_repeats;
-        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -93,12 +93,7 @@ void fla_test_syev(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_syev_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
-                                         &time_min, &residual);
-                /* Print the results */
-                fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
-                                      params->eig_sym_paramslist[0].threshold_value, time_min,
-                                      perf);
+                fla_test_syev_experiment(front_str, params, datatype, N, N, 0, n_repeats, einfo);
                 tests_not_run = 0;
             }
         }
@@ -122,13 +117,13 @@ void fla_test_syev(integer argc, char **argv, test_params_t *params)
     }
 }
 
-void fla_test_syev_experiment(test_params_t *params, integer datatype, integer p_cur, integer q_cur,
-                              integer pci, integer n_repeats, integer einfo, double *perf,
-                              double *time_min, double *residual)
+void fla_test_syev_experiment(char *tst_api, test_params_t *params, integer datatype, integer p_cur,
+                              integer q_cur, integer pci, integer n_repeats, integer einfo)
 {
     integer n, lda, info = 0;
     char jobz, uplo, range = 'V';
     void *A = NULL, *w = NULL, *A_test = NULL, *L = NULL, *scal = NULL;
+    double residual, err_thresh;
 
     integer test_lapacke_interface = params->test_lapacke_interface;
     int layout = params->matrix_major;
@@ -136,7 +131,7 @@ void fla_test_syev_experiment(test_params_t *params, integer datatype, integer p
     /* Get input matrix dimensions.*/
     jobz = params->eig_sym_paramslist[pci].jobz;
     uplo = params->eig_sym_paramslist[pci].uplo;
-    *residual = params->eig_sym_paramslist[pci].threshold_value;
+    err_thresh = params->eig_sym_paramslist[pci].threshold_value;
 
     n = p_cur;
     lda = params->eig_sym_paramslist[pci].lda;
@@ -176,28 +171,29 @@ void fla_test_syev_experiment(test_params_t *params, integer datatype, integer p
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
 
-    prepare_syev_run(&jobz, &uplo, n, A_test, lda, w, datatype, n_repeats, time_min, &info,
+    prepare_syev_run(&jobz, &uplo, n, A_test, lda, w, datatype, n_repeats, &time_min, &info,
                      test_lapacke_interface, layout);
 
     /* performance computation
        (8/3)n^3 flops for eigen vectors
        (4/3)n^3 flops for eigen values */
     if(jobz == 'V')
-        *perf = (double)((8.0 / 3.0) * n * n * n) / *time_min / FLOPS_PER_UNIT_PERF;
+        perf = (double)((8.0 / 3.0) * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     else
-        *perf = (double)((4.0 / 3.0) * n * n * n) / *time_min / FLOPS_PER_UNIT_PERF;
+        perf = (double)((4.0 / 3.0) * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
-        *perf *= 4.0;
+        perf *= 4.0;
 
     /* output validation */
-    if(info == 0)
+    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    if(!FLA_EXTREME_CASE_TEST)
     {
-        validate_syev(&jobz, &range, n, A, A_test, lda, 0, 0, L, w, NULL, datatype, residual,
-                      params->imatrix_char, scal);
+        validate_syev(tst_api, &jobz, &range, n, A, A_test, lda, 0, 0, L, w, NULL, datatype,
+                      residual, params->imatrix_char, scal);
     }
     else
     {
-        FLA_TEST_CHECK_EINFO(residual, info, einfo);
+        printf("Extreme Value tests not supported for xSYEV/HEEV APIs\n");
     }
 
     /* Free up the buffers */
@@ -220,7 +216,7 @@ void prepare_syev_run(char *jobz, char *uplo, integer n, void *A, integer lda, v
 {
     void *A_save = NULL, *work = NULL, *rwork = NULL, *w_test = NULL;
     integer i, lwork;
-    double time_min = 1e9, exe_time;
+    double t_min = 1e9, exe_time;
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
@@ -279,7 +275,7 @@ void prepare_syev_run(char *jobz, char *uplo, integer n, void *A, integer lda, v
         }
 
         /* Get the best execution time */
-        time_min = fla_min(time_min, exe_time);
+        t_min = fla_min(t_min, exe_time);
 
         /* Make a copy of the output buffers. This is required to validate the API functionality.*/
         copy_realtype_vector(datatype, n, w_test, 1, w, 1);
@@ -293,7 +289,7 @@ void prepare_syev_run(char *jobz, char *uplo, integer n, void *A, integer lda, v
         free_vector(w_test);
     }
 
-    *time_min_ = time_min;
+    *time_min_ = t_min;
 
     free_matrix(A_save);
 }

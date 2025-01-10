@@ -1,24 +1,37 @@
-/******************************************************************************
- * Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
- *******************************************************************************/
+/*
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+*/
 
 /*! @file validate_gesvdx.c
  *  @brief Defines validate function of GESVDX() to use in test suite.
  *  */
 #include "test_common.h"
-void validate_gesvdx(char *jobu, char *jobvt, char range, integer m, integer n, void *A,
-                     void *A_test, integer lda, void *vl, void *vu, integer il, integer iu,
-                     integer ns, void *s, void *s_test, void *U, integer ldu, void *V, integer ldvt,
-                     integer datatype, double *residual, integer *info, FILE *g_ext_fptr,
-                     void *scal, char imatrix)
-{
 
-    if(m == 0 || n == 0)
-        return;
+extern double perf;
+extern double time_min;
+
+void validate_gesvdx(char *tst_api, char *jobu, char *jobvt, char range, integer m, integer n,
+                     void *A, void *A_test, integer lda, void *vl, void *vu, integer il, integer iu,
+                     integer ns, void *s, void *s_test, void *U, integer ldu, void *V, integer ldvt,
+                     integer datatype, double err_thresh, FILE *g_ext_fptr, void *scal,
+                     char imatrix)
+{
     void *sigma = NULL, *U_A = NULL;
     void *work = NULL;
-    *info = 0;
     integer min_m_n = fla_min(m, n);
+    double residual, resid1 = 0., resid2 = 0.;
+    double resid3 = 0., resid4 = 0., resid5 = 0.;
+
+    /* Early return conditions */
+    if(m == 0 || n == 0)
+    {
+        FLA_TEST_PRINT_STATUS_AND_RETURN(m, n, err_thresh);
+    }
+    /* print overall status if incoming threshold is
+     * an extreme value indicating that API returned
+     * unexpected info value */
+    FLA_TEST_PRINT_INVALID_STATUS(m, n, err_thresh);
+
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &sigma, m);
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &U_A, m);
     reset_matrix(datatype, m, n, U_A, m);
@@ -29,8 +42,8 @@ void validate_gesvdx(char *jobu, char *jobvt, char range, integer m, integer n, 
     {
         case FLOAT:
         {
-            float norm1, norm2, norm_s, norm_sigma, eps, resid1, resid2, resid3, resid4, resid5;
-            norm1 = norm2 = norm_s = norm_sigma = resid1 = resid2 = resid3 = resid4 = 0.f;
+            float norm1, norm2, norm_s, norm_sigma, eps;
+            norm1 = norm2 = norm_s = norm_sigma = 0.f;
             eps = fla_lapack_slamch("P");
             if((*jobu == 'V' && *jobvt == 'V') || (*jobu == 'v' && *jobvt == 'v'))
             {
@@ -41,7 +54,7 @@ void validate_gesvdx(char *jobu, char *jobvt, char range, integer m, integer n, 
                     {
                         /* To handle large size values nrm2 is used */
                         float *vector = (float *)sigma + i * ns;
-                        norm_sigma = fla_max(norm_sigma, snrm2_(&ns, vector, &i_one));
+                        norm_sigma = fla_test_max(norm_sigma, snrm2_(&ns, vector, &i_one));
                     }
                 }
                 else
@@ -55,7 +68,7 @@ void validate_gesvdx(char *jobu, char *jobvt, char range, integer m, integer n, 
                     {
                         /* To handle large size values nrm2 is used */
                         float *vector = (float *)sigma + i * ns;
-                        norm1 = fla_max(norm1, snrm2_(&ns, vector, &i_one));
+                        norm1 = fla_test_max(norm1, snrm2_(&ns, vector, &i_one));
                     }
                 }
                 else
@@ -86,17 +99,14 @@ void validate_gesvdx(char *jobu, char *jobvt, char range, integer m, integer n, 
                 resid4 = (float)check_orthogonal_matrix('N', datatype, V, ns, n, ns, ldvt);
 
             /* Test 5: Test to Check order of Singular SVD values (positive and non-decreasing) */
-            resid5 = (float)svd_check_order(datatype, s, m, n, *residual);
-
-            *residual = (double)fla_max(fla_max(fla_max(resid1, fla_max(resid2, resid3)), resid4),
-                                        resid5);
+            resid5 = (float)svd_check_order(datatype, s, m, n, err_thresh);
             break;
         }
 
         case DOUBLE:
         {
-            double norm1, norm2, norm_s, norm_sigma, eps, resid1, resid2, resid3, resid4, resid5;
-            norm1 = norm2 = norm_s = norm_sigma = resid1 = resid2 = resid3 = resid4 = 0.;
+            double norm1, norm2, norm_s, norm_sigma, eps;
+            norm1 = norm2 = norm_s = norm_sigma = 0.;
             eps = fla_lapack_dlamch("P");
             if((*jobu == 'V' && *jobvt == 'V') || (*jobu == 'v' && *jobvt == 'v'))
             {
@@ -108,7 +118,7 @@ void validate_gesvdx(char *jobu, char *jobvt, char range, integer m, integer n, 
                     {
                         /* To handle large size values nrm2 is used */
                         double *vector = (double *)sigma + i * ns;
-                        norm_sigma = fla_max(norm_sigma, dnrm2_(&ns, vector, &i_one));
+                        norm_sigma = fla_test_max(norm_sigma, dnrm2_(&ns, vector, &i_one));
                     }
                 }
                 else
@@ -122,7 +132,7 @@ void validate_gesvdx(char *jobu, char *jobvt, char range, integer m, integer n, 
                     {
                         /* To handle large size values nrm2 is used */
                         double *vector = (double *)sigma + i * ns;
-                        norm1 = fla_max(norm1, dnrm2_(&ns, vector, &i_one));
+                        norm1 = fla_test_max(norm1, dnrm2_(&ns, vector, &i_one));
                     }
                 }
                 else
@@ -152,18 +162,14 @@ void validate_gesvdx(char *jobu, char *jobvt, char range, integer m, integer n, 
                 resid4 = check_orthogonal_matrix('N', datatype, V, ns, n, ns, ldvt);
 
             /* Test 5: Test to Check order of Singular SVD values (positive and non-decreasing) */
-            resid5 = svd_check_order(datatype, s, m, n, *residual);
-
-            *residual = (double)fla_max(fla_max(fla_max(resid1, fla_max(resid2, resid3)), resid4),
-                                        resid5);
-
+            resid5 = svd_check_order(datatype, s, m, n, err_thresh);
             break;
         }
 
         case COMPLEX:
         {
-            float norm1, norm2, norm_s, norm_sigma, eps, resid1, resid2, resid3, resid4, resid5;
-            norm1 = norm2 = norm_s = norm_sigma = resid1 = resid2 = resid3 = resid4 = 0.f;
+            float norm1, norm2, norm_s, norm_sigma, eps;
+            norm1 = norm2 = norm_s = norm_sigma = 0.f;
             eps = fla_lapack_slamch("P");
             if((*jobu == 'V' && *jobvt == 'V') || (*jobu == 'v' && *jobvt == 'v'))
             {
@@ -174,7 +180,7 @@ void validate_gesvdx(char *jobu, char *jobvt, char range, integer m, integer n, 
                     {
                         /* To handle large size values nrm2 is used */
                         scomplex *vector = (scomplex *)sigma + i * ns;
-                        norm_sigma = fla_max(norm_sigma, scnrm2_(&ns, vector, &i_one));
+                        norm_sigma = fla_test_max(norm_sigma, scnrm2_(&ns, vector, &i_one));
                     }
                 }
                 else
@@ -188,7 +194,7 @@ void validate_gesvdx(char *jobu, char *jobvt, char range, integer m, integer n, 
                     {
                         /* To handle large size values nrm2 is used */
                         scomplex *vector = (scomplex *)sigma + i * ns;
-                        norm1 = fla_max(norm1, scnrm2_(&ns, vector, &i_one));
+                        norm1 = fla_test_max(norm1, scnrm2_(&ns, vector, &i_one));
                     }
                 }
                 else
@@ -219,17 +225,14 @@ void validate_gesvdx(char *jobu, char *jobvt, char range, integer m, integer n, 
                 resid4 = (float)check_orthogonal_matrix('N', datatype, V, ns, n, ns, ldvt);
 
             /* Test 5: Test to Check order of Singular SVD values (positive and non-decreasing) */
-            resid5 = (float)svd_check_order(datatype, s, m, n, *residual);
-
-            *residual = (double)fla_max(fla_max(fla_max(resid1, fla_max(resid2, resid3)), resid4),
-                                        resid5);
+            resid5 = (float)svd_check_order(datatype, s, m, n, err_thresh);
             break;
         }
 
         case DOUBLE_COMPLEX:
         {
-            double norm1, norm2, norm_s, norm_sigma, eps, resid1, resid2, resid3, resid4, resid5;
-            norm1 = norm2 = norm_s = norm_sigma = resid1 = resid2 = resid3 = resid4 = 0.;
+            double norm1, norm2, norm_s, norm_sigma, eps;
+            norm1 = norm2 = norm_s = norm_sigma = 0.;
             eps = fla_lapack_dlamch("P");
             if((*jobu == 'V' && *jobvt == 'V') || (*jobu == 'v' && *jobvt == 'v'))
             {
@@ -240,7 +243,7 @@ void validate_gesvdx(char *jobu, char *jobvt, char range, integer m, integer n, 
                     {
                         /* To handle large size values nrm2 is used */
                         dcomplex *vector = (dcomplex *)sigma + i * ns;
-                        norm_sigma = fla_max(norm_sigma, dznrm2_(&ns, vector, &i_one));
+                        norm_sigma = fla_test_max(norm_sigma, dznrm2_(&ns, vector, &i_one));
                     }
                 }
                 else
@@ -254,7 +257,7 @@ void validate_gesvdx(char *jobu, char *jobvt, char range, integer m, integer n, 
                     {
                         /* To handle large size values nrm2 is used */
                         dcomplex *vector = (dcomplex *)sigma + i * ns;
-                        norm1 = fla_max(norm1, dznrm2_(&ns, vector, &i_one));
+                        norm1 = fla_test_max(norm1, dznrm2_(&ns, vector, &i_one));
                     }
                 }
                 norm1 = fla_lapack_zlange("F", &ns, &ns, sigma, &min_m_n, work);
@@ -285,13 +288,22 @@ void validate_gesvdx(char *jobu, char *jobvt, char range, integer m, integer n, 
                 resid4 = check_orthogonal_matrix('N', datatype, V, ns, n, ns, ldvt);
 
             /* Test 5: Test to Check order of Singular SVD values (positive and non-decreasing) */
-            resid5 = svd_check_order(datatype, s, m, n, *residual);
-
-            *residual = (double)fla_max(fla_max(fla_max(resid1, fla_max(resid2, resid3)), resid4),
-                                        resid5);
+            resid5 = svd_check_order(datatype, s, m, n, err_thresh);
             break;
         }
     }
     free_matrix(sigma);
     free_matrix(U_A);
+
+    residual = fla_test_max(resid1, resid2);
+    residual = fla_test_max(resid3, residual);
+    residual = fla_test_max(resid4, residual);
+    residual = fla_test_max(resid5, residual);
+
+    FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
+    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
+    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
+    FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
+    FLA_PRINT_SUBTEST_STATUS(resid5, err_thresh, "05");
 }

@@ -1,6 +1,6 @@
-/******************************************************************************
- * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
- *******************************************************************************/
+/*
+    Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
+*/
 
 /* > \brief \b validate_sygvd.c                                              */
 /* =========== DOCUMENTATION ===========                                     */
@@ -45,6 +45,9 @@
 
 #include "test_common.h"
 
+extern double perf;
+extern double time_min;
+
 #define GET_TRANS_STR(datatype) (((datatype) == FLOAT || (datatype) == DOUBLE) ? "T" : "C")
 
 #define invoke_lamch(type_prefix, arg) fla_lapack_##type_prefix##lamch(arg)
@@ -62,7 +65,7 @@
 */
 #define test_1_body(realtype, realtype_prefix, type_prefix)                                 \
     {                                                                                       \
-        realtype norm, norm_orig, resid;                                                    \
+        realtype norm, norm_orig;                                                           \
         /* Test 1 */                                                                        \
         /* Calculating LHS part of equation based on itype */                               \
         switch(itype)                                                                       \
@@ -104,13 +107,12 @@
                 break;                                                                      \
         }                                                                                   \
         norm = invoke_lange(type_prefix, "1", &n, &n, Z, &lda, work);                       \
-        resid = norm / (eps * norm_orig * (realtype)n);                                     \
-        *residual = (double)fla_max(*residual, resid);                                      \
+        resid2 = norm / (eps * norm_orig * (realtype)n);                                    \
     }
 
 #define test_2_body(realtype, realtype_prefix, type_prefix)                                 \
     {                                                                                       \
-        realtype norm, resid;                                                               \
+        realtype norm;                                                                      \
         /* Test 2 */                                                                        \
         /* compute norm(X * inv(X) - I) / (N * EPS)  */                                     \
         /* Z = I */                                                                         \
@@ -120,13 +122,12 @@
         /* Z = X * inv(X) - Z = X * inv(X) - I */                                           \
         invoke_gemm_diff(type_prefix, "N", "N", &n, &n, &n, X_inv, &lda, X, &lda, Z, &lda); \
         norm = invoke_lange(type_prefix, "1", &n, &n, Z, &lda, work);                       \
-        resid = norm / (eps * (realtype)n);                                                 \
-        *residual = (double)fla_max(*residual, resid);                                      \
+        resid3 = norm / (eps * (realtype)n);                                                \
     }
 
 #define test_3_body(realtype, realtype_prefix, type_prefix)                             \
     {                                                                                   \
-        realtype norm, resid;                                                           \
+        realtype norm;                                                                  \
         /* Test 3 */                                                                    \
         /* Compute norm (LU - B) / (N * EPS * normB) */                                 \
         reset_matrix(datatype, n, n, Z, lda);                                           \
@@ -134,13 +135,12 @@
         realtype normB = invoke_lange(type_prefix, "1", &n, &n, B, &lda, work);         \
         invoke_gemm_diff(type_prefix, "N", "N", &n, &n, &n, L, &lda, U, &lda, Z, &lda); \
         norm = invoke_lange(type_prefix, "1", &n, &n, Z, &lda, work);                   \
-        resid = norm / (eps * normB * (realtype)n);                                     \
-        *residual = (double)fla_max(*residual, resid);                                  \
+        resid4 = norm / (eps * normB * (realtype)n);                                    \
     }
 
 #define test_eigenvalues(realtype, realtype_prefix)                                         \
     {                                                                                       \
-        realtype norm, norm_L, eps, resid3;                                                 \
+        realtype norm, norm_L, eps;                                                         \
         eps = invoke_lamch(realtype_prefix, "P");                                           \
         if(itype == 2 || itype == 3)                                                        \
         {                                                                                   \
@@ -150,8 +150,7 @@
         invoke_axpy(realtype_prefix, &n, &realtype_prefix##_n_one, lambda_out, &i_one,      \
                     lambda_orig, &i_one);                                                   \
         norm = invoke_lange(realtype_prefix, "1", &n, &i_one, lambda_orig, &i_one, work);   \
-        resid3 = norm / (eps * norm_L * n);                                                 \
-        *residual = fla_max(*residual, (double)resid3);                                     \
+        resid5 = norm / (eps * norm_L * n);                                                 \
     }
 
 #define invoke_tests(realtype, realtype_prefix, type_prefix) \
@@ -163,14 +162,22 @@
         test_3_body(realtype, realtype_prefix, type_prefix); \
     }
 
-void validate_sygvd(integer itype, char *jobz, char *range, char *uplo, integer n, void *A,
-                    void *A_test, integer lda, void *B, void *B_test, integer ldb, integer il,
-                    integer iu, void *lambda_orig, void *lambda_out, void *ifail, integer datatype,
-                    double *residual, char imatrix, void *scal)
+void validate_sygvd(char *tst_api, integer itype, char *jobz, char *range, char *uplo, integer n,
+                    void *A, void *A_test, integer lda, void *B, void *B_test, integer ldb,
+                    integer il, integer iu, void *lambda_orig, void *lambda_out, void *ifail,
+                    integer datatype, double err_thresh, char imatrix, void *scal)
 {
+    double residual, resid1 = 0., resid2 = 0., resid3 = 0.;
+    double resid4 = 0., resid5 = 0., resid6 = 0.;
+    /* Early return conditions */
     if(n == 0)
-        return;
-    *residual = 0;
+    {
+        FLA_TEST_PRINT_STATUS_AND_RETURN(n, n, err_thresh);
+    }
+    /* print overall status if incoming threshold is
+     * an extreme value indicating that API returned
+     * unexpected info value */
+    FLA_TEST_PRINT_INVALID_STATUS(n, n, err_thresh);
 
     if(lambda_orig != NULL)
     {
@@ -184,7 +191,7 @@ void validate_sygvd(integer itype, char *jobz, char *range, char *uplo, integer 
         if((lambda_orig != NULL)
            && compare_realtype_vector(datatype, (iu - il + 1), lambda_orig, 1, il, lambda_out, 1))
         {
-            *residual = DBL_MAX;
+            resid1 = DBL_MAX;
         }
     }
     else /* range A or V */
@@ -289,7 +296,7 @@ void validate_sygvd(integer itype, char *jobz, char *range, char *uplo, integer 
                 for(i = 0; i < n; i++)
                 {
                     if(buff[i] != 0)
-                        *residual = DBL_MAX;
+                        resid6 = DBL_MAX;
                 }
             }
 
@@ -315,4 +322,18 @@ void validate_sygvd(integer itype, char *jobz, char *range, char *uplo, integer 
             }
         }
     }
+
+    residual = fla_test_max(resid1, resid2);
+    residual = fla_test_max(resid3, residual);
+    residual = fla_test_max(resid4, residual);
+    residual = fla_test_max(resid5, residual);
+    residual = fla_test_max(resid6, residual);
+
+    FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
+    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
+    FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
+    FLA_PRINT_SUBTEST_STATUS(resid5, err_thresh, "05");
+    FLA_PRINT_SUBTEST_STATUS(resid6, err_thresh, "06");
 }

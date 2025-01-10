@@ -1,6 +1,6 @@
-/******************************************************************************
- * Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
- *******************************************************************************/
+/*
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+*/
 
 /*! @file validate_gesdd.c
  *  @brief Defines validate function of GESDD() to use in test suite.
@@ -8,20 +8,32 @@
 
 #include "test_common.h"
 
-void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, integer lda, void *s,
-                    void *s_in, void *U, integer ldu, void *V, integer ldvt, integer datatype,
-                    double *residual, integer *info, char imatrix, void *scal)
+extern double perf;
+extern double time_min;
+
+void validate_gesdd(char *tst_api, char *jobz, integer m, integer n, void *A, void *A_test,
+                    integer lda, void *s, void *s_in, void *U, integer ldu, void *V, integer ldvt,
+                    integer datatype, double err_thresh, char imatrix, void *scal)
 {
-    if(m == 0 || n == 0)
-        return;
     void *sigma = NULL, *Usigma = NULL;
     void *work = NULL, *U_temp = NULL, *V_temp = NULL;
     integer ns = fla_min(m, n);
     integer n_U, m_V, ldu_t = ldu, ldvt_t = ldvt;
+    double residual, resid1 = 0., resid2 = 0.;
+    double resid3 = 0., resid4 = 0., resid5 = 0.;
+
+    /* Early return conditions */
+    if(m == 0 || n == 0)
+    {
+        FLA_TEST_PRINT_STATUS_AND_RETURN(m, n, err_thresh);
+    }
+    /* print overall status if incoming threshold is
+     * an extreme value indicating that API returned
+     * unexpected info value */
+    FLA_TEST_PRINT_INVALID_STATUS(m, n, err_thresh);
 
     n_U = (*jobz != 'A') ? ns : m;
     m_V = (*jobz != 'A') ? ns : n;
-    *info = 0;
 
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &sigma, m);
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &Usigma, m);
@@ -101,7 +113,7 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
 
             /* Test 4
                Test to Check order of Singular values of SVD (positive and non-decreasing) */
-            resid4 = (float)svd_check_order(datatype, s, m, n, *residual);
+            resid4 = (float)svd_check_order(datatype, s, m, n, err_thresh);
 
             /* Test 5: In case of specific input generation, compare input and
                output singular values */
@@ -116,8 +128,6 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
                 norm = fla_lapack_slange("1", &ns, &i_one, s_in, &i_one, work);
                 resid5 = norm / (eps * norm_A * ns);
             }
-            *residual = (double)fla_max(fla_max(fla_max(resid1, fla_max(resid2, resid3)), resid4),
-                                        resid5);
             break;
         }
 
@@ -149,7 +159,7 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
 
             /* Test 4
                Test to Check order of Singular values of SVD (positive and non-decreasing) */
-            resid4 = svd_check_order(datatype, s, m, n, *residual);
+            resid4 = svd_check_order(datatype, s, m, n, err_thresh);
 
             /* Test 5: In case of specific input generation, compare input and
                output singular values */
@@ -164,7 +174,6 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
                 norm = fla_lapack_dlange("1", &ns, &i_one, s_in, &i_one, work);
                 resid5 = norm / (eps * norm_A * ns);
             }
-            *residual = fla_max(fla_max(fla_max(resid1, fla_max(resid2, resid3)), resid4), resid5);
             break;
         }
 
@@ -197,7 +206,7 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
 
             /* Test 4
                Test to Check order of Singular values of SVD (positive and non-decreasing) */
-            resid4 = (float)svd_check_order(datatype, s, m, n, *residual);
+            resid4 = (float)svd_check_order(datatype, s, m, n, err_thresh);
 
             /* Test 5: In case of specific input generation, compare input and
                output singular values */
@@ -212,8 +221,6 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
                 norm = fla_lapack_slange("1", &ns, &i_one, s_in, &i_one, work);
                 resid5 = norm / (eps * norm_A * ns);
             }
-            *residual = (double)fla_max(fla_max(fla_max(resid1, fla_max(resid2, resid3)), resid4),
-                                        resid5);
             break;
         }
 
@@ -245,7 +252,7 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
 
             /* Test 4
                Test to Check order of Singular values of SVD  (positive and non-decreasing) */
-            resid4 = svd_check_order(datatype, s, m, n, *residual);
+            resid4 = svd_check_order(datatype, s, m, n, err_thresh);
 
             /* Test 5: In case of specific input generation, compare input and
                output singular values */
@@ -260,7 +267,6 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
                 norm = fla_lapack_dlange("1", &ns, &i_one, s_in, &i_one, work);
                 resid5 = norm / (eps * norm_A * ns);
             }
-            *residual = fla_max(fla_max(fla_max(resid1, fla_max(resid2, resid3)), resid4), resid5);
             break;
         }
     }
@@ -268,4 +274,16 @@ void validate_gesdd(char *jobz, integer m, integer n, void *A, void *A_test, int
     free_matrix(V_temp);
     free_matrix(sigma);
     free_matrix(Usigma);
+
+    residual = fla_test_max(resid1, resid2);
+    residual = fla_test_max(resid3, residual);
+    residual = fla_test_max(resid4, residual);
+    residual = fla_test_max(resid5, residual);
+
+    FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
+    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
+    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
+    FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
+    FLA_PRINT_SUBTEST_STATUS(resid5, err_thresh, "05");
 }

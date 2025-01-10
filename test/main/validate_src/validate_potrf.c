@@ -1,6 +1,6 @@
-/******************************************************************************
- * Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
- *******************************************************************************/
+/*
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+*/
 
 /*! @file validate_potrf.c
  *  @brief Defines validate function of POTRF() to use in test suite.
@@ -8,11 +8,12 @@
 
 #include "test_common.h"
 
-void validate_potrf(char *uplo, integer m, void *A, void *A_test, integer lda, integer datatype,
-                    double *residual, integer *info)
+extern double perf;
+extern double time_min;
+
+void validate_potrf(char *tst_api, char *uplo, integer m, void *A, void *A_test, integer lda,
+                    integer datatype, double err_thresh)
 {
-    if(m == 0)
-        return;
     void *b = NULL, *x = NULL;
     void *x_test = NULL, *b_test = NULL;
     void *work = NULL;
@@ -20,7 +21,18 @@ void validate_potrf(char *uplo, integer m, void *A, void *A_test, integer lda, i
     void *buff_A = NULL, *buff_B = NULL;
     integer nrhs = 1, incx = 1, incy = 1;
     char trans_A, trans_B;
-    *info = 0;
+    integer info = 0;
+    double residual, resid1 = 0., resid2 = 0.;
+
+    /* Early return conditions */
+    if(m == 0)
+    {
+        FLA_TEST_PRINT_STATUS_AND_RETURN(m, m, err_thresh);
+    }
+    /* print overall status if incoming threshold is
+     * an extreme value indicating that API returned
+     * unexpected info value */
+    FLA_TEST_PRINT_INVALID_STATUS(m, m, err_thresh);
 
     /* Create Matrix buff_A and buff_B for computing LL'*/
     create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &buff_A, m);
@@ -55,7 +67,7 @@ void validate_potrf(char *uplo, integer m, void *A, void *A_test, integer lda, i
     {
         case FLOAT:
         {
-            float norm_b, norm, eps, resid1, resid2;
+            float norm_b, norm, eps;
             float norm_A;
 
             /* Test 1 */
@@ -75,8 +87,8 @@ void validate_potrf(char *uplo, integer m, void *A, void *A_test, integer lda, i
             norm_b = snrm2_(&m, b, &incx);
 
             /* Find x to compute Ax-b */
-            fla_lapack_spotrs(uplo, &m, &nrhs, A_test, &lda, b_test, &m, info);
-            if(*info < 0)
+            fla_lapack_spotrs(uplo, &m, &nrhs, A_test, &lda, b_test, &m, &info);
+            if(info < 0)
                 break;
 
             copy_vector(datatype, m, b_test, 1, x, 1);
@@ -86,13 +98,11 @@ void validate_potrf(char *uplo, integer m, void *A, void *A_test, integer lda, i
             norm = snrm2_(&m, b, &incx);
 
             resid2 = norm / (eps * norm_b * (float)m);
-
-            *residual = (double)fla_max(resid1, resid2);
             break;
         }
         case DOUBLE:
         {
-            double norm_b, norm, eps, resid1, resid2;
+            double norm_b, norm, eps;
             double norm_A;
 
             /* Test 1 */
@@ -112,8 +122,8 @@ void validate_potrf(char *uplo, integer m, void *A, void *A_test, integer lda, i
             norm_b = dnrm2_(&m, b, &incx);
 
             /*Compute Ax-b Linear equations and find x */
-            fla_lapack_dpotrs(uplo, &m, &nrhs, A_test, &lda, b_test, &m, info);
-            if(*info < 0)
+            fla_lapack_dpotrs(uplo, &m, &nrhs, A_test, &lda, b_test, &m, &info);
+            if(info < 0)
                 break;
 
             copy_vector(datatype, m, b_test, 1, x, 1);
@@ -123,13 +133,11 @@ void validate_potrf(char *uplo, integer m, void *A, void *A_test, integer lda, i
             norm = dnrm2_(&m, b, &incx);
 
             resid2 = norm / (eps * norm_b * (double)m);
-
-            *residual = (double)fla_max(resid1, resid2);
             break;
         }
         case COMPLEX:
         {
-            float norm_b, norm, eps, resid1, resid2;
+            float norm_b, norm, eps;
             float norm_A;
 
             /* Test 1 */
@@ -149,8 +157,8 @@ void validate_potrf(char *uplo, integer m, void *A, void *A_test, integer lda, i
             norm_b = scnrm2_(&m, b, &incx);
 
             /*Find x to compute Ax-b */
-            fla_lapack_cpotrs(uplo, &m, &nrhs, A_test, &lda, b_test, &m, info);
-            if(*info < 0)
+            fla_lapack_cpotrs(uplo, &m, &nrhs, A_test, &lda, b_test, &m, &info);
+            if(info < 0)
                 break;
 
             copy_vector(datatype, m, b_test, 1, x, 1);
@@ -160,13 +168,11 @@ void validate_potrf(char *uplo, integer m, void *A, void *A_test, integer lda, i
             norm = scnrm2_(&m, b, &incx);
 
             resid2 = norm / (eps * norm_b * (float)m);
-
-            *residual = (double)fla_max(resid1, resid2);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm_b, norm, eps, resid1, resid2;
+            double norm_b, norm, eps;
             double norm_A;
 
             /* Test 1 */
@@ -186,8 +192,8 @@ void validate_potrf(char *uplo, integer m, void *A, void *A_test, integer lda, i
             norm_b = dznrm2_(&m, b, &incx);
 
             /* Find x to compute Ax-b */
-            fla_lapack_zpotrs(uplo, &m, &nrhs, A_test, &lda, b_test, &m, info);
-            if(*info < 0)
+            fla_lapack_zpotrs(uplo, &m, &nrhs, A_test, &lda, b_test, &m, &info);
+            if(info < 0)
                 break;
 
             copy_vector(datatype, m, b_test, 1, x, 1);
@@ -199,8 +205,6 @@ void validate_potrf(char *uplo, integer m, void *A, void *A_test, integer lda, i
             eps = fla_lapack_dlamch("P");
 
             resid2 = norm / (eps * norm_b * (double)m);
-
-            *residual = (double)fla_max(resid1, resid2);
             break;
         }
     }
@@ -212,4 +216,9 @@ void validate_potrf(char *uplo, integer m, void *A, void *A_test, integer lda, i
     free_matrix(A_save);
     free_matrix(buff_A);
     free_matrix(buff_B);
+
+    residual = fla_test_max(resid1, resid2);
+    FLA_PRINT_TEST_STATUS(m, m, residual, err_thresh);
+    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
 }

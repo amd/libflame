@@ -1,16 +1,35 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc.
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_common.h"
 
 // Global variables
+double perf;
+double time_min;
 integer i_zero = 0, i_one = 1, i_n_one = -1;
 float s_zero = 0, s_one = 1, s_n_one = -1;
 double d_zero = 0, d_one = 1, d_n_one = -1;
 scomplex c_zero = {0, 0}, c_one = {1, 0}, c_n_one = {-1, 0};
 dcomplex z_zero = {0, 0}, z_one = {1, 0}, z_n_one = {-1, 0};
 int matrix_layout = LAPACK_COL_MAJOR;
+
+/* Max function with NAN checks */
+double fla_test_max(double v1, double v2)
+{
+    double vmax;
+
+    if(isnan(v1) || isnan(v2))
+    {
+        vmax = NAN;
+    }
+    else
+    {
+        vmax = fla_max(v1, v2);
+    }
+
+    return vmax;
+}
 
 /* Integer absolute function */
 integer fla_i_abs(integer *x)
@@ -5596,8 +5615,9 @@ void fla_invoke_gemm(integer datatype, char *transA, char *transB, integer *m, i
 /* Generate a symmetric or hermitian matrix from existing matrix A
  * If type = "C" hermitian matrix formed.
  * If type = "S" symmetric matrix is formed.
- * If uplo = 'L' lower triangular part of the matrix is copied to upper triangular part in hermitian matrix.
- * Else upper triangular part of the matrix is copied to lower triangular part in hermitian matrix.
+ * If uplo = 'L' lower triangular part of the matrix is copied to upper triangular part in hermitian
+ * matrix. Else upper triangular part of the matrix is copied to lower triangular part in hermitian
+ * matrix.
  */
 void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, char *type, char uplo)
 {
@@ -5669,8 +5689,10 @@ void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, ch
                         i_temp = j;
                         j_temp = i;
                     }
-                    ((scomplex *)A)[i_temp * lda + j_temp].real = ((scomplex *)A)[j_temp * lda + i_temp].real;
-                    ((scomplex *)A)[i_temp * lda + j_temp].imag = conj * ((scomplex *)A)[j_temp * lda + i_temp].imag;
+                    ((scomplex *)A)[i_temp * lda + j_temp].real
+                        = ((scomplex *)A)[j_temp * lda + i_temp].real;
+                    ((scomplex *)A)[i_temp * lda + j_temp].imag
+                        = conj * ((scomplex *)A)[j_temp * lda + i_temp].imag;
                 }
             }
             break;
@@ -5696,8 +5718,10 @@ void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, ch
                         i_temp = j;
                         j_temp = i;
                     }
-                    ((dcomplex *)A)[i_temp * lda + j_temp].real = ((dcomplex *)A)[j_temp * lda + i_temp].real;
-                    ((dcomplex *)A)[i_temp * lda + j_temp].imag = conj * ((dcomplex *)A)[j_temp * lda + i_temp].imag;
+                    ((dcomplex *)A)[i_temp * lda + j_temp].real
+                        = ((dcomplex *)A)[j_temp * lda + i_temp].real;
+                    ((dcomplex *)A)[i_temp * lda + j_temp].imag
+                        = conj * ((dcomplex *)A)[j_temp * lda + i_temp].imag;
                 }
             }
             break;

@@ -317,7 +317,7 @@ void zlaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
         void
         zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
-    doublereal safmin, safmax;
+    doublereal safmin;
     extern /* Subroutine */
         void
         zgehrd_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
@@ -435,7 +435,6 @@ void zlaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     }
     /* ==== Machine constants ==== */
     safmin = dlamch_("SAFE MINIMUM");
-    safmax = 1. / safmin;
     ulp = dlamch_("PRECISION");
     smlnum = safmin * ((doublereal)(*n) / ulp);
     /* ==== Setup deflation window ==== */

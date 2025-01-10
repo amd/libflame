@@ -324,7 +324,6 @@ void slaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     extern /* Subroutine */
         void
         slarfg_(integer *, real *, real *, integer *, real *);
-    real safmax;
     extern /* Subroutine */
         void
         slahqr_(logical *, logical *, integer *, integer *, integer *, real *, integer *, real *,
@@ -425,7 +424,6 @@ void slaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     }
     /* ==== Machine constants ==== */
     safmin = slamch_("SAFE MINIMUM");
-    safmax = 1.f / safmin;
     ulp = slamch_("PRECISION");
     smlnum = safmin * ((real)(*n) / ulp);
     /* ==== Setup deflation window ==== */

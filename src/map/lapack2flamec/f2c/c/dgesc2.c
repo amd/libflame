@@ -129,7 +129,6 @@ void dgesc2_(integer *n, doublereal *a, integer *lda, doublereal *rhs, integer *
         dscal_(integer *, doublereal *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
-    doublereal bignum;
     extern /* Subroutine */
         void
         dlaswp_(integer *, doublereal *, integer *, integer *, integer *, integer *, integer *);
@@ -164,7 +163,6 @@ void dgesc2_(integer *n, doublereal *a, integer *lda, doublereal *rhs, integer *
     /* Function Body */
     eps = dlamch_("P");
     smlnum = dlamch_("S") / eps;
-    bignum = 1. / smlnum;
     /* Apply permutations IPIV to RHS */
     i__1 = *n - 1;
     dlaswp_(&c__1, &rhs[1], lda, &c__1, &i__1, &ipiv[1], &c__1);

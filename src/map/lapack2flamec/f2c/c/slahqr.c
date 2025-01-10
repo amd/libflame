@@ -248,7 +248,7 @@ void slahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
     extern /* Subroutine */
         void
         slarfg_(integer *, real *, real *, integer *, real *);
-    real safmax, rtdisc, smlnum;
+    real rtdisc, smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -311,7 +311,6 @@ void slahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
     nz = *ihiz - *iloz + 1;
     /* Set machine-dependent constants for the stopping criterion. */
     safmin = slamch_("SAFE MINIMUM");
-    safmax = 1.f / safmin;
     ulp = slamch_("PRECISION");
     smlnum = safmin * ((real)nh / ulp);
     /* I1 and I2 are the indices of the first row and last column of H */

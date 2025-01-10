@@ -297,7 +297,7 @@ void zlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
         zlaqr1_(integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *,
                 doublecomplex *);
     extern doublereal dlamch_(char *);
-    doublereal safmin, safmax;
+    doublereal safmin;
     extern /* Subroutine */
         void
         zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
@@ -373,7 +373,6 @@ void zlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
     ns = *nshfts - *nshfts % 2;
     /* ==== Machine constants for deflation ==== */
     safmin = dlamch_("SAFE MINIMUM");
-    safmax = 1. / safmin;
     ulp = dlamch_("PRECISION");
     smlnum = safmin * ((doublereal)(*n) / ulp);
     /* ==== Use accumulated reflections to update far-from-diagonal */

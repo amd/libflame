@@ -254,7 +254,7 @@ void dtrevc_(char *side, char *howmny, logical *select, integer *n, doublereal *
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical allv;
     integer ierr;
-    doublereal unfl, ovfl, smin;
+    doublereal unfl, smin;
     logical over;
     doublereal vmax;
     integer jnxt;
@@ -430,7 +430,6 @@ void dtrevc_(char *side, char *howmny, logical *select, integer *n, doublereal *
     }
     /* Set the constants to control overflow. */
     unfl = dlamch_("Safe minimum");
-    ovfl = 1. / unfl;
     ulp = dlamch_("Precision");
     smlnum = unfl * (*n / ulp);
     bignum = (1. - ulp) / smlnum;

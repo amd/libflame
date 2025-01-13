@@ -1,8 +1,8 @@
-/* ../netlib/ctrsyl.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./ctrsyl.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CTRSYL */
@@ -192,15 +192,12 @@ void ctrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, co
     scomplex suml, sumr;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     extern /* Complex */
-        VOID
+        void
         cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Complex */
-        VOID
-        cdotu_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
-    extern /* Subroutine */
         void
-        slabad_(real *, real *);
+        cdotu_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Complex */
         void
@@ -300,7 +297,6 @@ void ctrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, co
     eps = slamch_("P");
     smlnum = slamch_("S");
     bignum = 1.f / smlnum;
-    slabad_(&smlnum, &bignum);
     smlnum = smlnum * (real)(*m * *n) / eps;
     bignum = 1.f / smlnum;
     /* Computing MAX */

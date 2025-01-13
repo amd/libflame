@@ -1,4 +1,4 @@
-/* chpgvd.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./chpgvd.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -222,7 +222,7 @@ the */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup complexOTHEReigen */
+/* > \ingroup hpgvd */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -262,6 +262,7 @@ void chpgvd_(integer *itype, char *jobz, char *uplo, integer *n, complex *ap, co
         cpptrf_(char *, integer *, complex *, integer *);
     integer liwmin, lrwmin;
     logical lquery;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -340,7 +341,8 @@ void chpgvd_(integer *itype, char *jobz, char *uplo, integer *n, complex *ap, co
                 liwmin = 1;
             }
         }
-        work[1].r = (real)lwmin;
+        r__1 = sroundup_lwork(&lwmin);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         rwork[1] = (real)lrwmin;
         iwork[1] = liwmin;
@@ -447,7 +449,8 @@ void chpgvd_(integer *itype, char *jobz, char *uplo, integer *n, complex *ap, co
             }
         }
     }
-    work[1].r = (real)lwmin;
+    r__1 = sroundup_lwork(&lwmin);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     rwork[1] = (real)lrwmin;
     iwork[1] = liwmin;

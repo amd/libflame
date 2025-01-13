@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/chesv_aa.f -- translated by f2c (version 20160102). You must link the resulting
- object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
- systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
- -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./chesv_aa.f -- translated by f2c (version 20190311). You must link the resulting object file
+ with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c_n1 = -1;
 /* > \brief <b> CHESV_AA computes the solution to system of linear equations A * X = B for HE
@@ -157,8 +157,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2017 */
-/* > \ingroup complexHEsolve */
+/* > \ingroup hesv_aa */
 /* ===================================================================== */
 /* Subroutine */
 void chesv_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, integer *ipiv,
@@ -179,6 +178,7 @@ void chesv_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, 
 #endif
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
+    real r__1;
     /* Local variables */
     extern /* Subroutine */
         void
@@ -193,10 +193,10 @@ void chesv_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, 
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lwkopt;
     logical lquery;
-    /* -- LAPACK driver routine (version 3.8.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2017 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -262,13 +262,14 @@ void chesv_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, 
                    info);
         lwkopt_hetrs__ = (integer)work[1].r;
         lwkopt = fla_max(lwkopt_hetrf__, lwkopt_hetrs__);
-        work[1].r = (real)lwkopt;
+        r__1 = sroundup_lwork(&lwkopt);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHESV_AA ", &i__1, (ftnlen)9);
+        xerbla_("CHESV_AA", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -285,7 +286,8 @@ void chesv_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, 
         chetrs_aa_(uplo, n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb, &work[1], lwork,
                    info);
     }
-    work[1].r = (real)lwkopt;
+    r__1 = sroundup_lwork(&lwkopt);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

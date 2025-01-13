@@ -5,8 +5,8 @@
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 
 /*
-*     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
-*/
+ *     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+ */
 
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;

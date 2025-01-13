@@ -1,4 +1,4 @@
-/* claqz2.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./claqz2.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -216,6 +216,7 @@ the routine */
 /* > REC is INTEGER */
 /* > REC indicates the current recursion level. Should be set */
 /* > to 0 on first call. */
+/* > \endverbatim */
 /* > */
 /* > \param[out] INFO */
 /* > \verbatim */
@@ -227,7 +228,7 @@ the routine */
 /* ======== */
 /* > \author Thijs Steel, KU Leuven, KU Leuven */
 /* > \date May 2020 */
-/* > \ingroup complexGEcomputational */
+/* > \ingroup laqz2 */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
@@ -237,6 +238,12 @@ void claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
              complex *beta, complex *qc, integer *ldqc, complex *zc, integer *ldzc, complex *work,
              integer *lwork, real *rwork, integer *rec, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
+        "claqz2 inputs: n %" FLA_IS ",ilo %" FLA_IS ",ihi %" FLA_IS ",nw %" FLA_IS ",lda %" FLA_IS
+        ",ldb %" FLA_IS ",ldq %" FLA_IS ",ldz %" FLA_IS
+        ",ldqc %" FLA_IS ",ldzc %" FLA_IS ",lwork %" FLA_IS ",rec %" FLA_IS "",
+        *n, *ilo, *ihi, *nw, *lda, *ldb, *ldq, *ldz, *ldqc, *ldzc, *lwork, *rec);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, qc_dim1,
         qc_offset, zc_dim1, zc_offset, i__1, i__2, i__3, i__4;
@@ -263,7 +270,7 @@ void claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
         void
         cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
                complex *, integer *, complex *, complex *, integer *);
-    complex atemp;
+    complex atemp;           
     integer kwbot;
     real tempr;
     integer kwtop;
@@ -277,8 +284,7 @@ void claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
         void
         claqz1_(logical *, logical *, integer *, integer *, integer *, integer *, complex *,
                 integer *, complex *, integer *, integer *, integer *, complex *, integer *,
-                integer *, integer *, complex *, integer *),
-        slabad_(real *, real *);
+                integer *, integer *, complex *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
         void
@@ -288,7 +294,6 @@ void claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
     extern /* Subroutine */
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    real safmax;
     extern /* Subroutine */
         void
         ctgexc_(logical *, logical *, integer *, complex *, integer *, complex *, integer *,
@@ -365,6 +370,7 @@ void claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
         /* workspace query, quick return */
         work[1].r = (real)lworkreq;
         work[1].i = 0.f; // , expr subst
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(*lwork < lworkreq)
@@ -375,12 +381,11 @@ void claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
     {
         i__1 = -(*info);
         xerbla_("CLAQZ2", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants */
     safmin = slamch_("SAFE MINIMUM");
-    safmax = 1.f / safmin;
-    slabad_(&safmin, &safmax);
     ulp = slamch_("PRECISION");
     smlnum = safmin * ((real)(*n) / ulp);
     if(*ihi == kwtop)
@@ -438,6 +443,7 @@ void claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
         /* Computing 2nd power */
         i__1 = jw;
         clacpy_("ALL", &jw, &jw, &work[i__1 * i__1 + 1], &jw, &b[kwtop + kwtop * b_dim1], ldb);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Deflation detection loop */
@@ -612,6 +618,7 @@ void claqz2_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
                &c_b1, &work[1], n);
         clacpy_("ALL", n, &jw, &work[1], n, &z__[kwtop * z_dim1 + 1], ldz);
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* claqz2_ */

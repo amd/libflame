@@ -1,8 +1,8 @@
-/* ../netlib/cheevr.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./cheevr.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__10 = 10;
 static integer c__1 = 1;
@@ -456,8 +456,9 @@ void cheevr_(char *jobz, char *range, char *uplo, integer *n, complex *a, intege
                 real *, integer *, integer *, real *, integer *, integer *, real *, integer *,
                 integer *);
     logical lquery;
-    aocl_int64_t lwkopt;
-    aocl_int64_t llrwork;
+    integer lwkopt;
+    extern real sroundup_lwork(integer *);
+    integer llrwork;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -569,7 +570,8 @@ void cheevr_(char *jobz, char *range, char *uplo, integer *n, complex *a, intege
         /* Computing MAX */
         i__1 = (nb + 1) * *n;
         lwkopt = fla_max(i__1, lwmin);
-        work[1].r = (real)lwkopt;
+        r__1 = sroundup_lwork(&lwkopt);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         rwork[1] = (real)lrwmin;
         iwork[1] = liwmin;
@@ -777,7 +779,7 @@ void cheevr_(char *jobz, char *range, char *uplo, integer *n, complex *a, intege
                     &z__[z_offset], ldz, n, &isuppz[1], &tryrac, &rwork[indrwk], &llrwork,
                     &iwork[1], liwork, info);
             /* Apply unitary matrix used in reduction to tridiagonal */
-            /* form to eigenvectors returned by CSTEIN. */
+            /* form to eigenvectors returned by CSTEMR. */
             if(wantz && *info == 0)
             {
                 indwkn = indwk;
@@ -863,7 +865,8 @@ L30:
         }
     }
     /* Set WORK(1) to optimal workspace size. */
-    work[1].r = (real)lwkopt;
+    r__1 = sroundup_lwork(&lwkopt);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     rwork[1] = (real)lrwmin;
     iwork[1] = liwmin;

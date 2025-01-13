@@ -1,4 +1,4 @@
-/* clatsqr.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./clatsqr.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -108,6 +108,7 @@ static integer c__0 = 0;
 /* > */
 /* > \param[in] LWORK */
 /* > \verbatim */
+/* > LWORK is INTEGER */
 /* > The dimension of the array WORK. LWORK >= NB*N. */
 /* > If LWORK = -1, then a workspace query is assumed;
 the routine */
@@ -160,6 +161,8 @@ the routine */
 /* > SIAM J. Sci. Comput, vol. 34, no. 1, 2012 */
 /* > \endverbatim */
 /* > */
+/* > \ingroup latsqr */
+/* > */
 /* ===================================================================== */
 /* Subroutine */
 void clatsqr_(integer *m, integer *n, integer *mb, integer *nb, complex *a, integer *lda,
@@ -180,18 +183,18 @@ void clatsqr_(integer *m, integer *n, integer *mb, integer *nb, complex *a, inte
 #endif
     /* System generated locals */
     integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3;
+    real r__1;
     /* Local variables */
     integer i__, ii, kk, ctr;
     extern /* Subroutine */
         void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
         cgeqrt_(integer *, integer *, integer *, complex *, integer *, complex *, integer *,
                 complex *, integer *),
         ctpqrt_(integer *, integer *, integer *, integer *, complex *, integer *, complex *,
                 integer *, complex *, integer *, complex *, integer *);
     logical lquery;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. -- */
@@ -251,7 +254,8 @@ void clatsqr_(integer *m, integer *n, integer *mb, integer *nb, complex *a, inte
     if(*info == 0)
     {
         i__1 = *nb * *n;
-        work[1].r = (real)i__1;
+        r__1 = sroundup_lwork(&i__1);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
@@ -301,7 +305,8 @@ void clatsqr_(integer *m, integer *n, integer *mb, integer *nb, complex *a, inte
                 &t[(ctr * *n + 1) * t_dim1 + 1], ldt, &work[1], info);
     }
     i__2 = *n * *nb;
-    work[1].r = (real)i__2;
+    r__1 = sroundup_lwork(&i__2);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

@@ -1,8 +1,8 @@
-/* ../netlib/cstemr.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./cstemr.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static real c_b18 = .003f;
@@ -252,7 +252,7 @@ the */
 /* > */
 /* > \param[out] ISUPPZ */
 /* > \verbatim */
-/* > ISUPPZ is INTEGER array, dimension ( 2*max(1,M) ) */
+/* > ISUPPZ is INTEGER array, dimension ( 2*fla_max(1,M) ) */
 /* > The support of the eigenvectors in Z, i.e., the indices */
 /* > indicating the nonzero elements in Z. The i-th computed eigenvector */
 /* > is nonzero only in elements ISUPPZ( 2*i-1 ) through */
@@ -332,8 +332,7 @@ the */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date June 2016 */
-/* > \ingroup complexOTHERcomputational */
+/* > \ingroup stemr */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -341,7 +340,8 @@ the */
 /* > Jim Demmel, University of California, Berkeley, USA \n */
 /* > Inderjit Dhillon, University of Texas, Austin, USA \n */
 /* > Osni Marques, LBNL/NERSC, USA \n */
-/* > Christof Voemel, University of California, Berkeley, USA */
+/* > Christof Voemel, University of California, Berkeley, USA \n */
+/* > Aravindh Krishnamoorthy, FAU, Erlangen, Germany \n */
 /* ===================================================================== */
 /* Subroutine */
 void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, real *vu,
@@ -446,10 +446,11 @@ void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
         void
         slasrt_(char *, integer *, real *, integer *);
     logical lquery, zquery;
-    /* -- LAPACK computational routine (version 3.7.1) -- */
+    extern real sroundup_lwork(integer *);
+    logical laeswap;
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -485,6 +486,7 @@ void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
     indeig = lsame_(range, "I", 1, 1);
     lquery = *lwork == -1 || *liwork == -1;
     zquery = *nzc == -1;
+    laeswap = FALSE_;
     /* SSTEMR needs WORK of size 6*N, IWORK of size 3*N. */
     /* In addition, SLARRE needs WORK of size 6*N, IWORK of size 5*N. */
     /* Furthermore, CLARRV needs WORK of size 12*N, IWORK of size 7*N. */
@@ -567,7 +569,7 @@ void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
     rmax = fla_min(r__1, r__2);
     if(*info == 0)
     {
-        work[1] = (real)lwmin;
+        work[1] = sroundup_lwork(&lwmin);
         iwork[1] = liwmin;
         if(wantz && alleig)
         {
@@ -652,19 +654,41 @@ void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
         {
             slaev2_(&d__[1], &e[1], &d__[2], &r1, &r2, &cs, &sn);
         }
+        /* D/S/LAE2 and D/S/LAEV2 outputs satisfy |R1| >= |R2|. However, */
+        /* the following code requires R1 >= R2. Hence, we correct */
+        /* the order of R1, R2, CS, SN if R1 < R2 before further processing. */
+        if(r1 < r2)
+        {
+            e[2] = r1;
+            r1 = r2;
+            r2 = e[2];
+            laeswap = TRUE_;
+        }
         if(alleig || valeig && r2 > wl && r2 <= wu || indeig && iil == 1)
         {
             ++(*m);
             w[*m] = r2;
             if(wantz && !zquery)
             {
-                i__1 = *m * z_dim1 + 1;
-                r__1 = -sn;
-                z__[i__1].r = r__1;
-                z__[i__1].i = 0.f; // , expr subst
-                i__1 = *m * z_dim1 + 2;
-                z__[i__1].r = cs;
-                z__[i__1].i = 0.f; // , expr subst
+                if(laeswap)
+                {
+                    i__1 = *m * z_dim1 + 1;
+                    z__[i__1].r = cs;
+                    z__[i__1].i = 0.f; // , expr subst
+                    i__1 = *m * z_dim1 + 2;
+                    z__[i__1].r = sn;
+                    z__[i__1].i = 0.f; // , expr subst
+                }
+                else
+                {
+                    i__1 = *m * z_dim1 + 1;
+                    r__1 = -sn;
+                    z__[i__1].r = r__1;
+                    z__[i__1].i = 0.f; // , expr subst
+                    i__1 = *m * z_dim1 + 2;
+                    z__[i__1].r = cs;
+                    z__[i__1].i = 0.f; // , expr subst
+                }
                 /* Note: At most one of SN and CS can be zero. */
                 if(sn != 0.f)
                 {
@@ -692,12 +716,25 @@ void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
             w[*m] = r1;
             if(wantz && !zquery)
             {
-                i__1 = *m * z_dim1 + 1;
-                z__[i__1].r = cs;
-                z__[i__1].i = 0.f; // , expr subst
-                i__1 = *m * z_dim1 + 2;
-                z__[i__1].r = sn;
-                z__[i__1].i = 0.f; // , expr subst
+                if(laeswap)
+                {
+                    i__1 = *m * z_dim1 + 1;
+                    r__1 = -sn;
+                    z__[i__1].r = r__1;
+                    z__[i__1].i = 0.f; // , expr subst
+                    i__1 = *m * z_dim1 + 2;
+                    z__[i__1].r = cs;
+                    z__[i__1].i = 0.f; // , expr subst
+                }
+                else
+                {
+                    i__1 = *m * z_dim1 + 1;
+                    z__[i__1].r = cs;
+                    z__[i__1].i = 0.f; // , expr subst
+                    i__1 = *m * z_dim1 + 2;
+                    z__[i__1].r = sn;
+                    z__[i__1].i = 0.f; // , expr subst
+                }
                 /* Note: At most one of SN and CS can be zero. */
                 if(sn != 0.f)
                 {
@@ -883,7 +920,7 @@ void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
                 iend = iwork[iinspl + jblk - 1];
                 in = iend - ibegin + 1;
                 wend = wbegin - 1;
-                /* check if any eigenvalues have to be refined in this block */
+            /* check if any eigenvalues have to be refined in this block */
             L36:
                 if(wend < *m)
                 {
@@ -967,7 +1004,7 @@ void cstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
             }
         }
     }
-    work[1] = (real)lwmin;
+    work[1] = sroundup_lwork(&lwmin);
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

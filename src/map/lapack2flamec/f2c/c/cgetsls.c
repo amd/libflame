@@ -1,4 +1,4 @@
-/* cgetsls.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./cgetsls.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -160,7 +160,7 @@ the least squares solution could not be */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup complexGEsolve */
+/* > \ingroup getsls */
 /* ===================================================================== */
 /* Subroutine */
 void cgetsls_(char *trans, integer *m, integer *n, integer *nrhs, complex *a, integer *lda,
@@ -202,9 +202,6 @@ void cgetsls_(char *trans, integer *m, integer *n, integer *nrhs, complex *a, in
                integer *, integer *);
     integer maxmn;
     complex workq[1];
-    extern /* Subroutine */
-        void
-        slabad_(real *, real *);
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
         void
@@ -227,6 +224,7 @@ void cgetsls_(char *trans, integer *m, integer *n, integer *nrhs, complex *a, in
         void
         ctrtrs_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *,
                 integer *, integer *);
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -342,7 +340,7 @@ void cgetsls_(char *trans, integer *m, integer *n, integer *nrhs, complex *a, in
         {
             *info = -10;
         }
-        r__1 = (real)wsizeo;
+        r__1 = sroundup_lwork(&wsizeo);
         work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
     }
@@ -357,7 +355,7 @@ void cgetsls_(char *trans, integer *m, integer *n, integer *nrhs, complex *a, in
     {
         if(*lwork == -2)
         {
-            r__1 = (real)wsizem;
+            r__1 = sroundup_lwork(&wsizem);
             work[1].r = r__1;
             work[1].i = 0.f; // , expr subst
         }
@@ -387,7 +385,6 @@ void cgetsls_(char *trans, integer *m, integer *n, integer *nrhs, complex *a, in
     /* Get machine parameters */
     smlnum = slamch_("S") / slamch_("P");
     bignum = 1.f / smlnum;
-    slabad_(&smlnum, &bignum);
     /* Scale A, B if max element outside range [SMLNUM,BIGNUM] */
     anrm = clange_("M", m, n, &a[a_offset], lda, dum);
     iascl = 0;
@@ -547,7 +544,8 @@ void cgetsls_(char *trans, integer *m, integer *n, integer *nrhs, complex *a, in
         clascl_("G", &c__0, &c__0, &bignum, &bnrm, &scllen, nrhs, &b[b_offset], ldb, info);
     }
 L50:
-    r__1 = (real)(tszo + lwo);
+    i__1 = tszo + lwo;
+    r__1 = sroundup_lwork(&i__1);
     work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

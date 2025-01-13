@@ -1,8 +1,8 @@
-/* csytrf_aa.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./csytrf_aa.f -- translated by f2c (version 20190311). You must link the resulting object file
+ with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -82,7 +82,7 @@ static complex c_b19 = {-1.f, -0.f};
 /* > */
 /* > On exit, the tridiagonal matrix is stored in the diagonals */
 /* > and the subdiagonals of A just below (or above) the diagonals, */
-/* > and L is stored below (or above) the subdiaonals, when UPLO */
+/* > and L is stored below (or above) the subdiagonals, when UPLO */
 /* > is 'L' (or 'U'). */
 /* > \endverbatim */
 /* > */
@@ -131,7 +131,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup complexSYcomputational */
+/* > \ingroup hetrf_aa */
 /* ===================================================================== */
 /* Subroutine */
 void csytrf_aa_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, complex *work,
@@ -142,6 +142,7 @@ void csytrf_aa_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv,
                       *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    real r__1;
     /* Local variables */
     integer j;
     extern /* Subroutine */
@@ -169,6 +170,7 @@ void csytrf_aa_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv,
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer lwkopt;
     logical lquery;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -225,7 +227,8 @@ void csytrf_aa_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv,
     if(*info == 0)
     {
         lwkopt = (nb + 1) * *n;
-        work[1].r = (real)lwkopt;
+        r__1 = sroundup_lwork(&lwkopt);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
@@ -496,7 +499,8 @@ void csytrf_aa_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv,
         goto L11;
     }
 L20:
-    work[1].r = (real)lwkopt;
+    r__1 = sroundup_lwork(&lwkopt);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;

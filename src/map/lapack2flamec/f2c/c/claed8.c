@@ -1,12 +1,12 @@
-/* ../netlib/claed8.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./claed8.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b3 = -1.f;
 static integer c__1 = 1;
-/* > \brief \b CLAED8 used by sstedc. Merges eigenvalues and deflates secular equation. Used when
+/* > \brief \b CLAED8 used by CSTEDC. Merges eigenvalues and deflates secular equation. Used when
  * the original matrix is dense. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -225,7 +225,7 @@ static integer c__1 = 1;
 /* ===================================================================== */
 /* Subroutine */
 void claed8_(integer *k, integer *n, integer *qsiz, complex *q, integer *ldq, real *d__, real *rho,
-             integer *cutpnt, real *z__, real *dlamda, complex *q2, integer *ldq2, real *w,
+             integer *cutpnt, real *z__, real *dlambda, complex *q2, integer *ldq2, real *w,
              integer *indxp, integer *indx, integer *indxq, integer *perm, integer *givptr,
              integer *givcol, real *givnum, integer *info)
 {
@@ -272,7 +272,7 @@ void claed8_(integer *k, integer *n, integer *qsiz, complex *q, integer *ldq, re
     extern /* Subroutine */
         void
         slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
-    /* -- LAPACK computational routine (version 3.4.2) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
     /* .. Scalar Arguments .. */
@@ -383,7 +383,7 @@ void claed8_(integer *k, integer *n, integer *qsiz, complex *q, integer *ldq, re
     }
     i__ = 1;
     j = *cutpnt + 1;
-    aocl_lapack_slamrg(&n1, &n2, &dlambda[1], &c__1, &c__1, &indx[1]);
+    slamrg_(&n1, &n2, &dlambda[1], &c__1, &c__1, &indx[1]);
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
@@ -507,7 +507,7 @@ L70:
             ++(*k);
             w[*k] = z__[jlam];
             dlambda[*k] = d__[jlam];
-            indxp[*k] = (aocl_int_t)(jlam);
+            indxp[*k] = jlam;
             jlam = j;
         }
     }
@@ -516,7 +516,7 @@ L90: /* Record the last eigenvalue. */
     ++(*k);
     w[*k] = z__[jlam];
     dlambda[*k] = d__[jlam];
-    indxp[*k] = (aocl_int_t)(jlam);
+    indxp[*k] = jlam;
 L100: /* Sort the eigenvalues and corresponding eigenvectors into DLAMBDA */
     /* and Q2 respectively. The eigenvalues/vectors which were not */
     /* deflated go into the first K slots of DLAMBDA and Q2 respectively, */
@@ -535,7 +535,7 @@ L100: /* Sort the eigenvalues and corresponding eigenvectors into DLAMBDA */
     if(*k < *n)
     {
         i__1 = *n - *k;
-        aocl_blas_scopy(&i__1, &dlambda[*k + 1], &c__1, &d__[*k + 1], &c__1);
+        scopy_(&i__1, &dlambda[*k + 1], &c__1, &d__[*k + 1], &c__1);
         i__1 = *n - *k;
         clacpy_("A", qsiz, &i__1, &q2[(*k + 1) * q2_dim1 + 1], ldq2, &q[(*k + 1) * q_dim1 + 1],
                 ldq);

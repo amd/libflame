@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/chegv_2stage.f -- translated by f2c (version 20160102). You must link the
- resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
- Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
- with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./chegv_2stage.f -- translated by f2c (version 20190311). You must link the resulting object file
+ with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static complex c_b1 = {1.f, 0.f};
 static integer c__1 = 1;
@@ -158,7 +158,7 @@ static integer c__4 = 4;
 /* > If JOBZ = 'N' and N > 1, LWORK must be queried. */
 /* > LWORK = MAX(1, dimension) where */
 /* > dimension = fla_max(stage1,stage2) + (KD+1)*N + N */
-/* > = N*KD + N*max(KD+1,FACTOPTNB) */
+/* > = N*KD + N*fla_max(KD+1,FACTOPTNB) */
 /* > + fla_max(2*KD*KD, KD*NTHREADS) */
 /* > + (KD+1)*N + N */
 /* > where KD is the blocking size of the reduction, */
@@ -192,7 +192,7 @@ the routine */
 /* > tridiagonal form did not converge to zero;
  */
 /* > > N: if INFO = N + i, for 1 <= i <= N, then the leading */
-/* > minor of order i of B is not positive definite. */
+/* > principal minor of order i of B is not positive. */
 /* > The factorization of B could not be completed and */
 /* > no eigenvalues or eigenvectors were computed. */
 /* > \endverbatim */
@@ -202,8 +202,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2017 */
-/* > \ingroup complexHEeigen */
+/* > \ingroup hegv_2stage */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -258,6 +257,7 @@ void chegv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, complex *
 #endif
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;
+    real r__1;
     /* Local variables */
     integer ib, kd;
     extern /* Subroutine */
@@ -284,17 +284,15 @@ void chegv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, complex *
     logical wantz;
     extern /* Subroutine */
         void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
         chegst_(integer *, char *, integer *, complex *, integer *, complex *, integer *,
                 integer *),
         cpotrf_(char *, integer *, complex *, integer *, integer *);
     logical lquery;
-    /* -- LAPACK driver routine (version 3.8.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2017 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -358,7 +356,8 @@ void chegv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, complex *
         lhtrd = ilaenv2stage_(&c__3, "CHETRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
         lwtrd = ilaenv2stage_(&c__4, "CHETRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
         lwmin = *n + lhtrd + lwtrd;
-        work[1].r = (real)lwmin;
+        r__1 = sroundup_lwork(&lwmin);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         if(*lwork < lwmin && !lquery)
         {
@@ -368,7 +367,7 @@ void chegv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, complex *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHEGV_2STAGE ", &i__1, (ftnlen)13);
+        xerbla_("CHEGV_2STAGE", &i__1, (ftnlen)12);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -435,7 +434,8 @@ void chegv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, complex *
                    &a[a_offset], lda);
         }
     }
-    work[1].r = (real)lwmin;
+    r__1 = sroundup_lwork(&lwmin);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

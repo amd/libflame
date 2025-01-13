@@ -1,8 +1,8 @@
-/* ../netlib/claqr2.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./claqr2.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static complex c_b1 = {0.f, 0.f};
 static complex c_b2 = {1.f, 0.f};
@@ -297,6 +297,9 @@ void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
         z_offset, i__1, i__2, i__3, i__4;
     real r__1, r__2, r__3, r__4, r__5, r__6;
     complex q__1, q__2;
+    /* Builtin functions */
+    double r_imag(complex *);
+    void r_cnjg(complex *, complex *);
     /* Local variables */
     aocl_int64_t i__, j;
     scomplex s;
@@ -319,7 +322,6 @@ void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     integer infqr, kwtop;
     extern /* Subroutine */
         void
-        slabad_(real *, real *),
         cgehrd_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
                 integer *, integer *),
         clarfg_(integer *, complex *, complex *, integer *, complex *);
@@ -330,7 +332,7 @@ void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
                 complex *, integer *, integer *, complex *, integer *, integer *),
         clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
         claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
-    real safmin, safmax;
+    real safmin;
     extern /* Subroutine */
         void
         ctrexc_(char *, integer *, complex *, integer *, complex *, integer *, integer *, integer *,
@@ -338,7 +340,7 @@ void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
         cunmhr_(char *, char *, integer *, integer *, integer *, integer *, complex *, integer *,
                 complex *, complex *, integer *, complex *, integer *, integer *);
     real smlnum;
-    aocl_int64_t lwkopt;
+    integer lwkopt;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -467,8 +469,8 @@ void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
         r__5 = smlnum;
         r__6 = ulp
                * ((r__1 = h__[i__1].r, f2c_abs(r__1))
-                  + (r__2 = h__[i__1].i, f2c_abs(r__2))); // , expr subst
-        if((r__3 = s.r, f2c_abs(r__3)) + (r__4 = s.i, f2c_abs(r__4)) <= fla_max(r__5, r__6))
+                  + (r__2 = r_imag(&h__[kwtop + kwtop * h_dim1]), f2c_abs(r__2))); // , expr subst
+        if((r__3 = s.r, f2c_abs(r__3)) + (r__4 = r_imag(&s), f2c_abs(r__4)) <= fla_max(r__5, r__6))
         {
             *ns = 0;
             *nd = 1;
@@ -505,17 +507,19 @@ void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     {
         /* ==== Small spike tip deflation test ==== */
         i__2 = *ns + *ns * t_dim1;
-        foo = (r__1 = t[i__2].r, f2c_abs(r__1)) + (r__2 = t[i__2].i, f2c_abs(r__2));
+        foo = (r__1 = t[i__2].r, f2c_abs(r__1))
+              + (r__2 = r_imag(&t[*ns + *ns * t_dim1]), f2c_abs(r__2));
         if(foo == 0.f)
         {
-            foo = (r__1 = s.r, f2c_abs(r__1)) + (r__2 = s.i, f2c_abs(r__2));
+            foo = (r__1 = s.r, f2c_abs(r__1)) + (r__2 = r_imag(&s), f2c_abs(r__2));
         }
         i__2 = *ns * v_dim1 + 1;
         /* Computing MAX */
         r__5 = smlnum;
         r__6 = ulp * foo; // , expr subst
-        if(((r__1 = s.r, f2c_abs(r__1)) + (r__2 = s.i, f2c_abs(r__2)))
-               * ((r__3 = v[i__2].r, f2c_abs(r__3)) + (r__4 = v[i__2].i, f2c_abs(r__4)))
+        if(((r__1 = s.r, f2c_abs(r__1)) + (r__2 = r_imag(&s), f2c_abs(r__2)))
+               * ((r__3 = v[i__2].r, f2c_abs(r__3))
+                  + (r__4 = r_imag(&v[*ns * v_dim1 + 1]), f2c_abs(r__4)))
            <= fla_max(r__5, r__6))
         {
             /* ==== One more converged eigenvalue ==== */
@@ -550,8 +554,10 @@ void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
             {
                 i__3 = j + j * t_dim1;
                 i__4 = ifst + ifst * t_dim1;
-                if((r__1 = t[i__3].r, f2c_abs(r__1)) + (r__2 = t[i__3].i, f2c_abs(r__2))
-                   > (r__3 = t[i__4].r, f2c_abs(r__3)) + (r__4 = t[i__4].i, f2c_abs(r__4)))
+                if((r__1 = t[i__3].r, f2c_abs(r__1))
+                       + (r__2 = r_imag(&t[j + j * t_dim1]), f2c_abs(r__2))
+                   > (r__3 = t[i__4].r, f2c_abs(r__3))
+                         + (r__4 = r_imag(&t[ifst + ifst * t_dim1]), f2c_abs(r__4)))
                 {
                     ifst = j;
                 }
@@ -586,8 +592,7 @@ void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
             for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = i__;
-                q__1.r = work[i__].r;
-                q__1.i = -work[i__].i;
+                r_cnjg(&q__1, &work[i__]);
                 work[i__2].r = q__1.r;
                 work[i__2].i = q__1.i; // , expr subst
                 /* L50: */
@@ -600,8 +605,7 @@ void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
             i__1 = jw - 2;
             i__2 = jw - 2;
             claset_("L", &i__1, &i__2, &c_b1, &c_b1, &t[t_dim1 + 3], ldt);
-            q__1.r = tau.r;
-            q__1.i = -tau.i;
+            r_cnjg(&q__1, &tau);
             clarf_("L", ns, &jw, &work[1], &c__1, &q__1, &t[t_offset], ldt, &work[jw + 1]);
             clarf_("R", ns, ns, &work[1], &c__1, &tau, &t[t_offset], ldt, &work[jw + 1]);
             clarf_("R", &jw, ns, &work[1], &c__1, &tau, &v[v_offset], ldv, &work[jw + 1]);
@@ -612,8 +616,7 @@ void claqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
         if(kwtop > 1)
         {
             i__1 = kwtop + (kwtop - 1) * h_dim1;
-            q__2.r = v[v_dim1 + 1].r;
-            q__2.i = -v[v_dim1 + 1].i;
+            r_cnjg(&q__2, &v[v_dim1 + 1]);
             q__1.r = s.r * q__2.r - s.i * q__2.i;
             q__1.i = s.r * q__2.i + s.i * q__2.r; // , expr subst
             h__[i__1].r = q__1.r;

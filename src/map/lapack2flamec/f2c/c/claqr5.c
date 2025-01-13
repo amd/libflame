@@ -306,13 +306,13 @@ void claqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
     extern /* Subroutine */
         void
         claqr1_(integer *, complex *, integer *, complex *, complex *, complex *),
-        slabad_(real *, real *), clarfg_(integer *, complex *, complex *, integer *, complex *);
+        clarfg_(integer *, complex *, complex *, integer *, complex *);
     extern real slamch_(char *);
     extern /* Subroutine */
         void
         clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
         claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
-    real safmin, safmax;
+    real safmin;
     complex refsum;
     real smlnum;
     /* -- LAPACK auxiliary routine -- */

@@ -1,8 +1,8 @@
-/* ../netlib/cheevx.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./cheevx.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -351,6 +351,7 @@ void cheevx_(char *jobz, char *range, char *uplo, integer *n, complex *a, intege
                 integer *);
     integer lwkopt;
     logical lquery;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -460,7 +461,8 @@ void cheevx_(char *jobz, char *range, char *uplo, integer *n, complex *a, intege
             i__1 = 1;
             i__2 = (nb + 1) * *n; // , expr subst
             lwkopt = fla_max(i__1, i__2);
-            work[1].r = (real)lwkopt;
+            r__1 = sroundup_lwork(&lwkopt);
+            work[1].r = r__1;
             work[1].i = 0.f; // , expr subst
         }
         if(*lwork < lwkmin && !lquery)
@@ -705,7 +707,8 @@ L40:
         }
     }
     /* Set WORK(1) to optimal complex workspace size. */
-    work[1].r = (real)lwkopt;
+    r__1 = sroundup_lwork(&lwkopt);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

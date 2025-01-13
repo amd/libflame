@@ -1,4 +1,4 @@
-/* claqz0.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./claqz0.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -102,7 +102,7 @@ static integer c__1 = 1;
 /* > Anal., 29(2006), pp. 199--227. */
 /* > */
 /* > Ref: T. Steel, D. Camps, K. Meerbergen, R. Vandebril "A multishift, */
-/* > multipole rational QZ method with agressive early deflation" */
+/* > multipole rational QZ method with aggressive early deflation" */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -288,7 +288,7 @@ the routine */
 /* ======== */
 /* > \author Thijs Steel, KU Leuven */
 /* > \date May 2020 */
-/* > \ingroup complexGEcomputational */
+/* > \ingroup laqz0 */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
@@ -297,6 +297,11 @@ void claqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
              complex *q, integer *ldq, complex *z__, integer *ldz, complex *work, integer *lwork,
              real *rwork, integer *rec, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("claqz0 inputs: wants %\c ,wantq %\c ,wantz %\c , n %" FLA_IS ",ilo %" FLA_IS
+                      ",ihi %" FLA_IS ",lda %" FLA_IS ",ldb %" FLA_IS ",ldq %" FLA_IS
+                      ",ldz %" FLA_IS ",lwork %" FLA_IS ",rec %" FLA_IS "",
+                      *wants, *wantq, *wantz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz, *lwork, *rec);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
         i__3, i__4, i__5;
@@ -336,11 +341,7 @@ void claqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
                 integer *, complex *, complex *, complex *, integer *, complex *, integer *,
                 complex *, integer *, complex *, integer *, complex *, integer *, complex *,
                 integer *, complex *, integer *, integer *);
-    integer itemp1, itemp2;
-    extern /* Subroutine */
-        void
-        slabad_(real *, real *);
-    integer nibble;
+    integer itemp1, itemp2, nibble;
     extern real slamch_(char *);
     integer nblock;
     extern real clanhs_(char *, integer *, complex *, integer *, real *);
@@ -352,7 +353,6 @@ void claqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
     extern /* Subroutine */
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    real safmax;
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
         void
@@ -489,6 +489,7 @@ void claqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
     {
         i__1 = -(*info);
         xerbla_("CLAQZ0", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -496,6 +497,7 @@ void claqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
     {
         work[1].r = 1.f;
         work[1].i = 0.f; // , expr subst
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get the parameters */
@@ -529,6 +531,7 @@ void claqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
     {
         chgeqz_(wants, wantq, wantz, n, ilo, ihi, &a[a_offset], lda, &b[b_offset], ldb, &alpha[1],
                 &beta[1], &q[q_offset], ldq, &z__[z_offset], ldz, &work[1], lwork, &rwork[1], info);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Find out required workspace */
@@ -556,6 +559,7 @@ void claqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
         r__1 = (real)lworkreq;
         work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(*lwork < lworkreq)
@@ -565,6 +569,7 @@ void claqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
     if(*info != 0)
     {
         xerbla_("CLAQZ0", info, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize Q and Z */
@@ -578,8 +583,6 @@ void claqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
     }
     /* Get machine constants */
     safmin = slamch_("SAFE MINIMUM");
-    safmax = 1.f / safmin;
-    slabad_(&safmin, &safmax);
     ulp = slamch_("PRECISION");
     smlnum = safmin * ((real)(*n) / ulp);
     i__1 = *ihi - *ilo + 1;
@@ -678,7 +681,7 @@ void claqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
         {
             if(c_abs(&b[k + k * b_dim1]) < btol)
             {
-                /* A diagonal element of B is negligable, move it */
+                /* A diagonal element of B is negligible, move it */
                 /* to the top and deflate it */
                 i__2 = istart2 + 1;
                 for(k2 = k; k2 >= i__2; --k2)
@@ -815,7 +818,7 @@ void claqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
         i__3 = istop - istart2; // , expr subst
         ns = fla_min(i__2, i__3);
         ns = fla_min(ns, n_undeflated__);
-        shiftpos = istop - n_deflated__ - n_undeflated__ + 1;
+        shiftpos = istop - n_undeflated__ + 1;
         if(ld % 6 == 0)
         {
             /* Exceptional shift. Chosen for no particularly good reason. */
@@ -858,15 +861,16 @@ void claqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
                 &z__[z_offset], ldz, &work[1], &nblock, &work[i__2 * i__2 + 1], &nblock,
                 &work[(i__3 * i__3 << 1) + 1], &i__4, &sweep_info__);
     }
-    /* Call CHGEQZ to normalize the eigenvalue blocks and set the eigenvalues */
-    /* If all the eigenvalues have been found, CHGEQZ will not do any iterations */
-    /* and only normalize the blocks. In case of a rare convergence failure, */
-    /* the single shift might perform better. */
+/* Call CHGEQZ to normalize the eigenvalue blocks and set the eigenvalues */
+/* If all the eigenvalues have been found, CHGEQZ will not do any iterations */
+/* and only normalize the blocks. In case of a rare convergence failure, */
+/* the single shift might perform better. */
 L80:
     chgeqz_(wants, wantq, wantz, n, ilo, ihi, &a[a_offset], lda, &b[b_offset], ldb, &alpha[1],
             &beta[1], &q[q_offset], ldq, &z__[z_offset], ldz, &work[1], lwork, &rwork[1],
             &norm_info__);
     *info = norm_info__;
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* claqz0_ */

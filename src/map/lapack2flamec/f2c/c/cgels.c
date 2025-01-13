@@ -1,8 +1,8 @@
-/* ../netlib/cgels.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./cgels.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static complex c_b1 = {0.f, 0.f};
 static integer c__1 = 1;
@@ -57,7 +57,7 @@ static integer c__0 = 0;
 /* > an underdetermined system A * X = B. */
 /* > */
 /* > 3. If TRANS = 'C' and m >= n: find the minimum norm solution of */
-/* > an undetermined system A**H * X = B. */
+/* > an underdetermined system A**H * X = B. */
 /* > */
 /* > 4. If TRANS = 'C' and m < n: find the least squares solution of */
 /* > an overdetermined system, i.e., solve the least squares problem */
@@ -188,8 +188,7 @@ the least squares solution could not be */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup complexGEsolve */
+/* > \ingroup gels */
 /* ===================================================================== */
 /* Subroutine */
 void cgels_(char *trans, integer *m, integer *n, integer *nrhs, complex *a, integer *lda,
@@ -220,9 +219,6 @@ void cgels_(char *trans, integer *m, integer *n, integer *nrhs, complex *a, inte
     extern logical lsame_(char *, char *, integer, integer);
     integer wsize;
     real rwork[1];
-    extern /* Subroutine */
-        void
-        slabad_(real *, real *);
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
         void
@@ -252,10 +248,9 @@ void cgels_(char *trans, integer *m, integer *n, integer *nrhs, complex *a, inte
         void
         ctrtrs_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *,
                 integer *, integer *);
-    /* -- LAPACK driver routine (version 3.4.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -403,7 +398,6 @@ void cgels_(char *trans, integer *m, integer *n, integer *nrhs, complex *a, inte
     /* Get machine parameters */
     smlnum = slamch_("S") / slamch_("P");
     bignum = 1.f / smlnum;
-    slabad_(&smlnum, &bignum);
     /* Scale A, B if max element outside range [SMLNUM,BIGNUM] */
     anrm = clange_("M", m, n, &a[a_offset], lda, rwork);
     iascl = 0;
@@ -471,7 +465,7 @@ void cgels_(char *trans, integer *m, integer *n, integer *nrhs, complex *a, inte
         }
         else
         {
-            /* Overdetermined system of equations A**H * X = B */
+            /* Underdetermined system of equations A**T * X = B */
             /* B(1:N,1:NRHS) := inv(R**H) * B(1:N,1:NRHS) */
             ctrtrs_("Upper", "Conjugate transpose", "Non-unit", n, nrhs, &a[a_offset], lda,
                     &b[b_offset], ldb, info);

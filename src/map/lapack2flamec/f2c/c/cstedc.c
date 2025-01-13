@@ -1,11 +1,8 @@
-/* ../netlib/cstedc.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-
-/* Modifications Copyright (C) 2024 Advanced Micro Devices, Inc. All rights reserved. */
-
+/* ./cstedc.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__9 = 9;
 static integer c__0 = 0;
@@ -56,12 +53,6 @@ static integer c__1 = 1;
 /* > be found if CHETRD or CHPTRD or CHBTRD has been used to reduce this */
 /* > matrix to tridiagonal form. */
 /* > */
-/* > This code makes very mild assumptions about floating point */
-/* > arithmetic. It will work on machines with a guard digit in */
-/* > add/subtract, or on those binary machines without guard digits */
-/* > which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or Cray-2. */
-/* > It could conceivably fail on hexadecimal or decimal machines */
-/* > without guard digits, but we know of none. See SLAED3 for details. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -209,8 +200,7 @@ the */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date December 2016 */
-/* > \ingroup complexOTHERcomputational */
+/* > \ingroup stedc */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -291,10 +281,9 @@ void cstedc_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
         void
         ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
     extern real sroundup_lwork(integer *);
-    /* -- LAPACK computational routine (version 3.7.0) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* December 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -396,9 +385,10 @@ void cstedc_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
             lrwmin = (*n << 2) + 1 + (i__1 * i__1 << 1);
             liwmin = *n * 5 + 3;
         }
-        work[1].r = sroundup_lwork(&lwmin);
+        r__1 = sroundup_lwork(&lwmin);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
-        rwork[1] = sroundup_lwork(&lrwmin);
+        rwork[1] = (real)lrwmin;
         iwork[1] = liwmin;
         if(*lwork < lwmin && !lquery)
         {
@@ -498,7 +488,7 @@ void cstedc_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
         }
         eps = slamch_("Epsilon");
         start = 1;
-        /* while ( START <= N ) */
+    /* while ( START <= N ) */
     L30:
         if(start <= *n)
         {
@@ -582,9 +572,10 @@ void cstedc_(char *compz, integer *n, real *d__, real *e, complex *z__, integer 
         }
     }
 L70:
-    work[1].r = sroundup_lwork(&lwmin);
+    r__1 = sroundup_lwork(&lwmin);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
-    rwork[1] = sroundup_lwork(&lrwmin);
+    rwork[1] = (real)lrwmin;
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

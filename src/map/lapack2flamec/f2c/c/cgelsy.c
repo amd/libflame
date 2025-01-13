@@ -1,8 +1,8 @@
-/* ../netlib/cgelsy.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./cgelsy.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static complex c_b1 = {0.f, 0.f};
 static complex c_b2 = {1.f, 0.f};
@@ -125,6 +125,7 @@ they are stored as the columns of the */
 /* > B is COMPLEX array, dimension (LDB,NRHS) */
 /* > On entry, the M-by-NRHS right hand side matrix B. */
 /* > On exit, the N-by-NRHS solution matrix X. */
+/* > If M = 0 or N = 0, B is not referenced. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] LDB */
@@ -157,6 +158,7 @@ they are stored as the columns of the */
 /* > The effective rank of A, i.e., the order of the submatrix */
 /* > R11. This is the same as the order of the submatrix T11 */
 /* > in the complete orthogonal factorization of A. */
+/* > If NRHS = 0, RANK = 0 on output. */
 /* > \endverbatim */
 /* > */
 /* > \param[out] WORK */
@@ -202,8 +204,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup complexGEsolve */
+/* > \ingroup gelsy */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -256,8 +257,7 @@ void cgelsy_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
     extern /* Subroutine */
         void
         cgeqp3_(integer *, integer *, complex *, integer *, integer *, complex *, complex *,
-                integer *, real *, integer *),
-        slabad_(real *, real *);
+                integer *, real *, integer *);
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
         void
@@ -285,10 +285,9 @@ void cgelsy_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
         void
         ctzrzf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *,
                 integer *);
-    /* -- LAPACK driver routine (version 3.4.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -399,7 +398,6 @@ void cgelsy_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
     /* Get machine parameters */
     smlnum = slamch_("S") / slamch_("P");
     bignum = 1.f / smlnum;
-    slabad_(&smlnum, &bignum);
     /* Scale A, B if max entries outside range [SMLNUM,BIGNUM] */
     anrm = clange_("M", m, n, &a[a_offset], lda, &rwork[1]);
     iascl = 0;

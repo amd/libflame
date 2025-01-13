@@ -1,8 +1,8 @@
-/* ../netlib/csysvx.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./csysvx.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -279,8 +279,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date April 2012 */
-/* > \ingroup complexSYsolve */
+/* > \ingroup hesvx */
 /* ===================================================================== */
 /* Subroutine */
 void csysvx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *a, integer *lda,
@@ -306,6 +305,7 @@ void csysvx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *a, inte
 #endif
     /* System generated locals */
     integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2;
+    real r__1;
     /* Local variables */
     integer nb;
     extern logical lsame_(char *, char *, integer, integer);
@@ -333,10 +333,10 @@ void csysvx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *a, inte
         void
         csytrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *,
                 integer *);
-    /* -- LAPACK driver routine (version 3.4.1) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* April 2012 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -432,7 +432,8 @@ void csysvx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *a, inte
             i__2 = *n * nb; // , expr subst
             lwkopt = fla_max(i__1, i__2);
         }
-        work[1].r = (real)lwkopt;
+        r__1 = sroundup_lwork(&lwkopt);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
@@ -476,7 +477,8 @@ void csysvx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *a, inte
     {
         *info = *n + 1;
     }
-    work[1].r = (real)lwkopt;
+    r__1 = sroundup_lwork(&lwkopt);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

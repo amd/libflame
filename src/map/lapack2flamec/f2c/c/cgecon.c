@@ -1,8 +1,8 @@
-/* ../netlib/cgecon.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./cgecon.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b CGECON */
@@ -109,7 +109,15 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > INFO is INTEGER */
 /* > = 0: successful exit */
-/* > < 0: if INFO = -i, the i-th argument had an illegal value */
+/* > < 0: if INFO = -i, the i-th argument had an illegal value. */
+/* > NaNs are illegal values for ANORM, and they propagate to */
+/* > the output parameter RCOND. */
+/* > Infinity is illegal for ANORM, and it propagates to the output */
+/* > parameter RCOND as 0. */
+/* > = 1: if RCOND = NaN, or */
+/* > RCOND = Inf, or */
+/* > the computed norm of the inverse of A is 0. */
+/* > In the latter, RCOND = 0 is returned. */
 /* > \endverbatim */
 /* Authors: */
 /* ======== */
@@ -117,8 +125,7 @@ static integer c__1 = 1;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup complexGEcomputational */
+/* > \ingroup gecon */
 /* ===================================================================== */
 /* Subroutine */
 void cgecon_(char *norm, integer *n, complex *a, integer *lda, real *anorm, real *rcond,
@@ -161,13 +168,13 @@ void cgecon_(char *norm, integer *n, complex *a, integer *lda, real *anorm, real
         clatrs_(char *, char *, char *, char *, integer *, complex *, integer *, complex *, real *,
                 real *, integer *),
         csrscl_(integer *, real *, complex *, integer *);
+    extern logical sisnan_(real *);
     logical onenrm;
     char normin[1];
-    real smlnum;
-    /* -- LAPACK computational routine (version 3.4.0) -- */
+    real smlnum, hugeval;
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -190,7 +197,6 @@ void cgecon_(char *norm, integer *n, complex *a, integer *lda, real *anorm, real
     /* .. Statement Function definitions .. */
     /* .. */
     /* .. Executable Statements .. */
-    /* Test the input parameters. */
     /* Parameter adjustments */
     a_dim1 = *lda;
     a_offset = 1 + a_dim1;
@@ -198,6 +204,8 @@ void cgecon_(char *norm, integer *n, complex *a, integer *lda, real *anorm, real
     --work;
     --rwork;
     /* Function Body */
+    hugeval = slamch_("Overflow");
+    /* Test the input parameters. */
     *info = 0;
     onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", 1, 1);
     if(!onenrm && !lsame_(norm, "I", 1, 1))
@@ -233,6 +241,19 @@ void cgecon_(char *norm, integer *n, complex *a, integer *lda, real *anorm, real
     }
     else if(*anorm == 0.f)
     {
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return;
+    }
+    else if(sisnan_(anorm))
+    {
+        *rcond = *anorm;
+        *info = -5;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return;
+    }
+    else if(*anorm > hugeval)
+    {
+        *info = -5;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -293,6 +314,17 @@ L10:
     if(ainvnm != 0.f)
     {
         *rcond = 1.f / ainvnm / *anorm;
+    }
+    else
+    {
+        *info = 1;
+        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        return;
+    }
+    /* Check for NaNs and Infs */
+    if(sisnan_(rcond) || *rcond > hugeval)
+    {
+        *info = 1;
     }
 L20:
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

@@ -1,8 +1,8 @@
-/* ../netlib/cggevx.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./cggevx.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static complex c_b1 = {0.f, 0.f};
 static complex c_b2 = {1.f, 0.f};
@@ -349,8 +349,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date April 2012 */
-/* > \ingroup complexGEeigen */
+/* > \ingroup ggevx */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -429,8 +428,7 @@ void cggevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, co
         cggbak_(char *, char *, integer *, integer *, integer *, real *, real *, integer *,
                 complex *, integer *, integer *),
         cggbal_(char *, integer *, complex *, integer *, complex *, integer *, integer *, integer *,
-                real *, real *, real *, integer *),
-        slabad_(real *, real *);
+                real *, real *, real *, integer *);
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
         void
@@ -484,10 +482,10 @@ void cggevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, co
     logical wantsn;
     real smlnum;
     logical lquery, wantsv;
-    /* -- LAPACK driver routine (version 3.4.1) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* April 2012 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -652,7 +650,8 @@ void cggevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, co
                 maxwrk = fla_max(i__1, i__2);
             }
         }
-        work[1].r = (real)maxwrk;
+        r__1 = sroundup_lwork(&maxwrk);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         if(*lwork < minwrk && !lquery)
         {
@@ -681,7 +680,6 @@ void cggevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, co
     eps = slamch_("P");
     smlnum = slamch_("S");
     bignum = 1.f / smlnum;
-    slabad_(&smlnum, &bignum);
     smlnum = sqrt(smlnum) / eps;
     bignum = 1.f / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
@@ -857,8 +855,8 @@ void cggevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, co
         }
         if(!wantsn)
         {
-            /* compute eigenvectors (STGEVC) and estimate condition */
-            /* numbers (STGSNA). Note that the definition of the condition */
+            /* compute eigenvectors (CTGEVC) and estimate condition */
+            /* numbers (CTGSNA). Note that the definition of the condition */
             /* number is not invariant under transformation (u,v) to */
             /* (Q*u, Z*v), where (u,v) are eigenvectors of the generalized */
             /* Schur form (S,T), Q and Z are orthogonal matrices. In order */
@@ -971,7 +969,7 @@ void cggevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, co
         L80:;
         }
     }
-    /* Undo scaling if necessary */
+/* Undo scaling if necessary */
 L90:
     if(ilascl)
     {
@@ -981,7 +979,8 @@ L90:
     {
         clascl_("G", &c__0, &c__0, &bnrmto, &bnrm, n, &c__1, &beta[1], n, &ierr);
     }
-    work[1].r = (real)maxwrk;
+    r__1 = sroundup_lwork(&maxwrk);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

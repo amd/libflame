@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/csytrf_rk.f -- translated by f2c (version 20160102). You must link the resulting
- object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
- systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
- -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./csytrf_rk.f -- translated by f2c (version 20190311). You must link the resulting object file
+ with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -236,8 +236,7 @@ static integer c__2 = 2;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date December 2016 */
-/* > \ingroup complexSYcomputational */
+/* > \ingroup hetrf_rk */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -277,6 +276,7 @@ void csytrf_rk_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
 #endif
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
+    real r__1;
     /* Local variables */
     integer i__, k;
     extern /* Subroutine */
@@ -297,10 +297,10 @@ void csytrf_rk_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
-    /* -- LAPACK computational routine (version 3.7.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* December 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -347,14 +347,18 @@ void csytrf_rk_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
     {
         /* Determine the block size */
         nb = ilaenv_(&c__1, "CSYTRF_RK", uplo, n, &c_n1, &c_n1, &c_n1);
-        lwkopt = *n * nb;
-        work[1].r = (real)lwkopt;
+        /* Computing MAX */
+        i__1 = 1;
+        i__2 = *n * nb; // , expr subst
+        lwkopt = fla_max(i__1, i__2);
+        r__1 = sroundup_lwork(&lwkopt);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CSYTRF_RK", &i__1, (ftnlen)9);
+        xerbla_("CSYTRF_RK", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -442,8 +446,8 @@ void csytrf_rk_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
         /* Decrease K and return to the start of the main loop */
         k -= kb;
         goto L10;
-        /* This label is the exit from main loop over K decreasing */
-        /* from N to 1 in steps of KB */
+    /* This label is the exit from main loop over K decreasing */
+    /* from N to 1 in steps of KB */
     L15:;
     }
     else
@@ -515,12 +519,13 @@ void csytrf_rk_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
         /* Increase K and return to the start of the main loop */
         k += kb;
         goto L20;
-        /* This label is the exit from main loop over K increasing */
-        /* from 1 to N in steps of KB */
+    /* This label is the exit from main loop over K increasing */
+    /* from 1 to N in steps of KB */
     L35: /* End Lower */
          ;
     }
-    work[1].r = (real)lwkopt;
+    r__1 = sroundup_lwork(&lwkopt);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

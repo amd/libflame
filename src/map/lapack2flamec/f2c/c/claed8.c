@@ -1,12 +1,12 @@
-/* ../netlib/claed8.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./claed8.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b3 = -1.f;
 static integer c__1 = 1;
-/* > \brief \b CLAED8 used by sstedc. Merges eigenvalues and deflates secular equation. Used when
+/* > \brief \b CLAED8 used by CSTEDC. Merges eigenvalues and deflates secular equation. Used when
  * the original matrix is dense. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -28,7 +28,7 @@ static integer c__1 = 1;
 /* > \endhtmlonly */
 /* Definition: */
 /* =========== */
-/* SUBROUTINE CLAED8( K, N, QSIZ, Q, LDQ, D, RHO, CUTPNT, Z, DLAMDA, */
+/* SUBROUTINE CLAED8( K, N, QSIZ, Q, LDQ, D, RHO, CUTPNT, Z, DLAMBDA, */
 /* Q2, LDQ2, W, INDXP, INDX, INDXQ, PERM, GIVPTR, */
 /* GIVCOL, GIVNUM, INFO ) */
 /* .. Scalar Arguments .. */
@@ -38,7 +38,7 @@ static integer c__1 = 1;
 /* .. Array Arguments .. */
 /* INTEGER GIVCOL( 2, * ), INDX( * ), INDXP( * ), */
 /* $ INDXQ( * ), PERM( * ) */
-/* REAL D( * ), DLAMDA( * ), GIVNUM( 2, * ), W( * ), */
+/* REAL D( * ), DLAMBDA( * ), GIVNUM( 2, * ), W( * ), */
 /* $ Z( * ) */
 /* COMPLEX Q( LDQ, * ), Q2( LDQ2, * ) */
 /* .. */
@@ -127,9 +127,9 @@ static integer c__1 = 1;
 /* > destroyed during the updating process. */
 /* > \endverbatim */
 /* > */
-/* > \param[out] DLAMDA */
+/* > \param[out] DLAMBDA */
 /* > \verbatim */
-/* > DLAMDA is REAL array, dimension (N) */
+/* > DLAMBDA is REAL array, dimension (N) */
 /* > Contains a copy of the first K eigenvalues which will be used */
 /* > by SLAED3 to form the secular equation. */
 /* > \endverbatim */
@@ -221,12 +221,11 @@ static integer c__1 = 1;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date September 2012 */
-/* > \ingroup complexOTHERcomputational */
+/* > \ingroup laed8 */
 /* ===================================================================== */
 /* Subroutine */
 void claed8_(integer *k, integer *n, integer *qsiz, complex *q, integer *ldq, real *d__, real *rho,
-             integer *cutpnt, real *z__, real *dlamda, complex *q2, integer *ldq2, real *w,
+             integer *cutpnt, real *z__, real *dlambda, complex *q2, integer *ldq2, real *w,
              integer *indxp, integer *indx, integer *indxq, integer *perm, integer *givptr,
              integer *givcol, real *givnum, integer *info)
 {
@@ -273,10 +272,9 @@ void claed8_(integer *k, integer *n, integer *qsiz, complex *q, integer *ldq, re
     extern /* Subroutine */
         void
         slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
-    /* -- LAPACK computational routine (version 3.4.2) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* September 2012 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -300,7 +298,7 @@ void claed8_(integer *k, integer *n, integer *qsiz, complex *q, integer *ldq, re
     q -= q_offset;
     --d__;
     --z__;
-    --dlamda;
+    --dlambda;
     q2_dim1 = *ldq2;
     q2_offset = 1 + q2_dim1;
     q2 -= q2_offset;
@@ -379,17 +377,17 @@ void claed8_(integer *k, integer *n, integer *qsiz, complex *q, integer *ldq, re
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        dlamda[i__] = d__[indxq[i__]];
+        dlambda[i__] = d__[indxq[i__]];
         w[i__] = z__[indxq[i__]];
         /* L30: */
     }
     i__ = 1;
     j = *cutpnt + 1;
-    slamrg_(&n1, &n2, &dlamda[1], &c__1, &c__1, &indx[1]);
+    slamrg_(&n1, &n2, &dlambda[1], &c__1, &c__1, &indx[1]);
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        d__[i__] = dlamda[indx[i__]];
+        d__[i__] = dlambda[indx[i__]];
         z__[i__] = w[indx[i__]];
         /* L40: */
     }
@@ -508,7 +506,7 @@ L70:
         {
             ++(*k);
             w[*k] = z__[jlam];
-            dlamda[*k] = d__[jlam];
+            dlambda[*k] = d__[jlam];
             indxp[*k] = jlam;
             jlam = j;
         }
@@ -517,17 +515,17 @@ L70:
 L90: /* Record the last eigenvalue. */
     ++(*k);
     w[*k] = z__[jlam];
-    dlamda[*k] = d__[jlam];
+    dlambda[*k] = d__[jlam];
     indxp[*k] = jlam;
-L100: /* Sort the eigenvalues and corresponding eigenvectors into DLAMDA */
+L100: /* Sort the eigenvalues and corresponding eigenvectors into DLAMBDA */
     /* and Q2 respectively. The eigenvalues/vectors which were not */
-    /* deflated go into the first K slots of DLAMDA and Q2 respectively, */
+    /* deflated go into the first K slots of DLAMBDA and Q2 respectively, */
     /* while those which were deflated go into the last N - K slots. */
     i__1 = *n;
     for(j = 1; j <= i__1; ++j)
     {
         jp = indxp[j];
-        dlamda[j] = d__[jp];
+        dlambda[j] = d__[jp];
         perm[j] = indxq[indx[jp]];
         ccopy_(qsiz, &q[perm[j] * q_dim1 + 1], &c__1, &q2[j * q2_dim1 + 1], &c__1);
         /* L110: */
@@ -537,7 +535,7 @@ L100: /* Sort the eigenvalues and corresponding eigenvectors into DLAMDA */
     if(*k < *n)
     {
         i__1 = *n - *k;
-        scopy_(&i__1, &dlamda[*k + 1], &c__1, &d__[*k + 1], &c__1);
+        scopy_(&i__1, &dlambda[*k + 1], &c__1, &d__[*k + 1], &c__1);
         i__1 = *n - *k;
         clacpy_("A", qsiz, &i__1, &q2[(*k + 1) * q2_dim1 + 1], ldq2, &q[(*k + 1) * q_dim1 + 1],
                 ldq);

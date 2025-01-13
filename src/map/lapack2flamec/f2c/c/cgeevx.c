@@ -1,8 +1,8 @@
-/* ../netlib/cgeevx.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./cgeevx.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__0 = 0;
@@ -291,9 +291,8 @@ elements 1:ILO-1 and i+1:N of W */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date June 2016 */
 /* @generated from zgeevx.f, fortran z -> c, Tue Apr 19 01:47:44 2016 */
-/* > \ingroup complexGEeigen */
+/* > \ingroup geevx */
 /* ===================================================================== */
 /* Subroutine */
 void cgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, complex *a,
@@ -322,7 +321,8 @@ void cgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, co
     real r__1, r__2;
     complex q__1, q__2;
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(doublereal), r_imag(complex *);
+    void r_cnjg(complex *, complex *);
     /* Local variables */
     integer i__, k;
     char job[1];
@@ -342,8 +342,7 @@ void cgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, co
         void
         cgebak_(char *, char *, integer *, integer *, integer *, real *, integer *, complex *,
                 integer *, integer *),
-        cgebal_(char *, integer *, complex *, integer *, integer *, integer *, real *, integer *),
-        slabad_(real *, real *);
+        cgebal_(char *, integer *, complex *, integer *, integer *, integer *, real *, integer *);
     logical scalea;
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     real cscale;
@@ -360,7 +359,7 @@ void cgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, co
         clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    logical select[1] = {0};
+    logical select[1];
     real bignum;
     extern /* Subroutine */
         void
@@ -387,10 +386,10 @@ void cgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, co
         ctrevc3_(char *, char *, logical *, integer *, complex *, integer *, complex *, integer *,
                  complex *, integer *, integer *, integer *, complex *, integer *, real *,
                  integer *, integer *);
-    /* -- LAPACK driver routine (version 3.7.1) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -570,7 +569,8 @@ void cgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, co
             }
             maxwrk = fla_max(maxwrk, minwrk);
         }
-        work[1].r = (real)maxwrk;
+        r__1 = sroundup_lwork(&maxwrk);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         if(*lwork < minwrk && !lquery)
         {
@@ -599,7 +599,6 @@ void cgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, co
     eps = slamch_("P");
     smlnum = slamch_("S");
     bignum = 1.f / smlnum;
-    slabad_(&smlnum, &bignum);
     smlnum = sqrt(smlnum) / eps;
     bignum = 1.f / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
@@ -739,25 +738,25 @@ void cgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, co
                 /* Computing 2nd power */
                 r__1 = vl[i__3].r;
                 /* Computing 2nd power */
-                r__2 = vl[i__3].i;
+                r__2 = r_imag(&vl[k + i__ * vl_dim1]);
                 rwork[k] = r__1 * r__1 + r__2 * r__2;
                 /* L10: */
             }
             k = isamax_(n, &rwork[1], &c__1);
-            i__3 = k + i__ * vl_dim1;
-            q__2.r = vl[i__3].r;
-            q__2.i = -vl[i__3].i;
+            r_cnjg(&q__2, &vl[k + i__ * vl_dim1]);
             r__1 = sqrt(rwork[k]);
             q__1.r = q__2.r / r__1;
             q__1.i = q__2.i / r__1; // , expr subst
             tmp.r = q__1.r;
             tmp.i = q__1.i; // , expr subst
             cscal_(n, &tmp, &vl[i__ * vl_dim1 + 1], &c__1);
+            i__2 = k + i__ * vl_dim1;
+            i__3 = k + i__ * vl_dim1;
             r__1 = vl[i__3].r;
             q__1.r = r__1;
             q__1.i = 0.f; // , expr subst
-            vl[i__3].r = q__1.r;
-            vl[i__3].i = q__1.i; // , expr subst
+            vl[i__2].r = q__1.r;
+            vl[i__2].i = q__1.i; // , expr subst
             /* L20: */
         }
     }
@@ -778,29 +777,29 @@ void cgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, co
                 /* Computing 2nd power */
                 r__1 = vr[i__3].r;
                 /* Computing 2nd power */
-                r__2 = vr[i__3].i;
+                r__2 = r_imag(&vr[k + i__ * vr_dim1]);
                 rwork[k] = r__1 * r__1 + r__2 * r__2;
                 /* L30: */
             }
             k = isamax_(n, &rwork[1], &c__1);
-            i__3 = k + i__ * vr_dim1;
-            q__2.r = vr[i__3].r;
-            q__2.i = -vr[i__3].i;
+            r_cnjg(&q__2, &vr[k + i__ * vr_dim1]);
             r__1 = sqrt(rwork[k]);
             q__1.r = q__2.r / r__1;
             q__1.i = q__2.i / r__1; // , expr subst
             tmp.r = q__1.r;
             tmp.i = q__1.i; // , expr subst
             cscal_(n, &tmp, &vr[i__ * vr_dim1 + 1], &c__1);
+            i__2 = k + i__ * vr_dim1;
+            i__3 = k + i__ * vr_dim1;
             r__1 = vr[i__3].r;
             q__1.r = r__1;
             q__1.i = 0.f; // , expr subst
-            vr[i__3].r = q__1.r;
-            vr[i__3].i = q__1.i; // , expr subst
+            vr[i__2].r = q__1.r;
+            vr[i__2].i = q__1.i; // , expr subst
             /* L40: */
         }
     }
-    /* Undo scaling if necessary */
+/* Undo scaling if necessary */
 L50:
     if(scalea)
     {
@@ -822,7 +821,8 @@ L50:
             clascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &w[1], n, &ierr);
         }
     }
-    work[1].r = (real)maxwrk;
+    r__1 = sroundup_lwork(&maxwrk);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

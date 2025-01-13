@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/cheev_2stage.f -- translated by f2c (version 20160102). You must link the
- resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
- Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
- with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./cheev_2stage.f -- translated by f2c (version 20190311). You must link the resulting object file
+ with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -121,7 +121,7 @@ static real c_b28 = 1.f;
 /* > If JOBZ = 'N' and N > 1, LWORK must be queried. */
 /* > LWORK = MAX(1, dimension) where */
 /* > dimension = fla_max(stage1,stage2) + (KD+1)*N + N */
-/* > = N*KD + N*max(KD+1,FACTOPTNB) */
+/* > = N*KD + N*fla_max(KD+1,FACTOPTNB) */
 /* > + fla_max(2*KD*KD, KD*NTHREADS) */
 /* > + (KD+1)*N + N */
 /* > where KD is the blocking size of the reduction, */
@@ -159,8 +159,7 @@ i */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2017 */
-/* > \ingroup complexHEeigen */
+/* > \ingroup heev_2stage */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -259,11 +258,11 @@ void cheev_2stage_(char *jobz, char *uplo, integer *n, complex *a, integer *lda,
     integer llwork;
     real smlnum;
     logical lquery;
+    extern real sroundup_lwork(integer *);
     integer indhous;
-    /* -- LAPACK driver routine (version 3.8.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2017 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -316,7 +315,8 @@ void cheev_2stage_(char *jobz, char *uplo, integer *n, complex *a, integer *lda,
         lhtrd = ilaenv2stage_(&c__3, "CHETRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
         lwtrd = ilaenv2stage_(&c__4, "CHETRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
         lwmin = *n + lhtrd + lwtrd;
-        work[1].r = (real)lwmin;
+        r__1 = sroundup_lwork(&lwmin);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         if(*lwork < lwmin && !lquery)
         {
@@ -326,7 +326,7 @@ void cheev_2stage_(char *jobz, char *uplo, integer *n, complex *a, integer *lda,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHEEV_2STAGE ", &i__1, (ftnlen)13);
+        xerbla_("CHEEV_2STAGE", &i__1, (ftnlen)12);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -415,7 +415,8 @@ void cheev_2stage_(char *jobz, char *uplo, integer *n, complex *a, integer *lda,
         sscal_(&imax, &r__1, &w[1], &c__1);
     }
     /* Set WORK(1) to optimal complex workspace size. */
-    work[1].r = (real)lwmin;
+    r__1 = sroundup_lwork(&lwmin);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

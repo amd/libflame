@@ -1,8 +1,8 @@
-/* ../netlib/ctzrzf.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./ctzrzf.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -120,8 +120,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date April 2012 */
-/* > \ingroup complexOTHERcomputational */
+/* > \ingroup tzrzf */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -144,7 +143,7 @@ the routine */
 /* > V = ( I A(:,M+1:N) ) */
 /* > */
 /* > I is the M-by-M identity matrix, A(:,M+1:N) */
-/* > is the output stored in A on exit from DTZRZF, */
+/* > is the output stored in A on exit from CTZRZF, */
 /* > and tau(k) is the kth element of the array TAU. */
 /* > */
 /* > \endverbatim */
@@ -167,13 +166,12 @@ void ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
 #endif
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    real r__1;
     /* Local variables */
     integer i__, m1, ib, nb, ki, kk, mu, nx, iws, nbmin;
     extern /* Subroutine */
         void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
         clarzb_(char *, char *, char *, char *, integer *, integer *, integer *, integer *,
                 complex *, integer *, complex *, integer *, complex *, integer *, complex *,
                 integer *);
@@ -185,10 +183,10 @@ void ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
         clatrz_(integer *, integer *, integer *, complex *, integer *, complex *, complex *);
     integer lwkmin, ldwork, lwkopt;
     logical lquery;
-    /* -- LAPACK computational routine (version 3.4.1) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* April 2012 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -242,7 +240,8 @@ void ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
             lwkopt = *m * nb;
             lwkmin = fla_max(1, *m);
         }
-        work[1].r = (real)lwkopt;
+        r__1 = sroundup_lwork(&lwkopt);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         if(*lwork < lwkmin && !lquery)
         {
@@ -360,7 +359,8 @@ void ctzrzf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
         i__2 = *n - *m;
         clatrz_(&mu, n, &i__2, &a[a_offset], lda, &tau[1], &work[1]);
     }
-    work[1].r = (real)lwkopt;
+    r__1 = sroundup_lwork(&lwkopt);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

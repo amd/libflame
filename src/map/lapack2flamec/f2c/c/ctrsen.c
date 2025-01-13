@@ -1,8 +1,8 @@
-/* ../netlib/ctrsen.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./ctrsen.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c_n1 = -1;
 /* > \brief \b CTRSEN */
@@ -191,8 +191,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup complexOTHERcomputational */
+/* > \ingroup trsen */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -287,6 +286,7 @@ void ctrsen_(char *job, char *compq, logical *select, integer *n, complex *t, in
 #endif
     /* System generated locals */
     integer q_dim1, q_offset, t_dim1, t_offset, i__1, i__2, i__3;
+    real r__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
@@ -318,10 +318,10 @@ void ctrsen_(char *job, char *compq, logical *select, integer *n, complex *t, in
         ctrsyl_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
                 integer *, complex *, integer *, real *, integer *);
     logical lquery;
-    /* -- LAPACK computational routine (version 3.4.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -414,7 +414,8 @@ void ctrsen_(char *job, char *compq, logical *select, integer *n, complex *t, in
     }
     if(*info == 0)
     {
-        work[1].r = (real)lwmin;
+        r__1 = sroundup_lwork(&lwmin);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
@@ -512,7 +513,8 @@ L40: /* Copy reordered eigenvalues to W. */
         w[i__2].i = t[i__3].i; // , expr subst
         /* L50: */
     }
-    work[1].r = (real)lwmin;
+    r__1 = sroundup_lwork(&lwmin);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

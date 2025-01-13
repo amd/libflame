@@ -221,8 +221,7 @@ void cgelsx_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
         claic1_(integer *, integer *, complex *, real *, complex *, complex *, real *, complex *,
                 complex *),
         cunm2r_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
-                complex *, integer *, complex *, integer *),
-        slabad_(real *, real *);
+                complex *, integer *, complex *, integer *);
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
         void
@@ -325,7 +324,6 @@ void cgelsx_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
     /* Get machine parameters */
     smlnum = slamch_("S") / slamch_("P");
     bignum = 1.f / smlnum;
-    slabad_(&smlnum, &bignum);
     /* Scale A, B if max elements outside range [SMLNUM,BIGNUM] */
     anrm = clange_("M", m, n, &a[a_offset], lda, &rwork[1]);
     iascl = 0;

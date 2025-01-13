@@ -1,10 +1,10 @@
-/* ../netlib/clarfgp.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./clarfgp.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b5 = {1.f, 0.f};
+static complex c_b6 = {1.f, 0.f};
 /* > \brief \b CLARFGP generates an elementary reflector (Householder matrix) with non-negative
  * beta. */
 /* =========== DOCUMENTATION =========== */
@@ -76,7 +76,7 @@ static complex c_b5 = {1.f, 0.f};
 /* > \param[in,out] X */
 /* > \verbatim */
 /* > X is COMPLEX array, dimension */
-/* > (1+(N-2)*f2c_abs(INCX)) */
+/* > (1+(N-2)*abs(INCX)) */
 /* > On entry, the vector x. */
 /* > On exit, it is overwritten with the vector v. */
 /* > \endverbatim */
@@ -98,8 +98,7 @@ static complex c_b5 = {1.f, 0.f};
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2017 */
-/* > \ingroup complexOTHERauxiliary */
+/* > \ingroup larfgp */
 /* ===================================================================== */
 /* Subroutine */
 void clarfgp_(integer *n, complex *alpha, complex *x, integer *incx, complex *tau)
@@ -119,10 +118,11 @@ void clarfgp_(integer *n, complex *alpha, complex *x, integer *incx, complex *ta
     real r__1, r__2;
     complex q__1, q__2;
     /* Builtin functions */
-    double r_imag(complex *), r_sign(real *, real *), c_abs(complex *);
+    double r_imag(complex *), c_abs(complex *), r_sign(real *, real *);
     /* Local variables */
     integer j;
     complex savealpha;
+    real eps;
     integer knt;
     real beta;
     extern /* Subroutine */
@@ -139,10 +139,9 @@ void clarfgp_(integer *n, complex *alpha, complex *x, integer *incx, complex *ta
         void
         csscal_(integer *, real *, complex *, integer *);
     real bignum, smlnum;
-    /* -- LAPACK auxiliary routine (version 3.8.0) -- */
+    /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2017 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -168,13 +167,14 @@ void clarfgp_(integer *n, complex *alpha, complex *x, integer *incx, complex *ta
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
+    eps = slamch_("Precision");
     i__1 = *n - 1;
     xnorm = scnrm2_(&i__1, &x[1], incx);
     alphr = alpha->r;
     alphi = r_imag(alpha);
-    if(xnorm == 0.f)
+    if(xnorm <= eps * c_abs(alpha))
     {
-        /* H = [1-alpha/f2c_abs(alpha) 0;
+        /* H = [1-alpha/abs(alpha) 0;
         0 I], sign chosen so ALPHA >= 0. */
         if(alphi == 0.f)
         {
@@ -231,8 +231,8 @@ void clarfgp_(integer *n, complex *alpha, complex *x, integer *incx, complex *ta
         knt = 0;
         if(f2c_abs(beta) < smlnum)
         {
-            /* XNORM, BETA may be inaccurate;
-            scale X and recompute them */
+        /* XNORM, BETA may be inaccurate;
+        scale X and recompute them */
         L10:
             ++knt;
             i__1 = *n - 1;
@@ -281,7 +281,7 @@ void clarfgp_(integer *n, complex *alpha, complex *x, integer *incx, complex *ta
             q__1.i = alphi; // , expr subst
             alpha->r = q__1.r, alpha->i = q__1.i;
         }
-        cladiv_f2c_(&q__1, &c_b5, alpha);
+        cladiv_f2c_(&q__1, &c_b6, alpha);
         alpha->r = q__1.r, alpha->i = q__1.i;
         if(c_abs(tau) <= smlnum)
         {

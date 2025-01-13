@@ -1,4 +1,4 @@
-/* cgelss.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./cgelss.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -120,7 +120,7 @@ they are stored as the columns of the */
 /* > \verbatim */
 /* > S is REAL array, dimension (fla_min(M,N)) */
 /* > The singular values of A in decreasing order. */
-/* > The condition number of A in the 2-norm = S(1)/S (fla_min(m,n)). */
+/* > The condition number of A in the 2-norm = S(1)/S(fla_min(m,n)). */
 /* > \endverbatim */
 /* > */
 /* > \param[in] RCOND */
@@ -148,7 +148,7 @@ they are stored as the columns of the */
 /* > \verbatim */
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. LWORK >= 1, and also: */
-/* > LWORK >= 2*min(M,N) + fla_max(M,N,NRHS) */
+/* > LWORK >= 2*fla_min(M,N) + fla_max(M,N,NRHS) */
 /* > For good performance, LWORK should generally be larger. */
 /* > */
 /* > If LWORK = -1, then a workspace query is assumed;
@@ -160,7 +160,7 @@ the routine */
 /* > */
 /* > \param[out] RWORK */
 /* > \verbatim */
-/* > RWORK is REAL array, dimension (5*min(M,N)) */
+/* > RWORK is REAL array, dimension (5*fla_min(M,N)) */
 /* > \endverbatim */
 /* > */
 /* > \param[out] INFO */
@@ -179,7 +179,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup complexGEsolve */
+/* > \ingroup gelss */
 /* ===================================================================== */
 /* Subroutine */
 void cgelss_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, complex *b,
@@ -197,7 +197,8 @@ void cgelss_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
     integer i__, bl, ie, il, mm;
     complex dum[1];
     real eps, thr, anrm, bnrm;
-    integer itau, lwork_cgebrd__, lwork_cgelqf__, lwork_cungbr__, lwork_cunmbr__, lwork_cunmlq__;
+    integer itau, lwork_cgebrd__, lwork_cgelqf__, lwork_cungbr__, lwork_cunmbr__,
+        lwork_cunmlq__;
     extern /* Subroutine */
         void
         cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
@@ -216,8 +217,7 @@ void cgelss_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
     extern /* Subroutine */
         void
         cgebrd_(integer *, integer *, complex *, integer *, real *, real *, complex *, complex *,
-                complex *, integer *, integer *),
-        slabad_(real *, real *);
+                complex *, integer *, integer *);
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
         void
@@ -258,6 +258,7 @@ void cgelss_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
     real smlnum;
     integer irwork;
     logical lquery;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -335,6 +336,11 @@ void cgelss_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
             {
                 /* Path 1a - overdetermined, with many more rows than */
                 /* columns */
+                /* Compute space needed for CGEQRF */
+                cgeqrf_(m, n, &a[a_offset], lda, dum, dum, &c_n1, info);
+                /* Compute space needed for CUNMQR */
+                cunmqr_("L", "C", m, nrhs, n, &a[a_offset], lda, dum, &b[b_offset], ldb, dum, &c_n1,
+                        info);
                 mm = *n;
                 /* Computing MAX */
                 i__1 = maxwrk;
@@ -465,7 +471,8 @@ void cgelss_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
             }
             maxwrk = fla_max(minwrk, maxwrk);
         }
-        work[1].r = (real)maxwrk;
+        r__1 = sroundup_lwork(&maxwrk);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         if(*lwork < minwrk && !lquery)
         {
@@ -496,7 +503,6 @@ void cgelss_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
     sfmin = slamch_("S");
     smlnum = sfmin / eps;
     bignum = 1.f / smlnum;
-    slabad_(&smlnum, &bignum);
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
     anrm = clange_("M", m, n, &a[a_offset], lda, &rwork[1]);
     iascl = 0;
@@ -649,7 +655,7 @@ void cgelss_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
                 /* L20: */
             }
         }
-        else
+        else if(*nrhs == 1)
         {
             cgemv_("C", n, n, &c_b2, &a[a_offset], lda, &b[b_offset], &c__1, &c_b1, &work[1],
                    &c__1);
@@ -771,7 +777,7 @@ void cgelss_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
                     /* L40: */
                 }
             }
-            else
+            else if(*nrhs == 1)
             {
                 cgemv_("C", m, m, &c_b2, &work[il], &ldwork, &b[b_dim1 + 1], &c__1, &c_b1,
                        &work[iwork], &c__1);
@@ -874,7 +880,7 @@ void cgelss_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
                     /* L60: */
                 }
             }
-            else
+            else if(*nrhs == 1)
             {
                 cgemv_("C", m, n, &c_b2, &a[a_offset], lda, &b[b_offset], &c__1, &c_b1, &work[1],
                        &c__1);
@@ -902,7 +908,8 @@ void cgelss_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
         clascl_("G", &c__0, &c__0, &bignum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
     }
 L70:
-    work[1].r = (real)maxwrk;
+    r__1 = sroundup_lwork(&maxwrk);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;

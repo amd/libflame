@@ -1,8 +1,8 @@
-/* ../netlib/cungtr.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./cungtr.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -119,8 +119,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup complexOTHERcomputational */
+/* > \ingroup ungtr */
 /* ===================================================================== */
 /* Subroutine */
 void cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, complex *work,
@@ -136,6 +135,7 @@ void cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, com
 #endif
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    real r__1;
     /* Local variables */
     integer i__, j, nb;
     extern logical lsame_(char *, char *, integer, integer);
@@ -153,10 +153,10 @@ void cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, com
                 integer *, integer *);
     integer lwkopt;
     logical lquery;
-    /* -- LAPACK computational routine (version 3.4.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -226,7 +226,8 @@ void cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, com
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
         lwkopt = fla_max(i__1, i__2) * nb;
-        work[1].r = (real)lwkopt;
+        r__1 = sroundup_lwork(&lwkopt);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
@@ -332,7 +333,8 @@ void cungtr_(char *uplo, integer *n, complex *a, integer *lda, complex *tau, com
                     &iinfo);
         }
     }
-    work[1].r = (real)lwkopt;
+    r__1 = sroundup_lwork(&lwkopt);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

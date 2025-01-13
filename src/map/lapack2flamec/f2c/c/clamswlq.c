@@ -1,8 +1,8 @@
-/* clamswlq.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./clamswlq.f -- translated by f2c (version 20190311). You must link the resulting object file
+ with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__0 = 0;
 /* > \brief \b CLAMSWLQ */
@@ -192,6 +192,8 @@ the routine */
 /* > SIAM J. Sci. Comput, vol. 34, no. 1, 2012 */
 /* > \endverbatim */
 /* > */
+/* > \ingroup lamswlq */
+/* > */
 /* ===================================================================== */
 /* Subroutine */
 void clamswlq_(char *side, char *trans, integer *m, integer *n, integer *k, integer *mb,
@@ -216,6 +218,7 @@ void clamswlq_(char *side, char *trans, integer *m, integer *n, integer *k, inte
 #endif
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, t_dim1, t_offset, i__1, i__2, i__3;
+    real r__1;
     /* Local variables */
     integer i__, ii, kk, lw, ctr;
     logical left, tran;
@@ -225,6 +228,7 @@ void clamswlq_(char *side, char *trans, integer *m, integer *n, integer *k, inte
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, lquery;
+    extern real sroundup_lwork(integer *);
     extern /* Subroutine */
         void
         cgemlqt_(char *, char *, integer *, integer *, integer *, integer *, complex *, integer *,
@@ -318,14 +322,16 @@ void clamswlq_(char *side, char *trans, integer *m, integer *n, integer *k, inte
     {
         i__1 = -(*info);
         xerbla_("CLAMSWLQ", &i__1, (ftnlen)8);
-        work[1].r = (real)lw;
+        r__1 = sroundup_lwork(&lw);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     else if(lquery)
     {
-        work[1].r = (real)lw;
+        r__1 = sroundup_lwork(&lw);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -463,7 +469,8 @@ void clamswlq_(char *side, char *trans, integer *m, integer *n, integer *k, inte
                      &c__[ii * c_dim1 + 1], ldc, &work[1], info);
         }
     }
-    work[1].r = (real)lw;
+    r__1 = sroundup_lwork(&lw);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

@@ -1,8 +1,8 @@
-/* ../netlib/cgeev.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./cgeev.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__0 = 0;
@@ -178,9 +178,8 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date June 2016 */
 /* @generated from zgeev.f, fortran z -> c, Tue Apr 19 01:47:44 2016 */
-/* > \ingroup complexGEeigen */
+/* > \ingroup geev */
 /* ===================================================================== */
 /* Subroutine */
 void cgeev_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, complex *w, complex *vl,
@@ -227,8 +226,7 @@ void cgeev_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, comp
         void
         cgebak_(char *, char *, integer *, integer *, integer *, real *, integer *, complex *,
                 integer *, integer *),
-        cgebal_(char *, integer *, complex *, integer *, integer *, integer *, real *, integer *),
-        slabad_(real *, real *);
+        cgebal_(char *, integer *, complex *, integer *, integer *, integer *, real *, integer *);
     logical scalea;
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     real cscale;
@@ -264,10 +262,10 @@ void cgeev_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, comp
         ctrevc3_(char *, char *, logical *, integer *, complex *, integer *, complex *, integer *,
                  complex *, integer *, integer *, integer *, complex *, integer *, real *,
                  integer *, integer *);
-    /* -- LAPACK driver routine (version 3.7.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -396,7 +394,8 @@ void cgeev_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, comp
             i__1 = fla_max(maxwrk, hswork);
             maxwrk = fla_max(i__1, minwrk);
         }
-        work[1].r = (real)maxwrk;
+        r__1 = sroundup_lwork(&maxwrk);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         if(*lwork < minwrk && !lquery)
         {
@@ -425,7 +424,6 @@ void cgeev_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, comp
     eps = slamch_("P");
     smlnum = slamch_("S");
     bignum = 1.f / smlnum;
-    slabad_(&smlnum, &bignum);
     smlnum = sqrt(smlnum) / eps;
     bignum = 1.f / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
@@ -609,7 +607,7 @@ void cgeev_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, comp
             /* L40: */
         }
     }
-    /* Undo scaling if necessary */
+/* Undo scaling if necessary */
 L50:
     if(scalea)
     {
@@ -624,7 +622,8 @@ L50:
             clascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &w[1], n, &ierr);
         }
     }
-    work[1].r = (real)maxwrk;
+    r__1 = sroundup_lwork(&maxwrk);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

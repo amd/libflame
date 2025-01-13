@@ -1,4 +1,4 @@
-/* cunmrz.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./cunmrz.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -176,7 +176,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup complexOTHERcomputational */
+/* > \ingroup unmrz */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -198,9 +198,9 @@ void cunmrz_(char *side, char *trans, integer *m, integer *n, integer *k, intege
                       "cunmrz inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
                       ", l %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS ", lwork %" FLA_IS "",
                       *side, *trans, *m, *n, *k, *l, *lda, *ldc, *lwork);
-
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__4, i__5;
+    real r__1;
     char ch__1[2];
     /* Builtin functions */
     /* Subroutine */
@@ -220,9 +220,7 @@ void cunmrz_(char *side, char *trans, integer *m, integer *n, integer *k, intege
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
         void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
         clarzt_(char *, char *, integer *, integer *, complex *, integer *, complex *, complex *,
                 integer *);
     logical notran;
@@ -230,6 +228,7 @@ void cunmrz_(char *side, char *trans, integer *m, integer *n, integer *k, intege
     char transt[1];
     integer lwkopt;
     logical lquery;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -326,7 +325,8 @@ void cunmrz_(char *side, char *trans, integer *m, integer *n, integer *k, intege
             nb = fla_min(i__1, i__2);
             lwkopt = nw * nb + 4160;
         }
-        work[1].r = (real)lwkopt;
+        r__1 = sroundup_lwork(&lwkopt);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
@@ -437,7 +437,8 @@ void cunmrz_(char *side, char *trans, integer *m, integer *n, integer *k, intege
             /* L10: */
         }
     }
-    work[1].r = (real)lwkopt;
+    r__1 = sroundup_lwork(&lwkopt);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;

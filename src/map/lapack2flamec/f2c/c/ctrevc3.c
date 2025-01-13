@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/ctrevc3.f -- translated by f2c (version 20160102). You must link the resulting
- object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
- systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
- -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./ctrevc3.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static complex c_b1 = {0.f, 0.f};
 static complex c_b2 = {1.f, 0.f};
@@ -235,9 +235,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2017 */
-/* @generated from ztrevc3.f, fortran z -> c, Tue Apr 19 01:47:44 2016 */
-/* > \ingroup complexOTHERcomputational */
+/* > \ingroup trevc3 */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -276,15 +274,21 @@ void ctrevc3_(char *side, char *howmny, logical *select, integer *n, complex *t,
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__3, i__4, i__5, i__6;
+    integer t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__3, i__4,
+        i__5, i__6;
     real r__1, r__2, r__3;
     complex q__1, q__2;
     char ch__1[2];
+    /* Builtin functions */
+    /* Subroutine */
+
+    double r_imag(complex *);
+    void r_cnjg(complex *, complex *);
     /* Local variables */
     integer i__, j, k, nb, ii, ki, is, iv;
     real ulp;
     logical allv;
-    real unfl, ovfl, smin;
+    real unfl, smin;
     logical over;
     real scale;
     extern /* Subroutine */
@@ -301,9 +305,6 @@ void ctrevc3_(char *side, char *howmny, logical *select, integer *n, complex *t,
         void
         ccopy_(integer *, complex *, integer *, complex *, integer *);
     logical leftv, bothv, somev;
-    extern /* Subroutine */
-        void
-        slabad_(real *, real *);
     extern integer icamax_(integer *, complex *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
@@ -322,10 +323,10 @@ void ctrevc3_(char *side, char *howmny, logical *select, integer *n, complex *t,
     integer maxwrk;
     real smlnum;
     logical lquery;
-    /* -- LAPACK computational routine (version 3.8.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2017 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -388,10 +389,14 @@ void ctrevc3_(char *side, char *howmny, logical *select, integer *n, complex *t,
     }
     *info = 0;
     nb = ilaenv_(&c__1, "CTREVC", ch__1, n, &c_n1, &c_n1, &c_n1);
-    maxwrk = *n + (*n << 1) * nb;
-    work[1].r = (real)maxwrk;
+    /* Computing MAX */
+    i__1 = 1;
+    i__3 = *n + (*n << 1) * nb; // , expr subst
+    maxwrk = fla_max(i__1, i__3);
+    r__1 = sroundup_lwork(&maxwrk);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
-    rwork[1] = (real)(*n);
+    rwork[1] = (real)fla_max(1, *n);
     lquery = *lwork == -1 || *lrwork == -1;
     if(!rightv && !leftv)
     {
@@ -468,8 +473,6 @@ void ctrevc3_(char *side, char *howmny, logical *select, integer *n, complex *t,
     }
     /* Set the constants to control overflow. */
     unfl = slamch_("Safe minimum");
-    ovfl = 1.f / unfl;
-    slabad_(&unfl, &ovfl);
     ulp = slamch_("Precision");
     smlnum = unfl * (*n / ulp);
     /* Store the diagonal elements of T in working array WORK. */
@@ -516,7 +519,7 @@ void ctrevc3_(char *side, char *howmny, logical *select, integer *n, complex *t,
             i__1 = ki + ki * t_dim1;
             r__3 = ulp
                    * ((r__1 = t[i__1].r, f2c_abs(r__1))
-                      + (r__2 = t[ki + ki * t_dim1].i, f2c_abs(r__2)));
+                      + (r__2 = r_imag(&t[ki + ki * t_dim1]), f2c_abs(r__2)));
             smin = fla_max(r__3, smlnum);
             /* -------------------------------------------------------- */
             /* Complex right eigenvector */
@@ -548,7 +551,8 @@ void ctrevc3_(char *side, char *howmny, logical *select, integer *n, complex *t,
                 t[i__3].r = q__1.r;
                 t[i__3].i = q__1.i; // , expr subst
                 i__3 = k + k * t_dim1;
-                if((r__1 = t[i__3].r, f2c_abs(r__1)) + (r__2 = t[k + k * t_dim1].i, f2c_abs(r__2))
+                if((r__1 = t[i__3].r, f2c_abs(r__1))
+                       + (r__2 = r_imag(&t[k + k * t_dim1]), f2c_abs(r__2))
                    < smin)
                 {
                     i__4 = k + k * t_dim1;
@@ -576,7 +580,7 @@ void ctrevc3_(char *side, char *howmny, logical *select, integer *n, complex *t,
                 i__1 = ii + is * vr_dim1;
                 remax = 1.f
                         / ((r__1 = vr[i__1].r, f2c_abs(r__1))
-                           + (r__2 = vr[ii + is * vr_dim1].i, f2c_abs(r__2)));
+                           + (r__2 = r_imag(&vr[ii + is * vr_dim1]), f2c_abs(r__2)));
                 csscal_(&ki, &remax, &vr[is * vr_dim1 + 1], &c__1);
                 i__1 = *n;
                 for(k = ki + 1; k <= i__1; ++k)
@@ -603,7 +607,7 @@ void ctrevc3_(char *side, char *howmny, logical *select, integer *n, complex *t,
                 i__1 = ii + ki * vr_dim1;
                 remax = 1.f
                         / ((r__1 = vr[i__1].r, f2c_abs(r__1))
-                           + (r__2 = vr[ii + ki * vr_dim1].i, f2c_abs(r__2)));
+                           + (r__2 = r_imag(&vr[ii + ki * vr_dim1]), f2c_abs(r__2)));
                 csscal_(n, &remax, &vr[ki * vr_dim1 + 1], &c__1);
             }
             else
@@ -635,7 +639,7 @@ void ctrevc3_(char *side, char *howmny, logical *select, integer *n, complex *t,
                         i__3 = ii + (nb + k) * *n;
                         remax = 1.f
                                 / ((r__1 = work[i__3].r, f2c_abs(r__1))
-                                   + (r__2 = work[ii + (nb + k) * *n].i, f2c_abs(r__2)));
+                                   + (r__2 = r_imag(&work[ii + (nb + k) * *n]), f2c_abs(r__2)));
                         csscal_(n, &remax, &work[(nb + k) * *n + 1], &c__1);
                     }
                     i__1 = nb - iv + 1;
@@ -687,7 +691,7 @@ void ctrevc3_(char *side, char *howmny, logical *select, integer *n, complex *t,
             i__3 = ki + ki * t_dim1;
             r__3 = ulp
                    * ((r__1 = t[i__3].r, f2c_abs(r__1))
-                      + (r__2 = t[ki + ki * t_dim1].i, f2c_abs(r__2)));
+                      + (r__2 = r_imag(&t[ki + ki * t_dim1]), f2c_abs(r__2)));
             smin = fla_max(r__3, smlnum);
             /* -------------------------------------------------------- */
             /* Complex left eigenvector */
@@ -699,8 +703,7 @@ void ctrevc3_(char *side, char *howmny, logical *select, integer *n, complex *t,
             for(k = ki + 1; k <= i__3; ++k)
             {
                 i__4 = k + iv * *n;
-                q__2.r = t[ki + k * t_dim1].r;
-                q__2.i = -t[ki + k * t_dim1].i;
+                r_cnjg(&q__2, &t[ki + k * t_dim1]);
                 q__1.r = -q__2.r;
                 q__1.i = -q__2.i; // , expr subst
                 work[i__4].r = q__1.r;
@@ -720,7 +723,8 @@ void ctrevc3_(char *side, char *howmny, logical *select, integer *n, complex *t,
                 t[i__4].r = q__1.r;
                 t[i__4].i = q__1.i; // , expr subst
                 i__4 = k + k * t_dim1;
-                if((r__1 = t[i__4].r, f2c_abs(r__1)) + (r__2 = t[k + k * t_dim1].i, f2c_abs(r__2))
+                if((r__1 = t[i__4].r, f2c_abs(r__1))
+                       + (r__2 = r_imag(&t[k + k * t_dim1]), f2c_abs(r__2))
                    < smin)
                 {
                     i__5 = k + k * t_dim1;
@@ -751,7 +755,7 @@ void ctrevc3_(char *side, char *howmny, logical *select, integer *n, complex *t,
                 i__3 = ii + is * vl_dim1;
                 remax = 1.f
                         / ((r__1 = vl[i__3].r, f2c_abs(r__1))
-                           + (r__2 = vl[ii + is * vl_dim1].i, f2c_abs(r__2)));
+                           + (r__2 = r_imag(&vl[ii + is * vl_dim1]), f2c_abs(r__2)));
                 i__3 = *n - ki + 1;
                 csscal_(&i__3, &remax, &vl[ki + is * vl_dim1], &c__1);
                 i__3 = ki - 1;
@@ -779,7 +783,7 @@ void ctrevc3_(char *side, char *howmny, logical *select, integer *n, complex *t,
                 i__3 = ii + ki * vl_dim1;
                 remax = 1.f
                         / ((r__1 = vl[i__3].r, f2c_abs(r__1))
-                           + (r__2 = vl[ii + ki * vl_dim1].i, f2c_abs(r__2)));
+                           + (r__2 = r_imag(&vl[ii + ki * vl_dim1]), f2c_abs(r__2)));
                 csscal_(n, &remax, &vl[ki * vl_dim1 + 1], &c__1);
             }
             else
@@ -811,7 +815,7 @@ void ctrevc3_(char *side, char *howmny, logical *select, integer *n, complex *t,
                         i__4 = ii + (nb + k) * *n;
                         remax = 1.f
                                 / ((r__1 = work[i__4].r, f2c_abs(r__1))
-                                   + (r__2 = work[ii + (nb + k) * *n].i, f2c_abs(r__2)));
+                                   + (r__2 = r_imag(&work[ii + (nb + k) * *n]), f2c_abs(r__2)));
                         csscal_(n, &remax, &work[(nb + k) * *n + 1], &c__1);
                     }
                     clacpy_("F", n, &iv, &work[(nb + 1) * *n + 1], n,

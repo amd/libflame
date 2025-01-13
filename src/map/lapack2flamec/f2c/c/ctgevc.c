@@ -1,8 +1,8 @@
-/* ../netlib/ctgevc.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./ctgevc.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static complex c_b1 = {0.f, 0.f};
 static complex c_b2 = {1.f, 0.f};
@@ -59,7 +59,7 @@ static integer c__1 = 1;
 /* > */
 /* > S*x = w*P*x, (y**H)*S = w*(y**H)*P, */
 /* > */
-/* > where y**H denotes the conjugate tranpose of y. */
+/* > where y**H denotes the conjugate transpose of y. */
 /* > The eigenvalues are not input to this routine, but are computed */
 /* > directly from the diagonal elements of S and P. */
 /* > */
@@ -164,7 +164,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > VR is COMPLEX array, dimension (LDVR,MM) */
 /* > On entry, if SIDE = 'R' or 'B' and HOWMNY = 'B', VR must */
-/* > contain an N-by-N matrix Q (usually the unitary matrix Z */
+/* > contain an N-by-N matrix Z (usually the unitary matrix Z */
 /* > of right Schur vectors returned by CHGEQZ). */
 /* > On exit, if SIDE = 'R' or 'B', VR contains: */
 /* > if HOWMNY = 'A', the matrix X of right eigenvectors of (S,P);
@@ -220,8 +220,7 @@ static integer c__1 = 1;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup complexGEcomputational */
+/* > \ingroup tgevc */
 /* ===================================================================== */
 /* Subroutine */
 void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, integer *lds,
@@ -281,9 +280,6 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
     real acoefa, bcoefa, acoeff;
     complex bcoeff;
     logical ilback;
-    extern /* Subroutine */
-        void
-        slabad_(real *, real *);
     real ascale, bscale;
     extern /* Complex */
         void
@@ -297,10 +293,9 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
     real bignum;
     logical ilcomp;
     integer ihwmny;
-    /* -- LAPACK computational routine (version 3.4.0) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -475,7 +470,6 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
     /* Machine Constants */
     safmin = slamch_("Safe minimum");
     big = 1.f / safmin;
-    slabad_(&safmin, &big);
     ulp = slamch_("Epsilon") * slamch_("Base");
     small_val = safmin * *n / ulp;
     big = 1.f / small_val;

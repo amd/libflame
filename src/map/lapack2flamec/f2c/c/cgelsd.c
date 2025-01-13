@@ -1,8 +1,8 @@
-/* ../netlib/cgelsd.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./cgelsd.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static complex c_b1 = {0.f, 0.f};
 static integer c__9 = 9;
@@ -63,22 +63,16 @@ they are stored as the columns of the */
 /* > */
 /* > The problem is solved in three steps: */
 /* > (1) Reduce the coefficient matrix A to bidiagonal form with */
-/* > Householder tranformations, reducing the original problem */
+/* > Householder transformations, reducing the original problem */
 /* > into a "bidiagonal least squares problem" (BLS) */
 /* > (2) Solve the BLS using a divide and conquer approach. */
-/* > (3) Apply back all the Householder tranformations to solve */
+/* > (3) Apply back all the Householder transformations to solve */
 /* > the original least squares problem. */
 /* > */
 /* > The effective rank of A is determined by treating as zero those */
 /* > singular values which are less than RCOND times the largest singular */
 /* > value. */
 /* > */
-/* > The divide and conquer algorithm makes very mild assumptions about */
-/* > floating point arithmetic. It will work on machines with a guard */
-/* > digit in add/subtract, or on those binary machines without guard */
-/* > digits which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or */
-/* > Cray-2. It could conceivably fail on hexadecimal or decimal machines */
-/* > without guard digits, but we know of none. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -220,8 +214,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup complexGEsolve */
+/* > \ingroup gelsd */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -249,6 +242,7 @@ void cgelsd_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
 #endif
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
+    real r__1;
     /* Builtin functions */
     double log(doublereal);
     /* Local variables */
@@ -260,8 +254,7 @@ void cgelsd_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
     extern /* Subroutine */
         void
         cgebrd_(integer *, integer *, complex *, integer *, real *, real *, complex *, complex *,
-                complex *, integer *, integer *),
-        slabad_(real *, real *);
+                complex *, integer *, integer *);
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
         void
@@ -300,10 +293,10 @@ void cgelsd_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
     integer lrwork;
     logical lquery;
     integer nrwork, smlsiz;
-    /* -- LAPACK driver routine (version 3.4.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -524,7 +517,8 @@ void cgelsd_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
             }
         }
         minwrk = fla_min(minwrk, maxwrk);
-        work[1].r = (real)maxwrk;
+        r__1 = sroundup_lwork(&maxwrk);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         iwork[1] = liwork;
         rwork[1] = (real)lrwork;
@@ -557,7 +551,6 @@ void cgelsd_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
     sfmin = slamch_("S");
     smlnum = sfmin / eps;
     bignum = 1.f / smlnum;
-    slabad_(&smlnum, &bignum);
     /* Scale A if max entry outside range [SMLNUM,BIGNUM]. */
     anrm = clange_("M", m, n, &a[a_offset], lda, &rwork[1]);
     iascl = 0;
@@ -784,7 +777,8 @@ void cgelsd_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
         clascl_("G", &c__0, &c__0, &bignum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
     }
 L10:
-    work[1].r = (real)maxwrk;
+    r__1 = sroundup_lwork(&maxwrk);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     iwork[1] = liwork;
     rwork[1] = (real)lrwork;

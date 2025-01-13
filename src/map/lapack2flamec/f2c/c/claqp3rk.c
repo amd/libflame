@@ -4,11 +4,11 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {0.f, 0.f};
-static scomplex c_b2 = {1.f, 0.f};
-static aocl_int64_t c__1 = 1;
+static complex c_b1 = {0.f, 0.f};
+static complex c_b2 = {1.f, 0.f};
+static integer c__1 = 1;
 /* > \brief \b CLAQP3RK computes a step of truncated QR factorization with column pivoting of a
- * scomplex m-by-n matrix A using Level 3 BLAS and overwrites a scomplex m-by-nrhs matrix B with Q**H
+ * complex m-by-n matrix A using Level 3 BLAS and overwrites a complex m-by-nrhs matrix B with Q**H
  * * B. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -52,7 +52,7 @@ static aocl_int64_t c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > CLAQP3RK computes a step of truncated QR factorization with column */
-/* > pivoting of a scomplex M-by-N matrix A block A(IOFFSET+1:M,1:N) */
+/* > pivoting of a complex M-by-N matrix A block A(IOFFSET+1:M,1:N) */
 /* > by using Level 3 BLAS as */
 /* > */
 /* > A * P(KB) = Q(KB) * R(KB). */
@@ -398,64 +398,44 @@ static aocl_int64_t c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-/** Generated wrapper function */
-void claqp3rk_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, aocl_int_t *ioffset, aocl_int_t *nb,
-               real *abstol, real *reltol, aocl_int_t *kp1, real *maxc2nrm, scomplex *a,
-               aocl_int_t *lda, logical *done, aocl_int_t *kb, real *maxc2nrmk, real *relmaxc2nrmk,
-               aocl_int_t *jpiv, scomplex *tau, real *vn1, real *vn2, scomplex *auxv, scomplex *f,
-               aocl_int_t *ldf, aocl_int_t *iwork, aocl_int_t *info)
-{
-#if FLA_ENABLE_ILP64
-    aocl_lapack_claqp3rk(m, n, nrhs, ioffset, nb, abstol, reltol, kp1, maxc2nrm, a, lda, done, kb,
-                         maxc2nrmk, relmaxc2nrmk, jpiv, tau, vn1, vn2, auxv, f, ldf, iwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ioffset_64 = *ioffset;
-    aocl_int64_t nb_64 = *nb;
-    aocl_int64_t kp1_64 = *kp1;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t kb_64 = *kb;
-    aocl_int64_t ldf_64 = *ldf;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_claqp3rk(&m_64, &n_64, &nrhs_64, &ioffset_64, &nb_64, abstol, reltol, &kp1_64,
-                         maxc2nrm, a, &lda_64, done, &kb_64, maxc2nrmk, relmaxc2nrmk, jpiv, tau,
-                         vn1, vn2, auxv, f, &ldf_64, iwork, &info_64);
-
-    *kb = (aocl_int_t)kb_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_claqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
-                          aocl_int64_t *ioffset, aocl_int64_t *nb, real *abstol, real *reltol,
-                          aocl_int64_t *kp1, real *maxc2nrm, scomplex *a, aocl_int64_t *lda,
-                          logical *done, aocl_int64_t *kb, real *maxc2nrmk, real *relmaxc2nrmk,
-                          aocl_int_t *jpiv, scomplex *tau, real *vn1, real *vn2, scomplex *auxv,
-                          scomplex *f, aocl_int64_t *ldf, aocl_int_t *iwork, aocl_int64_t *info)
+void claqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer *nb, real *abstol,
+               real *reltol, integer *kp1, real *maxc2nrm, complex *a, integer *lda, logical *done,
+               integer *kb, real *maxc2nrmk, real *relmaxc2nrmk, integer *jpiv, complex *tau,
+               real *vn1, real *vn2, complex *auxv, complex *f, integer *ldf, integer *iwork,
+               integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("claqp3rk inputs: m %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS
+    AOCL_DTL_SNPRINTF("dlaqp3rk inputs: m %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS
                       ",ioffset %" FLA_IS ",nb %" FLA_IS ",kp1 %" FLA_IS ",lda %" FLA_IS
                       ",ldf %" FLA_IS "",
                       *m, *n, *nrhs, *ioffset, *nb, *kp1, *lda, *ldf);
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, f_dim1, f_offset, i__1, i__2, i__3;
+    integer a_dim1, a_offset, f_dim1, f_offset, i__1, i__2, i__3;
     real r__1, r__2;
-    scomplex q__1;
+    complex q__1;
     /* Builtin functions */
     double sqrt(doublereal);
-    void r_cnjg(scomplex *, scomplex *);
-    double r_imag(scomplex *), c_abs(scomplex *);
+    void r_cnjg(complex *, complex *);
+    double r_imag(complex *), c_abs(complex *);
     /* Local variables */
-    aocl_int64_t i__, j, k, minmnfact, minmnupdt, if__, kp;
-    scomplex aik;
+    integer i__, j, k, minmnfact, minmnupdt, if__, kp;
+    complex aik;
     real temp, temp2, tol3z;
-    aocl_int64_t itemp;
+    extern /* Subroutine */
+        void
+        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
+               complex *, integer *, complex *, complex *, integer *),
+        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
+               complex *, complex *, integer *),
+        cswap_(integer *, complex *, integer *, complex *, integer *);
+    integer itemp;
+    extern real scnrm2_(integer *, complex *, integer *);
+    extern /* Subroutine */
+        void
+        clarfg_(integer *, complex *, complex *, integer *, complex *);
     extern real slamch_(char *);
-    aocl_int64_t lsticc;
+    integer lsticc;
+    extern integer isamax_(integer *, real *, integer *);
     real taunan;
     extern logical sisnan_(real *);
     real hugeval;
@@ -511,7 +491,6 @@ void aocl_lapack_claqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
     k = 0;
     lsticc = 0;
     *done = FALSE_;
-    i__ = 0;
     while(k < *nb && lsticc == 0)
     {
         ++k;
@@ -529,7 +508,7 @@ void aocl_lapack_claqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
             /* of the column with the maximum 2-norm in the */
             /* submatrix A(I:M,K:N). */
             i__1 = *n - k + 1;
-            kp = k - 1 + aocl_blas_isamax(&i__1, &vn1[k], &c__1);
+            kp = k - 1 + isamax_(&i__1, &vn1[k], &c__1);
             /* Determine the maximum column 2-norm and the relative maximum */
             /* column 2-norm of the submatrix A(I:M,K:N) in step K. */
             *maxc2nrmk = vn1[kp];
@@ -568,11 +547,11 @@ void aocl_lapack_claqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
                 if(*nrhs > 0 && *kb < *m - *ioffset)
                 {
                     i__1 = *m - if__;
-                    q__1.real = -1.f;
-                    q__1.imag = -0.f; // , expr subst
-                    aocl_blas_cgemm("No transpose", "Conjugate transpose", &i__1, nrhs, kb, &q__1,
-                                    &a[if__ + 1 + a_dim1], lda, &f[*n + 1 + f_dim1], ldf, &c_b2,
-                                    &a[if__ + 1 + (*n + 1) * a_dim1], lda);
+                    q__1.r = -1.f;
+                    q__1.i = -0.f; // , expr subst
+                    cgemm_("No transpose", "Conjugate transpose", &i__1, nrhs, kb, &q__1,
+                           &a[if__ + 1 + a_dim1], lda, &f[*n + 1 + f_dim1], ldf, &c_b2,
+                           &a[if__ + 1 + (*n + 1) * a_dim1], lda);
                 }
                 /* There is no need to recompute the 2-norm of the */
                 /* difficult columns, since we stop the factorization. */
@@ -611,11 +590,11 @@ void aocl_lapack_claqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
                 if(*nrhs > 0 && *kb < *m - *ioffset)
                 {
                     i__1 = *m - if__;
-                    q__1.real = -1.f;
-                    q__1.imag = -0.f; // , expr subst
-                    aocl_blas_cgemm("No transpose", "Conjugate transpose", &i__1, nrhs, kb, &q__1,
-                                    &a[if__ + 1 + a_dim1], lda, &f[*n + 1 + f_dim1], ldf, &c_b2,
-                                    &a[if__ + 1 + (*n + 1) * a_dim1], lda);
+                    q__1.r = -1.f;
+                    q__1.i = -0.f; // , expr subst
+                    cgemm_("No transpose", "Conjugate transpose", &i__1, nrhs, kb, &q__1,
+                           &a[if__ + 1 + a_dim1], lda, &f[*n + 1 + f_dim1], ldf, &c_b2,
+                           &a[if__ + 1 + (*n + 1) * a_dim1], lda);
                 }
                 /* There is no need to recompute the 2-norm of the */
                 /* difficult columns, since we stop the factorization. */
@@ -626,8 +605,8 @@ void aocl_lapack_claqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
                 for(j = k; j <= i__1; ++j)
                 {
                     i__2 = j;
-                    tau[i__2].real = 0.f;
-                    tau[i__2].imag = 0.f; // , expr subst
+                    tau[i__2].r = 0.f;
+                    tau[i__2].i = 0.f; // , expr subst
                 }
                 /* Return from the routine. */
                 AOCL_DTL_TRACE_LOG_EXIT
@@ -681,11 +660,11 @@ void aocl_lapack_claqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
                 {
                     i__1 = *m - if__;
                     i__2 = *n + *nrhs - *kb;
-                    q__1.real = -1.f;
-                    q__1.imag = -0.f; // , expr subst
-                    aocl_blas_cgemm("No transpose", "Conjugate transpose", &i__1, &i__2, kb, &q__1,
-                                    &a[if__ + 1 + a_dim1], lda, &f[*kb + 1 + f_dim1], ldf, &c_b2,
-                                    &a[if__ + 1 + (*kb + 1) * a_dim1], lda);
+                    q__1.r = -1.f;
+                    q__1.i = -0.f; // , expr subst
+                    cgemm_("No transpose", "Conjugate transpose", &i__1, &i__2, kb, &q__1,
+                           &a[if__ + 1 + a_dim1], lda, &f[*kb + 1 + f_dim1], ldf, &c_b2,
+                           &a[if__ + 1 + (*kb + 1) * a_dim1], lda);
                 }
                 /* There is no need to recompute the 2-norm of the */
                 /* difficult columns, since we stop the factorization. */
@@ -696,8 +675,8 @@ void aocl_lapack_claqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
                 for(j = k; j <= i__1; ++j)
                 {
                     i__2 = j;
-                    tau[i__2].real = 0.f;
-                    tau[i__2].imag = 0.f; // , expr subst
+                    tau[i__2].r = 0.f;
+                    tau[i__2].i = 0.f; // , expr subst
                 }
                 /* Return from the routine. */
                 AOCL_DTL_TRACE_LOG_EXIT
@@ -721,14 +700,14 @@ void aocl_lapack_claqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
         /* the original matrix A_orig, not the block A(1:M,1:N). */
         if(kp != k)
         {
-            aocl_blas_cswap(m, &a[kp * a_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
+            cswap_(m, &a[kp * a_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
             i__1 = k - 1;
-            aocl_blas_cswap(&i__1, &f[kp + f_dim1], ldf, &f[k + f_dim1], ldf);
+            cswap_(&i__1, &f[kp + f_dim1], ldf, &f[k + f_dim1], ldf);
             vn1[kp] = vn1[k];
             vn2[kp] = vn2[k];
             itemp = jpiv[kp];
             jpiv[kp] = jpiv[k];
-            jpiv[k] = (aocl_int_t)(itemp);
+            jpiv[k] = itemp;
         }
         /* Apply previous Householder reflectors to column K: */
         /* A(I:M,K) := A(I:M,K) - A(I:M,1:K-1)*F(K,1:K-1)**H. */
@@ -739,36 +718,35 @@ void aocl_lapack_claqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
             {
                 i__2 = k + j * f_dim1;
                 r_cnjg(&q__1, &f[k + j * f_dim1]);
-                f[i__2].real = q__1.real;
-                f[i__2].imag = q__1.imag; // , expr subst
+                f[i__2].r = q__1.r;
+                f[i__2].i = q__1.i; // , expr subst
             }
             i__1 = *m - i__ + 1;
             i__2 = k - 1;
-            q__1.real = -1.f;
-            q__1.imag = -0.f; // , expr subst
-            aocl_blas_cgemv("No transpose", &i__1, &i__2, &q__1, &a[i__ + a_dim1], lda,
-                            &f[k + f_dim1], ldf, &c_b2, &a[i__ + k * a_dim1], &c__1);
+            q__1.r = -1.f;
+            q__1.i = -0.f; // , expr subst
+            cgemv_("No transpose", &i__1, &i__2, &q__1, &a[i__ + a_dim1], lda, &f[k + f_dim1], ldf,
+                   &c_b2, &a[i__ + k * a_dim1], &c__1);
             i__1 = k - 1;
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = k + j * f_dim1;
                 r_cnjg(&q__1, &f[k + j * f_dim1]);
-                f[i__2].real = q__1.real;
-                f[i__2].imag = q__1.imag; // , expr subst
+                f[i__2].r = q__1.r;
+                f[i__2].i = q__1.i; // , expr subst
             }
         }
         /* Generate elementary reflector H(k) using the column A(I:M,K). */
         if(i__ < *m)
         {
             i__1 = *m - i__ + 1;
-            aocl_lapack_clarfg(&i__1, &a[i__ + k * a_dim1], &a[i__ + 1 + k * a_dim1], &c__1,
-                               &tau[k]);
+            clarfg_(&i__1, &a[i__ + k * a_dim1], &a[i__ + 1 + k * a_dim1], &c__1, &tau[k]);
         }
         else
         {
             i__1 = k;
-            tau[i__1].real = 0.f;
-            tau[i__1].imag = 0.f; // , expr subst
+            tau[i__1].r = 0.f;
+            tau[i__1].i = 0.f; // , expr subst
         }
         /* Check if TAU(K) contains NaN, set INFO parameter */
         /* to the column number where NaN is found and return from */
@@ -780,11 +758,11 @@ void aocl_lapack_claqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
         /* TAU(K) to contain NaN. Therefore, this case of generating Inf */
         /* by CLARFG is covered by checking TAU(K) for NaN. */
         i__1 = k;
-        r__1 = tau[i__1].real;
+        r__1 = tau[i__1].r;
         if(sisnan_(&r__1))
         {
             i__1 = k;
-            taunan = tau[i__1].real;
+            taunan = tau[i__1].r;
         }
         else /* if(complicated condition) */
         {
@@ -826,11 +804,11 @@ void aocl_lapack_claqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
             if(*nrhs > 0 && *kb < *m - *ioffset)
             {
                 i__1 = *m - if__;
-                q__1.real = -1.f;
-                q__1.imag = -0.f; // , expr subst
-                aocl_blas_cgemm("No transpose", "Conjugate transpose", &i__1, nrhs, kb, &q__1,
-                                &a[if__ + 1 + a_dim1], lda, &f[*n + 1 + f_dim1], ldf, &c_b2,
-                                &a[if__ + 1 + (*n + 1) * a_dim1], lda);
+                q__1.r = -1.f;
+                q__1.i = -0.f; // , expr subst
+                cgemm_("No transpose", "Conjugate transpose", &i__1, nrhs, kb, &q__1,
+                       &a[if__ + 1 + a_dim1], lda, &f[*n + 1 + f_dim1], ldf, &c_b2,
+                       &a[if__ + 1 + (*n + 1) * a_dim1], lda);
             }
             /* There is no need to recompute the 2-norm of the */
             /* difficult columns, since we stop the factorization. */
@@ -842,11 +820,11 @@ void aocl_lapack_claqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
         }
         /* =============================================================== */
         i__1 = i__ + k * a_dim1;
-        aik.real = a[i__1].real;
-        aik.imag = a[i__1].imag; // , expr subst
+        aik.r = a[i__1].r;
+        aik.i = a[i__1].i; // , expr subst
         i__1 = i__ + k * a_dim1;
-        a[i__1].real = 1.f;
-        a[i__1].imag = 0.f; // , expr subst
+        a[i__1].r = 1.f;
+        a[i__1].i = 0.f; // , expr subst
         /* =============================================================== */
         /* Compute the current K-th column of F: */
         /* 1) F(K+1:N,K) := tau(K) * A(I:M,K+1:N)**H * A(I:M,K). */
@@ -854,9 +832,8 @@ void aocl_lapack_claqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
         {
             i__1 = *m - i__ + 1;
             i__2 = *n + *nrhs - k;
-            aocl_blas_cgemv("Conjugate transpose", &i__1, &i__2, &tau[k],
-                            &a[i__ + (k + 1) * a_dim1], lda, &a[i__ + k * a_dim1], &c__1, &c_b1,
-                            &f[k + 1 + k * f_dim1], &c__1);
+            cgemv_("Conjugate transpose", &i__1, &i__2, &tau[k], &a[i__ + (k + 1) * a_dim1], lda,
+                   &a[i__ + k * a_dim1], &c__1, &c_b1, &f[k + 1 + k * f_dim1], &c__1);
         }
         /* 2) Zero out elements above and on the diagonal of the */
         /* column K in matrix F, i.e elements F(1:K,K). */
@@ -864,8 +841,8 @@ void aocl_lapack_claqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
         for(j = 1; j <= i__1; ++j)
         {
             i__2 = j + k * f_dim1;
-            f[i__2].real = 0.f;
-            f[i__2].imag = 0.f; // , expr subst
+            f[i__2].r = 0.f;
+            f[i__2].i = 0.f; // , expr subst
         }
         /* 3) Incremental updating of the K-th column of F: */
         /* F(1:N,K) := F(1:N,K) - tau(K) * F(1:N,1:K-1) * A(I:M,1:K-1)**H */
@@ -875,14 +852,14 @@ void aocl_lapack_claqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
             i__1 = *m - i__ + 1;
             i__2 = k - 1;
             i__3 = k;
-            q__1.real = -tau[i__3].real;
-            q__1.imag = -tau[i__3].imag; // , expr subst
-            aocl_blas_cgemv("Conjugate Transpose", &i__1, &i__2, &q__1, &a[i__ + a_dim1], lda,
-                            &a[i__ + k * a_dim1], &c__1, &c_b1, &auxv[1], &c__1);
+            q__1.r = -tau[i__3].r;
+            q__1.i = -tau[i__3].i; // , expr subst
+            cgemv_("Conjugate Transpose", &i__1, &i__2, &q__1, &a[i__ + a_dim1], lda,
+                   &a[i__ + k * a_dim1], &c__1, &c_b1, &auxv[1], &c__1);
             i__1 = *n + *nrhs;
             i__2 = k - 1;
-            aocl_blas_cgemv("No transpose", &i__1, &i__2, &c_b2, &f[f_dim1 + 1], ldf, &auxv[1],
-                            &c__1, &c_b2, &f[k * f_dim1 + 1], &c__1);
+            cgemv_("No transpose", &i__1, &i__2, &c_b2, &f[f_dim1 + 1], ldf, &auxv[1], &c__1, &c_b2,
+                   &f[k * f_dim1 + 1], &c__1);
         }
         /* =============================================================== */
         /* Update the current I-th row of A: */
@@ -891,15 +868,14 @@ void aocl_lapack_claqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
         if(k < *n + *nrhs)
         {
             i__1 = *n + *nrhs - k;
-            q__1.real = -1.f;
-            q__1.imag = -0.f; // , expr subst
-            aocl_blas_cgemm("No transpose", "Conjugate transpose", &c__1, &i__1, &k, &q__1,
-                            &a[i__ + a_dim1], lda, &f[k + 1 + f_dim1], ldf, &c_b2,
-                            &a[i__ + (k + 1) * a_dim1], lda);
+            q__1.r = -1.f;
+            q__1.i = -0.f; // , expr subst
+            cgemm_("No transpose", "Conjugate transpose", &c__1, &i__1, &k, &q__1, &a[i__ + a_dim1],
+                   lda, &f[k + 1 + f_dim1], ldf, &c_b2, &a[i__ + (k + 1) * a_dim1], lda);
         }
         i__1 = i__ + k * a_dim1;
-        a[i__1].real = aik.real;
-        a[i__1].imag = aik.imag; // , expr subst
+        a[i__1].r = aik.r;
+        a[i__1].i = aik.i; // , expr subst
         /* Update the partial column 2-norms for the residual matrix, */
         /* only if the residual matrix A(I+1:M,K+1:N) exists, i.e. */
         /* when K < MINMNFACT = fla_min( M-IOFFSET, N ). */
@@ -928,7 +904,7 @@ void aocl_lapack_claqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
                         /* NOTE: ILSTCC > 1, threfore we can use IWORK only */
                         /* with N-1 elements, where the elements are */
                         /* shifted by 1 to the left. */
-                        iwork[j - 1] = (aocl_int_t)(lsticc);
+                        iwork[j - 1] = lsticc;
                         /* Set the index of the last difficult column LSTICC. */
                         lsticc = j;
                     }
@@ -960,11 +936,11 @@ void aocl_lapack_claqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
     {
         i__1 = *m - if__;
         i__2 = *n + *nrhs - *kb;
-        q__1.real = -1.f;
-        q__1.imag = -0.f; // , expr subst
-        aocl_blas_cgemm("No transpose", "Conjugate transpose", &i__1, &i__2, kb, &q__1,
-                        &a[if__ + 1 + a_dim1], lda, &f[*kb + 1 + f_dim1], ldf, &c_b2,
-                        &a[if__ + 1 + (*kb + 1) * a_dim1], lda);
+        q__1.r = -1.f;
+        q__1.i = -0.f; // , expr subst
+        cgemm_("No transpose", "Conjugate transpose", &i__1, &i__2, kb, &q__1,
+               &a[if__ + 1 + a_dim1], lda, &f[*kb + 1 + f_dim1], ldf, &c_b2,
+               &a[if__ + 1 + (*kb + 1) * a_dim1], lda);
     }
     /* Recompute the 2-norm of the difficult columns. */
     /* Loop over the index of the difficult columns from the largest */
@@ -981,7 +957,7 @@ void aocl_lapack_claqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
         /* SCNRM2 does not fail on vectors with norm below the value of */
         /* SQRT(SLAMCH('S')) */
         i__1 = *m - if__;
-        vn1[lsticc] = aocl_blas_scnrm2(&i__1, &a[if__ + 1 + lsticc * a_dim1], &c__1);
+        vn1[lsticc] = scnrm2_(&i__1, &a[if__ + 1 + lsticc * a_dim1], &c__1);
         vn2[lsticc] = vn1[lsticc];
         /* Downdate the index of the last difficult column to */
         /* the index of the previous difficult column. */

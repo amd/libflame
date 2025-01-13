@@ -1,8 +1,8 @@
-/* ../netlib/cgelsd.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./cgelsd.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static complex c_b1 = {0.f, 0.f};
 static integer c__9 = 9;
@@ -241,7 +241,7 @@ void cgelsd_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
+    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
     real r__1;
     /* Builtin functions */
     double log(doublereal);
@@ -254,8 +254,7 @@ void cgelsd_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
     extern /* Subroutine */
         void
         cgebrd_(integer *, integer *, complex *, integer *, real *, real *, complex *, complex *,
-                complex *, integer *, integer *),
-        slabad_(real *, real *);
+                complex *, integer *, integer *);
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
         void
@@ -293,7 +292,8 @@ void cgelsd_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
     real smlnum;
     aocl_int64_t lrwork;
     logical lquery;
-    aocl_int64_t nrwork, smlsiz;
+    integer nrwork, smlsiz;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -517,7 +517,8 @@ void cgelsd_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
             }
         }
         minwrk = fla_min(minwrk, maxwrk);
-        work[1].r = (real)maxwrk;
+        r__1 = sroundup_lwork(&maxwrk);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         iwork[1] = liwork;
         rwork[1] = (real)lrwork;
@@ -776,7 +777,8 @@ void cgelsd_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
         aocl_lapack_clascl("G", &c__0, &c__0, &bignum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
     }
 L10:
-    work[1].r = (real)maxwrk;
+    r__1 = sroundup_lwork(&maxwrk);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     iwork[1] = liwork;
     rwork[1] = (real)lrwork;

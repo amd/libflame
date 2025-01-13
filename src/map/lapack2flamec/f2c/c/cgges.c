@@ -1,8 +1,8 @@
-/* ../netlib/cgges.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./cgges.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static complex c_b1 = {0.f, 0.f};
 static complex c_b2 = {1.f, 0.f};
@@ -273,7 +273,7 @@ the routine */
 /* > \ingroup gges */
 /* ===================================================================== */
 /* Subroutine */
-void cgges_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, integer *n, complex *a,
+void cgges_(char *jobvsl, char *jobvsr, char *sort, L_fp selctg, integer *n, complex *a,
             integer *lda, complex *b, integer *ldb, integer *sdim, complex *alpha, complex *beta,
             complex *vsl, integer *ldvsl, complex *vsr, integer *ldvsr, complex *work,
             integer *lwork, real *rwork, logical *bwork, integer *info)
@@ -297,6 +297,7 @@ void cgges_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, integer *n, co
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, vsl_dim1, vsl_offset, vsr_dim1, vsr_offset, i__1,
         i__2;
+    real r__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
@@ -316,8 +317,7 @@ void cgges_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, integer *n, co
         cggbak_(char *, char *, integer *, integer *, integer *, real *, real *, integer *,
                 complex *, integer *, integer *),
         cggbal_(char *, integer *, complex *, integer *, complex *, integer *, integer *, integer *,
-                real *, real *, real *, integer *),
-        slabad_(real *, real *);
+                real *, real *, real *, integer *);
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
         void
@@ -360,7 +360,8 @@ void cgges_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, integer *n, co
                 complex *, integer *, complex *, integer *, integer *);
     real smlnum;
     logical wantst, lquery;
-    aocl_int64_t lwkopt;
+    integer lwkopt;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -497,7 +498,8 @@ void cgges_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, integer *n, co
             i__2 = *n + *n * ilaenv_(&c__1, "CUNGQR", " ", n, &c__1, n, &c_n1); // , expr subst
             lwkopt = fla_max(i__1, i__2);
         }
-        work[1].r = (real)lwkopt;
+        r__1 = sroundup_lwork(&lwkopt);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         if(*lwork < lwkmin && !lquery)
         {
@@ -707,7 +709,8 @@ void cgges_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, integer *n, co
         }
     }
 L30:
-    work[1].r = (real)lwkopt;
+    r__1 = sroundup_lwork(&lwkopt);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

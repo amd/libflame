@@ -1,4 +1,4 @@
-/* cggqrf.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./cggqrf.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -153,7 +153,7 @@ the remaining */
 /* > \verbatim */
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. LWORK >= fla_max(1,N,M,P). */
-/* > For optimum performance LWORK >= fla_max(N,M,P)*max(NB1,NB2,NB3), */
+/* > For optimum performance LWORK >= fla_max(N,M,P)*fla_max(NB1,NB2,NB3), */
 /* > where NB1 is the optimal blocksize for the QR factorization */
 /* > of an N-by-M matrix, NB2 is the optimal blocksize for the */
 /* > RQ factorization of an N-by-P matrix, and NB3 is the optimal */
@@ -178,7 +178,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup complexOTHERcomputational */
+/* > \ingroup ggqrf */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -226,6 +226,7 @@ void cggqrf_(integer *n, integer *m, integer *p, complex *a, integer *lda, compl
                       *n, *m, *p, *lda, *ldb);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
+    real r__1;
     /* Local variables */
     integer nb, nb1, nb2, nb3, lopt;
     extern /* Subroutine */
@@ -242,6 +243,7 @@ void cggqrf_(integer *n, integer *m, integer *p, complex *a, integer *lda, compl
                 complex *, integer *, complex *, integer *, integer *);
     integer lwkopt;
     logical lquery;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -281,7 +283,8 @@ void cggqrf_(integer *n, integer *m, integer *p, complex *a, integer *lda, compl
     /* Computing MAX */
     i__1 = fla_max(*n, *m);
     lwkopt = fla_max(i__1, *p) * nb;
-    work[1].r = (real)lwkopt;
+    r__1 = sroundup_lwork(&lwkopt);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     lquery = *lwork == -1;
     if(*n < 0)

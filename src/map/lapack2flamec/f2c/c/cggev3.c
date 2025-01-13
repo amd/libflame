@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/cggev3.f -- translated by f2c (version 20160102). You must link the resulting
- object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
- systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
- -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./cggev3.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static complex c_b1 = {0.f, 0.f};
 static complex c_b2 = {1.f, 0.f};
@@ -146,7 +146,7 @@ static integer c__0 = 0;
 /* > stored one after another in the columns of VL, in the same */
 /* > order as their eigenvalues. */
 /* > Each eigenvector is scaled so the largest component has */
-/* > abs(real part) + abs(imag. part) = 1. */
+/* > f2c_abs(real part) + f2c_abs(imag. part) = 1. */
 /* > Not referenced if JOBVL = 'N'. */
 /* > \endverbatim */
 /* > */
@@ -164,7 +164,7 @@ static integer c__0 = 0;
 /* > stored one after another in the columns of VR, in the same */
 /* > order as their eigenvalues. */
 /* > Each eigenvector is scaled so the largest component has */
-/* > abs(real part) + abs(imag. part) = 1. */
+/* > f2c_abs(real part) + f2c_abs(imag. part) = 1. */
 /* > Not referenced if JOBVR = 'N'. */
 /* > \endverbatim */
 /* > */
@@ -207,8 +207,8 @@ the routine */
 /* > The QZ iteration failed. No eigenvectors have been */
 /* > calculated, but ALPHA(j) and BETA(j) should be */
 /* > correct for j=INFO+1,...,N. */
-/* > > N: =N+1: other then QZ iteration failed in SHGEQZ, */
-/* > =N+2: error return from STGEVC. */
+/* > > N: =N+1: other then QZ iteration failed in CHGEQZ, */
+/* > =N+2: error return from CTGEVC. */
 /* > \endverbatim */
 /* Authors: */
 /* ======== */
@@ -216,8 +216,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date January 2015 */
-/* > \ingroup complexGEeigen */
+/* > \ingroup ggev3 */
 /* ===================================================================== */
 /* Subroutine */
 void cggev3_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, complex *b,
@@ -268,8 +267,7 @@ void cggev3_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, com
         cggbak_(char *, char *, integer *, integer *, integer *, real *, real *, integer *,
                 complex *, integer *, integer *),
         cggbal_(char *, integer *, complex *, integer *, complex *, integer *, integer *, integer *,
-                real *, real *, real *, integer *),
-        slabad_(real *, real *);
+                real *, real *, real *, integer *);
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
         void
@@ -310,10 +308,9 @@ void cggev3_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, com
     real smlnum;
     integer lwkopt;
     logical lquery;
-    /* -- LAPACK driver routine (version 3.6.1) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* January 2015 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -489,7 +486,7 @@ void cggev3_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, com
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGGEV3 ", &i__1, (ftnlen)7);
+        xerbla_("CGGEV3 ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -508,7 +505,6 @@ void cggev3_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, com
     eps = slamch_("E") * slamch_("B");
     smlnum = slamch_("S");
     bignum = 1.f / smlnum;
-    slabad_(&smlnum, &bignum);
     smlnum = sqrt(smlnum) / eps;
     bignum = 1.f / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
@@ -738,7 +734,7 @@ void cggev3_(char *jobvl, char *jobvr, integer *n, complex *a, integer *lda, com
             }
         }
     }
-    /* Undo scaling if necessary */
+/* Undo scaling if necessary */
 L70:
     if(ilascl)
     {

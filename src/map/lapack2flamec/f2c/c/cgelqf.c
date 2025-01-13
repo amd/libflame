@@ -1,8 +1,8 @@
-/* ../netlib/cgelqf.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./cgelqf.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
@@ -41,7 +41,7 @@ static aocl_int64_t c__2 = 2;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CGELQF computes an LQ factorization of a scomplex M-by-N matrix A: */
+/* > CGELQF computes an LQ factorization of a complex M-by-N matrix A: */
 /* > */
 /* > A = ( L 0 ) * Q */
 /* > */
@@ -73,7 +73,7 @@ static aocl_int64_t c__2 = 2;
 /* > A is COMPLEX array, dimension (LDA,N) */
 /* > On entry, the M-by-N matrix A. */
 /* > On exit, the elements on and below the diagonal of the array */
-/* > contain the m-by-fla_min(m,n) lower trapezoidal matrix L (L is */
+/* > contain the m-by-min(m,n) lower trapezoidal matrix L (L is */
 /* > lower triangular if m <= n);
 the elements above the diagonal, */
 /* > with the array TAU, represent the unitary matrix Q as a */
@@ -162,7 +162,7 @@ void cgelqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
     real r__1;
     /* Local variables */
     integer i__, k, ib, nb, nx, iws, nbmin, iinfo;
@@ -177,6 +177,7 @@ void cgelqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -205,7 +206,8 @@ void cgelqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
     *info = 0;
     nb = aocl_lapack_ilaenv(&c__1, "CGELQF", " ", m, n, &c_n1, &c_n1);
     lwkopt = *m * nb;
-    work[1].r = (real)lwkopt;
+    r__1 = sroundup_lwork(&lwkopt);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     lquery = *lwork == -1;
     if(*m < 0)
@@ -314,7 +316,8 @@ void cgelqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
         i__1 = *n - i__ + 1;
         cgelq2_(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1], &iinfo);
     }
-    work[1].r = (real)iws;
+    r__1 = sroundup_lwork(&iws);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

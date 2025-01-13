@@ -221,8 +221,7 @@ void cgelsx_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
         claic1_(integer *, integer *, complex *, real *, complex *, complex *, real *, complex *,
                 complex *),
         cunm2r_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
-                complex *, integer *, complex *, integer *),
-        slabad_(real *, real *);
+                complex *, integer *, complex *, integer *);
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
         void

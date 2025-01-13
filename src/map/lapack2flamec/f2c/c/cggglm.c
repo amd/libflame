@@ -1,4 +1,4 @@
-/* cggglm.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./cggglm.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -141,7 +141,7 @@ static integer c_n1 = -1;
 /* > */
 /* > \param[out] WORK */
 /* > \verbatim */
-/* > WORK is COMPLEX array, dimension (fla_max(1,LWORK)) */
+/* > WORK is COMPLEX array, dimension (MAX(1,LWORK)) */
 /* > On exit, if INFO = 0, WORK(1) returns the optimal LWORK. */
 /* > \endverbatim */
 /* > */
@@ -149,7 +149,7 @@ static integer c_n1 = -1;
 /* > \verbatim */
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. LWORK >= fla_max(1,N+M+P). */
-/* > For optimum performance, LWORK >= M+min(N,P)+fla_max(N,P)*NB, */
+/* > For optimum performance, LWORK >= M+min(N,P)+max(N,P)*NB, */
 /* > where NB is an upper bound for the optimal blocksizes for */
 /* > CGEQRF, CGERQF, CUNMQR and CUNMRQ. */
 /* > */
@@ -183,7 +183,7 @@ the least squares solution could not */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup complexOTHEReigen */
+/* > \ingroup ggglm */
 /* ===================================================================== */
 /* Subroutine */
 void cggglm_(integer *n, integer *m, integer *p, complex *a, integer *lda, complex *b, integer *ldb,
@@ -195,6 +195,7 @@ void cggglm_(integer *n, integer *m, integer *p, complex *a, integer *lda, compl
                       *n, *m, *p, *lda, *ldb);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
+    real r__1;
     complex q__1;
     /* Local variables */
     integer i__, nb, np, nb1, nb2, nb3, nb4, lopt;
@@ -220,6 +221,7 @@ void cggglm_(integer *n, integer *m, integer *p, complex *a, integer *lda, compl
         void
         ctrtrs_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *,
                 integer *, integer *);
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -289,14 +291,15 @@ void cggglm_(integer *n, integer *m, integer *p, complex *a, integer *lda, compl
             nb2 = ilaenv_(&c__1, "CGERQF", " ", n, m, &c_n1, &c_n1);
             nb3 = ilaenv_(&c__1, "CUNMQR", " ", n, m, p, &c_n1);
             nb4 = ilaenv_(&c__1, "CUNMRQ", " ", n, m, p, &c_n1);
-            /* Computing fla_max */
+            /* Computing MAX */
             i__1 = fla_max(nb1, nb2);
             i__1 = fla_max(i__1, nb3); // , expr subst
             nb = fla_max(i__1, nb4);
             lwkmin = *m + *n + *p;
             lwkopt = *m + np + fla_max(*n, *p) * nb;
         }
-        work[1].r = (real)lwkopt;
+        r__1 = sroundup_lwork(&lwkopt);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         if(*lwork < lwkmin && !lquery)
         {
@@ -352,7 +355,7 @@ void cggglm_(integer *n, integer *m, integer *p, complex *a, integer *lda, compl
     i__2 = *lwork - *m - np;
     cunmqr_("Left", "Conjugate transpose", n, &c__1, m, &a[a_offset], lda, &work[1], &d__[1], &i__1,
             &work[*m + np + 1], &i__2, info);
-    /* Computing fla_max */
+    /* Computing MAX */
     i__3 = *m + np + 1;
     i__1 = lopt;
     i__2 = (integer)work[i__3].r; // , expr subst
@@ -402,14 +405,14 @@ void cggglm_(integer *n, integer *m, integer *p, complex *a, integer *lda, compl
         ccopy_(m, &d__[1], &c__1, &x[1], &c__1);
     }
     /* Backward transformation y = Z**H *y */
-    /* Computing fla_max */
+    /* Computing MAX */
     i__1 = 1;
     i__2 = *n - *p + 1; // , expr subst
     i__3 = fla_max(1, *p);
     i__4 = *lwork - *m - np;
     cunmrq_("Left", "Conjugate transpose", p, &c__1, &np, &b[fla_max(i__1, i__2) + b_dim1], ldb,
             &work[*m + 1], &y[1], &i__3, &work[*m + np + 1], &i__4, info);
-    /* Computing fla_max */
+    /* Computing MAX */
     i__4 = *m + np + 1;
     i__2 = lopt;
     i__3 = (integer)work[i__4].r; // , expr subst

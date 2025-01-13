@@ -257,7 +257,7 @@ void fla_clabrd(integer *m, integer *n, integer *nb, complex *a, integer *lda, r
     int thread_id;
     complex alpha;
 #if FLA_OPENMP_MULTITHREADING
-    integer  i__4, i__5;
+    integer i__4, i__5;
     int actual_num_threads;
 #endif
     extern /* Subroutine */

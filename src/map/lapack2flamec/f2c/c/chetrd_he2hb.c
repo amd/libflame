@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/chetrd_he2hb.f -- translated by f2c (version 20160102). You must link the
- resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
- Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
- with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./chetrd_he2hb.f -- translated by f2c (version 20190311). You must link the resulting object file
+ with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static complex c_b1 = {0.f, 0.f};
 static complex c_b2 = {1.f, 0.f};
@@ -18,16 +18,16 @@ static real c_b33 = 1.f;
 /* > \htmlonly */
 /* > Download CHETRD_HE2HB + dependencies */
 /* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetrd.
- * f"> */
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetrd_
+ * he2hb.f"> */
 /* > [TGZ]</a> */
 /* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chetrd.
- * f"> */
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chetrd_
+ * he2hb.f"> */
 /* > [ZIP]</a> */
 /* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrd.
- * f"> */
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrd_
+ * he2hb.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -147,7 +147,7 @@ the routine */
 /* > only calculates the optimal size of the WORK array, returns */
 /* > this value as the first entry of the WORK array, and no error */
 /* > message related to LWORK is issued by XERBLA. */
-/* > LWORK_QUERY = N*KD + N*max(KD,FACTOPTNB) + 2*KD*KD */
+/* > LWORK_QUERY = N*KD + N*fla_max(KD,FACTOPTNB) + 2*KD*KD */
 /* > where FACTOPTNB is the blocking used by the QR or LQ */
 /* > algorithm, usually FACTOPTNB=128 is a good choice otherwise */
 /* > putting LWORK=-1 will provide the size of WORK. */
@@ -165,8 +165,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2017 */
-/* > \ingroup complexHEcomputational */
+/* > \ingroup hetrd_he2hb */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -266,6 +265,7 @@ void chetrd_he2hb_(char *uplo, integer *n, integer *kd, complex *a, integer *lda
 #endif
     /* System generated locals */
     integer a_dim1, a_offset, ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5;
+    real r__1;
     complex q__1;
     /* Local variables */
     integer i__, j, lk, pk, pn, lt, lw, ls1, ls2, ldt, ldw, lds1, lds2;
@@ -298,10 +298,10 @@ void chetrd_he2hb_(char *uplo, integer *n, integer *kd, complex *a, integer *lda
         claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
-    /* -- LAPACK computational routine (version 3.8.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2017 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -373,7 +373,8 @@ void chetrd_he2hb_(char *uplo, integer *n, integer *kd, complex *a, integer *lda
     }
     else if(lquery)
     {
-        work[1].r = (real)lwmin;
+        r__1 = sroundup_lwork(&lwmin);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -568,7 +569,8 @@ void chetrd_he2hb_(char *uplo, integer *n, integer *kd, complex *a, integer *lda
             /* L60: */
         }
     }
-    work[1].r = (real)lwmin;
+    r__1 = sroundup_lwork(&lwmin);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

@@ -1,8 +1,8 @@
-/* ../netlib/cunbdb.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./cunbdb.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b CUNBDB */
@@ -265,8 +265,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date December 2016 */
-/* > \ingroup complexOTHERcomputational */
+/* > \ingroup unbdb */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -342,10 +341,10 @@ void cunbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, compl
     extern /* Subroutine */
         void
         clarfgp_(integer *, complex *, complex *, integer *, complex *);
-    /* -- LAPACK computational routine (version 3.7.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* December 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -474,7 +473,8 @@ void cunbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, compl
     {
         lworkopt = *m - *q;
         lworkmin = *m - *q;
-        work[1].r = (real)lworkopt;
+        r__1 = sroundup_lwork(&lworkopt);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         if(*lwork < lworkmin && !lquery)
         {

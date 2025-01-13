@@ -1,4 +1,4 @@
-/* chpgvd.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./chpgvd.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -49,12 +49,6 @@ static integer c__1 = 1;
 /* > positive definite. */
 /* > If eigenvectors are desired, it uses a divide and conquer algorithm. */
 /* > */
-/* > The divide and conquer algorithm makes very mild assumptions about */
-/* > floating point arithmetic. It will work on machines with a guard */
-/* > digit in add/subtract, or on those binary machines without guard */
-/* > digits which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or */
-/* > Cray-2. It could conceivably fail on hexadecimal or decimal machines */
-/* > without guard digits, but we know of none. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -218,7 +212,7 @@ the */
 /* > tridiagonal form did not convergeto zero;
  */
 /* > > N: if INFO = N + i, for 1 <= i <= n, then the leading */
-/* > minor of order i of B is not positive definite. */
+/* > principal minor of order i of B is not positive. */
 /* > The factorization of B could not be completed and */
 /* > no eigenvalues or eigenvectors were computed. */
 /* > \endverbatim */
@@ -228,7 +222,7 @@ the */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup complexOTHEReigen */
+/* > \ingroup hpgvd */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -268,6 +262,7 @@ void chpgvd_(integer *itype, char *jobz, char *uplo, integer *n, complex *ap, co
         cpptrf_(char *, integer *, complex *, integer *);
     integer liwmin, lrwmin;
     logical lquery;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -346,7 +341,8 @@ void chpgvd_(integer *itype, char *jobz, char *uplo, integer *n, complex *ap, co
                 liwmin = 1;
             }
         }
-        work[1].r = (real)lwmin;
+        r__1 = sroundup_lwork(&lwmin);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         rwork[1] = (real)lrwmin;
         iwork[1] = liwmin;
@@ -453,7 +449,8 @@ void chpgvd_(integer *itype, char *jobz, char *uplo, integer *n, complex *ap, co
             }
         }
     }
-    work[1].r = (real)lwmin;
+    r__1 = sroundup_lwork(&lwmin);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     rwork[1] = (real)lrwmin;
     iwork[1] = liwmin;

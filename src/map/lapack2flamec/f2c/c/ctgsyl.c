@@ -1,8 +1,8 @@
-/* ../netlib/ctgsyl.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./ctgsyl.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static complex c_b1 = {0.f, 0.f};
 static integer c__2 = 2;
@@ -226,7 +226,7 @@ static complex c_b45 = {1.f, 0.f};
 /* > If 0 < SCALE < 1, C and F hold the solutions R and L, resp., */
 /* > to a slightly perturbed system but the input matrices A, B, */
 /* > D and E have not been changed. If SCALE = 0, R and L will */
-/* > hold the solutions to the homogenious system with C = F = 0. */
+/* > hold the solutions to the homogeneous system with C = F = 0. */
 /* > \endverbatim */
 /* > */
 /* > \param[out] WORK */
@@ -267,8 +267,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup complexSYcomputational */
+/* > \ingroup tgsyl */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -320,6 +319,7 @@ void ctgsyl_(char *trans, integer *ijob, integer *m, integer *n, complex *a, int
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, d_dim1, d_offset, e_dim1,
         e_offset, f_dim1, f_offset, i__1, i__2, i__3, i__4;
+    real r__1;
     complex q__1;
     /* Builtin functions */
     double sqrt(doublereal);
@@ -350,10 +350,10 @@ void ctgsyl_(char *trans, integer *ijob, integer *m, integer *n, complex *a, int
     logical notran;
     integer isolve;
     logical lquery;
-    /* -- LAPACK computational routine (version 3.4.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -465,7 +465,8 @@ void ctgsyl_(char *trans, integer *ijob, integer *m, integer *n, complex *a, int
         {
             lwmin = 1;
         }
-        work[1].r = (real)lwmin;
+        r__1 = sroundup_lwork(&lwmin);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         if(*lwork < lwmin && !lquery)
         {
@@ -854,7 +855,8 @@ L70:
             /* L210: */
         }
     }
-    work[1].r = (real)lwmin;
+    r__1 = sroundup_lwork(&lwmin);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

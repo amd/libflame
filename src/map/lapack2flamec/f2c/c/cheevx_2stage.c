@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/cheevx_2stage.f -- translated by f2c (version 20160102). You must link the
- resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
- Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
- with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./cheevx_2stage.f -- translated by f2c (version 20190311). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -275,8 +275,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date June 2016 */
-/* > \ingroup complexHEeigen */
+/* > \ingroup heevx_2stage */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -406,11 +405,11 @@ void cheevx_2stage_(char *jobz, char *range, char *uplo, integer *n, complex *a,
                 real *, integer *, integer *, real *, integer *, integer *, real *, integer *,
                 integer *);
     logical lquery;
+    extern real sroundup_lwork(integer *);
     integer indhous;
-    /* -- LAPACK driver routine (version 3.8.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -501,7 +500,8 @@ void cheevx_2stage_(char *jobz, char *range, char *uplo, integer *n, complex *a,
         if(*n <= 1)
         {
             lwmin = 1;
-            work[1].r = (real)lwmin;
+            r__1 = sroundup_lwork(&lwmin);
+            work[1].r = r__1;
             work[1].i = 0.f; // , expr subst
         }
         else
@@ -511,7 +511,8 @@ void cheevx_2stage_(char *jobz, char *range, char *uplo, integer *n, complex *a,
             lhtrd = ilaenv2stage_(&c__3, "CHETRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
             lwtrd = ilaenv2stage_(&c__4, "CHETRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
             lwmin = *n + lhtrd + lwtrd;
-            work[1].r = (real)lwmin;
+            r__1 = sroundup_lwork(&lwmin);
+            work[1].r = r__1;
             work[1].i = 0.f; // , expr subst
         }
         if(*lwork < lwmin && !lquery)
@@ -704,7 +705,7 @@ void cheevx_2stage_(char *jobz, char *range, char *uplo, integer *n, complex *a,
         cunmtr_("L", uplo, "N", n, m, &a[a_offset], lda, &work[indtau], &z__[z_offset], ldz,
                 &work[indwrk], &llwork, &iinfo);
     }
-    /* If matrix was scaled, then rescale eigenvalues appropriately. */
+/* If matrix was scaled, then rescale eigenvalues appropriately. */
 L40:
     if(iscale == 1)
     {
@@ -757,7 +758,8 @@ L40:
         }
     }
     /* Set WORK(1) to optimal complex workspace size. */
-    work[1].r = (real)lwmin;
+    r__1 = sroundup_lwork(&lwmin);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

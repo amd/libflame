@@ -282,6 +282,7 @@ void chetrd_hb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
                         integer *, integer *, complex *, integer *, complex *, complex *, integer *,
                         complex *);
     integer abdpos;
+    extern real sroundup_lwork(integer *);
     extern /* Subroutine */
         int
         clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
@@ -374,7 +375,7 @@ void chetrd_hb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     {
         hous[1].r = (real)lhmin;
         hous[1].i = 0.f; // , expr subst
-        work[1].r = (real)lwmin;
+        work[1].r = sroundup_lwork(&lwmin);
         work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
@@ -689,7 +690,7 @@ void chetrd_hb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
 #else
                         chb2st_kernels_(uplo, &wantq, &ttype, &stind, &edind, &sweepid, n, kd, &ib,
                                         &work[inda], &lda, &hous[indv], &hous[indtau], &ldv,
-                                        &work[indw + tid * *kd]);
+                                        &work[indw]);
 #endif
                                 if(blklastind >= *n - 1)
                                 {
@@ -743,7 +744,7 @@ void chetrd_hb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     }
     hous[1].r = (real)lhmin;
     hous[1].i = 0.f; // , expr subst
-    work[1].r = (real)lwmin;
+    work[1].r = sroundup_lwork(&lwmin);
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

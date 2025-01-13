@@ -1,4 +1,4 @@
-/* cungbr.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./cungbr.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -155,7 +155,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup complexGBcomputational */
+/* > \ingroup ungbr */
 /* ===================================================================== */
 /* Subroutine */
 void cungbr_(char *vect, integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau,
@@ -167,6 +167,7 @@ void cungbr_(char *vect, integer *m, integer *n, integer *k, complex *a, integer
                       *vect, *m, *n, *k, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
+    real r__1;
     /* Local variables */
     integer i__, j, mn;
     extern logical lsame_(char *, char *, integer, integer);
@@ -174,15 +175,14 @@ void cungbr_(char *vect, integer *m, integer *n, integer *k, complex *a, integer
     logical wantq;
     extern /* Subroutine */
         void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
         cunglq_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
                 integer *, integer *),
         cungqr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
                 integer *, integer *);
     integer lwkopt;
     logical lquery;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -291,7 +291,8 @@ void cungbr_(char *vect, integer *m, integer *n, integer *k, complex *a, integer
     }
     else if(lquery)
     {
-        work[1].r = (real)lwkopt;
+        r__1 = sroundup_lwork(&lwkopt);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -410,7 +411,8 @@ void cungbr_(char *vect, integer *m, integer *n, integer *k, complex *a, integer
             }
         }
     }
-    work[1].r = (real)lwkopt;
+    r__1 = sroundup_lwork(&lwkopt);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;

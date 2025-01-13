@@ -1,8 +1,8 @@
-/* ../netlib/cheevr.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./cheevr.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__10 = 10;
 static integer c__1 = 1;
@@ -86,7 +86,7 @@ static integer c_n1 = -1;
 /* > The desired accuracy of the output can be specified by the input */
 /* > parameter ABSTOL. */
 /* > */
-/* > For more details, see DSTEMR's documentation and: */
+/* > For more details, see CSTEMR's documentation and: */
 /* > - Inderjit S. Dhillon and Beresford N. Parlett: "Multiple representations */
 /* > to compute orthogonal eigenvectors of symmetric tridiagonal matrices," */
 /* > Linear Algebra and its Applications, 387(1), pp. 1-28, August 2004. */
@@ -166,12 +166,15 @@ static integer c_n1 = -1;
 /* > \param[in] VL */
 /* > \verbatim */
 /* > VL is REAL */
+/* > If RANGE='V', the lower bound of the interval to */
+/* > be searched for eigenvalues. VL < VU. */
+/* > Not referenced if RANGE = 'A' or 'I'. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] VU */
 /* > \verbatim */
 /* > VU is REAL */
-/* > If RANGE='V', the lower and upper bounds of the interval to */
+/* > If RANGE='V', the upper bound of the interval to */
 /* > be searched for eigenvalues. VL < VU. */
 /* > Not referenced if RANGE = 'A' or 'I'. */
 /* > \endverbatim */
@@ -179,13 +182,18 @@ static integer c_n1 = -1;
 /* > \param[in] IL */
 /* > \verbatim */
 /* > IL is INTEGER */
+/* > If RANGE='I', the index of the */
+/* > smallest eigenvalue to be returned. */
+/* > 1 <= IL <= IU <= N, if N > 0;
+IL = 1 and IU = 0 if N = 0. */
+/* > Not referenced if RANGE = 'A' or 'V'. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] IU */
 /* > \verbatim */
 /* > IU is INTEGER */
-/* > If RANGE='I', the indices (in ascending order) of the */
-/* > smallest and largest eigenvalues to be returned. */
+/* > If RANGE='I', the index of the */
+/* > largest eigenvalue to be returned. */
 /* > 1 <= IL <= IU <= N, if N > 0;
 IL = 1 and IU = 0 if N = 0. */
 /* > Not referenced if RANGE = 'A' or 'V'. */
@@ -215,7 +223,7 @@ IL = 1 and IU = 0 if N = 0. */
 /* > eigenvalues are computed to high relative accuracy when */
 /* > possible in future releases. The current code does not */
 /* > make any guarantees about high relative accuracy, but */
-/* > furutre releases will. See J. Barlow and J. Demmel, */
+/* > future releases will. See J. Barlow and J. Demmel, */
 /* > "Computing Accurate Eigensystems of Scaled Diagonally */
 /* > Dominant Matrices", LAPACK Working Note #7, for a discussion */
 /* > of which matrices define their eigenvalues to high relative */
@@ -263,7 +271,9 @@ if RANGE = 'V', the exact value of M */
 /* > The support of the eigenvectors in Z, i.e., the indices */
 /* > indicating the nonzero elements in Z. The i-th eigenvector */
 /* > is nonzero only in elements ISUPPZ( 2*i-1 ) through */
-/* > ISUPPZ( 2*i ). */
+/* > ISUPPZ( 2*i ). This is an output of CSTEMR (tridiagonal */
+/* > matrix). The support of the eigenvectors of A is typically */
+/* > 1:N because of the unitary transformations applied by CUNMTR. */
 /* > Implemented only for RANGE = 'A' or 'I' and IU - IL = N - 1 */
 /* > \endverbatim */
 /* > */
@@ -342,8 +352,7 @@ the */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date September 2012 */
-/* > \ingroup complexHEeigen */
+/* > \ingroup heevr */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -447,11 +456,12 @@ void cheevr_(char *jobz, char *range, char *uplo, integer *n, complex *a, intege
                 real *, integer *, integer *, real *, integer *, integer *, real *, integer *,
                 integer *);
     logical lquery;
-    integer lwkopt, llrwork;
-    /* -- LAPACK driver routine (version 3.4.2) -- */
+    integer lwkopt;
+    extern real sroundup_lwork(integer *);
+    integer llrwork;
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* September 2012 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -560,7 +570,8 @@ void cheevr_(char *jobz, char *range, char *uplo, integer *n, complex *a, intege
         /* Computing MAX */
         i__1 = (nb + 1) * *n;
         lwkopt = fla_max(i__1, lwmin);
-        work[1].r = (real)lwkopt;
+        r__1 = sroundup_lwork(&lwkopt);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         rwork[1] = (real)lrwmin;
         iwork[1] = liwmin;
@@ -768,7 +779,7 @@ void cheevr_(char *jobz, char *range, char *uplo, integer *n, complex *a, intege
                     &z__[z_offset], ldz, n, &isuppz[1], &tryrac, &rwork[indrwk], &llrwork,
                     &iwork[1], liwork, info);
             /* Apply unitary matrix used in reduction to tridiagonal */
-            /* form to eigenvectors returned by CSTEIN. */
+            /* form to eigenvectors returned by CSTEMR. */
             if(wantz && *info == 0)
             {
                 indwkn = indwk;
@@ -807,7 +818,7 @@ void cheevr_(char *jobz, char *range, char *uplo, integer *n, complex *a, intege
         cunmtr_("L", uplo, "N", n, m, &a[a_offset], lda, &work[indtau], &z__[z_offset], ldz,
                 &work[indwkn], &llwrkn, &iinfo);
     }
-    /* If matrix was scaled, then rescale eigenvalues appropriately. */
+/* If matrix was scaled, then rescale eigenvalues appropriately. */
 L30:
     if(iscale == 1)
     {
@@ -854,7 +865,8 @@ L30:
         }
     }
     /* Set WORK(1) to optimal workspace size. */
-    work[1].r = (real)lwkopt;
+    r__1 = sroundup_lwork(&lwkopt);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     rwork[1] = (real)lrwmin;
     iwork[1] = liwmin;

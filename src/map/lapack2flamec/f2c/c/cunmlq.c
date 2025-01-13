@@ -223,6 +223,7 @@ void fla_cunmlq(char *side, char *trans, integer *m, integer *n, integer *k, com
                 integer *),
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern real sroundup_lwork(integer *);
     logical notran;
     integer ldwork;
     char transt[1];
@@ -330,7 +331,7 @@ void fla_cunmlq(char *side, char *trans, integer *m, integer *n, integer *k, com
             nb = fla_min(i__1, i__2);
             lwkopt = fla_max(1, nw) * nb + 4160;
         }
-        work[1].r = (real)lwkopt;
+        work[1].r = sroundup_lwork(&lwkopt);
         work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
@@ -473,7 +474,7 @@ void fla_cunmlq(char *side, char *trans, integer *m, integer *n, integer *k, com
             }
         }
     }
-    work[1].r = (real)lwkopt;
+    work[1].r = sroundup_lwork(&lwkopt);
     work[1].i = 0.f; // , expr subst
     return;
     /* End of CUNMLQ */

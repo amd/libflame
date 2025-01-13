@@ -1,4 +1,4 @@
-/* csysv_rook.f -- translated by f2c (version 20190311). You must link the resulting object file
+/* ./csysv_rook.f -- translated by f2c (version 20190311). You must link the resulting object file
  with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
@@ -184,7 +184,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup complexSYsolve */
+/* > \ingroup hesv_rook */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -210,6 +210,7 @@ void csysv_rook_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda
                       *uplo, *n, *nrhs, *lda, *ldb);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;
+    real r__1;
     /* Local variables */
     extern /* Subroutine */
         void
@@ -223,6 +224,7 @@ void csysv_rook_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lwkopt;
     logical lquery;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -288,13 +290,14 @@ void csysv_rook_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda
             csytrf_rook_(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], &c_n1, info);
             lwkopt = (integer)work[1].r;
         }
-        work[1].r = (real)lwkopt;
+        r__1 = sroundup_lwork(&lwkopt);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CSYSV_ROOK ", &i__1, (ftnlen)11);
+        xerbla_("CSYSV_ROOK", &i__1, (ftnlen)10);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -311,7 +314,8 @@ void csysv_rook_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda
         /* Solve with TRS_ROOK ( Use Level 2 BLAS) */
         csytrs_rook_(uplo, n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb, info);
     }
-    work[1].r = (real)lwkopt;
+    r__1 = sroundup_lwork(&lwkopt);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;

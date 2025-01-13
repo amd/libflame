@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/cgges3.f -- translated by f2c (version 20160102). You must link the resulting
- object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
- systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
- -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./cgges3.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static complex c_b1 = {0.f, 0.f};
 static complex c_b2 = {1.f, 0.f};
@@ -255,7 +255,7 @@ the routine */
 /* > The QZ iteration failed. (A,B) are not in Schur */
 /* > form, but ALPHA(j) and BETA(j) should be correct for */
 /* > j=INFO+1,...,N. */
-/* > > N: =N+1: other than QZ iteration failed in CHGEQZ */
+/* > > N: =N+1: other than QZ iteration failed in CLAQZ0 */
 /* > =N+2: after reordering, roundoff changed values of */
 /* > some complex eigenvalues so that leading */
 /* > eigenvalues in the Generalized Schur form no */
@@ -269,11 +269,10 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date January 2015 */
-/* > \ingroup complexGEeigen */
+/* > \ingroup gges3 */
 /* ===================================================================== */
 /* Subroutine */
-void cgges3_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, integer *n, complex *a,
+void cgges3_(char *jobvsl, char *jobvsr, char *sort, L_fp selctg, integer *n, complex *a,
              integer *lda, complex *b, integer *ldb, integer *sdim, complex *alpha, complex *beta,
              complex *vsl, integer *ldvsl, complex *vsr, integer *ldvsr, complex *work,
              integer *lwork, real *rwork, logical *bwork, integer *info)
@@ -322,8 +321,7 @@ void cgges3_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, integer *n, c
         cggbak_(char *, char *, integer *, integer *, integer *, real *, real *, integer *,
                 complex *, integer *, integer *),
         cggbal_(char *, integer *, complex *, integer *, complex *, integer *, integer *, integer *,
-                real *, real *, real *, integer *),
-        slabad_(real *, real *);
+                real *, real *, real *, integer *);
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     extern /* Subroutine */
         void
@@ -362,10 +360,9 @@ void cgges3_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, integer *n, c
     real smlnum;
     logical wantst, lquery;
     integer lwkopt;
-    /* -- LAPACK driver routine (version 3.6.1) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* January 2015 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -535,7 +532,7 @@ void cgges3_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, integer *n, c
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGGES3 ", &i__1, (ftnlen)7);
+        xerbla_("CGGES3", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -555,7 +552,6 @@ void cgges3_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, integer *n, c
     eps = slamch_("P");
     smlnum = slamch_("S");
     bignum = 1.f / smlnum;
-    slabad_(&smlnum, &bignum);
     smlnum = sqrt(smlnum) / eps;
     bignum = 1.f / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */

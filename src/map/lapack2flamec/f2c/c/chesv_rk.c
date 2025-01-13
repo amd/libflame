@@ -1,8 +1,8 @@
-/* chesv_rk.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
- /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./chesv_rk.f -- translated by f2c (version 20190311). You must link the resulting object file
+ with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c_n1 = -1;
 /* > \brief <b> CHESV_RK computes the solution to system of linear equations A * X = B for SY
@@ -210,7 +210,7 @@ static integer c_n1 = -1;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup complexHEsolve */
+/* > \ingroup hesv_rk */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -237,6 +237,7 @@ void chesv_rk_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, 
                       *uplo, *n, *nrhs, *lda, *ldb);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;
+    real r__1;
     /* Local variables */
     extern /* Subroutine */
         void
@@ -248,6 +249,7 @@ void chesv_rk_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, 
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer lwkopt;
     logical lquery;
+    extern real sroundup_lwork(integer *);
     extern /* Subroutine */
         void
         chetrs_3_(char *, integer *, integer *, complex *, integer *, complex *, integer *,
@@ -318,13 +320,14 @@ void chesv_rk_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, 
             chetrf_rk_(uplo, n, &a[a_offset], lda, &e[1], &ipiv[1], &work[1], &c_n1, info);
             lwkopt = (integer)work[1].r;
         }
-        work[1].r = (real)lwkopt;
+        r__1 = sroundup_lwork(&lwkopt);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHESV_RK ", &i__1, (ftnlen)9);
+        xerbla_("CHESV_RK", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -340,7 +343,8 @@ void chesv_rk_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, 
         /* Solve the system A*X = B with BLAS3 solver, overwriting B with X. */
         chetrs_3_(uplo, n, nrhs, &a[a_offset], lda, &e[1], &ipiv[1], &b[b_offset], ldb, info);
     }
-    work[1].r = (real)lwkopt;
+    r__1 = sroundup_lwork(&lwkopt);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;

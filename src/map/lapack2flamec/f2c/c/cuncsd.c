@@ -1,8 +1,8 @@
-/* ../netlib/cuncsd.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./cuncsd.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c_n1 = -1;
 static logical c_false = FALSE_;
@@ -316,8 +316,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date June 2016 */
-/* > \ingroup complexOTHERcomputational */
+/* > \ingroup uncsd */
 /* ===================================================================== */
 /* Subroutine */
 void cuncsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, char *signs,
@@ -351,6 +350,7 @@ void cuncsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
     integer u1_dim1, u1_offset, u2_dim1, u2_offset, v1t_dim1, v1t_offset, v2t_dim1, v2t_offset,
         x11_dim1, x11_offset, x12_dim1, x12_offset, x21_dim1, x21_offset, x22_dim1, x22_offset,
         i__1, i__2, i__3, i__4, i__5, i__6;
+    real r__1;
     /* Local variables */
     logical colmajor;
     integer lworkmin, lworkopt, i__, j, childinfo, p1, q1, lrworkmin, lrworkopt, lbbcsdwork,
@@ -391,11 +391,12 @@ void cuncsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
                 integer *, integer *);
     integer iorgqr;
     char signst[1], transt[1];
-    logical lquery, wantv1t, wantv2t, lrquery;
-    /* -- LAPACK computational routine (version 3.7.1) -- */
+    logical lquery, wantv1t, wantv2t;
+    extern real sroundup_lwork(integer *);
+    logical lrquery;
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -708,8 +709,9 @@ void cuncsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
         i__1 = fla_max(i__1, i__2);
         i__2 = iorbdb + lorbdbworkmin; // ; expr subst
         lworkmin = fla_max(i__1, i__2) - 1;
-        i__1 = fla_max(lworkopt, lworkmin);
-        work[1].r = (real)i__1;
+        lworkopt = fla_max(lworkopt, lworkmin);
+        r__1 = sroundup_lwork(&lworkopt);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         if(*lwork < lworkmin && !(lquery || lrquery))
         {

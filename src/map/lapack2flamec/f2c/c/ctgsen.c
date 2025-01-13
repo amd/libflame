@@ -1,8 +1,8 @@
-/* ../netlib/ctgsen.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./ctgsen.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b CTGSEN */
@@ -299,8 +299,7 @@ the problem is very ill-conditioned. */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date June 2016 */
-/* > \ingroup complexOTHERcomputational */
+/* > \ingroup tgsen */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -348,7 +347,7 @@ the problem is very ill-conditioned. */
 /* > [ kron(In2, B11) -kron(B22**H, In1) ]. */
 /* > */
 /* > Here, Inx is the identity matrix of size nx and A22**H is the */
-/* > conjuguate transpose of A22. kron(X, Y) is the Kronecker product between */
+/* > conjugate transpose of A22. kron(X, Y) is the Kronecker product between */
 /* > the matrices X and Y. */
 /* > */
 /* > When DIF(2) is small, small changes in (A, B) can cause large changes */
@@ -385,7 +384,7 @@ the problem is very ill-conditioned. */
 /* > coalesce with an eigenvalue of (A22, B22) under perturbation (E,F), */
 /* > (i.e. (A + E, B + F), is */
 /* > */
-/* > x = fla_min(Difu,Difl)/((1/(PL*PL)+1/(PR*PR))**(1/2)+2*max(1/PL,1/PR)). */
+/* > x = fla_min(Difu,Difl)/((1/(PL*PL)+1/(PR*PR))**(1/2)+2*fla_max(1/PL,1/PR)). */
 /* > */
 /* > An approximate bound on x can be computed from DIF(1:2), PL and PR. */
 /* > */
@@ -460,6 +459,7 @@ void ctgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
         i__3;
+    real r__1;
     complex q__1, q__2;
     /* Builtin functions */
     double sqrt(doublereal), c_abs(complex *);
@@ -500,10 +500,10 @@ void ctgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
                 complex *, integer *, complex *, integer *, complex *, integer *, complex *,
                 integer *, real *, real *, complex *, integer *, integer *, integer *);
     logical lquery;
-    /* -- LAPACK computational routine (version 3.7.1) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -514,6 +514,8 @@ void ctgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
     /* .. Local Scalars .. */
     /* .. */
     /* .. Local Arrays .. */
+    /* .. */
+    /* .. External Functions .. */
     /* .. */
     /* .. External Subroutines .. */
     /* .. */
@@ -640,7 +642,8 @@ void ctgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
         lwmin = 1;
         liwmin = 1;
     }
-    work[1].r = (real)lwmin;
+    r__1 = sroundup_lwork(&lwmin);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     iwork[1] = liwmin;
     if(*lwork < lwmin && !lquery)
@@ -800,7 +803,7 @@ void ctgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
             i__ = n1 + 1;
             ijb = 0;
             mn2 = (n1 << 1) * n2;
-            /* 1-norm-based estimate of Difu. */
+        /* 1-norm-based estimate of Difu. */
         L40:
             clacn2_(&mn2, &work[mn2 + 1], &work[1], &dif[1], &kase, isave);
             if(kase != 0)
@@ -826,7 +829,7 @@ void ctgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
                 goto L40;
             }
             dif[1] = dscale / dif[1];
-            /* 1-norm-based estimate of Difl. */
+        /* 1-norm-based estimate of Difl. */
         L50:
             clacn2_(&mn2, &work[mn2 + 1], &work[1], &dif[2], &kase, isave);
             if(kase != 0)
@@ -903,7 +906,8 @@ void ctgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
         /* L60: */
     }
 L70:
-    work[1].r = (real)lwmin;
+    r__1 = sroundup_lwork(&lwmin);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     iwork[1] = liwmin;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

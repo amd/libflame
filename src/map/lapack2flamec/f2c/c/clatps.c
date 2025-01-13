@@ -1,13 +1,8 @@
-/* ../netlib/clatps.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-
-/*
-*     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
-*/
-
+/* ./clatps.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static real c_b36 = .5f;
@@ -271,7 +266,7 @@ void clatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
     scomplex tjjs;
     real xmax, grow;
     extern /* Complex */
-        VOID
+        void
         cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
@@ -281,7 +276,7 @@ void clatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
     complex uscal;
     integer jlast;
     extern /* Complex */
-        VOID
+        void
         cdotu_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     complex csumj;
     extern /* Subroutine */
@@ -290,8 +285,7 @@ void clatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
     logical upper;
     extern /* Subroutine */
         void
-        ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *),
-        slabad_(real *, real *);
+        ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *);
     extern integer icamax_(integer *, complex *, integer *);
     extern /* Complex */
         void
@@ -465,8 +459,8 @@ void clatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
             /* A is non-unit triangular. */
             /* Compute GROW = 1/G(j) and XBND = 1/M(j). */
             /* Initially, G(0) = max{
-            x(i), i=1,...,n}
-            . */
+           x(i), i=1,...,n}
+           . */
             grow = .5f / fla_max(xbnd, smlnum);
             xbnd = grow;
             ip = jfirst * (jfirst + 1) / 2;
@@ -564,8 +558,8 @@ void clatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
             /* A is non-unit triangular. */
             /* Compute GROW = 1/G(j) and XBND = 1/M(j). */
             /* Initially, M(0) = max{
-            x(i), i=1,...,n}
-            . */
+           x(i), i=1,...,n}
+           . */
             grow = .5f / fla_max(xbnd, smlnum);
             xbnd = grow;
             ip = jfirst * (jfirst + 1) / 2;

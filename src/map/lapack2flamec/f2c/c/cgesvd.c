@@ -1,8 +1,8 @@
-/* ../netlib/cgesvd.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./cgesvd.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static complex c_b1 = {0.f, 0.f};
 static complex c_b2 = {1.f, 0.f};
@@ -143,7 +143,7 @@ they are real and non-negative, and */
 /* > \param[out] U */
 /* > \verbatim */
 /* > U is COMPLEX array, dimension (LDU,UCOL) */
-/* > (LDU,M) if JOBU = 'A' or (LDU,fla_min(M,N)) if JOBU = 'S'. */
+/* > (LDU,M) if JOBU = 'A' or (LDU,min(M,N)) if JOBU = 'S'. */
 /* > If JOBU = 'A', U contains the M-by-M unitary matrix U;
  */
 /* > if JOBU = 'S', U contains the first fla_min(m,n) columns of U */
@@ -227,8 +227,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date April 2012 */
-/* > \ingroup complexGEsing */
+/* > \ingroup gesvd */
 /* ===================================================================== */
 /* Subroutine */
 void cgesvd_(char *jobu, char *jobvt, integer *m, integer *n, complex *a, integer *lda, real *s,
@@ -252,6 +251,7 @@ void cgesvd_(char *jobu, char *jobvt, integer *m, integer *n, complex *a, intege
 #endif
     /* System generated locals */
     integer a_dim1, a_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__2, i__3, i__4;
+    real r__1;
     char ch__1[2];
     /* Builtin functions */
     /* Subroutine */
@@ -315,10 +315,10 @@ void cgesvd_(char *jobu, char *jobvt, integer *m, integer *n, complex *a, intege
     logical lquery, wntuas, wntvas;
     integer lwork_cungbr_p__, lwork_cungbr_q__, lwork_cunglq_m__, lwork_cunglq_n__,
         lwork_cungqr_m__, lwork_cungqr_n__;
-    /* -- LAPACK driver routine (version 3.7.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* April 2012 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -920,7 +920,8 @@ void cgesvd_(char *jobu, char *jobvt, integer *m, integer *n, complex *a, intege
             }
         }
         maxwrk = fla_max(minwrk, maxwrk);
-        work[1].r = (real)maxwrk;
+        r__1 = sroundup_lwork(&maxwrk);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         if(*lwork < minwrk && !lquery)
         {
@@ -3524,7 +3525,8 @@ void cgesvd_(char *jobu, char *jobvt, integer *m, integer *n, complex *a, intege
         }
     }
     /* Return optimal workspace in WORK(1) */
-    work[1].r = (real)maxwrk;
+    r__1 = sroundup_lwork(&maxwrk);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

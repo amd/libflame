@@ -41,7 +41,7 @@
     FLA_Obj t, T, TL, TR;                                             \
     FLA_Error init_result;                                            \
     FLA_Uplo uplo_fla;                                                \
-    fla_dim_t m_d = *m, m_e = (m_d - 1);                                  \
+    fla_dim_t m_d = *m, m_e = (m_d - 1);                              \
                                                                       \
     FLA_Init_safe(&init_result);                                      \
     FLA_Param_map_netlib_to_flame_uplo(uplo, &uplo_fla);              \
@@ -128,65 +128,60 @@ extern void zungtr_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, d
 
 LAPACK_orgtr(s, org)
 {
-    int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sorgtr inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *m, *ldim_A);
+#if FLA_ENABLE_AMD_OPT
     {
-        if(*uplo == 'U' || *uplo == 'u')
+        sorgtr_fla(uplo, m, buff_A, ldim_A, buff_t, buff_w, lwork, info);
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
+    }
+#else
+    {
+
+        int fla_error = LAPACK_SUCCESS;
+        LAPACK_RETURN_CHECK_VAR1(sorgtr_check(uplo, m, buff_A, ldim_A, buff_t, buff_w, lwork, info),
+                                 fla_error)
+
+        if(fla_error == LAPACK_SUCCESS)
         {
-            sorgtr_fla(uplo, m, buff_A, ldim_A, buff_t, buff_w, lwork, info);
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            LAPACK_orgtr_body(s)
+                /** fla_error set to 0 on LAPACK_SUCCESS */
+                fla_error
+                = 0;
         }
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    {
-        LAPACK_RETURN_CHECK_VAR1(sorgtr_check(uplo, m, buff_A, ldim_A, buff_t, buff_w, lwork, info),
-                                 fla_error)
-    }
-
-    if(fla_error == LAPACK_SUCCESS)
-    {
-        LAPACK_orgtr_body(s)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
-    }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+#endif
 }
 
 LAPACK_orgtr(d, org)
 {
-    int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dorgtr inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *m, *ldim_A);
+#if FLA_ENABLE_AMD_OPT
     {
-#if !FLA_ENABLE_AMD_OPT
-        if(*uplo == 'U' || *uplo == 'u')
-#endif
+        dorgtr_fla(uplo, m, buff_A, ldim_A, buff_t, buff_w, lwork, info);
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
+    }
+#else
+    {
+        int fla_error = LAPACK_SUCCESS;
+        LAPACK_RETURN_CHECK_VAR1(dorgtr_check(uplo, m, buff_A, ldim_A, buff_t, buff_w, lwork, info),
+                                 fla_error)
+        if(fla_error == LAPACK_SUCCESS)
         {
-            dorgtr_fla(uplo, m, buff_A, ldim_A, buff_t, buff_w, lwork, info);
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
+            LAPACK_orgtr_body(d)
+                /** fla_error set to 0 on LAPACK_SUCCESS */
+                fla_error
+                = 0;
         }
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    {
-        LAPACK_RETURN_CHECK_VAR1(dorgtr_check(uplo, m, buff_A, ldim_A, buff_t, buff_w, lwork, info),
-                                 fla_error)
-    }
-    if(fla_error == LAPACK_SUCCESS)
-    {
-        LAPACK_orgtr_body(d)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
-    }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+#endif
 }
 
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX

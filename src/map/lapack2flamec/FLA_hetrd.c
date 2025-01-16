@@ -9,8 +9,8 @@
 */
 
 /*
-*     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
-*/
+ *     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+ */
 
 #include "FLAME.h"
 
@@ -158,64 +158,61 @@ extern void zhetrd_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, d
 
 LAPACK_hetrd(s, sy)
 {
-    int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("hetrd-ssytrd inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *m,
                       *ldim_A);
+#if FLA_ENABLE_AMD_OPT
     {
-        if(*uplo == 'U' || *uplo == 'u')
-        {
-            ssytrd_fla(uplo, m, buff_A, ldim_A, buff_d, buff_e, buff_t, buff_w, lwork, info);
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
-        }
+        ssytrd_fla(uplo, m, buff_A, ldim_A, buff_d, buff_e, buff_t, buff_w, lwork, info);
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
+#else
     {
+        int fla_error = LAPACK_SUCCESS;
         LAPACK_RETURN_CHECK_VAR1(
             ssytrd_check(uplo, m, buff_A, ldim_A, buff_d, buff_e, buff_t, buff_w, lwork, info),
             fla_error)
+        if(fla_error == LAPACK_SUCCESS)
+        {
+            LAPACK_hetrd_body(s)
+                /** fla_error set to 0 on LAPACK_SUCCESS */
+                fla_error
+                = 0;
+        }
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
-    if(fla_error == LAPACK_SUCCESS)
-    {
-        LAPACK_hetrd_body(s)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
-    }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
+#endif
 }
 LAPACK_hetrd(d, sy)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("hetrd-dsytrd inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *m,
                       *ldim_A);
+#if FLA_ENABLE_AMD_OPT
     {
-#if !FLA_ENABLE_AMD_OPT
-        if(*uplo == 'U' || *uplo == 'u')
-#endif
-        {
-            dsytrd_fla(uplo, m, buff_A, ldim_A, buff_d, buff_e, buff_t, buff_w, lwork, info);
-            AOCL_DTL_TRACE_LOG_EXIT
-            return;
-        }
+        dsytrd_fla(uplo, m, buff_A, ldim_A, buff_d, buff_e, buff_t, buff_w, lwork, info);
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
-#if !FLA_ENABLE_AMD_OPT // Code below is unreachable if FLA_ENABLE_AMD_OPT is true
-    int fla_error = LAPACK_SUCCESS;
+#else // Code below is unreachable if FLA_ENABLE_AMD_OPT is true
     {
+        int fla_error = LAPACK_SUCCESS;
         LAPACK_RETURN_CHECK_VAR1(
             dsytrd_check(uplo, m, buff_A, ldim_A, buff_d, buff_e, buff_t, buff_w, lwork, info),
             fla_error)
+
+        if(fla_error == LAPACK_SUCCESS)
+        {
+            LAPACK_hetrd_body(d)
+                /** fla_error set to 0 on LAPACK_SUCCESS */
+                fla_error
+                = 0;
+        }
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
     }
-    if(fla_error == LAPACK_SUCCESS)
-    {
-        LAPACK_hetrd_body(d)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
-    }
-    AOCL_DTL_TRACE_LOG_EXIT
-    return;
 #endif
 }
 

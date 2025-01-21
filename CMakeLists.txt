@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 3.26.0)
 file(STRINGS "so_version" VERSION_DATA)
 list(JOIN VERSION_DATA "." PROJ_VERSION)
 
-string(APPEND LIBS_LINK_FLAGS "-lpthread ")
+string(APPEND LIBS_LINK_FLAGS "-lpthread -lm ")
 
 if(WIN32)
 	project(AOCL-LibFLAME-Win VERSION ${PROJ_VERSION})
@@ -1324,12 +1324,11 @@ if(BUILD_LAPACKE_TEST)
 endif()
 
 
-
+set(REQ_LIBAOCLUTILS_PKGCONFIG "")
 # Configuration for pkg-config
-if(BUILD_SHARED_LIBS)
-	# Get the path of directory containing the aoclutils lib
-	cmake_path(GET LIBAOCLUTILS_LIBRARY_PATH PARENT_PATH LIBAOCLUTILS_LIBRARY_DIR)
-	string(APPEND LIBS_LINK_FLAGS "-L${LIBAOCLUTILS_LIBRARY_DIR} -laoclutils ")
+if(NOT ENABLE_EMBED_AOCLUTILS)
+	# set the variable if aocl-utils library is not embedded
+	set(REQ_LIBAOCLUTILS_PKGCONFIG "aocl-utils")
 endif()
 
 set(flamelib ${PROJECT_NAME})

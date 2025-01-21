@@ -1,8 +1,10 @@
-/* ../netlib/v3.9.0/iparam2stage.f -- translated by f2c (version 20160102). You must link the
- resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
- Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
- with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./iparam2stage.F -- translated by f2c (version 20190311). You must link the
+ resulting object file with libf2c: on Microsoft Windows system, link with
+ libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install
+ libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of
+ the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 #ifdef FLA_OPENMP_MULTITHREADING
 #include <omp.h>
@@ -97,14 +99,14 @@ static integer c_n1 = -1;
 /* > */
 /* > \param[in] NBI */
 /* > \verbatim */
-/* > NBI is INTEGER which is the used in the reduciton, */
+/* > NBI is INTEGER which is the used in the reduction, */
 /* > (e.g., the size of the band), needed to compute workspace */
 /* > and LHOUS2. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] IBI */
 /* > \verbatim */
-/* > IBI is INTEGER which represent the IB of the reduciton, */
+/* > IBI is INTEGER which represent the IB of the reduction, */
 /* > needed to compute workspace and LHOUS2. */
 /* > \endverbatim */
 /* > */
@@ -118,8 +120,7 @@ static integer c_n1 = -1;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date June 2016 */
-/* > \ingroup auxOTHERauxiliary */
+/* > \ingroup iparam2stage */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -140,7 +141,8 @@ static integer c_n1 = -1;
 /* > A. Haidar, J. Kurzak, P. Luszczek, 2013. */
 /* > An improved parallel singular value algorithm and its implementation */
 /* > for multicore hardware, In Proceedings of 2013 International Conference */
-/* > for High Performance Computing, Networking, Storage and Analysis (SC '13). */
+/* > for High Performance Computing, Networking, Storage and Analysis (SC '13).
+ */
 /* > Denver, Colorado, USA, 2013. */
 /* > Article 90, 12 pages. */
 /* > http://doi.acm.org/10.1145/2503210.2503292 */
@@ -168,6 +170,7 @@ integer iparam2stage_(integer *ispec, char *name__, char *opts, integer *ni, int
     integer nthreads, i__, factoptnb, ib, ic, kd, iz;
     char algo[3], prec[1], stag[5], vect[1];
     logical cprec, rprec;
+    extern logical lsame_(char *, char *, integer, integer);
     integer lhous, lwork;
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     char subnam[12];
@@ -176,8 +179,8 @@ integer iparam2stage_(integer *ispec, char *name__, char *opts, integer *ni, int
     int fla_thread_get_num_threads(void);
     /* -- LAPACK auxiliary routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
-    /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2016 */
+    /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+     */
     /* .. Scalar Arguments .. */
     /* ================================================================ */
     /* .. */
@@ -333,7 +336,7 @@ integer iparam2stage_(integer *ispec, char *name__, char *opts, integer *ni, int
         /* matrix (V,T) of the second stage. should be >= 1. */
         /* Will add the VECT OPTION HERE next release */
         *(unsigned char *)vect = *(unsigned char *)opts;
-        if(*(unsigned char *)vect == 'N')
+        if(lsame_(vect, "N", 1, 1))
         {
             /* Computing MAX */
             i__1 = 1;

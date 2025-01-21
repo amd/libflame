@@ -405,7 +405,7 @@ void claqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
                integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dlaqp3rk inputs: m %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS
+    AOCL_DTL_SNPRINTF("claqp3rk inputs: m %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS
                       ",ioffset %" FLA_IS ",nb %" FLA_IS ",kp1 %" FLA_IS ",lda %" FLA_IS
                       ",ldf %" FLA_IS "",
                       *m, *n, *nrhs, *ioffset, *nb, *kp1, *lda, *ldf);
@@ -491,6 +491,7 @@ void claqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
     k = 0;
     lsticc = 0;
     *done = FALSE_;
+    i__ = 0;
     while(k < *nb && lsticc == 0)
     {
         ++k;

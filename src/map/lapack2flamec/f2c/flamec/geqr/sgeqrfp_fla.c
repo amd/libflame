@@ -1,5 +1,8 @@
-/* sgeqrfp.f -- translated by f2c (version 20000121). You must link the resulting object file with
- * the libraries: -lf2c -lm (in that order) */
+/* ./sgeqrfp.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -126,7 +129,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup realGEcomputational */
+/* > \ingroup geqrfp */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -156,7 +159,7 @@ void sgeqrfp_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real 
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer i__, k, nbmin, iinfo, ib, nb, nx;
+    integer i__, k, ib, nb, nx, iws, nbmin, iinfo;
     extern /* Subroutine */
         void
         slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *,
@@ -171,7 +174,7 @@ void sgeqrfp_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real 
     extern /* Subroutine */
         void
         sgeqr2p_fla(integer *, integer *, real *, integer *, real *, real *, integer *);
-    integer iws;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -192,7 +195,7 @@ void sgeqrfp_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real 
     /* Test the input arguments */
     /* Parameter adjustments */
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
     --tau;
     --work;
@@ -200,7 +203,7 @@ void sgeqrfp_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real 
     *info = 0;
     nb = ilaenv_(&c__1, "SGEQRF", " ", m, n, &c_n1, &c_n1);
     lwkopt = *n * nb;
-    work[1] = (real)lwkopt;
+    work[1] = sroundup_lwork(&lwkopt);
     lquery = *lwork == -1;
     if(*m < 0)
     {
@@ -304,7 +307,7 @@ void sgeqrfp_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real 
         i__1 = *n - i__ + 1;
         sgeqr2p_fla(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1], &iinfo);
     }
-    work[1] = (real)iws;
+    work[1] = sroundup_lwork(&iws);
     return;
     /* End of SGEQRFP */
 }

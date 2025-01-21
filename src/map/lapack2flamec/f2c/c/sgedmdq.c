@@ -804,6 +804,7 @@ void sgedmdq_(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *
         mlwqr = fla_max(1, *n);
         /* Minimal workspace length for SGEQRF. */
         mlwork = fla_min(*m, *n) + mlwqr;
+        olwork = 0;
         if(lquery)
         {
             sgeqrf_(m, n, &f[f_offset], ldf, &work[1], rdummy, &c_n1, &info1);

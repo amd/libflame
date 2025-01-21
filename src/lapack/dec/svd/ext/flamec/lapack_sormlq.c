@@ -192,6 +192,7 @@ int lapack_sormlq(char *side, char *trans, integer *m, integer *n, integer *k, r
     integer lwkopt;
     logical lquery;
     integer iwt;
+    extern real sroundup_lwork(integer *);
 #if FLA_OPENMP_MULTITHREADING
     int thread_id, actual_num_threads;
     integer index, mi_sub, ni_sub;
@@ -285,7 +286,7 @@ int lapack_sormlq(char *side, char *trans, integer *m, integer *n, integer *k, r
         i__2 = ilaenv_(&c__1, "SORMLQ", ch__1, m, n, k, &c_n1); // , expr subst
         nb = fla_min(i__1,i__2);
         lwkopt = nw * nb + 4160;
-        work[1] = (real) lwkopt;
+        work[1] = sroundup_lwork(&lwkopt);
     }
     if (*info != 0)
     {
@@ -422,7 +423,7 @@ int lapack_sormlq(char *side, char *trans, integer *m, integer *n, integer *k, r
             }
         }
     }
-    work[1] = (real) lwkopt;
+    work[1] = sroundup_lwork(&lwkopt);
     return 0;
     /* End of SORMLQ */
 }

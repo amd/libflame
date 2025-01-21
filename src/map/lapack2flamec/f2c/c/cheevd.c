@@ -353,7 +353,7 @@ void cheevd_(char *jobz, char *uplo, integer *n, complex *a, integer *lda, real 
         r__1 = sroundup_lwork(&lopt);
         work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
-        rwork[1] = (real)lropt;
+        rwork[1] = sroundup_lwork(&lropt);
         iwork[1] = liopt;
         if(*lwork < lwmin && !lquery)
         {
@@ -468,7 +468,7 @@ void cheevd_(char *jobz, char *uplo, integer *n, complex *a, integer *lda, real 
     r__1 = sroundup_lwork(&lopt);
     work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
-    rwork[1] = (real)lropt;
+    rwork[1] = sroundup_lwork(&lropt);
     iwork[1] = liopt;
     AOCL_DTL_TRACE_LOG_EXIT
     return;

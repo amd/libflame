@@ -1,12 +1,14 @@
-/* ilaenv.f -- translated by f2c (version 20160102). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+/* ./ilaenv.f -- translated by f2c (version 20190311). You must link the
+ resulting object file with libf2c: on Microsoft Windows system, link with
+ libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install
+ libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of
+ the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-static real c_b174 = 0.f;
-static real c_b175 = 1.f;
+static real c_b179 = 0.f;
+static real c_b180 = 1.f;
 static integer c__0 = 0;
 /* > \brief \b ILAENV */
 /* =========== DOCUMENTATION =========== */
@@ -44,7 +46,8 @@ static integer c__0 = 0;
 /* > the parameters. */
 /* > */
 /* > ILAENV returns an INTEGER */
-/* > if ILAENV >= 0: ILAENV returns the value of the parameter specified by ISPEC */
+/* > if ILAENV >= 0: ILAENV returns the value of the parameter specified by
+ * ISPEC */
 /* > if ILAENV < 0: if ILAENV = -k, the k-th argument had an illegal value. */
 /* > */
 /* > This version provides a set of parameters which should give good, */
@@ -79,7 +82,7 @@ if the usable block size is less than */
 /* > rectangular blocks must have dimension at least k by m, */
 /* > where k is given by ILAENV(2,...) and m by ILAENV(5,...) */
 /* > = 6: the crossover point for the SVD (when reducing an m by n */
-/* > matrix to bidiagonal form, if fla_max(m,n)/fla_min(m,n) exceeds */
+/* > matrix to bidiagonal form, if fla_max(m,n)/min(m,n) exceeds */
 /* > this value, a QR factorization is used first to reduce */
 /* > the matrix to a triangular form.) */
 /* > = 7: the number of processors */
@@ -88,9 +91,9 @@ if the usable block size is less than */
 /* > = 9: maximum size of the subproblems at the bottom of the */
 /* > computation tree in the divide-and-conquer algorithm */
 /* > (used by xGELSD and xGESDD) */
-/* > =10: ieee NaN arithmetic can be trusted not to trap */
+/* > =10: ieee infinity and NaN arithmetic can be trusted not to trap */
 /* > =11: infinity arithmetic can be trusted not to trap */
-/* > 12 <= ISPEC <= 16: */
+/* > 12 <= ISPEC <= 17: */
 /* > xHSEQR or related subroutines, */
 /* > see IPARMQ for detailed explanation */
 /* > \endverbatim */
@@ -139,8 +142,7 @@ these may not all */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2019 */
-/* > \ingroup OTHERauxiliary */
+/* > \ingroup ilaenv */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -169,14 +171,14 @@ integer ilaenv_(integer *ispec, char *name__, char *opts, integer *n1, integer *
                 integer *n4)
 {
     /* System generated locals */
-    integer ret_val;
+    integer ret_val, i__1, i__2, i__3;
     /* Builtin functions */
     /* Subroutine */
     int s_copy(char *, char *, ftnlen, ftnlen);
     integer i_len(char *), s_cmp(char *, char *, ftnlen, ftnlen);
     /* strlen(s1)* Local variables */
     logical twostage;
-    integer i__, i__1, i__2, i__3;
+    integer i__;
     char c1[1], c2[2], c3[3], c4[2];
     integer ic, nb, iz, nx;
     logical cname;
@@ -188,8 +190,8 @@ integer ilaenv_(integer *ispec, char *name__, char *opts, integer *n1, integer *
     ftnlen name_len = strlen(name__);
     /* -- LAPACK auxiliary routine (version 3.9.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
-    /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2019 */
+    /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+     */
     /* .. Scalar Arguments .. */
     /* .. */
     /* ===================================================================== */
@@ -362,7 +364,7 @@ L50: /* ISPEC = 1: block size */
                 nb = 32;
             }
         }
-        else if(s_cmp(c3, "QR ", (ftnlen)3, (ftnlen)3) == 0)
+        else if(s_cmp(c3, "QR", (ftnlen)2, (ftnlen)2) == 0)
         {
             if(*n3 == 1)
             {
@@ -402,7 +404,7 @@ L50: /* ISPEC = 1: block size */
                 }
             }
         }
-        else if(s_cmp(c3, "LQ ", (ftnlen)3, (ftnlen)3) == 0)
+        else if(s_cmp(c3, "LQ", (ftnlen)2, (ftnlen)2) == 0)
         {
             if(*n3 == 2)
             {
@@ -473,6 +475,17 @@ L50: /* ISPEC = 1: block size */
             else
             {
                 nb = 64;
+            }
+        }
+        else if(s_cmp(subnam + 3, "QP3RK", (ftnlen)5, (ftnlen)5) == 0)
+        {
+            if(sname)
+            {
+                nb = 32;
+            }
+            else
+            {
+                nb = 32;
             }
         }
     }
@@ -691,8 +704,8 @@ L50: /* ISPEC = 1: block size */
             /* The upper bound is to prevent overly aggressive scaling. */
             if(sname)
             {
-                /* Computing fla_min */
-                /* Computing fla_max */
+                /* Computing MIN */
+                /* Computing MAX */
                 i__2 = 48;
                 i__3 = (fla_min(*n1, *n2) << 4) / 100; // , expr subst
                 i__1 = fla_max(i__2, i__3);
@@ -700,8 +713,8 @@ L50: /* ISPEC = 1: block size */
             }
             else
             {
-                /* Computing fla_min */
-                /* Computing fla_max */
+                /* Computing MIN */
+                /* Computing MAX */
                 i__2 = 24;
                 i__3 = (fla_min(*n1, *n2) << 3) / 100; // , expr subst
                 i__1 = fla_max(i__2, i__3);
@@ -799,6 +812,17 @@ L60: /* ISPEC = 2: minimum block size */
             }
         }
         else if(s_cmp(c3, "TRI", (ftnlen)3, (ftnlen)3) == 0)
+        {
+            if(sname)
+            {
+                nbmin = 2;
+            }
+            else
+            {
+                nbmin = 2;
+            }
+        }
+        else if(s_cmp(subnam + 3, "QP3RK", (ftnlen)5, (ftnlen)5) == 0)
         {
             if(sname)
             {
@@ -943,6 +967,17 @@ L70: /* ISPEC = 3: crossover point */
                 nx = 128;
             }
         }
+        else if(s_cmp(subnam + 3, "QP3RK", (ftnlen)5, (ftnlen)5) == 0)
+        {
+            if(sname)
+            {
+                nx = 128;
+            }
+            else
+            {
+                nx = 128;
+            }
+        }
     }
     else if(s_cmp(c2, "SY", (ftnlen)2, (ftnlen)2) == 0)
     {
@@ -1020,20 +1055,21 @@ L130: /* ISPEC = 9: maximum size of the subproblems at the bottom of the */
     /* (used by xGELSD and xGESDD) */
     ret_val = 25;
     return ret_val;
-L140: /* ISPEC = 10: ieee NaN arithmetic can be trusted not to trap */
+L140: /* ISPEC = 10: ieee and infinity NaN arithmetic can be trusted not to trap
+       */
     /* ILAENV = 0 */
     ret_val = 1;
     if(ret_val == 1)
     {
-        ret_val = ieeeck_(&c__1, &c_b174, &c_b175);
+        ret_val = ieeeck_(&c__1, &c_b179, &c_b180);
     }
     return ret_val;
-L150: /* ISPEC = 11: infinity arithmetic can be trusted not to trap */
+L150: /* ISPEC = 11: ieee infinity arithmetic can be trusted not to trap */
     /* ILAENV = 0 */
     ret_val = 1;
     if(ret_val == 1)
     {
-        ret_val = ieeeck_(&c__0, &c_b174, &c_b175);
+        ret_val = ieeeck_(&c__0, &c_b179, &c_b180);
     }
     return ret_val;
 L160: /* 12 <= ISPEC <= 16: xHSEQR or related subroutines. */

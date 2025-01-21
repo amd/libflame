@@ -494,6 +494,7 @@ void slaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
     k = 0;
     lsticc = 0;
     *done = FALSE_;
+    i__ = 0;
     while(k < *nb && lsticc == 0)
     {
         ++k;

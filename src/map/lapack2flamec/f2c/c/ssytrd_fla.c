@@ -221,6 +221,7 @@ void ssytrd_fla(char *uplo, integer *n, real *a, integer *lda, real *d__, real *
         slatrd_(char *, integer *, integer *, real *, integer *, real *, real *, real *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -275,7 +276,7 @@ void ssytrd_fla(char *uplo, integer *n, real *a, integer *lda, real *d__, real *
         /* Determine the block size. */
         nb = ilaenv_(&c__1, "SSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
         lwkopt = *n * nb;
-        work[1] = (real)lwkopt;
+        work[1] = sroundup_lwork(&lwkopt);
     }
     if(*info != 0)
     {
@@ -398,7 +399,7 @@ void ssytrd_fla(char *uplo, integer *n, real *a, integer *lda, real *d__, real *
         i__1 = *n - i__ + 1;
         ssytd2_fla(uplo, &i__1, &a[i__ + i__ * a_dim1], lda, &d__[i__], &e[i__], &tau[i__], &iinfo);
     }
-    work[1] = (real)lwkopt;
+    work[1] = sroundup_lwork(&lwkopt);
     return;
     /* End of SSYTRD */
 }

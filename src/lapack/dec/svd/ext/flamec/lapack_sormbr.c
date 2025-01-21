@@ -216,6 +216,7 @@ int lapack_sormbr(char *vect, char *side, char *trans, integer *m, integer *n, i
     logical lquery;
     extern /* Subroutine */
     int lapack_sormqr(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *);
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -335,7 +336,7 @@ int lapack_sormbr(char *vect, char *side, char *trans, integer *m, integer *n, i
             }
         }
         lwkopt = nw * nb;
-        work[1] = (real) lwkopt;
+        work[1] = sroundup_lwork(&lwkopt);
     }
     if (*info != 0)
     {
@@ -419,7 +420,7 @@ int lapack_sormbr(char *vect, char *side, char *trans, integer *m, integer *n, i
             lapack_sormlq(side, transt, &mi, &ni, &i__1, &a[(a_dim1 << 1) + 1], lda, &tau[1], &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, & iinfo);
         }
     }
-    work[1] = (real) lwkopt;
+    work[1] = sroundup_lwork(&lwkopt);
     return 0;
     /* End of SORMBR */
 }

@@ -154,6 +154,7 @@ int lapack_sgelqf(integer *m, integer *n, real *a, integer *lda, real *tau, real
     integer ldwork, lwkopt;
     logical lquery;
     integer iws;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -182,7 +183,7 @@ int lapack_sgelqf(integer *m, integer *n, real *a, integer *lda, real *tau, real
     *info = 0;
     nb = ilaenv_(&c__1, "SGELQF", " ", m, n, &c_n1, &c_n1);
     lwkopt = *m * nb;
-    work[1] = (real) lwkopt;
+    work[1] = sroundup_lwork(&lwkopt);
     lquery = *lwork == -1;
     if (*m < 0)
     {
@@ -285,7 +286,7 @@ int lapack_sgelqf(integer *m, integer *n, real *a, integer *lda, real *tau, real
         i__1 = *n - i__ + 1;
         lapack_sgelq2(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1], &iinfo);
     }
-    work[1] = (real) iws;
+    work[1] = sroundup_lwork(&iws);
     return 0;
     /* End of SGELQF */
 }

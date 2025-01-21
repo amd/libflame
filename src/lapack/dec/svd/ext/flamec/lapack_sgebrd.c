@@ -225,6 +225,7 @@ int lapack_sgebrd(integer *m, integer *n, real *a, integer *lda, real *d__, real
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer lwkopt;
     logical lquery;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -261,7 +262,7 @@ int lapack_sgebrd(integer *m, integer *n, real *a, integer *lda, real *d__, real
     i__2 = ilaenv_(&c__1, "SGEBRD", " ", m, n, &c_n1, &c_n1); // , expr subst
     nb = fla_max(i__1,i__2);
     lwkopt = (*m + *n) * nb;
-    work[1] = (real) lwkopt;
+    work[1] = sroundup_lwork(&lwkopt);
     lquery = *lwork == -1;
     if (*m < 0)
     {
@@ -399,7 +400,7 @@ Todo: This is a temporary workaround until the issue in the blocked algorithm is
     i__1 = *n - i__ + 1;
     lapack_sgebd2(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &d__[i__], &e[i__], & tauq[i__], &taup[i__], &work[1], info);
 #endif
-    work[1] = (real) ws;
+    work[1] = sroundup_lwork(&ws);
     return 0;
     /* End of SGEBRD */
 }

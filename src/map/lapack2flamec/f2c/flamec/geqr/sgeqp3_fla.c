@@ -1,4 +1,4 @@
-/* sgeqp3.f -- translated by f2c (version 20160102). You must link the resulting object file with
+/* ./sgeqp3.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -42,7 +42,7 @@ static integer c__2 = 2;
 /* > */
 /* > \verbatim */
 /* > */
-/* > SGEQP3_FLA computes a QR factorization with column pivoting of a */
+/* > SGEQP3 computes a QR factorization with column pivoting of a */
 /* > matrix A: A*P = Q*R using Level 3 BLAS. */
 /* > \endverbatim */
 /* Arguments: */
@@ -126,7 +126,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup realGEcomputational */
+/* > \ingroup geqp3 */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -183,6 +183,7 @@ void sgeqp3_fla(integer *m, integer *n, real *a, integer *lda, integer *jpvt, re
         void
         sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
                 integer *, real *, integer *, integer *);
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -203,7 +204,6 @@ void sgeqp3_fla(integer *m, integer *n, real *a, integer *lda, integer *jpvt, re
     /* Test input arguments */
     /* ==================== */
     /* Parameter adjustments */
-
     a_dim1 = *lda;
     a_offset = 1 + a_dim1;
     a -= a_offset;
@@ -239,7 +239,7 @@ void sgeqp3_fla(integer *m, integer *n, real *a, integer *lda, integer *jpvt, re
             nb = ilaenv_(&c__1, "SGEQRF", " ", m, n, &c_n1, &c_n1);
             lwkopt = (*n << 1) + (*n + 1) * nb;
         }
-        work[1] = (real)lwkopt;
+        work[1] = sroundup_lwork(&lwkopt);
         if(*lwork < iws && !lquery)
         {
             *info = -8;
@@ -388,7 +388,7 @@ void sgeqp3_fla(integer *m, integer *n, real *a, integer *lda, integer *jpvt, re
                     &work[*n + j], &work[(*n << 1) + 1]);
         }
     }
-    work[1] = (real)iws;
+    work[1] = sroundup_lwork(&iws);
     return;
     /* End of SGEQP3_FLA */
 }

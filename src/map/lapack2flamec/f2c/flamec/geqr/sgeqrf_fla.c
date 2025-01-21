@@ -111,7 +111,8 @@ the elements below the diagonal, */
 /* > \param[in] LWORK */
 /* > \verbatim */
 /* > LWORK is INTEGER */
-/* > The dimension of the array WORK. LWORK >= fla_max(1,N). */
+/* > The dimension of the array WORK. */
+/* > LWORK >= 1, if MIN(M,N) = 0, and LWORK >= N, otherwise. */
 /* > For optimum performance LWORK >= N*NB, where NB is */
 /* > the optimal blocksize. */
 /* > */
@@ -134,7 +135,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup realGEcomputational */
+/* > \ingroup geqrf */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -163,7 +164,7 @@ void sgeqrf_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer i__, k, nbmin, iinfo;
+    integer i__, k, iws, nbmin, iinfo;
     extern /* Subroutine */
         void
         sgeqr2_fla(integer *, integer *, real *, integer *, real *, real *, integer *);
@@ -179,7 +180,7 @@ void sgeqrf_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *
         slarft_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
-    integer iws;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -200,7 +201,7 @@ void sgeqrf_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *
     /* Test the input arguments */
     /* Parameter adjustments */
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
 #if AOCL_FLA_PROGRESS_H
     AOCL_FLA_PROGRESS_VAR;
@@ -209,16 +210,13 @@ void sgeqrf_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *
     --tau;
     --work;
     /* Function Body */
+    k = fla_min(*m, *n);
     *info = 0;
-
 #if FLA_ENABLE_AMD_OPT
     nb = get_block_size_sgeqrf(m, n);
 #else
     nb = ilaenv_(&c__1, "SGEQRF", " ", m, n, &c_n1, &c_n1);
 #endif
-
-    lwkopt = *n * nb;
-    work[1] = (real)lwkopt;
     lquery = *lwork == -1;
     if(*m < 0)
     {
@@ -244,10 +242,18 @@ void sgeqrf_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *
     }
     else if(lquery)
     {
+        if(k == 0)
+        {
+            lwkopt = 1;
+        }
+        else
+        {
+            lwkopt = *n * nb;
+        }
+        work[1] = sroundup_lwork(&lwkopt);
         return;
     }
     /* Quick return if possible */
-    k = fla_min(*m, *n);
     if(k == 0)
     {
         work[1] = 1.f;
@@ -354,7 +360,7 @@ void sgeqrf_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *
 
         sgeqr2_fla(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1], &iinfo);
     }
-    work[1] = (real)iws;
+    work[1] = sroundup_lwork(&iws);
     return;
     /* End of SGEQRF */
 }

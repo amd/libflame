@@ -163,6 +163,7 @@ int lapack_sorgbr(char *vect, integer *m, integer *n, integer *k, real *a, integ
     extern int lapack_sorglq( integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *), lapack_sorgqr(integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
     integer lwkopt;
     logical lquery;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -255,7 +256,7 @@ int lapack_sorgbr(char *vect, integer *m, integer *n, integer *k, real *a, integ
                 }
             }
         }
-        lwkopt = work[1];
+        lwkopt = (integer)work[1];
         lwkopt = fla_max(lwkopt,mn);
     }
     if (*info != 0)
@@ -266,7 +267,7 @@ int lapack_sorgbr(char *vect, integer *m, integer *n, integer *k, real *a, integ
     }
     else if (lquery)
     {
-        work[1] = (real) lwkopt;
+        work[1] = sroundup_lwork(&lwkopt);
         return 0;
     }
     /* Quick return if possible */
@@ -373,7 +374,7 @@ int lapack_sorgbr(char *vect, integer *m, integer *n, integer *k, real *a, integ
             }
         }
     }
-    work[1] = (real) lwkopt;
+    work[1] = sroundup_lwork(&lwkopt);
     return 0;
     /* End of SORGBR */
 }

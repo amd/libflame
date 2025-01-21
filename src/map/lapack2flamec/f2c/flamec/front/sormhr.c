@@ -207,6 +207,7 @@ void sormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, inte
         void
         sormqr_fla(char *, char *, integer *, integer *, integer *, real *, integer *, real *,
                    real *, integer *, real *, integer *, integer *);
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -298,7 +299,7 @@ void sormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, inte
             nb = ilaenv_(&c__1, "SORMQR", ch__1, m, &nh, &nh, &c_n1);
         }
         lwkopt = fla_max(1, nw) * nb;
-        work[1] = (real)lwkopt;
+        work[1] = sroundup_lwork(&lwkopt);
     }
     if(*info != 0)
     {
@@ -332,7 +333,7 @@ void sormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, inte
     }
     sormqr_fla(side, trans, &mi, &ni, &nh, &a[*ilo + 1 + *ilo * a_dim1], lda, &tau[*ilo],
                &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
-    work[1] = (real)lwkopt;
+    work[1] = sroundup_lwork(&lwkopt);
     return;
     /* End of SORMHR */
 }

@@ -144,7 +144,8 @@ void sorgtr_fla(char *uplo, integer *n, real *a, integer *lda, real *tau, real *
         sorgqr_fla(integer *, integer *, integer *, real *, integer *, real *, real *, integer *,
                    integer *);
     logical lquery;
-    aocl_int64_t lwkopt;
+    integer lwkopt;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -218,7 +219,7 @@ void sorgtr_fla(char *uplo, integer *n, real *a, integer *lda, real *tau, real *
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
         lwkopt = fla_max(i__1, i__2) * nb;
-        work[1] = (real)lwkopt;
+        work[1] = sroundup_lwork(&lwkopt);
     }
     if(*info != 0)
     {
@@ -302,7 +303,7 @@ void sorgtr_fla(char *uplo, integer *n, real *a, integer *lda, real *tau, real *
                        &iinfo);
         }
     }
-    work[1] = (real)lwkopt;
+    work[1] = sroundup_lwork(&lwkopt);
     return;
     /* End of SORGTR */
 }

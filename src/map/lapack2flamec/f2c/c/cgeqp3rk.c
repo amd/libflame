@@ -715,6 +715,7 @@ void cgeqp3rk_(integer *m, integer *n, integer *nrhs, integer *kmax, real *absto
     /* (3) when routine exits. */
     /* Here, IWS is the miminum workspace required for unblocked */
     /* code. */
+    nb = ilaenv_(&c__1, "CGEQP3RK", " ", m, n, &c_n1, &c_n1);
     if(*info == 0)
     {
         minmn = fla_min(*m, *n);
@@ -733,7 +734,6 @@ void cgeqp3rk_(integer *m, integer *n, integer *nrhs, integer *kmax, real *absto
             /* TOTAL_WORK_SIZE = 3*N + NRHS - 1 */
             iws = *n + *nrhs - 1;
             /* Assign to NB optimal block size. */
-            nb = ilaenv_(&c__1, "CGEQP3RK", " ", m, n, &c_n1, &c_n1);
             /* A formula for the optimal workspace size in case of using */
             /* both unblocked BLAS 2 in CLAQP2RK and blocked BLAS 3 code */
             /* in CLAQP3RK. */

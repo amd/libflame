@@ -143,6 +143,7 @@ void sorghr_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real
                    integer *);
     integer lwkopt;
     logical lquery;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -198,7 +199,7 @@ void sorghr_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real
     {
         nb = ilaenv_(&c__1, "SORGQR", " ", &nh, &nh, &nh, &c_n1);
         lwkopt = fla_max(1, nh) * nb;
-        work[1] = (real)lwkopt;
+        work[1] = sroundup_lwork(&lwkopt);
     }
     if(*info != 0)
     {
@@ -272,7 +273,7 @@ void sorghr_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real
         sorgqr_fla(&nh, &nh, &nh, &a[*ilo + 1 + (*ilo + 1) * a_dim1], lda, &tau[*ilo], &work[1],
                    lwork, &iinfo);
     }
-    work[1] = (real)lwkopt;
+    work[1] = sroundup_lwork(&lwkopt);
     return;
     /* End of SORGHR */
 }

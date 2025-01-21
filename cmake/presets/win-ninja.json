@@ -43,8 +43,7 @@
                 "lp64",
                 "static",
                 "autoisa",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-autoisa"
@@ -73,8 +72,7 @@
                 "static",
                 "autoisa",
                 "aoclblas",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-autoisa-aoclblas"
@@ -101,8 +99,7 @@
                 "lp64",
                 "static",
                 "avx",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx"
@@ -131,8 +128,7 @@
                 "static",
                 "avx",
                 "aoclblas",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx-aoclblas"
@@ -159,8 +155,7 @@
                 "lp64",
                 "static",
                 "avx2",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx2"
@@ -189,8 +184,7 @@
                 "static",
                 "avx2",
                 "aoclblas",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx2-aoclblas"
@@ -217,8 +211,7 @@
                 "lp64",
                 "static",
                 "avx512",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx512"
@@ -247,8 +240,7 @@
                 "static",
                 "avx512",
                 "aoclblas",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx512-aoclblas"
@@ -499,8 +491,7 @@
                 "ilp64",
                 "static",
                 "autoisa",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-autoisa"
@@ -529,8 +520,7 @@
                 "static",
                 "autoisa",
                 "aoclblas",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-autoisa-aoclblas"
@@ -557,8 +547,7 @@
                 "ilp64",
                 "static",
                 "avx",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx"
@@ -587,8 +576,7 @@
                 "static",
                 "avx",
                 "aoclblas",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx-aoclblas"
@@ -615,8 +603,7 @@
                 "ilp64",
                 "static",
                 "avx2",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx2"
@@ -645,8 +632,7 @@
                 "static",
                 "avx2",
                 "aoclblas",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx2-aoclblas"
@@ -673,8 +659,7 @@
                 "ilp64",
                 "static",
                 "avx512",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx512"
@@ -703,8 +688,7 @@
                 "static",
                 "avx512",
                 "aoclblas",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx512-aoclblas"
@@ -955,8 +939,7 @@
                 "lp64",
                 "static",
                 "autoisa",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-autoisa"
@@ -985,8 +968,7 @@
                 "static",
                 "autoisa",
                 "aoclblas",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-autoisa-aoclblas"
@@ -1013,8 +995,7 @@
                 "lp64",
                 "static",
                 "avx",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx"
@@ -1043,8 +1024,7 @@
                 "static",
                 "avx",
                 "aoclblas",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx-aoclblas"
@@ -1071,8 +1051,7 @@
                 "lp64",
                 "static",
                 "avx2",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx2"
@@ -1101,8 +1080,7 @@
                 "static",
                 "avx2",
                 "aoclblas",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx2-aoclblas"
@@ -1129,8 +1107,7 @@
                 "lp64",
                 "static",
                 "avx512",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx512"
@@ -1159,8 +1136,7 @@
                 "static",
                 "avx512",
                 "aoclblas",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx512-aoclblas"
@@ -1411,8 +1387,7 @@
                 "ilp64",
                 "static",
                 "autoisa",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-autoisa"
@@ -1441,8 +1416,7 @@
                 "static",
                 "autoisa",
                 "aoclblas",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-autoisa-aoclblas"
@@ -1469,8 +1443,7 @@
                 "ilp64",
                 "static",
                 "avx",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx"
@@ -1499,8 +1472,7 @@
                 "static",
                 "avx",
                 "aoclblas",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx-aoclblas"
@@ -1527,8 +1499,7 @@
                 "ilp64",
                 "static",
                 "avx2",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx2"
@@ -1557,8 +1528,7 @@
                 "static",
                 "avx2",
                 "aoclblas",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx2-aoclblas"
@@ -1585,8 +1555,7 @@
                 "ilp64",
                 "static",
                 "avx512",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx512"
@@ -1615,8 +1584,7 @@
                 "static",
                 "avx512",
                 "aoclblas",
-                "test",
-                "test-netlib"
+                "test"
             ],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx512-aoclblas"

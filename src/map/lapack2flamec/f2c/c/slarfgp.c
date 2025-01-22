@@ -100,6 +100,8 @@
 /* Subroutine */
 void slarfgp_(integer *n, real *alpha, real *x, integer *incx, real *tau)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slarfgp inputs: n %" FLA_IS ",incx %" FLA_IS "", *n, *incx);
     /* System generated locals */
     integer i__1;
     real r__1;
@@ -142,6 +144,7 @@ void slarfgp_(integer *n, real *alpha, real *x, integer *incx, real *tau)
     if(*n <= 0)
     {
         *tau = 0.f;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     eps = slamch_("Precision");
@@ -250,6 +253,7 @@ void slarfgp_(integer *n, real *alpha, real *x, integer *incx, real *tau)
         }
         *alpha = beta;
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLARFGP */
 }

@@ -217,30 +217,6 @@ void sgghrd_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, r
              integer *lda, real *b, integer *ldb, real *q, integer *ldq, real *z__, integer *ldz,
              integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgghrd(compq, compz, n, ilo, ihi, a, lda, b, ldb, q, ldq, z__, ldz, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ilo_64 = *ilo;
-    aocl_int64_t ihi_64 = *ihi;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sgghrd(compq, compz, &n_64, &ilo_64, &ihi_64, a, &lda_64, b, &ldb_64, q, &ldq_64,
-                       z__, &ldz_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_sgghrd(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t *ilo,
-                        aocl_int64_t *ihi, real *a, aocl_int64_t *lda, real *b, aocl_int64_t *ldb,
-                        real *q, aocl_int64_t *ldq, real *z__, aocl_int64_t *ldz,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgghrd inputs: compq %c ,compz %c ,n %" FLA_IS ",ilo %" FLA_IS
                       ",ihi %" FLA_IS ",lda %" FLA_IS ",ldb %" FLA_IS ",ldq %" FLA_IS
@@ -384,6 +360,7 @@ void aocl_lapack_sgghrd(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
     {
         i__1 = -(*info);
         xerbla_("SGGHRD", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize Q and Z if desired. */
@@ -398,6 +375,7 @@ void aocl_lapack_sgghrd(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
     /* Quick return if possible */
     if(*n <= 1)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Zero out lower triangle of B */
@@ -452,6 +430,7 @@ void aocl_lapack_sgghrd(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
         }
         /* L40: */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGGHRD */
 }

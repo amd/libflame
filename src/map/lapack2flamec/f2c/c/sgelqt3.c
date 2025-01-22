@@ -114,6 +114,9 @@ the elements below the diagonal are not used. */
 /* Subroutine */
 void sgelqt3_(integer *m, integer *n, real *a, integer *lda, real *t, integer *ldt, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgelqt3 inputs: m %" FLA_IS ",n %" FLA_IS ",lda %" FLA_IS ",ldt %" FLA_IS "",
+                      *m, *n, *lda, *ldt);
     /* System generated locals */
     integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2;
     /* Local variables */
@@ -170,6 +173,7 @@ void sgelqt3_(integer *m, integer *n, real *a, integer *lda, real *t, integer *l
     {
         i__1 = -(*info);
         xerbla_("SGELQT3", &i__1, (ftnlen)7);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*m == 1)
@@ -245,6 +249,7 @@ void sgelqt3_(integer *m, integer *n, real *a, integer *lda, real *t, integer *l
         T = [T1 T3] */
         /* [ A(1:N1,J1:N) L2 ] [ 0 T2] */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGELQT3 */
 }

@@ -120,6 +120,10 @@ the elements above the diagonal */
 void sgelqt_(integer *m, integer *n, integer *mb, real *a, integer *lda, real *t, integer *ldt,
              real *work, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgelqt inputs: m %" FLA_IS ",n %" FLA_IS ",mb %" FLA_IS ",lda %" FLA_IS
+                      ",ldt %" FLA_IS "",
+                      *m, *n, *mb, *lda, *ldt);
     /* System generated locals */
     integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */
@@ -180,12 +184,14 @@ void sgelqt_(integer *m, integer *n, integer *mb, real *a, integer *lda, real *t
     {
         i__1 = -(*info);
         xerbla_("SGELQT", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     k = fla_min(*m, *n);
     if(k == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Blocked loop of length K */
@@ -209,6 +215,7 @@ void sgelqt_(integer *m, integer *n, integer *mb, real *a, integer *lda, real *t
                     &t[i__ * t_dim1 + 1], ldt, &a[i__ + ib + i__ * a_dim1], lda, &work[1], &i__5);
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGELQT */
 }

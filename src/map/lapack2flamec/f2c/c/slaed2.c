@@ -216,6 +216,8 @@ void slaed2_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *l
              real *rho, real *z__, real *dlambda, real *w, real *q2, integer *indx, integer *indxc,
              integer *indxp, integer *coltyp, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slaed2 inputs: n %" FLA_IS ",n1 %" FLA_IS ",ldq %" FLA_IS "", *n, *n1, *ldq);
     /* System generated locals */
     integer q_dim1, q_offset, i__1, i__2;
     real r__1, r__2, r__3, r__4;
@@ -303,11 +305,13 @@ void slaed2_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *l
     {
         i__1 = -(*info);
         xerbla_("SLAED2", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     n2 = *n - *n1;
@@ -597,6 +601,7 @@ L100: /* Record the last eigenvalue. */
         /* L180: */
     }
 L190:
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAED2 */
 }

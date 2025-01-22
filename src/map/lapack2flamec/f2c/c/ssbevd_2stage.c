@@ -238,15 +238,11 @@ void ssbevd_2stage_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, i
                     real *w, real *z__, integer *ldz, real *work, integer *lwork, integer *iwork,
                     integer *liwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "ssbevd_2stage inputs: jobz %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS
              ", ldz %" FLA_IS ", *liwork %" FLA_IS "",
              *jobz, *uplo, *n, *kd, *ldab, *ldz, *liwork);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer ab_dim1, ab_offset, z_dim1, z_offset, i__1, i__2;
     real r__1;
@@ -401,18 +397,18 @@ void ssbevd_2stage_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, i
     {
         i__1 = -(*info);
         xerbla_("SSBEVD_2STAGE", &i__1, (ftnlen)13);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 1)
@@ -422,7 +418,7 @@ void ssbevd_2stage_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, i
         {
             z__[z_dim1 + 1] = 1.f;
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants. */
@@ -486,7 +482,7 @@ void ssbevd_2stage_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, i
     }
     work[1] = sroundup_lwork(&lwmin);
     iwork[1] = liwmin;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSBEVD_2STAGE */
 }

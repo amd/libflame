@@ -234,30 +234,6 @@ void sggev_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *b
             real *alphar, real *alphai, real *beta, real *vl, integer *ldvl, real *vr,
             integer *ldvr, real *work, integer *lwork, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sggev(jobvl, jobvr, n, a, lda, b, ldb, alphar, alphai, beta, vl, ldvl, vr, ldvr,
-                      work, lwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldvl_64 = *ldvl;
-    aocl_int64_t ldvr_64 = *ldvr;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sggev(jobvl, jobvr, &n_64, a, &lda_64, b, &ldb_64, alphar, alphai, beta, vl,
-                      &ldvl_64, vr, &ldvr_64, work, &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_sggev(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_int64_t *lda,
-                       real *b, aocl_int64_t *ldb, real *alphar, real *alphai, real *beta, real *vl,
-                       aocl_int64_t *ldvl, real *vr, aocl_int64_t *ldvr, real *work,
-                       aocl_int64_t *lwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sggev inputs: jobvl %c ,jobvr %c ,n %" FLA_IS ",lda %" FLA_IS ",ldb %" FLA_IS
                       ",ldvl %" FLA_IS ",ldvr %" FLA_IS ",lwork %" FLA_IS "",
@@ -469,15 +445,18 @@ void aocl_lapack_sggev(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_
     {
         i__1 = -(*info);
         xerbla_("SGGEV ", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants */
@@ -785,6 +764,7 @@ L110:
         slascl_("G", &c__0, &c__0, &bnrmto, &bnrm, n, &c__1, &beta[1], n, &ierr);
     }
     work[1] = sroundup_lwork(&maxwrk);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGGEV */
 }

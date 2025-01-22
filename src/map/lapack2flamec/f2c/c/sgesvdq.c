@@ -435,6 +435,11 @@ void sgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
               integer *numrank, integer *iwork, integer *liwork, real *work, integer *lwork,
               real *rwork, integer *lrwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
+        "sgesvdq inputs: joba %c ,jobp %c ,jobr %c ,jobu %c ,jobv %c ,m %" FLA_IS ",n %" FLA_IS
+        ",lda %" FLA_IS ",ldu %" FLA_IS ",ldv %" FLA_IS ",liwork %" FLA_IS ",lrwork %" FLA_IS "",
+        *joba, *jobp, *jobr, *jobu, *jobv, *m, *n, *lda, *ldu, *ldv, *liwork, *lrwork);
     /* System generated locals */
     integer a_dim1, a_offset, u_dim1, u_offset, v_dim1, v_offset, i__1, i__2;
     real r__1, r__2, r__3;
@@ -991,6 +996,7 @@ void sgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
     {
         i__1 = -(*info);
         xerbla_("SGESVDQ", &i__1, (ftnlen)7);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
@@ -1000,12 +1006,14 @@ void sgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
         work[1] = (real)optwrk;
         work[2] = (real)minwrk;
         rwork[1] = (real)rminwrk;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if the matrix is void. */
     if(*m == 0 || *n == 0)
     {
         /* .. all output is void. */
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     big = slamch_("O");
@@ -1029,6 +1037,7 @@ void sgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                 *info = -8;
                 i__2 = -(*info);
                 xerbla_("SGESVDQ", &i__2, (ftnlen)7);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* L1904: */
@@ -1089,6 +1098,7 @@ void sgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                 rwork[1] = -1.f;
             }
             rwork[2] = -1.f;
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         if(rwork[1] > big / sqrt((real)(*m)))
@@ -1114,6 +1124,7 @@ void sgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
             *info = -8;
             i__1 = -(*info);
             xerbla_("SGESVDQ", &i__1, (ftnlen)7);
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         if(rtmp > big / sqrt((real)(*m)))
@@ -1954,6 +1965,7 @@ L4002: /* .. if numerical rank deficiency is detected, the truncated */
     /* exact zeros in SGESVD() applied to the (possibly truncated) */
     /* full row rank triangular (trapezoidal) factor of A. */
     *numrank = nr;
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGESVDQ */
 }

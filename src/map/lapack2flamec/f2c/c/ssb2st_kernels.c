@@ -174,16 +174,12 @@ void ssb2st_kernels_(char *uplo, logical *wantz, integer *ttype, integer *st, in
                      integer *sweep, integer *n, integer *nb, integer *ib, real *a, integer *lda,
                      real *v, real *tau, integer *ldvt, real *work)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "ssb2st_kernels inputs: uplo %c, ttype %" FLA_IS ", st %" FLA_IS ", ed %" FLA_IS
              ", sweep %" FLA_IS ", n %" FLA_IS ", nb %" FLA_IS ", ib %" FLA_IS ", lda %" FLA_IS
              ", ldvt %" FLA_IS "",
              *uplo, *ttype, *st, *ed, *sweep, *n, *nb, *ib, *lda, *ldvt);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     real r__1;
@@ -399,7 +395,7 @@ void ssb2st_kernels_(char *uplo, logical *wantz, integer *ttype, integer *st, in
             }
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* END OF SSB2ST_KERNELS */
 }

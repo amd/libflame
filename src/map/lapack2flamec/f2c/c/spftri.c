@@ -194,20 +194,6 @@ k=N/2. IF TRANSR = 'T' then RFP is */
 /* Subroutine */
 void spftri_(char *transr, char *uplo, integer *n, real *a, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_spftri(transr, uplo, n, a, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_spftri(transr, uplo, &n_64, a, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_spftri(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("spftri inputs: transr %c ,uplo %c ,n %" FLA_IS "", *transr, *uplo, *n);
     /* System generated locals */
@@ -268,17 +254,20 @@ void aocl_lapack_spftri(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
     {
         i__1 = -(*info);
         xerbla_("SPFTRI", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Invert the triangular Cholesky factor U or L. */
     stftri_(transr, uplo, "N", n, a, info);
     if(*info > 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* If N is odd, set NISODD = .TRUE. */
@@ -421,6 +410,7 @@ void aocl_lapack_spftri(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
             }
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SPFTRI */
 }

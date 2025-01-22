@@ -151,12 +151,9 @@ the unit diagonal elements of L are not stored. */
 /* Subroutine */
 void slaorhr_col_getrfnp_(integer *m, integer *n, real *a, integer *lda, real *d__, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "slaorhr_col_getrfnp inputs: m %d, n %d, lda %d", *m, *n, *lda);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slaorhr_col_getrfnp inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",
+                      *m, *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
@@ -217,13 +214,13 @@ void slaorhr_col_getrfnp_(integer *m, integer *n, real *a, integer *lda, real *d
     {
         i__1 = -(*info);
         xerbla_("SLAORHR_COL_GETRFNP", &i__1, (ftnlen)19);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(fla_min(*m, *n) == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine the block size for this environment. */
@@ -264,7 +261,7 @@ void slaorhr_col_getrfnp_(integer *m, integer *n, real *a, integer *lda, real *d
             }
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAORHR_COL_GETRFNP */
 }

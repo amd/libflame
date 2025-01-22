@@ -179,28 +179,6 @@ void slaqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, 
              integer *lda, integer *jpvt, real *tau, real *vn1, real *vn2, real *auxv, real *f,
              integer *ldf)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slaqps(m, n, offset, nb, kb, a, lda, jpvt, tau, vn1, vn2, auxv, f, ldf);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t offset_64 = *offset;
-    aocl_int64_t nb_64 = *nb;
-    aocl_int64_t kb_64 = *kb;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldf_64 = *ldf;
-
-    aocl_lapack_slaqps(&m_64, &n_64, &offset_64, &nb_64, &kb_64, a, &lda_64, jpvt, tau, vn1, vn2,
-                       auxv, f, &ldf_64);
-
-    *kb = (aocl_int_t)kb_64;
-#endif
-}
-
-void aocl_lapack_slaqps(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *offset, aocl_int64_t *nb,
-                        aocl_int64_t *kb, real *a, aocl_int64_t *lda, aocl_int_t *jpvt, real *tau,
-                        real *vn1, real *vn2, real *auxv, real *f, aocl_int64_t *ldf)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaqps inputs: m %" FLA_IS ",n %" FLA_IS ",offset %" FLA_IS ",nb %" FLA_IS
                       ",lda %" FLA_IS ",ldf %" FLA_IS "",
@@ -417,6 +395,7 @@ L40:
         lsticc = itemp;
         goto L40;
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAQPS */
 }

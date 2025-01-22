@@ -178,26 +178,6 @@ static real c_b22 = 0.f;
 void slaed3_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *ldq, real *rho,
              real *dlambda, real *q2, integer *indx, integer *ctot, real *w, real *s, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slaed3(k, n, n1, d__, q, ldq, rho, dlambda, q2, indx, ctot, w, s, info);
-#else
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t n1_64 = *n1;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_slaed3(&k_64, &n_64, &n1_64, d__, q, &ldq_64, rho, dlambda, q2, indx, ctot, w, s,
-                       &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_slaed3(aocl_int64_t *k, aocl_int64_t *n, aocl_int64_t *n1, real *d__, real *q,
-                        aocl_int64_t *ldq, real *rho, real *dlambda, real *q2, aocl_int_t *indx,
-                        aocl_int_t *ctot, real *w, real *s, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaed3 inputs: k %" FLA_IS ",n %" FLA_IS ",n1 %" FLA_IS ",ldq %" FLA_IS
                       ",indx %" FLA_IS ",ctot %" FLA_IS "",
@@ -269,11 +249,13 @@ void aocl_lapack_slaed3(aocl_int64_t *k, aocl_int64_t *n, aocl_int64_t *n1, real
     {
         i__1 = -(*info);
         xerbla_("SLAED3", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*k == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     i__1 = *k;
@@ -381,6 +363,7 @@ L110:
         slaset_("A", n1, k, &c_b22, &c_b22, &q[q_dim1 + 1], ldq);
     }
 L120:
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAED3 */
 }

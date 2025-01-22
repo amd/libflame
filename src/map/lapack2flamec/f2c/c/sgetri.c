@@ -120,23 +120,6 @@ the matrix is */
 void sgetri_(integer *n, real *a, integer *lda, integer *ipiv, real *work, integer *lwork,
              integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgetri(n, a, lda, ipiv, work, lwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sgetri(&n_64, a, &lda_64, ipiv, work, &lwork_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_sgetri(aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int_t *ipiv, real *work,
-                        aocl_int64_t *lwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgetri inputs: n %" FLA_IS ",lda %" FLA_IS ",lwork %" FLA_IS "", *n, *lda,
                       *lwork);
@@ -209,15 +192,18 @@ void aocl_lapack_sgetri(aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int_t 
     {
         i__1 = -(*info);
         xerbla_("SGETRI", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Form inv(U). If INFO > 0 from STRTRI, then U is singular, */
@@ -225,6 +211,7 @@ void aocl_lapack_sgetri(aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int_t 
     strtri_("Upper", "Non-unit", n, &a[a_offset], lda, info);
     if(*info > 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     nbmin = 2;
@@ -320,6 +307,7 @@ void aocl_lapack_sgetri(aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int_t 
         /* L60: */
     }
     work[1] = sroundup_lwork(&iws);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGETRI */
 }

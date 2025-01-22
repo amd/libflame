@@ -501,6 +501,7 @@ void sla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     /* Function Body */
     if(*info != 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     eps = slamch_("Epsilon");
@@ -767,6 +768,7 @@ void sla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
         sla_lin_berr_(n, n, &c__1, &res[1], &ayb[1], &berr_out__[j]);
         /* End of loop for each RHS. */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* sla_porfsx_extended__ */

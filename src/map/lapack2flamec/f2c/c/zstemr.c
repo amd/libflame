@@ -351,8 +351,8 @@ void zstemr_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zstemr inputs: jobz %c, range %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS
-                      ", m %" FLA_IS ", ldz %" FLA_IS ", nzc %" FLA_IS ", lwork " FLA_IS
-                      ", liwork " FLA_IS "",
+                      ", m %" FLA_IS ", ldz %" FLA_IS ", nzc %" FLA_IS ", lwork %" FLA_IS
+                      ", liwork %" FLA_IS "",
                       *jobz, *range, *n, *il, *iu, *m, *ldz, *nzc, *lwork, *liwork);
     /* System generated locals */
     integer z_dim1, z_offset, i__1, i__2;

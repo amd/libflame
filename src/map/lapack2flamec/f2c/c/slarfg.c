@@ -103,12 +103,8 @@
 /* Subroutine */
 void slarfg_(integer *n, real *alpha, real *x, integer *incx, real *tau)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "slarfg inputs: n %d, incx %d", *n, *incx);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slarfg inputs: n %" FLA_IS ", incx %" FLA_IS "", *n, *incx);
     /* System generated locals */
     integer i__1;
     real r__1;
@@ -125,7 +121,7 @@ void slarfg_(integer *n, real *alpha, real *x, integer *incx, real *tau)
     extern real slapy2_(real *, real *), slamch_(char *);
     real safmin, rsafmn;
 #if FLA_ENABLE_AMD_OPT
-    void fla_sscal(integer *n, real *alpha, real *x, integer *incx);
+    void fla_sscal(integer * n, real * alpha, real * x, integer * incx);
 #endif
 
     /* -- LAPACK auxiliary routine (version 3.8.0) -- */
@@ -154,7 +150,7 @@ void slarfg_(integer *n, real *alpha, real *x, integer *incx, real *tau)
     if(*n <= 1)
     {
         *tau = 0.f;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     i__1 = *n - 1;
@@ -215,7 +211,7 @@ void slarfg_(integer *n, real *alpha, real *x, integer *incx, real *tau)
         }
         *alpha = beta;
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLARFG */
 }

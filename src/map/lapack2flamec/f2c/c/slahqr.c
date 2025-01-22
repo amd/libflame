@@ -694,8 +694,8 @@ L150:
     /* return to start of the main loop with new value of I. */
     i__ = l - 1;
     goto L20;
-    AOCL_DTL_TRACE_LOG_EXIT
 L160:
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAHQR */
 }

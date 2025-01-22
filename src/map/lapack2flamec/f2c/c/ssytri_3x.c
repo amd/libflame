@@ -164,14 +164,10 @@ the matrix is singular and its */
 void ssytri_3x_(char *uplo, integer *n, real *a, integer *lda, real *e, integer *ipiv, real *work,
                 integer *nb, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "ssytri_3x inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", nb %" FLA_IS "", *uplo, *n,
              *lda, *nb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer a_dim1, a_offset, work_dim1, work_offset, i__1, i__2, i__3;
     /* Local variables */
@@ -254,12 +250,12 @@ void ssytri_3x_(char *uplo, integer *n, real *a, integer *lda, real *e, integer 
     {
         i__1 = -(*info);
         xerbla_("SSYTRI_3X", &i__1, (ftnlen)9);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Workspace got Non-diag elements of D */
@@ -276,7 +272,7 @@ void ssytri_3x_(char *uplo, integer *n, real *a, integer *lda, real *e, integer 
         {
             if(ipiv[*info] > 0 && a[*info + *info * a_dim1] == 0.f)
             {
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
         }
@@ -289,7 +285,7 @@ void ssytri_3x_(char *uplo, integer *n, real *a, integer *lda, real *e, integer 
         {
             if(ipiv[*info] > 0 && a[*info + *info * a_dim1] == 0.f)
             {
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
         }
@@ -759,7 +755,7 @@ void ssytri_3x_(char *uplo, integer *n, real *a, integer *lda, real *e, integer 
             }
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYTRI_3X */
 }

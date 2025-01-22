@@ -157,27 +157,6 @@
 void sgbequb_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer *ldab, real *r__,
               real *c__, real *rowcnd, real *colcnd, real *amax, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgbequb(m, n, kl, ku, ab, ldab, r__, c__, rowcnd, colcnd, amax, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kl_64 = *kl;
-    aocl_int64_t ku_64 = *ku;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sgbequb(&m_64, &n_64, &kl_64, &ku_64, ab, &ldab_64, r__, c__, rowcnd, colcnd, amax,
-                        &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_sgbequb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
-                         real *ab, aocl_int64_t *ldab, real *r__, real *c__, real *rowcnd,
-                         real *colcnd, real *amax, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgbequb inputs: m %" FLA_IS ",n %" FLA_IS ",kl %" FLA_IS ",ku %" FLA_IS
                       ",ldab %" FLA_IS "",
@@ -248,6 +227,7 @@ void aocl_lapack_sgbequb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aoc
     {
         i__1 = -(*info);
         xerbla_("SGBEQUB", &i__1, (ftnlen)7);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible. */
@@ -256,6 +236,7 @@ void aocl_lapack_sgbequb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aoc
         *rowcnd = 1.f;
         *colcnd = 1.f;
         *amax = 0.f;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants. Assume SMLNUM is a power of the radix. */
@@ -325,6 +306,7 @@ void aocl_lapack_sgbequb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aoc
             if(r__[i__] == 0.f)
             {
                 *info = i__;
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* L50: */
@@ -404,6 +386,7 @@ void aocl_lapack_sgbequb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aoc
             if(c__[j] == 0.f)
             {
                 *info = *m + j;
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* L110: */
@@ -425,6 +408,7 @@ void aocl_lapack_sgbequb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aoc
         /* Compute COLCND = fla_min(C(J)) / fla_max(C(J)). */
         *colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGBEQUB */
 }

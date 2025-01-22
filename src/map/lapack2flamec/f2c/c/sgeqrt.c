@@ -140,6 +140,10 @@ the elements below the diagonal */
 void sgeqrt_(integer *m, integer *n, integer *nb, real *a, integer *lda, real *t, integer *ldt,
              real *work, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgeqrt inputs: m %" FLA_IS ",n %" FLA_IS ",nb %" FLA_IS ",lda %" FLA_IS
+                      ",ldt %" FLA_IS "",
+                      *m, *n, *nb, *lda, *ldt);
     /* System generated locals */
     integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */
@@ -201,12 +205,14 @@ void sgeqrt_(integer *m, integer *n, integer *nb, real *a, integer *lda, real *t
     {
         i__1 = -(*info);
         xerbla_("SGEQRT", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     k = fla_min(*m, *n);
     if(k == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Blocked loop of length K */
@@ -238,6 +244,7 @@ void sgeqrt_(integer *m, integer *n, integer *nb, real *a, integer *lda, real *t
                     &t[i__ * t_dim1 + 1], ldt, &a[i__ + (i__ + ib) * a_dim1], lda, &work[1], &i__5);
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGEQRT */
 }

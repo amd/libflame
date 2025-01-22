@@ -183,28 +183,6 @@ only the remaining */
 void sgelsx_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb,
              integer *jpvt, real *rcond, integer *rank, real *work, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgelsx(m, n, nrhs, a, lda, b, ldb, jpvt, rcond, rank, work, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t rank_64 = *rank;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sgelsx(&m_64, &n_64, &nrhs_64, a, &lda_64, b, &ldb_64, jpvt, rcond, &rank_64, work, &info_64);
-
-    *rank = (aocl_int_t)rank_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_sgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, real *a, aocl_int64_t *lda,
-             real *b, aocl_int64_t *ldb, aocl_int_t *jpvt, real *rcond, aocl_int64_t *rank,
-             real *work, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgelsx inputs: m %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS ",lda %" FLA_IS
                       ",ldb %" FLA_IS "",
@@ -306,6 +284,7 @@ void aocl_lapack_sgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     {
         i__1 = -(*info);
         xerbla_("SGELSX", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -314,6 +293,7 @@ void aocl_lapack_sgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     if(fla_min(i__1, *nrhs) == 0)
     {
         *rank = 0;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine parameters */
@@ -500,6 +480,7 @@ L10:
         aocl_lapack_slascl("G", &c__0, &c__0, &bignum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
     }
 L100:
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGELSX */
 }

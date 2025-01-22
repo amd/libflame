@@ -169,28 +169,6 @@ void slaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integ
              integer *perm, integer *givptr, integer *givcol, real *givnum, real *q, integer *qptr,
              real *z__, real *ztemp, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slaeda(n, tlvls, curlvl, curpbm, prmptr, perm, givptr, givcol, givnum, q, qptr, z__,
-                       ztemp, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t tlvls_64 = *tlvls;
-    aocl_int64_t curlvl_64 = *curlvl;
-    aocl_int64_t curpbm_64 = *curpbm;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_slaeda(&n_64, &tlvls_64, &curlvl_64, &curpbm_64, prmptr, perm, givptr, givcol,
-                       givnum, q, qptr, z__, ztemp, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_slaeda(aocl_int64_t *n, aocl_int64_t *tlvls, aocl_int64_t *curlvl,
-                        aocl_int64_t *curpbm, aocl_int_t *prmptr, aocl_int_t *perm,
-                        aocl_int_t *givptr, aocl_int_t *givcol, real *givnum, real *q,
-                        aocl_int_t *qptr, real *z__, real *ztemp, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaeda inputs: n %" FLA_IS ",tlvls %" FLA_IS ",curlvl %" FLA_IS
                       ",curpbm %" FLA_IS ",prmptr %" FLA_IS ",perm %" FLA_IS ",givptr %" FLA_IS
@@ -252,11 +230,13 @@ void aocl_lapack_slaeda(aocl_int64_t *n, aocl_int64_t *tlvls, aocl_int64_t *curl
     {
         i__1 = -(*info);
         xerbla_("SLAEDA", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine location of first number in second half. */
@@ -354,6 +334,7 @@ void aocl_lapack_slaeda(aocl_int64_t *n, aocl_int64_t *tlvls, aocl_int64_t *curl
         ptr += pow_ii(&c__2, &i__2);
         /* L70: */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAEDA */
 }

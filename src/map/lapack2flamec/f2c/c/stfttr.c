@@ -194,22 +194,6 @@
 /* Subroutine */
 void stfttr_(char *transr, char *uplo, integer *n, real *arf, real *a, integer *lda, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_stfttr(transr, uplo, n, arf, a, lda, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_stfttr(transr, uplo, &n_64, arf, a, &lda_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_stfttr(char *transr, char *uplo, aocl_int64_t *n, real *arf, real *a,
-                        aocl_int64_t *lda, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("stfttr inputs: transr %c ,uplo %c ,n %" FLA_IS ",lda %" FLA_IS "", *transr,
                       *uplo, *n, *lda);
@@ -272,6 +256,7 @@ void aocl_lapack_stfttr(char *transr, char *uplo, aocl_int64_t *n, real *arf, re
     {
         i__1 = -(*info);
         xerbla_("STFTTR", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -281,6 +266,7 @@ void aocl_lapack_stfttr(char *transr, char *uplo, aocl_int64_t *n, real *arf, re
         {
             a[0] = arf[0];
         }
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Size of array ARF(0:nt-1) */
@@ -564,6 +550,7 @@ void aocl_lapack_stfttr(char *transr, char *uplo, aocl_int64_t *n, real *arf, re
             }
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STFTTR */
 }

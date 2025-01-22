@@ -166,26 +166,6 @@ and second, applying a diagonal similarity transformation */
 void sgebal_(char *job, integer *n, real *a, integer *lda, integer *ilo, integer *ihi, real *scale,
              integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgebal(job, n, a, lda, ilo, ihi, scale, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ilo_64 = *ilo;
-    aocl_int64_t ihi_64 = *ihi;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sgebal(job, &n_64, a, &lda_64, &ilo_64, &ihi_64, scale, &info_64);
-
-    *ilo = (aocl_int_t)ilo_64;
-    *ihi = (aocl_int_t)ihi_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_sgebal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int64_t *ilo,
-                        aocl_int64_t *ihi, real *scale, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgebal inputs: job %c ,n %" FLA_IS ",lda %" FLA_IS "", *job, *n, *lda);
     /* System generated locals */
@@ -254,6 +234,7 @@ void aocl_lapack_sgebal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
     {
         i__1 = -(*info);
         xerbla_("SGEBAL", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick returns. */
@@ -261,6 +242,7 @@ void aocl_lapack_sgebal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
     {
         *ilo = 1;
         *ihi = 0;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(lsame_(job, "N", 1, 1))
@@ -272,6 +254,7 @@ void aocl_lapack_sgebal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
         }
         *ilo = 1;
         *ihi = *n;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Permutation to isolate eigenvalues if possible. */
@@ -311,6 +294,7 @@ void aocl_lapack_sgebal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
                     {
                         *ilo = 1;
                         *ihi = 1;
+                        AOCL_DTL_TRACE_LOG_EXIT
                         return;
                     }
                     --l;
@@ -361,6 +345,7 @@ void aocl_lapack_sgebal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
     {
         *ilo = k;
         *ihi = l;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Balance the submatrix in rows K to L. */
@@ -397,6 +382,7 @@ void aocl_lapack_sgebal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
                 *info = -3;
                 i__2 = -(*info);
                 xerbla_("SGEBAL", &i__2, (ftnlen)6);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             g = r__ / 2.f;
@@ -463,6 +449,7 @@ void aocl_lapack_sgebal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
     }
     *ilo = k;
     *ihi = l;
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGEBAL */
 }

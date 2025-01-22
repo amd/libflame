@@ -298,7 +298,7 @@ void claqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
              real *rwork, integer *rec, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("claqz0 inputs: wants %\c ,wantq %\c ,wantz %\c , n %" FLA_IS ",ilo %" FLA_IS
+    AOCL_DTL_SNPRINTF("claqz0 inputs: wants %c ,wantq %c ,wantz %c , n %" FLA_IS ",ilo %" FLA_IS
                       ",ihi %" FLA_IS ",lda %" FLA_IS ",ldb %" FLA_IS ",ldq %" FLA_IS
                       ",ldz %" FLA_IS ",lwork %" FLA_IS ",rec %" FLA_IS "",
                       *wants, *wantq, *wantz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz, *lwork, *rec);

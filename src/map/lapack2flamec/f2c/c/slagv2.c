@@ -157,19 +157,6 @@ static integer c__1 = 1;
 void slagv2_(real *a, integer *lda, real *b, integer *ldb, real *alphar, real *alphai, real *beta,
              real *csl, real *snl, real *csr, real *snr)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slagv2(a, lda, b, ldb, alphar, alphai, beta, csl, snl, csr, snr);
-#else
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-
-    aocl_lapack_slagv2(a, &lda_64, b, &ldb_64, alphar, alphai, beta, csl, snl, csr, snr);
-#endif
-}
-
-void aocl_lapack_slagv2(real *a, aocl_int64_t *lda, real *b, aocl_int64_t *ldb, real *alphar,
-                        real *alphai, real *beta, real *csl, real *snl, real *csr, real *snr)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slagv2 inputs: lda %" FLA_IS ",ldb %" FLA_IS "", *lda, *ldb);
     /* System generated locals */
@@ -386,6 +373,7 @@ void aocl_lapack_slagv2(real *a, aocl_int64_t *lda, real *b, aocl_int64_t *ldb, 
         beta[1] = 1.f;
         beta[2] = 1.f;
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAGV2 */
 }

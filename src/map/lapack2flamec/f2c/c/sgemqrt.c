@@ -170,6 +170,10 @@ void sgemqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
               integer *ldv, real *t, integer *ldt, real *c__, integer *ldc, real *work,
               integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgemqrt inputs: side %c ,trans %c ,m %" FLA_IS ",n %" FLA_IS ",k %" FLA_IS
+                      ",nb %" FLA_IS ",ldv %" FLA_IS ",ldt %" FLA_IS ",ldc %" FLA_IS "",
+                      *side, *trans, *m, *n, *k, *nb, *ldv, *ldt, *ldc);
     /* System generated locals */
     integer v_dim1, v_offset, c_dim1, c_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
@@ -271,11 +275,13 @@ void sgemqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
     {
         i__1 = -(*info);
         xerbla_("SGEMQRT", &i__1, (ftnlen)7);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* .. Quick return if possible .. */
     if(*m == 0 || *n == 0 || *k == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(left && tran)
@@ -338,6 +344,7 @@ void sgemqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
                     &t[i__ * t_dim1 + 1], ldt, &c__[i__ * c_dim1 + 1], ldc, &work[1], &ldwork);
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGEMQRT */
 }

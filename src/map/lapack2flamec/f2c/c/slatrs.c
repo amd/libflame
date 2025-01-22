@@ -243,22 +243,6 @@ b(i), i=1,..,n}
 void slatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, real *a, integer *lda,
              real *x, real *scale, real *cnorm, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slatrs(uplo, trans, diag, normin, n, a, lda, x, scale, cnorm, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_slatrs(uplo, trans, diag, normin, &n_64, a, &lda_64, x, scale, cnorm, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_int64_t *n, real *a,
-                        aocl_int64_t *lda, real *x, real *scale, real *cnorm, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slatrs inputs: uplo %c ,trans %c ,diag %c ,normin %c ,n %" FLA_IS
                       ",lda %" FLA_IS "",
@@ -357,12 +341,14 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
     {
         i__1 = -(*info);
         xerbla_("SLATRS", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     *scale = 1.f;
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine machine dependent parameters to control overflow. */
@@ -483,6 +469,7 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
                 /* At least one entry of A is not a valid floating-point entry. */
                 /* Rely on TRSV to propagate Inf and NaN. */
                 strsv_(uplo, trans, diag, n, &a[a_offset], lda, &x[1], &c__1);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
         }
@@ -964,6 +951,7 @@ void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_
         r__1 = 1.f / tscal;
         aocl_blas_sscal(n, &r__1, &cnorm[1], &c__1);
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLATRS */
 }

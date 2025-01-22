@@ -108,20 +108,6 @@
 void slar2v_(integer *n, real *x, real *y, real *z__, integer *incx, real *c__, real *s,
              integer *incc)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slar2v(n, x, y, z__, incx, c__, s, incc);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-    aocl_int64_t incc_64 = *incc;
-
-    aocl_lapack_slar2v(&n_64, x, y, z__, &incx_64, c__, s, &incc_64);
-#endif
-}
-
-void aocl_lapack_slar2v(aocl_int64_t *n, real *x, real *y, real *z__, aocl_int64_t *incx, real *c__,
-                        real *s, aocl_int64_t *incc)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slar2v inputs: n %" FLA_IS ",incx %" FLA_IS ",incc %" FLA_IS "", *n, *incx,
                       *incc);
@@ -177,6 +163,7 @@ void aocl_lapack_slar2v(aocl_int64_t *n, real *x, real *y, real *z__, aocl_int64
         /* L10: */
     }
     /* End of SLAR2V */
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* slar2v_ */

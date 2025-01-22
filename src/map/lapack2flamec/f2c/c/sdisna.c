@@ -116,22 +116,6 @@
 /* Subroutine */
 void sdisna_(char *job, integer *m, integer *n, real *d__, real *sep, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sdisna(job, m, n, d__, sep, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sdisna(job, &m_64, &n_64, d__, sep, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_sdisna(char *job, aocl_int64_t *m, aocl_int64_t *n, real *d__, real *sep,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sdisna inputs: job %c ,m %" FLA_IS ",n %" FLA_IS "", *job, *m, *n);
     /* System generated locals */
@@ -238,11 +222,13 @@ void aocl_lapack_sdisna(char *job, aocl_int64_t *m, aocl_int64_t *n, real *d__, 
     {
         i__1 = -(*info);
         xerbla_("SDISNA", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(k == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute reciprocal condition numbers */
@@ -307,6 +293,7 @@ void aocl_lapack_sdisna(char *job, aocl_int64_t *m, aocl_int64_t *n, real *d__, 
         sep[i__] = fla_max(r__1, thresh);
         /* L30: */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SDISNA */
 }

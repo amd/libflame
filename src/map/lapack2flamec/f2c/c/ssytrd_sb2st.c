@@ -244,15 +244,11 @@ void ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
                    integer *ldab, real *d__, real *e, real *hous, integer *lhous, real *work,
                    integer *lwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "ssytrd_sb2st inputs: stage1 %c, vect %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS
              ", ldab %" FLA_IS ", lhous %" FLA_IS "",
              *stage1, *vect, *uplo, *n, *kd, *ldab, *lhous);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */
@@ -365,12 +361,12 @@ void ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     {
         i__1 = -(*info);
         xerbla_("SSYTRD_SB2ST", &i__1, (ftnlen)12);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -378,7 +374,7 @@ void ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     {
         hous[1] = 1.f;
         work[1] = 1.f;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine pointer position */
@@ -430,7 +426,7 @@ void ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
         }
         hous[1] = 1.f;
         work[1] = 1.f;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Case KD=1: */
@@ -470,7 +466,7 @@ void ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
         }
         hous[1] = 1.f;
         work[1] = 1.f;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Main code start here. */
@@ -653,7 +649,7 @@ void ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     }
     hous[1] = (real)lhmin;
     work[1] = sroundup_lwork(&lwmin);
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYTRD_SB2ST */
 }

@@ -264,6 +264,13 @@ void slaed7_(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer
              integer *givptr, integer *givcol, real *givnum, real *work, integer *iwork,
              integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slaed7 inputs: icompq %" FLA_IS ",n %" FLA_IS ",qsiz %" FLA_IS
+                      ",tlvls %" FLA_IS ",curlvl %" FLA_IS ",curpbm %" FLA_IS ",ldq %" FLA_IS
+                      ",cutpnt %" FLA_IS ",prmptr %" FLA_IS ",perm %" FLA_IS ",givptr %" FLA_IS
+                      ",givcol %" FLA_IS "",
+                      *icompq, *n, *qsiz, *tlvls, *curlvl, *curpbm, *ldq, *cutpnt, *prmptr, *perm,
+                      *givptr, *givcol);
     /* System generated locals */
     integer q_dim1, q_offset, i__1, i__2;
     /* Builtin functions */
@@ -352,11 +359,13 @@ void slaed7_(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer
     {
         i__1 = -(*info);
         xerbla_("SLAED7", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* The following values are for bookkeeping purposes only. They are */
@@ -441,6 +450,7 @@ void slaed7_(integer *icompq, integer *n, integer *qsiz, integer *tlvls, integer
         }
     }
 L30:
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAED7 */
 }

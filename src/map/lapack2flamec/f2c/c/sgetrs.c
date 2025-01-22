@@ -124,25 +124,6 @@ for 1<=i<=N, row i of the */
 void sgetrs_(char *trans, integer *n, integer *nrhs, real *a, integer *lda, integer *ipiv, real *b,
              integer *ldb, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgetrs(trans, n, nrhs, a, lda, ipiv, b, ldb, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sgetrs(trans, &n_64, &nrhs_64, a, &lda_64, ipiv, b, &ldb_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_sgetrs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *a,
-                        aocl_int64_t *lda, aocl_int_t *ipiv, real *b, aocl_int64_t *ldb,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgetrs inputs: trans %c ,n %" FLA_IS ",nrhs %" FLA_IS ",lda %" FLA_IS
                       ",ldb %" FLA_IS "",
@@ -216,11 +197,13 @@ void aocl_lapack_sgetrs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
     {
         i__1 = -(*info);
         xerbla_("SGETRS", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(notran)
@@ -247,6 +230,7 @@ void aocl_lapack_sgetrs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
         /* Apply row interchanges to the solution vectors. */
         aocl_lapack_slaswp(nrhs, &b[b_offset], ldb, &c__1, n, &ipiv[1], &c_n1);
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGETRS */
 }

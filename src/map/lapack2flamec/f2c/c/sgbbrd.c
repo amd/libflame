@@ -195,33 +195,6 @@ void sgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, inte
              integer *ldab, real *d__, real *e, real *q, integer *ldq, real *pt, integer *ldpt,
              real *c__, integer *ldc, real *work, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgbbrd(vect, m, n, ncc, kl, ku, ab, ldab, d__, e, q, ldq, pt, ldpt, c__, ldc, work,
-                       info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ncc_64 = *ncc;
-    aocl_int64_t kl_64 = *kl;
-    aocl_int64_t ku_64 = *ku;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t ldpt_64 = *ldpt;
-    aocl_int64_t ldc_64 = *ldc;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sgbbrd(vect, &m_64, &n_64, &ncc_64, &kl_64, &ku_64, ab, &ldab_64, d__, e, q,
-                       &ldq_64, pt, &ldpt_64, c__, &ldc_64, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_sgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *ncc,
-                        aocl_int64_t *kl, aocl_int64_t *ku, real *ab, aocl_int64_t *ldab, real *d__,
-                        real *e, real *q, aocl_int64_t *ldq, real *pt, aocl_int64_t *ldpt,
-                        real *c__, aocl_int64_t *ldc, real *work, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgbbrd inputs: vect %c ,m %" FLA_IS ",n %" FLA_IS ",ncc %" FLA_IS
                       ",kl %" FLA_IS ",ku %" FLA_IS ",ldab %" FLA_IS ",ldq %" FLA_IS
@@ -341,6 +314,7 @@ void aocl_lapack_sgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     {
         i__1 = -(*info);
         xerbla_("SGBBRD", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize Q and P**T to the unit matrix, if needed */
@@ -355,6 +329,7 @@ void aocl_lapack_sgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     /* Quick return if possible. */
     if(*m == 0 || *n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     minmn = fla_min(*m, *n);
@@ -678,6 +653,7 @@ void aocl_lapack_sgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
             /* L150: */
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGBBRD */
 }

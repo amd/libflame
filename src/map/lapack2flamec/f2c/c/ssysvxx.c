@@ -517,6 +517,11 @@ void ssysvxx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, intege
               real *err_bnds_norm__, real *err_bnds_comp__, integer *nparams, real *params,
               real *work, integer *iwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("ssysvxx inputs: fact %c ,uplo %c ,n %" FLA_IS ",nrhs %" FLA_IS
+                      ",lda %" FLA_IS ",ldaf %" FLA_IS ",equed %c ,ldb %" FLA_IS ",ldx %" FLA_IS
+                      ",nparams %" FLA_IS "",
+                      *fact, *uplo, *n, *nrhs, *lda, *ldaf, *equed, *ldb, *ldx, *nparams);
     /* System generated locals */
     integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset,
         err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1;
@@ -694,6 +699,7 @@ void ssysvxx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, intege
     {
         i__1 = -(*info);
         xerbla_("SSYSVXX", &i__1, (ftnlen)7);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(equil)
@@ -729,6 +735,7 @@ void ssysvxx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, intege
                 *rpvgrw = sla_syrpvgrw_(uplo, n, info, &a[a_offset], lda, &af[af_offset], ldaf,
                                         &ipiv[1], &work[1]);
             }
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }
@@ -752,6 +759,7 @@ void ssysvxx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, intege
     {
         slascl2_(n, nrhs, &s[1], &x[x_offset], ldx);
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYSVXX */
 }

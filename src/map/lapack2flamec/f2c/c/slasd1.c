@@ -212,28 +212,6 @@ void slasd1_(integer *nl, integer *nr, integer *sqre, real *d__, real *alpha, re
              integer *ldu, real *vt, integer *ldvt, integer *idxq, integer *iwork, real *work,
              integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slasd1(nl, nr, sqre, d__, alpha, beta, u, ldu, vt, ldvt, idxq, iwork, work, info);
-#else
-    aocl_int64_t nl_64 = *nl;
-    aocl_int64_t nr_64 = *nr;
-    aocl_int64_t sqre_64 = *sqre;
-    aocl_int64_t ldu_64 = *ldu;
-    aocl_int64_t ldvt_64 = *ldvt;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_slasd1(&nl_64, &nr_64, &sqre_64, d__, alpha, beta, u, &ldu_64, vt, &ldvt_64, idxq,
-                       iwork, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_slasd1(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, real *d__,
-                        real *alpha, real *beta, real *u, aocl_int64_t *ldu, real *vt,
-                        aocl_int64_t *ldvt, aocl_int_t *idxq, aocl_int_t *iwork, real *work,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slasd1 inputs: nl %" FLA_IS ",nr %" FLA_IS ",sqre %" FLA_IS ",ldu %" FLA_IS
                       ",ldvt %" FLA_IS "",
@@ -310,6 +288,7 @@ void aocl_lapack_slasd1(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     {
         i__1 = -(*info);
         xerbla_("SLASD1", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     n = *nl + *nr + 1;
@@ -357,6 +336,7 @@ void aocl_lapack_slasd1(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
             &iwork[coltyp], &work[iz], info);
     if(*info != 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Unscale. */
@@ -365,6 +345,7 @@ void aocl_lapack_slasd1(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     n1 = k;
     n2 = n - k;
     slamrg_(&n1, &n2, &d__[1], &c__1, &c_n1, &idxq[1]);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLASD1 */
 }

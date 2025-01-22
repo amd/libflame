@@ -252,14 +252,10 @@ void strevc3_(char *side, char *howmny, logical *select, integer *n, real *t, in
               real *vl, integer *ldvl, real *vr, integer *ldvr, integer *mm, integer *m, real *work,
               integer *lwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
-             "strevc3 inputs: side %c, howmny %c, n %d, ldt %d, ldvl %d, ldvr %d, mm %d", *side,
-             *howmny, *n, *ldt, *ldvl, *ldvr, *mm);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("strevc3 inputs: side %c, howmny %c, n %" FLA_IS ", ldt %" FLA_IS
+                      ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS "",
+                      *side, *howmny, *n, *ldt, *ldvl, *ldvr, *mm);
     /* System generated locals */
     integer t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__2, i__3, i__4;
     real r__1, r__2, r__3, r__4;
@@ -468,18 +464,18 @@ void strevc3_(char *side, char *howmny, logical *select, integer *n, real *t, in
     {
         i__2 = -(*info);
         xerbla_("STREVC3", &i__2, (ftnlen)7);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible. */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Use blocked version of back-transformation if sufficient workspace. */
@@ -1555,7 +1551,7 @@ void strevc3_(char *side, char *howmny, logical *select, integer *n, real *t, in
         L260:;
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STREVC3 */
 }

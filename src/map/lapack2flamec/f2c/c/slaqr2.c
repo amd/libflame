@@ -285,44 +285,6 @@ void slaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
              real *t, integer *ldt, integer *nv, real *wv, integer *ldwv, real *work,
              integer *lwork)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slaqr2(wantt, wantz, n, ktop, kbot, nw, h__, ldh, iloz, ihiz, z__, ldz, ns, nd, sr,
-                       si, v, ldv, nh, t, ldt, nv, wv, ldwv, work, lwork);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ktop_64 = *ktop;
-    aocl_int64_t kbot_64 = *kbot;
-    aocl_int64_t nw_64 = *nw;
-    aocl_int64_t ldh_64 = *ldh;
-    aocl_int64_t iloz_64 = *iloz;
-    aocl_int64_t ihiz_64 = *ihiz;
-    aocl_int64_t ldz_64 = *ldz;
-    aocl_int64_t ns_64 = *ns;
-    aocl_int64_t nd_64 = *nd;
-    aocl_int64_t ldv_64 = *ldv;
-    aocl_int64_t nh_64 = *nh;
-    aocl_int64_t ldt_64 = *ldt;
-    aocl_int64_t nv_64 = *nv;
-    aocl_int64_t ldwv_64 = *ldwv;
-    aocl_int64_t lwork_64 = *lwork;
-
-    aocl_lapack_slaqr2(wantt, wantz, &n_64, &ktop_64, &kbot_64, &nw_64, h__, &ldh_64, &iloz_64,
-                       &ihiz_64, z__, &ldz_64, &ns_64, &nd_64, sr, si, v, &ldv_64, &nh_64, t,
-                       &ldt_64, &nv_64, wv, &ldwv_64, work, &lwork_64);
-
-    *ns = (aocl_int_t)ns_64;
-    *nd = (aocl_int_t)nd_64;
-#endif
-}
-
-void aocl_lapack_slaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_int64_t *ktop,
-                        aocl_int64_t *kbot, aocl_int64_t *nw, real *h__, aocl_int64_t *ldh,
-                        aocl_int64_t *iloz, aocl_int64_t *ihiz, real *z__, aocl_int64_t *ldz,
-                        aocl_int64_t *ns, aocl_int64_t *nd, real *sr, real *si, real *v,
-                        aocl_int64_t *ldv, aocl_int64_t *nh, real *t, aocl_int64_t *ldt,
-                        aocl_int64_t *nv, real *wv, aocl_int64_t *ldwv, real *work,
-                        aocl_int64_t *lwork)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF(
         "slaqr2 inputs: n %" FLA_IS ",ktop %" FLA_IS ",kbot %" FLA_IS ",nw %" FLA_IS ",ldh %" FLA_IS
@@ -452,6 +414,7 @@ void aocl_lapack_slaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     if(*lwork == -1)
     {
         work[1] = sroundup_lwork(&lwkopt);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* ==== Nothing to do ... */
@@ -461,11 +424,13 @@ void aocl_lapack_slaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     work[1] = 1.f;
     if(*ktop > *kbot)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* ... nor for an empty deflation window. ==== */
     if(*nw < 1)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* ==== Machine constants ==== */
@@ -506,6 +471,7 @@ void aocl_lapack_slaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
             }
         }
         work[1] = 1.f;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* ==== Convert to spike-triangular form. (In case of a */
@@ -838,6 +804,7 @@ L60:
     /* ==== Return optimal workspace. ==== */
     work[1] = sroundup_lwork(&lwkopt);
     /* ==== End of SLAQR2 ==== */
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* slaqr2_ */

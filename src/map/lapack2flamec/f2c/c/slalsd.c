@@ -182,28 +182,6 @@ in this case a minimum norm solution is returned. */
 void slalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, real *e, real *b,
              integer *ldb, real *rcond, integer *rank, real *work, integer *iwork, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slalsd(uplo, smlsiz, n, nrhs, d__, e, b, ldb, rcond, rank, work, iwork, info);
-#else
-    aocl_int64_t smlsiz_64 = *smlsiz;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t rank_64 = *rank;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_slalsd(uplo, &smlsiz_64, &n_64, &nrhs_64, d__, e, b, &ldb_64, rcond, &rank_64, work,
-                       iwork, &info_64);
-
-    *rank = (aocl_int_t)rank_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_int64_t *nrhs,
-                        real *d__, real *e, real *b, aocl_int64_t *ldb, real *rcond,
-                        aocl_int64_t *rank, real *work, aocl_int_t *iwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slalsd inputs: uplo %c ,smlsiz %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS
                       ",ldb %" FLA_IS "",
@@ -313,6 +291,7 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
     {
         i__1 = -(*info);
         xerbla_("SLALSD", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     eps = slamch_("Epsilon");
@@ -329,6 +308,7 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
     /* Quick return if possible. */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(*n == 1)
@@ -343,6 +323,7 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
             slascl_("G", &c__0, &c__0, &d__[1], &c_b11, &c__1, nrhs, &b[b_offset], ldb, info);
             d__[1] = f2c_abs(d__[1]);
         }
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Rotate the matrix if it is lower bidiagonal. */
@@ -390,6 +371,7 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
     if(orgnrm == 0.f)
     {
         slaset_("A", n, nrhs, &c_b6, &c_b6, &b[b_offset], ldb);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     aocl_lapack_slascl("G", &c__0, &c__0, &orgnrm, &c_b11, n, &c__1, &d__[1], n, info);
@@ -404,6 +386,7 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                 &b[b_offset], ldb, &work[nwork], info);
         if(*info != 0)
         {
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         tol = rcnd * (r__1 = d__[isamax_(n, &d__[1], &c__1)], f2c_abs(r__1));
@@ -429,6 +412,7 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
         slascl_("G", &c__0, &c__0, &c_b11, &orgnrm, n, &c__1, &d__[1], n, info);
         slasrt_("D", n, &d__[1], info);
         slascl_("G", &c__0, &c__0, &orgnrm, &c_b11, n, nrhs, &b[b_offset], ldb, info);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Book-keeping and setting up some constants. */
@@ -513,6 +497,7 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                         n, &work[nwork], n, &b[st + b_dim1], ldb, &work[nwork], info);
                 if(*info != 0)
                 {
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 aocl_lapack_slacpy("A", &nsize, nrhs, &b[st + b_dim1], ldb, &work[bx + st1], n);
@@ -527,6 +512,7 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                         &work[c__ + st1], &work[s + st1], &work[nwork], &iwork[iwk], info);
                 if(*info != 0)
                 {
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 bxst = bx + st1;
@@ -538,6 +524,7 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                         &iwork[iwk], info);
                 if(*info != 0)
                 {
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
             }
@@ -592,6 +579,7 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                     &work[c__ + st1], &work[s + st1], &work[nwork], &iwork[iwk], info);
             if(*info != 0)
             {
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
         }
@@ -601,6 +589,7 @@ void aocl_lapack_slalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
     slascl_("G", &c__0, &c__0, &c_b11, &orgnrm, n, &c__1, &d__[1], n, info);
     slasrt_("D", n, &d__[1], info);
     slascl_("G", &c__0, &c__0, &orgnrm, &c_b11, n, nrhs, &b[b_offset], ldb, info);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLALSD */
 }

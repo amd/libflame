@@ -201,23 +201,6 @@ static real c_b10 = 1.f;
 void spftrs_(char *transr, char *uplo, integer *n, integer *nrhs, real *a, real *b, integer *ldb,
              integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_spftrs(transr, uplo, n, nrhs, a, b, ldb, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_spftrs(transr, uplo, &n_64, &nrhs_64, a, b, &ldb_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_spftrs(char *transr, char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, real *a,
-                        real *b, aocl_int64_t *ldb, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("spftrs inputs: transr %c ,uplo %c ,n %" FLA_IS ",nrhs %" FLA_IS
                       ",ldb %" FLA_IS "",
@@ -286,11 +269,13 @@ void aocl_lapack_spftrs(char *transr, char *uplo, aocl_int64_t *n, aocl_int64_t 
     {
         i__1 = -(*info);
         xerbla_("SPFTRS", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* start execution: there are two triangular solves */
@@ -304,6 +289,7 @@ void aocl_lapack_spftrs(char *transr, char *uplo, aocl_int64_t *n, aocl_int64_t 
         aocl_lapack_stfsm(transr, "L", uplo, "T", "N", n, nrhs, &c_b10, a, &b[b_offset], ldb);
         aocl_lapack_stfsm(transr, "L", uplo, "N", "N", n, nrhs, &c_b10, a, &b[b_offset], ldb);
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SPFTRS */
 }

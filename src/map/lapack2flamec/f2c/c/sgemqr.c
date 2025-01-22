@@ -173,6 +173,10 @@ void sgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, real *
              real *t, integer *tsize, real *c__, integer *ldc, real *work, integer *lwork,
              integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgemqr inputs: side %c ,trans %c ,m %" FLA_IS ",n %" FLA_IS ",k %" FLA_IS
+                      ",lda %" FLA_IS ",tsize %" FLA_IS ",ldc %" FLA_IS ",lwork %" FLA_IS "",
+                      *side, *trans, *m, *n, *k, *lda, *tsize, *ldc, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__1;
     /* Local variables */
@@ -284,10 +288,12 @@ void sgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, real *
     {
         i__1 = -(*info);
         xerbla_("SGEMQR", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -295,6 +301,7 @@ void sgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, real *
     i__1 = fla_min(*m, *n);
     if(fla_min(i__1, *k) == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Computing MAX */
@@ -310,6 +317,7 @@ void sgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, real *
                   ldc, &work[1], lwork, info);
     }
     work[1] = sroundup_lwork(&lw);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGEMQR */
 }

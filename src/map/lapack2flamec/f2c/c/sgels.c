@@ -195,28 +195,6 @@ the least squares solution could not be */
 void sgels_(char *trans, integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *b,
             integer *ldb, real *work, integer *lwork, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgels(trans, m, n, nrhs, a, lda, b, ldb, work, lwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sgels(trans, &m_64, &n_64, &nrhs_64, a, &lda_64, b, &ldb_64, work, &lwork_64,
-                      &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, real *a,
-                       aocl_int64_t *lda, real *b, aocl_int64_t *ldb, real *work,
-                       aocl_int64_t *lwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgels inputs: trans %c ,m %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS
                       ",lda %" FLA_IS ",ldb %" FLA_IS ",lwork %" FLA_IS "",
@@ -386,10 +364,12 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     {
         i__1 = -(*info);
         xerbla_("SGELS ", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -399,6 +379,7 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     {
         i__1 = fla_max(*m, *n);
         slaset_("Full", &i__1, nrhs, &c_b33, &c_b33, &b[b_offset], ldb);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine parameters */
@@ -464,6 +445,7 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
                     ldb, info);
             if(*info > 0)
             {
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             scllen = *n;
@@ -476,6 +458,7 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
                     info);
             if(*info > 0)
             {
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* B(N+1:M,1:NRHS) = ZERO */
@@ -512,6 +495,7 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
                     ldb, info);
             if(*info > 0)
             {
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* B(M+1:N,1:NRHS) = 0 */
@@ -546,6 +530,7 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
                     info);
             if(*info > 0)
             {
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             scllen = *m;
@@ -570,6 +555,7 @@ void aocl_lapack_sgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     }
 L50:
     work[1] = sroundup_lwork(&wsize);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGELS */
 }

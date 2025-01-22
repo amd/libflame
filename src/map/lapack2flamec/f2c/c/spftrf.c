@@ -203,20 +203,6 @@ k=N/2. IF TRANSR = 'T' then RFP is */
 /* Subroutine */
 void spftrf_(char *transr, char *uplo, integer *n, real *a, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_spftrf(transr, uplo, n, a, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_spftrf(transr, uplo, &n_64, a, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("spftrf inputs: transr %c ,uplo %c ,n %" FLA_IS "", *transr, *uplo, *n);
     /* System generated locals */
@@ -276,11 +262,13 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
     {
         i__1 = -(*info);
         xerbla_("SPFTRF", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* If N is odd, set NISODD = .TRUE. */
@@ -320,6 +308,7 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 spotrf_("L", &n1, a, n, info);
                 if(*info > 0)
                 {
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 strsm_("R", "L", "T", "N", &n2, &n1, &c_b12, a, n, &a[n1], n);
@@ -338,6 +327,7 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 spotrf_("L", &n1, &a[n2], n, info);
                 if(*info > 0)
                 {
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 strsm_("L", "L", "N", "N", &n1, &n2, &c_b12, &a[n2], n, a, n);
@@ -361,6 +351,7 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 spotrf_("U", &n1, a, &n1, info);
                 if(*info > 0)
                 {
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 strsm_("L", "U", "T", "N", &n1, &n2, &c_b12, a, &n1, &a[n1 * n1], &n1);
@@ -380,6 +371,7 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 spotrf_("U", &n1, &a[n2 * n2], &n2, info);
                 if(*info > 0)
                 {
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 strsm_("R", "U", "N", "N", &n2, &n1, &c_b12, &a[n2 * n2], &n2, a, &n2);
@@ -407,6 +399,7 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 spotrf_("L", &k, &a[1], &i__1, info);
                 if(*info > 0)
                 {
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 i__1 = *n + 1;
@@ -431,6 +424,7 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 spotrf_("L", &k, &a[k + 1], &i__1, info);
                 if(*info > 0)
                 {
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 i__1 = *n + 1;
@@ -459,6 +453,7 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 spotrf_("U", &k, &a[k], &k, info);
                 if(*info > 0)
                 {
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 strsm_("L", "U", "T", "N", &k, &k, &c_b12, &a[k], &n1, &a[k * (k + 1)], &k);
@@ -478,6 +473,7 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
                 spotrf_("U", &k, &a[k * (k + 1)], &k, info);
                 if(*info > 0)
                 {
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 strsm_("R", "U", "N", "N", &k, &k, &c_b12, &a[k * (k + 1)], &k, a, &k);
@@ -490,6 +486,7 @@ void aocl_lapack_spftrf(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl
             }
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SPFTRF */
 }

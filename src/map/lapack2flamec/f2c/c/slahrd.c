@@ -176,23 +176,6 @@ v(i+k+1:n) is stored on exit in */
 void slahrd_(integer *n, integer *k, integer *nb, real *a, integer *lda, real *tau, real *t,
              integer *ldt, real *y, integer *ldy)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slahrd(n, k, nb, a, lda, tau, t, ldt, y, ldy);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t nb_64 = *nb;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldt_64 = *ldt;
-    aocl_int64_t ldy_64 = *ldy;
-
-    aocl_lapack_slahrd(&n_64, &k_64, &nb_64, a, &lda_64, tau, t, &ldt_64, y, &ldy_64);
-#endif
-}
-
-void aocl_lapack_slahrd(aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *nb, real *a, aocl_int64_t *lda,
-             real *tau, real *t, aocl_int64_t *ldt, real *y, aocl_int64_t *ldy)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slahrd inputs: n %" FLA_IS ",k %" FLA_IS ",nb %" FLA_IS ",lda %" FLA_IS
                       ",ldt %" FLA_IS ",ldy %" FLA_IS "",
@@ -246,6 +229,7 @@ void aocl_lapack_slahrd(aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *nb, real
     ei = 0.f;
     if(*n <= 1)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     i__1 = *nb;
@@ -324,6 +308,7 @@ void aocl_lapack_slahrd(aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *nb, real
         /* L10: */
     }
     a[*k + *nb + *nb * a_dim1] = ei;
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAHRD */
 }

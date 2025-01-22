@@ -133,6 +133,8 @@ E(N) need not be set. */
 void slarra_(integer *n, real *d__, real *e, real *e2, real *spltol, real *tnrm, integer *nsplit,
              integer *isplit, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slarra inputs: n %" FLA_IS "", *n);
     /* System generated locals */
     integer i__1;
     real r__1, r__2;
@@ -167,6 +169,7 @@ void slarra_(integer *n, real *d__, real *e, real *e2, real *spltol, real *tnrm,
     /* Quick return if possible */
     if(*n <= 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute splitting points */
@@ -207,6 +210,7 @@ void slarra_(integer *n, real *d__, real *e, real *e2, real *spltol, real *tnrm,
         }
     }
     isplit[*nsplit] = *n;
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLARRA */
 }

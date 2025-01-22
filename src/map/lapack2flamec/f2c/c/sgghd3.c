@@ -244,6 +244,11 @@ void sgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, r
              integer *lda, real *b, integer *ldb, real *q, integer *ldq, real *z__, integer *ldz,
              real *work, integer *lwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgghd3 inputs: compq %c ,compz %c ,n %" FLA_IS ",ilo %" FLA_IS
+                      ",ihi %" FLA_IS ",lda %" FLA_IS ",ldb %" FLA_IS ",ldq %" FLA_IS
+                      ",ldz %" FLA_IS ",lwork %" FLA_IS "",
+                      *compq, *compz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
         i__3, i__4, i__5, i__6, i__7, i__8;
@@ -387,10 +392,12 @@ void sgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, r
     {
         i__1 = -(*info);
         xerbla_("SGGHD3", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize Q and Z if desired. */
@@ -414,6 +421,7 @@ void sgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, r
     if(nh <= 1)
     {
         work[1] = 1.f;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine the blocksize. */
@@ -1042,6 +1050,7 @@ void sgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, r
                 ldq, &z__[z_offset], ldz, &ierr);
     }
     work[1] = sroundup_lwork(&lwkopt);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGGHD3 */
 }

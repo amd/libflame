@@ -164,24 +164,6 @@ static integer c_n1 = -1;
 void slaed1_(integer *n, real *d__, real *q, integer *ldq, integer *indxq, real *rho,
              integer *cutpnt, real *work, integer *iwork, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slaed1(n, d__, q, ldq, indxq, rho, cutpnt, work, iwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t cutpnt_64 = *cutpnt;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_slaed1(&n_64, d__, q, &ldq_64, indxq, rho, &cutpnt_64, work, iwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_slaed1(aocl_int64_t *n, real *d__, real *q, aocl_int64_t *ldq, aocl_int_t *indxq,
-                        real *rho, aocl_int64_t *cutpnt, real *work, aocl_int_t *iwork,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaed1 inputs: n %" FLA_IS ",ldq %" FLA_IS ",cutpnt %" FLA_IS "", *n, *ldq,
                       *cutpnt);
@@ -254,11 +236,13 @@ void aocl_lapack_slaed1(aocl_int64_t *n, real *d__, real *q, aocl_int64_t *ldq, 
     {
         i__1 = -(*info);
         xerbla_("SLAED1", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* The following values are integer pointers which indicate */
@@ -312,6 +296,7 @@ void aocl_lapack_slaed1(aocl_int64_t *n, real *d__, real *q, aocl_int64_t *ldq, 
         }
     }
 L20:
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAED1 */
 }

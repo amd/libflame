@@ -277,6 +277,11 @@ void sgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, real
               integer *ldu, real *vt, integer *ldvt, real *work, integer *lwork, integer *iwork,
               integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgesvdx inputs: jobu %c ,jobvt %c ,range %c ,m %" FLA_IS ",n %" FLA_IS
+                      ",lda %" FLA_IS ",il %" FLA_IS ",iu %" FLA_IS ",ldu %" FLA_IS ",ldvt %" FLA_IS
+                      ",lwork %" FLA_IS "",
+                      *jobu, *jobvt, *range, *m, *n, *lda, *il, *iu, *ldu, *ldvt, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__2, i__3;
     char ch__1[2];
@@ -624,15 +629,18 @@ void sgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, real
     {
         i__2 = -(*info);
         xerbla_("SGESVDX", &i__2, (ftnlen)7);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Set singular values indices accord to RANGE. */
@@ -964,6 +972,7 @@ void sgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, real
     }
     /* Return optimal workspace in WORK(1) */
     work[1] = sroundup_lwork(&maxwrk);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGESVDX */
 }

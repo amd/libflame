@@ -171,25 +171,6 @@
 void sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, integer *lda, real *x,
                 integer *incx, real *beta, real *y, integer *incy)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sla_geamv(trans, m, n, alpha, a, lda, x, incx, beta, y, incy);
-#else
-    aocl_int64_t trans_64 = *trans;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t incx_64 = *incx;
-    aocl_int64_t incy_64 = *incy;
-
-    aocl_lapack_sla_geamv(&trans_64, &m_64, &n_64, alpha, a, &lda_64, x, &incx_64, beta, y,
-                          &incy_64);
-#endif
-}
-
-void aocl_lapack_sla_geamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n, real *alpha,
-                           real *a, aocl_int64_t *lda, real *x, aocl_int64_t *incx, real *beta,
-                           real *y, aocl_int64_t *incy)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sla_geamv inputs: trans %" FLA_IS ",m %" FLA_IS ",n %" FLA_IS ",lda %" FLA_IS
                       ",incx %" FLA_IS ",incy %" FLA_IS "",
@@ -267,11 +248,13 @@ void aocl_lapack_sla_geamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
     if(info != 0)
     {
         xerbla_("SLA_GEAMV ", &info, (ftnlen)10);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible. */
     if(*m == 0 || *n == 0 || *alpha == 0.f && *beta == 1.f)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Set LENX and LENY, the lengths of the vectors x and y, and set */
@@ -465,6 +448,7 @@ void aocl_lapack_sla_geamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n
             }
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLA_GEAMV */
 }

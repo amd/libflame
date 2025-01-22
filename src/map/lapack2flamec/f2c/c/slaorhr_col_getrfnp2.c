@@ -171,12 +171,9 @@ the unit diagonal elements of L are not stored. */
 /* Subroutine */
 void slaorhr_col_getrfnp2_(integer *m, integer *n, real *a, integer *lda, real *d__, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "slaorhr_col_getrfnp2 inputs: m %d, n %d, lda %d", *m, *n, *lda);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slaorhr_col_getrfnp2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",
+                      *m, *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
     real r__1;
@@ -242,13 +239,13 @@ void slaorhr_col_getrfnp2_(integer *m, integer *n, real *a, integer *lda, real *
     {
         i__1 = -(*info);
         xerbla_("SLAORHR_COL_GETRFNP2", &i__1, (ftnlen)20);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(fla_min(*m, *n) == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*m == 1)
@@ -310,7 +307,7 @@ void slaorhr_col_getrfnp2_(integer *m, integer *n, real *a, integer *lda, real *
         slaorhr_col_getrfnp2_(&i__1, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &d__[n1 + 1],
                               &iinfo);
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAORHR_COL_GETRFNP2 */
 }

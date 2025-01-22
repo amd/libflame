@@ -282,35 +282,6 @@ void slasd2_(integer *nl, integer *nr, integer *sqre, integer *k, real *d__, rea
              integer *ldu2, real *vt2, integer *ldvt2, integer *idxp, integer *idx, integer *idxc,
              integer *idxq, integer *coltyp, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slasd2(nl, nr, sqre, k, d__, z__, alpha, beta, u, ldu, vt, ldvt, dsigma, u2, ldu2,
-                       vt2, ldvt2, idxp, idx, idxc, idxq, coltyp, info);
-#else
-    aocl_int64_t nl_64 = *nl;
-    aocl_int64_t nr_64 = *nr;
-    aocl_int64_t sqre_64 = *sqre;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t ldu_64 = *ldu;
-    aocl_int64_t ldvt_64 = *ldvt;
-    aocl_int64_t ldu2_64 = *ldu2;
-    aocl_int64_t ldvt2_64 = *ldvt2;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_slasd2(&nl_64, &nr_64, &sqre_64, &k_64, d__, z__, alpha, beta, u, &ldu_64, vt,
-                       &ldvt_64, dsigma, u2, &ldu2_64, vt2, &ldvt2_64, idxp, idx, idxc, idxq,
-                       coltyp, &info_64);
-
-    *k = (aocl_int_t)k_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_slasd2(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, aocl_int64_t *k,
-                        real *d__, real *z__, real *alpha, real *beta, real *u, aocl_int64_t *ldu,
-                        real *vt, aocl_int64_t *ldvt, real *dsigma, real *u2, aocl_int64_t *ldu2,
-                        real *vt2, aocl_int64_t *ldvt2, aocl_int_t *idxp, aocl_int_t *idx,
-                        aocl_int_t *idxc, aocl_int_t *idxq, aocl_int_t *coltyp, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slasd2 inputs: nl %" FLA_IS ",nr %" FLA_IS ",sqre %" FLA_IS ",ldu %" FLA_IS
                       ",ldvt %" FLA_IS ",ldu2 %" FLA_IS ",ldvt2 %" FLA_IS "",
@@ -430,6 +401,7 @@ void aocl_lapack_slasd2(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     {
         i__1 = -(*info);
         xerbla_("SLASD2", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     nlp1 = *nl + 1;
@@ -746,6 +718,7 @@ L120: /* Count up the total number of the various types of columns, then */
         coltyp[j] = (aocl_int_t)(ctot[j - 1]);
         /* L190: */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLASD2 */
 }

@@ -278,32 +278,6 @@ void shsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
              integer *ldh, real *wr, real *wi, real *vl, integer *ldvl, real *vr, integer *ldvr,
              integer *mm, integer *m, real *work, integer *ifaill, integer *ifailr, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_shsein(side, eigsrc, initv, select, n, h__, ldh, wr, wi, vl, ldvl, vr, ldvr, mm, m,
-                       work, ifaill, ifailr, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldh_64 = *ldh;
-    aocl_int64_t ldvl_64 = *ldvl;
-    aocl_int64_t ldvr_64 = *ldvr;
-    aocl_int64_t mm_64 = *mm;
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_shsein(side, eigsrc, initv, select, &n_64, h__, &ldh_64, wr, wi, vl, &ldvl_64, vr,
-                       &ldvr_64, &mm_64, &m_64, work, ifaill, ifailr, &info_64);
-
-    *m = (aocl_int_t)m_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_shsein(char *side, char *eigsrc, char *initv, logical *select, aocl_int64_t *n,
-                        real *h__, aocl_int64_t *ldh, real *wr, real *wi, real *vl,
-                        aocl_int64_t *ldvl, real *vr, aocl_int64_t *ldvr, aocl_int64_t *mm,
-                        aocl_int64_t *m, real *work, aocl_int_t *ifaill, aocl_int_t *ifailr,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("shsein inputs: side %c ,eigsrc %c ,initv %c ,n %" FLA_IS ",ldh %" FLA_IS
                       ",ldvl %" FLA_IS ",ldvr %" FLA_IS ",mm %" FLA_IS ",m %" FLA_IS "",
@@ -447,11 +421,13 @@ void aocl_lapack_shsein(char *side, char *eigsrc, char *initv, logical *select, 
     {
         i__1 = -(*info);
         xerbla_("SHSEIN", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible. */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Set machine-dependent constants. */
@@ -523,6 +499,7 @@ void aocl_lapack_shsein(char *side, char *eigsrc, char *initv, logical *select, 
                 if(sisnan_(&hnorm))
                 {
                     *info = -6;
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 else if(hnorm > 0.f)
@@ -654,6 +631,7 @@ void aocl_lapack_shsein(char *side, char *eigsrc, char *initv, logical *select, 
         }
         /* L120: */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SHSEIN */
 }

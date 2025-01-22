@@ -175,15 +175,11 @@ IBLOCK(i)=1 if eigenvalue W(i) belongs to */
 void sstein_(integer *n, real *d__, real *e, integer *m, real *w, integer *iblock, integer *isplit,
              real *z__, integer *ldz, real *work, integer *iwork, integer *ifail, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "sstein inputs: n %" FLA_IS ", m %" FLA_IS ", iblock %" FLA_IS ", isplit %" FLA_IS
              ", ldz %" FLA_IS "",
              *n, *m, *iblock, *isplit, *ldz);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer z_dim1, z_offset, i__1, i__2, i__3;
     real r__1, r__2, r__3, r__4, r__5;
@@ -309,19 +305,19 @@ void sstein_(integer *n, real *d__, real *e, integer *m, real *w, integer *ibloc
     {
         i__1 = -(*info);
         xerbla_("SSTEIN", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0 || *m == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(*n == 1)
     {
         z__[z_dim1 + 1] = 1.f;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants. */
@@ -510,7 +506,7 @@ void sstein_(integer *n, real *d__, real *e, integer *m, real *w, integer *ibloc
         }
     L160:;
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSTEIN */
 }

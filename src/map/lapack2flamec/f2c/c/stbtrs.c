@@ -148,15 +148,11 @@ static integer c__1 = 1;
 void stbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integer *nrhs, real *ab,
              integer *ldab, real *b, integer *ldb, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "stbtrs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", kd %" FLA_IS
              ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS "",
              *uplo, *trans, *diag, *n, *kd, *nrhs, *ldab, *ldb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer ab_dim1, ab_offset, b_dim1, b_offset, i__1;
     /* Local variables */
@@ -236,13 +232,13 @@ void stbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
     {
         i__1 = -(*info);
         xerbla_("STBTRS", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Check for singularity. */
@@ -255,7 +251,7 @@ void stbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
             {
                 if(ab[*kd + 1 + *info * ab_dim1] == 0.f)
                 {
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 /* L10: */
@@ -268,7 +264,7 @@ void stbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
             {
                 if(ab[*info * ab_dim1 + 1] == 0.f)
                 {
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 /* L20: */
@@ -283,7 +279,7 @@ void stbtrs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
         stbsv_(uplo, trans, diag, n, kd, &ab[ab_offset], ldab, &b[j * b_dim1 + 1], &c__1);
         /* L30: */
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STBTRS */
 }

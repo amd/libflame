@@ -150,12 +150,8 @@
 void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *rho, real *sigma,
              real *work, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "slasd4 inputs: n %d, i__ %d", *n, *i__);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slasd4 inputs: n %" FLA_IS ", i__ %" FLA_IS "", *n, *i__);
     /* System generated locals */
     integer i__1;
     real r__1;
@@ -228,13 +224,13 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         *sigma = sqrt(d__[1] * d__[1] + *rho * z__[1] * z__[1]);
         delta[1] = 1.f;
         work[1] = 1.f;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 2)
     {
         slasd5_(i__, &d__[1], &z__[1], &delta[1], rho, sigma, &work[1]);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute machine epsilon */
@@ -1195,7 +1191,7 @@ void slasd4_(integer *n, integer *i__, real *d__, real *z__, real *delta, real *
         /* Return with INFO = 1, NITER = MAXIT and not converged */
         *info = 1;
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
 L240:
     return;
     /* End of SLASD4 */

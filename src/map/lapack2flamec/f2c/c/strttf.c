@@ -192,6 +192,9 @@
 /* Subroutine */
 void strttf_(char *transr, char *uplo, integer *n, real *a, integer *lda, real *arf, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("strttf inputs: transr %c ,uplo %c ,n %" FLA_IS ",lda %" FLA_IS "", *transr,
+                      *uplo, *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     /* Local variables */
@@ -251,6 +254,7 @@ void strttf_(char *transr, char *uplo, integer *n, real *a, integer *lda, real *
     {
         i__1 = -(*info);
         xerbla_("STRTTF", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -260,6 +264,7 @@ void strttf_(char *transr, char *uplo, integer *n, real *a, integer *lda, real *
         {
             arf[0] = a[0];
         }
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Size of array ARF(0:nt-1) */
@@ -543,6 +548,7 @@ void strttf_(char *transr, char *uplo, integer *n, real *a, integer *lda, real *
             }
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STRTTF */
 }

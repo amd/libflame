@@ -225,15 +225,11 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
              integer *ldb, real *q, integer *ldq, real *z__, integer *ldz, integer *ifst,
              integer *ilst, real *work, integer *lwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "stgexc inputs: n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS
              ", ldz %" FLA_IS ", ifst %" FLA_IS ", ilst %" FLA_IS "",
              *n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1;
     /* Local variables */
@@ -332,18 +328,18 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
     {
         i__1 = -(*info);
         xerbla_("STGEXC", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n <= 1)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine the first row of the specified block and find out */
@@ -382,7 +378,7 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
     }
     if(*ifst == *ilst)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*ifst < *ilst)
@@ -414,7 +410,7 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
             if(*info != 0)
             {
                 *ilst = here;
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             here += nbnext;
@@ -445,7 +441,7 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
             if(*info != 0)
             {
                 *ilst = here;
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             if(nbnext == 1)
@@ -456,7 +452,7 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
                 if(*info != 0)
                 {
                     *ilst = here;
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 ++here;
@@ -476,7 +472,7 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
                     if(*info != 0)
                     {
                         *ilst = here;
-                        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                        AOCL_DTL_TRACE_LOG_EXIT
                         return;
                     }
                     here += 2;
@@ -489,7 +485,7 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
                     if(*info != 0)
                     {
                         *ilst = here;
-                        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                        AOCL_DTL_TRACE_LOG_EXIT
                         return;
                     }
                     ++here;
@@ -498,7 +494,7 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
                     if(*info != 0)
                     {
                         *ilst = here;
-                        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                        AOCL_DTL_TRACE_LOG_EXIT
                         return;
                     }
                     ++here;
@@ -531,7 +527,7 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
             if(*info != 0)
             {
                 *ilst = here;
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             here -= nbnext;
@@ -562,7 +558,7 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
             if(*info != 0)
             {
                 *ilst = here;
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             if(nbnext == 1)
@@ -573,7 +569,7 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
                 if(*info != 0)
                 {
                     *ilst = here;
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 --here;
@@ -594,7 +590,7 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
                     if(*info != 0)
                     {
                         *ilst = here;
-                        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                        AOCL_DTL_TRACE_LOG_EXIT
                         return;
                     }
                     here += -2;
@@ -607,7 +603,7 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
                     if(*info != 0)
                     {
                         *ilst = here;
-                        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                        AOCL_DTL_TRACE_LOG_EXIT
                         return;
                     }
                     --here;
@@ -616,7 +612,7 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
                     if(*info != 0)
                     {
                         *ilst = here;
-                        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                        AOCL_DTL_TRACE_LOG_EXIT
                         return;
                     }
                     --here;
@@ -630,7 +626,7 @@ void stgexc_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
     }
     *ilst = here;
     work[1] = sroundup_lwork(&lwmin);
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STGEXC */
 }

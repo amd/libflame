@@ -463,15 +463,11 @@ void stgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
              integer *ldq, real *z__, integer *ldz, integer *m, real *pl, real *pr, real *dif,
              real *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "stgsen inputs: ijob %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS
              ", ldq %" FLA_IS ", ldz %" FLA_IS "",
              *ijob, *n, *lda, *ldb, *ldq, *ldz);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2;
     real r__1;
@@ -590,7 +586,7 @@ void stgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
     {
         i__1 = -(*info);
         xerbla_("STGSEN", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants */
@@ -692,12 +688,12 @@ void stgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
     {
         i__1 = -(*info);
         xerbla_("STGSEN", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible. */
@@ -972,7 +968,7 @@ L60: /* Compute generalized eigenvalues of reordered pair (A, B) and */
     }
     work[1] = sroundup_lwork(&lwmin);
     iwork[1] = liwmin;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STGSEN */
 }

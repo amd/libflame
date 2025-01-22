@@ -190,6 +190,10 @@ static real c_b10 = 1.f;
 void slasyf_rook_(char *uplo, integer *n, integer *nb, integer *kb, real *a, integer *lda,
                   integer *ipiv, real *w, integer *ldw, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slasyf_rook inputs: uplo %c ,n %" FLA_IS ",nb %" FLA_IS ",lda %" FLA_IS
+                      ",ldw %" FLA_IS "",
+                      *uplo, *n, *nb, *lda, *ldw);
     /* System generated locals */
     integer a_dim1, a_offset, w_dim1, w_offset, i__1, i__2, i__3, i__4, i__5;
     real r__1;
@@ -866,6 +870,7 @@ void slasyf_rook_(char *uplo, integer *n, integer *nb, integer *kb, real *a, int
         /* Set KB to the number of columns factorized */
         *kb = k - 1;
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLASYF_ROOK */
 }

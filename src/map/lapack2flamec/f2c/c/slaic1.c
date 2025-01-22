@@ -135,12 +135,8 @@ static real c_b5 = 1.f;
 void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma, real *sestpr,
              real *s, real *c__)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "slaic1_ inputs: *job %d, *j %d", *job, *j);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slaic1_ inputs: *job %" FLA_IS ", *j %" FLA_IS "", *job, *j);
     /* System generated locals */
     real r__1, r__2, r__3, r__4;
     /* Builtin functions */
@@ -200,7 +196,7 @@ void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma
                 *c__ /= tmp;
                 *sestpr = s1 * tmp;
             }
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         else if(absgam <= eps * absest)
@@ -211,7 +207,7 @@ void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma
             s1 = absest / tmp;
             s2 = absalp / tmp;
             *sestpr = tmp * sqrt(s1 * s1 + s2 * s2);
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         else if(absalp <= eps * absest)
@@ -230,7 +226,7 @@ void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma
                 *c__ = 1.f;
                 *sestpr = s1;
             }
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         else if(absest <= eps * absalp || absest <= eps * absgam)
@@ -253,7 +249,7 @@ void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma
                 *s = alpha / s1 / *c__;
                 *c__ = r_sign(&c_b5, gamma) / *c__;
             }
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         else
@@ -277,7 +273,7 @@ void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma
             *s = sine / tmp;
             *c__ = cosine / tmp;
             *sestpr = sqrt(t + 1.f) * absest;
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }
@@ -307,7 +303,7 @@ void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma
             tmp = sqrt(*s * *s + *c__ * *c__);
             *s /= tmp;
             *c__ /= tmp;
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         else if(absgam <= eps * absest)
@@ -315,7 +311,7 @@ void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma
             *s = 0.f;
             *c__ = 1.f;
             *sestpr = absgam;
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         else if(absalp <= eps * absest)
@@ -334,7 +330,7 @@ void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma
                 *c__ = 0.f;
                 *sestpr = s2;
             }
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         else if(absest <= eps * absalp || absest <= eps * absgam)
@@ -357,7 +353,7 @@ void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma
                 *c__ = alpha / s1 / *s;
                 *s = -r_sign(&c_b5, gamma) / *s;
             }
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         else
@@ -401,11 +397,11 @@ void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma
             tmp = sqrt(sine * sine + cosine * cosine);
             *s = sine / tmp;
             *c__ = cosine / tmp;
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAIC1 */
 }

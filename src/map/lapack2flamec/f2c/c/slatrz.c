@@ -136,6 +136,9 @@
 /* Subroutine */
 void slatrz_(integer *m, integer *n, integer *l, real *a, integer *lda, real *tau, real *work)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slatrz inputs: m %" FLA_IS ",n %" FLA_IS ",l %" FLA_IS ",lda %" FLA_IS "",
+                      *m, *n, *l, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     /* Local variables */
@@ -172,6 +175,7 @@ void slatrz_(integer *m, integer *n, integer *l, real *a, integer *lda, real *ta
     /* Function Body */
     if(*m == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(*m == *n)
@@ -182,6 +186,7 @@ void slatrz_(integer *m, integer *n, integer *l, real *a, integer *lda, real *ta
             tau[i__] = 0.f;
             /* L10: */
         }
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     for(i__ = *m; i__ >= 1; --i__)
@@ -197,6 +202,7 @@ void slatrz_(integer *m, integer *n, integer *l, real *a, integer *lda, real *ta
                &a[i__ * a_dim1 + 1], lda, &work[1]);
         /* L20: */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLATRZ */
 }

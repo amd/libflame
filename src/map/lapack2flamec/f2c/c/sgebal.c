@@ -166,6 +166,8 @@ and second, applying a diagonal similarity transformation */
 void sgebal_(char *job, integer *n, real *a, integer *lda, integer *ilo, integer *ihi, real *scale,
              integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgebal inputs: job %c ,n %" FLA_IS ",lda %" FLA_IS "", *job, *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     real r__1, r__2;
@@ -232,6 +234,7 @@ void sgebal_(char *job, integer *n, real *a, integer *lda, integer *ilo, integer
     {
         i__1 = -(*info);
         xerbla_("SGEBAL", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick returns. */
@@ -239,6 +242,7 @@ void sgebal_(char *job, integer *n, real *a, integer *lda, integer *ilo, integer
     {
         *ilo = 1;
         *ihi = 0;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(lsame_(job, "N", 1, 1))
@@ -250,6 +254,7 @@ void sgebal_(char *job, integer *n, real *a, integer *lda, integer *ilo, integer
         }
         *ilo = 1;
         *ihi = *n;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Permutation to isolate eigenvalues if possible. */
@@ -289,6 +294,7 @@ void sgebal_(char *job, integer *n, real *a, integer *lda, integer *ilo, integer
                     {
                         *ilo = 1;
                         *ihi = 1;
+                        AOCL_DTL_TRACE_LOG_EXIT
                         return;
                     }
                     --l;
@@ -339,6 +345,7 @@ void sgebal_(char *job, integer *n, real *a, integer *lda, integer *ilo, integer
     {
         *ilo = k;
         *ihi = l;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Balance the submatrix in rows K to L. */
@@ -375,6 +382,7 @@ void sgebal_(char *job, integer *n, real *a, integer *lda, integer *ilo, integer
                 *info = -3;
                 i__2 = -(*info);
                 xerbla_("SGEBAL", &i__2, (ftnlen)6);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             g = r__ / 2.f;
@@ -441,6 +449,7 @@ void sgebal_(char *job, integer *n, real *a, integer *lda, integer *ilo, integer
     }
     *ilo = k;
     *ihi = l;
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGEBAL */
 }

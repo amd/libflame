@@ -286,15 +286,11 @@ void ssysvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, integer
              real *rcond, real *ferr, real *berr, real *work, integer *lwork, integer *iwork,
              integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "ssysvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
              ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",
              *fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2;
     /* Local variables */
@@ -429,12 +425,12 @@ void ssysvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, integer
     {
         i__1 = -(*info);
         xerbla_("SSYSVX", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(nofact)
@@ -446,7 +442,7 @@ void ssysvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, integer
         if(*info > 0)
         {
             *rcond = 0.f;
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }
@@ -467,7 +463,7 @@ void ssysvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, integer
         *info = *n + 1;
     }
     work[1] = sroundup_lwork(&lwkopt);
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYSVX */
 }

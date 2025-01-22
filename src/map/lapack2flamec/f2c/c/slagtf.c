@@ -154,6 +154,8 @@
 void slagtf_(integer *n, real *a, real *lambda, real *b, real *c__, real *tol, real *d__,
              integer *in, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slagtf inputs: n %" FLA_IS "", *n);
     /* System generated locals */
     integer i__1;
     real r__1, r__2;
@@ -197,10 +199,12 @@ void slagtf_(integer *n, real *a, real *lambda, real *b, real *c__, real *tol, r
         *info = -1;
         i__1 = -(*info);
         xerbla_("SLAGTF", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     a[1] -= *lambda;
@@ -211,6 +215,7 @@ void slagtf_(integer *n, real *a, real *lambda, real *b, real *c__, real *tol, r
         {
             in[1] = 1;
         }
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     eps = slamch_("Epsilon");
@@ -283,6 +288,7 @@ void slagtf_(integer *n, real *a, real *lambda, real *b, real *c__, real *tol, r
     {
         in[*n] = *n;
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAGTF */
 }

@@ -317,6 +317,10 @@ void slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
              integer *nval, real *ab, real *c__, integer *mout, integer *nab, real *work,
              integer *iwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slaebz inputs: ijob %" FLA_IS ",nitmax %" FLA_IS ",n %" FLA_IS
+                      ",mmax %" FLA_IS ",minp %" FLA_IS ",nbmin %" FLA_IS "",
+                      *ijob, *nitmax, *n, *mmax, *minp, *nbmin);
     /* System generated locals */
     integer nab_dim1, nab_offset, ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     real r__1, r__2, r__3, r__4;
@@ -360,6 +364,7 @@ void slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
     if(*ijob < 1 || *ijob > 3)
     {
         *info = -1;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize NAB */
@@ -401,6 +406,7 @@ void slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
             *mout = *mout + nab[ji + (nab_dim1 << 1)] - nab[ji + nab_dim1];
             /* L30: */
         }
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize for loop */
@@ -510,6 +516,7 @@ void slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
                 }
                 if(*info != 0)
                 {
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 kl = klnew;
@@ -607,6 +614,7 @@ void slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
                     else
                     {
                         *info = *mmax + 1;
+                        AOCL_DTL_TRACE_LOG_EXIT
                         return;
                     }
                 }
@@ -691,6 +699,7 @@ L140: /* Computing MAX */
     i__1 = kl + 1 - kf;
     *info = fla_max(i__1, 0);
     *mout = kl;
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAEBZ */
 }

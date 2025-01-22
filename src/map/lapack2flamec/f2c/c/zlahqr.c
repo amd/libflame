@@ -910,8 +910,8 @@ L140: /* H(I,I-1) is negligible: one eigenvalue has converged. */
     /* return to start of the main loop with new value of I. */
     i__ = l - 1;
     goto L30;
-    AOCL_DTL_TRACE_LOG_EXIT
 L150:
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZLAHQR */
 }

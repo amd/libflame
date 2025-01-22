@@ -150,13 +150,10 @@ elements marked */
 void sgbtrf_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer *ldab,
              integer *ipiv, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "sgbtrf inputs: m %d, n %d, kl %d, ku %d, ldab %d", *m, *n, *kl, *ku,
-             *ldab);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgbtrf inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
+                      ", ldab %" FLA_IS "",
+                      *m, *n, *kl, *ku, *ldab);
     /* System generated locals */
     integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     real r__1;
@@ -251,13 +248,13 @@ void sgbtrf_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer
     {
         i__1 = -(*info);
         xerbla_("SGBTRF", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
 #if AOCL_FLA_PROGRESS_H
@@ -638,7 +635,7 @@ void sgbtrf_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer
             /* L180: */
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGBTRF */
 }

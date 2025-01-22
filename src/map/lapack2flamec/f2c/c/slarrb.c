@@ -192,6 +192,10 @@ void slarrb_(integer *n, real *d__, real *lld, integer *ifirst, integer *ilast, 
              real *rtol2, integer *offset, real *w, real *wgap, real *werr, real *work,
              integer *iwork, real *pivmin, real *spdiam, integer *twist, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slarrb inputs: n %" FLA_IS ",ifirst %" FLA_IS ",ilast %" FLA_IS
+                      ",offset %" FLA_IS ",twist %" FLA_IS "",
+                      *n, *ifirst, *ilast, *offset, *twist);
     /* System generated locals */
     integer i__1;
     real r__1, r__2;
@@ -237,6 +241,7 @@ void slarrb_(integer *n, real *d__, real *lld, integer *ifirst, integer *ilast, 
     /* Quick return if possible */
     if(*n <= 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     maxitr = (integer)((log(*spdiam + *pivmin) - log(*pivmin)) / log(2.f)) + 2;
@@ -430,6 +435,7 @@ L80:
         wgap[ii - 1] = fla_max(r__1, r__2);
         /* L111: */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLARRB */
 }

@@ -164,6 +164,9 @@ static integer c_n1 = -1;
 void slaed1_(integer *n, real *d__, real *q, integer *ldq, integer *indxq, real *rho,
              integer *cutpnt, real *work, integer *iwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slaed1 inputs: n %" FLA_IS ",ldq %" FLA_IS ",cutpnt %" FLA_IS "", *n, *ldq,
+                      *cutpnt);
     /* System generated locals */
     integer q_dim1, q_offset, i__1, i__2;
     /* Local variables */
@@ -233,11 +236,13 @@ void slaed1_(integer *n, real *d__, real *q, integer *ldq, integer *indxq, real 
     {
         i__1 = -(*info);
         xerbla_("SLAED1", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* The following values are integer pointers which indicate */
@@ -291,6 +296,7 @@ void slaed1_(integer *n, real *d__, real *q, integer *ldq, integer *indxq, real 
         }
     }
 L20:
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAED1 */
 }

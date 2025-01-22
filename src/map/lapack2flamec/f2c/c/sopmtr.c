@@ -153,13 +153,10 @@ static integer c__1 = 1;
 void sopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, real *ap, real *tau,
              real *c__, integer *ldc, real *work, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "sopmtr inputs: side %c, uplo %c, trans %c, m %d, n %d, ldc %d", *side,
-             *uplo, *trans, *m, *n, *ldc);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sopmtr inputs: side %c, uplo %c, trans %c, m %" FLA_IS ", n %" FLA_IS
+                      ", ldc %" FLA_IS "",
+                      *side, *uplo, *trans, *m, *n, *ldc);
     /* System generated locals */
     integer c_dim1, c_offset, i__1, i__2;
     /* Local variables */
@@ -245,13 +242,13 @@ void sopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, real *
     {
         i__1 = -(*info);
         xerbla_("SOPMTR", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(upper)
@@ -372,7 +369,7 @@ void sopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, real *
             /* L20: */
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SOPMTR */
 }

@@ -111,6 +111,8 @@ for 1 <= i <= fla_min(M,N), row i of the */
 /* Subroutine */
 void sgetrf2_(integer *m, integer *n, real *a, integer *lda, integer *ipiv, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgetrf2 inputs: m %" FLA_IS ",n %" FLA_IS ",lda %" FLA_IS "", *m, *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     real r__1;
@@ -184,11 +186,13 @@ void sgetrf2_(integer *m, integer *n, real *a, integer *lda, integer *ipiv, inte
     {
         i__1 = -(*info);
         xerbla_("SGETRF2", &i__1, (ftnlen)7);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*m == 1)
@@ -308,6 +312,7 @@ void sgetrf2_(integer *m, integer *n, real *a, integer *lda, integer *ipiv, inte
         i__2 = fla_min(*m, *n);
         slaswp_(&n1, &a[a_dim1 + 1], lda, &i__1, &i__2, &ipiv[1], &c__1);
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGETRF2 */
 }

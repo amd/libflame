@@ -182,6 +182,10 @@ in this case a minimum norm solution is returned. */
 void slalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, real *e, real *b,
              integer *ldb, real *rcond, integer *rank, real *work, integer *iwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slalsd inputs: uplo %c ,smlsiz %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS
+                      ",ldb %" FLA_IS "",
+                      *uplo, *smlsiz, *n, *nrhs, *ldb);
     /* System generated locals */
     integer b_dim1, b_offset, i__1, i__2;
     real r__1;
@@ -287,6 +291,7 @@ void slalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
     {
         i__1 = -(*info);
         xerbla_("SLALSD", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     eps = slamch_("Epsilon");
@@ -303,6 +308,7 @@ void slalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
     /* Quick return if possible. */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(*n == 1)
@@ -317,6 +323,7 @@ void slalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
             slascl_("G", &c__0, &c__0, &d__[1], &c_b11, &c__1, nrhs, &b[b_offset], ldb, info);
             d__[1] = f2c_abs(d__[1]);
         }
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Rotate the matrix if it is lower bidiagonal. */
@@ -364,6 +371,7 @@ void slalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
     if(orgnrm == 0.f)
     {
         slaset_("A", n, nrhs, &c_b6, &c_b6, &b[b_offset], ldb);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     slascl_("G", &c__0, &c__0, &orgnrm, &c_b11, n, &c__1, &d__[1], n, info);
@@ -378,6 +386,7 @@ void slalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
                 &b[b_offset], ldb, &work[nwork], info);
         if(*info != 0)
         {
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         tol = rcnd * (r__1 = d__[isamax_(n, &d__[1], &c__1)], f2c_abs(r__1));
@@ -403,6 +412,7 @@ void slalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
         slascl_("G", &c__0, &c__0, &c_b11, &orgnrm, n, &c__1, &d__[1], n, info);
         slasrt_("D", n, &d__[1], info);
         slascl_("G", &c__0, &c__0, &orgnrm, &c_b11, n, nrhs, &b[b_offset], ldb, info);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Book-keeping and setting up some constants. */
@@ -487,6 +497,7 @@ void slalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
                         n, &work[nwork], n, &b[st + b_dim1], ldb, &work[nwork], info);
                 if(*info != 0)
                 {
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 slacpy_("A", &nsize, nrhs, &b[st + b_dim1], ldb, &work[bx + st1], n);
@@ -501,6 +512,7 @@ void slalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
                         &work[c__ + st1], &work[s + st1], &work[nwork], &iwork[iwk], info);
                 if(*info != 0)
                 {
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 bxst = bx + st1;
@@ -512,6 +524,7 @@ void slalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
                         &iwork[iwk], info);
                 if(*info != 0)
                 {
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
             }
@@ -566,6 +579,7 @@ void slalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
                     &work[c__ + st1], &work[s + st1], &work[nwork], &iwork[iwk], info);
             if(*info != 0)
             {
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
         }
@@ -575,6 +589,7 @@ void slalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, real *d__, 
     slascl_("G", &c__0, &c__0, &c_b11, &orgnrm, n, &c__1, &d__[1], n, info);
     slasrt_("D", n, &d__[1], info);
     slascl_("G", &c__0, &c__0, &orgnrm, &c_b11, n, nrhs, &b[b_offset], ldb, info);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLALSD */
 }

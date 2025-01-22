@@ -229,13 +229,9 @@ i off-diagonal elements of an intermediate */
 void ssyevd_2stage_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w, real *work,
                     integer *lwork, integer *iwork, integer *liwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "ssyevd_2stage inputs: jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS "",
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("ssyevd_2stage inputs: jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS "",
              *jobz, *uplo, *n, *lda);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
     real r__1;
@@ -380,18 +376,18 @@ void ssyevd_2stage_(char *jobz, char *uplo, integer *n, real *a, integer *lda, r
     {
         i__1 = -(*info);
         xerbla_("SSYEVD_2STAGE", &i__1, (ftnlen)13);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 1)
@@ -401,7 +397,7 @@ void ssyevd_2stage_(char *jobz, char *uplo, integer *n, real *a, integer *lda, r
         {
             a[a_dim1 + 1] = 1.f;
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants. */
@@ -450,7 +446,7 @@ void ssyevd_2stage_(char *jobz, char *uplo, integer *n, real *a, integer *lda, r
     {
         /* Not available in this release, and argument checking should not */
         /* let it getting here */
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
         sstedc_("I", n, &w[1], &work[inde], &work[indwrk], n, &work[indwk2], &llwrk2, &iwork[1],
                 liwork, info);
@@ -466,7 +462,7 @@ void ssyevd_2stage_(char *jobz, char *uplo, integer *n, real *a, integer *lda, r
     }
     work[1] = (real)lwmin;
     iwork[1] = liwmin;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYEVD_2STAGE */
 }

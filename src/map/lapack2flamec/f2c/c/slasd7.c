@@ -284,14 +284,11 @@ void slasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
              integer *givptr, integer *givcol, integer *ldgcol, real *givnum, integer *ldgnum,
              real *c__, real *s, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
-             "slasd7 inputs: icompq %d, nl %d, nr %d, sqre %d, idxq %d, ldgcol %d, ldgnum %d",
-             *icompq, *nl, *nr, *sqre, *idxq, *ldgcol, *ldgnum);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slasd7 inputs: icompq %" FLA_IS ", nl %" FLA_IS ", nr %" FLA_IS
+                      ", sqre %" FLA_IS ", idxq %" FLA_IS ", ldgcol %" FLA_IS ", ldgnum %" FLA_IS
+                      "",
+                      *icompq, *nl, *nr, *sqre, *idxq, *ldgcol, *ldgnum);
     /* System generated locals */
     integer givcol_dim1, givcol_offset, givnum_dim1, givnum_offset, i__1;
     real r__1, r__2;
@@ -389,7 +386,7 @@ void slasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
     {
         i__1 = -(*info);
         xerbla_("SLASD7", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     nlp1 = *nl + 1;
@@ -637,7 +634,7 @@ L100: /* Sort the singular values into DSIGMA. The singular values which */
     scopy_(&i__1, &vfw[2], &c__1, &vf[2], &c__1);
     i__1 = n - 1;
     scopy_(&i__1, &vlw[2], &c__1, &vl[2], &c__1);
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLASD7 */
 }

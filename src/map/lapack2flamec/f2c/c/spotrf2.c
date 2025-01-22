@@ -102,7 +102,7 @@ static real c_b11 = -1.f;
 /* Subroutine */
 void spotrf2_(char *uplo, integer *n, real *a, integer *lda, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_INIT
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
     /* Builtin functions */
@@ -228,7 +228,7 @@ void spotrf2_(char *uplo, integer *n, real *a, integer *lda, integer *info)
             }
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SPOTRF2 */
 }

@@ -101,6 +101,10 @@
 /* Subroutine */
 void slargv_(integer *n, real *x, integer *incx, real *y, integer *incy, real *c__, integer *incc)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slargv inputs: n %" FLA_IS ",incx %" FLA_IS ",incy %" FLA_IS ",incc %" FLA_IS
+                      "",
+                      *n, *incx, *incy, *incc);
     /* System generated locals */
     integer i__1;
     /* Builtin functions */
@@ -171,6 +175,7 @@ void slargv_(integer *n, real *x, integer *incx, real *y, integer *incy, real *c
         ix += *incx;
         /* L10: */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLARGV */
 }

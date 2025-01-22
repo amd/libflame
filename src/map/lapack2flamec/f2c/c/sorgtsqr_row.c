@@ -191,6 +191,10 @@ static integer c__1 = 1;
 void sorgtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, real *a, integer *lda, real *t,
                    integer *ldt, real *work, integer *lwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sorgtsqr_row inputs: m %" FLA_IS ",n %" FLA_IS ",mb %" FLA_IS ",nb %" FLA_IS
+                      ",lda %" FLA_IS ",ldt %" FLA_IS ",lwork %" FLA_IS "",
+                      *m, *n, *mb, *nb, *lda, *ldt, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */
@@ -290,17 +294,20 @@ void sorgtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, real *a, in
     {
         i__1 = -(*info);
         xerbla_("SORGTSQR_ROW", &i__1, (ftnlen)12);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
         work[1] = sroundup_lwork(&lworkopt);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(fla_min(*m, *n) == 0)
     {
         work[1] = sroundup_lwork(&lworkopt);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* (0) Set the upper-triangular part of the matrix A to zero and */
@@ -392,6 +399,7 @@ void sorgtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, real *a, in
         }
     }
     work[1] = sroundup_lwork(&lworkopt);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SORGTSQR_ROW */
 }

@@ -174,13 +174,10 @@ void spprfs_(char *uplo, integer *n, integer *nrhs, real *ap, real *afp, real *b
              real *x, integer *ldx, real *ferr, real *berr, real *work, integer *iwork,
              integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "spprfs inputs: uplo %c, n %d, nrhs %d, ldb %d, ldx %d", *uplo, *n, *nrhs,
-             *ldb, *ldx);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("spprfs inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS
+                      ", ldx %" FLA_IS "",
+                      *uplo, *n, *nrhs, *ldb, *ldx);
     /* System generated locals */
     integer b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3;
     real r__1, r__2, r__3;
@@ -274,7 +271,7 @@ void spprfs_(char *uplo, integer *n, integer *nrhs, real *ap, real *afp, real *b
     {
         i__1 = -(*info);
         xerbla_("SPPRFS", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -287,7 +284,7 @@ void spprfs_(char *uplo, integer *n, integer *nrhs, real *ap, real *afp, real *b
             berr[j] = 0.f;
             /* L10: */
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* NZ = maximum number of nonzero elements in each row of A, plus 1 */
@@ -477,7 +474,7 @@ void spprfs_(char *uplo, integer *n, integer *nrhs, real *ap, real *afp, real *b
         }
         /* L140: */
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SPPRFS */
 }

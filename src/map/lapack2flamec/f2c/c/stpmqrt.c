@@ -221,16 +221,12 @@ void stpmqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
               real *v, integer *ldv, real *t, integer *ldt, real *a, integer *lda, real *b,
               integer *ldb, real *work, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "stpmqrt inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
              ", l %" FLA_IS ", nb %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS ", lda %" FLA_IS
              ", ldb %" FLA_IS "",
              *side, *trans, *m, *n, *k, *l, *nb, *ldv, *ldt, *lda, *ldb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer v_dim1, v_offset, a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, i__1, i__2,
         i__3, i__4;
@@ -347,13 +343,13 @@ void stpmqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
     {
         i__1 = -(*info);
         xerbla_("STPMQRT", &i__1, (ftnlen)7);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* .. Quick return if possible .. */
     if(*m == 0 || *n == 0 || *k == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(left && tran)
@@ -460,7 +456,7 @@ void stpmqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
                     &work[1], m);
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STPMQRT */
 }

@@ -157,6 +157,8 @@ static integer c__1 = 1;
 void slagv2_(real *a, integer *lda, real *b, integer *ldb, real *alphar, real *alphai, real *beta,
              real *csl, real *snl, real *csr, real *snr)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slagv2 inputs: lda %" FLA_IS ",ldb %" FLA_IS "", *lda, *ldb);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset;
     real r__1, r__2, r__3, r__4, r__5, r__6;
@@ -371,6 +373,7 @@ void slagv2_(real *a, integer *lda, real *b, integer *ldb, real *alphar, real *a
         beta[1] = 1.f;
         beta[2] = 1.f;
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAGV2 */
 }

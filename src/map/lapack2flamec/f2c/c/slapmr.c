@@ -101,6 +101,8 @@
 /* Subroutine */
 void slapmr_(logical *forwrd, integer *m, integer *n, real *x, integer *ldx, integer *k)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slapmr inputs: m %" FLA_IS ",n %" FLA_IS ",ldx %" FLA_IS "", *m, *n, *ldx);
     /* System generated locals */
     integer x_dim1, x_offset, i__1, i__2;
     /* Local variables */
@@ -126,6 +128,7 @@ void slapmr_(logical *forwrd, integer *m, integer *n, real *x, integer *ldx, int
     /* Function Body */
     if(*m <= 1)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     i__1 = *m;
@@ -200,6 +203,7 @@ void slapmr_(logical *forwrd, integer *m, integer *n, real *x, integer *ldx, int
              ;
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZLAPMT */
 }

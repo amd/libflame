@@ -178,6 +178,10 @@ void slasy2_(logical *ltranl, logical *ltranr, integer *isgn, integer *n1, integ
              integer *ldtl, real *tr, integer *ldtr, real *b, integer *ldb, real *scale, real *x,
              integer *ldx, real *xnorm, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slasy2 inputs: isgn %" FLA_IS ",n1 %" FLA_IS ",n2 %" FLA_IS ",ldtl %" FLA_IS
+                      ",ldtr %" FLA_IS ",ldb %" FLA_IS ",ldx %" FLA_IS "",
+                      *isgn, *n1, *n2, *ldtl, *ldtr, *ldb, *ldx);
     /* Initialized data */
     static const integer locu12[4] = {3, 4, 1, 2};
     static const integer locl21[4] = {2, 1, 4, 3};
@@ -253,6 +257,7 @@ void slasy2_(logical *ltranl, logical *ltranr, integer *isgn, integer *n1, integ
     /* Quick return if possible */
     if(*n1 == 0 || *n2 == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Set constants to control overflow */
@@ -289,6 +294,7 @@ L10:
     }
     x[x_dim1 + 1] = b[b_dim1 + 1] * *scale / tau1;
     *xnorm = (r__1 = x[x_dim1 + 1], f2c_abs(r__1));
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* 1 by 2: */
     /* TL11*[X11 X12] + ISGN*[X11 X12]*op[TR11 TR12] = [B11 B12] */
@@ -406,6 +412,7 @@ L40: /* Solve 2 by 2 system using complete pivoting. */
         r__4 = (r__2 = x[x_dim1 + 2], f2c_abs(r__2)); // , expr subst
         *xnorm = fla_max(r__3, r__4);
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* 2 by 2: */
     /* op[TL11 TL12]*[X11 X12] +ISGN* [X11 X12]*op[TR11 TR12] = [B11 B12] */
@@ -567,6 +574,7 @@ L50: /* Computing MAX */
     r__1 = f2c_abs(tmp[0]) + f2c_abs(tmp[2]);
     r__2 = f2c_abs(tmp[1]) + f2c_abs(tmp[3]); // , expr subst
     *xnorm = fla_max(r__1, r__2);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLASY2 */
 }

@@ -80,12 +80,8 @@
 /* Subroutine */
 void srscl_(integer *n, real *sa, real *sx, integer *incx)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    sprintf(buffer, "srscl inputs: n %d, incx %d ", *n, *incx);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("srscl inputs: n %" FLA_IS ", incx %" FLA_IS " ", *n, *incx);
     real mul, cden;
     logical done;
     real cnum, cden1, cnum1;
@@ -119,7 +115,7 @@ void srscl_(integer *n, real *sa, real *sx, integer *incx)
     /* Function Body */
     if(*n <= 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine parameters */
@@ -157,7 +153,7 @@ L10:
     {
         goto L10;
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SRSCL */
 }

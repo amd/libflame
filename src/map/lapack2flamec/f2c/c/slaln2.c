@@ -222,6 +222,10 @@ void slaln2_(logical *ltrans, integer *na, integer *nw, real *smin, real *ca, re
              real *d1, real *d2, real *b, integer *ldb, real *wr, real *wi, real *x, integer *ldx,
              real *scale, real *xnorm, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slaln2 inputs: na %" FLA_IS ",nw %" FLA_IS ",lda %" FLA_IS ",ldb %" FLA_IS
+                      ",ldx %" FLA_IS "",
+                      *na, *nw, *lda, *ldb, *ldx);
     /* Initialized data */
     static const logical cswap[4] = {FALSE_, FALSE_, TRUE_, TRUE_};
     static const logical rswap[4] = {FALSE_, TRUE_, FALSE_, TRUE_};
@@ -406,6 +410,7 @@ void slaln2_(logical *ltrans, integer *na, integer *nw, real *smin, real *ca, re
                 x[x_dim1 + 2] = temp * b[b_dim1 + 2];
                 *xnorm = temp * bnorm;
                 *info = 1;
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* Gaussian elimination with complete pivoting. */
@@ -515,6 +520,7 @@ void slaln2_(logical *ltrans, integer *na, integer *nw, real *smin, real *ca, re
                 x[(x_dim1 << 1) + 2] = temp * b[(b_dim1 << 1) + 2];
                 *xnorm = temp * bnorm;
                 *info = 1;
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* Gaussian elimination with complete pivoting. */
@@ -640,6 +646,7 @@ void slaln2_(logical *ltrans, integer *na, integer *nw, real *smin, real *ca, re
             }
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLALN2 */
 }

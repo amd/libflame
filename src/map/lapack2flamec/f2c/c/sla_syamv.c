@@ -174,6 +174,10 @@
 void sla_syamv_(integer *uplo, integer *n, real *alpha, real *a, integer *lda, real *x,
                 integer *incx, real *beta, real *y, integer *incy)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sla_syamv inputs: uplo %" FLA_IS ",n %" FLA_IS ",lda %" FLA_IS
+                      ",incx %" FLA_IS ",incy %" FLA_IS "",
+                      *uplo, *n, *lda, *incx, *incy);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     real r__1;
@@ -241,11 +245,13 @@ void sla_syamv_(integer *uplo, integer *n, real *alpha, real *a, integer *lda, r
     if(info != 0)
     {
         xerbla_("SLA_SYAMV", &info, (ftnlen)9);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible. */
     if(*n == 0 || *alpha == 0.f && *beta == 1.f)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Set up the start points in X and Y. */
@@ -458,6 +464,7 @@ void sla_syamv_(integer *uplo, integer *n, real *alpha, real *a, integer *lda, r
             }
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLA_SYAMV */
 }

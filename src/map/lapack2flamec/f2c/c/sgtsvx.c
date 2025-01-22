@@ -296,13 +296,10 @@ void sgtsvx_(char *fact, char *trans, integer *n, integer *nrhs, real *dl, real 
              real *x, integer *ldx, real *rcond, real *ferr, real *berr, real *work, integer *iwork,
              integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "sgtsvx inputs: fact %c, trans %c, n %d, nrhs %d, ldb %d, ldx %d", *fact,
-             *trans, *n, *nrhs, *ldb, *ldx);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgtsvx inputs: fact %c, trans %c, n %" FLA_IS ", nrhs %" FLA_IS
+                      ", ldb %" FLA_IS ", ldx %" FLA_IS "",
+                      *fact, *trans, *n, *nrhs, *ldb, *ldx);
     /* System generated locals */
     integer b_dim1, b_offset, x_dim1, x_offset, i__1;
     /* Local variables */
@@ -403,7 +400,7 @@ void sgtsvx_(char *fact, char *trans, integer *n, integer *nrhs, real *dl, real 
     {
         i__1 = -(*info);
         xerbla_("SGTSVX", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(nofact)
@@ -422,7 +419,7 @@ void sgtsvx_(char *fact, char *trans, integer *n, integer *nrhs, real *dl, real 
         if(*info > 0)
         {
             *rcond = 0.f;
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }
@@ -451,7 +448,7 @@ void sgtsvx_(char *fact, char *trans, integer *n, integer *nrhs, real *dl, real 
     {
         *info = *n + 1;
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGTSVX */
 }

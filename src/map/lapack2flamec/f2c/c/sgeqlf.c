@@ -144,6 +144,10 @@ v(1:m-k+i-1) is stored on exit in */
 void sgeqlf_(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *lwork,
              integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgeqlf inputs: m %" FLA_IS ",n %" FLA_IS ",lda %" FLA_IS ",lwork %" FLA_IS
+                      "",
+                      *m, *n, *lda, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
@@ -222,15 +226,18 @@ void sgeqlf_(integer *m, integer *n, real *a, integer *lda, real *tau, real *wor
     {
         i__1 = -(*info);
         xerbla_("SGEQLF", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(k == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     nbmin = 2;
@@ -310,6 +317,7 @@ void sgeqlf_(integer *m, integer *n, real *a, integer *lda, real *tau, real *wor
         sgeql2_(&mu, &nu, &a[a_offset], lda, &tau[1], &work[1], &iinfo);
     }
     work[1] = sroundup_lwork(&iws);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGEQLF */
 }

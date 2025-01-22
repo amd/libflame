@@ -76,12 +76,8 @@
 /* ===================================================================== */
 real scsum1_(integer *n, complex *cx, integer *incx)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "scsum1 inputs: n %d, incx %d", *n, *incx);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("scsum1 inputs: n %" FLA_IS ", incx %" FLA_IS "", *n, *incx);
     /* System generated locals */
     integer i__1, i__2;
     real ret_val;
@@ -111,7 +107,7 @@ real scsum1_(integer *n, complex *cx, integer *incx)
     stemp = 0.f;
     if(*n <= 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return ret_val;
     }
     if(*incx == 1)
@@ -129,7 +125,7 @@ real scsum1_(integer *n, complex *cx, integer *incx)
         /* L10: */
     }
     ret_val = stemp;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return ret_val;
     /* CODE FOR INCREMENT EQUAL TO 1 */
 L20:
@@ -141,7 +137,7 @@ L20:
         /* L30: */
     }
     ret_val = stemp;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return ret_val;
     /* End of SCSUM1 */
 }

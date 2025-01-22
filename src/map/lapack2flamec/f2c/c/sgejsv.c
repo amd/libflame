@@ -483,6 +483,11 @@ void sgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
              integer *n, real *a, integer *lda, real *sva, real *u, integer *ldu, real *v,
              integer *ldv, real *work, integer *lwork, integer *iwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
+        "sgejsv inputs: joba %c ,jobu %c ,jobv %c ,jobr %c ,jobt %c ,jobp %c ,m %" FLA_IS
+        ",n %" FLA_IS ",lda %" FLA_IS ",ldu %" FLA_IS ",ldv %" FLA_IS ",lwork %" FLA_IS "",
+        *joba, *jobu, *jobv, *jobr, *jobt, *jobp, *m, *n, *lda, *ldu, *ldv, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, u_dim1, u_offset, v_dim1, v_offset, i__1, i__2, i__3, i__4, i__5,
         i__6, i__7, i__8, i__9, i__10, i__11, i__12;
@@ -703,6 +708,7 @@ void sgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         /* #:( */
         i__1 = -(*info);
         xerbla_("SGEJSV", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return for void matrix (Y3K safe) */
@@ -719,6 +725,7 @@ void sgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         {
             work[j1] = 0.f;
         }
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine whether the matrix U should be M x N or M x M */
@@ -755,6 +762,7 @@ void sgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             *info = -9;
             i__2 = -(*info);
             xerbla_("SGEJSV", &i__2, (ftnlen)6);
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         aaqq = sqrt(aaqq);
@@ -828,6 +836,7 @@ void sgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
         iwork[1] = 0;
         iwork[2] = 0;
         iwork[3] = 0;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Issue warning if denormalized column norms detected. Override the */
@@ -902,6 +911,7 @@ void sgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
             work[6] = 0.f;
             work[7] = 0.f;
         }
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     transp = FALSE_;
@@ -2334,6 +2344,7 @@ void sgejsv_(char *joba, char *jobu, char *jobv, char *jobr, char *jobt, char *j
     iwork[1] = nr;
     iwork[2] = numrank;
     iwork[3] = warning;
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* .. */
     /* .. END OF SGEJSV */

@@ -116,6 +116,9 @@ for 1 <= j <= N, column j of the */
 void sgesc2_(integer *n, real *a, integer *lda, real *rhs, integer *ipiv, integer *jpiv,
              real *scale)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgesc2 inputs: n %" FLA_IS ",lda %" FLA_IS ",jpiv %" FLA_IS "", *n, *lda,
+                      *jpiv);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     real r__1, r__2;
@@ -202,6 +205,7 @@ void sgesc2_(integer *n, real *a, integer *lda, real *rhs, integer *ipiv, intege
     /* Apply permutations JPIV to the solution (RHS) */
     i__1 = *n - 1;
     slaswp_(&c__1, &rhs[1], lda, &c__1, &i__1, &jpiv[1], &c_n1);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGESC2 */
 }

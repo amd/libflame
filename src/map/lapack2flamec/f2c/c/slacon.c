@@ -115,21 +115,6 @@ static real c_b11 = 1.f;
 /* Subroutine */
 void slacon_(integer *n, real *v, real *x, integer *isgn, real *est, integer *kase)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slacon(n, v, x, isgn, est, kase);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kase_64 = *kase;
-
-    aocl_lapack_slacon(&n_64, v, x, isgn, est, &kase_64);
-
-    *kase = (aocl_int_t)kase_64;
-#endif
-}
-
-void aocl_lapack_slacon(aocl_int64_t *n, real *v, real *x, aocl_int_t *isgn, real *est,
-                        aocl_int64_t *kase)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slacon inputs: n %" FLA_IS "", *n);
     /* System generated locals */
@@ -188,6 +173,7 @@ void aocl_lapack_slacon(aocl_int64_t *n, real *v, real *x, aocl_int_t *isgn, rea
         }
         *kase = 1;
         jump = 1;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     switch(jump)
@@ -225,6 +211,7 @@ L20:
     }
     *kase = 2;
     jump = 2;
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* ................ ENTRY (JUMP = 2) */
     /* FIRST ITERATION. X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X. */
@@ -242,6 +229,7 @@ L50:
     x[j] = 1.f;
     *kase = 1;
     jump = 3;
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* ................ ENTRY (JUMP = 3) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
@@ -275,6 +263,7 @@ L90: /* TEST FOR CYCLING. */
     }
     *kase = 2;
     jump = 4;
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* ................ ENTRY (JUMP = 4) */
     /* X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X. */
@@ -298,6 +287,7 @@ L120:
     }
     *kase = 1;
     jump = 5;
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* ................ ENTRY (JUMP = 5) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
@@ -310,6 +300,7 @@ L140:
     }
 L150:
     *kase = 0;
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLACON */
 }

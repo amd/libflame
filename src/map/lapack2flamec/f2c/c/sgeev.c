@@ -198,6 +198,10 @@ void sgeev_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *w
             real *vl, integer *ldvl, real *vr, integer *ldvr, real *work, integer *lwork,
             integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgeev inputs: jobvl %c ,jobvr %c ,n %" FLA_IS ",lda %" FLA_IS
+                      ",ldvl %" FLA_IS ",ldvr %" FLA_IS ",lwork %" FLA_IS "",
+                      *jobvl, *jobvr, *n, *lda, *ldvl, *ldvr, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2, i__3;
     real r__1, r__2;
@@ -427,15 +431,18 @@ void sgeev_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *w
     {
         i__1 = -(*info);
         xerbla_("SGEEV ", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants */
@@ -637,6 +644,7 @@ L50:
         }
     }
     work[1] = sroundup_lwork(&maxwrk);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGEEV */
 }

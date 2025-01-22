@@ -152,24 +152,6 @@ v(i+2:ihi) is stored on */
 void sgehd2_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real *tau, real *work,
              integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgehd2(n, ilo, ihi, a, lda, tau, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ilo_64 = *ilo;
-    aocl_int64_t ihi_64 = *ihi;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sgehd2(&n_64, &ilo_64, &ihi_64, a, &lda_64, tau, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_sgehd2(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, real *a,
-                        aocl_int64_t *lda, real *tau, real *work, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgehd2 inputs: n %" FLA_IS ",ilo %" FLA_IS ",ihi %" FLA_IS ",lda %" FLA_IS
                       "",
@@ -231,6 +213,7 @@ void aocl_lapack_sgehd2(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, r
     {
         i__1 = -(*info);
         xerbla_("SGEHD2", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     i__1 = *ihi - 1;
@@ -256,6 +239,7 @@ void aocl_lapack_sgehd2(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, r
         a[i__ + 1 + i__ * a_dim1] = aii;
         /* L10: */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGEHD2 */
 }

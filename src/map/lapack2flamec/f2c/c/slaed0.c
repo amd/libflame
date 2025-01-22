@@ -176,27 +176,6 @@ static integer c__1 = 1;
 void slaed0_(integer *icompq, integer *qsiz, integer *n, real *d__, real *e, real *q, integer *ldq,
              real *qstore, integer *ldqs, real *work, integer *iwork, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slaed0(icompq, qsiz, n, d__, e, q, ldq, qstore, ldqs, work, iwork, info);
-#else
-    aocl_int64_t icompq_64 = *icompq;
-    aocl_int64_t qsiz_64 = *qsiz;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t ldqs_64 = *ldqs;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_slaed0(&icompq_64, &qsiz_64, &n_64, d__, e, q, &ldq_64, qstore, &ldqs_64, work,
-                       iwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_slaed0(aocl_int64_t *icompq, aocl_int64_t *qsiz, aocl_int64_t *n, real *d__,
-                        real *e, real *q, aocl_int64_t *ldq, real *qstore, aocl_int64_t *ldqs,
-                        real *work, aocl_int_t *iwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaed0 inputs: icompq %" FLA_IS ",qsiz %" FLA_IS ",n %" FLA_IS
                       ",ldq %" FLA_IS ",ldqs %" FLA_IS "",
@@ -305,11 +284,13 @@ void aocl_lapack_slaed0(aocl_int64_t *icompq, aocl_int64_t *qsiz, aocl_int64_t *
     {
         i__1 = -(*info);
         xerbla_("SLAED0", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     smlsiz = aocl_lapack_ilaenv(&c__9, "SLAED0", " ", &c__0, &c__0, &c__0, &c__0);
@@ -538,6 +519,7 @@ L80:
 L130:
     *info = submat * (*n + 1) + submat + matsiz - 1;
 L140:
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAED0 */
 }

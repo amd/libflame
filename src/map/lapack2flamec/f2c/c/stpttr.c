@@ -102,22 +102,6 @@
 /* Subroutine */
 void stpttr_(char *uplo, integer *n, real *ap, real *a, integer *lda, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_stpttr(uplo, n, ap, a, lda, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_stpttr(uplo, &n_64, ap, a, &lda_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_stpttr(char *uplo, aocl_int64_t *n, real *ap, real *a, aocl_int64_t *lda,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("stpttr inputs: uplo %c ,n %" FLA_IS ",lda %" FLA_IS "", *uplo, *n, *lda);
     /* System generated locals */
@@ -172,6 +156,7 @@ void aocl_lapack_stpttr(char *uplo, aocl_int64_t *n, real *ap, real *a, aocl_int
     {
         i__1 = -(*info);
         xerbla_("STPTTR", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(lower)
@@ -202,6 +187,7 @@ void aocl_lapack_stpttr(char *uplo, aocl_int64_t *n, real *ap, real *a, aocl_int
             }
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STPTTR */
 }

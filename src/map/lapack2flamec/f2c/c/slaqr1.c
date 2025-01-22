@@ -119,6 +119,8 @@
 void slaqr1_(integer *n, real *h__, integer *ldh, real *sr1, real *si1, real *sr2, real *si2,
              real *v)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slaqr1 inputs: n %" FLA_IS ",ldh %" FLA_IS "", *n, *ldh);
     /* System generated locals */
     integer h_dim1, h_offset;
     real r__1, r__2, r__3;
@@ -149,6 +151,7 @@ void slaqr1_(integer *n, real *h__, integer *ldh, real *sr1, real *si1, real *sr
     /* Function Body */
     if(*n != 2 && *n != 3)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 2)
@@ -190,6 +193,7 @@ void slaqr1_(integer *n, real *h__, integer *ldh, real *sr1, real *si1, real *sr
                    + h21s * h__[(h_dim1 << 1) + 3];
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* slaqr1_ */

@@ -227,15 +227,11 @@ void ssbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, real 
              real *bb, integer *ldbb, real *w, real *z__, integer *ldz, real *work, integer *lwork,
              integer *iwork, integer *liwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "ssbgvd inputs: jobz %c, uplo %c, n %" FLA_IS ", ka %" FLA_IS ", kb %" FLA_IS
              ", ldab %" FLA_IS ", ldbb %" FLA_IS ", ldz %" FLA_IS ", liwork %" FLA_IS "",
              *jobz, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldz, *liwork);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer ab_dim1, ab_offset, bb_dim1, bb_offset, z_dim1, z_offset, i__1;
     /* Local variables */
@@ -369,18 +365,18 @@ void ssbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, real 
     {
         i__1 = -(*info);
         xerbla_("SSBGVD", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Form a split Cholesky factorization of B. */
@@ -388,7 +384,7 @@ void ssbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, real 
     if(*info != 0)
     {
         *info = *n + *info;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Transform problem to standard eigenvalue problem. */
@@ -424,7 +420,7 @@ void ssbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, real 
     }
     work[1] = sroundup_lwork(&lwmin);
     iwork[1] = liwmin;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSBGVD */
 }

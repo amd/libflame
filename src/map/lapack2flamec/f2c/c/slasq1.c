@@ -110,12 +110,8 @@ static integer c__0 = 0;
 /* Subroutine */
 void slasq1_(integer *n, real *d__, real *e, real *work, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "slasq1 inputs: n %d", *n);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slasq1 inputs: n %" FLA_IS "", *n);
     /* System generated locals */
     integer i__1, i__2;
     real r__1, r__2, r__3;
@@ -175,18 +171,18 @@ void slasq1_(integer *n, real *d__, real *e, real *work, integer *info)
         *info = -1;
         i__1 = -(*info);
         xerbla_("SLASQ1", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(*n == 1)
     {
         d__[1] = f2c_abs(d__[1]);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(*n == 2)
@@ -194,7 +190,7 @@ void slasq1_(integer *n, real *d__, real *e, real *work, integer *info)
         slas2_(&d__[1], &e[1], &d__[2], &sigmn, &sigmx);
         d__[1] = sigmx;
         d__[2] = sigmn;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Estimate the largest singular value. */
@@ -214,7 +210,7 @@ void slasq1_(integer *n, real *d__, real *e, real *work, integer *info)
     if(sigmx == 0.f)
     {
         slasrt_("D", n, &d__[1], &iinfo);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     i__1 = *n;
@@ -271,7 +267,7 @@ void slasq1_(integer *n, real *d__, real *e, real *work, integer *info)
         slascl_("G", &c__0, &c__0, &scale, &sigmx, n, &c__1, &d__[1], n, &iinfo);
         slascl_("G", &c__0, &c__0, &scale, &sigmx, n, &c__1, &e[1], n, &iinfo);
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLASQ1 */
 }

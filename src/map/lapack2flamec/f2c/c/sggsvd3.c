@@ -355,6 +355,11 @@ void sggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, intege
               real *u, integer *ldu, real *v, integer *ldv, real *q, integer *ldq, real *work,
               integer *lwork, integer *iwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sggsvd3 inputs: jobu %c ,jobv %c ,jobq %c ,m %" FLA_IS ",n %" FLA_IS
+                      ",p %" FLA_IS ",l %" FLA_IS ",lda %" FLA_IS ",ldb %" FLA_IS ",ldu %" FLA_IS
+                      ",ldv %" FLA_IS ",ldq %" FLA_IS ",lwork %" FLA_IS "",
+                      *jobu, *jobv, *jobq, *m, *n, *p, *l, *lda, *ldb, *ldu, *ldv, *ldq, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1,
         v_offset, i__1, i__2;
@@ -499,10 +504,12 @@ void sggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, intege
     {
         i__1 = -(*info);
         xerbla_("SGGSVD3", &i__1, (ftnlen)7);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(lquery)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute the Frobenius norm of matrices A and B */
@@ -560,6 +567,7 @@ void sggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, intege
         /* L20: */
     }
     work[1] = sroundup_lwork(&lwkopt);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGGSVD3 */
 }

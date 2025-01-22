@@ -279,21 +279,6 @@ K=N/2. If */
 void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integer *m, integer *n,
             real *alpha, real *a, real *b, integer *ldb)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_stfsm(transr, side, uplo, trans, diag, m, n, alpha, a, b, ldb);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldb_64 = *ldb;
-
-    aocl_lapack_stfsm(transr, side, uplo, trans, diag, &m_64, &n_64, alpha, a, b, &ldb_64);
-#endif
-}
-
-void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *diag,
-                       aocl_int64_t *m, aocl_int64_t *n, real *alpha, real *a, real *b,
-                       aocl_int64_t *ldb)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("stfsm inputs: transr %c ,side %c ,uplo %c ,trans %c ,diag %c ,m %" FLA_IS
                       ",n %" FLA_IS ",ldb %" FLA_IS "",
@@ -383,11 +368,13 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
     {
         i__1 = -info;
         xerbla_("STFSM ", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return when ( (N.EQ.0).OR.(M.EQ.0) ) */
     if(*m == 0 || *n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return when ALPHA.EQ.(0D+0) */
@@ -404,6 +391,7 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
             }
             /* L20: */
         }
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(lside)
@@ -929,6 +917,7 @@ void aocl_lapack_stfsm(char *transr, char *side, char *uplo, char *trans, char *
             }
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STFSM */
 }

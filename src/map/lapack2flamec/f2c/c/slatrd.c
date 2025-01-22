@@ -209,21 +209,6 @@ v(i+1:n) is stored on exit in A(i+1:n,i), */
 void slatrd_(char *uplo, integer *n, integer *nb, real *a, integer *lda, real *e, real *tau,
              real *w, integer *ldw)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slatrd(uplo, n, nb, a, lda, e, tau, w, ldw);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nb_64 = *nb;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldw_64 = *ldw;
-
-    aocl_lapack_slatrd(uplo, &n_64, &nb_64, a, &lda_64, e, tau, w, &ldw_64);
-#endif
-}
-
-void aocl_lapack_slatrd(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, real *a, aocl_int64_t *lda,
-                        real *e, real *tau, real *w, aocl_int64_t *ldw)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slatrd inputs: uplo %c ,n %" FLA_IS ",nb %" FLA_IS ",lda %" FLA_IS
                       ",ldw %" FLA_IS "",
@@ -277,6 +262,7 @@ void aocl_lapack_slatrd(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, real *a, 
     /* Function Body */
     if(*n <= 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(lsame_(uplo, "U", 1, 1))
@@ -400,6 +386,7 @@ void aocl_lapack_slatrd(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, real *a, 
             /* L20: */
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLATRD */
 }

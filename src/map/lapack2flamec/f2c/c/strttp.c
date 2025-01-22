@@ -102,22 +102,6 @@
 /* Subroutine */
 void strttp_(char *uplo, integer *n, real *a, integer *lda, real *ap, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_strttp(uplo, n, a, lda, ap, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_strttp(uplo, &n_64, a, &lda_64, ap, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_strttp(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *ap,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("strttp inputs: uplo %c ,n %" FLA_IS ",lda %" FLA_IS "", *uplo, *n, *lda);
     /* System generated locals */
@@ -172,6 +156,7 @@ void aocl_lapack_strttp(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda,
     {
         i__1 = -(*info);
         xerbla_("STRTTP", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(lower)
@@ -202,6 +187,7 @@ void aocl_lapack_strttp(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda,
             }
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STRTTP */
 }

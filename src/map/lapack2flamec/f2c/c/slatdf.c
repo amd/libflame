@@ -174,20 +174,6 @@ for 1 <= j <= N, column j of the */
 void slatdf_(integer *ijob, integer *n, real *z__, integer *ldz, real *rhs, real *rdsum,
              real *rdscal, integer *ipiv, integer *jpiv)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slatdf(ijob, n, z__, ldz, rhs, rdsum, rdscal, ipiv, jpiv);
-#else
-    aocl_int64_t ijob_64 = *ijob;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldz_64 = *ldz;
-
-    aocl_lapack_slatdf(&ijob_64, &n_64, z__, &ldz_64, rhs, rdsum, rdscal, ipiv, jpiv);
-#endif
-}
-
-void aocl_lapack_slatdf(aocl_int64_t *ijob, aocl_int64_t *n, real *z__, aocl_int64_t *ldz,
-                        real *rhs, real *rdsum, real *rdscal, aocl_int_t *ipiv, aocl_int_t *jpiv)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slatdf inputs: ijob %" FLA_IS ",n %" FLA_IS ",ldz %" FLA_IS ",jpiv %" FLA_IS
                       "",
@@ -353,6 +339,7 @@ void aocl_lapack_slatdf(aocl_int64_t *ijob, aocl_int64_t *n, real *z__, aocl_int
         /* Compute the sum of squares */
         aocl_lapack_slassq(n, &rhs[1], &c__1, rdscal, rdsum);
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLATDF */
 }

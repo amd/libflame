@@ -113,6 +113,8 @@ for 1 <= j <= N, column j of the */
 /* Subroutine */
 void sgetc2_(integer *n, real *a, integer *lda, integer *ipiv, integer *jpiv, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgetc2 inputs: n %" FLA_IS ",lda %" FLA_IS "", *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
     real r__1;
@@ -163,6 +165,7 @@ void sgetc2_(integer *n, real *a, integer *lda, integer *ipiv, integer *jpiv, in
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Set constants to control overflow */
@@ -178,6 +181,7 @@ void sgetc2_(integer *n, real *a, integer *lda, integer *ipiv, integer *jpiv, in
             *info = 1;
             a[a_dim1 + 1] = smlnum;
         }
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Factorize A using complete pivoting. */
@@ -247,6 +251,7 @@ void sgetc2_(integer *n, real *a, integer *lda, integer *ipiv, integer *jpiv, in
     /* Set last pivots to N */
     ipiv[*n] = *n;
     jpiv[*n] = *n;
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGETC2 */
 }

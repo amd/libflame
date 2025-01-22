@@ -154,19 +154,6 @@ if a diagonal is smaller */
 void slag2_(real *a, integer *lda, real *b, integer *ldb, real *safmin, real *scale1, real *scale2,
             real *wr1, real *wr2, real *wi)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slag2(a, lda, b, ldb, safmin, scale1, scale2, wr1, wr2, wi);
-#else
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-
-    aocl_lapack_slag2(a, &lda_64, b, &ldb_64, safmin, scale1, scale2, wr1, wr2, wi);
-#endif
-}
-
-void aocl_lapack_slag2(real *a, aocl_int64_t *lda, real *b, aocl_int64_t *ldb, real *safmin,
-                       real *scale1, real *scale2, real *wr1, real *wr2, real *wi)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slag2 inputs: lda %" FLA_IS ",ldb %" FLA_IS "", *lda, *ldb);
     /* System generated locals */
@@ -440,6 +427,7 @@ void aocl_lapack_slag2(real *a, aocl_int64_t *lda, real *b, aocl_int64_t *ldb, r
         }
     }
     /* End of SLAG2 */
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* slag2_ */

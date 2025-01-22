@@ -101,20 +101,6 @@
 /* Subroutine */
 void slapmr_(logical *forwrd, integer *m, integer *n, real *x, integer *ldx, integer *k)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slapmr(forwrd, m, n, x, ldx, k);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldx_64 = *ldx;
-
-    aocl_lapack_slapmr(forwrd, &m_64, &n_64, x, &ldx_64, k);
-#endif
-}
-
-void aocl_lapack_slapmr(logical *forwrd, aocl_int64_t *m, aocl_int64_t *n, real *x,
-                        aocl_int64_t *ldx, aocl_int_t *k)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slapmr inputs: m %" FLA_IS ",n %" FLA_IS ",ldx %" FLA_IS "", *m, *n, *ldx);
     /* System generated locals */
@@ -142,6 +128,7 @@ void aocl_lapack_slapmr(logical *forwrd, aocl_int64_t *m, aocl_int64_t *n, real 
     /* Function Body */
     if(*m <= 1)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     i__1 = *m;
@@ -216,6 +203,7 @@ void aocl_lapack_slapmr(logical *forwrd, aocl_int64_t *m, aocl_int64_t *n, real 
              ;
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZLAPMT */
 }

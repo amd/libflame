@@ -179,27 +179,6 @@ void slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *l
              real *wi, real *vr, real *vi, real *b, integer *ldb, real *work, real *eps3,
              real *smlnum, real *bignum, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slaein(rightv, noinit, n, h__, ldh, wr, wi, vr, vi, b, ldb, work, eps3, smlnum,
-                       bignum, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldh_64 = *ldh;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_slaein(rightv, noinit, &n_64, h__, &ldh_64, wr, wi, vr, vi, b, &ldb_64, work, eps3,
-                       smlnum, bignum, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_slaein(logical *rightv, logical *noinit, aocl_int64_t *n, real *h__,
-                        aocl_int64_t *ldh, real *wr, real *wi, real *vr, real *vi, real *b,
-                        aocl_int64_t *ldb, real *work, real *eps3, real *smlnum, real *bignum,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaein inputs: n %" FLA_IS ",ldh %" FLA_IS ",ldb %" FLA_IS "", *n, *ldh,
                       *ldb);
@@ -744,6 +723,7 @@ void aocl_lapack_slaein(logical *rightv, logical *noinit, aocl_int64_t *n, real 
         r__1 = 1.f / vnorm;
         aocl_blas_sscal(n, &r__1, &vi[1], &c__1);
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAEIN */
 }

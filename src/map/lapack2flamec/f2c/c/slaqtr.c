@@ -170,22 +170,6 @@ static logical c_true = TRUE_;
 void slaqtr_(logical *ltran, logical *lreal, integer *n, real *t, integer *ldt, real *b, real *w,
              real *scale, real *x, real *work, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slaqtr(ltran, lreal, n, t, ldt, b, w, scale, x, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldt_64 = *ldt;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_slaqtr(ltran, lreal, &n_64, t, &ldt_64, b, w, scale, x, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_slaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, real *t, aocl_int64_t *ldt,
-                        real *b, real *w, real *scale, real *x, real *work, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaqtr inputs: n %" FLA_IS ",ldt %" FLA_IS "", *n, *ldt);
     /* System generated locals */
@@ -257,6 +241,7 @@ void aocl_lapack_slaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, real *t
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Set constants to control overflow */
@@ -871,6 +856,7 @@ void aocl_lapack_slaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, real *t
             }
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAQTR */
 }

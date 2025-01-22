@@ -587,7 +587,7 @@ void dgedmdq_(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *
               doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dgedmdq inputs: jobs %\c ,jobz %\c ,jobr %\c ,jobq %\c ,jobt %\c ,jobf %\c "
+    AOCL_DTL_SNPRINTF("dgedmdq inputs: jobs %c ,jobz %c ,jobr %c ,jobq %c ,jobt %c ,jobf %c "
                       ",whtsvd %" FLA_IS ",m %" FLA_IS ",n %" FLA_IS ",ldf %" FLA_IS ",ldx %" FLA_IS
                       ",ldy %" FLA_IS ",nrnk %" FLA_IS ",ldz %" FLA_IS ",ldb %" FLA_IS
                       ",ldv %" FLA_IS ",lds %" FLA_IS ",lwork %" FLA_IS ",liwork %" FLA_IS "",

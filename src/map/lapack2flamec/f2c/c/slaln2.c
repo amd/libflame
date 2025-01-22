@@ -222,29 +222,6 @@ void slaln2_(logical *ltrans, integer *na, integer *nw, real *smin, real *ca, re
              real *d1, real *d2, real *b, integer *ldb, real *wr, real *wi, real *x, integer *ldx,
              real *scale, real *xnorm, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slaln2(ltrans, na, nw, smin, ca, a, lda, d1, d2, b, ldb, wr, wi, x, ldx, scale,
-                       xnorm, info);
-#else
-    aocl_int64_t na_64 = *na;
-    aocl_int64_t nw_64 = *nw;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldx_64 = *ldx;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_slaln2(ltrans, &na_64, &nw_64, smin, ca, a, &lda_64, d1, d2, b, &ldb_64, wr, wi, x,
-                       &ldx_64, scale, xnorm, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, real *smin, real *ca,
-                        real *a, aocl_int64_t *lda, real *d1, real *d2, real *b, aocl_int64_t *ldb,
-                        real *wr, real *wi, real *x, aocl_int64_t *ldx, real *scale, real *xnorm,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaln2 inputs: na %" FLA_IS ",nw %" FLA_IS ",lda %" FLA_IS ",ldb %" FLA_IS
                       ",ldx %" FLA_IS "",
@@ -433,6 +410,7 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
                 x[x_dim1 + 2] = temp * b[b_dim1 + 2];
                 *xnorm = temp * bnorm;
                 *info = 1;
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* Gaussian elimination with complete pivoting. */
@@ -542,6 +520,7 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
                 x[(x_dim1 << 1) + 2] = temp * b[(b_dim1 << 1) + 2];
                 *xnorm = temp * bnorm;
                 *info = 1;
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* Gaussian elimination with complete pivoting. */
@@ -667,6 +646,7 @@ void aocl_lapack_slaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, rea
             }
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLALN2 */
 }

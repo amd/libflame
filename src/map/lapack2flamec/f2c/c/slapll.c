@@ -99,20 +99,6 @@
 /* Subroutine */
 void slapll_(integer *n, real *x, integer *incx, real *y, integer *incy, real *ssmin)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slapll(n, x, incx, y, incy, ssmin);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incx_64 = *incx;
-    aocl_int64_t incy_64 = *incy;
-
-    aocl_lapack_slapll(&n_64, x, &incx_64, y, &incy_64, ssmin);
-#endif
-}
-
-void aocl_lapack_slapll(aocl_int64_t *n, real *x, aocl_int64_t *incx, real *y, aocl_int64_t *incy,
-                        real *ssmin)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slapll inputs: n %" FLA_IS ",incx %" FLA_IS ",incy %" FLA_IS "", *n, *incx,
                       *incy);
@@ -154,6 +140,7 @@ void aocl_lapack_slapll(aocl_int64_t *n, real *x, aocl_int64_t *incx, real *y, a
     if(*n <= 1)
     {
         *ssmin = 0.f;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute the QR factorization of the N-by-2 matrix ( X Y ) */
@@ -168,6 +155,7 @@ void aocl_lapack_slapll(aocl_int64_t *n, real *x, aocl_int64_t *incx, real *y, a
     a22 = y[*incy + 1];
     /* Compute the SVD of 2-by-2 Upper triangular matrix. */
     slas2_(&a11, &a12, &a22, ssmin, &ssmax);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAPLL */
 }

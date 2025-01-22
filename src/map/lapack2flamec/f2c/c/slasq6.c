@@ -116,6 +116,8 @@
 void slasq6_(integer *i0, integer *n0, real *z__, integer *pp, real *dmin__, real *dmin1,
              real *dmin2, real *dn, real *dnm1, real *dnm2)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slasq6 inputs: i0 %" FLA_IS ",n0 %" FLA_IS ",pp %" FLA_IS "", *i0, *n0, *pp);
     /* System generated locals */
     integer i__1;
     real r__1, r__2;
@@ -148,6 +150,7 @@ void slasq6_(integer *i0, integer *n0, real *z__, integer *pp, real *dmin__, rea
     /* Function Body */
     if(*n0 - *i0 - 1 <= 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     safmin = slamch_("Safe minimum");
@@ -269,6 +272,7 @@ void slasq6_(integer *i0, integer *n0, real *z__, integer *pp, real *dmin__, rea
     *dmin__ = fla_min(*dmin__, *dn);
     z__[j4 + 2] = *dn;
     z__[(*n0 << 2) - *pp] = emin;
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLASQ6 */
 }

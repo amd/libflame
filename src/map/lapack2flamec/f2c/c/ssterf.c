@@ -88,12 +88,8 @@ if INFO = i, then i */
 /* Subroutine */
 void ssterf_(integer *n, real *d__, real *e, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "ssterf inputs: n %" FLA_IS "", *n);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("ssterf inputs: n %" FLA_IS "", *n);
     /* System generated locals */
     integer i__1;
     real r__1, r__2, r__3;
@@ -165,12 +161,12 @@ void ssterf_(integer *n, real *d__, real *e, integer *info)
         *info = -1;
         i__1 = -(*info);
         xerbla_("SSTERF", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n <= 1)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine the unit roundoff for this environment. */
@@ -486,7 +482,7 @@ L150:
 L170:
     slasrt_("I", n, &d__[1], info);
 L180:
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSTERF */
 }

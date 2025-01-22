@@ -364,8 +364,8 @@ L110:
     {
         dlaset_("A", n1, k, &c_b22, &c_b22, &q[q_dim1 + 1], ldq);
     }
-    AOCL_DTL_TRACE_LOG_EXIT
 L120:
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of DLAED3 */
 }

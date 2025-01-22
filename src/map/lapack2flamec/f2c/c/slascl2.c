@@ -87,19 +87,6 @@
 /* Subroutine */
 void slascl2_(integer *m, integer *n, real *d__, real *x, integer *ldx)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slascl2(m, n, d__, x, ldx);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldx_64 = *ldx;
-
-    aocl_lapack_slascl2(&m_64, &n_64, d__, x, &ldx_64);
-#endif
-}
-
-void aocl_lapack_slascl2(aocl_int64_t *m, aocl_int64_t *n, real *d__, real *x, aocl_int64_t *ldx)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slascl2 inputs: m %" FLA_IS ",n %" FLA_IS ",ldx %" FLA_IS "", *m, *n, *ldx);
     /* System generated locals */
@@ -133,6 +120,7 @@ void aocl_lapack_slascl2(aocl_int64_t *m, aocl_int64_t *n, real *d__, real *x, a
             x[i__ + j * x_dim1] *= d__[i__];
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* slascl2_ */

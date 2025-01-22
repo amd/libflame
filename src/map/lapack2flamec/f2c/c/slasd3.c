@@ -222,34 +222,6 @@ void slasd3_(integer *nl, integer *nr, integer *sqre, integer *k, real *d__, rea
              real *dsigma, real *u, integer *ldu, real *u2, integer *ldu2, real *vt, integer *ldvt,
              real *vt2, integer *ldvt2, integer *idxc, integer *ctot, real *z__, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slasd3(nl, nr, sqre, k, d__, q, ldq, dsigma, u, ldu, u2, ldu2, vt, ldvt, vt2, ldvt2,
-                       idxc, ctot, z__, info);
-#else
-    aocl_int64_t nl_64 = *nl;
-    aocl_int64_t nr_64 = *nr;
-    aocl_int64_t sqre_64 = *sqre;
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t ldu_64 = *ldu;
-    aocl_int64_t ldu2_64 = *ldu2;
-    aocl_int64_t ldvt_64 = *ldvt;
-    aocl_int64_t ldvt2_64 = *ldvt2;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_slasd3(&nl_64, &nr_64, &sqre_64, &k_64, d__, q, &ldq_64, dsigma, u, &ldu_64, u2,
-                       &ldu2_64, vt, &ldvt_64, vt2, &ldvt2_64, idxc, ctot, z__, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_slasd3(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, aocl_int64_t *k,
-                        real *d__, real *q, aocl_int64_t *ldq, real *dsigma, real *u,
-                        aocl_int64_t *ldu, real *u2, aocl_int64_t *ldu2, real *vt,
-                        aocl_int64_t *ldvt, real *vt2, aocl_int64_t *ldvt2, aocl_int_t *idxc,
-                        aocl_int_t *ctot, real *z__, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slasd3 inputs: nl %" FLA_IS ",nr %" FLA_IS ",sqre %" FLA_IS ",k %" FLA_IS
                       ",ldq %" FLA_IS ",ldu %" FLA_IS ",ldu2 %" FLA_IS ",ldvt %" FLA_IS
@@ -368,6 +340,7 @@ void aocl_lapack_slasd3(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
     {
         i__1 = -(*info);
         xerbla_("SLASD3", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -388,6 +361,7 @@ void aocl_lapack_slasd3(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
                 /* L10: */
             }
         }
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Keep a copy of Z. */
@@ -405,6 +379,7 @@ void aocl_lapack_slasd3(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, 
         /* If the zero finder fails, report the convergence failure. */
         if(*info != 0)
         {
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         /* L30: */
@@ -511,6 +486,7 @@ L100:
     {
         sgemm_("N", "N", k, &m, k, &c_b12, &q[q_offset], ldq, &vt2[vt2_offset], ldvt2, &c_b25,
                &vt[vt_offset], ldvt);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     ktemp = ctot[1] + 1;
@@ -542,6 +518,7 @@ L100:
     ctemp = ctot[2] + 1 + ctot[3];
     sgemm_("N", "N", k, &nrp1, &ctemp, &c_b12, &q[ktemp * q_dim1 + 1], ldq,
            &vt2[ktemp + nlp2 * vt2_dim1], ldvt2, &c_b25, &vt[nlp2 * vt_dim1 + 1], ldvt);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLASD3 */
 }

@@ -153,27 +153,6 @@ static integer c__2 = 2;
 void slasd0_(integer *n, integer *sqre, real *d__, real *e, real *u, integer *ldu, real *vt,
              integer *ldvt, integer *smlsiz, integer *iwork, real *work, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slasd0(n, sqre, d__, e, u, ldu, vt, ldvt, smlsiz, iwork, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t sqre_64 = *sqre;
-    aocl_int64_t ldu_64 = *ldu;
-    aocl_int64_t ldvt_64 = *ldvt;
-    aocl_int64_t smlsiz_64 = *smlsiz;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_slasd0(&n_64, &sqre_64, d__, e, u, &ldu_64, vt, &ldvt_64, &smlsiz_64, iwork, work,
-                       &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_slasd0(aocl_int64_t *n, aocl_int64_t *sqre, real *d__, real *e, real *u,
-                        aocl_int64_t *ldu, real *vt, aocl_int64_t *ldvt, aocl_int64_t *smlsiz,
-                        aocl_int_t *iwork, real *work, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slasd0 inputs: n %" FLA_IS ",sqre %" FLA_IS ",ldu %" FLA_IS ",ldvt %" FLA_IS
                       ",smlsiz %" FLA_IS "",
@@ -250,6 +229,7 @@ void aocl_lapack_slasd0(aocl_int64_t *n, aocl_int64_t *sqre, real *d__, real *e,
     {
         i__1 = -(*info);
         xerbla_("SLASD0", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* If the input matrix is too small, call SLASDQ to find the SVD. */
@@ -257,6 +237,7 @@ void aocl_lapack_slasd0(aocl_int64_t *n, aocl_int64_t *sqre, real *d__, real *e,
     {
         slasdq_("U", sqre, n, &m, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldvt, &u[u_offset], ldu,
                 &u[u_offset], ldu, &work[1], info);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Set up the computation tree. */
@@ -291,6 +272,7 @@ void aocl_lapack_slasd0(aocl_int64_t *n, aocl_int64_t *sqre, real *d__, real *e,
                 ldvt, &u[nlf + nlf * u_dim1], ldu, &u[nlf + nlf * u_dim1], ldu, &work[1], info);
         if(*info != 0)
         {
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         itemp = idxq + nlf - 2;
@@ -313,6 +295,7 @@ void aocl_lapack_slasd0(aocl_int64_t *n, aocl_int64_t *sqre, real *d__, real *e,
                 ldvt, &u[nrf + nrf * u_dim1], ldu, &u[nrf + nrf * u_dim1], ldu, &work[1], info);
         if(*info != 0)
         {
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         itemp = idxq + ic;
@@ -363,12 +346,14 @@ void aocl_lapack_slasd0(aocl_int64_t *n, aocl_int64_t *sqre, real *d__, real *e,
                     &vt[nlf + nlf * vt_dim1], ldvt, &iwork[idxqc], &iwork[iwk], &work[1], info);
             if(*info != 0)
             {
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* L40: */
         }
         /* L50: */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLASD0 */
 }

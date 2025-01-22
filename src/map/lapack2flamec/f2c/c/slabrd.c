@@ -223,11 +223,16 @@ tauq is stored in TAUQ(i) and taup in TAUP(i). */
 void slabrd_(integer *m, integer *n, integer *nb, real *a, integer *lda, real *d__, real *e,
              real *tauq, real *taup, real *x, integer *ldx, real *y, integer *ldy)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slabrd inputs: m %" FLA_IS ",n %" FLA_IS ",nb %" FLA_IS ",lda %" FLA_IS
+                      ",ldx %" FLA_IS ",ldy %" FLA_IS "",
+                      *m, *n, *nb, *lda, *ldx, *ldy);
     extern void fla_slabrd(integer * m, integer * n, integer * nb, real * a, integer * lda,
                            real * d__, real * e, real * tauq, real * taup, real * x, integer * ldx,
                            real * y, integer * ldy);
 
     fla_slabrd(m, n, nb, a, lda, d__, e, tauq, taup, x, ldx, y, ldy);
+    AOCL_DTL_TRACE_LOG_EXIT
 }
 
 void fla_slabrd(integer *m, integer *n, integer *nb, real *a, integer *lda, real *d__, real *e,

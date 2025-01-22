@@ -190,27 +190,6 @@ static real c_b10 = 1.f;
 void slasyf_rook_(char *uplo, integer *n, integer *nb, integer *kb, real *a, integer *lda,
                   integer *ipiv, real *w, integer *ldw, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slasyf_rook(uplo, n, nb, kb, a, lda, ipiv, w, ldw, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nb_64 = *nb;
-    aocl_int64_t kb_64 = *kb;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldw_64 = *ldw;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_slasyf_rook(uplo, &n_64, &nb_64, &kb_64, a, &lda_64, ipiv, w, &ldw_64, &info_64);
-
-    *kb = (aocl_int_t)kb_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_slasyf_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl_int64_t *kb,
-                             real *a, aocl_int64_t *lda, aocl_int_t *ipiv, real *w,
-                             aocl_int64_t *ldw, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slasyf_rook inputs: uplo %c ,n %" FLA_IS ",nb %" FLA_IS ",lda %" FLA_IS
                       ",ldw %" FLA_IS "",
@@ -913,6 +892,7 @@ void aocl_lapack_slasyf_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl
         /* Set KB to the number of columns factorized */
         *kb = k - 1;
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLASYF_ROOK */
 }

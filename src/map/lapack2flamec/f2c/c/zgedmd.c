@@ -515,9 +515,9 @@ void zgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
     AOCL_DTL_SNPRINTF("zgedmd inputs: jobs %c, jobz %c, jobr %c, jobf %c, whtsvd %" FLA_IS
                       ", m %" FLA_IS ", n %" FLA_IS ", ldx %" FLA_IS,
                       ", ldy %" FLA_IS ", nrnk %" FLA_IS ", ldz %" FLA_IS ", ldb %" FLA_IS
-                      ", ldw %" FLA_IS ", lds %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",
-                      *jobs, *jobz, *jobr, *jobf, *whtsvd, *m, *n, *ldx, *ldy, *nrnk, *ldz, *ldb,
-                      *ldw, *lds, *lwork, *liwork);
+                      ", ldw %" FLA_IS ", lds %" FLA_IS ", lzwork %" FLA_IS ", lrwork %" FLA_IS 
+                      ", liwork %" FLA_IS "",*jobs, *jobz, *jobr, *jobf, *whtsvd, *m, *n, *ldx,
+                      *ldy, *nrnk, *ldz, *ldb, *ldw, *lds,*lzwork, *lrwork, *liwork);
     /* System generated locals */
     integer x_dim1, x_offset, y_dim1, y_offset, z_dim1, z_offset, b_dim1, b_offset, w_dim1,
         w_offset, s_dim1, s_offset, i__1, i__2, i__3, i__4, i__5, i__6;

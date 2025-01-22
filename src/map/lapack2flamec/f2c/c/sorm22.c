@@ -166,6 +166,10 @@ the routine */
 void sorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integer *n2, real *q,
              integer *ldq, real *c__, integer *ldc, real *work, integer *lwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sorm22 inputs: side %c ,trans %c ,m %" FLA_IS ",n %" FLA_IS ",n1 %" FLA_IS
+                      ",n2 %" FLA_IS ",ldq %" FLA_IS ",ldc %" FLA_IS ",lwork %" FLA_IS "",
+                      *side, *trans, *m, *n, *n1, *n2, *ldq, *ldc, *lwork);
     /* System generated locals */
     integer q_dim1, q_offset, c_dim1, c_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
@@ -277,16 +281,19 @@ void sorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
     {
         i__1 = -(*info);
         xerbla_("SORM22", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
     {
         work[1] = 1.f;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Degenerate cases (N1 = 0 or N2 = 0) are handled using STRMM. */
@@ -295,6 +302,7 @@ void sorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
         strmm_(side, "Upper", trans, "Non-Unit", m, n, &c_b10, &q[q_offset], ldq, &c__[c_offset],
                ldc);
         work[1] = 1.f;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(*n2 == 0)
@@ -302,6 +310,7 @@ void sorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
         strmm_(side, "Lower", trans, "Non-Unit", m, n, &c_b10, &q[q_offset], ldq, &c__[c_offset],
                ldc);
         work[1] = 1.f;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute the largest chunk size available from the workspace. */
@@ -436,6 +445,7 @@ void sorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
         }
     }
     work[1] = sroundup_lwork(&lwkopt);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SORM22 */
 }

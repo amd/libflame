@@ -121,20 +121,6 @@ static integer c__1 = 1;
 void slarfx_(char *side, integer *m, integer *n, real *v, real *tau, real *c__, integer *ldc,
              real *work)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slarfx(side, m, n, v, tau, c__, ldc, work);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldc_64 = *ldc;
-
-    aocl_lapack_slarfx(side, &m_64, &n_64, v, tau, c__, &ldc_64, work);
-#endif
-}
-
-void aocl_lapack_slarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, real *tau, real *c__,
-                        aocl_int64_t *ldc, real *work)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slarfx inputs: side %c ,m %" FLA_IS ",n %" FLA_IS ",ldc %" FLA_IS "", *side,
                       *m, *n, *ldc);
@@ -174,6 +160,7 @@ void aocl_lapack_slarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, r
     /* Function Body */
     if(*tau == 0.f)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(lsame_(side, "L", 1, 1))
@@ -751,6 +738,7 @@ void aocl_lapack_slarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, r
         goto L410;
     }
 L410:
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLARFX */
 }

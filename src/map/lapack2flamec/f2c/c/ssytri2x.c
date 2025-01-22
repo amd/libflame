@@ -124,14 +124,10 @@ the matrix is singular and its */
 void ssytri2x_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real *work,
                integer *nb, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "ssytri2x inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", nb %" FLA_IS "", *uplo, *n,
              *lda, *nb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer a_dim1, a_offset, work_dim1, work_offset, i__1, i__2, i__3;
     /* Local variables */
@@ -217,12 +213,12 @@ void ssytri2x_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, rea
     {
         i__1 = -(*info);
         xerbla_("SSYTRI2X", &i__1, (ftnlen)8);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Convert A */
@@ -236,7 +232,7 @@ void ssytri2x_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, rea
         {
             if(ipiv[*info] > 0 && a[*info + *info * a_dim1] == 0.f)
             {
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
         }
@@ -249,7 +245,7 @@ void ssytri2x_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, rea
         {
             if(ipiv[*info] > 0 && a[*info + *info * a_dim1] == 0.f)
             {
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
         }
@@ -733,7 +729,7 @@ void ssytri2x_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, rea
             --i__;
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYTRI2X */
 }

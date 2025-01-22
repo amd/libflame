@@ -274,6 +274,13 @@ void slals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
              integer *ldgcol, real *givnum, integer *ldgnum, real *poles, real *difl, real *difr,
              real *z__, integer *k, real *c__, real *s, real *work, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slals0 inputs: icompq %" FLA_IS ",nl %" FLA_IS ",nr %" FLA_IS
+                      ",sqre %" FLA_IS ",nrhs %" FLA_IS ",ldb %" FLA_IS ",ldbx %" FLA_IS
+                      ",perm %" FLA_IS ",givptr %" FLA_IS ",givcol %" FLA_IS ",ldgcol %" FLA_IS
+                      ",ldgnum %" FLA_IS ",k %" FLA_IS "",
+                      *icompq, *nl, *nr, *sqre, *nrhs, *ldb, *ldbx, *perm, *givptr, *givcol,
+                      *ldgcol, *ldgnum, *k);
     /* System generated locals */
     integer givcol_dim1, givcol_offset, b_dim1, b_offset, bx_dim1, bx_offset, difr_dim1,
         difr_offset, givnum_dim1, givnum_offset, poles_dim1, poles_offset, i__1, i__2;
@@ -400,6 +407,7 @@ void slals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
     {
         i__1 = -(*info);
         xerbla_("SLALS0", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     m = n + *sqre;
@@ -596,6 +604,7 @@ void slals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
             /* L100: */
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLALS0 */
 }

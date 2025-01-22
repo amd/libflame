@@ -203,13 +203,10 @@ void sorbdb1_(integer *m, integer *p, integer *q, real *x11, integer *ldx11, rea
               integer *ldx21, real *theta, real *phi, real *taup1, real *taup2, real *tauq1,
               real *work, integer *lwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "sorbdb1 inputs: m %d, p %d, q %d, ldx11 %d, ldx21 %d", *m, *p, *q,
-             *ldx11, *ldx21);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sorbdb1 inputs: m %" FLA_IS ", p %" FLA_IS ", q %" FLA_IS ", ldx11 %" FLA_IS
+                      ", ldx21 %" FLA_IS "",
+                      *m, *p, *q, *ldx11, *ldx21);
     /* System generated locals */
     integer x11_dim1, x11_offset, x21_dim1, x21_offset, i__1, i__2, i__3, i__4;
     real r__1, r__2;
@@ -326,12 +323,12 @@ void sorbdb1_(integer *m, integer *p, integer *q, real *x11, integer *ldx11, rea
     {
         i__1 = -(*info);
         xerbla_("SORBDB1", &i__1, (ftnlen)7);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Reduce columns 1, ..., Q of X11 and X21 */
@@ -393,7 +390,7 @@ void sorbdb1_(integer *m, integer *p, integer *q, real *x11, integer *ldx11, rea
                      &childinfo);
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SORBDB1 */
 }

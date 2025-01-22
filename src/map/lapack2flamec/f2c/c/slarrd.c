@@ -336,6 +336,10 @@ void slarrd_(char *range, char *order, integer *n, real *vl, real *vu, integer *
              integer *isplit, integer *m, real *w, real *werr, real *wl, real *wu, integer *iblock,
              integer *indexw, real *work, integer *iwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slarrd inputs: range %c ,order %c ,n %" FLA_IS ",il %" FLA_IS ",iu %" FLA_IS
+                      ",nsplit %" FLA_IS ",isplit %" FLA_IS "",
+                      *range, *order, *n, *il, *iu, *nsplit, *isplit);
     /* System generated locals */
     integer i__1, i__2, i__3;
     real r__1, r__2;
@@ -410,6 +414,7 @@ void slarrd_(char *range, char *order, integer *n, real *vl, real *vu, integer *
     /* Quick return if possible */
     if(*n <= 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Decode RANGE */
@@ -459,6 +464,7 @@ void slarrd_(char *range, char *order, integer *n, real *vl, real *vu, integer *
     }
     if(*info != 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize error flags */
@@ -486,6 +492,7 @@ void slarrd_(char *range, char *order, integer *n, real *vl, real *vu, integer *
             iblock[1] = 1;
             indexw[1] = 1;
         }
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* NB is the minimum vector length for vector bisection, or 0 */
@@ -555,6 +562,7 @@ void slarrd_(char *range, char *order, integer *n, real *vl, real *vu, integer *
         if(iinfo != 0)
         {
             *info = iinfo;
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         /* On exit, output intervals may not be ordered by ascending negcount */
@@ -581,6 +589,7 @@ void slarrd_(char *range, char *order, integer *n, real *vl, real *vu, integer *
         if(nwl < 0 || nwl >= *n || nwu < 1 || nwu > *n)
         {
             *info = 4;
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }
@@ -733,6 +742,7 @@ void slarrd_(char *range, char *order, integer *n, real *vl, real *vu, integer *
             if(iinfo != 0)
             {
                 *info = iinfo;
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             nwl += iwork[1];
@@ -746,6 +756,7 @@ void slarrd_(char *range, char *order, integer *n, real *vl, real *vu, integer *
             if(iinfo != 0)
             {
                 *info = iinfo;
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* Copy eigenvalues into W and IBLOCK */
@@ -969,6 +980,7 @@ void slarrd_(char *range, char *order, integer *n, real *vl, real *vu, integer *
     {
         *info += 2;
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLARRD */
 }

@@ -20,6 +20,15 @@
    GELQF computes an LQ factorization of a M-by-N matrix A: A = L * Q.
 */
 
+extern int lapack_sgelqf(integer *m, integer *n, real *a, integer *lda, real *tau, real *work,
+                         integer *lwork, integer *info);
+extern int lapack_dgelqf(integer *m, integer *n, doublereal *a, integer *lda, doublereal *tau,
+                         doublereal *work, integer *lwork, integer *info);
+extern int lapack_sgelq2(integer *m, integer *n, real *a, integer *lda, real *tau, real *work,
+                         integer *info);
+extern int lapack_dgelq2(integer *m, integer *n, doublereal *a, integer *lda, doublereal *tau,
+                         doublereal *work, integer *info);
+
 #define LAPACK_gelqf(prefix)                                                                 \
     void F77_##prefix##gelqf(integer *m, integer *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
                              integer * ldim_A, PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,       \
@@ -57,10 +66,16 @@
 
 LAPACK_gelqf(s)
 {
-    int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgelqf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
                       *ldim_A);
+#if FLA_ENABLE_AMD_OPT
+{
+    lapack_sgelqf(m, n, buff_A, ldim_A, buff_t, buff_w, lwork, info);
+}
+#else
+{
+    int fla_error = LAPACK_SUCCESS;
     {
         LAPACK_RETURN_CHECK_VAR1(sgelqf_check(m, n, buff_A, ldim_A, buff_t, buff_w, lwork, info),
                                  fla_error)
@@ -68,19 +83,27 @@ LAPACK_gelqf(s)
     if(fla_error == LAPACK_SUCCESS)
     {
         LAPACK_gelqf_body(s)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+        /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
+}
+#endif
     AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
+
 LAPACK_gelqf(d)
-{
-    int fla_error = LAPACK_SUCCESS;
+{ 
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgelqf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
                       *ldim_A);
+#if FLA_ENABLE_AMD_OPT
+{
+    lapack_dgelqf(m, n, buff_A, ldim_A, buff_t, buff_w, lwork, info);
+}
+#else
+{
+    int fla_error = LAPACK_SUCCESS;
     {
         LAPACK_RETURN_CHECK_VAR1(dgelqf_check(m, n, buff_A, ldim_A, buff_t, buff_w, lwork, info),
                                  fla_error)
@@ -88,10 +111,11 @@ LAPACK_gelqf(d)
     if(fla_error == LAPACK_SUCCESS)
     {
         LAPACK_gelqf_body(d)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+        /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
+}
+#endif
     AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
@@ -143,12 +167,19 @@ LAPACK_gelqf(z)
     void F77_##prefix##gelq2(integer *m, integer *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
                              integer * ldim_A, PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,       \
                              PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * info)
+
 LAPACK_gelq2(s)
 {
-    int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgelq2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
                       *ldim_A);
+#if FLA_ENABLE_AMD_OPT
+{
+    lapack_sgelq2(m, n, buff_A, ldim_A, buff_t, buff_w, info);
+}
+#else
+{
+    int fla_error = LAPACK_SUCCESS;
     {
         LAPACK_RETURN_CHECK_VAR1(sgelq2_check(m, n, buff_A, ldim_A, buff_t, buff_w, info),
                                  fla_error)
@@ -156,30 +187,39 @@ LAPACK_gelq2(s)
     if(fla_error == LAPACK_SUCCESS)
     {
         LAPACK_gelqf_body(s)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+        /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
+}
+#endif
     AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
+
 LAPACK_gelq2(d)
 {
-    int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgelq2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
                       *ldim_A);
+#if FLA_ENABLE_AMD_OPT
+{
+    lapack_dgelq2(m, n, buff_A, ldim_A, buff_t, buff_w, info);
+}
+#else
+{
+    int fla_error = LAPACK_SUCCESS;
     {
         LAPACK_RETURN_CHECK_VAR1(dgelq2_check(m, n, buff_A, ldim_A, buff_t, buff_w, info),
-                                 fla_error)
+                                fla_error)
     }
     if(fla_error == LAPACK_SUCCESS)
     {
         LAPACK_gelqf_body(d)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+        /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
+}
+#endif
     AOCL_DTL_TRACE_LOG_EXIT
     return;
 }

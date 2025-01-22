@@ -1,4 +1,4 @@
-##Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.##
+##Copyright (C) 2023-2025, Advanced Micro Devices, Inc. All rights reserved.##
 
 cmake_minimum_required(VERSION 3.26.0)
 
@@ -217,7 +217,7 @@ if(UNIX)
 	set(GCC_WARNING_FLAGS "-Wall -Wno-comment")
 	set(COMPILER_LANGUAGE_FLAGS " -std=c11 -D_GNU_SOURCE -Wno-unused-function -Wno-parentheses -Wfatal-errors")
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${COMPILER_DEBUG_FLAG} ${GCC_WARNING_FLAGS} ${COMPILER_LANGUAGE_FLAGS}")
-	add_compile_options(-fPIC)
+	add_compile_options(-fPIC -fmacro-prefix-map=${CMAKE_SOURCE_DIR}=.)
 endif()
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")

@@ -407,6 +407,11 @@ void sla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
                           integer *ithresh, real *rthresh, real *dz_ub__, logical *ignore_cwise__,
                           integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sla_syrfsx_extended inputs: uplo %c ,n %" FLA_IS ",nrhs %" FLA_IS
+                      ",lda %" FLA_IS ",ldaf %" FLA_IS ",ldb %" FLA_IS ",ldy %" FLA_IS
+                      ",ithresh %" FLA_IS "",
+                      *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldy, *ithresh);
     /* System generated locals */
     integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, y_dim1, y_offset,
         err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1,
@@ -544,6 +549,7 @@ void sla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
     {
         i__1 = -(*info);
         xerbla_("SLA_SYRFSX_EXTENDED", &i__1, (ftnlen)19);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     eps = slamch_("Epsilon");
@@ -810,6 +816,7 @@ void sla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
         sla_lin_berr_(n, n, &c__1, &res[1], &ayb[1], &berr_out__[j]);
         /* End of loop for each RHS. */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* sla_syrfsx_extended__ */

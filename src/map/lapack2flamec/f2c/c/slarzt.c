@@ -189,13 +189,10 @@ the corresponding */
 void slarzt_(char *direct, char *storev, integer *n, integer *k, real *v, integer *ldv, real *tau,
              real *t, integer *ldt)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "slarzt inputs: direct %c, storev %c, n %d, k %d, ldv %d, ldt %d",
-             *direct, *storev, *n, *k, *ldv, *ldt);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slarzt inputs: direct %c, storev %c, n %" FLA_IS ", k %" FLA_IS
+                      ", ldv %" FLA_IS ", ldt %" FLA_IS "",
+                      *direct, *storev, *n, *k, *ldv, *ldt);
     /* System generated locals */
     integer t_dim1, t_offset, v_dim1, v_offset, i__1;
     real r__1;
@@ -249,7 +246,7 @@ void slarzt_(char *direct, char *storev, integer *n, integer *k, real *v, intege
     {
         i__1 = -info;
         xerbla_("SLARZT", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     for(i__ = *k; i__ >= 1; --i__)
@@ -283,7 +280,7 @@ void slarzt_(char *direct, char *storev, integer *n, integer *k, real *v, intege
         }
         /* L20: */
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLARZT */
 }

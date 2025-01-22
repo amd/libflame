@@ -102,12 +102,10 @@
 void slag2d_(integer *m, integer *n, real *sa, integer *ldsa, doublereal *a, integer *lda,
              integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "slag2d_ inputs: *m %d, *n %d, *ldsa %d, *lda %d", *m, *n, *ldsa, *lda);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slag2d_ inputs: *m %" FLA_IS ", *n %" FLA_IS ", *ldsa %" FLA_IS
+                      ", *lda %" FLA_IS "",
+                      *m, *n, *ldsa, *lda);
     /* System generated locals */
     integer sa_dim1, sa_offset, a_dim1, a_offset, i__1, i__2;
     /* Local variables */
@@ -144,7 +142,7 @@ void slag2d_(integer *m, integer *n, real *sa, integer *ldsa, doublereal *a, int
         }
         /* L20: */
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAG2D */
 }

@@ -121,6 +121,9 @@ static integer c__1 = 1;
 void slarfx_(char *side, integer *m, integer *n, real *v, real *tau, real *c__, integer *ldc,
              real *work)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slarfx inputs: side %c ,m %" FLA_IS ",n %" FLA_IS ",ldc %" FLA_IS "", *side,
+                      *m, *n, *ldc);
     /* System generated locals */
     integer c_dim1, c_offset, i__1;
     /* Local variables */
@@ -157,6 +160,7 @@ void slarfx_(char *side, integer *m, integer *n, real *v, real *tau, real *c__, 
     /* Function Body */
     if(*tau == 0.f)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(lsame_(side, "L", 1, 1))
@@ -734,6 +738,7 @@ void slarfx_(char *side, integer *m, integer *n, real *v, real *tau, real *c__, 
         goto L410;
     }
 L410:
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLARFX */
 }

@@ -187,6 +187,10 @@ void sgerfs_(char *trans, integer *n, integer *nrhs, real *a, integer *lda, real
              integer *ipiv, real *b, integer *ldb, real *x, integer *ldx, real *ferr, real *berr,
              real *work, integer *iwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgerfs inputs: trans %c ,n %" FLA_IS ",nrhs %" FLA_IS ",lda %" FLA_IS
+                      ",ldaf %" FLA_IS ",ldb %" FLA_IS ",ldx %" FLA_IS "",
+                      *trans, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
     /* System generated locals */
     integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2,
         i__3;
@@ -298,6 +302,7 @@ void sgerfs_(char *trans, integer *n, integer *nrhs, real *a, integer *lda, real
     {
         i__1 = -(*info);
         xerbla_("SGERFS", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -310,6 +315,7 @@ void sgerfs_(char *trans, integer *n, integer *nrhs, real *a, integer *lda, real
             berr[j] = 0.f;
             /* L10: */
         }
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(notran)
@@ -495,6 +501,7 @@ void sgerfs_(char *trans, integer *n, integer *nrhs, real *a, integer *lda, real
         }
         /* L140: */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGERFS */
 }

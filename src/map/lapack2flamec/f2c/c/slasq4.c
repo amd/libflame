@@ -149,12 +149,10 @@ void slasq4_(integer *i0, integer *n0, real *z__, integer *pp, integer *n0in, re
              real *dmin1, real *dmin2, real *dn, real *dn1, real *dn2, real *tau, integer *ttype,
              real *g)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "slasq4 inputs: i0 %d, n0 %d, pp %d, n0in %d", *i0, *n0, *pp, *n0in);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slasq4 inputs: i0 %" FLA_IS ", n0 %" FLA_IS ", pp %" FLA_IS ", n0in %" FLA_IS
+                      "",
+                      *i0, *n0, *pp, *n0in);
     /* System generated locals */
     integer i__1;
     real r__1, r__2;
@@ -190,7 +188,7 @@ void slasq4_(integer *i0, integer *n0, real *z__, integer *pp, integer *n0in, re
     {
         *tau = -(*dmin__);
         *ttype = -1;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     nn = (*n0 << 2) + *pp;
@@ -254,7 +252,7 @@ void slasq4_(integer *i0, integer *n0, real *z__, integer *pp, integer *n0in, re
                     a2 = 0.f;
                     if(z__[nn - 5] > z__[nn - 7])
                     {
-                        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                        AOCL_DTL_TRACE_LOG_EXIT
                         return;
                     }
                     b2 = z__[nn - 5] / z__[nn - 7];
@@ -266,13 +264,13 @@ void slasq4_(integer *i0, integer *n0, real *z__, integer *pp, integer *n0in, re
                     gam = *dn1;
                     if(z__[np - 4] > z__[np - 2])
                     {
-                        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                        AOCL_DTL_TRACE_LOG_EXIT
                         return;
                     }
                     a2 = z__[np - 4] / z__[np - 2];
                     if(z__[nn - 9] > z__[nn - 11])
                     {
-                        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                        AOCL_DTL_TRACE_LOG_EXIT
                         return;
                     }
                     b2 = z__[nn - 9] / z__[nn - 11];
@@ -290,7 +288,7 @@ void slasq4_(integer *i0, integer *n0, real *z__, integer *pp, integer *n0in, re
                     b1 = b2;
                     if(z__[i4] > z__[i4 - 2])
                     {
-                        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                        AOCL_DTL_TRACE_LOG_EXIT
                         return;
                     }
                     b2 *= z__[i4] / z__[i4 - 2];
@@ -322,7 +320,7 @@ void slasq4_(integer *i0, integer *n0, real *z__, integer *pp, integer *n0in, re
             gam = *dn2;
             if(z__[np - 8] > b2 || z__[np - 4] > b1)
             {
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             a2 = z__[np - 8] / b2 * (z__[np - 4] / b1 + 1.f);
@@ -341,7 +339,7 @@ void slasq4_(integer *i0, integer *n0, real *z__, integer *pp, integer *n0in, re
                     b1 = b2;
                     if(z__[i4] > z__[i4 - 2])
                     {
-                        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                        AOCL_DTL_TRACE_LOG_EXIT
                         return;
                     }
                     b2 *= z__[i4] / z__[i4 - 2];
@@ -389,7 +387,7 @@ void slasq4_(integer *i0, integer *n0, real *z__, integer *pp, integer *n0in, re
             s = *dmin1 * .333f;
             if(z__[nn - 5] > z__[nn - 7])
             {
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             b1 = z__[nn - 5] / z__[nn - 7];
@@ -404,7 +402,7 @@ void slasq4_(integer *i0, integer *n0, real *z__, integer *pp, integer *n0in, re
                 a2 = b1;
                 if(z__[i4] > z__[i4 - 2])
                 {
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 b1 *= z__[i4] / z__[i4 - 2];
@@ -458,7 +456,7 @@ void slasq4_(integer *i0, integer *n0, real *z__, integer *pp, integer *n0in, re
             s = *dmin2 * .333f;
             if(z__[nn - 5] > z__[nn - 7])
             {
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             b1 = z__[nn - 5] / z__[nn - 7];
@@ -472,7 +470,7 @@ void slasq4_(integer *i0, integer *n0, real *z__, integer *pp, integer *n0in, re
             {
                 if(z__[i4] > z__[i4 - 2])
                 {
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 b1 *= z__[i4] / z__[i4 - 2];
@@ -517,7 +515,7 @@ void slasq4_(integer *i0, integer *n0, real *z__, integer *pp, integer *n0in, re
         *ttype = -12;
     }
     *tau = s;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLASQ4 */
 }

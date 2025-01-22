@@ -190,13 +190,9 @@ i */
 void ssyev_2stage_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w, real *work,
                    integer *lwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "ssyev_2stage inputs: jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS "",
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("ssyev_2stage inputs: jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS "",
              *jobz, *uplo, *n, *lda);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
     real r__1;
@@ -315,18 +311,18 @@ void ssyev_2stage_(char *jobz, char *uplo, integer *n, real *a, integer *lda, re
     {
         i__1 = -(*info);
         xerbla_("SSYEV_2STAGE ", &i__1, (ftnlen)13);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 1)
@@ -337,7 +333,7 @@ void ssyev_2stage_(char *jobz, char *uplo, integer *n, real *a, integer *lda, re
         {
             a[a_dim1 + 1] = 1.f;
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants. */
@@ -382,7 +378,7 @@ void ssyev_2stage_(char *jobz, char *uplo, integer *n, real *a, integer *lda, re
     {
         /* Not available in this release, and argument checking should not */
         /* let it getting here */
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
         sorgtr_(uplo, n, &a[a_offset], lda, &work[indtau], &work[indwrk], &llwork, &iinfo);
         ssteqr_(jobz, n, &w[1], &work[inde], &a[a_offset], lda, &work[indtau], info);
@@ -403,7 +399,7 @@ void ssyev_2stage_(char *jobz, char *uplo, integer *n, real *a, integer *lda, re
     }
     /* Set WORK(1) to optimal workspace size. */
     work[1] = sroundup_lwork(&lwmin);
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYEV_2STAGE */
 }

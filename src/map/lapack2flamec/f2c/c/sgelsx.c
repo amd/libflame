@@ -183,6 +183,10 @@ only the remaining */
 void sgelsx_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb,
              integer *jpvt, real *rcond, integer *rank, real *work, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgelsx inputs: m %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS ",lda %" FLA_IS
+                      ",ldb %" FLA_IS "",
+                      *m, *n, *nrhs, *lda, *ldb);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     real r__1;
@@ -280,6 +284,7 @@ void sgelsx_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
     {
         i__1 = -(*info);
         xerbla_("SGELSX", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -288,6 +293,7 @@ void sgelsx_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
     if(fla_min(i__1, *nrhs) == 0)
     {
         *rank = 0;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine parameters */
@@ -474,6 +480,7 @@ L10:
         slascl_("G", &c__0, &c__0, &bignum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
     }
 L100:
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGELSX */
 }

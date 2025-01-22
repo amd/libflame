@@ -124,6 +124,10 @@ for 1<=i<=N, row i of the */
 void sgetrs_(char *trans, integer *n, integer *nrhs, real *a, integer *lda, integer *ipiv, real *b,
              integer *ldb, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgetrs inputs: trans %c ,n %" FLA_IS ",nrhs %" FLA_IS ",lda %" FLA_IS
+                      ",ldb %" FLA_IS "",
+                      *trans, *n, *nrhs, *lda, *ldb);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
@@ -193,11 +197,13 @@ void sgetrs_(char *trans, integer *n, integer *nrhs, real *a, integer *lda, inte
     {
         i__1 = -(*info);
         xerbla_("SGETRS", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(notran)
@@ -224,6 +230,7 @@ void sgetrs_(char *trans, integer *n, integer *nrhs, real *a, integer *lda, inte
         /* Apply row interchanges to the solution vectors. */
         slaswp_(nrhs, &b[b_offset], ldb, &c__1, n, &ipiv[1], &c_n1);
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGETRS */
 }

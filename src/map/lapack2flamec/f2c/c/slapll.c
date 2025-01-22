@@ -99,6 +99,9 @@
 /* Subroutine */
 void slapll_(integer *n, real *x, integer *incx, real *y, integer *incy, real *ssmin)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slapll inputs: n %" FLA_IS ",incx %" FLA_IS ",incy %" FLA_IS "", *n, *incx,
+                      *incy);
     /* System generated locals */
     integer i__1;
     /* Local variables */
@@ -138,6 +141,7 @@ void slapll_(integer *n, real *x, integer *incx, real *y, integer *incy, real *s
     if(*n <= 1)
     {
         *ssmin = 0.f;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute the QR factorization of the N-by-2 matrix ( X Y ) */
@@ -152,6 +156,7 @@ void slapll_(integer *n, real *x, integer *incx, real *y, integer *incy, real *s
     a22 = y[*incy + 1];
     /* Compute the SVD of 2-by-2 Upper triangular matrix. */
     slas2_(&a11, &a12, &a22, ssmin, &ssmax);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAPLL */
 }

@@ -126,13 +126,10 @@ static integer c__1 = 1;
 void slarf_(char *side, integer *m, integer *n, real *v, integer *incv, real *tau, real *c__,
             integer *ldc, real *work)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "slarf inputs: side %c, m %d, n %d, incv %d, ldc %d", *side, *m, *n,
-             *incv, *ldc);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slarf inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS
+                      ", ldc %" FLA_IS "",
+                      *side, *m, *n, *incv, *ldc);
     /* System generated locals */
     integer c_dim1, c_offset;
     real r__1;
@@ -246,7 +243,7 @@ void slarf_(char *side, integer *m, integer *n, real *v, integer *incv, real *ta
             sger_(&lastc, &lastv, &r__1, &work[1], &c__1, &v[1], incv, &c__[c_offset], ldc);
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLARF */
 }

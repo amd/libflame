@@ -132,6 +132,8 @@
 void slarrc_(char *jobt, integer *n, real *vl, real *vu, real *d__, real *e, real *pivmin,
              integer *eigcnt, integer *lcnt, integer *rcnt, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slarrc inputs: jobt %c ,n %" FLA_IS "", *jobt, *n);
     /* System generated locals */
     integer i__1;
     real r__1;
@@ -167,6 +169,7 @@ void slarrc_(char *jobt, integer *n, real *vl, real *vu, real *d__, real *e, rea
     /* Quick return if possible */
     if(*n <= 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     matt = lsame_(jobt, "T", 1, 1);
@@ -253,6 +256,7 @@ void slarrc_(char *jobt, integer *n, real *vl, real *vu, real *d__, real *e, rea
         }
     }
     *eigcnt = *rcnt - *lcnt;
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLARRC */
 }

@@ -393,6 +393,10 @@ static real c_b21 = -1.f;
 void slarfb_gett_(char *ident, integer *m, integer *n, integer *k, real *t, integer *ldt, real *a,
                   integer *lda, real *b, integer *ldb, real *work, integer *ldwork)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slarfb_gett inputs: ident %c ,m %" FLA_IS ",n %" FLA_IS ",k %" FLA_IS
+                      ",ldt %" FLA_IS ",lda %" FLA_IS ",ldb %" FLA_IS ",ldwork %" FLA_IS "",
+                      *ident, *m, *n, *k, *ldt, *lda, *ldb, *ldwork);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, work_dim1, work_offset, i__1,
         i__2;
@@ -441,6 +445,7 @@ void slarfb_gett_(char *ident, integer *m, integer *n, integer *k, real *t, inte
     /* Function Body */
     if(*m < 0 || *n <= 0 || *k == 0 || *k > *n)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     lnotident = !lsame_(ident, "I", 1, 1);
@@ -584,6 +589,7 @@ void slarfb_gett_(char *ident, integer *m, integer *n, integer *k, real *t, inte
             a[i__ + j * a_dim1] -= work[i__ + j * work_dim1];
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLARFB_GETT */
 }

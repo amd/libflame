@@ -143,13 +143,9 @@ static integer c__1 = 1;
 void ssycon_rook_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real *anorm,
                   real *rcond, real *work, integer *iwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "ssycon_rook inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("ssycon_rook inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n,
              *lda);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
     /* Local variables */
@@ -219,7 +215,7 @@ void ssycon_rook_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, 
     {
         i__1 = -(*info);
         xerbla_("SSYCON_ROOK", &i__1, (ftnlen)11);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -227,12 +223,12 @@ void ssycon_rook_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, 
     if(*n == 0)
     {
         *rcond = 1.f;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(*anorm <= 0.f)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Check that the diagonal matrix D is nonsingular. */
@@ -243,7 +239,7 @@ void ssycon_rook_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, 
         {
             if(ipiv[i__] > 0 && a[i__ + i__ * a_dim1] == 0.f)
             {
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* L10: */
@@ -257,7 +253,7 @@ void ssycon_rook_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, 
         {
             if(ipiv[i__] > 0 && a[i__ + i__ * a_dim1] == 0.f)
             {
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* L20: */
@@ -278,7 +274,7 @@ L30:
     {
         *rcond = 1.f / ainvnm / *anorm;
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYCON_ROOK */
 }

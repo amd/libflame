@@ -212,6 +212,10 @@ void slasd1_(integer *nl, integer *nr, integer *sqre, real *d__, real *alpha, re
              integer *ldu, real *vt, integer *ldvt, integer *idxq, integer *iwork, real *work,
              integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slasd1 inputs: nl %" FLA_IS ",nr %" FLA_IS ",sqre %" FLA_IS ",ldu %" FLA_IS
+                      ",ldvt %" FLA_IS "",
+                      *nl, *nr, *sqre, *ldu, *ldvt);
     /* System generated locals */
     integer u_dim1, u_offset, vt_dim1, vt_offset, i__1;
     real r__1, r__2;
@@ -284,6 +288,7 @@ void slasd1_(integer *nl, integer *nr, integer *sqre, real *d__, real *alpha, re
     {
         i__1 = -(*info);
         xerbla_("SLASD1", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     n = *nl + *nr + 1;
@@ -331,6 +336,7 @@ void slasd1_(integer *nl, integer *nr, integer *sqre, real *d__, real *alpha, re
             &iwork[coltyp], &work[iz], info);
     if(*info != 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Unscale. */
@@ -339,6 +345,7 @@ void slasd1_(integer *nl, integer *nr, integer *sqre, real *d__, real *alpha, re
     n1 = k;
     n2 = n - k;
     slamrg_(&n1, &n2, &d__[1], &c__1, &c_n1, &idxq[1]);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLASD1 */
 }

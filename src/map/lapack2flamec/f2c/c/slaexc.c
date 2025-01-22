@@ -147,6 +147,10 @@ the blocks are not swapped and T and Q are */
 void slaexc_(logical *wantq, integer *n, real *t, integer *ldt, real *q, integer *ldq, integer *j1,
              integer *n1, integer *n2, real *work, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slaexc inputs: n %" FLA_IS ",ldt %" FLA_IS ",ldq %" FLA_IS ",j1 %" FLA_IS
+                      ",n1 %" FLA_IS ",n2 %" FLA_IS "",
+                      *n, *ldt, *ldq, *j1, *n1, *n2);
     /* System generated locals */
     integer q_dim1, q_offset, t_dim1, t_offset, i__1;
     real r__1, r__2, r__3;
@@ -217,10 +221,12 @@ void slaexc_(logical *wantq, integer *n, real *t, integer *ldt, real *q, integer
     /* Quick return if possible */
     if(*n == 0 || *n1 == 0 || *n2 == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*j1 + *n1 > *n)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     j2 = *j1 + 1;
@@ -433,10 +439,12 @@ void slaexc_(logical *wantq, integer *n, real *t, integer *ldt, real *q, integer
             }
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* Exit with INFO = 1 if swap was rejected. */
 L50:
     *info = 1;
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAEXC */
 }

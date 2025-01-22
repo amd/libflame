@@ -179,7 +179,7 @@ void cunmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, comple
              complex *tau, complex *c__, integer *ldc, complex *work, integer *lwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("cunmtr inputs: side %\c ,uplo %\c ,trans %\c ,m %" FLA_IS ",n %" FLA_IS
+    AOCL_DTL_SNPRINTF("cunmtr inputs: side %c ,uplo %c ,trans %c ,m %" FLA_IS ",n %" FLA_IS
                       ",lda %" FLA_IS ",ldc %" FLA_IS ",lwork %" FLA_IS ",info %" FLA_IS "",
                       *side, *uplo, *trans, *m, *n, *lda, *ldc, *lwork, *info);
     /* System generated locals */

@@ -131,12 +131,8 @@ static integer c__1 = 1;
 void sgecon_(char *norm, integer *n, real *a, integer *lda, real *anorm, real *rcond, real *work,
              integer *iwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "sgecon inputs: norm %c, n %d, lda %d", *norm, *n, *lda);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgecon inputs: norm %c, n %" FLA_IS ", lda %" FLA_IS "", *norm, *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
     real r__1;
@@ -218,7 +214,7 @@ void sgecon_(char *norm, integer *n, real *a, integer *lda, real *anorm, real *r
     {
         i__1 = -(*info);
         xerbla_("SGECON", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -226,25 +222,25 @@ void sgecon_(char *norm, integer *n, real *a, integer *lda, real *anorm, real *r
     if(*n == 0)
     {
         *rcond = 1.f;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(*anorm == 0.f)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(sisnan_(anorm))
     {
         *rcond = *anorm;
         *info = -5;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(*anorm > hugeval)
     {
         *info = -5;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     smlnum = slamch_("Safe minimum");
@@ -304,7 +300,7 @@ L10:
     else
     {
         *info = 1;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Check for NaNs and Infs */
@@ -312,8 +308,8 @@ L10:
     {
         *info = 1;
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
 L20:
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGECON */
 }

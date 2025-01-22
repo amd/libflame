@@ -195,6 +195,11 @@ void sgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, inte
              integer *ldab, real *d__, real *e, real *q, integer *ldq, real *pt, integer *ldpt,
              real *c__, integer *ldc, real *work, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgbbrd inputs: vect %c ,m %" FLA_IS ",n %" FLA_IS ",ncc %" FLA_IS
+                      ",kl %" FLA_IS ",ku %" FLA_IS ",ldab %" FLA_IS ",ldq %" FLA_IS
+                      ",ldpt %" FLA_IS ",ldc %" FLA_IS "",
+                      *vect, *m, *n, *ncc, *kl, *ku, *ldab, *ldq, *ldpt, *ldc);
     /* System generated locals */
     integer ab_dim1, ab_offset, c_dim1, c_offset, pt_dim1, pt_offset, q_dim1, q_offset, i__1, i__2,
         i__3, i__4, i__5, i__6, i__7;
@@ -309,6 +314,7 @@ void sgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, inte
     {
         i__1 = -(*info);
         xerbla_("SGBBRD", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize Q and P**T to the unit matrix, if needed */
@@ -323,6 +329,7 @@ void sgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, inte
     /* Quick return if possible. */
     if(*m == 0 || *n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     minmn = fla_min(*m, *n);
@@ -644,6 +651,7 @@ void sgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, inte
             /* L150: */
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGBBRD */
 }

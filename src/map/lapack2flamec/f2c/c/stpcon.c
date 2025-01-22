@@ -133,13 +133,9 @@ static integer c__1 = 1;
 void stpcon_(char *norm, char *uplo, char *diag, integer *n, real *ap, real *rcond, real *work,
              integer *iwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "stpcon inputs: norm %c, uplo %c, diag %c, n %" FLA_IS "", *norm, *uplo,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("stpcon inputs: norm %c, uplo %c, diag %c, n %" FLA_IS "", *norm, *uplo,
              *diag, *n);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer i__1;
     real r__1;
@@ -224,14 +220,14 @@ void stpcon_(char *norm, char *uplo, char *diag, integer *n, real *ap, real *rco
     {
         i__1 = -(*info);
         xerbla_("STPCON", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         *rcond = 1.f;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     *rcond = 0.f;
@@ -290,7 +286,7 @@ void stpcon_(char *norm, char *uplo, char *diag, integer *n, real *ap, real *rco
         }
     }
 L20:
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STPCON */
 }

@@ -165,12 +165,9 @@ static real c_b7 = 1.f;
 void slasd8_(integer *icompq, integer *k, real *d__, real *z__, real *vf, real *vl, real *difl,
              real *difr, integer *lddifr, real *dsigma, real *work, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "slasd8 inputs: icompq %d, k %d, lddifr %d", *icompq, *k, *lddifr);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slasd8 inputs: icompq %" FLA_IS ", k %" FLA_IS ", lddifr %" FLA_IS "",
+                      *icompq, *k, *lddifr);
     /* System generated locals */
     integer difr_dim1, difr_offset, i__1, i__2;
     real r__1, r__2;
@@ -249,7 +246,7 @@ void slasd8_(integer *icompq, integer *k, real *d__, real *z__, real *vf, real *
     {
         i__1 = -(*info);
         xerbla_("SLASD8", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -262,7 +259,7 @@ void slasd8_(integer *icompq, integer *k, real *d__, real *z__, real *vf, real *
             difl[2] = 1.f;
             difr[(difr_dim1 << 1) + 1] = 1.f;
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Book keeping. */
@@ -286,7 +283,7 @@ void slasd8_(integer *icompq, integer *k, real *d__, real *z__, real *vf, real *
         /* If the root finder fails, report the convergence failure. */
         if(*info != 0)
         {
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         work[iwk3i + j] = work[iwk3i + j] * work[j] * work[iwk2i + j];
@@ -355,7 +352,7 @@ void slasd8_(integer *icompq, integer *k, real *d__, real *z__, real *vf, real *
     }
     scopy_(k, &work[iwk2], &c__1, &vf[1], &c__1);
     scopy_(k, &work[iwk3], &c__1, &vl[1], &c__1);
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLASD8 */
 }

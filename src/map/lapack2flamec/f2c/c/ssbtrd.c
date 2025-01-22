@@ -174,15 +174,11 @@ if VECT = 'N' or 'V', then Q need not be set. */
 void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer *ldab, real *d__,
              real *e, real *q, integer *ldq, real *work, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "ssbtrd inputs: vect %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS
              ", ldq %" FLA_IS "",
              *vect, *uplo, *n, *kd, *ldab, *ldq);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer ab_dim1, ab_offset, q_dim1, q_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */
@@ -276,13 +272,13 @@ void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer 
     {
         i__1 = -(*info);
         xerbla_("SSBTRD", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize Q to the unit matrix, if needed */
@@ -756,7 +752,7 @@ void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer 
             /* L240: */
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSBTRD */
 }

@@ -140,13 +140,9 @@ IPIV(i) = i indicates a row interchange was not */
 void sgttrs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *du, real *du2,
              integer *ipiv, real *b, integer *ldb, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "sgttrs inputs: trans %c, n %d, nrhs %d, ldb %d", *trans, *n, *nrhs,
-             *ldb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgttrs inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",
+                      *trans, *n, *nrhs, *ldb);
     /* System generated locals */
     integer b_dim1, b_offset, i__1, i__2, i__3;
     /* Local variables */
@@ -210,13 +206,13 @@ void sgttrs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *
     {
         i__1 = -(*info);
         xerbla_("SGTTRS", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Decode TRANS */
@@ -259,7 +255,7 @@ void sgttrs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *
         }
     }
     /* End of SGTTRS */
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* sgttrs_ */

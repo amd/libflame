@@ -182,6 +182,10 @@
 void sla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku, real *alpha,
                 real *ab, integer *ldab, real *x, integer *incx, real *beta, real *y, integer *incy)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sla_gbamv inputs: trans %" FLA_IS ",m %" FLA_IS ",n %" FLA_IS ",kl %" FLA_IS
+                      ",ku %" FLA_IS ",ldab %" FLA_IS ",incx %" FLA_IS ",incy %" FLA_IS "",
+                      *trans, *m, *n, *kl, *ku, *ldab, *incx, *incy);
     /* System generated locals */
     integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     real r__1;
@@ -263,11 +267,13 @@ void sla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku
     if(info != 0)
     {
         xerbla_("SLA_GBAMV ", &info, (ftnlen)10);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible. */
     if(*m == 0 || *n == 0 || *alpha == 0.f && *beta == 1.f)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Set LENX and LENY, the lengths of the vectors x and y, and set */
@@ -479,6 +485,7 @@ void sla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku
             }
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLA_GBAMV */
 }

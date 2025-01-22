@@ -153,13 +153,10 @@ T may have been partially */
 void strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *ldq, integer *ifst,
              integer *ilst, real *work, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "strexc inputs: compq %c, n %d, ldt %d, ldq %d, ifst %d, ilst %d", *compq,
-             *n, *ldt, *ldq, *ifst, *ilst);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("strexc inputs: compq %c, n %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS
+                      ", ifst %" FLA_IS ", ilst %" FLA_IS "",
+                      *compq, *n, *ldt, *ldq, *ifst, *ilst);
     /* System generated locals */
     integer q_dim1, q_offset, t_dim1, t_offset, i__1;
     /* Local variables */
@@ -234,13 +231,13 @@ void strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *l
     {
         i__1 = -(*info);
         xerbla_("STREXC", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n <= 1)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine the first row of specified block */
@@ -279,7 +276,7 @@ void strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *l
     }
     if(*ifst == *ilst)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*ifst < *ilst)
@@ -311,7 +308,7 @@ void strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *l
             if(*info != 0)
             {
                 *ilst = here;
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             here += nbnext;
@@ -342,7 +339,7 @@ void strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *l
             if(*info != 0)
             {
                 *ilst = here;
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             if(nbnext == 1)
@@ -367,7 +364,7 @@ void strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *l
                     if(*info != 0)
                     {
                         *ilst = here;
-                        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                        AOCL_DTL_TRACE_LOG_EXIT
                         return;
                     }
                     here += 2;
@@ -410,7 +407,7 @@ void strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *l
             if(*info != 0)
             {
                 *ilst = here;
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             here -= nbnext;
@@ -441,7 +438,7 @@ void strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *l
             if(*info != 0)
             {
                 *ilst = here;
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             if(nbnext == 1)
@@ -467,7 +464,7 @@ void strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *l
                     if(*info != 0)
                     {
                         *ilst = here;
-                        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                        AOCL_DTL_TRACE_LOG_EXIT
                         return;
                     }
                     here += -2;
@@ -490,7 +487,7 @@ void strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *l
         }
     }
     *ilst = here;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STREXC */
 }

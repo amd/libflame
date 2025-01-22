@@ -116,6 +116,8 @@
 /* Subroutine */
 void sdisna_(char *job, integer *m, integer *n, real *d__, real *sep, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sdisna inputs: job %c ,m %" FLA_IS ",n %" FLA_IS "", *job, *m, *n);
     /* System generated locals */
     integer i__1;
     real r__1, r__2, r__3;
@@ -220,11 +222,13 @@ void sdisna_(char *job, integer *m, integer *n, real *d__, real *sep, integer *i
     {
         i__1 = -(*info);
         xerbla_("SDISNA", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(k == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute reciprocal condition numbers */
@@ -289,6 +293,7 @@ void sdisna_(char *job, integer *m, integer *n, real *d__, real *sep, integer *i
         sep[i__] = fla_max(r__1, thresh);
         /* L30: */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SDISNA */
 }

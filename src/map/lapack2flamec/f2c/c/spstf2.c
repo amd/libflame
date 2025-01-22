@@ -144,13 +144,9 @@ static real c_b18 = 1.f;
 void spstf2_(char *uplo, integer *n, real *a, integer *lda, integer *piv, integer *rank, real *tol,
              real *work, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "spstf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("spstf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n,
              *lda);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
     real r__1;
@@ -227,13 +223,13 @@ void spstf2_(char *uplo, integer *n, real *a, integer *lda, integer *piv, intege
     {
         i__1 = -(*info);
         xerbla_("SPSTF2", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize PIV */
@@ -427,7 +423,7 @@ L160: /* Rank is number of steps completed. Set INFO = 1 to signal */
     *rank = j - 1;
     *info = 1;
 L170:
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SPSTF2 */
 }

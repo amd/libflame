@@ -154,6 +154,10 @@ static integer c__1 = 1;
 void slaed9_(integer *k, integer *kstart, integer *kstop, integer *n, real *d__, real *q,
              integer *ldq, real *rho, real *dlambda, real *w, real *s, integer *lds, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slaed9 inputs: k %" FLA_IS ",kstart %" FLA_IS ",kstop %" FLA_IS ",n %" FLA_IS
+                      ",ldq %" FLA_IS ",lds %" FLA_IS "",
+                      *k, *kstart, *kstop, *n, *ldq, *lds);
     /* System generated locals */
     integer q_dim1, q_offset, s_dim1, s_offset, i__1, i__2;
     real r__1;
@@ -226,11 +230,13 @@ void slaed9_(integer *k, integer *kstart, integer *kstop, integer *n, real *d__,
     {
         i__1 = -(*info);
         xerbla_("SLAED9", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*k == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     i__1 = *kstop;
@@ -308,6 +314,7 @@ void slaed9_(integer *k, integer *kstart, integer *kstop, integer *n, real *d__,
         /* L110: */
     }
 L120:
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAED9 */
 }

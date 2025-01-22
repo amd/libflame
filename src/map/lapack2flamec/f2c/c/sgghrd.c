@@ -217,6 +217,11 @@ void sgghrd_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, r
              integer *lda, real *b, integer *ldb, real *q, integer *ldq, real *z__, integer *ldz,
              integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgghrd inputs: compq %c ,compz %c ,n %" FLA_IS ",ilo %" FLA_IS
+                      ",ihi %" FLA_IS ",lda %" FLA_IS ",ldb %" FLA_IS ",ldq %" FLA_IS
+                      ",ldz %" FLA_IS "",
+                      *compq, *compz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
         i__3;
@@ -355,6 +360,7 @@ void sgghrd_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, r
     {
         i__1 = -(*info);
         xerbla_("SGGHRD", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize Q and Z if desired. */
@@ -369,6 +375,7 @@ void sgghrd_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, r
     /* Quick return if possible */
     if(*n <= 1)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Zero out lower triangle of B */
@@ -422,6 +429,7 @@ void sgghrd_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, r
         }
         /* L40: */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGGHRD */
 }

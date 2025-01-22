@@ -209,6 +209,10 @@ v(i+1:n) is stored on exit in A(i+1:n,i), */
 void slatrd_(char *uplo, integer *n, integer *nb, real *a, integer *lda, real *e, real *tau,
              real *w, integer *ldw)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slatrd inputs: uplo %c ,n %" FLA_IS ",nb %" FLA_IS ",lda %" FLA_IS
+                      ",ldw %" FLA_IS "",
+                      *uplo, *n, *nb, *lda, *ldw);
     /* System generated locals */
     integer a_dim1, a_offset, w_dim1, w_offset, i__1, i__2, i__3;
     /* Local variables */
@@ -258,6 +262,7 @@ void slatrd_(char *uplo, integer *n, integer *nb, real *a, integer *lda, real *e
     /* Function Body */
     if(*n <= 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(lsame_(uplo, "U", 1, 1))
@@ -380,6 +385,7 @@ void slatrd_(char *uplo, integer *n, integer *nb, real *a, integer *lda, real *e
             /* L20: */
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLATRD */
 }

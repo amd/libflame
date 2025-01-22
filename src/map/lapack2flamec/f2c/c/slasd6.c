@@ -320,14 +320,11 @@ void slasd6_(integer *icompq, integer *nl, integer *nr, integer *sqre, real *d__
              real *difl, real *difr, real *z__, integer *k, real *c__, real *s, real *work,
              integer *iwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
-             "slasd6 inputs: icompq %d, nl %d, nr %d, sqre %d, idxq %d, ldgcol %d, ldgnum %d",
-             *icompq, *nl, *nr, *sqre, *idxq, *ldgcol, *ldgnum);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slasd6 inputs: icompq %" FLA_IS ", nl %" FLA_IS ", nr %" FLA_IS
+                      ", sqre %" FLA_IS ", idxq %" FLA_IS ", ldgcol %" FLA_IS ", ldgnum %" FLA_IS
+                      "",
+                      *icompq, *nl, *nr, *sqre, *idxq, *ldgcol, *ldgnum);
     /* System generated locals */
     integer givcol_dim1, givcol_offset, givnum_dim1, givnum_offset, poles_dim1, poles_offset, i__1;
     real r__1, r__2;
@@ -423,7 +420,7 @@ void slasd6_(integer *icompq, integer *nl, integer *nr, integer *sqre, real *d__
     {
         i__1 = -(*info);
         xerbla_("SLASD6", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* The following values are for bookkeeping purposes only. They are */
@@ -464,7 +461,7 @@ void slasd6_(integer *icompq, integer *nl, integer *nr, integer *sqre, real *d__
     /* Report the possible convergence failure. */
     if(*info != 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Save the poles if ICOMPQ = 1. */
@@ -479,7 +476,7 @@ void slasd6_(integer *icompq, integer *nl, integer *nr, integer *sqre, real *d__
     n1 = *k;
     n2 = n - *k;
     slamrg_(&n1, &n2, &d__[1], &c__1, &c_n1, &idxq[1]);
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLASD6 */
 }

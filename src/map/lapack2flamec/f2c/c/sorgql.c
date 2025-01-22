@@ -131,12 +131,9 @@ the routine */
 void sorgql_(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *work,
              integer *lwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "sorgql inputs: m %d, n %d, k %d, lda %d", *m, *n, *k, *lda);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sorgql inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",
+                      *m, *n, *k, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
@@ -220,18 +217,18 @@ void sorgql_(integer *m, integer *n, integer *k, real *a, integer *lda, real *ta
     {
         i__1 = -(*info);
         xerbla_("SORGQL", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n <= 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     nbmin = 2;
@@ -336,7 +333,7 @@ void sorgql_(integer *m, integer *n, integer *k, real *a, integer *lda, real *ta
         }
     }
     work[1] = sroundup_lwork(&iws);
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SORGQL */
 }

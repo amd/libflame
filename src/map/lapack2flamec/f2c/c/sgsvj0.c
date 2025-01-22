@@ -219,6 +219,10 @@ void sgsvj0_(char *jobv, integer *m, integer *n, real *a, integer *lda, real *d_
              integer *mv, real *v, integer *ldv, real *eps, real *sfmin, real *tol, integer *nsweep,
              real *work, integer *lwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgsvj0 inputs: jobv %c ,m %" FLA_IS ",n %" FLA_IS ",lda %" FLA_IS
+                      ",mv %" FLA_IS ",ldv %" FLA_IS ",nsweep %" FLA_IS ",lwork %" FLA_IS "",
+                      *jobv, *m, *n, *lda, *mv, *ldv, *nsweep, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, v_dim1, v_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     real r__1, r__2;
@@ -347,6 +351,7 @@ void sgsvj0_(char *jobv, integer *m, integer *n, real *a, integer *lda, real *d_
     {
         i__1 = -(*info);
         xerbla_("SGSVJ0", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(rsvec)
@@ -1252,6 +1257,7 @@ L1995: /* Sort the vector D. */
         }
         /* L5991: */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* .. */
     /* .. END OF SGSVJ0 */

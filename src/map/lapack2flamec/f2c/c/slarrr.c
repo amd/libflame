@@ -90,6 +90,8 @@ E(N) is set to ZERO. */
 /* Subroutine */
 void slarrr_(integer *n, real *d__, real *e, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slarrr inputs: n %" FLA_IS "", *n);
     /* System generated locals */
     integer i__1;
     real r__1;
@@ -128,6 +130,7 @@ void slarrr_(integer *n, real *d__, real *e, integer *info)
     if(*n <= 0)
     {
         *info = 0;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* As a default, do NOT go for relative-accuracy preserving computations. */
@@ -190,6 +193,7 @@ L11:
     if(yesrel)
     {
         *info = 0;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else
@@ -203,6 +207,7 @@ L11:
     /* In this case, the matrix needs to be flipped and, at the end */
     /* of the eigenvector computation, the flip needs to be applied */
     /* to the computed eigenvectors (and the support) */
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* END OF SLARRR */
 }

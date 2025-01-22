@@ -166,14 +166,10 @@ the */
 void ssytrf_aa_2stage_(char *uplo, integer *n, real *a, integer *lda, real *tb, integer *ltb,
                        integer *ipiv, integer *ipiv2, real *work, integer *lwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "ssytrf_aa_2stage inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ltb %" FLA_IS "",
              *uplo, *n, *lda, *ltb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
@@ -263,7 +259,7 @@ void ssytrf_aa_2stage_(char *uplo, integer *n, real *a, integer *lda, real *tb, 
     {
         i__1 = -(*info);
         xerbla_("SSYTRF_AA_2STAGE", &i__1, (ftnlen)16);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Answer the query */
@@ -282,13 +278,13 @@ void ssytrf_aa_2stage_(char *uplo, integer *n, real *a, integer *lda, real *tb, 
     }
     if(tquery || wquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine the number of the block size */
@@ -732,7 +728,7 @@ void ssytrf_aa_2stage_(char *uplo, integer *n, real *a, integer *lda, real *tb, 
     }
     /* Factor the band matrix */
     sgbtrf_(n, n, &nb, &nb, &tb[1], &ldtb, &ipiv2[1], info);
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYTRF_AA_2STAGE */
 }

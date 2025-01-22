@@ -236,21 +236,6 @@ b(i), i=1,..,n}
 void slatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, real *ap, real *x,
              real *scale, real *cnorm, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slatps(uplo, trans, diag, normin, n, ap, x, scale, cnorm, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_slatps(uplo, trans, diag, normin, &n_64, ap, x, scale, cnorm, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_slatps(char *uplo, char *trans, char *diag, char *normin, aocl_int64_t *n,
-                        real *ap, real *x, real *scale, real *cnorm, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slatps inputs: uplo %c ,trans %c ,diag %c ,normin %c ,n %" FLA_IS "", *uplo,
                       *trans, *diag, *normin, *n);
@@ -340,11 +325,13 @@ void aocl_lapack_slatps(char *uplo, char *trans, char *diag, char *normin, aocl_
     {
         i__1 = -(*info);
         xerbla_("SLATPS", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine machine dependent parameters to control overflow. */
@@ -887,6 +874,7 @@ void aocl_lapack_slatps(char *uplo, char *trans, char *diag, char *normin, aocl_
         r__1 = 1.f / tscal;
         aocl_blas_sscal(n, &r__1, &cnorm[1], &c__1);
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLATPS */
 }

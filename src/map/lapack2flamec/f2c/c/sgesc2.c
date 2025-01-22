@@ -116,19 +116,6 @@ for 1 <= j <= N, column j of the */
 void sgesc2_(integer *n, real *a, integer *lda, real *rhs, integer *ipiv, integer *jpiv,
              real *scale)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgesc2(n, a, lda, rhs, ipiv, jpiv, scale);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-
-    aocl_lapack_sgesc2(&n_64, a, &lda_64, rhs, ipiv, jpiv, scale);
-#endif
-}
-
-void aocl_lapack_sgesc2(aocl_int64_t *n, real *a, aocl_int64_t *lda, real *rhs, aocl_int_t *ipiv,
-                        aocl_int_t *jpiv, real *scale)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgesc2 inputs: n %" FLA_IS ",lda %" FLA_IS ",jpiv %" FLA_IS "", *n, *lda,
                       *jpiv);
@@ -218,6 +205,7 @@ void aocl_lapack_sgesc2(aocl_int64_t *n, real *a, aocl_int64_t *lda, real *rhs, 
     /* Apply permutations JPIV to the solution (RHS) */
     i__1 = *n - 1;
     slaswp_(&c__1, &rhs[1], lda, &c__1, &i__1, &jpiv[1], &c_n1);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGESC2 */
 }

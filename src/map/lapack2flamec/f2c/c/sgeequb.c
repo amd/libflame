@@ -143,23 +143,6 @@
 void sgeequb_(integer *m, integer *n, real *a, integer *lda, real *r__, real *c__, real *rowcnd,
               real *colcnd, real *amax, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgeequb(m, n, a, lda, r__, c__, rowcnd, colcnd, amax, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sgeequb(&m_64, &n_64, a, &lda_64, r__, c__, rowcnd, colcnd, amax, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_sgeequb(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *r__,
-                         real *c__, real *rowcnd, real *colcnd, real *amax, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgeequb inputs: m %" FLA_IS ",n %" FLA_IS ",lda %" FLA_IS "", *m, *n, *lda);
     /* System generated locals */
@@ -220,6 +203,7 @@ void aocl_lapack_sgeequb(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t
     {
         i__1 = -(*info);
         xerbla_("SGEEQUB", &i__1, (ftnlen)7);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible. */
@@ -228,6 +212,7 @@ void aocl_lapack_sgeequb(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t
         *rowcnd = 1.f;
         *colcnd = 1.f;
         *amax = 0.f;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants. Assume SMLNUM is a power of the radix. */
@@ -292,6 +277,7 @@ void aocl_lapack_sgeequb(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t
             if(r__[i__] == 0.f)
             {
                 *info = i__;
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* L50: */
@@ -366,6 +352,7 @@ void aocl_lapack_sgeequb(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t
             if(c__[j] == 0.f)
             {
                 *info = *m + j;
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* L110: */
@@ -387,6 +374,7 @@ void aocl_lapack_sgeequb(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t
         /* Compute COLCND = fla_min(C(J)) / fla_max(C(J)). */
         *colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGEEQUB */
 }

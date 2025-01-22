@@ -317,6 +317,10 @@ void sgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, re
              integer *ihi, real *scale, real *abnrm, real *rconde, real *rcondv, real *work,
              integer *lwork, integer *iwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgeevx inputs: balanc %c ,jobvl %c ,jobvr %c ,sense %c ,n %" FLA_IS
+                      ",lda %" FLA_IS ",ldvl %" FLA_IS ",ldvr %" FLA_IS ",lwork %" FLA_IS "",
+                      *balanc, *jobvl, *jobvr, *sense, *n, *lda, *ldvl, *ldvr, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2, i__3;
     real r__1, r__2;
@@ -584,15 +588,18 @@ void sgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, re
     {
         i__1 = -(*info);
         xerbla_("SGEEVX", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants */
@@ -821,6 +828,7 @@ L50:
         }
     }
     work[1] = sroundup_lwork(&maxwrk);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGEEVX */
 }

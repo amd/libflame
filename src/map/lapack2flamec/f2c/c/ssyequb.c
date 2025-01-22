@@ -132,6 +132,8 @@ static integer c__1 = 1;
 void ssyequb_(char *uplo, integer *n, real *a, integer *lda, real *s, real *scond, real *amax,
               real *work, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("ssyequb inputs: uplo %c ,n %" FLA_IS ",lda %" FLA_IS "", *uplo, *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     real r__1, r__2, r__3;
@@ -201,6 +203,7 @@ void ssyequb_(char *uplo, integer *n, real *a, integer *lda, real *s, real *scon
     {
         i__1 = -(*info);
         xerbla_("SSYEQUB", &i__1, (ftnlen)7);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     up = lsame_(uplo, "U", 1, 1);
@@ -209,6 +212,7 @@ void ssyequb_(char *uplo, integer *n, real *a, integer *lda, real *s, real *scon
     if(*n == 0)
     {
         *scond = 1.f;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     i__1 = *n;
@@ -355,6 +359,7 @@ void ssyequb_(char *uplo, integer *n, real *a, integer *lda, real *s, real *scon
             if(d__ <= 0.f)
             {
                 *info = -1;
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             si = c0 * -2 / (c1 + sqrt(d__));
@@ -421,6 +426,7 @@ L999:
         smax = fla_max(r__1, r__2);
     }
     *scond = fla_max(smin, smlnum) / fla_min(smax, bignum);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* ssyequb_ */

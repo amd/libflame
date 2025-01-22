@@ -308,6 +308,9 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
              integer *isplit, integer *m, real *w, real *werr, real *wgap, integer *iblock,
              integer *indexw, real *gers, real *pivmin, real *work, integer *iwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slarre inputs: range %c ,n %" FLA_IS ",il %" FLA_IS ",iu %" FLA_IS "",
+                      *range, *n, *il, *iu);
     /* System generated locals */
     integer i__1, i__2;
     real r__1, r__2, r__3;
@@ -411,6 +414,7 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
     /* Quick return if possible */
     if(*n <= 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Decode RANGE */
@@ -454,6 +458,7 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
         }
         /* store the shift for the initial RRR, which is zero in this case */
         e[1] = 0.f;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* General case: tridiagonal matrix of order > 1 */
@@ -526,6 +531,7 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
         if(iinfo != 0)
         {
             *info = -1;
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         /* Make sure that the entries M+1 to N in W, WERR, IBLOCK, INDEXW are 0 */
@@ -649,6 +655,7 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
             if(iinfo != 0)
             {
                 *info = -1;
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* Computing MAX */
@@ -660,6 +667,7 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
             if(iinfo != 0)
             {
                 *info = -1;
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* Computing MIN */
@@ -902,6 +910,7 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
         /* if the program reaches this point, no base representation could be */
         /* found in MAXTRY iterations. */
         *info = 2;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     L83: /* At this point, we have found an initial base representation */
         /* T - SIGMA I = L D L^T with not too much element growth. */
@@ -969,6 +978,7 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
             if(iinfo != 0)
             {
                 *info = -4;
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* SLARRB computes all gaps correctly except for the last one */
@@ -1018,6 +1028,7 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
                 /* and should be changed. The index is in IWORK(1) and the */
                 /* gap is in WORK(N+1) */
                 *info = -5;
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             else
@@ -1029,6 +1040,7 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
                     if(work[i__] < 0.f)
                     {
                         *info = -6;
+                        AOCL_DTL_TRACE_LOG_EXIT
                         return;
                     }
                     /* L149: */
@@ -1085,6 +1097,7 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
         wbegin = wend + 1;
     L170:;
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLARRE */
 }

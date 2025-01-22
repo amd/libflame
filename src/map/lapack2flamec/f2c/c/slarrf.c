@@ -191,6 +191,9 @@ void slarrf_(integer *n, real *d__, real *l, real *ld, integer *clstrt, integer 
              real *wgap, real *werr, real *spdiam, real *clgapl, real *clgapr, real *pivmin,
              real *sigma, real *dplus, real *lplus, real *work, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slarrf inputs: n %" FLA_IS ",clstrt %" FLA_IS ",clend %" FLA_IS "", *n,
+                      *clstrt, *clend);
     /* System generated locals */
     integer i__1;
     real r__1, r__2, r__3;
@@ -253,6 +256,7 @@ void slarrf_(integer *n, real *d__, real *l, real *ld, integer *clstrt, integer 
     /* Quick return if possible */
     if(*n <= 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     fact = 2.f;
@@ -539,6 +543,7 @@ L50:
         else
         {
             *info = 1;
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }
@@ -553,6 +558,7 @@ L100:
         i__1 = *n - 1;
         scopy_(&i__1, &work[*n + 1], &c__1, &lplus[1], &c__1);
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLARRF */
 }

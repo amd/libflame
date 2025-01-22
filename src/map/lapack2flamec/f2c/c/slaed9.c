@@ -154,28 +154,6 @@ static integer c__1 = 1;
 void slaed9_(integer *k, integer *kstart, integer *kstop, integer *n, real *d__, real *q,
              integer *ldq, real *rho, real *dlambda, real *w, real *s, integer *lds, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slaed9(k, kstart, kstop, n, d__, q, ldq, rho, dlambda, w, s, lds, info);
-#else
-    aocl_int64_t k_64 = *k;
-    aocl_int64_t kstart_64 = *kstart;
-    aocl_int64_t kstop_64 = *kstop;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t lds_64 = *lds;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_slaed9(&k_64, &kstart_64, &kstop_64, &n_64, d__, q, &ldq_64, rho, dlambda, w, s,
-                       &lds_64, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_slaed9(aocl_int64_t *k, aocl_int64_t *kstart, aocl_int64_t *kstop, aocl_int64_t *n,
-                        real *d__, real *q, aocl_int64_t *ldq, real *rho, real *dlambda, real *w,
-                        real *s, aocl_int64_t *lds, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaed9 inputs: k %" FLA_IS ",kstart %" FLA_IS ",kstop %" FLA_IS ",n %" FLA_IS
                       ",ldq %" FLA_IS ",lds %" FLA_IS "",
@@ -252,11 +230,13 @@ void aocl_lapack_slaed9(aocl_int64_t *k, aocl_int64_t *kstart, aocl_int64_t *kst
     {
         i__1 = -(*info);
         xerbla_("SLAED9", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*k == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     i__1 = *kstop;
@@ -334,6 +314,7 @@ void aocl_lapack_slaed9(aocl_int64_t *k, aocl_int64_t *kstart, aocl_int64_t *kst
         /* L110: */
     }
 L120:
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAED9 */
 }

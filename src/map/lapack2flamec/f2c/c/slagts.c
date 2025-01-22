@@ -159,22 +159,6 @@
 void slagts_(integer *job, integer *n, real *a, real *b, real *c__, real *d__, integer *in, real *y,
              real *tol, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slagts(job, n, a, b, c__, d__, in, y, tol, info);
-#else
-    aocl_int64_t job_64 = *job;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_slagts(&job_64, &n_64, a, b, c__, d__, in, y, tol, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_slagts(aocl_int64_t *job, aocl_int64_t *n, real *a, real *b, real *c__, real *d__,
-                        aocl_int_t *in, real *y, real *tol, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slagts inputs: job %" FLA_IS ",n %" FLA_IS ",in %" FLA_IS "", *job, *n, *in);
     /* System generated locals */
@@ -231,10 +215,12 @@ void aocl_lapack_slagts(aocl_int64_t *job, aocl_int64_t *n, real *a, real *b, re
     {
         i__1 = -(*info);
         xerbla_("SLAGTS", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     eps = slamch_("Epsilon");
@@ -313,6 +299,7 @@ void aocl_lapack_slagts(aocl_int64_t *job, aocl_int64_t *n, real *a, real *b, re
                         if(absak == 0.f || f2c_abs(temp) * sfmin > absak)
                         {
                             *info = k;
+                            AOCL_DTL_TRACE_LOG_EXIT
                             return;
                         }
                         else
@@ -324,6 +311,7 @@ void aocl_lapack_slagts(aocl_int64_t *job, aocl_int64_t *n, real *a, real *b, re
                     else if(f2c_abs(temp) > absak * bignum)
                     {
                         *info = k;
+                        AOCL_DTL_TRACE_LOG_EXIT
                         return;
                     }
                 }
@@ -408,6 +396,7 @@ void aocl_lapack_slagts(aocl_int64_t *job, aocl_int64_t *n, real *a, real *b, re
                         if(absak == 0.f || f2c_abs(temp) * sfmin > absak)
                         {
                             *info = k;
+                            AOCL_DTL_TRACE_LOG_EXIT
                             return;
                         }
                         else
@@ -419,6 +408,7 @@ void aocl_lapack_slagts(aocl_int64_t *job, aocl_int64_t *n, real *a, real *b, re
                     else if(f2c_abs(temp) > absak * bignum)
                     {
                         *info = k;
+                        AOCL_DTL_TRACE_LOG_EXIT
                         return;
                     }
                 }
@@ -490,6 +480,7 @@ void aocl_lapack_slagts(aocl_int64_t *job, aocl_int64_t *n, real *a, real *b, re
         }
     }
     /* End of SLAGTS */
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* slagts_ */

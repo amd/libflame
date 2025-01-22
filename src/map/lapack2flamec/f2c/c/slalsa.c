@@ -271,35 +271,6 @@ void slalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, real *
              integer *perm, real *givnum, real *c__, real *s, real *work, integer *iwork,
              integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slalsa(icompq, smlsiz, n, nrhs, b, ldb, bx, ldbx, u, ldu, vt, k, difl, difr, z__,
-                       poles, givptr, givcol, ldgcol, perm, givnum, c__, s, work, iwork, info);
-#else
-    aocl_int64_t icompq_64 = *icompq;
-    aocl_int64_t smlsiz_64 = *smlsiz;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldbx_64 = *ldbx;
-    aocl_int64_t ldu_64 = *ldu;
-    aocl_int64_t ldgcol_64 = *ldgcol;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_slalsa(&icompq_64, &smlsiz_64, &n_64, &nrhs_64, b, &ldb_64, bx, &ldbx_64, u,
-                       &ldu_64, vt, k, difl, difr, z__, poles, givptr, givcol, &ldgcol_64, perm,
-                       givnum, c__, s, work, iwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_slalsa(aocl_int64_t *icompq, aocl_int64_t *smlsiz, aocl_int64_t *n,
-                        aocl_int64_t *nrhs, real *b, aocl_int64_t *ldb, real *bx,
-                        aocl_int64_t *ldbx, real *u, aocl_int64_t *ldu, real *vt, aocl_int_t *k,
-                        real *difl, real *difr, real *z__, real *poles, aocl_int_t *givptr,
-                        aocl_int_t *givcol, aocl_int64_t *ldgcol, aocl_int_t *perm, real *givnum,
-                        real *c__, real *s, real *work, aocl_int_t *iwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF(
         "slalsa inputs: icompq %" FLA_IS ",smlsiz %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS
@@ -424,6 +395,7 @@ void aocl_lapack_slalsa(aocl_int64_t *icompq, aocl_int64_t *smlsiz, aocl_int64_t
     {
         i__1 = -(*info);
         xerbla_("SLALSA", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Book-keeping and setting up the computation tree. */
@@ -588,6 +560,7 @@ L50: /* First now go through the right singular vector matrices of all */
         /* L80: */
     }
 L90:
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLALSA */
 }

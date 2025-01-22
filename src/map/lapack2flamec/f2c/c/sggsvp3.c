@@ -283,6 +283,11 @@ void sggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
               real *u, integer *ldu, real *v, integer *ldv, real *q, integer *ldq, integer *iwork,
               real *tau, real *work, integer *lwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sggsvp3 inputs: jobu %c ,jobv %c ,jobq %c ,m %" FLA_IS ",p %" FLA_IS
+                      ",n %" FLA_IS ",lda %" FLA_IS ",ldb %" FLA_IS ",l %" FLA_IS ",ldu %" FLA_IS
+                      ",ldv %" FLA_IS ",ldq %" FLA_IS ",lwork %" FLA_IS "",
+                      *jobu, *jobv, *jobq, *m, *p, *n, *lda, *ldb, *l, *ldu, *ldv, *ldq, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1,
         v_offset, i__1, i__2, i__3;
@@ -436,10 +441,12 @@ void sggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
     {
         i__1 = -(*info);
         xerbla_("SGGSVP3", &i__1, (ftnlen)7);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(lquery)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* QR with column pivoting of B: B*P = V*( S11 S12 ) */
@@ -658,6 +665,7 @@ void sggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
         }
     }
     work[1] = sroundup_lwork(&lwkopt);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGGSVP3 */
 }

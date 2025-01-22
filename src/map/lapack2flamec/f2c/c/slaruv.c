@@ -92,12 +92,8 @@ the array */
 /* Subroutine */
 void slaruv_(integer *iseed, integer *n, real *x)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "slaruv inputs: iseed %d, n %d", *iseed, *n);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slaruv inputs: iseed %" FLA_IS ", n  %" FLA_IS "", *iseed, *n);
     /* Initialized data */
     static const integer mm[512] /* was [128][4] */
         = {494,  2637, 255,  2008, 1253, 3344, 4084, 1739, 3143, 3468, 688,  1657, 1238, 3166, 1292,
@@ -165,7 +161,7 @@ void slaruv_(integer *iseed, integer *n, real *x)
     /* Quick return for N < 1 */
     if(*n < 1)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     i1 = iseed[1];
@@ -220,7 +216,7 @@ void slaruv_(integer *iseed, integer *n, real *x)
     iseed[2] = it2;
     iseed[3] = it3;
     iseed[4] = it4;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLARUV */
 }

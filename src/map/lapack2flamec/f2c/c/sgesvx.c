@@ -354,31 +354,6 @@ void sgesvx_(char *fact, char *trans, integer *n, integer *nrhs, real *a, intege
              real *x, integer *ldx, real *rcond, real *ferr, real *berr, real *work, integer *iwork,
              integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgesvx(fact, trans, n, nrhs, a, lda, af, ldaf, ipiv, equed, r__, c__, b, ldb, x,
-                       ldx, rcond, ferr, berr, work, iwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldaf_64 = *ldaf;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldx_64 = *ldx;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sgesvx(fact, trans, &n_64, &nrhs_64, a, &lda_64, af, &ldaf_64, ipiv, equed, r__,
-                       c__, b, &ldb_64, x, &ldx_64, rcond, ferr, berr, work, iwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *a,
-                        aocl_int64_t *lda, real *af, aocl_int64_t *ldaf, aocl_int_t *ipiv,
-                        char *equed, real *r__, real *c__, real *b, aocl_int64_t *ldb, real *x,
-                        aocl_int64_t *ldx, real *rcond, real *ferr, real *berr, real *work,
-                        aocl_int_t *iwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgesvx inputs: fact %c ,trans %c ,n %" FLA_IS ",nrhs %" FLA_IS
                       ",lda %" FLA_IS ",ldaf %" FLA_IS ",equed %c ,ldb %" FLA_IS ",ldx %" FLA_IS "",
@@ -592,6 +567,7 @@ void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
     {
         i__1 = -(*info);
         xerbla_("SGESVX", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(equil)
@@ -659,6 +635,7 @@ void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
             }
             work[1] = rpvgrw;
             *rcond = 0.f;
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }
@@ -742,6 +719,7 @@ void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
         *info = *n + 1;
     }
     work[1] = rpvgrw;
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGESVX */
 }

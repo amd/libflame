@@ -177,13 +177,10 @@ static integer c__1 = 1;
 void sorgtsqr_(integer *m, integer *n, integer *mb, integer *nb, real *a, integer *lda, real *t,
                integer *ldt, real *work, integer *lwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "sorgtsqr inputs: m %d, n %d, mb %d, nb %d, lda %d, ldt %d", *m, *n, *mb,
-             *nb, *lda, *ldt);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sorgtsqr inputs: m %" FLA_IS ", n %" FLA_IS ", mb %" FLA_IS ", nb %" FLA_IS
+                      ", lda %" FLA_IS ", ldt %" FLA_IS "",
+                      *m, *n, *mb, *nb, *lda, *ldt);
     /* System generated locals */
     integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2;
     /* Local variables */
@@ -292,20 +289,20 @@ void sorgtsqr_(integer *m, integer *n, integer *mb, integer *nb, real *a, intege
     {
         i__1 = -(*info);
         xerbla_("SORGTSQR", &i__1, (ftnlen)8);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
         work[1] = sroundup_lwork(&lworkopt);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(fla_min(*m, *n) == 0)
     {
         work[1] = sroundup_lwork(&lworkopt);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* (1) Form explicitly the tall-skinny M-by-N left submatrix Q1_in */
@@ -332,7 +329,7 @@ void sorgtsqr_(integer *m, integer *n, integer *mb, integer *nb, real *a, intege
         scopy_(m, &work[(j - 1) * ldc + 1], &c__1, &a[j * a_dim1 + 1], &c__1);
     }
     work[1] = sroundup_lwork(&lworkopt);
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SORGTSQR */
 }

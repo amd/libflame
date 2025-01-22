@@ -381,6 +381,11 @@ void sggesx_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, char *sense,
              real *rcondv, real *work, integer *lwork, integer *iwork, integer *liwork,
              logical *bwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sggesx inputs: jobvsl %c ,jobvsr %c ,sort %c ,sense %c ,n %" FLA_IS
+                      ",lda %" FLA_IS ",ldb %" FLA_IS ",ldvsl %" FLA_IS ",ldvsr %" FLA_IS
+                      ",lwork %" FLA_IS "",
+                      *jobvsl, *jobvsr, *sort, *sense, *n, *lda, *ldb, *ldvsl, *ldvsr, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, vsl_dim1, vsl_offset, vsr_dim1, vsr_offset, i__1,
         i__2;
@@ -660,16 +665,19 @@ void sggesx_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, char *sense,
     {
         i__1 = -(*info);
         xerbla_("SGGESX", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         *sdim = 0;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants */
@@ -965,6 +973,7 @@ void sggesx_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, char *sense,
 L50:
     work[1] = sroundup_lwork(&maxwrk);
     iwork[1] = liwmin;
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGGESX */
 }

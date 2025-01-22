@@ -138,23 +138,6 @@ static real c_b8 = 1.f;
 /* Subroutine */
 void stzrqf_(integer *m, integer *n, real *a, integer *lda, real *tau, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_stzrqf(m, n, a, lda, tau, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_stzrqf(&m_64, &n_64, a, &lda_64, tau, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_stzrqf(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *tau,
-             aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("stzrqf inputs: m %" FLA_IS ",n %" FLA_IS ",lda %" FLA_IS "", *m, *n, *lda);
     /* System generated locals */
@@ -214,11 +197,13 @@ void aocl_lapack_stzrqf(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
     {
         i__1 = -(*info);
         xerbla_("STZRQF", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Perform the factorization. */
     if(*m == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*m == *n)
@@ -269,6 +254,7 @@ void aocl_lapack_stzrqf(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
             /* L20: */
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STZRQF */
 }

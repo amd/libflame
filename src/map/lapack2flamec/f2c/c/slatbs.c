@@ -248,25 +248,6 @@ b(i), i=1,..,n}
 void slatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, integer *kd, real *ab,
              integer *ldab, real *x, real *scale, real *cnorm, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slatbs(uplo, trans, diag, normin, n, kd, ab, ldab, x, scale, cnorm, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t kd_64 = *kd;
-    aocl_int64_t ldab_64 = *ldab;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_slatbs(uplo, trans, diag, normin, &n_64, &kd_64, ab, &ldab_64, x, scale, cnorm,
-                       &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_int64_t *n,
-                        aocl_int64_t *kd, real *ab, aocl_int64_t *ldab, real *x, real *scale,
-                        real *cnorm, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slatbs inputs: uplo %c ,trans %c ,diag %c ,normin %c ,n %" FLA_IS
                       ",kd %" FLA_IS ",ldab %" FLA_IS "",
@@ -368,11 +349,13 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
     {
         i__1 = -(*info);
         xerbla_("SLATBS", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine machine dependent parameters to control overflow. */
@@ -940,6 +923,7 @@ void aocl_lapack_slatbs(char *uplo, char *trans, char *diag, char *normin, aocl_
         r__1 = 1.f / tscal;
         aocl_blas_sscal(n, &r__1, &cnorm[1], &c__1);
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLATBS */
 }

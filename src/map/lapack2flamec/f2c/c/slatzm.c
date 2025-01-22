@@ -152,21 +152,6 @@ static real c_b5 = 1.f;
 void slatzm_(char *side, integer *m, integer *n, real *v, integer *incv, real *tau, real *c1,
              real *c2, integer *ldc, real *work)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slatzm(side, m, n, v, incv, tau, c1, c2, ldc, work);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t incv_64 = *incv;
-    aocl_int64_t ldc_64 = *ldc;
-
-    aocl_lapack_slatzm(side, &m_64, &n_64, v, &incv_64, tau, c1, c2, &ldc_64, work);
-#endif
-}
-
-void aocl_lapack_slatzm(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, aocl_int64_t *incv, real *tau,
-             real *c1, real *c2, aocl_int64_t *ldc, real *work)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slatzm inputs: side %c ,m %" FLA_IS ",n %" FLA_IS ",incv %" FLA_IS
                       ",ldc %" FLA_IS "",
@@ -216,6 +201,7 @@ void aocl_lapack_slatzm(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, a
     /* Function Body */
     if(fla_min(*m, *n) == 0 || *tau == 0.f)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(lsame_(side, "L", 1, 1))
@@ -247,6 +233,7 @@ void aocl_lapack_slatzm(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, a
         r__1 = -(*tau);
         aocl_blas_sger(m, &i__1, &r__1, &work[1], &c__1, &v[1], incv, &c2[c2_offset], ldc);
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLATZM */
 }

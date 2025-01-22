@@ -175,6 +175,10 @@ static integer c__2 = 2;
 void sgeqr_(integer *m, integer *n, real *a, integer *lda, real *t, integer *tsize, real *work,
             integer *lwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgeqr inputs: m %" FLA_IS ",n %" FLA_IS ",lda %" FLA_IS ",tsize %" FLA_IS
+                      ",lwork %" FLA_IS "",
+                      *m, *n, *lda, *tsize, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     /* Local variables */
@@ -357,15 +361,18 @@ void sgeqr_(integer *m, integer *n, real *a, integer *lda, real *t, integer *tsi
     {
         i__1 = -(*info);
         xerbla_("SGEQR", &i__1, (ftnlen)5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(fla_min(*m, *n) == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* The QR Decomposition */
@@ -381,6 +388,7 @@ void sgeqr_(integer *m, integer *n, real *a, integer *lda, real *t, integer *tsi
     i__1 = 1;
     i__2 = nb * *n; // , expr subst
     work[1] = (real)fla_max(i__1, i__2);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGEQR */
 }

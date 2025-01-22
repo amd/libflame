@@ -211,31 +211,6 @@ the routine */
 void sgelsy_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb,
              integer *jpvt, real *rcond, integer *rank, real *work, integer *lwork, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgelsy(m, n, nrhs, a, lda, b, ldb, jpvt, rcond, rank, work, lwork, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t rank_64 = *rank;
-    aocl_int64_t lwork_64 = *lwork;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sgelsy(&m_64, &n_64, &nrhs_64, a, &lda_64, b, &ldb_64, jpvt, rcond, &rank_64, work,
-                       &lwork_64, &info_64);
-
-    *rank = (aocl_int_t)rank_64;
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_sgelsy(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, real *a,
-                        aocl_int64_t *lda, real *b, aocl_int64_t *ldb, aocl_int_t *jpvt,
-                        real *rcond, aocl_int64_t *rank, real *work, aocl_int64_t *lwork,
-                        aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgelsy inputs: m %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS ",lda %" FLA_IS
                       ",ldb %" FLA_IS ",lwork %" FLA_IS "",
@@ -382,16 +357,19 @@ void aocl_lapack_sgelsy(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, re
     {
         i__1 = -(*info);
         xerbla_("SGELSY", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(mn == 0 || *nrhs == 0)
     {
         *rank = 0;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine parameters */
@@ -562,6 +540,7 @@ L10:
     }
 L70:
     work[1] = sroundup_lwork(&lwkopt);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGELSY */
 }

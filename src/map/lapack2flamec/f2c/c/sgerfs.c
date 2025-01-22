@@ -187,30 +187,6 @@ void sgerfs_(char *trans, integer *n, integer *nrhs, real *a, integer *lda, real
              integer *ipiv, real *b, integer *ldb, real *x, integer *ldx, real *ferr, real *berr,
              real *work, integer *iwork, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgerfs(trans, n, nrhs, a, lda, af, ldaf, ipiv, b, ldb, x, ldx, ferr, berr, work,
-                       iwork, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t nrhs_64 = *nrhs;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t ldaf_64 = *ldaf;
-    aocl_int64_t ldb_64 = *ldb;
-    aocl_int64_t ldx_64 = *ldx;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sgerfs(trans, &n_64, &nrhs_64, a, &lda_64, af, &ldaf_64, ipiv, b, &ldb_64, x,
-                       &ldx_64, ferr, berr, work, iwork, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_sgerfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *a,
-                        aocl_int64_t *lda, real *af, aocl_int64_t *ldaf, aocl_int_t *ipiv, real *b,
-                        aocl_int64_t *ldb, real *x, aocl_int64_t *ldx, real *ferr, real *berr,
-                        real *work, aocl_int_t *iwork, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgerfs inputs: trans %c ,n %" FLA_IS ",nrhs %" FLA_IS ",lda %" FLA_IS
                       ",ldaf %" FLA_IS ",ldb %" FLA_IS ",ldx %" FLA_IS "",
@@ -326,6 +302,7 @@ void aocl_lapack_sgerfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
     {
         i__1 = -(*info);
         xerbla_("SGERFS", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -338,6 +315,7 @@ void aocl_lapack_sgerfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
             berr[j] = 0.f;
             /* L10: */
         }
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(notran)
@@ -523,6 +501,7 @@ void aocl_lapack_sgerfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *
         }
         /* L140: */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGERFS */
 }

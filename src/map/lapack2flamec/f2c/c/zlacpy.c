@@ -103,7 +103,7 @@ void zlacpy_(char *uplo, integer *m, integer *n, doublecomplex *a, integer *lda,
              integer *ldb)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlacpy inputs: uplo %c, m %" FLA_IS ", n %" FLA_IS ", lda %%" FLA_IS
+    AOCL_DTL_SNPRINTF("zlacpy inputs: uplo %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
                       ", ldb %" FLA_IS "",
                       *uplo, *m, *n, *lda, *ldb);
     /* System generated locals */

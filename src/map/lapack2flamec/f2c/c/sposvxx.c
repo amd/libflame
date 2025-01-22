@@ -683,6 +683,7 @@ void sposvxx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, intege
     {
         i__1 = -(*info);
         xerbla_("SPOSVXX", &i__1, (ftnlen)7);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(equil)
@@ -713,6 +714,7 @@ void sposvxx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, intege
             /* Compute the reciprocal pivot growth factor of the */
             /* leading rank-deficient INFO columns of A. */
             *rpvgrw = sla_porpvgrw_(uplo, info, &a[a_offset], lda, &af[af_offset], ldaf, &work[1]);
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }
@@ -732,6 +734,7 @@ void sposvxx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, intege
     {
         slascl2_(n, nrhs, &s[1], &x[x_offset], ldx);
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SPOSVXX */
 }

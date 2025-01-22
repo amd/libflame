@@ -126,23 +126,6 @@ v(1:m-k+i-1) is stored on exit in */
 /* Subroutine */
 void sgeql2_(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_sgeql2(m, n, a, lda, tau, work, info);
-#else
-    aocl_int64_t m_64 = *m;
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t lda_64 = *lda;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_sgeql2(&m_64, &n_64, a, &lda_64, tau, work, &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_sgeql2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *tau,
-                        real *work, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgeql2 inputs: m %" FLA_IS ",n %" FLA_IS ",lda %" FLA_IS "", *m, *n, *lda);
     /* System generated locals */
@@ -198,6 +181,7 @@ void aocl_lapack_sgeql2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
     {
         i__1 = -(*info);
         xerbla_("SGEQL2", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     k = fla_min(*m, *n);
@@ -218,6 +202,7 @@ void aocl_lapack_sgeql2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t 
         a[*m - k + i__ + (*n - k + i__) * a_dim1] = aii;
         /* L10: */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGEQL2 */
 }

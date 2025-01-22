@@ -147,28 +147,6 @@ the blocks are not swapped and T and Q are */
 void slaexc_(logical *wantq, integer *n, real *t, integer *ldt, real *q, integer *ldq, integer *j1,
              integer *n1, integer *n2, real *work, integer *info)
 {
-#if FLA_ENABLE_ILP64
-    aocl_lapack_slaexc(wantq, n, t, ldt, q, ldq, j1, n1, n2, work, info);
-#else
-    aocl_int64_t n_64 = *n;
-    aocl_int64_t ldt_64 = *ldt;
-    aocl_int64_t ldq_64 = *ldq;
-    aocl_int64_t j1_64 = *j1;
-    aocl_int64_t n1_64 = *n1;
-    aocl_int64_t n2_64 = *n2;
-    aocl_int64_t info_64 = *info;
-
-    aocl_lapack_slaexc(wantq, &n_64, t, &ldt_64, q, &ldq_64, &j1_64, &n1_64, &n2_64, work,
-                       &info_64);
-
-    *info = (aocl_int_t)info_64;
-#endif
-}
-
-void aocl_lapack_slaexc(logical *wantq, aocl_int64_t *n, real *t, aocl_int64_t *ldt, real *q,
-                        aocl_int64_t *ldq, aocl_int64_t *j1, aocl_int64_t *n1, aocl_int64_t *n2,
-                        real *work, aocl_int64_t *info)
-{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaexc inputs: n %" FLA_IS ",ldt %" FLA_IS ",ldq %" FLA_IS ",j1 %" FLA_IS
                       ",n1 %" FLA_IS ",n2 %" FLA_IS "",
@@ -243,10 +221,12 @@ void aocl_lapack_slaexc(logical *wantq, aocl_int64_t *n, real *t, aocl_int64_t *
     /* Quick return if possible */
     if(*n == 0 || *n1 == 0 || *n2 == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*j1 + *n1 > *n)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     j2 = *j1 + 1;
@@ -459,10 +439,12 @@ void aocl_lapack_slaexc(logical *wantq, aocl_int64_t *n, real *t, aocl_int64_t *
             }
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* Exit with INFO = 1 if swap was rejected. */
 L50:
     *info = 1;
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAEXC */
 }

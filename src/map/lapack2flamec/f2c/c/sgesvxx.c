@@ -776,6 +776,7 @@ void sgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, real *a, integ
     {
         i__1 = -(*info);
         xerbla_("SGESVXX", &i__1, (ftnlen)7);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(equil)
@@ -834,6 +835,7 @@ void sgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, real *a, integ
             /* Compute the reciprocal pivot growth factor of the */
             /* leading rank-deficient INFO columns of A. */
             *rpvgrw = sla_gerpvgrw_(n, info, &a[a_offset], lda, &af[af_offset], ldaf);
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }
@@ -857,6 +859,7 @@ void sgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, real *a, integ
     {
         slascl2_(n, nrhs, &r__[1], &x[x_offset], ldx);
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGESVXX */
 }

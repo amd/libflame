@@ -259,8 +259,8 @@ void zhegvd_(integer *itype, char *jobz, char *uplo, integer *n, doublecomplex *
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhegvd inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS
-                      ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork " FLA_IS ", lrwork " FLA_IS
-                      ", liwork " FLA_IS "",
+                      ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS ", lrwork %" FLA_IS
+                      ", liwork %" FLA_IS "",
                       *itype, *jobz, *uplo, *n, *lda, *ldb, *lwork, *lrwork, *liwork);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;

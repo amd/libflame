@@ -96,13 +96,10 @@
 /* Subroutine */
 void slamrg_(integer *n1, integer *n2, real *a, integer *strd1, integer *strd2, integer *index)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "slamrg inputs: n1 %d, n2 %d, strd1 %d, strd2 %d", *n1, *n2, *strd1,
-             *strd2);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slamrg inputs: n1 %" FLA_IS ", n2 %" FLA_IS ", strd1 %" FLA_IS
+                      ", strd2 %" FLA_IS "",
+                      *n1, *n2, *strd1, *strd2);
     /* System generated locals */
     integer i__1;
     /* Local variables */
@@ -186,7 +183,7 @@ L10:
             /* L30: */
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAMRG */
 }

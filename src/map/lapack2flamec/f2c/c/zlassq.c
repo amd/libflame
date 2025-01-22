@@ -119,8 +119,8 @@
 void zlassq_(integer *n, doublecomplex *x, integer *incx, doublereal *scale, doublereal *sumsq)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zlassq inputs: n %" FLA_IS ", incx %" FLA_IS ", scl %lf, sumsq %lf", *n,
-                      *incx, *scl, *sumsq);
+    AOCL_DTL_SNPRINTF("zlassq inputs: n %" FLA_IS ", incx %" FLA_IS ", scale %lf, sumsq %lf", *n,
+                      *incx, *scale, *sumsq);
     /* System generated locals */
     integer i__1, i__2;
     doublereal r__1, r__2;

@@ -234,6 +234,10 @@ void sggev_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *b
             real *alphar, real *alphai, real *beta, real *vl, integer *ldvl, real *vr,
             integer *ldvr, real *work, integer *lwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sggev inputs: jobvl %c ,jobvr %c ,n %" FLA_IS ",lda %" FLA_IS ",ldb %" FLA_IS
+                      ",ldvl %" FLA_IS ",ldvr %" FLA_IS ",lwork %" FLA_IS "",
+                      *jobvl, *jobvr, *n, *lda, *ldb, *ldvl, *ldvr, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2;
     real r__1, r__2, r__3, r__4;
@@ -440,15 +444,18 @@ void sggev_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *b
     {
         i__1 = -(*info);
         xerbla_("SGGEV ", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants */
@@ -756,6 +763,7 @@ L110:
         slascl_("G", &c__0, &c__0, &bnrmto, &bnrm, n, &c__1, &beta[1], n, &ierr);
     }
     work[1] = sroundup_lwork(&maxwrk);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGGEV */
 }

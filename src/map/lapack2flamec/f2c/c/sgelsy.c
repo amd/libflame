@@ -211,6 +211,10 @@ the routine */
 void sgelsy_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb,
              integer *jpvt, real *rcond, integer *rank, real *work, integer *lwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgelsy inputs: m %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS ",lda %" FLA_IS
+                      ",ldb %" FLA_IS ",lwork %" FLA_IS "",
+                      *m, *n, *nrhs, *lda, *ldb, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     real r__1, r__2;
@@ -353,16 +357,19 @@ void sgelsy_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
     {
         i__1 = -(*info);
         xerbla_("SGELSY", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(mn == 0 || *nrhs == 0)
     {
         *rank = 0;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine parameters */
@@ -532,6 +539,7 @@ L10:
     }
 L70:
     work[1] = sroundup_lwork(&lwkopt);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGELSY */
 }

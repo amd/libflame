@@ -348,15 +348,11 @@ void ssyevr_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *
              integer *ldz, integer *isuppz, real *work, integer *lwork, integer *iwork,
              integer *liwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "ssyevr inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS
              ", il %" FLA_IS ", iu %" FLA_IS ", ldz %" FLA_IS "",
              *jobz, *range, *uplo, *n, *lda, *il, *iu, *ldz);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer a_dim1, a_offset, z_dim1, z_offset, i__1, i__2;
     real r__1, r__2;
@@ -542,12 +538,12 @@ void ssyevr_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *
     {
         i__1 = -(*info);
         xerbla_("SSYEVR", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -555,7 +551,7 @@ void ssyevr_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *
     if(*n == 0)
     {
         work[1] = 1.f;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 1)
@@ -580,7 +576,7 @@ void ssyevr_(char *jobz, char *range, char *uplo, integer *n, real *a, integer *
             isuppz[1] = 1;
             isuppz[2] = 1;
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants. */
@@ -806,7 +802,7 @@ L30:
     /* Set WORK(1) to optimal workspace size. */
     work[1] = sroundup_lwork(&lwkopt);
     iwork[1] = liwmin;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYEVR */
 }

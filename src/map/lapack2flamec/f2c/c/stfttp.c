@@ -188,6 +188,8 @@
 /* Subroutine */
 void stfttp_(char *transr, char *uplo, integer *n, real *arf, real *ap, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("stfttp inputs: transr %c ,uplo %c ,n %" FLA_IS "", *transr, *uplo, *n);
     /* System generated locals */
     integer i__1, i__2, i__3;
     /* Local variables */
@@ -237,11 +239,13 @@ void stfttp_(char *transr, char *uplo, integer *n, real *arf, real *ap, integer 
     {
         i__1 = -(*info);
         xerbla_("STFTTP", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 1)
@@ -254,6 +258,7 @@ void stfttp_(char *transr, char *uplo, integer *n, real *arf, real *ap, integer 
         {
             ap[0] = arf[0];
         }
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Size of array ARF(0:NT-1) */
@@ -565,6 +570,7 @@ void stfttp_(char *transr, char *uplo, integer *n, real *arf, real *ap, integer 
             }
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STFTTP */
 }

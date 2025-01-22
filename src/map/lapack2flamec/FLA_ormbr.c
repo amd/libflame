@@ -237,8 +237,8 @@ extern void dormbr_fla(char *vect, char *side, char *trans, integer *m, integer 
 LAPACK_ormbr(s, orm)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sormbr inputs: vect %c, side %c, trans %c, m " FLA_IS ", n " FLA_IS
-                      ", k " FLA_IS ", lda " FLA_IS ", ldc " FLA_IS "",
+    AOCL_DTL_SNPRINTF("sormbr inputs: vect %c, side %c, trans %c, m %" FLA_IS ", n %" FLA_IS
+                      ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",
                       *vect, *side, *trans, *m, *n, *k, *ldim_A, *ldim_C);
     {
 #if !FLA_ENABLE_AMD_OPT
@@ -270,8 +270,8 @@ LAPACK_ormbr(s, orm)
 LAPACK_ormbr(d, orm)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("dormbr inputs: vect %c, side %c, trans %c, m " FLA_IS ", n " FLA_IS
-                      ", k " FLA_IS ", lda " FLA_IS ", ldc " FLA_IS "",
+    AOCL_DTL_SNPRINTF("dormbr inputs: vect %c, side %c, trans %c, m %" FLA_IS ", n %" FLA_IS
+                      ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",
                       *vect, *side, *trans, *m, *n, *k, *ldim_A, *ldim_C);
     {
 #if !FLA_ENABLE_AMD_OPT
@@ -305,8 +305,8 @@ LAPACK_ormbr(c, unm)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("cunmbr inputs: vect %c, side %c, trans %c, m " FLA_IS ", n " FLA_IS
-                      ", k " FLA_IS ", lda " FLA_IS ", ldc " FLA_IS "",
+    AOCL_DTL_SNPRINTF("cunmbr inputs: vect %c, side %c, trans %c, m %" FLA_IS ", n %" FLA_IS
+                      ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",
                       *vect, *side, *trans, *m, *n, *k, *ldim_A, *ldim_C);
     {
         LAPACK_RETURN_CHECK_VAR1(cunmbr_check(vect, side, trans, m, n, k, buff_A, ldim_A, buff_t,
@@ -327,8 +327,8 @@ LAPACK_ormbr(z, unm)
 {
     int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("zunmbr inputs: vect %c, side %c, trans %c, m " FLA_IS ", n " FLA_IS
-                      ", k " FLA_IS ", lda " FLA_IS ", ldc " FLA_IS "",
+    AOCL_DTL_SNPRINTF("zunmbr inputs: vect %c, side %c, trans %c, m %" FLA_IS ", n %" FLA_IS
+                      ", k %" FLA_IS ", lda %" FLA_IS ", ldc %" FLA_IS "",
                       *vect, *side, *trans, *m, *n, *k, *ldim_A, *ldim_C);
     {
         LAPACK_RETURN_CHECK_VAR1(zunmbr_check(vect, side, trans, m, n, k, buff_A, ldim_A, buff_t,

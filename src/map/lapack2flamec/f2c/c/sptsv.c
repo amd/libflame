@@ -111,13 +111,9 @@
 /* Subroutine */
 void sptsv_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ldb, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "sptsv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "", *n,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sptsv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "", *n,
              *nrhs, *ldb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer b_dim1, b_offset, i__1;
     /* Local variables */
@@ -167,7 +163,7 @@ void sptsv_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ldb
     {
         i__1 = -(*info);
         xerbla_("SPTSV ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute the L*D*L**T (or U**T*D*U) factorization of A. */
@@ -177,7 +173,7 @@ void sptsv_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ldb
         /* Solve the system A*X = B, overwriting B with X. */
         spttrs_(n, nrhs, &d__[1], &e[1], &b[b_offset], ldb, info);
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SPTSV */
 }

@@ -123,6 +123,8 @@ v(1:n-k+i-1) is stored on exit in */
 /* Subroutine */
 void sgerq2_(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgerq2 inputs: m %" FLA_IS ",n %" FLA_IS ",lda %" FLA_IS "", *m, *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     /* Local variables */
@@ -176,6 +178,7 @@ void sgerq2_(integer *m, integer *n, real *a, integer *lda, real *tau, real *wor
     {
         i__1 = -(*info);
         xerbla_("SGERQ2", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     k = fla_min(*m, *n);
@@ -196,6 +199,7 @@ void sgerq2_(integer *m, integer *n, real *a, integer *lda, real *tau, real *wor
         a[*m - k + i__ + (*n - k + i__) * a_dim1] = aii;
         /* L10: */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGERQ2 */
 }

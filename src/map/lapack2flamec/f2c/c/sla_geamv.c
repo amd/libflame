@@ -171,6 +171,10 @@
 void sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, integer *lda, real *x,
                 integer *incx, real *beta, real *y, integer *incy)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sla_geamv inputs: trans %" FLA_IS ",m %" FLA_IS ",n %" FLA_IS ",lda %" FLA_IS
+                      ",incx %" FLA_IS ",incy %" FLA_IS "",
+                      *trans, *m, *n, *lda, *incx, *incy);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     real r__1;
@@ -244,11 +248,13 @@ void sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, in
     if(info != 0)
     {
         xerbla_("SLA_GEAMV ", &info, (ftnlen)10);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible. */
     if(*m == 0 || *n == 0 || *alpha == 0.f && *beta == 1.f)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Set LENX and LENY, the lengths of the vectors x and y, and set */
@@ -442,6 +448,7 @@ void sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, in
             }
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLA_GEAMV */
 }

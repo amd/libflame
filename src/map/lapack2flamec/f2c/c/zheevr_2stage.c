@@ -421,7 +421,7 @@ void zheevr_2stage_(char *jobz, char *range, char *uplo, integer *n, doublecompl
         "zheevr_2stage inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS
         ", il %" FLA_IS ", iu %" FLA_IS ", vl %lf, vu %lf, abstol %lf, ldz %" FLA_IS
         ", lwork %" FLA_IS ", lrwork %" FLA_IS ", liwork %" FLA_IS "",
-        *jobz, *range, *uplo, *n, *lda, *il, *iu, *vl, *vu, *abstol, *ldz, *lwork, *lrwork, liwork);
+        *jobz, *range, *uplo, *n, *lda, *il, *iu, *vl, *vu, *abstol, *ldz, *lwork, *lrwork, *liwork);
     /* System generated locals */
     integer a_dim1, a_offset, z_dim1, z_offset, i__1, i__2;
     doublereal d__1, d__2;

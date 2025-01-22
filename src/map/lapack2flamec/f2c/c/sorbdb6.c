@@ -161,14 +161,10 @@ void sorbdb6_(integer *m1, integer *m2, integer *n, real *x1, integer *incx1, re
               integer *incx2, real *q1, integer *ldq1, real *q2, integer *ldq2, real *work,
               integer *lwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
-             "sorbdb6 inputs: m1 %d, m2 %d, n %d, incx1 %d, incx2 %d, ldq1 %d, ldq2 %d", *m1, *m2,
-             *n, *incx1, *incx2, *ldq1, *ldq2);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sorbdb6 inputs: m1 %" FLA_IS ", m2 %" FLA_IS ", n %" FLA_IS
+                      ", incx1 %" FLA_IS ", incx2 %" FLA_IS ", ldq1 %" FLA_IS ", ldq2 %" FLA_IS "",
+                      *m1, *m2, *n, *incx1, *incx2, *ldq1, *ldq2);
     /* System generated locals */
     integer q1_dim1, q1_offset, q2_dim1, q2_offset, i__1, i__2;
     /* Builtin functions */
@@ -254,7 +250,7 @@ void sorbdb6_(integer *m1, integer *m2, integer *n, real *x1, integer *incx1, re
     {
         i__1 = -(*info);
         xerbla_("SORBDB6", &i__1, (ftnlen)7);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     eps = slamch_("Precision");
@@ -291,7 +287,7 @@ void sorbdb6_(integer *m1, integer *m2, integer *n, real *x1, integer *incx1, re
     /* Otherwise, project again. */
     if(norm_new__ >= norm * .83f)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(norm_new__ <= (*n * eps * norm))
@@ -308,7 +304,7 @@ void sorbdb6_(integer *m1, integer *m2, integer *n, real *x1, integer *incx1, re
         {
             x2[ix] = 0.f;
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     norm = norm_new__;
@@ -355,7 +351,7 @@ void sorbdb6_(integer *m1, integer *m2, integer *n, real *x1, integer *incx1, re
             x2[ix] = 0.f;
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SORBDB6 */
 }

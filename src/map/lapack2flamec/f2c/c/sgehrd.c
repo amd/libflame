@@ -176,6 +176,10 @@ v(i+2:ihi) is stored on */
 void sgehrd_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real *tau, real *work,
              integer *lwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgehrd inputs: n %" FLA_IS ",ilo %" FLA_IS ",ihi %" FLA_IS ",lda %" FLA_IS
+                      ",lwork %" FLA_IS "",
+                      *n, *ilo, *ihi, *lda, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
@@ -263,10 +267,12 @@ void sgehrd_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real
     {
         i__1 = -(*info);
         xerbla_("SGEHRD", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Set elements 1:ILO-1 and IHI:N-1 of TAU to zero */
@@ -287,6 +293,7 @@ void sgehrd_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real
     if(nh <= 1)
     {
         work[1] = 1.f;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine the block size */
@@ -383,6 +390,7 @@ void sgehrd_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real
     /* Use unblocked code to reduce the rest of the matrix */
     sgehd2_(n, &i__, ihi, &a[a_offset], lda, &tau[1], &work[1], &iinfo);
     work[1] = sroundup_lwork(&lwkopt);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGEHRD */
 }

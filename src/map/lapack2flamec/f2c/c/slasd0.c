@@ -153,6 +153,10 @@ static integer c__2 = 2;
 void slasd0_(integer *n, integer *sqre, real *d__, real *e, real *u, integer *ldu, real *vt,
              integer *ldvt, integer *smlsiz, integer *iwork, real *work, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slasd0 inputs: n %" FLA_IS ",sqre %" FLA_IS ",ldu %" FLA_IS ",ldvt %" FLA_IS
+                      ",smlsiz %" FLA_IS "",
+                      *n, *sqre, *ldu, *ldvt, *smlsiz);
     /* System generated locals */
     integer u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
     /* Builtin functions */
@@ -224,6 +228,7 @@ void slasd0_(integer *n, integer *sqre, real *d__, real *e, real *u, integer *ld
     {
         i__1 = -(*info);
         xerbla_("SLASD0", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* If the input matrix is too small, call SLASDQ to find the SVD. */
@@ -231,6 +236,7 @@ void slasd0_(integer *n, integer *sqre, real *d__, real *e, real *u, integer *ld
     {
         slasdq_("U", sqre, n, &m, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldvt, &u[u_offset], ldu,
                 &u[u_offset], ldu, &work[1], info);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Set up the computation tree. */
@@ -265,6 +271,7 @@ void slasd0_(integer *n, integer *sqre, real *d__, real *e, real *u, integer *ld
                 ldvt, &u[nlf + nlf * u_dim1], ldu, &u[nlf + nlf * u_dim1], ldu, &work[1], info);
         if(*info != 0)
         {
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         itemp = idxq + nlf - 2;
@@ -287,6 +294,7 @@ void slasd0_(integer *n, integer *sqre, real *d__, real *e, real *u, integer *ld
                 ldvt, &u[nrf + nrf * u_dim1], ldu, &u[nrf + nrf * u_dim1], ldu, &work[1], info);
         if(*info != 0)
         {
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         itemp = idxq + ic;
@@ -337,12 +345,14 @@ void slasd0_(integer *n, integer *sqre, real *d__, real *e, real *u, integer *ld
                     &vt[nlf + nlf * vt_dim1], ldvt, &iwork[idxqc], &iwork[iwk], &work[1], info);
             if(*info != 0)
             {
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* L40: */
         }
         /* L50: */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLASD0 */
 }

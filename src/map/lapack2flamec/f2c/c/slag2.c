@@ -154,6 +154,8 @@ if a diagonal is smaller */
 void slag2_(real *a, integer *lda, real *b, integer *ldb, real *safmin, real *scale1, real *scale2,
             real *wr1, real *wr2, real *wi)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slag2 inputs: lda %" FLA_IS ",ldb %" FLA_IS "", *lda, *ldb);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset;
     real r__1, r__2, r__3, r__4, r__5, r__6;
@@ -425,6 +427,7 @@ void slag2_(real *a, integer *lda, real *b, integer *ldb, real *safmin, real *sc
         }
     }
     /* End of SLAG2 */
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* slag2_ */

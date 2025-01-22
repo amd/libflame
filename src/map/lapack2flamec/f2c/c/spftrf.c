@@ -203,6 +203,8 @@ k=N/2. IF TRANSR = 'T' then RFP is */
 /* Subroutine */
 void spftrf_(char *transr, char *uplo, integer *n, real *a, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("spftrf inputs: transr %c ,uplo %c ,n %" FLA_IS "", *transr, *uplo, *n);
     /* System generated locals */
     integer i__1, i__2;
     /* Local variables */
@@ -260,11 +262,13 @@ void spftrf_(char *transr, char *uplo, integer *n, real *a, integer *info)
     {
         i__1 = -(*info);
         xerbla_("SPFTRF", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* If N is odd, set NISODD = .TRUE. */
@@ -304,6 +308,7 @@ void spftrf_(char *transr, char *uplo, integer *n, real *a, integer *info)
                 spotrf_("L", &n1, a, n, info);
                 if(*info > 0)
                 {
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 strsm_("R", "L", "T", "N", &n2, &n1, &c_b12, a, n, &a[n1], n);
@@ -322,6 +327,7 @@ void spftrf_(char *transr, char *uplo, integer *n, real *a, integer *info)
                 spotrf_("L", &n1, &a[n2], n, info);
                 if(*info > 0)
                 {
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 strsm_("L", "L", "N", "N", &n1, &n2, &c_b12, &a[n2], n, a, n);
@@ -345,6 +351,7 @@ void spftrf_(char *transr, char *uplo, integer *n, real *a, integer *info)
                 spotrf_("U", &n1, a, &n1, info);
                 if(*info > 0)
                 {
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 strsm_("L", "U", "T", "N", &n1, &n2, &c_b12, a, &n1, &a[n1 * n1], &n1);
@@ -364,6 +371,7 @@ void spftrf_(char *transr, char *uplo, integer *n, real *a, integer *info)
                 spotrf_("U", &n1, &a[n2 * n2], &n2, info);
                 if(*info > 0)
                 {
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 strsm_("R", "U", "N", "N", &n2, &n1, &c_b12, &a[n2 * n2], &n2, a, &n2);
@@ -391,6 +399,7 @@ void spftrf_(char *transr, char *uplo, integer *n, real *a, integer *info)
                 spotrf_("L", &k, &a[1], &i__1, info);
                 if(*info > 0)
                 {
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 i__1 = *n + 1;
@@ -415,6 +424,7 @@ void spftrf_(char *transr, char *uplo, integer *n, real *a, integer *info)
                 spotrf_("L", &k, &a[k + 1], &i__1, info);
                 if(*info > 0)
                 {
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 i__1 = *n + 1;
@@ -443,6 +453,7 @@ void spftrf_(char *transr, char *uplo, integer *n, real *a, integer *info)
                 spotrf_("U", &k, &a[k], &k, info);
                 if(*info > 0)
                 {
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 strsm_("L", "U", "T", "N", &k, &k, &c_b12, &a[k], &n1, &a[k * (k + 1)], &k);
@@ -462,6 +473,7 @@ void spftrf_(char *transr, char *uplo, integer *n, real *a, integer *info)
                 spotrf_("U", &k, &a[k * (k + 1)], &k, info);
                 if(*info > 0)
                 {
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 strsm_("R", "U", "N", "N", &k, &k, &c_b12, &a[k * (k + 1)], &k, a, &k);
@@ -474,6 +486,7 @@ void spftrf_(char *transr, char *uplo, integer *n, real *a, integer *info)
             }
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SPFTRF */
 }

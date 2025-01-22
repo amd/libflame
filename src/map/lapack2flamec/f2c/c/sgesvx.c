@@ -354,6 +354,10 @@ void sgesvx_(char *fact, char *trans, integer *n, integer *nrhs, real *a, intege
              real *x, integer *ldx, real *rcond, real *ferr, real *berr, real *work, integer *iwork,
              integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgesvx inputs: fact %c ,trans %c ,n %" FLA_IS ",nrhs %" FLA_IS
+                      ",lda %" FLA_IS ",ldaf %" FLA_IS ",equed %c ,ldb %" FLA_IS ",ldx %" FLA_IS "",
+                      *fact, *trans, *n, *nrhs, *lda, *ldaf, *equed, *ldb, *ldx);
     /* System generated locals */
     integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2;
     real r__1, r__2;
@@ -563,6 +567,7 @@ void sgesvx_(char *fact, char *trans, integer *n, integer *nrhs, real *a, intege
     {
         i__1 = -(*info);
         xerbla_("SGESVX", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(equil)
@@ -630,6 +635,7 @@ void sgesvx_(char *fact, char *trans, integer *n, integer *nrhs, real *a, intege
             }
             work[1] = rpvgrw;
             *rcond = 0.f;
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }
@@ -713,6 +719,7 @@ void sgesvx_(char *fact, char *trans, integer *n, integer *nrhs, real *a, intege
         *info = *n + 1;
     }
     work[1] = rpvgrw;
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGESVX */
 }

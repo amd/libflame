@@ -376,15 +376,11 @@ void sgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
              real *c__, real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *ferr,
              real *berr, real *work, integer *iwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
-             "sgbsvx inputs: fact %c, trans %c, n %d, kl %d, ku %d, nrhs %d, ldab %d, ldafb %d, "
-             "equed %c, ldb %d, ldx %d",
-             *fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *equed, *ldb, *ldx);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgbsvx inputs: fact %c, trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
+                      ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldafb %" FLA_IS ", "
+                      "equed %c, ldb %" FLA_IS ", ldx %" FLA_IS "",
+                      *fact, *trans, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *equed, *ldb, *ldx);
     /* System generated locals */
     integer ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
         i__2, i__3, i__4, i__5;
@@ -615,7 +611,7 @@ void sgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
     {
         i__1 = -(*info);
         xerbla_("SGBSVX", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(equil)
@@ -726,7 +722,7 @@ void sgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
             }
             work[1] = rpvgrw;
             *rcond = 0.f;
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }
@@ -812,7 +808,7 @@ void sgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
         *info = *n + 1;
     }
     work[1] = rpvgrw;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGBSVX */
 }

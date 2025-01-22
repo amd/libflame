@@ -119,13 +119,9 @@ the matrix is singular and its */
 void ssytri_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real *work,
              integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "ssytri inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("ssytri inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n,
              *lda);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
     real r__1;
@@ -193,13 +189,13 @@ void ssytri_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real 
     {
         i__1 = -(*info);
         xerbla_("SSYTRI", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Check that the diagonal matrix D is nonsingular. */
@@ -210,7 +206,7 @@ void ssytri_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real 
         {
             if(ipiv[*info] > 0 && a[*info + *info * a_dim1] == 0.f)
             {
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* L10: */
@@ -224,7 +220,7 @@ void ssytri_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real 
         {
             if(ipiv[*info] > 0 && a[*info + *info * a_dim1] == 0.f)
             {
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* L20: */
@@ -410,7 +406,7 @@ void ssytri_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real 
         goto L50;
     L60:;
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYTRI */
 }

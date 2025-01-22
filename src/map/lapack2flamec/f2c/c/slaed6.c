@@ -139,12 +139,8 @@ otherwise it is between d(1) and d(2). See */
 void slaed6_(integer *kniter, logical *orgati, real *rho, real *d__, real *z__, real *finit,
              real *tau, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "slaed6_ inputs: *kniter %d", *kniter);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slaed6_ inputs: *kniter %" FLA_IS "", *kniter);
     /* System generated locals */
     integer i__1;
     real r__1, r__2, r__3, r__4;
@@ -460,7 +456,7 @@ L60: /* Undo scaling */
     {
         *tau *= sclinv;
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAED6 */
 }

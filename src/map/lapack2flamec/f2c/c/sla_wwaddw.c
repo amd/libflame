@@ -78,6 +78,8 @@
 /* Subroutine */
 void sla_wwaddw_(integer *n, real *x, real *y, real *w)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sla_wwaddw inputs: n %" FLA_IS "", *n);
     /* System generated locals */
     integer i__1;
     /* Local variables */
@@ -109,6 +111,7 @@ void sla_wwaddw_(integer *n, real *x, real *y, real *w)
         x[i__] = s;
         /* L10: */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* sla_wwaddw__ */

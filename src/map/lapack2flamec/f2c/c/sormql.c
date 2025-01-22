@@ -175,13 +175,10 @@ the routine */
 void sormql_(char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda,
              real *tau, real *c__, integer *ldc, real *work, integer *lwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "sormql inputs: side %c, trans %c, m %d, n %d, k %d, lda %d, ldc %d",
-             *side, *trans, *m, *n, *k, *lda, *ldc);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sormql inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
+                      ", lda %" FLA_IS ", ldc %" FLA_IS "",
+                      *side, *trans, *m, *n, *k, *lda, *ldc);
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__4, i__5;
     char ch__1[2];
@@ -306,18 +303,18 @@ void sormql_(char *side, char *trans, integer *m, integer *n, integer *k, real *
     {
         i__1 = -(*info);
         xerbla_("SORMQL", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     nbmin = 2;
@@ -393,7 +390,7 @@ void sormql_(char *side, char *trans, integer *m, integer *n, integer *k, real *
         }
     }
     work[1] = sroundup_lwork(&lwkopt);
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SORMQL */
 }

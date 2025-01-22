@@ -201,6 +201,10 @@ static real c_b10 = 1.f;
 void spftrs_(char *transr, char *uplo, integer *n, integer *nrhs, real *a, real *b, integer *ldb,
              integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("spftrs inputs: transr %c ,uplo %c ,n %" FLA_IS ",nrhs %" FLA_IS
+                      ",ldb %" FLA_IS "",
+                      *transr, *uplo, *n, *nrhs, *ldb);
     /* System generated locals */
     integer b_dim1, b_offset, i__1;
     /* Local variables */
@@ -265,11 +269,13 @@ void spftrs_(char *transr, char *uplo, integer *n, integer *nrhs, real *a, real 
     {
         i__1 = -(*info);
         xerbla_("SPFTRS", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* start execution: there are two triangular solves */
@@ -283,6 +289,7 @@ void spftrs_(char *transr, char *uplo, integer *n, integer *nrhs, real *a, real 
         stfsm_(transr, "L", uplo, "T", "N", n, nrhs, &c_b10, a, &b[b_offset], ldb);
         stfsm_(transr, "L", uplo, "N", "N", n, nrhs, &c_b10, a, &b[b_offset], ldb);
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SPFTRS */
 }

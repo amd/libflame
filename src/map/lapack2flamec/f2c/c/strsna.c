@@ -274,15 +274,11 @@ void strsna_(char *job, char *howmny, logical *select, integer *n, real *t, inte
              integer *ldvl, real *vr, integer *ldvr, real *s, real *sep, integer *mm, integer *m,
              real *work, integer *ldwork, integer *iwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "strsna inputs: job %c, howmny %c, n %" FLA_IS ", ldt %" FLA_IS ", ldvl %" FLA_IS
              ", ldvr %" FLA_IS ", mm %" FLA_IS ", ldwork %" FLA_IS "",
              *job, *howmny, *n, *ldt, *ldvl, *ldvr, *mm, *ldwork);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, work_dim1, work_offset, i__1,
         i__2;
@@ -464,13 +460,13 @@ void strsna_(char *job, char *howmny, logical *select, integer *n, real *t, inte
     {
         i__1 = -(*info);
         xerbla_("STRSNA", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 1)
@@ -479,7 +475,7 @@ void strsna_(char *job, char *howmny, logical *select, integer *n, real *t, inte
         {
             if(!select[1])
             {
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
         }
@@ -491,7 +487,7 @@ void strsna_(char *job, char *howmny, logical *select, integer *n, real *t, inte
         {
             sep[1] = (r__1 = t[t_dim1 + 1], f2c_abs(r__1));
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants */
@@ -705,7 +701,7 @@ void strsna_(char *job, char *howmny, logical *select, integer *n, real *t, inte
         }
     L60:;
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STRSNA */
 }

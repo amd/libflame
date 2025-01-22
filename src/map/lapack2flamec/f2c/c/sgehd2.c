@@ -152,6 +152,10 @@ v(i+2:ihi) is stored on */
 void sgehd2_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real *tau, real *work,
              integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgehd2 inputs: n %" FLA_IS ",ilo %" FLA_IS ",ihi %" FLA_IS ",lda %" FLA_IS
+                      "",
+                      *n, *ilo, *ihi, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
@@ -209,6 +213,7 @@ void sgehd2_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real
     {
         i__1 = -(*info);
         xerbla_("SGEHD2", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     i__1 = *ihi - 1;
@@ -234,6 +239,7 @@ void sgehd2_(integer *n, integer *ilo, integer *ihi, real *a, integer *lda, real
         a[i__ + 1 + i__ * a_dim1] = aii;
         /* L10: */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGEHD2 */
 }

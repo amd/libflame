@@ -120,6 +120,9 @@ the matrix is */
 void sgetri_(integer *n, real *a, integer *lda, integer *ipiv, real *work, integer *lwork,
              integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgetri inputs: n %" FLA_IS ",lda %" FLA_IS ",lwork %" FLA_IS "", *n, *lda,
+                      *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
@@ -189,15 +192,18 @@ void sgetri_(integer *n, real *a, integer *lda, integer *ipiv, real *work, integ
     {
         i__1 = -(*info);
         xerbla_("SGETRI", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Form inv(U). If INFO > 0 from STRTRI, then U is singular, */
@@ -205,6 +211,7 @@ void sgetri_(integer *n, real *a, integer *lda, integer *ipiv, real *work, integ
     strtri_("Upper", "Non-unit", n, &a[a_offset], lda, info);
     if(*info > 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     nbmin = 2;
@@ -300,6 +307,7 @@ void sgetri_(integer *n, real *a, integer *lda, integer *ipiv, real *work, integ
         /* L60: */
     }
     work[1] = sroundup_lwork(&iws);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGETRI */
 }

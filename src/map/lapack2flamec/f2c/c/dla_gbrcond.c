@@ -172,9 +172,8 @@ doublereal dla_gbrcond_(char *trans, integer *n, integer *kl, integer *ku, doubl
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dla_gbrcond inputs: trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
-                      ", ldab %" FLA_IS ", ldafb %" FLA_IS ", cmode %" FLA_IS ", work %" FLA_IS
-                      ", iwork %" FLA_IS "",
-                      *trans, *n, *kl, *ku, *ldab, *ldafb, *cmode, *work, *iwork);
+                      ", ldab %" FLA_IS ", ldafb %" FLA_IS ", cmode %" FLA_IS ", iwork %" FLA_IS "",
+                      *trans, *n, *kl, *ku, *ldab, *ldafb, *cmode, *iwork);
     /* System generated locals */
     integer ab_dim1, ab_offset, afb_dim1, afb_offset, i__1, i__2, i__3, i__4;
     doublereal ret_val, d__1;

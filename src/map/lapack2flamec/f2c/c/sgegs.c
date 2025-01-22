@@ -234,6 +234,10 @@ void sgegs_(char *jobvsl, char *jobvsr, integer *n, real *a, integer *lda, real 
             real *alphar, real *alphai, real *beta, real *vsl, integer *ldvsl, real *vsr,
             integer *ldvsr, real *work, integer *lwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgegs inputs: jobvsl %c ,jobvsr %c ,n %" FLA_IS ",lda %" FLA_IS
+                      ",ldb %" FLA_IS ",ldvsl %" FLA_IS ",ldvsr %" FLA_IS ",lwork %" FLA_IS "",
+                      *jobvsl, *jobvsr, *n, *lda, *ldb, *ldvsl, *ldvsr, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, vsl_dim1, vsl_offset, vsr_dim1, vsr_offset, i__1,
         i__2;
@@ -419,15 +423,18 @@ void sgegs_(char *jobvsl, char *jobvsr, integer *n, real *a, integer *lda, real 
     {
         i__1 = -(*info);
         xerbla_("SGEGS ", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants */
@@ -454,6 +461,7 @@ void sgegs_(char *jobvsl, char *jobvsr, integer *n, real *a, integer *lda, real 
         if(iinfo != 0)
         {
             *info = *n + 9;
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }
@@ -476,6 +484,7 @@ void sgegs_(char *jobvsl, char *jobvsr, integer *n, real *a, integer *lda, real 
         if(iinfo != 0)
         {
             *info = *n + 9;
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }
@@ -622,18 +631,21 @@ void sgegs_(char *jobvsl, char *jobvsr, integer *n, real *a, integer *lda, real 
         if(iinfo != 0)
         {
             *info = *n + 9;
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         slascl_("G", &c_n1, &c_n1, &anrmto, &anrm, n, &c__1, &alphar[1], n, &iinfo);
         if(iinfo != 0)
         {
             *info = *n + 9;
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         slascl_("G", &c_n1, &c_n1, &anrmto, &anrm, n, &c__1, &alphai[1], n, &iinfo);
         if(iinfo != 0)
         {
             *info = *n + 9;
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }
@@ -643,17 +655,20 @@ void sgegs_(char *jobvsl, char *jobvsr, integer *n, real *a, integer *lda, real 
         if(iinfo != 0)
         {
             *info = *n + 9;
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         slascl_("G", &c_n1, &c_n1, &bnrmto, &bnrm, n, &c__1, &beta[1], n, &iinfo);
         if(iinfo != 0)
         {
             *info = *n + 9;
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }
 L10:
     work[1] = (real)lwkopt;
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGEGS */
 }

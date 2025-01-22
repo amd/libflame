@@ -423,6 +423,11 @@ void sla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
                           real *dy, real *y_tail__, real *rcond, integer *ithresh, real *rthresh,
                           real *dz_ub__, logical *ignore_cwise__, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sla_gbrfsx_extended inputs: n %" FLA_IS ",kl %" FLA_IS ",ku %" FLA_IS
+                      ",nrhs %" FLA_IS ",ldab %" FLA_IS ",ldafb %" FLA_IS ",ldb %" FLA_IS
+                      ",ldy %" FLA_IS ",ithresh %" FLA_IS "",
+                      *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldy, *ithresh);
     /* System generated locals */
     integer ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, y_dim1, y_offset,
         err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1,
@@ -523,6 +528,7 @@ void sla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
     /* Function Body */
     if(*info != 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     chla_transtype_(ch__1, trans_type__);
@@ -799,6 +805,7 @@ void sla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
         sla_lin_berr_(n, n, &c__1, &res[1], &ayb[1], &berr_out__[j]);
         /* End of loop for each RHS */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* sla_gbrfsx_extended__ */

@@ -222,6 +222,11 @@ void slasd3_(integer *nl, integer *nr, integer *sqre, integer *k, real *d__, rea
              real *dsigma, real *u, integer *ldu, real *u2, integer *ldu2, real *vt, integer *ldvt,
              real *vt2, integer *ldvt2, integer *idxc, integer *ctot, real *z__, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slasd3 inputs: nl %" FLA_IS ",nr %" FLA_IS ",sqre %" FLA_IS ",k %" FLA_IS
+                      ",ldq %" FLA_IS ",ldu %" FLA_IS ",ldu2 %" FLA_IS ",ldvt %" FLA_IS
+                      ",ldvt2 %" FLA_IS ",idxc %" FLA_IS ",ctot %" FLA_IS "",
+                      *nl, *nr, *sqre, *k, *ldq, *ldu, *ldu2, *ldvt, *ldvt2, *idxc, *ctot);
     /* System generated locals */
     integer q_dim1, q_offset, u_dim1, u_offset, u2_dim1, u2_offset, vt_dim1, vt_offset, vt2_dim1,
         vt2_offset, i__1, i__2;
@@ -335,6 +340,7 @@ void slasd3_(integer *nl, integer *nr, integer *sqre, integer *k, real *d__, rea
     {
         i__1 = -(*info);
         xerbla_("SLASD3", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -355,6 +361,7 @@ void slasd3_(integer *nl, integer *nr, integer *sqre, integer *k, real *d__, rea
                 /* L10: */
             }
         }
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Keep a copy of Z. */
@@ -372,6 +379,7 @@ void slasd3_(integer *nl, integer *nr, integer *sqre, integer *k, real *d__, rea
         /* If the zero finder fails, report the convergence failure. */
         if(*info != 0)
         {
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         /* L30: */
@@ -478,6 +486,7 @@ L100:
     {
         sgemm_("N", "N", k, &m, k, &c_b12, &q[q_offset], ldq, &vt2[vt2_offset], ldvt2, &c_b25,
                &vt[vt_offset], ldvt);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     ktemp = ctot[1] + 1;
@@ -509,6 +518,7 @@ L100:
     ctemp = ctot[2] + 1 + ctot[3];
     sgemm_("N", "N", k, &nrp1, &ctemp, &c_b12, &q[ktemp * q_dim1 + 1], ldq,
            &vt2[ktemp + nlp2 * vt2_dim1], ldvt2, &c_b25, &vt[nlp2 * vt_dim1 + 1], ldvt);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLASD3 */
 }

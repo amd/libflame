@@ -211,15 +211,11 @@ i */
 void ssbev_2stage_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, integer *ldab,
                    real *w, real *z__, integer *ldz, real *work, integer *lwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "ssbev_2stage inputs: jobz %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS
              ", ldz %" FLA_IS "",
              *jobz, *uplo, *n, *kd, *ldab, *ldz);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer ab_dim1, ab_offset, z_dim1, z_offset, i__1;
     real r__1;
@@ -354,18 +350,18 @@ void ssbev_2stage_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, in
     {
         i__1 = -(*info);
         xerbla_("SSBEV_2STAGE ", &i__1, (ftnlen)13);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 1)
@@ -382,7 +378,7 @@ void ssbev_2stage_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, in
         {
             z__[z_dim1 + 1] = 1.f;
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants. */
@@ -448,7 +444,7 @@ void ssbev_2stage_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, in
     }
     /* Set WORK(1) to optimal workspace size. */
     work[1] = sroundup_lwork(&lwmin);
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSBEV_2STAGE */
 }

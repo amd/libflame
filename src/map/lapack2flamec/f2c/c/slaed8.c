@@ -243,6 +243,11 @@ void slaed8_(integer *icompq, integer *k, integer *n, integer *qsiz, real *d__, 
              real *q2, integer *ldq2, real *w, integer *perm, integer *givptr, integer *givcol,
              real *givnum, integer *indxp, integer *indx, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slaed8 inputs: icompq %" FLA_IS ",n %" FLA_IS ",qsiz %" FLA_IS
+                      ",ldq %" FLA_IS ",indxq %" FLA_IS ",cutpnt %" FLA_IS ",ldq2 %" FLA_IS
+                      ",indx %" FLA_IS "",
+                      *icompq, *n, *qsiz, *ldq, *indxq, *cutpnt, *ldq2, *indx);
     /* System generated locals */
     integer q_dim1, q_offset, q2_dim1, q2_offset, i__1;
     real r__1;
@@ -337,6 +342,7 @@ void slaed8_(integer *icompq, integer *k, integer *n, integer *qsiz, real *d__, 
     {
         i__1 = -(*info);
         xerbla_("SLAED8", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Need to initialize GIVPTR to O here in case of quick exit */
@@ -347,6 +353,7 @@ void slaed8_(integer *icompq, integer *k, integer *n, integer *qsiz, real *d__, 
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     n1 = *cutpnt;
@@ -421,6 +428,7 @@ void slaed8_(integer *icompq, integer *k, integer *n, integer *qsiz, real *d__, 
             }
             slacpy_("A", qsiz, n, &q2[q2_dim1 + 1], ldq2, &q[q_dim1 + 1], ldq);
         }
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* If there are multiple eigenvalues then the problem deflates. Here */
@@ -575,6 +583,7 @@ L110: /* Sort the eigenvalues and corresponding eigenvectors into DLAMBDA */
                     ldq);
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAED8 */
 }

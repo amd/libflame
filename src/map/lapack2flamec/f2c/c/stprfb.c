@@ -260,15 +260,11 @@ void stprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
              integer *k, integer *l, real *v, integer *ldv, real *t, integer *ldt, real *a,
              integer *lda, real *b, integer *ldb, real *work, integer *ldwork)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
-             "stprfb inputs: side %c, trans %c, direct %c, storev %c, m %d, n %d, k %d, l %d, ldv "
-             "%d, ldt %d, lda %d, ldb %d",
-             *side, *trans, *direct, *storev, *m, *n, *k, *l, *ldv, *ldt, *lda, *ldb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("stprfb inputs: side %c, trans %c, direct %c, storev %c, m %" FLA_IS
+                      ", n %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", ldv "
+                      "%" FLA_IS ", ldt %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",
+                      *side, *trans, *direct, *storev, *m, *n, *k, *l, *ldv, *ldt, *lda, *ldb);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1,
         work_offset, i__1, i__2;
@@ -325,7 +321,7 @@ void stprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
     /* Function Body */
     if(*m <= 0 || *n <= 0 || *k <= 0 || *l < 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(lsame_(storev, "C", 1, 1))
@@ -936,7 +932,7 @@ void stprfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
             }
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STPRFB */
 }

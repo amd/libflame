@@ -179,6 +179,9 @@ void slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *l
              real *wi, real *vr, real *vi, real *b, integer *ldb, real *work, real *eps3,
              real *smlnum, real *bignum, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slaein inputs: n %" FLA_IS ",ldh %" FLA_IS ",ldb %" FLA_IS "", *n, *ldh,
+                      *ldb);
     /* System generated locals */
     integer b_dim1, b_offset, h_dim1, h_offset, i__1, i__2, i__3, i__4;
     real r__1, r__2, r__3, r__4;
@@ -723,6 +726,7 @@ void slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *l
         r__1 = 1.f / vnorm;
         sscal_(n, &r__1, &vi[1], &c__1);
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAEIN */
 }

@@ -159,6 +159,8 @@
 void slagts_(integer *job, integer *n, real *a, real *b, real *c__, real *d__, integer *in, real *y,
              real *tol, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slagts inputs: job %" FLA_IS ",n %" FLA_IS ",in %" FLA_IS "", *job, *n, *in);
     /* System generated locals */
     integer i__1;
     real r__1, r__2, r__3, r__4, r__5;
@@ -213,10 +215,12 @@ void slagts_(integer *job, integer *n, real *a, real *b, real *c__, real *d__, i
     {
         i__1 = -(*info);
         xerbla_("SLAGTS", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     eps = slamch_("Epsilon");
@@ -295,6 +299,7 @@ void slagts_(integer *job, integer *n, real *a, real *b, real *c__, real *d__, i
                         if(absak == 0.f || f2c_abs(temp) * sfmin > absak)
                         {
                             *info = k;
+                            AOCL_DTL_TRACE_LOG_EXIT
                             return;
                         }
                         else
@@ -306,6 +311,7 @@ void slagts_(integer *job, integer *n, real *a, real *b, real *c__, real *d__, i
                     else if(f2c_abs(temp) > absak * bignum)
                     {
                         *info = k;
+                        AOCL_DTL_TRACE_LOG_EXIT
                         return;
                     }
                 }
@@ -390,6 +396,7 @@ void slagts_(integer *job, integer *n, real *a, real *b, real *c__, real *d__, i
                         if(absak == 0.f || f2c_abs(temp) * sfmin > absak)
                         {
                             *info = k;
+                            AOCL_DTL_TRACE_LOG_EXIT
                             return;
                         }
                         else
@@ -401,6 +408,7 @@ void slagts_(integer *job, integer *n, real *a, real *b, real *c__, real *d__, i
                     else if(f2c_abs(temp) > absak * bignum)
                     {
                         *info = k;
+                        AOCL_DTL_TRACE_LOG_EXIT
                         return;
                     }
                 }
@@ -472,6 +480,7 @@ void slagts_(integer *job, integer *n, real *a, real *b, real *c__, real *d__, i
         }
     }
     /* End of SLAGTS */
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* slagts_ */

@@ -195,6 +195,10 @@ the least squares solution could not be */
 void sgels_(char *trans, integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *b,
             integer *ldb, real *work, integer *lwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgels inputs: trans %c ,m %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS
+                      ",lda %" FLA_IS ",ldb %" FLA_IS ",lwork %" FLA_IS "",
+                      *trans, *m, *n, *nrhs, *lda, *ldb, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     /* Local variables */
@@ -360,10 +364,12 @@ void sgels_(char *trans, integer *m, integer *n, integer *nrhs, real *a, integer
     {
         i__1 = -(*info);
         xerbla_("SGELS ", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -373,6 +379,7 @@ void sgels_(char *trans, integer *m, integer *n, integer *nrhs, real *a, integer
     {
         i__1 = fla_max(*m, *n);
         slaset_("Full", &i__1, nrhs, &c_b33, &c_b33, &b[b_offset], ldb);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine parameters */
@@ -438,6 +445,7 @@ void sgels_(char *trans, integer *m, integer *n, integer *nrhs, real *a, integer
                     ldb, info);
             if(*info > 0)
             {
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             scllen = *n;
@@ -450,6 +458,7 @@ void sgels_(char *trans, integer *m, integer *n, integer *nrhs, real *a, integer
                     info);
             if(*info > 0)
             {
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* B(N+1:M,1:NRHS) = ZERO */
@@ -486,6 +495,7 @@ void sgels_(char *trans, integer *m, integer *n, integer *nrhs, real *a, integer
                     ldb, info);
             if(*info > 0)
             {
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* B(M+1:N,1:NRHS) = 0 */
@@ -520,6 +530,7 @@ void sgels_(char *trans, integer *m, integer *n, integer *nrhs, real *a, integer
                     info);
             if(*info > 0)
             {
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             scllen = *m;
@@ -544,6 +555,7 @@ void sgels_(char *trans, integer *m, integer *n, integer *nrhs, real *a, integer
     }
 L50:
     work[1] = sroundup_lwork(&wsize);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGELS */
 }

@@ -157,6 +157,10 @@
 void sgbequb_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer *ldab, real *r__,
               real *c__, real *rowcnd, real *colcnd, real *amax, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgbequb inputs: m %" FLA_IS ",n %" FLA_IS ",kl %" FLA_IS ",ku %" FLA_IS
+                      ",ldab %" FLA_IS "",
+                      *m, *n, *kl, *ku, *ldab);
     /* System generated locals */
     integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     real r__1, r__2, r__3;
@@ -223,6 +227,7 @@ void sgbequb_(integer *m, integer *n, integer *kl, integer *ku, real *ab, intege
     {
         i__1 = -(*info);
         xerbla_("SGBEQUB", &i__1, (ftnlen)7);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible. */
@@ -231,6 +236,7 @@ void sgbequb_(integer *m, integer *n, integer *kl, integer *ku, real *ab, intege
         *rowcnd = 1.f;
         *colcnd = 1.f;
         *amax = 0.f;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants. Assume SMLNUM is a power of the radix. */
@@ -300,6 +306,7 @@ void sgbequb_(integer *m, integer *n, integer *kl, integer *ku, real *ab, intege
             if(r__[i__] == 0.f)
             {
                 *info = i__;
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* L50: */
@@ -379,6 +386,7 @@ void sgbequb_(integer *m, integer *n, integer *kl, integer *ku, real *ab, intege
             if(c__[j] == 0.f)
             {
                 *info = *m + j;
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* L110: */
@@ -400,6 +408,7 @@ void sgbequb_(integer *m, integer *n, integer *kl, integer *ku, real *ab, intege
         /* Compute COLCND = fla_min(C(J)) / fla_max(C(J)). */
         *colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGBEQUB */
 }

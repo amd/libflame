@@ -51,7 +51,7 @@
 /* Subroutine */
 void scombssq_(real *v1, real *v2)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_INIT
     /* System generated locals */
     real r__1;
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
@@ -84,7 +84,7 @@ void scombssq_(real *v1, real *v2)
         v1[2] = v2[2] + r__1 * r__1 * v1[2];
         v1[1] = v2[1];
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SCOMBSSQ */
 }

@@ -179,6 +179,10 @@ void slaqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, 
              integer *lda, integer *jpvt, real *tau, real *vn1, real *vn2, real *auxv, real *f,
              integer *ldf)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slaqps inputs: m %" FLA_IS ",n %" FLA_IS ",offset %" FLA_IS ",nb %" FLA_IS
+                      ",lda %" FLA_IS ",ldf %" FLA_IS "",
+                      *m, *n, *offset, *nb, *lda, *ldf);
     /* System generated locals */
     integer a_dim1, a_offset, f_dim1, f_offset, i__1, i__2;
     real r__1, r__2;
@@ -392,6 +396,7 @@ L40:
         lsticc = itemp;
         goto L40;
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAQPS */
 }

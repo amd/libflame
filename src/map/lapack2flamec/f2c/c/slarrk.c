@@ -142,6 +142,8 @@
 void slarrk_(integer *n, integer *iw, real *gl, real *gu, real *d__, real *e2, real *pivmin,
              real *reltol, real *w, real *werr, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slarrk inputs: n %" FLA_IS ",iw %" FLA_IS "", *n, *iw);
     /* System generated locals */
     integer i__1;
     real r__1, r__2;
@@ -180,6 +182,7 @@ void slarrk_(integer *n, integer *iw, real *gl, real *gu, real *d__, real *e2, r
     if(*n <= 0)
     {
         *info = 0;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants */
@@ -252,6 +255,7 @@ L10: /* Check if interval converged or maximum number of iterations reached */
 L30: /* Converged or maximum number of iterations reached */
     *w = (left + right) * .5f;
     *werr = (r__1 = right - left, f2c_abs(r__1)) * .5f;
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLARRK */
 }

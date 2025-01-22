@@ -279,13 +279,10 @@ void slasda_(integer *icompq, integer *smlsiz, integer *n, integer *sqre, real *
              real *poles, integer *givptr, integer *givcol, integer *ldgcol, integer *perm,
              real *givnum, real *c__, real *s, real *work, integer *iwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "slasda inputs: icompq %d, smlsiz %d, n %d, sqre %d, ldu %d, ldgcol %d",
-             *icompq, *smlsiz, *n, *sqre, *ldu, *ldgcol);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slasda inputs: icompq %" FLA_IS ", smlsiz %" FLA_IS ", n %" FLA_IS
+                      ", sqre %" FLA_IS ", ldu %" FLA_IS ", ldgcol %" FLA_IS "",
+                      *icompq, *smlsiz, *n, *sqre, *ldu, *ldgcol);
     /* System generated locals */
     integer givcol_dim1, givcol_offset, perm_dim1, perm_offset, difl_dim1, difl_offset, difr_dim1,
         difr_offset, givnum_dim1, givnum_offset, poles_dim1, poles_offset, u_dim1, u_offset,
@@ -399,7 +396,7 @@ void slasda_(integer *icompq, integer *smlsiz, integer *n, integer *sqre, real *
     {
         i__1 = -(*info);
         xerbla_("SLASDA", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     m = *n + *sqre;
@@ -416,7 +413,7 @@ void slasda_(integer *icompq, integer *smlsiz, integer *n, integer *sqre, real *
             slasdq_("U", sqre, n, &m, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldu, &u[u_offset],
                     ldu, &u[u_offset], ldu, &work[1], info);
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Book-keeping and set up the computation tree. */
@@ -475,7 +472,7 @@ void slasda_(integer *icompq, integer *smlsiz, integer *n, integer *sqre, real *
         }
         if(*info != 0)
         {
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         i__2 = nl;
@@ -516,7 +513,7 @@ void slasda_(integer *icompq, integer *smlsiz, integer *n, integer *sqre, real *
         }
         if(*info != 0)
         {
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         i__2 = nr;
@@ -588,14 +585,14 @@ void slasda_(integer *icompq, integer *smlsiz, integer *n, integer *sqre, real *
             }
             if(*info != 0)
             {
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* L40: */
         }
         /* L50: */
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLASDA */
 }

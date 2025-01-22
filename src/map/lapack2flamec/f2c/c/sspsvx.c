@@ -279,15 +279,11 @@ void sspsvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *ap, real *
              real *b, integer *ldb, real *x, integer *ldx, real *rcond, real *ferr, real *berr,
              real *work, integer *iwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "sspsvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS
              ", ldx %" FLA_IS "",
              *fact, *uplo, *n, *nrhs, *ldb, *ldx);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer b_dim1, b_offset, x_dim1, x_offset, i__1;
     /* Local variables */
@@ -378,7 +374,7 @@ void sspsvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *ap, real *
     {
         i__1 = -(*info);
         xerbla_("SSPSVX", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(nofact)
@@ -391,7 +387,7 @@ void sspsvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *ap, real *
         if(*info > 0)
         {
             *rcond = 0.f;
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }
@@ -411,7 +407,7 @@ void sspsvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *ap, real *
     {
         *info = *n + 1;
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSPSVX */
 }

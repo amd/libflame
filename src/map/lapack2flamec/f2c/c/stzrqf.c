@@ -138,6 +138,8 @@ static real c_b8 = 1.f;
 /* Subroutine */
 void stzrqf_(integer *m, integer *n, real *a, integer *lda, real *tau, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("stzrqf inputs: m %" FLA_IS ",n %" FLA_IS ",lda %" FLA_IS "", *m, *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     real r__1;
@@ -195,11 +197,13 @@ void stzrqf_(integer *m, integer *n, real *a, integer *lda, real *tau, integer *
     {
         i__1 = -(*info);
         xerbla_("STZRQF", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Perform the factorization. */
     if(*m == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*m == *n)
@@ -250,6 +254,7 @@ void stzrqf_(integer *m, integer *n, real *a, integer *lda, real *tau, integer *
             /* L20: */
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STZRQF */
 }

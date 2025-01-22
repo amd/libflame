@@ -163,13 +163,10 @@ elements marked */
 void sgbsv_(integer *n, integer *kl, integer *ku, integer *nrhs, real *ab, integer *ldab,
             integer *ipiv, real *b, integer *ldb, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "sgbsv inputs: n %d, kl %d, ku %d, nrhs %d, ldab %d, ldb %d", *n, *kl,
-             *ku, *nrhs, *ldab, *ldb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgbsv inputs: n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", nrhs %" FLA_IS
+                      ", ldab %" FLA_IS ", ldb %" FLA_IS "",
+                      *n, *kl, *ku, *nrhs, *ldab, *ldb);
     /* System generated locals */
     integer ab_dim1, ab_offset, b_dim1, b_offset, i__1;
     /* Local variables */
@@ -235,7 +232,7 @@ void sgbsv_(integer *n, integer *kl, integer *ku, integer *nrhs, real *ab, integ
     {
         i__1 = -(*info);
         xerbla_("SGBSV ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute the LU factorization of the band matrix A. */
@@ -246,7 +243,7 @@ void sgbsv_(integer *n, integer *kl, integer *ku, integer *nrhs, real *ab, integ
         sgbtrs_("No transpose", n, kl, ku, nrhs, &ab[ab_offset], ldab, &ipiv[1], &b[b_offset], ldb,
                 info);
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGBSV */
 }

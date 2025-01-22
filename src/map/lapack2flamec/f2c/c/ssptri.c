@@ -113,12 +113,8 @@ the matrix is singular and its */
 /* Subroutine */
 void ssptri_(char *uplo, integer *n, real *ap, integer *ipiv, real *work, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "ssptri inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("ssptri inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     /* System generated locals */
     integer i__1;
     real r__1;
@@ -180,13 +176,13 @@ void ssptri_(char *uplo, integer *n, real *ap, integer *ipiv, real *work, intege
     {
         i__1 = -(*info);
         xerbla_("SSPTRI", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Check that the diagonal matrix D is nonsingular. */
@@ -198,7 +194,7 @@ void ssptri_(char *uplo, integer *n, real *ap, integer *ipiv, real *work, intege
         {
             if(ipiv[*info] > 0 && ap[kp] == 0.f)
             {
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             kp -= *info;
@@ -214,7 +210,7 @@ void ssptri_(char *uplo, integer *n, real *ap, integer *ipiv, real *work, intege
         {
             if(ipiv[*info] > 0 && ap[kp] == 0.f)
             {
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             kp = kp + *n - *info + 1;
@@ -421,7 +417,7 @@ void ssptri_(char *uplo, integer *n, real *ap, integer *ipiv, real *work, intege
         goto L60;
     L80:;
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSPTRI */
 }

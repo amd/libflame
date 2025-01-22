@@ -268,14 +268,10 @@ void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *
              real *abstol, real *d__, real *e, integer *m, integer *nsplit, real *w,
              integer *iblock, integer *isplit, real *work, integer *iwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "sstebz inputs: range %c, order %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS "",
              *range, *order, *n, *il, *iu);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer i__1, i__2, i__3;
     real r__1, r__2, r__3, r__4, r__5;
@@ -414,7 +410,7 @@ void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *
     {
         i__1 = -(*info);
         xerbla_("SSTEBZ", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize error flags */
@@ -425,7 +421,7 @@ void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *
     *m = 0;
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Simplifications: */
@@ -459,7 +455,7 @@ void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *
             iblock[1] = 1;
             *m = 1;
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute Splitting Points */
@@ -574,7 +570,7 @@ void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *
         if(nwl < 0 || nwl >= *n || nwu < 1 || nwu > *n)
         {
             *info = 4;
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }
@@ -895,7 +891,7 @@ void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *
     {
         *info += 2;
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSTEBZ */
 }

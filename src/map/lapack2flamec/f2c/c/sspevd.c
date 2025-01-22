@@ -177,13 +177,9 @@ i */
 void sspevd_(char *jobz, char *uplo, integer *n, real *ap, real *w, real *z__, integer *ldz,
              real *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "sspevd inputs: jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS "", *jobz,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sspevd inputs: jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS "", *jobz,
              *uplo, *n, *ldz);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer z_dim1, z_offset, i__1;
     real r__1;
@@ -313,18 +309,18 @@ void sspevd_(char *jobz, char *uplo, integer *n, real *ap, real *w, real *z__, i
     {
         i__1 = -(*info);
         xerbla_("SSPEVD", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 1)
@@ -334,7 +330,7 @@ void sspevd_(char *jobz, char *uplo, integer *n, real *ap, real *w, real *z__, i
         {
             z__[z_dim1 + 1] = 1.f;
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants. */
@@ -391,7 +387,7 @@ void sspevd_(char *jobz, char *uplo, integer *n, real *ap, real *w, real *z__, i
     }
     work[1] = sroundup_lwork(&lwmin);
     iwork[1] = liwmin;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSPEVD */
 }

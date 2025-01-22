@@ -283,6 +283,12 @@ void slaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
              real *t, integer *ldt, integer *nv, real *wv, integer *ldwv, real *work,
              integer *lwork)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
+        "slaqr3 inputs: n %" FLA_IS ",ktop %" FLA_IS ",kbot %" FLA_IS ",nw %" FLA_IS ",ldh %" FLA_IS
+        ",iloz %" FLA_IS ",ihiz %" FLA_IS ",ldz %" FLA_IS ",ldv %" FLA_IS ",nh %" FLA_IS
+        ",ldt %" FLA_IS ",nv %" FLA_IS ",ldwv %" FLA_IS ",lwork %" FLA_IS "",
+        *n, *ktop, *kbot, *nw, *ldh, *iloz, *ihiz, *ldz, *ldv, *nh, *ldt, *nv, *ldwv, *lwork);
     /* System generated locals */
     integer h_dim1, h_offset, t_dim1, t_offset, v_dim1, v_offset, wv_dim1, wv_offset, z_dim1,
         z_offset, i__1, i__2, i__3, i__4;
@@ -411,6 +417,7 @@ void slaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     if(*lwork == -1)
     {
         work[1] = sroundup_lwork(&lwkopt);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* ==== Nothing to do ... */
@@ -420,11 +427,13 @@ void slaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     work[1] = 1.f;
     if(*ktop > *kbot)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* ... nor for an empty deflation window. ==== */
     if(*nw < 1)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* ==== Machine constants ==== */
@@ -465,6 +474,7 @@ void slaqr3_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
             }
         }
         work[1] = 1.f;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* ==== Convert to spike-triangular form. (In case of a */
@@ -806,6 +816,7 @@ L60:
     /* ==== Return optimal workspace. ==== */
     work[1] = sroundup_lwork(&lwkopt);
     /* ==== End of SLAQR3 ==== */
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* slaqr3_ */

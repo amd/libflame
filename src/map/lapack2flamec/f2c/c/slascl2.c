@@ -87,6 +87,8 @@
 /* Subroutine */
 void slascl2_(integer *m, integer *n, real *d__, real *x, integer *ldx)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slascl2 inputs: m %" FLA_IS ",n %" FLA_IS ",ldx %" FLA_IS "", *m, *n, *ldx);
     /* System generated locals */
     integer x_dim1, x_offset, i__1, i__2;
     /* Local variables */
@@ -118,6 +120,7 @@ void slascl2_(integer *m, integer *n, real *d__, real *x, integer *ldx)
             x[i__ + j * x_dim1] *= d__[i__];
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* slascl2_ */

@@ -403,6 +403,11 @@ void sporfsx_(char *uplo, char *equed, integer *n, integer *nrhs, real *a, integ
               real *berr, integer *n_err_bnds__, real *err_bnds_norm__, real *err_bnds_comp__,
               integer *nparams, real *params, real *work, integer *iwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sporfsx inputs: uplo %c ,equed %c ,n %" FLA_IS ",nrhs %" FLA_IS
+                      ",lda %" FLA_IS ",ldaf %" FLA_IS ",ldb %" FLA_IS ",ldx %" FLA_IS
+                      ",nparams %" FLA_IS "",
+                      *uplo, *equed, *n, *nrhs, *lda, *ldaf, *ldb, *ldx, *nparams);
     /* System generated locals */
     integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset,
         err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1;
@@ -583,6 +588,7 @@ void sporfsx_(char *uplo, char *equed, integer *n, integer *nrhs, real *a, integ
     {
         i__1 = -(*info);
         xerbla_("SPORFSX", &i__1, (ftnlen)7);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible. */
@@ -609,6 +615,7 @@ void sporfsx_(char *uplo, char *equed, integer *n, integer *nrhs, real *a, integ
                 err_bnds_comp__[j + err_bnds_comp_dim1 * 3] = 1.f;
             }
         }
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Default to failure. */
@@ -745,6 +752,7 @@ void sporfsx_(char *uplo, char *equed, integer *n, integer *nrhs, real *a, integ
             }
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SPORFSX */
 }

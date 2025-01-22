@@ -109,12 +109,9 @@ the strictly upper */
 /* Subroutine */
 void slaset_(char *uplo, integer *m, integer *n, real *alpha, real *beta, real *a, integer *lda)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "slaset inputs: uplo %c, m %d, n %d, lda %d", *uplo, *m, *n, *lda);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slaset inputs: uplo %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",
+                      *uplo, *m, *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
@@ -197,7 +194,7 @@ void slaset_(char *uplo, integer *m, integer *n, real *alpha, real *beta, real *
         a[i__ + i__ * a_dim1] = *beta;
         /* L70: */
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLASET */
 }

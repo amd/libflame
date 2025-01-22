@@ -108,6 +108,9 @@
 void slar2v_(integer *n, real *x, real *y, real *z__, integer *incx, real *c__, real *s,
              integer *incc)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slar2v inputs: n %" FLA_IS ",incx %" FLA_IS ",incc %" FLA_IS "", *n, *incx,
+                      *incc);
     /* System generated locals */
     integer i__1;
     /* Local variables */
@@ -160,6 +163,7 @@ void slar2v_(integer *n, real *x, real *y, real *z__, integer *incx, real *c__, 
         /* L10: */
     }
     /* End of SLAR2V */
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* slar2v_ */

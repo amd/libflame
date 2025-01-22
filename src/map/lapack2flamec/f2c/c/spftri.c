@@ -194,6 +194,8 @@ k=N/2. IF TRANSR = 'T' then RFP is */
 /* Subroutine */
 void spftri_(char *transr, char *uplo, integer *n, real *a, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("spftri inputs: transr %c ,uplo %c ,n %" FLA_IS "", *transr, *uplo, *n);
     /* System generated locals */
     integer i__1, i__2;
     /* Local variables */
@@ -252,17 +254,20 @@ void spftri_(char *transr, char *uplo, integer *n, real *a, integer *info)
     {
         i__1 = -(*info);
         xerbla_("SPFTRI", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Invert the triangular Cholesky factor U or L. */
     stftri_(transr, uplo, "N", n, a, info);
     if(*info > 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* If N is odd, set NISODD = .TRUE. */
@@ -405,6 +410,7 @@ void spftri_(char *transr, char *uplo, integer *n, real *a, integer *info)
             }
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SPFTRI */
 }

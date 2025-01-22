@@ -178,6 +178,10 @@ static real c_b22 = 0.f;
 void slaed3_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *ldq, real *rho,
              real *dlambda, real *q2, integer *indx, integer *ctot, real *w, real *s, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slaed3 inputs: k %" FLA_IS ",n %" FLA_IS ",n1 %" FLA_IS ",ldq %" FLA_IS
+                      ",indx %" FLA_IS ",ctot %" FLA_IS "",
+                      *k, *n, *n1, *ldq, *indx, *ctot);
     /* System generated locals */
     integer q_dim1, q_offset, i__1, i__2;
     real r__1;
@@ -245,11 +249,13 @@ void slaed3_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *l
     {
         i__1 = -(*info);
         xerbla_("SLAED3", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*k == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     i__1 = *k;
@@ -357,6 +363,7 @@ L110:
         slaset_("A", n1, k, &c_b22, &c_b22, &q[q_dim1 + 1], ldq);
     }
 L120:
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAED3 */
 }

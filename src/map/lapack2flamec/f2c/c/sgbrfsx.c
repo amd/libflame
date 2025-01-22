@@ -452,6 +452,11 @@ void sgbrfsx_(char *trans, char *equed, integer *n, integer *kl, integer *ku, in
               integer *n_err_bnds__, real *err_bnds_norm__, real *err_bnds_comp__, integer *nparams,
               real *params, real *work, integer *iwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgbrfsx inputs: trans %c ,equed %c ,n %" FLA_IS ",kl %" FLA_IS ",ku %" FLA_IS
+                      ",nrhs %" FLA_IS ",ldab %" FLA_IS ",ldafb %" FLA_IS ",ldb %" FLA_IS
+                      ",ldx %" FLA_IS ",nparams %" FLA_IS "",
+                      *trans, *equed, *n, *kl, *ku, *nrhs, *ldab, *ldafb, *ldb, *ldx, *nparams);
     /* System generated locals */
     integer ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset,
         err_bnds_norm_dim1, err_bnds_norm_offset, err_bnds_comp_dim1, err_bnds_comp_offset, i__1;
@@ -647,6 +652,7 @@ void sgbrfsx_(char *trans, char *equed, integer *n, integer *kl, integer *ku, in
     {
         i__1 = -(*info);
         xerbla_("SGBRFSX", &i__1, (ftnlen)7);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible. */
@@ -673,6 +679,7 @@ void sgbrfsx_(char *trans, char *equed, integer *n, integer *kl, integer *ku, in
                 err_bnds_comp__[j + err_bnds_comp_dim1 * 3] = 1.f;
             }
         }
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Default to failure. */
@@ -837,6 +844,7 @@ void sgbrfsx_(char *trans, char *equed, integer *n, integer *kl, integer *ku, in
             }
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGBRFSX */
 }

@@ -147,6 +147,10 @@ if JPVT(i) = 0, */
 void slaqp2_(integer *m, integer *n, integer *offset, real *a, integer *lda, integer *jpvt,
              real *tau, real *vn1, real *vn2, real *work)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slaqp2 inputs: m %" FLA_IS ",n %" FLA_IS ",offset %" FLA_IS ",lda %" FLA_IS
+                      "",
+                      *m, *n, *offset, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
     real r__1, r__2;
@@ -283,6 +287,7 @@ void slaqp2_(integer *m, integer *n, integer *offset, real *a, integer *lda, int
         }
         /* L20: */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAQP2 */
 }

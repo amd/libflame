@@ -170,6 +170,8 @@ static logical c_true = TRUE_;
 void slaqtr_(logical *ltran, logical *lreal, integer *n, real *t, integer *ldt, real *b, real *w,
              real *scale, real *x, real *work, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slaqtr inputs: n %" FLA_IS ",ldt %" FLA_IS "", *n, *ldt);
     /* System generated locals */
     integer t_dim1, t_offset, i__1, i__2;
     real r__1, r__2, r__3, r__4, r__5, r__6;
@@ -242,6 +244,7 @@ void slaqtr_(logical *ltran, logical *lreal, integer *n, real *t, integer *ldt, 
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Set constants to control overflow */
@@ -853,6 +856,7 @@ void slaqtr_(logical *ltran, logical *lreal, integer *n, real *t, integer *ldt, 
             }
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAQTR */
 }

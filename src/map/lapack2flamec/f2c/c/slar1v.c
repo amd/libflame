@@ -229,6 +229,8 @@ void slar1v_(integer *n, integer *b1, integer *bn, real *lambda, real *d__, real
              real *ztz, real *mingma, integer *r__, integer *isuppz, real *nrminv, real *resid,
              real *rqcorr, real *work)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slar1v inputs: n %" FLA_IS ",b1 %" FLA_IS ",bn %" FLA_IS "", *n, *b1, *bn);
     /* System generated locals */
     integer i__1;
     real r__1, r__2, r__3;
@@ -561,6 +563,7 @@ L60:
     *nrminv = sqrt(tmp);
     *resid = f2c_abs(*mingma) * *nrminv;
     *rqcorr = *mingma * tmp;
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAR1V */
 }

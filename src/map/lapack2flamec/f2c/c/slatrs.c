@@ -243,6 +243,10 @@ b(i), i=1,..,n}
 void slatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, real *a, integer *lda,
              real *x, real *scale, real *cnorm, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slatrs inputs: uplo %c ,trans %c ,diag %c ,normin %c ,n %" FLA_IS
+                      ",lda %" FLA_IS "",
+                      *uplo, *trans, *diag, *normin, *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
     real r__1, r__2, r__3;
@@ -339,12 +343,14 @@ void slatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
     {
         i__1 = -(*info);
         xerbla_("SLATRS", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     *scale = 1.f;
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine machine dependent parameters to control overflow. */
@@ -465,6 +471,7 @@ void slatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
                 /* At least one entry of A is not a valid floating-point entry. */
                 /* Rely on TRSV to propagate Inf and NaN. */
                 strsv_(uplo, trans, diag, n, &a[a_offset], lda, &x[1], &c__1);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
         }
@@ -946,6 +953,7 @@ void slatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
         r__1 = 1.f / tscal;
         sscal_(n, &r__1, &cnorm[1], &c__1);
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLATRS */
 }

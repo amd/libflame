@@ -153,14 +153,10 @@ the routine */
 void stzrzf_(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *lwork,
              integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "stzrzf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "", *m,
              *n, *lda, *lwork);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */
@@ -248,18 +244,18 @@ void stzrzf_(integer *m, integer *n, real *a, integer *lda, real *tau, real *wor
     {
         i__1 = -(*info);
         xerbla_("STZRZF", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*m == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(*m == *n)
@@ -270,7 +266,7 @@ void stzrzf_(integer *m, integer *n, real *a, integer *lda, real *tau, real *wor
             tau[i__] = 0.f;
             /* L10: */
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     nbmin = 2;
@@ -354,7 +350,7 @@ void stzrzf_(integer *m, integer *n, real *a, integer *lda, real *tau, real *wor
         slatrz_(&mu, n, &i__2, &a[a_offset], lda, &tau[1], &work[1]);
     }
     work[1] = sroundup_lwork(&lwkopt);
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STZRZF */
 }

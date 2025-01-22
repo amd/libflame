@@ -105,6 +105,9 @@ static integer c__1 = 1;
 void slarfy_(char *uplo, integer *n, real *v, integer *incv, real *tau, real *c__, integer *ldc,
              real *work)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slarfy inputs: uplo %c ,n %" FLA_IS ",incv %" FLA_IS ",ldc %" FLA_IS "",
+                      *uplo, *n, *incv, *ldc);
     /* System generated locals */
     integer c_dim1, c_offset;
     real r__1;
@@ -146,6 +149,7 @@ void slarfy_(char *uplo, integer *n, real *v, integer *incv, real *tau, real *c_
     /* Function Body */
     if(*tau == 0.f)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Form w:= C * v */
@@ -155,6 +159,7 @@ void slarfy_(char *uplo, integer *n, real *v, integer *incv, real *tau, real *c_
     /* C := C - v * w' - w * v' */
     r__1 = -(*tau);
     ssyr2_(uplo, n, &r__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLARFY */
 }

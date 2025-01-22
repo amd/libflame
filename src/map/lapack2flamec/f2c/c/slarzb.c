@@ -187,15 +187,11 @@ void slarzb_(char *side, char *trans, char *direct, char *storev, integer *m, in
              integer *k, integer *l, real *v, integer *ldv, real *t, integer *ldt, real *c__,
              integer *ldc, real *work, integer *ldwork)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
-             "slarzb inputs: side %c, trans %c, direct %c, storev %c, m %d, n %d, k %d, l %d, ldv "
-             "%d, ldt %d, ldc %d",
-             *side, *trans, *direct, *storev, *m, *n, *k, *l, *ldv, *ldt, *ldc);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slarzb inputs: side %c, trans %c, direct %c, storev %c, m %" FLA_IS
+                      ", n %" FLA_IS ", k %" FLA_IS ", l %" FLA_IS ", ldv "
+                      "%" FLA_IS ", ldt %" FLA_IS ", ldc %" FLA_IS "",
+                      *side, *trans, *direct, *storev, *m, *n, *k, *l, *ldv, *ldt, *ldc);
     /* System generated locals */
     integer c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1,
         i__2;
@@ -246,7 +242,7 @@ void slarzb_(char *side, char *trans, char *direct, char *storev, integer *m, in
     /* Function Body */
     if(*m <= 0 || *n <= 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Check for currently supported options */
@@ -263,7 +259,7 @@ void slarzb_(char *side, char *trans, char *direct, char *storev, integer *m, in
     {
         i__1 = -info;
         xerbla_("SLARZB", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(lsame_(trans, "N", 1, 1))
@@ -354,7 +350,7 @@ void slarzb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                    &v[v_offset], ldv, &c_b13, &c__[(*n - *l + 1) * c_dim1 + 1], ldc);
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLARZB */
 }

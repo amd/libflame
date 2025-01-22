@@ -106,6 +106,10 @@
 void slartv_(integer *n, real *x, integer *incx, real *y, integer *incy, real *c__, real *s,
              integer *incc)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slartv inputs: n %" FLA_IS ",incx %" FLA_IS ",incy %" FLA_IS ",incc %" FLA_IS
+                      "",
+                      *n, *incx, *incy, *incc);
     /* System generated locals */
     integer i__1;
     /* Local variables */
@@ -144,6 +148,7 @@ void slartv_(integer *n, real *x, integer *incx, real *y, integer *incy, real *c
         ic += *incc;
         /* L10: */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLARTV */
 }

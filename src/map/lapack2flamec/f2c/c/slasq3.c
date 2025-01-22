@@ -180,14 +180,10 @@ void slasq3_(integer *i0, integer *n0, real *z__, integer *pp, real *dmin__, rea
              integer *ttype, real *dmin1, real *dmin2, real *dn, real *dn1, real *dn2, real *g,
              real *tau)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
-             "slasq3 inputs: i0 %d, n0 %d, pp %d, nfail %d, iter %d, ndiv %d, ttype %d", *i0, *n0,
-             *pp, *nfail, *iter, *ndiv, *ttype);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slasq3 inputs: i0 %" FLA_IS ", n0 %" FLA_IS ", pp %" FLA_IS
+                      ", nfail %" FLA_IS ", iter %" FLA_IS ", ndiv %" FLA_IS ", ttype %" FLA_IS "",
+                      *i0, *n0, *pp, *nfail, *iter, *ndiv, *ttype);
     /* System generated locals */
     integer i__1;
     real r__1, r__2;
@@ -242,7 +238,7 @@ void slasq3_(integer *i0, integer *n0, real *z__, integer *pp, real *dmin__, rea
 L10:
     if(*n0 < *i0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n0 == *i0)
@@ -432,7 +428,7 @@ L90:
         *desig = *sigma - (t - *tau) + *desig;
     }
     *sigma = t;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLASQ3 */
 }

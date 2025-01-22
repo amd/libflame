@@ -138,12 +138,8 @@
 void slaqge_(integer *m, integer *n, real *a, integer *lda, real *r__, real *c__, real *rowcnd,
              real *colcnd, real *amax, char *equed)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "slaqge inputs: m %d, n %d, lda %d", *m, *n, *lda);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slaqge inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     /* Local variables */
@@ -177,7 +173,7 @@ void slaqge_(integer *m, integer *n, real *a, integer *lda, real *r__, real *c__
     if(*m <= 0 || *n <= 0)
     {
         *(unsigned char *)equed = 'N';
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize LARGE and SMALL. */
@@ -242,7 +238,7 @@ void slaqge_(integer *m, integer *n, real *a, integer *lda, real *r__, real *c__
         }
         *(unsigned char *)equed = 'B';
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAQGE */
 }

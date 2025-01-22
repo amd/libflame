@@ -989,8 +989,8 @@ L200:
         }
         /* L210: */
     }
-    AOCL_DTL_TRACE_LOG_EXIT
 L220:
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZBDSQR */
 }

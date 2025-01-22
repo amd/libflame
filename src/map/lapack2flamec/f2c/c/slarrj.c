@@ -164,6 +164,10 @@ void slarrj_(integer *n, real *d__, real *e2, integer *ifirst, integer *ilast, r
              integer *offset, real *w, real *werr, real *work, integer *iwork, real *pivmin,
              real *spdiam, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slarrj inputs: n %" FLA_IS ",ifirst %" FLA_IS ",ilast %" FLA_IS
+                      ",offset %" FLA_IS "",
+                      *n, *ifirst, *ilast, *offset);
     /* System generated locals */
     integer i__1, i__2;
     real r__1, r__2;
@@ -207,6 +211,7 @@ void slarrj_(integer *n, real *d__, real *e2, integer *ifirst, integer *ilast, r
     /* Quick return if possible */
     if(*n <= 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     maxitr = (integer)((log(*spdiam + *pivmin) - log(*pivmin)) / log(2.f)) + 2;
@@ -414,6 +419,7 @@ L80:
         }
         /* L110: */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLARRJ */
 }

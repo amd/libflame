@@ -211,14 +211,10 @@ void sspgvd_(integer *itype, char *jobz, char *uplo, integer *n, real *ap, real 
              real *z__, integer *ldz, real *work, integer *lwork, integer *iwork, integer *liwork,
              integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "sspgvd inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS "",
              *itype, *jobz, *uplo, *n, *ldz);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer z_dim1, z_offset, i__1;
     real r__1, r__2;
@@ -333,18 +329,18 @@ void sspgvd_(integer *itype, char *jobz, char *uplo, integer *n, real *ap, real 
     {
         i__1 = -(*info);
         xerbla_("SSPGVD", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Form a Cholesky factorization of BP. */
@@ -352,7 +348,7 @@ void sspgvd_(integer *itype, char *jobz, char *uplo, integer *n, real *ap, real 
     if(*info != 0)
     {
         *info = *n + *info;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
@@ -417,7 +413,7 @@ void sspgvd_(integer *itype, char *jobz, char *uplo, integer *n, real *ap, real 
     }
     work[1] = sroundup_lwork(&lwmin);
     iwork[1] = liwmin;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSPGVD */
 }

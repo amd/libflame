@@ -248,6 +248,10 @@ b(i), i=1,..,n}
 void slatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, integer *kd, real *ab,
              integer *ldab, real *x, real *scale, real *cnorm, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slatbs inputs: uplo %c ,trans %c ,diag %c ,normin %c ,n %" FLA_IS
+                      ",kd %" FLA_IS ",ldab %" FLA_IS "",
+                      *uplo, *trans, *diag, *normin, *n, *kd, *ldab);
     /* System generated locals */
     integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     real r__1, r__2, r__3;
@@ -348,11 +352,13 @@ void slatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
     {
         i__1 = -(*info);
         xerbla_("SLATBS", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine machine dependent parameters to control overflow. */
@@ -920,6 +926,7 @@ void slatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
         r__1 = 1.f / tscal;
         sscal_(n, &r__1, &cnorm[1], &c__1);
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLATBS */
 }

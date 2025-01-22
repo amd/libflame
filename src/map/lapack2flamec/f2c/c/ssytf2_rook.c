@@ -192,13 +192,9 @@ static integer c__1 = 1;
 /* Subroutine */
 void ssytf2_rook_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "ssytf2_rook inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("ssytf2_rook inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n,
              *lda);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     real r__1;
@@ -280,7 +276,7 @@ void ssytf2_rook_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, 
     {
         i__1 = -(*info);
         xerbla_("SSYTF2_ROOK", &i__1, (ftnlen)11);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize ALPHA for use in choosing pivot block size. */
@@ -789,7 +785,7 @@ void ssytf2_rook_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, 
         goto L40;
     }
 L70:
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYTF2_ROOK */
 }

@@ -122,12 +122,8 @@
 /* Subroutine */
 void slaqsp_(char *uplo, integer *n, real *ap, real *s, real *scond, real *amax, char *equed)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "slaqsp inputs: uplo %c, n %d", *uplo, *n);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slaqsp inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     /* System generated locals */
     integer i__1, i__2;
     /* Local variables */
@@ -160,7 +156,7 @@ void slaqsp_(char *uplo, integer *n, real *ap, real *s, real *scond, real *amax,
     if(*n <= 0)
     {
         *(unsigned char *)equed = 'N';
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize LARGE and SMALL. */
@@ -212,7 +208,7 @@ void slaqsp_(char *uplo, integer *n, real *ap, real *s, real *scond, real *amax,
         }
         *(unsigned char *)equed = 'Y';
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAQSP */
 }

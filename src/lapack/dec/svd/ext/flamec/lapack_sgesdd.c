@@ -272,7 +272,7 @@ int lapack_sgesdd(char *jobz, integer *m, integer *n, real *a, integer *lda, rea
     integer blk;
     real dum[1], eps;
     integer ivt;
-    extern real sroundup_lwork_(integer *);
+    extern real sroundup_lwork(integer *);
     integer lwork_sgebrd_mm__, lwork_sgebrd_mn__, lwork_sgebrd_nn__;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -763,7 +763,7 @@ int lapack_sgesdd(char *jobz, integer *m, integer *n, real *a, integer *lda, rea
             }
         }
         maxwrk = fla_max(maxwrk,minwrk);
-        work[1] = (real)maxwrk;
+        work[1] = sroundup_lwork(&maxwrk);
         if (*lwork < minwrk && ! lquery)
         {
             *info = -12;
@@ -1536,7 +1536,7 @@ int lapack_sgesdd(char *jobz, integer *m, integer *n, real *a, integer *lda, rea
         }
     }
     /* Return optimal workspace in WORK(1) */
-    work[1] = (real)maxwrk;
+    work[1] = sroundup_lwork(&maxwrk);
     return 0;
     /* End of SGESDD */
 }

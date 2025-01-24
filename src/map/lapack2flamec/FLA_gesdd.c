@@ -8,7 +8,7 @@
 
 */
 /*
- *  Copyright (c) 2020-2023 Advanced Micro Devices, Inc.  All rights reserved.
+ *  Copyright (c) 2020-2025 Advanced Micro Devices, Inc.  All rights reserved.
  */
 #include "FLAME.h"
 
@@ -101,55 +101,8 @@ LAPACK_gesdd_real(s)
 
 #if FLA_ENABLE_AMD_OPT
     {
-        if(*m > 750 || *n > 750)
-        {
-            char jobu[1], jobv[1];
-
-            if(lsame_(jobz, "O", 1, 1))
-            {
-                if(*m >= *n)
-                {
-                    jobu[0] = 'O';
-                    jobv[0] = 'A';
-                }
-                else
-                {
-                    jobu[0] = 'A';
-                    jobv[0] = 'O';
-                }
-            }
-            else
-            {
-                jobu[0] = *jobz;
-                jobv[0] = *jobz;
-            }
-            LAPACK_RETURN_CHECK_VAR1(sgesdd_fla_check(jobu, jobv, m, n, buff_A, ldim_A, buff_s,
-                                                      buff_U, ldim_U, buff_Vh, ldim_Vh, buff_w,
-                                                      lwork, info),
-                                     fla_error)
-            if(fla_error == LAPACK_SUCCESS)
-            {
-                LAPACK_gesdd_real_body(s)
-                    /** fla_error set to 0 on LAPACK_SUCCESS */
-                    fla_error
-                    = 0;
-            }
-        }
-        else
-        {
-            LAPACK_RETURN_CHECK_VAR1(sgesdd_check(jobz, m, n, buff_A, ldim_A, buff_s, buff_U,
-                                                  ldim_U, buff_Vh, ldim_Vh, buff_w, lwork, buff_i,
-                                                  info),
-                                     fla_error)
-
-            if(fla_error == LAPACK_SUCCESS)
-            {
-                lapack_sgesdd(jobz, m, n, buff_A, ldim_A, buff_s, buff_U, ldim_U, buff_Vh, ldim_Vh,
-                              buff_w, lwork, buff_i, info);
-                /** fla_error set to 0 on LAPACK_SUCCESS */
-                fla_error = 0;
-            }
-        }
+        lapack_sgesdd(jobz, m, n, buff_A, ldim_A, buff_s, buff_U, ldim_U, buff_Vh, ldim_Vh,
+                      buff_w, lwork, buff_i, info);
     }
 #else
     {
@@ -204,21 +157,11 @@ LAPACK_gesdd_real(d)
 
 #if FLA_ENABLE_AMD_OPT
     {
-        LAPACK_RETURN_CHECK_VAR1(dgesdd_check(jobz, m, n, buff_A, ldim_A, buff_s, buff_U, ldim_U,
-                                              buff_Vh, ldim_Vh, buff_w, lwork, buff_i, info),
-                                 fla_error)
+        /* Initialize global context data */
+        aocl_fla_init();
 
-        if(fla_error == LAPACK_SUCCESS)
-        {
-
-            /* Initialize global context data */
-            aocl_fla_init();
-
-            lapack_dgesdd(jobz, m, n, buff_A, ldim_A, buff_s, buff_U, ldim_U, buff_Vh, ldim_Vh,
-                          buff_w, lwork, buff_i, info);
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error = 0;
-        }
+        lapack_dgesdd(jobz, m, n, buff_A, ldim_A, buff_s, buff_U, ldim_U, buff_Vh, ldim_Vh,
+                      buff_w, lwork, buff_i, info);
     }
 #else
     {

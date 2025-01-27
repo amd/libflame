@@ -223,7 +223,7 @@ if */
 /* > \ingroup gees */
 /* ===================================================================== */
 /* Subroutine */
-void sgees_(char *jobvs, char *sort, L_fp select, integer *n, real *a, integer *lda, integer *sdim,
+void sgees_(char *jobvs, char *sort, L_fps2 select, integer *n, real *a, integer *lda, integer *sdim,
             real *wr, real *wi, real *vs, integer *ldvs, real *work, integer *lwork, logical *bwork,
             integer *info)
 {

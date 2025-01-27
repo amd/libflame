@@ -272,7 +272,7 @@ the routine */
 /* > \ingroup gges3 */
 /* ===================================================================== */
 /* Subroutine */
-void zgges3_(char *jobvsl, char *jobvsr, char *sort, L_fp selctg, integer *n, doublecomplex *a,
+void zgges3_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, integer *n, doublecomplex *a,
              integer *lda, doublecomplex *b, integer *ldb, integer *sdim, doublecomplex *alpha,
              doublecomplex *beta, doublecomplex *vsl, integer *ldvsl, doublecomplex *vsr,
              integer *ldvsr, doublecomplex *work, integer *lwork, doublereal *rwork, logical *bwork,

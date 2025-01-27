@@ -4,13 +4,13 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static complex c_b2 = {0.f, 0.f};
+static doublecomplex c_b1 = {1.f, 0.f};
+static doublecomplex c_b2 = {0.f, 0.f};
 static integer c_n1 = -1;
 static integer c__1 = 1;
 static integer c__0 = 0;
-static real c_b54 = 1.f;
-static real c_b64 = 0.f;
+static doublereal c_b54 = 1.f;
+static doublereal c_b64 = 0.f;
 /* > \brief \b ZGEDMD computes the Dynamic Mode Decomposition (DMD) for a pair of data snapshot
  * matrices. */
 /* =========== DOCUMENTATION =========== */
@@ -505,11 +505,11 @@ LIWORK >=1 */
 /* ............................................................. */
 /* Subroutine */
 void zgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, integer *m,
-             integer *n, complex *x, integer *ldx, complex *y, integer *ldy, integer *nrnk,
-             real *tol, integer *k, complex *eigs, complex *z__, integer *ldz, real *res,
-             complex *b, integer *ldb, complex *w, integer *ldw, complex *s, integer *lds,
-             complex *zwork, integer *lzwork, real *rwork, integer *lrwork, integer *iwork,
-             integer *liwork, integer *info)
+             integer *n, doublecomplex *x, integer *ldx, doublecomplex *y, integer *ldy,
+             integer *nrnk, doublereal *tol, integer *k, doublecomplex *eigs, doublecomplex *z__,
+             integer *ldz, doublereal *res, doublecomplex *b, integer *ldb, doublecomplex *w,
+             integer *ldw, doublecomplex *s, integer *lds, doublecomplex *zwork, integer *lzwork,
+             doublereal *rwork, integer *lrwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgedmd inputs: jobs %c, jobz %c, jobr %c, jobf %c, whtsvd %" FLA_IS
@@ -521,72 +521,79 @@ void zgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
     /* System generated locals */
     integer x_dim1, x_offset, y_dim1, y_offset, z_dim1, z_offset, b_dim1, b_offset, w_dim1,
         w_offset, s_dim1, s_offset, i__1, i__2, i__3, i__4, i__5, i__6;
-    real r__1;
+    doublereal r__1;
     doublereal d__1;
-    complex q__1, q__2;
+    doublecomplex q__1, q__2;
     /* Builtin functions */
-    double sqrt(doublereal), c_abs(complex *);
+    double sqrt(doublereal), c_abs(doublecomplex *);
     /* Local variables */
     integer i__, j;
-    real ofl, ssum;
+    doublereal ofl, ssum;
     integer info1, info2;
-    real xscl1, xscl2, scale;
+    doublereal xscl1, xscl2, scale;
     extern logical lsame_(char *, char *, integer, integer);
     logical badxy;
-    real small_val;
+    doublereal small_val;
     extern /* Subroutine */
         void
-        zgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
-               complex *, integer *, complex *, complex *, integer *);
+        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
+               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     char jobzl[1];
     extern /* Subroutine */
         void
-        zgeev_(char *, char *, integer *, complex *, integer *, complex *, complex *, integer *,
-               complex *, integer *, complex *, integer *, real *, integer *);
+        zgeev_(char *, char *, integer *, doublecomplex *, integer *, doublecomplex *,
+               doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
+               doublereal *, integer *);
     logical wntex;
     extern /* Subroutine */
         void
-        zaxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
-    extern real dznrm2_(integer *, complex *, integer *), dlamch_(char *);
-    extern logical disnan_(real *);
+        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
+    extern doublereal dznrm2_(integer *, doublecomplex *, integer *), dlamch_(char *);
+    extern logical disnan_(doublereal *);
     extern /* Subroutine */
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     char t_or_n__[1];
     extern /* Subroutine */
         void
-        zdscal_(integer *, real *, complex *, integer *),
-        zgesdd_(char *, integer *, integer *, complex *, integer *, real *, complex *, integer *,
-                complex *, integer *, complex *, integer *, real *, integer *, integer *),
-        zlascl_();
-    extern integer izamax_(integer *, complex *, integer *);
+        zdscal_(integer *, doublereal *, doublecomplex *, integer *),
+        zgesdd_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *,
+                doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
+                doublereal *, integer *, integer *),
+        zlascl_(char *type__, integer *kl, integer *ku, doublereal *cfrom, doublereal *cto,
+                integer *m, integer *n, doublecomplex *a, integer *lda, integer *info);
+    extern integer izamax_(integer *, doublecomplex *, integer *);
     logical sccolx, sccoly;
     integer lwrsdd, mwrsdd;
     extern /* Subroutine */
         void
-        zgesvd_(char *, char *, integer *, integer *, complex *, integer *, real *, complex *,
-                integer *, complex *, integer *, complex *, integer *, real *, integer *),
-        zlacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *);
+        zgesvd_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublereal *,
+                doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
+                doublereal *, integer *),
+        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                integer *);
     integer iminwr;
     logical wntref, wntvec;
-    real rootsc;
+    doublereal rootsc;
     integer lwrkev, mlwork, mwrkev, numrnk, olwork, lwrsvd, mwrsvd, mlrwrk;
     logical lquery, wntres;
     char jsvopt[1];
     integer lwrsvj, mwrsvj;
-    real rdummy[2];
+    doublereal rdummy[2];
     extern /* Subroutine */
         void
-        zgejsv_(char *, char *, char *, char *, char *, char *, integer *, integer *, complex *,
-                integer *, real *, complex *, integer *, complex *, integer *, complex *, integer *,
-                real *, integer *, integer *, integer *),
-        zlassq_(integer *, complex *, integer *, real *, real *);
+        zgejsv_(char *, char *, char *, char *, char *, char *, integer *, integer *,
+                doublecomplex *, integer *, doublereal *, doublecomplex *, integer *,
+                doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, integer *,
+                integer *, integer *),
+        zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
     integer lwrsvq, mwrsvq;
     extern /* Subroutine */
         void
-        zgesvdq_(char *, char *, char *, char *, char *, integer *, integer *, complex *, integer *,
-                 real *, complex *, integer *, complex *, integer *, integer *, integer *,
-                 integer *, complex *, integer *, real *, integer *, integer *);
+        zgesvdq_(char *, char *, char *, char *, char *, integer *, integer *, doublecomplex *,
+                 integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *,
+                 integer *, integer *, integer *, doublecomplex *, integer *, doublereal *,
+                 integer *, integer *);
     /* ...Translated by Pacific-Sierra Research vf90 Personal 3.4N3 02:54:45 10/25/24 */
     /* ...Switches: */
     /* -- LAPACK driver routine -- */
@@ -884,10 +891,10 @@ void zgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
     {
         /* Return minimal and optimal workspace sizes */
         iwork[1] = iminwr;
-        rwork[1] = (real)mlrwrk;
-        zwork[1].r = (real)mlwork;
+        rwork[1] = (doublereal)mlrwrk;
+        zwork[1].r = (doublereal)mlwork;
         zwork[1].i = 0.f; // , expr subst
-        zwork[2].r = (real)olwork;
+        zwork[2].r = (doublereal)olwork;
         zwork[2].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;

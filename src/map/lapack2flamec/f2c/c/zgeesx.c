@@ -247,7 +247,7 @@ if */
 /* > \ingroup geesx */
 /* ===================================================================== */
 /* Subroutine */
-void zgeesx_(char *jobvs, char *sort, L_fp select, char *sense, integer *n, doublecomplex *a,
+void zgeesx_(char *jobvs, char *sort, L_fpz1 select, char *sense, integer *n, doublecomplex *a,
              integer *lda, integer *sdim, doublecomplex *w, doublecomplex *vs, integer *ldvs,
              doublereal *rconde, doublereal *rcondv, doublecomplex *work, integer *lwork,
              doublereal *rwork, logical *bwork, integer *info)

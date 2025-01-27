@@ -375,7 +375,7 @@ the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp selctg, char *sense, integer *n,
+void dggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, char *sense, integer *n,
              doublereal *a, integer *lda, doublereal *b, integer *ldb, integer *sdim,
              doublereal *alphar, doublereal *alphai, doublereal *beta, doublereal *vsl,
              integer *ldvsl, doublereal *vsr, integer *ldvsr, doublereal *rconde,

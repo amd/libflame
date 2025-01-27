@@ -338,7 +338,7 @@ the */
 /* > \ingroup ggesx */
 /* ===================================================================== */
 /* Subroutine */
-void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp selctg, char *sense, integer *n,
+void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, char *sense, integer *n,
              complex *a, integer *lda, complex *b, integer *ldb, integer *sdim, complex *alpha,
              complex *beta, complex *vsl, integer *ldvsl, complex *vsr, integer *ldvsr,
              real *rconde, real *rcondv, complex *work, integer *lwork, real *rwork, integer *iwork,

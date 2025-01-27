@@ -201,7 +201,7 @@ elements 1:ILO-1 and i+1:N of W */
 /* > \ingroup gees */
 /* ===================================================================== */
 /* Subroutine */
-void zgees_(char *jobvs, char *sort, L_fp select, integer *n, doublecomplex *a, integer *lda,
+void zgees_(char *jobvs, char *sort, L_fpz1 select, integer *n, doublecomplex *a, integer *lda,
             integer *sdim, doublecomplex *w, doublecomplex *vs, integer *ldvs, doublecomplex *work,
             integer *lwork, doublereal *rwork, logical *bwork, integer *info)
 {

@@ -201,7 +201,7 @@ elements 1:ILO-1 and i+1:N of W */
 /* > \ingroup gees */
 /* ===================================================================== */
 /* Subroutine */
-void cgees_(char *jobvs, char *sort, L_fp select, integer *n, complex *a, integer *lda,
+void cgees_(char *jobvs, char *sort, L_fp1 select, integer *n, complex *a, integer *lda,
             integer *sdim, complex *w, complex *vs, integer *ldvs, complex *work, integer *lwork,
             real *rwork, logical *bwork, integer *info)
 {

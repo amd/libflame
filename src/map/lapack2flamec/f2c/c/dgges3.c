@@ -288,7 +288,7 @@ the routine */
 /* > \ingroup gges3 */
 /* ===================================================================== */
 /* Subroutine */
-void dgges3_(char *jobvsl, char *jobvsr, char *sort, L_fp selctg, integer *n, doublereal *a,
+void dgges3_(char *jobvsl, char *jobvsr, char *sort, L_fpd3 selctg, integer *n, doublereal *a,
              integer *lda, doublereal *b, integer *ldb, integer *sdim, doublereal *alphar,
              doublereal *alphai, doublereal *beta, doublereal *vsl, integer *ldvsl, doublereal *vsr,
              integer *ldvsr, doublereal *work, integer *lwork, logical *bwork, integer *info)

@@ -293,7 +293,7 @@ if */
 /* > \ingroup geesx */
 /* ===================================================================== */
 /* Subroutine */
-void dgeesx_(char *jobvs, char *sort, L_fp select, char *sense, integer *n, doublereal *a,
+void dgeesx_(char *jobvs, char *sort, L_fpd2 select, char *sense, integer *n, doublereal *a,
              integer *lda, integer *sdim, doublereal *wr, doublereal *wi, doublereal *vs,
              integer *ldvs, doublereal *rconde, doublereal *rcondv, doublereal *work,
              integer *lwork, integer *iwork, integer *liwork, logical *bwork, integer *info)

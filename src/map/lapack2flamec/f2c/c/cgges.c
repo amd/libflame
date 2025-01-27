@@ -273,7 +273,7 @@ the routine */
 /* > \ingroup gges */
 /* ===================================================================== */
 /* Subroutine */
-void cgges_(char *jobvsl, char *jobvsr, char *sort, L_fp selctg, integer *n, complex *a,
+void cgges_(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, integer *n, complex *a,
             integer *lda, complex *b, integer *ldb, integer *sdim, complex *alpha, complex *beta,
             complex *vsl, integer *ldvsl, complex *vsr, integer *ldvsr, complex *work,
             integer *lwork, real *rwork, logical *bwork, integer *info)

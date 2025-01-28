@@ -181,9 +181,6 @@ elseif(UNIX)
 	else()
 		message(STATUS "No ISA flag set")
 	endif()
-	if(ENABLE_MULTITHREADING)
-		set(COMPILER_OPTIMIZATION_FLAGS	"${COMPILER_OPTIMIZATION_FLAGS} -fopenmp")
-	endif()
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${COMPILER_OPTIMIZATION_FLAGS}")
 else()
 	message(STATUS "OS UNKNOWN CANNOT SET SIMD")
@@ -998,6 +995,8 @@ if(ENABLE_OPENMP)
 		target_link_libraries(${PROJECT_NAME}  ${LIBIOMP})
 
 		string(APPEND LIBS_LINK_FLAGS "-L${EXT_OPENMP_PATH} -l${EXT_OPENMP_LIB} ")
+
+		set	(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fopenmp")
 
 		if(UNIX)
 	        	target_link_libraries(${PROJECT_NAME} -Wl,--as-needed -ldl)

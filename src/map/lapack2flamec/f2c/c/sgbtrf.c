@@ -269,7 +269,14 @@ void sgbtrf_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer
 #endif
 
     /* Determine the block size for this environment */
+#if FLA_ENABLE_AMD_OPT
+     if(*ku <= 64)
+         nb = 1;
+     else
+         nb = 32;
+#else
     nb = ilaenv_(&c__1, "SGBTRF", " ", m, n, kl, ku);
+#endif
     /* The block size must not exceed the limit set by the size of the */
     /* local arrays WORK13 and WORK31. */
     nb = fla_min(nb, 64);

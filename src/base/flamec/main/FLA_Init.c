@@ -248,10 +248,14 @@ char*     FLA_Get_AOCL_Version( void )
      {
 	    return lflibversion.version;
      }
+     int vers_major, vers_minor, vers_patch;
+     ilaver_(&vers_major, &vers_minor, &vers_patch);
 
      char lfmainversion[] = "AOCL-LAPACK ";
      char* lfversion = lflibversion.version;
-     char lapackversion[] = ", supports LAPACK 3.11.0";
+     char lapackversion[30];
+     snprintf(lapackversion, sizeof(lapackversion), ", supports LAPACK %d.%d.%d",
+              vers_major, vers_minor, vers_patch);
      int length, i;
 
      length = 0;

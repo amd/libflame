@@ -88,11 +88,8 @@ int test_progress(const char *const api, const integer lenapi, const integer *co
 int main(int argc, char **argv)
 {
     test_params_t params;
-    integer vers_major, vers_minor, vers_patch;
     integer arg_count = argc;
     bool status;
-
-    ilaver_(&vers_major, &vers_minor, &vers_patch);
 
     /* Initialize some strings. */
     fla_test_init_strings();
@@ -136,8 +133,7 @@ int main(int argc, char **argv)
     }
     else if(cmd_option == 0)
     {
-        printf(" LAPACK version: %" FT_IS ".%" FT_IS ".%" FT_IS " \n", vers_major, vers_minor,
-               vers_patch);
+        printf(" AOCL-LAPACK version: %s\n", FLA_Get_AOCL_Version());
         /* Copy the binary name to a global string so we can use it later. */
         strncpy(fla_test_binary_name, argv[0], MAX_BINARY_NAME_LENGTH);
 

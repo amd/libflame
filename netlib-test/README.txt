@@ -23,6 +23,6 @@
         ILP64 : LP64 or ILP64 mode. Default=0(Use LP64)
         BLAS_LIB_PATH : path of blas library chosen in BLAS_LIB
         LAPACK_LIB_PATH : path to lapack library chosen in LAPACK_LIB
-        LAPACK_TEST_DIR : netlib lapack test directory name. Default=lapack-3.10.0
+        LAPACK_TEST_DIR : netlib lapack test directory name. Default=lapack-3.12.0
 
   Usage for AOCC is on similar lines. Just replace script name from "run-netlib-test.sh" to "run-netlib-test-aocc.sh" 

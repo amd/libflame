@@ -63,51 +63,67 @@ extern double time_min;
    realtype_prefix: FLOAT/COMPLEX: s; DOUBLE, DOUBLE_COMPLEX: d
    type_prefix: FLOAT: s; DOUBLE: d; COMPLEX: c; DOUBLE_COMPLEX: z
 */
-#define test_1_body(realtype, realtype_prefix, type_prefix)                                 \
-    {                                                                                       \
-        realtype norm, norm_orig;                                                           \
-        /* Test 1 */                                                                        \
-        /* Calculating LHS part of equation based on itype */                               \
-        switch(itype)                                                                       \
-        {                                                                                   \
-            case 1:                                                                         \
-                /* Z = A * X */                                                             \
-                fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, A, &lda, X, &lda, Z, &lda); \
-                break;                                                                      \
-            case 2:                                                                         \
-                /* Z = A * B * X */                                                         \
-                fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, A, &lda, B, &ldb, P, &lda); \
-                fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, P, &lda, X, &lda, Z, &lda); \
-                break;                                                                      \
-            case 3:                                                                         \
-                /* Z = B * A * X */                                                         \
-                fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, B, &ldb, A, &lda, P, &lda); \
-                fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, P, &lda, X, &lda, Z, &lda); \
-                break;                                                                      \
-        }                                                                                   \
-        norm_orig = invoke_lange(type_prefix, "1", &n, &n, Z, &lda, work);                  \
-        if(norm_orig < ufmin)                                                               \
-        {                                                                                   \
-            norm_orig = ufmin;                                                              \
-        }                                                                                   \
-        /* F = X * lambda */                                                                \
-        multiply_matrix_diag_vector(datatype, n, n, X, lda, lambda_out, 1);                 \
-        switch(itype)                                                                       \
-        {                                                                                   \
-            case 1:                                                                         \
-                /* P = B * F = B * X * lambda */                                            \
-                fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, B, &ldb, X, &lda, P, &lda); \
-                /* Z = Z - P = Z - (B * X * lambda ) */                                     \
-                matrix_difference(datatype, n, n, Z, lda, P, lda);                          \
-                break;                                                                      \
-            case 2:                                                                         \
-            case 3:                                                                         \
-                /* Z = Z - (X * lambda) */                                                  \
-                matrix_difference(datatype, n, n, Z, lda, X, lda);                          \
-                break;                                                                      \
-        }                                                                                   \
-        norm = invoke_lange(type_prefix, "1", &n, &n, Z, &lda, work);                       \
-        resid2 = norm / (eps * norm_orig * (realtype)n);                                    \
+#define test_1_body(realtype, realtype_prefix, type_prefix)                                        \
+    {                                                                                              \
+        realtype norm, norm_orig, x_scale = 1.0;                                                   \
+        /* Test 1 */                                                                               \
+        copy_matrix(datatype, "full", n, n, X, lda, X_scaled, lda);                                \
+        /* If test is underflow/overflow then scale X accordingly */                               \
+        if(imatrix == 'O')                                                                         \
+        {                                                                                          \
+            /* Scale such that all elements are <= 10^-2 */                                        \
+            get_max_from_matrix(datatype, X_scaled, &x_scale, n, n, lda);                          \
+            x_scale = 0.01 / x_scale;                                                              \
+            scal_matrix(datatype, &x_scale, X_scaled, n, n, lda, 1);                               \
+        }                                                                                          \
+        else if(imatrix == 'U')                                                                    \
+        {                                                                                          \
+            /* Scale such that all elements are >= 1 */                                            \
+            get_min_from_matrix(datatype, X_scaled, &x_scale, n, n, lda);                          \
+            x_scale = 1.0 / x_scale;                                                               \
+            scal_matrix(datatype, &x_scale, X_scaled, n, n, lda, 1);                               \
+        }                                                                                          \
+        /* Calculating LHS part of equation based on itype */                                      \
+        switch(itype)                                                                              \
+        {                                                                                          \
+            case 1:                                                                                \
+                /* Z = A * X */                                                                    \
+                fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, A, &lda, X_scaled, &lda, Z, &lda); \
+                break;                                                                             \
+            case 2:                                                                                \
+                /* Z = A * B * X */                                                                \
+                fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, A, &lda, B, &ldb, P, &lda);        \
+                fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, P, &lda, X_scaled, &lda, Z, &lda); \
+                break;                                                                             \
+            case 3:                                                                                \
+                /* Z = B * A * X */                                                                \
+                fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, B, &ldb, A, &lda, P, &lda);        \
+                fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, P, &lda, X_scaled, &lda, Z, &lda); \
+                break;                                                                             \
+        }                                                                                          \
+        norm_orig = invoke_lange(type_prefix, "1", &n, &n, Z, &lda, work);                         \
+        if(norm_orig < ufmin)                                                                      \
+        {                                                                                          \
+            norm_orig = ufmin;                                                                     \
+        }                                                                                          \
+        /* F = X * lambda */                                                                       \
+        multiply_matrix_diag_vector(datatype, n, n, X_scaled, lda, lambda_out, 1);                 \
+        switch(itype)                                                                              \
+        {                                                                                          \
+            case 1:                                                                                \
+                /* P = B * F = B * X * lambda */                                                   \
+                fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, B, &ldb, X_scaled, &lda, P, &lda); \
+                /* Z = Z - P = Z - (B * X * lambda ) */                                            \
+                matrix_difference(datatype, n, n, Z, lda, P, lda);                                 \
+                break;                                                                             \
+            case 2:                                                                                \
+            case 3:                                                                                \
+                /* Z = Z - (X * lambda) */                                                         \
+                matrix_difference(datatype, n, n, Z, lda, X_scaled, lda);                          \
+                break;                                                                             \
+        }                                                                                          \
+        norm = invoke_lange(type_prefix, "1", &n, &n, Z, &lda, work);                              \
+        resid2 = norm / (eps * norm_orig * (realtype)n);                                           \
     }
 
 #define test_2_body(realtype, realtype_prefix, type_prefix)                                 \
@@ -198,7 +214,8 @@ void validate_sygvd(char *tst_api, integer itype, char *jobz, char *range, char 
     {
         if(*jobz != 'N')
         {
-            void *Z = NULL, *work = NULL, *X = NULL, *X_inv = NULL, *P = NULL, *L = NULL, *U = NULL;
+            void *Z = NULL, *work = NULL, *X = NULL, *X_inv = NULL, *P = NULL, *L = NULL, *U = NULL,
+                 *X_scaled = NULL;
             integer i;
             integer *buff = (integer *)ifail;
 
@@ -221,6 +238,9 @@ void validate_sygvd(char *tst_api, integer itype, char *jobz, char *range, char 
 
             create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &U, lda);
             reset_matrix(datatype, n, n, U, lda);
+
+            create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &X_scaled, lda);
+            reset_matrix(datatype, n, n, X_scaled, lda);
 
             /* B = U'U = LL' = LU */
             if(*uplo == 'U')
@@ -306,6 +326,7 @@ void validate_sygvd(char *tst_api, integer itype, char *jobz, char *range, char 
             free_matrix(P);
             free_matrix(L);
             free_matrix(U);
+            free_matrix(X_scaled);
         }
         /* Test 5: In case of specific input generation, compare input and
            output eigen values */

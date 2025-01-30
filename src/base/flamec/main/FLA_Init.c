@@ -248,7 +248,7 @@ char*     FLA_Get_AOCL_Version( void )
      {
 	    return lflibversion.version;
      }
-     int vers_major, vers_minor, vers_patch;
+     integer vers_major, vers_minor, vers_patch;
      ilaver_(&vers_major, &vers_minor, &vers_patch);
 
      char lfmainversion[] = "AOCL-LAPACK ";

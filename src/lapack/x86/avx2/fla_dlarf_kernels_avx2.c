@@ -1,5 +1,5 @@
 /******************************************************************************
- * * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
+ * * Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
  *   Portions of this file consist of AI-generated content
  * *******************************************************************************/
 
@@ -13,8 +13,8 @@ void fla_dlarf_left_apply_incv1_avx2(integer m, integer n, doublereal *a_buff, i
     integer acols, arows;
     integer k, j;
     __m128d vd2_inp;
-    __m128d vd2_ntau, vd2_dtmp, vd2_vj1;
-    __m256d vd4_dtmp, vd4_inp, vd4_vj;
+    __m128d vd2_ntau, vd2_dtmp, vd2_vj1, vd2_dtmp2;
+    __m256d vd4_dtmp, vd4_inp, vd4_vj, vd4_dtmp2;
     __m128d vd2_ltmp, vd2_htmp;
 
     /* Apply the Householder rotation                      */
@@ -41,7 +41,8 @@ void fla_dlarf_left_apply_incv1_avx2(integer m, integer n, doublereal *a_buff, i
             vd4_vj = _mm256_loadu_pd((const doublereal *)&v[k]);
 
             /* take dot product */
-            vd4_dtmp = _mm256_fmadd_pd(vd4_inp, vd4_vj, vd4_dtmp);
+            vd4_dtmp2 = _mm256_mul_pd(vd4_inp, vd4_vj);
+            vd4_dtmp = _mm256_add_pd(vd4_dtmp, vd4_dtmp2);
         }
         if(k < arows)
         {
@@ -50,7 +51,8 @@ void fla_dlarf_left_apply_incv1_avx2(integer m, integer n, doublereal *a_buff, i
             vd2_vj1 = _mm_loadu_pd((const doublereal *)&v[k]);
 
             /* take dot product */
-            vd2_dtmp = _mm_fmadd_pd(vd2_inp, vd2_vj1, vd2_dtmp);
+            vd2_dtmp2 = _mm_mul_pd(vd2_inp, vd2_vj1);
+            vd2_dtmp = _mm_add_pd(vd2_dtmp, vd2_dtmp2);
             k += 2;
         }
         if(k == arows)
@@ -60,7 +62,8 @@ void fla_dlarf_left_apply_incv1_avx2(integer m, integer n, doublereal *a_buff, i
             vd2_vj1 = _mm_load_sd((const doublereal *)&v[k]);
 
             /* take dot product */
-            vd2_dtmp = _mm_fmadd_pd(vd2_inp, vd2_vj1, vd2_dtmp);
+            vd2_dtmp2 = _mm_mul_pd(vd2_inp, vd2_vj1);
+            vd2_dtmp = _mm_add_pd(vd2_dtmp, vd2_dtmp2);
         }
         /* Horizontal add of dtmp */
         vd2_ltmp = _mm256_castpd256_pd128(vd4_dtmp);
@@ -70,7 +73,7 @@ void fla_dlarf_left_apply_incv1_avx2(integer m, integer n, doublereal *a_buff, i
         vd2_dtmp = _mm_add_pd(vd2_dtmp, vd2_htmp);
         vd2_dtmp = _mm_hadd_pd(vd2_dtmp, vd2_dtmp);
         _mm_storel_pd((doublereal *)&work[j], vd2_dtmp);
-        
+
         /* Compute tmp = - tau * tmp */
         vd2_dtmp = _mm_mul_pd(vd2_dtmp, vd2_ntau);
         vd4_dtmp = _mm256_castpd128_pd256(vd2_dtmp);
@@ -89,7 +92,8 @@ void fla_dlarf_left_apply_incv1_avx2(integer m, integer n, doublereal *a_buff, i
             vd4_vj = _mm256_loadu_pd((const doublereal *)&v[k]);
 
             /* mul by dtmp, add and store */
-            vd4_inp = _mm256_fmadd_pd(vd4_dtmp, vd4_vj, vd4_inp);
+            vd4_dtmp2 = _mm256_mul_pd(vd4_dtmp, vd4_vj);
+            vd4_inp = _mm256_add_pd(vd4_dtmp2, vd4_inp);
             _mm256_storeu_pd((doublereal *)&a_buff[k + j * ldr], vd4_inp);
         }
         if(k < arows)
@@ -99,7 +103,8 @@ void fla_dlarf_left_apply_incv1_avx2(integer m, integer n, doublereal *a_buff, i
             vd2_vj1 = _mm_loadu_pd((const doublereal *)&v[k]);
 
             /* mul by dtmp, add and store */
-            vd2_inp = _mm_fmadd_pd(vd2_dtmp, vd2_vj1, vd2_inp);
+            vd2_dtmp2 = _mm_mul_pd(vd2_dtmp, vd2_vj1);
+            vd2_inp = _mm_add_pd(vd2_dtmp2, vd2_inp);
             _mm_storeu_pd((doublereal *)&a_buff[k + j * ldr], vd2_inp);
             k += 2;
         }
@@ -110,7 +115,8 @@ void fla_dlarf_left_apply_incv1_avx2(integer m, integer n, doublereal *a_buff, i
             vd2_vj1 = _mm_load_sd((const doublereal *)&v[k]);
 
             /* mul by dtmp, add and store */
-            vd2_inp = _mm_fmadd_pd(vd2_dtmp, vd2_vj1, vd2_inp);
+            vd2_dtmp2 = _mm_mul_pd(vd2_dtmp, vd2_vj1);
+            vd2_inp = _mm_add_pd(vd2_dtmp2, vd2_inp);
             _mm_storel_pd((doublereal *)&a_buff[k + j * ldr], vd2_inp);
         }
     }

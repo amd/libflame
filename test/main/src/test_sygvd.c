@@ -191,7 +191,7 @@ void fla_test_sygvd_experiment(test_params_t *params, integer datatype, integer 
         /* Genrating random spd matrix with known chol factor */
         /* Evals is used here as temporary buffer */
         generate_matrix_from_EVs(datatype, 'V', n, U, lda, EVals, 0.1, 1.0, USE_ABS_EIGEN_VALUES);
-        get_triangular_matrix("U", datatype, n, n, U, lda, 1);
+        get_triangular_matrix("U", datatype, n, n, U, lda, 1, NON_UNIT_DIAG);
 
         /* B = U**{T|C} U */
         fla_invoke_gemm(datatype, GET_TRANS_STR(datatype), "N", &n, &n, &n, U, &lda, U, &lda, B,

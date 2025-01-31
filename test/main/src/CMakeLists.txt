@@ -55,7 +55,9 @@ ${CMAKE_CURRENT_SOURCE_DIR}/test_sytrf_rook.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_larf.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_sygvd.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_lange.c
-${CMAKE_CURRENT_SOURCE_DIR}/test_gecon.c)
+${CMAKE_CURRENT_SOURCE_DIR}/test_gecon.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_getrfnp.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_getrfnpi.c)
 
 if(ENABLE_CPP_TEST)
 add_subdirectory(cpp)

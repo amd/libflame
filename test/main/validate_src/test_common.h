@@ -25,6 +25,17 @@
 #define USE_ABS_EIGEN_VALUES 1
 #define USE_SIGNED_EIGEN_VALUES 0
 
+/* Enum value for the type of diagonal
+   elements of a diagnoal matrix.
+
+   NON_UNIT_DIAG: Diagonal elements are non-unit
+   UNIT_DIAG: Diagonal elements are unit */
+enum TRIANGULAR_MATRIX_DIAG_TYPE
+{
+    NON_UNIT_DIAG = 0,
+    UNIT_DIAG = 1
+};
+
 /* The macros below are used for deciding which position of the off-diagonal
  * element of 2x2 diagonal block needs to be negated.
  * Used for the hetrf_rook test case
@@ -222,11 +233,21 @@ void get_orthogonal_matrix_from_QR(integer datatype, integer n, void *A, integer
    else if order == 'R' matrix will be printed in rows first order*/
 void print_matrix(char *desc, char *order, integer datatype, integer M, integer N, void *A,
                   integer lda);
-/* Get upper triangular matrix or lower triangular matrix based on UPLO.
-   If A_init is false, initialize A with random values.
-   Else A is already initialized by caller. */
+/**
+ * @brief Get upper triangular matrix or lower triangular matrix based on UPLO.
+ * @param uplo - 'U' for upper triangular matrix, 'L' for lower triangular matrix.
+ * @param datatype - Data type of matrix.
+ * @param m - Number of rows of matrix.
+ * @param n - Number of columns of matrix.
+ * @param A - Matrix to be initialized. If A_init is 0, initialize A with random values.
+ *            otherwise A is already initialized by caller.
+ * @param lda - Leading dimension of matrix A.
+ * @param A_init - 0 if A is not initialized, 1 if A is already initialized.
+ * @param diag_type - UNIT_DIAG if diagonal elements need to be set to unity,
+ *                    NON_UNIT_DIAG if diagonal elements are not required to be set to unity.
+ */
 void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, void *A, integer lda,
-                           integer A_init);
+                           integer A_init, enum TRIANGULAR_MATRIX_DIAG_TYPE diag_type);
 /*To Check order of Singular values of SVD (positive and non-decreasing)*/
 double svd_check_order(integer datatype, void *s, integer m, integer n, double residual);
 /*Generate Matrix for SVD*/
@@ -373,4 +394,7 @@ integer fla_validate_lange_norm_types(char *src_norm_str, char *dst_norm_str, in
  * Compare matrix A with matrix B*/
 integer compare_matrix(integer datatype, char *uplo, integer m, integer n, void *A, integer lda,
                        void *B, integer ldb);
+/* Swap rows of the matrix as per permutation vector */
+void swap_rows_with_pivot(integer datatype, integer m, integer n, void *A, integer lda,
+                          integer *ipiv);
 #endif // TEST_COMMON_H

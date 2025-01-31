@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2021-2022 Advanced Micro Devices, Inc. All rights reserved.
+ *  Copyright (c) 2021-2025 Advanced Micro Devices, Inc. All rights reserved.
  * */
 
 #include "FLAME.h"
@@ -15,7 +15,7 @@ FLA_Error FLA_LU_nopiv_ic_blk_var1( integer m_A, integer n_A,FLA_Obj A, scomplex
   {
     for(integer j=0;j<nfact;j++)
     {
-      *(copy_A+i+j*cs_A) = *(buff_A+i+j*cs_A);
+      *(copy_A+i+j*m_A) = *(buff_A+i+j*cs_A);
     }
   }
 
@@ -42,7 +42,7 @@ FLA_Error FLA_LU_nopiv_ic_blk_var1( integer m_A, integer n_A,FLA_Obj A, scomplex
     {
       for(integer j=0;j<nfact;j++)
       {
-        *(buff_A+i+j*cs_A) = *(copy_A+i+j*cs_A);
+        *(buff_A+i+j*cs_A) = *(copy_A+i+j*m_A);
       }
     }
     FLA_LU_nopiv_ic_unblk_var1(m_A,n_A,buff_A,e_val,rs_A,cs_A);            //restore original matrix and use unblocked variant 1 to recover last valid state$

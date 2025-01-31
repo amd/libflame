@@ -176,4 +176,7 @@ void validate_lange(integer datatype, char norm_type, integer m, integer n, inte
 void validate_gecon(integer datatype, char norm, integer n, void *A, void *A_save, integer lda,
                     double *residual, char imatrix_char);
 
+void validate_getrfnpi(integer m_A, integer n_A, integer nfact, void *A, void *A_test, integer lda,
+                       integer *IPIV, integer datatype, double *residual, integer *info,
+                       char imatrix);
 #endif // VALIDATE_COMMON_H

@@ -52,3 +52,5 @@
 1   sytrf_rook   LDLT factorization                       (0 = disable; 1 = enable; 2 = enable only this)
 1   lange   Calculates Matrix Norms                       (0 = disable; 1 = enable; 2 = enable only this)
 1   gecon  Estimates reciprocal of the condition number   (0 = disable; 1 = enable; 2 = enable only this)
+1   getrfnp LU factorization (No Pivoting)                (0 = disable; 1 = enable; 2 = enable only this)
+1   getrfnpi  LU factorization (No Pivot, Partial Factor) (0 = disable; 1 = enable; 2 = enable only this)

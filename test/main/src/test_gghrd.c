@@ -242,7 +242,7 @@ void fla_test_gghrd_experiment(test_params_t *params, integer datatype, integer 
             scale_matrix_underflow_overflow_gghrd(datatype, n, B, ldb, params->imatrix_char);
             ABInitialized = 1;
         }
-        get_triangular_matrix("U", datatype, n, n, B, ldb, ABInitialized);
+        get_triangular_matrix("U", datatype, n, n, B, ldb, ABInitialized, NON_UNIT_DIAG);
         get_generic_triangular_matrix(datatype, n, A, lda, ilo, ihi, ABInitialized);
 
         /* Initialize Q matrix. */
@@ -446,8 +446,8 @@ void prepare_gghrd_run(char *compq, char *compz, integer n, integer *ilo, intege
         {
             exe_time = fla_test_clock();
             /* Call CPP gghrd API */
-            invoke_cpp_gghrd(datatype, compq, compz, &n, ilo, ihi, A, &lda, B, &ldb, Q, &ldq, Z, &ldz,
-                             info);
+            invoke_cpp_gghrd(datatype, compq, compz, &n, ilo, ihi, A, &lda, B, &ldb, Q, &ldq, Z,
+                             &ldz, info);
             exe_time = fla_test_clock() - exe_time;
         }
 #endif

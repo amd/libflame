@@ -2771,11 +2771,21 @@ void print_matrix(char *desc, char *order, integer datatype, integer M, integer 
     }
 }
 
-/* Get upper triangular matrix or lower triangular matrix based on UPLO.
-   If A_init is 0, initialize A with random values.
-   Else A is already initialized by caller. */
+/**
+ * @brief Get upper triangular matrix or lower triangular matrix based on UPLO.
+ * @param uplo - 'U' for upper triangular matrix, 'L' for lower triangular matrix.
+ * @param datatype - Data type of matrix.
+ * @param m - Number of rows of matrix.
+ * @param n - Number of columns of matrix.
+ * @param A - Matrix to be initialized. If A_init is 0, initialize A with random values.
+ *            otherwise A is already initialized by caller.
+ * @param lda - Leading dimension of matrix A.
+ * @param A_init - 0 if A is not initialized, 1 if A is already initialized.
+ * @param diag_type - UNIT_DIAG if diagonal elements need to be set to unity,
+ *                    NON_UNIT_DIAG if diagonal elements are not required to be set to unity.
+ */
 void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, void *A, integer lda,
-                           integer A_init)
+                           integer A_init, enum TRIANGULAR_MATRIX_DIAG_TYPE diag_type)
 {
     integer i;
 
@@ -2794,18 +2804,32 @@ void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, v
         {
             if(*uplo == 'U')
             {
-                for(i = 0; i < n; i++)
+                if(diag_type == UNIT_DIAG)
                 {
-                    float *p = &((float *)A)[(i + 1) + i * lda];
-                    reset_vector(datatype, (void *)p, m - i - 1, 1);
+                    fla_lapack_slaset("L", &m, &n, &s_zero, &s_one, A, &lda);
+                }
+                else
+                {
+                    for(i = 0; i < n; i++)
+                    {
+                        float *p = &((float *)A)[(i + 1) + i * lda];
+                        reset_vector(datatype, (void *)p, m - i - 1, 1);
+                    }
                 }
             }
             else if(*uplo == 'L')
             {
-                for(i = 0; i < n; i++)
+                if(diag_type == UNIT_DIAG)
                 {
-                    float *p = &((float *)A)[i * lda];
-                    reset_vector(datatype, (void *)p, i + 1, 1);
+                    fla_lapack_slaset("U", &m, &n, &s_zero, &s_one, A, &lda);
+                }
+                else
+                {
+                    for(i = 0; i < n; i++)
+                    {
+                        float *p = &((float *)A)[i * lda];
+                        reset_vector(datatype, (void *)p, i + 1, 1);
+                    }
                 }
             }
             break;
@@ -2814,18 +2838,32 @@ void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, v
         {
             if(*uplo == 'U')
             {
-                for(i = 0; i < n; i++)
+                if(diag_type == UNIT_DIAG)
                 {
-                    double *p = &((double *)A)[(i + 1) + i * lda];
-                    reset_vector(datatype, (void *)p, m - i - 1, 1);
+                    fla_lapack_dlaset("L", &m, &n, &d_zero, &d_one, A, &lda);
+                }
+                else
+                {
+                    for(i = 0; i < n; i++)
+                    {
+                        double *p = &((double *)A)[(i + 1) + i * lda];
+                        reset_vector(datatype, (void *)p, m - i - 1, 1);
+                    }
                 }
             }
             else if(*uplo == 'L')
             {
-                for(i = 0; i < n; i++)
+                if(diag_type == UNIT_DIAG)
                 {
-                    double *p = &((double *)A)[i * lda];
-                    reset_vector(datatype, (void *)p, i + 1, 1);
+                    fla_lapack_dlaset("U", &m, &n, &d_zero, &d_one, A, &lda);
+                }
+                else
+                {
+                    for(i = 0; i < n; i++)
+                    {
+                        double *p = &((double *)A)[i * lda];
+                        reset_vector(datatype, (void *)p, i + 1, 1);
+                    }
                 }
             }
             break;
@@ -2834,18 +2872,32 @@ void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, v
         {
             if(*uplo == 'U')
             {
-                for(i = 0; i < n; i++)
+                if(diag_type == UNIT_DIAG)
                 {
-                    scomplex *p = &((scomplex *)A)[(i + 1) + i * lda];
-                    reset_vector(datatype, (void *)p, m - i - 1, 1);
+                    fla_lapack_claset("L", &m, &n, &c_zero, &c_one, A, &lda);
+                }
+                else
+                {
+                    for(i = 0; i < n; i++)
+                    {
+                        scomplex *p = &((scomplex *)A)[(i + 1) + i * lda];
+                        reset_vector(datatype, (void *)p, m - i - 1, 1);
+                    }
                 }
             }
             else if(*uplo == 'L')
             {
-                for(i = 0; i < n; i++)
+                if(diag_type == UNIT_DIAG)
                 {
-                    scomplex *p = &((scomplex *)A)[i * lda];
-                    reset_vector(datatype, (void *)p, i + 1, 1);
+                    fla_lapack_claset("U", &m, &n, &c_zero, &c_one, A, &lda);
+                }
+                else
+                {
+                    for(i = 0; i < n; i++)
+                    {
+                        scomplex *p = &((scomplex *)A)[i * lda];
+                        reset_vector(datatype, (void *)p, i + 1, 1);
+                    }
                 }
             }
             break;
@@ -2854,18 +2906,32 @@ void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, v
         {
             if(*uplo == 'U')
             {
-                for(i = 0; i < n; i++)
+                if(diag_type == UNIT_DIAG)
                 {
-                    dcomplex *p = &((dcomplex *)A)[(i + 1) + i * lda];
-                    reset_vector(datatype, (void *)p, m - i - 1, 1);
+                    fla_lapack_zlaset("L", &m, &n, &z_zero, &z_one, A, &lda);
+                }
+                else
+                {
+                    for(i = 0; i < n; i++)
+                    {
+                        dcomplex *p = &((dcomplex *)A)[(i + 1) + i * lda];
+                        reset_vector(datatype, (void *)p, m - i - 1, 1);
+                    }
                 }
             }
             else if(*uplo == 'L')
             {
-                for(i = 0; i < n; i++)
+                if(diag_type == UNIT_DIAG)
                 {
-                    dcomplex *p = &((dcomplex *)A)[i * lda];
-                    reset_vector(datatype, (void *)p, i + 1, 1);
+                    fla_lapack_zlaset("U", &m, &n, &z_zero, &z_one, A, &lda);
+                }
+                else
+                {
+                    for(i = 0; i < n; i++)
+                    {
+                        dcomplex *p = &((dcomplex *)A)[i * lda];
+                        reset_vector(datatype, (void *)p, i + 1, 1);
+                    }
                 }
             }
             break;
@@ -3469,7 +3535,7 @@ void init_vector_spec_rand_in(integer datatype, void *A, integer M, integer incx
     */
     if(M > 10)
     {
-        span = (M)*0.2;
+        span = (M) * 0.2;
     }
     else
     {
@@ -6912,4 +6978,26 @@ integer compare_matrix(integer datatype, char *uplo, integer m, integer n, void 
         }
     }
     return 1;
+}
+
+/* Swap rows of the matrix as per permutation vector */
+void swap_rows_with_pivot(integer datatype, integer m, integer n, void *A, integer lda,
+                          integer *ipiv)
+{
+    integer min_mn = fla_min(m, n);
+    switch(datatype)
+    {
+        case FLOAT:
+            fla_lapack_slaswp(&n, A, &lda, &i_one, &min_mn, ipiv, &i_one);
+            break;
+        case DOUBLE:
+            fla_lapack_dlaswp(&n, A, &lda, &i_one, &min_mn, ipiv, &i_one);
+            break;
+        case COMPLEX:
+            fla_lapack_claswp(&n, A, &lda, &i_one, &min_mn, ipiv, &i_one);
+            break;
+        case DOUBLE_COMPLEX:
+            fla_lapack_zlaswp(&n, A, &lda, &i_one, &min_mn, ipiv, &i_one);
+            break;
+    }
 }

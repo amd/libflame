@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2021-2022 Advanced Micro Devices, Inc. All rights reserved.
+ *  Copyright (c) 2021-2025 Advanced Micro Devices, Inc. All rights reserved.
  * */
 
 #include "FLAME.h"
@@ -15,7 +15,7 @@ FLA_Error FLA_LU_nopiv_id_blk_var1( integer m_A, integer n_A, FLA_Obj A, double*
   {
     for(integer j=0;j<nfact;j++)
     {
-      *(copy_A+i+j*cs_A) = *(buff_A+i+j*cs_A);
+      *(copy_A+i+j*m_A) = *(buff_A+i+j*cs_A);
     }
   }
 
@@ -43,7 +43,7 @@ FLA_Error FLA_LU_nopiv_id_blk_var1( integer m_A, integer n_A, FLA_Obj A, double*
     {
       for(integer j=0;j<nfact;j++)
       {
-        *(buff_A+i+j*cs_A) = *(copy_A+i+j*cs_A);
+        *(buff_A+i+j*cs_A) = *(copy_A+i+j*m_A);
       }
     }
 

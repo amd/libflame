@@ -47,4 +47,5 @@ ${CMAKE_CURRENT_SOURCE_DIR}/validate_larf.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_sygvd.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_lange.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_gecon.c
+${CMAKE_CURRENT_SOURCE_DIR}/validate_getrfnpi.c
 )

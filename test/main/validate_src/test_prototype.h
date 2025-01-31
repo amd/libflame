@@ -358,10 +358,25 @@
 #define fla_lapack_chetrf_rook CHETRF_ROOK_
 #define fla_lapack_zhetrf_rook ZHETRF_ROOK_
 
+#define fla_lapack_ssygvd SSYGVD_
+#define fla_lapack_dsygvd DSYGVD_
+#define fla_lapack_chegvd CSYGVD_
+#define fla_lapack_zhegvd ZSYGVD_
+
 #define fla_lapack_sgecon SGECON_
 #define fla_lapack_dgecon DGECON_
 #define fla_lapack_cgecon CGECON_
 #define fla_lapack_zgecon ZGECON_
+
+#define fla_lapack_sgetrfnp SGETRFNP_
+#define fla_lapack_dgetrfnp DGETRFNP_
+#define fla_lapack_cgetrfnp CGETRFNP_
+#define fla_lapack_zgetrfnp ZGETRFNP_
+
+#define fla_lapack_sgetrfnpi SGETRFNPI_
+#define fla_lapack_dgetrfnpi DGETRFNPI_
+#define fla_lapack_cgetrfnpi CGETRFNPI_
+#define fla_lapack_zgetrfnpi ZGETRFNPI_
 
 #elif(UPPER)
 
@@ -657,10 +672,25 @@
 #define fla_lapack_chetrf_rook CHETRF_ROOK
 #define fla_lapack_zhetrf_rook ZHETRF_ROOK
 
+#define fla_lapack_ssygvd SSYGVD
+#define fla_lapack_dsygvd DSYGVD
+#define fla_lapack_chegvd CSYGVD
+#define fla_lapack_zhegvd ZSYGVD
+
 #define fla_lapack_sgecon SGECON
 #define fla_lapack_dgecon DGECON
 #define fla_lapack_cgecon CGECON
 #define fla_lapack_zgecon ZGECON
+
+#define fla_lapack_sgetrfnp SGETRFNP
+#define fla_lapack_dgetrfnp DGETRFNP
+#define fla_lapack_cgetrfnp CGETRFNP
+#define fla_lapack_zgetrfnp ZGETRFNP
+
+#define fla_lapack_sgetrfnpi SGETRFNPI
+#define fla_lapack_dgetrfnpi DGETRFNPI
+#define fla_lapack_cgetrfnpi CGETRFNPI
+#define fla_lapack_zgetrfnpi ZGETRFNPI
 
 #elif(LOWER)
 
@@ -956,10 +986,25 @@
 #define fla_lapack_chetrf_rook chetrf_rook
 #define fla_lapack_zhetrf_rook zhetrf_rook
 
+#define fla_lapack_ssygvd ssygvd
+#define fla_lapack_dsygvd dsygvd
+#define fla_lapack_chegvd chegvd
+#define fla_lapack_zhegvd zhegvd
+
 #define fla_lapack_sgecon sgecon
 #define fla_lapack_dgecon dgecon
 #define fla_lapack_cgecon cgecon
 #define fla_lapack_zgecon zgecon
+
+#define fla_lapack_sgetrfnp sgetrfnp
+#define fla_lapack_dgetrfnp dgetrfnp
+#define fla_lapack_cgetrfnp cgetrfnp
+#define fla_lapack_zgetrfnp zgetrfnp
+
+#define fla_lapack_sgetrfnpi sgetrfnpi
+#define fla_lapack_dgetrfnpi dgetrfnpi
+#define fla_lapack_cgetrfnpi cgetrfnpi
+#define fla_lapack_zgetrfnpi zgetrfnpi
 
 #else
 
@@ -1264,6 +1309,16 @@
 #define fla_lapack_dgecon dgecon_
 #define fla_lapack_cgecon cgecon_
 #define fla_lapack_zgecon zgecon_
+
+#define fla_lapack_sgetrfnp sgetrfnp_
+#define fla_lapack_dgetrfnp dgetrfnp_
+#define fla_lapack_cgetrfnp cgetrfnp_
+#define fla_lapack_zgetrfnp zgetrfnp_
+
+#define fla_lapack_sgetrfnpi sgetrfnpi_
+#define fla_lapack_dgetrfnpi dgetrfnpi_
+#define fla_lapack_cgetrfnpi cgetrfnpi_
+#define fla_lapack_zgetrfnpi zgetrfnpi_
 
 #endif /*if UPPER_*/
 

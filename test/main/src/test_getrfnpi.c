@@ -2,25 +2,21 @@
     Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
-#if ENABLE_AOCL_EXTENSION_APIS
-
 #include "test_lapack.h"
 
 #define GETRFNPI_VL 0.1
 #define GETRFNPI_VU 10
 
-extern double perf;
-extern double time_min;
 void invoke_getrf(integer datatype, integer *m, integer *n, void *a, integer *lda, integer *ipiv,
                   integer *info);
 
 /* Local prototypes */
-void fla_test_getrfnpi_experiment(char *tst_api, test_params_t *params, integer datatype,
-                                  integer p_cur, integer q_cur, integer pci, integer n_repeats,
-                                  integer einfo);
+void fla_test_getrfnpi_experiment(test_params_t *params, integer datatype, integer p_cur,
+                                  integer q_cur, integer pci, integer n_repeats, integer einfo,
+                                  double *perf, double *t, double *residual);
 void prepare_getrfnpi_run(integer m_A, integer n_A, integer nfact, void *A, integer lda,
-                          integer datatype, integer *info, integer interfacetype, int matrix_layout,
-                          test_params_t *params);
+                          integer datatype, integer n_repeats, double *time_min_, integer *info,
+                          integer interfacetype, int matrix_layout);
 void invoke_getrfnpi(integer datatype, integer *m, integer *n, integer *nfact, void *a,
                      integer *lda, integer *info);
 
@@ -33,7 +29,7 @@ void fla_test_getrfnpi(integer argc, char **argv, test_params_t *params)
 
     if(argc == 1)
     {
-        g_config_data = 1;
+        config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, RECT_INPUT, params, LIN, fla_test_getrfnpi_experiment);
@@ -47,6 +43,7 @@ void fla_test_getrfnpi(integer argc, char **argv, test_params_t *params)
     {
         integer i, num_types, M, N;
         integer datatype, n_repeats;
+        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -57,7 +54,6 @@ void fla_test_getrfnpi(integer argc, char **argv, test_params_t *params)
         params->lin_solver_paramslist[0].ncolm = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
-        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -81,8 +77,12 @@ void fla_test_getrfnpi(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_getrfnpi_experiment(front_str, params, datatype, M, N, 0, n_repeats,
-                                             einfo);
+                fla_test_getrfnpi_experiment(params, datatype, M, N, 0, n_repeats, einfo, &perf,
+                                             &time_min, &residual);
+                /* Print the results */
+                fla_test_print_status(front_str, stype, RECT_INPUT, M, N, residual,
+                                      params->lin_solver_paramslist[0].solver_threshold, time_min,
+                                      perf);
                 tests_not_run = 0;
             }
         }
@@ -107,16 +107,15 @@ void fla_test_getrfnpi(integer argc, char **argv, test_params_t *params)
     return;
 }
 
-void fla_test_getrfnpi_experiment(char *tst_api, test_params_t *params, integer datatype,
-                                  integer p_cur, integer q_cur, integer pci, integer n_repeats,
-                                  integer einfo)
+void fla_test_getrfnpi_experiment(test_params_t *params, integer datatype, integer p_cur,
+                                  integer q_cur, integer pci, integer n_repeats, integer einfo,
+                                  double *perf, double *t, double *residual)
 {
-    integer m, n, lda, info = 0, i__, nfact, max_mn, min_mn;
+    integer m, n, lda, info = 0, vinfo = 0, i__, nfact, max_mn, min_mn;
     void *IPIV = NULL, *A = NULL, *A_test = NULL, *s_test = NULL;
     void *A_copy;
     char range = 'U';
-    double residual, err_thresh;
-    void *filename = NULL;
+    double time_min = 1e9;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
@@ -125,12 +124,12 @@ void fla_test_getrfnpi_experiment(char *tst_api, test_params_t *params, integer 
     m = p_cur;
     n = q_cur;
     lda = params->lin_solver_paramslist[pci].lda;
-    err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
+    *residual = params->lin_solver_paramslist[pci].solver_threshold;
     nfact = params->lin_solver_paramslist[pci].ncolm;
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(g_config_data)
+    if(config_data)
     {
         if(lda == -1)
         {
@@ -141,54 +140,38 @@ void fla_test_getrfnpi_experiment(char *tst_api, test_params_t *params, integer 
     /* Create the matrices for the current operation*/
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
     create_vector(INTEGER, &IPIV, fla_min(m, n));
-    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
+    create_realtype_vector(datatype, &s_test, fla_min(m, n));
 
-    /* This code path is run to generate the matrix to be passed to the API. This is the default
-     * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
-     * Test cases. For verification runs the input is loaded from the input generated during Ground
-     * truth run */
-    if(!FLA_BRT_VERIFICATION_RUN)
+    /* Initialize the test matrices*/
+    if(g_ext_fptr != NULL || FLA_EXTREME_CASE_TEST)
     {
-        /* Initialize the test matrices*/
-        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST) || (FLA_RANDOM_INIT_MODE))
-        {
-            init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
-        }
-        /* If the lda is less than m, then do not initilize the input matrix.
-        The invalid param error should be reported by the API */
-        else if(lda >= m)
-        {
-            /* Generate input matrix with condition number <= 100 */
-            create_realtype_vector(datatype, &s_test, fla_min(m, n));
-            create_svd_matrix(datatype, range, m, n, A, lda, s_test, GETRFNPI_VL, GETRFNPI_VU,
-                              i_zero, i_zero, info);
-            free_vector(s_test);
-            create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_copy, lda);
-            copy_matrix(datatype, "full", m, n, A, lda, A_copy, lda);
-
-            /* Invoke getrf to get the optimial permuation vector */
-            invoke_getrf(datatype, &m, &n, A_copy, &lda, IPIV, &info);
-
-            /* Swap rows of A as per computed permutation matrix
-            to avoid error in LU factorization */
-            swap_rows_with_pivot(datatype, m, n, A, lda, IPIV);
-
-            if(FLA_OVERFLOW_UNDERFLOW_TEST)
-            {
-                scale_matrix_underflow_overflow_getrfnp(datatype, m, n, A, lda, params->imatrix_char);
-            }
-            free_matrix(A_copy);
-        }
+        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
     }
-    /* This macro is used in the BRT test cases for the following purposes:
-     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
-     * reference
-     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
-     * passed as input to the API
-     * */
-    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, m, n, A, lda, "dddd", m, n, nfact, lda)
+    /* If the lda is less than m, then do not initilize the input matrix.
+       The invalid param error should be reported by the API */
+    else if(lda >= m)
+    {
+        /* Generate input matrix with condition number <= 100 */
+        create_svd_matrix(datatype, range, m, n, A, lda, s_test, GETRFNPI_VL, GETRFNPI_VU, i_zero,
+                          i_zero, info);
+        create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_copy, lda);
+        copy_matrix(datatype, "full", m, n, A, lda, A_copy, lda);
 
+        /* Invoke getrf to get the optimial permuation vector */
+        invoke_getrf(datatype, &m, &n, A_copy, &lda, IPIV, &info);
+
+        /* Swap rows of A as per computed permutation matrix
+           to avoid error in LU factorization */
+        swap_rows_with_pivot(datatype, m, n, A, lda, IPIV);
+
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            scale_matrix_underflow_overflow_getrf(datatype, m, n, A, lda, params->imatrix_char);
+        }
+        free_matrix(A_copy);
+    }
     /* Save the original matrix*/
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
     /* Copy data if only lda >= m */
     if(lda >= m)
     {
@@ -196,19 +179,23 @@ void fla_test_getrfnpi_experiment(char *tst_api, test_params_t *params, integer 
     }
 
     /* call to API */
-    prepare_getrfnpi_run(m, n, nfact, A_test, lda, datatype, &info, interfacetype, layout, params);
+    prepare_getrfnpi_run(m, n, nfact, A_test, lda, datatype, n_repeats, &time_min, &info,
+                         interfacetype, layout);
+
+    /* execution time */
+    *t = time_min;
 
     /* performance computation */
     max_mn = fla_max(m, n);
     min_mn = fla_min(m, n);
 
-    perf = ((1.0 / 3.0)
-            * (((3.0 * max_mn - min_mn) * min_mn * min_mn)
-               - ((min_mn - nfact) * (min_mn - nfact) * (3.0 * max_mn - 2.0 * nfact - min_mn))))
-           / time_min / FLOPS_PER_UNIT_PERF;
+    *perf = ((1.0 / 3.0)
+             * ((min_mn * min_mn * (3.0 * max_mn - min_mn))
+                - ((min_mn - nfact) * (min_mn - nfact) * (3.0 * max_mn - 2.0 * nfact - min_mn))))
+            / time_min / FLOPS_PER_UNIT_PERF;
 
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
-        perf *= 4.0;
+        *perf *= 4.0;
 
     /* Fill IPIV specifiying that no permutation has been done */
     for(i__ = 0; i__ < fla_min(m, n); ++i__)
@@ -217,66 +204,44 @@ void fla_test_getrfnpi_experiment(char *tst_api, test_params_t *params, integer 
     }
 
     /* output validation */
-    FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    /* Bit reproducibility tests path
-     * This path is taken when BRT is enabled.
-     *     - In the Ground truth runs (BRT_char => G, F), the output is stored in a file and the
-     * default validation function is called
-     *     - In the verification runs (BRT_char => V, M), the output is loaded from the file and
-     * compared with the generated output
-     *  */
-    IF_FLA_BRT_VALIDATION(
-        m, n, store_outputs_base(filename, params, 1, 0, datatype, m, n, A_test, lda),
-        validate_getrfnpi(tst_api, m, n, nfact, A, A_test, lda, IPIV, datatype, residual,
-                          params->imatrix_char, params),
-        check_reproducibility_base(filename, params, 1, 0, datatype, m, n, A_test, lda))
-    else if(FLA_SKIP_VALIDATION_MODE)
-    {
-        /* Skip validation for performance modes */
-        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
-    }
-    /* API functionality validation */
-    else if(!FLA_EXTREME_CASE_TEST)
+    if((!FLA_EXTREME_CASE_TEST) && info == 0)
     {
         /* Validate only part of the matrix that has been factored */
-        validate_getrfnpi(tst_api, m, n, nfact, A, A_test, lda, IPIV, datatype, residual,
-                          params->imatrix_char, params);
+        validate_getrfnpi(m, n, nfact, A, A_test, lda, IPIV, datatype, residual, &vinfo,
+                          params->imatrix_char);
     }
     /* check for output matrix when inputs as extreme values */
-    else
+    else if(FLA_EXTREME_CASE_TEST)
     {
         if((!check_extreme_value(datatype, m, n, A_test, lda, params->imatrix_char)))
         {
-            residual = DBL_MAX;
+            *residual = DBL_MAX;
         }
-        else
-        {
-            residual = err_thresh;
-        }
-        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
     }
+    else
+        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up the buffers */
-free_buffers:
-    FLA_FREE_FILENAME(filename)
     free_matrix(A);
     free_matrix(A_test);
     free_vector(IPIV);
+    free_vector(s_test);
 }
 
 void prepare_getrfnpi_run(integer m_A, integer n_A, integer nfact, void *A, integer lda,
-                          integer datatype, integer *info, integer interfacetype, int layout,
-                          test_params_t *params)
+                          integer datatype, integer n_repeats, double *time_min_, integer *info,
+                          integer interfacetype, int layout)
 {
+    integer i;
     void *A_save;
-    double exe_time;
+    double time_min = 1e9, exe_time;
 
     /* Save the original matrix */
     create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_A, &A_save, lda);
     copy_matrix(datatype, "full", m_A, n_A, A, lda, A_save, lda);
 
     *info = 0;
-    FLA_EXEC_LOOP_BEGIN
+    for(i = 0; i < n_repeats && *info == 0; ++i)
     {
 
         /* Copy original input data */
@@ -286,9 +251,12 @@ void prepare_getrfnpi_run(integer m_A, integer n_A, integer nfact, void *A, inte
         /* Call LAPACK getrf API */
         invoke_getrfnpi(datatype, &m_A, &n_A, &nfact, A_save, &lda, info);
         exe_time = fla_test_clock() - exe_time;
-        FLA_EXEC_LOOP_UPDATE_WITH_INFO
+
+        /* Get the best execution time */
+        time_min = fla_min(time_min, exe_time);
     }
 
+    *time_min_ = time_min;
     /*  Save the AFACT to matrix A */
     copy_matrix(datatype, "full", m_A, n_A, A_save, lda, A, lda);
     free_matrix(A_save);
@@ -327,5 +295,3 @@ void invoke_getrfnpi(integer datatype, integer *m, integer *n, integer *nfact, v
         }
     }
 }
-
-#endif /* ENABLE_AOCL_EXTENSION_APIS */

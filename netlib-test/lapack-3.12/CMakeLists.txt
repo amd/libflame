@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.2)
 project(LAPACK Fortran C)
 
 set(LAPACK_MAJOR_VERSION 3)
-set(LAPACK_MINOR_VERSION 11)
+set(LAPACK_MINOR_VERSION 12)
 set(LAPACK_PATCH_VERSION 0)
 set(
   LAPACK_VERSION
@@ -277,8 +277,8 @@ message(STATUS "Build deprecated routines: ${BUILD_DEPRECATED}")
 # By default all precisions are generated
 option(BUILD_SINGLE "Build single precision real" ON)
 option(BUILD_DOUBLE "Build double precision real" ON)
-option(BUILD_COMPLEX "Build single precision complex" OFF)
-option(BUILD_COMPLEX16 "Build double precision complex"OFF)
+option(BUILD_COMPLEX "Build single precision complex" ON)
+option(BUILD_COMPLEX16 "Build double precision complex" ON)
 message(STATUS "Build single precision real: ${BUILD_SINGLE}")
 message(STATUS "Build double precision real: ${BUILD_DOUBLE}")
 message(STATUS "Build single precision complex: ${BUILD_COMPLEX}")

@@ -154,6 +154,7 @@ extern void dgeqrf_fla(integer *m, integer *n,
  /* Subroutine */
  int lapack_dgelqf(integer *m, integer *n, doublereal *a, integer * lda, doublereal *tau, doublereal *work, integer *lwork, integer *info) {
  /* System generated locals */
+ *info = 0;
  integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
  extern void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
 #ifdef FLA_ENABLE_AMD_OPT
@@ -162,25 +163,21 @@ extern void dgeqrf_fla(integer *m, integer *n,
  * */
  if (*m <= FLA_DELQF_TRAN_THRESH && *n <= FLA_DELQF_TRAN_THRESH)
  {
-   doublereal *at;
+    doublereal *at;
 
    if (*lwork == -1)
    {
-       /* Call QR to get appropriate work buffer size */
-       dgeqrf_fla(n, m, a, n, tau, work, lwork, info);
-
-       if (*lda < fla_max(1,*m) && (*info < -4))
+       if (*m < 0)
        {
-           *info = -4;
+           *info = -1;
        }
-
-       if(*info == -1)
+       else if (*n < 0)
        {
            *info = -2;
        }
-       else if(*info == -2)
+       else if (*lda < fla_max(1,*m))
        {
-           *info = -1;
+           *info = -4;
        }
        if(*info < 0)
        {
@@ -188,25 +185,37 @@ extern void dgeqrf_fla(integer *m, integer *n,
            xerbla_("DGELQF", &i__1, (ftnlen)6);
            return 0;
        }
+    /* Call QR to get appropriate work buffer size */
+       dgeqrf_fla(n, m, a, n, tau, work, lwork, info);
    }
    else
    {
        if (*m < 0)
        {
            *info = -1;
-           return 0;
        }
        else if (*n < 0)
        {
            *info = -2;
-           return 0;
        }
-       else if (*lda < fla_max(1, *m))
+       else if(*lda < fla_max(1,*m))
        {
            *info = -4;
+       }
+       else if(*lwork < fla_max(1, *m))
+       {
+           *info = -7;
+       }
+       if(*info < 0)
+       {
+           i__1 = -(*info);
+           xerbla_("DGELQF", &i__1, (ftnlen)6);
            return 0;
        }
-
+       if(*n == 0 || *m == 0)
+       {
+           return 0;
+       }
        if (*info == 0)
        {
            /* Allocate transpose matrix */

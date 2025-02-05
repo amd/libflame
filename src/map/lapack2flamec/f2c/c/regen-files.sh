@@ -1,6 +1,6 @@
 #!/bin/bash
 
-
+###DEPRECATED FILE###
 
 ## Clean up all
 rm -f *.c *~

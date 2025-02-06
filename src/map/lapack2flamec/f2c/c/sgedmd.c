@@ -972,6 +972,7 @@ void sgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* WORK(i) = DNRM2( M, X(1,i), 1 ) */
+            ssum = 1.f;
             scale = 0.f;
             slassq_(m, &x[i__ * x_dim1 + 1], &c__1, &scale, &ssum);
             if(sisnan_(&scale) || sisnan_(&ssum))
@@ -1073,6 +1074,7 @@ void sgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* WORK(i) = DNRM2( M, Y(1,i), 1 ) */
+            ssum = 1.f;
             scale = 0.f;
             slassq_(m, &y[i__ * y_dim1 + 1], &c__1, &scale, &ssum);
             if(sisnan_(&scale) || sisnan_(&ssum))

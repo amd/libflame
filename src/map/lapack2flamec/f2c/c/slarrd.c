@@ -360,7 +360,7 @@ void slarrd_(char *range, char *order, integer *n, real *vl, real *vu, integer *
     real wkill, rtoli, uflow, tnorm;
     integer ibegin, irange, idiscl;
     extern real slamch_(char *);
-    integer idumma[1];
+    integer idumma[1] = {0};
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer idiscu;
     extern /* Subroutine */

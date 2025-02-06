@@ -996,9 +996,8 @@ if(ENABLE_OPENMP)
 
 		string(APPEND LIBS_LINK_FLAGS "-L${EXT_OPENMP_PATH} -l${EXT_OPENMP_LIB} ")
 
-		set	(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fopenmp")
-
 		if(UNIX)
+				set	(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fopenmp")
 	        	target_link_libraries(${PROJECT_NAME} -Wl,--as-needed -ldl)
 		endif()
 	else()

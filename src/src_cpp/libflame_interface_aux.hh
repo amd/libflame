@@ -9,6 +9,7 @@
 #ifndef LIBFLAME_INTERFACE_AUX_HH
 #define LIBFLAME_INTERFACE_AUX_HH
 
+#include "libflame.hh"
 
 namespace libflame
 {

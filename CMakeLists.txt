@@ -981,7 +981,14 @@ set(LIBFLAME_PUBLIC_HEADERS	"include/FLAME.h"
 				"src/lapacke/LAPACKE/include/lapacke.h"
 				"src/lapacke/LAPACKE/include/lapack.h"
 				"src/src_cpp/libflame_interface.hh"
-				"src/src_cpp/libflame.hh")
+				"src/src_cpp/libflame.hh"
+				"src/src_cpp/libflame_interface_aux.hh"
+				"src/src_cpp/libflame_interface_blas.hh"
+				"src/src_cpp/libflame_interface_eig.hh"
+				"src/src_cpp/libflame_interface_lin.hh"
+				"src/src_cpp/libflame_interface_lsq.hh"
+				"src/src_cpp/libflame_interface_orth.hh"
+				"src/src_cpp/libflame_interface_svd.hh")
 
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${LIBFLAME_PUBLIC_HEADERS}")
 

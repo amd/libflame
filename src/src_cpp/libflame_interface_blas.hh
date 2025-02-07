@@ -9,6 +9,7 @@
 #ifndef LIBFLAME_INTERFACE_BLAS_HH
 #define LIBFLAME_INTERFACE_BLAS_HH
 
+#include "libflame.hh"
 
 namespace libflame
 {
@@ -610,12 +611,12 @@ namespace libflame
     template <typename T>
     T lange(char *norm, integer *m, integer *n, T *a, integer *lda, T *work)
     {
-        return lange(norm, m, n, a, lda, work);
+        lange(norm, m, n, a, lda, work);
     }
     template <typename T, typename Ta>
     Ta lange(char *norm, integer *m, integer *n, T *a, integer *lda, Ta *work)
     {
-        return lange(norm, m, n, a, lda, work);
+        lange(norm, m, n, a, lda, work);
     }
     /** @}*/ // end of lange
 

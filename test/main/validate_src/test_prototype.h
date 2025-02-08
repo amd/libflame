@@ -399,6 +399,11 @@
 #define fla_lapack_cgejsv CGEJSV_
 #define fla_lapack_zgejsv ZGEJSV_
 
+#define fla_lapack_sormlq SORMLQ_
+#define fla_lapack_dormlq DORMLQ_
+#define fla_lapack_cunmlq CUNMLQ_
+#define fla_lapack_zunmlq ZUNMLQ_
+
 #elif(UPPER)
 
 #define fla_lapack_sladiv SLADIV
@@ -718,7 +723,6 @@
 
 #define fla_lapack_chetri_rook CHETRI_ROOK
 #define fla_lapack_zhetri_rook ZHETRI_ROOK
-
 #define fla_lapack_sormqr SORMQR
 #define fla_lapack_dormqr DORMQR
 #define fla_lapack_cunmqr CUNMQR
@@ -733,6 +737,11 @@
 #define fla_lapack_dgejsv DGEJSV
 #define fla_lapack_cgejsv CGEJSV
 #define fla_lapack_zgejsv ZGEJSV
+
+#define fla_lapack_sormlq SORMLQ
+#define fla_lapack_dormlq DORMLQ
+#define fla_lapack_cunmlq CUNMLQ
+#define fla_lapack_zunmlq ZUNMLQ
 #elif(LOWER)
 
 #define fla_lapack_sladiv sladiv
@@ -1066,6 +1075,11 @@
 #define fla_lapack_dgejsv dgejsv
 #define fla_lapack_cgejsv cgejsv
 #define fla_lapack_zgejsv zgejsv
+
+#define fla_lapack_sormlq sormlq
+#define fla_lapack_dormlq dormlq
+#define fla_lapack_cunmlq cunmlq
+#define fla_lapack_zunmlq zunmlq
 #else
 
 #define fla_lapack_sladiv sladiv_
@@ -1400,6 +1414,12 @@
 #define fla_lapack_dgejsv dgejsv_
 #define fla_lapack_cgejsv cgejsv_
 #define fla_lapack_zgejsv zgejsv_
+
+#define fla_lapack_sormlq sormlq_
+#define fla_lapack_dormlq dormlq_
+#define fla_lapack_cunmlq cunmlq_
+#define fla_lapack_zunmlq zunmlq_
+
 #endif /*if UPPER_*/
 
 /* These functions are API invoking functions used in other API test codes */
@@ -1430,5 +1450,8 @@ extern void invoke_gghrd(integer datatype, char *compq, char *compz, integer *n,
 /* Used for GBTRS(), GBCON()*/
 extern void invoke_gbtrf(integer datatype, integer *m, integer *n, integer *kl, integer *ku,
                          void *ab, integer *ldab, integer *ipiv, integer *info);
+
+extern void invoke_gelqf(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau,
+                         void *work, integer *lwork, integer *info);
 
 #endif // TEST_PROTOTYPE_H

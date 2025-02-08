@@ -64,6 +64,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/test_ormqr.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_gejsv.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_labrd.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_orgtr.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_ormlq.c
 )
 
 add_subdirectory(lapacke)

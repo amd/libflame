@@ -45,6 +45,7 @@
 1   sytrf_rook LDLT factorization                         (0 = disable; 1 = enable; 2 = enable only this)
 1   gecon  Estimates reciprocal of the condition number   (0 = disable; 1 = enable; 2 = enable only this)
 1   hetrf   LDLH factorization                            (0 = disable; 1 = enable; 2 = enable only this)
-1   ormqr   QR factorization                              (0 = disable; 1 = enable; 2 = enable only this)
 1   gejsv   SVD using Jacobi method                       (0 = disable; 1 = enable; 2 = enable only this)
 1   sytrd   Symmetric to tridiagonal matrix               (0 = disable; 1 = enable; 2 = enable only this)
+1   ormqr   Apply Elementary Reflectors (QR)              (0 = disable; 1 = enable; 2 = enable only this)
+1   ormlq   Apply Elementary Reflectors (LQ)              (0 = disable; 1 = enable; 2 = enable only this)

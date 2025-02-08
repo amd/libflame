@@ -206,26 +206,28 @@ void fla_test_ormqr_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Create tau vector */
     create_vector(datatype, &T_test, fla_min(m_A, k));
-    lwork = -1;
-
-    create_vector(datatype, &qwork, 1);
-    invoke_geqrf(datatype, &m_A, &k, NULL, &lda, NULL, qwork, &lwork, &info);
-    if(info == 0)
-    {
-        lwork = get_work_value(datatype, qwork);
-    }
-    else
-    {
-        lwork = fla_max(1, n_A);
-    }
-
-    /* create work buffer */
-    create_vector(datatype, &work, lwork);
-
-    /* QR Factorisation on matrix A to generate Q and R */
-    invoke_geqrf(datatype, &m_A, &k, A_test, &lda, T_test, work, &lwork, &info);
     create_vector(datatype, &tau, k);
-    copy_vector(datatype, fla_min(n_A, k), T_test, 1, tau, 1);
+    if(g_ext_fptr == NULL && !(FLA_EXTREME_CASE_TEST))
+    {
+        lwork = -1;
+        create_vector(datatype, &qwork, 1);
+        invoke_geqrf(datatype, &m_A, &k, NULL, &lda, NULL, qwork, &lwork, &info);
+        if(info == 0)
+        {
+            lwork = get_work_value(datatype, qwork);
+        }
+        else
+        {
+            lwork = fla_max(1, n_A);
+        }
+
+        /* create work buffer */
+        create_vector(datatype, &work, lwork);
+
+        /* QR Factorisation on matrix A to generate Q and R */
+        invoke_geqrf(datatype, &m_A, &k, A_test, &lda, T_test, work, &lwork, &info);
+        copy_vector(datatype, fla_min(n_A, k), T_test, 1, tau, 1);
+    }
     /*invoke ormqr API */
     prepare_ormqr_run(side, trans, m, n, k, m_A, n_A, A_test, lda, tau, C, ldc, datatype,
                       n_repeats, &time_min, &info, interfacetype, layout);
@@ -366,7 +368,7 @@ double prepare_lapacke_ormqr_run(integer datatype, int layout, char side, char t
     integer lda_t = lda, ldc_t = ldc;
     void *A_t = NULL, *C_t = NULL;
 
-    if (lda >= m_A)
+    if(lda >= m_A)
     {
         /* Configure leading dimensions as per the input matrix layout */
         SELECT_LDA(g_ext_fptr, config_data, layout, fla_max(m, n), row_major_ormqr_lda, lda_t);

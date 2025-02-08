@@ -143,6 +143,9 @@ void invoke_cpp_sytrf_rook(integer datatype, char *uplo, integer *n, void *a, in
                            integer *ipiv, void *work, integer *lwork, integer *info);
 void invoke_cpp_sytrf(integer datatype, char *uplo, integer *n, void *a, integer *lda,
                       integer *ipiv, void *work, integer *lwork, integer *info);
+void invoke_cpp_ormlq(integer datatype, char *side, char *trans, integer *m, integer *n, integer *k,
+                      void *A, integer *lda, void *tau, void *C, integer *ldc, void *work,
+                      integer *lwork, integer *info);
 #ifdef __cplusplus
 }
 #endif

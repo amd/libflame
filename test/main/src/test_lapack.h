@@ -187,6 +187,8 @@ extern FILE *g_ext_fptr;
             func_str = "UNMQR";                               \
         else if(strcmp(func_str, "SYTRD") == 0)               \
             func_str = "HETRD";                               \
+        else if(strcmp(func_str, "ORMLQ") == 0)               \
+            func_str = "UNMLQ";                               \
     }
 
 /* Macro to skip complex and double complex tests of not supported APIs */
@@ -242,6 +244,7 @@ typedef struct Lin_solver_paramlist_t
     integer ldb; //  leading dimension of the array b
     integer ldq; //  leading dimension of the array q
     integer ldz; //  leading dimension of the array z
+    integer ldc; //  leading dimension of the array c
     integer ldab; //  leading dimension of the array ab. For GBTRF, GBTRS, LDAB >= 2*KL+KU+1
     integer kl; // number of subdiagonals
     integer ku; // number of superdiagonals
@@ -254,6 +257,7 @@ typedef struct Lin_solver_paramlist_t
     char transr; // Must be 'N' or 'T' or 'C'.
     char compq_gghrd;
     char compz_gghrd;
+
     // below params are used only by Lin solver driver APIs.
     char fact; // Must be 'F', 'N', or 'E'.
     char equed; // Must be 'N', 'R'. 'C', 'B'

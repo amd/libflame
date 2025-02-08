@@ -723,6 +723,8 @@ void fla_test_read_linear_param(const char *file_name, test_params_t *params)
     READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].lda);
     /* leading dimension for B */
     READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].ldb);
+    /* leading dimension for C */
+    READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].ldc);
     /* leading dimension for Q */
     READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].ldq);
     /* leading dimension for Z */

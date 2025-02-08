@@ -259,8 +259,9 @@ doublereal fla_dnrm2_blas_avx2(integer *sd, doublereal *a, integer *incx)
     for(; i < *sd; i += 1)
     {
         abs_chi = fabs(*xt);
-        
-        if((abs_chi <= thres_big) && (abs_chi >= thres_sml))
+
+        /* check for numerical limit and NAN */
+        if(((abs_chi <= thres_big) && (abs_chi >= thres_sml)) || (abs_chi != abs_chi))
         {
             sum_med += abs_chi * abs_chi;
         }

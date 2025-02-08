@@ -57,6 +57,7 @@
 1   hetrf   LDLH factorization                            (0 = disable; 1 = enable; 2 = enable only this)
 1   hetri_rook   LDLH factorization                       (0 = disable; 1 = enable; 2 = enable only this)
 1   labrd   SVD auxiliary routines                        (0 = disable; 1 = enable; 2 = enable only this)
-1   ormqr   QR factorization                              (0 = disable; 1 = enable; 2 = enable only this)
 1   gejsv   SVD using Jacobi method                       (0 = disable; 1 = enable; 2 = enable only this)
 1   sytrd   Symmetric to tridiagonal matrix               (0 = disable; 1 = enable; 2 = enable only this)
+1   ormqr   Apply Elementary Reflectors (QR)              (0 = disable; 1 = enable; 2 = enable only this)
+1   ormlq   Apply Elementary Reflectors (LQ)              (0 = disable; 1 = enable; 2 = enable only this)

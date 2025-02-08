@@ -591,7 +591,8 @@ doublereal fla_dnrm2_blas_avx512(integer *sd, doublereal *a, integer *incx)
         {
             abs_chi = fabs(*xt);
             // Most likely case: medium values, not over/under-flow.
-            if((abs_chi <= thresh_big) && (abs_chi >= thresh_sml))
+            /* check for numerical limit and NAN */
+            if(((abs_chi <= thresh_big) && (abs_chi >= thresh_sml)) || (abs_chi != abs_chi))
             {
                 sum_med += abs_chi * abs_chi;
             }

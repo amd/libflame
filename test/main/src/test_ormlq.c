@@ -1,7 +1,3 @@
-/*
-    Copyright (C) 2025-2026, Advanced Micro Devices, Inc. All rights reserved.
-*/
-
 #include "test_lapack.h"
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
@@ -17,8 +13,8 @@ void fla_test_ormlq_experiment(char *tst_api, test_params_t *params, integer dat
                                integer einfo);
 void prepare_ormlq_run(integer datatype, char side, char trans, integer m, integer n, integer k,
                        void *A, integer lda, integer m_A, integer n_A, void *tau, void *C,
-                       integer ldc, void *work, integer *info, integer interfacetype,
-                       integer layout, test_params_t *params);
+                       integer ldc, void *work, integer n_repeats, double *time_min, integer *info,
+                       integer interfacetype, integer layout);
 void invoke_ormlq(integer datatype, char *side, char *trans, integer *m, integer *n, integer *k,
                   void *A, integer *lda, void *tau, void *C, integer *ldc, void *work,
                   integer *lwork, integer *info);
@@ -37,7 +33,7 @@ void fla_test_ormlq(integer argc, char **argv, test_params_t *params)
     if(argc == 1)
     {
         g_lwork = -1;
-        g_config_data = 1;
+        config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, RECT_INPUT, params, LIN, fla_test_ormlq_experiment);
@@ -78,7 +74,6 @@ void fla_test_ormlq(integer argc, char **argv, test_params_t *params)
         }
         g_lwork = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[11], &endptr, CLI_DECIMAL_BASE);
-        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -133,12 +128,10 @@ void fla_test_ormlq_experiment(char *tst_api, test_params_t *params, integer dat
                                integer einfo)
 {
     integer m, n, k, lda, ldc, info = 0, m_A, n_A, gelqf_info = 0, gelqf_lwork = -1;
-    void *A = NULL, *C = NULL, *work = NULL, *C_save = NULL, *tau = NULL, *tau_save = NULL;
+    void *A = NULL, *C = NULL, *work = NULL, *C_save = NULL, *tau = NULL;
     char side, trans;
     integer interfacetype = params->interfacetype;
     integer layout = params->matrix_major;
-    void *filename = NULL;
-
     double residual, err_thresh;
 
     /* Determine the dimensions */
@@ -164,7 +157,7 @@ void fla_test_ormlq_experiment(char *tst_api, test_params_t *params, integer dat
         m_A = n;
         n_A = m;
     }
-    if(g_config_data)
+    if(config_data)
     {
         if(lda == -1 || lda < m_A)
         {
@@ -185,71 +178,55 @@ void fla_test_ormlq_experiment(char *tst_api, test_params_t *params, integer dat
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &C_save, ldc);
     create_vector(datatype, &tau, k);
 
-    if(!FLA_BRT_VERIFICATION_RUN)
+    init_matrix(datatype, A, k, m_A, lda, g_ext_fptr, params->imatrix_char);
+    init_matrix(datatype, C, m, n, ldc, g_ext_fptr, params->imatrix_char);
+
+    /* Scaling matrix with values around overflow, underflow for ORMLQ/UNMLQ */
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
     {
-        init_matrix(datatype, A, k, m_A, lda, g_ext_fptr, params->imatrix_char);
-        init_matrix(datatype, C, m, n, ldc, g_ext_fptr, params->imatrix_char);
-
-        /* Scaling matrix with values around overflow, underflow for ORMLQ/UNMLQ */
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
-        {
-            scale_matrix_underflow_overflow_ormlq(datatype, m_A, k, A, lda, params->imatrix_char);
-        }
-        /*Generate input matrix A for ormlq, where the i-th row must contain the vector which
-        defines the elementary reflector H(i), for i = 1,2,...,k, as returned by GELQF
-        */
-        if(g_ext_fptr == NULL && !(FLA_EXTREME_CASE_TEST))
-        {
-            create_vector(datatype, &work, i_one);
-            invoke_gelqf(datatype, &k, &m_A, NULL, &lda, NULL, work, &gelqf_lwork, &gelqf_info);
-            if(gelqf_info == 0)
-            {
-                gelqf_lwork = get_work_value(datatype, work);
-            }
-            else
-            {
-                gelqf_lwork = fla_max(m_A, 1);
-            }
-            free_vector(work);
-            create_vector(datatype, &work, gelqf_lwork);
-            gelqf_info = 0;
-            invoke_gelqf(datatype, &k, &m_A, A, &lda, tau, work, &gelqf_lwork, &gelqf_info);
-            free_vector(work);
-        }
-        /* Save the original matrix */
-        copy_matrix(datatype, "Full", m, n, C, ldc, C_save, ldc);
+        scale_matrix_underflow_overflow_ormlq(datatype, m_A, k, A, lda, params->imatrix_char);
     }
-    FLA_BRT_PROCESS_THREE_INPUT(datatype, m_A, fla_max(m_A, n_A), A, lda, datatype, m, n, C, ldc,
-                                datatype, 1, k, tau, 1, "ccdddddd", side, trans, m, n, k, lda, ldc,
-                                g_lwork)
-
-    /* Save tau before API call for input arg preservation check */
-    create_vector(datatype, &tau_save, k);
-    copy_vector(datatype, k, tau, 1, tau_save, 1);
+    /*Generate input matrix A for ormlq, where the i-th row must contain the vector which defines
+    the elementary reflector H(i), for i = 1,2,...,k, as returned by GELQF
+    */
+    if(g_ext_fptr == NULL && !(FLA_EXTREME_CASE_TEST))
+    {
+        create_vector(datatype, &work, i_one);
+        invoke_gelqf(datatype, &k, &m_A, NULL, &lda, NULL, work, &gelqf_lwork, &gelqf_info);
+        if(gelqf_info == 0)
+        {
+            gelqf_lwork = get_work_value(datatype, work);
+        }
+        else
+        {
+            gelqf_lwork = fla_max(m_A, 1);
+        }
+        free_vector(work);
+        create_vector(datatype, &work, gelqf_lwork);
+        gelqf_info = 0;
+        invoke_gelqf(datatype, &k, &m_A, A, &lda, tau, work, &gelqf_lwork, &gelqf_info);
+        free_vector(work);
+    }
+    /* Save the original matrix */
+    copy_matrix(datatype, "Full", m, n, C, ldc, C_save, ldc);
 
     /* call to API */
-    prepare_ormlq_run(datatype, side, trans, m, n, k, A, lda, m_A, n_A, tau, C, ldc, work, &info,
-                      interfacetype, layout, params);
-
+    prepare_ormlq_run(datatype, side, trans, m, n, k, A, lda, m_A, n_A, tau, C, ldc, work,
+                      n_repeats, &time_min, &info, interfacetype, layout);
     /* performance computation
        perf = 2nk(2m-k) if side = L
             = 2mk(2n-k) if side = R */
-    perf = (double)(2.0 * (m_A * k) * ((2.0 * n_A) - k)) / time_min / FLOPS_PER_UNIT_PERF;
+    perf = (double)(2 * (m_A * k) * ((2 * n_A) - k)) / time_min / FLOPS_PER_UNIT_PERF;
 
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         perf *= 4.0;
 
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
     /* Output validataion */
-    IF_FLA_BRT_VALIDATION(
-        m, n, store_outputs_base(filename, params, 1, 0, datatype, m, n, C, ldc),
-        validate_ormqr(tst_api, side, trans, m, n, k, A, NULL, lda, C, tau, tau_save, ldc, C_save,
-                       datatype, residual, params->imatrix_char, params),
-        check_reproducibility_base(filename, params, 1, 0, datatype, m, n, C, ldc))
-    else if(!FLA_EXTREME_CASE_TEST)
+    if(!FLA_EXTREME_CASE_TEST)
     {
-        validate_ormqr(tst_api, side, trans, m, n, k, A, NULL, lda, C, tau, tau_save, ldc, C_save,
-                       datatype, residual, params->imatrix_char, params);
+        validate_ormqr(tst_api, side, trans, m, n, k, A, lda, C, tau, ldc, C_save, datatype,
+                       residual, params->imatrix_char);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -266,26 +243,23 @@ void fla_test_ormlq_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up buffers */
-free_buffers:
-    FLA_FREE_FILENAME(filename)
     free_matrix(A);
     free_matrix(C);
     free_matrix(C_save);
-    free_vector(tau_save);
     free_vector(tau);
 }
 
 void prepare_ormlq_run(integer datatype, char side, char trans, integer m, integer n, integer k,
                        void *A, integer lda, integer m_A, integer n_A, void *tau, void *C,
-                       integer ldc, void *work, integer *info, integer interfacetype,
-                       integer layout, test_params_t *params)
+                       integer ldc, void *work, integer n_repeats, double *time_min, integer *info,
+                       integer interfacetype, integer layout)
 {
-    integer lwork;
+    integer i, lwork;
     void *C_save = NULL;
-    double exe_time;
+    double time_min_ = 1e9, exe_time;
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &C_save, ldc);
 
-    /* Workspace size calculations for scomplex datatype */
+    /* Workspace size calculations for complex datatype */
     /* Make a workspace query the first time through. This will provide us with
      and ideal workspace size based on an internal block size.
      NOTE: LAPACKE interface handles workspace query internally */
@@ -320,7 +294,7 @@ void prepare_ormlq_run(integer datatype, char side, char trans, integer m, integ
     }
 
     *info = 0;
-    FLA_EXEC_LOOP_BEGIN
+    for(i = 0; i < n_repeats && *info == 0; i++)
     {
         /* Copy original input */
         copy_matrix(datatype, "full", m, n, C, ldc, C_save, ldc);
@@ -356,10 +330,11 @@ void prepare_ormlq_run(integer datatype, char side, char trans, integer m, integ
         }
 
         /* Get the best execution time */
-        FLA_EXEC_LOOP_UPDATE_WITH_INFO
+        time_min_ = fla_min(time_min_, exe_time);
 
         free_vector(work);
     }
+    *time_min = time_min_;
 
     /* Save the output to vector C */
     copy_matrix(datatype, "full", m, n, C_save, ldc, C, ldc);
@@ -380,8 +355,8 @@ double prepare_lapacke_ormlq_run(integer datatype, integer layout, char side, ch
     C_t = C;
     /* Configure leading dimensions as per the input matrix layout */
 
-    SELECT_LDA(g_ext_fptr, g_config_data, layout, fla_max(m, n), row_major_ormlq_lda, lda_t);
-    SELECT_LDA(g_ext_fptr, g_config_data, layout, fla_max(m, n), row_major_ormlq_ldc, ldc_t);
+    SELECT_LDA(g_ext_fptr, config_data, layout, fla_max(m, n), row_major_ormlq_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, config_data, layout, fla_max(m, n), row_major_ormlq_ldc, ldc_t);
     /* In case of row_major matrix layout,
     convert input matrix to row_major */
     if(layout == LAPACK_ROW_MAJOR)

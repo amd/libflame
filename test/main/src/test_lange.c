@@ -159,10 +159,10 @@ void fla_test_lange_experiment(char *tst_api, test_params_t *params, integer dat
         residual = err_thresh;
         time_min = 1e9;
 
-        if(g_ext_fptr != NULL)
+        if(g_ext_fptr != NULL || FLA_EXTREME_CASE_TEST)
         {
             /* Initialize input vectors with custom data */
-            init_matrix_from_file(datatype, A, m, n, lda, g_ext_fptr);
+            init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
         }
         else
         {
@@ -192,7 +192,22 @@ void fla_test_lange_experiment(char *tst_api, test_params_t *params, integer dat
         }
 
         /* output validation */
-        validate_lange(tst_api, datatype, test_norm_type, m, n, lda, A, result, residual);
+        if(!FLA_EXTREME_CASE_TEST)
+        {
+            validate_lange(tst_api, datatype, test_norm_type, m, n, lda, A, result, residual);
+        }
+        else
+        {
+            if((!check_extreme_value(datatype, 1, 1, result, 1, params->imatrix_char)))
+            {
+                residual = DBL_MAX;
+            }
+            else
+            {
+                residual = err_thresh;
+            }
+            FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
+        }
     }
 
     /* Free up the buffers */

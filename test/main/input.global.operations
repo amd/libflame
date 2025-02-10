@@ -56,3 +56,4 @@
 1   getrfnpi  LU factorization (No Pivot, Partial Factor) (0 = disable; 1 = enable; 2 = enable only this)
 1   hetrf   LDLH factorization                            (0 = disable; 1 = enable; 2 = enable only this)
 1   hetri_rook   LDLH factorization                       (0 = disable; 1 = enable; 2 = enable only this)
+1   ormqr   QR factorization                              (0 = disable; 1 = enable; 2 = enable only this)

@@ -180,6 +180,8 @@ extern FILE *g_ext_fptr;
             func_str = "UNG2R";                               \
         else if(strcmp(func_str, "SYGVD") == 0)               \
             func_str = "HEGVD";                               \
+        else if(strcmp(func_str, "ORMQR") == 0)               \
+            func_str = "UNMQR";                               \
     }
 
 /* Macro to skip complex and double complex tests of not supported APIs */
@@ -252,6 +254,7 @@ typedef struct Lin_solver_paramlist_t
     char symm; // if symmetric 'S' or Hermitian 'H'
     char equed_porfsx; // Must be 'N', 'Y'.
     char norm_gbcon; // norm param for gbcon API
+    char side; // Left 'L' or Right 'R'
 } Lin_solver_paramlist;
 
 /* struct to hold eigen parameters */

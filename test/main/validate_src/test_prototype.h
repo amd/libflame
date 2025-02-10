@@ -383,6 +383,12 @@
 
 #define fla_lapack_chetri_rook CHETRI_ROOK_
 #define fla_lapack_zhetri_rook ZHETRI_ROOK_
+
+#define fla_lapack_sormqr SORMQR_
+#define fla_lapack_dormqr DORMQR_
+#define fla_lapack_cunmqr CUNMQR_
+#define fla_lapack_zunmqr ZUNMQR_
+
 #elif(UPPER)
 
 #define fla_lapack_sladiv SLADIV
@@ -702,6 +708,12 @@
 
 #define fla_lapack_chetri_rook CHETRI_ROOK
 #define fla_lapack_zhetri_rook ZHETRI_ROOK
+
+#define fla_lapack_sormqr SORMQR
+#define fla_lapack_dormqr DORMQR
+#define fla_lapack_cunmqr CUNMQR
+#define fla_lapack_zunmqr ZUNMQR
+
 #elif(LOWER)
 
 #define fla_lapack_sladiv sladiv
@@ -1020,6 +1032,12 @@
 
 #define fla_lapack_chetri_rook chetri_rook
 #define fla_lapack_zhetri_rook zhetri_rook
+
+#define fla_lapack_sormqr sormqr
+#define fla_lapack_dormqr dormqr
+#define fla_lapack_cunmqr cunmqr
+#define fla_lapack_zunmqr zunmqr
+
 #else
 
 #define fla_lapack_sladiv sladiv_
@@ -1339,6 +1357,12 @@
 
 #define fla_lapack_chetri_rook chetri_rook_
 #define fla_lapack_zhetri_rook zhetri_rook_
+
+#define fla_lapack_sormqr sormqr_
+#define fla_lapack_dormqr dormqr_
+#define fla_lapack_cunmqr cunmqr_
+#define fla_lapack_zunmqr zunmqr_
+
 #endif /*if UPPER_*/
 
 /* These functions are API invoking functions used in other API test codes */
@@ -1793,6 +1817,7 @@ lapack_int LAPACKE_clarfg(lapack_int n, lapack_complex_float *alpha, lapack_comp
                           lapack_int incx, lapack_complex_float *tau);
 lapack_int LAPACKE_zlarfg(lapack_int n, lapack_complex_double *alpha, lapack_complex_double *x,
                           lapack_int incx, lapack_complex_double *tau);
+
 lapack_int LAPACKE_ssygvd(int matrix_layout, lapack_int itype, char jobz, char uplo, lapack_int n,
                           float *a, lapack_int lda, float *b, lapack_int ldb, float *w);
 lapack_int LAPACKE_dsygvd(int matrix_layout, lapack_int itype, char jobz, char uplo, lapack_int n,
@@ -1803,6 +1828,7 @@ lapack_int LAPACKE_chegvd(int matrix_layout, lapack_int itype, char jobz, char u
 lapack_int LAPACKE_zhegvd(int matrix_layout, lapack_int itype, char jobz, char uplo, lapack_int n,
                           lapack_complex_double *a, lapack_int lda, lapack_complex_double *b,
                           lapack_int ldb, double *w);
+
 lapack_int LAPACKE_sgbtrf(int matrix_layout, lapack_int m, lapack_int n, lapack_int kl,
                           lapack_int ku, float *ab, lapack_int ldab, lapack_int *ipiv);
 lapack_int LAPACKE_dgbtrf(int matrix_layout, lapack_int m, lapack_int n, lapack_int kl,
@@ -1813,6 +1839,7 @@ lapack_int LAPACKE_cgbtrf(int matrix_layout, lapack_int m, lapack_int n, lapack_
 lapack_int LAPACKE_zgbtrf(int matrix_layout, lapack_int m, lapack_int n, lapack_int kl,
                           lapack_int ku, lapack_complex_double *ab, lapack_int ldab,
                           lapack_int *ipiv);
+
 lapack_int LAPACKE_sgbtrs(int matrix_layout, char trans, lapack_int n, lapack_int kl, lapack_int ku,
                           lapack_int nrhs, float *ab, lapack_int ldab, lapack_int *ipiv, float *b,
                           lapack_int ldb);
@@ -1825,6 +1852,7 @@ lapack_int LAPACKE_cgbtrs(int matrix_layout, char trans, lapack_int n, lapack_in
 lapack_int LAPACKE_zgbtrs(int matrix_layout, char trans, lapack_int n, lapack_int kl, lapack_int ku,
                           lapack_int nrhs, const lapack_complex_double *ab, lapack_int ldab,
                           const lapack_int *ipiv, lapack_complex_double *b, lapack_int ldb);
+
 lapack_int LAPACKE_sgecon(int matrix_layout, char norm, lapack_int n, const float *a,
                           lapack_int lda, float anorm, float *rcond);
 lapack_int LAPACKE_dgecon(int matrix_layout, char norm, lapack_int n, const double *a,
@@ -1834,4 +1862,19 @@ lapack_int LAPACKE_cgecon(int matrix_layout, char norm, lapack_int n, const lapa
 lapack_int LAPACKE_zgecon(int matrix_layout, char norm, lapack_int n,
                           const lapack_complex_double *a, lapack_int lda, double anorm,
                           double *rcond);
+
+lapack_int LAPACKE_sormqr(int matrix_layout, char side, char trans, lapack_int m, lapack_int n,
+                          lapack_int k, const float *a, lapack_int lda, const float *tau, float *c,
+                          lapack_int ldc);
+lapack_int LAPACKE_dormqr(int matrix_layout, char side, char trans, lapack_int m, lapack_int n,
+                          lapack_int k, const double *a, lapack_int lda, const double *tau,
+                          double *c, lapack_int ldc);
+lapack_int LAPACKE_cunmqr(int matrix_layout, char side, char trans, lapack_int m, lapack_int n,
+                          lapack_int k, const lapack_complex_float *a, lapack_int lda,
+                          const lapack_complex_float *tau, lapack_complex_float *c, lapack_int ldc);
+lapack_int LAPACKE_zunmqr(int matrix_layout, char side, char trans, lapack_int m, lapack_int n,
+                          lapack_int k, const lapack_complex_double *a, lapack_int lda,
+                          const lapack_complex_double *tau, lapack_complex_double *c,
+                          lapack_int ldc);
+
 #endif // TEST_PROTOTYPE_H

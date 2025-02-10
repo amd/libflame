@@ -108,6 +108,9 @@ void invoke_cpp_hetrf(integer datatype, char *uplo, integer *n, void *A, integer
                       integer *ipiv, void *work, integer *lwork, integer *info);
 void invoke_cpp_hetri_rook(integer datatype, char *uplo, integer *n, void *a, integer *lda,
                            integer *ipiv, void *work, integer *info);
+void invoke_cpp_ormqr(integer datatype, char *side, char *trans, integer *m, integer *n, integer *k,
+                      void *A, integer *lda, void *tau, void *C, integer *ldc, void *work,
+                      integer *lwork, integer *info);
 #ifdef __cplusplus
 }
 #endif

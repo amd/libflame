@@ -1235,6 +1235,14 @@ set(EXTREMEVALUE_TEST_CASES "gehrd sdcz 15 1 10 15 15 1 --imatrix=N"
             "hetri_rook cz L 44 50 1 --imatrix=N"
             "hetri_rook cz L 130 130 1 --imatrix=I"
             "hetri_rook cz L 130 150 1 --imatrix=F"
+            "lange sdcz M1IF 1 32 -1 1 --imatrix=N"
+            "lange sdcz M1IF 1 32 -1 1 --imatrix=A"
+            "lange sdcz M1IF 1 32 -1 1 --imatrix=I"
+            "lange sdcz M1IF 1 32 -1 1 --imatrix=F"
+            "lange sdcz M1IF 80 104 -1 1 --imatrix=N"
+            "lange sdcz M1IF 80 104 -1 1 --imatrix=A"
+            "lange sdcz M1IF 80 104 -1 1 --imatrix=I"
+            "lange sdcz M1IF 80 104 -1 1 --imatrix=F"
             )
 
 set(TEST_NUM 1)

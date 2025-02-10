@@ -18,6 +18,7 @@
 #define invoke_mm512_reduce_max_px(x, ...) _mm512_reduce_max_p##x(__VA_ARGS__)
 #define invoke_mm512_maskz_loadu_px(x, ...) _mm512_maskz_loadu_p##x(__VA_ARGS__)
 #define invoke_mm512_permute_px(x, ...) _mm512_permute_p##x(__VA_ARGS__)
+#define invoke_mm512_cmpunord_px_mask(x, ...) _mm512_cmpunord_p##x##_mask(__VA_ARGS__)
 
 #define invoke_sqrts(data) sqrtf(data)
 #define invoke_sqrtd(data) sqrt(data)
@@ -31,6 +32,7 @@
     type_mm512x(x) vec1, vec2, vec3;                                                      \
     type_mm512x(x) vmax = {0};                                                            \
     type_mm512x(x) vd8_nzero = invoke_mm512_set1_px(x, -0.0f);                            \
+    integer nan_flag = 0;                                                                 \
     integer i__, lasti, remain;                                                           \
     realtype max_value;                                                                   \
     max_value = 0.0f;                                                                     \
@@ -43,6 +45,8 @@
         /* Find absolute values */                                                        \
         vec1 = invoke_mm512_andnot_px(x, vd8_nzero, vec1);                                \
         vec2 = invoke_mm512_andnot_px(x, vd8_nzero, vec2);                                \
+        /* Check for nan values */                                                        \
+        nan_flag |= invoke_mm512_cmpunord_px_mask(x, vec1, vec2);                         \
         /* Find intermediate maximum values */                                            \
         vec3 = invoke_mm512_max_px(x, vec1, vec2);                                        \
         vmax = invoke_mm512_max_px(x, vec3, vmax);                                        \
@@ -51,6 +55,7 @@
     if((m - lasti) >= nx)                                                                 \
     {                                                                                     \
         vec1 = invoke_mm512_loadu_px(x, &a[lasti + 1 + a_dim]);                           \
+        nan_flag |= invoke_mm512_cmpunord_px_mask(x, vec1, vec1);                         \
         vec1 = invoke_mm512_andnot_px(x, vd8_nzero, vec1);                                \
         vmax = invoke_mm512_max_px(x, vec1, vmax);                                        \
         lasti += nx;                                                                      \
@@ -59,10 +64,19 @@
     {                                                                                     \
         remain = m - lasti;                                                               \
         vec1 = invoke_mm512_maskz_loadu_px(x, (1 << remain) - 1, &a[lasti + 1 + a_dim]);  \
+        nan_flag |= invoke_mm512_cmpunord_px_mask(x, vec1, vec1);                         \
         vec1 = invoke_mm512_andnot_px(x, vd8_nzero, vec1);                                \
         vmax = invoke_mm512_max_px(x, vec1, vmax);                                        \
     }                                                                                     \
-    max_value = invoke_mm512_reduce_max_px(x, vmax);
+    /* If Nan flag is true then return Nan as result */                                   \
+    if(nan_flag)                                                                          \
+    {                                                                                     \
+        max_value = NAN;                                                                  \
+    }                                                                                     \
+    else                                                                                  \
+    {                                                                                     \
+        max_value = invoke_mm512_reduce_max_px(x, vmax);                                  \
+    }
 
 #define fla_get_max_sabs_element_complex_mm512_shuffle_flag_real 0b10001000
 #define fla_get_max_sabs_element_complex_mm512_shuffle_flag_imag 0b11011101
@@ -91,7 +105,7 @@
     fla_get_max_##x##abs_element_vector_complex_avx512_extra_vars
 
 #define fla_get_max_sabs_element_vector_complex_avx2_load512(target_vec, idx) \
-    target_vec##_256s = _mm256_loadu_ps((real *)&a[(idx) + a_dim]);                  \
+    target_vec##_256s = _mm256_loadu_ps((real *)&a[(idx) + a_dim]);           \
     target_vec = _mm512_cvtps_pd(target_vec##_256s);
 
 #define fla_get_max_dabs_element_vector_complex_avx2_load512(target_vec, idx) \
@@ -101,224 +115,238 @@
     fla_get_max_##x##abs_element_vector_complex_avx2_load512(target_vec, idx)
 
 #define fla_get_max_sabs_element_vector_complex_avx2_load512_masked(target_vec, idx, mask) \
-    target_vec##_256s                                                                             \
-        = _mm512_castps512_ps256(_mm512_maskz_loadu_ps(mask, (real *)&a[(idx) + a_dim]));         \
+    target_vec##_256s                                                                      \
+        = _mm512_castps512_ps256(_mm512_maskz_loadu_ps(mask, (real *)&a[(idx) + a_dim]));  \
     target_vec = _mm512_cvtps_pd(target_vec##_256s);
 
 #define fla_get_max_dabs_element_vector_complex_avx2_load512_masked(target_vec, idx, mask) \
     target_vec = _mm512_maskz_loadu_pd(mask, (doublereal *)&a[(idx) + a_dim]);
 
-#define fla_get_max_xabs_element_vector_complex_avx2_load512_masked(x, target_vec, idx, \
-                                                                           mask)               \
+#define fla_get_max_xabs_element_vector_complex_avx2_load512_masked(x, target_vec, idx, mask) \
     fla_get_max_##x##abs_element_vector_complex_avx2_load512_masked(target_vec, idx, mask)
 
+#define fla_get_max_xabs_element_vector_complex_avx512(x, m, a, a_dim, nx, hnx, stepsize)         \
+    type_mm512x(d) vec1, vec2, vec3, vec4;                                                        \
+    type_mm512x(d) vec5, vec6, vec7, vec8;                                                        \
+    fla_get_max_xabs_element_vector_complex_avx512_define_extra_vars(x);                          \
+    type_mm512x(d) vmax = {0};                                                                    \
+    doublereal max_value;                                                                         \
+    max_value = 0.0;                                                                              \
+    integer i__, lasti, remainv1, remainv2, nan_flag = 0;                                         \
+    lasti = m - (m % 16);                                                                         \
+    /* Get maximum upto size lasti */                                                             \
+    for(i__ = 1; i__ <= lasti; i__ += stepsize)                                                   \
+    {                                                                                             \
+        fla_get_max_xabs_element_vector_complex_avx2_load512(x, vec1, i__);                       \
+        fla_get_max_xabs_element_vector_complex_avx2_load512(x, vec2, i__ + hnx);                 \
+        /* Check for NaN */                                                                       \
+        nan_flag |= invoke_mm512_cmpunord_px_mask(d, vec1, vec2);                                 \
+        /* vec3 = r = real(a[0:nx]); vec4 = i = image(a[0:nx])*/                                  \
+        vec3 = invoke_mm512_shuffle_px(                                                           \
+            d, vec1, vec2, fla_get_max_xabs_element_complex_mm512_shuffle_flag_real(d));          \
+        vec4 = invoke_mm512_shuffle_px(                                                           \
+            d, vec1, vec2, fla_get_max_xabs_element_complex_mm512_shuffle_flag_imag(d));          \
+        /* calculating r^2 and i^r */                                                             \
+        vec3 = invoke_mm512_mul_px(d, vec3, vec3);                                                \
+        vec4 = invoke_mm512_mul_px(d, vec4, vec4);                                                \
+        /* vec3 = vec3 + vec4 */                                                                  \
+        vec3 = invoke_mm512_add_px(d, vec3, vec4);                                                \
+        fla_get_max_xabs_element_vector_complex_avx2_load512(x, vec5, i__ + nx);                  \
+        fla_get_max_xabs_element_vector_complex_avx2_load512(x, vec6, i__ + nx + hnx);            \
+        /* Check for NaN */                                                                       \
+        nan_flag |= invoke_mm512_cmpunord_px_mask(d, vec5, vec6);                                 \
+        /* vec7 = r = real(a[nx:2*nx]); vec8 = i = image(a[nx:2*nx])*/                            \
+        vec7 = invoke_mm512_shuffle_px(                                                           \
+            d, vec5, vec6, fla_get_max_xabs_element_complex_mm512_shuffle_flag_real(d));          \
+        vec8 = invoke_mm512_shuffle_px(                                                           \
+            d, vec5, vec6, fla_get_max_xabs_element_complex_mm512_shuffle_flag_imag(d));          \
+        /* calculating r^2 and i^r */                                                             \
+        vec7 = invoke_mm512_mul_px(d, vec7, vec7);                                                \
+        vec8 = invoke_mm512_mul_px(d, vec8, vec8);                                                \
+        /* vec7 = vec7 + vec8 */                                                                  \
+        vec7 = invoke_mm512_add_px(d, vec7, vec8);                                                \
+        /* vec1 = max(vec3, vec7) */                                                              \
+        vec1 = invoke_mm512_max_px(d, vec3, vec7);                                                \
+        vmax = invoke_mm512_max_px(d, vec1, vmax);                                                \
+    }                                                                                             \
+    if((m - lasti) >= nx)                                                                         \
+    {                                                                                             \
+        fla_get_max_xabs_element_vector_complex_avx2_load512(x, vec1, lasti + 1);                 \
+        fla_get_max_xabs_element_vector_complex_avx2_load512(x, vec2, lasti + 1 + hnx);           \
+        /* Check for NaN */                                                                       \
+        nan_flag |= invoke_mm512_cmpunord_px_mask(d, vec1, vec2);                                 \
+        /* vec3 = r = real(a[0:nx]); vec4 = i = image(a[0:nx])*/                                  \
+        vec3 = invoke_mm512_shuffle_px(                                                           \
+            d, vec1, vec2, fla_get_max_xabs_element_complex_mm512_shuffle_flag_real(d));          \
+        vec4 = invoke_mm512_shuffle_px(                                                           \
+            d, vec1, vec2, fla_get_max_xabs_element_complex_mm512_shuffle_flag_imag(d));          \
+        /* calculating r^2 and i^r */                                                             \
+        vec3 = invoke_mm512_mul_px(d, vec3, vec3);                                                \
+        vec4 = invoke_mm512_mul_px(d, vec4, vec4);                                                \
+        /* vec3 = vec3 + vec4 */                                                                  \
+        vec3 = invoke_mm512_add_px(d, vec3, vec4);                                                \
+        vmax = invoke_mm512_max_px(d, vec3, vmax);                                                \
+        lasti += nx;                                                                              \
+    }                                                                                             \
+    if(lasti < m)                                                                                 \
+    {                                                                                             \
+        remainv1 = fla_min(m - lasti, hnx);                                                       \
+        remainv2 = m - lasti - remainv1;                                                          \
+        remainv1 <<= 1;                                                                           \
+        remainv2 <<= 1;                                                                           \
+        if(remainv2 != 0)                                                                         \
+        {                                                                                         \
+            fla_get_max_xabs_element_vector_complex_avx2_load512_masked(x, vec1, lasti + 1,       \
+                                                                        ((1 << remainv1) - 1));   \
+            fla_get_max_xabs_element_vector_complex_avx2_load512_masked(x, vec2, lasti + 1 + hnx, \
+                                                                        ((1 << remainv2) - 1));   \
+            /* Check for NaN */                                                                   \
+            nan_flag |= invoke_mm512_cmpunord_px_mask(d, vec1, vec2);                             \
+            /* vec3 = r = real(a[0:nx]); vec4 = i = image(a[0:nx])*/                              \
+            vec3 = invoke_mm512_shuffle_px(                                                       \
+                d, vec1, vec2, fla_get_max_xabs_element_complex_mm512_shuffle_flag_real(d));      \
+            vec4 = invoke_mm512_shuffle_px(                                                       \
+                d, vec1, vec2, fla_get_max_xabs_element_complex_mm512_shuffle_flag_imag(d));      \
+            /* calculating r^2 and i^r */                                                         \
+            vec3 = invoke_mm512_mul_px(d, vec3, vec3);                                            \
+            vec4 = invoke_mm512_mul_px(d, vec4, vec4);                                            \
+            /* vec3 = vec3 + vec4 */                                                              \
+            vec3 = invoke_mm512_add_px(d, vec3, vec4);                                            \
+            vmax = invoke_mm512_max_px(d, vec3, vmax);                                            \
+        }                                                                                         \
+        else                                                                                      \
+        {                                                                                         \
+            fla_get_max_xabs_element_vector_complex_avx2_load512_masked(x, vec1, lasti + 1,       \
+                                                                        ((1 << remainv1) - 1));   \
+            /* Check for NaN */                                                                   \
+            nan_flag |= invoke_mm512_cmpunord_px_mask(d, vec1, vec1);                             \
+            vec1 = invoke_mm512_mul_px(d, vec1, vec1);                                            \
+            vec2 = invoke_mm512_permute_px(                                                       \
+                d, vec1, fla_get_max_xabs_element_complex_mm512_shuffle_ri_flag(d));              \
+            vec1 = invoke_mm512_add_px(d, vec1, vec2);                                            \
+            vmax = invoke_mm512_max_px(d, vec1, vmax);                                            \
+        }                                                                                         \
+    }                                                                                             \
+    /* If Nan flag is true then return Nan as result */                                           \
+    if(nan_flag)                                                                                  \
+    {                                                                                             \
+        max_value = NAN;                                                                          \
+    }                                                                                             \
+    else                                                                                          \
+    {                                                                                             \
+        max_value = invoke_mm512_reduce_max_px(d, vmax);                                          \
+        max_value = invoke_sqrtx(d, max_value);                                                   \
+    }
 
-#define fla_get_max_xabs_element_vector_complex_avx512(x, m, a, a_dim, nx, hnx,      \
-                                                       stepsize)                               \
-    type_mm512x(d) vec1, vec2, vec3, vec4;                                                     \
-    type_mm512x(d) vec5, vec6, vec7, vec8;                                                     \
-    fla_get_max_xabs_element_vector_complex_avx512_define_extra_vars(x);                       \
-    type_mm512x(d) vmax = {0};                                                                 \
-    doublereal max_value;                                                                        \
-    max_value = 0.0;                                                                          \
-    integer i__, lasti, remainv1, remainv2;                                                    \
-    lasti = m - (m % 16);                                                                \
-    /* Get maximum upto size lasti */                                                          \
-    for(i__ = 1; i__ <= lasti; i__ += stepsize)                                                  \
-    {                                                                                            \
-        fla_get_max_xabs_element_vector_complex_avx2_load512(x, vec1, i__);               \
-        fla_get_max_xabs_element_vector_complex_avx2_load512(x, vec2, i__ + hnx);         \
-        /* vec3 = r = real(a[0:nx]); vec4 = i = image(a[0:nx])*/                                 \
-        vec3 = invoke_mm512_shuffle_px(                                                          \
-            d, vec1, vec2, fla_get_max_xabs_element_complex_mm512_shuffle_flag_real(d));         \
-        vec4 = invoke_mm512_shuffle_px(                                                          \
-            d, vec1, vec2, fla_get_max_xabs_element_complex_mm512_shuffle_flag_imag(d));         \
-        /* calculating r^2 and i^r */                                                            \
-        vec3 = invoke_mm512_mul_px(d, vec3, vec3);                                               \
-        vec4 = invoke_mm512_mul_px(d, vec4, vec4);                                               \
-        /* vec3 = vec3 + vec4 */                                                                 \
-        vec3 = invoke_mm512_add_px(d, vec3, vec4);                                               \
-        fla_get_max_xabs_element_vector_complex_avx2_load512(x, vec5, i__ + nx);          \
-        fla_get_max_xabs_element_vector_complex_avx2_load512(x, vec6, i__ + nx + hnx);    \
-        /* vec7 = r = real(a[nx:2*nx]); vec8 = i = image(a[nx:2*nx])*/                           \
-        vec7 = invoke_mm512_shuffle_px(                                                          \
-            d, vec5, vec6, fla_get_max_xabs_element_complex_mm512_shuffle_flag_real(d));         \
-        vec8 = invoke_mm512_shuffle_px(                                                          \
-            d, vec5, vec6, fla_get_max_xabs_element_complex_mm512_shuffle_flag_imag(d));         \
-        /* calculating r^2 and i^r */                                                            \
-        vec7 = invoke_mm512_mul_px(d, vec7, vec7);                                               \
-        vec8 = invoke_mm512_mul_px(d, vec8, vec8);                                               \
-        /* vec7 = vec7 + vec8 */                                                                 \
-        vec7 = invoke_mm512_add_px(d, vec7, vec8);                                               \
-        /* vec1 = max(vec3, vec7) */                                                             \
-        vec1 = invoke_mm512_max_px(d, vec3, vec7);                                               \
-        vmax = invoke_mm512_max_px(d, vec1, vmax);                                               \
-    }                                                                                            \
-    if((m - lasti) >= nx)                                                                        \
-    {                                                                                            \
-        fla_get_max_xabs_element_vector_complex_avx2_load512(x, vec1, lasti + 1);         \
-        fla_get_max_xabs_element_vector_complex_avx2_load512(x, vec2, lasti + 1 + hnx);   \
-        /* vec3 = r = real(a[0:nx]); vec4 = i = image(a[0:nx])*/                                 \
-        vec3 = invoke_mm512_shuffle_px(                                                          \
-            d, vec1, vec2, fla_get_max_xabs_element_complex_mm512_shuffle_flag_real(d));         \
-        vec4 = invoke_mm512_shuffle_px(                                                          \
-            d, vec1, vec2, fla_get_max_xabs_element_complex_mm512_shuffle_flag_imag(d));         \
-        /* calculating r^2 and i^r */                                                            \
-        vec3 = invoke_mm512_mul_px(d, vec3, vec3);                                               \
-        vec4 = invoke_mm512_mul_px(d, vec4, vec4);                                               \
-        /* vec3 = vec3 + vec4 */                                                                 \
-        vec3 = invoke_mm512_add_px(d, vec3, vec4);                                               \
-        vmax = invoke_mm512_max_px(d, vec3, vmax);                                               \
-        lasti += nx;                                                                             \
-    }                                                                                            \
-    if(lasti < m)                                                                                \
-    {                                                                                            \
-        remainv1 = fla_min(m - lasti, hnx);                                                      \
-        remainv2 = m - lasti - remainv1;                                                         \
-        remainv1 <<= 1;                                                                          \
-        remainv2 <<= 1;                                                                          \
-        if(remainv2 != 0)                                                                        \
-        {                                                                                        \
-            fla_get_max_xabs_element_vector_complex_avx2_load512_masked(                  \
-                x, vec1, lasti + 1, ((1 << remainv1) - 1));                                      \
-            fla_get_max_xabs_element_vector_complex_avx2_load512_masked(                  \
-                x, vec2, lasti + 1 + hnx, ((1 << remainv2) - 1));                                \
-            /* vec3 = r = real(a[0:nx]); vec4 = i = image(a[0:nx])*/                             \
-            vec3 = invoke_mm512_shuffle_px(                                                      \
-                d, vec1, vec2, fla_get_max_xabs_element_complex_mm512_shuffle_flag_real(d));     \
-            vec4 = invoke_mm512_shuffle_px(                                                      \
-                d, vec1, vec2, fla_get_max_xabs_element_complex_mm512_shuffle_flag_imag(d));     \
-            /* calculating r^2 and i^r */                                                        \
-            vec3 = invoke_mm512_mul_px(d, vec3, vec3);                                           \
-            vec4 = invoke_mm512_mul_px(d, vec4, vec4);                                           \
-            /* vec3 = vec3 + vec4 */                                                             \
-            vec3 = invoke_mm512_add_px(d, vec3, vec4);                                           \
-            vmax = invoke_mm512_max_px(d, vec3, vmax);                                           \
-        }                                                                                        \
-        else                                                                                     \
-        {                                                                                        \
-            fla_get_max_xabs_element_vector_complex_avx2_load512_masked(                  \
-                x, vec1, lasti + 1, ((1 << remainv1) - 1));                                      \
-            vec1 = invoke_mm512_mul_px(d, vec1, vec1);                                           \
-            vec2 = invoke_mm512_permute_px(                                                      \
-                d, vec1, fla_get_max_xabs_element_complex_mm512_shuffle_ri_flag(d));             \
-            vec1 = invoke_mm512_add_px(d, vec1, vec2);                                           \
-            vmax = invoke_mm512_max_px(d, vec1, vmax);                                           \
-        }                                                                                        \
-    }                                                                                            \
-    max_value = invoke_mm512_reduce_max_px(d, vmax);                                             \
-    max_value = invoke_sqrtx(d, max_value);
-
-
-#define fla_get_max_xabs_element_vector_complex_avx512_scaled(x, m, a, a_dim, nx, hnx, \
-                                                              stepsize, scale_factor)            \
-    type_mm512x(d) vec1, vec2, vec3, vec4;                                                       \
-    type_mm512x(d) vec5, vec6, vec7, vec8;                                                       \
-    type_mm512x(d) vmax = {0}, scale_vec;                                                        \
-    fla_get_max_xabs_element_vector_complex_avx512_define_extra_vars(x);                  \
-    doublereal max_value;                                                                        \
-    integer i__, lasti, remainv1, remainv2;                                                      \
-    max_value = 0.0f;                                                                            \
-    lasti = m - (m % stepsize);                                                                  \
-    scale_vec = invoke_mm512_set1_px(d, scale_factor);                                           \
-    /* Get maximum upto size lasti */                                                            \
-    for(i__ = 1; i__ <= lasti; i__ += stepsize)                                                  \
-    {                                                                                            \
-        fla_get_max_xabs_element_vector_complex_avx2_load512(x, vec1, i__);               \
-        fla_get_max_xabs_element_vector_complex_avx2_load512(x, vec2, i__ + hnx);         \
-        /* Scale values */                                                                       \
-        vec1 = invoke_mm512_mul_px(d, vec1, scale_vec);                                          \
-        vec2 = invoke_mm512_mul_px(d, vec2, scale_vec);                                          \
-        /* vec3 = r = real(a[0:nx]); vec4 = i = image(a[0:nx])*/                                 \
-        vec3 = invoke_mm512_shuffle_px(                                                          \
-            d, vec1, vec2, fla_get_max_xabs_element_complex_mm512_shuffle_flag_real(d));         \
-        vec4 = invoke_mm512_shuffle_px(                                                          \
-            d, vec1, vec2, fla_get_max_xabs_element_complex_mm512_shuffle_flag_imag(d));         \
-        /* calculating r^2 and i^r */                                                            \
-        vec3 = invoke_mm512_mul_px(d, vec3, vec3);                                               \
-        vec4 = invoke_mm512_mul_px(d, vec4, vec4);                                               \
-        /* vec3 = vec3 + vec4 */                                                                 \
-        vec3 = invoke_mm512_add_px(d, vec3, vec4);                                               \
-        fla_get_max_xabs_element_vector_complex_avx2_load512(x, vec5, i__ + nx);          \
-        fla_get_max_xabs_element_vector_complex_avx2_load512(x, vec6, i__ + nx + hnx);    \
-        /* Scale values */                                                                       \
-        vec5 = invoke_mm512_mul_px(d, vec5, scale_vec);                                          \
-        vec6 = invoke_mm512_mul_px(d, vec6, scale_vec);                                          \
-        /* vec7 = r = real(a[nx:2*nx]); vec8 = i = image(a[nx:2*nx])*/                           \
-        vec7 = invoke_mm512_shuffle_px(                                                          \
-            d, vec5, vec6, fla_get_max_xabs_element_complex_mm512_shuffle_flag_real(d));         \
-        vec8 = invoke_mm512_shuffle_px(                                                          \
-            d, vec5, vec6, fla_get_max_xabs_element_complex_mm512_shuffle_flag_imag(d));         \
-        /* calculating r^2 and i^r */                                                            \
-        vec7 = invoke_mm512_mul_px(d, vec7, vec7);                                               \
-        vec8 = invoke_mm512_mul_px(d, vec8, vec8);                                               \
-        /* vec7 = vec7 + vec8 */                                                                 \
-        vec7 = invoke_mm512_add_px(d, vec7, vec8);                                               \
-        /* vec1 = max(vec3, vec7) */                                                             \
-        vec1 = invoke_mm512_max_px(d, vec3, vec7);                                               \
-        vmax = invoke_mm512_max_px(d, vec1, vmax);                                               \
-    }                                                                                            \
-    if((m - lasti) >= nx)                                                                        \
-    {                                                                                            \
-        fla_get_max_xabs_element_vector_complex_avx2_load512(x, vec1, lasti + 1);         \
-        fla_get_max_xabs_element_vector_complex_avx2_load512(x, vec2, lasti + 1 + hnx);   \
-        /* Scale values */                                                                       \
-        vec1 = invoke_mm512_mul_px(d, vec1, scale_vec);                                          \
-        vec2 = invoke_mm512_mul_px(d, vec2, scale_vec);                                          \
-        /* vec3 = r = real(a[0:nx]); vec4 = i = image(a[0:nx])*/                                 \
-        vec3 = invoke_mm512_shuffle_px(                                                          \
-            d, vec1, vec2, fla_get_max_xabs_element_complex_mm512_shuffle_flag_real(d));         \
-        vec4 = invoke_mm512_shuffle_px(                                                          \
-            d, vec1, vec2, fla_get_max_xabs_element_complex_mm512_shuffle_flag_imag(d));         \
-        /* calculating r^2 and i^r */                                                            \
-        vec3 = invoke_mm512_mul_px(d, vec3, vec3);                                               \
-        vec4 = invoke_mm512_mul_px(d, vec4, vec4);                                               \
-        /* vec3 = vec3 + vec4 */                                                                 \
-        vec3 = invoke_mm512_add_px(d, vec3, vec4);                                               \
-        vmax = invoke_mm512_max_px(d, vec3, vmax);                                               \
-        lasti += nx;                                                                             \
-    }                                                                                            \
-    if(lasti < m)                                                                                \
-    {                                                                                            \
-        remainv1 = fla_min(m - lasti, hnx);                                                      \
-        remainv2 = m - lasti - remainv1;                                                         \
-        remainv1 <<= 1;                                                                          \
-        remainv2 <<= 1;                                                                          \
-        if(remainv2 != 0)                                                                        \
-        {                                                                                        \
-            fla_get_max_xabs_element_vector_complex_avx2_load512_masked(                  \
-                x, vec1, lasti + 1, ((1 << remainv1) - 1));                                      \
-            fla_get_max_xabs_element_vector_complex_avx2_load512_masked(                  \
-                x, vec2, lasti + 1 + hnx, ((1 << remainv2) - 1));                                \
-            /* Scale values */                                                                   \
-            vec1 = invoke_mm512_mul_px(d, vec1, scale_vec);                                      \
-            vec2 = invoke_mm512_mul_px(d, vec2, scale_vec);                                      \
-            /* vec3 = r = real(a[0:nx]); vec4 = i = image(a[0:nx])*/                             \
-            vec3 = invoke_mm512_shuffle_px(                                                      \
-                d, vec1, vec2, fla_get_max_xabs_element_complex_mm512_shuffle_flag_real(d));     \
-            vec4 = invoke_mm512_shuffle_px(                                                      \
-                d, vec1, vec2, fla_get_max_xabs_element_complex_mm512_shuffle_flag_imag(d));     \
-            /* calculating r^2 and i^r */                                                        \
-            vec3 = invoke_mm512_mul_px(d, vec3, vec3);                                           \
-            vec4 = invoke_mm512_mul_px(d, vec4, vec4);                                           \
-            /* vec3 = vec3 + vec4 */                                                             \
-            vec3 = invoke_mm512_add_px(d, vec3, vec4);                                           \
-            vmax = invoke_mm512_max_px(d, vec3, vmax);                                           \
-        }                                                                                        \
-        else                                                                                     \
-        {                                                                                        \
-            fla_get_max_xabs_element_vector_complex_avx2_load512_masked(                  \
-                x, vec1, lasti + 1, ((1 << remainv1) - 1));                                      \
-            /* Scale values */                                                                   \
-            vec1 = invoke_mm512_mul_px(d, vec1, scale_vec);                                      \
-            vec1 = invoke_mm512_mul_px(d, vec1, vec1);                                           \
-            vec2 = invoke_mm512_permute_px(                                                      \
-                d, vec1, fla_get_max_xabs_element_complex_mm512_shuffle_ri_flag(d));             \
-            vec1 = invoke_mm512_add_px(d, vec1, vec2);                                           \
-            vmax = invoke_mm512_max_px(d, vec1, vmax);                                           \
-        }                                                                                        \
-    }                                                                                            \
-    max_value = invoke_mm512_reduce_max_px(d, vmax);                                             \
+#define fla_get_max_xabs_element_vector_complex_avx512_scaled(x, m, a, a_dim, nx, hnx, stepsize,  \
+                                                              scale_factor)                       \
+    type_mm512x(d) vec1, vec2, vec3, vec4;                                                        \
+    type_mm512x(d) vec5, vec6, vec7, vec8;                                                        \
+    type_mm512x(d) vmax = {0}, scale_vec;                                                         \
+    fla_get_max_xabs_element_vector_complex_avx512_define_extra_vars(x);                          \
+    doublereal max_value;                                                                         \
+    integer i__, lasti, remainv1, remainv2;                                                       \
+    max_value = 0.0f;                                                                             \
+    lasti = m - (m % stepsize);                                                                   \
+    scale_vec = invoke_mm512_set1_px(d, scale_factor);                                            \
+    /* Get maximum upto size lasti */                                                             \
+    for(i__ = 1; i__ <= lasti; i__ += stepsize)                                                   \
+    {                                                                                             \
+        fla_get_max_xabs_element_vector_complex_avx2_load512(x, vec1, i__);                       \
+        fla_get_max_xabs_element_vector_complex_avx2_load512(x, vec2, i__ + hnx);                 \
+        /* Scale values */                                                                        \
+        vec1 = invoke_mm512_mul_px(d, vec1, scale_vec);                                           \
+        vec2 = invoke_mm512_mul_px(d, vec2, scale_vec);                                           \
+        /* vec3 = r = real(a[0:nx]); vec4 = i = image(a[0:nx])*/                                  \
+        vec3 = invoke_mm512_shuffle_px(                                                           \
+            d, vec1, vec2, fla_get_max_xabs_element_complex_mm512_shuffle_flag_real(d));          \
+        vec4 = invoke_mm512_shuffle_px(                                                           \
+            d, vec1, vec2, fla_get_max_xabs_element_complex_mm512_shuffle_flag_imag(d));          \
+        /* calculating r^2 and i^r */                                                             \
+        vec3 = invoke_mm512_mul_px(d, vec3, vec3);                                                \
+        vec4 = invoke_mm512_mul_px(d, vec4, vec4);                                                \
+        /* vec3 = vec3 + vec4 */                                                                  \
+        vec3 = invoke_mm512_add_px(d, vec3, vec4);                                                \
+        fla_get_max_xabs_element_vector_complex_avx2_load512(x, vec5, i__ + nx);                  \
+        fla_get_max_xabs_element_vector_complex_avx2_load512(x, vec6, i__ + nx + hnx);            \
+        /* Scale values */                                                                        \
+        vec5 = invoke_mm512_mul_px(d, vec5, scale_vec);                                           \
+        vec6 = invoke_mm512_mul_px(d, vec6, scale_vec);                                           \
+        /* vec7 = r = real(a[nx:2*nx]); vec8 = i = image(a[nx:2*nx])*/                            \
+        vec7 = invoke_mm512_shuffle_px(                                                           \
+            d, vec5, vec6, fla_get_max_xabs_element_complex_mm512_shuffle_flag_real(d));          \
+        vec8 = invoke_mm512_shuffle_px(                                                           \
+            d, vec5, vec6, fla_get_max_xabs_element_complex_mm512_shuffle_flag_imag(d));          \
+        /* calculating r^2 and i^r */                                                             \
+        vec7 = invoke_mm512_mul_px(d, vec7, vec7);                                                \
+        vec8 = invoke_mm512_mul_px(d, vec8, vec8);                                                \
+        /* vec7 = vec7 + vec8 */                                                                  \
+        vec7 = invoke_mm512_add_px(d, vec7, vec8);                                                \
+        /* vec1 = max(vec3, vec7) */                                                              \
+        vec1 = invoke_mm512_max_px(d, vec3, vec7);                                                \
+        vmax = invoke_mm512_max_px(d, vec1, vmax);                                                \
+    }                                                                                             \
+    if((m - lasti) >= nx)                                                                         \
+    {                                                                                             \
+        fla_get_max_xabs_element_vector_complex_avx2_load512(x, vec1, lasti + 1);                 \
+        fla_get_max_xabs_element_vector_complex_avx2_load512(x, vec2, lasti + 1 + hnx);           \
+        /* Scale values */                                                                        \
+        vec1 = invoke_mm512_mul_px(d, vec1, scale_vec);                                           \
+        vec2 = invoke_mm512_mul_px(d, vec2, scale_vec);                                           \
+        /* vec3 = r = real(a[0:nx]); vec4 = i = image(a[0:nx])*/                                  \
+        vec3 = invoke_mm512_shuffle_px(                                                           \
+            d, vec1, vec2, fla_get_max_xabs_element_complex_mm512_shuffle_flag_real(d));          \
+        vec4 = invoke_mm512_shuffle_px(                                                           \
+            d, vec1, vec2, fla_get_max_xabs_element_complex_mm512_shuffle_flag_imag(d));          \
+        /* calculating r^2 and i^r */                                                             \
+        vec3 = invoke_mm512_mul_px(d, vec3, vec3);                                                \
+        vec4 = invoke_mm512_mul_px(d, vec4, vec4);                                                \
+        /* vec3 = vec3 + vec4 */                                                                  \
+        vec3 = invoke_mm512_add_px(d, vec3, vec4);                                                \
+        vmax = invoke_mm512_max_px(d, vec3, vmax);                                                \
+        lasti += nx;                                                                              \
+    }                                                                                             \
+    if(lasti < m)                                                                                 \
+    {                                                                                             \
+        remainv1 = fla_min(m - lasti, hnx);                                                       \
+        remainv2 = m - lasti - remainv1;                                                          \
+        remainv1 <<= 1;                                                                           \
+        remainv2 <<= 1;                                                                           \
+        if(remainv2 != 0)                                                                         \
+        {                                                                                         \
+            fla_get_max_xabs_element_vector_complex_avx2_load512_masked(x, vec1, lasti + 1,       \
+                                                                        ((1 << remainv1) - 1));   \
+            fla_get_max_xabs_element_vector_complex_avx2_load512_masked(x, vec2, lasti + 1 + hnx, \
+                                                                        ((1 << remainv2) - 1));   \
+            /* Scale values */                                                                    \
+            vec1 = invoke_mm512_mul_px(d, vec1, scale_vec);                                       \
+            vec2 = invoke_mm512_mul_px(d, vec2, scale_vec);                                       \
+            /* vec3 = r = real(a[0:nx]); vec4 = i = image(a[0:nx])*/                              \
+            vec3 = invoke_mm512_shuffle_px(                                                       \
+                d, vec1, vec2, fla_get_max_xabs_element_complex_mm512_shuffle_flag_real(d));      \
+            vec4 = invoke_mm512_shuffle_px(                                                       \
+                d, vec1, vec2, fla_get_max_xabs_element_complex_mm512_shuffle_flag_imag(d));      \
+            /* calculating r^2 and i^r */                                                         \
+            vec3 = invoke_mm512_mul_px(d, vec3, vec3);                                            \
+            vec4 = invoke_mm512_mul_px(d, vec4, vec4);                                            \
+            /* vec3 = vec3 + vec4 */                                                              \
+            vec3 = invoke_mm512_add_px(d, vec3, vec4);                                            \
+            vmax = invoke_mm512_max_px(d, vec3, vmax);                                            \
+        }                                                                                         \
+        else                                                                                      \
+        {                                                                                         \
+            fla_get_max_xabs_element_vector_complex_avx2_load512_masked(x, vec1, lasti + 1,       \
+                                                                        ((1 << remainv1) - 1));   \
+            /* Scale values */                                                                    \
+            vec1 = invoke_mm512_mul_px(d, vec1, scale_vec);                                       \
+            vec1 = invoke_mm512_mul_px(d, vec1, vec1);                                            \
+            vec2 = invoke_mm512_permute_px(                                                       \
+                d, vec1, fla_get_max_xabs_element_complex_mm512_shuffle_ri_flag(d));              \
+            vec1 = invoke_mm512_add_px(d, vec1, vec2);                                            \
+            vmax = invoke_mm512_max_px(d, vec1, vmax);                                            \
+        }                                                                                         \
+    }                                                                                             \
+    max_value = invoke_mm512_reduce_max_px(d, vmax);                                              \
     max_value = invoke_sqrtx(d, max_value);
 
 /* Find maxmimum absoute value of given doublereal vector using avx512 intrinsics*/
@@ -348,17 +376,16 @@ doublereal fla_get_max_zabs_element_vector_avx512(integer m, doublecomplex *a, i
     fla_get_max_xabs_element_vector_complex_avx512(d, m, a, a_dim, 8, 4, 16);
     /* To avoid overflow if the max element is bigger/smaller than
        the threshold value then scale each element before
-       calculating the absolute value. */
-    if(max_value > tbig)
+       calculating the absolute value.
+       Also is calculated value is NaN then no need to check*/
+    if(max_value > tbig && max_value == max_value)
     {
-        fla_get_max_xabs_element_vector_complex_avx512_scaled(d, m, a, a_dim, 8, 4, 16,
-                                                              sbig);
+        fla_get_max_xabs_element_vector_complex_avx512_scaled(d, m, a, a_dim, 8, 4, 16, sbig);
         return max_value / sbig;
     }
-    else if(max_value < tsml)
+    else if(max_value < tsml && max_value == max_value)
     {
-        fla_get_max_xabs_element_vector_complex_avx512_scaled(d, m, a, a_dim, 8, 4, 16,
-                                                              ssml);
+        fla_get_max_xabs_element_vector_complex_avx512_scaled(d, m, a, a_dim, 8, 4, 16, ssml);
         return max_value / ssml;
     }
     return max_value;

@@ -184,7 +184,7 @@ doublereal dlange_(char *norm, integer *m, integer *n, doublereal *a, integer *l
             /* Select optimized path for AMD architecture*/
             temp = fla_get_max_dabs_element_vector(i__2, a, j_a_dim);
 
-            if(value < temp)
+            if(value < temp || temp != temp)
                 value = temp;
 #else
             for(i__ = 1; i__ <= i__2; ++i__)

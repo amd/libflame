@@ -45,7 +45,7 @@ void validate_getrs(char *tst_api, char *trans, integer n, integer nrhs, void *A
                     char imatrix, void *scal);
 
 void validate_orgqr(char *tst_api, integer m, integer n, void *A, integer lda, void *Q, void *R,
-                    void *work, integer datatype, double err_thresh, char imatrix);
+                    integer datatype, double err_thresh, char imatrix);
 
 void validate_potrf(char *tst_api, char *uplo, integer m, void *A, void *A_test, integer lda,
                     integer datatype, double err_thresh);
@@ -169,8 +169,8 @@ void validate_gelsd(char *tst_api, integer m, integer n, integer NRHS, void *A, 
 void validate_sytrf(char *tst_api, char *uplo, integer n, integer lda, void *A_res,
                     integer datatype, integer *ipiv, double err_thresh, void *A);
 
-void validate_hetrf(char *tst_api, char *uplo, integer n, integer lda, void *A_res, integer datatype,
-                    integer *ipiv, double err_thresh, void *A);
+void validate_hetrf(char *tst_api, char *uplo, integer n, integer lda, void *A_res,
+                    integer datatype, integer *ipiv, double err_thresh, void *A);
 void validate_hetrf_rook(char *tst_api, char *uplo, integer n, integer lda, void *A_res,
                          integer datatype, integer *ipiv, double err_thresh, void *A);
 
@@ -194,6 +194,10 @@ void validate_gecon(char *tst_api, integer datatype, char norm, integer n, void 
 void validate_getrfnpi(char *tst_api, integer m_A, integer n_A, integer nfact, void *A,
                        void *A_test, integer lda, integer *IPIV, integer datatype,
                        double err_thresh, char imatrix);
-void validate_hetri_rook(char *tst_api, char uplo, integer n, void *A, void *A_inv, integer lda, integer *ipiv,
-                         integer datatype, double err_thresh, char imatrix);
+void validate_hetri_rook(char *tst_api, char uplo, integer n, void *A, void *A_inv, integer lda,
+                         integer *ipiv, integer datatype, double err_thresh, char imatrix);
+void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, integer k, void *A,
+                    integer lda, void *C, void *Tau, integer ldc, void *C_test,
+                    integer datatype, double err_thresh, char imatrix);
+
 #endif // VALIDATE_COMMON_H

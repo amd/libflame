@@ -49,5 +49,6 @@ ${CMAKE_CURRENT_SOURCE_DIR}/validate_lange.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_gecon.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_getrfnpi.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_hetri_rook.c
+${CMAKE_CURRENT_SOURCE_DIR}/validate_ormqr.c
 )
 

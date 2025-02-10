@@ -13,7 +13,7 @@ extern double time_min;
 void fla_test_org2r_experiment(char *tst_api, test_params_t *params, integer datatype,
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
-void prepare_org2r_run(integer m, integer n, void *A, integer lda, void *T, void *work,
+void prepare_org2r_run(integer m, integer n, void *A, integer lda, void *T,
                        integer datatype, integer n_repeats, double *time_min_, integer *info,
                        integer interfacetype);
 void invoke_org2r(integer datatype, integer *m, integer *n, integer *min_A, void *a, integer *lda,
@@ -108,7 +108,7 @@ void fla_test_org2r_experiment(char *tst_api, test_params_t *params, integer dat
 {
     integer m, n, lda;
     void *A = NULL, *A_test = NULL, *T_test = NULL;
-    void *work = NULL, *work_test = NULL;
+    void *work = NULL;
     void *Q = NULL, *R = NULL;
     integer interfacetype = params->interfacetype;
     integer lwork = -1, info = 0;
@@ -122,122 +122,123 @@ void fla_test_org2r_experiment(char *tst_api, test_params_t *params, integer dat
     perf = 0.;
     err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
 
-    /* If leading dimensions = -1, set them to default value
-       when inputs are from config files */
+    /* When inputs are from config file,
+       1) if m < n(invalid case), interchange m, n
+       2) if leading dimensions = -1, set them to default value */
     if(config_data)
     {
-        if(lda == -1)
+        if (p_cur < q_cur)
+        {
+            m = q_cur;
+            n = p_cur;
+        }
+        if(lda == -1 || lda < m)
         {
             lda = fla_max(1, m);
         }
     }
 
-    if(m >= n)
+    /* Create input matrix parameters */
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
+
+    /* create tau vector */
+    create_vector(datatype, &T_test, fla_min(m, n));
+
+    init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
     {
-        /* Create input matrix parameters */
-        create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
+        scale_matrix_underflow_overflow_org2r(datatype, m, n, A, lda, params->imatrix_char);
+    }
 
-        /* create tau vector */
-        create_vector(datatype, &T_test, fla_min(m, n));
+    /* Make a copy of input matrix A.
+       This is required to validate the API functionality.*/
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
+    copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
-        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+    /* create Q matrix to check orthogonality */
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &Q, lda);
+    reset_matrix(datatype, m, n, Q, lda);
+
+    /* Make a workspace query the first time. This will provide us with
+       and ideal workspace size based on internal block size.*/
+    if(g_lwork <= 0)
+    {
+        lwork = -1;
+        create_vector(datatype, &work, 1);
+
+        /* call to  geqrf API */
+        invoke_geqrf(datatype, &m, &n, NULL, &lda, NULL, work, &lwork, &info);
+
+        if(info == 0)
         {
-            scale_matrix_underflow_overflow_org2r(datatype, m, n, A, lda, params->imatrix_char);
+            /* Get work size */
+            lwork = get_work_value(datatype, work);
         }
 
-        /* Make a copy of input matrix A.
-           This is required to validate the API functionality.*/
-        create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
-        copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
+        /* Output buffers will be freshly allocated for each iterations, free up
+        the current output buffers.*/
+        free_vector(work);
+    }
 
-        /* create Q matrix to check orthogonality */
-        create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &Q, lda);
-        reset_matrix(datatype, m, n, Q, lda);
+    /* create work buffer */
+    create_vector(datatype, &work, lwork);
 
-        /* Make a workspace query the first time. This will provide us with
-           and ideal workspace size based on internal block size.*/
-        if(g_lwork <= 0)
+    /* QR Factorisation on matrix A to generate Q and R */
+    invoke_geqrf(datatype, &m, &n, A_test, &lda, T_test, work, &lwork, &info);
+
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &R, n);
+    reset_matrix(datatype, n, n, R, n);
+    copy_matrix(datatype, "Upper", n, n, A_test, lda, R, n);
+
+    copy_matrix(datatype, "full", m, n, A_test, lda, Q, lda);
+
+    /*invoke org2r API */
+    prepare_org2r_run(m, n, Q, lda, T_test, datatype, n_repeats, &time_min, &info,
+                      interfacetype);
+
+    /* performance computation
+       (2/3)*n2*(3m - n) */
+    perf = (double)((2.0 * m * n * n) - ((2.0 / 3.0) * n * n * n)) / time_min
+           / FLOPS_PER_UNIT_PERF;
+    if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+        perf *= 4.0;
+
+    /* output validation */
+    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    if(!FLA_EXTREME_CASE_TEST)
+    {
+        validate_orgqr(tst_api, m, n, A, lda, Q, R, datatype, residual,
+                       params->imatrix_char);
+    }
+    /* check for output matrix when inputs as extreme values */
+    else
+    {
+        if(!check_extreme_value(datatype, m, n, Q, lda, params->imatrix_char))
         {
-            lwork = -1;
-            create_vector(datatype, &work, 1);
-
-            /* call to  geqrf API */
-            invoke_geqrf(datatype, &m, &n, NULL, &lda, NULL, work, &lwork, &info);
-
-            if(info == 0)
-            {
-                /* Get work size */
-                lwork = get_work_value(datatype, work);
-            }
-
-            /* Output buffers will be freshly allocated for each iterations, free up
-            the current output buffers.*/
-            free_vector(work);
+            residual = DBL_MAX;
         }
-
-        /* create work buffer */
-        create_vector(datatype, &work, lwork);
-        create_vector(datatype, &work_test, n);
-
-        /* QR Factorisation on matrix A to generate Q and R */
-        invoke_geqrf(datatype, &m, &n, A_test, &lda, T_test, work, &lwork, &info);
-
-        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &R, n);
-        reset_matrix(datatype, n, n, R, n);
-        copy_matrix(datatype, "Upper", n, n, A_test, lda, R, n);
-
-        copy_matrix(datatype, "full", m, n, A_test, lda, Q, lda);
-
-        /*invoke org2r API */
-        prepare_org2r_run(m, n, Q, lda, T_test, work_test, datatype, n_repeats, &time_min, &info,
-                          interfacetype);
-
-        /* performance computation
-           (2/3)*n2*(3m - n) */
-        perf = (double)((2.0 * m * n * n) - ((2.0 / 3.0) * n * n * n)) / time_min
-               / FLOPS_PER_UNIT_PERF;
-        if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
-            perf *= 4.0;
-
-        /* output validation */
-        FLA_TEST_CHECK_EINFO(residual, info, einfo);
-        if(!FLA_EXTREME_CASE_TEST)
-        {
-            validate_orgqr(tst_api, m, n, A, lda, Q, R, work_test, datatype, residual,
-                           params->imatrix_char);
-        }
-        /* check for output matrix when inputs as extreme values */
         else
         {
-            if(!check_extreme_value(datatype, m, n, Q, lda, params->imatrix_char))
-            {
-                residual = DBL_MAX;
-            }
-            else
-            {
-                residual = err_thresh;
-            }
-            FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
+            residual = err_thresh;
         }
-
-        /* Free up the buffers */
-        free_matrix(A);
-        free_matrix(A_test);
-        free_matrix(work);
-        free_vector(work_test);
-        free_vector(T_test);
-        free_matrix(Q);
-        free_matrix(R);
+        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
     }
+
+    /* Free up the buffers */
+    free_matrix(A);
+    free_matrix(A_test);
+    free_matrix(work);
+    free_vector(T_test);
+    free_matrix(Q);
+    free_matrix(R);
 }
 
-void prepare_org2r_run(integer m, integer n, void *A, integer lda, void *T, void *work,
+void prepare_org2r_run(integer m, integer n, void *A, integer lda, void *T,
                        integer datatype, integer n_repeats, double *time_min_, integer *info,
                        integer interfacetype)
 {
     integer i;
-    void *A_save = NULL;
+    void *A_save = NULL, *work = NULL;
     double t_min = 1e9, exe_time;
 
     /* Make a copy of the input matrix A. Same input values will be passed in
@@ -251,7 +252,7 @@ void prepare_org2r_run(integer m, integer n, void *A, integer lda, void *T, void
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
         copy_matrix(datatype, "full", m, n, A_save, lda, A, lda);
-
+        create_vector(datatype, &work, n);
 #if ENABLE_CPP_TEST
         if(interfacetype == LAPACK_CPP_TEST)
         {
@@ -273,6 +274,7 @@ void prepare_org2r_run(integer m, integer n, void *A, integer lda, void *T, void
 
         /* Get the best execution time */
         t_min = fla_min(t_min, exe_time);
+        free_vector(work);
     }
 
     *time_min_ = t_min;

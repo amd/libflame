@@ -487,9 +487,19 @@ void fla_test_lapack_suite(char *input_filename, test_params_t *params)
 
     fla_test_output_info("\n");
     if((params->test_lapacke_interface == 1))
+    {
         fla_test_output_info("--- LAPACKE-level operation tests ---------------------\n");
+        if (params->interfacetype == LAPACKE_ROW_TEST)
+            fla_test_output_info("\nMatrix layout: Row-major\n");
+        else
+            fla_test_output_info("\nMatrix layout: Column-major\n");
+    }
     else
+    {
         fla_test_output_info("--- LAPACK-level operation tests ---------------------\n");
+        if (params->interfacetype == LAPACK_CPP_TEST)
+            fla_test_output_info("\nInterface: CPP\n");
+    }
     fla_test_output_info("\n");
 
     // Attempt to open input file corresponding to input_filename as
@@ -841,6 +851,8 @@ void fla_test_read_linear_param(const char *file_name, test_params_t *params)
     READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].ihi);
     /* rcond */
     READ_CONFIG_PARAM_DBL(params->lin_solver_paramslist[i].rcond);
+    /* side */
+    READ_CONFIG_PARAM_STR(params->lin_solver_paramslist[i].side);
     /* solver_threshold */
     READ_CONFIG_PARAM_FLT(params->lin_solver_paramslist[i].solver_threshold);
 

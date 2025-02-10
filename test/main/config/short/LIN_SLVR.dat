@@ -36,4 +36,5 @@ ldab_gbcon  4 7 15 65
 ilo 2 40 1
 ihi 6 55 100
 rcond -1 -1 -1
+side L R R L
 RSEE_Threshold 15.0 15.0 20.0 50.0

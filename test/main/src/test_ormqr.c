@@ -1,12 +1,11 @@
 /*
-    Copyright (C) 2025-2026, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
-#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -19,14 +18,17 @@ void fla_test_ormqr_experiment(char *tst_api, test_params_t *params, integer dat
                                integer einfo);
 void prepare_ormqr_run(char side, char trans, integer m, integer n, integer k, integer m_A,
                        integer n_A, void *A, integer lda, void *tau, void *c, integer ldc,
-                       integer datatype, integer *info, integer interfacetype, int matrix_layout,
-                       test_params_t *params);
+                       integer datatype, integer n_repeats, double *time_min_, integer *info,
+                       integer interfacetype, int matrix_layout);
 void invoke_ormqr(integer datatype, char *side, char *trans, integer *m, integer *n, integer *k,
                   void *a, integer *lda, void *tau, void *c, integer *ldc, void *work,
                   integer *lwork, integer *info);
 double prepare_lapacke_ormqr_run(integer datatype, int matrix_layout, char side, char trans,
                                  integer m, integer n, integer k, integer m_A, integer n_A, void *A,
                                  integer lda, void *tau, void *c, integer ldc, integer *info);
+integer invoke_lapacke_ormqr(integer datatype, int matrix_layout, char side, char trans, integer m,
+                             integer n, integer k, void *a, integer lda, const void *tau, void *c,
+                             integer ldc);
 
 void fla_test_ormqr(integer argc, char **argv, test_params_t *params)
 {
@@ -38,7 +40,7 @@ void fla_test_ormqr(integer argc, char **argv, test_params_t *params)
     if(argc == 1)
     {
         g_lwork = -1;
-        g_config_data = 1;
+        config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, RECT_INPUT, params, LIN, fla_test_ormqr_experiment);
@@ -63,7 +65,8 @@ void fla_test_ormqr(integer argc, char **argv, test_params_t *params)
         N = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].kl = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
         /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
-        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
+        if((g_ext_fptr == NULL) && params->test_lapacke_interface
+           && (params->matrix_major == LAPACK_ROW_MAJOR))
         {
             row_major_ormqr_lda = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
             row_major_ormqr_ldc = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
@@ -78,7 +81,6 @@ void fla_test_ormqr(integer argc, char **argv, test_params_t *params)
         g_lwork = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
 
         n_repeats = strtoimax(argv[11], &endptr, CLI_DECIMAL_BASE);
-        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -134,14 +136,13 @@ void fla_test_ormqr_experiment(char *tst_api, test_params_t *params, integer dat
                                integer einfo)
 {
     integer m, n, k, lda, ldc, m_A, n_A;
-    void *A = NULL, *A_test = NULL, *A_test_save = NULL, *T_test = NULL, *C = NULL, *C_test = NULL;
-    void *work = NULL, *qwork = NULL, *tau = NULL, *tau_save = NULL;
+    void *A = NULL, *A_test = NULL, *T_test = NULL, *C = NULL, *C_test = NULL;
+    void *work = NULL, *qwork = NULL, *tau = NULL;
     integer lwork = -1, info = 0;
     char side, trans;
     double residual, err_thresh;
-    void *filename = NULL;
 
-    integer interfacetype = params->interfacetype;
+    integer test_lapacke_interface = params->test_lapacke_interface;
     int layout = params->matrix_major;
 
     /* Get input matrix dimensions.*/
@@ -150,7 +151,7 @@ void fla_test_ormqr_experiment(char *tst_api, test_params_t *params, integer dat
     k = params->lin_solver_paramslist[0].kl;
     side = params->lin_solver_paramslist[pci].side;
     trans = params->lin_solver_paramslist[pci].transr;
-    if((datatype == COMPLEX || datatype == DOUBLE_COMPLEX) && same_char(trans, 'T'))
+    if((datatype == COMPLEX || datatype == DOUBLE_COMPLEX) && trans == 'T')
         trans = 'C';
     lda = params->lin_solver_paramslist[pci].lda;
     ldc = params->lin_solver_paramslist[pci].ldb;
@@ -158,7 +159,7 @@ void fla_test_ormqr_experiment(char *tst_api, test_params_t *params, integer dat
     time_min = 0.;
     perf = 0.;
     err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
-    if(same_char(side, 'L'))
+    if(side == 'L')
     {
         m_A = m;
         n_A = n;
@@ -170,7 +171,7 @@ void fla_test_ormqr_experiment(char *tst_api, test_params_t *params, integer dat
     }
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(g_config_data)
+    if(config_data)
     {
         if(k < fla_min(m, n))
         {
@@ -188,90 +189,63 @@ void fla_test_ormqr_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Create input matrix parameters */
     create_matrix(datatype, LAPACK_COL_MAJOR, m_A, k, &A, lda);
+    init_matrix(datatype, A, m_A, k, lda, g_ext_fptr, params->imatrix_char);
+
+    /* Make a copy of input matrix A to validate the API functionality.*/
     create_matrix(datatype, LAPACK_COL_MAJOR, m_A, k, &A_test, lda);
+    copy_matrix(datatype, "full", m_A, k, A, lda, A_test, lda);
 
     /* Create and initialize matrix C */
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &C, ldc);
+    init_matrix(datatype, C, m, n, ldc, g_ext_fptr, params->imatrix_char);
+    /* Scaling matrix with values around overflow, underflow for ORGQR/UNGQR */
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
+    {
+        scale_matrix_underflow_overflow_ormqr(datatype, m_A, k, A, lda, params->imatrix_char);
+    }
+    /* Make a copy of matrix C to validate the API functionality.*/
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &C_test, ldc);
+    copy_matrix(datatype, "full", m, n, C, ldc, C_test, ldc);
 
     /* Create tau vector */
-    create_vector(datatype, &tau, k);
+    create_vector(datatype, &T_test, fla_min(m_A, n_A));
+    lwork = -1;
 
-    if(!FLA_BRT_VERIFICATION_RUN)
+    create_vector(datatype, &qwork, 1);
+    invoke_geqrf(datatype, &m_A, &k, NULL, &lda, NULL, qwork, &lwork, &info);
+    if(info == 0)
     {
-        init_matrix(datatype, A, m_A, k, lda, g_ext_fptr, params->imatrix_char);
-
-        /* Make a copy of input matrix A to validate the API functionality.*/
-        copy_matrix(datatype, "full", m_A, k, A, lda, A_test, lda);
-
-        init_matrix(datatype, C, m, n, ldc, g_ext_fptr, params->imatrix_char);
-        /* Scaling matrix with values around overflow, underflow for ORGQR/UNGQR */
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
-        {
-            scale_matrix_underflow_overflow_ormqr(datatype, m_A, k, A, lda, params->imatrix_char);
-        }
-        /* Make a copy of matrix C to validate the API functionality.*/
-        create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &C_test, ldc);
-        copy_matrix(datatype, "full", m, n, C, ldc, C_test, ldc);
-
-        if(g_ext_fptr == NULL && !(FLA_EXTREME_CASE_TEST))
-        {
-            lwork = -1;
-            create_vector(datatype, &T_test, fla_min(m_A, k));
-            create_vector(datatype, &qwork, 1);
-            invoke_geqrf(datatype, &m_A, &k, NULL, &lda, NULL, qwork, &lwork, &info);
-            if(info == 0)
-            {
-                lwork = get_work_value(datatype, qwork);
-            }
-            else
-            {
-                lwork = fla_max(1, n_A);
-            }
-
-            /* create work buffer */
-            create_vector(datatype, &work, lwork);
-
-            /* QR Factorisation on matrix A to generate Q and R */
-            invoke_geqrf(datatype, &m_A, &k, A_test, &lda, T_test, work, &lwork, &info);
-            copy_vector(datatype, fla_min(n_A, k), T_test, 1, tau, 1);
-            
-            free_vector(T_test);
-            free_vector(work);
-            free_vector(qwork);
-        }
+        lwork = get_work_value(datatype, qwork);
     }
-    FLA_BRT_PROCESS_THREE_INPUT(datatype, m_A, k, A_test, lda, datatype, 1, fla_min(n_A, k), tau, 1,
-                                datatype, m, n, C, ldc, "ccdddddd", side, trans, m, n, k, lda, ldc,
-                                g_lwork)
+    else
+    {
+        lwork = fla_max(1, n_A);
+    }
 
-    /* Save A_test and tau before API call for input arg preservation check */
-    create_matrix(datatype, LAPACK_COL_MAJOR, m_A, k, &A_test_save, lda);
-    copy_matrix(datatype, "full", m_A, k, A_test, lda, A_test_save, lda);
-    create_vector(datatype, &tau_save, k);
-    copy_vector(datatype, k, tau, 1, tau_save, 1);
+    /* create work buffer */
+    create_vector(datatype, &work, lwork);
 
+    /* QR Factorisation on matrix A to generate Q and R */
+    invoke_geqrf(datatype, &m_A, &k, A_test, &lda, T_test, work, &lwork, &info);
+    create_vector(datatype, &tau, k);
+    copy_vector(datatype, fla_min(n_A, k), T_test, 1, tau, 1);
     /*invoke ormqr API */
-    prepare_ormqr_run(side, trans, m, n, k, m_A, n_A, A_test, lda, tau, C, ldc, datatype, &info,
-                      interfacetype, layout, params);
+    prepare_ormqr_run(side, trans, m, n, k, m_A, n_A, A_test, lda, tau, C, ldc, datatype,
+                      n_repeats, &time_min, &info, test_lapacke_interface, layout);
 
     /* performance computation
        perf = 2nk(2m-k) if side = L
             = 2mk(2n-k) if side = R */
-    perf = (double)((2.0 * n_A * k) * (2.0 * m_A - k)) / time_min / FLOPS_PER_UNIT_PERF;
+    perf = (double)((2.0 * n_A * k) * (2 * m_A - k)) / time_min / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         perf *= 4.0;
 
     /* output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    IF_FLA_BRT_VALIDATION(
-        m, n, store_outputs_base(filename, params, 1, 0, datatype, m, n, C, lda),
-        validate_ormqr(tst_api, side, trans, m, n, k, A_test, A_test_save, lda, C, tau, tau_save,
-                       ldc, C_test, datatype, residual, params->imatrix_char, params),
-        check_reproducibility_base(filename, params, 1, 0, datatype, m, n, C, lda))
-    else if(!FLA_EXTREME_CASE_TEST)
+    if(!FLA_EXTREME_CASE_TEST)
     {
-        validate_ormqr(tst_api, side, trans, m, n, k, A_test, A_test_save, lda, C, tau, tau_save,
-                       ldc, C_test, datatype, residual, params->imatrix_char, params);
+        validate_ormqr(tst_api, side, trans, m, n, k, A_test, lda, C, tau, ldc, C_test, datatype,
+                       residual, params->imatrix_char);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -289,28 +263,23 @@ void fla_test_ormqr_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
-    if(!FLA_BRT_VERIFICATION_RUN)
-    {
-        free_matrix(C_test);
-    }
-free_buffers:
-    FLA_FREE_FILENAME(filename)
     free_matrix(A);
     free_matrix(A_test);
-    free_matrix(A_test_save);
-    free_vector(tau_save);
+    free_vector(work);
+    free_vector(T_test);
     free_vector(tau);
     free_matrix(C);
+    free_matrix(C_test);
 }
 
 void prepare_ormqr_run(char side, char trans, integer m, integer n, integer k, integer m_A,
                        integer n_A, void *A, integer lda, void *tau, void *c, integer ldc,
-                       integer datatype, integer *info, integer interfacetype, int layout,
-                       test_params_t *params)
+                       integer datatype, integer n_repeats, double *time_min_, integer *info,
+                       integer interfacetype, int layout)
 {
-    integer lwork;
+    integer i, lwork;
     void *C_save = NULL, *work = NULL;
-    double exe_time;
+    double time_min = 1e9, exe_time;
 
     /* Make a copy of the input matrix C. Same input values will be passed in
        each iteration.*/
@@ -350,7 +319,7 @@ void prepare_ormqr_run(char side, char trans, integer m, integer n, integer k, i
     }
     *info = 0;
 
-    FLA_EXEC_LOOP_BEGIN
+    for(i = 0; i < n_repeats && *info == 0; ++i)
     {
         /* Restore input matrix C value for each iteration*/
         copy_matrix(datatype, "full", m, n, C_save, ldc, c, ldc);
@@ -382,12 +351,12 @@ void prepare_ormqr_run(char side, char trans, integer m, integer n, integer k, i
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Update ctx and loop conditions */
-        FLA_EXEC_LOOP_UPDATE_WITH_INFO
+        /* Get the best execution time */
+        time_min = fla_min(time_min, exe_time);
         free_vector(work);
     }
 
-    free_matrix(C_save);
+    *time_min_ = time_min;
 }
 
 double prepare_lapacke_ormqr_run(integer datatype, int layout, char side, char trans, integer m,
@@ -398,11 +367,11 @@ double prepare_lapacke_ormqr_run(integer datatype, int layout, char side, char t
     integer lda_t = lda, ldc_t = ldc;
     void *A_t = NULL, *C_t = NULL;
 
-    if(lda >= m_A)
+    if (lda >= m_A)
     {
         /* Configure leading dimensions as per the input matrix layout */
-        SELECT_LDA(g_ext_fptr, g_config_data, layout, fla_max(m, n), row_major_ormqr_lda, lda_t);
-        SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_ormqr_ldc, ldc_t);
+        SELECT_LDA(g_ext_fptr, config_data, layout, fla_max(m, n), row_major_ormqr_lda, lda_t);
+        SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_ormqr_ldc, ldc_t);
 
         A_t = A;
         C_t = C;
@@ -427,7 +396,7 @@ double prepare_lapacke_ormqr_run(integer datatype, int layout, char side, char t
 
     exe_time = fla_test_clock() - exe_time;
 
-    if(lda >= m_A && layout == LAPACK_ROW_MAJOR && *info == 0)
+    if(layout == LAPACK_ROW_MAJOR && *info == 0)
     {
         /* In case of row_major matrix layout, convert output matrices
            to column_major layout */
@@ -470,4 +439,38 @@ void invoke_ormqr(integer datatype, char *side, char *trans, integer *m, integer
             break;
         }
     }
+}
+
+integer invoke_lapacke_ormqr(integer datatype, int layout, char side, char trans, integer m,
+                             integer n, integer k, void *a, integer lda, const void *tau, void *c,
+                             integer ldc)
+{
+    integer info = 0;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            info = LAPACKE_sormqr(layout, side, trans, m, n, k, a, lda, tau, c, ldc);
+            break;
+        }
+
+        case DOUBLE:
+        {
+            info = LAPACKE_dormqr(layout, side, trans, m, n, k, a, lda, tau, c, ldc);
+            break;
+        }
+
+        case COMPLEX:
+        {
+            info = LAPACKE_cunmqr(layout, side, trans, m, n, k, a, lda, tau, c, ldc);
+            break;
+        }
+
+        case DOUBLE_COMPLEX:
+        {
+            info = LAPACKE_zunmqr(layout, side, trans, m, n, k, a, lda, tau, c, ldc);
+            break;
+        }
+    }
+    return info;
 }

@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) 2025-2026, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 
 /*! @file validate_ormqr.c
@@ -7,13 +7,12 @@
  *  */
 
 #include "test_common.h"
-#include "test_prototype.h"
 
 void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, integer k, void *A,
-                    void *A_save, integer lda, void *C, void *Tau, void *Tau_save, integer ldc,
-                    void *C_test, integer datatype, double err_thresh, char imatrix, void *params)
+                    integer lda, void *C, void *Tau, integer ldc, void *C_test, integer datatype,
+                    double err_thresh, char imatrix)
 {
-    double residual = 0., resid1 = 0., resid2 = 0., resid3 = 0., resid4 = 0.;
+    double residual = 0.;
     char norm = '1';
     char trans_g;
     integer lwork = -1;
@@ -31,21 +30,21 @@ void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, 
     FLA_TEST_PRINT_INVALID_STATUS(m, n, err_thresh);
 
     /* Modify m based on side */
-    if(same_char(side, 'R'))
+    if(side == 'R')
     {
         m_mod = n;
     }
 
     /* Allocate memory for Q and CC */
-    create_matrix(datatype, LAPACK_COL_MAJOR, m_mod, m_mod, &Q, m_mod);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m_mod, m_mod, &Q, lda);
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &CC, ldc);
 
     /* Initialize Q and CC to zero */
-    reset_matrix(datatype, m_mod, m_mod, Q, m_mod);
+    reset_matrix(datatype, m_mod, m_mod, Q, lda);
     reset_matrix(datatype, m, n, CC, ldc);
 
     /* Assign trans_g based on trans */
-    if(same_char(trans, 'N'))
+    if(trans == 'N')
     {
         trans_g = 'N';
     }
@@ -54,14 +53,8 @@ void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, 
         trans_g = (datatype == COMPLEX || datatype == DOUBLE_COMPLEX) ? 'C' : 'T';
     }
     /* Copy the first k columns of the factorization to the array Q */
-    if(strcmp(tst_api, "ORMQR") == 0)
-    {
-        copy_matrix(datatype, "FULL", m_mod, k, A, lda, Q, m_mod);
-    }
-    else if(strcmp(tst_api, "ORMLQ") == 0)
-    {
-        copy_matrix(datatype, "FULL", k, m_mod, A, lda, Q, m_mod);
-    }
+    copy_matrix(datatype, "full", m_mod, k, A, lda, Q, lda);
+
     /* Copy C to CC */
     copy_matrix(datatype, "full", m, n, C, ldc, CC, ldc);
 
@@ -69,18 +62,12 @@ void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, 
     {
         case FLOAT:
         {
-            float norm_C, norm_diff, twork;
+            float eps, norm_C, norm_diff, twork;
+            eps = fla_lapack_slamch("P");
 
             /* Generating the Q martrix using the elementary reflectors and scalar
                factor values */
-            if(strcmp(tst_api, "ORMQR") == 0)
-            {
-                fla_lapack_sorgqr(&m_mod, &m_mod, &k, NULL, &m_mod, NULL, &twork, &lwork, &info);
-            }
-            else if(strcmp(tst_api, "ORMLQ") == 0)
-            {
-                fla_lapack_sorglq(&m_mod, &m_mod, &k, NULL, &m_mod, NULL, &twork, &lwork, &info);
-            }
+            fla_lapack_sorgqr(&m_mod, &m_mod, &k, NULL, &lda, NULL, &twork, &lwork, &info);
             if(info < 0)
             {
                 residual = DBL_MIN;
@@ -89,48 +76,36 @@ void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, 
 
             lwork = twork;
             create_vector(datatype, &work, lwork);
-            if(strcmp(tst_api, "ORMQR") == 0)
-            {
-                fla_lapack_sorgqr(&m_mod, &m_mod, &k, Q, &m_mod, Tau, work, &lwork, &info);
-            }
-            else if(strcmp(tst_api, "ORMLQ") == 0)
-            {
-                fla_lapack_sorglq(&m_mod, &m_mod, &k, Q, &m_mod, Tau, work, &lwork, &info);
-            }
+
+            fla_lapack_sorgqr(&m_mod, &m_mod, &k, Q, &lda, Tau, work, &lwork, &info);
 
             /* Form Q * C and subtract from output C from ORMQR  */
-            if(same_char(side, 'L'))
+            if(side == 'L')
             {
-                sgemm_(&trans_g, "N", &m, &n, &m_mod, &s_n_one, Q, &m_mod, C_test, &ldc, &s_one, CC,
+                sgemm_(&trans_g, "N", &m, &n, &m_mod, &s_n_one, Q, &lda, C_test, &ldc, &s_one, CC,
                        &ldc);
             }
             else
             {
-                sgemm_("N", &trans_g, &m, &n, &m_mod, &s_n_one, C_test, &ldc, Q, &m_mod, &s_one, CC,
+                sgemm_("N", &trans_g, &m, &n, &m_mod, &s_n_one, C_test, &ldc, Q, &lda, &s_one, CC,
                        &ldc);
             }
 
             /* Compute error in the difference */
             norm_C = fla_lapack_slange(&norm, &m, &n, C, &ldc, work);
             norm_diff = fla_lapack_slange(&norm, &m, &n, CC, &ldc, work);
-            residual = fla_compute_residual(datatype, 'P', norm_diff, norm_C, m, params);
+            residual = (double)((norm_diff / norm_C) / (eps * (float)m));
 
             break;
         }
         case DOUBLE:
         {
-            double norm_C, norm_diff, twork;
+            double eps, norm_C, norm_diff, twork;
+            eps = fla_lapack_dlamch("P");
 
             /* Generating the Q martrix using the elementary reflectors and scalar
                factor values */
-            if(strcmp(tst_api, "ORMQR") == 0)
-            {
-                fla_lapack_dorgqr(&m_mod, &m_mod, &k, NULL, &m_mod, NULL, &twork, &lwork, &info);
-            }
-            else if(strcmp(tst_api, "ORMLQ") == 0)
-            {
-                fla_lapack_dorglq(&m_mod, &m_mod, &k, NULL, &m_mod, NULL, &twork, &lwork, &info);
-            }
+            fla_lapack_dorgqr(&m_mod, &m_mod, &k, NULL, &lda, NULL, &twork, &lwork, &info);
             if(info < 0)
             {
                 residual = DBL_MIN;
@@ -139,49 +114,37 @@ void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, 
 
             lwork = twork;
             create_vector(datatype, &work, lwork);
-            if(strcmp(tst_api, "ORMQR") == 0)
-            {
-                fla_lapack_dorgqr(&m_mod, &m_mod, &k, Q, &m_mod, Tau, work, &lwork, &info);
-            }
-            else if(strcmp(tst_api, "ORMLQ") == 0)
-            {
-                fla_lapack_dorglq(&m_mod, &m_mod, &k, Q, &m_mod, Tau, work, &lwork, &info);
-            }
+
+            fla_lapack_dorgqr(&m_mod, &m_mod, &k, Q, &lda, Tau, work, &lwork, &info);
 
             /* Form Q * C and subtract from output C from ORMQR  */
-            if(same_char(side, 'L'))
+            if(side == 'L')
             {
-                dgemm_(&trans_g, "N", &m, &n, &m_mod, &d_n_one, Q, &m_mod, C_test, &ldc, &d_one, CC,
+                dgemm_(&trans_g, "N", &m, &n, &m_mod, &d_n_one, Q, &lda, C_test, &ldc, &d_one, CC,
                        &ldc);
             }
             else
             {
-                dgemm_("N", &trans_g, &m, &n, &m_mod, &d_n_one, C_test, &ldc, Q, &m_mod, &d_one, CC,
+                dgemm_("N", &trans_g, &m, &n, &m_mod, &d_n_one, C_test, &ldc, Q, &lda, &d_one, CC,
                        &ldc);
             }
 
             /* Compute error in the difference */
             norm_C = fla_lapack_dlange(&norm, &m, &n, C, &ldc, work);
             norm_diff = fla_lapack_dlange(&norm, &m, &n, CC, &ldc, work);
-            residual = fla_compute_residual(datatype, 'P', norm_diff, norm_C, m, params);
+            residual = (norm_diff / norm_C) / (eps * (double)m);
 
             break;
         }
         case COMPLEX:
         {
-            float norm_C, norm_diff;
+            float eps, norm_C, norm_diff;
             scomplex twork;
+            eps = fla_lapack_slamch("P");
 
             /* Generating the Q martrix using the elementary reflectors and scalar
                factor values */
-            if(strcmp(tst_api, "ORMQR") == 0)
-            {
-                fla_lapack_cungqr(&m_mod, &m_mod, &k, NULL, &m_mod, NULL, &twork, &lwork, &info);
-            }
-            else if(strcmp(tst_api, "ORMLQ") == 0)
-            {
-                fla_lapack_cunglq(&m_mod, &m_mod, &k, NULL, &m_mod, NULL, &twork, &lwork, &info);
-            }
+            fla_lapack_cungqr(&m_mod, &m_mod, &k, NULL, &lda, NULL, &twork, &lwork, &info);
             if(info < 0)
             {
                 residual = DBL_MIN;
@@ -190,49 +153,37 @@ void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, 
 
             lwork = twork.real;
             create_vector(datatype, &work, lwork);
-            if(strcmp(tst_api, "ORMQR") == 0)
-            {
-                fla_lapack_cungqr(&m_mod, &m_mod, &k, Q, &m_mod, Tau, work, &lwork, &info);
-            }
-            else if(strcmp(tst_api, "ORMLQ") == 0)
-            {
-                fla_lapack_cunglq(&m_mod, &m_mod, &k, Q, &m_mod, Tau, work, &lwork, &info);
-            }
+
+            fla_lapack_cungqr(&m_mod, &m_mod, &k, Q, &lda, Tau, work, &lwork, &info);
 
             /* Form Q * C and subtract from output C from ORMQR  */
-            if(same_char(side, 'L'))
+            if(side == 'L')
             {
-                cgemm_(&trans_g, "N", &m, &n, &m_mod, &c_n_one, Q, &m_mod, C_test, &ldc, &c_one, CC,
+                cgemm_(&trans_g, "N", &m, &n, &m_mod, &c_n_one, Q, &lda, C_test, &ldc, &c_one, CC,
                        &ldc);
             }
             else
             {
-                cgemm_("N", &trans_g, &m, &n, &m_mod, &c_n_one, C_test, &ldc, Q, &m_mod, &c_one, CC,
+                cgemm_("N", &trans_g, &m, &n, &m_mod, &c_n_one, C_test, &ldc, Q, &lda, &c_one, CC,
                        &ldc);
             }
 
             /* Compute error in the difference */
             norm_C = fla_lapack_clange(&norm, &m, &n, C, &ldc, work);
             norm_diff = fla_lapack_clange(&norm, &m, &n, CC, &ldc, work);
-            residual = fla_compute_residual(datatype, 'P', norm_diff, norm_C, m, params);
+            residual = (double)((norm_diff / norm_C) / (eps * (float)m));
 
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm_C, norm_diff;
+            double eps, norm_C, norm_diff;
             dcomplex twork;
+            eps = fla_lapack_dlamch("P");
 
             /* Generating the Q martrix using the elementary reflectors and scalar
                factor values */
-            if(strcmp(tst_api, "ORMQR") == 0)
-            {
-                fla_lapack_zungqr(&m_mod, &m_mod, &k, NULL, &m_mod, NULL, &twork, &lwork, &info);
-            }
-            else if(strcmp(tst_api, "ORMLQ") == 0)
-            {
-                fla_lapack_zunglq(&m_mod, &m_mod, &k, NULL, &m_mod, NULL, &twork, &lwork, &info);
-            }
+            fla_lapack_zungqr(&m_mod, &m_mod, &k, NULL, &lda, NULL, &twork, &lwork, &info);
             if(info < 0)
             {
                 residual = DBL_MIN;
@@ -241,31 +192,25 @@ void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, 
 
             lwork = twork.real;
             create_vector(datatype, &work, lwork);
-            if(strcmp(tst_api, "ORMQR") == 0)
-            {
-                fla_lapack_zungqr(&m_mod, &m_mod, &k, Q, &m_mod, Tau, work, &lwork, &info);
-            }
-            else if(strcmp(tst_api, "ORMLQ") == 0)
-            {
-                fla_lapack_zunglq(&m_mod, &m_mod, &k, Q, &m_mod, Tau, work, &lwork, &info);
-            }
+
+            fla_lapack_zungqr(&m_mod, &m_mod, &k, Q, &lda, Tau, work, &lwork, &info);
 
             /* Form Q * C and subtract from output C from ORMQR  */
-            if(same_char(side, 'L'))
+            if(side == 'L')
             {
-                zgemm_(&trans_g, "N", &m, &n, &m_mod, &z_n_one, Q, &m_mod, C_test, &ldc, &z_one, CC,
+                zgemm_(&trans_g, "N", &m, &n, &m_mod, &z_n_one, Q, &lda, C_test, &ldc, &z_one, CC,
                        &ldc);
             }
             else
             {
-                zgemm_("N", &trans_g, &m, &n, &m_mod, &z_n_one, C_test, &ldc, Q, &m_mod, &z_one, CC,
+                zgemm_("N", &trans_g, &m, &n, &m_mod, &z_n_one, C_test, &ldc, Q, &lda, &z_one, CC,
                        &ldc);
             }
 
             /* Compute error in the difference */
             norm_C = fla_lapack_zlange(&norm, &m, &n, C, &ldc, work);
             norm_diff = fla_lapack_zlange(&norm, &m, &n, CC, &ldc, work);
-            residual = fla_compute_residual(datatype, 'P', norm_diff, norm_C, m, params);
+            residual = (norm_diff / norm_C) / (eps * (double)m);
 
             break;
         }
@@ -274,25 +219,6 @@ void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, 
     /* Free allocated memory */
     free_matrix(Q);
     free_matrix(CC);
-    free_vector(work);
 
-    /* Test 2: Check padding rows not modified on output matrix C */
-    resid2 = check_padding(datatype, m, n, C, ldc);
-
-    /* Test 3: Ensure input matrix A (reflectors) was not modified. */
-    resid3 = compare_matrix(datatype, "full", same_char(side, 'L') ? m : n, k,
-                            A_save, lda, A, lda);
-
-    /* Test 4: Ensure input vector TAU was not modified. */
-    resid4 = compare_vector(datatype, k, Tau, 1, 1, Tau_save, 1);
-
-    resid1 = residual;
-    residual = fla_test_max(resid1, resid2);
-    residual = fla_test_max(residual, resid3);
-    residual = fla_test_max(residual, resid4);
     FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
-    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
-    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
-    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
-    FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
 }

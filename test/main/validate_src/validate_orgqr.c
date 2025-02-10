@@ -12,10 +12,11 @@ extern double perf;
 extern double time_min;
 
 void validate_orgqr(char *tst_api, integer m, integer n, void *A, integer lda, void *Q, void *R,
-                    void *work, integer datatype, double err_thresh, char imatrix)
+                    integer datatype, double err_thresh, char imatrix)
 {
     integer k;
     double residual, resid1 = 0., resid2 = 0.;
+    void *work = NULL;
 
     /* Early return conditions */
     if(m == 0 || n == 0)

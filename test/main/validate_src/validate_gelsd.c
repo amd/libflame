@@ -169,7 +169,7 @@ void validate_gelsd(char *tst_api, integer m, integer n, integer nrhs, void *A, 
                 /* Compute |B-AX| = 0 */
                 compute_matrix_norm(datatype, NORM, m, n, A, lda, &norm_a, imatrix, work);
                 compute_matrix_norm(datatype, NORM, m, nrhs, B, ldb, &norm_b, imatrix, work);
-                compute_matrix_norm(datatype, NORM, n, nrhs, X, nrhs, &norm_x, imatrix, work);
+                compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm_x, imatrix, work);
                 eps = fla_lapack_slamch("E");
 
                 /* Compute B-AX */

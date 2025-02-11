@@ -254,7 +254,7 @@ char*     FLA_Get_AOCL_Version( void )
      char lfmainversion[] = "AOCL-LAPACK ";
      char* lfversion = lflibversion.version;
      char lapackversion[30];
-     snprintf(lapackversion, sizeof(lapackversion), ", supports LAPACK %d.%d.%d",
+     snprintf(lapackversion, sizeof(lapackversion), ", supports LAPACK %"FLA_IS".%"FLA_IS".%"FLA_IS"",
               vers_major, vers_minor, vers_patch);
      int length, i;
 

@@ -38,7 +38,7 @@ config.mk
 
 # -- monolithic headers --
 include/**/*.h
-
+include/**/*.hh
 # -- build system directories --
 
 config

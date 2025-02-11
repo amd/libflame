@@ -213,7 +213,7 @@ def flatten_header( inputfile, header_dirpaths, cursp ):
 	ostring  = ""
 
 	# Open the input file to process.
-	ifile = open( inputfile, "r" )
+	ifile = open( inputfile, "r" ,encoding="utf-8")
 
 	# Iterate over the lines in the file.
 	while True:
@@ -501,7 +501,7 @@ def main():
 	echov1_n( "." )
 
 	# Open the output file.
-	ofile = open( outputfile, "w" )
+	ofile = open( outputfile, "w" ,encoding="utf-8")
 
 	# Precompile the main regular expression used to isolate #include
 	# directives and the headers they reference. This regex object will

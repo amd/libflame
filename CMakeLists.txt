@@ -894,6 +894,17 @@ execute_process(
     OUTPUT_VARIABLE CMD_OUTPUT
 	)
 
+# Run python script to generate libflame_interface header at configuration time
+set (INTERFACE_HEADER_DIR_PATHS "${CMAKE_SOURCE_DIR}/src/src_cpp")
+set (INTERFACE_TARGET_PATH "${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/libflame_interface.hh")
+execute_process(
+	COMMAND ${PYTHON_EXE} ${BLIS_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
+	"${INTERFACE_HEADER_DIR_PATHS}/libflame_interface.hh" "${INTERFACE_TARGET_PATH}"
+	"${BASE_INC_PATH}" "${INTERFACE_HEADER_DIR_PATHS}"
+	RESULT_VARIABLE CMD_RESULT
+    OUTPUT_VARIABLE CMD_OUTPUT
+	)
+
 include_directories(${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/.)
 if(ENABLE_AOCL_DTL)
 	#only enabling aocl dtl when ENABLE_AOCL_DTL is set to a valid value
@@ -980,15 +991,8 @@ set(LIBFLAME_PUBLIC_HEADERS	"include/FLAME.h"
 				"src/lapacke/LAPACKE/include/lapacke_mangling.h"
 				"src/lapacke/LAPACKE/include/lapacke.h"
 				"src/lapacke/LAPACKE/include/lapack.h"
-				"src/src_cpp/libflame_interface.hh"
-				"src/src_cpp/libflame.hh"
-				"src/src_cpp/libflame_interface_aux.hh"
-				"src/src_cpp/libflame_interface_blas.hh"
-				"src/src_cpp/libflame_interface_eig.hh"
-				"src/src_cpp/libflame_interface_lin.hh"
-				"src/src_cpp/libflame_interface_lsq.hh"
-				"src/src_cpp/libflame_interface_orth.hh"
-				"src/src_cpp/libflame_interface_svd.hh")
+				"${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/libflame_interface.hh"
+				"src/src_cpp/libflame.hh")
 
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${LIBFLAME_PUBLIC_HEADERS}")
 

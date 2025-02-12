@@ -230,7 +230,7 @@ void prepare_hetri_rook_run(integer datatype, integer n, void *A, char uplo, int
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_save, lda);
 
     /* Work buffer allocation */
-    lwork = n;
+    lwork = fla_max(1, n);
 
     *info = 0;
     for(i = 0; i < n_repeats && *info == 0; i++)

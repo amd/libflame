@@ -12,7 +12,10 @@ void validate_hetri_rook(char *tst_api, char uplo, integer n, void *A, void *A_i
                          integer datatype, double err_thresh, char imatrix)
 { 
     if(n == 0)
+    {
+        FLA_TEST_PRINT_STATUS_AND_RETURN(n, n, err_thresh);
         return;
+    }
     /*If UPLO = 'U', the upper triangular part of the
       inverse is formed in upper triangular part of A_inv;
       if UPLO = 'L' the lower triangular part of the 

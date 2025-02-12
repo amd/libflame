@@ -3,11 +3,11 @@ exec_prefix=${prefix}
 libdir=${prefix}/lib
 includedir=${prefix}/include
 
-Name: @PROJECT_NAME@
+Name: AOCL-LAPACK
 Description: AOCL-LAPACK is a high performant implementation of Linear Algebra PACKage(LAPACK)
 Version: @PROJECT_VERSION@
-Requires: blis
+Requires: @REQ_BLAS_PKGNAME@
 Requires.private: @REQ_LIBAOCLUTILS_PKGCONFIG@
 Cflags: -I${includedir}
-Libs: -L${libdir} -l@flamelib@ 
+Libs: -L${libdir} -l@REQ_PKG_LIB@ 
 Libs.private: @LIBS_LINK_FLAGS@

@@ -43,11 +43,9 @@ set (CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin")
 # Added for debugging purpose
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 
-if(WIN32)
-	set (PYTHON_EXE "python")
-else()
-	set (PYTHON_EXE "python3")
-endif()
+# getting python3 interpreter
+find_package(Python3 REQUIRED COMPONENTS Interpreter)
+
 ### Making LF_ISA_CONFIG case insensitive ###
 string(TOLOWER "${LF_ISA_CONFIG}" lf_isa_config_lower)
 
@@ -61,7 +59,7 @@ if (${lf_isa_config_lower} STREQUAL "auto")
     set(AUTO_CONFIG_PY "${CMAKE_SOURCE_DIR}/build/auto_config.py")
     # Run python script to find the architecture family name
     execute_process(
-          COMMAND ${PYTHON_EXE} ${AUTO_CONFIG_PY}
+          COMMAND ${Python3_EXECUTABLE} ${AUTO_CONFIG_PY}
           RESULT_VARIABLE CMD_RESULT
           OUTPUT_VARIABLE CMD_OUTPUT
           OUTPUT_STRIP_TRAILING_WHITESPACE)
@@ -524,6 +522,19 @@ if(ENABLE_LAPACKE_LSAME_FORTRAN_STRLEN)
     add_definitions(-DLAPACK_LSAME_FORTRAN_STRLEN_END)
 endif()
 
+set(REQ_LIBAOCLUTILS_PKGNAME "")
+# Configuration for pkg-config
+if(NOT ENABLE_EMBED_AOCLUTILS)
+	# set the variable if aocl-utils library is not embedded
+	set(REQ_LIBAOCLUTILS_PKGNAME "aocl-utils")
+endif()
+# Get the required AOCL-BLAS library pkg name
+if (ENABLE_MULTITHREADING)
+    set(REQ_BLAS_PKGNAME "aocl-blas-mt")
+else()
+	set(REQ_BLAS_PKGNAME "aocl-blas")
+endif()
+
 # Include the AOCL-BLAS path check cmake directory
 include(cmake/find_dep_libs.cmake)
 
@@ -588,7 +599,6 @@ if(WIN32)
 endif()
 
 #genreating the monolithic headers
-find_package(PythonInterp REQUIRED)
 if(WIN32)
 	set (MK_HEADER_DIR_PATHS "${CMAKE_SOURCE_DIR}/windows/build")
 elseif(UNIX)
@@ -865,7 +875,7 @@ set (BLIS1__H_SRC_PATH "${CMAKE_SOURCE_DIR}/src/base/flamec/blis/include/blis1.h
 set (BLIS_FLATTEN_HEADER "${CMAKE_SOURCE_DIR}/build/flatten-headers.py")
 
 execute_process(
-    COMMAND ${PYTHON_EXE} ${BLIS_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
+    COMMAND ${Python3_EXECUTABLE} ${BLIS_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
 	"${BLIS1__H_SRC_PATH}" "${BLIS1_TARGET_PATH}" "${BASE_INC_PATH}" "${MK_HEADER_DIR_PATHS}"
 	RESULT_VARIABLE CMD_RESULT
     OUTPUT_VARIABLE CMD_OUTPUT
@@ -877,7 +887,7 @@ set (FLAME_TARGET_PATH "${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/FLA_f2c.h")
 set (FLAME_H_SRC_PATH  "${CMAKE_SOURCE_DIR}/src/base/flamec/include/FLA_f2c.h" )
 
 execute_process(
-    COMMAND ${PYTHON_EXE} ${BLIS_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
+    COMMAND ${Python3_EXECUTABLE} ${BLIS_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
 	"${FLAME_H_SRC_PATH}" "${FLAME_TARGET_PATH}" "${BASE_INC_PATH}" "${MK_HEADER_DIR_PATHS}"
 	RESULT_VARIABLE CMD_RESULT
     OUTPUT_VARIABLE CMD_OUTPUT
@@ -888,7 +898,7 @@ execute_process(
 set (FLAME_TARGET_PATH "${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/FLAME.h")
 set (FLAME_H_SRC_PATH  "${CMAKE_SOURCE_DIR}/src/base/flamec/include/FLAME.h" )
 execute_process(
-    COMMAND ${PYTHON_EXE} ${BLIS_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
+    COMMAND ${Python3_EXECUTABLE} ${BLIS_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
 	"${FLAME_H_SRC_PATH}" "${FLAME_TARGET_PATH}" "${BASE_INC_PATH}" "${MK_HEADER_DIR_PATHS}"
 	RESULT_VARIABLE CMD_RESULT
     OUTPUT_VARIABLE CMD_OUTPUT
@@ -898,7 +908,7 @@ execute_process(
 set (INTERFACE_HEADER_DIR_PATHS "${CMAKE_SOURCE_DIR}/src/src_cpp")
 set (INTERFACE_TARGET_PATH "${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/libflame_interface.hh")
 execute_process(
-	COMMAND ${PYTHON_EXE} ${BLIS_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
+	COMMAND ${Python3_EXECUTABLE} ${BLIS_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
 	"${INTERFACE_HEADER_DIR_PATHS}/libflame_interface.hh" "${INTERFACE_TARGET_PATH}"
 	"${BASE_INC_PATH}" "${INTERFACE_HEADER_DIR_PATHS}"
 	RESULT_VARIABLE CMD_RESULT
@@ -1344,16 +1354,9 @@ if(BUILD_LAPACKE_TEST)
 endif()
 
 
-set(REQ_LIBAOCLUTILS_PKGCONFIG "")
-# Configuration for pkg-config
-if(NOT ENABLE_EMBED_AOCLUTILS)
-	# set the variable if aocl-utils library is not embedded
-	set(REQ_LIBAOCLUTILS_PKGCONFIG "aocl-utils")
-endif()
-
-set(flamelib ${PROJECT_NAME})
-configure_file(flame.pc.in flame.pc @ONLY)
-install(FILES ${CMAKE_BINARY_DIR}/flame.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pkgconfig)
+set(REQ_PKG_LIB ${PROJECT_NAME})
+configure_file(aocl-lapack.pc.in aocl-lapack.pc @ONLY)
+install(FILES ${CMAKE_BINARY_DIR}/aocl-lapack.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/pkgconfig)
 
 # To View Added Definitions and C Flags
 get_directory_property( DirDefs COMPILE_DEFINITIONS )

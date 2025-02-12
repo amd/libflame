@@ -1307,7 +1307,7 @@ if (BUILD_TEST OR BUILD_LEGACY_TEST)
 		elseif (ENABLE_AOCL_BLAS)
 			# If BLAS library is provided from environment, then use it
 			set_target_properties(blas PROPERTIES
-			IMPORTED_IMPLIB ${BLAS_LIBRARY}}
+			IMPORTED_IMPLIB ${BLAS_LIBRARY}
 			POSITION_INDEPENDENT_CODE ON
 			)
 		endif()

@@ -470,6 +470,8 @@ void sstemr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
     iil = 0;
     iiu = 0;
     nsplit = 0;
+    r1 = 0.f;
+    r2 = 0.f;
     if(valeig)
     {
         /* We do not reference VL, VU in the cases RANGE = 'I','A' */

@@ -52,7 +52,7 @@ function(aocl_libs)
     IF(BUILD_SHARED_LIBS)
       SET(UTILS_LIB_NAME "libaoclutils")
     ELSE(BUILD_SHARED_LIBS)
-      SET(BLAS_LIB_NAME "libaoclutils_static")
+      SET(UTILS_LIB_NAME "libaoclutils_static")
     ENDIF(BUILD_SHARED_LIBS)
 
     find_library(AOCL_BLAS_LIB
@@ -82,7 +82,7 @@ function(aocl_libs)
     find_path(AOCL_UTILS_INCLUDE_DIR
     NAMES alci_c.h  alci.h  arch.h  enum.h  macros.h
     HINTS ${AOCL_ROOT}/amd-utils ${AOCL_ROOT}
-    PATH_SUFFIXES "include/${ILP_DIR}/alci" "include_${ILP_DIR}/alci" "include/alci"
+    PATH_SUFFIXES "include/${ILP_DIR}" "include_${ILP_DIR}" "include"
     DOC "AOCL-UTILS headers"
     )
 

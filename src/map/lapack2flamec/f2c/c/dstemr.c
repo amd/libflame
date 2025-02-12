@@ -468,6 +468,8 @@ void dstemr_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e
     iil = 0;
     iiu = 0;
     nsplit = 0;
+    r1 = 0.;
+    r2 = 0.;
     if(valeig)
     {
         /* We do not reference VL, VU in the cases RANGE = 'I','A' */

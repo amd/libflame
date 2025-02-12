@@ -144,7 +144,7 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaed4 inputs: n %" FLA_IS ", i__ %" FLA_IS "", *n, *i__);
     /* System generated locals */
-    integer i__1, i__2, i__3;
+    integer i__1, i__2;
     doublereal d__1;
     /* Builtin functions */
     double sqrt(doublereal);
@@ -507,7 +507,6 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
         phi = 0.;
         i__1 = *n;
         i__2 = *i__ - 1;
-        i__3 = *i__ + 2;
 
         for(j = 1; j <= i__2; ++j)
         {

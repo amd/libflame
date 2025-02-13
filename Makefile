@@ -577,10 +577,10 @@ endif
 # Consolidated libflame_interface.hh header creation
 $(CPP_INTERFACE_H_FLAT):
 ifeq ($(ENABLE_VERBOSE),yes)
-	$(FLATTEN_H) -c -v1 $(CPP_INTERFACE_SRC_PATH) $@ $(BASE_INC_PATH) "$(CPP_TEMPLATE_H_PATH)"
+	$(FLATTEN_H) -v1 $(CPP_INTERFACE_SRC_PATH) $@ $(BASE_INC_PATH) "$(CPP_TEMPLATE_H_PATH)"
 else
 	@echo -n "Generating monolithic $(@)"
-	@$(FLATTEN_H) -c -v1 $(CPP_INTERFACE_SRC_PATH) $@ $(BASE_INC_PATH) "$(CPP_TEMPLATE_H_PATH)"
+	@$(FLATTEN_H) -v1 $(CPP_INTERFACE_SRC_PATH) $@ $(BASE_INC_PATH) "$(CPP_TEMPLATE_H_PATH)"
 	@echo "Generated monolithic $@"
 endif
 

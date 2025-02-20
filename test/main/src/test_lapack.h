@@ -472,9 +472,12 @@ typedef struct AUX_paramlist_t
     float aux_threshold; // threshold for the aux API
 
     /* Parameter for 'larfg' API */
+    integer nb; // The number of leading rows and columns of A to be reduced.
     integer incx_larfg; // The increment between successive values of X in larfg(incx > 0)
     integer incv; // The increment between elements of V for larf
     integer ldc; // The leading dimension of the array C for larf
+    integer ldx; // The leading dimension of the array X. LDX >= max(1,M).
+    integer ldy; // The leading dimension of the array Y. LDY >= max(1,N).
     integer num_repeats;
     integer num_tests;
     integer num_data_types;

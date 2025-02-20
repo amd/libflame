@@ -56,6 +56,7 @@ void fla_test_getrfnp(integer argc, char **argv, test_params_t *params);
 void fla_test_getrfnpi(integer argc, char **argv, test_params_t *params);
 void fla_test_hetri_rook(integer argc, char **argv, test_params_t *params);
 void fla_test_ormqr(integer argc, char **argv, test_params_t *params);
+void fla_test_labrd(integer argc, char **argv, test_params_t *params);
 void fla_test_gejsv(integer argc, char **argv, test_params_t *params);
 
 #define LIN_ID 0
@@ -95,7 +96,7 @@ OPERATIONS API_test_functions[]
        {LIN_ID, "getrfnp", fla_test_getrfnp}, {LIN_ID, "getrfnpi", fla_test_getrfnpi},
        {LIN_ID, "hetrf", fla_test_hetrf},     {LIN_ID, "hetri_rook", fla_test_hetri_rook},
        {LIN_ID, "ormqr", fla_test_ormqr},     {LIN_ID, "unmqr", fla_test_ormqr},
-       {SVD_ID, "gejsv", fla_test_gejsv}};
+       {SVD_ID, "gejsv", fla_test_gejsv},     {AUX_ID, "labrd", fla_test_labrd}};
 
 /* Add test API's group entry below */
 char *API_test_group[] = {"LIN", "EIG", "SVD", "AUX"};

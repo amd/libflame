@@ -389,6 +389,11 @@
 #define fla_lapack_cunmqr CUNMQR_
 #define fla_lapack_zunmqr ZUNMQR_
 
+#define fla_lapack_slabrd SLABRD_
+#define fla_lapack_dlabrd DLABRD_
+#define fla_lapack_clabrd CLABRD_
+#define fla_lapack_zlabrd ZLABRD_
+
 #define fla_lapack_sgejsv SGEJSV_
 #define fla_lapack_dgejsv DGEJSV_
 #define fla_lapack_cgejsv CGEJSV_
@@ -719,6 +724,11 @@
 #define fla_lapack_cunmqr CUNMQR
 #define fla_lapack_zunmqr ZUNMQR
 
+#define fla_lapack_slabrd SLABRD
+#define fla_lapack_dlabrd DLABRD
+#define fla_lapack_clabrd CLABRD
+#define fla_lapack_zlabrd ZLABRD
+
 #define fla_lapack_sgejsv SGEJSV
 #define fla_lapack_dgejsv DGEJSV
 #define fla_lapack_cgejsv CGEJSV
@@ -1046,6 +1056,11 @@
 #define fla_lapack_dormqr dormqr
 #define fla_lapack_cunmqr cunmqr
 #define fla_lapack_zunmqr zunmqr
+
+#define fla_lapack_slabrd slabrd
+#define fla_lapack_dlabrd dlabrd
+#define fla_lapack_clabrd clabrd
+#define fla_lapack_zlabrd zlabrd
 
 #define fla_lapack_sgejsv sgejsv
 #define fla_lapack_dgejsv dgejsv
@@ -1375,6 +1390,11 @@
 #define fla_lapack_dormqr dormqr_
 #define fla_lapack_cunmqr cunmqr_
 #define fla_lapack_zunmqr zunmqr_
+
+#define fla_lapack_slabrd slabrd_
+#define fla_lapack_dlabrd dlabrd_
+#define fla_lapack_clabrd clabrd_
+#define fla_lapack_zlabrd zlabrd_
 
 #define fla_lapack_sgejsv sgejsv_
 #define fla_lapack_dgejsv dgejsv_

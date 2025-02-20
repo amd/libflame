@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_labrd.c
@@ -13,7 +13,7 @@ extern double perf;
 extern double time_min;
 integer Ut = 0, Vt = 0;
 
-/* Helper functions for collecting output from LABRD and recreating A in bidiagonal form */
+// Helper functions for collecting output from LABRD and recreating A in bidiagonal form
 void collect_LABRD_Output(integer datatype, integer m, integer n, integer nb, void *A_test,
                           integer lda, void *X, integer ldx, void *Y, integer ldy, void *U, void *V,
                           void *XU, void *VY);
@@ -23,9 +23,9 @@ void create_bidiagonal_form(integer datatype, integer m, integer n, integer nb, 
 void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, void *A_test,
                     integer lda, void *d, void *e, void *tauq, void *taup, void *X, integer ldx,
                     void *Y, integer ldy, integer datatype, double err_thresh, FILE *g_ext_fptr,
-                    char imatrix, void *params)
+                    char imatrix)
 {
-    double residual = err_thresh, resid1 = 0., resid2 = 0., resid3 = 0., resid4 = 0.;
+    double residual = err_thresh;
     /* Early return conditions */
     if(m == 0 || n == 0)
     {
@@ -48,7 +48,7 @@ void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, vo
      */
     void *V = NULL, *U = NULL, *XU = NULL, *VY = NULL;
     void *A_BD = NULL;
-    /* Creating matrices for outputs to be collected from LABRD */
+    // Creating matrices for outputs to be collected from LABRD
     create_matrix(datatype, LAPACK_COL_MAJOR, m, nb, &V, m);
     create_matrix(datatype, LAPACK_COL_MAJOR, nb, n, &U, nb);
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &XU, m);
@@ -119,7 +119,7 @@ void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, vo
             {
                 void *LR = NULL, *RR = NULL, *work = NULL;
                 float tauQ, tauP;
-                /* Collecting elementary reflector V from outputs in A */
+                // Collecting elementary reflector V from outputs in A
                 tauQ = ((float *)tauq)[i];
                 create_vector(datatype, &LR, m);
                 for(int j = 0; j < m; j++)
@@ -131,12 +131,12 @@ void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, vo
                     else
                         ((float *)LR)[j] = ((float *)A_test)[j + i * lda];
                 }
-                /* Applying elementary reflector V to the left of the matrix */
+                // Applying elementary reflector V to the left of the matrix
                 create_vector(datatype, &work, n);
                 slarf_("L", &m, &n, LR, &i_one, &tauQ, A, &lda, work);
                 free_vector(LR);
                 free_vector(work);
-                /* Collecting elementary reflector U from outputs in A */
+                // Collecting elementary reflector U from outputs in A
                 tauP = ((float *)taup)[i];
                 create_vector(datatype, &RR, n);
                 for(int j = 0; j < n; j++)
@@ -148,18 +148,19 @@ void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, vo
                     else
                         ((float *)RR)[j] = ((float *)A_test)[i + j * lda];
                 }
-                /* Applying elementary reflector U to the right of the matrix */
+                // Applying elementary reflector U to the right of the matrix
                 create_vector(datatype, &work, m);
                 slarf_("R", &m, &n, RR, &i_one, &tauP, A, &lda, work);
                 free_vector(RR);
                 free_vector(work);
             }
-            /* Get difference between the 2 bidiagonal forms of A */
-            float norm, norm_A;
+            // Get difference between the 2 bidiagonal forms of A
+            float norm, norm_A, eps;
+            eps = fla_lapack_slamch("P");
             norm_A = fla_lapack_slange("1", &m, &n, A, &lda, NULL);
             matrix_difference(datatype, m, n, A, lda, A_BD, lda);
             norm = fla_lapack_slange("1", &m, &n, A, &lda, NULL);
-            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
+            residual = (double)(norm / (eps * norm_A * n));
             break;
         }
 
@@ -169,7 +170,7 @@ void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, vo
             {
                 void *LR = NULL, *RR = NULL, *work = NULL;
                 double tauQ, tauP;
-                /* Collecting elementary reflector V from outputs in A */
+                // Collecting elementary reflector V from outputs in A
                 tauQ = ((double *)tauq)[i];
                 create_vector(datatype, &LR, m);
                 for(int j = 0; j < m; j++)
@@ -181,12 +182,12 @@ void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, vo
                     else
                         ((double *)LR)[j] = ((double *)A_test)[j + i * lda];
                 }
-                /* Applying elementary reflector V to the left of the matrix */
+                // Applying elementary reflector V to the left of the matrix
                 create_vector(datatype, &work, n);
                 dlarf_("L", &m, &n, LR, &i_one, &tauQ, A, &lda, work);
                 free_vector(LR);
                 free_vector(work);
-                /* Collecting elementary reflector U from outputs in A */
+                // Collecting elementary reflector U from outputs in A
                 tauP = ((double *)taup)[i];
                 create_vector(datatype, &RR, n);
                 for(int j = 0; j < n; j++)
@@ -198,18 +199,19 @@ void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, vo
                     else
                         ((double *)RR)[j] = ((double *)A_test)[i + j * lda];
                 }
-                /* Applying elementary reflector U to the right of the matrix */
+                // Applying elementary reflector U to the right of the matrix
                 create_vector(datatype, &work, m);
                 dlarf_("R", &m, &n, RR, &i_one, &tauP, A, &lda, work);
                 free_vector(RR);
                 free_vector(work);
             }
-            /* Get difference between the 2 bidiagonal forms of A */
-            double norm, norm_A;
+            // Get difference between the 2 bidiagonal forms of A
+            double norm, norm_A, eps;
+            eps = fla_lapack_dlamch("P");
             norm_A = fla_lapack_dlange("1", &m, &n, A, &lda, NULL);
             matrix_difference(datatype, m, n, A, lda, A_BD, lda);
             norm = fla_lapack_dlange("1", &m, &n, A, &lda, NULL);
-            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
+            residual = (double)(norm / (eps * norm_A * n));
             break;
         }
 
@@ -219,9 +221,9 @@ void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, vo
             {
                 void *LR = NULL, *RR = NULL, *work = NULL;
                 scomplex tauQ, tauP;
-                /* Collecting elementary reflector V from outputs in A */
+                // Collecting elementary reflector V from outputs in A
                 tauQ = ((scomplex *)tauq)[i];
-                /* Apply conjugate of TAUQ to larf to use apply V**H */
+                // Apply conjugate of TAUQ to larf to use apply V**H
                 tauQ.imag = (-1) * tauQ.imag;
                 create_vector(datatype, &LR, m);
                 for(int j = 0; j < m; j++)
@@ -236,12 +238,12 @@ void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, vo
                         ((scomplex *)LR)[j].imag = ((scomplex *)A_test)[j + i * lda].imag;
                     }
                 }
-                /* Applying elementary reflector V to the left of the matrix */
+                // Applying elementary reflector V to the left of the matrix
                 create_vector(datatype, &work, n);
                 clarf_("L", &m, &n, LR, &i_one, &tauQ, A, &lda, work);
                 free_vector(LR);
                 free_vector(work);
-                /* Collecting elementary reflector U from outputs in A */
+                // Collecting elementary reflector U from outputs in A
                 tauP = ((scomplex *)taup)[i];
                 create_vector(datatype, &RR, n);
                 for(int j = 0; j < n; j++)
@@ -253,22 +255,23 @@ void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, vo
                     else
                     {
                         ((scomplex *)RR)[j].real = ((scomplex *)A_test)[i + j * lda].real;
-                        /* Output in A is of conjugate format and needs to be negated */
+                        // Output in A is of conjugate format and needs to be negated
                         ((scomplex *)RR)[j].imag = (-1) * ((scomplex *)A_test)[i + j * lda].imag;
                     }
                 }
-                /* Applying elementary reflector U to the right of the matrix */
+                // Applying elementary reflector U to the right of the matrix
                 create_vector(datatype, &work, m);
                 clarf_("R", &m, &n, RR, &i_one, &tauP, A, &lda, work);
                 free_vector(RR);
                 free_vector(work);
             }
-            /* Get difference between the 2 bidiagonal forms of A */
-            float norm, norm_A;
+            // Get difference between the 2 bidiagonal forms of A
+            float norm, norm_A, eps;
+            eps = fla_lapack_slamch("P");
             norm_A = fla_lapack_clange("1", &m, &n, A, &lda, NULL);
             matrix_difference(datatype, m, n, A, lda, A_BD, lda);
             norm = fla_lapack_clange("1", &m, &n, A, &lda, NULL);
-            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
+            residual = (double)(norm / (eps * norm_A * n));
             break;
         }
 
@@ -278,9 +281,9 @@ void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, vo
             {
                 void *LR = NULL, *RR = NULL, *work = NULL;
                 dcomplex tauQ, tauP;
-                /* Collecting elementary reflector V from outputs in A */
+                // Collecting elementary reflector V from outputs in A
                 tauQ = ((dcomplex *)tauq)[i];
-                /* Apply conjugate of TAUQ to larf to use apply V**H */
+                // Apply conjugate of TAUQ to larf to use apply V**H
                 tauQ.imag = (-1) * tauQ.imag;
                 create_vector(datatype, &LR, m);
                 for(int j = 0; j < m; j++)
@@ -295,12 +298,12 @@ void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, vo
                         ((dcomplex *)LR)[j].imag = ((dcomplex *)A_test)[j + i * lda].imag;
                     }
                 }
-                /* Applying elementary reflector V to the left of the matrix */
+                // Applying elementary reflector V to the left of the matrix
                 create_vector(datatype, &work, n);
                 zlarf_("L", &m, &n, LR, &i_one, &tauQ, A, &lda, work);
                 free_vector(LR);
                 free_vector(work);
-                /* Collecting elementary reflector U from outputs in A */
+                // Collecting elementary reflector U from outputs in A
                 tauP = ((dcomplex *)taup)[i];
                 create_vector(datatype, &RR, n);
                 for(int j = 0; j < n; j++)
@@ -312,22 +315,23 @@ void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, vo
                     else
                     {
                         ((dcomplex *)RR)[j].real = ((dcomplex *)A_test)[i + j * lda].real;
-                        /* Output in A is of conjugate format and needs to be negated */
+                        // Output in A is of conjugate format and needs to be negated
                         ((dcomplex *)RR)[j].imag = (-1) * ((dcomplex *)A_test)[i + j * lda].imag;
                     }
                 }
-                /* Applying elementary reflector U to the right of the matrix */
+                // Applying elementary reflector U to the right of the matrix
                 create_vector(datatype, &work, m);
                 zlarf_("R", &m, &n, RR, &i_one, &tauP, A, &lda, work);
                 free_vector(RR);
                 free_vector(work);
             }
-            /* Get difference between the 2 bidiagonal forms of A */
-            double norm, norm_A;
+            // Get difference between the 2 bidiagonal forms of A
+            double norm, norm_A, eps;
+            eps = fla_lapack_dlamch("P");
             norm_A = fla_lapack_zlange("1", &m, &n, A, &lda, NULL);
             matrix_difference(datatype, m, n, A, lda, A_BD, lda);
             norm = fla_lapack_zlange("1", &m, &n, A, &lda, NULL);
-            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
+            residual = (double)(norm / (eps * norm_A * n));
             break;
         }
     }
@@ -336,22 +340,7 @@ void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, vo
     free_matrix(XU);
     free_matrix(VY);
     free_matrix(A_BD);
-
-    /* Test 2: Check padding rows of A not modified */
-    resid2 = check_padding(datatype, m, n, A_test, lda);
-    /* Test 3: Check padding rows of X not modified */
-    resid3 = check_padding(datatype, m, nb, X, ldx);
-    /* Test 4: Check padding rows of Y not modified */
-    resid4 = check_padding(datatype, n, nb, Y, ldy);
-    residual = fla_test_max(resid1, resid2);
-    residual = fla_test_max(residual, resid3);
-    residual = fla_test_max(residual, resid4);
-
     FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
-    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
-    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
-    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
-    FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
 }
 void collect_LABRD_Output(integer datatype, integer m, integer n, integer nb, void *A_test,
                           integer lda, void *X, integer ldx, void *Y, integer ldy, void *U, void *V,
@@ -361,7 +350,7 @@ void collect_LABRD_Output(integer datatype, integer m, integer n, integer nb, vo
     {
         case FLOAT:
         {
-            /* Collecting V from outputs in A */
+            // Collecting V from outputs in A
             for(int j = 0; j < nb; j++)
             {
                 for(int i = 0; i < m; i++)
@@ -374,7 +363,7 @@ void collect_LABRD_Output(integer datatype, integer m, integer n, integer nb, vo
                         ((float *)V)[i + j * m] = ((float *)A_test)[i + j * lda];
                 }
             }
-            /* Collecting U**H from outputs in A */
+            // Collecting U**H from outputs in A
             for(int j = 0; j < n; j++)
             {
                 for(int i = 0; i < nb; i++)
@@ -395,7 +384,7 @@ void collect_LABRD_Output(integer datatype, integer m, integer n, integer nb, vo
         }
         case DOUBLE:
         {
-            /* Collecting V from outputs in A */
+            // Collecting V from outputs in A
             for(int j = 0; j < nb; j++)
             {
                 for(int i = 0; i < m; i++)
@@ -408,7 +397,7 @@ void collect_LABRD_Output(integer datatype, integer m, integer n, integer nb, vo
                         ((double *)V)[i + j * m] = ((double *)A_test)[i + j * lda];
                 }
             }
-            /* Collecting U**H from outputs in A */
+            // Collecting U**H from outputs in A
             for(int j = 0; j < n; j++)
             {
                 for(int i = 0; i < nb; i++)
@@ -429,7 +418,7 @@ void collect_LABRD_Output(integer datatype, integer m, integer n, integer nb, vo
         }
         case COMPLEX:
         {
-            /* Collecting V from outputs in A */
+            // Collecting V from outputs in A
             for(int j = 0; j < nb; j++)
             {
                 for(int i = 0; i < m; i++)
@@ -445,7 +434,7 @@ void collect_LABRD_Output(integer datatype, integer m, integer n, integer nb, vo
                     }
                 }
             }
-            /* Collecting U**H from outputs in A */
+            // Collecting U**H from outputs in A
             for(int j = 0; j < n; j++)
             {
                 for(int i = 0; i < nb; i++)
@@ -471,7 +460,7 @@ void collect_LABRD_Output(integer datatype, integer m, integer n, integer nb, vo
         }
         case DOUBLE_COMPLEX:
         {
-            /* Collecting V from outputs in A */
+            // Collecting V from outputs in A
             for(int j = 0; j < nb; j++)
             {
                 for(int i = 0; i < m; i++)
@@ -487,7 +476,7 @@ void collect_LABRD_Output(integer datatype, integer m, integer n, integer nb, vo
                     }
                 }
             }
-            /* Collecting U**H from outputs in A */
+            // Collecting U**H from outputs in A
             for(int j = 0; j < n; j++)
             {
                 for(int i = 0; i < nb; i++)
@@ -522,7 +511,7 @@ void create_bidiagonal_form(integer datatype, integer m, integer n, integer nb, 
             {
                 for(integer j = 0; j < n; j++)
                 {
-                    /* The first nb positions of the primary diagonal is stored in d */
+                    // The first nb positions of the primary diagonal is stored in d
                     if(i == j && i < nb)
                     {
                         ((float *)A)[i + j * lda] = ((float *)d)[i];
@@ -539,7 +528,7 @@ void create_bidiagonal_form(integer datatype, integer m, integer n, integer nb, 
                     {
                         ((float *)A)[i + j * lda] = ((float *)e)[j];
                     }
-                    /* The first nb rows and columns are reduced to 0 */
+                    // The first nb rows and columns are reduced to 0
                     else if(i < nb || j < nb)
                     {
                         ((float *)A)[i + j * lda] = s_zero;
@@ -564,7 +553,7 @@ void create_bidiagonal_form(integer datatype, integer m, integer n, integer nb, 
             {
                 for(integer j = 0; j < n; j++)
                 {
-                    /* The first nb positions of the primary diagonal is stored in d */
+                    // The first nb positions of the primary diagonal is stored in d
                     if(i == j && i < nb)
                     {
                         ((double *)A)[i + j * lda] = ((double *)d)[i];
@@ -581,7 +570,7 @@ void create_bidiagonal_form(integer datatype, integer m, integer n, integer nb, 
                     {
                         ((double *)A)[i + j * lda] = ((double *)e)[j];
                     }
-                    /* The first nb rows and columns are reduced to 0 */
+                    // The first nb rows and columns are reduced to 0
                     else if(i < nb || j < nb)
                     {
                         ((double *)A)[i + j * lda] = d_zero;
@@ -606,7 +595,7 @@ void create_bidiagonal_form(integer datatype, integer m, integer n, integer nb, 
             {
                 for(integer j = 0; j < n; j++)
                 {
-                    /* The first nb positions of the primary diagonal is stored in d */
+                    // The first nb positions of the primary diagonal is stored in d
                     if(i == j && i < nb)
                     {
                         ((scomplex *)A)[i + j * lda].real = ((float *)d)[i];
@@ -626,7 +615,7 @@ void create_bidiagonal_form(integer datatype, integer m, integer n, integer nb, 
                         ((scomplex *)A)[i + j * lda].real = ((float *)e)[j];
                         ((scomplex *)A)[i + j * lda].imag = s_zero;
                     }
-                    /* The first nb rows and columns are reduced to 0 */
+                    // The first nb rows and columns are reduced to 0
                     else if(i < nb || j < nb)
                     {
                         ((scomplex *)A)[i + j * lda] = c_zero;
@@ -654,7 +643,7 @@ void create_bidiagonal_form(integer datatype, integer m, integer n, integer nb, 
             {
                 for(integer j = 0; j < n; j++)
                 {
-                    /* The first nb positions of the primary diagonal is stored in d */
+                    // The first nb positions of the primary diagonal is stored in d
                     if(i == j && i < nb)
                     {
                         ((dcomplex *)A)[i + j * lda].real = ((double *)d)[i];
@@ -674,7 +663,7 @@ void create_bidiagonal_form(integer datatype, integer m, integer n, integer nb, 
                         ((dcomplex *)A)[i + j * lda].real = ((double *)e)[j];
                         ((dcomplex *)A)[i + j * lda].imag = d_zero;
                     }
-                    /* The first nb rows and columns are reduced to 0 */
+                    // The first nb rows and columns are reduced to 0
                     else if(i < nb || j < nb)
                     {
                         ((dcomplex *)A)[i + j * lda] = z_zero;

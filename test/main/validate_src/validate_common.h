@@ -207,7 +207,10 @@ void validate_hetri_rook(char *tst_api, char uplo, integer n, void *A, void *A_i
 void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, integer k, void *A,
                     integer lda, void *C, void *Tau, integer ldc, void *C_test, integer datatype,
                     double err_thresh, char imatrix);
-
+void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A,void *A_test, 
+                    integer lda, void *d, void *e, void *tauq,  void *taup, void *X, integer ldx, 
+                    void *Y, integer ldy, integer datatype, double err_thresh, FILE *g_ext_fptr,
+                    char imatrix);
 void validate_gejsv(char *tst_api, char joba, char jobu, char jobv, char jobr, char jobt, char jobp,
                     integer m, integer n, void *A, integer lda, void *S, void *S_test, void *U,
                     integer ldu, void *V, integer ldv, void *stat, integer *istat,

@@ -1316,8 +1316,14 @@ void fla_test_read_aux_params(const char *file_name, test_params_t *params)
         params->aux_paramslist[i].num_ranges = num_ranges;
     }
 
+    /* nb */
+    READ_CONFIG_PARAM_INT(params->aux_paramslist[i].nb);
     /* lda */
     READ_CONFIG_PARAM_INT(params->aux_paramslist[i].lda);
+    /* ldx */
+    READ_CONFIG_PARAM_INT(params->aux_paramslist[i].ldx);
+    /* ldy */
+    READ_CONFIG_PARAM_INT(params->aux_paramslist[i].ldy);
     /* incx */
     READ_CONFIG_PARAM_INT(params->aux_paramslist[i].incx);
     /* incy */

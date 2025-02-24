@@ -80,7 +80,7 @@ function(aocl_libs)
 
     # add aocl-utils headers
     find_path(AOCL_UTILS_INCLUDE_DIR
-    NAMES alci_c.h  alci.h  arch.h  enum.h  macros.h
+    NAMES alci/alci_c.h  alci/alci.h  alci/arch.h  alci/enum.h  alci/macros.h
     HINTS ${AOCL_ROOT}/amd-utils ${AOCL_ROOT}
     PATH_SUFFIXES "include/${ILP_DIR}" "include_${ILP_DIR}" "include"
     DOC "AOCL-UTILS headers"

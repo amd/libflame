@@ -1356,7 +1356,7 @@ endif()
 
 set(REQ_PKG_LIB ${PROJECT_NAME})
 configure_file(aocl-lapack.pc.in aocl-lapack.pc @ONLY)
-install(FILES ${CMAKE_BINARY_DIR}/aocl-lapack.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/pkgconfig)
+install(FILES ${CMAKE_BINARY_DIR}/aocl-lapack.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
 
 # To View Added Definitions and C Flags
 get_directory_property( DirDefs COMPILE_DEFINITIONS )

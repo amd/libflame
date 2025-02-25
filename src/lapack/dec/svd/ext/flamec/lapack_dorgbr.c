@@ -1,6 +1,8 @@
-/* dorgbr.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
- #include "FLAME.h"
+ /* ./dorgbr.f -- translated by f2c (version 20190311). You must link the resulting object file with
+  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
  #include "FLA_f2c.h" /* Table of constant values */
  static integer c_n1 = -1;
  /* > \brief \b DORGBR */
@@ -9,11 +11,17 @@
  /* http://www.netlib.org/lapack/explore-html/ */
  /* > \htmlonly */
  /* > Download DORGBR + dependencies */
- /* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dorgbr. f"> */
+ /* > <a
+  * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dorgbr.
+  * f"> */
  /* > [TGZ]</a> */
- /* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dorgbr. f"> */
+ /* > <a
+  * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dorgbr.
+  * f"> */
  /* > [ZIP]</a> */
- /* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorgbr. f"> */
+ /* > <a
+  * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorgbr.
+  * f"> */
  /* > [TXT]</a> */
  /* > \endhtmlonly */
  /* Definition: */
@@ -147,203 +155,241 @@
  /* > \author Univ. of California Berkeley */
  /* > \author Univ. of Colorado Denver */
  /* > \author NAG Ltd. */
- /* > \ingroup doubleGBcomputational */
+ /* > \ingroup ungbr */
  /* ===================================================================== */
  /* Subroutine */
- int lapack_dorgbr(char *vect, integer *m, integer *n, integer *k, doublereal *a, integer *lda, doublereal *tau, doublereal *work, integer *lwork, integer *info) {
- /* System generated locals */
- integer a_dim1, a_offset, i__1, i__2, i__3;
- /* Local variables */
- integer i__, j, mn;
- extern logical lsame_(char *, char *, integer, integer);
- integer iinfo;
- logical wantq;
- extern /* Subroutine */
- void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
- extern int lapack_dorglq( integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *), lapack_dorgqr( integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *);
- integer lwkopt;
- logical lquery;
- /* -- LAPACK computational routine -- */
- /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
- /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
- /* .. Scalar Arguments .. */
- /* .. */
- /* .. Array Arguments .. */
- /* .. */
- /* ===================================================================== */
- /* .. Parameters .. */
- /* .. */
- /* .. Local Scalars .. */
- /* .. */
- /* .. External Functions .. */
- /* .. */
- /* .. External Subroutines .. */
- /* .. */
- /* .. Intrinsic Functions .. */
- /* .. */
- /* .. Executable Statements .. */
- /* Test the input arguments */
- /* Parameter adjustments */
- a_dim1 = *lda;
- a_offset = 1 + a_dim1;
- a -= a_offset;
- --tau;
- --work;
- /* Function Body */
- *info = 0;
- wantq = lsame_(vect, "Q", 1, 1);
- mn = fla_min(*m,*n);
- lquery = *lwork == -1;
- if (! wantq && ! lsame_(vect, "P", 1, 1)) {
- *info = -1;
- }
- else if (*m < 0) {
- *info = -2;
- }
- else if (*n < 0 || wantq && (*n > *m || *n < fla_min(*m,*k)) || ! wantq && ( *m > *n || *m < fla_min(*n,*k))) {
- *info = -3;
- }
- else if (*k < 0) {
- *info = -4;
- }
- else if (*lda < fla_max(1,*m)) {
- *info = -6;
- }
- else if (*lwork < fla_max(1,mn) && ! lquery) {
- *info = -9;
- }
- if (*info == 0) {
- work[1] = 1.;
- if (wantq) {
- if (*m >= *k) {
- lapack_dorgqr(m, n, k, &a[a_offset], lda, &tau[1], &work[1], &c_n1, &iinfo);
- }
- else {
- if (*m > 1) {
- i__1 = *m - 1;
- i__2 = *m - 1;
- i__3 = *m - 1;
- lapack_dorgqr(&i__1, &i__2, &i__3, &a[a_offset], lda, &tau[1], & work[1], &c_n1, &iinfo);
- }
- }
- }
- else {
- if (*k < *n) {
- lapack_dorglq(m, n, k, &a[a_offset], lda, &tau[1], &work[1], &c_n1, &iinfo);
- }
- else {
- if (*n > 1) {
- i__1 = *n - 1;
- i__2 = *n - 1;
- i__3 = *n - 1;
- lapack_dorglq(&i__1, &i__2, &i__3, &a[a_offset], lda, &tau[1], & work[1], &c_n1, &iinfo);
- }
- }
- }
- lwkopt = (integer) work[1];
- lwkopt = fla_max(lwkopt,mn);
- }
- if (*info != 0) {
- i__1 = -(*info);
- xerbla_("DORGBR", &i__1, (ftnlen)6);
- return 0;
- }
- else if (lquery) {
- work[1] = (doublereal) lwkopt;
- return 0;
- }
- /* Quick return if possible */
- if (*m == 0 || *n == 0) {
- work[1] = 1.;
- return 0;
- }
- if (wantq) {
- /* Form Q, determined by a call to DGEBRD to reduce an m-by-k */
- /* matrix */
- if (*m >= *k) {
- /* If m >= k, assume m >= n >= k */
- lapack_dorgqr(m, n, k, &a[a_offset], lda, &tau[1], &work[1], lwork, & iinfo);
- }
- else {
- /* If m < k, assume m = n */
- /* Shift the vectors which define the elementary reflectors one */
- /* column to the right, and set the first row and column of Q */
- /* to those of the unit matrix */
- for (j = *m;
- j >= 2;
- --j) {
- a[j * a_dim1 + 1] = 0.;
- i__1 = *m;
- for (i__ = j + 1;
- i__ <= i__1;
- ++i__) {
- a[i__ + j * a_dim1] = a[i__ + (j - 1) * a_dim1];
- /* L10: */
- }
- /* L20: */
- }
- a[a_dim1 + 1] = 1.;
- i__1 = *m;
- for (i__ = 2;
- i__ <= i__1;
- ++i__) {
- a[i__ + a_dim1] = 0.;
- /* L30: */
- }
- if (*m > 1) {
- /* Form Q(2:m,2:m) */
- i__1 = *m - 1;
- i__2 = *m - 1;
- i__3 = *m - 1;
- lapack_dorgqr(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[ 1], &work[1], lwork, &iinfo);
- }
- }
- }
- else {
- /* Form P**T, determined by a call to DGEBRD to reduce a k-by-n */
- /* matrix */
- if (*k < *n) {
- /* If k < n, assume k <= m <= n */
- lapack_dorglq(m, n, k, &a[a_offset], lda, &tau[1], &work[1], lwork, & iinfo);
- }
- else {
- /* If k >= n, assume m = n */
- /* Shift the vectors which define the elementary reflectors one */
- /* row downward, and set the first row and column of P**T to */
- /* those of the unit matrix */
- a[a_dim1 + 1] = 1.;
- i__1 = *n;
- for (i__ = 2;
- i__ <= i__1;
- ++i__) {
- a[i__ + a_dim1] = 0.;
- /* L40: */
- }
- i__1 = *n;
- for (j = 2;
- j <= i__1;
- ++j) {
- for (i__ = j - 1;
- i__ >= 2;
- --i__) {
- a[i__ + j * a_dim1] = a[i__ - 1 + j * a_dim1];
- /* L50: */
- }
- a[j * a_dim1 + 1] = 0.;
- /* L60: */
- }
- if (*n > 1) {
- /* Form P**T(2:n,2:n) */
- i__1 = *n - 1;
- i__2 = *n - 1;
- i__3 = *n - 1;
- lapack_dorglq(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[ 1], &work[1], lwork, &iinfo);
- }
- }
- }
- work[1] = (doublereal) lwkopt;
- return 0;
- /* End of DORGBR */
- }
- /* lapack_dorgbr */
- 
+ int lapack_dorgbr(char *vect, integer *m, integer *n, integer *k, doublereal *a, integer *lda,
+                   doublereal *tau, doublereal *work, integer *lwork, integer *info)
+ {
+     AOCL_DTL_TRACE_LOG_INIT
+     AOCL_DTL_SNPRINTF("dorgbr inputs: vect %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
+                       ", lda %" FLA_IS ", lwork %" FLA_IS "",
+                       *vect, *m, *n, *k, *lda, *lwork);
+     /* System generated locals */
+    integer a_dim1, a_offset, i__1, i__2, i__3;
+    /* Local variables */
+    integer i__, j, mn;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer iinfo;
+    logical wantq;
+    extern /* Subroutine */
+        int
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
+        lapack_dorglq(integer *, integer *, integer *, doublereal *, integer *, doublereal *,
+                doublereal *, integer *, integer *),
+        lapack_dorgqr(integer *, integer *, integer *, doublereal *, integer *, doublereal *,
+                doublereal *, integer *, integer *);
+    integer lwkopt;
+    logical lquery;
+    /* -- LAPACK computational routine -- */
+    /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
+    /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
+    /* .. Scalar Arguments .. */
+    /* .. */
+    /* .. Array Arguments .. */
+    /* .. */
+    /* ===================================================================== */
+    /* .. Parameters .. */
+    /* .. */
+    /* .. Local Scalars .. */
+    /* .. */
+    /* .. External Functions .. */
+    /* .. */
+    /* .. External Subroutines .. */
+    /* .. */
+    /* .. Intrinsic Functions .. */
+    /* .. */
+    /* .. Executable Statements .. */
+    /* Test the input arguments */
+    /* Parameter adjustments */
+    a_dim1 = *lda;
+    a_offset = 1 + a_dim1;
+    a -= a_offset;
+    --tau;
+    --work;
+    /* Function Body */
+    *info = 0;
+    wantq = lsame_(vect, "Q", 1, 1);
+    mn = fla_min(*m, *n);
+    lquery = *lwork == -1;
+    if(!wantq && !lsame_(vect, "P", 1, 1))
+    {
+        *info = -1;
+    }
+    else if(*m < 0)
+    {
+        *info = -2;
+    }
+    else if(*n < 0 || wantq && (*n > *m || *n < fla_min(*m, *k))
+            || !wantq && (*m > *n || *m < fla_min(*n, *k)))
+    {
+        *info = -3;
+    }
+    else if(*k < 0)
+    {
+        *info = -4;
+    }
+    else if(*lda < fla_max(1, *m))
+    {
+        *info = -6;
+    }
+    else if(*lwork < fla_max(1, mn) && !lquery)
+    {
+        *info = -9;
+    }
+    if(*info == 0)
+    {
+        work[1] = 1.;
+        if(wantq)
+        {
+            if(*m >= *k)
+            {
+                lapack_dorgqr(m, n, k, &a[a_offset], lda, &tau[1], &work[1], &c_n1, &iinfo);
+            }
+            else
+            {
+                if(*m > 1)
+                {
+                    i__1 = *m - 1;
+                    i__2 = *m - 1;
+                    i__3 = *m - 1;
+                    lapack_dorgqr(&i__1, &i__2, &i__3, &a[a_offset], lda, &tau[1], &work[1], &c_n1,
+                            &iinfo);
+                }
+            }
+        }
+        else
+        {
+            if(*k < *n)
+            {
+                lapack_dorglq(m, n, k, &a[a_offset], lda, &tau[1], &work[1], &c_n1, &iinfo);
+            }
+            else
+            {
+                if(*n > 1)
+                {
+                    i__1 = *n - 1;
+                    i__2 = *n - 1;
+                    i__3 = *n - 1;
+                    lapack_dorglq(&i__1, &i__2, &i__3, &a[a_offset], lda, &tau[1], &work[1], &c_n1,
+                            &iinfo);
+                }
+            }
+        }
+        lwkopt = (integer)work[1];
+        lwkopt = fla_max(lwkopt, mn);
+    }
+    if(*info != 0)
+    {
+        i__1 = -(*info);
+        xerbla_("DORGBR", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
+    }
+    else if(lquery)
+    {
+        work[1] = (doublereal)lwkopt;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
+    }
+    /* Quick return if possible */
+    if(*m == 0 || *n == 0)
+    {
+        work[1] = 1.;
+        AOCL_DTL_TRACE_LOG_EXIT
+        return 0;
+    }
+    if(wantq)
+    {
+        /* Form Q, determined by a call to DGEBRD to reduce an m-by-k */
+        /* matrix */
+        if(*m >= *k)
+        {
+            /* If m >= k, assume m >= n >= k */
+            lapack_dorgqr(m, n, k, &a[a_offset], lda, &tau[1], &work[1], lwork, &iinfo);
+        }
+        else
+        {
+            /* If m < k, assume m = n */
+            /* Shift the vectors which define the elementary reflectors one */
+            /* column to the right, and set the first row and column of Q */
+            /* to those of the unit matrix */
+            for(j = *m; j >= 2; --j)
+            {
+                a[j * a_dim1 + 1] = 0.;
+                i__1 = *m;
+                for(i__ = j + 1; i__ <= i__1; ++i__)
+                {
+                    a[i__ + j * a_dim1] = a[i__ + (j - 1) * a_dim1];
+                    /* L10: */
+                }
+                /* L20: */
+            }
+            a[a_dim1 + 1] = 1.;
+            i__1 = *m;
+            for(i__ = 2; i__ <= i__1; ++i__)
+            {
+                a[i__ + a_dim1] = 0.;
+                /* L30: */
+            }
+            if(*m > 1)
+            {
+                /* Form Q(2:m,2:m) */
+                i__1 = *m - 1;
+                i__2 = *m - 1;
+                i__3 = *m - 1;
+                lapack_dorgqr(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[1], &work[1], lwork,
+                        &iinfo);
+            }
+        }
+    }
+    else
+    {
+        /* Form P**T, determined by a call to DGEBRD to reduce a k-by-n */
+        /* matrix */
+        if(*k < *n)
+        {
+            /* If k < n, assume k <= m <= n */
+            lapack_dorglq(m, n, k, &a[a_offset], lda, &tau[1], &work[1], lwork, &iinfo);
+        }
+        else
+        {
+            /* If k >= n, assume m = n */
+            /* Shift the vectors which define the elementary reflectors one */
+            /* row downward, and set the first row and column of P**T to */
+            /* those of the unit matrix */
+            a[a_dim1 + 1] = 1.;
+            i__1 = *n;
+            for(i__ = 2; i__ <= i__1; ++i__)
+            {
+                a[i__ + a_dim1] = 0.;
+                /* L40: */
+            }
+            i__1 = *n;
+            for(j = 2; j <= i__1; ++j)
+            {
+                for(i__ = j - 1; i__ >= 2; --i__)
+                {
+                    a[i__ + j * a_dim1] = a[i__ - 1 + j * a_dim1];
+                    /* L50: */
+                }
+                a[j * a_dim1 + 1] = 0.;
+                /* L60: */
+            }
+            if(*n > 1)
+            {
+                /* Form P**T(2:n,2:n) */
+                i__1 = *n - 1;
+                i__2 = *n - 1;
+                i__3 = *n - 1;
+                lapack_dorglq(&i__1, &i__2, &i__3, &a[(a_dim1 << 1) + 2], lda, &tau[1], &work[1], lwork,
+                        &iinfo);
+            }
+        }
+    }
+    work[1] = (doublereal)lwkopt;
+    AOCL_DTL_TRACE_LOG_EXIT
+    return 0;
+    /* End of DORGBR */
+}
+/* dorgbr_ */

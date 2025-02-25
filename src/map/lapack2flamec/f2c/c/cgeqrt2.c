@@ -1,4 +1,4 @@
-/* cgeqrt2.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./cgeqrt2.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -102,7 +102,7 @@ the elements below the diagonal are not used. */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup complexGEcomputational */
+/* > \ingroup geqrt2 */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -131,16 +131,9 @@ the elements below the diagonal are not used. */
 void cgeqrt2_(integer *m, integer *n, complex *a, integer *lda, complex *t, integer *ldt,
               integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cgeqrt2 inputs: m %lld, n %lld, lda %lld, ldt %lld", *m, *n, *lda, *ldt);
-#else
-    snprintf(buffer, 256, "cgeqrt2 inputs: m %d, n %d, lda %d, ldt %d", *m, *n, *lda, *ldt);
-#endif
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("cgeqrt2 inputs: m %" FLA_IS ", n %" FLA_IS ", ldt %" FLA_IS "", *m, *n,
+                      *ldt);
     /* System generated locals */
     integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3;
     complex q__1, q__2;
@@ -206,7 +199,7 @@ void cgeqrt2_(integer *m, integer *n, complex *a, integer *lda, complex *t, inte
     {
         i__1 = -(*info);
         xerbla_("CGEQRT2", &i__1, (ftnlen)7);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     k = fla_min(*m, *n);
@@ -283,7 +276,7 @@ void cgeqrt2_(integer *m, integer *n, complex *a, integer *lda, complex *t, inte
         t[i__2].i = 0.f; // , expr subst
     }
     /* End of CGEQRT2 */
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* cgeqrt2_ */

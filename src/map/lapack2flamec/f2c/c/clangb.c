@@ -1,4 +1,4 @@
-/* clangb.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./clangb.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -50,7 +50,7 @@ static integer c__1 = 1;
 /* > \return CLANGB */
 /* > \verbatim */
 /* > */
-/* > CLANGB = ( fla_max(abs(A(i,j))), NORM = 'M' or 'm' */
+/* > CLANGB = ( fla_max(f2c_abs(A(i,j))), NORM = 'M' or 'm' */
 /* > ( */
 /* > ( norm1(A), NORM = '1', 'O' or 'o' */
 /* > ( */
@@ -61,7 +61,7 @@ static integer c__1 = 1;
 /* > where norm1 denotes the one norm of a matrix (maximum column sum), */
 /* > normI denotes the infinity norm of a matrix (maximum row sum) and */
 /* > normF denotes the Frobenius norm of a matrix (square root of sum of */
-/* > squares). Note that fla_max(abs(A(i,j))) is not a consistent matrix norm. */
+/* > squares). Note that fla_max(f2c_abs(A(i,j))) is not a consistent matrix norm. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -119,23 +119,15 @@ otherwise, WORK is not */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup complexGBauxiliary */
+/* > \ingroup langb */
 /* ===================================================================== */
 real clangb_(char *norm, integer *n, integer *kl, integer *ku, complex *ab, integer *ldab,
              real *work)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "clangb inputs: norm %c, n %lld, kl %lld, ku %lld, ldab %lld", *norm, *n,
-             *kl, *ku, *ldab);
-#else
-    snprintf(buffer, 256, "clangb inputs: norm %c, n %d, kl %d, ku %d, ldab %d", *norm, *n, *kl,
-             *ku, *ldab);
-#endif
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("clangb inputs: norm %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
+                      ", ldab %" FLA_IS "",
+                      *norm, *n, *kl, *ku, *ldab);
     /* System generated locals */
     integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     real ret_val;

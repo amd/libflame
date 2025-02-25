@@ -1,13 +1,8 @@
-/* clatrs.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./clatrs.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-
-/*
- *     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
- */
-
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static real c_b40 = .5f;
@@ -166,7 +161,7 @@ static real c_b40 = .5f;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup complexOTHERauxiliary */
+/* > \ingroup latrs */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -249,18 +244,9 @@ b(i), i=1,..,n}
 void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, complex *a,
              integer *lda, complex *x, real *scale, real *cnorm, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "clatrs inputs: uplo %c, trans %c, diag %c, normin %c, n %lld, lda %lld",
-             *uplo, *trans, *diag, *normin, *n, *lda);
-#else
-    snprintf(buffer, 256, "clatrs inputs: uplo %c, trans %c, diag %c, normin %c, n %d, lda %d",
-             *uplo, *trans, *diag, *normin, *n, *lda);
-#endif
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("clatrs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", lda %" FLA_IS "",
+                      *uplo, *trans, *diag, *n, *lda);
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     real r__1, r__2, r__3, r__4;
@@ -278,7 +264,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
     scomplex tjjs;
     real xmax, grow;
     extern /* Complex */
-        VOID
+        void
         cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
@@ -288,7 +274,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
     complex uscal;
     integer jlast;
     extern /* Complex */
-        VOID
+        void
         cdotu_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     complex csumj;
     extern /* Subroutine */
@@ -343,9 +329,6 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
     --cnorm;
     /* Function Body */
     *info = 0;
-    // initializing as {1, 0} because it is
-    // used as divisor
-    tjjs = (complex){.r = 1.f, .i = 0.f};
     upper = lsame_(uplo, "U", 1, 1);
     notran = lsame_(trans, "N", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
@@ -378,14 +361,14 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
     {
         i__1 = -(*info);
         xerbla_("CLATRS", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     *scale = 1.f;
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine machine dependent parameters to control overflow. */
@@ -529,7 +512,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                 /* At least one entry of A is not a valid floating-point */
                 /* entry. Rely on TRSV to propagate Inf and NaN. */
                 ctrsv_(uplo, trans, diag, n, &a[a_offset], lda, &x[1], &c__1);
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
         }
@@ -544,7 +527,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
         i__2 = j;
         r__3 = xmax;
         r__4 = (r__1 = x[i__2].r / 2.f, f2c_abs(r__1))
-               + (r__2 = x[j].i / 2.f, f2c_abs(r__2)); // , expr subst
+               + (r__2 = r_imag(&x[j]) / 2.f, f2c_abs(r__2)); // , expr subst
         xmax = fla_max(r__3, r__4);
         /* L30: */
     }
@@ -574,8 +557,8 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
             /* A is non-unit triangular. */
             /* Compute GROW = 1/G(j) and XBND = 1/M(j). */
             /* Initially, G(0) = max{
-            x(i), i=1,...,n}
-            . */
+           x(i), i=1,...,n}
+           . */
             grow = .5f / fla_max(xbnd, smlnum);
             xbnd = grow;
             i__1 = jlast;
@@ -590,7 +573,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                 i__3 = j + j * a_dim1;
                 tjjs.r = a[i__3].r;
                 tjjs.i = a[i__3].i; // , expr subst
-                tjj = (r__1 = tjjs.r, f2c_abs(r__1)) + (r__2 = tjjs.i, f2c_abs(r__2));
+                tjj = (r__1 = tjjs.r, f2c_abs(r__1)) + (r__2 = r_imag(&tjjs), f2c_abs(r__2));
                 if(tjj >= smlnum)
                 {
                     /* M(j) = G(j-1) / f2c_abs(A(j,j)) */
@@ -669,8 +652,8 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
             /* A is non-unit triangular. */
             /* Compute GROW = 1/G(j) and XBND = 1/M(j). */
             /* Initially, M(0) = max{
-            x(i), i=1,...,n}
-            . */
+           x(i), i=1,...,n}
+           . */
             grow = .5f / fla_max(xbnd, smlnum);
             xbnd = grow;
             i__1 = jlast;
@@ -691,7 +674,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                 i__3 = j + j * a_dim1;
                 tjjs.r = a[i__3].r;
                 tjjs.i = a[i__3].i; // , expr subst
-                tjj = (r__1 = tjjs.r, f2c_abs(r__1)) + (r__2 = tjjs.i, f2c_abs(r__2));
+                tjj = (r__1 = tjjs.r, f2c_abs(r__1)) + (r__2 = r_imag(&tjjs), f2c_abs(r__2));
                 if(tjj >= smlnum)
                 {
                     /* M(j) = M(j-1)*( 1 + CNORM(j) ) / f2c_abs(A(j,j)) */
@@ -766,7 +749,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
             {
                 /* Compute x(j) = b(j) / A(j,j), scaling x if necessary. */
                 i__3 = j;
-                xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = x[j].i, f2c_abs(r__2));
+                xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
                 if(nounit)
                 {
                     i__3 = j + j * a_dim1;
@@ -784,7 +767,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                         goto L105;
                     }
                 }
-                tjj = (r__1 = tjjs.r, f2c_abs(r__1)) + (r__2 = tjjs.i, f2c_abs(r__2));
+                tjj = (r__1 = tjjs.r, f2c_abs(r__1)) + (r__2 = r_imag(&tjjs), f2c_abs(r__2));
                 if(tjj > smlnum)
                 {
                     /* f2c_abs(A(j,j)) > SMLNUM: */
@@ -804,14 +787,14 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                     x[i__3].r = q__1.r;
                     x[i__3].i = q__1.i; // , expr subst
                     i__3 = j;
-                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = x[j].i, f2c_abs(r__2));
+                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
                 }
                 else if(tjj > 0.f)
                 {
                     /* 0 < f2c_abs(A(j,j)) <= SMLNUM: */
                     if(xj > tjj * bignum)
                     {
-                        /* Scale x by (1/f2c_abs(x(j)))*f2c_abs(A(j,j))*BIGNUM */
+                        /* Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM */
                         /* to avoid overflow when dividing by A(j,j). */
                         rec = tjj * bignum / xj;
                         if(cnorm[j] > 1.f)
@@ -829,7 +812,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                     x[i__3].r = q__1.r;
                     x[i__3].i = q__1.i; // , expr subst
                     i__3 = j;
-                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = x[j].i, f2c_abs(r__2));
+                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
                 }
                 else
                 {
@@ -857,7 +840,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                     rec = 1.f / xj;
                     if(cnorm[j] > (bignum - xmax) * rec)
                     {
-                        /* Scale x by 1/(2*f2c_abs(x(j))). */
+                        /* Scale x by 1/(2*abs(x(j))). */
                         rec *= .5f;
                         aocl_blas_csscal(n, &rec, &x[1], &c__1);
                         *scale *= rec;
@@ -885,7 +868,8 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                         i__3 = j - 1;
                         i__ = aocl_blas_icamax(&i__3, &x[1], &c__1);
                         i__3 = i__;
-                        xmax = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = x[i__].i, f2c_abs(r__2));
+                        xmax = (r__1 = x[i__3].r, f2c_abs(r__1))
+                               + (r__2 = r_imag(&x[i__]), f2c_abs(r__2));
                     }
                 }
                 else
@@ -904,7 +888,8 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                         i__3 = *n - j;
                         i__ = j + aocl_blas_icamax(&i__3, &x[j + 1], &c__1);
                         i__3 = i__;
-                        xmax = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = x[i__].i, f2c_abs(r__2));
+                        xmax = (r__1 = x[i__3].r, f2c_abs(r__1))
+                               + (r__2 = r_imag(&x[i__]), f2c_abs(r__2));
                     }
                 }
                 /* L110: */
@@ -920,7 +905,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                 /* Compute x(j) = b(j) - sum A(k,j)*x(k). */
                 /* k<>j */
                 i__3 = j;
-                xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = x[j].i, f2c_abs(r__2));
+                xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
                 uscal.r = tscal;
                 uscal.i = 0.f; // , expr subst
                 rec = 1.f / fla_max(xmax, 1.f);
@@ -941,7 +926,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                         tjjs.real = tscal;
                         tjjs.imag = 0.f; // , expr subst
                     }
-                    tjj = (r__1 = tjjs.r, f2c_abs(r__1)) + (r__2 = tjjs.i, f2c_abs(r__2));
+                    tjj = (r__1 = tjjs.r, f2c_abs(r__1)) + (r__2 = r_imag(&tjjs), f2c_abs(r__2));
                     if(tjj > 1.f)
                     {
                         /* Divide by A(j,j) when scaling x if A(j,j) > 1. */
@@ -1034,7 +1019,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                     x[i__3].real = q__1.real;
                     x[i__3].imag = q__1.imag; // , expr subst
                     i__3 = j;
-                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = x[j].i, f2c_abs(r__2));
+                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
                     if(nounit)
                     {
                         i__3 = j + j * a_dim1;
@@ -1053,7 +1038,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                         }
                     }
                     /* Compute x(j) = x(j) / A(j,j), scaling if necessary. */
-                    tjj = (r__1 = tjjs.r, f2c_abs(r__1)) + (r__2 = tjjs.i, f2c_abs(r__2));
+                    tjj = (r__1 = tjjs.r, f2c_abs(r__1)) + (r__2 = r_imag(&tjjs), f2c_abs(r__2));
                     if(tjj > smlnum)
                     {
                         /* f2c_abs(A(j,j)) > SMLNUM: */
@@ -1061,7 +1046,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                         {
                             if(xj > tjj * bignum)
                             {
-                                /* Scale X by 1/f2c_abs(x(j)). */
+                                /* Scale X by 1/abs(x(j)). */
                                 rec = 1.f / xj;
                                 aocl_blas_csscal(n, &rec, &x[1], &c__1);
                                 *scale *= rec;
@@ -1078,7 +1063,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                         /* 0 < f2c_abs(A(j,j)) <= SMLNUM: */
                         if(xj > tjj * bignum)
                         {
-                            /* Scale x by (1/f2c_abs(x(j)))*f2c_abs(A(j,j))*BIGNUM. */
+                            /* Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM. */
                             rec = tjj * bignum / xj;
                             aocl_blas_csscal(n, &rec, &x[1], &c__1);
                             *scale *= rec;
@@ -1124,7 +1109,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                 i__3 = j;
                 r__3 = xmax;
                 r__4 = (r__1 = x[i__3].r, f2c_abs(r__1))
-                       + (r__2 = x[j].i, f2c_abs(r__2)); // , expr subst
+                       + (r__2 = r_imag(&x[j]), f2c_abs(r__2)); // , expr subst
                 xmax = fla_max(r__3, r__4);
                 /* L150: */
             }
@@ -1139,7 +1124,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                 /* Compute x(j) = b(j) - sum A(k,j)*x(k). */
                 /* k<>j */
                 i__3 = j;
-                xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = x[j].i, f2c_abs(r__2));
+                xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
                 uscal.r = tscal;
                 uscal.i = 0.f; // , expr subst
                 rec = 1.f / fla_max(xmax, 1.f);
@@ -1149,8 +1134,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                     rec *= .5f;
                     if(nounit)
                     {
-                        q__2.r = a[j + j * a_dim1].r;
-                        q__2.i = -a[j + j * a_dim1].i;
+                        r_cnjg(&q__2, &a[j + j * a_dim1]);
                         q__1.r = tscal * q__2.r;
                         q__1.i = tscal * q__2.i; // , expr subst
                         tjjs.r = q__1.r;
@@ -1161,7 +1145,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                         tjjs.real = tscal;
                         tjjs.imag = 0.f; // , expr subst
                     }
-                    tjj = (r__1 = tjjs.r, f2c_abs(r__1)) + (r__2 = tjjs.i, f2c_abs(r__2));
+                    tjj = (r__1 = tjjs.r, f2c_abs(r__1)) + (r__2 = r_imag(&tjjs), f2c_abs(r__2));
                     if(tjj > 1.f)
                     {
                         /* Divide by A(j,j) when scaling x if A(j,j) > 1. */
@@ -1209,8 +1193,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                         i__3 = j - 1;
                         for(i__ = 1; i__ <= i__3; ++i__)
                         {
-                            q__4.r = a[i__ + j * a_dim1].r;
-                            q__4.i = -a[i__ + j * a_dim1].i;
+                            r_cnjg(&q__4, &a[i__ + j * a_dim1]);
                             q__3.r = q__4.r * uscal.r - q__4.i * uscal.i;
                             q__3.i = q__4.r * uscal.i + q__4.i * uscal.r; // , expr subst
                             i__4 = i__;
@@ -1228,8 +1211,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                         i__3 = *n;
                         for(i__ = j + 1; i__ <= i__3; ++i__)
                         {
-                            q__4.r = a[i__ + j * a_dim1].r;
-                            q__4.i = -a[i__ + j * a_dim1].i;
+                            r_cnjg(&q__4, &a[i__ + j * a_dim1]);
                             q__3.r = q__4.r * uscal.r - q__4.i * uscal.i;
                             q__3.i = q__4.r * uscal.i + q__4.i * uscal.r; // , expr subst
                             i__4 = i__;
@@ -1256,11 +1238,10 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                     x[i__3].real = q__1.real;
                     x[i__3].imag = q__1.imag; // , expr subst
                     i__3 = j;
-                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = x[j].i, f2c_abs(r__2));
+                    xj = (r__1 = x[i__3].r, f2c_abs(r__1)) + (r__2 = r_imag(&x[j]), f2c_abs(r__2));
                     if(nounit)
                     {
-                        q__2.r = a[j + j * a_dim1].r;
-                        q__2.i = -a[j + j * a_dim1].i;
+                        r_cnjg(&q__2, &a[j + j * a_dim1]);
                         q__1.r = tscal * q__2.r;
                         q__1.i = tscal * q__2.i; // , expr subst
                         tjjs.r = q__1.r;
@@ -1276,7 +1257,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                         }
                     }
                     /* Compute x(j) = x(j) / A(j,j), scaling if necessary. */
-                    tjj = (r__1 = tjjs.r, f2c_abs(r__1)) + (r__2 = tjjs.i, f2c_abs(r__2));
+                    tjj = (r__1 = tjjs.r, f2c_abs(r__1)) + (r__2 = r_imag(&tjjs), f2c_abs(r__2));
                     if(tjj > smlnum)
                     {
                         /* f2c_abs(A(j,j)) > SMLNUM: */
@@ -1284,7 +1265,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                         {
                             if(xj > tjj * bignum)
                             {
-                                /* Scale X by 1/f2c_abs(x(j)). */
+                                /* Scale X by 1/abs(x(j)). */
                                 rec = 1.f / xj;
                                 aocl_blas_csscal(n, &rec, &x[1], &c__1);
                                 *scale *= rec;
@@ -1301,7 +1282,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                         /* 0 < f2c_abs(A(j,j)) <= SMLNUM: */
                         if(xj > tjj * bignum)
                         {
-                            /* Scale x by (1/f2c_abs(x(j)))*f2c_abs(A(j,j))*BIGNUM. */
+                            /* Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM. */
                             rec = tjj * bignum / xj;
                             aocl_blas_csscal(n, &rec, &x[1], &c__1);
                             *scale *= rec;
@@ -1347,7 +1328,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
                 i__3 = j;
                 r__3 = xmax;
                 r__4 = (r__1 = x[i__3].r, f2c_abs(r__1))
-                       + (r__2 = x[j].i, f2c_abs(r__2)); // , expr subst
+                       + (r__2 = r_imag(&x[j]), f2c_abs(r__2)); // , expr subst
                 xmax = fla_max(r__3, r__4);
                 /* L190: */
             }
@@ -1360,7 +1341,7 @@ void clatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, comp
         r__1 = 1.f / tscal;
         aocl_blas_sscal(n, &r__1, &cnorm[1], &c__1);
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of CLATRS */
 }

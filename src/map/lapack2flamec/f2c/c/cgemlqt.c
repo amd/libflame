@@ -1,4 +1,4 @@
-/* cgemlqt.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./cgemlqt.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -143,28 +143,17 @@
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup doubleGEcomputational */
+/* > \ingroup gemlqt */
 /* ===================================================================== */
 /* Subroutine */
 void cgemlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integer *mb, complex *v,
               integer *ldv, complex *t, integer *ldt, complex *c__, integer *ldc, complex *work,
               integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "cgemlqt inputs: side %c, trans %c, m %lld, n %lld, k %lld, mb %lld, ldv %lld, ldt "
-             "%lld, ldc %lld",
-             *side, *trans, *m, *n, *k, *mb, *ldv, *ldt, *ldc);
-#else
-    snprintf(buffer, 256,
-             "cgemlqt inputs: side %c, trans %c, m %d, n %d, k %d, mb %d, ldv %d, ldt %d, ldc %d",
-             *side, *trans, *m, *n, *k, *mb, *ldv, *ldt, *ldc);
-#endif
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("cgemlqt inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
+                      ", mb %" FLA_IS ", ldv %" FLA_IS ", ldt %" FLA_IS ", ldc %" FLA_IS "",
+                      *side, *trans, *m, *n, *k, *mb, *ldv, *ldt, *ldc);
     /* System generated locals */
     integer v_dim1, v_offset, c_dim1, c_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
@@ -265,13 +254,13 @@ void cgemlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
     {
         i__1 = -(*info);
         xerbla_("CGEMLQT", &i__1, (ftnlen)7);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* .. Quick return if possible .. */
     if(*m == 0 || *n == 0 || *k == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(left && notran)
@@ -334,7 +323,7 @@ void cgemlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
                     &t[i__ * t_dim1 + 1], ldt, &c__[i__ * c_dim1 + 1], ldc, &work[1], &ldwork);
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of CGEMLQT */
 }

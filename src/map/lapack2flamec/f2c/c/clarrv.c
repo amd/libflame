@@ -1,8 +1,8 @@
-/* ../netlib/clarrv.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./clarrv.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static complex c_b1 = {0.f, 0.f};
 static integer c__1 = 1;
@@ -263,7 +263,6 @@ IBLOCK(i)=1 if eigenvalue */
 /* > he might be trading in precision when he decreases MINRGP. */
 /* > =-3: Problem in SLARRB when refining a single eigenvalue */
 /* > after the Rayleigh correction was rejected. */
-/* > =-4: M value exceeds N */
 /* > = 5: The Rayleigh Quotient Iteration failed to converge to */
 /* > full accuracy in MAXITR steps. */
 /* > \endverbatim */
@@ -273,8 +272,7 @@ IBLOCK(i)=1 if eigenvalue */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date June 2016 */
-/* > \ingroup complexOTHERauxiliary */
+/* > \ingroup larrv */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -290,21 +288,10 @@ void clarrv_(integer *n, real *vl, real *vu, real *d__, real *l, real *pivmin, i
              real *w, real *werr, real *wgap, integer *iblock, integer *indexw, real *gers,
              complex *z__, integer *ldz, integer *isuppz, real *work, integer *iwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256,
-             "clarrv inputs: n %lld, isplit %lld, m %lld, dol %lld, dou %lld, iblock %lld, indexw "
-             "%lld, ldz %lld",
-             *n, *isplit, *m, *dol, *dou, *iblock, *indexw, *ldz);
-#else
-    snprintf(buffer, 256,
-             "clarrv inputs: n %d, isplit %d, m %d, dol %d, dou %d, iblock %d, indexw %d, ldz %d",
-             *n, *isplit, *m, *dol, *dou, *iblock, *indexw, *ldz);
-#endif
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("clarrv inputs: n %" FLA_IS ", isplit %" FLA_IS ", m %" FLA_IS
+                      ", dol %" FLA_IS ", iblock %" FLA_IS ", indexw %" FLA_IS ", ldz %" FLA_IS "",
+                      *n, *isplit, *m, *dol, *iblock, *indexw, *ldz);
     /* System generated locals */
     integer z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     real r__1, r__2;
@@ -321,6 +308,7 @@ void clarrv_(integer *n, real *vl, real *vu, real *d__, real *l, real *pivmin, i
     real ztz;
     integer iend, jblk;
     real lgap;
+    integer done;
     real rgap, left;
     integer wend, iter;
     real bstw;
@@ -382,10 +370,9 @@ void clarrv_(integer *n, real *vl, real *vu, real *d__, real *l, real *pivmin, i
         void
         slarrf_(integer *, real *, real *, real *, integer *, integer *, real *, real *, real *,
                 real *, real *, real *, real *, real *, real *, real *, real *, integer *);
-    /* -- LAPACK auxiliary routine (version 3.7.1) -- */
+    /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -422,11 +409,9 @@ void clarrv_(integer *n, real *vl, real *vu, real *d__, real *l, real *pivmin, i
     /* Function Body */
     *info = 0;
     /* Quick return if possible */
-    if((*n <= 0) || (*m <= 0) || (*m > *n))
+    if(*n <= 0 || *m <= 0)
     {
-        if(*m > *n)
-            *info = -4;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* The first N entries of WORK are reserved for the eigenvalues */
@@ -492,6 +477,8 @@ void clarrv_(integer *n, real *vl, real *vu, real *d__, real *l, real *pivmin, i
     /* entries is contained in the interval IBEGIN:IEND. */
     /* Remark that if k eigenpairs are desired, then the eigenvectors */
     /* are stored in k contiguous columns of Z. */
+    /* DONE is the number of eigenvectors already computed */
+    done = 0;
     ibegin = 1;
     wbegin = 1;
     i__1 = iblock[*m];
@@ -546,6 +533,7 @@ void clarrv_(integer *n, real *vl, real *vu, real *d__, real *l, real *pivmin, i
         /* This is for a 1x1 block */
         if(ibegin == iend)
         {
+            ++done;
             i__2 = ibegin + wbegin * z_dim1;
             z__[i__2].r = 1.f;
             z__[i__2].i = 0.f; // , expr subst
@@ -584,9 +572,9 @@ void clarrv_(integer *n, real *vl, real *vu, real *d__, real *l, real *pivmin, i
         /* IDONE is the number of eigenvectors already computed in the current */
         /* block */
         idone = 0;
-        /* loop while( IDONE.LT.IM ) */
-        /* generate the representation tree for the current block and */
-        /* compute the eigenvectors */
+    /* loop while( IDONE.LT.IM ) */
+    /* generate the representation tree for the current block and */
+    /* compute the eigenvectors */
     L40:
         if(idone < im)
         {
@@ -594,7 +582,7 @@ void clarrv_(integer *n, real *vl, real *vu, real *d__, real *l, real *pivmin, i
             if(ndepth > *m)
             {
                 *info = -2;
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* breadth first processing of the current level of the representation */
@@ -695,7 +683,7 @@ void clarrv_(integer *n, real *vl, real *vu, real *d__, real *l, real *pivmin, i
                     if(iinfo != 0)
                     {
                         *info = -1;
-                        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                        AOCL_DTL_TRACE_LOG_EXIT
                         return;
                     }
                     /* We also recompute the extremal gaps. W holds all eigenvalues */
@@ -906,7 +894,7 @@ void clarrv_(integer *n, real *vl, real *vu, real *d__, real *l, real *pivmin, i
                         else
                         {
                             *info = -2;
-                            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                            AOCL_DTL_TRACE_LOG_EXIT
                             return;
                         }
                     }
@@ -924,6 +912,7 @@ void clarrv_(integer *n, real *vl, real *vu, real *d__, real *l, real *pivmin, i
                         i__4 = windex + 1;
                         windpl = fla_min(i__4, *m);
                         lambda = work[windex];
+                        ++done;
                         /* Check if eigenvector computation is to be skipped */
                         if(windex < *dol || windex > *dou)
                         {
@@ -1022,7 +1011,7 @@ void clarrv_(integer *n, real *vl, real *vu, real *d__, real *l, real *pivmin, i
                             if(iinfo != 0)
                             {
                                 *info = -3;
-                                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                                AOCL_DTL_TRACE_LOG_EXIT
                                 return;
                             }
                             lambda = work[windex];
@@ -1136,7 +1125,7 @@ void clarrv_(integer *n, real *vl, real *vu, real *d__, real *l, real *pivmin, i
                             else
                             {
                                 *info = 5;
-                                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                                AOCL_DTL_TRACE_LOG_EXIT
                                 return;
                             }
                         }
@@ -1222,7 +1211,7 @@ void clarrv_(integer *n, real *vl, real *vu, real *d__, real *l, real *pivmin, i
                         }
                         ++idone;
                     }
-                    /* here ends the code for the current child */
+                /* here ends the code for the current child */
                 L139: /* Proceed to any remaining child nodes */
                     newfst = j + 1;
                 L140:;
@@ -1236,7 +1225,7 @@ void clarrv_(integer *n, real *vl, real *vu, real *d__, real *l, real *pivmin, i
         wbegin = wend + 1;
     L170:;
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of CLARRV */
 }

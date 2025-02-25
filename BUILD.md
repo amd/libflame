@@ -222,7 +222,7 @@ It will give you a prompt to view the code coverage of that particular applicati
 
 ## 10. pkg-config support
 When building the package using cmake, pkg-config metadata file for the library is generated in
-the location `{CMAKE_INSTALL_PREFIX}/pkgconfig/`. 
+the location `{CMAKE_INSTALL_PREFIX}/lib/pkgconfig/`. 
 - The pkg-config metadata file should be placed at a location recognized by pkg-config tool.
 - libblis should be installed along with it's pkg-config metadata file.
 

@@ -7,7 +7,7 @@ Name: AOCL-LAPACK
 Description: AOCL-LAPACK is a high performant implementation of Linear Algebra PACKage(LAPACK)
 Version: @PROJECT_VERSION@
 Requires: @REQ_BLAS_PKGNAME@
-Requires.private: @REQ_LIBAOCLUTILS_PKGCONFIG@
+Requires.private: @REQ_LIBAOCLUTILS_PKGNAME@
 Cflags: -I${includedir}
 Libs: -L${libdir} -l@REQ_PKG_LIB@ 
 Libs.private: @LIBS_LINK_FLAGS@

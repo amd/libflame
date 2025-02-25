@@ -1,4 +1,4 @@
-/* cgesdd.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./cgesdd.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -63,12 +63,6 @@ they are real and non-negative, and */
 /* > */
 /* > Note that the routine returns VT = V**H, not V. */
 /* > */
-/* > The divide and conquer algorithm makes very mild assumptions about */
-/* > floating point arithmetic. It will work on machines with a guard */
-/* > digit in add/subtract, or on those binary machines without guard */
-/* > digits which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or */
-/* > Cray-2. It could conceivably fail on hexadecimal or decimal machines */
-/* > without guard digits, but we know of none. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -235,7 +229,7 @@ see comments inside code. */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup complexGEsing */
+/* > \ingroup gesdd */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -248,17 +242,10 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
              integer *ldu, complex *vt, integer *ldvt, complex *work, integer *lwork, real *rwork,
              integer *iwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-#if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "cgesdd inputs: m %lld, n %lld, lda %lld, lwork %lld", *m, *n, *lda,
-             *lwork);
-#else
-    snprintf(buffer, 256, "cgesdd inputs: m %d, n %d, lda %d, lwork %d", *m, *n, *lda, *lwork);
-#endif
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("cgesdd inputs: jobz %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
+                      ", ldu %" FLA_IS ", ldvt %" FLA_IS ", lwork %" FLA_IS "",
+                      *jobz, *m, *n, *lda, *ldu, *ldvt, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2, i__3;
     real r__1;
@@ -854,18 +841,18 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
     {
         i__1 = -(*info);
         xerbla_("CGESDD", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants */
@@ -877,7 +864,7 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
     if(sisnan_(&anrm))
     {
         *info = -4;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     iscl = 0;
@@ -2220,7 +2207,7 @@ void cgesdd_(char *jobz, integer *m, integer *n, complex *a, integer *lda, real 
     r__1 = sroundup_lwork(&maxwrk);
     work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of CGESDD */
 }

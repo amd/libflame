@@ -1,8 +1,8 @@
-/* ../netlib/dlarrv.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./dlarrv.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b5 = 0.;
 static integer c__1 = 1;
@@ -268,7 +268,6 @@ IBLOCK(i)=1 if eigenvalue */
 /* > he might be trading in precision when he decreases MINRGP. */
 /* > =-3: Problem in DLARRB when refining a single eigenvalue */
 /* > after the Rayleigh correction was rejected. */
-/* > =-4: M value exceeds N */
 /* > = 5: The Rayleigh Quotient Iteration failed to converge to */
 /* > full accuracy in MAXITR steps. */
 /* > \endverbatim */
@@ -278,8 +277,7 @@ IBLOCK(i)=1 if eigenvalue */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date June 2016 */
-/* > \ingroup doubleOTHERauxiliary */
+/* > \ingroup larrv */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -317,6 +315,7 @@ void dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, double
     doublereal ztz;
     integer iend, jblk;
     doublereal lgap;
+    integer done;
     doublereal rgap, left;
     integer wend, iter;
     doublereal bstw;
@@ -382,10 +381,9 @@ void dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, double
     doublereal nrminv, rqcorr;
     logical tryrqc;
     integer isupmx;
-    /* -- LAPACK auxiliary routine (version 3.8.0) -- */
+    /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -422,10 +420,8 @@ void dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, double
     /* Function Body */
     *info = 0;
     /* Quick return if possible */
-    if((*n <= 0) || (*m <= 0) || (*m > *n))
+    if(*n <= 0 || *m <= 0)
     {
-        if(*m > *n)
-            *info = -4;
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -490,6 +486,8 @@ void dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, double
     /* entries is contained in the interval IBEGIN:IEND. */
     /* Remark that if k eigenpairs are desired, then the eigenvectors */
     /* are stored in k contiguous columns of Z. */
+    /* DONE is the number of eigenvectors already computed */
+    done = 0;
     ibegin = 1;
     wbegin = 1;
     i__1 = iblock[*m];
@@ -544,6 +542,7 @@ void dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, double
         /* This is for a 1x1 block */
         if(ibegin == iend)
         {
+            ++done;
             z__[ibegin + wbegin * z_dim1] = 1.;
             isuppz[(wbegin << 1) - 1] = ibegin;
             isuppz[wbegin * 2] = ibegin;
@@ -580,9 +579,9 @@ void dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, double
         /* IDONE is the number of eigenvectors already computed in the current */
         /* block */
         idone = 0;
-        /* loop while( IDONE.LT.IM ) */
-        /* generate the representation tree for the current block and */
-        /* compute the eigenvectors */
+    /* loop while( IDONE.LT.IM ) */
+    /* generate the representation tree for the current block and */
+    /* compute the eigenvectors */
     L40:
         if(idone < im)
         {
@@ -881,6 +880,7 @@ void dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, double
                         i__4 = windex + 1;
                         windpl = fla_min(i__4, *m);
                         lambda = work[windex];
+                        ++done;
                         /* Check if eigenvector computation is to be skipped */
                         if(windex < *dol || windex > *dou)
                         {
@@ -1175,7 +1175,7 @@ void dlarrv_(integer *n, doublereal *vl, doublereal *vu, doublereal *d__, double
                         }
                         ++idone;
                     }
-                    /* here ends the code for the current child */
+                /* here ends the code for the current child */
                 L139: /* Proceed to any remaining child nodes */
                     newfst = j + 1;
                 L140:;

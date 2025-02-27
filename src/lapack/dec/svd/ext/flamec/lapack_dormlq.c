@@ -401,9 +401,8 @@ int lapack_dormlq(char *side, char *trans, integer *m, integer *n, integer *k, d
 
 // DORMLQ, size thresholds to choose number of threads
 // TODO: Move the macro definitions to corresponding headers
-#define FLA_DORMLQ_THREADS_THRESH0   (800)
-#define FLA_DORMLQ_THREADS_THRESH1   (2100)
-#define FLA_DORMLQ_THREADS_THRESH2   (3100)
+#define FLA_DORMLQ_THREADS_THRESH0 (1110)
+#define FLA_DORMLQ_THREADS_THRESH1 (3100)
 
 extern int fla_thread_get_num_threads();
 static int get_opt_threads_dormlq(integer m, integer n)
@@ -413,13 +412,9 @@ static int get_opt_threads_dormlq(integer m, integer n)
 
     if(min_m_n < FLA_DORMLQ_THREADS_THRESH0)
     {
-        num_threads = 1;
-    }
-    else if(min_m_n < FLA_DORMLQ_THREADS_THRESH1)
-    {
         num_threads = 16;
     }
-    else if(min_m_n < FLA_DORMLQ_THREADS_THRESH2)
+    else if(min_m_n < FLA_DORMLQ_THREADS_THRESH1)
     {
         num_threads = 32;
     }

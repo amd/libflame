@@ -28008,19 +28008,19 @@ void SGETRFNPI_(integer *m, integer *n, integer *nfact, float *a, integer *lda, 
 	return sgetrfnpi_( m, n, nfact, a, lda, info);
 }
 
-void ZGETRFNPI(integer *m, integer *n, integer*nfact, dcomplex *a, integer *lda, integer *info)
+void ZGETRFNPI(integer *m, integer *n, integer *nfact, dcomplex *a, integer *lda, integer *info)
 {
-	return zgetrfnpi_( m, n, n, a, lda, info);
+	return zgetrfnpi_( m, n, nfact, a, lda, info);
 }
 
-void zgetrfnpi(integer *m, integer *n, integer*nfact, dcomplex *a, integer *lda, integer *info)
+void zgetrfnpi(integer *m, integer *n, integer *nfact, dcomplex *a, integer *lda, integer *info)
 {
-	return zgetrfnpi_( m, n, n, a, lda, info);
+	return zgetrfnpi_(m, n, nfact, a, lda, info);
 }
 
-void ZGETRFNPI_(integer *m, integer *n, integer*nfact, dcomplex *a, integer *lda, integer *info)
+void ZGETRFNPI_(integer *m, integer *n, integer *nfact, dcomplex *a, integer *lda, integer *info)
 {
-	return zgetrfnpi_( m, n, n, a, lda, info);
+	return zgetrfnpi_(m, n, nfact, a, lda, info);
 }
 
 void CHLA_TRANSTYPE(char* ret_val, integer* trans)
@@ -29778,122 +29778,122 @@ void ZGETRFNP_(integer* m, integer* n, dcomplex* a, integer* lda, integer* info)
 	return zgetrfnp_( m, n, a, lda, info);
 }
 
-void SSPFFRT2( float  *ap, integer *n, integer * ncolm, float  *work, float  *work2 )
+void SSPFFRT2( float  *ap, integer *n, integer *ncolm, float  *work, float  *work2 )
 {
 	return sspffrt2_( ap, n, ncolm, work, work2 );
 }
 
-void sspffrt2( float  *ap, integer *n, integer * ncolm, float  *work, float  *work2 )
+void sspffrt2( float  *ap, integer *n, integer *ncolm, float  *work, float  *work2 )
 {
 	return sspffrt2_( ap, n, ncolm, work, work2 );
 }
 
-void SSPFFRT2_( float  *ap, integer *n, integer * ncolm, float  *work, float  *work2 )
+void SSPFFRT2_( float  *ap, integer *n, integer *ncolm, float  *work, float  *work2 )
 {
 	return sspffrt2_( ap, n, ncolm, work, work2);
 }
 
-void DSPFFRT2( double *ap, integer *n, integer * ncolm, double *work, double *work2 )
+void DSPFFRT2( double *ap, integer *n, integer *ncolm, double *work, double *work2 )
 {
 	return dspffrt2_( ap, n, ncolm, work, work2 );
 }
 
-void dspffrt2( double *ap, integer *n, integer * ncolm, double *work, double *work2 )
+void dspffrt2( double *ap, integer *n, integer *ncolm, double *work, double *work2 )
 {
 	return dspffrt2_( ap, n, ncolm, work, work2 );
 }
 
-void DSPFFRT2_( double *ap, integer *n, integer * ncolm, double *work, double *work2 )
+void DSPFFRT2_( double *ap, integer *n, integer *ncolm, double *work, double *work2 )
 {
 	return dspffrt2_( ap, n, ncolm, work, work2 );
 }
 
-void CSPFFRT2( scomplex *ap, integer *n, integer * ncolm, scomplex *work, scomplex *work2 )
+void CSPFFRT2( scomplex *ap, integer *n, integer *ncolm, scomplex *work, scomplex *work2 )
 {
 	return cspffrt2_( ap, n, ncolm, work, work2 );
 }
 
-void cspffrt2( scomplex *ap, integer *n, integer * ncolm, scomplex *work, scomplex *work2 )
+void cspffrt2( scomplex *ap, integer *n, integer *ncolm, scomplex *work, scomplex *work2 )
 {
 	return cspffrt2_( ap, n, ncolm, work, work2 );
 }
 
-void CSPFFRT2_( scomplex *ap, integer *n, integer * ncolm, scomplex *work, scomplex *work2 )
+void CSPFFRT2_( scomplex *ap, integer *n, integer *ncolm, scomplex *work, scomplex *work2 )
 {
 	return cspffrt2_( ap, n, ncolm, work, work2 );
 }
 
-void ZSPFFRT2( dcomplex *ap, integer *n, integer * ncolm, dcomplex *work, dcomplex *work2 )
+void ZSPFFRT2( dcomplex *ap, integer *n, integer *ncolm, dcomplex *work, dcomplex *work2 )
 {
 	return zspffrt2_( ap, n, ncolm, work, work2 );
 }
 
-void zspffrt2( dcomplex *ap, integer *n, integer * ncolm, dcomplex *work, dcomplex *work2 )
+void zspffrt2( dcomplex *ap, integer *n, integer *ncolm, dcomplex *work, dcomplex *work2 )
 {
 	return zspffrt2_( ap, n, ncolm, work, work2 );
 }
 
-void ZSPFFRT2_( dcomplex *ap, integer *n, integer * ncolm, dcomplex *work, dcomplex *work2 )
+void ZSPFFRT2_( dcomplex *ap, integer *n, integer *ncolm, dcomplex *work, dcomplex *work2 )
 {
 	return zspffrt2_( ap, n, ncolm, work, work2 );
 }
 
-void SSPFFRTX( float  *ap, integer *n, integer * ncolm, float  *work, float  *work2 )
+void SSPFFRTX( float  *ap, integer *n, integer *ncolm, float  *work, float  *work2 )
 {
 	return sspffrtx_( ap, n, ncolm, work, work2 );
 }
 
-void sspffrtx( float  *ap, integer *n, integer * ncolm, float  *work, float  *work2 )
+void sspffrtx( float  *ap, integer *n, integer *ncolm, float  *work, float  *work2 )
 {
 	return sspffrtx_( ap, n, ncolm, work, work2 );
 }
 
-void SSPFFRTX_( float  *ap, integer *n, integer * ncolm, float  *work, float  *work2 )
+void SSPFFRTX_( float  *ap, integer *n, integer *ncolm, float  *work, float  *work2 )
 {
 	return sspffrtx_( ap, n, ncolm, work, work2 );
 }
 
-void DSPFFRTX( double *ap, integer *n, integer * ncolm, double *work, double *work2 )
+void DSPFFRTX( double *ap, integer *n, integer *ncolm, double *work, double *work2 )
 {
 	return dspffrtx_( ap, n, ncolm, work, work2 );
 }
 
-void dspffrtx( double *ap, integer *n, integer * ncolm, double *work, double *work2 )
+void dspffrtx( double *ap, integer *n, integer *ncolm, double *work, double *work2 )
 {
 	return dspffrtx_( ap, n, ncolm, work, work2 );
 }
 
-void DSPFFRTX_( double *ap, integer *n, integer * ncolm, double *work, double *work2 )
+void DSPFFRTX_( double *ap, integer *n, integer *ncolm, double *work, double *work2 )
 {
 	return dspffrtx_( ap, n, ncolm, work, work2);
 }
 
-void CSPFFRTX( scomplex *ap, integer *n, integer * ncolm, scomplex *work, scomplex *work2 )
+void CSPFFRTX( scomplex *ap, integer *n, integer *ncolm, scomplex *work, scomplex *work2 )
 {
 	return cspffrtx_( ap, n, ncolm, work, work2 );
 }
 
-void cspffrtx( scomplex *ap, integer *n, integer * ncolm, scomplex *work, scomplex *work2 )
+void cspffrtx( scomplex *ap, integer *n, integer *ncolm, scomplex *work, scomplex *work2 )
 {
 	return cspffrtx_( ap, n, ncolm, work, work2 );
 }
 
-void CSPFFRTX_( scomplex *ap, integer *n, integer * ncolm, scomplex *work, scomplex *work2 )
+void CSPFFRTX_( scomplex *ap, integer *n, integer *ncolm, scomplex *work, scomplex *work2 )
 {
 	return cspffrtx_( ap, n, ncolm, work, work2 );
 }
 
-void ZSPFFRTX( dcomplex *ap, integer *n, integer * ncolm, dcomplex *work, dcomplex *work2 )
+void ZSPFFRTX( dcomplex *ap, integer *n, integer *ncolm, dcomplex *work, dcomplex *work2 )
 {
 	return zspffrtx_( ap, n, ncolm, work, work2 );
 }
 
-void zspffrtx( dcomplex *ap, integer *n, integer * ncolm, dcomplex *work, dcomplex *work2 )
+void zspffrtx( dcomplex *ap, integer *n, integer *ncolm, dcomplex *work, dcomplex *work2 )
 {
 	return zspffrtx_( ap, n, ncolm, work, work2 );
 }
 
-void ZSPFFRTX_( dcomplex *ap, integer *n, integer * ncolm, dcomplex *work, dcomplex *work2 )
+void ZSPFFRTX_( dcomplex *ap, integer *n, integer *ncolm, dcomplex *work, dcomplex *work2 )
 {
 	return zspffrtx_( ap, n, ncolm, work, work2 );
 }

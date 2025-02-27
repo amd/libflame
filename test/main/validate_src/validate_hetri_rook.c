@@ -7,6 +7,7 @@
  *  */
 
 #include "test_common.h"
+#include "test_prototype.h"
 
 void validate_hetri_rook(char *tst_api, char uplo, integer n, void *A, void *A_inv, integer lda, integer *ipiv,
                          integer datatype, double err_thresh, char imatrix)

@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -26,9 +27,6 @@ void invoke_ormqr(integer datatype, char *side, char *trans, integer *m, integer
 double prepare_lapacke_ormqr_run(integer datatype, int matrix_layout, char side, char trans,
                                  integer m, integer n, integer k, integer m_A, integer n_A, void *A,
                                  integer lda, void *tau, void *c, integer ldc, integer *info);
-integer invoke_lapacke_ormqr(integer datatype, int matrix_layout, char side, char trans, integer m,
-                             integer n, integer k, void *a, integer lda, const void *tau, void *c,
-                             integer ldc);
 
 void fla_test_ormqr(integer argc, char **argv, test_params_t *params)
 {
@@ -439,38 +437,4 @@ void invoke_ormqr(integer datatype, char *side, char *trans, integer *m, integer
             break;
         }
     }
-}
-
-integer invoke_lapacke_ormqr(integer datatype, int layout, char side, char trans, integer m,
-                             integer n, integer k, void *a, integer lda, const void *tau, void *c,
-                             integer ldc)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sormqr(layout, side, trans, m, n, k, a, lda, tau, c, ldc);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dormqr(layout, side, trans, m, n, k, a, lda, tau, c, ldc);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_cunmqr(layout, side, trans, m, n, k, a, lda, tau, c, ldc);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zunmqr(layout, side, trans, m, n, k, a, lda, tau, c, ldc);
-            break;
-        }
-    }
-    return info;
 }

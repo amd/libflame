@@ -2,9 +2,8 @@
     Copyright (C) 2023-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
-#include "test_common.h"
 #include "test_lapack.h"
-#include "test_prototype.h"
+#include <invoke_lapacke.h>
 
 #define SYTRF_VU 10.0 // Maximum eigen value for condition number.
 #define SYTRF_VL 0.01 // Minimum eigen value for condition number.
@@ -23,8 +22,6 @@ void prepare_sytrf_run(integer datatype, integer n, void *A, char uplo, integer 
                        integer *info, integer test_lapacke_interface, integer mlayout);
 double prepare_lapacke_sytrf_run(integer datatype, integer layout, char uplo, integer n, void *A,
                                  integer lda, void *ipiv, integer *info);
-integer invoke_lapacke_sytrf(integer datatype, integer layout, char uplo, integer n, void *a,
-                             integer lda, integer *ipiv);
 
 void fla_test_sytrf(integer argc, char **argv, test_params_t *params)
 {
@@ -150,7 +147,7 @@ void fla_test_sytrf_experiment(char *tst_api, test_params_t *params, integer dat
     if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST && !FLA_OVERFLOW_UNDERFLOW_TEST))
     {
         init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
-        if(params->imatrix_char != NULL)
+        if(params->imatrix_char != '\0')
         {
             form_symmetric_matrix(datatype, n, A, lda, "S", 'U');
         }
@@ -344,40 +341,4 @@ void invoke_sytrf(integer datatype, char *uplo, integer *n, void *a, integer *ld
             break;
         }
     }
-}
-
-/*
-LAPACKE SYTRF API invoke function
-*/
-integer invoke_lapacke_sytrf(integer datatype, integer layout, char uplo, integer n, void *a,
-                             integer lda, integer *ipiv)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_ssytrf(layout, uplo, n, a, lda, ipiv);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dsytrf(layout, uplo, n, a, lda, ipiv);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_csytrf(layout, uplo, n, a, lda, ipiv);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zsytrf(layout, uplo, n, a, lda, ipiv);
-            break;
-        }
-    }
-    return info;
 }

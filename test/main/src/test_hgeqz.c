@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -32,10 +33,6 @@ double prepare_lapacke_hgeqz_run(integer datatype, int matrix_layout, char *job,
                                  integer ldh, void *t, integer ldt, void *alpha, void *alphar,
                                  void *alphai, void *beta, void *q, integer ldq, void *z,
                                  integer ldz, integer *info);
-integer invoke_lapacke_hgeqz(integer datatype, int matrix_layout, char job, char compq, char compz,
-                             integer n, integer ilo, integer ihi, void *h, integer ldh, void *t,
-                             integer ldt, void *alpha, void *alphar, void *alphai, void *beta,
-                             void *q, integer ldq, void *z, integer ldz);
 
 void fla_test_hgeqz(integer argc, char **argv, test_params_t *params)
 {
@@ -712,43 +709,4 @@ void invoke_hgeqz(integer datatype, char *job, char *compq, char *compz, integer
             break;
         }
     }
-}
-
-integer invoke_lapacke_hgeqz(integer datatype, int layout, char job, char compq, char compz,
-                             integer n, integer ilo, integer ihi, void *h, integer ldh, void *t,
-                             integer ldt, void *alpha, void *alphar, void *alphai, void *beta,
-                             void *q, integer ldq, void *z, integer ldz)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_shgeqz(layout, job, compq, compz, n, ilo, ihi, h, ldh, t, ldt, alphar,
-                                  alphai, beta, q, ldq, z, ldz);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dhgeqz(layout, job, compq, compz, n, ilo, ihi, h, ldh, t, ldt, alphar,
-                                  alphai, beta, q, ldq, z, ldz);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_chgeqz(layout, job, compq, compz, n, ilo, ihi, h, ldh, t, ldt, alpha,
-                                  beta, q, ldq, z, ldz);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zhgeqz(layout, job, compq, compz, n, ilo, ihi, h, ldh, t, ldt, alpha,
-                                  beta, q, ldq, z, ldz);
-            break;
-        }
-    }
-    return info;
 }

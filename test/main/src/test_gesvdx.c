@@ -8,6 +8,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -33,10 +34,6 @@ double prepare_lapacke_gesvdx_run(integer datatype, int matrix_layout, char *job
                                   void *vl, void *vu, integer il, integer iu, integer *ns, void *s,
                                   void *U, integer ldu, void *V, integer ldvt, void *work,
                                   integer *lwork, integer *iwork, void *rwork, integer *info);
-integer invoke_lapacke_gesvdx(integer datatype, int matrix_layout, char jobu, char jobvt,
-                              char range, integer m, integer n, void *a, integer lda, void *vl,
-                              void *vu, integer il, integer iu, integer *ns, void *s, void *u,
-                              integer ldu, void *vt, integer ldvt, void *superb);
 
 void fla_test_gesvdx(integer argc, char **argv, test_params_t *params)
 {
@@ -547,43 +544,4 @@ void invoke_gesvdx(integer datatype, char *jobu, char *jobvt, char *range, integ
             break;
         }
     }
-}
-
-integer invoke_lapacke_gesvdx(integer datatype, int layout, char jobu, char jobvt, char range,
-                              integer m, integer n, void *a, integer lda, void *vl, void *vu,
-                              integer il, integer iu, integer *ns, void *s, void *u, integer ldu,
-                              void *vt, integer ldvt, void *superb)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sgesvdx(layout, jobu, jobvt, range, m, n, a, lda, *(float *)vl,
-                                   *(float *)vu, il, iu, ns, s, u, ldu, vt, ldvt, superb);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dgesvdx(layout, jobu, jobvt, range, m, n, a, lda, *(double *)vl,
-                                   *(double *)vu, il, iu, ns, s, u, ldu, vt, ldvt, superb);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_cgesvdx(layout, jobu, jobvt, range, m, n, a, lda, *(float *)vl,
-                                   *(float *)vu, il, iu, ns, s, u, ldu, vt, ldvt, superb);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgesvdx(layout, jobu, jobvt, range, m, n, a, lda, *(double *)vl,
-                                   *(double *)vu, il, iu, ns, s, u, ldu, vt, ldvt, superb);
-            break;
-        }
-    }
-    return info;
 }

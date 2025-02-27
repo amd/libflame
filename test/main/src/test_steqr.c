@@ -2,9 +2,8 @@
     Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
-#include "test_common.h"
 #include "test_lapack.h"
-#include "test_prototype.h"
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -21,8 +20,6 @@ void invoke_steqr(integer datatype, char *compz, integer *n, void *z, integer *l
                   void *e, void *work, integer *info);
 double prepare_lapacke_steqr_run(integer datatype, int matrix_layout, char *compz, integer n,
                                  void *Z, integer ldz, void *D, void *E, integer *info);
-integer invoke_lapacke_steqr(integer datatype, int matrix_layout, char compz, integer n, void *d,
-                             void *e, void *z, integer ldz);
 
 #define STEQR_VL 0.1
 #define STEQR_VU 1000
@@ -398,34 +395,4 @@ void invoke_steqr(integer datatype, char *compz, integer *n, void *z, integer *l
             break;
         }
     }
-}
-
-integer invoke_lapacke_steqr(integer datatype, int layout, char compz, integer n, void *d, void *e,
-                             void *z, integer ldz)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_ssteqr(layout, compz, n, d, e, z, ldz);
-            break;
-        }
-        case DOUBLE:
-        {
-            info = LAPACKE_dsteqr(layout, compz, n, d, e, z, ldz);
-            break;
-        }
-        case COMPLEX:
-        {
-            info = LAPACKE_csteqr(layout, compz, n, d, e, z, ldz);
-            break;
-        }
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zsteqr(layout, compz, n, d, e, z, ldz);
-            break;
-        }
-    }
-    return info;
 }

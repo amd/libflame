@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 #define GETRI_VL 0.1
 #define GETRI_VU 10
@@ -25,8 +26,6 @@ void invoke_getri(integer datatype, integer *n, void *a, integer *lda, integer *
                   integer *lwork, integer *info);
 double prepare_lapacke_getri_run(integer datatype, int matrix_layout, integer m_A, integer n_A,
                                  void *A, integer lda, integer *ipiv, integer *info);
-integer invoke_lapacke_getri(integer datatype, int matrix_layout, integer n, void *a, integer lda,
-                             const integer *ipiv);
 
 void fla_test_getri(integer argc, char **argv, test_params_t *params)
 {
@@ -378,37 +377,4 @@ void invoke_getri(integer datatype, integer *n, void *a, integer *lda, integer *
             break;
         }
     }
-}
-
-integer invoke_lapacke_getri(integer datatype, int layout, integer n, void *a, integer lda,
-                             const integer *ipiv)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sgetri(layout, n, a, lda, ipiv);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dgetri(layout, n, a, lda, ipiv);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_cgetri(layout, n, a, lda, ipiv);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgetri(layout, n, a, lda, ipiv);
-            break;
-        }
-    }
-    return info;
 }

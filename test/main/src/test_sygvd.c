@@ -2,9 +2,8 @@
     Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
-#include "test_common.h"
 #include "test_lapack.h"
-#include "test_prototype.h"
+#include <invoke_lapacke.h>
 
 #define GET_TRANS_STR(datatype) (((datatype) == FLOAT || (datatype) == DOUBLE) ? "T" : "C")
 
@@ -24,8 +23,6 @@ void invoke_sygvd(integer datatype, integer *itype, char *jobz, char *uplo, inte
 double prepare_lapacke_sygvd_run(integer datatype, int itype, int layout, char *jobz, char *uplo,
                                  integer n, void *A, integer lda, void *B, integer ldb, void *w,
                                  integer *info);
-integer invoke_lapacke_sygvd(integer datatype, int layout, int itype, char jobz, char uplo,
-                             integer n, void *a, integer lda, void *b, integer ldb, void *w);
 
 void fla_test_sygvd(integer argc, char **argv, test_params_t *params)
 {
@@ -481,34 +478,4 @@ void invoke_sygvd(integer datatype, integer *itype, char *jobz, char *uplo, inte
             break;
         }
     }
-}
-
-integer invoke_lapacke_sygvd(integer datatype, int layout, int itype, char jobz, char uplo,
-                             integer n, void *a, integer lda, void *b, integer ldb, void *w)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_ssygvd(layout, itype, jobz, uplo, n, a, lda, b, ldb, w);
-            break;
-        }
-        case DOUBLE:
-        {
-            info = LAPACKE_dsygvd(layout, itype, jobz, uplo, n, a, lda, b, ldb, w);
-            break;
-        }
-        case COMPLEX:
-        {
-            info = LAPACKE_chegvd(layout, itype, jobz, uplo, n, a, lda, b, ldb, w);
-            break;
-        }
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zhegvd(layout, itype, jobz, uplo, n, a, lda, b, ldb, w);
-            break;
-        }
-    }
-    return info;
 }

@@ -133,6 +133,7 @@ target_include_directories("${PROJECT_NAME}" PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
 if(ENABLE_CPP_TEST)
 target_include_directories("${PROJECT_NAME}" PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/cpp)
 endif()
+target_include_directories("${PROJECT_NAME}" PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/lapacke)
 
 add_subdirectory(src)
 add_subdirectory(validate_src)

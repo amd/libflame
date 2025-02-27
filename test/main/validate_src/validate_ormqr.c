@@ -7,6 +7,7 @@
  *  */
 
 #include "test_common.h"
+#include "test_prototype.h"
 
 void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, integer k, void *A,
                     integer lda, void *C, void *Tau, integer ldc, void *C_test, integer datatype,

@@ -1,0 +1,49 @@
+############################################################################## #
+#Copyright(C) 2025, Advanced Micro Devices, Inc.All rights reserved.
+############################################################################## #
+
+target_sources(${PROJECT_NAME}
+    PRIVATE
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_gbtrf.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_gbtrs.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_gecon.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_geev.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_geevx.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_gehrd.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_gelqf.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_gels.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_gelsd.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_gelss.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_geqp3.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_geqrf.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_gerqf.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_gesdd.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_gesv.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_gesvd.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_gesvdx.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_getrf.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_getri.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_getrs.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_ggev.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_ggevx.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_gghrd.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_gtsv.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke.h
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_hetrf.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_hetrf_rook.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_hgeqz.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_hseqr.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_larfg.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_orgqr.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_potrf.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_potrs.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_stedc.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_steqr.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_stevd.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_syev.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_syevd.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_syevx.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_sygvd.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_sytrf.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_sytrf_rook.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_ormqr.c)

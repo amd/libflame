@@ -2,9 +2,8 @@
     Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
-#include "test_common.h"
 #include "test_lapack.h"
-#include "test_prototype.h"
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -21,8 +20,6 @@ void invoke_stevd(integer datatype, char *jobz, integer *n, void *z, integer *ld
                   void *work, integer *lwork, void *iwork, integer *liwork, integer *info);
 double prepare_lapacke_stevd_run(integer datatype, int matrix_layout, char *jobz, integer n,
                                  void *Z, integer ldz, void *D, void *E, integer *info);
-integer invoke_lapacke_stevd(integer datatype, int matrix_layout, char jobz, integer n, void *d,
-                             void *e, void *z, integer ldz);
 
 #define STEVD_VL 0.1
 #define STEVD_VU 1000
@@ -406,24 +403,4 @@ void invoke_stevd(integer datatype, char *jobz, integer *n, void *z, integer *ld
             break;
         }
     }
-}
-
-integer invoke_lapacke_stevd(integer datatype, int layout, char jobz, integer n, void *d, void *e,
-                             void *z, integer ldz)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sstevd(layout, jobz, n, d, e, z, ldz);
-            break;
-        }
-        case DOUBLE:
-        {
-            info = LAPACKE_dstevd(layout, jobz, n, d, e, z, ldz);
-            break;
-        }
-    }
-    return info;
 }

@@ -2,12 +2,11 @@
     Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
 */
 
-#include "test_common.h"
 #include "test_lapack.h"
-#include "test_prototype.h"
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 integer row_major_gecon_lda;
 
@@ -21,8 +20,6 @@ double prepare_lapacke_gecon_run(integer datatype, integer layout, char norm, in
                                  integer lda, void *anorm, void *rcond, integer *info);
 void invoke_gecon(integer datatype, char *norm, integer *n, void *A, integer *lda, void *anorm,
                   void *rcond, void *work, void *lrwork, integer *info);
-integer invoke_lapacke_gecon(integer datatype, integer layout, char norm, integer n, void *A,
-                             integer lda, void *anorm, void *rcond);
 
 void fla_test_gecon(integer argc, char **argv, test_params_t *params)
 {
@@ -355,41 +352,4 @@ void invoke_gecon(integer datatype, char *norm, integer *n, void *A, integer *ld
             break;
         }
     }
-}
-
-/*
-LAPACKE gecon API invoke function
-*/
-
-integer invoke_lapacke_gecon(integer datatype, integer layout, char norm, integer n, void *A,
-                             integer lda, void *anorm, void *rcond)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sgecon(layout, norm, n, A, lda, *(float *)anorm, (float *)rcond);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dgecon(layout, norm, n, A, lda, *(double *)anorm, (double *)rcond);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_cgecon(layout, norm, n, A, lda, *(float *)anorm, (float *)rcond);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgecon(layout, norm, n, A, lda, *(double *)anorm, (double *)rcond);
-            break;
-        }
-    }
-    return info;
 }

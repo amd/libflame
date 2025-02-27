@@ -1001,8 +1001,7 @@ set(LIBFLAME_PUBLIC_HEADERS	"include/FLAME.h"
 				"src/lapacke/LAPACKE/include/lapacke_mangling.h"
 				"src/lapacke/LAPACKE/include/lapacke.h"
 				"src/lapacke/LAPACKE/include/lapack.h"
-				"${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/libflame_interface.hh"
-				"src/src_cpp/libflame.hh")
+				"${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/libflame_interface.hh")
 
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${LIBFLAME_PUBLIC_HEADERS}")
 

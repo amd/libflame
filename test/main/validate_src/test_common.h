@@ -10,7 +10,7 @@
 #define TEST_COMMON_H
 
 #include "blis.h"
-#include "test_prototype.h"
+#include "FLA_f2c.h"
 #include "validate_common.h"
 #include "test_overflow_underflow.h"
 

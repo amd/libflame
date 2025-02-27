@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 #define GETRS_VL 0.1
 #define GETRS_VU 10
@@ -27,9 +28,6 @@ void invoke_getrs(integer datatype, char *trans, integer *nrhs, integer *n, void
 double prepare_lapacke_getrs_run(integer datatype, int matrix_layout, char *trans, integer n,
                                  integer nrhs, void *A, integer lda, void *B, integer ldb,
                                  integer *ipiv, integer *info);
-integer invoke_lapacke_getrs(integer datatype, int matrix_layout, char trans, integer n,
-                             integer nrhs, const void *a, integer lda, const integer *ipiv, void *b,
-                             integer ldb);
 
 void fla_test_getrs(integer argc, char **argv, test_params_t *params)
 {
@@ -377,37 +375,4 @@ void invoke_getrs(integer datatype, char *trans, integer *n, integer *nrhs, void
             break;
         }
     }
-}
-
-integer invoke_lapacke_getrs(integer datatype, int layout, char trans, integer n, integer nrhs,
-                             const void *a, integer lda, const integer *ipiv, void *b, integer ldb)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sgetrs(layout, trans, n, nrhs, a, lda, ipiv, b, ldb);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dgetrs(layout, trans, n, nrhs, a, lda, ipiv, b, ldb);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_cgetrs(layout, trans, n, nrhs, a, lda, ipiv, b, ldb);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgetrs(layout, trans, n, nrhs, a, lda, ipiv, b, ldb);
-            break;
-        }
-    }
-    return info;
 }

@@ -46,14 +46,4 @@ ${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_syevx.c
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_sygvd.c
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_sytrf.c
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_sytrf_rook.c
-${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_ormqr.c
-${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_gejsv.c
-${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_sytrd.c
-${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_ormlq.c
-${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_potri.c
-${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_gebrd.c
-${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_trtri.c
-${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_trtrs.c
-${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_geqpf.c
-${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_bdsqr.c
-)
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_ormqr.c)

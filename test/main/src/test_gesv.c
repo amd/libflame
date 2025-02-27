@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 #define GESV_VL 0.1
 #define GESV_VU 10
@@ -26,8 +27,6 @@ void invoke_gesv(integer datatype, integer *nrhs, integer *n, void *a, integer *
 double prepare_lapacke_gesv_run(integer datatype, int matrix_layout, integer n_A, integer nrhs,
                                 void *A, integer lda, void *B, integer ldb, integer *ipiv,
                                 integer *info);
-integer invoke_lapacke_gesv(integer datatype, int matrix_layout, integer n, integer nrhs, void *a,
-                            integer lda, integer *ipiv, void *b, integer ldb);
 
 void fla_test_gesv(integer argc, char **argv, test_params_t *params)
 {
@@ -360,37 +359,4 @@ void invoke_gesv(integer datatype, integer *n, integer *nrhs, void *a, integer *
             break;
         }
     }
-}
-
-integer invoke_lapacke_gesv(integer datatype, int layout, integer n, integer nrhs, void *a,
-                            integer lda, integer *ipiv, void *b, integer ldb)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sgesv(layout, n, nrhs, a, lda, ipiv, b, ldb);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dgesv(layout, n, nrhs, a, lda, ipiv, b, ldb);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_cgesv(layout, n, nrhs, a, lda, ipiv, b, ldb);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgesv(layout, n, nrhs, a, lda, ipiv, b, ldb);
-            break;
-        }
-    }
-    return info;
 }

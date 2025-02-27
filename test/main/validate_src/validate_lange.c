@@ -7,6 +7,7 @@
  *  */
 
 #include "test_common.h"
+#include "test_prototype.h"
 
 /* Used for scaling during sum of squares calculation */
 #define float_sbig 1.32348898E-23f

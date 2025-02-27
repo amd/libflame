@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -23,8 +24,6 @@ void invoke_stedc(integer datatype, char *compz, integer *n, void *D, void *E, v
                   integer *iwork, integer *liwork, integer *info);
 double prepare_lapacke_stedc_run(integer datatype, int matrix_layout, char *compz, integer n,
                                  void *D, void *E, void *Z, integer ldz, integer *info);
-integer invoke_lapacke_stedc(integer datatype, int matrix_layout, char compz, integer n, void *d,
-                             void *e, void *z, integer ldz);
 
 #define STEDC_VL 0.1
 #define STEDC_VU 1000
@@ -517,34 +516,4 @@ void invoke_stedc(integer datatype, char *compz, integer *n, void *D, void *E, v
             break;
         }
     }
-}
-
-integer invoke_lapacke_stedc(integer datatype, int layout, char compz, integer n, void *D, void *E,
-                             void *Z, integer ldz)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sstedc(layout, compz, n, D, E, Z, ldz);
-            break;
-        }
-        case DOUBLE:
-        {
-            info = LAPACKE_dstedc(layout, compz, n, D, E, Z, ldz);
-            break;
-        }
-        case COMPLEX:
-        {
-            info = LAPACKE_cstedc(layout, compz, n, D, E, Z, ldz);
-            break;
-        }
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zstedc(layout, compz, n, D, E, Z, ldz);
-            break;
-        }
-    }
-    return info;
 }

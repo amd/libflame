@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -22,8 +23,6 @@ void invoke_geqrf(integer datatype, integer *m, integer *n, void *a, integer *ld
                   void *work, integer *lwork, integer *info);
 double prepare_lapacke_geqrf_run(integer datatype, int matrix_layout, integer m_A, integer n_A,
                                  void *A, integer lda, void *T, integer *info);
-integer invoke_lapacke_geqrf(integer datatype, int matrix_layout, integer m, integer n, void *a,
-                             integer lda, void *tau);
 
 void fla_test_geqrf(integer argc, char **argv, test_params_t *params)
 {
@@ -368,37 +367,4 @@ void invoke_geqrf(integer datatype, integer *m, integer *n, void *a, integer *ld
             break;
         }
     }
-}
-
-integer invoke_lapacke_geqrf(integer datatype, int layout, integer m, integer n, void *a,
-                             integer lda, void *tau)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sgeqrf(layout, m, n, a, lda, tau);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dgeqrf(layout, m, n, a, lda, tau);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_cgeqrf(layout, m, n, a, lda, tau);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgeqrf(layout, m, n, a, lda, tau);
-            break;
-        }
-    }
-    return info;
 }

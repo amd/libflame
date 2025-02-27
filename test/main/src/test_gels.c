@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 #define GELS_VL 0.1
 #define GELS_VU 10
@@ -23,8 +24,6 @@ void prepare_gels_run(integer datatype, char trans, integer m, integer n, intege
                       void *A, integer lda, void *B, integer ldb, void *work, integer lwork,
                       integer n_repeats, double *time_min_, integer *info, integer interfacetype,
                       integer layout);
-integer invoke_lapacke_gels(integer datatype, integer layout, char trans, integer m, integer n,
-                            integer nrhs, void *A, integer lda, void *B, integer ldb);
 double prepare_lapacke_gels_run(integer datatype, integer layout, char trans, integer m, integer n,
                                 integer nrhs, integer m_b, void *A, integer lda, void *B,
                                 integer ldb, integer *info);
@@ -433,40 +432,4 @@ void invoke_gels(integer datatype, char *trans, integer *m, integer *n, integer 
             break;
         }
     }
-}
-
-/*
-LAPACKE GELS API invoke function
-*/
-integer invoke_lapacke_gels(integer datatype, integer layout, char trans, integer m, integer n,
-                            integer nrhs, void *A, integer lda, void *B, integer ldb)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sgels(layout, trans, m, n, nrhs, A, lda, B, ldb);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dgels(layout, trans, m, n, nrhs, A, lda, B, ldb);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_cgels(layout, trans, m, n, nrhs, A, lda, B, ldb);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgels(layout, trans, m, n, nrhs, A, lda, B, ldb);
-            break;
-        }
-    }
-    return info;
 }

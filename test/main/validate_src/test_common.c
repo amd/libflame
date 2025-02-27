@@ -2,6 +2,7 @@
     Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
+#include "test_prototype.h"
 #include "test_common.h"
 
 // Global variables

@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 #define GELSD_VL 0.1
 #define GELSD_VU 10
@@ -26,9 +27,6 @@ void prepare_gelsd_run(integer m_A, integer n_A, integer nrhs, void *A, integer 
 void invoke_gelsd(integer datatype, integer *m, integer *n, integer *nrhs, void *a, integer *lda,
                   void *b, integer *ldb, void *s, void *rcond, integer *rank, void *work,
                   integer *lwork, void *rwork, integer *iwork, integer *info);
-integer invoke_lapacke_gelsd(integer datatype, integer layout, integer m, integer n, integer nrhs,
-                             void *A, integer lda, void *B, integer ldb, void *s, void *rcond,
-                             integer *rank);
 double prepare_lapacke_gelsd_run(integer datatype, integer layout, integer m, integer n,
                                  integer nrhs, void *A, integer lda, void *B, integer ldb, void *s,
                                  void *rcond, integer *rank, integer *info);
@@ -456,41 +454,4 @@ void invoke_gelsd(integer datatype, integer *m, integer *n, integer *nrhs, void 
             break;
         }
     }
-}
-
-/*
-LAPACKE GELSD API invoke function
-*/
-integer invoke_lapacke_gelsd(integer datatype, integer layout, integer m, integer n, integer nrhs,
-                             void *A, integer lda, void *B, integer ldb, void *s, void *rcond,
-                             integer *rank)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sgelsd(layout, m, n, nrhs, A, lda, B, ldb, s, *(float *)rcond, rank);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dgelsd(layout, m, n, nrhs, A, lda, B, ldb, s, *(double *)rcond, rank);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_cgelsd(layout, m, n, nrhs, A, lda, B, ldb, s, *(float *)rcond, rank);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgelsd(layout, m, n, nrhs, A, lda, B, ldb, s, *(double *)rcond, rank);
-            break;
-        }
-    }
-    return info;
 }

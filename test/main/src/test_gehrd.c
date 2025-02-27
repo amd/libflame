@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -22,8 +23,6 @@ void invoke_gehrd(integer datatype, integer *n, integer *ilo, integer *ihi, void
                   void *tau, void *work, integer *lwork, integer *info);
 double prepare_lapacke_gehrd_run(integer datatype, int layout, integer n, integer *ilo,
                                  integer *ihi, void *A, integer lda, void *tau, integer *info);
-integer invoke_lapacke_gehrd(integer datatype, int matrix_layout, integer n, integer ilo,
-                             integer ihi, void *a, integer lda, void *tau);
 
 void fla_test_gehrd(integer argc, char **argv, test_params_t *params)
 {
@@ -372,37 +371,4 @@ void invoke_gehrd(integer datatype, integer *n, integer *ilo, integer *ihi, void
             break;
         }
     }
-}
-
-integer invoke_lapacke_gehrd(integer datatype, int layout, integer n, integer ilo, integer ihi,
-                             void *a, integer lda, void *tau)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sgehrd(layout, n, ilo, ihi, a, lda, tau);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dgehrd(layout, n, ilo, ihi, a, lda, tau);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_cgehrd(layout, n, ilo, ihi, a, lda, tau);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgehrd(layout, n, ilo, ihi, a, lda, tau);
-            break;
-        }
-    }
-    return info;
 }

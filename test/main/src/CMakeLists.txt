@@ -62,6 +62,8 @@ ${CMAKE_CURRENT_SOURCE_DIR}/test_getrfnpi.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_hetri_rook.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_ormqr.c)
 
+add_subdirectory(lapacke)
+
 if(ENABLE_CPP_TEST)
 add_subdirectory(cpp)
 endif()

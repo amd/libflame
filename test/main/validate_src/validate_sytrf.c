@@ -7,6 +7,7 @@
  *  */
 
 #include "test_common.h"
+#include "test_prototype.h"
 
 void validate_sytrf(char *tst_api, char *uplo, integer n, integer lda, void *A_res,
                     integer datatype, integer *ipiv, double err_thresh, void *A)

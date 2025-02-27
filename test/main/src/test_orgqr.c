@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -22,8 +23,6 @@ void invoke_orgqr(integer datatype, integer *m, integer *n, integer *min_A, void
                   void *tau, void *work, integer *lwork, integer *info);
 double prepare_lapacke_orgqr_run(integer datatype, int matrix_layout, integer m, integer n, void *A,
                                  integer lda, void *T, integer *info);
-integer invoke_lapacke_orgqr(integer datatype, int matrix_layout, integer m, integer n, integer k,
-                             void *a, integer lda, const void *tau);
 
 void fla_test_orgqr(integer argc, char **argv, test_params_t *params)
 {
@@ -389,37 +388,4 @@ void invoke_orgqr(integer datatype, integer *m, integer *n, integer *min_A, void
             break;
         }
     }
-}
-
-integer invoke_lapacke_orgqr(integer datatype, int layout, integer m, integer n, integer k, void *a,
-                             integer lda, const void *tau)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sorgqr(layout, m, n, n, a, lda, tau);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dorgqr(layout, m, n, n, a, lda, tau);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_cungqr(layout, m, n, n, a, lda, tau);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zungqr(layout, m, n, n, a, lda, tau);
-            break;
-        }
-    }
-    return info;
 }

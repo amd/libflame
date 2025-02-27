@@ -7,6 +7,7 @@
  *  */
 
 #include "test_common.h"
+#include "test_prototype.h"
 
 /* Validates bottom left submatrix of array A */
 #define validate_getrfnpi_test_L_BL_block(x, nrm_prefix, mat_type, realtype)               \

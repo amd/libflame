@@ -21,6 +21,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 #endif
+#include "test_prototype.h"
 #include "test_common.h"
 
 #define LAPACK_OPERATIONS_FILENAME "input.global.operations"

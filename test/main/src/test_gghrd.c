@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -29,9 +30,6 @@ double prepare_lapacke_gghrd_run(integer datatype, int matrix_layout, char *comp
                                  integer n, integer *ilo, integer *ihi, void *a, integer lda,
                                  void *b, integer ldb, void *q, integer ldq, void *z, integer ldz,
                                  integer *info);
-integer invoke_lapacke_gghrd(integer datatype, int matrix_layout, char compq, char compz, integer n,
-                             integer ilo, integer ihi, void *a, integer lda, void *b, integer ldb,
-                             void *q, integer ldq, void *z, integer ldz);
 
 void fla_test_gghrd(integer argc, char **argv, test_params_t *params)
 {
@@ -580,42 +578,4 @@ void invoke_gghrd(integer datatype, char *compq, char *compz, integer *n, intege
             break;
         }
     }
-}
-
-integer invoke_lapacke_gghrd(integer datatype, int layout, char compq, char compz, integer n,
-                             integer ilo, integer ihi, void *a, integer lda, void *b, integer ldb,
-                             void *q, integer ldq, void *z, integer ldz)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info
-                = LAPACKE_sgghrd(layout, compq, compz, n, ilo, ihi, a, lda, b, ldb, q, ldq, z, ldz);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info
-                = LAPACKE_dgghrd(layout, compq, compz, n, ilo, ihi, a, lda, b, ldb, q, ldq, z, ldz);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info
-                = LAPACKE_cgghrd(layout, compq, compz, n, ilo, ihi, a, lda, b, ldb, q, ldq, z, ldz);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info
-                = LAPACKE_zgghrd(layout, compq, compz, n, ilo, ihi, a, lda, b, ldb, q, ldq, z, ldz);
-            break;
-        }
-    }
-    return info;
 }

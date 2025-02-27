@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 #define HETRF_ROOK_VU 10.0 // Maximum eigen value for condition number.
 #define HETRF_ROOK_VL 0.01 // Minimum eigen value for condition number.
@@ -25,8 +26,6 @@ void prepare_hetrf_rook_run(integer datatype, integer n, void *A, char uplo, int
                             integer mlayout);
 double prepare_lapacke_hetrf_rook_run(integer datatype, integer layout, char uplo, integer n,
                                       void *A, integer lda, void *ipiv, integer *info);
-integer invoke_lapacke_hetrf_rook(integer datatype, integer layout, char uplo, integer n, void *a,
-                                  integer lda, integer *ipiv);
 
 void fla_test_hetrf_rook(integer argc, char **argv, test_params_t *params)
 {
@@ -151,7 +150,7 @@ void fla_test_hetrf_rook_experiment(char *tst_api, test_params_t *params, intege
     if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST && !FLA_OVERFLOW_UNDERFLOW_TEST))
     {
         init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
-        if(params->imatrix_char != NULL)
+        if(params->imatrix_char != '\0')
         {
             form_symmetric_matrix(datatype, n, A, lda, "C", 'U');
         }
@@ -354,28 +353,4 @@ void invoke_hetrf_rook(integer datatype, char *uplo, integer *n, void *a, intege
             break;
         }
     }
-}
-
-/*
-LAPACKE HETRF_ROOK API invoke function
-*/
-integer invoke_lapacke_hetrf_rook(integer datatype, integer layout, char uplo, integer n, void *a,
-                                  integer lda, integer *ipiv)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case COMPLEX:
-        {
-            info = LAPACKE_chetrf_rook(layout, uplo, n, a, lda, ipiv);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zhetrf_rook(layout, uplo, n, a, lda, ipiv);
-            break;
-        }
-    }
-    return info;
 }

@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -26,9 +27,6 @@ void invoke_gesdd(integer datatype, char *jobz, integer *m, integer *n, void *a,
 double prepare_lapacke_gesdd_run(integer datatype, int matrix_layout, char *jobz, integer m_A,
                                  integer n_A, void *A, integer lda, void *s, void *U, integer ldu,
                                  void *V, integer ldvt, integer *info);
-integer invoke_lapacke_gesdd(integer datatype, int matrix_layout, char jobz, integer m, integer n,
-                             void *a, integer lda, void *s, void *u, integer ldu, void *vt,
-                             integer ldvt);
 
 void fla_test_gesdd(integer argc, char **argv, test_params_t *params)
 {
@@ -604,37 +602,4 @@ void invoke_gesdd(integer datatype, char *jobz, integer *m, integer *n, void *a,
             break;
         }
     }
-}
-
-integer invoke_lapacke_gesdd(integer datatype, int layout, char jobz, integer m, integer n, void *a,
-                             integer lda, void *s, void *u, integer ldu, void *vt, integer ldvt)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sgesdd(layout, jobz, m, n, a, lda, s, u, ldu, vt, ldvt);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dgesdd(layout, jobz, m, n, a, lda, s, u, ldu, vt, ldvt);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_cgesdd(layout, jobz, m, n, a, lda, s, u, ldu, vt, ldvt);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgesdd(layout, jobz, m, n, a, lda, s, u, ldu, vt, ldvt);
-            break;
-        }
-    }
-    return info;
 }

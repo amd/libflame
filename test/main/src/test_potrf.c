@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -21,8 +22,6 @@ void prepare_potrf_run(char *uplo, integer m, void *A, integer lda, integer data
 void invoke_potrf(char *uplo, integer datatype, integer *m, void *a, integer *lda, integer *info);
 double prepare_lapacke_potrf_run(integer datatype, int matrix_layout, char *uplo, integer m,
                                  void *A, integer lda, integer *info);
-integer invoke_lapacke_potrf(integer datatype, int matrix_layout, char uplo, integer n, void *a,
-                             integer lda);
 
 void fla_test_potrf(integer argc, char **argv, test_params_t *params)
 {
@@ -148,7 +147,7 @@ void fla_test_potrf_experiment(char *tst_api, test_params_t *params, integer dat
     {
         /* Initialize input matrix with custom data */
         init_matrix(datatype, A, m, m, lda, g_ext_fptr, params->imatrix_char);
-        if(params->imatrix_char != NULL)
+        if(params->imatrix_char != '\0')
         {
             char *type = "C";
             if(datatype == FLOAT || datatype == DOUBLE)
@@ -317,32 +316,3 @@ void invoke_potrf(char *uplo, integer datatype, integer *m, void *a, integer *ld
     }
 }
 
-integer invoke_lapacke_potrf(integer datatype, int layout, char uplo, integer n, void *a,
-                             integer lda)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_spotrf(layout, uplo, n, a, lda);
-            break;
-        }
-        case DOUBLE:
-        {
-            info = LAPACKE_dpotrf(layout, uplo, n, a, lda);
-            break;
-        }
-        case COMPLEX:
-        {
-            info = LAPACKE_cpotrf(layout, uplo, n, a, lda);
-            break;
-        }
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zpotrf(layout, uplo, n, a, lda);
-            break;
-        }
-    }
-    return info;
-}

@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -32,11 +33,7 @@ double prepare_lapacke_geevx_run(integer datatype, int matrix_layout, char *bala
                                  void *wr, void *wi, void *w, void *vl, integer ldvl, void *vr,
                                  integer ldvr, integer *ilo, integer *ihi, void *scale, void *abnrm,
                                  void *rconde, void *rcondv, integer *info);
-integer invoke_lapacke_geevx(integer datatype, int matrix_layout, char balanc, char jobvl,
-                             char jobvr, char sense, integer n, void *a, integer lda, void *wr,
-                             void *wi, void *w, void *vl, integer ldvl, void *vr, integer ldvr,
-                             integer *ilo, integer *ihi, void *scale, void *abnrm, void *rconde,
-                             void *rcondv);
+
 
 void fla_test_geevx(integer argc, char **argv, test_params_t *params)
 {
@@ -562,44 +559,4 @@ void invoke_geevx(integer datatype, char *balanc, char *jobvl, char *jobvr, char
             break;
         }
     }
-}
-
-/* API to invoke geevx LAPACKE interface */
-integer invoke_lapacke_geevx(integer datatype, int layout, char balanc, char jobvl, char jobvr,
-                             char sense, integer n, void *a, integer lda, void *wr, void *wi,
-                             void *w, void *vl, integer ldvl, void *vr, integer ldvr, integer *ilo,
-                             integer *ihi, void *scale, void *abnrm, void *rconde, void *rcondv)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sgeevx(layout, balanc, jobvl, jobvr, sense, n, a, lda, wr, wi, vl, ldvl,
-                                  vr, ldvr, ilo, ihi, scale, abnrm, rconde, rcondv);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dgeevx(layout, balanc, jobvl, jobvr, sense, n, a, lda, wr, wi, vl, ldvl,
-                                  vr, ldvr, ilo, ihi, scale, abnrm, rconde, rcondv);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_cgeevx(layout, balanc, jobvl, jobvr, sense, n, a, lda, w, vl, ldvl, vr,
-                                  ldvr, ilo, ihi, scale, abnrm, rconde, rcondv);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgeevx(layout, balanc, jobvl, jobvr, sense, n, a, lda, w, vl, ldvl, vr,
-                                  ldvr, ilo, ihi, scale, abnrm, rconde, rcondv);
-            break;
-        }
-    }
-    return info;
 }

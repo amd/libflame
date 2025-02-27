@@ -2,9 +2,7 @@
  * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 
-#include "test_common.h"
 #include "test_lapack.h"
-#include "test_prototype.h"
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
@@ -149,7 +147,7 @@ void fla_test_hetri_rook_experiment(char *tst_api, test_params_t *params, intege
         {
             ((integer*)ipiv)[i] = i + 1;
         }
-        if(params->imatrix_char != NULL)
+        if(params->imatrix_char != '\0')
         {
             form_symmetric_matrix(datatype, n, A, lda, "C", 'U');
         }

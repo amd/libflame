@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -26,9 +27,6 @@ void invoke_geev(integer datatype, char *jobvl, char *jobvr, integer *n, void *a
 double prepare_lapacke_geev_run(integer datatype, int matrix_layout, char *jobvl, char *jobvr,
                                 integer n, void *a, integer lda, void *wr, void *wi, void *w,
                                 void *vl, integer ldvl, void *vr, integer ldvr, integer *info);
-integer invoke_lapacke_geev(integer datatype, int matrix_layout, char jobvl, char jobvr, integer n,
-                            void *a, integer lda, void *wr, void *wi, void *w, void *vl,
-                            integer ldvl, void *vr, integer ldvr);
 
 void fla_test_geev(integer argc, char **argv, test_params_t *params)
 {
@@ -500,38 +498,4 @@ void invoke_geev(integer datatype, char *jobvl, char *jobvr, integer *n, void *a
             break;
         }
     }
-}
-
-integer invoke_lapacke_geev(integer datatype, int layout, char jobvl, char jobvr, integer n,
-                            void *a, integer lda, void *wr, void *wi, void *w, void *vl,
-                            integer ldvl, void *vr, integer ldvr)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sgeev(layout, jobvl, jobvr, n, a, lda, wr, wi, vl, ldvl, vr, ldvr);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dgeev(layout, jobvl, jobvr, n, a, lda, wr, wi, vl, ldvl, vr, ldvr);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_cgeev(layout, jobvl, jobvr, n, a, lda, w, vl, ldvl, vr, ldvr);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgeev(layout, jobvl, jobvr, n, a, lda, w, vl, ldvl, vr, ldvr);
-            break;
-        }
-    }
-    return info;
 }

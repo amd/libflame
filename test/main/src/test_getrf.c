@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 #define GETRF_VL 0.1
 #define GETRF_VU 10
@@ -25,8 +26,6 @@ void invoke_getrf(integer datatype, integer *m, integer *n, void *a, integer *ld
                   integer *info);
 double prepare_lapacke_getrf_run(integer datatype, int matrix_layout, integer m_A, integer n_A,
                                  void *A, integer lda, integer *ipiv, integer *info);
-integer invoke_lapacke_getrf(integer datatype, int matrix_layout, integer m, integer n, void *a,
-                             integer lda, integer *ipiv);
 
 void fla_test_getrf(integer argc, char **argv, test_params_t *params)
 {
@@ -343,37 +342,4 @@ void invoke_getrf(integer datatype, integer *m, integer *n, void *a, integer *ld
             break;
         }
     }
-}
-
-integer invoke_lapacke_getrf(integer datatype, int layout, integer m, integer n, void *a,
-                             integer lda, integer *ipiv)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sgetrf(layout, m, n, a, lda, ipiv);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dgetrf(layout, m, n, a, lda, ipiv);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_cgetrf(layout, m, n, a, lda, ipiv);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgetrf(layout, m, n, a, lda, ipiv);
-            break;
-        }
-    }
-    return info;
 }

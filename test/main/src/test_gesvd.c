@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -28,9 +29,6 @@ double prepare_lapacke_gesvd_run(integer datatype, int matrix_layout, char *jobu
                                  integer m_A, integer n_A, void *A, integer lda, void *s, void *U,
                                  integer ldu, void *V, integer ldvt, integer *info, void *work,
                                  void *rwork);
-integer invoke_lapacke_gesvd(integer datatype, int matrix_layout, char jobu, char jobvt, integer m,
-                             integer n, void *a, integer lda, void *s, void *u, integer ldu,
-                             void *vt, integer ldvt, void *work, void *rwork);
 
 void fla_test_gesvd(integer argc, char **argv, test_params_t *params)
 {
@@ -540,38 +538,4 @@ void invoke_gesvd(integer datatype, char *jobu, char *jobvt, integer *m, integer
             break;
         }
     }
-}
-
-integer invoke_lapacke_gesvd(integer datatype, int layout, char jobu, char jobvt, integer m,
-                             integer n, void *a, integer lda, void *s, void *u, integer ldu,
-                             void *vt, integer ldvt, void *work, void *rwork)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sgesvd(layout, jobu, jobvt, m, n, a, lda, s, u, ldu, vt, ldvt, work);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dgesvd(layout, jobu, jobvt, m, n, a, lda, s, u, ldu, vt, ldvt, work);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_cgesvd(layout, jobu, jobvt, m, n, a, lda, s, u, ldu, vt, ldvt, rwork);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgesvd(layout, jobu, jobvt, m, n, a, lda, s, u, ldu, vt, ldvt, rwork);
-            break;
-        }
-    }
-    return info;
 }

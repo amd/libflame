@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -25,9 +26,6 @@ void invoke_gbtrf(integer datatype, integer *m, integer *n, integer *kl, integer
 double prepare_lapacke_gbtrs_run(integer datatype, integer matrix_layout, char trans, integer n_A,
                                  integer kl, integer ku, integer nrhs, void *ab, integer ldab,
                                  integer *ipiv, void *b, integer ldb, integer *info);
-integer invoke_lapacke_gbtrs(integer datatype, int matrix_layout, char trans, integer n, integer kl,
-                             integer ku, integer nrhs, void *ab, integer ldab, integer *ipiv,
-                             void *b, integer ldb);
 
 void fla_test_gbtrs(integer argc, char **argv, test_params_t *params)
 {
@@ -402,38 +400,4 @@ void invoke_gbtrs(integer datatype, char *trans, integer *n, integer *kl, intege
             break;
         }
     }
-}
-
-integer invoke_lapacke_gbtrs(integer datatype, int layout, char trans, integer n, integer kl,
-                             integer ku, integer nrhs, void *ab, integer ldab, integer *ipiv,
-                             void *b, integer ldb)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sgbtrs(layout, trans, n, kl, ku, nrhs, ab, ldab, ipiv, b, ldb);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dgbtrs(layout, trans, n, kl, ku, nrhs, ab, ldab, ipiv, b, ldb);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_cgbtrs(layout, trans, n, kl, ku, nrhs, ab, ldab, ipiv, b, ldb);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgbtrs(layout, trans, n, kl, ku, nrhs, ab, ldab, ipiv, b, ldb);
-            break;
-        }
-    }
-    return info;
 }

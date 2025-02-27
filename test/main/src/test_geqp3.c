@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -22,8 +23,6 @@ void invoke_geqp3(integer datatype, integer *m, integer *n, void *a, integer *ld
                   void *tau, void *work, integer *lwork, void *rwork, integer *info);
 double prepare_lapacke_geqp3_run(integer datatype, int layout, integer m_A, integer n_A, void *A,
                                  integer lda, integer *jpvt, void *T, integer *info);
-integer invoke_lapacke_geqp3(integer datatype, int matrix_layout, integer m, integer n, void *a,
-                             integer lda, integer *jpvt, void *tau);
 
 void fla_test_geqp3(integer argc, char **argv, test_params_t *params)
 {
@@ -389,37 +388,4 @@ void invoke_geqp3(integer datatype, integer *m, integer *n, void *a, integer *ld
             break;
         }
     }
-}
-
-integer invoke_lapacke_geqp3(integer datatype, int layout, integer m, integer n, void *a,
-                             integer lda, integer *jpvt, void *tau)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sgeqp3(layout, m, n, a, lda, jpvt, tau);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dgeqp3(layout, m, n, a, lda, jpvt, tau);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_cgeqp3(layout, m, n, a, lda, jpvt, tau);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgeqp3(layout, m, n, a, lda, jpvt, tau);
-            break;
-        }
-    }
-    return info;
 }

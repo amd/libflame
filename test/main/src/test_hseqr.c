@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -26,9 +27,6 @@ void invoke_hseqr(integer datatype, char *job, char *compz, integer *n, integer 
 double prepare_lapacke_hseqr_run(integer datatype, int matrix_layout, char *job, char *compz,
                                  integer n, integer *ilo, integer *ihi, void *h, integer ldh,
                                  void *w, void *wr, void *wi, void *z, integer ldz, integer *info);
-integer invoke_lapacke_hseqr(integer datatype, int matrix_layout, char job, char compz, integer n,
-                             integer ilo, integer ihi, void *h, integer ldh, void *w, void *wr,
-                             void *wi, void *z, integer ldz);
 
 void fla_test_hseqr(integer argc, char **argv, test_params_t *params)
 {
@@ -470,38 +468,4 @@ void invoke_hseqr(integer datatype, char *job, char *compz, integer *n, integer 
             break;
         }
     }
-}
-
-integer invoke_lapacke_hseqr(integer datatype, int layout, char job, char compz, integer n,
-                             integer ilo, integer ihi, void *h, integer ldh, void *w, void *wr,
-                             void *wi, void *z, integer ldz)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_shseqr(layout, job, compz, n, ilo, ihi, h, ldh, wr, wi, z, ldz);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dhseqr(layout, job, compz, n, ilo, ihi, h, ldh, wr, wi, z, ldz);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_chseqr(layout, job, compz, n, ilo, ihi, h, ldh, w, z, ldz);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zhseqr(layout, job, compz, n, ilo, ihi, h, ldh, w, z, ldz);
-            break;
-        }
-    }
-    return info;
 }

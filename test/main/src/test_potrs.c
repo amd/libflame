@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -24,8 +25,6 @@ void invoke_potrs(char *uplo, integer datatype, integer *m, void *A, integer *ld
 double prepare_lapacke_potrs_run(integer datatype, int matrix_layout, char *uplo, integer m,
                                  integer nrhs, void *A, integer lda, void *b, integer ldb,
                                  integer *info);
-integer invoke_lapacke_potrs(integer datatype, int matrix_layout, char uplo, integer n,
-                             integer nrhs, const void *a, integer lda, void *b, integer ldb);
 
 void fla_test_potrs(integer argc, char **argv, test_params_t *params)
 {
@@ -355,34 +354,4 @@ void invoke_potrs(char *uplo, integer datatype, integer *n, void *A, integer *ld
             break;
         }
     }
-}
-
-integer invoke_lapacke_potrs(integer datatype, int layout, char uplo, integer n, integer nrhs,
-                             const void *A, integer lda, void *B, integer ldb)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_spotrs(layout, uplo, n, nrhs, A, lda, B, ldb);
-            break;
-        }
-        case DOUBLE:
-        {
-            info = LAPACKE_dpotrs(layout, uplo, n, nrhs, A, lda, B, ldb);
-            break;
-        }
-        case COMPLEX:
-        {
-            info = LAPACKE_cpotrs(layout, uplo, n, nrhs, A, lda, B, ldb);
-            break;
-        }
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zpotrs(layout, uplo, n, nrhs, A, lda, B, ldb);
-            break;
-        }
-    }
-    return info;
 }

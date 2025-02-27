@@ -8,6 +8,9 @@
 
     Copyright (c) 2025 Advanced Micro Devices, Inc. All rights reserved.
 */
+#ifndef LAPACK_2_FLAME_H
+#define LAPACK_2_FLAME_H
+
 int cbbcsd_check(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, integer *m,
                  integer *p, integer *q, float *theta, float *phi, scomplex *u1, integer *ldu1,
                  scomplex *u2, integer *ldu2, scomplex *v1t, integer *ldv1t, scomplex *v2t,
@@ -4396,3 +4399,4 @@ int zupgtr_check(char *uplo, integer *n, dcomplex *ap, dcomplex *tau, dcomplex *
                  dcomplex *work, integer *info);
 int zupmtr_check(char *side, char *uplo, char *trans, integer *m, integer *n, dcomplex *ap,
                  dcomplex *tau, dcomplex *c__, integer *ldc, dcomplex *work, integer *info);
+#endif

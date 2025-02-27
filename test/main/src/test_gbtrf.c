@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -21,8 +22,6 @@ void invoke_gbtrf(integer datatype, integer *m, integer *n, integer *kl, integer
 double prepare_lapacke_gbtrf_run(integer datatype, integer matrix_layout, integer m_A, integer n_A,
                                  integer kl, integer ku, void *ab, integer ldab, integer *ipiv,
                                  integer *info);
-integer invoke_lapacke_gbtrf(integer datatype, int matrix_layout, integer m, integer n, integer kl,
-                             integer ku, void *ab, integer ldab, integer *ipiv);
 
 void fla_test_gbtrf(integer argc, char **argv, test_params_t *params)
 {
@@ -340,37 +339,4 @@ void invoke_gbtrf(integer datatype, integer *m, integer *n, integer *kl, integer
             break;
         }
     }
-}
-
-integer invoke_lapacke_gbtrf(integer datatype, int layout, integer m, integer n, integer kl,
-                             integer ku, void *ab, integer ldab, integer *ipiv)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sgbtrf(layout, m, n, kl, ku, ab, ldab, ipiv);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dgbtrf(layout, m, n, kl, ku, ab, ldab, ipiv);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_cgbtrf(layout, m, n, kl, ku, ab, ldab, ipiv);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgbtrf(layout, m, n, kl, ku, ab, ldab, ipiv);
-            break;
-        }
-    }
-    return info;
 }

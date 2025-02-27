@@ -2,7 +2,6 @@
 # Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
 ###############################################################################
 
-target_include_directories("${PROJECT_NAME}" PRIVATE ${CMAKE_SOURCE_DIR}/src/src_cpp)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-comment -Wno-unused-function")
 
 if(WIN32)

@@ -9,7 +9,6 @@
 #ifndef LIBFLAME_INTERFACE_ORTH_HH
 #define LIBFLAME_INTERFACE_ORTH_HH
 
-#include "libflame.hh"
 
 namespace libflame
 {

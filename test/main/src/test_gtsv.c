@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -19,8 +20,6 @@ void prepare_gtsv_run(integer n_A, integer nrhs, void *dl, void *d, void *du, vo
                       integer interfacetype, integer layout);
 void invoke_gtsv(integer datatype, integer *nrhs, integer *n, void *dl, void *d, void *du, void *b,
                  integer *ldb, integer *info);
-integer invoke_lapacke_gtsv(integer datatype, integer layout, integer n, integer nrhs, void *dl,
-                            void *d, void *du, void *B, integer ldb);
 double prepare_lapacke_gtsv_run(integer datatype, integer layout, integer n, integer nrhs, void *dl,
                                 void *d, void *du, void *B, integer ldb, integer *info);
 
@@ -423,40 +422,4 @@ void invoke_gtsv(integer datatype, integer *n, integer *nrhs, void *dl, void *d,
             break;
         }
     }
-}
-
-/*
-LAPACKE GTSV API invoke function
-*/
-integer invoke_lapacke_gtsv(integer datatype, integer layout, integer n, integer nrhs, void *dl,
-                            void *d, void *du, void *B, integer ldb)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sgtsv(layout, n, nrhs, dl, d, du, B, ldb);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dgtsv(layout, n, nrhs, dl, d, du, B, ldb);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_cgtsv(layout, n, nrhs, dl, d, du, B, ldb);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgtsv(layout, n, nrhs, dl, d, du, B, ldb);
-            break;
-        }
-    }
-    return info;
 }

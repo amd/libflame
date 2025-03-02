@@ -2308,7 +2308,7 @@ void scale_matrix_overflow_underflow_hetri_rook(integer datatype, integer n, voi
 
 /* Scaling matrix with values around overflow, underflow for ormqr/unmqr */
 void scale_matrix_underflow_overflow_ormqr(integer datatype, integer m, integer n, void *A,
-    integer lda, char imatrix_char)
+                                           integer lda, char imatrix_char)
 {
     void *max_min = NULL, *scal = NULL;
     create_vector(get_realtype(datatype), &max_min, 1);
@@ -2330,4 +2330,40 @@ void scale_matrix_underflow_overflow_ormqr(integer datatype, integer m, integer 
     /* free vectors */
     free_vector(max_min);
     free_vector(scal);
+}
+
+/* Scale matrix with values around overflow underflow for gejsv */
+void scale_matrix_overflow_underflow_gejsv(integer datatype, integer m, integer n, void *A,
+                                           integer lda, void *S, char imatrix_char, void *scal)
+{
+    void *max_min = NULL, *max_min_a = NULL, *max_min_s = NULL;
+    double tuning_val = 1.0;
+    create_vector(get_realtype(datatype), &max_min, 1);
+    create_vector(get_realtype(datatype), &max_min_a, 1);
+    create_vector(get_realtype(datatype), &max_min_s, 1);
+
+    if(imatrix_char == 'O')
+    {
+        get_max_from_matrix(datatype, A, max_min_a, m, n, lda);
+        get_max_from_matrix(get_realtype(datatype), S, max_min_s, n, i_one, n);
+        get_max_of_values(get_realtype(datatype), max_min_a, max_min_s, max_min);
+        tuning_val = 5.0;
+    }
+    else if(imatrix_char == 'U')
+    {
+        get_min_from_matrix(datatype, A, max_min_a, m, n, lda);
+        get_min_from_matrix(get_realtype(datatype), S, max_min_s, n, i_one, n);
+        get_min_of_values(get_realtype(datatype), max_min_a, max_min_s, max_min);
+    }
+    calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
+
+    /* Scaling the matrix A with scal */
+    scal_matrix(datatype, scal, A, m, n, lda, i_one);
+    /* Scaling the vector S with scal */
+    scal_matrix(get_realtype(datatype), scal, S, n, i_one, n, i_one);
+
+    /* free vectors */
+    free_vector(max_min);
+    free_vector(max_min_a);
+    free_vector(max_min_s);
 }

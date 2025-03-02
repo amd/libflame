@@ -108,7 +108,8 @@ extern double time_min;
             norm_orig = ufmin;                                                                     \
         }                                                                                          \
         /* F = X * lambda */                                                                       \
-        multiply_matrix_diag_vector(datatype, n, n, X_scaled, lda, lambda_out, 1);                 \
+        multiply_matrix_diag_vector(datatype, 'R', VECTOR_TYPE_REAL, n, n, X_scaled, lda,          \
+                                    lambda_out, 1);                                                \
         switch(itype)                                                                              \
         {                                                                                          \
             case 1:                                                                                \

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2025-2026, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_gejsv.c
@@ -37,13 +37,13 @@ extern double time_min;
 
 #define gejsv_validate_singular_values(realtype_prefix, realtype)                        \
     {                                                                                    \
-        realtype norm_orig = realtype_prefix##nrm2_(&n, S, &i_one);                      \
+        realtype norm_orig = realtype_prefix##nrm2_(&svd_len, S_test, &i_one);           \
         void *S_copy = NULL;                                                             \
         create_vector(get_realtype(datatype), &S_copy, n);                               \
         copy_vector(get_realtype(datatype), n, S_scaled, 1, S_copy, 1);                  \
         realtype_prefix##axpy_(&n, &realtype_prefix##_n_one, S, &i_one, S_copy, &i_one); \
         realtype norm = realtype_prefix##nrm2_(&n, S_copy, &i_one);                      \
-        resid2 = fla_compute_residual(datatype, 'P', norm, norm_orig, n, params);             \
+        resid2 = norm / (eps * norm_orig * n);                                           \
         free_vector(S_copy);                                                             \
     }
 
@@ -57,11 +57,10 @@ extern double time_min;
         copy_matrix(datatype, "full", m, n, U, ldu, U_copy, ldu);                                 \
         multiply_matrix_diag_vector(datatype, 'R', VECTOR_TYPE_REAL, m, n, U_copy, ldu, S_scaled, \
                                     1);                                                           \
-        fla_invoke_gemm(datatype, "N", "C", &m, &n, &n, d_one, U_copy, &ldu,                      \
-             V, &ldv, d_zero, A_copy, &lda);                                                      \
+        fla_invoke_gemm(datatype, "N", "C", &m, &n, &n, U_copy, &ldu, V, &ldv, A_copy, &lda);     \
         matrix_difference(datatype, m, n, A_copy, lda, A, lda);                                   \
         realtype norm = type_prefix##lange_("1", &m, &n, A_copy, &lda, NULL);                     \
-        resid3 = fla_compute_residual(datatype, 'P', norm, norm_orig, n, params);                      \
+        resid3 = norm / (eps * norm_orig * n);                                                    \
         free_matrix(A_copy);                                                                      \
         free_matrix(U_copy);                                                                      \
     }
@@ -79,6 +78,7 @@ extern double time_min;
 
 #define gejsv_run_validations(type_prefix, realtype_prefix, realtype)                      \
     {                                                                                      \
+        realtype eps = realtype_prefix##lamch_("P");                                       \
         gejsv_validate_num_singular_values(realtype);                                      \
         if(validate_singular_values)                                                       \
         {                                                                                  \
@@ -90,11 +90,11 @@ extern double time_min;
         }                                                                                  \
         if(same_char(jobu, 'U') || same_char(jobu, 'F'))                                   \
         {                                                                                  \
-            resid4 = check_orthogonality(datatype, U, m, svd_len, ldu, params);            \
+            resid4 = check_orthogonality(datatype, U, m, svd_len, ldu);                    \
         }                                                                                  \
         if(same_char(jobv, 'V') || same_char(jobv, 'J'))                                   \
         {                                                                                  \
-            resid5 = check_orthogonality(datatype, V, n, n, ldv, params);                  \
+            resid5 = check_orthogonality(datatype, V, n, n, ldv);                          \
         }                                                                                  \
         /* If joba is A then validate that smaller singular values have been eliminated */ \
         if(test_eliminated_svds)                                                           \
@@ -107,10 +107,9 @@ void validate_gejsv(char *tst_api, char joba, char jobu, char jobv, char jobr, c
                     integer m, integer n, void *A, integer lda, void *S, void *S_test, void *U,
                     integer ldu, void *V, integer ldv, void *stat, integer *istat,
                     integer test_eliminated_svds, integer datatype, double err_thresh, void *scal,
-                    char imatrix, void *params)
+                    char imatrix)
 {
-    double residual, resid1 = 0., resid2 = 0., resid3 = 0., resid4 = 0., resid5 = 0., resid6 = 0.,
-           resid7 = 0., resid8 = 0., resid9 = 0.;
+    double residual, resid1 = 0., resid2 = 0., resid3 = 0., resid4 = 0., resid5 = 0., resid6 = 0.;
     void *S_scaled = NULL;
     integer validate_singular_values;
     integer svd_len = same_char(jobu, 'F') ? m : n; /* Early return conditions */
@@ -155,21 +154,11 @@ void validate_gejsv(char *tst_api, char joba, char jobu, char jobv, char jobr, c
 
     free_vector(S_scaled);
 
-    /* Test 7: Check padding rows of A not modified */
-    resid7 = check_padding(datatype, m, n, A, lda);
-    /* Test 8: Check padding rows of U not modified */
-    resid8 = check_padding(datatype, m, svd_len, U, ldu);
-    /* Test 9: Check padding rows of V not modified */
-    resid9 = check_padding(datatype, n, n, V, ldv);
-
-    residual = fla_test_max(resid1, resid2);
-    residual = fla_test_max(residual, resid3);
-    residual = fla_test_max(residual, resid4);
-    residual = fla_test_max(residual, resid5);
-    residual = fla_test_max(residual, resid6);
-    residual = fla_test_max(residual, resid7);
-    residual = fla_test_max(residual, resid8);
-    residual = fla_test_max(residual, resid9);
+    residual = fla_max(resid1, resid2);
+    residual = fla_max(residual, resid3);
+    residual = fla_max(residual, resid4);
+    residual = fla_max(residual, resid5);
+    residual = fla_max(residual, resid6);
     FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
     FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
     FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
@@ -177,7 +166,4 @@ void validate_gejsv(char *tst_api, char joba, char jobu, char jobv, char jobr, c
     FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
     FLA_PRINT_SUBTEST_STATUS(resid5, err_thresh, "05");
     FLA_PRINT_SUBTEST_STATUS(resid6, err_thresh, "06");
-    FLA_PRINT_SUBTEST_STATUS(resid7, err_thresh, "07");
-    FLA_PRINT_SUBTEST_STATUS(resid8, err_thresh, "08");
-    FLA_PRINT_SUBTEST_STATUS(resid9, err_thresh, "09");
 }

@@ -60,7 +60,9 @@ ${CMAKE_CURRENT_SOURCE_DIR}/test_gecon.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_getrfnp.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_getrfnpi.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_hetri_rook.c
-${CMAKE_CURRENT_SOURCE_DIR}/test_ormqr.c)
+${CMAKE_CURRENT_SOURCE_DIR}/test_ormqr.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_gejsv.c
+)
 
 add_subdirectory(lapacke)
 

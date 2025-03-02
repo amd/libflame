@@ -103,7 +103,7 @@ void invoke_cpp_stedc(integer datatype, char *compz, integer *n, void *D, void *
                       integer *ldz, void *work, integer *lwork, void *rwork, integer *lrwork,
                       integer *iwork, integer *liwork, integer *info);
 void invoke_cpp_gecon(integer datatype, char *norm, integer *n, void *A, integer *lda, void *anorm,
-                  void *rcond, void *work, void *lrwork, integer *info);
+                      void *rcond, void *work, void *lrwork, integer *info);
 void invoke_cpp_hetrf(integer datatype, char *uplo, integer *n, void *A, integer *lda,
                       integer *ipiv, void *work, integer *lwork, integer *info);
 void invoke_cpp_hetri_rook(integer datatype, char *uplo, integer *n, void *a, integer *lda,
@@ -111,6 +111,10 @@ void invoke_cpp_hetri_rook(integer datatype, char *uplo, integer *n, void *a, in
 void invoke_cpp_ormqr(integer datatype, char *side, char *trans, integer *m, integer *n, integer *k,
                       void *A, integer *lda, void *tau, void *C, integer *ldc, void *work,
                       integer *lwork, integer *info);
+void invoke_cpp_gejsv(integer datatype, char *joba, char *jobu, char *jobv, char *jobr, char *jobt,
+                      char *jobp, integer *m, integer *n, void *A, integer *lda, void *S, void *U,
+                      integer *ldu, void *V, integer *ldv, void *work, integer *lwork, void *rwork,
+                      integer *lrwork, integer *iwork, integer *info);
 #ifdef __cplusplus
 }
 #endif

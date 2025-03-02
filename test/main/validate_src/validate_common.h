@@ -197,7 +197,12 @@ void validate_getrfnpi(char *tst_api, integer m_A, integer n_A, integer nfact, v
 void validate_hetri_rook(char *tst_api, char uplo, integer n, void *A, void *A_inv, integer lda,
                          integer *ipiv, integer datatype, double err_thresh, char imatrix);
 void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, integer k, void *A,
-                    integer lda, void *C, void *Tau, integer ldc, void *C_test,
-                    integer datatype, double err_thresh, char imatrix);
+                    integer lda, void *C, void *Tau, integer ldc, void *C_test, integer datatype,
+                    double err_thresh, char imatrix);
 
+void validate_gejsv(char *tst_api, char joba, char jobu, char jobv, char jobr, char jobt, char jobp,
+                    integer m, integer n, void *A, integer lda, void *S, void *S_test, void *U,
+                    integer ldu, void *V, integer ldv, void *stat, integer *istat,
+                    integer test_eliminated_svds, integer datatype, double err_thresh, void *scal,
+                    char imatrix);
 #endif // VALIDATE_COMMON_H

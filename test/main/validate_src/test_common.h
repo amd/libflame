@@ -36,6 +36,12 @@ enum TRIANGULAR_MATRIX_DIAG_TYPE
     UNIT_DIAG = 1
 };
 
+enum VECTOR_TYPE
+{
+    VECTOR_TYPE_REAL = 0,
+    VECTOR_TYPE_COMPLEX = 1
+};
+
 /* The macros below are used for deciding which position of the off-diagonal
  * element of 2x2 diagonal block needs to be negated.
  * Used for the hetrf/hetrf_rook test case
@@ -122,6 +128,13 @@ void fla_test_print_status(char *func_str, char datatype_char, integer sqr_inp, 
         FLA_PRINT_TEST_STATUS(p, q, err_thresh, err_thresh * 2); \
         return;                                                  \
     }
+
+#define FLA_IS_REALTYPE(datatype) (datatype == FLOAT || datatype == DOUBLE)
+
+#define FLA_IS_COMPLEXTYPE(datatype) (datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+
+#define FLA_IS_LAPACKE_INTERFACE(interfacetype) \
+    (interfacetype == LAPACKE_ROW_TEST || interfacetype == LAPACKE_COLUMN_TEST)
 
 /* Max function with NAN checks */
 double fla_test_max(double v1, double v2);
@@ -318,8 +331,8 @@ void init_vector_spec_in(integer datatype, void *A, integer M, integer incx, cha
 /* Checks whether the value is zero or not */
 double is_value_zero(integer datatype, void *value, double residual);
 /* Multiply general m * n matrix with diagonal vector (of an n * n diagonal matrix) of size n */
-void multiply_matrix_diag_vector(integer datatype, integer m, integer n, void *A, integer lda,
-                                 void *X, integer incx);
+void multiply_matrix_diag_vector(integer datatype, char side, enum VECTOR_TYPE vectype, integer m,
+                                 integer n, void *A, integer lda, void *X, integer incx);
 /* Generate square matrix of size n x n using Eigen decomposition(ED) */
 void generate_matrix_from_ED(integer datatype, integer n, void *A, integer lda, void *Q,
                              void *lambda);
@@ -447,4 +460,6 @@ void swap_rows_with_pivot(integer datatype, integer m, integer n, void *A, integ
                           integer *ipiv);
 /* Case-insensitive comparision of given two chars */
 logical same_char(char ca, char cb);
+/* Return pointer at required offset for the given datatype */
+void *get_ptr_at_offset(integer datatype, void *A, integer offset);
 #endif // TEST_COMMON_H

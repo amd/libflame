@@ -46,4 +46,6 @@ ${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_syevx.c
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_sygvd.c
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_sytrf.c
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_sytrf_rook.c
-${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_ormqr.c)
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_ormqr.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_gejsv.c
+)

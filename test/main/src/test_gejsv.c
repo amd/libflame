@@ -39,7 +39,8 @@ void fla_test_gejsv_experiment(char *tst_api, test_params_t *params, integer dat
 void prepare_gejsv_run(integer datatype, char joba, char jobu, char jobv, char jobr, char jobt,
                        char jobp, integer m, integer n, void *A, integer lda, void *S, void *U,
                        integer ldu, void *V, integer ldv, void *stat, integer *istat,
-                       integer interfacetype, integer layout, integer *info, test_params_t *params);
+                       integer n_repeats, double *time_min_, integer interfacetype, integer layout,
+                       integer *info);
 
 void invoke_gejsv(integer datatype, char *joba, char *jobu, char *jobv, char *jobr, char *jobt,
                   char *jobp, integer *m, integer *n, void *A, integer *lda, void *S, void *U,
@@ -57,17 +58,6 @@ void generate_gejsv_test_matrix(integer datatype, char joba, char jobu, char job
 integer get_gejsv_lwork(char joba, char jobu, char jobv, char jobr, char jobt, char jobp, integer m,
                         integer n);
 
-/* Helper functions for Bit reproducibility tests */
-void store_gejsv_outputs(void *filename, integer datatype, char joba, char jobu, char jobv,
-                         char jobr, char jobt, char jobp, integer m, integer n, void *A,
-                         integer lda, void *S, void *U, integer ldu, void *V, integer ldv,
-                         integer g_lwork, integer g_lrwork, integer g_liwork, void *params);
-integer check_bit_reproducibility_gejsv(void *filename, integer datatype, char joba, char jobu,
-                                        char jobv, char jobr, char jobt, char jobp, integer m,
-                                        integer n, void *A, integer lda, void *S, void *U,
-                                        integer ldu, void *V, integer ldv, integer g_lwork,
-                                        integer g_lrwork, integer g_liwork, void *params);
-
 void fla_test_gejsv(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "Singular Value Decomposition using Jacobi method";
@@ -75,59 +65,20 @@ void fla_test_gejsv(integer argc, char **argv, test_params_t *params)
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
     integer num_ranges, i;
 
-    /* Arrays to save original range values */
-    integer *orig_m_range_start = NULL;
-    integer *orig_m_range_end = NULL;
-    integer *orig_n_range_start = NULL;
-    integer *orig_n_range_end = NULL;
-
     if(argc == 1)
     {
         /* Test with parameters from config */
         g_lwork = -1;
         g_lrwork = -1;
         g_liwork = -1;
-        g_config_data = 1;
+        config_data = 1;
 
         /* gejsv has different configuration for the matrix sizes.
            Need to map these special sizes to the standard size
            variables used by test op driver. */
         num_ranges = params->svd_paramslist[0].num_ranges;
-
-        /* Save original range values before modifying them */
-        orig_m_range_start = (integer *)fla_mem_alloc(num_ranges * sizeof(integer));
-        orig_m_range_end = (integer *)fla_mem_alloc(num_ranges * sizeof(integer));
-        orig_n_range_start = (integer *)fla_mem_alloc(num_ranges * sizeof(integer));
-        orig_n_range_end = (integer *)fla_mem_alloc(num_ranges * sizeof(integer));
-
-        /* Check for allocation failures */
-        if(orig_m_range_start == NULL || orig_m_range_end == NULL || orig_n_range_start == NULL
-           || orig_n_range_end == NULL)
-        {
-            printf("\nError: Memory allocation failed for range arrays in GEJSV test\n");
-
-            /* Clean up any successfully allocated memory */
-            if(orig_m_range_start != NULL)
-                free(orig_m_range_start);
-            if(orig_m_range_end != NULL)
-                free(orig_m_range_end);
-            if(orig_n_range_start != NULL)
-                free(orig_n_range_start);
-            if(orig_n_range_end != NULL)
-                free(orig_n_range_end);
-
-            return;
-        }
-
         for(i = 0; i < num_ranges; i++)
         {
-            /* Save original values */
-            orig_m_range_start[i] = params->svd_paramslist[i].m_range_start;
-            orig_m_range_end[i] = params->svd_paramslist[i].m_range_end;
-            orig_n_range_start[i] = params->svd_paramslist[i].n_range_start;
-            orig_n_range_end[i] = params->svd_paramslist[i].n_range_end;
-
-            /* Set GEJSV-specific values */
             params->svd_paramslist[i].m_range_start = params->svd_paramslist[i].m_gejsv;
             params->svd_paramslist[i].m_range_end = params->svd_paramslist[i].m_gejsv;
             params->svd_paramslist[i].n_range_start = params->svd_paramslist[i].n_gejsv;
@@ -138,21 +89,6 @@ void fla_test_gejsv(integer argc, char **argv, test_params_t *params)
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, RECT_INPUT, params, SVD, fla_test_gejsv_experiment);
         tests_not_run = 0;
-
-        /* Restore original range values after GEJSV completes */
-        for(i = 0; i < num_ranges; i++)
-        {
-            params->svd_paramslist[i].m_range_start = orig_m_range_start[i];
-            params->svd_paramslist[i].m_range_end = orig_m_range_end[i];
-            params->svd_paramslist[i].n_range_start = orig_n_range_start[i];
-            params->svd_paramslist[i].n_range_end = orig_n_range_end[i];
-        }
-
-        /* Free temporary storage */
-        free(orig_m_range_start);
-        free(orig_m_range_end);
-        free(orig_n_range_start);
-        free(orig_n_range_end);
     }
     if(argc == 19)
     {
@@ -198,7 +134,6 @@ void fla_test_gejsv(integer argc, char **argv, test_params_t *params)
         g_lrwork = strtoimax(argv[15], &endptr, CLI_DECIMAL_BASE);
         g_liwork = strtoimax(argv[16], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[17], &endptr, CLI_DECIMAL_BASE);
-        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -258,14 +193,12 @@ void fla_test_gejsv_experiment(char *tst_api, test_params_t *params, integer dat
     void *A = NULL, *A_test = NULL, *U = NULL, *V = NULL, *S = NULL, *S_test = NULL;
     void *stat, *istat, *scal = NULL;
     double residual, err_thresh;
-    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
     integer layout = params->matrix_major;
     char imatrix = params->imatrix_char;
-
     /* Test that small noise svds are eliminated
-           when joba = A */
+       when joba = A */
 
     m = p_cur;
     n = q_cur;
@@ -305,41 +238,28 @@ void fla_test_gejsv_experiment(char *tst_api, test_params_t *params, integer dat
     create_vector(get_realtype(datatype), &S_test, n);
     create_vector(get_realtype(datatype), &stat, 7);
     create_vector(INTEGER, &istat, 4);
+    create_vector(get_realtype(datatype), &scal, 1);
 
-    if(!FLA_BRT_VERIFICATION_RUN)
+    if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
     {
-        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST) || (FLA_RANDOM_INIT_MODE))
+        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+        init_matrix(get_realtype(datatype), S, n, 1, lda, g_ext_fptr, params->imatrix_char);
+    }
+    else
+    {
+        /* Generate matrix A based on the input parameters */
+        generate_gejsv_test_matrix(datatype, joba, jobu, jobv, m, n, A, lda, S);
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
         {
-            init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
-            init_matrix(get_realtype(datatype), S, n, 1, lda, g_ext_fptr, params->imatrix_char);
-        }
-        else
-        {
-            /* Generate matrix A based on the input parameters */
-            generate_gejsv_test_matrix(datatype, joba, jobu, jobv, m, n, A, lda, S);
-            if(FLA_OVERFLOW_UNDERFLOW_TEST)
-            {
-                create_vector(get_realtype(datatype), &scal, 1);
-                scale_matrix_overflow_underflow_gejsv(datatype, m, n, A, lda, S, imatrix, scal);
-            }
+            scale_matrix_overflow_underflow_gejsv(datatype, m, n, A, lda, S, imatrix, scal);
         }
     }
-
-    /* This macro is used in the BRT test cases for the following purposes:
-     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
-     * reference
-     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
-     * passed as input to the API
-     * */
-    FLA_BRT_PROCESS_TWO_INPUT(datatype, m, n, A, lda, get_realtype(datatype), n, 1, S, lda,
-                              "ccccccdddddddd", joba, jobu, jobv, jobr, jobt, jobp, m, n, lda, ldu,
-                              ldv, g_lwork, g_lrwork, g_liwork)
 
     /* Make a copy of input matrix A. This is required to validate the API functionality */
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
     prepare_gejsv_run(datatype, joba, jobu, jobv, jobr, jobt, jobp, m, n, A_test, lda, S_test, U,
-                      ldu, V, ldv, stat, istat, interfacetype, layout, &info, params);
+                      ldu, V, ldv, stat, istat, n_repeats, &time_min, interfacetype, layout, &info);
 
     /* performance computation */
     /*  6mn^2 + 8n^3 flops */
@@ -349,26 +269,11 @@ void fla_test_gejsv_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    IF_FLA_BRT_VALIDATION(
-        m, n,
-        store_gejsv_outputs(filename, datatype, joba, jobu, jobv, jobr, jobt, jobp, m, n, A, lda, S,
-                            U, ldu, V, ldv, g_lwork, g_lrwork, g_liwork, params),
-        validate_gejsv(tst_api, joba, jobu, jobv, jobr, jobt, jobp, m, n, A, lda, S, S_test, U, ldu,
-                       V, ldv, stat, istat, test_eliminated_svds, datatype, residual, scal, imatrix,
-                       params),
-        check_bit_reproducibility_gejsv(filename, datatype, joba, jobu, jobv, jobr, jobt, jobp, m,
-                                        n, A, lda, S, U, ldu, V, ldv, g_lwork, g_lrwork, g_liwork,
-                                        params))
-    else if(FLA_SKIP_VALIDATION_MODE)
-    {
-        /* Skip validation for performance modes */
-        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
-    }
-    else if(!FLA_EXTREME_CASE_TEST)
+    if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gejsv(tst_api, joba, jobu, jobv, jobr, jobt, jobp, m, n, A, lda, S, S_test, U, ldu,
-                       V, ldv, stat, istat, test_eliminated_svds, datatype, residual, scal, imatrix,
-                       params);
+                       V, ldv, stat, istat, test_eliminated_svds, datatype, residual, scal,
+                       imatrix);
     }
     else
     {
@@ -384,19 +289,13 @@ void fla_test_gejsv_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
-    if(!FLA_BRT_VERIFICATION_RUN)
-    {
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
-            free_vector(scal);
-    }
-free_buffers:
-    FLA_FREE_FILENAME(filename);
     free_matrix(A);
     free_matrix(A_test);
     free_vector(S);
     free_vector(S_test);
     free_vector(stat);
     free_vector(istat);
+    free_vector(scal);
     if(!same_char(jobu, 'N'))
     {
         free_matrix(U);
@@ -410,11 +309,12 @@ free_buffers:
 void prepare_gejsv_run(integer datatype, char joba, char jobu, char jobv, char jobr, char jobt,
                        char jobp, integer m, integer n, void *A, integer lda, void *S, void *U,
                        integer ldu, void *V, integer ldv, void *stat, integer *istat,
-                       integer interfacetype, integer layout, integer *info, test_params_t *params)
+                       integer n_repeats, double *time_min_, integer interfacetype, integer layout,
+                       integer *info)
 {
     void *A_save = NULL, *work = NULL, *rwork = NULL;
-    integer lwork, lrwork, liwork, *iwork;
-    double exe_time;
+    integer lwork, lrwork, liwork, *iwork, i;
+    double t_min = 1e9, exe_time;
 
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_save, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_save, lda);
@@ -509,7 +409,7 @@ void prepare_gejsv_run(integer datatype, char joba, char jobu, char jobv, char j
     }
 
     *info = 0;
-    FLA_EXEC_LOOP_BEGIN
+    for(i = 0; i < n_repeats && *info == 0; ++i)
     {
         copy_matrix(datatype, "full", m, n, A_save, lda, A, lda);
 
@@ -536,9 +436,10 @@ void prepare_gejsv_run(integer datatype, char joba, char jobu, char jobv, char j
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Update ctx and loop conditions */
-        FLA_EXEC_LOOP_UPDATE_WITH_INFO
+        t_min = fla_min(t_min, exe_time);
     }
+
+    *time_min_ = t_min;
 
     /* Copying stat values for Non-lapacke interfaces */
     if(!FLA_IS_LAPACKE_INTERFACE(interfacetype))
@@ -577,9 +478,9 @@ double prepare_lapacke_gejsv_run(integer datatype, int layout, char joba, char j
     void *A_t = NULL, *U_t = NULL, *V_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_gejsv_lda, lda_t);
-    SELECT_LDA(g_ext_fptr, g_config_data, layout, m, row_major_gejsv_ldu, ldu_t);
-    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_gejsv_ldv, ldv_t);
+    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_gejsv_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, config_data, layout, m, row_major_gejsv_ldu, ldu_t);
+    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_gejsv_ldv, ldv_t);
 
     A_t = A;
     U_t = U;
@@ -759,50 +660,4 @@ integer get_gejsv_lwork(char joba, char jobu, char jobv, char jobr, char jobt, c
     if(want_u && want_v)
         lwork = fla_max(lwork, n + m * NBsiz);
     return lwork;
-}
-
-void store_gejsv_outputs(void *filename, integer datatype, char joba, char jobu, char jobv,
-                         char jobr, char jobt, char jobp, integer m, integer n, void *A,
-                         integer lda, void *S, void *U, integer ldu, void *V, integer ldv,
-                         integer g_lwork, integer g_lrwork, integer g_liwork, void *params)
-{
-    /* Create and open a file for storing Ground truth*/
-    FLA_OPEN_GT_FILE_STORE
-
-    FLA_STORE_BRT_MATRIX(datatype, m, n, A, lda)
-    FLA_STORE_BRT_VECTOR(get_realtype(datatype), n, S)
-    if(!same_char(jobu, 'N'))
-    {
-        FLA_STORE_BRT_MATRIX(datatype, m, n, U, ldu)
-    }
-    if(!same_char(jobv, 'N'))
-    {
-        FLA_STORE_BRT_MATRIX(datatype, n, n, V, ldv)
-    }
-
-    FLA_CLOSE_GT_FILE_STORE
-}
-
-integer check_bit_reproducibility_gejsv(void *filename, integer datatype, char joba, char jobu,
-                                        char jobv, char jobr, char jobt, char jobp, integer m,
-                                        integer n, void *A, integer lda, void *S, void *U,
-                                        integer ldu, void *V, integer ldv, integer g_lwork,
-                                        integer g_lrwork, integer g_liwork, void *params)
-{
-    /* Open the file for reading Ground truth */
-    FLA_OPEN_GT_FILE_READ
-
-    FLA_VERIFY_BRT_MATRIX(datatype, m, n, A, lda)
-    FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), n, S)
-    if(!same_char(jobu, 'N'))
-    {
-        FLA_VERIFY_BRT_MATRIX(datatype, m, n, U, ldu)
-    }
-    if(!same_char(jobv, 'N'))
-    {
-        FLA_VERIFY_BRT_MATRIX(datatype, n, n, V, ldv)
-    }
-
-    fclose(gt_file);
-    return 1;
 }

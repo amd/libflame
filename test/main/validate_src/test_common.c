@@ -3554,7 +3554,7 @@ void init_vector_spec_rand_in(integer datatype, void *A, integer M, integer incx
     */
     if(M > 10)
     {
-        span = (M) * 0.2;
+        span = (M)*0.2;
     }
     else
     {
@@ -3678,6 +3678,7 @@ void init_matrix(integer datatype, void *A, integer M, integer N, integer LDA, F
  *   V -> Singular value between (vl, vu) range => vector in range(vl, vu)
  *   I -> Singular value between (il, iu) index
  *   U -> Singular value between (vl, vu) range with uniformly distributed values
+ *   N -> Singluar values are pre-populated in S
  *               A  = (U * S * V')
  *   where  S  is a diagonal matrix with diagonal elements being
  *   the singular values of input matrix A
@@ -3713,8 +3714,12 @@ void create_svd_matrix(integer datatype, char range, integer m, integer n, void 
     get_orthogonal_matrix_from_QR(datatype, m, A, m, U, m, &info);
     get_orthogonal_matrix_from_QR(datatype, n, B, n, V, n, &info);
 
-    /* Generating positive singular values according to the ranges */
-    rand_vector(get_realtype(datatype), min_m_n, s_test, i_one, vl, vu, range);
+    /* Generating positive singular values according to the ranges
+       If range is N then singular values are already populated */
+    if(range != 'N')
+        rand_vector(get_realtype(datatype), min_m_n, s_test, i_one, vl, vu, range);
+    else
+        copy_realtype_vector(datatype, min_m_n, S, 1, s_test, 1);
 
     /* Sorting singular values in descending order */
     get_abs_vector_value(datatype, s_test, min_m_n, i_one);
@@ -4058,24 +4063,28 @@ void copy_tridiag_vector(integer datatype, void *dl, void *d, void *du, integer 
    (of an n * n diagonal matrix) of size n
    NOTE: General matrix by vector multiplication can be done by scaling each
          column of the matrix with corresponding element in the vector */
-void multiply_matrix_diag_vector(integer datatype, integer m, integer n, void *A, integer lda,
-                                 void *X, integer incx)
+void multiply_matrix_diag_vector(integer datatype, char side, enum VECTOR_TYPE vectype, integer m,
+                                 integer n, void *A, integer lda, void *X, integer incx)
 {
-    integer j;
+    integer j, loopn, inca, veclen;
     if(m <= 0 || n <= 0)
         return;
+
+    loopn = (side == 'L') ? m : n;
+    inca = (side == 'L') ? lda : 1;
+    veclen = (side == 'L') ? n : m;
 
     switch(datatype)
     {
         case FLOAT:
         {
             float *a_begin, *x = (float *)X;
-            for(j = 0; j < n; j++)
+            for(j = 0; j < loopn; j++)
             {
                 /* scale each column of the matrix by corresponding element
                    in the vector */
-                a_begin = (float *)A + j * lda;
-                sscal_(&m, &x[j], a_begin, &incx);
+                a_begin = (float *)A + ((side == 'L') ? j : j * lda);
+                sscal_(&veclen, &x[j * incx], a_begin, &inca);
             }
             break;
         }
@@ -4083,12 +4092,12 @@ void multiply_matrix_diag_vector(integer datatype, integer m, integer n, void *A
         case DOUBLE:
         {
             double *a_begin, *x = (double *)X;
-            for(j = 0; j < n; j++)
+            for(j = 0; j < loopn; j++)
             {
                 /* scale each column of the matrix by corresponding element
                    in the vector */
-                a_begin = (double *)A + j * lda;
-                dscal_(&m, &x[j], a_begin, &incx);
+                a_begin = (double *)A + ((side == 'L') ? j : j * lda);
+                dscal_(&veclen, &x[j * incx], a_begin, &inca);
             }
             break;
         }
@@ -4096,14 +4105,22 @@ void multiply_matrix_diag_vector(integer datatype, integer m, integer n, void *A
         case COMPLEX:
         {
             scomplex *a_begin, x;
-            for(j = 0; j < n; j++)
+            for(j = 0; j < loopn; j++)
             {
                 /* scale each column of the matrix by corresponding element
                    in the vector */
-                a_begin = (scomplex *)A + j * lda;
-                x.real = *((float *)X + j);
-                x.imag = 0.f;
-                cscal_(&m, &x, a_begin, &incx);
+                a_begin = (scomplex *)A + ((side == 'L') ? j : j * lda);
+                if(vectype == VECTOR_TYPE_COMPLEX)
+                {
+                    x.real = ((scomplex *)X)[j].real;
+                    x.imag = ((scomplex *)X)[j].imag;
+                }
+                else
+                {
+                    x.real = *((float *)X + j);
+                    x.imag = 0.f;
+                }
+                cscal_(&veclen, &x, a_begin, &inca);
             }
             break;
         }
@@ -4111,14 +4128,22 @@ void multiply_matrix_diag_vector(integer datatype, integer m, integer n, void *A
         case DOUBLE_COMPLEX:
         {
             dcomplex *a_begin, x;
-            for(j = 0; j < n; j++)
+            for(j = 0; j < loopn; j++)
             {
                 /* scale each column of the matrix by corresponding element
                    in the vector */
-                a_begin = (dcomplex *)A + j * lda;
-                x.real = *((double *)X + j);
-                x.imag = 0.0;
-                zscal_(&m, &x, a_begin, &incx);
+                a_begin = (dcomplex *)A + ((side == 'L') ? j : j * lda);
+                if(vectype == VECTOR_TYPE_COMPLEX)
+                {
+                    x.real = ((dcomplex *)X)[j].real;
+                    x.imag = ((dcomplex *)X)[j].imag;
+                }
+                else
+                {
+                    x.real = *((double *)X + j);
+                    x.imag = 0.;
+                }
+                zscal_(&veclen, &x, a_begin, &inca);
             }
             break;
         }
@@ -4148,7 +4173,7 @@ void generate_matrix_from_ED(integer datatype, integer n, void *A, integer lda, 
     copy_matrix(datatype, "full", n, n, Q, n, Qlambda, n);
 
     /* Perform Q * lambda */
-    multiply_matrix_diag_vector(datatype, n, n, Qlambda, n, lambda, 1);
+    multiply_matrix_diag_vector(datatype, 'R', VECTOR_TYPE_REAL, n, n, Qlambda, n, lambda, 1);
     switch(datatype)
     {
         case FLOAT:
@@ -7092,4 +7117,23 @@ logical same_char(char ca, char cb)
 
     // Compare the uppercase characters and return the result
     return uppercase_ca == uppercase_cb;
+}
+
+/* Return pointer at required offset for the given datatype */
+void *get_ptr_at_offset(integer datatype, void *A, integer offset)
+{
+    switch(datatype)
+    {
+        case FLOAT:
+            return (float *)A + offset;
+        case DOUBLE:
+            return (double *)A + offset;
+        case COMPLEX:
+            return (scomplex *)A + offset;
+        case DOUBLE_COMPLEX:
+            return (dcomplex *)A + offset;
+        case INTEGER:
+            return (integer *)A + offset;
+    }
+    return NULL;
 }

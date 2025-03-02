@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #ifndef TEST_PROTOTYPE_H
@@ -389,6 +389,11 @@
 #define fla_lapack_cunmqr CUNMQR_
 #define fla_lapack_zunmqr ZUNMQR_
 
+#define fla_lapack_sgejsv SGEJSV_
+#define fla_lapack_dgejsv DGEJSV_
+#define fla_lapack_cgejsv CGEJSV_
+#define fla_lapack_zgejsv ZGEJSV_
+
 #elif(UPPER)
 
 #define fla_lapack_sladiv SLADIV
@@ -714,6 +719,10 @@
 #define fla_lapack_cunmqr CUNMQR
 #define fla_lapack_zunmqr ZUNMQR
 
+#define fla_lapack_sgejsv SGEJSV
+#define fla_lapack_dgejsv DGEJSV
+#define fla_lapack_cgejsv CGEJSV
+#define fla_lapack_zgejsv ZGEJSV
 #elif(LOWER)
 
 #define fla_lapack_sladiv sladiv
@@ -1038,6 +1047,10 @@
 #define fla_lapack_cunmqr cunmqr
 #define fla_lapack_zunmqr zunmqr
 
+#define fla_lapack_sgejsv sgejsv
+#define fla_lapack_dgejsv dgejsv
+#define fla_lapack_cgejsv cgejsv
+#define fla_lapack_zgejsv zgejsv
 #else
 
 #define fla_lapack_sladiv sladiv_
@@ -1363,6 +1376,10 @@
 #define fla_lapack_cunmqr cunmqr_
 #define fla_lapack_zunmqr zunmqr_
 
+#define fla_lapack_sgejsv sgejsv_
+#define fla_lapack_dgejsv dgejsv_
+#define fla_lapack_cgejsv cgejsv_
+#define fla_lapack_zgejsv zgejsv_
 #endif /*if UPPER_*/
 
 /* These functions are API invoking functions used in other API test codes */
@@ -1379,7 +1396,7 @@ extern void invoke_geev(integer datatype, char *jobvl, char *jobvr, integer *n, 
                         void *vr, integer *ldvr, void *work, integer *lwork, void *rwork,
                         integer *info);
 extern void invoke_hetrf_rook(integer datatype, char *uplo, integer *n, void *a, integer *lda,
-                       integer *ipiv, void *work, integer *lwork, integer *info);
+                              integer *ipiv, void *work, integer *lwork, integer *info);
 /* Generates Orthogonal matrix from ORGTR() after SYTRD() call. */
 extern void invoke_sytrd(integer datatype, char *uplo, char compz, integer n, void *A, integer lda,
                          void *D, void *E, integer *info);

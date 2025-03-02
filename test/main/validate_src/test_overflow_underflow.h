@@ -167,5 +167,8 @@ void scale_matrix_underflow_overflow_gecon(integer datatype, integer n, void *A,
                                            char imatrix_char);
 /* Scale matrix with values around overflow underflow for hetri_rook */
 void scale_matrix_overflow_underflow_hetri_rook(integer datatype, integer n, void *A, integer lda,
-                                           char imatrix_char);
+                                                char imatrix_char);
+/* Scale matrix with values around overflow underflow for gejsv */
+void scale_matrix_overflow_underflow_gejsv(integer datatype, integer m, integer n, void *A,
+                                           integer lda, void *S, char imatrix_char, void *scal);
 #endif // TEST_OVERFLOW_UNDERFLOW_H

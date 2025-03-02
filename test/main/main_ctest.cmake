@@ -192,7 +192,35 @@ foreach(FUNCTION "gels")
     endforeach(PREC)
 endforeach(FUNCTION)
 
+# Additional tests for GEJSV
+# because config based tests
+# do not cover all API parameters
 
+macro(add_gejsv_test TEST_NUM_GEJSV FUNCTION PREC JOBA JOBU JOBV JOBR JOBT JOBP SIZE_M SIZE_N)
+    set(TEST_NAME gejsv_test_case${TEST_NUM_GEJSV})
+    add_test(${TEST_NAME} ${CTEST_MAIN_COMMAND} ${FUNCTION} ${PREC} ${JOBA} ${JOBU} ${JOBV} ${JOBR} ${JOBT} ${JOBP} ${SIZE_M} ${SIZE_N} "-1" "-1" "-1" "-1" "-1" "-1" "1")
+    set_tests_properties(${TEST_NAME} PROPERTIES FAIL_REGULAR_EXPRESSION "FAIL;No test was run, give valid arguments" ENVIRONMENT "OMP_NUM_THREADS=16")
+    MATH(EXPR TEST_NUM_GEJSV "${TEST_NUM_GEJSV}+1")
+endmacro()
+
+set(TEST_NUM_GEJSV 1)
+foreach(FUNCTION "gejsv")
+    foreach(PREC "s" "d" "c" "z")
+        foreach(SIZE_M "50" "89")
+            foreach(SIZE_N "50")
+                foreach(JOBA "C" "E" "F" "G" "A" "R")
+                    add_gejsv_test(${TEST_NUM_GEJSV} ${FUNCTION} ${PREC} ${JOBA} "N" "N" "N" "N" "N" ${SIZE_M} ${SIZE_N})
+                    add_gejsv_test(${TEST_NUM_GEJSV} ${FUNCTION} ${PREC} ${JOBA} "F" "N" "R" "N" "P" ${SIZE_M} ${SIZE_N})
+                    add_gejsv_test(${TEST_NUM_GEJSV} ${FUNCTION} ${PREC} ${JOBA} "F" "V" "R" "T" "P" ${SIZE_M} ${SIZE_N})
+                    add_gejsv_test(${TEST_NUM_GEJSV} ${FUNCTION} ${PREC} ${JOBA} "F" "J" "R" "T" "P" ${SIZE_M} ${SIZE_N})
+                    add_gejsv_test(${TEST_NUM_GEJSV} ${FUNCTION} ${PREC} ${JOBA} "U" "V" "N" "N" "N" ${SIZE_M} ${SIZE_N})
+                    add_gejsv_test(${TEST_NUM_GEJSV} ${FUNCTION} ${PREC} ${JOBA} "U" "W" "R" "T" "P" ${SIZE_M} ${SIZE_N})
+                endforeach(JOBA)
+            endforeach(SIZE_N)
+        endforeach(SIZE_M)
+    endforeach(PREC)
+endforeach(FUNCTION)
+            
 set(TEST_NUM 1)
 foreach(dgesvd_test_cases IN LISTS DGESVD_TEST_CASES)
     string(REPLACE " " ";" COMMANDLINE_PARAMS ${dgesvd_test_cases})

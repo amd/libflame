@@ -88,7 +88,7 @@ void validate_syev(char *tst_api, char *jobz, char *range, integer n, void *A, v
             copy_matrix(datatype, "full", n, n, A_test, lda, Q, lda);
 
             /* Multiply Q * lambda(eigen values) */
-            multiply_matrix_diag_vector(datatype, n, n, Q, lda, lambda, 1);
+            multiply_matrix_diag_vector(datatype, 'R', VECTOR_TYPE_REAL, n, n, Q, lda, lambda, 1);
 
             switch(datatype)
             {

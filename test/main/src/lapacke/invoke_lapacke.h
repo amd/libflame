@@ -113,4 +113,8 @@ integer invoke_lapacke_hetrf_rook(integer datatype, integer layout, char uplo, i
 integer invoke_lapacke_ormqr(integer datatype, int matrix_layout, char side, char trans, integer m,
                              integer n, integer k, void *a, integer lda, const void *tau, void *c,
                              integer ldc);
+integer invoke_lapacke_gejsv(integer datatype, int layout, char joba, char jobu, char jobv,
+                             char jobr, char jobt, char jobp, integer m, integer n, void *A,
+                             integer lda, void *S, void *U, integer ldu, void *V, integer ldv,
+                             void *stat, integer *istat);
 #endif

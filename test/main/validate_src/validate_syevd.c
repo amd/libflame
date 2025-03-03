@@ -27,7 +27,7 @@ void validate_syevd(char *tst_api, char *jobz, integer n, void *A, void *A_test,
      * unexpected info value */
     FLA_TEST_PRINT_INVALID_STATUS(n, n, err_thresh);
 
-    if(*jobz != 'N')
+    if(!same_char(*jobz, 'N'))
     {
         void *lambda = NULL, *zlambda = NULL, *Z = NULL;
         void *work = NULL;

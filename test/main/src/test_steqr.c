@@ -144,7 +144,7 @@ void fla_test_steqr_experiment(char *tst_api, test_params_t *params, integer dat
     {
         if(ldz == -1)
         {
-            if((compz == 'N') && (layout != LAPACK_ROW_MAJOR))
+            if(same_char(compz, 'N') == 0 && layout != LAPACK_ROW_MAJOR)
             {
                 ldz = 1;
             }
@@ -176,7 +176,7 @@ void fla_test_steqr_experiment(char *tst_api, test_params_t *params, integer dat
         /* Initialize input matrix with custom data */
         init_matrix(realtype, D, 1, n, 1, g_ext_fptr, params->imatrix_char);
         init_matrix(realtype, E, 1, n - 1, 1, g_ext_fptr, params->imatrix_char);
-        if(compz == 'V')
+        if(same_char(compz, 'V'))
         {
             init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
             copy_matrix(datatype, "full", n, n, A, lda, Q, lda);
@@ -202,13 +202,13 @@ void fla_test_steqr_experiment(char *tst_api, test_params_t *params, integer dat
         copy_matrix(datatype, "full", n, n, A, lda, Q, lda);
         invoke_sytrd(datatype, &uplo, compz, n, Q, lda, D, E, &info);
     }
-    if(compz == 'I')
+    if(same_char(compz, 'I'))
     {
         set_identity_matrix(datatype, n, n, Z_test, ldz);
         /* Form tridiagonal matrix Z by copying from D, E.*/
         copy_sym_tridiag_matrix(datatype, D, E, n, n, Z, ldz);
     }
-    else if(compz == 'V')
+    else if(same_char(compz, 'V'))
     {
         copy_matrix(datatype, "full", n, n, A, lda, Z, ldz);
         copy_matrix(datatype, "full", n, n, Q, lda, Z_test, ldz);
@@ -227,9 +227,9 @@ void fla_test_steqr_experiment(char *tst_api, test_params_t *params, integer dat
        7 n^3 flops for eigen vectors of Z, compz = 'V' or 'I'
        14 n^3 flops for eigen vectors of Z for complex, compz = 'V' or 'I' */
 
-    if(compz == 'I' || compz == 'V')
+    if(same_char(compz, 'V') || same_char(compz, 'I'))
         perf = (double)(7.0 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
-    else if(compz == 'N')
+    else if(same_char(compz, 'N'))
         perf = (double)(24.0 * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         perf = (double)(14.0 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
@@ -275,7 +275,7 @@ void prepare_steqr_run(char *compz, integer n, void *Z, integer ldz, void *D, vo
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
-    if(*compz != 'N')
+    if(!same_char(*compz, 'N'))
     {
         create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z_save, ldz);
         copy_matrix(datatype, "full", n, n, Z, ldz, Z_save, ldz);
@@ -291,7 +291,7 @@ void prepare_steqr_run(char *compz, integer n, void *Z, integer ldz, void *D, vo
     {
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
-        if(*compz != 'N')
+        if(!same_char(*compz, 'N'))
         {
             copy_matrix(datatype, "full", n, n, Z_save, ldz, Z, ldz);
         }
@@ -322,7 +322,7 @@ void prepare_steqr_run(char *compz, integer n, void *Z, integer ldz, void *D, vo
 
     *time_min_ = t_min;
 
-    if(*compz != 'N')
+    if(!same_char(*compz, 'N'))
     {
         free_matrix(Z_save);
     }
@@ -344,7 +344,7 @@ double prepare_lapacke_steqr_run(integer datatype, int layout, char *compz, inte
 
     /* In case of row_major matrix layout,
        convert input matrix to row_major */
-    if((*compz != 'N') && (layout == LAPACK_ROW_MAJOR))
+    if((!same_char(*compz, 'N')) && (layout == LAPACK_ROW_MAJOR))
     {
         /* Create temporary buffers for converting matrix layout */
         create_matrix(datatype, layout, n, n, &Z_t, fla_max(n, ldz_t));
@@ -357,7 +357,7 @@ double prepare_lapacke_steqr_run(integer datatype, int layout, char *compz, inte
     *info = invoke_lapacke_steqr(datatype, layout, *compz, n, D, E, Z_t, ldz_t);
 
     exe_time = fla_test_clock() - exe_time;
-    if((*compz != 'N') && (layout == LAPACK_ROW_MAJOR))
+    if((!same_char(*compz, 'N')) && (layout == LAPACK_ROW_MAJOR))
     {
         /* In case of row_major matrix layout, convert output matrices
            to column_major layout */

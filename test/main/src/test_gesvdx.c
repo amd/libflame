@@ -182,7 +182,7 @@ void fla_test_gesvdx_experiment(char *tst_api, test_params_t *params, integer da
           JOBU = 'V', LDU >= M. */
         if(ldu == -1)
         {
-            if((jobu == 'V'))
+            if(same_char(jobu, 'V'))
             {
                 ldu = m;
             }
@@ -195,15 +195,15 @@ void fla_test_gesvdx_experiment(char *tst_api, test_params_t *params, integer da
           JOBVT = 'V', LDVT >= NS */
         if(ldvt == -1)
         {
-            if(jobvt == 'V')
+            if(same_char(jobvt, 'V'))
             {
-                if(range == 'A' || range == 'V')
-                {
-                    ldvt = min_m_n;
-                }
-                else if(range == 'I')
+                if(same_char(range, 'I'))
                 {
                     ldvt = iu - il + 1;
+                }
+                else
+                {
+                    ldvt = min_m_n;
                 }
             }
             else
@@ -239,7 +239,7 @@ void fla_test_gesvdx_experiment(char *tst_api, test_params_t *params, integer da
         {
             create_vector(get_realtype(datatype), &scal, 1);
             /* Range 'V' treated as 'A' only in case of overflow and underflow */
-            if(range == 'V' || range == 'v')
+            if(same_char(range, 'V'))
                 range = 'A';
         }
 
@@ -263,7 +263,7 @@ void fla_test_gesvdx_experiment(char *tst_api, test_params_t *params, integer da
      * Singular values only, 4mn^2 - 4n^3/3 flops
      * Singular values and some singular vectors U (m x n) and V (n x n), 14mn^2 + 8n^3 flops */
 
-    if(jobu == 'N' || jobvt == 'N')
+    if(same_char(jobvt, 'N') && same_char(jobu, 'N'))
     {
         if(m >= n)
             perf = (double)((4.0 * m * n * n) - ((4.0 * n * n * n) / 3.0)) / time_min
@@ -473,11 +473,11 @@ double prepare_lapacke_gesvdx_run(integer datatype, int layout, char *jobu, char
     {
         /* Create temporary buffers for converting matrix layout */
         create_matrix(datatype, layout, m_A, n_A, &A_t, fla_max(n_A, lda_t));
-        if(*jobu != 'N')
+        if(!same_char(*jobu, 'N'))
         {
             create_matrix(datatype, layout, m_A, m_A, &U_t, fla_max(m_A, ldu_t));
         }
-        if(*jobvt != 'N')
+        if(!same_char(*jobvt, 'N'))
         {
             create_matrix(datatype, layout, n_A, n_A, &V_t, fla_max(n_A, ldvt_t));
         }
@@ -496,12 +496,12 @@ double prepare_lapacke_gesvdx_run(integer datatype, int layout, char *jobu, char
     if(layout == LAPACK_ROW_MAJOR)
     {
         convert_matrix_layout(layout, datatype, m_A, n_A, A_t, lda_t, A, lda);
-        if((*jobu != 'N') && (*jobu != 'O'))
+        if(!same_char(*jobu,'N') && !same_char(*jobu,'O'))
         {
             convert_matrix_layout(layout, datatype, m_A, m_A, U_t, ldu_t, U, ldu);
             free_matrix(U_t);
         }
-        if((*jobvt != 'N') && (*jobvt != 'O'))
+        if(!same_char(*jobvt,'N') && !same_char(*jobvt,'O'))
         {
             convert_matrix_layout(layout, datatype, n_A, n_A, V_t, ldvt_t, V, ldvt);
             free_matrix(V_t);

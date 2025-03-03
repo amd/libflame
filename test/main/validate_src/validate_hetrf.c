@@ -51,7 +51,7 @@ void validate_hetrf(char *tst_api, char *uplo, integer n, integer lda, void *A_r
 
     integer s = 1, k;
 
-    if(uplo[0] == 'U' || uplo[0] == 'u')
+    if(same_char(*uplo, 'U'))
     {
         for(k = n - 1; k >= 0; k = k - s)
         {
@@ -118,7 +118,7 @@ void validate_hetrf(char *tst_api, char *uplo, integer n, integer lda, void *A_r
             fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, work, &n, A_val, &n, temp, &n);
         }
     }
-    else if(uplo[0] == 'L' || uplo[0] == 'l')
+    else if(same_char(*uplo, 'L'))
     {
         for(k = 0; k <= n - 1; k += s)
         {

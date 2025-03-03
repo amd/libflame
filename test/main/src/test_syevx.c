@@ -79,7 +79,7 @@ void fla_test_syevx(integer argc, char **argv, test_params_t *params)
         params->eig_sym_paramslist[0].VL = atof(argv[8]);
         params->eig_sym_paramslist[0].VU = atof(argv[9]);
 
-        if(params->eig_sym_paramslist[0].range_x == 'I')
+        if(same_char(params->eig_sym_paramslist[0].range_x, 'I'))
         {
             /* 1 <= IL <= IU <= N, if N > 0;
                IL = 1 and IU = 0 if N = 0. */
@@ -218,7 +218,7 @@ void fla_test_syevx_experiment(char *tst_api, test_params_t *params, integer dat
            if JOBZ = 'V', LDZ >= max(1,N) */
         if(ldz == -1)
         {
-            if(jobz == 'V')
+            if(same_char(jobz, 'V'))
             {
                 ldz = fla_max(1, n);
             }
@@ -263,7 +263,7 @@ void fla_test_syevx_experiment(char *tst_api, test_params_t *params, integer dat
     /* performance computation
        (8/3)n^3 flops for eigen vectors
        (4/3)n^3 flops for eigen values */
-    if(jobz == 'V')
+    if(same_char(jobz, 'V'))
         perf = (double)((8.0 / 3.0) * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     else
         perf = (double)((4.0 / 3.0) * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
@@ -321,7 +321,7 @@ void prepare_syevx_run(char *jobz, char *range, char *uplo, integer n, void *A, 
     double t_min = 1e9, exe_time;
     void *iwork = NULL;
 
-    if(*range == 'I')
+    if(same_char(*range, 'I'))
         m = iu - il + 1;
     else
         m = n;
@@ -398,7 +398,7 @@ void prepare_syevx_run(char *jobz, char *range, char *uplo, integer n, void *A, 
            orthonormal eigenvectors of the matrix A corresponding to
            the selected eigenvalues.
            Copy eigen vectors to A to validate API functionality */
-        if(*jobz == 'V')
+        if(same_char(*jobz, 'V'))
             copy_matrix(datatype, "full", m, m, z__, ldz, A, lda);
 
         /* Free up the output buffers */
@@ -434,7 +434,7 @@ double prepare_lapacke_syevx_run(integer datatype, int layout, char *jobz, char 
     {
         /* Create temporary buffers for converting matrix layout */
         create_matrix(datatype, layout, n, n, &A_t, lda_t);
-        if(*jobz != 'N')
+        if(!same_char(*jobz, 'N'))
         {
             create_matrix(datatype, layout, *m, n, &Z_t, ldz_t);
         }
@@ -452,7 +452,7 @@ double prepare_lapacke_syevx_run(integer datatype, int layout, char *jobz, char 
         /* In case of row_major matrix layout, convert output matrices
            to column_major layout */
         convert_matrix_layout(layout, datatype, n, n, A_t, lda_t, A, lda);
-        if(*jobz != 'N')
+        if(!same_char(*jobz, 'N'))
         {
             convert_matrix_layout(layout, datatype, *m, n, Z_t, ldz_t, z, ldz);
             free_matrix(Z_t);

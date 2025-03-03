@@ -70,14 +70,14 @@ extern double time_min;
         /* Test 1 */                                                                               \
         copy_matrix(datatype, "full", n, n, X, lda, X_scaled, lda);                                \
         /* If test is underflow/overflow then scale X accordingly */                               \
-        if(imatrix == 'O')                                                                         \
+        if(same_char(imatrix, 'O'))                                                             \
         {                                                                                          \
             /* Scale such that all elements are <= 10^-2 */                                        \
             get_max_from_matrix(datatype, X_scaled, &x_scale, n, n, lda);                          \
             x_scale = 0.01 / x_scale;                                                              \
             scal_matrix(datatype, &x_scale, X_scaled, n, n, lda, 1);                               \
         }                                                                                          \
-        else if(imatrix == 'U')                                                                    \
+        else if(same_char(imatrix, 'U'))                                                        \
         {                                                                                          \
             /* Scale such that all elements are >= 1 */                                            \
             get_min_from_matrix(datatype, X_scaled, &x_scale, n, n, lda);                          \
@@ -201,7 +201,7 @@ void validate_sygvd(char *tst_api, integer itype, char *jobz, char *range, char 
         sort_realtype_vector(datatype, "A", n, lambda_orig, 1);
     }
 
-    if((*range == 'I') || (*range == 'i'))
+    if(same_char(*range, 'I'))
     {
         /* Test I range
            check if output EVs matches the input EVs in given index range */
@@ -213,7 +213,7 @@ void validate_sygvd(char *tst_api, integer itype, char *jobz, char *range, char 
     }
     else /* range A or V */
     {
-        if(*jobz != 'N')
+        if(!same_char(*jobz, 'N'))
         {
             void *Z = NULL, *work = NULL, *X = NULL, *X_inv = NULL, *P = NULL, *L = NULL, *U = NULL,
                  *X_scaled = NULL;
@@ -244,7 +244,7 @@ void validate_sygvd(char *tst_api, integer itype, char *jobz, char *range, char 
             reset_matrix(datatype, n, n, X_scaled, lda);
 
             /* B = U'U = LL' = LU */
-            if(*uplo == 'U')
+            if(same_char(*uplo, 'U'))
             {
                 /* B_test contains the upper triangular cholesky factor
                    Set L = U' */

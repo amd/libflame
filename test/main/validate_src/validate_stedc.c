@@ -27,7 +27,7 @@ void validate_stedc(char *tst_api, char compz, integer n, void *D_test, void *Z_
     {
         FLA_TEST_PRINT_STATUS_AND_RETURN(n, n, err_thresh);
     }
-    if(compz == 'N')
+    if(same_char(compz, 'N'))
         return;
     /* print overall status if incoming threshold is
      * an extreme value indicating that API returned

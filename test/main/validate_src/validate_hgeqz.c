@@ -305,7 +305,7 @@ void validate_hgeqz(char *tst_api, char *job, char *compq, char *compz, integer 
             float norm, norm_H, norm_T, eps;
             eps = fla_lapack_slamch("P");
 
-            if(*compq == 'V' && *compz == 'V')
+            if(same_char(*compq, 'V') && same_char(*compz, 'V'))
             {
                 /* Test 1
                     | A - Q_A**T * Q_test * S * Z_test**T * Z_A**T  | / ( |A| n ulp ) */
@@ -326,7 +326,7 @@ void validate_hgeqz(char *tst_api, char *job, char *compq, char *compz, integer 
                 compute_matrix_norm(datatype, NORM, n, n, B, ldt, &norm, imatrix, work);
                 resid2 = norm / (eps * norm_T * (float)n);
             }
-            if(*compq == 'I' && *compz == 'I')
+            if(same_char(*compq, 'I') && same_char(*compz, 'I'))
             {
                 /* Test 3
                     | H - Q_test S Z_test**T  | / ( |H| n ulp ) */
@@ -370,7 +370,7 @@ void validate_hgeqz(char *tst_api, char *job, char *compq, char *compz, integer 
             double norm, norm_H, norm_T, eps;
             eps = fla_lapack_dlamch("P");
 
-            if(*compq == 'V' && *compz == 'V')
+            if(same_char(*compq, 'V') && same_char(*compz, 'V'))
             {
                 /* Test 1
                     | A - Q_A**T * Q_test * S * Z_test**T * Z_A**T  | / ( |A| n ulp ) */
@@ -391,7 +391,7 @@ void validate_hgeqz(char *tst_api, char *job, char *compq, char *compz, integer 
                 compute_matrix_norm(datatype, NORM, n, n, B, ldt, &norm, imatrix, work);
                 resid2 = norm / (eps * norm_T * (float)n);
             }
-            if(*compq == 'I' && *compz == 'I')
+            if(same_char(*compq, 'I') && same_char(*compz, 'I'))
             {
                 /* Test 1
                     | H - Q_test S Z_test**T  | / ( |H| n ulp ) */
@@ -435,7 +435,7 @@ void validate_hgeqz(char *tst_api, char *job, char *compq, char *compz, integer 
             float norm, norm_H, norm_T, eps;
             eps = fla_lapack_slamch("P");
 
-            if(*compq == 'V' && *compz == 'V')
+            if(same_char(*compq, 'V') && same_char(*compz, 'V'))
             {
                 /* Test 1
                     | A - Q_A**H * Q_test * S * Z_test**H * Z_A**H  | / ( |A| n ulp ) */
@@ -456,7 +456,7 @@ void validate_hgeqz(char *tst_api, char *job, char *compq, char *compz, integer 
                 compute_matrix_norm(datatype, NORM, n, n, B, ldt, &norm, imatrix, work);
                 resid2 = norm / (eps * norm_T * (float)n);
             }
-            if(*compq == 'I' && *compz == 'I')
+            if(same_char(*compq, 'I') && same_char(*compz, 'I'))
             {
                 /* Test 1
                     | H - Q_test S Z_test**H  | / ( |H| n ulp ) */
@@ -500,7 +500,7 @@ void validate_hgeqz(char *tst_api, char *job, char *compq, char *compz, integer 
             double norm, norm_H, norm_T, eps;
             eps = fla_lapack_dlamch("P");
 
-            if(*compq == 'V' && *compz == 'V')
+            if(same_char(*compq, 'V') && same_char(*compz, 'V'))
             {
                 /* Test 1
                     | A - Q_A**H * Q_test * S * Z_test**H * Z_A**H  | / ( |A| n ulp ) */
@@ -521,7 +521,7 @@ void validate_hgeqz(char *tst_api, char *job, char *compq, char *compz, integer 
                 compute_matrix_norm(datatype, NORM, n, n, B, ldt, &norm, imatrix, work);
                 resid2 = norm / (eps * norm_T * (float)n);
             }
-            if(*compq == 'I' && *compz == 'I')
+            if(same_char(*compq, 'I') && same_char(*compz, 'I'))
             {
                 /* Test 1
                     | H - Q_test S Z_test**H  | / ( |H| n ulp ) */
@@ -567,7 +567,7 @@ void validate_hgeqz(char *tst_api, char *job, char *compq, char *compz, integer 
     residual = fla_test_max(resid4, residual);
 /* TODO: Enable GGHRD Test case */
 #if 0
-    if(*compq == 'I' && *compz == 'I')
+    if(same_char(*compq, 'I') && same_char(*compz, 'I'))
     {
         residual = fla_test_max(res_gghrd[0], residual);
         residual = fla_test_max(res_gghrd[1], residual);

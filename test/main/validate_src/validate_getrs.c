@@ -30,7 +30,7 @@ void validate_getrs(char *tst_api, char *trans, integer n, integer nrhs, void *A
      * unexpected info value */
     FLA_TEST_PRINT_INVALID_STATUS(n, n, err_thresh);
 
-    if(imatrix == 'U')
+    if(same_char(imatrix, 'U'))
     {
         create_vector(datatype, &Y, i_one);
     }
@@ -46,12 +46,12 @@ void validate_getrs(char *tst_api, char *trans, integer n, integer nrhs, void *A
             sgemm_(trans, "N", &n, &nrhs, &n, &s_one, A, &lda, X, &ldb, &s_n_one, B, &ldb);
 
             /* Scaling the X for overflow/underflow cases */
-            if((imatrix == 'O') && (scal != NULL))
+            if((same_char(imatrix, 'O')) && (scal != NULL))
             {
                 sscal_(&n, scal, X, &i_one);
             }
 
-            if((imatrix == 'U') && (scal != NULL))
+            if((same_char(imatrix, 'U')) && (scal != NULL))
             {
                 get_reciprocal_real_vector(get_realtype(datatype), scal, i_one, Y, i_one);
                 scal_matrix(datatype, scal, X, n, nrhs, ldb, i_one);
@@ -74,12 +74,12 @@ void validate_getrs(char *tst_api, char *trans, integer n, integer nrhs, void *A
             dgemm_(trans, "N", &n, &nrhs, &n, &d_one, A, &lda, X, &ldb, &d_n_one, B, &ldb);
 
             /* Scaling the X for overflow/underflow cases */
-            if((imatrix == 'O') && (scal != NULL))
+            if((same_char(imatrix, 'O')) && (scal != NULL))
             {
                 dscal_(&n, scal, X, &i_one);
             }
 
-            if((imatrix == 'U') && (scal != NULL))
+            if((same_char(imatrix, 'U')) && (scal != NULL))
             {
                 get_reciprocal_real_vector(get_realtype(datatype), scal, i_one, Y, i_one);
                 scal_matrix(datatype, scal, X, n, nrhs, ldb, i_one);
@@ -102,12 +102,12 @@ void validate_getrs(char *tst_api, char *trans, integer n, integer nrhs, void *A
             cgemm_(trans, "N", &n, &nrhs, &n, &c_one, A, &lda, X, &ldb, &c_n_one, B, &ldb);
 
             /* Scaling the X for overflow/underflow cases */
-            if((imatrix == 'O') && (scal != NULL))
+            if((same_char(imatrix, 'O')) && (scal != NULL))
             {
                 cscal_(&n, scal, X, &i_one);
             }
 
-            if((imatrix == 'U') && (scal != NULL))
+            if((same_char(imatrix, 'U')) && (scal != NULL))
             {
                 get_reciprocal_real_vector(get_realtype(datatype), scal, i_one, Y, i_one);
                 scal_matrix(datatype, scal, X, n, nrhs, ldb, i_one);
@@ -130,12 +130,12 @@ void validate_getrs(char *tst_api, char *trans, integer n, integer nrhs, void *A
             zgemm_(trans, "N", &n, &nrhs, &n, &z_one, A, &lda, X, &ldb, &z_n_one, B, &ldb);
 
             /* Scaling the X for overflow/underflow cases */
-            if((imatrix == 'O') && (scal != NULL))
+            if((same_char(imatrix, 'O')) && (scal != NULL))
             {
                 zscal_(&n, scal, X, &i_one);
             }
 
-            if((imatrix == 'U') && (scal != NULL))
+            if((same_char(imatrix, 'U')) && (scal != NULL))
             {
                 get_reciprocal_real_vector(get_realtype(datatype), scal, i_one, Y, i_one);
                 scal_matrix(datatype, scal, X, n, nrhs, ldb, i_one);
@@ -154,7 +154,7 @@ void validate_getrs(char *tst_api, char *trans, integer n, integer nrhs, void *A
             break;
     }
 
-    if(imatrix == 'U')
+    if(same_char(imatrix, 'U'))
     {
         free_vector(Y);
     }

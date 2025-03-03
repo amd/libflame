@@ -174,7 +174,7 @@ void fla_test_syev_experiment(char *tst_api, test_params_t *params, integer data
     /* performance computation
        (8/3)n^3 flops for eigen vectors
        (4/3)n^3 flops for eigen values */
-    if(jobz == 'V')
+    if(same_char(jobz, 'V'))
         perf = (double)((8.0 / 3.0) * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     else
         perf = (double)((4.0 / 3.0) * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;

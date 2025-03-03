@@ -164,7 +164,8 @@ void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer dat
     jobvl = params->eig_non_sym_paramslist[pci].jobvsl;
     jobvr = params->eig_non_sym_paramslist[pci].jobvsr;
     sense = params->eig_non_sym_paramslist[pci].sense_ggevx;
-    if(sense == 'B' || sense == 'E')
+
+    if(same_char(sense, 'B') || same_char(sense, 'E'))
     {
         jobvl = 'V';
         jobvr = 'V';
@@ -180,7 +181,7 @@ void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer dat
         /* LDVL >= 1; if JOBVL = 'V', LDVL >= M */
         if(ldvl == -1)
         {
-            if(jobvl == 'V')
+            if(same_char(jobvl, 'V'))
             {
                 ldvl = m;
             }
@@ -192,7 +193,7 @@ void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer dat
         /* LDVR >= 1; if JOBVR = 'V', LDVR >= M */
         if(ldvr == -1)
         {
-            if(jobvr == 'V')
+            if(same_char(jobvr, 'V'))
             {
                 ldvr = m;
             }
@@ -264,7 +265,7 @@ void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer dat
     /* performance computation
        4/3 m^3 flops if job = 'N'
        8/3 m^3 + m^2 flops if job = 'V' */
-    if(jobvl == 'N' && jobvr == 'N')
+    if(same_char(jobvl, 'N') && same_char(jobvr, 'N'))
         perf = (double)((4.0 / 3.0) * m * m * m) / time_min / FLOPS_PER_UNIT_PERF;
     else
         perf = (double)(((8.0 / 3.0) * m * m * m) + (m * m)) / time_min / FLOPS_PER_UNIT_PERF;
@@ -483,11 +484,11 @@ double prepare_lapacke_geevx_run(integer datatype, int layout, char *balanc, cha
     {
         /* Create temporary buffers for converting matrix layout */
         create_matrix(datatype, layout, n, n, &a_t, lda_t);
-        if(*jobvl == 'V')
+        if(same_char(*jobvl, 'V'))
         {
             create_matrix(datatype, layout, n, n, &vl_t, ldvl_t);
         }
-        if(*jobvr == 'V')
+        if(same_char(*jobvr, 'V'))
         {
             create_matrix(datatype, layout, n, n, &vr_t, ldvr_t);
         }
@@ -508,12 +509,12 @@ double prepare_lapacke_geevx_run(integer datatype, int layout, char *balanc, cha
     if(layout == LAPACK_ROW_MAJOR)
     {
         convert_matrix_layout(layout, datatype, n, n, a_t, lda_t, a, lda);
-        if(*jobvl == 'V')
+        if(same_char(*jobvl, 'V'))
         {
             convert_matrix_layout(layout, datatype, n, n, vl_t, ldvl_t, vl, ldvl);
             free_matrix(vl_t);
         }
-        if(*jobvr == 'V')
+        if(same_char(*jobvr, 'V'))
         {
             convert_matrix_layout(layout, datatype, n, n, vr_t, ldvr_t, vr, ldvr);
             free_matrix(vr_t);

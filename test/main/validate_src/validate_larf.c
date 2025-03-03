@@ -48,7 +48,7 @@ void validate_larf(char *tst_api, integer datatype, char side, integer m, intege
     FLA_TEST_PRINT_INVALID_STATUS(m, n, err_thresh);
 
     integer m_H;
-    if(side == 'L')
+    if(same_char(side, 'L'))
     {
         m_H = m;
     }
@@ -76,7 +76,7 @@ void validate_larf(char *tst_api, integer datatype, char side, integer m, intege
 
             copy_matrix(datatype, "full", m, n, c__out, ldc__out, c__out_tmp, m);
 
-            if(side == 'L')
+            if(same_char(side, 'L'))
             {
                 sgemm_("N", "N", &m, &n, &m, &s_one, H, &m, c__out_tmp, &m, &s_zero, out_validate,
                        &m);
@@ -115,7 +115,7 @@ void validate_larf(char *tst_api, integer datatype, char side, integer m, intege
 
             copy_matrix(datatype, "full", m, n, c__out, ldc__out, c__out_tmp, m);
 
-            if(side == 'L')
+            if(same_char(side, 'L'))
             {
                 dgemm_("N", "N", &m, &n, &m, &d_one, H, &m, c__out_tmp, &m, &d_zero, out_validate,
                        &m);
@@ -156,7 +156,7 @@ void validate_larf(char *tst_api, integer datatype, char side, integer m, intege
 
             copy_matrix(datatype, "full", m, n, c__out, ldc__out, c__out_tmp, m);
 
-            if(side == 'L')
+            if(same_char(side, 'L'))
             {
                 cgemm_("C", "N", &m, &n, &m, &c_one, H, &m, c__out_tmp, &m, &c_zero, out_validate,
                        &m);
@@ -197,7 +197,7 @@ void validate_larf(char *tst_api, integer datatype, char side, integer m, intege
 
             copy_matrix(datatype, "full", m, n, c__out, ldc__out, c__out_tmp, m);
 
-            if(side == 'L')
+            if(same_char(side, 'L'))
             {
                 zgemm_("C", "N", &m, &n, &m, &z_one, H, &m, c__out_tmp, &m, &z_zero, out_validate,
                        &m);

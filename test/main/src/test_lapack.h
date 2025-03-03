@@ -114,8 +114,9 @@ extern FILE *g_ext_fptr;
             info = strtok(NULL, "=");                                                             \
         }                                                                                         \
         if(strlen(info_value[1]) != 1                                                             \
-           || (info_value[1][0] != 'I' && info_value[1][0] != 'N' && info_value[1][0] != 'A'      \
-               && info_value[1][0] != 'F' && info_value[1][0] != 'U' && info_value[1][0] != 'O')) \
+           || (!same_char(info_value[1][0], 'I') && !same_char(info_value[1][0], 'N')             \
+           && !same_char(info_value[1][0], 'A') && !same_char(info_value[1][0], 'F')              \
+           && !same_char(info_value[1][0], 'U') && !same_char(info_value[1][0], 'O')))            \
         {                                                                                         \
             printf("\n Invalid input for imatrix \n");                                            \
             return;                                                                               \
@@ -153,10 +154,11 @@ extern FILE *g_ext_fptr;
     }
 
 #define FLA_EXTREME_CASE_TEST                                                                  \
-    (params->imatrix_char == 'A' || params->imatrix_char == 'F' || params->imatrix_char == 'N' \
-     || params->imatrix_char == 'I')
+    (same_char(params->imatrix_char, 'A') || same_char(params->imatrix_char, 'F')              \
+      || same_char(params->imatrix_char, 'N') || same_char(params->imatrix_char, 'I'))
 
-#define FLA_OVERFLOW_UNDERFLOW_TEST (params->imatrix_char == 'O' || params->imatrix_char == 'U')
+#define FLA_OVERFLOW_UNDERFLOW_TEST                                                            \
+    (same_char(params->imatrix_char, 'O') || same_char(params->imatrix_char, 'U'))
 
 /* Macro to check if a LAPACK API have different names for its
    (precision)variants and modify API display string
@@ -186,13 +188,15 @@ extern FILE *g_ext_fptr;
     }
 
 /* Macro to skip complex and double complex tests of not supported APIs */
-#define FLA_SKIP_TEST(datatype_char, func_str)                                           \
-    ((((datatype_char == 'c' || datatype_char == 'z') && strcmp(func_str, "STEVD") == 0) \
-      || ((datatype_char == 's' || datatype_char == 'd')                                 \
-          && (strcmp(func_str, "HETRF") == 0 || strcmp(func_str, "HETRF_ROOK") == 0    \
-        || strcmp(func_str, "HETRI_ROOK") == 0)))   \
-         ? TRUE                                                                          \
+#define FLA_SKIP_TEST(datatype_char, func_str)                                      \
+    ((((same_char(datatype_char, 'c') || same_char(datatype_char, 'z'))             \
+      && strcmp(func_str, "STEVD") == 0)                                            \
+      || ((same_char(datatype_char, 's') || same_char(datatype_char, 'd'))          \
+          && (strcmp(func_str, "HETRF") == 0 || strcmp(func_str, "HETRF_ROOK") == 0 \
+             || strcmp(func_str, "HETRI_ROOK") == 0)))                              \
+         ? TRUE                                                                     \
          : FALSE)
+
 
 /* Assign leading dimension value based on matrix layout and cmdline/config inputs */
 #define SELECT_LDA(g_ext_fptr, config_data, layout, n, rm_lda, lda_t) \

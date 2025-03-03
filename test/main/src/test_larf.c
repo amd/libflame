@@ -130,7 +130,7 @@ void fla_test_larf_experiment(char *tst_api, test_params_t *params, integer data
     integer v_num_elements;
     integer work_num_elements;
 
-    if(side == 'L')
+    if(same_char(side, 'L'))
     {
         v_num_elements = m;
         work_num_elements = n;

@@ -46,10 +46,10 @@ void validate_gesvdx(char *tst_api, char *jobu, char *jobvt, char range, integer
             float norm1, norm2, norm_s, norm_sigma, eps;
             norm1 = norm2 = norm_s = norm_sigma = 0.f;
             eps = fla_lapack_slamch("P");
-            if((*jobu == 'V' && *jobvt == 'V') || (*jobu == 'v' && *jobvt == 'v'))
+            if(same_char(*jobu, 'V') && same_char(*jobvt, 'V'))
             {
                 /* Test 1: Compute (sigma_test - (U'A VT')) */
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 0; i < ns; i++)
                     {
@@ -63,7 +63,7 @@ void validate_gesvdx(char *tst_api, char *jobu, char *jobvt, char range, integer
                 sgemm_("T", "N", &m, &n, &m, &s_one, U, &ldu, A, &lda, &s_zero, U_A, &m);
                 sgemm_("N", "T", &min_m_n, &min_m_n, &n, &s_one, U_A, &m, V, &ldvt, &s_n_one, sigma,
                        &min_m_n);
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 0; i < ns; i++)
                     {
@@ -79,7 +79,7 @@ void validate_gesvdx(char *tst_api, char *jobu, char *jobvt, char range, integer
             /* In case of g_ext_fptr the svd matrix is not called*/
             if(g_ext_fptr == NULL)
             {
-                if((imatrix == 'O' || imatrix == 'U') && (range != 'V' && range != 'v'))
+                if((same_char(imatrix, 'O') || same_char(imatrix, 'U')) && (!same_char(range, 'V')))
                 {
                     *(float *)scal = 1.00 / *(float *)scal;
                     sscal_(&ns, scal, s, &i_one);
@@ -92,11 +92,11 @@ void validate_gesvdx(char *tst_api, char *jobu, char *jobvt, char range, integer
             }
 
             /* Test 3: Checking Orthogonal property: U' * U = I */
-            if(*jobu == 'V' || *jobu == 'v')
+            if(same_char(*jobu, 'V'))
                 resid3 = (float)check_orthogonal_matrix('T', datatype, U, ns, m, ns, ldu);
 
             /* Test 4: Checking Orthogonal property: V * V' = I */
-            if(*jobvt == 'V' || *jobvt == 'v')
+            if(same_char(*jobvt, 'V'))
                 resid4 = (float)check_orthogonal_matrix('N', datatype, V, ns, n, ns, ldvt);
 
             /* Test 5: Test to Check order of Singular SVD values (positive and non-decreasing) */
@@ -109,11 +109,11 @@ void validate_gesvdx(char *tst_api, char *jobu, char *jobvt, char range, integer
             double norm1, norm2, norm_s, norm_sigma, eps;
             norm1 = norm2 = norm_s = norm_sigma = 0.;
             eps = fla_lapack_dlamch("P");
-            if((*jobu == 'V' && *jobvt == 'V') || (*jobu == 'v' && *jobvt == 'v'))
+            if(same_char(*jobu, 'V') && same_char(*jobvt, 'V'))
             {
                 /* Test 1: Compute (sigma_test - (U'A VT')) */
 
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 0; i < ns; i++)
                     {
@@ -127,7 +127,7 @@ void validate_gesvdx(char *tst_api, char *jobu, char *jobvt, char range, integer
                 dgemm_("T", "N", &m, &n, &m, &d_one, U, &ldu, A, &lda, &d_zero, U_A, &m);
                 dgemm_("N", "T", &min_m_n, &min_m_n, &n, &d_one, U_A, &m, V, &ldvt, &d_n_one, sigma,
                        &min_m_n);
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 0; i < ns; i++)
                     {
@@ -143,7 +143,7 @@ void validate_gesvdx(char *tst_api, char *jobu, char *jobvt, char range, integer
             if(g_ext_fptr == NULL)
             {
                 /* Test 2: To check functionality compute (s_test - s) */
-                if(imatrix == 'O' || imatrix == 'U')
+                if(same_char(imatrix, 'O') || same_char(imatrix, 'U'))
                 {
                     *(double *)scal = 1.00 / *(double *)scal;
                     dscal_(&ns, scal, s, &i_one);
@@ -155,11 +155,11 @@ void validate_gesvdx(char *tst_api, char *jobu, char *jobvt, char range, integer
             }
 
             /* Test 3: Checking Orthogonal property: U' * U = I */
-            if(*jobu == 'V' || *jobu == 'v')
+            if(same_char(*jobu, 'V'))
                 resid3 = check_orthogonal_matrix('T', datatype, U, ns, m, ns, ldu);
 
             /* Test 4: Checking Orthogonal property: V * V' = I */
-            if(*jobvt == 'V' || *jobvt == 'v')
+            if(same_char(*jobvt, 'V'))
                 resid4 = check_orthogonal_matrix('N', datatype, V, ns, n, ns, ldvt);
 
             /* Test 5: Test to Check order of Singular SVD values (positive and non-decreasing) */
@@ -172,10 +172,10 @@ void validate_gesvdx(char *tst_api, char *jobu, char *jobvt, char range, integer
             float norm1, norm2, norm_s, norm_sigma, eps;
             norm1 = norm2 = norm_s = norm_sigma = 0.f;
             eps = fla_lapack_slamch("P");
-            if((*jobu == 'V' && *jobvt == 'V') || (*jobu == 'v' && *jobvt == 'v'))
+            if(same_char(*jobu, 'V') && same_char(*jobvt, 'V'))
             {
                 /* Test 1: Compute (sigma_test - (U'A VT')) */
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 0; i < ns; i++)
                     {
@@ -189,7 +189,7 @@ void validate_gesvdx(char *tst_api, char *jobu, char *jobvt, char range, integer
                 cgemm_("C", "N", &m, &n, &m, &c_one, U, &ldu, A, &lda, &c_zero, U_A, &m);
                 cgemm_("N", "C", &min_m_n, &min_m_n, &n, &c_one, U_A, &m, V, &ldvt, &c_n_one, sigma,
                        &min_m_n);
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 0; i < ns; i++)
                     {
@@ -205,7 +205,7 @@ void validate_gesvdx(char *tst_api, char *jobu, char *jobvt, char range, integer
             if(g_ext_fptr == NULL)
             {
                 /* Test 2: To check functionality compute (s_test - s) */
-                if(imatrix == 'O' || imatrix == 'U')
+                if(same_char(imatrix, 'O') || same_char(imatrix, 'U'))
                 {
                     /* Scaledown the sigma during overflow */
                     *(float *)scal = s_one / *(float *)scal;
@@ -218,11 +218,11 @@ void validate_gesvdx(char *tst_api, char *jobu, char *jobvt, char range, integer
             }
 
             /* Test 3: Checking Orthogonal property: U' * U = I */
-            if(*jobu == 'V' || *jobu == 'v')
+            if(same_char(*jobu, 'V'))
                 resid3 = (float)check_orthogonal_matrix('C', datatype, U, ns, m, ns, ldu);
 
             /* Test 4: Checking Orthogonal property: V * V' = I */
-            if(*jobvt == 'V' || *jobvt == 'v')
+            if(same_char(*jobvt, 'V'))
                 resid4 = (float)check_orthogonal_matrix('N', datatype, V, ns, n, ns, ldvt);
 
             /* Test 5: Test to Check order of Singular SVD values (positive and non-decreasing) */
@@ -235,10 +235,10 @@ void validate_gesvdx(char *tst_api, char *jobu, char *jobvt, char range, integer
             double norm1, norm2, norm_s, norm_sigma, eps;
             norm1 = norm2 = norm_s = norm_sigma = 0.;
             eps = fla_lapack_dlamch("P");
-            if((*jobu == 'V' && *jobvt == 'V') || (*jobu == 'v' && *jobvt == 'v'))
+            if(same_char(*jobu, 'V') && same_char(*jobvt, 'V'))
             {
                 /* Test 1: Compute (sigma_test - (U'A VT')) */
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 0; i < ns; i++)
                     {
@@ -252,7 +252,7 @@ void validate_gesvdx(char *tst_api, char *jobu, char *jobvt, char range, integer
                 zgemm_("C", "N", &m, &n, &m, &z_one, U, &ldu, A, &lda, &z_zero, U_A, &m);
                 zgemm_("N", "C", &min_m_n, &min_m_n, &n, &z_one, U_A, &m, V, &ldvt, &z_n_one, sigma,
                        &min_m_n);
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 0; i < ns; i++)
                     {
@@ -268,7 +268,7 @@ void validate_gesvdx(char *tst_api, char *jobu, char *jobvt, char range, integer
             {
 
                 /* Test 2: To check functionality compute (s_test - s) */
-                if(imatrix == 'O' || imatrix == 'U')
+                if(same_char(imatrix, 'O') || same_char(imatrix, 'U'))
                 {
                     /* Scaledown the sigma during overflow and underflow */
                     *(double *)scal = d_one / *(double *)scal;
@@ -281,11 +281,11 @@ void validate_gesvdx(char *tst_api, char *jobu, char *jobvt, char range, integer
             }
 
             /* Test 3: Checking Orthogonal property: U' * U = I */
-            if(*jobu == 'V' || *jobu == 'v')
+            if(same_char(*jobu, 'V'))
                 resid3 = check_orthogonal_matrix('C', datatype, U, ns, m, ns, ldu);
 
             /* Test 4: Checking Orthogonal property: V * V' = I */
-            if(*jobvt == 'V' || *jobvt == 'v')
+            if(same_char(*jobvt, 'V'))
                 resid4 = check_orthogonal_matrix('N', datatype, V, ns, n, ns, ldvt);
 
             /* Test 5: Test to Check order of Singular SVD values (positive and non-decreasing) */

@@ -391,11 +391,11 @@ void validate_lange(char *tst_api, integer datatype, char norm_type, integer m, 
             double res_value = *(float *)result - *(float *)calculated_value;
             residual = FLA_FABS(res_value);
             float eps = slamch_("P");
-            if(norm_type == 'F' && residual > (m * n * eps))
+            if(same_char(norm_type, 'F') && residual > (m * n * eps))
             {
                 residual = DBL_MAX;
             }
-            else if(norm_type != 'F' && residual > eps)
+            else if(!same_char(norm_type, 'F') && residual > eps)
             {
                 residual = DBL_MAX;
             }
@@ -406,11 +406,11 @@ void validate_lange(char *tst_api, integer datatype, char norm_type, integer m, 
             double res_value = *(double *)result - *(double *)calculated_value;
             residual = FLA_FABS(res_value);
             double eps = dlamch_("P");
-            if(norm_type == 'F' && residual > (m * n * eps))
+            if(same_char(norm_type, 'F') && residual > (m * n * eps))
             {
                 residual = DBL_MAX;
             }
-            else if(norm_type != 'F' && residual > eps)
+            else if(!same_char(norm_type, 'F') && residual > eps)
             {
                 residual = DBL_MAX;
             }

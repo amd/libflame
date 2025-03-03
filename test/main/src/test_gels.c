@@ -161,19 +161,15 @@ void fla_test_gels_experiment(char *tst_api, test_params_t *params, integer data
      * Dimension of B is (n, nrhs) if TRANS = "T" */
 
     m_b = n;
-    if(trans == 'N' || trans == 'n')
+    if(same_char(trans, 'N'))
     {
         trans = 'N';
         m_b = m;
     }
-    if(trans == 'T' || trans == 't')
-    {
-        trans = 'T';
-    }
 
     /* trans for complex number should be equal to 'C' (or 'c') while passing to the GEL api
      */
-    if((datatype == COMPLEX || datatype == DOUBLE_COMPLEX) && (trans == 'T'))
+    if((datatype == COMPLEX || datatype == DOUBLE_COMPLEX) && (same_char(trans, 'T')))
     {
         trans = 'C';
     }
@@ -360,7 +356,7 @@ double prepare_lapacke_gels_run(integer datatype, integer layout, char trans, in
     A_t = A;
     B_t = B;
 
-    if(trans == 'N')
+    if(same_char(trans, 'N'))
     {
         m_x = n;
     }

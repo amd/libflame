@@ -32,7 +32,7 @@ void validate_hseqr(char *tst_api, char *job, char *compz, integer n, void *H, v
      * unexpected info value */
     FLA_TEST_PRINT_INVALID_STATUS(n, n, err_thresh);
 
-    if((imatrix == 'O' || imatrix == 'U') && (scal_H != NULL))
+    if((same_char(imatrix, 'O') || same_char(imatrix, 'U')) && (scal_H != NULL))
     {
         create_realtype_vector(datatype, &Y, 1);
         get_reciprocal_real_vector(get_realtype(datatype), scal_H, 1, Y, 1);
@@ -141,7 +141,7 @@ void validate_hseqr(char *tst_api, char *job, char *compz, integer n, void *H, v
     }
     residual = fla_test_max(resid1, resid2);
 
-    if(*job == 'E' || *compz == 'N')
+    if(same_char(*job, 'E') || same_char(*compz, 'N'))
     {
         FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
         FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");

@@ -45,7 +45,7 @@ void validate_ggevx(char *tst_api, char *balanc, char *jobvl, char *jobvr, char 
             norm_A = fla_lapack_slange("1", &n, &n, A, &lda, work);
             /* Test 1 */
             /* Validation for 'V' 'V' combination */
-            if(*jobvr == 'V')
+            if(same_char(*jobvr, 'V'))
             {
                 create_vector(COMPLEX, &VRC, n);
                 create_vector(datatype, &VRTemp, n);
@@ -107,7 +107,7 @@ void validate_ggevx(char *tst_api, char *balanc, char *jobvl, char *jobvr, char 
                 free_vector(VRC);
                 free_vector(VRTemp);
             }
-            if(*jobvl == 'V')
+            if(same_char(*jobvl, 'V'))
             {
                 create_vector(COMPLEX, &VLC, n);
                 create_vector(FLOAT, &VLTemp, n);
@@ -187,7 +187,7 @@ void validate_ggevx(char *tst_api, char *balanc, char *jobvl, char *jobvr, char 
             norm_A = fla_lapack_dlange("1", &n, &n, A, &lda, work);
             /* Test 1 */
             /* Validation for 'V' 'V' combination */
-            if(*jobvr == 'V')
+            if(same_char(*jobvr, 'V'))
             {
                 create_vector(DOUBLE_COMPLEX, &VRC, n);
                 create_vector(datatype, &VRTemp, n);
@@ -253,7 +253,7 @@ void validate_ggevx(char *tst_api, char *balanc, char *jobvl, char *jobvr, char 
                 free_vector(VRC);
                 free_vector(VRTemp);
             }
-            if(*jobvl == 'V')
+            if(same_char(*jobvl, 'V'))
             {
                 create_vector(DOUBLE_COMPLEX, &VLC, n);
                 create_vector(datatype, &VLTemp, n);
@@ -340,7 +340,7 @@ void validate_ggevx(char *tst_api, char *balanc, char *jobvl, char *jobvr, char 
             create_vector(datatype, &VLTemp, n);
             create_vector(datatype, &Y, n);
 
-            if(*jobvr == 'V')
+            if(same_char(*jobvr, 'V'))
             {
                 for(i = 0; i < n; i++)
                 {
@@ -359,7 +359,7 @@ void validate_ggevx(char *tst_api, char *balanc, char *jobvl, char *jobvr, char 
                 }
             }
 
-            if(*jobvl == 'V')
+            if(same_char(*jobvl, 'V'))
             {
 
                 for(i = 0; i < n; i++)
@@ -401,7 +401,7 @@ void validate_ggevx(char *tst_api, char *balanc, char *jobvl, char *jobvr, char 
             create_vector(datatype, &VLTemp, n);
             create_vector(datatype, &Y, n);
 
-            if(*jobvr == 'V')
+            if(same_char(*jobvr, 'V'))
             {
                 for(i = 0; i < n; i++)
                 {
@@ -423,7 +423,7 @@ void validate_ggevx(char *tst_api, char *balanc, char *jobvl, char *jobvr, char 
                 }
             }
 
-            if(*jobvl == 'V')
+            if(same_char(*jobvl, 'V'))
             {
 
                 for(i = 0; i < n; i++)

@@ -33,8 +33,8 @@ void validate_gesdd(char *tst_api, char *jobz, integer m, integer n, void *A, vo
      * unexpected info value */
     FLA_TEST_PRINT_INVALID_STATUS(m, n, err_thresh);
 
-    n_U = (*jobz != 'A') ? ns : m;
-    m_V = (*jobz != 'A') ? ns : n;
+    n_U = (!same_char(*jobz,'A')) ? ns : m;
+    m_V = (!same_char(*jobz,'A')) ? ns : n;
 
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &sigma, m);
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &Usigma, m);
@@ -45,7 +45,7 @@ void validate_gesdd(char *tst_api, char *jobz, integer m, integer n, void *A, vo
 
     /* In case of JOBZ = O, modify ldu, ldvt to make use of the same U buffer
        for further validation similar to JOBZ=A/S */
-    if(*jobz == 'O')
+    if(same_char(*jobz , 'O'))
     {
         if(m >= n)
         {
@@ -60,7 +60,7 @@ void validate_gesdd(char *tst_api, char *jobz, integer m, integer n, void *A, vo
        to use them commonly across all cases JOBZ=A/S/O */
     create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &U_temp, ldu);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &V_temp, ldvt);
-    if(*jobz == 'A' || *jobz == 'S')
+    if(same_char(*jobz , 'A') || same_char(*jobz , 'S'))
     {
         copy_matrix(datatype, "FULL", m, n_U, U, ldu_t, U_temp, ldu);
         copy_matrix(datatype, "FULL", m_V, n, V, ldvt_t, V_temp, ldvt);
@@ -70,7 +70,7 @@ void validate_gesdd(char *tst_api, char *jobz, integer m, integer n, void *A, vo
                   of U (the left singular vectors, stored columnwise);
        if M < N, A is overwritten with the first M rows
                  of V**T (the right singular vectors, stored rowwise) */
-    else if(*jobz == 'O')
+    else if(same_char(*jobz , 'O'))
     {
         if(m >= n)
         {
@@ -94,7 +94,7 @@ void validate_gesdd(char *tst_api, char *jobz, integer m, integer n, void *A, vo
 
             /* Test 1
                compute norm(A - (U*sigma*Vt)) / (V * norm(A) * EPS)*/
-            if(*jobz != 'N')
+            if(!same_char(*jobz,'N'))
             {
                 norm_A = fla_lapack_slange("1", &m, &n, A, &lda, work);
                 sgemm_("N", "N", &m, &n, &n_U, &s_one, U_temp, &ldu, sigma, &m, &s_zero, Usigma,
@@ -120,7 +120,7 @@ void validate_gesdd(char *tst_api, char *jobz, integer m, integer n, void *A, vo
                output singular values */
             if(s_in != NULL)
             {
-                if((imatrix == 'O' || imatrix == 'U') && (scal != NULL))
+                if((same_char(imatrix, 'O') || same_char(imatrix, 'U')) && (scal != NULL))
                 {
                     sscal_(&ns, scal, s_in, &i_one);
                 }
@@ -140,7 +140,7 @@ void validate_gesdd(char *tst_api, char *jobz, integer m, integer n, void *A, vo
 
             /* Test 1
                compute norm(A - (U*sigma*Vt)) / (V * norm(A) * EPS)*/
-            if(*jobz != 'N')
+            if(!same_char(*jobz, 'N'))
             {
                 norm_A = fla_lapack_dlange("1", &m, &n, A, &lda, work);
                 dgemm_("N", "N", &m, &n, &n_U, &d_one, U_temp, &ldu, sigma, &m, &d_zero, Usigma,
@@ -166,7 +166,7 @@ void validate_gesdd(char *tst_api, char *jobz, integer m, integer n, void *A, vo
                output singular values */
             if(s_in != NULL)
             {
-                if((imatrix == 'O' || imatrix == 'U') && (scal != NULL))
+                if((same_char(imatrix, 'O') || same_char(imatrix, 'U')) && (scal != NULL))
                 {
                     dscal_(&ns, scal, s_in, &i_one);
                 }
@@ -186,7 +186,7 @@ void validate_gesdd(char *tst_api, char *jobz, integer m, integer n, void *A, vo
 
             /* Test 1
                compute norm(A - (U*sigma*Vt)) / (V * norm(A) * EPS)*/
-            if(*jobz != 'N')
+            if(!same_char(*jobz,'N'))
             {
                 norm_A = fla_lapack_clange("1", &m, &n, A, &lda, work);
                 cgemm_("N", "N", &m, &n, &n_U, &c_one, U_temp, &ldu, sigma, &m, &c_zero, Usigma,
@@ -213,7 +213,7 @@ void validate_gesdd(char *tst_api, char *jobz, integer m, integer n, void *A, vo
                output singular values */
             if(s_in != NULL)
             {
-                if((imatrix == 'O' || imatrix == 'U') && (scal != NULL))
+                if((same_char(imatrix, 'O') || same_char(imatrix, 'U')) && (scal != NULL))
                 {
                     sscal_(&ns, scal, s_in, &i_one);
                 }
@@ -233,7 +233,7 @@ void validate_gesdd(char *tst_api, char *jobz, integer m, integer n, void *A, vo
 
             /* Test 1
                compute norm(A - (U*sigma*Vt)) / (V * norm(A) * EPS)*/
-            if(*jobz != 'N')
+            if(!same_char(*jobz,'N'))
             {
                 norm_A = fla_lapack_zlange("1", &m, &n, A, &lda, work);
                 zgemm_("N", "N", &m, &n, &n_U, &z_one, U_temp, &ldu, sigma, &m, &z_zero, Usigma,
@@ -259,7 +259,7 @@ void validate_gesdd(char *tst_api, char *jobz, integer m, integer n, void *A, vo
                output singular values */
             if(s_in != NULL)
             {
-                if((imatrix == 'O' || imatrix == 'U') && (scal != NULL))
+                if((same_char(imatrix, 'O') || same_char(imatrix, 'U')) && (scal != NULL))
                 {
                     dscal_(&ns, scal, s_in, &i_one);
                 }

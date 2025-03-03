@@ -161,7 +161,7 @@ void fla_test_hseqr_experiment(char *tst_api, test_params_t *params, integer dat
            Otherwise, LDZ >= 1 */
         if(ldz == -1)
         {
-            if((compz == 'I') || (compz == 'V'))
+            if(same_char(compz, 'I') || same_char(compz, 'V'))
             {
                 ldz = fla_max(1, n);
             }
@@ -208,7 +208,7 @@ void fla_test_hseqr_experiment(char *tst_api, test_params_t *params, integer dat
             scale_matrix_overflow_underflow_hseqr(datatype, n, H, ldh, params->imatrix_char,
                                                   scal_H);
         }
-        if(compz == 'I')
+        if(same_char(compz, 'I'))
             set_identity_matrix(datatype, n, n, Z, ldz);
     }
 
@@ -229,14 +229,14 @@ void fla_test_hseqr_experiment(char *tst_api, test_params_t *params, integer dat
        (20)n^3 flops full Schur factorization is computed for real
        (70)n^3 flops full Schur factorization is computed for complex */
 
-    if(compz == 'N')
+    if(same_char(compz, 'N'))
     {
         if(datatype == FLOAT || datatype == DOUBLE)
             perf = (double)(7.0 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
         else
             perf = (double)(25.0 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     }
-    else if(compz == 'I')
+    else if(same_char(compz, 'I'))
     {
         if(datatype == FLOAT || datatype == DOUBLE)
             perf = (double)(10.0 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
@@ -409,7 +409,7 @@ double prepare_lapacke_hseqr_run(integer datatype, int layout, char *job, char *
         create_matrix(datatype, layout, n, n, &H_t, fla_max(n, ldh_t));
 
         convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, H, ldh, H_t, ldh_t);
-        if(*compz != 'N')
+        if(!same_char(*compz, 'N'))
         {
             create_matrix(datatype, layout, n, n, &Z_t, fla_max(n, ldz_t));
             convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, Z, ldz, Z_t, ldz_t);
@@ -427,7 +427,7 @@ double prepare_lapacke_hseqr_run(integer datatype, int layout, char *job, char *
         /* In case of row_major matrix layout, convert output matrices
            to column_major layout */
         convert_matrix_layout(layout, datatype, n, n, H_t, ldh_t, H, ldh);
-        if(*compz != 'N')
+        if(!same_char(*compz, 'N'))
         {
             convert_matrix_layout(layout, datatype, n, n, Z_t, ldz_t, Z, ldz);
             free_matrix(Z_t);

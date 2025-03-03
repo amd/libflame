@@ -62,7 +62,7 @@ void validate_syev(char *tst_api, char *jobz, char *range, integer n, void *A, v
         sort_realtype_vector(datatype, "A", n, L, 1);
     }
 
-    if((*range == 'I') || (*range == 'i'))
+    if(same_char(*range, 'I'))
     {
         /* Test I range
            check if output EVs matches the input EVs in given index range */
@@ -73,7 +73,7 @@ void validate_syev(char *tst_api, char *jobz, char *range, integer n, void *A, v
     }
     else /* range A or V */
     {
-        if(*jobz != 'N')
+        if(!same_char(*jobz, 'N'))
         {
             void *Z = NULL, *work = NULL, *Q = NULL;
             integer i;
@@ -194,7 +194,7 @@ void validate_syev(char *tst_api, char *jobz, char *range, integer n, void *A, v
                 float norm, norm_L, eps;
                 eps = fla_lapack_slamch("P");
 
-                if((imatrix == 'O' || imatrix == 'U') && (scal != NULL))
+                if((same_char(imatrix, 'O') || same_char(imatrix, 'U')) && (scal != NULL))
                 {
                     sscal_(&n, scal, L, &i_one);
                 }
@@ -209,7 +209,7 @@ void validate_syev(char *tst_api, char *jobz, char *range, integer n, void *A, v
                 double norm, norm_L, eps;
                 eps = fla_lapack_dlamch("P");
 
-                if((imatrix == 'O' || imatrix == 'U') && (scal != NULL))
+                if((same_char(imatrix, 'O') || same_char(imatrix, 'U')) && (scal != NULL))
                 {
                     dscal_(&n, scal, L, &i_one);
                 }

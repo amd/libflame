@@ -13,7 +13,7 @@
 #define validate_getrfnpi_test_L_BL_block(x, nrm_prefix, mat_type, realtype)               \
     realtype norm_A_BL = 0, norm = 0;                                                      \
     copy_matrix(datatype, "full", m_BL, n_BL, (mat_type *)A + nfact, lda, L_BL, m_BL);     \
-    if(imatrix == 'O')                                                                     \
+    if(same_char(imatrix, 'O'))                                                            \
     {                                                                                      \
         for(int i = 0; i < n_BL; i++)                                                      \
         {                                                                                  \
@@ -31,7 +31,7 @@
     /* Compare value result and calculated value for L_BL */                               \
     matrix_difference(datatype, m_BL, n_BL, L_BL, m_BL, (mat_type *)A_test + nfact, lda);  \
     /* Calculate norm */                                                                   \
-    if(imatrix == 'O')                                                                     \
+    if(same_char(imatrix, 'O'))                                                            \
     {                                                                                      \
         for(int i = 0; i < n_BL; i++)                                                      \
         {                                                                                  \
@@ -50,7 +50,7 @@
 #define validate_getrfnpi_test_U_TR_block(x, nrm_prefix, mat_type, realtype)                    \
     realtype norm_A_TR = 0, norm = 0;                                                           \
     copy_matrix(datatype, "full", m_TR, n_TR, (mat_type *)A + nfact * lda, lda, U_TR, m_TR);    \
-    if(imatrix == 'O')                                                                          \
+    if(same_char(imatrix, 'O'))                                                                 \
     {                                                                                           \
         for(int i = 0; i < n_TR; i++)                                                           \
         {                                                                                       \
@@ -68,7 +68,7 @@
     /* Compare value result and calculated value for U_TR */                                    \
     matrix_difference(datatype, m_TR, n_TR, U_TR, m_TR, (mat_type *)A_test + nfact * lda, lda); \
     /* Calculate norm */                                                                        \
-    if(imatrix == 'O')                                                                          \
+    if(same_char(imatrix, 'O'))                                                                 \
     {                                                                                           \
         for(int i = 0; i < n_TR; i++)                                                           \
         {                                                                                       \
@@ -89,7 +89,7 @@
     realtype norm_A_BR = 0, norm = 0;                                                             \
     copy_matrix(datatype, "full", m_BR, n_BR, (mat_type *)A + nfact * lda + nfact, lda, A_BR,     \
                 m_BR);                                                                            \
-    if(imatrix == 'O')                                                                            \
+    if(same_char(imatrix, 'O'))                                                                   \
     {                                                                                             \
         for(int i = 0; i < n_BR; i++)                                                             \
         {                                                                                         \
@@ -109,7 +109,7 @@
     matrix_difference(datatype, m_BR, n_BR, A_BR, m_BR, (mat_type *)A_test + nfact * lda + nfact, \
                       lda);                                                                       \
     /* Calculate norm */                                                                          \
-    if(imatrix == 'O')                                                                            \
+    if(same_char(imatrix, 'O'))                                                                   \
     {                                                                                             \
         for(int i = 0; i < n_BR; i++)                                                             \
         {                                                                                         \

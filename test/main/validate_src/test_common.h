@@ -445,4 +445,6 @@ integer compare_matrix(integer datatype, char *uplo, integer m, integer n, void 
 /* Swap rows of the matrix as per permutation vector */
 void swap_rows_with_pivot(integer datatype, integer m, integer n, void *A, integer lda,
                           integer *ipiv);
+/* Case-insensitive comparision of given two chars */
+logical same_char(char ca, char cb);
 #endif // TEST_COMMON_H

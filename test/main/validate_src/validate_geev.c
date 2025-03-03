@@ -57,13 +57,13 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
             float norm, norm_A, norm_W, eps;
             norm = norm_A = norm_W = 0.f;
             eps = fla_lapack_slamch("P");
-            if(*jobvr == 'V')
+            if(same_char(*jobvr, 'V'))
             {
                 /* Test 1
                    compute norm((A*V = V*lambda)) / (V * norm(A) * EPS)*/
                 sgemm_("N", "N", &m, &m, &m, &s_one, A, &lda, VR, &ldvr, &s_zero, Vlambda, &m);
                 /* To handle large size values (3.40E+38) nrm2 is used */
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 1; i < m; i++)
                     {
@@ -75,7 +75,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                     norm_A = fla_lapack_slange("F", &m, &m, Vlambda, &m, work);
                 sgemm_("N", "N", &m, &m, &m, &s_one, VR, &ldvr, lambda, &m, &s_n_one, Vlambda, &m);
                 /* To handle large size values (3.40E+38) nrm2 is used */
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 1; i < m; i++)
                     {
@@ -87,14 +87,14 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                     norm = fla_lapack_slange("F", &m, &m, Vlambda, &m, work);
                 resid1 = norm / (eps * norm_A * (float)m);
             }
-            if(*jobvl == 'V')
+            if(same_char(*jobvl, 'V'))
             {
                 /* Test 2
                  * compute norm (A**H * VL - VL * W**H) / (V * norm(A) * EPS)
                  */
                 sgemm_("C", "N", &m, &m, &m, &s_one, A, &lda, VL, &ldvl, &s_zero, Vlambda, &m);
                 /* To handle large size values (3.40E+38) nrm2 is used */
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 1; i < m; i++)
                     {
@@ -107,7 +107,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                     norm_A = fla_lapack_slange("F", &m, &m, Vlambda, &m, work);
                 sgemm_("N", "C", &m, &m, &m, &s_one, VL, &ldvl, lambda, &m, &s_n_one, Vlambda, &m);
                 /* To handle large size values (3.40E+38) nrm2 is used */
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 1; i < m; i++)
                     {
@@ -124,7 +124,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
             {
                 /* Test 3: In case of specific input generation, compare input and
                            output eigen values */
-                if(imatrix == 'O' || imatrix == 'U')
+                if(same_char(imatrix, 'O') || same_char(imatrix, 'U'))
                 {
                     *(float *)scal = 1.00 / *(float *)scal;
                     sscal_(&m, scal, wr, &i_one);
@@ -148,14 +148,14 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
             norm = norm_A = norm_W = 0.;
             eps = fla_lapack_dlamch("P");
 
-            if(*jobvr == 'V')
+            if(same_char(*jobvr, 'V'))
             {
                 /* Test 1
                  * compute norm((A*V = V*lambda)) / (V * norm(A) * EPS)
                  */
                 dgemm_("N", "N", &m, &m, &m, &d_one, A, &lda, VR, &ldvr, &d_zero, Vlambda, &m);
                 /* To handle large size values (1.79E+308) nrm2 is used */
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 0; i < m; i++)
                     {
@@ -168,7 +168,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                     norm_A = fla_lapack_dlange("F", &m, &m, Vlambda, &m, work);
                 dgemm_("N", "N", &m, &m, &m, &d_one, VR, &ldvr, lambda, &m, &d_n_one, Vlambda, &m);
                 /* To handle large size values (1.79E+308) nrm2 is used */
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 0; i < m; i++)
                     {
@@ -180,14 +180,14 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                     norm = fla_lapack_dlange("F", &m, &m, Vlambda, &m, work);
                 resid1 = norm / (eps * norm_A * (double)m);
             }
-            if(*jobvl == 'V')
+            if(same_char(*jobvl, 'V'))
             {
                 /* Test 2
                  * compute norm (A**H * VL - VL * W**H) / (V * norm(A) * EPS)
                  */
                 dgemm_("C", "N", &m, &m, &m, &d_one, A, &lda, VL, &ldvl, &d_zero, Vlambda, &m);
                 /* To handle large size values (1.79E+308) nrm2 is used */
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 0; i < m; i++)
                     {
@@ -200,7 +200,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                     norm_A = fla_lapack_dlange("F", &m, &m, Vlambda, &m, work);
                 dgemm_("N", "C", &m, &m, &m, &d_one, VL, &ldvl, lambda, &m, &d_n_one, Vlambda, &m);
                 /* To handle large size values (1.79E+308) nrm2 is used */
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 0; i < m; i++)
                     {
@@ -217,7 +217,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
             {
                 /* Test 3: In case of specific input generation, compare input and
                            output eigen values */
-                if(imatrix == 'O' || imatrix == 'U')
+                if(same_char(imatrix, 'O') || same_char(imatrix, 'U'))
                 {
                     *(double *)scal = 1.00 / *(double *)scal;
                     dscal_(&m, scal, wr, &i_one);
@@ -246,14 +246,14 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
             reset_matrix(datatype, m, m, lambda, m);
             ccopy_(&m, w, &i_one, lambda, &incr);
 
-            if(*jobvr == 'V')
+            if(same_char(*jobvr, 'V'))
             {
                 /* Test 1
                  * compute norm((A*V = V*lambda)) / (V * norm(A) * EPS)
                  */
                 cgemm_("N", "N", &m, &m, &m, &c_one, A, &lda, VR, &ldvr, &c_zero, Vlambda, &m);
                 /* To handle large size values (3.40E+38) nrm2 is used */
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 0; i < m; i++)
                     {
@@ -266,7 +266,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                     norm_A = fla_lapack_clange("F", &m, &m, Vlambda, &m, work);
                 cgemm_("N", "N", &m, &m, &m, &c_one, VR, &ldvr, lambda, &m, &c_n_one, Vlambda, &m);
                 /* To handle large size values (3.40E+38) nrm2 is used */
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 0; i < m; i++)
                     {
@@ -279,14 +279,14 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                     norm = fla_lapack_clange("F", &m, &m, Vlambda, &m, work);
                 resid1 = norm / (eps * norm_A * (float)m);
             }
-            if(*jobvl == 'V')
+            if(same_char(*jobvl, 'V'))
             {
                 /* Test 2
                  * compute norm (A**H * VL - VL * W**H) / (V * norm(A) * EPS)
                  */
                 cgemm_("C", "N", &m, &m, &m, &c_one, A, &lda, VL, &ldvl, &c_zero, Vlambda, &m);
                 /* To handle large size values (3.40E+38) nrm2 is used */
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 0; i < m; i++)
                     {
@@ -299,7 +299,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                     norm_A = fla_lapack_clange("F", &m, &m, Vlambda, &m, work);
                 cgemm_("N", "C", &m, &m, &m, &c_one, VL, &ldvl, lambda, &m, &c_n_one, Vlambda, &m);
                 /* To handle large size values (3.40E+38) nrm2 is used */
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 0; i < m; i++)
                     {
@@ -316,7 +316,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
             {
                 /* Test 3: In case of specific input generation, compare input and
                            output eigen values (A-B = 0) */
-                if(imatrix == 'O' || imatrix == 'U')
+                if(same_char(imatrix, 'O') || same_char(imatrix, 'U'))
                 {
                     *(float *)scal = 1.00 / *(float *)scal;
                     csscal_(&m, scal, w, &i_one);
@@ -339,14 +339,14 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
 
             reset_matrix(datatype, m, m, lambda, m);
             zcopy_(&m, w, &i_one, lambda, &incr);
-            if(*jobvr == 'V')
+            if(same_char(*jobvr, 'V'))
             {
                 /* Test 1
                  * compute norm((A*V = V*lambda)) / (V * norm(A) * EPS)
                  */
                 zgemm_("N", "N", &m, &m, &m, &z_one, A, &lda, VR, &ldvr, &z_zero, Vlambda, &m);
                 /* To handle large size values (1.79E+308) nrm2 is used */
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 0; i < m; i++)
                     {
@@ -359,7 +359,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                     norm_A = fla_lapack_zlange("F", &m, &m, Vlambda, &m, work);
                 zgemm_("N", "N", &m, &m, &m, &z_one, VR, &ldvr, lambda, &m, &z_n_one, Vlambda, &m);
                 /* To handle large size values (1.79E+308) nrm2 is used */
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 0; i < m; i++)
                     {
@@ -372,14 +372,14 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                     norm = fla_lapack_zlange("F", &m, &m, Vlambda, &m, work);
                 resid1 = norm / (eps * norm_A * (double)m);
             }
-            if(*jobvl == 'V')
+            if(same_char(*jobvl, 'V'))
             {
                 /* Test 2
                  * compute norm (A**H * VL - VL * W**H) / (V * norm(A) * EPS)
                  */
                 zgemm_("C", "N", &m, &m, &m, &z_one, A, &lda, VL, &ldvl, &z_zero, Vlambda, &m);
                 /* To handle large size values (1.79E+308) nrm2 is used */
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 0; i < m; i++)
                     {
@@ -392,7 +392,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                     norm_A = fla_lapack_zlange("F", &m, &m, Vlambda, &m, work);
                 zgemm_("N", "C", &m, &m, &m, &z_one, VL, &ldvl, lambda, &m, &z_n_one, Vlambda, &m);
                 /* To handle large size values (1.79E+308) nrm2 is used */
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 0; i < m; i++)
                     {
@@ -409,7 +409,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
             {
                 /* Test 3: In case of specific input generation, compare input and
                            output eigen values (A-B = 0) */
-                if(imatrix == 'O' || imatrix == 'U')
+                if(same_char(imatrix, 'O') || same_char(imatrix, 'U'))
                 {
                     *(double *)scal = 1.00 / *(double *)scal;
                     zdscal_(&m, scal, w, &i_one);

@@ -149,7 +149,7 @@ void fla_test_ormqr_experiment(char *tst_api, test_params_t *params, integer dat
     k = params->lin_solver_paramslist[0].kl;
     side = params->lin_solver_paramslist[pci].side;
     trans = params->lin_solver_paramslist[pci].transr;
-    if((datatype == COMPLEX || datatype == DOUBLE_COMPLEX) && trans == 'T')
+    if((datatype == COMPLEX || datatype == DOUBLE_COMPLEX) && same_char(trans, 'T'))
         trans = 'C';
     lda = params->lin_solver_paramslist[pci].lda;
     ldc = params->lin_solver_paramslist[pci].ldb;
@@ -157,7 +157,7 @@ void fla_test_ormqr_experiment(char *tst_api, test_params_t *params, integer dat
     time_min = 0.;
     perf = 0.;
     err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
-    if(side == 'L')
+    if(same_char(side, 'L'))
     {
         m_A = m;
         n_A = n;

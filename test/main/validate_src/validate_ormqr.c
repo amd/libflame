@@ -31,7 +31,7 @@ void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, 
     FLA_TEST_PRINT_INVALID_STATUS(m, n, err_thresh);
 
     /* Modify m based on side */
-    if(side == 'R')
+    if(same_char(side, 'R'))
     {
         m_mod = n;
     }
@@ -45,7 +45,7 @@ void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, 
     reset_matrix(datatype, m, n, CC, ldc);
 
     /* Assign trans_g based on trans */
-    if(trans == 'N')
+    if(same_char(trans, 'N'))
     {
         trans_g = 'N';
     }
@@ -81,7 +81,7 @@ void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, 
             fla_lapack_sorgqr(&m_mod, &m_mod, &k, Q, &lda, Tau, work, &lwork, &info);
 
             /* Form Q * C and subtract from output C from ORMQR  */
-            if(side == 'L')
+            if(same_char(side, 'L'))
             {
                 sgemm_(&trans_g, "N", &m, &n, &m_mod, &s_n_one, Q, &lda, C_test, &ldc, &s_one, CC,
                        &ldc);
@@ -119,7 +119,7 @@ void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, 
             fla_lapack_dorgqr(&m_mod, &m_mod, &k, Q, &lda, Tau, work, &lwork, &info);
 
             /* Form Q * C and subtract from output C from ORMQR  */
-            if(side == 'L')
+            if(same_char(side, 'L'))
             {
                 dgemm_(&trans_g, "N", &m, &n, &m_mod, &d_n_one, Q, &lda, C_test, &ldc, &d_one, CC,
                        &ldc);
@@ -158,7 +158,7 @@ void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, 
             fla_lapack_cungqr(&m_mod, &m_mod, &k, Q, &lda, Tau, work, &lwork, &info);
 
             /* Form Q * C and subtract from output C from ORMQR  */
-            if(side == 'L')
+            if(same_char(side, 'L'))
             {
                 cgemm_(&trans_g, "N", &m, &n, &m_mod, &c_n_one, Q, &lda, C_test, &ldc, &c_one, CC,
                        &ldc);
@@ -197,7 +197,7 @@ void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, 
             fla_lapack_zungqr(&m_mod, &m_mod, &k, Q, &lda, Tau, work, &lwork, &info);
 
             /* Form Q * C and subtract from output C from ORMQR  */
-            if(side == 'L')
+            if(same_char(side, 'L'))
             {
                 zgemm_(&trans_g, "N", &m, &n, &m_mod, &z_n_one, Q, &lda, C_test, &ldc, &z_one, CC,
                        &ldc);

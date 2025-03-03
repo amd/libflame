@@ -150,7 +150,7 @@ void fla_test_stedc_experiment(char *tst_api, test_params_t *params, integer dat
     {
         if(ldz == -1)
         {
-            if((compz == 'N') && (layout != LAPACK_ROW_MAJOR))
+            if((same_char(compz, 'N') == 0) && (layout != LAPACK_ROW_MAJOR))
             {
                 ldz = 1;
             }
@@ -183,7 +183,7 @@ void fla_test_stedc_experiment(char *tst_api, test_params_t *params, integer dat
         init_matrix(realtype, D, 1, n, 1, g_ext_fptr, params->imatrix_char);
         init_matrix(realtype, E, 1, n - 1, 1, g_ext_fptr, params->imatrix_char);
 
-        if(compz == 'V')
+        if(same_char(compz, 'V'))
         {
             init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
             if(g_ext_fptr)
@@ -219,12 +219,12 @@ void fla_test_stedc_experiment(char *tst_api, test_params_t *params, integer dat
         uplo = 'U';
         invoke_sytrd(datatype, &uplo, compz, n, Q, lda, D, E, &info);
     }
-    if(compz == 'I')
+    if(same_char(compz, 'I'))
     {
         set_identity_matrix(datatype, n, n, Z_test, ldz);
         copy_sym_tridiag_matrix(datatype, D, E, n, n, Z, ldz);
     }
-    else if(compz == 'V')
+    else if(same_char(compz, 'V'))
     {
         copy_matrix(datatype, "full", n, n, Q, lda, Z_test, ldz);
         copy_matrix(datatype, "full", n, n, A, lda, Z, ldz);
@@ -242,7 +242,7 @@ void fla_test_stedc_experiment(char *tst_api, test_params_t *params, integer dat
        (6)n^3 flops for eigen vectors
        (4/3)n^3 flops for eigen values. */
     perf = (double)((4.0 / 3.0) * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
-    if(compz != 'N')
+    if(!same_char(compz, 'N'))
     {
         perf += (double)(6 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     }
@@ -262,7 +262,7 @@ void fla_test_stedc_experiment(char *tst_api, test_params_t *params, integer dat
     else
     {
         residual = err_thresh;
-        if(compz == 'N')
+        if(same_char(compz, 'N'))
         {
             if(!check_extreme_value(datatype, n, 1, D_test, 1, params->imatrix_char))
             {
@@ -310,7 +310,7 @@ void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, intege
 
     /* Make a copy of the input matrices. Same input values will be passed in
        each itertaion.*/
-    if(*compz == 'V')
+    if(same_char(*compz, 'V'))
     {
         create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z_save, ldz);
         copy_matrix(datatype, "full", n, n, Z, ldz, Z_save, ldz);
@@ -388,7 +388,7 @@ void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, intege
     {
         /* Restore input matrices and allocate memory to output buffers
            for each iteration. */
-        if(*compz == 'V')
+        if(same_char(*compz, 'V'))
         {
             copy_matrix(datatype, "full", n, n, Z_save, ldz, Z, ldz);
         }
@@ -462,7 +462,7 @@ double prepare_lapacke_stedc_run(integer datatype, int layout, char *compz, inte
 
     /* In case of row_major matrix layout,
        convert input matrix to row_major */
-    if((*compz != 'N') && (layout == LAPACK_ROW_MAJOR))
+    if((!same_char(*compz, 'N')) && (layout == LAPACK_ROW_MAJOR))
     {
         /* Create temporary buffers for converting matrix layout */
         create_matrix(datatype, layout, n, n, &Z_t, fla_max(n, ldz_t));
@@ -475,7 +475,7 @@ double prepare_lapacke_stedc_run(integer datatype, int layout, char *compz, inte
     *info = invoke_lapacke_stedc(datatype, layout, *compz, n, D, E, Z_t, ldz_t);
 
     exe_time = fla_test_clock() - exe_time;
-    if((*compz != 'N') && (layout == LAPACK_ROW_MAJOR))
+    if((!same_char(*compz, 'N')) && (layout == LAPACK_ROW_MAJOR))
     {
         /* In case of row_major matrix layout, convert output matrices
            to column_major layout */

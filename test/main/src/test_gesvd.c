@@ -166,7 +166,7 @@ void fla_test_gesvd_experiment(char *tst_api, test_params_t *params, integer dat
            if JOBU = 'S' or 'A', LDU >= M. */
         if(ldu == -1)
         {
-            if((jobu != 'N'))
+            if(!(same_char(jobu, 'N')))
             {
                 ldu = m;
             }
@@ -180,11 +180,11 @@ void fla_test_gesvd_experiment(char *tst_api, test_params_t *params, integer dat
            if JOBVT = 'S', LDVT >= min(M,N)*/
         if(ldvt == -1)
         {
-            if(jobvt == 'A')
+            if(same_char(jobvt, 'A'))
             {
                 ldvt = n;
             }
-            else if(jobvt != 'N')
+            else if(!(same_char(jobvt, 'N')))
             {
                 ldvt = ns;
             }
@@ -195,16 +195,16 @@ void fla_test_gesvd_experiment(char *tst_api, test_params_t *params, integer dat
         }
     }
 
-    n_U = (jobu != 'A') ? ns : m;
-    m_V = (jobvt != 'A') ? ns : n;
+    n_U = (!same_char(jobu, 'A')) ? ns : m;
+    m_V = (!same_char(jobvt,'A')) ? ns : n;
 
     /* Create input matrix parameters */
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
-    if(jobu != 'N' && jobu != 'O')
+    if(!same_char(jobu, 'N') && !same_char(jobu, 'O'))
     {
         create_matrix(datatype, LAPACK_COL_MAJOR, m, n_U, &U, ldu);
     }
-    if(jobvt != 'N' && jobvt != 'O')
+    if(!same_char(jobvt,'N') && !same_char(jobvt,'O'))
     {
         create_matrix(datatype, LAPACK_COL_MAJOR, m_V, n, &V, ldvt);
     }
@@ -240,7 +240,7 @@ void fla_test_gesvd_experiment(char *tst_api, test_params_t *params, integer dat
      * Singular values only, 4mn^2 - 4n^3/3 flops
      * Singular values and some singular vectors U (m x n) and V (n x n), 14mn^2 + 8n^3 flops
      * Link : http://icl.cs.utk.edu/magma/forum/viewtopic.php?f=2&t=921 */
-    if(jobu == 'N' || jobvt == 'N')
+    if(same_char(jobu, 'N') && same_char(jobvt, 'N'))
     {
         if(m >= n)
             perf = (double)((4.0 * m * n * n) - ((4.0 * n * n * n) / 3.0)) / time_min
@@ -289,11 +289,11 @@ void fla_test_gesvd_experiment(char *tst_api, test_params_t *params, integer dat
     }
     free_matrix(A);
     free_matrix(A_test);
-    if(jobu != 'N' && jobu != 'O')
+    if(!same_char(jobu, 'N') && !same_char(jobu, 'O'))
     {
         free_matrix(U);
     }
-    if(jobvt != 'N' && jobvt != 'O')
+    if(!same_char(jobvt,'N') && !same_char(jobvt,'O'))
     {
         free_matrix(V);
     }
@@ -316,8 +316,8 @@ void prepare_gesvd_run(char *jobu, char *jobvt, integer m_A, integer n_A, void *
 
     min_m_n = fla_min(m_A, n_A);
     max_m_n = fla_max(m_A, n_A);
-    n_U = (*jobu != 'A') ? min_m_n : m_A;
-    m_V = (*jobvt != 'A') ? min_m_n : n_A;
+    n_U = (!same_char(*jobu, 'A')) ? min_m_n : m_A;
+    m_V = (!same_char(*jobvt, 'A')) ? min_m_n : n_A;
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
@@ -365,11 +365,11 @@ void prepare_gesvd_run(char *jobu, char *jobvt, integer m_A, integer n_A, void *
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
         copy_matrix(datatype, "full", m_A, n_A, A_save, lda, A, lda);
-        if(*jobu != 'N' && *jobu != 'O')
+        if(!same_char(*jobu, 'N') && !same_char(*jobu, 'O'))
         {
             create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_U, &U_test, ldu);
         }
-        if(*jobvt != 'N' && *jobvt != 'O')
+        if(!same_char(*jobvt, 'N') && !same_char(*jobvt, 'O'))
         {
             create_matrix(datatype, LAPACK_COL_MAJOR, m_V, n_A, &V_test, ldvt);
         }
@@ -412,11 +412,11 @@ void prepare_gesvd_run(char *jobu, char *jobvt, integer m_A, integer n_A, void *
         t_min = fla_min(t_min, exe_time);
 
         /* Make a copy of the output buffers. This is required to validate the API functionality. */
-        if(*jobu != 'N' && *jobu != 'O')
+        if(!same_char(*jobu, 'N') && !same_char(*jobu, 'O'))
         {
             copy_matrix(datatype, "full", m_A, n_U, U_test, ldu, U, ldu);
         }
-        if(*jobvt != 'N' && *jobvt != 'O')
+        if(!same_char(*jobvt, 'N') && !same_char(*jobvt, 'O'))
         {
             copy_matrix(datatype, "full", m_V, n_A, V_test, ldvt, V, ldvt);
         }
@@ -426,11 +426,11 @@ void prepare_gesvd_run(char *jobu, char *jobvt, integer m_A, integer n_A, void *
         free_vector(work);
         if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
             free_vector(rwork);
-        if(*jobu != 'N' && *jobu != 'O')
+        if(!same_char(*jobu, 'N') && !same_char(*jobu, 'O'))
         {
             free_matrix(U_test);
         }
-        if(*jobvt != 'N' && *jobvt != 'O')
+        if(!same_char(*jobvt, 'N') && !same_char(*jobvt, 'O'))
         {
             free_matrix(V_test);
         }
@@ -467,11 +467,11 @@ double prepare_lapacke_gesvd_run(integer datatype, int layout, char *jobu, char 
     {
         /* Create temporary buffers for converting matrix layout */
         create_matrix(datatype, layout, m_A, n_A, &A_t, fla_max(n_A, lda_t));
-        if((*jobu != 'N') && (*jobu != 'O'))
+        if(!same_char(*jobu, 'N') && !same_char(*jobu, 'O'))
         {
             create_matrix(datatype, layout, m_A, m_A, &U_t, fla_max(m_A, ldu_t));
         }
-        if((*jobvt != 'N') && (*jobvt != 'O'))
+        if(!same_char(*jobvt, 'N') && !same_char(*jobvt, 'O'))
         {
             create_matrix(datatype, layout, n_A, n_A, &V_t, fla_max(n_A, ldvt_t));
         }
@@ -490,12 +490,12 @@ double prepare_lapacke_gesvd_run(integer datatype, int layout, char *jobu, char 
     if(layout == LAPACK_ROW_MAJOR)
     {
         convert_matrix_layout(layout, datatype, m_A, n_A, A_t, lda_t, A, lda);
-        if((*jobu != 'N') && (*jobu != 'O'))
+        if(!same_char(*jobu, 'N') && !same_char(*jobu, 'O'))
         {
             convert_matrix_layout(layout, datatype, m_A, m_A, U_t, ldu_t, U, ldu);
             free_matrix(U_t);
         }
-        if((*jobvt != 'N') && (*jobvt != 'O'))
+        if(!same_char(*jobvt, 'N') && !same_char(*jobvt, 'O'))
         {
             convert_matrix_layout(layout, datatype, n_A, n_A, V_t, ldvt_t, V, ldvt);
             free_matrix(V_t);

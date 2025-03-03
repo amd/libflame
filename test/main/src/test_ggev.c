@@ -172,7 +172,7 @@ void fla_test_ggev_experiment(char *tst_api, test_params_t *params, integer data
            if JOBVL = 'V', LDVL >= M */
         if(ldvl == -1)
         {
-            if(JOBVL == 'V')
+            if(same_char(JOBVL, 'V'))
             {
                 ldvl = m;
             }
@@ -185,7 +185,7 @@ void fla_test_ggev_experiment(char *tst_api, test_params_t *params, integer data
            if JOBVR = 'V', LDVR >= M */
         if(ldvr == -1)
         {
-            if(JOBVR == 'V')
+            if(same_char(JOBVR, 'V'))
             {
                 ldvr = m;
             }
@@ -238,7 +238,7 @@ void fla_test_ggev_experiment(char *tst_api, test_params_t *params, integer data
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
     if(!FLA_EXTREME_CASE_TEST)
     {
-        if(JOBVL == 'V' || JOBVR == 'V')
+        if(same_char(JOBVL, 'V') || same_char(JOBVR, 'V'))
         {
             validate_ggev(tst_api, &JOBVL, &JOBVR, m, A, lda, B, ldb, alpha, alphar, alphai, beta,
                           VL, ldvl, VR, ldvr, datatype, residual);
@@ -246,7 +246,7 @@ void fla_test_ggev_experiment(char *tst_api, test_params_t *params, integer data
         else
         { /* For JOBVL = JOBVR = N, eigen values are validated by comparing them with
              the eigen values generated from JOBVL = V, JOBVR = N case */
-            if(JOBVL == 'N' && JOBVR == 'N')
+            if(same_char(JOBVL, 'N') && same_char(JOBVR, 'N'))
             {
                 void *A_copy = NULL, *B_copy = NULL, *beta_copy = NULL, *VL_copy = NULL;
                 void *alphar_copy = NULL, *alphai_copy = NULL, *alpha_copy = NULL;
@@ -466,11 +466,11 @@ double prepare_lapacke_ggev_run(integer datatype, int layout, char *jobvl, char 
         /* Create temporary buffers for converting matrix layout */
         create_matrix(datatype, layout, n_A, n_A, &A_t, fla_max(n_A, lda_t));
         create_matrix(datatype, layout, n_A, n_A, &B_t, fla_max(n_A, ldb_t));
-        if(*jobvl == 'V')
+        if(same_char(*jobvl, 'V'))
         {
             create_matrix(datatype, layout, n_A, n_A, &vl_t, fla_max(n_A, ldvl_t));
         }
-        if(*jobvr == 'V')
+        if(same_char(*jobvr, 'V'))
         {
             create_matrix(datatype, layout, n_A, n_A, &vr_t, fla_max(n_A, ldvr_t));
         }
@@ -493,12 +493,12 @@ double prepare_lapacke_ggev_run(integer datatype, int layout, char *jobvl, char 
         convert_matrix_layout(layout, datatype, n_A, n_A, A_t, lda_t, A, lda);
         convert_matrix_layout(layout, datatype, n_A, n_A, B_t, ldb_t, B, ldb);
 
-        if(*jobvl == 'V')
+        if(same_char(*jobvl, 'V'))
         {
             convert_matrix_layout(layout, datatype, n_A, n_A, vl_t, ldvl_t, vl, ldvl);
             free_matrix(vl_t);
         }
-        if(*jobvr == 'V')
+        if(same_char(*jobvr, 'V'))
         {
             convert_matrix_layout(layout, datatype, n_A, n_A, vr_t, ldvr_t, vr, ldvr);
             free_matrix(vr_t);

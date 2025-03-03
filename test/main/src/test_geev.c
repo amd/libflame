@@ -163,7 +163,7 @@ void fla_test_geev_experiment(char *tst_api, test_params_t *params, integer data
         /* LDVL >= 1; if JOBVL = 'V', LDVL >= N */
         if(ldvl == -1)
         {
-            if(jobvl == 'V')
+            if(same_char(jobvl, 'V'))
             {
                 ldvl = n;
             }
@@ -175,7 +175,7 @@ void fla_test_geev_experiment(char *tst_api, test_params_t *params, integer data
         /* LDVR >= 1; if JOBVR = 'V', LDVR >= N */
         if(ldvr == -1)
         {
-            if(jobvr == 'V')
+            if(same_char(jobvr, 'V'))
             {
                 ldvr = n;
             }
@@ -240,7 +240,7 @@ void fla_test_geev_experiment(char *tst_api, test_params_t *params, integer data
        4/3 n^3 flops if job = 'N'
        8/3 n^3 flops if job = 'V' */
 
-    if(jobvl == 'N' && jobvr == 'N')
+    if(same_char(jobvl, 'N') && same_char(jobvr, 'N'))
         perf = (double)((4.0 / 3.0) * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     else
         perf = (double)((8.0 / 3.0) * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
@@ -426,11 +426,11 @@ double prepare_lapacke_geev_run(integer datatype, int layout, char *jobvl, char 
     {
         /* Create temporary buffers for converting matrix layout */
         create_matrix(datatype, layout, n, n, &a_t, fla_max(n, lda_t));
-        if(*jobvl == 'V')
+        if(same_char(*jobvl, 'V'))
         {
             create_matrix(datatype, layout, n, n, &vl_t, fla_max(n, ldvl_t));
         }
-        if(*jobvr == 'V')
+        if(same_char(*jobvr, 'V'))
         {
             create_matrix(datatype, layout, n, n, &vr_t, fla_max(n, ldvr_t));
         }
@@ -449,12 +449,12 @@ double prepare_lapacke_geev_run(integer datatype, int layout, char *jobvl, char 
     if(layout == LAPACK_ROW_MAJOR)
     {
         convert_matrix_layout(layout, datatype, n, n, a_t, lda_t, a, lda);
-        if(*jobvl == 'V')
+        if(same_char(*jobvl, 'V'))
         {
             convert_matrix_layout(layout, datatype, n, n, vl_t, ldvl_t, vl, ldvl);
             free_matrix(vl_t);
         }
-        if(*jobvr == 'V')
+        if(same_char(*jobvr, 'V'))
         {
             convert_matrix_layout(layout, datatype, n, n, vr_t, ldvr_t, vr, ldvr);
             free_matrix(vr_t);

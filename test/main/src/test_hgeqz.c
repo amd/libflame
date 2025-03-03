@@ -184,7 +184,7 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
         /* LDQ >= N if COMPQ='V' or 'I'; LDQ >= 1 otherwise */
         if(ldq == -1)
         {
-            if((compq == 'V') || (compq == 'I'))
+            if(same_char(compq, 'V') || same_char(compq, 'I'))
             {
                 ldq = n;
             }
@@ -196,7 +196,7 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
         /* LDZ >= N if COMPZ='V' or 'I'; LDZ >= 1 otherwise */
         if(ldz == -1)
         {
-            if((compz == 'V') || (compz == 'I'))
+            if(same_char(compz, 'V') || same_char(compz, 'I'))
             {
                 ldz = n;
             }
@@ -250,7 +250,7 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
                                                     scal_B);
         }
         /* Decompose matrix B in to QR and store orthogonal matrix in Q and R in B */
-        if(compq == 'N')
+        if(same_char(compq, 'N'))
         {
             create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Q_temp, ldt);
             get_orthogonal_matrix_from_QR(datatype, n, B, ldt, Q_temp, ldt, &info);
@@ -262,7 +262,7 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
         }
 
         /* Create the orthogonal Z matrix */
-        if(compz == 'V')
+        if(same_char(compz, 'V'))
         {
             create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &tmp, n);
             rand_matrix(datatype, tmp, n, n, n);
@@ -274,9 +274,9 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
         /* Make copy of matrix A and B. This is required to validate the API functionality */
         copy_matrix(datatype, "full", n, n, A, ldh, H, ldh);
         copy_matrix(datatype, "full", n, n, B, ldt, T, ldt);
-        if(compq == 'I')
+        if(same_char(compq, 'I'))
             set_identity_matrix(datatype, n, n, Q, ldq);
-        if(compz == 'I')
+        if(same_char(compz, 'I'))
             set_identity_matrix(datatype, n, n, Z, ldz);
         /* Make copy of matrix Q and Z. This is required to validate the API functionality */
         copy_matrix(datatype, "full", n, n, Q, ldq, Q_A, ldq);
@@ -284,9 +284,9 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
         /* Call to GGHRD API */
         invoke_gghrd(datatype, &compq, &compz, &n, &ilo, &ihi, H, &ldh, T, &ldt, Q, &ldq, Z, &ldz,
                      &info);
-        if(compq == 'I')
+        if(same_char(compq, 'I'))
             set_identity_matrix(datatype, n, n, Q, ldq);
-        if(compz == 'I')
+        if(same_char(compz, 'I'))
             set_identity_matrix(datatype, n, n, Z, ldz);
     }
 
@@ -306,7 +306,7 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* if job=E, in addition to the first api, also execute the api with jobe=S, compeq=N and
      * compez=N */
-    if(job == 'E')
+    if(same_char(job, 'E'))
     {
         char jobe = 'S';
         char compeq = 'N';
@@ -330,7 +330,7 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
                           &time_mine, &info, interfacetype, layout);
     }
     /* If compq=N or/and compz=N, also execute the api with compnq=I and compnz=I */
-    else if(compq == 'N' || compz == 'N')
+    else if(same_char(compq, 'N') || same_char(compz, 'N'))
     {
         char compnq = 'I';
         char compnz = 'I';
@@ -381,14 +381,14 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
        (20)n^3 flops full Schur factorization is computed for real
        (70)n^3 flops full Schur factorization is computed for complex */
 
-    if(compz == 'N')
+    if(same_char(compz, 'N'))
     {
         if(datatype == FLOAT || datatype == DOUBLE)
             perf = (double)(7.0 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
         else
             perf = (double)(25.0 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     }
-    else if(compz == 'I')
+    else if(same_char(compz, 'I'))
     {
         if(datatype == FLOAT || datatype == DOUBLE)
             perf = (double)(10.0 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
@@ -408,14 +408,14 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
     if(!FLA_EXTREME_CASE_TEST)
     {
         /* If job=E, validate eigen values from the first and second api calls */
-        if(job == 'E')
+        if(same_char(job, 'E'))
         {
             validate_hgeqz_eigen_values(tst_api, datatype, n, alpha, alphar, alphai, beta, alphae,
                                         alphaer, alphaei, betae, residual);
         }
         /* If compq=N or compz=N, validate eigen values from the first and second api
            calls. Then validate H_test and T_test matrices */
-        else if(compq == 'N' || compz == 'N')
+        else if(same_char(compq, 'N') || same_char(compz, 'N'))
         {
             validate_hgeqz_comp_n(tst_api, datatype, n, H_test, H_ntest, ldh, T_test, T_ntest, ldt,
                                   alpha, alphar, alphai, beta, alphan, alphanr, alphani, betan,
@@ -451,13 +451,13 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
     {
         free_vector(alphar);
         free_vector(alphai);
-        if(job == 'E')
+        if(same_char(job, 'E'))
         {
             free_vector(alphaer);
             free_vector(alphaei);
         }
 
-        if(compq == 'N' || compz == 'N')
+        if(same_char(compq, 'N') || same_char(compz, 'N'))
         {
             free_vector(alphanr);
             free_vector(alphani);
@@ -466,9 +466,9 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
     else
     {
         free_vector(alpha);
-        if(job == 'E')
+        if(same_char(job, 'E'))
             free_vector(alphae);
-        if(compq == 'N' || compz == 'N')
+        if(same_char(compq, 'N') || same_char(compz, 'N'))
             free_vector(alphan);
     }
     if(FLA_OVERFLOW_UNDERFLOW_TEST)
@@ -477,9 +477,9 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
         free_vector(scal_B);
     }
 
-    if(job == 'E')
+    if(same_char(job, 'E'))
         free_vector(betae);
-    if(compq == 'N' || compz == 'N')
+    if(same_char(compq, 'N') || same_char(compz, 'N'))
     {
         free_vector(betan);
         free_matrix(H_ntest);
@@ -631,12 +631,12 @@ double prepare_lapacke_hgeqz_run(integer datatype, int layout, char *job, char *
 
         convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, H, ldh, H_t, ldh_t);
         convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, T, ldt, T_t, ldt_t);
-        if(*compq != 'N')
+        if(!same_char(*compq, 'N'))
         {
             create_matrix(datatype, layout, n, n, &Q_t, fla_max(n, ldq_t));
             convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, Q, ldq, Q_t, ldq_t);
         }
-        if(*compz != 'N')
+        if(!same_char(*compz, 'N'))
         {
             create_matrix(datatype, layout, n, n, &Z_t, fla_max(n, ldz_t));
             convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, Z, ldz, Z_t, ldz_t);
@@ -657,12 +657,12 @@ double prepare_lapacke_hgeqz_run(integer datatype, int layout, char *job, char *
         convert_matrix_layout(layout, datatype, n, n, H_t, ldh_t, H, ldh);
         convert_matrix_layout(layout, datatype, n, n, T_t, ldt_t, T, ldt);
 
-        if(*compq != 'N')
+        if(!same_char(*compq, 'N'))
         {
             convert_matrix_layout(layout, datatype, n, n, Q_t, ldq_t, Q, ldq);
             free_matrix(Q_t);
         }
-        if(*compz != 'N')
+        if(!same_char(*compz, 'N'))
         {
             convert_matrix_layout(layout, datatype, n, n, Z_t, ldz_t, Z, ldz);
             free_matrix(Z_t);

@@ -152,7 +152,7 @@ void fla_test_stevd_experiment(char *tst_api, test_params_t *params, integer dat
     {
         if(ldz == -1)
         {
-            if((jobz == 'N') && (matrix_layout == LAPACK_ROW_MAJOR))
+            if(same_char(jobz, 'N') && (matrix_layout == LAPACK_ROW_MAJOR))
             {
                 ldz = 1;
             }
@@ -209,7 +209,7 @@ void fla_test_stevd_experiment(char *tst_api, test_params_t *params, integer dat
     /* performance computation
         6 * n^3 + n^2 flops for eigen vectors
         6 * n^2 flops for eigen values */
-    if(jobz == 'V')
+    if(same_char(jobz, 'V'))
         perf = (double)((6.0 * n * n * n) + (n * n)) / time_min / FLOPS_PER_UNIT_PERF;
     else
         perf = (double)(6.0 * n * n) / time_min / FLOPS_PER_UNIT_PERF;
@@ -224,13 +224,13 @@ void fla_test_stevd_experiment(char *tst_api, test_params_t *params, integer dat
     /* Check for output matrix & vectors when inputs are extreme values */
     else if(FLA_EXTREME_CASE_TEST)
     {
-        if((jobz == 'V')
+        if(same_char(jobz, 'V')
            && (!check_extreme_value(datatype, n, n, Z_test, ldz, params->imatrix_char)
                && !check_extreme_value(datatype, 1, n, D_test, 1, params->imatrix_char)))
         {
             residual = DBL_MAX;
         }
-        else if((jobz == 'N')
+        else if(same_char(jobz, 'N')
                 && !check_extreme_value(datatype, 1, n, D_test, 1, params->imatrix_char))
         {
             residual = DBL_MAX;
@@ -365,7 +365,7 @@ double prepare_lapacke_stevd_run(integer datatype, int layout, char *jobz, integ
 
     /* In case of row_major matrix layout,
        convert input matrix to row_major */
-    if((*jobz != 'N') && (layout == LAPACK_ROW_MAJOR))
+    if((!same_char(*jobz, 'N')) && (layout == LAPACK_ROW_MAJOR))
     {
         /* Create temporary buffers for converting matrix layout */
         create_matrix(datatype, layout, n, n, &Z_t, fla_max(n, ldz_t));
@@ -376,7 +376,7 @@ double prepare_lapacke_stevd_run(integer datatype, int layout, char *jobz, integ
     *info = invoke_lapacke_stevd(datatype, layout, *jobz, n, D, E, Z_t, ldz_t);
 
     exe_time = fla_test_clock() - exe_time;
-    if((*jobz != 'N') && (layout == LAPACK_ROW_MAJOR))
+    if((!same_char(*jobz, 'N')) && (layout == LAPACK_ROW_MAJOR))
     {
         /* In case of row_major matrix layout, convert output matrices
            to column_major layout */

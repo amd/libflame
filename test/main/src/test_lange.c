@@ -223,7 +223,7 @@ void prepare_lange_run(integer datatype, char norm_type, void *A, integer m, int
     void *work = NULL;
     double exe_time, time_min = 1e9;
 
-    if(norm_type == 'I')
+    if(same_char(norm_type, 'I'))
     {
         create_vector(get_realtype(datatype), &work, m);
     }
@@ -240,7 +240,7 @@ void prepare_lange_run(integer datatype, char norm_type, void *A, integer m, int
 
     *time_min_ = time_min;
 
-    if(norm_type == 'I')
+    if(same_char(norm_type, 'I'))
     {
         free_vector(work);
     }

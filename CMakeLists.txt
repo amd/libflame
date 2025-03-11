@@ -530,9 +530,9 @@ if(NOT ENABLE_EMBED_AOCLUTILS)
 endif()
 # Get the required AOCL-BLAS library pkg name
 if (ENABLE_MULTITHREADING)
-    set(REQ_BLAS_PKGNAME "aocl-blas-mt")
+    set(REQ_BLAS_PKGNAME "blis-mt")
 else()
-	set(REQ_BLAS_PKGNAME "aocl-blas")
+	set(REQ_BLAS_PKGNAME "blis")
 endif()
 
 # Include the AOCL-BLAS path check cmake directory
@@ -1363,8 +1363,8 @@ endif()
 
 
 set(REQ_PKG_LIB ${PROJECT_NAME})
-configure_file(aocl-lapack.pc.in aocl-lapack.pc @ONLY)
-install(FILES ${CMAKE_BINARY_DIR}/aocl-lapack.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
+configure_file(aocl-lapack.pc.in flame.pc @ONLY)
+install(FILES ${CMAKE_BINARY_DIR}/flame.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
 
 # To View Added Definitions and C Flags
 get_directory_property( DirDefs COMPILE_DEFINITIONS )

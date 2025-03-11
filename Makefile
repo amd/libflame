@@ -369,7 +369,6 @@ HEADERS_TO_FLATTEN := $(FLAME_H_FLAT) $(BLIS1_H_FLAT) $(FLAF2C_H_FLAT)
 # Define a list of headers to install and their installation path. The default
 # is to only install FLAME.h.
 HEADERS_TO_INSTALL := $(FLAME_H_FLAT)
-HEADERS_TO_INSTALL += $(CPP_TEMPLATE_H_PATH)/libflame.hh
 HEADERS_TO_INSTALL += $(CPP_INTERFACE_H_FLAT)
 #LAPACKE headers for cpp interface
 LAPACKE_HEADERS_DIR := $(SRC_DIR)/$(LAPACKE_DIR)/LAPACKE/include
@@ -377,7 +376,7 @@ LAPACKE_HEADERS    := $(LAPACKE_HEADERS_DIR)/lapacke.h
 LAPACKE_HEADERS    += $(LAPACKE_HEADERS_DIR)/lapacke_mangling.h
 LAPACKE_HEADERS    += $(LAPACKE_HEADERS_DIR)/lapack.h
 
-HEADERS_TO_INSTALL += $(LAPACKE_HEADERS)
+HEADERS_TO_INSTALL += $(LAPACKE_HEADERS) $(FLAF2C_H_FLAT)
 HEADERS_INST       := $(addprefix $(MK_INCL_DIR_INST)/, $(notdir $(HEADERS_TO_INSTALL)))
 
 # Add -I to each header path so we can specify our include search paths to the

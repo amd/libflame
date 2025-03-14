@@ -33,7 +33,7 @@ import os
 project = 'AOCL-LAPACK'
 copyright = '2024-2025, AMD'
 author = 'AMD'
-release = '5.0'
+release = '5.1'
 
 # Integrating doxygen generated xml files
 extensions = ['breathe']

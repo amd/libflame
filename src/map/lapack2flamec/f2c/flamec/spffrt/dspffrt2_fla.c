@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2021-2022 Advanced Micro Devices, Inc.  All rights reserved.
+    Copyright (c) 2020-2025 Advanced Micro Devices, Inc.  All rights reserved.
 */
 
 #include "FLA_f2c.h"
@@ -178,7 +178,13 @@ void dsffrk2_fla(doublereal *au, integer *m, integer *n, integer *lda, doublerea
     for(k = 1; k <= *n; k++)
     {
         /* D(k) = -1/A(k,k) */
-        r1 = 1. / au[kc];
+
+        /* Skip trailing matrix update if zero diagonal element is encountered */
+        if(au[kc] == 0)
+            r1 = 0;
+        else
+            r1 = 1. / au[kc];
+
         d__1 = -r1;
 
         i__1 = *n - k;
@@ -395,7 +401,13 @@ void dspffrt2_fla_def(doublereal *ap, integer *n, integer *ncolm, doublereal *wo
     for(k = 1; k <= *ncolm; k++)
     {
         /* D(k) = -1/A(k,k) */
-        r1 = 1. / ap[kc];
+
+        /* Skip trailing matrix update if zero diagonal element is encountered */
+        if(ap[kc] == 0)
+            r1 = 0;
+        else
+            r1 = 1. / ap[kc];
+
         d__1 = -r1;
 
         /* Update the trailing submatrix */

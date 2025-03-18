@@ -1,6 +1,5 @@
 /*
-    Copyright (c) 2020 Advanced Micro Devices, Inc.  All rights reserved.
-    Oct 09, 2020
+    Copyright (c) 2020-2025 Advanced Micro Devices, Inc.  All rights reserved.
 */
 
 #include "FLA_f2c.h"
@@ -86,7 +85,12 @@ void sspffrt2_fla(real *ap, integer *n, integer *ncolm, real *work, real *work2)
         /* W(k) = L(k)*D(k) */
         /* where L(k) is the k-th column of L */
 
-        r1 = 1. / ap[kc];
+        /* Skip trailing matrix update if zero diagonal element is encountered */
+        if(ap[kc] == 0)
+            r1 = 0;
+        else
+            r1 = 1. / ap[kc];
+
         d__1 = -r1;
 
         /* Perform a rank-1 update of A(k+1:n,k+1:n) as */

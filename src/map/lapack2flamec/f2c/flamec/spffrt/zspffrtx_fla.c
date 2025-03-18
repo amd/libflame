@@ -1,6 +1,5 @@
 /*
-    Copyright (c) 2020 Advanced Micro Devices, Inc.  All rights reserved.
-    Oct 09, 2020
+    Copyright (c) 2020-2025 Advanced Micro Devices, Inc.  All rights reserved.
 */
 
 #include "FLA_f2c.h"
@@ -90,7 +89,16 @@ void zspffrtx_fla(doublecomplex *ap, integer *n, integer *ncolm, doublecomplex *
         /* W(k) = L(k)*D(k) */
         /* where L(k) is the k-th column of L */
 
-        z_div(&z__1, &c_b1, &ap[kc]);
+        /* Skip trailing matrix update if zero diagonal element is encountered */
+        if(ap[kc].r == 0 && ap[kc].i == 0)
+        {
+            z__1.r = 0;
+            z__1.i = 0;
+        }
+        else
+        {
+            z_div(&z__1, &c_b1, &ap[kc]);
+        }
         r1.r = -z__1.r;
         r1.i = -z__1.i;
 

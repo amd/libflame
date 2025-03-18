@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2021-2022 Advanced Micro Devices, Inc.  All rights reserved.
+    Copyright (c) 2020-2025 Advanced Micro Devices, Inc.  All rights reserved.
 */
 
 #include "FLA_f2c.h"
@@ -180,7 +180,17 @@ void zsffrk2_fla(doublecomplex *au, integer *m, integer *n, integer *lda, double
     for(k = 1; k <= *n; k++)
     {
         /* D(k) = -1/A(k,k) */
-        z_div(&z__1, &c_b1, &au[kc]);
+
+        /* Skip trailing matrix update if zero diagonal element is encountered */
+        if(au[kc].r == 0 && au[kc].i == 0)
+        {
+            z__1.r = 0;
+            z__1.i = 0;
+        }
+        else
+        {
+            z_div(&z__1, &c_b1, &au[kc]);
+        }
 
         r1.r = -z__1.r;
         r1.i = -z__1.i;
@@ -349,7 +359,16 @@ void zspffrt2_fla_def(doublecomplex *ap, integer *n, integer *ncolm, doublecompl
         /* W(k) = L(k)*D(k) */
         /* where L(k) is the k-th column of L */
 
-        z_div(&z__1, &c_b1, &ap[kc]);
+        /* Skip trailing matrix update if zero diagonal element is encountered */
+        if(ap[kc].r == 0 && ap[kc].i == 0)
+        {
+            z__1.r = 0;
+            z__1.i = 0;
+        }
+        else
+        {
+            z_div(&z__1, &c_b1, &ap[kc]);
+        }
 
         r1.r = -z__1.r;
         r1.i = -z__1.i;

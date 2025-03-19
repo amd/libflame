@@ -30,7 +30,7 @@
 
 typedef struct scomplex
 {
-  float real, imag;
+    float real, imag;
 } scomplex;
 #endif
 
@@ -38,7 +38,7 @@ typedef struct scomplex
 #define _DEFINED_DCOMPLEX
 typedef struct dcomplex
 {
-  double real, imag;
+    double real, imag;
 } dcomplex;
 #endif
 
@@ -58,9 +58,9 @@ typedef unsigned long uinteger;
 #else
 // When stdint.h is not available, manually typedef the types we will use.
 #ifdef _WIN32
-typedef          __int32  int32_t;
+typedef __int32 int32_t;
 typedef unsigned __int32 uint32_t;
-typedef          __int64  int64_t;
+typedef __int64 int64_t;
 typedef unsigned __int64 uint64_t;
 #else
 #error "Attempting to compile on pre-C99 system without stdint.h."
@@ -69,19 +69,19 @@ typedef unsigned __int64 uint64_t;
 
 typedef integer logical;
 
-#define fla_min( x, y )    \
-({                         \
-   __typeof__(x) _x = (x); \
-   __typeof__(y) _y = (y); \
-   _x < _y ? _x : _y;      \
-})
+#define fla_min(x, y)           \
+    ({                          \
+        __typeof__(x) _x = (x); \
+        __typeof__(y) _y = (y); \
+        _x < _y ? _x : _y;      \
+    })
 
-#define fla_max( x, y )    \
-({                         \
-   __typeof__(x) _x = (x); \
-   __typeof__(y) _y = (y); \
-   _x > _y ? _x : _y;      \
-})
+#define fla_max(x, y)           \
+    ({                          \
+        __typeof__(x) _x = (x); \
+        __typeof__(y) _y = (y); \
+        _x > _y ? _x : _y;      \
+    })
 
 /* Enum value for the type of diagonal
    elements of a diagnoal matrix.
@@ -265,8 +265,6 @@ void get_diagonal(integer datatype, void *A, integer m, integer n, integer lda, 
 void get_subdiagonal(integer datatype, void *A, integer m, integer n, integer lda, void *Subdiag);
 /*Tridiagonal matrix functions*/
 void rand_sym_tridiag_matrix(integer datatype, void *A, integer M, integer N, integer LDA);
-void copy_sym_tridiag_matrix(integer datatype, void *D, void *E, integer M, integer N, void *A,
-                             integer LDA);
 void copy_tridiag_matrix(integer datatype, void *dl, void *d, void *du, integer M, integer N,
                          void *A, integer LDA);
 void copy_tridiag_vector(integer datatype, void *dl, void *d, void *du, integer M, integer N,
@@ -275,6 +273,9 @@ void tridiag_matrix_multiply(integer datatype, integer n, integer nrhs, void *dl
                              void *B, integer ldb, void *C, integer ldc);
 void copy_sym_tridiag_matrix(integer datatype, void *D, void *E, integer M, integer N, void *B,
                              integer LDA);
+/* Decompose symmetric matrix A into trdiagonal matrix in D, E and store orthogonal matrix in Q*/
+void get_sym_tridiagonal_matrix(integer datatype, char *uplo, integer n, void *A, integer lda,
+                                void *D, void *E, integer *info);
 
 /* Division of complex types */
 void c_div_t(scomplex *cp, scomplex *ap, scomplex *bp);
@@ -520,4 +521,5 @@ void swap_rows_with_pivot(integer datatype, integer m, integer n, void *A, integ
 logical same_char(char ca, char cb);
 /* Return pointer at required offset for the given datatype */
 void *get_ptr_at_offset(integer datatype, void *A, integer offset);
+
 #endif // TEST_COMMON_H

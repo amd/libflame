@@ -2393,3 +2393,47 @@ void scale_matrix_overflow_underflow_gejsv(integer datatype, integer m, integer 
     free_vector(max_min_a);
     free_vector(max_min_s);
 }
+
+/* Scaling matrix with values around overflow, underflow for SYTRD/HETRD */
+void scale_matrix_underflow_overflow_sytrd(integer datatype, integer n, void *A, integer lda,
+                                           char imatrix_char)
+{
+    double tuning_val = 1.0;
+    void *max_min = NULL, *scal = NULL;
+
+    if(n == 1)
+    {
+        assign_value(datatype, A, d_one, d_one);
+    }
+    create_vector(get_realtype(datatype), &scal, 1);
+    create_vector(get_realtype(datatype), &max_min, 1);
+
+    if(same_char(imatrix_char, 'O'))
+    {
+        get_max_from_matrix(datatype, A, max_min, n, n, lda);
+        if(n < 100)
+        {
+            tuning_val = 11.0;
+        }
+        else if(n < 200)
+        {
+            tuning_val = 15.0;
+        }
+        else
+        {
+            tuning_val = 30.0;
+        }
+    }
+    if(same_char(imatrix_char, 'U'))
+    {
+        get_min_from_matrix(datatype, A, max_min, n, n, lda);
+    }
+    calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
+
+    /* Scaling the matrix A with scal */
+    scal_matrix(datatype, scal, A, n, n, lda, i_one);
+
+    /* free vectors */
+    free_vector(max_min);
+    free_vector(scal);
+}

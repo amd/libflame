@@ -1416,10 +1416,13 @@ extern void invoke_geev(integer datatype, char *jobvl, char *jobvr, integer *n, 
                         void *vr, integer *ldvr, void *work, integer *lwork, void *rwork,
                         integer *info);
 extern void invoke_hetrf_rook(integer datatype, char *uplo, integer *n, void *a, integer *lda,
-                              integer *ipiv, void *work, integer *lwork, integer *info);
-/* Generates Orthogonal matrix from ORGTR() after SYTRD() call. */
-extern void invoke_sytrd(integer datatype, char *uplo, char compz, integer n, void *A, integer lda,
-                         void *D, void *E, integer *info);
+                       integer *ipiv, void *work, integer *lwork, integer *info);
+/* LAPACK SYTRD API invoke function to form Symmetric tridiagonal matrix. */
+extern void invoke_sytrd(integer datatype, char *uplo, integer *n, void *A, integer *lda,
+                  void *D, void *E, void *tau, void *work, integer *lwork, integer *info);
+/* Get the orhtogonal matrix from elementary vectors returned by SYTRD.*/
+extern void invoke_orgtr(integer datatype, char *uplo, integer *n, void *a, integer *lda,
+                  void *tau, void *work, integer *lwork, integer *info);
 extern void invoke_gghrd(integer datatype, char *compq, char *compz, integer *n, integer *ilo,
                          integer *ihi, void *a, integer *lda, void *b, integer *ldb, void *q,
                          integer *ldq, void *z, integer *ldz, integer *info);

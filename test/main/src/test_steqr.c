@@ -200,7 +200,7 @@ void fla_test_steqr_experiment(char *tst_api, test_params_t *params, integer dat
             scale_matrix_underflow_overflow_steqr(datatype, n, A, lda, &params->imatrix_char, scal);
         }
         copy_matrix(datatype, "full", n, n, A, lda, Q, lda);
-        invoke_sytrd(datatype, &uplo, compz, n, Q, lda, D, E, &info);
+        get_sym_tridiagonal_matrix(datatype, &uplo, n, Q, lda, D, E, &info);
     }
     if(same_char(compz, 'I'))
     {

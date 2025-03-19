@@ -115,9 +115,11 @@ void invoke_cpp_gejsv(integer datatype, char *joba, char *jobu, char *jobv, char
                       char *jobp, integer *m, integer *n, void *A, integer *lda, void *S, void *U,
                       integer *ldu, void *V, integer *ldv, void *work, integer *lwork, void *rwork,
                       integer *lrwork, integer *iwork, integer *info);
-void invoke_cpp_labrd(integer datatype, integer *m, integer *n, integer *nb, void *a,
-                        integer *lda, void *d, void *e, void *tauq, void *taup, void *x, 
-                        integer *ldx, void *y, integer *ldy);
+void invoke_cpp_labrd(integer datatype, integer *m, integer *n, integer *nb, void *a, integer *lda,
+                      void *d, void *e, void *tauq, void *taup, void *x, integer *ldx, void *y,
+                      integer *ldy);
+void invoke_cpp_sytrd(integer datatype, char *uplo, integer *n, void *A, integer *lda, void *D,
+                      void *E, void *tau, void *work, integer *lwork, integer *info);
 #ifdef __cplusplus
 }
 #endif

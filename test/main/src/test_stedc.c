@@ -217,7 +217,7 @@ void fla_test_stedc_experiment(char *tst_api, test_params_t *params, integer dat
         }
         copy_matrix(datatype, "full", n, n, A, lda, Q, lda);
         uplo = 'U';
-        invoke_sytrd(datatype, &uplo, compz, n, Q, lda, D, E, &info);
+        get_sym_tridiagonal_matrix(datatype, &uplo, n, Q, lda, D, E, &info);
     }
     if(same_char(compz, 'I'))
     {

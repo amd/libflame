@@ -1,5 +1,5 @@
 # ##############################################################################
-# Copyright (c) 2024 Advanced Micro Devices, Inc.
+# Copyright (c) 2024-2025 Advanced Micro Devices, Inc.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@ cmake_minimum_required(VERSION 3.26.0)
 
 project(aocllapack-doc)
 
-find_package(Doxygen 1.9.6)
+find_package(Doxygen 1.9.1)
 
 set(W_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 
@@ -114,12 +114,12 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/doxygen/html/index.html)
     if(NOT ${EXIT_CODE} EQUAL 0)
       message(
         FATAL_ERROR
-          "Python package rocm_docs is required to build the documentation\n   Use: ${Python_EXECUTABLE} -m pip install rocm-docs-core==0.30.0"
+          "Python package rocm_docs is required to build the documentation\n   Use: ${Python_EXECUTABLE} -m pip install rocm-docs-core"
       )
     endif()
 
     # checks rocm-docs-core version is in between 0.19.0 & 0.32.0
-    check_rocm_docs_version()
+    #check_rocm_docs_version()
 
     execute_process(
       COMMAND ${Python_EXECUTABLE} -c "import breathe"
@@ -158,8 +158,8 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/doxygen/html/index.html)
       )
     else()
       message(STATUS "Sphinx generated successfully at ${W_DIR}/sphinx/html")
-      file(REMOVE_RECURSE ${W_DIR}/doxygen/xml)
-      file(REMOVE_RECURSE ${W_DIR}/sphinx/doctrees)
+      #file(REMOVE_RECURSE ${W_DIR}/doxygen/xml)
+      #file(REMOVE_RECURSE ${W_DIR}/sphinx/doctrees)
     endif()
 else() # !(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/docs/html/index.html)
     message(STATUS "Doxygen document generation failed.")

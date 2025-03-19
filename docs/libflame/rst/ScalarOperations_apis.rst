@@ -1,4 +1,4 @@
-..  Copyright (C) 2024, Advanced Micro Devices. All rights reserved.
+..  Copyright (C) 2024-2025, Advanced Micro Devices. All rights reserved.
 
 ..  Redistribution and use in source and binary forms, with or without
 ..  modification, are permitted provided that the following conditions are met:
@@ -35,6 +35,7 @@ ISNAN
 ------
 
 .. doxygengroup:: isnan
+   :project: lapack
    :members:
 
 
@@ -44,6 +45,7 @@ LAISNAN
 --------
 
 .. doxygengroup:: laisnan
+   :project: lapack
    :members:
 
 
@@ -53,6 +55,7 @@ LADIV
 ------
 
 .. doxygengroup:: ladiv
+   :project: lapack
    :members:
 
 
@@ -62,6 +65,7 @@ LAPY2
 ------
 
 .. doxygengroup:: lapy2
+   :project: lapack
    :members:
 
 
@@ -71,4 +75,5 @@ LAPY3
 ------
 
 .. doxygengroup:: lapy3
+   :project: lapack
    :members:

@@ -1,4 +1,4 @@
-..  Copyright (C) 2024, Advanced Micro Devices. All rights reserved.
+..  Copyright (C) 2024-2025, Advanced Micro Devices. All rights reserved.
 
 ..  Redistribution and use in source and binary forms, with or without
 ..  modification, are permitted provided that the following conditions are met:
@@ -35,6 +35,7 @@ GESV
 ------
 
 .. doxygengroup:: gesv
+   :project: lapack
    :members:
 
 
@@ -44,6 +45,7 @@ GESVX
 ------
 
 .. doxygengroup:: gesvx
+   :project: lapack
    :members:
 
 
@@ -53,6 +55,7 @@ GESVXX
 ------
 
 .. doxygengroup:: gesvxx
+   :project: lapack
    :members:
 
 
@@ -62,6 +65,7 @@ GBSV
 ------
 
 .. doxygengroup:: gbsv
+   :project: lapack
    :members:
 
 
@@ -71,6 +75,7 @@ GBSVX
 ------
 
 .. doxygengroup:: gbsvx
+   :project: lapack
    :members:
 
 
@@ -80,6 +85,7 @@ GBSVXX
 ------
 
 .. doxygengroup:: gbsvxx
+   :project: lapack
    :members:
 
 
@@ -89,6 +95,7 @@ GTSV
 ------
 
 .. doxygengroup:: gtsv
+   :project: lapack
    :members:
 
 
@@ -98,5 +105,6 @@ GTSVX
 ------
 
 .. doxygengroup:: gtsvx
+   :project: lapack
    :members:
 

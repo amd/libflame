@@ -1,4 +1,4 @@
-..  Copyright (C) 2024, Advanced Micro Devices. All rights reserved.
+..  Copyright (C) 2024-2025, Advanced Micro Devices. All rights reserved.
 
 ..  Redistribution and use in source and binary forms, with or without
 ..  modification, are permitted provided that the following conditions are met:
@@ -35,6 +35,7 @@ SYEV
 ------
 
 .. doxygengroup:: syev
+   :project: lapack
    :members:
 
 
@@ -44,6 +45,7 @@ SYEVD
 ------
 
 .. doxygengroup:: syevd
+   :project: lapack
    :members:
 
 
@@ -53,6 +55,7 @@ SYEVR
 ------
 
 .. doxygengroup:: syevr
+   :project: lapack
    :members:
 
 
@@ -62,6 +65,7 @@ SYEVX
 ------
 
 .. doxygengroup:: syevx
+   :project: lapack
    :members:
 
 
@@ -71,6 +75,7 @@ SYEVX_2STAGE
 --------------
 
 .. doxygengroup:: syevx_2stage
+   :project: lapack
    :members:
 
 
@@ -80,6 +85,7 @@ SYEV_2STAGE
 -------------
 
 .. doxygengroup:: syev_2stage
+   :project: lapack
    :members:
 
 
@@ -89,6 +95,7 @@ SYEVR_2STAGE
 ------------
 
 .. doxygengroup:: syevr_2stage
+   :project: lapack
    :members:
 
 
@@ -98,6 +105,7 @@ SPEV
 ------
 
 .. doxygengroup:: spev
+   :project: lapack
    :members:
 
 
@@ -107,6 +115,7 @@ SPEVD
 ------
 
 .. doxygengroup:: spevd
+   :project: lapack
    :members:
 
 
@@ -116,6 +125,7 @@ SPEVX
 ------
 
 .. doxygengroup:: spevx
+   :project: lapack
    :members:
 
 
@@ -125,6 +135,7 @@ STEV
 ------
 
 .. doxygengroup:: stev
+   :project: lapack
    :members:
 
 
@@ -134,6 +145,7 @@ STEVD
 ------
 
 .. doxygengroup:: stevd
+   :project: lapack
    :members:
 
 
@@ -143,6 +155,7 @@ STEVR
 ------
 
 .. doxygengroup:: stevr
+   :project: lapack
    :members:
 
 
@@ -152,6 +165,7 @@ STEVX
 ------
 
 .. doxygengroup:: stevx
+   :project: lapack
    :members:
 
 
@@ -161,6 +175,7 @@ PTEQR
 ------
 
 .. doxygengroup:: pteqr
+   :project: lapack
    :members:
 
 
@@ -170,6 +185,7 @@ STEBZ
 ------
 
 .. doxygengroup:: stebz
+   :project: lapack
    :members:
 
 
@@ -179,6 +195,7 @@ STEFR
 ------
 
 .. doxygengroup:: stefr
+   :project: lapack
    :members:
 
 
@@ -188,6 +205,7 @@ STEDC
 ------
 
 .. doxygengroup:: stedc
+   :project: lapack
    :members:
 
 
@@ -197,6 +215,7 @@ STEGR
 ------
 
 .. doxygengroup:: stegr
+   :project: lapack
    :members:
 
 
@@ -206,6 +225,7 @@ STEIN
 ------
 
 .. doxygengroup:: stein
+   :project: lapack
    :members:
 
 
@@ -215,6 +235,7 @@ STEQR
 ------
 
 .. doxygengroup:: steqr
+   :project: lapack
    :members:
 
 
@@ -224,6 +245,7 @@ SYGV
 ------
 
 .. doxygengroup:: sygv
+   :project: lapack
    :members:
 
 
@@ -233,6 +255,7 @@ SYGV_2STAGE
 -------------
 
 .. doxygengroup:: sygv_2stage
+   :project: lapack
    :members:
 
 
@@ -242,6 +265,7 @@ SYGVD
 ------
 
 .. doxygengroup:: sygvd
+   :project: lapack
    :members:
 
 
@@ -251,6 +275,7 @@ SYGVX
 ------
 
 .. doxygengroup:: sygvx
+   :project: lapack
    :members:
 
 
@@ -260,6 +285,7 @@ SPGV
 ------
 
 .. doxygengroup:: spgv
+   :project: lapack
    :members:
 
 
@@ -269,6 +295,7 @@ SPGVD
 ------
 
 .. doxygengroup:: spgvd
+   :project: lapack
    :members:
 
 
@@ -278,6 +305,7 @@ SPGVX
 ------
 
 .. doxygengroup:: spgvx
+   :project: lapack
    :members:
 
 
@@ -287,6 +315,7 @@ SBGV
 ------
 
 .. doxygengroup:: sbgv
+   :project: lapack
    :members:
 
 
@@ -296,6 +325,7 @@ SBGVD
 ------
 
 .. doxygengroup:: sbgvd
+   :project: lapack
    :members:
 
 
@@ -305,6 +335,7 @@ SGBVX
 ------
 
 .. doxygengroup:: sgbvx
+   :project: lapack
    :members:
 
 
@@ -314,6 +345,7 @@ DISNA
 ------
 
 .. doxygengroup:: disna
+   :project: lapack
    :members:
 
 
@@ -323,6 +355,7 @@ SYTRD
 ------
 
 .. doxygengroup:: sytrd
+   :project: lapack
    :members:
 
 
@@ -332,6 +365,7 @@ HETRD
 ------
 
 .. doxygengroup:: hetrd
+   :project: lapack
    :members:
 
 
@@ -341,6 +375,7 @@ HETD2
 ------
 
 .. doxygengroup:: hetd2
+   :project: lapack
    :members:
 
 
@@ -350,6 +385,7 @@ SYTD2
 ------
 
 .. doxygengroup:: sytd2
+   :project: lapack
    :members:
 
 
@@ -359,6 +395,7 @@ LATRD
 ------
 
 .. doxygengroup:: latrd
+   :project: lapack
    :members:
 
 
@@ -368,6 +405,7 @@ UNGTR
 ------
 
 .. doxygengroup:: ungtr
+   :project: lapack
    :members:
 
 
@@ -377,6 +415,7 @@ ORGTR
 ------
 
 .. doxygengroup:: orgtr
+   :project: lapack
    :members:
 
 
@@ -386,6 +425,7 @@ UNMTR
 ------
 
 .. doxygengroup:: unmtr
+   :project: lapack
    :members:
 
 
@@ -395,6 +435,7 @@ ORMTR
 ------
 
 .. doxygengroup:: ormtr
+   :project: lapack
    :members:
 
 
@@ -404,6 +445,7 @@ SYTRD_2STAGE
 -------------
 
 .. doxygengroup:: sytrd_2stage
+   :project: lapack
    :members:
 
 
@@ -413,6 +455,7 @@ HETRD_2STAGE
 ------------
 
 .. doxygengroup:: hetrd_2stage
+   :project: lapack
    :members:
 
 
@@ -422,6 +465,7 @@ HETRD_HE2HB
 -----------
 
 .. doxygengroup:: hetrd_he2hb
+   :project: lapack
    :members:
 
 
@@ -431,6 +475,7 @@ SYTRD_HB2ST
 ------------
 
 .. doxygengroup:: sytrd_hb2st
+   :project: lapack
    :members:
 
 
@@ -440,6 +485,7 @@ HB2ST_KERNELS
 -------------
 
 .. doxygengroup:: hb2st_kernels
+   :project: lapack
    :members:
 
 
@@ -449,6 +495,7 @@ SB2ST_KERNELS
 --------------
 
 .. doxygengroup:: sb2st_kernels
+   :project: lapack
    :members:
 
 
@@ -458,6 +505,7 @@ LAE2
 ------
 
 .. doxygengroup:: lae2
+   :project: lapack
    :members:
 
 
@@ -467,6 +515,7 @@ LAESY
 ------
 
 .. doxygengroup:: laesy
+   :project: lapack
    :members:
 
 
@@ -476,6 +525,7 @@ LAEV2
 ------
 
 .. doxygengroup:: laev2
+   :project: lapack
    :members:
 
 
@@ -485,6 +535,7 @@ LAGTF
 ------
 
 .. doxygengroup:: lagtf
+   :project: lapack
    :members:
 
 
@@ -494,6 +545,7 @@ LAGTS
 ------
 
 .. doxygengroup:: lagts
+   :project: lapack
    :members:
 
 
@@ -503,6 +555,7 @@ SPTRD
 ------
 
 .. doxygengroup:: sptrd
+   :project: lapack
    :members:
 
 
@@ -512,6 +565,7 @@ OPGTR
 ------
 
 .. doxygengroup:: opgtr
+   :project: lapack
    :members:
 
 
@@ -521,6 +575,7 @@ OPMTR
 ------
 
 .. doxygengroup:: opmtr
+   :project: lapack
    :members:
 
 
@@ -530,6 +585,7 @@ SBTRD
 ------
 
 .. doxygengroup:: sbtrd
+   :project: lapack
    :members:
 
 
@@ -539,6 +595,7 @@ SYGST
 ------
 
 .. doxygengroup:: sygst
+   :project: lapack
    :members:
 
 
@@ -548,6 +605,7 @@ HEGST
 ------
 
 .. doxygengroup:: hegst
+   :project: lapack
    :members:
 
 
@@ -557,6 +615,7 @@ HEGS2
 ------
 
 .. doxygengroup:: hegs2
+   :project: lapack
    :members:
 
 
@@ -566,6 +625,7 @@ SYGS2
 ------
 
 .. doxygengroup:: sygs2
+   :project: lapack
    :members:
 
 
@@ -575,6 +635,7 @@ SPGST
 ------
 
 .. doxygengroup:: spgst
+   :project: lapack
    :members:
 
 
@@ -584,6 +645,7 @@ PBSTF
 ------
 
 .. doxygengroup:: pbstf
+   :project: lapack
    :members:
 
 
@@ -593,6 +655,7 @@ LAG2
 ------
 
 .. doxygengroup:: lag2
+   :project: lapack
    :members:
 
 
@@ -602,6 +665,7 @@ LAEBZ
 ------
 
 .. doxygengroup:: laebz
+   :project: lapack
    :members:
 
 
@@ -611,6 +675,7 @@ LANEG
 ------
 
 .. doxygengroup:: laneg
+   :project: lapack
    :members:
 
 
@@ -620,6 +685,7 @@ LAED0
 ------
 
 .. doxygengroup:: laed0
+   :project: lapack
    :members:
 
 
@@ -629,6 +695,7 @@ LAED1
 ------
 
 .. doxygengroup:: laed1
+   :project: lapack
    :members:
 
 
@@ -638,6 +705,7 @@ LAED2
 ------
 
 .. doxygengroup:: laed2
+   :project: lapack
    :members:
 
 
@@ -647,6 +715,7 @@ LAED3
 ------
 
 .. doxygengroup:: laed3
+   :project: lapack
    :members:
 
 
@@ -656,6 +725,7 @@ LAED4
 ------
 
 .. doxygengroup:: laed4
+   :project: lapack
    :members:
 
 
@@ -665,6 +735,7 @@ LAED5
 ------
 
 .. doxygengroup:: laed5
+   :project: lapack
    :members:
 
 
@@ -674,6 +745,7 @@ LAED6
 ------
 
 .. doxygengroup:: laed6
+   :project: lapack
    :members:
 
 
@@ -683,6 +755,7 @@ LAED7
 ------
 
 .. doxygengroup:: laed7
+   :project: lapack
    :members:
 
 
@@ -692,6 +765,7 @@ LAED8
 ------
 
 .. doxygengroup:: laed8
+   :project: lapack
    :members:
 
 
@@ -701,6 +775,7 @@ LAED9
 ------
 
 .. doxygengroup:: laed9
+   :project: lapack
    :members:
 
 
@@ -710,6 +785,7 @@ LAEDA
 ------
 
 .. doxygengroup:: laeda
+   :project: lapack
    :members:
 
 
@@ -719,6 +795,7 @@ LARRA
 ------
 
 .. doxygengroup:: larra
+   :project: lapack
    :members:
 
 
@@ -728,6 +805,7 @@ LARRB
 ------
 
 .. doxygengroup:: larrb
+   :project: lapack
    :members:
 
 
@@ -737,6 +815,7 @@ LARRC
 ------
 
 .. doxygengroup:: larrc
+   :project: lapack
    :members:
 
 
@@ -746,6 +825,7 @@ LARRD
 ------
 
 .. doxygengroup:: larrd
+   :project: lapack
    :members:
 
 
@@ -755,6 +835,7 @@ LARRE
 ------
 
 .. doxygengroup:: larre
+   :project: lapack
    :members:
 
 
@@ -764,6 +845,7 @@ LARRF
 ------
 
 .. doxygengroup:: larrf
+   :project: lapack
    :members:
 
 
@@ -773,6 +855,7 @@ LARRJ
 ------
 
 .. doxygengroup:: larrj
+   :project: lapack
    :members:
 
 
@@ -782,6 +865,7 @@ LARRK
 ------
 
 .. doxygengroup:: larrk
+   :project: lapack
    :members:
 
 
@@ -791,6 +875,7 @@ LARRV
 ------
 
 .. doxygengroup:: larrv
+   :project: lapack
    :members:
 
 
@@ -800,4 +885,5 @@ LAR1V
 ------
 
 .. doxygengroup:: lar1v
+   :project: lapack
    :members:

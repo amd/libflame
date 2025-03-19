@@ -1,4 +1,4 @@
-..  Copyright (C) 2024, Advanced Micro Devices. All rights reserved.
+..  Copyright (C) 2024-2025, Advanced Micro Devices. All rights reserved.
 
 ..  Redistribution and use in source and binary forms, with or without
 ..  modification, are permitted provided that the following conditions are met:
@@ -35,6 +35,7 @@ LAGTM
 ------
 
 .. doxygengroup:: lagtm
+   :project: lapack
    :members:
 
 
@@ -44,6 +45,7 @@ LACRM
 ------
 
 .. doxygengroup:: lacrm
+   :project: lapack
    :members:
 
 
@@ -53,6 +55,7 @@ LARCM
 ------
 
 .. doxygengroup:: larcm
+   :project: lapack
    :members:
 
 
@@ -62,6 +65,7 @@ HFRK
 ------
 
 .. doxygengroup:: hfrk
+   :project: lapack
    :members:
 
 
@@ -71,4 +75,5 @@ TFSM
 ------
 
 .. doxygengroup:: tfsm
+   :project: lapack
    :members:

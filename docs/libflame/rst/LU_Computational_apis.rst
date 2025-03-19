@@ -1,4 +1,4 @@
-..  Copyright (C) 2024, Advanced Micro Devices. All rights reserved.
+..  Copyright (C) 2024-2025, Advanced Micro Devices. All rights reserved.
 
 ..  Redistribution and use in source and binary forms, with or without
 ..  modification, are permitted provided that the following conditions are met:
@@ -35,6 +35,7 @@ GECON
 ------
 
 .. doxygengroup:: gecon
+   :project: lapack
    :members:
 
 
@@ -44,6 +45,7 @@ GETRF
 ------
 
 .. doxygengroup:: getrf
+   :project: lapack
    :members:
 
 
@@ -53,6 +55,7 @@ GETRF2
 ------
 
 .. doxygengroup:: getrf2
+   :project: lapack
    :members:
 
 
@@ -62,6 +65,7 @@ GETF2
 ------
 
 .. doxygengroup:: getf2
+   :project: lapack
    :members:
 
 
@@ -71,6 +75,7 @@ GETRS
 ------
 
 .. doxygengroup:: getrs
+   :project: lapack
    :members:
 
 
@@ -80,6 +85,7 @@ GETRI
 ------
 
 .. doxygengroup:: getri
+   :project: lapack
    :members:
 
 
@@ -89,6 +95,7 @@ GERFS
 ------
 
 .. doxygengroup:: gerfs
+   :project: lapack
    :members:
 
 
@@ -98,6 +105,7 @@ GERFSX
 ------
 
 .. doxygengroup:: gerfsx
+   :project: lapack
    :members:
 
 
@@ -107,6 +115,7 @@ GEEQU
 ------
 
 .. doxygengroup:: geequ
+   :project: lapack
    :members:
 
 
@@ -116,6 +125,7 @@ GEEQUB
 ------
 
 .. doxygengroup:: geequb
+   :project: lapack
    :members:
 
 
@@ -125,6 +135,7 @@ LAQGE
 ------
 
 .. doxygengroup:: laqge
+   :project: lapack
    :members:
 
 
@@ -134,6 +145,7 @@ LASWP
 ------
 
 .. doxygengroup:: laswp
+   :project: lapack
    :members:
 
 
@@ -143,6 +155,7 @@ GESC2
 ------
 
 .. doxygengroup:: gesc2
+   :project: lapack
    :members:
 
 
@@ -152,6 +165,7 @@ LATDF
 ------
 
 .. doxygengroup:: latdf
+   :project: lapack
    :members:
 
 
@@ -161,6 +175,7 @@ LA_GERCOND
 ----------
 
 .. doxygengroup:: la_gercond
+   :project: lapack
    :members:
 
 
@@ -170,6 +185,7 @@ LA_GERPVGRW
 -----------
 
 .. doxygengroup:: la_gerpvgrw
+   :project: lapack
    :members:
 
 
@@ -179,6 +195,7 @@ LA_GERFSX_EXTENDED
 ------------------
 
 .. doxygengroup:: la_gerfsx_extended
+   :project: lapack
    :members:
 
 
@@ -188,6 +205,7 @@ GBCON
 ------
 
 .. doxygengroup:: gbcon
+   :project: lapack
    :members:
 
 
@@ -197,6 +215,7 @@ GBTRF
 ------
 
 .. doxygengroup:: gbtrf
+   :project: lapack
    :members:
 
 
@@ -206,6 +225,7 @@ GBTF2
 ------
 
 .. doxygengroup:: gbtf2
+   :project: lapack
    :members:
 
 
@@ -215,6 +235,7 @@ GBTRS
 ------
 
 .. doxygengroup:: gbtrs
+   :project: lapack
    :members:
 
 
@@ -224,6 +245,7 @@ GBRFS
 ------
 
 .. doxygengroup:: gbrfs
+   :project: lapack
    :members:
 
 
@@ -233,6 +255,7 @@ GBRFSX
 ------
 
 .. doxygengroup:: gbrfsx
+   :project: lapack
    :members:
 
 
@@ -242,6 +265,7 @@ GBEQU
 ------
 
 .. doxygengroup:: gbequ
+   :project: lapack
    :members:
 
 
@@ -251,6 +275,7 @@ GBEQUB
 ------
 
 .. doxygengroup:: gbequb
+   :project: lapack
    :members:
 
 
@@ -260,6 +285,7 @@ LAQGB
 ------
 
 .. doxygengroup:: laqgb
+   :project: lapack
    :members:
 
 
@@ -269,6 +295,7 @@ GBRCOND
 --------
 
 .. doxygengroup:: gbrcond
+   :project: lapack
    :members:
 
 
@@ -278,6 +305,7 @@ LA_GBRPVGRW
 ------------
 
 .. doxygengroup:: la_gbrpvgrw
+   :project: lapack
    :members:
 
 
@@ -287,6 +315,7 @@ LA_GBRFSX_EXTENDED
 ------------------
 
 .. doxygengroup:: la_gbrfsx_extended
+   :project: lapack
    :members:
 
 
@@ -296,6 +325,7 @@ GTCON
 ------
 
 .. doxygengroup:: gtcon
+   :project: lapack
    :members:
 
 
@@ -305,6 +335,7 @@ GTTRF
 ------
 
 .. doxygengroup:: gttrf
+   :project: lapack
    :members:
 
 
@@ -314,6 +345,7 @@ GTTRS
 ------
 
 .. doxygengroup:: gttrs
+   :project: lapack
    :members:
 
 
@@ -323,6 +355,7 @@ GTTS2
 ------
 
 .. doxygengroup:: gtts2
+   :project: lapack
    :members:
 
 
@@ -332,4 +365,5 @@ GTRFS
 ------
 
 .. doxygengroup:: gtrfs
+   :project: lapack
    :members:

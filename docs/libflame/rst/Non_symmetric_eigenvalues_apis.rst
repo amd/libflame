@@ -1,4 +1,4 @@
-..  Copyright (C) 2024, Advanced Micro Devices. All rights reserved.
+..  Copyright (C) 2024-2025, Advanced Micro Devices. All rights reserved.
 
 ..  Redistribution and use in source and binary forms, with or without
 ..  modification, are permitted provided that the following conditions are met:
@@ -37,6 +37,7 @@ GEEV
 ------
 
 .. doxygengroup:: geev
+   :project: lapack
    :members:
 
 
@@ -46,6 +47,7 @@ GEEVX
 ------
 
 .. doxygengroup:: geevx
+   :project: lapack
    :members:
 
 
@@ -55,6 +57,7 @@ GEES
 ------
 
 .. doxygengroup:: gees
+   :project: lapack
    :members:
 
 
@@ -64,6 +67,7 @@ GEESX
 ------
 
 .. doxygengroup:: geesx
+   :project: lapack
    :members:
 
 
@@ -73,6 +77,7 @@ GGEV3
 ------
 
 .. doxygengroup:: ggev3
+   :project: lapack
    :members:
 
 
@@ -82,6 +87,7 @@ GGEV
 ------
 
 .. doxygengroup:: ggev
+   :project: lapack
    :members:
 
 
@@ -91,6 +97,7 @@ GGEVX
 ------
 
 .. doxygengroup:: ggevx
+   :project: lapack
    :members:
 
 
@@ -100,6 +107,7 @@ GGES3
 ------
 
 .. doxygengroup:: gges3
+   :project: lapack
    :members:
 
 
@@ -109,6 +117,7 @@ GGES
 ------
 
 .. doxygengroup:: gges
+   :project: lapack
    :members:
 
 
@@ -118,6 +127,7 @@ GGESX
 ------
 
 .. doxygengroup:: ggesx
+   :project: lapack
    :members:
 
 
@@ -127,6 +137,7 @@ GEBAL
 ------
 
 .. doxygengroup:: gebal
+   :project: lapack
    :members:
 
 
@@ -136,6 +147,7 @@ GEHRD
 ------
 
 .. doxygengroup:: gehrd
+   :project: lapack
    :members:
 
 
@@ -145,6 +157,7 @@ GEHD2
 ------
 
 .. doxygengroup:: gehd2
+   :project: lapack
    :members:
 
 
@@ -154,6 +167,7 @@ LAHR2
 ------
 
 .. doxygengroup:: lahr2
+   :project: lapack
    :members:
 
 
@@ -163,6 +177,7 @@ GHR
 ------
 
 .. doxygengroup:: ghr
+   :project: lapack
    :members:
 
 
@@ -172,6 +187,7 @@ MHR
 ------
 
 .. doxygengroup:: mhr
+   :project: lapack
    :members:
 
 
@@ -181,6 +197,7 @@ GEBAK
 ------
 
 .. doxygengroup:: gebak
+   :project: lapack
    :members:
 
 
@@ -190,6 +207,7 @@ HSEQR
 ------
 
 .. doxygengroup:: hseqr
+   :project: lapack
    :members:
 
 
@@ -199,6 +217,7 @@ HSEIN
 ------
 
 .. doxygengroup:: hsein
+   :project: lapack
    :members:
 
 
@@ -208,6 +227,7 @@ TREVC
 ------
 
 .. doxygengroup:: trevc
+   :project: lapack
    :members:
 
 
@@ -217,6 +237,7 @@ TREVC3
 ------
 
 .. doxygengroup:: trevc3
+   :project: lapack
    :members:
 
 
@@ -226,6 +247,7 @@ LALN2
 ------
 
 .. doxygengroup:: laln2
+   :project: lapack
    :members:
 
 
@@ -235,6 +257,7 @@ TRSYL
 ------
 
 .. doxygengroup:: trsyl
+   :project: lapack
    :members:
 
 
@@ -244,6 +267,7 @@ TRSNA
 ------
 
 .. doxygengroup:: trsna
+   :project: lapack
    :members:
 
 
@@ -253,6 +277,7 @@ LAQTR
 ------
 
 .. doxygengroup:: laqtr
+   :project: lapack
    :members:
 
 
@@ -262,6 +287,7 @@ TREXC
 ------
 
 .. doxygengroup:: trexc
+   :project: lapack
    :members:
 
 
@@ -271,6 +297,7 @@ TRSEN
 ------
 
 .. doxygengroup:: trsen
+   :project: lapack
    :members:
 
 
@@ -280,6 +307,7 @@ LAEXC
 ------
 
 .. doxygengroup:: laexc
+   :project: lapack
    :members:
 
 
@@ -289,6 +317,7 @@ LANV2
 ------
 
 .. doxygengroup:: lanv2
+   :project: lapack
    :members:
 
 
@@ -298,6 +327,7 @@ LAEIN
 ------
 
 .. doxygengroup:: laein
+   :project: lapack
    :members:
 
 
@@ -307,6 +337,7 @@ LAHQR
 ------
 
 .. doxygengroup:: lahqr
+   :project: lapack
    :members:
 
 
@@ -316,6 +347,7 @@ LAQR0
 ------
 
 .. doxygengroup:: laqr0
+   :project: lapack
    :members:
 
 
@@ -325,6 +357,7 @@ LAQR1
 ------
 
 .. doxygengroup:: laqr1
+   :project: lapack
    :members:
 
 
@@ -334,6 +367,7 @@ LAQR2
 ------
 
 .. doxygengroup:: laqr2
+   :project: lapack
    :members:
 
 
@@ -343,6 +377,7 @@ LAQR3
 ------
 
 .. doxygengroup:: laqr3
+   :project: lapack
    :members:
 
 
@@ -352,6 +387,7 @@ LAQR4
 ------
 
 .. doxygengroup:: laqr4
+   :project: lapack
    :members:
 
 
@@ -361,6 +397,7 @@ LAQR5
 ------
 
 .. doxygengroup:: laqr5
+   :project: lapack
    :members:
 
 
@@ -370,6 +407,7 @@ LAQZ0
 ------
 
 .. doxygengroup:: laqz0
+   :project: lapack
    :members:
 
 
@@ -379,6 +417,7 @@ LAQZ1
 ------
 
 .. doxygengroup:: laqz1
+   :project: lapack
    :members:
 
 
@@ -388,6 +427,7 @@ LAQZ2
 ------
 
 .. doxygengroup:: laqz2
+   :project: lapack
    :members:
 
 
@@ -397,6 +437,7 @@ LAQZ3
 ------
 
 .. doxygengroup:: laqz3
+   :project: lapack
    :members:
 
 
@@ -406,6 +447,7 @@ LAQZ4
 ------
 
 .. doxygengroup:: laqz4
+   :project: lapack
    :members:
 
 
@@ -415,6 +457,7 @@ GGBAL
 ------
 
 .. doxygengroup:: ggbal
+   :project: lapack
    :members:
 
 
@@ -424,6 +467,7 @@ GGHRD
 ------
 
 .. doxygengroup:: gghrd
+   :project: lapack
    :members:
 
 
@@ -433,6 +477,7 @@ GGHD3
 ------
 
 .. doxygengroup:: gghd3
+   :project: lapack
    :members:
 
 
@@ -442,6 +487,7 @@ HGEQZ
 ------
 
 .. doxygengroup:: hgeqz
+   :project: lapack
    :members:
 
 
@@ -451,6 +497,7 @@ GGBAK
 ------
 
 .. doxygengroup:: ggbak
+   :project: lapack
    :members:
 
 
@@ -460,6 +507,7 @@ TGSEN
 ------
 
 .. doxygengroup:: tgsen
+   :project: lapack
    :members:
 
 
@@ -469,6 +517,7 @@ TGSNA
 ------
 
 .. doxygengroup:: tgsna
+   :project: lapack
    :members:
 
 
@@ -478,6 +527,7 @@ TGSYL
 ------
 
 .. doxygengroup:: tgsyl
+   :project: lapack
    :members:
 
 
@@ -487,6 +537,7 @@ TGSY2
 ------
 
 .. doxygengroup:: tgsy2
+   :project: lapack
    :members:
 
 
@@ -496,6 +547,7 @@ M22
 ------
 
 .. doxygengroup:: m22
+   :project: lapack
    :members:
 
 
@@ -505,6 +557,7 @@ LAGV2
 ------
 
 .. doxygengroup:: lagv2
+   :project: lapack
    :members:
 
 
@@ -514,6 +567,7 @@ TGEVC
 ------
 
 .. doxygengroup:: tgevc
+   :project: lapack
    :members:
 
 
@@ -523,6 +577,7 @@ TGEXC
 ------
 
 .. doxygengroup:: tgexc
+   :project: lapack
    :members:
 
 
@@ -532,4 +587,5 @@ TGEX2
 ------
 
 .. doxygengroup:: tgex2
+   :project: lapack
    :members:

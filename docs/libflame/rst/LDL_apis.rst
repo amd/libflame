@@ -1,4 +1,4 @@
-..  Copyright (C) 2024, Advanced Micro Devices. All rights reserved.
+..  Copyright (C) 2024-2025, Advanced Micro Devices. All rights reserved.
 
 ..  Redistribution and use in source and binary forms, with or without
 ..  modification, are permitted provided that the following conditions are met:
@@ -35,6 +35,7 @@ SYSV
 ------
 
 .. doxygengroup:: sysv
+   :project: lapack
    :members:
 
 
@@ -44,6 +45,7 @@ SYSV_ROOK
 ---------
 
 .. doxygengroup:: sysv_rook
+   :project: lapack
    :members:
 
 
@@ -53,6 +55,7 @@ SYSV_RK
 --------
 
 .. doxygengroup:: sysv_rk
+   :project: lapack
    :members:
 
 
@@ -62,6 +65,7 @@ SYSVX
 ------
 
 .. doxygengroup:: sysvx
+   :project: lapack
    :members:
 
 
@@ -71,6 +75,7 @@ SYSVXX
 ------
 
 .. doxygengroup:: sysvxx
+   :project: lapack
    :members:
 
 
@@ -80,6 +85,7 @@ SPSV
 ------
 
 .. doxygengroup:: spsv
+   :project: lapack
    :members:
 
 
@@ -89,6 +95,7 @@ SPSVX
 ------
 
 .. doxygengroup:: spsvx
+   :project: lapack
    :members:
 
 
@@ -98,6 +105,7 @@ SYSV_AA
 --------
 
 .. doxygengroup:: sysv_aa
+   :project: lapack
    :members:
 
 
@@ -107,4 +115,5 @@ SYSV_AA_2STAGE
 ----------------
 
 .. doxygengroup:: sysv_aa_2stage
+   :project: lapack
    :members:

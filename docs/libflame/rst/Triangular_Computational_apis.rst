@@ -1,4 +1,4 @@
-..  Copyright (C) 2024, Advanced Micro Devices. All rights reserved.
+..  Copyright (C) 2024-2025, Advanced Micro Devices. All rights reserved.
 
 ..  Redistribution and use in source and binary forms, with or without
 ..  modification, are permitted provided that the following conditions are met:
@@ -35,6 +35,7 @@ TRCON
 ------
 
 .. doxygengroup:: trcon
+   :project: lapack
    :members:
 
 
@@ -44,6 +45,7 @@ TRTRS
 ------
 
 .. doxygengroup:: trtrs
+   :project: lapack
    :members:
 
 
@@ -53,6 +55,7 @@ LATRS
 ------
 
 .. doxygengroup:: latrs
+   :project: lapack
    :members:
 
 
@@ -62,6 +65,7 @@ TRTRI
 ------
 
 .. doxygengroup:: trtri
+   :project: lapack
    :members:
 
 
@@ -71,6 +75,7 @@ TRTI2
 ------
 
 .. doxygengroup:: trti2
+   :project: lapack
    :members:
 
 
@@ -80,6 +85,7 @@ TRRFS
 ------
 
 .. doxygengroup:: trrfs
+   :project: lapack
    :members:
 
 
@@ -89,6 +95,7 @@ LAUUM
 ------
 
 .. doxygengroup:: lauum
+   :project: lapack
    :members:
 
 
@@ -98,6 +105,7 @@ LAUU2
 ------
 
 .. doxygengroup:: lauu2
+   :project: lapack
    :members:
 
 
@@ -107,6 +115,7 @@ TPCON
 ------
 
 .. doxygengroup:: tpcon
+   :project: lapack
    :members:
 
 
@@ -116,6 +125,7 @@ TPTRS
 ------
 
 .. doxygengroup:: tptrs
+   :project: lapack
    :members:
 
 
@@ -125,6 +135,7 @@ LATPS
 ------
 
 .. doxygengroup:: latps
+   :project: lapack
    :members:
 
 
@@ -134,6 +145,7 @@ TPTRI
 ------
 
 .. doxygengroup:: tptri
+   :project: lapack
    :members:
 
 
@@ -143,6 +155,7 @@ TPRFS
 ------
 
 .. doxygengroup:: tprfs
+   :project: lapack
    :members:
 
 
@@ -152,6 +165,7 @@ TFTRI
 ------
 
 .. doxygengroup:: tftri
+   :project: lapack
    :members:
 
 
@@ -161,6 +175,7 @@ TBCON
 ------
 
 .. doxygengroup:: tbcon
+   :project: lapack
    :members:
 
 
@@ -170,6 +185,7 @@ TBTRS
 ------
 
 .. doxygengroup:: tbtrs
+   :project: lapack
    :members:
 
 
@@ -179,6 +195,7 @@ LATBS
 ------
 
 .. doxygengroup:: latbs
+   :project: lapack
    :members:
 
 
@@ -188,4 +205,5 @@ TBRFS
 ------
 
 .. doxygengroup:: tbrfs
+   :project: lapack
    :members:

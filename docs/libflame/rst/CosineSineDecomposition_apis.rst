@@ -1,4 +1,4 @@
-..  Copyright (C) 2024, Advanced Micro Devices. All rights reserved.
+..  Copyright (C) 2024-2025, Advanced Micro Devices. All rights reserved.
 
 ..  Redistribution and use in source and binary forms, with or without
 ..  modification, are permitted provided that the following conditions are met:
@@ -35,6 +35,7 @@ BBSCD
 ------
 
 .. doxygengroup:: bbscd
+   :project: lapack
    :members:
 
 
@@ -44,6 +45,7 @@ ORCSD
 ------
 
 .. doxygengroup:: orcsd
+   :project: lapack
    :members:
 
 
@@ -53,6 +55,7 @@ ORCSD2BY1
 ----------
 
 .. doxygengroup:: orcsd2by1
+   :project: lapack
    :members:
 
 
@@ -62,6 +65,7 @@ ORBDB
 ------
 
 .. doxygengroup:: orbdb
+   :project: lapack
    :members:
 
 
@@ -71,6 +75,7 @@ ORBDB1
 ------
 
 .. doxygengroup:: orbdb1
+   :project: lapack
    :members:
 
 
@@ -80,6 +85,7 @@ ORBDB2
 ------
 
 .. doxygengroup:: orbdb2
+   :project: lapack
    :members:
 
 
@@ -89,6 +95,7 @@ ORBDB3
 ------
 
 .. doxygengroup:: orbdb3
+   :project: lapack
    :members:
 
 
@@ -98,6 +105,7 @@ ORBDB4
 ------
 
 .. doxygengroup:: orbdb4
+   :project: lapack
    :members:
 
 
@@ -107,6 +115,7 @@ UNBDB5
 ------
 
 .. doxygengroup:: unbdb5
+   :project: lapack
    :members:
 
 
@@ -116,6 +125,7 @@ ORBDB6
 ------
 
 .. doxygengroup:: orbdb6
+   :project: lapack
    :members:
 
 
@@ -125,6 +135,7 @@ LAPMR
 ------
 
 .. doxygengroup:: lapmr
+   :project: lapack
    :members:
 
 
@@ -134,4 +145,5 @@ LAPMT
 ------
 
 .. doxygengroup:: lapmt
+   :project: lapack
    :members:

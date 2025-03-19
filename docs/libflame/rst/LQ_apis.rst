@@ -1,4 +1,4 @@
-..  Copyright (C) 2024, Advanced Micro Devices. All rights reserved.
+..  Copyright (C) 2024-2025, Advanced Micro Devices. All rights reserved.
 
 ..  Redistribution and use in source and binary forms, with or without
 ..  modification, are permitted provided that the following conditions are met:
@@ -36,6 +36,7 @@ GELQ
 ------
 
 .. doxygengroup:: gelq
+   :project: lapack
    :members:
 
 
@@ -45,6 +46,7 @@ GEMLQ
 ------
 
 .. doxygengroup:: gemlq
+   :project: lapack
    :members:
 
 
@@ -54,6 +56,7 @@ GELQF
 ------
 
 .. doxygengroup:: gelqf
+   :project: lapack
    :members:
 
 
@@ -63,6 +66,7 @@ GELQ2
 ------
 
 .. doxygengroup:: gelq2
+   :project: lapack
    :members:
 
 
@@ -72,6 +76,7 @@ UNGLQ
 ------
 
 .. doxygengroup:: unglq
+   :project: lapack
    :members:
 
 
@@ -81,6 +86,7 @@ ORGLQ
 ------
 
 .. doxygengroup:: orglq
+   :project: lapack
    :members:
 
 
@@ -90,6 +96,7 @@ ORGL2
 ------
 
 .. doxygengroup:: orgl2
+   :project: lapack
    :members:
 
 
@@ -99,6 +106,7 @@ ORMLQ
 ------
 
 .. doxygengroup:: ormlq
+   :project: lapack
    :members:
 
 
@@ -108,6 +116,7 @@ UNMLQ
 ------
 
 .. doxygengroup:: unmlq
+   :project: lapack
    :members:
 
 
@@ -117,6 +126,7 @@ ORML2
 ------
 
 .. doxygengroup:: orml2
+   :project: lapack
    :members:
 
 
@@ -126,6 +136,7 @@ UNML2
 ------
 
 .. doxygengroup:: unml2
+   :project: lapack
    :members:
 
 
@@ -135,6 +146,7 @@ GELQT
 ------
 
 .. doxygengroup:: gelqt
+   :project: lapack
    :members:
 
 
@@ -144,6 +156,7 @@ GELQT3
 ------
 
 .. doxygengroup:: gelqt3
+   :project: lapack
    :members:
 
 
@@ -153,6 +166,7 @@ GEMLQR
 ------
 
 .. doxygengroup:: gemlqr
+   :project: lapack
    :members:
 
 
@@ -162,6 +176,7 @@ LAMSWLQ
 ---------
 
 .. doxygengroup:: lamswlq
+   :project: lapack
    :members:
 
 
@@ -171,6 +186,7 @@ TPLQT
 ------
 
 .. doxygengroup:: tplqt
+   :project: lapack
    :members:
 
 
@@ -180,6 +196,7 @@ TPLQT2
 ------
 
 .. doxygengroup:: tplqt2
+   :project: lapack
    :members:
 
 
@@ -189,6 +206,7 @@ TPMLQT
 ------
 
 .. doxygengroup:: tpmlqt
+   :project: lapack
    :members:
 
 
@@ -198,6 +216,7 @@ GEQLF
 ------
 
 .. doxygengroup:: geqlf
+   :project: lapack
    :members:
 
 
@@ -207,6 +226,7 @@ GERQ2
 ------
 
 .. doxygengroup:: gerq2
+   :project: lapack
    :members:
 
 
@@ -216,6 +236,7 @@ UNGRQ
 ------
 
 .. doxygengroup:: ungrq
+   :project: lapack
    :members:
 
 
@@ -225,6 +246,7 @@ UNMRQ
 ------
 
 .. doxygengroup:: unmrq
+   :project: lapack
    :members:
 
 
@@ -234,6 +256,7 @@ ORMR2
 ------
 
 .. doxygengroup:: ormr2
+   :project: lapack
    :members:
 
 
@@ -243,6 +266,7 @@ ORGR2
 ------
 
 .. doxygengroup:: orgr2
+   :project: lapack
    :members:
 
 
@@ -252,6 +276,7 @@ GEQL2
 ------
 
 .. doxygengroup:: geql2
+   :project: lapack
    :members:
 
 
@@ -261,6 +286,7 @@ ORGQL
 ------
 
 .. doxygengroup:: orgql
+   :project: lapack
    :members:
 
 
@@ -270,6 +296,7 @@ ORMQL
 ------
 
 .. doxygengroup:: ormql
+   :project: lapack
    :members:
 
 
@@ -279,6 +306,7 @@ ORG2L
 ------
 
 .. doxygengroup:: org2l
+   :project: lapack
    :members:
 
 
@@ -288,6 +316,7 @@ ORM2L
 ------
 
 .. doxygengroup:: orm2l
+   :project: lapack
    :members:
 
 
@@ -297,6 +326,7 @@ GGRQF
 ------
 
 .. doxygengroup:: ggrqf
+   :project: lapack
    :members:
 
 
@@ -306,6 +336,7 @@ TZRZF
 ------
 
 .. doxygengroup:: tzrzf
+   :project: lapack
    :members:
 
 
@@ -315,6 +346,7 @@ LATRZ
 ------
 
 .. doxygengroup:: latrz
+   :project: lapack
    :members:
 
 
@@ -324,6 +356,7 @@ LARZ
 ------
 
 .. doxygengroup:: larz
+   :project: lapack
    :members:
 
 
@@ -333,6 +366,7 @@ LARZB
 ------
 
 .. doxygengroup:: larzb
+   :project: lapack
    :members:
 
 
@@ -342,6 +376,7 @@ LARZT
 ------
 
 .. doxygengroup:: larzt
+   :project: lapack
    :members:
 
 
@@ -351,6 +386,7 @@ ORMZR
 ------
 
 .. doxygengroup:: ormzr
+   :project: lapack
    :members:
 
 
@@ -360,4 +396,5 @@ ORMR3
 ------
 
 .. doxygengroup:: ormr3
+   :project: lapack
    :members:

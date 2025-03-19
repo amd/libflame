@@ -1,4 +1,4 @@
-..  Copyright (C) 2024, Advanced Micro Devices. All rights reserved.
+..  Copyright (C) 2024-2025, Advanced Micro Devices. All rights reserved.
 
 ..  Redistribution and use in source and binary forms, with or without
 ..  modification, are permitted provided that the following conditions are met:
@@ -35,6 +35,7 @@ LAMCH
 ------
 
 .. doxygengroup:: lamch
+   :project: lapack
    :members:
 
 
@@ -44,6 +45,7 @@ LABAD
 ------
 
 .. doxygengroup:: labad
+   :project: lapack
    :members:
 
 
@@ -53,6 +55,7 @@ ILAVER
 ------
 
 .. doxygengroup:: ilaver
+   :project: lapack
    :members:
 
 
@@ -62,6 +65,7 @@ IPARAM2STAGE
 ------------
 
 .. doxygengroup:: iparam2stage
+   :project: lapack
    :members:
 
 
@@ -71,6 +75,7 @@ ILADIAG
 --------
 
 .. doxygengroup:: iladiag
+   :project: lapack
    :members:
 
 
@@ -80,6 +85,7 @@ ILATRANS
 --------
 
 .. doxygengroup:: ilatrans
+   :project: lapack
    :members:
 
 
@@ -89,6 +95,7 @@ ILAPREC
 ---------
 
 .. doxygengroup:: ilaprec
+   :project: lapack
    :members:
 
 
@@ -98,6 +105,7 @@ ILAENV2STAGE
 -------------
 
 .. doxygengroup:: ilaenv2stage
+   :project: lapack
    :members:
 
 
@@ -107,6 +115,7 @@ ILAUPLO
 --------
 
 .. doxygengroup:: ilauplo
+   :project: lapack
    :members:
 
 
@@ -116,4 +125,5 @@ LATRANS
 --------
 
 .. doxygengroup:: latrans
+   :project: lapack
    :members:

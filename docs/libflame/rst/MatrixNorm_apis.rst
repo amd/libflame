@@ -1,4 +1,4 @@
-..  Copyright (C) 2024, Advanced Micro Devices. All rights reserved.
+..  Copyright (C) 2024-2025, Advanced Micro Devices. All rights reserved.
 
 ..  Redistribution and use in source and binary forms, with or without
 ..  modification, are permitted provided that the following conditions are met:
@@ -35,6 +35,7 @@ LANGE
 ------
 
 .. doxygengroup:: lange
+   :project: lapack
    :members:
 
 
@@ -44,6 +45,7 @@ LANGB
 ------
 
 .. doxygengroup:: langb
+   :project: lapack
    :members:
 
 
@@ -53,6 +55,7 @@ LANGT
 ------
 
 .. doxygengroup:: langt
+   :project: lapack
    :members:
 
 
@@ -62,6 +65,7 @@ LANHS
 ------
 
 .. doxygengroup:: lanhs
+   :project: lapack
    :members:
 
 
@@ -71,6 +75,7 @@ LANHE
 ------
 
 .. doxygengroup:: lanhe
+   :project: lapack
    :members:
 
 
@@ -80,6 +85,7 @@ LANSY
 ------
 
 .. doxygengroup:: lansy
+   :project: lapack
    :members:
 
 
@@ -89,6 +95,7 @@ LANHF
 ------
 
 .. doxygengroup:: lanhf
+   :project: lapack
    :members:
 
 
@@ -98,6 +105,7 @@ LANSF
 ------
 
 .. doxygengroup:: lansf
+   :project: lapack
    :members:
 
 
@@ -107,6 +115,7 @@ LANHP
 ------
 
 .. doxygengroup:: lanhp
+   :project: lapack
    :members:
 
 
@@ -116,6 +125,7 @@ LANSP
 ------
 
 .. doxygengroup:: lansp
+   :project: lapack
    :members:
 
 
@@ -125,6 +135,7 @@ LANHB
 ------
 
 .. doxygengroup:: lanhb
+   :project: lapack
    :members:
 
 
@@ -134,6 +145,7 @@ LANSB
 ------
 
 .. doxygengroup:: lansb
+   :project: lapack
    :members:
 
 
@@ -143,6 +155,7 @@ LANHT
 ------
 
 .. doxygengroup:: lanht
+   :project: lapack
    :members:
 
 
@@ -152,6 +165,7 @@ LANST
 ------
 
 .. doxygengroup:: lanst
+   :project: lapack
    :members:
 
 
@@ -161,6 +175,7 @@ LANTR
 ------
 
 .. doxygengroup:: lantr
+   :project: lapack
    :members:
 
 
@@ -170,6 +185,7 @@ LANTP
 ------
 
 .. doxygengroup:: lantp
+   :project: lapack
    :members:
 
 
@@ -179,4 +195,5 @@ LANTB
 ------
 
 .. doxygengroup:: lantb
+   :project: lapack
    :members:

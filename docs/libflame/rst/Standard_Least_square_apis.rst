@@ -1,4 +1,4 @@
-..  Copyright (C) 2024, Advanced Micro Devices. All rights reserved.
+..  Copyright (C) 2024-2025, Advanced Micro Devices. All rights reserved.
 
 ..  Redistribution and use in source and binary forms, with or without
 ..  modification, are permitted provided that the following conditions are met:
@@ -35,6 +35,7 @@ GELS
 ------
 
 .. doxygengroup:: gels
+   :project: lapack
    :members:
 
 
@@ -44,6 +45,7 @@ GELSS
 ------
 
 .. doxygengroup:: gelss
+   :project: lapack
    :members:
 
 
@@ -53,6 +55,7 @@ GELSD
 ------
 
 .. doxygengroup:: gelsd
+   :project: lapack
    :members:
 
 
@@ -62,6 +65,7 @@ GELSY
 ------
 
 .. doxygengroup:: gelsy
+   :project: lapack
    :members:
 
 
@@ -71,4 +75,5 @@ GETSLS
 ------
 
 .. doxygengroup:: getsls
+   :project: lapack
    :members:

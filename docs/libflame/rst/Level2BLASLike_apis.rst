@@ -1,4 +1,4 @@
-..  Copyright (C) 2024, Advanced Micro Devices. All rights reserved.
+..  Copyright (C) 2024-2025, Advanced Micro Devices. All rights reserved.
 
 ..  Redistribution and use in source and binary forms, with or without
 ..  modification, are permitted provided that the following conditions are met:
@@ -36,6 +36,7 @@ LASCL
 ------
 
 .. doxygengroup:: lascl
+   :project: lapack
    :members:
 
 
@@ -45,6 +46,7 @@ LAGEAMV
 --------
 
 .. doxygengroup:: lageamv
+   :project: lapack
    :members:
 
 
@@ -54,6 +56,7 @@ LAGEAMB
 --------
 
 .. doxygengroup:: lageamb
+   :project: lapack
    :members:
 
 
@@ -63,6 +66,7 @@ LA_HEAMV
 --------
 
 .. doxygengroup:: la_heamv
+   :project: lapack
    :members:
 
 
@@ -72,6 +76,7 @@ LASCL2
 ------
 
 .. doxygengroup:: lascl2
+   :project: lapack
    :members:
 
 
@@ -81,6 +86,7 @@ LARSCL2
 --------
 
 .. doxygengroup:: larscl2
+   :project: lapack
    :members:
 
 
@@ -90,4 +96,5 @@ LA_WWADDW
 ----------
 
 .. doxygengroup:: la_wwaddw
+   :project: lapack
    :members:

@@ -1,4 +1,4 @@
-..  Copyright (C) 2024, Advanced Micro Devices. All rights reserved.
+..  Copyright (C) 2024-2025, Advanced Micro Devices. All rights reserved.
 
 ..  Redistribution and use in source and binary forms, with or without
 ..  modification, are permitted provided that the following conditions are met:
@@ -35,6 +35,7 @@ HECON
 ------
 
 .. doxygengroup:: hecon
+   :project: lapack
    :members:
 
 
@@ -44,6 +45,7 @@ SYCON
 ------
 
 .. doxygengroup:: sycon
+   :project: lapack
    :members:
 
 
@@ -53,6 +55,7 @@ SYTRF
 ------
 
 .. doxygengroup:: sytrf
+   :project: lapack
    :members:
 
 
@@ -62,6 +65,7 @@ LASYF
 ------
 
 .. doxygengroup:: lasyf
+   :project: lapack
    :members:
 
 
@@ -71,6 +75,7 @@ SYTF2
 ------
 
 .. doxygengroup:: sytf2
+   :project: lapack
    :members:
 
 
@@ -80,6 +85,7 @@ SYTRS
 ------
 
 .. doxygengroup:: sytrs
+   :project: lapack
    :members:
 
 
@@ -89,6 +95,7 @@ SYTRI
 ------
 
 .. doxygengroup:: sytri
+   :project: lapack
    :members:
 
 
@@ -98,6 +105,7 @@ SYRFS
 ------
 
 .. doxygengroup:: syrfs
+   :project: lapack
    :members:
 
 
@@ -107,6 +115,7 @@ SYRFSX
 ------
 
 .. doxygengroup:: syrfsx
+   :project: lapack
    :members:
 
 
@@ -116,6 +125,7 @@ SYEQUB
 ------
 
 .. doxygengroup:: syequb
+   :project: lapack
    :members:
 
 
@@ -125,6 +135,7 @@ SYCONV
 ------
 
 .. doxygengroup:: syconv
+   :project: lapack
    :members:
 
 
@@ -134,6 +145,7 @@ SYCON_3
 --------
 
 .. doxygengroup:: sycon_3
+   :project: lapack
    :members:
 
 
@@ -143,6 +155,7 @@ SYTRI2
 ------
 
 .. doxygengroup:: sytri2
+   :project: lapack
    :members:
 
 
@@ -152,6 +165,7 @@ SYTRI2X
 -------
 
 .. doxygengroup:: sytri2x
+   :project: lapack
    :members:
 
 
@@ -161,6 +175,7 @@ SYTRI_3
 -------
 
 .. doxygengroup:: sytri_3
+   :project: lapack
    :members:
 
 
@@ -170,6 +185,7 @@ SYTRI_3X
 ---------
 
 .. doxygengroup:: sytri_3x
+   :project: lapack
    :members:
 
 
@@ -179,6 +195,7 @@ SYTRS2
 ------
 
 .. doxygengroup:: sytrs2
+   :project: lapack
    :members:
 
 
@@ -188,6 +205,7 @@ SYTRS_3
 --------
 
 .. doxygengroup:: sytrs_3
+   :project: lapack
    :members:
 
 
@@ -197,6 +215,7 @@ SYSWAPR
 --------
 
 .. doxygengroup:: syswapr
+   :project: lapack
    :members:
 
 
@@ -206,6 +225,7 @@ LA_HERCOND_C
 -------------
 
 .. doxygengroup:: la_hercond_c
+   :project: lapack
    :members:
 
 
@@ -215,6 +235,7 @@ LA_HERCOND_X
 -------------
 
 .. doxygengroup:: la_hercond_x
+   :project: lapack
    :members:
 
 
@@ -224,6 +245,7 @@ LA_HERFSX_EXTENDED
 ------------------
 
 .. doxygengroup:: la_herfsx_extended
+   :project: lapack
    :members:
 
 
@@ -233,6 +255,7 @@ LA_HERPVGRW
 -----------
 
 .. doxygengroup:: la_herpvgrw
+   :project: lapack
    :members:
 
 
@@ -242,6 +265,7 @@ HPCON
 ------
 
 .. doxygengroup:: hpcon
+   :project: lapack
    :members:
 
 
@@ -251,6 +275,7 @@ SPTRF
 ------
 
 .. doxygengroup:: sptrf
+   :project: lapack
    :members:
 
 
@@ -260,6 +285,7 @@ SPTRS
 ------
 
 .. doxygengroup:: sptrs
+   :project: lapack
    :members:
 
 
@@ -269,6 +295,7 @@ SPTRI
 ------
 
 .. doxygengroup:: sptri
+   :project: lapack
    :members:
 
 
@@ -278,6 +305,7 @@ SPRFS
 ------
 
 .. doxygengroup:: sprfs
+   :project: lapack
    :members:
 
 
@@ -287,6 +315,7 @@ HECON_ROOK
 -----------
 
 .. doxygengroup:: hecon_rook
+   :project: lapack
    :members:
 
 
@@ -296,6 +325,7 @@ SYCON_ROOK
 -----------
 
 .. doxygengroup:: sycon_rook
+   :project: lapack
    :members:
 
 
@@ -305,6 +335,7 @@ SYTRF_HOOK
 -----------
 
 .. doxygengroup:: sytrf_hook
+   :project: lapack
    :members:
 
 
@@ -314,6 +345,7 @@ LASYF_ROOK
 ----------
 
 .. doxygengroup:: lasyf_rook
+   :project: lapack
    :members:
 
 
@@ -323,6 +355,7 @@ SYTF2_ROOK
 -----------
 
 .. doxygengroup:: sytf2_rook
+   :project: lapack
    :members:
 
 
@@ -332,6 +365,7 @@ SYTRI_ROOK
 -----------
 
 .. doxygengroup:: sytri_rook
+   :project: lapack
    :members:
 
 
@@ -341,6 +375,7 @@ SYTRF_RK
 --------
 
 .. doxygengroup:: sytrf_rk
+   :project: lapack
    :members:
 
 
@@ -350,6 +385,7 @@ LASYF_RK
 --------
 
 .. doxygengroup:: lasyf_rk
+   :project: lapack
    :members:
 
 
@@ -359,6 +395,7 @@ SYTF2_RK
 ---------
 
 .. doxygengroup:: sytf2_rk
+   :project: lapack
    :members:
 
 
@@ -368,6 +405,7 @@ SYCONVF
 -------
 
 .. doxygengroup:: syconvf
+   :project: lapack
    :members:
 
 
@@ -377,6 +415,7 @@ SYCONVF_ROOK
 -------------
 
 .. doxygengroup:: syconvf_rook
+   :project: lapack
    :members:
 
 
@@ -386,6 +425,7 @@ SYTRF_AA
 --------
 
 .. doxygengroup:: sytrf_aa
+   :project: lapack
    :members:
 
 
@@ -395,6 +435,7 @@ LASYF_AA
 --------
 
 .. doxygengroup:: lasyf_aa
+   :project: lapack
    :members:
 
 
@@ -404,6 +445,7 @@ SYTRS_AA
 --------
 
 .. doxygengroup:: sytrs_aa
+   :project: lapack
    :members:
 
 .. _hetrf_aa:
@@ -412,6 +454,7 @@ HETRF_AA
 --------
 
 .. doxygengroup:: hetrf_aa
+   :project: lapack
    :members:
 
 
@@ -421,6 +464,7 @@ LAHEF_AA
 --------
 
 .. doxygengroup:: lahef_aa
+   :project: lapack
    :members:
 
 
@@ -430,6 +474,7 @@ HETRS_AA
 ---------
 
 .. doxygengroup:: hetrs_aa
+   :project: lapack
    :members:
 
 
@@ -439,6 +484,7 @@ HETRS_AA_2STAGE
 ----------------
 
 .. doxygengroup:: hetrs_aa_2stage
+   :project: lapack
    :members:
 
 
@@ -448,6 +494,7 @@ SYTRS_AA_2STAGE
 ----------------
 
 .. doxygengroup:: sytrs_aa_2stage
+   :project: lapack
    :members:
 
 
@@ -457,6 +504,7 @@ SYTRF_AA_2STAGE
 ---------------
 
 .. doxygengroup:: sytrf_aa_2stage
+   :project: lapack
    :members:
 
 
@@ -466,4 +514,5 @@ HETRF_AA_2STAGE
 ---------------
 
 .. doxygengroup:: hetrf_aa_2stage
+   :project: lapack
    :members:

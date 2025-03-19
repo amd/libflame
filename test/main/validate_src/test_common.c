@@ -7096,7 +7096,7 @@ logical same_char(char ca, char cb)
     integer uppercase_ca, uppercase_cb;
 
     // Convert the first character to uppercase, if it's a lowercase letter
-    if (ca >= 'a' && ca <= 'z')
+    if(ca >= 'a' && ca <= 'z')
     {
         uppercase_ca = ca - ('a' - 'A');
     }
@@ -7106,7 +7106,7 @@ logical same_char(char ca, char cb)
     }
 
     // Convert the second character to uppercase, if it's a lowercase letter
-    if (cb >= 'a' && cb <= 'z')
+    if(cb >= 'a' && cb <= 'z')
     {
         uppercase_cb = cb - ('a' - 'A');
     }
@@ -7136,4 +7136,46 @@ void *get_ptr_at_offset(integer datatype, void *A, integer offset)
             return (integer *)A + offset;
     }
     return NULL;
+}
+/* Decompose symmetric matrix A into Q, D, E and store orthogonal matrix in Q and tridiagonal matrix
+ * in D, E*/
+void get_sym_tridiagonal_matrix(integer datatype, char *uplo, integer n, void *A, integer lda,
+                                void *D, void *E, integer *info)
+{
+    void *tau = NULL, *work = NULL;
+    integer lwork = -1;
+
+    if(!n)
+        return;
+
+    create_vector(datatype, &tau, n - 1);
+    create_vector(datatype, &work, 1);
+
+    invoke_sytrd(datatype, uplo, &n, NULL, &lda, NULL, NULL, tau, work, &lwork, info);
+
+    /* Get work size for SYTRD */
+    lwork = get_work_value(datatype, work);
+    free_vector(work);
+    create_vector(datatype, &work, lwork);
+
+    /* Form symmetric tridiagonal matrix */
+    invoke_sytrd(datatype, uplo, &n, A, &lda, D, E, tau, work, &lwork, info);
+
+    free_vector(work);
+
+    lwork = -1;
+    create_vector(datatype, &work, 1);
+    invoke_orgtr(datatype, uplo, &n, NULL, &lda, tau, work, &lwork, info);
+
+    /* Get work size for ORGTR */
+    lwork = get_work_value(datatype, work);
+    free_vector(work);
+    create_vector(datatype, &work, lwork);
+
+    /* Generate orthogonal matrix */
+    invoke_orgtr(datatype, uplo, &n, A, &lda, tau, work, &lwork, info);
+
+    /* Free buffers */
+    free_vector(work);
+    free_vector(tau);
 }

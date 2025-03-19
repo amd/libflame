@@ -1,4 +1,4 @@
-..  Copyright (C) 2024, Advanced Micro Devices. All rights reserved.
+..  Copyright (C) 2024-2025, Advanced Micro Devices. All rights reserved.
 
 ..  Redistribution and use in source and binary forms, with or without
 ..  modification, are permitted provided that the following conditions are met:
@@ -36,6 +36,7 @@ LASET
 ------
 
 .. doxygengroup:: laset
+   :project: lapack
    :members:
 
 
@@ -45,6 +46,7 @@ LARNV
 ------
 
 .. doxygengroup:: larnv
+   :project: lapack
    :members:
 
 
@@ -54,6 +56,7 @@ LARUV
 ------
 
 .. doxygengroup:: laruv
+   :project: lapack
    :members:
 
 
@@ -63,6 +66,7 @@ LACPY
 ------
 
 .. doxygengroup:: lacpy
+   :project: lapack
    :members:
 
 
@@ -72,6 +76,7 @@ LACP2
 ------
 
 .. doxygengroup:: lacp2
+   :project: lapack
    :members:
 
 
@@ -81,6 +86,7 @@ TFTTP
 ------
 
 .. doxygengroup:: tfttp
+   :project: lapack
    :members:
 
 
@@ -90,6 +96,7 @@ TFTTR
 ------
 
 .. doxygengroup:: tfttr
+   :project: lapack
    :members:
 
 
@@ -99,6 +106,7 @@ TPTTF
 ------
 
 .. doxygengroup:: tpttf
+   :project: lapack
    :members:
 
 
@@ -108,6 +116,7 @@ TPTTR
 ------
 
 .. doxygengroup:: tpttr
+   :project: lapack
    :members:
 
 
@@ -117,6 +126,7 @@ TRTTF
 ------
 
 .. doxygengroup:: trttf
+   :project: lapack
    :members:
 
 
@@ -126,4 +136,5 @@ TRTTP
 ------
 
 .. doxygengroup:: trttp
+   :project: lapack
    :members:

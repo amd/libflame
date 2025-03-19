@@ -1,4 +1,4 @@
-..  Copyright (C) 2024, Advanced Micro Devices. All rights reserved.
+..  Copyright (C) 2024-2025, Advanced Micro Devices. All rights reserved.
 
 ..  Redistribution and use in source and binary forms, with or without
 ..  modification, are permitted provided that the following conditions are met:
@@ -35,6 +35,7 @@ LACGV
 ------
 
 .. doxygengroup:: lacgv
+   :project: lapack
    :members:
 
 
@@ -44,6 +45,7 @@ LASRT
 ------
 
 .. doxygengroup:: lasrt
+   :project: lapack
    :members:
 
 
@@ -53,6 +55,7 @@ LASSQ
 ------
 
 .. doxygengroup:: lassq
+   :project: lapack
    :members:
 
 
@@ -62,4 +65,5 @@ RSCL
 ------
 
 .. doxygengroup:: rscl
+   :project: lapack
    :members:

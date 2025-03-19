@@ -1,4 +1,4 @@
-..  Copyright (C) 2024, Advanced Micro Devices. All rights reserved.
+..  Copyright (C) 2024-2025, Advanced Micro Devices. All rights reserved.
 
 ..  Redistribution and use in source and binary forms, with or without
 ..  modification, are permitted provided that the following conditions are met:
@@ -35,6 +35,7 @@ LARF
 ------
 
 .. doxygengroup:: larf
+   :project: lapack
    :members:
 
 
@@ -44,6 +45,7 @@ LARFX
 ------
 
 .. doxygengroup:: larfx
+   :project: lapack
    :members:
 
 
@@ -53,6 +55,7 @@ LARFY
 ------
 
 .. doxygengroup:: larfy
+   :project: lapack
    :members:
 
 
@@ -62,6 +65,7 @@ LARFB
 ------
 
 .. doxygengroup:: larfb
+   :project: lapack
    :members:
 
 
@@ -71,6 +75,7 @@ LARFG
 ------
 
 .. doxygengroup:: larfg
+   :project: lapack
    :members:
 
 
@@ -80,6 +85,7 @@ LARFGP
 ------
 
 .. doxygengroup:: larfgp
+   :project: lapack
    :members:
 
 
@@ -89,4 +95,5 @@ LARFT
 ------
 
 .. doxygengroup:: larft
+   :project: lapack
    :members:

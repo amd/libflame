@@ -1,4 +1,4 @@
-..  Copyright (C) 2024, Advanced Micro Devices. All rights reserved.
+..  Copyright (C) 2024-2025, Advanced Micro Devices. All rights reserved.
 
 ..  Redistribution and use in source and binary forms, with or without
 ..  modification, are permitted provided that the following conditions are met:
@@ -35,6 +35,7 @@ LAIC1
 ------
 
 .. doxygengroup:: laic1
+   :project: lapack
    :members:
 
 
@@ -44,6 +45,7 @@ LALS0
 ------
 
 .. doxygengroup:: lals0
+   :project: lapack
    :members:
 
 
@@ -53,6 +55,7 @@ LALSA
 ------
 
 .. doxygengroup:: lalsa
+   :project: lapack
    :members:
 
 
@@ -62,4 +65,5 @@ LALSD
 ------
 
 .. doxygengroup:: lalsd
+   :project: lapack
    :members:

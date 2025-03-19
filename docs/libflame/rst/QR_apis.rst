@@ -1,4 +1,4 @@
-..  Copyright (C) 2024, Advanced Micro Devices. All rights reserved.
+..  Copyright (C) 2024-2025, Advanced Micro Devices. All rights reserved.
 
 ..  Redistribution and use in source and binary forms, with or without
 ..  modification, are permitted provided that the following conditions are met:
@@ -35,6 +35,7 @@ GEQR
 ------
 
 .. doxygengroup:: geqr
+   :project: lapack
    :members:
 
 
@@ -44,6 +45,7 @@ GEMQR
 ------
 
 .. doxygengroup:: gemqr
+   :project: lapack
    :members:
 
 
@@ -53,6 +55,7 @@ GEQRF
 ------
 
 .. doxygengroup:: geqrf
+   :project: lapack
    :members:
 
 
@@ -62,6 +65,7 @@ GEQR2
 ------
 
 .. doxygengroup:: geqr2
+   :project: lapack
    :members:
 
 
@@ -71,6 +75,7 @@ ORGQR
 ------
 
 .. doxygengroup:: orgqr
+   :project: lapack
    :members:
 
 
@@ -80,6 +85,7 @@ UNGQR
 ------
 
 .. doxygengroup:: ungqr
+   :project: lapack
    :members:
 
 
@@ -89,6 +95,7 @@ UNG2R
 ------
 
 .. doxygengroup:: ung2r
+   :project: lapack
    :members:
 
 
@@ -98,6 +105,7 @@ UNMQR
 ------
 
 .. doxygengroup:: unmqr
+   :project: lapack
    :members:
 
 
@@ -107,6 +115,7 @@ ORMQR
 ------
 
 .. doxygengroup:: ormqr
+   :project: lapack
    :members:
 
 
@@ -116,6 +125,7 @@ ORM2R
 ------
 
 .. doxygengroup:: orm2r
+   :project: lapack
    :members:
 
 
@@ -125,6 +135,7 @@ UNM2R
 ------
 
 .. doxygengroup:: unm2r
+   :project: lapack
    :members:
 
 
@@ -134,6 +145,7 @@ GEQRT
 ------
 
 .. doxygengroup:: geqrt
+   :project: lapack
    :members:
 
 
@@ -143,6 +155,7 @@ GEQRT2
 ------
 
 .. doxygengroup:: geqrt2
+   :project: lapack
    :members:
 
 
@@ -152,6 +165,7 @@ GEQRT3
 ------
 
 .. doxygengroup:: geqrt3
+   :project: lapack
    :members:
 
 
@@ -161,6 +175,7 @@ GEMQRT
 ------
 
 .. doxygengroup:: gemqrt
+   :project: lapack
    :members:
 
 
@@ -170,6 +185,7 @@ GEQRFP
 ------
 
 .. doxygengroup:: geqrfp
+   :project: lapack
    :members:
 
 
@@ -179,6 +195,7 @@ GEQR2P
 ------
 
 .. doxygengroup:: geqr2p
+   :project: lapack
    :members:
 
 
@@ -188,6 +205,7 @@ GEQP3
 ------
 
 .. doxygengroup:: geqp3
+   :project: lapack
    :members:
 
 
@@ -197,6 +215,7 @@ LAQP2
 ------
 
 .. doxygengroup:: laqp2
+   :project: lapack
    :members:
 
 
@@ -206,6 +225,7 @@ LAQPS
 ------
 
 .. doxygengroup:: laqps
+   :project: lapack
    :members:
 
 
@@ -215,6 +235,7 @@ LATSQR
 ------
 
 .. doxygengroup:: latsqr
+   :project: lapack
    :members:
 
 
@@ -224,6 +245,7 @@ ORGTSQR
 --------
 
 .. doxygengroup:: orgtsqr
+   :project: lapack
    :members:
 
 
@@ -233,6 +255,7 @@ ORGTSQR_ROW
 ------------
 
 .. doxygengroup:: orgtqr_
+   :project: lapack
    :members:
 
 
@@ -242,6 +265,7 @@ LARFB_GETT
 -----------
 
 .. doxygengroup:: larfb_
+   :project: lapack
    :members:
 
 
@@ -251,6 +275,7 @@ LAMTSQR
 -------
 
 .. doxygengroup:: lamtsqr
+   :project: lapack
    :members:
 
 
@@ -260,6 +285,7 @@ GETSQRHRT
 ---------
 
 .. doxygengroup:: getsqrhrt
+   :project: lapack
    :members:
 
 
@@ -269,6 +295,7 @@ ORHR_COL
 ---------
 
 .. doxygengroup:: orhr_col
+   :project: lapack
    :members:
 
 
@@ -278,6 +305,7 @@ LAUNHR_COL_GETRFNP
 ------------------
 
 .. doxygengroup:: launhr_col_getrfnp
+   :project: lapack
    :members:
 
 
@@ -287,6 +315,7 @@ LAORHR_COL_GETRFNP
 -------------------
 
 .. doxygengroup:: laorhr_col_getrfnp
+   :project: lapack
    :members:
 
 
@@ -296,6 +325,7 @@ LAUNHR_COL_GETRFNP2
 -------------------
 
 .. doxygengroup:: launhr_col_getrfnp2
+   :project: lapack
    :members:
 
 
@@ -305,6 +335,7 @@ LAORHR_COL_GETRFNP2
 --------------------
 
 .. doxygengroup:: laorhr_col_getrfnp2
+   :project: lapack
    :members:
 
 
@@ -314,6 +345,7 @@ TPQRT
 ------
 
 .. doxygengroup:: tpqrt
+   :project: lapack
    :members:
 
 
@@ -323,6 +355,7 @@ TPQRT2
 ------
 
 .. doxygengroup:: tpqrt2
+   :project: lapack
    :members:
 
 
@@ -332,6 +365,7 @@ TPMQRT
 ------
 
 .. doxygengroup:: tpmqrt
+   :project: lapack
    :members:
 
 
@@ -341,6 +375,7 @@ TPRFB
 ------
 
 .. doxygengroup:: tprfb
+   :project: lapack
    :members:
 
 
@@ -350,4 +385,5 @@ GGQRF
 ------
 
 .. doxygengroup:: ggqrf
+   :project: lapack
    :members:

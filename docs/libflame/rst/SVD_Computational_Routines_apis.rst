@@ -1,4 +1,4 @@
-..  Copyright (C) 2024, Advanced Micro Devices. All rights reserved.
+..  Copyright (C) 2024-2025, Advanced Micro Devices. All rights reserved.
 
 ..  Redistribution and use in source and binary forms, with or without
 ..  modification, are permitted provided that the following conditions are met:
@@ -35,6 +35,7 @@ GESVD
 ------
 
 .. doxygengroup:: gesvd
+   :project: lapack
    :members:
 
 
@@ -44,6 +45,7 @@ GESVDQ
 ------
 
 .. doxygengroup:: gesvdq
+   :project: lapack
    :members:
 
 
@@ -53,6 +55,7 @@ GESDD
 ------
 
 .. doxygengroup:: gesdd
+   :project: lapack
    :members:
 
 
@@ -62,6 +65,7 @@ GESVDX
 ------
 
 .. doxygengroup:: gesvdx
+   :project: lapack
    :members:
 
 
@@ -71,6 +75,7 @@ GEJSV
 ------
 
 .. doxygengroup:: gejsv
+   :project: lapack
    :members:
 
 
@@ -80,6 +85,7 @@ GESVJ
 ------
 
 .. doxygengroup:: gesvj
+   :project: lapack
    :members:
 
 
@@ -89,6 +95,7 @@ BDSQR
 ------
 
 .. doxygengroup:: bdsqr
+   :project: lapack
    :members:
 
 
@@ -98,6 +105,7 @@ BDSDC
 ------
 
 .. doxygengroup:: bdsdc
+   :project: lapack
    :members:
 
 
@@ -107,6 +115,7 @@ BDSVDX
 ------
 
 .. doxygengroup:: bdsvdx
+   :project: lapack
    :members:
 
 
@@ -116,6 +125,7 @@ GGSVD3
 ------
 
 .. doxygengroup:: ggsvd3
+   :project: lapack
    :members:
 
 
@@ -125,6 +135,7 @@ GEBRD
 ------
 
 .. doxygengroup:: gebrd
+   :project: lapack
    :members:
 
 
@@ -134,6 +145,7 @@ GEBD2
 ------
 
 .. doxygengroup:: gebd2
+   :project: lapack
    :members:
 
 
@@ -143,6 +155,7 @@ LABRD
 ------
 
 .. doxygengroup:: labrd
+   :project: lapack
    :members:
 
 
@@ -152,6 +165,7 @@ GBBRD
 ------
 
 .. doxygengroup:: gbbrd
+   :project: lapack
    :members:
 
 
@@ -161,6 +175,7 @@ UNGBR
 ------
 
 .. doxygengroup:: ungbr
+   :project: lapack
    :members:
 
 
@@ -170,6 +185,7 @@ ORGBR
 ------
 
 .. doxygengroup:: orgbr
+   :project: lapack
    :members:
 
 
@@ -179,6 +195,7 @@ ORMBR
 ------
 
 .. doxygengroup:: ormbr
+   :project: lapack
    :members:
 
 
@@ -188,6 +205,7 @@ UNMBR
 ------
 
 .. doxygengroup:: unmbr
+   :project: lapack
    :members:
 
 
@@ -197,6 +215,7 @@ GESVJ0
 ------
 
 .. doxygengroup:: gesvj0
+   :project: lapack
    :members:
 
 
@@ -206,6 +225,7 @@ GESVJ1
 ------
 
 .. doxygengroup:: gesvj1
+   :project: lapack
    :members:
 
 
@@ -215,6 +235,7 @@ LAS2
 ------
 
 .. doxygengroup:: las2
+   :project: lapack
    :members:
 
 
@@ -224,6 +245,7 @@ LASV2
 ------
 
 .. doxygengroup:: lasv2
+   :project: lapack
    :members:
 
 .. _ggsvp3:
@@ -232,6 +254,7 @@ GGSVP3
 ------
 
 .. doxygengroup:: ggsvp3
+   :project: lapack
    :members:
 
 
@@ -241,6 +264,7 @@ TGSJA
 ------
 
 .. doxygengroup:: tgsja
+   :project: lapack
    :members:
 
 
@@ -250,6 +274,7 @@ LAGS2
 ------
 
 .. doxygengroup:: lags2
+   :project: lapack
    :members:
 
 
@@ -259,6 +284,7 @@ LAPLL
 ------
 
 .. doxygengroup:: lapll
+   :project: lapack
    :members:
 
 
@@ -268,6 +294,7 @@ LASQ1
 ------
 
 .. doxygengroup:: lasq1
+   :project: lapack
    :members:
 
 
@@ -277,6 +304,7 @@ LASQ2
 ------
 
 .. doxygengroup:: lasq2
+   :project: lapack
    :members:
 
 
@@ -286,6 +314,7 @@ LASQ3
 ------
 
 .. doxygengroup:: lasq3
+   :project: lapack
    :members:
 
 
@@ -295,6 +324,7 @@ LASQ4
 ------
 
 .. doxygengroup:: lasq4
+   :project: lapack
    :members:
 
 
@@ -304,6 +334,7 @@ LASQ5
 ------
 
 .. doxygengroup:: lasq5
+   :project: lapack
    :members:
 
 
@@ -313,6 +344,7 @@ LASQ6
 ------
 
 .. doxygengroup:: lasq6
+   :project: lapack
    :members:
 
 
@@ -322,6 +354,7 @@ LASD0
 ------
 
 .. doxygengroup:: lasd0
+   :project: lapack
    :members:
 
 
@@ -331,6 +364,7 @@ LASDT
 ------
 
 .. doxygengroup:: lasdt
+   :project: lapack
    :members:
 
 
@@ -340,6 +374,7 @@ LASD1
 ------
 
 .. doxygengroup:: lasd1
+   :project: lapack
    :members:
 
 
@@ -349,6 +384,7 @@ LASD2
 ------
 
 .. doxygengroup:: lasd2
+   :project: lapack
    :members:
 
 
@@ -358,6 +394,7 @@ LASD3
 ------
 
 .. doxygengroup:: lasd3
+   :project: lapack
    :members:
 
 
@@ -367,6 +404,7 @@ LASD4
 ------
 
 .. doxygengroup:: lasd4
+   :project: lapack
    :members:
 
 
@@ -376,6 +414,7 @@ LASDQ
 ------
 
 .. doxygengroup:: lasdq
+   :project: lapack
    :members:
 
 
@@ -385,6 +424,7 @@ LASDA
 ------
 
 .. doxygengroup:: lasda
+   :project: lapack
    :members:
 
 
@@ -394,6 +434,7 @@ LASD6
 ------
 
 .. doxygengroup:: lasd6
+   :project: lapack
    :members:
 
 
@@ -403,6 +444,7 @@ LASD7
 ------
 
 .. doxygengroup:: lasd7
+   :project: lapack
    :members:
 
 
@@ -412,4 +454,5 @@ LASD8
 ------
 
 .. doxygengroup:: lasd8
+   :project: lapack
    :members:

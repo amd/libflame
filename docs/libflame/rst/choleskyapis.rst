@@ -1,4 +1,4 @@
-..  Copyright (C) 2024, Advanced Micro Devices. All rights reserved.
+..  Copyright (C) 2024-2025, Advanced Micro Devices. All rights reserved.
 
 ..  Redistribution and use in source and binary forms, with or without
 ..  modification, are permitted provided that the following conditions are met:
@@ -35,6 +35,7 @@ POTRF
 ------
 
 .. doxygengroup:: potrf
+   :project: lapack
    :members:
 
 
@@ -44,6 +45,7 @@ POTRF2
 ------
 
 .. doxygengroup:: potrf2
+   :project: lapack
    :members:
 
 
@@ -53,6 +55,7 @@ POTF2
 ------
 
 .. doxygengroup:: potf2
+   :project: lapack
    :members:
 
 
@@ -62,6 +65,7 @@ PSTRF
 ------
 
 .. doxygengroup:: pstrf
+   :project: lapack
    :members:
 
 
@@ -71,6 +75,7 @@ PSTF2
 ------
 
 .. doxygengroup:: pstf2
+   :project: lapack
    :members:
 
 
@@ -80,6 +85,7 @@ POTRS
 ------
 
 .. doxygengroup:: potrs
+   :project: lapack
    :members:
 
 
@@ -89,6 +95,7 @@ POTRI
 ------
 
 .. doxygengroup:: potri
+   :project: lapack
    :members:
 
 
@@ -98,6 +105,7 @@ PORFS
 ------
 
 .. doxygengroup:: porfs
+   :project: lapack
    :members:
 
 
@@ -107,6 +115,7 @@ PORFSX
 ------
 
 .. doxygengroup:: porfsx
+   :project: lapack
    :members:
 
 
@@ -116,6 +125,7 @@ POEQU
 ------
 
 .. doxygengroup:: poequ
+   :project: lapack
    :members:
 
 
@@ -125,6 +135,7 @@ POEQUB
 ------
 
 .. doxygengroup:: poequb
+   :project: lapack
    :members:
 
 
@@ -134,6 +145,7 @@ LAQHE
 ------
 
 .. doxygengroup:: laqhe
+   :project: lapack
    :members:
 
 
@@ -143,6 +155,7 @@ LA_PORCOND
 ----------
 
 .. doxygengroup:: la_porcond
+   :project: lapack
    :members:
 
 
@@ -152,6 +165,7 @@ LA_PORCONDX
 -----------
 
 .. doxygengroup:: la_porcondx
+   :project: lapack
    :members:
 
 
@@ -161,6 +175,7 @@ LA_PORPVGRW
 ------------
 
 .. doxygengroup:: la_porpvgrw
+   :project: lapack
    :members:
 
 
@@ -170,6 +185,7 @@ PPCON
 ------
 
 .. doxygengroup:: ppcon
+   :project: lapack
    :members:
 
 
@@ -179,6 +195,7 @@ PPTRF
 ------
 
 .. doxygengroup:: pptrf
+   :project: lapack
    :members:
 
 
@@ -188,6 +205,7 @@ PPTRS
 ------
 
 .. doxygengroup:: pptrs
+   :project: lapack
    :members:
 
 
@@ -197,6 +215,7 @@ PPTRI
 ------
 
 .. doxygengroup:: pptri
+   :project: lapack
    :members:
 
 
@@ -206,6 +225,7 @@ PPRFS
 ------
 
 .. doxygengroup:: pprfs
+   :project: lapack
    :members:
 
 
@@ -215,6 +235,7 @@ PPEQU
 ------
 
 .. doxygengroup:: ppequ
+   :project: lapack
    :members:
 
 
@@ -224,6 +245,7 @@ LAQHP
 ------
 
 .. doxygengroup:: laqhp
+   :project: lapack
    :members:
 
 
@@ -233,6 +255,7 @@ PETRF
 ------
 
 .. doxygengroup:: petrf
+   :project: lapack
    :members:
 
 
@@ -242,6 +265,7 @@ PFRS
 ------
 
 .. doxygengroup:: pfrs
+   :project: lapack
    :members:
 
 
@@ -251,6 +275,7 @@ PFTRI
 ------
 
 .. doxygengroup:: pftri
+   :project: lapack
    :members:
 
 
@@ -260,6 +285,7 @@ PBCON
 ------
 
 .. doxygengroup:: pbcon
+   :project: lapack
    :members:
 
 
@@ -269,6 +295,7 @@ PBTRF
 ------
 
 .. doxygengroup:: pbtrf
+   :project: lapack
    :members:
 
 
@@ -278,6 +305,7 @@ PBEQU
 ------
 
 .. doxygengroup:: pbequ
+   :project: lapack
    :members:
 
 
@@ -287,6 +315,7 @@ LAQHB
 ------
 
 .. doxygengroup:: laqhb
+   :project: lapack
    :members:
 
 
@@ -296,6 +325,7 @@ PTCON
 ------
 
 .. doxygengroup:: ptcon
+   :project: lapack
    :members:
 
 
@@ -305,6 +335,7 @@ PTTRF
 ------
 
 .. doxygengroup:: pttrf
+   :project: lapack
    :members:
 
 
@@ -314,6 +345,7 @@ PTTRS
 ------
 
 .. doxygengroup:: pttrs
+   :project: lapack
    :members:
 
 
@@ -323,6 +355,7 @@ PTTS2
 ------
 
 .. doxygengroup:: ptts2
+   :project: lapack
    :members:
 
 .. _ptrfs:
@@ -331,4 +364,5 @@ PTRFS
 ------
 
 .. doxygengroup:: ptrfs
+   :project: lapack
    :members:

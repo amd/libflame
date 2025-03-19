@@ -192,7 +192,7 @@ void fla_test_stevd_experiment(char *tst_api, test_params_t *params, integer dat
             scale_matrix_underflow_overflow_stevd(datatype, n, A, lda, &params->imatrix_char, scal);
         }
         copy_matrix(datatype, "full", n, n, A, lda, Q, lda);
-        invoke_sytrd(datatype, &uplo, jobz, n, Q, lda, D, E, &info);
+        get_sym_tridiagonal_matrix(datatype, &uplo, n, Q, lda, D, E, &info);
     }
     /* Get symmetric tridiagonal matrix from D, E and use for validation.*/
     copy_sym_tridiag_matrix(datatype, D, E, n, n, Z, ldz);

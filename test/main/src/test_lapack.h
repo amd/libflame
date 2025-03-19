@@ -87,50 +87,50 @@ extern integer config_data;
  * */
 extern FILE *g_ext_fptr;
 
-#define FLA_TEST_PARSE_LAST_ARG(argv)                                                             \
-    integer i;                                                                                    \
-    char *info;                                                                                   \
-    char info_value[2][MAX_PASS_STRING_LENGTH];                                                   \
-                                                                                                  \
-    i = 0;                                                                                        \
-    if(strstr(argv, "--einfo") != NULL)                                                           \
-    {                                                                                             \
-        info = strtok(argv, "=");                                                                 \
-        while(info != NULL && i < 2)                                                              \
-        {                                                                                         \
-            strcpy(info_value[i], info);                                                          \
-            i++;                                                                                  \
-            info = strtok(NULL, "=");                                                             \
-        }                                                                                         \
-        einfo = atoi(info_value[1]);                                                              \
-    }                                                                                             \
-    else if(strstr(argv, "--imatrix") != NULL)                                                    \
-    {                                                                                             \
-        info = strtok(argv, "=");                                                                 \
-        while(info != NULL && i < 2)                                                              \
-        {                                                                                         \
-            strcpy(info_value[i], info);                                                          \
-            i++;                                                                                  \
-            info = strtok(NULL, "=");                                                             \
-        }                                                                                         \
-        if(strlen(info_value[1]) != 1                                                             \
-           || (!same_char(info_value[1][0], 'I') && !same_char(info_value[1][0], 'N')             \
-           && !same_char(info_value[1][0], 'A') && !same_char(info_value[1][0], 'F')              \
-           && !same_char(info_value[1][0], 'U') && !same_char(info_value[1][0], 'O')))            \
-        {                                                                                         \
-            printf("\n Invalid input for imatrix \n");                                            \
-            return;                                                                               \
-        }                                                                                         \
-        params->imatrix_char = info_value[1][0];                                                  \
-    }                                                                                             \
-    else                                                                                          \
-    {                                                                                             \
-        g_ext_fptr = fopen(argv, "r");                                                            \
-        if(g_ext_fptr == NULL)                                                                    \
-        {                                                                                         \
-            printf("\n Invalid input file argument \n");                                          \
-            return;                                                                               \
-        }                                                                                         \
+#define FLA_TEST_PARSE_LAST_ARG(argv)                                                      \
+    integer i;                                                                             \
+    char *info;                                                                            \
+    char info_value[2][MAX_PASS_STRING_LENGTH];                                            \
+                                                                                           \
+    i = 0;                                                                                 \
+    if(strstr(argv, "--einfo") != NULL)                                                    \
+    {                                                                                      \
+        info = strtok(argv, "=");                                                          \
+        while(info != NULL && i < 2)                                                       \
+        {                                                                                  \
+            strcpy(info_value[i], info);                                                   \
+            i++;                                                                           \
+            info = strtok(NULL, "=");                                                      \
+        }                                                                                  \
+        einfo = atoi(info_value[1]);                                                       \
+    }                                                                                      \
+    else if(strstr(argv, "--imatrix") != NULL)                                             \
+    {                                                                                      \
+        info = strtok(argv, "=");                                                          \
+        while(info != NULL && i < 2)                                                       \
+        {                                                                                  \
+            strcpy(info_value[i], info);                                                   \
+            i++;                                                                           \
+            info = strtok(NULL, "=");                                                      \
+        }                                                                                  \
+        if(strlen(info_value[1]) != 1                                                      \
+           || (!same_char(info_value[1][0], 'I') && !same_char(info_value[1][0], 'N')      \
+               && !same_char(info_value[1][0], 'A') && !same_char(info_value[1][0], 'F')   \
+               && !same_char(info_value[1][0], 'U') && !same_char(info_value[1][0], 'O'))) \
+        {                                                                                  \
+            printf("\n Invalid input for imatrix \n");                                     \
+            return;                                                                        \
+        }                                                                                  \
+        params->imatrix_char = info_value[1][0];                                           \
+    }                                                                                      \
+    else                                                                                   \
+    {                                                                                      \
+        g_ext_fptr = fopen(argv, "r");                                                     \
+        if(g_ext_fptr == NULL)                                                             \
+        {                                                                                  \
+            printf("\n Invalid input file argument \n");                                   \
+            return;                                                                        \
+        }                                                                                  \
     }
 
 #define FLA_TEST_CHECK_EINFO(residual, info, einfo) \
@@ -153,11 +153,11 @@ extern FILE *g_ext_fptr;
         }                                           \
     }
 
-#define FLA_EXTREME_CASE_TEST                                                                  \
-    (same_char(params->imatrix_char, 'A') || same_char(params->imatrix_char, 'F')              \
-      || same_char(params->imatrix_char, 'N') || same_char(params->imatrix_char, 'I'))
+#define FLA_EXTREME_CASE_TEST                                                     \
+    (same_char(params->imatrix_char, 'A') || same_char(params->imatrix_char, 'F') \
+     || same_char(params->imatrix_char, 'N') || same_char(params->imatrix_char, 'I'))
 
-#define FLA_OVERFLOW_UNDERFLOW_TEST                                                            \
+#define FLA_OVERFLOW_UNDERFLOW_TEST \
     (same_char(params->imatrix_char, 'O') || same_char(params->imatrix_char, 'U'))
 
 /* Macro to check if a LAPACK API have different names for its
@@ -185,18 +185,19 @@ extern FILE *g_ext_fptr;
             func_str = "HEGVD";                               \
         else if(strcmp(func_str, "ORMQR") == 0)               \
             func_str = "UNMQR";                               \
+        else if(strcmp(func_str, "SYTRD") == 0)               \
+            func_str = "HETRD";                               \
     }
 
 /* Macro to skip complex and double complex tests of not supported APIs */
 #define FLA_SKIP_TEST(datatype_char, func_str)                                      \
     ((((same_char(datatype_char, 'c') || same_char(datatype_char, 'z'))             \
-      && strcmp(func_str, "STEVD") == 0)                                            \
+       && strcmp(func_str, "STEVD") == 0)                                           \
       || ((same_char(datatype_char, 's') || same_char(datatype_char, 'd'))          \
           && (strcmp(func_str, "HETRF") == 0 || strcmp(func_str, "HETRF_ROOK") == 0 \
-             || strcmp(func_str, "HETRI_ROOK") == 0)))                              \
+              || strcmp(func_str, "HETRI_ROOK") == 0)))                             \
          ? TRUE                                                                     \
          : FALSE)
-
 
 /* Assign leading dimension value based on matrix layout and cmdline/config inputs */
 #define SELECT_LDA(g_ext_fptr, config_data, layout, n, rm_lda, lda_t) \

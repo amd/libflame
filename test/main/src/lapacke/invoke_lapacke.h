@@ -117,4 +117,6 @@ integer invoke_lapacke_gejsv(integer datatype, int layout, char joba, char jobu,
                              char jobr, char jobt, char jobp, integer m, integer n, void *A,
                              integer lda, void *S, void *U, integer ldu, void *V, integer ldv,
                              void *stat, integer *istat);
+integer invoke_lapacke_sytrd(integer datatype, integer layout, char uplo, integer n, void *A,
+                             integer lda, void *D, void *E, void *tau);
 #endif

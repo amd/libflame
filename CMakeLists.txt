@@ -872,10 +872,10 @@ file(MAKE_DIRECTORY ${BASE_INC_PATH})
 # this will generate  blis1.h file in windows/include
 set (BLIS1_TARGET_PATH "${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/blis1.h")
 set (BLIS1__H_SRC_PATH "${CMAKE_SOURCE_DIR}/src/base/flamec/blis/include/blis1.h" )
-set (BLIS_FLATTEN_HEADER "${CMAKE_SOURCE_DIR}/build/flatten-headers.py")
+set (FLA_FLATTEN_HEADER "${CMAKE_SOURCE_DIR}/build/flatten-headers.py")
 
 execute_process(
-    COMMAND ${Python3_EXECUTABLE} ${BLIS_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
+    COMMAND ${Python3_EXECUTABLE} ${FLA_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
 	"${BLIS1__H_SRC_PATH}" "${BLIS1_TARGET_PATH}" "${BASE_INC_PATH}" "${MK_HEADER_DIR_PATHS}"
 	RESULT_VARIABLE CMD_RESULT
     OUTPUT_VARIABLE CMD_OUTPUT
@@ -887,7 +887,7 @@ set (FLAME_TARGET_PATH "${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/FLA_f2c.h")
 set (FLAME_H_SRC_PATH  "${CMAKE_SOURCE_DIR}/src/base/flamec/include/FLA_f2c.h" )
 
 execute_process(
-    COMMAND ${Python3_EXECUTABLE} ${BLIS_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
+    COMMAND ${Python3_EXECUTABLE} ${FLA_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
 	"${FLAME_H_SRC_PATH}" "${FLAME_TARGET_PATH}" "${BASE_INC_PATH}" "${MK_HEADER_DIR_PATHS}"
 	RESULT_VARIABLE CMD_RESULT
     OUTPUT_VARIABLE CMD_OUTPUT
@@ -898,7 +898,7 @@ execute_process(
 set (FLAME_TARGET_PATH "${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/FLAME.h")
 set (FLAME_H_SRC_PATH  "${CMAKE_SOURCE_DIR}/src/base/flamec/include/FLAME.h" )
 execute_process(
-    COMMAND ${Python3_EXECUTABLE} ${BLIS_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
+    COMMAND ${Python3_EXECUTABLE} ${FLA_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
 	"${FLAME_H_SRC_PATH}" "${FLAME_TARGET_PATH}" "${BASE_INC_PATH}" "${MK_HEADER_DIR_PATHS}"
 	RESULT_VARIABLE CMD_RESULT
     OUTPUT_VARIABLE CMD_OUTPUT
@@ -908,9 +908,20 @@ execute_process(
 set (INTERFACE_HEADER_DIR_PATHS "${CMAKE_SOURCE_DIR}/src/src_cpp")
 set (INTERFACE_TARGET_PATH "${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/libflame_interface.hh")
 execute_process(
-	COMMAND ${Python3_EXECUTABLE} ${BLIS_FLATTEN_HEADER}  "${VERBOSE}"
+	COMMAND ${Python3_EXECUTABLE} ${FLA_FLATTEN_HEADER}  "${VERBOSE}"
 	"${INTERFACE_HEADER_DIR_PATHS}/libflame_interface.hh" "${INTERFACE_TARGET_PATH}"
 	"${BASE_INC_PATH}" "${INTERFACE_HEADER_DIR_PATHS}"
+	RESULT_VARIABLE CMD_RESULT
+    OUTPUT_VARIABLE CMD_OUTPUT
+	)
+
+# Run python script to generate libflame_interface header at configuration time
+set (LAPACKE_HEADER_SRC_PATH "${CMAKE_SOURCE_DIR}/src/lapacke/LAPACKE/include/")
+set (LAPACKE_HEADER_TARGET_PATH "${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/lapacke.h")
+execute_process(
+	COMMAND ${Python3_EXECUTABLE} ${FLA_FLATTEN_HEADER}  "${VERBOSE}"
+	"${LAPACKE_HEADER_SRC_PATH}/lapacke.h" "${LAPACKE_HEADER_TARGET_PATH}"
+	"${BASE_INC_PATH}" "${LAPACKE_HEADER_SRC_PATH}"
 	RESULT_VARIABLE CMD_RESULT
     OUTPUT_VARIABLE CMD_OUTPUT
 	)
@@ -998,9 +1009,7 @@ endif()
 message(STATUS "CMAKE_INSTALL_PREFIX : ${CMAKE_INSTALL_PREFIX}")
 
 set(LIBFLAME_PUBLIC_HEADERS	"include/FLAME.h"
-				"src/lapacke/LAPACKE/include/lapacke_mangling.h"
-				"src/lapacke/LAPACKE/include/lapacke.h"
-				"src/lapacke/LAPACKE/include/lapack.h"
+				"${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/lapacke.h"
 				"${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/libflame_interface.hh")
 
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${LIBFLAME_PUBLIC_HEADERS}")

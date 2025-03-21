@@ -52,6 +52,10 @@ LIBAOCLUTILS_LIBRARY_PATH :=
 #
 # --- ILP64 --- Set to 1 to enable ILP64 ---------------------------------------
 #
+ifndef $(ILP64)
+ILP64 = 0
+endif
+
 ifeq ($(ILP64),1)
 ifeq ($(ENABLE_CPP_TEST), 1)
     CXXFLAGS    += -DFLA_ENABLE_ILP64=1

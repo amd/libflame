@@ -327,6 +327,9 @@ FLAF2C_H_FLAT := $(BASE_INC_PATH)/$(FLAF2C_H)
 CPP_INTERFACE_H := libflame_interface.hh
 CPP_INTERFACE_H_FLAT := $(BASE_INC_PATH)/$(CPP_INTERFACE_H)
 
+LAPACKE_H := lapacke.h
+LAPACKE_H_FLAT := $(BASE_INC_PATH)/$(LAPACKE_H)
+
 #Define path of CPP Template header files
 CPP_TEMPLATE_H_PATH := ./$(SRC_DIR)/src_cpp
 
@@ -372,11 +375,8 @@ HEADERS_TO_INSTALL := $(FLAME_H_FLAT)
 HEADERS_TO_INSTALL += $(CPP_INTERFACE_H_FLAT)
 #LAPACKE headers for cpp interface
 LAPACKE_HEADERS_DIR := $(SRC_DIR)/$(LAPACKE_DIR)/LAPACKE/include
-LAPACKE_HEADERS    := $(LAPACKE_HEADERS_DIR)/lapacke.h
-LAPACKE_HEADERS    += $(LAPACKE_HEADERS_DIR)/lapacke_mangling.h
-LAPACKE_HEADERS    += $(LAPACKE_HEADERS_DIR)/lapack.h
 
-HEADERS_TO_INSTALL += $(LAPACKE_HEADERS) $(FLAF2C_H_FLAT)
+HEADERS_TO_INSTALL += $(BASE_INC_PATH)/lapacke.h
 HEADERS_INST       := $(addprefix $(MK_INCL_DIR_INST)/, $(notdir $(HEADERS_TO_INSTALL)))
 
 # Add -I to each header path so we can specify our include search paths to the
@@ -596,6 +596,15 @@ else
 	@echo "Generated monolithic $@"
 endif
 
+# Consolidated lapacke.h header creation
+$(LAPACKE_H_FLAT):
+ifeq ($(ENABLE_VERBOSE),yes)
+	$(FLATTEN_H) -c -v1 $(LAPACKE_HEADERS_DIR)/lapacke.h $@ $(BASE_INC_PATH) "$(LAPACKE_HEADERS_DIR)"
+else
+	@echo -n "Generating monolithic $(@)"
+	@$(FLATTEN_H) -c -v1 $(LAPACKE_HEADERS_DIR)/lapacke.h $@ $(BASE_INC_PATH) "$(LAPACKE_HEADERS_DIR)"
+	@echo "Generated monolithic $@"
+endif
 
 # Consolidated FLA_f2c.h header creation
 

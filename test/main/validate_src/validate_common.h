@@ -10,6 +10,14 @@
 #ifndef VALIDATE_COMMON_H
 #define VALIDATE_COMMON_H
 
+#if defined(FLA_ENABLE_ILP64)
+typedef int64_t integer;
+typedef uint64_t uinteger;
+#else
+typedef int integer;
+typedef unsigned long uinteger;
+#endif
+
 void validate_geqrf(char *tst_api, integer m_A, integer n_A, void *A, void *A_test, integer lda,
                     void *T_test, integer datatype, double err_thresh);
 

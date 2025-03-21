@@ -10,7 +10,6 @@
 #define TEST_COMMON_H
 
 #include "blis.h"
-#include "FLA_f2c.h"
 #include "validate_common.h"
 #include "test_overflow_underflow.h"
 
@@ -24,6 +23,65 @@
 
 #define USE_ABS_EIGEN_VALUES 1
 #define USE_SIGNED_EIGEN_VALUES 0
+// --- Complex type definitions -----------------------------------------------
+
+#ifndef _DEFINED_SCOMPLEX
+#define _DEFINED_SCOMPLEX
+
+typedef struct scomplex
+{
+  float real, imag;
+} scomplex;
+#endif
+
+#ifndef _DEFINED_DCOMPLEX
+#define _DEFINED_DCOMPLEX
+typedef struct dcomplex
+{
+  double real, imag;
+} dcomplex;
+#endif
+
+#if defined(FLA_ENABLE_ILP64)
+typedef int64_t integer;
+typedef uint64_t uinteger;
+#else
+typedef int integer;
+typedef unsigned long uinteger;
+#endif
+#ifdef __cplusplus
+// For C++, include stdint.h.
+#include <stdint.h> // skipped
+#elif __STDC_VERSION__ >= 199901L
+// For C99 (or later), include stdint.h.
+#include <stdint.h> // skipped
+#else
+// When stdint.h is not available, manually typedef the types we will use.
+#ifdef _WIN32
+typedef          __int32  int32_t;
+typedef unsigned __int32 uint32_t;
+typedef          __int64  int64_t;
+typedef unsigned __int64 uint64_t;
+#else
+#error "Attempting to compile on pre-C99 system without stdint.h."
+#endif
+#endif
+
+typedef integer logical;
+
+#define fla_min( x, y )    \
+({                         \
+   __typeof__(x) _x = (x); \
+   __typeof__(y) _y = (y); \
+   _x < _y ? _x : _y;      \
+})
+
+#define fla_max( x, y )    \
+({                         \
+   __typeof__(x) _x = (x); \
+   __typeof__(y) _y = (y); \
+   _x > _y ? _x : _y;      \
+})
 
 /* Enum value for the type of diagonal
    elements of a diagnoal matrix.

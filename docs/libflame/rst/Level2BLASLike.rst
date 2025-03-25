@@ -29,16 +29,71 @@
 Level 2 BLAS-like Matrix-Vector Operations
 -------------------------------------------
 
-* :ref:`lascl`
-* :ref:`lageamv`
-* :ref:`lageamb`
-* :ref:`la_heamv`
-* :ref:`lascl2`
-* :ref:`larscl2`
-* :ref:`la_wwaddw`
+.. _lascl:
+
+LASCL
+^^^^^^
+
+.. doxygengroup:: lascl
+   :project: lapack
+   :members:
 
 
-.. toctree::
-    :hidden:
+.. _lageamv:
 
-    Level2BLASLike_apis
+LAGEAMV
+^^^^^^^^
+
+.. doxygengroup:: lageamv
+   :project: lapack
+   :members:
+
+
+.. _lageamb:
+
+LAGEAMB
+^^^^^^^^
+
+.. doxygengroup:: lageamb
+   :project: lapack
+   :members:
+
+
+.. _la_heamv:
+
+LA_HEAMV
+^^^^^^^^
+
+.. doxygengroup:: la_heamv
+   :project: lapack
+   :members:
+
+
+.. _lascl2:
+
+LASCL2
+^^^^^^
+
+.. doxygengroup:: lascl2
+   :project: lapack
+   :members:
+
+
+.. _larscl2:
+
+LARSCL2
+^^^^^^^^
+
+.. doxygengroup:: larscl2
+   :project: lapack
+   :members:
+
+
+.. _la_wwaddw:
+
+LA_WWADDW
+^^^^^^^^^^
+
+.. doxygengroup:: la_wwaddw
+   :project: lapack
+   :members:

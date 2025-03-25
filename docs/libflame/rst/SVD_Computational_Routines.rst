@@ -30,53 +30,430 @@
 SVD Computational Routines
 --------------------------
 
+.. _gesvd:
 
-* :ref:`gesvd`
-* :ref:`gesvdq`
-* :ref:`gesdd`
-* :ref:`gesvdx`
-* :ref:`gejsv`
-* :ref:`gesvj`
-* :ref:`bdsqr`
-* :ref:`bdsdc`
-* :ref:`bdsvdx`
-* :ref:`ggsvd3`
-* :ref:`gebrd`
-* :ref:`gebd2`
-* :ref:`labrd`
-* :ref:`gbbrd`
-* :ref:`ungbr`
-* :ref:`orgbr`
-* :ref:`ormbr`
-* :ref:`unmbr`
-* :ref:`gesvj`
-* :ref:`gesvj1`
-* :ref:`las2`
-* :ref:`lasv2`
-* :ref:`ggsvp3`
-* :ref:`tgsja`
-* :ref:`lags2`
-* :ref:`lapll`
-* :ref:`lasq1`
-* :ref:`lasq2`
-* :ref:`lasq3`
-* :ref:`lasq4`
-* :ref:`lasq5`
-* :ref:`lasq6`
-* :ref:`lasd0`
-* :ref:`lasdt`
-* :ref:`lasd1`
-* :ref:`lasd2`
-* :ref:`lasd3`
-* :ref:`lasd4`
-* :ref:`lasdq`
-* :ref:`lasda`
-* :ref:`lasd6`
-* :ref:`lasd7`
-* :ref:`lasd8`
+GESVD
+^^^^^^
+
+.. doxygengroup:: gesvd
+   :project: lapack
+   :members:
 
 
-.. toctree::
-    :hidden:
+.. _gesvdq:
 
-    SVD_Computational_Routines_apis
+GESVDQ
+^^^^^^
+
+.. doxygengroup:: gesvdq
+   :project: lapack
+   :members:
+
+
+.. _gesdd:
+
+GESDD
+^^^^^^
+
+.. doxygengroup:: gesdd
+   :project: lapack
+   :members:
+
+
+.. _gesvdx:
+
+GESVDX
+^^^^^^
+
+.. doxygengroup:: gesvdx
+   :project: lapack
+   :members:
+
+
+.. _gejsv:
+
+GEJSV
+^^^^^^
+
+.. doxygengroup:: gejsv
+   :project: lapack
+   :members:
+
+
+.. _gesvj:
+
+GESVJ
+^^^^^^
+
+.. doxygengroup:: gesvj
+   :project: lapack
+   :members:
+
+
+.. _bdsqr:
+
+BDSQR
+^^^^^^
+
+.. doxygengroup:: bdsqr
+   :project: lapack
+   :members:
+
+
+.. _bdsdc:
+
+BDSDC
+^^^^^^
+
+.. doxygengroup:: bdsdc
+   :project: lapack
+   :members:
+
+
+.. _bdsvdx:
+
+BDSVDX
+^^^^^^
+
+.. doxygengroup:: bdsvdx
+   :project: lapack
+   :members:
+
+
+.. _ggsvd3:
+
+GGSVD3
+^^^^^^
+
+.. doxygengroup:: ggsvd3
+   :project: lapack
+   :members:
+
+
+.. _gebrd:
+
+GEBRD
+^^^^^^
+
+.. doxygengroup:: gebrd
+   :project: lapack
+   :members:
+
+
+.. _gebd2:
+
+GEBD2
+^^^^^^
+
+.. doxygengroup:: gebd2
+   :project: lapack
+   :members:
+
+
+.. _labrd:
+
+LABRD
+^^^^^^
+
+.. doxygengroup:: labrd
+   :project: lapack
+   :members:
+
+
+.. _gbbrd:
+
+GBBRD
+^^^^^^
+
+.. doxygengroup:: gbbrd
+   :project: lapack
+   :members:
+
+
+.. _ungbr:
+
+UNGBR
+^^^^^^
+
+.. doxygengroup:: ungbr
+   :project: lapack
+   :members:
+
+
+.. _orgbr:
+
+ORGBR
+^^^^^^
+
+.. doxygengroup:: orgbr
+   :project: lapack
+   :members:
+
+
+.. _ormbr:
+
+ORMBR
+^^^^^^
+
+.. doxygengroup:: ormbr
+   :project: lapack
+   :members:
+
+
+.. _unmbr:
+
+UNMBR
+^^^^^^
+
+.. doxygengroup:: unmbr
+   :project: lapack
+   :members:
+
+
+.. _gesvj0:
+
+GESVJ0
+^^^^^^
+
+.. doxygengroup:: gesvj0
+   :project: lapack
+   :members:
+
+
+.. _gesvj1:
+
+GESVJ1
+^^^^^^
+
+.. doxygengroup:: gesvj1
+   :project: lapack
+   :members:
+
+
+.. _las2:
+
+LAS2
+^^^^^^
+
+.. doxygengroup:: las2
+   :project: lapack
+   :members:
+
+
+.. _lasv2:
+
+LASV2
+^^^^^^
+
+.. doxygengroup:: lasv2
+   :project: lapack
+   :members:
+
+.. _ggsvp3:
+
+GGSVP3
+^^^^^^
+
+.. doxygengroup:: ggsvp3
+   :project: lapack
+   :members:
+
+
+.. _tgsja:
+
+TGSJA
+^^^^^^
+
+.. doxygengroup:: tgsja
+   :project: lapack
+   :members:
+
+
+.. _lags2:
+
+LAGS2
+^^^^^^
+
+.. doxygengroup:: lags2
+   :project: lapack
+   :members:
+
+
+.. _lapll:
+
+LAPLL
+^^^^^^
+
+.. doxygengroup:: lapll
+   :project: lapack
+   :members:
+
+
+.. _lasq1:
+
+LASQ1
+^^^^^^
+
+.. doxygengroup:: lasq1
+   :project: lapack
+   :members:
+
+
+.. _lasq2:
+
+LASQ2
+^^^^^^
+
+.. doxygengroup:: lasq2
+   :project: lapack
+   :members:
+
+
+.. _lasq3:
+
+LASQ3
+^^^^^^
+
+.. doxygengroup:: lasq3
+   :project: lapack
+   :members:
+
+
+.. _lasq4:
+
+LASQ4
+^^^^^^
+
+.. doxygengroup:: lasq4
+   :project: lapack
+   :members:
+
+
+.. _lasq5:
+
+LASQ5
+^^^^^^
+
+.. doxygengroup:: lasq5
+   :project: lapack
+   :members:
+
+
+.. _lasq6:
+
+LASQ6
+^^^^^^
+
+.. doxygengroup:: lasq6
+   :project: lapack
+   :members:
+
+
+.. _lasd0:
+
+LASD0
+^^^^^^
+
+.. doxygengroup:: lasd0
+   :project: lapack
+   :members:
+
+
+.. _lasdt:
+
+LASDT
+^^^^^^
+
+.. doxygengroup:: lasdt
+   :project: lapack
+   :members:
+
+
+.. _lasd1:
+
+LASD1
+^^^^^^
+
+.. doxygengroup:: lasd1
+   :project: lapack
+   :members:
+
+
+.. _lasd2:
+
+LASD2
+^^^^^^
+
+.. doxygengroup:: lasd2
+   :project: lapack
+   :members:
+
+
+.. _lasd3:
+
+LASD3
+^^^^^^
+
+.. doxygengroup:: lasd3
+   :project: lapack
+   :members:
+
+
+.. _lasd4:
+
+LASD4
+^^^^^^
+
+.. doxygengroup:: lasd4
+   :project: lapack
+   :members:
+
+
+.. _lasdq:
+
+LASDQ
+^^^^^^
+
+.. doxygengroup:: lasdq
+   :project: lapack
+   :members:
+
+
+.. _lasda:
+
+LASDA
+^^^^^^
+
+.. doxygengroup:: lasda
+   :project: lapack
+   :members:
+
+
+.. _lasd6:
+
+LASD6
+^^^^^^
+
+.. doxygengroup:: lasd6
+   :project: lapack
+   :members:
+
+
+.. _lasd7:
+
+LASD7
+^^^^^^
+
+.. doxygengroup:: lasd7
+   :project: lapack
+   :members:
+
+
+.. _lasd8:
+
+LASD8
+^^^^^^
+
+.. doxygengroup:: lasd8
+   :project: lapack
+   :members:

@@ -24,56 +24,38 @@
 ..  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 ..  POSSIBILITY OF SUCH DAMAGE.
 
-.. _Level3BLASLike_apis:
+.. _Auxiliary_routines_LinearSolve:
 
-Level 3 BLAS-like Matrix-Matrix Operations APIs
------------------------------------------------
 
-.. _lagtm:
+Auxiliary Routines
+-------------------
 
-LAGTM
-------
+.. _lacn2:
 
-.. doxygengroup:: lagtm
+LACN2
+^^^^^^
+
+.. doxygengroup:: lacn2
    :project: lapack
    :members:
 
 
-.. _lacrm:
+.. _lacon:
 
-LACRM
-------
+LACON
+^^^^^^
 
-.. doxygengroup:: lacrm
+.. doxygengroup:: lacon
    :project: lapack
    :members:
 
 
-.. _larcm:
+.. _la_lin_berr:
 
-LARCM
-------
+LA_LIN_BERR
+^^^^^^^^^^^^
 
-.. doxygengroup:: larcm
+.. doxygengroup:: la_lin_berr
    :project: lapack
    :members:
 
-
-.. _hfrk:
-
-HFRK
-------
-
-.. doxygengroup:: hfrk
-   :project: lapack
-   :members:
-
-
-.. _tfsm:
-
-TFSM
-------
-
-.. doxygengroup:: tfsm
-   :project: lapack
-   :members:

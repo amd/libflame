@@ -30,13 +30,52 @@
 Level 3 BLAS-like Matrix-Matrix Operations
 -------------------------------------------
 
-* :ref:`lagtm`
-* :ref:`lacrm`
-* :ref:`larcm`
-* :ref:`hfrk`
-* :ref:`tfsm`
+.. _lagtm:
 
-.. toctree::
-    :hidden:
+LAGTM
+^^^^^^
 
-    Level3BLASLike_apis
+.. doxygengroup:: lagtm
+   :project: lapack
+   :members:
+
+
+.. _lacrm:
+
+LACRM
+^^^^^^
+
+.. doxygengroup:: lacrm
+   :project: lapack
+   :members:
+
+
+.. _larcm:
+
+LARCM
+^^^^^^
+
+.. doxygengroup:: larcm
+   :project: lapack
+   :members:
+
+
+.. _hfrk:
+
+HFRK
+^^^^^^
+
+.. doxygengroup:: hfrk
+   :project: lapack
+   :members:
+
+
+.. _tfsm:
+
+TFSM
+^^^^^^
+
+.. doxygengroup:: tfsm
+   :project: lapack
+   :members:
+

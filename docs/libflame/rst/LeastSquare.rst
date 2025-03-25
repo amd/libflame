@@ -29,15 +29,9 @@
 Least Squares
 --------------
 
-* :ref:`Standard_Least_square`
-* :ref:`Constrained_least_squares`
-* :ref:`Auxiliary_routines_least_square`
-
-
 .. toctree::
-   :hidden:
-   :caption: Contents:
+   :maxdepth: 1
 
-   Standard_Least_square
-   Constrained_least_squares
-   Auxiliary_routines_least_square
+   Standard_Least_square.rst
+   Constrained_least_squares.rst
+   Auxiliary_routines_least_square.rst

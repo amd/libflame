@@ -29,14 +29,51 @@
 Scalar Operations
 -----------------
 
-* :ref:`isnan`
-* :ref:`laisnan`
-* :ref:`ladiv`
-* :ref:`lapy2`
-* :ref:`lapy3`
+.. _isnan:
+
+ISNAN
+^^^^^^
+
+.. doxygengroup:: isnan
+   :project: lapack
+   :members:
 
 
-.. toctree::
-    :hidden:
+.. _laisnan:
 
-    ScalarOperations_apis
+LAISNAN
+^^^^^^^^
+
+.. doxygengroup:: laisnan
+   :project: lapack
+   :members:
+
+
+.. _ladiv:
+
+LADIV
+^^^^^^
+
+.. doxygengroup:: ladiv
+   :project: lapack
+   :members:
+
+
+.. _lapy2:
+
+LAPY2
+^^^^^^
+
+.. doxygengroup:: lapy2
+   :project: lapack
+   :members:
+
+
+.. _lapy3:
+
+LAPY3
+^^^^^^
+
+.. doxygengroup:: lapy3
+   :project: lapack
+   :members:

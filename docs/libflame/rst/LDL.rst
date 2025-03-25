@@ -29,18 +29,91 @@
 LDL
 ---
 
-* :ref:`sysv`
-* :ref:`sysv_rook`
-* :ref:`sysv_rk`
-* :ref:`sysvx`
-* :ref:`sysvxx`
-* :ref:`spsv`
-* :ref:`spsvx`
-* :ref:`sysv_aa`
-* :ref:`sysv_aa_2stage`
+.. _sysv:
 
-.. toctree::
-    :hidden:
-    :caption: Contents:
+SYSV
+^^^^^^
 
-    LDL_apis.rst
+.. doxygengroup:: sysv
+   :project: lapack
+   :members:
+
+
+.. _sysv_rook:
+
+SYSV_ROOK
+^^^^^^^^^
+
+.. doxygengroup:: sysv_rook
+   :project: lapack
+   :members:
+
+
+.. _sysv_rk:
+
+SYSV_RK
+^^^^^^^^
+
+.. doxygengroup:: sysv_rk
+   :project: lapack
+   :members:
+
+
+.. _sysvx:
+
+SYSVX
+^^^^^^
+
+.. doxygengroup:: sysvx
+   :project: lapack
+   :members:
+
+
+.. _sysvxx:
+
+SYSVXX
+^^^^^^
+
+.. doxygengroup:: sysvxx
+   :project: lapack
+   :members:
+
+
+.. _spsv:
+
+SPSV
+^^^^^^
+
+.. doxygengroup:: spsv
+   :project: lapack
+   :members:
+
+
+.. _spsvx:
+
+SPSVX
+^^^^^^
+
+.. doxygengroup:: spsvx
+   :project: lapack
+   :members:
+
+
+.. _sysv_aa:
+
+SYSV_AA
+^^^^^^^^
+
+.. doxygengroup:: sysv_aa
+   :project: lapack
+   :members:
+
+
+.. _sysv_aa_2stage:
+
+SYSV_AA_2STAGE
+^^^^^^^^^^^^^^^^
+
+.. doxygengroup:: sysv_aa_2stage
+   :project: lapack
+   :members:

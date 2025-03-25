@@ -30,19 +30,102 @@
 Parameters
 -----------
 
-* :ref:`lamch`
-* :ref:`labad`
-* :ref:`ilaver`
-* :ref:`iparam2stage`
-* :ref:`iladiag`
-* :ref:`ilatrans`
-* :ref:`ilaprec`
-* :ref:`iladiag`
-* :ref:`ilaenv2stage`
-* :ref:`ilauplo`
-* :ref:`latrans`
+.. _lamch:
 
-.. toctree::
-    :hidden:
+LAMCH
+^^^^^^
 
-    Parameters_apis
+.. doxygengroup:: lamch
+   :project: lapack
+   :members:
+
+
+.. _labad:
+
+LABAD
+^^^^^^
+
+.. doxygengroup:: labad
+   :project: lapack
+   :members:
+
+
+.. _ilaver:
+
+ILAVER
+^^^^^^
+
+.. doxygengroup:: ilaver
+   :project: lapack
+   :members:
+
+
+.. _iparam2stage:
+
+IPARAM2STAGE
+^^^^^^^^^^^^
+
+.. doxygengroup:: iparam2stage
+   :project: lapack
+   :members:
+
+
+.. _iladiag:
+
+ILADIAG
+^^^^^^^^
+
+.. doxygengroup:: iladiag
+   :project: lapack
+   :members:
+
+
+.. _ilatrans:
+
+ILATRANS
+^^^^^^^^
+
+.. doxygengroup:: ilatrans
+   :project: lapack
+   :members:
+
+
+.. _ilaprec:
+
+ILAPREC
+^^^^^^^^^
+
+.. doxygengroup:: ilaprec
+   :project: lapack
+   :members:
+
+
+.. _ilaenv2stage:
+
+ILAENV2STAGE
+^^^^^^^^^^^^^
+
+.. doxygengroup:: ilaenv2stage
+   :project: lapack
+   :members:
+
+
+.. _ilauplo:
+
+ILAUPLO
+^^^^^^^^
+
+.. doxygengroup:: ilauplo
+   :project: lapack
+   :members:
+
+
+.. _latrans:
+
+LATRANS
+^^^^^^^^
+
+.. doxygengroup:: latrans
+   :project: lapack
+   :members:
+

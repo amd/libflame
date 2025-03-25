@@ -30,19 +30,11 @@
 Orthogonal/Unitary factorizations
 ----------------------------------
 
-* :ref:`QR`
-* :ref:`LQ`
-* :ref:`CosineSineDecomposition`
-* :ref:`HouseholdReflector`
-* :ref:`GivensJacobiPlaneRotations`
-
-
 .. toctree::
-   :hidden:
-   :caption: Contents:
+   :maxdepth: 1
 
-   QR
-   LQ
-   CosineSineDecomposition
-   HouseholdReflector
-   GivensJacobiPlaneRotations
+   QR.rst
+   LQ.rst
+   CosineSineDecomposition.rst
+   HouseholdReflector.rst
+   GivensJacobiPlaneRotations.rst

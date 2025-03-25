@@ -29,27 +29,181 @@
 Triangular Computational
 ------------------------
 
-* :ref:`trcon`
-* :ref:`trtrs`
-* :ref:`latrs`
-* :ref:`trtri`
-* :ref:`trti2`
-* :ref:`trrfs`
-* :ref:`lauum`
-* :ref:`lauu2`
-* :ref:`tpcon`
-* :ref:`tptrs`
-* :ref:`latps`
-* :ref:`tptri`
-* :ref:`tprfs`
-* :ref:`tftri`
-* :ref:`tbcon`
-* :ref:`tbtrs`
-* :ref:`latbs`
-* :ref:`tbrfs`
+.. _trcon:
 
-.. toctree::
-    :hidden:
-    :caption: Contents:
+TRCON
+^^^^^^
 
-    Triangular_Computational_apis.rst
+.. doxygengroup:: trcon
+   :project: lapack
+   :members:
+
+
+.. _trtrs:
+
+TRTRS
+^^^^^^
+
+.. doxygengroup:: trtrs
+   :project: lapack
+   :members:
+
+
+.. _latrs:
+
+LATRS
+^^^^^^
+
+.. doxygengroup:: latrs
+   :project: lapack
+   :members:
+
+
+.. _trtri:
+
+TRTRI
+^^^^^^
+
+.. doxygengroup:: trtri
+   :project: lapack
+   :members:
+
+
+.. _trti2:
+
+TRTI2
+^^^^^^
+
+.. doxygengroup:: trti2
+   :project: lapack
+   :members:
+
+
+.. _trrfs:
+
+TRRFS
+^^^^^^
+
+.. doxygengroup:: trrfs
+   :project: lapack
+   :members:
+
+
+.. _lauum:
+
+LAUUM
+^^^^^^
+
+.. doxygengroup:: lauum
+   :project: lapack
+   :members:
+
+
+.. _lauu2:
+
+LAUU2
+^^^^^^
+
+.. doxygengroup:: lauu2
+   :project: lapack
+   :members:
+
+
+.. _tpcon:
+
+TPCON
+^^^^^^
+
+.. doxygengroup:: tpcon
+   :project: lapack
+   :members:
+
+
+.. _tptrs:
+
+TPTRS
+^^^^^^
+
+.. doxygengroup:: tptrs
+   :project: lapack
+   :members:
+
+
+.. _latps:
+
+LATPS
+^^^^^^
+
+.. doxygengroup:: latps
+   :project: lapack
+   :members:
+
+
+.. _tptri:
+
+TPTRI
+^^^^^^
+
+.. doxygengroup:: tptri
+   :project: lapack
+   :members:
+
+
+.. _tprfs:
+
+TPRFS
+^^^^^^
+
+.. doxygengroup:: tprfs
+   :project: lapack
+   :members:
+
+
+.. _tftri:
+
+TFTRI
+^^^^^^
+
+.. doxygengroup:: tftri
+   :project: lapack
+   :members:
+
+
+.. _tbcon:
+
+TBCON
+^^^^^^
+
+.. doxygengroup:: tbcon
+   :project: lapack
+   :members:
+
+
+.. _tbtrs:
+
+TBTRS
+^^^^^^
+
+.. doxygengroup:: tbtrs
+   :project: lapack
+   :members:
+
+
+.. _latbs:
+
+LATBS
+^^^^^^
+
+.. doxygengroup:: latbs
+   :project: lapack
+   :members:
+
+
+.. _tbrfs:
+
+TBRFS
+^^^^^^
+
+.. doxygengroup:: tbrfs
+   :project: lapack
+   :members:

@@ -29,44 +29,361 @@
 QR
 ---
 
-* :ref:`geqr`
-* :ref:`gemqr`
-* :ref:`geqrf`
-* :ref:`geqr2`
-* :ref:`orgqr`
-* :ref:`ungqr`
-* :ref:`ung2r`
-* :ref:`unmqr`
-* :ref:`ormqr`
-* :ref:`orm2r`
-* :ref:`unm2r`
-* :ref:`geqrt`
-* :ref:`geqrt2`
-* :ref:`geqrt3`
-* :ref:`gemqrt`
-* :ref:`geqrfp`
-* :ref:`geqr2p`
-* :ref:`geqp3`
-* :ref:`laqp2`
-* :ref:`laqps`
-* :ref:`latsqr`
-* :ref:`orgtsqr`
-* :ref:`orgtqr_`
-* :ref:`larfb_`
-* :ref:`lamtsqr`
-* :ref:`getsqrhrt`
-* :ref:`orhr_col`
-* :ref:`launhr_col_getrfnp`
-* :ref:`laorhr_col_getrfnp`
-* :ref:`launhr_col_getrfnp2`
-* :ref:`laorhr_col_getrfnp2`
-* :ref:`tpqrt`
-* :ref:`tpqrt2`
-* :ref:`tpmqrt`
-* :ref:`tprfb`
-* :ref:`ggqrf`
+.. _geqr:
 
-.. toctree::
-    :hidden:
+GEQR
+^^^^^^
 
-    QR_apis
+.. doxygengroup:: geqr
+   :project: lapack
+   :members:
+
+
+.. _gemqr:
+
+GEMQR
+^^^^^^
+
+.. doxygengroup:: gemqr
+   :project: lapack
+   :members:
+
+
+.. _geqrf:
+
+GEQRF
+^^^^^^
+
+.. doxygengroup:: geqrf
+   :project: lapack
+   :members:
+
+
+.. _geqr2:
+
+GEQR2
+^^^^^^
+
+.. doxygengroup:: geqr2
+   :project: lapack
+   :members:
+
+
+.. _orgqr:
+
+ORGQR
+^^^^^^
+
+.. doxygengroup:: orgqr
+   :project: lapack
+   :members:
+
+
+.. _ungqr:
+
+UNGQR
+^^^^^^
+
+.. doxygengroup:: ungqr
+   :project: lapack
+   :members:
+
+
+.. _ung2r:
+
+UNG2R
+^^^^^^
+
+.. doxygengroup:: ung2r
+   :project: lapack
+   :members:
+
+
+.. _unmqr:
+
+UNMQR
+^^^^^^
+
+.. doxygengroup:: unmqr
+   :project: lapack
+   :members:
+
+
+.. _ormqr:
+
+ORMQR
+^^^^^^
+
+.. doxygengroup:: ormqr
+   :project: lapack
+   :members:
+
+
+.. _orm2r:
+
+ORM2R
+^^^^^^
+
+.. doxygengroup:: orm2r
+   :project: lapack
+   :members:
+
+
+.. _unm2r:
+
+UNM2R
+^^^^^^
+
+.. doxygengroup:: unm2r
+   :project: lapack
+   :members:
+
+
+.. _geqrt:
+
+GEQRT
+^^^^^^
+
+.. doxygengroup:: geqrt
+   :project: lapack
+   :members:
+
+
+.. _geqrt2:
+
+GEQRT2
+^^^^^^
+
+.. doxygengroup:: geqrt2
+   :project: lapack
+   :members:
+
+
+.. _geqrt3:
+
+GEQRT3
+^^^^^^
+
+.. doxygengroup:: geqrt3
+   :project: lapack
+   :members:
+
+
+.. _gemqrt:
+
+GEMQRT
+^^^^^^
+
+.. doxygengroup:: gemqrt
+   :project: lapack
+   :members:
+
+
+.. _geqrfp:
+
+GEQRFP
+^^^^^^
+
+.. doxygengroup:: geqrfp
+   :project: lapack
+   :members:
+
+
+.. _geqr2p:
+
+GEQR2P
+^^^^^^
+
+.. doxygengroup:: geqr2p
+   :project: lapack
+   :members:
+
+
+.. _geqp3:
+
+GEQP3
+^^^^^^
+
+.. doxygengroup:: geqp3
+   :project: lapack
+   :members:
+
+
+.. _laqp2:
+
+LAQP2
+^^^^^^
+
+.. doxygengroup:: laqp2
+   :project: lapack
+   :members:
+
+
+.. _laqps:
+
+LAQPS
+^^^^^^
+
+.. doxygengroup:: laqps
+   :project: lapack
+   :members:
+
+
+.. _latsqr:
+
+LATSQR
+^^^^^^
+
+.. doxygengroup:: latsqr
+   :project: lapack
+   :members:
+
+
+.. _orgtsqr:
+
+ORGTSQR
+^^^^^^^^
+
+.. doxygengroup:: orgtsqr
+   :project: lapack
+   :members:
+
+
+.. _orgtqr_:
+
+ORGTSQR_ROW
+^^^^^^^^^^^^
+
+.. doxygengroup:: orgtqr_
+   :project: lapack
+   :members:
+
+
+.. _larfb_:
+
+LARFB_GETT
+^^^^^^^^^^^
+
+.. doxygengroup:: larfb_
+   :project: lapack
+   :members:
+
+
+.. _lamtsqr:
+
+LAMTSQR
+^^^^^^^
+
+.. doxygengroup:: lamtsqr
+   :project: lapack
+   :members:
+
+
+.. _getsqrhrt:
+
+GETSQRHRT
+^^^^^^^^^
+
+.. doxygengroup:: getsqrhrt
+   :project: lapack
+   :members:
+
+
+.. _orhr_col:
+
+ORHR_COL
+^^^^^^^^^
+
+.. doxygengroup:: orhr_col
+   :project: lapack
+   :members:
+
+
+.. _launhr_col_getrfnp:
+
+LAUNHR_COL_GETRFNP
+^^^^^^^^^^^^^^^^^^
+
+.. doxygengroup:: launhr_col_getrfnp
+   :project: lapack
+   :members:
+
+
+.. _laorhr_col_getrfnp:
+
+LAORHR_COL_GETRFNP
+^^^^^^^^^^^^^^^^^^^
+
+.. doxygengroup:: laorhr_col_getrfnp
+   :project: lapack
+   :members:
+
+
+.. _launhr_col_getrfnp2:
+
+LAUNHR_COL_GETRFNP2
+^^^^^^^^^^^^^^^^^^^
+
+.. doxygengroup:: launhr_col_getrfnp2
+   :project: lapack
+   :members:
+
+
+.. _laorhr_col_getrfnp2:
+
+LAORHR_COL_GETRFNP2
+^^^^^^^^^^^^^^^^^^^^
+
+.. doxygengroup:: laorhr_col_getrfnp2
+   :project: lapack
+   :members:
+
+
+.. _tpqrt:
+
+TPQRT
+^^^^^^
+
+.. doxygengroup:: tpqrt
+   :project: lapack
+   :members:
+
+
+.. _tpqrt2:
+
+TPQRT2
+^^^^^^
+
+.. doxygengroup:: tpqrt2
+   :project: lapack
+   :members:
+
+
+.. _tpmqrt:
+
+TPMQRT
+^^^^^^
+
+.. doxygengroup:: tpmqrt
+   :project: lapack
+   :members:
+
+
+.. _tprfb:
+
+TPRFB
+^^^^^^
+
+.. doxygengroup:: tprfb
+   :project: lapack
+   :members:
+
+
+.. _ggqrf:
+
+GGQRF
+^^^^^^
+
+.. doxygengroup:: ggqrf
+   :project: lapack
+   :members:

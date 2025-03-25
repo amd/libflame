@@ -29,25 +29,171 @@
 Matrix Norm
 -------------
 
-* :ref:`lange`
-* :ref:`langb`
-* :ref:`langt`
-* :ref:`lanhs`
-* :ref:`lanhe`
-* :ref:`lansy`
-* :ref:`lanhf`
-* :ref:`lansf`
-* :ref:`lanhp`
-* :ref:`lansp`
-* :ref:`lanhb`
-* :ref:`lansb`
-* :ref:`lanht`
-* :ref:`lanst`
-* :ref:`lantr`
-* :ref:`lantp`
-* :ref:`lantb`
+.. _lange:
 
-.. toctree::
-    :hidden:
+LANGE
+^^^^^^
 
-    MatrixNorm_apis
+.. doxygengroup:: lange
+   :project: lapack
+   :members:
+
+
+.. _langb:
+
+LANGB
+^^^^^^
+
+.. doxygengroup:: langb
+   :project: lapack
+   :members:
+
+
+.. _langt:
+
+LANGT
+^^^^^^
+
+.. doxygengroup:: langt
+   :project: lapack
+   :members:
+
+
+.. _lanhs:
+
+LANHS
+^^^^^^
+
+.. doxygengroup:: lanhs
+   :project: lapack
+   :members:
+
+
+.. _lanhe:
+
+LANHE
+^^^^^^
+
+.. doxygengroup:: lanhe
+   :project: lapack
+   :members:
+
+
+.. _lansy:
+
+LANSY
+^^^^^^
+
+.. doxygengroup:: lansy
+   :project: lapack
+   :members:
+
+
+.. _lanhf:
+
+LANHF
+^^^^^^
+
+.. doxygengroup:: lanhf
+   :project: lapack
+   :members:
+
+
+.. _lansf:
+
+LANSF
+^^^^^^
+
+.. doxygengroup:: lansf
+   :project: lapack
+   :members:
+
+
+.. _lanhp:
+
+LANHP
+^^^^^^
+
+.. doxygengroup:: lanhp
+   :project: lapack
+   :members:
+
+
+.. _lansp:
+
+LANSP
+^^^^^^
+
+.. doxygengroup:: lansp
+   :project: lapack
+   :members:
+
+
+.. _lanhb:
+
+LANHB
+^^^^^^
+
+.. doxygengroup:: lanhb
+   :project: lapack
+   :members:
+
+
+.. _lansb:
+
+LANSB
+^^^^^^
+
+.. doxygengroup:: lansb
+   :project: lapack
+   :members:
+
+
+.. _lanht:
+
+LANHT
+^^^^^^
+
+.. doxygengroup:: lanht
+   :project: lapack
+   :members:
+
+
+.. _lanst:
+
+LANST
+^^^^^^
+
+.. doxygengroup:: lanst
+   :project: lapack
+   :members:
+
+
+.. _lantr:
+
+LANTR
+^^^^^^
+
+.. doxygengroup:: lantr
+   :project: lapack
+   :members:
+
+
+.. _lantp:
+
+LANTP
+^^^^^^
+
+.. doxygengroup:: lantp
+   :project: lapack
+   :members:
+
+
+.. _lantb:
+
+LANTB
+^^^^^^
+
+.. doxygengroup:: lantb
+   :project: lapack
+   :members:

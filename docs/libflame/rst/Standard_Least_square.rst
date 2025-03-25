@@ -30,16 +30,51 @@
 Standard Least Square
 ----------------------
 
+.. _gels:
 
-* :ref:`gels`
-* :ref:`gelss`
-* :ref:`gelsd`
-* :ref:`gelsy`
-* :ref:`getsls`
+GELS
+^^^^^^
+
+.. doxygengroup:: gels
+   :project: lapack
+   :members:
 
 
-.. toctree::
-    :hidden:
+.. _gelss:
 
-    Standard_Least_square_apis
+GELSS
+^^^^^^
 
+.. doxygengroup:: gelss
+   :project: lapack
+   :members:
+
+
+.. _gelsd:
+
+GELSD
+^^^^^^
+
+.. doxygengroup:: gelsd
+   :project: lapack
+   :members:
+
+
+.. _gelsy:
+
+GELSY
+^^^^^^
+
+.. doxygengroup:: gelsy
+   :project: lapack
+   :members:
+
+
+.. _getsls:
+
+GETSLS
+^^^^^^
+
+.. doxygengroup:: getsls
+   :project: lapack
+   :members:

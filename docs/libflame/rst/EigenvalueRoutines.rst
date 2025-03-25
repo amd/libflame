@@ -30,14 +30,9 @@
 Eigen Value Decompositions
 --------------------------
 
-* :ref:`Non_symmetric_eigenvalues`
-* :ref:`Symmetric_eigenvalues`
-
-
 .. toctree::
-   :hidden:
-   :caption: Contents:
+   :maxdepth: 1
 
-   Non_symmetric_eigenvalues
-   Symmetric_eigenvalues
+   Non_symmetric_eigenvalues.rst
+   Symmetric_eigenvalues.rst
 

@@ -29,17 +29,72 @@
 Givens/Jacobi Plane Rotations
 ------------------------------
 
+.. _lartg_jacobi:
 
-* :ref:`lartg_jacobi`
-* :ref:`lartgp`
-* :ref:`lasr`
-* :ref:`largv`
-* :ref:`lartv`
-* :ref:`lar2v`
-* :ref:`lacrt`
+LARTG
+^^^^^^
+
+.. doxygengroup:: lartg_jacobi
+   :project: lapack
+   :members:
 
 
-.. toctree::
-    :hidden:
+.. _lartgp:
 
-    GivensJacobiPlaneRotations_apis
+LARTGP
+^^^^^^
+
+.. doxygengroup:: lartgp
+   :project: lapack
+   :members:
+
+
+.. _lasr:
+
+LASR
+^^^^^^
+
+.. doxygengroup:: lasr
+   :project: lapack
+   :members:
+
+
+.. _largv:
+
+LARGV
+^^^^^^
+
+.. doxygengroup:: largv
+   :project: lapack
+   :members:
+
+
+.. _lartv:
+
+LARTV
+^^^^^^
+
+.. doxygengroup:: lartv
+   :project: lapack
+   :members:
+
+
+.. _lar2v:
+
+LAR2V
+^^^^^^
+
+.. doxygengroup:: lar2v
+   :project: lapack
+   :members:
+
+
+.. _lacrt:
+
+LACRT
+^^^^^^
+
+.. doxygengroup:: lacrt
+   :project: lapack
+   :members:
+

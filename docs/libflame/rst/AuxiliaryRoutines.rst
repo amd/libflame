@@ -24,56 +24,13 @@
 ..  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 ..  POSSIBILITY OF SUCH DAMAGE.
 
-.. _Level3BLASLike_apis:
-
-Level 3 BLAS-like Matrix-Matrix Operations APIs
------------------------------------------------
-
-.. _lagtm:
-
-LAGTM
-------
-
-.. doxygengroup:: lagtm
-   :project: lapack
-   :members:
+.. _AuxiliaryRoutines:
 
 
-.. _lacrm:
+Auxiliary Routines
+--------------------
 
-LACRM
-------
+.. toctree::
+    :maxdepth: 1
 
-.. doxygengroup:: lacrm
-   :project: lapack
-   :members:
-
-
-.. _larcm:
-
-LARCM
-------
-
-.. doxygengroup:: larcm
-   :project: lapack
-   :members:
-
-
-.. _hfrk:
-
-HFRK
-------
-
-.. doxygengroup:: hfrk
-   :project: lapack
-   :members:
-
-
-.. _tfsm:
-
-TFSM
-------
-
-.. doxygengroup:: tfsm
-   :project: lapack
-   :members:
+    Parameters.rst

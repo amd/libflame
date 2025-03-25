@@ -30,10 +30,8 @@
 Singular Value Decomposition (SVD)
 -----------------------------------
 
-* :ref:`SVD_Computational_Routines`
-
 .. toctree::
     :maxdepth: 1
-    :caption: Contents:
+    :caption: Table of Contents:
 
-    SVD_Computational_Routines
+    SVD_Computational_Routines.rst

@@ -27,20 +27,84 @@
 .. _LU_General_matrix_driver:
 
 LU General Matrix driver
--------------------------
+------------------------
 
-* :ref:`gesv`
-* :ref:`gesvx`
-* :ref:`gesvxx`
-* :ref:`gbsv`
-* :ref:`gbsvx`
-* :ref:`gbsvxx`
-* :ref:`gtsv`
-* :ref:`gtsvx`
+.. _gesv:
+
+GESV
+^^^^^^
+
+.. doxygengroup:: gesv
+   :project: lapack
+   :members:
 
 
-.. toctree::
-   :hidden:
-   :caption: Contents:
+.. _gesvx:
 
-   LU_General_matrix_driver_apis.rst
+GESVX
+^^^^^^
+
+.. doxygengroup:: gesvx
+   :project: lapack
+   :members:
+
+
+.. _gesvxx:
+
+GESVXX
+^^^^^^
+
+.. doxygengroup:: gesvxx
+   :project: lapack
+   :members:
+
+
+.. _gbsv:
+
+GBSV
+^^^^^^
+
+.. doxygengroup:: gbsv
+   :project: lapack
+   :members:
+
+
+.. _gbsvx:
+
+GBSVX
+^^^^^^
+
+.. doxygengroup:: gbsvx
+   :project: lapack
+   :members:
+
+
+.. _gbsvxx:
+
+GBSVXX
+^^^^^^
+
+.. doxygengroup:: gbsvxx
+   :project: lapack
+   :members:
+
+
+.. _gtsv:
+
+GTSV
+^^^^^^
+
+.. doxygengroup:: gtsv
+   :project: lapack
+   :members:
+
+
+.. _gtsvx:
+
+GTSVX
+^^^^^^
+
+.. doxygengroup:: gtsvx
+   :project: lapack
+   :members:
+

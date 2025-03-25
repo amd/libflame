@@ -26,24 +26,114 @@
 
 .. _InitializeCopyConvert:
 
-
 Initialize, Copy, Convert
 --------------------------
 
-* :ref:`laset`
-* :ref:`larnv`
-* :ref:`laruv`
-* :ref:`lacpy`
-* :ref:`lacp2`
-* :ref:`tfttp`
-* :ref:`tfttr`
-* :ref:`tpttf`
-* :ref:`tpttr`
-* :ref:`trttf`
-* :ref:`trttp`
+.. _laset:
+
+LASET
+^^^^^^
+
+.. doxygengroup:: laset
+   :project: lapack
+   :members:
 
 
-.. toctree::
-    :hidden:
+.. _larnv:
 
-    InitializeCopyConvert_apis
+LARNV
+^^^^^^
+
+.. doxygengroup:: larnv
+   :project: lapack
+   :members:
+
+
+.. _laruv:
+
+LARUV
+^^^^^^
+
+.. doxygengroup:: laruv
+   :project: lapack
+   :members:
+
+
+.. _lacpy:
+
+LACPY
+^^^^^^
+
+.. doxygengroup:: lacpy
+   :project: lapack
+   :members:
+
+
+.. _lacp2:
+
+LACP2
+^^^^^^
+
+.. doxygengroup:: lacp2
+   :project: lapack
+   :members:
+
+
+.. _tfttp:
+
+TFTTP
+^^^^^^
+
+.. doxygengroup:: tfttp
+   :project: lapack
+   :members:
+
+
+.. _tfttr:
+
+TFTTR
+^^^^^^
+
+.. doxygengroup:: tfttr
+   :project: lapack
+   :members:
+
+
+.. _tpttf:
+
+TPTTF
+^^^^^^
+
+.. doxygengroup:: tpttf
+   :project: lapack
+   :members:
+
+
+.. _tpttr:
+
+TPTTR
+^^^^^^
+
+.. doxygengroup:: tpttr
+   :project: lapack
+   :members:
+
+
+.. _trttf:
+
+TRTTF
+^^^^^^
+
+.. doxygengroup:: trttf
+   :project: lapack
+   :members:
+
+
+.. _trttp:
+
+TRTTP
+^^^^^^
+
+.. doxygengroup:: trttp
+   :project: lapack
+   :members:

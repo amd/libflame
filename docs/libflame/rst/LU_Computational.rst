@@ -27,46 +27,343 @@
 .. _LU_Computational:
 
 LU Computational Routines
---------------------------
+-------------------------
 
-* :ref:`gecon`
-* :ref:`getrf`
-* :ref:`getrf2`
-* :ref:`getf2`
-* :ref:`getrs`
-* :ref:`getri`
-* :ref:`gerfs`
-* :ref:`gerfsx`
-* :ref:`geequ`
-* :ref:`geequb`
-* :ref:`laqge`
-* :ref:`laswp`
-* :ref:`gesc2`
-* :ref:`latdf`
-* :ref:`la_gercond`
-* :ref:`la_gerpvgrw`
-* :ref:`la_gerfsx_extended`
-* :ref:`gbcon`
-* :ref:`gbtrf`
-* :ref:`gbtf2`
-* :ref:`gbtrs`
-* :ref:`gbrfs`
-* :ref:`gbrfsx`
-* :ref:`gbequ`
-* :ref:`gbequb`
-* :ref:`laqgb`
-* :ref:`gbrcond`
-* :ref:`la_gbrpvgrw`
-* :ref:`la_gbrfsx_extended`
-* :ref:`gtcon`
-* :ref:`gttrf`
-* :ref:`gttrs`
-* :ref:`gtts2`
-* :ref:`gtrfs`
+.. _gecon:
+
+GECON
+^^^^^^
+
+.. doxygengroup:: gecon
+   :project: lapack
+   :members:
 
 
-.. toctree::
-   :hidden:
-   :caption: Contents:
+.. _getrf:
 
-   LU_Computational_apis.rst
+GETRF
+^^^^^^
+
+.. doxygengroup:: getrf
+   :project: lapack
+   :members:
+
+
+.. _getrf2:
+
+GETRF2
+^^^^^^
+
+.. doxygengroup:: getrf2
+   :project: lapack
+   :members:
+
+
+.. _getf2:
+
+GETF2
+^^^^^^
+
+.. doxygengroup:: getf2
+   :project: lapack
+   :members:
+
+
+.. _getrs:
+
+GETRS
+^^^^^^
+
+.. doxygengroup:: getrs
+   :project: lapack
+   :members:
+
+
+.. _getri:
+
+GETRI
+^^^^^^
+
+.. doxygengroup:: getri
+   :project: lapack
+   :members:
+
+
+.. _gerfs:
+
+GERFS
+^^^^^^
+
+.. doxygengroup:: gerfs
+   :project: lapack
+   :members:
+
+
+.. _gerfsx:
+
+GERFSX
+^^^^^^
+
+.. doxygengroup:: gerfsx
+   :project: lapack
+   :members:
+
+
+.. _geequ:
+
+GEEQU
+^^^^^^
+
+.. doxygengroup:: geequ
+   :project: lapack
+   :members:
+
+
+.. _geequb:
+
+GEEQUB
+^^^^^^
+
+.. doxygengroup:: geequb
+   :project: lapack
+   :members:
+
+
+.. _laqge:
+
+LAQGE
+^^^^^^
+
+.. doxygengroup:: laqge
+   :project: lapack
+   :members:
+
+
+.. _laswp:
+
+LASWP
+^^^^^^
+
+.. doxygengroup:: laswp
+   :project: lapack
+   :members:
+
+
+.. _gesc2:
+
+GESC2
+^^^^^^
+
+.. doxygengroup:: gesc2
+   :project: lapack
+   :members:
+
+
+.. _latdf:
+
+LATDF
+^^^^^^
+
+.. doxygengroup:: latdf
+   :project: lapack
+   :members:
+
+
+.. _la_gercond:
+
+LA_GERCOND
+^^^^^^^^^^
+
+.. doxygengroup:: la_gercond
+   :project: lapack
+   :members:
+
+
+.. _la_gerpvgrw:
+
+LA_GERPVGRW
+^^^^^^^^^^^
+
+.. doxygengroup:: la_gerpvgrw
+   :project: lapack
+   :members:
+
+
+.. _la_gerfsx_extended:
+
+LA_GERFSX_EXTENDED
+^^^^^^^^^^^^^^^^^^
+
+.. doxygengroup:: la_gerfsx_extended
+   :project: lapack
+   :members:
+
+
+.. _gbcon:
+
+GBCON
+^^^^^^
+
+.. doxygengroup:: gbcon
+   :project: lapack
+   :members:
+
+
+.. _gbtrf:
+
+GBTRF
+^^^^^^
+
+.. doxygengroup:: gbtrf
+   :project: lapack
+   :members:
+
+
+.. _gbtf2:
+
+GBTF2
+^^^^^^
+
+.. doxygengroup:: gbtf2
+   :project: lapack
+   :members:
+
+
+.. _gbtrs:
+
+GBTRS
+^^^^^^
+
+.. doxygengroup:: gbtrs
+   :project: lapack
+   :members:
+
+
+.. _gbrfs:
+
+GBRFS
+^^^^^^
+
+.. doxygengroup:: gbrfs
+   :project: lapack
+   :members:
+
+
+.. _gbrfsx:
+
+GBRFSX
+^^^^^^
+
+.. doxygengroup:: gbrfsx
+   :project: lapack
+   :members:
+
+
+.. _gbequ:
+
+GBEQU
+^^^^^^
+
+.. doxygengroup:: gbequ
+   :project: lapack
+   :members:
+
+
+.. _gbequb:
+
+GBEQUB
+^^^^^^
+
+.. doxygengroup:: gbequb
+   :project: lapack
+   :members:
+
+
+.. _laqgb:
+
+LAQGB
+^^^^^^
+
+.. doxygengroup:: laqgb
+   :project: lapack
+   :members:
+
+
+.. _gbrcond:
+
+GBRCOND
+^^^^^^^^
+
+.. doxygengroup:: gbrcond
+   :project: lapack
+   :members:
+
+
+.. _la_gbrpvgrw:
+
+LA_GBRPVGRW
+^^^^^^^^^^^^
+
+.. doxygengroup:: la_gbrpvgrw
+   :project: lapack
+   :members:
+
+
+.. _la_gbrfsx_extended:
+
+LA_GBRFSX_EXTENDED
+^^^^^^^^^^^^^^^^^^
+
+.. doxygengroup:: la_gbrfsx_extended
+   :project: lapack
+   :members:
+
+
+.. _gtcon:
+
+GTCON
+^^^^^^
+
+.. doxygengroup:: gtcon
+   :project: lapack
+   :members:
+
+
+.. _gttrf:
+
+GTTRF
+^^^^^^
+
+.. doxygengroup:: gttrf
+   :project: lapack
+   :members:
+
+
+.. _gttrs:
+
+GTTRS
+^^^^^^
+
+.. doxygengroup:: gttrs
+   :project: lapack
+   :members:
+
+
+.. _gtts2:
+
+GTTS2
+^^^^^^
+
+.. doxygengroup:: gtts2
+   :project: lapack
+   :members:
+
+
+.. _gtrfs:
+
+GTRFS
+^^^^^^
+
+.. doxygengroup:: gtrfs
+   :project: lapack
+   :members:

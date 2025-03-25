@@ -29,13 +29,42 @@
 Level 1 BLAS-like Vector Operations
 ------------------------------------
 
-* :ref:`lacgv`
-* :ref:`lasrt`
-* :ref:`lassq`
-* :ref:`rscl`
+
+.. _lacgv:
+
+LACGV
+^^^^^^
+
+.. doxygengroup:: lacgv
+   :project: lapack
+   :members:
 
 
-.. toctree::
-    :hidden:
+.. _lasrt:
 
-    Level1BLASLike_apis
+LASRT
+^^^^^^
+
+.. doxygengroup:: lasrt
+   :project: lapack
+   :members:
+
+
+.. _lassq:
+
+LASSQ
+^^^^^^
+
+.. doxygengroup:: lassq
+   :project: lapack
+   :members:
+
+
+.. _rscl:
+
+RSCL
+^^^^^^
+
+.. doxygengroup:: rscl
+   :project: lapack
+   :members:

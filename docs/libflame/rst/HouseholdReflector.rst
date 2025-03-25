@@ -30,16 +30,72 @@
 Household Reflector
 -------------------
 
+.. _larf:
 
-* :ref:`larf`
-* :ref:`larfx`
-* :ref:`larfy`
-* :ref:`larfb`
-* :ref:`larfg`
-* :ref:`larfgp`
-* :ref:`larft`
+LARF
+^^^^^^
 
-.. toctree::
-    :hidden:
+.. doxygengroup:: larf
+   :project: lapack
+   :members:
 
-    HouseholdReflector_apis
+
+.. _larfx:
+
+LARFX
+^^^^^^
+
+.. doxygengroup:: larfx
+   :project: lapack
+   :members:
+
+
+.. _larfy:
+
+LARFY
+^^^^^^
+
+.. doxygengroup:: larfy
+   :project: lapack
+   :members:
+
+
+.. _larfb:
+
+LARFB
+^^^^^^
+
+.. doxygengroup:: larfb
+   :project: lapack
+   :members:
+
+
+.. _larfg:
+
+LARFG
+^^^^^^
+
+.. doxygengroup:: larfg
+   :project: lapack
+   :members:
+
+
+.. _larfgp:
+
+LARFGP
+^^^^^^
+
+.. doxygengroup:: larfgp
+   :project: lapack
+   :members:
+
+
+.. _larft:
+
+LARFT
+^^^^^^
+
+.. doxygengroup:: larft
+   :project: lapack
+   :members:
+

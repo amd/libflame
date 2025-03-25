@@ -30,44 +30,340 @@
 Cholesky Factorization
 ----------------------
 
-* :ref:`potrf`
-* :ref:`potrf2`
-* :ref:`potf2`
-* :ref:`pstrf`
-* :ref:`pstf2`
-* :ref:`potrs`
-* :ref:`potri`
-* :ref:`porfs`
-* :ref:`porfsx`
-* :ref:`poequ`
-* :ref:`poequb`
-* :ref:`laqhe`
-* :ref:`la_porcond`
-* :ref:`la_porcondx`
-* :ref:`la_porpvgrw`
-* :ref:`ppcon`
-* :ref:`pptrf`
-* :ref:`pptrs`
-* :ref:`pptri`
-* :ref:`pprfs`
-* :ref:`ppequ`
-* :ref:`laqhp`
-* :ref:`petrf`
-* :ref:`pfrs`
-* :ref:`pftri`
-* :ref:`pbcon`
-* :ref:`pbtrf`
-* :ref:`pbequ`
-* :ref:`laqhb`
-* :ref:`ptcon`
-* :ref:`pttrf`
-* :ref:`pttrs`
-* :ref:`ptts2`
-* :ref:`ptrfs`
+.. _potrf:
+
+POTRF
+^^^^^
+
+.. doxygengroup:: potrf
+   :project: lapack
+   :members:
 
 
-.. toctree::
-   :hidden:
-   :caption: Contents:
+.. _potrf2:
 
-   choleskyapis
+POTRF2
+^^^^^^
+
+.. doxygengroup:: potrf2
+   :project: lapack
+   :members:
+
+
+.. _potf2:
+
+POTF2
+^^^^^^
+
+.. doxygengroup:: potf2
+   :project: lapack
+   :members:
+
+
+.. _pstrf:
+
+PSTRF
+^^^^^^
+
+.. doxygengroup:: pstrf
+   :project: lapack
+   :members:
+
+
+.. _pstf2:
+
+PSTF2
+^^^^^^
+
+.. doxygengroup:: pstf2
+   :project: lapack
+   :members:
+
+
+.. _potrs:
+
+POTRS
+^^^^^^
+
+.. doxygengroup:: potrs
+   :project: lapack
+   :members:
+
+
+.. _potri:
+
+POTRI
+^^^^^^
+
+.. doxygengroup:: potri
+   :project: lapack
+   :members:
+
+
+.. _porfs:
+
+PORFS
+^^^^^^
+
+.. doxygengroup:: porfs
+   :project: lapack
+   :members:
+
+
+.. _porfsx:
+
+PORFSX
+^^^^^^
+
+.. doxygengroup:: porfsx
+   :project: lapack
+   :members:
+
+
+.. _poequ:
+
+POEQU
+^^^^^^
+
+.. doxygengroup:: poequ
+   :project: lapack
+   :members:
+
+
+.. _poequb:
+
+POEQUB
+^^^^^^
+
+.. doxygengroup:: poequb
+   :project: lapack
+   :members:
+
+
+.. _laqhe:
+
+LAQHE
+^^^^^^
+
+.. doxygengroup:: laqhe
+   :project: lapack
+   :members:
+
+
+.. _la_porcond:
+
+LA_PORCOND
+^^^^^^^^^^
+
+.. doxygengroup:: la_porcond
+   :project: lapack
+   :members:
+
+
+.. _la_porcondx:
+
+LA_PORCONDX
+^^^^^^^^^^^
+
+.. doxygengroup:: la_porcondx
+   :project: lapack
+   :members:
+
+
+.. _la_porpvgrw:
+
+LA_PORPVGRW
+^^^^^^^^^^^^
+
+.. doxygengroup:: la_porpvgrw
+   :project: lapack
+   :members:
+
+
+.. _ppcon:
+
+PPCON
+^^^^^^
+
+.. doxygengroup:: ppcon
+   :project: lapack
+   :members:
+
+
+.. _pptrf:
+
+PPTRF
+^^^^^^
+
+.. doxygengroup:: pptrf
+   :project: lapack
+   :members:
+
+
+.. _pptrs:
+
+PPTRS
+^^^^^^
+
+.. doxygengroup:: pptrs
+   :project: lapack
+   :members:
+
+
+.. _pptri:
+
+PPTRI
+^^^^^^
+
+.. doxygengroup:: pptri
+   :project: lapack
+   :members:
+
+
+.. _pprfs:
+
+PPRFS
+^^^^^^
+
+.. doxygengroup:: pprfs
+   :project: lapack
+   :members:
+
+
+.. _ppequ:
+
+PPEQU
+^^^^^^
+
+.. doxygengroup:: ppequ
+   :project: lapack
+   :members:
+
+
+.. _laqhp:
+
+LAQHP
+^^^^^^
+
+.. doxygengroup:: laqhp
+   :project: lapack
+   :members:
+
+
+.. _petrf:
+
+PETRF
+^^^^^^
+
+.. doxygengroup:: petrf
+   :project: lapack
+   :members:
+
+
+.. _pfrs:
+
+PFRS
+^^^^^^
+
+.. doxygengroup:: pfrs
+   :project: lapack
+   :members:
+
+
+.. _pftri:
+
+PFTRI
+^^^^^^
+
+.. doxygengroup:: pftri
+   :project: lapack
+   :members:
+
+
+.. _pbcon:
+
+PBCON
+^^^^^^
+
+.. doxygengroup:: pbcon
+   :project: lapack
+   :members:
+
+
+.. _pbtrf:
+
+PBTRF
+^^^^^^
+
+.. doxygengroup:: pbtrf
+   :project: lapack
+   :members:
+
+
+.. _pbequ:
+
+PBEQU
+^^^^^^
+
+.. doxygengroup:: pbequ
+   :project: lapack
+   :members:
+
+
+.. _laqhb:
+
+LAQHB
+^^^^^^
+
+.. doxygengroup:: laqhb
+   :project: lapack
+   :members:
+
+
+.. _ptcon:
+
+PTCON
+^^^^^^
+
+.. doxygengroup:: ptcon
+   :project: lapack
+   :members:
+
+
+.. _pttrf:
+
+PTTRF
+^^^^^^
+
+.. doxygengroup:: pttrf
+   :project: lapack
+   :members:
+
+
+.. _pttrs:
+
+PTTRS
+^^^^^^
+
+.. doxygengroup:: pttrs
+   :project: lapack
+   :members:
+
+
+.. _ptts2:
+
+PTTS2
+^^^^^^
+
+.. doxygengroup:: ptts2
+   :project: lapack
+   :members:
+
+.. _ptrfs:
+
+PTRFS
+^^^^^^
+
+.. doxygengroup:: ptrfs
+   :project: lapack
+   :members:

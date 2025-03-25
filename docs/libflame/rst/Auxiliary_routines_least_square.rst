@@ -29,14 +29,42 @@
 Auxiliary Routines
 ------------------
 
+.. _laic1:
 
-* :ref:`laic1`
-* :ref:`lals0`
-* :ref:`lalsa`
-* :ref:`lalsd`
+LAIC1
+^^^^^^
+
+.. doxygengroup:: laic1
+   :project: lapack
+   :members:
 
 
-.. toctree::
-    :hidden:
+.. _lals0:
 
-    Auxiliary_routines_least_square_apis
+LALS0
+^^^^^^
+
+.. doxygengroup:: lals0
+   :project: lapack
+   :members:
+
+
+.. _lalsa:
+
+LALSA
+^^^^^^
+
+.. doxygengroup:: lalsa
+   :project: lapack
+   :members:
+
+
+.. _lalsd:
+
+LALSD
+^^^^^^
+
+.. doxygengroup:: lalsd
+   :project: lapack
+   :members:
+

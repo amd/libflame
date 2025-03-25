@@ -24,13 +24,10 @@
 ..  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 ..  POSSIBILITY OF SUCH DAMAGE.
 
-============
+############
 AOCL-LAPACK
-============
+############
 
-
-Overview
-`````````
 AOCL-LAPACK is a high performant implementation of Linear Algebra PACKage (LAPACK).
 LAPACK provides routines for solving systems of linear equations, least-squares problems,
 eigenvalue problems, singular value problems, and the associated matrix factorizations. It is
@@ -59,28 +56,43 @@ AOCL-LAPACK library installable package is available `here <https://www.amd.com/
 Linux & Windows installer pacakges are available for download.
 
 
-AOCL-LAPACK API GUIDE
-``````````````````````
+API Referece
+============
 
-* :ref:`apiGuide`
-   * :ref:`fortranInterfaces`
-   * :ref:`lapackeInterfaces`
-   * :ref:`cppInterfaces`
+AOCL-LAPACK supports C, Fortran, and C++ template interfaces for the LAPACK APIs.
+
+Fortran Interfaces
+------------------
+
+AOCL-LAPACK provides standard Fortran LAPACK APIs.
+Please refer to `Netlib documentation <https://www.netlib.org/lapack/>`_ to see the API definitions.
+
+LAPACKE Interfaces
+------------------
+
+AOCL-LAPACK provides standard C Interface to LAPACK APIs.
+Please refer to `LAPACKE Netlib documentation <https://github.com/Reference-LAPACK/lapack/tree/master/LAPACKE>`_
+to see the API definitions.
+
+CPP Interfaces
+---------------
+
+.. AOCL-LAPACK provides standard C++ Interface to LAPACK APIs. Please refer :ref:`cppInterfaces`.
+
+AOCL-LAPACK provides standard C++ Interface to LAPACK APIs. Please refer :ref:`CPP Interface documentation <cppInterfaces>`.
+
 
 .. toctree::
    :maxdepth: 3
    :hidden:
-   :caption: Contents:
+   :caption: Table of Contents:
 
    self
-   API_Guide.rst
-
+   fortranInterfaces.rst
+   lapackeInterfaces.rst
+   cppInterfaces.rst
 
 Contacts
-`````````
+=========
 
 AOCL-LAPACK is developed and maintained by AMD. For support, send an email to toolchainsupport@amd.com.
-
-
-
-

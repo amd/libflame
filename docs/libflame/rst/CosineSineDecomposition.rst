@@ -29,22 +29,121 @@
 Cosine-Sine(CS) Decomposition
 ------------------------------
 
+.. _bbscd:
 
-* :ref:`bbscd`
-* :ref:`orcsd`
-* :ref:`orcsd2by1`
-* :ref:`orbdb`
-* :ref:`orbdb1`
-* :ref:`orbdb2`
-* :ref:`orbdb3`
-* :ref:`orbdb4`
-* :ref:`unbdb5`
-* :ref:`orbdb6`
-* :ref:`lapmr`
-* :ref:`lapmt`
+BBSCD
+^^^^^^
+
+.. doxygengroup:: bbscd
+   :project: lapack
+   :members:
 
 
-.. toctree::
-    :hidden:
+.. _orcsd:
 
-    CosineSineDecomposition_apis
+ORCSD
+^^^^^^
+
+.. doxygengroup:: orcsd
+   :project: lapack
+   :members:
+
+
+.. _orcsd2by1:
+
+ORCSD2BY1
+^^^^^^^^^^
+
+.. doxygengroup:: orcsd2by1
+   :project: lapack
+   :members:
+
+
+.. _orbdb:
+
+ORBDB
+^^^^^^
+
+.. doxygengroup:: orbdb
+   :project: lapack
+   :members:
+
+
+.. _orbdb1:
+
+ORBDB1
+^^^^^^
+
+.. doxygengroup:: orbdb1
+   :project: lapack
+   :members:
+
+
+.. _orbdb2:
+
+ORBDB2
+^^^^^^
+
+.. doxygengroup:: orbdb2
+   :project: lapack
+   :members:
+
+
+.. _orbdb3:
+
+ORBDB3
+^^^^^^
+
+.. doxygengroup:: orbdb3
+   :project: lapack
+   :members:
+
+
+.. _orbdb4:
+
+ORBDB4
+^^^^^^
+
+.. doxygengroup:: orbdb4
+   :project: lapack
+   :members:
+
+
+.. _unbdb5:
+
+UNBDB5
+^^^^^^
+
+.. doxygengroup:: unbdb5
+   :project: lapack
+   :members:
+
+
+.. _orbdb6:
+
+ORBDB6
+^^^^^^
+
+.. doxygengroup:: orbdb6
+   :project: lapack
+   :members:
+
+
+.. _lapmr:
+
+LAPMR
+^^^^^^
+
+.. doxygengroup:: lapmr
+   :project: lapack
+   :members:
+
+
+.. _lapmt:
+
+LAPMT
+^^^^^^
+
+.. doxygengroup:: lapmt
+   :project: lapack
+   :members:

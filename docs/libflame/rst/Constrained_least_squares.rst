@@ -30,11 +30,22 @@
 Constrained Least Squares
 --------------------------
 
-* :ref:`gglse`
-* :ref:`ggglm`
+.. _gglse:
+
+GGLSE
+^^^^^^
+
+.. doxygengroup:: gglse
+   :project: lapack
+   :members:
 
 
-.. toctree::
-    :hidden:
+.. _ggglm:
 
-    Constrained_least_squares_apis
+GGGLM
+^^^^^^
+
+.. doxygengroup:: ggglm
+   :project: lapack
+   :members:
+

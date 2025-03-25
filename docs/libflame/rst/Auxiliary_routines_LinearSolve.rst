@@ -24,56 +24,38 @@
 ..  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 ..  POSSIBILITY OF SUCH DAMAGE.
 
-.. _ScalarOperations_apis:
+.. _Auxiliary_routines_LinearSolve:
 
-Scalar Operations APIs
------------------------
 
-.. _isnan:
+Auxiliary Routines
+-------------------
 
-ISNAN
-------
+.. _lacn2:
 
-.. doxygengroup:: isnan
+LACN2
+^^^^^^
+
+.. doxygengroup:: lacn2
    :project: lapack
    :members:
 
 
-.. _laisnan:
+.. _lacon:
 
-LAISNAN
---------
+LACON
+^^^^^^
 
-.. doxygengroup:: laisnan
+.. doxygengroup:: lacon
    :project: lapack
    :members:
 
 
-.. _ladiv:
+.. _la_lin_berr:
 
-LADIV
-------
+LA_LIN_BERR
+^^^^^^^^^^^^
 
-.. doxygengroup:: ladiv
+.. doxygengroup:: la_lin_berr
    :project: lapack
    :members:
 
-
-.. _lapy2:
-
-LAPY2
-------
-
-.. doxygengroup:: lapy2
-   :project: lapack
-   :members:
-
-
-.. _lapy3:
-
-LAPY3
-------
-
-.. doxygengroup:: lapy3
-   :project: lapack
-   :members:

@@ -29,9 +29,113 @@
 Least Squares
 --------------
 
-.. toctree::
-   :maxdepth: 1
 
-   Standard_Least_square.rst
-   Constrained_least_squares.rst
-   Auxiliary_routines_least_square.rst
+.. _gels:
+
+GELS
+^^^^^^
+
+.. doxygengroup:: gels
+   :project: lapack
+   :content-only:
+
+
+.. _gelss:
+
+GELSS
+^^^^^^
+
+.. doxygengroup:: gelss
+   :project: lapack
+   :content-only:
+
+
+.. _gelsd:
+
+GELSD
+^^^^^^
+
+.. doxygengroup:: gelsd
+   :project: lapack
+   :content-only:
+
+
+.. _gelsy:
+
+GELSY
+^^^^^^
+
+.. doxygengroup:: gelsy
+   :project: lapack
+   :content-only:
+
+
+.. _getsls:
+
+GETSLS
+^^^^^^
+
+.. doxygengroup:: getsls
+   :project: lapack
+   :content-only:
+
+
+.. _gglse:
+
+GGLSE
+^^^^^^
+
+.. doxygengroup:: gglse
+   :project: lapack
+   :content-only:
+
+
+.. _ggglm:
+
+GGGLM
+^^^^^^
+
+.. doxygengroup:: ggglm
+   :project: lapack
+   :content-only:
+
+
+.. _laic1:
+
+LAIC1
+^^^^^^
+
+.. doxygengroup:: laic1
+   :project: lapack
+   :content-only:
+
+
+.. _lals0:
+
+LALS0
+^^^^^^
+
+.. doxygengroup:: lals0
+   :project: lapack
+   :content-only:
+
+
+.. _lalsa:
+
+LALSA
+^^^^^^
+
+.. doxygengroup:: lalsa
+   :project: lapack
+   :content-only:
+
+
+.. _lalsd:
+
+LALSD
+^^^^^^
+
+.. doxygengroup:: lalsd
+   :project: lapack
+   :content-only:
+

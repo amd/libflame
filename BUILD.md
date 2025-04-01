@@ -141,8 +141,8 @@ Note: Windows requires running create_new_testdir.bat script before running netl
         2. doxygen >= 1.9.6
         3. sphinx >= 7.3.7
             python -m pip install sphinx==7.3.7
-        4. rocm-docs-core == 0.30.0
-            python -m pip install rocm-docs-core==0.30.0
+        4. rocm-docs-core
+            python -m pip install rocm-docs-core
         5. breathe >= 4.30.0
             python -m pip install breathe==4.30.0
 

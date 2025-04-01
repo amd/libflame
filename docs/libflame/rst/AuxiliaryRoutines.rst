@@ -30,7 +30,102 @@
 Auxiliary Routines
 --------------------
 
-.. toctree::
-    :maxdepth: 1
 
-    Parameters.rst
+.. _lamch:
+
+LAMCH
+^^^^^^
+
+.. doxygengroup:: lamch
+   :project: lapack
+   :content-only:
+
+
+.. _labad:
+
+LABAD
+^^^^^^
+
+.. doxygengroup:: labad
+   :project: lapack
+   :content-only:
+
+
+.. _ilaver:
+
+ILAVER
+^^^^^^
+
+.. doxygengroup:: ilaver
+   :project: lapack
+   :content-only:
+
+
+.. _iparam2stage:
+
+IPARAM2STAGE
+^^^^^^^^^^^^
+
+.. doxygengroup:: iparam2stage
+   :project: lapack
+   :content-only:
+
+
+.. _iladiag:
+
+ILADIAG
+^^^^^^^^
+
+.. doxygengroup:: iladiag
+   :project: lapack
+   :content-only:
+
+
+.. _ilatrans:
+
+ILATRANS
+^^^^^^^^
+
+.. doxygengroup:: ilatrans
+   :project: lapack
+   :content-only:
+
+
+.. _ilaprec:
+
+ILAPREC
+^^^^^^^^^
+
+.. doxygengroup:: ilaprec
+   :project: lapack
+   :content-only:
+
+
+.. _ilaenv2stage:
+
+ILAENV2STAGE
+^^^^^^^^^^^^^
+
+.. doxygengroup:: ilaenv2stage
+   :project: lapack
+   :content-only:
+
+
+.. _ilauplo:
+
+ILAUPLO
+^^^^^^^^
+
+.. doxygengroup:: ilauplo
+   :project: lapack
+   :content-only:
+
+
+.. _latrans:
+
+LATRANS
+^^^^^^^^
+
+.. doxygengroup:: latrans
+   :project: lapack
+   :content-only:

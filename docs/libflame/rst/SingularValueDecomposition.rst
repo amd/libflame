@@ -30,8 +30,432 @@
 Singular Value Decomposition (SVD)
 -----------------------------------
 
-.. toctree::
-    :maxdepth: 1
-    :caption: Table of Contents:
 
-    SVD_Computational_Routines.rst
+.. _gesvd:
+
+GESVD
+^^^^^^
+
+.. doxygengroup:: gesvd
+   :project: lapack
+   :content-only:
+
+
+.. _gesvdq:
+
+GESVDQ
+^^^^^^
+
+.. doxygengroup:: gesvdq
+   :project: lapack
+   :content-only:
+
+
+.. _gesdd:
+
+GESDD
+^^^^^^
+
+.. doxygengroup:: gesdd
+   :project: lapack
+   :content-only:
+
+
+.. _gesvdx:
+
+GESVDX
+^^^^^^
+
+.. doxygengroup:: gesvdx
+   :project: lapack
+   :content-only:
+
+
+.. _gejsv:
+
+GEJSV
+^^^^^^
+
+.. doxygengroup:: gejsv
+   :project: lapack
+   :content-only:
+
+
+.. _gesvj:
+
+GESVJ
+^^^^^^
+
+.. doxygengroup:: gesvj
+   :project: lapack
+   :content-only:
+
+
+.. _bdsqr:
+
+BDSQR
+^^^^^^
+
+.. doxygengroup:: bdsqr
+   :project: lapack
+   :content-only:
+
+
+.. _bdsdc:
+
+BDSDC
+^^^^^^
+
+.. doxygengroup:: bdsdc
+   :project: lapack
+   :content-only:
+
+
+.. _bdsvdx:
+
+BDSVDX
+^^^^^^
+
+.. doxygengroup:: bdsvdx
+   :project: lapack
+   :content-only:
+
+
+.. _ggsvd3:
+
+GGSVD3
+^^^^^^
+
+.. doxygengroup:: ggsvd3
+   :project: lapack
+   :content-only:
+
+
+.. _gebrd:
+
+GEBRD
+^^^^^^
+
+.. doxygengroup:: gebrd
+   :project: lapack
+   :content-only:
+
+
+.. _gebd2:
+
+GEBD2
+^^^^^^
+
+.. doxygengroup:: gebd2
+   :project: lapack
+   :content-only:
+
+
+.. _labrd:
+
+LABRD
+^^^^^^
+
+.. doxygengroup:: labrd
+   :project: lapack
+   :content-only:
+
+
+.. _gbbrd:
+
+GBBRD
+^^^^^^
+
+.. doxygengroup:: gbbrd
+   :project: lapack
+   :content-only:
+
+
+.. _ungbr:
+
+UNGBR
+^^^^^^
+
+.. doxygengroup:: ungbr
+   :project: lapack
+   :content-only:
+
+
+.. _orgbr:
+
+ORGBR
+^^^^^^
+
+.. doxygengroup:: orgbr
+   :project: lapack
+   :content-only:
+
+
+.. _ormbr:
+
+ORMBR
+^^^^^^
+
+.. doxygengroup:: ormbr
+   :project: lapack
+   :content-only:
+
+
+.. _unmbr:
+
+UNMBR
+^^^^^^
+
+.. doxygengroup:: unmbr
+   :project: lapack
+   :content-only:
+
+
+.. _gesvj0:
+
+GESVJ0
+^^^^^^
+
+.. doxygengroup:: gesvj0
+   :project: lapack
+   :content-only:
+
+
+.. _gesvj1:
+
+GESVJ1
+^^^^^^
+
+.. doxygengroup:: gesvj1
+   :project: lapack
+   :content-only:
+
+
+.. _las2:
+
+LAS2
+^^^^^^
+
+.. doxygengroup:: las2
+   :project: lapack
+   :content-only:
+
+
+.. _lasv2:
+
+LASV2
+^^^^^^
+
+.. doxygengroup:: lasv2
+   :project: lapack
+   :content-only:
+
+.. _ggsvp3:
+
+GGSVP3
+^^^^^^
+
+.. doxygengroup:: ggsvp3
+   :project: lapack
+   :content-only:
+
+
+.. _tgsja:
+
+TGSJA
+^^^^^^
+
+.. doxygengroup:: tgsja
+   :project: lapack
+   :content-only:
+
+
+.. _lags2:
+
+LAGS2
+^^^^^^
+
+.. doxygengroup:: lags2
+   :project: lapack
+   :content-only:
+
+
+.. _lapll:
+
+LAPLL
+^^^^^^
+
+.. doxygengroup:: lapll
+   :project: lapack
+   :content-only:
+
+
+.. _lasq1:
+
+LASQ1
+^^^^^^
+
+.. doxygengroup:: lasq1
+   :project: lapack
+   :content-only:
+
+
+.. _lasq2:
+
+LASQ2
+^^^^^^
+
+.. doxygengroup:: lasq2
+   :project: lapack
+   :content-only:
+
+
+.. _lasq3:
+
+LASQ3
+^^^^^^
+
+.. doxygengroup:: lasq3
+   :project: lapack
+   :content-only:
+
+
+.. _lasq4:
+
+LASQ4
+^^^^^^
+
+.. doxygengroup:: lasq4
+   :project: lapack
+   :content-only:
+
+
+.. _lasq5:
+
+LASQ5
+^^^^^^
+
+.. doxygengroup:: lasq5
+   :project: lapack
+   :content-only:
+
+
+.. _lasq6:
+
+LASQ6
+^^^^^^
+
+.. doxygengroup:: lasq6
+   :project: lapack
+   :content-only:
+
+
+.. _lasd0:
+
+LASD0
+^^^^^^
+
+.. doxygengroup:: lasd0
+   :project: lapack
+   :content-only:
+
+
+.. _lasdt:
+
+LASDT
+^^^^^^
+
+.. doxygengroup:: lasdt
+   :project: lapack
+   :content-only:
+
+
+.. _lasd1:
+
+LASD1
+^^^^^^
+
+.. doxygengroup:: lasd1
+   :project: lapack
+   :content-only:
+
+
+.. _lasd2:
+
+LASD2
+^^^^^^
+
+.. doxygengroup:: lasd2
+   :project: lapack
+   :content-only:
+
+
+.. _lasd3:
+
+LASD3
+^^^^^^
+
+.. doxygengroup:: lasd3
+   :project: lapack
+   :content-only:
+
+
+.. _lasd4:
+
+LASD4
+^^^^^^
+
+.. doxygengroup:: lasd4
+   :project: lapack
+   :content-only:
+
+
+.. _lasdq:
+
+LASDQ
+^^^^^^
+
+.. doxygengroup:: lasdq
+   :project: lapack
+   :content-only:
+
+
+.. _lasda:
+
+LASDA
+^^^^^^
+
+.. doxygengroup:: lasda
+   :project: lapack
+   :content-only:
+
+
+.. _lasd6:
+
+LASD6
+^^^^^^
+
+.. doxygengroup:: lasd6
+   :project: lapack
+   :content-only:
+
+
+.. _lasd7:
+
+LASD7
+^^^^^^
+
+.. doxygengroup:: lasd7
+   :project: lapack
+   :content-only:
+
+
+.. _lasd8:
+
+LASD8
+^^^^^^
+
+.. doxygengroup:: lasd8
+   :project: lapack
+   :content-only:
+

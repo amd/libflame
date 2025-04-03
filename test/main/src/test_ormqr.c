@@ -206,7 +206,7 @@ void fla_test_ormqr_experiment(char *tst_api, test_params_t *params, integer dat
     copy_matrix(datatype, "full", m, n, C, ldc, C_test, ldc);
 
     /* Create tau vector */
-    create_vector(datatype, &T_test, fla_min(m_A, n_A));
+    create_vector(datatype, &T_test, fla_min(m_A, k));
     lwork = -1;
 
     create_vector(datatype, &qwork, 1);
@@ -265,6 +265,7 @@ void fla_test_ormqr_experiment(char *tst_api, test_params_t *params, integer dat
     free_matrix(A_test);
     free_vector(work);
     free_vector(T_test);
+    free_vector(qwork);
     free_vector(tau);
     free_matrix(C);
     free_matrix(C_test);
@@ -355,6 +356,7 @@ void prepare_ormqr_run(char side, char trans, integer m, integer n, integer k, i
     }
 
     *time_min_ = time_min;
+    free_matrix(C_save);
 }
 
 double prepare_lapacke_ormqr_run(integer datatype, int layout, char side, char trans, integer m,
@@ -394,7 +396,7 @@ double prepare_lapacke_ormqr_run(integer datatype, int layout, char side, char t
 
     exe_time = fla_test_clock() - exe_time;
 
-    if(layout == LAPACK_ROW_MAJOR && *info == 0)
+    if(lda >= m_A && layout == LAPACK_ROW_MAJOR && *info == 0)
     {
         /* In case of row_major matrix layout, convert output matrices
            to column_major layout */

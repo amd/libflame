@@ -220,6 +220,6 @@ void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, 
     /* Free allocated memory */
     free_matrix(Q);
     free_matrix(CC);
-
+    free_vector(work);
     FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
 }

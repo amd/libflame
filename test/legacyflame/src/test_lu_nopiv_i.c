@@ -77,7 +77,6 @@ void libfla_test_lu_nopiv_i_experiment( test_params_t params,
 					double*       residual )
 {
         double time_min   = 1e9;
-        double time;
 	uinteger i;
 	uinteger m, n, nfact;
 	uinteger lda;

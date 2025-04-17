@@ -575,26 +575,22 @@ void parallel_gemm_kernel(obj_t* alpha, obj_t* a, obj_t* b, obj_t* beta, obj_t* 
 int FLA_LU_piv_z_var2_parallel( integer *m, integer *n, dcomplex *a, integer *lda, integer *ipiv, integer *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8, i__9, i__10, i__11;
+    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     dcomplex z__1 = {-1, 0};
     integer i__, j, iinfo;
     integer jb, nb;
     dcomplex c_b1 = {1.,0.};
     integer c__1 = 1;
-    integer c_n1 = -1;
-    integer x;
     #define a_subscr(a_1,a_2) (a_2)*a_dim1 + a_1
     #define a_ref(a_1,a_2) a[a_subscr(a_1,a_2)]
-    int threads_id, n_threads, threads_ids, r_thread, c_thread;
+    int threads_id, n_threads;
     obj_t       alphao = BLIS_OBJECT_INITIALIZER_1X1;
     obj_t       ao     = BLIS_OBJECT_INITIALIZER;
     obj_t       bo     = BLIS_OBJECT_INITIALIZER;
     obj_t       betao  = BLIS_OBJECT_INITIALIZER_1X1;
     obj_t       co     = BLIS_OBJECT_INITIALIZER;
     const num_t dt     = BLIS_DCOMPLEX;
-    integer   m0, n0, k0;
-    fla_dim_t       m0_a, n0_a;
-    fla_dim_t       m0_b, n0_b;
+    integer   m0, n0, k0, m0_a, n0_a, m0_b, n0_b;
     trans_t blis_transa, blis_transb;
     cntx_t* cntx = NULL;
     rntm_t* rntm = NULL;
@@ -671,7 +667,7 @@ int FLA_LU_piv_z_var2_parallel( integer *m, integer *n, dcomplex *a, integer *ld
     i__1 = fla_min(*m,*n);
     i__2 = nb;
 
-    #pragma omp parallel num_threads(n_threads) private(i__3, i__4, i__5, i__6, i__7, i__8, i__9, i__10, i__11, j, threads_id)
+    #pragma omp parallel num_threads(n_threads) private(i__3, i__4, i__5, i__6, j, threads_id)
     {
         threads_id = omp_get_thread_num();
         for (j = 1; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2)

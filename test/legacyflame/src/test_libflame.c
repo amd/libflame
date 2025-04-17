@@ -1168,7 +1168,7 @@ void libfla_test_init_strings( void )
 	sprintf( libfla_test_pass_string, "PASS" );
 	sprintf( libfla_test_warn_string, "MARGINAL" );
 	sprintf( libfla_test_fail_string, "FAILURE" );
-	sprintf( libfla_test_storage_format_string, "Row(r) and General(g) storage format is not supported\n \ 
+	sprintf( libfla_test_storage_format_string, "Row(r) and General(g) storage format is not supported\n \
 							\t\t  by External LAPACK interface" );
 
 	sprintf( libfla_test_stor_chars, STORAGE_SCHEME_CHARS );

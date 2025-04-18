@@ -3,6 +3,9 @@
 */
 
 #include "test_lapack.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 #include <invoke_lapacke.h>
 
 extern double perf;
@@ -15,7 +18,7 @@ void fla_test_stevd_experiment(char *tst_api, test_params_t *params, integer dat
                                integer einfo);
 void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, void *E,
                        integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, int matrix_layout);
+                       integer interfacetype, int matrix_layout);
 void invoke_stevd(integer datatype, char *jobz, integer *n, void *z, integer *ldz, void *d, void *e,
                   void *work, integer *lwork, void *iwork, integer *liwork, integer *info);
 double prepare_lapacke_stevd_run(integer datatype, int matrix_layout, char *jobz, integer n,
@@ -57,8 +60,7 @@ void fla_test_stevd(integer argc, char **argv, test_params_t *params)
         params->eig_sym_paramslist[0].jobz = argv[3][0];
         N = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
         /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
-        if((g_ext_fptr == NULL) && params->test_lapacke_interface
-           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
         {
             row_major_stevd_ldz = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
             params->eig_sym_paramslist[0].ldz = N;
@@ -131,7 +133,7 @@ void fla_test_stevd_experiment(char *tst_api, test_params_t *params, integer dat
     char range = 'V', uplo = 'U';
     double residual, err_thresh;
 
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
 
     /* Get input matrix dimensions.*/
@@ -204,7 +206,7 @@ void fla_test_stevd_experiment(char *tst_api, test_params_t *params, integer dat
     copy_vector(datatype, n - 1, E, 1, E_test, 1);
 
     prepare_stevd_run(&jobz, n, Z_test, ldz, D_test, E_test, datatype, n_repeats, &time_min, &info,
-                      test_lapacke_interface, layout);
+                      interfacetype, layout);
 
     /* performance computation
         6 * n^3 + n^2 flops for eigen vectors
@@ -263,7 +265,7 @@ void fla_test_stevd_experiment(char *tst_api, test_params_t *params, integer dat
 
 void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, void *E,
                        integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, int layout)
+                       integer interfacetype, int layout)
 {
     void *Z_save, *D_save, *E_save, *work, *iwork;
     integer lwork, liwork;
@@ -283,15 +285,26 @@ void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, voi
     /* Make a workspace query the first time through. This will provide us with
        and ideal workspace size based on an internal block size.
        NOTE: LAPACKE interface handles workspace query internally */
-    if((test_lapacke_interface == 0) && (g_lwork <= 0 || g_liwork <= 0))
+    if((interfacetype != LAPACKE_ROW_TEST) && (interfacetype != LAPACKE_COLUMN_TEST)
+       && (g_lwork <= 0 || g_liwork <= 0))
     {
         lwork = -1;
         liwork = -1;
         create_vector(INTEGER, &iwork, 1);
         create_vector(datatype, &work, 1);
-        /* call to  stevd API */
-        invoke_stevd(datatype, jobz, &n, NULL, &ldz, NULL, NULL, work, &lwork, iwork, &liwork,
-                     info);
+#if ENABLE_CPP_TEST
+        if(interfacetype == LAPACK_CPP_TEST)
+        {
+            invoke_cpp_stevd(datatype, jobz, &n, NULL, &ldz, NULL, NULL, work, &lwork, iwork,
+                             &liwork, info);
+        }
+        else
+#endif
+        {
+            /* call to  stevd API */
+            invoke_stevd(datatype, jobz, &n, NULL, &ldz, NULL, NULL, work, &lwork, iwork, &liwork,
+                         info);
+        }
         if(*info == 0)
         {
             /* Get work size */
@@ -324,10 +337,18 @@ void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, voi
         reset_vector(INTEGER, iwork, liwork, 1);
 
         /* Check if LAPACKE interface is enabled */
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time = prepare_lapacke_stevd_run(datatype, layout, jobz, n, Z, ldz, D, E, info);
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST) /* Call CPP STEVD API */
+        {
+            exe_time = fla_test_clock();
+            invoke_cpp_stevd(datatype, jobz, &n, Z, &ldz, D, E, work, &lwork, iwork, &liwork, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();

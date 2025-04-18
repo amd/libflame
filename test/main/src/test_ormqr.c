@@ -63,8 +63,7 @@ void fla_test_ormqr(integer argc, char **argv, test_params_t *params)
         N = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].kl = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
         /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
-        if((g_ext_fptr == NULL) && params->test_lapacke_interface
-           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
         {
             row_major_ormqr_lda = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
             row_major_ormqr_ldc = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
@@ -140,7 +139,7 @@ void fla_test_ormqr_experiment(char *tst_api, test_params_t *params, integer dat
     char side, trans;
     double residual, err_thresh;
 
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
 
     /* Get input matrix dimensions.*/
@@ -229,7 +228,7 @@ void fla_test_ormqr_experiment(char *tst_api, test_params_t *params, integer dat
     copy_vector(datatype, fla_min(n_A, k), T_test, 1, tau, 1);
     /*invoke ormqr API */
     prepare_ormqr_run(side, trans, m, n, k, m_A, n_A, A_test, lda, tau, C, ldc, datatype,
-                      n_repeats, &time_min, &info, test_lapacke_interface, layout);
+                      n_repeats, &time_min, &info, interfacetype, layout);
 
     /* performance computation
        perf = 2nk(2m-k) if side = L

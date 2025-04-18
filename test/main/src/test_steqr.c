@@ -3,6 +3,9 @@
 */
 
 #include "test_lapack.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 #include <invoke_lapacke.h>
 
 extern double perf;
@@ -15,7 +18,7 @@ void fla_test_steqr_experiment(char *tst_api, test_params_t *params, integer dat
                                integer einfo);
 void prepare_steqr_run(char *compz, integer n, void *Z, integer ldz, void *D, void *E,
                        integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, int matrix_layout);
+                       integer interfacetype, int matrix_layout);
 void invoke_steqr(integer datatype, char *compz, integer *n, void *z, integer *ldz, void *d,
                   void *e, void *work, integer *info);
 double prepare_lapacke_steqr_run(integer datatype, int matrix_layout, char *compz, integer n,
@@ -56,8 +59,7 @@ void fla_test_steqr(integer argc, char **argv, test_params_t *params)
         params->eig_sym_paramslist[0].compz = argv[3][0];
         N = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
         /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
-        if((g_ext_fptr == NULL) && params->test_lapacke_interface
-           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
         {
             row_major_steqr_ldz = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
             params->eig_sym_paramslist[0].ldz = N;
@@ -126,7 +128,7 @@ void fla_test_steqr_experiment(char *tst_api, test_params_t *params, integer dat
     void *L = NULL, *scal = NULL;
     double residual, err_thresh;
 
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
 
     /* Get input matrix dimensions.*/
@@ -220,7 +222,7 @@ void fla_test_steqr_experiment(char *tst_api, test_params_t *params, integer dat
     copy_vector(realtype, n - 1, E, 1, E_test, 1);
 
     prepare_steqr_run(&compz, n, Z_test, ldz, D_test, E_test, datatype, n_repeats, &time_min, &info,
-                      test_lapacke_interface, layout);
+                      interfacetype, layout);
 
     /* performance computation
        24 n^2 flops for eigen vectors of Z, compz = 'N'
@@ -267,7 +269,7 @@ void fla_test_steqr_experiment(char *tst_api, test_params_t *params, integer dat
 
 void prepare_steqr_run(char *compz, integer n, void *Z, integer ldz, void *D, void *E,
                        integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, int layout)
+                       integer interfacetype, int layout)
 {
     void *Z_save = NULL, *D_save = NULL, *E_save = NULL, *work = NULL;
     integer i, realtype;
@@ -299,10 +301,18 @@ void prepare_steqr_run(char *compz, integer n, void *Z, integer ldz, void *D, vo
         copy_vector(realtype, n - 1, E_save, 1, E, 1);
 
         create_vector(realtype, &work, 2 * (n - 1));
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time = prepare_lapacke_steqr_run(datatype, layout, compz, n, Z, ldz, D, E, info);
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST) /* Call CPP STEQR API */
+        {
+            exe_time = fla_test_clock();
+            invoke_cpp_steqr(datatype, compz, &n, Z, &ldz, D, E, work, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();

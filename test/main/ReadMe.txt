@@ -204,19 +204,19 @@ NOTE:
 
 6. Tests with invalid input parameters using --einfo option:
 
-   Tests to check proper functioning of APIs while sending invalid value for any of the input parameters
-   can be done using --einfo option. This option is available only through command-line execution.
+ ï¿½ Tests to check proper functioning of APIs while sending invalid value for any of the input parameters
+ ï¿½ can be done using --einfo option. This option is available only through command-line execution.
 
-   Example:
-    ./test_lapack.x GGEVX d P N N E -10 10 10 10 10 -1 100 --einfo=-5
+ ï¿½ Example:
+ ï¿½ï¿½ ./test_lapack.x GGEVX d P N N E -10 10 10 10 10 -1 100 --einfo=-5
 
-   In the above example, the value of the M has been given -10 which is an invalid value.
-   The --einfo parameter states the expected value of 'info' coming out of GGEVX API given the invalid input.
-   The test-suite checks the actual value of 'info' against this expected value and reurns PASS if they match
-   and FAIL if they don't.
+ ï¿½ In the above example, the value of the M has been given -10 which is an invalid value.
+ ï¿½ The --einfo parameter states the expected value of 'info' coming out of GGEVX API given the invalid input.
+ ï¿½ The test-suite checks the actual value of 'info' against this expected value and reurns PASS if they match
+ ï¿½ and FAIL if they don't.
 
-   All parameter related testing commands are compiled in test/main/scripts run_negative_test_cases.py which
-   can be used for this purpose.
+ ï¿½ All parameter related testing commands are compiled in test/main/scripts run_negative_test_cases.py which
+ ï¿½ can be used for this purpose.
 
 7. Tests with special inputs using --imatrix option for extreme values test:
 
@@ -294,26 +294,7 @@ NOTE:
    In AOCL Progress thread  2, at API  DGETRF, progress 24 total threads= 4
    In AOCL Progress thread  0, at API  DGETRF, progress 8 total threads= 4
 
-11. LAPACKE interface support:
-    Test suite supports testing of LAPACKE interface. LAPACKE API testing
-    can be enabled by passing "--lapacke=<matrix layout>" option along with
-    test executable.
-
-   Example: ./test_lapack.x --lapacke=row_major    --> for Row major layout
-            ./test_lapack.x --lapacke=column_major --> for column major layout
-
-   ### `input.global.operations.lapacke`
-
-      For LAPACKE API testing, `input.global.operations.lapacke` file should be used
-      instead of input.global.operations file for enabling/disabling single or
-      a group of APIs.
-
-   Note :
-   1) Default layout is set to Column_major. In case user specifies
-      anything other than row_major/column_major, matrix layout is
-      considered to be column_major.
-
-12. Common interface support:
+11. Common interface support:
    Test suite supports the interfaces as follows:
    a. "--interface=lapack" : Uses LAPACK interface for testing.
    b. "--interface=lapacke_row" : Uses LAPACKE interface with row major for testing.
@@ -322,9 +303,8 @@ NOTE:
 
    Note :
    1) In case user specifies anything incorrect, returns error and prints all interfaces.
-   2) Above "--lapacke" option will be removed once all test cases supports common interface.
-   3) ENABLE_CPP_TEST flag is used to enable/disable CPP interface, it is enabled by default.
-   4) If ENABLE_CPP_TEST is disabled & "--interface=cpp" is used, then returns error to enable
+   2) ENABLE_CPP_TEST flag is used to enable/disable CPP interface, it is enabled by default.
+   3) If ENABLE_CPP_TEST is disabled & "--interface=cpp" is used, then returns error to enable
       ENABLE_CPP_TEST flag. Also the test cases which are not yet implemented in cpp,
       uses LAPACK interface.
 

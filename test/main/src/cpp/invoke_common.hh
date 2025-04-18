@@ -120,6 +120,29 @@ void invoke_cpp_labrd(integer datatype, integer *m, integer *n, integer *nb, voi
                       integer *ldy);
 void invoke_cpp_sytrd(integer datatype, char *uplo, integer *n, void *A, integer *lda, void *D,
                       void *E, void *tau, void *work, integer *lwork, integer *info);
+void invoke_cpp_lange(integer datatype, char *norm_type, integer *m, integer *n, void *A,
+                      integer *lda, void *work, void *result);
+void invoke_cpp_steqr(integer datatype, char *compz, integer *n, void *z, integer *ldz, void *d,
+                      void *e, void *work, integer *info);
+void invoke_cpp_stevd(integer datatype, char *jobz, integer *n, void *z, integer *ldz, void *d,
+                      void *e, void *work, integer *lwork, integer *iwork, integer *liwork,
+                      integer *info);
+void invoke_cpp_syev(integer datatype, char *jobz, char *uplo, integer *n, void *a, integer *lda,
+                     void *w, void *work, integer *lwork, void *rwork, integer *info);
+void invoke_cpp_syevd(integer datatype, char *jobz, char *uplo, integer *n, void *a, integer *lda,
+                      void *w, void *work, integer *lwork, void *rwork, integer *lrwork,
+                      integer *iwork, integer *liwork, integer *info);
+void invoke_cpp_syevx(integer datatype, char *jobz, char *range, char *uplo, integer *n, void *a,
+                      integer *lda, void *vl, void *vu, integer *il, integer *iu, void *abstol,
+                      integer *m, void *w, void *z, integer *ldz, void *work, integer *lwork,
+                      void *rwork, integer *iwork, void *ifail, integer *info);
+void invoke_cpp_sygvd(integer datatype, integer *itype, char *jobz, char *uplo, integer *n, void *a,
+                      integer *lda, void *b, integer *ldb, void *w, void *work, integer *lwork,
+                      void *rwork, integer *lrwork, integer *iwork, integer *liwork, integer *info);
+void invoke_cpp_sytrf_rook(integer datatype, char *uplo, integer *n, void *a, integer *lda,
+                           integer *ipiv, void *work, integer *lwork, integer *info);
+void invoke_cpp_sytrf(integer datatype, char *uplo, integer *n, void *a, integer *lda,
+                      integer *ipiv, void *work, integer *lwork, integer *info);
 #ifdef __cplusplus
 }
 #endif

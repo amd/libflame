@@ -610,12 +610,12 @@ namespace libflame
     template <typename T>
     T lange(char *norm, integer *m, integer *n, T *a, integer *lda, T *work)
     {
-        lange(norm, m, n, a, lda, work);
+        return lange(norm, m, n, a, lda, work);
     }
     template <typename T, typename Ta>
     Ta lange(char *norm, integer *m, integer *n, T *a, integer *lda, Ta *work)
     {
-        lange(norm, m, n, a, lda, work);
+        return lange(norm, m, n, a, lda, work);
     }
     /** @}*/ // end of lange
 

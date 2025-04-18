@@ -3,6 +3,9 @@
 */
 
 #include "test_lapack.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 #include <invoke_lapacke.h>
 
 #define GET_TRANS_STR(datatype) (((datatype) == FLOAT || (datatype) == DOUBLE) ? "T" : "C")
@@ -15,8 +18,7 @@ void fla_test_sygvd_experiment(char *tst_api, test_params_t *params, integer dat
                                integer einfo);
 void prepare_sygvd_run(integer itype, char *jobz, char *uplo, integer n, void *A, integer lda,
                        void *B, integer ldb, void *w, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer test_lapacke_interface,
-                       int layout);
+                       double *time_min_, integer *info, integer interfacetype, int layout);
 void invoke_sygvd(integer datatype, integer *itype, char *jobz, char *uplo, integer *n, void *a,
                   integer *lda, void *b, integer *ldb, void *w, void *work, integer *lwork,
                   void *rwork, integer *lrwork, void *iwork, integer *liwork, integer *info);
@@ -127,7 +129,7 @@ void fla_test_sygvd_experiment(char *tst_api, test_params_t *params, integer dat
     void *scal = NULL, *temp = NULL;
     double residual, err_thresh;
 
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
 
     /* Get input matrix dimensions.*/
@@ -260,7 +262,7 @@ void fla_test_sygvd_experiment(char *tst_api, test_params_t *params, integer dat
     copy_matrix(datatype, "full", n, n, B, lda, B_test, lda);
 
     prepare_sygvd_run(itype, &jobz, &uplo, n, A_test, lda, B_test, lda, w, datatype, n_repeats,
-                      &time_min, &info, test_lapacke_interface, layout);
+                      &time_min, &info, interfacetype, layout);
     /* performance computation
        (8/3)n^3 [syevd] + (1/3)n^3 [potrf] flops for eigen vectors
        (4/3)n^3 [syevd] + (1/3)n^3 [potrf] flops for eigen values */
@@ -307,7 +309,7 @@ void fla_test_sygvd_experiment(char *tst_api, test_params_t *params, integer dat
 
 void prepare_sygvd_run(integer itype, char *jobz, char *uplo, integer n, void *A, integer lda,
                        void *B, integer ldb, void *w, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer test_lapacke_interface, int layout)
+                       double *time_min_, integer *info, integer interfacetype, int layout)
 {
     void *A_save, *work, *iwork, *rwork = NULL, *B_save = NULL;
     integer lwork, liwork, lrwork;
@@ -322,7 +324,7 @@ void prepare_sygvd_run(integer itype, char *jobz, char *uplo, integer n, void *A
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &B_save, ldb);
     copy_matrix(datatype, "full", n, n, B, ldb, B_save, ldb);
 
-    if((test_lapacke_interface == 0)
+    if((interfacetype != LAPACKE_ROW_TEST) && (interfacetype != LAPACKE_COLUMN_TEST)
        && (g_lwork <= 0 || ((datatype == COMPLEX || datatype == DOUBLE_COMPLEX) && g_lrwork <= 0)
            || g_liwork <= 0))
     {
@@ -333,10 +335,19 @@ void prepare_sygvd_run(integer itype, char *jobz, char *uplo, integer n, void *A
         create_vector(datatype, &work, 1);
         create_vector(INTEGER, &iwork, 1);
         create_realtype_vector(datatype, &rwork, 1);
-        /* call to  syevd API */
-        invoke_sygvd(datatype, &itype, jobz, uplo, &n, NULL, &lda, NULL, &ldb, NULL, work, &lwork,
-                     rwork, &lrwork, iwork, &liwork, info);
-
+        /* call to  sygvd API */
+#if ENABLE_CPP_TEST
+        if(interfacetype == LAPACK_CPP_TEST)
+        {
+            invoke_cpp_sygvd(datatype, &itype, jobz, uplo, &n, NULL, &lda, NULL, &ldb, NULL, work,
+                             &lwork, rwork, &lrwork, iwork, &liwork, info);
+        }
+        else
+#endif
+        {
+            invoke_sygvd(datatype, &itype, jobz, uplo, &n, NULL, &lda, NULL, &ldb, NULL, work,
+                         &lwork, rwork, &lrwork, iwork, &liwork, info);
+        }
         /* Get work size */
         if(*info == 0)
         {
@@ -373,11 +384,20 @@ void prepare_sygvd_run(integer itype, char *jobz, char *uplo, integer n, void *A
             rwork = NULL;
 
         /* Check if LAPACKE interface is enabled */
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time = prepare_lapacke_sygvd_run(datatype, itype, layout, jobz, uplo, n, A, lda, B,
                                                  lda, w, info);
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST) /* Call CPP SYGVD API */
+        {
+            exe_time = fla_test_clock();
+            invoke_cpp_sygvd(datatype, &itype, jobz, uplo, &n, A, &lda, B, &lda, w, work, &lwork,
+                             rwork, &lrwork, iwork, &liwork, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();

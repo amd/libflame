@@ -55,5 +55,14 @@ ${CMAKE_CURRENT_SOURCE_DIR}/invoke_ormqr.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_gejsv.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_labrd.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_sytrd.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lange.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_steqr.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_stevd.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_syev.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_syevd.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_syevx.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_sygvd.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_sytrf_rook.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_sytrf.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_common.hh
 )

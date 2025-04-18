@@ -3,6 +3,9 @@
 */
 
 #include "test_lapack.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 /* Local prototypes */
 integer i_abs(integer *x);
@@ -10,7 +13,7 @@ void fla_test_lange_experiment(char *tst_api, test_params_t *params, integer dat
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
 void prepare_lange_run(integer datatype, char norm_type, void *A, integer m, integer n, integer lda,
-                       void *result, integer n_repeats, double *time_min_);
+                       void *result, integer n_repeats, double *time_min_, integer interfacetype);
 void invoke_lange(integer datatype, char *norm_type, integer *m, integer *n, void *A, integer *lda,
                   void *work, void *result);
 
@@ -128,6 +131,7 @@ void fla_test_lange_experiment(char *tst_api, test_params_t *params, integer dat
     integer lda = params->aux_paramslist[pci].lda;
     integer i;
     double residual, err_thresh;
+    integer interfacetype = params->interfacetype;
 
     err_thresh = params->aux_paramslist[pci].aux_threshold;
     if(lda == -1)
@@ -176,7 +180,8 @@ void fla_test_lange_experiment(char *tst_api, test_params_t *params, integer dat
                                                   params->imatrix_char, scal);
         }
 
-        prepare_lange_run(datatype, test_norm_type, A, m, n, lda, result, n_repeats, &time_min);
+        prepare_lange_run(datatype, test_norm_type, A, m, n, lda, result, n_repeats, &time_min,
+                          interfacetype);
 
         /* execution time */
         if(time_min == d_zero)
@@ -217,7 +222,7 @@ void fla_test_lange_experiment(char *tst_api, test_params_t *params, integer dat
 }
 
 void prepare_lange_run(integer datatype, char norm_type, void *A, integer m, integer n, integer lda,
-                       void *result, integer n_repeats, double *time_min_)
+                       void *result, integer n_repeats, double *time_min_, integer interfacetype)
 {
     integer i;
     void *work = NULL;
@@ -230,10 +235,21 @@ void prepare_lange_run(integer datatype, char norm_type, void *A, integer m, int
 
     for(i = 0; i < n_repeats; ++i)
     {
-        exe_time = fla_test_clock();
-        /*  call lange API */
-        invoke_lange(datatype, &norm_type, &m, &n, A, &lda, work, result);
-        exe_time = fla_test_clock() - exe_time;
+#if ENABLE_CPP_TEST
+        if(interfacetype == LAPACK_CPP_TEST) /* Call CPP LANGE API */
+        {
+            exe_time = fla_test_clock();
+            invoke_cpp_lange(datatype, &norm_type, &m, &n, A, &lda, work, result);
+            exe_time = fla_test_clock() - exe_time;
+        }
+        else
+#endif
+        {
+            exe_time = fla_test_clock();
+            /*  call lange API */
+            invoke_lange(datatype, &norm_type, &m, &n, A, &lda, work, result);
+            exe_time = fla_test_clock() - exe_time;
+        }
         /* Get the best execution time */
         time_min = fla_min(time_min, exe_time);
     }

@@ -1,7 +1,7 @@
 This summary and the license information provided below is for reference
 purposes and is not intended to be a comprehensive list of all copyright notices
-or license terms and conditions applicable to AOCL-LAPACK Library version 5.0.
-Please refer to the source code files in AOCL-LAPACK Library version 5.0 for all
+or license terms and conditions applicable to LAPACK Library version 5.1.
+Please refer to the source code files in AOCL-LAPACK Library version 5.1 for all
 copyrights and licenses.
 
 AMD copyrighted code (BSD-3-clause)
@@ -379,7 +379,7 @@ reference-lapack-lapack v3.11.0 (BSD-3-Clause)
 Copyright Statements
 Copyright (c) 1992-2017 The University of Tennessee and The University of
 Tennessee Research Foundation.  All rights  reserved.
-Copyright (c) 2000-2017 The University of California Bereley. All rights
+Copyright (c) 2000-2017 The University of California Berkeley. All rights
 reserved.
 Copyright (c) 2006-2017 The University of Colorado Denver.  All rights reserved.
 
@@ -449,7 +449,7 @@ export regulations this software is eligible for export from the U.S. and can be
 downloaded by or otherwise exported or reexported worldwide EXCEPT to U.S.
 embargoed destinations which include Cuba, Iraq, Libya, North Korea, Iran,
 Syria, Sudan, Afghanistan and any other country to which the U.S. has embargoed
-goods and seices.
+goods and services.
 
 reference-lapack-lapack v3.9.0 (BSD-3-Clause)
 
@@ -515,7 +515,7 @@ version 3 ("GPLv3").
 Please try the latest version of texinfo.tex before submitting bug reports; you
 can get the latest version from: http://ftp.gnu.org/gnu/texinfo/ (the Texinfo
 release area), or
-http://ftpmirror.gg/texinfo/ (same, via a mirror), or
+http://ftpmirror.gnu.org/texinfo/ (same, via a mirror), or
 http://www.gnu.org/software/texinfo/ (the Texinfo home page) The texinfo.tex in
 any given distribution could well be out
 of date, so if that's what you're using, please check.

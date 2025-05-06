@@ -1,23 +1,30 @@
 /*
-    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
+
+extern double perf;
+extern double time_min;
+integer row_major_stedc_ldz;
 
 /* Local prototypes. */
-void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *t, double *residual);
+void fla_test_stedc_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo);
 void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, integer ldz,
                        integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, int matrix_layout);
+                       integer interfacetype, int matrix_layout);
 void invoke_stedc(integer datatype, char *compz, integer *n, void *D, void *E, void *Z,
                   integer *ldz, void *work, integer *lwork, void *rwork, integer *lrwork,
                   integer *iwork, integer *liwork, integer *info);
 double prepare_lapacke_stedc_run(integer datatype, int matrix_layout, char *compz, integer n,
                                  void *D, void *E, void *Z, integer ldz, integer *info);
-integer invoke_lapacke_stedc(integer datatype, int matrix_layout, char compz, integer n,
-                             void *d, void *e, void *z, integer ldz);
+integer invoke_lapacke_stedc(integer datatype, int matrix_layout, char compz, integer n, void *d,
+                             void *e, void *z, integer ldz);
 
 #define STEDC_VL 0.1
 #define STEDC_VU 1000
@@ -48,7 +55,6 @@ void fla_test_stedc(integer argc, char **argv, test_params_t *params)
         /* Test with parameters from commandline */
         integer i, num_types, N;
         integer datatype, n_repeats;
-        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -56,7 +62,16 @@ void fla_test_stedc(integer argc, char **argv, test_params_t *params)
         num_types = strlen(argv[2]);
         params->eig_sym_paramslist[0].compz = argv[3][0];
         N = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
-        params->eig_sym_paramslist[0].ldz = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
+        /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
+        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
+        {
+            row_major_stedc_ldz = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
+            params->eig_sym_paramslist[0].ldz = N;
+        }
+        else
+        {
+            params->eig_sym_paramslist[0].ldz = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
+        }
 
         g_lwork = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
         g_liwork = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
@@ -85,12 +100,7 @@ void fla_test_stedc(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_stedc_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
-                                          &time_min, &residual);
-                /* Print the results */
-                fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
-                                      params->eig_sym_paramslist[0].threshold_value, time_min,
-                                      perf);
+                fla_test_stedc_experiment(front_str, params, datatype, N, N, 0, n_repeats, einfo);
                 tests_not_run = 0;
             }
         }
@@ -114,18 +124,17 @@ void fla_test_stedc(integer argc, char **argv, test_params_t *params)
     }
 }
 
-void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *t, double *residual)
+void fla_test_stedc_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo)
 {
     integer n, info = 0, realtype, lda, ldz;
     void *D = NULL, *D_test = NULL, *E = NULL, *E_test = NULL, *Z_test = NULL;
     void *Z = NULL, *A = NULL, *L = NULL, *Q = NULL, *scal = NULL;
-    double time_min = 1e9;
     char compz, uplo, range = 'V';
-    double resid;
+    double residual, err_thresh;
 
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
 
     /* Get input matrix dimensions. */
@@ -134,7 +143,7 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
     /* Initialize parameter needed for STEDC() call. */
     compz = params->eig_sym_paramslist[pci].compz;
     ldz = params->eig_sym_paramslist[pci].ldz;
-    *residual = params->eig_sym_paramslist[pci].threshold_value;
+    err_thresh = params->eig_sym_paramslist[pci].threshold_value;
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
@@ -181,27 +190,17 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
             if(g_ext_fptr)
             {
                 copy_matrix(datatype, "full", n, n, A, lda, Q, lda);
-                resid = check_orthogonality(datatype, Q, n, n, lda);
-                if(resid < *residual)
-                {
-                    /* Input matrix is orthogonal matrix for file inputs.
-                       So get the symmetric/hermitian matrix using:
-                       A = Q * T * (Q**T) */
-                    copy_sym_tridiag_matrix(datatype, D, E, n, n, Z, ldz);
-                    fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, Q, &lda, Z, &ldz, Z_test, &ldz);
-                    fla_invoke_gemm(datatype, "N", "T", &n, &n, &n, Z_test, &ldz, Q, &lda, A, &lda);
-                }
-                else
-                {
-                    printf("Error: Input matrix A is not orthogonal\n");
-                    *residual = DBL_MAX;
-                    return;
-                }
+                /* Input matrix is assumed to be orthogonal matrix for file inputs.
+                 * So get the symmetric/hermitian matrix using:
+                 * A = Q * T * (Q**T) */
+                copy_sym_tridiag_matrix(datatype, D, E, n, n, Z, ldz);
+                fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, Q, &lda, Z, &ldz, Z_test, &ldz);
+                fla_invoke_gemm(datatype, "N", "T", &n, &n, &n, Z_test, &ldz, Q, &lda, A, &lda);
             }
             else if(FLA_EXTREME_CASE_TEST)
             {
                 /* Get the symmetric/hermitian matrix.*/
-                form_symmetric_matrix(datatype, n, A, lda, "C");
+                form_symmetric_matrix(datatype, n, A, lda, "C", 'U');
                 /* Initialize Q matrix */
                 init_matrix(datatype, Q, n, n, lda, g_ext_fptr, params->imatrix_char);
             }
@@ -210,7 +209,8 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
     else
     {
         create_realtype_vector(datatype, &L, n);
-        generate_matrix_from_EVs(datatype, range, n, A, lda, L, STEDC_VL, STEDC_VU);
+        generate_matrix_from_EVs(datatype, range, n, A, lda, L, STEDC_VL, STEDC_VU,
+                                 USE_ABS_EIGEN_VALUES);
         if(FLA_OVERFLOW_UNDERFLOW_TEST)
         {
             create_realtype_vector(get_datatype(datatype), &scal, n);
@@ -237,37 +237,37 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
     copy_vector(realtype, n - 1, E, 1, E_test, 1);
 
     prepare_stedc_run(&compz, n, D_test, E_test, Z_test, ldz, datatype, n_repeats, &time_min, &info,
-                      test_lapacke_interface, layout);
+                      interfacetype, layout);
 
-    /* Execution time. */
-    *t = time_min;
     /* Performance computation
        (6)n^3 flops for eigen vectors
        (4/3)n^3 flops for eigen values. */
-    *perf = (double)((4.0 / 3.0) * n * n * n) / *t / FLOPS_PER_UNIT_PERF;
+    perf = (double)((4.0 / 3.0) * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     if(compz != 'N')
     {
-        *perf += (double)(6 * n * n * n) / *t / FLOPS_PER_UNIT_PERF;
+        perf += (double)(6 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     }
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
     {
-        *perf *= 2.0;
+        perf *= 2.0;
     }
 
     /* Output validation. */
-    if(!FLA_EXTREME_CASE_TEST && (info == 0))
+    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    if(!FLA_EXTREME_CASE_TEST)
     {
-        validate_syev(&compz, &range, n, Z, Z_test, ldz, 0, 0, L, D_test, NULL, datatype, residual,
-                      params->imatrix_char, scal);
+        validate_syev(tst_api, &compz, &range, n, Z, Z_test, ldz, 0, 0, L, D_test, NULL, datatype,
+                      residual, params->imatrix_char, scal);
     }
     /* Check for output matrix & vectors when inputs are extreme values */
-    else if(FLA_EXTREME_CASE_TEST)
+    else
     {
+        residual = err_thresh;
         if(compz == 'N')
         {
             if(!check_extreme_value(datatype, n, 1, D_test, 1, params->imatrix_char))
             {
-                *residual = DBL_MAX;
+                residual = DBL_MAX;
             }
         }
         else
@@ -275,13 +275,10 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
             if(!check_extreme_value(datatype, n, n, Z_test, lda, params->imatrix_char)
                && !check_extreme_value(datatype, n, 1, D_test, 1, params->imatrix_char))
             {
-                *residual = DBL_MAX;
+                residual = DBL_MAX;
             }
         }
-    }
-    else
-    {
-        FLA_TEST_CHECK_EINFO(residual, info, einfo);
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     }
 
     /* Free up buffers. */
@@ -305,12 +302,12 @@ void fla_test_stedc_experiment(test_params_t *params, integer datatype, integer 
 
 void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, integer ldz,
                        integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, int layout)
+                       integer interfacetype, int layout)
 {
     integer index, lwork, liwork, lrwork, realtype;
     void *D_save = NULL, *E_save = NULL, *E_test = NULL, *Z_save = NULL;
     void *work = NULL, *iwork = NULL, *rwork = NULL;
-    double time_min = 1e9, exe_time;
+    double t_min = 1e9, exe_time;
 
     /* Make a copy of the input matrices. Same input values will be passed in
        each itertaion.*/
@@ -327,7 +324,7 @@ void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, intege
 
     /* Call to STEDC() API to get work buffers size.
        NOTE: LAPACKE interface handles workspace query internally */
-    if((test_lapacke_interface == 0)
+    if((interfacetype != LAPACKE_COLUMN_TEST) && (interfacetype != LAPACKE_ROW_TEST)
        && (g_lwork == -1 || g_liwork == -1
            || ((datatype == COMPLEX || datatype == DOUBLE_COMPLEX) && g_lrwork == -1)))
     {
@@ -339,8 +336,18 @@ void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, intege
         lwork = g_lwork;
         liwork = g_liwork;
         lrwork = g_lrwork;
-        invoke_stedc(datatype, compz, &n, D, E_test, Z, &ldz, work, &lwork, rwork, &lrwork, iwork,
-                     &liwork, info);
+#if ENABLE_CPP_TEST
+        if(interfacetype == LAPACK_CPP_TEST)
+        {
+            invoke_cpp_stedc(datatype, compz, &n, D, E_test, Z, &ldz, work, &lwork, rwork, &lrwork,
+                             iwork, &liwork, info);
+        }
+        else
+#endif
+        {
+            invoke_stedc(datatype, compz, &n, D, E_test, Z, &ldz, work, &lwork, rwork, &lrwork,
+                         iwork, &liwork, info);
+        }
 
         /* Get work buffers size. */
         if(*info == 0)
@@ -396,11 +403,21 @@ void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, intege
         reset_vector(INTEGER, iwork, liwork, 1);
 
         /* Check if LAPACKE interface is enabled */
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time
                 = prepare_lapacke_stedc_run(datatype, layout, compz, n, D, E_test, Z, ldz, info);
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST)
+        {
+            exe_time = fla_test_clock();
+            /* Call CPP stedc API */
+            invoke_cpp_stedc(datatype, compz, &n, D, E_test, Z, &ldz, work, &lwork, rwork, &lrwork,
+                             iwork, &liwork, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();
@@ -412,9 +429,9 @@ void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, intege
         }
 
         /* Get the best execution time. */
-        time_min = fla_min(time_min, exe_time);
+        t_min = fla_min(t_min, exe_time);
     }
-    *time_min_ = time_min;
+    *time_min_ = t_min;
 
     /* Free up buffers. */
     if(*compz == 'V')
@@ -438,13 +455,18 @@ double prepare_lapacke_stedc_run(integer datatype, int layout, char *compz, inte
     double exe_time;
     integer ldz_t = ldz;
     void *Z_t = NULL;
+
+    /* Configure leading dimensions as per the input matrix layout */
+    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_stedc_ldz, ldz_t);
+
     Z_t = Z;
 
+    /* In case of row_major matrix layout,
+       convert input matrix to row_major */
     if((*compz != 'N') && (layout == LAPACK_ROW_MAJOR))
     {
-        ldz_t = fla_max(1, n);
         /* Create temporary buffers for converting matrix layout */
-        create_matrix(datatype, layout, n, n, &Z_t, ldz_t);
+        create_matrix(datatype, layout, n, n, &Z_t, fla_max(n, ldz_t));
         convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, Z, ldz, Z_t, ldz_t);
     }
 
@@ -497,8 +519,8 @@ void invoke_stedc(integer datatype, char *compz, integer *n, void *D, void *E, v
     }
 }
 
-integer invoke_lapacke_stedc(integer datatype, int layout, char compz, integer n, void *D,
-                             void *E, void *Z, integer ldz)
+integer invoke_lapacke_stedc(integer datatype, int layout, char compz, integer n, void *D, void *E,
+                             void *Z, integer ldz)
 {
     integer info = 0;
     switch(datatype)

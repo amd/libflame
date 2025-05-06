@@ -1,11 +1,11 @@
-/* ../netlib/sspgvd.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sspgvd.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-/* > \brief \b SSPGST */
+/* > \brief \b SSPGVD */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -49,12 +49,6 @@ static integer c__1 = 1;
 /* > positive definite. */
 /* > If eigenvectors are desired, it uses a divide and conquer algorithm. */
 /* > */
-/* > The divide and conquer algorithm makes very mild assumptions about */
-/* > floating point arithmetic. It will work on machines with a guard */
-/* > digit in add/subtract, or on those binary machines without guard */
-/* > digits which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or */
-/* > Cray-2. It could conceivably fail on hexadecimal or decimal machines */
-/* > without guard digits, but we know of none. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -196,7 +190,7 @@ the */
 /* > tridiagonal form did not converge to zero;
  */
 /* > > N: if INFO = N + i, for 1 <= i <= N, then the leading */
-/* > minor of order i of B is not positive definite. */
+/* > principal minor of order i of B is not positive. */
 /* > The factorization of B could not be completed and */
 /* > no eigenvalues or eigenvectors were computed. */
 /* > \endverbatim */
@@ -206,8 +200,7 @@ the */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup realOTHEReigen */
+/* > \ingroup hpgvd */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -218,14 +211,10 @@ void sspgvd_(integer *itype, char *jobz, char *uplo, integer *n, real *ap, real 
              real *z__, integer *ldz, real *work, integer *lwork, integer *iwork, integer *liwork,
              integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "sspgvd inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS "",
              *itype, *jobz, *uplo, *n, *ldz);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer z_dim1, z_offset, i__1;
     real r__1, r__2;
@@ -250,10 +239,10 @@ void sspgvd_(integer *itype, char *jobz, char *uplo, integer *n, real *ap, real 
     extern /* Subroutine */
         void
         sspgst_(integer *, char *, integer *, real *, real *, integer *);
-    /* -- LAPACK driver routine (version 3.4.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -325,7 +314,7 @@ void sspgvd_(integer *itype, char *jobz, char *uplo, integer *n, real *ap, real 
                 lwmin = *n << 1;
             }
         }
-        work[1] = (real)lwmin;
+        work[1] = sroundup_lwork(&lwmin);
         iwork[1] = liwmin;
         if(*lwork < lwmin && !lquery)
         {
@@ -340,18 +329,18 @@ void sspgvd_(integer *itype, char *jobz, char *uplo, integer *n, real *ap, real 
     {
         i__1 = -(*info);
         xerbla_("SSPGVD", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Form a Cholesky factorization of BP. */
@@ -359,7 +348,7 @@ void sspgvd_(integer *itype, char *jobz, char *uplo, integer *n, real *ap, real 
     if(*info != 0)
     {
         *info = *n + *info;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
@@ -368,11 +357,11 @@ void sspgvd_(integer *itype, char *jobz, char *uplo, integer *n, real *ap, real 
             info);
     /* Computing MAX */
     r__1 = (real)lwmin;
-    lwmin = fla_max(r__1, work[1]);
+    lwmin = (integer)fla_max(r__1, work[1]);
     /* Computing MAX */
     r__1 = (real)liwmin;
     r__2 = (real)iwork[1]; // , expr subst
-    liwmin = fla_max(r__1, r__2);
+    liwmin = (integer)fla_max(r__1, r__2);
     if(wantz)
     {
         /* Backtransform eigenvectors to the original problem. */
@@ -422,9 +411,9 @@ void sspgvd_(integer *itype, char *jobz, char *uplo, integer *n, real *ap, real 
             }
         }
     }
-    work[1] = (real)lwmin;
+    work[1] = sroundup_lwork(&lwmin);
     iwork[1] = liwmin;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSPGVD */
 }

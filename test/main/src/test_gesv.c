@@ -1,30 +1,38 @@
 /*
-    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 #define GESV_VL 0.1
 #define GESV_VU 10
 
+extern double perf;
+extern double time_min;
+integer row_major_gesv_lda;
+integer row_major_gesv_ldb;
+
 /* Local prototypes */
-void fla_test_gesv_experiment(test_params_t *params, integer datatype, integer p_cur, integer q_cur,
-                              integer pci, integer n_repeats, integer einfo, double *perf,
-                              double *t, double *residual);
+void fla_test_gesv_experiment(char *tst_api, test_params_t *params, integer datatype, integer p_cur,
+                              integer q_cur, integer pci, integer n_repeats, integer einfo);
 void prepare_gesv_run(integer n_A, integer nrhs, void *A, integer lda, void *B, integer ldb,
                       integer *ipiv, integer datatype, integer n_repeats, double *time_min_,
-                      integer *info, integer test_lapacke_interface, int matrix_layout);
+                      integer *info, integer interfacetype, int matrix_layout);
 void invoke_gesv(integer datatype, integer *nrhs, integer *n, void *a, integer *lda, integer *ipiv,
                  void *b, integer *ldb, integer *info);
 double prepare_lapacke_gesv_run(integer datatype, int matrix_layout, integer n_A, integer nrhs,
                                 void *A, integer lda, void *B, integer ldb, integer *ipiv,
                                 integer *info);
-integer invoke_lapacke_gesv(integer datatype, int matrix_layout, integer n, integer nrhs,
-                            void *a, integer lda, integer *ipiv, void *b, integer ldb);
+integer invoke_lapacke_gesv(integer datatype, int matrix_layout, integer n, integer nrhs, void *a,
+                            integer lda, integer *ipiv, void *b, integer ldb);
 
 void fla_test_gesv(integer argc, char **argv, test_params_t *params)
 {
-    char *op_str = "Linear Solve using LU", *front_str = "GESV";
+    char *op_str = "Linear Solve using LU";
+    char *front_str = "GESV";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
     params->imatrix_char = '\0';
 
@@ -45,7 +53,6 @@ void fla_test_gesv(integer argc, char **argv, test_params_t *params)
         /* Test with parameters from commandline */
         integer i, num_types, N;
         integer datatype, n_repeats;
-        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -53,9 +60,19 @@ void fla_test_gesv(integer argc, char **argv, test_params_t *params)
         num_types = strlen(argv[2]);
         N = strtoimax(argv[3], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].nrhs = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
-        params->lin_solver_paramslist[0].lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
-        params->lin_solver_paramslist[0].ldb = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
-
+        /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
+        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
+        {
+            row_major_gesv_lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
+            row_major_gesv_ldb = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
+            params->lin_solver_paramslist[0].lda = N;
+            params->lin_solver_paramslist[0].ldb = N;
+        }
+        else
+        {
+            params->lin_solver_paramslist[0].lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
+            params->lin_solver_paramslist[0].ldb = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
+        }
         n_repeats = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
 
         if(n_repeats > 0)
@@ -80,12 +97,7 @@ void fla_test_gesv(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_gesv_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
-                                         &time_min, &residual);
-                /* Print the results */
-                fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
-                                      params->lin_solver_paramslist[0].solver_threshold, time_min,
-                                      perf);
+                fla_test_gesv_experiment(front_str, params, datatype, N, N, 0, n_repeats, einfo);
                 tests_not_run = 0;
             }
         }
@@ -110,20 +122,19 @@ void fla_test_gesv(integer argc, char **argv, test_params_t *params)
     return;
 }
 
-void fla_test_gesv_experiment(test_params_t *params, integer datatype, integer p_cur, integer q_cur,
-                              integer pci, integer n_repeats, integer einfo, double *perf,
-                              double *t, double *residual)
+void fla_test_gesv_experiment(char *tst_api, test_params_t *params, integer datatype, integer p_cur,
+                              integer q_cur, integer pci, integer n_repeats, integer einfo)
 {
-    integer n, lda, ldb, NRHS, info = 0, vinfo = 0;
+    integer n, lda, ldb, NRHS, info = 0;
     void *IPIV = NULL, *A = NULL, *A_save = NULL, *B = NULL, *B_save = NULL, *s_test = NULL,
          *scal = NULL;
-    double time_min = 1e9;
     char range = 'U';
+    double residual, err_thresh;
 
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
 
-    *residual = params->lin_solver_paramslist[pci].solver_threshold;
+    err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
     NRHS = params->lin_solver_paramslist[pci].nrhs;
     /* Determine the dimensions*/
     n = p_cur;
@@ -176,33 +187,35 @@ void fla_test_gesv_experiment(test_params_t *params, integer datatype, integer p
     copy_matrix(datatype, "full", n, NRHS, B, ldb, B_save, ldb);
     /* call to API */
     prepare_gesv_run(n, NRHS, A_save, lda, B_save, ldb, IPIV, datatype, n_repeats, &time_min, &info,
-                     test_lapacke_interface, layout);
-
-    /* execution time */
-    *t = time_min;
+                     interfacetype, layout);
 
     /* performance computation */
     /* 2mn^2 - (2/3)n^3 flops */
-    *perf
-        = (double)((2.0 * n * n * n) - ((2.0 / 3.0) * n * n * n)) / time_min / FLOPS_PER_UNIT_PERF;
+    perf = (double)((2.0 * n * n * n) - ((2.0 / 3.0) * n * n * n)) / time_min / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
-        *perf *= 4.0;
+        perf *= 4.0;
 
     /* output validation */
-    if(FLA_OVERFLOW_UNDERFLOW_TEST && info == 0)
-        validate_gesv(n, NRHS, A, lda, B, ldb, B_save, datatype, residual, &vinfo,
+    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    if(!FLA_EXTREME_CASE_TEST)
+    {
+        validate_gesv(tst_api, n, NRHS, A, lda, B, ldb, B_save, datatype, residual,
                       params->imatrix_char, scal);
+    }
     /* check for output matrix when inputs as extreme values */
-    else if(FLA_EXTREME_CASE_TEST)
+    else
     {
         if((!check_extreme_value(datatype, n, n, A_save, lda, params->imatrix_char))
            && (!check_extreme_value(datatype, n, NRHS, B_save, ldb, params->imatrix_char)))
         {
-            *residual = DBL_MAX;
+            residual = DBL_MAX;
         }
+        else
+        {
+            residual = err_thresh;
+        }
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     }
-    else
-        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up the buffers */
     free_matrix(A);
@@ -219,11 +232,11 @@ void fla_test_gesv_experiment(test_params_t *params, integer datatype, integer p
 
 void prepare_gesv_run(integer n_A, integer nrhs, void *A, integer lda, void *B, integer ldb,
                       integer *IPIV, integer datatype, integer n_repeats, double *time_min_,
-                      integer *info, integer test_lapacke_interface, int layout)
+                      integer *info, integer interfacetype, int layout)
 {
     integer i;
     void *A_test, *B_test;
-    double time_min = 1e9, exe_time;
+    double t_min = 1e9, exe_time;
 
     /* Save the original matrix */
     create_matrix(datatype, LAPACK_COL_MAJOR, n_A, n_A, &A_test, lda);
@@ -237,23 +250,32 @@ void prepare_gesv_run(integer n_A, integer nrhs, void *A, integer lda, void *B, 
         copy_matrix(datatype, "full", n_A, n_A, A, lda, A_test, lda);
         copy_matrix(datatype, "full", n_A, nrhs, B, ldb, B_test, ldb);
         /* Check if LAPACKE interface is enabled */
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time = prepare_lapacke_gesv_run(datatype, layout, n_A, nrhs, A_test, lda, B_test,
                                                 ldb, IPIV, info);
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST)
+        {
+            exe_time = fla_test_clock();
+            /* call CPP gesv API  */
+            invoke_cpp_gesv(datatype, &n_A, &nrhs, A_test, &lda, IPIV, B_test, &ldb, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();
-            /*  call  gesv API  */
+            /* call LAPACK gesv API  */
             invoke_gesv(datatype, &n_A, &nrhs, A_test, &lda, IPIV, B_test, &ldb, info);
             exe_time = fla_test_clock() - exe_time;
         }
         /* Get the best execution time */
-        time_min = fla_min(time_min, exe_time);
+        t_min = fla_min(t_min, exe_time);
     }
 
-    *time_min_ = time_min;
+    *time_min_ = t_min;
     /*  Save the final result to B matrix*/
     copy_matrix(datatype, "full", n_A, nrhs, B_test, ldb, B, ldb);
 
@@ -261,25 +283,27 @@ void prepare_gesv_run(integer n_A, integer nrhs, void *A, integer lda, void *B, 
     free_matrix(B_test);
 }
 
-double prepare_lapacke_gesv_run(integer datatype, int layout, integer n_A, integer nrhs,
-                                void *A, integer lda, void *B, integer ldb, integer *ipiv,
-                                integer *info)
+double prepare_lapacke_gesv_run(integer datatype, int layout, integer n_A, integer nrhs, void *A,
+                                integer lda, void *B, integer ldb, integer *ipiv, integer *info)
 {
     double exe_time = 0;
     integer lda_t = lda;
     integer ldb_t = ldb;
     void *A_t = NULL, *B_t = NULL;
+
+    /* Configure leading dimensions as per the input matrix layout */
+    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_gesv_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, config_data, layout, nrhs, row_major_gesv_ldb, ldb_t);
+
     A_t = A;
     B_t = B;
     /* In case of row_major matrix layout,
        convert input matrix to row_major */
     if(layout == LAPACK_ROW_MAJOR)
     {
-        lda_t = fla_max(1, n_A);
-        ldb_t = fla_max(1, nrhs);
         /* Create temporary buffers for converting matrix layout */
-        create_matrix(datatype, layout, n_A, n_A, &A_t, lda_t);
-        create_matrix(datatype, layout, n_A, nrhs, &B_t, ldb_t);
+        create_matrix(datatype, layout, n_A, n_A, &A_t, fla_max(n_A, lda_t));
+        create_matrix(datatype, layout, n_A, nrhs, &B_t, fla_max(nrhs, ldb_t));
         convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n_A, n_A, A, lda, A_t, lda_t);
         convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n_A, nrhs, B, ldb, B_t, ldb_t);
     }

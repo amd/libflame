@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/sorm22.f -- translated by f2c (version 20160102). You must link the resulting
- object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
- systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
- -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sorm22.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b10 = 1.f;
 /* > \brief \b SORM22 multiplies a general matrix by a banded orthogonal matrix. */
@@ -160,13 +160,16 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date January 2015 */
-/* > \ingroup complexOTHERcomputational */
+/* > \ingroup unm22 */
 /* ===================================================================== */
 /* Subroutine */
 void sorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integer *n2, real *q,
              integer *ldq, real *c__, integer *ldc, real *work, integer *lwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sorm22 inputs: side %c ,trans %c ,m %" FLA_IS ",n %" FLA_IS ",n1 %" FLA_IS
+                      ",n2 %" FLA_IS ",ldq %" FLA_IS ",ldc %" FLA_IS ",lwork %" FLA_IS "",
+                      *side, *trans, *m, *n, *n1, *n2, *ldq, *ldc, *lwork);
     /* System generated locals */
     integer q_dim1, q_offset, c_dim1, c_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
@@ -184,10 +187,10 @@ void sorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
     logical notran;
     integer ldwork, lwkopt;
     logical lquery;
-    /* -- LAPACK computational routine (version 3.7.1) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* January 2015 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -272,22 +275,25 @@ void sorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
     if(*info == 0)
     {
         lwkopt = *m * *n;
-        work[1] = (real)lwkopt;
+        work[1] = sroundup_lwork(&lwkopt);
     }
     if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SORM22", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
     {
         work[1] = 1.f;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Degenerate cases (N1 = 0 or N2 = 0) are handled using STRMM. */
@@ -296,6 +302,7 @@ void sorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
         strmm_(side, "Upper", trans, "Non-Unit", m, n, &c_b10, &q[q_offset], ldq, &c__[c_offset],
                ldc);
         work[1] = 1.f;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(*n2 == 0)
@@ -303,6 +310,7 @@ void sorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
         strmm_(side, "Lower", trans, "Non-Unit", m, n, &c_b10, &q[q_offset], ldq, &c__[c_offset],
                ldc);
         work[1] = 1.f;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute the largest chunk size available from the workspace. */
@@ -436,7 +444,8 @@ void sorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
             }
         }
     }
-    work[1] = (real)lwkopt;
+    work[1] = sroundup_lwork(&lwkopt);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SORM22 */
 }

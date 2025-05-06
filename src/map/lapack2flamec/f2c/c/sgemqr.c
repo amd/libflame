@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/sgemqr.f -- translated by f2c (version 20160102). You must link the resulting
- object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
- systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
- -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sgemqr.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SGEMQR */
 /* Definition: */
 /* =========== */
@@ -165,12 +165,18 @@
 /* > */
 /* > \endverbatim */
 /* > */
+/* > \ingroup gemqr */
+/* > */
 /* ===================================================================== */
 /* Subroutine */
 void sgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda,
              real *t, integer *tsize, real *c__, integer *ldc, real *work, integer *lwork,
              integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgemqr inputs: side %c ,trans %c ,m %" FLA_IS ",n %" FLA_IS ",k %" FLA_IS
+                      ",lda %" FLA_IS ",tsize %" FLA_IS ",ldc %" FLA_IS ",lwork %" FLA_IS "",
+                      *side, *trans, *m, *n, *k, *lda, *tsize, *ldc, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__1;
     /* Local variables */
@@ -186,14 +192,14 @@ void sgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, real *
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, lquery;
+    extern real sroundup_lwork(integer *);
     extern /* Subroutine */
         void
         sgemqrt_(char *, char *, integer *, integer *, integer *, integer *, real *, integer *,
                  real *, integer *, real *, integer *, real *, integer *);
-    /* -- LAPACK computational routine (version 3.7.0) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* December 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -276,16 +282,18 @@ void sgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, real *
     }
     if(*info == 0)
     {
-        work[1] = (real)lw;
+        work[1] = sroundup_lwork(&lw);
     }
     if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SGEMQR", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -293,6 +301,7 @@ void sgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, real *
     i__1 = fla_min(*m, *n);
     if(fla_min(i__1, *k) == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Computing MAX */
@@ -307,7 +316,8 @@ void sgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, real *
         slamtsqr_(side, trans, m, n, k, &mb, &nb, &a[a_offset], lda, &t[6], &nb, &c__[c_offset],
                   ldc, &work[1], lwork, info);
     }
-    work[1] = (real)lw;
+    work[1] = sroundup_lwork(&lw);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGEMQR */
 }

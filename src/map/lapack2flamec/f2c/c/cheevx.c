@@ -1,8 +1,8 @@
-/* ../netlib/cheevx.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./cheevx.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -106,12 +106,15 @@ static integer c_n1 = -1;
 /* > \param[in] VL */
 /* > \verbatim */
 /* > VL is REAL */
+/* > If RANGE='V', the lower bound of the interval to */
+/* > be searched for eigenvalues. VL < VU. */
+/* > Not referenced if RANGE = 'A' or 'I'. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] VU */
 /* > \verbatim */
 /* > VU is REAL */
-/* > If RANGE='V', the lower and upper bounds of the interval to */
+/* > If RANGE='V', the upper bound of the interval to */
 /* > be searched for eigenvalues. VL < VU. */
 /* > Not referenced if RANGE = 'A' or 'I'. */
 /* > \endverbatim */
@@ -119,13 +122,18 @@ static integer c_n1 = -1;
 /* > \param[in] IL */
 /* > \verbatim */
 /* > IL is INTEGER */
+/* > If RANGE='I', the index of the */
+/* > smallest eigenvalue to be returned. */
+/* > 1 <= IL <= IU <= N, if N > 0;
+IL = 1 and IU = 0 if N = 0. */
+/* > Not referenced if RANGE = 'A' or 'V'. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] IU */
 /* > \verbatim */
 /* > IU is INTEGER */
-/* > If RANGE='I', the indices (in ascending order) of the */
-/* > smallest and largest eigenvalues to be returned. */
+/* > If RANGE='I', the index of the */
+/* > largest eigenvalue to be returned. */
 /* > 1 <= IL <= IU <= N, if N > 0;
 IL = 1 and IU = 0 if N = 0. */
 /* > Not referenced if RANGE = 'A' or 'V'. */
@@ -251,8 +259,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup complexHEeigen */
+/* > \ingroup heevx */
 /* ===================================================================== */
 /* Subroutine */
 void cheevx_(char *jobz, char *range, char *uplo, integer *n, complex *a, integer *lda, real *vl,
@@ -345,10 +352,10 @@ void cheevx_(char *jobz, char *range, char *uplo, integer *n, complex *a, intege
                 integer *);
     integer lwkopt;
     logical lquery;
-    /* -- LAPACK driver routine (version 3.4.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -455,7 +462,8 @@ void cheevx_(char *jobz, char *range, char *uplo, integer *n, complex *a, intege
             i__1 = 1;
             i__2 = (nb + 1) * *n; // , expr subst
             lwkopt = fla_max(i__1, i__2);
-            work[1].r = (real)lwkopt;
+            r__1 = sroundup_lwork(&lwkopt);
+            work[1].r = r__1;
             work[1].i = 0.f; // , expr subst
         }
         if(*lwork < lwkmin && !lquery)
@@ -647,7 +655,7 @@ void cheevx_(char *jobz, char *range, char *uplo, integer *n, complex *a, intege
         cunmtr_("L", uplo, "N", n, m, &a[a_offset], lda, &work[indtau], &z__[z_offset], ldz,
                 &work[indwrk], &llwork, &iinfo);
     }
-    /* If matrix was scaled, then rescale eigenvalues appropriately. */
+/* If matrix was scaled, then rescale eigenvalues appropriately. */
 L40:
     if(iscale == 1)
     {
@@ -700,7 +708,8 @@ L40:
         }
     }
     /* Set WORK(1) to optimal complex workspace size. */
-    work[1].r = (real)lwkopt;
+    r__1 = sroundup_lwork(&lwkopt);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

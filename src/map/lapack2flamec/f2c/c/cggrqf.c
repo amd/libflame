@@ -1,4 +1,4 @@
-/* cggrqf.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./cggrqf.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -144,7 +144,7 @@ the elements below the diagonal, */
 /* > */
 /* > \param[out] WORK */
 /* > \verbatim */
-/* > WORK is COMPLEX array, dimension (fla_max(1,LWORK)) */
+/* > WORK is COMPLEX array, dimension (MAX(1,LWORK)) */
 /* > On exit, if INFO = 0, WORK(1) returns the optimal LWORK. */
 /* > \endverbatim */
 /* > */
@@ -177,7 +177,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup complexOTHERcomputational */
+/* > \ingroup ggrqf */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -225,6 +225,7 @@ void cggrqf_(integer *m, integer *p, integer *n, complex *a, integer *lda, compl
                       *m, *p, *n, *lda, *ldb);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
+    real r__1;
     /* Local variables */
     integer nb, nb1, nb2, nb3, lopt;
     extern /* Subroutine */
@@ -241,6 +242,7 @@ void cggrqf_(integer *m, integer *p, integer *n, complex *a, integer *lda, compl
                 complex *, integer *, complex *, integer *, integer *);
     integer lwkopt;
     logical lquery;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -274,13 +276,14 @@ void cggrqf_(integer *m, integer *p, integer *n, complex *a, integer *lda, compl
     nb1 = ilaenv_(&c__1, "CGERQF", " ", m, n, &c_n1, &c_n1);
     nb2 = ilaenv_(&c__1, "CGEQRF", " ", p, n, &c_n1, &c_n1);
     nb3 = ilaenv_(&c__1, "CUNMRQ", " ", m, n, p, &c_n1);
-    /* Computing fla_max */
+    /* Computing MAX */
     i__1 = fla_max(nb1, nb2);
     nb = fla_max(i__1, nb3);
-    /* Computing fla_max */
+    /* Computing MAX */
     i__1 = fla_max(*n, *m);
     lwkopt = fla_max(i__1, *p) * nb;
-    work[1].r = (real)lwkopt;
+    r__1 = sroundup_lwork(&lwkopt);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     lquery = *lwork == -1;
     if(*m < 0)
@@ -305,7 +308,7 @@ void cggrqf_(integer *m, integer *p, integer *n, complex *a, integer *lda, compl
     }
     else /* if(complicated condition) */
     {
-        /* Computing fla_max */
+        /* Computing MAX */
         i__1 = fla_max(1, *m);
         i__1 = fla_max(i__1, *p); // , expr subst
         if(*lwork < fla_max(i__1, *n) && !lquery)
@@ -330,18 +333,18 @@ void cggrqf_(integer *m, integer *p, integer *n, complex *a, integer *lda, compl
     lopt = (integer)work[1].r;
     /* Update B := B*Q**H */
     i__1 = fla_min(*m, *n);
-    /* Computing fla_max */
+    /* Computing MAX */
     i__2 = 1;
     i__3 = *m - *n + 1; // , expr subst
     cunmrq_("Right", "Conjugate Transpose", p, n, &i__1, &a[fla_max(i__2, i__3) + a_dim1], lda,
             &taua[1], &b[b_offset], ldb, &work[1], lwork, info);
-    /* Computing fla_max */
+    /* Computing MAX */
     i__1 = lopt;
     i__2 = (integer)work[1].r; // , expr subst
     lopt = fla_max(i__1, i__2);
     /* QR factorization of P-by-N matrix B: B = Z*T */
     cgeqrf_(p, n, &b[b_offset], ldb, &taub[1], &work[1], lwork, info);
-    /* Computing fla_max */
+    /* Computing MAX */
     i__2 = lopt;
     i__3 = (integer)work[1].r; // , expr subst
     i__1 = fla_max(i__2, i__3);

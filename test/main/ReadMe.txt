@@ -133,7 +133,8 @@ below.
 
    NOTE: Method to pass customised input data:
          Customised input matrices can be copied to a file and passed(as the last argument)
-         to the API through command line.
+         to the API through command line. Input matrix data is assumed to be in column major
+         format. (All the elements of a column are continously copied to the file)
 
       Ex: ./test_lapack.x GGEVX d P N N E 10 10 10 10 10 -1 100 inputdata.txt
           where inputdata.txt file is in the same location as the test_lapack.x
@@ -203,19 +204,19 @@ NOTE:
 
 6. Tests with invalid input parameters using --einfo option:
 
-Â Â  Tests to check proper functioning of APIs while sending invalid value for any of the input parameters
-Â Â  can be done using --einfo option. This option is available only through command-line execution.
+   Tests to check proper functioning of APIs while sending invalid value for any of the input parameters
+   can be done using --einfo option. This option is available only through command-line execution.
 
-Â Â  Example:
-Â Â Â  ./test_lapack.x GGEVX d P N N E -10 10 10 10 10 -1 100 --einfo=-5
+   Example:
+    ./test_lapack.x GGEVX d P N N E -10 10 10 10 10 -1 100 --einfo=-5
 
-Â Â  In the above example, the value of the M has been given -10 which is an invalid value.
-Â Â  The --einfo parameter states the expected value of 'info' coming out of GGEVX API given the invalid input.
-Â Â  The test-suite checks the actual value of 'info' against this expected value and reurns PASS if they match
-Â Â  and FAIL if they don't.
+   In the above example, the value of the M has been given -10 which is an invalid value.
+   The --einfo parameter states the expected value of 'info' coming out of GGEVX API given the invalid input.
+   The test-suite checks the actual value of 'info' against this expected value and reurns PASS if they match
+   and FAIL if they don't.
 
-Â Â  All parameter related testing commands are compiled in test/main/scripts run_negative_test_cases.py which
-Â Â  can be used for this purpose.
+   All parameter related testing commands are compiled in test/main/scripts run_negative_test_cases.py which
+   can be used for this purpose.
 
 7. Tests with special inputs using --imatrix option for extreme values test:
 
@@ -231,10 +232,10 @@ NOTE:
     ./test_lapack.x GESV d 10 10 10 10 1 --imatrix=F
 
    Test behaviour for --imatrix=
-   N:intialize the matrix with NAN values in all locations
-   I:intialize the matrix with INFINITY values in all locations
-   A:intialize the matrix with the NAN values in few random locations
-   F:intialize the matrix with the INFINITY values in few random locations
+   N:initialize the matrix with NAN values in all locations
+   I:initialize the matrix with INFINITY values in all locations
+   A:initialize the matrix with the NAN values in few random locations
+   F:initialize the matrix with the INFINITY values in few random locations
 
 8. Tests with special inputs using --imatrix option for overflow/underflow test:
 
@@ -311,5 +312,21 @@ NOTE:
    1) Default layout is set to Column_major. In case user specifies
       anything other than row_major/column_major, matrix layout is
       considered to be column_major.
-   2) LAPACKE interface testing is only supported for config based tests.
 
+12. Common interface support:
+   Test suite supports the interfaces as follows:
+   a. "--interface=lapack" : Uses LAPACK interface for testing.
+   b. "--interface=lapacke_row" : Uses LAPACKE interface with row major for testing.
+   c. "--interface=lapacke_column" : Uses LAPACKE interface with column major for testing.
+   d. "--interface=cpp" : Uses CPP interface for testing.
+
+   Note :
+   1) In case user specifies anything incorrect, returns error and prints all interfaces.
+   2) Above "--lapacke" option will be removed once all test cases supports common interface.
+   3) ENABLE_CPP_TEST flag is used to enable/disable CPP interface, it is enabled by default.
+   4) If ENABLE_CPP_TEST is disabled & "--interface=cpp" is used, then returns error to enable
+      ENABLE_CPP_TEST flag. Also the test cases which are not yet implemented in cpp,
+      uses LAPACK interface.
+
+   Example: ./test_lapack.x --interface=cpp    --> for CPP interface
+            ./test_lapack.x --interface=lapacke_column --> for column major layout of lapacke interface

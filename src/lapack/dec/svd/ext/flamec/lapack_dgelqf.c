@@ -153,45 +153,109 @@ extern void dgeqrf_fla(integer *m, integer *n,
  /* ===================================================================== */
  /* Subroutine */
  int lapack_dgelqf(integer *m, integer *n, doublereal *a, integer * lda, doublereal *tau, doublereal *work, integer *lwork, integer *info) {
+ /* System generated locals */
+ *info = 0;
+ integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
+ extern void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
 #ifdef FLA_ENABLE_AMD_OPT
 /* LQ Factorization through QR using below equation:
  *              LQ = (QR)**H
  * */
  if (*m <= FLA_DELQF_TRAN_THRESH && *n <= FLA_DELQF_TRAN_THRESH)
  {
-   doublereal *at;
+    doublereal *at;
 
    if (*lwork == -1)
    {
-       /* Call QR to get appropriate work buffer size */
+       if (*m < 0)
+       {
+           *info = -1;
+       }
+       else if (*n < 0)
+       {
+           *info = -2;
+       }
+       else if (*lda < fla_max(1,*m))
+       {
+           *info = -4;
+       }
+       if(*info < 0)
+       {
+           i__1 = -(*info);
+           xerbla_("DGELQF", &i__1, (ftnlen)6);
+           return 0;
+       }
+    /* Call QR to get appropriate work buffer size */
        dgeqrf_fla(n, m, a, n, tau, work, lwork, info);
    }
    else
    {
-       /* Allocate transpose matrix */
-       at = malloc(*n * *m * sizeof(doublereal));
+       if (*m < 0)
+       {
+           *info = -1;
+       }
+       else if (*n < 0)
+       {
+           *info = -2;
+       }
+       else if(*lda < fla_max(1,*m))
+       {
+           *info = -4;
+       }
+       else if(*lwork < fla_max(1, *m))
+       {
+           *info = -7;
+       }
+       if(*info < 0)
+       {
+           i__1 = -(*info);
+           xerbla_("DGELQF", &i__1, (ftnlen)6);
+           return 0;
+       }
+       if(*n == 0 || *m == 0)
+       {
+           return 0;
+       }
+       if (*info == 0)
+       {
+           /* Allocate transpose matrix */
+           at = malloc(*n * *m * sizeof(doublereal));
 
-       /* Do transpose and store it in at */
-       fla_dtranspose(m, n, a, lda, at, n);
+           /* Do transpose and store it in at */
+           fla_dtranspose(m, n, a, lda, at, n);
 
-       /* Call QR for the transposed n x m matrix at */
-       dgeqrf_fla(n, m, at, n, tau, work, lwork, info);
+           /* Call QR for the transposed n x m matrix at */
+           dgeqrf_fla(n, m, at, n, tau, work, lwork, info);
 
-       /* Transpose at and store back in a */
-       fla_dtranspose(n, m, at, n, a, lda);
+           if(*info == -1)
+           {
+               *info = -2;
+           }
+           else if(*info == -2)
+           {
+               *info = -1;
+           }
 
-       /* Free the transpose matrix */
-       free(at);
+           /* Transpose at and store back in a */
+           fla_dtranspose(n, m, at, n, a, lda);
+
+           /* Free the transpose matrix */
+           free(at);
+       }
+       if(*info < 0)
+       {
+           i__1 = -(*info);
+           xerbla_("DGELQF", &i__1, (ftnlen)6);
+           return 0;
+       }
    }
    return 0;
  }
 #endif
- /* System generated locals */
- integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
  /* Local variables */
  integer i__, k, ib, nb, nx, iws, nbmin, iinfo;
  extern /* Subroutine */
- void dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlarft_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+ void dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlarft_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
  extern /* Subroutine */
  int lapack_dgelq2(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
  extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);

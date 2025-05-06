@@ -257,15 +257,10 @@ void sstegr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
              integer *isuppz, real *work, integer *lwork, integer *iwork, integer *liwork,
              integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
-             "sstegr inputs: jobz %c, range %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS
-             ", m %" FLA_IS ", ldz %" FLA_IS ", isuppz %" FLA_IS "",
-             *jobz, *range, *n, *il, *iu, *m, *ldz, *isuppz);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sstegr inputs: jobz %c, range %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS
+                      ", m %" FLA_IS ", ldz %" FLA_IS "",
+                      *jobz, *range, *n, *il, *iu, *m, *ldz);
     /* System generated locals */
     integer z_dim1, z_offset;
     /* Local variables */
@@ -305,7 +300,7 @@ void sstegr_(char *jobz, char *range, integer *n, real *d__, real *e, real *vl, 
     sstemr_(jobz, range, n, &d__[1], &e[1], vl, vu, il, iu, m, &w[1], &z__[z_offset], ldz, n,
             &isuppz[1], &tryrac, &work[1], lwork, &iwork[1], liwork, info);
     /* End of SSTEGR */
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
 }
 /* sstegr_ */

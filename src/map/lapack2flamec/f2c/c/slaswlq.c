@@ -1,4 +1,4 @@
-/* slaswlq.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./slaswlq.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -106,6 +106,7 @@ static integer c__0 = 0;
 /* > \endverbatim */
 /* > \param[in] LWORK */
 /* > \verbatim */
+/* > LWORK is INTEGER */
 /* > The dimension of the array WORK. LWORK >= MB * M. */
 /* > If LWORK = -1, then a workspace query is assumed;
 the routine */
@@ -158,6 +159,8 @@ the routine */
 /* > SIAM J. Sci. Comput, vol. 34, no. 1, 2012 */
 /* > \endverbatim */
 /* > */
+/* > \ingroup laswlq */
+/* > */
 /* ===================================================================== */
 /* Subroutine */
 void slaswlq_(integer *m, integer *n, integer *mb, integer *nb, real *a, integer *lda, real *t,
@@ -173,9 +176,7 @@ void slaswlq_(integer *m, integer *n, integer *mb, integer *nb, real *a, integer
     integer i__, ii, kk, ctr;
     extern /* Subroutine */
         void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
         sgelqt_(integer *, integer *, integer *, real *, integer *, real *, integer *, real *,
                 integer *);
     logical lquery;
@@ -183,6 +184,7 @@ void slaswlq_(integer *m, integer *n, integer *mb, integer *nb, real *a, integer
         void
         stplqt_(integer *, integer *, integer *, integer *, real *, integer *, real *, integer *,
                 real *, integer *, real *, integer *);
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. -- */
@@ -289,7 +291,8 @@ void slaswlq_(integer *m, integer *n, integer *mb, integer *nb, real *a, integer
         stplqt_(m, &kk, &c__0, mb, &a[a_dim1 + 1], lda, &a[ii * a_dim1 + 1], lda,
                 &t[(ctr * *m + 1) * t_dim1 + 1], ldt, &work[1], info);
     }
-    work[1] = (real)(*m * *mb);
+    i__2 = *m * *mb;
+    work[1] = sroundup_lwork(&i__2);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLASWLQ */

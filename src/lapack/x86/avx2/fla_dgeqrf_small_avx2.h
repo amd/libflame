@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2023-2025, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 #ifndef FLA_DGEQRF_SMALL_AVX2_DEFS_H
 #define FLA_DGEQRF_SMALL_AVX2_DEFS_H
@@ -68,7 +68,8 @@
     __m128d vd2_sinp, vd2_binp, vd2_minp;         \
     __m128d vd2_smsk, vd2_bmsk, vd2_mmsk;         \
     __m128d vd2_ssum, vd2_bsum, vd2_msum;         \
-    __m128d vd2_norm, vd2_vj1, vd2_dtmp;          \
+    __m128d vd2_norm, vd2_vj1;                    \
+    __m128d vd2_dtmp, vd2_dtmp2, vd2_dtmp3;       \
     __m128d vd2_ntau, vd2_ltmp, vd2_htmp;         \
     __m128d vd2_zero = _mm_set1_pd(-0.0f);        \
                                                   \
@@ -77,7 +78,8 @@
     __m256d vd4_sinp, vd4_binp, vd4_minp;         \
     __m256d vd4_smsk, vd4_bmsk, vd4_mmsk;         \
     __m256d vd4_ssum, vd4_bsum, vd4_msum;         \
-    __m256d vd4_norm, vd4_vj, vd4_dtmp;           \
+    __m256d vd4_norm, vd4_vj;                     \
+    __m256d vd4_dtmp, vd4_dtmp2, vd4_dtmp3;       \
     __m256d vd4_zero = _mm256_set1_pd(-0.0f);     \
                                                   \
     if(r_once)                                    \
@@ -140,7 +142,8 @@
     /* if all inputs are in  medium range */                          \
     if(_mm256_testz_pd(vd4_mmsk, vd4_mmsk))                           \
     {                                                                 \
-        vd4_msum = _mm256_fmadd_pd(vd4_inp, vd4_inp, vd4_msum);       \
+        vd4_dtmp = _mm256_mul_pd(vd4_inp, vd4_inp);                   \
+        vd4_msum = _mm256_add_pd(vd4_msum, vd4_dtmp);                 \
     }                                                                 \
     else /* for small and large inputs */                             \
     {                                                                 \
@@ -153,9 +156,12 @@
         vd4_sinp = _mm256_mul_pd(vd4_sinp, vd4_sscl);                 \
         vd4_binp = _mm256_mul_pd(vd4_binp, vd4_bscl);                 \
                                                                       \
-        vd4_msum = _mm256_fmadd_pd(vd4_minp, vd4_minp, vd4_msum);     \
-        vd4_ssum = _mm256_fmadd_pd(vd4_sinp, vd4_sinp, vd4_ssum);     \
-        vd4_bsum = _mm256_fmadd_pd(vd4_binp, vd4_binp, vd4_bsum);     \
+        vd4_dtmp = _mm256_mul_pd(vd4_minp, vd4_minp);                 \
+        vd4_dtmp2 = _mm256_mul_pd(vd4_sinp, vd4_sinp);                \
+        vd4_dtmp3 = _mm256_mul_pd(vd4_binp, vd4_binp);                \
+        vd4_msum = _mm256_add_pd(vd4_msum, vd4_dtmp);                 \
+        vd4_ssum = _mm256_add_pd(vd4_ssum, vd4_dtmp2);                \
+        vd4_bsum = _mm256_add_pd(vd4_bsum, vd4_dtmp3);                \
     }
 
 /* NORM computation using 128-bit AVX intrinsics */
@@ -171,7 +177,8 @@
     /* if all inputs are in  medium range */                       \
     if(_mm_testz_pd(vd2_mmsk, vd2_mmsk))                           \
     {                                                              \
-        vd2_msum = _mm_fmadd_pd(vd2_inp, vd2_inp, vd2_msum);       \
+        vd2_dtmp = _mm_mul_pd(vd2_inp, vd2_inp);                   \
+        vd2_msum = _mm_add_pd(vd2_msum, vd2_dtmp);                 \
     }                                                              \
     else /* for small and large inputs */                          \
     {                                                              \
@@ -183,9 +190,13 @@
         /* scale, square and add as applicable */                  \
         vd2_sinp = _mm_mul_pd(vd2_sinp, vd2_sscl);                 \
         vd2_binp = _mm_mul_pd(vd2_binp, vd2_bscl);                 \
-        vd2_ssum = _mm_fmadd_pd(vd2_sinp, vd2_sinp, vd2_ssum);     \
-        vd2_bsum = _mm_fmadd_pd(vd2_binp, vd2_binp, vd2_bsum);     \
-        vd2_msum = _mm_fmadd_pd(vd2_minp, vd2_minp, vd2_msum);     \
+                                                                   \
+        vd2_dtmp = _mm_mul_pd(vd2_sinp, vd2_sinp);                 \
+        vd2_dtmp2 = _mm_mul_pd(vd2_binp, vd2_binp);                \
+        vd2_dtmp3 = _mm_mul_pd(vd2_minp, vd2_minp);                \
+        vd2_ssum = _mm_add_pd(vd2_ssum, vd2_dtmp);                 \
+        vd2_bsum = _mm_add_pd(vd2_bsum, vd2_dtmp2);                \
+        vd2_msum = _mm_add_pd(vd2_msum, vd2_dtmp3);                \
     }
 
 #define FLA_LARF_GEN_DSMALL_COL(i, m, n, tau)                         \
@@ -242,11 +253,11 @@
         }                                                             \
         else                                                          \
         {                                                             \
-            doublereal px0, w, z;                                     \
+            doublereal w, z;                                          \
                                                                       \
-            px0 = f2c_abs(alpha);                                     \
-            w = fla_max(px0, xnorm);                                  \
-            z = fla_min(px0, xnorm);                                  \
+            dtmp = f2c_abs(alpha);                                    \
+            w = fla_max(dtmp, xnorm);                                 \
+            z = fla_min(dtmp, xnorm);                                 \
                                                                       \
             z = z / w;                                                \
             beta = w * sqrt(z * z + 1);                               \
@@ -287,7 +298,7 @@
         }                                                             \
     }
 
-#define FLA_LARF_APPLY_DSMALL_COL(i, m, n, r, tau)                  \
+#define FLA_LARF_APPLY_DSMALL_COL(i, m, n, r, ldr, tau)             \
     if(xnorm != 0.) /* Sub-diagonal elements are already zero */    \
     {                                                               \
         /* Part 2: Apply the Householder rotation              */   \
@@ -295,7 +306,7 @@
         /*    A = A - tau * v * v**T * A                       */   \
         /*      = A - v * tau * (A**T * v)**T                  */   \
                                                                     \
-        A = &r[i + (i + 1) * *lda];                                 \
+        A = &r[i + (i + 1) * *ldr];                                 \
         arows = *m - i + 1;                                         \
         acols = *n - i;                                             \
         v[1] = 1.;                                                  \
@@ -305,20 +316,26 @@
         /* Compute A**T * v */                                      \
         for(j = 1; j <= acols; j++) /* for every column c_A of A */ \
         {                                                           \
-            ac = &A[(j - 1) * *lda - 1];                            \
+            ac = &A[(j - 1) * *ldr - 1];                            \
                                                                     \
             /* Compute tmp = c_A**T . v */                          \
-            dtmp = 0;                                               \
+            vd2_dtmp = _mm_setzero_pd();                            \
             for(k = 1; k <= (arows - 1); k += 2)                    \
             {                                                       \
-                dtmp = dtmp + ac[k] * v[k];                         \
-                dtmp = dtmp + ac[k + 1] * v[k + 1];                 \
+                vd2_inp = _mm_loadu_pd((const doublereal *)&ac[k]); \
+                vd2_vj1 = _mm_loadu_pd((const doublereal *)&v[k]);  \
+                vd2_dtmp2 = _mm_mul_pd(vd2_inp, vd2_vj1);           \
+                vd2_dtmp = _mm_add_pd(vd2_dtmp, vd2_dtmp2);         \
             }                                                       \
             if(k == arows)                                          \
             {                                                       \
-                dtmp = dtmp + ac[k] * v[k];                         \
+                vd2_inp = _mm_load_sd((const doublereal *)&ac[k]);  \
+                vd2_vj1 = _mm_load_sd((const doublereal *)&v[k]);   \
+                vd2_dtmp2 = _mm_mul_pd(vd2_inp, vd2_vj1);           \
+                vd2_dtmp = _mm_add_pd(vd2_dtmp, vd2_dtmp2);         \
             }                                                       \
-            vd2_dtmp = _mm_set1_pd(dtmp);                           \
+                                                                    \
+            vd2_dtmp = _mm_hadd_pd(vd2_dtmp, vd2_dtmp);             \
                                                                     \
             /* Compute tmp = -tau * tmp */                          \
             vd2_dtmp = _mm_mul_pd(vd2_dtmp, vd2_ntau);              \
@@ -331,7 +348,8 @@
                 vd2_vj1 = _mm_loadu_pd((const doublereal *)&v[k]);  \
                                                                     \
                 /* mul by dtmp, add and store */                    \
-                vd2_inp = _mm_fmadd_pd(vd2_vj1, vd2_dtmp, vd2_inp); \
+                vd2_dtmp2 = _mm_mul_pd(vd2_vj1, vd2_dtmp);          \
+                vd2_inp = _mm_add_pd(vd2_inp, vd2_dtmp2);           \
                 _mm_storeu_pd((doublereal *)&ac[k], vd2_inp);       \
             }                                                       \
             if(k == arows)                                          \
@@ -341,7 +359,8 @@
                 vd2_vj1 = _mm_load_sd((const doublereal *)&v[k]);   \
                                                                     \
                 /* multiply with tau and store */                   \
-                vd2_inp = _mm_fmadd_pd(vd2_vj1, vd2_dtmp, vd2_inp); \
+                vd2_dtmp2 = _mm_mul_pd(vd2_vj1, vd2_dtmp);          \
+                vd2_inp = _mm_add_pd(vd2_inp, vd2_dtmp2);           \
                 _mm_store_sd((doublereal *)&ac[k], vd2_inp);        \
             }                                                       \
         }                                                           \
@@ -421,11 +440,11 @@
         }                                                                              \
         else                                                                           \
         {                                                                              \
-            doublereal px0, w, z;                                                      \
+            doublereal w, z;                                                           \
                                                                                        \
-            px0 = f2c_abs(alpha);                                                      \
-            w = fla_max(px0, xnorm);                                                   \
-            z = fla_min(px0, xnorm);                                                   \
+            dtmp = f2c_abs(alpha);                                                     \
+            w = fla_max(dtmp, xnorm);                                                  \
+            z = fla_min(dtmp, xnorm);                                                  \
                                                                                        \
             z = z / w;                                                                 \
             beta = w * sqrt(z * z + 1);                                                \
@@ -507,7 +526,8 @@
                 vd4_vj = _mm256_loadu_pd((const doublereal *)&v[k]);   \
                                                                        \
                 /* take dot product */                                 \
-                vd4_dtmp = _mm256_fmadd_pd(vd4_inp, vd4_vj, vd4_dtmp); \
+                vd4_dtmp2 = _mm256_mul_pd(vd4_inp, vd4_vj);            \
+                vd4_dtmp = _mm256_add_pd(vd4_dtmp, vd4_dtmp2);         \
             }                                                          \
             if(k < arows)                                              \
             {                                                          \
@@ -516,7 +536,8 @@
                 vd2_vj1 = _mm_loadu_pd((const doublereal *)&v[k]);     \
                                                                        \
                 /* take dot product */                                 \
-                vd2_dtmp = _mm_fmadd_pd(vd2_inp, vd2_vj1, vd2_dtmp);   \
+                vd2_dtmp2 = _mm_mul_pd(vd2_inp, vd2_vj1);              \
+                vd2_dtmp = _mm_add_pd(vd2_dtmp, vd2_dtmp2);            \
                 k += 2;                                                \
             }                                                          \
             if(k == arows)                                             \
@@ -526,7 +547,8 @@
                 vd2_vj1 = _mm_load_sd((const doublereal *)&v[k]);      \
                                                                        \
                 /* take dot product */                                 \
-                vd2_dtmp = _mm_fmadd_pd(vd2_inp, vd2_vj1, vd2_dtmp);   \
+                vd2_dtmp2 = _mm_mul_pd(vd2_inp, vd2_vj1);              \
+                vd2_dtmp = _mm_add_pd(vd2_dtmp, vd2_dtmp2);            \
             }                                                          \
             /* Horizontal add of dtmp */                               \
             vd2_ltmp = _mm256_castpd256_pd128(vd4_dtmp);               \
@@ -554,7 +576,8 @@
                 vd4_vj = _mm256_loadu_pd((const doublereal *)&v[k]);   \
                                                                        \
                 /* mul by dtmp, add and store */                       \
-                vd4_inp = _mm256_fmadd_pd(vd4_dtmp, vd4_vj, vd4_inp);  \
+                vd4_dtmp2 = _mm256_mul_pd(vd4_vj, vd4_dtmp);           \
+                vd4_inp = _mm256_add_pd(vd4_inp, vd4_dtmp2);           \
                 _mm256_storeu_pd((doublereal *)&ac[k], vd4_inp);       \
             }                                                          \
             if(k < arows)                                              \
@@ -564,7 +587,8 @@
                 vd2_vj1 = _mm_loadu_pd((const doublereal *)&v[k]);     \
                                                                        \
                 /* mul by dtmp, add and store */                       \
-                vd2_inp = _mm_fmadd_pd(vd2_dtmp, vd2_vj1, vd2_inp);    \
+                vd2_dtmp2 = _mm_mul_pd(vd2_vj1, vd2_dtmp);             \
+                vd2_inp = _mm_add_pd(vd2_inp, vd2_dtmp2);              \
                 _mm_storeu_pd((doublereal *)&ac[k], vd2_inp);          \
                 k += 2;                                                \
             }                                                          \
@@ -575,82 +599,80 @@
                 vd2_vj1 = _mm_load_sd((const doublereal *)&v[k]);      \
                                                                        \
                 /* mul by dtmp, add and store */                       \
-                vd2_inp = _mm_fmadd_pd(vd2_dtmp, vd2_vj1, vd2_inp);    \
+                vd2_dtmp2 = _mm_mul_pd(vd2_vj1, vd2_dtmp);             \
+                vd2_inp = _mm_add_pd(vd2_inp, vd2_dtmp2);              \
                 _mm_storel_pd((doublereal *)&ac[k], vd2_inp);          \
             }                                                          \
         }                                                              \
         v[1] = beta;                                                   \
     }
 
-#define FLA_LARF_GEN_DSMALL_ROW(i, m, n, tau)                       \
+#define FLA_LARF_GEN_DSMALL_ROW(i, m, n, iptr, ldia, tau)           \
     /* Compute norm2 */                                             \
-    xnorm = dnrm2_(&rlen, &iptr[2 * *lda], lda);                    \
+    xnorm = dnrm2_(&rlen, &iptr[2 * *ldia], ldia);                  \
     if(xnorm == 0.)                                                 \
     {                                                               \
         tau[i] = 0.;                                                \
-        beta = iptr[*lda];                                          \
+        beta = iptr[*ldia];                                         \
     }                                                               \
     else                                                            \
     {                                                               \
         knt = 0;                                                    \
         v = iptr;                                                   \
-        alpha = v[*lda];                                            \
-        d__1 = dlapy2_(&v[*lda], &xnorm);                           \
+        alpha = v[*ldia];                                           \
+        d__1 = dlapy2_(&v[*ldia], &xnorm);                          \
         beta = -d_sign(&d__1, &alpha);                              \
         if(f2c_abs(beta) < safmin)                                  \
         {                                                           \
             for(knt = 0; f2c_abs(beta) < safmin && knt < 20; knt++) \
             {                                                       \
-                i__1 = *n - 1;                                      \
-                dscal_(&i__1, &rsafmin, &v[2 * *lda], lda);         \
+                dscal_(&rlen, &rsafmin, &v[2 * *ldia], ldia);       \
                 beta *= rsafmin;                                    \
                 alpha *= rsafmin;                                   \
             }                                                       \
             /* New BETA is at most 1, at least SAFMIN */            \
-            i__1 = rlen;                                            \
-            xnorm = dnrm2_(&i__1, &v[2 * *lda], lda);               \
+            xnorm = dnrm2_(&rlen, &v[2 * *ldia], ldia);             \
             d__1 = dlapy2_(&alpha, &xnorm);                         \
             beta = -d_sign(&d__1, &alpha);                          \
         }                                                           \
         tau[i] = (beta - alpha) / beta;                             \
-        i__1 = rlen;                                                \
         d__1 = 1. / (alpha - beta);                                 \
-        dscal_(&i__1, &d__1, &v[2 * *lda], lda);                    \
+        dscal_(&rlen, &d__1, &v[2 * *ldia], ldia);                  \
         for(j = 1; j <= knt; ++j)                                   \
         {                                                           \
             beta *= safmin;                                         \
         }                                                           \
     }
 
-#define FLA_LARF_APPLY_DSMALL_ROW(i, m, n, tau)                           \
-    if(xnorm == 0.)                                                       \
-    {                                                                     \
-        tau[i] = 0.;                                                      \
-    }                                                                     \
-    else                                                                  \
-    {                                                                     \
-        /* for every row ac of A(i+1:nr,i+1:nc) */                        \
-        ac = iptr;                                                        \
-        v[*lda] = 1;                                                      \
-        for(j = 1; j <= slen; j++)                                        \
-        {                                                                 \
-            dtmp = 0;                                                     \
-            /* w = (ac .* v) */                                           \
-            for(k = 1; k <= rlen + 1; k++)                                \
-            {                                                             \
-                dtmp = dtmp + ac[j + k * *lda] * v[k * *lda];             \
-            }                                                             \
-                                                                          \
-            /* (ac .* v) * tau */                                         \
-            dtmp = dtmp * tau[i];                                         \
-                                                                          \
-            /* ac = ac - ac * dtmp */                                     \
-            for(k = 1; k <= rlen + 1; k++)                                \
-            {                                                             \
-                ac[j + k * *lda] = ac[j + k * *lda] - v[k * *lda] * dtmp; \
-            }                                                             \
-        }                                                                 \
-        v[*lda] = beta;                                                   \
+#define FLA_LARF_APPLY_DSMALL_ROW(i, m, n, iptr, ldia, tau)                  \
+    if(xnorm == 0.)                                                          \
+    {                                                                        \
+        tau[i] = 0.;                                                         \
+    }                                                                        \
+    else                                                                     \
+    {                                                                        \
+        /* for every row ac of A(i+1:nr,i+1:nc) */                           \
+        ac = iptr;                                                           \
+        v[*ldia] = 1;                                                        \
+        for(j = 1; j <= slen; j++)                                           \
+        {                                                                    \
+            dtmp = 0;                                                        \
+            /* w = (ac .* v) */                                              \
+            for(k = 1; k <= rlen + 1; k++)                                   \
+            {                                                                \
+                dtmp = dtmp + ac[j + k * *ldia] * v[k * *ldia];              \
+            }                                                                \
+                                                                             \
+            /* (ac .* v) * tau */                                            \
+            dtmp = dtmp * tau[i];                                            \
+                                                                             \
+            /* ac = ac - ac * dtmp */                                        \
+            for(k = 1; k <= rlen + 1; k++)                                   \
+            {                                                                \
+                ac[j + k * *ldia] = ac[j + k * *ldia] - v[k * *ldia] * dtmp; \
+            }                                                                \
+        }                                                                    \
+        v[*ldia] = beta;                                                     \
     }
 
 #define FLA_LARF_UAPPLY_DSMALL_SQR(m, a, lda, tauq, u, ldu, twork)              \

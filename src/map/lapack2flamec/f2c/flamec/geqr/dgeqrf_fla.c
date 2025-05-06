@@ -1,15 +1,20 @@
-/* dgeqrf.f -- translated by f2c (version 20000121). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
+/* dgeqrf.f -- translated by f2c (version 20000121). You must link the resulting object file with
+ * the libraries: -lf2c -lm (in that order) */
 /******************************************************************************
-* Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
-*******************************************************************************/
+ * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 #include "FLA_f2c.h" /* Table of constant values */
 #include "fla_lapack_x86_common.h"
-#ifndef FLA_ENABLE_AMD_OPT
- static integer c__1 = 1;
+#if !FLA_ENABLE_AMD_OPT
+static integer c__1 = 1;
 #endif
 static integer c_n1 = -1;
 static integer c__3 = 3;
 static integer c__2 = 2;
+
+extern int fla_thread_get_num_threads();
+
+integer get_block_size_dgeqrf(integer *m, integer *n);
 
 /* > \brief \b DGEQRF */
 /* =========== DOCUMENTATION =========== */
@@ -152,6 +157,7 @@ v(i+1:m) is stored on exit in A(i+1:m,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
+
 void dgeqrf_fla(integer *m, integer *n, doublereal *a, integer *lda, doublereal *tau,
                 doublereal *work, integer *lwork, integer *info)
 {
@@ -209,11 +215,12 @@ void dgeqrf_fla(integer *m, integer *n, doublereal *a, integer *lda, doublereal 
     --work;
     /* Function Body */
     *info = 0;
-#ifdef FLA_ENABLE_AMD_OPT
-    nb = FLA_GEQRF_BLOCK_SIZE;
+#if FLA_ENABLE_AMD_OPT
+    nb = get_block_size_dgeqrf(m, n);
 #else
     nb = ilaenv_(&c__1, "DGEQRF", " ", m, n, &c_n1, &c_n1);
 #endif
+
     lwkopt = *n * nb;
     work[1] = (doublereal)lwkopt;
     lquery = *lwork == -1;
@@ -363,4 +370,42 @@ void dgeqrf_fla(integer *m, integer *n, doublereal *a, integer *lda, doublereal 
     return;
     /* End of DGEQRF */
 }
+
+integer get_block_size_dgeqrf(integer *m, integer *n)
+{
+    integer block_size;
+
+    /* Set block_size=32 for small sizes */
+    if(*m <= 17 && *n <= 17)
+    {
+        block_size = 32;
+    }
+    else
+    {
+        int num_threads = fla_thread_get_num_threads();
+
+        if(num_threads == 1)
+        {
+            if(*m >= 2000 && *n >= 2000)
+            {
+                block_size = 64;
+            }
+            else if(*m >= 1000 && *n >= 1000)
+            {
+                block_size = 60;
+            }
+            else
+            {
+                block_size = 32;
+            }
+        }
+        else
+        {
+            block_size = 32;
+        }
+    }
+
+    return block_size;
+}
+
 /* dgeqrf_ */

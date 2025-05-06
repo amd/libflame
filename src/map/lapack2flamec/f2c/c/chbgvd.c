@@ -1,8 +1,8 @@
-/* ../netlib/chbgvd.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./chbgvd.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static complex c_b1 = {1.f, 0.f};
 static complex c_b2 = {0.f, 0.f};
@@ -52,12 +52,6 @@ static complex c_b2 = {0.f, 0.f};
 /* > and banded, and B is also positive definite. If eigenvectors are */
 /* > desired, it uses a divide and conquer algorithm. */
 /* > */
-/* > The divide and conquer algorithm makes very mild assumptions about */
-/* > floating point arithmetic. It will work on machines with a guard */
-/* > digit in add/subtract, or on those binary machines without guard */
-/* > digits which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or */
-/* > Cray-2. It could conceivably fail on hexadecimal or decimal machines */
-/* > without guard digits, but we know of none. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -247,8 +241,7 @@ the */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date June 2016 */
-/* > \ingroup complexOTHEReigen */
+/* > \ingroup hbgvd */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -278,6 +271,7 @@ void chbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, compl
 #endif
     /* System generated locals */
     integer ab_dim1, ab_offset, bb_dim1, bb_offset, z_dim1, z_offset, i__1;
+    real r__1;
     /* Local variables */
     integer inde;
     char vect[1];
@@ -309,10 +303,10 @@ void chbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, compl
         ssterf_(integer *, real *, real *, integer *);
     integer lrwmin;
     logical lquery;
-    /* -- LAPACK driver routine (version 3.7.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -403,7 +397,8 @@ void chbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, compl
     }
     if(*info == 0)
     {
-        work[1].r = (real)lwmin;
+        r__1 = sroundup_lwork(&lwmin);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         rwork[1] = (real)lrwmin;
         iwork[1] = liwmin;
@@ -477,7 +472,8 @@ void chbgvd_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, compl
         cgemm_("N", "N", n, n, n, &c_b1, &z__[z_offset], ldz, &work[1], n, &c_b2, &work[indwk2], n);
         clacpy_("A", n, n, &work[indwk2], n, &z__[z_offset], ldz);
     }
-    work[1].r = (real)lwmin;
+    r__1 = sroundup_lwork(&lwmin);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     rwork[1] = (real)lrwmin;
     iwork[1] = liwmin;

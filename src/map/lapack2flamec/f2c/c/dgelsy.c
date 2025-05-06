@@ -1,8 +1,8 @@
-/* ../netlib/dgelsy.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./dgelsy.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -124,6 +124,7 @@ they are stored as the columns of the */
 /* > B is DOUBLE PRECISION array, dimension (LDB,NRHS) */
 /* > On entry, the M-by-NRHS right hand side matrix B. */
 /* > On exit, the N-by-NRHS solution matrix X. */
+/* > If M = 0 or N = 0, B is not referenced. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] LDB */
@@ -156,6 +157,7 @@ they are stored as the columns of the */
 /* > The effective rank of A, i.e., the order of the submatrix */
 /* > R11. This is the same as the order of the submatrix T11 */
 /* > in the complete orthogonal factorization of A. */
+/* > If NRHS = 0, RANK = 0 on output. */
 /* > \endverbatim */
 /* > */
 /* > \param[out] WORK */
@@ -196,8 +198,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup doubleGEsolve */
+/* > \ingroup gelsy */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -238,8 +239,7 @@ void dgelsy_(integer *m, integer *n, integer *nrhs, doublereal *a, integer *lda,
     extern /* Subroutine */
         void
         dgeqp3_(integer *, integer *, doublereal *, integer *, integer *, doublereal *,
-                doublereal *, integer *, integer *),
-        dlabad_(doublereal *, doublereal *);
+                doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *),
         dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
     extern /* Subroutine */
@@ -266,10 +266,9 @@ void dgelsy_(integer *m, integer *n, integer *nrhs, doublereal *a, integer *lda,
         void
         dtzrzf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
                 integer *, integer *);
-    /* -- LAPACK driver routine (version 3.4.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -384,7 +383,6 @@ void dgelsy_(integer *m, integer *n, integer *nrhs, doublereal *a, integer *lda,
     /* Get machine parameters */
     smlnum = dlamch_("S") / dlamch_("P");
     bignum = 1. / smlnum;
-    dlabad_(&smlnum, &bignum);
     /* Scale A, B if max entries outside range [SMLNUM,BIGNUM] */
     anrm = dlange_("M", m, n, &a[a_offset], lda, &work[1]);
     iascl = 0;

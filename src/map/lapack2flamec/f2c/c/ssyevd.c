@@ -1,4 +1,4 @@
-/* ssyevd.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./ssyevd.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -48,13 +48,6 @@ static real c_b17 = 1.f;
 /* > SSYEVD computes all eigenvalues and, optionally, eigenvectors of a */
 /* > real symmetric matrix A. If eigenvectors are desired, it uses a */
 /* > divide and conquer algorithm. */
-/* > */
-/* > The divide and conquer algorithm makes very mild assumptions about */
-/* > floating point arithmetic. It will work on machines with a guard */
-/* > digit in add/subtract, or on those binary machines without guard */
-/* > digits which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or */
-/* > Cray-2. It could conceivably fail on hexadecimal or decimal machines */
-/* > without guard digits, but we know of none. */
 /* > */
 /* > Because of large use of BLAS of level 3, SSYEVD needs N**2 more */
 /* > workspace than SSYEVX. */
@@ -177,7 +170,7 @@ i off-diagonal elements of an intermediate */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup realSYeigen */
+/* > \ingroup heevd */
 /* > \par Contributors: */
 /* ================== */
 /* > */

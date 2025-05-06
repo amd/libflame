@@ -1,9 +1,9 @@
-/* ../netlib/zhbgv.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b ZHBGST */
+/* ./zhbgv.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+#include "FLA_f2c.h" /* > \brief \b ZHBGV */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -178,8 +178,7 @@
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup complex16OTHEReigen */
+/* > \ingroup hbgv */
 /* ===================================================================== */
 /* Subroutine */
 void zhbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, doublecomplex *ab,
@@ -200,9 +199,7 @@ void zhbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, double
     logical upper, wantz;
     extern /* Subroutine */
         void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
         dsterf_(integer *, doublereal *, doublereal *, integer *),
         zhbtrd_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublereal *,
                 doublereal *, doublecomplex *, integer *, doublecomplex *, integer *);
@@ -215,10 +212,9 @@ void zhbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, double
         zpbstf_(char *, integer *, integer *, doublecomplex *, integer *, integer *),
         zsteqr_(char *, integer *, doublereal *, doublereal *, doublecomplex *, integer *,
                 doublereal *, integer *);
-    /* -- LAPACK driver routine (version 3.4.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -284,7 +280,7 @@ void zhbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, double
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHBGV ", &i__1, (ftnlen)6);
+        xerbla_("ZHBGV", &i__1, (ftnlen)5);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

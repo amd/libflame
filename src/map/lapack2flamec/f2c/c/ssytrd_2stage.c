@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/ssytrd_2stage.f -- translated by f2c (version 20160102). You must link the
- resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
- Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
- with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./ssytrd_2stage.f -- translated by f2c (version 20190311). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -168,7 +168,7 @@ the routine */
 /* > message related to LWORK is issued by XERBLA. */
 /* > LWORK = MAX(1, dimension) where */
 /* > dimension = fla_max(stage1,stage2) + (KD+1)*N */
-/* > = N*KD + N*max(KD+1,FACTOPTNB) */
+/* > = N*KD + N*fla_max(KD+1,FACTOPTNB) */
 /* > + fla_max(2*KD*KD, KD*NTHREADS) */
 /* > + (KD+1)*N */
 /* > where KD is the blocking size of the reduction, */
@@ -190,8 +190,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2017 */
-/* > \ingroup realSYcomputational */
+/* > \ingroup hetrd_2stage */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -232,15 +231,11 @@ void ssytrd_2stage_(char *vect, char *uplo, integer *n, real *a, integer *lda, r
                     real *tau, real *hous2, integer *lhous2, real *work, integer *lwork,
                     integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "ssytrd_2stage inputs: vect %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS
              ", lhous2 %" FLA_IS "",
              *vect, *uplo, *n, *lda, *lhous2);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
     /* Local variables */
@@ -261,10 +256,9 @@ void ssytrd_2stage_(char *vect, char *uplo, integer *n, real *a, integer *lda, r
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
-    /* -- LAPACK computational routine (version 3.8.0) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2017 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -332,19 +326,19 @@ void ssytrd_2stage_(char *vect, char *uplo, integer *n, real *a, integer *lda, r
     {
         i__1 = -(*info);
         xerbla_("SSYTRD_2STAGE", &i__1, (ftnlen)13);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         work[1] = 1.f;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine pointer position */
@@ -358,7 +352,7 @@ void ssytrd_2stage_(char *vect, char *uplo, integer *n, real *a, integer *lda, r
     {
         i__1 = -(*info);
         xerbla_("SSYTRD_SY2SB", &i__1, (ftnlen)12);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     ssytrd_sb2st_("Y", vect, uplo, n, &kd, &work[abpos], &ldab, &d__[1], &e[1], &hous2[1], lhous2,
@@ -367,12 +361,12 @@ void ssytrd_2stage_(char *vect, char *uplo, integer *n, real *a, integer *lda, r
     {
         i__1 = -(*info);
         xerbla_("SSYTRD_SB2ST", &i__1, (ftnlen)12);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     hous2[1] = (real)lhmin;
     work[1] = (real)lwmin;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYTRD_2STAGE */
 }

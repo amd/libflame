@@ -1,5 +1,5 @@
 ## ##############################################################################
-## Copyright (C) 2024, Advanced Micro Devices. All rights reserved.
+## Copyright (C) 2024-2025, Advanced Micro Devices. All rights reserved.
 ##
 ## Redistribution and use in source and binary forms, with or without
 ## modification, are permitted provided that the following conditions are met:
@@ -29,7 +29,7 @@
 
 {%
 macro top_level_header(branch, latest_version, release_candidate_version) -%}
-    <a class="klavika-font hover-opacity" href="./index.html">AOCL-LAPACK 5.0</a>
+    <a class="klavika-font hover-opacity" href="./index.html">AOCL-LAPACK 5.1</a>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var elements = document.getElementsByClassName('header-all-versions');
@@ -38,7 +38,7 @@ macro top_level_header(branch, latest_version, release_candidate_version) -%}
             }
 
             elements = document.querySelector("body > footer > div > section > div:nth-child(1) > div > ul").children;
-            var removable_items = ['2020-2024, Advanced Micro Devices, Inc', 'Statement on Forced Labor', 'Fair and Open Competition', 'UK Tax Strategy', 'Cookie Policy', 'Cookie Settings'];
+            var removable_items = ['2020-2025, Advanced Micro Devices, Inc', 'Statement on Forced Labor', 'Fair and Open Competition', 'UK Tax Strategy', 'Cookie Policy', 'Cookie Settings'];
             for(var i = 0; i < elements.length; i++) {
                 if(removable_items.includes(elements[i].innerText)) {
                     elements[i].remove();

@@ -1,4 +1,4 @@
-/* dlaqr5.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./dlaqr5.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -237,7 +237,7 @@ static integer c__3 = 3;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup doubleOTHERauxiliary */
+/* > \ingroup laqr5 */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -300,8 +300,7 @@ void dlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
     extern /* Subroutine */
         void
         dlaqr1_(integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *,
-                doublereal *, doublereal *),
-        dlabad_(doublereal *, doublereal *);
+                doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
         void
@@ -311,7 +310,7 @@ void dlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
     extern /* Subroutine */
         void
         dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
-    doublereal safmax, refsum, smlnum;
+    doublereal refsum, smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -395,8 +394,6 @@ void dlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
     ns = *nshfts - *nshfts % 2;
     /* ==== Machine constants for deflation ==== */
     safmin = dlamch_("SAFE MINIMUM");
-    safmax = 1. / safmin;
-    dlabad_(&safmin, &safmax);
     ulp = dlamch_("PRECISION");
     smlnum = safmin * ((doublereal)(*n) / ulp);
     /* ==== Use accumulated reflections to update far-from-diagonal */
@@ -659,10 +656,13 @@ void dlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                     /* ==== Perform delayed transformation of row below */
                     /* . Mth bulge. Exploit fact that first two elements */
                     /* . of row are actually zero. ==== */
-                    refsum = v[m * v_dim1 + 1] * v[m * v_dim1 + 3] * h__[k + 3 + (k + 2) * h_dim1];
-                    h__[k + 3 + k * h_dim1] = -refsum;
-                    h__[k + 3 + (k + 1) * h_dim1] = -refsum * v[m * v_dim1 + 2];
-                    h__[k + 3 + (k + 2) * h_dim1] -= refsum * v[m * v_dim1 + 3];
+                    t1 = v[m * v_dim1 + 1];
+                    t2 = t1 * v[m * v_dim1 + 2];
+                    t3 = t1 * v[m * v_dim1 + 3];
+                    refsum = v[m * v_dim1 + 3] * h__[k + 3 + (k + 2) * h_dim1];
+                    h__[k + 3 + k * h_dim1] = -refsum * t1;
+                    h__[k + 3 + (k + 1) * h_dim1] = -refsum * t2;
+                    h__[k + 3 + (k + 2) * h_dim1] -= refsum * t3;
                     /* ==== Calculate reflection to move */
                     /* . Mth bulge one step. ==== */
                     beta = h__[k + 1 + k * h_dim1];
@@ -692,10 +692,12 @@ void dlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                                 &si[(m << 1) - 1], &sr[m * 2], &si[m * 2], vt);
                         alpha = vt[0];
                         dlarfg_(&c__3, &alpha, &vt[1], &c__1, vt);
-                        refsum
-                            = vt[0] * (h__[k + 1 + k * h_dim1] + vt[1] * h__[k + 2 + k * h_dim1]);
-                        if((d__1 = h__[k + 2 + k * h_dim1] - refsum * vt[1], f2c_dabs(d__1))
-                               + (d__2 = refsum * vt[2], f2c_dabs(d__2))
+                        t1 = vt[0];
+                        t2 = t1 * vt[1];
+                        t3 = t1 * vt[2];
+                        refsum = h__[k + 1 + k * h_dim1] + vt[1] * h__[k + 2 + k * h_dim1];
+                        if((d__1 = h__[k + 2 + k * h_dim1] - refsum * t2, f2c_dabs(d__1))
+                               + (d__2 = refsum * t3, f2c_dabs(d__2))
                            > ulp
                                  * ((d__3 = h__[k + k * h_dim1], f2c_dabs(d__3))
                                     + (d__4 = h__[k + 1 + (k + 1) * h_dim1], f2c_dabs(d__4))
@@ -714,7 +716,7 @@ void dlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                             /* . create only negligible fill. */
                             /* . Replace the old reflector with */
                             /* . the new one. ==== */
-                            h__[k + 1 + k * h_dim1] -= refsum;
+                            h__[k + 1 + k * h_dim1] -= refsum * t1;
                             h__[k + 2 + k * h_dim1] = 0.;
                             h__[k + 3 + k * h_dim1] = 0.;
                             v[m * v_dim1 + 1] = vt[0];

@@ -5,8 +5,8 @@
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 
 /*
-*     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
-*/
+ *     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+ */
 
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
@@ -163,12 +163,8 @@ static integer c__1 = 1;
 /* Subroutine */
 void ssptrf_(char *uplo, integer *n, real *ap, integer *ipiv, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "ssptrf inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("ssptrf inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     /* System generated locals */
     integer i__1, i__2;
     real r__1, r__2, r__3;
@@ -242,7 +238,7 @@ void ssptrf_(char *uplo, integer *n, real *ap, integer *ipiv, integer *info)
     {
         i__1 = -(*info);
         xerbla_("SSPTRF", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize ALPHA for use in choosing pivot block size. */
@@ -637,7 +633,7 @@ void ssptrf_(char *uplo, integer *n, real *ap, integer *ipiv, integer *info)
         goto L60;
     }
 L110:
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSPTRF */
 }

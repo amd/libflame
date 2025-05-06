@@ -122,6 +122,10 @@ the unit diagonal elements of L are not stored. */
 void sgesv_(integer *n, integer *nrhs, real *a, integer *lda, integer *ipiv, real *b, integer *ldb,
             integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgesv inputs: n %" FLA_IS ",nrhs %" FLA_IS ",lda %" FLA_IS ",ldb %" FLA_IS
+                      "",
+                      *n, *nrhs, *lda, *ldb);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
@@ -178,6 +182,7 @@ void sgesv_(integer *n, integer *nrhs, real *a, integer *lda, integer *ipiv, rea
     {
         i__1 = -(*info);
         xerbla_("SGESV ", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute the LU factorization of A. */
@@ -187,6 +192,7 @@ void sgesv_(integer *n, integer *nrhs, real *a, integer *lda, integer *ipiv, rea
         /* Solve the system A*X = B, overwriting B with X. */
         sgetrs_("No transpose", n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb, info);
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGESV */
 }

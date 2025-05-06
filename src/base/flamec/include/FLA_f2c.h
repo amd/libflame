@@ -15,7 +15,9 @@
 #include <string.h>
 #include <stdlib.h> 
 #include <math.h>
+#ifndef __cplusplus
 #include <complex.h>
+#endif
 #undef complex
 #include "FLA_config.h"
 #include "FLA_macro_defs.h"
@@ -122,6 +124,9 @@
 	#define AOCL_DTL_TRACE_LOG_EXIT
 
 #endif
+
+/* Macro to access array item pointers stored in column major order */
+#define M_PTR(A, r, c, lda) ((A) + (((c) * (lda)) + (r)))
 
 // LDLT Factorization for packed matrices uses different threshold to choose
 // between blocked /  unblocked variants and also the blocksize for the blocked

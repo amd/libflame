@@ -1,8 +1,8 @@
-/* ../netlib/zgelss.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./zgelss.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublecomplex c_b1 = {0., 0.};
 static doublecomplex c_b2 = {1., 0.};
@@ -179,8 +179,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date June 2016 */
-/* > \ingroup complex16GEsolve */
+/* > \ingroup gelss */
 /* ===================================================================== */
 /* Subroutine */
 void zgelss_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *lda,
@@ -191,7 +190,6 @@ void zgelss_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *l
     AOCL_DTL_SNPRINTF("zgelss inputs: m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
                       ", ldb %" FLA_IS ", rank %" FLA_IS "",
                       *m, *n, *nrhs, *lda, *ldb, *rank);
-
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
     doublereal d__1;
@@ -199,8 +197,8 @@ void zgelss_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *l
     integer i__, bl, ie, il, mm;
     doublecomplex dum[1];
     doublereal eps, thr, anrm, bnrm;
-    integer itau, lwork_zgebrd__, lwork_zgelqf__, lwork_zungbr__, lwork_zunmbr__, iascl, ibscl,
-        lwork_zunmlq__, chunk;
+    integer itau, lwork_zgebrd__, lwork_zgelqf__, lwork_zungbr__, lwork_zunmbr__,
+        iascl, ibscl, lwork_zunmlq__, chunk;
     doublereal sfmin;
     integer minmn;
     extern /* Subroutine */
@@ -215,8 +213,7 @@ void zgelss_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *l
     integer iwork;
     extern /* Subroutine */
         void
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        dlabad_(doublereal *, doublereal *);
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
         void
@@ -267,10 +264,9 @@ void zgelss_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *l
                 doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *),
         zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
                 doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
-    /* -- LAPACK driver routine (version 3.7.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -510,7 +506,6 @@ void zgelss_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *l
     sfmin = dlamch_("S");
     smlnum = sfmin / eps;
     bignum = 1. / smlnum;
-    dlabad_(&smlnum, &bignum);
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
     anrm = zlange_("M", m, n, &a[a_offset], lda, &rwork[1]);
     iascl = 0;
@@ -663,7 +658,7 @@ void zgelss_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *l
                 /* L20: */
             }
         }
-        else
+        else if(*nrhs == 1)
         {
             zgemv_("C", n, n, &c_b2, &a[a_offset], lda, &b[b_offset], &c__1, &c_b1, &work[1],
                    &c__1);
@@ -785,7 +780,7 @@ void zgelss_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *l
                     /* L40: */
                 }
             }
-            else
+            else if(*nrhs == 1)
             {
                 zgemv_("C", m, m, &c_b2, &work[il], &ldwork, &b[b_dim1 + 1], &c__1, &c_b1,
                        &work[iwork], &c__1);
@@ -888,7 +883,7 @@ void zgelss_(integer *m, integer *n, integer *nrhs, doublecomplex *a, integer *l
                     /* L60: */
                 }
             }
-            else
+            else if(*nrhs == 1)
             {
                 zgemv_("C", m, n, &c_b2, &a[a_offset], lda, &b[b_offset], &c__1, &c_b1, &work[1],
                        &c__1);

@@ -1,16 +1,23 @@
 /*
-    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
+
+extern double perf;
+extern double time_min;
+integer row_major_gehrd_lda;
 
 /* Local prototypes */
-void fla_test_gehrd_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *t, double *residual);
+void fla_test_gehrd_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo);
 void prepare_gehrd_run(integer n, integer *ilo, integer *ihi, void *A, integer lda, void *tau,
                        integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, int matrix_layout);
+                       integer interfacetype, int matrix_layout);
 void invoke_gehrd(integer datatype, integer *n, integer *ilo, integer *ihi, void *a, integer *lda,
                   void *tau, void *work, integer *lwork, integer *info);
 double prepare_lapacke_gehrd_run(integer datatype, int layout, integer n, integer *ilo,
@@ -39,7 +46,6 @@ void fla_test_gehrd(integer argc, char **argv, test_params_t *params)
     {
         integer i, num_types, N;
         integer datatype, n_repeats;
-        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -48,7 +54,16 @@ void fla_test_gehrd(integer argc, char **argv, test_params_t *params)
         N = strtoimax(argv[3], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].ilo = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].ihi = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
-        params->lin_solver_paramslist[0].lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
+        /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
+        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
+        {
+            row_major_gehrd_lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
+            params->lin_solver_paramslist[0].lda = N;
+        }
+        else
+        {
+            params->lin_solver_paramslist[0].lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
+        }
         g_lwork = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
 
@@ -74,12 +89,7 @@ void fla_test_gehrd(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_gehrd_experiment(params, datatype, N, N, 0, n_repeats, einfo, &perf,
-                                          &time_min, &residual);
-                /* Print the results */
-                fla_test_print_status(front_str, stype, SQUARE_INPUT, N, N, residual,
-                                      params->lin_solver_paramslist[0].solver_threshold, time_min,
-                                      perf);
+                fla_test_gehrd_experiment(front_str, params, datatype, N, N, 0, n_repeats, einfo);
                 tests_not_run = 0;
             }
         }
@@ -102,15 +112,16 @@ void fla_test_gehrd(integer argc, char **argv, test_params_t *params)
     }
 }
 
-void fla_test_gehrd_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *time_min, double *residual)
+void fla_test_gehrd_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo)
 {
-    integer n, lda;
-    integer ilo, ihi, info = 0, vinfo = 0;
+    integer n, lda, AInitialized = 0;
+    integer ilo, ihi, info = 0;
     void *A = NULL, *A_Test = NULL, *tau = NULL;
+    double residual, err_thresh;
 
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
 
     /* Get input matrix dimensions. */
@@ -128,7 +139,7 @@ void fla_test_gehrd_experiment(test_params_t *params, integer datatype, integer 
     }
 
     /* Initialize parameter needed for gehrd() call. */
-    *residual = params->lin_solver_paramslist[pci].solver_threshold;
+    err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
     ilo = params->lin_solver_paramslist[pci].ilo;
     ihi = params->lin_solver_paramslist[pci].ihi;
 
@@ -142,33 +153,57 @@ void fla_test_gehrd_experiment(test_params_t *params, integer datatype, integer 
     }
     else
     {
-        /* Intialize matrix H with ILO and IHI conditions to generate hessenberg matrix */
-        get_generic_triangular_matrix(datatype, n, A, lda, ilo, ihi, false);
+        if(FLA_EXTREME_CASE_TEST)
+        {
+            init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+            AInitialized = 1;
+        }
+        else if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            rand_matrix(datatype, A, n, n, lda);
+            scale_matrix_underflow_overflow_gehrd(datatype, n, A, lda, params->imatrix_char);
+            AInitialized = 1;
+        }
+        /* Initialize matrix H with ILO and IHI conditions to generate hessenberg matrix */
+        get_generic_triangular_matrix(datatype, n, A, lda, ilo, ihi, AInitialized);
     }
 
     /* Make copy of matrix A. This is required to validate the API functionality */
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_Test, lda);
     copy_matrix(datatype, "full", n, n, A, lda, A_Test, lda);
 
-    prepare_gehrd_run(n, &ilo, &ihi, A_Test, lda, tau, datatype, n_repeats, time_min, &info,
-                      test_lapacke_interface, layout);
+    prepare_gehrd_run(n, &ilo, &ihi, A_Test, lda, tau, datatype, n_repeats, &time_min, &info,
+                      interfacetype, layout);
 
     /* Performance computation
        (2/3)*(ihi - ilo)^2(2ihi + 2ilo + 3n) flops for real values
        4*((2/3)*(ihi - ilo)^2(2ihi + 2ilo + 3n)) flops for complex values */
 
     if(datatype == FLOAT || datatype == DOUBLE)
-        *perf = (double)((2.0 / 3.0) * pow((ihi - ilo), 2) * (2 * ihi + 2 * ilo + 3 * n))
-                / *time_min / FLOPS_PER_UNIT_PERF;
+        perf = (double)((2.0 / 3.0) * pow((ihi - ilo), 2) * (2 * ihi + 2 * ilo + 3 * n)) / time_min
+               / FLOPS_PER_UNIT_PERF;
     else
-        *perf = (double)(4.0 * ((2.0 / 3.0) * pow((ihi - ilo), 2) * (2 * ihi + 2 * ilo + 3 * n)))
-                / *time_min / FLOPS_PER_UNIT_PERF;
+        perf = (double)(4.0 * ((2.0 / 3.0) * pow((ihi - ilo), 2) * (2 * ihi + 2 * ilo + 3 * n)))
+               / time_min / FLOPS_PER_UNIT_PERF;
 
     /* Output Validation */
-    if(info == 0)
-        validate_gehrd(n, ilo, ihi, A, A_Test, lda, tau, datatype, residual, &vinfo);
-
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    if(!FLA_EXTREME_CASE_TEST)
+    {
+        validate_gehrd(tst_api, n, ilo, ihi, A, A_Test, lda, tau, datatype, residual);
+    }
+    else
+    {
+        if((!check_extreme_value(datatype, n, n, A_Test, lda, params->imatrix_char)))
+        {
+            residual = DBL_MAX;
+        }
+        else
+        {
+            residual = err_thresh;
+        }
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    }
 
     /* Free up the buffers */
     free_matrix(A);
@@ -178,11 +213,11 @@ void fla_test_gehrd_experiment(test_params_t *params, integer datatype, integer 
 
 void prepare_gehrd_run(integer n, integer *ilo, integer *ihi, void *A, integer lda, void *tau,
                        integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, int layout)
+                       integer interfacetype, int layout)
 {
     void *A_save = NULL, *work = NULL, *tau_test = NULL;
     integer i, lwork;
-    double time_min = 1e9, exe_time;
+    double t_min = 1e9, exe_time;
 
     /* Make a copy of the input matrix A. Same input values will be passed in each itertaion.*/
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_save, lda);
@@ -191,13 +226,23 @@ void prepare_gehrd_run(integer n, integer *ilo, integer *ihi, void *A, integer l
     /* Make a workspace query the first time through. This will provide us with
        and ideal workspace size based on an internal block size.
        NOTE: LAPACKE interface handles workspace query internally */
-    if((test_lapacke_interface == 0) && (g_lwork <= 0))
+    if((interfacetype != LAPACKE_COLUMN_TEST) && (interfacetype != LAPACKE_ROW_TEST)
+       && (g_lwork <= 0))
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
 
         /* call to  gehrd API */
-        invoke_gehrd(datatype, &n, ilo, ihi, NULL, &lda, NULL, work, &lwork, info);
+#if ENABLE_CPP_TEST
+        if(interfacetype == LAPACK_CPP_TEST)
+        {
+            invoke_cpp_gehrd(datatype, &n, ilo, ihi, NULL, &lda, NULL, work, &lwork, info);
+        }
+        else
+#endif
+        {
+            invoke_gehrd(datatype, &n, ilo, ihi, NULL, &lda, NULL, work, &lwork, info);
+        }
 
         /* Output buffers will be freshly allocated for each iterations, free up
         the current output buffers.*/
@@ -224,22 +269,30 @@ void prepare_gehrd_run(integer n, integer *ilo, integer *ihi, void *A, integer l
         create_vector(datatype, &tau_test, n - 1);
 
         /* Check if LAPACKE interface is enabled */
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time
                 = prepare_lapacke_gehrd_run(datatype, layout, n, ilo, ihi, A, lda, tau_test, info);
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST)
+        {
+            exe_time = fla_test_clock();
+            /* Call CPP gehrd API */
+            invoke_cpp_gehrd(datatype, &n, ilo, ihi, A, &lda, tau_test, work, &lwork, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();
             /* Call LAPACK gehrd API */
             invoke_gehrd(datatype, &n, ilo, ihi, A, &lda, tau_test, work, &lwork, info);
-
             exe_time = fla_test_clock() - exe_time;
         }
 
         /* Get the best execution time */
-        time_min = fla_min(time_min, exe_time);
+        t_min = fla_min(t_min, exe_time);
 
         copy_vector(datatype, n - 1, tau_test, 1, tau, 1);
 
@@ -247,7 +300,7 @@ void prepare_gehrd_run(integer n, integer *ilo, integer *ihi, void *A, integer l
         free_vector(work);
         free_vector(tau_test);
     }
-    *time_min_ = time_min;
+    *time_min_ = t_min;
 
     free_matrix(A_save);
 }
@@ -258,13 +311,16 @@ double prepare_lapacke_gehrd_run(integer datatype, int layout, integer n, intege
     double exe_time;
     integer lda_t = lda;
     void *A_t = NULL;
+
+    /* Configure leading dimensions as per the input matrix layout */
+    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_gehrd_lda, lda_t);
+
     A_t = A;
 
     /* In case of row_major matrix layout,
        convert input matrix to row_major */
     if(layout == LAPACK_ROW_MAJOR)
     {
-        lda_t = fla_max(1, n);
         /* Create temporary buffers for converting matrix layout */
         create_matrix(datatype, layout, n, n, &A_t, lda_t);
         convert_matrix_layout(LAPACK_COL_MAJOR, datatype, n, n, A, lda, A_t, lda_t);
@@ -279,7 +335,7 @@ double prepare_lapacke_gehrd_run(integer datatype, int layout, integer n, intege
 
     /* In case of row_major matrix layout, convert output matrices
        to column_major layout */
-    if((layout == LAPACK_ROW_MAJOR))
+    if(layout == LAPACK_ROW_MAJOR)
     {
         convert_matrix_layout(layout, datatype, n, n, A_t, lda_t, A, lda);
         free_matrix(A_t);

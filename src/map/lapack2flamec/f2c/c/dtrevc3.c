@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/dtrevc3.f -- translated by f2c (version 20160102). You must link the resulting
- object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
- systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
- -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./dtrevc3.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -230,9 +230,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2017 */
-/* @precisions fortran d -> s */
-/* > \ingroup doubleOTHERcomputational */
+/* > \ingroup trevc3 */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -278,7 +276,7 @@ void dtrevc3_(char *side, char *howmny, logical *select, integer *n, doublereal 
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical allv;
     integer ierr;
-    doublereal unfl, ovfl, smin;
+    doublereal unfl, smin;
     logical over;
     doublereal vmax;
     integer jnxt;
@@ -310,8 +308,7 @@ void dtrevc3_(char *side, char *howmny, logical *select, integer *n, doublereal 
         void
         dlaln2_(logical *, integer *, integer *, doublereal *, doublereal *, doublereal *,
                 integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *,
-                doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *),
-        dlabad_(doublereal *, doublereal *);
+                doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */
@@ -327,10 +324,9 @@ void dtrevc3_(char *side, char *howmny, logical *select, integer *n, doublereal 
     integer maxwrk;
     doublereal smlnum;
     logical lquery;
-    /* -- LAPACK computational routine (version 3.8.0) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2017 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -371,7 +367,10 @@ void dtrevc3_(char *side, char *howmny, logical *select, integer *n, doublereal 
     somev = lsame_(howmny, "S", 1, 1);
     *info = 0;
     nb = ilaenv_(&c__1, "DTREVC", ch__1, n, &c_n1, &c_n1, &c_n1);
-    maxwrk = *n + (*n << 1) * nb;
+    /* Computing MAX */
+    i__2 = 1;
+    i__3 = *n + (*n << 1) * nb; // , expr subst
+    maxwrk = fla_max(i__2, i__3);
     work[1] = (doublereal)maxwrk;
     lquery = *lwork == -1;
     if(!rightv && !leftv)
@@ -499,8 +498,6 @@ void dtrevc3_(char *side, char *howmny, logical *select, integer *n, doublereal 
     }
     /* Set the constants to control overflow. */
     unfl = dlamch_("Safe minimum");
-    ovfl = 1. / unfl;
-    dlabad_(&unfl, &ovfl);
     ulp = dlamch_("Precision");
     smlnum = unfl * (*n / ulp);
     bignum = (1. - ulp) / smlnum;

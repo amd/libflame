@@ -1,8 +1,8 @@
-/* ../netlib/stzrzf.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./stzrzf.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -120,8 +120,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date April 2012 */
-/* > \ingroup realOTHERcomputational */
+/* > \ingroup tzrzf */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -144,7 +143,7 @@ the routine */
 /* > V = ( I A(:,M+1:N) ) */
 /* > */
 /* > I is the M-by-M identity matrix, A(:,M+1:N) */
-/* > is the output stored in A on exit from DTZRZF, */
+/* > is the output stored in A on exit from STZRZF, */
 /* > and tau(k) is the kth element of the array TAU. */
 /* > */
 /* > \endverbatim */
@@ -154,14 +153,10 @@ the routine */
 void stzrzf_(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *lwork,
              integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "stzrzf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "", *m,
              *n, *lda, *lwork);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */
@@ -183,10 +178,10 @@ void stzrzf_(integer *m, integer *n, real *a, integer *lda, real *tau, real *wor
     extern /* Subroutine */
         void
         slatrz_(integer *, integer *, integer *, real *, integer *, real *, real *);
-    /* -- LAPACK computational routine (version 3.4.1) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* April 2012 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -239,7 +234,7 @@ void stzrzf_(integer *m, integer *n, real *a, integer *lda, real *tau, real *wor
             lwkopt = *m * nb;
             lwkmin = fla_max(1, *m);
         }
-        work[1] = (real)lwkopt;
+        work[1] = sroundup_lwork(&lwkopt);
         if(*lwork < lwkmin && !lquery)
         {
             *info = -7;
@@ -249,18 +244,18 @@ void stzrzf_(integer *m, integer *n, real *a, integer *lda, real *tau, real *wor
     {
         i__1 = -(*info);
         xerbla_("STZRZF", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*m == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(*m == *n)
@@ -271,7 +266,7 @@ void stzrzf_(integer *m, integer *n, real *a, integer *lda, real *tau, real *wor
             tau[i__] = 0.f;
             /* L10: */
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     nbmin = 2;
@@ -354,8 +349,8 @@ void stzrzf_(integer *m, integer *n, real *a, integer *lda, real *tau, real *wor
         i__2 = *n - *m;
         slatrz_(&mu, n, &i__2, &a[a_offset], lda, &tau[1], &work[1]);
     }
-    work[1] = (real)lwkopt;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    work[1] = sroundup_lwork(&lwkopt);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STZRZF */
 }

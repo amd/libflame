@@ -1,20 +1,27 @@
 /*
-    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
+
+extern double perf;
+extern double time_min;
+integer row_major_geqp3_lda;
 
 /* Local prototypes */
-void fla_test_geqp3_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *t, double *residual);
+void fla_test_geqp3_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo);
 void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *jpvt, void *T,
                        integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, int matrix_layout);
+                       integer interfacetype, int matrix_layout);
 void invoke_geqp3(integer datatype, integer *m, integer *n, void *a, integer *lda, integer *jpvt,
                   void *tau, void *work, integer *lwork, void *rwork, integer *info);
-double prepare_lapacke_geqp3_run(integer datatype, int layout, integer m_A, integer n_A,
-                                 void *A, integer lda, integer *jpvt, void *T, integer *info);
+double prepare_lapacke_geqp3_run(integer datatype, int layout, integer m_A, integer n_A, void *A,
+                                 integer lda, integer *jpvt, void *T, integer *info);
 integer invoke_lapacke_geqp3(integer datatype, int matrix_layout, integer m, integer n, void *a,
                              integer lda, integer *jpvt, void *tau);
 
@@ -42,7 +49,6 @@ void fla_test_geqp3(integer argc, char **argv, test_params_t *params)
     {
         integer i, num_types, M, N;
         integer datatype, n_repeats;
-        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -50,8 +56,16 @@ void fla_test_geqp3(integer argc, char **argv, test_params_t *params)
         num_types = strlen(argv[2]);
         M = strtoimax(argv[3], &endptr, CLI_DECIMAL_BASE);
         N = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
-        params->lin_solver_paramslist[0].lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
-
+        /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
+        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
+        {
+            row_major_geqp3_lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
+            params->lin_solver_paramslist[0].lda = N;
+        }
+        else
+        {
+            params->lin_solver_paramslist[0].lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
+        }
         g_lwork = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
 
@@ -77,12 +91,7 @@ void fla_test_geqp3(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_geqp3_experiment(params, datatype, M, N, 0, n_repeats, einfo, &perf,
-                                          &time_min, &residual);
-                /* Print the results */
-                fla_test_print_status(front_str, stype, RECT_INPUT, M, N, residual,
-                                      params->lin_solver_paramslist[0].solver_threshold, time_min,
-                                      perf);
+                fla_test_geqp3_experiment(front_str, params, datatype, M, N, 0, n_repeats, einfo);
                 tests_not_run = 0;
             }
         }
@@ -106,20 +115,20 @@ void fla_test_geqp3(integer argc, char **argv, test_params_t *params)
     return;
 }
 
-void fla_test_geqp3_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *t, double *residual)
+void fla_test_geqp3_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo)
 {
     integer m, n, lda;
-    integer info = 0, vinfo = 0;
+    integer info = 0;
     void *A = NULL, *A_test = NULL, *T = NULL;
     integer *jpvt;
-    double time_min = 1e9;
+    double residual, err_thresh;
 
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
 
-    *residual = params->lin_solver_paramslist[pci].solver_threshold;
+    err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
 
     /* Get input matrix dimensions */
     m = p_cur;
@@ -142,6 +151,11 @@ void fla_test_geqp3_experiment(test_params_t *params, integer datatype, integer 
 
     init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
 
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
+    {
+        scale_matrix_underflow_overflow_geqp3(datatype, m, n, A, lda, params->imatrix_char);
+    }
+
     /* Make a copy of input matrix A,required for validation. */
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
@@ -150,36 +164,40 @@ void fla_test_geqp3_experiment(test_params_t *params, integer datatype, integer 
     create_vector(INTEGER, (void **)&jpvt, n);
 
     prepare_geqp3_run(m, n, A_test, lda, jpvt, T, datatype, n_repeats, &time_min, &info,
-                      test_lapacke_interface, layout);
-
-    /* execution time */
-    *t = time_min;
+                      interfacetype, layout);
 
     /* performance computation
      * 2mn^2 - (2/3)n^3 flops
      */
     if(m >= n)
-        *perf = (double)((2.0 * m * n * n) - ((2.0 / 3.0) * n * n * n)) / time_min
-                / FLOPS_PER_UNIT_PERF;
+        perf = (double)((2.0 * m * n * n) - ((2.0 / 3.0) * n * n * n)) / time_min
+               / FLOPS_PER_UNIT_PERF;
     else
-        *perf = (double)((2.0 * n * m * m) - ((2.0 / 3.0) * m * m * m)) / time_min
-                / FLOPS_PER_UNIT_PERF;
+        perf = (double)((2.0 * n * m * m) - ((2.0 / 3.0) * m * m * m)) / time_min
+               / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
-        *perf *= 4.0;
+        perf *= 4.0;
 
     /* output validation */
-    if((info == 0) && (!FLA_EXTREME_CASE_TEST))
-        validate_geqp3(m, n, A, A_test, lda, jpvt, T, datatype, residual, &vinfo);
+    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    if(!FLA_EXTREME_CASE_TEST)
+    {
+        validate_geqp3(tst_api, m, n, A, A_test, lda, jpvt, T, datatype, residual,
+                       params->imatrix_char);
+    }
     /* check for output matrix when inputs as extreme values */
-    else if(FLA_EXTREME_CASE_TEST)
+    else
     {
         if((!check_extreme_value(datatype, m, n, A_test, lda, params->imatrix_char)))
         {
-            *residual = DBL_MAX;
+            residual = DBL_MAX;
         }
+        else
+        {
+            residual = err_thresh;
+        }
+        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
     }
-    else
-        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up the buffers */
     free_matrix(A);
@@ -190,13 +208,13 @@ void fla_test_geqp3_experiment(test_params_t *params, integer datatype, integer 
 
 void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *jpvt, void *T,
                        integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, int layout)
+                       integer interfacetype, int layout)
 {
     integer min_A, i;
     void *A_save = NULL, *T_test = NULL, *work = NULL;
     void *rwork = NULL;
     integer lwork = -1;
-    double time_min = 1e9, exe_time;
+    double t_min = 1e9, exe_time;
 
     min_A = fla_min(m_A, n_A);
 
@@ -208,13 +226,24 @@ void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *
     /* Make a workspace query the first time. This will provide us with
        and ideal workspace size based on internal block size.
        NOTE: LAPACKE interface handles workspace query internally */
-    if((test_lapacke_interface == 0) && (g_lwork <= 0))
+    if((interfacetype != LAPACKE_COLUMN_TEST) && (interfacetype != LAPACKE_ROW_TEST)
+       && (g_lwork <= 0))
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
 
         /* call to  geqp3 API */
-        invoke_geqp3(datatype, &m_A, &n_A, NULL, &lda, NULL, NULL, work, &lwork, rwork, info);
+#if ENABLE_CPP_TEST
+        if(interfacetype == LAPACK_CPP_TEST)
+        {
+            invoke_cpp_geqp3(datatype, &m_A, &n_A, NULL, &lda, NULL, NULL, work, &lwork, rwork,
+                             info);
+        }
+        else
+#endif
+        {
+            invoke_geqp3(datatype, &m_A, &n_A, NULL, &lda, NULL, NULL, work, &lwork, rwork, info);
+        }
         if(*info == 0)
         {
             /* Get work size */
@@ -251,11 +280,21 @@ void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *
         create_vector(datatype, &work, lwork);
 
         /* Check if LAPACKE interface is enabled */
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time
                 = prepare_lapacke_geqp3_run(datatype, layout, m_A, n_A, A, lda, jpvt, T_test, info);
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST)
+        {
+            exe_time = fla_test_clock();
+            /* Call CPP geqp3 API */
+            invoke_cpp_geqp3(datatype, &m_A, &n_A, A, &lda, jpvt, T_test, work, &lwork, rwork,
+                             info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();
@@ -266,7 +305,7 @@ void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *
         }
 
         /* Get the best execution time */
-        time_min = fla_min(time_min, exe_time);
+        t_min = fla_min(t_min, exe_time);
 
         /* Make a copy of the output buffers, for validation. */
         copy_vector(datatype, min_A, T_test, 1, T, 1);
@@ -276,26 +315,29 @@ void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *
         free_vector(T_test);
     }
 
-    *time_min_ = time_min;
+    *time_min_ = t_min;
 
     free_matrix(A_save);
     if(datatype >= COMPLEX)
         free_vector(rwork);
 }
 
-double prepare_lapacke_geqp3_run(integer datatype, int layout, integer m_A, integer n_A,
-                                 void *A, integer lda, integer *jpvt, void *T, integer *info)
+double prepare_lapacke_geqp3_run(integer datatype, int layout, integer m_A, integer n_A, void *A,
+                                 integer lda, integer *jpvt, void *T, integer *info)
 {
     double exe_time;
     integer lda_t = lda;
     void *A_t = NULL;
+
+    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_geqp3_lda, lda_t);
+
     A_t = A;
 
+    /* Configure leading dimensions as per the input matrix layout */
     if(layout == LAPACK_ROW_MAJOR)
     {
-        lda_t = fla_max(1, n_A);
         /* Create temporary buffers for converting matrix layout */
-        create_matrix(datatype, layout, m_A, n_A, &A_t, lda_t);
+        create_matrix(datatype, layout, m_A, n_A, &A_t, fla_max(n_A, lda_t));
         convert_matrix_layout(LAPACK_COL_MAJOR, datatype, m_A, n_A, A, lda, A_t, lda_t);
     }
 

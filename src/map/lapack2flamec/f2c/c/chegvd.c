@@ -1,4 +1,4 @@
-/* chegvd.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./chegvd.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -48,12 +48,6 @@ static complex c_b1 = {1.f, 0.f};
 /* > B are assumed to be Hermitian and B is also positive definite. */
 /* > If eigenvectors are desired, it uses a divide and conquer algorithm. */
 /* > */
-/* > The divide and conquer algorithm makes very mild assumptions about */
-/* > floating point arithmetic. It will work on machines with a guard */
-/* > digit in add/subtract, or on those binary machines without guard */
-/* > digits which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or */
-/* > Cray-2. It could conceivably fail on hexadecimal or decimal machines */
-/* > without guard digits, but we know of none. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -224,7 +218,7 @@ i off-diagonal elements of an */
 /* > through mod(INFO,N+1);
  */
 /* > > N: if INFO = N + i, for 1 <= i <= N, then the leading */
-/* > minor of order i of B is not positive definite. */
+/* > principal minor of order i of B is not positive. */
 /* > The factorization of B could not be completed and */
 /* > no eigenvalues or eigenvectors were computed. */
 /* > \endverbatim */
@@ -234,7 +228,7 @@ i off-diagonal elements of an */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup complexHEeigen */
+/* > \ingroup hegvd */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -290,6 +284,7 @@ void chegvd_(integer *itype, char *jobz, char *uplo, integer *n, complex *a, int
         cpotrf_(char *, integer *, complex *, integer *, integer *);
     integer liwmin, lrwmin;
     logical lquery;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -373,9 +368,9 @@ void chegvd_(integer *itype, char *jobz, char *uplo, integer *n, complex *a, int
     }
     if(*info == 0)
     {
-        work[1].r = (real)lopt;
+        work[1].r = sroundup_lwork(&lopt);
         work[1].i = 0.f; // , expr subst
-        rwork[1] = (real)lropt;
+        rwork[1] = sroundup_lwork(&lropt);
         iwork[1] = liopt;
         if(*lwork < lwmin && !lquery)
         {
@@ -467,9 +462,9 @@ void chegvd_(integer *itype, char *jobz, char *uplo, integer *n, complex *a, int
                    lda);
         }
     }
-    work[1].r = (real)lopt;
+    work[1].r = sroundup_lwork(&lopt);
     work[1].i = 0.f; // , expr subst
-    rwork[1] = (real)lropt;
+    rwork[1] = sroundup_lwork(&lropt);
     iwork[1] = liopt;
     AOCL_DTL_TRACE_LOG_EXIT
     return;

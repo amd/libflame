@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/sgghd3.f -- translated by f2c (version 20160102). You must link the resulting
- object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
- systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
- -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sgghd3.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -16,7 +16,7 @@ static integer c__16 = 16;
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
-/* > Download SGGHRD + dependencies */
+/* > Download SGGHD3 + dependencies */
 /* > <a
  * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgghd3.
  * f"> */
@@ -226,14 +226,13 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date January 2015 */
-/* > \ingroup realOTHERcomputational */
+/* > \ingroup gghd3 */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
 /* > \verbatim */
 /* > */
-/* > This routine reduces A to Hessenberg form and maintains B in */
+/* > This routine reduces A to Hessenberg form and maintains B in triangular form */
 /* > using a blocked variant of Moler and Stewart's original algorithm, */
 /* > as described by Kagstrom, Kressner, Quintana-Orti, and Quintana-Orti */
 /* > (BIT 2008). */
@@ -245,6 +244,11 @@ void sgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, r
              integer *lda, real *b, integer *ldb, real *q, integer *ldq, real *z__, integer *ldz,
              real *work, integer *lwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgghd3 inputs: compq %c ,compz %c ,n %" FLA_IS ",ilo %" FLA_IS
+                      ",ihi %" FLA_IS ",lda %" FLA_IS ",ldb %" FLA_IS ",ldq %" FLA_IS
+                      ",ldz %" FLA_IS ",lwork %" FLA_IS "",
+                      *compq, *compz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
         i__3, i__4, i__5, i__6, i__7, i__8;
@@ -297,10 +301,10 @@ void sgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, r
         slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     integer lwkopt;
     logical lquery;
-    /* -- LAPACK computational routine (version 3.8.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* January 2015 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -338,7 +342,7 @@ void sgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, r
     /* Computing MAX */
     i__1 = *n * 6 * nb;
     lwkopt = fla_max(i__1, 1);
-    work[1] = (real)lwkopt;
+    work[1] = sroundup_lwork(&lwkopt);
     initq = lsame_(compq, "I", 1, 1);
     wantq = initq || lsame_(compq, "V", 1, 1);
     initz = lsame_(compz, "I", 1, 1);
@@ -388,10 +392,12 @@ void sgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, r
     {
         i__1 = -(*info);
         xerbla_("SGGHD3", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize Q and Z if desired. */
@@ -415,6 +421,7 @@ void sgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, r
     if(nh <= 1)
     {
         work[1] = 1.f;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine the blocksize. */
@@ -1042,7 +1049,8 @@ void sgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, r
         sgghrd_(compq2, compz2, n, &jcol, ihi, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
                 ldq, &z__[z_offset], ldz, &ierr);
     }
-    work[1] = (real)lwkopt;
+    work[1] = sroundup_lwork(&lwkopt);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGGHD3 */
 }

@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/sgesvdx.f -- translated by f2c (version 20160102). You must link the resulting
- object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
- systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
- -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sgesvdx.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__6 = 6;
 static integer c__0 = 0;
@@ -269,8 +269,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date June 2016 */
-/* > \ingroup realGEsing */
+/* > \ingroup gesvdx */
 /* ===================================================================== */
 /* Subroutine */
 void sgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, real *a, integer *lda,
@@ -278,6 +277,11 @@ void sgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, real
               integer *ldu, real *vt, integer *ldvt, real *work, integer *lwork, integer *iwork,
               integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgesvdx inputs: jobu %c ,jobvt %c ,range %c ,m %" FLA_IS ",n %" FLA_IS
+                      ",lda %" FLA_IS ",il %" FLA_IS ",iu %" FLA_IS ",ldu %" FLA_IS ",ldvt %" FLA_IS
+                      ",lwork %" FLA_IS "",
+                      *jobu, *jobvt, *range, *m, *n, *lda, *il, *iu, *ldu, *ldvt, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__2, i__3;
     char ch__1[2];
@@ -336,13 +340,15 @@ void sgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, real
     extern /* Subroutine */
         void
         sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
-                integer *, real *, integer *, integer *),
+                integer *, real *, integer *, integer *);
+    extern real sroundup_lwork(integer *);
+    extern /* Subroutine */
+        void
         sbdsvdx_(char *, char *, char *, integer *, real *, real *, real *, real *, integer *,
                  integer *, integer *, real *, real *, integer *, real *, integer *, integer *);
-    /* -- LAPACK driver routine (version 3.8.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -613,7 +619,7 @@ void sgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, real
             }
         }
         maxwrk = fla_max(maxwrk, minwrk);
-        work[1] = (real)maxwrk;
+        work[1] = sroundup_lwork(&maxwrk);
         if(*lwork < minwrk && !lquery)
         {
             *info = -19;
@@ -623,15 +629,18 @@ void sgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, real
     {
         i__2 = -(*info);
         xerbla_("SGESVDX", &i__2, (ftnlen)7);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Set singular values indices accord to RANGE. */
@@ -962,7 +971,8 @@ void sgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, real
         }
     }
     /* Return optimal workspace in WORK(1) */
-    work[1] = (real)maxwrk;
+    work[1] = sroundup_lwork(&maxwrk);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGESVDX */
 }

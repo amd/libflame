@@ -285,8 +285,7 @@ void dlaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
                 integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *),
         dlaqz2_(logical *, logical *, integer *, integer *, integer *, integer *, doublereal *,
                 integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *,
-                integer *, integer *, doublereal *, integer *),
-        dlabad_(doublereal *, doublereal *);
+                integer *, integer *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
         void
@@ -295,7 +294,6 @@ void dlaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
     extern /* Subroutine */
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    doublereal safmax;
     extern /* Subroutine */
         void
         dtgexc_(logical *, logical *, integer *, doublereal *, integer *, doublereal *, integer *,
@@ -392,8 +390,6 @@ void dlaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
     }
     /* Get machine constants */
     safmin = dlamch_("SAFE MINIMUM");
-    safmax = 1. / safmin;
-    dlabad_(&safmin, &safmax);
     ulp = dlamch_("PRECISION");
     smlnum = safmin * ((doublereal)(*n) / ulp);
     if(*ihi == kwtop)

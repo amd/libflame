@@ -208,6 +208,9 @@
 void ssyconvf_(char *uplo, char *way, integer *n, real *a, integer *lda, real *e, integer *ipiv,
                integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("ssyconvf inputs: uplo %c ,way %c ,n %" FLA_IS ",lda %" FLA_IS "", *uplo,
+                      *way, *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
     /* Local variables */
@@ -265,11 +268,13 @@ void ssyconvf_(char *uplo, char *way, integer *n, real *a, integer *lda, real *e
     {
         i__1 = -(*info);
         xerbla_("SSYCONVF", &i__1, (ftnlen)8);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(upper)
@@ -536,6 +541,7 @@ void ssyconvf_(char *uplo, char *way, integer *n, real *a, integer *lda, real *e
         }
         /* End A is LOWER */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYCONVF */
 }

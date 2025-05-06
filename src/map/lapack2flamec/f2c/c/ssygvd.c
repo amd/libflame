@@ -1,11 +1,11 @@
-/* ../netlib/ssygvd.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./ssygvd.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b11 = 1.f;
-/* > \brief \b SSYGST */
+/* > \brief \b SSYGVD */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -47,12 +47,6 @@ static real c_b11 = 1.f;
 /* > B are assumed to be symmetric and B is also positive definite. */
 /* > If eigenvectors are desired, it uses a divide and conquer algorithm. */
 /* > */
-/* > The divide and conquer algorithm makes very mild assumptions about */
-/* > floating point arithmetic. It will work on machines with a guard */
-/* > digit in add/subtract, or on those binary machines without guard */
-/* > digits which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or */
-/* > Cray-2. It could conceivably fail on hexadecimal or decimal machines */
-/* > without guard digits, but we know of none. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -201,7 +195,7 @@ i off-diagonal elements of an */
 /* > through mod(INFO,N+1);
  */
 /* > > N: if INFO = N + i, for 1 <= i <= N, then the leading */
-/* > minor of order i of B is not positive definite. */
+/* > principal minor of order i of B is not positive. */
 /* > The factorization of B could not be completed and */
 /* > no eigenvalues or eigenvectors were computed. */
 /* > \endverbatim */
@@ -211,8 +205,7 @@ i off-diagonal elements of an */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup realSYeigen */
+/* > \ingroup hegvd */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -234,15 +227,11 @@ void ssygvd_(integer *itype, char *jobz, char *uplo, integer *n, real *a, intege
              integer *ldb, real *w, real *work, integer *lwork, integer *iwork, integer *liwork,
              integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "ssygvd inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS
              ", ldb %" FLA_IS "",
              *itype, *jobz, *uplo, *n, *lda, *ldb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;
     real r__1, r__2;
@@ -273,10 +262,10 @@ void ssygvd_(integer *itype, char *jobz, char *uplo, integer *n, real *a, intege
     extern /* Subroutine */
         void
         ssygst_(integer *, char *, integer *, real *, integer *, real *, integer *, integer *);
-    /* -- LAPACK driver routine (version 3.4.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -354,7 +343,7 @@ void ssygvd_(integer *itype, char *jobz, char *uplo, integer *n, real *a, intege
     }
     if(*info == 0)
     {
-        work[1] = (real)lopt;
+        work[1] = sroundup_lwork(&lopt);
         iwork[1] = liopt;
         if(*lwork < lwmin && !lquery)
         {
@@ -369,18 +358,18 @@ void ssygvd_(integer *itype, char *jobz, char *uplo, integer *n, real *a, intege
     {
         i__1 = -(*info);
         xerbla_("SSYGVD", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Form a Cholesky factorization of B. */
@@ -388,7 +377,7 @@ void ssygvd_(integer *itype, char *jobz, char *uplo, integer *n, real *a, intege
     if(*info != 0)
     {
         *info = *n + *info;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
@@ -396,11 +385,11 @@ void ssygvd_(integer *itype, char *jobz, char *uplo, integer *n, real *a, intege
     ssyevd_(jobz, uplo, n, &a[a_offset], lda, &w[1], &work[1], lwork, &iwork[1], liwork, info);
     /* Computing MAX */
     r__1 = (real)lopt;
-    lopt = fla_max(r__1, work[1]);
+    lopt = (integer)fla_max(r__1, work[1]);
     /* Computing MAX */
     r__1 = (real)liopt;
     r__2 = (real)iwork[1]; // , expr subst
-    liopt = fla_max(r__1, r__2);
+    liopt = (integer)fla_max(r__1, r__2);
     if(wantz && *info == 0)
     {
         /* Backtransform eigenvectors to the original problem. */
@@ -437,9 +426,9 @@ void ssygvd_(integer *itype, char *jobz, char *uplo, integer *n, real *a, intege
                    lda);
         }
     }
-    work[1] = (real)lopt;
+    work[1] = sroundup_lwork(&lopt);
     iwork[1] = liopt;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYGVD */
 }

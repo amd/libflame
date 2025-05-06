@@ -1,4 +1,4 @@
-/* shseqr.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./shseqr.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -240,7 +240,7 @@ static integer c__49 = 49;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup realOTHERcomputational */
+/* > \ingroup hseqr */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -352,6 +352,7 @@ void shseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, rea
         slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
         slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     logical lquery;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -397,7 +398,8 @@ void shseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, rea
     wantt = lsame_(job, "S", 1, 1);
     initz = lsame_(compz, "I", 1, 1);
     wantz = initz || lsame_(compz, "V", 1, 1);
-    work[1] = (real)fla_max(1, *n);
+    i__1 = fla_max(1, *n);
+    work[1] = sroundup_lwork(&i__1);
     lquery = *lwork == -1;
     *info = 0;
     if(!lsame_(job, "E", 1, 1) && !wantt)

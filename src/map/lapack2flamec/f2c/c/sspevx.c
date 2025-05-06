@@ -1,8 +1,8 @@
-/* ../netlib/sspevx.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sspevx.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief <b> SSPEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors
@@ -105,12 +105,15 @@ static integer c__1 = 1;
 /* > \param[in] VL */
 /* > \verbatim */
 /* > VL is REAL */
+/* > If RANGE='V', the lower bound of the interval to */
+/* > be searched for eigenvalues. VL < VU. */
+/* > Not referenced if RANGE = 'A' or 'I'. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] VU */
 /* > \verbatim */
 /* > VU is REAL */
-/* > If RANGE='V', the lower and upper bounds of the interval to */
+/* > If RANGE='V', the upper bound of the interval to */
 /* > be searched for eigenvalues. VL < VU. */
 /* > Not referenced if RANGE = 'A' or 'I'. */
 /* > \endverbatim */
@@ -118,13 +121,18 @@ static integer c__1 = 1;
 /* > \param[in] IL */
 /* > \verbatim */
 /* > IL is INTEGER */
+/* > If RANGE='I', the index of the */
+/* > smallest eigenvalue to be returned. */
+/* > 1 <= IL <= IU <= N, if N > 0;
+IL = 1 and IU = 0 if N = 0. */
+/* > Not referenced if RANGE = 'A' or 'V'. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] IU */
 /* > \verbatim */
 /* > IU is INTEGER */
-/* > If RANGE='I', the indices (in ascending order) of the */
-/* > smallest and largest eigenvalues to be returned. */
+/* > If RANGE='I', the index of the */
+/* > largest eigenvalue to be returned. */
 /* > 1 <= IL <= IU <= N, if N > 0;
 IL = 1 and IU = 0 if N = 0. */
 /* > Not referenced if RANGE = 'A' or 'V'. */
@@ -226,23 +234,18 @@ if RANGE = 'V', the exact value of M */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup realOTHEReigen */
+/* > \ingroup hpevx */
 /* ===================================================================== */
 /* Subroutine */
 void sspevx_(char *jobz, char *range, char *uplo, integer *n, real *ap, real *vl, real *vu,
              integer *il, integer *iu, real *abstol, integer *m, real *w, real *z__, integer *ldz,
              real *work, integer *iwork, integer *ifail, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "sspevx inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS
              ", ldz %" FLA_IS "",
              *jobz, *range, *uplo, *n, *il, *iu, *ldz);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer z_dim1, z_offset, i__1, i__2;
     real r__1, r__2;
@@ -269,7 +272,7 @@ void sspevx_(char *jobz, char *range, char *uplo, integer *n, real *ap, real *vl
         scopy_(integer *, real *, integer *, real *, integer *),
         sswap_(integer *, real *, integer *, real *, integer *);
     logical wantz, alleig, indeig;
-    integer iscale, indibl;
+    integer iscale;
     logical valeig;
     extern real slamch_(char *);
     real safmin;
@@ -298,10 +301,9 @@ void sspevx_(char *jobz, char *range, char *uplo, integer *n, real *ap, real *vl
         ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *),
         sopmtr_(char *, char *, char *, integer *, integer *, real *, real *, real *, integer *,
                 real *, integer *);
-    /* -- LAPACK driver routine (version 3.4.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -382,14 +384,14 @@ void sspevx_(char *jobz, char *range, char *uplo, integer *n, real *ap, real *vl
     {
         i__1 = -(*info);
         xerbla_("SSPEVX", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     *m = 0;
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 1)
@@ -411,7 +413,7 @@ void sspevx_(char *jobz, char *range, char *uplo, integer *n, real *ap, real *vl
         {
             z__[z_dim1 + 1] = 1.f;
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants. */
@@ -471,7 +473,6 @@ void sspevx_(char *jobz, char *range, char *uplo, integer *n, real *ap, real *vl
     /* If all eigenvalues are desired and ABSTOL is less than or equal */
     /* to zero, then call SSTERF or SOPGTR and SSTEQR. If this fails */
     /* for some eigenvalue, then try SSTEBZ. */
-    indibl = 1;
     test = FALSE_;
     if(indeig)
     {
@@ -522,20 +523,20 @@ void sspevx_(char *jobz, char *range, char *uplo, integer *n, real *ap, real *vl
     {
         *(unsigned char *)order = 'E';
     }
-    indisp = indibl + *n;
+    indisp = *n + 1;
     indiwo = indisp + *n;
     sstebz_(range, order, n, &vll, &vuu, il, iu, &abstll, &work[indd], &work[inde], m, &nsplit,
-            &w[1], &iwork[indibl], &iwork[indisp], &work[indwrk], &iwork[indiwo], info);
+            &w[1], &iwork[1], &iwork[indisp], &work[indwrk], &iwork[indiwo], info);
     if(wantz)
     {
-        sstein_(n, &work[indd], &work[inde], m, &w[1], &iwork[indibl], &iwork[indisp],
-                &z__[z_offset], ldz, &work[indwrk], &iwork[indiwo], &ifail[1], info);
+        sstein_(n, &work[indd], &work[inde], m, &w[1], &iwork[1], &iwork[indisp], &z__[z_offset],
+                ldz, &work[indwrk], &iwork[indiwo], &ifail[1], info);
         /* Apply orthogonal matrix used in reduction to tridiagonal */
         /* form to eigenvectors returned by SSTEIN. */
         sopmtr_("L", uplo, "N", n, m, &ap[1], &work[indtau], &z__[z_offset], ldz, &work[indwrk],
                 &iinfo);
     }
-    /* If matrix was scaled, then rescale eigenvalues appropriately. */
+/* If matrix was scaled, then rescale eigenvalues appropriately. */
 L20:
     if(iscale == 1)
     {
@@ -571,11 +572,11 @@ L20:
             }
             if(i__ != 0)
             {
-                itmp1 = iwork[indibl + i__ - 1];
+                itmp1 = iwork[i__];
                 w[i__] = w[j];
-                iwork[indibl + i__ - 1] = iwork[indibl + j - 1];
+                iwork[i__] = iwork[j];
                 w[j] = tmp1;
-                iwork[indibl + j - 1] = itmp1;
+                iwork[j] = itmp1;
                 sswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], &c__1);
                 if(*info != 0)
                 {
@@ -587,7 +588,7 @@ L20:
             /* L40: */
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSPEVX */
 }

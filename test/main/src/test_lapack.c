@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022 - 2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "ctype.h"
@@ -88,10 +88,8 @@ int test_progress(const char *const api, const integer lenapi, const integer *co
 int main(int argc, char **argv)
 {
     test_params_t params;
-    integer vers_major, vers_minor, vers_patch;
     integer arg_count = argc;
-
-    ilaver_(&vers_major, &vers_minor, &vers_patch);
+    bool status;
 
     /* Initialize some strings. */
     fla_test_init_strings();
@@ -115,6 +113,16 @@ int main(int argc, char **argv)
     /* Check for LAPACKE interface testing */
     fla_check_lapacke_interface(&arg_count, argv, &params);
 
+    if(params.test_lapacke_interface != 1)
+    {
+        status = fla_check_interface(&arg_count, argv, &params);
+        /* Check status and return */
+        if(status == FALSE)
+        {
+            return -1;
+        }
+    }
+
     /* Checking for the cmd option or config file option */
     int cmd_option = fla_check_cmd_config_dir(arg_count, argv);
 
@@ -125,8 +133,7 @@ int main(int argc, char **argv)
     }
     else if(cmd_option == 0)
     {
-        printf(" LAPACK version: %" FT_IS ".%" FT_IS ".%" FT_IS " \n", vers_major, vers_minor,
-               vers_patch);
+        printf(" AOCL-LAPACK version: %s\n", FLA_Get_AOCL_Version());
         /* Copy the binary name to a global string so we can use it later. */
         strncpy(fla_test_binary_name, argv[0], MAX_BINARY_NAME_LENGTH);
 
@@ -147,7 +154,8 @@ int main(int argc, char **argv)
         aocl_fla_set_progress(test_progress);
 #endif
 
-        if(params.test_lapacke_interface == 1)
+        if((params.test_lapacke_interface == 1) || (params.interfacetype == LAPACKE_ROW_TEST)
+           || (params.interfacetype == LAPACKE_COLUMN_TEST))
             fla_test_lapack_suite(LAPACKE_OPERATIONS_FILENAME, &params);
         else
             /* Test the LAPACK-level operations. */
@@ -186,6 +194,9 @@ void fla_check_lapacke_interface(integer *arg_count, char **argv, test_params_t 
     integer len_column_major = strlen(column_major);
     integer index;
 
+    /* Initialize interfacetype with lapacke.*/
+    params->interfacetype = LAPACKE_COLUMN_TEST;
+
     /* check all the input args excluding first argument test_lapack.x
        for '--lapacke=' string */
     for(index = 1; index < *arg_count; index++)
@@ -195,11 +206,20 @@ void fla_check_lapacke_interface(integer *arg_count, char **argv, test_params_t 
             enable_lapacke = 1;
             major = argv[index] + len_lapacke_test;
 
+            for(int i = 0; i < strlen(argv[index]); i++)
+            {
+                major[i] = tolower(major[i]);
+            }
             /* Check user input is row/column major*/
             if(!(strncmp(major, row_major, len_row_major)))
+            {
                 lapacke_major = LAPACK_ROW_MAJOR;
+                params->interfacetype = LAPACKE_ROW_TEST;
+            }
             else if(!(strncmp(major, column_major, len_column_major)))
+            {
                 lapacke_major = LAPACK_COL_MAJOR;
+            }
             else /* assign default value as column major */
             {
                 printf("\nWarning: Matrix layout '%s' is invalid,", major);
@@ -214,6 +234,90 @@ void fla_check_lapacke_interface(integer *arg_count, char **argv, test_params_t 
     }
     params->test_lapacke_interface = enable_lapacke;
     params->matrix_major = lapacke_major;
+}
+
+/* Function to configure appropriate interface to test
+   Returns true if interface is valid, returns false otherwise */
+bool fla_check_interface(integer *arg_count, char **argv, test_params_t *params)
+{
+    char *interface_test = "--interface=";
+    char *row_major = "lapacke_row";
+    char *column_major = "lapacke_column";
+    char *cpp_test = "cpp";
+    char *lapack_test = "lapack";
+    char *interface_buff = NULL;
+    int lapacke_major = LAPACK_COL_MAJOR;
+    integer enable_lapacke = 0, interfacetype = LAPACK_TEST;
+    integer len_interface_test = strlen(interface_test);
+    integer len_row_major = strlen(row_major);
+    integer len_column_major = strlen(column_major);
+    integer len_cpp_test = strlen(cpp_test);
+    integer len_lapack_test = strlen(lapack_test);
+    integer index;
+
+    /* check all the input args excluding first argument test_lapack.x
+       for '--interface=' string */
+    for(index = 1; index < *arg_count; index++)
+    {
+        if(!(strncmp(argv[index], interface_test, len_interface_test)))
+        {
+            interface_buff = argv[index] + len_interface_test;
+
+            for(int i = 0; i < strlen(argv[index]); i++)
+            {
+                interface_buff[i] = tolower(interface_buff[i]);
+            }
+
+            /* Check for specific interface like lapacke, cpp, lapack.*/
+            if(!(strncmp(interface_buff, row_major, len_row_major))
+               && (len_row_major == strlen(interface_buff)))
+            {
+                enable_lapacke = 1;
+                lapacke_major = LAPACK_ROW_MAJOR;
+                interfacetype = LAPACKE_ROW_TEST;
+            }
+            else if(!(strncmp(interface_buff, column_major, len_column_major))
+                    && (len_column_major == strlen(interface_buff)))
+            {
+                enable_lapacke = 1;
+                lapacke_major = LAPACK_COL_MAJOR;
+                interfacetype = LAPACKE_COLUMN_TEST;
+            }
+            else if(!(strncmp(interface_buff, cpp_test, len_cpp_test))
+                    && (len_cpp_test == strlen(interface_buff)))
+            {
+                interfacetype = LAPACK_CPP_TEST;
+#if(!ENABLE_CPP_TEST)
+                {
+                    printf("\nError: ENABLE_CPP_TEST flag is disabled to use CPP interface, please "
+                           "enable and rebuild.\n");
+                    return FALSE;
+                }
+#endif
+            }
+            else if(!(strncmp(interface_buff, lapack_test, len_lapack_test))
+                    && (len_lapack_test == strlen(interface_buff)))
+            /* assign default interface as lapack */
+            {
+                interfacetype = LAPACK_TEST;
+            }
+            else
+            {
+                printf("\nError: Interface '%s' is invalid,", interface_buff);
+                printf(" Please provide valid interface: \n lapack, lapacke_row, lapacke_column, "
+                       "cpp\n");
+                return FALSE;
+            }
+            /* Decrement argument count to fall back to exisiting design of
+               checking input filename or get config file data*/
+            *arg_count = *arg_count - 1;
+            break;
+        }
+    }
+    params->test_lapacke_interface = enable_lapacke;
+    params->interfacetype = interfacetype;
+    params->matrix_major = lapacke_major;
+    return TRUE;
 }
 
 /* Function for checking cmd option or config file directory */
@@ -569,6 +673,60 @@ void fla_test_read_next_line(char *buffer, FILE *input_stream)
     sscanf(temp, "%s ", buffer);
 }
 
+#define READ_CONFIG_PARAM_INT(x)        \
+    fscanf(fp, "%s", &line[0]);         \
+    for(i = 0; i < NUM_SUB_TESTS; i++)  \
+    {                                   \
+        fscanf(fp, "%" FT_IS "", &(x)); \
+        CHECK_LINE_SKIP();              \
+    }
+
+#define READ_CONFIG_PARAM_FLT(x)       \
+    fscanf(fp, "%s", &line[0]);        \
+    for(i = 0; i < NUM_SUB_TESTS; i++) \
+    {                                  \
+        fscanf(fp, "%f", &(x));        \
+        CHECK_LINE_SKIP();             \
+    }
+
+#define READ_CONFIG_PARAM_DBL(x)       \
+    fscanf(fp, "%s", &line[0]);        \
+    for(i = 0; i < NUM_SUB_TESTS; i++) \
+    {                                  \
+        fscanf(fp, "%lf", &(x));       \
+        CHECK_LINE_SKIP();             \
+    }
+
+#define READ_CONFIG_PARAM_STR(x)       \
+    fscanf(fp, "%s", str);             \
+    for(i = 0; i < NUM_SUB_TESTS; i++) \
+    {                                  \
+        fscanf(fp, "%s", str);         \
+        (x) = *str;                    \
+        CHECK_LINE_SKIP();             \
+    }
+#define PARSE_CONFIG_DATATYPES(x)                                          \
+    fscanf(fp, "%s", &line[0]); /* num data types */                       \
+    for(i = 0; i < NUM_SUB_TESTS; i++)                                     \
+    {                                                                      \
+        fscanf(fp, "%s", str); /* num data types */                        \
+        for(j = 0; j < NUM_SUB_TESTS; j++)                                 \
+        {                                                                  \
+            x[j].data_types_char[i] = *str;                                \
+            x[j].data_types[i] = get_datatype(*str);                       \
+        }                                                                  \
+        eol = fgetc(fp);                                                   \
+        if((eol == '\r') || (eol == '\n'))                                 \
+        {                                                                  \
+            ndata_types = ((i + 1) < ndata_types) ? (i + 1) : ndata_types; \
+            break;                                                         \
+        }                                                                  \
+    }                                                                      \
+    for(i = 0; i < NUM_SUB_TESTS; i++)                                     \
+    {                                                                      \
+        x[i].num_data_types = ndata_types;                                 \
+    }
+
 /* This function reads parameters needed for Linear solver APIs
    from the config settings file 'LIN_SLVR.dat' and saves in the
    'lin_solver_paramslist' structure array   */
@@ -600,303 +758,92 @@ void fla_test_read_linear_param(const char *file_name, test_params_t *params)
         params->lin_solver_paramslist[i].num_tests = num_tests;
     }
 
-    fscanf(fp, "%s", &line[0]); // Range_start
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->lin_solver_paramslist[i].m_range_start));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Range_end
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->lin_solver_paramslist[i].m_range_end));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Range_step_size
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->lin_solver_paramslist[i].m_range_step_size));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Range_start
-
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->lin_solver_paramslist[i].n_range_start));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Range_end
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->lin_solver_paramslist[i].n_range_end));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Range_step_size
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->lin_solver_paramslist[i].n_range_step_size));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // leading dimension for A
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->lin_solver_paramslist[i].lda));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // leading dimension for B
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->lin_solver_paramslist[i].ldb));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // leading dimension for Q
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->lin_solver_paramslist[i].ldq));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // leading dimension for Z
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->lin_solver_paramslist[i].ldz));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // leading dimension LDAB
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->lin_solver_paramslist[i].ldab));
-        CHECK_LINE_SKIP();
-    }
+    /* Range Start */
+    READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].m_range_start);
+    /* Range End */
+    READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].m_range_end);
+    /* Range_step_size */
+    READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].m_range_step_size);
+    /* Range_start */
+    READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].n_range_start);
+    /* Range_end */
+    READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].n_range_end);
+    /* Range_step_size */
+    READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].n_range_step_size);
+    /* leading dimension for A */
+    READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].lda);
+    /* leading dimension for B */
+    READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].ldb);
+    /* leading dimension for Q */
+    READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].ldq);
+    /* leading dimension for Z */
+    READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].ldz);
+    /* leading dimension LDAB */
+    READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].ldab);
 
     for(i = 0; i < NUM_SUB_TESTS; i++)
     {
         params->lin_solver_paramslist[i].num_ranges = num_ranges;
     }
 
-    fscanf(fp, "%s", &line[0]); // Numer of repeats
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->lin_solver_paramslist[i].num_repeats));
-    }
+    /* Number of repeats */
+    READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].num_repeats);
 
+    /* datatypes specified */
     ndata_types = NUM_SUB_TESTS;
-    fscanf(fp, "%s", &line[0]); // Datatypes
-    str = &line[0];
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        for(j = 0; j < NUM_SUB_TESTS; j++)
-        {
-            params->lin_solver_paramslist[j].data_types_char[i] = *str;
-            params->lin_solver_paramslist[j].data_types[i] = get_datatype(*str);
-        }
-        eol = fgetc(fp);
-        if((eol == '\r') || (eol == '\n'))
-        {
-            ndata_types = ((i + 1) < ndata_types) ? (i + 1) : ndata_types;
-            break;
-        }
-    }
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        params->lin_solver_paramslist[i].num_data_types = ndata_types;
-    }
+    PARSE_CONFIG_DATATYPES(params->lin_solver_paramslist);
 
-    fscanf(fp, "%s", &line[0]); // Matrix Layout (row or col major)
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->lin_solver_paramslist[i].matrix_layout));
-        CHECK_LINE_SKIP();
-    }
+    /* Matrix Layout (row or col major) */
+    READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].matrix_layout);
+    /* trans */
+    READ_CONFIG_PARAM_STR(params->lin_solver_paramslist[i].transr);
+    /* uplo */
+    READ_CONFIG_PARAM_STR(params->lin_solver_paramslist[i].Uplo);
+    /* compq_gghrd */
+    READ_CONFIG_PARAM_STR(params->lin_solver_paramslist[i].compq_gghrd);
+    /* compz_gghrd */
+    READ_CONFIG_PARAM_STR(params->lin_solver_paramslist[i].compz_gghrd);
+    /* nrhs */
+    READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].nrhs);
+    /* ncolm */
+    READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].ncolm);
+    /* kl */
+    READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].kl);
+    /* ku */
+    READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].ku);
+    /* kd */
+    READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].kd);
+    /* diag */
+    READ_CONFIG_PARAM_STR(params->lin_solver_paramslist[i].diag);
+    /* fact */
+    READ_CONFIG_PARAM_STR(params->lin_solver_paramslist[i].fact);
+    /* equed */
+    READ_CONFIG_PARAM_STR(params->lin_solver_paramslist[i].equed);
+    /* symm */
+    READ_CONFIG_PARAM_STR(params->lin_solver_paramslist[i].symm);
+    /* equed_porfsx */
+    READ_CONFIG_PARAM_STR(params->lin_solver_paramslist[i].equed_porfsx);
+    /* n_err_bnds_porfsx */
+    READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].n_err_bnds_porfsx);
+    /* nparams_porfsx */
+    READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].nparams_porfsx);
+    /* norm_gbcon */
+    READ_CONFIG_PARAM_STR(params->lin_solver_paramslist[i].norm_gbcon);
+    /* kl_gbcon */
+    READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].kl_gbcon);
+    /* ku_gbcon */
+    READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].ku_gbcon);
+    /* ldab_gbcon */
+    READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].ldab_gbcon);
+    /* ilo */
+    READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].ilo);
+    /* ihi */
+    READ_CONFIG_PARAM_INT(params->lin_solver_paramslist[i].ihi);
+    /* rcond */
+    READ_CONFIG_PARAM_DBL(params->lin_solver_paramslist[i].rcond);
+    /* solver_threshold */
+    READ_CONFIG_PARAM_FLT(params->lin_solver_paramslist[i].solver_threshold);
 
-    str = &line[0];
-    fscanf(fp, "%s", str);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->lin_solver_paramslist[i].transr = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->lin_solver_paramslist[i].Uplo = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Must be 'V' or 'I'
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->lin_solver_paramslist[i].compq_gghrd = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Must be 'V' or 'I'
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->lin_solver_paramslist[i].compz_gghrd = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->lin_solver_paramslist[i].nrhs));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->lin_solver_paramslist[i].ncolm));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->lin_solver_paramslist[i].kl));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->lin_solver_paramslist[i].ku));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->lin_solver_paramslist[i].kd));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->lin_solver_paramslist[i].diag = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->lin_solver_paramslist[i].fact = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->lin_solver_paramslist[i].equed = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->lin_solver_paramslist[i].symm = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->lin_solver_paramslist[i].equed_porfsx = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->lin_solver_paramslist[i].n_err_bnds_porfsx));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->lin_solver_paramslist[i].nparams_porfsx));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->lin_solver_paramslist[i].norm_gbcon = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->lin_solver_paramslist[i].kl_gbcon));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->lin_solver_paramslist[i].ku_gbcon));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->lin_solver_paramslist[i].ldab_gbcon));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // ilo >=1 && ilo<=ihi
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->lin_solver_paramslist[i].ilo));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // ihi >=ilo && ihi<=N
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->lin_solver_paramslist[i].ihi));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%lf", &(params->lin_solver_paramslist[i].rcond));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%f", &(params->lin_solver_paramslist[i].solver_threshold));
-        CHECK_LINE_SKIP();
-    }
     fclose(fp);
 }
 
@@ -920,6 +867,7 @@ void fla_test_read_sym_eig_params(const char *file_name, test_params_t *params)
         printf("Error: Symmetric EIG params config file missing. Exiting.. \n");
         exit(-1);
     }
+    str = &line[0];
 
     /* Read the number of Ranges */
     fscanf(fp, "%s", &line[0]);
@@ -930,377 +878,110 @@ void fla_test_read_sym_eig_params(const char *file_name, test_params_t *params)
     }
 
     num_ranges = num_tests;
-    fscanf(fp, "%s", &line[0]); // Range_start
 
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_sym_paramslist[i].m_range_start));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Range_end
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_sym_paramslist[i].m_range_end));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Range_step_size
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_sym_paramslist[i].m_range_step_size));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Range_end
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_sym_paramslist[i].n_range_start));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Range_end
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_sym_paramslist[i].n_range_end));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Range_step_size
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_sym_paramslist[i].n_range_step_size));
-        CHECK_LINE_SKIP();
-    }
+    /* m_range_start */
+    READ_CONFIG_PARAM_INT(params->eig_sym_paramslist[i].m_range_start);
+    /* m_range_end */
+    READ_CONFIG_PARAM_INT(params->eig_sym_paramslist[i].m_range_end);
+    /* m_range_step_size */
+    READ_CONFIG_PARAM_INT(params->eig_sym_paramslist[i].m_range_step_size);
+    /* n_range_start */
+    READ_CONFIG_PARAM_INT(params->eig_sym_paramslist[i].n_range_start);
+    /* n_range_end */
+    READ_CONFIG_PARAM_INT(params->eig_sym_paramslist[i].n_range_end);
+    /* n_range_step_size */
+    READ_CONFIG_PARAM_INT(params->eig_sym_paramslist[i].n_range_step_size);
 
     for(i = 0; i < NUM_SUB_TESTS; i++)
     {
         params->eig_sym_paramslist[i].num_ranges = num_ranges;
     }
 
-    fscanf(fp, "%s", &line[0]); // number of repeats
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_sym_paramslist[i].num_repeats));
-        CHECK_LINE_SKIP();
-    }
+    /* num_repeats */
+    READ_CONFIG_PARAM_INT(params->eig_sym_paramslist[i].num_repeats);
 
-    fscanf(fp, "%s", &line[0]);
-    str = &line[0];
-
+    /* datatypes specified */
     ndata_types = NUM_SUB_TESTS;
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str); // num data types
-        for(j = 0; j < NUM_SUB_TESTS; j++)
-        {
-            params->eig_sym_paramslist[j].data_types_char[i] = *str;
-            params->eig_sym_paramslist[j].data_types[i] = get_datatype(*str);
-        }
-        eol = fgetc(fp);
-        if((eol == '\r') || (eol == '\n'))
-        {
-            ndata_types = ((i + 1) < ndata_types) ? (i + 1) : ndata_types;
-            break;
-        }
-    }
+    PARSE_CONFIG_DATATYPES(params->eig_sym_paramslist);
 
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        params->eig_sym_paramslist[i].num_data_types = ndata_types;
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_sym_paramslist[i].matrix_layout));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", str);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_sym_paramslist[i].trans = *str;
-        CHECK_LINE_SKIP();
-    }
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_sym_paramslist[i].uplo = *str;
-        CHECK_LINE_SKIP();
-    }
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_sym_paramslist[i].job = *str;
-        CHECK_LINE_SKIP();
-    }
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_sym_paramslist[i].jobz = *str;
-        CHECK_LINE_SKIP();
-    }
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_sym_paramslist[i].job_seqr = *str;
-        CHECK_LINE_SKIP();
-    }
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_sym_paramslist[i].vect = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_sym_paramslist[i].nrhs));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_sym_paramslist[i].lda));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_sym_paramslist[i].ldb));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_sym_paramslist[i].ldz));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Leading dimension of Q
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_sym_paramslist[i].ldq));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_sym_paramslist[i].nb));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_sym_paramslist[i].ldt));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_sym_paramslist[i].k));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_sym_paramslist[i].isgn));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Must be 'N','I' or 'V
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_sym_paramslist[i].compq_hgeqz = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Must be 'N','I' or 'V
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_sym_paramslist[i].compz_hgeqz = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_sym_paramslist[i].compz = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_sym_paramslist[i].compz_hseqr = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_sym_paramslist[i].kb));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_sym_paramslist[i].itype));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_sym_paramslist[i].vect_rd = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_sym_paramslist[i].side = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_sym_paramslist[i].eigsrc = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_sym_paramslist[i].initv = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_sym_paramslist[i].norm = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_sym_paramslist[i].diag = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_sym_paramslist[i].storev = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_sym_paramslist[i].tsize));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_sym_paramslist[i].ilo));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_sym_paramslist[i].ihi));
-        CHECK_LINE_SKIP();
-    }
-
+    /* matrix_layout */
+    READ_CONFIG_PARAM_INT(params->eig_sym_paramslist[i].matrix_layout);
+    /* trans */
+    READ_CONFIG_PARAM_STR(params->eig_sym_paramslist[i].trans);
+    /* uplo */
+    READ_CONFIG_PARAM_STR(params->eig_sym_paramslist[i].uplo);
+    /* job */
+    READ_CONFIG_PARAM_STR(params->eig_sym_paramslist[i].job);
+    /* jobz */
+    READ_CONFIG_PARAM_STR(params->eig_sym_paramslist[i].jobz);
+    /* job_seqr */
+    READ_CONFIG_PARAM_STR(params->eig_sym_paramslist[i].job_seqr);
+    /* vect */
+    READ_CONFIG_PARAM_STR(params->eig_sym_paramslist[i].vect);
+    /* nrhs */
+    READ_CONFIG_PARAM_INT(params->eig_sym_paramslist[i].nrhs);
+    /* lda */
+    READ_CONFIG_PARAM_INT(params->eig_sym_paramslist[i].lda);
+    /* ldb */
+    READ_CONFIG_PARAM_INT(params->eig_sym_paramslist[i].ldb);
+    /* ldz */
+    READ_CONFIG_PARAM_INT(params->eig_sym_paramslist[i].ldz);
+    /* ldq */
+    READ_CONFIG_PARAM_INT(params->eig_sym_paramslist[i].ldq);
+    /* nb */
+    READ_CONFIG_PARAM_INT(params->eig_sym_paramslist[i].nb);
+    /* ldt */
+    READ_CONFIG_PARAM_INT(params->eig_sym_paramslist[i].ldt);
+    /* k */
+    READ_CONFIG_PARAM_INT(params->eig_sym_paramslist[i].k);
+    /* isgn */
+    READ_CONFIG_PARAM_INT(params->eig_sym_paramslist[i].isgn);
+    /* compq_hgeqz */
+    READ_CONFIG_PARAM_STR(params->eig_sym_paramslist[i].compq_hgeqz);
+    /* compz_hgeqz  */
+    READ_CONFIG_PARAM_STR(params->eig_sym_paramslist[i].compz_hgeqz);
+    /* compz */
+    READ_CONFIG_PARAM_STR(params->eig_sym_paramslist[i].compz);
+    /* compz_hseqr */
+    READ_CONFIG_PARAM_STR(params->eig_sym_paramslist[i].compz_hseqr);
+    /* kb */
+    READ_CONFIG_PARAM_INT(params->eig_sym_paramslist[i].kb);
+    /* itype */
+    READ_CONFIG_PARAM_INT(params->eig_sym_paramslist[i].itype);
+    /* vect_rd */
+    READ_CONFIG_PARAM_STR(params->eig_sym_paramslist[i].vect_rd);
+    /* side */
+    READ_CONFIG_PARAM_STR(params->eig_sym_paramslist[i].side);
+    /* eigsrc */
+    READ_CONFIG_PARAM_STR(params->eig_sym_paramslist[i].eigsrc);
+    /* initv */
+    READ_CONFIG_PARAM_STR(params->eig_sym_paramslist[i].initv);
+    /* norm */
+    READ_CONFIG_PARAM_STR(params->eig_sym_paramslist[i].norm);
+    /* diag */
+    READ_CONFIG_PARAM_STR(params->eig_sym_paramslist[i].diag);
+    /* storev */
+    READ_CONFIG_PARAM_STR(params->eig_sym_paramslist[i].storev);
+    /* tsize */
+    READ_CONFIG_PARAM_INT(params->eig_sym_paramslist[i].tsize);
+    /* ilo */
+    READ_CONFIG_PARAM_INT(params->eig_sym_paramslist[i].ilo);
+    /* ihi */
+    READ_CONFIG_PARAM_INT(params->eig_sym_paramslist[i].ihi);
     /* Range is used to select the range of eigen values to be generated */
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_sym_paramslist[i].range_x = *str;
-        CHECK_LINE_SKIP();
-    }
-
+    READ_CONFIG_PARAM_STR(params->eig_sym_paramslist[i].range_x);
     /* Index of the smallest eigen value to be returned */
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_sym_paramslist[i].IL));
-        CHECK_LINE_SKIP();
-    }
-
+    READ_CONFIG_PARAM_INT(params->eig_sym_paramslist[i].IL);
     /* Index of the largest eigen value to be returned */
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_sym_paramslist[i].IU));
-        CHECK_LINE_SKIP();
-    }
-
+    READ_CONFIG_PARAM_INT(params->eig_sym_paramslist[i].IU);
     /* Lower bound of the interval to be searched for eigen values */
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%f", &(params->eig_sym_paramslist[i].VL));
-        CHECK_LINE_SKIP();
-    }
-
+    READ_CONFIG_PARAM_FLT(params->eig_sym_paramslist[i].VL);
     /* Upper bound of the interval to be searched for eigen values */
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%f", &(params->eig_sym_paramslist[i].VU));
-        CHECK_LINE_SKIP();
-    }
-
+    READ_CONFIG_PARAM_FLT(params->eig_sym_paramslist[i].VU);
     /* The absolute error tolerance for the eigen values */
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%f", &(params->eig_sym_paramslist[i].abstol));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_sym_paramslist[i].threshold_value));
-        CHECK_LINE_SKIP();
-    }
+    READ_CONFIG_PARAM_FLT(params->eig_sym_paramslist[i].abstol);
+    /* threshold_value */
+    READ_CONFIG_PARAM_FLT(params->eig_sym_paramslist[i].threshold_value);
 
     fclose(fp);
 }
@@ -1338,341 +1019,99 @@ void fla_test_read_non_sym_eig_params(const char *file_name, test_params_t *para
 
     num_ranges = num_tests;
 
-    fscanf(fp, "%s", &line[0]); // Range_start
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_non_sym_paramslist[i].m_range_start));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Range_end
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_non_sym_paramslist[i].m_range_end));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Range_step_size
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_non_sym_paramslist[i].m_range_step_size));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Range_end
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_non_sym_paramslist[i].n_range_start));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Range_end
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_non_sym_paramslist[i].n_range_end));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Range_step_size
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_non_sym_paramslist[i].n_range_step_size));
-        CHECK_LINE_SKIP();
-    }
+    /* m_range_start */
+    READ_CONFIG_PARAM_INT(params->eig_non_sym_paramslist[i].m_range_start);
+    /* m_range_end */
+    READ_CONFIG_PARAM_INT(params->eig_non_sym_paramslist[i].m_range_end);
+    /* m_range_step_size */
+    READ_CONFIG_PARAM_INT(params->eig_non_sym_paramslist[i].m_range_step_size);
+    /* n_range_start */
+    READ_CONFIG_PARAM_INT(params->eig_non_sym_paramslist[i].n_range_start);
+    /* n_range_end */
+    READ_CONFIG_PARAM_INT(params->eig_non_sym_paramslist[i].n_range_end);
+    /* n_range_step_size */
+    READ_CONFIG_PARAM_INT(params->eig_non_sym_paramslist[i].n_range_step_size);
 
     for(i = 0; i < NUM_SUB_TESTS; i++)
     {
         params->eig_non_sym_paramslist[i].num_ranges = num_ranges;
     }
 
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_non_sym_paramslist[i].lda));
-        CHECK_LINE_SKIP();
-    }
+    /* lda */
+    READ_CONFIG_PARAM_INT(params->eig_non_sym_paramslist[i].lda);
+    /* ldb */
+    READ_CONFIG_PARAM_INT(params->eig_non_sym_paramslist[i].ldb);
+    /* ldvl */
+    READ_CONFIG_PARAM_INT(params->eig_non_sym_paramslist[i].ldvl);
+    /* ldvr */
+    READ_CONFIG_PARAM_INT(params->eig_non_sym_paramslist[i].ldvr);
+    /* num_repeats */
+    READ_CONFIG_PARAM_INT(params->eig_non_sym_paramslist[i].num_repeats);
 
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_non_sym_paramslist[i].ldb));
-        CHECK_LINE_SKIP();
-    }
+    /* datatypes specified */
+    ndata_types = NUM_SUB_TESTS;
+    PARSE_CONFIG_DATATYPES(params->eig_non_sym_paramslist);
 
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_non_sym_paramslist[i].ldvl));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_non_sym_paramslist[i].ldvr));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // number of repeats
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_non_sym_paramslist[i].num_repeats));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str); // num data types
-        for(j = 0; j < NUM_SUB_TESTS; j++)
-        {
-            params->eig_non_sym_paramslist[j].data_types_char[i] = *str;
-            params->eig_non_sym_paramslist[j].data_types[i] = get_datatype(*str);
-        }
-        eol = fgetc(fp);
-        if((eol == '\r') || (eol == '\n'))
-        {
-            ndata_types = ((i + 1) < ndata_types) ? (i + 1) : ndata_types;
-            break;
-        }
-    }
-
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        params->eig_non_sym_paramslist[i].num_data_types = ndata_types;
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_non_sym_paramslist[i].matrix_layout));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_non_sym_paramslist[i].howmny = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_non_sym_paramslist[i].initv = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_non_sym_paramslist[i].job_seqr = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_non_sym_paramslist[i].eigsrc = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_non_sym_paramslist[i].initv = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_non_sym_paramslist[i].job = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_non_sym_paramslist[i].howmny_trsna = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_non_sym_paramslist[i].job_trsen = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_non_sym_paramslist[i].compq = *str;
-        CHECK_LINE_SKIP();
-    }
-
+    /* matrix_layout */
+    READ_CONFIG_PARAM_INT(params->eig_non_sym_paramslist[i].matrix_layout);
+    /* howmny */
+    READ_CONFIG_PARAM_STR(params->eig_non_sym_paramslist[i].howmny);
+    /* initv */
+    READ_CONFIG_PARAM_STR(params->eig_non_sym_paramslist[i].initv);
+    /* job_seqr */
+    READ_CONFIG_PARAM_STR(params->eig_non_sym_paramslist[i].job_seqr);
+    /* eigsrc */
+    READ_CONFIG_PARAM_STR(params->eig_non_sym_paramslist[i].eigsrc);
+    /* initv */
+    READ_CONFIG_PARAM_STR(params->eig_non_sym_paramslist[i].initv);
+    /* job */
+    READ_CONFIG_PARAM_STR(params->eig_non_sym_paramslist[i].job);
+    /* howmny_trsna */
+    READ_CONFIG_PARAM_STR(params->eig_non_sym_paramslist[i].howmny_trsna);
+    /* job_trsen */
+    READ_CONFIG_PARAM_STR(params->eig_non_sym_paramslist[i].job_trsen);
+    /* compq */
+    READ_CONFIG_PARAM_STR(params->eig_non_sym_paramslist[i].compq);
     /* Reading config params for 'trsyl' API  */
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_non_sym_paramslist[i].trana_real = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_non_sym_paramslist[i].trana_complex = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_non_sym_paramslist[i].tranb_real = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_non_sym_paramslist[i].tranb_complex = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_non_sym_paramslist[i].isgn));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%f", &(params->eig_non_sym_paramslist[i].gghrd_threshold));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%f", &(params->eig_non_sym_paramslist[i].ggbal_threshold));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%f", &(params->eig_non_sym_paramslist[i].GenNonSymEigProblem_threshold));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_non_sym_paramslist[i].side_tgevc = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_non_sym_paramslist[i].jobvsl = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_non_sym_paramslist[i].jobvsr = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_non_sym_paramslist[i].sort = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_non_sym_paramslist[i].sense_ggesx = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_non_sym_paramslist[i].balance_ggevx = *str;
-        CHECK_LINE_SKIP();
-    }
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_non_sym_paramslist[i].sense_ggevx = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_non_sym_paramslist[i].sort_gees = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_non_sym_paramslist[i].wantz));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_non_sym_paramslist[i].wantq));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->eig_non_sym_paramslist[i].tgsen_ijob));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->eig_non_sym_paramslist[i].unmhr_trans = *str;
-        CHECK_LINE_SKIP();
-    }
+    READ_CONFIG_PARAM_STR(params->eig_non_sym_paramslist[i].trana_real);
+    /* trana_complex */
+    READ_CONFIG_PARAM_STR(params->eig_non_sym_paramslist[i].trana_complex);
+    /* tranb_real */
+    READ_CONFIG_PARAM_STR(params->eig_non_sym_paramslist[i].tranb_real);
+    /* tranb_complex */
+    READ_CONFIG_PARAM_STR(params->eig_non_sym_paramslist[i].tranb_complex);
+    /* isgn */
+    READ_CONFIG_PARAM_INT(params->eig_non_sym_paramslist[i].isgn);
+    /* gghrd_threshold */
+    READ_CONFIG_PARAM_FLT(params->eig_non_sym_paramslist[i].gghrd_threshold);
+    /* ggbal_threshold */
+    READ_CONFIG_PARAM_FLT(params->eig_non_sym_paramslist[i].ggbal_threshold);
+    /* GenNonSymEigProblem_threshold */
+    READ_CONFIG_PARAM_FLT(params->eig_non_sym_paramslist[i].GenNonSymEigProblem_threshold);
+    /* side_tgevc */
+    READ_CONFIG_PARAM_STR(params->eig_non_sym_paramslist[i].side_tgevc);
+    /* jobvsl */
+    READ_CONFIG_PARAM_STR(params->eig_non_sym_paramslist[i].jobvsl);
+    /* jobvsr */
+    READ_CONFIG_PARAM_STR(params->eig_non_sym_paramslist[i].jobvsr);
+    /* sort */
+    READ_CONFIG_PARAM_STR(params->eig_non_sym_paramslist[i].sort);
+    /* sense_ggesx */
+    READ_CONFIG_PARAM_STR(params->eig_non_sym_paramslist[i].sense_ggesx);
+    /* balance_ggevx */
+    READ_CONFIG_PARAM_STR(params->eig_non_sym_paramslist[i].balance_ggevx);
+    /* sense_ggevx */
+    READ_CONFIG_PARAM_STR(params->eig_non_sym_paramslist[i].sense_ggevx);
+    /* sort_gees */
+    READ_CONFIG_PARAM_STR(params->eig_non_sym_paramslist[i].sort_gees);
+    /* wantz */
+    READ_CONFIG_PARAM_INT(params->eig_non_sym_paramslist[i].wantz);
+    /* wantq */
+    READ_CONFIG_PARAM_INT(params->eig_non_sym_paramslist[i].wantq);
+    /* tgsen_ijob */
+    READ_CONFIG_PARAM_INT(params->eig_non_sym_paramslist[i].tgsen_ijob);
+    /* unmhr_trans */
+    READ_CONFIG_PARAM_STR(params->eig_non_sym_paramslist[i].unmhr_trans);
 
     fclose(fp);
 }
@@ -1707,382 +1146,111 @@ void fla_test_read_svd_params(const char *file_name, test_params_t *params)
     }
 
     num_ranges = num_tests;
-    fscanf(fp, "%s", &line[0]); // Range_start
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->svd_paramslist[i].m_range_start));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Range_end
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->svd_paramslist[i].m_range_end));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Range_step_size
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->svd_paramslist[i].m_range_step_size));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Range_start
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->svd_paramslist[i].n_range_start));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Range_end
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->svd_paramslist[i].n_range_end));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Range_step_size
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->svd_paramslist[i].n_range_step_size));
-        CHECK_LINE_SKIP();
-    }
+    /* m_range_start */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].m_range_start);
+    /* m_range_end */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].m_range_end);
+    /* m_range_step_size */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].m_range_step_size);
+    /* n_range_start */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].n_range_start);
+    /* n_range_end */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].n_range_end);
+    /* n_range_step_size */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].n_range_step_size);
 
     for(i = 0; i < NUM_SUB_TESTS; i++)
     {
         params->svd_paramslist[i].num_ranges = num_ranges;
     }
 
-    fscanf(fp, "%s", &line[0]); // leading dimension of input
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->svd_paramslist[i].lda));
-        CHECK_LINE_SKIP();
-    }
+    /* lda */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].lda);
+    /* ldu */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].ldu);
+    /* ldvt */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].ldvt);
+    /* num_repeats */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].num_repeats);
 
-    fscanf(fp, "%s", &line[0]); // leading dimension of u output
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->svd_paramslist[i].ldu));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // leading dimension of vt output
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->svd_paramslist[i].ldvt));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // number of repeats
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->svd_paramslist[i].num_repeats));
-        CHECK_LINE_SKIP();
-    }
-
+    /* datatypes specified */
     ndata_types = NUM_SUB_TESTS;
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str); // num data types
-        for(j = 0; j < NUM_SUB_TESTS; j++)
-        {
-            params->svd_paramslist[j].data_types_char[i] = *str;
-            params->svd_paramslist[j].data_types[i] = get_datatype(*str);
-        }
-        eol = fgetc(fp);
-        if((eol == '\r') || (eol == '\n'))
-        {
-            ndata_types = ((i + 1) < ndata_types) ? (i + 1) : ndata_types;
-            break;
-        }
-    }
+    PARSE_CONFIG_DATATYPES(params->svd_paramslist);
 
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        params->svd_paramslist[i].num_data_types = ndata_types;
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->svd_paramslist[i].matrix_layout));
-        CHECK_LINE_SKIP();
-    }
-
-    str = &line[0];
-    fscanf(fp, "%s", str);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->svd_paramslist[i].jobu = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->svd_paramslist[i].jobv = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->svd_paramslist[i].jobq = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->svd_paramslist[i].m));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->svd_paramslist[i].p));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->svd_paramslist[i].n));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%f", &(params->svd_paramslist[i].tola));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%f", &(params->svd_paramslist[i].tolb));
-        CHECK_LINE_SKIP();
-    }
-
-    str = &line[0];
-    fscanf(fp, "%s", str);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->svd_paramslist[i].jobu_gesvd = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    str = &line[0];
-    fscanf(fp, "%s", str);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->svd_paramslist[i].jobvt_gesvd = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->svd_paramslist[i].joba_gejsv = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->svd_paramslist[i].jobu_gejsv = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->svd_paramslist[i].jobv_gejsv = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->svd_paramslist[i].jobr_gejsv = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->svd_paramslist[i].jobt_gejsv = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->svd_paramslist[i].jobp_gejsv = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->svd_paramslist[i].m_gejsv));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->svd_paramslist[i].n_gejsv));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->svd_paramslist[i].joba_gesvj = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->svd_paramslist[i].jobu_gesvj = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->svd_paramslist[i].jobv_gesvj = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->svd_paramslist[i].m_gesvj));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->svd_paramslist[i].n_gesvj));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->svd_paramslist[i].mv_gesvj));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%f", &(params->svd_paramslist[i].ctol_gesvj));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", &(params->svd_paramslist[i].jobu_gesvdx));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", &(params->svd_paramslist[i].jobvt_gesvdx));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", &(params->svd_paramslist[i].range_gesvdx));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->svd_paramslist[i].il));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->svd_paramslist[i].iu));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%f", &(params->svd_paramslist[i].vl));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%f", &(params->svd_paramslist[i].vu));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->svd_paramslist[i].joba_gesvdq = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->svd_paramslist[i].jobu_gesvdq = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str);
-        params->svd_paramslist[i].jobv_gesvdq = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%f", &(params->svd_paramslist[i].svd_threshold));
-        CHECK_LINE_SKIP();
-    }
+    /* matrix_layout */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].matrix_layout);
+    /* jobu */
+    READ_CONFIG_PARAM_STR(params->svd_paramslist[i].jobu);
+    /* jobv */
+    READ_CONFIG_PARAM_STR(params->svd_paramslist[i].jobv);
+    /* jobq */
+    READ_CONFIG_PARAM_STR(params->svd_paramslist[i].jobq);
+    /* m */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].m);
+    /* p */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].p);
+    /* n */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].n);
+    /* tola */
+    READ_CONFIG_PARAM_FLT(params->svd_paramslist[i].tola);
+    /* tolb */
+    READ_CONFIG_PARAM_FLT(params->svd_paramslist[i].tolb);
+    /* jobu_gesvd */
+    READ_CONFIG_PARAM_STR(params->svd_paramslist[i].jobu_gesvd);
+    /* jobvt_gesvd */
+    READ_CONFIG_PARAM_STR(params->svd_paramslist[i].jobvt_gesvd);
+    /* joba_gejsv */
+    READ_CONFIG_PARAM_STR(params->svd_paramslist[i].joba_gejsv);
+    /* jobu_gejsv */
+    READ_CONFIG_PARAM_STR(params->svd_paramslist[i].jobu_gejsv);
+    /* jobv_gejsv */
+    READ_CONFIG_PARAM_STR(params->svd_paramslist[i].jobv_gejsv);
+    /* jobr_gejsv */
+    READ_CONFIG_PARAM_STR(params->svd_paramslist[i].jobr_gejsv);
+    /* jobt_gejsv */
+    READ_CONFIG_PARAM_STR(params->svd_paramslist[i].jobt_gejsv);
+    /* jobp_gejsv */
+    READ_CONFIG_PARAM_STR(params->svd_paramslist[i].jobp_gejsv);
+    /* m_gejsv */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].m_gejsv);
+    /* n_gejsv */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].n_gejsv);
+    /* joba_gesvj */
+    READ_CONFIG_PARAM_STR(params->svd_paramslist[i].joba_gesvj);
+    /* jobu_gesvj */
+    READ_CONFIG_PARAM_STR(params->svd_paramslist[i].jobu_gesvj);
+    /* jobv_gesvj */
+    READ_CONFIG_PARAM_STR(params->svd_paramslist[i].jobv_gesvj);
+    /* m_gesvj */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].m_gesvj);
+    /* n_gesvj */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].n_gesvj);
+    /* mv_gesvj */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].mv_gesvj);
+    /* ctol_gesvj */
+    READ_CONFIG_PARAM_FLT(params->svd_paramslist[i].ctol_gesvj);
+    /* jobu_gesvdx */
+    READ_CONFIG_PARAM_STR(params->svd_paramslist[i].jobu_gesvdx);
+    /* jobvt_gesvdx */
+    READ_CONFIG_PARAM_STR(params->svd_paramslist[i].jobvt_gesvdx);
+    /* range_gesvdx */
+    READ_CONFIG_PARAM_STR(params->svd_paramslist[i].range_gesvdx);
+    /* il */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].il);
+    /* iu */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].iu);
+    /* vl */
+    READ_CONFIG_PARAM_FLT(params->svd_paramslist[i].vl);
+    /* vu */
+    READ_CONFIG_PARAM_FLT(params->svd_paramslist[i].vu);
+    /* joba_gesvdq */
+    READ_CONFIG_PARAM_STR(params->svd_paramslist[i].joba_gesvdq);
+    /* jobu_gesvdq */
+    READ_CONFIG_PARAM_STR(params->svd_paramslist[i].jobu_gesvdq);
+    /* jobv_gesvdq */
+    READ_CONFIG_PARAM_STR(params->svd_paramslist[i].jobv_gesvdq);
+    /* svd_threshold */
+    READ_CONFIG_PARAM_FLT(params->svd_paramslist[i].svd_threshold);
 
     fclose(fp);
 }
@@ -2100,6 +1268,7 @@ void fla_test_read_aux_params(const char *file_name, test_params_t *params)
     integer num_tests;
     integer ndata_types;
     integer num_ranges;
+    integer len;
 
     str = &line[0];
     fp = fopen(file_name, "r");
@@ -2117,144 +1286,65 @@ void fla_test_read_aux_params(const char *file_name, test_params_t *params)
     }
 
     num_ranges = num_tests;
-    fscanf(fp, "%s", &line[0]); // Range_start
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->aux_paramslist[i].m_range_start));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Range_end
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->aux_paramslist[i].m_range_end));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Range_step_size
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->aux_paramslist[i].m_range_step_size));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Range_start
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->aux_paramslist[i].n_range_start));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Range_end
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->aux_paramslist[i].n_range_end));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // Range_step_size
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->aux_paramslist[i].n_range_step_size));
-        CHECK_LINE_SKIP();
-    }
+    /* m_range_start */
+    READ_CONFIG_PARAM_INT(params->aux_paramslist[i].m_range_start);
+    /* m_range_end */
+    READ_CONFIG_PARAM_INT(params->aux_paramslist[i].m_range_end);
+    /* m_range_step_size */
+    READ_CONFIG_PARAM_INT(params->aux_paramslist[i].m_range_step_size);
+    /* n_range_start */
+    READ_CONFIG_PARAM_INT(params->aux_paramslist[i].n_range_start);
+    /* n_range_end */
+    READ_CONFIG_PARAM_INT(params->aux_paramslist[i].n_range_end);
+    /* n_range_step_size */
+    READ_CONFIG_PARAM_INT(params->aux_paramslist[i].n_range_step_size);
 
     for(i = 0; i < NUM_SUB_TESTS; i++)
     {
         params->aux_paramslist[i].num_ranges = num_ranges;
     }
 
-    fscanf(fp, "%s", &line[0]); // leading dimension of input
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->aux_paramslist[i].lda));
-        CHECK_LINE_SKIP();
-    }
+    /* lda */
+    READ_CONFIG_PARAM_INT(params->aux_paramslist[i].lda);
+    /* incx */
+    READ_CONFIG_PARAM_INT(params->aux_paramslist[i].incx);
+    /* incy */
+    READ_CONFIG_PARAM_INT(params->aux_paramslist[i].incy);
+    /* incx_larfg */
+    READ_CONFIG_PARAM_INT(params->aux_paramslist[i].incx_larfg);
+    /* side */
+    READ_CONFIG_PARAM_STR(params->aux_paramslist[i].side);
+    /* incv */
+    READ_CONFIG_PARAM_INT(params->aux_paramslist[i].incv);
+    /* ldc */
+    READ_CONFIG_PARAM_INT(params->aux_paramslist[i].ldc);
+    /* num_repeats */
+    READ_CONFIG_PARAM_INT(params->aux_paramslist[i].num_repeats);
 
-    fscanf(fp, "%s", &line[0]); // The increment between successive values of CX
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->aux_paramslist[i].incx));
-        CHECK_LINE_SKIP();
-    }
+    /* datatypes specified */
+    ndata_types = NUM_SUB_TESTS;
+    PARSE_CONFIG_DATATYPES(params->aux_paramslist);
 
-    fscanf(fp, "%s", &line[0]); // The increment between successive values of CY
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->aux_paramslist[i].incy));
-        CHECK_LINE_SKIP();
-    }
+    /* matrix_layout */
+    READ_CONFIG_PARAM_INT(params->aux_paramslist[i].matrix_layout);
+    /* aux_threshold */
+    READ_CONFIG_PARAM_FLT(params->aux_paramslist[i].aux_threshold);
 
-    fscanf(fp, "%s", &line[0]); // The increment between successive values of X in larfg (incx > 0)
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->aux_paramslist[i].incx_larfg));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // The side (either L or R) for larf
+    fscanf(fp, "%s", &line[0]); // Norm types
     for(i = 0; i < NUM_SUB_TESTS; i++)
     {
         fscanf(fp, "%s", str);
-        params->aux_paramslist[i].side = *str;
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // The increment between elements of V for larf
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->aux_paramslist[i].incv));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // The leading dimension of the array C for larf
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->aux_paramslist[i].ldc));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]); // number of repeats
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->aux_paramslist[i].num_repeats));
-        CHECK_LINE_SKIP();
-    }
-
-    ndata_types = NUM_SUB_TESTS;
-    fscanf(fp, "%s", &line[0]); // num data types
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%s", str); // num data types
-        for(j = 0; j < NUM_SUB_TESTS; j++)
+        len = strlen(str);
+        len = fla_min(len, MAX_NUM_NORMTYPES);
+        for(j = 0; j < len; j++)
         {
-            params->aux_paramslist[j].data_types_char[i] = *str;
-            params->aux_paramslist[j].data_types[i] = get_datatype(*str);
+            params->aux_paramslist[i].norm_types_str[j] = str[j];
         }
-        eol = fgetc(fp);
-        if((eol == '\r') || (eol == '\n'))
+        for(j = len; j < MAX_NUM_NORMTYPES; j++)
         {
-            ndata_types = ((i + 1) < ndata_types) ? (i + 1) : ndata_types;
-            break;
+            params->aux_paramslist[i].norm_types_str[j] = '\0';
         }
-    }
 
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        params->aux_paramslist[i].num_data_types = ndata_types;
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%" FT_IS "", &(params->aux_paramslist[i].matrix_layout));
-        CHECK_LINE_SKIP();
-    }
-
-    fscanf(fp, "%s", &line[0]);
-    for(i = 0; i < NUM_SUB_TESTS; i++)
-    {
-        fscanf(fp, "%f", &(params->aux_paramslist[i].aux_threshold));
         CHECK_LINE_SKIP();
     }
 
@@ -2462,16 +1552,14 @@ void fla_test_init_strings(void)
 }
 
 void fla_test_op_driver(char *func_str, integer sqr_inp, test_params_t *params, integer api_type,
-                        void (*f_exp)(test_params_t *, // params
+                        void (*f_exp)(char *, // API_test string
+                                      test_params_t *, // params
                                       integer, // datatype
                                       integer, // p_cur
                                       integer, // q_cur
                                       integer, // pci (param combo counter)
                                       integer, // n_repeats
-                                      integer, // einfo
-                                      double *, // perf
-                                      double *, // time
-                                      double *)) // residual
+                                      integer))
 {
     integer n_datatypes = params->n_datatypes;
     integer n_repeats, ith;
@@ -2481,11 +1569,8 @@ void fla_test_op_driver(char *func_str, integer sqr_inp, test_params_t *params, 
     integer dt, p_cur, q_cur, einfo = 0;
     char datatype_char;
     integer datatype;
-    double thresh;
-    double perf_max_val, time_min_val, residual_max_val;
     double *perf = (double *)malloc(n_threads * sizeof(double));
     double *time = (double *)malloc(n_threads * sizeof(double));
-    double *residual = (double *)malloc(n_threads * sizeof(double));
 
     fla_test_output_info("%2sAPI%13s DATA_TYPE%6s SIZE%9s FLOPS%9s TIME%9s ERROR%9s STATUS\n", "",
                          "", "", "", "", "", "");
@@ -2531,7 +1616,6 @@ void fla_test_op_driver(char *func_str, integer sqr_inp, test_params_t *params, 
                 q_first = params->lin_solver_paramslist[range_loop_counter].n_range_start;
                 q_max = params->lin_solver_paramslist[range_loop_counter].n_range_end;
                 q_inc = params->lin_solver_paramslist[range_loop_counter].n_range_step_size;
-                thresh = params->lin_solver_paramslist[range_loop_counter].solver_threshold;
                 params->datatype = params->lin_solver_paramslist[range_loop_counter].data_types;
                 params->datatype_char
                     = params->lin_solver_paramslist[range_loop_counter].data_types_char;
@@ -2546,7 +1630,6 @@ void fla_test_op_driver(char *func_str, integer sqr_inp, test_params_t *params, 
                 q_first = p_first;
                 q_max = p_max;
                 q_inc = p_inc;
-                thresh = params->eig_sym_paramslist[range_loop_counter].threshold_value;
                 params->datatype = params->eig_sym_paramslist[range_loop_counter].data_types;
                 params->datatype_char
                     = params->eig_sym_paramslist[range_loop_counter].data_types_char;
@@ -2561,7 +1644,6 @@ void fla_test_op_driver(char *func_str, integer sqr_inp, test_params_t *params, 
                 q_first = params->eig_non_sym_paramslist[range_loop_counter].n_range_start;
                 q_max = params->eig_non_sym_paramslist[range_loop_counter].n_range_end;
                 q_inc = params->eig_non_sym_paramslist[range_loop_counter].n_range_step_size;
-                thresh = params->eig_non_sym_paramslist[range_loop_counter].gghrd_threshold;
                 params->datatype = params->eig_non_sym_paramslist[range_loop_counter].data_types;
                 params->datatype_char
                     = params->eig_non_sym_paramslist[range_loop_counter].data_types_char;
@@ -2576,7 +1658,6 @@ void fla_test_op_driver(char *func_str, integer sqr_inp, test_params_t *params, 
                 q_first = params->svd_paramslist[range_loop_counter].n_range_start;
                 q_max = params->svd_paramslist[range_loop_counter].n_range_end;
                 q_inc = params->svd_paramslist[range_loop_counter].n_range_step_size;
-                thresh = params->svd_paramslist[range_loop_counter].svd_threshold;
                 params->datatype = params->svd_paramslist[range_loop_counter].data_types;
                 params->datatype_char = params->svd_paramslist[range_loop_counter].data_types_char;
                 n_repeats = params->svd_paramslist[range_loop_counter].num_repeats;
@@ -2590,7 +1671,6 @@ void fla_test_op_driver(char *func_str, integer sqr_inp, test_params_t *params, 
                 q_first = params->aux_paramslist[range_loop_counter].n_range_start;
                 q_max = params->aux_paramslist[range_loop_counter].n_range_end;
                 q_inc = params->aux_paramslist[range_loop_counter].n_range_step_size;
-                thresh = params->aux_paramslist[range_loop_counter].aux_threshold;
                 params->datatype = params->aux_paramslist[range_loop_counter].data_types;
                 params->datatype_char = params->aux_paramslist[range_loop_counter].data_types_char;
                 n_repeats = params->aux_paramslist[range_loop_counter].num_repeats;
@@ -2619,24 +1699,14 @@ void fla_test_op_driver(char *func_str, integer sqr_inp, test_params_t *params, 
 #pragma omp for
                         for(ith = 0; ith < n_threads; ith++)
                         {
-                            f_exp(params, datatype, p_cur, q_cur, range_loop_counter, n_repeats,
-                                  einfo, (perf + ith), (time + ith), (residual + ith));
+                            f_exp(func_str, params, datatype, p_cur, q_cur, range_loop_counter,
+                                  n_repeats, einfo);
                         }
-
-                        get_max_from_array(DOUBLE, (void *)residual, (void *)&residual_max_val,
-                                           n_threads);
-                        get_min_from_array(DOUBLE, (void *)time, (void *)&time_min_val, n_threads);
-                        get_max_from_array(DOUBLE, (void *)perf, (void *)&perf_max_val, n_threads);
-
-                        fla_test_print_status(func_str, datatype_char, sqr_inp, p_cur, q_cur,
-                                              residual_max_val, thresh, time_min_val, perf_max_val);
                     }
                     else
                     {
-                        f_exp(params, datatype, p_cur, q_cur, range_loop_counter, n_repeats, einfo,
-                              perf, time, residual);
-                        fla_test_print_status(func_str, datatype_char, sqr_inp, p_cur, q_cur,
-                                              *residual, thresh, *time, *perf);
+                        f_exp(func_str, params, datatype, p_cur, q_cur, range_loop_counter,
+                              n_repeats, einfo);
                     }
                 }
             }
@@ -2646,7 +1716,6 @@ void fla_test_op_driver(char *func_str, integer sqr_inp, test_params_t *params, 
     }
 
     free(perf);
-    free(residual);
     free(time);
 }
 

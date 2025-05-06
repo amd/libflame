@@ -1,8 +1,8 @@
-/*../netlib/dtgevc.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./dtgevc.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static logical c_true = TRUE_;
 static integer c__2 = 2;
@@ -61,7 +61,7 @@ static logical c_false = FALSE_;
 /* > */
 /* > S*x = w*P*x, (y**H)*S = w*(y**H)*P, */
 /* > */
-/* > where y**H denotes the conjugate tranpose of y. */
+/* > where y**H denotes the conjugate transpose of y. */
 /* > The eigenvalues are not input to this routine, but are computed */
 /* > directly from the diagonal blocks of S and P. */
 /* > */
@@ -240,8 +240,7 @@ static logical c_false = FALSE_;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup doubleGEcomputational */
+/* > \ingroup tgevc */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -350,11 +349,7 @@ void dtgevc_(char *side, char *howmny, logical *select, integer *n, doublereal *
         dlaln2_(logical *, integer *, integer *, doublereal *, doublereal *, doublereal *,
                 integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *,
                 doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    doublereal temp2i;
-    extern /* Subroutine */
-        void
-        dlabad_(doublereal *, doublereal *);
-    doublereal temp2r;
+    doublereal temp2i, temp2r;
     logical ilabad, ilbbad;
     doublereal acoefa, bcoefa, cimaga, cimagb;
     logical ilback;
@@ -370,10 +365,9 @@ void dtgevc_(char *side, char *howmny, logical *select, integer *n, doublereal *
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical ilcomp, ilcplx;
     integer ihwmny;
-    /* -- LAPACK computational routine (version 3.4.0) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -584,7 +578,6 @@ void dtgevc_(char *side, char *howmny, logical *select, integer *n, doublereal *
     /* Machine Constants */
     safmin = dlamch_("Safe minimum");
     big = 1. / safmin;
-    dlabad_(&safmin, &big);
     ulp = dlamch_("Epsilon") * dlamch_("Base");
     small_val = safmin * *n / ulp;
     big = 1. / small_val;
@@ -916,7 +909,7 @@ void dtgevc_(char *side, char *howmny, logical *select, integer *n, doublereal *
                 /* a*conjg( sum S(k,j)*x(k) ) - b*conjg( sum P(k,j)*x(k) ) */
                 /* k=je k=je */
                 /* which may cause underflow problems if A or B are close */
-                /* to underflow. (E.g., less than SMALL.) */
+                /* to underflow. (E.g., less than small_val.) */
                 i__3 = nw;
                 for(jw = 1; jw <= i__3; ++jw)
                 {

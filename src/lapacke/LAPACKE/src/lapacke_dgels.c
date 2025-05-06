@@ -40,17 +40,24 @@ lapack_int LAPACKE_dgels( int matrix_layout, char trans, lapack_int m,
     lapack_int lwork = -1;
     double* work = NULL;
     double work_query;
+#ifndef LAPACK_DISABLE_NAN_CHECK
+    lapack_int m_b = m;
+#endif
+
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dgels", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
+    if( LAPACKE_lsame( trans, 'T' ) || LAPACKE_lsame( trans, 't' ) ) {
+        m_b = n;
+    }
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( LAPACKE_dge_nancheck( matrix_layout, m, n, a, lda ) ) {
             return -6;
         }
-        if( LAPACKE_dge_nancheck( matrix_layout, MAX(m,n), nrhs, b, ldb ) ) {
+        if( LAPACKE_dge_nancheck( matrix_layout, m_b, nrhs, b, ldb ) ) {
             return -8;
         }
     }

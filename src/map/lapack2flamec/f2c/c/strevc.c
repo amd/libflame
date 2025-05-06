@@ -1,8 +1,8 @@
-/* ../netlib/strevc.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./strevc.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static logical c_false = FALSE_;
 static integer c__1 = 1;
@@ -55,9 +55,9 @@ static logical c_true = TRUE_;
 /* > The right eigenvector x and the left eigenvector y of T corresponding */
 /* > to an eigenvalue w are defined by: */
 /* > */
-/* > T*x = w*x, (y**T)*T = w*(y**T) */
+/* > T*x = w*x, (y**H)*T = w*(y**H) */
 /* > */
-/* > where y**T denotes the transpose of y. */
+/* > where y**H denotes the conjugate transpose of y. */
 /* > The eigenvalues are not input to this routine, but are read directly */
 /* > from the diagonal blocks of T. */
 /* > */
@@ -213,8 +213,7 @@ static logical c_true = TRUE_;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup realOTHERcomputational */
+/* > \ingroup trevc */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -236,14 +235,10 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
              integer *ldvl, real *vr, integer *ldvr, integer *mm, integer *m, real *work,
              integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
-             "strevc inputs: side %c, howmny %c, n %d, ldt %d, ldvl %d, ldvr %d, mm %d", *side,
-             *howmny, *n, *ldt, *ldvl, *ldvr, *mm);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("strevc inputs: side %c, howmny %c, n %" FLA_IS ", ldt %" FLA_IS
+                      ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS "",
+                      *side, *howmny, *n, *ldt, *ldvl, *ldvr, *mm);
     /* System generated locals */
     integer t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2, i__3;
     real r__1, r__2, r__3, r__4;
@@ -257,7 +252,7 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
     real wi, wr, rec, ulp, beta, emax;
     logical pair, allv;
     integer ierr;
-    real unfl, ovfl, smin;
+    real unfl, smin;
     extern real sdot_(integer *, real *, integer *, real *, integer *);
     logical over;
     real vmax;
@@ -284,8 +279,7 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
         void
         saxpy_(integer *, real *, real *, integer *, real *, integer *),
         slaln2_(logical *, integer *, integer *, real *, real *, real *, integer *, real *, real *,
-                real *, integer *, real *, real *, real *, integer *, real *, real *, integer *),
-        slabad_(real *, real *);
+                real *, integer *, real *, real *, real *, integer *, real *, real *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
         void
@@ -294,10 +288,9 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
     extern integer isamax_(integer *, real *, integer *);
     logical rightv;
     real smlnum;
-    /* -- LAPACK computational routine (version 3.4.0) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -423,19 +416,17 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
     {
         i__1 = -(*info);
         xerbla_("STREVC", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible. */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Set the constants to control overflow. */
     unfl = slamch_("Safe minimum");
-    ovfl = 1.f / unfl;
-    slabad_(&unfl, &ovfl);
     ulp = slamch_("Precision");
     smlnum = unfl * (*n / ulp);
     bignum = (1.f - ulp) / smlnum;
@@ -1255,7 +1246,7 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
             /* L260: */
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STREVC */
 }

@@ -1,8 +1,8 @@
-/* ../netlib/sgelsy.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sgelsy.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -124,6 +124,7 @@ they are stored as the columns of the */
 /* > B is REAL array, dimension (LDB,NRHS) */
 /* > On entry, the M-by-NRHS right hand side matrix B. */
 /* > On exit, the N-by-NRHS solution matrix X. */
+/* > If M = 0 or N = 0, B is not referenced. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] LDB */
@@ -156,6 +157,7 @@ they are stored as the columns of the */
 /* > The effective rank of A, i.e., the order of the submatrix */
 /* > R11. This is the same as the order of the submatrix T11 */
 /* > in the complete orthogonal factorization of A. */
+/* > If NRHS = 0, RANK = 0 on output. */
 /* > \endverbatim */
 /* > */
 /* > \param[out] WORK */
@@ -196,8 +198,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup realGEsolve */
+/* > \ingroup gelsy */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -210,6 +211,10 @@ the routine */
 void sgelsy_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb,
              integer *jpvt, real *rcond, integer *rank, real *work, integer *lwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgelsy inputs: m %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS ",lda %" FLA_IS
+                      ",ldb %" FLA_IS ",lwork %" FLA_IS "",
+                      *m, *n, *nrhs, *lda, *ldb, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     real r__1, r__2;
@@ -229,8 +234,7 @@ void sgelsy_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
                real *, integer *),
         slaic1_(integer *, integer *, real *, real *, real *, real *, real *, real *, real *),
         sgeqp3_(integer *, integer *, real *, integer *, integer *, real *, real *, integer *,
-                integer *),
-        slabad_(real *, real *);
+                integer *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
         void
@@ -253,10 +257,10 @@ void sgelsy_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
         sormrz_(char *, char *, integer *, integer *, integer *, integer *, real *, integer *,
                 real *, real *, integer *, real *, integer *, integer *),
         stzrzf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
-    /* -- LAPACK driver routine (version 3.4.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -343,7 +347,7 @@ void sgelsy_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
             i__2 = (mn << 1) + nb * *nrhs; // ; expr subst
             lwkopt = fla_max(i__1, i__2);
         }
-        work[1] = (real)lwkopt;
+        work[1] = sroundup_lwork(&lwkopt);
         if(*lwork < lwkmin && !lquery)
         {
             *info = -12;
@@ -353,22 +357,24 @@ void sgelsy_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
     {
         i__1 = -(*info);
         xerbla_("SGELSY", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(mn == 0 || *nrhs == 0)
     {
         *rank = 0;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine parameters */
     smlnum = slamch_("S") / slamch_("P");
     bignum = 1.f / smlnum;
-    slabad_(&smlnum, &bignum);
     /* Scale A, B if max entries outside range [SMLNUM,BIGNUM] */
     anrm = slange_("M", m, n, &a[a_offset], lda, &work[1]);
     iascl = 0;
@@ -532,7 +538,8 @@ L10:
         slascl_("G", &c__0, &c__0, &bignum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
     }
 L70:
-    work[1] = (real)lwkopt;
+    work[1] = sroundup_lwork(&lwkopt);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGELSY */
 }

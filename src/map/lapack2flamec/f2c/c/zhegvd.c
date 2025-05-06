@@ -259,8 +259,8 @@ void zhegvd_(integer *itype, char *jobz, char *uplo, integer *n, doublecomplex *
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhegvd inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS
-                      ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork " FLA_IS ", lrwork " FLA_IS
-                      ", liwork " FLA_IS "",
+                      ", lda %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS ", lrwork %" FLA_IS
+                      ", liwork %" FLA_IS "",
                       *itype, *jobz, *uplo, *n, *lda, *ldb, *lwork, *lrwork, *liwork);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;
@@ -294,6 +294,7 @@ void zhegvd_(integer *itype, char *jobz, char *uplo, integer *n, doublecomplex *
     extern /* Subroutine */
         void
         zpotrf_(char *, integer *, doublecomplex *, integer *, integer *);
+    extern doublereal droundup_lwork(integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -378,9 +379,9 @@ void zhegvd_(integer *itype, char *jobz, char *uplo, integer *n, doublecomplex *
     }
     if(*info == 0)
     {
-        work[1].r = (doublereal)lopt;
+        work[1].r = droundup_lwork(&lopt);
         work[1].i = 0.; // , expr subst
-        rwork[1] = (doublereal)lropt;
+        rwork[1] = droundup_lwork(&lropt);
         iwork[1] = liopt;
         if(*lwork < lwmin && !lquery)
         {
@@ -472,9 +473,9 @@ void zhegvd_(integer *itype, char *jobz, char *uplo, integer *n, doublecomplex *
                    lda);
         }
     }
-    work[1].r = (doublereal)lopt;
+    work[1].r = droundup_lwork(&lopt);
     work[1].i = 0.; // , expr subst
-    rwork[1] = (doublereal)lropt;
+    rwork[1] = droundup_lwork(&lropt);
     iwork[1] = liopt;
     AOCL_DTL_TRACE_LOG_EXIT
     return;

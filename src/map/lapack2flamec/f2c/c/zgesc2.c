@@ -1,8 +1,8 @@
-/* ../netlib/zgesc2.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./zgesc2.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static doublecomplex c_b13 = {1., 0.};
@@ -107,8 +107,7 @@ for 1 <= j <= N, column j of the */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2017 */
-/* > \ingroup complex16GEauxiliary */
+/* > \ingroup gesc2 */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -134,19 +133,16 @@ void zgesc2_(integer *n, doublecomplex *a, integer *lda, doublecomplex *rhs, int
     doublecomplex temp;
     extern /* Subroutine */
         void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *),
-        dlabad_(doublereal *, doublereal *);
+        zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
-    doublereal bignum;
     extern integer izamax_(integer *, doublecomplex *, integer *);
     doublereal smlnum;
     extern /* Subroutine */
         void
         zlaswp_(integer *, doublecomplex *, integer *, integer *, integer *, integer *, integer *);
-    /* -- LAPACK auxiliary routine (version 3.8.0) -- */
+    /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2017 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -174,8 +170,6 @@ void zgesc2_(integer *n, doublecomplex *a, integer *lda, doublecomplex *rhs, int
     /* Function Body */
     eps = dlamch_("P");
     smlnum = dlamch_("S") / eps;
-    bignum = 1. / smlnum;
-    dlabad_(&smlnum, &bignum);
     /* Apply permutations IPIV to RHS */
     i__1 = *n - 1;
     zlaswp_(&c__1, &rhs[1], lda, &c__1, &i__1, &ipiv[1], &c__1);

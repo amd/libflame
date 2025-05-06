@@ -1,8 +1,8 @@
-/* ../netlib/slarra.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./slarra.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLARRA computes the splitting points with the specified threshold. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -119,8 +119,7 @@ E(N) need not be set. */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date June 2017 */
-/* > \ingroup OTHERauxiliary */
+/* > \ingroup larra */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -134,6 +133,8 @@ E(N) need not be set. */
 void slarra_(integer *n, real *d__, real *e, real *e2, real *spltol, real *tnrm, integer *nsplit,
              integer *isplit, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slarra inputs: n %" FLA_IS "", *n);
     /* System generated locals */
     integer i__1;
     real r__1, r__2;
@@ -142,10 +143,9 @@ void slarra_(integer *n, real *d__, real *e, real *e2, real *spltol, real *tnrm,
     /* Local variables */
     integer i__;
     real tmp1, eabs;
-    /* -- LAPACK auxiliary routine (version 3.7.1) -- */
+    /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2017 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -165,13 +165,14 @@ void slarra_(integer *n, real *d__, real *e, real *e2, real *spltol, real *tnrm,
     --d__;
     /* Function Body */
     *info = 0;
+    *nsplit = 1;
     /* Quick return if possible */
     if(*n <= 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute splitting points */
-    *nsplit = 1;
     if(*spltol < 0.f)
     {
         /* Criterion based on absolute off-diagonal value */
@@ -209,6 +210,7 @@ void slarra_(integer *n, real *d__, real *e, real *e2, real *spltol, real *tnrm,
         }
     }
     isplit[*nsplit] = *n;
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLARRA */
 }

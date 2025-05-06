@@ -242,6 +242,10 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
               real *vu, integer *il, integer *iu, integer *ns, real *s, real *z__, integer *ldz,
               real *work, integer *iwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sbdsvdx inputs: uplo %c ,jobz %c ,range %c ,n %" FLA_IS ",il %" FLA_IS
+                      ",iu %" FLA_IS ",ldz %" FLA_IS "",
+                      *uplo, *jobz, *range, *n, *il, *iu, *ldz);
     /* System generated locals */
     integer z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
     real r__1, r__2, r__3, r__4;
@@ -398,12 +402,14 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
     {
         i__1 = -(*info);
         xerbla_("SBDSVDX", &i__1, (ftnlen)7);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible (N.LE.1) */
     *ns = 0;
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 1)
@@ -426,6 +432,7 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
             z__[z_dim1 + 1] = r_sign(&c_b10, &d__[1]);
             z__[z_dim1 + 2] = 1.f;
         }
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     abstol = slamch_("Safe Minimum") * 2;
@@ -541,6 +548,7 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
                 &iwork[iifail], info);
         if(*ns == 0)
         {
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         else
@@ -737,6 +745,7 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
                     if(*info != 0)
                     {
                         /* Exit with the error code from SSTEVX. */
+                        AOCL_DTL_TRACE_LOG_EXIT
                         return;
                     }
                     /* EMIN = ABS( MAXVAL( S( ISBEG:ISBEG+NSL-1 ) ) ) */
@@ -793,6 +802,7 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
                             if(nrmu == 0.f)
                             {
                                 *info = (*n << 1) + 1;
+                                AOCL_DTL_TRACE_LOG_EXIT
                                 return;
                             }
                             r__1 = 1.f / nrmu;
@@ -822,6 +832,7 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
                             if(nrmv == 0.f)
                             {
                                 *info = (*n << 1) + 1;
+                                AOCL_DTL_TRACE_LOG_EXIT
                                 return;
                             }
                             r__1 = -1.f / nrmv;
@@ -995,6 +1006,7 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
             }
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SBDSVDX */
 }

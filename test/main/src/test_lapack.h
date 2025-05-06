@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #ifndef TEST_LAPACK_H
@@ -36,13 +36,12 @@
 #define MAX_NUM_DATATYPES 4
 #define FLOPS_PER_UNIT_PERF 1e9
 
+#define MAX_NUM_NORMTYPES 4
+
 #define DISABLE_ALL 0
 #define SPECIFY 1
 #define DISABLE 0
 #define ENABLE 1
-
-#define RECT_INPUT 0
-#define SQUARE_INPUT 1
 
 #define CLI_NORM_THRESH 30.0
 #define CLI_DECIMAL_BASE 10
@@ -133,8 +132,24 @@ extern FILE *g_ext_fptr;
     }
 
 #define FLA_TEST_CHECK_EINFO(residual, info, einfo) \
-    if(info != einfo)                               \
-        *residual = DBL_MAX;
+    {                                               \
+        if(einfo == 0 && info < 0)                  \
+        {                                           \
+            residual = DBL_MIN;                     \
+        }                                           \
+        else if(info != einfo)                      \
+        {                                           \
+            residual = DBL_MAX;                     \
+        }                                           \
+        else if(einfo != 0 && (info == einfo))      \
+        {                                           \
+            residual = -1;                          \
+        }                                           \
+        else                                        \
+        {                                           \
+            residual = err_thresh;                  \
+        }                                           \
+    }
 
 #define FLA_EXTREME_CASE_TEST                                                                  \
     (params->imatrix_char == 'A' || params->imatrix_char == 'F' || params->imatrix_char == 'N' \
@@ -163,16 +178,44 @@ extern FILE *g_ext_fptr;
             func_str = "UNGQR";                               \
         else if(strcmp(func_str, "ORG2R") == 0)               \
             func_str = "UNG2R";                               \
+        else if(strcmp(func_str, "SYGVD") == 0)               \
+            func_str = "HEGVD";                               \
     }
 
 /* Macro to skip complex and double complex tests of not supported APIs */
-#define FLA_SKIP_TEST(datatype_char, func_str)                                               \
-    (((datatype_char == 'c') || (datatype_char == 'z')) && (strcmp(func_str, "STEVD") == 0)) \
-        ? TRUE                                                                               \
-        : FALSE
+#define FLA_SKIP_TEST(datatype_char, func_str)                                           \
+    ((((datatype_char == 'c' || datatype_char == 'z') && strcmp(func_str, "STEVD") == 0) \
+      || ((datatype_char == 's' || datatype_char == 'd')                                 \
+          && (strcmp(func_str, "HETRF") == 0 || strcmp(func_str, "HETRF_ROOK") == 0    \
+        || strcmp(func_str, "HETRI_ROOK") == 0)))   \
+         ? TRUE                                                                          \
+         : FALSE)
+
+/* Assign leading dimension value based on matrix layout and cmdline/config inputs */
+#define SELECT_LDA(g_ext_fptr, config_data, layout, n, rm_lda, lda_t) \
+    if((g_ext_fptr == NULL) && (layout == LAPACK_ROW_MAJOR))          \
+    {                                                                 \
+        if(config_data)                                               \
+        {                                                             \
+            lda_t = fla_max(1, n);                                    \
+        }                                                             \
+        else                                                          \
+        {                                                             \
+            lda_t = rm_lda;                                           \
+        }                                                             \
+    }
 
 typedef struct Lin_solver_paramlist_t
 {
+    // below params are used only by Lin solver driver APIs.
+    doublereal rcond; // used to determine the effective rank of matrix
+    float solver_threshold; // threshold to verify PASS/FAIL criteria
+    integer n_err_bnds_porfsx;
+    integer nparams_porfsx;
+    integer kl_gbcon; // number of subdiagonals
+    integer ku_gbcon; // number of superdiagonals
+    integer ldab_gbcon; // leading dimension of the array ab
+
     integer num_ranges; // number of ranges to run
     integer m_range_start;
     integer m_range_end;
@@ -184,12 +227,7 @@ typedef struct Lin_solver_paramlist_t
     integer num_repeats;
     integer num_data_types;
     integer data_types[MAX_NUM_DATATYPES];
-    char data_types_char[MAX_NUM_DATATYPES];
     integer matrix_layout;
-    char Uplo;
-    char transr; // Must be 'N' or 'T' or 'C'.
-    char compq_gghrd;
-    char compz_gghrd;
     integer nrhs; // number of rhight hand sides
     integer ncolm; // number of columns to factor
     integer lda; //  leading dimension of the array a
@@ -200,27 +238,29 @@ typedef struct Lin_solver_paramlist_t
     integer kl; // number of subdiagonals
     integer ku; // number of superdiagonals
     integer kd; // number of super or sub diagonals
-    char diag; // flag to indicate unit diagonal
     integer ilo;
     integer ihi;
+    char data_types_char[MAX_NUM_DATATYPES];
+    char diag; // flag to indicate unit diagonal
+    char Uplo;
+    char transr; // Must be 'N' or 'T' or 'C'.
+    char compq_gghrd;
+    char compz_gghrd;
     // below params are used only by Lin solver driver APIs.
     char fact; // Must be 'F', 'N', or 'E'.
     char equed; // Must be 'N', 'R'. 'C', 'B'
     char symm; // if symmetric 'S' or Hermitian 'H'
-    float solver_threshold; // threshold to verify PASS/FAIL criteria
     char equed_porfsx; // Must be 'N', 'Y'.
-    integer n_err_bnds_porfsx;
-    integer nparams_porfsx;
     char norm_gbcon; // norm param for gbcon API
-    integer kl_gbcon; // number of subdiagonals
-    integer ku_gbcon; // number of superdiagonals
-    integer ldab_gbcon; // leading dimension of the array ab
-    doublereal rcond; // used to determine the effective rank of matrix
 } Lin_solver_paramlist;
 
 /* struct to hold eigen parameters */
 typedef struct EIG_paramlist_t
 {
+    float VL;
+    float VU;
+    float abstol;
+    float threshold_value; // threshold value for EIG
     integer num_ranges; // number of ranges to run
     integer m_range_start;
     integer m_range_end;
@@ -232,13 +272,7 @@ typedef struct EIG_paramlist_t
     integer num_repeats;
     integer num_data_types;
     integer data_types[MAX_NUM_DATATYPES];
-    char data_types_char[MAX_NUM_DATATYPES];
     integer matrix_layout;
-    char trans; // Must be 'N' or 'T' or 'C'.
-    char uplo; // Must be 'U' or 'L'
-    char job; // Must be 'N', 'P', 'S' or 'B'
-    char jobz; // Must be 'N' or 'V'
-    char vect; // Vector must be 'Q' or  'P'
     integer nrhs; // number of rhight hand sides
     integer lda; //  leading dimension of the array a
     integer ldb; //  leading dimension of the array b
@@ -248,12 +282,23 @@ typedef struct EIG_paramlist_t
     integer ldt; // number of subdiagonals
     integer k;
     integer isgn;
+    integer kb;
+    integer itype;
+    integer tsize;
+    integer ilo;
+    integer ihi;
+    integer IL;
+    integer IU;
+    char data_types_char[MAX_NUM_DATATYPES];
+    char trans; // Must be 'N' or 'T' or 'C'.
+    char uplo; // Must be 'U' or 'L'
+    char job; // Must be 'N', 'P', 'S' or 'B'
+    char jobz; // Must be 'N' or 'V'
+    char vect; // Vector must be 'Q' or  'P'
     char compq_hgeqz;
     char compz_hgeqz;
     char compz;
     char compz_hseqr;
-    integer kb;
-    integer itype;
     char vect_rd;
     char side;
     char job_seqr; // Must be 'E', 'S'
@@ -262,21 +307,17 @@ typedef struct EIG_paramlist_t
     char norm;
     char diag;
     char storev;
-    integer tsize;
-    integer ilo;
-    integer ihi;
     char range_x; // range must be 'A', 'V' or 'I'
-    integer IL;
-    integer IU;
-    real VL;
-    real VU;
-    real abstol;
-    integer threshold_value; // threshold value for EIG
 } EIG_paramlist;
 
 /* struct to hold eigen parameters */
 typedef struct EIG_Non_symmetric_paramlist_t
 {
+    /* Thresholds for the APIs  */
+    float gghrd_threshold; // threshold for the gghrd API
+    float ggbal_threshold; // threshold for the ggbal API
+    float GenNonSymEigProblem_threshold; // threshold for the Non-sym Eigen APIs
+
     integer num_ranges; // number of ranges to run
     integer m_range_start;
     integer m_range_end;
@@ -294,8 +335,17 @@ typedef struct EIG_Non_symmetric_paramlist_t
     integer num_tests;
     integer num_data_types;
     integer data_types[MAX_NUM_DATATYPES];
-    char data_types_char[MAX_NUM_DATATYPES];
     integer matrix_layout;
+    integer wantz; // Must be 1 or 0
+    integer wantq; // Must be 1 or 0
+    integer tgsen_ijob; // Must be between 0 to 5
+    integer ilo;
+    integer ihi;
+
+    /* used params for trsyl API  */
+    integer isgn; //  +1 or -1
+
+    char data_types_char[MAX_NUM_DATATYPES];
     char howmny; // Must be 'A' or 'B' or 'S'.
     char initv; // Must be 'N' or 'U'.
     char job_seqr; // Must be 'E', 'S'
@@ -313,12 +363,6 @@ typedef struct EIG_Non_symmetric_paramlist_t
     char trana_complex; //  Must be 'N' or 'T' or 'C'.
     char tranb_real; //  Must be 'N' or 'T' or 'C'.
     char tranb_complex; //  Must be 'N' or 'T' or 'C'.
-    integer isgn; //  +1 or -1
-
-    /* Thresholds for the APIs  */
-    float gghrd_threshold; // threshold for the gghrd API
-    float ggbal_threshold; // threshold for the ggbal API
-    float GenNonSymEigProblem_threshold; // threshold for the ggbal API
 
     char compq_hgeqz; // Must be 'I' or 'V' or 'N'
     char compz_hgeqz; // Must be 'I' or 'V' or 'N'
@@ -331,17 +375,23 @@ typedef struct EIG_Non_symmetric_paramlist_t
     char balance_ggevx; // must be 'N' or 'P' or 'S' or 'B'.
     char sense_ggevx; // must be 'N' or 'E' or 'V' or 'B'.
     char sort_gees; // Must be 'N', or 'S'.
-    integer wantz; // Must be 1 or 0
-    integer wantq; // Must be 1 or 0
-    integer tgsen_ijob; // Must be between 0 to 5
     char unmhr_trans; // Must be N or C
-    integer ilo;
-    integer ihi;
 } EIG_Non_symmetric_paramlist;
 
 /* struct to hold SVD parameters */
 typedef struct SVD_paramlist_t
 {
+    /* Parameters for 'gesvj' API  */
+    float ctol_gesvj; // convergence of threshold
+
+    /* Parameters for 'gesvdx' API  */
+    float vl, vu; //  the lower and upper bounds of the interval.
+
+    /* Thresholds for the APIs  */
+    float svd_threshold; // threshold for the gghrd API
+
+    float tola;
+    float tolb;
     integer num_ranges; // number of ranges to run
     integer m_range_start;
     integer m_range_end;
@@ -358,16 +408,25 @@ typedef struct SVD_paramlist_t
     integer num_tests;
     integer num_data_types;
     integer data_types[MAX_NUM_DATATYPES];
-    char data_types_char[MAX_NUM_DATATYPES];
     integer matrix_layout; //  storage layout LAPACK_ROW_MAJOR or LAPACK_COL_MAJOR
-    char jobu; // Must be 'U' or 'N'.
-    char jobv; // Must be 'V' or 'N'.
-    char jobq; // Must be 'Q' or 'N'.
     integer m; // The number of rows of the matrix A
     integer p; // The number of rows of the matrix B
     integer n; // The number of columns of the matrices A and B
-    float tola;
-    float tolb;
+    integer m_gejsv; // The number of rows of the matrix A
+    integer n_gejsv; // The number of rows of the matrix B
+
+    /* Parameters for 'gesvj' API  */
+    integer m_gesvj; // The number of rows of the matrix A
+    integer n_gesvj; // The number of rows of the matrix B
+    integer mv_gesvj;
+
+    /* Parameters for 'gesvdx' API  */
+    integer il, iu; // the indices of the smallest and largest singular values.
+
+    char data_types_char[MAX_NUM_DATATYPES];
+    char jobu; // Must be 'U' or 'N'.
+    char jobv; // Must be 'V' or 'N'.
+    char jobq; // Must be 'Q' or 'N'.
     char jobu_gesvd; // Must be 'A', 'S', 'O', or 'N'.
     char jobvt_gesvd; // Must be 'A', 'S', 'O', or 'N'.
 
@@ -377,38 +436,43 @@ typedef struct SVD_paramlist_t
     char jobr_gejsv; // Must be 'N' or 'R'.
     char jobt_gejsv; // Must be 'T' or 'N'.
     char jobp_gejsv; //  Must be 'P' or 'N'.
-    integer m_gejsv; // The number of rows of the matrix A
-    integer n_gejsv; // The number of rows of the matrix B
 
     /* Parameters for 'gesvj' API  */
     char joba_gesvj; //  Must be 'L', 'U' or 'G'.
     char jobu_gesvj; // Must be 'U', 'C' or 'N'.
     char jobv_gesvj; // Must be 'V', 'A' or 'N'.
-    integer m_gesvj; // The number of rows of the matrix A
-    integer n_gesvj; // The number of rows of the matrix B
-    integer mv_gesvj;
-    float ctol_gesvj; // convergence of threshold
 
     /* Parameters for 'gesvdx' API  */
     char jobu_gesvdx; //  Must be 'V', or 'N'.
     char jobvt_gesvdx; // Must be 'V', or 'N'.
     char range_gesvdx; // Must be 'A', 'V', 'I'.
-    integer il, iu; // the indices of the smallest and largest singular values.
-    float vl, vu; //  the lower and upper bounds of the interval.
 
     /* Parameters for 'gesvdq' API  */
     char joba_gesvdq; //  Must be 'A', 'H', 'M' , 'E'
     char jobu_gesvdq; // Must be 'A', 'S', 'R' , 'N'
     char jobv_gesvdq; // Must be 'A', 'V', 'R' , 'N'.
-
-    /* Thresholds for the APIs  */
-    float svd_threshold; // threshold for the gghrd API
-
 } SVD_paramlist;
 
 /* struct to hold AUX parameters */
 typedef struct AUX_paramlist_t
 {
+    /* Parameter for 'larfg' API */
+    double alpha_real;
+    double alpha_imag; // The alpha values for larfg
+
+    /* Thresholds for the APIs  */
+    float aux_threshold; // threshold for the aux API
+
+    /* Parameter for 'larfg' API */
+    integer incx_larfg; // The increment between successive values of X in larfg(incx > 0)
+    integer incv; // The increment between elements of V for larf
+    integer ldc; // The leading dimension of the array C for larf
+    integer num_repeats;
+    integer num_tests;
+    integer num_data_types;
+    integer data_types[MAX_NUM_DATATYPES];
+    integer matrix_layout; //  storage layout LAPACK_ROW_MAJOR or LAPACK_COL_MAJOR
+
     integer num_ranges; // number of ranges to run
     integer m_range_start;
     integer m_range_end;
@@ -420,36 +484,38 @@ typedef struct AUX_paramlist_t
     integer incx; // The increment between successive values of CX
     integer incy; // The increment between successive values of CY
     /* Parameter for 'larfg' API */
-    integer incx_larfg; // The increment between successive values of X in larfg(incx > 0)
-    double alpha_real;
-    double alpha_imag; // The alpha values for larfg
     char side; // The side (either L or R) for larf. L means left and R means right
-    integer incv; // The increment between elements of V for larf
-    integer ldc; // The leading dimension of the array C for larf
-    integer num_repeats;
-    integer num_tests;
-    integer num_data_types;
-    integer data_types[MAX_NUM_DATATYPES];
     char data_types_char[MAX_NUM_DATATYPES];
-    integer matrix_layout; //  storage layout LAPACK_ROW_MAJOR or LAPACK_COL_MAJOR
-    /* Thresholds for the APIs  */
-    float aux_threshold; // threshold for the aux API
-
+    /* Norm types to be tested for lange APIs
+        M: max absolute value
+        1/O: 1-norm
+        I: infinity norm
+        F/E: Frobenius norm  */
+    char norm_types_str[MAX_NUM_NORMTYPES];
 } AUX_paramlist;
+
+typedef enum
+{
+    LAPACK_TEST,
+    LAPACKE_ROW_TEST,
+    LAPACKE_COLUMN_TEST,
+    LAPACK_CPP_TEST
+} test_interface;
 
 typedef struct
 {
-    integer n_repeats;
-    integer n_datatypes;
     char *datatype_char;
     integer *datatype;
+    integer n_repeats;
+    integer n_datatypes;
     integer p_first;
     integer p_max;
     integer p_inc;
     integer p_nfact;
-    char imatrix_char;
     integer test_lapacke_interface;
+    test_interface interfacetype;
     int matrix_major;
+    char imatrix_char;
 
     struct SVD_paramlist_t svd_paramslist[NUM_SUB_TESTS];
     struct EIG_Non_symmetric_paramlist_t eig_non_sym_paramslist[NUM_SUB_TESTS];
@@ -508,18 +574,14 @@ void fla_test_read_aux_params(const char *input_filename, test_params_t *params)
 void fla_test_lapack_suite(char *input_filename, test_params_t *params);
 
 void fla_test_op_driver(char *func_str, integer square_inp, test_params_t *params, integer api_type,
-                        void (*f_exp)(test_params_t *, // params
+                        void (*f_exp)(char *, // API_test string
+                                      test_params_t *, // params
                                       integer, // datatype
                                       integer, // p_cur
                                       integer, // q_cur
                                       integer, // pci (param combo counter)
                                       integer, // n_repeats
-                                      integer, // einfo
-                                      double *, // perf
-                                      double *, // time
-                                      double *)); // residual
-void fla_test_print_status(char *func_str, char datatype_char, integer sqr_inp, integer p_cur,
-                           integer q_cur, double residual, double thresh, double time, double perf);
+                                      integer));
 void fla_test_print_summary();
 void fla_test_build_function_string(char *func_base_str, char *impl_var_str, char *func_str);
 void fill_string_with_n_spaces(char *str, integer n_spaces);
@@ -527,5 +589,5 @@ double fla_test_clock(void);
 void fla_test_get_time_unit(char *scale, double *time);
 integer fla_test_get_group_id(char *buffer);
 void fla_check_lapacke_interface(integer *arg_count, char **argv, test_params_t *params);
-
+bool fla_check_interface(integer *arg_count, char **argv, test_params_t *params);
 #endif // TEST_LAPACK_H

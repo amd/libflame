@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/ssbev_2stage.f -- translated by f2c (version 20160102). You must link the
- resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
- Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
- with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./ssbev_2stage.f -- translated by f2c (version 20190311). You must link the resulting object file
+ with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__2 = 2;
 static integer c_n1 = -1;
@@ -174,8 +174,7 @@ i */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2017 */
-/* > \ingroup realOTHEReigen */
+/* > \ingroup hbev_2stage */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -212,15 +211,11 @@ i */
 void ssbev_2stage_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, integer *ldab,
                    real *w, real *z__, integer *ldz, real *work, integer *lwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "ssbev_2stage inputs: jobz %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS
              ", ldz %" FLA_IS "",
              *jobz, *uplo, *n, *kd, *ldab, *ldz);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer ab_dim1, ab_offset, z_dim1, z_offset, i__1;
     real r__1;
@@ -271,11 +266,11 @@ void ssbev_2stage_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, in
     extern /* Subroutine */
         void
         ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
+    extern real sroundup_lwork(integer *);
     integer indhous;
-    /* -- LAPACK driver routine (version 3.8.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2017 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -336,7 +331,7 @@ void ssbev_2stage_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, in
         if(*n <= 1)
         {
             lwmin = 1;
-            work[1] = (real)lwmin;
+            work[1] = sroundup_lwork(&lwmin);
         }
         else
         {
@@ -344,7 +339,7 @@ void ssbev_2stage_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, in
             lhtrd = ilaenv2stage_(&c__3, "SSYTRD_SB2ST", jobz, n, kd, &ib, &c_n1);
             lwtrd = ilaenv2stage_(&c__4, "SSYTRD_SB2ST", jobz, n, kd, &ib, &c_n1);
             lwmin = *n + lhtrd + lwtrd;
-            work[1] = (real)lwmin;
+            work[1] = sroundup_lwork(&lwmin);
         }
         if(*lwork < lwmin && !lquery)
         {
@@ -355,18 +350,18 @@ void ssbev_2stage_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, in
     {
         i__1 = -(*info);
         xerbla_("SSBEV_2STAGE ", &i__1, (ftnlen)13);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 1)
@@ -383,7 +378,7 @@ void ssbev_2stage_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, in
         {
             z__[z_dim1 + 1] = 1.f;
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants. */
@@ -448,8 +443,8 @@ void ssbev_2stage_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, in
         sscal_(&imax, &r__1, &w[1], &c__1);
     }
     /* Set WORK(1) to optimal workspace size. */
-    work[1] = (real)lwmin;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    work[1] = sroundup_lwork(&lwmin);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSBEV_2STAGE */
 }

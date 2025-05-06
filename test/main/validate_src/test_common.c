@@ -1,16 +1,35 @@
 /*
-    Copyright (C) 2022-2024, Advanced Micro Devices, Inc.
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_common.h"
 
 // Global variables
+double perf;
+double time_min;
 integer i_zero = 0, i_one = 1, i_n_one = -1;
 float s_zero = 0, s_one = 1, s_n_one = -1;
 double d_zero = 0, d_one = 1, d_n_one = -1;
 scomplex c_zero = {0, 0}, c_one = {1, 0}, c_n_one = {-1, 0};
 dcomplex z_zero = {0, 0}, z_one = {1, 0}, z_n_one = {-1, 0};
 int matrix_layout = LAPACK_COL_MAJOR;
+
+/* Max function with NAN checks */
+double fla_test_max(double v1, double v2)
+{
+    double vmax;
+
+    if(isnan(v1) || isnan(v2))
+    {
+        vmax = NAN;
+    }
+    else
+    {
+        vmax = fla_max(v1, v2);
+    }
+
+    return vmax;
+}
 
 /* Integer absolute function */
 integer fla_i_abs(integer *x)
@@ -377,8 +396,7 @@ void copy_realtype_vector(integer datatype, integer M, void *A, integer LDA, voi
 }
 
 /* create matrix of given datatype */
-void create_matrix(integer datatype, int matrix_layout, integer M, integer N, void **A,
-                   integer lda)
+void create_matrix(integer datatype, int matrix_layout, integer M, integer N, void **A, integer lda)
 {
     integer rs, cs;
     *A = NULL;
@@ -601,7 +619,7 @@ void rand_sym_matrix(integer datatype, void *A, integer M, integer N, integer LD
     }
 }
 
-/* Copy a matrix */
+/* Copy matrix A into matrix B*/
 void copy_matrix(integer datatype, char *uplo, integer M, integer N, void *A, integer LDA, void *B,
                  integer LDB)
 {
@@ -972,7 +990,7 @@ void rand_spd_matrix(integer datatype, char *uplo, void *A, integer m, integer l
     /*  Initialize input matrix A by generating values in given range (VL, VU)
      *  using eigen values function.
      */
-    generate_matrix_from_EVs(datatype, 'V', m, A, lda, L, RSPD_VL, RSPD_VU);
+    generate_matrix_from_EVs(datatype, 'V', m, A, lda, L, RSPD_VL, RSPD_VU, USE_ABS_EIGEN_VALUES);
 
     /* Force the matrix to be exactly symmetric
      * by copying lower half to upper half or vice versa
@@ -981,7 +999,7 @@ void rand_spd_matrix(integer datatype, char *uplo, void *A, integer m, integer l
     {
         type = "S";
     }
-    form_symmetric_matrix(datatype, m, A, lda, type);
+    form_symmetric_matrix(datatype, m, A, lda, type, 'U');
 
     free_vector(L);
 }
@@ -1403,6 +1421,31 @@ integer get_datatype(char stype)
         datatype = INVALID_TYPE;
 
     return datatype;
+}
+
+/* Get datatype char for a given datatype */
+char get_datatype_char(integer datatype)
+{
+    char stype;
+    switch(datatype)
+    {
+        case FLOAT:
+            stype = 's';
+            break;
+        case DOUBLE:
+            stype = 'd';
+            break;
+        case COMPLEX:
+            stype = 'c';
+            break;
+        case DOUBLE_COMPLEX:
+            stype = 'z';
+            break;
+        default:
+            stype = 'i';
+            break;
+    }
+    return stype;
 }
 
 /* Get realtype of given datatype. */
@@ -1930,7 +1973,7 @@ void get_min_from_array(integer datatype, void *arr, void *min_val, integer n)
         }
     }
 }
-/* Reading matrix input data from a file */
+/* Reading matrix input data from a file in column major format m-rows, n-columns */
 void init_matrix_from_file(integer datatype, void *A, integer m, integer n, integer lda, FILE *fptr)
 {
     int i, j;
@@ -1942,12 +1985,12 @@ void init_matrix_from_file(integer datatype, void *A, integer m, integer n, inte
         {
             float num;
 
-            for(i = 0; i < m; i++)
+            for(j = 0; j < n; j++)
             {
-                for(j = 0; j < n; j++)
+                for(i = 0; i < m; i++)
                 {
                     fscanf(fptr, "%f", &num);
-                    ((float *)A)[i * lda + j] = num;
+                    ((float *)A)[i + j * lda] = num;
                 }
             }
             break;
@@ -1957,12 +2000,12 @@ void init_matrix_from_file(integer datatype, void *A, integer m, integer n, inte
         {
             double num;
 
-            for(i = 0; i < m; i++)
+            for(j = 0; j < n; j++)
             {
-                for(j = 0; j < n; j++)
+                for(i = 0; i < m; i++)
                 {
                     fscanf(fptr, "%lf", &num);
-                    ((double *)A)[i * lda + j] = num;
+                    ((double *)A)[i + j * lda] = num;
                 }
             }
             break;
@@ -1972,14 +2015,14 @@ void init_matrix_from_file(integer datatype, void *A, integer m, integer n, inte
         {
             float num;
 
-            for(i = 0; i < m; i++)
+            for(j = 0; j < n; j++)
             {
-                for(j = 0; j < n; j++)
+                for(i = 0; i < m; i++)
                 {
                     fscanf(fptr, "%f", &num);
-                    ((scomplex *)A)[i * lda + j].real = num;
+                    ((scomplex *)A)[i + j * lda].real = num;
                     fscanf(fptr, "%f", &num);
-                    ((scomplex *)A)[i * lda + j].imag = num;
+                    ((scomplex *)A)[i + j * lda].imag = num;
                 }
             }
             break;
@@ -1989,14 +2032,14 @@ void init_matrix_from_file(integer datatype, void *A, integer m, integer n, inte
         {
             double num;
 
-            for(i = 0; i < m; i++)
+            for(j = 0; j < n; j++)
             {
-                for(j = 0; j < n; j++)
+                for(i = 0; i < m; i++)
                 {
                     fscanf(fptr, "%lf", &num);
-                    ((dcomplex *)A)[i * lda + j].real = num;
+                    ((dcomplex *)A)[i + j * lda].real = num;
                     fscanf(fptr, "%lf", &num);
-                    ((dcomplex *)A)[i * lda + j].imag = num;
+                    ((dcomplex *)A)[i + j * lda].imag = num;
                 }
             }
             break;
@@ -2066,14 +2109,14 @@ void init_vector_from_file(integer datatype, void *A, integer m, integer inc, FI
 
 /* Convert matrix according to ILO and IHI values */
 void get_generic_triangular_matrix(integer datatype, integer N, void *A, integer LDA, integer ilo,
-                                   integer ihi, bool AInitialized)
+                                   integer ihi, integer AInitialized)
 {
     integer i;
 
     if(LDA < N)
         return;
 
-    /* Intialize matrix with random values */
+    /* Initialize matrix with random values */
     if(!AInitialized)
     {
         rand_matrix(datatype, A, N, N, LDA);
@@ -2148,15 +2191,23 @@ void get_generic_triangular_matrix(integer datatype, integer N, void *A, integer
     }
 }
 
+/* Generate Hessenberg matrix from eigen values.
+   On input: A and Z need to be allocated by caller.
+   On output: A has upper hessenberg matrix.
+              Z has orthogonal matrix.
+              wr_in has eigen values.
+              wi_in has eigen values for imaginary parts of complex conjugate pairs
+              for real/double datatypes. */
 void get_hessenberg_matrix_from_EVs(integer datatype, integer n, void *A, integer lda, void *Z,
                                     integer ldz, integer *ilo, integer *ihi, integer *info,
-                                    bool AInitialized, void *wr_in, void *wi_in)
+                                    void *wr_in, void *wi_in)
 {
     void *A_sub = NULL, *L = NULL, *wr_sub_in = NULL, *wi_sub_in = NULL, *L_tmp = NULL;
+    integer AInitialized = 1;
 
     /* Initialize matrix A */
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &L_tmp, n);
-    generate_asym_matrix_from_EVs(datatype, n, A, lda, L_tmp, NULL, NULL);
+    generate_asym_matrix_from_EVs(datatype, n, A, lda, L_tmp);
     free_matrix(L_tmp);
 
     /* Get diagonal elements of A into wr_in as initial eigen values */
@@ -2165,8 +2216,9 @@ void get_hessenberg_matrix_from_EVs(integer datatype, integer n, void *A, intege
     /* Generate a square matrix A_sub of size *ihi-*ilo+1 with known eigen values in L */
     create_matrix(datatype, LAPACK_COL_MAJOR, *ihi - *ilo + 1, *ihi - *ilo + 1, &A_sub,
                   *ihi - *ilo + 1);
-    create_matrix(datatype, LAPACK_COL_MAJOR, *ihi - *ilo + 1, *ihi - *ilo + 1, &L, *ihi - *ilo + 1);
-    generate_asym_matrix_from_EVs(datatype, *ihi - *ilo + 1, A_sub, *ihi - *ilo + 1, L, NULL, NULL);
+    create_matrix(datatype, LAPACK_COL_MAJOR, *ihi - *ilo + 1, *ihi - *ilo + 1, &L,
+                  *ihi - *ilo + 1);
+    generate_asym_matrix_from_EVs(datatype, *ihi - *ilo + 1, A_sub, *ihi - *ilo + 1, L);
 
     /* Get the diagonal elements of L into wr_sub_in and copy them into wr_in */
     create_vector(datatype, &wr_sub_in, *ihi - *ilo + 1);
@@ -2197,7 +2249,7 @@ void get_hessenberg_matrix_from_EVs(integer datatype, integer n, void *A, intege
     }
 
     /* Generate Hessenberg matrix */
-    get_hessenberg_matrix(datatype, n, A, lda, Z, ldz, ilo, ihi, info, true);
+    get_hessenberg_matrix(datatype, n, A, lda, Z, ldz, ilo, ihi, info, AInitialized);
 
     free_matrix(A_sub);
     free_matrix(L);
@@ -2205,9 +2257,13 @@ void get_hessenberg_matrix_from_EVs(integer datatype, integer n, void *A, intege
     free_vector(wi_sub_in);
 }
 
-/* Generate Hessenberg matrix */
+/* Generate Hessenberg matrix.
+   On input: If AInitialized is false, then A will be initialized with random matrix.
+             Else, A has initialized by caller.
+   On output: A has upper hessenberg matrix
+              Z has orthogonal matrix */
 void get_hessenberg_matrix(integer datatype, integer n, void *A, integer lda, void *Z, integer ldz,
-                           integer *ilo, integer *ihi, integer *info, bool AInitialized)
+                           integer *ilo, integer *ihi, integer *info, integer AInitialized)
 {
     static integer g_lwork;
     void *A_save = NULL;
@@ -2734,11 +2790,32 @@ void print_matrix(char *desc, char *order, integer datatype, integer M, integer 
     }
 }
 
-/* Get upper triangular matrix or lower triangular matrix based on UPLO */
-void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, void *A, integer lda)
+/**
+ * @brief Get upper triangular matrix or lower triangular matrix based on UPLO.
+ * @param uplo - 'U' for upper triangular matrix, 'L' for lower triangular matrix.
+ * @param datatype - Data type of matrix.
+ * @param m - Number of rows of matrix.
+ * @param n - Number of columns of matrix.
+ * @param A - Matrix to be initialized. If A_init is 0, initialize A with random values.
+ *            otherwise A is already initialized by caller.
+ * @param lda - Leading dimension of matrix A.
+ * @param A_init - 0 if A is not initialized, 1 if A is already initialized.
+ * @param diag_type - UNIT_DIAG if diagonal elements need to be set to unity,
+ *                    NON_UNIT_DIAG if diagonal elements are not required to be set to unity.
+ */
+void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, void *A, integer lda,
+                           integer A_init, enum TRIANGULAR_MATRIX_DIAG_TYPE diag_type)
 {
     integer i;
-    rand_matrix(datatype, A, m, n, lda);
+
+    if(lda < m)
+    {
+        return;
+    }
+    if(!A_init)
+    {
+        rand_matrix(datatype, A, m, n, lda);
+    }
 
     switch(datatype)
     {
@@ -2746,18 +2823,32 @@ void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, v
         {
             if(*uplo == 'U')
             {
-                for(i = 0; i < n; i++)
+                if(diag_type == UNIT_DIAG)
                 {
-                    float *p = &((float *)A)[(i + 1) + i * lda];
-                    reset_vector(datatype, (void *)p, m - i - 1, 1);
+                    fla_lapack_slaset("L", &m, &n, &s_zero, &s_one, A, &lda);
+                }
+                else
+                {
+                    for(i = 0; i < n; i++)
+                    {
+                        float *p = &((float *)A)[(i + 1) + i * lda];
+                        reset_vector(datatype, (void *)p, m - i - 1, 1);
+                    }
                 }
             }
             else if(*uplo == 'L')
             {
-                for(i = 0; i < n; i++)
+                if(diag_type == UNIT_DIAG)
                 {
-                    float *p = &((float *)A)[i * lda];
-                    reset_vector(datatype, (void *)p, i + 1, 1);
+                    fla_lapack_slaset("U", &m, &n, &s_zero, &s_one, A, &lda);
+                }
+                else
+                {
+                    for(i = 0; i < n; i++)
+                    {
+                        float *p = &((float *)A)[i * lda];
+                        reset_vector(datatype, (void *)p, i + 1, 1);
+                    }
                 }
             }
             break;
@@ -2766,18 +2857,32 @@ void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, v
         {
             if(*uplo == 'U')
             {
-                for(i = 0; i < n; i++)
+                if(diag_type == UNIT_DIAG)
                 {
-                    double *p = &((double *)A)[(i + 1) + i * lda];
-                    reset_vector(datatype, (void *)p, m - i - 1, 1);
+                    fla_lapack_dlaset("L", &m, &n, &d_zero, &d_one, A, &lda);
+                }
+                else
+                {
+                    for(i = 0; i < n; i++)
+                    {
+                        double *p = &((double *)A)[(i + 1) + i * lda];
+                        reset_vector(datatype, (void *)p, m - i - 1, 1);
+                    }
                 }
             }
             else if(*uplo == 'L')
             {
-                for(i = 0; i < n; i++)
+                if(diag_type == UNIT_DIAG)
                 {
-                    double *p = &((double *)A)[i * lda];
-                    reset_vector(datatype, (void *)p, i + 1, 1);
+                    fla_lapack_dlaset("U", &m, &n, &d_zero, &d_one, A, &lda);
+                }
+                else
+                {
+                    for(i = 0; i < n; i++)
+                    {
+                        double *p = &((double *)A)[i * lda];
+                        reset_vector(datatype, (void *)p, i + 1, 1);
+                    }
                 }
             }
             break;
@@ -2786,18 +2891,32 @@ void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, v
         {
             if(*uplo == 'U')
             {
-                for(i = 0; i < n; i++)
+                if(diag_type == UNIT_DIAG)
                 {
-                    scomplex *p = &((scomplex *)A)[(i + 1) + i * lda];
-                    reset_vector(datatype, (void *)p, m - i - 1, 1);
+                    fla_lapack_claset("L", &m, &n, &c_zero, &c_one, A, &lda);
+                }
+                else
+                {
+                    for(i = 0; i < n; i++)
+                    {
+                        scomplex *p = &((scomplex *)A)[(i + 1) + i * lda];
+                        reset_vector(datatype, (void *)p, m - i - 1, 1);
+                    }
                 }
             }
             else if(*uplo == 'L')
             {
-                for(i = 0; i < n; i++)
+                if(diag_type == UNIT_DIAG)
                 {
-                    scomplex *p = &((scomplex *)A)[i * lda];
-                    reset_vector(datatype, (void *)p, i + 1, 1);
+                    fla_lapack_claset("U", &m, &n, &c_zero, &c_one, A, &lda);
+                }
+                else
+                {
+                    for(i = 0; i < n; i++)
+                    {
+                        scomplex *p = &((scomplex *)A)[i * lda];
+                        reset_vector(datatype, (void *)p, i + 1, 1);
+                    }
                 }
             }
             break;
@@ -2806,18 +2925,32 @@ void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, v
         {
             if(*uplo == 'U')
             {
-                for(i = 0; i < n; i++)
+                if(diag_type == UNIT_DIAG)
                 {
-                    dcomplex *p = &((dcomplex *)A)[(i + 1) + i * lda];
-                    reset_vector(datatype, (void *)p, m - i - 1, 1);
+                    fla_lapack_zlaset("L", &m, &n, &z_zero, &z_one, A, &lda);
+                }
+                else
+                {
+                    for(i = 0; i < n; i++)
+                    {
+                        dcomplex *p = &((dcomplex *)A)[(i + 1) + i * lda];
+                        reset_vector(datatype, (void *)p, m - i - 1, 1);
+                    }
                 }
             }
             else if(*uplo == 'L')
             {
-                for(i = 0; i < n; i++)
+                if(diag_type == UNIT_DIAG)
                 {
-                    dcomplex *p = &((dcomplex *)A)[i * lda];
-                    reset_vector(datatype, (void *)p, i + 1, 1);
+                    fla_lapack_zlaset("U", &m, &n, &z_zero, &z_one, A, &lda);
+                }
+                else
+                {
+                    for(i = 0; i < n; i++)
+                    {
+                        dcomplex *p = &((dcomplex *)A)[i * lda];
+                        reset_vector(datatype, (void *)p, i + 1, 1);
+                    }
                 }
             }
             break;
@@ -2910,7 +3043,7 @@ double svd_check_order(integer datatype, void *s, integer m, integer n, double r
     return resid;
 }
 
-/* Intialize matrix with special values*/
+/* Initialize matrix with special values*/
 void init_matrix_spec_in(integer datatype, void *A, integer M, integer N, integer LDA, char type)
 {
     integer i, j;
@@ -2987,7 +3120,7 @@ void init_matrix_spec_in(integer datatype, void *A, integer M, integer N, intege
     }
 }
 
-/* Intialize matrix with special values in random locations */
+/* Initialize matrix with special values in random locations */
 void init_matrix_spec_rand_in(integer datatype, void *A, integer M, integer N, integer LDA,
                               char type)
 {
@@ -3191,7 +3324,7 @@ void init_matrix_spec_rand_in(integer datatype, void *A, integer M, integer N, i
 }
 
 /* Test to check the extreme values propagation in output matrix */
-bool check_extreme_value(integer datatype, integer M, integer N, void *A, integer LDA, char type)
+integer check_extreme_value(integer datatype, integer M, integer N, void *A, integer LDA, char type)
 {
     if(!A)
         return false;
@@ -3208,7 +3341,7 @@ bool check_extreme_value(integer datatype, integer M, integer N, void *A, intege
                     {
                         if(isnan(((float *)A)[i * LDA + j]))
                         {
-                            return true;
+                            return 1;
                         }
                     }
                 }
@@ -3222,7 +3355,7 @@ bool check_extreme_value(integer datatype, integer M, integer N, void *A, intege
                     {
                         if((isinf(((float *)A)[i * LDA + j])) || (isnan(((float *)A)[i * LDA + j])))
                         {
-                            return true;
+                            return 1;
                         }
                     }
                 }
@@ -3240,7 +3373,7 @@ bool check_extreme_value(integer datatype, integer M, integer N, void *A, intege
                     {
                         if(isnan(((double *)A)[i * LDA + j]))
                         {
-                            return true;
+                            return 1;
                         }
                     }
                 }
@@ -3255,7 +3388,7 @@ bool check_extreme_value(integer datatype, integer M, integer N, void *A, intege
                         if((isinf(((double *)A)[i * LDA + j]))
                            || (isnan(((double *)A)[i * LDA + j])))
                         {
-                            return true;
+                            return 1;
                         }
                     }
                 }
@@ -3274,7 +3407,7 @@ bool check_extreme_value(integer datatype, integer M, integer N, void *A, intege
                         if(isnan(((scomplex *)A)[i * LDA + j].real)
                            || isnan(((scomplex *)A)[i * LDA + j].imag))
                         {
-                            return true;
+                            return 1;
                         }
                     }
                 }
@@ -3291,7 +3424,7 @@ bool check_extreme_value(integer datatype, integer M, integer N, void *A, intege
                            || (isnan(((scomplex *)A)[i * LDA + j].real)
                                || isnan(((scomplex *)A)[i * LDA + j].imag)))
                         {
-                            return true;
+                            return 1;
                         }
                     }
                 }
@@ -3310,7 +3443,7 @@ bool check_extreme_value(integer datatype, integer M, integer N, void *A, intege
                         if(isnan(((dcomplex *)A)[i * LDA + j].real)
                            || isnan(((dcomplex *)A)[i * LDA + j].imag))
                         {
-                            return true;
+                            return 1;
                         }
                     }
                 }
@@ -3327,7 +3460,7 @@ bool check_extreme_value(integer datatype, integer M, integer N, void *A, intege
                            || (isnan(((dcomplex *)A)[i * LDA + j].real)
                                || isnan(((dcomplex *)A)[i * LDA + j].imag)))
                         {
-                            return true;
+                            return 1;
                         }
                     }
                 }
@@ -3338,7 +3471,7 @@ bool check_extreme_value(integer datatype, integer M, integer N, void *A, intege
     return 0;
 }
 
-/* Intialize vector with special values */
+/* Initialize vector with special values */
 void init_vector_spec_in(integer datatype, void *A, integer M, integer incx, char type)
 {
     integer i;
@@ -3400,7 +3533,7 @@ void init_vector_spec_in(integer datatype, void *A, integer M, integer incx, cha
         }
     }
 }
-/* Intialize vector with special values in random locations */
+/* Initialize vector with special values in random locations */
 void init_vector_spec_rand_in(integer datatype, void *A, integer M, integer incx, char type)
 {
     integer rows, span;
@@ -3421,7 +3554,7 @@ void init_vector_spec_rand_in(integer datatype, void *A, integer M, integer incx
     */
     if(M > 10)
     {
-        span = (M)*0.2;
+        span = (M) * 0.2;
     }
     else
     {
@@ -3524,7 +3657,7 @@ void init_vector_spec_rand_in(integer datatype, void *A, integer M, integer incx
     return;
 }
 
-/*Intialize matrix according to given input*/
+/*Initialize matrix according to given input*/
 void init_matrix(integer datatype, void *A, integer M, integer N, integer LDA, FILE *g_ext_fptr,
                  char imatrix_char)
 {
@@ -3706,7 +3839,7 @@ double is_value_zero(integer datatype, void *value, double residual)
     return resid;
 }
 
-/*Intialize vector according to given input*/
+/*Initialize vector according to given input*/
 void init_vector(integer datatype, void *A, integer M, integer incx, FILE *g_ext_fptr,
                  char ivector_char)
 {
@@ -4160,8 +4293,39 @@ integer compare_realtype_vector(integer datatype, integer vect_len, void *A, int
  *               Q  is an orthogonal matrix with corresponding
  *                  eigen vectors as its rows.
  */
+
+/*
+ * Randomly set some of the eigen values in L to positive and some of them to negative
+ */
+
+void convert_signed_eigen_values(integer datatype, void *L, integer n)
+{
+    integer i;
+    integer tmp;
+    for(i = 0; i < n; i++)
+    {
+        tmp = rand();
+        if(tmp % 2 == 0)
+        {
+            switch(datatype)
+            {
+                case COMPLEX:
+                {
+                    ((float *)L)[i] = -((float *)L)[i];
+                    break;
+                }
+                case DOUBLE_COMPLEX:
+                {
+                    ((double *)L)[i] = -((double *)L)[i];
+                    break;
+                }
+            }
+        }
+    }
+}
+
 void generate_matrix_from_EVs(integer datatype, char range, integer n, void *A, integer lda,
-                              void *L, double vl, double vu)
+                              void *L, double vl, double vu, integer randomize_sign)
 {
     void *X = NULL, *Q = NULL;
     integer realtype, info = 0;
@@ -4170,6 +4334,11 @@ void generate_matrix_from_EVs(integer datatype, char range, integer n, void *A, 
     /* Generate random vector of size n with values ranging
     between (vl, vu) */
     rand_vector(realtype, n, L, i_one, vl, vu, range);
+
+    if(randomize_sign == USE_SIGNED_EIGEN_VALUES)
+    {
+        convert_signed_eigen_values(datatype, L, n);
+    }
 
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &X, n);
     rand_matrix(datatype, X, n, n, n);
@@ -4346,7 +4515,7 @@ void get_band_storage_matrix(integer datatype, integer M, integer N, integer kl,
     }
 }
 
-/* Intialize matrix with special values in random locations of band matrix */
+/* Initialize matrix with special values in random locations of band matrix */
 void init_matrix_spec_rand_band_matrix_in(integer datatype, void *A, integer M, integer N,
                                           integer LDA, integer kl, integer ku, char type)
 {
@@ -5361,6 +5530,7 @@ void residual_sum_of_squares(int datatype, integer m, integer n, integer nrhs, v
             break;
         }
     }
+    *resid /= n;
 }
 
 /* swap row or column in a matrix
@@ -5445,10 +5615,13 @@ void fla_invoke_gemm(integer datatype, char *transA, char *transB, integer *m, i
 /* Generate a symmetric or hermitian matrix from existing matrix A
  * If type = "C" hermitian matrix formed.
  * If type = "S" symmetric matrix is formed.
+ * If uplo = 'L' lower triangular part of the matrix is copied to upper triangular part in hermitian
+ * matrix. Else upper triangular part of the matrix is copied to lower triangular part in hermitian
+ * matrix.
  */
-void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, char *type)
+void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, char *type, char uplo)
 {
-    integer i, j, conj = 1;
+    integer i, j, conj = 1, i_temp, j_temp;
     if(lda < n)
     {
         return;
@@ -5465,7 +5638,14 @@ void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, ch
             {
                 for(j = i; j < n; j++)
                 {
-                    ((float *)A)[i * lda + j] = ((float *)A)[j * lda + i];
+                    i_temp = i;
+                    j_temp = j;
+                    if(uplo == 'L')
+                    {
+                        i_temp = j;
+                        j_temp = i;
+                    }
+                    ((float *)A)[i_temp * lda + j_temp] = ((float *)A)[j_temp * lda + i_temp];
                 }
             }
             break;
@@ -5476,7 +5656,14 @@ void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, ch
             {
                 for(j = i; j < n; j++)
                 {
-                    ((double *)A)[i * lda + j] = ((double *)A)[j * lda + i];
+                    i_temp = i;
+                    j_temp = j;
+                    if(uplo == 'L')
+                    {
+                        i_temp = j;
+                        j_temp = i;
+                    }
+                    ((double *)A)[i_temp * lda + j_temp] = ((double *)A)[j_temp * lda + i_temp];
                 }
             }
             break;
@@ -5495,8 +5682,17 @@ void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, ch
                         }
                         continue;
                     }
-                    ((scomplex *)A)[j * lda + i].real = ((scomplex *)A)[i * lda + j].real;
-                    ((scomplex *)A)[j * lda + i].imag = conj * ((scomplex *)A)[i * lda + j].imag;
+                    i_temp = i;
+                    j_temp = j;
+                    if(uplo == 'L')
+                    {
+                        i_temp = j;
+                        j_temp = i;
+                    }
+                    ((scomplex *)A)[i_temp * lda + j_temp].real
+                        = ((scomplex *)A)[j_temp * lda + i_temp].real;
+                    ((scomplex *)A)[i_temp * lda + j_temp].imag
+                        = conj * ((scomplex *)A)[j_temp * lda + i_temp].imag;
                 }
             }
             break;
@@ -5515,8 +5711,17 @@ void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, ch
                         }
                         continue;
                     }
-                    ((dcomplex *)A)[j * lda + i].real = ((dcomplex *)A)[i * lda + j].real;
-                    ((dcomplex *)A)[j * lda + i].imag = conj * ((dcomplex *)A)[i * lda + j].imag;
+                    i_temp = i;
+                    j_temp = j;
+                    if(uplo == 'L')
+                    {
+                        i_temp = j;
+                        j_temp = i;
+                    }
+                    ((dcomplex *)A)[i_temp * lda + j_temp].real
+                        = ((dcomplex *)A)[j_temp * lda + i_temp].real;
+                    ((dcomplex *)A)[i_temp * lda + j_temp].imag
+                        = conj * ((dcomplex *)A)[j_temp * lda + i_temp].imag;
                 }
             }
             break;
@@ -6054,8 +6259,7 @@ void create_realtype_block_diagonal_matrix(integer datatype, void *A, integer n,
  */
 #define ASYM_EV_VL 1
 #define ASYM_EV_VU 1500
-void generate_asym_matrix_from_EVs(integer datatype, integer n, void *A, integer lda, void *L,
-                                   char *imatrix, void *scal)
+void generate_asym_matrix_from_EVs(integer datatype, integer n, void *A, integer lda, void *L)
 {
     void *X = NULL, *Q = NULL;
     integer info = 0;
@@ -6088,11 +6292,6 @@ void generate_asym_matrix_from_EVs(integer datatype, integer n, void *A, integer
        and Q(Eigen vectors) obtained above using reverse
        Eigen decompostion */
     generate_asym_matrix_from_ED(datatype, n, A, lda, Q, L);
-
-    if((imatrix != NULL) && (*imatrix == 'O' || *imatrix == 'U'))
-    {
-        init_matrix_overflow_underflow_asym(datatype, n, n, A, lda, *imatrix, scal);
-    }
 
     /* Free up the buffers */
     free_matrix(X);
@@ -6315,7 +6514,7 @@ void convert_matrix_layout(int matrix_layout, integer datatype, integer m, integ
                            integer lda, void *a_t, integer lda_t)
 {
     integer i, j, cs, rs;
-    if(a == NULL || a_t == NULL)
+    if(a == NULL || a_t == NULL || lda <= 0 || lda_t <= 0)
         return;
 
     if(matrix_layout == LAPACK_COL_MAJOR)
@@ -6409,5 +6608,450 @@ void get_reciprocal_real_vector(integer datatype, void *X, integer n, void *Y, i
             }
             break;
         }
+    }
+}
+
+/* Solves one of the matrix equations op( A )*X = B,  or   X*op( A ) = B
+ * where A is a unit, or non-unit,  upper or lower triangular matrix
+ */
+void fla_invoke_trsm(integer datatype, char *side, char *uplo, char *transa, char *diag, integer *m,
+                     integer *n, void *a, integer *lda, void *b, integer *ldb)
+{
+    switch(datatype)
+    {
+        case FLOAT:
+            strsm_(side, uplo, transa, diag, m, n, &s_one, a, lda, b, ldb);
+            break;
+        case DOUBLE:
+            dtrsm_(side, uplo, transa, diag, m, n, &d_one, a, lda, b, ldb);
+            break;
+        case COMPLEX:
+            ctrsm_(side, uplo, transa, diag, m, n, &c_one, a, lda, b, ldb);
+            break;
+        case DOUBLE_COMPLEX:
+            ztrsm_(side, uplo, transa, diag, m, n, &z_one, a, lda, b, ldb);
+    }
+}
+
+/* Performs B := op( A )*B,   or   B := B*op( A )
+ * where A is a unit or non-unit, upper or lower triangular matrix
+ */
+void fla_invoke_trmm(integer datatype, char *side, char *uplo, char *transa, char *diag, integer *m,
+                     integer *n, void *a, integer *lda, void *b, integer *ldb)
+{
+    switch(datatype)
+    {
+        case FLOAT:
+            strmm_(side, uplo, transa, diag, m, n, &s_one, a, lda, b, ldb);
+            break;
+        case DOUBLE:
+            dtrmm_(side, uplo, transa, diag, m, n, &d_one, a, lda, b, ldb);
+            break;
+        case COMPLEX:
+            ctrmm_(side, uplo, transa, diag, m, n, &c_one, a, lda, b, ldb);
+            break;
+        case DOUBLE_COMPLEX:
+            ztrmm_(side, uplo, transa, diag, m, n, &z_one, a, lda, b, ldb);
+            break;
+    }
+}
+
+/* Uniontype to reduce code redundancy */
+typedef union
+{
+    float s;
+    double d;
+} compositereal_t;
+
+/* Convert the given banded storage matrix from column major layout to row major layout and vice
+   versa NOTE: matrix_layout is the existing layout of the given input matrix 'AB' */
+void convert_banded_matrix_layout(int matrix_layout, integer datatype, integer m, integer n,
+                                  void *AB, integer ldab, void *AB_trans, integer ldab_trans)
+{
+    integer i, j;
+    integer cs, rs;
+
+    if(AB == NULL || AB_trans == NULL)
+        return;
+
+    if(matrix_layout == LAPACK_COL_MAJOR)
+    {
+        cs = fla_min(ldab_trans, n);
+        rs = ldab;
+    }
+    else if(matrix_layout == LAPACK_ROW_MAJOR)
+    {
+        cs = ldab_trans;
+        rs = fla_min(n, ldab);
+    }
+    else
+    {
+        /* invalid input layout */
+        printf("\n Invalid matrix layout for matrix_transpose");
+        return;
+    }
+
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            for(j = 0; j < cs; j++)
+            {
+                for(i = 0; i < rs; i++)
+                {
+                    ((float *)AB_trans)[i * ldab_trans + j] = ((float *)AB)[i + j * ldab];
+                }
+            }
+            break;
+        }
+        case DOUBLE:
+        {
+            for(j = 0; j < cs; j++)
+            {
+                for(i = 0; i < rs; i++)
+                {
+                    ((double *)AB_trans)[i * ldab_trans + j] = ((double *)AB)[i + j * ldab];
+                }
+            }
+            break;
+        }
+        case COMPLEX:
+        {
+            for(j = 0; j < cs; j++)
+            {
+                for(i = 0; i < rs; i++)
+                {
+                    ((scomplex *)AB_trans)[i * ldab_trans + j].real
+                        = ((scomplex *)AB)[i + j * ldab].real;
+                    ((scomplex *)AB_trans)[i * ldab_trans + j].imag
+                        = ((scomplex *)AB)[i + j * ldab].imag;
+                }
+            }
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            for(j = 0; j < cs; j++)
+            {
+                for(i = 0; i < rs; i++)
+                {
+                    ((dcomplex *)AB_trans)[i * ldab_trans + j].real
+                        = ((dcomplex *)AB)[i + j * ldab].real;
+                    ((dcomplex *)AB_trans)[i * ldab_trans + j].imag
+                        = ((dcomplex *)AB)[i + j * ldab].imag;
+                }
+            }
+            break;
+        }
+    }
+    return;
+}
+
+/* Gets the maximum absolute values of the two input values */
+void get_max_of_values(integer datatype, void *a, void *b, void *max_val)
+{
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            *(float *)max_val = fla_max(FLA_FABS(*(float *)a), FLA_FABS(*(float *)b));
+            break;
+        }
+        case DOUBLE:
+        {
+            *(double *)max_val = fla_max(FLA_FABS(*(double *)a), FLA_FABS(*(double *)b));
+            break;
+        }
+        case COMPLEX:
+        {
+            float real_max
+                = fla_max(FLA_FABS(((scomplex *)a)->real), FLA_FABS(((scomplex *)b)->real));
+            float imag_max
+                = fla_max(FLA_FABS(((scomplex *)a)->imag), FLA_FABS(((scomplex *)b)->imag));
+            *(float *)max_val = fla_max(real_max, imag_max);
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            double real_max
+                = fla_max(FLA_FABS(((dcomplex *)a)->real), FLA_FABS(((dcomplex *)b)->real));
+            double imag_max
+                = fla_max(FLA_FABS(((dcomplex *)a)->imag), FLA_FABS(((dcomplex *)b)->imag));
+            *(double *)max_val = fla_max(real_max, imag_max);
+            break;
+        }
+    }
+}
+
+/* Gets the minimum absolute values of the two input values */
+void get_min_of_values(integer datatype, void *a, void *b, void *min_val)
+{
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            *(float *)min_val = fla_min(FLA_FABS(*(float *)a), FLA_FABS(*(float *)b));
+            break;
+        }
+        case DOUBLE:
+        {
+            *(double *)min_val = fla_min(FLA_FABS(*(double *)a), FLA_FABS(*(double *)b));
+            break;
+        }
+        case COMPLEX:
+        {
+            float real_min
+                = fla_min(FLA_FABS(((scomplex *)a)->real), FLA_FABS(((scomplex *)b)->real));
+            float imag_min
+                = fla_min(FLA_FABS(((scomplex *)a)->imag), FLA_FABS(((scomplex *)b)->imag));
+            *(float *)min_val = fla_min(real_min, imag_min);
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            double real_min
+                = fla_min(FLA_FABS(((dcomplex *)a)->real), FLA_FABS(((dcomplex *)b)->real));
+            double imag_min
+                = fla_min(FLA_FABS(((dcomplex *)a)->imag), FLA_FABS(((dcomplex *)b)->imag));
+            *(double *)min_val = fla_min(real_min, imag_min);
+            break;
+        }
+    }
+}
+
+/* Negate the off-diagonal element of the 2x2 diagonal block.
+   Used for the hetrf/hetrf_rook test case
+*/
+void negate_off_diagonal_element_imag(integer datatype, void *D, integer n, integer k,
+                                      integer position)
+{
+    if(position == LOWER_OFF_DIAGONAL_ELEMENT)
+    {
+        switch(datatype)
+        {
+            case COMPLEX:
+            {
+                (((scomplex *)D)[(k - 1) * n + k]).imag = -(((scomplex *)D)[(k - 1) * n + k]).imag;
+                break;
+            }
+            case DOUBLE_COMPLEX:
+            {
+                (((dcomplex *)D)[(k - 1) * n + k]).imag = -(((dcomplex *)D)[(k - 1) * n + k]).imag;
+                break;
+            }
+        }
+    }
+    else
+    {
+        switch(datatype)
+        {
+            case COMPLEX:
+            {
+                (((scomplex *)D)[(k + 1) * n + k]).imag = -(((scomplex *)D)[(k + 1) * n + k]).imag;
+                break;
+            }
+            case DOUBLE_COMPLEX:
+            {
+                (((dcomplex *)D)[(k + 1) * n + k]).imag = -(((dcomplex *)D)[(k + 1) * n + k]).imag;
+                break;
+            }
+        }
+    }
+}
+
+/* Validates and parses the norm types to be tested for lange API */
+integer fla_validate_lange_norm_types(char *src_norm_str, char *dst_norm_str, integer max_len)
+{
+    if(!src_norm_str || !dst_norm_str)
+    {
+        return -1;
+    }
+
+    char *parsed_norm_str;
+    integer norm_flags = 0b1111;
+    integer idx = 0;
+
+    parsed_norm_str = (char *)malloc(max_len * sizeof(char));
+    for(integer i = 0; i < max_len; i++)
+    {
+        char norm_char = toupper(src_norm_str[i]);
+
+        if(norm_char == '\0')
+        {
+            break;
+        }
+
+        switch(norm_char)
+        {
+            case 'M':
+            {
+                if(norm_flags & 0b1)
+                {
+                    parsed_norm_str[idx++] = 'M';
+                    norm_flags &= ~0b1;
+                }
+                break;
+            }
+            case '1':
+            case 'O':
+            {
+                if(norm_flags & 0b10)
+                {
+                    parsed_norm_str[idx++] = '1';
+                    norm_flags &= ~0b10;
+                }
+                break;
+            }
+            case 'I':
+            {
+                if(norm_flags & 0b100)
+                {
+                    parsed_norm_str[idx++] = 'I';
+                    norm_flags &= ~0b100;
+                }
+                break;
+            }
+            case 'F':
+            case 'E':
+            {
+                if(norm_flags & 0b1000)
+                {
+                    parsed_norm_str[idx++] = 'F';
+                    norm_flags &= ~0b1000;
+                }
+                break;
+            }
+        }
+    }
+    for(integer i = 0; i < idx; i++)
+    {
+        dst_norm_str[i] = parsed_norm_str[i];
+    }
+    for(integer i = idx; i < max_len; i++)
+    {
+        dst_norm_str[i] = '\0';
+    }
+    free(parsed_norm_str);
+    return idx > 0 ? 0 : -1;
+}
+
+/* Sets the matrix index bounds for the given uplo and i values for compare_matrix function*/
+void set_matrix_bounds(char *uplo, integer i, integer m, integer *j_start, integer *j_end)
+{
+    if(*uplo == 'U')
+    {
+        *j_start = 0;
+        *j_end = fla_min(i, m);
+    }
+    else if(*uplo == 'L')
+    {
+        *j_start = i;
+        *j_end = m;
+    }
+    else
+    {
+        *j_start = 0;
+        *j_end = m;
+    }
+}
+
+/* Comparison of matrix
+ * Compare matrix A with matrix B
+ * if uplo = 'U' upper triangular part is compared.
+ * if uplo = 'L' lower triangular part is compared.
+ * else full matrix is compared.
+ * Retruns 0 if there is a mismatch
+ * Returns 1 if A and B are identical */
+integer compare_matrix(integer datatype, char *uplo, integer m, integer n, void *A, integer lda,
+                       void *B, integer ldb)
+{
+    integer i, j, j_start = 0, j_end = m;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            for(i = 0; i < n; i++)
+            {
+                set_matrix_bounds(uplo, i, m, &j_start, &j_end);
+                for(j = j_start; j < j_end; j++)
+                {
+                    if(((float *)A)[i * lda + j] != ((float *)B)[i * ldb + j])
+                    {
+                        return 0;
+                    }
+                }
+            }
+            break;
+        }
+        case DOUBLE:
+        {
+            for(i = 0; i < n; i++)
+            {
+                set_matrix_bounds(uplo, i, m, &j_start, &j_end);
+                for(j = j_start; j < j_end; j++)
+                {
+                    if(((double *)A)[i * lda + j] != ((double *)B)[i * ldb + j])
+                    {
+                        return 0;
+                    }
+                }
+            }
+            break;
+        }
+        case COMPLEX:
+        {
+            for(i = 0; i < n; i++)
+            {
+                set_matrix_bounds(uplo, i, m, &j_start, &j_end);
+                for(j = j_start; j < j_end; j++)
+                {
+                    if((((scomplex *)A)[i * lda + j].real != ((scomplex *)B)[i * ldb + j].real)
+                       && (((scomplex *)A)[i * lda + j].imag != ((scomplex *)B)[i * ldb + j].imag))
+                    {
+                        return 0;
+                    }
+                }
+            }
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            for(i = 0; i < n; i++)
+            {
+                set_matrix_bounds(uplo, i, m, &j_start, &j_end);
+                for(j = j_start; j < j_end; j++)
+                {
+                    if((((dcomplex *)A)[i * lda + j].real != ((dcomplex *)B)[i * ldb + j].real)
+                       && (((dcomplex *)A)[i * lda + j].imag != ((dcomplex *)B)[i * ldb + j].imag))
+                    {
+                        return 0;
+                    }
+                }
+            }
+            break;
+        }
+    }
+    return 1;
+}
+
+/* Swap rows of the matrix as per permutation vector */
+void swap_rows_with_pivot(integer datatype, integer m, integer n, void *A, integer lda,
+                          integer *ipiv)
+{
+    integer min_mn = fla_min(m, n);
+    switch(datatype)
+    {
+        case FLOAT:
+            fla_lapack_slaswp(&n, A, &lda, &i_one, &min_mn, ipiv, &i_one);
+            break;
+        case DOUBLE:
+            fla_lapack_dlaswp(&n, A, &lda, &i_one, &min_mn, ipiv, &i_one);
+            break;
+        case COMPLEX:
+            fla_lapack_claswp(&n, A, &lda, &i_one, &min_mn, ipiv, &i_one);
+            break;
+        case DOUBLE_COMPLEX:
+            fla_lapack_zlaswp(&n, A, &lda, &i_one, &min_mn, ipiv, &i_one);
+            break;
     }
 }

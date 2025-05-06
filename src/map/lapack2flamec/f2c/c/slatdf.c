@@ -174,6 +174,10 @@ for 1 <= j <= N, column j of the */
 void slatdf_(integer *ijob, integer *n, real *z__, integer *ldz, real *rhs, real *rdsum,
              real *rdscal, integer *ipiv, integer *jpiv)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slatdf inputs: ijob %" FLA_IS ",n %" FLA_IS ",ldz %" FLA_IS ",jpiv %" FLA_IS
+                      "",
+                      *ijob, *n, *ldz, *jpiv);
     /* System generated locals */
     integer z_dim1, z_offset, i__1, i__2;
     real r__1;
@@ -336,6 +340,7 @@ void slatdf_(integer *ijob, integer *n, real *z__, integer *ldz, real *rhs, real
         /* Compute the sum of squares */
         slassq_(n, &rhs[1], &c__1, rdscal, rdsum);
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLATDF */
 }

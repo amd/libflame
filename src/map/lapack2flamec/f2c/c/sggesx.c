@@ -1,8 +1,8 @@
-/* ../netlib/sggesx.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sggesx.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__0 = 0;
@@ -354,8 +354,7 @@ the */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date June 2017 */
-/* > \ingroup realGEeigen */
+/* > \ingroup ggesx */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -376,12 +375,17 @@ the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void sggesx_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, char *sense, integer *n,
-             real *a, integer *lda, real *b, integer *ldb, integer *sdim, real *alphar,
-             real *alphai, real *beta, real *vsl, integer *ldvsl, real *vsr, integer *ldvsr,
-             real *rconde, real *rcondv, real *work, integer *lwork, integer *iwork,
-             integer *liwork, logical *bwork, integer *info)
+void sggesx_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, char *sense, integer *n, real *a,
+             integer *lda, real *b, integer *ldb, integer *sdim, real *alphar, real *alphai,
+             real *beta, real *vsl, integer *ldvsl, real *vsr, integer *ldvsr, real *rconde,
+             real *rcondv, real *work, integer *lwork, integer *iwork, integer *liwork,
+             logical *bwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sggesx inputs: jobvsl %c ,jobvsr %c ,sort %c ,sense %c ,n %" FLA_IS
+                      ",lda %" FLA_IS ",ldb %" FLA_IS ",ldvsl %" FLA_IS ",ldvsr %" FLA_IS
+                      ",lwork %" FLA_IS "",
+                      *jobvsl, *jobvsr, *sort, *sense, *n, *lda, *ldb, *ldvsl, *ldvsr, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, vsl_dim1, vsl_offset, vsr_dim1, vsr_offset, i__1,
         i__2;
@@ -403,7 +407,6 @@ void sggesx_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, char *sense,
     logical lst2sl;
     extern /* Subroutine */
         void
-        slabad_(real *, real *),
         sggbak_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
                 integer *, integer *),
         sggbal_(char *, integer *, real *, integer *, real *, integer *, integer *, integer *,
@@ -455,10 +458,10 @@ void sggesx_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, char *sense,
         void
         sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
                 integer *, real *, integer *, integer *);
-    /* -- LAPACK driver routine (version 3.7.1) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2017 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -639,7 +642,7 @@ void sggesx_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, char *sense,
             maxwrk = 1;
             lwrk = 1;
         }
-        work[1] = (real)lwrk;
+        work[1] = sroundup_lwork(&lwrk);
         if(wantsn || *n == 0)
         {
             liwmin = 1;
@@ -662,23 +665,25 @@ void sggesx_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, char *sense,
     {
         i__1 = -(*info);
         xerbla_("SGGESX", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
         *sdim = 0;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants */
     eps = slamch_("P");
     safmin = slamch_("S");
     safmax = 1.f / safmin;
-    slabad_(&safmin, &safmax);
     smlnum = sqrt(safmin) / eps;
     bignum = 1.f / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
@@ -966,8 +971,9 @@ void sggesx_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, char *sense,
         }
     }
 L50:
-    work[1] = (real)maxwrk;
+    work[1] = sroundup_lwork(&maxwrk);
     iwork[1] = liwmin;
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGGESX */
 }

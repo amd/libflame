@@ -1,8 +1,8 @@
-/* ../netlib/zggesx.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./zggesx.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublecomplex c_b1 = {0., 0.};
 static doublecomplex c_b2 = {1., 0.};
@@ -117,7 +117,7 @@ and computes a reciprocal condition number for */
 /* > */
 /* > \param[in] SELCTG */
 /* > \verbatim */
-/* > SELCTG is procedure) LOGICAL FUNCTION of two COMPLEX*16 arguments */
+/* > SELCTG is a LOGICAL FUNCTION of two COMPLEX*16 arguments */
 /* > SELCTG must be declared EXTERNAL in the calling subroutine. */
 /* > If SORT = 'N', SELCTG is not referenced. */
 /* > If SORT = 'S', SELCTG is used to select eigenvalues to sort */
@@ -133,13 +133,13 @@ and computes a reciprocal condition number for */
 /* > \verbatim */
 /* > SENSE is CHARACTER*1 */
 /* > Determines which reciprocal condition numbers are computed. */
-/* > = 'N' : None are computed;
+/* > = 'N': None are computed;
  */
-/* > = 'E' : Computed for average of selected eigenvalues only;
+/* > = 'E': Computed for average of selected eigenvalues only;
  */
-/* > = 'V' : Computed for selected deflating subspaces only;
+/* > = 'V': Computed for selected deflating subspaces only;
  */
-/* > = 'B' : Computed for both. */
+/* > = 'B': Computed for both. */
 /* > If SENSE = 'E', 'V', or 'B', SORT must equal 'S'. */
 /* > \endverbatim */
 /* > */
@@ -335,8 +335,7 @@ the */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup complex16GEeigen */
+/* > \ingroup ggesx */
 /* ===================================================================== */
 /* Subroutine */
 void zggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, char *sense, integer *n,
@@ -368,9 +367,6 @@ void zggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, char *sense,
     integer ileft, icols;
     logical cursl, ilvsl, ilvsr;
     integer irwrk, irows;
-    extern /* Subroutine */
-        void
-        dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
         void
@@ -428,10 +424,9 @@ void zggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, char *sense,
                 doublecomplex *, integer *, integer *),
         zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
                 doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
-    /* -- LAPACK driver routine (version 3.4.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -646,7 +641,6 @@ void zggesx_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, char *sense,
     eps = dlamch_("P");
     smlnum = dlamch_("S");
     bignum = 1. / smlnum;
-    dlabad_(&smlnum, &bignum);
     smlnum = sqrt(smlnum) / eps;
     bignum = 1. / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */

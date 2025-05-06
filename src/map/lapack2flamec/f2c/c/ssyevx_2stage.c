@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/ssyevx_2stage.f -- translated by f2c (version 20160102). You must link the
- resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
- Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
- with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./ssyevx_2stage.f -- translated by f2c (version 20190311). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -269,8 +269,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date June 2016 */
-/* > \ingroup realSYeigen */
+/* > \ingroup heevx_2stage */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -309,15 +308,11 @@ void ssyevx_2stage_(char *jobz, char *range, char *uplo, integer *n, real *a, in
                     real *z__, integer *ldz, real *work, integer *lwork, integer *iwork,
                     integer *ifail, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "ssyevx_2stage inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS
              ", il %" FLA_IS ", iu %" FLA_IS ", ldz %" FLA_IS "",
              *jobz, *range, *uplo, *n, *lda, *il, *iu, *ldz);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer a_dim1, a_offset, z_dim1, z_offset, i__1, i__2;
     real r__1, r__2;
@@ -384,11 +379,11 @@ void ssyevx_2stage_(char *jobz, char *range, char *uplo, integer *n, real *a, in
         ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *),
         sormtr_(char *, char *, char *, integer *, integer *, real *, integer *, real *, real *,
                 integer *, real *, integer *, integer *);
+    extern real sroundup_lwork(integer *);
     integer indhous;
-    /* -- LAPACK driver routine (version 3.8.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -478,7 +473,7 @@ void ssyevx_2stage_(char *jobz, char *range, char *uplo, integer *n, real *a, in
         if(*n <= 1)
         {
             lwmin = 1;
-            work[1] = (real)lwmin;
+            work[1] = sroundup_lwork(&lwmin);
         }
         else
         {
@@ -501,19 +496,19 @@ void ssyevx_2stage_(char *jobz, char *range, char *uplo, integer *n, real *a, in
     {
         i__1 = -(*info);
         xerbla_("SSYEVX_2STAGE", &i__1, (ftnlen)13);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     *m = 0;
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 1)
@@ -535,7 +530,7 @@ void ssyevx_2stage_(char *jobz, char *range, char *uplo, integer *n, real *a, in
         {
             z__[z_dim1 + 1] = 1.f;
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants. */
@@ -677,7 +672,7 @@ void ssyevx_2stage_(char *jobz, char *range, char *uplo, integer *n, real *a, in
         sormtr_("L", uplo, "N", n, m, &a[a_offset], lda, &work[indtau], &z__[z_offset], ldz,
                 &work[indwkn], &llwrkn, &iinfo);
     }
-    /* If matrix was scaled, then rescale eigenvalues appropriately. */
+/* If matrix was scaled, then rescale eigenvalues appropriately. */
 L40:
     if(iscale == 1)
     {
@@ -730,8 +725,8 @@ L40:
         }
     }
     /* Set WORK(1) to optimal workspace size. */
-    work[1] = (real)lwmin;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    work[1] = sroundup_lwork(&lwmin);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYEVX_2STAGE */
 }

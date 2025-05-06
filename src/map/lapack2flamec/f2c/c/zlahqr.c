@@ -1,4 +1,4 @@
-/* zlahqr.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./zlahqr.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -179,7 +179,7 @@ elements i+1:ihi of W contain */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup complex16OTHERauxiliary */
+/* > \ingroup lahqr */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -245,10 +245,9 @@ void zlahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
     doublereal rtemp;
     extern /* Subroutine */
         void
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        dlabad_(doublereal *, doublereal *);
+        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
-    doublereal safmin, safmax;
+    doublereal safmin;
     extern /* Subroutine */
         void
         zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
@@ -383,8 +382,6 @@ void zlahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
     nz = *ihiz - *iloz + 1;
     /* Set machine-dependent constants for the stopping criterion. */
     safmin = dlamch_("SAFE MINIMUM");
-    safmax = 1. / safmin;
-    dlabad_(&safmin, &safmax);
     ulp = dlamch_("PRECISION");
     smlnum = safmin * ((doublereal)nh / ulp);
     /* I1 and I2 are the indices of the first row and last column of H */
@@ -673,8 +670,7 @@ L30:
         h11s.i = z__1.i; // , expr subst
         i__2 = l + 1 + l * h_dim1;
         h21 = h__[i__2].r;
-        s = (d__1 = h11s.r, f2c_dabs(d__1)) + (d__2 = d_imag(&h11s), f2c_dabs(d__2))
-            + f2c_dabs(h21);
+        s = (d__1 = h11s.r, f2c_dabs(d__1)) + (d__2 = d_imag(&h11s), f2c_dabs(d__2)) + f2c_dabs(h21);
         z__1.r = h11s.r / s;
         z__1.i = h11s.i / s; // , expr subst
         h11s.r = z__1.r;

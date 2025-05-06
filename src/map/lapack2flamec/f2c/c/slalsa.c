@@ -271,6 +271,12 @@ void slalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, real *
              integer *perm, real *givnum, real *c__, real *s, real *work, integer *iwork,
              integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
+        "slalsa inputs: icompq %" FLA_IS ",smlsiz %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS
+        ",ldb %" FLA_IS ",ldbx %" FLA_IS ",ldu %" FLA_IS ",k %" FLA_IS ",givptr %" FLA_IS
+        ",givcol %" FLA_IS ",ldgcol %" FLA_IS ",perm %" FLA_IS "",
+        *icompq, *smlsiz, *n, *nrhs, *ldb, *ldbx, *ldu, *k, *givptr, *givcol, *ldgcol, *perm);
     /* System generated locals */
     integer givcol_dim1, givcol_offset, perm_dim1, perm_offset, b_dim1, b_offset, bx_dim1,
         bx_offset, difl_dim1, difl_offset, difr_dim1, difr_offset, givnum_dim1, givnum_offset,
@@ -389,6 +395,7 @@ void slalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, real *
     {
         i__1 = -(*info);
         xerbla_("SLALSA", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Book-keeping and setting up the computation tree. */
@@ -553,6 +560,7 @@ L50: /* First now go through the right singular vector matrices of all */
         /* L80: */
     }
 L90:
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLALSA */
 }

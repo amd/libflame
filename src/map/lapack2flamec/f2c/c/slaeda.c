@@ -169,6 +169,11 @@ void slaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integ
              integer *perm, integer *givptr, integer *givcol, real *givnum, real *q, integer *qptr,
              real *z__, real *ztemp, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slaeda inputs: n %" FLA_IS ",tlvls %" FLA_IS ",curlvl %" FLA_IS
+                      ",curpbm %" FLA_IS ",prmptr %" FLA_IS ",perm %" FLA_IS ",givptr %" FLA_IS
+                      ",givcol %" FLA_IS ",qptr %" FLA_IS "",
+                      *n, *tlvls, *curlvl, *curpbm, *prmptr, *perm, *givptr, *givcol, *qptr);
     /* System generated locals */
     integer i__1, i__2, i__3;
     /* Builtin functions */
@@ -225,11 +230,13 @@ void slaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integ
     {
         i__1 = -(*info);
         xerbla_("SLAEDA", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine location of first number in second half. */
@@ -327,6 +334,7 @@ void slaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integ
         ptr += pow_ii(&c__2, &i__2);
         /* L70: */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAEDA */
 }

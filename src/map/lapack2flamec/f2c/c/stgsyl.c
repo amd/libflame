@@ -1,8 +1,8 @@
-/* ../netlib/stgsyl.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./stgsyl.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__2 = 2;
 static integer c_n1 = -1;
@@ -97,20 +97,20 @@ static real c_b52 = 1.f;
 /* > \param[in] TRANS */
 /* > \verbatim */
 /* > TRANS is CHARACTER*1 */
-/* > = 'N', solve the generalized Sylvester equation (1). */
-/* > = 'T', solve the 'transposed' system (3). */
+/* > = 'N': solve the generalized Sylvester equation (1). */
+/* > = 'T': solve the 'transposed' system (3). */
 /* > \endverbatim */
 /* > */
 /* > \param[in] IJOB */
 /* > \verbatim */
 /* > IJOB is INTEGER */
 /* > Specifies what kind of functionality to be performed. */
-/* > =0: solve (1) only. */
-/* > =1: The functionality of 0 and 3. */
-/* > =2: The functionality of 0 and 4. */
-/* > =3: Only an estimate of Dif[(A,D), (B,E)] is computed. */
+/* > = 0: solve (1) only. */
+/* > = 1: The functionality of 0 and 3. */
+/* > = 2: The functionality of 0 and 4. */
+/* > = 3: Only an estimate of Dif[(A,D), (B,E)] is computed. */
 /* > (look ahead strategy IJOB = 1 is used). */
-/* > =4: Only an estimate of Dif[(A,D), (B,E)] is computed. */
+/* > = 4: Only an estimate of Dif[(A,D), (B,E)] is computed. */
 /* > ( SGECON on sub-systems is used ). */
 /* > Not referenced if TRANS = 'T'. */
 /* > \endverbatim */
@@ -268,8 +268,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup realSYcomputational */
+/* > \ingroup tgsyl */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -305,16 +304,12 @@ void stgsyl_(char *trans, integer *ijob, integer *m, integer *n, real *a, intege
              real *f, integer *ldf, real *scale, real *dif, real *work, integer *lwork,
              integer *iwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "stgsyl inputs: trans %c, ijob %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
              ", ldb %" FLA_IS ", ldc %" FLA_IS ", ldd %" FLA_IS ", lde %" FLA_IS ", ldf %" FLA_IS
              "",
              *trans, *ijob, *m, *n, *lda, *ldb, *ldc, *ldd, *lde, *ldf);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, d_dim1, d_offset, e_dim1,
         e_offset, f_dim1, f_offset, i__1, i__2, i__3, i__4;
@@ -354,10 +349,10 @@ void stgsyl_(char *trans, integer *ijob, integer *m, integer *n, real *a, intege
     logical notran;
     integer isolve;
     logical lquery;
-    /* -- LAPACK computational routine (version 3.4.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -469,7 +464,7 @@ void stgsyl_(char *trans, integer *ijob, integer *m, integer *n, real *a, intege
         {
             lwmin = 1;
         }
-        work[1] = (real)lwmin;
+        work[1] = sroundup_lwork(&lwmin);
         if(*lwork < lwmin && !lquery)
         {
             *info = -20;
@@ -479,12 +474,12 @@ void stgsyl_(char *trans, integer *ijob, integer *m, integer *n, real *a, intege
     {
         i__1 = -(*info);
         xerbla_("STGSYL", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -498,7 +493,7 @@ void stgsyl_(char *trans, integer *ijob, integer *m, integer *n, real *a, intege
                 *dif = 0.f;
             }
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine optimal block sizes MB and NB */
@@ -562,7 +557,7 @@ void stgsyl_(char *trans, integer *ijob, integer *m, integer *n, real *a, intege
             }
             /* L30: */
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine block structure of A */
@@ -835,8 +830,8 @@ L70:
             /* L210: */
         }
     }
-    work[1] = (real)lwmin;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    work[1] = sroundup_lwork(&lwmin);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STGSYL */
 }

@@ -143,15 +143,11 @@ void ssytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, real *a, integer *
                        integer *ltb, integer *ipiv, integer *ipiv2, real *b, integer *ldb,
                        integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "ssytrs_aa_2stage inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
-             ", ltb %" FLA_IS ", ldb %%" FLA_IS "",
+             ", ltb %" FLA_IS ", ldb %" FLA_IS "",
              *uplo, *n, *nrhs, *lda, *ltb, *ldb);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
@@ -226,13 +222,13 @@ void ssytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, real *a, integer *
     {
         i__1 = -(*info);
         xerbla_("SSYTRS_AA_2STAGE", &i__1, (ftnlen)16);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0 || *nrhs == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Read NB and compute LDTB */
@@ -290,7 +286,7 @@ void ssytrs_aa_2stage_(char *uplo, integer *n, integer *nrhs, real *a, integer *
             slaswp_(nrhs, &b[b_offset], ldb, &i__1, n, &ipiv[1], &c_n1);
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYTRS_AA_2STAGE */
 }

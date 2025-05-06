@@ -279,6 +279,10 @@ K=N/2. If */
 void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integer *m, integer *n,
             real *alpha, real *a, real *b, integer *ldb)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("stfsm inputs: transr %c ,side %c ,uplo %c ,trans %c ,diag %c ,m %" FLA_IS
+                      ",n %" FLA_IS ",ldb %" FLA_IS "",
+                      *transr, *side, *uplo, *trans, *diag, *m, *n, *ldb);
     /* System generated locals */
     integer b_dim1, b_offset, i__1, i__2;
     /* Local variables */
@@ -364,11 +368,13 @@ void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
     {
         i__1 = -info;
         xerbla_("STFSM ", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return when ( (N.EQ.0).OR.(M.EQ.0) ) */
     if(*m == 0 || *n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return when ALPHA.EQ.(0D+0) */
@@ -385,6 +391,7 @@ void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
             }
             /* L20: */
         }
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(lside)
@@ -907,6 +914,7 @@ void stfsm_(char *transr, char *side, char *uplo, char *trans, char *diag, integ
             }
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STFSM */
 }

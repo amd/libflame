@@ -1,8 +1,8 @@
-/* ../netlib/csrscl.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./csrscl.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b CSRSCL multiplies a vector by the reciprocal of a real scalar. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -59,7 +59,7 @@
 /* > \param[in,out] SX */
 /* > \verbatim */
 /* > SX is COMPLEX array, dimension */
-/* > (1+(N-1)*f2c_abs(INCX)) */
+/* > (1+(N-1)*abs(INCX)) */
 /* > The n-element vector x. */
 /* > \endverbatim */
 /* > */
@@ -75,8 +75,7 @@
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date September 2012 */
-/* > \ingroup complexOTHERauxiliary */
+/* > \ingroup rscl */
 /* ===================================================================== */
 /* Subroutine */
 void csrscl_(integer *n, real *sa, complex *sx, integer *incx)
@@ -94,18 +93,14 @@ void csrscl_(integer *n, real *sa, complex *sx, integer *incx)
     real mul, cden;
     logical done;
     real cnum, cden1, cnum1;
-    extern /* Subroutine */
-        void
-        slabad_(real *, real *);
     extern real slamch_(char *);
     extern /* Subroutine */
         void
         csscal_(integer *, real *, complex *, integer *);
     real bignum, smlnum;
-    /* -- LAPACK auxiliary routine (version 3.4.2) -- */
+    /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* September 2012 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -134,7 +129,6 @@ void csrscl_(integer *n, real *sa, complex *sx, integer *incx)
     /* Get machine parameters */
     smlnum = slamch_("S");
     bignum = 1.f / smlnum;
-    slabad_(&smlnum, &bignum);
     /* Initialize the denominator to SA and the numerator to 1. */
     cden = *sa;
     cnum = 1.f;

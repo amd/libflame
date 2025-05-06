@@ -1,5 +1,5 @@
 /******************************************************************************
- * * Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
+ * * Copyright (C) 2023-2025, Advanced Micro Devices, Inc. All rights reserved.
  * *******************************************************************************/
 
 /*! @file fla_lapack_x86_common.c
@@ -43,9 +43,13 @@ void fla_dgesvd_xs_small10T(integer *m, integer *n, doublereal *a, integer *lda,
                             doublereal *work, integer *info);
 int fla_dgetrs_small_notrans(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda,
                              integer *ipiv, doublereal *b, integer *ldb, integer *info);
-int fla_dgetrs_small_notrans(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda,
-                             integer *ipiv, doublereal *b, integer *ldb, integer *info);
 void lapack_getri_small_d(integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *work,
                           integer *info);
-doublereal fla_get_max_abs_element_vector(integer m, doublereal *a, integer a_dim);
+doublereal fla_dnrm2_blas_kernel(integer *sd, doublereal *a, integer *inc);
+real fla_get_max_sabs_element_vector(integer m, real *a, integer a_dim);
+doublereal fla_get_max_dabs_element_vector(integer m, doublereal *a, integer a_dim);
+real fla_get_max_cabs_element_vector(integer m, complex *a, integer a_dim);
+doublereal fla_get_max_zabs_element_vector(integer m, doublecomplex *a, integer a_dim);
+void fla_zlarf_left_invc1_opt(integer m, integer n, doublecomplex *a_buff, integer ldr,
+                              doublecomplex *v, doublecomplex *ntau, doublecomplex *work);
 #endif

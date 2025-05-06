@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/zheevr_2stage.f -- translated by f2c (version 20160102). You must link the
- resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
- Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
- with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./zheevr_2stage.f -- translated by f2c (version 20190311). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__10 = 10;
 static integer c__1 = 1;
@@ -90,7 +90,7 @@ static integer c_n1 = -1;
 /* > The desired accuracy of the output can be specified by the input */
 /* > parameter ABSTOL. */
 /* > */
-/* > For more details, see DSTEMR's documentation and: */
+/* > For more details, see ZSTEMR's documentation and: */
 /* > - Inderjit S. Dhillon and Beresford N. Parlett: "Multiple representations */
 /* > to compute orthogonal eigenvectors of symmetric tridiagonal matrices," */
 /* > Linear Algebra and its Applications, 387(1), pp. 1-28, August 2004. */
@@ -366,8 +366,7 @@ the */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date June 2016 */
-/* > \ingroup complex16HEeigen */
+/* > \ingroup heevr_2stage */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -422,7 +421,7 @@ void zheevr_2stage_(char *jobz, char *range, char *uplo, integer *n, doublecompl
         "zheevr_2stage inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS
         ", il %" FLA_IS ", iu %" FLA_IS ", vl %lf, vu %lf, abstol %lf, ldz %" FLA_IS
         ", lwork %" FLA_IS ", lrwork %" FLA_IS ", liwork %" FLA_IS "",
-        *jobz, *range, *uplo, *n, *lda, *il, *iu, *vl, *vu, *abstol, *ldz, *lwork, *lrwork, liwork);
+        *jobz, *range, *uplo, *n, *lda, *il, *iu, *vl, *vu, *abstol, *ldz, *lwork, *lrwork, *liwork);
     /* System generated locals */
     integer a_dim1, a_offset, z_dim1, z_offset, i__1, i__2;
     doublereal d__1, d__2;
@@ -470,9 +469,7 @@ void zheevr_2stage_(char *jobz, char *range, char *uplo, integer *n, doublecompl
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
         void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
         zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal abstll, bignum;
     integer indtau, indisp;
@@ -505,10 +502,9 @@ void zheevr_2stage_(char *jobz, char *range, char *uplo, integer *n, doublecompl
         zunmtr_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *,
                 doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     integer indhous, llrwork;
-    /* -- LAPACK driver routine (version 3.8.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -858,7 +854,7 @@ void zheevr_2stage_(char *jobz, char *range, char *uplo, integer *n, doublecompl
         zunmtr_("L", uplo, "N", n, m, &a[a_offset], lda, &work[indtau], &z__[z_offset], ldz,
                 &work[indwkn], &llwrkn, &iinfo);
     }
-    /* If matrix was scaled, then rescale eigenvalues appropriately. */
+/* If matrix was scaled, then rescale eigenvalues appropriately. */
 L30:
     if(iscale == 1)
     {

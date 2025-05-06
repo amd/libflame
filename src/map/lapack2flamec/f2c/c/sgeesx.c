@@ -1,4 +1,4 @@
-/* sgeesx.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./sgeesx.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -290,7 +290,7 @@ if */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup realGEeigen */
+/* > \ingroup geesx */
 /* ===================================================================== */
 /* Subroutine */
 void sgeesx_(char *jobvs, char *sort, L_fps2 select, char *sense, integer *n, real *a, integer *lda,
@@ -319,11 +319,7 @@ void sgeesx_(char *jobvs, char *sort, L_fps2 select, char *sense, integer *n, re
         void
         scopy_(integer *, real *, integer *, real *, integer *),
         sswap_(integer *, real *, integer *, real *, integer *);
-    logical lst2sl;
-    extern /* Subroutine */
-        void
-        slabad_(real *, real *);
-    logical scalea;
+    logical lst2sl, scalea;
     real cscale;
     extern /* Subroutine */
         void
@@ -360,6 +356,7 @@ void sgeesx_(char *jobvs, char *sort, L_fps2 select, char *sense, integer *n, re
                 real *, integer *, real *, real *, real *, integer *, integer *, integer *,
                 integer *);
     logical wantst, lquery, wantsv, wantvs;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -492,7 +489,7 @@ void sgeesx_(char *jobvs, char *sort, L_fps2 select, char *sense, integer *n, re
             }
         }
         iwork[1] = liwrk;
-        work[1] = (real)lwrk;
+        work[1] = sroundup_lwork(&lwrk);
         if(*lwork < minwrk && !lquery)
         {
             *info = -16;
@@ -525,7 +522,6 @@ void sgeesx_(char *jobvs, char *sort, L_fps2 select, char *sense, integer *n, re
     eps = slamch_("P");
     smlnum = slamch_("S");
     bignum = 1.f / smlnum;
-    slabad_(&smlnum, &bignum);
     smlnum = sqrt(smlnum) / eps;
     bignum = 1.f / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
@@ -766,7 +762,7 @@ void sgeesx_(char *jobvs, char *sort, L_fps2 select, char *sense, integer *n, re
             /* L30: */
         }
     }
-    work[1] = (real)maxwrk;
+    work[1] = sroundup_lwork(&maxwrk);
     if(wantsv || wantsb)
     {
         iwork[1] = *sdim * (*n - *sdim);

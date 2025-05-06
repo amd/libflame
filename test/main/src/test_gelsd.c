@@ -1,23 +1,37 @@
 /*
-    Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
 
 #define GELSD_VL 0.1
 #define GELSD_VU 10
 
+extern double perf;
+extern double time_min;
+integer row_major_gelsd_lda;
+integer row_major_gelsd_ldb;
+
 /* Local prototypes */
-void fla_test_gelsd_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *t, double *residual);
+void fla_test_gelsd_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo);
 void prepare_gelsd_run(integer m_A, integer n_A, integer nrhs, void *A, integer lda, void *B,
                        integer ldb, void *s, void *rcond, integer *rank, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info);
+                       integer n_repeats, double *time_min_, integer *info, integer interfacetype,
+                       integer layout);
 void invoke_gelsd(integer datatype, integer *m, integer *n, integer *nrhs, void *a, integer *lda,
                   void *b, integer *ldb, void *s, void *rcond, integer *rank, void *work,
                   integer *lwork, void *rwork, integer *iwork, integer *info);
-
+integer invoke_lapacke_gelsd(integer datatype, integer layout, integer m, integer n, integer nrhs,
+                             void *A, integer lda, void *B, integer ldb, void *s, void *rcond,
+                             integer *rank);
+double prepare_lapacke_gelsd_run(integer datatype, integer layout, integer m, integer n,
+                                 integer nrhs, void *A, integer lda, void *B, integer ldb, void *s,
+                                 void *rcond, integer *rank, integer *info);
 void fla_test_gelsd(integer argc, char **argv, test_params_t *params)
 {
     srand(1);
@@ -44,7 +58,6 @@ void fla_test_gelsd(integer argc, char **argv, test_params_t *params)
         /* Test with parameters from commandline */
         integer i, num_types, M, N;
         integer datatype, n_repeats;
-        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -53,9 +66,18 @@ void fla_test_gelsd(integer argc, char **argv, test_params_t *params)
         M = strtoimax(argv[3], &endptr, CLI_DECIMAL_BASE);
         N = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].nrhs = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
-        params->lin_solver_paramslist[0].lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
-        params->lin_solver_paramslist[0].ldb = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
-
+        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
+        {
+            row_major_gelsd_lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
+            row_major_gelsd_ldb = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
+            params->lin_solver_paramslist[0].lda = M;
+            params->lin_solver_paramslist[0].ldb = fla_max(M, N);
+        }
+        else
+        {
+            params->lin_solver_paramslist[0].lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
+            params->lin_solver_paramslist[0].ldb = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
+        }
         params->lin_solver_paramslist[0].rcond = atof(argv[8]);
         g_lwork = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
@@ -82,12 +104,7 @@ void fla_test_gelsd(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_gelsd_experiment(params, datatype, M, N, 0, n_repeats, einfo, &perf,
-                                          &time_min, &residual);
-                /* Print the results */
-                fla_test_print_status(front_str, stype, RECT_INPUT, M, N, residual,
-                                      params->lin_solver_paramslist[0].solver_threshold, time_min,
-                                      perf);
+                fla_test_gelsd_experiment(front_str, params, datatype, M, N, 0, n_repeats, einfo);
                 tests_not_run = 0;
             }
         }
@@ -112,17 +129,21 @@ void fla_test_gelsd(integer argc, char **argv, test_params_t *params)
     return;
 }
 
-void fla_test_gelsd_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *t, double *residual)
+void fla_test_gelsd_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo)
 {
     integer m, n, lda, ldb, NRHS;
     integer info = 0, rank;
     void *A = NULL, *A_save = NULL, *B = NULL, *B_save = NULL;
     void *S = NULL, *rcond = NULL, *s_test = NULL;
-    double time_min = 1e9;
+    double residual, err_thresh;
+
     char range = 'U';
-    *residual = params->lin_solver_paramslist[pci].solver_threshold;
+    integer interfacetype = params->interfacetype;
+    integer layout = params->matrix_major;
+
+    err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
     NRHS = params->lin_solver_paramslist[pci].nrhs;
     m = p_cur;
     n = q_cur;
@@ -161,6 +182,8 @@ void fla_test_gelsd_experiment(test_params_t *params, integer datatype, integer 
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_save, lda);
     create_matrix(datatype, LAPACK_COL_MAJOR, fla_max(m, n), NRHS, &B, ldb);
     create_matrix(datatype, LAPACK_COL_MAJOR, fla_max(m, n), NRHS, &B_save, ldb);
+    reset_matrix(datatype, ldb, NRHS, B, ldb);
+    reset_matrix(datatype, ldb, NRHS, B_save, ldb);
     create_realtype_vector(datatype, &s_test, fla_min(m, n));
 
     /* Initialize the test matrices */
@@ -177,7 +200,8 @@ void fla_test_gelsd_experiment(test_params_t *params, integer datatype, integer 
         /* Overflow or underflow test initialization */
         if(FLA_OVERFLOW_UNDERFLOW_TEST)
         {
-            scale_matrix_overflow_underflow_gelsd(datatype, m, n, NRHS, A, lda, params->imatrix_char);
+            scale_matrix_overflow_underflow_gelsd(datatype, m, n, NRHS, A, lda,
+                                                  params->imatrix_char);
         }
     }
 
@@ -188,37 +212,42 @@ void fla_test_gelsd_experiment(test_params_t *params, integer datatype, integer 
 
     /* call to API */
     prepare_gelsd_run(m, n, NRHS, A_save, lda, B_save, ldb, S, rcond, &rank, datatype, n_repeats,
-                      &time_min, &info);
-    /* execution time */
-    *t = time_min;
+                      &time_min, &info, interfacetype, layout);
 
     /* performance computation */
     if(m >= n)
     {
-        *perf = (double)(4.0 * m * n * (n + NRHS) + NRHS) / *t / FLOPS_PER_UNIT_PERF;
+        perf = (double)(4.0 * m * n * (n + NRHS) + NRHS) / time_min / FLOPS_PER_UNIT_PERF;
     }
     else
     {
-        *perf = (double)((2.0 * m * NRHS * (m + n) + m * (4.0 * n * n + 1.0) + NRHS)) / *t
-                / FLOPS_PER_UNIT_PERF;
+        perf = (double)((2.0 * m * NRHS * (m + n) + m * (4.0 * n * n + 1.0) + NRHS)) / time_min
+               / FLOPS_PER_UNIT_PERF;
     }
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
-        *perf *= 4.0;
+        perf *= 4.0;
 
     /* Output validation, accuracy test */
-    if(!FLA_EXTREME_CASE_TEST && (info == 0))
-        validate_gelsd(m, n, NRHS, A, lda, B, ldb, S, B_save, rcond, &rank, datatype, residual, params->imatrix_char);
+    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    if(!FLA_EXTREME_CASE_TEST)
+    {
+        validate_gelsd(tst_api, m, n, NRHS, A, lda, B, ldb, S, B_save, rcond, &rank, datatype,
+                       residual, params->imatrix_char);
+    }
     /* check for output matrix when inputs as extreme values */
-    else if(FLA_EXTREME_CASE_TEST)
+    else
     {
         if((!check_extreme_value(datatype, m, n, A_save, lda, params->imatrix_char))
            && (!check_extreme_value(datatype, m, NRHS, B_save, ldb, params->imatrix_char)))
         {
-            *residual = DBL_MAX;
+            residual = DBL_MAX;
         }
+        else
+        {
+            residual = err_thresh;
+        }
+        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
     }
-    else
-        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up the buffers */
     free_matrix(A);
@@ -232,30 +261,44 @@ void fla_test_gelsd_experiment(test_params_t *params, integer datatype, integer 
 
 void prepare_gelsd_run(integer m_A, integer n_A, integer nrhs, void *A, integer lda, void *B,
                        integer ldb, void *s, void *rcond, integer *rank, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info)
+                       integer n_repeats, double *time_min_, integer *info, integer interfacetype,
+                       integer layout)
 {
     integer i, lwork, liwork = 1, lrwork = 1, realtype;
     void *A_test, *B_test;
     void *work = NULL, *rwork = NULL, *iwork = NULL;
-    double time_min = 1e9, exe_time;
+    double t_min = 1e9, exe_time;
 
     /* Save the original matrix */
     create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_A, &A_test, lda);
     create_matrix(datatype, LAPACK_COL_MAJOR, fla_max(m_A, n_A), nrhs, &B_test, ldb);
+    reset_matrix(datatype, fla_max(m_A, n_A), nrhs, B_test, ldb);
     realtype = get_realtype(datatype);
 
     /* Make a workspace query the first time through. This will provide us with
-       and ideal workspace size based on an internal block size.*/
-    if(g_lwork <= 0)
+     and ideal workspace size based on an internal block size.
+     NOTE: LAPACKE interface handles workspace query internally */
+    if((interfacetype != LAPACKE_COLUMN_TEST) && (interfacetype != LAPACKE_ROW_TEST)
+       && (g_lwork <= 0))
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
         create_vector(realtype, &rwork, 1);
         create_vector(INTEGER, &iwork, 1);
 
-        /* call to  gelsd API */
-        invoke_gelsd(datatype, &m_A, &n_A, &nrhs, NULL, &lda, NULL, &ldb, NULL, rcond, rank, work,
-                     &lwork, rwork, iwork, info);
+        /* call to  gelsd API to get lwork*/
+#if ENABLE_CPP_TEST
+        if(interfacetype == LAPACK_CPP_TEST)
+        {
+            invoke_cpp_gelsd(datatype, &m_A, &n_A, &nrhs, NULL, &lda, NULL, &ldb, NULL, rcond, rank,
+                             work, &lwork, rwork, iwork, info);
+        }
+        else
+#endif
+        {
+            invoke_gelsd(datatype, &m_A, &n_A, &nrhs, NULL, &lda, NULL, &ldb, NULL, rcond, rank,
+                         work, &lwork, rwork, iwork, info);
+        }
         /* Get work size */
         if(*info == 0)
         {
@@ -288,17 +331,31 @@ void prepare_gelsd_run(integer m_A, integer n_A, integer nrhs, void *A, integer 
             create_realtype_vector(datatype, &rwork, fla_max(1, lrwork));
         else
             rwork = NULL;
-
-        exe_time = fla_test_clock();
-
-        /* call to API */
-        invoke_gelsd(datatype, &m_A, &n_A, &nrhs, A_test, &lda, B_test, &ldb, s, rcond, rank, work,
-                     &lwork, rwork, iwork, info);
-
-        exe_time = fla_test_clock() - exe_time;
-
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
+        {
+            exe_time = prepare_lapacke_gelsd_run(datatype, layout, m_A, n_A, nrhs, A_test, lda,
+                                                 B_test, ldb, s, rcond, rank, info);
+        }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST)
+        {
+            exe_time = fla_test_clock();
+            /* Call CPP gelsd API */
+            invoke_cpp_gelsd(datatype, &m_A, &n_A, &nrhs, A_test, &lda, B_test, &ldb, s, rcond,
+                             rank, work, &lwork, rwork, iwork, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
+        else
+        {
+            exe_time = fla_test_clock();
+            /* call to API */
+            invoke_gelsd(datatype, &m_A, &n_A, &nrhs, A_test, &lda, B_test, &ldb, s, rcond, rank,
+                         work, &lwork, rwork, iwork, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
         /* Get the best execution time */
-        time_min = fla_min(time_min, exe_time);
+        t_min = fla_min(t_min, exe_time);
 
         /* Free up the output buffers */
         free_vector(work);
@@ -307,12 +364,61 @@ void prepare_gelsd_run(integer m_A, integer n_A, integer nrhs, void *A, integer 
             free_vector(rwork);
     }
 
-    *time_min_ = time_min;
+    *time_min_ = t_min;
 
     /*  Save the final result to B matrix*/
     copy_matrix(datatype, "full", n_A, nrhs, B_test, ldb, B, ldb);
     free_matrix(A_test);
     free_matrix(B_test);
+}
+
+double prepare_lapacke_gelsd_run(integer datatype, integer layout, integer m, integer n,
+                                 integer nrhs, void *A, integer lda, void *B, integer ldb, void *s,
+                                 void *rcond, integer *rank, integer *info)
+{
+    double exe_time = 0;
+    void *A_t = NULL, *B_t = NULL;
+    integer lda_t = lda, ldb_t = ldb, max_m_n = fla_max(m, n);
+    A_t = A;
+    B_t = B;
+
+    /* Configure leading dimensions as per the input matrix layout */
+    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_gelsd_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, config_data, layout, nrhs, row_major_gelsd_ldb, ldb_t);
+
+    /* In case of row_major matrix layout,
+       convert input matrix to row_major */
+    if(layout == LAPACK_ROW_MAJOR)
+    {
+        /* Create temporary buffers for converting matrix layout */
+        create_matrix(datatype, layout, m, n, &A_t, fla_max(n, lda_t));
+        create_matrix(datatype, layout, max_m_n, nrhs, &B_t, fla_max(nrhs, ldb_t));
+        reset_matrix(datatype, max_m_n, nrhs, B_t, max_m_n);
+
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, m, n, A, lda, A_t, lda_t);
+        convert_matrix_layout(LAPACK_COL_MAJOR, datatype, m, nrhs, B, ldb, B_t, ldb_t);
+    }
+
+    exe_time = fla_test_clock();
+
+    /* call to LAPACKE gels API */
+
+    *info = invoke_lapacke_gelsd(datatype, layout, m, n, nrhs, A_t, lda_t, B_t, ldb_t, s, rcond,
+                                 rank);
+
+    exe_time = fla_test_clock() - exe_time;
+
+    /* In case of row_major matrix layout, convert output matrices
+       to column_major layout */
+
+    if((layout == LAPACK_ROW_MAJOR))
+    {
+        convert_matrix_layout(layout, datatype, m, n, A_t, lda_t, A, lda);
+        convert_matrix_layout(layout, datatype, n, nrhs, B_t, ldb_t, B, ldb);
+        free_matrix(A_t);
+        free_matrix(B_t);
+    }
+    return exe_time;
 }
 
 /*
@@ -350,4 +456,41 @@ void invoke_gelsd(integer datatype, integer *m, integer *n, integer *nrhs, void 
             break;
         }
     }
+}
+
+/*
+LAPACKE GELSD API invoke function
+*/
+integer invoke_lapacke_gelsd(integer datatype, integer layout, integer m, integer n, integer nrhs,
+                             void *A, integer lda, void *B, integer ldb, void *s, void *rcond,
+                             integer *rank)
+{
+    integer info = 0;
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            info = LAPACKE_sgelsd(layout, m, n, nrhs, A, lda, B, ldb, s, *(float *)rcond, rank);
+            break;
+        }
+
+        case DOUBLE:
+        {
+            info = LAPACKE_dgelsd(layout, m, n, nrhs, A, lda, B, ldb, s, *(double *)rcond, rank);
+            break;
+        }
+
+        case COMPLEX:
+        {
+            info = LAPACKE_cgelsd(layout, m, n, nrhs, A, lda, B, ldb, s, *(float *)rcond, rank);
+            break;
+        }
+
+        case DOUBLE_COMPLEX:
+        {
+            info = LAPACKE_zgelsd(layout, m, n, nrhs, A, lda, B, ldb, s, *(double *)rcond, rank);
+            break;
+        }
+    }
+    return info;
 }

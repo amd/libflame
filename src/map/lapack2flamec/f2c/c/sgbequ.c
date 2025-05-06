@@ -150,13 +150,10 @@
 void sgbequ_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer *ldab, real *r__,
              real *c__, real *rowcnd, real *colcnd, real *amax, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "sgbequ inputs: m %d, n %d, kl %d, ku %d, ldab %d", *m, *n, *kl, *ku,
-             *ldab);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgbequ inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
+                      ", ldab %" FLA_IS "",
+                      *m, *n, *kl, *ku, *ldab);
     /* System generated locals */
     integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     real r__1, r__2, r__3;
@@ -221,7 +218,7 @@ void sgbequ_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer
     {
         i__1 = -(*info);
         xerbla_("SGBEQU", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -230,7 +227,7 @@ void sgbequ_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer
         *rowcnd = 1.f;
         *colcnd = 1.f;
         *amax = 0.f;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants. */
@@ -289,7 +286,7 @@ void sgbequ_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer
             if(r__[i__] == 0.f)
             {
                 *info = i__;
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* L50: */
@@ -365,7 +362,7 @@ void sgbequ_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer
             if(c__[j] == 0.f)
             {
                 *info = *m + j;
-                AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* L110: */
@@ -387,7 +384,7 @@ void sgbequ_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer
         /* Compute COLCND = fla_min(C(J)) / fla_max(C(J)) */
         *colcnd = fla_max(rcmin, smlnum) / fla_min(rcmax, bignum);
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGBEQU */
 }

@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 /*
- *     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+ *     Modifications Copyright (c) 2024-2025 Advanced Micro Devices, Inc.  All rights reserved.
  */
 #include "FLA_f2c.h" /* Table of constant values */
 
@@ -141,7 +141,8 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
     integer i__;
     logical applyleft;
 #ifdef FLA_ENABLE_AMD_OPT
-    extern void fla_dlarf_small_incv1_simd( integer lastv, integer lastc, double *c__, integer ldc, double *v, double tau, double *work);
+    extern void fla_dlarf_small_incv1_simd(integer lastv, integer lastc, double *c__, integer ldc,
+                                           double *v, double tau, double *work);
 #endif
     extern /* Subroutine */
         void
@@ -236,25 +237,27 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
                    &work[1], &c__1);
 
             /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**T */
-            dger_(&lastv, &lastc, &d__1, &v[1], incv, &work[1], &c__1, &c__[ c_offset], ldc);            
+            dger_(&lastv, &lastc, &d__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
 #else
             /* Get threshold sizes to take optimized path*/
-            FLA_Bool min_lastc_lastv = (lastc < FLA_DGEMV_DGER_SIMD_SMALL_THRESH) && 
-                    (lastv > FLA_DGEMV_DGER_SIMD_SMALL_THRESH_M && lastv < FLA_DGEMV_DGER_SIMD_SMALL_THRESH);
+            FLA_Bool min_lastc_lastv = (lastc <= FLA_DGEMV_DGER_SIMD_SMALL_THRESH)
+                                       && (lastv >= FLA_DGEMV_DGER_SIMD_SMALL_THRESH_M
+                                           && lastv <= FLA_DGEMV_DGER_SIMD_SMALL_THRESH);
 
-          /* If the size of the matrix is small and incv =1, use the optimized path */
+            /* If the size of the matrix is small and incv =1, use the optimized path */
             if(min_lastc_lastv && *incv == c__1 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
             {
                 /* Call optimized routine */
-                fla_dlarf_small_incv1_simd( lastv, lastc, c__, *ldc, v, d__1, work);
+                fla_dlarf_small_incv1_simd(lastv, lastc, c__, *ldc, v, d__1, work);
             }
             else
             {
                 /* w(1:lastc,1) := C(1:lastv,1:lastc)**T * v(1:lastv,1) */
-                dgemv_("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[1], incv, &c_b5, &work[1], &c__1);
-            
+                dgemv_("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[1], incv, &c_b5,
+                       &work[1], &c__1);
+
                 /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**T*/
-                dger_(&lastv, &lastc, &d__1, &v[1], incv, &work[1], &c__1, &c__[ c_offset], ldc);
+                dger_(&lastv, &lastc, &d__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
             }
 #endif
         }

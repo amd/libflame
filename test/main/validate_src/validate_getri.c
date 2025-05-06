@@ -1,6 +1,6 @@
-/******************************************************************************
- * Copyright (C) 2022-2023, Advanced Micro Devices, Inc. All rights reserved.
- *******************************************************************************/
+/*
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+*/
 
 /*! @file validate_getri.c
  *  @brief Defines validate function of GETRI() to use in test suite.
@@ -8,15 +8,25 @@
 
 #include "test_common.h"
 
-void validate_getri(integer m_A, integer n_A, void *A, void *A_inv, integer lda, integer *IPIV,
-                    integer datatype, double *residual, integer *info, char imatrix)
+extern double perf;
+extern double time_min;
+
+void validate_getri(char *tst_api, integer m_A, integer n_A, void *A, void *A_inv, integer lda,
+                    integer *IPIV, integer datatype, double err_thresh, char imatrix)
 {
-    if(m_A == 0 || n_A == 0)
-        return;
-    /* System generated locals */
     void *a_temp, *work;
-    *info = 0;
     char NORM = '1';
+    double residual;
+
+    /* Early return conditions */
+    if(m_A == 0 || n_A == 0)
+    {
+        FLA_TEST_PRINT_STATUS_AND_RETURN(m_A, n_A, err_thresh);
+    }
+    /* print overall status if incoming threshold is
+     * an extreme value indicating that API returned
+     * unexpected info value */
+    FLA_TEST_PRINT_INVALID_STATUS(m_A, n_A, err_thresh);
 
     /* Create Identity matrix */
     create_matrix(datatype, LAPACK_COL_MAJOR, n_A, n_A, &a_temp, n_A);
@@ -38,7 +48,7 @@ void validate_getri(integer m_A, integer n_A, void *A, void *A_inv, integer lda,
 
             compute_matrix_norm(datatype, NORM, m_A, m_A, a_temp, m_A, &norm, imatrix, work);
             /* Compute norm(I - A'*A) / (N * norm(A) * norm(AINV) * EPS)*/
-            *residual = (double)(norm / (norm_I * eps * n_A));
+            residual = (double)(norm / (norm_I * eps * n_A));
             break;
         }
 
@@ -56,7 +66,7 @@ void validate_getri(integer m_A, integer n_A, void *A, void *A_inv, integer lda,
 
             compute_matrix_norm(datatype, NORM, m_A, m_A, a_temp, m_A, &norm, imatrix, work);
             /* Compute norm(I - A'*A) / (N * norm(A) * norm(AINV) * EPS)*/
-            *residual = (double)(norm / (norm_I * eps * n_A));
+            residual = (double)(norm / (norm_I * eps * n_A));
             break;
         }
         case COMPLEX:
@@ -70,10 +80,9 @@ void validate_getri(integer m_A, integer n_A, void *A, void *A_inv, integer lda,
             /* compute I - A' * A */
             cgemm_("N", "N", &m_A, &n_A, &m_A, &c_n_one, A_inv, &lda, A, &lda, &c_one, a_temp,
                    &m_A);
-
             compute_matrix_norm(datatype, NORM, m_A, m_A, a_temp, m_A, &norm, imatrix, work);
             /* Compute norm(I - A'*A) / (N * norm(A) * norm(AINV) * EPS)*/
-            *residual = (double)(norm / (norm_I * eps * n_A));
+            residual = (double)(norm / (norm_I * eps * n_A));
             break;
         }
         case DOUBLE_COMPLEX:
@@ -90,12 +99,18 @@ void validate_getri(integer m_A, integer n_A, void *A, void *A_inv, integer lda,
 
             compute_matrix_norm(datatype, NORM, m_A, m_A, a_temp, m_A, &norm, imatrix, work);
             /* Compute norm(I - A'*A) / (N * norm(A) * norm(AINV) * EPS)*/
-            *residual = (double)(norm / (norm_I * eps * n_A));
+            residual = (double)(norm / (norm_I * eps * n_A));
             break;
         }
+        default:
+            residual = err_thresh;
+            break;
     }
 
     // Free up buffers
     free_vector(work);
     free_vector(a_temp);
+
+    FLA_PRINT_TEST_STATUS(m_A, n_A, residual, err_thresh);
+    FLA_PRINT_SUBTEST_STATUS(residual, err_thresh, "01");
 }

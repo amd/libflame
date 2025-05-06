@@ -1,8 +1,8 @@
-/* ../netlib/ssysvx.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./ssysvx.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -278,8 +278,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date April 2012 */
-/* > \ingroup realSYsolve */
+/* > \ingroup hesvx */
 /* ===================================================================== */
 /* Subroutine */
 void ssysvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *af,
@@ -287,15 +286,11 @@ void ssysvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, integer
              real *rcond, real *ferr, real *berr, real *work, integer *lwork, integer *iwork,
              integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "ssysvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
              ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",
              *fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2;
     /* Local variables */
@@ -325,10 +320,10 @@ void ssysvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, integer
         ssytrf_(char *, integer *, real *, integer *, integer *, real *, integer *, integer *),
         ssytrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *,
                 integer *);
-    /* -- LAPACK driver routine (version 3.4.1) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* April 2012 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -424,18 +419,18 @@ void ssysvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, integer
             i__2 = *n * nb; // , expr subst
             lwkopt = fla_max(i__1, i__2);
         }
-        work[1] = (real)lwkopt;
+        work[1] = sroundup_lwork(&lwkopt);
     }
     if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SSYSVX", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(nofact)
@@ -447,7 +442,7 @@ void ssysvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, integer
         if(*info > 0)
         {
             *rcond = 0.f;
-            AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
     }
@@ -467,8 +462,8 @@ void ssysvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, integer
     {
         *info = *n + 1;
     }
-    work[1] = (real)lwkopt;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    work[1] = sroundup_lwork(&lwkopt);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYSVX */
 }

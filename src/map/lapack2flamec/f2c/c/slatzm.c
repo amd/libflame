@@ -152,6 +152,10 @@ static real c_b5 = 1.f;
 void slatzm_(char *side, integer *m, integer *n, real *v, integer *incv, real *tau, real *c1,
              real *c2, integer *ldc, real *work)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slatzm inputs: side %c ,m %" FLA_IS ",n %" FLA_IS ",incv %" FLA_IS
+                      ",ldc %" FLA_IS "",
+                      *side, *m, *n, *incv, *ldc);
     /* System generated locals */
     integer c1_dim1, c1_offset, c2_dim1, c2_offset, i__1;
     real r__1;
@@ -197,6 +201,7 @@ void slatzm_(char *side, integer *m, integer *n, real *v, integer *incv, real *t
     /* Function Body */
     if(fla_min(*m, *n) == 0 || *tau == 0.f)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(lsame_(side, "L", 1, 1))
@@ -228,6 +233,7 @@ void slatzm_(char *side, integer *m, integer *n, real *v, integer *incv, real *t
         r__1 = -(*tau);
         sger_(m, &i__1, &r__1, &work[1], &c__1, &v[1], incv, &c2[c2_offset], ldc);
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLATZM */
 }

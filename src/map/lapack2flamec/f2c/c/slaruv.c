@@ -1,8 +1,8 @@
-/* ../netlib/slaruv.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./slaruv.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* > \brief \b SLARUV returns a vector of n random real numbers from a uniform distribution. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -71,8 +71,7 @@ the array */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date September 2012 */
-/* > \ingroup auxOTHERauxiliary */
+/* > \ingroup laruv */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -93,12 +92,8 @@ the array */
 /* Subroutine */
 void slaruv_(integer *iseed, integer *n, real *x)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "slaruv inputs: iseed %d, n %d", *iseed, *n);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slaruv inputs: iseed %" FLA_IS ", n  %" FLA_IS "", *iseed, *n);
     /* Initialized data */
     static const integer mm[512] /* was [128][4] */
         = {494,  2637, 255,  2008, 1253, 3344, 4084, 1739, 3143, 3468, 688,  1657, 1238, 3166, 1292,
@@ -140,10 +135,9 @@ void slaruv_(integer *iseed, integer *n, real *x)
     integer i__1;
     /* Local variables */
     integer i__, i1, i2, i3, i4, it1, it2, it3, it4;
-    /* -- LAPACK auxiliary routine (version 3.4.2) -- */
+    /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* September 2012 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -164,6 +158,12 @@ void slaruv_(integer *iseed, integer *n, real *x)
     /* Function Body */
     /* .. */
     /* .. Executable Statements .. */
+    /* Quick return for N < 1 */
+    if(*n < 1)
+    {
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
+    }
     i1 = iseed[1];
     i2 = iseed[2];
     i3 = iseed[3];
@@ -216,7 +216,7 @@ void slaruv_(integer *iseed, integer *n, real *x)
     iseed[2] = it2;
     iseed[3] = it3;
     iseed[4] = it4;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLARUV */
 }

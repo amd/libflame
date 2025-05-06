@@ -1,4 +1,4 @@
-/* slaqr4.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./slaqr4.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -252,7 +252,7 @@ IHI <= IHIZ <= N. */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup realOTHERauxiliary */
+/* > \ingroup laqr4 */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -320,6 +320,7 @@ void slaqr4_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
     integer nwupbd;
     logical sorted;
     integer lwkopt;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -445,7 +446,7 @@ void slaqr4_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
         /* ==== Quick return in case of workspace query. ==== */
         if(*lwork == -1)
         {
-            work[1] = (real)lwkopt;
+            work[1] = sroundup_lwork(&lwkopt);
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
@@ -789,7 +790,7 @@ void slaqr4_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
     L90:;
     }
     /* ==== Return the optimal value of LWORK. ==== */
-    work[1] = (real)lwkopt;
+    work[1] = sroundup_lwork(&lwkopt);
     /* ==== End of SLAQR4 ==== */
     AOCL_DTL_TRACE_LOG_EXIT
     return;

@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/ssbevd_2stage.f -- translated by f2c (version 20160102). You must link the
- resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
- Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
- with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./ssbevd_2stage.f -- translated by f2c (version 20190311). You must link the resulting object
+ file with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__2 = 2;
 static integer c_n1 = -1;
@@ -55,12 +55,6 @@ static integer c__1 = 1;
 /* > the reduction to tridiagonal. If eigenvectors are desired, it uses */
 /* > a divide and conquer algorithm. */
 /* > */
-/* > The divide and conquer algorithm makes very mild assumptions about */
-/* > floating point arithmetic. It will work on machines with a guard */
-/* > digit in add/subtract, or on those binary machines without guard */
-/* > digits which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or */
-/* > Cray-2. It could conceivably fail on hexadecimal or decimal machines */
-/* > without guard digits, but we know of none. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -206,8 +200,7 @@ i */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2017 */
-/* > \ingroup realOTHEReigen */
+/* > \ingroup hbevd_2stage */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -245,15 +238,11 @@ void ssbevd_2stage_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, i
                     real *w, real *z__, integer *ldz, real *work, integer *lwork, integer *iwork,
                     integer *liwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "ssbevd_2stage inputs: jobz %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS
              ", ldz %" FLA_IS ", *liwork %" FLA_IS "",
              *jobz, *uplo, *n, *kd, *ldab, *ldz, *liwork);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer ab_dim1, ab_offset, z_dim1, z_offset, i__1, i__2;
     real r__1;
@@ -304,11 +293,11 @@ void ssbevd_2stage_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, i
     integer llwork;
     real smlnum;
     logical lquery;
+    extern real sroundup_lwork(integer *);
     integer indhous;
-    /* -- LAPACK driver routine (version 3.8.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2017 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -393,7 +382,7 @@ void ssbevd_2stage_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, i
     }
     if(*info == 0)
     {
-        work[1] = (real)lwmin;
+        work[1] = sroundup_lwork(&lwmin);
         iwork[1] = liwmin;
         if(*lwork < lwmin && !lquery)
         {
@@ -408,18 +397,18 @@ void ssbevd_2stage_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, i
     {
         i__1 = -(*info);
         xerbla_("SSBEVD_2STAGE", &i__1, (ftnlen)13);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 1)
@@ -429,7 +418,7 @@ void ssbevd_2stage_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, i
         {
             z__[z_dim1 + 1] = 1.f;
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants. */
@@ -491,9 +480,9 @@ void ssbevd_2stage_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, i
         r__1 = 1.f / sigma;
         sscal_(n, &r__1, &w[1], &c__1);
     }
-    work[1] = (real)lwmin;
+    work[1] = sroundup_lwork(&lwmin);
     iwork[1] = liwmin;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSBEVD_2STAGE */
 }

@@ -1,13 +1,8 @@
-/* ../netlib/slarre.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-
-/*
-*     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
-*/
-
+/* ./slarre.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__2 = 2;
@@ -63,7 +58,7 @@ static integer c__2 = 2;
 /* > SSTEMR to compute the eigenvectors of T. */
 /* > The accuracy varies depending on whether bisection is used to */
 /* > find a few eigenvalues or the dqds algorithm (subroutine SLASQ2) to */
-/* > conpute all and then discard any unwanted one. */
+/* > compute all and then discard any unwanted one. */
 /* > As an added benefit, SLARRE also outputs the n */
 /* > Gerschgorin intervals for the matrices L_i D_i L_i^T. */
 /* > \endverbatim */
@@ -287,8 +282,7 @@ IBLOCK(i)=1 if eigenvalue */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date June 2016 */
-/* > \ingroup OTHERauxiliary */
+/* > \ingroup larre */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -314,6 +308,9 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
              integer *isplit, integer *m, real *w, real *werr, real *wgap, integer *iblock,
              integer *indexw, real *gers, real *pivmin, real *work, integer *iwork, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slarre inputs: range %c ,n %" FLA_IS ",il %" FLA_IS ",iu %" FLA_IS "",
+                      *range, *n, *il, *iu);
     /* System generated locals */
     integer i__1, i__2;
     real r__1, r__2, r__3;
@@ -372,10 +369,9 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
     extern /* Subroutine */
         void
         slarnv_(integer *, integer *, integer *, real *);
-    /* -- LAPACK auxiliary routine (version 3.8.0) -- */
+    /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -413,9 +409,12 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
     mb = 0;
     irange = 0;
     cnt1 = cnt2 = 0;
+    *nsplit = 0;
+    *m = 0;
     /* Quick return if possible */
     if(*n <= 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Decode RANGE */
@@ -431,7 +430,6 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
     {
         irange = 2;
     }
-    *m = 0;
     /* Get machine constants */
     safmin = slamch_("S");
     eps = slamch_("P");
@@ -460,6 +458,7 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
         }
         /* store the shift for the initial RRR, which is zero in this case */
         e[1] = 0.f;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* General case: tridiagonal matrix of order > 1 */
@@ -532,6 +531,7 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
         if(iinfo != 0)
         {
             *info = -1;
+            AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         /* Make sure that the entries M+1 to N in W, WERR, IBLOCK, INDEXW are 0 */
@@ -655,6 +655,7 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
             if(iinfo != 0)
             {
                 *info = -1;
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* Computing MAX */
@@ -666,6 +667,7 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
             if(iinfo != 0)
             {
                 *info = -1;
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* Computing MIN */
@@ -908,6 +910,7 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
         /* if the program reaches this point, no base representation could be */
         /* found in MAXTRY iterations. */
         *info = 2;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     L83: /* At this point, we have found an initial base representation */
         /* T - SIGMA I = L D L^T with not too much element growth. */
@@ -975,6 +978,7 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
             if(iinfo != 0)
             {
                 *info = -4;
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* SLARRB computes all gaps correctly except for the last one */
@@ -1024,6 +1028,7 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
                 /* and should be changed. The index is in IWORK(1) and the */
                 /* gap is in WORK(N+1) */
                 *info = -5;
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             else
@@ -1035,6 +1040,7 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
                     if(work[i__] < 0.f)
                     {
                         *info = -6;
+                        AOCL_DTL_TRACE_LOG_EXIT
                         return;
                     }
                     /* L149: */
@@ -1091,7 +1097,8 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
         wbegin = wend + 1;
     L170:;
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
-    /* end of SLARRE */
+    /* End of SLARRE */
 }
 /* slarre_ */

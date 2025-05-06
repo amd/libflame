@@ -2,7 +2,7 @@
 
 echo
 echo "Argument Values"
-LAPACK_TEST_DIR=lapack-3.11
+LAPACK_TEST_DIR=lapack-3.12
 BLAS_LIB=libblis-mt.a
 BLAS_LIB_PATH= 
 LAPACK_LIB=libflame.a
@@ -73,7 +73,7 @@ then
 	echo "LAPACK_LIB_PATH : path to lapack library chosen in LAPACK_LIB"
 	echo "AOCLUTILS_LIB_PATH : path to aocl-utils library"
   	echo "DTL_LIB_PATH : path to DTL library chosen in DTL_LIB (if DTL is enabled)"
-	echo "LAPACK_TEST_DIR : netlib lapack test directory name. Default=lapack-3.10.0"
+	echo "LAPACK_TEST_DIR : netlib lapack test directory name. Default=lapack-3.12.0"
 	echo "GCOV : Enable(1) or disable(0) Code Coverage. Only Enable if Code Coverage is enabled on the library. Default=0"
 	echo "AOCL_LAPACK_SUMMARY : run aocl-lapack netlib test suite summary script. Default=1"
 	echo

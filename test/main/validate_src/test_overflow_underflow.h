@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 
 /*! @file test_overflow_underflow.h
@@ -14,15 +14,19 @@
 
 #include <float.h>
 
-/* Initializing matrix with values around overflow underflow */
+/* Initializing matrix with values around overflow underflow for SVD */
 void init_matrix_overflow_underflow_svd(integer datatype, integer m, integer n, void *A,
                                         integer lda, char imatrix, void *scal);
+void init_matrix_overflow_underflow_svdx(integer datatype, integer m, integer n, void *A,
+                                         integer lda, char imatrix, void *scal);
 /* Initializing asymmetrix matrix with values around overflow underflow (GEEV)*/
 void init_matrix_overflow_underflow_asym(integer datatype, integer m, integer n, void *A,
                                          integer lda, char imatrix, void *scal);
 /* Calculating the scaling value with respect to max and min for SVD */
 void calculate_svd_scale_value(integer datatype, integer m, integer n, void *A, integer lda,
                                char imatrix, void *scal);
+void calculate_svdx_scale_value(integer datatype, integer m, integer n, void *A, integer lda,
+                                char imatrix, void *scal);
 /* Calculating the scaling value with respect to max and min for ASYM */
 void calculate_asym_scale_value(integer datatype, integer m, integer n, void *A, integer lda,
                                 char imatrix, void *scal);
@@ -44,8 +48,17 @@ void scale_matrix_underflow_overflow_geqrf(integer datatype, integer m, integer 
 /* Scaling matrix with values around overflow underflow for larfg */
 void scale_matrix_underflow_overflow_larfg(integer datatype, integer m, integer n, void *A,
                                            integer lda, char imatrix_char);
+/* Scaling matrix with values around overflow underflow for larf */
+void scale_matrix_underflow_overflow_larf(integer datatype, integer m, integer n, void *A,
+                                          integer lda, char imatrix_char);
 void scale_matrix_underflow_overflow_getrf(integer datatype, integer m, integer n, void *A,
                                            integer lda, char imatrix_char);
+/* Scale matrix with values around overflow underflow for hetrf */
+void scale_matrix_overflow_underflow_hetrf(integer datatype, integer m, void *A, integer lda,
+                                           char imatrix);
+/* Scale matrix with values around overflow underflow for hetrf_rook */
+void scale_matrix_overflow_underflow_hetrf_rook(integer datatype, integer m, void *A, integer lda,
+                                                char imatrix);
 /* Scale matrix with values around overflow underflow for sytrf */
 void scale_matrix_overflow_underflow_sytrf(integer datatype, integer m, void *A, integer lda,
                                            char imatrix);
@@ -111,4 +124,48 @@ void scale_matrix_underflow_overflow_getrs(integer datatype, char *trans, intege
 /* Scaling matrix with values around overflow underflow for getri */
 void scale_matrix_underflow_overflow_getri(integer datatype, integer m, integer n, void *A,
                                            integer lda, char imatrix_char);
+/* Scaling matrix with values around overflow, underflow for GEQP3 */
+void scale_matrix_underflow_overflow_geqp3(integer datatype, integer m, integer n, void *A,
+                                           integer lda, char imatrix_char);
+/* Scaling matrix with values around overflow, underflow for SYEVD/HEEVD */
+void scale_matrix_underflow_overflow_syevd(integer datatype, integer n, void *A, integer lda,
+                                           char *imatrix_char, void *scal);
+/* Scale matrix with values around overflow underflow for gesv */
+void scale_matrix_underflow_overflow_gesdd(integer datatype, integer m, integer n, void *A,
+                                           integer lda, char imatrix_char, void *scal);
+/* Scaling matrix with values around overflow, underflow for ORGQR/UNGQR */
+void scale_matrix_underflow_overflow_orgqr(integer datatype, integer m, integer n, void *A,
+                                           integer lda, char imatrix_char);
+/* Scaling matrix with values around overflow, underflow for POTRS */
+void scale_matrix_underflow_overflow_potrs(integer datatype, integer n, void *A, integer lda,
+                                           char imatrix_char, void *scal);
+/* Scale matrix with values around overflow underflow for hgeqz A matrix */
+void scale_matrix_overflow_underflow_hgeqz_A(integer datatype, integer n, void *A, integer lda,
+                                             char imatrix_char, void *scal);
+/* Scale matrix with values around overflow underflow for hgeqz B matrix */
+void scale_matrix_overflow_underflow_hgeqz_B(integer datatype, integer n, void *A, integer lda,
+                                             char imatrix_char, void *scal);
+/* Scale matrix with values around overflow underflow for hseqr */
+void scale_matrix_overflow_underflow_hseqr(integer datatype, integer n, void *A, integer lda,
+                                           char imatrix_char, void *scal);
+/* Scaling matrix with values around overflow underflow for GEHRD */
+void scale_matrix_underflow_overflow_gehrd(integer datatype, integer n, void *A, integer lda,
+                                           char imatrix_char);
+/* Scaling matrix with values around overflow underflow for GGHRD */
+void scale_matrix_underflow_overflow_gghrd(integer datatype, integer n, void *A, integer lda,
+                                           char imatrix_char);
+/* Scaling matrix with values around overflow, underflow for SYGVD/HEGVD */
+void scale_matrix_underflow_overflow_sygvd(integer datatype, integer n, void *A, integer lda,
+                                           void *B, integer ldb, integer itype, char imatrix_char,
+                                           void *scal);
+/* Scaing matrix with values around overflow, underflow for lange */
+void scale_matrix_underflow_overflow_lange(integer datatype, integer m, integer n, void *A,
+                                           integer lda, char norm_type, char imatrix_char,
+                                           void *scal);
+/* Scaling matrix with values around overflow, underflow for GECON */
+void scale_matrix_underflow_overflow_gecon(integer datatype, integer n, void *A, integer lda,
+                                           char imatrix_char);
+/* Scale matrix with values around overflow underflow for hetri_rook */
+void scale_matrix_overflow_underflow_hetri_rook(integer datatype, integer n, void *A, integer lda,
+                                           char imatrix_char);
 #endif // TEST_OVERFLOW_UNDERFLOW_H

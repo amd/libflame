@@ -1,8 +1,8 @@
-/* ../netlib/cbdsqr.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./cbdsqr.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b15 = -.125;
 static integer c__1 = 1;
@@ -176,8 +176,7 @@ LDC >=1 if NCC = 0. */
 /* > */
 /* > \param[out] RWORK */
 /* > \verbatim */
-/* > RWORK is REAL array, dimension (2*N) */
-/* > if NCVT = NRU = NCC = 0, (fla_max(1, 4*N-4)) otherwise */
+/* > RWORK is REAL array, dimension (4*N) */
 /* > \endverbatim */
 /* > */
 /* > \param[out] INFO */
@@ -196,7 +195,7 @@ if INFO = i, i */
 /* ========================= */
 /* > */
 /* > \verbatim */
-/* > TOLMUL REAL, default = fla_max(10,fla_min(100,EPS**(-1/8))) */
+/* > TOLMUL REAL, default = fla_max(10,min(100,EPS**(-1/8))) */
 /* > TOLMUL controls the convergence criterion of the QR loop. */
 /* > If it is positive, TOLMUL*EPS is the desired relative */
 /* > precision in the computed singular values. */
@@ -216,6 +215,16 @@ if INFO = i, i */
 /* > algorithm through its inner loop. The algorithms stops */
 /* > (and so fails to converge) if the number of passes */
 /* > through the inner loop exceeds MAXITR*N**2. */
+/* > */
+/* > \endverbatim */
+/* > \par Note: */
+/* =========== */
+/* > */
+/* > \verbatim */
+/* > Bug report from Cezary Dendek. */
+/* > On November 3rd 2023, the INTEGER variable MAXIT = MAXITR*N**2 is */
+/* > removed since it can overflow pretty easily (for N larger or equal */
+/* > than 18,919). We instead use MAXITDIVN = MAXITR*N. */
 /* > \endverbatim */
 /* Authors: */
 /* ======== */
@@ -223,8 +232,7 @@ if INFO = i, i */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup complexOTHERcomputational */
+/* > \ingroup bdsqr */
 /* ===================================================================== */
 /* Subroutine */
 void cbdsqr_(char *uplo, integer *n, integer *ncvt, integer *nru, integer *ncc, real *d__, real *e,
@@ -253,9 +261,12 @@ void cbdsqr_(char *uplo, integer *n, integer *ncvt, integer *nru, integer *ncc, 
     /* Builtin functions */
     double pow_dd(doublereal *, doublereal *), sqrt(doublereal), r_sign(real *, real *);
     /* Local variables */
+    integer iterdivn;
     real f, g, h__;
     integer i__, j, m;
-    real r__, cs;
+    real r__;
+    integer maxitdivn;
+    real cs;
     integer ll;
     real sn, mu;
     integer nm1, nm12, nm13, lll;
@@ -279,8 +290,7 @@ void cbdsqr_(char *uplo, integer *n, integer *ncvt, integer *nru, integer *ncc, 
     extern /* Subroutine */
         void
         cswap_(integer *, complex *, integer *, complex *, integer *);
-    integer maxit;
-    real sminl, sigmx;
+    real sigmx;
     logical lower;
     extern /* Subroutine */
         void
@@ -299,10 +309,9 @@ void cbdsqr_(char *uplo, integer *n, integer *ncvt, integer *nru, integer *ncc, 
     real thresh;
     logical rotate;
     real tolmul;
-    /* -- LAPACK computational routine (version 3.4.0) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -462,7 +471,7 @@ void cbdsqr_(char *uplo, integer *n, integer *ncvt, integer *nru, integer *ncc, 
         smax = fla_max(r__2, r__3);
         /* L30: */
     }
-    sminl = 0.f;
+    smin = 0.f;
     if(tol >= 0.f)
     {
         /* Relative accuracy desired */
@@ -488,7 +497,7 @@ void cbdsqr_(char *uplo, integer *n, integer *ncvt, integer *nru, integer *ncc, 
         sminoa /= sqrt((real)(*n));
         /* Computing MAX */
         r__1 = tol * sminoa;
-        r__2 = *n * 6 * *n * unfl; // , expr subst
+        r__2 = *n * (*n * unfl) * 6; // , expr subst
         thresh = fla_max(r__1, r__2);
     }
     else
@@ -496,27 +505,33 @@ void cbdsqr_(char *uplo, integer *n, integer *ncvt, integer *nru, integer *ncc, 
         /* Absolute accuracy desired */
         /* Computing MAX */
         r__1 = f2c_abs(tol) * smax;
-        r__2 = *n * 6 * *n * unfl; // , expr subst
+        r__2 = *n * (*n * unfl) * 6; // , expr subst
         thresh = fla_max(r__1, r__2);
     }
     /* Prepare for main iteration loop for the singular values */
     /* (MAXIT is the maximum number of passes through the inner */
     /* loop permitted before nonconvergence signalled.) */
-    maxit = *n * 6 * *n;
-    iter = 0;
+    maxitdivn = *n * 6;
+    iterdivn = 0;
+    iter = -1;
     oldll = -1;
     oldm = -1;
     /* M points to last element of unconverged part of matrix */
     m = *n;
-    /* Begin main iteration loop */
+/* Begin main iteration loop */
 L60: /* Check for convergence or exceeding iteration count */
     if(m <= 1)
     {
         goto L160;
     }
-    if(iter > maxit)
+    if(iter >= *n)
     {
-        goto L200;
+        iter -= *n;
+        ++iterdivn;
+        if(iterdivn >= maxitdivn)
+        {
+            goto L200;
+        }
     }
     /* Find diagonal block of matrix to work on */
     if(tol < 0.f && (r__1 = d__[m], f2c_abs(r__1)) <= thresh)
@@ -524,7 +539,6 @@ L60: /* Check for convergence or exceeding iteration count */
         d__[m] = 0.f;
     }
     smax = (r__1 = d__[m], f2c_abs(r__1));
-    smin = smax;
     i__1 = m - 1;
     for(lll = 1; lll <= i__1; ++lll)
     {
@@ -539,7 +553,6 @@ L60: /* Check for convergence or exceeding iteration count */
         {
             goto L80;
         }
-        smin = fla_min(smin, abss);
         /* Computing MAX */
         r__1 = fla_max(smax, abss);
         smax = fla_max(r__1, abse);
@@ -613,7 +626,7 @@ L90:
             /* If relative accuracy desired, */
             /* apply convergence criterion forward */
             mu = (r__1 = d__[ll], f2c_abs(r__1));
-            sminl = mu;
+            smin = mu;
             i__1 = m - 1;
             for(lll = ll; lll <= i__1; ++lll)
             {
@@ -624,7 +637,7 @@ L90:
                 }
                 mu = (r__2 = d__[lll + 1], f2c_abs(r__2))
                      * (mu / (mu + (r__1 = e[lll], f2c_abs(r__1))));
-                sminl = fla_min(sminl, mu);
+                smin = fla_min(smin, mu);
                 /* L100: */
             }
         }
@@ -644,7 +657,7 @@ L90:
             /* If relative accuracy desired, */
             /* apply convergence criterion backward */
             mu = (r__1 = d__[m], f2c_abs(r__1));
-            sminl = mu;
+            smin = mu;
             i__1 = ll;
             for(lll = m - 1; lll >= i__1; --lll)
             {
@@ -655,7 +668,7 @@ L90:
                 }
                 mu = (r__2 = d__[lll], f2c_abs(r__2))
                      * (mu / (mu + (r__1 = e[lll], f2c_abs(r__1))));
-                sminl = fla_min(sminl, mu);
+                smin = fla_min(smin, mu);
                 /* L110: */
             }
         }
@@ -667,7 +680,7 @@ L90:
     /* Computing MAX */
     r__1 = eps;
     r__2 = tol * .01f; // , expr subst
-    if(tol >= 0.f && *n * tol * (sminl / smax) <= fla_max(r__1, r__2))
+    if(tol >= 0.f && *n * tol * (smin / smax) <= fla_max(r__1, r__2))
     {
         /* Use a zero shift to avoid loss of relative accuracy */
         shift = 0.f;
@@ -927,7 +940,7 @@ L90:
     }
     /* QR iteration finished, go back and check convergence */
     goto L60;
-    /* All singular values converged, so make them positive */
+/* All singular values converged, so make them positive */
 L160:
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
@@ -982,7 +995,7 @@ L160:
         /* L190: */
     }
     goto L220;
-    /* Maximum number of iterations exceeded, failure to converge */
+/* Maximum number of iterations exceeded, failure to converge */
 L200:
     *info = 0;
     i__1 = *n - 1;

@@ -1,8 +1,8 @@
-/* ../netlib/sgeev.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sgeev.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c__0 = 0;
@@ -190,15 +190,18 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date June 2016 */
 /* @generated from dgeev.f, fortran d -> s, Tue Apr 19 01:47:44 2016 */
-/* > \ingroup realGEeigen */
+/* > \ingroup geev */
 /* ===================================================================== */
 /* Subroutine */
 void sgeev_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *wr, real *wi,
             real *vl, integer *ldvl, real *vr, integer *ldvr, real *work, integer *lwork,
             integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgeev inputs: jobvl %c ,jobvr %c ,n %" FLA_IS ",lda %" FLA_IS
+                      ",ldvl %" FLA_IS ",ldvr %" FLA_IS ",lwork %" FLA_IS "",
+                      *jobvl, *jobvr, *n, *lda, *ldvl, *ldvr, *lwork);
     /* System generated locals */
     integer a_dim1, a_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2, i__3;
     real r__1, r__2;
@@ -224,9 +227,6 @@ void sgeev_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *w
         void
         sscal_(integer *, real *, real *, integer *);
     extern real slapy2_(real *, real *);
-    extern /* Subroutine */
-        void
-        slabad_(real *, real *);
     logical scalea;
     real cscale;
     extern /* Subroutine */
@@ -265,10 +265,10 @@ void sgeev_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *w
         void
         strevc3_(char *, char *, logical *, integer *, real *, integer *, real *, integer *, real *,
                  integer *, integer *, integer *, real *, integer *, integer *);
-    /* -- LAPACK driver routine (version 3.7.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* June 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -421,7 +421,7 @@ void sgeev_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *w
             }
             maxwrk = fla_max(maxwrk, minwrk);
         }
-        work[1] = (real)maxwrk;
+        work[1] = sroundup_lwork(&maxwrk);
         if(*lwork < minwrk && !lquery)
         {
             *info = -13;
@@ -431,22 +431,24 @@ void sgeev_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *w
     {
         i__1 = -(*info);
         xerbla_("SGEEV ", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants */
     eps = slamch_("P");
     smlnum = slamch_("S");
     bignum = 1.f / smlnum;
-    slabad_(&smlnum, &bignum);
     smlnum = sqrt(smlnum) / eps;
     bignum = 1.f / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
@@ -619,7 +621,7 @@ void sgeev_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *w
             /* L40: */
         }
     }
-    /* Undo scaling if necessary */
+/* Undo scaling if necessary */
 L50:
     if(scalea)
     {
@@ -641,7 +643,8 @@ L50:
             slascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &wi[1], n, &ierr);
         }
     }
-    work[1] = (real)maxwrk;
+    work[1] = sroundup_lwork(&maxwrk);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGEEV */
 }

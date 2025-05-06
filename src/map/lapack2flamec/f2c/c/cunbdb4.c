@@ -1,8 +1,8 @@
-/* ../netlib/cunbdb4.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./cunbdb4.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static complex c_b1 = {-1.f, 0.f};
 static integer c__1 = 1;
@@ -44,7 +44,7 @@ static integer c__1 = 1;
 /* >\verbatim */
 /* > */
 /* > CUNBDB4 simultaneously bidiagonalizes the blocks of a tall and skinny */
-/* > matrix X with orthonomal columns: */
+/* > matrix X with orthonormal columns: */
 /* > */
 /* > [ B11 ] */
 /* > [ X11 ] [ P1 | ] [ 0 ] */
@@ -128,14 +128,14 @@ static integer c__1 = 1;
 /* > */
 /* > \param[out] TAUP1 */
 /* > \verbatim */
-/* > TAUP1 is COMPLEX array, dimension (P) */
+/* > TAUP1 is COMPLEX array, dimension (M-Q) */
 /* > The scalar factors of the elementary reflectors that define */
 /* > P1. */
 /* > \endverbatim */
 /* > */
 /* > \param[out] TAUP2 */
 /* > \verbatim */
-/* > TAUP2 is COMPLEX array, dimension (M-P) */
+/* > TAUP2 is COMPLEX array, dimension (M-Q) */
 /* > The scalar factors of the elementary reflectors that define */
 /* > P2. */
 /* > \endverbatim */
@@ -186,8 +186,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date July 2012 */
-/* > \ingroup complexOTHERcomputational */
+/* > \ingroup unbdb4 */
 /* > \par Further Details: */
 /* ===================== */
 /* > \verbatim */
@@ -263,10 +262,10 @@ void cunbdb4_(integer *m, integer *p, integer *q, complex *x11, integer *ldx11, 
     extern /* Subroutine */
         void
         clarfgp_(integer *, complex *, complex *, integer *, complex *);
-    /* -- LAPACK computational routine (version 3.8.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* July 2012 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -344,7 +343,8 @@ void cunbdb4_(integer *m, integer *p, integer *q, complex *x11, integer *ldx11, 
         i__2 = iorbdb5 + lorbdb5 - 1; // , expr subst
         lworkopt = fla_max(i__1, i__2);
         lworkmin = lworkopt;
-        work[1].r = (real)lworkopt;
+        r__1 = sroundup_lwork(&lworkopt);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         if(*lwork < lworkmin && !lquery)
         {

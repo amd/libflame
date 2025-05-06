@@ -1,4 +1,4 @@
-/* slaqz0.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./slaqz0.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -111,7 +111,7 @@ static integer c__1 = 1;
 /* > Anal., 29(2006), pp. 199--227. */
 /* > */
 /* > Ref: T. Steel, D. Camps, K. Meerbergen, R. Vandebril "A multishift, */
-/* > multipole rational QZ method with agressive early deflation" */
+/* > multipole rational QZ method with aggressive early deflation" */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -308,7 +308,7 @@ the routine */
 /* ======== */
 /* > \author Thijs Steel, KU Leuven */
 /* > \date May 2020 */
-/* > \ingroup doubleGEcomputational */
+/* > \ingroup laqz0 */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
@@ -358,15 +358,13 @@ void slaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
         slaqz4_(logical *, logical *, logical *, integer *, integer *, integer *, integer *,
                 integer *, real *, real *, real *, real *, integer *, real *, integer *, real *,
                 integer *, real *, integer *, real *, integer *, real *, integer *, real *,
-                integer *, integer *),
-        slabad_(real *, real *);
+                integer *, integer *);
     integer nibble, nblock;
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    real safmax;
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real eshift;
     char jbcmpz[3];
@@ -381,6 +379,7 @@ void slaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
     integer iwantq, iwants, istart;
     real smlnum;
     integer istopm, iwantz, istart2;
+    extern real sroundup_lwork(integer *);
     logical ilschur;
     integer nshifts, istartm;
     /* Arguments */
@@ -572,7 +571,7 @@ void slaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
     lworkreq = fla_max(i__1, i__2);
     if(*lwork == -1)
     {
-        work[1] = (real)lworkreq;
+        work[1] = sroundup_lwork(&lworkreq);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -597,8 +596,6 @@ void slaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
     }
     /* Get machine constants */
     safmin = slamch_("SAFE MINIMUM");
-    safmax = 1.f / safmin;
-    slabad_(&safmin, &safmax);
     ulp = slamch_("PRECISION");
     smlnum = safmin * ((real)(*n) / ulp);
     i__1 = *ihi - *ilo + 1;
@@ -721,7 +718,7 @@ void slaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
         {
             if((r__1 = b[k + k * b_dim1], f2c_abs(r__1)) < btol)
             {
-                /* A diagonal element of B is negligable, move it */
+                /* A diagonal element of B is negligible, move it */
                 /* to the top and deflate it */
                 i__2 = istart2 + 1;
                 for(k2 = k; k2 >= i__2; --k2)
@@ -842,7 +839,7 @@ void slaqz0_(char *wants, char *wantq, char *wantz, integer *n, integer *ilo, in
         i__3 = istop - istart2; // , expr subst
         ns = fla_min(i__2, i__3);
         ns = fla_min(ns, n_undeflated__);
-        shiftpos = istop - n_deflated__ - n_undeflated__ + 1;
+        shiftpos = istop - n_undeflated__ + 1;
         /* Shuffle shifts to put double shifts in front */
         /* This ensures that we don't split up a double shift */
         i__2 = shiftpos + n_undeflated__ - 1;

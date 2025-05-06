@@ -1,13 +1,13 @@
-/* ../netlib/zhbgvx.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./zhbgvx.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublecomplex c_b1 = {0., 0.};
 static doublecomplex c_b2 = {1., 0.};
 static integer c__1 = 1;
-/* > \brief \b ZHBGST */
+/* > \brief \b ZHBGVX */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -164,13 +164,17 @@ static integer c__1 = 1;
 /* > \param[in] VL */
 /* > \verbatim */
 /* > VL is DOUBLE PRECISION */
+/* > */
+/* > If RANGE='V', the lower bound of the interval to */
+/* > be searched for eigenvalues. VL < VU. */
+/* > Not referenced if RANGE = 'A' or 'I'. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] VU */
 /* > \verbatim */
 /* > VU is DOUBLE PRECISION */
 /* > */
-/* > If RANGE='V', the lower and upper bounds of the interval to */
+/* > If RANGE='V', the upper bound of the interval to */
 /* > be searched for eigenvalues. VL < VU. */
 /* > Not referenced if RANGE = 'A' or 'I'. */
 /* > \endverbatim */
@@ -178,14 +182,20 @@ static integer c__1 = 1;
 /* > \param[in] IL */
 /* > \verbatim */
 /* > IL is INTEGER */
+/* > */
+/* > If RANGE='I', the index of the */
+/* > smallest eigenvalue to be returned. */
+/* > 1 <= IL <= IU <= N, if N > 0;
+IL = 1 and IU = 0 if N = 0. */
+/* > Not referenced if RANGE = 'A' or 'V'. */
 /* > \endverbatim */
 /* > */
 /* > \param[in] IU */
 /* > \verbatim */
 /* > IU is INTEGER */
 /* > */
-/* > If RANGE='I', the indices (in ascending order) of the */
-/* > smallest and largest eigenvalues to be returned. */
+/* > If RANGE='I', the index of the */
+/* > largest eigenvalue to be returned. */
 /* > 1 <= IL <= IU <= N, if N > 0;
 IL = 1 and IU = 0 if N = 0. */
 /* > Not referenced if RANGE = 'A' or 'V'. */
@@ -286,8 +296,7 @@ IL = 1 and IU = 0 if N = 0. */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup complex16OTHEReigen */
+/* > \ingroup hbgvx */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -328,9 +337,7 @@ void zhbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
         void
         zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
         zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
-    logical alleig, indeig;
-    integer indibl;
-    logical valeig;
+    logical alleig, indeig, valeig;
     extern /* Subroutine */
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
@@ -360,10 +367,9 @@ void zhbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
                 integer *),
         zsteqr_(char *, integer *, doublereal *, doublereal *, doublecomplex *, integer *,
                 doublereal *, integer *);
-    /* -- LAPACK driver routine (version 3.4.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -497,7 +503,6 @@ void zhbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
             &work[1], &rwork[1], &iinfo);
     /* Solve the standard eigenvalue problem. */
     /* Reduce Hermitian band matrix to tridiagonal form. */
-    indibl = 1;
     indd = 1;
     inde = indd + *n;
     indrwk = inde + *n;
@@ -564,14 +569,14 @@ void zhbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
     {
         *(unsigned char *)order = 'E';
     }
-    indisp = indibl + *n;
+    indisp = *n + 1;
     indiwk = indisp + *n;
     dstebz_(range, order, n, vl, vu, il, iu, abstol, &rwork[indd], &rwork[inde], m, &nsplit, &w[1],
-            &iwork[indibl], &iwork[indisp], &rwork[indrwk], &iwork[indiwk], info);
+            &iwork[1], &iwork[indisp], &rwork[indrwk], &iwork[indiwk], info);
     if(wantz)
     {
-        zstein_(n, &rwork[indd], &rwork[inde], m, &w[1], &iwork[indibl], &iwork[indisp],
-                &z__[z_offset], ldz, &rwork[indrwk], &iwork[indiwk], &ifail[1], info);
+        zstein_(n, &rwork[indd], &rwork[inde], m, &w[1], &iwork[1], &iwork[indisp], &z__[z_offset],
+                ldz, &rwork[indrwk], &iwork[indiwk], &ifail[1], info);
         /* Apply unitary matrix used in reduction to tridiagonal */
         /* form to eigenvectors returned by ZSTEIN. */
         i__1 = *m;
@@ -604,11 +609,11 @@ L30: /* If eigenvalues are not in order, then sort them, along with */
             }
             if(i__ != 0)
             {
-                itmp1 = iwork[indibl + i__ - 1];
+                itmp1 = iwork[i__];
                 w[i__] = w[j];
-                iwork[indibl + i__ - 1] = iwork[indibl + j - 1];
+                iwork[i__] = iwork[j];
                 w[j] = tmp1;
-                iwork[indibl + j - 1] = itmp1;
+                iwork[j] = itmp1;
                 zswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], &c__1);
                 if(*info != 0)
                 {

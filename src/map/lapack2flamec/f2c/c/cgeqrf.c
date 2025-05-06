@@ -1,13 +1,23 @@
-/* cgeqrf.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./cgeqrf.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/******************************************************************************
+ * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 #include "FLA_f2c.h" /* Table of constant values */
+#if !FLA_ENABLE_AMD_OPT
 static integer c__1 = 1;
+#endif
 static integer c_n1 = -1;
 static integer c__3 = 3;
 static integer c__2 = 2;
+
+extern int fla_thread_get_num_threads();
+
+integer get_block_size_cgeqrf(integer *m, integer *n);
+
 /* > \brief \b CGEQRF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -128,7 +138,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup complexGEcomputational */
+/* > \ingroup geqrf */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -166,6 +176,7 @@ void cgeqrf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
 #endif
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    real r__1;
     /* Local variables */
     integer i__, k, ib, nb, nx, iws, nbmin, iinfo;
     extern /* Subroutine */
@@ -179,6 +190,7 @@ void cgeqrf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -204,9 +216,13 @@ void cgeqrf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
     --tau;
     --work;
     /* Function Body */
+#if FLA_ENABLE_AMD_OPT
+    nb = get_block_size_cgeqrf(m, n);
+#else
+    nb = ilaenv_(&c__1, "CGEQRF", " ", m, n, &c_n1, &c_n1);
+#endif
     k = fla_min(*m, *n);
     *info = 0;
-    nb = ilaenv_(&c__1, "CGEQRF", " ", m, n, &c_n1, &c_n1);
     lquery = *lwork == -1;
     if(*m < 0)
     {
@@ -244,7 +260,8 @@ void cgeqrf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
         {
             lwkopt = *n * nb;
         }
-        work[1].r = (real)lwkopt;
+        r__1 = sroundup_lwork(&lwkopt);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -326,10 +343,49 @@ void cgeqrf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
         i__1 = *n - i__ + 1;
         cgeqr2_(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1], &iinfo);
     }
-    work[1].r = (real)iws;
+    r__1 = sroundup_lwork(&iws);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CGEQRF */
 }
+
+integer get_block_size_cgeqrf(integer *m, integer *n)
+{
+    integer block_size;
+
+    /* Set block_size=32 for small sizes */
+    if(*m <= 17 && *n <= 17)
+    {
+        block_size = 32;
+    }
+    else
+    {
+        int num_threads = fla_thread_get_num_threads();
+
+        if(num_threads == 1)
+        {
+            if(*m >= 600 && *n >= 600)
+            {
+                block_size = 64;
+            }
+            else if(*m >= 300 && *n >= 300)
+            {
+                block_size = 48;
+            }
+            else
+            {
+                block_size = 32;
+            }
+        }
+        else
+        {
+            block_size = 32;
+        }
+    }
+
+    return block_size;
+}
+
 /* cgeqrf_ */

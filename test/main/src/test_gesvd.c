@@ -1,20 +1,26 @@
 /*
-    Copyright (C) 2022-2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
-#include "test_common.h"
 #include "test_lapack.h"
-#include "test_overflow_underflow.h"
-#include "test_prototype.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
+
+extern double perf;
+extern double time_min;
+integer row_major_gesvd_lda;
+integer row_major_gesvd_ldu;
+integer row_major_gesvd_ldvt;
 
 /* Local prototypes */
-void fla_test_gesvd_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *t, double *residual);
+void fla_test_gesvd_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo);
 void prepare_gesvd_run(char *jobu, char *jobvt, integer m_A, integer n_A, void *A, integer lda,
                        void *s, void *U, integer ldu, void *V, integer ldvt, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, int matrix_layout);
+                       integer n_repeats, double *time_min_, integer *info, integer interfacetype,
+                       int matrix_layout);
 void invoke_gesvd(integer datatype, char *jobu, char *jobvt, integer *m, integer *n, void *a,
                   integer *lda, void *s, void *u, integer *ldu, void *vt, integer *ldvt, void *work,
                   integer *lwork, void *rwork, integer *info);
@@ -22,9 +28,9 @@ double prepare_lapacke_gesvd_run(integer datatype, int matrix_layout, char *jobu
                                  integer m_A, integer n_A, void *A, integer lda, void *s, void *U,
                                  integer ldu, void *V, integer ldvt, integer *info, void *work,
                                  void *rwork);
-integer invoke_lapacke_gesvd(integer datatype, int matrix_layout, char jobu, char jobvt,
-                             integer m, integer n, void *a, integer lda, void *s, void *u,
-                             integer ldu, void *vt, integer ldvt, void *work, void *rwork);
+integer invoke_lapacke_gesvd(integer datatype, int matrix_layout, char jobu, char jobvt, integer m,
+                             integer n, void *a, integer lda, void *s, void *u, integer ldu,
+                             void *vt, integer ldvt, void *work, void *rwork);
 
 void fla_test_gesvd(integer argc, char **argv, test_params_t *params)
 {
@@ -50,7 +56,6 @@ void fla_test_gesvd(integer argc, char **argv, test_params_t *params)
     {
         integer i, num_types, N, M;
         integer datatype, n_repeats;
-        double perf, time_min, residual;
         char stype, type_flag[4] = {0};
         char *endptr;
 
@@ -60,10 +65,22 @@ void fla_test_gesvd(integer argc, char **argv, test_params_t *params)
         params->svd_paramslist[0].jobvt_gesvd = argv[4][0];
         M = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
         N = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
-        params->svd_paramslist[0].lda = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
-        params->svd_paramslist[0].ldu = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
-        params->svd_paramslist[0].ldvt = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
-
+        /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
+        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
+        {
+            row_major_gesvd_lda = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
+            row_major_gesvd_ldu = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
+            row_major_gesvd_ldvt = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
+            params->svd_paramslist[0].lda = N;
+            params->svd_paramslist[0].ldu = N;
+            params->svd_paramslist[0].ldvt = N;
+        }
+        else
+        {
+            params->svd_paramslist[0].lda = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
+            params->svd_paramslist[0].ldu = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
+            params->svd_paramslist[0].ldvt = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
+        }
         g_lwork = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[11], &endptr, CLI_DECIMAL_BASE);
 
@@ -89,11 +106,7 @@ void fla_test_gesvd(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_gesvd_experiment(params, datatype, M, N, 0, n_repeats, einfo, &perf,
-                                          &time_min, &residual);
-                /* Print the results */
-                fla_test_print_status(front_str, stype, RECT_INPUT, M, N, residual,
-                                      params->svd_paramslist[0].svd_threshold, time_min, perf);
+                fla_test_gesvd_experiment(front_str, params, datatype, M, N, 0, n_repeats, einfo);
                 tests_not_run = 0;
             }
         }
@@ -118,26 +131,27 @@ void fla_test_gesvd(integer argc, char **argv, test_params_t *params)
     return;
 }
 
-void fla_test_gesvd_experiment(test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo,
-                               double *perf, double *time_min, double *residual)
+void fla_test_gesvd_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo)
 {
-    integer m, n, lda, ldu, ldvt;
-    integer info = 0, vinfo = 0;
+    integer m, n, lda, ldu, ldvt, n_U, m_V, ns;
+    integer info = 0;
     char jobu, jobvt;
     void *A = NULL, *U = NULL, *V = NULL, *s = NULL, *A_test = NULL, *s_test = NULL, *scal = NULL;
+    double residual, err_thresh;
 
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
 
     /* Get input matrix dimensions. */
     jobu = params->svd_paramslist[pci].jobu_gesvd;
     jobvt = params->svd_paramslist[pci].jobvt_gesvd;
-    *residual = params->svd_paramslist[pci].svd_threshold;
+    err_thresh = params->svd_paramslist[pci].svd_threshold;
 
     m = p_cur;
     n = q_cur;
-
+    ns = fla_min(m, n);
     lda = params->svd_paramslist[pci].lda;
     ldu = params->svd_paramslist[pci].ldu;
     ldvt = params->svd_paramslist[pci].ldvt;
@@ -174,7 +188,7 @@ void fla_test_gesvd_experiment(test_params_t *params, integer datatype, integer 
             }
             else if(jobvt != 'N')
             {
-                ldvt = fla_min(m, n);
+                ldvt = ns;
             }
             else
             {
@@ -182,10 +196,20 @@ void fla_test_gesvd_experiment(test_params_t *params, integer datatype, integer 
             }
         }
     }
-    /* Create input matrix parameters. */
+
+    n_U = (jobu != 'A') ? ns : m;
+    m_V = (jobvt != 'A') ? ns : n;
+
+    /* Create input matrix parameters */
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
-    create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &U, ldu);
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &V, ldvt);
+    if(jobu != 'N' && jobu != 'O')
+    {
+        create_matrix(datatype, LAPACK_COL_MAJOR, m, n_U, &U, ldu);
+    }
+    if(jobvt != 'N' && jobvt != 'O')
+    {
+        create_matrix(datatype, LAPACK_COL_MAJOR, m_V, n, &V, ldvt);
+    }
     create_realtype_vector(datatype, &s, fla_min(m, n));
     create_realtype_vector(datatype, &s_test, fla_min(m, n));
 
@@ -212,7 +236,7 @@ void fla_test_gesvd_experiment(test_params_t *params, integer datatype, integer 
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
     prepare_gesvd_run(&jobu, &jobvt, m, n, A_test, lda, s, U, ldu, V, ldvt, datatype, n_repeats,
-                      time_min, &info, test_lapacke_interface, layout);
+                      &time_min, &info, interfacetype, layout);
 
     /* Performance Computation
      * Singular values only, 4mn^2 - 4n^3/3 flops
@@ -221,40 +245,44 @@ void fla_test_gesvd_experiment(test_params_t *params, integer datatype, integer 
     if(jobu == 'N' || jobvt == 'N')
     {
         if(m >= n)
-            *perf = (double)((4.0 * m * n * n) - ((4.0 * n * n * n) / 3.0)) / *time_min
-                    / FLOPS_PER_UNIT_PERF;
+            perf = (double)((4.0 * m * n * n) - ((4.0 * n * n * n) / 3.0)) / time_min
+                   / FLOPS_PER_UNIT_PERF;
         else
-            *perf = (double)((4.0 * n * m * m) - ((4.0 * m * m * m) / 3.0)) / *time_min
-                    / FLOPS_PER_UNIT_PERF;
+            perf = (double)((4.0 * n * m * m) - ((4.0 * m * m * m) / 3.0)) / time_min
+                   / FLOPS_PER_UNIT_PERF;
     }
     else
     {
         if(m >= n)
-            *perf = (double)((14.0 * m * n * n) + (8.0 * n * n * n)) / *time_min
-                    / FLOPS_PER_UNIT_PERF;
+            perf
+                = (double)((14.0 * m * n * n) + (8.0 * n * n * n)) / time_min / FLOPS_PER_UNIT_PERF;
         else
-            *perf = (double)((14.0 * n * m * m) + (8.0 * m * m * m)) / *time_min
-                    / FLOPS_PER_UNIT_PERF;
+            perf
+                = (double)((14.0 * n * m * m) + (8.0 * m * m * m)) / time_min / FLOPS_PER_UNIT_PERF;
     }
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
-        *perf *= 4.0;
+        perf *= 4.0;
 
     /* output validation */
-    if(info == 0 && (FLA_OVERFLOW_UNDERFLOW_TEST || (!FLA_EXTREME_CASE_TEST)))
+    FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    if(!FLA_EXTREME_CASE_TEST)
     {
-        validate_gesvd(&jobu, &jobvt, m, n, A, A_test, lda, s, s_test, U, ldu, V, ldvt, datatype,
-                       residual, &vinfo, g_ext_fptr, params->imatrix_char, scal);
+        validate_gesvd(tst_api, &jobu, &jobvt, m, n, A, A_test, lda, s, s_test, U, ldu, V, ldvt,
+                       datatype, residual, g_ext_fptr, params->imatrix_char, scal);
     }
     /* check for output matrix when inputs as extreme values */
-    else if(FLA_EXTREME_CASE_TEST)
+    else
     {
         if(!check_extreme_value(datatype, m, n, A_test, lda, params->imatrix_char))
         {
-            *residual = DBL_MAX;
+            residual = DBL_MAX;
         }
+        else
+        {
+            residual = err_thresh;
+        }
+        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
     }
-    else
-        FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
     /* Free up the buffers */
     if(FLA_OVERFLOW_UNDERFLOW_TEST)
@@ -263,16 +291,22 @@ void fla_test_gesvd_experiment(test_params_t *params, integer datatype, integer 
     }
     free_matrix(A);
     free_matrix(A_test);
-    free_matrix(U);
-    free_matrix(V);
+    if(jobu != 'N' && jobu != 'O')
+    {
+        free_matrix(U);
+    }
+    if(jobvt != 'N' && jobvt != 'O')
+    {
+        free_matrix(V);
+    }
     free_vector(s);
     free_vector(s_test);
 }
 
 void prepare_gesvd_run(char *jobu, char *jobvt, integer m_A, integer n_A, void *A, integer lda,
                        void *s, void *U, integer ldu, void *V, integer ldvt, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info,
-                       integer test_lapacke_interface, int layout)
+                       integer n_repeats, double *time_min_, integer *info, integer interfacetype,
+                       int layout)
 {
     integer min_m_n, max_m_n;
     void *A_save, *s_test;
@@ -280,7 +314,7 @@ void prepare_gesvd_run(char *jobu, char *jobvt, integer m_A, integer n_A, void *
     void *U_test, *V_test;
     integer lwork, lrwork;
     integer i, n_U, m_V;
-    double time_min = 1e9, exe_time;
+    double t_min = 1e9, exe_time;
 
     min_m_n = fla_min(m_A, n_A);
     max_m_n = fla_max(m_A, n_A);
@@ -304,8 +338,18 @@ void prepare_gesvd_run(char *jobu, char *jobvt, integer m_A, integer n_A, void *
         create_vector(datatype, &work, 1);
 
         /* call gesvd API */
-        invoke_gesvd(datatype, jobu, jobvt, &m_A, &n_A, NULL, &lda, NULL, NULL, &ldu, NULL, &ldvt,
-                     work, &lwork, NULL, info);
+#if ENABLE_CPP_TEST
+        if(interfacetype == LAPACK_CPP_TEST)
+        {
+            invoke_cpp_gesvd(datatype, jobu, jobvt, &m_A, &n_A, NULL, &lda, NULL, NULL, &ldu, NULL,
+                             &ldvt, work, &lwork, NULL, info);
+        }
+        else
+#endif
+        {
+            invoke_gesvd(datatype, jobu, jobvt, &m_A, &n_A, NULL, &lda, NULL, NULL, &ldu, NULL,
+                         &ldvt, work, &lwork, NULL, info);
+        }
         if(*info == 0)
         {
             /* Get the work size */
@@ -323,8 +367,14 @@ void prepare_gesvd_run(char *jobu, char *jobvt, integer m_A, integer n_A, void *
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
         copy_matrix(datatype, "full", m_A, n_A, A_save, lda, A, lda);
-        create_matrix(datatype, LAPACK_COL_MAJOR, m_A, m_A, &U_test, ldu);
-        create_matrix(datatype, LAPACK_COL_MAJOR, n_A, n_A, &V_test, ldvt);
+        if(*jobu != 'N' && *jobu != 'O')
+        {
+            create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_U, &U_test, ldu);
+        }
+        if(*jobvt != 'N' && *jobvt != 'O')
+        {
+            create_matrix(datatype, LAPACK_COL_MAJOR, m_V, n_A, &V_test, ldvt);
+        }
         create_realtype_vector(datatype, &s_test, min_m_n);
         create_vector(datatype, &work, lwork);
 
@@ -334,12 +384,22 @@ void prepare_gesvd_run(char *jobu, char *jobvt, integer m_A, integer n_A, void *
             rwork = NULL;
 
         /* Check if LAPACKE is enabled */
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time
                 = prepare_lapacke_gesvd_run(datatype, layout, jobu, jobvt, m_A, n_A, A, lda, s_test,
                                             U_test, ldu, V_test, ldvt, info, work, rwork);
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST)
+        {
+            exe_time = fla_test_clock();
+            /* call CPP gesvd API  */
+            invoke_cpp_gesvd(datatype, jobu, jobvt, &m_A, &n_A, A, &lda, s_test, U_test, &ldu,
+                             V_test, &ldvt, work, &lwork, rwork, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();
@@ -351,55 +411,71 @@ void prepare_gesvd_run(char *jobu, char *jobvt, integer m_A, integer n_A, void *
         }
 
         /* Get the best execution time */
-        time_min = fla_min(time_min, exe_time);
+        t_min = fla_min(t_min, exe_time);
 
         /* Make a copy of the output buffers. This is required to validate the API functionality. */
-        copy_matrix(datatype, "full", m_A, n_U, U_test, ldu, U, ldu);
-        copy_matrix(datatype, "full", m_V, n_A, V_test, ldvt, V, ldvt);
+        if(*jobu != 'N' && *jobu != 'O')
+        {
+            copy_matrix(datatype, "full", m_A, n_U, U_test, ldu, U, ldu);
+        }
+        if(*jobvt != 'N' && *jobvt != 'O')
+        {
+            copy_matrix(datatype, "full", m_V, n_A, V_test, ldvt, V, ldvt);
+        }
         copy_realtype_vector(datatype, min_m_n, s_test, 1, s, 1);
 
         /* Free up the output buffers */
         free_vector(work);
         if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
             free_vector(rwork);
-        free_matrix(U_test);
-        free_matrix(V_test);
+        if(*jobu != 'N' && *jobu != 'O')
+        {
+            free_matrix(U_test);
+        }
+        if(*jobvt != 'N' && *jobvt != 'O')
+        {
+            free_matrix(V_test);
+        }
         free_vector(s_test);
     }
 
-    *time_min_ = time_min;
+    *time_min_ = t_min;
 
     free_matrix(A_save);
 }
 
-double prepare_lapacke_gesvd_run(integer datatype, int layout, char *jobu, char *jobvt,
-                                 integer m_A, integer n_A, void *A, integer lda, void *s, void *U,
-                                 integer ldu, void *V, integer ldvt, integer *info, void *work,
-                                 void *rwork)
+double prepare_lapacke_gesvd_run(integer datatype, int layout, char *jobu, char *jobvt, integer m_A,
+                                 integer n_A, void *A, integer lda, void *s, void *U, integer ldu,
+                                 void *V, integer ldvt, integer *info, void *work, void *rwork)
 {
     double exe_time;
     integer lda_t = lda;
     integer ldu_t = ldu;
     integer ldvt_t = ldvt;
     void *A_t = NULL, *U_t = NULL, *V_t = NULL;
+
+    /* Configure leading dimensions as per the input matrix layout */
+    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_gesvd_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, config_data, layout, m_A, row_major_gesvd_ldu, ldu_t);
+    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_gesvd_ldvt, ldvt_t);
+
     A_t = A;
     U_t = U;
     V_t = V;
 
+    /* In case of row_major matrix layout,
+       convert input matrix to row_major */
     if(layout == LAPACK_ROW_MAJOR)
     {
-        lda_t = fla_max(1, n_A);
-        ldu_t = fla_max(1, m_A);
-        ldvt_t = fla_max(1, n_A);
         /* Create temporary buffers for converting matrix layout */
-        create_matrix(datatype, layout, m_A, n_A, &A_t, lda_t);
+        create_matrix(datatype, layout, m_A, n_A, &A_t, fla_max(n_A, lda_t));
         if((*jobu != 'N') && (*jobu != 'O'))
         {
-            create_matrix(datatype, layout, m_A, m_A, &U_t, ldu_t);
+            create_matrix(datatype, layout, m_A, m_A, &U_t, fla_max(m_A, ldu_t));
         }
         if((*jobvt != 'N') && (*jobvt != 'O'))
         {
-            create_matrix(datatype, layout, n_A, n_A, &V_t, ldvt_t);
+            create_matrix(datatype, layout, n_A, n_A, &V_t, fla_max(n_A, ldvt_t));
         }
         convert_matrix_layout(LAPACK_COL_MAJOR, datatype, m_A, n_A, A, lda, A_t, lda_t);
     }

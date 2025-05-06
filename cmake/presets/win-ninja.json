@@ -1,0 +1,3100 @@
+{
+    "version": 6,
+    "include": [
+        "base.json"
+    ],
+    "configurePresets": [
+        {
+            "name": "win-ninja",
+            "inherits": [
+                "base",
+                "amdgccopt"
+            ],
+            "hidden": true,
+            "generator": "Ninja",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            },
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang-cl",
+                "CMAKE_CXX_COMPILER": "clang-cl"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-static-autoisa",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "static",
+                "autoisa"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-autoisa"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-static-autoisa-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "static",
+                "autoisa",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-autoisa"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-static-autoisa-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "static",
+                "autoisa",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-autoisa-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-static-autoisa-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "static",
+                "autoisa",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-autoisa-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-static-avx",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "static",
+                "avx"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-static-avx-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "static",
+                "avx",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-static-avx-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "static",
+                "avx",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-static-avx-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "static",
+                "avx",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-static-avx2",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "static",
+                "avx2"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx2"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-static-avx2-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "static",
+                "avx2",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx2"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-static-avx2-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "static",
+                "avx2",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx2-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-static-avx2-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "static",
+                "avx2",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx2-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-static-avx512",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "static",
+                "avx512"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx512"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-static-avx512-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "static",
+                "avx512",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx512"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-static-avx512-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "static",
+                "avx512",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx512-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-static-avx512-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "static",
+                "avx512",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx512-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-autoisa",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "shared",
+                "autoisa"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-autoisa"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-autoisa-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "shared",
+                "autoisa",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-autoisa"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-autoisa-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "shared",
+                "autoisa",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-autoisa-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-autoisa-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "shared",
+                "autoisa",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-autoisa-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-avx",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "shared",
+                "avx"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-avx-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "shared",
+                "avx",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-avx-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "shared",
+                "avx",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-avx-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "shared",
+                "avx",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-avx2",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "shared",
+                "avx2"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx2"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-avx2-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "shared",
+                "avx2",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx2"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-avx2-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "shared",
+                "avx2",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx2-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-avx2-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "shared",
+                "avx2",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx2-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-avx512",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "shared",
+                "avx512"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx512"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-avx512-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "shared",
+                "avx512",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx512"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-avx512-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "shared",
+                "avx512",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx512-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-avx512-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "lp64",
+                "shared",
+                "avx512",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-lp64-avx512-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-autoisa",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "static",
+                "autoisa"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-autoisa"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-autoisa-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "static",
+                "autoisa",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-autoisa"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-autoisa-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "static",
+                "autoisa",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-autoisa-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-autoisa-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "static",
+                "autoisa",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-autoisa-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-avx",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "static",
+                "avx"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-avx-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "static",
+                "avx",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-avx-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "static",
+                "avx",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-avx-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "static",
+                "avx",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-avx2",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "static",
+                "avx2"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx2"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-avx2-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "static",
+                "avx2",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx2"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-avx2-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "static",
+                "avx2",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx2-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-avx2-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "static",
+                "avx2",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx2-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-avx512",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "static",
+                "avx512"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx512"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-avx512-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "static",
+                "avx512",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx512"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-avx512-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "static",
+                "avx512",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx512-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-avx512-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "static",
+                "avx512",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx512-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-autoisa",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "shared",
+                "autoisa"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-autoisa"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-autoisa-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "shared",
+                "autoisa",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-autoisa"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-autoisa-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "shared",
+                "autoisa",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-autoisa-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-autoisa-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "shared",
+                "autoisa",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-autoisa-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-avx",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "shared",
+                "avx"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-avx-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "shared",
+                "avx",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-avx-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "shared",
+                "avx",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-avx-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "shared",
+                "avx",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-avx2",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "shared",
+                "avx2"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx2"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-avx2-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "shared",
+                "avx2",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx2"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-avx2-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "shared",
+                "avx2",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx2-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-avx2-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "shared",
+                "avx2",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx2-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-avx512",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "shared",
+                "avx512"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx512"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-avx512-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "shared",
+                "avx512",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx512"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-avx512-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "shared",
+                "avx512",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx512-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-avx512-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "st",
+                "ilp64",
+                "shared",
+                "avx512",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-st-ilp64-avx512-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-autoisa",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "static",
+                "autoisa"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-autoisa"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-autoisa-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "static",
+                "autoisa",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-autoisa"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-autoisa-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "static",
+                "autoisa",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-autoisa-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-autoisa-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "static",
+                "autoisa",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-autoisa-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-avx",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "static",
+                "avx"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-avx-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "static",
+                "avx",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-avx-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "static",
+                "avx",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-avx-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "static",
+                "avx",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-avx2",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "static",
+                "avx2"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx2"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-avx2-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "static",
+                "avx2",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx2"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-avx2-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "static",
+                "avx2",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx2-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-avx2-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "static",
+                "avx2",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx2-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-avx512",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "static",
+                "avx512"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx512"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-avx512-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "static",
+                "avx512",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx512"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-avx512-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "static",
+                "avx512",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx512-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-avx512-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "static",
+                "avx512",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx512-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-autoisa",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "shared",
+                "autoisa"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-autoisa"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-autoisa-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "shared",
+                "autoisa",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-autoisa"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-autoisa-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "shared",
+                "autoisa",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-autoisa-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-autoisa-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "shared",
+                "autoisa",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-autoisa-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-avx",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "shared",
+                "avx"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-avx-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "shared",
+                "avx",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-avx-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "shared",
+                "avx",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-avx-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "shared",
+                "avx",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-avx2",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "shared",
+                "avx2"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx2"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-avx2-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "shared",
+                "avx2",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx2"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-avx2-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "shared",
+                "avx2",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx2-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-avx2-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "shared",
+                "avx2",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx2-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-avx512",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "shared",
+                "avx512"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx512"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-avx512-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "shared",
+                "avx512",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx512"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-avx512-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "shared",
+                "avx512",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx512-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-avx512-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "lp64",
+                "shared",
+                "avx512",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-lp64-avx512-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-autoisa",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "static",
+                "autoisa"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-autoisa"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-autoisa-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "static",
+                "autoisa",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-autoisa"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-autoisa-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "static",
+                "autoisa",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-autoisa-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-autoisa-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "static",
+                "autoisa",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-autoisa-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-avx",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "static",
+                "avx"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-avx-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "static",
+                "avx",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-avx-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "static",
+                "avx",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-avx-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "static",
+                "avx",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-avx2",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "static",
+                "avx2"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx2"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-avx2-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "static",
+                "avx2",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx2"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-avx2-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "static",
+                "avx2",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx2-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-avx2-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "static",
+                "avx2",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx2-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-avx512",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "static",
+                "avx512"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx512"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-avx512-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "static",
+                "avx512",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx512"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-avx512-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "static",
+                "avx512",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx512-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-avx512-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "static",
+                "avx512",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx512-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-autoisa",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "shared",
+                "autoisa"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-autoisa"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-autoisa-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "shared",
+                "autoisa",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-autoisa"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-autoisa-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "shared",
+                "autoisa",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-autoisa-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-autoisa-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "shared",
+                "autoisa",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-autoisa-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-avx",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "shared",
+                "avx"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-avx-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "shared",
+                "avx",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-avx-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "shared",
+                "avx",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-avx-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "shared",
+                "avx",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-avx2",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "shared",
+                "avx2"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx2"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-avx2-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "shared",
+                "avx2",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx2"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-avx2-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "shared",
+                "avx2",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx2-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-avx2-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "shared",
+                "avx2",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx2-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-avx512",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "shared",
+                "avx512"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx512"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-avx512-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "shared",
+                "avx512",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx512"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-avx512-aoclblas",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "shared",
+                "avx512",
+                "aoclblas"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx512-aoclblas"
+            }
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-avx512-aoclblas-test",
+            "inherits": [
+                "win-ninja",
+                "mt",
+                "ilp64",
+                "shared",
+                "avx512",
+                "aoclblas",
+                "test"
+            ],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install-win-mt-ilp64-avx512-aoclblas"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "win-ninja-st-lp64-static-autoisa",
+            "configurePreset": "win-ninja-st-lp64-static-autoisa",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-static-autoisa-test",
+            "configurePreset": "win-ninja-st-lp64-static-autoisa-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-static-autoisa-aoclblas",
+            "configurePreset": "win-ninja-st-lp64-static-autoisa-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-static-autoisa-aoclblas-test",
+            "configurePreset": "win-ninja-st-lp64-static-autoisa-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-static-avx",
+            "configurePreset": "win-ninja-st-lp64-static-avx",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-static-avx-test",
+            "configurePreset": "win-ninja-st-lp64-static-avx-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-static-avx-aoclblas",
+            "configurePreset": "win-ninja-st-lp64-static-avx-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-static-avx-aoclblas-test",
+            "configurePreset": "win-ninja-st-lp64-static-avx-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-static-avx2",
+            "configurePreset": "win-ninja-st-lp64-static-avx2",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-static-avx2-test",
+            "configurePreset": "win-ninja-st-lp64-static-avx2-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-static-avx2-aoclblas",
+            "configurePreset": "win-ninja-st-lp64-static-avx2-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-static-avx2-aoclblas-test",
+            "configurePreset": "win-ninja-st-lp64-static-avx2-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-static-avx512",
+            "configurePreset": "win-ninja-st-lp64-static-avx512",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-static-avx512-test",
+            "configurePreset": "win-ninja-st-lp64-static-avx512-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-static-avx512-aoclblas",
+            "configurePreset": "win-ninja-st-lp64-static-avx512-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-static-avx512-aoclblas-test",
+            "configurePreset": "win-ninja-st-lp64-static-avx512-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-autoisa",
+            "configurePreset": "win-ninja-st-lp64-shared-autoisa",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-autoisa-test",
+            "configurePreset": "win-ninja-st-lp64-shared-autoisa-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-autoisa-aoclblas",
+            "configurePreset": "win-ninja-st-lp64-shared-autoisa-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-autoisa-aoclblas-test",
+            "configurePreset": "win-ninja-st-lp64-shared-autoisa-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-avx",
+            "configurePreset": "win-ninja-st-lp64-shared-avx",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-avx-test",
+            "configurePreset": "win-ninja-st-lp64-shared-avx-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-avx-aoclblas",
+            "configurePreset": "win-ninja-st-lp64-shared-avx-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-avx-aoclblas-test",
+            "configurePreset": "win-ninja-st-lp64-shared-avx-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-avx2",
+            "configurePreset": "win-ninja-st-lp64-shared-avx2",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-avx2-test",
+            "configurePreset": "win-ninja-st-lp64-shared-avx2-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-avx2-aoclblas",
+            "configurePreset": "win-ninja-st-lp64-shared-avx2-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-avx2-aoclblas-test",
+            "configurePreset": "win-ninja-st-lp64-shared-avx2-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-avx512",
+            "configurePreset": "win-ninja-st-lp64-shared-avx512",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-avx512-test",
+            "configurePreset": "win-ninja-st-lp64-shared-avx512-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-avx512-aoclblas",
+            "configurePreset": "win-ninja-st-lp64-shared-avx512-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-lp64-shared-avx512-aoclblas-test",
+            "configurePreset": "win-ninja-st-lp64-shared-avx512-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-autoisa",
+            "configurePreset": "win-ninja-st-ilp64-static-autoisa",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-autoisa-test",
+            "configurePreset": "win-ninja-st-ilp64-static-autoisa-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-autoisa-aoclblas",
+            "configurePreset": "win-ninja-st-ilp64-static-autoisa-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-autoisa-aoclblas-test",
+            "configurePreset": "win-ninja-st-ilp64-static-autoisa-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-avx",
+            "configurePreset": "win-ninja-st-ilp64-static-avx",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-avx-test",
+            "configurePreset": "win-ninja-st-ilp64-static-avx-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-avx-aoclblas",
+            "configurePreset": "win-ninja-st-ilp64-static-avx-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-avx-aoclblas-test",
+            "configurePreset": "win-ninja-st-ilp64-static-avx-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-avx2",
+            "configurePreset": "win-ninja-st-ilp64-static-avx2",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-avx2-test",
+            "configurePreset": "win-ninja-st-ilp64-static-avx2-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-avx2-aoclblas",
+            "configurePreset": "win-ninja-st-ilp64-static-avx2-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-avx2-aoclblas-test",
+            "configurePreset": "win-ninja-st-ilp64-static-avx2-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-avx512",
+            "configurePreset": "win-ninja-st-ilp64-static-avx512",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-avx512-test",
+            "configurePreset": "win-ninja-st-ilp64-static-avx512-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-avx512-aoclblas",
+            "configurePreset": "win-ninja-st-ilp64-static-avx512-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-static-avx512-aoclblas-test",
+            "configurePreset": "win-ninja-st-ilp64-static-avx512-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-autoisa",
+            "configurePreset": "win-ninja-st-ilp64-shared-autoisa",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-autoisa-test",
+            "configurePreset": "win-ninja-st-ilp64-shared-autoisa-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-autoisa-aoclblas",
+            "configurePreset": "win-ninja-st-ilp64-shared-autoisa-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-autoisa-aoclblas-test",
+            "configurePreset": "win-ninja-st-ilp64-shared-autoisa-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-avx",
+            "configurePreset": "win-ninja-st-ilp64-shared-avx",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-avx-test",
+            "configurePreset": "win-ninja-st-ilp64-shared-avx-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-avx-aoclblas",
+            "configurePreset": "win-ninja-st-ilp64-shared-avx-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-avx-aoclblas-test",
+            "configurePreset": "win-ninja-st-ilp64-shared-avx-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-avx2",
+            "configurePreset": "win-ninja-st-ilp64-shared-avx2",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-avx2-test",
+            "configurePreset": "win-ninja-st-ilp64-shared-avx2-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-avx2-aoclblas",
+            "configurePreset": "win-ninja-st-ilp64-shared-avx2-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-avx2-aoclblas-test",
+            "configurePreset": "win-ninja-st-ilp64-shared-avx2-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-avx512",
+            "configurePreset": "win-ninja-st-ilp64-shared-avx512",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-avx512-test",
+            "configurePreset": "win-ninja-st-ilp64-shared-avx512-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-avx512-aoclblas",
+            "configurePreset": "win-ninja-st-ilp64-shared-avx512-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-st-ilp64-shared-avx512-aoclblas-test",
+            "configurePreset": "win-ninja-st-ilp64-shared-avx512-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-autoisa",
+            "configurePreset": "win-ninja-mt-lp64-static-autoisa",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-autoisa-test",
+            "configurePreset": "win-ninja-mt-lp64-static-autoisa-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-autoisa-aoclblas",
+            "configurePreset": "win-ninja-mt-lp64-static-autoisa-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-autoisa-aoclblas-test",
+            "configurePreset": "win-ninja-mt-lp64-static-autoisa-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-avx",
+            "configurePreset": "win-ninja-mt-lp64-static-avx",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-avx-test",
+            "configurePreset": "win-ninja-mt-lp64-static-avx-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-avx-aoclblas",
+            "configurePreset": "win-ninja-mt-lp64-static-avx-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-avx-aoclblas-test",
+            "configurePreset": "win-ninja-mt-lp64-static-avx-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-avx2",
+            "configurePreset": "win-ninja-mt-lp64-static-avx2",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-avx2-test",
+            "configurePreset": "win-ninja-mt-lp64-static-avx2-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-avx2-aoclblas",
+            "configurePreset": "win-ninja-mt-lp64-static-avx2-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-avx2-aoclblas-test",
+            "configurePreset": "win-ninja-mt-lp64-static-avx2-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-avx512",
+            "configurePreset": "win-ninja-mt-lp64-static-avx512",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-avx512-test",
+            "configurePreset": "win-ninja-mt-lp64-static-avx512-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-avx512-aoclblas",
+            "configurePreset": "win-ninja-mt-lp64-static-avx512-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-static-avx512-aoclblas-test",
+            "configurePreset": "win-ninja-mt-lp64-static-avx512-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-autoisa",
+            "configurePreset": "win-ninja-mt-lp64-shared-autoisa",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-autoisa-test",
+            "configurePreset": "win-ninja-mt-lp64-shared-autoisa-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-autoisa-aoclblas",
+            "configurePreset": "win-ninja-mt-lp64-shared-autoisa-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-autoisa-aoclblas-test",
+            "configurePreset": "win-ninja-mt-lp64-shared-autoisa-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-avx",
+            "configurePreset": "win-ninja-mt-lp64-shared-avx",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-avx-test",
+            "configurePreset": "win-ninja-mt-lp64-shared-avx-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-avx-aoclblas",
+            "configurePreset": "win-ninja-mt-lp64-shared-avx-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-avx-aoclblas-test",
+            "configurePreset": "win-ninja-mt-lp64-shared-avx-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-avx2",
+            "configurePreset": "win-ninja-mt-lp64-shared-avx2",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-avx2-test",
+            "configurePreset": "win-ninja-mt-lp64-shared-avx2-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-avx2-aoclblas",
+            "configurePreset": "win-ninja-mt-lp64-shared-avx2-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-avx2-aoclblas-test",
+            "configurePreset": "win-ninja-mt-lp64-shared-avx2-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-avx512",
+            "configurePreset": "win-ninja-mt-lp64-shared-avx512",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-avx512-test",
+            "configurePreset": "win-ninja-mt-lp64-shared-avx512-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-avx512-aoclblas",
+            "configurePreset": "win-ninja-mt-lp64-shared-avx512-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-lp64-shared-avx512-aoclblas-test",
+            "configurePreset": "win-ninja-mt-lp64-shared-avx512-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-autoisa",
+            "configurePreset": "win-ninja-mt-ilp64-static-autoisa",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-autoisa-test",
+            "configurePreset": "win-ninja-mt-ilp64-static-autoisa-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-autoisa-aoclblas",
+            "configurePreset": "win-ninja-mt-ilp64-static-autoisa-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-autoisa-aoclblas-test",
+            "configurePreset": "win-ninja-mt-ilp64-static-autoisa-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-avx",
+            "configurePreset": "win-ninja-mt-ilp64-static-avx",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-avx-test",
+            "configurePreset": "win-ninja-mt-ilp64-static-avx-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-avx-aoclblas",
+            "configurePreset": "win-ninja-mt-ilp64-static-avx-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-avx-aoclblas-test",
+            "configurePreset": "win-ninja-mt-ilp64-static-avx-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-avx2",
+            "configurePreset": "win-ninja-mt-ilp64-static-avx2",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-avx2-test",
+            "configurePreset": "win-ninja-mt-ilp64-static-avx2-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-avx2-aoclblas",
+            "configurePreset": "win-ninja-mt-ilp64-static-avx2-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-avx2-aoclblas-test",
+            "configurePreset": "win-ninja-mt-ilp64-static-avx2-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-avx512",
+            "configurePreset": "win-ninja-mt-ilp64-static-avx512",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-avx512-test",
+            "configurePreset": "win-ninja-mt-ilp64-static-avx512-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-avx512-aoclblas",
+            "configurePreset": "win-ninja-mt-ilp64-static-avx512-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-static-avx512-aoclblas-test",
+            "configurePreset": "win-ninja-mt-ilp64-static-avx512-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-autoisa",
+            "configurePreset": "win-ninja-mt-ilp64-shared-autoisa",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-autoisa-test",
+            "configurePreset": "win-ninja-mt-ilp64-shared-autoisa-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-autoisa-aoclblas",
+            "configurePreset": "win-ninja-mt-ilp64-shared-autoisa-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-autoisa-aoclblas-test",
+            "configurePreset": "win-ninja-mt-ilp64-shared-autoisa-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-avx",
+            "configurePreset": "win-ninja-mt-ilp64-shared-avx",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-avx-test",
+            "configurePreset": "win-ninja-mt-ilp64-shared-avx-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-avx-aoclblas",
+            "configurePreset": "win-ninja-mt-ilp64-shared-avx-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-avx-aoclblas-test",
+            "configurePreset": "win-ninja-mt-ilp64-shared-avx-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-avx2",
+            "configurePreset": "win-ninja-mt-ilp64-shared-avx2",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-avx2-test",
+            "configurePreset": "win-ninja-mt-ilp64-shared-avx2-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-avx2-aoclblas",
+            "configurePreset": "win-ninja-mt-ilp64-shared-avx2-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-avx2-aoclblas-test",
+            "configurePreset": "win-ninja-mt-ilp64-shared-avx2-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-avx512",
+            "configurePreset": "win-ninja-mt-ilp64-shared-avx512",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-avx512-test",
+            "configurePreset": "win-ninja-mt-ilp64-shared-avx512-test",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-avx512-aoclblas",
+            "configurePreset": "win-ninja-mt-ilp64-shared-avx512-aoclblas",
+            "inherits": "base"
+        },
+        {
+            "name": "win-ninja-mt-ilp64-shared-avx512-aoclblas-test",
+            "configurePreset": "win-ninja-mt-ilp64-shared-avx512-aoclblas-test",
+            "inherits": "base"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-static-autoisa",
+            "configurePreset": "win-ninja-st-lp64-static-autoisa",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-static-autoisa-test",
+            "configurePreset": "win-ninja-st-lp64-static-autoisa-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-static-autoisa-aoclblas",
+            "configurePreset": "win-ninja-st-lp64-static-autoisa-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-static-autoisa-aoclblas-test",
+            "configurePreset": "win-ninja-st-lp64-static-autoisa-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-static-avx",
+            "configurePreset": "win-ninja-st-lp64-static-avx",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-static-avx-test",
+            "configurePreset": "win-ninja-st-lp64-static-avx-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-static-avx-aoclblas",
+            "configurePreset": "win-ninja-st-lp64-static-avx-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-static-avx-aoclblas-test",
+            "configurePreset": "win-ninja-st-lp64-static-avx-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-static-avx2",
+            "configurePreset": "win-ninja-st-lp64-static-avx2",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-static-avx2-test",
+            "configurePreset": "win-ninja-st-lp64-static-avx2-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-static-avx2-aoclblas",
+            "configurePreset": "win-ninja-st-lp64-static-avx2-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-static-avx2-aoclblas-test",
+            "configurePreset": "win-ninja-st-lp64-static-avx2-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-static-avx512",
+            "configurePreset": "win-ninja-st-lp64-static-avx512",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-static-avx512-test",
+            "configurePreset": "win-ninja-st-lp64-static-avx512-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-static-avx512-aoclblas",
+            "configurePreset": "win-ninja-st-lp64-static-avx512-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-static-avx512-aoclblas-test",
+            "configurePreset": "win-ninja-st-lp64-static-avx512-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-shared-autoisa",
+            "configurePreset": "win-ninja-st-lp64-shared-autoisa",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-shared-autoisa-test",
+            "configurePreset": "win-ninja-st-lp64-shared-autoisa-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-shared-autoisa-aoclblas",
+            "configurePreset": "win-ninja-st-lp64-shared-autoisa-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-shared-autoisa-aoclblas-test",
+            "configurePreset": "win-ninja-st-lp64-shared-autoisa-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-shared-avx",
+            "configurePreset": "win-ninja-st-lp64-shared-avx",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-shared-avx-test",
+            "configurePreset": "win-ninja-st-lp64-shared-avx-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-shared-avx-aoclblas",
+            "configurePreset": "win-ninja-st-lp64-shared-avx-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-shared-avx-aoclblas-test",
+            "configurePreset": "win-ninja-st-lp64-shared-avx-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-shared-avx2",
+            "configurePreset": "win-ninja-st-lp64-shared-avx2",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-shared-avx2-test",
+            "configurePreset": "win-ninja-st-lp64-shared-avx2-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-shared-avx2-aoclblas",
+            "configurePreset": "win-ninja-st-lp64-shared-avx2-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-shared-avx2-aoclblas-test",
+            "configurePreset": "win-ninja-st-lp64-shared-avx2-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-shared-avx512",
+            "configurePreset": "win-ninja-st-lp64-shared-avx512",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-shared-avx512-test",
+            "configurePreset": "win-ninja-st-lp64-shared-avx512-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-shared-avx512-aoclblas",
+            "configurePreset": "win-ninja-st-lp64-shared-avx512-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-lp64-shared-avx512-aoclblas-test",
+            "configurePreset": "win-ninja-st-lp64-shared-avx512-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-static-autoisa",
+            "configurePreset": "win-ninja-st-ilp64-static-autoisa",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-static-autoisa-test",
+            "configurePreset": "win-ninja-st-ilp64-static-autoisa-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-static-autoisa-aoclblas",
+            "configurePreset": "win-ninja-st-ilp64-static-autoisa-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-static-autoisa-aoclblas-test",
+            "configurePreset": "win-ninja-st-ilp64-static-autoisa-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-static-avx",
+            "configurePreset": "win-ninja-st-ilp64-static-avx",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-static-avx-test",
+            "configurePreset": "win-ninja-st-ilp64-static-avx-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-static-avx-aoclblas",
+            "configurePreset": "win-ninja-st-ilp64-static-avx-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-static-avx-aoclblas-test",
+            "configurePreset": "win-ninja-st-ilp64-static-avx-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-static-avx2",
+            "configurePreset": "win-ninja-st-ilp64-static-avx2",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-static-avx2-test",
+            "configurePreset": "win-ninja-st-ilp64-static-avx2-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-static-avx2-aoclblas",
+            "configurePreset": "win-ninja-st-ilp64-static-avx2-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-static-avx2-aoclblas-test",
+            "configurePreset": "win-ninja-st-ilp64-static-avx2-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-static-avx512",
+            "configurePreset": "win-ninja-st-ilp64-static-avx512",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-static-avx512-test",
+            "configurePreset": "win-ninja-st-ilp64-static-avx512-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-static-avx512-aoclblas",
+            "configurePreset": "win-ninja-st-ilp64-static-avx512-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-static-avx512-aoclblas-test",
+            "configurePreset": "win-ninja-st-ilp64-static-avx512-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-shared-autoisa",
+            "configurePreset": "win-ninja-st-ilp64-shared-autoisa",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-shared-autoisa-test",
+            "configurePreset": "win-ninja-st-ilp64-shared-autoisa-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-shared-autoisa-aoclblas",
+            "configurePreset": "win-ninja-st-ilp64-shared-autoisa-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-shared-autoisa-aoclblas-test",
+            "configurePreset": "win-ninja-st-ilp64-shared-autoisa-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-shared-avx",
+            "configurePreset": "win-ninja-st-ilp64-shared-avx",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-shared-avx-test",
+            "configurePreset": "win-ninja-st-ilp64-shared-avx-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-shared-avx-aoclblas",
+            "configurePreset": "win-ninja-st-ilp64-shared-avx-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-shared-avx-aoclblas-test",
+            "configurePreset": "win-ninja-st-ilp64-shared-avx-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-shared-avx2",
+            "configurePreset": "win-ninja-st-ilp64-shared-avx2",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-shared-avx2-test",
+            "configurePreset": "win-ninja-st-ilp64-shared-avx2-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-shared-avx2-aoclblas",
+            "configurePreset": "win-ninja-st-ilp64-shared-avx2-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-shared-avx2-aoclblas-test",
+            "configurePreset": "win-ninja-st-ilp64-shared-avx2-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-shared-avx512",
+            "configurePreset": "win-ninja-st-ilp64-shared-avx512",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-shared-avx512-test",
+            "configurePreset": "win-ninja-st-ilp64-shared-avx512-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-shared-avx512-aoclblas",
+            "configurePreset": "win-ninja-st-ilp64-shared-avx512-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-st-ilp64-shared-avx512-aoclblas-test",
+            "configurePreset": "win-ninja-st-ilp64-shared-avx512-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-static-autoisa",
+            "configurePreset": "win-ninja-mt-lp64-static-autoisa",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-static-autoisa-test",
+            "configurePreset": "win-ninja-mt-lp64-static-autoisa-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-static-autoisa-aoclblas",
+            "configurePreset": "win-ninja-mt-lp64-static-autoisa-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-static-autoisa-aoclblas-test",
+            "configurePreset": "win-ninja-mt-lp64-static-autoisa-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-static-avx",
+            "configurePreset": "win-ninja-mt-lp64-static-avx",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-static-avx-test",
+            "configurePreset": "win-ninja-mt-lp64-static-avx-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-static-avx-aoclblas",
+            "configurePreset": "win-ninja-mt-lp64-static-avx-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-static-avx-aoclblas-test",
+            "configurePreset": "win-ninja-mt-lp64-static-avx-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-static-avx2",
+            "configurePreset": "win-ninja-mt-lp64-static-avx2",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-static-avx2-test",
+            "configurePreset": "win-ninja-mt-lp64-static-avx2-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-static-avx2-aoclblas",
+            "configurePreset": "win-ninja-mt-lp64-static-avx2-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-static-avx2-aoclblas-test",
+            "configurePreset": "win-ninja-mt-lp64-static-avx2-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-static-avx512",
+            "configurePreset": "win-ninja-mt-lp64-static-avx512",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-static-avx512-test",
+            "configurePreset": "win-ninja-mt-lp64-static-avx512-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-static-avx512-aoclblas",
+            "configurePreset": "win-ninja-mt-lp64-static-avx512-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-static-avx512-aoclblas-test",
+            "configurePreset": "win-ninja-mt-lp64-static-avx512-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-shared-autoisa",
+            "configurePreset": "win-ninja-mt-lp64-shared-autoisa",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-shared-autoisa-test",
+            "configurePreset": "win-ninja-mt-lp64-shared-autoisa-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-shared-autoisa-aoclblas",
+            "configurePreset": "win-ninja-mt-lp64-shared-autoisa-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-shared-autoisa-aoclblas-test",
+            "configurePreset": "win-ninja-mt-lp64-shared-autoisa-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-shared-avx",
+            "configurePreset": "win-ninja-mt-lp64-shared-avx",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-shared-avx-test",
+            "configurePreset": "win-ninja-mt-lp64-shared-avx-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-shared-avx-aoclblas",
+            "configurePreset": "win-ninja-mt-lp64-shared-avx-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-shared-avx-aoclblas-test",
+            "configurePreset": "win-ninja-mt-lp64-shared-avx-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-shared-avx2",
+            "configurePreset": "win-ninja-mt-lp64-shared-avx2",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-shared-avx2-test",
+            "configurePreset": "win-ninja-mt-lp64-shared-avx2-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-shared-avx2-aoclblas",
+            "configurePreset": "win-ninja-mt-lp64-shared-avx2-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-shared-avx2-aoclblas-test",
+            "configurePreset": "win-ninja-mt-lp64-shared-avx2-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-shared-avx512",
+            "configurePreset": "win-ninja-mt-lp64-shared-avx512",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-shared-avx512-test",
+            "configurePreset": "win-ninja-mt-lp64-shared-avx512-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-shared-avx512-aoclblas",
+            "configurePreset": "win-ninja-mt-lp64-shared-avx512-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-lp64-shared-avx512-aoclblas-test",
+            "configurePreset": "win-ninja-mt-lp64-shared-avx512-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-static-autoisa",
+            "configurePreset": "win-ninja-mt-ilp64-static-autoisa",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-static-autoisa-test",
+            "configurePreset": "win-ninja-mt-ilp64-static-autoisa-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-static-autoisa-aoclblas",
+            "configurePreset": "win-ninja-mt-ilp64-static-autoisa-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-static-autoisa-aoclblas-test",
+            "configurePreset": "win-ninja-mt-ilp64-static-autoisa-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-static-avx",
+            "configurePreset": "win-ninja-mt-ilp64-static-avx",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-static-avx-test",
+            "configurePreset": "win-ninja-mt-ilp64-static-avx-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-static-avx-aoclblas",
+            "configurePreset": "win-ninja-mt-ilp64-static-avx-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-static-avx-aoclblas-test",
+            "configurePreset": "win-ninja-mt-ilp64-static-avx-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-static-avx2",
+            "configurePreset": "win-ninja-mt-ilp64-static-avx2",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-static-avx2-test",
+            "configurePreset": "win-ninja-mt-ilp64-static-avx2-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-static-avx2-aoclblas",
+            "configurePreset": "win-ninja-mt-ilp64-static-avx2-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-static-avx2-aoclblas-test",
+            "configurePreset": "win-ninja-mt-ilp64-static-avx2-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-static-avx512",
+            "configurePreset": "win-ninja-mt-ilp64-static-avx512",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-static-avx512-test",
+            "configurePreset": "win-ninja-mt-ilp64-static-avx512-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-static-avx512-aoclblas",
+            "configurePreset": "win-ninja-mt-ilp64-static-avx512-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-static-avx512-aoclblas-test",
+            "configurePreset": "win-ninja-mt-ilp64-static-avx512-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-shared-autoisa",
+            "configurePreset": "win-ninja-mt-ilp64-shared-autoisa",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-shared-autoisa-test",
+            "configurePreset": "win-ninja-mt-ilp64-shared-autoisa-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-shared-autoisa-aoclblas",
+            "configurePreset": "win-ninja-mt-ilp64-shared-autoisa-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-shared-autoisa-aoclblas-test",
+            "configurePreset": "win-ninja-mt-ilp64-shared-autoisa-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-shared-avx",
+            "configurePreset": "win-ninja-mt-ilp64-shared-avx",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-shared-avx-test",
+            "configurePreset": "win-ninja-mt-ilp64-shared-avx-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-shared-avx-aoclblas",
+            "configurePreset": "win-ninja-mt-ilp64-shared-avx-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-shared-avx-aoclblas-test",
+            "configurePreset": "win-ninja-mt-ilp64-shared-avx-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-shared-avx2",
+            "configurePreset": "win-ninja-mt-ilp64-shared-avx2",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-shared-avx2-test",
+            "configurePreset": "win-ninja-mt-ilp64-shared-avx2-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-shared-avx2-aoclblas",
+            "configurePreset": "win-ninja-mt-ilp64-shared-avx2-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-shared-avx2-aoclblas-test",
+            "configurePreset": "win-ninja-mt-ilp64-shared-avx2-aoclblas-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-shared-avx512",
+            "configurePreset": "win-ninja-mt-ilp64-shared-avx512",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-shared-avx512-test",
+            "configurePreset": "win-ninja-mt-ilp64-shared-avx512-test",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-shared-avx512-aoclblas",
+            "configurePreset": "win-ninja-mt-ilp64-shared-avx512-aoclblas",
+            "inherits": "install"
+        },
+        {
+            "name": "install-win-ninja-mt-ilp64-shared-avx512-aoclblas-test",
+            "configurePreset": "win-ninja-mt-ilp64-shared-avx512-aoclblas-test",
+            "inherits": "install"
+        }
+    ]
+}

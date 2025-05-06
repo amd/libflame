@@ -1,8 +1,8 @@
-/* ../netlib/zsytrf.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./zsytrf.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -50,7 +50,7 @@ static integer c__2 = 2;
 /* > */
 /* > where U (or L) is a product of permutation and unit upper (lower) */
 /* > triangular matrices, and D is symmetric and block diagonal with */
-/* > with 1-by-1 and 2-by-2 diagonal blocks. */
+/* > 1-by-1 and 2-by-2 diagonal blocks. */
 /* > */
 /* > This is the blocked version of the algorithm, calling Level 3 BLAS. */
 /* > \endverbatim */
@@ -139,8 +139,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup complex16SYcomputational */
+/* > \ingroup hetrf */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -208,10 +207,9 @@ void zsytrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
                 doublecomplex *, integer *, integer *);
     integer lwkopt;
     logical lquery;
-    /* -- LAPACK computational routine (version 3.4.0) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -257,7 +255,10 @@ void zsytrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
     {
         /* Determine the block size */
         nb = ilaenv_(&c__1, "ZSYTRF", uplo, n, &c_n1, &c_n1, &c_n1);
-        lwkopt = *n * nb;
+        /* Computing MAX */
+        i__1 = 1;
+        i__2 = *n * nb; // , expr subst
+        lwkopt = fla_max(i__1, i__2);
         work[1].r = (doublereal)lwkopt;
         work[1].i = 0.; // , expr subst
     }

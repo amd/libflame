@@ -244,15 +244,11 @@ void ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
                    integer *ldab, real *d__, real *e, real *hous, integer *lhous, real *work,
                    integer *lwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "ssytrd_sb2st inputs: stage1 %c, vect %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS
              ", ldab %" FLA_IS ", lhous %" FLA_IS "",
              *stage1, *vect, *uplo, *n, *kd, *ldab, *lhous);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */
@@ -274,6 +270,7 @@ void ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
         slaset_(char *, integer *, integer *, real *, real *, real *, integer *),
         ssb2st_kernels_(char *, logical *, integer *, integer *, integer *, integer *, integer *,
                         integer *, integer *, real *, integer *, real *, real *, integer *, real *);
+    extern real sroundup_lwork(integer *);
 #ifdef FLA_OPENMP_MULTITHREADING
     extern /* Function */
         int
@@ -358,18 +355,18 @@ void ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     if(*info == 0)
     {
         hous[1] = (real)lhmin;
-        work[1] = (real)lwmin;
+        work[1] = sroundup_lwork(&lwmin);
     }
     if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SSYTRD_SB2ST", &i__1, (ftnlen)12);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -377,7 +374,7 @@ void ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     {
         hous[1] = 1.f;
         work[1] = 1.f;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine pointer position */
@@ -429,7 +426,7 @@ void ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
         }
         hous[1] = 1.f;
         work[1] = 1.f;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Case KD=1: */
@@ -469,7 +466,7 @@ void ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
         }
         hous[1] = 1.f;
         work[1] = 1.f;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Main code start here. */
@@ -501,7 +498,6 @@ void ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     i__1 = *kd + 1;
     slacpy_("A", &i__1, n, &ab[ab_offset], ldab, &work[apos], &lda);
     slaset_("A", kd, n, &c_b26, &c_b26, &work[awpos], &lda);
-
 
     /* openMP parallelisation start here */
 #ifdef FLA_OPENMP_MULTITHREADING
@@ -602,7 +598,7 @@ void ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
 #else
                         ssb2st_kernels_(uplo, &wantq, &ttype, &stind, &edind, &sweepid, n, kd, &ib,
                                         &work[inda], &lda, &hous[indv], &hous[indtau], &ldv,
-                                        &work[indw + tid * *kd]);
+                                        &work[indw]);
 #endif
                                 if(blklastind >= *n - 1)
                                 {
@@ -652,8 +648,8 @@ void ssytrd_sb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
         }
     }
     hous[1] = (real)lhmin;
-    work[1] = (real)lwmin;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    work[1] = sroundup_lwork(&lwmin);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYTRD_SB2ST */
 }

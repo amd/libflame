@@ -311,6 +311,8 @@ FLAF2C_H_SRC_PATH := $(DIST_PATH)/src/base/flamec/include/FLA_f2c.h
 FLAME_H_SRC_PATH  := $(DIST_PATH)/src/base/flamec/include/FLAME.h
 BLIS1_H_SRC_PATH  := $(DIST_PATH)/src/base/flamec/blis/include/blis1.h
 
+CPP_INTERFACE_SRC_PATH := $(DIST_PATH)/src/src_cpp/libflame_interface.hh
+
 # Construct the path to what will be the intermediate flattened/monolithic
 # header files.
 FLAME_H       := FLAME.h
@@ -322,6 +324,8 @@ BLIS1_H_FLAT  := $(BASE_INC_PATH)/$(BLIS1_H)
 FLAF2C_H      := FLA_f2c.h
 FLAF2C_H_FLAT := $(BASE_INC_PATH)/$(FLAF2C_H)
 
+CPP_INTERFACE_H := libflame_interface.hh
+CPP_INTERFACE_H_FLAT := $(BASE_INC_PATH)/$(CPP_INTERFACE_H)
 
 #Define path of CPP Template header files
 CPP_TEMPLATE_H_PATH := ./$(SRC_DIR)/src_cpp
@@ -365,7 +369,8 @@ HEADERS_TO_FLATTEN := $(FLAME_H_FLAT) $(BLIS1_H_FLAT) $(FLAF2C_H_FLAT)
 # Define a list of headers to install and their installation path. The default
 # is to only install FLAME.h.
 HEADERS_TO_INSTALL := $(FLAME_H_FLAT)
-HEADERS_TO_INSTALL += $(CPP_TEMPLATE_H_PATH)/*.hh
+HEADERS_TO_INSTALL += $(CPP_TEMPLATE_H_PATH)/libflame.hh
+HEADERS_TO_INSTALL += $(CPP_INTERFACE_H_FLAT)
 #LAPACKE headers for cpp interface
 LAPACKE_HEADERS_DIR := $(SRC_DIR)/$(LAPACKE_DIR)/LAPACKE/include
 LAPACKE_HEADERS    := $(LAPACKE_HEADERS_DIR)/lapacke.h
@@ -547,7 +552,7 @@ aoclutillib:
 	
 # --- Cosolidated header creation ---
 
-flat-headers: check-env $(FLAME_H_FLAT) $(BLIS1_H_FLAT) $(FLAF2C_H_FLAT)
+flat-headers: check-env $(FLAME_H_FLAT) $(BLIS1_H_FLAT) $(FLAF2C_H_FLAT) $(CPP_INTERFACE_H_FLAT)
 
 # Consolidated FLAME.h header creation
 $(FLAME_H_FLAT): $(MK_HEADER_FILES)
@@ -566,6 +571,16 @@ ifeq ($(ENABLE_VERBOSE),yes)
 else
 	@echo -n "Generating monolithic $(@)"
 	@$(FLATTEN_H) -c -v1 $(BLIS1_H_SRC_PATH) $@ $(BASE_INC_PATH) "$(MK_HEADER_DIR_PATHS)"
+	@echo "Generated monolithic $@"
+endif
+
+# Consolidated libflame_interface.hh header creation
+$(CPP_INTERFACE_H_FLAT):
+ifeq ($(ENABLE_VERBOSE),yes)
+	$(FLATTEN_H) -v1 $(CPP_INTERFACE_SRC_PATH) $@ $(BASE_INC_PATH) "$(CPP_TEMPLATE_H_PATH)"
+else
+	@echo -n "Generating monolithic $(@)"
+	@$(FLATTEN_H) -v1 $(CPP_INTERFACE_SRC_PATH) $@ $(BASE_INC_PATH) "$(CPP_TEMPLATE_H_PATH)"
 	@echo "Generated monolithic $@"
 endif
 

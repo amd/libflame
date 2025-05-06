@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/zgges3.f -- translated by f2c (version 20160102). You must link the resulting
- object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
- systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
- -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./zgges3.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublecomplex c_b1 = {0., 0.};
 static doublecomplex c_b2 = {1., 0.};
@@ -255,7 +255,7 @@ the routine */
 /* > The QZ iteration failed. (A,B) are not in Schur */
 /* > form, but ALPHA(j) and BETA(j) should be correct for */
 /* > j=INFO+1,...,N. */
-/* > > N: =N+1: other than QZ iteration failed in ZHGEQZ */
+/* > > N: =N+1: other than QZ iteration failed in ZLAQZ0 */
 /* > =N+2: after reordering, roundoff changed values of */
 /* > some complex eigenvalues so that leading */
 /* > eigenvalues in the Generalized Schur form no */
@@ -269,8 +269,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date January 2015 */
-/* > \ingroup complex16GEeigen */
+/* > \ingroup gges3 */
 /* ===================================================================== */
 /* Subroutine */
 void zgges3_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, integer *n, doublecomplex *a,
@@ -304,8 +303,7 @@ void zgges3_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, integer *n, 
         void
         zgghd3_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
                 doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-                doublecomplex *, integer *, integer *),
-        dlabad_(doublereal *, doublereal *);
+                doublecomplex *, integer *, integer *);
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
         void
@@ -341,7 +339,7 @@ void zgges3_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, integer *n, 
         zhgeqz_(char *, char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
                 doublecomplex *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
                 integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
-                integer *),
+                integer *),        
         ztgsen_(integer *, logical *, logical *, logical *, integer *, doublecomplex *, integer *,
                 doublecomplex *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
                 integer *, doublecomplex *, integer *, integer *, doublereal *, doublereal *,
@@ -355,10 +353,9 @@ void zgges3_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, integer *n, 
                 doublecomplex *, integer *, integer *),
         zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
                 doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
-    /* -- LAPACK driver routine (version 3.6.1) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* January 2015 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -528,7 +525,7 @@ void zgges3_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, integer *n, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGGES3 ", &i__1, (ftnlen)7);
+        xerbla_("ZGGES3", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -548,7 +545,6 @@ void zgges3_(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, integer *n, 
     eps = dlamch_("P");
     smlnum = dlamch_("S");
     bignum = 1. / smlnum;
-    dlabad_(&smlnum, &bignum);
     smlnum = sqrt(smlnum) / eps;
     bignum = 1. / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */

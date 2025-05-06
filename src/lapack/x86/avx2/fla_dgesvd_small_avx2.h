@@ -34,7 +34,7 @@ doublereal d_sign(doublereal *, doublereal *);
              * elements below diagonal A(i+1:nr,i) */                    \
             FLA_LARF_GEN_DSMALL_COL(i, &nr, &nc, qtau);                  \
             /* Apply the reflector on A(i:nr,i+1:nc) from the left */    \
-            FLA_LARF_APPLY_DSMALL_COL(i, &nr, &nc, ia, qtau);            \
+            FLA_LARF_APPLY_DSMALL_COL(i, &nr, &nc, ia, ldia, qtau);      \
         }                                                                \
         else                                                             \
         {                                                                \
@@ -59,13 +59,25 @@ doublereal d_sign(doublereal *, doublereal *);
             /* Generate elementary reflector to annihilate               \
              * elements to the right of current row's                    \
              * super diagonalA(i,i+2:nr) */                              \
-            FLA_LARF_GEN_DSMALL_ROW(i, &nr, &nc, tau);                   \
+            FLA_LARF_GEN_DSMALL_ROW(i, &nr, &nc, iptr, ldia, tau);       \
             /* Apply the reflector on A(i+1:nr,i+1:nc) from the right */ \
-            FLA_LARF_APPLY_DSMALL_ROW(i, &nr, &nc, tau);                 \
+            FLA_LARF_APPLY_DSMALL_ROW(i, &nr, &nc, iptr, ldia, tau);     \
         }                                                                \
         if(rlen >= 0)                                                    \
             ev[i] = iptr[*ldia];                                         \
     }
+
+#define FLA_COMPUTE_VT_2X2(vt, ldvt, s1, s2, cr, sr) \
+    doublereal scl1, scl2;                           \
+                                                     \
+    scl1 = (s1 < 0.) ? -1. : 1.;                     \
+    scl2 = (s2 < 0.) ? -1. : 1.;                     \
+                                                     \
+    vt[1 + *ldvt] = scl1 * cr;                       \
+    vt[2 + *ldvt] = scl2 * -sr;                      \
+                                                     \
+    vt[1 + 2 * *ldvt] = scl1 * sr;                   \
+    vt[2 + 2 * *ldvt] = scl2 * cr;
 
 #endif /* FLA_ENABLE_AMD_OPT */
 #endif /* FLA_DGESVD_SMALL_AVX2_DEFS_H */

@@ -1,4 +1,4 @@
-/* cgeesx.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./cgeesx.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -244,7 +244,7 @@ if */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup complexGEeigen */
+/* > \ingroup geesx */
 /* ===================================================================== */
 /* Subroutine */
 void cgeesx_(char *jobvs, char *sort, L_fp1 select, char *sense, integer *n, complex *a,
@@ -258,6 +258,7 @@ void cgeesx_(char *jobvs, char *sort, L_fp1 select, char *sense, integer *n, com
                       *jobvs, *sort, *sense, *n, *lda, *ldvs);
     /* System generated locals */
     integer a_dim1, a_offset, vs_dim1, vs_offset, i__1, i__2;
+    real r__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
@@ -272,8 +273,7 @@ void cgeesx_(char *jobvs, char *sort, L_fp1 select, char *sense, integer *n, com
         ccopy_(integer *, complex *, integer *, complex *, integer *),
         cgebak_(char *, char *, integer *, integer *, integer *, real *, integer *, complex *,
                 integer *, integer *),
-        cgebal_(char *, integer *, complex *, integer *, integer *, integer *, real *, integer *),
-        slabad_(real *, real *);
+        cgebal_(char *, integer *, complex *, integer *, integer *, integer *, real *, integer *);
     logical scalea;
     extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     real cscale;
@@ -309,6 +309,7 @@ void cgeesx_(char *jobvs, char *sort, L_fp1 select, char *sense, integer *n, com
     real smlnum;
     integer hswork;
     logical wantst, lquery, wantsv, wantvs;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -428,7 +429,8 @@ void cgeesx_(char *jobvs, char *sort, L_fp1 select, char *sense, integer *n, com
                 lwrk = fla_max(i__1, i__2);
             }
         }
-        work[1].r = (real)lwrk;
+        r__1 = sroundup_lwork(&lwrk);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         if(*lwork < minwrk && !lquery)
         {
@@ -458,7 +460,6 @@ void cgeesx_(char *jobvs, char *sort, L_fp1 select, char *sense, integer *n, com
     eps = slamch_("P");
     smlnum = slamch_("S");
     bignum = 1.f / smlnum;
-    slabad_(&smlnum, &bignum);
     smlnum = sqrt(smlnum) / eps;
     bignum = 1.f / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
@@ -566,7 +567,8 @@ void cgeesx_(char *jobvs, char *sort, L_fp1 select, char *sense, integer *n, com
             *rcondv = dum[0];
         }
     }
-    work[1].r = (real)maxwrk;
+    r__1 = sroundup_lwork(&maxwrk);
+    work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;

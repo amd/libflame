@@ -1,12 +1,12 @@
-/* ../netlib/slaed2.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./slaed2.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b3 = -1.f;
 static integer c__1 = 1;
-/* > \brief \b SLAED2 used by sstedc. Merges eigenvalues and deflates secular equation. Used when
+/* > \brief \b SLAED2 used by SSTEDC. Merges eigenvalues and deflates secular equation. Used when
  * the original matrix is tridiagonal. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -28,7 +28,7 @@ static integer c__1 = 1;
 /* > \endhtmlonly */
 /* Definition: */
 /* =========== */
-/* SUBROUTINE SLAED2( K, N, N1, D, Q, LDQ, INDXQ, RHO, Z, DLAMDA, W, */
+/* SUBROUTINE SLAED2( K, N, N1, D, Q, LDQ, INDXQ, RHO, Z, DLAMBDA, W, */
 /* Q2, INDX, INDXC, INDXP, COLTYP, INFO ) */
 /* .. Scalar Arguments .. */
 /* INTEGER INFO, K, LDQ, N, N1 */
@@ -37,7 +37,7 @@ static integer c__1 = 1;
 /* .. Array Arguments .. */
 /* INTEGER COLTYP( * ), INDX( * ), INDXC( * ), INDXP( * ), */
 /* $ INDXQ( * ) */
-/* REAL D( * ), DLAMDA( * ), Q( LDQ, * ), Q2( * ), */
+/* REAL D( * ), DLAMBDA( * ), Q( LDQ, * ), Q2( * ), */
 /* $ W( * ), Z( * ) */
 /* .. */
 /* > \par Purpose: */
@@ -128,9 +128,9 @@ static integer c__1 = 1;
 /* > process. */
 /* > \endverbatim */
 /* > */
-/* > \param[out] DLAMDA */
+/* > \param[out] DLAMBDA */
 /* > \verbatim */
-/* > DLAMDA is REAL array, dimension (N) */
+/* > DLAMBDA is REAL array, dimension (N) */
 /* > A copy of the first K eigenvalues which will be used by */
 /* > SLAED3 to form the secular equation. */
 /* > \endverbatim */
@@ -153,7 +153,7 @@ static integer c__1 = 1;
 /* > \param[out] INDX */
 /* > \verbatim */
 /* > INDX is INTEGER array, dimension (N) */
-/* > The permutation used to sort the contents of DLAMDA into */
+/* > The permutation used to sort the contents of DLAMBDA into */
 /* > ascending order. */
 /* > \endverbatim */
 /* > */
@@ -202,8 +202,7 @@ static integer c__1 = 1;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date December 2016 */
-/* > \ingroup auxOTHERcomputational */
+/* > \ingroup laed2 */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -214,9 +213,11 @@ static integer c__1 = 1;
 /* ===================================================================== */
 /* Subroutine */
 void slaed2_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *ldq, integer *indxq,
-             real *rho, real *z__, real *dlamda, real *w, real *q2, integer *indx, integer *indxc,
+             real *rho, real *z__, real *dlambda, real *w, real *q2, integer *indx, integer *indxc,
              integer *indxp, integer *coltyp, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slaed2 inputs: n %" FLA_IS ",n1 %" FLA_IS ",ldq %" FLA_IS "", *n, *n1, *ldq);
     /* System generated locals */
     integer q_dim1, q_offset, i__1, i__2;
     real r__1, r__2, r__3, r__4;
@@ -243,10 +244,9 @@ void slaed2_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *l
         void
         slamrg_(integer *, integer *, real *, integer *, integer *, integer *),
         slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
-    /* -- LAPACK computational routine (version 3.7.0) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* December 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -273,7 +273,7 @@ void slaed2_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *l
     q -= q_offset;
     --indxq;
     --z__;
-    --dlamda;
+    --dlambda;
     --w;
     --q2;
     --indx;
@@ -305,11 +305,13 @@ void slaed2_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *l
     {
         i__1 = -(*info);
         xerbla_("SLAED2", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     n2 = *n - *n1;
@@ -335,10 +337,10 @@ void slaed2_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *l
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        dlamda[i__] = d__[indxq[i__]];
+        dlambda[i__] = d__[indxq[i__]];
         /* L20: */
     }
-    slamrg_(n1, &n2, &dlamda[1], &c__1, &c__1, &indxc[1]);
+    slamrg_(n1, &n2, &dlambda[1], &c__1, &c__1, &indxc[1]);
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
@@ -365,12 +367,12 @@ void slaed2_(integer *k, integer *n, integer *n1, real *d__, real *q, integer *l
         {
             i__ = indx[j];
             scopy_(n, &q[i__ * q_dim1 + 1], &c__1, &q2[iq2], &c__1);
-            dlamda[j] = d__[i__];
+            dlambda[j] = d__[i__];
             iq2 += *n;
             /* L40: */
         }
         slacpy_("A", n, n, &q2[1], n, &q[q_offset], ldq);
-        scopy_(n, &dlamda[1], &c__1, &d__[1], &c__1);
+        scopy_(n, &dlambda[1], &c__1, &d__[1], &c__1);
         goto L190;
     }
     /* If there are multiple eigenvalues then the problem deflates. Here */
@@ -487,7 +489,7 @@ L80:
         else
         {
             ++(*k);
-            dlamda[*k] = d__[pj];
+            dlambda[*k] = d__[pj];
             w[*k] = z__[pj];
             indxp[*k] = pj;
             pj = nj;
@@ -496,7 +498,7 @@ L80:
     goto L80;
 L100: /* Record the last eigenvalue. */
     ++(*k);
-    dlamda[*k] = d__[pj];
+    dlambda[*k] = d__[pj];
     w[*k] = z__[pj];
     indxp[*k] = pj;
     /* Count up the total number of the various types of columns, then */
@@ -534,9 +536,9 @@ L100: /* Record the last eigenvalue. */
         ++psm[ct - 1];
         /* L130: */
     }
-    /* Sort the eigenvalues and corresponding eigenvectors into DLAMDA */
+    /* Sort the eigenvalues and corresponding eigenvectors into DLAMBDA */
     /* and Q2 respectively. The eigenvalues/vectors which were not */
-    /* deflated go into the first K slots of DLAMDA and Q2 respectively, */
+    /* deflated go into the first K slots of DLAMBDA and Q2 respectively, */
     /* while those which were deflated go into the last N - K slots. */
     i__ = 1;
     iq1 = 1;
@@ -599,6 +601,7 @@ L100: /* Record the last eigenvalue. */
         /* L180: */
     }
 L190:
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAED2 */
 }

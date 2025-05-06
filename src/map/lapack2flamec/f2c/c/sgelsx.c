@@ -183,6 +183,10 @@ only the remaining */
 void sgelsx_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb,
              integer *jpvt, real *rcond, integer *rank, real *work, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sgelsx inputs: m %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS ",lda %" FLA_IS
+                      ",ldb %" FLA_IS "",
+                      *m, *n, *nrhs, *lda, *ldb);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     real r__1;
@@ -198,8 +202,7 @@ void sgelsx_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
                real *, integer *),
         slaic1_(integer *, integer *, real *, real *, real *, real *, real *, real *, real *),
         sorm2r_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
-                integer *, real *, integer *),
-        slabad_(real *, real *);
+                integer *, real *, integer *);
     extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     extern /* Subroutine */
         void
@@ -281,6 +284,7 @@ void sgelsx_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
     {
         i__1 = -(*info);
         xerbla_("SGELSX", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -289,12 +293,12 @@ void sgelsx_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
     if(fla_min(i__1, *nrhs) == 0)
     {
         *rank = 0;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine parameters */
     smlnum = slamch_("S") / slamch_("P");
     bignum = 1.f / smlnum;
-    slabad_(&smlnum, &bignum);
     /* Scale A, B if max elements outside range [SMLNUM,BIGNUM] */
     anrm = slange_("M", m, n, &a[a_offset], lda, &work[1]);
     iascl = 0;
@@ -476,6 +480,7 @@ L10:
         slascl_("G", &c__0, &c__0, &bignum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
     }
 L100:
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGELSX */
 }

@@ -269,15 +269,11 @@ void sspgvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, re
              real *vl, real *vu, integer *il, integer *iu, real *abstol, integer *m, real *w,
              real *z__, integer *ldz, real *work, integer *iwork, integer *ifail, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "sspgvx inputs: itype %" FLA_IS ", jobz %c, range %c, uplo %c, n %" FLA_IS
              ", il %" FLA_IS ", iu %" FLA_IS ", ldz %" FLA_IS "",
              *itype, *jobz, *range, *uplo, *n, *il, *iu, *ldz);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer z_dim1, z_offset, i__1;
     /* Local variables */
@@ -388,14 +384,14 @@ void sspgvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, re
     {
         i__1 = -(*info);
         xerbla_("SSPGVX", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     *m = 0;
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Form a Cholesky factorization of B. */
@@ -403,7 +399,7 @@ void sspgvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, re
     if(*info != 0)
     {
         *info = *n + *info;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
@@ -458,7 +454,7 @@ void sspgvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, re
             }
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSPGVX */
 }

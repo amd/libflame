@@ -278,6 +278,10 @@ void shsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
              integer *ldh, real *wr, real *wi, real *vl, integer *ldvl, real *vr, integer *ldvr,
              integer *mm, integer *m, real *work, integer *ifaill, integer *ifailr, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("shsein inputs: side %c ,eigsrc %c ,initv %c ,n %" FLA_IS ",ldh %" FLA_IS
+                      ",ldvl %" FLA_IS ",ldvr %" FLA_IS ",mm %" FLA_IS ",m %" FLA_IS "",
+                      *side, *eigsrc, *initv, *n, *ldh, *ldvl, *ldvr, *mm, *m);
     /* System generated locals */
     integer h_dim1, h_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2;
     real r__1, r__2;
@@ -418,11 +422,13 @@ void shsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
     {
         i__1 = -(*info);
         xerbla_("SHSEIN", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible. */
     if(*n == 0)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Set machine-dependent constants. */
@@ -494,6 +500,7 @@ void shsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
                 if(sisnan_(&hnorm))
                 {
                     *info = -6;
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 else if(hnorm > 0.f)
@@ -625,6 +632,7 @@ void shsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
         }
         /* L120: */
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SHSEIN */
 }

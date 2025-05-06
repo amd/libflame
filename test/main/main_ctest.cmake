@@ -9,6 +9,8 @@ endif()
 # Added test to run main test suite
 foreach(CONFIG_TYPE "long" "medium" "short" "micro")
     add_test(NAME main_test_${CONFIG_TYPE} COMMAND ${CTEST_MAIN_COMMAND}  --config-dir=${CONFIG_TYPE} WORKING_DIRECTORY ${CTEST_WORKING_DIR})
+    add_test(NAME lapacke_test_col_major_${CONFIG_TYPE} COMMAND ${CTEST_MAIN_COMMAND} --config-dir=${CONFIG_TYPE} --lapacke=column_major WORKING_DIRECTORY ${CTEST_WORKING_DIR})
+    add_test(NAME lapacke_test_row_major_${CONFIG_TYPE} COMMAND ${CTEST_MAIN_COMMAND} --config-dir=${CONFIG_TYPE} --lapacke=row_major WORKING_DIRECTORY ${CTEST_WORKING_DIR})
 endforeach()
 
 #Example to add further tests to ctest
@@ -73,7 +75,10 @@ set(DGESVD_TEST_CASES "gesvd d A S 124 15 124 124 15 -1 1"
                 "gesvd d O A 85 21 85 85 21 -1 1"
                 "gesvd d O S 124 15 124 124 15 -1 1"
                 "gesvd d O N 20 17 20 20 17 -1 1"
+                "gesvd d N A 10 2 10 10 2 -1 1"
+                "gesvd d N N 10 2 10 10 2 -1 1"
                 "gesvd d N A 124 15 124 124 15 -1 1"
+                "gesvd d N N 124 15 124 124 15 -1 1"
                 "gesvd d N S 85 21 85 85 21 -1 1"
                 "gesvd d N N 20 17 20 20 17 -1 1"
                 "gesvd d A A 3 20 3 3 20 -1 1"
@@ -87,12 +92,78 @@ set(DGESVD_TEST_CASES "gesvd d A S 124 15 124 124 15 -1 1"
                 "gesvd d N S 12 19 12 12 19 -1 1"
                 "gesvd d N O 40 120 40 40 120 -1 1"
                 "gesvd d N N 120 120 120 120 120 -1 1"
+                "gesvd d S S 19 8 98 19 8 -1 1"
+                "gesvd d A S 124 15 130 135 17 -1 1"
+                "gesvd d A O 85 21 90 92 25 -1 1"
+                "gesvd d A N 20 17 25 29 27 -1 1"
+                "gesvd d S A 85 21 90 87 25 -1 1"
+                "gesvd d S S 124 15 140 130 25 -1 1"
+                "gesvd d S N 20 17 25 28 19 -1 1"
+                "gesvd d O A 85 21 90 95 25 -1 1"
+                "gesvd d O S 124 15 130 135 20 -1 1"
+                "gesvd d O N 20 17 25 28 20 -1 1"
+                "gesvd d N A 10 2 11 12 3 -1 1"
+                "gesvd d N N 10 2 11 12 3 -1 1"
+                "gesvd d N A 124 15 130 135 25 -1 1"
+                "gesvd d N N 124 15 130 135 25 -1 1"
+                "gesvd d N S 85 21 90 95 25 -1 1"
+                "gesvd d N N 20 17 25 30 27 -1 1"
+                "gesvd d A A 3 20 5 7 25 -1 1"
+                "gesvd d A S 12 19 15 18 20 -1 1"
+                "gesvd d A O 12 19 15 18 120 -1 1"
+                "gesvd d A N 40 120 60 50 130 -1 1"
+                "gesvd d O A 3 20 7 5 25 -1 1"
+                "gesvd d O S 12 19 18 15 25 -1 1"
+                "gesvd d O N 40 120 50 45 130 -1 1"
+                "gesvd d N A 3 20 7 5 25 -1 1"
+                "gesvd d N S 12 19 15 14 20 -1 1"
+                "gesvd d N O 40 120 45 50 125 -1 1"
+                "gesvd d N N 120 120 130 125 140 -1 1"
+                "gesvd d S S 19 8 98 19 8 -1 1"
+                "gesvd d S S 9 11 10 11 12 -1 1"
+                "gesvd d A S 13 15 16 17 18 -1 1"
+                "gesvd d S S 9 11 9 9 9 -1 1"
+                "gesvd d A S 13 15 13 13 13 -1 1"
+                "gesvd d S S 10 2 10 10 2 -1 1"
+                "gesvd d S S 10 2 11 12 3 -1 1"
+                "gesvd d N S 10 2 10 10 2 -1 1"
+                "gesvd d N S 10 2 11 12 3 -1 1"
+                "gesvd d A S 10 2 10 10 2 -1 1"
+                "gesvd d A S 10 2 11 12 3 -1 1"
+                "gesvd d S A 10 2 10 10 2 -1 1"
+                "gesvd d S A 10 2 11 12 3 -1 1"
+                "gesvd d N N 2 2 2 1 1 -1 1"
+                "gesvd d N S 2 2 2 1 2 -1 1"
+                "gesvd d S S 2 2 2 2 2 -1 1"
+                "gesvd d S N 2 2 2 2 1 -1 1"
+                "gesvd d N N 13 11 13 1 1 -1 1"
+                "gesvd d N N 13 11 14 1 1 -1 1"
+                "gesvd d S N 13 11 13 13 1 -1 1"
+                "gesvd d S N 13 11 14 15 1 -1 1"
+                "gesvd d S S 13 11 13 13 11 -1 1"
+                "gesvd d S S 13 11 14 15 12 -1 1"
+                "gesvd d N S 13 11 13 1 11 -1 1"
+                "gesvd d N S 13 11 14 1 12 -1 1"
+                "gesvd d N N 13 25 13 1 1 -1 1"
+                "gesvd d N N 2 6 2 1 1 -1 1"
+                "gesvd d N N 3 6 3 1 1 -1 1"
+                "gesvd d N N 3 6 4 1 1 -1 1"
+                "gesvd d S S 3 6 3 3 3 -1 1"
+                "gesvd d A S 3 6 3 3 3 -1 1"
+                "gesvd d S S 2 6 2 2 2 -1 1"
+                "gesvd d A S 2 6 2 2 2 -1 1"
+                "gesvd d S S 14 26 14 14 14 -1 1"
+                "gesvd d S S 14 26 15 16 17 -1 1"
+                "gesvd d S S 2 3 2 2 2 -1 1"
+                "gesvd d A S 3 4 3 3 3 -1 1"
+                "gesvd d S S 2 3 2 2 2 -1 1"
+                "gesvd d A S 2 3 2 2 2 -1 1"
 )
 
 #Performance tests for ZGETRF
 foreach(FUNCTION "getrf")
-    foreach(PREC "z") 
-        foreach(SIZE_N "8" "16" "32" "64" "128" "256" "512" "1024")
+    foreach(PREC "s" "d" "z") 
+        foreach(SIZE_N "2" "3" "4" "5" "8" "16" "32" "64" "128" "256" "512" "1024")
             add_test(NAME LU_FACTORIZATION_${PREC}${FUNCTION}_${SIZE_N}x${SIZE_N} COMMAND ${CTEST_MAIN_COMMAND} ${FUNCTION} ${PREC} ${SIZE_N} ${SIZE_N} ${SIZE_N} 1)
             set_property(TEST LU_FACTORIZATION_${PREC}${FUNCTION}_${SIZE_N}x${SIZE_N} PROPERTY ENVIRONMENT "OMP_NUM_THREADS=1")
         endforeach(SIZE_N)

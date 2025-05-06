@@ -52,7 +52,7 @@ AOCL-LAPACK can be linked with any Netlib BLAS compliant library when compiled w
 `cmake -DENABLE_AMD_AOCC_FLAGS=ON -DENABLE_AOCL_BLAS=ON ...`
 
 The path of AOCL-BLAS library can be provided in one of the following methods
-1. Set "AOCL_ROOT" environment variable to the root path where AOCL-BLAS library `($AOCL_ROOT/lib)` and header files `("$AOCL_ROOT"/include)` are located.
+1. Set "AOCL_ROOT" environment variable to the root path where AOCL-BLAS library `($AOCL_ROOT/lib)` and header files `("$AOCL_ROOT"/include)` are located. AOCL_ROOT must ideally be path where all AOCL libraries are installed including AOCL-Utils and AOCL-BLAS.
 `export AOCL_ROOT=<path to AOCL-BLAS>`
 
 2. Specify root path of AOCL-BLAS library through cmake option "AOCL_ROOT"
@@ -64,7 +64,11 @@ Linking with AOCL Utilities library
 ------------------------------------
 AOCL-LAPACK depends on AOCL Utilities library, AOCL-Utils for certain functions including CPU architecture detection at runtime. The default build of AOCL-LAPACK requires path to AOCL-Utils header files to be set as follows
 
-- For CMake based build, ensure header file path of AOCL-Utils is  set using LIBAOCLUTILS_INCLUDE_PATH option.
+- For CMake build, the path of AOCL-Utils library can be provided in one of the following methods 
+1. Set "AOCL_ROOT" environment variable to the root path where AOCL-Utils library  header files `("$AOCL_ROOT"/include)` are located. AOCL_ROOT must ideally be path where all AOCL libraries are installed including AOCL-Utils and AOCL-BLAS.
+`export AOCL_ROOT=<path to AOCL-Utils>`
+
+2. Set LIBAOCLUTILS_INCLUDE_PATH option.
 
         cmake ../ -DENABLE_AMD_FLAGS=ON -DLIBAOCLUTILS_INCLUDE_PATH=<path/to/libaoclutils/header/files>
 
@@ -218,6 +222,104 @@ It will give you a prompt to view the code coverage of that particular applicati
 
 ## 10. pkg-config support
 When building the package using cmake, pkg-config metadata file for the library is generated in
-the location `{CMAKE_INSTALL_PREFIX}/share/pkgconfig/`. 
+the location `{CMAKE_INSTALL_PREFIX}/lib/pkgconfig/`. 
 - The pkg-config metadata file should be placed at a location recognized by pkg-config tool.
-- libblis should be installed along with it's pkg-config metadata file.
+- aocl-blas and aocl-utils should be installed along with it's pkg-config metadata file.
+
+## Building using CMake presets
+
+AOCL-LAPACK provides with build, testing and test workflow cmake presets for most common configurations. You can list
+all available configurations with the following command:
+
+
+| Preset type        |Command                                       |
+|--------------------|----------------------------------------------|
+| Configuration      | `cmake --list-presets`                       |
+| Build              | `cmake --build --list-presets`               |
+| CTest**            | `ctest --list-presets`                       |
+| Workflow**         | `cmake --workflow --list-presets`            |
+
+> ** CTest and Workflow presets are not available for Windows platform.
+
+### Configuration presets
+
+These presets are used to configure the project. AOCL-LAPACK requires AOCL-Utils library to be linked with it. It 
+also reqires BLAS library if building tests. You can provide the path to AOCL-Utils and BLAS library on the command line
+or if you have pkg-config files for these libraries (aocl-utils.pc and blis.pc) in your system, the build system will
+automatically use them. Make sure the pkg-config files are in the default search path for pkg-config or set PKG_CONFIG_PATH environment variable to the directory containing these files.
+
+> **Note for Windows:**
+ On windows platform auto configuration using pkg-config files are not supported. You will need to provide following options when configuring the project: LIBAOCLUTILS_LIBRARY_PATH, LIBAOCLUTILS_INCLUDE_PATH and EXT_BLAS_LIBNAME for the basic build
+
+
+Presets names use the following convention: `<os>-<buildsystem>-<compiler>-<st/mt>-<lp/ilp>-<static/shared>-<isa-mode>-<other optional commands>`
+
+| Option                  | Allowed Values                                   | Notes                                                                                       |
+|-------------------------|--------------------------------------------------|---------------------------------------------------------------------------------------------|
+| os                      | linux, win (Windows)                             |                                                                                             |
+| buildsystem             | - **Linux**: make <br> - **Windows**: ninja      | When using ninja on Windows, the build system will automatically use LLVM toolchain. **compiler** option should be omitted in this case |
+| compiler                | - **Linux**: gcc, aocc <br> - **Windows**: msvc  | When using msvc, Microsoft Visual Studio toolchain is used as buildsystem. **buildsystem** option should be omitted in this case |
+| st/mt                   | st, mt                                           | Single-threaded or multi-threaded build                                                     |
+| lp/ilp                  | lp, ilp                                          | LP64 or ILP64 build                                                                         |
+| static/shared           | static, shared                                   | Static or shared library                                                                    |
+| isa-mode                | autosia, avx, avx2, avx512                       | ISA mode for the build                                                                      |
+| other optional commands | test, aoclblas                                   | - **test**: Builds libflame test binary <br> - **aoclblas**: Enables tight coupling with aoclblas |
+
+
+Examples:
+
+Building AOCL-LAPACK without tests:
+
+- With AOCL-Utils pkg-config files
+
+        cmake --preset <preset-name>
+
+- Without AOCL-Utils pkg-config files
+
+        cmake --preset <preset-name> -DLIBAOCLUTILS_LIBRARY_PATH=<path/to/libaoclutils/lib/file> -DLIBAOCLUTILS_INCLUDE_PATH=<path/to/libaoclutils/header/files>
+
+
+Building AOCL-LAPACK with tests:
+
+- With AOCL-Utils and BLAS pkg-config files
+
+        cmake --preset <preset-name ending with test>
+    
+- Without AOCL-Utils and BLAS pkg-config files
+            
+        cmake --preset <preset-name ending with test> -DLIBAOCLUTILS_LIBRARY_PATH=<path/to/libaoclutils/file> -DLIBAOCLUTILS_INCLUDE_PATH=<path/to/libaoclutils/header/files> -DCMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH=<path/to/blas/lib> -DEXT_BLAS_LIBNAME=<blas_lib_name> -DBLAS_HEADER_PATH=<path/to/blis.h>
+
+> Note that when building libflame integrated with AOCL-BLAS library and if the blis pkg-config file is not available, AOCL-ROOT variable must be set as mentioned in the section "Linking with AOCL-BLAS".
+
+
+### Build presets
+AOCL-LAPACK provides two types of build presets for each configuration preset.
+
+1. `build` preset: This preset is named same as the configuration preset. It is used to build the library.
+1. `install` preset: This preset is named `install-<configuration-preset>`. It will build and install the library. By default, the library is installed in the `install-<suffix>` where suffix is determined by the configuration preset. If you want to install the library in a different location, you can provide the path using the `CMAKE_INSTALL_PREFIX` variable. while configuring the project.
+
+```
+cmake --build --preset <build-preset>
+```
+
+### Test presets
+AOCL-LAPACK provides test presets for each configuration preset. These presets are used to run tests on the library. Once the library is built, you can run the tests using the following command:
+
+    ctest --preset <test-preset>
+
+### Workflow presets
+Workflow presets are used to configure, build, install and run tests in a single command. You can use the following command to run the workflow:
+
+    cmake --workflow --preset <workflow-preset>
+
+As of now cmake workflow presets do not accept any additional arguments, so you cannot manually set the path to AOCL-Utils or BLAS library. Either use the pkg-config files or as a workaround you can do the following:
+
+1. Configure the project using the configuration preset with the required paths.
+    
+        cmake --preset <preset with same name as workflow preset> ... <additional arguments>
+
+2. Run the workflow preset.
+    
+        cmake --workflow --preset <workflow-preset>
+
+

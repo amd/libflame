@@ -1,24 +1,36 @@
-/******************************************************************************
- * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
- *******************************************************************************/
+/*
+    Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
+*/
 
 /*! @file validate_gtsv.c
  *  @brief Defines validate function of GTSV() to use in test suite.
  *  */
 
 #include "test_common.h"
-void validate_gtsv(integer datatype, integer n, integer nrhs, void *B, integer ldb, void *X,
-                   void *Xact, integer ldx, void *dl, void *d, void *du, void *dl_save,
-                   void *d_save, void *du_save, integer info, void *scal, char imatrix,
-                   double *residual)
-{
-    if(n == 0 || nrhs == 0)
-        return;
 
+extern double perf;
+extern double time_min;
+
+void validate_gtsv(char *tst_api, integer datatype, integer n, integer nrhs, void *B, integer ldb,
+                   void *X, void *Xact, integer ldx, void *dl, void *d, void *du, void *dl_save,
+                   void *d_save, void *du_save, void *scal, char imatrix, double err_thresh)
+{
     void *work = NULL;
     void *A, *ipiv;
     integer dl_size, du_size, inc, lda;
     char NORM = '1';
+    integer info;
+    double residual, resid1 = 0., resid2 = 0., resid3 = 0.;
+
+    /* Early return conditions */
+    if(n == 0 || nrhs == 0)
+    {
+        FLA_TEST_PRINT_STATUS_AND_RETURN(n, n, err_thresh);
+    }
+    /* print overall status if incoming threshold is
+     * an extreme value indicating that API returned
+     * unexpected info value */
+    FLA_TEST_PRINT_INVALID_STATUS(n, n, err_thresh);
 
     /* Set sizes and dimensions for vector and matrix */
     dl_size = n - 2, du_size = n - 1;
@@ -33,8 +45,8 @@ void validate_gtsv(integer datatype, integer n, integer nrhs, void *B, integer l
     {
         case FLOAT:
         {
-            float eps, norm_X = 0, norm_B = 0, norm1 = 0, norm2 = 0, resid1, resid2;
-            float norm_dl = 0, norm_d = 0, norm_du = 0, norm3 = 0, norm4 = 0, norm5 = 0, resid3;
+            float eps, norm_X = 0, norm_B = 0, norm1 = 0, norm2 = 0;
+            float norm_dl = 0, norm_d = 0, norm_du = 0, norm3 = 0, norm4 = 0, norm5 = 0;
             float *d_ptr, *du_ptr, *dl_ptr;
 
             eps = fla_lapack_slamch("P");
@@ -43,7 +55,7 @@ void validate_gtsv(integer datatype, integer n, integer nrhs, void *B, integer l
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm_B, imatrix, work);
             slagtm_("N", &n, &nrhs, &s_one, dl, d, du, X, &ldx, &s_n_one, B, &ldb);
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm1, imatrix, work);
-            resid1 = (norm1 / norm_B)/(eps * n);
+            resid1 = (norm1 / norm_B) / (eps * n);
 
             /* Test 2: Compute norm (Xact - X / (eps * norm_X *n)) */
             if(Xact != NULL)
@@ -51,11 +63,11 @@ void validate_gtsv(integer datatype, integer n, integer nrhs, void *B, integer l
                 compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm_X, imatrix, work);
                 matrix_difference(datatype, n, nrhs, X, ldx, Xact, ldx);
                 compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm2, imatrix, work);
-                resid2 = (norm2 / norm_X) /(eps * n);
+                resid2 = (norm2 / norm_X) / (eps * n * 10);
             }
             else
             {
-                resid2 = (float)*residual;
+                resid2 = (float)err_thresh;
             }
 
             /* Test3 : Compute norm for tridiagonal vectors dl, d, du by
@@ -79,14 +91,12 @@ void validate_gtsv(integer datatype, integer n, integer nrhs, void *B, integer l
             norm4 = fla_lapack_slange("F", &n, &i_one, d_save, &i_one, work);
             norm5 = fla_lapack_slange("F", &du_size, &i_one, du_save, &i_one, work);
             resid3 = ((norm3 + norm4 + norm5) / (norm_dl + norm_d + norm_du)) / (eps * n);
-
-            *residual = (double)fla_max(fla_max(resid1, resid2), resid3);
             break;
         }
         case DOUBLE:
         {
-            double eps, norm_X = 0, norm_B = 0, norm1 = 0, norm2 = 0, resid1 = 0, resid2 = 0;
-            double norm_dl = 0, norm_d = 0, norm_du = 0, norm3 = 0, norm4 = 0, norm5 = 0, resid3;
+            double eps, norm_X = 0, norm_B = 0, norm1 = 0, norm2 = 0;
+            double norm_dl = 0, norm_d = 0, norm_du = 0, norm3 = 0, norm4 = 0, norm5 = 0;
             double *d_ptr, *dl_ptr, *du_ptr;
 
             eps = fla_lapack_dlamch("P");
@@ -95,7 +105,7 @@ void validate_gtsv(integer datatype, integer n, integer nrhs, void *B, integer l
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm_B, imatrix, work);
             dlagtm_("N", &n, &nrhs, &d_one, dl, d, du, X, &ldx, &d_n_one, B, &ldb);
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm1, imatrix, work);
-            resid1 = (norm1 / norm_B) /(eps * n);
+            resid1 = (norm1 / norm_B) / (eps * n);
 
             if(Xact != NULL)
             {
@@ -103,11 +113,11 @@ void validate_gtsv(integer datatype, integer n, integer nrhs, void *B, integer l
                 compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm_X, imatrix, work);
                 matrix_difference(datatype, n, nrhs, X, ldx, Xact, ldx);
                 compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm2, imatrix, work);
-                resid2 = (norm2 / norm_X) /(eps * n);
+                resid2 = (norm2 / norm_X) / (eps * n * 10);
             }
             else
             {
-                resid2 = (float)*residual;
+                resid2 = (float)err_thresh;
             }
 
             /* Test3 : Compute norm for tridiagonal vectors dl, d, du by
@@ -131,14 +141,12 @@ void validate_gtsv(integer datatype, integer n, integer nrhs, void *B, integer l
             norm4 = fla_lapack_dlange("F", &n, &i_one, d_save, &i_one, work);
             norm5 = fla_lapack_dlange("F", &du_size, &i_one, du_save, &i_one, work);
             resid3 = ((norm3 + norm4 + norm5) / (norm_dl + norm_d + norm_du)) / (eps * n);
-
-            *residual = (double)fla_max(fla_max(resid1, resid2), resid3);
             break;
         }
         case COMPLEX:
         {
-            float eps, norm_X = 0, norm_B = 0, norm1 = 0, norm2 = 0, resid1 = 0, resid2;
-            float norm_dl = 0, norm_d = 0, norm_du = 0, norm3 = 0, norm4 = 0, norm5 = 0, resid3;
+            float eps, norm_X = 0, norm_B = 0, norm1 = 0, norm2 = 0;
+            float norm_dl = 0, norm_d = 0, norm_du = 0, norm3 = 0, norm4 = 0, norm5 = 0;
             scomplex *d_ptr, *dl_ptr, *du_ptr;
 
             eps = fla_lapack_slamch("P");
@@ -147,7 +155,7 @@ void validate_gtsv(integer datatype, integer n, integer nrhs, void *B, integer l
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm_B, imatrix, work);
             clagtm_("N", &n, &nrhs, &s_one, dl, d, du, X, &ldx, &s_n_one, B, &ldb);
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm1, imatrix, work);
-            resid1 = (norm1 / norm_B) /(eps * n);
+            resid1 = (norm1 / norm_B) / (eps * n);
 
             if(Xact != NULL)
             {
@@ -155,11 +163,11 @@ void validate_gtsv(integer datatype, integer n, integer nrhs, void *B, integer l
                 compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm_X, imatrix, work);
                 matrix_difference(datatype, n, nrhs, X, ldx, Xact, ldx);
                 compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm2, imatrix, work);
-                resid2 = (norm2 / norm_X) /(eps * n);
+                resid2 = (norm2 / norm_X) / (eps * n * 10);
             }
             else
             {
-                resid2 = (float)*residual;
+                resid2 = (float)err_thresh;
             }
 
             /* Test3 : Compute norm for tridiagonal vectors dl, d, du by
@@ -183,14 +191,12 @@ void validate_gtsv(integer datatype, integer n, integer nrhs, void *B, integer l
             norm4 = fla_lapack_clange("F", &n, &i_one, d_save, &i_one, work);
             norm5 = fla_lapack_clange("F", &du_size, &i_one, du_save, &i_one, work);
             resid3 = ((norm3 + norm4 + norm5) / (norm_dl + norm_d + norm_du)) / (eps * n);
-
-            *residual = (double)fla_max(fla_max(resid1, resid2), resid3);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm_X = 0, norm_B = 0, norm1 = 0, norm2 = 0, eps, resid1, resid2;
-            double norm_dl = 0, norm_d = 0, norm_du = 0, norm3 = 0, norm4 = 0, norm5 = 0, resid3;
+            double norm_X = 0, norm_B = 0, norm1 = 0, norm2 = 0, eps;
+            double norm_dl = 0, norm_d = 0, norm_du = 0, norm3 = 0, norm4 = 0, norm5 = 0;
             dcomplex *d_ptr, *dl_ptr, *du_ptr;
 
             eps = fla_lapack_dlamch("P");
@@ -199,7 +205,7 @@ void validate_gtsv(integer datatype, integer n, integer nrhs, void *B, integer l
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm_B, imatrix, work);
             zlagtm_("N", &n, &nrhs, &d_one, dl, d, du, X, &ldx, &d_n_one, B, &ldb);
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm1, imatrix, work);
-            resid1 = (norm1 / norm_B) /(eps * n);
+            resid1 = (norm1 / norm_B) / (eps * n);
 
             if(Xact != NULL)
             {
@@ -207,11 +213,11 @@ void validate_gtsv(integer datatype, integer n, integer nrhs, void *B, integer l
                 compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm_X, imatrix, work);
                 matrix_difference(datatype, n, nrhs, X, ldx, Xact, ldx);
                 compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm2, imatrix, work);
-                resid2 = (norm2 / norm_X) /(eps * n);
+                resid2 = (norm2 / norm_X) / (eps * n * 10);
             }
             else
             {
-                resid2 = (float)*residual;
+                resid2 = (float)err_thresh;
             }
 
             /* Test3 : Compute norm for tridiagonal vectors dl, d, du by
@@ -235,11 +241,17 @@ void validate_gtsv(integer datatype, integer n, integer nrhs, void *B, integer l
             norm4 = fla_lapack_zlange("F", &n, &i_one, d_save, &i_one, work);
             norm5 = fla_lapack_zlange("F", &du_size, &i_one, du_save, &i_one, work);
             resid3 = ((norm3 + norm4 + norm5) / (norm_dl + norm_d + norm_du)) / (eps * n);
-
-            *residual = (double)fla_max(fla_max(resid1, resid2), resid3);
             break;
         }
     }
     free_vector(ipiv);
     free_matrix(A);
+
+    residual = fla_test_max(resid1, resid2);
+    residual = fla_test_max(resid3, residual);
+
+    FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
+    FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
+    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
 }

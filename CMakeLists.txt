@@ -1,12 +1,12 @@
-##Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.##
+##Copyright (C) 2023-2025, Advanced Micro Devices, Inc. All rights reserved.##
 
-cmake_minimum_required(VERSION 3.22.0)
+cmake_minimum_required(VERSION 3.26.0)
 
 # Reading program version from file
 file(STRINGS "so_version" VERSION_DATA)
 list(JOIN VERSION_DATA "." PROJ_VERSION)
 
-string(APPEND LIBS_LINK_FLAGS "-lpthread ")
+string(APPEND LIBS_LINK_FLAGS "-lpthread -lm ")
 
 if(WIN32)
 	project(AOCL-LibFLAME-Win VERSION ${PROJ_VERSION})
@@ -43,11 +43,9 @@ set (CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin")
 # Added for debugging purpose
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 
-if(WIN32)
-	set (PYTHON_EXE "python")
-else()
-	set (PYTHON_EXE "python3")
-endif()
+# getting python3 interpreter
+find_package(Python3 REQUIRED COMPONENTS Interpreter)
+
 ### Making LF_ISA_CONFIG case insensitive ###
 string(TOLOWER "${LF_ISA_CONFIG}" lf_isa_config_lower)
 
@@ -61,7 +59,7 @@ if (${lf_isa_config_lower} STREQUAL "auto")
     set(AUTO_CONFIG_PY "${CMAKE_SOURCE_DIR}/build/auto_config.py")
     # Run python script to find the architecture family name
     execute_process(
-          COMMAND ${PYTHON_EXE} ${AUTO_CONFIG_PY}
+          COMMAND ${Python3_EXECUTABLE} ${AUTO_CONFIG_PY}
           RESULT_VARIABLE CMD_RESULT
           OUTPUT_VARIABLE CMD_OUTPUT
           OUTPUT_STRIP_TRAILING_WHITESPACE)
@@ -79,7 +77,7 @@ message("LF_ISA_CONFIG selected:${LF_ISA_CONFIG}")
 set(LIBAOCLUTILS_PROJECT "libaoclutils")
 set(LIBAOCLUTILS_INSTALL_DIR_NAME "install-aoclutils")
 set(LIBAOCLUTILS_GIT_URL "https://github.com/amd/aocl-utils.git" CACHE STRING "libaoclutils repository URL to be used")
-set(LIBAOCLUTILS_GIT_TAG "4.1" CACHE STRING "libaoclutils repository tag to be used")
+set(LIBAOCLUTILS_GIT_TAG "5.0" CACHE STRING "libaoclutils repository tag to be used")
 
 if(UNIX)
 	set(LIBAOCLUTILS_SHAREDLIB "libaoclutils.so")
@@ -92,11 +90,11 @@ endif ()
 #enabling the configuration options
 option (ENABLE_AMD_OPT "Enable AMD optimized path" OFF)
 option (ENABLE_AMD_COMMON_FLAGS "Enable AMD FLAGS internally enables ENABLE_BLAS_EXT_GEMMT, ENABLE_AMD_OPT, ENABLE_BUILTIN_LAPACK2FLAME, ENABLE_EXT_LAPACK_INTERFACE, ENABLE_MULTITHREADING" OFF)
-# hiding this option form cmake gui
+# hiding this option from cmake gui
 mark_as_advanced(ENABLE_AMD_COMMON_FLAGS)
 option (ENABLE_AMD_FLAGS "Enable AMD FLAGS internally enables ENABLE_AMD_COMMON_FLAGS" OFF)
 option (ENABLE_AMD_AOCC_FLAGS "Enable AMD FLAGS internally enables Enable AMD FLAGS internally enables ENABLE_AMD_COMMON_FLAGS, ENABLE_F2C_DOTC, ENABLE_VOID_RETURN_COMPLEX_FUNCTION" OFF)
-# Since AOCC isn't used in windows hiding this option form cmake gui
+# Since AOCC isn't used in windows hiding this option from cmake gui
 if(WIN32)
 	mark_as_advanced(ENABLE_AMD_AOCC_FLAGS)
 endif()
@@ -147,6 +145,7 @@ set(ENABLE_AOCL_DTL OFF CACHE STRING "Enable DTL Usage. USE with Option ALL to E
 set_property(CACHE ENABLE_AOCL_DTL PROPERTY STRINGS TRACE_AND_LOG TRACE LOG OFF )
 option (ENABLE_EMBED_AOCLUTILS "Enables embedding aocl-utils library in AOCL-LAPACK" OFF)
 option (ENABLE_LAPACKE_LSAME_FORTRAN_STRLEN " For LAPACKE interface enables lsame arguments length based on Fortran interface " OFF)
+option (ENABLE_ASAN "Enable Address Sanitizer (Debug build)" OFF)
 
 message(STATUS "CMAKE_BUILD_TYPE : ${CMAKE_BUILD_TYPE}")
 if(WIN32)
@@ -193,13 +192,27 @@ if(ENABLE_GCOV)
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fprofile-arcs -ftest-coverage")
 endif()
 
+# Address Sanitizer
+if(WIN32)
+    if(ENABLE_ASAN)
+       message(STATUS "Address Sanitizer is not supported")
+    endif()
+elseif(UNIX)
+    if(ENABLE_ASAN)
+        message(STATUS "Enabled ENABLE_ASAN : ${ENABLE_ASAN}")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address")
+    else()
+        message(STATUS "Enabled ENABLE_ASAN : ${ENABLE_ASAN}")
+    endif()
+endif()
+
 #Adding PIC flag and other flags
 if(UNIX)
 	SET(COMPILER_DEBUG_FLAG "-g0")
 	set(GCC_WARNING_FLAGS "-Wall -Wno-comment")
 	set(COMPILER_LANGUAGE_FLAGS " -std=c11 -D_GNU_SOURCE -Wno-unused-function -Wno-parentheses -Wfatal-errors")
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${COMPILER_DEBUG_FLAG} ${GCC_WARNING_FLAGS} ${COMPILER_LANGUAGE_FLAGS}")
-	add_compile_options(-fPIC)
+	add_compile_options(-fPIC -fmacro-prefix-map=${CMAKE_SOURCE_DIR}=.)
 endif()
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
@@ -509,11 +522,45 @@ if(ENABLE_LAPACKE_LSAME_FORTRAN_STRLEN)
     add_definitions(-DLAPACK_LSAME_FORTRAN_STRLEN_END)
 endif()
 
+set(REQ_LIBAOCLUTILS_PKGNAME "")
+# Configuration for pkg-config
+if(NOT ENABLE_EMBED_AOCLUTILS)
+	# set the variable if aocl-utils library is not embedded
+	set(REQ_LIBAOCLUTILS_PKGNAME "aocl-utils")
+endif()
+# Get the required AOCL-BLAS library pkg name
+if (ENABLE_MULTITHREADING)
+    set(REQ_BLAS_PKGNAME "blis-mt")
+else()
+	set(REQ_BLAS_PKGNAME "blis")
+endif()
+
+# Include the AOCL-BLAS path check cmake directory
+include(cmake/find_dep_libs.cmake)
+
 # AOCL-BLAS library linking option. If ENABLE_AOCL_BLAS is set, then the AOCL-BLAS library will be linked.
 # Note: This block has to come after the FLA_ENABLE_ILP64 block, as that decides the type of AOCL-BLAS library thats linked.
 if (ENABLE_AOCL_BLAS)
-       message(STATUS "AOCL-BLAS library linking option selected")
-       include(cmake/find_aocl-blas.cmake)
+    message(STATUS "AOCL-BLAS library linking option selected")
+
+	if(NOT BLAS_LIBRARY)
+		message (FATAL_ERROR "Error: Either AOCL_ROOT environment variable is not set or could not find a suitable installation of AOCL-BLAS Library in \$AOCL_ROOT=${AOCL_ROOT}")
+	endif()
+endif()
+
+# If the external BLAS library path is not set, then check if the BLAS_LIBRARY is set from AOCL_ROOT environment. 
+# If it is set, then use the BLAS_LIBRARY path as the AOCL-BLAS path.
+if ((ENABLE_AOCL_BLAS OR NOT (CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH AND EXT_BLAS_LIBNAME AND BLAS_HEADER_PATH))
+	AND (WIN32 OR BUILD_TEST OR BUILD_LEGACY_TEST OR BUILD_NETLIB_TEST) 
+	AND BLAS_LIBRARY)
+
+	if (ENABLE_AOCL_BLAS AND (CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH OR EXT_BLAS_LIBNAME OR BLAS_HEADER_PATH))
+		message(WARNING "CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH and/or EXT_BLAS_LIBNAME are set. These will be ignored since BLAS library will be chosen from AOCL_ROOT path when ENABLE_AOCL_BLAS is set")
+	endif()
+
+	set(CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH ${BLAS_LIB_PATH})
+	set(EXT_BLAS_LIBNAME ${BLAS_LIB_NAME})
+	set(BLAS_HEADER_PATH ${BLAS_INCLUDE_DIR})
 endif()
 
 if(ENABLE_AMD_OPT)
@@ -552,7 +599,6 @@ if(WIN32)
 endif()
 
 #genreating the monolithic headers
-find_package(PythonInterp REQUIRED)
 if(WIN32)
 	set (MK_HEADER_DIR_PATHS "${CMAKE_SOURCE_DIR}/windows/build")
 elseif(UNIX)
@@ -829,7 +875,7 @@ set (BLIS1__H_SRC_PATH "${CMAKE_SOURCE_DIR}/src/base/flamec/blis/include/blis1.h
 set (BLIS_FLATTEN_HEADER "${CMAKE_SOURCE_DIR}/build/flatten-headers.py")
 
 execute_process(
-    COMMAND ${PYTHON_EXE} ${BLIS_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
+    COMMAND ${Python3_EXECUTABLE} ${BLIS_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
 	"${BLIS1__H_SRC_PATH}" "${BLIS1_TARGET_PATH}" "${BASE_INC_PATH}" "${MK_HEADER_DIR_PATHS}"
 	RESULT_VARIABLE CMD_RESULT
     OUTPUT_VARIABLE CMD_OUTPUT
@@ -841,7 +887,7 @@ set (FLAME_TARGET_PATH "${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/FLA_f2c.h")
 set (FLAME_H_SRC_PATH  "${CMAKE_SOURCE_DIR}/src/base/flamec/include/FLA_f2c.h" )
 
 execute_process(
-    COMMAND ${PYTHON_EXE} ${BLIS_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
+    COMMAND ${Python3_EXECUTABLE} ${BLIS_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
 	"${FLAME_H_SRC_PATH}" "${FLAME_TARGET_PATH}" "${BASE_INC_PATH}" "${MK_HEADER_DIR_PATHS}"
 	RESULT_VARIABLE CMD_RESULT
     OUTPUT_VARIABLE CMD_OUTPUT
@@ -852,8 +898,19 @@ execute_process(
 set (FLAME_TARGET_PATH "${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/FLAME.h")
 set (FLAME_H_SRC_PATH  "${CMAKE_SOURCE_DIR}/src/base/flamec/include/FLAME.h" )
 execute_process(
-    COMMAND ${PYTHON_EXE} ${BLIS_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
+    COMMAND ${Python3_EXECUTABLE} ${BLIS_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
 	"${FLAME_H_SRC_PATH}" "${FLAME_TARGET_PATH}" "${BASE_INC_PATH}" "${MK_HEADER_DIR_PATHS}"
+	RESULT_VARIABLE CMD_RESULT
+    OUTPUT_VARIABLE CMD_OUTPUT
+	)
+
+# Run python script to generate libflame_interface header at configuration time
+set (INTERFACE_HEADER_DIR_PATHS "${CMAKE_SOURCE_DIR}/src/src_cpp")
+set (INTERFACE_TARGET_PATH "${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/libflame_interface.hh")
+execute_process(
+	COMMAND ${Python3_EXECUTABLE} ${BLIS_FLATTEN_HEADER}  "${VERBOSE}"
+	"${INTERFACE_HEADER_DIR_PATHS}/libflame_interface.hh" "${INTERFACE_TARGET_PATH}"
+	"${BASE_INC_PATH}" "${INTERFACE_HEADER_DIR_PATHS}"
 	RESULT_VARIABLE CMD_RESULT
     OUTPUT_VARIABLE CMD_OUTPUT
 	)
@@ -944,7 +1001,7 @@ set(LIBFLAME_PUBLIC_HEADERS	"include/FLAME.h"
 				"src/lapacke/LAPACKE/include/lapacke_mangling.h"
 				"src/lapacke/LAPACKE/include/lapacke.h"
 				"src/lapacke/LAPACKE/include/lapack.h"
-				"src/src_cpp/libflame_interface.hh"
+				"${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/libflame_interface.hh"
 				"src/src_cpp/libflame.hh")
 
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${LIBFLAME_PUBLIC_HEADERS}")
@@ -976,13 +1033,13 @@ if(ENABLE_OPENMP)
 
 		find_library(LIBIOMP ${EXT_OPENMP_LIB} ${EXT_OPENMP_PATH} NO_DEFAULT_PATH)
         	message("User provided OpenMP library path ${LIBIOMP}")
-
 		
 		target_link_libraries(${PROJECT_NAME}  ${LIBIOMP})
 
 		string(APPEND LIBS_LINK_FLAGS "-L${EXT_OPENMP_PATH} -l${EXT_OPENMP_LIB} ")
 
 		if(UNIX)
+				set	(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fopenmp")
 	        	target_link_libraries(${PROJECT_NAME} -Wl,--as-needed -ldl)
 		endif()
 	else()
@@ -1014,6 +1071,30 @@ endif ()
 	target_include_directories(${PROJECT_NAME} PUBLIC src/lapack/x86/avx512)
 	target_include_directories(${PROJECT_NAME} PUBLIC src/lapack/x86/front)
 	target_include_directories(${PROJECT_NAME} PUBLIC src/lapack/x86/generic)
+
+# IF AOCL-UTILS paths is not provided by user, try to get it from AOCL_ROOT environment vriable
+if (NOT LIBAOCLUTILS_INCLUDE_PATH OR NOT LIBAOCLUTILS_LIBRARY_PATH)
+	if (NOT LIBAOCLUTILS_INCLUDE_PATH)
+		if(AOCL_UTILS_LIBRARY)
+			message("LIBAOCLUTILS_INCLUDE_PATH not set. AOCL-UTILS library path provided by AOCL_ROOT environment variable will be used")
+			set(LIBAOCLUTILS_INCLUDE_PATH ${AOCL_UTILS_INCLUDE_DIR})
+			set(LIBAOCLUTILS_LIBRARY_PATH ${AOCL_UTILS_LIBRARY})
+		else()
+			message(FATAL_ERROR "AOCL-UTILS library header path not provided! Set the same using flag LIBAOCLUTILS_INCLUDE_PATH or AOCL_ROOT environment variable")
+		endif()
+	elseif(NOT LIBAOCLUTILS_LIBRARY_PATH AND (BUILD_SHARED_LIBS OR BUILD_TEST OR BUILD_LEGACY_TEST OR BUILD_NETLIB_TEST))
+		if (AOCL_UTILS_LIBRARY)
+			message("LIBAOCLUTILS_LIBRARY_PATH not set. AOCL-UTILS library path provided by AOCL_ROOT environment variable will be used")
+			set(LIBAOCLUTILS_LIBRARY_PATH ${AOCL_UTILS_LIBRARY})
+			set(LIBAOCLUTILS_INCLUDE_PATH ${AOCL_UTILS_INCLUDE_DIR})
+		else()
+			message(FATAL_ERROR "AOCL-UTILS library path not provided! Set the same using flag LIBAOCLUTILS_LIBRARY_PATH or AOCL_ROOT environment variable")
+		endif()
+	endif()
+endif()
+
+message(STATUS "AOCL-UTILS library path : ${LIBAOCLUTILS_LIBRARY_PATH}")
+message(STATUS "AOCL-UTILS library headers path : ${LIBAOCLUTILS_INCLUDE_PATH}")
 
 #If embedding AOCL-UTILS library in AOCL-LAPACK option is selected
 if(ENABLE_EMBED_AOCLUTILS)
@@ -1135,73 +1216,126 @@ link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 add_definitions(-DEXPMODULE)
 add_subdirectory(src)
 
+if (BUILD_TEST OR BUILD_LEGACY_TEST OR BUILD_NETLIB_TEST)
+
+	if (NOT CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH OR NOT EXT_BLAS_LIBNAME)
+		message(FATAL_ERROR "BLAS library path not set! Please set the same using CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH option or AOCL_ROOT environment variable or make sure blis pkg-config file is in PKG_CONFIG_PATH")
+	endif()
+
+	if(BUILD_TEST AND NOT ENABLE_AOCL_BLAS AND NOT BLAS_HEADER_PATH)
+		message(FATAL_ERROR "BLAS header path not set! Please set the same using BLAS_HEADER_PATH option")
+	endif()
+
+	# print paths of external libraries
+	message(STATUS "External BLAS library path for test suite: ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}")
+	message(STATUS "External BLAS library name for test suite: ${EXT_BLAS_LIBNAME}")
+	message(STATUS "External BLAS header path for test suite: ${BLAS_HEADER_PATH}")
+	
+	# if user wants to run tests on an external lapack library
+	# needs to be modified for external lapack libraries same way as done for blas
+	if((NOT EXT_LAPACK_LIBRARY_PATH) OR (NOT EXT_LAPACK_LIBNAME))
+
+		if (UNIX)
+			if (BUILD_SHARED_LIBS)
+				set(LIBFLAME_LIB_NAME lib${PROJECT_NAME}${CMAKE_SHARED_LIBRARY_SUFFIX})
+				set(LIBFLAME_LIBRARY_OUTPUT_PATH ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+			else()
+				set(LIBFLAME_LIB_NAME lib${PROJECT_NAME}${CMAKE_STATIC_LIBRARY_SUFFIX})
+				set(LIBFLAME_LIBRARY_OUTPUT_PATH ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+			endif()
+		else ()
+			if (BUILD_SHARED_LIBS)
+				set(LIBFLAME_LIB_NAME ${TEMP_VAR}${CMAKE_SHARED_LIBRARY_SUFFIX})
+				set(LIBFLAME_LIBRARY_OUTPUT_PATH ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/$<CONFIG>/})
+			else()
+				set(LIBFLAME_LIB_NAME ${TEMP_VAR}${CMAKE_STATIC_LIBRARY_SUFFIX})
+				set(LIBFLAME_LIBRARY_OUTPUT_PATH ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/$<CONFIG>/)
+			endif()
+		endif()
+
+		set(EXT_LAPACK_LIBRARY_PATH ${LIBFLAME_LIBRARY_OUTPUT_PATH})
+		set(EXT_LAPACK_LIBNAME ${LIBFLAME_LIB_NAME})
+		message(STATUS "Missing External lapack library. Using ${LIBFLAME_LIBRARY_OUTPUT_PATH}/${LIBFLAME_LIB_NAME} ")
+	elseif(NOT EXISTS ${EXT_LAPACK_LIBRARY_PATH}/${EXT_LAPACK_LIBNAME})
+		message(FATAL_ERROR "\n Invalid path to lapack Library \n \
+		${EXT_LAPACK_LIBRARY_PATH}/${EXT_LAPACK_LIBNAME} \
+		Does not exist.\n Please check the path again, or avoid passing \n \
+		-DEXT_LAPACK_LIBRARY_PATH and -DEXT_LAPACK_LIBNAME to use libflame")
+	endif()
+
+endif()
+
 if (BUILD_TEST OR BUILD_LEGACY_TEST)
 	# enable ctest
 	enable_testing()
 	message(STATUS "CTEST ENABLED")
 
-	if(NOT CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH OR NOT EXT_BLAS_LIBNAME)
-		message(FATAL_ERROR "Please set path and name of BLAS library using CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH and EXT_BLAS_LIBNAME options respectively.")
-	endif()
-
 	add_library(blas SHARED IMPORTED)
 	add_library(aoclutils SHARED IMPORTED)
 	if(NOT ENABLE_EMBED_AOCLUTILS AND NOT EXISTS ${LIBAOCLUTILS_LIBRARY_PATH})
-		message(FATAL_ERROR "aocl-utils library path not set! Please set the same using LIBAOCLUTILS_LIBRARY_PATH option")
+		message(FATAL_ERROR "aocl-utils library path not set! Please set the same using LIBAOCLUTILS_LIBRARY_PATH \
+		option or make sure aocl-utils pkg-config file is in PKG_CONFIG_PATH")
 	endif()
-
+		
 	if(UNIX)
-		# CHECKS if blas library exists
-		set(BLAS_LIB_LIST ${EXT_BLAS_LIBNAME})
+		# CHECKS if blas library path is explicitly set
+		if (CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH AND EXT_BLAS_LIBNAME AND (NOT ENABLE_AOCL_BLAS))
+			# CHECKS if blas library exists
+			set(BLAS_LIB_LIST ${EXT_BLAS_LIBNAME})
 
-		# If there are multiple libraries that are part of given BLAS, each will be separated by space
-		separate_arguments(BLAS_LIB_LIST)
-		message(STATUS "BLAS library provided ${BLAS_LIB_LIST}")
-		foreach(BLAS_LIB ${BLAS_LIB_LIST})
-			if(NOT EXISTS ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${BLAS_LIB})
-				message(FATAL_ERROR "\n Invalid path to BLAS Library \n \
-				${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME} \
-				Does not exist.\n Please check the path again")
-			endif()
-		endforeach()
+			# If there are multiple libraries that are part of given BLAS, each will be separated by space
+			separate_arguments(BLAS_LIB_LIST)
 
-		foreach(BLAS_LIB ${BLAS_LIB_LIST})
-			list(APPEND BLAS_LINK_LIST ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${BLAS_LIB})
-		endforeach()
+			foreach(BLAS_LIB ${BLAS_LIB_LIST})
+				if(NOT EXISTS ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${BLAS_LIB})
+					message(FATAL_ERROR "\n Invalid path to BLAS Library \n \
+					${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME} \
+					Does not exist.\n Please check the path again")
+				endif()
+			endforeach()
+
+			foreach(BLAS_LIB ${BLAS_LIB_LIST})
+				list(APPEND BLAS_LINK_LIST ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${BLAS_LIB})
+			endforeach()
+	
+		elseif(ENABLE_AOCL_BLAS)
+			# If BLAS library is provided from environment, then use it
+			list(APPEND BLAS_LINK_LIST ${BLAS_LIBRARY})
+			set(BLAS_HEADER_PATH ${BLAS_INCLUDE_DIR})			
+			message(STATUS "BLAS library from environment")
+		endif()
+
 		set_target_properties(aoclutils PROPERTIES
 		IMPORTED_LOCATION ${LIBAOCLUTILS_LIBRARY_PATH}
 		POSITION_INDEPENDENT_CODE ON
 		)
+
 	elseif(WIN32)
-		# CHECKS if blas library exists
-       		if(NOT EXISTS ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME})
-               		message(FATAL_ERROR "\n Invalid path to BLAS Library \n \
-			${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME} \
-			Does not exist.\n Please check the path again")
+		# CHECKS if blas library is explicitly set
+		if (CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH AND EXT_BLAS_LIBNAME AND (NOT ENABLE_AOCL_BLAS))
+			if(NOT EXISTS ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME})
+				message(FATAL_ERROR "\n Invalid path to BLAS Library \n \
+					${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME} \
+					Does not exist.\n Please check the path again")
+			endif()
+
+			set_target_properties(blas PROPERTIES
+			IMPORTED_IMPLIB ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME}
+			POSITION_INDEPENDENT_CODE ON
+			)
+		elseif (ENABLE_AOCL_BLAS)
+			# If BLAS library is provided from environment, then use it
+			set_target_properties(blas PROPERTIES
+			IMPORTED_IMPLIB ${BLAS_LIBRARY}
+			POSITION_INDEPENDENT_CODE ON
+			)
 		endif()
 
-		set_target_properties(blas PROPERTIES
-		IMPORTED_IMPLIB ${CMAKE_EXT_BLAS_LIBRARY_DEPENDENCY_PATH}/${EXT_BLAS_LIBNAME}
-		POSITION_INDEPENDENT_CODE ON
-		)
 		set_target_properties(aoclutils PROPERTIES
 		IMPORTED_IMPLIB ${LIBAOCLUTILS_LIBRARY_PATH}
 		POSITION_INDEPENDENT_CODE ON
 		)
 	endif()
-
-	# if user wants to run tests on an external lapack library
-	# needs to be modified for external lapack libraries same way as done for blas
-	if((NOT EXT_LAPACK_LIBRARY_PATH) OR (NOT EXT_LAPACK_LIBNAME))
-		set(EXT_LAPACK_LIBRARY_PATH "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
-		message(STATUS "Missing External lapack library. Using ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${EXT_LAPACK_LIBNAME} ")
-	elseif(NOT EXISTS ${EXT_LAPACK_LIBRARY_PATH}/${EXT_LAPACK_LIBNAME})
-		message(FATAL_ERROR "\n Invalid path to lapack Library \n \
-	${EXT_LAPACK_LIBRARY_PATH}/${EXT_LAPACK_LIBNAME} \
-	Does not exist.\n Please check the path again, or avoid passing \n \
-	-DEXT_LAPACK_LIBRARY_PATH and -DEXT_LAPACK_LIBNAME to use libflame")
-	endif()
-	#add_subdirectory(testcpp)
 endif()
 
 if(BUILD_TEST)
@@ -1212,6 +1346,11 @@ if(BUILD_LEGACY_TEST)
 endif()
 
 if (BUILD_NETLIB_TEST)
+
+	if (BUILD_SHARED_LIBS)
+		message(FATAL_ERROR "Netlib test is not supported for shared library build")
+	endif()
+
 	if(WIN32)
 		add_subdirectory(netlib-test)
 	else()
@@ -1224,17 +1363,9 @@ if(BUILD_LAPACKE_TEST)
 endif()
 
 
-
-# Configuration for pkg-config
-if(BUILD_SHARED_LIBS)
-	# Get the path of directory containing the aoclutils lib
-	cmake_path(GET LIBAOCLUTILS_LIBRARY_PATH PARENT_PATH LIBAOCLUTILS_LIBRARY_DIR)
-	string(APPEND LIBS_LINK_FLAGS "-L${LIBAOCLUTILS_LIBRARY_DIR} -laoclutils ")
-endif()
-
-set(flamelib ${PROJECT_NAME})
-configure_file(flame.pc.in flame.pc @ONLY)
-install(FILES ${CMAKE_BINARY_DIR}/flame.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pkgconfig)
+set(REQ_PKG_LIB ${PROJECT_NAME})
+configure_file(aocl-lapack.pc.in flame.pc @ONLY)
+install(FILES ${CMAKE_BINARY_DIR}/flame.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
 
 # To View Added Definitions and C Flags
 get_directory_property( DirDefs COMPILE_DEFINITIONS )

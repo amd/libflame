@@ -1,8 +1,8 @@
-/* ../netlib/ssytrf.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./ssytrf.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -46,7 +46,7 @@ static integer c__2 = 2;
 /* > the Bunch-Kaufman diagonal pivoting method. The form of the */
 /* > factorization is */
 /* > */
-/* > A = U*D*U**T or A = L*D*L**T */
+/* > A = U**T*D*U or A = L*D*L**T */
 /* > */
 /* > where U (or L) is a product of permutation and unit upper (lower) */
 /* > triangular matrices, and D is symmetric and block diagonal with */
@@ -139,14 +139,13 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup realSYcomputational */
+/* > \ingroup hetrf */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
 /* > \verbatim */
 /* > */
-/* > If UPLO = 'U', then A = U*D*U**T, where */
+/* > If UPLO = 'U', then A = U**T*D*U, where */
 /* > U = P(n)*U(n)* ... *P(k)U(k)* ..., */
 /* > i.e., U is a product of terms P(k)*U(k), where k decreases from n to */
 /* > 1 in steps of 1 or 2, and D is a block diagonal matrix with 1-by-1 */
@@ -186,13 +185,9 @@ the routine */
 void ssytrf_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real *work,
              integer *lwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "ssytrf inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("ssytrf inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n,
              *lda);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     /* Local variables */
@@ -211,10 +206,10 @@ void ssytrf_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real 
                 integer *, integer *);
     integer ldwork, lwkopt;
     logical lquery;
-    /* -- LAPACK computational routine (version 3.4.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -260,19 +255,22 @@ void ssytrf_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real 
     {
         /* Determine the block size */
         nb = ilaenv_(&c__1, "SSYTRF", uplo, n, &c_n1, &c_n1, &c_n1);
-        lwkopt = *n * nb;
-        work[1] = (real)lwkopt;
+        /* Computing MAX */
+        i__1 = 1;
+        i__2 = *n * nb; // , expr subst
+        lwkopt = fla_max(i__1, i__2);
+        work[1] = sroundup_lwork(&lwkopt);
     }
     if(*info != 0)
     {
         i__1 = -(*info);
         xerbla_("SSYTRF", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     nbmin = 2;
@@ -301,7 +299,7 @@ void ssytrf_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real 
     }
     if(upper)
     {
-        /* Factorize A as U*D*U**T using the upper triangle of A */
+        /* Factorize A as U**T*D*U using the upper triangle of A */
         /* K is the main loop index, decreasing from N to 1 in steps of */
         /* KB, where KB is the number of columns factorized by SLASYF;
          */
@@ -385,8 +383,8 @@ void ssytrf_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real 
         goto L20;
     }
 L40:
-    work[1] = (real)lwkopt;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    work[1] = sroundup_lwork(&lwkopt);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYTRF */
 }

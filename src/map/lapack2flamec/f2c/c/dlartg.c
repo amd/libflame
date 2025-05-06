@@ -82,7 +82,7 @@
 /*  ======== */
 /* > \author Edward Anderson, Lockheed Martin */
 /* > \date July 2016 */
-/* > \ingroup OTHERauxiliary */
+/* > \ingroup lartg */
 /* > \par Contributors: */
 /*  ================== */
 /* > */
@@ -108,7 +108,7 @@ void dlartg_(doublereal *f, doublereal *g, doublereal *c__, doublereal *s, doubl
     double sqrt(doublereal), d_sign(doublereal *, doublereal *);
     /* Local variables */
     doublereal d__, u, f1, g1, fs, gs, rtmin, rtmax, safmin, safmax;
-    doublereal d__1, d__2, d__3;
+    doublereal d__1, d__2, d__3, g__t;
     /* ...Translated by Pacific-Sierra Research vf90 Personal 3.4N3 05:19:29 1/25/23 */
     /*  -- LAPACK auxiliary routine -- */
     /*  -- LAPACK is a software package provided by Univ. of Tennessee,    -- */
@@ -124,6 +124,7 @@ void dlartg_(doublereal *f, doublereal *g, doublereal *c__, doublereal *s, doubl
     /* .. Executable Statements .. */
     f1 = f2c_dabs(*f);
     g1 = f2c_dabs(*g);
+    g__t = *g;
     if(*g == 0.)
     {
         *c__ = 1.;
@@ -141,7 +142,7 @@ void dlartg_(doublereal *f, doublereal *g, doublereal *c__, doublereal *s, doubl
         d__ = sqrt(*f * *f + *g * *g);
         *c__ = f1 / d__;
         *r__ = d_sign(&d__, f);
-        *s = *g / *r__;
+        *s = g__t / *r__;
     }
     else
     {

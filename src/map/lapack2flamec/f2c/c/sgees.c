@@ -1,4 +1,4 @@
-/* sgees.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./sgees.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -220,12 +220,12 @@ if */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup realGEeigen */
+/* > \ingroup gees */
 /* ===================================================================== */
 /* Subroutine */
-void sgees_(char *jobvs, char *sort, L_fps2 select, integer *n, real *a, integer *lda,
-            integer *sdim, real *wr, real *wi, real *vs, integer *ldvs, real *work, integer *lwork,
-            logical *bwork, integer *info)
+void sgees_(char *jobvs, char *sort, L_fps2 select, integer *n, real *a, integer *lda, integer *sdim,
+            real *wr, real *wi, real *vs, integer *ldvs, real *work, integer *lwork, logical *bwork,
+            integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgees inputs: jobvs %c, sort %c, n %" FLA_IS ", lda %" FLA_IS
@@ -249,11 +249,7 @@ void sgees_(char *jobvs, char *sort, L_fps2 select, integer *n, real *a, integer
         void
         scopy_(integer *, real *, integer *, real *, integer *),
         sswap_(integer *, real *, integer *, real *, integer *);
-    logical lst2sl;
-    extern /* Subroutine */
-        void
-        slabad_(real *, real *);
-    logical scalea;
+    logical lst2sl, scalea;
     real cscale;
     extern /* Subroutine */
         void
@@ -289,6 +285,7 @@ void sgees_(char *jobvs, char *sort, L_fps2 select, integer *n, real *a, integer
                 real *, integer *, real *, real *, real *, integer *, integer *, integer *,
                 integer *);
     logical wantst, lquery, wantvs;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -393,7 +390,7 @@ void sgees_(char *jobvs, char *sort, L_fps2 select, integer *n, real *a, integer
                 maxwrk = fla_max(i__1, i__2);
             }
         }
-        work[1] = (real)maxwrk;
+        work[1] = sroundup_lwork(&maxwrk);
         if(*lwork < minwrk && !lquery)
         {
             *info = -13;
@@ -422,7 +419,6 @@ void sgees_(char *jobvs, char *sort, L_fps2 select, integer *n, real *a, integer
     eps = slamch_("P");
     smlnum = slamch_("S");
     bignum = 1.f / smlnum;
-    slabad_(&smlnum, &bignum);
     smlnum = sqrt(smlnum) / eps;
     bignum = 1.f / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
@@ -639,7 +635,7 @@ void sgees_(char *jobvs, char *sort, L_fps2 select, integer *n, real *a, integer
             /* L30: */
         }
     }
-    work[1] = (real)maxwrk;
+    work[1] = sroundup_lwork(&maxwrk);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGEES */

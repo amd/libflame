@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/sorgtsqr.f -- translated by f2c (version 20160102). You must link the resulting
- object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
- systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
- -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sorgtsqr.f -- translated by f2c (version 20190311). You must link the resulting object file
+ with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b4 = 0.f;
 static real c_b5 = 1.f;
@@ -25,7 +25,7 @@ static integer c__1 = 1;
  * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorgtsq
  * r.f"> */
 /* > [TXT]</a> */
-/* > */
+/* > \endhtmlonly */
 /* Definition: */
 /* =========== */
 /* SUBROUTINE SORGTSQR( M, N, MB, NB, A, LDA, T, LDT, WORK, LWORK, */
@@ -128,7 +128,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > LDT is INTEGER */
 /* > The leading dimension of the array T. */
-/* > LDT >= fla_max(1,fla_min(NB1,N)). */
+/* > LDT >= fla_max(1,min(NB1,N)). */
 /* > \endverbatim */
 /* > */
 /* > \param[out] WORK */
@@ -139,6 +139,7 @@ static integer c__1 = 1;
 /* > */
 /* > \param[in] LWORK */
 /* > \verbatim */
+/* > LWORK is INTEGER */
 /* > The dimension of the array WORK. LWORK >= (M+NB)*N. */
 /* > If LWORK = -1, then a workspace query is assumed. */
 /* > The routine only calculates the optimal size of the WORK */
@@ -160,8 +161,7 @@ static integer c__1 = 1;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2019 */
-/* > \ingroup singleOTHERcomputational */
+/* > \ingroup ungtsqr */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -177,13 +177,10 @@ static integer c__1 = 1;
 void sorgtsqr_(integer *m, integer *n, integer *mb, integer *nb, real *a, integer *lda, real *t,
                integer *ldt, real *work, integer *lwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "sorgtsqr inputs: m %d, n %d, mb %d, nb %d, lda %d, ldt %d", *m, *n, *mb,
-             *nb, *lda, *ldt);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sorgtsqr inputs: m %" FLA_IS ", n %" FLA_IS ", mb %" FLA_IS ", nb %" FLA_IS
+                      ", lda %" FLA_IS ", ldt %" FLA_IS "",
+                      *m, *n, *mb, *nb, *lda, *ldt);
     /* System generated locals */
     integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2;
     /* Local variables */
@@ -199,10 +196,10 @@ void sorgtsqr_(integer *m, integer *n, integer *mb, integer *nb, real *a, intege
         slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     logical lquery;
     integer nblocal;
-    /* -- LAPACK computational routine (version 3.9.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2019 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -211,6 +208,8 @@ void sorgtsqr_(integer *m, integer *n, integer *mb, integer *nb, real *a, intege
     /* .. Parameters .. */
     /* .. */
     /* .. Local Scalars .. */
+    /* .. */
+    /* .. External Functions .. */
     /* .. */
     /* .. External Subroutines .. */
     /* .. */
@@ -262,7 +261,7 @@ void sorgtsqr_(integer *m, integer *n, integer *mb, integer *nb, real *a, intege
         {
             /* Test the input LWORK for the dimension of the array WORK. */
             /* This workspace is used to store array C(LDC, N) and WORK(LWORK) */
-            /* in the call to DLAMTSQR. See the documentation for DLAMTSQR. */
+            /* in the call to SLAMTSQR. See the documentation for SLAMTSQR. */
             if(*lwork < 2 && !lquery)
             {
                 *info = -10;
@@ -272,8 +271,8 @@ void sorgtsqr_(integer *m, integer *n, integer *mb, integer *nb, real *a, intege
                 /* Set block size for column blocks */
                 nblocal = fla_min(*nb, *n);
                 /* LWORK = -1, then set the size for the array C(LDC,N) */
-                /* in DLAMTSQR call and set the optimal size of the work array */
-                /* WORK(LWORK) in DLAMTSQR call. */
+                /* in SLAMTSQR call and set the optimal size of the work array */
+                /* WORK(LWORK) in SLAMTSQR call. */
                 ldc = *m;
                 lc = ldc * *n;
                 lw = *n * nblocal;
@@ -290,26 +289,26 @@ void sorgtsqr_(integer *m, integer *n, integer *mb, integer *nb, real *a, intege
     {
         i__1 = -(*info);
         xerbla_("SORGTSQR", &i__1, (ftnlen)8);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        work[1] = (real)lworkopt;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        work[1] = sroundup_lwork(&lworkopt);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(fla_min(*m, *n) == 0)
     {
-        work[1] = (real)lworkopt;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        work[1] = sroundup_lwork(&lworkopt);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* (1) Form explicitly the tall-skinny M-by-N left submatrix Q1_in */
     /* of M-by-M orthogonal matrix Q_in, which is implicitly stored in */
     /* the subdiagonal part of input array A and in the input array T. */
-    /* Perform by the following operation using the routine DLAMTSQR. */
+    /* Perform by the following operation using the routine SLAMTSQR. */
     /* Q1_in = Q_in * ( I ), where I is a N-by-N identity matrix, */
     /* ( 0 ) 0 is a (M-N)-by-N zero matrix. */
     /* (1a) Form M-by-N matrix in the array WORK(1:LDC*N) with ones */
@@ -329,8 +328,8 @@ void sorgtsqr_(integer *m, integer *n, integer *mb, integer *nb, real *a, intege
     {
         scopy_(m, &work[(j - 1) * ldc + 1], &c__1, &a[j * a_dim1 + 1], &c__1);
     }
-    work[1] = (real)lworkopt;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    work[1] = sroundup_lwork(&lworkopt);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SORGTSQR */
 }

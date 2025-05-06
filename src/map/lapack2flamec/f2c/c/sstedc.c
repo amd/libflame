@@ -1,11 +1,8 @@
-/* ../netlib/sstedc.f -- translated by f2c (version 20160102). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-
-/* Modifications Copyright (C) 2024 Advanced Micro Devices, Inc. All rights reserved. */
-
+/* ./sstedc.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__9 = 9;
 static integer c__0 = 0;
@@ -55,12 +52,6 @@ static integer c__1 = 1;
 /* > found if SSYTRD or SSPTRD or SSBTRD has been used to reduce this */
 /* > matrix to tridiagonal form. */
 /* > */
-/* > This code makes very mild assumptions about floating point */
-/* > arithmetic. It will work on machines with a guard digit in */
-/* > add/subtract, or on those binary machines without guard digits */
-/* > which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or Cray-2. */
-/* > It could conceivably fail on hexadecimal or decimal machines */
-/* > without guard digits, but we know of none. See SLAED3 for details. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -183,8 +174,7 @@ the */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date December 2016 */
-/* > \ingroup auxOTHERcomputational */
+/* > \ingroup stedc */
 /* > \par Contributors: */
 /* ================== */
 /* > */
@@ -197,13 +187,9 @@ the */
 void sstedc_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ldz, real *work,
              integer *lwork, integer *iwork, integer *liwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "sstedc inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "", *compz, *n,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("sstedc inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "", *compz, *n,
              *ldz);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer z_dim1, z_offset, i__1, i__2;
     real r__1, r__2;
@@ -253,10 +239,9 @@ void sstedc_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ld
         ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
     integer storez, strtrw;
     extern real sroundup_lwork(integer *);
-    /* -- LAPACK computational routine (version 3.7.0) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* December 2016 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -370,18 +355,18 @@ void sstedc_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ld
     {
         i__1 = -(*info);
         xerbla_("SSTEDC", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 1)
@@ -390,7 +375,7 @@ void sstedc_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ld
         {
             z__[z_dim1 + 1] = 1.f;
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* If the following conditional clause is removed, then the routine */
@@ -437,7 +422,7 @@ void sstedc_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ld
         }
         eps = slamch_("Epsilon");
         start = 1;
-        /* while ( START <= N ) */
+    /* while ( START <= N ) */
     L10:
         if(start <= *n)
         {
@@ -559,7 +544,7 @@ void sstedc_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ld
 L50:
     work[1] = sroundup_lwork(&lwmin);
     iwork[1] = liwmin;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSTEDC */
 }

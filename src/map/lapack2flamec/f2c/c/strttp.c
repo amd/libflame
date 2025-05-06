@@ -102,6 +102,8 @@
 /* Subroutine */
 void strttp_(char *uplo, integer *n, real *a, integer *lda, real *ap, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("strttp inputs: uplo %c ,n %" FLA_IS ",lda %" FLA_IS "", *uplo, *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     /* Local variables */
@@ -154,6 +156,7 @@ void strttp_(char *uplo, integer *n, real *a, integer *lda, real *ap, integer *i
     {
         i__1 = -(*info);
         xerbla_("STRTTP", &i__1, (ftnlen)6);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(lower)
@@ -184,6 +187,7 @@ void strttp_(char *uplo, integer *n, real *a, integer *lda, real *ap, integer *i
             }
         }
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STRTTP */
 }

@@ -1,14 +1,14 @@
 /******************************************************************************
- * * Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
+ * * Copyright (C) 2023-2025, Advanced Micro Devices, Inc. All rights reserved.
  * *******************************************************************************/
 /*! @file fla_lapack_x86_common.c
  *  @brief Common front-end functions
  *         to choose optimized paths
  *  *  */
 
+#include "fla_lapack_x86_common.h"
 #include "fla_lapack_avx2_kernels.h"
 #include "fla_lapack_avx512_kernels.h"
-#include "fla_lapack_x86_common.h"
 
 #if FLA_ENABLE_AMD_OPT
 
@@ -52,7 +52,8 @@ int fla_drot(integer *n, doublereal *dx, integer *incx, doublereal *dy, integer 
              doublereal *c__, doublereal *s)
 {
 #ifndef FLA_ENABLE_AOCL_BLAS
-    extern void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *);
+    extern void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+                      doublereal *);
 #endif
 
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
@@ -116,15 +117,16 @@ void fla_dscal(integer *n, doublereal *da, doublereal *dx, integer *incx)
     /* Initialize global context data */
     aocl_fla_init();
 
-    if(*incx == 1 && *da != 0 && *n >= 1 && *n <= FLA_DSCAL_INLINE_SMALL && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
+    if(*incx == 1 && *da != 0 && *n >= 1 && *n <= FLA_DSCAL_INLINE_SMALL
+       && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
         if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
         {
-           fla_dscal_ix1_avx512(n, da, dx, incx);
+            fla_dscal_ix1_avx512(n, da, dx, incx);
         }
         else
         {
-           fla_dscal_ix1_avx2(n, da, dx, incx);
+            fla_dscal_ix1_avx2(n, da, dx, incx);
         }
     }
     else
@@ -175,7 +177,8 @@ void fla_sscal(integer *n, real *alpha, real *x, integer *incx)
     aocl_fla_init();
 
     /* Take AVX path only for increment equal to 1 */
-    if(*incx == 1 &&  *alpha != 0 && *n >= 1 && *n <= FLA_SSCAL_INLINE_SMALL && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
+    if(*incx == 1 && *alpha != 0 && *n >= 1 && *n <= FLA_SSCAL_INLINE_SMALL
+       && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
         if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
         {
@@ -322,43 +325,121 @@ int fla_dgetrs_small_notrans(char *trans, integer *n, integer *nrhs, doublereal 
     }
     return 0;
 }
-/* Find the maximum element from absolute values of a vector*/
-doublereal fla_get_max_abs_element_vector(integer m, doublereal *a, integer a_dim)
-{
-    doublereal value = 0.0f, temp;
-    integer i__;
 
-    // Path when AVX512 ISA is supported
+/* Find the maximum element from absolute values of a real vector */
+real fla_get_max_sabs_element_vector(integer m, real *a, integer a_diml)
+{
+    real max_value = 0.0, temp;
+    integer i__;
+    /* Path when AVX512 ISA is supported */
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
     {
-        value = fla_get_max_abs_element_vector_avx512(m, a, a_dim);
+        max_value = fla_get_max_sabs_element_vector_avx512(m, a, a_diml);
     }
     else if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
-        // Path when AVX2 ISA is supported
-        value = fla_get_max_abs_element_vector_avx2(m, a, a_dim);
+        /* Path when AVX2 ISA is supported */
+        max_value = fla_get_max_sabs_element_vector_avx2(m, a, a_diml);
     }
     else
     {
-        // Reference code
         for(i__ = 1; i__ <= m; ++i__)
         {
-            temp = f2c_abs(a[i__ + a_dim]);
-            if(value < temp || temp != temp)
+            temp = f2c_abs(a[i__ + a_diml]);
+            if(max_value < temp || temp != temp)
             {
-                value = temp;
+                max_value = temp;
             }
         }
     }
-
-    return value;
+    return max_value;
 }
 
-/* DLARF for small sizes 
+/* Find the maximum element from absolute values of a doublereal vector */
+doublereal fla_get_max_dabs_element_vector(integer m, doublereal *a, integer a_diml)
+{
+    doublereal max_value = 0.0, temp;
+    integer i__;
+    /* Path when AVX512 ISA is supported */
+    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
+    {
+        max_value = fla_get_max_dabs_element_vector_avx512(m, a, a_diml);
+    }
+    else if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
+    {
+        /* Path when AVX2 ISA is supported */
+        max_value = fla_get_max_dabs_element_vector_avx2(m, a, a_diml);
+    }
+    else
+    {
+        for(i__ = 1; i__ <= m; ++i__)
+        {
+            temp = f2c_abs(a[i__ + a_diml]);
+            max_value = (max_value < temp || temp != temp) ? temp : max_value;
+        }
+    }
+    return max_value;
+}
+
+/* Find the maximum element from absolute values of a complex vector */
+real fla_get_max_cabs_element_vector(integer m, complex *a, integer a_diml)
+{
+    double c_abs(complex *);
+    real max_value = 0.0, temp;
+    integer i__;
+    /* Path when AVX512 ISA is supported */
+    if(m > FLA_CLANGEM_SIMD_AVX512_THRESH_M &&  FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
+    {
+        max_value = fla_get_max_cabs_element_vector_avx512(m, a, a_diml);
+    }
+    else if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
+    {
+        /* Path when AVX2 ISA is supported */
+        max_value = fla_get_max_cabs_element_vector_avx2(m, a, a_diml);
+    }
+    else
+    {
+        for(i__ = 1; i__ <= m; ++i__)
+        {
+            temp = c_abs(&a[i__ + a_diml]);
+            max_value = (max_value < temp || temp != temp) ? temp : max_value;
+        }
+    }
+    return max_value;
+}
+
+/* Find the maximum element from absolute values of a doublecomplex vector */
+doublereal fla_get_max_zabs_element_vector(integer m, doublecomplex *a, integer a_diml)
+{
+    double z_abs(doublecomplex *);
+    doublereal max_value = 0.0, temp;
+    integer i__;
+    /* Path when AVX512 ISA is supported */
+    if(m > FLA_ZLANGEM_SIMD_AVX512_THRESH_M && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
+    {
+        max_value = fla_get_max_zabs_element_vector_avx512(m, a, a_diml);
+    }
+    else if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
+    {
+        /* Path when AVX2 ISA is supported */
+        max_value = fla_get_max_zabs_element_vector_avx2(m, a, a_diml);
+    }
+    else
+    {
+        for(i__ = 1; i__ <= m; ++i__)
+        {
+            temp = z_abs(&a[i__ + a_diml]);
+            max_value = (max_value < temp || temp != temp) ? temp : max_value;
+        }
+    }
+    return max_value;
+}
+
+/* DLARF for small sizes
  * To be used only when vectorized code via avx2/avx512 is enabled
  * */
 void fla_dlarf_small_incv1_simd(integer m, integer n, doublereal *a_buff, integer ldr,
-                                        doublereal *v, doublereal ntau, doublereal *work)
+                                doublereal *v, doublereal ntau, doublereal *work)
 {
     /* Select AVX512 kernel based on preset threshold and ISA support  */
     if(m > FLA_DGEMV_DGER_SIMD_AVX512_THRESH_M && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
@@ -370,6 +451,58 @@ void fla_dlarf_small_incv1_simd(integer m, integer n, doublereal *a_buff, intege
         fla_dlarf_left_apply_incv1_avx2(m, n, a_buff, ldr, v, ntau, work);
     }
     return;
+}
+
+/* dnrm2 for small input sizes */
+doublereal fla_dnrm2_blas_kernel(integer *sd, doublereal *a, integer *inc)
+{
+    doublereal value = 0.;
+    /* TODO : Call DNRM2 AVX2 and AVX512 kernels using AOCL_BLAS_ENABLE 
+       feature and call directly */
+    if(*sd > FLA_DNRM2_SMALL_THRESH0 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
+    {
+        value = fla_dnrm2_blas_avx512(sd, a, inc);
+    }
+    else if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
+    {
+        value = fla_dnrm2_blas_avx2(sd, a, inc);
+    }
+    else
+    {
+        value = dnrm2_(sd, a, inc);
+    }
+    return value;
+}
+
+/* ZLARF optimized */
+void fla_zlarf_left_invc1_opt(integer m, integer n, doublecomplex *a_buff, integer ldr,
+                              doublecomplex *v, doublecomplex *ntau, doublecomplex *work)
+{
+    if(m < FLA_ZGEMV_ZGER_SIMD_AXV2_THRESH_M && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
+    {
+        /* If size is less than AVX2 threshold and AVX2 is available then execute AVX2 kernel */
+        fla_zlarf_left_apply_incv1_avx2(m, n, a_buff, ldr, v, ntau, work);
+    }
+    else if(m < FLA_ZGEMV_ZGER_SIMD_AXV512_THRESH_M && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
+    {
+        /* AVX512 based on size and available ISA */
+        fla_zlarf_left_apply_incv1_avx512(m, n, a_buff, ldr, v, ntau, work);
+    }
+    else
+    {
+        /* Original code */
+        dcomplex c_b1 = {1., 0.};
+        dcomplex c_b2 = {0., 0.};
+        integer c__1 = 1;
+        integer a_offset = 1 + ldr;
+
+        /* w(1:lastc,1) := C(1:lastv,1:lastc)**H * v(1:lastv,1) */
+        zgemv_("Conjugate transpose", &m, &n, &c_b1, (dcomplex *)&a_buff[a_offset], &ldr,
+               (dcomplex *)&v[1], &c__1, (dcomplex *)&c_b2, (dcomplex *)&work[1], &c__1);
+        /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**H */
+        zgerc_(&m, &n, (dcomplex *)ntau, (dcomplex *)&v[1], &c__1, (dcomplex *)&work[1], &c__1,
+               (dcomplex *)&a_buff[a_offset], &ldr);
+    }
 }
 
 #endif

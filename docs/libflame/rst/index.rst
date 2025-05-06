@@ -1,4 +1,4 @@
-..  Copyright (C) 2024, Advanced Micro Devices. All rights reserved.
+..  Copyright (C) 2024-2025, Advanced Micro Devices. All rights reserved.
 
 ..  Redistribution and use in source and binary forms, with or without
 ..  modification, are permitted provided that the following conditions are met:
@@ -47,7 +47,7 @@ libflame. The upstream libFLAME repository is available on `GitHub <https://gith
 libflame>`_. AMD is actively optimizing key routines in libFLAME as a part of the AOCL-LAPACK
 library, for AMD “Zen”-based architectures in the "amd" fork of libFLAME hosted on AMD GitHub.
 
-From AOCL 4.1, AOCL-LAPACK is compatible with LAPACK 3.11.0 specification. In combination
+From AOCL 5.1, AOCL-LAPACK is compatible with LAPACK 3.12.0 specification. In combination
 with the AOCL-BLAS library, which includes optimizations for the AMD “Zen”-based processors,
 AOCL-LAPACK enables running high performing LAPACK functionalities on AMD platforms.
 

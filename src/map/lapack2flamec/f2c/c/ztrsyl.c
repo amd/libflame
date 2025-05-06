@@ -1,8 +1,8 @@
-/* ../netlib/ztrsyl.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./ztrsyl.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 /* > \brief \b ZTRSYL */
@@ -152,8 +152,7 @@ perturbed */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup complex16SYcomputational */
+/* > \ingroup trsyl */
 /* ===================================================================== */
 /* Subroutine */
 void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, doublecomplex *a,
@@ -182,14 +181,11 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
     doublecomplex suml, sumr;
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Double Complex */
-        VOID
+        void
         zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
                    integer *),
         zdotu_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
                    integer *);
-    extern /* Subroutine */
-        void
-        dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     doublereal scaloc;
     extern /* Subroutine */
@@ -206,10 +202,9 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
         zladiv_f2c_(doublecomplex *, doublecomplex *, doublecomplex *);
     logical notrna, notrnb;
     doublereal smlnum;
-    /* -- LAPACK computational routine (version 3.4.0) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -293,7 +288,6 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
     eps = dlamch_("P");
     smlnum = dlamch_("S");
     bignum = 1. / smlnum;
-    dlabad_(&smlnum, &bignum);
     smlnum = smlnum * (doublereal)(*m * *n) / eps;
     bignum = 1. / smlnum;
     /* Computing MAX */

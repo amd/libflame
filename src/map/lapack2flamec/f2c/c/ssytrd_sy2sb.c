@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/ssytrd_sy2sb.f -- translated by f2c (version 20160102). You must link the
- resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
- Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
- with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./ssytrd_sy2sb.f -- translated by f2c (version 20190311). You must link the resulting object file
+ with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__4 = 4;
 static integer c_n1 = -1;
@@ -19,16 +19,16 @@ static real c_b42 = -1.f;
 /* > \htmlonly */
 /* > Download SSYTRD_SY2SB + dependencies */
 /* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssytrd.
- * f"> */
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssytrd_
+ * sy2sb.f"> */
 /* > [TGZ]</a> */
 /* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssytrd.
- * f"> */
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssytrd_
+ * sy2sb.f"> */
 /* > [ZIP]</a> */
 /* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytrd.
- * f"> */
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytrd_
+ * sy2sb.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -148,7 +148,7 @@ the routine */
 /* > only calculates the optimal size of the WORK array, returns */
 /* > this value as the first entry of the WORK array, and no error */
 /* > message related to LWORK is issued by XERBLA. */
-/* > LWORK_QUERY = N*KD + N*max(KD,FACTOPTNB) + 2*KD*KD */
+/* > LWORK_QUERY = N*KD + N*fla_max(KD,FACTOPTNB) + 2*KD*KD */
 /* > where FACTOPTNB is the blocking used by the QR or LQ */
 /* > algorithm, usually FACTOPTNB=128 is a good choice otherwise */
 /* > putting LWORK=-1 will provide the size of WORK. */
@@ -166,8 +166,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2017 */
-/* > \ingroup realSYcomputational */
+/* > \ingroup hetrd_he2hb */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -252,15 +251,11 @@ v(i+kd+2:n) is stored on exit in */
 void ssytrd_sy2sb_(char *uplo, integer *n, integer *kd, real *a, integer *lda, real *ab,
                    integer *ldab, real *tau, real *work, integer *lwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "ssytrd_sy2sb inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", lda %" FLA_IS
              ", ldab %" FLA_IS "",
              *uplo, *n, *kd, *lda, *ldab);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer a_dim1, a_offset, ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */
@@ -289,10 +284,10 @@ void ssytrd_sy2sb_(char *uplo, integer *n, integer *kd, real *a, integer *lda, r
         slarft_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *),
         slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     logical lquery;
-    /* -- LAPACK computational routine (version 3.8.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2017 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -359,13 +354,13 @@ void ssytrd_sy2sb_(char *uplo, integer *n, integer *kd, real *a, integer *lda, r
     {
         i__1 = -(*info);
         xerbla_("SSYTRD_SY2SB", &i__1, (ftnlen)12);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        work[1] = (real)lwmin;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        work[1] = sroundup_lwork(&lwmin);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
@@ -399,7 +394,7 @@ void ssytrd_sy2sb_(char *uplo, integer *n, integer *kd, real *a, integer *lda, r
             }
         }
         work[1] = 1.f;
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Determine the pointer position for the workspace */
@@ -549,8 +544,8 @@ void ssytrd_sy2sb_(char *uplo, integer *n, integer *kd, real *a, integer *lda, r
             /* L60: */
         }
     }
-    work[1] = (real)lwmin;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    work[1] = sroundup_lwork(&lwmin);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYTRD_SY2SB */
 }

@@ -109,6 +109,8 @@
 /* Subroutine */
 void spoequb_(integer *n, real *a, integer *lda, real *s, real *scond, real *amax, integer *info)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("spoequb inputs: n %" FLA_IS ",lda %" FLA_IS "", *n, *lda);
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
     real r__1, r__2;
@@ -162,6 +164,7 @@ void spoequb_(integer *n, real *a, integer *lda, real *s, real *scond, real *ama
     {
         i__1 = -(*info);
         xerbla_("SPOEQUB", &i__1, (ftnlen)7);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible. */
@@ -169,6 +172,7 @@ void spoequb_(integer *n, real *a, integer *lda, real *s, real *scond, real *ama
     {
         *scond = 1.f;
         *amax = 0.f;
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     base = slamch_("B");
@@ -200,6 +204,7 @@ void spoequb_(integer *n, real *a, integer *lda, real *s, real *scond, real *ama
             if(s[i__] <= 0.f)
             {
                 *info = i__;
+                AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
             /* L20: */
@@ -219,6 +224,7 @@ void spoequb_(integer *n, real *a, integer *lda, real *s, real *scond, real *ama
         /* Compute SCOND = fla_min(S(I)) / fla_max(S(I)). */
         *scond = sqrt(smin) / sqrt(*amax);
     }
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SPOEQUB */
 }

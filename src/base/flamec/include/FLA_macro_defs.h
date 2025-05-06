@@ -9,7 +9,7 @@
 */
 
 /*
-    Modifications Copyright (c) 2021-2024 Advanced Micro Devices, Inc.  All rights reserved.
+    Modifications Copyright (c) 2021-2025 Advanced Micro Devices, Inc.  All rights reserved.
 */
 
 
@@ -250,9 +250,12 @@
 #define FLA_GETRF_COMPLEX             (670)
 #define FLA_GETRF_DOUBLE_COMPLEX      (1630)
 
-#define FLA_SGETRF_SMALL_THRESH0      (31)
 #define FLA_SGETRF_SMALL_THRESH1      (117)
 #define FLA_SGETRF_MEDIUM_THRESH0     (480)
+
+#define FLA_SGETRF_SMALL_THRESH0      (7)
+#define FLA_SGETRF_SMALL_AVX2_THRESH0      (31)
+#define FLA_SGETRF_SMALL_AVX512_THRESH0    (156)
 
 #define FLA_DGETRF_SMALL_THRESH0      (8)
 #define FLA_DGETRF_SMALL_AVX2_THRESH0      (81)
@@ -267,15 +270,24 @@
 #define FLA_FULL_DGER_CONSTANT (200)
 
 // ORGQR , threshold numbers to chose paths for performance
-#define FLA_DGEMV_DGER_SIMD_SMALL_THRESH   (100)
-#define FLA_DGEMV_DGER_SIMD_SMALL_THRESH_M (8)
+#define FLA_DGEMV_DGER_SIMD_SMALL_THRESH   (128)
+#define FLA_DGEMV_DGER_SIMD_SMALL_THRESH_M (6)
 #define FLA_DGEMV_DGER_SIMD_AVX512_THRESH_M (25)
+#define FLA_ZGEMV_ZGER_SIMD_AXV2_THRESH_M (8)
+#define FLA_ZGEMV_ZGER_SIMD_AXV512_THRESH_M (49)
 #define FLA_SSCAL_INLINE_SMALL          (512)
 #define FLA_DSCAL_INLINE_SMALL          (512)
 #define FLA_ZGERC_INLINE_SMALL_THRESH0  (128)
 #define FLA_ZGERC_INLINE_SMALL_THRESH1  (32)
 #define FLA_ZSCAL_INLINE_SMALL          (128)
 #define FLA_ZUNGQR_BLOCK_SMALL_THRESH   (32)
+
+
+#define FLA_ZLANGEM_SIMD_AVX512_THRESH_M (15)
+#define FLA_CLANGEM_SIMD_AVX512_THRESH_M (15)
+
+// DNRM2 threshold numbers to chose AVX kernel
+#define FLA_DNRM2_SMALL_THRESH0  (15)
 
 // GEQP3 , threshold numbers to chose paths for performance
 #define FLA_IDAMAX_INLINE_SMALL_THRESH   (128)

@@ -1,14 +1,14 @@
-/* ../netlib/v3.9.0/sgges3.f -- translated by f2c (version 20160102). You must link the resulting
- object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix
- systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
- -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./sgges3.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c_n1 = -1;
 static integer c__1 = 1;
 static integer c__0 = 0;
-static real c_b36 = 0.f;
-static real c_b37 = 1.f;
+static real c_b37 = 0.f;
+static real c_b38 = 1.f;
 /* > \brief <b> SGGES3 computes the eigenvalues, the Schur form, and, optionally, the matrix of
  * Schur vectors for GE matrices (blocked algorithm)</b> */
 /* =========== DOCUMENTATION =========== */
@@ -271,7 +271,7 @@ the routine */
 /* > The QZ iteration failed. (A,B) are not in Schur */
 /* > form, but ALPHAR(j), ALPHAI(j), and BETA(j) should */
 /* > be correct for j=INFO+1,...,N. */
-/* > > N: =N+1: other than QZ iteration failed in SHGEQZ. */
+/* > > N: =N+1: other than QZ iteration failed in SLAQZ0. */
 /* > =N+2: after reordering, roundoff changed values of */
 /* > some complex eigenvalues so that leading */
 /* > eigenvalues in the Generalized Schur form no */
@@ -285,14 +285,13 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date January 2015 */
-/* > \ingroup realGEeigen */
+/* > \ingroup gges3 */
 /* ===================================================================== */
 /* Subroutine */
-void sgges3_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, integer *n, real *a,
-             integer *lda, real *b, integer *ldb, integer *sdim, real *alphar, real *alphai,
-             real *beta, real *vsl, integer *ldvsl, real *vsr, integer *ldvsr, real *work,
-             integer *lwork, logical *bwork, integer *info)
+void sgges3_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, integer *n, real *a, integer *lda,
+             real *b, integer *ldb, integer *sdim, real *alphar, real *alphai, real *beta,
+             real *vsl, integer *ldvsl, real *vsr, integer *ldvsr, real *work, integer *lwork,
+             logical *bwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgges3 inputs: jobvsl %c, jobvsr %c, sort %c, n %" FLA_IS ", lda %" FLA_IS
@@ -322,7 +321,6 @@ void sgges3_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, integer *n, 
     logical lst2sl;
     extern /* Subroutine */
         void
-        slabad_(real *, real *),
         sggbak_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
                 integer *, integer *),
         sggbal_(char *, integer *, real *, integer *, real *, integer *, integer *, integer *,
@@ -368,10 +366,10 @@ void sgges3_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, integer *n, 
         void
         sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
                 integer *, real *, integer *, integer *);
-    /* -- LAPACK driver routine (version 3.6.0) -- */
+    extern real sroundup_lwork(integer *);
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* January 2015 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -527,12 +525,12 @@ void sgges3_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, integer *n, 
             i__2 = (*n << 1) + (integer)work[1]; // , expr subst
             lwkopt = fla_max(i__1, i__2);
         }
-        work[1] = (real)lwkopt;
+        work[1] = sroundup_lwork(&lwkopt);
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGGES3 ", &i__1, (ftnlen)7);
+        xerbla_("SGGES3", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -552,7 +550,6 @@ void sgges3_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, integer *n, 
     eps = slamch_("P");
     safmin = slamch_("S");
     safmax = 1.f / safmin;
-    slabad_(&safmin, &safmax);
     smlnum = sqrt(safmin) / eps;
     bignum = 1.f / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
@@ -609,7 +606,7 @@ void sgges3_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, integer *n, 
     /* Initialize VSL */
     if(ilvsl)
     {
-        slaset_("Full", n, n, &c_b36, &c_b37, &vsl[vsl_offset], ldvsl);
+        slaset_("Full", n, n, &c_b37, &c_b38, &vsl[vsl_offset], ldvsl);
         if(irows > 1)
         {
             i__1 = irows - 1;
@@ -624,7 +621,7 @@ void sgges3_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, integer *n, 
     /* Initialize VSR */
     if(ilvsr)
     {
-        slaset_("Full", n, n, &c_b36, &c_b37, &vsr[vsr_offset], ldvsr);
+        slaset_("Full", n, n, &c_b37, &c_b38, &vsr[vsr_offset], ldvsr);
     }
     /* Reduce to generalized Hessenberg form */
     i__1 = *lwork + 1 - iwrk;
@@ -804,7 +801,7 @@ void sgges3_(char *jobvsl, char *jobvsr, char *sort, L_fps3 selctg, integer *n, 
         }
     }
 L40:
-    work[1] = (real)lwkopt;
+    work[1] = sroundup_lwork(&lwkopt);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGGES3 */

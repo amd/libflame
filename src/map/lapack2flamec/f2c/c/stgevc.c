@@ -1,8 +1,8 @@
-/* ../netlib/stgevc.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./stgevc.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static logical c_true = TRUE_;
 static integer c__2 = 2;
@@ -61,7 +61,7 @@ static logical c_false = FALSE_;
 /* > */
 /* > S*x = w*P*x, (y**H)*S = w*(y**H)*P, */
 /* > */
-/* > where y**H denotes the conjugate tranpose of y. */
+/* > where y**H denotes the conjugate transpose of y. */
 /* > The eigenvalues are not input to this routine, but are computed */
 /* > directly from the diagonal blocks of S and P. */
 /* > */
@@ -240,8 +240,7 @@ static logical c_false = FALSE_;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup realGEcomputational */
+/* > \ingroup tgevc */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -307,15 +306,11 @@ void stgevc_(char *side, char *howmny, logical *select, integer *n, real *s, int
              integer *ldp, real *vl, integer *ldvl, real *vr, integer *ldvr, integer *mm,
              integer *m, real *work, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256,
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF(
              "stgevc inputs: side %c, howmny %c, n %" FLA_IS ", lds %" FLA_IS ", ldp %" FLA_IS
              ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS "",
              *side, *howmny, *n, *lds, *ldp, *ldvl, *ldvr, *mm);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer p_dim1, p_offset, s_dim1, s_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2,
         i__3, i__4, i__5;
@@ -357,9 +352,6 @@ void stgevc_(char *side, char *howmny, logical *select, integer *n, real *s, int
     logical ilabad, ilbbad;
     real acoefa, bcoefa, cimaga, cimagb;
     logical ilback;
-    extern /* Subroutine */
-        void
-        slabad_(real *, real *);
     real bcoefi, ascale, bscale, creala, crealb, bcoefr;
     extern real slamch_(char *);
     real salfar, safmin;
@@ -372,10 +364,9 @@ void stgevc_(char *side, char *howmny, logical *select, integer *n, real *s, int
         void
         slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     integer ihwmny;
-    /* -- LAPACK computational routine (version 3.4.0) -- */
+    /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -482,7 +473,7 @@ void stgevc_(char *side, char *howmny, logical *select, integer *n, real *s, int
     {
         i__1 = -(*info);
         xerbla_("STGEVC", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Count the number of eigenvectors to be computed */
@@ -573,20 +564,19 @@ void stgevc_(char *side, char *howmny, logical *select, integer *n, real *s, int
     {
         i__1 = -(*info);
         xerbla_("STGEVC", &i__1, (ftnlen)6);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     *m = im;
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Machine Constants */
     safmin = slamch_("Safe minimum");
     big = 1.f / safmin;
-    slabad_(&safmin, &big);
     ulp = slamch_("Epsilon") * slamch_("Base");
     small_val = safmin * *n / ulp;
     big = 1.f / small_val;
@@ -784,7 +774,7 @@ void stgevc_(char *side, char *howmny, logical *select, integer *n, real *s, int
                 if(bcoefi == 0.f)
                 {
                     *info = je;
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 /* Scale to avoid over/underflow */
@@ -1206,7 +1196,7 @@ void stgevc_(char *side, char *howmny, logical *select, integer *n, real *s, int
                 if(bcoefi == 0.f)
                 {
                     *info = je - 1;
-                    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+                    AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 /* Scale to avoid over/underflow */
@@ -1533,7 +1523,7 @@ void stgevc_(char *side, char *howmny, logical *select, integer *n, real *s, int
         L500:;
         }
     }
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STGEVC */
 }

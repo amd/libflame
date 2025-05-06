@@ -176,6 +176,10 @@ v(i+k+1:n) is stored on exit in */
 void slahrd_(integer *n, integer *k, integer *nb, real *a, integer *lda, real *tau, real *t,
              integer *ldt, real *y, integer *ldy)
 {
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slahrd inputs: n %" FLA_IS ",k %" FLA_IS ",nb %" FLA_IS ",lda %" FLA_IS
+                      ",ldt %" FLA_IS ",ldy %" FLA_IS "",
+                      *n, *k, *nb, *lda, *ldt, *ldy);
     /* System generated locals */
     integer a_dim1, a_offset, t_dim1, t_offset, y_dim1, y_offset, i__1, i__2, i__3;
     real r__1;
@@ -225,6 +229,7 @@ void slahrd_(integer *n, integer *k, integer *nb, real *a, integer *lda, real *t
     ei = 0.f;
     if(*n <= 1)
     {
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     i__1 = *nb;
@@ -302,6 +307,7 @@ void slahrd_(integer *n, integer *k, integer *nb, real *a, integer *lda, real *t
         /* L10: */
     }
     a[*k + *nb + *nb * a_dim1] = ei;
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLAHRD */
 }

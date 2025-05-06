@@ -3,11 +3,21 @@
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/******************************************************************************
+ * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 #include "FLA_f2c.h" /* Table of constant values */
+#if !FLA_ENABLE_AMD_OPT
 static integer c__1 = 1;
+#endif
 static integer c_n1 = -1;
 static integer c__3 = 3;
 static integer c__2 = 2;
+
+extern int fla_thread_get_num_threads();
+
+integer get_block_size_zgeqrf(integer *m, integer *n);
+
 /* > \brief \b ZGEQRF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -202,9 +212,13 @@ void zgeqrf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
     --tau;
     --work;
     /* Function Body */
+#if FLA_ENABLE_AMD_OPT
+    nb = get_block_size_zgeqrf(m, n);
+#else
+    nb = ilaenv_(&c__1, "ZGEQRF", " ", m, n, &c_n1, &c_n1);
+#endif
     k = fla_min(*m, *n);
     *info = 0;
-    nb = ilaenv_(&c__1, "ZGEQRF", " ", m, n, &c_n1, &c_n1);
     lquery = *lwork == -1;
     if(*m < 0)
     {
@@ -330,4 +344,38 @@ void zgeqrf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
     return;
     /* End of ZGEQRF */
 }
+
+integer get_block_size_zgeqrf(integer *m, integer *n)
+{
+    integer block_size;
+
+    /* Set block_size=32 for small sizes */
+    if(*m <= 17 && *n <= 17)
+    {
+        block_size = 32;
+    }
+    else
+    {
+        int num_threads = fla_thread_get_num_threads();
+
+        if(num_threads == 1)
+        {
+            if(*m >= 400 && *n >= 400)
+            {
+                block_size = 64;
+            }
+            else
+            {
+                block_size = 32;
+            }
+        }
+        else
+        {
+            block_size = 32;
+        }
+    }
+
+    return block_size;
+}
+
 /* zgeqrf_ */

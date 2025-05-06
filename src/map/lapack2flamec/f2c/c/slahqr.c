@@ -1,4 +1,4 @@
-/* slahqr.f -- translated by f2c (version 20190311). You must link the resulting object file with
+/* ./slahqr.f -- translated by f2c (version 20190311). You must link the resulting object file with
  libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
@@ -190,7 +190,7 @@ elements i+1:ihi of WR and WI */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup realOTHERauxiliary */
+/* > \ingroup lahqr */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -242,14 +242,13 @@ void slahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
     extern /* Subroutine */
         void
         scopy_(integer *, real *, integer *, real *, integer *),
-        slanv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *, real *),
-        slabad_(real *, real *);
+        slanv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *, real *);
     extern real slamch_(char *);
     real safmin;
     extern /* Subroutine */
         void
         slarfg_(integer *, real *, real *, integer *, real *);
-    real safmax, rtdisc, smlnum;
+    real rtdisc, smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -312,8 +311,6 @@ void slahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
     nz = *ihiz - *iloz + 1;
     /* Set machine-dependent constants for the stopping criterion. */
     safmin = slamch_("SAFE MINIMUM");
-    safmax = 1.f / safmin;
-    slabad_(&safmin, &safmax);
     ulp = slamch_("PRECISION");
     smlnum = safmin * ((real)nh / ulp);
     /* I1 and I2 are the indices of the first row and last column of H */

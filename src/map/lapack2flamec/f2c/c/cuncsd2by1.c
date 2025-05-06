@@ -1,4 +1,4 @@
-/* cuncsd2by1.f -- translated by f2c (version 20190311). You must link the resulting object file
+/* ./cuncsd2by1.f -- translated by f2c (version 20190311). You must link the resulting object file
  with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
@@ -228,6 +228,7 @@ the routine */
 /* > and RWORK array, respectively, and no error message related */
 /* > to LWORK or LRWORK is issued by XERBLA. */
 /* > \endverbatim */
+/* > */
 /* > \param[out] IWORK */
 /* > \verbatim */
 /* > IWORK is INTEGER array, dimension (M-MIN(P,M-P,Q,M-Q)) */
@@ -252,7 +253,7 @@ the routine */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup complexOTHERcomputational */
+/* > \ingroup uncsd2by1 */
 /* ===================================================================== */
 /* Subroutine */
 void cuncsd2by1_(char *jobu1, char *jobu2, char *jobv1t, integer *m, integer *p, integer *q,
@@ -269,6 +270,7 @@ void cuncsd2by1_(char *jobu1, char *jobu2, char *jobv1t, integer *m, integer *p,
     /* System generated locals */
     integer u1_dim1, u1_offset, u2_dim1, u2_offset, v1t_dim1, v1t_offset, x11_dim1, x11_offset,
         x21_dim1, x21_offset, i__1, i__2, i__3;
+    real r__1;
     /* Local variables */
     integer lworkmin, lworkopt, i__, j, r__, childinfo, lorglqmin, lorgqrmin, lorglqopt, lrworkmin,
         lorgqropt, lrworkopt;
@@ -319,6 +321,7 @@ void cuncsd2by1_(char *jobu1, char *jobu2, char *jobv1t, integer *m, integer *p,
                  real *, real *, complex *, complex *, complex *, complex *, complex *, integer *,
                  integer *);
     logical wantv1t;
+    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -691,7 +694,8 @@ void cuncsd2by1_(char *jobu1, char *jobu2, char *jobv1t, integer *m, integer *p,
         i__1 = fla_max(i__1, i__2);
         i__2 = iorglq + lorglqopt - 1; // ; expr subst
         lworkopt = fla_max(i__1, i__2);
-        work[1].r = (real)lworkopt;
+        r__1 = sroundup_lwork(&lworkopt);
+        work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         if(*lwork < lworkmin && !lquery)
         {

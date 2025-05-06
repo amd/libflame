@@ -1,8 +1,8 @@
-/* ../netlib/v3.9.0/ssyev_2stage.f -- translated by f2c (version 20160102). You must link the
- resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or
- Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place,
- with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
- libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./ssyev_2stage.f -- translated by f2c (version 20190311). You must link the resulting object file
+ with libf2c: on Microsoft Windows system, link with libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
+ standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
+ -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -20,16 +20,16 @@ static real c_b27 = 1.f;
 /* > \htmlonly */
 /* > Download SSYEV_2STAGE + dependencies */
 /* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssyevd_
- * 2stage.f"> */
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssyev_2
+ * stage.f"> */
 /* > [TGZ]</a> */
 /* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssyevd_
- * 2stage.f"> */
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssyev_2
+ * stage.f"> */
 /* > [ZIP]</a> */
 /* > <a
- * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssyevd_
- * 2stage.f"> */
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssyev_2
+ * stage.f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -120,7 +120,7 @@ static real c_b27 = 1.f;
 /* > If JOBZ = 'N' and N > 1, LWORK must be queried. */
 /* > LWORK = MAX(1, dimension) where */
 /* > dimension = fla_max(stage1,stage2) + (KD+1)*N + 2*N */
-/* > = N*KD + N*max(KD+1,FACTOPTNB) */
+/* > = N*KD + N*fla_max(KD+1,FACTOPTNB) */
 /* > + fla_max(2*KD*KD, KD*NTHREADS) */
 /* > + (KD+1)*N + 2*N */
 /* > where KD is the blocking size of the reduction, */
@@ -153,8 +153,7 @@ i */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2017 */
-/* > \ingroup realSYeigen */
+/* > \ingroup heev_2stage */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -191,13 +190,9 @@ i */
 void ssyev_2stage_(char *jobz, char *uplo, integer *n, real *a, integer *lda, real *w, real *work,
                    integer *lwork, integer *info)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
-    snprintf(buffer, 256, "ssyev_2stage inputs: jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS "",
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("ssyev_2stage inputs: jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS "",
              *jobz, *uplo, *n, *lda);
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
     real r__1;
@@ -250,11 +245,11 @@ void ssyev_2stage_(char *jobz, char *uplo, integer *n, real *a, integer *lda, re
     extern /* Subroutine */
         void
         ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
+    extern real sroundup_lwork(integer *);
     integer indhous;
-    /* -- LAPACK driver routine (version 3.8.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2017 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -316,18 +311,18 @@ void ssyev_2stage_(char *jobz, char *uplo, integer *n, real *a, integer *lda, re
     {
         i__1 = -(*info);
         xerbla_("SSYEV_2STAGE ", &i__1, (ftnlen)13);
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*n == 0)
     {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 1)
@@ -338,7 +333,7 @@ void ssyev_2stage_(char *jobz, char *uplo, integer *n, real *a, integer *lda, re
         {
             a[a_dim1 + 1] = 1.f;
         }
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Get machine constants. */
@@ -383,7 +378,7 @@ void ssyev_2stage_(char *jobz, char *uplo, integer *n, real *a, integer *lda, re
     {
         /* Not available in this release, and argument checking should not */
         /* let it getting here */
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+        AOCL_DTL_TRACE_LOG_EXIT
         return;
         sorgtr_(uplo, n, &a[a_offset], lda, &work[indtau], &work[indwrk], &llwork, &iinfo);
         ssteqr_(jobz, n, &w[1], &work[inde], &a[a_offset], lda, &work[indtau], info);
@@ -403,8 +398,8 @@ void ssyev_2stage_(char *jobz, char *uplo, integer *n, real *a, integer *lda, re
         sscal_(&imax, &r__1, &w[1], &c__1);
     }
     /* Set WORK(1) to optimal workspace size. */
-    work[1] = (real)lwmin;
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
+    work[1] = sroundup_lwork(&lwmin);
+    AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYEV_2STAGE */
 }

@@ -122,7 +122,7 @@ void fla_test_labrd_experiment(char *tst_api, test_params_t *params, integer dat
     m = p_cur;
     n = q_cur;
     nb = params->aux_paramslist[pci].nb;
-    // Adjusting nb
+    /* Adjusting nb */
     if(nb > m || nb > n)
     {
         nb = fla_min(m, n);
@@ -244,7 +244,7 @@ void prepare_labrd_run(integer m_A, integer n_A, integer nb_A, void *A, integer 
            for each iteration*/
         copy_matrix(datatype, "full", m_A, n_A, A_save, lda, A, lda);
 
-        // Create output matrices and vectors
+        /* Create output matrices and vectors */
         create_matrix(datatype, LAPACK_COL_MAJOR, m_A, nb_A, &X_test, ldx);
         create_matrix(datatype, LAPACK_COL_MAJOR, n_A, nb_A, &Y_test, ldy);
         create_realtype_vector(datatype, &d_test, nb_A);

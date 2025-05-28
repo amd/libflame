@@ -590,7 +590,7 @@ int FLA_LU_piv_z_var2_parallel( integer *m, integer *n, dcomplex *a, integer *ld
     obj_t       betao  = BLIS_OBJECT_INITIALIZER_1X1;
     obj_t       co     = BLIS_OBJECT_INITIALIZER;
     const num_t dt     = BLIS_DCOMPLEX;
-    integer   m0, n0, k0, m0_a, n0_a, m0_b, n0_b;
+    dim_t   m0, n0, k0, m0_a, n0_a, m0_b, n0_b;
     trans_t blis_transa, blis_transb;
     cntx_t* cntx = NULL;
     rntm_t* rntm = NULL;

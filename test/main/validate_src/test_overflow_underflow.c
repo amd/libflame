@@ -521,7 +521,18 @@ void scale_matrix_underflow_overflow_labrd(integer datatype, integer m, integer 
     if(imatrix_char == 'O')
     {
         get_max_from_matrix(datatype, A, max_min, m, n, lda);
-        calculate_scale_value(datatype, scal, max_min, 8.0, imatrix_char);
+        if(m <= 50 && n <= 50)
+        {
+            calculate_scale_value(datatype, scal, max_min, 8.0, imatrix_char);
+        }
+        else if(m <= 225 && n <= 225)
+        {
+            calculate_scale_value(datatype, scal, max_min, 15.0, imatrix_char);
+        }
+        else
+        {
+            calculate_scale_value(datatype, scal, max_min, 30.0, imatrix_char);
+        }
     }
     else
     {

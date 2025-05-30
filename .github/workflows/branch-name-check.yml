@@ -1,0 +1,35 @@
+name: Branch Name Check  
+permissions:  
+  contents: read # To restrict token usage for read-only 
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  check_branch_name:
+    runs-on: Linux  # Use the default GitHub-hosted runner with Linux system
+
+    steps:
+    # Check out the repository code
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Check branch name using Bash
+    # Validate the branch name using Bash
+      env:
+        BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
+        USER: ${{ github.actor }}
+      run: |
+        # Extract the base username from the USER variable
+        echo "Original USER: $USER"
+        BASE_USER=${USER%_amdeng}  # Trim the trailing _amdeng from the USER
+        echo "Trimmed USER: $BASE_USER"
+
+        echo "Checking branch name: $BRANCH_NAME"
+        if [[ ! "$BRANCH_NAME" =~ ^u/.*/PR/.*$ ]] && [[ ! "$BRANCH_NAME" =~ ^u/.*/WIP/.*$ ]]; then
+          echo "Error: Branch name '$BRANCH_NAME' does not match the required naming convention 'u/$BASE_USER/PR/<JIRA_Ticket/Feature_Name>' or 'u/$BASE_USER/WIP/<JIRA_Ticket/Feature_Name>'."
+          exit 1
+        fi
+        echo "Branch name '$BRANCH_NAME' is valid."
+      shell: bash  # Use the default Linux shell

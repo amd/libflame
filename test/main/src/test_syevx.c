@@ -346,18 +346,19 @@ void prepare_syevx_run(char *jobz, char *range, char *uplo, integer n, void *A, 
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
+        integer m__ = m;
         /* call to  syevx API */
 #if ENABLE_CPP_TEST
         if(interfacetype == LAPACK_CPP_TEST)
         {
             invoke_cpp_syevx(datatype, jobz, range, uplo, &n, NULL, &lda, vl, vu, &il, &iu, abstol,
-                             &m, NULL, NULL, &ldz, work, &lwork, rwork, iwork, ifail, info);
+                             &m__, NULL, NULL, &ldz, work, &lwork, rwork, iwork, ifail, info);
         }
         else
 #endif
         {
-            invoke_syevx(datatype, jobz, range, uplo, &n, NULL, &lda, vl, vu, &il, &iu, abstol, &m,
-                         NULL, NULL, &ldz, work, &lwork, rwork, iwork, ifail, info);
+            invoke_syevx(datatype, jobz, range, uplo, &n, NULL, &lda, vl, vu, &il, &iu, abstol,
+                         &m__, NULL, NULL, &ldz, work, &lwork, rwork, iwork, ifail, info);
         }
         /* Get work size */
         if(*info == 0)

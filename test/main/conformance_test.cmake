@@ -1,7 +1,11 @@
 ###############################################################################
 # Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
 ###############################################################################
-set(NEGATIVE_TEST_CASES "sytrd sd X 1 1 -1 1 --einfo=-1"
+set(NEGATIVE_TEST_CASES 
+            "potri sdcz X 10 10 1 --einfo=-1"
+            "potri sdcz U -10 10 1 --einfo=-2"
+            "potri sdcz U 10 -10 1 --einfo=-4"
+            "sytrd sd X 1 1 -1 1 --einfo=-1"
             "sytrd sd U -1 1 -1 1 --einfo=-2"
             "sytrd sd U 1 -1 -1 1 --einfo=-4"
             "sytrd sd U 1 1 -2 1 --einfo=-9"
@@ -332,6 +336,8 @@ set(NEGATIVE_TEST_CASES "sytrd sd X 1 1 -1 1 --einfo=-1"
             )
 
 set(CORNER_TEST_CASES 
+            "potri sdcz U 0 1 1 --einfo=0"
+            "potri sdcz L 0 1 1 --einfo=0"
             "labrd scdz 0 10 5 10 10 10 1"
             "labrd scdz 10 0 5 10 10 10 1"
             "labrd scdz 0 1 1 1 1 1 1"
@@ -599,7 +605,24 @@ set(MIN_WORK_TEST_CASES "gehrd sdcz 10 1 5 10 10 1 --einfo=0"
                 "unmqr cz R N 10 15 10 15 15 10 1"
                 )
 
-set(EXTREMEVALUE_TEST_CASES "labrd sdcz 10 7 5 10 10 10 1 --imatrix=I"
+set(EXTREMEVALUE_TEST_CASES 
+            "potri sdcz U 10 10 1 --imatrix=N"
+            "potri sdcz L 10 10 1 --imatrix=N"
+            "potri sdcz U 10 10 1 --imatrix=A"
+            "potri sdcz L 10 10 1 --imatrix=A"
+            "potri sdcz U 10 10 1 --imatrix=I"
+            "potri sdcz L 10 10 1 --imatrix=I"
+            "potri sdcz U 10 10 1 --imatrix=F"
+            "potri sdcz L 10 10 1 --imatrix=F"
+            "potri sdcz U 100 100 1 --imatrix=N"
+            "potri sdcz L 100 100 1 --imatrix=N"
+            "potri sdcz U 100 100 1 --imatrix=A"
+            "potri sdcz L 100 100 1 --imatrix=A"
+            "potri sdcz U 100 100 1 --imatrix=I"
+            "potri sdcz L 100 100 1 --imatrix=I"
+            "potri sdcz U 100 100 1 --imatrix=F"
+            "potri sdcz L 100 100 1 --imatrix=F"
+            "labrd sdcz 10 7 5 10 10 10 1 --imatrix=I"
             "labrd sdcz 10 7 5 10 10 10 1 --imatrix=F"
             "labrd sdcz 10 7 5 10 10 10 1 --imatrix=N"
             "labrd sdcz 10 7 5 10 10 10 1 --imatrix=A"

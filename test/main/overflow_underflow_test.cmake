@@ -2,7 +2,24 @@
 # Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
 ###############################################################################
 # Overflow and Underflow test cases for APIs.
-set(OVERFLOW_UNDERFLOW_VALUES_TEST_CASES "labrd scdz 50 50 50 50 50 50 1 --imatrix=O"
+set(OVERFLOW_UNDERFLOW_VALUES_TEST_CASES 
+            "potri sdcz L 50 50 1 --imatrix=U"
+            "potri sdcz U 50 50 1 --imatrix=U"
+            "potri sdcz L 50 50 1 --imatrix=O"
+            "potri sdcz U 50 50 1 --imatrix=O"
+            "potri sdcz L 99 99 1 --imatrix=U"
+            "potri sdcz U 99 99 1 --imatrix=U"
+            "potri sdcz L 99 99 1 --imatrix=O"
+            "potri sdcz U 99 99 1 --imatrix=O"
+            "potri sdcz L 499 499 1 --imatrix=U"
+            "potri sdcz U 499 499 1 --imatrix=U"
+            "potri sdcz L 499 499 1 --imatrix=O"
+            "potri sdcz U 499 499 1 --imatrix=O"
+            "potri sdcz L 600 700 1 --imatrix=U"
+            "potri sdcz U 600 700 1 --imatrix=U"
+            "potri sdcz L 600 700 1 --imatrix=O"
+            "potri sdcz U 600 700 1 --imatrix=O"
+            "labrd scdz 50 50 50 50 50 50 1 --imatrix=O"
             "labrd scdz 50 50 50 50 50 50 1 --imatrix=U"
             "labrd scdz 75 150 100 150 150 150 1 --imatrix=O"
             "labrd scdz 75 150 100 150 150 150 1 --imatrix=U"

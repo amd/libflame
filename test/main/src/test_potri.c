@@ -16,17 +16,12 @@ integer row_major_potri_lda;
 void fla_test_potri_experiment(char *tst_api, test_params_t *params, integer datatype,
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
-void prepare_potri_run(char *uplo, integer n, void *A, integer lda, integer datatype, integer *info,
-                       integer interfacetype, int matrix_layout, test_params_t *params);
+void prepare_potri_run(char *uplo, integer n, void *A, integer lda, integer datatype,
+                       integer n_repeats, double *time_min_, integer *info, integer interfacetype,
+                       int matrix_layout);
 void invoke_potri(char *uplo, integer datatype, integer *n, void *a, integer *lda, integer *info);
 double prepare_lapacke_potri_run(integer datatype, int matrix_layout, char *uplo, integer n,
                                  void *A, integer lda, integer *info);
-
-#define VALIDATE_POTRI                                                                            \
-    form_symmetric_matrix(datatype, n, A, lda, "C", uplo);                                        \
-    form_symmetric_matrix(datatype, n, A_test, lda, "C", uplo);                                   \
-    validate_getri(tst_api, n, n, A, A_test, lda, NULL, datatype, residual, params->imatrix_char, \
-                   params);
 
 void fla_test_potri(integer argc, char **argv, test_params_t *params)
 {
@@ -37,7 +32,7 @@ void fla_test_potri(integer argc, char **argv, test_params_t *params)
 
     if(argc == 1)
     {
-        g_config_data = 1;
+        config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, LIN, fla_test_potri_experiment);
@@ -69,7 +64,6 @@ void fla_test_potri(integer argc, char **argv, test_params_t *params)
             params->lin_solver_paramslist[0].lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
         }
         n_repeats = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
-        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -126,7 +120,6 @@ void fla_test_potri_experiment(char *tst_api, test_params_t *params, integer dat
     void *A = NULL, *A_test = NULL;
     char uplo = params->lin_solver_paramslist[pci].Uplo;
     double residual, err_thresh;
-    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
@@ -139,7 +132,7 @@ void fla_test_potri_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(g_config_data)
+    if(config_data)
     {
         if(lda == -1)
         {
@@ -150,35 +143,29 @@ void fla_test_potri_experiment(char *tst_api, test_params_t *params, integer dat
     /* Create input matrix parameters */
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
 
-    /* Skip input generation during BRT verification runs since FLA_BRT_PROCESS_ macros load inputs
-     * from files */
-    if(!FLA_BRT_VERIFICATION_RUN)
+    if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST && !FLA_OVERFLOW_UNDERFLOW_TEST))
     {
-        /* NOTE: POTRI requires structured input;
-           Random matrix initialization is incompatible */
-        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST && !FLA_OVERFLOW_UNDERFLOW_TEST))
+        /* Initialize input matrix with custom data */
+        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+        if(params->imatrix_char != '\0')
         {
-            /* Initialize input matrix with custom data */
-            init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
-            if((params->imatrix_char != '\0'))
+            char *type = "C";
+            if(datatype == FLOAT || datatype == DOUBLE)
             {
-                form_symmetric_matrix(datatype, n, A, lda, "C", uplo);
+                type = "S";
             }
-        }
-        else
-        {
-            rand_spd_matrix(datatype, &uplo, A, n, lda);
-            /* Oveflow or underflow test initialization */
-            if(FLA_OVERFLOW_UNDERFLOW_TEST)
-            {
-                scale_matrix_overflow_underflow_potri(datatype, n, A, lda, params->imatrix_char);
-            }
+            form_symmetric_matrix(datatype, n, A, lda, type, 'U');
         }
     }
-
-    /* BRT input processing: store input matrix during ground truth runs, load during verification
-     * runs */
-    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, n, n, A, lda, "cdd", uplo, n, lda)
+    else
+    {
+        rand_spd_matrix(datatype, &uplo, A, n, lda);
+        /* Oveflow or underflow test initialization */
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            scale_matrix_overflow_underflow_potri(datatype, n, A, lda, params->imatrix_char);
+        }
+    }
 
     /* Make a copy of input matrix A. This is required to validate the API functionality */
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
@@ -186,31 +173,22 @@ void fla_test_potri_experiment(char *tst_api, test_params_t *params, integer dat
 
     invoke_potrf(&uplo, datatype, &n, A_test, &lda, &info);
 
-    prepare_potri_run(&uplo, n, A_test, lda, datatype, &info, interfacetype, layout, params);
+    prepare_potri_run(&uplo, n, A_test, lda, datatype, n_repeats, &time_min, &info, interfacetype,
+                      layout);
 
     /* Compute the performance of the best experiment repeat */
-    /* (1/3)n^3 for real and (4/3)n^3 for scomplex*/
+    /* (1/3)n^3 for real and (4/3)n^3 for complex*/
     perf = (double)(1.0 / 3.0 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         perf *= 4.0;
 
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    IF_FLA_BRT_VALIDATION(
-        n, n, store_outputs_base(filename, params, 1, 0, datatype, n, n, A_test, lda),
-        VALIDATE_POTRI,
-        check_reproducibility_base(filename, params, 1, 0, datatype, n, n, A_test, lda))
-    else if(FLA_SKIP_VALIDATION_MODE)
-    {
-        /* Skip validation for performance modes */
-        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
-    }
-    else if(!FLA_EXTREME_CASE_TEST)
+    if(!FLA_EXTREME_CASE_TEST)
     {
         /* Form full matrices before calling validate code of GETRI */
         form_symmetric_matrix(datatype, n, A, lda, "C", uplo);
         form_symmetric_matrix(datatype, n, A_test, lda, "C", uplo);
-        validate_getri(tst_api, n, n, A, A_test, lda, NULL, datatype, residual,
-                       params->imatrix_char, params);
+        validate_getri(tst_api, n, n, A, A_test, lda, NULL, datatype, residual, params->imatrix_char);
     }
     else if(FLA_EXTREME_CASE_TEST)
     {
@@ -225,17 +203,17 @@ void fla_test_potri_experiment(char *tst_api, test_params_t *params, integer dat
         FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     }
 
-    free_matrix(A_test);
-free_buffers:
-    FLA_FREE_FILENAME(filename)
     free_matrix(A);
+    free_matrix(A_test);
 }
 
-void prepare_potri_run(char *uplo, integer n, void *A, integer lda, integer datatype, integer *info,
-                       integer interfacetype, int layout, test_params_t *params)
+void prepare_potri_run(char *uplo, integer n, void *A, integer lda, integer datatype,
+                       integer n_repeats, double *time_min_, integer *info, integer interfacetype,
+                       int layout)
 {
     void *A_save = NULL;
-    double exe_time;
+    double t_min = 1e9, exe_time;
+    integer i;
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
@@ -243,7 +221,7 @@ void prepare_potri_run(char *uplo, integer n, void *A, integer lda, integer data
     copy_matrix(datatype, "full", n, n, A, lda, A_save, lda);
 
     *info = 0;
-    FLA_EXEC_LOOP_BEGIN
+    for(i = 0; i < n_repeats && *info == 0; ++i)
     {
         /* Restore input matrix A value and allocate memory to output buffers
         for each iteration */
@@ -270,10 +248,11 @@ void prepare_potri_run(char *uplo, integer n, void *A, integer lda, integer data
 
             exe_time = fla_test_clock() - exe_time;
         }
-        /* Update ctx and loop conditions */
-        FLA_EXEC_LOOP_UPDATE_WITH_INFO
+        /* Get the best execution time */
+        t_min = fla_min(t_min, exe_time);
     }
 
+    *time_min_ = t_min;
     free_matrix(A_save);
 }
 
@@ -285,7 +264,7 @@ double prepare_lapacke_potri_run(integer datatype, int layout, char *uplo, integ
     void *A_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_potri_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_potri_lda, lda_t);
 
     A_t = A;
 
@@ -341,3 +320,4 @@ void invoke_potri(char *uplo, integer datatype, integer *n, void *a, integer *ld
         }
     }
 }
+

@@ -180,4 +180,7 @@ void scale_matrix_underflow_overflow_sytrd(integer datatype, integer n, void *A,
 /* Scaling matrix with values around overflow underflow for ormlq */
 void scale_matrix_underflow_overflow_ormlq(integer datatype, integer m, integer n, void *A,
                                            integer lda, char imatrix_char);
+/* Scale matrix with values around overflow underflow for potri */
+void scale_matrix_overflow_underflow_potri(integer datatype, integer n, void *A, integer lda,
+                                           char imatrix_char);
 #endif // TEST_OVERFLOW_UNDERFLOW_H

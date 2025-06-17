@@ -146,6 +146,8 @@ void invoke_cpp_sytrf(integer datatype, char *uplo, integer *n, void *a, integer
 void invoke_cpp_ormlq(integer datatype, char *side, char *trans, integer *m, integer *n, integer *k,
                       void *A, integer *lda, void *tau, void *C, integer *ldc, void *work,
                       integer *lwork, integer *info);
+void invoke_cpp_potri(char *uplo, integer datatype, integer *n, void *a, integer *lda,
+                      integer *info);
 #ifdef __cplusplus
 }
 #endif

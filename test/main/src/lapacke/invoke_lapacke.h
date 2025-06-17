@@ -122,4 +122,6 @@ integer invoke_lapacke_sytrd(integer datatype, integer layout, char uplo, intege
 integer invoke_lapacke_ormlq(integer datatype, integer layout, char side, char trans, integer m,
                              integer n, integer k, void *A, integer lda, void *tau, void *C,
                              integer ldc);
+integer invoke_lapacke_potri(integer datatype, int layout, char uplo, integer n, void *a,
+                             integer lda);
 #endif

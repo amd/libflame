@@ -152,6 +152,11 @@
 #define fla_lapack_cpotrs CPOTRS_
 #define fla_lapack_zpotrs ZPOTRS_
 
+#define fla_lapack_spotri SPOTRI_
+#define fla_lapack_dpotri DPOTRI_
+#define fla_lapack_cpotri CPOTRI_
+#define fla_lapack_zpotri ZPOTRI_
+
 #define fla_lapack_sgetrf SGETRF_
 #define fla_lapack_dgetrf DGETRF_
 #define fla_lapack_cgetrf CGETRF_
@@ -492,6 +497,11 @@
 #define fla_lapack_cpotrs CPOTRS
 #define fla_lapack_zpotrs ZPOTRS
 
+#define fla_lapack_spotri SPOTRI
+#define fla_lapack_dpotri DPOTRI
+#define fla_lapack_cpotri CPOTRI
+#define fla_lapack_zpotri ZPOTRI
+
 #define fla_lapack_sgetrf SGETRF
 #define fla_lapack_dgetrf DGETRF
 #define fla_lapack_cgetrf CGETRF
@@ -830,6 +840,11 @@
 #define fla_lapack_cpotrs cpotrs
 #define fla_lapack_zpotrs zpotrs
 
+#define fla_lapack_spotri spotri
+#define fla_lapack_dpotri dpotri
+#define fla_lapack_cpotri cpotri
+#define fla_lapack_zpotri zpotri
+
 #define fla_lapack_sgetrf sgetrf
 #define fla_lapack_dgetrf dgetrf
 #define fla_lapack_cgetrf cgetrf
@@ -1167,6 +1182,11 @@
 #define fla_lapack_dpotrs dpotrs_
 #define fla_lapack_cpotrs cpotrs_
 #define fla_lapack_zpotrs zpotrs_
+
+#define fla_lapack_spotri spotri_
+#define fla_lapack_dpotri dpotri_
+#define fla_lapack_cpotri cpotri_
+#define fla_lapack_zpotri zpotri_
 
 #define fla_lapack_sgetrf sgetrf_
 #define fla_lapack_dgetrf dgetrf_

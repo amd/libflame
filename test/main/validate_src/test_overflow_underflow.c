@@ -2483,3 +2483,30 @@ void scale_matrix_underflow_overflow_ormlq(integer datatype, integer m, integer 
     free_vector(max_min);
     free_vector(scal);
 }
+
+/* Scale matrix with values around overflow underflow for potri */
+void scale_matrix_overflow_underflow_potri(integer datatype, integer n, void *A, integer lda,
+                                           char imatrix_char)
+{
+    void *max_min = NULL, *scal = NULL;
+    double tuning_val = 1.0;
+    create_vector(get_realtype(datatype), &max_min, 1);
+    create_vector(get_realtype(datatype), &scal, 1);
+
+    if(same_char(imatrix_char, 'U'))
+    {
+        get_min_from_matrix(datatype, A, max_min, n, n, lda);
+    }
+    else if(same_char(imatrix_char, 'O'))
+    {
+        get_max_from_matrix(datatype, A, max_min, n, n, lda);
+    }
+    calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
+
+    /* Scaling the matrix A with scal */
+    scal_matrix(datatype, scal, A, n, n, lda, i_one);
+
+    /* Free vectors */
+    free_vector(max_min);
+    free_vector(scal);
+}

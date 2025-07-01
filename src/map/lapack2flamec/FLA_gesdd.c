@@ -155,6 +155,42 @@ LAPACK_gesdd_real(d)
                              integer *info);
 
 #if FLA_ENABLE_AMD_OPT
+    if(*m < FLA_SVD_SMALL_SIZE_THRESH2 && *n < FLA_SVD_SMALL_SIZE_THRESH2)
+    {
+        int fla_error = LAPACK_SUCCESS;
+        char jobu[1], jobv[1];
+
+        if(lsame_(jobz, "O", 1, 1))
+        {
+            if(*m >= *n)
+            {
+                jobu[0] = 'O';
+                jobv[0] = 'A';
+            }
+            else
+            {
+                jobu[0] = 'A';
+                jobv[0] = 'O';
+            }
+        }
+        else
+        {
+            jobu[0] = *jobz;
+            jobv[0] = *jobz;
+        }
+        LAPACK_RETURN_CHECK_VAR1(dgesdd_fla_check(jobu, jobv, m, n, buff_A, ldim_A, buff_s, buff_U,
+                                                  ldim_U, buff_Vh, ldim_Vh, buff_w, lwork, info),
+                                 fla_error)
+
+        if(fla_error == LAPACK_SUCCESS)
+        {
+            LAPACK_gesdd_real_body(d)
+                /** fla_error set to 0 on LAPACK_SUCCESS */
+                fla_error
+                = 0;
+        }
+    }
+    else
     {
         /* Initialize global context data */
         aocl_fla_init();

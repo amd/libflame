@@ -2,7 +2,7 @@
  * Copyright (C) 2023-2024, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 
-/*! @file fla_dgesvd_nx_small10_avx2.c
+/*! @file fla_dgesvd_xx_small10_avx2.c
  *  @brief DGESVD Small path (Path 10)
  *  */
 
@@ -12,8 +12,9 @@
 #if FLA_ENABLE_AMD_OPT
 
 extern void dlartg_(doublereal *da, doublereal *db, doublereal *c__, doublereal *s, doublereal *r);
+extern void dlasq1_(integer *, doublereal *, doublereal *, doublereal *, integer *);
 
-void fla_dgesvd_xx_small10_avx2(integer wntus, integer wntvs, integer *m, integer *n, doublereal *a,
+void fla_dgesvd_xx_small10_avx2(integer wntu, integer wntv, integer *m, integer *n, integer *ncu, doublereal *a,
                                 integer *lda, doublereal *s, doublereal *u, integer *ldu,
                                 doublereal *vt, integer *ldvt, doublereal *work, integer *info)
 {
@@ -73,7 +74,7 @@ void fla_dgesvd_xx_small10_avx2(integer wntus, integer wntvs, integer *m, intege
         FLA_BIDIAGONALIZE_SMALL(*m, *n, a, lda, tauq, taup, s, e);
 
         /* Generate Qr (from bidiag) in vt from work[iu] (a here) */
-        if(wntvs)
+        if(wntv)
         {
             for(i = 1; i <= *n; i++)
                 for(j = 1; j <= *n; j++)
@@ -81,8 +82,17 @@ void fla_dgesvd_xx_small10_avx2(integer wntus, integer wntvs, integer *m, intege
             FLA_LARF_VTAPPLY_DSMALL_SQR(n, a, lda, taup, vt, ldvt);
         }
         /* Generate Ql (from bidiag) in u from a */
-        if(wntus)
+        if(wntu)
         {
+            /* Initialize columns n to ncu of U to eye */
+            for(i = *n + 1; i <= *ncu; i++)
+            {
+                for(j = *n + 1; j <= *ncu; j++)
+                {
+                    u[i + j * *ldu] = 0.;
+                }
+                u[i + i * *ldu] = 1.;
+            }
             /* for all HH vectors from the end */
             for(i = *n; i >= 1; i--)
             {
@@ -95,7 +105,7 @@ void fla_dgesvd_xx_small10_avx2(integer wntus, integer wntvs, integer *m, intege
                 u[i + i * *ldu] = 1 + stau;
 
                 /* Update rest of the columns from (i + 1) to n */
-                for(k = i + 1; k <= *n; k++)
+                for(k = i + 1; k <= *ncu; k++)
                 {
                     dtmp = 0.;
                     for(j = i + 1; j <= *m; j++)
@@ -117,11 +127,11 @@ void fla_dgesvd_xx_small10_avx2(integer wntus, integer wntvs, integer *m, intege
     /* Compute final Singular Values/Vectors */
     ncvt = 0;
     nru = 0;
-    if(wntvs)
+    if(wntv)
     {
         ncvt = *n;
     }
-    if(wntus)
+    if(wntu)
     {
         nru = *m;
     }
@@ -156,8 +166,17 @@ void fla_dgesvd_xx_small10_avx2(integer wntus, integer wntvs, integer *m, intege
     }
     else
     {
-        lapack_dbdsqr_small("U", n, &ncvt, &nru, &s[1], &e[1], &vt[1 + *ldvt], ldvt, &u[1 + *ldu],
-                            ldu, info);
+        if(ncvt == 0 && nru == 0)
+        {
+            /* Compute Singular Values excluding computation of Singular Vectors */
+            dlasq1_(n, &s[1], &e[1], &work[itauq - 1], info);
+        }
+        else
+        {
+            /* Compute Singular Values and Vectors */
+            lapack_dbdsqr_small("U", n, &ncvt, &nru, &s[1], &e[1], &vt[1 + *ldvt], ldvt,
+                                &u[1 + *ldu], ldu, info);
+        }
     }
     return;
 }

@@ -40,9 +40,9 @@ void fla_dgesvd_small6_avx2(integer wntus, integer wntvs, integer *m, integer *n
     doublereal c_zero = 0.;
 
     /* indices for partitioning work buffer */
-    itau = 1;
-    ie = itau + *n;
-    itauq = ie + *n;
+    ie = 1;
+    itau = ie + *n;
+    itauq = itau + *n;
     itaup = itauq + *n;
 
     /* parameter adjustments */
@@ -83,6 +83,7 @@ void fla_dgesvd_small6_avx2(integer wntus, integer wntvs, integer *m, integer *n
     /* Set lower part of U to zero */
     tn = *n - 1;
     dlaset_("L", &tn, &tn, &c_zero, &c_zero, &au[2 + *ldau], ldau);
+
     FLA_BIDIAGONALIZE_SMALL(*n, *n, au, ldau, tauq, taup, s, e);
 
     /* Form Vt' in vt from HH vectors in U (right bi-diagonalizing Q) */
@@ -124,8 +125,17 @@ void fla_dgesvd_small6_avx2(integer wntus, integer wntvs, integer *m, integer *n
     }
     else
     {
-        lapack_dbdsqr_small("U", n, &ncvt, &nru, &s[1], &e[1], &vt[1 + *ldvt], ldvt, &u[1 + *ldu],
-                            ldu, info);
+        if(ncvt == 0 && nru == 0)
+        {
+            /* Compute Singular Values excluding computation of Singular Vectors */
+            dlasq1_(n, &s[1], &e[1], &work[itau - 1], info);
+        }
+        else
+        {
+            /* Compute Singular Values and Vectors */
+            lapack_dbdsqr_small("U", n, &ncvt, &nru, &s[1], &e[1], &vt[1 + *ldvt], ldvt, &u[1 + *ldu],
+                                ldu, info);
+        }
     }
 
     /* Compute U by updating U' by applying from the left the Q from QR */

@@ -250,13 +250,13 @@ int fla_zgetrf_small_simd(integer *m, integer *n, dcomplex *a, integer *lda, int
 
 /* SVD for small tall-matrices in DGESVD
  */
-void fla_dgesvd_xx_small10(integer wntus, integer wntvs, integer *m, integer *n, doublereal *a,
+void fla_dgesvd_xx_small10(integer wntus, integer wntvs, integer *m, integer *n, integer *ncu, doublereal *a,
                            integer *lda, doublereal *s, doublereal *u, integer *ldu, doublereal *vt,
                            integer *ldvt, doublereal *work, integer *info)
 {
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
-        fla_dgesvd_xx_small10_avx2(wntus, wntvs, m, n, a, lda, s, u, ldu, vt, ldvt, work, info);
+        fla_dgesvd_xx_small10_avx2(wntus, wntvs, m, n, ncu, a, lda, s, u, ldu, vt, ldvt, work, info);
     }
     return;
 }

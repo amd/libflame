@@ -35,7 +35,7 @@ void fla_dgesvd_nn_small1T(integer *m, integer *n, doublereal *a, integer *lda, 
 void fla_dgesvd_small6T(integer *m, integer *n, doublereal *a, integer *lda, doublereal *ql,
                         integer *ldql, doublereal *s, doublereal *u, integer *ldu, doublereal *vt,
                         integer *ldvt, doublereal *work, integer *info);
-void fla_dgesvd_xx_small10(integer wntus, integer wntvs, integer *m, integer *n, doublereal *a,
+void fla_dgesvd_xx_small10(integer wntu, integer wntv, integer *m, integer *n, integer *ncu, doublereal *a,
                            integer *lda, doublereal *s, doublereal *u, integer *ldu, doublereal *vt,
                            integer *ldvt, doublereal *work, integer *info);
 void fla_dgesvd_xs_small10T(integer *m, integer *n, doublereal *a, integer *lda, doublereal *s,

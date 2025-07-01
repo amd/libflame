@@ -46,7 +46,7 @@ void fla_dgesvd_nn_small1T_avx2(integer *m, integer *n, doublereal *a, integer *
     /* Upper Bidiagonalization */
     FLA_BIDIAGONALIZE_SMALL(*m, *m, a, lda, tauq, taup, s, e);
 
-    /* Compute Singular Values */
+    /* Compute Singular Values and Vetcors */
     lapack_dbdsqr_small("U", m, &c__0, &c__0, &s[1], &e[1], NULL, &c__1, NULL, &c__1, info);
 
     return;

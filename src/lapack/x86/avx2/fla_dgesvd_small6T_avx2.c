@@ -62,7 +62,8 @@ void fla_dgesvd_small6T_avx2(integer *m, integer *n, doublereal *a, integer *lda
 
     /* Generate Ql (from bidiag) in u from a */
     FLA_LARF_UAPPLY_DSMALL_SQR(m, a, lda, tauq, u, ldu, taup);
-
+    
+    /* Compute Singular Values and Vetcors */
     lapack_dbdsqr_small("U", m, m, m, &s[1], &e[1], &vt[1 + *ldvt], ldvt, &u[1 + *ldu], ldu, info);
 
     /* Apply HH from LQ factorization (ql) on vt from right */

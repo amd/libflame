@@ -294,6 +294,12 @@
 #define FLA_DGEQP3_BLOCK_SMALL_THRESH    (32)
 #define FLA_ZGEQP3_BLOCK_SMALL_THRESH    (32)
 
+// DGESVD, DGESDD thresholds for small size optimization
+#define FLA_SVD_SMALL_SIZE_THRESH0    (16)
+#define FLA_SVD_SMALL_SIZE_THRESH1    (24)
+#define FLA_SVD_SMALL_SIZE_THRESH2    (40)
+#define FLA_SVD_SMALL_SIZE_THRESH3    (45)
+
 // --- Error-related macro definitions -----------------------------------------
 
 // Useful when determining the relative index base of the error codes.

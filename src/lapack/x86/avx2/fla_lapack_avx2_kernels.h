@@ -51,7 +51,7 @@ void fla_dgesvd_small6_avx2(integer wntus, integer wntvs, integer *m, integer *n
 void fla_dgesvd_small6T_avx2(integer *m, integer *n, doublereal *a, integer *lda, doublereal *ql,
                              integer *ldql, doublereal *s, doublereal *u, integer *ldu,
                              doublereal *vt, integer *ldvt, doublereal *work, integer *info);
-void fla_dgesvd_xx_small10_avx2(integer wntus, integer wntvs, integer *m, integer *n, doublereal *a,
+void fla_dgesvd_xx_small10_avx2(integer wntu, integer wntv, integer *m, integer *n, integer *ncu, doublereal *a,
                                 integer *lda, doublereal *s, doublereal *u, integer *ldu,
                                 doublereal *vt, integer *ldvt, doublereal *work, integer *info);
 void fla_dgesvd_xs_small10T_avx2(integer *m, integer *n, doublereal *a, integer *lda, doublereal *s,

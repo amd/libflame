@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+    Copyright (c) 2024-2025 Advanced Micro Devices, Inc.  All rights reserved.
 */
 
 #include "FLAME.h"
@@ -10,62 +10,12 @@
 #include "fla_lapack_x86_common.h"
 
 #ifdef FLA_ENABLE_AMD_OPT
+
 static doublereal d__1 = -1;
 static doublereal c_b1 = 1;
 extern int fla_thread_get_num_threads(void);
-
-void FLA_get_optimum_params_dgetrf(integer m, integer n, integer *nb, int *n_threads)
-{
-    int available_n_threads;
-
-    /* Get maximum thread available*/
-    available_n_threads = fla_thread_get_num_threads();
-
-#ifdef FLA_OPENMP_MULTITHREADING
-
-    if(m <= 512 || n <= 512)
-    {
-        *nb = 15;
-        *n_threads = 8;
-    }
-    else if(m <= 1024 || n <= 1024)
-    {
-        *nb = 32;
-        *n_threads = 16;
-    }
-    else if(m <= 2048 || n <= 2048)
-    {
-        *nb = 64;
-        *n_threads = 24;
-    }
-    else if(m <= 6500 || n <= 6500)
-    {
-        *nb = 128;
-        *n_threads = 32;
-    }
-    else if(m <= 12000 || n <= 12000)
-    {
-        *nb = 128;
-        *n_threads = 32;
-    }
-    else
-    {
-        *nb = 128;
-        *n_threads = 64;
-    }
-
-    if(*n_threads > available_n_threads)
-        *n_threads = available_n_threads;
-
-#else
-    *nb = 64;
-    *n_threads = 1;
-#endif
-
-    return;
-}
-
-/* LU factorization blocked varaiant */
+extern void FLA_get_optimum_params_getrf(integer m, integer n, integer *nb, int *n_threads);
+    /* LU factorization blocked varaiant */
 int FLA_LU_piv_d_parallel(integer *m, integer *n, doublereal *a, integer *lda, integer *ipiv,
                           integer *info)
 {
@@ -104,7 +54,7 @@ int FLA_LU_piv_d_parallel(integer *m, integer *n, doublereal *a, integer *lda, i
         return 0;
 
     /* Determine optimum block and thread size for this environment */
-    FLA_get_optimum_params_dgetrf(*m, *n, &nb, &n_threads);
+    FLA_get_optimum_params_getrf(*m, *n, &nb, &n_threads);
 
     /* call sequencial algorithm for single thread*/
     if(n_threads == 1)

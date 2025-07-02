@@ -10,6 +10,7 @@
 
 #include "FLAME.h"
 
+extern int fla_thread_get_num_threads(void);
 extern TLS_CLASS_SPEC fla_lu_t* fla_lu_piv_cntl;
 extern TLS_CLASS_SPEC fla_lu_t* fla_lu_piv_cntl2;
 
@@ -33,7 +34,7 @@ FLA_Error FLA_LU_piv( FLA_Obj A, FLA_Obj p )
 }
 
 
-void FLA_get_optimum_params_getrf(fla_dim_t m, fla_dim_t n, fla_dim_t *nb, int *n_threads)
+void FLA_get_optimum_params_getrf(integer m, integer n, integer *nb, int *n_threads)
 {
     int available_n_threads = fla_thread_get_num_threads();
 
@@ -56,7 +57,7 @@ void FLA_get_optimum_params_getrf(fla_dim_t m, fla_dim_t n, fla_dim_t *nb, int *
         *nb = nb_dyn < 16 ? 16 : (nb_dyn > 128 ? 128 : nb_dyn);
     }
 
-    // now override for special shapes / sizes if desired
+    // now override for special shapes / sizes if desired…
     if(*n_threads == 64)
     {
         if(ratio > TALL_RATIO_THRESHOLD)
@@ -91,18 +92,18 @@ void FLA_get_optimum_params_getrf(fla_dim_t m, fla_dim_t n, fla_dim_t *nb, int *
         {
             if(m > 8192)
             {
-                *nb = 128;
-                *n_threads = 64;
+                *nb = 96;
+                *n_threads = 32;
             }
             else if(m > 4096)
             {
                 *nb = 64;
-                *n_threads = 32;
+                *n_threads = 24;
             }
             else if(m > 2048)
             {
-                *nb = 64;
-                *n_threads = 24;
+                *nb = 32;
+                *n_threads = 16;
             }
             else
             {

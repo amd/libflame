@@ -9,11 +9,12 @@
 */
 
 /*
-    Modifications Copyright (c) 2021-2024 Advanced Micro Devices, Inc.  All rights reserved.
+    Modifications Copyright (c) 2021-2025 Advanced Micro Devices, Inc.  All rights reserved.
 */
 
 #include "FLA_LU_piv_vars.h"
 
+void FLA_get_optimum_params_getrf(integer m, integer n, integer *nb, int *n_threads);
 FLA_Error FLA_LU_piv_internal( FLA_Obj A, FLA_Obj p, fla_lu_t* cntl );
 integer   FLA_LU_piv_small_s_var0( integer *m, integer *n, real *a, integer *lda,
                                    integer *ipiv, integer *info );

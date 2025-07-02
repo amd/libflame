@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2023 Advanced Micro Devices, Inc.  All rights reserved.
+    Copyright (c) 2023-2025 Advanced Micro Devices, Inc.  All rights reserved.
 */
 
 #include "FLAME.h"
@@ -9,72 +9,16 @@
 #include "FLA_f2c.h"
 #include "fla_lapack_x86_common.h"
 
+#ifdef FLA_ENABLE_AMD_OPT
 #define FLA_LU_SMALL_BLOCK_SIZE 4096
 #define FLA_LU_SMALL_DIM 32
 
-#ifdef FLA_ENABLE_AMD_OPT
+extern void FLA_get_optimum_params_getrf(integer m, integer n, integer *nb, int *n_threads);
+
 static dcomplex z__1 = { -1, 0};
 static dcomplex c_b1 = {1.,0.};
 static integer c__1 = 1;
 
-
-
-void FLA_get_optimum_params_zgetrf(integer m, integer n, integer *nb, int *n_threads)
-{
-    int available_n_threads;
-    extern int fla_thread_get_num_threads(void);
-
-    /* Get maximum thread available*/
-    available_n_threads = fla_thread_get_num_threads();
-
-#ifdef FLA_OPENMP_MULTITHREADING
-
-    if(m <= 100 || n <= 100)
-    {
-        *nb = 15;
-        *n_threads = 4;
-    }
-    else if(m <= 512 || n <= 512)
-    {
-        *nb = 15;
-        *n_threads = 8;
-    }
-    else if(m <= 920 || n <= 920)
-    {
-        *nb = 15;
-        *n_threads = 16;
-    }
-    else if(m <= 2048 || n <= 2048)
-    {
-        *nb = 15;
-        *n_threads = 32;
-    }
-    else if(m <= 6144 || n <= 6144)
-    {
-        *nb = 15;
-        *n_threads = 96;
-    }
-    else if(m <= 12288 || n <= 12288)
-    {
-        *nb = 32;
-        *n_threads = 96;
-    }
-    else
-    {
-        *nb = 64;
-        *n_threads = 192;
-    }
-
-    if(*n_threads > available_n_threads)
-        *n_threads = available_n_threads;
-
-#else
-    *nb = 64;
-    *n_threads = 1;
-#endif
-
-    return;
-}
 
 /*
  * LU with partial pivoting for tiny matrices
@@ -368,7 +312,7 @@ int FLA_LU_piv_z_var1_parallel( integer *m, integer *n, dcomplex *a, integer *ld
         return 0;
 
     // Determine optimum block and thread size for this environment
-    FLA_get_optimum_params_zgetrf(*m, *n, &nb, &n_threads);
+    FLA_get_optimum_params_getrf(*m, *n, &nb, &n_threads);
 
     /* call sequencial algorithm for single thread*/
     if(n_threads == 1)
@@ -647,7 +591,7 @@ int FLA_LU_piv_z_var2_parallel( integer *m, integer *n, dcomplex *a, integer *ld
     /* BLIS framework end */
 
     // Determine optimum block and thread size for this environment
-    FLA_get_optimum_params_zgetrf(*m, *n, &nb, &n_threads);
+    FLA_get_optimum_params_getrf(*m, *n, &nb, &n_threads);
 
     /*----------------blocked LU algorithm-------------------------
     A00 |   A01               L00 |   0           U00 |   U01

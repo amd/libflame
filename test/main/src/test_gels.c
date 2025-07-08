@@ -213,11 +213,11 @@ void fla_test_gels_experiment(char *tst_api, test_params_t *params, integer data
     /* Performance computation */
     if(m >= n)
     {
-        perf = (double)((n * n) * (2.0 / 3.0) * ((3 * m) - n)) / time_min / FLOPS_PER_UNIT_PERF;
+        perf = (double)((2.0 / 3.0) * (n * n) * ((3 * m) - n)) / time_min / FLOPS_PER_UNIT_PERF;
     }
     else
     {
-        perf = (double)((m * m) * (2.0 / 3.0) * ((3 * n) - m)) / time_min / FLOPS_PER_UNIT_PERF;
+        perf = (double)((2.0 / 3.0) * (m * m) * ((3 * n) - m)) / time_min / FLOPS_PER_UNIT_PERF;
     }
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         perf *= 4.0;

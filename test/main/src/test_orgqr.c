@@ -190,6 +190,10 @@ void fla_test_orgqr_experiment(char *tst_api, test_params_t *params, integer dat
     {
         lwork = fla_max(1, n);
     }
+    /* Free the query workspace */
+    free_vector(work);
+    work = NULL;
+
     /* create work buffer */
     create_vector(datatype, &work, lwork);
 
@@ -271,8 +275,9 @@ void prepare_orgqr_run(integer m, integer n, void *A, integer lda, void *T,
             lwork = get_work_value(datatype, work);
         }
         /* Output buffers will be freshly allocated for each iterations, free up
-        the current output buffers.*/
+           the current output buffers.*/
         free_vector(work);
+        work = NULL;
     }
     else
     {

@@ -177,7 +177,7 @@ void fla_test_sytrf_experiment(char *tst_api, test_params_t *params, integer dat
                       &info, interfacetype, layout);
 
     /* Performance computation */
-    perf = (double)(n * n * n) * (1.0 / 3.0) / time_min / FLOPS_PER_UNIT_PERF;
+    perf = (double)((1.0 / 3.0) * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         perf *= 4.0;
 

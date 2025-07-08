@@ -190,7 +190,7 @@ void fla_test_labrd_experiment(char *tst_api, test_params_t *params, integer dat
      * Sum of floating point operations in GEBRD for (m,nb) + (n,nb) - (nb,nb)
      * Link : https://support.nag.com/numeric/nl/nagdoc_latest/clhtml/f08/f08kec.html */
 
-    perf = (double)(((4 * nb * nb) * ((3 * m) + (3 * n) - (4 * nb))) / 3) / time_min
+    perf = (double)(((4.0 * nb * nb) * ((3.0 * m) + (3.0 * n) - (4.0 * nb))) / 3.0) / time_min
            / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         perf *= 4.0;

@@ -216,7 +216,7 @@ void fla_test_ormlq_experiment(char *tst_api, test_params_t *params, integer dat
     /* performance computation
        perf = 2nk(2m-k) if side = L
             = 2mk(2n-k) if side = R */
-    perf = (double)(2 * (m_A * k) * ((2 * n_A) - k)) / time_min / FLOPS_PER_UNIT_PERF;
+    perf = (double)(2.0 * (m_A * k) * ((2.0 * n_A) - k)) / time_min / FLOPS_PER_UNIT_PERF;
 
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         perf *= 4.0;

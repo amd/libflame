@@ -193,7 +193,7 @@ void fla_test_lange_experiment(char *tst_api, test_params_t *params, integer dat
         perf = (double)(4.0 * m * n) / time_min / FLOPS_PER_UNIT_PERF;
         if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         {
-            perf *= 2;
+            perf *= 2.0;
         }
 
         /* output validation */

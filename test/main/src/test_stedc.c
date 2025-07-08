@@ -244,7 +244,7 @@ void fla_test_stedc_experiment(char *tst_api, test_params_t *params, integer dat
     perf = (double)((4.0 / 3.0) * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     if(!same_char(compz, 'N'))
     {
-        perf += (double)(6 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
+        perf += (double)(6.0 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     }
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
     {

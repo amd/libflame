@@ -180,7 +180,7 @@ void fla_test_gecon_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Performance computation */
 
-    perf = (double)(2 * (n * n)) / time_min / FLOPS_PER_UNIT_PERF;
+    perf = (double)(2.0 * n * n) / time_min / FLOPS_PER_UNIT_PERF;
 
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         perf *= 4.0;

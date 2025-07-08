@@ -184,7 +184,7 @@ void fla_test_getrfnpi_experiment(char *tst_api, test_params_t *params, integer 
     min_mn = fla_min(m, n);
 
     perf = ((1.0 / 3.0)
-            * ((min_mn * min_mn * (3.0 * max_mn - min_mn))
+            * (((3.0 * max_mn - min_mn) * min_mn * min_mn)
                - ((min_mn - nfact) * (min_mn - nfact) * (3.0 * max_mn - 2.0 * nfact - min_mn))))
            / time_min / FLOPS_PER_UNIT_PERF;
 

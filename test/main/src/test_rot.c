@@ -14,7 +14,7 @@ integer i_abs(integer *x);
 void fla_test_rot_experiment(char *tst_api, test_params_t *params, integer datatype, integer p_cur,
                              integer q_cur, integer pci, integer n_repeats, integer einfo);
 void prepare_rot_run(integer datatype, integer n_A, void *cx, integer incx, void *cy, integer incy,
-                     void *c, void *s, integer n_repeats, double *time_min_, integer interfacetype);
+                     void *c, void *s, integer interfacetype, test_params_t *params);
 void invoke_rot(integer datatype, integer *n, void *cx, integer *incx, void *cy, integer *incy,
                 void *c, void *s);
 extern void invoke_lartg(integer datatype, void *f, void *g, void *c, void *s, void *r);
@@ -52,6 +52,7 @@ void fla_test_rot(integer argc, char **argv, test_params_t *params)
         params->aux_paramslist[0].incy = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
 
         n_repeats = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -153,8 +154,9 @@ void fla_test_rot_experiment(char *tst_api, test_params_t *params, integer datat
     }
     copy_vector(datatype, 1 + (n - 1) * fla_i_abs(&incx), cx, i_one, cx_test, i_one);
     copy_vector(datatype, 1 + (n - 1) * fla_i_abs(&incy), cy, i_one, cy_test, i_one);
+
     /* call to API */
-    prepare_rot_run(datatype, n, cx, incx, cy, incy, c, s, n_repeats, &time_min, interfacetype);
+    prepare_rot_run(datatype, n, cx, incx, cy, incy, c, s, interfacetype, params);
 
     /* execution time */
     if(time_min == d_zero)
@@ -165,7 +167,8 @@ void fla_test_rot_experiment(char *tst_api, test_params_t *params, integer datat
     /* 4*n */
     perf = (double)(4.0 * n) / time_min / FLOPS_PER_UNIT_PERF;
     /* output validation */
-    validate_rot(tst_api, datatype, n, cx, cx_test, incx, cy, cy_test, incy, c, s, err_thresh);
+    validate_rot(tst_api, datatype, n, cx, cx_test, incx, cy, cy_test, incy, c, s, err_thresh,
+                 params);
 
     /* Free up the buffers */
     free_vector(cx);
@@ -180,16 +183,15 @@ void fla_test_rot_experiment(char *tst_api, test_params_t *params, integer datat
 }
 
 void prepare_rot_run(integer datatype, integer n_A, void *cx, integer incx, void *cy, integer incy,
-                     void *c, void *s, integer n_repeats, double *time_min_, integer interfacetype)
+                     void *c, void *s, integer interfacetype, test_params_t *params)
 {
-    integer i;
     void *cx_save = NULL, *cy_save = NULL;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     create_vector(datatype, &cx_save, 1 + (n_A - 1) * fla_i_abs(&incx));
     create_vector(datatype, &cy_save, 1 + (n_A - 1) * fla_i_abs(&incy));
 
-    for(i = 0; i < n_repeats; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Copy original input data */
         copy_vector(datatype, 1 + (n_A - 1) * fla_i_abs(&incx), cx, i_one, cx_save, i_one);
@@ -212,11 +214,10 @@ void prepare_rot_run(integer datatype, integer n_A, void *cx, integer incx, void
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_NO_INFO
     }
 
-    *time_min_ = t_min;
     /*  Save the final result to A matrix*/
     copy_vector(datatype, 1 + (n_A - 1) * fla_i_abs(&incx), cx_save, i_one, cx, i_one);
     copy_vector(datatype, 1 + (n_A - 1) * fla_i_abs(&incy), cy_save, i_one, cy, i_one);

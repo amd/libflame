@@ -14,7 +14,7 @@ extern double time_min;
 
 void validate_gels(char *tst_api, char *trans, integer m, integer n, integer nrhs, void *A,
                    integer lda, void *B, integer ldb, void *x, integer datatype, double err_thresh,
-                   char imatrix)
+                   char imatrix, void *params)
 {
     integer m1 = m, n1 = n, ldc = fla_max(m, fla_max(n, nrhs));
     char NORM = '1';

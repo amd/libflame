@@ -23,7 +23,7 @@ void create_bidiagonal_form(integer datatype, integer m, integer n, integer nb, 
 void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, void *A_test,
                     integer lda, void *d, void *e, void *tauq, void *taup, void *X, integer ldx,
                     void *Y, integer ldy, integer datatype, double err_thresh, FILE *g_ext_fptr,
-                    char imatrix)
+                    char imatrix, void *params)
 {
     double residual = err_thresh;
     /* Early return conditions */
@@ -131,7 +131,7 @@ void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, vo
                     else
                         ((float *)LR)[j] = ((float *)A_test)[j + i * lda];
                 }
-                /* Applying elementary reflector V to the left of the matrix */ 
+                /* Applying elementary reflector V to the left of the matrix */
                 create_vector(datatype, &work, n);
                 slarf_("L", &m, &n, LR, &i_one, &tauQ, A, &lda, work);
                 free_vector(LR);

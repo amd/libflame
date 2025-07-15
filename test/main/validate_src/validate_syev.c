@@ -42,7 +42,7 @@ extern double time_min;
 
 void validate_syev(char *tst_api, char *jobz, char *range, integer n, void *A, void *A_test,
                    integer lda, integer il, integer iu, void *L, void *lambda, void *ifail,
-                   integer datatype, double err_thresh, char imatrix, void *scal)
+                   integer datatype, double err_thresh, char imatrix, void *scal, void *params)
 {
     double residual, resid1 = 0., resid2 = 0.;
     double resid3 = 0., resid4 = 0., resid5 = 0.;

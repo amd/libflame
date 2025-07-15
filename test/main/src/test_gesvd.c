@@ -20,8 +20,8 @@ void fla_test_gesvd_experiment(char *tst_api, test_params_t *params, integer dat
                                integer einfo);
 void prepare_gesvd_run(char *jobu, char *jobvt, integer m_A, integer n_A, void *A, integer lda,
                        void *s, void *U, integer ldu, void *V, integer ldvt, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info, integer interfacetype,
-                       int matrix_layout);
+                       integer *info, integer interfacetype, int matrix_layout,
+                       test_params_t *params);
 void invoke_gesvd(integer datatype, char *jobu, char *jobvt, integer *m, integer *n, void *a,
                   integer *lda, void *s, void *u, integer *ldu, void *vt, integer *ldvt, void *work,
                   integer *lwork, void *rwork, integer *info);
@@ -40,7 +40,7 @@ void fla_test_gesvd(integer argc, char **argv, test_params_t *params)
     if(argc == 1)
     {
         g_lwork = -1;
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, RECT_INPUT, params, SVD, fla_test_gesvd_experiment);
@@ -81,6 +81,7 @@ void fla_test_gesvd(integer argc, char **argv, test_params_t *params)
         }
         g_lwork = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[11], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -156,7 +157,7 @@ void fla_test_gesvd_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -196,7 +197,7 @@ void fla_test_gesvd_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     n_U = (!same_char(jobu, 'A')) ? ns : m;
-    m_V = (!same_char(jobvt,'A')) ? ns : n;
+    m_V = (!same_char(jobvt, 'A')) ? ns : n;
 
     /* Create input matrix parameters */
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
@@ -204,7 +205,7 @@ void fla_test_gesvd_experiment(char *tst_api, test_params_t *params, integer dat
     {
         create_matrix(datatype, LAPACK_COL_MAJOR, m, n_U, &U, ldu);
     }
-    if(!same_char(jobvt,'N') && !same_char(jobvt,'O'))
+    if(!same_char(jobvt, 'N') && !same_char(jobvt, 'O'))
     {
         create_matrix(datatype, LAPACK_COL_MAJOR, m_V, n, &V, ldvt);
     }
@@ -233,8 +234,8 @@ void fla_test_gesvd_experiment(char *tst_api, test_params_t *params, integer dat
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
-    prepare_gesvd_run(&jobu, &jobvt, m, n, A_test, lda, s, U, ldu, V, ldvt, datatype, n_repeats,
-                      &time_min, &info, interfacetype, layout);
+    prepare_gesvd_run(&jobu, &jobvt, m, n, A_test, lda, s, U, ldu, V, ldvt, datatype, &info,
+                      interfacetype, layout, params);
 
     /* Performance Computation
      * Singular values only, 4mn^2 - 4n^3/3 flops
@@ -266,7 +267,7 @@ void fla_test_gesvd_experiment(char *tst_api, test_params_t *params, integer dat
     if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gesvd(tst_api, &jobu, &jobvt, m, n, A, A_test, lda, s, s_test, U, ldu, V, ldvt,
-                       datatype, residual, g_ext_fptr, params->imatrix_char, scal);
+                       datatype, residual, g_ext_fptr, params->imatrix_char, scal, params);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -293,7 +294,7 @@ void fla_test_gesvd_experiment(char *tst_api, test_params_t *params, integer dat
     {
         free_matrix(U);
     }
-    if(!same_char(jobvt,'N') && !same_char(jobvt,'O'))
+    if(!same_char(jobvt, 'N') && !same_char(jobvt, 'O'))
     {
         free_matrix(V);
     }
@@ -303,16 +304,15 @@ void fla_test_gesvd_experiment(char *tst_api, test_params_t *params, integer dat
 
 void prepare_gesvd_run(char *jobu, char *jobvt, integer m_A, integer n_A, void *A, integer lda,
                        void *s, void *U, integer ldu, void *V, integer ldvt, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info, integer interfacetype,
-                       int layout)
+                       integer *info, integer interfacetype, int layout, test_params_t *params)
 {
     integer min_m_n, max_m_n;
     void *A_save, *s_test;
     void *work, *rwork;
     void *U_test, *V_test;
     integer lwork, lrwork;
-    integer i, n_U, m_V;
-    double t_min = 1e9, exe_time;
+    integer n_U, m_V;
+    double exe_time;
 
     min_m_n = fla_min(m_A, n_A);
     max_m_n = fla_max(m_A, n_A);
@@ -360,7 +360,7 @@ void prepare_gesvd_run(char *jobu, char *jobvt, integer m_A, integer n_A, void *
         lwork = g_lwork;
     }
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
@@ -408,8 +408,8 @@ void prepare_gesvd_run(char *jobu, char *jobvt, integer m_A, integer n_A, void *
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
 
         /* Make a copy of the output buffers. This is required to validate the API functionality. */
         if(!same_char(*jobu, 'N') && !same_char(*jobu, 'O'))
@@ -437,8 +437,6 @@ void prepare_gesvd_run(char *jobu, char *jobvt, integer m_A, integer n_A, void *
         free_vector(s_test);
     }
 
-    *time_min_ = t_min;
-
     free_matrix(A_save);
 }
 
@@ -453,9 +451,9 @@ double prepare_lapacke_gesvd_run(integer datatype, int layout, char *jobu, char 
     void *A_t = NULL, *U_t = NULL, *V_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_gesvd_lda, lda_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, m_A, row_major_gesvd_ldu, ldu_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_gesvd_ldvt, ldvt_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n_A, row_major_gesvd_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, m_A, row_major_gesvd_ldu, ldu_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n_A, row_major_gesvd_ldvt, ldvt_t);
 
     A_t = A;
     U_t = U;

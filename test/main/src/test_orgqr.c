@@ -16,9 +16,9 @@ integer row_major_orgqr_lda;
 void fla_test_orgqr_experiment(char *tst_api, test_params_t *params, integer datatype,
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
-void prepare_orgqr_run(integer m, integer n, void *A, integer lda, void *T,
-                       integer datatype, integer n_repeats, double *time_min_,
-                       integer *info, integer interfacetype, int matrix_layout);
+void prepare_orgqr_run(integer m, integer n, void *A, integer lda, void *T, integer datatype,
+                       integer *info, integer interfacetype, int matrix_layout,
+                       test_params_t *params);
 void invoke_orgqr(integer datatype, integer *m, integer *n, integer *min_A, void *a, integer *lda,
                   void *tau, void *work, integer *lwork, integer *info);
 double prepare_lapacke_orgqr_run(integer datatype, int matrix_layout, integer m, integer n, void *A,
@@ -34,7 +34,7 @@ void fla_test_orgqr(integer argc, char **argv, test_params_t *params)
     if(argc == 1)
     {
         g_lwork = -1;
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, RECT_INPUT, params, LIN, fla_test_orgqr_experiment);
@@ -68,6 +68,7 @@ void fla_test_orgqr(integer argc, char **argv, test_params_t *params)
         g_lwork = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
 
         n_repeats = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -141,9 +142,9 @@ void fla_test_orgqr_experiment(char *tst_api, test_params_t *params, integer dat
     /* When inputs are from config file,
        1) if m < n(invalid case), interchange m, n
        2) if leading dimensions = -1, set them to default value */
-    if(config_data)
+    if(g_config_data)
     {
-        if (p_cur < q_cur)
+        if(p_cur < q_cur)
         {
             m = q_cur;
             n = p_cur;
@@ -207,13 +208,11 @@ void fla_test_orgqr_experiment(char *tst_api, test_params_t *params, integer dat
     copy_matrix(datatype, "full", m, n, A_test, lda, Q, lda);
 
     /*invoke orgqr API */
-    prepare_orgqr_run(m, n, Q, lda, T_test, datatype, n_repeats, &time_min,
-                      &info, interfacetype, layout);
+    prepare_orgqr_run(m, n, Q, lda, T_test, datatype, &info, interfacetype, layout, params);
 
     /* performance computation
-       (2/3)*n2*(3m - n) */
-    perf = (double)((2.0 * m * n * n) - ((2.0 / 3.0) * n * n * n)) / time_min
-           / FLOPS_PER_UNIT_PERF;
+    (2/3)*n2*(3m - n) */
+    perf = (double)((2.0 * m * n * n) - ((2.0 / 3.0) * n * n * n)) / time_min / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         perf *= 4.0;
 
@@ -221,8 +220,8 @@ void fla_test_orgqr_experiment(char *tst_api, test_params_t *params, integer dat
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
     if(!FLA_EXTREME_CASE_TEST)
     {
-        validate_orgqr(tst_api, m, n, A, lda, Q, R, datatype, residual,
-                       params->imatrix_char);
+        validate_orgqr(tst_api, m, n, A, lda, Q, R, datatype, residual, params->imatrix_char,
+                       params);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -245,16 +244,14 @@ void fla_test_orgqr_experiment(char *tst_api, test_params_t *params, integer dat
     free_vector(T_test);
     free_matrix(Q);
     free_matrix(R);
-
 }
 
-void prepare_orgqr_run(integer m, integer n, void *A, integer lda, void *T,
-                       integer datatype, integer n_repeats, double *time_min_,
-                       integer *info, integer interfacetype, int layout)
+void prepare_orgqr_run(integer m, integer n, void *A, integer lda, void *T, integer datatype,
+                       integer *info, integer interfacetype, int layout, test_params_t *params)
 {
-    integer i, lwork;
+    integer lwork;
     void *A_save = NULL, *work = NULL;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
@@ -285,7 +282,7 @@ void prepare_orgqr_run(integer m, integer n, void *A, integer lda, void *T,
     }
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
@@ -314,12 +311,10 @@ void prepare_orgqr_run(integer m, integer n, void *A, integer lda, void *T,
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
         free_vector(work);
     }
-
-    *time_min_ = t_min;
 
     free_matrix(A_save);
 }
@@ -332,7 +327,7 @@ double prepare_lapacke_orgqr_run(integer datatype, int layout, integer m, intege
     void *A_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_orgqr_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_orgqr_lda, lda_t);
 
     A_t = A;
 

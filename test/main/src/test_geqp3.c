@@ -17,8 +17,8 @@ void fla_test_geqp3_experiment(char *tst_api, test_params_t *params, integer dat
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
 void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *jpvt, void *T,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer interfacetype, int matrix_layout);
+                       integer datatype, integer *info, integer interfacetype, int matrix_layout,
+                       test_params_t *params);
 void invoke_geqp3(integer datatype, integer *m, integer *n, void *a, integer *lda, integer *jpvt,
                   void *tau, void *work, integer *lwork, void *rwork, integer *info);
 double prepare_lapacke_geqp3_run(integer datatype, int layout, integer m_A, integer n_A, void *A,
@@ -34,7 +34,7 @@ void fla_test_geqp3(integer argc, char **argv, test_params_t *params)
     if(argc == 1)
     {
         g_lwork = -1;
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, RECT_INPUT, params, LIN, fla_test_geqp3_experiment);
@@ -67,6 +67,7 @@ void fla_test_geqp3(integer argc, char **argv, test_params_t *params)
         }
         g_lwork = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -136,7 +137,7 @@ void fla_test_geqp3_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -162,8 +163,7 @@ void fla_test_geqp3_experiment(char *tst_api, test_params_t *params, integer dat
     /* Create pivot array */
     create_vector(INTEGER, (void **)&jpvt, n);
 
-    prepare_geqp3_run(m, n, A_test, lda, jpvt, T, datatype, n_repeats, &time_min, &info,
-                      interfacetype, layout);
+    prepare_geqp3_run(m, n, A_test, lda, jpvt, T, datatype, &info, interfacetype, layout, params);
 
     /* performance computation
      * 2mn^2 - (2/3)n^3 flops
@@ -182,7 +182,7 @@ void fla_test_geqp3_experiment(char *tst_api, test_params_t *params, integer dat
     if(!FLA_EXTREME_CASE_TEST)
     {
         validate_geqp3(tst_api, m, n, A, A_test, lda, jpvt, T, datatype, residual,
-                       params->imatrix_char);
+                       params->imatrix_char, params);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -206,14 +206,14 @@ void fla_test_geqp3_experiment(char *tst_api, test_params_t *params, integer dat
 }
 
 void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *jpvt, void *T,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer interfacetype, int layout)
+                       integer datatype, integer *info, integer interfacetype, int layout,
+                       test_params_t *params)
 {
-    integer min_A, i;
+    integer min_A;
     void *A_save = NULL, *T_test = NULL, *work = NULL;
     void *rwork = NULL;
     integer lwork = -1;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     min_A = fla_min(m_A, n_A);
 
@@ -263,7 +263,7 @@ void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *
         create_realtype_vector(datatype, &rwork, 2 * n_A);
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration */
@@ -303,8 +303,8 @@ void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop condition */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
 
         /* Make a copy of the output buffers, for validation. */
         copy_vector(datatype, min_A, T_test, 1, T, 1);
@@ -313,8 +313,6 @@ void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *
         free_vector(work);
         free_vector(T_test);
     }
-
-    *time_min_ = t_min;
 
     free_matrix(A_save);
     if(datatype >= COMPLEX)
@@ -328,7 +326,7 @@ double prepare_lapacke_geqp3_run(integer datatype, int layout, integer m_A, inte
     integer lda_t = lda;
     void *A_t = NULL;
 
-    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_geqp3_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n_A, row_major_geqp3_lda, lda_t);
 
     A_t = A;
 

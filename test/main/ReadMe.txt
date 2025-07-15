@@ -310,3 +310,66 @@ NOTE:
 
    Example: ./test_lapack.x --interface=cpp    --> for CPP interface
             ./test_lapack.x --interface=lapacke_column --> for column major layout of lapacke interface
+
+12. Benchmark and Statistics Options
+
+   The test suite supports various options for benchmarking and collecting statistics:
+
+   a. Benchmark Mode
+      --bench=<k>: Execute tests in benchmark mode for a minimum duration of <k> seconds.
+      The test will run for at least <k> seconds, but will always complete the specified
+      number of <repeats> iterations. The total number of iterations will be the maximum
+      of <repeats> and the iterations needed to reach <k> seconds.
+
+      Examples:
+         i. With repeats=10, k=2, and 1 second per iteration:
+            The test runs 10 iterations (repeats takes precedence)
+        ii. With repeats=10, k=30, and 1 second per iteration:
+            The test runs 30 iterations (duration takes precedence)
+
+      Note: By default, 10% of iterations are dedicated to warmup in benchmark mode.
+
+   b. Warmup Options
+      --warmup=<k>: Configure the number of warmup invocations where <k> can be:
+        - 0: Disable warmup
+        - Decimal k in range (0,1): Use ceil(k * repeat) invocations as warmup
+        - Integer k >= 1: Use k invocations as warmup
+
+   c. Statistics Collection
+      --stats=<stats_list>: Specify comma-separated list of statistics to print.
+      Available statistics include:
+        - min: Minimum runtime
+        - max: Maximum runtime
+        - avg: Average runtime
+        - var: Variance
+        - stddev: Standard deviation
+        - p<1-99>: Percentiles (e.g., p95 for 95th percentile)
+      
+      Example: --stats=min,avg,p95,var
+      Default statistics in benchmark mode: min, avg, p95
+      Default statistics in normal mode: min only
+
+   d. Output Formatting
+      --print-header: Print the header for test output in CLI mode
+      --time-unit=<unit>: Specify time unit for output (s, ms, us, ns, ps, auto)
+      Default unit is 'auto' which automatically selects based on test duration
+
+   e. Data Analysis
+      --filter-outliers[=<multiplier>]: Filter outliers from test results
+      Default multiplier is 2.0
+      Filters values greater than (multiplier * stddev + mean)
+      
+      --dump-runtimes=<file_path>: Save runtime data to specified file
+      Only valid in CLI mode
+
+   Example usage:
+   $ ./test_lapack.x --bench=60 --warmup=0.1 --stats=min,avg,p95 --time-unit=ms
+   $ ./test_lapack.x --filter-outliers=2.5 --dump-runtimes=results.txt
+
+   Note: 
+   - These options are particularly useful for performance testing and analysis.
+   - The benchmark mode ensures consistent test duration while the statistics options
+     provide detailed performance metrics for analysis.
+   - These options can be used along with special matrix (--imatrix) and 
+     interface (--interface) options. However these options should
+     be provided after special matrix and interface options.

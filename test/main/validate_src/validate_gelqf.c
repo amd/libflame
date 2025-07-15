@@ -13,7 +13,7 @@ extern double perf;
 extern double time_min;
 
 void validate_gelqf(char *tst_api, integer m_A, integer n_A, void *A, void *A_test, integer lda,
-                    void *T_test, integer datatype, double err_thresh)
+                    void *T_test, integer datatype, double err_thresh, void *params)
 {
     void *Q = NULL, *L = NULL, *work = NULL;
     integer min_A;

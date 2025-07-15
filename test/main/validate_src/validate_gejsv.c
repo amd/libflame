@@ -107,7 +107,7 @@ void validate_gejsv(char *tst_api, char joba, char jobu, char jobv, char jobr, c
                     integer m, integer n, void *A, integer lda, void *S, void *S_test, void *U,
                     integer ldu, void *V, integer ldv, void *stat, integer *istat,
                     integer test_eliminated_svds, integer datatype, double err_thresh, void *scal,
-                    char imatrix)
+                    char imatrix, void *params)
 {
     double residual, resid1 = 0., resid2 = 0., resid3 = 0., resid4 = 0., resid5 = 0., resid6 = 0.;
     void *S_scaled = NULL;

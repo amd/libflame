@@ -16,8 +16,8 @@ void fla_test_gbtrs_experiment(char *tst_api, test_params_t *params, integer dat
                                integer einfo);
 void prepare_gbtrs_run(char trans, integer n_A, integer kl, integer ku, integer nrhs, void *ab,
                        integer ldab, integer *ipiv, void *b, integer ldb, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info, integer interfacetype,
-                       integer matrix_layout);
+                       integer *info, integer interfacetype, integer matrix_layout,
+                       test_params_t *params);
 void invoke_gbtrs(integer datatype, char *trans, integer *n, integer *kl, integer *ku,
                   integer *nrhs, void *ab, integer *ldab, integer *ipiv, void *b, integer *ldb,
                   integer *info);
@@ -35,7 +35,7 @@ void fla_test_gbtrs(integer argc, char **argv, test_params_t *params)
     params->imatrix_char = '\0';
     if(argc == 1)
     {
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, LIN, fla_test_gbtrs_experiment);
@@ -64,6 +64,7 @@ void fla_test_gbtrs(integer argc, char **argv, test_params_t *params)
         params->lin_solver_paramslist[0].ldb = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
 
         n_repeats = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -138,7 +139,7 @@ void fla_test_gbtrs_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(ldab == -1)
         {
@@ -220,8 +221,8 @@ void fla_test_gbtrs_experiment(char *tst_api, test_params_t *params, integer dat
     copy_matrix(datatype, "full", n, nrhs, B, ldb, X, ldb);
 
     /* call to API */
-    prepare_gbtrs_run(trans, n, kl, ku, nrhs, AB_test, ldab, IPIV, X, ldb, datatype, n_repeats,
-                      &time_min, &info, interfacetype, layout);
+    prepare_gbtrs_run(trans, n, kl, ku, nrhs, AB_test, ldab, IPIV, X, ldb, datatype, &info,
+                      interfacetype, layout, params);
 
     /* performance computation */
     perf = (2.0 * n * (ku + 2 * kl)) / time_min / FLOPS_PER_UNIT_PERF;
@@ -239,7 +240,7 @@ void fla_test_gbtrs_experiment(char *tst_api, test_params_t *params, integer dat
         get_band_matrix_from_band_storage(datatype, n, n, kl, ku, AB, ldab, A, n);
         /* Call validate_getrs() to validate the output*/
         validate_getrs(tst_api, &trans, n, nrhs, A, n, B, ldb, X, datatype, residual,
-                       params->imatrix_char, NULL);
+                       params->imatrix_char, NULL, params);
         free_matrix(A);
     }
     /* check for output matrix when inputs as extreme values */
@@ -266,18 +267,16 @@ void fla_test_gbtrs_experiment(char *tst_api, test_params_t *params, integer dat
 
 void prepare_gbtrs_run(char trans, integer n_A, integer kl, integer ku, integer nrhs, void *AB,
                        integer ldab, integer *IPIV, void *B, integer ldb, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info, integer interfacetype,
-                       integer layout)
+                       integer *info, integer interfacetype, integer layout, test_params_t *params)
 {
-    integer i;
     void *B_save;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     /* Save the original matrix */
     create_matrix(datatype, LAPACK_COL_MAJOR, n_A, nrhs, &B_save, ldb);
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Copy original input data */
         copy_matrix(datatype, "full", n_A, nrhs, B, ldb, B_save, ldb);
@@ -308,11 +307,10 @@ void prepare_gbtrs_run(char trans, integer n_A, integer kl, integer ku, integer 
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
     }
 
-    *time_min_ = t_min;
     /*  Save the final result to B matrix*/
     copy_matrix(datatype, "full", n_A, nrhs, B_save, ldb, B, ldb);
     free_matrix(B_save);

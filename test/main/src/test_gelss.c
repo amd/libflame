@@ -24,8 +24,8 @@ void fla_test_gelss_experiment(char *tst_api, test_params_t *params, integer dat
                                integer einfo);
 void prepare_gelss_run(integer datatype, integer m, integer n, integer nrhs, void *A, integer lda,
                        void *B, integer ldb, void *s, void *rcond, integer *rank, void *work,
-                       integer lwork, void *rwork, integer n_repeats, double *time_min_,
-                       integer *info, integer interfacetype, integer layout);
+                       integer lwork, void *rwork, integer *info, integer interfacetype,
+                       integer layout, test_params_t *params);
 double prepare_lapacke_gelss_run(integer datatype, integer layout, integer m, integer n,
                                  integer nrhs, void *A, integer lda, void *B, integer ldb, void *s,
                                  void *rcond, integer *rank, integer *info);
@@ -39,7 +39,7 @@ void fla_test_gelss(integer argc, char **argv, test_params_t *params)
 
     if(argc == 1)
     {
-        config_data = 1;
+        g_config_data = 1;
         g_lwork = -1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
@@ -77,6 +77,7 @@ void fla_test_gelss(integer argc, char **argv, test_params_t *params)
         }
         g_lwork = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -159,7 +160,7 @@ void fla_test_gelss_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -207,7 +208,7 @@ void fla_test_gelss_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* call to API */
     prepare_gelss_run(datatype, m, n, nrhs, A_test, lda, B_test, ldb, s, rcond, &rank, work, lwork,
-                      rwork, n_repeats, &time_min, &info, interfacetype, layout);
+                      rwork, &info, interfacetype, layout, params);
 
     /* performance computation */
     if(m >= n)
@@ -227,7 +228,7 @@ void fla_test_gelss_experiment(char *tst_api, test_params_t *params, integer dat
     if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gelsd(tst_api, m, n, nrhs, A, lda, B, ldb, s, B_test, rcond, &rank, datatype,
-                       residual, params->imatrix_char);
+                       residual, params->imatrix_char, params);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -257,12 +258,11 @@ void fla_test_gelss_experiment(char *tst_api, test_params_t *params, integer dat
 
 void prepare_gelss_run(integer datatype, integer m, integer n, integer nrhs, void *A, integer lda,
                        void *B, integer ldb, void *s, void *rcond, integer *rank, void *work,
-                       integer lwork, void *rwork, integer n_repeats, double *time_min_,
-                       integer *info, integer interfacetype, integer layout)
+                       integer lwork, void *rwork, integer *info, integer interfacetype,
+                       integer layout, test_params_t *params)
 {
-    integer i;
     void *A_save = NULL, *B_save = NULL;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_save, lda);
     create_matrix(datatype, LAPACK_COL_MAJOR, fla_max(m, n), nrhs, &B_save, ldb);
@@ -302,7 +302,7 @@ void prepare_gelss_run(integer datatype, integer m, integer n, integer nrhs, voi
     }
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; i++)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Copy original input */
         copy_matrix(datatype, "full", lda, n, A, lda, A_save, lda);
@@ -335,12 +335,12 @@ void prepare_gelss_run(integer datatype, integer m, integer n, integer nrhs, voi
 
             exe_time = fla_test_clock() - exe_time;
         }
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+
+        /* Update ctx and loop condition */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
 
         free_vector(work);
     }
-    *time_min_ = t_min;
 
     /* Save the output to vector A */
     copy_matrix(datatype, "full", lda, n, A_save, lda, A, lda);
@@ -360,8 +360,8 @@ double prepare_lapacke_gelss_run(integer datatype, integer layout, integer m, in
     B_t = B;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_gelss_lda, lda_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, nrhs, row_major_gelss_ldb, ldb_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_gelss_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, nrhs, row_major_gelss_ldb, ldb_t);
 
     /* In case of row_major matrix layout,
        convert input matrix to row_major */

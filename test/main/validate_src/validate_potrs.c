@@ -13,7 +13,7 @@ extern double perf;
 extern double time_min;
 
 void validate_potrs(char *tst_api, integer n, integer nrhs, void *A, integer lda, void *X, void *B,
-                    integer ldb, integer datatype, double err_thresh, char imatrix)
+                    integer ldb, integer datatype, double err_thresh, char imatrix, void *params)
 {
     void *work = NULL;
     integer ldx;

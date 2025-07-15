@@ -17,8 +17,8 @@ void fla_test_gehrd_experiment(char *tst_api, test_params_t *params, integer dat
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
 void prepare_gehrd_run(integer n, integer *ilo, integer *ihi, void *A, integer lda, void *tau,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer interfacetype, int matrix_layout);
+                       integer datatype, integer *info, integer interfacetype, int matrix_layout,
+                       test_params_t *params);
 void invoke_gehrd(integer datatype, integer *n, integer *ilo, integer *ihi, void *a, integer *lda,
                   void *tau, void *work, integer *lwork, integer *info);
 double prepare_lapacke_gehrd_run(integer datatype, int layout, integer n, integer *ilo,
@@ -31,7 +31,7 @@ void fla_test_gehrd(integer argc, char **argv, test_params_t *params)
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
     if(argc == 1)
     {
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, LIN, fla_test_gehrd_experiment);
@@ -65,6 +65,7 @@ void fla_test_gehrd(integer argc, char **argv, test_params_t *params)
         }
         g_lwork = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -129,7 +130,7 @@ void fla_test_gehrd_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -171,13 +172,13 @@ void fla_test_gehrd_experiment(char *tst_api, test_params_t *params, integer dat
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_Test, lda);
     copy_matrix(datatype, "full", n, n, A, lda, A_Test, lda);
 
-    prepare_gehrd_run(n, &ilo, &ihi, A_Test, lda, tau, datatype, n_repeats, &time_min, &info,
-                      interfacetype, layout);
+    prepare_gehrd_run(n, &ilo, &ihi, A_Test, lda, tau, datatype, &info, interfacetype, layout,
+                      params);
 
+    /* Get the minimum time */
     /* Performance computation
-       (2/3)*(ihi - ilo)^2(2ihi + 2ilo + 3n) flops for real values
-       4*((2/3)*(ihi - ilo)^2(2ihi + 2ilo + 3n)) flops for complex values */
-
+    (2/3)*(ihi - ilo)^2(2ihi + 2ilo + 3n) flops for real values
+    4*((2/3)*(ihi - ilo)^2(2ihi + 2ilo + 3n)) flops for complex values */
     if(datatype == FLOAT || datatype == DOUBLE)
         perf = (double)((2.0 / 3.0) * pow((ihi - ilo), 2) * (2 * ihi + 2 * ilo + 3 * n)) / time_min
                / FLOPS_PER_UNIT_PERF;
@@ -189,7 +190,7 @@ void fla_test_gehrd_experiment(char *tst_api, test_params_t *params, integer dat
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
     if(!FLA_EXTREME_CASE_TEST)
     {
-        validate_gehrd(tst_api, n, ilo, ihi, A, A_Test, lda, tau, datatype, residual);
+        validate_gehrd(tst_api, n, ilo, ihi, A, A_Test, lda, tau, datatype, residual, params);
     }
     else
     {
@@ -211,12 +212,12 @@ void fla_test_gehrd_experiment(char *tst_api, test_params_t *params, integer dat
 }
 
 void prepare_gehrd_run(integer n, integer *ilo, integer *ihi, void *A, integer lda, void *tau,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer interfacetype, int layout)
+                       integer datatype, integer *info, integer interfacetype, int layout,
+                       test_params_t *params)
 {
     void *A_save = NULL, *work = NULL, *tau_test = NULL;
-    integer i, lwork;
-    double t_min = 1e9, exe_time;
+    integer lwork;
+    double exe_time;
 
     /* Make a copy of the input matrix A. Same input values will be passed in each itertaion.*/
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_save, lda);
@@ -259,7 +260,7 @@ void prepare_gehrd_run(integer n, integer *ilo, integer *ihi, void *A, integer l
     }
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrix H and Z value and allocate memory to output buffers
            for each iteration*/
@@ -290,8 +291,8 @@ void prepare_gehrd_run(integer n, integer *ilo, integer *ihi, void *A, integer l
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
 
         copy_vector(datatype, n - 1, tau_test, 1, tau, 1);
 
@@ -299,7 +300,6 @@ void prepare_gehrd_run(integer n, integer *ilo, integer *ihi, void *A, integer l
         free_vector(work);
         free_vector(tau_test);
     }
-    *time_min_ = t_min;
 
     free_matrix(A_save);
 }
@@ -312,7 +312,7 @@ double prepare_lapacke_gehrd_run(integer datatype, int layout, integer n, intege
     void *A_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_gehrd_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_gehrd_lda, lda_t);
 
     A_t = A;
 

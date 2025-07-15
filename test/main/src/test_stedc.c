@@ -17,8 +17,8 @@ void fla_test_stedc_experiment(char *tst_api, test_params_t *params, integer dat
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
 void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, integer ldz,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer interfacetype, int matrix_layout);
+                       integer datatype, integer *info, integer interfacetype, int matrix_layout,
+                       test_params_t *params);
 void invoke_stedc(integer datatype, char *compz, integer *n, void *D, void *E, void *Z,
                   integer *ldz, void *work, integer *lwork, void *rwork, integer *lrwork,
                   integer *iwork, integer *liwork, integer *info);
@@ -39,7 +39,7 @@ void fla_test_stedc(integer argc, char **argv, test_params_t *params)
         g_lwork = -1;
         g_liwork = -1;
         g_lrwork = -1;
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, EIG_SYM, fla_test_stedc_experiment);
@@ -76,6 +76,7 @@ void fla_test_stedc(integer argc, char **argv, test_params_t *params)
         g_liwork = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
         g_lrwork = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -129,7 +130,7 @@ void fla_test_stedc_experiment(char *tst_api, test_params_t *params, integer dat
 {
     integer n, info = 0, realtype, lda, ldz;
     void *D = NULL, *D_test = NULL, *E = NULL, *E_test = NULL, *Z_test = NULL;
-    void *Z = NULL, *A = NULL, *L = NULL, *Q = NULL, *scal = NULL;
+    void *Z = NULL, *A = NULL, *L = NULL, *Q = NULL, *scal = NULL, *Z_test_save = NULL;
     char compz, uplo, range = 'V';
     double residual, err_thresh;
 
@@ -146,7 +147,7 @@ void fla_test_stedc_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(ldz == -1)
         {
@@ -234,13 +235,15 @@ void fla_test_stedc_experiment(char *tst_api, test_params_t *params, integer dat
     copy_vector(realtype, n, D, 1, D_test, 1);
     create_vector(realtype, &E_test, n - 1);
     copy_vector(realtype, n - 1, E, 1, E_test, 1);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z_test_save, ldz);
+    copy_matrix(datatype, "full", n, n, Z_test, ldz, Z_test_save, ldz);
 
-    prepare_stedc_run(&compz, n, D_test, E_test, Z_test, ldz, datatype, n_repeats, &time_min, &info,
-                      interfacetype, layout);
+    prepare_stedc_run(&compz, n, D_test, E_test, Z_test, ldz, datatype, &info, interfacetype,
+                      layout, params);
 
     /* Performance computation
-       (6)n^3 flops for eigen vectors
-       (4/3)n^3 flops for eigen values. */
+    (6)n^3 flops for eigen vectors
+    (4/3)n^3 flops for eigen values. */
     perf = (double)((4.0 / 3.0) * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     if(!same_char(compz, 'N'))
     {
@@ -256,7 +259,7 @@ void fla_test_stedc_experiment(char *tst_api, test_params_t *params, integer dat
     if(!FLA_EXTREME_CASE_TEST)
     {
         validate_syev(tst_api, &compz, &range, n, Z, Z_test, ldz, 0, 0, L, D_test, NULL, datatype,
-                      residual, params->imatrix_char, scal);
+                      residual, params->imatrix_char, scal, params);
     }
     /* Check for output matrix & vectors when inputs are extreme values */
     else
@@ -281,6 +284,7 @@ void fla_test_stedc_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up buffers. */
+    free_matrix(Z_test_save);
     free_matrix(Z);
     free_matrix(Z_test);
     free_vector(D_test);
@@ -300,13 +304,13 @@ void fla_test_stedc_experiment(char *tst_api, test_params_t *params, integer dat
 }
 
 void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, integer ldz,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer interfacetype, int layout)
+                       integer datatype, integer *info, integer interfacetype, int layout,
+                       test_params_t *params)
 {
-    integer index, lwork, liwork, lrwork, realtype;
+    integer lwork, liwork, lrwork, realtype;
     void *D_save = NULL, *E_save = NULL, *E_test = NULL, *Z_save = NULL;
     void *work = NULL, *iwork = NULL, *rwork = NULL;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     /* Make a copy of the input matrices. Same input values will be passed in
        each itertaion.*/
@@ -384,7 +388,7 @@ void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, intege
     create_vector(realtype, &E_test, n - 1);
 
     *info = 0;
-    for(index = 0; index < n_repeats && *info == 0; ++index)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrices and allocate memory to output buffers
            for each iteration. */
@@ -427,10 +431,9 @@ void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, intege
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time. */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
     }
-    *time_min_ = t_min;
 
     /* Free up buffers. */
     if(*compz == 'V')
@@ -456,7 +459,7 @@ double prepare_lapacke_stedc_run(integer datatype, int layout, char *compz, inte
     void *Z_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_stedc_ldz, ldz_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_stedc_ldz, ldz_t);
 
     Z_t = Z;
 

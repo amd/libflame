@@ -2,6 +2,8 @@
     Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
+#if ENABLE_AOCL_EXTENSION_APIS
+
 #include "test_lapack.h"
 
 extern double perf;
@@ -11,7 +13,7 @@ void fla_test_spffrt2_experiment(char *tst_api, test_params_t *params, integer d
                                  integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                  integer einfo);
 void prepare_spffrt2_run(integer n_A, integer ncolm, integer pn, void *A, integer datatype,
-                         integer n_repeats, double *time_min_);
+                         test_params_t *params);
 void invoke_spffrt2(integer datatype, void *a, integer *n, integer *ncolm, void *work, void *work2);
 
 void fla_test_spffrt2(integer argc, char **argv, test_params_t *params)
@@ -45,6 +47,7 @@ void fla_test_spffrt2(integer argc, char **argv, test_params_t *params)
         params->lin_solver_paramslist[0].ncolm = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
 
         n_repeats = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -98,7 +101,7 @@ void fla_test_spffrt2_experiment(char *tst_api, test_params_t *params, integer d
                                  integer einfo)
 {
     integer n, ncolm, pn;
-    void *A, *AP;
+    void *A, *AP, *AP_save;
     double err_thresh;
 
     err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
@@ -122,9 +125,11 @@ void fla_test_spffrt2_experiment(char *tst_api, test_params_t *params, integer d
     }
     /* Pack a symmetric matrix in column first order */
     pack_matrix_lt(datatype, A, AP, n, n);
+    create_vector(datatype, &AP_save, pn);
+    copy_vector(datatype, pn, AP, i_one, AP_save, i_one);
 
     /* call to API */
-    prepare_spffrt2_run(n, ncolm, pn, AP, datatype, n_repeats, &time_min);
+    prepare_spffrt2_run(n, ncolm, pn, AP, datatype, params);
 
     /* performance computation */
     if(datatype == FLOAT || datatype == DOUBLE)
@@ -140,26 +145,26 @@ void fla_test_spffrt2_experiment(char *tst_api, test_params_t *params, integer d
     /* output validation */
     if(ncolm <= n && n > 0 && ncolm > 0)
     {
-        validate_spffrt2(tst_api, n, ncolm, A, AP, datatype, err_thresh);
+        validate_spffrt2(tst_api, n, ncolm, A, AP, datatype, err_thresh, params);
     }
 
     /* Free up the buffers */
+    free_vector(AP_save);
     free_matrix(A);
     free_vector(AP);
 }
 
 void prepare_spffrt2_run(integer n_A, integer ncolm, integer pn, void *AP, integer datatype,
-                         integer n_repeats, double *time_min_)
+                         test_params_t *params)
 {
-    integer i;
     void *AP_save, *work = NULL, *work2 = NULL;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     create_vector(datatype, &AP_save, pn);
     create_vector(datatype, &work, 2 * n_A);
     create_vector(datatype, &work2, 2 * n_A);
 
-    for(i = 0; i < n_repeats; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Copy original input data */
         copy_vector(datatype, pn, AP, i_one, AP_save, i_one);
@@ -170,12 +175,9 @@ void prepare_spffrt2_run(integer n_A, integer ncolm, integer pn, void *AP, integ
         invoke_spffrt2(datatype, AP_save, &n_A, &ncolm, work, work2);
 
         exe_time = fla_test_clock() - exe_time;
-
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        FLA_EXEC_LOOP_UPDATE_NO_INFO
     }
 
-    *time_min_ = t_min;
     /*  Save the final result to A matrix*/
     copy_vector(datatype, pn, AP_save, i_one, AP, i_one);
     free_vector(AP_save);
@@ -215,3 +217,5 @@ void invoke_spffrt2(integer datatype, void *ap, integer *n, integer *ncolm, void
         }
     }
 }
+
+#endif /* ENABLE_AOCL_EXTENSION_APIS */

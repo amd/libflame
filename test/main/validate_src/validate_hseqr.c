@@ -15,7 +15,7 @@ extern double time_min;
 void validate_hseqr(char *tst_api, char *job, char *compz, integer n, void *H, void *H_test,
                     integer ldh, void *Z, void *Z_test, integer ldz, void *wr, void *wr_in,
                     void *wi, void *wi_in, void *w, integer datatype, double err_thresh,
-                    integer *ilo, integer *ihi, char imatrix, void *scal_H)
+                    integer *ilo, integer *ihi, char imatrix, void *scal_H, void *params)
 {
     char NORM = '1';
     void *Y = NULL;

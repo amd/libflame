@@ -152,7 +152,7 @@
 
 void validate_getrfnpi(char *tst_api, integer m_A, integer n_A, integer nfact, void *A,
                        void *A_test, integer lda, integer *IPIV, integer datatype,
-                       double err_thresh, char imatrix)
+                       double err_thresh, char imatrix, void *params)
 {
     /* System generated locals */
     integer m_BR, n_BR, m_BL, n_BL, m_TR, n_TR;
@@ -171,8 +171,8 @@ void validate_getrfnpi(char *tst_api, integer m_A, integer n_A, integer nfact, v
     FLA_TEST_PRINT_INVALID_STATUS(m_A, n_A, err_thresh);
 
     /* Call validate getrf on factored block */
-    validate_getrf_internal(nfact, nfact, A, A_test, lda, IPIV, datatype, imatrix, &resid1,
-                            &resid2);
+    validate_getrf_internal(nfact, nfact, A, A_test, lda, IPIV, datatype, imatrix, &resid1, &resid2,
+                            params);
 
     m_BR = m_A - nfact;
     n_BR = n_A - nfact;

@@ -19,8 +19,8 @@ void fla_test_gesdd_experiment(char *tst_api, test_params_t *params, integer dat
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
 void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer lda, void *s, void *U,
-                       integer ldu, void *V, integer ldvt, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer interfacetype, int matrix_layout);
+                       integer ldu, void *V, integer ldvt, integer datatype, integer *info,
+                       integer interfacetype, int matrix_layout, test_params_t *params);
 void invoke_gesdd(integer datatype, char *jobz, integer *m, integer *n, void *a, integer *lda,
                   void *s, void *u, integer *ldu, void *vt, integer *ldvt, void *work,
                   integer *lwork, void *rwork, integer *iwork, integer *info);
@@ -38,7 +38,7 @@ void fla_test_gesdd(integer argc, char **argv, test_params_t *params)
     if(argc == 1)
     {
         g_lwork = -1;
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, RECT_INPUT, params, SVD, fla_test_gesdd_experiment);
@@ -80,6 +80,7 @@ void fla_test_gesdd(integer argc, char **argv, test_params_t *params)
         g_lwork = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
 
         n_repeats = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -154,7 +155,7 @@ void fla_test_gesdd_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -238,11 +239,11 @@ void fla_test_gesdd_experiment(char *tst_api, test_params_t *params, integer dat
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
-    prepare_gesdd_run(&jobz, m, n, A_test, lda, s, U, ldu, V, ldvt, datatype, n_repeats, &time_min,
-                      &info, interfacetype, layout);
+    prepare_gesdd_run(&jobz, m, n, A_test, lda, s, U, ldu, V, ldvt, datatype, &info, interfacetype,
+                      layout, params);
 
     /* performance computation
-       6mn^2 + 8n^3 flops */
+ 6mn^2 + 8n^3 flops */
     if(m >= n)
         perf = (double)((6.0 * m * n * n) + (8.0 * n * n * n)) / time_min / FLOPS_PER_UNIT_PERF;
     else
@@ -255,7 +256,7 @@ void fla_test_gesdd_experiment(char *tst_api, test_params_t *params, integer dat
     if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gesdd(tst_api, &jobz, m, n, A, A_test, lda, s, s_in, U, ldu, V, ldvt, datatype,
-                       residual, params->imatrix_char, scal);
+                       residual, params->imatrix_char, scal, params);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -294,15 +295,14 @@ void fla_test_gesdd_experiment(char *tst_api, test_params_t *params, integer dat
 }
 
 void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer lda, void *s, void *U,
-                       integer ldu, void *V, integer ldvt, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer interfacetype, int layout)
+                       integer ldu, void *V, integer ldvt, integer datatype, integer *info,
+                       integer interfacetype, int layout, test_params_t *params)
 {
     integer min_m_n, max_m_n, n_U, m_V;
     void *A_save, *s_test, *work, *iwork, *rwork;
     void *U_test, *V_test;
     integer lwork, liwork, lrwork;
-    integer i;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     min_m_n = fla_min(m_A, n_A);
     max_m_n = fla_max(m_A, n_A);
@@ -357,7 +357,7 @@ void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer ld
     }
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
@@ -411,8 +411,8 @@ void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer ld
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
 
         /* Make a copy of the output buffers. This is required to validate the API functionality.*/
         if(!same_char(*jobz, 'N'))
@@ -451,8 +451,6 @@ void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer ld
         free_vector(s_test);
     }
 
-    *time_min_ = t_min;
-
     free_matrix(A_save);
 }
 
@@ -467,9 +465,9 @@ double prepare_lapacke_gesdd_run(integer datatype, int layout, char *jobz, integ
     void *A_t = NULL, *U_t = NULL, *V_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_gesdd_lda, lda_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, m_A, row_major_gesdd_ldu, ldu_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_gesdd_ldvt, ldvt_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n_A, row_major_gesdd_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, m_A, row_major_gesdd_ldu, ldu_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n_A, row_major_gesdd_ldvt, ldvt_t);
 
     A_t = A;
     U_t = U;

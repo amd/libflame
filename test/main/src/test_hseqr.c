@@ -19,8 +19,8 @@ void fla_test_hseqr_experiment(char *tst_api, test_params_t *params, integer dat
                                integer einfo);
 void prepare_hseqr_run(char *job, char *compz, integer n, integer *ilo, integer *ihi, void *h,
                        integer ldh, void *w, void *wr, void *wi, void *z, integer ldz,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer interfacetype, int matrix_layout);
+                       integer datatype, integer *info, integer interfacetype, int matrix_layout,
+                       test_params_t *params);
 void invoke_hseqr(integer datatype, char *job, char *compz, integer *n, integer *ilo, integer *ihi,
                   void *h, integer *ldh, void *w, void *wr, void *wi, void *z, integer *ldz,
                   void *work, integer *lwork, integer *info);
@@ -35,7 +35,7 @@ void fla_test_hseqr(integer argc, char **argv, test_params_t *params)
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
     if(argc == 1)
     {
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, EIG_SYM, fla_test_hseqr_experiment);
@@ -74,6 +74,7 @@ void fla_test_hseqr(integer argc, char **argv, test_params_t *params)
         }
         g_lwork = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[11], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -151,7 +152,7 @@ void fla_test_hseqr_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(ldh == -1)
         {
@@ -219,15 +220,15 @@ void fla_test_hseqr_experiment(char *tst_api, test_params_t *params, integer dat
     copy_matrix(datatype, "full", n, n, Z, ldz, Z_Test, ldz);
 
     prepare_hseqr_run(&job, &compz, n, &ilo, &ihi, H_test, ldh, w, wr, wi, Z_Test, ldz, datatype,
-                      n_repeats, &time_min, &info, interfacetype, layout);
+                      &info, interfacetype, layout, params);
 
     /* Performance computation
-       (7)n^3 flops for eigen vectors for real
-       (25)n^3 flops for eigen vectors for complex
-       (10)n^3 flops for Schur form is computed for real
-       (35)n^3 flops for Schur form is computed for complex
-       (20)n^3 flops full Schur factorization is computed for real
-       (70)n^3 flops full Schur factorization is computed for complex */
+    (7)n^3 flops for eigen vectors for real
+    (25)n^3 flops for eigen vectors for complex
+    (10)n^3 flops for Schur form is computed for real
+    (35)n^3 flops for Schur form is computed for complex
+    (20)n^3 flops full Schur factorization is computed for real
+    (70)n^3 flops full Schur factorization is computed for complex */
 
     if(same_char(compz, 'N'))
     {
@@ -256,7 +257,8 @@ void fla_test_hseqr_experiment(char *tst_api, test_params_t *params, integer dat
     if(!FLA_EXTREME_CASE_TEST)
     {
         validate_hseqr(tst_api, &job, &compz, n, H, H_test, ldh, Z, Z_Test, ldz, wr, wr_in, wi,
-                       wi_in, w, datatype, residual, &ilo, &ihi, params->imatrix_char, scal_H);
+                       wi_in, w, datatype, residual, &ilo, &ihi, params->imatrix_char, scal_H,
+                       params);
     }
     else
     {
@@ -287,12 +289,12 @@ void fla_test_hseqr_experiment(char *tst_api, test_params_t *params, integer dat
 
 void prepare_hseqr_run(char *job, char *compz, integer n, integer *ilo, integer *ihi, void *H,
                        integer ldh, void *w, void *wr, void *wi, void *Z, integer ldz,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer interfacetype, int layout)
+                       integer datatype, integer *info, integer interfacetype, int layout,
+                       test_params_t *params)
 {
     void *H_save = NULL, *work = NULL, *Z_save = NULL;
-    integer i, lwork;
-    double t_min = 1e9, exe_time;
+    integer lwork;
+    double exe_time;
 
     /* Make a copy of the input matrix H and Z. Same input values will be passed in each
      * itertaion.*/
@@ -341,7 +343,7 @@ void prepare_hseqr_run(char *job, char *compz, integer n, integer *ilo, integer 
     }
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrix H and Z value and allocate memory to output buffers
            for each iteration*/
@@ -374,13 +376,12 @@ void prepare_hseqr_run(char *job, char *compz, integer n, integer *ilo, integer 
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
 
         /* Free up the output buffers */
         free_vector(work);
     }
-    *time_min_ = t_min;
 
     free(H_save);
     free(Z_save);
@@ -396,8 +397,8 @@ double prepare_lapacke_hseqr_run(integer datatype, int layout, char *job, char *
     void *H_t = NULL, *Z_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_hseqr_ldh, ldh_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_hseqr_ldz, ldz_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_hseqr_ldh, ldh_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_hseqr_ldz, ldz_t);
 
     H_t = H;
     Z_t = Z;

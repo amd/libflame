@@ -19,8 +19,8 @@ void fla_test_syevx_experiment(char *tst_api, test_params_t *params, integer dat
                                integer einfo);
 void prepare_syevx_run(char *jobz, char *range, char *uplo, integer n, void *A, integer lda,
                        void *vl, void *vu, integer il, integer iu, void *abstol, void *w,
-                       integer ldz, void *ifail, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer interfacetype, int matrix_layout);
+                       integer ldz, void *ifail, integer datatype, integer *info,
+                       integer interfacetype, int matrix_layout, test_params_t *params);
 void invoke_syevx(integer datatype, char *jobz, char *range, char *uplo, integer *n, void *a,
                   integer *lda, void *vl, void *vu, integer *il, integer *iu, void *abstol,
                   integer *m, void *w, void *z, integer *ldz, void *work, integer *lwork,
@@ -41,7 +41,7 @@ void fla_test_syevx(integer argc, char **argv, test_params_t *params)
     if(argc == 1)
     {
         g_lwork = -1;
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, EIG_SYM, fla_test_syevx_experiment);
@@ -101,6 +101,7 @@ void fla_test_syevx(integer argc, char **argv, test_params_t *params)
         g_lwork = strtoimax(argv[14], &endptr, CLI_DECIMAL_BASE);
 
         n_repeats = strtoimax(argv[15], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -209,7 +210,7 @@ void fla_test_syevx_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -259,7 +260,7 @@ void fla_test_syevx_experiment(char *tst_api, test_params_t *params, integer dat
     create_vector(INTEGER, &ifail, n);
 
     prepare_syevx_run(&jobz, &range, &uplo, n, A_test, lda, vl, vu, il, iu, abstol, w, ldz, ifail,
-                      datatype, n_repeats, &time_min, &info, interfacetype, layout);
+                      datatype, &info, interfacetype, layout, params);
 
     /* performance computation
        (8/3)n^3 flops for eigen vectors
@@ -276,7 +277,7 @@ void fla_test_syevx_experiment(char *tst_api, test_params_t *params, integer dat
     if(!FLA_EXTREME_CASE_TEST)
     {
         validate_syev(tst_api, &jobz, &range, n, A, A_test, lda, il, iu, L, w, ifail, datatype,
-                      residual, params->imatrix_char, scal);
+                      residual, params->imatrix_char, scal, params);
     }
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
@@ -313,13 +314,13 @@ void fla_test_syevx_experiment(char *tst_api, test_params_t *params, integer dat
 
 void prepare_syevx_run(char *jobz, char *range, char *uplo, integer n, void *A, integer lda,
                        void *vl, void *vu, integer il, integer iu, void *abstol, void *w,
-                       integer ldz, void *ifail, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer interfacetype, int layout)
+                       integer ldz, void *ifail, integer datatype, integer *info,
+                       integer interfacetype, int layout, test_params_t *params)
 {
     void *A_save = NULL, *work = NULL, *rwork = NULL;
     void *w_test = NULL, *z__ = NULL;
-    integer i, m, lwork;
-    double t_min = 1e9, exe_time;
+    integer m, lwork;
+    double exe_time;
     void *iwork = NULL;
 
     if(same_char(*range, 'I'))
@@ -373,7 +374,7 @@ void prepare_syevx_run(char *jobz, char *range, char *uplo, integer n, void *A, 
     }
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
@@ -409,8 +410,9 @@ void prepare_syevx_run(char *jobz, char *range, char *uplo, integer n, void *A, 
 
             exe_time = fla_test_clock() - exe_time;
         }
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_NO_INFO
 
         /* Make a copy of the output buffers.
            This is required to validate the API functionality.*/
@@ -429,7 +431,6 @@ void prepare_syevx_run(char *jobz, char *range, char *uplo, integer n, void *A, 
         free_matrix(z__);
     }
 
-    *time_min_ = t_min;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         free_vector(rwork);
     free_vector(iwork);
@@ -446,8 +447,8 @@ double prepare_lapacke_syevx_run(integer datatype, int layout, char *jobz, char 
     integer ldz_t = ldz;
     void *A_t = NULL, *Z_t = NULL;
 
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_syevx_lda, lda_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_syevx_ldz, ldz_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_syevx_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_syevx_ldz, ldz_t);
 
     A_t = A;
     Z_t = z;

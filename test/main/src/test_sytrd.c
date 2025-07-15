@@ -14,8 +14,8 @@ void fla_test_sytrd_experiment(char *tst_api, test_params_t *params, integer dat
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
 void prepare_sytrd_run(integer datatype, char uplo, integer n, void *A, integer lda, void *D,
-                       void *E, void *tau, integer n_repeats, double *time_min_, integer *info,
-                       integer interfacetype, integer layout);
+                       void *E, void *tau, integer *info, integer interfacetype, integer layout,
+                       test_params_t *params);
 void invoke_sytrd(integer datatype, char *uplo, integer *n, void *A, integer *lda, void *D, void *E,
                   void *tau, void *work, integer *lwork, integer *info);
 double prepare_lapacke_sytrd_run(integer datatype, integer layout, char uplo, integer n, void *A,
@@ -30,7 +30,7 @@ void fla_test_sytrd(integer argc, char **argv, test_params_t *params)
     if(argc == 1)
     {
         g_lwork = -1;
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, EIG_SYM, fla_test_sytrd_experiment);
@@ -65,6 +65,7 @@ void fla_test_sytrd(integer argc, char **argv, test_params_t *params)
 
         g_lwork = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -134,7 +135,7 @@ void fla_test_sytrd_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -176,8 +177,8 @@ void fla_test_sytrd_experiment(char *tst_api, test_params_t *params, integer dat
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
     create_vector(datatype, &tau, n - 1);
 
-    prepare_sytrd_run(datatype, uplo, n, A_test, lda, D, E, tau, n_repeats, &time_min, &info,
-                      interfacetype, layout);
+    prepare_sytrd_run(datatype, uplo, n, A_test, lda, D, E, tau, &info, interfacetype, layout,
+                      params);
 
     /* Performance computation (4/3)n^3 flops. */
     perf = (double)((4.0 / 3.0) * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
@@ -186,7 +187,7 @@ void fla_test_sytrd_experiment(char *tst_api, test_params_t *params, integer dat
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
     if(!FLA_EXTREME_CASE_TEST)
     {
-        validate_sytrd(tst_api, datatype, uplo, n, A_test, A, lda, D, E, tau, residual);
+        validate_sytrd(tst_api, datatype, uplo, n, A_test, A, lda, D, E, tau, residual, params);
     }
     /* Check for output matrix & vectors when inputs are extreme values */
     else
@@ -208,13 +209,13 @@ void fla_test_sytrd_experiment(char *tst_api, test_params_t *params, integer dat
 }
 
 void prepare_sytrd_run(integer datatype, char uplo, integer n, void *A, integer lda, void *D,
-                       void *E, void *tau, integer n_repeats, double *time_min_, integer *info,
-                       integer interfacetype, integer layout)
+                       void *E, void *tau, integer *info, integer interfacetype, integer layout,
+                       test_params_t *params)
 {
-    integer index, lwork;
+    integer lwork;
     void *A_save = NULL;
     void *work = NULL;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     /* Make a copy of the input matrices. Same input values will be passed in
        each itertaion.*/
@@ -259,7 +260,7 @@ void prepare_sytrd_run(integer datatype, char uplo, integer n, void *A, integer 
     create_vector(datatype, &work, lwork);
 
     *info = 0;
-    for(index = 0; index < n_repeats && *info == 0; ++index)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrices and allocate memory to output buffers
            for each iteration. */
@@ -291,10 +292,9 @@ void prepare_sytrd_run(integer datatype, char uplo, integer n, void *A, integer 
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time. */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
     }
-    *time_min_ = t_min;
 
     /* Free up buffers. */
     free_vector(A_save);
@@ -309,7 +309,7 @@ double prepare_lapacke_sytrd_run(integer datatype, integer layout, char uplo, in
     integer lda_t = lda;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_sytrd_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_sytrd_lda, lda_t);
 
     /* In case of row_major matrix layout,
        convert input matrix to row_major */

@@ -15,8 +15,8 @@ void fla_test_gbtrf_experiment(char *tst_api, test_params_t *params, integer dat
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
 void prepare_gbtrf_run(integer m_A, integer n_A, integer kl, integer ku, void *ab, integer ldab,
-                       integer *ipiv, integer datatype, integer n_repeats, double *time_min_,
-                       integer *info, integer interfacetype, integer matrix_layout);
+                       integer *ipiv, integer datatype, integer *info, integer interfacetype,
+                       integer matrix_layout, test_params_t *params);
 void invoke_gbtrf(integer datatype, integer *m, integer *n, integer *kl, integer *ku, void *ab,
                   integer *ldab, integer *ipiv, integer *info);
 double prepare_lapacke_gbtrf_run(integer datatype, integer matrix_layout, integer m_A, integer n_A,
@@ -32,7 +32,7 @@ void fla_test_gbtrf(integer argc, char **argv, test_params_t *params)
 
     if(argc == 1)
     {
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, RECT_INPUT, params, LIN, fla_test_gbtrf_experiment);
@@ -58,6 +58,7 @@ void fla_test_gbtrf(integer argc, char **argv, test_params_t *params)
         params->lin_solver_paramslist[0].ldab = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
 
         n_repeats = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -129,7 +130,7 @@ void fla_test_gbtrf_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(ldab == -1)
         {
@@ -180,8 +181,8 @@ void fla_test_gbtrf_experiment(char *tst_api, test_params_t *params, integer dat
     copy_matrix(datatype, "full", ldab, n, AB, ldab, AB_test, ldab);
 
     /* call to API */
-    prepare_gbtrf_run(m, n, kl, ku, AB_test, ldab, IPIV, datatype, n_repeats, &time_min, &info,
-                      interfacetype, layout);
+    prepare_gbtrf_run(m, n, kl, ku, AB_test, ldab, IPIV, datatype, &info, interfacetype, layout,
+                      params);
 
     /* performance computation */
     perf = (2.0 * n * (kl + ku + 1) * kl) / time_min / FLOPS_PER_UNIT_PERF;
@@ -194,7 +195,7 @@ void fla_test_gbtrf_experiment(char *tst_api, test_params_t *params, integer dat
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
     if(!FLA_EXTREME_CASE_TEST)
     {
-        validate_gbtrf(tst_api, m, n, kl, ku, AB, AB_test, ldab, IPIV, datatype, residual);
+        validate_gbtrf(tst_api, m, n, kl, ku, AB, AB_test, ldab, IPIV, datatype, residual, params);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -217,19 +218,18 @@ void fla_test_gbtrf_experiment(char *tst_api, test_params_t *params, integer dat
 }
 
 void prepare_gbtrf_run(integer m_A, integer n_A, integer kl, integer ku, void *AB, integer ldab,
-                       integer *IPIV, integer datatype, integer n_repeats, double *time_min_,
-                       integer *info, integer interfacetype, integer layout)
+                       integer *IPIV, integer datatype, integer *info, integer interfacetype,
+                       integer layout, test_params_t *params)
 {
-    integer i;
     void *AB_save;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     /* Save the original matrix */
     create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_A, &AB_save, ldab);
     copy_matrix(datatype, "full", ldab, n_A, AB, ldab, AB_save, ldab);
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Copy original input data */
         copy_matrix(datatype, "full", ldab, n_A, AB, ldab, AB_save, ldab);
@@ -256,11 +256,10 @@ void prepare_gbtrf_run(integer m_A, integer n_A, integer kl, integer ku, void *A
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop condition */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
     }
 
-    *time_min_ = t_min;
     /*  Save the ABFACT to matrix AB */
     copy_matrix(datatype, "full", ldab, n_A, AB_save, ldab, AB, ldab);
     free_matrix(AB_save);

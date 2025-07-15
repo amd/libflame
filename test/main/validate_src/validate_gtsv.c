@@ -14,7 +14,8 @@ extern double time_min;
 
 void validate_gtsv(char *tst_api, integer datatype, integer n, integer nrhs, void *B, integer ldb,
                    void *X, void *Xact, integer ldx, void *dl, void *d, void *du, void *dl_save,
-                   void *d_save, void *du_save, void *scal, char imatrix, double err_thresh)
+                   void *d_save, void *du_save, void *scal, char imatrix, double err_thresh,
+                   void *params)
 {
     void *work = NULL;
     void *A, *ipiv;

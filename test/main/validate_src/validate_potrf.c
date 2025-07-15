@@ -13,7 +13,7 @@ extern double perf;
 extern double time_min;
 
 void validate_potrf(char *tst_api, char *uplo, integer m, void *A, void *A_test, integer lda,
-                    integer datatype, double err_thresh)
+                    integer datatype, double err_thresh, void *params)
 {
     void *b = NULL, *x = NULL;
     void *x_test = NULL, *b_test = NULL;

@@ -17,8 +17,8 @@ void fla_test_gelqf_experiment(char *tst_api, test_params_t *params, integer dat
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
 void prepare_gelqf_run(integer m_A, integer n_A, void *A, integer lda, void *T, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info, integer interfacetype,
-                       int matrix_layout);
+                       integer *info, integer interfacetype, int matrix_layout,
+                       test_params_t *params);
 void invoke_gelqf(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau,
                   void *work, integer *lwork, integer *info);
 double prepare_lapacke_gelqf_run(integer datatype, int matrix_layout, integer m_A, integer n_A,
@@ -27,13 +27,13 @@ double prepare_lapacke_gelqf_run(integer datatype, int matrix_layout, integer m_
 void fla_test_gelqf(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "LQ factorization";
-    char *front_str = "GEQLF";
+    char *front_str = "GELQF";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
     params->imatrix_char = '\0';
     if(argc == 1)
     {
         g_lwork = -1;
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, RECT_INPUT, params, LIN, fla_test_gelqf_experiment);
@@ -67,6 +67,7 @@ void fla_test_gelqf(integer argc, char **argv, test_params_t *params)
         g_lwork = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
 
         n_repeats = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -135,7 +136,7 @@ void fla_test_gelqf_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -156,8 +157,7 @@ void fla_test_gelqf_experiment(char *tst_api, test_params_t *params, integer dat
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
-    prepare_gelqf_run(m, n, A_test, lda, T, datatype, n_repeats, &time_min, &info, interfacetype,
-                      layout);
+    prepare_gelqf_run(m, n, A_test, lda, T, datatype, &info, interfacetype, layout, params);
 
     /* performance computation
      * 2mn^2 - (2/3)n^3 flops
@@ -175,7 +175,7 @@ void fla_test_gelqf_experiment(char *tst_api, test_params_t *params, integer dat
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
     if(!FLA_EXTREME_CASE_TEST)
     {
-        validate_gelqf(tst_api, m, n, A, A_test, lda, T, datatype, residual);
+        validate_gelqf(tst_api, m, n, A, A_test, lda, T, datatype, residual, params);
     }
     else
     {
@@ -197,13 +197,12 @@ void fla_test_gelqf_experiment(char *tst_api, test_params_t *params, integer dat
 }
 
 void prepare_gelqf_run(integer m_A, integer n_A, void *A, integer lda, void *T, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info, integer interfacetype,
-                       int layout)
+                       integer *info, integer interfacetype, int layout, test_params_t *params)
 {
-    integer min_A, i;
+    integer min_A;
     void *A_save = NULL, *T_test = NULL, *work = NULL;
     integer lwork = -1;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     min_A = fla_min(m_A, n_A);
 
@@ -247,7 +246,7 @@ void prepare_gelqf_run(integer m_A, integer n_A, void *A, integer lda, void *T, 
     }
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration */
@@ -281,8 +280,8 @@ void prepare_gelqf_run(integer m_A, integer n_A, void *A, integer lda, void *T, 
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
 
         /* Make a copy of the output buffers.
         This is required to validate the API functionality. */
@@ -292,8 +291,6 @@ void prepare_gelqf_run(integer m_A, integer n_A, void *A, integer lda, void *T, 
         free_vector(work);
         free_vector(T_test);
     }
-
-    *time_min_ = t_min;
 
     free_matrix(A_save);
 }
@@ -306,7 +303,7 @@ double prepare_lapacke_gelqf_run(integer datatype, int layout, integer m_A, inte
     void *A_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_gelqf_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n_A, row_major_gelqf_lda, lda_t);
 
     A_t = A;
 

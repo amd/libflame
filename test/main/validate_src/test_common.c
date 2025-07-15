@@ -2,8 +2,8 @@
     Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
-#include "test_prototype.h"
 #include "test_common.h"
+#include "test_prototype.h"
 
 // Global variables
 double perf;
@@ -627,40 +627,69 @@ void copy_matrix(integer datatype, char *uplo, integer M, integer N, void *A, in
     if((LDA < M) || (LDB < M))
         return;
 
+    size_t element_size = 0;
     switch(datatype)
     {
         case INTEGER:
         {
-            integer i, j;
-
-            for(i = 0; i < N; i++)
-            {
-                for(j = 0; j < M; j++)
-                {
-                    ((integer *)B)[i * LDB + j] = ((integer *)A)[i * LDA + j];
-                }
-            }
+            element_size = sizeof(integer);
             break;
         }
         case FLOAT:
         {
-            fla_lapack_slacpy(uplo, &M, &N, A, &LDA, B, &LDB);
+            element_size = sizeof(float);
             break;
         }
         case DOUBLE:
         {
-            fla_lapack_dlacpy(uplo, &M, &N, A, &LDA, B, &LDB);
+            element_size = sizeof(double);
             break;
         }
         case COMPLEX:
         {
-            fla_lapack_clacpy(uplo, &M, &N, A, &LDA, B, &LDB);
+            element_size = sizeof(scomplex);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            fla_lapack_zlacpy(uplo, &M, &N, A, &LDA, B, &LDB);
+            element_size = sizeof(dcomplex);
             break;
+        }
+    }
+    if(element_size == 0)
+    {
+        return;
+    }
+
+    if(same_char(*uplo, 'U'))
+    {
+        for(int i = 0; i < N; i++)
+        {
+            memcpy((char *)B + (i * LDB) * element_size, (char *)A + (i * LDA) * element_size,
+                   fla_min(i + 1, M) * element_size);
+        }
+    }
+    else if(same_char(*uplo, 'L'))
+    {
+        for(int i = 0; i < N && i < M; i++)
+        {
+            memcpy((char *)B + (i * LDB + i) * element_size,
+                   (char *)A + (i * LDA + i) * element_size, (M - i) * element_size);
+        }
+    }
+    else
+    {
+        if(LDA == LDB && LDA == M)
+        {
+            memcpy(B, A, LDA * N * element_size);
+        }
+        else
+        {
+            for(int i = 0; i < N; i++)
+            {
+                memcpy((char *)B + (i * LDB) * element_size, (char *)A + (i * LDA) * element_size,
+                       M * element_size);
+            }
         }
     }
 }
@@ -7137,6 +7166,227 @@ void *get_ptr_at_offset(integer datatype, void *A, integer offset)
     }
     return NULL;
 }
+
+#define DEFINE_ASCENDING_COMPARISION_FUNC(datatype)                                               \
+    int compare_##datatype##_asc(const void *a, const void *b)                                    \
+    {                                                                                             \
+        return *(datatype *)a == *(datatype *)b ? 0 : (*(datatype *)a > *(datatype *)b ? 1 : -1); \
+    }
+#define DEFINE_DESCENDING_COMPARISION_FUNC(datatype)                                              \
+    int compare_##datatype##_desc(const void *a, const void *b)                                   \
+    {                                                                                             \
+        return *(datatype *)a == *(datatype *)b ? 0 : (*(datatype *)a < *(datatype *)b ? 1 : -1); \
+    }
+
+DEFINE_ASCENDING_COMPARISION_FUNC(float)
+DEFINE_ASCENDING_COMPARISION_FUNC(double)
+DEFINE_DESCENDING_COMPARISION_FUNC(float)
+DEFINE_DESCENDING_COMPARISION_FUNC(double)
+
+/* Uses qsort to sort the given vector of real type
+ *  in ascending or descending order based on the order parameter
+ * datatype: FLOAT, DOUBLE
+ * order: 'A' for ascending, 'D' for descending
+ * vect_len: length of the vector
+ * w: pointer to the vector (vector should have increment of 1)
+ */
+void qsort_realtype_vector(integer datatype, char *order, integer vect_len, void *w)
+{
+    size_t ele_size = 0;
+    int (*compare_func)(const void *, const void *) = NULL;
+
+    if(datatype == FLOAT)
+    {
+        ele_size = sizeof(float);
+        if(same_char(*order, 'A'))
+        {
+            compare_func = compare_float_asc;
+        }
+        else if(same_char(*order, 'D'))
+        {
+            compare_func = compare_float_desc;
+        }
+        else
+        {
+            printf("Invalid order type for qsort_realtype_vector\n");
+            return;
+        }
+    }
+    else if(datatype == DOUBLE)
+    {
+        ele_size = sizeof(double);
+        if(same_char(*order, 'A'))
+        {
+            compare_func = compare_double_asc;
+        }
+        else if(same_char(*order, 'D'))
+        {
+            compare_func = compare_double_desc;
+        }
+        else
+        {
+            printf("Invalid order type for qsort_realtype_vector\n");
+            return;
+        }
+    }
+    else
+    {
+        printf("Invalid datatype for qsort_realtype_vector\n");
+        return;
+    }
+
+    qsort(w, vect_len, ele_size, compare_func);
+}
+
+/*
+ * Gets the sum of the elements of the array
+ * datatype: FLOAT, DOUBLE, INTEGER, COMPLEX, DOUBLE_COMPLEX
+ * A: pointer to the array
+ * sum: pointer to the sum
+ * n: number of elements in the array
+ */
+void get_sum_of_array(integer datatype, void *A, void *sum, integer n)
+{
+    integer i;
+    if(sum == NULL)
+    {
+        return;
+    }
+
+    /* Set sum to 0 */
+
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            *(float *)sum = 0.0f;
+            break;
+        }
+        case DOUBLE:
+        {
+            *(double *)sum = 0.0;
+            break;
+        }
+        case INTEGER:
+        {
+            *(integer *)sum = 0;
+            break;
+        }
+        case COMPLEX:
+        {
+            ((scomplex *)sum)->real = 0.0f;
+            ((scomplex *)sum)->imag = 0.0f;
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            ((dcomplex *)sum)->real = 0.0;
+            ((dcomplex *)sum)->imag = 0.0;
+            break;
+        }
+    }
+
+    if(A == NULL)
+    {
+        return;
+    }
+
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            for(i = 0; i < n; i++)
+            {
+                *(float *)sum += ((float *)A)[i];
+            }
+            break;
+        }
+        case DOUBLE:
+        {
+            for(i = 0; i < n; i++)
+            {
+                *(double *)sum += ((double *)A)[i];
+            }
+            break;
+        }
+        case INTEGER:
+        {
+            for(i = 0; i < n; i++)
+            {
+                *(integer *)sum += ((integer *)A)[i];
+            }
+            break;
+        }
+        case COMPLEX:
+        {
+            for(i = 0; i < n; i++)
+            {
+                ((scomplex *)sum)->real += ((scomplex *)A)[i].real;
+                ((scomplex *)sum)->imag += ((scomplex *)A)[i].imag;
+            }
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            for(i = 0; i < n; i++)
+            {
+                ((dcomplex *)sum)->real += ((dcomplex *)A)[i].real;
+                ((dcomplex *)sum)->imag += ((dcomplex *)A)[i].imag;
+            }
+            break;
+        }
+    }
+}
+
+/* Gets the average of the elements of the array
+ * datatype: FLOAT, DOUBLE, INTEGER, COMPLEX, DOUBLE_COMPLEX
+ * A: pointer to the array
+ * avg: pointer to the average
+ * n: number of elements in the array
+ *
+ * If the datatype is INTEGER, the average is returned as a double
+ */
+void get_avg_of_array(integer datatype, void *A, void *avg, integer n)
+{
+    if(avg == NULL)
+    {
+        return;
+    }
+    get_sum_of_array(datatype, A, avg, n);
+    if(n > 0)
+    {
+        switch(datatype)
+        {
+            case FLOAT:
+            {
+                *(float *)avg = *(float *)avg / n;
+                break;
+            }
+            case DOUBLE:
+            {
+                *(double *)avg = *(double *)avg / n;
+                break;
+            }
+            case INTEGER:
+            {
+                *(double *)avg = *(integer *)avg / (double)n;
+                break;
+            }
+            case COMPLEX:
+            {
+                ((scomplex *)avg)->real = ((scomplex *)avg)->real / n;
+                ((scomplex *)avg)->imag = ((scomplex *)avg)->imag / n;
+                break;
+            }
+            case DOUBLE_COMPLEX:
+            {
+                ((dcomplex *)avg)->real = ((dcomplex *)avg)->real / n;
+                ((dcomplex *)avg)->imag = ((dcomplex *)avg)->imag / n;
+                break;
+            }
+        }
+    }
+}
 /* Decompose symmetric matrix A into Q, D, E and store orthogonal matrix in Q and tridiagonal matrix
  * in D, E*/
 void get_sym_tridiagonal_matrix(integer datatype, char *uplo, integer n, void *A, integer lda,
@@ -7178,4 +7428,141 @@ void get_sym_tridiagonal_matrix(integer datatype, char *uplo, integer n, void *A
     /* Free buffers */
     free_vector(work);
     free_vector(tau);
+}
+
+/* Gets the variance of the elements of the array
+ * datatype: FLOAT, DOUBLE, INTEGER, COMPLEX, DOUBLE_COMPLEX
+ * A: pointer to the array
+ * variance: pointer to the variance
+ * n: number of elements in the array
+ *
+ * If the datatype is INTEGER, the variance is returned as a double
+ */
+void get_variance_of_array(integer datatype, void *A, void *variance, integer n)
+{
+    if(variance == NULL || n <= 0)
+    {
+        return;
+    }
+
+    switch(datatype)
+    {
+        case INTEGER:
+        {
+            double sum = 0;
+            double avg = 0;
+            get_avg_of_array(datatype, A, &avg, n);
+            for(integer i = 0; i < n; i++)
+            {
+                sum += (((integer *)A)[i] - avg) * (((integer *)A)[i] - avg);
+            }
+            *(double *)variance = sum / n;
+            break;
+        }
+        case FLOAT:
+        {
+            float sum = 0;
+            float avg = 0;
+            get_avg_of_array(datatype, A, &avg, n);
+            for(integer i = 0; i < n; i++)
+            {
+                sum += (((float *)A)[i] - avg) * (((float *)A)[i] - avg);
+            }
+            *(float *)variance = sum / n;
+            break;
+        }
+        case DOUBLE:
+        {
+            double sum = 0;
+            double avg = 0;
+            get_avg_of_array(datatype, A, &avg, n);
+            for(integer i = 0; i < n; i++)
+            {
+                sum += (((double *)A)[i] - avg) * (((double *)A)[i] - avg);
+            }
+            *(double *)variance = sum / n;
+            break;
+        }
+        case COMPLEX:
+        {
+            scomplex sum = {0.0f, 0.0f};
+            scomplex avg = {0.0f, 0.0f};
+            get_avg_of_array(datatype, A, &avg, n);
+            for(integer i = 0; i < n; i++)
+            {
+                sum.real
+                    += (((scomplex *)A)[i].real - avg.real) * (((scomplex *)A)[i].real - avg.real);
+                sum.imag
+                    += (((scomplex *)A)[i].imag - avg.imag) * (((scomplex *)A)[i].imag - avg.imag);
+            }
+            ((scomplex *)variance)->real = sum.real / n;
+            ((scomplex *)variance)->imag = sum.imag / n;
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            dcomplex sum = {0.0, 0.0};
+            dcomplex avg = {0.0, 0.0};
+            get_avg_of_array(datatype, A, &avg, n);
+            for(integer i = 0; i < n; i++)
+            {
+                sum.real
+                    += (((dcomplex *)A)[i].real - avg.real) * (((dcomplex *)A)[i].real - avg.real);
+                sum.imag
+                    += (((dcomplex *)A)[i].imag - avg.imag) * (((dcomplex *)A)[i].imag - avg.imag);
+            }
+            ((dcomplex *)variance)->real = sum.real / n;
+            ((dcomplex *)variance)->imag = sum.imag / n;
+            break;
+        }
+    }
+}
+
+/* Gets the standard deviation of array
+ * datatype: FLOAT, DOUBLE, INTEGER, COMPLEX, DOUBLE_COMPLEX
+ * A: pointer to the array
+ * stddev: pointer to the standard deviation
+ * n: number of elements in the array
+ *
+ * If the datatype is INTEGER, the standard deviation is returned as a double
+ */
+void get_stddev_of_array(integer datatype, void *A, void *stddev, integer n)
+{
+    if(stddev == NULL || n <= 0)
+    {
+        return;
+    }
+
+    get_variance_of_array(datatype, A, stddev, n);
+
+    switch(datatype)
+    {
+        case INTEGER:
+        {
+            *(double *)stddev = sqrt(*(double *)stddev);
+            break;
+        }
+        case FLOAT:
+        {
+            *(float *)stddev = sqrt(*(float *)stddev);
+            break;
+        }
+        case DOUBLE:
+        {
+            *(double *)stddev = sqrt(*(double *)stddev);
+            break;
+        }
+        case COMPLEX:
+        {
+            ((scomplex *)stddev)->real = sqrt(((scomplex *)stddev)->real);
+            ((scomplex *)stddev)->imag = sqrt(((scomplex *)stddev)->imag);
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            ((dcomplex *)stddev)->real = sqrt(((dcomplex *)stddev)->real);
+            ((dcomplex *)stddev)->imag = sqrt(((dcomplex *)stddev)->imag);
+            break;
+        }
+    }
 }

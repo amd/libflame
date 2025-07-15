@@ -21,8 +21,8 @@ void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer dat
 void prepare_geevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, integer n, void *a,
                        integer lda, void *wr, void *wi, void *w, void *vl, integer ldvl, void *vr,
                        integer ldvr, integer *ilo, integer *ihi, void *scale, void *abnrm,
-                       void *rconde, void *rcondv, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer interfacetype, int matrix_layout);
+                       void *rconde, void *rcondv, integer datatype, integer *info,
+                       integer interfacetype, int matrix_layout, test_params_t *params);
 void invoke_geevx(integer datatype, char *balanc, char *jobvl, char *jobvr, char *sense, integer *n,
                   void *a, integer *lda, void *wr, void *wi, void *w, void *vl, integer *ldvl,
                   void *vr, integer *ldvr, integer *ilo, integer *ihi, void *scale, void *abnrm,
@@ -33,7 +33,6 @@ double prepare_lapacke_geevx_run(integer datatype, int matrix_layout, char *bala
                                  void *wr, void *wi, void *w, void *vl, integer ldvl, void *vr,
                                  integer ldvr, integer *ilo, integer *ihi, void *scale, void *abnrm,
                                  void *rconde, void *rcondv, integer *info);
-
 
 void fla_test_geevx(integer argc, char **argv, test_params_t *params)
 {
@@ -46,7 +45,7 @@ void fla_test_geevx(integer argc, char **argv, test_params_t *params)
     if(argc == 1)
     {
         g_lwork = -1;
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, EIG_NSYM, fla_test_geevx_experiment);
@@ -89,6 +88,7 @@ void fla_test_geevx(integer argc, char **argv, test_params_t *params)
         }
         g_lwork = strtoimax(argv[11], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[12], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -172,7 +172,7 @@ void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer dat
     }
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -259,12 +259,12 @@ void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer dat
     copy_matrix(datatype, "full", m, m, A, lda, A_test, lda);
 
     prepare_geevx_run(&balanc, &jobvl, &jobvr, &sense, m, A_test, lda, wr, wi, w, VL, ldvl, VR,
-                      ldvr, &ilo, &ihi, scale, abnrm, rconde, rcondv, datatype, n_repeats,
-                      &time_min, &info, interfacetype, layout);
+                      ldvr, &ilo, &ihi, scale, abnrm, rconde, rcondv, datatype, &info,
+                      interfacetype, layout, params);
 
     /* performance computation
-       4/3 m^3 flops if job = 'N'
-       8/3 m^3 + m^2 flops if job = 'V' */
+    4/3 m^3 flops if job = 'N'
+    8/3 m^3 + m^2 flops if job = 'V' */
     if(same_char(jobvl, 'N') && same_char(jobvr, 'N'))
         perf = (double)((4.0 / 3.0) * m * m * m) / time_min / FLOPS_PER_UNIT_PERF;
     else
@@ -278,7 +278,7 @@ void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer dat
     {
         validate_geevx(tst_api, &jobvl, &jobvr, &sense, &balanc, m, A, A_test, lda, VL, ldvl, VR,
                        ldvr, w, wr, wi, scale, abnrm, rconde, rcondv, datatype,
-                       params->imatrix_char, scal, residual, wr_in, wi_in);
+                       params->imatrix_char, scal, residual, wr_in, wi_in, params);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -329,13 +329,12 @@ void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer dat
 void prepare_geevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, integer m_A, void *A,
                        integer lda, void *wr, void *wi, void *w, void *VL, integer ldvl, void *VR,
                        integer ldvr, integer *ilo, integer *ihi, void *scale, void *abnrm,
-                       void *rconde, void *rcondv, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer interfacetype, int layout)
+                       void *rconde, void *rcondv, integer datatype, integer *info,
+                       integer interfacetype, int layout, test_params_t *params)
 {
     void *A_save = NULL, *rwork = NULL, *iwork = NULL, *work = NULL;
     integer lwork, liwork, lrwork;
-    integer i;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
@@ -396,7 +395,7 @@ void prepare_geevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, inte
     }
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
@@ -438,8 +437,9 @@ void prepare_geevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, inte
 
             exe_time = fla_test_clock() - exe_time;
         }
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
 
         /* Free up the output buffers */
         free_vector(work);
@@ -452,7 +452,6 @@ void prepare_geevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, inte
             free_vector(iwork);
         }
     }
-    *time_min_ = t_min;
 
     free_matrix(A_save);
 }
@@ -470,9 +469,9 @@ double prepare_lapacke_geevx_run(integer datatype, int layout, char *balanc, cha
     void *a_t = NULL, *vl_t = NULL, *vr_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_geevx_lda, lda_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_geevx_ldvl, ldvl_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_geevx_ldvr, ldvr_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_geevx_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_geevx_ldvl, ldvl_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_geevx_ldvr, ldvr_t);
 
     a_t = a;
     vl_t = vl;

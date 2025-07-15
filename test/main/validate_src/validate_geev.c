@@ -15,7 +15,7 @@ extern double time_min;
 void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, void *A_test,
                    integer lda, void *VL, integer ldvl, void *VR, integer ldvr, void *w, void *wr,
                    void *wi, integer datatype, char imatrix, void *scal, double err_thresh,
-                   void *wr_in, void *wi_in)
+                   void *wr_in, void *wi_in, void *params)
 {
     void *work = NULL;
     void *lambda = NULL, *Vlambda = NULL;

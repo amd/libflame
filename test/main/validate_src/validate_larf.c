@@ -13,7 +13,7 @@ extern double time_min;
 
 void validate_larf(char *tst_api, integer datatype, char side, integer m, integer n, void *v,
                    integer incv, void *c__, integer ldc__, void *c__out, integer ldc__out,
-                   void *tau, double err_thresh)
+                   void *tau, double err_thresh, void *params)
 {
     /*
     This function does the following:

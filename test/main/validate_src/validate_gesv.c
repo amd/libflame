@@ -14,7 +14,7 @@ extern double time_min;
 
 void validate_gesv(char *tst_api, integer n, integer nrhs, void *A, integer lda, void *B,
                    integer ldb, void *X, integer datatype, double err_thresh, char imatrix,
-                   void *scal)
+                   void *scal, void *params)
 {
     void *work = NULL;
     char NORM = '1';

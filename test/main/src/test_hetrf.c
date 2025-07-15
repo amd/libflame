@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 
 #include "test_lapack.h"
@@ -17,11 +17,12 @@ integer row_major_hetrf_lda;
 
 void invoke_hetrf(integer datatype, char *uplo, integer *n, void *a, integer *lda, integer *ipiv,
                   void *work, integer *lwork, integer *info);
-void fla_test_hetrf_experiment(char *tst_api, test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo);
+void fla_test_hetrf_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo);
 void prepare_hetrf_run(integer datatype, integer n, void *A, char uplo, integer lda, integer *ipiv,
-                       void *work, integer lwork, integer n_repeats, double *time_min_,
-                       integer *info, integer interfacetype, integer mlayout);
+                       void *work, integer lwork, integer *info, integer interfacetype,
+                       integer mlayout, test_params_t *params);
 double prepare_lapacke_hetrf_run(integer datatype, integer layout, char uplo, integer n, void *A,
                                  integer lda, void *ipiv, integer *info);
 
@@ -34,7 +35,7 @@ void fla_test_hetrf(integer argc, char **argv, test_params_t *params)
     params->imatrix_char = '\0';
     if(argc == 1)
     {
-        config_data = 1;
+        g_config_data = 1;
         g_lwork = -1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
@@ -66,6 +67,7 @@ void fla_test_hetrf(integer argc, char **argv, test_params_t *params)
             params->lin_solver_paramslist[0].lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
         }
         n_repeats = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
         g_lwork = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
 
         if(n_repeats > 0)
@@ -112,8 +114,9 @@ void fla_test_hetrf(integer argc, char **argv, test_params_t *params)
     }
 }
 
-void fla_test_hetrf_experiment(char *tst_api, test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo)
+void fla_test_hetrf_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo)
 {
     integer n, lda, lwork = -1, info = 0;
     void *A = NULL, *A_test = NULL, *ipiv = NULL, *work = NULL, *L = NULL;
@@ -130,7 +133,7 @@ void fla_test_hetrf_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -171,18 +174,18 @@ void fla_test_hetrf_experiment(char *tst_api, test_params_t *params, integer dat
     copy_matrix(datatype, "full", lda, n, A, lda, A_test, lda);
 
     /* call to API */
-    prepare_hetrf_run(datatype, n, A_test, uplo, lda, ipiv, work, lwork, n_repeats, &time_min, &info,
-                      interfacetype, layout);
+    prepare_hetrf_run(datatype, n, A_test, uplo, lda, ipiv, work, lwork, &info, interfacetype,
+                      layout, params);
 
     /* Performance computation */
     perf = (double)((1.0 / 3.0) * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     perf *= 4.0;
 
     /* Output validataion */
-        FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    FLA_TEST_CHECK_EINFO(residual, info, einfo);
     if(!FLA_EXTREME_CASE_TEST)
     {
-        validate_hetrf(tst_api, &uplo, n, lda, A_test, datatype, ipiv, residual, A);
+        validate_hetrf(tst_api, &uplo, n, lda, A_test, datatype, ipiv, residual, A, params);
     }
     else
     {
@@ -204,12 +207,11 @@ void fla_test_hetrf_experiment(char *tst_api, test_params_t *params, integer dat
 }
 
 void prepare_hetrf_run(integer datatype, integer n, void *A, char uplo, integer lda, integer *ipiv,
-                       void *work, integer lwork, integer n_repeats, double *time_min_,
-                       integer *info, integer interfacetype, integer layout)
+                       void *work, integer lwork, integer *info, integer interfacetype,
+                       integer layout, test_params_t *params)
 {
-    integer i;
     void *A_save = NULL;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_save, lda);
 
@@ -235,7 +237,7 @@ void prepare_hetrf_run(integer datatype, integer n, void *A, char uplo, integer 
 
     *info = 0;
 
-    for(i = 0; i < n_repeats && *info == 0; i++)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Copy original input */
         copy_matrix(datatype, "full", lda, n, A, lda, A_save, lda);
@@ -266,13 +268,12 @@ void prepare_hetrf_run(integer datatype, integer n, void *A, char uplo, integer 
 
             exe_time = fla_test_clock() - exe_time;
         }
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
 
         free_vector(work);
     }
-
-    *time_min_ = t_min;
 
     /* Save the output to vector A */
     copy_matrix(datatype, "full", lda, n, A_save, lda, A, lda);
@@ -288,7 +289,7 @@ double prepare_lapacke_hetrf_run(integer datatype, integer layout, char uplo, in
     A_t = A;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_hetrf_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_hetrf_lda, lda_t);
 
     /* In case of row_major matrix layout,
        convert input matrix to row_major */

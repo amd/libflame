@@ -14,7 +14,7 @@ void fla_test_lartg_experiment(char *tst_api, test_params_t *params, integer dat
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
 void prepare_lartg_run(integer datatype, void *f, void *g, void *r, void *c, void *s,
-                       integer n_repeats, double *time_min_, integer interfacetype);
+                       integer interfacetype, test_params_t *params);
 void invoke_lartg(integer datatype, void *f, void *g, void *c, void *s, void *r);
 
 void fla_test_lartg(integer argc, char **argv, test_params_t *params)
@@ -61,6 +61,7 @@ void fla_test_lartg(integer argc, char **argv, test_params_t *params)
         num_types = strlen(argv[2]);
 
         n_repeats = strtoimax(argv[3], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -141,8 +142,9 @@ void fla_test_lartg_experiment(char *tst_api, test_params_t *params, integer dat
         rand_vector(datatype, 1, f, 1, d_zero, d_zero, 'R');
         rand_vector(datatype, 1, g, 1, d_zero, d_zero, 'R');
     }
+
     /* call to API */
-    prepare_lartg_run(datatype, f, g, r, c, s, n_repeats, &time_min, interfacetype);
+    prepare_lartg_run(datatype, f, g, r, c, s, interfacetype, params);
 
     /* execution time */
     if(time_min == d_zero)
@@ -153,7 +155,7 @@ void fla_test_lartg_experiment(char *tst_api, test_params_t *params, integer dat
     perf = (double)(6.0) / time_min / FLOPS_PER_UNIT_PERF;
 
     /* output validation */
-    validate_lartg(tst_api, datatype, f, g, r, c, s, err_thresh);
+    validate_lartg(tst_api, datatype, f, g, r, c, s, err_thresh, params);
 
     /* Free up the buffers */
     free_vector(c);
@@ -164,12 +166,11 @@ void fla_test_lartg_experiment(char *tst_api, test_params_t *params, integer dat
 }
 
 void prepare_lartg_run(integer datatype, void *f, void *g, void *r, void *c, void *s,
-                       integer n_repeats, double *time_min_, integer interfacetype)
+                       integer interfacetype, test_params_t *params)
 {
-    integer i;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
-    for(i = 0; i < n_repeats; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
 #if ENABLE_CPP_TEST
         if(interfacetype == LAPACK_CPP_TEST)
@@ -187,11 +188,10 @@ void prepare_lartg_run(integer datatype, void *f, void *g, void *r, void *c, voi
             invoke_lartg(datatype, f, g, c, s, r);
             exe_time = fla_test_clock() - exe_time;
         }
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
-    }
 
-    *time_min_ = t_min;
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_NO_INFO
+    }
 }
 
 void invoke_lartg(integer datatype, void *f, void *g, void *c, void *s, void *r)

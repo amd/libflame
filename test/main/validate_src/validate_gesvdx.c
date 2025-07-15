@@ -15,7 +15,7 @@ void validate_gesvdx(char *tst_api, char *jobu, char *jobvt, char range, integer
                      void *A, void *A_test, integer lda, void *vl, void *vu, integer il, integer iu,
                      integer ns, void *s, void *s_test, void *U, integer ldu, void *V, integer ldvt,
                      integer datatype, double err_thresh, FILE *g_ext_fptr, void *scal,
-                     char imatrix)
+                     char imatrix, void *params)
 {
     void *sigma = NULL, *U_A = NULL;
     void *work = NULL;

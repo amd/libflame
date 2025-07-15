@@ -41,7 +41,7 @@ extern double time_min;
 
 void validate_gelsd(char *tst_api, integer m, integer n, integer nrhs, void *A, integer lda,
                     void *B, integer ldb, void *S, void *X, void *rcond, integer *rank,
-                    integer datatype, double err_thresh, char imatrix)
+                    integer datatype, double err_thresh, char imatrix, void *params)
 {
     void *work = NULL;
     char NORM = '1';

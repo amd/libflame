@@ -17,7 +17,7 @@ void validate_geevx(char *tst_api, char *jobvl, char *jobvr, char *sense, char *
                     void *A, void *A_test, integer lda, void *VL, integer ldvl, void *VR,
                     integer ldvr, void *w, void *wr, void *wi, void *scale, void *abnrm,
                     void *rconde, void *rcondv, integer datatype, char imatrix, void *scal,
-                    double err_thresh, void *wr_in, void *wi_in)
+                    double err_thresh, void *wr_in, void *wi_in, void *params)
 {
     void *work = NULL;
     void *lambda = NULL, *Vlambda = NULL;
@@ -60,7 +60,7 @@ void validate_geevx(char *tst_api, char *jobvl, char *jobvr, char *sense, char *
             float norm, norm_A, norm_W, eps;
             norm = norm_A = norm_W = 0.f;
             eps = fla_lapack_slamch("P");
-            if(same_char(*jobvr , 'V'))
+            if(same_char(*jobvr, 'V'))
             {
                 /* Test 1
                    compute norm((A*V = V*lambda)) / (V * norm(A) * EPS)*/
@@ -72,7 +72,7 @@ void validate_geevx(char *tst_api, char *jobvl, char *jobvr, char *sense, char *
                 compute_matrix_norm(datatype, NORM, m, m, Vlambda, m, &norm, imatrix, work);
                 resid1 = norm / (eps * norm_A * (float)m);
             }
-            if(same_char(*jobvl , 'V'))
+            if(same_char(*jobvl, 'V'))
             {
                 /* Test 2
                  * compute norm (A**H * VL - VL * W**H) / (V * norm(A) * EPS)
@@ -113,7 +113,7 @@ void validate_geevx(char *tst_api, char *jobvl, char *jobvr, char *sense, char *
             norm = norm_A = norm_W = 0.;
             eps = fla_lapack_dlamch("P");
 
-            if(same_char(*jobvr , 'V'))
+            if(same_char(*jobvr, 'V'))
             {
                 /* Test 1
                  * compute norm((A*V = V*lambda)) / (V * norm(A) * EPS)
@@ -126,7 +126,7 @@ void validate_geevx(char *tst_api, char *jobvl, char *jobvr, char *sense, char *
                 compute_matrix_norm(datatype, NORM, m, m, Vlambda, m, &norm, imatrix, work);
                 resid1 = norm / (eps * norm_A * (double)m);
             }
-            if(same_char(*jobvl , 'V'))
+            if(same_char(*jobvl, 'V'))
             {
                 /* Test 2
                  * compute norm (A**H * VL - VL * W**H) / (V * norm(A) * EPS)
@@ -172,7 +172,7 @@ void validate_geevx(char *tst_api, char *jobvl, char *jobvr, char *sense, char *
             reset_matrix(datatype, m, m, lambda, m);
             ccopy_(&m, w, &i_one, lambda, &incr);
 
-            if(same_char(*jobvr , 'V'))
+            if(same_char(*jobvr, 'V'))
             {
                 /* Test 1
                  * compute norm((A*V = V*lambda)) / (V * norm(A) * EPS)
@@ -185,7 +185,7 @@ void validate_geevx(char *tst_api, char *jobvl, char *jobvr, char *sense, char *
                 compute_matrix_norm(datatype, NORM, m, m, Vlambda, m, &norm, imatrix, work);
                 resid1 = norm / (eps * norm_A * (float)m);
             }
-            if(same_char(*jobvl , 'V'))
+            if(same_char(*jobvl, 'V'))
             {
                 /* Test 2
                  * compute norm (A**H * VL - VL * W**H) / (V * norm(A) * EPS)
@@ -225,7 +225,7 @@ void validate_geevx(char *tst_api, char *jobvl, char *jobvr, char *sense, char *
 
             reset_matrix(datatype, m, m, lambda, m);
             zcopy_(&m, w, &i_one, lambda, &incr);
-            if(same_char(*jobvr , 'V'))
+            if(same_char(*jobvr, 'V'))
             {
                 /* Test 1
                  * compute norm((A*V = V*lambda)) / (V * norm(A) * EPS)
@@ -238,7 +238,7 @@ void validate_geevx(char *tst_api, char *jobvl, char *jobvr, char *sense, char *
                 compute_matrix_norm(datatype, NORM, m, m, Vlambda, m, &norm, imatrix, work);
                 resid1 = norm / (eps * norm_A * (double)m);
             }
-            if(same_char(*jobvl , 'V'))
+            if(same_char(*jobvl, 'V'))
             {
                 /* Test 2
                  * compute norm (A**H * VL - VL * W**H) / (V * norm(A) * EPS)

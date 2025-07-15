@@ -22,8 +22,8 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
 void prepare_hgeqz_run(char *job, char *compq, char *compz, integer n, integer *ilo, integer *ihi,
                        void *h, integer ldh, void *t, integer ldt, void *alpha, void *alphar,
                        void *alphai, void *beta, void *q, integer ldq, void *z, integer ldz,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer interfacetype, int matrix_layout);
+                       integer datatype, integer *info, integer interfacetype, int matrix_layout,
+                       test_params_t *params);
 void invoke_hgeqz(integer datatype, char *job, char *compq, char *compz, integer *n, integer *ilo,
                   integer *ihi, void *h, integer *ldh, void *t, integer *ldt, void *alpha,
                   void *alphar, void *alphai, void *beta, void *q, integer *ldq, void *z,
@@ -41,7 +41,7 @@ void fla_test_hgeqz(integer argc, char **argv, test_params_t *params)
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
     if(argc == 1)
     {
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, EIG_SYM, fla_test_hgeqz_experiment);
@@ -87,6 +87,7 @@ void fla_test_hgeqz(integer argc, char **argv, test_params_t *params)
         }
         g_lwork = strtoimax(argv[13], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[14], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -171,7 +172,7 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(ldh == -1)
         {
@@ -301,8 +302,8 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
     copy_matrix(datatype, "full", n, n, Z, ldz, Z_test, ldz);
 
     prepare_hgeqz_run(&job, &compq, &compz, n, &ilo, &ihi, H_test, ldh, T_test, ldt, alpha, alphar,
-                      alphai, beta, Q_test, ldq, Z_test, ldz, datatype, n_repeats, &time_min, &info,
-                      interfacetype, layout);
+                      alphai, beta, Q_test, ldq, Z_test, ldz, datatype, &info, interfacetype,
+                      layout, params);
 
     /* if job=E, in addition to the first api, also execute the api with jobe=S, compeq=N and
      * compez=N */
@@ -311,7 +312,6 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
         char jobe = 'S';
         char compeq = 'N';
         char compez = 'N';
-        double time_mine;
 
         if(datatype == FLOAT || datatype == DOUBLE)
         {
@@ -326,15 +326,14 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
 
         /* Call the API */
         prepare_hgeqz_run(&jobe, &compeq, &compez, n, &ilo, &ihi, H_test, ldh, T_test, ldt, alphae,
-                          alphaer, alphaei, betae, Q_test, ldq, Z_test, ldz, datatype, n_repeats,
-                          &time_mine, &info, interfacetype, layout);
+                          alphaer, alphaei, betae, Q_test, ldq, Z_test, ldz, datatype, &info,
+                          interfacetype, layout, NULL);
     }
     /* If compq=N or/and compz=N, also execute the api with compnq=I and compnz=I */
     else if(same_char(compq, 'N') || same_char(compz, 'N'))
     {
         char compnq = 'I';
         char compnz = 'I';
-        double time_minn;
 
         integer ldqn = fla_max(ldq, n);
         integer ldzn = fla_max(ldz, n);
@@ -366,20 +365,20 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
 
         /* Call the API */
         prepare_hgeqz_run(&job, &compnq, &compnz, n, &ilo, &ihi, H_ntest, ldh, T_ntest, ldt, alphan,
-                          alphanr, alphani, betan, Q_ntest, ldqn, Z_ntest, ldzn, datatype,
-                          n_repeats, &time_minn, &info, interfacetype, layout);
+                          alphanr, alphani, betan, Q_ntest, ldqn, Z_ntest, ldzn, datatype, &info,
+                          interfacetype, layout, NULL);
         /* Free the matrices */
         free_matrix(Q_ntest);
         free_matrix(Z_ntest);
     }
 
     /* Performance computation
-       (7)n^3 flops for eigen vectors for real
-       (25)n^3 flops for eigen vectors for complex
-       (10)n^3 flops for Schur form is computed for real
-       (35)n^3 flops for Schur form is computed for complex
-       (20)n^3 flops full Schur factorization is computed for real
-       (70)n^3 flops full Schur factorization is computed for complex */
+    (7)n^3 flops for eigen vectors for real
+    (25)n^3 flops for eigen vectors for complex
+    (10)n^3 flops for Schur form is computed for real
+    (35)n^3 flops for Schur form is computed for complex
+    (20)n^3 flops full Schur factorization is computed for real
+    (70)n^3 flops full Schur factorization is computed for complex */
 
     if(same_char(compz, 'N'))
     {
@@ -411,7 +410,7 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
         if(same_char(job, 'E'))
         {
             validate_hgeqz_eigen_values(tst_api, datatype, n, alpha, alphar, alphai, beta, alphae,
-                                        alphaer, alphaei, betae, residual);
+                                        alphaer, alphaei, betae, residual, params);
         }
         /* If compq=N or compz=N, validate eigen values from the first and second api
            calls. Then validate H_test and T_test matrices */
@@ -419,13 +418,13 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
         {
             validate_hgeqz_comp_n(tst_api, datatype, n, H_test, H_ntest, ldh, T_test, T_ntest, ldt,
                                   alpha, alphar, alphai, beta, alphan, alphanr, alphani, betan,
-                                  residual);
+                                  residual, params);
         }
         else
         {
             validate_hgeqz(tst_api, &job, &compq, &compz, n, H, H_test, A, ldh, T, T_test, B, ldt,
                            Q, Q_test, Q_A, ldq, Z, Z_test, Z_A, ldz, datatype, residual,
-                           params->imatrix_char);
+                           params->imatrix_char, params);
         }
     }
     else
@@ -490,12 +489,12 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
 void prepare_hgeqz_run(char *job, char *compq, char *compz, integer n, integer *ilo, integer *ihi,
                        void *H, integer ldh, void *T, integer ldt, void *alpha, void *alphar,
                        void *alphai, void *beta, void *Q, integer ldq, void *Z, integer ldz,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer interfacetype, int layout)
+                       integer datatype, integer *info, integer interfacetype, int layout,
+                       test_params_t *params)
 {
     void *H_save = NULL, *T_save = NULL, *Q_save = NULL, *Z_save = NULL, *work = NULL, *rwork;
-    integer i, lwork;
-    double t_min = 1e9, exe_time;
+    integer lwork;
+    double exe_time;
 
     /* Make a copy of the input matrix H,T,Q and Z. Same input values will be passed in each
      * itertaion.*/
@@ -548,7 +547,7 @@ void prepare_hgeqz_run(char *job, char *compq, char *compz, integer n, integer *
     }
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrix H and Z value and allocate memory to output buffers
            for each iteration*/
@@ -583,13 +582,12 @@ void prepare_hgeqz_run(char *job, char *compq, char *compz, integer n, integer *
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
 
         /* Free up the output buffers */
         free_vector(work);
     }
-    *time_min_ = t_min;
 
     free(H_save);
     free(Z_save);
@@ -612,10 +610,10 @@ double prepare_lapacke_hgeqz_run(integer datatype, int layout, char *job, char *
     void *H_t = NULL, *T_t = NULL, *Q_t = NULL, *Z_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_hgeqz_ldh, ldh_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_hgeqz_ldt, ldt_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_hgeqz_ldq, ldq_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_hgeqz_ldz, ldz_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_hgeqz_ldh, ldh_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_hgeqz_ldt, ldt_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_hgeqz_ldq, ldq_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_hgeqz_ldz, ldz_t);
 
     H_t = H;
     T_t = T;

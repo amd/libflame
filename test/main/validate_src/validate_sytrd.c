@@ -10,7 +10,7 @@
 #include "test_prototype.h"
 
 void validate_sytrd(char *tst_api, integer datatype, char uplo, integer n, void *A_test, void *A_in,
-                    integer lda, void *D, void *E, void *tau, double err_thresh)
+                    integer lda, void *D, void *E, void *tau, double err_thresh, void *params)
 {
     double residual = 0., resid1 = 0., resid2 = 0.;
     void *A_save = NULL, *work = NULL, *Q_temp = NULL;

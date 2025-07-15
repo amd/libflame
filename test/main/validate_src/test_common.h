@@ -11,6 +11,7 @@
 
 #include "blis.h"
 #include "validate_common.h"
+#include "test_output_routines.h"
 #include "test_overflow_underflow.h"
 
 #include <limits.h>
@@ -151,14 +152,11 @@ extern int matrix_layout;
 #define FT_IS "d"
 #endif
 
-/* function call for status print */
-void fla_test_print_status(char *func_str, char datatype_char, integer sqr_inp, integer p_cur,
-                           integer q_cur, double residual, double thresh, double time, double perf);
-
 /* print overall test status */
 #define FLA_PRINT_TEST_STATUS(p, q, residual, err_thresh) \
     char dtype = get_datatype_char(datatype);             \
-    fla_test_print_status(tst_api, dtype, RECT_INPUT, p, q, residual, err_thresh, time_min, perf);
+    fla_dump_runtimes_to_file(params, tst_api, dtype, p, q);                    \
+    fla_test_print_status(tst_api, dtype, RECT_INPUT, p, q, residual, err_thresh, perf, params);
 
 /* print sub-test details in case of failure */
 #define FLA_PRINT_SUBTEST_STATUS(residual, err_thresh, idx)           \
@@ -521,5 +519,53 @@ void swap_rows_with_pivot(integer datatype, integer m, integer n, void *A, integ
 logical same_char(char ca, char cb);
 /* Return pointer at required offset for the given datatype */
 void *get_ptr_at_offset(integer datatype, void *A, integer offset);
+
+/* Uses qsort to sort the given vector of real type
+ *  in ascending or descending order based on the order parameter
+ * datatype: FLOAT, DOUBLE
+ * order: 'A' for ascending, 'D' for descending
+ * vect_len: length of the vector
+ * w: pointer to the vector (vector should have increment of 1)
+ */
+void qsort_realtype_vector(integer datatype, char *order, integer vect_len, void *w);
+
+/*
+ * Gets the sum of the elements of the array
+ * datatype: FLOAT, DOUBLE, INTEGER, COMPLEX, DOUBLE_COMPLEX
+ * A: pointer to the array
+ * sum: pointer to the sum
+ * n: number of elements in the array
+ */
+void get_sum_of_array(integer datatype, void *A, void *sum, integer n);
+
+/* Gets the average of the elements of the array
+ * datatype: FLOAT, DOUBLE, INTEGER, COMPLEX, DOUBLE_COMPLEX
+ * A: pointer to the array
+ * avg: pointer to the average
+ * n: number of elements in the array
+ *
+ * If the datatype is INTEGER, the average is returned as a double
+ */
+void get_avg_of_array(integer datatype, void *A, void *avg, integer n);
+
+/* Gets the variance of the elements of the array
+ * datatype: FLOAT, DOUBLE, INTEGER, COMPLEX, DOUBLE_COMPLEX
+ * A: pointer to the array
+ * variance: pointer to the variance
+ * n: number of elements in the array
+ *
+ * If the datatype is INTEGER, the variance is returned as a double
+ */
+void get_variance_of_array(integer datatype, void *A, void *variance, integer n);
+
+/* Gets the standard deviation of the elements of the array
+ * datatype: FLOAT, DOUBLE, INTEGER, COMPLEX, DOUBLE_COMPLEX
+ * A: pointer to the array
+ * stddev: pointer to the standard deviation
+ * n: number of elements in the array
+ *
+ * If the datatype is INTEGER, the standard deviation is returned as a double
+ */
+void get_stddev_of_array(integer datatype, void *A, void *stddev, integer n);
 
 #endif // TEST_COMMON_H

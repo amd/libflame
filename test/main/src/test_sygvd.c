@@ -17,8 +17,8 @@ void fla_test_sygvd_experiment(char *tst_api, test_params_t *params, integer dat
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
 void prepare_sygvd_run(integer itype, char *jobz, char *uplo, integer n, void *A, integer lda,
-                       void *B, integer ldb, void *w, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer interfacetype, int layout);
+                       void *B, integer ldb, void *w, integer datatype, integer *info,
+                       integer interfacetype, int layout, test_params_t *params);
 void invoke_sygvd(integer datatype, integer *itype, char *jobz, char *uplo, integer *n, void *a,
                   integer *lda, void *b, integer *ldb, void *w, void *work, integer *lwork,
                   void *rwork, integer *lrwork, void *iwork, integer *liwork, integer *info);
@@ -38,7 +38,7 @@ void fla_test_sygvd(integer argc, char **argv, test_params_t *params)
         g_lwork = -1;
         g_liwork = -1;
         g_lrwork = -1;
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, EIG_SYM, fla_test_sygvd_experiment);
@@ -68,6 +68,7 @@ void fla_test_sygvd(integer argc, char **argv, test_params_t *params)
         g_lrwork = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
 
         n_repeats = strtoimax(argv[11], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -144,7 +145,7 @@ void fla_test_sygvd_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -261,11 +262,12 @@ void fla_test_sygvd_experiment(char *tst_api, test_params_t *params, integer dat
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &B_test, lda);
     copy_matrix(datatype, "full", n, n, B, lda, B_test, lda);
 
-    prepare_sygvd_run(itype, &jobz, &uplo, n, A_test, lda, B_test, lda, w, datatype, n_repeats,
-                      &time_min, &info, interfacetype, layout);
+    prepare_sygvd_run(itype, &jobz, &uplo, n, A_test, lda, B_test, lda, w, datatype, &info,
+                      interfacetype, layout, params);
+
     /* performance computation
-       (8/3)n^3 [syevd] + (1/3)n^3 [potrf] flops for eigen vectors
-       (4/3)n^3 [syevd] + (1/3)n^3 [potrf] flops for eigen values */
+    (8/3)n^3 [syevd] + (1/3)n^3 [potrf] flops for eigen vectors
+    (4/3)n^3 [syevd] + (1/3)n^3 [potrf] flops for eigen values */
     if(same_char(jobz, 'V'))
         perf = (double)(3.0 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     else
@@ -278,7 +280,7 @@ void fla_test_sygvd_experiment(char *tst_api, test_params_t *params, integer dat
     if(!FLA_EXTREME_CASE_TEST)
     {
         validate_sygvd(tst_api, itype, &jobz, &range, &uplo, n, A, A_test, lda, B, B_test, lda, 0,
-                       0, EVals, w, NULL, datatype, residual, params->imatrix_char, scal);
+                       0, EVals, w, NULL, datatype, residual, params->imatrix_char, scal, params);
     }
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
@@ -308,13 +310,12 @@ void fla_test_sygvd_experiment(char *tst_api, test_params_t *params, integer dat
 }
 
 void prepare_sygvd_run(integer itype, char *jobz, char *uplo, integer n, void *A, integer lda,
-                       void *B, integer ldb, void *w, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer interfacetype, int layout)
+                       void *B, integer ldb, void *w, integer datatype, integer *info,
+                       integer interfacetype, int layout, test_params_t *params)
 {
     void *A_save, *work, *iwork, *rwork = NULL, *B_save = NULL;
     integer lwork, liwork, lrwork;
-    integer i;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     /* Make a copy of the input matrix A and B. Same input values will be passed in
        each itertaion.*/
@@ -368,7 +369,7 @@ void prepare_sygvd_run(integer itype, char *jobz, char *uplo, integer n, void *A
     }
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrix A and B value and allocate memory to output buffers
            for each iteration */
@@ -407,8 +408,8 @@ void prepare_sygvd_run(integer itype, char *jobz, char *uplo, integer n, void *A
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
 
         /* Free up the output buffers */
         free_vector(work);
@@ -417,8 +418,6 @@ void prepare_sygvd_run(integer itype, char *jobz, char *uplo, integer n, void *A
         if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
             free_vector(rwork);
     }
-
-    *time_min_ = t_min;
 
     free_matrix(A_save);
     free_matrix(B_save);

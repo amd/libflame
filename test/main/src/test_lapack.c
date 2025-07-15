@@ -24,12 +24,12 @@ char fla_test_storage_format_string[200];
 char fla_test_stor_chars[NUM_STORAGE_CHARS + 1];
 double ref_time_sec = 0.0;
 
-integer total_tests;
-integer total_failed_tests;
-integer total_incomplete_tests;
-integer tests_passed[4];
-integer tests_failed[4];
-integer tests_incomplete[4];
+integer g_total_tests;
+integer g_total_failed_tests;
+integer g_total_incomplete_tests;
+integer g_tests_passed[4];
+integer g_tests_failed[4];
+integer g_tests_incomplete[4];
 
 /* Flag to indicate lwork/liwork/lrwork availability status
  * <= 0 - To be calculated
@@ -42,11 +42,21 @@ integer g_lrwork = -1;
  * = 0 - Inputs are from command line
  * = 1 - Inputs are from config file
  * */
-integer config_data = 0;
+integer g_config_data = 0;
 /* File pointer for external file which is used
  * to pass the input matrix values
  * */
 FILE *g_ext_fptr = NULL;
+
+/*
+ * List of available statistics.
+ * The order of the statistics in this list should match
+ * the order of the fla_stat_type enum in test_lapack.h.
+ */
+fla_stat_info_t AVAILABLE_STATS[FLA_NUM_STATS]
+    = {{FLA_MIN_STAT, "min", "MIN"},      {FLA_MAX_STAT, "max", "MAX"},
+       {FLA_AVG_STAT, "avg", "AVG"},      {FLA_PERCENTILE_STAT, "p", "P"},
+       {FLA_VARIANCE_STAT, "var", "VAR"}, {FLA_STDDEV_STAT, "stddev", "STD"}};
 
 #define SKIP_EXTRA_LINE_READ() \
     eol = fgetc(fp);           \
@@ -108,26 +118,41 @@ int main(int argc, char **argv)
         }
     }
 
+    /* Set default params */
     params.imatrix_char = '\0'; // Initialize imatrix_char to NULL
+    params.interfacetype = LAPACK_TEST;
+    params.matrix_major = LAPACK_COL_MAJOR;
+    params.cli_print_header = 0;
+    params.warmup_repeats = 0.;
+    params.time_unit = FLA_TIME_UNIT_AUTO;
+    params.outlier_multiplier = 0.0;
+    params.dump_runtimes_file_name = NULL;
 
-    status = fla_check_interface(&arg_count, argv, &params);
-    /* Check status and return */
+    status = fla_parse_cmdline_args(&arg_count, argv, &params);
+
     if(status == FALSE)
     {
+        /* If parse error or --help then return */
         return -1;
     }
 
     /* Checking for the cmd option or config file option */
     int cmd_option = fla_check_cmd_config_dir(arg_count, argv);
 
+    fla_test_runtime_ctx_init(&params);
+
     /* Check for Command line requests */
     if(cmd_option == 1)
     {
+        g_config_data = 0;
         fla_test_execute_cli_api(arg_count, argv, &params);
     }
     else if(cmd_option == 0)
     {
+#if ENABLE_AOCL_EXTENSION_APIS == 1
         printf(" AOCL-LAPACK version: %s\n", FLA_Get_AOCL_Version());
+#endif
+        g_config_data = 1;
         /* Copy the binary name to a global string so we can use it later. */
         strncpy(fla_test_binary_name, argv[0], MAX_BINARY_NAME_LENGTH);
 
@@ -174,12 +199,14 @@ int main(int argc, char **argv)
         return 0;
     }
 
+    fla_test_runtime_ctx_free(&params);
+
     return 0;
 }
 
 /* Function to configure appropriate interface to test
    Returns true if interface is valid, returns false otherwise */
-bool fla_check_interface(integer *arg_count, char **argv, test_params_t *params)
+integer fla_check_interface(integer arg_count, char **argv, test_params_t *params)
 {
     char *interface_test = "--interface=";
     char *row_major = "lapacke_row";
@@ -195,13 +222,15 @@ bool fla_check_interface(integer *arg_count, char **argv, test_params_t *params)
     integer len_cpp_test = strlen(cpp_test);
     integer len_lapack_test = strlen(lapack_test);
     integer index;
+    integer parse_status = 0;
 
     /* check all the input args excluding first argument test_lapack.x
        for '--interface=' string */
-    for(index = 1; index < *arg_count; index++)
+    for(index = 1; index < arg_count; index++)
     {
         if(!(strncmp(argv[index], interface_test, len_interface_test)))
         {
+            parse_status = 1; /* argument is found */
             interface_buff = argv[index] + len_interface_test;
 
             for(int i = 0; i < strlen(argv[index]); i++)
@@ -230,7 +259,7 @@ bool fla_check_interface(integer *arg_count, char **argv, test_params_t *params)
                 {
                     printf("\nError: ENABLE_CPP_TEST flag is disabled to use CPP interface, please "
                            "enable and rebuild.\n");
-                    return FALSE;
+                    return -1; /* Invalid interface */
                 }
 #endif
             }
@@ -245,17 +274,18 @@ bool fla_check_interface(integer *arg_count, char **argv, test_params_t *params)
                 printf("\nError: Interface '%s' is invalid,", interface_buff);
                 printf(" Please provide valid interface: \n lapack, lapacke_row, lapacke_column, "
                        "cpp\n");
-                return FALSE;
+                return -1; /* Invalid interface */
             }
-            /* Decrement argument count to fall back to exisiting design of
-               checking input filename or get config file data*/
-            *arg_count = *arg_count - 1;
             break;
         }
     }
-    params->interfacetype = interfacetype;
-    params->matrix_major = lapacke_major;
-    return TRUE;
+    /* Set these values only if interface paramter is found */
+    if(parse_status)
+    {
+        params->interfacetype = interfacetype;
+        params->matrix_major = lapacke_major;
+    }
+    return parse_status;
 }
 
 /* Function for checking cmd option or config file directory */
@@ -413,12 +443,13 @@ void fla_test_lapack_suite(char *input_filename, test_params_t *params)
     integer i, j, op, test_api_count, g_id, test_group_count;
     FILE *input_stream;
 
-    total_tests = 0;
-    total_failed_tests = 0;
-    total_incomplete_tests = 0;
-    tests_passed[0] = tests_passed[1] = tests_passed[2] = tests_passed[3] = 0;
-    tests_failed[0] = tests_failed[1] = tests_failed[2] = tests_failed[3] = 0;
-    tests_incomplete[0] = tests_incomplete[1] = tests_incomplete[2] = tests_incomplete[3] = 0;
+    g_total_tests = 0;
+    g_total_failed_tests = 0;
+    g_total_incomplete_tests = 0;
+    g_tests_passed[0] = g_tests_passed[1] = g_tests_passed[2] = g_tests_passed[3] = 0;
+    g_tests_failed[0] = g_tests_failed[1] = g_tests_failed[2] = g_tests_failed[3] = 0;
+    g_tests_incomplete[0] = g_tests_incomplete[1] = g_tests_incomplete[2] = g_tests_incomplete[3]
+        = 0;
 
     test_api_count = sizeof(API_test_functions) / sizeof(API_test_functions[0]);
     test_group_count = sizeof(API_test_group) / sizeof(API_test_group[0]);
@@ -497,34 +528,6 @@ void fla_test_lapack_suite(char *input_filename, test_params_t *params)
     }
     fclose(input_stream);
     fla_test_print_summary();
-}
-
-void fla_test_print_summary()
-{
-    fla_test_output_info("\n\nResults Summary:\n\n");
-    fla_test_output_info("%2sDATATYPE%13s No. of Tests%6s Passed%9s Failed%9s Incomplete\n", "", "",
-                         "", "", "");
-    fla_test_output_info(
-        "=====================================================================================\n");
-    fla_test_output_info("%2sFLOAT%15s %8d%8s %8d%6s %8d%15s %d\n", "", "",
-                         tests_passed[0] + tests_failed[0] + tests_incomplete[0], "",
-                         tests_passed[0], "", tests_failed[0], "", tests_incomplete[0]);
-    fla_test_output_info("%2sDOUBLE%14s %8d%8s %8d%6s %8d%15s %d\n", "", "",
-                         tests_passed[1] + tests_failed[1] + tests_incomplete[0], "",
-                         tests_passed[1], "", tests_failed[1], "", tests_incomplete[1]);
-    fla_test_output_info("%2sCOMPLEX%13s %8d%8s %8d%6s %8d%15s %d\n", "", "",
-                         tests_passed[2] + tests_failed[2] + tests_incomplete[0], "",
-                         tests_passed[2], "", tests_failed[2], "", tests_incomplete[2]);
-    fla_test_output_info("%2sDOUBLE COMPLEX%6s %8d%8s %8d%6s %8d%15s %d\n", "", "",
-                         tests_passed[3] + tests_failed[3] + tests_incomplete[0], "",
-                         tests_passed[3], "", tests_failed[3], "", tests_incomplete[3]);
-
-    if(total_failed_tests > 0)
-        printf("\n\nThere are failed tests, Please look at output log for more details\n\n");
-
-    if(total_incomplete_tests > 0)
-        printf("\n\nThere are some incomplete tests, Please look at the parameters passed to the "
-               "API\n\n");
 }
 
 void fla_test_output_op_struct(char *op_str, integer op)
@@ -1310,129 +1313,12 @@ void fla_test_read_aux_params(const char *file_name, test_params_t *params)
     fclose(fp);
 }
 
-void fla_test_output_info(char *message, ...)
-{
-    FILE *output_stream = stdout;
-    va_list args;
-
-    // Initialize variable argument environment.
-    va_start(args, message);
-
-    // Parse the received message and print its components.
-    fla_test_parse_message(output_stream, message, args);
-
-    // Shutdown variable argument environment and clean up stack.
-    va_end(args);
-
-    // Flush the output stream.
-    fflush(output_stream);
-}
-
-void fla_test_output_error(char *message, ...)
-{
-    FILE *output_stream = stderr;
-    va_list args;
-
-    fprintf(output_stream, "%s: *** error ***: ", fla_test_binary_name);
-
-    // Initialize variable argument environment.
-    va_start(args, message);
-
-    // Parse the received message and print its components.
-    fla_test_parse_message(output_stream, message, args);
-
-    // Shutdown variable argument environment and clean up stack.
-    va_end(args);
-
-    // Flush the output stream.
-    fflush(output_stream);
-
-    // Exit.
-    exit(1);
-}
-
-void fla_test_parse_message(FILE *output_stream, char *message, va_list args)
-{
-    integer c, cf;
-    char format_spec[20];
-    uinteger the_uint;
-    integer the_int;
-    double the_double;
-    char *the_string;
-    char the_char;
-
-    // Begin looping over message to insert variables wherever there are
-    // format specifiers.
-    for(c = 0; message[c] != '\0';)
-    {
-        if(message[c] != '%')
-        {
-            fprintf(output_stream, "%c", message[c]);
-            c += 1;
-        }
-        else if(message[c] == '%' && message[c + 1] == '%') // handle escaped '%' chars.
-        {
-            fprintf(output_stream, "%c", message[c]);
-            c += 2;
-        }
-        else
-        {
-            // Save the format string if there is one.
-            format_spec[0] = '%';
-            for(c += 1, cf = 1; strchr("udefsc", message[c]) == NULL; ++c, ++cf)
-            {
-                format_spec[cf] = message[c];
-            }
-
-            // Add the final type specifier, and null-terminate the string.
-            format_spec[cf] = message[c];
-            format_spec[cf + 1] = '\0';
-
-            // Switch based on type, since we can't predict what will
-            // va_args() will return.
-            switch(message[c])
-            {
-                case 'u':
-                    the_uint = va_arg(args, uinteger);
-                    fprintf(output_stream, format_spec, the_uint);
-                    break;
-
-                case 'd':
-                    the_int = va_arg(args, integer);
-                    fprintf(output_stream, format_spec, the_int);
-                    break;
-
-                case 'e':
-                    the_double = va_arg(args, double);
-                    fprintf(output_stream, format_spec, the_double);
-                    break;
-
-                case 'f':
-                    the_double = va_arg(args, double);
-                    fprintf(output_stream, format_spec, the_double);
-                    break;
-
-                case 's':
-                    the_string = va_arg(args, char *);
-                    fprintf(output_stream, format_spec, the_string);
-                    break;
-
-                case 'c':
-                    the_char = va_arg(args, integer);
-                    fprintf(output_stream, "%c", the_char);
-                    break;
-            }
-
-            // Move to next character past type specifier.
-            c += 1;
-        }
-    }
-}
-
 void fla_test_execute_cli_api(integer argc, char **argv, test_params_t *params)
 {
     integer i, test_api_count;
     char s_name[MAX_FUNC_STRING_LENGTH];
+
+    FLA_PRINT_HEADER_CLI;
 
     test_api_count = sizeof(API_test_functions) / sizeof(API_test_functions[0]);
 
@@ -1454,7 +1340,7 @@ void fla_test_execute_cli_api(integer argc, char **argv, test_params_t *params)
         }
     }
 
-    if(total_tests == 0)
+    if(g_total_tests == 0)
         printf("\nNo test was run, give valid arguments\n");
 }
 
@@ -1534,11 +1420,8 @@ void fla_test_op_driver(char *func_str, integer sqr_inp, test_params_t *params, 
     double *perf = (double *)malloc(n_threads * sizeof(double));
     double *time = (double *)malloc(n_threads * sizeof(double));
 
-    fla_test_output_info("%2sAPI%13s DATA_TYPE%6s SIZE%9s FLOPS%9s TIME%9s ERROR%9s STATUS\n", "",
-                         "", "", "", "", "", "");
-    fla_test_output_info(
-        "%1s=====%12s===========%4s========%7s=======%7s========%6s==========%6s========\n", "", "",
-        "", "", "", "", "");
+    fla_test_print_header(params);
+
     switch(api_type)
     {
         case LIN:
@@ -1655,6 +1538,7 @@ void fla_test_op_driver(char *func_str, integer sqr_inp, test_params_t *params, 
                 for(p_cur = p_first, q_cur = q_first; (p_cur <= p_max && q_cur <= q_max);
                     p_cur += p_inc, q_cur += q_inc)
                 {
+                    params->n_repeats = n_repeats;
                     if(n_threads > 1)
                     {
 #pragma omp parallel num_threads(n_threads)
@@ -1679,76 +1563,6 @@ void fla_test_op_driver(char *func_str, integer sqr_inp, test_params_t *params, 
 
     free(perf);
     free(time);
-}
-
-void fla_test_print_status(char *func_str, char datatype_char, integer sqr_inp, integer p_cur,
-                           integer q_cur, double residual, double thresh, double time, double perf)
-{
-    char func_param_str[64];
-    char blank_str[32];
-    char scale[3] = "";
-    integer n_spaces, datatype;
-    char *pass_str;
-
-    datatype = get_datatype(datatype_char);
-
-    FLA_MAP_API_NAME(datatype, func_str);
-
-    pass_str = fla_test_get_string_for_result(residual, datatype, thresh);
-
-    fla_test_build_function_string(func_str, NULL, func_param_str);
-
-    n_spaces = MAX_FUNC_STRING_LENGTH - strlen(func_param_str);
-    fill_string_with_n_spaces(blank_str, n_spaces);
-
-    fla_test_get_time_unit(scale, &time);
-
-    if(sqr_inp == SQUARE_INPUT)
-    {
-        if(pass_str[0] == 'P' || pass_str[0] == 'F')
-            fla_test_output_info(" %s%s  %c  %10" FT_IS " x %-9" FT_IS
-                                 " %-10.2lf  %6.2lf %-7s  %-7.2le   %10s\n",
-                                 func_param_str, blank_str, datatype_char, p_cur, p_cur, perf, time,
-                                 scale, residual, pass_str);
-        else
-            fla_test_output_info(" %s%s  %c  %10" FT_IS " x %-9" FT_IS
-                                 " %-10.2lf  %6.2lf %-7s  %-7.2le   %12s\n",
-                                 func_param_str, blank_str, datatype_char, p_cur, p_cur, perf, time,
-                                 scale, residual, pass_str);
-    }
-    else
-    {
-        if(pass_str[0] == 'P' || pass_str[0] == 'F')
-            fla_test_output_info(" %s%s  %c  %10" FT_IS " x %-9" FT_IS
-                                 " %-10.2lf  %6.2lf %-7s  %-7.2le   %10s\n",
-                                 func_param_str, blank_str, datatype_char, p_cur, q_cur, perf, time,
-                                 scale, residual, pass_str);
-        else
-            fla_test_output_info(" %s%s  %c  %10" FT_IS " x %-9" FT_IS
-                                 " %-10.2lf  %6.2lf %-7s  %-7.2le   %12s\n",
-                                 func_param_str, blank_str, datatype_char, p_cur, q_cur, perf, time,
-                                 scale, residual, pass_str);
-    }
-
-    total_tests++;
-    tests_passed[datatype - FLOAT] += (pass_str[0] == 'P');
-    tests_failed[datatype - FLOAT] += (pass_str[0] == 'F');
-    tests_incomplete[datatype - FLOAT] += (pass_str[0] == 'I');
-    total_failed_tests += (pass_str[0] == 'F');
-    total_incomplete_tests += (pass_str[0] == 'I');
-}
-
-void fla_test_build_function_string(char *func_base_str, char *impl_var_str, char *func_str)
-{
-    sprintf(func_str, "%s", func_base_str);
-}
-
-void fill_string_with_n_spaces(char *str, integer n_spaces)
-{
-    integer i;
-
-    for(i = 0; i < n_spaces; ++i)
-        sprintf(&str[i], " ");
 }
 
 /* This function is used to clock the execution time of APIs*/
@@ -1779,37 +1593,636 @@ double fla_test_clock()
 #endif
 }
 
-/* This function sets the unit of time*/
-void fla_test_get_time_unit(char *scale, double *time)
+/*
+ * This function checks if the argument "--bench=<k>" is present in the command line.
+ * If the argument is present, it sets the benchmark_mode flag and bench_duration in
+ * params.
+ *
+ * In the benchmark mode, api execution would be run atleast for <k> seconds.
+ * It also shows more detailed statistics by default.
+ *
+ * @return
+ *      0 if the argument is not found,
+ *      1 if the argument is found and valid,
+ *     -1 if the argument is found but invalid value is provided.
+ * */
+integer fla_parse_bench_arg(integer argc, char **argv, test_params_t *params)
 {
-    if(*time >= 1)
+    params->benchmark_mode = 0;
+    const char *arg_str = "--bench=";
+    integer arg_len = strlen(arg_str);
+
+    /* Check if the argument is present in the command line. */
+    for(integer i = 1; i < argc; ++i)
     {
-        scale[0] = 's';
-        scale[1] = '\0';
-        return;
+        if(strncmp(argv[i], arg_str, arg_len) == 0)
+        {
+            errno = 0; /* Reset errno before strtof */
+            params->bench_duration = strtof(argv[i] + arg_len, NULL);
+            /* Checking any error during parsing */
+            /* Checking if bench value is not negative */
+            if(errno != 0 || params->bench_duration <= 0)
+            {
+                /* Invalid bench value */
+                printf("\nError: Invalid bench argument: %s\n", argv[i]);
+                printf("       Please provide a valid duration > 0.\n");
+                return -1;
+            }
+            /* Bench value is valid */
+            params->benchmark_mode = 1;
+            return 1;
+        }
+    }
+    return 0;
+}
+
+/*
+ * This function checks if the argument "--warmup=<k>" is present in the command line.
+ * If the argument is present, it sets the warmup_repeats in params.
+ * The value can be:
+ *      0: Disable Warmup
+ *      Any decimal k in range (0, 1) exclusive: ceil(k * repeat) number of invocations as warmup
+ *      Any integer k >= 1: k invocations as warmup
+ * @return
+ *      0 if the argument is not found,
+ *      1 if the argument is found and valid,
+ *     -1 if the argument is found but invalid value is provided.
+ */
+integer fla_parse_warmup_arg(integer argc, char **argv, test_params_t *params)
+{
+    const char *arg_str = "--warmup=";
+    integer arg_len = strlen(arg_str);
+
+    /* Check if the argument is present in the command line. */
+    for(integer i = 1; i < argc; ++i)
+    {
+        if(strncmp(argv[i], arg_str, arg_len) == 0)
+        {
+            errno = 0; /* Reset errno before strtof */
+            params->warmup_repeats = strtof(argv[i] + arg_len, NULL);
+            /* Checking any error during parsing */
+            /* Checking if warmup value is not negative */
+            /* Checking if warmup value is > 1, then it is an integer */
+            if(errno != 0 || params->warmup_repeats < 0
+               || (params->warmup_repeats > 1
+                   && (params->warmup_repeats - (integer)params->warmup_repeats) != 0))
+            {
+                /* Invalid warmup value */
+                printf("\nError: Invalid warmup argument: %s\n", argv[i]);
+                printf("       Please provide a valid number.\n");
+                printf("       0: Disable Warmup\n");
+                printf("       Any decimal k in range (0, 1) exclusive: "
+                       "ceil(k * repeat) number of invocations as warmup\n");
+                printf("       Any integer k >= 1: k invocations as warmup\n");
+                return -1;
+            }
+            /* Warmup value is valid */
+            return 1;
+        }
+    }
+    return 0;
+}
+
+/*
+ * This function checks if the argument "--stats=<stats_list>" is present in the command line.
+ * stats_list is a comma separated list of statistics to be printed.
+ * The list can contain the following values:
+ *      min: Minimum time
+ *      max: Maximum time
+ *      avg: Average time
+ *      p1-p99: Percentiles
+ * The function sets the stats_out array in params with the corresponding values.
+ * @return
+ *      0 if the argument is not found,
+ *      1 if the argument is found and valid,
+ *     -1 if the argument is found but invalid value is provided.
+ */
+integer fla_parse_stats_arg(integer argc, char **argv, test_params_t *params)
+{
+    params->num_stats = 0;
+    const char *arg_str = "--stats=";
+    integer arg_len = strlen(arg_str);
+    char *stats_val = NULL;
+    integer num_stats_found = 0;
+    integer percentile_val;
+    char *endptr = NULL;
+
+    /* Check if the argument is present in the command line. */
+    for(integer i = 1; i < argc; ++i)
+    {
+        if(strncmp(argv[i], arg_str, arg_len) == 0)
+        {
+            stats_val = argv[i] + arg_len;
+            /* Set values to lowercase */
+            for(integer j = 0; j < strlen(stats_val); j++)
+            {
+                stats_val[j] = tolower(stats_val[j]);
+            }
+            /* Split by comma */
+            char *token = stats_val;
+            char *token_next = NULL;
+            integer token_len = 0;
+            integer found_flag;
+            while(token != NULL)
+            {
+                token_next = strchr(token, ',');
+
+                /* This is the last token */
+                if(token_next == NULL)
+                {
+                    token_len = strlen(token);
+                }
+                else
+                {
+                    token_len = token_next - token;
+                }
+
+                if(token_len <= 0)
+                {
+                    num_stats_found = 0;
+                    break;
+                }
+
+                if(num_stats_found >= MAX_NUM_STATS)
+                {
+                    printf("\nError: Too many stats specified. Max allowed is %d\n", MAX_NUM_STATS);
+                    return -1;
+                }
+
+                found_flag = 0;
+                for(integer j = 0; j < FLA_NUM_STATS; j++)
+                {
+                    integer stat_str_len = strlen(AVAILABLE_STATS[j].arg_str);
+                    if(strncmp(token, AVAILABLE_STATS[j].arg_str, stat_str_len) == 0)
+                    {
+                        /* If percentile then need special input */
+                        if(AVAILABLE_STATS[j].stat_type == FLA_PERCENTILE_STAT)
+                        {
+                            if((token_len - stat_str_len) >= 1 && (token_len - stat_str_len) <= 2)
+                            {
+                                percentile_val = (integer)strtol(token + stat_str_len, &endptr, 10);
+                                if((*endptr == '\0' || *endptr == ',') && percentile_val >= 1
+                                   && percentile_val <= 99)
+                                {
+                                    params->stats_out[num_stats_found++]
+                                        = (fla_stat_t){.stat_type = AVAILABLE_STATS[j].stat_type,
+                                                       .percentile_num = percentile_val};
+                                    found_flag = 1;
+                                }
+                            }
+                        }
+                        else if(token_len == stat_str_len)
+                        {
+                            params->stats_out[num_stats_found++].stat_type
+                                = AVAILABLE_STATS[j].stat_type;
+                            found_flag = 1;
+                        }
+                    }
+                }
+                if(found_flag == 0)
+                {
+                    num_stats_found = 0;
+                    break;
+                }
+
+                token = token_next != NULL ? token_next + 1 : NULL;
+            }
+
+            if(num_stats_found == 0)
+            {
+                printf("\nError: Invalid stats argument: %s\n", argv[i]);
+                printf("       Please provide a valid stats argument.\n");
+                printf("       Upto %d stats can be specified separated by comma.\n",
+                       MAX_NUM_STATS);
+                printf("       Available stats are:");
+                for(integer j = 0; j < FLA_NUM_STATS - 1; j++)
+                {
+                    if(AVAILABLE_STATS[j].stat_type == FLA_PERCENTILE_STAT)
+                    {
+                        printf(" %s<1-99>,", AVAILABLE_STATS[j].arg_str);
+                    }
+                    else
+                    {
+                        printf(" %s,", AVAILABLE_STATS[j].arg_str);
+                    }
+                }
+                printf(" %s\n", AVAILABLE_STATS[FLA_NUM_STATS - 1].arg_str);
+                printf("       Example: --stats=min,avg,p95,var\n");
+                return -1;
+            }
+
+            params->num_stats = num_stats_found;
+            return 1;
+        }
+    }
+    return 0;
+}
+
+/*
+ * This function checks if the argument "--print-header" is present in the command line.
+ * --print-header is used to print the header for the test output in cli mode.
+ *
+ * * @return
+ *      0 if the argument is not found,
+ *      1 if the argument is found .
+ **/
+integer fla_parse_print_header_arg(integer argc, char **argv, test_params_t *params)
+{
+    const char *arg_str = "--print-header";
+    integer arg_len = strlen(arg_str);
+
+    /* Check if the argument is present in the command line. */
+    for(integer i = 1; i < argc; ++i)
+    {
+        if(strncmp(argv[i], arg_str, arg_len) == 0)
+        {
+            params->cli_print_header = 1;
+            return 1;
+        }
+    }
+    return 0;
+}
+
+/*
+ * This function parses the time unit argument "--time-unit=<unit>" from the command line.
+ * The unit can be one of the following: s, ms, us, ns, ps, auto.
+ *
+ * * @return
+ *      0 if the argument is not found,
+ *      1 if the argument is found and valid,
+ *     -1 if the argument is found but invalid value is provided.
+ */
+integer fla_parse_time_unit_arg(integer argc, char **argv, test_params_t *params)
+{
+    const char *arg_str = "--time-unit=";
+    integer arg_len = strlen(arg_str);
+    char *unit_arg = NULL;
+
+    /* Check if the argument is present in the command line. */
+    for(integer i = 1; i < argc; ++i)
+    {
+        if(strncmp(argv[i], arg_str, arg_len) == 0)
+        {
+            unit_arg = argv[i] + arg_len;
+            /* Set values to lowercase */
+            for(integer j = 0; j < strlen(unit_arg); j++)
+            {
+                unit_arg[j] = tolower(unit_arg[j]);
+            }
+            if(strncmp(unit_arg, "s", 1) == 0)
+            {
+                params->time_unit = FLA_TIME_UNIT_SEC;
+            }
+            else if(strncmp(unit_arg, "ms", 2) == 0)
+            {
+                params->time_unit = FLA_TIME_UNIT_MILLISEC;
+            }
+            else if(strncmp(unit_arg, "us", 2) == 0)
+            {
+                params->time_unit = FLA_TIME_UNIT_MICROSEC;
+            }
+            else if(strncmp(unit_arg, "ns", 2) == 0)
+            {
+                params->time_unit = FLA_TIME_UNIT_NANOSEC;
+            }
+            else if(strncmp(unit_arg, "ps", 2) == 0)
+            {
+                params->time_unit = FLA_TIME_UNIT_PICOSEC;
+            }
+            else if(strncmp(unit_arg, "auto", 4) == 0)
+            {
+                params->time_unit = FLA_TIME_UNIT_AUTO;
+            }
+            else
+            {
+                printf("\nError: Invalid time unit argument: %s\n", argv[i]);
+                printf("       Please provide a valid time unit argument.\n");
+                printf("       Available time units are: s, ms, us, ns, ps, auto\n");
+                return -1;
+            }
+            return 1;
+        }
+    }
+    return 0;
+}
+
+/*
+ * This function checks if the argument "--help" is present in the command line.
+ * If the argument is present, it prints the help message and returns -1.
+ *
+ * * @return
+ *     0 if the argument is not found,
+ *    -1 if the argument is found and help message is printed.
+ **/
+integer fla_check_help_arg(integer argc, char **argv)
+{
+    for(integer i = 1; i < argc; ++i)
+    {
+        if(strcmp(argv[i], "--help") == 0)
+        {
+            fla_print_help(argv[0]);
+            return -1;
+        }
+    }
+    return 0;
+}
+
+/*
+ * This function checks if the argument "--filter-outliers[=<multiplier>]" is present in the command
+ * line. If the argument is present, it will filter runtimes greater than
+ *
+ *   multiplier * stddev + mean
+ *
+ * If multiplier is not provided, it will use the default value of FLA_OUTLIERS_MULTIPLIER_DEFAULT.
+ *
+ * @return
+ *      0 if the argument is not found,
+ *      1 if the argument is found and valid,
+ *     -1 if the argument is found but invalid value is provided.
+ */
+integer fla_parse_filter_outliers_args(integer argc, char **argv, test_params_t *params)
+{
+    const char *arg_str = "--filter-outliers";
+    integer arg_len = strlen(arg_str);
+
+    /* Check if the argument is present in the command line. */
+    for(integer i = 1; i < argc; ++i)
+    {
+        if(strncmp(argv[i], arg_str, arg_len) == 0)
+        {
+            /* If '=' is present then filter parameter is provided */
+            if(argv[i][arg_len] == '=')
+            {
+                errno = 0; /* Reset errno before strtof */
+                params->outlier_multiplier = strtof(argv[i] + arg_len + 1, NULL);
+                /* Checking any error during parsing */
+                /* Checking if filter value is not negative */
+                if(errno != 0 || params->outlier_multiplier <= 0)
+                {
+                    /* Invalid filter value */
+                    printf("\nError: Invalid filter-outliers argument: %s\n", argv[i]);
+                    printf("       Please provide a valid multiplier > 0.\n");
+                    return -1;
+                }
+            }
+            else
+            {
+                /* If '=' is not present then default muliplier is used */
+                params->outlier_multiplier = FLA_OUTLIERS_MULTIPLIER_DEFAULT;
+            }
+            return 1;
+        }
+    }
+    return 0;
+}
+
+/* This function checks if the argument "--dump-runtimes=<file_name>" is present in the command
+ * line. If the argument is present, it sets the dump_runtimes_file_name in params.
+ *
+ * @return
+ *      0 if the argument is not found,
+ *      1 if the argument is found and valid,
+ *     -1 if the argument is found but invalid value is provided.
+ */
+integer fla_parse_dump_runtimes_arg(integer argc, char **argv, test_params_t *params)
+{
+    const char *arg_str = "--dump-runtimes=";
+    integer arg_len = strlen(arg_str);
+
+    /* Check if the argument is present in the command line. */
+    for(integer i = 1; i < argc; ++i)
+    {
+        if(strncmp(argv[i], arg_str, arg_len) == 0)
+        {
+            if(argv[i][arg_len] == '\0')
+            {
+                printf("\nError: Invalid dump-runtimes argument: %s\n", argv[i]);
+                printf("       Please provide a valid file name.\n");
+                return -1;
+            }
+            else
+            {
+                params->dump_runtimes_file_name = argv[i] + arg_len;
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
+
+#define FLA_ARGS_PARSE_RESULT_HANDLER                 \
+    if(parse_status < 0)                              \
+    {                                                 \
+        return FALSE; /* Invalid arg while parsing */ \
+    }                                                 \
+    n_args_found += parse_status;
+
+/*
+ * This function parses the command line arguments and sets the
+ * corresponding values in the params structure.
+ * It also updates the argc values to ignore parsed arguments in further
+ * processing. These arguments should be passed in the last.
+ *
+ * @return TRUE if parsing is successful, FALSE if any error occured
+ * */
+bool fla_parse_cmdline_args(integer *argc, char **argv, test_params_t *params)
+{
+    integer n_args_found = 0;
+    integer parse_status;
+
+    /* Check if the help argument is present */
+    parse_status = fla_check_help_arg(*argc, argv);
+    FLA_ARGS_PARSE_RESULT_HANDLER;
+
+    parse_status = fla_check_interface(*argc, argv, params);
+    FLA_ARGS_PARSE_RESULT_HANDLER;
+
+    parse_status = fla_parse_bench_arg(*argc, argv, params);
+    FLA_ARGS_PARSE_RESULT_HANDLER;
+
+    parse_status = fla_parse_warmup_arg(*argc, argv, params);
+    FLA_ARGS_PARSE_RESULT_HANDLER;
+
+    /* If warmup is not provided and benchmark mode then set
+    default warmup */
+    if(parse_status == 0 && params->benchmark_mode)
+    {
+        params->warmup_repeats = FLA_BENCH_DEFAULT_WARMUP;
     }
 
-    if((*time < 1) && (*time >= 0.001))
+    parse_status = fla_parse_stats_arg(*argc, argv, params);
+    FLA_ARGS_PARSE_RESULT_HANDLER;
+    /* If stats arg not found then set default stats */
+    if(params->num_stats == 0)
     {
-        scale[0] = 'm';
-        *time *= 1000;
-    }
-    else if((*time < 0.001) && (*time >= 0.000001))
-    {
-        scale[0] = 'u';
-        *time *= 1000000;
-    }
-    else if((*time < 0.000001) && (*time >= 0.000000001))
-    {
-        scale[0] = 'n';
-        *time *= 1000000000;
-    }
-    else if((*time < 0.000000001) && (*time >= 0.000000000001))
-    {
-        scale[0] = 'p';
-        *time *= 1000000000000;
+        if(params->benchmark_mode)
+        {
+            /* In benchmark mode show min, avg and p95 */
+            params->stats_out[0] = (fla_stat_t){.stat_type = FLA_MIN_STAT};
+            params->stats_out[1] = (fla_stat_t){.stat_type = FLA_AVG_STAT};
+            params->stats_out[2]
+                = (fla_stat_t){.stat_type = FLA_PERCENTILE_STAT, .percentile_num = 95};
+            params->num_stats = 3;
+        }
+        else
+        {
+            /* In normal mode show only min */
+            params->stats_out[0] = (fla_stat_t){.stat_type = FLA_MIN_STAT};
+            params->num_stats = 1;
+        }
     }
 
-    scale[1] = 's';
-    scale[2] = '\0';
+    parse_status = fla_parse_print_header_arg(*argc, argv, params);
+    FLA_ARGS_PARSE_RESULT_HANDLER;
+
+    parse_status = fla_parse_time_unit_arg(*argc, argv, params);
+    FLA_ARGS_PARSE_RESULT_HANDLER;
+
+    parse_status = fla_parse_filter_outliers_args(*argc, argv, params);
+    FLA_ARGS_PARSE_RESULT_HANDLER;
+
+    parse_status = fla_parse_dump_runtimes_arg(*argc, argv, params);
+    FLA_ARGS_PARSE_RESULT_HANDLER;
+
+    *argc -= n_args_found;
+
+    return TRUE;
+}
+
+/**
+ * This function checks if the runtimes array is needed.
+ *
+ * @return 1 if runtimes array is needed, 0 otherwise.
+ */
+integer fla_need_runtimes_array(test_params_t *params)
+{
+    if(params->dump_runtimes_file_name || params->outlier_multiplier)
+    {
+        return 1;
+    }
+    for(integer i = 0; i < params->num_stats; i++)
+    {
+        if(params->stats_out[i].stat_type == FLA_PERCENTILE_STAT
+           || params->stats_out[i].stat_type == FLA_VARIANCE_STAT
+           || params->stats_out[i].stat_type == FLA_STDDEV_STAT)
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+/* Utility functions to get the statistics values
+ * If percentile is needed then make sure filtered_runarr is sorted.
+ */
+double fla_stat_get_val(test_params_t *params, fla_stat_t *stat_desc)
+{
+    test_runtime_ctx_t *ctx = &params->runtime_ctx;
+
+    switch(stat_desc->stat_type)
+    {
+        case FLA_MIN_STAT:
+        {
+            double min_time = ctx->min_time;
+            if(params->outlier_multiplier != 0.0 && ctx->run_times_arr != NULL)
+            {
+                get_min_from_array(DOUBLE, ctx->run_times_arr, &min_time,
+                                   ctx->filtered_run_times_size);
+            }
+            return min_time;
+        }
+        case FLA_MAX_STAT:
+        {
+            double max_time = ctx->max_time;
+            if(params->outlier_multiplier != 0.0 && ctx->run_times_arr != NULL)
+            {
+                get_max_from_array(DOUBLE, ctx->run_times_arr, &max_time,
+                                   ctx->filtered_run_times_size);
+            }
+            return max_time;
+        }
+        case FLA_AVG_STAT:
+        {
+            double avg = ctx->total_time / ctx->run_times_counter;
+            if(params->outlier_multiplier != 0.0 && ctx->run_times_arr != NULL)
+            {
+                get_avg_of_array(DOUBLE, ctx->run_times_arr, &avg, ctx->filtered_run_times_size);
+            }
+            return avg;
+        }
+
+        case FLA_PERCENTILE_STAT:
+        {
+            size_t p_index
+                = (size_t)ceil((ctx->filtered_run_times_size * stat_desc->percentile_num) / 100.0);
+            p_index = fla_min(p_index, ctx->filtered_run_times_size - 1);
+            return ctx->run_times_arr != NULL ? ctx->run_times_arr[p_index] : -1.0;
+        }
+        case FLA_VARIANCE_STAT:
+        {
+            double variance = 0.0;
+            if(ctx->run_times_arr != NULL)
+            {
+                get_variance_of_array(DOUBLE, ctx->run_times_arr, &variance,
+                                      ctx->filtered_run_times_size);
+            }
+            return variance;
+        }
+        case FLA_STDDEV_STAT:
+        {
+            double stddev = 0.0;
+            if(ctx->run_times_arr != NULL)
+            {
+                get_stddev_of_array(DOUBLE, ctx->run_times_arr, &stddev,
+                                    ctx->filtered_run_times_size);
+            }
+            return stddev;
+        }
+        default:
+        {
+            return -1.0;
+        }
+    }
+    /* If none of the above cases are met, return -1.0 */
+    return -1.0;
+}
+
+/* This function initializes the runtime context */
+void fla_test_runtime_ctx_init(test_params_t *params)
+{
+    params->runtime_ctx.run_times_counter = 0;
+    params->runtime_ctx.run_times_arr = NULL;
+    params->runtime_ctx.run_times_arr_size = 0;
+    params->runtime_ctx.warmup_counter = 0;
+    params->runtime_ctx.min_time = DBL_MAX;
+    params->runtime_ctx.total_time = 0.0;
+    params->runtime_ctx.max_time = 0.0;
+    params->runtime_ctx.filtered_run_times_size = 0;
+    params->runtime_ctx.need_runtimes_array = fla_need_runtimes_array(params);
+}
+
+/* Resets the runtime context. Does not free the run_times_arr
+ * as this array can be used for multiple tests.
+ */
+void fla_test_runtime_ctx_reset(test_params_t *params)
+{
+    params->runtime_ctx.run_times_counter = 0;
+    params->runtime_ctx.warmup_counter = 0;
+    params->runtime_ctx.min_time = DBL_MAX;
+    params->runtime_ctx.max_time = 0.0;
+    params->runtime_ctx.total_time = 0.0;
+    params->runtime_ctx.filtered_run_times_size = 0;
+}
+
+/* Frees memory allocated for the context.
+ * This function should be called when all tests are finished
+ */
+void fla_test_runtime_ctx_free(test_params_t *params)
+{
+    if(params->runtime_ctx.run_times_arr != NULL && params->runtime_ctx.run_times_arr_size > 0)
+    {
+        free(params->runtime_ctx.run_times_arr);
+        params->runtime_ctx.run_times_arr = NULL;
+        params->runtime_ctx.run_times_arr_size = 0;
+    }
 }

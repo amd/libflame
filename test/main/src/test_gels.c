@@ -22,8 +22,7 @@ void fla_test_gels_experiment(char *tst_api, test_params_t *params, integer data
                               integer q_cur, integer pci, integer n_repeats, integer einfo);
 void prepare_gels_run(integer datatype, char trans, integer m, integer n, integer m_b, integer nrhs,
                       void *A, integer lda, void *B, integer ldb, void *work, integer lwork,
-                      integer n_repeats, double *time_min_, integer *info, integer interfacetype,
-                      integer layout);
+                      integer *info, integer interfacetype, integer layout, test_params_t *params);
 double prepare_lapacke_gels_run(integer datatype, integer layout, char trans, integer m, integer n,
                                 integer nrhs, integer m_b, void *A, integer lda, void *B,
                                 integer ldb, integer *info);
@@ -38,7 +37,7 @@ void fla_test_gels(integer argc, char **argv, test_params_t *params)
 
     if(argc == 1)
     {
-        config_data = 1;
+        g_config_data = 1;
         g_lwork = -1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
@@ -76,6 +75,7 @@ void fla_test_gels(integer argc, char **argv, test_params_t *params)
         }
         g_lwork = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -144,7 +144,7 @@ void fla_test_gels_experiment(char *tst_api, test_params_t *params, integer data
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -207,8 +207,8 @@ void fla_test_gels_experiment(char *tst_api, test_params_t *params, integer data
     copy_matrix(datatype, "full", ldb, nrhs, B, ldb, B_test, ldb);
 
     /* call to API */
-    prepare_gels_run(datatype, trans, m, n, m_b, nrhs, A_test, lda, B_test, ldb, work, lwork,
-                     n_repeats, &time_min, &info, interfacetype, layout);
+    prepare_gels_run(datatype, trans, m, n, m_b, nrhs, A_test, lda, B_test, ldb, work, lwork, &info,
+                     interfacetype, layout, params);
 
     /* Performance computation */
     if(m >= n)
@@ -227,7 +227,7 @@ void fla_test_gels_experiment(char *tst_api, test_params_t *params, integer data
     if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gels(tst_api, &trans, m, n, nrhs, A, lda, B, ldb, B_test, datatype, residual,
-                      params->imatrix_char);
+                      params->imatrix_char, params);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -254,12 +254,10 @@ void fla_test_gels_experiment(char *tst_api, test_params_t *params, integer data
 
 void prepare_gels_run(integer datatype, char trans, integer m, integer n, integer m_b, integer nrhs,
                       void *A, integer lda, void *B, integer ldb, void *work, integer lwork,
-                      integer n_repeats, double *time_min_, integer *info, integer interfacetype,
-                      integer layout)
+                      integer *info, integer interfacetype, integer layout, test_params_t *params)
 {
-    integer i;
     void *A_save = NULL, *B_save = NULL;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_save, lda);
     create_matrix(datatype, LAPACK_COL_MAJOR, m_b, nrhs, &B_save, ldb);
@@ -298,7 +296,7 @@ void prepare_gels_run(integer datatype, char trans, integer m, integer n, intege
     }
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; i++)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Copy original input */
         copy_matrix(datatype, "full", lda, n, A, lda, A_save, lda);
@@ -330,12 +328,11 @@ void prepare_gels_run(integer datatype, char trans, integer m, integer n, intege
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
 
         free_vector(work);
     }
-    *time_min_ = t_min;
 
     /* Save the output to vector A */
     copy_matrix(datatype, "full", lda, n, A_save, lda, A, lda);
@@ -362,8 +359,8 @@ double prepare_lapacke_gels_run(integer datatype, integer layout, char trans, in
     }
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_gels_lda, lda_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, nrhs, row_major_gels_ldb, ldb_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_gels_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, nrhs, row_major_gels_ldb, ldb_t);
 
     /* In case of row_major matrix layout,
        convert input matrix to row_major */

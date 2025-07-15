@@ -15,7 +15,7 @@ extern double time_min;
 void validate_hgeqz_comp_n(char *tst_api, integer datatype, integer n, void *H_test, void *H_ntest,
                            integer ldh, void *T_test, void *T_ntest, integer ldt, void *alpha,
                            void *alphar, void *alphai, void *beta, void *alphan, void *alphanr,
-                           void *alphani, void *betan, double err_thresh)
+                           void *alphani, void *betan, double err_thresh, void *params)
 {
     void *work = NULL;
     double residual = err_thresh, resid1 = 0., resid2 = 0.;
@@ -33,7 +33,7 @@ void validate_hgeqz_comp_n(char *tst_api, integer datatype, integer n, void *H_t
 
     /* Validate the eigen values when compq=N or compz=N */
     validate_eigen_values(tst_api, datatype, n, alpha, alphar, alphai, beta, alphan, alphanr,
-                          alphani, betan, &resid1, &resid2, &resid3);
+                          alphani, betan, &resid1, &resid2, &resid3, params);
 
     switch(datatype)
     {
@@ -130,7 +130,8 @@ void validate_hgeqz_comp_n(char *tst_api, integer datatype, integer n, void *H_t
 
 void validate_eigen_values(char *tst_api, integer datatype, integer n, void *alpha, void *alphar,
                            void *alphai, void *beta, void *alphae, void *alphaer, void *alphaei,
-                           void *betae, double *resid1, double *resid2, double *resid3)
+                           void *betae, double *resid1, double *resid2, double *resid3,
+                           void *params)
 {
     void *work = NULL;
 
@@ -240,7 +241,8 @@ void validate_eigen_values(char *tst_api, integer datatype, integer n, void *alp
 
 void validate_hgeqz_eigen_values(char *tst_api, integer datatype, integer n, void *alpha,
                                  void *alphar, void *alphai, void *beta, void *alphae,
-                                 void *alphaer, void *alphaei, void *betae, double err_thresh)
+                                 void *alphaer, void *alphaei, void *betae, double err_thresh,
+                                 void *params)
 {
     double residual, resid1 = 0., resid2 = 0., resid3 = 0.;
 
@@ -255,7 +257,7 @@ void validate_hgeqz_eigen_values(char *tst_api, integer datatype, integer n, voi
     FLA_TEST_PRINT_INVALID_STATUS(n, n, err_thresh);
 
     validate_eigen_values(tst_api, datatype, n, alpha, alphar, alphai, beta, alphae, alphaer,
-                          alphaei, betae, &resid1, &resid2, &resid3);
+                          alphaei, betae, &resid1, &resid2, &resid3, params);
 
     residual = fla_test_max(resid1, resid2);
     residual = fla_test_max(resid3, residual);
@@ -269,7 +271,7 @@ void validate_hgeqz_eigen_values(char *tst_api, integer datatype, integer n, voi
 void validate_hgeqz(char *tst_api, char *job, char *compq, char *compz, integer n, void *H,
                     void *H_test, void *A, integer ldh, void *T, void *T_test, void *B, integer ldt,
                     void *Q, void *Q_test, void *Q_A, integer ldq, void *Z, void *Z_test, void *Z_A,
-                    integer ldz, integer datatype, double err_thresh, char imatrix)
+                    integer ldz, integer datatype, double err_thresh, char imatrix, void *params)
 {
     double residual = err_thresh, resid1 = 0., resid2 = 0.;
     double resid3 = 0., resid4 = 0.;
@@ -352,7 +354,7 @@ void validate_hgeqz(char *tst_api, char *job, char *compq, char *compz, integer 
 
                 /* Test 5 */
                 validate_gghrd_int(tst_api, compq, compz, n, A, h_input, ldh, B, t_input, ldt, Q_A,
-                                   Q, ldq, Z_A, Z, ldz, datatype, res_gghrd);
+                                   Q, ldq, Z_A, Z, ldz, datatype, res_gghrd, params);
             }
 
             /* Test 4
@@ -417,7 +419,7 @@ void validate_hgeqz(char *tst_api, char *job, char *compq, char *compz, integer 
 
                 /* Test 3 */
                 validate_gghrd_int(tst_api, compq, compz, n, A, h_input, ldh, B, t_input, ldt, Q_A,
-                                   Q, ldq, Z_A, Z, ldz, datatype, res_gghrd);
+                                   Q, ldq, Z_A, Z, ldz, datatype, res_gghrd, params);
             }
 
             /* Test 4
@@ -482,7 +484,7 @@ void validate_hgeqz(char *tst_api, char *job, char *compq, char *compz, integer 
 
                 /* Test 3 */
                 validate_gghrd_int(tst_api, compq, compz, n, A, h_input, ldh, B, t_input, ldt, Q_A,
-                                   Q, ldq, Z_A, Z, ldz, datatype, res_gghrd);
+                                   Q, ldq, Z_A, Z, ldz, datatype, res_gghrd, params);
             }
 
             /* Test 4
@@ -547,7 +549,7 @@ void validate_hgeqz(char *tst_api, char *job, char *compq, char *compz, integer 
 
                 /* Test 3 */
                 validate_gghrd_int(tst_api, compq, compz, n, A, h_input, ldh, B, t_input, ldt, Q_A,
-                                   Q, ldq, Z_A, Z, ldz, datatype, res_gghrd);
+                                   Q, ldq, Z_A, Z, ldz, datatype, res_gghrd, params);
             }
 
             /* Test 4

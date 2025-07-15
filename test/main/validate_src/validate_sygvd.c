@@ -70,14 +70,14 @@ extern double time_min;
         /* Test 1 */                                                                               \
         copy_matrix(datatype, "full", n, n, X, lda, X_scaled, lda);                                \
         /* If test is underflow/overflow then scale X accordingly */                               \
-        if(same_char(imatrix, 'O'))                                                             \
+        if(same_char(imatrix, 'O'))                                                                \
         {                                                                                          \
             /* Scale such that all elements are <= 10^-2 */                                        \
             get_max_from_matrix(datatype, X_scaled, &x_scale, n, n, lda);                          \
             x_scale = 0.01 / x_scale;                                                              \
             scal_matrix(datatype, &x_scale, X_scaled, n, n, lda, 1);                               \
         }                                                                                          \
-        else if(same_char(imatrix, 'U'))                                                        \
+        else if(same_char(imatrix, 'U'))                                                           \
         {                                                                                          \
             /* Scale such that all elements are >= 1 */                                            \
             get_min_from_matrix(datatype, X_scaled, &x_scale, n, n, lda);                          \
@@ -183,7 +183,7 @@ extern double time_min;
 void validate_sygvd(char *tst_api, integer itype, char *jobz, char *range, char *uplo, integer n,
                     void *A, void *A_test, integer lda, void *B, void *B_test, integer ldb,
                     integer il, integer iu, void *lambda_orig, void *lambda_out, void *ifail,
-                    integer datatype, double err_thresh, char imatrix, void *scal)
+                    integer datatype, double err_thresh, char imatrix, void *scal, void *params)
 {
     double residual, resid1 = 0., resid2 = 0., resid3 = 0.;
     double resid4 = 0., resid5 = 0., resid6 = 0.;

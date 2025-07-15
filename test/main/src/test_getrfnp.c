@@ -2,6 +2,8 @@
     Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
+#if ENABLE_AOCL_EXTENSION_APIS
+
 #include "test_lapack.h"
 
 #define GETRFNP_VL 0.1
@@ -14,8 +16,8 @@ void fla_test_getrfnp_experiment(char *tst_api, test_params_t *params, integer d
                                  integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                  integer einfo);
 void prepare_getrfnp_run(integer m_A, integer n_A, void *A, integer lda, integer datatype,
-                         integer n_repeats, double *time_min_, integer *info, integer interfacetype,
-                         int matrix_layout);
+                         integer *info, integer interfacetype, int matrix_layout,
+                         test_params_t *params);
 void invoke_getrfnp(integer datatype, integer *m, integer *n, void *a, integer *lda, integer *info);
 
 void fla_test_getrfnp(integer argc, char **argv, test_params_t *params)
@@ -27,7 +29,7 @@ void fla_test_getrfnp(integer argc, char **argv, test_params_t *params)
 
     if(argc == 1)
     {
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, RECT_INPUT, params, LIN, fla_test_getrfnp_experiment);
@@ -50,6 +52,7 @@ void fla_test_getrfnp(integer argc, char **argv, test_params_t *params)
         N = strtoimax(argv[4], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -119,7 +122,7 @@ void fla_test_getrfnp_experiment(char *tst_api, test_params_t *params, integer d
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -170,8 +173,7 @@ void fla_test_getrfnp_experiment(char *tst_api, test_params_t *params, integer d
     }
 
     /* call to API */
-    prepare_getrfnp_run(m, n, A_test, lda, datatype, n_repeats, &time_min, &info, interfacetype,
-                        layout);
+    prepare_getrfnp_run(m, n, A_test, lda, datatype, &info, interfacetype, layout, params);
 
     /* performance computation */
     min_mn = fla_min(m, n);
@@ -194,7 +196,7 @@ void fla_test_getrfnp_experiment(char *tst_api, test_params_t *params, integer d
     if(!FLA_EXTREME_CASE_TEST)
     {
         validate_getrf(tst_api, m, n, A, A_test, lda, IPIV, datatype, residual,
-                       params->imatrix_char);
+                       params->imatrix_char, params);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -218,19 +220,17 @@ void fla_test_getrfnp_experiment(char *tst_api, test_params_t *params, integer d
 }
 
 void prepare_getrfnp_run(integer m_A, integer n_A, void *A, integer lda, integer datatype,
-                         integer n_repeats, double *time_min_, integer *info, integer interfacetype,
-                         int layout)
+                         integer *info, integer interfacetype, int layout, test_params_t *params)
 {
-    integer i;
     void *A_save;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     /* Save the original matrix */
     create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_A, &A_save, lda);
     copy_matrix(datatype, "full", m_A, n_A, A, lda, A_save, lda);
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
 
         /* Copy original input data */
@@ -240,12 +240,9 @@ void prepare_getrfnp_run(integer m_A, integer n_A, void *A, integer lda, integer
         /* Call LAPACK getrf API */
         invoke_getrfnp(datatype, &m_A, &n_A, A_save, &lda, info);
         exe_time = fla_test_clock() - exe_time;
-
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
     }
 
-    *time_min_ = t_min;
     /*  Save the AFACT to matrix A */
     copy_matrix(datatype, "full", m_A, n_A, A_save, lda, A, lda);
     free_matrix(A_save);
@@ -283,3 +280,5 @@ void invoke_getrfnp(integer datatype, integer *m, integer *n, void *a, integer *
         }
     }
 }
+
+#endif /* ENABLE_AOCL_EXTENSION_APIS */

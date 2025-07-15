@@ -12,7 +12,7 @@ extern double perf;
 extern double time_min;
 
 void validate_larfg(char *tst_api, integer datatype, integer n, integer incx, integer x_length,
-                    void *x, void *v, void *tau, double err_thresh)
+                    void *x, void *v, void *tau, double err_thresh, void *params)
 {
     void *beta, *x_temp, *v_temp, *work;
     double residual;

@@ -13,7 +13,7 @@ extern double perf;
 extern double time_min;
 
 void validate_spffrtx(char *tst_api, integer n, integer ncolm, void *A, void *AP, integer datatype,
-                      double err_thresh)
+                      double err_thresh, void *params)
 {
     integer i, j, di;
     void *work = NULL;

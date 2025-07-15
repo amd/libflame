@@ -13,7 +13,7 @@ extern double perf;
 extern double time_min;
 
 void validate_syevd(char *tst_api, char *jobz, integer n, void *A, void *A_test, integer lda,
-                    void *w, integer datatype, double err_thresh)
+                    void *w, integer datatype, double err_thresh, void *params)
 {
     double residual, resid1 = 0., resid2 = 0.;
 

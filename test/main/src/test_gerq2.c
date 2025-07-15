@@ -15,7 +15,7 @@ void fla_test_gerq2_experiment(char *tst_api, test_params_t *params, integer dat
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
 void prepare_gerq2_run(integer m_A, integer n_A, void *A, integer lda, void *T, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info, integer interfacetype);
+                       integer *info, integer interfacetype, test_params_t *params);
 void invoke_gerq2(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau,
                   void *work, integer *info);
 
@@ -28,7 +28,7 @@ void fla_test_gerq2(integer argc, char **argv, test_params_t *params)
 
     if(argc == 1)
     {
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, RECT_INPUT, params, LIN, fla_test_gerq2_experiment);
@@ -52,6 +52,7 @@ void fla_test_gerq2(integer argc, char **argv, test_params_t *params)
         params->lin_solver_paramslist[0].lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
 
         n_repeats = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -118,7 +119,7 @@ void fla_test_gerq2_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -140,7 +141,7 @@ void fla_test_gerq2_experiment(char *tst_api, test_params_t *params, integer dat
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
-    prepare_gerq2_run(m, n, A_test, lda, T, datatype, n_repeats, &time_min, &info, interfacetype);
+    prepare_gerq2_run(m, n, A_test, lda, T, datatype, &info, interfacetype, params);
 
     /* performance computation */
     if(m >= n)
@@ -156,7 +157,7 @@ void fla_test_gerq2_experiment(char *tst_api, test_params_t *params, integer dat
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
     if(!FLA_EXTREME_CASE_TEST)
     {
-        validate_gerq2(tst_api, m, n, A, A_test, lda, T, datatype, residual);
+        validate_gerq2(tst_api, m, n, A, A_test, lda, T, datatype, residual, params);
     }
     else
     {
@@ -178,11 +179,11 @@ void fla_test_gerq2_experiment(char *tst_api, test_params_t *params, integer dat
 }
 
 void prepare_gerq2_run(integer m_A, integer n_A, void *A, integer lda, void *T, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info, integer interfacetype)
+                       integer *info, integer interfacetype, test_params_t *params)
 {
-    integer min_A, i;
+    integer min_A;
     void *A_save = NULL, *T_test = NULL, *work = NULL;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     min_A = fla_min(m_A, n_A);
 
@@ -192,7 +193,7 @@ void prepare_gerq2_run(integer m_A, integer n_A, void *A, integer lda, void *T, 
     copy_matrix(datatype, "full", m_A, n_A, A, lda, A_save, lda);
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
@@ -218,8 +219,8 @@ void prepare_gerq2_run(integer m_A, integer n_A, void *A, integer lda, void *T, 
             exe_time = fla_test_clock() - exe_time;
         }
 
-        // Get the best execution time
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
 
         // Make a copy of the output buffers. This is required to validate the API functionality.
         copy_vector(datatype, min_A, T_test, 1, T, 1);
@@ -228,8 +229,6 @@ void prepare_gerq2_run(integer m_A, integer n_A, void *A, integer lda, void *T, 
         free_vector(work);
         free_vector(T_test);
     }
-
-    *time_min_ = t_min;
 
     free_matrix(A_save);
 }

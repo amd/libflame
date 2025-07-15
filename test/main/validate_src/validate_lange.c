@@ -341,7 +341,7 @@
     }
 
 void validate_lange(char *tst_api, integer datatype, char norm_type, integer m, integer n,
-                    integer lda, void *A, void *result, double err_thresh)
+                    integer lda, void *A, void *result, double err_thresh, void *params)
 {
     void *calculated_value;
     double residual;

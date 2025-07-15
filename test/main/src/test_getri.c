@@ -20,8 +20,8 @@ void fla_test_getri_experiment(char *tst_api, test_params_t *params, integer dat
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
 void prepare_getri_run(integer n_A, void *A, integer lda, integer *ipiv, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info, integer interfacetype,
-                       int matrix_layout);
+                       integer *info, integer interfacetype, int matrix_layout,
+                       test_params_t *params);
 void invoke_getri(integer datatype, integer *n, void *a, integer *lda, integer *ipiv, void *work,
                   integer *lwork, integer *info);
 double prepare_lapacke_getri_run(integer datatype, int matrix_layout, integer m_A, integer n_A,
@@ -37,7 +37,7 @@ void fla_test_getri(integer argc, char **argv, test_params_t *params)
     if(argc == 1)
     {
         g_lwork = -1;
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, LIN, fla_test_getri_experiment);
@@ -70,6 +70,7 @@ void fla_test_getri(integer argc, char **argv, test_params_t *params)
         g_lwork = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
 
         n_repeats = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -137,7 +138,7 @@ void fla_test_getri_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -171,8 +172,7 @@ void fla_test_getri_experiment(char *tst_api, test_params_t *params, integer dat
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
 
     /* call to API */
-    prepare_getri_run(n, A_test, lda, IPIV, datatype, n_repeats, &time_min, &info, interfacetype,
-                      layout);
+    prepare_getri_run(n, A_test, lda, IPIV, datatype, &info, interfacetype, layout, params);
 
     /* performance computation */
     /* 2mn^2 - (2/3)n^3 flops */
@@ -185,7 +185,7 @@ void fla_test_getri_experiment(char *tst_api, test_params_t *params, integer dat
     if(!FLA_EXTREME_CASE_TEST)
     {
         validate_getri(tst_api, n, n, A, A_test, lda, IPIV, datatype, residual,
-                       params->imatrix_char);
+                       params->imatrix_char, params);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -209,13 +209,11 @@ void fla_test_getri_experiment(char *tst_api, test_params_t *params, integer dat
 }
 
 void prepare_getri_run(integer n_A, void *A, integer lda, integer *IPIV, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info, integer interfacetype,
-                       int layout)
+                       integer *info, integer interfacetype, int layout, test_params_t *params)
 {
     integer lwork;
-    integer i;
     void *A_save, *work;
-    double t_min = 1e9, exe_time;
+    double exe_time;
     lwork = i_n_one;
 
     /* Save the original matrix */
@@ -260,7 +258,7 @@ void prepare_getri_run(integer n_A, void *A, integer lda, integer *IPIV, integer
     }
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
 
         /* Copy original input data */
@@ -292,13 +290,12 @@ void prepare_getri_run(integer n_A, void *A, integer lda, integer *IPIV, integer
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
         // Free up the output buffers
         free_matrix(work);
     }
 
-    *time_min_ = t_min;
     /*  Save the final result to A matrix*/
     copy_matrix(datatype, "full", n_A, n_A, A_save, lda, A, lda);
     free_matrix(A_save);
@@ -312,7 +309,7 @@ double prepare_lapacke_getri_run(integer datatype, int layout, integer m_A, inte
     void *A_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_getri_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n_A, row_major_getri_lda, lda_t);
 
     A_t = A;
 

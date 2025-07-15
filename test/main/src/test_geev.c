@@ -19,8 +19,8 @@ void fla_test_geev_experiment(char *tst_api, test_params_t *params, integer data
                               integer q_cur, integer pci, integer n_repeats, integer einfo);
 void prepare_geev_run(char *jobvl, char *jobvr, integer n, void *a, integer lda, void *wr, void *wi,
                       void *w, void *vl, integer ldvl, void *vr, integer ldvr, integer datatype,
-                      integer n_repeats, double *time_min_, integer *info, integer interfacetype,
-                      int matrix_layout);
+                      integer *info, integer interfacetype, int matrix_layout,
+                      test_params_t *params);
 void invoke_geev(integer datatype, char *jobvl, char *jobvr, integer *n, void *a, integer *lda,
                  void *wr, void *wi, void *w, void *vl, integer *ldvl, void *vr, integer *ldvr,
                  void *work, integer *lwork, void *rwork, integer *info);
@@ -39,7 +39,7 @@ void fla_test_geev(integer argc, char **argv, test_params_t *params)
     if(argc == 1)
     {
         g_lwork = -1;
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, EIG_NSYM, fla_test_geev_experiment);
@@ -81,6 +81,7 @@ void fla_test_geev(integer argc, char **argv, test_params_t *params)
 
         g_lwork = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -154,7 +155,7 @@ void fla_test_geev_experiment(char *tst_api, test_params_t *params, integer data
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -233,13 +234,13 @@ void fla_test_geev_experiment(char *tst_api, test_params_t *params, integer data
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
 
-    prepare_geev_run(&jobvl, &jobvr, n, A_test, lda, wr, wi, w, VL, ldvl, VR, ldvr, datatype,
-                     n_repeats, &time_min, &info, interfacetype, layout);
+    prepare_geev_run(&jobvl, &jobvr, n, A_test, lda, wr, wi, w, VL, ldvl, VR, ldvr, datatype, &info,
+                     interfacetype, layout, params);
 
+    /* Get the minimum time */
     /* performance computation
-       4/3 n^3 flops if job = 'N'
-       8/3 n^3 flops if job = 'V' */
-
+    4/3 n^3 flops if job = 'N'
+    8/3 n^3 flops if job = 'V' */
     if(same_char(jobvl, 'N') && same_char(jobvr, 'N'))
         perf = (double)((4.0 / 3.0) * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     else
@@ -252,7 +253,7 @@ void fla_test_geev_experiment(char *tst_api, test_params_t *params, integer data
     if(!FLA_EXTREME_CASE_TEST)
     {
         validate_geev(tst_api, &jobvl, &jobvr, n, A, A_test, lda, VL, ldvl, VR, ldvr, w, wr, wi,
-                      datatype, params->imatrix_char, scal, residual, wr_in, wi_in);
+                      datatype, params->imatrix_char, scal, residual, wr_in, wi_in, params);
     }
     else
     {
@@ -288,13 +289,12 @@ void fla_test_geev_experiment(char *tst_api, test_params_t *params, integer data
 
 void prepare_geev_run(char *jobvl, char *jobvr, integer n_A, void *A, integer lda, void *wr,
                       void *wi, void *w, void *VL, integer ldvl, void *VR, integer ldvr,
-                      integer datatype, integer n_repeats, double *time_min_, integer *info,
-                      integer interfacetype, int layout)
+                      integer datatype, integer *info, integer interfacetype, int layout,
+                      test_params_t *params)
 {
     void *A_save = NULL, *rwork = NULL, *work = NULL;
     integer lwork, lrwork;
-    integer i;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
@@ -351,7 +351,7 @@ void prepare_geev_run(char *jobvl, char *jobvr, integer n_A, void *A, integer ld
     }
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
@@ -385,8 +385,8 @@ void prepare_geev_run(char *jobvl, char *jobvr, integer n_A, void *A, integer ld
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
 
         /* Free up the output buffers */
         free_vector(work);
@@ -395,8 +395,6 @@ void prepare_geev_run(char *jobvl, char *jobvr, integer n_A, void *A, integer ld
             free_vector(rwork);
         }
     }
-
-    *time_min_ = t_min;
 
     free_matrix(A_save);
 }
@@ -412,9 +410,9 @@ double prepare_lapacke_geev_run(integer datatype, int layout, char *jobvl, char 
     void *a_t = NULL, *vl_t = NULL, *vr_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_geev_lda, lda_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_geev_ldvl, ldvl_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_geev_ldvr, ldvr_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_geev_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_geev_ldvl, ldvl_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_geev_ldvr, ldvr_t);
 
     a_t = a;
     vl_t = vl;

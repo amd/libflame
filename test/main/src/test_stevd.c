@@ -17,8 +17,8 @@ void fla_test_stevd_experiment(char *tst_api, test_params_t *params, integer dat
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
 void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, void *E,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer interfacetype, int matrix_layout);
+                       integer datatype, integer *info, integer interfacetype, int matrix_layout,
+                       test_params_t *params);
 void invoke_stevd(integer datatype, char *jobz, integer *n, void *z, integer *ldz, void *d, void *e,
                   void *work, integer *lwork, void *iwork, integer *liwork, integer *info);
 double prepare_lapacke_stevd_run(integer datatype, int matrix_layout, char *jobz, integer n,
@@ -37,7 +37,7 @@ void fla_test_stevd(integer argc, char **argv, test_params_t *params)
     {
         g_lwork = -1;
         g_liwork = -1;
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, EIG_SYM, fla_test_stevd_experiment);
@@ -72,6 +72,7 @@ void fla_test_stevd(integer argc, char **argv, test_params_t *params)
         g_lwork = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
         g_liwork = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -150,7 +151,7 @@ void fla_test_stevd_experiment(char *tst_api, test_params_t *params, integer dat
     n = p_cur;
     /* If leading dimensions = -1, set them to default value
         when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(ldz == -1)
         {
@@ -205,12 +206,12 @@ void fla_test_stevd_experiment(char *tst_api, test_params_t *params, integer dat
     copy_vector(datatype, n, D, 1, D_test, 1);
     copy_vector(datatype, n - 1, E, 1, E_test, 1);
 
-    prepare_stevd_run(&jobz, n, Z_test, ldz, D_test, E_test, datatype, n_repeats, &time_min, &info,
-                      interfacetype, layout);
+    prepare_stevd_run(&jobz, n, Z_test, ldz, D_test, E_test, datatype, &info, interfacetype, layout,
+                      params);
 
     /* performance computation
-        6 * n^3 + n^2 flops for eigen vectors
-        6 * n^2 flops for eigen values */
+     6 * n^3 + n^2 flops for eigen vectors
+     6 * n^2 flops for eigen values */
     if(same_char(jobz, 'V'))
         perf = (double)((6.0 * n * n * n) + (n * n)) / time_min / FLOPS_PER_UNIT_PERF;
     else
@@ -221,7 +222,7 @@ void fla_test_stevd_experiment(char *tst_api, test_params_t *params, integer dat
     if(!FLA_EXTREME_CASE_TEST)
     {
         validate_syev(tst_api, &jobz, &range, n, Z, Z_test, ldz, 0, 0, L, D_test, NULL, datatype,
-                      residual, params->imatrix_char, scal);
+                      residual, params->imatrix_char, scal, params);
     }
     /* Check for output matrix & vectors when inputs are extreme values */
     else if(FLA_EXTREME_CASE_TEST)
@@ -264,13 +265,12 @@ void fla_test_stevd_experiment(char *tst_api, test_params_t *params, integer dat
 }
 
 void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, void *E,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer interfacetype, int layout)
+                       integer datatype, integer *info, integer interfacetype, int layout,
+                       test_params_t *params)
 {
     void *Z_save, *D_save, *E_save, *work, *iwork;
     integer lwork, liwork;
-    integer i;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
@@ -327,7 +327,7 @@ void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, voi
     create_vector(INTEGER, &iwork, liwork);
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore/reset input matrices for each iteration*/
         copy_matrix(datatype, "full", n, n, Z_save, ldz, Z, ldz);
@@ -358,11 +358,9 @@ void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, voi
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
     }
-
-    *time_min_ = t_min;
 
     /* Free up the buffers */
     free_matrix(Z_save);
@@ -380,7 +378,7 @@ double prepare_lapacke_stevd_run(integer datatype, int layout, char *jobz, integ
     void *Z_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_stevd_ldz, ldz_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_stevd_ldz, ldz_t);
 
     Z_t = Z;
 

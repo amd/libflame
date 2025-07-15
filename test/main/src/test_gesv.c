@@ -20,8 +20,8 @@ integer row_major_gesv_ldb;
 void fla_test_gesv_experiment(char *tst_api, test_params_t *params, integer datatype, integer p_cur,
                               integer q_cur, integer pci, integer n_repeats, integer einfo);
 void prepare_gesv_run(integer n_A, integer nrhs, void *A, integer lda, void *B, integer ldb,
-                      integer *ipiv, integer datatype, integer n_repeats, double *time_min_,
-                      integer *info, integer interfacetype, int matrix_layout);
+                      integer *ipiv, integer datatype, integer *info, integer interfacetype,
+                      int matrix_layout, test_params_t *params);
 void invoke_gesv(integer datatype, integer *nrhs, integer *n, void *a, integer *lda, integer *ipiv,
                  void *b, integer *ldb, integer *info);
 double prepare_lapacke_gesv_run(integer datatype, int matrix_layout, integer n_A, integer nrhs,
@@ -37,7 +37,7 @@ void fla_test_gesv(integer argc, char **argv, test_params_t *params)
 
     if(argc == 1)
     {
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, LIN, fla_test_gesv_experiment);
@@ -73,6 +73,7 @@ void fla_test_gesv(integer argc, char **argv, test_params_t *params)
             params->lin_solver_paramslist[0].ldb = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
         }
         n_repeats = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -142,7 +143,7 @@ void fla_test_gesv_experiment(char *tst_api, test_params_t *params, integer data
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -184,9 +185,10 @@ void fla_test_gesv_experiment(char *tst_api, test_params_t *params, integer data
     /* Save the original matrix*/
     copy_matrix(datatype, "full", n, n, A, lda, A_save, lda);
     copy_matrix(datatype, "full", n, NRHS, B, ldb, B_save, ldb);
+
     /* call to API */
-    prepare_gesv_run(n, NRHS, A_save, lda, B_save, ldb, IPIV, datatype, n_repeats, &time_min, &info,
-                     interfacetype, layout);
+    prepare_gesv_run(n, NRHS, A_save, lda, B_save, ldb, IPIV, datatype, &info, interfacetype,
+                     layout, params);
 
     /* performance computation */
     /* 2mn^2 - (2/3)n^3 flops */
@@ -199,7 +201,7 @@ void fla_test_gesv_experiment(char *tst_api, test_params_t *params, integer data
     if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gesv(tst_api, n, NRHS, A, lda, B, ldb, B_save, datatype, residual,
-                      params->imatrix_char, scal);
+                      params->imatrix_char, scal, params);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -230,19 +232,18 @@ void fla_test_gesv_experiment(char *tst_api, test_params_t *params, integer data
 }
 
 void prepare_gesv_run(integer n_A, integer nrhs, void *A, integer lda, void *B, integer ldb,
-                      integer *IPIV, integer datatype, integer n_repeats, double *time_min_,
-                      integer *info, integer interfacetype, int layout)
+                      integer *IPIV, integer datatype, integer *info, integer interfacetype,
+                      int layout, test_params_t *params)
 {
-    integer i;
     void *A_test, *B_test;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     /* Save the original matrix */
     create_matrix(datatype, LAPACK_COL_MAJOR, n_A, n_A, &A_test, lda);
     create_matrix(datatype, LAPACK_COL_MAJOR, n_A, nrhs, &B_test, ldb);
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
 
         /* Copy original input data */
@@ -270,11 +271,11 @@ void prepare_gesv_run(integer n_A, integer nrhs, void *A, integer lda, void *B, 
             invoke_gesv(datatype, &n_A, &nrhs, A_test, &lda, IPIV, B_test, &ldb, info);
             exe_time = fla_test_clock() - exe_time;
         }
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
     }
 
-    *time_min_ = t_min;
     /*  Save the final result to B matrix*/
     copy_matrix(datatype, "full", n_A, nrhs, B_test, ldb, B, ldb);
 
@@ -291,8 +292,8 @@ double prepare_lapacke_gesv_run(integer datatype, int layout, integer n_A, integ
     void *A_t = NULL, *B_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_gesv_lda, lda_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, nrhs, row_major_gesv_ldb, ldb_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n_A, row_major_gesv_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, nrhs, row_major_gesv_ldb, ldb_t);
 
     A_t = A;
     B_t = B;

@@ -39,8 +39,7 @@ void fla_test_gejsv_experiment(char *tst_api, test_params_t *params, integer dat
 void prepare_gejsv_run(integer datatype, char joba, char jobu, char jobv, char jobr, char jobt,
                        char jobp, integer m, integer n, void *A, integer lda, void *S, void *U,
                        integer ldu, void *V, integer ldv, void *stat, integer *istat,
-                       integer n_repeats, double *time_min_, integer interfacetype, integer layout,
-                       integer *info);
+                       integer interfacetype, integer layout, integer *info, test_params_t *params);
 
 void invoke_gejsv(integer datatype, char *joba, char *jobu, char *jobv, char *jobr, char *jobt,
                   char *jobp, integer *m, integer *n, void *A, integer *lda, void *S, void *U,
@@ -71,7 +70,7 @@ void fla_test_gejsv(integer argc, char **argv, test_params_t *params)
         g_lwork = -1;
         g_lrwork = -1;
         g_liwork = -1;
-        config_data = 1;
+        g_config_data = 1;
 
         /* gejsv has different configuration for the matrix sizes.
            Need to map these special sizes to the standard size
@@ -134,6 +133,7 @@ void fla_test_gejsv(integer argc, char **argv, test_params_t *params)
         g_lrwork = strtoimax(argv[15], &endptr, CLI_DECIMAL_BASE);
         g_liwork = strtoimax(argv[16], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[17], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -197,8 +197,9 @@ void fla_test_gejsv_experiment(char *tst_api, test_params_t *params, integer dat
     integer interfacetype = params->interfacetype;
     integer layout = params->matrix_major;
     char imatrix = params->imatrix_char;
+
     /* Test that small noise svds are eliminated
-       when joba = A */
+           when joba = A */
 
     m = p_cur;
     n = q_cur;
@@ -259,7 +260,7 @@ void fla_test_gejsv_experiment(char *tst_api, test_params_t *params, integer dat
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
     prepare_gejsv_run(datatype, joba, jobu, jobv, jobr, jobt, jobp, m, n, A_test, lda, S_test, U,
-                      ldu, V, ldv, stat, istat, n_repeats, &time_min, interfacetype, layout, &info);
+                      ldu, V, ldv, stat, istat, interfacetype, layout, &info, params);
 
     /* performance computation */
     /*  6mn^2 + 8n^3 flops */
@@ -272,8 +273,8 @@ void fla_test_gejsv_experiment(char *tst_api, test_params_t *params, integer dat
     if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gejsv(tst_api, joba, jobu, jobv, jobr, jobt, jobp, m, n, A, lda, S, S_test, U, ldu,
-                       V, ldv, stat, istat, test_eliminated_svds, datatype, residual, scal,
-                       imatrix);
+                       V, ldv, stat, istat, test_eliminated_svds, datatype, residual, scal, imatrix,
+                       params);
     }
     else
     {
@@ -309,12 +310,11 @@ void fla_test_gejsv_experiment(char *tst_api, test_params_t *params, integer dat
 void prepare_gejsv_run(integer datatype, char joba, char jobu, char jobv, char jobr, char jobt,
                        char jobp, integer m, integer n, void *A, integer lda, void *S, void *U,
                        integer ldu, void *V, integer ldv, void *stat, integer *istat,
-                       integer n_repeats, double *time_min_, integer interfacetype, integer layout,
-                       integer *info)
+                       integer interfacetype, integer layout, integer *info, test_params_t *params)
 {
     void *A_save = NULL, *work = NULL, *rwork = NULL;
-    integer lwork, lrwork, liwork, *iwork, i;
-    double t_min = 1e9, exe_time;
+    integer lwork, lrwork, liwork, *iwork;
+    double exe_time;
 
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_save, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_save, lda);
@@ -409,7 +409,7 @@ void prepare_gejsv_run(integer datatype, char joba, char jobu, char jobv, char j
     }
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         copy_matrix(datatype, "full", m, n, A_save, lda, A, lda);
 
@@ -436,10 +436,9 @@ void prepare_gejsv_run(integer datatype, char joba, char jobu, char jobv, char j
             exe_time = fla_test_clock() - exe_time;
         }
 
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
     }
-
-    *time_min_ = t_min;
 
     /* Copying stat values for Non-lapacke interfaces */
     if(!FLA_IS_LAPACKE_INTERFACE(interfacetype))
@@ -478,9 +477,9 @@ double prepare_lapacke_gejsv_run(integer datatype, int layout, char joba, char j
     void *A_t = NULL, *U_t = NULL, *V_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_gejsv_lda, lda_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, m, row_major_gejsv_ldu, ldu_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_gejsv_ldv, ldv_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_gejsv_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, m, row_major_gejsv_ldu, ldu_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_gejsv_ldv, ldv_t);
 
     A_t = A;
     U_t = U;

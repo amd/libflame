@@ -16,9 +16,8 @@ integer row_major_potrf_lda;
 void fla_test_potrf_experiment(char *tst_api, test_params_t *params, integer datatype,
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
-void prepare_potrf_run(char *uplo, integer m, void *A, integer lda, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info, integer interfacetype,
-                       int matrix_layout);
+void prepare_potrf_run(char *uplo, integer m, void *A, integer lda, integer datatype, integer *info,
+                       integer interfacetype, int matrix_layout, test_params_t *params);
 void invoke_potrf(char *uplo, integer datatype, integer *m, void *a, integer *lda, integer *info);
 double prepare_lapacke_potrf_run(integer datatype, int matrix_layout, char *uplo, integer m,
                                  void *A, integer lda, integer *info);
@@ -32,7 +31,7 @@ void fla_test_potrf(integer argc, char **argv, test_params_t *params)
 
     if(argc == 1)
     {
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, LIN, fla_test_potrf_experiment);
@@ -64,6 +63,7 @@ void fla_test_potrf(integer argc, char **argv, test_params_t *params)
             params->lin_solver_paramslist[0].lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
         }
         n_repeats = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -132,7 +132,7 @@ void fla_test_potrf_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -171,8 +171,7 @@ void fla_test_potrf_experiment(char *tst_api, test_params_t *params, integer dat
     create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &A_test, lda);
     copy_matrix(datatype, "full", m, m, A, lda, A_test, lda);
 
-    prepare_potrf_run(&uplo, m, A_test, lda, datatype, n_repeats, &time_min, &info, interfacetype,
-                      layout);
+    prepare_potrf_run(&uplo, m, A_test, lda, datatype, &info, interfacetype, layout, params);
 
     /* Compute the performance of the best experiment repeat */
     /* (1/3)m^3 for real and (4/3)m^3 for complex*/
@@ -183,7 +182,7 @@ void fla_test_potrf_experiment(char *tst_api, test_params_t *params, integer dat
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
     if(!FLA_EXTREME_CASE_TEST)
     {
-        validate_potrf(tst_api, &uplo, m, A, A_test, lda, datatype, residual);
+        validate_potrf(tst_api, &uplo, m, A, A_test, lda, datatype, residual, params);
     }
     else if(FLA_EXTREME_CASE_TEST)
     {
@@ -198,17 +197,16 @@ void fla_test_potrf_experiment(char *tst_api, test_params_t *params, integer dat
         FLA_PRINT_TEST_STATUS(m, m, residual, err_thresh);
     }
 
+    /* Free up the buffers */
     free_matrix(A);
     free_matrix(A_test);
 }
 
-void prepare_potrf_run(char *uplo, integer m, void *A, integer lda, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info, integer interfacetype,
-                       int layout)
+void prepare_potrf_run(char *uplo, integer m, void *A, integer lda, integer datatype, integer *info,
+                       integer interfacetype, int layout, test_params_t *params)
 {
     void *A_save = NULL;
-    double t_min = 1e9, exe_time;
-    integer i;
+    double exe_time;
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
@@ -216,7 +214,7 @@ void prepare_potrf_run(char *uplo, integer m, void *A, integer lda, integer data
     copy_matrix(datatype, "full", m, m, A, lda, A_save, lda);
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrix A value and allocate memory to output buffers
         for each iteration */
@@ -243,11 +241,11 @@ void prepare_potrf_run(char *uplo, integer m, void *A, integer lda, integer data
 
             exe_time = fla_test_clock() - exe_time;
         }
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
     }
 
-    *time_min_ = t_min;
     free_matrix(A_save);
 }
 
@@ -259,7 +257,7 @@ double prepare_lapacke_potrf_run(integer datatype, int layout, char *uplo, integ
     void *A_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, m, row_major_potrf_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, m, row_major_potrf_lda, lda_t);
 
     A_t = A;
 
@@ -315,4 +313,3 @@ void invoke_potrf(char *uplo, integer datatype, integer *m, void *a, integer *ld
         }
     }
 }
-

@@ -15,7 +15,7 @@ extern double time_min;
 void validate_ggev(char *tst_api, char *jobvl, char *jobvr, integer n, void *A, integer lda,
                    void *B, integer ldb, void *alpha, void *alphar, void *alphai, void *beta,
                    void *VL, integer ldvl, void *VR, integer ldvr, integer datatype,
-                   double err_thresh)
+                   double err_thresh, void *params)
 {
     integer i, j;
     void *work = NULL;
@@ -463,7 +463,7 @@ void validate_ggev(char *tst_api, char *jobvl, char *jobvr, integer n, void *A, 
 /* Test case to check if the given set of alpha, beta and alpha_copy, beta_copy are same or not */
 void validate_ggev_EVs(char *tst_api, integer m, void *alpha, void *alphar, void *alphai,
                        void *beta, void *alpha_copy, void *alphar_copy, void *alphai_copy,
-                       void *beta_copy, integer datatype, double err_thresh)
+                       void *beta_copy, integer datatype, double err_thresh, void *params)
 {
     double residual;
     double resid1 = 0., resid2 = 0., resid3 = 0.;

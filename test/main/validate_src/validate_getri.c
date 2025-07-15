@@ -13,7 +13,7 @@ extern double perf;
 extern double time_min;
 
 void validate_getri(char *tst_api, integer m_A, integer n_A, void *A, void *A_inv, integer lda,
-                    integer *IPIV, integer datatype, double err_thresh, char imatrix)
+                    integer *IPIV, integer datatype, double err_thresh, char imatrix, void *params)
 {
     void *a_temp, *work;
     char NORM = '1';

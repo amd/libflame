@@ -11,7 +11,7 @@
 
 void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, integer k, void *A,
                     integer lda, void *C, void *Tau, integer ldc, void *C_test, integer datatype,
-                    double err_thresh, char imatrix)
+                    double err_thresh, char imatrix, void *params)
 {
     double residual = 0.;
     char norm = '1';

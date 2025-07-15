@@ -13,7 +13,7 @@ void fla_test_lange_experiment(char *tst_api, test_params_t *params, integer dat
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
 void prepare_lange_run(integer datatype, char norm_type, void *A, integer m, integer n, integer lda,
-                       void *result, integer n_repeats, double *time_min_, integer interfacetype);
+                       void *result, integer interfacetype, test_params_t *params);
 void invoke_lange(integer datatype, char *norm_type, integer *m, integer *n, void *A, integer *lda,
                   void *work, void *result);
 
@@ -65,6 +65,7 @@ void fla_test_lange(integer argc, char **argv, test_params_t *params)
         params->aux_paramslist[0].lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
 
         n_repeats = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         // set the threshold
         params->aux_paramslist[0].aux_threshold = CLI_NORM_THRESH;
@@ -180,10 +181,8 @@ void fla_test_lange_experiment(char *tst_api, test_params_t *params, integer dat
                                                   params->imatrix_char, scal);
         }
 
-        prepare_lange_run(datatype, test_norm_type, A, m, n, lda, result, n_repeats, &time_min,
-                          interfacetype);
+        prepare_lange_run(datatype, test_norm_type, A, m, n, lda, result, interfacetype, params);
 
-        /* execution time */
         if(time_min == d_zero)
         {
             time_min = 1e-9;
@@ -199,7 +198,8 @@ void fla_test_lange_experiment(char *tst_api, test_params_t *params, integer dat
         /* output validation */
         if(!FLA_EXTREME_CASE_TEST)
         {
-            validate_lange(tst_api, datatype, test_norm_type, m, n, lda, A, result, residual);
+            validate_lange(tst_api, datatype, test_norm_type, m, n, lda, A, result, residual,
+                           params);
         }
         else
         {
@@ -213,6 +213,7 @@ void fla_test_lange_experiment(char *tst_api, test_params_t *params, integer dat
             }
             FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
         }
+        fla_test_runtime_ctx_reset(params);
     }
 
     /* Free up the buffers */
@@ -222,18 +223,17 @@ void fla_test_lange_experiment(char *tst_api, test_params_t *params, integer dat
 }
 
 void prepare_lange_run(integer datatype, char norm_type, void *A, integer m, integer n, integer lda,
-                       void *result, integer n_repeats, double *time_min_, integer interfacetype)
+                       void *result, integer interfacetype, test_params_t *params)
 {
-    integer i;
     void *work = NULL;
-    double exe_time, time_min = 1e9;
+    double exe_time;
 
     if(same_char(norm_type, 'I'))
     {
         create_vector(get_realtype(datatype), &work, m);
     }
 
-    for(i = 0; i < n_repeats; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
 #if ENABLE_CPP_TEST
         if(interfacetype == LAPACK_CPP_TEST) /* Call CPP LANGE API */
@@ -250,11 +250,9 @@ void prepare_lange_run(integer datatype, char norm_type, void *A, integer m, int
             invoke_lange(datatype, &norm_type, &m, &n, A, &lda, work, result);
             exe_time = fla_test_clock() - exe_time;
         }
-        /* Get the best execution time */
-        time_min = fla_min(time_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_NO_INFO
     }
-
-    *time_min_ = time_min;
 
     if(same_char(norm_type, 'I'))
     {

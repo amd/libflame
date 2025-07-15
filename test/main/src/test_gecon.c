@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -14,8 +14,8 @@ void fla_test_gecon_experiment(char *tst_api, test_params_t *params, integer dat
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
 void prepare_gecon_run(integer datatype, char *norm, integer n, void *A, integer lda, void *anorm,
-                       void *rcond, void *work, void *lrwork, integer n_repeats, double *time_min_,
-                       integer *info, integer interfacetype, integer layout);
+                       void *rcond, void *work, void *lrwork, integer *info, integer interfacetype,
+                       integer layout, test_params_t *params);
 double prepare_lapacke_gecon_run(integer datatype, integer layout, char norm, integer n, void *A,
                                  integer lda, void *anorm, void *rcond, integer *info);
 void invoke_gecon(integer datatype, char *norm, integer *n, void *A, integer *lda, void *anorm,
@@ -30,7 +30,7 @@ void fla_test_gecon(integer argc, char **argv, test_params_t *params)
 
     if(argc == 1)
     {
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, LIN, fla_test_gecon_experiment);
@@ -64,6 +64,7 @@ void fla_test_gecon(integer argc, char **argv, test_params_t *params)
         }
 
         n_repeats = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -130,7 +131,7 @@ void fla_test_gecon_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -172,11 +173,10 @@ void fla_test_gecon_experiment(char *tst_api, test_params_t *params, integer dat
         invoke_getrf(datatype, &n, &n, A, &lda, ipiv, &getrfinfo);
         copy_matrix(datatype, "Full", n, n, A, lda, A_save, lda);
     }
-    /* Save the original matrix */
 
     /* call to API */
-    prepare_gecon_run(datatype, &norm, n, A, lda, anorm, rcond, work, lrwork, n_repeats, &time_min,
-                      &info, interfacetype, layout);
+    prepare_gecon_run(datatype, &norm, n, A, lda, anorm, rcond, work, lrwork, &info, interfacetype,
+                      layout, params);
 
     /* Performance computation */
 
@@ -189,7 +189,8 @@ void fla_test_gecon_experiment(char *tst_api, test_params_t *params, integer dat
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
     if(!FLA_EXTREME_CASE_TEST)
     {
-        validate_gecon(tst_api, datatype, norm, n, A, A_save, lda, residual, params->imatrix_char);
+        validate_gecon(tst_api, datatype, norm, n, A, A_save, lda, residual, params->imatrix_char,
+                       params);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -217,12 +218,12 @@ void fla_test_gecon_experiment(char *tst_api, test_params_t *params, integer dat
 }
 
 void prepare_gecon_run(integer datatype, char *norm, integer n, void *A, integer lda, void *anorm,
-                       void *rcond, void *work, void *lrwork, integer n_repeats, double *time_min_,
-                       integer *info, integer interfacetype, integer layout)
+                       void *rcond, void *work, void *lrwork, integer *info, integer interfacetype,
+                       integer layout, test_params_t *params)
 {
-    integer i, lwork = 4 * n;
+    integer lwork = 4 * n;
     void *A_save = NULL;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_save, lda);
 
@@ -233,7 +234,7 @@ void prepare_gecon_run(integer datatype, char *norm, integer n, void *A, integer
     }
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; i++)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Copy original input */
         copy_matrix(datatype, "full", lda, n, A, lda, A_save, lda);
@@ -266,12 +267,11 @@ void prepare_gecon_run(integer datatype, char *norm, integer n, void *A, integer
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
 
         free_vector(work);
     }
-    *time_min_ = t_min;
 
     /* Save the output to vector A */
     copy_matrix(datatype, "full", lda, n, A_save, lda, A, lda);
@@ -289,7 +289,7 @@ double prepare_lapacke_gecon_run(integer datatype, integer layout, char norm, in
     A_t = A;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_gecon_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_gecon_lda, lda_t);
     /* In case of row_major matrix layout,
        convert input matrix to row_major */
     if(layout == LAPACK_ROW_MAJOR)

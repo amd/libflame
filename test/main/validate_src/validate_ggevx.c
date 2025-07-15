@@ -15,7 +15,7 @@ extern double time_min;
 void validate_ggevx(char *tst_api, char *balanc, char *jobvl, char *jobvr, char *sense, integer n,
                     void *A, integer lda, void *B, integer ldb, void *alpha, void *alphar,
                     void *alphai, void *beta, void *VL, integer ldvl, void *VR, integer ldvr,
-                    integer datatype, double err_thresh)
+                    integer datatype, double err_thresh, void *params)
 {
     integer i, j;
     void *work = NULL;

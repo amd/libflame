@@ -13,7 +13,8 @@ extern double perf;
 extern double time_min;
 
 void validate_getrf(char *tst_api, integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
-                    integer lda, integer *IPIV, integer datatype, double err_thresh, char imatrix)
+                    integer lda, integer *IPIV, integer datatype, double err_thresh, char imatrix,
+                    void *params)
 {
     double residual, resid1 = 0., resid2 = 0.;
 
@@ -27,7 +28,8 @@ void validate_getrf(char *tst_api, integer m_A, integer n_A, void *A, void *A_te
      * unexpected info value */
     FLA_TEST_PRINT_INVALID_STATUS(m_A, n_A, err_thresh);
 
-    validate_getrf_internal(m_A, n_A, A, A_test, lda, IPIV, datatype, imatrix, &resid1, &resid2);
+    validate_getrf_internal(m_A, n_A, A, A_test, lda, IPIV, datatype, imatrix, &resid1, &resid2,
+                            params);
 
     residual = fla_test_max(resid1, resid2);
     FLA_PRINT_TEST_STATUS(m_A, n_A, residual, err_thresh);
@@ -37,7 +39,7 @@ void validate_getrf(char *tst_api, integer m_A, integer n_A, void *A, void *A_te
 
 void validate_getrf_internal(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
                              integer lda, integer *IPIV, integer datatype, char imatrix,
-                             double *resid1, double *resid2)
+                             double *resid1, double *resid2, void *params)
 {
     integer m_n_vector, min_A;
     integer m_L, n_L, m_U, n_U, k;

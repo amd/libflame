@@ -13,7 +13,7 @@ extern double perf;
 extern double time_min;
 
 void validate_hetrf(char *tst_api, char *uplo, integer n, integer lda, void *A_res,
-                    integer datatype, integer *ipiv, double err_thresh, void *A)
+                    integer datatype, integer *ipiv, double err_thresh, void *A, void *params)
 {
     void *work = NULL;
     void *D = NULL;

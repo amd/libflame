@@ -16,7 +16,7 @@ extern double time_min;
    matrices only if compz != N, as output will not be generated
    if compz = N.*/
 void validate_stedc(char *tst_api, char compz, integer n, void *D_test, void *Z_input, void *Z,
-                    integer ldz, integer datatype, double err_thresh)
+                    integer ldz, integer datatype, double err_thresh, void *params)
 {
     void *lambda = NULL, *zlambda = NULL;
     void *work = NULL;

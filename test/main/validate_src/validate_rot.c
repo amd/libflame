@@ -13,7 +13,8 @@ extern double perf;
 extern double time_min;
 
 void validate_rot(char *tst_api, integer datatype, integer n, void *cx, void *cx_test, integer incx,
-                  void *cy, void *cy_test, integer incy, void *c, void *s, double err_thresh)
+                  void *cy, void *cy_test, integer incy, void *c, void *s, double err_thresh,
+                  void *params)
 {
     double residual, resid1 = 0., resid2 = 0.;
     /* Early return conditions */

@@ -14,7 +14,7 @@ extern double time_min;
 
 void validate_getrs(char *tst_api, char *trans, integer n, integer nrhs, void *A, integer lda,
                     void *B, integer ldb, void *X, integer datatype, double err_thresh,
-                    char imatrix, void *scal)
+                    char imatrix, void *scal, void *params)
 {
     void *work = NULL, *Y = NULL;
     char NORM = '1';

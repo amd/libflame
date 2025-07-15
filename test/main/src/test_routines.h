@@ -69,7 +69,12 @@ void fla_test_potri(integer argc, char **argv, test_params_t *params);
 
 /* Add test api function call entry below */
 OPERATIONS API_test_functions[]
-    = {{LIN_ID, "gbtrf", fla_test_gbtrf},     {LIN_ID, "gbtrs", fla_test_gbtrs},
+    = {
+#if ENABLE_AOCL_EXTENSION_APIS
+       {LIN_ID, "spffrt2", fla_test_spffrt2}, {LIN_ID, "spffrtx", fla_test_spffrtx},
+       {LIN_ID, "getrfnp", fla_test_getrfnp}, {LIN_ID, "getrfnpi", fla_test_getrfnpi},
+#endif
+       {LIN_ID, "gbtrf", fla_test_gbtrf},     {LIN_ID, "gbtrs", fla_test_gbtrs},
        {LIN_ID, "orgqr", fla_test_orgqr},     {LIN_ID, "ungqr", fla_test_orgqr},
        {LIN_ID, "potrs", fla_test_potrs},     {EIG_ID, "geev", fla_test_geev},
        {EIG_ID, "geevx", fla_test_geevx},     {SVD_ID, "gesdd", fla_test_gesdd},
@@ -83,8 +88,7 @@ OPERATIONS API_test_functions[]
        {EIG_ID, "ggev", fla_test_ggev},       {EIG_ID, "steqr", fla_test_steqr},
        {EIG_ID, "stevd", fla_test_stevd},     {EIG_ID, "stedc", fla_test_stedc},
        {EIG_ID, "hseqr", fla_test_hseqr},     {EIG_ID, "syev", fla_test_syev},
-       {EIG_ID, "heev", fla_test_syev},       {LIN_ID, "spffrt2", fla_test_spffrt2},
-       {LIN_ID, "spffrtx", fla_test_spffrtx}, {LIN_ID, "gehrd", fla_test_gehrd},
+       {EIG_ID, "heev", fla_test_syev},       {LIN_ID, "gehrd", fla_test_gehrd},
        {LIN_ID, "gghrd", fla_test_gghrd},     {EIG_ID, "hgeqz", fla_test_hgeqz},
        {AUX_ID, "rot", fla_test_rot},         {AUX_ID, "lartg", fla_test_lartg},
        {LIN_ID, "org2r", fla_test_org2r},     {LIN_ID, "ung2r", fla_test_org2r},
@@ -96,7 +100,6 @@ OPERATIONS API_test_functions[]
        {EIG_ID, "sygvd", fla_test_sygvd},     {AUX_ID, "hegvd", fla_test_sygvd},
        {LIN_ID, "hetrf_rook", fla_test_hetrf_rook}, {LIN_ID, "sytrf_rook", fla_test_sytrf_rook},
        {AUX_ID, "lange", fla_test_lange},     {LIN_ID, "gecon", fla_test_gecon},
-       {LIN_ID, "getrfnp", fla_test_getrfnp}, {LIN_ID, "getrfnpi", fla_test_getrfnpi},
        {LIN_ID, "hetrf", fla_test_hetrf},     {LIN_ID, "hetri_rook", fla_test_hetri_rook},
        {LIN_ID, "ormqr", fla_test_ormqr},     {LIN_ID, "unmqr", fla_test_ormqr},
        {SVD_ID, "gejsv", fla_test_gejsv},     {AUX_ID, "labrd", fla_test_labrd},

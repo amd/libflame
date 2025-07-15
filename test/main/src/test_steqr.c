@@ -17,8 +17,8 @@ void fla_test_steqr_experiment(char *tst_api, test_params_t *params, integer dat
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
 void prepare_steqr_run(char *compz, integer n, void *Z, integer ldz, void *D, void *E,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer interfacetype, int matrix_layout);
+                       integer datatype, integer *info, integer interfacetype, int matrix_layout,
+                       test_params_t *params);
 void invoke_steqr(integer datatype, char *compz, integer *n, void *z, integer *ldz, void *d,
                   void *e, void *work, integer *info);
 double prepare_lapacke_steqr_run(integer datatype, int matrix_layout, char *compz, integer n,
@@ -35,7 +35,7 @@ void fla_test_steqr(integer argc, char **argv, test_params_t *params)
 
     if(argc == 1)
     {
-        config_data = 1;
+        g_config_data = 1;
         /* Test with parameters from config */
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
@@ -69,6 +69,7 @@ void fla_test_steqr(integer argc, char **argv, test_params_t *params)
             params->eig_sym_paramslist[0].ldz = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
         }
         n_repeats = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -125,7 +126,7 @@ void fla_test_steqr_experiment(char *tst_api, test_params_t *params, integer dat
     char compz, uplo, range = 'V';
     void *Z = NULL, *Z_test = NULL, *A = NULL, *Q = NULL;
     void *D = NULL, *D_test = NULL, *E = NULL, *E_test = NULL;
-    void *L = NULL, *scal = NULL;
+    void *L = NULL, *scal = NULL, *Z_test_save = NULL;
     double residual, err_thresh;
 
     integer interfacetype = params->interfacetype;
@@ -142,7 +143,7 @@ void fla_test_steqr_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(ldz == -1)
         {
@@ -220,14 +221,16 @@ void fla_test_steqr_experiment(char *tst_api, test_params_t *params, integer dat
     create_vector(realtype, &E_test, n - 1);
     copy_vector(realtype, n, D, 1, D_test, 1);
     copy_vector(realtype, n - 1, E, 1, E_test, 1);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z_test_save, ldz);
+    copy_matrix(datatype, "full", n, n, Z_test, ldz, Z_test_save, ldz);
 
-    prepare_steqr_run(&compz, n, Z_test, ldz, D_test, E_test, datatype, n_repeats, &time_min, &info,
-                      interfacetype, layout);
+    prepare_steqr_run(&compz, n, Z_test, ldz, D_test, E_test, datatype, &info, interfacetype,
+                      layout, params);
 
     /* performance computation
-       24 n^2 flops for eigen vectors of Z, compz = 'N'
-       7 n^3 flops for eigen vectors of Z, compz = 'V' or 'I'
-       14 n^3 flops for eigen vectors of Z for complex, compz = 'V' or 'I' */
+    24 n^2 flops for eigen vectors of Z, compz = 'N'
+    7 n^3 flops for eigen vectors of Z, compz = 'V' or 'I'
+    14 n^3 flops for eigen vectors of Z for complex, compz = 'V' or 'I' */
 
     if(same_char(compz, 'V') || same_char(compz, 'I'))
         perf = (double)(7.0 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
@@ -241,7 +244,7 @@ void fla_test_steqr_experiment(char *tst_api, test_params_t *params, integer dat
     if(!FLA_EXTREME_CASE_TEST)
     {
         validate_syev(tst_api, &compz, &range, n, Z, Z_test, lda, 0, 0, L, D_test, NULL, datatype,
-                      residual, params->imatrix_char, scal);
+                      residual, params->imatrix_char, scal, params);
     }
     else
     {
@@ -249,6 +252,7 @@ void fla_test_steqr_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+    free_matrix(Z_test_save);
     free_matrix(Z);
     free_vector(D);
     free_vector(E);
@@ -268,12 +272,12 @@ void fla_test_steqr_experiment(char *tst_api, test_params_t *params, integer dat
 }
 
 void prepare_steqr_run(char *compz, integer n, void *Z, integer ldz, void *D, void *E,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer interfacetype, int layout)
+                       integer datatype, integer *info, integer interfacetype, int layout,
+                       test_params_t *params)
 {
     void *Z_save = NULL, *D_save = NULL, *E_save = NULL, *work = NULL;
-    integer i, realtype;
-    double t_min = 1e9, exe_time;
+    integer realtype;
+    double exe_time;
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
@@ -289,7 +293,7 @@ void prepare_steqr_run(char *compz, integer n, void *Z, integer ldz, void *D, vo
     copy_vector(realtype, n - 1, E, 1, E_save, 1);
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
@@ -323,14 +327,12 @@ void prepare_steqr_run(char *compz, integer n, void *Z, integer ldz, void *D, vo
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
 
         /* Free up the output buffers */
         free_vector(work);
     }
-
-    *time_min_ = t_min;
 
     if(!same_char(*compz, 'N'))
     {
@@ -348,7 +350,7 @@ double prepare_lapacke_steqr_run(integer datatype, int layout, char *compz, inte
     void *Z_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_steqr_ldz, ldz_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_steqr_ldz, ldz_t);
 
     Z_t = Z;
 

@@ -21,8 +21,8 @@ void fla_test_gghrd_experiment(char *tst_api, test_params_t *params, integer dat
                                integer einfo);
 void prepare_gghrd_run(char *compq, char *compz, integer n, integer *ilo, integer *ihi, void *a,
                        integer lda, void *b, integer ldb, void *q, integer ldq, void *z,
-                       integer ldz, integer datatype, integer n_repeats, double *time_min_,
-                       integer *info, integer interfacetype, int matrix_layout);
+                       integer ldz, integer datatype, integer *info, integer interfacetype,
+                       int matrix_layout, test_params_t *params);
 void invoke_gghrd(integer datatype, char *compq, char *compz, integer *n, integer *ilo,
                   integer *ihi, void *a, integer *lda, void *b, integer *ldb, void *q, integer *ldq,
                   void *z, integer *ldz, integer *info);
@@ -38,7 +38,7 @@ void fla_test_gghrd(integer argc, char **argv, test_params_t *params)
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
     if(argc == 1)
     {
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, LIN, fla_test_gghrd_experiment);
@@ -82,6 +82,7 @@ void fla_test_gghrd(integer argc, char **argv, test_params_t *params)
             params->lin_solver_paramslist[0].ldz = strtoimax(argv[11], &endptr, CLI_DECIMAL_BASE);
         }
         n_repeats = strtoimax(argv[12], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         /* Skip if imatrix is I or F as API doesnot support the INF inputs. */
         if((!same_char(params->imatrix_char, 'I')) && (!same_char(params->imatrix_char, 'F')))
@@ -169,7 +170,7 @@ void fla_test_gghrd_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -282,7 +283,7 @@ void fla_test_gghrd_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     prepare_gghrd_run(&compq, &compz, n, &ilo, &ihi, A_test, lda, B_test, ldb, Q_test, ldq, Z_test,
-                      ldz, datatype, n_repeats, &time_min, &info, interfacetype, layout);
+                      ldz, datatype, &info, interfacetype, layout, params);
 
     /* If compq=N or/and compz=N, in addition to the first api call, also execute
        second api call with compq=I and compz=I. And validate the H and T matrices from
@@ -291,7 +292,6 @@ void fla_test_gghrd_experiment(char *tst_api, test_params_t *params, integer dat
     {
         char compnq = 'I';
         char compnz = 'I';
-        double time_minn;
         integer ldqn = fla_max(ldq, n);
         integer ldzn = fla_max(ldz, n);
 
@@ -304,18 +304,18 @@ void fla_test_gghrd_experiment(char *tst_api, test_params_t *params, integer dat
         set_identity_matrix(datatype, n, n, Q_ntest, ldqn);
         set_identity_matrix(datatype, n, n, Z_ntest, ldzn);
         prepare_gghrd_run(&compnq, &compnz, n, &ilo, &ihi, A_ntest, lda, B_ntest, ldb, Q_ntest,
-                          ldqn, Z_ntest, ldzn, datatype, n_repeats, &time_minn, &info,
-                          interfacetype, layout);
+                          ldqn, Z_ntest, ldzn, datatype, &info, interfacetype, layout, NULL);
         free_matrix(Q_ntest);
         free_matrix(Z_ntest);
     }
+
     /* Performance computation
-       (7)n^3 flops for eigen vectors for real
-       (25)n^3 flops for eigen vectors for complex
-       (10)n^3 flops for Schur form is computed for real
-       (35)n^3 flops for Schur form is computed for complex
-       (20)n^3 flops full Schur factorization is computed for real
-       (70)n^3 flops full Schur factorization is computed for complex */
+    (7)n^3 flops for eigen vectors for real
+    (25)n^3 flops for eigen vectors for complex
+    (10)n^3 flops for Schur form is computed for real
+    (35)n^3 flops for Schur form is computed for complex
+    (20)n^3 flops full Schur factorization is computed for real
+    (70)n^3 flops full Schur factorization is computed for complex */
 
     if(same_char(compz, 'N'))
     {
@@ -346,14 +346,14 @@ void fla_test_gghrd_experiment(char *tst_api, test_params_t *params, integer dat
         if(same_char(compq, 'N') || same_char(compz, 'N'))
         {
             /* Validation for compq=N or/and compz=N case */
-            validate_gghrd(tst_api, &compq, &compz, n, A_test, A_ntest, lda, B_test, B_ntest,
-                           ldb, Q, Q_test, ldq, Z, Z_test, ldz, datatype, residual);
+            validate_gghrd(tst_api, &compq, &compz, n, A_test, A_ntest, lda, B_test, B_ntest, ldb,
+                           Q, Q_test, ldq, Z, Z_test, ldz, datatype, residual, params);
         }
         else
         {
             /* Validation for other cases */
-            validate_gghrd(tst_api, &compq, &compz, n, A, A_test, lda, B, B_test, ldb, Q,
-                           Q_test, ldq, Z, Z_test, ldz, datatype, residual);
+            validate_gghrd(tst_api, &compq, &compz, n, A, A_test, lda, B, B_test, ldb, Q, Q_test,
+                           ldq, Z, Z_test, ldz, datatype, residual, params);
         }
     }
     else
@@ -380,16 +380,16 @@ void fla_test_gghrd_experiment(char *tst_api, test_params_t *params, integer dat
     /* Free up the buffers */
     free_matrix(A);
     free_matrix(B);
-    free_matrix(Q);
-    free_matrix(Z);
     free_matrix(A_test);
     free_matrix(B_test);
     if(!same_char(compq, 'N'))
     {
+        free_matrix(Q);
         free_matrix(Q_test);
     }
     if(!same_char(compz, 'N'))
     {
+        free_matrix(Z);
         free_matrix(Z_test);
     }
     if(same_char(compq, 'N') || same_char(compz, 'N'))
@@ -401,12 +401,11 @@ void fla_test_gghrd_experiment(char *tst_api, test_params_t *params, integer dat
 
 void prepare_gghrd_run(char *compq, char *compz, integer n, integer *ilo, integer *ihi, void *A,
                        integer lda, void *B, integer ldb, void *Q, integer ldq, void *Z,
-                       integer ldz, integer datatype, integer n_repeats, double *time_min_,
-                       integer *info, integer interfacetype, int layout)
+                       integer ldz, integer datatype, integer *info, integer interfacetype,
+                       int layout, test_params_t *params)
 {
     void *A_save = NULL, *B_save = NULL, *Q_save = NULL, *Z_save = NULL;
-    integer i;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     /* Make a copy of the input matrix A,B,Q and Z. Same input values will be passed in each
      * itertaion.*/
@@ -426,7 +425,7 @@ void prepare_gghrd_run(char *compq, char *compz, integer n, integer *ilo, intege
     copy_matrix(datatype, "full", n, n, B, ldb, B_save, ldb);
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrix A,B,Q and Z value and allocate memory to output buffers
            for each iteration*/
@@ -463,10 +462,9 @@ void prepare_gghrd_run(char *compq, char *compz, integer n, integer *ilo, intege
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
     }
-    *time_min_ = t_min;
 
     free_matrix(A_save);
     free_matrix(B_save);
@@ -487,10 +485,10 @@ double prepare_lapacke_gghrd_run(integer datatype, int layout, char *compq, char
     void *A_t = NULL, *B_t = NULL, *Q_t = NULL, *Z_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_gghrd_lda, lda_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_gghrd_ldb, ldb_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_gghrd_ldq, ldq_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_gghrd_ldz, ldz_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_gghrd_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_gghrd_ldb, ldb_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_gghrd_ldq, ldq_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_gghrd_ldz, ldz_t);
 
     A_t = A;
     B_t = B;

@@ -13,7 +13,7 @@ extern double perf;
 extern double time_min;
 
 void validate_lartg(char *tst_api, integer datatype, void *f, void *g, void *r, void *c, void *s,
-                    double err_thresh)
+                    double err_thresh, void *params)
 {
     void *out_zero = NULL;
     double residual, resid1 = 0., resid2 = 0.;

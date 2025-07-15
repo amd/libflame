@@ -17,8 +17,8 @@ void fla_test_syevd_experiment(char *tst_api, test_params_t *params, integer dat
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
 void prepare_syevd_run(char *jobz, char *uplo, integer n, void *A, integer lda, void *w,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer interfacetype, int matrix_layout);
+                       integer datatype, integer *info, integer interfacetype, int matrix_layout,
+                       test_params_t *params);
 void invoke_syevd(integer datatype, char *jobz, char *uplo, integer *n, void *a, integer *lda,
                   void *w, void *work, integer *lwork, void *rwork, integer *lrwork, void *iwork,
                   integer *liwork, integer *info);
@@ -40,7 +40,7 @@ void fla_test_syevd(integer argc, char **argv, test_params_t *params)
         g_lwork = -1;
         g_liwork = -1;
         g_lrwork = -1;
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, EIG_SYM, fla_test_syevd_experiment);
@@ -77,6 +77,7 @@ void fla_test_syevd(integer argc, char **argv, test_params_t *params)
         g_lrwork = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
 
         n_repeats = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -149,7 +150,7 @@ void fla_test_syevd_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -183,12 +184,12 @@ void fla_test_syevd_experiment(char *tst_api, test_params_t *params, integer dat
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
 
-    prepare_syevd_run(&jobz, &uplo, n, A_test, lda, w, datatype, n_repeats, &time_min, &info,
-                      interfacetype, layout);
+    prepare_syevd_run(&jobz, &uplo, n, A_test, lda, w, datatype, &info, interfacetype, layout,
+                      params);
 
     /* performance computation
-       (8/3)n^3 flops for eigen vectors
-       (4/3)n^3 flops for eigen values */
+    (8/3)n^3 flops for eigen vectors
+    (4/3)n^3 flops for eigen values */
     if(same_char(jobz, 'V'))
         perf = (double)((8.0 / 3.0) * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     else
@@ -201,7 +202,7 @@ void fla_test_syevd_experiment(char *tst_api, test_params_t *params, integer dat
     if(!FLA_EXTREME_CASE_TEST)
     {
         validate_syev(tst_api, &jobz, &range, n, A, A_test, lda, 0, 0, L, w, NULL, datatype,
-                      residual, params->imatrix_char, scal);
+                      residual, params->imatrix_char, scal, params);
     }
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
@@ -230,13 +231,12 @@ void fla_test_syevd_experiment(char *tst_api, test_params_t *params, integer dat
 }
 
 void prepare_syevd_run(char *jobz, char *uplo, integer n, void *A, integer lda, void *w,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer interfacetype, int layout)
+                       integer datatype, integer *info, integer interfacetype, int layout,
+                       test_params_t *params)
 {
     void *A_save, *w_test, *work, *iwork, *rwork = NULL;
     integer lwork, liwork, lrwork;
-    integer i;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
@@ -290,7 +290,7 @@ void prepare_syevd_run(char *jobz, char *uplo, integer n, void *A, integer lda, 
     }
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
@@ -329,8 +329,8 @@ void prepare_syevd_run(char *jobz, char *uplo, integer n, void *A, integer lda, 
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
 
         /* Make a copy of the output buffers. This is required to validate the API functionality.*/
         copy_realtype_vector(datatype, n, w_test, 1, w, 1);
@@ -345,8 +345,6 @@ void prepare_syevd_run(char *jobz, char *uplo, integer n, void *A, integer lda, 
         free_vector(w_test);
     }
 
-    *time_min_ = t_min;
-
     free_matrix(A_save);
 }
 
@@ -358,7 +356,7 @@ double prepare_lapacke_syevd_run(integer datatype, int layout, char *jobz, char 
     void *A_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_syevd_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_syevd_lda, lda_t);
 
     A_t = A;
 

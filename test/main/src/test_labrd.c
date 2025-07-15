@@ -16,8 +16,7 @@ void fla_test_labrd_experiment(char *tst_api, test_params_t *params, integer dat
                                integer einfo);
 void prepare_labrd_run(integer m_A, integer n_A, integer nb_A, void *A, integer lda, void *d,
                        void *e, void *tauq, void *taup, void *X, integer ldx, void *Y, integer ldy,
-                       integer datatype, integer n_repeats, double *time_min_,
-                       integer interfacetype);
+                       integer datatype, integer interfacetype, test_params_t *params);
 void invoke_labrd(integer datatype, integer *m, integer *n, integer *nb, void *a, integer *lda,
                   void *d, void *e, void *tauq, void *taup, void *x, integer *ldx, void *y,
                   integer *ldy);
@@ -31,7 +30,7 @@ void fla_test_labrd(integer argc, char **argv, test_params_t *params)
 
     if(argc == 1)
     {
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, RECT_INPUT, params, AUX, fla_test_labrd_experiment);
@@ -58,6 +57,7 @@ void fla_test_labrd(integer argc, char **argv, test_params_t *params)
         params->aux_paramslist[0].ldx = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
         params->aux_paramslist[0].ldy = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -133,7 +133,7 @@ void fla_test_labrd_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         /* LDA >= max(1,M) */
         if(lda == -1)
@@ -179,8 +179,8 @@ void fla_test_labrd_experiment(char *tst_api, test_params_t *params, integer dat
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
-    prepare_labrd_run(m, n, nb, A_test, lda, d, e, tauq, taup, X, ldx, Y, ldy, datatype, n_repeats,
-                      &time_min, interfacetype);
+    prepare_labrd_run(m, n, nb, A_test, lda, d, e, tauq, taup, X, ldx, Y, ldy, datatype,
+                      interfacetype, params);
 
     /* Performance Computation
      * The number of floating point operations in GEBRD is 4n^2(3m - n)/3 if m>=n else 4m^2(3n-m)/3
@@ -198,7 +198,7 @@ void fla_test_labrd_experiment(char *tst_api, test_params_t *params, integer dat
     if(!FLA_EXTREME_CASE_TEST)
     {
         validate_labrd(tst_api, m, n, nb, A, A_test, lda, d, e, tauq, taup, X, ldx, Y, ldy,
-                       datatype, err_thresh, g_ext_fptr, params->imatrix_char);
+                       datatype, err_thresh, g_ext_fptr, params->imatrix_char, params);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -214,6 +214,7 @@ void fla_test_labrd_experiment(char *tst_api, test_params_t *params, integer dat
         FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
     }
 
+    /* Free up buffers */
     free_matrix(A);
     free_matrix(A_test);
     free_matrix(X);
@@ -225,20 +226,18 @@ void fla_test_labrd_experiment(char *tst_api, test_params_t *params, integer dat
 }
 void prepare_labrd_run(integer m_A, integer n_A, integer nb_A, void *A, integer lda, void *d,
                        void *e, void *tauq, void *taup, void *X, integer ldx, void *Y, integer ldy,
-                       integer datatype, integer n_repeats, double *time_min_,
-                       integer interfacetype)
+                       integer datatype, integer interfacetype, test_params_t *params)
 {
     void *A_save, *d_test, *e_test, *tauq_test, *taup_test;
     void *X_test, *Y_test;
-    integer i;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
     create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_A, &A_save, lda);
     copy_matrix(datatype, "full", m_A, n_A, A, lda, A_save, lda);
 
-    for(i = 0; i < n_repeats; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
@@ -273,8 +272,8 @@ void prepare_labrd_run(integer m_A, integer n_A, integer nb_A, void *A, integer 
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_NO_INFO
 
         /* Make a copy of the output buffers. This is required to validate the API functionality. */
         copy_matrix(datatype, "full", m_A, nb_A, X_test, ldx, X, ldx);
@@ -293,8 +292,6 @@ void prepare_labrd_run(integer m_A, integer n_A, integer nb_A, void *A, integer 
         free_vector(tauq_test);
         free_vector(taup_test);
     }
-
-    *time_min_ = t_min;
 
     free_matrix(A_save);
 }

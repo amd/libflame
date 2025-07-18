@@ -143,6 +143,10 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
 #ifdef FLA_ENABLE_AMD_OPT
     extern void fla_dlarf_small_incv1_simd(integer lastv, integer lastc, double *c__, integer ldc,
                                            double *v, double tau, double *work);
+    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
+    extern void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    void fla_dlarf_tuning_params(integer m, integer n, FLA_Bool * use_blocked_flag,
+                                 integer * nthreads);
 #endif
     extern /* Subroutine */
         void
@@ -252,12 +256,39 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
             }
             else
             {
-                /* w(1:lastc,1) := C(1:lastv,1:lastc)**T * v(1:lastv,1) */
-                dgemv_("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[1], incv, &c_b5,
-                       &work[1], &c__1);
 
-                /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**T*/
-                dger_(&lastv, &lastc, &d__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
+                FLA_Bool use_blocked = 0;
+                integer opt_nthreads = 1;
+
+                fla_dlarf_tuning_params(lastv, lastc, &use_blocked, &opt_nthreads);
+
+                /* If use_blocked is 1, process in blocks */
+                if(use_blocked)
+                {
+                    /* Process in blocks */
+#ifdef FLA_OPENMP_MULTITHREADING
+#pragma omp parallel for num_threads(opt_nthreads) private(i__)
+#endif
+                    /* Loop for each column of C */
+                    for(i__ = 1; i__ <= lastc; ++i__)
+                    {
+                        /* W(i) =  C(1:lastv,i)**T * v(1:lastv,1)  */
+                        work[i__] = ddot_(&lastv, &v[1], incv, &c__[i__ * *ldc + 1], &c__1);
+                        /* C(1:lastv,i) = C(1:lastv,i) - v(1:lastv,1) * -tau * W(i) */
+                        doublereal d__2 = -(*tau) * work[i__];
+                        daxpy_(&lastv, &d__2, &v[1], incv, &c__[i__ * *ldc + 1], &c__1);
+                    }
+                }
+                else
+                {
+                    /* Process in a single call */
+                    /* w(1:lastc,1) := C(1:lastv,1:lastc)**T * v(1:lastv,1) */
+                    dgemv_("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[1], incv,
+                           &c_b5, &work[1], &c__1);
+
+                    /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**T*/
+                    dger_(&lastv, &lastc, &d__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
+                }
             }
 #endif
         }
@@ -280,3 +311,63 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
     /* End of DLARF */
 }
 /* dlarf_ */
+
+#ifdef FLA_ENABLE_AMD_OPT
+void fla_dlarf_tuning_params(integer m, integer n, FLA_Bool *use_blocked_flag, integer *nthreads)
+{
+
+    extern int fla_thread_get_num_threads(void);
+
+    integer max_available_threads = fla_thread_get_num_threads();
+
+    /* Special case for 1 thread */
+    if(max_available_threads == 1)
+    {
+        *nthreads = 1;
+        /* Use blocked code for large sizes as it is more cache friendly */
+        if(m > FLA_DLARF_ST_BLOCKED_THRESH_M && n > FLA_DLARF_ST_BLOCKED_THRESH_N)
+        {
+            *use_blocked_flag = 1;
+        }
+        else
+        {
+            *use_blocked_flag = 0;
+        }
+        return;
+    }
+
+    /* General case */
+
+    integer opt_n_threads = 1;
+    integer blocked_flag = 0;
+
+    integer num_elems = m * n;
+    if(num_elems < FLA_DLARF_THRESH_UNBLOCKED)
+    {
+        blocked_flag = 0;
+    }
+    else if(num_elems < FLA_DLARF_THRESH_THREAD_4)
+    {
+        opt_n_threads = fla_min(4, n / 2);
+        blocked_flag = 1;
+    }
+    else if(num_elems < FLA_DLARF_THRESH_THREAD_8)
+    {
+        opt_n_threads = fla_min(8, n / 2);
+        blocked_flag = 1;
+    }
+    else if(num_elems < FLA_DLARF_THRESH_THREAD_32)
+    {
+        opt_n_threads = fla_min(32, n / 2);
+        blocked_flag = 1;
+    }
+    else
+    {
+        opt_n_threads = fla_min(128, n / 2);
+        blocked_flag = 1;
+    }
+
+    *use_blocked_flag = blocked_flag;
+    *nthreads = fla_min(opt_n_threads, max_available_threads);
+}
+#endif /* FLA_ENABLE_AMD_OPT */

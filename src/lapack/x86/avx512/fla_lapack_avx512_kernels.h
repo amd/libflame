@@ -34,6 +34,7 @@ void fla_dlarf_left_apply_incv1_avx512(integer m, integer n, doublereal *a_buff,
 doublereal fla_dnrm2_blas_avx512(integer *sd, doublereal *a, integer *inc);
 void fla_zlarf_left_apply_incv1_avx512(integer m, integer n, doublecomplex *a_buff, integer ldr,
                                        doublecomplex *v, doublecomplex *ntau, doublecomplex *work);
+int fla_dpotrf_small_avx512(char *uplo, integer *n, doublereal *a, integer *lda, integer *info);
 
 #endif
 #endif

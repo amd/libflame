@@ -1,7 +1,7 @@
 /* dgeqrf.f -- translated by f2c (version 20000121). You must link the resulting object file with
  * the libraries: -lf2c -lm (in that order) */
 /******************************************************************************
- * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 #include "FLA_f2c.h" /* Table of constant values */
 #include "fla_lapack_x86_common.h"
@@ -235,7 +235,7 @@ void dgeqrf_fla(integer *m, integer *n, doublereal *a, integer *lda, doublereal 
 #endif
 
     lwkopt = *n * nb;
-#if FLA_ENABLE_AMD_OPT
+#if FLA_ENABLE_AMD_OPT && FLA_OPENMP_MULTITHREADING
     /* If the matrix is large, use the multithreaded version */
     /* Need to tune this threshold */
     integer nthreads = dgeqrf_mt_large_num_threads(*m, *n);
@@ -297,7 +297,7 @@ void dgeqrf_fla(integer *m, integer *n, doublereal *a, integer *lda, doublereal 
         fla_dgeqrf_small(m, n, &a[a_offset], lda, &tau[1], &work[1]);
         return;
     }
-#ifdef FLA_OPENMP_MULTITHREADING
+#if FLA_OPENMP_MULTITHREADING
     else if(*m >= FLA_DGEQRF_MT_LARGE_M_THRESH && *n >= FLA_DGEQRF_MT_LARGE_N_THRESH
             && *lwork >= lwkopt)
     {
@@ -440,7 +440,7 @@ integer get_block_size_dgeqrf(integer *m, integer *n)
 
 /* dgeqrf_ */
 
-#if FLA_ENABLE_AMD_OPT
+#if FLA_ENABLE_AMD_OPT && FLA_OPENMP_MULTITHREADING
 
 /* Returns the optimial number of threads to use for dgeqrf_mt_large */
 static integer dgeqrf_mt_large_num_threads(integer gm, integer gn)

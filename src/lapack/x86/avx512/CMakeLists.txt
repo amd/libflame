@@ -16,6 +16,7 @@ add_library(FLA_LAPACK_AVX512
      ${CMAKE_CURRENT_SOURCE_DIR}/fla_dlarf_kernels_avx512.c
      ${CMAKE_CURRENT_SOURCE_DIR}/fla_dnrm2_blas_avx512.c
      ${CMAKE_CURRENT_SOURCE_DIR}/fla_zlarf_kernels_avx512.c
+     ${CMAKE_CURRENT_SOURCE_DIR}/fla_dpotrf_small_avx512.c
 )
 
 if(WIN32)

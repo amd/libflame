@@ -237,6 +237,13 @@
 // small matrices
 #define FLA_GEQRF_STHRESH (32)
 #define FLA_GEQRF_BLOCK_SIZE (32)
+
+// Matrix size thresholds for choosing multithreaded QR for large matrices
+#define FLA_DGEQRF_MT_LARGE_M_THRESH (128)
+#define FLA_DGEQRF_MT_LARGE_N_THRESH (128)
+#define FLA_DGEQRF_MT_LARGE_PANEL_SIZE (16)
+#define FLA_DGEQRF_MT_THRESHOLD_8_THREADS (15848840)
+
 // Matrix size thresholds for choosing transposed QR for LQ 
 #define FLA_DELQF_TRAN_THRESH (1280)
 
@@ -283,6 +290,17 @@
 #define FLA_ZGERC_INLINE_SMALL_THRESH1  (32)
 #define FLA_ZSCAL_INLINE_SMALL          (128)
 #define FLA_ZUNGQR_BLOCK_SMALL_THRESH   (32)
+
+/* DLARF , threshold numbers to choose paths for performance */
+#define FLA_DLARF_ST_BLOCKED_THRESH_M (1000)
+#define FLA_DLARF_ST_BLOCKED_THRESH_N (100)
+#define FLA_DLARF_THRESH_UNBLOCKED (4096)
+#define FLA_DLARF_THRESH_THREAD_4 (81920)
+#define FLA_DLARF_THRESH_THREAD_8 (4096000)
+#define FLA_DLARF_THRESH_THREAD_32 (48720000)
+
+/* DLARFT , threshold numbers to chose paths for performance */
+#define FLA_DLARFT_BLOCK_NB (16)
 
 
 #define FLA_ZLANGEM_SIMD_AVX512_THRESH_M (15)

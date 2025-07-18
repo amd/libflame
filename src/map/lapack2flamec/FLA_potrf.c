@@ -18,7 +18,10 @@
 #include "FLA_lapack2flame_prototypes.h"
 #include "FLA_lapack2flame_return_defs.h"
 #include "FLA_lapack2flame_util_defs.h"
-
+#if FLA_ENABLE_AMD_OPT
+#include "fla_lapack_avx2_kernels.h"
+#include "fla_lapack_avx512_kernels.h"
+#endif
 /*
   POTRF computes the Cholesky factorization of a symmetric (hermitian)
   positive definite matrix A.
@@ -43,6 +46,7 @@ extern int cpotf2_check(char *uplo, integer *n, scomplex *a, integer *lda, integ
 extern int zpotf2_check(char *uplo, integer *n, dcomplex *a, integer *lda, integer *info);
 extern int lapack_spotf2(char *uplo, integer *n, float *a, integer *lda, integer *info);
 extern int lapack_dpotf2(char *uplo, integer *n, double *a, integer *lda, integer *info);
+extern int lapack_dpotrf_var1(char *uplo, integer *n, double *a, integer *lda, integer *info);
 
 extern void DTL_Trace(uint8 ui8LogLevel, uint8 ui8LogType, const int8 *pi8FileName,
                       const int8 *pi8FunctionName, uint32 ui32LineNumber, const int8 *pi8Message);
@@ -58,12 +62,33 @@ extern void DTL_Trace(uint8 ui8LogLevel, uint8 ui8LogType, const int8 *pi8FileNa
     else                                              \
         lapack_spotrf(uplo, n, buff_A, ldim_A, info);
 
-#define LAPACK_potrf_body_d(prefix)                   \
-    if(*n < FLA_POTRF_DOUBLE_SMALL)                   \
-        lapack_dpotf2(uplo, n, buff_A, ldim_A, info); \
-    else                                              \
-        lapack_dpotrf(uplo, n, buff_A, ldim_A, info);
-
+#ifdef FLA_OPENMP_MULTITHREADING
+#define LAPACK_potrf_body_d(prefix)                                           \
+{                                                                             \
+    if(*n < FLA_POTRF_DOUBLE_SMALL && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))    \
+        fla_dpotrf_small_avx512(uplo, n, buff_A, ldim_A, info);               \
+    else if(*n < FLA_POTRF_DOUBLE_SMALL && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) \
+        fla_dpotrf_small_avx2(uplo, n, buff_A, ldim_A, info);                 \
+    else if((*n >= FLA_POTRF_BLOCK_SIZE))                                     \
+        lapack_dpotrf_var1(uplo, n, buff_A, ldim_A, info);                    \
+    else if(*n < FLA_POTRF_DOUBLE_SMALL)                                      \
+        lapack_dpotf2(uplo, n, buff_A, ldim_A, info);                         \
+    else                                                                      \
+        lapack_dpotrf(uplo, n, buff_A, ldim_A, info);                         \
+}
+#else
+#define LAPACK_potrf_body_d(prefix)                                        \
+{                                                                             \
+    if(*n < FLA_POTRF_DOUBLE_SMALL && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))    \
+        fla_dpotrf_small_avx512(uplo, n, buff_A, ldim_A, info);               \
+    else if(*n < FLA_POTRF_DOUBLE_SMALL && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) \
+        fla_dpotrf_small_avx2(uplo, n, buff_A, ldim_A, info);                 \
+    else if(*n < FLA_POTRF_DOUBLE_SMALL)                                      \
+        lapack_dpotf2(uplo, n, buff_A, ldim_A, info);                         \
+    else                                                                      \
+        lapack_dpotrf(uplo, n, buff_A, ldim_A, info);                         \
+}
+#endif
 #endif
 
 #define LAPACK_potrf_body(prefix)                          \

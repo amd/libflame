@@ -250,6 +250,10 @@
 //POTRF, threshold numbers to chose paths for performance
 #define FLA_POTRF_FLOAT_SMALL         (70)
 #define FLA_POTRF_DOUBLE_SMALL        (75)
+#define FLA_DPOTRF_LOWER_SMALL        (18)
+#define FLA_DPOTRF_LOWER_MEDIUM       (75)
+#define FLA_DPOTRF_UPPER_MEDIUM       (50)
+#define FLA_POTRF_BLOCK_SIZE          (256)
 
 //GETRF , threshold numbers to chose paths for performance
 #define TALL_RATIO_THRESHOLD 1.5

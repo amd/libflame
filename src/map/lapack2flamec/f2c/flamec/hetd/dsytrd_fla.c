@@ -3,13 +3,28 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+
 #include "FLA_f2c.h" /* Table of constant values */
+#ifdef FLA_OPENMP_MULTITHREADING
+#include <omp.h>
+
+#define MATRIX_SIZE_THRESHOLD_PARALLEL 5000
+#define ADAPTIVE_BLOCK_SIZE 64
+#define OPTIMAL_THREADS 8
+
+void dsytrd_fla_parallel(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *d__, doublereal *e,
+                doublereal *tau, doublereal *work, integer *lwork, integer *info);
+#endif
+
+
+
 static integer c__1 = 1;
 static integer c_n1 = -1;
 static integer c__3 = 3;
 static integer c__2 = 2;
 static doublereal c_b22 = -1.;
 static doublereal c_b23 = 1.;
+
 /* > \brief \b DSYTRD */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -80,7 +95,7 @@ static doublereal c_b23 = 1.;
 /* > tridiagonal matrix T, and the elements above the first */
 /* > superdiagonal, with the array TAU, represent the orthogonal */
 /* > matrix Q as a product of elementary reflectors;
-if UPLO */
+ if UPLO */
 /* > = 'L', the diagonal and first subdiagonal of A are over- */
 /* > written by the corresponding elements of the tridiagonal */
 /* > matrix T, and the elements below the first subdiagonal, with */
@@ -129,7 +144,7 @@ if UPLO */
 /* > optimal blocksize. */
 /* > */
 /* > If LWORK = -1, then a workspace query is assumed;
-the routine */
+ the routine */
 /* > only calculates the optimal size of the WORK array, returns */
 /* > this value as the first entry of the WORK array, and no error */
 /* > message related to LWORK is issued by XERBLA. */
@@ -241,6 +256,15 @@ void dsytrd_fla(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
     /* .. External Functions .. */
     /* .. */
     /* .. Executable Statements .. */
+
+#ifdef FLA_OPENMP_MULTITHREADING
+    if(*n <= MATRIX_SIZE_THRESHOLD_PARALLEL)
+    {
+        dsytrd_fla_parallel(uplo, n, a, lda, d__, e, tau, work, lwork, info);
+        return;
+    }
+#endif
+
     /* Test the input parameters */
     /* Parameter adjustments */
     a_dim1 = *lda;
@@ -403,3 +427,276 @@ void dsytrd_fla(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
     /* End of DSYTRD */
 }
 /* dsytrd_ */
+
+
+#ifdef FLA_OPENMP_MULTITHREADING
+void dsytrd_fla_parallel(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *d__, doublereal *e,
+                doublereal *tau, doublereal *work, integer *lwork, integer *info)
+{
+    /* System generated locals */
+    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7;
+    /* Local variables */
+    integer i__, j, nb, kk, nx, iws;
+    extern logical lsame_(char *, char *, integer, integer);
+    integer nbmin, iinfo;
+    logical upper;
+    integer adaptive_block, num_threads, max_available_threads;
+    extern /* Subroutine */
+        void
+        dsytd2_fla(char *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                   doublereal *, integer *),
+        dsyr2k_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *,
+                doublereal *, integer *, doublereal *, doublereal *, integer *),
+        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
+               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *),
+        dlatrd_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
+                doublereal *, integer *),
+        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern int fla_thread_get_num_threads(void);
+    integer ldwork, lwkopt;
+    logical lquery;
+
+    /* Parameter adjustments */
+    a_dim1 = *lda;
+    a_offset = 1 + a_dim1;
+    a -= a_offset;
+    --d__;
+    --e;
+    --tau;
+    --work;
+    /* Function Body */
+    *info = 0;
+    upper = lsame_(uplo, "U", 1, 1);
+    lquery = *lwork == -1;
+    if(!upper && !lsame_(uplo, "L", 1, 1))
+    {
+        *info = -1;
+    }
+    else if(*n < 0)
+    {
+        *info = -2;
+    }
+    else if(*lda < fla_max(1, *n))
+    {
+        *info = -4;
+    }
+    else if(*lwork < 1 && !lquery)
+    {
+        *info = -9;
+    }
+    if(*info == 0)
+    {
+        /* Determine the block size. */
+        nb = ilaenv_(&c__1, "DSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
+        lwkopt = *n * nb;
+        work[1] = (doublereal)lwkopt;
+    }
+    if(*info != 0)
+    {
+        i__1 = -(*info);
+        xerbla_("DSYTRD", &i__1, (ftnlen)6);
+        return;
+    }
+    else if(lquery)
+    {
+        return;
+    }
+    /* Quick return if possible */
+    if(*n == 0)
+    {
+        work[1] = 1.;
+        return;
+    }
+    nx = *n;
+    iws = 1;
+    if(nb > 1 && nb < *n)
+    {
+        /* Determine when to cross over from blocked to unblocked code */
+        /* (last block is always handled by unblocked code). */
+        /* Computing MAX */
+        i__1 = nb;
+        i__2 = ilaenv_(&c__3, "DSYTRD", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+        nx = fla_max(i__1, i__2);
+        if(nx < *n)
+        {
+            /* Determine if workspace is large enough for blocked code. */
+            ldwork = *n;
+            iws = ldwork * nb;
+            if(*lwork < iws)
+            {
+                /* Not enough workspace to use optimal NB: determine the */
+                /* minimum value of NB, and reduce NB or force use of */
+                /* unblocked code by setting NX = N. */
+                /* Computing MAX */
+                i__1 = *lwork / ldwork;
+                nb = fla_max(i__1, 1);
+                nbmin = ilaenv_(&c__2, "DSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
+                if(nb < nbmin)
+                {
+                    nx = *n;
+                }
+            }
+        }
+        else
+        {
+            nx = *n;
+        }
+    }
+    else
+    {
+        nb = 1;
+    }
+
+    adaptive_block = ADAPTIVE_BLOCK_SIZE;
+
+    max_available_threads = fla_thread_get_num_threads();
+    if(max_available_threads < OPTIMAL_THREADS)
+        num_threads = max_available_threads;
+    else
+        num_threads = OPTIMAL_THREADS;
+
+#pragma omp parallel num_threads(num_threads)
+    {
+#pragma omp single
+        {
+            if(upper)
+            {
+                /* Reduce the upper triangle of A. */
+                /* Columns 1:kk are handled by the unblocked method. */
+                kk = *n - (*n - nx + nb - 1) / nb * nb;
+                i__1 = kk + 1;
+                i__2 = -nb;
+
+                for(i__ = *n - nb + 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
+                {
+                    /* Reduce columns i:i+nb-1 to tridiagonal form and form the */
+                    /* matrix W which is needed to update the unreduced part of */
+                    /* the matrix */
+                    i__3 = i__ + nb - 1;
+                    dlatrd_(uplo, &i__3, &nb, &a[a_offset], lda, &e[1], &tau[1], &work[1], &ldwork);
+
+                    /* Update the unreduced submatrix A(1:i-1,1:i-1), using an */
+                    /* update of the form: A := A - V*W**T - W*V**T */
+
+/* For smaller matrices, use fine-grained task approach */
+#pragma omp taskgroup
+                    {
+                        for(i__4 = 0; i__4 < (i__ - 1); i__4 += adaptive_block)
+                        {
+                            i__5 = fla_min(adaptive_block, i__ - i__4 - 1);
+
+#pragma omp task firstprivate(i__4, i__5, i__, nb, ldwork)
+                            {
+                                dsyr2k_(uplo, "No transpose", &i__5, &nb, &c_b22,
+                                        &a[i__ * a_dim1 + 1 + i__4], lda, &work[1 + i__4], &ldwork,
+                                        &c_b23, &a[i__4 + 1 + (i__4 + 1) * a_dim1], lda);
+                            }
+
+                            for(i__6 = i__4 - adaptive_block; i__6 >= 0; i__6 -= adaptive_block)
+                            {
+                                i__7 = fla_min(adaptive_block, i__ - i__6 - 1);
+
+#pragma omp task firstprivate(i__6, i__7, i__4, i__5, i__, nb, ldwork)
+                                {
+                                    dgemm_("N", "T", &i__7, &i__5, &nb, &c_b22,
+                                           &a[i__ * a_dim1 + 1 + i__6], lda, &work[1 + i__4],
+                                           &ldwork, &c_b23, &a[i__6 + 1 + (i__4 + 1) * a_dim1],
+                                           lda);
+
+                                    dgemm_("N", "T", &i__7, &i__5, &nb, &c_b22, &work[1 + i__6],
+                                           &ldwork, &a[i__ * a_dim1 + 1 + i__4], lda, &c_b23,
+                                           &a[i__6 + 1 + (i__4 + 1) * a_dim1], lda);
+                                }
+                            }
+                        }
+                    }
+
+                    /* Copy superdiagonal elements back into A, and diagonal */
+                    /* elements into D */
+                    i__3 = i__ + nb - 1;
+                    for(j = i__; j <= i__3; ++j)
+                    {
+                        a[j - 1 + j * a_dim1] = e[j - 1];
+                        d__[j] = a[j + j * a_dim1];
+                    }
+                }
+                /* Use unblocked code to reduce the last or only block */
+                dsytd2_fla(uplo, &kk, &a[a_offset], lda, &d__[1], &e[1], &tau[1], &iinfo);
+            }
+            else
+            {
+                /* Reduce the lower triangle of A */
+                i__2 = *n - nx;
+                i__1 = nb;
+
+                for(i__ = 1; i__1 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__1)
+                {
+                    /* Reduce columns i:i+nb-1 to tridiagonal form and form the */
+                    /* matrix W which is needed to update the unreduced part of */
+                    /* the matrix */
+                    i__3 = *n - i__ + 1;
+                    dlatrd_(uplo, &i__3, &nb, &a[i__ + i__ * a_dim1], lda, &e[i__], &tau[i__],
+                            &work[1], &ldwork);
+
+                    /* Update the unreduced submatrix A(i+ib:n,i+ib:n), using */
+                    /* an update of the form: A := A - V*W**T - W*V**T */
+                    i__3 = *n - i__ - nb + 1;
+
+#pragma omp taskgroup
+                    {
+                        for(i__4 = 0; i__4 < i__3; i__4 += adaptive_block)
+                        {
+                            i__5 = fla_min(adaptive_block, i__3 - i__4);
+
+#pragma omp task firstprivate(i__4, i__5, i__, nb, ldwork)
+                            {
+                                dsyr2k_(uplo, "No transpose", &i__5, &nb, &c_b22,
+                                        &a[i__ + nb + i__4 + i__ * a_dim1], lda,
+                                        &work[nb + i__4 + 1], &ldwork, &c_b23,
+                                        &a[i__ + nb + i__4 + (i__ + i__4 + nb) * a_dim1], lda);
+                            }
+
+                            for(i__6 = i__4 + adaptive_block; i__6 < i__3; i__6 += adaptive_block)
+                            {
+                                i__7 = fla_min(adaptive_block, i__3 - i__6);
+
+#pragma omp task firstprivate(i__6, i__7, i__4, i__5, i__, nb, ldwork)
+                                {
+                                    dgemm_("N", "T", &i__7, &i__5, &nb, &c_b22,
+                                           &a[i__ + nb + i__6 + i__ * a_dim1], lda,
+                                           &work[nb + i__4 + 1], &ldwork, &c_b23,
+                                           &a[i__ + nb + i__6 + (i__ + nb + i__4) * a_dim1], lda);
+
+                                    dgemm_("N", "T", &i__7, &i__5, &nb, &c_b22,
+                                           &work[nb + i__6 + 1], &ldwork,
+                                           &a[i__ + nb + i__4 + i__ * a_dim1], lda, &c_b23,
+                                           &a[i__ + nb + i__6 + (i__ + nb + i__4) * a_dim1], lda);
+                                }
+                            }
+                        }
+                    }
+
+                    /* Copy subdiagonal elements back into A, and diagonal */
+                    /* elements into D */
+                    i__3 = i__ + nb - 1;
+                    for(j = i__; j <= i__3; ++j)
+                    {
+                        a[j + 1 + j * a_dim1] = e[j];
+                        d__[j] = a[j + j * a_dim1];
+                    }
+                }
+                /* Use unblocked code to reduce the last or only block */
+                i__1 = *n - i__ + 1;
+                dsytd2_fla(uplo, &i__1, &a[i__ + i__ * a_dim1], lda, &d__[i__], &e[i__], &tau[i__],
+                           &iinfo);
+            }
+
+        }
+    }
+
+    work[1] = (doublereal)lwkopt;
+    return;
+    /* End of DSYTRD */
+}
+#endif

@@ -409,6 +409,11 @@
 #define fla_lapack_cunmlq CUNMLQ_
 #define fla_lapack_zunmlq ZUNMLQ_
 
+#define fla_lapack_sgbsv SGBSV_
+#define fla_lapack_dgbsv DGBSV_
+#define fla_lapack_cgbsv CGBSV_
+#define fla_lapack_zgbsv ZGBSV_
+
 #elif(UPPER)
 
 #define fla_lapack_sladiv SLADIV
@@ -752,6 +757,11 @@
 #define fla_lapack_dormlq DORMLQ
 #define fla_lapack_cunmlq CUNMLQ
 #define fla_lapack_zunmlq ZUNMLQ
+
+#define fla_lapack_sgbsv SGBSV
+#define fla_lapack_dgbsv DGBSV
+#define fla_lapack_cgbsv CGBSV
+#define fla_lapack_zgbsv ZGBSV
 #elif(LOWER)
 
 #define fla_lapack_sladiv sladiv
@@ -1095,6 +1105,11 @@
 #define fla_lapack_dormlq dormlq
 #define fla_lapack_cunmlq cunmlq
 #define fla_lapack_zunmlq zunmlq
+
+#define fla_lapack_sgbsv sgbsv
+#define fla_lapack_dgbsv dgbsv
+#define fla_lapack_cgbsv cgbsv
+#define fla_lapack_zgbsv zgbsv
 #else
 
 #define fla_lapack_sladiv sladiv_
@@ -1439,6 +1454,11 @@
 #define fla_lapack_dormlq dormlq_
 #define fla_lapack_cunmlq cunmlq_
 #define fla_lapack_zunmlq zunmlq_
+
+#define fla_lapack_sgbsv sgbsv_
+#define fla_lapack_dgbsv dgbsv_
+#define fla_lapack_cgbsv cgbsv_
+#define fla_lapack_zgbsv zgbsv_
 
 #endif /*if UPPER_*/
 

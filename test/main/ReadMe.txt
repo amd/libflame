@@ -373,3 +373,11 @@ NOTE:
    - These options can be used along with special matrix (--imatrix) and 
      interface (--interface) options. However these options should
      be provided after special matrix and interface options.
+
+13. APIs with only Benchmark test without output Validation
+   Test suite provides support to run only performance benchmark tests for
+   few APIs. Support for more APIs in this mode is being added.
+   These tests are available only through command line mode (config mode
+   is not supported) and only for LAPACK interfaces.
+   Refer to input.global.operations file for APIs with only Benchmark test without
+   Validation. All these APIs will be listed after appropriate comment in that file. 

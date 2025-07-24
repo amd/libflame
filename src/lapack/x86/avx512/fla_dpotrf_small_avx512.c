@@ -46,7 +46,7 @@ int fla_dpotrf_small_avx512(char *uplo, integer *n, doublereal *a, integer *lda,
         a[0] = sqrt(a[0]);
         a[1] = a[1] / a[0];
         p_val = (a[1] * a[1]);
-        if(a[*lda + 1] <= p_val)
+        if(a[*lda + 1] <= p_val || a[*lda + 1] != a[*lda + 1])
         {
             *info = 2;
             return 0;

@@ -1,4 +1,9 @@
-#include "FLA_f2c.h"
+
+/*
+ *  Copyright (c) 2025 Advanced Micro Devices, Inc.  All rights reserved.
+ */
+
+ #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 static integer c__6 = 6;
 static integer c__0 = 0;
@@ -675,7 +680,7 @@ int dgesdd_fla_check(char *jobu, char *jobvt, integer *m, integer *n, double *a,
         work[1] = (double)maxwrk;
         if(*lwork < minwrk && !lquery)
         {
-            *info = -13;
+            *info = -12;
         }
     }
     if(*info != 0)

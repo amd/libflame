@@ -242,12 +242,11 @@ void fla_test_gesdd_experiment(char *tst_api, test_params_t *params, integer dat
     prepare_gesdd_run(&jobz, m, n, A_test, lda, s, U, ldu, V, ldvt, datatype, &info, interfacetype,
                       layout, params);
 
-    /* performance computation
- 6mn^2 + 8n^3 flops */
+    /* performance computation 6mn^2 + 8n^3 flops */
     if(m >= n)
         perf = (double)((6.0 * m * n * n) + (8.0 * n * n * n)) / time_min / FLOPS_PER_UNIT_PERF;
     else
-        perf = (double)((6.0 * n * m * m) + ((8.0) * m * m * m)) / time_min / FLOPS_PER_UNIT_PERF;
+        perf = (double)((6.0 * n * m * m) + (8.0 * m * m * m)) / time_min / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         perf *= 4.0;
 

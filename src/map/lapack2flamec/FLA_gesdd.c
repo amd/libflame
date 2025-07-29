@@ -157,8 +157,11 @@ LAPACK_gesdd_real(d)
 #if FLA_ENABLE_AMD_OPT
     if(*m < FLA_SVD_SMALL_SIZE_THRESH2 && *n < FLA_SVD_SMALL_SIZE_THRESH2)
     {
-        int fla_error = LAPACK_SUCCESS;
+        /* Path for small sizes making use of optimized DGESVD */
         char jobu[1], jobv[1];
+        doublereal anrm;
+        extern doublereal dlange_(char *norm, integer *m, integer *n,
+                                  doublereal *a, integer *lda, doublereal *work);
 
         if(lsame_(jobz, "O", 1, 1))
         {
@@ -178,16 +181,56 @@ LAPACK_gesdd_real(d)
             jobu[0] = *jobz;
             jobv[0] = *jobz;
         }
-        LAPACK_RETURN_CHECK_VAR1(dgesdd_fla_check(jobu, jobv, m, n, buff_A, ldim_A, buff_s, buff_U,
-                                                  ldim_U, buff_Vh, ldim_Vh, buff_w, lwork, info),
-                                 fla_error)
 
-        if(fla_error == LAPACK_SUCCESS)
+        /* Check input dimensions */
+        if(*m < 0)
         {
-            LAPACK_gesdd_real_body(d)
-                /** fla_error set to 0 on LAPACK_SUCCESS */
-                fla_error
-                = 0;
+            *info = -2;
+        }
+        else if(*n < 0)
+        {
+            *info = -3;
+        }
+        else if(*ldim_A < fla_max(1, *m))
+        {
+            *info = -5;
+        }
+
+        /* Check for NAN values in input */
+        if(*lwork != -1 && *info == 0)
+        {
+            /* DLANGE call with "M" to get max absolute value */
+            anrm = dlange_("M", m, n, buff_A, ldim_A, NULL);
+            if(anrm != anrm)
+            {
+                *info = -4;
+            }
+        }
+
+        if(*info < 0)
+        {
+            /* If the info is set to a negative value, it means that the
+             * input parameters are invalid, so return. */
+            AOCL_DTL_TRACE_LOG_EXIT
+            return;
+        }
+
+        /* Calling DGESVD */
+        LAPACK_gesdd_real_body(d)
+
+        /* Map info values of DGESVD to DGESDD */
+        if(*info < 0)
+        {
+            if(*info >= -2)
+            {
+                /* Common job parameter 1 in DGESDD vs two split job parameters in DGESVD (1 & 2) */
+                *info = -1;
+            }
+            else
+            {
+                /* Reduce by 1 to match info values of DGESVD to DGESDD */
+                *info += 1;
+            }
         }
     }
     else

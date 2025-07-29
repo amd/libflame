@@ -626,6 +626,8 @@ void copy_matrix(integer datatype, char *uplo, integer M, integer N, void *A, in
 {
     if((LDA < M) || (LDB < M))
         return;
+    if((M <= 0) || (N <= 0))
+        return;
 
     size_t element_size = 0;
     switch(datatype)

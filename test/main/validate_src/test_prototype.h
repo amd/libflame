@@ -414,6 +414,10 @@
 #define fla_lapack_cgbsv CGBSV_
 #define fla_lapack_zgbsv ZGBSV_
 
+#define fla_lapack_sgetrf2 SGETRF2_
+#define fla_lapack_dgetrf2 DGETRF2_
+#define fla_lapack_cgetrf2 CGETRF2_
+#define fla_lapack_zgetrf2 ZGETRF2_
 #elif(UPPER)
 
 #define fla_lapack_sladiv SLADIV
@@ -762,6 +766,11 @@
 #define fla_lapack_dgbsv DGBSV
 #define fla_lapack_cgbsv CGBSV
 #define fla_lapack_zgbsv ZGBSV
+
+#define fla_lapack_sgetrf2 SGETRF2
+#define fla_lapack_dgetrf2 DGETRF2
+#define fla_lapack_cgetrf2 CGETRF2
+#define fla_lapack_zgetrf2 ZGETRF2
 #elif(LOWER)
 
 #define fla_lapack_sladiv sladiv
@@ -1110,6 +1119,11 @@
 #define fla_lapack_dgbsv dgbsv
 #define fla_lapack_cgbsv cgbsv
 #define fla_lapack_zgbsv zgbsv
+
+#define fla_lapack_sgetrf2 sgetrf2
+#define fla_lapack_dgetrf2 dgetrf2
+#define fla_lapack_cgetrf2 cgetrf2
+#define fla_lapack_zgetrf2 zgetrf2
 #else
 
 #define fla_lapack_sladiv sladiv_
@@ -1459,6 +1473,11 @@
 #define fla_lapack_dgbsv dgbsv_
 #define fla_lapack_cgbsv cgbsv_
 #define fla_lapack_zgbsv zgbsv_
+
+#define fla_lapack_sgetrf2 sgetrf2_
+#define fla_lapack_dgetrf2 dgetrf2_
+#define fla_lapack_cgetrf2 cgetrf2_
+#define fla_lapack_zgetrf2 zgetrf2_
 
 #endif /*if UPPER_*/
 

@@ -1348,42 +1348,12 @@ char *fla_test_get_string_for_result(double residual, integer datatype, double t
 {
     char *r_val;
 
-    if(datatype == FLOAT)
-    {
-        if(residual == DBL_MIN)
-            r_val = fla_test_invalid_string;
-        else if((residual > thresh) || (isnan(residual)))
-            r_val = fla_test_fail_string;
-        else
-            r_val = fla_test_pass_string;
-    }
-    else if(datatype == DOUBLE)
-    {
-        if(residual == DBL_MIN)
-            r_val = fla_test_invalid_string;
-        else if((residual > thresh) || (isnan(residual)))
-            r_val = fla_test_fail_string;
-        else
-            r_val = fla_test_pass_string;
-    }
-    else if(datatype == COMPLEX)
-    {
-        if(residual == DBL_MIN)
-            r_val = fla_test_invalid_string;
-        else if((residual > thresh) || (isnan(residual)))
-            r_val = fla_test_fail_string;
-        else
-            r_val = fla_test_pass_string;
-    }
+    if(residual == DBL_MIN)
+        r_val = fla_test_invalid_string;
+    else if((residual > thresh) || (isnan(residual)))
+        r_val = fla_test_fail_string;
     else
-    {
-        if(residual == DBL_MIN)
-            r_val = fla_test_invalid_string;
-        else if((residual > thresh) || (isnan(residual)))
-            r_val = fla_test_fail_string;
-        else
-            r_val = fla_test_pass_string;
-    }
+        r_val = fla_test_pass_string;
 
     return r_val;
 }

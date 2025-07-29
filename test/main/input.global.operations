@@ -64,3 +64,4 @@
 1   potri   Inverse of Cholesky factorization             (0 = disable; 1 = enable; 2 = enable only this)
 #   APIs with only Benchmark test without Validation
 0   gbsv    Linear Solve using LU for Band Matrix         (0 = disable; 1 = enable; 2 = enable only this)
+0   getrf2  LU factorization (GETRF2)                     (0 = disable; 1 = enable; 2 = enable only this)

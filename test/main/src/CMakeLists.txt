@@ -68,6 +68,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/test_ormlq.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_potri.c
 # only performance benchmarking
 ${CMAKE_CURRENT_SOURCE_DIR}/test_gbsv.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_getrf2.c
 )
 
 add_subdirectory(lapacke)

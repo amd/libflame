@@ -162,7 +162,7 @@ set(DGESVD_TEST_CASES "gesvd d A S 124 15 124 124 15 -1 1"
 
 #Performance tests for ZGETRF
 foreach(FUNCTION "getrf")
-    foreach(PREC "s" "d" "z") 
+    foreach(PREC "s" "d" "z")
         foreach(SIZE_N "2" "3" "4" "5" "8" "16" "32" "64" "128" "256" "512" "1024")
             add_test(NAME LU_FACTORIZATION_${PREC}${FUNCTION}_${SIZE_N}x${SIZE_N} COMMAND ${CTEST_MAIN_COMMAND} ${FUNCTION} ${PREC} ${SIZE_N} ${SIZE_N} ${SIZE_N} 1)
             set_property(TEST LU_FACTORIZATION_${PREC}${FUNCTION}_${SIZE_N}x${SIZE_N} PROPERTY ENVIRONMENT "OMP_NUM_THREADS=1")
@@ -171,9 +171,9 @@ foreach(FUNCTION "getrf")
 endforeach(FUNCTION)
 
 #Example to add loop based tests to ctest
-# Note: in forloop based test the variable should also modify the name of the test, since 2 tests cannot have same name 
+# Note: in forloop based test the variable should also modify the name of the test, since 2 tests cannot have same name
 foreach(FUNCTION "gesv")
-    foreach(PREC "s" "d" "c" "z") 
+    foreach(PREC "s" "d" "c" "z")
         foreach(SIZE_N "10")
             add_test(NAME custom_main_test_${PREC}${FUNCTION}_${SIZE_N}x${SIZE_N} COMMAND ${CTEST_MAIN_COMMAND} ${FUNCTION} ${PREC} ${SIZE_N} 10 10 10 10)
         endforeach(SIZE_N)
@@ -182,7 +182,7 @@ endforeach(FUNCTION)
 
 #Performance tests for GELS
 foreach(FUNCTION "gels")
-    foreach(PREC "d") 
+    foreach(PREC "d")
         foreach(SIZE_M RANGE 10 40)
           foreach(SIZE_N 10)
             add_test(NAME GELS_NT_NRHS2_${PREC}${FUNCTION}_${SIZE_M}x${SIZE_N} COMMAND ${CTEST_MAIN_COMMAND} ${FUNCTION} ${PREC} N ${SIZE_M} ${SIZE_N} 2 ${SIZE_M} ${SIZE_M} -1 10000)
@@ -220,7 +220,7 @@ foreach(FUNCTION "gejsv")
         endforeach(SIZE_M)
     endforeach(PREC)
 endforeach(FUNCTION)
-            
+
 set(TEST_NUM 1)
 foreach(dgesvd_test_cases IN LISTS DGESVD_TEST_CASES)
     string(REPLACE " " ";" COMMANDLINE_PARAMS ${dgesvd_test_cases})
@@ -230,3 +230,5 @@ foreach(dgesvd_test_cases IN LISTS DGESVD_TEST_CASES)
 MATH(EXPR TEST_NUM "${TEST_NUM}+1")
 endforeach()
 
+# Adding lapacke ctest for unmlq for row_major layout
+add_test(NAME UNMLQ_LAPACKE_ROW_MAJOR_TEST COMMAND ${CTEST_MAIN_COMMAND} unmlq cz R N 100 85 2 380 400 -1 100 --interface=lapacke_row)

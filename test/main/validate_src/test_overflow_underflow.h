@@ -174,6 +174,9 @@ void scale_matrix_overflow_underflow_gejsv(integer datatype, integer m, integer 
 /* Scaling matrix with values around overflow underflow for labrd */
 void scale_matrix_underflow_overflow_labrd(integer datatype, integer m, integer n, void *A,
                                            integer lda, char imatrix_char);
+/* Scaling matrix with values around overflow underflow for gebrd */
+void scale_matrix_underflow_overflow_gebrd(integer datatype, integer m, integer n, void *A,
+                                           integer lda, char imatrix_char);
 /* Scaling matrix with values around overflow, underflow for SYTRD/HETRD */
 void scale_matrix_underflow_overflow_sytrd(integer datatype, integer n, void *A, integer lda,
                                            char imatrix_char);

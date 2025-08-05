@@ -342,8 +342,9 @@ double prepare_lapacke_getri_run(integer datatype, int layout, integer m_A, inte
 }
 
 /*
- *  GETRI_API calls LAPACK interface of
- *  Singular value decomposition - gesvd
+ *  Call LAPACK interface of
+ *  getri to compute the inverse of a matrix
+ *  A, given its LU factorization.
  *  */
 void invoke_getri(integer datatype, integer *n, void *a, integer *lda, integer *ipiv, void *work,
                   integer *lwork, integer *info)

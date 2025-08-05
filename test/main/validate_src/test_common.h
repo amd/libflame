@@ -84,6 +84,16 @@ typedef integer logical;
         _x > _y ? _x : _y;      \
     })
 
+#define FP_FSCANF(fp, format_str, x)                          \
+    {                                                         \
+        int f_error = fscanf(fp, format_str, (x));            \
+        if(f_error == 0)                                      \
+        {                                                     \
+            printf("Error reading from file %s\n", __FILE__); \
+            exit(-1);                                         \
+        }                                                     \
+    }
+
 /* Enum value for the type of diagonal
    elements of a diagnoal matrix.
 
@@ -142,6 +152,9 @@ extern int matrix_layout;
 #define MAX_FLT_DIFF 0.00001 // Maximum allowed difference for float comparision
 #define MAX_DBL_DIFF 0.0000000001 // Maximum allowed difference for double comparision
 
+#define LOWER_BIDIAG 0
+#define UPPER_BIDIAG 1
+
 #if defined(FLA_ENABLE_ILP64)
 #ifdef _WIN32
 #define FT_IS "lld"
@@ -153,9 +166,9 @@ extern int matrix_layout;
 #endif
 
 /* print overall test status */
-#define FLA_PRINT_TEST_STATUS(p, q, residual, err_thresh) \
-    char dtype = get_datatype_char(datatype);             \
-    fla_dump_runtimes_to_file(params, tst_api, dtype, p, q);                    \
+#define FLA_PRINT_TEST_STATUS(p, q, residual, err_thresh)    \
+    char dtype = get_datatype_char(datatype);                \
+    fla_dump_runtimes_to_file(params, tst_api, dtype, p, q); \
     fla_test_print_status(tst_api, dtype, RECT_INPUT, p, q, residual, err_thresh, perf, params);
 
 /* print sub-test details in case of failure */
@@ -519,6 +532,8 @@ void swap_rows_with_pivot(integer datatype, integer m, integer n, void *A, integ
 logical same_char(char ca, char cb);
 /* Return pointer at required offset for the given datatype */
 void *get_ptr_at_offset(integer datatype, void *A, integer offset);
+void build_bidiagonal_matrix(integer datatype, integer m, integer n, integer k, void *d, void *e,
+                             void *B, integer ldb, integer type);
 
 /* Uses qsort to sort the given vector of real type
  *  in ascending or descending order based on the order parameter

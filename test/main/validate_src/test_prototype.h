@@ -409,6 +409,17 @@
 #define fla_lapack_cunmlq CUNMLQ_
 #define fla_lapack_zunmlq ZUNMLQ_
 
+#define fla_lapack_sorgbr SORGBR_
+#define fla_lapack_dorgbr DORGBR_
+#define fla_lapack_cungbr CUNGBR_
+#define fla_lapack_zungbr ZUNGBR_
+
+#define fla_lapack_sgebrd SGEBRD_
+#define fla_lapack_dgebrd DGEBRD_
+#define fla_lapack_cgebrd CGEBRD_
+#define fla_lapack_zgebrd ZGEBRD_
+
+/* Benchmark only APIs */
 #define fla_lapack_sgbsv SGBSV_
 #define fla_lapack_dgbsv DGBSV_
 #define fla_lapack_cgbsv CGBSV_
@@ -762,6 +773,17 @@
 #define fla_lapack_cunmlq CUNMLQ
 #define fla_lapack_zunmlq ZUNMLQ
 
+#define fla_lapack_sorgbr SORGBR
+#define fla_lapack_dorgbr DORGBR
+#define fla_lapack_cungbr CUNGBR
+#define fla_lapack_zungbr ZUNGBR
+
+#define fla_lapack_sgebrd SGEBRD
+#define fla_lapack_dgebrd DGEBRD
+#define fla_lapack_cgebrd CGEBRD
+#define fla_lapack_zgebrd ZGEBRD
+
+/* Benchmark only APIs */
 #define fla_lapack_sgbsv SGBSV
 #define fla_lapack_dgbsv DGBSV
 #define fla_lapack_cgbsv CGBSV
@@ -1115,6 +1137,17 @@
 #define fla_lapack_cunmlq cunmlq
 #define fla_lapack_zunmlq zunmlq
 
+#define fla_lapack_sorgbr sorgbr
+#define fla_lapack_dorgbr dorgbr
+#define fla_lapack_cungbr cungbr
+#define fla_lapack_zungbr zungbr
+
+#define fla_lapack_sgebrd sgebrd
+#define fla_lapack_dgebrd dgebrd
+#define fla_lapack_cgebrd cgebrd
+#define fla_lapack_zgebrd zgebrd
+
+/* Benchmark only APIs */
 #define fla_lapack_sgbsv sgbsv
 #define fla_lapack_dgbsv dgbsv
 #define fla_lapack_cgbsv cgbsv
@@ -1469,6 +1502,17 @@
 #define fla_lapack_cunmlq cunmlq_
 #define fla_lapack_zunmlq zunmlq_
 
+#define fla_lapack_sorgbr sorgbr_
+#define fla_lapack_dorgbr dorgbr_
+#define fla_lapack_cungbr cungbr_
+#define fla_lapack_zungbr zungbr_
+
+#define fla_lapack_sgebrd sgebrd_
+#define fla_lapack_dgebrd dgebrd_
+#define fla_lapack_cgebrd cgebrd_
+#define fla_lapack_zgebrd zgebrd_
+
+/* Benchmark only APIs */
 #define fla_lapack_sgbsv sgbsv_
 #define fla_lapack_dgbsv dgbsv_
 #define fla_lapack_cgbsv cgbsv_
@@ -1495,13 +1539,13 @@ extern void invoke_geev(integer datatype, char *jobvl, char *jobvr, integer *n, 
                         void *vr, integer *ldvr, void *work, integer *lwork, void *rwork,
                         integer *info);
 extern void invoke_hetrf_rook(integer datatype, char *uplo, integer *n, void *a, integer *lda,
-                       integer *ipiv, void *work, integer *lwork, integer *info);
+                              integer *ipiv, void *work, integer *lwork, integer *info);
 /* LAPACK SYTRD API invoke function to form Symmetric tridiagonal matrix. */
-extern void invoke_sytrd(integer datatype, char *uplo, integer *n, void *A, integer *lda,
-                  void *D, void *E, void *tau, void *work, integer *lwork, integer *info);
+extern void invoke_sytrd(integer datatype, char *uplo, integer *n, void *A, integer *lda, void *D,
+                         void *E, void *tau, void *work, integer *lwork, integer *info);
 /* Get the orhtogonal matrix from elementary vectors returned by SYTRD.*/
-extern void invoke_orgtr(integer datatype, char *uplo, integer *n, void *a, integer *lda,
-                  void *tau, void *work, integer *lwork, integer *info);
+extern void invoke_orgtr(integer datatype, char *uplo, integer *n, void *a, integer *lda, void *tau,
+                         void *work, integer *lwork, integer *info);
 extern void invoke_gghrd(integer datatype, char *compq, char *compz, integer *n, integer *ilo,
                          integer *ihi, void *a, integer *lda, void *b, integer *ldb, void *q,
                          integer *ldq, void *z, integer *ldz, integer *info);

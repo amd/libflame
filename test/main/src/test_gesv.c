@@ -328,8 +328,9 @@ double prepare_lapacke_gesv_run(integer datatype, int layout, integer n_A, integ
 }
 
 /*
- *  gesv_API calls LAPACK interface of
- *  Singular value decomposition - gesvd
+ *  Call to LAPACK interface of
+ *  gesv to solve the system of linear equations
+ *  A * X = B, where A is a square matrix.
  *  */
 void invoke_gesv(integer datatype, integer *n, integer *nrhs, void *a, integer *lda, integer *ipiv,
                  void *b, integer *ldb, integer *info)

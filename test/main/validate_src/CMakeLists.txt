@@ -53,5 +53,6 @@ ${CMAKE_CURRENT_SOURCE_DIR}/validate_hetri_rook.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_ormqr.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_gejsv.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_labrd.c
+${CMAKE_CURRENT_SOURCE_DIR}/validate_gebrd.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_sytrd.c
 )

@@ -345,8 +345,9 @@ double prepare_lapacke_getrs_run(integer datatype, int layout, char *trans, inte
 }
 
 /*
- *  GETRS_API calls LAPACK interface of
- *  Singular value decomposition - gesvd
+ *  Call to LAPACK interface of
+ *  GETRS to solve the system of linear equations
+ *  A * X = B, where A is a square matrix.
  *  */
 void invoke_getrs(integer datatype, char *trans, integer *n, integer *nrhs, void *a, integer *lda,
                   integer *ipiv, void *b, integer *ldb, integer *info)

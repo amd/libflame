@@ -224,4 +224,7 @@ void validate_gejsv(char *tst_api, char joba, char jobu, char jobv, char jobr, c
                     char imatrix, void *params);
 void validate_sytrd(char *tst_api, integer datatype, char uplo, integer n, void *A_out, void *A_in,
                     integer lda, void *D, void *E, void *tau, double err_thresh, void *params);
+void validate_gebrd(integer datatype, char *tst_api, integer m, integer n, void *A, integer lda,
+                    void *A_test, integer ldat, void *d, void *e, void *tauq, void *taup,
+                    double err_thresh, void *params);
 #endif // VALIDATE_COMMON_H

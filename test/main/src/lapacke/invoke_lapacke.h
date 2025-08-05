@@ -124,4 +124,7 @@ integer invoke_lapacke_ormlq(integer datatype, integer layout, char side, char t
                              integer ldc);
 integer invoke_lapacke_potri(integer datatype, int layout, char uplo, integer n, void *a,
                              integer lda);
+integer invoke_lapacke_gebrd(integer datatype, int layout, integer m, integer n, void *a,
+                             integer lda, void *d, void *e, void *tauq, void *taup);
 #endif
+

@@ -60,6 +60,7 @@ char *fla_mem_alloc(size_t size)
 #endif
     return buff;
 }
+
 /* create vector of given datatype*/
 void create_vector(integer datatype, void **A, integer M)
 {
@@ -2021,7 +2022,7 @@ void init_matrix_from_file(integer datatype, void *A, integer m, integer n, inte
             {
                 for(i = 0; i < m; i++)
                 {
-                    fscanf(fptr, "%f", &num);
+                    FP_FSCANF(fptr, "%f", &num);
                     ((float *)A)[i + j * lda] = num;
                 }
             }
@@ -2036,7 +2037,7 @@ void init_matrix_from_file(integer datatype, void *A, integer m, integer n, inte
             {
                 for(i = 0; i < m; i++)
                 {
-                    fscanf(fptr, "%lf", &num);
+                    FP_FSCANF(fptr, "%lf", &num);
                     ((double *)A)[i + j * lda] = num;
                 }
             }
@@ -2051,9 +2052,9 @@ void init_matrix_from_file(integer datatype, void *A, integer m, integer n, inte
             {
                 for(i = 0; i < m; i++)
                 {
-                    fscanf(fptr, "%f", &num);
+                    FP_FSCANF(fptr, "%f", &num);
                     ((scomplex *)A)[i + j * lda].real = num;
-                    fscanf(fptr, "%f", &num);
+                    FP_FSCANF(fptr, "%f", &num);
                     ((scomplex *)A)[i + j * lda].imag = num;
                 }
             }
@@ -2068,9 +2069,9 @@ void init_matrix_from_file(integer datatype, void *A, integer m, integer n, inte
             {
                 for(i = 0; i < m; i++)
                 {
-                    fscanf(fptr, "%lf", &num);
+                    FP_FSCANF(fptr, "%lf", &num);
                     ((dcomplex *)A)[i + j * lda].real = num;
-                    fscanf(fptr, "%lf", &num);
+                    FP_FSCANF(fptr, "%lf", &num);
                     ((dcomplex *)A)[i + j * lda].imag = num;
                 }
             }
@@ -2091,7 +2092,7 @@ void init_vector_from_file(integer datatype, void *A, integer m, integer inc, FI
 
             for(i = 0; i < m; i++)
             {
-                fscanf(fptr, "%f", &num);
+                FP_FSCANF(fptr, "%f", &num);
                 ((float *)A)[i * inc] = num;
             }
             break;
@@ -2103,7 +2104,7 @@ void init_vector_from_file(integer datatype, void *A, integer m, integer inc, FI
 
             for(i = 0; i < m; i++)
             {
-                fscanf(fptr, "%lf", &num);
+                FP_FSCANF(fptr, "%lf", &num);
                 ((double *)A)[i * inc] = num;
             }
             break;
@@ -2115,9 +2116,9 @@ void init_vector_from_file(integer datatype, void *A, integer m, integer inc, FI
 
             for(i = 0; i < m; i++)
             {
-                fscanf(fptr, "%f", &num);
+                FP_FSCANF(fptr, "%f", &num);
                 ((scomplex *)A)[i * inc].real = num;
-                fscanf(fptr, "%f", &num);
+                FP_FSCANF(fptr, "%f", &num);
                 ((scomplex *)A)[i * inc].imag = num;
             }
             break;
@@ -2129,9 +2130,9 @@ void init_vector_from_file(integer datatype, void *A, integer m, integer inc, FI
 
             for(i = 0; i < m; i++)
             {
-                fscanf(fptr, "%lf", &num);
+                FP_FSCANF(fptr, "%lf", &num);
                 ((dcomplex *)A)[i * inc].real = num;
-                fscanf(fptr, "%lf", &num);
+                FP_FSCANF(fptr, "%lf", &num);
                 ((dcomplex *)A)[i * inc].imag = num;
             }
             break;
@@ -5636,7 +5637,7 @@ void swap_row_col(integer datatype, integer *m, void *A, integer lda, integer *i
     }
 }
 
-/* GEMM implementation for  C := alpha*op( A )*op( B ) + beta*C
+/* GEMM implementation for  C := op( A )*op( B )
  * Where alpha = 1, beta = 0
  */
 void fla_invoke_gemm(integer datatype, char *transA, char *transB, integer *m, integer *n,
@@ -7565,6 +7566,114 @@ void get_stddev_of_array(integer datatype, void *A, void *stddev, integer n)
             ((dcomplex *)stddev)->real = sqrt(((dcomplex *)stddev)->real);
             ((dcomplex *)stddev)->imag = sqrt(((dcomplex *)stddev)->imag);
             break;
+        }
+    }
+}
+
+/*
+ * Build the bidiagonal matrix B from diagonal (d) and off-diagonal (e) arrays.
+ * The matrix B is reset to zero before being filled. The logic is datatype-specific.
+ *
+ * Parameters:
+ *   datatype - type of the matrix (FLOAT, DOUBLE, COMPLEX, DOUBLE_COMPLEX)
+ *   m, n     - dimensions of B
+ *   k        - min(m, n)
+ *   d        - pointer to diagonal elements
+ *   e        - pointer to off-diagonal elements
+ *   B        - pointer to output matrix (column-major)
+ *   ldb      - leading dimension of B
+ *   type     - lower or upper bidiagonal matrix (0 for LOWER_BIDIAG, 1 for UPPER_BIDIAG)
+ */
+void build_bidiagonal_matrix(integer datatype, integer m, integer n, integer k, void *d, void *e,
+                             void *B, integer ldb, integer type)
+{
+    integer i;
+
+    if(!B || !d || (type != LOWER_BIDIAG && type != UPPER_BIDIAG))
+        return;
+
+    reset_matrix(datatype, m, n, B, ldb);
+
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            float *w_ptr = (float *)B;
+            for(i = 0; i < k; i++)
+            {
+                w_ptr[i + i * ldb] = ((float *)d)[i];
+                if(type == LOWER_BIDIAG && i < (k - 1))
+                {
+                    w_ptr[i + 1 + i * ldb] = ((float *)e)[i];
+                }
+                else if(type == UPPER_BIDIAG && i < (k - 1))
+                {
+                    w_ptr[i + (i + 1) * ldb] = ((float *)e)[i];
+                }
+            }
+            break;
+        }
+        case DOUBLE:
+        {
+            double *w_ptr = (double *)B;
+            for(i = 0; i < k; i++)
+            {
+                w_ptr[i + i * ldb] = ((double *)d)[i];
+                if(type == LOWER_BIDIAG && i < (k - 1))
+                {
+                    w_ptr[i + 1 + i * ldb] = ((double *)e)[i];
+                }
+                else if(type == UPPER_BIDIAG && i < (k - 1))
+                {
+                    w_ptr[i + (i + 1) * ldb] = ((double *)e)[i];
+                }
+            }
+            break;
+        }
+        case COMPLEX:
+        {
+            scomplex *w_ptr = (scomplex *)B;
+            for(i = 0; i < k; i++)
+            {
+                w_ptr[i + i * ldb].real = ((float *)d)[i];
+                w_ptr[i + i * ldb].imag = 0.f;
+                if(type == LOWER_BIDIAG && i < (k - 1))
+                {
+                    w_ptr[i + 1 + i * ldb].real = ((float *)e)[i];
+                    w_ptr[i + 1 + i * ldb].imag = 0.f;
+                }
+                else if(type == UPPER_BIDIAG && i < (k - 1))
+                {
+                    w_ptr[i + (i + 1) * ldb].real = ((float *)e)[i];
+                    w_ptr[i + (i + 1) * ldb].imag = 0.f;
+                }
+            }
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            dcomplex *w_ptr = (dcomplex *)B;
+            for(i = 0; i < k; i++)
+            {
+                w_ptr[i + i * ldb].real = ((double *)d)[i];
+                w_ptr[i + i * ldb].imag = 0.;
+                if(type == LOWER_BIDIAG && i < (k - 1))
+                {
+                    w_ptr[i + 1 + i * ldb].real = ((double *)e)[i];
+                    w_ptr[i + 1 + i * ldb].imag = 0.;
+                }
+                else if(type == UPPER_BIDIAG && i < (k - 1))
+                {
+                    w_ptr[i + (i + 1) * ldb].real = ((double *)e)[i];
+                    w_ptr[i + (i + 1) * ldb].imag = 0.;
+                }
+            }
+            break;
+        }
+        default:
+        {
+            printf("Unsupported datatype for build_bidiagonal_matrix\n");
+            return;
         }
     }
 }

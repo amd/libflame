@@ -58,11 +58,6 @@ fla_stat_info_t AVAILABLE_STATS[FLA_NUM_STATS]
        {FLA_AVG_STAT, "avg", "AVG"},      {FLA_PERCENTILE_STAT, "p", "P"},
        {FLA_VARIANCE_STAT, "var", "VAR"}, {FLA_STDDEV_STAT, "stddev", "STD"}};
 
-#define SKIP_EXTRA_LINE_READ() \
-    eol = fgetc(fp);           \
-    if(eol != '\n')            \
-    fscanf(fp, "%*[^\n]\n")
-
 #define CHECK_LINE_SKIP()                                           \
     eol = fgetc(fp);                                                \
     if((eol == '\r') || (eol == '\n'))                              \
@@ -625,43 +620,43 @@ void fla_test_read_next_line(char *buffer, FILE *input_stream)
     sscanf(temp, "%s ", buffer);
 }
 
-#define READ_CONFIG_PARAM_INT(x)        \
-    fscanf(fp, "%s", &line[0]);         \
-    for(i = 0; i < NUM_SUB_TESTS; i++)  \
-    {                                   \
-        fscanf(fp, "%" FT_IS "", &(x)); \
-        CHECK_LINE_SKIP();              \
+#define READ_CONFIG_PARAM_INT(x)           \
+    FP_FSCANF(fp, "%s", &line[0]);         \
+    for(i = 0; i < NUM_SUB_TESTS; i++)     \
+    {                                      \
+        FP_FSCANF(fp, "%" FT_IS "", &(x)); \
+        CHECK_LINE_SKIP();                 \
     }
 
 #define READ_CONFIG_PARAM_FLT(x)       \
-    fscanf(fp, "%s", &line[0]);        \
+    FP_FSCANF(fp, "%s", &line[0]);     \
     for(i = 0; i < NUM_SUB_TESTS; i++) \
     {                                  \
-        fscanf(fp, "%f", &(x));        \
+        FP_FSCANF(fp, "%f", &(x));     \
         CHECK_LINE_SKIP();             \
     }
 
 #define READ_CONFIG_PARAM_DBL(x)       \
-    fscanf(fp, "%s", &line[0]);        \
+    FP_FSCANF(fp, "%s", &line[0]);     \
     for(i = 0; i < NUM_SUB_TESTS; i++) \
     {                                  \
-        fscanf(fp, "%lf", &(x));       \
+        FP_FSCANF(fp, "%lf", &(x));    \
         CHECK_LINE_SKIP();             \
     }
 
 #define READ_CONFIG_PARAM_STR(x)       \
-    fscanf(fp, "%s", str);             \
+    FP_FSCANF(fp, "%s", str);          \
     for(i = 0; i < NUM_SUB_TESTS; i++) \
     {                                  \
-        fscanf(fp, "%s", str);         \
+        FP_FSCANF(fp, "%s", str);      \
         (x) = *str;                    \
         CHECK_LINE_SKIP();             \
     }
 #define PARSE_CONFIG_DATATYPES(x)                                          \
-    fscanf(fp, "%s", &line[0]); /* num data types */                       \
+    FP_FSCANF(fp, "%s", &line[0]); /* num data types */                    \
     for(i = 0; i < NUM_SUB_TESTS; i++)                                     \
     {                                                                      \
-        fscanf(fp, "%s", str); /* num data types */                        \
+        FP_FSCANF(fp, "%s", str); /* num data types */                     \
         for(j = 0; j < NUM_SUB_TESTS; j++)                                 \
         {                                                                  \
             x[j].data_types_char[i] = *str;                                \
@@ -701,8 +696,8 @@ void fla_test_read_linear_param(const char *file_name, test_params_t *params)
     }
 
     /* Read the number of Tests */
-    fscanf(fp, "%s", &line[0]);
-    fscanf(fp, "%" FT_IS "", &num_tests);
+    FP_FSCANF(fp, "%s", &line[0]);
+    FP_FSCANF(fp, "%" FT_IS "", &num_tests);
 
     num_ranges = num_tests;
     for(i = 0; i < NUM_SUB_TESTS; i++)
@@ -826,8 +821,8 @@ void fla_test_read_sym_eig_params(const char *file_name, test_params_t *params)
     str = &line[0];
 
     /* Read the number of Ranges */
-    fscanf(fp, "%s", &line[0]);
-    fscanf(fp, "%" FT_IS "", &num_tests);
+    FP_FSCANF(fp, "%s", &line[0]);
+    FP_FSCANF(fp, "%" FT_IS "", &num_tests);
     for(i = 0; i < NUM_SUB_TESTS; i++)
     {
         params->eig_sym_paramslist[i].num_tests = num_tests;
@@ -966,8 +961,8 @@ void fla_test_read_non_sym_eig_params(const char *file_name, test_params_t *para
     }
 
     /* Read the number of Tests */
-    fscanf(fp, "%s", &line[0]);
-    fscanf(fp, "%" FT_IS "", &num_tests);
+    FP_FSCANF(fp, "%s", &line[0]);
+    FP_FSCANF(fp, "%" FT_IS "", &num_tests);
     for(i = 0; i < NUM_SUB_TESTS; i++)
     {
         params->eig_non_sym_paramslist[i].num_tests = num_tests;
@@ -1094,8 +1089,8 @@ void fla_test_read_svd_params(const char *file_name, test_params_t *params)
         exit(-1);
     }
 
-    fscanf(fp, "%s", &line[0]);
-    fscanf(fp, "%" FT_IS "", &num_tests);
+    FP_FSCANF(fp, "%s", &line[0]);
+    FP_FSCANF(fp, "%" FT_IS "", &num_tests);
     for(i = 0; i < NUM_SUB_TESTS; i++)
     {
         params->svd_paramslist[i].num_tests = num_tests;
@@ -1234,8 +1229,8 @@ void fla_test_read_aux_params(const char *file_name, test_params_t *params)
         exit(-1);
     }
 
-    fscanf(fp, "%s", &line[0]);
-    fscanf(fp, "%" FT_IS "", &num_tests);
+    FP_FSCANF(fp, "%s", &line[0]);
+    FP_FSCANF(fp, "%" FT_IS "", &num_tests);
     for(i = 0; i < NUM_SUB_TESTS; i++)
     {
         params->aux_paramslist[i].num_tests = num_tests;
@@ -1292,10 +1287,10 @@ void fla_test_read_aux_params(const char *file_name, test_params_t *params)
     /* aux_threshold */
     READ_CONFIG_PARAM_FLT(params->aux_paramslist[i].aux_threshold);
 
-    fscanf(fp, "%s", &line[0]); // Norm types
+    FP_FSCANF(fp, "%s", &line[0]); // Norm types
     for(i = 0; i < NUM_SUB_TESTS; i++)
     {
-        fscanf(fp, "%s", str);
+        FP_FSCANF(fp, "%s", str);
         len = strlen(str);
         len = fla_min(len, MAX_NUM_NORMTYPES);
         for(j = 0; j < len; j++)

@@ -15,7 +15,7 @@ void validate_gecon(char *tst_api, integer datatype, char norm, integer n, void 
     double residual;
 
     /* Early return conditions */
-    if(n == 0 || n == 0)
+    if(n == 0)
     {
         FLA_TEST_PRINT_STATUS_AND_RETURN(n, n, err_thresh);
     }

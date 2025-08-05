@@ -51,4 +51,6 @@ ${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_gejsv.c
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_sytrd.c
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_ormlq.c
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_potri.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_gebrd.c
 )
+

@@ -547,6 +547,32 @@ void scale_matrix_underflow_overflow_labrd(integer datatype, integer m, integer 
     free_vector(scal);
 }
 
+/* Scaling matrix with values around overflow underflow for gebrd */
+void scale_matrix_underflow_overflow_gebrd(integer datatype, integer m, integer n, void *A,
+                                           integer lda, char imatrix_char)
+{
+    void *max_min = NULL, *scal = NULL;
+    create_vector(get_realtype(datatype), &max_min, 1);
+    create_vector(get_realtype(datatype), &scal, 1);
+
+    if(imatrix_char == 'O')
+    {
+        get_max_from_matrix(datatype, A, max_min, m, n, lda);
+        calculate_scale_value(datatype, scal, max_min, 8.0, imatrix_char);
+    }
+    else
+    {
+        get_min_from_matrix(datatype, A, max_min, m, n, lda);
+        calculate_scale_value(datatype, scal, max_min, 1.0, imatrix_char);
+    }
+    /* Scaling the matrix A with scal */
+    scal_matrix(datatype, scal, A, m, n, lda, i_one);
+
+    /* free vectors */
+    free_vector(max_min);
+    free_vector(scal);
+}
+
 /* Scaling matrix with values around overflow underflow for larf */
 void scale_matrix_underflow_overflow_larf(integer datatype, integer m, integer n, void *A,
                                           integer lda, char imatrix_char)

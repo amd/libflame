@@ -148,6 +148,8 @@ void invoke_cpp_ormlq(integer datatype, char *side, char *trans, integer *m, int
                       integer *lwork, integer *info);
 void invoke_cpp_potri(char *uplo, integer datatype, integer *n, void *a, integer *lda,
                       integer *info);
+void invoke_cpp_gebrd(integer datatype, integer *m, integer *n, void *a, integer *lda, void *d,
+                      void *e, void *tauq, void *taup, void *work, integer *lwork, integer *info);
 #ifdef __cplusplus
 }
 #endif

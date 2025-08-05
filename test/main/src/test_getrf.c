@@ -308,8 +308,8 @@ double prepare_lapacke_getrf_run(integer datatype, int layout, integer m_A, inte
 }
 
 /*
- *  GETRF_API calls LAPACK interface of
- *  Singular value decomposition - gesvd
+ *  Call to LAPACK interface of
+ *  getrf to perform LU factorization.
  *  */
 void invoke_getrf(integer datatype, integer *m, integer *n, void *a, integer *lda, integer *ipiv,
                   integer *info)

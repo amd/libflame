@@ -2536,3 +2536,111 @@ void scale_matrix_overflow_underflow_potri(integer datatype, integer n, void *A,
     free_vector(max_min);
     free_vector(scal);
 }
+
+/* Scale matrix with values around overflow underflow for trtri */
+void scale_matrix_underflow_overflow_trtri(integer datatype, char diag_type, integer n, void *A,
+                                           integer lda, char imatrix_char)
+{
+    void *max_min = NULL, *scal = NULL;
+    double tuning_val = 1.0;
+    create_vector(get_realtype(datatype), &max_min, 1);
+    create_vector(get_realtype(datatype), &scal, 1);
+
+    if(same_char(imatrix_char, 'U'))
+    {
+        get_min_from_matrix(datatype, A, max_min, n, n, lda);
+        calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
+    }
+    else if(same_char(imatrix_char, 'O'))
+    {
+        if(n > 60)
+        {
+            tuning_val = 5.0;
+        }
+        get_max_from_matrix(datatype, A, max_min, n, n, lda);
+        calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
+    }
+
+    /* Adjust scaling factor for complex types to prevent overflow/underflow */
+    if(datatype == COMPLEX)
+    {
+        float scale_val = *(float *)scal;
+        float max_safe_scale = 1e+10f;
+        float min_safe_scale = 1e-10f;
+        if(scale_val > max_safe_scale)
+        {
+            *(float *)scal = max_safe_scale;
+        }
+        else if(scale_val < min_safe_scale)
+        {
+            *(float *)scal = min_safe_scale;
+        }
+    }
+    else if(datatype == DOUBLE_COMPLEX)
+    {
+        double scale_val = *(double *)scal;
+        double max_safe_scale = 1e+100;
+        double min_safe_scale = 1e-100;
+        if(scale_val > max_safe_scale)
+        {
+            *(double *)scal = max_safe_scale;
+        }
+        else if(scale_val < min_safe_scale)
+        {
+            *(double *)scal = min_safe_scale;
+        }
+    }
+
+    /* Scaling the matrix A with scal */
+    scal_matrix(datatype, scal, A, n, n, lda, i_one);
+
+    /* Restore unit diagonal if diag_type is 'U' */
+    if(same_char(diag_type, 'U'))
+    {
+        switch(datatype)
+        {
+            case FLOAT:
+            {
+                float *mat = (float *)A;
+                for(integer i = 0; i < n; ++i)
+                {
+                    mat[i * lda + i] = 1.0f;
+                }
+                break;
+            }
+            case DOUBLE:
+            {
+                double *mat = (double *)A;
+                for(integer i = 0; i < n; ++i)
+                {
+                    mat[i * lda + i] = 1.0;
+                }
+                break;
+            }
+            case COMPLEX:
+            {
+                scomplex *mat = (scomplex *)A;
+                for(integer i = 0; i < n; ++i)
+                {
+                    mat[i * lda + i].real = 1.0f;
+                    mat[i * lda + i].imag = 0.0f;
+                }
+                break;
+            }
+            case DOUBLE_COMPLEX:
+            {
+                dcomplex *mat = (dcomplex *)A;
+                for(integer i = 0; i < n; ++i)
+                {
+                    mat[i * lda + i].real = 1.0;
+                    mat[i * lda + i].imag = 0.0;
+                }
+                break;
+            }
+        }
+    }
+
+    /* Free vectors */
+    free_vector(max_min);
+    free_vector(scal);
+}

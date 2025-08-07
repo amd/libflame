@@ -150,6 +150,8 @@ void invoke_cpp_potri(char *uplo, integer datatype, integer *n, void *a, integer
                       integer *info);
 void invoke_cpp_gebrd(integer datatype, integer *m, integer *n, void *a, integer *lda, void *d,
                       void *e, void *tauq, void *taup, void *work, integer *lwork, integer *info);
+void invoke_cpp_trtri(integer datatype, char *uplo, char *diag, integer *n, void *a, integer *lda,
+                      integer *info);
 #ifdef __cplusplus
 }
 #endif

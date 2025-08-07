@@ -1,7 +1,7 @@
 ###############################################################################
 # Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
 ###############################################################################
-set(NEGATIVE_TEST_CASES 
+set(NEGATIVE_TEST_CASES
             "potri sdcz X 10 10 1 --einfo=-1"
             "potri sdcz U -10 10 1 --einfo=-2"
             "potri sdcz U 10 -10 1 --einfo=-4"
@@ -336,9 +336,13 @@ set(NEGATIVE_TEST_CASES
             "unmlq cz L N 10 10 10 8 10 -1 1 --einfo=-7"
             "unmlq cz L N 10 10 10 10 8 -1 1 --einfo=-10"
             "unmlq cz L N 10 10 10 10 10 8 1 --einfo=-12"
+            "trtri sdcz A N 10 10 1 --einfo=-1"
+            "trtri sdcz U A 10 10 1 --einfo=-2"
+            "trtri sdcz U N -10 10 1 --einfo=-3"
+            "trtri sdcz U N 10 9 1 --einfo=-5"
             )
 
-set(CORNER_TEST_CASES 
+set(CORNER_TEST_CASES
             "potri sdcz U 0 1 1 --einfo=0"
             "potri sdcz L 0 1 1 --einfo=0"
             "labrd scdz 0 10 5 10 10 10 1"
@@ -556,6 +560,7 @@ set(CORNER_TEST_CASES
             "unmlq cz L N 0 10 10 10 10 -1 1"
             "unmlq cz L N 10 0 0 10 10 -1 1"
             "unmlq cz L N 10 10 0 10 10 -1 1"
+            "trtri sdcz U N 0 10 1"
         )
 
 set(MIN_WORK_TEST_CASES "gehrd sdcz 10 1 5 10 10 1 --einfo=0"
@@ -610,7 +615,7 @@ set(MIN_WORK_TEST_CASES "gehrd sdcz 10 1 5 10 10 1 --einfo=0"
                 "unmqr cz R N 10 15 10 15 15 10 1"
                 )
 
-set(EXTREMEVALUE_TEST_CASES 
+set(EXTREMEVALUE_TEST_CASES
             "potri sdcz U 10 10 1 --imatrix=N"
             "potri sdcz L 10 10 1 --imatrix=N"
             "potri sdcz U 10 10 1 --imatrix=A"
@@ -1567,6 +1572,14 @@ set(EXTREMEVALUE_TEST_CASES
             "unmlq cz L T 150 100 150 150 150 -1 1 --imatrix=F"
             "unmlq cz R T 150 100 150 150 150 -1 1 --imatrix=I"
             "unmlq cz L T 150 100 150 150 150 -1 1 --imatrix=I"
+            "trtri scdz U U 10 10 1 --imatrix=A"
+            "trtri scdz U N 10 10 1 --imatrix=N"
+            "trtri scdz U U 10 10 1 --imatrix=I"
+            "trtri scdz U N 10 10 1 --imatrix=F"
+            "trtri scdz L N 65 70 1 --imatrix=A"
+            "trtri scdz L U 70 90 1 --imatrix=N"
+            "trtri scdz L N 100 105 1 --imatrix=I"
+            "trtri scdz L U 105 120 1 --imatrix=F"
             )
 
 set(TEST_NUM 1)

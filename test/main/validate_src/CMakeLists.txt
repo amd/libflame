@@ -55,4 +55,5 @@ ${CMAKE_CURRENT_SOURCE_DIR}/validate_gejsv.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_labrd.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_gebrd.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_sytrd.c
+${CMAKE_CURRENT_SOURCE_DIR}/validate_trtri.c
 )

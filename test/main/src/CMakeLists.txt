@@ -67,6 +67,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/test_labrd.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_orgtr.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_ormlq.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_potri.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_trtri.c
 # only performance benchmarking
 ${CMAKE_CURRENT_SOURCE_DIR}/test_gbsv.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_getrf2.c

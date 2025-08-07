@@ -67,5 +67,6 @@ ${CMAKE_CURRENT_SOURCE_DIR}/invoke_sytrf.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_ormlq.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_potri.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_gebrd.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_trtri.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_common.hh
 )

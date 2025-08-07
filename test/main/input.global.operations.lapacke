@@ -51,3 +51,4 @@
 1   ormlq   Apply Elementary Reflectors (LQ)              (0 = disable; 1 = enable; 2 = enable only this)
 1   potri   Inverse of Cholesky factorization             (0 = disable; 1 = enable; 2 = enable only this)
 1   gebrd   Bi-Diagonalization                            (0 = disable; 1 = enable; 2 = enable only this)
+1   trtri   Inverse of triangular matrix                  (0 = disable; 1 = enable; 2 = enable only this)

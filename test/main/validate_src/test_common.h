@@ -155,6 +155,12 @@ extern int matrix_layout;
 #define LOWER_BIDIAG 0
 #define UPPER_BIDIAG 1
 
+/* Macros for triangular matrix generation */
+#define TRIANGULAR_DIAG_MIN 1.0
+#define TRIANGULAR_DIAG_MAX 2.0
+#define TRIANGULAR_OFFDIAG_MIN -0.01
+#define TRIANGULAR_OFFDIAG_MAX  0.01
+
 #if defined(FLA_ENABLE_ILP64)
 #ifdef _WIN32
 #define FT_IS "lld"
@@ -582,5 +588,8 @@ void get_variance_of_array(integer datatype, void *A, void *variance, integer n)
  * If the datatype is INTEGER, the standard deviation is returned as a double
  */
 void get_stddev_of_array(integer datatype, void *A, void *stddev, integer n);
+
+void get_non_singular_triangular_matrix(char *uplo, integer datatype, integer m, integer n, void *A,
+                                        integer lda, enum TRIANGULAR_MATRIX_DIAG_TYPE diag_type);
 
 #endif // TEST_COMMON_H

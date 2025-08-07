@@ -126,5 +126,6 @@ integer invoke_lapacke_potri(integer datatype, int layout, char uplo, integer n,
                              integer lda);
 integer invoke_lapacke_gebrd(integer datatype, int layout, integer m, integer n, void *a,
                              integer lda, void *d, void *e, void *tauq, void *taup);
+integer invoke_lapacke_trtri(integer datatype, int layout, char uplo, char diag, integer n, void *a,
+                             integer lda);
 #endif
-

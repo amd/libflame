@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2025-2026, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_trtri.c
@@ -31,7 +31,8 @@ void validate_trtri(char *tst_api, char uplo, char diag, integer n, void *A, voi
     {
         case FLOAT:
         {
-            float norm, norm_I;
+            float norm, norm_I, eps;
+            eps = fla_lapack_slamch("Epsilon");
             /* compute I - A' * A */
             fla_lapack_slaset("full", &n, &n, &s_zero, &s_one, I_mat, &lda);
             norm_I = sqrt(n);
@@ -48,12 +49,14 @@ void validate_trtri(char *tst_api, char uplo, char diag, integer n, void *A, voi
                 fla_lapack_slaset("U", &n, &n, &s_zero, &s_zero, I_mat, &lda);
             }
             compute_matrix_norm(datatype, NORM, n, n, I_mat, lda, &norm, imatrix, NULL);
-            residual = fla_compute_residual(datatype, 'E', norm, norm_I, n, params);
+            residual = (double)(norm / (norm_I * eps * n));
             break;
         }
         case DOUBLE:
         {
-            double norm_I, norm;
+            double norm_I, norm, eps;
+
+            eps = fla_lapack_dlamch("Epsilon");
             /* compute I - A' * A */
             fla_lapack_dlaset("full", &n, &n, &d_zero, &d_one, I_mat, &lda);
             norm_I = sqrt(n);
@@ -70,12 +73,13 @@ void validate_trtri(char *tst_api, char uplo, char diag, integer n, void *A, voi
                 fla_lapack_dlaset("U", &n, &n, &d_zero, &d_zero, I_mat, &lda);
             }
             compute_matrix_norm(datatype, NORM, n, n, I_mat, lda, &norm, imatrix, NULL);
-            residual = fla_compute_residual(datatype, 'E', norm, norm_I, n, params);
+            residual = (double)(norm / (norm_I * eps * n));
             break;
         }
         case COMPLEX:
         {
-            float norm, norm_I;
+            float norm, norm_I, eps;
+            eps = fla_lapack_slamch("Epsilon");
             /* compute I - A' * A */
             fla_lapack_claset("full", &n, &n, &c_zero, &c_one, I_mat, &lda);
             norm_I = sqrt(n);
@@ -92,12 +96,13 @@ void validate_trtri(char *tst_api, char uplo, char diag, integer n, void *A, voi
                 fla_lapack_claset("U", &n, &n, &c_zero, &c_zero, I_mat, &lda);
             }
             compute_matrix_norm(datatype, NORM, n, n, I_mat, lda, &norm, imatrix, NULL);
-            residual = fla_compute_residual(datatype, 'E', norm, norm_I, n, params);
+            residual = (double)(norm / (norm_I * eps * n));
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm, norm_I;
+            double norm, norm_I, eps;
+            eps = fla_lapack_dlamch("Epsilon");
             /* compute I - A' * A */
             fla_lapack_zlaset("full", &n, &n, &z_zero, &z_one, I_mat, &lda);
             norm_I = sqrt(n);
@@ -114,7 +119,7 @@ void validate_trtri(char *tst_api, char uplo, char diag, integer n, void *A, voi
                 fla_lapack_zlaset("U", &n, &n, &z_zero, &z_zero, I_mat, &lda);
             }
             compute_matrix_norm(datatype, NORM, n, n, I_mat, lda, &norm, imatrix, NULL);
-            residual = fla_compute_residual(datatype, 'E', norm, norm_I, n, params);
+            residual = (double)(norm / (norm_I * eps * n));
             break;
         }
     }

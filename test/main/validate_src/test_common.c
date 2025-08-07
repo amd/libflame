@@ -2879,8 +2879,8 @@ void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, v
                 {
                     for(i = 0; i < n; i++)
                     {
-                        float *p = &((float *)A)[i * lda];
-                        reset_vector(datatype, (void *)p, i + 1, 1);
+                        float *p = &((float *)A)[i * lda + (i + 1)];
+                        reset_vector(datatype, (void *)p, n - i - 1, 1);
                     }
                 }
             }
@@ -2913,8 +2913,8 @@ void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, v
                 {
                     for(i = 0; i < n; i++)
                     {
-                        double *p = &((double *)A)[i * lda];
-                        reset_vector(datatype, (void *)p, i + 1, 1);
+                        double *p = &((double *)A)[i * lda + (i + 1)];
+                        reset_vector(datatype, (void *)p, n - i - 1, 1);
                     }
                 }
             }
@@ -2947,8 +2947,8 @@ void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, v
                 {
                     for(i = 0; i < n; i++)
                     {
-                        scomplex *p = &((scomplex *)A)[i * lda];
-                        reset_vector(datatype, (void *)p, i + 1, 1);
+                        scomplex *p = &((scomplex *)A)[i * lda + (i + 1)];
+                        reset_vector(datatype, (void *)p, n - i - 1, 1);
                     }
                 }
             }
@@ -2981,8 +2981,8 @@ void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, v
                 {
                     for(i = 0; i < n; i++)
                     {
-                        dcomplex *p = &((dcomplex *)A)[i * lda];
-                        reset_vector(datatype, (void *)p, i + 1, 1);
+                        dcomplex *p = &((dcomplex *)A)[i * lda + (i + 1)];
+                        reset_vector(datatype, (void *)p, n - i - 1, 1);
                     }
                 }
             }
@@ -7675,5 +7675,198 @@ void build_bidiagonal_matrix(integer datatype, integer m, integer n, integer k, 
             printf("Unsupported datatype for build_bidiagonal_matrix\n");
             return;
         }
+    }
+}
+
+/**
+ * @brief Generate a well-conditioned, strictly diagonally dominant triangular matrix.
+ *        - Diagonal: sum(abs(off-diagonal)) + margin (or 1 if UNIT_DIAG)
+ *        - Off-diagonal: small random values in [-0.01, 0.01] (real and imag for complex)
+ * @param uplo - 'U' for upper triangular matrix, 'L' for lower triangular matrix.
+ * @param datatype - Data type of matrix.
+ * @param m - Number of rows of matrix.
+ * @param n - Number of columns of matrix.
+ * @param A - Matrix to be initialized.
+ * @param lda - Leading dimension of matrix A.
+ * @param diag_type - UNIT_DIAG or NON_UNIT_DIAG (ignored, always non-singular).
+ */
+ void get_non_singular_triangular_matrix(char *uplo, integer datatype, integer m, integer n, void *A,
+                                         integer lda, enum TRIANGULAR_MATRIX_DIAG_TYPE diag_type)
+{
+    integer i, j;
+    integer min_mn = (m < n) ? m : n;
+
+    /* Ensure leading dimension is valid */
+    if(lda < m)
+    {
+        return;
+    }
+    /* Always reset the matrix to zero for a clean start */
+    reset_matrix(datatype, m, n, A, lda);
+
+    switch(datatype)
+    {
+        case FLOAT:
+        {
+            float *mat = (float *)A;
+            /* Fill diagonal */
+            if(diag_type == UNIT_DIAG)
+            {
+                for(i = 0; i < min_mn; ++i)
+                {
+                    mat[i * lda + i] = 1.0f;
+                }
+            }
+            else
+            {
+                rand_vector(FLOAT, min_mn, &mat[0], lda + 1, (float)TRIANGULAR_DIAG_MIN,
+                            (float)TRIANGULAR_DIAG_MAX, 'V');
+            }
+            /* Fill off-diagonal */
+            if(same_char(*uplo, 'U'))
+            {
+                for(j = 0; j < n; ++j)
+                {
+                    for(i = 0; i < j && i < m; ++i)
+                    {
+                        rand_vector(FLOAT, 1, &mat[j * lda + i], 1, (float)TRIANGULAR_OFFDIAG_MIN,
+                                    (float)TRIANGULAR_OFFDIAG_MAX, 'V');
+                   }
+                }
+            }
+            else
+            {
+                for(j = 0; j < n; ++j)
+                {
+                    for(i = j + 1; i < m; ++i)
+                    {
+                        rand_vector(FLOAT, 1, &mat[j * lda + i], 1, (float)TRIANGULAR_OFFDIAG_MIN,
+                                    (float)TRIANGULAR_OFFDIAG_MAX, 'V');
+                    }
+                }
+            }
+            break;
+        }
+        case DOUBLE:
+        {
+            double *mat = (double *)A;
+            if(diag_type == UNIT_DIAG)
+            {
+                for(i = 0; i < min_mn; ++i)
+                {
+                    mat[i * lda + i] = 1.0;
+                }
+            }
+            else
+            {
+                rand_vector(DOUBLE, min_mn, &mat[0], lda + 1, TRIANGULAR_DIAG_MIN,
+                            TRIANGULAR_DIAG_MAX, 'V');
+            }
+            if(same_char(*uplo, 'U'))
+            {
+                for(j = 0; j < n; ++j)
+                {
+                    for(i = 0; i < j && i < m; ++i)
+                    {
+                        rand_vector(DOUBLE, 1, &mat[j * lda + i], 1, TRIANGULAR_OFFDIAG_MIN,
+                                    TRIANGULAR_OFFDIAG_MAX, 'V');
+                    }
+                }
+            }
+            else
+            {
+                for(j = 0; j < n; ++j)
+                {
+                    for(i = j + 1; i < m; ++i)
+                    {
+                        rand_vector(DOUBLE, 1, &mat[j * lda + i], 1, TRIANGULAR_OFFDIAG_MIN,
+                                    TRIANGULAR_OFFDIAG_MAX, 'V');
+                    }
+                }
+            }
+            break;
+        }
+        case COMPLEX:
+        {
+            scomplex *mat = (scomplex *)A;
+            if(diag_type == UNIT_DIAG)
+            {
+                for(i = 0; i < min_mn; ++i)
+                {
+                    mat[i * lda + i].real = 1.0f;
+                    mat[i * lda + i].imag = 0.0f;
+                }
+            }
+            else
+            {
+                rand_vector(COMPLEX, min_mn, &mat[0], lda + 1, (float)TRIANGULAR_DIAG_MIN,
+                            (float)TRIANGULAR_DIAG_MAX, 'V');
+            }
+            if(same_char(*uplo, 'U'))
+            {
+                for(j = 0; j < n; ++j)
+                {
+                    for(i = 0; i < j && i < m; ++i)
+                    {
+                        rand_vector(COMPLEX, 1, &mat[j * lda + i], 1, (float)TRIANGULAR_OFFDIAG_MIN,
+                                    (float)TRIANGULAR_OFFDIAG_MAX, 'V');
+                    }
+                }
+            }
+            else
+            {
+                for(j = 0; j < n; ++j)
+                {
+                    for(i = j + 1; i < m; ++i)
+                    {
+                        rand_vector(COMPLEX, 1, &mat[j * lda + i], 1, (float)TRIANGULAR_OFFDIAG_MIN,
+                                   (float)TRIANGULAR_OFFDIAG_MAX, 'V');
+                    }
+                }
+            }
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            dcomplex *mat = (dcomplex *)A;
+            if(diag_type == UNIT_DIAG)
+            {
+                for(i = 0; i < min_mn; ++i)
+                {
+                    mat[i * lda + i].real = 1.0;
+                    mat[i * lda + i].imag = 0.0;
+                }
+             }
+            else
+            {
+                rand_vector(DOUBLE_COMPLEX, min_mn, &mat[0], lda + 1, TRIANGULAR_DIAG_MIN,
+                            TRIANGULAR_DIAG_MAX, 'V');
+            }
+            if(same_char(*uplo, 'U'))
+            {
+                for(j = 0; j < n; ++j)
+                {
+                    for(i = 0; i < j && i < m; ++i)
+                    {
+                        rand_vector(DOUBLE_COMPLEX, 1, &mat[j * lda + i], 1, TRIANGULAR_OFFDIAG_MIN,
+                                    TRIANGULAR_OFFDIAG_MAX, 'V');
+                    }
+                }
+            }
+            else
+            {
+                for(j = 0; j < n; ++j)
+                {
+                    for(i = j + 1; i < m; ++i)
+                    {
+                        rand_vector(DOUBLE_COMPLEX, 1, &mat[j * lda + i], 1, TRIANGULAR_OFFDIAG_MIN,
+                                    TRIANGULAR_OFFDIAG_MAX, 'V');
+                    }
+                }
+            }
+            break;
+        }
+        default:
+            break;
     }
 }

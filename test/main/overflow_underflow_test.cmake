@@ -2,7 +2,7 @@
 # Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
 ###############################################################################
 # Overflow and Underflow test cases for APIs.
-set(OVERFLOW_UNDERFLOW_VALUES_TEST_CASES 
+set(OVERFLOW_UNDERFLOW_VALUES_TEST_CASES
             "potri sdcz L 50 50 1 --imatrix=U"
             "potri sdcz U 50 50 1 --imatrix=U"
             "potri sdcz L 50 50 1 --imatrix=O"
@@ -610,6 +610,16 @@ set(OVERFLOW_UNDERFLOW_VALUES_TEST_CASES
             "unmlq cz R T 109 153 100 159 159 -1 1 --imatrix=U"
             "unmlq cz L T 160 115 100 170 175 -1 1 --imatrix=O"
             "unmlq cz R N 160 115 100 170 175 -1 1 --imatrix=U"
+            "trtri sdcz U U 10 10 1 --imatrix=U"
+            "trtri sdcz L U 10 10 1 --imatrix=U"
+            "trtri sdcz U N 10 10 1 --imatrix=O"
+            "trtri sdcz U N 10 10 1 --imatrix=O"
+            "trtri sdcz L N 10 10 1 --imatrix=O"
+            "trtri sdcz L N 10 10 1 --imatrix=O"
+            "trtri sdcz U N 10 10 1 --imatrix=U"
+            "trtri sdcz U N 10 10 1 --imatrix=U"
+            "trtri sdcz L N 10 10 1 --imatrix=U"
+            "trtri sdcz L N 10 10 1 --imatrix=U"
 )
 
 foreach(ou_vals_test_cases IN LISTS OVERFLOW_UNDERFLOW_VALUES_TEST_CASES)

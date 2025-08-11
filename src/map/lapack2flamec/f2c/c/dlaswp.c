@@ -121,7 +121,7 @@ void dlaswp_(integer *n, doublereal *a, integer *lda, integer *k1, integer *k2, 
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
     integer i__, j, k, i1, i2, n32, ip, ix, ix0, inc;
-    doublereal temp;
+    doublereal *colptr, temp;
     /* -- LAPACK auxiliary routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -161,11 +161,22 @@ void dlaswp_(integer *n, doublereal *a, integer *lda, integer *k1, integer *k2, 
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    n32 = *n / 32 << 5;
+    /* Process columns in tiles to improve cache locality. Use a larger tile
+       size on modern CPUs. */
+    const integer dlaswp_tile = 64;
+    n32 = (*n / dlaswp_tile) * dlaswp_tile;
     if(n32 != 0)
     {
         i__1 = n32;
-        for(j = 1; j <= i__1; j += 32)
+        /* 
+         #pragma omp parallel for:
+            This is a combined directive that creates a team of threads and then divides the iterations of the following for loop among them.
+         schedule(static):
+            With static scheduling, the iterations are divided into approximately equal-sized contiguous blocks, and each block is assigned to a thread.
+         if (condition):
+            If the condition true, it executed in parallel. If the condition is zero (false), the for loop will be executed sequentially by a single thread. */
+        #pragma omp parallel for schedule(static) if (n32 >= (dlaswp_tile * 2)) private(ix, i__, ip, k, i__2, i__3, i__4, colptr, temp) firstprivate(ix0, i1, i2, inc, a_dim1)
+        for(j = 1; j <= i__1; j += dlaswp_tile)
         {
             ix = ix0;
             i__2 = i2;
@@ -175,12 +186,13 @@ void dlaswp_(integer *n, doublereal *a, integer *lda, integer *k1, integer *k2, 
                 ip = ipiv[ix];
                 if(ip != i__)
                 {
-                    i__4 = j + 31;
+                    i__4 = j + (dlaswp_tile - 1);
                     for(k = j; k <= i__4; ++k)
                     {
-                        temp = a[i__ + k * a_dim1];
-                        a[i__ + k * a_dim1] = a[ip + k * a_dim1];
-                        a[ip + k * a_dim1] = temp;
+                        colptr = &a[k * a_dim1];
+                        temp = colptr[i__];
+                        colptr[i__] = colptr[ip];
+                        colptr[ip] = temp;
                         /* L10: */
                     }
                 }
@@ -204,9 +216,10 @@ void dlaswp_(integer *n, doublereal *a, integer *lda, integer *k1, integer *k2, 
                 i__2 = *n;
                 for(k = n32; k <= i__2; ++k)
                 {
-                    temp = a[i__ + k * a_dim1];
-                    a[i__ + k * a_dim1] = a[ip + k * a_dim1];
-                    a[ip + k * a_dim1] = temp;
+                    colptr = &a[k * a_dim1];
+                    temp = colptr[i__];
+                    colptr[i__] = colptr[ip];
+                    colptr[ip] = temp;
                     /* L40: */
                 }
             }

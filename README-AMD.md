@@ -20,7 +20,9 @@ in the "amd" fork of libFLAME hosted on [github](https://github.com/amd/libflame
 
 For detailed instructions on how to configure, build, install, and link against 
 libflame on AMD CPUs, please refer to the AOCL User Guide located on AMD 
-developer [portal](https://www.amd.com/en/developer/aocl.html).
+developer [portal](https://www.amd.com/en/developer/aocl.html). Please note that
+autoconf based build system using configure and Makefile is no longer supported.
+
 
 Upstream repository contains libflame reference manual and a complete API 
 reference. If you have LaTeX installed on your system, you may simply change 

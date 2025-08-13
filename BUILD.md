@@ -322,4 +322,5 @@ As of now cmake workflow presets do not accept any additional arguments, so you 
     
         cmake --workflow --preset <workflow-preset>
 
-
+Note:
+    autoconf based build system using configure and Makefile is no longer supported.

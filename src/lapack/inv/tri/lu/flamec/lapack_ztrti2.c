@@ -17,7 +17,7 @@
 
 /* Table of constant values */
 
-static aocl_int64_t c__1 = 1;
+static integer c__1 = 1;
 
 /* > \brief \b ZTRTI2 computes the inverse of a triangular matrix (unblocked algorithm). */
 
@@ -60,7 +60,7 @@ f"> */
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZTRTI2 computes the inverse of a scomplex upper or lower triangular */
+/* > ZTRTI2 computes the inverse of a complex upper or lower triangular */
 /* > matrix. */
 /* > */
 /* > This is the Level 2 BLAS version of the algorithm. */
@@ -132,27 +132,20 @@ f"> */
 /* > \ingroup trti2 */
 
 
-/* Z_DIV macro for scomplex division - follows z_div function logic */
+/* Z_DIV macro for complex division - follows z_div function logic */
 #ifdef _WIN32
-/* Windows implementation - manual scomplex division calculation */
-#define Z_DIV_TRTI2(result, numerator, denominator)                                               \
-    do                                                                                            \
-    {                                                                                             \
-        double temp;                                                                              \
-        double s, xr_s, xi_s;                                                                     \
-        s = fla_max(fabs((denominator)->real), fabs((denominator)->imag));                        \
-        s = 1.0 / s;                                                                              \
-        xr_s = (denominator)->real * s;                                                           \
-        xi_s = (denominator)->imag * s;                                                           \
-        temp = xr_s * (denominator)->real + xi_s * (denominator)->imag;                           \
-        temp = 1.0 / temp;                                                                        \
-        (result)->real = xr_s * temp;                                                             \
-        (result)->imag = -xi_s * temp;                                                            \
-        (result)->real = (result)->real * (numerator)->real + (result)->imag * (numerator)->imag; \
-        (result)->imag = (result)->imag * (numerator)->real - (result)->real * (numerator)->imag; \
+/* Windows implementation - manual complex division calculation */
+#define Z_DIV_TRTI2(result, numerator, denominator)                           \
+    do                                                                        \
+    {                                                                         \
+        dcomplex _a = *(numerator);                                           \
+        dcomplex _b = *(denominator);                                         \
+        double _temp = (_b.real * _b.real) + (_b.imag * _b.imag);             \
+        (result)->real = ((_a.real * _b.real) + (_a.imag * _b.imag)) / _temp; \
+        (result)->imag = ((_a.imag * _b.real) - (_a.real * _b.imag)) / _temp; \
     } while(0)
 #else
-/* Non-Windows implementation - use C99 scomplex arithmetic */
+/* Non-Windows implementation - use C99 complex arithmetic */
 #define Z_DIV_TRTI2(result, numerator, denominator)                                   \
     do                                                                                \
     {                                                                                 \
@@ -165,16 +158,20 @@ f"> */
 #endif
 
 /*  ===================================================================== */
-/* Subroutine */ void lapack_ztrti2(char *uplo, char *diag, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
-                                    aocl_int64_t *info)
+/* Subroutine */ void lapack_ztrti2(char *uplo, char *diag, integer *n, dcomplex *a, integer *lda,
+                                    integer *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1, i__2;
+    integer a_dim1, a_offset, i__1, i__2;
     /* Local variables */
-    aocl_int64_t j;
+    integer j;
     dcomplex ajj;
-    extern int lsame_(char *, char *, aocl_int64_t a, aocl_int64_t b);
+    extern /* Subroutine */ int zscal_(integer *, dcomplex *, dcomplex *, integer *);
+    extern int lsame_(char *, char *, integer a, integer b);
     logical upper;
+    extern /* Subroutine */ int ztrmv_(char *, char *, char *, integer *, dcomplex *, integer *,
+                                       dcomplex *, integer *),
+        xerbla_(char *, integer *, ftnlen srname_len);
     logical nounit;
 
     /*  -- LAPACK computational routine -- */
@@ -230,7 +227,7 @@ f"> */
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZTRTI2", &i__1, (ftnlen)6);
+        xerbla_("ZTRTI2", &i__1, (ftnlen)6);
         return;
     }
 
@@ -256,10 +253,10 @@ f"> */
                 /*           Compute elements 1:j-1 of j-th column. */
 
                 i__2 = j - 1;
-                aocl_blas_ztrmv("Upper", "No transpose", diag, &i__2, &a[a_offset], lda, &a[j * a_dim1 + 1],
+                ztrmv_("Upper", "No transpose", diag, &i__2, &a[a_offset], lda, &a[j * a_dim1 + 1],
                        &c__1);
                 i__2 = j - 1;
-                aocl_blas_zscal(&i__2, &ajj, &a[j * a_dim1 + 1], &c__1);
+                zscal_(&i__2, &ajj, &a[j * a_dim1 + 1], &c__1);
             }
         }
         else
@@ -271,10 +268,10 @@ f"> */
                 /*           Compute elements 1:j-1 of j-th column. */
 
                 i__2 = j - 1;
-                aocl_blas_ztrmv("Upper", "No transpose", diag, &i__2, &a[a_offset], lda, &a[j * a_dim1 + 1],
+                ztrmv_("Upper", "No transpose", diag, &i__2, &a[a_offset], lda, &a[j * a_dim1 + 1],
                        &c__1);
                 i__2 = j - 1;
-                aocl_blas_zscal(&i__2, &ajj, &a[j * a_dim1 + 1], &c__1);
+                zscal_(&i__2, &ajj, &a[j * a_dim1 + 1], &c__1);
             }
         }
     }
@@ -301,10 +298,10 @@ f"> */
                     /*              Compute elements j+1:n of j-th column. */
 
                     i__1 = *n - j;
-                    aocl_blas_ztrmv("Lower", "No transpose", diag, &i__1, &a[j + 1 + (j + 1) * a_dim1], lda,
+                    ztrmv_("Lower", "No transpose", diag, &i__1, &a[j + 1 + (j + 1) * a_dim1], lda,
                            &a[j + 1 + j * a_dim1], &c__1);
                     i__1 = *n - j;
-                    aocl_blas_zscal(&i__1, &ajj, &a[j + 1 + j * a_dim1], &c__1);
+                    zscal_(&i__1, &ajj, &a[j + 1 + j * a_dim1], &c__1);
                 }
             }
         }
@@ -320,10 +317,10 @@ f"> */
                     /*              Compute elements j+1:n of j-th column. */
 
                     i__1 = *n - j;
-                    aocl_blas_ztrmv("Lower", "No transpose", diag, &i__1, &a[j + 1 + (j + 1) * a_dim1], lda,
+                    ztrmv_("Lower", "No transpose", diag, &i__1, &a[j + 1 + (j + 1) * a_dim1], lda,
                            &a[j + 1 + j * a_dim1], &c__1);
                     i__1 = *n - j;
-                    aocl_blas_zscal(&i__1, &ajj, &a[j + 1 + j * a_dim1], &c__1);
+                    zscal_(&i__1, &ajj, &a[j + 1 + j * a_dim1], &c__1);
                 }
             }
         }

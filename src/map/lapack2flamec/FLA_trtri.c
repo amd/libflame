@@ -127,15 +127,24 @@ LAPACK_trtri(z)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztrtri inputs: uplo %c, diag %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo,
                       *diag, *n, *ldim_A);
+
+#if FLA_ENABLE_AMD_OPT
+    if(*n <= FLA_TRTRI_SMALL_THRESH0)
     {
-        LAPACK_RETURN_CHECK_VAR1(ztrtri_check(uplo, diag, n, buff_A, ldim_A, info), fla_error)
+        lapack_ztrtri(uplo, diag, n, buff_A, ldim_A, info);
     }
-    if(fla_error == LAPACK_SUCCESS)
+    else
+#endif
     {
-        LAPACK_trtri_body(z)
+        {
+            LAPACK_RETURN_CHECK_VAR1(ztrtri_check(uplo, diag, n, buff_A, ldim_A, info), fla_error)
+        }
+        if(fla_error == LAPACK_SUCCESS)
+        {
+            LAPACK_trtri_body(z)
             /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+           fla_error = 0;
+        }
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;
@@ -214,15 +223,23 @@ LAPACK_trti2(z)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztrti2 inputs: uplo %c, diag %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo,
                       *diag, *n, *ldim_A);
+#if FLA_ENABLE_AMD_OPT
+    if(*n <= FLA_TRTRI_SMALL_THRESH0)
     {
-        LAPACK_RETURN_CHECK_VAR1(ztrti2_check(uplo, diag, n, buff_A, ldim_A, info), fla_error)
+        lapack_ztrti2(uplo, diag, n, buff_A, ldim_A, info);
     }
-    if(fla_error == LAPACK_SUCCESS)
+    else
+#endif
     {
-        LAPACK_trtri_body(z)
+        {
+            LAPACK_RETURN_CHECK_VAR1(ztrti2_check(uplo, diag, n, buff_A, ldim_A, info), fla_error)
+        }
+        if(fla_error == LAPACK_SUCCESS)
+        {
+            LAPACK_trtri_body(z)
             /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+            fla_error = 0;
+        }
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

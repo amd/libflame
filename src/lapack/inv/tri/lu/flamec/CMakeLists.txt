@@ -1,5 +1,5 @@
-##Copyright (C) 2020-24, Advanced Micro Devices, Inc.## 
-target_sources("${PROJECT_NAME}" 
+##Copyright (C) 2020-25, Advanced Micro Devices, Inc.##
+target_sources("${PROJECT_NAME}"
      PRIVATE
 ${CMAKE_CURRENT_SOURCE_DIR}/FLA_Trinv_lu.h
 ${CMAKE_CURRENT_SOURCE_DIR}/FLA_Trinv_lu_blk_var1.c
@@ -16,4 +16,6 @@ ${CMAKE_CURRENT_SOURCE_DIR}/FLA_Trinv_lu_unb_var3.c
 ${CMAKE_CURRENT_SOURCE_DIR}/FLA_Trinv_lu_unb_var4.c
 ${CMAKE_CURRENT_SOURCE_DIR}/lapack_dtrtri.c
 ${CMAKE_CURRENT_SOURCE_DIR}/lapack_dtrti2.c
+${CMAKE_CURRENT_SOURCE_DIR}/lapack_ztrtri.c
+${CMAKE_CURRENT_SOURCE_DIR}/lapack_ztrti2.c
 	)

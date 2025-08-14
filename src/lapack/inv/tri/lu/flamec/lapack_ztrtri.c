@@ -17,8 +17,8 @@
 
 /* Table of constant values */
 
-static aocl_int64_t c__1 = 1;
-static aocl_int64_t c_n1 = -1;
+static integer c__1 = 1;
+static integer c_n1 = -1;
 static dcomplex c_b18 = {1., 0.};
 static dcomplex c_b22 = {-1., 0.};
 
@@ -63,7 +63,7 @@ f"> */
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZTRTRI computes the inverse of a scomplex upper or lower triangular */
+/* > ZTRTRI computes the inverse of a complex upper or lower triangular */
 /* > matrix A. */
 /* > */
 /* > This is the Level 3 BLAS version of the algorithm. */
@@ -134,17 +134,25 @@ f"> */
 /* > \ingroup trtri */
 
 /*  ===================================================================== */
-/* Subroutine */ void lapack_ztrtri(char *uplo, char *diag, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
-                                    aocl_int64_t *info)
+/* Subroutine */ void lapack_ztrtri(char *uplo, char *diag, integer *n, dcomplex *a, integer *lda,
+                                    integer *info)
 {
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1, i__3, i__4, i__5;
+    integer a_dim1, a_offset, i__1, i__3, i__4, i__5;
     char ch__1[3] = {0};
 
     /* Local variables */
-    aocl_int64_t j, jb, nb, nn;
-    extern int lsame_(char *, char *, aocl_int64_t a, aocl_int64_t b);
+    integer j, jb, nb, nn;
+    extern int lsame_(char *, char *, integer a, integer b);
+    extern /* Subroutine */ int ztrmm_(char *, char *, char *, char *, integer *, integer *,
+                                       dcomplex *, dcomplex *, integer *, dcomplex *, integer *),
+        ztrsm_(char *, char *, char *, char *, integer *, integer *, dcomplex *, dcomplex *,
+               integer *, dcomplex *, integer *);
     logical upper;
+    extern /* Subroutine */ int ztrti2_(char *, char *, integer *, dcomplex *, integer *,
+                                        integer *),
+        xerbla_(char *, integer *, ftnlen srname_len);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     logical nounit;
 
     /*  -- LAPACK computational routine -- */
@@ -200,7 +208,7 @@ f"> */
     if(*info != 0)
     {
         i__1 = -(*info);
-        aocl_blas_xerbla("ZTRTRI", &i__1, (ftnlen)6);
+        xerbla_("ZTRTRI", &i__1, (ftnlen)6);
         return;
     }
 
@@ -237,11 +245,11 @@ f"> */
 
         /* Use unblocked code */
 
-        aocl_lapack_ztrti2(uplo, diag, n, &a[a_offset], lda, info);
+        ztrti2_(uplo, diag, n, &a[a_offset], lda, info);
     }
     else
     {
-        nb = aocl_lapack_ilaenv(&c__1, "ZTRTRI", ch__1, n, &c_n1, &c_n1, &c_n1);
+        nb = ilaenv_(&c__1, "ZTRTRI", ch__1, n, &c_n1, &c_n1, &c_n1);
         /* Use blocked code */
 
         if(upper)
@@ -260,15 +268,15 @@ f"> */
                 /* Compute rows 1:j-1 of current block column */
 
                 i__4 = j - 1;
-                aocl_blas_ztrmm("Left", "Upper", "No transpose", diag, &i__4, &jb, &c_b18, &a[a_offset], lda,
+                ztrmm_("Left", "Upper", "No transpose", diag, &i__4, &jb, &c_b18, &a[a_offset], lda,
                        &a[j * a_dim1 + 1], lda);
                 i__4 = j - 1;
-                aocl_blas_ztrsm("Right", "Upper", "No transpose", diag, &i__4, &jb, &c_b22,
+                ztrsm_("Right", "Upper", "No transpose", diag, &i__4, &jb, &c_b22,
                        &a[j + j * a_dim1], lda, &a[j * a_dim1 + 1], lda);
 
                 /* Compute inverse of current diagonal block */
 
-                aocl_lapack_ztrti2("Upper", diag, &jb, &a[j + j * a_dim1], lda, info);
+                ztrti2_("Upper", diag, &jb, &a[j + j * a_dim1], lda, info);
             }
         }
         else
@@ -289,16 +297,16 @@ f"> */
                     /* Compute rows j+jb:n of current block column */
 
                     i__1 = *n - j - jb + 1;
-                    aocl_blas_ztrmm("Left", "Lower", "No transpose", diag, &i__1, &jb, &c_b18,
+                    ztrmm_("Left", "Lower", "No transpose", diag, &i__1, &jb, &c_b18,
                            &a[j + jb + (j + jb) * a_dim1], lda, &a[j + jb + j * a_dim1], lda);
                     i__1 = *n - j - jb + 1;
-                    aocl_blas_ztrsm("Right", "Lower", "No transpose", diag, &i__1, &jb, &c_b22,
+                    ztrsm_("Right", "Lower", "No transpose", diag, &i__1, &jb, &c_b22,
                            &a[j + j * a_dim1], lda, &a[j + jb + j * a_dim1], lda);
                 }
 
                 /* Compute inverse of current diagonal block */
 
-                aocl_lapack_ztrti2("Lower", diag, &jb, &a[j + j * a_dim1], lda, info);
+                ztrti2_("Lower", diag, &jb, &a[j + j * a_dim1], lda, info);
             }
         }
     }

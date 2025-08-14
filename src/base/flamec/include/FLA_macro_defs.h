@@ -146,7 +146,7 @@
 #define FLA_REAL_DOMAIN      1200
 #define FLA_COMPLEX_DOMAIN   1201
 
-// FLA_Inv    
+// FLA_Inv
 #define FLA_NO_INVERSE       1300
 #define FLA_INVERSE          1301
 
@@ -244,7 +244,7 @@
 #define FLA_DGEQRF_MT_LARGE_PANEL_SIZE (16)
 #define FLA_DGEQRF_MT_THRESHOLD_8_THREADS (15848840)
 
-// Matrix size thresholds for choosing transposed QR for LQ 
+// Matrix size thresholds for choosing transposed QR for LQ
 #define FLA_DELQF_TRAN_THRESH (1280)
 
 //POTRF, threshold numbers to chose paths for performance
@@ -323,6 +323,9 @@
 #define FLA_SVD_SMALL_SIZE_THRESH1    (24)
 #define FLA_SVD_SMALL_SIZE_THRESH2    (40)
 #define FLA_SVD_SMALL_SIZE_THRESH3    (45)
+
+// TRTRI, threshold numbers to chose paths for performance
+#define FLA_TRTRI_SMALL_THRESH0      (60)
 
 // --- Error-related macro definitions -----------------------------------------
 

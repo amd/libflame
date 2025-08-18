@@ -381,3 +381,51 @@ NOTE:
    is not supported) and only for LAPACK interfaces.
    Refer to input.global.operations file for APIs with only Benchmark test without
    Validation. All these APIs will be listed after appropriate comment in that file. 
+
+14. Bit Reproducibility Test options
+
+   The test suite contains options for checking bitwise matching outputs for LAPACK APIs.
+   This test is run with a ground truth and verification concept, 
+   with the output of one run being used as a reference to compare all successive outputs.
+   
+   This option is available only through command line execution.
+
+   Example:
+   Ground truth runs
+   (CRC - checksum)
+   ./test_lapack.x labrd scdz 75 110 50 150 150 150 10 --seed=10 --BRT=G 
+   ./test_lapack.x gelqf sdcz 4 4 4 -1 10 --seed=10 --BRT=G 
+   (Complete binary data)
+   ./test_lapack.x labrd scdz 75 110 50 150 150 150 10 --seed=10 --BRT=F 
+   ./test_lapack.x gelqf sdcz 4 4 4 -1 10 --seed=10 --BRT=F 
+
+   Verification runs
+   (CRC - checksum)
+   ./test_lapack.x labrd scdz 75 110 50 150 150 150 10 --seed=10 --BRT=V 
+   ./test_lapack.x gelqf sdcz 4 4 4 -1 10 --seed=10 --BRT=V 
+   (Complete binary data)
+   ./test_lapack.x labrd scdz 75 110 50 150 150 150 10 --seed=10 --BRT=M 
+   ./test_lapack.x gelqf sdcz 4 4 4 -1 10 --seed=10 --BRT=M 
+
+   CTEST integration:
+   The CRC variant of ground truth and verification test cases have been added to the ctest.
+   By default, the "ctest" command will skip both GT and V runs.
+
+   For running Repeatability test, from within the build folder run the command 
+      command : "REPEATABILITY_TEST=TRUE ctest -L "repeatability_tests""
+   This will run both the Ground truth run and the verification run in the same environment setup.
+
+   For running Bit Reproducibility test,
+   First run,
+      Command : "RUN_BRT_GT=TRUE ctest -L "brt_gt_tests"" 
+      This will generate the binary files containing GT outputs inside the build folder.
+   Then after making changes to the environment run 
+      command : "RUN_BRT_V=TRUE ctest -L "brt_v_tests""
+      This will verify the outputs using the ground truth run as reference
+
+   Incase of a need for testing between different builds,
+      The binary files containing the GT outputs can be found under : <Build_folder>/test/main/BRT
+      This BRT folder can be stored and moved across different machines for testing.
+
+   Note: 
+   It is important to specify the seed when running BR tests between different runs/builds.

@@ -220,6 +220,13 @@ extern char fla_test_binary_name[MAX_BINARY_NAME_LENGTH + 1];
 #define FLA_OVERFLOW_UNDERFLOW_TEST \
     (same_char(params->imatrix_char, 'O') || same_char(params->imatrix_char, 'U'))
 
+#define FLA_BIT_REPRODUCIBILITY_TEST                                      \
+    (same_char(params->BRT_char, 'G') || same_char(params->BRT_char, 'V') \
+     || same_char(params->BRT_char, 'M') || same_char(params->BRT_char, 'F'))
+
+#define FLA_BRT_VERIFICATION_RUN \
+    (same_char(params->BRT_char, 'V') || same_char(params->BRT_char, 'M'))
+
 /* Macro to check if a LAPACK API have different names for its
    (precision)variants and modify API display string
    according to datatype/precision
@@ -725,6 +732,10 @@ typedef struct
     struct EIG_paramlist_t eig_sym_paramslist[NUM_SUB_TESTS];
     struct Lin_solver_paramlist_t lin_solver_paramslist[NUM_SUB_TESTS];
     struct AUX_paramlist_t aux_paramslist[NUM_SUB_TESTS];
+
+    /* Reproducibility and repeatability tests */
+    char BRT_char;
+    int seed;
 
 } test_params_t;
 

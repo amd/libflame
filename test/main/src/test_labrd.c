@@ -21,6 +21,15 @@ void invoke_labrd(integer datatype, integer *m, integer *n, integer *nb, void *a
                   void *d, void *e, void *tauq, void *taup, void *x, integer *ldx, void *y,
                   integer *ldy);
 
+/* Helper functions for Bit reproducibility tests */
+void store_labrd_outputs(void *filename, integer datatype, integer m, integer n, integer nb,
+                         void *A, integer lda, void *d, void *e, void *tauq, void *taup, void *X,
+                         integer ldx, void *Y, integer ldy, void *params);
+integer check_bit_reproducibility_labrd(void *filename, integer datatype, integer m, integer n,
+                                        integer nb, void *A, integer lda, void *d, void *e,
+                                        void *tauq, void *taup, void *X, integer ldx, void *Y,
+                                        integer ldy, void *params);
+
 void fla_test_labrd(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "Singular value decomposition";
@@ -113,6 +122,7 @@ void fla_test_labrd_experiment(char *tst_api, test_params_t *params, integer dat
     void *A = NULL, *X = NULL, *Y = NULL, *d = NULL, *e = NULL, *tauq = NULL, *taup = NULL;
     void *A_test = NULL;
     double residual, err_thresh;
+    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
 
@@ -154,6 +164,7 @@ void fla_test_labrd_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Create input matrix parameters */
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
 
     /* Create output matrix parameters */
     create_matrix(datatype, LAPACK_COL_MAJOR, m, nb, &X, ldx);
@@ -166,8 +177,23 @@ void fla_test_labrd_experiment(char *tst_api, test_params_t *params, integer dat
     create_vector(datatype, &tauq, nb);
     create_vector(datatype, &taup, nb);
 
-    /* initialize input matrix */
-    init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+    /* This code path is run to generate the matrix to be passed to the API. This is the default
+     * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
+     * Test cases. For verification runs the input is loaded from the input generated during Ground
+     * truth run */
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        /* initialize input matrix */
+        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+    }
+
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * passed as input to the API
+     * */
+    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, m, n, A, lda, "dddddd", m, n, nb, lda, ldx, ldy)
 
     /* Scaling matrix with values around overflow, underflow for LABRD */
     if(FLA_OVERFLOW_UNDERFLOW_TEST)
@@ -176,7 +202,6 @@ void fla_test_labrd_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Make a copy of input matrix A. This is required to validate the API functionality. */
-    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
     prepare_labrd_run(m, n, nb, A_test, lda, d, e, tauq, taup, X, ldx, Y, ldy, datatype,
@@ -195,7 +220,23 @@ void fla_test_labrd_experiment(char *tst_api, test_params_t *params, integer dat
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         perf *= 4.0;
 
-    if(!FLA_EXTREME_CASE_TEST)
+    /* Bit reproducibility tests path
+     * This path is taken when BRT is enabled.
+     *     - In the Ground truth runs (BRT_char => G, F), the output is stored in a file and the
+     * default validation function is called
+     *     - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * compared with the generated output
+     *  */
+    FLA_BRT_OUTPUT_VALIDATION(
+        m, n,
+        store_labrd_outputs(filename, datatype, m, n, nb, A_test, lda, d, e, tauq, taup, X, ldx, Y,
+                            ldy, params),
+        validate_labrd(tst_api, m, n, nb, A, A_test, lda, d, e, tauq, taup, X, ldx, Y, ldy,
+                       datatype, err_thresh, g_ext_fptr, params->imatrix_char, params),
+        check_bit_reproducibility_labrd(filename, datatype, m, n, nb, A_test, lda, d, e, tauq, taup,
+                                        X, ldx, Y, ldy, params))
+    /* API functionality validation */
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_labrd(tst_api, m, n, nb, A, A_test, lda, d, e, tauq, taup, X, ldx, Y, ldy,
                        datatype, err_thresh, g_ext_fptr, params->imatrix_char, params);
@@ -215,6 +256,8 @@ void fla_test_labrd_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename)
     free_matrix(A);
     free_matrix(A_test);
     free_matrix(X);
@@ -224,6 +267,7 @@ void fla_test_labrd_experiment(char *tst_api, test_params_t *params, integer dat
     free_vector(tauq);
     free_vector(taup);
 }
+
 void prepare_labrd_run(integer m_A, integer n_A, integer nb_A, void *A, integer lda, void *d,
                        void *e, void *tauq, void *taup, void *X, integer ldx, void *Y, integer ldy,
                        integer datatype, integer interfacetype, test_params_t *params)
@@ -326,4 +370,44 @@ void invoke_labrd(integer datatype, integer *m, integer *n, integer *nb, void *a
             break;
         }
     }
+}
+
+void store_labrd_outputs(void *filename, integer datatype, integer m, integer n, integer nb,
+                         void *A, integer lda, void *d, void *e, void *tauq, void *taup, void *X,
+                         integer ldx, void *Y, integer ldy, void *params)
+{
+    /* Create and open a file for storing Ground truth*/
+    FLA_OPEN_GT_FILE_STORE
+
+    /* Store the ground truth data */
+    FLA_STORE_BRT_MATRIX(datatype, m, n, A, lda)
+    FLA_STORE_BRT_VECTOR(get_realtype(datatype), nb, d)
+    FLA_STORE_BRT_VECTOR(get_realtype(datatype), nb, e)
+    FLA_STORE_BRT_VECTOR(datatype, nb, tauq)
+    FLA_STORE_BRT_VECTOR(datatype, nb, taup)
+    FLA_STORE_BRT_MATRIX_NB_DIAG(datatype, m, nb, nb, X, ldx)
+    FLA_STORE_BRT_MATRIX_NB_DIAG(datatype, n, nb, nb, Y, ldy)
+
+    fclose(gt_file);
+}
+
+integer check_bit_reproducibility_labrd(void *filename, integer datatype, integer m, integer n,
+                                        integer nb, void *A, integer lda, void *d, void *e,
+                                        void *tauq, void *taup, void *X, integer ldx, void *Y,
+                                        integer ldy, void *params)
+{
+    /* Open the file for reading Ground truth */
+    FLA_OPEN_GT_FILE_READ
+
+    /* Load stored GT and verify with current API outputs */
+    FLA_VERIFY_BRT_MATRIX(datatype, m, n, A, lda)
+    FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), nb, d)
+    FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), nb, e)
+    FLA_VERIFY_BRT_VECTOR(datatype, nb, tauq)
+    FLA_VERIFY_BRT_VECTOR(datatype, nb, taup)
+    FLA_VERIFY_BRT_MATRIX_NB_DIAG(datatype, m, nb, nb, X, ldx)
+    FLA_VERIFY_BRT_MATRIX_NB_DIAG(datatype, n, nb, nb, Y, ldy)
+
+    fclose(gt_file);
+    return 1;
 }

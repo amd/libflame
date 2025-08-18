@@ -1559,6 +1559,88 @@ double fla_test_clock()
 }
 
 /*
+ * This function checks for the arguments necessary for Bit reproducibility test in the command
+ * line. For Bit reproducibility test, two arguments are necessary:
+ *     1. --BRT_char=<k> : k is the character which specifies the type of BRT to be run.
+ *     2. --seed=<k> : k is the seed value to be used for generating input matrices.
+ * For Repeatability test, only the first argument is necessary and has to be set to I.
+ *
+ * @return
+ *      0 if the argument is not found,
+ *      1 if the argument is found and valid,
+ *     -1 if the argument is found but invalid value is provided.
+ * */
+integer fla_parse_brt_args(integer argc, char **argv, test_params_t *params)
+{
+    params->BRT_char = '\0';
+    params->seed = -999;
+    const char *brt_arg_str = "--BRT=";
+    const char *seed_arg_str = "--seed=";
+    integer brt_arg_len = strlen(brt_arg_str), seed_arg_len = strlen(seed_arg_str);
+    bool brt_set = false, seed_set = false;
+
+    /* Check if the argument is present in the command line. */
+    for(integer i = 1; i < argc; ++i)
+    {
+        if(strncmp(argv[i], brt_arg_str, brt_arg_len) == 0)
+        {
+            errno = 0; /* Reset errno before strtof */
+            params->BRT_char = argv[i][brt_arg_len];
+            /* Checking any error during parsing */
+            /* Checking if BRT value is valid */
+            if(errno != 0
+               || (!same_char(params->BRT_char, 'G') && !same_char(params->BRT_char, 'V')
+                   && !same_char(params->BRT_char, 'F') && !same_char(params->BRT_char, 'M')))
+            {
+                /* Invalid BRT value */
+                printf("\nError: Invalid BRT argument: %s\n", argv[i]);
+                printf("       Please provide one of the following inputs :\n");
+                printf("       G : CRC - Ground truth generation\n");
+                printf("       V : CRC - Output verification\n");
+                printf("       F : Complete Output binary generation\n");
+                printf("       M : Complete Output binary verification\n");
+                return -1;
+            }
+            brt_set = true;
+        }
+        if(strncmp(argv[i], seed_arg_str, seed_arg_len) == 0)
+        {
+            errno = 0; /* Reset errno before strtol */
+            params->seed = strtol(argv[i] + seed_arg_len, NULL, 10);
+            /* Checking any error during parsing */
+            /* Checking if seed value has been set */
+            if(errno != 0 || params->seed == -999)
+            {
+                /* Invalid bench value */
+                printf("\nError: Invalid seed argument: %s\n", argv[i]);
+                printf("       Please provide a valid seed.\n");
+                return -1;
+            }
+            seed_set = true;
+            srand(params->seed);
+        }
+        if(brt_set && seed_set)
+        {
+            return 2;
+        }
+    }
+    if(brt_set && !seed_set)
+    {
+        printf("\nError: Seed not set\n");
+        printf("       Please provide a seed for Bit reproducibility test.\n");
+        return -1;
+    }
+    else if(seed_set)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+/*
  * This function checks if the argument "--bench=<k>" is present in the command line.
  * If the argument is present, it sets the benchmark_mode flag and bench_duration in
  * params.
@@ -1997,6 +2079,9 @@ bool fla_parse_cmdline_args(integer *argc, char **argv, test_params_t *params)
 
     /* Check if the help argument is present */
     parse_status = fla_check_help_arg(*argc, argv);
+    FLA_ARGS_PARSE_RESULT_HANDLER;
+
+    parse_status = fla_parse_brt_args(*argc, argv, params);
     FLA_ARGS_PARSE_RESULT_HANDLER;
 
     parse_status = fla_check_interface(*argc, argv, params);

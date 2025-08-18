@@ -13,6 +13,7 @@
 #include "validate_common.h"
 #include "test_output_routines.h"
 #include "test_overflow_underflow.h"
+#include "test_bit_reproducibility.h"
 
 #include <limits.h>
 #include <stdint.h>

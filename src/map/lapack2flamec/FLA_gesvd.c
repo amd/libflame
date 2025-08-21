@@ -9,7 +9,7 @@
 */
 
 /*
-    Copyright (c) 2021-2024 Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (c) 2021-2025 Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "FLAME.h"
@@ -35,6 +35,7 @@
   Note that the routine returns V**T, not V.
 */
 
+extern void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
 extern int lapack_sgesvd(char *jobu, char *jobvt, integer *m, integer *n, real *a, integer *lda,
                          real *s, real *u, integer *ldu, real *vt, integer *ldvt, real *work,
                          integer *lwork, integer *info);
@@ -181,11 +182,20 @@ LAPACK_gesvd_real(d)
                       *jobu, *jobv, *m, *n, *ldim_A, *ldim_U, *ldim_Vh);
 #if FLA_ENABLE_AMD_OPT
     {
+        integer i__1;
         /* Initialize global context data */
         aocl_fla_init();
 
         lapack_dgesvd(jobu, jobv, m, n, buff_A, ldim_A, buff_s, buff_U, ldim_U, buff_Vh, ldim_Vh,
                       buff_w, lwork, info);
+
+        if(*info < 0)
+        {
+            /* If the info is set to a negative value, it means that the
+             * input parameters are invalid, so return. */
+            i__1 = -(*info);
+            xerbla_("DGESVD", &i__1, (ftnlen)6);
+        }
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

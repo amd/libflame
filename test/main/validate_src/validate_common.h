@@ -229,4 +229,7 @@ void validate_gebrd(integer datatype, char *tst_api, integer m, integer n, void 
                     double err_thresh, void *params);
 void validate_trtri(char *tst_api, char uplo, char diag, integer n, void *A, void *A_inv,
                      integer lda, integer datatype, double err_thresh, char imatrix, void *params);
+void validate_trtrs(char *tst_api, integer datatype, char *uplo, char *trans, char *diag, integer n, integer nrhs,
+                    void *A, integer lda, void *X, void *B, integer ldb, double err_thresh, char imatrix, void *params);
+
 #endif // VALIDATE_COMMON_H

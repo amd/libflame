@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2025-2026, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_trtrs.c
@@ -18,7 +18,7 @@ void validate_trtrs(char *tst_api, integer datatype, char *uplo, char *trans, ch
 {
     void *work = NULL;
     char NORM = '1';
-    double residual = 0.;
+    double residual;
 
     /* Early return conditions */
     if(n == 0 || nrhs == 0)
@@ -34,12 +34,13 @@ void validate_trtrs(char *tst_api, integer datatype, char *uplo, char *trans, ch
     {
         case FLOAT:
         {
-            float norm_a, norm_b, norm_x, norm;
+            float norm_a, norm_b, norm_x, norm, eps;
 
             /* Test 1: Compute residual ||AX - B|| / (||A|| * ||X|| + ||B||) */
             compute_matrix_norm(datatype, NORM, n, n, A, lda, &norm_a, imatrix, work);
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm_b, imatrix, work);
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldb, &norm_x, imatrix, work);
+            eps = fla_lapack_slamch("E");
             
             /* Compute AX using TRMM: X := A*X */
             strmm_("L", uplo, trans, diag, &n, &nrhs, &s_one, A, &lda, X, &ldb);
@@ -48,17 +49,18 @@ void validate_trtrs(char *tst_api, integer datatype, char *uplo, char *trans, ch
             matrix_difference(datatype, n, nrhs, X, ldb, B, ldb);
 
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldb, &norm, imatrix, work);
-            residual = fla_compute_residual(datatype, 'E', norm, (norm_a * norm_x + norm_b), n, params);
+            residual = (double)((norm / (norm_a * norm_x + norm_b)) / ((float)n * eps));
             break;
         }
         case DOUBLE:
         {
-            double norm_a, norm_b, norm_x, norm;
+            double norm_a, norm_b, norm_x, norm, eps;
 
             /* Test 1: Compute residual ||AX - B|| / (||A|| * ||X|| + ||B||) */
             compute_matrix_norm(datatype, NORM, n, n, A, lda, &norm_a, imatrix, work);
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm_b, imatrix, work);
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldb, &norm_x, imatrix, work);
+            eps = fla_lapack_dlamch("E");
 
             /* Compute AX using TRMM: X := A*X */
             dtrmm_("L", uplo, trans, diag, &n, &nrhs, &d_one, A, &lda, X, &ldb);
@@ -67,17 +69,18 @@ void validate_trtrs(char *tst_api, integer datatype, char *uplo, char *trans, ch
             matrix_difference(datatype, n, nrhs, X, ldb, B, ldb);
 
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldb, &norm, imatrix, work);
-            residual = fla_compute_residual(datatype, 'E', norm, (norm_a * norm_x + norm_b), n, params);
+            residual = (norm / (norm_a * norm_x + norm_b)) / ((double)n * eps);
             break;
         }
         case COMPLEX:
         {
-            float norm_a, norm_b, norm_x, norm;
+            float norm_a, norm_b, norm_x, norm, eps;
 
             /* Test 1: Compute residual ||AX - B|| / (||A|| * ||X|| + ||B||) */
             compute_matrix_norm(datatype, NORM, n, n, A, lda, &norm_a, imatrix, work);
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm_b, imatrix, work);
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldb, &norm_x, imatrix, work);
+            eps = fla_lapack_slamch("E");
 
             /* Compute AX using TRMM: X := A*X */
             ctrmm_("L", uplo, trans, diag, &n, &nrhs, &c_one, A, &lda, X, &ldb);
@@ -86,17 +89,18 @@ void validate_trtrs(char *tst_api, integer datatype, char *uplo, char *trans, ch
             matrix_difference(datatype, n, nrhs, X, ldb, B, ldb);
 
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldb, &norm, imatrix, work);
-            residual = fla_compute_residual(datatype, 'E', norm, (norm_a * norm_x + norm_b), n, params);
+            residual = (double)((norm / (norm_a * norm_x + norm_b)) / ((float)n * eps));
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm_a, norm_b, norm_x, norm;
+            double norm_a, norm_b, norm_x, norm, eps;
 
             /* Test 1: Compute residual ||AX - B|| / (||A|| * ||X|| + ||B||) */
             compute_matrix_norm(datatype, NORM, n, n, A, lda, &norm_a, imatrix, work);
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm_b, imatrix, work);
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldb, &norm_x, imatrix, work);
+            eps = fla_lapack_dlamch("E");
 
             /* Compute AX using TRMM: X := A*X */
             ztrmm_("L", uplo, trans, diag, &n, &nrhs, &z_one, A, &lda, X, &ldb);
@@ -105,7 +109,7 @@ void validate_trtrs(char *tst_api, integer datatype, char *uplo, char *trans, ch
             matrix_difference(datatype, n, nrhs, X, ldb, B, ldb);
 
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldb, &norm, imatrix, work);
-            residual = fla_compute_residual(datatype, 'E', norm, (norm_a * norm_x + norm_b), n, params);
+            residual = (norm / (norm_a * norm_x + norm_b)) / ((double)n * eps);
             break;
         }
         default:

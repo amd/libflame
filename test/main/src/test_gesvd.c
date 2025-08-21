@@ -69,8 +69,8 @@ void fla_test_gesvd(integer argc, char **argv, test_params_t *params)
             row_major_gesvd_lda = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
             row_major_gesvd_ldu = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
             row_major_gesvd_ldvt = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
-            params->svd_paramslist[0].lda = N;
-            params->svd_paramslist[0].ldu = N;
+            params->svd_paramslist[0].lda = M;
+            params->svd_paramslist[0].ldu = M;
             params->svd_paramslist[0].ldvt = N;
         }
         else

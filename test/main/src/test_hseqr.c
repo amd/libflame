@@ -200,6 +200,10 @@ void fla_test_hseqr_experiment(char *tst_api, test_params_t *params, integer dat
             create_vector(datatype, &wi_in, n);
             reset_vector(datatype, wi_in, n, 1);
         }
+        else
+        {
+            wi_in = wr_in;
+        }
 
         get_hessenberg_matrix_from_EVs(datatype, n, H, ldh, Z, ldz, &ilo, &ihi, &info, wr_in,
                                        wi_in);

@@ -159,6 +159,12 @@ void reset_vector(integer datatype, void *A, integer M, integer incA)
 {
     integer i;
 
+    /* early return */
+    if(M <= 0 || incA == 0 || A == NULL)
+    {
+        return;
+    }
+
     switch(datatype)
     {
         case INTEGER:
@@ -216,6 +222,12 @@ void rand_vector(integer datatype, integer M, void *A, integer inc, double VL, d
 {
     integer i;
     double step = (VU - VL) / M;
+
+    /* early return */
+    if(M <= 0 || inc == 0 || A == NULL)
+    {
+        return;
+    }
 
     switch(datatype)
     {
@@ -297,6 +309,62 @@ void rand_vector(integer datatype, integer M, void *A, integer inc, double VL, d
 }
 
 /* Copy a vector */
+#if 1
+void copy_vector(integer datatype, integer M, void *a, integer inca, void *b, integer incb)
+{
+    /* early return */
+    if(M <= 0 || inca == 0 || incb == 0 || a == NULL || b == NULL)
+    {
+        return;
+    }
+
+    switch(datatype)
+    {
+        case INTEGER:
+        {
+            integer i, ia = 0, ib = 0;
+
+            if(inca < 0)
+            {
+                ia = (-M + 1) * inca;
+            }
+
+            if(incb < 0)
+            {
+                ib = (-M + 1) * incb;
+            }
+
+            for(i = 0; i < M; i++)
+            {
+                ((integer *)b)[ib] = ((integer *)a)[ia];
+                ia += inca;
+                ib += incb;
+            }
+            break;
+        }
+        case FLOAT:
+        {
+            scopy_(&M, a, &inca, b, &incb);
+            break;
+        }
+        case DOUBLE:
+        {
+            dcopy_(&M, a, &inca, b, &incb);
+            break;
+        }
+        case COMPLEX:
+        {
+            ccopy_(&M, a, &inca, b, &incb);
+            break;
+        }
+        case DOUBLE_COMPLEX:
+        {
+            zcopy_(&M, a, &inca, b, &incb);
+            break;
+        }
+    }
+}
+#else
 void copy_vector(integer datatype, integer M, void *A, integer LDA, void *B, integer LDB)
 {
     switch(datatype)
@@ -345,6 +413,7 @@ void copy_vector(integer datatype, integer M, void *A, integer LDA, void *B, int
         }
     }
 }
+#endif
 
 /* copy subvector
  * m - elements in the vector to be copied
@@ -359,6 +428,20 @@ void copy_subvector(integer datatype, integer m, void *A, integer lda, void *B, 
                     integer srow, integer scol, integer drow, integer dcol)
 {
     void *Ax = NULL, *Bx = NULL;
+
+    /* early return */
+    if(m <= 0 || (lda < m && scol != 0) || (ldb < m && dcol != 0) || (lda < 1 && scol == 0)
+       || (ldb < 1 && dcol == 0))
+    {
+        return;
+    }
+    if(srow < 0 || scol < 0 || drow < 0 || dcol < 0)
+    {
+        return;
+    }
+    if(A == NULL || B == NULL)
+        return;
+
     switch(datatype)
     {
         case FLOAT:
@@ -389,12 +472,18 @@ void copy_subvector(integer datatype, integer m, void *A, integer lda, void *B, 
     copy_vector(datatype, m, Ax, 1, Bx, 1);
 }
 
-void copy_realtype_vector(integer datatype, integer M, void *A, integer LDA, void *B, integer LDB)
+void copy_realtype_vector(integer datatype, integer M, void *a, integer inca, void *b, integer incb)
 {
+    /* early return */
+    if(M <= 0 || inca < 1 || incb < 1 || a == NULL || b == NULL)
+    {
+        return;
+    }
+
     if(datatype == FLOAT || datatype == COMPLEX)
-        scopy_(&M, A, &LDA, B, &LDB);
+        scopy_(&M, a, &inca, b, &incb);
     else
-        dcopy_(&M, A, &LDA, B, &LDB);
+        dcopy_(&M, a, &inca, b, &incb);
 }
 
 /* create matrix of given datatype */
@@ -402,6 +491,7 @@ void create_matrix(integer datatype, int matrix_layout, integer M, integer N, vo
 {
     integer rs, cs;
     *A = NULL;
+
     if(matrix_layout == LAPACK_ROW_MAJOR)
     {
         rs = M;
@@ -505,8 +595,13 @@ void free_matrix(void *A)
 void rand_matrix(integer datatype, void *A, integer M, integer N, integer LDA)
 {
     integer i, j;
-    if(LDA < M)
+
+    /* early return */
+    if(M <= 0 || N <= 0 || LDA < M || A == NULL)
+    {
         return;
+    }
+
     switch(datatype)
     {
         case FLOAT:
@@ -562,8 +657,13 @@ void rand_matrix(integer datatype, void *A, integer M, integer N, integer LDA)
 void rand_sym_matrix(integer datatype, void *A, integer M, integer N, integer LDA)
 {
     integer i, j;
-    if(LDA < M)
+
+    /* early return */
+    if(M <= 0 || N <= 0 || LDA < M || A == NULL)
+    {
         return;
+    }
+
     switch(datatype)
     {
         case FLOAT:
@@ -625,12 +725,14 @@ void rand_sym_matrix(integer datatype, void *A, integer M, integer N, integer LD
 void copy_matrix(integer datatype, char *uplo, integer M, integer N, void *A, integer LDA, void *B,
                  integer LDB)
 {
-    if((LDA < M) || (LDB < M))
-        return;
-    if((M <= 0) || (N <= 0))
-        return;
-
     size_t element_size = 0;
+
+    /* early return */
+    if(M <= 0 || N <= 0 || LDA < M || LDB < M || uplo == NULL || A == NULL || B == NULL)
+    {
+        return;
+    }
+
     switch(datatype)
     {
         case INTEGER:
@@ -700,6 +802,12 @@ void copy_matrix(integer datatype, char *uplo, integer M, integer N, void *A, in
 void copy_realtype_matrix(integer datatype, char *uplo, integer M, integer N, void *A, integer LDA,
                           void *B, integer LDB)
 {
+    /* early return */
+    if(M <= 0 || N <= 0 || LDA < M || LDB < M || uplo == NULL || A == NULL || B == NULL)
+    {
+        return;
+    }
+
     if(datatype == FLOAT || datatype == COMPLEX)
         fla_lapack_slacpy(uplo, &M, &N, A, &LDA, B, &LDB);
     else
@@ -710,8 +818,13 @@ void copy_realtype_matrix(integer datatype, char *uplo, integer M, integer N, vo
 void reset_matrix(integer datatype, integer M, integer N, void *A, integer LDA)
 {
     integer i, j;
-    if(LDA < M)
+
+    /* early return */
+    if(M <= 0 || N <= 0 || LDA < M || A == NULL)
+    {
         return;
+    }
+
     switch(datatype)
     {
         case INTEGER:
@@ -755,8 +868,11 @@ void reset_matrix(integer datatype, integer M, integer N, void *A, integer LDA)
 /* Set a matrix to identity */
 void set_identity_matrix(integer datatype, integer M, integer N, void *A, integer LDA)
 {
-    if(LDA < M)
+    /* early return */
+    if(M <= 0 || N <= 0 || LDA < M || A == NULL)
+    {
         return;
+    }
 
     switch(datatype)
     {
@@ -873,8 +989,11 @@ void diagmv(integer datatype, integer m, integer n, void *x, integer incx, void 
     integer n_elem;
     integer j;
 
-    if(m <= 0 || n <= 0)
+    /* early return */
+    if(m <= 0 || n <= 0 || a_rs <= 0 || a_cs <= 0 || incx <= 0 || a == NULL || x == NULL)
+    {
         return;
+    }
 
     // Initialize with optimal values for column-major storage.
     inca = a_rs;
@@ -930,9 +1049,16 @@ void diagmv(integer datatype, integer m, integer n, void *x, integer incx, void 
     }
 }
 
+/* element-wise multiply */
 void scalv(integer datatype, integer n, void *x, integer incx, void *y, integer incy)
 {
     integer i;
+
+    /* early return */
+    if(n <= 0 || incx <= 0 || incy <= 0 || x == NULL || y == NULL)
+    {
+        return;
+    }
 
     switch(datatype)
     {
@@ -948,7 +1074,6 @@ void scalv(integer datatype, integer n, void *x, integer incx, void *y, integer 
             }
             break;
         }
-
         case DOUBLE:
         {
             double *chi, *psi;
@@ -961,7 +1086,6 @@ void scalv(integer datatype, integer n, void *x, integer incx, void *y, integer 
             }
             break;
         }
-
         case COMPLEX:
         {
             float *chi;
@@ -977,7 +1101,6 @@ void scalv(integer datatype, integer n, void *x, integer incx, void *y, integer 
             }
             break;
         }
-
         case DOUBLE_COMPLEX:
         {
             double *chi;
@@ -1017,6 +1140,12 @@ void rand_spd_matrix(integer datatype, char *uplo, void *A, integer m, integer l
     void *L = NULL;
     char *type = "C";
 
+    /* early return */
+    if(m <= 0 || lda < m || A == NULL)
+    {
+        return;
+    }
+
     /* Create vector required for EVs */
     create_realtype_vector(datatype, &L, m);
 
@@ -1042,6 +1171,12 @@ void diagonalize_realtype_vector(integer datatype, void *s, void *sigma, integer
                                  integer LDA)
 {
     integer incr, i, j, min_m_n;
+
+    /* early return */
+    if(m <= 0 || n <= 0 || LDA < m || s == NULL || sigma == NULL)
+    {
+        return;
+    }
 
     incr = m + 1;
     min_m_n = fla_min(m, n);
@@ -1091,8 +1226,12 @@ void diagonalize_realtype_vector(integer datatype, void *s, void *sigma, integer
 void rand_hermitian_matrix(integer datatype, integer n, void **A, integer lda)
 {
     void *B = NULL;
-    if(lda < n)
+
+    /* early return */
+    if(n <= 0 || lda < n || A == NULL)
+    {
         return;
+    }
 
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &B, n);
     reset_matrix(datatype, n, n, B, n);
@@ -1126,6 +1265,12 @@ void create_block_diagonal_matrix(integer datatype, void *wr, void *wi, void *la
                                   integer n, integer lda)
 {
     integer i, j;
+
+    /* early return */
+    if(m <= 0 || n <= 0 || lda < m || wr == NULL || wi == NULL || lambda == NULL)
+    {
+        return;
+    }
 
     switch(datatype)
     {
@@ -1182,6 +1327,13 @@ double check_orthogonal_matrix(char trn, integer datatype, void *A, integer m, i
 {
     void *a_temp = NULL, *work = NULL;
     double resid = 0.;
+
+    /* early return */
+    if(m <= 0 || n <= 0 || k <= 0 || lda < m || A == NULL)
+    {
+        return resid;
+    }
+
     /* Create Identity matrix to validate orthogonal property of matrix A*/
     create_matrix(datatype, LAPACK_COL_MAJOR, k, k, &a_temp, k);
 
@@ -1269,6 +1421,12 @@ double check_orthogonality(integer datatype, void *A, integer m, integer n, inte
     double resid = 0.;
     integer k;
 
+    /* early return */
+    if(m <= 0 || n <= 0 || lda < m || A == NULL)
+    {
+        return resid * 4.;
+    }
+
     /* Create Identity matrix to validate orthogonal property of matrix A*/
     if(m <= n)
     {
@@ -1342,6 +1500,17 @@ void copy_submatrix(integer datatype, integer m, integer n, void *A, integer lda
                     integer ldb, integer srow, integer scol, integer drow, integer dcol)
 {
     void *sub_A = NULL, *sub_B = NULL;
+
+    /* early return */
+    if(m <= 0 || n <= 0 || lda < m || ldb < m || A == NULL || B == NULL)
+    {
+        return;
+    }
+    if(srow < 0 || scol < 0 || drow < 0 || dcol < 0)
+    {
+        return;
+    }
+
     switch(datatype)
     {
         case FLOAT:
@@ -1380,6 +1549,16 @@ void scgemv(char TRANS, integer real_alpha, integer m, integer n, scomplex *alph
     float rl, ig;
     float alphar;
     void *A = NULL;
+
+    /* early return */
+    if(m <= 0 || n <= 0 || lda < m || incv <= 0 || inc <= 0)
+    {
+        return;
+    }
+    if(a == NULL || v == NULL || c == NULL || alpha == NULL)
+    {
+        return;
+    }
 
     create_matrix(FLOAT, LAPACK_COL_MAJOR, m, n, &A, lda);
 
@@ -1522,8 +1701,13 @@ double get_realtype_value(integer datatype, void *value)
 void rand_sym_tridiag_matrix(integer datatype, void *A, integer M, integer N, integer LDA)
 {
     integer i, j;
-    if(LDA < M)
+
+    /* early return */
+    if(M <= 0 || N <= 0 || LDA < M || A == NULL)
+    {
         return;
+    }
+
     reset_matrix(datatype, M, N, A, LDA);
 
     switch(datatype)
@@ -1599,6 +1783,13 @@ void rand_sym_tridiag_matrix(integer datatype, void *A, integer M, integer N, in
 void get_diagonal(integer datatype, void *A, integer m, integer n, integer lda, void *Diag)
 {
     integer i, j;
+
+    /* early return */
+    if(m <= 0 || n <= 0 || lda < m || A == NULL || Diag == NULL)
+    {
+        return;
+    }
+
     switch(datatype)
     {
         case FLOAT:
@@ -1642,6 +1833,13 @@ void get_diagonal(integer datatype, void *A, integer m, integer n, integer lda, 
 void get_subdiagonal(integer datatype, void *A, integer m, integer n, integer lda, void *Subdiag)
 {
     integer i, j;
+
+    /* early return */
+    if(m <= 0 || n <= 0 || lda < m || A == NULL || Subdiag == NULL)
+    {
+        return;
+    }
+
     switch(datatype)
     {
         case FLOAT:
@@ -1685,8 +1883,13 @@ void copy_sym_tridiag_matrix(integer datatype, void *D, void *E, integer M, inte
                              integer LDA)
 {
     integer i, j;
-    if(LDA < M)
+
+    /* early return */
+    if(M <= 0 || N <= 0 || LDA < M || D == NULL || E == NULL || B == NULL)
+    {
         return;
+    }
+
     reset_matrix(datatype, M, N, B, LDA);
 
     switch(datatype)
@@ -1773,6 +1976,12 @@ void copy_sym_tridiag_matrix(integer datatype, void *D, void *E, integer M, inte
 void get_max_from_array(integer datatype, void *arr, void *max_val, integer n)
 {
     integer i;
+
+    /* early return */
+    if(n <= 0 || arr == NULL || max_val == NULL)
+    {
+        return;
+    }
 
     switch(datatype)
     {
@@ -1890,6 +2099,12 @@ void get_max_from_array(integer datatype, void *arr, void *max_val, integer n)
 void get_min_from_array(integer datatype, void *arr, void *min_val, integer n)
 {
     integer i;
+
+    /* early return */
+    if(n <= 0 || arr == NULL || min_val == NULL)
+    {
+        return;
+    }
 
     switch(datatype)
     {
@@ -2010,8 +2225,13 @@ void get_min_from_array(integer datatype, void *arr, void *min_val, integer n)
 void init_matrix_from_file(integer datatype, void *A, integer m, integer n, integer lda, FILE *fptr)
 {
     int i, j;
-    if(lda < m)
+
+    /* early return */
+    if(m <= 0 || n <= 0 || lda < m || A == NULL || fptr == NULL)
+    {
         return;
+    }
+
     switch(datatype)
     {
         case FLOAT:
@@ -2084,6 +2304,12 @@ void init_vector_from_file(integer datatype, void *A, integer m, integer inc, FI
 {
     int i;
 
+    /* early return */
+    if(m <= 0 || inc <= 0 || A == NULL || fptr == NULL)
+    {
+        return;
+    }
+
     switch(datatype)
     {
         case FLOAT:
@@ -2146,8 +2372,11 @@ void get_generic_triangular_matrix(integer datatype, integer N, void *A, integer
 {
     integer i;
 
-    if(LDA < N)
+    /* early return */
+    if(N <= 0 || LDA < N || ilo < 1 || ihi < 1 || ilo > ihi || ihi > N || A == NULL)
+    {
         return;
+    }
 
     /* Initialize matrix with random values */
     if(!AInitialized)
@@ -2159,13 +2388,13 @@ void get_generic_triangular_matrix(integer datatype, integer N, void *A, integer
     {
         case FLOAT:
         {
-            /* Making elements below diagonal for columns 0 to ilo-1 to Zero*/
+            /* Making elements below diagonal for columns 0 to ilo-1 to Zero */
             for(i = 0; i < ilo - 1; i++)
             {
                 float *p = &((float *)A)[(i + 1) + i * LDA];
                 reset_vector(datatype, (void *)p, N - i - 1, 1);
             }
-            /* Making elements below diagonal for rows ihi+1 to N to Zero*/
+            /* Making elements below diagonal for rows ihi+1 to N to Zero */
             for(i = ihi; i < N; i++)
             {
                 float *p = &((float *)A)[i];
@@ -2238,6 +2467,20 @@ void get_hessenberg_matrix_from_EVs(integer datatype, integer n, void *A, intege
     void *A_sub = NULL, *L = NULL, *wr_sub_in = NULL, *wi_sub_in = NULL, *L_tmp = NULL;
     integer AInitialized = 1;
 
+    /* early return */
+    if(A == NULL || Z == NULL || wr_in == NULL || wi_in == NULL || info == NULL || ilo == NULL
+       || ihi == NULL)
+    {
+        if(info != NULL)
+            *info = -1;
+        return;
+    }
+    if(n <= 0 || lda < n || *ilo < 1 || *ilo > n || *ihi < *ilo || *ihi > n)
+    {
+        *info = -1;
+        return;
+    }
+
     /* Initialize matrix A */
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &L_tmp, n);
     generate_asym_matrix_from_EVs(datatype, n, A, lda, L_tmp);
@@ -2258,7 +2501,8 @@ void get_hessenberg_matrix_from_EVs(integer datatype, integer n, void *A, intege
     get_diagonal(datatype, L, *ihi - *ilo + 1, *ihi - *ilo + 1, *ihi - *ilo + 1, wr_sub_in);
     if(*ilo >= 1 && *ilo <= n && *ihi >= *ilo && *ihi <= n)
     {
-        copy_subvector(datatype, *ihi - *ilo + 1, wr_sub_in, 1, wr_in, 1, 0, 0, 0, *ilo - 1);
+        copy_vector(datatype, *ihi - *ilo + 1, wr_sub_in, 1,
+                    get_m_ptr(datatype, wr_in, *ilo - 1, 0, 1), 1);
     }
 
     /*If datatype = float or double, get the sub diagonal elements of L into wi_sub_in.
@@ -2270,7 +2514,8 @@ void get_hessenberg_matrix_from_EVs(integer datatype, integer n, void *A, intege
         get_subdiagonal(datatype, L, *ihi - *ilo + 1, *ihi - *ilo + 1, *ihi - *ilo + 1, wi_sub_in);
         if(*ilo >= 1 && *ilo <= n && *ihi >= *ilo && *ihi <= n)
         {
-            copy_subvector(datatype, *ihi - *ilo + 1, wi_sub_in, 1, wi_in, 1, 0, 0, 0, *ilo - 1);
+            copy_vector(datatype, *ihi - *ilo + 1, wi_sub_in, 1,
+                        get_m_ptr(datatype, wi_in, *ilo - 1, 0, 1), 1);
         }
     }
 
@@ -2303,8 +2548,18 @@ void get_hessenberg_matrix(integer datatype, integer n, void *A, integer lda, vo
     void *tau = NULL, *work = NULL;
     integer lwork;
 
-    if(lda < n)
+    /* early return */
+    if(A == NULL || Z == NULL || ilo == NULL || ihi == NULL || info == NULL)
+    {
+        if(info != NULL)
+            *info = -1;
         return;
+    }
+    if(n <= 0 || lda < n || *ilo < 1 || *ilo > n || *ihi < *ilo || *ihi > n)
+    {
+        *info = -1;
+        return;
+    }
 
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_save, lda);
     create_vector(datatype, &tau, n - 1);
@@ -2469,11 +2724,18 @@ void get_hessenberg_matrix(integer datatype, integer n, void *A, integer lda, vo
 void convert_upper_hessenberg(integer datatype, integer n, void *A, integer lda)
 {
     integer i;
+
+    /* early return */
+    if(n <= 0 || lda < n || A == NULL)
+    {
+        return;
+    }
+
     switch(datatype)
     {
         case FLOAT:
         {
-            for(i = 0; i < n; i++)
+            for(i = 0; i < n - 2; i++)
             {
                 float *p = &((float *)A)[(i + 2) + i * lda];
                 reset_vector(datatype, (void *)p, n - i - 2, 1);
@@ -2482,7 +2744,7 @@ void convert_upper_hessenberg(integer datatype, integer n, void *A, integer lda)
         }
         case DOUBLE:
         {
-            for(i = 0; i < n; i++)
+            for(i = 0; i < n - 2; i++)
             {
                 double *p = &((double *)A)[(i + 2) + i * lda];
                 reset_vector(datatype, (void *)p, n - i - 2, 1);
@@ -2491,7 +2753,7 @@ void convert_upper_hessenberg(integer datatype, integer n, void *A, integer lda)
         }
         case COMPLEX:
         {
-            for(i = 0; i < n; i++)
+            for(i = 0; i < n - 2; i++)
             {
                 scomplex *p = &((scomplex *)A)[(i + 2) + i * lda];
                 reset_vector(datatype, (void *)p, n - i - 2, 1);
@@ -2500,7 +2762,7 @@ void convert_upper_hessenberg(integer datatype, integer n, void *A, integer lda)
         }
         case DOUBLE_COMPLEX:
         {
-            for(i = 0; i < n; i++)
+            for(i = 0; i < n - 2; i++)
             {
                 dcomplex *p = &((dcomplex *)A)[(i + 2) + i * lda];
                 reset_vector(datatype, (void *)p, n - i - 2, 1);
@@ -2514,6 +2776,12 @@ void convert_upper_hessenberg(integer datatype, integer n, void *A, integer lda)
 void pack_matrix_lt(integer datatype, void *A, void *B, integer N, integer lda)
 {
     integer i, j;
+
+    /* early return */
+    if(N <= 0 || lda < N || B == NULL || A == NULL)
+    {
+        return;
+    }
 
     switch(datatype)
     {
@@ -2580,6 +2848,13 @@ void pack_matrix_lt(integer datatype, void *A, void *B, integer N, integer lda)
 void extract_upper_hessenberg_matrix(integer datatype, integer n, void *A, integer lda)
 {
     integer i;
+
+    /* early return */
+    if(n <= 0 || lda < n || A == NULL)
+    {
+        return;
+    }
+
     switch(datatype)
     {
         case FLOAT:
@@ -2631,8 +2906,20 @@ void get_orthogonal_matrix_from_QR(integer datatype, integer n, void *A, integer
 {
     void *tau = NULL, *work = NULL;
     integer lwork = -1;
-    if(!n || (lda < n) || (ldq < n))
+
+    /* early return */
+    if(A == NULL || Q == NULL || info == NULL)
+    {
+        if(info != NULL)
+            *info = -1;
         return;
+    }
+    if(n <= 0 || lda < n || ldq < n)
+    {
+        *info = -1;
+        return;
+    }
+
     /* Intializing matrix for the call to GGHRD */
     create_vector(datatype, &work, 1);
     create_vector(datatype, &tau, n);
@@ -2748,6 +3035,13 @@ void print_matrix(char *desc, char *order, integer datatype, integer M, integer 
                   integer lda)
 {
     integer i, j, row_max = M, col_max = N, ldc = lda, ldr = 1;
+
+    /* early return */
+    if(M <= 0 || N <= 0 || lda < M || A == NULL || desc == NULL || order == NULL)
+    {
+        return;
+    }
+
     if(same_char(*order, 'C'))
     {
         row_max = N;
@@ -2841,10 +3135,12 @@ void get_triangular_matrix(char *uplo, integer datatype, integer m, integer n, v
 {
     integer i;
 
-    if(lda < m)
+    /* early return */
+    if(m <= 0 || n <= 0 || lda < m || A == NULL || uplo == NULL)
     {
         return;
     }
+
     if(!A_init)
     {
         rand_matrix(datatype, A, m, n, lda);
@@ -2998,6 +3294,12 @@ double svd_check_order(integer datatype, void *s, integer m, integer n, double r
     min_m_n = fla_min(m, n);
     double resid = 0.;
 
+    /* early return */
+    if(s == NULL || min_m_n <= 0)
+    {
+        return residual * 2;
+    }
+
     switch(datatype)
     {
         case INTEGER:
@@ -3080,8 +3382,13 @@ double svd_check_order(integer datatype, void *s, integer m, integer n, double r
 void init_matrix_spec_in(integer datatype, void *A, integer M, integer N, integer LDA, char type)
 {
     integer i, j;
-    if(LDA < M)
+
+    /* early return */
+    if(M <= 0 || N <= 0 || LDA < M || A == NULL)
+    {
         return;
+    }
+
     switch(datatype)
     {
         case FLOAT:
@@ -3158,8 +3465,13 @@ void init_matrix_spec_rand_in(integer datatype, void *A, integer M, integer N, i
                               char type)
 {
     integer rows, cols, upspan, lowspan, span;
-    if(LDA < M)
+
+    /* early return */
+    if(M <= 0 || N <= 0 || LDA < M || A == NULL)
+    {
         return;
+    }
+
     rand_matrix(datatype, A, M, N, LDA);
     /* when M*N less than 2 there is no need of randomness*/
     if(M * N < 2)
@@ -3359,9 +3671,14 @@ void init_matrix_spec_rand_in(integer datatype, void *A, integer M, integer N, i
 /* Test to check the extreme values propagation in output matrix */
 integer check_extreme_value(integer datatype, integer M, integer N, void *A, integer LDA, char type)
 {
-    if(!A)
-        return false;
     integer i, j;
+
+    /* early return */
+    if(M <= 0 || N <= 0 || LDA < M || A == NULL)
+    {
+        return 0;
+    }
+
     switch(datatype)
     {
         case FLOAT:
@@ -3507,6 +3824,13 @@ integer check_extreme_value(integer datatype, integer M, integer N, void *A, int
 void init_vector_spec_in(integer datatype, void *A, integer M, integer incx, char type)
 {
     integer i;
+
+    /* early return */
+    if(M <= 0 || incx <= 0 || A == NULL)
+    {
+        return;
+    }
+
     switch(datatype)
     {
         case FLOAT:
@@ -3569,6 +3893,13 @@ void init_vector_spec_in(integer datatype, void *A, integer M, integer incx, cha
 void init_vector_spec_rand_in(integer datatype, void *A, integer M, integer incx, char type)
 {
     integer rows, span;
+
+    /* early return */
+    if(M <= 0 || incx <= 0 || A == NULL)
+    {
+        return;
+    }
+
     rand_vector(datatype, M, A, incx, d_zero, d_zero, 'R');
     /* when M*N less than 2 there is no need of randomness*/
     if(M < 2)
@@ -3693,6 +4024,12 @@ void init_vector_spec_rand_in(integer datatype, void *A, integer M, integer incx
 void init_matrix(integer datatype, void *A, integer M, integer N, integer LDA, FILE *g_ext_fptr,
                  char imatrix_char)
 {
+    /* early return */
+    if(M <= 0 || N <= 0 || LDA < M || A == NULL)
+    {
+        return;
+    }
+
     if(g_ext_fptr != NULL)
         init_matrix_from_file(datatype, A, M, N, LDA, g_ext_fptr);
     else if(same_char(imatrix_char, 'I') || same_char(imatrix_char, 'N'))
@@ -3721,8 +4058,12 @@ void create_svd_matrix(integer datatype, char range, integer m, integer n, void 
                        integer lda, void *S, double vl, double vu, integer il, integer iu,
                        integer info)
 {
-    if(lda < m)
+    /* early return */
+    if(m <= 0 || n <= 0 || lda < m || A_input == NULL || S == NULL)
+    {
         return;
+    }
+
     /* For range I, index range should be 1 <= IL <= IU <= min(M,N) */
     if(same_char(range, 'I') && (il <= 0 || iu > fla_min(m, n)))
         return;
@@ -3818,6 +4159,12 @@ void create_svd_matrix(integer datatype, char range, integer m, integer n, void 
  * index - Starting position of the source vector */
 void copy_realtype_subvector(integer datatype, integer m, void *A, void *B, integer index)
 {
+    /* early return */
+    if(m <= 0 || index < 0 || A == NULL || B == NULL)
+    {
+        return;
+    }
+
     if(datatype == FLOAT || datatype == COMPLEX)
     {
         float *float_A, *float_B;
@@ -3880,6 +4227,12 @@ double is_value_zero(integer datatype, void *value, double residual)
 void init_vector(integer datatype, void *A, integer M, integer incx, FILE *g_ext_fptr,
                  char ivector_char)
 {
+    /* early return */
+    if(M <= 0 || incx <= 0 || A == NULL)
+    {
+        return;
+    }
+
     if(g_ext_fptr != NULL)
         init_vector_from_file(datatype, A, M, incx, g_ext_fptr);
     else if(same_char(ivector_char, 'I') || same_char(ivector_char, 'N'))
@@ -3895,8 +4248,15 @@ void init_vector(integer datatype, void *A, integer M, integer incx, FILE *g_ext
 void tridiag_matrix_multiply(integer datatype, integer n, integer nrhs, void *dl, void *d, void *du,
                              void *B, integer ldb, void *C, integer ldc)
 {
-    if(ldb < n || ldc < n)
+    /* early return */
+    if(n <= 0 || nrhs <= 0 || ldb < n || ldc < n)
+    {
         return;
+    }
+    if(dl == NULL || d == NULL || du == NULL || B == NULL || C == NULL)
+    {
+        return;
+    }
 
     switch(datatype)
     {
@@ -3928,6 +4288,13 @@ void matrix_difference(integer datatype, integer m, integer n, void *A, integer 
                        integer ldb)
 {
     integer i = 0;
+
+    /* early return */
+    if(m <= 0 || n <= 0 || lda < m || ldb < m || A == NULL || B == NULL)
+    {
+        return;
+    }
+
     switch(datatype)
     {
         case FLOAT:
@@ -3981,12 +4348,16 @@ void matrix_difference(integer datatype, integer m, integer n, void *A, integer 
 void copy_tridiag_matrix(integer datatype, void *dl, void *d, void *du, integer M, integer N,
                          void *A, integer LDA)
 {
-    if(LDA < M)
-        return;
     integer inc = LDA + 1;
     integer min_m_n, dl_size, du_size;
     min_m_n = fla_min(M, N);
     dl_size = N - 1, du_size = N - 1;
+
+    /* early return */
+    if(M <= 0 || N <= 0 || LDA < M || A == NULL || dl == NULL || d == NULL || du == NULL)
+    {
+        return;
+    }
 
     reset_matrix(datatype, M, N, A, LDA);
 
@@ -4039,12 +4410,16 @@ void copy_tridiag_matrix(integer datatype, void *dl, void *d, void *du, integer 
 void copy_tridiag_vector(integer datatype, void *dl, void *d, void *du, integer M, integer N,
                          void *A, integer LDA)
 {
-    if(LDA < M)
-        return;
     integer inc = LDA + 1;
     integer min_m_n, dl_size, du_size;
     min_m_n = fla_min(M, N);
     dl_size = N - 1, du_size = N - 1;
+
+    /* early return */
+    if(M <= 0 || N <= 0 || LDA < M || A == NULL || dl == NULL || d == NULL || du == NULL)
+    {
+        return;
+    }
 
     switch(datatype)
     {
@@ -4099,7 +4474,13 @@ void multiply_matrix_diag_vector(integer datatype, char side, enum VECTOR_TYPE v
                                  integer n, void *A, integer lda, void *X, integer incx)
 {
     integer j, loopn, inca, veclen;
-    if(m <= 0 || n <= 0)
+
+    /* early return */
+    if(m <= 0 || n <= 0 || lda < m || incx <= 0 || A == NULL || X == NULL)
+    {
+        return;
+    }
+    if(A == NULL || X == NULL)
         return;
 
     loopn = (side == 'L') ? m : n;
@@ -4195,11 +4576,11 @@ void generate_matrix_from_ED(integer datatype, integer n, void *A, integer lda, 
 {
     void *Qlambda = NULL;
 
-    if(!n)
+    /* early return */
+    if(n <= 0 || lda < n || A == NULL || Q == NULL || lambda == NULL)
+    {
         return;
-
-    if(lda < n)
-        return;
+    }
 
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Qlambda, n);
     copy_matrix(datatype, "full", n, n, Q, n, Qlambda, n);
@@ -4241,10 +4622,14 @@ void generate_matrix_from_ED(integer datatype, integer n, void *A, integer lda, 
          = D - Descending order */
 void sort_realtype_vector(integer datatype, char *order, integer vect_len, void *w, integer incw)
 {
-    if(!w)
-        return;
-
     integer i, j;
+
+    /* early return */
+    if(vect_len <= 0 || incw <= 0 || w == NULL || order == NULL)
+    {
+        return;
+    }
+
     if(get_realtype(datatype) == FLOAT)
     {
         float temp;
@@ -4312,10 +4697,14 @@ void sort_realtype_vector(integer datatype, char *order, integer vect_len, void 
 integer compare_realtype_vector(integer datatype, integer vect_len, void *A, integer inca,
                                 integer offset_A, void *B, integer incb)
 {
-    if(!A || !B)
-        return 1;
-
     integer i;
+
+    /* early return */
+    if(vect_len <= 0 || inca <= 0 || incb <= 0 || offset_A < 0 || A == NULL || B == NULL)
+    {
+        return 1;
+    }
+
     if(datatype == FLOAT || datatype == COMPLEX)
     {
         float *a = (float *)A;
@@ -4357,8 +4746,14 @@ integer compare_realtype_vector(integer datatype, integer vect_len, void *A, int
 
 void convert_signed_eigen_values(integer datatype, void *L, integer n)
 {
-    integer i;
-    integer tmp;
+    integer i, tmp;
+
+    /* early return */
+    if(n <= 0 || L == NULL)
+    {
+        return;
+    }
+
     for(i = 0; i < n; i++)
     {
         tmp = rand();
@@ -4386,6 +4781,13 @@ void generate_matrix_from_EVs(integer datatype, char range, integer n, void *A, 
 {
     void *X = NULL, *Q = NULL;
     integer realtype, info = 0;
+
+    /* early return */
+    if(n <= 0 || lda < n || A == NULL || L == NULL)
+    {
+        return;
+    }
+
     realtype = get_realtype(datatype);
 
     /* Generate random vector of size n with values ranging
@@ -4416,6 +4818,13 @@ void generate_matrix_from_EVs(integer datatype, char range, integer n, void *A, 
 void get_abs_vector_value(integer datatype, void *S, integer M, integer inc)
 {
     integer i = 0;
+
+    /* early return */
+    if(M <= 0 || inc <= 0 || S == NULL)
+    {
+        return;
+    }
+
     if(datatype == FLOAT || datatype == COMPLEX)
     {
         for(i = 0; i < M; i++)
@@ -4577,8 +4986,13 @@ void init_matrix_spec_rand_band_matrix_in(integer datatype, void *A, integer M, 
                                           integer LDA, integer kl, integer ku, char type)
 {
     integer rows, cols, upspan, lowspan, span, min_m_n, i;
-    if(LDA < M)
+
+    /* early return */
+    if(M <= 0 || N <= 0 || LDA < M || kl < 0 || ku < 0 || A == NULL)
+    {
         return;
+    }
+
     rand_matrix(datatype, A, M, N, LDA);
     /* when M*N less than 2 there is no need of randomness*/
     if(M * N < 2)
@@ -4838,9 +5252,13 @@ void get_band_matrix_from_band_storage(integer datatype, integer M, integer N, i
 {
     integer i, j, A_size = LDA * N, AB_size = LDAB * N;
 
-    if((M <= 0) || (N <= 0) || (kl < 0) || (ku < 0) || (LDA <= 0) || (LDA < M) || (A == NULL)
-       || (AB == NULL) || (LDAB <= 0) || (LDAB < (2 * kl + ku + 1)))
+    /* early return */
+    if((M <= 0) || (N <= 0) || (kl < 0) || (ku < 0) || (LDA < M) || (A == NULL) || (AB == NULL)
+       || (LDAB <= 0) || (LDAB < (2 * kl + ku + 1)))
+    {
         return;
+    }
+
     reset_matrix(datatype, M, N, A, LDA);
     switch(datatype)
     {
@@ -4916,6 +5334,13 @@ void rand_band_storage_matrix(integer datatype, integer M, integer N, integer kl
 {
     void *A;
 
+    /* early return */
+    if((M <= 0) || (N <= 0) || (kl < 0) || (ku < 0) || (LDAB <= 0) || (LDAB < (2 * kl + ku + 1))
+       || (AB == NULL))
+    {
+        return;
+    }
+
     /* Allocate matrix A */
     create_matrix(datatype, LAPACK_COL_MAJOR, M, N, &A, M);
 
@@ -4937,6 +5362,13 @@ void reconstruct_band_storage_matrix(integer datatype, integer m, integer n, int
     integer j, i__1, i__2, i;
     integer diag_offset, superdiag_band, column_length;
     integer il, ip, iw;
+
+    /* early return */
+    if((m <= 0) || (n <= 0) || (kl < 0) || (ku < 0) || (ldab <= 0) || (ldab < (2 * kl + ku + 1))
+       || (AB == NULL) || (ipiv == NULL))
+    {
+        return;
+    }
 
     /* Copy factorized banded storage matrix */
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &ABfac, ldab);
@@ -5124,6 +5556,13 @@ void check_vector_in_rowspace(integer datatype, char *trans, integer m, integer 
     integer lwork = (m + nrhs) * (n + 2), ldwork = (m + nrhs), temp, INFO = 0;
     double temp1;
     void *work = NULL;
+
+    /* early return */
+    if((m <= 0) || (n <= 0) || (nrhs <= 0) || (lda < m) || (ldb < n) || (A == NULL) || (x == NULL)
+       || (resid == NULL))
+    {
+        return;
+    }
 
     if(same_char(*trans, 'T') || same_char(*trans, 'C'))
     {
@@ -5474,6 +5913,12 @@ void compute_matrix_norm(integer datatype, char ntype, integer m, integer n, voi
     integer i;
     void *col;
 
+    /* early return */
+    if((m <= 0) || (n <= 0) || (lda < m && n > 1) || (A == NULL) || (nrm2 == NULL))
+    {
+        return;
+    }
+
     if(!same_char(imatrix, 'O'))
     {
         switch(datatype)
@@ -5552,6 +5997,13 @@ void residual_sum_of_squares(int datatype, integer m, integer n, integer nrhs, v
 {
     integer temp = m - n;
     *resid = 0;
+
+    /* early return */
+    if((m <= 0) || (n <= 0) || (nrhs <= 0) || (ldx < m) || (x == NULL) || (resid == NULL))
+    {
+        return;
+    }
+
     switch(datatype)
     {
         case FLOAT:
@@ -5604,6 +6056,14 @@ void swap_row_col(integer datatype, integer *m, void *A, integer lda, integer *i
                   integer srow, integer scol, integer drow, integer dcol)
 {
     void *x = NULL, *y = NULL;
+
+    /* early return */
+    if((m == NULL) || (*m <= 0) || (A == NULL) || (lda <= 0) || (incx == NULL) || (incy == NULL)
+       || (srow < 0) || (scol < 0) || (drow < 0) || (dcol < 0))
+    {
+        return;
+    }
+
     switch(datatype)
     {
         case FLOAT:
@@ -5644,6 +6104,14 @@ void fla_invoke_gemm(integer datatype, char *transA, char *transB, integer *m, i
                      integer *k, void *A, integer *lda, void *B, integer *ldb, void *C,
                      integer *ldc)
 {
+    /* check for NULL pointers */
+    if((transA == NULL) || (transB == NULL) || (m == NULL) || (n == NULL) || (k == NULL)
+       || (A == NULL) || (lda == NULL) || (B == NULL) || (ldb == NULL) || (C == NULL)
+       || (ldc == NULL))
+    {
+        return;
+    }
+
     switch(datatype)
     {
         case FLOAT:
@@ -5679,10 +6147,13 @@ void fla_invoke_gemm(integer datatype, char *transA, char *transB, integer *m, i
 void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, char *type, char uplo)
 {
     integer i, j, conj = 1, i_temp, j_temp;
-    if(lda < n)
+
+    /* early return */
+    if((n <= 0) || (A == NULL) || (lda < n) || (type == NULL))
     {
         return;
     }
+
     if(same_char(*type, 'C'))
     {
         conj = -1;
@@ -5789,6 +6260,13 @@ void form_symmetric_matrix(integer datatype, integer n, void *A, integer lda, ch
 void scal_matrix(integer datatype, void *x, void *A, integer m, integer n, integer lda, integer inc)
 {
     integer j;
+
+    /* early return */
+    if((m <= 0) || (n <= 0) || (lda < m) || (A == NULL) || (x == NULL) || (inc <= 0))
+    {
+        return;
+    }
+
     switch(datatype)
     {
         case FLOAT:
@@ -5841,11 +6319,19 @@ void scal_matrix(integer datatype, void *x, void *A, integer m, integer n, integ
     }
     return;
 }
+
 /* Get the maximum value from the matrix */
 void get_max_from_matrix(integer datatype, void *A, void *max_val, integer m, integer n,
                          integer lda)
 {
     integer i, j;
+
+    /* early return */
+    if((m <= 0) || (n <= 0) || (lda < m) || (A == NULL) || (max_val == NULL))
+    {
+        return;
+    }
+
     switch(datatype)
     {
         case FLOAT:
@@ -5945,6 +6431,12 @@ void get_min_from_matrix(integer datatype, void *A, void *min_val, integer m, in
                          integer lda)
 {
     integer i, j;
+
+    /* early return */
+    if((m <= 0) || (n <= 0) || (lda < m) || (A == NULL) || (min_val == NULL))
+    {
+        return;
+    }
 
     switch(datatype)
     {
@@ -6052,10 +6544,14 @@ void get_min_from_matrix(integer datatype, void *A, void *min_val, integer m, in
          = D - Descending order */
 void sort_vector(integer datatype, char *order, integer vect_len, void *w, integer incw)
 {
-    if(!w)
-        return;
-
     integer i, j;
+
+    /* early return */
+    if((vect_len <= 0) || (w == NULL) || (order == NULL) || (incw <= 0))
+    {
+        return;
+    }
+
     switch(datatype)
     {
         case FLOAT:
@@ -6273,8 +6769,12 @@ void sort_vector(integer datatype, char *order, integer vect_len, void *w, integ
 void create_realtype_block_diagonal_matrix(integer datatype, void *A, integer n, integer lda)
 {
     integer i;
-    if(lda < n)
+
+    /* early return */
+    if((n <= 0) || (lda < n) || (A == NULL))
+    {
         return;
+    }
 
     reset_matrix(datatype, n, n, A, lda);
 
@@ -6321,8 +6821,11 @@ void generate_asym_matrix_from_EVs(integer datatype, integer n, void *A, integer
     void *X = NULL, *Q = NULL;
     integer info = 0;
 
-    if(n == 0)
+    /* early return */
+    if((n <= 0) || (lda < n) || (A == NULL) || (L == NULL))
+    {
         return;
+    }
 
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
     {
@@ -6365,8 +6868,12 @@ void generate_asym_matrix_from_ED(integer datatype, integer n, void *A, integer 
                                   void *lambda)
 {
     void *Qlambda = NULL;
-    if(lda < n)
+
+    /* early return */
+    if((n <= 0) || (lda < n) || (A == NULL) || (Q == NULL) || (lambda == NULL))
+    {
         return;
+    }
 
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Qlambda, n);
 
@@ -6411,6 +6918,14 @@ integer compare_vector(integer datatype, integer vect_len, void *A, integer inca
                        void *B, integer incb)
 {
     integer i;
+
+    /* early return */
+    if((vect_len <= 0) || (A == NULL) || (B == NULL) || (inca <= 0) || (incb <= 0)
+       || (offset_A <= 0))
+    {
+        return 1; /* return non-zero value to indicate error */
+    }
+
     switch(datatype)
     {
         case FLOAT:
@@ -6474,6 +6989,12 @@ void diagonalize_vector(integer datatype, void *s, void *sigma, integer m, integ
 {
     integer incr, min_m_n;
 
+    /* early return */
+    if((m <= 0) || (n <= 0) || (LDA < m) || (s == NULL) || (sigma == NULL))
+    {
+        return;
+    }
+
     incr = m + 1;
     min_m_n = fla_min(m, n);
 
@@ -6504,13 +7025,17 @@ void diagonalize_vector(integer datatype, void *s, void *sigma, integer m, integ
     }
 }
 
-/* Find negative value of every 2nd element (starting from ilo-1 till ihi-2) and store in   next
+/* Find negative value of every 2nd element (starting from ilo-1 till ihi-2) and store in next
  * location. Used to store imaginary parts of complex conjuate pair of eigen values */
 void add_negative_values_ilo_ihi(integer datatype, void *vect, integer ilo, integer ihi)
 {
-    if(!vect)
-        return;
     integer i;
+
+    /* early return */
+    if((ilo < 1) || (ihi < 1) || (ilo > ihi) || (vect == NULL))
+    {
+        return;
+    }
 
     if(datatype == FLOAT)
     {
@@ -6537,10 +7062,14 @@ void add_negative_values_ilo_ihi(integer datatype, void *vect, integer ilo, inte
        output vector {a, -a, -b, b, ...} */
 void add_negative_values(integer datatype, void *vect, integer n)
 {
-    if(!vect)
-        return;
-
     integer i;
+
+    /* early return */
+    if((n <= 0) || (vect == NULL))
+    {
+        return;
+    }
+
     if(datatype == FLOAT)
     {
         float *w = (float *)vect;
@@ -6571,8 +7100,12 @@ void convert_matrix_layout(int matrix_layout, integer datatype, integer m, integ
                            integer lda, void *a_t, integer lda_t)
 {
     integer i, j, cs, rs;
-    if(a == NULL || a_t == NULL || lda <= 0 || lda_t <= 0)
+
+    /* early return TODO */
+    if(((a == NULL) || (a_t == NULL) || m <= 0) || (n <= 0) || (lda <= 0) || (lda_t <= 0))
+    {
         return;
+    }
 
     if(matrix_layout == LAPACK_COL_MAJOR)
     {
@@ -6647,6 +7180,13 @@ void convert_matrix_layout(int matrix_layout, integer datatype, integer m, integ
 void get_reciprocal_real_vector(integer datatype, void *X, integer n, void *Y, integer inx)
 {
     integer i = 0;
+
+    /* early return */
+    if((n <= 0) || (X == NULL) || (Y == NULL) || (inx <= 0))
+    {
+        return;
+    }
+
     switch(datatype)
     {
         case FLOAT:
@@ -6674,6 +7214,13 @@ void get_reciprocal_real_vector(integer datatype, void *X, integer n, void *Y, i
 void fla_invoke_trsm(integer datatype, char *side, char *uplo, char *transa, char *diag, integer *m,
                      integer *n, void *a, integer *lda, void *b, integer *ldb)
 {
+    /* check for NULL pointers */
+    if(side == NULL || uplo == NULL || transa == NULL || diag == NULL || a == NULL || b == NULL
+       || m == NULL || n == NULL || lda == NULL || ldb == NULL)
+    {
+        return;
+    }
+
     switch(datatype)
     {
         case FLOAT:
@@ -6696,6 +7243,13 @@ void fla_invoke_trsm(integer datatype, char *side, char *uplo, char *transa, cha
 void fla_invoke_trmm(integer datatype, char *side, char *uplo, char *transa, char *diag, integer *m,
                      integer *n, void *a, integer *lda, void *b, integer *ldb)
 {
+    /* check for NULL pointers */
+    if(side == NULL || uplo == NULL || transa == NULL || diag == NULL || a == NULL || b == NULL
+       || m == NULL || n == NULL || lda == NULL || ldb == NULL)
+    {
+        return;
+    }
+
     switch(datatype)
     {
         case FLOAT:
@@ -6728,8 +7282,12 @@ void convert_banded_matrix_layout(int matrix_layout, integer datatype, integer m
     integer i, j;
     integer cs, rs;
 
-    if(AB == NULL || AB_trans == NULL)
+    /* check for NULL pointers */
+    if(AB == NULL || AB_trans == NULL || m <= 0 || n <= 0 || ldab <= 0 || ldab_trans <= 0)
+    {
+        printf("\n Invalid input matrix for convert_banded_matrix_layout");
         return;
+    }
 
     if(matrix_layout == LAPACK_COL_MAJOR)
     {
@@ -6747,6 +7305,13 @@ void convert_banded_matrix_layout(int matrix_layout, integer datatype, integer m
         printf("\n Invalid matrix layout for matrix_transpose");
         return;
     }
+
+    /* TODO */
+    // if(ldab < cs || ldab_trans < rs)
+    // {
+    //     printf("\n Invalid leading dimension for convert_banded_matrix_layout");
+    //     return;
+    // }
 
     switch(datatype)
     {
@@ -6807,6 +7372,10 @@ void convert_banded_matrix_layout(int matrix_layout, integer datatype, integer m
 /* Gets the maximum absolute values of the two input values */
 void get_max_of_values(integer datatype, void *a, void *b, void *max_val)
 {
+    /* check for NULL pointers */
+    if(a == NULL || b == NULL || max_val == NULL)
+        return;
+
     switch(datatype)
     {
         case FLOAT:
@@ -6843,6 +7412,10 @@ void get_max_of_values(integer datatype, void *a, void *b, void *max_val)
 /* Gets the minimum absolute values of the two input values */
 void get_min_of_values(integer datatype, void *a, void *b, void *min_val)
 {
+    /* check for NULL pointers */
+    if(a == NULL || b == NULL || min_val == NULL)
+        return;
+
     switch(datatype)
     {
         case FLOAT:
@@ -6882,6 +7455,12 @@ void get_min_of_values(integer datatype, void *a, void *b, void *min_val)
 void negate_off_diagonal_element_imag(integer datatype, void *D, integer n, integer k,
                                       integer position)
 {
+    /* early return */
+    if((n <= 0) || (k < 0) || (k >= n) || (D == NULL))
+    {
+        return;
+    }
+
     if(position == LOWER_OFF_DIAGONAL_ELEMENT)
     {
         switch(datatype)
@@ -6919,14 +7498,15 @@ void negate_off_diagonal_element_imag(integer datatype, void *D, integer n, inte
 /* Validates and parses the norm types to be tested for lange API */
 integer fla_validate_lange_norm_types(char *src_norm_str, char *dst_norm_str, integer max_len)
 {
-    if(!src_norm_str || !dst_norm_str)
-    {
-        return -1;
-    }
-
     char *parsed_norm_str;
     integer norm_flags = 0b1111;
     integer idx = 0;
+
+    /* early return */
+    if(src_norm_str == NULL || dst_norm_str == NULL || max_len <= 0)
+    {
+        return -1; /* return non-zero value to indicate error */
+    }
 
     parsed_norm_str = (char *)malloc(max_len * sizeof(char));
     for(integer i = 0; i < max_len; i++)
@@ -6995,6 +7575,10 @@ integer fla_validate_lange_norm_types(char *src_norm_str, char *dst_norm_str, in
 /* Sets the matrix index bounds for the given uplo and i values for compare_matrix function*/
 void set_matrix_bounds(char *uplo, integer i, integer m, integer *j_start, integer *j_end)
 {
+    /* check for NULL pointers */
+    if(uplo == NULL || j_start == NULL || j_end == NULL)
+        return;
+
     if(same_char(*uplo, 'U'))
     {
         *j_start = 0;
@@ -7023,6 +7607,14 @@ integer compare_matrix(integer datatype, char *uplo, integer m, integer n, void 
                        void *B, integer ldb)
 {
     integer i, j, j_start = 0, j_end = m;
+
+    /* early return */
+    if((m <= 0) || (n <= 0) || (lda < m) || (ldb < m) || (A == NULL) || (B == NULL)
+       || (uplo == NULL))
+    {
+        return 0; /* return non-zero value to indicate error */
+    }
+
     switch(datatype)
     {
         case FLOAT:
@@ -7096,6 +7688,13 @@ void swap_rows_with_pivot(integer datatype, integer m, integer n, void *A, integ
                           integer *ipiv)
 {
     integer min_mn = fla_min(m, n);
+
+    /* early return */
+    if((m <= 0) || (n <= 0) || (lda < m) || (A == NULL) || (ipiv == NULL))
+    {
+        return;
+    }
+
     switch(datatype)
     {
         case FLOAT:
@@ -7154,6 +7753,12 @@ logical same_char(char ca, char cb)
 /* Return pointer at required offset for the given datatype */
 void *get_ptr_at_offset(integer datatype, void *A, integer offset)
 {
+    /* early return */
+    if(A == NULL)
+    {
+        return NULL; /* return NULL to indicate error */
+    }
+
     switch(datatype)
     {
         case FLOAT:
@@ -7197,6 +7802,12 @@ void qsort_realtype_vector(integer datatype, char *order, integer vect_len, void
 {
     size_t ele_size = 0;
     int (*compare_func)(const void *, const void *) = NULL;
+
+    /* early return */
+    if((vect_len <= 0) || (w == NULL) || (order == NULL))
+    {
+        return; /* return to indicate error */
+    }
 
     if(datatype == FLOAT)
     {
@@ -7251,7 +7862,9 @@ void qsort_realtype_vector(integer datatype, char *order, integer vect_len, void
 void get_sum_of_array(integer datatype, void *A, void *sum, integer n)
 {
     integer i;
-    if(sum == NULL)
+
+    /* early return */
+    if((n <= 0) || (A == NULL) || (sum == NULL))
     {
         return;
     }
@@ -7351,10 +7964,12 @@ void get_sum_of_array(integer datatype, void *A, void *sum, integer n)
  */
 void get_avg_of_array(integer datatype, void *A, void *avg, integer n)
 {
-    if(avg == NULL)
+    /* early return */
+    if((n <= 0) || (A == NULL) || (avg == NULL))
     {
         return;
     }
+
     get_sum_of_array(datatype, A, avg, n);
     if(n > 0)
     {
@@ -7390,6 +8005,7 @@ void get_avg_of_array(integer datatype, void *A, void *avg, integer n)
         }
     }
 }
+
 /* Decompose symmetric matrix A into Q, D, E and store orthogonal matrix in Q and tridiagonal matrix
  * in D, E*/
 void get_sym_tridiagonal_matrix(integer datatype, char *uplo, integer n, void *A, integer lda,
@@ -7398,8 +8014,14 @@ void get_sym_tridiagonal_matrix(integer datatype, char *uplo, integer n, void *A
     void *tau = NULL, *work = NULL;
     integer lwork = -1;
 
-    if(!n)
+    /* early return */
+    if((n <= 0) || (lda < n) || (A == NULL) || (D == NULL) || (E == NULL) || (info == NULL)
+       || (uplo == NULL))
+    {
+        if(info != NULL)
+            *info = -1; /* return non-zero value to indicate error */
         return;
+    }
 
     create_vector(datatype, &tau, n - 1);
     create_vector(datatype, &work, 1);
@@ -7443,7 +8065,8 @@ void get_sym_tridiagonal_matrix(integer datatype, char *uplo, integer n, void *A
  */
 void get_variance_of_array(integer datatype, void *A, void *variance, integer n)
 {
-    if(variance == NULL || n <= 0)
+    /* early return */
+    if((n <= 0) || (A == NULL) || (variance == NULL))
     {
         return;
     }
@@ -7531,7 +8154,8 @@ void get_variance_of_array(integer datatype, void *A, void *variance, integer n)
  */
 void get_stddev_of_array(integer datatype, void *A, void *stddev, integer n)
 {
-    if(stddev == NULL || n <= 0)
+    /* early return */
+    if((n <= 0) || (A == NULL) || (stddev == NULL))
     {
         return;
     }
@@ -7590,6 +8214,8 @@ void build_bidiagonal_matrix(integer datatype, integer m, integer n, integer k, 
     integer i;
 
     if(!B || !d || (type != LOWER_BIDIAG && type != UPPER_BIDIAG))
+        return;
+    if(m <= 0 || n <= 0 || k <= 0 || ldb < m)
         return;
 
     reset_matrix(datatype, m, n, B, ldb);
@@ -7690,17 +8316,18 @@ void build_bidiagonal_matrix(integer datatype, integer m, integer n, integer k, 
  * @param lda - Leading dimension of matrix A.
  * @param diag_type - UNIT_DIAG or NON_UNIT_DIAG (ignored, always non-singular).
  */
- void get_non_singular_triangular_matrix(char *uplo, integer datatype, integer m, integer n, void *A,
-                                         integer lda, enum TRIANGULAR_MATRIX_DIAG_TYPE diag_type)
+void get_non_singular_triangular_matrix(char *uplo, integer datatype, integer m, integer n, void *A,
+                                        integer lda, enum TRIANGULAR_MATRIX_DIAG_TYPE diag_type)
 {
     integer i, j;
     integer min_mn = (m < n) ? m : n;
 
-    /* Ensure leading dimension is valid */
-    if(lda < m)
+    /* early return */
+    if((m <= 0) || (n <= 0) || (lda < m) || (A == NULL) || (uplo == NULL))
     {
         return;
     }
+
     /* Always reset the matrix to zero for a clean start */
     reset_matrix(datatype, m, n, A, lda);
 
@@ -7731,7 +8358,7 @@ void build_bidiagonal_matrix(integer datatype, integer m, integer n, integer k, 
                     {
                         rand_vector(FLOAT, 1, &mat[j * lda + i], 1, (float)TRIANGULAR_OFFDIAG_MIN,
                                     (float)TRIANGULAR_OFFDIAG_MAX, 'V');
-                   }
+                    }
                 }
             }
             else
@@ -7820,7 +8447,7 @@ void build_bidiagonal_matrix(integer datatype, integer m, integer n, integer k, 
                     for(i = j + 1; i < m; ++i)
                     {
                         rand_vector(COMPLEX, 1, &mat[j * lda + i], 1, (float)TRIANGULAR_OFFDIAG_MIN,
-                                   (float)TRIANGULAR_OFFDIAG_MAX, 'V');
+                                    (float)TRIANGULAR_OFFDIAG_MAX, 'V');
                     }
                 }
             }
@@ -7836,7 +8463,7 @@ void build_bidiagonal_matrix(integer datatype, integer m, integer n, integer k, 
                     mat[i * lda + i].real = 1.0;
                     mat[i * lda + i].imag = 0.0;
                 }
-             }
+            }
             else
             {
                 rand_vector(DOUBLE_COMPLEX, min_mn, &mat[0], lda + 1, TRIANGULAR_DIAG_MIN,

@@ -37,4 +37,3 @@ ${CMAKE_CURRENT_SOURCE_DIR}/s_cat.c
 ${CMAKE_CURRENT_SOURCE_DIR}/f77_aloc.c
 
 	)
-add_subdirectory(io)

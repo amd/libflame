@@ -424,6 +424,10 @@
 #define fla_lapack_ctrtri CTRTRI_
 #define fla_lapack_ztrtri ZTRTRI_
 
+#define fla_lapack_strtrs STRTRS_
+#define fla_lapack_dtrtrs DTRTRS_
+#define fla_lapack_ctrtrs CTRTRS_
+#define fla_lapack_ztrtrs ZTRTRS_
 /* Benchmark only APIs */
 #define fla_lapack_sgbsv SGBSV_
 #define fla_lapack_dgbsv DGBSV_
@@ -434,6 +438,7 @@
 #define fla_lapack_dgetrf2 DGETRF2_
 #define fla_lapack_cgetrf2 CGETRF2_
 #define fla_lapack_zgetrf2 ZGETRF2_
+
 #elif(UPPER)
 
 #define fla_lapack_sladiv SLADIV
@@ -792,6 +797,11 @@
 #define fla_lapack_dtrtri DTRTRI
 #define fla_lapack_ctrtri CTRTRI
 #define fla_lapack_ztrtri ZTRTRI
+
+#define fla_lapack_strtrs STRTRS
+#define fla_lapack_dtrtrs DTRTRS
+#define fla_lapack_ctrtrs CTRTRS
+#define fla_lapack_ztrtrs ZTRTRS
 
 /* Benchmark only APIs */
 #define fla_lapack_sgbsv SGBSV
@@ -1162,6 +1172,11 @@
 #define fla_lapack_ctrtri ctrtri
 #define fla_lapack_ztrtri ztrtri
 
+#define fla_lapack_strtrs strtrs
+#define fla_lapack_dtrtrs dtrtrs
+#define fla_lapack_ctrtrs ctrtrs
+#define fla_lapack_ztrtrs ztrtrs
+
 /* Benchmark only APIs */
 #define fla_lapack_sgbsv sgbsv
 #define fla_lapack_dgbsv dgbsv
@@ -1531,6 +1546,11 @@
 #define fla_lapack_dtrtri dtrtri_
 #define fla_lapack_ctrtri ctrtri_
 #define fla_lapack_ztrtri ztrtri_
+
+#define fla_lapack_strtrs strtrs_
+#define fla_lapack_dtrtrs dtrtrs_
+#define fla_lapack_ctrtrs ctrtrs_
+#define fla_lapack_ztrtrs ztrtrs_
 
 /* Benchmark only APIs */
 #define fla_lapack_sgbsv sgbsv_

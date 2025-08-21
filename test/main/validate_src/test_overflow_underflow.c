@@ -2644,3 +2644,98 @@ void scale_matrix_underflow_overflow_trtri(integer datatype, char diag_type, int
     free_vector(max_min);
     free_vector(scal);
 }
+
+/* Scaling matrix with values around overflow, underflow for TRTRS */
+void scale_matrix_overflow_underflow_trtrs(integer datatype, integer n, integer nrhs, void *A,
+                                           void *B, integer lda, integer ldb, char trans, char imatrix_char,
+                                           char diag, char uplo)
+{
+    void *max_min = NULL, *max_min_B = NULL, *scal = NULL, *scal_B = NULL;
+    double tuning_val = 5.0, tuning_val_B = 5.0;
+    create_vector(get_realtype(datatype), &max_min_B, 1);
+    create_vector(get_realtype(datatype), &max_min, 1);
+    create_vector(get_realtype(datatype), &scal, 1);
+    create_vector(get_realtype(datatype), &scal_B, 1);
+
+    if(same_char(imatrix_char, 'O'))
+    {
+        get_max_from_matrix(datatype, A, max_min, n, n, lda);
+        get_max_from_matrix(datatype, B, max_min_B, n, nrhs, ldb);
+    }
+    if(same_char(imatrix_char, 'U'))
+    {
+        get_min_from_matrix(datatype, A, max_min, n, n, lda);
+        get_min_from_matrix(datatype, B, max_min_B, n, nrhs, ldb);
+    }
+
+    calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
+    calculate_scale_value(datatype, scal_B, max_min_B, tuning_val_B, imatrix_char);
+
+    if(same_char(diag, 'N'))
+    {
+        scal_matrix(datatype, scal, A, n, n, lda, i_one);
+    }
+    else if(same_char(uplo, 'L'))
+    {
+        scal_matrix(datatype, scal_B, B, n, nrhs, ldb, i_one);
+    }
+    else if(!same_char(diag, 'N') && !same_char(uplo, 'U'))
+    {
+        scal_matrix(datatype, scal_B, B, n, nrhs, ldb, i_one);
+        scal_matrix(datatype, scal, A, n, n, lda, i_one);
+    }
+    else
+    {
+        scal_matrix(datatype, scal_B, B, n, nrhs, ldb, i_one);
+    }
+
+    /* Scaling the matrix A with scal */
+    /* Restore unit diagonal if diag_type is 'U' */
+    if(same_char(diag, 'U'))
+    {
+        switch(datatype)
+        {
+            case FLOAT:
+            {
+                float *mat = (float *)A;
+                for(integer i = 0; i < n; ++i)
+                {
+                    mat[i * lda + i] = 1.0f;
+                }
+                break;
+            }
+            case DOUBLE:
+            {
+                double *mat = (double *)A;
+                for(integer i = 0; i < n; ++i)
+                {
+                    mat[i * lda + i] = 1.0;
+                }
+                break;
+            }
+            case COMPLEX:
+            {
+                scomplex *mat = (scomplex *)A;
+                for(integer i = 0; i < n; ++i)
+                {
+                    mat[i * lda + i].real = 1.0f;
+                    mat[i * lda + i].imag = 0.0f;
+                }
+                break;
+            }
+            case DOUBLE_COMPLEX:
+            {
+                dcomplex *mat = (dcomplex *)A;
+                for(integer i = 0; i < n; ++i)
+                {
+                    mat[i * lda + i].real = 1.0;
+                    mat[i * lda + i].imag = 0.0;
+                }
+                break;
+            }
+        }
+    }
+    /* Free vectors */
+    free_vector(max_min);
+    free_vector(scal);
+}

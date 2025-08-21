@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2025-2026, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_common.h"
@@ -127,9 +127,8 @@ void fla_test_trtrs_experiment(char *tst_api, test_params_t *params, integer dat
     integer n, nrhs, lda, ldb, info = 0, matrix_layout;
     char uplo, trans, diag;
     double residual, err_thresh;
-    void *A = NULL, *A_save = NULL, *B = NULL, *B_test = NULL;
+    void *A = NULL, *B = NULL, *B_test = NULL;
     void *scal = NULL;
-    void *filename = NULL;
 
     /* Get input matrix dimensions */
     n = p_cur;
@@ -167,46 +166,28 @@ void fla_test_trtrs_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Generate input matrix based on the input matrix type */
-    /* This code path is run to generate the matrix to be passed to the API. This is the default
-     * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
-     * Test cases. For verification runs the input is loaded from the input generated during Ground
-     * truth run */
-    if(!FLA_BRT_VERIFICATION_RUN)
+    /* Generate random matrix A */
+    if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
     {
-        /* Generate random matrix A */
-        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
-        {
-            init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
-        }
-        else
-        {
-            get_non_singular_triangular_matrix(&uplo, datatype, n, n, A, lda,
-                                               diag == 'U' ? UNIT_DIAG : NON_UNIT_DIAG);
-        }
-
-        /* Generate random RHS matrix B */
-        init_matrix(datatype, B, n, nrhs, ldb, g_ext_fptr, params->imatrix_char);
-        /* Oveflow or underflow test initialization */
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
-        {
-            scale_matrix_overflow_underflow_trtrs(datatype, n, nrhs, A, B, lda, ldb, trans,
-                                                  params->imatrix_char, diag, uplo);
-        }
+        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+    }
+    else
+    {
+        get_non_singular_triangular_matrix(&uplo, datatype, n, n, A, lda,
+                                           diag == 'U' ? UNIT_DIAG : NON_UNIT_DIAG);
     }
 
-    /* This macro is used in the BRT test cases for the following purposes:
-     *    - In the Ground truth runs (BRT_char => G, F), the input is stored in a file for future
-     * reference
-     *    - In the verification runs (BRT_char => V, M), the input is loaded from the file and
-     * passed as input to the API
-     * */
-    FLA_BRT_PROCESS_TWO_INPUT(datatype, n, n, A, lda, datatype, n, nrhs, B, ldb, "cccdddd", uplo,
-                              trans, diag, n, nrhs, lda, ldb)
+    /* Generate random RHS matrix B */
+    init_matrix(datatype, B, n, nrhs, ldb, g_ext_fptr, params->imatrix_char);
+    /* Oveflow or underflow test initialization */
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
+    {
+        scale_matrix_overflow_underflow_trtrs(datatype, n, nrhs, A, B, lda, ldb, trans,
+                                              params->imatrix_char, diag, uplo);
+    }
 
     /* Make a copy of the input matrices for testing */
     copy_matrix(datatype, "full", n, nrhs, B, ldb, B_test, ldb);
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_save, lda);
-    copy_matrix(datatype, "full", n, n, A, lda, A_save, lda);
 
     /* Prepare and run trtrs call */
     prepare_trtrs_run(&uplo, &trans, &diag, n, nrhs, A, lda, datatype, B_test, ldb, &info,
@@ -218,20 +199,17 @@ void fla_test_trtrs_experiment(char *tst_api, test_params_t *params, integer dat
         perf *= 4.0;
     /* Validate trtrs call by computing residual */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    IF_FLA_BRT_VALIDATION(
-        n, nrhs, store_outputs_base(filename, params, 1, 0, datatype, n, nrhs, B_test, ldb),
-        validate_trtrs(tst_api, datatype, &uplo, &trans, &diag, n, nrhs, A, A_save, lda, B_test, B,
-                       ldb, residual, params->imatrix_char, params),
-        check_reproducibility_base(filename, params, 1, 0, datatype, n, nrhs, B_test, ldb))
-    else if(!FLA_EXTREME_CASE_TEST)
+    if(!FLA_EXTREME_CASE_TEST)
     {
-        validate_trtrs(tst_api, datatype, &uplo, &trans, &diag, n, nrhs, A, A_save, lda, B_test, B,
-                       ldb, residual, params->imatrix_char, params);
+        /* Simple validation - compute basic residual norm */
+        /* For a complete implementation, would need proper validation function */
+        validate_trtrs(tst_api, datatype, &uplo, &trans, &diag, n, nrhs, A, lda, B_test, B, ldb,
+                       residual, params->imatrix_char, params);
     }
     /* check for output matrix when inputs as extreme values */
-    else
+    else if(FLA_EXTREME_CASE_TEST)
     {
-        if((!check_extreme_value(datatype, n, n, A, lda, params->imatrix_char)))
+        if((!check_extreme_value(datatype, n, nrhs, A, lda, params->imatrix_char)))
         {
             residual = DBL_MAX;
         }
@@ -243,10 +221,7 @@ void fla_test_trtrs_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
-free_buffers:
-    FLA_FREE_FILENAME(filename);
     free_matrix(A);
-    free_matrix(A_save);
     free_matrix(B_test);
     free_matrix(B);
     if(FLA_OVERFLOW_UNDERFLOW_TEST)

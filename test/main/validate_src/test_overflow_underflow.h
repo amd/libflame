@@ -187,6 +187,10 @@ void scale_matrix_underflow_overflow_ormlq(integer datatype, integer m, integer 
 void scale_matrix_overflow_underflow_potri(integer datatype, integer n, void *A, integer lda,
                                            char imatrix_char);
 /* Scale matrix with values around overflow underflow for trtri */
-void scale_matrix_underflow_overflow_trtri(integer datatype,  char diag_type, integer n, void *A, integer lda,
-                                           char imatrix_char);
+void scale_matrix_underflow_overflow_trtri(integer datatype, char diag_type, integer n, void *A,
+                                           integer lda, char imatrix_char);
+/* Scaling matrix with values around overflow, underflow for TRTRS */
+void scale_matrix_overflow_underflow_trtrs(integer datatype, integer n, integer nrhs, void *A,
+                                           void *B, integer lda, integer ldb, char trans,
+                                           char imatrix_char, char diag, char uplo);
 #endif // TEST_OVERFLOW_UNDERFLOW_H

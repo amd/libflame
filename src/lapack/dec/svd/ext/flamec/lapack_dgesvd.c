@@ -5,7 +5,7 @@
  the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 /*
- * Modifications Copyright (c) 2021-2024 Advanced Micro Devices, Inc.  All
+ * Modifications Copyright (c) 2021-2025 Advanced Micro Devices, Inc.  All
  * rights reserved.
  */
 #include "FLAME.h"
@@ -1646,8 +1646,6 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
   }
 #endif
   if (*info != 0) {
-    i__2 = -(*info);
-    xerbla_("DGESVD", &i__2, (ftnlen)6);
     return 0;
   } else if (lquery) {
     return 0;

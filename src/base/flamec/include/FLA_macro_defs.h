@@ -298,10 +298,9 @@
 /* DLARF , threshold numbers to choose paths for performance */
 #define FLA_DLARF_ST_BLOCKED_THRESH_M (1000)
 #define FLA_DLARF_ST_BLOCKED_THRESH_N (100)
-#define FLA_DLARF_THRESH_UNBLOCKED (4096)
-#define FLA_DLARF_THRESH_THREAD_4 (81920)
-#define FLA_DLARF_THRESH_THREAD_8 (4096000)
-#define FLA_DLARF_THRESH_THREAD_32 (48720000)
+#define FLA_DLARF_THRESH_UNBLOCKED (213760)
+#define FLA_DLARF_THRESH_THREAD_8 (1048576)
+#define FLA_DLARF_THRESH_THREAD_64 (45198729)
 
 /* DLARFT , threshold numbers to chose paths for performance */
 #define FLA_DLARFT_BLOCK_NB (16)

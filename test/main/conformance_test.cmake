@@ -340,6 +340,13 @@ set(NEGATIVE_TEST_CASES
             "trtri sdcz U A 10 10 1 --einfo=-2"
             "trtri sdcz U N -10 10 1 --einfo=-3"
             "trtri sdcz U N 10 9 1 --einfo=-5"
+            "trtrs sdcz J T N 10 1 1 10 1 --einfo=-1"
+            "trtrs sdcz L A N 10 1 1 10 1 --einfo=-2"
+            "trtrs sdcz L T A 10 1 1 10 1 --einfo=-3"
+            "trtrs sdcz L T N -1 1 1 10 1 --einfo=-4"
+            "trtrs sdcz L T N 10 -1 1 10 1 --einfo=-5"
+            "trtrs sdcz U T N 10 1 1 10 1 --einfo=-7"
+            "trtrs sdcz L T N 10 1 10 1 1 --einfo=-9"
             )
 
 set(CORNER_TEST_CASES
@@ -561,6 +568,8 @@ set(CORNER_TEST_CASES
             "unmlq cz L N 10 0 0 10 10 -1 1"
             "unmlq cz L N 10 10 0 10 10 -1 1"
             "trtri sdcz U N 0 10 1"
+            "trtrs sdcz L T N 0 1 10 1 1"
+            "trtrs sdcz L T N 20 0 20 20 1"
         )
 
 set(MIN_WORK_TEST_CASES "gehrd sdcz 10 1 5 10 10 1 --einfo=0"
@@ -1580,6 +1589,22 @@ set(EXTREMEVALUE_TEST_CASES
             "trtri scdz L U 70 90 1 --imatrix=N"
             "trtri scdz L N 100 105 1 --imatrix=I"
             "trtri scdz L U 105 120 1 --imatrix=F"
+            "trtrs sdcz L T N 10 1 10 10 1 --imatrix=N"
+            "trtrs sdcz L T N 10 1 10 10 1 --imatrix=A"
+            "trtrs sdcz L T N 10 1 10 10 1 --imatrix=F"
+            "trtrs sdcz L T N 10 1 10 10 1 --imatrix=I"
+            "trtrs sdcz U T U 20 1 20 20 1 --imatrix=N"
+            "trtrs sdcz U T U 20 1 20 20 1 --imatrix=A"
+            "trtrs sdcz U T U 20 1 20 20 1 --imatrix=F"
+            "trtrs sdcz U T U 20 1 20 20 1 --imatrix=I"
+            "trtrs sdcz L N N 10 1 10 10 1 --imatrix=N"
+            "trtrs sdcz L N N 10 1 10 10 1 --imatrix=A"
+            "trtrs sdcz L N N 10 1 10 10 1 --imatrix=F"
+            "trtrs sdcz L N N 10 1 10 10 1 --imatrix=I"
+            "trtrs sdcz U N U 20 1 20 20 1 --imatrix=N"
+            "trtrs sdcz U N U 20 1 20 20 1 --imatrix=A"
+            "trtrs sdcz U N U 20 1 20 20 1 --imatrix=F"
+            "trtrs sdcz U N U 20 1 20 20 1 --imatrix=I"
             )
 
 set(TEST_NUM 1)

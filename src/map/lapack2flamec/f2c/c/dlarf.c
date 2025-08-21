@@ -7,6 +7,12 @@
  *     Modifications Copyright (c) 2024-2025 Advanced Micro Devices, Inc.  All rights reserved.
  */
 #include "FLA_f2c.h" /* Table of constant values */
+#if FLA_ENABLE_AOCL_BLAS
+#include "blis.h"
+void bli_dgemv_t_zen4_int(conj_t conja, conj_t conjx, dim_t m, dim_t n, double *alpha, double *a,
+                          inc_t inca, inc_t lda, double *x, inc_t incx, double *beta, double *y,
+                          inc_t incy, cntx_t *cntx);
+#endif
 
 static doublereal c_b4 = 1.;
 static doublereal c_b5 = 0.;
@@ -143,11 +149,14 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
 #ifdef FLA_ENABLE_AMD_OPT
     extern void fla_dlarf_small_incv1_simd(integer lastv, integer lastc, double *c__, integer ldc,
                                            double *v, double tau, double *work);
+#if !FLA_ENABLE_AOCL_BLAS
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+#endif
     void fla_dlarf_tuning_params(integer m, integer n, FLA_Bool * use_blocked_flag,
                                  integer * nthreads);
 #endif
+#if !FLA_ENABLE_AOCL_BLAS
     extern /* Subroutine */
         void
         dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
@@ -157,6 +166,7 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
         void
         dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
                integer *, doublereal *, doublereal *, integer *);
+#endif
     integer lastc, lastv;
     extern integer iladlc_(integer *, integer *, doublereal *, integer *),
         iladlr_(integer *, integer *, doublereal *, integer *);
@@ -248,6 +258,9 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
                                        && (lastv >= FLA_DGEMV_DGER_SIMD_SMALL_THRESH_M
                                            && lastv <= FLA_DGEMV_DGER_SIMD_SMALL_THRESH);
 
+            /* Initialize global context data */
+            aocl_fla_init();
+
             /* If the size of the matrix is small and incv =1, use the optimized path */
             if(min_lastc_lastv && *incv == c__1 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
             {
@@ -283,9 +296,28 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
                 {
                     /* Process in a single call */
                     /* w(1:lastc,1) := C(1:lastv,1:lastc)**T * v(1:lastv,1) */
+#if FLA_ENABLE_AOCL_BLAS
+                    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
+                    {
+                        /* Use direct single threaded BLIS kernel */
+                        bli_dgemv_t_zen4_int(BLIS_CONJUGATE, BLIS_NO_CONJUGATE, lastv, lastc, &c_b4,
+                                             &c__[c_offset], 1, *ldc, &v[1], *incv, &c_b5, &work[1],
+                                             c__1, NULL);
+                    }
+                    else
+                    {
+#ifdef FLA_OPENMP_MULTITHREADING
+#pragma omp teams num_teams(1) thread_limit(1)
+#endif
+                        {
+                            dgemv_("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[1],
+                                   incv, &c_b5, &work[1], &c__1);
+                        }
+                    }
+#else
                     dgemv_("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[1], incv,
                            &c_b5, &work[1], &c__1);
-
+#endif
                     /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**T*/
                     dger_(&lastv, &lastc, &d__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
                 }
@@ -315,8 +347,13 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
 #ifdef FLA_ENABLE_AMD_OPT
 void fla_dlarf_tuning_params(integer m, integer n, FLA_Bool *use_blocked_flag, integer *nthreads)
 {
-
     extern int fla_thread_get_num_threads(void);
+    integer num_elems = m * n;
+    if(num_elems < FLA_DLARF_THRESH_UNBLOCKED)
+    {
+        *use_blocked_flag = 0;
+        return;
+    }
 
     integer max_available_threads = fla_thread_get_num_threads();
 
@@ -339,35 +376,21 @@ void fla_dlarf_tuning_params(integer m, integer n, FLA_Bool *use_blocked_flag, i
     /* General case */
 
     integer opt_n_threads = 1;
-    integer blocked_flag = 0;
 
-    integer num_elems = m * n;
-    if(num_elems < FLA_DLARF_THRESH_UNBLOCKED)
-    {
-        blocked_flag = 0;
-    }
-    else if(num_elems < FLA_DLARF_THRESH_THREAD_4)
-    {
-        opt_n_threads = fla_min(4, n / 2);
-        blocked_flag = 1;
-    }
-    else if(num_elems < FLA_DLARF_THRESH_THREAD_8)
+    if(num_elems < FLA_DLARF_THRESH_THREAD_8)
     {
         opt_n_threads = fla_min(8, n / 2);
-        blocked_flag = 1;
     }
-    else if(num_elems < FLA_DLARF_THRESH_THREAD_32)
+    else if(num_elems < FLA_DLARF_THRESH_THREAD_64)
     {
-        opt_n_threads = fla_min(32, n / 2);
-        blocked_flag = 1;
+        opt_n_threads = fla_min(64, n / 2);
     }
     else
     {
         opt_n_threads = fla_min(128, n / 2);
-        blocked_flag = 1;
     }
 
-    *use_blocked_flag = blocked_flag;
+    *use_blocked_flag = 1;
     *nthreads = fla_min(opt_n_threads, max_available_threads);
 }
 #endif /* FLA_ENABLE_AMD_OPT */

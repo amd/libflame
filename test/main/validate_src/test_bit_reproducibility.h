@@ -471,14 +471,15 @@ void update_filetype(void **buffer, char *filetype, integer contains_filetype);
 /* Helper function to store and verify seed generated input between GT and V runs */
 integer store_load_input_matrices(char BRT_char, char *filename, integer num_matrices, ...);
 
-/* Returns number of bitwise mismatch between 2 vectors */
+/* Compares the data present in memory for 2 vectors for bitwise equality */
 int bitwise_compare_vector(integer datatype, integer m, void *A, void *B);
 
-/* Returns number of bitwise mismatch between 2 matrices */
+/* Compares the data present in memory for 2 matrices for bitwise equality */
 int bitwise_compare_matrix(integer datatype, integer m, integer n, void *A, integer lda, void *B,
                            integer ldb);
 
-/* Returns number of bitwise mismatch between 2 matrices ignoring the first nb diagonal elements*/
+/* Compares the data present in memory for 2 matrices for bitwise equality, ignoring the first nb
+ * elements */
 int bitwise_compare_matrix_no_nb_diag(integer datatype, integer m, integer n, integer nb, void *A,
                                       integer lda, void *B, integer ldb);
 
@@ -492,6 +493,4 @@ uint32_t generate_crc_matrix(integer datatype, integer m, integer n, void *A, in
 uint32_t generate_crc_matrix_no_nb_diag(integer datatype, integer m, integer n, integer nb, void *A,
                                         integer lda);
 
-/* Counting set bits using the canonical Kernighan’s bit counting or __builtin_popcount*/
-int count_set_bits(uint32_t A);
 #endif

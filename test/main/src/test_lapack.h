@@ -399,6 +399,7 @@ typedef struct Lin_solver_paramlist_t
     integer ldz; //  leading dimension of the array z
     integer ldc; //  leading dimension of the array c
     integer ldab; //  leading dimension of the array ab. For GBTRF, GBTRS, LDAB >= 2*KL+KU+1
+    integer ldafb; //  leading dimension of the array afb. For GBSVX
     integer kl; // number of subdiagonals
     integer ku; // number of superdiagonals
     integer kd; // number of super or sub diagonals

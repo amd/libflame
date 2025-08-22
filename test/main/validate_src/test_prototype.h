@@ -439,6 +439,20 @@
 #define fla_lapack_cgetrf2 CGETRF2_
 #define fla_lapack_zgetrf2 ZGETRF2_
 
+#define fla_lapack_sgetf2 SGETF2_
+#define fla_lapack_dgetf2 DGETF2_
+#define fla_lapack_cgetf2 CGETF2_
+#define fla_lapack_zgetf2 ZGETF2_
+
+#define fla_lapack_sgbtf2 SGBTF2_
+#define fla_lapack_dgbtf2 DGBTF2_
+#define fla_lapack_cgbtf2 CGBTF2_
+#define fla_lapack_zgbtf2 ZGBTF2_
+
+#define fla_lapack_sgbsvx SGBSVX_
+#define fla_lapack_dgbsvx DGBSVX_
+#define fla_lapack_cgbsvx CGBSVX_
+#define fla_lapack_zgbsvx ZGBSVX_
 #elif(UPPER)
 
 #define fla_lapack_sladiv SLADIV
@@ -813,6 +827,21 @@
 #define fla_lapack_dgetrf2 DGETRF2
 #define fla_lapack_cgetrf2 CGETRF2
 #define fla_lapack_zgetrf2 ZGETRF2
+
+#define fla_lapack_sgetf2 SGETF2
+#define fla_lapack_dgetf2 DGETF2
+#define fla_lapack_cgetf2 CGETF2
+#define fla_lapack_zgetf2 ZGETF2
+
+#define fla_lapack_sgbtf2 SGBTF2
+#define fla_lapack_dgbtf2 DGBTF2
+#define fla_lapack_cgbtf2 CGBTF2
+#define fla_lapack_zgbtf2 ZGBTF2
+
+#define fla_lapack_sgbsvx SGBSVX
+#define fla_lapack_dgbsvx DGBSVX
+#define fla_lapack_cgbsvx CGBSVX
+#define fla_lapack_zgbsvx ZGBSVX
 #elif(LOWER)
 
 #define fla_lapack_sladiv sladiv
@@ -1187,6 +1216,21 @@
 #define fla_lapack_dgetrf2 dgetrf2
 #define fla_lapack_cgetrf2 cgetrf2
 #define fla_lapack_zgetrf2 zgetrf2
+
+#define fla_lapack_sgetf2 sgetf2
+#define fla_lapack_dgetf2 dgetf2
+#define fla_lapack_cgetf2 cgetf2
+#define fla_lapack_zgetf2 zgetf2
+
+#define fla_lapack_sgbtf2 sgbtf2
+#define fla_lapack_dgbtf2 dgbtf2
+#define fla_lapack_cgbtf2 cgbtf2
+#define fla_lapack_zgbtf2 zgbtf2
+
+#define fla_lapack_sgbsvx sgbsvx
+#define fla_lapack_dgbsvx dgbsvx
+#define fla_lapack_cgbsvx cgbsvx
+#define fla_lapack_zgbsvx zgbsvx
 #else
 
 #define fla_lapack_sladiv sladiv_
@@ -1562,6 +1606,21 @@
 #define fla_lapack_dgetrf2 dgetrf2_
 #define fla_lapack_cgetrf2 cgetrf2_
 #define fla_lapack_zgetrf2 zgetrf2_
+
+#define fla_lapack_sgetf2 sgetf2_
+#define fla_lapack_dgetf2 dgetf2_
+#define fla_lapack_cgetf2 cgetf2_
+#define fla_lapack_zgetf2 zgetf2_
+
+#define fla_lapack_sgbtf2 sgbtf2_
+#define fla_lapack_dgbtf2 dgbtf2_
+#define fla_lapack_cgbtf2 cgbtf2_
+#define fla_lapack_zgbtf2 zgbtf2_
+
+#define fla_lapack_sgbsvx sgbsvx_
+#define fla_lapack_dgbsvx dgbsvx_
+#define fla_lapack_cgbsvx cgbsvx_
+#define fla_lapack_zgbsvx zgbsvx_
 
 #endif /*if UPPER_*/
 

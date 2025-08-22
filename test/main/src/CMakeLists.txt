@@ -72,6 +72,9 @@ ${CMAKE_CURRENT_SOURCE_DIR}/test_trtrs.c
 # only performance benchmarking
 ${CMAKE_CURRENT_SOURCE_DIR}/test_gbsv.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_getrf2.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_getf2.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_gbtf2.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_gbsvx.c
 )
 
 add_subdirectory(lapacke)

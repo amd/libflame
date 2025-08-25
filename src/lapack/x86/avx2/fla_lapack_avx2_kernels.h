@@ -67,5 +67,6 @@ doublereal fla_dnrm2_blas_avx2(integer *sd, doublereal *a, integer *inc);
 void fla_zlarf_left_apply_incv1_avx2(integer m, integer n, doublecomplex *a_buff, integer ldr,
                                      doublecomplex *v, doublecomplex *ntau, doublecomplex *work);
 int fla_dpotrf_small_avx2(char *uplo, integer *n, doublereal *a, integer *lda, integer *info);
+void fla_dpotri_small_avx2(char *uplo, integer *n, double *A, integer *lda, integer *info);
 #endif /* FLA_ENABLE_AMD_OPT */
 #endif /* FLA_LAPACK_AVX2_KERNELS_DEFS_H */

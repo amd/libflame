@@ -41,7 +41,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 #include <stdlib.h>
+#include <stdint.h>
 #include <inttypes.h>
+
 
 #ifdef __cplusplus
     // For C++, include stdint.h.
@@ -65,11 +67,12 @@ extern "C" {
 #define LAPACK_ILP64
 #endif
 
+
 #ifndef lapack_int
 #if defined(LAPACK_ILP64)
-#define lapack_int              int64_t
+#define lapack_int        int64_t
 #else
-#define lapack_int              int32_t
+#define lapack_int        int32_t
 #endif
 #endif
 
@@ -85,7 +88,7 @@ extern "C" {
 #endif
 
 #ifndef lapack_logical
-#define lapack_logical          lapack_int
+#define lapack_logical    lapack_int
 #endif
 
 #ifndef LAPACK_COMPLEX_CUSTOM

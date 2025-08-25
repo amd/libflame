@@ -41,11 +41,15 @@
 #define zdotu_f2c_ zdotu_
 #endif
 
-//DTL purpose
+/* DTL purpose */
 #ifdef FLA_ENABLE_ILP64
-#define FLA_IS "lld"
+  #ifdef _WIN32
+    #define FLA_IS "lld"
+  #else
+    #define FLA_IS "ld"
+  #endif
 #else
-#define FLA_IS "d"
+  #define FLA_IS "d"
 #endif
 
 #if LF_AOCL_DTL_LOG_ENABLE

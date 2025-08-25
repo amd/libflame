@@ -9,7 +9,7 @@
 */
 
 /*
-    Modifications Copyright (c) 2021-2024 Advanced Micro Devices, Inc.  All rights reserved.
+    Modifications Copyright (c) 2021-2025 Advanced Micro Devices, Inc.  All rights reserved.
 */
 
 #include "FLAME.h"
@@ -21,8 +21,8 @@
 #include "FLA_lapack2flame_util_defs.h"
 #include "fla_lapack_avx2_kernels.h"
 #include "fla_lapack_avx512_kernels.h"
-#include "fla_lapack_lu_small_kernals_d.h"
-#include "fla_lapack_lu_small_kernals_s.h"
+#include "fla_lapack_lu_small_kernels_d.h"
+#include "fla_lapack_lu_small_kernels_s.h"
 #include "fla_lapack_x86_common.h"
 
 /*

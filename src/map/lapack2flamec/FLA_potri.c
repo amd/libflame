@@ -8,6 +8,10 @@
 
 */
 
+/*
+    Modifications Copyright (c) 2021-2025 Advanced Micro Devices, Inc.  All rights reserved.
+*/
+
 #include "FLAME.h"
 
 #ifdef FLA_ENABLE_LAPACK2FLAME
@@ -15,6 +19,10 @@
 #include "FLA_lapack2flame_prototypes.h"
 #include "FLA_lapack2flame_return_defs.h"
 #include "FLA_lapack2flame_util_defs.h"
+#if FLA_ENABLE_AMD_OPT
+#include <fla_lapack_cholesky_small_kernels.h>
+#include <fla_lapack_avx2_kernels.h>
+#endif
 
 /*
    POTRI computes the inverse of a symmetric (hermitian) positive definite
@@ -81,13 +89,40 @@ LAPACK_potri(d)
     }
     if(fla_error == LAPACK_SUCCESS)
     {
-        LAPACK_potri_body(d)
-            /** fla_error set to 0 on LAPACK_SUCCESS */
-            fla_error
-            = 0;
+#if FLA_ENABLE_AMD_OPT
+        if(*n == 1)
+        {
+            FLA_POTRI_SMALL_1X1(uplo, n, buff_A, ldim_A, info);
+        }
+        else if(*n == 2)
+        {
+            FLA_POTRI_SMALL_2X2(doublereal, uplo, n, buff_A, ldim_A, info);
+        }
+        else if(*n == 3)
+        {
+            FLA_POTRI_SMALL_3X3(doublereal, uplo, n, buff_A, ldim_A, info);
+        }
+        else if(*n == 4)
+        {
+            FLA_POTRI_SMALL_4X4(doublereal, uplo, n, buff_A, ldim_A, info);
+        }
+        else if(*n <= FLA_POTRI_DOUBLE_SMALL && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
+        {
+            fla_dpotri_small_avx2(uplo, n, buff_A, ldim_A, info);
+        }
+        else
+        {
+            LAPACK_potri_body(d)
+        }
+#else
+        {
+            LAPACK_potri_body(d)
+        }
+#endif
+        /** fla_error set to 0 on LAPACK_SUCCESS */
+        fla_error = 0;
     }
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
 }
 LAPACK_potri(c)
 {

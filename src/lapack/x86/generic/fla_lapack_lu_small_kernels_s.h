@@ -1,15 +1,15 @@
 /******************************************************************************
- * * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
+ * * Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
  * *******************************************************************************/
 
-/*! @file ffla_lapack_lu_small_kernals_s.h
+/*! @file ffla_lapack_lu_small_kernels_s.h
  *  @brief Common front-end functions
  *         for single precision
  *         to choose optimized paths
  *  *  */
 
 #include "FLAME.h"
-#include "fla_lapack_lu_small_kernals_common.h"
+#include "fla_lapack_lu_small_kernels_common.h"
 
 #if FLA_ENABLE_AMD_OPT
 /*

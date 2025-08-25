@@ -1,8 +1,8 @@
 /******************************************************************************
- * * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
+ * * Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
  * *******************************************************************************/
 
-/*! @file ffla_lapack_lu_small_kernals_comon.h
+/*! @file ffla_lapack_lu_small_kernels_comon.h
  *  @brief Common front-end functions
  *         for single and double precision
  *         to choose optimized paths

@@ -11,9 +11,56 @@
 #if FLA_ENABLE_AMD_OPT
 int fla_dpotrf_small_avx2(char *uplo, integer *n, doublereal *a, integer *lda, integer *info);
 #endif
-void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
 
-#define BLOCK_SIZE FLA_POTRF_BLOCK_SIZE
+/* Threshold values used for tuning thread binding and workload partitioning.*/
+#define PROC_BIND_CLOSE_THREADS 96
+#define PROC_BIND_CLOSE_SIZE 9760
+
+void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+extern int fla_thread_get_num_threads();
+
+void dpotrf_auto_tune_params(integer n, int *num_threads, int *block_size)
+{
+    *block_size = FLA_POTRF_BLOCK_SIZE; // Default block size
+
+    // Get maximum available threads
+    int max_threads = fla_thread_get_num_threads();
+
+    if(n <= 300)
+    {
+        *num_threads = 8;
+        *block_size = 64;
+    }
+    else if(n <= 1024)
+    {
+        *num_threads = 8;
+        *block_size = 128;
+    }
+    else if(n <= 1280)
+    {
+        *num_threads = 32;
+        *block_size = 128;
+    }
+    else if(n <= 2048)
+    {
+        *num_threads = 32;
+        *block_size = 128;
+    }
+    else if(n >= 9760)
+    {
+        // Large problems
+        *num_threads = 128;
+        *block_size = 256;
+    }
+    else
+    {
+        // Medium-large problems
+        *num_threads = 64;
+        *block_size = 224;
+    }
+    // Ensure we don't exceed available threads
+    *num_threads = fla_min(*num_threads, max_threads);
+}
 
 /* Table of constant values */
 static integer c__1 = 1;
@@ -272,7 +319,8 @@ static size_t A21;
 static size_t A12;
 static size_t A22;
 
-#define A(m, n, gm, gn, mb, nb, uplo) (double *)get_tile_addr_triangle(A, gm, m, n, gm, gn, mb, nb, uplo)
+#define A(m, n, gm, gn, mb, nb, uplo) \
+    (double *)get_tile_addr_triangle(A, gm, m, n, gm, gn, mb, nb, uplo)
 
 static inline integer get_tile_lda(integer mb, integer gm, integer k)
 {
@@ -321,7 +369,6 @@ static inline void *get_tile_addr_triangle(double *A, integer N, integer m, inte
     return (void *)((char *)A + (offset * eltsize));
 }
 
-
 static inline integer get_tile_rows(integer mt, integer mb, integer m, integer k)
 {
     if(k < mt - 1)
@@ -334,23 +381,22 @@ static inline integer get_tile_rows(integer mt, integer mb, integer m, integer k
 
 void dpotrf_tile(char *uplo, integer n, double *A, integer lda, integer *iinfo
 #if AOCL_FLA_PROGRESS_H
-,
-aocl_fla_progress_callback aocl_fla_progress_ptr,
-integer progress_step_count,
-integer progress_total_threads
+                 ,
+                 aocl_fla_progress_callback aocl_fla_progress_ptr, integer progress_step_count,
+                 integer progress_total_threads
 #endif
 )
 {
-#pragma omp task depend(inout : A [0:lda * n])
+#pragma omp task depend(inout : A[0 : lda * n])
     {
         __builtin_prefetch(A, 1, 3);
 #if AOCL_FLA_PROGRESS_H
         integer thread_id = omp_get_thread_num();
-            if(aocl_fla_progress_ptr)
-            {
-                AOCL_FLA_PROGRESS_FUNC_PTR("DPOTRF", 6, &progress_step_count, &thread_id,
-                                           &progress_total_threads);
-            }
+        if(aocl_fla_progress_ptr)
+        {
+            AOCL_FLA_PROGRESS_FUNC_PTR("DPOTRF", 6, &progress_step_count, &thread_id,
+                                       &progress_total_threads);
+        }
 #endif
         lapack_dpotrf(uplo, &n, A, &lda, iinfo);
     }
@@ -364,9 +410,7 @@ void dtrsm_tile(char *side, char *uplo, char *transa, char *diag, integer m, int
         ak = m;
     else
         ak = n;
-#pragma omp task depend(in                             \
-                        : A [0:(lda)*ak]) depend(inout \
-                                                 : B [0:(ldb) * (n)])
+#pragma omp task depend(in : A[0 : (lda) * ak]) depend(inout : B[0 : (ldb) * (n)])
     {
         __builtin_prefetch(B, 1, 3);
         dtrsm_(side, uplo, transa, diag, &m, &n, alpha, A, &lda, B, &ldb);
@@ -381,9 +425,7 @@ void dsyrk_tile(char *uplo, char *trans, integer n, integer k, double *alpha, do
         ak = k;
     else
         ak = n;
-#pragma omp task depend(in                             \
-                        : A [0:(lda)*ak]) depend(inout \
-                                                 : C [0:(ldc) * (n)])
+#pragma omp task depend(in : A[0 : (lda) * ak]) depend(inout : C[0 : (ldc) * (n)])
     {
         __builtin_prefetch(A, 1, 3);
         dsyrk_(uplo, trans, &n, &k, alpha, A, &lda, beta, C, &ldc);
@@ -405,10 +447,8 @@ void dgemm_tile(char *transa, char *transb, integer m, integer n, integer k, dou
         bk = n;
     else
         bk = k;
-#pragma omp task depend(in                                                                     \
-                        : A [0:(lda)*ak]) depend(in                                            \
-                                                 : B [0:(ldb)*bk]) depend(inout                \
-                                                                          : C [0:(ldc) * (n)])
+#pragma omp task depend(in : A[0 : (lda) * ak]) depend(in : B[0 : (ldb) * bk]) \
+    depend(inout : C[0 : (ldc) * (n)])
     {
         __builtin_prefetch(C, 1, 3);
         dgemm_(transa, transb, &m, &n, &k, alpha, A, &lda, B, &ldb, beta, C, &ldc);
@@ -572,7 +612,7 @@ void omp_dpotrf(char *uplo, double *A, integer *n, integer *lda, integer mt, int
 
 void dlacpy_tile(integer m, integer n, double *A, integer lda, double *B, integer ldb)
 {
-#pragma omp task depend(in : A [0:(lda) * (n)]) depend(out : B [0:(ldb) * (n)])
+#pragma omp task depend(in : A[0 : (lda) * (n)]) depend(out : B[0 : (ldb) * (n)])
     {
         dlacpy_("Full", &m, &n, A, &lda, B, &ldb);
     }
@@ -639,7 +679,7 @@ void matrix_untile(double *pA, integer lda, double *A, integer nb, integer mb, c
  * - Frees temporary memory
  *
  * Memory allocation size calculation:
- * - Block sizes: nb (column blocks) = 256, mb (row blocks) = 256
+ * - Block sizes: nb (column blocks), mb (row blocks) are auto-tuned based on problem size
  * - Number of tiles: mt, nt calculated based on matrix dimensions
  * - Total memory includes full tiles plus remainder elements
  *
@@ -650,8 +690,8 @@ void matrix_untile(double *pA, integer lda, double *A, integer nb, integer mb, c
  * @param info Pointer to error information output
  *
  * @note Memory allocation failure results in fallback to reference algorithm(lapack_dpotrf).
- * 
- * @note Reference: "A class of parallel tiled linear algebra algorithms for 
+ *
+ * @note Reference: "A class of parallel tiled linear algebra algorithms for
  *  multicore architectures. Parallel Computing, 35(1), 38-53"
  *  by "Buttari, A., Langou, J., Kurzak, J., & Dongarra, J"
  */
@@ -677,12 +717,17 @@ void lapack_dpotrf_var1(char *uplo, integer *n, doublereal *A, integer *lda, int
         return;
     }
     // Quick return if possible
-    if( *n == 0)
+    if(*n == 0)
     {
         return;
     }
-    integer nb = BLOCK_SIZE;
-    integer mb = BLOCK_SIZE;
+
+    // Auto-tune parameters based on problem size
+    integer auto_num_threads, auto_block_size;
+    dpotrf_auto_tune_params(*n, &auto_num_threads, &auto_block_size);
+
+    integer nb = auto_block_size;
+    integer mb = auto_block_size;
     integer mt = (*n == 0) ? 0 : (*n - 1) / nb + 1;
     integer nt = (*n == 0) ? 0 : (*n - 1) / nb + 1;
     integer lm1 = *n / mb;
@@ -706,17 +751,36 @@ void lapack_dpotrf_var1(char *uplo, integer *n, doublereal *A, integer *lda, int
     {
         uplo_local = 'U';
     }
-#pragma omp parallel
-#pragma omp single
+
+    if(*n <= PROC_BIND_CLOSE_SIZE || auto_num_threads < PROC_BIND_CLOSE_THREADS)
     {
-        // Translate to tile layout.
-        matrix_tile(A, *lda, temp_A, nb, mb, &uplo_local, mt, nt, *n, *n, *n);
+#pragma omp parallel num_threads(auto_num_threads) proc_bind(close)
+#pragma omp single
+        {
+            // Translate to tile layout.
+            matrix_tile(A, *lda, temp_A, nb, mb, &uplo_local, mt, nt, *n, *n, *n);
 
-        // Call to tiled potrf path
-        omp_dpotrf(&uplo_local, temp_A, n, lda, mt, mb, nb, *n, *n, info);
+            // Call to tiled potrf path
+            omp_dpotrf(&uplo_local, temp_A, n, lda, mt, mb, nb, *n, *n, info);
 
-        // Get time for matrix_untile
-        matrix_untile(A, *lda, temp_A, nb, mb, &uplo_local, mt, nt, *n, *n, *n);
+            // Get time for matrix_untile
+            matrix_untile(A, *lda, temp_A, nb, mb, &uplo_local, mt, nt, *n, *n, *n);
+        }
+    }
+    else
+    {
+#pragma omp parallel num_threads(auto_num_threads) proc_bind(spread)
+#pragma omp single
+        {
+            // Translate to tile layout.
+            matrix_tile(A, *lda, temp_A, nb, mb, &uplo_local, mt, nt, *n, *n, *n);
+
+            // Call to tiled potrf path
+            omp_dpotrf(&uplo_local, temp_A, n, lda, mt, mb, nb, *n, *n, info);
+
+            // Get time for matrix_untile
+            matrix_untile(A, *lda, temp_A, nb, mb, &uplo_local, mt, nt, *n, *n, *n);
+        }
     }
     free(temp_A);
 }

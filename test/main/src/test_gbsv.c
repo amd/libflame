@@ -4,7 +4,6 @@
 
 #include "test_lapack.h"
 
-
 extern double perf;
 extern double time_min;
 
@@ -17,6 +16,12 @@ void prepare_gbsv_run(integer n_A, integer kl, integer ku, integer nrhs, void *A
 void invoke_gbsv(integer datatype, integer *n, integer *kl, integer *ku, integer *nrhs, void *ab,
                  integer *ldab, integer *ipiv, void *b, integer *ldb, integer *info);
 
+/* Helper functions for Bit reproducibility tests */
+void store_gbsv_outputs(void *filename, integer datatype, integer n, integer kl, integer ku,
+                        integer nrhs, void *ab, integer ldab, void *b, integer ldb, void *params);
+integer check_bit_reproducibility_gbsv(void *filename, integer datatype, integer n, integer kl,
+                                       integer ku, integer nrhs, void *ab, integer ldab, void *b,
+                                       integer ldb, void *params);
 void fla_test_gbsv(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "Linear Solve using LU for Band Matrix";
@@ -52,7 +57,7 @@ void fla_test_gbsv(integer argc, char **argv, test_params_t *params)
         params->lin_solver_paramslist[0].nrhs = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].ldab = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].ldb = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
-        
+
         /* Store KL and KU in the structure */
         params->lin_solver_paramslist[0].kl = KL;
         params->lin_solver_paramslist[0].ku = KU;
@@ -112,6 +117,7 @@ void fla_test_gbsv_experiment(char *tst_api, test_params_t *params, integer data
     integer n, kl, ku, ldab, ldb, NRHS, info = 0;
     void *IPIV = NULL, *AB = NULL, *AB_save = NULL, *B = NULL, *B_save = NULL;
     double residual, err_thresh;
+    void *filename = NULL;
 
     err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
     NRHS = params->lin_solver_paramslist[pci].nrhs;
@@ -144,29 +150,38 @@ void fla_test_gbsv_experiment(char *tst_api, test_params_t *params, integer data
     create_matrix(datatype, LAPACK_COL_MAJOR, n, NRHS, &B_save, ldb);
 
     /* Initialize the test matrices */
-    if(g_ext_fptr != NULL)
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        /* Initialize input matrix with custom data from file */
-        init_matrix(datatype, AB, ldab, n, ldab, g_ext_fptr, params->imatrix_char);
-        init_matrix(datatype, B, n, NRHS, ldb, g_ext_fptr, params->imatrix_char);
-
-        /* Save the original matrix AB */
-        copy_matrix(datatype, "full", ldab, n, AB, ldab, AB_save, ldab);
+        if(g_ext_fptr != NULL)
+        {
+            /* Initialize input matrix with custom data from file */
+            init_matrix(datatype, AB, ldab, n, ldab, g_ext_fptr, params->imatrix_char);
+            init_matrix(datatype, B, n, NRHS, ldb, g_ext_fptr, params->imatrix_char);
+        }
+        else
+        {
+            /* Initialize & convert random band matrix into band storage as per API need */
+            rand_band_storage_matrix(datatype, n, n, kl, ku, AB, ldab);
+            /* Initialize random B matrix */
+            rand_matrix(datatype, B, n, NRHS, ldb);
+        }
     }
-    else
-    {
-        /* Initialize & convert random band matrix into band storage as per API need */
-        rand_band_storage_matrix(datatype, n, n, kl, ku, AB, ldab);
-        /* Initialize random B matrix */
-        rand_matrix(datatype, B, n, NRHS, ldb);
 
-        /* Save the original matrix AB */
-        copy_matrix(datatype, "full", ldab, n, AB, ldab, AB_save, ldab);
-    }
-    
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * passed as input to the API
+     * */
+    FLA_BRT_PROCESS_TWO_INPUT(datatype, ldab, n, AB, ldab, datatype, n, NRHS, B, ldb, "dddddd", n,
+                              kl, ku, NRHS, ldab, ldb)
+
+    /* Save the original matrix AB */
+    copy_matrix(datatype, "full", ldab, n, AB, ldab, AB_save, ldab);
+
     /* Save the original matrix B */
     copy_matrix(datatype, "full", n, NRHS, B, ldb, B_save, ldb);
-    
+
     /* call to API */
     prepare_gbsv_run(n, kl, ku, NRHS, AB_save, ldab, B_save, ldb, IPIV, datatype, &info, params);
 
@@ -176,9 +191,20 @@ void fla_test_gbsv_experiment(char *tst_api, test_params_t *params, integer data
 
     /* output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    IF_FLA_BRT_VALIDATION(
+        n, n,
+        store_gbsv_outputs(filename, datatype, n, kl, ku, NRHS, AB_save, ldab, B_save, ldb, params),
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh),
+        check_bit_reproducibility_gbsv(filename, datatype, n, kl, ku, NRHS, AB_save, ldab, B_save,
+                                       ldb, params))
+    else
+    {
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    }
 
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename);
     free_matrix(AB);
     free_matrix(AB_save);
     free_vector(IPIV);
@@ -203,12 +229,12 @@ void prepare_gbsv_run(integer n_A, integer kl, integer ku, integer nrhs, void *A
         /* Copy original input data */
         copy_matrix(datatype, "full", ldab, n_A, AB, ldab, AB_test, ldab);
         copy_matrix(datatype, "full", n_A, nrhs, B, ldb, B_test, ldb);
-        
+
         exe_time = fla_test_clock();
         /* call LAPACK gbsv API */
         invoke_gbsv(datatype, &n_A, &kl, &ku, &nrhs, AB_test, &ldab, IPIV, B_test, &ldb, info);
         exe_time = fla_test_clock() - exe_time;
-        
+
         /* Update ctx and loop conditions */
         FLA_EXEC_LOOP_UPDATE_WITH_INFO
     }
@@ -253,4 +279,29 @@ void invoke_gbsv(integer datatype, integer *n, integer *kl, integer *ku, integer
             break;
         }
     }
+}
+
+void store_gbsv_outputs(void *filename, integer datatype, integer n, integer kl, integer ku,
+                        integer nrhs, void *AB, integer ldab, void *B, integer ldb, void *params)
+{
+    /* Create and open a file for storing Ground truth*/
+    FLA_OPEN_GT_FILE_STORE
+
+    FLA_STORE_BRT_MATRIX(datatype, ldab, n, AB, ldab)
+    FLA_STORE_BRT_MATRIX(datatype, n, nrhs, B, ldb)
+
+    fclose(gt_file);
+}
+integer check_bit_reproducibility_gbsv(void *filename, integer datatype, integer n, integer kl,
+                                       integer ku, integer nrhs, void *AB, integer ldab, void *B,
+                                       integer ldb, void *params)
+{
+    /* Open the file for reading Ground truth */
+    FLA_OPEN_GT_FILE_READ
+
+    FLA_VERIFY_BRT_MATRIX(datatype, ldab, n, AB, ldab)
+    FLA_VERIFY_BRT_MATRIX(datatype, n, nrhs, B, ldb)
+
+    fclose(gt_file);
+    return 1;
 }

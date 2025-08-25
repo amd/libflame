@@ -24,6 +24,12 @@ void invoke_geqrf(integer datatype, integer *m, integer *n, void *a, integer *ld
 double prepare_lapacke_geqrf_run(integer datatype, int matrix_layout, integer m_A, integer n_A,
                                  void *A, integer lda, void *T, integer *info);
 
+/* Helper functions for Bit reproducibility tests */
+void store_geqrf_outputs(void *filename, integer datatype, integer m, integer n, void *A,
+                         integer lda, void *T, integer lwork, void *params);
+integer check_bit_reproducibility_geqrf(void *filename, integer datatype, integer m, integer n,
+                                        void *A, integer lda, void *T, integer lwork, void *params);
+
 void fla_test_geqrf(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "QR factorization";
@@ -125,6 +131,7 @@ void fla_test_geqrf_experiment(char *tst_api, test_params_t *params, integer dat
     integer info = 0;
     void *A = NULL, *A_test = NULL, *T = NULL;
     double residual, err_thresh;
+    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
@@ -147,16 +154,31 @@ void fla_test_geqrf_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Create input matrix parameters */
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
+
+    /* Create output vector */
     create_vector(datatype, &T, fla_min(m, n));
 
-    init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        /* initialize input matrix */
+        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+    }
+
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * passed as input to the API
+     * */
+    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, m, n, A, lda, "dddd", m, n, lda, g_lwork)
+
     if(FLA_OVERFLOW_UNDERFLOW_TEST)
     {
         scale_matrix_underflow_overflow_geqrf(datatype, m, n, A, lda, params->imatrix_char);
     }
 
     /* Make a copy of input matrix A. This is required to validate the API functionality. */
-    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
     prepare_geqrf_run(m, n, A_test, lda, T, datatype, &info, interfacetype, layout, params);
@@ -174,7 +196,12 @@ void fla_test_geqrf_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+
+    IF_FLA_BRT_VALIDATION(
+        m, n, store_geqrf_outputs(filename, datatype, m, n, A_test, lda, T, g_lwork, params),
+        validate_geqrf(tst_api, m, n, A, A_test, lda, T, datatype, residual, params),
+        check_bit_reproducibility_geqrf(filename, datatype, m, n, A_test, lda, T, g_lwork, params))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_geqrf(tst_api, m, n, A, A_test, lda, T, datatype, residual, params);
     }
@@ -193,6 +220,8 @@ void fla_test_geqrf_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename);
     free_matrix(A);
     free_matrix(A_test);
     free_vector(T);
@@ -364,4 +393,29 @@ void invoke_geqrf(integer datatype, integer *m, integer *n, void *a, integer *ld
             break;
         }
     }
+}
+
+void store_geqrf_outputs(void *filename, integer datatype, integer m, integer n, void *A,
+                         integer lda, void *T, integer lwork, void *params)
+{
+    /* Create and open a file for storing Ground truth*/
+    FLA_OPEN_GT_FILE_STORE
+
+    FLA_STORE_BRT_MATRIX(datatype, m, n, A, lda)
+    FLA_STORE_BRT_VECTOR(datatype, fla_min(m, n), T)
+
+    fclose(gt_file);
+}
+
+integer check_bit_reproducibility_geqrf(void *filename, integer datatype, integer m, integer n,
+                                        void *A, integer lda, void *T, integer lwork, void *params)
+{
+    /* Open the file for reading Ground truth */
+    FLA_OPEN_GT_FILE_READ
+
+    FLA_VERIFY_BRT_MATRIX(datatype, m, n, A, lda)
+    FLA_VERIFY_BRT_VECTOR(datatype, fla_min(m, n), T)
+
+    fclose(gt_file);
+    return 1;
 }

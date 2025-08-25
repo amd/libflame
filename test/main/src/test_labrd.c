@@ -227,14 +227,14 @@ void fla_test_labrd_experiment(char *tst_api, test_params_t *params, integer dat
      *     - In the verification runs (BRT_char => V, M), the output is loaded from the file and
      * compared with the generated output
      *  */
-    FLA_BRT_OUTPUT_VALIDATION(
-        m, n,
-        store_labrd_outputs(filename, datatype, m, n, nb, A_test, lda, d, e, tauq, taup, X, ldx, Y,
-                            ldy, params),
-        validate_labrd(tst_api, m, n, nb, A, A_test, lda, d, e, tauq, taup, X, ldx, Y, ldy,
-                       datatype, err_thresh, g_ext_fptr, params->imatrix_char, params),
-        check_bit_reproducibility_labrd(filename, datatype, m, n, nb, A_test, lda, d, e, tauq, taup,
-                                        X, ldx, Y, ldy, params))
+    IF_FLA_BRT_VALIDATION(m, n,
+                          store_labrd_outputs(filename, datatype, m, n, nb, A_test, lda, d, e, tauq,
+                                              taup, X, ldx, Y, ldy, params),
+                          validate_labrd(tst_api, m, n, nb, A, A_test, lda, d, e, tauq, taup, X,
+                                         ldx, Y, ldy, datatype, err_thresh, g_ext_fptr,
+                                         params->imatrix_char, params),
+                          check_bit_reproducibility_labrd(filename, datatype, m, n, nb, A_test, lda,
+                                                          d, e, tauq, taup, X, ldx, Y, ldy, params))
     /* API functionality validation */
     else if(!FLA_EXTREME_CASE_TEST)
     {

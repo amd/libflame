@@ -28,6 +28,15 @@ double prepare_lapacke_gesdd_run(integer datatype, int matrix_layout, char *jobz
                                  integer n_A, void *A, integer lda, void *s, void *U, integer ldu,
                                  void *V, integer ldvt, integer *info);
 
+/* Helper functions for Bit reproducibility tests */
+void store_gesdd_outputs(void *filename, integer datatype, char jobz, integer m, integer n, void *A,
+                         integer lda, void *s, void *U, integer ldu, void *V, integer ldvt,
+                         integer g_lwork, void *params);
+integer check_bit_reproducibility_gesdd(void *filename, integer datatype, char jobz, integer m,
+                                        integer n, void *A, integer lda, void *s, void *U,
+                                        integer ldu, void *V, integer ldvt, integer g_lwork,
+                                        void *params);
+
 void fla_test_gesdd(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "Singular value decomposition";
@@ -138,6 +147,7 @@ void fla_test_gesdd_experiment(char *tst_api, test_params_t *params, integer dat
     char jobz;
     void *A = NULL, *U = NULL, *V = NULL, *s = NULL, *A_test = NULL, *s_in = NULL, *scal = NULL;
     double residual, err_thresh;
+    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
@@ -215,28 +225,38 @@ void fla_test_gesdd_experiment(char *tst_api, test_params_t *params, integer dat
             create_matrix(datatype, LAPACK_COL_MAJOR, m, n_U, &U, ldu);
         }
     }
-
     create_realtype_vector(datatype, &s, fla_min(m, n));
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
+    create_realtype_vector(datatype, &s_in, fla_min(m, n));
+    create_vector(get_realtype(datatype), &scal, 1);
 
-    if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
-    }
-    else
-    {
-        create_realtype_vector(datatype, &s_in, fla_min(m, n));
-        /* Generate matrix A from known singular values */
-        create_svd_matrix(datatype, 'A', m, n, A, lda, s_in, s_one, s_one, i_one, i_one, info);
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
         {
-            create_vector(get_realtype(datatype), &scal, 1);
-            scale_matrix_underflow_overflow_gesdd(datatype, m, n, A, lda, params->imatrix_char,
-                                                  scal);
+            init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+        }
+        else
+        {
+            /* Generate matrix A from known singular values */
+            create_svd_matrix(datatype, 'A', m, n, A, lda, s_in, s_one, s_one, i_one, i_one, info);
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                scale_matrix_underflow_overflow_gesdd(datatype, m, n, A, lda, params->imatrix_char,
+                                                      scal);
+            }
         }
     }
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * passed as input to the API
+     * */
+    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, m, n, A, lda, "cdddddd", jobz, m, n, lda, ldu, ldvt,
+                                 g_lwork)
 
     /* Make a copy of input matrix A. This is required to validate the API functionality.*/
-    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
     prepare_gesdd_run(&jobz, m, n, A_test, lda, s, U, ldu, V, ldvt, datatype, &info, interfacetype,
@@ -252,7 +272,22 @@ void fla_test_gesdd_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    /* Bit reproducibility tests path
+     * This path is taken when BRT is enabled.
+     *     - In the Ground truth runs (BRT_char => G, F), the output is stored in a file and the
+     * default validation function is called
+     *     - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * compared with the generated output
+     *  */
+    IF_FLA_BRT_VALIDATION(m, n,
+                          store_gesdd_outputs(filename, datatype, jobz, m, n, A, lda, s, U, ldu, V,
+                                              ldvt, g_lwork, params),
+                          validate_gesdd(tst_api, &jobz, m, n, A, A_test, lda, s, s_in, U, ldu, V,
+                                         ldvt, datatype, residual, params->imatrix_char, scal,
+                                         params),
+                          check_bit_reproducibility_gesdd(filename, datatype, jobz, m, n, A, lda, s,
+                                                          U, ldu, V, ldvt, g_lwork, params))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gesdd(tst_api, &jobz, m, n, A, A_test, lda, s, s_in, U, ldu, V, ldvt, datatype,
                        residual, params->imatrix_char, scal, params);
@@ -272,6 +307,8 @@ void fla_test_gesdd_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename)
     free_matrix(A);
     free_matrix(A_test);
     if(same_char(jobz, 'A') || same_char(jobz, 'S') || (same_char(jobz, 'O') && m < n))
@@ -283,14 +320,8 @@ void fla_test_gesdd_experiment(char *tst_api, test_params_t *params, integer dat
         free_matrix(V);
     }
     free_vector(s);
-    if((g_ext_fptr == NULL) && !(params->imatrix_char))
-    {
-        free_vector(s_in);
-    }
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-    {
-        free_vector(scal);
-    }
+    free_vector(s_in);
+    free_vector(scal);
 }
 
 void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer lda, void *s, void *U,
@@ -599,4 +630,79 @@ void invoke_gesdd(integer datatype, char *jobz, integer *m, integer *n, void *a,
             break;
         }
     }
+}
+
+void store_gesdd_outputs(void *filename, integer datatype, char jobz, integer m, integer n, void *A,
+                         integer lda, void *s, void *U, integer ldu, void *V, integer ldvt,
+                         integer g_lwork, void *params)
+{
+    /* Create and open a file for storing Ground truth*/
+    FLA_OPEN_GT_FILE_STORE
+
+    integer ns = fla_min(m, n);
+    integer n_U = (same_char(jobz, 'S')) ? ns : m;
+    integer m_V = (same_char(jobz, 'S')) ? ns : n;
+
+    /* Store the ground truth data */
+    if(same_char(jobz, 'O'))
+    {
+        FLA_STORE_BRT_MATRIX(datatype, m, n, A, lda)
+    }
+    FLA_STORE_BRT_VECTOR(get_realtype(datatype), ns, s)
+    if(!same_char(jobz, 'N'))
+    {
+        if(same_char(jobz, 'A') || same_char(jobz, 'S'))
+        {
+            FLA_STORE_BRT_MATRIX(datatype, m, n_U, U, ldu)
+            FLA_STORE_BRT_MATRIX(datatype, m_V, n, V, ldvt)
+        }
+        else if(same_char(jobz, 'O') && m >= n)
+        {
+            FLA_STORE_BRT_MATRIX(datatype, m_V, n, V, ldvt)
+        }
+        else
+        {
+            FLA_STORE_BRT_MATRIX(datatype, m, n_U, U, ldu)
+        }
+    }
+
+    fclose(gt_file);
+}
+integer check_bit_reproducibility_gesdd(void *filename, integer datatype, char jobz, integer m,
+                                        integer n, void *A, integer lda, void *s, void *U,
+                                        integer ldu, void *V, integer ldvt, integer g_lwork,
+                                        void *params)
+{
+    /* Open the file for reading Ground truth */
+    FLA_OPEN_GT_FILE_READ
+
+    integer ns = fla_min(m, n);
+    integer n_U = (same_char(jobz, 'S')) ? ns : m;
+    integer m_V = (same_char(jobz, 'S')) ? ns : n;
+
+    /* Load stored GT and verify with current API outputs */
+    if(same_char(jobz, 'O'))
+    {
+        FLA_VERIFY_BRT_MATRIX(datatype, m, n, A, lda)
+    }
+    FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), ns, s)
+    if(!same_char(jobz, 'N'))
+    {
+        if(same_char(jobz, 'A') || same_char(jobz, 'S'))
+        {
+            FLA_VERIFY_BRT_MATRIX(datatype, m, n_U, U, ldu)
+            FLA_VERIFY_BRT_MATRIX(datatype, m_V, n, V, ldvt)
+        }
+        else if(same_char(jobz, 'O') && m >= n)
+        {
+            FLA_VERIFY_BRT_MATRIX(datatype, m_V, n, V, ldvt)
+        }
+        else
+        {
+            FLA_VERIFY_BRT_MATRIX(datatype, m, n_U, U, ldu)
+        }
+    }
+
+    fclose(gt_file);
+    return 1;
 }

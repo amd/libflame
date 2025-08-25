@@ -29,6 +29,16 @@ void invoke_gelsd(integer datatype, integer *m, integer *n, integer *nrhs, void 
 double prepare_lapacke_gelsd_run(integer datatype, integer layout, integer m, integer n,
                                  integer nrhs, void *A, integer lda, void *B, integer ldb, void *s,
                                  void *rcond, integer *rank, integer *info);
+
+/* Helper functions for Bit reproducibility tests */
+void store_gelsd_outputs(void *filename, integer datatype, integer m, integer n, integer NRHS,
+                         void *A_save, integer lda, void *S, void *B_save, integer ldb, void *rcond,
+                         integer g_lwork, void *params);
+integer check_bit_reproducibility_gelsd(void *filename, integer datatype, integer m, integer n,
+                                        integer NRHS, void *A_save, integer lda, void *S,
+                                        void *B_save, integer ldb, void *rcond, integer g_lwork,
+                                        void *params);
+
 void fla_test_gelsd(integer argc, char **argv, test_params_t *params)
 {
     srand(1);
@@ -136,6 +146,7 @@ void fla_test_gelsd_experiment(char *tst_api, test_params_t *params, integer dat
     void *A = NULL, *A_save = NULL, *B = NULL, *B_save = NULL;
     void *S = NULL, *rcond = NULL, *s_test = NULL;
     double residual, err_thresh;
+    void *filename = NULL;
 
     char range = 'U';
     integer interfacetype = params->interfacetype;
@@ -182,31 +193,55 @@ void fla_test_gelsd_experiment(char *tst_api, test_params_t *params, integer dat
     create_matrix(datatype, LAPACK_COL_MAJOR, fla_max(m, n), NRHS, &B_save, ldb);
     reset_matrix(datatype, ldb, NRHS, B, ldb);
     reset_matrix(datatype, ldb, NRHS, B_save, ldb);
+    create_realtype_vector(datatype, &S, fla_min(m, n));
     create_realtype_vector(datatype, &s_test, fla_min(m, n));
 
-    /* Initialize the test matrices */
-    init_matrix(datatype, B, m, NRHS, ldb, g_ext_fptr, params->imatrix_char);
-    if(FLA_EXTREME_CASE_TEST || (g_ext_fptr != NULL))
+    /* This code path is run to generate the matrix to be passed to the API. This is the default
+     * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
+     * Test cases. For verification runs the input is loaded from the input generated during Ground
+     * truth run */
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+        /* Initialize the test matrices */
+        init_matrix(datatype, B, m, NRHS, ldb, g_ext_fptr, params->imatrix_char);
+        if(FLA_EXTREME_CASE_TEST || (g_ext_fptr != NULL))
+        {
+            init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+        }
+        else
+        {
+            /* Generate input matrix with condition number <= 100 */
+            create_svd_matrix(datatype, range, m, n, A, lda, s_test, GELSD_VL, GELSD_VU, i_zero,
+                              i_zero, info);
+            /* Overflow or underflow test initialization */
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                scale_matrix_overflow_underflow_gelsd(datatype, m, n, NRHS, A, lda,
+                                                      params->imatrix_char);
+            }
+        }
+    }
+
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * passed as input to the API
+     * */
+    if(datatype == FLOAT || datatype == COMPLEX)
+    {
+        FLA_BRT_PROCESS_TWO_INPUT(datatype, m, n, A, lda, datatype, m, NRHS, B, ldb, "dddddfd", m,
+                                  n, NRHS, lda, ldb, *(real *)rcond, g_lwork)
     }
     else
     {
-        /* Generate input matrix with condition number <= 100 */
-        create_svd_matrix(datatype, range, m, n, A, lda, s_test, GELSD_VL, GELSD_VU, i_zero, i_zero,
-                          info);
-        /* Overflow or underflow test initialization */
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
-        {
-            scale_matrix_overflow_underflow_gelsd(datatype, m, n, NRHS, A, lda,
-                                                  params->imatrix_char);
-        }
+        FLA_BRT_PROCESS_TWO_INPUT(datatype, m, n, A, lda, datatype, m, NRHS, B, ldb, "dddddfd", m,
+                                  n, NRHS, lda, ldb, *(doublereal *)rcond, g_lwork)
     }
 
     /* Save the original matrix*/
     copy_matrix(datatype, "full", m, n, A, lda, A_save, lda);
     copy_matrix(datatype, "full", m, NRHS, B, ldb, B_save, ldb);
-    create_realtype_vector(datatype, &S, fla_min(m, n));
 
     /* call to API */
     prepare_gelsd_run(m, n, NRHS, A_save, lda, B_save, ldb, S, rcond, &rank, datatype, &info,
@@ -227,7 +262,15 @@ void fla_test_gelsd_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Output validation, accuracy test */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    IF_FLA_BRT_VALIDATION(m, n,
+                          store_gelsd_outputs(filename, datatype, m, n, NRHS, A_save, lda, S,
+                                              B_save, ldb, rcond, g_lwork, params),
+                          validate_gelsd(tst_api, m, n, NRHS, A, lda, B, ldb, S, B_save, rcond,
+                                         &rank, datatype, residual, params->imatrix_char, params),
+                          check_bit_reproducibility_gelsd(filename, datatype, m, n, NRHS, A_save,
+                                                          lda, S, B_save, ldb, rcond, g_lwork,
+                                                          params))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gelsd(tst_api, m, n, NRHS, A, lda, B, ldb, S, B_save, rcond, &rank, datatype,
                        residual, params->imatrix_char, params);
@@ -248,6 +291,8 @@ void fla_test_gelsd_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename)
     free_matrix(A);
     free_matrix(A_save);
     free_matrix(B);
@@ -452,4 +497,32 @@ void invoke_gelsd(integer datatype, integer *m, integer *n, integer *nrhs, void 
             break;
         }
     }
+}
+
+void store_gelsd_outputs(void *filename, integer datatype, integer m, integer n, integer NRHS,
+                         void *A_save, integer lda, void *S, void *B_save, integer ldb, void *rcond,
+                         integer g_lwork, void *params)
+{
+    /* Create and open a file for storing Ground truth*/
+    FLA_OPEN_GT_FILE_STORE
+
+    FLA_STORE_BRT_MATRIX(datatype, n, NRHS, B_save, ldb)
+    FLA_STORE_BRT_VECTOR(get_realtype(datatype), fla_min(m, n), S)
+
+    fclose(gt_file);
+}
+
+integer check_bit_reproducibility_gelsd(void *filename, integer datatype, integer m, integer n,
+                                        integer NRHS, void *A_save, integer lda, void *S,
+                                        void *B_save, integer ldb, void *rcond, integer g_lwork,
+                                        void *params)
+{
+    /* Open the file for reading Ground truth */
+    FLA_OPEN_GT_FILE_READ
+
+    FLA_VERIFY_BRT_MATRIX(datatype, n, NRHS, B_save, ldb)
+    FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), fla_min(m, n), S)
+
+    fclose(gt_file);
+    return 1;
 }

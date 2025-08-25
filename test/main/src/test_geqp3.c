@@ -24,6 +24,13 @@ void invoke_geqp3(integer datatype, integer *m, integer *n, void *a, integer *ld
 double prepare_lapacke_geqp3_run(integer datatype, int layout, integer m_A, integer n_A, void *A,
                                  integer lda, integer *jpvt, void *T, integer *info);
 
+/* Helper functions for Bit reproducibility tests */
+void store_geqp3_outputs(void *filename, integer datatype, integer m, integer n, void *A,
+                         integer lda, void *jpvt, void *T, integer g_lwork, void *params);
+integer check_bit_reproducibility_geqp3(void *filename, integer datatype, integer m, integer n,
+                                        void *A, integer lda, void *jpvt, void *T, integer g_lwork,
+                                        void *params);
+
 void fla_test_geqp3(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "QR factorization with column pivoting";
@@ -124,6 +131,7 @@ void fla_test_geqp3_experiment(char *tst_api, test_params_t *params, integer dat
     void *A = NULL, *A_test = NULL, *T = NULL;
     integer *jpvt;
     double residual, err_thresh;
+    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
@@ -148,20 +156,35 @@ void fla_test_geqp3_experiment(char *tst_api, test_params_t *params, integer dat
     /* Create input matrix parameters */
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
     create_vector(datatype, &T, fla_min(m, n));
-
-    init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
-
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-    {
-        scale_matrix_underflow_overflow_geqp3(datatype, m, n, A, lda, params->imatrix_char);
-    }
-
-    /* Make a copy of input matrix A,required for validation. */
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
-    copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
     /* Create pivot array */
     create_vector(INTEGER, (void **)&jpvt, n);
+
+    /* This code path is run to generate the matrix to be passed to the API. This is the default
+     * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
+     * Test cases. For verification runs the input is loaded from the input generated during Ground
+     * truth run */
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            scale_matrix_underflow_overflow_geqp3(datatype, m, n, A, lda, params->imatrix_char);
+        }
+    }
+
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * passed as input to the API
+     * */
+    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, m, n, A, lda, "dddd", m, n, lda, g_lwork)
+
+    /* Make a copy of input matrix A,required for validation. */
+    copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
     prepare_geqp3_run(m, n, A_test, lda, jpvt, T, datatype, &info, interfacetype, layout, params);
 
@@ -179,7 +202,20 @@ void fla_test_geqp3_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    /* Bit reproducibility tests path
+     * This path is taken when BRT is enabled.
+     *     - In the Ground truth runs (BRT_char => G, F), the output is stored in a file and the
+     * default validation function is called
+     *     - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * compared with the generated output
+     *  */
+    IF_FLA_BRT_VALIDATION(
+        m, n, store_geqp3_outputs(filename, datatype, m, n, A_test, lda, jpvt, T, g_lwork, params),
+        validate_geqp3(tst_api, m, n, A, A_test, lda, jpvt, T, datatype, residual,
+                       params->imatrix_char, params),
+        check_bit_reproducibility_geqp3(filename, datatype, m, n, A_test, lda, jpvt, T, g_lwork,
+                                        params))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_geqp3(tst_api, m, n, A, A_test, lda, jpvt, T, datatype, residual,
                        params->imatrix_char, params);
@@ -199,6 +235,8 @@ void fla_test_geqp3_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename)
     free_matrix(A);
     free_matrix(A_test);
     free_vector(T);
@@ -386,4 +424,34 @@ void invoke_geqp3(integer datatype, integer *m, integer *n, void *a, integer *ld
             break;
         }
     }
+}
+
+void store_geqp3_outputs(void *filename, integer datatype, integer m, integer n, void *A,
+                         integer lda, void *jpvt, void *T, integer g_lwork, void *params)
+{
+    /* Create and open a file for storing Ground truth*/
+    FLA_OPEN_GT_FILE_STORE
+
+    /* Store the ground truth data */
+    FLA_STORE_BRT_MATRIX(datatype, m, n, A, lda)
+    FLA_STORE_BRT_VECTOR(datatype, fla_min(m, n), T)
+    FLA_STORE_BRT_VECTOR(INTEGER, n, jpvt)
+
+    fclose(gt_file);
+}
+
+integer check_bit_reproducibility_geqp3(void *filename, integer datatype, integer m, integer n,
+                                        void *A, integer lda, void *jpvt, void *T, integer g_lwork,
+                                        void *params)
+{
+    /* Open the file for reading Ground truth */
+    FLA_OPEN_GT_FILE_READ
+
+    /* Load stored GT and verify with current API outputs */
+    FLA_VERIFY_BRT_MATRIX(datatype, m, n, A, lda)
+    FLA_VERIFY_BRT_VECTOR(datatype, fla_min(m, n), T)
+    FLA_VERIFY_BRT_VECTOR(INTEGER, n, jpvt)
+
+    fclose(gt_file);
+    return 1;
 }

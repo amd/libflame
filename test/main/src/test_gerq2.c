@@ -19,6 +19,12 @@ void prepare_gerq2_run(integer m_A, integer n_A, void *A, integer lda, void *T, 
 void invoke_gerq2(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau,
                   void *work, integer *info);
 
+/* Helper functions for Bit reproducibility tests */
+void store_gerq2_outputs(void *filename, integer datatype, integer m, integer n, void *A,
+                         integer lda, void *T, void *params);
+integer check_bit_reproducibility_gerq2(void *filename, integer datatype, integer m, integer n,
+                                        void *A, integer lda, void *T, void *params);
+
 void fla_test_gerq2(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "RQ factorization with unblocked algorithm";
@@ -110,6 +116,7 @@ void fla_test_gerq2_experiment(char *tst_api, test_params_t *params, integer dat
     void *A = NULL, *A_test = NULL, *T = NULL;
     double residual, err_thresh;
     integer interfacetype = params->interfacetype;
+    void *filename = NULL;
 
     // Get input matrix dimensions.
     m = p_cur;
@@ -130,15 +137,29 @@ void fla_test_gerq2_experiment(char *tst_api, test_params_t *params, integer dat
     // Create input matrix parameters
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
     create_vector(datatype, &T, fla_min(m, n));
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
 
-    init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
+    /* This code path is run to generate the matrix to be passed to the API. This is the default
+     * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
+     * Test cases. For verification runs the input is loaded from the input generated during Ground
+     * truth run */
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        scale_matrix_overflow_underflow_gerq2(datatype, m, n, A, lda, params->imatrix_char);
+        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            scale_matrix_overflow_underflow_gerq2(datatype, m, n, A, lda, params->imatrix_char);
+        }
     }
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * passed as input to the API
+     * */
+    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, m, n, A, lda, "ddd", m, n, lda)
 
     // Make a copy of input matrix A. This is required to validate the API functionality.
-    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
     prepare_gerq2_run(m, n, A_test, lda, T, datatype, &info, interfacetype, params);
@@ -155,7 +176,18 @@ void fla_test_gerq2_experiment(char *tst_api, test_params_t *params, integer dat
 
     // output validation
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    /* Bit reproducibility tests path
+     * This path is taken when BRT is enabled.
+     *     - In the Ground truth runs (BRT_char => G, F), the output is stored in a file and the
+     * default validation function is called
+     *     - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * compared with the generated output
+     *  */
+    IF_FLA_BRT_VALIDATION(
+        m, n, store_gerq2_outputs(filename, datatype, m, n, A, lda, T, params),
+        validate_gerq2(tst_api, m, n, A, A_test, lda, T, datatype, residual, params),
+        check_bit_reproducibility_gerq2(filename, datatype, m, n, A, lda, T, params))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gerq2(tst_api, m, n, A, A_test, lda, T, datatype, residual, params);
     }
@@ -173,6 +205,8 @@ void fla_test_gerq2_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     // Free up buffers
+free_buffers:
+    FLA_FREE_FILENAME(filename)
     free_matrix(A);
     free_matrix(A_test);
     free_vector(T);
@@ -262,4 +296,30 @@ void invoke_gerq2(integer datatype, integer *m, integer *n, void *a, integer *ld
             break;
         }
     }
+}
+
+void store_gerq2_outputs(void *filename, integer datatype, integer m, integer n, void *A,
+                         integer lda, void *T, void *params)
+{
+    /* Create and open a file for storing Ground truth*/
+    FLA_OPEN_GT_FILE_STORE
+
+    /* Store the ground truth data */
+    FLA_STORE_BRT_MATRIX(datatype, m, n, A, lda)
+    FLA_STORE_BRT_VECTOR(datatype, fla_min(m, n), T)
+
+    fclose(gt_file);
+}
+integer check_bit_reproducibility_gerq2(void *filename, integer datatype, integer m, integer n,
+                                        void *A, integer lda, void *T, void *params)
+{
+    /* Open the file for reading Ground truth */
+    FLA_OPEN_GT_FILE_READ
+
+    /* Load stored GT and verify with current API outputs */
+    FLA_VERIFY_BRT_MATRIX(datatype, m, n, A, lda)
+    FLA_VERIFY_BRT_VECTOR(datatype, fla_min(m, n), T)
+
+    fclose(gt_file);
+    return 1;
 }

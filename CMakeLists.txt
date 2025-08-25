@@ -146,6 +146,19 @@ set_property(CACHE ENABLE_AOCL_DTL PROPERTY STRINGS TRACE_AND_LOG TRACE LOG OFF 
 option (ENABLE_EMBED_AOCLUTILS "Enables embedding aocl-utils library in AOCL-LAPACK" OFF)
 option (ENABLE_LAPACKE_LSAME_FORTRAN_STRLEN " For LAPACKE interface enables lsame arguments length based on Fortran interface " OFF)
 option (ENABLE_ASAN "Enable Address Sanitizer (Debug build)" OFF)
+# By default build LAPACKE Index-32 API library
+option(BUILD_INDEX64 "Build LAPACKE Index-64 API libraries" OFF)
+if(BUILD_INDEX64)
+  set(LAPACKELIB "lapacke64")
+else()
+  set(LAPACKELIB "lapacke")
+endif()
+
+# By default build LAPACKE Index-64 API as extended API for supported compilers only.
+#TODO : Require lapack_64.h to build LAPACKE Index-64 API.
+option(BUILD_INDEX64_EXT_API
+  "Build LAPACKE Index-64 API as extended API with _64 suffix" OFF)
+message(STATUS "Build LAPACKE Index-64 API as extended API with _64 suffix: ${BUILD_INDEX64_EXT_API}")
 
 message(STATUS "CMAKE_BUILD_TYPE : ${CMAKE_BUILD_TYPE}")
 if(WIN32)
@@ -521,6 +534,8 @@ endif()
 
 if(ENABLE_ILP64)
 	set(FLA_ENABLE_ILP64 TRUE)
+	#BUILD_INDEX64_EXT_API is disabled until _64 suffix APIs is supported from dependent libraries.
+	set(BUILD_INDEX64_EXT_API OFF)
 	add_definitions(-DFLA_ENABLE_ILP64=1)
 	message(STATUS "Enabled FLA_ENABLE_ILP64 : ${ENABLE_ILP64} ")
 endif()
@@ -985,6 +1000,8 @@ endif()
 set(OBJECT_LIBRARIES
     $<TARGET_OBJECTS:FLA_LAPACK_AVX512>
     $<TARGET_OBJECTS:FLA_LAPACK_AVX2>
+    $<TARGET_OBJECTS:${LAPACKELIB}_obj>
+    $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${LAPACKELIB}_64_obj>>
 )
 
 if (BUILD_SHARED_LIBS)

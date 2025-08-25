@@ -23,6 +23,13 @@ double prepare_lapacke_gbtrf_run(integer datatype, integer matrix_layout, intege
                                  integer kl, integer ku, void *ab, integer ldab, integer *ipiv,
                                  integer *info);
 
+/* Helper functions for Bit reproducibility tests */
+void store_gbtrf_outputs(void *filename, integer datatype, integer m, integer n, integer kl,
+                         integer ku, void *AB_test, integer ldab, void *IPIV, void *params);
+integer check_bit_reproducibility_gbtrf(void *filename, integer datatype, integer m, integer n,
+                                        integer kl, integer ku, void *AB, integer ldab, void *IPIV,
+                                        void *params);
+
 void fla_test_gbtrf(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "LU factorization of banded matrix";
@@ -116,6 +123,7 @@ void fla_test_gbtrf_experiment(char *tst_api, test_params_t *params, integer dat
     void *IPIV;
     void *AB, *AB_test, *A;
     double residual, err_thresh;
+    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
     integer layout = params->matrix_major;
@@ -138,44 +146,58 @@ void fla_test_gbtrf_experiment(char *tst_api, test_params_t *params, integer dat
         }
     }
 
-    /* Create the matrices for the current operation*/
+    /* Create the input matrix*/
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &AB, ldab);
+
+    /* Create the matrices for the test operation*/
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &AB_test, ldab);
     create_vector(INTEGER, &IPIV, fla_min(m, n));
     reset_vector(INTEGER, IPIV, fla_min(m, n), 1);
 
-    /* Initialize the test matrices*/
-    if(g_ext_fptr != NULL)
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        /* Initialize input matrix with custom data from file or extreme values */
-        init_matrix(datatype, AB, m, n, ldab, g_ext_fptr, params->imatrix_char);
-    }
-    else if(FLA_EXTREME_CASE_TEST)
-    {
-        create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, m);
-        if((params->imatrix_char == 'A') || (params->imatrix_char == 'F'))
+        /* Initialize the test matrices*/
+        if(g_ext_fptr != NULL)
         {
-            init_matrix_spec_rand_band_matrix_in(datatype, A, m, n, m, kl, ku,
-                                                 params->imatrix_char);
+            /* Initialize input matrix with custom data from file or extreme values */
+            init_matrix(datatype, AB, m, n, ldab, g_ext_fptr, params->imatrix_char);
+        }
+        else if(FLA_EXTREME_CASE_TEST)
+        {
+            create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, m);
+            if((params->imatrix_char == 'A') || (params->imatrix_char == 'F'))
+            {
+                init_matrix_spec_rand_band_matrix_in(datatype, A, m, n, m, kl, ku,
+                                                     params->imatrix_char);
+            }
+            else
+            {
+                init_matrix_spec_in(datatype, A, m, n, m, params->imatrix_char);
+            }
+
+            get_band_storage_matrix(datatype, m, n, kl, ku, A, m, AB, ldab);
+            free_matrix(A);
         }
         else
         {
-            init_matrix_spec_in(datatype, A, m, n, m, params->imatrix_char);
+            /* Initialize & convert random band matrix into band storage as per API need */
+            rand_band_storage_matrix(datatype, m, n, kl, ku, AB, ldab);
+            /* Oveflow or underflow test initialization */
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                scale_matrix_underflow_overflow_gbtrf(datatype, m, n, AB, ldab,
+                                                      params->imatrix_char);
+            }
         }
+    }
 
-        get_band_storage_matrix(datatype, m, n, kl, ku, A, m, AB, ldab);
-        free_matrix(A);
-    }
-    else
-    {
-        /* Initialize & convert random band matrix into band storage as per API need */
-        rand_band_storage_matrix(datatype, m, n, kl, ku, AB, ldab);
-        /* Oveflow or underflow test initialization */
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
-        {
-            scale_matrix_underflow_overflow_gbtrf(datatype, m, n, AB, ldab, params->imatrix_char);
-        }
-    }
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * passed as input to the API
+     * */
+    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, m, n, AB, ldab, "ddddd", m, n, kl, ku, ldab)
 
     /* Save the original matrix*/
     copy_matrix(datatype, "full", ldab, n, AB, ldab, AB_test, ldab);
@@ -193,7 +215,12 @@ void fla_test_gbtrf_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    IF_FLA_BRT_VALIDATION(
+        m, n, store_gbtrf_outputs(filename, datatype, m, n, kl, ku, AB_test, ldab, IPIV, params),
+        validate_gbtrf(tst_api, m, n, kl, ku, AB, AB_test, ldab, IPIV, datatype, residual, params),
+        check_bit_reproducibility_gbtrf(filename, datatype, m, n, kl, ku, AB_test, ldab, IPIV,
+                                        params))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gbtrf(tst_api, m, n, kl, ku, AB, AB_test, ldab, IPIV, datatype, residual, params);
     }
@@ -212,6 +239,8 @@ void fla_test_gbtrf_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename);
     free_matrix(AB);
     free_matrix(AB_test);
     free_vector(IPIV);
@@ -338,4 +367,30 @@ void invoke_gbtrf(integer datatype, integer *m, integer *n, integer *kl, integer
             break;
         }
     }
+}
+
+void store_gbtrf_outputs(void *filename, integer datatype, integer m, integer n, integer kl,
+                         integer ku, void *AB_test, integer ldab, void *IPIV, void *params)
+{
+    /* Create and open a file for storing Ground truth*/
+    FLA_OPEN_GT_FILE_STORE
+
+    FLA_STORE_BRT_MATRIX(datatype, m, n, AB_test, ldab)
+    FLA_STORE_BRT_VECTOR(INTEGER, fla_min(m, n), IPIV)
+
+    fclose(gt_file);
+}
+
+integer check_bit_reproducibility_gbtrf(void *filename, integer datatype, integer m, integer n,
+                                        integer kl, integer ku, void *AB, integer ldab, void *IPIV,
+                                        void *params)
+{
+    /* Open the file for reading Ground truth */
+    FLA_OPEN_GT_FILE_READ
+
+    FLA_VERIFY_BRT_MATRIX(datatype, m, n, AB, ldab)
+    FLA_VERIFY_BRT_VECTOR(INTEGER, fla_min(m, n), IPIV)
+
+    fclose(gt_file);
+    return 1;
 }

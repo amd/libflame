@@ -356,26 +356,26 @@
     }
 
 /* Macro for the BRT path in the post processing of API outputs in the test driver */
-#define FLA_BRT_OUTPUT_VALIDATION(m, n, storeFunction, validateFunction, checkBRTFunction) \
-    if(FLA_BIT_REPRODUCIBILITY_TEST)                                                       \
-    {                                                                                      \
-        if(same_char(params->BRT_char, 'G') || same_char(params->BRT_char, 'F'))           \
-        {                                                                                  \
-            storeFunction;                                                                 \
-            validateFunction;                                                              \
-        }                                                                                  \
-        else if(same_char(params->BRT_char, 'V') || same_char(params->BRT_char, 'M'))      \
-        {                                                                                  \
-            if(!checkBRTFunction)                                                          \
-            {                                                                              \
-                residual = DBL_MAX;                                                        \
-            }                                                                              \
-            else                                                                           \
-            {                                                                              \
-                residual = 0;                                                              \
-            }                                                                              \
-            FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);                             \
-        }                                                                                  \
+#define IF_FLA_BRT_VALIDATION(m, n, storeFunction, validateFunction, checkBRTFunction) \
+    if(FLA_BIT_REPRODUCIBILITY_TEST)                                                   \
+    {                                                                                  \
+        if(same_char(params->BRT_char, 'G') || same_char(params->BRT_char, 'F'))       \
+        {                                                                              \
+            storeFunction;                                                             \
+            validateFunction;                                                          \
+        }                                                                              \
+        else if(same_char(params->BRT_char, 'V') || same_char(params->BRT_char, 'M'))  \
+        {                                                                              \
+            if(!checkBRTFunction)                                                      \
+            {                                                                          \
+                residual = DBL_MAX;                                                    \
+            }                                                                          \
+            else                                                                       \
+            {                                                                          \
+                residual = 0;                                                          \
+            }                                                                          \
+            FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);                         \
+        }                                                                              \
     }
 
 /* Macro for the BRT path in the pre processing of API inputs in the test driver

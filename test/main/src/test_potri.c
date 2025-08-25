@@ -142,19 +142,13 @@ void fla_test_potri_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Create input matrix parameters */
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
-
     if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST && !FLA_OVERFLOW_UNDERFLOW_TEST))
     {
         /* Initialize input matrix with custom data */
         init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
         if(params->imatrix_char != '\0')
         {
-            char *type = "C";
-            if(datatype == FLOAT || datatype == DOUBLE)
-            {
-                type = "S";
-            }
-            form_symmetric_matrix(datatype, n, A, lda, type, 'U');
+            form_symmetric_matrix(datatype, n, A, lda, "C", uplo);
         }
     }
     else

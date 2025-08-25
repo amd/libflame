@@ -34,6 +34,16 @@ double prepare_lapacke_geevx_run(integer datatype, int matrix_layout, char *bala
                                  integer ldvr, integer *ilo, integer *ihi, void *scale, void *abnrm,
                                  void *rconde, void *rcondv, integer *info);
 
+void store_geevx_outputs(void *filename, integer datatype, char balanc, char jobvl, char jobvr,
+                         char sense, integer m, void *A, integer lda, void *VL, integer ldvl,
+                         void *VR, integer ldvr, void *w, void *wr, void *wi, void *scale,
+                         void *abnrm, void *rconde, void *rcondv, integer lwork, void *params);
+integer check_bit_reproducibility_geevx(void *filename, integer datatype, char balanc, char jobvl,
+                                        char jobvr, char sense, integer m, void *A, integer lda,
+                                        void *VL, integer ldvl, void *VR, integer ldvr, void *w,
+                                        void *wr, void *wi, void *scale, void *abnrm, void *rconde,
+                                        void *rcondv, integer lwork, void *params);
+
 void fla_test_geevx(integer argc, char **argv, test_params_t *params)
 {
     srand(1); /* Setting the seed for random input genetation values */
@@ -149,6 +159,7 @@ void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer dat
     void *A_test = NULL, *L = NULL, *wr_in = NULL, *wi_in = NULL, *scal = NULL;
     char balanc, jobvl, jobvr, sense;
     double residual, err_thresh;
+    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
@@ -206,6 +217,7 @@ void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Create input matrix parameters */
     create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &A, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &A_test, lda);
 
     create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &VL, ldvl);
     create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &VR, ldvr);
@@ -223,39 +235,54 @@ void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer dat
         create_vector(datatype, &wr, m);
         create_vector(datatype, &wi, m);
     }
-
-    if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
     {
-        init_matrix(datatype, A, m, m, lda, g_ext_fptr, params->imatrix_char);
+        create_vector(get_realtype(datatype), &scal, 1);
     }
-    else
+
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        /*  Creating input matrix A by generating random eigen values */
-        create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &L, m);
-        generate_asym_matrix_from_EVs(datatype, m, A, lda, L);
-
-        /* Overflow/underflow initialization */
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
         {
-            create_vector(get_realtype(datatype), &scal, 1);
-            init_matrix_overflow_underflow_asym(datatype, m, m, A, lda, params->imatrix_char, scal);
+            init_matrix(datatype, A, m, m, lda, g_ext_fptr, params->imatrix_char);
         }
-        /* Diagonal and sub-diagonals(upper and lower sub-diagonal together
-           contains imaginary parts) contain real and imaginary parts
-           of eigen values respectively. Storing them for valiation purpose */
-        create_vector(datatype, &wr_in, m);
-        get_diagonal(datatype, L, m, m, m, wr_in);
-
-        if(datatype == FLOAT || datatype == DOUBLE)
+        else
         {
-            create_vector(datatype, &wi_in, m);
-            reset_vector(datatype, wi_in, m, 1);
-            get_subdiagonal(datatype, L, m, m, m, wi_in);
+            /*  Creating input matrix A by generating random eigen values */
+            create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &L, m);
+            generate_asym_matrix_from_EVs(datatype, m, A, lda, L);
+
+            /* Overflow/underflow initialization */
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                init_matrix_overflow_underflow_asym(datatype, m, m, A, lda, params->imatrix_char,
+                                                    scal);
+            }
+            /* Diagonal and sub-diagonals(upper and lower sub-diagonal together
+            contains imaginary parts) contain real and imaginary parts
+            of eigen values respectively. Storing them for valiation purpose */
+            create_vector(datatype, &wr_in, m);
+            get_diagonal(datatype, L, m, m, m, wr_in);
+
+            if(datatype == FLOAT || datatype == DOUBLE)
+            {
+                create_vector(datatype, &wi_in, m);
+                reset_vector(datatype, wi_in, m, 1);
+                get_subdiagonal(datatype, L, m, m, m, wi_in);
+            }
         }
     }
+
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * passed as input to the API
+     * */
+    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, m, m, A, lda, "ccccddddd", balanc, jobvl, jobvr, sense,
+                                 m, lda, ldvl, ldvr, g_lwork);
 
     /* Make a copy of input matrix A. This is required to validate the API functionality. */
-    create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &A_test, lda);
     copy_matrix(datatype, "full", m, m, A, lda, A_test, lda);
 
     prepare_geevx_run(&balanc, &jobvl, &jobvr, &sense, m, A_test, lda, wr, wi, w, VL, ldvl, VR,
@@ -274,7 +301,18 @@ void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    IF_FLA_BRT_VALIDATION(
+        m, m,
+        store_geevx_outputs(filename, datatype, balanc, jobvl, jobvr, sense, m, A_test, lda, VL,
+                            ldvl, VR, ldvr, w, wr, wi, scale, abnrm, rconde, rcondv, g_lwork,
+                            params),
+        validate_geevx(tst_api, &jobvl, &jobvr, &sense, &balanc, m, A, A_test, lda, VL, ldvl, VR,
+                       ldvr, w, wr, wi, scale, abnrm, rconde, rcondv, datatype,
+                       params->imatrix_char, scal, residual, wr_in, wi_in, params),
+        check_bit_reproducibility_geevx(filename, datatype, balanc, jobvl, jobvr, sense, m, A_test,
+                                        lda, VL, ldvl, VR, ldvr, w, wr, wi, scale, abnrm, rconde,
+                                        rcondv, g_lwork, params))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_geevx(tst_api, &jobvl, &jobvr, &sense, &balanc, m, A, A_test, lda, VL, ldvl, VR,
                        ldvr, w, wr, wi, scale, abnrm, rconde, rcondv, datatype,
@@ -295,6 +333,8 @@ void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename);
     free_matrix(A);
     free_matrix(A_test);
     free_matrix(VL);
@@ -559,4 +599,85 @@ void invoke_geevx(integer datatype, char *balanc, char *jobvl, char *jobvr, char
             break;
         }
     }
+}
+
+void store_geevx_outputs(void *filename, integer datatype, char balanc, char jobvl, char jobvr,
+                         char sense, integer m, void *A, integer lda, void *VL, integer ldvl,
+                         void *VR, integer ldvr, void *w, void *wr, void *wi, void *scale,
+                         void *abnrm, void *rconde, void *rcondv, integer lwork, void *params)
+{
+    /* Create and open a file for storing Ground truth*/
+    FLA_OPEN_GT_FILE_STORE
+
+    FLA_STORE_BRT_MATRIX(datatype, m, m, A, lda)
+    if(!same_char(jobvl, 'N'))
+    {
+        FLA_STORE_BRT_MATRIX(datatype, m, m, VL, ldvl)
+    }
+    if(!same_char(jobvr, 'N'))
+    {
+        FLA_STORE_BRT_MATRIX(datatype, m, m, VR, ldvr)
+    }
+    if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+    {
+        FLA_STORE_BRT_VECTOR(datatype, m, w)
+    }
+    else
+    {
+        FLA_STORE_BRT_VECTOR(datatype, m, wr)
+        FLA_STORE_BRT_VECTOR(datatype, m, wi)
+    }
+    FLA_STORE_BRT_VECTOR(get_realtype(datatype), m, scale)
+    FLA_STORE_BRT_VECTOR(get_realtype(datatype), 1, abnrm)
+    if(!same_char(sense, 'N') && !same_char(sense, 'V'))
+    {
+        FLA_STORE_BRT_VECTOR(get_realtype(datatype), m, rconde)
+    }
+    if(!same_char(sense, 'N') && !same_char(sense, 'E'))
+    {
+        FLA_STORE_BRT_VECTOR(get_realtype(datatype), m, rcondv)
+    }
+
+    fclose(gt_file);
+}
+integer check_bit_reproducibility_geevx(void *filename, integer datatype, char balanc, char jobvl,
+                                        char jobvr, char sense, integer m, void *A, integer lda,
+                                        void *VL, integer ldvl, void *VR, integer ldvr, void *w,
+                                        void *wr, void *wi, void *scale, void *abnrm, void *rconde,
+                                        void *rcondv, integer lwork, void *params)
+{
+    /* Open the file for reading Ground truth */
+    FLA_OPEN_GT_FILE_READ
+
+    FLA_VERIFY_BRT_MATRIX(datatype, m, m, A, lda)
+    if(!same_char(jobvl, 'N'))
+    {
+        FLA_VERIFY_BRT_MATRIX(datatype, m, m, VL, ldvl)
+    }
+    if(!same_char(jobvr, 'N'))
+    {
+        FLA_VERIFY_BRT_MATRIX(datatype, m, m, VR, ldvr)
+    }
+    if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+    {
+        FLA_VERIFY_BRT_VECTOR(datatype, m, w)
+    }
+    else
+    {
+        FLA_VERIFY_BRT_VECTOR(datatype, m, wr)
+        FLA_VERIFY_BRT_VECTOR(datatype, m, wi)
+    }
+    FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), m, scale)
+    FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), 1, abnrm)
+    if(!same_char(sense, 'N') && !same_char(sense, 'V'))
+    {
+        FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), m, rconde)
+    }
+    if(!same_char(sense, 'N') && !same_char(sense, 'E'))
+    {
+        FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), m, rcondv)
+    }
+
+    fclose(gt_file);
+    return 1;
 }

@@ -57,6 +57,17 @@ void generate_gejsv_test_matrix(integer datatype, char joba, char jobu, char job
 integer get_gejsv_lwork(char joba, char jobu, char jobv, char jobr, char jobt, char jobp, integer m,
                         integer n);
 
+/* Helper functions for Bit reproducibility tests */
+void store_gejsv_outputs(void *filename, integer datatype, char joba, char jobu, char jobv,
+                         char jobr, char jobt, char jobp, integer m, integer n, void *A,
+                         integer lda, void *S, void *U, integer ldu, void *V, integer ldv,
+                         integer g_lwork, integer g_lrwork, integer g_liwork, void *params);
+integer check_bit_reproducibility_gejsv(void *filename, integer datatype, char joba, char jobu,
+                                        char jobv, char jobr, char jobt, char jobp, integer m,
+                                        integer n, void *A, integer lda, void *S, void *U,
+                                        integer ldu, void *V, integer ldv, integer g_lwork,
+                                        integer g_lrwork, integer g_liwork, void *params);
+
 void fla_test_gejsv(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "Singular Value Decomposition using Jacobi method";
@@ -193,6 +204,7 @@ void fla_test_gejsv_experiment(char *tst_api, test_params_t *params, integer dat
     void *A = NULL, *A_test = NULL, *U = NULL, *V = NULL, *S = NULL, *S_test = NULL;
     void *stat, *istat, *scal = NULL;
     double residual, err_thresh;
+    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
     integer layout = params->matrix_major;
@@ -241,20 +253,33 @@ void fla_test_gejsv_experiment(char *tst_api, test_params_t *params, integer dat
     create_vector(INTEGER, &istat, 4);
     create_vector(get_realtype(datatype), &scal, 1);
 
-    if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
-        init_matrix(get_realtype(datatype), S, n, 1, lda, g_ext_fptr, params->imatrix_char);
-    }
-    else
-    {
-        /* Generate matrix A based on the input parameters */
-        generate_gejsv_test_matrix(datatype, joba, jobu, jobv, m, n, A, lda, S);
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
         {
-            scale_matrix_overflow_underflow_gejsv(datatype, m, n, A, lda, S, imatrix, scal);
+            init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+            init_matrix(get_realtype(datatype), S, n, 1, lda, g_ext_fptr, params->imatrix_char);
+        }
+        else
+        {
+            /* Generate matrix A based on the input parameters */
+            generate_gejsv_test_matrix(datatype, joba, jobu, jobv, m, n, A, lda, S);
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                scale_matrix_overflow_underflow_gejsv(datatype, m, n, A, lda, S, imatrix, scal);
+            }
         }
     }
+
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * passed as input to the API
+     * */
+    FLA_BRT_PROCESS_TWO_INPUT(datatype, m, n, A, lda, get_realtype(datatype), n, 1, S, lda,
+                              "ccccccdddddddd", joba, jobu, jobv, jobr, jobt, jobp, m, n, lda, ldu,
+                              ldv, g_lwork, g_lrwork, g_liwork)
 
     /* Make a copy of input matrix A. This is required to validate the API functionality */
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
@@ -270,7 +295,17 @@ void fla_test_gejsv_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    IF_FLA_BRT_VALIDATION(
+        m, n,
+        store_gejsv_outputs(filename, datatype, joba, jobu, jobv, jobr, jobt, jobp, m, n, A, lda, S,
+                            U, ldu, V, ldv, g_lwork, g_lrwork, g_liwork, params),
+        validate_gejsv(tst_api, joba, jobu, jobv, jobr, jobt, jobp, m, n, A, lda, S, S_test, U, ldu,
+                       V, ldv, stat, istat, test_eliminated_svds, datatype, residual, scal, imatrix,
+                       params),
+        check_bit_reproducibility_gejsv(filename, datatype, joba, jobu, jobv, jobr, jobt, jobp, m,
+                                        n, A, lda, S, U, ldu, V, ldv, g_lwork, g_lrwork, g_liwork,
+                                        params))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gejsv(tst_api, joba, jobu, jobv, jobr, jobt, jobp, m, n, A, lda, S, S_test, U, ldu,
                        V, ldv, stat, istat, test_eliminated_svds, datatype, residual, scal, imatrix,
@@ -290,6 +325,8 @@ void fla_test_gejsv_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename);
     free_matrix(A);
     free_matrix(A_test);
     free_vector(S);
@@ -659,4 +696,50 @@ integer get_gejsv_lwork(char joba, char jobu, char jobv, char jobr, char jobt, c
     if(want_u && want_v)
         lwork = fla_max(lwork, n + m * NBsiz);
     return lwork;
+}
+
+void store_gejsv_outputs(void *filename, integer datatype, char joba, char jobu, char jobv,
+                         char jobr, char jobt, char jobp, integer m, integer n, void *A,
+                         integer lda, void *S, void *U, integer ldu, void *V, integer ldv,
+                         integer g_lwork, integer g_lrwork, integer g_liwork, void *params)
+{
+    /* Create and open a file for storing Ground truth*/
+    FLA_OPEN_GT_FILE_STORE
+
+    FLA_STORE_BRT_MATRIX(datatype, m, n, A, lda)
+    FLA_STORE_BRT_VECTOR(get_realtype(datatype), n, S)
+    if(!same_char(jobu, 'N'))
+    {
+        FLA_STORE_BRT_MATRIX(datatype, m, n, U, ldu)
+    }
+    if(!same_char(jobv, 'N'))
+    {
+        FLA_STORE_BRT_MATRIX(datatype, n, n, V, ldv)
+    }
+
+    fclose(gt_file);
+}
+
+integer check_bit_reproducibility_gejsv(void *filename, integer datatype, char joba, char jobu,
+                                        char jobv, char jobr, char jobt, char jobp, integer m,
+                                        integer n, void *A, integer lda, void *S, void *U,
+                                        integer ldu, void *V, integer ldv, integer g_lwork,
+                                        integer g_lrwork, integer g_liwork, void *params)
+{
+    /* Open the file for reading Ground truth */
+    FLA_OPEN_GT_FILE_READ
+
+    FLA_VERIFY_BRT_MATRIX(datatype, m, n, A, lda)
+    FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), n, S)
+    if(!same_char(jobu, 'N'))
+    {
+        FLA_VERIFY_BRT_MATRIX(datatype, m, n, U, ldu)
+    }
+    if(!same_char(jobv, 'N'))
+    {
+        FLA_VERIFY_BRT_MATRIX(datatype, n, n, V, ldv)
+    }
+
+    fclose(gt_file);
+    return 1;
 }

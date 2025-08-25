@@ -32,7 +32,7 @@
 
 #include "lapacke_utils.h"
 
-double LAPACKE_zlansy_work( int matrix_layout, char norm, char uplo,
+double API_SUFFIX(LAPACKE_zlansy_work)( int matrix_layout, char norm, char uplo,
                                 lapack_int n, const lapack_complex_double* a,
                                 lapack_int lda, double* work )
 {
@@ -41,13 +41,16 @@ double LAPACKE_zlansy_work( int matrix_layout, char norm, char uplo,
     if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         res = LAPACK_zlansy( &norm, &uplo, &n, a, &lda, work );
+        if( info < 0 ) {
+            info = info - 1;
+        }
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int lda_t = MAX(1,n);
         lapack_complex_double* a_t = NULL;
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -6;
-            LAPACKE_xerbla( "LAPACKE_zlansy_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zlansy_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -58,7 +61,7 @@ double LAPACKE_zlansy_work( int matrix_layout, char norm, char uplo,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        LAPACKE_zsy_trans( matrix_layout, uplo, n, a, lda, a_t, lda_t );
+        API_SUFFIX(LAPACKE_zsy_trans)( matrix_layout, uplo, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         res = LAPACK_zlansy( &norm, &uplo, &n, a_t, &lda_t, work );
         info = 0;  /* LAPACK call is ok! */
@@ -66,11 +69,11 @@ double LAPACKE_zlansy_work( int matrix_layout, char norm, char uplo,
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_zlansy_work", info );
+            API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zlansy_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_zlansy_work", info );
+        API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_zlansy_work", info );
     }
     return res;
 }

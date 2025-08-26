@@ -92,7 +92,7 @@ if(LAPACKE_WITH_TMG)
 endif()
 target_link_libraries(${PROJECT_NAME} PRIVATE ${LAPACK_LIBRARIES})
 
-install( FILES ${LAPACKE_INCLUDE} ${LAPACK_BINARY_DIR}/include/lapacke_mangling.h
+install( FILES ${LAPACKE_INCLUDE} ${CMAKE_CURRENT_BINARY_DIR}/include/lapacke_mangling.h
   DESTINATION ${CMAKE_INSTALL_PREFIX}/include
   COMPONENT Development
   )
@@ -102,16 +102,3 @@ if(BUILD_TESTING)
 endif()
 
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lapacke.pc.in ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKELIB}.pc @ONLY)
-install(FILES
-  ${CMAKE_CURRENT_BINARY_DIR}/${LAPACKELIB}.pc
-  DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig
-  COMPONENT Development
-  )
-
-install(FILES
-  ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${LAPACKELIB}-config.cmake
-  ${LAPACK_BINARY_DIR}/${LAPACKELIB}-config-version.cmake
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LAPACKELIB}-${LAPACK_VERSION}
-  COMPONENT Development
-  )

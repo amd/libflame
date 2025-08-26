@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {0.f, 0.f};
+static doublecomplex c_b1 = {0., 0.};
 static integer c_n1 = -1;
 /* > \brief \b ZGEDMDQ computes the Dynamic Mode Decomposition (DMD) for a pair of data snapshot
  * matrices. */
@@ -560,11 +560,11 @@ LIWORK >=1 */
 /* ............................................................. */
 /* Subroutine */
 void zgedmdq_(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf,
-              integer *whtsvd, integer *m, integer *n, complex *f, integer *ldf, complex *x,
-              integer *ldx, complex *y, integer *ldy, integer *nrnk, real *tol, integer *k,
-              complex *eigs, complex *z__, integer *ldz, real *res, complex *b, integer *ldb,
-              complex *v, integer *ldv, complex *s, integer *lds, complex *zwork, integer *lzwork,
-              real *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+              integer *whtsvd, integer *m, integer *n, doublecomplex *f, integer *ldf, doublecomplex *x,
+              integer *ldx, doublecomplex *y, integer *ldy, integer *nrnk, doublereal *tol, integer *k,
+              doublecomplex *eigs, doublecomplex *z__, integer *ldz, doublereal *res, doublecomplex *b, integer *ldb,
+              doublecomplex *v, integer *ldv, doublecomplex *s, integer *lds, doublecomplex *zwork, integer *lzwork,
+              doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF(
@@ -587,19 +587,19 @@ void zgedmdq_(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *
     logical wntex;
     extern /* Subroutine */
         void
-        zgedmd_(char *, char *, char *, char *, integer *, integer *, integer *, complex *,
-                integer *, complex *, integer *, integer *, real *, integer *, complex *, complex *,
-                integer *, real *, complex *, integer *, complex *, integer *, complex *, integer *,
-                complex *, integer *, real *, integer *, integer *, integer *, integer *),
+        zgedmd_(char *, char *, char *, char *, integer *, integer *, integer *, doublecomplex *,
+                integer *, doublecomplex *, integer *, integer *, doublereal *, integer *, doublecomplex *, doublecomplex *,
+                integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
+                doublecomplex *, integer *, doublereal *, integer *, integer *, integer *, integer *),
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     integer mlwdmd, olwdmd;
     logical sccolx, sccoly;
     extern /* Subroutine */
         void
-        zgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *,
+        zgeqrf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *,
                 integer *),
-        zlacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
-        zlaset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
+        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *),
+        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *);
     integer iminwr;
     logical wntvec, wntvcf;
     integer mlwgqr;
@@ -608,10 +608,10 @@ void zgedmdq_(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *
     logical lquery, wntres, wnttrf, wntvcq;
     extern /* Subroutine */
         void
-        zungqr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
+        zungqr_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *,
                 integer *, integer *),
-        zunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
-                complex *, integer *, complex *, integer *, integer *);
+        zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+                doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* ...Translated by Pacific-Sierra Research vf90 Personal 3.4N3 02:55:35 10/25/24 */
     /* ...Switches: */
     /* -- LAPACK driver routine -- */
@@ -725,7 +725,7 @@ void zgedmdq_(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *
     {
         *info = -16;
     }
-    else if(*tol < 0.f || *tol >= 1.f)
+    else if(*tol < 0. || *tol >= 1.)
     {
         *info = -17;
     }
@@ -767,12 +767,12 @@ void zgedmdq_(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *
             if(lquery)
             {
                 iwork[1] = 1;
-                zwork[1].r = 2.f;
-                zwork[1].i = 0.f; // , expr subst
-                zwork[2].r = 2.f;
-                zwork[2].i = 0.f; // , expr subst
-                work[1] = 2.f;
-                work[2] = 2.f;
+                zwork[1].r = 2.;
+                zwork[1].i = 0.; // , expr subst
+                zwork[2].r = 2.;
+                zwork[2].i = 0.; // , expr subst
+                work[1] = 2.;
+                work[2] = 2.;
             }
             else
             {
@@ -880,12 +880,12 @@ void zgedmdq_(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *
     {
         /* Return minimal and optimal workspace sizes */
         iwork[1] = iminwr;
-        zwork[1].r = (real)mlwork;
-        zwork[1].i = 0.f; // , expr subst
-        zwork[2].r = (real)olwork;
-        zwork[2].i = 0.f; // , expr subst
-        work[1] = (real)mlrwrk;
-        work[2] = (real)mlrwrk;
+        zwork[1].r = (doublereal)mlwork;
+        zwork[1].i = 0.; // , expr subst
+        zwork[2].r = (doublereal)olwork;
+        zwork[2].i = 0.; // , expr subst
+        work[1] = (doublereal)mlrwrk;
+        work[2] = (doublereal)mlrwrk;
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

@@ -9,10 +9,9 @@
 #ifndef LIBFLAME_INTERFACE_EIG_HH
 #define LIBFLAME_INTERFACE_EIG_HH
 
-
 namespace libflame
 {
-     /** @defgroup Eig Eigenvalue Routines
+    /** @defgroup Eig Eigenvalue Routines
      * @ingroup LAPACK
      * @{
      */
@@ -7403,6 +7402,812 @@ for GE matrices (blocked algorithm)
         tgex2(wantq, wantz, n, a, lda, b, ldb, q, ldq, z, ldz, j1, n1, n2, work, lwork, info);
     }
     /** @}*/ // end of tgex2
+
+    /** @defgroup dmd dmd
+     * @ingroup NYS
+     * @{
+     */
+    /*! @brief GEDMD computes the Dynamic Mode Decomposition (DMD) for
+         a pair of data snapshot matrices. For the input matrices
+         X and Y such that Y = A*X with an unaccessible matrix
+         A, GEDMD computes a certain number of Ritz pairs of A using
+         the standard Rayleigh-Ritz extraction from a subspace of
+         range(X) that is determined using the leading left singular
+         vectors of X. Optionally, GEDMD returns the residuals
+         of the computed Ritz pairs, the information needed for
+         a refinement of the Ritz vectors, or the eigenvectors of
+         the Exact DMD.
+ * @details
+  * \b Purpose:
+    * \verbatim
+      DGEDMD computes the Dynamic Mode Decomposition (DMD) for 
+      a pair of data snapshot matrices. For the input matrices 
+      X and Y such that Y = A*X with an unaccessible matrix 
+      A, DGEDMD computes a certain number of Ritz pairs of A using 
+      the standard Rayleigh-Ritz extraction from a subspace of 
+      range(X) that is determined using the leading left singular 
+      vectors of X. Optionally, DGEDMD returns the residuals 
+      of the computed Ritz pairs, the information needed for 
+      a refinement of the Ritz vectors, or the eigenvectors of 
+      the Exact DMD. 
+      For further details see the references listed 
+      below. For more details of the implementation see [3]
+     \endverbatim
+
+ * @param[in] JOBS
+         JOBS (input) CHARACTER*1
+         Determines whether the initial data snapshots are scaled
+         by a diagonal matrix.
+         'S' :: The data snapshots matrices X and Y are multiplied
+         with a diagonal matrix D so that X*D has unit
+         nonzero columns (in the Euclidean 2-norm)
+         'C' :: The snapshots are scaled as with the 'S' option.
+         If it is found that an i-th column of X is zero
+         vector and the corresponding i-th column of Y is
+         non-zero, then the i-th column of Y is set to
+         zero and a warning flag is raised.
+         'Y' :: The data snapshots matrices X and Y are multiplied
+         by a diagonal matrix D so that Y*D has unit
+         nonzero columns (in the Euclidean 2-norm)
+         'N' :: No data scaling.
+ * @param[in] JOBZ
+         JOBZ (input) CHARACTER*1
+         Determines whether the eigenvectors (Koopman modes) will
+         be computed.
+         'V' :: The eigenvectors (Koopman modes) will be computed
+         and returned in the matrix Z.
+         See the description of Z.
+         'F' :: The eigenvectors (Koopman modes) will be returned
+         in factored form as the product X(:,1:K)*W, where X
+         contains a POD basis (leading left singular vectors
+         of the data matrix X) and W contains the eigenvectors
+         of the corresponding Rayleigh quotient.
+         See the descriptions of K, X, W, Z.
+         'N' :: The eigenvectors are not computed.
+ * @param[in] JOBR
+         JOBR (input) CHARACTER*1
+         Determines whether to compute the residuals.
+         'R' :: The residuals for the computed eigenpairs will be
+         computed and stored in the array RES.
+         See the description of RES.
+         For this option to be legal, JOBZ must be 'V'.
+         'N' :: The residuals are not computed.
+ * @param[in] JOBF
+      JOBF (input) CHARACTER*1
+      Specifies whether to store information needed for post-
+      processing (e.g. computing refined Ritz vectors)
+      'R' :: The matrix needed for the refinement of the Ritz
+      vectors is computed and stored in the array B.
+      See the description of B.
+      'E' :: The unscaled eigenvectors of the Exact DMD are
+      computed and returned in the array B. See the
+      description of B.
+      'N' :: No eigenvector refinement data is computed.
+ * @param[in] WHTSVD
+      WHTSVD (input) INTEGER, WHSTVD in 1, 2, 3, 4
+      Allows for a selection of the SVD algorithm from the
+      LAPACK library.
+      1 :: CGESVD (the QR SVD algorithm)
+      2 :: CGESDD (the Divide and Conquer algorith
+      if enough
+       workspace available, this is the fastest option)
+       3 :: CGESVDQ (the preconditioned QR SVD
+      this and 4
+       are the most accurate options)
+       4 :: CGEJSV (the preconditioned Jacobi SV
+      this and 3
+      are the most accurate options)
+      For the four methods above, a significant difference in
+      the accuracy of small singular values is possible if
+      the snapshots vary in norm so that X is severely
+      ill-conditioned. If small (smaller than EPS*||X||)
+      singular values are of interest and JOBS=='N', then
+      the options (3, 4) give the most accurate results, where
+      the option 4 is slightly better and with stronger
+      theoretical background.
+      If JOBS=='S', i.e. the columns of X will be normalized,
+      then all methods give nearly equally accurate results.
+ * @param[in] M
+      M (input) INTEGER, M>= 0
+      The state space dimension (the row dimension of X, Y).
+ * @param[in] N
+      N (input) INTEGER, 0 <= N <= M
+      The number of data snapshot pairs
+      (the number of columns of X and Y).
+
+ * @param[in,out] X
+      X (input/output) COMPLEX M-by-N array  
+      > On entry, X contains the data snapshot matrix X. It is 
+      assumed that the column norms of X are in the range of 
+      the normalized floating point numbers. 
+      < On exit, the leading K columns of X contain a POD basis, 
+      i.e. the leading K left singular vectors of the input 
+      data matrix X, U(:,1:K). All N columns of X contain all 
+      left singular vectors of the input matrix X. 
+      See the descriptions of K, Z and W. 
+
+ * @param[in] LDX
+      LDX (input) INTEGER, LDX >= M
+      The leading dimension of the array X.
+ * @param[in,out] Y
+      Y (input/workspace/output) COMPLEX M-by-N array
+      > On entry, Y contains the data snapshot matrix Y
+      < On exit,
+      If JOBR == 'R', the leading K columns of Y contain
+      the residual vectors for the computed Ritz pairs.
+      See the description of RES.
+      If JOBR == 'N', Y contains the original input data,
+      scaled according to the value of JOBS.
+
+ * @param[in] LDY
+      LDY (input) INTEGER , LDY >= M
+      The leading dimension of the array Y.
+
+ * @param[in] NRNK
+      NRNK (input) INTEGER
+      Determines the mode how to compute the numerical rank,
+      i.e. how to truncate small singular values of the input
+      matrix X. On input, if
+      NRNK = -1 :: i-th singular value sigma(i) is truncated
+      if sigma(i) <= TOL*sigma(1)
+      This option is recommended.
+      NRNK = -2 :: i-th singular value sigma(i) is truncated
+      if sigma(i) <= TOL*sigma(i-1)
+      This option is included for R&D purposes.
+      It requires highly accurate SVD, which
+      may not be feasible.
+      The numerical rank can be enforced by using positive
+      value of NRNK as follows:
+      0 < NRNK <= N :: at most NRNK largest singular values
+      will be used. If the number of the computed nonzero
+      singular values is less than NRNK, then only those
+      nonzero values will be used and the actually used
+      dimension is less than NRNK. The actual number of
+      the nonzero singular values is returned in the variable
+      K. See the descriptions of TOL and K.
+ * @param[in] TOL
+      TOL (input) REAL, 0 <= TOL < 1
+      The tolerance for truncating small singular values.
+      See the description of NRNK.
+
+ * @param[out] K
+      K (output) INTEGER, 0 <= K <= N
+      The dimension of the POD basis for the data snapshot
+      matrix X and the number of the computed Ritz pairs.
+      The value of K is determined according to the rule set
+      by the parameters NRNK and TOL.
+      See the descriptions of NRNK and TOL.
+ * @param[out] EIGS
+      EIGS (output) COMPLEX N-by-1 array
+      The leading K (K<=N) entries of EIGS contain
+      the computed eigenvalues (Ritz values).
+      See the descriptions of K, and Z.
+
+ * @param[out] Z
+      Z (workspace/output) COMPLEX M-by-N array
+      If JOBZ =='V' then Z contains the Ritz vectors. Z(:,i)
+      is an eigenvector of the i-th Ritz valu
+      ||Z(:,i)||_2=1.
+      If JOBZ == 'F', then the Z(:,i)'s are given implicitly as
+      the columns of X(:,1:K)*W(1:K,1:K), i.e. X(:,1:K)*W(:,i)
+      is an eigenvector corresponding to EIGS(i). The columns
+      of W(1:k,1:K) are the computed eigenvectors of the
+      K-by-K Rayleigh quotient.
+      See the descriptions of EIGS, X and W.
+ * @param[in] LDZ
+      LDZ (input) INTEGER , LDZ >= M
+      The leading dimension of the array Z.
+ * @param[out] RES
+      RES (output) REAL N-by-1 array
+      RES(1:K) contains the residuals for the K computed
+      Ritz pairs,
+      RES(i) = || A * Z(:,i) - EIGS(i)*Z(:,i))||_2.
+      See the description of EIGS and Z.
+ * @param[out] B
+      B (output) COMPLEX M-by-N array.
+      IF JOBF =='R', B(1:M,1:K) contains A*U(:,1:K), and can
+      be used for computing the refined vector
+      see further
+      details in the provided references.
+      If JOBF == 'E', B(1:M,1:K) contains
+      A*U(:,1:K)*W(1:K,1:K), which are the vectors from the
+      Exact DMD, up to scaling by the inverse eigenvalues.
+      If JOBF =='N', then B is not referenced.
+      See the descriptions of X, W, K.
+ * @param[in] LDB
+      LDB (input) INTEGER, LDB >= M
+      The leading dimension of the array B.
+ * @param[out] W
+      W (workspace/output) COMPLEX N-by-N array
+      On exit, W(1:K,1:K) contains the K computed
+      eigenvectors of the matrix Rayleigh quotient.
+      The Ritz vectors (returned in Z) are the
+      product of X (containing a POD basis for the input
+      matrix X) and W. See the descriptions of K, S, X and Z.
+      W is also used as a workspace to temporarily store the
+      right singular vectors of X.
+
+ * @param[in] LDW
+      LDW (input) INTEGER, LDW >= N
+      The leading dimension of the array W.
+ * @param[out] S
+      S (workspace/output) COMPLEX N-by-N array
+      The array S(1:K,1:K) is used for the matrix Rayleigh
+      quotient. This content is overwritten during
+      the eigenvalue decomposition by CGEEV.
+      See the description of K.
+ * @param[in] LDS
+      LDS (input) INTEGER, LDS >= N
+      The leading dimension of the array S.
+
+ * @param[out] ZWORK
+      ZWORK (workspace/output) COMPLEX LZWORK-by-1 array
+      ZWORK is used as complex workspace in the complex SVD, as
+      specified by WHTSVD (1,2, 3 or 4) and for CGEEV for computing
+      the eigenvalues of a Rayleigh quotient.
+      If the call to GEDMD is only workspace query, then
+      ZWORK(1) contains the minimal complex workspace length and
+      ZWORK(2) is the optimal complex workspace length.
+      Hence, the length of work is at least 2.
+      See the description of LZWORK.
+ * @param[in] LZWORK
+      LZWORK (input) INTEGER
+      The minimal length of the workspace vector ZWORK.
+      LZWORK is calculated as MAX(LZWORK_SVD, LZWORK_CGEEV),
+      where LZWORK_CGEEV = MAX( 1, 2*N ) and the minimal
+      LZWORK_SVD is calculated as follows
+      If WHTSVD == 1 :: CGESVD ::
+      LZWORK_SVD = MAX(1,2*MIN(M,N)+MAX(M,N))
+      If WHTSVD == 2 :: CGESDD ::
+      LZWORK_SVD = 2*MIN(M,N)*MIN(M,N)+2*MIN(M,N)+MAX(M,N)
+      If WHTSVD == 3 :: CGESVDQ ::
+      LZWORK_SVD = obtainable by a query
+      If WHTSVD == 4 :: CGEJSV ::
+      LZWORK_SVD = obtainable by a query
+      If on entry LZWORK = -1, then a workspace query is
+      assumed and the procedure only computes the minimal
+      and the optimal workspace lengths and returns them in
+      LZWORK(1) and LZWORK(2), respectively.
+
+ * @param[out] RWORK
+      RWORK (workspace/output) REAL LRWORK-by-1 array
+      On exit, RWORK(1:N) contains the singular values of
+      X (for JOBS=='N') or column scaled X (JOBS=='S', 'C').
+      If WHTSVD==4, then RWORK(N+1) and RWORK(N+2) contain
+      scaling factor RWORK(N+2)/RWORK(N+1) used to scale X
+      and Y to avoid overflow in the SVD of X.
+      This may be of interest if the scaling option is off
+      and as many as possible smallest eigenvalues are
+      desired to the highest feasible accuracy.
+      If the call to GEDMD is only workspace query, then
+      RWORK(1) contains the minimal workspace length.
+      See the description of LRWORK.
+ * @param[in] LRWORK
+      LRWORK (input) INTEGER
+      The minimal length of the workspace vector RWORK.
+      LRWORK is calculated as follows:
+      LRWORK = MAX(1, N+LRWORK_SVD,N+LRWORK_CGEEV), where
+      LRWORK_CGEEV = MAX(1,2*N) and RWORK_SVD is the real workspace
+      for the SVD subroutine determined by the input parameter
+      WHTSVD.
+      If WHTSVD == 1 :: CGESVD ::
+      LRWORK_SVD = 5*MIN(M,N)
+      If WHTSVD == 2 :: CGESDD ::
+      LRWORK_SVD = MAX(5*MIN(M,N)*MIN(M,N)+7*MIN(M,N),
+      2*MAX(M,N)*MIN(M,N)+2*MIN(M,N)*MIN(M,N)+MIN(M,N) ) )
+      If WHTSVD == 3 :: CGESVDQ ::
+      LRWORK_SVD = obtainable by a query
+      If WHTSVD == 4 :: CGEJSV ::
+      LRWORK_SVD = obtainable by a query
+      If on entry LRWORK = -1, then a workspace query is
+      assumed and the procedure only computes the minimal
+      real workspace length and returns it in RWORK(1).
+ * @param[out] IWORK
+      IWORK (workspace/output) INTEGER LIWORK-by-1 array
+      Workspace that is required only if WHTSVD equals
+      2 , 3 or 4. (See the description of WHTSVD).
+      If on entry LWORK =-1 or LIWORK=-1, then the
+      minimal length of IWORK is computed and returned in
+      IWORK(1). See the description of LIWORK.
+
+ * @param[in] LIWORK
+      LIWORK (input) INTEGER
+      The minimal length of the workspace vector IWORK.
+      If WHTSVD == 1, then only IWORK(1) is use
+      LIWORK >=1
+      If WHTSVD == 2, then LIWORK >= MAX(1,8*MIN(M,N))
+      If WHTSVD == 3, then LIWORK >= MAX(1,M+N-1)
+      If WHTSVD == 4, then LIWORK >= MAX(3,M+3*N)
+      If on entry LIWORK = -1, then a workspace query is
+      assumed and the procedure only computes the minimal
+      and the optimal workspace lengths for ZWORK, RWORK and
+      IWORK. See the descriptions of ZWORK, RWORK and IWORK.
+ * @param[out] INFO
+      INFO (output) INTEGER
+      -i < 0 :: On entry, the i-th argument had an
+      illegal value
+      = 0 :: Successful return.
+      = 1 :: Void input. Quick exit (M=0 or N=0).
+      = 2 :: The SVD computation of X did not converge.
+      Suggestion: Check the input data and/or
+      repeat with different WHTSVD.
+      = 3 :: The computation of the eigenvalues did not
+      converge.
+      = 4 :: If data scaling was requested on input and
+      the procedure found inconsistency in the data
+      such that for some column index i,
+      X(:,i) = 0 but Y(:,i) /= 0, then Y(:,i) is set
+      to zero if JOBS=='C'. The computation proceeds
+      with original or modified data and warning
+      flag is set with INFO=4.
+
+*/
+    template <typename T>
+    void gedmd(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, integer *m,
+               integer *n, T *x, integer *ldx, T *y, integer *ldy, integer *nrnk, T *tol,
+               integer *k, T *reig, T *imeig, T *z__, integer *ldz, T *res, T *b, integer *ldb,
+               T *w, integer *ldw, T *s, integer *lds, T *work, integer *lwork, integer *iwork,
+               integer *liwork, integer *info)
+    {
+        gedmd(jobs, jobz, jobr, jobf, whtsvd, m, n, x, ldx, y, ldy, nrnk, tol, k, reig, imeig, z__,
+              ldz, res, b, ldb, w, ldw, s, lds, work, lwork, iwork, liwork, info);
+    }
+    template <typename T, typename Ta>
+    void gedmd(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, integer *m,
+               integer *n, T *x, integer *ldx, T *y, integer *ldy, integer *nrnk, Ta *tol,
+               integer *k, T *eigs, T *z__, integer *ldz, Ta *res, T *b, integer *ldb, T *w,
+               integer *ldw, T *s, integer *lds, T *zwork, integer *lzwork, Ta *rwork,
+               integer *lrwork, integer *iwork, integer *liwork, integer *info)
+    {
+        gedmd(jobs, jobz, jobr, jobf, whtsvd, m, n, x, ldx, y, ldy, nrnk, tol, k, eigs, z__, ldz,
+              res, b, ldb, w, ldw, s, lds, zwork, lzwork, rwork, lrwork, iwork, liwork, info);
+    }
+    /** @}*/ // end of dmd
+
+    /** @defgroup dmdq dmdq
+     * * \ingroup NYS
+     * @{
+     */
+    /*! @brief  GEDMDQ computes the Dynamic Mode Decomposition (DMD) for a pair of data snapshot
+        matrices.
+* @details
+* \b Purpose:
+    * \verbatim
+     DGEDMDQ computes the Dynamic Mode Decomposition (DMD) for
+     a pair of data snapshot matrices, using a QR factorization
+     based compression of the data. For the input matrices
+     X and Y such that Y = A*X with an unaccessible matrix
+     A, DGEDMDQ computes a certain number of Ritz pairs of A using
+     the standard Rayleigh-Ritz extraction from a subspace of
+     range(X) that is determined using the leading left singular
+     vectors of X. Optionally, DGEDMDQ returns the residuals
+     of the computed Ritz pairs, the information needed for
+     a refinement of the Ritz vectors, or the eigenvectors of
+     the Exact DMD.
+     For further details see the references listed
+     below. For more details of the implementation see [3].
+     * \endverbatim
+
+     * @param[in] JOBS
+         JOBS (input) CHARACTER*1
+         Determines whether the initial data snapshots are scaled
+         by a diagonal matrix. The data snapshots are the columns
+         of F. The leading N-1 columns of F are denoted X and the
+         trailing N-1 columns are denoted Y.
+         'S' :: The data snapshots matrices X and Y are multiplied
+         with a diagonal matrix D so that X*D has unit
+         nonzero columns (in the Euclidean 2-norm)
+         'C' :: The snapshots are scaled as with the 'S' option.
+         If it is found that an i-th column of X is zero
+         vector and the corresponding i-th column of Y is
+         non-zero, then the i-th column of Y is set to
+         zero and a warning flag is raised.
+         'Y' :: The data snapshots matrices X and Y are multiplied
+         by a diagonal matrix D so that Y*D has unit
+         nonzero columns (in the Euclidean 2-norm)
+         'N' :: No data scaling.
+
+     * @param[in] JOBZ
+         JOBZ (input) CHARACTER*1
+         Determines whether the eigenvectors (Koopman modes) will
+         be computed.
+         'V' :: The eigenvectors (Koopman modes) will be computed
+         and returned in the matrix Z.
+         See the description of Z.
+         'F' :: The eigenvectors (Koopman modes) will be returned
+         in factored form as the product Z*V, where Z
+         is orthonormal and V contains the eigenvectors
+         of the corresponding Rayleigh quotient.
+         See the descriptions of F, V, Z.
+         'Q' :: The eigenvectors (Koopman modes) will be returned
+         in factored form as the product Q*Z, where Z
+         contains the eigenvectors of the compression of the
+         underlying discretized operator onto the span of
+         the data snapshots. See the descriptions of F, V, Z.
+         Q is from the initial QR factorization.
+         'N' :: The eigenvectors are not computed.
+
+     * @param[in] JOBR
+         JOBR (input) CHARACTER*1
+         Determines whether to compute the residuals.
+         'R' :: The residuals for the computed eigenpairs will
+         be computed and stored in the array RES.
+         See the description of RES.
+         For this option to be legal, JOBZ must be 'V'.
+         'N' :: The residuals are not computed.
+
+     * @param[in] JOBQ
+         JOBQ (input) CHARACTER*1
+         Specifies whether to explicitly compute and return the
+         orthogonal matrix from the QR factorization.
+         'Q' :: The matrix Q of the QR factorization of the data
+         snapshot matrix is computed and stored in the
+         array F. See the description of F.
+         'N' :: The matrix Q is not explicitly computed.
+
+     * @param[in] JOBT
+         JOBT (input) CHARACTER*1
+         Specifies whether to return the upper triangular factor
+         from the QR factorization.
+         'R' :: The matrix R of the QR factorization of the data
+         snapshot matrix F is returned in the array Y.
+         See the description of Y and Further details.
+         'N' :: The matrix R is not returned.
+
+     * @param[in] JOBF
+         JOBF (input) CHARACTER*1
+         Specifies whether to store information needed for post-
+         processing (e.g. computing refined Ritz vectors)
+         'R' :: The matrix needed for the refinement of the Ritz
+         vectors is computed and stored in the array B.
+         See the description of B.
+         'E' :: The unscaled eigenvectors of the Exact DMD are
+         computed and returned in the array B. See the
+         description of B.
+         'N' :: No eigenvector refinement data is computed.
+         To be useful on exit, this option needs JOBQ='Q'.
+
+     * @param[in] WHTSVD
+         WHTSVD (input) INTEGER, WHSTVD in 1, 2, 3, 4 
+         Allows for a selection of the SVD algorithm from the
+         LAPACK library.
+         1 :: DGESVD (the QR SVD algorithm)
+         2 :: DGESDD (the Divide and Conquer algorith
+         if enough
+         workspace available, this is the fastest option)
+         3 :: DGESVDQ (the preconditioned QR SVD
+         this and 4
+         are the most accurate options)
+         4 :: DGEJSV (the preconditioned Jacobi SV
+         this and 3
+         are the most accurate options)
+         For the four methods above, a significant difference in
+         the accuracy of small singular values is possible if
+         the snapshots vary in norm so that X is severely
+         ill-conditioned. If small (smaller than EPS*||X||)
+         singular values are of interest and JOBS=='N', then
+         the options (3, 4) give the most accurate results, where
+         the option 4 is slightly better and with stronger
+         theoretical background.
+         If JOBS=='S', i.e. the columns of X will be normalized,
+         then all methods give nearly equally accurate results.
+
+     * @param[in] M
+         M (input) INTEGER, M >= 0
+         The state space dimension (the number of rows of F).
+
+     * @param[in] N
+         N (input) INTEGER, 0 <= N <= M
+         The number of data snapshots from a single trajectory,
+         taken at equidistant discrete times. This is the
+         number of columns of F.
+
+     * @param[in,out] F
+         F (input/output) doublereal M-by-N array
+         > On entry,
+         the columns of F are the sequence of data snapshots
+         from a single trajectory, taken at equidistant discrete
+         times. It is assumed that the column norms of F are
+         in the range of the normalized floating point numbers.
+         < On exit,
+         If JOBQ == 'Q', the array F contains the orthogonal
+         matrix/factor of the QR factorization of the initial
+         data snapshots matrix F. See the description of JOBQ.
+         If JOBQ == 'N', the entries in F strictly below the main
+         diagonal contain, column-wise, the information on the
+         Householder vectors, as returned by DGEQRF. The
+         remaining information to restore the orthogonal matrix
+         of the initial QR factorization is stored in WORK(1:N).
+         See the description of WORK.
+
+     * @param[in] LDF
+         LDF (input) INTEGER, LDF >= M
+         The leading dimension of the array F.
+
+     * @param[in,out] X
+         X (workspace/output) doublereal MIN(M,N)-by-(N-1) array
+         X is used as workspace to hold representations of the
+         leading N-1 snapshots in the orthonormal basis computed
+         in the QR factorization of F.
+         On exit, the leading K columns of X contain the leading
+         K left singular vectors of the above described content
+         of X. To lift them to the space of the left singular
+         vectors U(:,1:K)of the input data, pre-multiply with the
+         Q factor from the initial QR factorization.
+         See the descriptions of F, K, V and Z.
+
+     * @param[in] LDX
+         LDX (input) INTEGER, LDX >= N
+         The leading dimension of the array X.
+
+     * @param[in,out] Y
+         Y (workspace/output) doublereal MIN(M,N)-by-(N-1) array
+         Y is used as workspace to hold representations of the
+         trailing N-1 snapshots in the orthonormal basis computed
+         in the QR factorization of F.
+         On exit,
+         If JOBT == 'R', Y contains the MIN(M,N)-by-N upper
+         triangular factor from the QR factorization of the data
+         snapshot matrix F.
+
+     * @param[in] LDY
+         LDY (input) INTEGER , LDY >= N
+         The leading dimension of the array Y.
+
+     * @param[in] NRNK
+         NRNK (input) INTEGER
+         Determines the mode how to compute the numerical rank,
+         i.e. how to truncate small singular values of the input
+         matrix X. On input, if
+         NRNK = -1 :: i-th singular value sigma(i) is truncated
+         if sigma(i) <= TOL*sigma(1)
+         This option is recommended.
+         NRNK = -2 :: i-th singular value sigma(i) is truncated
+         if sigma(i) <= TOL*sigma(i-1)
+         This option is included for R&D purposes.
+         It requires highly accurate SVD, which
+         may not be feasible.
+         The numerical rank can be enforced by using positive
+         value of NRNK as follows:
+         0 < NRNK <= N-1 :: at most NRNK largest singular values
+         will be used. If the number of the computed nonzero
+         singular values is less than NRNK, then only those
+         nonzero values will be used and the actually used
+         dimension is less than NRNK. The actual number of
+         the nonzero singular values is returned in the variable
+         K. See the description of K.
+
+     * @param[in] TOL
+         TOL (input) doublereal, 0 <= TOL < 1
+         The tolerance for truncating small singular values.
+         See the description of NRNK.
+
+     * @param[out] K
+         K (output) INTEGER, 0 <= K <= N
+         The dimension of the SVD/POD basis for the leading N-1
+         data snapshots (columns of F) and the number of the
+         computed Ritz pairs. The value of K is determined
+         according to the rule set by the parameters NRNK and
+         TOL. See the descriptions of NRNK and TOL.
+
+     * @param[out] REIG
+         REIG (output) doublereal (N-1)-by-1 array
+         The leading K (K<=N) entries of REIG contain
+         the doublereal parts of the computed eigenvalues
+         REIG(1:K) + sqrt(-1)*IMEIG(1:K).
+         See the descriptions of K, IMEIG, Z.
+
+     * @param[out] IMEIG
+         IMEIG (output) doublereal (N-1)-by-1 array
+         The leading K (K<N) entries of REIG contain
+         the imaginary parts of the computed eigenvalues
+         REIG(1:K) + sqrt(-1)*IMEIG(1:K).
+         The eigenvalues are determined as follows:
+         If IMEIG(i) == 0, then the corresponding eigenvalue is
+         doublereal, LAMBDA(i) = REIG(i).
+         If IMEIG(i)>0, then the corresponding complex
+         conjugate pair of eigenvalues reads
+         LAMBDA(i) = REIG(i) + sqrt(-1)*IMAG(i)
+         LAMBDA(i+1) = REIG(i) - sqrt(-1)*IMAG(i)
+         That is, complex conjugate pairs have consequtive
+         indices (i,i+1), with the positive imaginary part
+         listed first.
+         See the descriptions of K, REIG, Z.
+
+     * @param[out] Z
+         Z (workspace/output) doublereal M-by-(N-1) array
+         If JOBZ =='V' then
+         Z contains doublereal Ritz vectors as follows:
+         If IMEIG(i)=0, then Z(:,i) is an eigenvector of
+         the i-th Ritz value.
+         If IMEIG(i) > 0 (and IMEIG(i+1) < 0) then
+         [Z(:,i) Z(:,i+1)] span an invariant subspace and
+         the Ritz values extracted from this subspace are
+         REIG(i) + sqrt(-1)*IMEIG(i) and
+         REIG(i) - sqrt(-1)*IMEIG(i).
+         The corresponding eigenvectors are
+         Z(:,i) + sqrt(-1)*Z(:,i+1) and
+         Z(:,i) - sqrt(-1)*Z(:,i+1), respectively.
+         If JOBZ == 'F', then the above descriptions hold for
+         the columns of Z*V, where the columns of V are the
+         eigenvectors of the K-by-K Rayleigh quotient, and Z is
+         orthonormal. The columns of V are similarly structured:
+         If IMEIG(i) == 0 then Z*V(:,i) is an eigenvector, and if
+         IMEIG(i) > 0 then Z*V(:,i)+sqrt(-1)*Z*V(:,i+1) and
+         Z*V(:,i)-sqrt(-1)*Z*V(:,i+1)
+         are the eigenvectors of LAMBDA(i), LAMBDA(i+1).
+         See the descriptions of REIG, IMEIG, X and V.
+
+     * @param[in] LDZ
+         LDZ (input) INTEGER , LDZ >= M
+         The leading dimension of the array Z.
+
+     * @param[out] RES
+         RES (output) doublereal (N-1)-by-1 array
+         RES(1:K) contains the residuals for the K computed
+         Ritz pairs.
+         If LAMBDA(i) is doublereal, then
+         RES(i) = || A * Z(:,i) - LAMBDA(i)*Z(:,i))||_2.
+         If [LAMBDA(i), LAMBDA(i+1)] is a complex conjugate pair
+         then
+         RES(i)=RES(i+1) = || A * Z(:,i:i+1) - Z(:,i:i+1) *B||_F
+         where B = [ doublereal(LAMBDA(i)) imag(LAMBDA(i)) ]
+         [-imag(LAMBDA(i)) doublereal(LAMBDA(i)) ].
+         It holds that
+         RES(i) = || A*ZC(:,i) - LAMBDA(i) *ZC(:,i) ||_2
+         RES(i+1) = || A*ZC(:,i+1) - LAMBDA(i+1)*ZC(:,i+1) ||_2
+         where ZC(:,i) = Z(:,i) + sqrt(-1)*Z(:,i+1)
+         ZC(:,i+1) = Z(:,i) - sqrt(-1)*Z(:,i+1)
+         See the description of Z.
+
+     * @param[out] B
+         B (output) doublereal MIN(M,N)-by-(N-1) array.
+         IF JOBF =='R', B(1:N,1:K) contains A*U(:,1:K), and can
+         be used for computing the refined vector
+         see further
+         details in the provided references.
+         If JOBF == 'E', B(1:N,K) contains
+         A*U(:,1:K)*W(1:K,1:K), which are the vectors from the
+         Exact DMD, up to scaling by the inverse eigenvalues.
+         In both cases, the content of B can be lifted to the
+         original dimension of the input data by pre-multiplying
+         with the Q factor from the initial QR factorization.
+         Here A denotes a compression of the underlying operator.
+         See the descriptions of F and X.
+         If JOBF =='N', then B is not referenced.
+
+     * @param[in] LDB
+         LDB (input) INTEGER, LDB >= MIN(M,N)
+         The leading dimension of the array B.
+
+     * @param[out] V
+         V (workspace/output) doublereal (N-1)-by-(N-1) array
+         On exit, V(1:K,1:K) contains the K eigenvectors of
+         the Rayleigh quotient. The eigenvectors of a complex
+         conjugate pair of eigenvalues are returned in doublereal form
+         as explained in the description of Z. The Ritz vectors
+         (returned in Z) are the product of X and
+         see
+         the descriptions of X and Z.
+
+     * @param[in] LDV
+         LDV (input) INTEGER, LDV >= N-1
+         The leading dimension of the array V.
+
+     * @param[out] S
+         S (output) doublereal (N-1)-by-(N-1) array
+         The array S(1:K,1:K) is used for the matrix Rayleigh
+         quotient. This content is overwritten during
+         the eigenvalue decomposition by DGEEV.
+         See the description of K.
+
+     * @param[in] LDS
+         LDS (input) INTEGER, LDS >= N-1
+         The leading dimension of the array S.
+
+     * @param[out] WORK
+         WORK (workspace/output) doublereal LWORK-by-1 array
+         On exit,
+         WORK(1:MIN(M,N)) contains the scalar factors of the
+         elementary reflectors as returned by DGEQRF of the
+         M-by-N input matrix F.
+         WORK(MIN(M,N)+1:MIN(M,N)+N-1) contains the singular values of
+         the input submatrix F(1:M,1:N-1).
+         If the call to DGEDMDQ is only workspace query, then
+         WORK(1) contains the minimal workspace length and
+         WORK(2) is the optimal workspace length. Hence, the
+         length of work is at least 2.
+         See the description of LWORK.
+
+     * @param[in] LWORK
+         LWORK (input) INTEGER
+         The minimal length of the workspace vector WORK.
+         LWORK is calculated as follows:
+         Let MLWQR = N (minimal workspace for DGEQRF[M,N])
+         MLWDMD = minimal workspace for DGEDMD (see the
+         description of LWORK in DGEDMD) for
+         snapshots of dimensions MIN(M,N)-by-(N-1)
+         MLWMQR = N (minimal workspace for
+         DORMQR['L','N',M,N,N])
+         MLWGQR = N (minimal workspace for DORGQR[M,N,N])
+         Then
+         LWORK = MAX(N+MLWQR, N+MLWDMD)
+         is updated as follows:
+         if JOBZ == 'V' or JOBZ == 'F' THEN
+         LWORK = MAX( LWORK, MIN(M,N)+N-1+MLWMQR )
+         if JOBQ == 'Q' THEN
+         LWORK = MAX( LWORK, MIN(M,N)+N-1+MLWGQR)
+         If on entry LWORK = -1, then a workspace query is
+         assumed and the procedure only computes the minimal
+         and the optimal workspace lengths for both WORK and
+         IWORK. See the descriptions of WORK and IWORK.
+
+     * @param[out] IWORK
+         IWORK (workspace/output) INTEGER LIWORK-by-1 array
+         Workspace that is required only if WHTSVD equals
+         2 , 3 or 4. (See the description of WHTSVD).
+         If on entry LWORK =-1 or LIWORK=-1, then the
+         minimal length of IWORK is computed and returned in
+         IWORK(1). See the description of LIWORK.
+
+     * @param[in] LIWORK
+         LIWORK (input) INTEGER
+         The minimal length of the workspace vector IWORK.
+         If WHTSVD == 1, then only IWORK(1) is use
+         LIWORK >=1
+         Let M1=MIN(M,N), N1=N-1. Then
+         If WHTSVD == 2, then LIWORK >= MAX(1,8*MIN(M1,N1))
+         If WHTSVD == 3, then LIWORK >= MAX(1,M1+N1-1)
+         If WHTSVD == 4, then LIWORK >= MAX(3,M1+3*N1)
+         If on entry LIWORK = -1, then a workspace query is
+         assumed and the procedure only computes the minimal
+         and the optimal workspace lengths for both WORK and
+         IWORK. See the descriptions of WORK and IWORK.
+
+     * @param[out] INFO
+         INFO (output) INTEGER
+         -i < 0 :: On entry, the i-th argument had an
+         illegal value
+         = 0 :: Successful return.
+         = 1 :: Void input. Quick exit (M=0 or N=0).
+         = 2 :: The SVD computation of X did not converge.
+         Suggestion: Check the input data and/or
+         repeat with different WHTSVD.
+         = 3 :: The computation of the eigenvalues did not
+         converge.
+         = 4 :: If data scaling was requested on input and
+         the procedure found inconsistency in the data
+         such that for some column index i,
+         X(:,i) = 0 but Y(:,i) /= 0, then Y(:,i) is set
+         to zero if JOBS=='C'. The computation proceeds
+         with original or modified data and warning
+         flag is set with INFO=4.
+    */
+    template <typename T>
+    void gedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf,
+                integer *whtsvd, integer *m, integer *n, T *f, integer *ldf, T *x, integer *ldx,
+                T *y, integer *ldy, integer *nrnk, T *tol, integer *k, T *reig, T *imeig, T *z__,
+                integer *ldz, T *res, T *b, integer *ldb, T *v, integer *ldv, T *s, integer *lds,
+                T *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+    {
+        gedmdq(jobs, jobz, jobr, jobq, jobt, jobf, whtsvd, m, n, f, ldf, x, ldx, y, ldy, nrnk, tol,
+               k, reig, imeig, z__, ldz, res, b, ldb, v, ldv, s, lds, work, lwork, iwork, liwork,
+               info);
+    }
+    template <typename T, typename Ta>
+    void gedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf,
+                integer *whtsvd, integer *m, integer *n, T *f, integer *ldf, T *x, integer *ldx,
+                T *y, integer *ldy, integer *nrnk, Ta *tol, integer *k, T *eigs, T *z__,
+                integer *ldz, Ta *res, T *b, integer *ldb, T *v, integer *ldv, T *s, integer *lds,
+                T *zwork, integer *lzwork, Ta *work, integer *lwork, integer *iwork,
+                integer *liwork, integer *info)
+    {
+        gedmdq(jobs, jobz, jobr, jobq, jobt, jobf, whtsvd, m, n, f, ldf, x, ldx, y, ldy, nrnk, tol,
+               k, eigs, z__, ldz, res, b, ldb, v, ldv, s, lds, zwork, lzwork, work, lwork, iwork,
+               liwork, info);
+    }
+    /** @}*/ // end of dmdq
+
     /**@}*/ // end of NYS
 
     /** @defgroup SYM Symmetric eigenvalues
@@ -9974,7 +10779,8 @@ eigenvectors for OTHER matrices
      * @ingroup SYM
      * @{
      */
-    /*! @brief STEMR computes selected eigenvalues and, optionally, eigenvectors of a real symmetric tridiagonal matrix T.
+    /*! @brief STEMR computes selected eigenvalues and, optionally, eigenvectors of a real symmetric
+ tridiagonal matrix T.
 
  * @details
  * \b Purpose:
@@ -10028,18 +10834,18 @@ eigenvectors for OTHER matrices
           On exit, D is overwritten \n
  * @param[in,out] E
           E is REAL array, dimension (N) \n
-          On entry, The (n-1) subdiagonal elements of the tridiagonal matrix 
+          On entry, The (n-1) subdiagonal elements of the tridiagonal matrix
           T, in elements 1 to N-1 of E. E(N) need not to be set on input,
           but is used internally as workspace. \n
           On exit, E is overwritten. \n
  * @param[in] VL
           VL is REAL \n
-          If RANGE='V', the lower bound of the interval to be searched for 
+          If RANGE='V', the lower bound of the interval to be searched for
           eigenvalues. VL < VU \n
           Not referenced if RANGE ='A' or 'I'. \n
  * @param[in] VU
           VU is REAL \n
-          If RANGE='V', the upper bound of the interval to be searched for 
+          If RANGE='V', the upper bound of the interval to be searched for
           eigenvalues. VL < VU \n
           Not referenced if RANGE ='A' or 'I'. \n
  * @param[in] IL
@@ -10058,7 +10864,7 @@ eigenvectors for OTHER matrices
           If RANGE = 'A', M = N, and if RANGE = 'I', M = IU-IL+1 \n
  * @param[out] W
           W is REAL array, dimension (N) \n
-          The first M elements contain the selected eigenvalues in 
+          The first M elements contain the selected eigenvalues in
           ascending order. \n
  * @param[out] Z
          Z is COMPLEX array, dimension (LDZ, max(1,M) ) \n
@@ -10073,7 +10879,7 @@ eigenvectors for OTHER matrices
          query by setting NZC = -1, see below. \n
  * @param[in] LDZ
           LDZ is INTEGER \n
-          The leading dimension of the array Z.  LDZ >= 1, and if 
+          The leading dimension of the array Z.  LDZ >= 1, and if
           JOBZ = 'V', then LDZ >= max(1,N). \n
  * @param[in] NZC
          NZC is INTEGER \n
@@ -10142,22 +10948,24 @@ eigenvectors for OTHER matrices
          CLARRV, respectively. \n
 
  *  * */
-   template <typename T>
-   void stemr(char* jobz, char* range, integer* n, T*  d, T*  e, T* vl, T* vu, integer* il,
-              integer* iu, integer* m, T*  w, T* z, integer* ldz, integer* nzc, integer* isuppz,
-              integer* tryrac, T* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
-   {
-      stemr(jobz, range, n, d, e, vl, vu, il, iu, m, w, z, ldz, nzc, isuppz, tryrac,
-            work, lwork, iwork, liwork, info);
-   }
-   template< typename T, typename Ta >
-   void stemr(char* jobz, char* range, integer* n, Ta*  d, Ta*  e, Ta* vl, Ta* vu, integer* il,
-              integer* iu, integer* m, Ta*  w, T* z, integer* ldz, integer* nzc, integer* isuppz,
-              integer* tryrac, Ta* work, integer* lwork, integer* iwork, integer* liwork, integer* info)
-   {
-      stemr(jobz, range, n, d, e, vl, vu, il, iu, m, w, z, ldz, nzc, isuppz, tryrac,
-            work, lwork, iwork, liwork, info);
-   }
+    template <typename T>
+    void stemr(char *jobz, char *range, integer *n, T *d, T *e, T *vl, T *vu, integer *il,
+               integer *iu, integer *m, T *w, T *z, integer *ldz, integer *nzc, integer *isuppz,
+               integer *tryrac, T *work, integer *lwork, integer *iwork, integer *liwork,
+               integer *info)
+    {
+        stemr(jobz, range, n, d, e, vl, vu, il, iu, m, w, z, ldz, nzc, isuppz, tryrac, work, lwork,
+              iwork, liwork, info);
+    }
+    template <typename T, typename Ta>
+    void stemr(char *jobz, char *range, integer *n, Ta *d, Ta *e, Ta *vl, Ta *vu, integer *il,
+               integer *iu, integer *m, Ta *w, T *z, integer *ldz, integer *nzc, integer *isuppz,
+               integer *tryrac, Ta *work, integer *lwork, integer *iwork, integer *liwork,
+               integer *info)
+    {
+        stemr(jobz, range, n, d, e, vl, vu, il, iu, m, w, z, ldz, nzc, isuppz, tryrac, work, lwork,
+              iwork, liwork, info);
+    }
     /** @}*/ // end of stemr
 
     /** @defgroup steqr steqr
@@ -16708,8 +17516,8 @@ eigenvectors for OTHER matrices
     * \b Purpose:
     * \verbatim
         Eigenvalue decomposition (QR algorithm).
-        Computation of all eigenvalues and, optionally, eigenvectors of a complex Hermitian matrix a.
-    \endverbatim
+        Computation of all eigenvalues and, optionally, eigenvectors of a complex Hermitian matrix
+    a. \endverbatim
 
     * @param[in] JOBS
               JOBZ is CHARACTER*1 \n
@@ -16764,11 +17572,11 @@ eigenvectors for OTHER matrices
                     form did not converge to zero. \n
 
     *     *  */
-    template< typename T, typename Ta >
-    void heev(char* jobz, char* uplo, integer* n, T* a, integer* lda, Ta*  w, T* work, integer* lwork,
-              Ta* rwork, integer* info)
+    template <typename T, typename Ta>
+    void heev(char *jobz, char *uplo, integer *n, T *a, integer *lda, Ta *w, T *work,
+              integer *lwork, Ta *rwork, integer *info)
     {
-         heev(jobz, uplo, n, a, lda, w, work, lwork, rwork, info);
+        heev(jobz, uplo, n, a, lda, w, work, lwork, rwork, info);
     }
     /** @}*/ // end of heev
 
@@ -16776,8 +17584,8 @@ eigenvectors for OTHER matrices
      * @ingroup HER
      * @{
      */
-    /*! @brief HEEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors for HE matrices
-               using divide and conquer algorithm
+    /*! @brief HEEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors
+ for HE matrices using divide and conquer algorithm
     *
     * @details
     * \b Purpose:
@@ -16830,7 +17638,7 @@ eigenvectors for OTHER matrices
  \n
               If LWORK = -1, then a workspace query is assumed; the routine
               only calculates the optimal sizes of the WORK, RWORK and IWORK
-              arrays, returns these values as the first entries of the WORK, 
+              arrays, returns these values as the first entries of the WORK,
               RWORK and IWORK arrays, and no error message related to LWORK or
               LRWORK or LIWORK is issued by XERBLA. \n
     * @param[out]	RWORK
@@ -16876,20 +17684,21 @@ eigenvectors for OTHER matrices
                     mod(INFO,N+1). \n
 
     *     *  */
-   template< typename T, typename Ta >
-   void heevd(char* jobz, char* uplo, integer* n, T* a, integer* lda, Ta* w, T* work, 
-              integer* lwork, Ta* rwork, integer* lrwork, integer* iwork, integer* liwork, integer* info)
-   {
-      heevd(jobz, uplo, n, a, lda, w, work, lwork, rwork, lrwork, iwork, liwork, info);
-   }
+    template <typename T, typename Ta>
+    void heevd(char *jobz, char *uplo, integer *n, T *a, integer *lda, Ta *w, T *work,
+               integer *lwork, Ta *rwork, integer *lrwork, integer *iwork, integer *liwork,
+               integer *info)
+    {
+        heevd(jobz, uplo, n, a, lda, w, work, lwork, rwork, lrwork, iwork, liwork, info);
+    }
     /** @}*/ // end of heevd
 
     /** @defgroup heevr heevr
      * @ingroup HER
      * @{
      */
-    /*! @brief HEEVR computes the eigenvalues and, optionally, the left and/or right eigenvectors for HE matrices
-               using Hermitian eigenvalue decomposition (MRRR)
+    /*! @brief HEEVR computes the eigenvalues and, optionally, the left and/or right eigenvectors
+    for HE matrices using Hermitian eigenvalue decomposition (MRRR)
     *
 
     * @details
@@ -16941,8 +17750,8 @@ eigenvectors for OTHER matrices
          For more details, see CSTEMR's documentation and:
          - Inderjit S. Dhillon and Beresford N. Parlett:
          Linear Algebra and its Applications, 387(1), pp. 1-28, August 2004.
-         - Inderjit Dhillon and Beresford Parlett:  SIAM Journal on Matrix Analysis and Applications, Vol. 25,
-         2004.  Also LAPACK Working Note 154.
+         - Inderjit Dhillon and Beresford Parlett:  SIAM Journal on Matrix Analysis and
+    Applications, Vol. 25, 2004.  Also LAPACK Working Note 154.
          - Inderjit Dhillon: ,
          Computer Science Division Technical Report No. UCB/CSD-97-971,
          UC Berkeley, May 1997.
@@ -16986,124 +17795,124 @@ eigenvectors for OTHER matrices
               be searched for eigenvalues. VL < VU. \n
               Not referenced if range = 'A' or 'I'. \n
     * @param[in] VU
-				  VU is REAL \n
-				  If RANGE='V', the upper bound of the interval to
-				  be searched for eigenvalues. VL < VU. \n
-				  Not referenced if RANGE = 'A' or 'I'. \n
+                  VU is REAL \n
+                  If RANGE='V', the upper bound of the interval to
+                  be searched for eigenvalues. VL < VU. \n
+                  Not referenced if RANGE = 'A' or 'I'. \n
     * @param[in] IL
-				  IL is INTEGER \n
-				  If RANGE='I', the index of the
-				  smallest eigenvalue to be returned. \n
-				  1 <= IL <= IU <= N, if N > 0; IL = 1 and IU = 0 if N = 0. \n
-				  Not referenced if RANGE = 'A' or 'V'. \n
+                  IL is INTEGER \n
+                  If RANGE='I', the index of the
+                  smallest eigenvalue to be returned. \n
+                  1 <= IL <= IU <= N, if N > 0; IL = 1 and IU = 0 if N = 0. \n
+                  Not referenced if RANGE = 'A' or 'V'. \n
     * @param[in] IU
-				  IU is INTEGER \n
-				  If RANGE='I', the index of the
-				  largest eigenvalue to be returned. \n
-				  1 <= IL <= IU <= N, if N > 0; IL = 1 and IU = 0 if N = 0. \n
-				  Not referenced if RANGE = 'A' or 'V'. \n
+                  IU is INTEGER \n
+                  If RANGE='I', the index of the
+                  largest eigenvalue to be returned. \n
+                  1 <= IL <= IU <= N, if N > 0; IL = 1 and IU = 0 if N = 0. \n
+                  Not referenced if RANGE = 'A' or 'V'. \n
     * @param[in] ABSTOL
-				  ABSTOL is REAL \n
-				  The absolute error tolerance for the eigenvalues. \n
-				  An approximate eigenvalue is accepted as converged
-				  when it is determined to lie in an interval [a,b]
-				  of width less than or equal to \n
-				  
-				  ABSTOL + EPS *   max( |a|,|b| ) , \n
-				  
-				  where EPS is the machine precision.  If ABSTOL is less than
-				  or equal to zero, then  EPS*|T|  will be used in its place,
-				  where |T| is the 1-norm of the tridiagonal matrix obtained
-				  by reducing A to tridiagonal form. \n
-				  
-				  See  by Demmel and
-				  Kahan, LAPACK Working Note #3. \n
-				  
-				  If high relative accuracy is important, set ABSTOL to
-				  SLAMCH( 'Safe minimum' ).  Doing so will guarantee that
-				  eigenvalues are computed to high relative accuracy when
-				  possible in future releases.  The current code does not
-				  make any guarantees about high relative accuracy, but
-				  future releases will. See J. Barlow and J. Demmel,
-				  , LAPACK Working Note #7, for a discussion
-				  of which matrices define their eigenvalues to high relative
-				  accuracy. \n
+                  ABSTOL is REAL \n
+                  The absolute error tolerance for the eigenvalues. \n
+                  An approximate eigenvalue is accepted as converged
+                  when it is determined to lie in an interval [a,b]
+                  of width less than or equal to \n
+
+                  ABSTOL + EPS *   max( |a|,|b| ) , \n
+
+                  where EPS is the machine precision.  If ABSTOL is less than
+                  or equal to zero, then  EPS*|T|  will be used in its place,
+                  where |T| is the 1-norm of the tridiagonal matrix obtained
+                  by reducing A to tridiagonal form. \n
+
+                  See  by Demmel and
+                  Kahan, LAPACK Working Note #3. \n
+
+                  If high relative accuracy is important, set ABSTOL to
+                  SLAMCH( 'Safe minimum' ).  Doing so will guarantee that
+                  eigenvalues are computed to high relative accuracy when
+                  possible in future releases.  The current code does not
+                  make any guarantees about high relative accuracy, but
+                  future releases will. See J. Barlow and J. Demmel,
+                  , LAPACK Working Note #7, for a discussion
+                  of which matrices define their eigenvalues to high relative
+                  accuracy. \n
     * @param[out] M
-				  M is INTEGER \n
-				  The total number of eigenvalues found.  0 <= M <= N. \n
-				  If RANGE = 'A', M = N, and if RANGE = 'I', M = IU-IL+1. \n
+                  M is INTEGER \n
+                  The total number of eigenvalues found.  0 <= M <= N. \n
+                  If RANGE = 'A', M = N, and if RANGE = 'I', M = IU-IL+1. \n
     * @param[out] W
-				  W is REAL array, dimension (N) \n
-				  The first M elements contain the selected eigenvalues in
-				  ascending order. \n
+                  W is REAL array, dimension (N) \n
+                  The first M elements contain the selected eigenvalues in
+                  ascending order. \n
     * @param[out] Z
-				  Z is COMPLEX array, dimension (LDZ, max(1,M)) \n
-				  If JOBZ = 'V', then if INFO = 0, the first M columns of Z
-				  contain the orthonormal eigenvectors of the matrix A
-				  corresponding to the selected eigenvalues, with the i-th
-				  column of Z holding the eigenvector associated with W(i). \n
-				  If JOBZ = 'N', then Z is not referenced. \n
-				  Note: the user must ensure that at least max(1,M) columns are
-				  supplied in the array Z; if RANGE = 'V', the exact value of M
-				  is not known in advance and an upper bound must be used.
-				  Supplying N columns is always safe. \n
+                  Z is COMPLEX array, dimension (LDZ, max(1,M)) \n
+                  If JOBZ = 'V', then if INFO = 0, the first M columns of Z
+                  contain the orthonormal eigenvectors of the matrix A
+                  corresponding to the selected eigenvalues, with the i-th
+                  column of Z holding the eigenvector associated with W(i). \n
+                  If JOBZ = 'N', then Z is not referenced. \n
+                  Note: the user must ensure that at least max(1,M) columns are
+                  supplied in the array Z; if RANGE = 'V', the exact value of M
+                  is not known in advance and an upper bound must be used.
+                  Supplying N columns is always safe. \n
     * @param[in] LDZ
-				  LDZ is INTEGER \n
-				  The leading dimension of the array Z.  LDZ >= 1, and if
-				  JOBZ = 'V', LDZ >= max(1,N). \n
+                  LDZ is INTEGER \n
+                  The leading dimension of the array Z.  LDZ >= 1, and if
+                  JOBZ = 'V', LDZ >= max(1,N). \n
     * @param[out] ISUPPZ
-				  ISUPPZ is INTEGER array, dimension ( 2*max(1,M) ) \n
-				  The support of the eigenvectors in Z, i.e., the indices
-				  indicating the nonzero elements in Z. The i-th eigenvector
-				  is nonzero only in elements ISUPPZ( 2*i-1 ) through
-				  ISUPPZ( 2*i ). This is an output of CSTEMR (tridiagonal
-				  matrix). The support of the eigenvectors of A is typically
-				  1:N because of the unitary transformations applied by CUNMTR. \n
-				  Implemented only for RANGE = 'A' or 'I' and IU - IL = N - 1 \n
+                  ISUPPZ is INTEGER array, dimension ( 2*max(1,M) ) \n
+                  The support of the eigenvectors in Z, i.e., the indices
+                  indicating the nonzero elements in Z. The i-th eigenvector
+                  is nonzero only in elements ISUPPZ( 2*i-1 ) through
+                  ISUPPZ( 2*i ). This is an output of CSTEMR (tridiagonal
+                  matrix). The support of the eigenvectors of A is typically
+                  1:N because of the unitary transformations applied by CUNMTR. \n
+                  Implemented only for RANGE = 'A' or 'I' and IU - IL = N - 1 \n
     * @param[out]	WORK
-				  WORK is COMPLEX array, dimension (MAX(1,LWORK)) \n
-				  On exit, if INFO = 0, WORK(1) returns the optimal LWORK. \n
+                  WORK is COMPLEX array, dimension (MAX(1,LWORK)) \n
+                  On exit, if INFO = 0, WORK(1) returns the optimal LWORK. \n
     * @param[in]	LWORK
-				  LWORK is INTEGER \n
-				  The length of the array WORK. \n
-				  If N <= 1, LWORK >= 1, else LWORK >= 2*N. \n
-				  For optimal efficiency, LWORK >= (NB+1)*N,
-				  where NB is the max of the blocksize for CHETRD and for
-				  CUNMTR as returned by ILAENV. \n \n
-				  
-				  If LWORK = -1, then a workspace query is assumed; the routine
-				  only calculates the optimal sizes of the WORK, RWORK and
-				  IWORK arrays, returns these values as the first entries of
-				  the WORK, RWORK and IWORK arrays, and no error message
-				  related to LWORK or LRWORK or LIWORK is issued by XERBLA. \n
+                  LWORK is INTEGER \n
+                  The length of the array WORK. \n
+                  If N <= 1, LWORK >= 1, else LWORK >= 2*N. \n
+                  For optimal efficiency, LWORK >= (NB+1)*N,
+                  where NB is the max of the blocksize for CHETRD and for
+                  CUNMTR as returned by ILAENV. \n \n
+
+                  If LWORK = -1, then a workspace query is assumed; the routine
+                  only calculates the optimal sizes of the WORK, RWORK and
+                  IWORK arrays, returns these values as the first entries of
+                  the WORK, RWORK and IWORK arrays, and no error message
+                  related to LWORK or LRWORK or LIWORK is issued by XERBLA. \n
     * @param[out]	RWORK
-				  RWORK is REAL array, dimension (MAX(1,LRWORK)) \n
-				  On exit, if INFO = 0, RWORK(1) returns the optimal
-				  (and minimal) LRWORK. \n
+                  RWORK is REAL array, dimension (MAX(1,LRWORK)) \n
+                  On exit, if INFO = 0, RWORK(1) returns the optimal
+                  (and minimal) LRWORK. \n
     * @param[in]	LRWORK
-				  LRWORK is INTEGER \n
-				  The length of the array RWORK. \n
-				  If N <= 1, LRWORK >= 1, else LRWORK >= 24*N. \n \n
-				  
-				  If LRWORK = -1, then a workspace query is assumed; the
-				  routine only calculates the optimal sizes of the WORK, RWORK
-				  and IWORK arrays, returns these values as the first entries
-				  of the WORK, RWORK and IWORK arrays, and no error message
-				  related to LWORK or LRWORK or LIWORK is issued by XERBLA. \n
+                  LRWORK is INTEGER \n
+                  The length of the array RWORK. \n
+                  If N <= 1, LRWORK >= 1, else LRWORK >= 24*N. \n \n
+
+                  If LRWORK = -1, then a workspace query is assumed; the
+                  routine only calculates the optimal sizes of the WORK, RWORK
+                  and IWORK arrays, returns these values as the first entries
+                  of the WORK, RWORK and IWORK arrays, and no error message
+                  related to LWORK or LRWORK or LIWORK is issued by XERBLA. \n
     * @param[out]	IWORK
-				  IWORK is INTEGER array, dimension (MAX(1,LIWORK)) \n
-				  On exit, if INFO = 0, IWORK(1) returns the optimal
-				  (and minimal) LIWORK. \n
+                  IWORK is INTEGER array, dimension (MAX(1,LIWORK)) \n
+                  On exit, if INFO = 0, IWORK(1) returns the optimal
+                  (and minimal) LIWORK. \n
     * @param[in]	LIWORK
-				  LIWORK is INTEGER \n
-				  The dimension of the array IWORK. \n
-				  If N <= 1, LIWORK >= 1, else LIWORK >= 10*N. \n \n
-				  
-				  If LIWORK = -1, then a workspace query is assumed; the
-				  routine only calculates the optimal sizes of the WORK, RWORK
-				  and IWORK arrays, returns these values as the first entries
-				  of the WORK, RWORK and IWORK arrays, and no error message
-				  related to LWORK or LRWORK or LIWORK is issued by XERBLA. \n
+                  LIWORK is INTEGER \n
+                  The dimension of the array IWORK. \n
+                  If N <= 1, LIWORK >= 1, else LIWORK >= 10*N. \n \n
+
+                  If LIWORK = -1, then a workspace query is assumed; the
+                  routine only calculates the optimal sizes of the WORK, RWORK
+                  and IWORK arrays, returns these values as the first entries
+                  of the WORK, RWORK and IWORK arrays, and no error message
+                  related to LWORK or LRWORK or LIWORK is issued by XERBLA. \n
     * @param[out]	INFO
               INFO is INTEGER \n
               = 0:  successful exit \n
@@ -17111,15 +17920,15 @@ eigenvectors for OTHER matrices
               > 0:  Internal error \n
 
     *     *  */
-	 template< typename T, typename Ta >
-	 void heevr(char* jobz, char* range, char* uplo, integer* n, T* a, integer* lda,
-               Ta*  vl, Ta*  vu, integer* il, integer* iu, Ta*  abstol, integer* m, Ta* w,
-               T* z, integer* ldz, integer* isuppz, T* work, integer* lwork, Ta* rwork, integer* lrwork, 
-               integer* iwork, integer* liwork, integer* info)
-	 {
-	   heevr(jobz, range, uplo, n, a, lda, vl, vu, il, iu, abstol, m, w, z, ldz, isuppz, 
-            work, lwork, rwork, lrwork, iwork, liwork, info);
-	 }
+    template <typename T, typename Ta>
+    void heevr(char *jobz, char *range, char *uplo, integer *n, T *a, integer *lda, Ta *vl, Ta *vu,
+               integer *il, integer *iu, Ta *abstol, integer *m, Ta *w, T *z, integer *ldz,
+               integer *isuppz, T *work, integer *lwork, Ta *rwork, integer *lrwork, integer *iwork,
+               integer *liwork, integer *info)
+    {
+        heevr(jobz, range, uplo, n, a, lda, vl, vu, il, iu, abstol, m, w, z, ldz, isuppz, work,
+              lwork, rwork, lrwork, iwork, liwork, info);
+    }
     /** @}*/ // end of heevr
 
     /** @}*/ // end of HER

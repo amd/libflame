@@ -1450,3 +1450,53 @@ LAR1V
    :project: lapack
    :content-only:
 
+
+.. _heev:
+
+HEEV
+^^^^^
+
+.. doxygengroup:: heev
+   :project: lapack
+   :content-only:
+
+
+.. _heevd:
+
+HEEVD
+^^^^^
+
+.. doxygengroup:: heevd
+   :project: lapack
+   :content-only:
+
+
+.. _heevr:
+
+HEEVR
+^^^^^
+
+.. doxygengroup:: heevr
+   :project: lapack
+   :content-only:
+
+
+.. _dmd:
+
+GEDMD
+^^^^^
+
+.. doxygengroup:: dmd
+   :project: lapack
+   :content-only:
+
+
+.. _dmdq:
+
+GEDMDQ
+^^^^^^
+
+.. doxygengroup:: dmdq
+   :project: lapack
+   :content-only:
+

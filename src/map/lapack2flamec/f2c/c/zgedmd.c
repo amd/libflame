@@ -4,13 +4,13 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1.f, 0.f};
-static doublecomplex c_b2 = {0.f, 0.f};
+static doublecomplex c_b1 = {1., 0.};
+static doublecomplex c_b2 = {0., 0.};
 static integer c_n1 = -1;
 static integer c__1 = 1;
 static integer c__0 = 0;
-static doublereal c_b54 = 1.f;
-static doublereal c_b64 = 0.f;
+static doublereal c_b54 = 1.;
+static doublereal c_b64 = 0.;
 /* > \brief \b ZGEDMD computes the Dynamic Mode Decomposition (DMD) for a pair of data snapshot
  * matrices. */
 /* =========== DOCUMENTATION =========== */
@@ -691,7 +691,7 @@ void zgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
     {
         *info = -12;
     }
-    else if(*tol < 0.f || *tol >= 1.f)
+    else if(*tol < 0. || *tol >= 1.)
     {
         *info = -13;
     }
@@ -726,11 +726,11 @@ void zgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
             if(lquery)
             {
                 iwork[1] = 1;
-                rwork[1] = 1.f;
-                zwork[1].r = 2.f;
-                zwork[1].i = 0.f; // , expr subst
-                zwork[2].r = 2.f;
-                zwork[2].i = 0.f; // , expr subst
+                rwork[1] = 1.;
+                zwork[1].r = 2.;
+                zwork[1].i = 0.; // , expr subst
+                zwork[2].r = 2.;
+                zwork[2].i = 0.; // , expr subst
             }
             else
             {
@@ -893,9 +893,9 @@ void zgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
         iwork[1] = iminwr;
         rwork[1] = (doublereal)mlrwrk;
         zwork[1].r = (doublereal)mlwork;
-        zwork[1].i = 0.f; // , expr subst
+        zwork[1].i = 0.; // , expr subst
         zwork[2].r = (doublereal)olwork;
-        zwork[2].i = 0.f; // , expr subst
+        zwork[2].i = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -915,7 +915,7 @@ void zgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* WORK(i) = DZNRM2( M, X(1,i), 1 ) */
-            scale = 0.f;
+            scale = 0.;
             zlassq_(m, &x[i__ * x_dim1 + 1], &c__1, &scale, &ssum);
             if(disnan_(&scale) || disnan_(&ssum))
             {
@@ -924,7 +924,7 @@ void zgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
                 i__2 = -(*info);
                 xerbla_("ZGEDMD", &i__2, (ftnlen)6);
             }
-            if(scale != 0.f && ssum != 0.f)
+            if(scale != 0. && ssum != 0.)
             {
                 rootsc = sqrt(ssum);
                 if(scale >= ofl / rootsc)
@@ -939,7 +939,7 @@ void zgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
                     /* underflow may occur in the smallest entries */
                     /* of X(:,i). The relative backward and forward */
                     /* errors are small in the ell_2 norm. */
-                    r__1 = 1.f / rootsc;
+                    r__1 = 1. / rootsc;
                     zlascl_("G", &c__0, &c__0, &scale, &r__1, m, &c__1, &x[i__ * x_dim1 + 1], ldx,
                             &info2);
                     rwork[i__] = -scale * (rootsc / (doublereal)(*m));
@@ -956,7 +956,7 @@ void zgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
             }
             else
             {
-                rwork[i__] = 0.f;
+                rwork[i__] = 0.;
                 ++(*k);
             }
         }
@@ -975,22 +975,22 @@ void zgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* Now, apply the same scaling to the columns of Y. */
-            if(rwork[i__] > 0.f)
+            if(rwork[i__] > 0.)
             {
                 /* ! BLAS CALL */
-                r__1 = 1.f / rwork[i__];
+                r__1 = 1. / rwork[i__];
                 zdscal_(m, &r__1, &y[i__ * y_dim1 + 1], &c__1);
                 /* Y(1:M,i) = (ONE/RWORK(i)) * Y(1:M,i) ! INTRINSIC */
             }
-            else if(rwork[i__] < 0.f)
+            else if(rwork[i__] < 0.)
             {
                 r__1 = -rwork[i__];
-                d__1 = 1.f / (doublereal)(*m);
+                d__1 = 1. / (doublereal)(*m);
                 zlascl_("G", &c__0, &c__0, &r__1, &d__1, m, &c__1, &y[i__ * y_dim1 + 1], ldy,
                         &info2);
                 /* LAPACK CALL */
             }
-            else if(c_abs(&y[izamax_(m, &y[i__ * y_dim1 + 1], &c__1) + i__ * y_dim1]) != 0.f)
+            else if(c_abs(&y[izamax_(m, &y[i__ * y_dim1 + 1], &c__1) + i__ * y_dim1]) != 0.)
             {
                 /* X(:,i) is zero vector. For consistency, */
                 /* Y(:,i) should also be zero. If Y(:,i) is not */
@@ -1017,7 +1017,7 @@ void zgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* RWORK(i) = DZNRM2( M, Y(1,i), 1 ) */
-            scale = 0.f;
+            scale = 0.;
             zlassq_(m, &y[i__ * y_dim1 + 1], &c__1, &scale, &ssum);
             if(disnan_(&scale) || disnan_(&ssum))
             {
@@ -1026,7 +1026,7 @@ void zgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
                 i__2 = -(*info);
                 xerbla_("ZGEDMD", &i__2, (ftnlen)6);
             }
-            if(scale != 0.f && ssum != 0.f)
+            if(scale != 0. && ssum != 0.)
             {
                 rootsc = sqrt(ssum);
                 if(scale >= ofl / rootsc)
@@ -1041,7 +1041,7 @@ void zgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
                     /* underflow may occur in the smallest entries */
                     /* of Y(:,i). The relative backward and forward */
                     /* errors are small in the ell_2 norm. */
-                    r__1 = 1.f / rootsc;
+                    r__1 = 1. / rootsc;
                     zlascl_("G", &c__0, &c__0, &scale, &r__1, m, &c__1, &y[i__ * y_dim1 + 1], ldy,
                             &info2);
                     rwork[i__] = -scale * (rootsc / (doublereal)(*m));
@@ -1058,29 +1058,29 @@ void zgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
             }
             else
             {
-                rwork[i__] = 0.f;
+                rwork[i__] = 0.;
             }
         }
         i__1 = *n;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* Now, apply the same scaling to the columns of X. */
-            if(rwork[i__] > 0.f)
+            if(rwork[i__] > 0.)
             {
                 /* ! BLAS CALL */
-                r__1 = 1.f / rwork[i__];
+                r__1 = 1. / rwork[i__];
                 zdscal_(m, &r__1, &x[i__ * x_dim1 + 1], &c__1);
                 /* X(1:M,i) = (ONE/RWORK(i)) * X(1:M,i) ! INTRINSIC */
             }
-            else if(rwork[i__] < 0.f)
+            else if(rwork[i__] < 0.)
             {
                 r__1 = -rwork[i__];
-                d__1 = 1.f / (doublereal)(*m);
+                d__1 = 1. / (doublereal)(*m);
                 zlascl_("G", &c__0, &c__0, &r__1, &d__1, m, &c__1, &x[i__ * x_dim1 + 1], ldx,
                         &info2);
                 /* LAPACK CALL */
             }
-            else if(c_abs(&x[izamax_(m, &x[i__ * x_dim1 + 1], &c__1) + i__ * x_dim1]) != 0.f)
+            else if(c_abs(&x[izamax_(m, &x[i__ * x_dim1 + 1], &c__1) + i__ * x_dim1]) != 0.)
             {
                 /* Y(:,i) is zero vector. If X(:,i) is not */
                 /* zero, then a warning flag is raised. */
@@ -1153,7 +1153,7 @@ void zgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    if(rwork[1] == 0.f)
+    if(rwork[1] == 0.)
     {
         /* The largest computed singular value of (scaled) */
         /* X is zero. Return error code -8 */
@@ -1225,7 +1225,7 @@ void zgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* ! BLAS CALL */
-            r__1 = 1.f / rwork[i__];
+            r__1 = 1. / rwork[i__];
             zdscal_(n, &r__1, &w[i__ * w_dim1 + 1], &c__1);
             /* W(1:N,i) = (ONE/RWORK(i)) * W(1:N,i) ! INTRINSIC */
         }
@@ -1242,7 +1242,7 @@ void zgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
         i__1 = *k;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            rwork[*n + i__] = 1.f / rwork[i__];
+            rwork[*n + i__] = 1. / rwork[i__];
         }
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
@@ -1253,7 +1253,7 @@ void zgedmd_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, in
                 i__3 = i__ + j * w_dim1;
                 i__4 = *n + i__;
                 q__2.r = rwork[i__4];
-                q__2.i = 0.f; // , expr subst
+                q__2.i = 0.; // , expr subst
                 i__5 = i__ + j * w_dim1;
                 q__1.r = q__2.r * w[i__5].r - q__2.i * w[i__5].i;
                 q__1.i = q__2.r * w[i__5].i + q__2.i * w[i__5].r; // , expr subst

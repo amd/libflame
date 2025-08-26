@@ -19,7 +19,7 @@ int fla_dpotrf_small_avx2(char *uplo, integer *n, doublereal *a, integer *lda, i
 void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
 extern int fla_thread_get_num_threads();
 
-void dpotrf_auto_tune_params(integer n, int *num_threads, int *block_size)
+void dpotrf_auto_tune_params(integer n, int *num_threads, integer *block_size)
 {
     *block_size = FLA_POTRF_BLOCK_SIZE; // Default block size
 
@@ -723,7 +723,9 @@ void lapack_dpotrf_var1(char *uplo, integer *n, doublereal *A, integer *lda, int
     }
 
     // Auto-tune parameters based on problem size
-    integer auto_num_threads, auto_block_size;
+    int auto_num_threads;
+    integer auto_block_size;
+
     dpotrf_auto_tune_params(*n, &auto_num_threads, &auto_block_size);
 
     integer nb = auto_block_size;

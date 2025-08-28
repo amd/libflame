@@ -37,7 +37,7 @@ extern double time_min;
 
 #define gejsv_validate_singular_values(realtype_prefix, realtype)                        \
     {                                                                                    \
-        realtype norm_orig = realtype_prefix##nrm2_(&svd_len, S_test, &i_one);           \
+        realtype norm_orig = realtype_prefix##nrm2_(&n, S, &i_one);                      \
         void *S_copy = NULL;                                                             \
         create_vector(get_realtype(datatype), &S_copy, n);                               \
         copy_vector(get_realtype(datatype), n, S_scaled, 1, S_copy, 1);                  \
@@ -154,11 +154,11 @@ void validate_gejsv(char *tst_api, char joba, char jobu, char jobv, char jobr, c
 
     free_vector(S_scaled);
 
-    residual = fla_max(resid1, resid2);
-    residual = fla_max(residual, resid3);
-    residual = fla_max(residual, resid4);
-    residual = fla_max(residual, resid5);
-    residual = fla_max(residual, resid6);
+    residual = fla_test_max(resid1, resid2);
+    residual = fla_test_max(residual, resid3);
+    residual = fla_test_max(residual, resid4);
+    residual = fla_test_max(residual, resid5);
+    residual = fla_test_max(residual, resid6);
     FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
     FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
     FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");

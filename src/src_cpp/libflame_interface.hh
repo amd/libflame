@@ -58,25 +58,25 @@ namespace libflame
 	 inline void lag2d(integer* m, integer* n, float* sa, integer* ldsa, 
                       double* a, integer* lda, integer* info)
 	 {
-	   slag2d(m, n, sa, ldsa, a, lda, info);
+	   slag2d_(m, n, sa, ldsa, a, lda, info);
 	 }
 
-	 inline void lag2s(integer*m, integer* n, double* a, integer* lda, float* sa,
+	 inline void lag2s(integer* m, integer* n, double* a, integer* lda, float* sa,
                       integer *ldsa, integer* info)
 	 {
-	   dlag2s(m, n, a, lda, sa, ldsa, info);
+	   dlag2s_(m, n, a, lda, sa, ldsa, info);
 	 }
 
-	 inline void lag2z(integer*m, integer* n, scomplex* sa, integer*ldsa, dcomplex* a,
+	 inline void lag2z(integer* m, integer* n, scomplex* sa, integer*ldsa, dcomplex* a,
                       integer* lda, integer* info)
 	 {
-	   clag2z(m, n, sa, ldsa, a, lda, info);
+	   clag2z_(m, n, sa, ldsa, a, lda, info);
 	 }
 
-	 inline void lag2c(integer*m, integer* n, dcomplex* a, integer*lda, scomplex* sa, 
+	 inline void lag2c(integer* m, integer* n, dcomplex* a, integer*lda, scomplex* sa, 
                       integer* ldsa, integer* info)
 	 {
-	   zlag2c(m, n, a, lda, sa, ldsa, info);
+	   zlag2c_(m, n, a, lda, sa, ldsa, info);
 	 }
 
 	 template< typename T >

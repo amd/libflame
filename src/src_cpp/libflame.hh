@@ -1,5 +1,5 @@
 /******************************************************************************
-* Copyright (C) 2021-2024, Advanced Micro Devices, Inc. All rights reserved.
+* Copyright (C) 2021-2025, Advanced Micro Devices, Inc. All rights reserved.
 *******************************************************************************/
 
 /*! @file libflame.hh
@@ -2345,21 +2345,6 @@ inline void slag2d(integer* m, integer* n, float* sa, integer* ldsa, double* a, 
   slag2d_(m, n, sa, ldsa, a, lda, info);
 }
 
-// --- converts a double precision matrix to a single precision matrix ---
-inline void dlag2s(integer*m, integer* n, double* a, integer*lda, float* sa, integer* ldsa, integer* info)
-{
-  dlag2s_(m, n, a, lda, sa, ldsa, info);
-}
-// --- converts a complex single precision matrix to a complex double precision matrix. ---
-inline void clag2z(integer*m, integer* n, scomplex* sa, integer*ldsa, dcomplex* a, integer* lda, integer* info)
-{
-  clag2z_(m, n, sa, ldsa, a, lda, info);
-} 
-// --- converts a single precision matrix to a double precision matrix ---
-inline void zlag2c(integer*m, integer* n, dcomplex* a, integer*lda, scomplex* sa, integer* ldsa, integer* info)
-{
-  zlag2c_(m, n, a, lda, sa, ldsa, info);
-}
 
 // --- returns sqrt(x2+y2) ---
 inline float lapy2(float* x, float* y)

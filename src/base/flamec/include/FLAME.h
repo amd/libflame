@@ -6,7 +6,7 @@
     BSD license, which can be found in the LICENSE file at the top-level
     directory, or at http://opensource.org/licenses/BSD-3-Clause
 
-*   Copyright (c) 2019-2022 Advanced Micro Devices, Inc.
+*   Modifications Copyright (c) 2019-2025 Advanced Micro Devices, Inc.  All rights reserved.
 */
 
 #ifndef FLAME_H
@@ -28,15 +28,8 @@ extern "C" {
   #include <stdlib.h>
   #include <stdarg.h>
   #include <string.h>
-  #ifdef FLA_ENABLE_WINDOWS_BUILD
+  #ifdef _WIN32
     #include <windows.h>
-  #else
-  #ifndef FLA_ENABLE_TIDSP
-    // TI CG does not support POSIX
-    #include <unistd.h>
-    #include <fcntl.h>
-    #include <sys/types.h>
-  #endif
   #endif
   #include <math.h>
   #include <float.h>
@@ -87,7 +80,8 @@ extern "C" {
   #include "FLA_lapack_f77_prototypes.h"
 
   #include "aocldtl.h"
-
+   // Include other api formats from wrapper code
+  #include "libflame_api_wrapper.h"
 
 // End extern "C" construct block.
 #ifdef __cplusplus

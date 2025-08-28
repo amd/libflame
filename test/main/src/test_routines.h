@@ -70,6 +70,9 @@ void fla_test_getrf2(integer argc, char **argv, test_params_t *params);
 void fla_test_getf2(integer argc, char **argv, test_params_t *params);
 void fla_test_gbtf2(integer argc, char **argv, test_params_t *params);
 void fla_test_gbsvx(integer argc, char **argv, test_params_t *params);
+void fla_test_getc2(integer argc, char **argv, test_params_t *params);
+void fla_test_potrf2(integer argc, char **argv, test_params_t *params);
+void fla_test_potf2(integer argc, char **argv, test_params_t *params);
 
 #define LIN_ID 0
 #define EIG_ID 1
@@ -119,7 +122,8 @@ OPERATIONS API_test_functions[]
        /* only performance benchmarking */
        {LIN_ID, "gbsv", fla_test_gbsv},       {LIN_ID, "getrf2", fla_test_getrf2},
        {LIN_ID, "getf2", fla_test_getf2},     {LIN_ID, "gbtf2", fla_test_gbtf2},
-       {LIN_ID, "gbsvx", fla_test_gbsvx}};
+       {LIN_ID, "gbsvx", fla_test_gbsvx},     {LIN_ID, "getc2", fla_test_getc2},
+       {LIN_ID, "potrf2", fla_test_potrf2},   {LIN_ID, "potf2", fla_test_potf2}};
 
 /* Add test API's group entry below */
 char *API_test_group[] = {"LIN", "EIG", "SVD", "AUX"};

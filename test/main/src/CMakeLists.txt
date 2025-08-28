@@ -75,6 +75,9 @@ ${CMAKE_CURRENT_SOURCE_DIR}/test_getrf2.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_getf2.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_gbtf2.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_gbsvx.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_getc2.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_potf2.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_potrf2.c
 )
 
 add_subdirectory(lapacke)

@@ -3674,7 +3674,7 @@ integer check_extreme_value(integer datatype, integer M, integer N, void *A, int
     integer i, j;
 
     /* early return */
-    if(M <= 0 || N <= 0 || LDA < M || A == NULL)
+    if(M <= 0 || N <= 0 || LDA <= 0 || A == NULL)
     {
         return 0;
     }
@@ -5914,7 +5914,7 @@ void compute_matrix_norm(integer datatype, char ntype, integer m, integer n, voi
     void *col;
 
     /* early return */
-    if((m <= 0) || (n <= 0) || (lda < m && n > 1) || (A == NULL) || (nrm2 == NULL))
+    if((m <= 0) || (n <= 0) || (lda <= 0 && n > 1) || (A == NULL) || (nrm2 == NULL))
     {
         return;
     }
@@ -6262,7 +6262,7 @@ void scal_matrix(integer datatype, void *x, void *A, integer m, integer n, integ
     integer j;
 
     /* early return */
-    if((m <= 0) || (n <= 0) || (lda < m) || (A == NULL) || (x == NULL) || (inc <= 0))
+    if((m <= 0) || (n <= 0) || (lda <= 0) || (A == NULL) || (x == NULL) || (inc <= 0))
     {
         return;
     }
@@ -6327,7 +6327,7 @@ void get_max_from_matrix(integer datatype, void *A, void *max_val, integer m, in
     integer i, j;
 
     /* early return */
-    if((m <= 0) || (n <= 0) || (lda < m) || (A == NULL) || (max_val == NULL))
+    if((m <= 0) || (n <= 0) || (lda <= 0) || (A == NULL) || (max_val == NULL))
     {
         return;
     }
@@ -6433,7 +6433,7 @@ void get_min_from_matrix(integer datatype, void *A, void *min_val, integer m, in
     integer i, j;
 
     /* early return */
-    if((m <= 0) || (n <= 0) || (lda < m) || (A == NULL) || (min_val == NULL))
+    if((m <= 0) || (n <= 0) || (lda <= 0) || (A == NULL) || (min_val == NULL))
     {
         return;
     }

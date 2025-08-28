@@ -8,7 +8,8 @@
 #ifdef FLA_OPENMP_MULTITHREADING
 #include <omp.h>
 
-#define MATRIX_SIZE_THRESHOLD_PARALLEL 5000
+#define MATRIX_SIZE_MIN_THRESHOLD_PARALLEL 30
+#define MATRIX_SIZE_MAX_THRESHOLD_PARALLEL 5000
 #define ADAPTIVE_BLOCK_SIZE 64
 #define OPTIMAL_THREADS 8
 
@@ -258,7 +259,7 @@ void dsytrd_fla(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
     /* .. Executable Statements .. */
 
 #ifdef FLA_OPENMP_MULTITHREADING
-    if(*n <= MATRIX_SIZE_THRESHOLD_PARALLEL)
+    if(*n >= MATRIX_SIZE_MIN_THRESHOLD_PARALLEL && *n <= MATRIX_SIZE_MAX_THRESHOLD_PARALLEL)
     {
         dsytrd_fla_parallel(uplo, n, a, lda, d__, e, tau, work, lwork, info);
         return;

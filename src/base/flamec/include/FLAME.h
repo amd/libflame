@@ -6,7 +6,7 @@
     BSD license, which can be found in the LICENSE file at the top-level
     directory, or at http://opensource.org/licenses/BSD-3-Clause
 
-*   Copyright (c) 2019-2022 Advanced Micro Devices, Inc.
+*   Modifications Copyright (c) 2019-2025 Advanced Micro Devices, Inc.  All rights reserved.
 */
 
 #ifndef FLAME_H
@@ -17,17 +17,17 @@
 #include "FLA_config.h"
 #include "FLA_config_check.h"
 
-// Include standard C header files.
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <string.h>
-#ifdef _WIN32
-  #include <windows.h>
-#endif
-#include <math.h>
-#include <float.h>
-#include <signal.h>
+  // Include standard C header files.
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <stdarg.h>
+  #include <string.h>
+  #ifdef _WIN32
+    #include <windows.h>
+  #endif
+  #include <math.h>
+  #include <float.h>
+  #include <signal.h>
 
   // Include f2c definitions.
   #include "FLA_f2c.h"
@@ -73,7 +73,8 @@
 #include "libflame_api_wrapper.h"
 
   #include "aocldtl.h"
-
+   // Include other api formats from wrapper code
+  #include "libflame_api_wrapper.h"
 
 // End extern "C" construct block.
 #ifdef __cplusplus

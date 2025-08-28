@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2022 Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (c) 2022-2025 Advanced Micro Devices, Inc. All rights reserved.
 */
 /* typedef long integer integer; */
 #ifdef __cplusplus
@@ -37,18 +37,31 @@ const integer* const current_thread,
 const integer* const total_threads
 );
 
+#ifdef _WIN32
+  #ifdef FLA_ENABLE_WINDOWS_BUILD
+     #if defined(__clang__) || defined(__INTEL_LLVM_COMPILER)
+       #define FLA_ATTRI_WEAK __attribute__((weak))
+     #else
+       #define FLA_ATTRI_WEAK
+     #endif
+  #else
+	   #define FLA_ATTRI_WEAK
+  #endif
+#else
+  #define FLA_ATTRI_WEAK __attribute__((weak))
+#endif
+
 void aocl_fla_set_progress(aocl_fla_progress_callback func);
 extern volatile aocl_fla_progress_callback aocl_fla_progress_glb_ptr;
-#ifndef FLA_ENABLE_WINDOWS_BUILD  
-__attribute__((weak))
-int aocl_fla_progress(
+  
+FLA_ATTRI_WEAK int aocl_fla_progress(
 const char* const api,
 const integer lenapi,
 const integer* const progress,
 const integer* const current_thread,
 const integer* const total_threads
 );
-#endif
+
 // Macro to send update using api name
 #define AOCL_FLA_PROGRESS_FUNC_PTR(api,lenapi,progress,tid,nt) \
          if((*aocl_fla_progress_ptr) (api,lenapi, progress, tid, nt)){\

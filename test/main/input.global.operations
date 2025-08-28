@@ -71,3 +71,6 @@
 0   getf2   LU factorization (GETF2)                      (0 = disable; 1 = enable; 2 = enable only this)
 0   gbtf2   LU factorization of banded matrix (GBTF2)     (0 = disable; 1 = enable; 2 = enable only this)
 0   gbsvx   Linear Solve using LU for Band Matrix (GBSVX) (0 = disable; 1 = enable; 2 = enable only this)
+0   getc2   LU factorization (GETC2)                      (0 = disable; 1 = enable; 2 = enable only this)
+0   potf2   Cholesky factorization (unblocked algorithm)  (0 = disable; 1 = enable; 2 = enable only this)
+0   potrf2  Cholesky factorization (recursive algorithm)  (0 = disable; 1 = enable; 2 = enable only this)

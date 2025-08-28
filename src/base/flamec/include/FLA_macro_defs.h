@@ -39,13 +39,17 @@
 #endif
 
 #if ENABLE_THREAD_LOCAL_STORAGE
-#ifdef FLA_ENABLE_WINDOWS_BUILD
-#define TLS_CLASS_SPEC __declspec(thread)
+   #if _WIN32
+      #if defined(FLA_ENABLE_WINDOWS_BUILD)
+         #define TLS_CLASS_SPEC __declspec(thread)
+      #else
+         #define TLS_CLASS_SPEC
+      #endif
+   #else
+     #define TLS_CLASS_SPEC __thread 
+   #endif
 #else
-#define TLS_CLASS_SPEC __thread
-#endif
-#else
-#define TLS_CLASS_SPEC
+   #define TLS_CLASS_SPEC
 #endif
 
 // --- Type-related macro definitions ------------------------------------------

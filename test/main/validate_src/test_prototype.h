@@ -453,6 +453,21 @@
 #define fla_lapack_dgbsvx DGBSVX_
 #define fla_lapack_cgbsvx CGBSVX_
 #define fla_lapack_zgbsvx ZGBSVX_
+
+#define fla_lapack_sgetc2 SGETC2_
+#define fla_lapack_dgetc2 DGETC2_
+#define fla_lapack_cgetc2 CGETC2_
+#define fla_lapack_zgetc2 ZGETC2_
+
+#define fla_lapack_spotrf2 SPOTRF2_
+#define fla_lapack_dpotrf2 DPOTRF2_
+#define fla_lapack_cpotrf2 CPOTRF2_
+#define fla_lapack_zpotrf2 ZPOTRF2_
+
+#define fla_lapack_spotf2 SPOTF2_
+#define fla_lapack_dpotf2 DPOTF2_
+#define fla_lapack_cpotf2 CPOTF2_
+#define fla_lapack_zpotf2 ZPOTF2_
 #elif(UPPER)
 
 #define fla_lapack_sladiv SLADIV
@@ -842,6 +857,21 @@
 #define fla_lapack_dgbsvx DGBSVX
 #define fla_lapack_cgbsvx CGBSVX
 #define fla_lapack_zgbsvx ZGBSVX
+
+#define fla_lapack_sgetc2 SGETC2
+#define fla_lapack_dgetc2 DGETC2
+#define fla_lapack_cgetc2 CGETC2
+#define fla_lapack_zgetc2 ZGETC2
+
+#define fla_lapack_spotrf2 SPOTRF2
+#define fla_lapack_dpotrf2 DPOTRF2
+#define fla_lapack_cpotrf2 CPOTRF2
+#define fla_lapack_zpotrf2 ZPOTRF2
+
+#define fla_lapack_spotf2 SPOTF2
+#define fla_lapack_dpotf2 DPOTF2
+#define fla_lapack_cpotf2 CPOTF2
+#define fla_lapack_zpotf2 ZPOTF2
 #elif(LOWER)
 
 #define fla_lapack_sladiv sladiv
@@ -1231,6 +1261,21 @@
 #define fla_lapack_dgbsvx dgbsvx
 #define fla_lapack_cgbsvx cgbsvx
 #define fla_lapack_zgbsvx zgbsvx
+
+#define fla_lapack_sgetc2 sgetc2
+#define fla_lapack_dgetc2 dgetc2
+#define fla_lapack_cgetc2 cgetc2
+#define fla_lapack_zgetc2 zgetc2
+
+#define fla_lapack_spotrf2 spotrf2
+#define fla_lapack_dpotrf2 dpotrf2
+#define fla_lapack_cpotrf2 cpotrf2
+#define fla_lapack_zpotrf2 zpotrf2
+
+#define fla_lapack_spotf2 spotf2
+#define fla_lapack_dpotf2 dpotf2
+#define fla_lapack_cpotf2 cpotf2
+#define fla_lapack_zpotf2 zpotf2
 #else
 
 #define fla_lapack_sladiv sladiv_
@@ -1622,6 +1667,20 @@
 #define fla_lapack_cgbsvx cgbsvx_
 #define fla_lapack_zgbsvx zgbsvx_
 
+#define fla_lapack_sgetc2 sgetc2_
+#define fla_lapack_dgetc2 dgetc2_
+#define fla_lapack_cgetc2 cgetc2_
+#define fla_lapack_zgetc2 zgetc2_
+
+#define fla_lapack_spotrf2 spotrf2_
+#define fla_lapack_dpotrf2 dpotrf2_
+#define fla_lapack_cpotrf2 cpotrf2_
+#define fla_lapack_zpotrf2 zpotrf2_
+
+#define fla_lapack_spotf2 spotf2_
+#define fla_lapack_dpotf2 dpotf2_
+#define fla_lapack_cpotf2 cpotf2_
+#define fla_lapack_zpotf2 zpotf2_
 #endif /*if UPPER_*/
 
 /* These functions are API invoking functions used in other API test codes */

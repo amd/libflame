@@ -11,8 +11,8 @@ extern double time_min;
 void fla_test_potrf2_experiment(char *tst_api, test_params_t *params, integer datatype,
                                 integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                 integer einfo);
-void prepare_potrf2_run(char *uplo, integer m, void *A, integer lda, integer datatype,
-                        integer *info, test_params_t *params);
+void prepare_potrf2_run(char *uplo, integer m, void *A, integer lda, integer datatype, integer *info,
+                        test_params_t *params);
 void invoke_potrf2(char *uplo, integer datatype, integer *m, void *a, integer *lda, integer *info);
 
 void fla_test_potrf2(integer argc, char **argv, test_params_t *params)
@@ -104,7 +104,6 @@ void fla_test_potrf2_experiment(char *tst_api, test_params_t *params, integer da
     void *A = NULL, *A_test = NULL;
     char uplo = params->lin_solver_paramslist[pci].Uplo;
     double residual, err_thresh;
-    void *filename = NULL;
 
     err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
 
@@ -125,24 +124,15 @@ void fla_test_potrf2_experiment(char *tst_api, test_params_t *params, integer da
     /* Create input matrix parameters */
     create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &A, lda);
 
-    /* Skip input generation during BRT verification runs since FLA_BRT_PROCESS_ macros load inputs
-     * from files */
-    if(!FLA_BRT_VERIFICATION_RUN)
+    if(g_ext_fptr != NULL)
     {
-        if(g_ext_fptr != NULL)
-        {
-            /* Initialize input matrix with custom data */
-            init_matrix(datatype, A, m, m, lda, g_ext_fptr, params->imatrix_char);
-        }
-        else
-        {
-            rand_spd_matrix(datatype, &uplo, A, m, lda);
-        }
+        /* Initialize input matrix with custom data */
+        init_matrix(datatype, A, m, m, lda, g_ext_fptr, params->imatrix_char);
     }
-
-    /* BRT input processing: store input matrix during ground truth runs, load during verification
-     * runs */
-    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, m, m, A, lda, "cdd", uplo, m, lda)
+    else
+    {
+        rand_spd_matrix(datatype, &uplo, A, m, lda);
+    }
 
     /* Make a copy of input matrix A. This is required to validate the API functionality */
     create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &A_test, lda);
@@ -151,30 +141,21 @@ void fla_test_potrf2_experiment(char *tst_api, test_params_t *params, integer da
     prepare_potrf2_run(&uplo, m, A_test, lda, datatype, &info, params);
 
     /* Compute the performance of the best experiment repeat */
-    /* (1/3)m^3 for real and (4/3)m^3 for scomplex*/
+    /* (1/3)m^3 for real and (4/3)m^3 for complex*/
     perf = (double)(1.0 / 3.0 * m * m * m) / time_min / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         perf *= 4.0;
 
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    IF_FLA_BRT_VALIDATION(
-        m, m, store_outputs_base(filename, params, 1, 0, datatype, m, m, A_test, lda),
-        FLA_PRINT_TEST_STATUS(m, m, residual, err_thresh),
-        check_reproducibility_base(filename, params, 1, 0, datatype, m, m, A_test, lda))
-    else
-    {
-        FLA_PRINT_TEST_STATUS(m, m, residual, err_thresh);
-    }
+    FLA_PRINT_TEST_STATUS(m, m, residual, err_thresh);
 
     /* Free up the buffers */
-    free_matrix(A_test);
-free_buffers:
-    FLA_FREE_FILENAME(filename)
     free_matrix(A);
+    free_matrix(A_test);
 }
 
-void prepare_potrf2_run(char *uplo, integer m, void *A, integer lda, integer datatype,
-                        integer *info, test_params_t *params)
+void prepare_potrf2_run(char *uplo, integer m, void *A, integer lda, integer datatype, integer *info,
+                        test_params_t *params)
 {
     void *A_save = NULL;
     double exe_time;

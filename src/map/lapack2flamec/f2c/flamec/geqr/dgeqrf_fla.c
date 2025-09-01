@@ -238,10 +238,11 @@ void dgeqrf_fla(integer *m, integer *n, doublereal *a, integer *lda, doublereal 
 #if FLA_ENABLE_AMD_OPT && FLA_OPENMP_MULTITHREADING
     /* If the matrix is large, use the multithreaded version */
     /* Need to tune this threshold */
-    integer nthreads = dgeqrf_mt_large_num_threads(*m, *n);
+    integer opt_mt_threads = 1;
     if(*m >= FLA_DGEQRF_MT_LARGE_M_THRESH && *n >= FLA_DGEQRF_MT_LARGE_N_THRESH)
     {
-        lwkopt = dgeqrf_mt_large_lwork(*m, *n, nthreads);
+        opt_mt_threads = dgeqrf_mt_large_num_threads(*m, *n);
+        lwkopt = dgeqrf_mt_large_lwork(*m, *n, opt_mt_threads);
     }
 #endif
     work[1] = (doublereal)lwkopt;
@@ -301,7 +302,7 @@ void dgeqrf_fla(integer *m, integer *n, doublereal *a, integer *lda, doublereal 
     else if(*m >= FLA_DGEQRF_MT_LARGE_M_THRESH && *n >= FLA_DGEQRF_MT_LARGE_N_THRESH
             && *lwork >= lwkopt)
     {
-        dgeqrf_mt_large(*m, *n, &a[a_offset], *lda, &tau[1], &work[1], nthreads, info);
+        dgeqrf_mt_large(*m, *n, &a[a_offset], *lda, &tau[1], &work[1], opt_mt_threads, info);
         return;
     }
 #endif

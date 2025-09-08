@@ -2737,7 +2737,7 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
       /* Path 10 (M at least N, but not much larger) */
       /* Reduce to bidiagonal form without QR decomposition */
 #if FLA_ENABLE_AMD_OPT
-      if (((wntun && wntvn) && (*m < FLA_SVD_SMALL_SIZE_THRESH3))
+      if (((wntun || wntus) && (wntvn || wntvs) && (*m < FLA_SVD_SMALL_SIZE_THRESH3))
          && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
       {
         fla_dgesvd_xx_small10(wntuas, wntvas, m, n, n, &a[a_offset], lda, &s[1],

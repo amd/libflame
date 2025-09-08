@@ -12,6 +12,7 @@
 *     Modifications Copyright (c) 2023 Advanced Micro Devices, Inc.  All rights reserved.
 */
 #include "blis1.h"
+#include "FLA_f2c.h"
 #if FLA_ENABLE_AOCL_BLAS
 #include "blis.h"
 #endif
@@ -441,7 +442,7 @@ void bl1_dgemv_blas( trans1_t transa, integer m, integer n, double* alpha, doubl
 	             *beta,
 	             y, incy );
 #else
-#if FLA_ENABLE_AOCL_BLAS && defined(BLIS_KERNELS_ZEN4)
+#if FLA_ENABLE_AOCL_BLAS
     /* Use direct single threaded BLIS kernel */
 	aocl_fla_init();
     if ( FLA_IS_MIN_ARCH_ID( FLA_ARCH_AVX512 ) && incx > 0 && incy > 0 )

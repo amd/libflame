@@ -7,6 +7,10 @@
  * Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 #include "FLA_f2c.h" /* Table of constant values */
+#if FLA_ENABLE_AOCL_BLAS
+#include "blis.h"
+#endif
+
 static integer c__1 = 1;
 static doublereal c_b6 = 1.;
 static doublereal c_b0 = 0.;
@@ -180,22 +184,24 @@ void dlarft_(char *direct, char *storev, integer *n, integer *k, doublereal *v, 
     doublereal d__1;
     /* Local variables */
     integer i__, j, prevlastv;
+    integer lastv;
+#if !FLA_ENABLE_AOCL_BLAS
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
         void
         dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
                integer *, doublereal *, doublereal *, integer *);
-    integer lastv;
     extern /* Subroutine */
         void
-        dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *),
-        f90_exit_(void);
+        dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *);
 #ifdef FLA_ENABLE_AMD_OPT
     extern void dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *,
                        doublereal *, integer *, doublereal *, integer *);
     extern void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
                        integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
 #endif
+#endif
+
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -229,6 +235,9 @@ void dlarft_(char *direct, char *storev, integer *n, integer *k, doublereal *v, 
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
+#ifdef FLA_ENABLE_AMD_OPT
+	aocl_fla_init();
+#endif
     if(lsame_(direct, "F", 1, 1))
     {
         prevlastv = *n;
@@ -293,8 +302,20 @@ void dlarft_(char *direct, char *storev, integer *n, integer *k, doublereal *v, 
                 /* Explicitly make the diagonal element of V11 equal to 1 */
                 v[i__ + i__ * v_dim1] = 1.;
                 /* T11(1:i-1,i) := - tau(i) * V11(i:j,1:i-1)**T * V11(i:j,i) */
-                dgemv_("Transpose", &m_lower_triangular, &n_left, &n_tau, &v[i__ + v_dim1], ldv,
-                       &v[i__ + i__ * v_dim1], &c__1, &c_b0, &t[i__ * t_dim1 + 1], &c__1);
+#if FLA_ENABLE_AOCL_BLAS
+                if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
+                {
+                    bli_dgemv_t_zen4_int(BLIS_CONJUGATE, BLIS_NO_CONJUGATE, m_lower_triangular,
+                                         n_left, &n_tau, &v[i__ + v_dim1], 1, *ldv,
+                                         &v[i__ + i__ * v_dim1], c__1,
+                                         &c_b0, &t[i__ * t_dim1 + 1], c__1, NULL);
+                }
+                else
+#endif
+                {
+                    dgemv_("Transpose", &m_lower_triangular, &n_left, &n_tau, &v[i__ + v_dim1], ldv,
+                           &v[i__ + i__ * v_dim1], &c__1, &c_b0, &t[i__ * t_dim1 + 1], &c__1);
+                }
                 /* Restore the diagonal element of V11 */
                 v[i__ + i__ * v_dim1] = diag_elem;
                 /* T11(1:i-1,i) := T11(1:i-1,1:i-1) * T11(1:i-1,i) */
@@ -328,8 +349,21 @@ void dlarft_(char *direct, char *storev, integer *n, integer *k, doublereal *v, 
                     /* Update T12
                        T12(:, j) = -tau[j] * T12(:, j) -tau[j] * V21**T * V22(:, j)
                      */
-                    dgemv_("Transpose", &m_v22_j, &n_v31, &n_tau, &v[j + v_dim1], ldv,
-                           &v[j + j * v_dim1], &c__1, &n_tau, &t[j * t_dim1 + 1], &c__1);
+#if FLA_ENABLE_AOCL_BLAS
+                    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
+                    {
+                        double n_tau_d = n_tau;
+                        bli_dgemv_t_zen4_int(BLIS_CONJUGATE, BLIS_NO_CONJUGATE, m_v22_j, n_v31, &n_tau,
+                                             &v[j + v_dim1], 1, *ldv,
+                                             &v[j + j * v_dim1], c__1,
+                                             &n_tau_d, &t[j * t_dim1 + 1], c__1, NULL);
+                    }
+                    else
+#endif
+                    {
+                        dgemv_("Transpose", &m_v22_j, &n_v31, &n_tau, &v[j + v_dim1], ldv,
+                               &v[j + j * v_dim1], &c__1, &n_tau, &t[j * t_dim1 + 1], &c__1);
+                    }
 
                     /* V22_32 = || V22 ||
                      *          || V32 ||
@@ -341,8 +375,20 @@ void dlarft_(char *direct, char *storev, integer *n, integer *k, doublereal *v, 
                     /* Update T22
                      * T22(:, j) =  -tau[j] * V22_32(:,1:j-1)**T * V22_32(:, j)
                      */
-                    dgemv_("Transpose", &m_v22_32_j, &n_v22_32_j, &n_tau, &v[j + v_dim1 * i__], ldv,
-                           &v[j + j * v_dim1], &c__1, &c_b0, &t[j * t_dim1 + i__], &c__1);
+#if FLA_ENABLE_AOCL_BLAS
+                    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
+                    {
+                        bli_dgemv_t_zen4_int(BLIS_CONJUGATE, BLIS_NO_CONJUGATE, m_v22_32_j,
+                                             n_v22_32_j, &n_tau, &v[j + v_dim1 * i__], 1, *ldv,
+                                             &v[j + j * v_dim1], c__1,
+                                             &c_b0, &t[j * t_dim1 + i__], c__1, NULL);
+                    }
+                    else
+#endif
+                    {
+                        dgemv_("Transpose", &m_v22_32_j, &n_v22_32_j, &n_tau, &v[j + v_dim1 * i__], ldv,
+                               &v[j + j * v_dim1], &c__1, &c_b0, &t[j * t_dim1 + i__], &c__1);
+                    }
 
                     /* Restore the diagonal element of V22 */
                     v[j + j * v_dim1] = diag_elem;
@@ -365,8 +411,20 @@ void dlarft_(char *direct, char *storev, integer *n, integer *k, doublereal *v, 
                     /* Update T12
                      * T12(:, j) = T12(:,j) + T12 * T12(:, j)
                      */
-                    dgemv_("No transpose", &m_t12, &n_t12_j, &c_b6, &t[1 + i__ * t_dim1], ldt,
-                           &t[i__ + j * t_dim1], &c__1, &c_b6, &t[j * t_dim1 + 1], &c__1);
+#if FLA_ENABLE_AOCL_BLAS
+                    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
+                    {
+                        bli_dgemv_n_zen4_int_40x2_st(BLIS_NO_TRANSPOSE, BLIS_NO_CONJUGATE, m_t12,
+                                                     n_t12_j, &c_b6, &t[1 + i__ * t_dim1], 1, *ldt,
+                                                     &t[i__ + j * t_dim1], c__1,
+                                                     &c_b6, &t[j * t_dim1 + 1], c__1, NULL);
+                    }
+                    else
+#endif
+                    {
+                        dgemv_("No transpose", &m_t12, &n_t12_j, &c_b6, &t[1 + i__ * t_dim1], ldt,
+                               &t[i__ + j * t_dim1], &c__1, &c_b6, &t[j * t_dim1 + 1], &c__1);
+                    }
                     /*
                      * Update T22
                      * T22(:, j) = T22(1:j-1, j) * T22(:, j)
@@ -415,9 +473,21 @@ void dlarft_(char *direct, char *storev, integer *n, integer *k, doublereal *v, 
                         i__2 = j - i__;
                         i__3 = i__ - 1;
                         d__1 = -tau[i__];
-                        dgemv_("Transpose", &i__2, &i__3, &d__1, &v[i__ + 1 + v_dim1], ldv,
-                               &v[i__ + 1 + i__ * v_dim1], &c__1, &c_b6, &t[i__ * t_dim1 + 1],
-                               &c__1);
+#if FLA_ENABLE_AOCL_BLAS
+                        if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
+                        {
+                            bli_dgemv_t_zen4_int(BLIS_CONJUGATE, BLIS_NO_CONJUGATE, i__2, i__3, &d__1,
+                                                 &v[i__ + 1 + v_dim1], 1, *ldv,
+                                                 &v[i__ + 1 + i__ * v_dim1], c__1,
+                                                 &c_b6, &t[i__ * t_dim1 + 1], c__1, NULL);
+                        }
+                        else
+#endif
+                        {
+                            dgemv_("Transpose", &i__2, &i__3, &d__1, &v[i__ + 1 + v_dim1], ldv,
+                                   &v[i__ + 1 + i__ * v_dim1], &c__1, &c_b6, &t[i__ * t_dim1 + 1],
+                                &c__1);
+                        }
                     }
                     else
                     {
@@ -440,9 +510,21 @@ void dlarft_(char *direct, char *storev, integer *n, integer *k, doublereal *v, 
                         i__2 = i__ - 1;
                         i__3 = j - i__;
                         d__1 = -tau[i__];
-                        dgemv_("No transpose", &i__2, &i__3, &d__1, &v[(i__ + 1) * v_dim1 + 1], ldv,
-                               &v[i__ + (i__ + 1) * v_dim1], ldv, &c_b6, &t[i__ * t_dim1 + 1],
-                               &c__1);
+#if FLA_ENABLE_AOCL_BLAS
+                        if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512) && *ldv > 0)
+                        {
+                            bli_dgemv_n_zen4_int_40x2_st(BLIS_NO_TRANSPOSE, BLIS_NO_CONJUGATE, i__2, i__3, &d__1,
+                                                 &v[(i__ + 1) * v_dim1 + 1], 1, *ldv,
+                                                 &v[i__ + (i__ + 1) * v_dim1], *ldv,
+                                                 &c_b6, &t[i__ * t_dim1 + 1], c__1, NULL);
+                        }
+                        else
+#endif
+                        {
+                            dgemv_("No transpose", &i__2, &i__3, &d__1, &v[(i__ + 1) * v_dim1 + 1], ldv,
+                                   &v[i__ + (i__ + 1) * v_dim1], ldv, &c_b6, &t[i__ * t_dim1 + 1],
+                                   &c__1);
+                        }
                     }
                     /* T(1:i-1,i) := T(1:i-1,1:i-1) * T(1:i-1,i) */
                     i__2 = i__ - 1;
@@ -503,9 +585,21 @@ void dlarft_(char *direct, char *storev, integer *n, integer *k, doublereal *v, 
                         i__1 = *n - *k + i__ - j;
                         i__2 = *k - i__;
                         d__1 = -tau[i__];
-                        dgemv_("Transpose", &i__1, &i__2, &d__1, &v[j + (i__ + 1) * v_dim1], ldv,
-                               &v[j + i__ * v_dim1], &c__1, &c_b6, &t[i__ + 1 + i__ * t_dim1],
-                               &c__1);
+#if FLA_ENABLE_AOCL_BLAS
+                        if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
+                        {
+                            bli_dgemv_t_zen4_int(BLIS_CONJUGATE, BLIS_NO_CONJUGATE, i__1, i__2, &d__1,
+                                                 &v[j + (i__ + 1) * v_dim1], 1, *ldv,
+                                                 &v[j + i__ * v_dim1], c__1,
+                                                 &c_b6, &t[i__ + 1 + i__ * t_dim1], c__1, NULL);
+                        }
+                        else
+#endif
+                        {
+                            dgemv_("Transpose", &i__1, &i__2, &d__1, &v[j + (i__ + 1) * v_dim1], ldv,
+                                   &v[j + i__ * v_dim1], &c__1, &c_b6, &t[i__ + 1 + i__ * t_dim1],
+                                   &c__1);
+                        }
                     }
                     else
                     {
@@ -528,8 +622,20 @@ void dlarft_(char *direct, char *storev, integer *n, integer *k, doublereal *v, 
                         i__1 = *k - i__;
                         i__2 = *n - *k + i__ - j;
                         d__1 = -tau[i__];
-                        dgemv_("No transpose", &i__1, &i__2, &d__1, &v[i__ + 1 + j * v_dim1], ldv,
-                               &v[i__ + j * v_dim1], ldv, &c_b6, &t[i__ + 1 + i__ * t_dim1], &c__1);
+#if FLA_ENABLE_AOCL_BLAS
+                        if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512) && *ldv > 0)
+                        {
+                            bli_dgemv_n_zen4_int_40x2_st(BLIS_NO_TRANSPOSE, BLIS_NO_CONJUGATE, i__1, i__2, &d__1,
+                                                         &v[i__ + 1 + j * v_dim1], 1, *ldv,
+                                                         &v[i__ + j * v_dim1], *ldv,
+                                                         &c_b6, &t[i__ + 1 + i__ * t_dim1], c__1, NULL);
+                        }
+                        else
+#endif
+                        {
+                            dgemv_("No transpose", &i__1, &i__2, &d__1, &v[i__ + 1 + j * v_dim1], ldv,
+                                   &v[i__ + j * v_dim1], ldv, &c_b6, &t[i__ + 1 + i__ * t_dim1], &c__1);
+                        }
                     }
                     /* T(i+1:k,i) := T(i+1:k,i+1:k) * T(i+1:k,i) */
                     i__1 = *k - i__;

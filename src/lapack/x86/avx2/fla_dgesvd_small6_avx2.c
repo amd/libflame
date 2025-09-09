@@ -122,6 +122,10 @@ void fla_dgesvd_small6_avx2(integer wntus, integer wntvs, integer *m, integer *n
         {
             fla_drot_avx2(&nru, &u[1 + *ldu], &c__1, &u[1 + 2 * *ldu], &c__1, &cosl, &sinl);
         }
+
+        /* Normalize singular values and scale corresponding vectors for 2x2 case */
+        FLA_NORMALIZE_SINGULAR_VALUE_AND_VECTORS_2X2(1, wntus);
+        FLA_NORMALIZE_SINGULAR_VALUE_AND_VECTORS_2X2(2, wntus);
     }
     else
     {
@@ -129,6 +133,12 @@ void fla_dgesvd_small6_avx2(integer wntus, integer wntvs, integer *m, integer *n
         {
             /* Compute Singular Values excluding computation of Singular Vectors */
             dlasq1_(n, &s[1], &e[1], &work[itau - 1], info);
+
+            /* Ensure singular values are positive */
+            if(*info == 0)
+            {
+                FLA_ENSURE_POSITIVE_SINGULAR_VALUES(*n);
+            }
         }
         else
         {

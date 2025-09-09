@@ -11,6 +11,7 @@
 
 #if FLA_ENABLE_AMD_OPT
 
+
 extern void dlartg_(doublereal *da, doublereal *db, doublereal *c__, doublereal *s, doublereal *r);
 extern void dlasq1_(integer *, doublereal *, doublereal *, doublereal *, integer *);
 
@@ -163,6 +164,10 @@ void fla_dgesvd_xx_small10_avx2(integer wntu, integer wntv, integer *m, integer 
             u[1 + 2 * *ldu] = -(p3 + p2);
             u[2 + 2 * *ldu] = p0 - p1;
         }
+
+        /* Normalize singular values and scale corresponding vectors for 2x2 case */
+        FLA_NORMALIZE_SINGULAR_VALUE_AND_VECTORS_2X2(1, wntu);
+        FLA_NORMALIZE_SINGULAR_VALUE_AND_VECTORS_2X2(2, wntu);
     }
     else
     {
@@ -170,6 +175,12 @@ void fla_dgesvd_xx_small10_avx2(integer wntu, integer wntv, integer *m, integer 
         {
             /* Compute Singular Values excluding computation of Singular Vectors */
             dlasq1_(n, &s[1], &e[1], &work[itauq - 1], info);
+
+            /* Ensure singular values are positive */
+            if(*info == 0)
+            {
+                FLA_ENSURE_POSITIVE_SINGULAR_VALUES(*n);
+            }
         }
         else
         {

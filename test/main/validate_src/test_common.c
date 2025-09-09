@@ -3037,7 +3037,7 @@ void print_matrix(char *desc, char *order, integer datatype, integer M, integer 
     integer i, j, row_max = M, col_max = N, ldc = lda, ldr = 1;
 
     /* early return */
-    if(M <= 0 || N <= 0 || lda < M || A == NULL || desc == NULL || order == NULL)
+    if(M <= 0 || N <= 0 || lda <= 0 || A == NULL || desc == NULL || order == NULL)
     {
         return;
     }

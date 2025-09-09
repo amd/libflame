@@ -79,5 +79,38 @@ doublereal d_sign(doublereal *, doublereal *);
     vt[1 + 2 * *ldvt] = scl1 * sr;                   \
     vt[2 + 2 * *ldvt] = scl2 * cr;
 
+/* Macro to normalize singular value sign and
+   scale corresponding singular vectors for 2x2 matrices */
+#define FLA_NORMALIZE_SINGULAR_VALUE_AND_VECTORS_2X2(idx, wntu_var)  \
+    if(s[idx] == 0.0)                                                \
+    {                                                                \
+        s[idx] = 0.0; /* Avoid -ZERO */                              \
+    }                                                                \
+    else if(s[idx] < 0.0)                                            \
+    {                                                                \
+        s[idx] = -s[idx]; /* Make singular value positive */         \
+        if(wntu_var && u != NULL)                                    \
+        {                                                            \
+            /* Negate corresponding left singular vector column */   \
+            u[1 + (idx) * *ldu] = -u[1 + (idx) * *ldu];              \
+            u[2 + (idx) * *ldu] = -u[2 + (idx) * *ldu];              \
+        }                                                            \
+    }
+
+/* Macro to ensure all singular values are positive
+   (values only, no vector adjustments) */
+#define FLA_ENSURE_POSITIVE_SINGULAR_VALUES(n_vals)   \
+    for(integer i__ = 1; i__ <= (n_vals); i__++)      \
+    {                                                 \
+        if(s[i__] == 0.0)                             \
+        {                                             \
+            s[i__] = 0.0; /* Avoid -ZERO */           \
+        }                                             \
+        else if(s[i__] < 0.0)                         \
+        {                                             \
+            s[i__] = -s[i__]; /* Make positive */     \
+        }                                             \
+    }
+
 #endif /* FLA_ENABLE_AMD_OPT */
 #endif /* FLA_DGESVD_SMALL_AVX2_DEFS_H */

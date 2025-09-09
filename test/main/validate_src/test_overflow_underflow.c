@@ -653,7 +653,7 @@ void scale_matrix_overflow_underflow_hetrf(integer datatype, integer m, void *A,
         }
         else if(m < 200)
         {
-            tuning_val = 37.0;
+            tuning_val = 45.0;
         }
         else
         {
@@ -2526,6 +2526,10 @@ void scale_matrix_overflow_underflow_potri(integer datatype, integer n, void *A,
     else if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, n, n, lda);
+        if (n < 100 && datatype == COMPLEX)
+        {
+            tuning_val = 2.0;
+        }
     }
     calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
 

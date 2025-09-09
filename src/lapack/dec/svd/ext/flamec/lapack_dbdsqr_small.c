@@ -806,7 +806,12 @@ L160:
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        if(d__[i__] < 0.)
+        if(d__[i__] == 0.)
+        {
+            /* Avoid -ZERO */
+            d__[i__] = 0.;
+        }
+        else if(d__[i__] < 0.)
         {
             d__[i__] = -d__[i__];
             /* Change sign of singular vectors, if desired */

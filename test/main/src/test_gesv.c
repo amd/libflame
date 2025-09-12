@@ -170,7 +170,10 @@ void fla_test_gesv_experiment(char *tst_api, test_params_t *params, integer data
     create_matrix(datatype, LAPACK_COL_MAJOR, n, NRHS, &B, ldb);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, NRHS, &B_save, ldb);
     create_realtype_vector(datatype, &s_test, n);
-    create_vector(get_realtype(datatype), &scal, 1);
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
+    {
+        create_vector(get_realtype(datatype), &scal, 1);
+    }
 
     /* This code path is run to generate the matrix to be passed to the API. This is the default
      * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT

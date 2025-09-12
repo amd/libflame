@@ -5,13 +5,18 @@
     This file is part of libflame and is available under the 3-Clause
     BSD license, which can be found in the LICENSE file at the top-level
     directory, or at http://opensource.org/licenses/BSD-3-Clause
-
 */
 
+/*
+ *  Modifications Copyright (c) 2025 Advanced Micro Devices, Inc.  All rights reserved.
+ */
+
+#ifndef _WIN32
+#include <unistd.h>
+#endif
+
 #include "FLAME.h"
-
 #include "test_libflame.h"
-
 // Operation modules.
 #include "test_gemm.h"
 #include "test_hemm.h"

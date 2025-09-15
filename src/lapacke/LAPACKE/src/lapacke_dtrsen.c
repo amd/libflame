@@ -76,18 +76,10 @@ lapack_int API_SUFFIX(LAPACKE_dtrsen)( int matrix_layout, char job, char compq,
     liwork = iwork_query;
     lwork = (lapack_int)work_query;
     /* Allocate memory for work arrays */
-    if( API_SUFFIX(LAPACKE_lsame)( job, 'b' ) || API_SUFFIX(LAPACKE_lsame)( job, 'v' ) ) {
-        iwork = (lapack_int*)LAPACKE_malloc( sizeof(lapack_int) * liwork );
-        if( iwork == NULL ) {
-            info = LAPACK_WORK_MEMORY_ERROR;
-            goto exit_level_0;
-        }
-    } else {
-        iwork = (lapack_int*)LAPACKE_malloc( sizeof(lapack_int) );
-        if( iwork == NULL ) {
-            info = LAPACK_WORK_MEMORY_ERROR;
-            goto exit_level_0;
-        }
+    iwork = (lapack_int*)LAPACKE_malloc( sizeof(lapack_int) * liwork );
+    if( iwork == NULL ) {
+        info = LAPACK_WORK_MEMORY_ERROR;
+        goto exit_level_0;
     }
     work = (double*)LAPACKE_malloc( sizeof(double) * lwork );
     if( work == NULL ) {
@@ -101,9 +93,7 @@ lapack_int API_SUFFIX(LAPACKE_dtrsen)( int matrix_layout, char job, char compq,
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_1:
-    if( API_SUFFIX(LAPACKE_lsame)( job, 'b' ) || API_SUFFIX(LAPACKE_lsame)( job, 'v' ) ) {
-        LAPACKE_free( iwork );
-    }
+    LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
         API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_dtrsen", info );

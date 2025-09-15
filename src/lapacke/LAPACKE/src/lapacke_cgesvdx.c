@@ -30,6 +30,10 @@
 * Author: Intel Corporation
 *****************************************************************************/
 
+/*
+ *     Modifications Copyright (c) 2025 Advanced Micro Devices, Inc.  All rights reserved.
+ */
+
 #include "lapacke_utils.h"
 
 lapack_int API_SUFFIX(LAPACKE_cgesvdx)( int matrix_layout, char jobu, char jobvt, char range,
@@ -73,12 +77,12 @@ lapack_int API_SUFFIX(LAPACKE_cgesvdx)( int matrix_layout, char jobu, char jobvt
         LAPACKE_malloc( sizeof(lapack_complex_float) * lwork );
     if( work == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
-        goto exit_level_1;
+        goto exit_level_0;
     }
     rwork = (float*)LAPACKE_malloc( sizeof(float) * lrwork );
     if( rwork == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
-        goto exit_level_0;
+        goto exit_level_1;
     }
     iwork = (lapack_int*)LAPACKE_malloc( sizeof(lapack_int) * MAX(1,(12*MIN(m,n))) );
     if( iwork == NULL ) {
@@ -96,9 +100,9 @@ lapack_int API_SUFFIX(LAPACKE_cgesvdx)( int matrix_layout, char jobu, char jobvt
     /* Release memory and exit */
     LAPACKE_free( iwork );
 exit_level_2:
-    LAPACKE_free( work );
-exit_level_1:
     LAPACKE_free( rwork );
+exit_level_1:
+    LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
         API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_cgesvdx", info );

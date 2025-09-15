@@ -30,6 +30,10 @@
 * Author: Intel Corporation
 *****************************************************************************/
 
+/*
+ *     Modifications Copyright (c) 2025 Advanced Micro Devices, Inc.  All rights reserved.
+ */
+
 #include "lapacke_utils.h"
 
 lapack_int API_SUFFIX(LAPACKE_cgejsv)( int matrix_layout, char joba, char jobu, char jobv,
@@ -174,9 +178,9 @@ lapack_int API_SUFFIX(LAPACKE_cgejsv)( int matrix_layout, char joba, char jobu, 
         istat[i] = iwork[i];
     }
     /* Release memory and exit */
-    LAPACKE_free( cwork );
-exit_level_2:
     LAPACKE_free( rwork );
+exit_level_2:
+    LAPACKE_free( cwork );
 exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:

@@ -30,6 +30,10 @@
 * Author: Intel Corporation
 *****************************************************************************/
 
+/*
+ *     Modifications Copyright (c) 2025 Advanced Micro Devices, Inc.  All rights reserved.
+ */
+
 #include "lapacke_utils.h"
 
 lapack_int API_SUFFIX(LAPACKE_zhbevx_2stage_work)( int matrix_layout, char jobz, char range,
@@ -105,9 +109,14 @@ lapack_int API_SUFFIX(LAPACKE_zhbevx_2stage_work)( int matrix_layout, char jobz,
         }
         /* Query optimal working array(s) size if requested */
         if( lwork == -1 ) {
-             LAPACK_zhbevx_2stage( &jobz, &range, &uplo, &n, &kd, ab_t, &ldab_t, q_t,
+            LAPACK_zhbevx_2stage( &jobz, &range, &uplo, &n, &kd, ab_t, &ldab_t, q_t,
                        &ldq_t, &vl, &vu, &il, &iu, &abstol, m, w, z_t, &ldz_t,
                        work, &lwork, rwork, iwork, ifail, &info );
+            LAPACKE_free( ab_t );
+            if( LAPACKE_lsame( jobz, 'v' ) ) {
+                LAPACKE_free( q_t );
+                LAPACKE_free( z_t );
+            }
             return (info < 0) ? (info - 1) : info;
         }
         /* Transpose input matrices */

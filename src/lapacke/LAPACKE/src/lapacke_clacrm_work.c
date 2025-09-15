@@ -30,6 +30,10 @@
 * Author: Intel Corporation
 *****************************************************************************/
 
+/*
+ *     Modifications Copyright (c) 2025 Advanced Micro Devices, Inc.  All rights reserved.
+ */
+
 #include "lapacke_utils.h"
 
 lapack_int API_SUFFIX(LAPACKE_clacrm_work)(int matrix_layout, lapack_int m, lapack_int n,
@@ -68,18 +72,18 @@ lapack_int API_SUFFIX(LAPACKE_clacrm_work)(int matrix_layout, lapack_int m, lapa
         /* Allocate memory for temporary array(s) */
         a_t = (lapack_complex_float*)
             LAPACKE_malloc(sizeof(lapack_complex_float) * lda_t * MAX(1,n));
-        b_t = (float*)
-            LAPACKE_malloc(sizeof(float) * ldb_t * MAX(1,n));
-        c_t = (lapack_complex_float*)
-            LAPACKE_malloc((sizeof(lapack_complex_float) * ldc_t * MAX(1,n)));
         if (a_t == NULL) {
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_0;
         }
+        b_t = (float*)
+            LAPACKE_malloc(sizeof(float) * ldb_t * MAX(1,n));
         if (b_t == NULL) {
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_1;
         }
+        c_t = (lapack_complex_float*)
+            LAPACKE_malloc((sizeof(lapack_complex_float) * ldc_t * MAX(1,n)));
         if (c_t == NULL) {
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_2;

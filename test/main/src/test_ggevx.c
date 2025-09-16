@@ -39,6 +39,19 @@ double prepare_lapacke_ggevx_run(integer datatype, int matrix_layout, char *bala
                                  void *abnrm, void *bbnrm, void *rconde, void *rcondv,
                                  integer *info);
 
+/* Helper functions for Bit reproducibility tests */
+void store_ggevx_outputs(void *filename, integer datatype, char balanc, char jobvl, char jobvr,
+                         char sense, integer n, void *A, integer lda, void *B, integer ldb,
+                         void *alpha, void *alphar, void *alphai, void *beta, void *vl,
+                         integer ldvl, void *vr, integer ldvr, void *lscale, void *rscale,
+                         void *abnrm, void *bbnrm, void *rconde, void *rcondv, void *params);
+integer check_bit_reproducibility_ggevx(void *filename, integer datatype, char balanc, char jobvl,
+                                        char jobvr, char sense, integer n, void *A, integer lda,
+                                        void *B, integer ldb, void *alpha, void *alphar,
+                                        void *alphai, void *beta, void *vl, integer ldvl, void *vr,
+                                        integer ldvr, void *lscale, void *rscale, void *abnrm,
+                                        void *bbnrm, void *rconde, void *rcondv, void *params);
+
 void fla_test_ggevx(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "Computing Eigen value and Eigen vectors with condition numbers";
@@ -161,6 +174,7 @@ void fla_test_ggevx_experiment(char *tst_api, test_params_t *params, integer dat
     char BALANC = params->eig_non_sym_paramslist[pci].balance_ggevx;
     char SENSE = params->eig_non_sym_paramslist[pci].sense_ggevx;
     double residual, err_thresh;
+    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
@@ -215,7 +229,9 @@ void fla_test_ggevx_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Create input matrix parameters */
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &B, ldb);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &B_test, ldb);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &VL, ldvl);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &VR, ldvr);
     create_vector(datatype, &beta, n);
@@ -237,12 +253,25 @@ void fla_test_ggevx_experiment(char *tst_api, test_params_t *params, integer dat
     create_realtype_vector(datatype, &abnrm, 1);
     create_realtype_vector(datatype, &bbnrm, 1);
 
-    init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
-    init_matrix(datatype, B, n, n, ldb, g_ext_fptr, params->imatrix_char);
+    /* This code path is run to generate the matrix to be passed to the API. This is the default
+     * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
+     * Test cases. For verification runs the input is loaded from the input generated during Ground
+     * truth run */
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+        init_matrix(datatype, B, n, n, ldb, g_ext_fptr, params->imatrix_char);
+    }
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * passed as input to the API
+     * */
+    FLA_BRT_PROCESS_TWO_INPUT(datatype, n, n, A, lda, datatype, n, n, B, ldb, "ccccdddddd", BALANC,
+                              JOBVL, JOBVR, SENSE, n, lda, ldb, ldvl, ldvr, g_lwork)
 
     /* Make a copy of input matrix A. This is required to validate the API functionality */
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &B_test, ldb);
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
     copy_matrix(datatype, "full", n, n, B, ldb, B_test, ldb);
 
@@ -258,7 +287,24 @@ void fla_test_ggevx_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    /* Bit reproducibility tests path
+     * This path is taken when BRT is enabled.
+     *     - In the Ground truth runs (BRT_char => G, F), the output is stored in a file and the
+     * default validation function is called
+     *     - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * compared with the generated output
+     *  */
+    IF_FLA_BRT_VALIDATION(
+        n, n,
+        store_ggevx_outputs(filename, datatype, BALANC, JOBVL, JOBVR, SENSE, n, A, lda, B, ldb,
+                            alpha, alphar, alphai, beta, VL, ldvl, VR, ldvr, lscale, rscale, abnrm,
+                            bbnrm, rconde, rcondv, params),
+        validate_ggevx(tst_api, &BALANC, &JOBVL, &JOBVR, &SENSE, n, A_test, lda, B_test, ldb, alpha,
+                       alphar, alphai, beta, VL, ldvl, VR, ldvr, datatype, residual, params),
+        check_bit_reproducibility_ggevx(filename, datatype, BALANC, JOBVL, JOBVR, SENSE, n, A, lda,
+                                        B, ldb, alpha, alphar, alphai, beta, VL, ldvl, VR, ldvr,
+                                        lscale, rscale, abnrm, bbnrm, rconde, rcondv, params))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         if(same_char(JOBVL, 'V') || same_char(JOBVR, 'V'))
         {
@@ -273,6 +319,8 @@ void fla_test_ggevx_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename)
     free_matrix(A);
     free_matrix(A_test);
     free_matrix(B);
@@ -542,4 +590,97 @@ void invoke_ggevx(integer datatype, char *balanc, char *jobvl, char *jobvr, char
             break;
         }
     }
+}
+
+void store_ggevx_outputs(void *filename, integer datatype, char balanc, char jobvl, char jobvr,
+                         char sense, integer n, void *A, integer lda, void *B, integer ldb,
+                         void *alpha, void *alphar, void *alphai, void *beta, void *vl,
+                         integer ldvl, void *vr, integer ldvr, void *lscale, void *rscale,
+                         void *abnrm, void *bbnrm, void *rconde, void *rcondv, void *params)
+{
+    /* Create and open a file for storing Ground truth*/
+    FLA_OPEN_GT_FILE_STORE
+
+    /* Store the ground truth data */
+    FLA_STORE_BRT_MATRIX(datatype, n, n, A, lda)
+    FLA_STORE_BRT_MATRIX(datatype, n, n, B, ldb)
+    if(!same_char(jobvl, 'N'))
+    {
+        FLA_STORE_BRT_MATRIX(datatype, n, n, vl, ldvl)
+    }
+    if(!same_char(jobvr, 'N'))
+    {
+        FLA_STORE_BRT_MATRIX(datatype, n, n, vr, ldvr)
+    }
+    if(datatype == FLOAT || datatype == DOUBLE)
+    {
+        FLA_STORE_BRT_VECTOR(datatype, n, alphar)
+        FLA_STORE_BRT_VECTOR(datatype, n, alphai)
+    }
+    else
+    {
+        FLA_STORE_BRT_VECTOR(datatype, n, alpha)
+    }
+    FLA_STORE_BRT_VECTOR(datatype, n, beta)
+    FLA_STORE_BRT_VECTOR(get_realtype(datatype), n, lscale)
+    FLA_STORE_BRT_VECTOR(get_realtype(datatype), n, rscale)
+    if(!same_char(sense, 'N') && !same_char(sense, 'V'))
+    {
+        FLA_STORE_BRT_VECTOR(get_realtype(datatype), n, rconde)
+    }
+    if(!same_char(sense, 'N') && !same_char(sense, 'E'))
+    {
+        FLA_STORE_BRT_VECTOR(get_realtype(datatype), n, rcondv)
+    }
+    FLA_STORE_BRT_VECTOR(get_realtype(datatype), 1, abnrm)
+    FLA_STORE_BRT_VECTOR(get_realtype(datatype), 1, bbnrm)
+
+    FLA_CLOSE_GT_FILE_STORE
+}
+integer check_bit_reproducibility_ggevx(void *filename, integer datatype, char balanc, char jobvl,
+                                        char jobvr, char sense, integer n, void *A, integer lda,
+                                        void *B, integer ldb, void *alpha, void *alphar,
+                                        void *alphai, void *beta, void *vl, integer ldvl, void *vr,
+                                        integer ldvr, void *lscale, void *rscale, void *abnrm,
+                                        void *bbnrm, void *rconde, void *rcondv, void *params)
+{
+    /* Open the file for reading Ground truth */
+    FLA_OPEN_GT_FILE_READ
+
+    /* Load stored GT and verify with current API outputs */
+    FLA_VERIFY_BRT_MATRIX(datatype, n, n, A, lda)
+    FLA_VERIFY_BRT_MATRIX(datatype, n, n, B, ldb)
+    if(!same_char(jobvl, 'N'))
+    {
+        FLA_VERIFY_BRT_MATRIX(datatype, n, n, vl, ldvl)
+    }
+    if(!same_char(jobvr, 'N'))
+    {
+        FLA_VERIFY_BRT_MATRIX(datatype, n, n, vr, ldvr)
+    }
+    if(datatype == FLOAT || datatype == DOUBLE)
+    {
+        FLA_VERIFY_BRT_VECTOR(datatype, n, alphar)
+        FLA_VERIFY_BRT_VECTOR(datatype, n, alphai)
+    }
+    else
+    {
+        FLA_VERIFY_BRT_VECTOR(datatype, n, alpha)
+    }
+    FLA_VERIFY_BRT_VECTOR(datatype, n, beta)
+    FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), n, lscale)
+    FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), n, rscale)
+    if(!same_char(sense, 'N') && !same_char(sense, 'V'))
+    {
+        FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), n, rconde)
+    }
+    if(!same_char(sense, 'N') && !same_char(sense, 'E'))
+    {
+        FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), n, rcondv)
+    }
+    FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), 1, abnrm)
+    FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), 1, bbnrm)
+
+    fclose(gt_file);
+    return 1;
 }

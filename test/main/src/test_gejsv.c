@@ -251,7 +251,6 @@ void fla_test_gejsv_experiment(char *tst_api, test_params_t *params, integer dat
     create_vector(get_realtype(datatype), &S_test, n);
     create_vector(get_realtype(datatype), &stat, 7);
     create_vector(INTEGER, &istat, 4);
-    create_vector(get_realtype(datatype), &scal, 1);
 
     if(!FLA_BRT_VERIFICATION_RUN)
     {
@@ -266,6 +265,7 @@ void fla_test_gejsv_experiment(char *tst_api, test_params_t *params, integer dat
             generate_gejsv_test_matrix(datatype, joba, jobu, jobv, m, n, A, lda, S);
             if(FLA_OVERFLOW_UNDERFLOW_TEST)
             {
+                create_vector(get_realtype(datatype), &scal, 1);
                 scale_matrix_overflow_underflow_gejsv(datatype, m, n, A, lda, S, imatrix, scal);
             }
         }
@@ -717,7 +717,7 @@ void store_gejsv_outputs(void *filename, integer datatype, char joba, char jobu,
         FLA_STORE_BRT_MATRIX(datatype, n, n, V, ldv)
     }
 
-    fclose(gt_file);
+    FLA_CLOSE_GT_FILE_STORE
 }
 
 integer check_bit_reproducibility_gejsv(void *filename, integer datatype, char joba, char jobu,

@@ -24,13 +24,6 @@ void invoke_geqp3(integer datatype, integer *m, integer *n, void *a, integer *ld
 double prepare_lapacke_geqp3_run(integer datatype, int layout, integer m_A, integer n_A, void *A,
                                  integer lda, integer *jpvt, void *T, integer *info);
 
-/* Helper functions for Bit reproducibility tests */
-void store_geqp3_outputs(void *filename, integer datatype, integer m, integer n, void *A,
-                         integer lda, void *jpvt, void *T, integer g_lwork, void *params);
-integer check_bit_reproducibility_geqp3(void *filename, integer datatype, integer m, integer n,
-                                        void *A, integer lda, void *jpvt, void *T, integer g_lwork,
-                                        void *params);
-
 void fla_test_geqp3(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "QR factorization with column pivoting";
@@ -209,12 +202,14 @@ void fla_test_geqp3_experiment(char *tst_api, test_params_t *params, integer dat
      *     - In the verification runs (BRT_char => V, M), the output is loaded from the file and
      * compared with the generated output
      *  */
-    IF_FLA_BRT_VALIDATION(
-        m, n, store_geqp3_outputs(filename, datatype, m, n, A_test, lda, jpvt, T, g_lwork, params),
-        validate_geqp3(tst_api, m, n, A, A_test, lda, jpvt, T, datatype, residual,
-                       params->imatrix_char, params),
-        check_bit_reproducibility_geqp3(filename, datatype, m, n, A_test, lda, jpvt, T, g_lwork,
-                                        params))
+    IF_FLA_BRT_VALIDATION(m, n,
+                          store_outputs_base(filename, params, 1, 2, datatype, m, n, A_test, lda,
+                                             datatype, fla_min(m, n), T, INTEGER, n, jpvt),
+                          validate_geqp3(tst_api, m, n, A, A_test, lda, jpvt, T, datatype, residual,
+                                         params->imatrix_char, params),
+                          check_reproducibility_base(filename, params, 1, 2, datatype, m, n, A_test,
+                                                     lda, datatype, fla_min(m, n), T, INTEGER, n,
+                                                     jpvt))
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_geqp3(tst_api, m, n, A, A_test, lda, jpvt, T, datatype, residual,
@@ -424,34 +419,4 @@ void invoke_geqp3(integer datatype, integer *m, integer *n, void *a, integer *ld
             break;
         }
     }
-}
-
-void store_geqp3_outputs(void *filename, integer datatype, integer m, integer n, void *A,
-                         integer lda, void *jpvt, void *T, integer g_lwork, void *params)
-{
-    /* Create and open a file for storing Ground truth*/
-    FLA_OPEN_GT_FILE_STORE
-
-    /* Store the ground truth data */
-    FLA_STORE_BRT_MATRIX(datatype, m, n, A, lda)
-    FLA_STORE_BRT_VECTOR(datatype, fla_min(m, n), T)
-    FLA_STORE_BRT_VECTOR(INTEGER, n, jpvt)
-
-    fclose(gt_file);
-}
-
-integer check_bit_reproducibility_geqp3(void *filename, integer datatype, integer m, integer n,
-                                        void *A, integer lda, void *jpvt, void *T, integer g_lwork,
-                                        void *params)
-{
-    /* Open the file for reading Ground truth */
-    FLA_OPEN_GT_FILE_READ
-
-    /* Load stored GT and verify with current API outputs */
-    FLA_VERIFY_BRT_MATRIX(datatype, m, n, A, lda)
-    FLA_VERIFY_BRT_VECTOR(datatype, fla_min(m, n), T)
-    FLA_VERIFY_BRT_VECTOR(INTEGER, n, jpvt)
-
-    fclose(gt_file);
-    return 1;
 }

@@ -27,14 +27,6 @@ double prepare_lapacke_gels_run(integer datatype, integer layout, char trans, in
                                 integer nrhs, integer m_b, void *A, integer lda, void *B,
                                 integer ldb, integer *info);
 
-/* Helper functions for Bit reproducibility tests */
-void store_gels_outputs(void *filename, integer datatype, char trans, integer m, integer n,
-                        integer nrhs, void *A_test, integer lda, void *B_test, integer ldb,
-                        integer g_lwork, void *params);
-integer check_bit_reproducibility_gels(void *filename, integer datatype, char trans, integer m,
-                                       integer n, integer nrhs, void *A_test, integer lda,
-                                       void *B_test, integer ldb, integer g_lwork, void *params);
-
 void fla_test_gels(integer argc, char **argv, test_params_t *params)
 {
     srand(14);
@@ -190,7 +182,6 @@ void fla_test_gels_experiment(char *tst_api, test_params_t *params, integer data
     create_matrix(datatype, LAPACK_COL_MAJOR, m_b, nrhs, &B_test, ldb);
     reset_matrix(datatype, ldb, nrhs, B, ldb);
     reset_matrix(datatype, ldb, nrhs, B_test, ldb);
-    create_realtype_vector(datatype, &s_test, fla_min(m, n));
 
     /* This code path is run to generate the matrix to be passed to the API. This is the default
      * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
@@ -208,6 +199,7 @@ void fla_test_gels_experiment(char *tst_api, test_params_t *params, integer data
         else
         {
             /* Generate input matrix with condition number <= 100 */
+            create_realtype_vector(datatype, &s_test, fla_min(m, n));
             create_svd_matrix(datatype, range, m, n, A, lda, s_test, GELS_VL, GELS_VU, i_zero,
                               i_zero, info);
             if(FLA_OVERFLOW_UNDERFLOW_TEST)
@@ -257,12 +249,12 @@ void fla_test_gels_experiment(char *tst_api, test_params_t *params, integer data
      * compared with the generated output
      *  */
     IF_FLA_BRT_VALIDATION(m, n,
-                          store_gels_outputs(filename, datatype, trans, m, n, nrhs, A_test, lda,
-                                             B_test, ldb, g_lwork, params),
+                          store_outputs_base(filename, params, 2, 0, datatype, m, n, A_test, lda,
+                                             datatype, m_b, nrhs, B_test, ldb),
                           validate_gels(tst_api, &trans, m, n, nrhs, A, lda, B, ldb, B_test,
                                         datatype, residual, params->imatrix_char, params),
-                          check_bit_reproducibility_gels(filename, datatype, trans, m, n, nrhs,
-                                                         A_test, lda, B_test, ldb, g_lwork, params))
+                          check_reproducibility_base(filename, params, 2, 0, datatype, m, n, A_test,
+                                                     lda, datatype, m_b, nrhs, B_test, ldb))
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gels(tst_api, &trans, m, n, nrhs, A, lda, B, ldb, B_test, datatype, residual,
@@ -466,51 +458,4 @@ void invoke_gels(integer datatype, char *trans, integer *m, integer *n, integer 
             break;
         }
     }
-}
-
-void store_gels_outputs(void *filename, integer datatype, char trans, integer m, integer n,
-                        integer nrhs, void *A_test, integer lda, void *B_test, integer ldb,
-                        integer g_lwork, void *params)
-{
-    /* Create and open a file for storing Ground truth*/
-    FLA_OPEN_GT_FILE_STORE
-
-    /* Based on the value of TRANS the dimension of B changes.
-     * Dimension of B is (m, nrhs) if TRANS = "N"
-     * Dimension of B is (n, nrhs) if TRANS = "T" */
-    integer m_b = n;
-    if(same_char(trans, 'N'))
-    {
-        trans = 'N';
-        m_b = m;
-    }
-
-    FLA_STORE_BRT_MATRIX(datatype, m, n, A_test, lda)
-    FLA_STORE_BRT_MATRIX(datatype, m_b, nrhs, B_test, ldb)
-
-    fclose(gt_file);
-}
-
-integer check_bit_reproducibility_gels(void *filename, integer datatype, char trans, integer m,
-                                       integer n, integer nrhs, void *A_test, integer lda,
-                                       void *B_test, integer ldb, integer g_lwork, void *params)
-{
-    /* Open the file for reading Ground truth */
-    FLA_OPEN_GT_FILE_READ
-
-    /* Based on the value of TRANS the dimension of B changes.
-     * Dimension of B is (m, nrhs) if TRANS = "N"
-     * Dimension of B is (n, nrhs) if TRANS = "T" */
-    integer m_b = n;
-    if(same_char(trans, 'N'))
-    {
-        trans = 'N';
-        m_b = m;
-    }
-
-    FLA_VERIFY_BRT_MATRIX(datatype, m, n, A_test, lda)
-    FLA_VERIFY_BRT_MATRIX(datatype, m_b, nrhs, B_test, ldb)
-
-    fclose(gt_file);
-    return 1;
 }

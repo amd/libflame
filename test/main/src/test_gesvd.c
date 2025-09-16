@@ -220,9 +220,6 @@ void fla_test_gesvd_experiment(char *tst_api, test_params_t *params, integer dat
         create_matrix(datatype, LAPACK_COL_MAJOR, m_V, n, &V, ldvt);
     }
     create_realtype_vector(datatype, &s, fla_min(m, n));
-    create_realtype_vector(datatype, &s_test, fla_min(m, n));
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-        create_vector(get_realtype(datatype), &scal, 1);
 
     /* This code path is run to generate the matrix to be passed to the API. This is the default
      * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
@@ -237,11 +234,13 @@ void fla_test_gesvd_experiment(char *tst_api, test_params_t *params, integer dat
         else
         {
             /* Generate matrix A with singular value */
+            create_realtype_vector(datatype, &s_test, fla_min(m, n));
             create_svd_matrix(datatype, 'A', m, n, A, lda, s_test, s_one, s_one, i_one, i_one,
                               info);
             if(FLA_OVERFLOW_UNDERFLOW_TEST)
             {
                 /* Initializing matrix with values around overflow underflow */
+                create_vector(get_realtype(datatype), &scal, 1);
                 init_matrix_overflow_underflow_svd(datatype, m, n, A, lda, params->imatrix_char,
                                                    scal);
             }
@@ -597,7 +596,7 @@ void store_gesvd_outputs(void *filename, integer datatype, char jobu, char jobvt
         FLA_STORE_BRT_MATRIX(datatype, m_V, n, V, ldvt)
     }
 
-    fclose(gt_file);
+    FLA_CLOSE_GT_FILE_STORE
 }
 
 integer check_bit_reproducibility_gesvd(void *filename, integer datatype, char jobu, char jobvt,

@@ -388,7 +388,7 @@ void store_labrd_outputs(void *filename, integer datatype, integer m, integer n,
     FLA_STORE_BRT_MATRIX_NB_DIAG(datatype, m, nb, nb, X, ldx)
     FLA_STORE_BRT_MATRIX_NB_DIAG(datatype, n, nb, nb, Y, ldy)
 
-    fclose(gt_file);
+    FLA_CLOSE_GT_FILE_STORE
 }
 
 integer check_bit_reproducibility_labrd(void *filename, integer datatype, integer m, integer n,

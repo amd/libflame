@@ -31,6 +31,29 @@ double prepare_lapacke_gghrd_run(integer datatype, int matrix_layout, char *comp
                                  void *b, integer ldb, void *q, integer ldq, void *z, integer ldz,
                                  integer *info);
 
+#define VALIDATE_GGHRD                                                                             \
+    if(same_char(compq, 'N') || same_char(compz, 'N'))                                             \
+    {                                                                                              \
+        /* Validation for compq=N or/and compz=N case */                                           \
+        validate_gghrd(tst_api, &compq, &compz, n, A_test, A_ntest, lda, B_test, B_ntest, ldb, Q,  \
+                       Q_test, ldq, Z, Z_test, ldz, datatype, residual, params);                   \
+    }                                                                                              \
+    else                                                                                           \
+    {                                                                                              \
+        /* Validation for other cases */                                                           \
+        validate_gghrd(tst_api, &compq, &compz, n, A, A_test, lda, B, B_test, ldb, Q, Q_test, ldq, \
+                       Z, Z_test, ldz, datatype, residual, params);                                \
+    }
+
+/* Helper functions for Bit reproducibility tests */
+void store_gghrd_outputs(void *filename, integer datatype, char compq, char compz, integer n,
+                         integer ilo, integer ihi, void *A, integer lda, void *B, integer ldb,
+                         void *Q, integer ldq, void *Z, integer ldz, void *params);
+integer check_bit_reproducibility_gghrd(void *filename, integer datatype, char compq, char compz,
+                                        integer n, integer ilo, integer ihi, void *A, integer lda,
+                                        void *B, integer ldb, void *Q, integer ldq, void *Z,
+                                        integer ldz, void *params);
+
 void fla_test_gghrd(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "Reduces a pair matrices (A,B) to generalized upper Hessenberg form";
@@ -150,6 +173,7 @@ void fla_test_gghrd_experiment(char *tst_api, test_params_t *params, integer dat
          *Z_ntest = NULL;
     char compz, compq;
     double residual, err_thresh;
+    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
@@ -208,79 +232,115 @@ void fla_test_gghrd_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Create input matrix parameters*/
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &B, ldb);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &B_test, ldb);
 
     if(!same_char(compq, 'N'))
-        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Q, ldq);
-    if(!same_char(compz, 'N'))
-        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z, ldz);
-
-    if(g_ext_fptr != NULL)
     {
-        init_matrix_from_file(datatype, A, n, n, lda, g_ext_fptr);
-        init_matrix_from_file(datatype, B, n, n, ldb, g_ext_fptr);
-        init_matrix_from_file(datatype, Q, n, n, ldq, g_ext_fptr);
-        init_matrix_from_file(datatype, Z, n, n, ldz, g_ext_fptr);
+        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Q, ldq);
+        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Q_test, ldq);
+    }
+    if(!same_char(compz, 'N'))
+    {
+        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z, ldz);
+        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z_test, ldz);
+    }
+
+    /* This code path is run to generate the matrix to be passed to the API. This is the default
+     * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
+     * Test cases. For verification runs the input is loaded from the input generated during Ground
+     * truth run */
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        if(g_ext_fptr != NULL)
+        {
+            init_matrix_from_file(datatype, A, n, n, lda, g_ext_fptr);
+            init_matrix_from_file(datatype, B, n, n, ldb, g_ext_fptr);
+            init_matrix_from_file(datatype, Q, n, n, ldq, g_ext_fptr);
+            init_matrix_from_file(datatype, Z, n, n, ldz, g_ext_fptr);
+        }
+        else
+        {
+            /* Initialize A, B matrices. */
+            if((same_char(params->imatrix_char, 'N')) || (same_char(params->imatrix_char, 'A')))
+            {
+                init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+                init_matrix(datatype, B, n, n, ldb, g_ext_fptr, params->imatrix_char);
+                ABInitialized = 1;
+            }
+            else if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                rand_matrix(datatype, A, n, n, lda);
+                rand_matrix(datatype, B, n, n, ldb);
+                scale_matrix_underflow_overflow_gghrd(datatype, n, A, lda, params->imatrix_char);
+                scale_matrix_underflow_overflow_gghrd(datatype, n, B, ldb, params->imatrix_char);
+                ABInitialized = 1;
+            }
+            get_triangular_matrix("U", datatype, n, n, B, ldb, ABInitialized, NON_UNIT_DIAG);
+            get_generic_triangular_matrix(datatype, n, A, lda, ilo, ihi, ABInitialized);
+
+            /* Initialize Q matrix. */
+            if(same_char(compq, 'V'))
+            {
+                get_orthogonal_matrix_from_QR(datatype, n, B, ldb, Q, ldq, &info);
+            }
+            else if(same_char(compq, 'I'))
+            {
+                set_identity_matrix(datatype, n, n, Q, ldq);
+            }
+
+            /* Initialize Z matrix. */
+            if(same_char(compz, 'I'))
+            {
+                set_identity_matrix(datatype, n, n, Z, ldz);
+            }
+            else if(same_char(compz, 'V'))
+            {
+                create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &temp, n);
+                rand_matrix(datatype, temp, n, n, n);
+                get_orthogonal_matrix_from_QR(datatype, n, temp, n, Z, ldz, &info);
+                free_matrix(temp);
+            }
+        }
+    }
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * passed as input to the API
+     * */
+    if(!same_char(compq, 'N') && !same_char(compz, 'N'))
+    {
+        FLA_BRT_PROCESS_FOUR_INPUT(datatype, n, n, A, lda, datatype, n, n, B, ldb, datatype, n, n,
+                                   Q, ldq, datatype, n, n, Z, ldz, "ccddddddd", compq, compz, n,
+                                   ilo, ihi, lda, ldb, ldq, ldz)
+    }
+    else if(same_char(compq, 'N') && !same_char(compz, 'N'))
+    {
+        FLA_BRT_PROCESS_THREE_INPUT(datatype, n, n, A, lda, datatype, n, n, B, ldb, datatype, n, n,
+                                    Z, ldz, "ccddddddd", compq, compz, n, ilo, ihi, lda, ldb, ldq,
+                                    ldz)
+    }
+    else if(!same_char(compq, 'N') && same_char(compz, 'N'))
+    {
+        FLA_BRT_PROCESS_THREE_INPUT(datatype, n, n, A, lda, datatype, n, n, B, ldb, datatype, n, n,
+                                    Q, ldq, "ccddddddd", compq, compz, n, ilo, ihi, lda, ldb, ldq,
+                                    ldz)
     }
     else
     {
-        /* Initialize A, B matrices. */
-        if((same_char(params->imatrix_char, 'N')) || (same_char(params->imatrix_char, 'A')))
-        {
-            init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
-            init_matrix(datatype, B, n, n, ldb, g_ext_fptr, params->imatrix_char);
-            ABInitialized = 1;
-        }
-        else if(FLA_OVERFLOW_UNDERFLOW_TEST)
-        {
-            rand_matrix(datatype, A, n, n, lda);
-            rand_matrix(datatype, B, n, n, ldb);
-            scale_matrix_underflow_overflow_gghrd(datatype, n, A, lda, params->imatrix_char);
-            scale_matrix_underflow_overflow_gghrd(datatype, n, B, ldb, params->imatrix_char);
-            ABInitialized = 1;
-        }
-        get_triangular_matrix("U", datatype, n, n, B, ldb, ABInitialized, NON_UNIT_DIAG);
-        get_generic_triangular_matrix(datatype, n, A, lda, ilo, ihi, ABInitialized);
-
-        /* Initialize Q matrix. */
-        if(same_char(compq, 'V'))
-        {
-            get_orthogonal_matrix_from_QR(datatype, n, B, ldb, Q, ldq, &info);
-        }
-        else if(same_char(compq, 'I'))
-        {
-            set_identity_matrix(datatype, n, n, Q, ldq);
-        }
-
-        /* Initialize Z matrix. */
-        if(same_char(compz, 'I'))
-        {
-            set_identity_matrix(datatype, n, n, Z, ldz);
-        }
-        else if(same_char(compz, 'V'))
-        {
-            create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &temp, n);
-            rand_matrix(datatype, temp, n, n, n);
-            get_orthogonal_matrix_from_QR(datatype, n, temp, n, Z, ldz, &info);
-            free_matrix(temp);
-        }
+        FLA_BRT_PROCESS_TWO_INPUT(datatype, n, n, A, lda, datatype, n, n, B, ldb, "ccddddddd",
+                                  compq, compz, n, ilo, ihi, lda, ldb, ldq, ldz)
     }
 
     /* Make copy of matrix A,B,Q and Z. This is required to validate the API functionality */
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &B_test, ldb);
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
     copy_matrix(datatype, "full", n, n, B, ldb, B_test, ldb);
     if(!same_char(compq, 'N'))
-    {
-        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Q_test, ldq);
         copy_matrix(datatype, "full", n, n, Q, ldq, Q_test, ldq);
-    }
     if(!same_char(compz, 'N'))
-    {
-        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Z_test, ldz);
         copy_matrix(datatype, "full", n, n, Z, ldz, Z_test, ldz);
-    }
 
     prepare_gghrd_run(&compq, &compz, n, &ilo, &ihi, A_test, lda, B_test, ldb, Q_test, ldq, Z_test,
                       ldz, datatype, &info, interfacetype, layout, params);
@@ -341,20 +401,23 @@ void fla_test_gghrd_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Output Validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    /* Bit reproducibility tests path
+     * This path is taken when BRT is enabled.
+     *     - In the Ground truth runs (BRT_char => G, F), the output is stored in a file and the
+     * default validation function is called
+     *     - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * compared with the generated output
+     *  */
+    IF_FLA_BRT_VALIDATION(n, n,
+                          store_gghrd_outputs(filename, datatype, compq, compz, n, ilo, ihi, A, lda,
+                                              B, ldb, Q, ldq, Z, ldz, params),
+                          VALIDATE_GGHRD,
+                          check_bit_reproducibility_gghrd(filename, datatype, compq, compz, n, ilo,
+                                                          ihi, A, lda, B, ldb, Q, ldq, Z, ldz,
+                                                          params))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
-        if(same_char(compq, 'N') || same_char(compz, 'N'))
-        {
-            /* Validation for compq=N or/and compz=N case */
-            validate_gghrd(tst_api, &compq, &compz, n, A_test, A_ntest, lda, B_test, B_ntest, ldb,
-                           Q, Q_test, ldq, Z, Z_test, ldz, datatype, residual, params);
-        }
-        else
-        {
-            /* Validation for other cases */
-            validate_gghrd(tst_api, &compq, &compz, n, A, A_test, lda, B, B_test, ldb, Q, Q_test,
-                           ldq, Z, Z_test, ldz, datatype, residual, params);
-        }
+        VALIDATE_GGHRD
     }
     else
     {
@@ -378,6 +441,13 @@ void fla_test_gghrd_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+    if(same_char(compq, 'N') || same_char(compz, 'N'))
+    {
+        free_matrix(A_ntest);
+        free_matrix(B_ntest);
+    }
+free_buffers:
+    FLA_FREE_FILENAME(filename)
     free_matrix(A);
     free_matrix(B);
     free_matrix(A_test);
@@ -391,11 +461,6 @@ void fla_test_gghrd_experiment(char *tst_api, test_params_t *params, integer dat
     {
         free_matrix(Z);
         free_matrix(Z_test);
-    }
-    if(same_char(compq, 'N') || same_char(compz, 'N'))
-    {
-        free_matrix(A_ntest);
-        free_matrix(B_ntest);
     }
 }
 
@@ -576,4 +641,49 @@ void invoke_gghrd(integer datatype, char *compq, char *compz, integer *n, intege
             break;
         }
     }
+}
+
+void store_gghrd_outputs(void *filename, integer datatype, char compq, char compz, integer n,
+                         integer ilo, integer ihi, void *A, integer lda, void *B, integer ldb,
+                         void *Q, integer ldq, void *Z, integer ldz, void *params)
+{
+    /* Create and open a file for storing Ground truth*/
+    FLA_OPEN_GT_FILE_STORE
+
+    /* Store the ground truth data */
+    FLA_STORE_BRT_MATRIX(datatype, n, n, A, lda)
+    FLA_STORE_BRT_MATRIX(datatype, n, n, B, ldb)
+    if(!same_char(compq, 'N'))
+    {
+        FLA_STORE_BRT_MATRIX(datatype, n, n, Q, ldq)
+    }
+    if(!same_char(compz, 'N'))
+    {
+        FLA_STORE_BRT_MATRIX(datatype, n, n, Z, ldz)
+    }
+
+    FLA_CLOSE_GT_FILE_STORE
+}
+integer check_bit_reproducibility_gghrd(void *filename, integer datatype, char compq, char compz,
+                                        integer n, integer ilo, integer ihi, void *A, integer lda,
+                                        void *B, integer ldb, void *Q, integer ldq, void *Z,
+                                        integer ldz, void *params)
+{
+    /* Open the file for reading Ground truth */
+    FLA_OPEN_GT_FILE_READ
+
+    /* Load stored GT and verify with current API outputs */
+    FLA_VERIFY_BRT_MATRIX(datatype, n, n, A, lda)
+    FLA_VERIFY_BRT_MATRIX(datatype, n, n, B, ldb)
+    if(!same_char(compq, 'N'))
+    {
+        FLA_VERIFY_BRT_MATRIX(datatype, n, n, Q, ldq)
+    }
+    if(!same_char(compz, 'N'))
+    {
+        FLA_VERIFY_BRT_MATRIX(datatype, n, n, Z, ldz)
+    }
+
+    fclose(gt_file);
+    return 1;
 }

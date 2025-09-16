@@ -134,6 +134,7 @@ void fla_test_getrs_experiment(char *tst_api, test_params_t *params, integer dat
     void *A, *A_test, *B, *B_save, *X, *scal = NULL, *A_test_save = NULL;
     char TRANS = params->lin_solver_paramslist[pci].transr;
     double residual, err_thresh;
+    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
@@ -167,26 +168,45 @@ void fla_test_getrs_experiment(char *tst_api, test_params_t *params, integer dat
     create_matrix(datatype, LAPACK_COL_MAJOR, n, NRHS, &B_save, ldb);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, NRHS, &X, ldb);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
-    create_realtype_vector(datatype, &s_test, n);
 
-    /* Initialize the test matrices*/
-    if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
     {
-        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+        create_realtype_vector(get_datatype(datatype), &scal, n);
     }
-    else
+
+    /* This code path is run to generate the matrix to be passed to the API. This is the default
+     * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
+     * Test cases. For verification runs the input is loaded from the input generated during Ground
+     * truth run */
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        /* Generate input matrix with condition number <= 100 */
-        create_svd_matrix(datatype, range, n, n, A, lda, s_test, GETRS_VL, GETRS_VU, i_zero, i_zero,
-                          info);
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        /* Initialize the test matrices*/
+        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
         {
-            create_realtype_vector(get_datatype(datatype), &scal, n);
-            scale_matrix_underflow_overflow_getrs(datatype, &TRANS, n, n, A, lda,
-                                                  params->imatrix_char, scal);
+            init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
         }
+        else
+        {
+            /* Generate input matrix with condition number <= 100 */
+            create_realtype_vector(datatype, &s_test, n);
+            create_svd_matrix(datatype, range, n, n, A, lda, s_test, GETRS_VL, GETRS_VU, i_zero,
+                              i_zero, info);
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                scale_matrix_underflow_overflow_getrs(datatype, &TRANS, n, n, A, lda,
+                                                      params->imatrix_char, scal);
+            }
+        }
+        init_matrix(datatype, B, n, NRHS, ldb, g_ext_fptr, params->imatrix_char);
     }
-    init_matrix(datatype, B, n, NRHS, ldb, g_ext_fptr, params->imatrix_char);
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * passed as input to the API
+     * */
+    FLA_BRT_PROCESS_TWO_INPUT(datatype, n, n, A, lda, datatype, n, NRHS, B, ldb, "cdddd", TRANS, n,
+                              NRHS, lda, ldb)
 
     /* Save the original matrix*/
 
@@ -211,7 +231,19 @@ void fla_test_getrs_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    /* Bit reproducibility tests path
+     * This path is taken when BRT is enabled.
+     *     - In the Ground truth runs (BRT_char => G, F), the output is stored in a file and the
+     * default validation function is called
+     *     - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * compared with the generated output
+     *  */
+    IF_FLA_BRT_VALIDATION(
+        n, n, store_outputs_base(filename, params, 1, 0, datatype, n, NRHS, X, ldb),
+        validate_getrs(tst_api, &TRANS, n, NRHS, A, lda, B_save, ldb, X, datatype, residual,
+                       params->imatrix_char, scal, params),
+        check_reproducibility_base(filename, params, 1, 0, datatype, n, NRHS, X, ldb))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_getrs(tst_api, &TRANS, n, NRHS, A, lda, B_save, ldb, X, datatype, residual,
                        params->imatrix_char, scal, params);
@@ -231,6 +263,8 @@ void fla_test_getrs_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename)
     free_matrix(A);
     free_matrix(A_test);
     free_vector(IPIV);

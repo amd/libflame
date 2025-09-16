@@ -16,12 +16,6 @@ void prepare_gbsv_run(integer n_A, integer kl, integer ku, integer nrhs, void *A
 void invoke_gbsv(integer datatype, integer *n, integer *kl, integer *ku, integer *nrhs, void *ab,
                  integer *ldab, integer *ipiv, void *b, integer *ldb, integer *info);
 
-/* Helper functions for Bit reproducibility tests */
-void store_gbsv_outputs(void *filename, integer datatype, integer n, integer kl, integer ku,
-                        integer nrhs, void *ab, integer ldab, void *b, integer ldb, void *params);
-integer check_bit_reproducibility_gbsv(void *filename, integer datatype, integer n, integer kl,
-                                       integer ku, integer nrhs, void *ab, integer ldab, void *b,
-                                       integer ldb, void *params);
 void fla_test_gbsv(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "Linear Solve using LU for Band Matrix";
@@ -191,12 +185,12 @@ void fla_test_gbsv_experiment(char *tst_api, test_params_t *params, integer data
 
     /* output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    IF_FLA_BRT_VALIDATION(
-        n, n,
-        store_gbsv_outputs(filename, datatype, n, kl, ku, NRHS, AB_save, ldab, B_save, ldb, params),
-        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh),
-        check_bit_reproducibility_gbsv(filename, datatype, n, kl, ku, NRHS, AB_save, ldab, B_save,
-                                       ldb, params))
+    IF_FLA_BRT_VALIDATION(n, n,
+                          store_outputs_base(filename, params, 2, 0, datatype, ldab, n, AB_save,
+                                             ldab, datatype, n, NRHS, B_save, ldb),
+                          FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh),
+                          check_reproducibility_base(filename, params, 2, 0, datatype, ldab, n,
+                                                     AB_save, ldab, datatype, n, NRHS, B_save, ldb))
     else
     {
         FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
@@ -279,29 +273,4 @@ void invoke_gbsv(integer datatype, integer *n, integer *kl, integer *ku, integer
             break;
         }
     }
-}
-
-void store_gbsv_outputs(void *filename, integer datatype, integer n, integer kl, integer ku,
-                        integer nrhs, void *AB, integer ldab, void *B, integer ldb, void *params)
-{
-    /* Create and open a file for storing Ground truth*/
-    FLA_OPEN_GT_FILE_STORE
-
-    FLA_STORE_BRT_MATRIX(datatype, ldab, n, AB, ldab)
-    FLA_STORE_BRT_MATRIX(datatype, n, nrhs, B, ldb)
-
-    fclose(gt_file);
-}
-integer check_bit_reproducibility_gbsv(void *filename, integer datatype, integer n, integer kl,
-                                       integer ku, integer nrhs, void *AB, integer ldab, void *B,
-                                       integer ldb, void *params)
-{
-    /* Open the file for reading Ground truth */
-    FLA_OPEN_GT_FILE_READ
-
-    FLA_VERIFY_BRT_MATRIX(datatype, ldab, n, AB, ldab)
-    FLA_VERIFY_BRT_MATRIX(datatype, n, nrhs, B, ldb)
-
-    fclose(gt_file);
-    return 1;
 }

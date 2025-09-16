@@ -30,15 +30,6 @@ double prepare_lapacke_gelss_run(integer datatype, integer layout, integer m, in
                                  integer nrhs, void *A, integer lda, void *B, integer ldb, void *s,
                                  void *rcond, integer *rank, integer *info);
 
-/* Helper functions for Bit reproducibility tests */
-void store_gelss_outputs(void *filename, integer datatype, integer m, integer n, integer nrhs,
-                         void *A_test, integer lda, void *s, void *B_test, integer ldb, void *rcond,
-                         integer g_lwork, void *params);
-integer check_bit_reproducibility_gelss(void *filename, integer datatype, integer m, integer n,
-                                        integer nrhs, void *A_test, integer lda, void *s,
-                                        void *B_test, integer ldb, void *rcond, integer g_lwork,
-                                        void *params);
-
 void fla_test_gelss(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "Solves overdetermined or underdetermined systems for GE matrices";
@@ -191,7 +182,6 @@ void fla_test_gelss_experiment(char *tst_api, test_params_t *params, integer dat
     reset_matrix(datatype, fla_max(m, n), nrhs, B_test, ldb);
     create_realtype_vector(datatype, &s, fla_min(m, n));
     create_realtype_vector(datatype, &rwork, 5 * fla_min(m, n));
-    create_realtype_vector(datatype, &s_test, fla_min(m, n));
 
     /* This code path is run to generate the matrix to be passed to the API. This is the default
      * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
@@ -208,6 +198,7 @@ void fla_test_gelss_experiment(char *tst_api, test_params_t *params, integer dat
         else
         {
             /* Generate input matrix with condition number <= 100 */
+            create_realtype_vector(datatype, &s_test, fla_min(m, n));
             create_svd_matrix(datatype, range, m, n, A, lda, s_test, GELSS_VL, GELSS_VU, i_zero,
                               i_zero, info);
             /* Overflow or underflow test initialization */
@@ -259,14 +250,14 @@ void fla_test_gelss_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Output validataion */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    IF_FLA_BRT_VALIDATION(m, n,
-                          store_gelss_outputs(filename, datatype, m, n, nrhs, A_test, lda, s,
-                                              B_test, ldb, rcond, g_lwork, params),
-                          validate_gelsd(tst_api, m, n, nrhs, A, lda, B, ldb, s, B_test, rcond,
-                                         &rank, datatype, residual, params->imatrix_char, params),
-                          check_bit_reproducibility_gelss(filename, datatype, m, n, nrhs, A_test,
-                                                          lda, s, B_test, ldb, rcond, g_lwork,
-                                                          params))
+    IF_FLA_BRT_VALIDATION(
+        m, n,
+        store_outputs_base(filename, params, 2, 1, datatype, m, n, A_test, lda, datatype, n, nrhs,
+                           B_test, ldb, get_realtype(datatype), fla_min(m, n), s),
+        validate_gelsd(tst_api, m, n, nrhs, A, lda, B, ldb, s, B_test, rcond, &rank, datatype,
+                       residual, params->imatrix_char, params),
+        check_reproducibility_base(filename, params, 2, 1, datatype, m, n, A_test, lda, datatype, n,
+                                   nrhs, B_test, ldb, get_realtype(datatype), fla_min(m, n), s))
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gelsd(tst_api, m, n, nrhs, A, lda, B, ldb, s, B_test, rcond, &rank, datatype,
@@ -469,34 +460,4 @@ void invoke_gelss(integer datatype, integer *m, integer *n, integer *nrhs, void 
             break;
         }
     }
-}
-
-void store_gelss_outputs(void *filename, integer datatype, integer m, integer n, integer nrhs,
-                         void *A_test, integer lda, void *s, void *B_test, integer ldb, void *rcond,
-                         integer g_lwork, void *params)
-{
-    /* Create and open a file for storing Ground truth*/
-    FLA_OPEN_GT_FILE_STORE
-
-    FLA_STORE_BRT_MATRIX(datatype, m, n, A_test, lda)
-    FLA_STORE_BRT_MATRIX(datatype, n, nrhs, B_test, ldb)
-    FLA_STORE_BRT_VECTOR(get_realtype(datatype), fla_min(m, n), s)
-
-    fclose(gt_file);
-}
-
-integer check_bit_reproducibility_gelss(void *filename, integer datatype, integer m, integer n,
-                                        integer nrhs, void *A_test, integer lda, void *s,
-                                        void *B_test, integer ldb, void *rcond, integer g_lwork,
-                                        void *params)
-{
-    /* Open the file for reading Ground truth */
-    FLA_OPEN_GT_FILE_READ
-
-    FLA_VERIFY_BRT_MATRIX(datatype, m, n, A_test, lda)
-    FLA_VERIFY_BRT_MATRIX(datatype, n, nrhs, B_test, ldb)
-    FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), fla_min(m, n), s)
-
-    fclose(gt_file);
-    return 1;
 }

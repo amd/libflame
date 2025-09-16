@@ -638,7 +638,7 @@ void store_geevx_outputs(void *filename, integer datatype, char balanc, char job
         FLA_STORE_BRT_VECTOR(get_realtype(datatype), m, rcondv)
     }
 
-    fclose(gt_file);
+    FLA_CLOSE_GT_FILE_STORE
 }
 integer check_bit_reproducibility_geevx(void *filename, integer datatype, char balanc, char jobvl,
                                         char jobvr, char sense, integer m, void *A, integer lda,

@@ -220,9 +220,10 @@ extern char fla_test_binary_name[MAX_BINARY_NAME_LENGTH + 1];
 #define FLA_OVERFLOW_UNDERFLOW_TEST \
     (same_char(params->imatrix_char, 'O') || same_char(params->imatrix_char, 'U'))
 
-#define FLA_BIT_REPRODUCIBILITY_TEST                                      \
-    (same_char(params->BRT_char, 'G') || same_char(params->BRT_char, 'V') \
-     || same_char(params->BRT_char, 'M') || same_char(params->BRT_char, 'F'))
+#define FLA_BIT_REPRODUCIBILITY_TEST                                         \
+    (same_char(params->BRT_char, 'G') || same_char(params->BRT_char, 'V')    \
+     || same_char(params->BRT_char, 'M') || same_char(params->BRT_char, 'F') \
+     || same_char(params->BRT_char, 'L'))
 
 #define FLA_BRT_VERIFICATION_RUN \
     (same_char(params->BRT_char, 'V') || same_char(params->BRT_char, 'M'))

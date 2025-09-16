@@ -24,13 +24,6 @@ void invoke_gehrd(integer datatype, integer *n, integer *ilo, integer *ihi, void
 double prepare_lapacke_gehrd_run(integer datatype, int layout, integer n, integer *ilo,
                                  integer *ihi, void *A, integer lda, void *tau, integer *info);
 
-/* Helper functions for Bit reproducibility tests */
-void store_gehrd_outputs(void *filename, integer datatype, integer n, integer ilo, integer ihi,
-                         void *A_Test, integer lda, void *tau, integer g_lwork, void *params);
-integer check_bit_reproducibility_gehrd(void *filename, integer datatype, integer n, integer ilo,
-                                        integer ihi, void *A_Test, integer lda, void *tau,
-                                        integer g_lwork, void *params);
-
 void fla_test_gehrd(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "Reduces matrix to upper hessenberg from";
@@ -209,10 +202,11 @@ void fla_test_gehrd_experiment(char *tst_api, test_params_t *params, integer dat
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
     IF_FLA_BRT_VALIDATION(
         n, n,
-        store_gehrd_outputs(filename, datatype, n, ilo, ihi, A_Test, lda, tau, g_lwork, params),
+        store_outputs_base(filename, params, 1, 1, datatype, n, n, A_Test, lda, datatype, n - 1,
+                           tau),
         validate_gehrd(tst_api, n, ilo, ihi, A, A_Test, lda, tau, datatype, residual, params),
-        check_bit_reproducibility_gehrd(filename, datatype, n, ilo, ihi, A_Test, lda, tau, g_lwork,
-                                        params))
+        check_reproducibility_base(filename, params, 1, 1, datatype, n, n, A_Test, lda, datatype,
+                                   n - 1, tau))
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gehrd(tst_api, n, ilo, ihi, A, A_Test, lda, tau, datatype, residual, params);
@@ -398,29 +392,4 @@ void invoke_gehrd(integer datatype, integer *n, integer *ilo, integer *ihi, void
             break;
         }
     }
-}
-
-void store_gehrd_outputs(void *filename, integer datatype, integer n, integer ilo, integer ihi,
-                         void *A_Test, integer lda, void *tau, integer g_lwork, void *params)
-{
-    /* Create and open a file for storing Ground truth*/
-    FLA_OPEN_GT_FILE_STORE
-
-    FLA_STORE_BRT_MATRIX(datatype, n, n, A_Test, lda)
-    FLA_STORE_BRT_VECTOR(datatype, n - 1, tau)
-
-    fclose(gt_file);
-}
-integer check_bit_reproducibility_gehrd(void *filename, integer datatype, integer n, integer ilo,
-                                        integer ihi, void *A_Test, integer lda, void *tau,
-                                        integer g_lwork, void *params)
-{
-    /* Open the file for reading Ground truth */
-    FLA_OPEN_GT_FILE_READ
-
-    FLA_VERIFY_BRT_MATRIX(datatype, n, n, A_Test, lda)
-    FLA_VERIFY_BRT_VECTOR(datatype, n - 1, tau)
-
-    fclose(gt_file);
-    return 1;
 }

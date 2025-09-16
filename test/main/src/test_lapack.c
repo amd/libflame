@@ -1590,7 +1590,8 @@ integer fla_parse_brt_args(integer argc, char **argv, test_params_t *params)
             /* Checking if BRT value is valid */
             if(errno != 0
                || (!same_char(params->BRT_char, 'G') && !same_char(params->BRT_char, 'V')
-                   && !same_char(params->BRT_char, 'F') && !same_char(params->BRT_char, 'M')))
+                   && !same_char(params->BRT_char, 'F') && !same_char(params->BRT_char, 'M')
+                   && !same_char(params->BRT_char, 'L')))
             {
                 /* Invalid BRT value */
                 printf("\nError: Invalid BRT argument: %s\n", argv[i]);
@@ -1599,6 +1600,7 @@ integer fla_parse_brt_args(integer argc, char **argv, test_params_t *params)
                 printf("       V : CRC - Output verification\n");
                 printf("       F : Complete Output binary generation\n");
                 printf("       M : Complete Output binary verification\n");
+                printf("       L : Print CRC of outputs to the CLI log\n");
                 return -1;
             }
             brt_set = true;

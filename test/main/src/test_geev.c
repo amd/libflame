@@ -558,7 +558,7 @@ void store_geev_outputs(void *filename, integer datatype, char jobvl, char jobvr
         FLA_STORE_BRT_VECTOR(datatype, n, wi)
     }
 
-    fclose(gt_file);
+    FLA_CLOSE_GT_FILE_STORE
 }
 
 integer check_bit_reproducibility_geev(void *filename, integer datatype, char jobvl, char jobvr,

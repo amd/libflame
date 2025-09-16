@@ -236,12 +236,9 @@ void fla_test_gesvdx_experiment(char *tst_api, test_params_t *params, integer da
 
     /* Create input matrix parameters. */
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
-    create_realtype_vector(datatype, &s_test, min_m_n);
     create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &U, ldu);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &V, ldvt);
     create_realtype_vector(datatype, &s, min_m_n);
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-        create_vector(get_realtype(datatype), &scal, 1);
 
     /* This code path is run to generate the matrix to be passed to the API. This is the default
      * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
@@ -264,10 +261,12 @@ void fla_test_gesvdx_experiment(char *tst_api, test_params_t *params, integer da
             }
 
             /* Generate matrix A by known singular value */
+            create_realtype_vector(datatype, &s_test, min_m_n);
             create_svd_matrix(datatype, range, m, n, A, lda, s_test, d_vl, d_vu, il, iu, info);
             if(FLA_OVERFLOW_UNDERFLOW_TEST)
             {
                 /* Initializing matrix with values around overflow underflow */
+                create_vector(get_realtype(datatype), &scal, 1);
                 init_matrix_overflow_underflow_svdx(datatype, m, n, A, lda, params->imatrix_char,
                                                     scal);
             }
@@ -619,7 +618,7 @@ void store_gesvdx_outputs(void *filename, integer datatype, char jobu, char jobv
         FLA_STORE_BRT_MATRIX(datatype, ns, n, V, ldvt)
     }
 
-    fclose(gt_file);
+    FLA_CLOSE_GT_FILE_STORE
 }
 integer check_bit_reproducibility_gesvdx(void *filename, integer datatype, char jobu, char jobvt,
                                          char range, integer m, integer n, void *A, integer lda,

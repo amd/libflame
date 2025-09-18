@@ -25,6 +25,11 @@
 
 #define USE_ABS_EIGEN_VALUES 1
 #define USE_SIGNED_EIGEN_VALUES 0
+
+#ifndef fla_size_t
+typedef int64_t fla_size_t;
+#endif
+
 // --- Complex type definitions -----------------------------------------------
 
 #ifndef _DEFINED_SCOMPLEX

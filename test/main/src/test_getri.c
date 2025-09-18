@@ -159,7 +159,7 @@ void fla_test_getri_experiment(char *tst_api, test_params_t *params, integer dat
     if(!FLA_BRT_VERIFICATION_RUN)
     {
         /* Initialize the test matrices*/
-        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
+        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST) || (FLA_RANDOM_INIT_MODE))
         {
             init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
         }
@@ -209,6 +209,10 @@ void fla_test_getri_experiment(char *tst_api, test_params_t *params, integer dat
         validate_getri(tst_api, n, n, A, A_test, lda, IPIV, datatype, residual,
                        params->imatrix_char, params),
         check_reproducibility_base(filename, params, 1, 0, datatype, n, n, A_test, lda))
+    else if(FLA_RANDOM_INIT_MODE)
+    {
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    }
     /* API functionality validation */
     else if(!FLA_EXTREME_CASE_TEST)
     {

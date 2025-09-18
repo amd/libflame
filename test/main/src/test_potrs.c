@@ -203,7 +203,11 @@ void fla_test_potrs_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Validate potrs call by computing Ax-b */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    if(FLA_RANDOM_INIT_MODE)
+    {
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    }
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_potrs(tst_api, n, nrhs, A_test, lda, X, B, ldb, datatype, residual,
                        params->imatrix_char, params);

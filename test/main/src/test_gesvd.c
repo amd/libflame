@@ -227,7 +227,7 @@ void fla_test_gesvd_experiment(char *tst_api, test_params_t *params, integer dat
      * truth run */
     if(!FLA_BRT_VERIFICATION_RUN)
     {
-        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
+        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST) || (FLA_RANDOM_INIT_MODE))
         {
             init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
         }
@@ -297,6 +297,10 @@ void fla_test_gesvd_experiment(char *tst_api, test_params_t *params, integer dat
                                          params->imatrix_char, scal, params),
                           check_bit_reproducibility_gesvd(filename, datatype, jobu, jobvt, m, n, A,
                                                           lda, s, U, ldu, V, ldvt, params))
+    else if(FLA_RANDOM_INIT_MODE)
+    {
+        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gesvd(tst_api, &jobu, &jobvt, m, n, A, A_test, lda, s, s_test, U, ldu, V, ldvt,

@@ -144,7 +144,7 @@
 
 #define GET_MNORM(realtype, datatype, A, m, n, lda, resultp)  \
     {                                                         \
-        integer i, j;                                         \
+        size_t i, j;                                          \
         realtype max_val = 0.0;                               \
         realtype abs_val;                                     \
         for(j = 0; j < n; j++)                                \
@@ -160,7 +160,7 @@
 
 #define GET_1NORM(realtype, datatype, A, m, n, lda, resultp)  \
     {                                                         \
-        integer i, j;                                         \
+        size_t i, j;                                          \
         realtype max_val = 0.0, col_sum = 0.0;                \
         double abs_val;                                       \
         for(j = 0; j < n; j++)                                \
@@ -178,7 +178,7 @@
 
 #define GET_INORM(realtype, datatype, A, m, n, lda, resultp)          \
     {                                                                 \
-        integer i, j;                                                 \
+        size_t i, j;                                                  \
         realtype max_val = 0.0;                                       \
         double abs_val;                                               \
         realtype *row_sums;                                           \
@@ -202,7 +202,7 @@
 
 #define GET_FNORM(realtype, datatype, A, m, n, lda, resultp)            \
     {                                                                   \
-        integer i, j;                                                   \
+        size_t i, j;                                                    \
         integer notbig = 1;                                             \
         realtype sqrsum = 0., scl = 1.;                                 \
         realtype abig, amed, asml, abs_val, t__;                        \

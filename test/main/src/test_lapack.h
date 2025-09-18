@@ -228,6 +228,9 @@ extern char fla_test_binary_name[MAX_BINARY_NAME_LENGTH + 1];
 #define FLA_BRT_VERIFICATION_RUN \
     (same_char(params->BRT_char, 'V') || same_char(params->BRT_char, 'M'))
 
+#define FLA_RANDOM_INIT_MODE \
+    (params->random_init == 1)
+
 /* Macro to check if a LAPACK API have different names for its
    (precision)variants and modify API display string
    according to datatype/precision
@@ -710,6 +713,9 @@ typedef struct
     run.  The actual repeats are calculated as follows:
         max(ceil(bench_duration/time_per_call), n_repeats) */
     double bench_duration;
+    /* Enables random initialization mode, which populates input matrices
+       with random values and skips validation of the output matrices */
+    integer random_init;
     double warmup_repeats;
     fla_stat_t stats_out[MAX_NUM_STATS];
     /* Values greater then outlier_multiplier*stddev + mean are

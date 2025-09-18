@@ -122,6 +122,7 @@ int main(int argc, char **argv)
     params.time_unit = FLA_TIME_UNIT_AUTO;
     params.outlier_multiplier = 0.0;
     params.dump_runtimes_file_name = NULL;
+    params.random_init = 0;
 
     status = fla_parse_cmdline_args(&arg_count, argv, &params);
 
@@ -2059,6 +2060,44 @@ integer fla_parse_dump_runtimes_arg(integer argc, char **argv, test_params_t *pa
     return 0;
 }
 
+/*
+ * This function checks if the argument "--random_init=<k>" is present in the command line.
+ * If the argument is present, it sets the random_init flag in params.
+ * This is a special mode for benchmark testing with random matrix initialization.
+ *
+ * @return
+ *      0 if the argument is not found,
+ *      1 if the argument is found and valid,
+ *     -1 if the argument is found but invalid value is provided.
+ */
+integer fla_parse_random_init_arg(integer argc, char **argv, test_params_t *params)
+{
+    const char *arg_str = "--random_init=";
+    integer arg_len = strlen(arg_str);
+
+    /* Check if the argument is present in the command line. */
+    for(integer i = 1; i < argc; ++i)
+    {
+        if(strncmp(argv[i], arg_str, arg_len) == 0)
+        {
+            errno = 0; /* Reset errno before strtol */
+            params->random_init = strtol(argv[i] + arg_len, NULL, 10);
+            /* Checking any error during parsing */
+            /* Checking if random_init value is 0 or 1 */
+            if(errno != 0 || (params->random_init != 0 && params->random_init != 1))
+            {
+                /* Invalid random_init value */
+                printf("\nError: Invalid random_init argument: %s\n", argv[i]);
+                printf("       Please provide 0 (disable) or 1 (enable).\n");
+                return -1;
+            }
+            /* random_init value is valid */
+            return 1;
+        }
+    }
+    return 0;
+}
+
 #define FLA_ARGS_PARSE_RESULT_HANDLER                 \
     if(parse_status < 0)                              \
     {                                                 \
@@ -2093,6 +2132,9 @@ bool fla_parse_cmdline_args(integer *argc, char **argv, test_params_t *params)
     FLA_ARGS_PARSE_RESULT_HANDLER;
 
     parse_status = fla_parse_warmup_arg(*argc, argv, params);
+    FLA_ARGS_PARSE_RESULT_HANDLER;
+
+    parse_status = fla_parse_random_init_arg(*argc, argv, params);
     FLA_ARGS_PARSE_RESULT_HANDLER;
 
     /* If warmup is not provided and benchmark mode then set

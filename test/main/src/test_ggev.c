@@ -280,6 +280,10 @@ void fla_test_ggev_experiment(char *tst_api, test_params_t *params, integer data
                       ldvl, VR, ldvr, datatype, residual, params),
         check_bit_reproducibility_ggev(filename, datatype, JOBVL, JOBVR, m, A, lda, B, ldb, alpha,
                                        alphar, alphai, beta, VL, ldvl, VR, ldvr, params))
+    else if(FLA_RANDOM_INIT_MODE)
+    {
+        FLA_PRINT_TEST_STATUS(m, m, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         if(same_char(JOBVL, 'V') || same_char(JOBVR, 'V'))

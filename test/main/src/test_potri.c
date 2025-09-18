@@ -146,7 +146,7 @@ void fla_test_potri_experiment(char *tst_api, test_params_t *params, integer dat
     {
         /* Initialize input matrix with custom data */
         init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
-        if(params->imatrix_char != '\0')
+        if((params->imatrix_char != '\0'))
         {
             form_symmetric_matrix(datatype, n, A, lda, "C", uplo);
         }
@@ -176,7 +176,11 @@ void fla_test_potri_experiment(char *tst_api, test_params_t *params, integer dat
         perf *= 4.0;
 
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    if(FLA_RANDOM_INIT_MODE)
+    {
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    }
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         /* Form full matrices before calling validate code of GETRI */
         form_symmetric_matrix(datatype, n, A, lda, "C", uplo);

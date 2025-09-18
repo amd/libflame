@@ -344,7 +344,7 @@ NOTE:
         - var: Variance
         - stddev: Standard deviation
         - p<1-99>: Percentiles (e.g., p95 for 95th percentile)
-      
+
       Example: --stats=min,avg,p95,var
       Default statistics in benchmark mode: min, avg, p95
       Default statistics in normal mode: min only
@@ -358,7 +358,7 @@ NOTE:
       --filter-outliers[=<multiplier>]: Filter outliers from test results
       Default multiplier is 2.0
       Filters values greater than (multiplier * stddev + mean)
-      
+
       --dump-runtimes=<file_path>: Save runtime data to specified file
       Only valid in CLI mode
 
@@ -366,11 +366,11 @@ NOTE:
    $ ./test_lapack.x --bench=60 --warmup=0.1 --stats=min,avg,p95 --time-unit=ms
    $ ./test_lapack.x --filter-outliers=2.5 --dump-runtimes=results.txt
 
-   Note: 
+   Note:
    - These options are particularly useful for performance testing and analysis.
    - The benchmark mode ensures consistent test duration while the statistics options
      provide detailed performance metrics for analysis.
-   - These options can be used along with special matrix (--imatrix) and 
+   - These options can be used along with special matrix (--imatrix) and
      interface (--interface) options. However these options should
      be provided after special matrix and interface options.
 
@@ -380,46 +380,46 @@ NOTE:
    These tests are available only through command line mode (config mode
    is not supported) and only for LAPACK interfaces.
    Refer to input.global.operations file for APIs with only Benchmark test without
-   Validation. All these APIs will be listed after appropriate comment in that file. 
+   Validation. All these APIs will be listed after appropriate comment in that file.
 
 14. Bit Reproducibility Test options
 
    The test suite contains options for checking bitwise matching outputs for LAPACK APIs.
-   This test is run with a ground truth and verification concept, 
+   This test is run with a ground truth and verification concept,
    with the output of one run being used as a reference to compare all successive outputs.
-   
+
    This option is available only through command line execution.
 
    Example:
    Ground truth runs
    (CRC - checksum)
-   ./test_lapack.x labrd scdz 75 110 50 150 150 150 10 --seed=10 --BRT=G 
-   ./test_lapack.x gelqf sdcz 4 4 4 -1 10 --seed=10 --BRT=G 
+   ./test_lapack.x labrd scdz 75 110 50 150 150 150 10 --seed=10 --BRT=G
+   ./test_lapack.x gelqf sdcz 4 4 4 -1 10 --seed=10 --BRT=G
    (Complete binary data)
-   ./test_lapack.x labrd scdz 75 110 50 150 150 150 10 --seed=10 --BRT=F 
-   ./test_lapack.x gelqf sdcz 4 4 4 -1 10 --seed=10 --BRT=F 
+   ./test_lapack.x labrd scdz 75 110 50 150 150 150 10 --seed=10 --BRT=F
+   ./test_lapack.x gelqf sdcz 4 4 4 -1 10 --seed=10 --BRT=F
 
    Verification runs
    (CRC - checksum)
-   ./test_lapack.x labrd scdz 75 110 50 150 150 150 10 --seed=10 --BRT=V 
-   ./test_lapack.x gelqf sdcz 4 4 4 -1 10 --seed=10 --BRT=V 
+   ./test_lapack.x labrd scdz 75 110 50 150 150 150 10 --seed=10 --BRT=V
+   ./test_lapack.x gelqf sdcz 4 4 4 -1 10 --seed=10 --BRT=V
    (Complete binary data)
-   ./test_lapack.x labrd scdz 75 110 50 150 150 150 10 --seed=10 --BRT=M 
-   ./test_lapack.x gelqf sdcz 4 4 4 -1 10 --seed=10 --BRT=M 
+   ./test_lapack.x labrd scdz 75 110 50 150 150 150 10 --seed=10 --BRT=M
+   ./test_lapack.x gelqf sdcz 4 4 4 -1 10 --seed=10 --BRT=M
 
    CTEST integration:
    The CRC variant of ground truth and verification test cases have been added to the ctest.
    By default, the "ctest" command will skip both GT and V runs.
 
-   For running Repeatability test, from within the build folder run the command 
+   For running Repeatability test, from within the build folder run the command
       command : "REPEATABILITY_TEST=TRUE ctest -L "repeatability_tests""
    This will run both the Ground truth run and the verification run in the same environment setup.
 
    For running Bit Reproducibility test,
    First run,
-      Command : "RUN_BRT_GT=TRUE ctest -L "brt_gt_tests"" 
+      Command : "RUN_BRT_GT=TRUE ctest -L "brt_gt_tests""
       This will generate the binary files containing GT outputs inside the build folder.
-   Then after making changes to the environment run 
+   Then after making changes to the environment run
       command : "RUN_BRT_V=TRUE ctest -L "brt_v_tests""
       This will verify the outputs using the ground truth run as reference
 
@@ -427,5 +427,19 @@ NOTE:
       The binary files containing the GT outputs can be found under : <Build_folder>/test/main/BRT
       This BRT folder can be stored and moved across different machines for testing.
 
-   Note: 
+   Note:
    It is important to specify the seed when running BR tests between different runs/builds.
+
+15. Random Initialization Mode
+
+   The test suite supports random initialization mode for generating test matrices with
+   random values.
+
+   This option is available through command line execution using the --random_init parameter.
+
+   Example:
+   ./test_lapack.x GETRF d 100 100 100 10 --random_init=1
+
+   Note:
+   - This mode is particularly useful for debugging and performance analysis
+   - Random initialization can be combined with other test options like benchmark mode

@@ -21,6 +21,7 @@ void fla_test_spffrt2(integer argc, char **argv, test_params_t *params)
     char *op_str = "Computes LDLT partial factorization";
     char *front_str = "SPFFRT2";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
+    params->imatrix_char = '\0';
 
     if(argc == 1)
     {
@@ -113,10 +114,9 @@ void fla_test_spffrt2_experiment(char *tst_api, test_params_t *params, integer d
     /* Create the matrices for the current operation*/
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, n);
     create_vector(datatype, &AP, pn);
-    if(g_ext_fptr != NULL)
+    if(g_ext_fptr != NULL || (FLA_RANDOM_INIT_MODE))
     {
-        /* Initialize input matrix with custom data */
-        init_matrix_from_file(datatype, A, n, n, n, g_ext_fptr);
+        init_matrix(datatype, A, n, n, n, g_ext_fptr, params->imatrix_char);
     }
     else
     {
@@ -143,7 +143,11 @@ void fla_test_spffrt2_experiment(char *tst_api, test_params_t *params, integer d
               / time_min / FLOPS_PER_UNIT_PERF;
 
     /* output validation */
-    if(ncolm <= n && n > 0 && ncolm > 0)
+    if(FLA_RANDOM_INIT_MODE)
+    {
+        FLA_PRINT_TEST_STATUS(n, n, err_thresh, err_thresh);
+    }
+    else if((ncolm <= n && n > 0 && ncolm > 0))
     {
         validate_spffrt2(tst_api, n, ncolm, A, AP, datatype, err_thresh, params);
     }

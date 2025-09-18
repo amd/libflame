@@ -15,7 +15,7 @@ extern double time_min;
 void validate_spffrt2(char *tst_api, integer n, integer ncolm, void *A, void *AP, integer datatype,
                       double err_thresh, void *params)
 {
-    integer i, j, di;
+    size_t i, j, di;
     void *work = NULL;
     void *L = NULL, *D = NULL, *T = NULL;
     double residual = 0.;

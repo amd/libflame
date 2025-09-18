@@ -170,7 +170,7 @@ void fla_test_gesv_experiment(char *tst_api, test_params_t *params, integer data
     if(!FLA_BRT_VERIFICATION_RUN)
     {
         /* Initialize the test matrices*/
-        if((!FLA_EXTREME_CASE_TEST) && g_ext_fptr == NULL)
+        if((!FLA_EXTREME_CASE_TEST) && (g_ext_fptr == NULL) && !(FLA_RANDOM_INIT_MODE))
         {
             /* Generate input matrix with condition number <= 100 */
             create_realtype_vector(datatype, &s_test, n);
@@ -224,6 +224,10 @@ void fla_test_gesv_experiment(char *tst_api, test_params_t *params, integer data
                           check_reproducibility_base(filename, params, 2, 1, datatype, n, n, A_save,
                                                      lda, datatype, n, NRHS, B_save, ldb, INTEGER,
                                                      n, IPIV))
+    else if(FLA_RANDOM_INIT_MODE)
+    {
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gesv(tst_api, n, NRHS, A, lda, B, ldb, B_save, datatype, residual,

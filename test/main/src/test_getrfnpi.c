@@ -174,7 +174,7 @@ void fla_test_getrfnpi_experiment(char *tst_api, test_params_t *params, integer 
 
             if(FLA_OVERFLOW_UNDERFLOW_TEST)
             {
-                scale_matrix_underflow_overflow_getrf(datatype, m, n, A, lda, params->imatrix_char);
+                scale_matrix_underflow_overflow_getrfnp(datatype, m, n, A, lda, params->imatrix_char);
             }
             free_matrix(A_copy);
         }

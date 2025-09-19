@@ -1635,7 +1635,7 @@ void scale_matrix_underflow_overflow_getri(integer datatype, integer m, integer 
         get_max_from_matrix(datatype, A, max_min, m, n, lda);
         if(n < 100)
         {
-            tuning_val = 12.0;
+            tuning_val = 20.0;
         }
         else if(n < 200)
         {
@@ -2526,7 +2526,7 @@ void scale_matrix_overflow_underflow_potri(integer datatype, integer n, void *A,
     else if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, n, n, lda);
-        if (n < 100 && datatype == COMPLEX)
+        if (n < 100)
         {
             tuning_val = 2.0;
         }
@@ -2740,6 +2740,108 @@ void scale_matrix_overflow_underflow_trtrs(integer datatype, integer n, integer 
         }
     }
     /* Free vectors */
+    free_vector(max_min);
+    free_vector(scal);
+}
+
+/* Scaling matrix with values around overflow underflow for getrfnp and getrfnp */
+void scale_matrix_underflow_overflow_getrfnp(integer datatype, integer m, integer n, void *A,
+                                           integer lda, char imatrix_char)
+{
+    void *max_min = NULL, *scal = NULL;
+    double tuning_val = 1.0;
+    create_vector(get_realtype(datatype), &max_min, 1);
+    create_vector(get_realtype(datatype), &scal, 1);
+    if(same_char(imatrix_char, 'O'))
+    {
+        get_max_from_matrix(datatype, A, max_min, m, n, lda);
+        if((m == 1) && (n == 1))
+        {
+            tuning_val = 14.0;
+        }
+        else if((m == 1 && n < 10) || (n == 1 && m < 10))
+        {
+            tuning_val = 30.0;
+        }
+        else if((m == 1 && n < 60) || (n == 1 && m < 60))
+        {
+            tuning_val = 60.0;
+        }
+        else if((m == 1 && n < 500) || (n == 1 && m < 500))
+        {
+            tuning_val = 150.0;
+        }
+        else if(m == n && m < 30)
+        {
+            tuning_val = 5.0;
+        }
+        else if(m == n && m < 50)
+        {
+            tuning_val = 9.0;
+        }
+        else if(m == n && m < 100)
+        {
+            tuning_val = 15.0;
+        }
+        else if(m == n && m < 450)
+        {
+            tuning_val = 50.0;
+        }
+        else if(m == n && m < 800)
+        {
+            tuning_val = 80.0;
+        }
+        else if(m == n && m < 900)
+        {
+            tuning_val = 120.0;
+        }
+        else if(m == n && m < 1100)
+        {
+            tuning_val = 150.0;
+        }
+        else if(m == n)
+        {
+            tuning_val = 500.0;
+        }
+        else if(m <= 10 && n <= 10)
+        {
+            tuning_val = 3.5;
+        }
+        else if(m <= 300 && n <= 300)
+        {
+            tuning_val = 40.0;
+        }
+        else if(m <= 1000 && n <= 1000)
+        {
+            tuning_val = 80.0;
+        }
+        else
+        {
+            tuning_val = 95.0;
+        }
+        if ((m >= 500 || n >= 500) && datatype == DOUBLE_COMPLEX)
+        {
+            tuning_val = 10e200;
+        }
+    }
+    if(same_char(imatrix_char, 'U'))
+    {
+        get_min_from_matrix(datatype, A, max_min, m, n, lda);
+        if((m >= 500 || n >= 500) && datatype == DOUBLE_COMPLEX)
+        {
+            tuning_val = 1e-200;
+        }
+        else
+        {
+            tuning_val = 1.0;
+        }
+    }
+    calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
+
+    /* Scaling the matrix A with scal */
+    scal_matrix(datatype, scal, A, m, n, lda, i_one);
+
+    /* free vectors */
     free_vector(max_min);
     free_vector(scal);
 }

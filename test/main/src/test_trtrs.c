@@ -209,7 +209,7 @@ void fla_test_trtrs_experiment(char *tst_api, test_params_t *params, integer dat
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
     {
-        if((!check_extreme_value(datatype, n, nrhs, A, lda, params->imatrix_char)))
+        if((!check_extreme_value(datatype, n, n, A, lda, params->imatrix_char)))
         {
             residual = DBL_MAX;
         }

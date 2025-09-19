@@ -135,14 +135,21 @@ f"> */
 /* Z_DIV macro for complex division - follows z_div function logic */
 #ifdef _WIN32
 /* Windows implementation - manual complex division calculation */
-#define Z_DIV_TRTI2(result, numerator, denominator)                           \
-    do                                                                        \
-    {                                                                         \
-        dcomplex _a = *(numerator);                                           \
-        dcomplex _b = *(denominator);                                         \
-        double _temp = (_b.real * _b.real) + (_b.imag * _b.imag);             \
-        (result)->real = ((_a.real * _b.real) + (_a.imag * _b.imag)) / _temp; \
-        (result)->imag = ((_a.imag * _b.real) - (_a.real * _b.imag)) / _temp; \
+#define Z_DIV_TRTI2(result, numerator, denominator)                                               \
+    do                                                                                            \
+    {                                                                                             \
+        double temp;                                                                              \
+        double s, xr_s, xi_s;                                                                     \
+        s = fla_max(fabs((denominator)->real), fabs((denominator)->imag));                        \
+        s = 1.0 / s;                                                                              \
+        xr_s = (denominator)->real * s;                                                           \
+        xi_s = (denominator)->imag * s;                                                           \
+        temp = xr_s * (denominator)->real + xi_s * (denominator)->imag;                           \
+        temp = 1.0 / temp;                                                                        \
+        (result)->real = xr_s * temp;                                                             \
+        (result)->imag = -xi_s * temp;                                                            \
+        (result)->real = (result)->real * (numerator)->real + (result)->imag * (numerator)->imag; \
+        (result)->imag = (result)->imag * (numerator)->real - (result)->real * (numerator)->imag; \
     } while(0)
 #else
 /* Non-Windows implementation - use C99 complex arithmetic */

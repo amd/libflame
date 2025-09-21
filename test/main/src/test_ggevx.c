@@ -266,6 +266,10 @@ void fla_test_ggevx_experiment(char *tst_api, test_params_t *params, integer dat
                            alpha, alphar, alphai, beta, VL, ldvl, VR, ldvr, datatype, residual,
                            params);
         }
+        else
+        {
+            FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+        }
     }
     else
     {

@@ -248,7 +248,7 @@ bool fla_aocl_enable_instruction_query(void)
 }
 
 /* Get value of AOCL_ENABLE_INSTRUCTIONS environment variable
- * Sets boolean fla_aocl_e_i if vaalid value returned*/
+ * Sets boolean fla_aocl_e_i if valid value returned*/
 void fla_get_arch_info_from_env(fla_context *context)
 {
     fla_req_id = fla_env_get_var_arch_type("AOCL_ENABLE_INSTRUCTIONS", -1);
@@ -359,21 +359,33 @@ void fla_isa_init(fla_context *context)
     const char* const flags_array[] = {"avx2", "avx512f"};
     au_cpu_num_t cpu_num = AU_CURRENT_CPU_NUM;
 
-    bool result = au_cpuid_has_flags(cpu_num, flags_array, 1);
+    bool cpu_supports_isa = au_cpuid_has_flags(cpu_num, flags_array, 1);
 
     // Check if the target supports AVX2/AVX512
-    if(result)
+    if(cpu_supports_isa)
     {
         context->is_avx2 = TRUE;
         fla_arch_id = FLA_ARCH_AVX2;
     }
-    result = au_cpuid_has_flags(cpu_num, &flags_array[1], 1);
-    if(result)
+
+    cpu_supports_isa = au_cpuid_has_flags(cpu_num, &flags_array[1], 1);
+    if(cpu_supports_isa)
     {
         context->is_avx512 = TRUE;
         fla_arch_id = FLA_ARCH_AVX512;
     }
 
+#ifdef FLA_STRICT_ARCH
+    /* Compile-time override: force architecture ID, but cap to CPU capability.
+       Usage: add -DFLA_STRICT_ARCH=FLA_ARCH_AVX2 (or other FLA_ARCH_* value) in CMake
+       This overrides AOCL_ENABLE_INSTRUCTIONS behavior. */
+    {
+        fla_arch_t strict_arch_id = (fla_arch_t) FLA_STRICT_ARCH;
+
+        fla_arch_id = fla_arch_id < strict_arch_id ? fla_arch_id : strict_arch_id;
+    }
+
+#else
     // Check user has set AOCL_ENABLE_INSTRUCTIONS env variable
     fla_get_arch_info_from_env(context);
 
@@ -395,6 +407,7 @@ void fla_isa_init(fla_context *context)
             fla_arch_id = FLA_ARCH_GENERIC;
         }
     }
+#endif
 
     // set the ARCH ID to use
     context->arch_id = fla_arch_id;

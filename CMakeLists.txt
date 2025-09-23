@@ -49,10 +49,20 @@ find_package(Python3 REQUIRED COMPONENTS Interpreter)
 ### Making LF_ISA_CONFIG case insensitive ###
 string(TOLOWER "${LF_ISA_CONFIG}" lf_isa_config_lower)
 
-if ("${lf_isa_config_lower}" STREQUAL "none" OR "${lf_isa_config_lower}" STREQUAL "avx" OR "${lf_isa_config_lower}" STREQUAL "avx2" OR "${lf_isa_config_lower}" STREQUAL "avx512" OR "${lf_isa_config_lower}" STREQUAL "auto")
-   message("Machine ISA configuration set to ${LF_ISA_CONFIG}")
+if (
+	"${lf_isa_config_lower}" STREQUAL "none"
+	OR "${lf_isa_config_lower}" STREQUAL "avx"
+	OR "${lf_isa_config_lower}" STREQUAL "avx2"
+	OR "${lf_isa_config_lower}" STREQUAL "avx2-strict"
+	OR "${lf_isa_config_lower}" STREQUAL "avx512"
+	OR "${lf_isa_config_lower}" STREQUAL "avx512-strict"
+	OR "${lf_isa_config_lower}" STREQUAL "auto"
+)
+	message(STATUS "Machine ISA configuration set to ${LF_ISA_CONFIG}")
 else()
-   message(FATAL_ERROR "Machine ISA configuration error, valid values are AVX, AVX2, AVX512 and auto")
+	message(FATAL_ERROR
+		"Machine ISA configuration error, valid values are "
+		"AVX, AVX2, AVX2-STRICT, AVX512, AVX512-STRICT and auto")
 endif()
 
 if (${lf_isa_config_lower} STREQUAL "auto")
@@ -175,6 +185,20 @@ set(AOCL_ROOT "" CACHE STRING "AOCL-BLAS installation path")
 
 
 message(STATUS "checking SIMD  ")
+
+# Accept fixed/forced variants and map them to a compile-time definition
+if("${lf_isa_config_lower}" STREQUAL "avx2-strict" )
+    message(STATUS "LF_ISA_CONFIG requests a compile-time forced AVX2 ISA")
+    # define compile-time forced ISA macro for C code (FLA_Context.c expects FLA_STRICT_ARCH)
+    add_definitions(-DFLA_STRICT_ARCH=FLA_ARCH_AVX2)
+    # normalize to base token so later compiler flag logic still applies
+    set(lf_isa_config_lower "avx2")
+elseif("${lf_isa_config_lower}" STREQUAL "avx512-strict" )
+    message(STATUS "LF_ISA_CONFIG requests a compile-time forced AVX512 ISA")
+    add_definitions(-DFLA_STRICT_ARCH=FLA_ARCH_AVX512)
+    set(lf_isa_config_lower "avx512")
+endif()
+
 if(WIN32)
 	if(${lf_isa_config_lower} STREQUAL "avx512")
 	add_definitions(/arch:AVX512)

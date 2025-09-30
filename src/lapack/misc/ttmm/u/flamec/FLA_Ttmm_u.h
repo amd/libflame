@@ -19,32 +19,32 @@ FLA_Error FLA_Ttmm_u_unb_var2( FLA_Obj A );
 FLA_Error FLA_Ttmm_u_unb_var3( FLA_Obj A );
 
 FLA_Error FLA_Ttmm_u_opt_var1( FLA_Obj A );
-FLA_Error FLA_Ttmm_u_ops_var1( integer mn_A,
-                               float*    A, integer rs_A, integer cs_A );
-FLA_Error FLA_Ttmm_u_opd_var1( integer mn_A,
-                               double*   A, integer rs_A, integer cs_A );
-FLA_Error FLA_Ttmm_u_opc_var1( integer mn_A,
-                               scomplex* A, integer rs_A, integer cs_A );
-FLA_Error FLA_Ttmm_u_opz_var1( integer mn_A,
-                               dcomplex* A, integer rs_A, integer cs_A );
+FLA_Error FLA_Ttmm_u_ops_var1( fla_dim_t mn_A,
+                               float*    A, fla_dim_t rs_A, fla_dim_t cs_A );
+FLA_Error FLA_Ttmm_u_opd_var1( fla_dim_t mn_A,
+                               double*   A, fla_dim_t rs_A, fla_dim_t cs_A );
+FLA_Error FLA_Ttmm_u_opc_var1( fla_dim_t mn_A,
+                               scomplex* A, fla_dim_t rs_A, fla_dim_t cs_A );
+FLA_Error FLA_Ttmm_u_opz_var1( fla_dim_t mn_A,
+                               dcomplex* A, fla_dim_t rs_A, fla_dim_t cs_A );
 
 FLA_Error FLA_Ttmm_u_opt_var2( FLA_Obj A );
-FLA_Error FLA_Ttmm_u_ops_var2( integer mn_A,
-                               float*    A, integer rs_A, integer cs_A );
-FLA_Error FLA_Ttmm_u_opd_var2( integer mn_A,
-                               double*   A, integer rs_A, integer cs_A );
-FLA_Error FLA_Ttmm_u_opc_var2( integer mn_A,
-                               scomplex* A, integer rs_A, integer cs_A );
-FLA_Error FLA_Ttmm_u_opz_var2( integer mn_A,
-                               dcomplex* A, integer rs_A, integer cs_A );
+FLA_Error FLA_Ttmm_u_ops_var2( fla_dim_t mn_A,
+                               float*    A, fla_dim_t rs_A, fla_dim_t cs_A );
+FLA_Error FLA_Ttmm_u_opd_var2( fla_dim_t mn_A,
+                               double*   A, fla_dim_t rs_A, fla_dim_t cs_A );
+FLA_Error FLA_Ttmm_u_opc_var2( fla_dim_t mn_A,
+                               scomplex* A, fla_dim_t rs_A, fla_dim_t cs_A );
+FLA_Error FLA_Ttmm_u_opz_var2( fla_dim_t mn_A,
+                               dcomplex* A, fla_dim_t rs_A, fla_dim_t cs_A );
 
 FLA_Error FLA_Ttmm_u_opt_var3( FLA_Obj A );
-FLA_Error FLA_Ttmm_u_ops_var3( integer mn_A,
-                               float*    A, integer rs_A, integer cs_A );
-FLA_Error FLA_Ttmm_u_opd_var3( integer mn_A,
-                               double*   A, integer rs_A, integer cs_A );
-FLA_Error FLA_Ttmm_u_opc_var3( integer mn_A,
-                               scomplex* A, integer rs_A, integer cs_A );
-FLA_Error FLA_Ttmm_u_opz_var3( integer mn_A,
-                               dcomplex* A, integer rs_A, integer cs_A );
+FLA_Error FLA_Ttmm_u_ops_var3( fla_dim_t mn_A,
+                               float*    A, fla_dim_t rs_A, fla_dim_t cs_A );
+FLA_Error FLA_Ttmm_u_opd_var3( fla_dim_t mn_A,
+                               double*   A, fla_dim_t rs_A, fla_dim_t cs_A );
+FLA_Error FLA_Ttmm_u_opc_var3( fla_dim_t mn_A,
+                               scomplex* A, fla_dim_t rs_A, fla_dim_t cs_A );
+FLA_Error FLA_Ttmm_u_opz_var3( fla_dim_t mn_A,
+                               dcomplex* A, fla_dim_t rs_A, fla_dim_t cs_A );
 

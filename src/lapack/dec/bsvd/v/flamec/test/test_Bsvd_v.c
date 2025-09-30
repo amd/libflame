@@ -18,14 +18,14 @@
 void fill_singularvalues( FLA_Obj s );
 
 void time_Bsvd_v(
-               integer variant, integer type, integer n_repeats, integer m, integer n, integer n_iter_max, integer k_accum, integer b_alg,
+               aocl_int64_t variant, aocl_int64_t type, aocl_int64_t n_repeats, aocl_int64_t m, aocl_int64_t n, aocl_int64_t n_iter_max, aocl_int64_t k_accum, aocl_int64_t b_alg,
                FLA_Obj A_orig, FLA_Obj d, FLA_Obj e, FLA_Obj s, FLA_Obj G, FLA_Obj H, FLA_Obj RG, FLA_Obj RH, FLA_Obj W, FLA_Obj U, FLA_Obj V,
                double *dtime, double *diff1, double* diff2, double *gflops );
 
 
 int main(int argc, char *argv[])
 {
-  integer 
+  aocl_int64_t 
     m_input, n_input,
     m, n,
     p_first, p_last, p_inc,

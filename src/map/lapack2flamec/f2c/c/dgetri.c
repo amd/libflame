@@ -5,9 +5,9 @@
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 #include "fla_lapack_x86_common.h"
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__2 = 2;
 static doublereal c_b20 = -1.;
 static doublereal c_b22 = 1.;
 /* > \brief \b DGETRI */
@@ -119,35 +119,37 @@ the matrix is */
 /* > \ingroup doubleGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dgetri_(integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *work,
-             integer *lwork, integer *info)
+/** Generated wrapper function */
+void dgetri_(aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int_t *ipiv, doublereal *work,
+             aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgetri(n, a, lda, ipiv, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgetri(&n_64, a, &lda_64, ipiv, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dgetri(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aocl_int_t *ipiv,
+                        doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgetri inputs: n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "", *n, *lda,
                       *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer i__, j, jb, nb = 0, jj, jp, nn, iws;
-    extern /* Subroutine */
-        void
-        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *),
-        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
-               integer *, doublereal *, doublereal *, integer *);
-    integer nbmin;
-    extern /* Subroutine */
-        void
-        dswap_(integer *, doublereal *, integer *, doublereal *, integer *),
-        dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer ldwork;
-    extern /* Subroutine */
-        void
-        dtrtri_(char *, char *, integer *, doublereal *, integer *, integer *);
-    integer lwkopt;
+    aocl_int64_t i__, j, jb, nb = 0, jj, jp, nn, iws;
+    aocl_int64_t nbmin;
+    aocl_int64_t ldwork;
+    aocl_int64_t lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -184,7 +186,7 @@ void dgetri_(integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal 
     }
     else
     {
-        nb = ilaenv_(&c__1, "DGETRI", " ", n, &c_n1, &c_n1, &c_n1);
+        nb = aocl_lapack_ilaenv(&c__1, "DGETRI", " ", n, &c_n1, &c_n1, &c_n1);
         lwkopt = *n * nb;
     }
     work[1] = (doublereal)lwkopt;
@@ -204,7 +206,7 @@ void dgetri_(integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGETRI", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGETRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -229,7 +231,7 @@ void dgetri_(integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal 
     else
 #endif
     {
-        dtrtri_("Upper", "Non-unit", n, &a[a_offset], lda, info);
+        aocl_lapack_dtrtri("Upper", "Non-unit", n, &a[a_offset], lda, info);
 
         if(*info > 0)
         {
@@ -248,7 +250,8 @@ void dgetri_(integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal 
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = ilaenv_(&c__2, "DGETRI", " ", n, &c_n1, &c_n1, &c_n1); // , expr subst
+                i__2 = aocl_lapack_ilaenv(&c__2, "DGETRI", " ", n, &c_n1, &c_n1,
+                                          &c_n1); // , expr subst
                 nbmin = fla_max(i__1, i__2);
             }
         }
@@ -274,8 +277,8 @@ void dgetri_(integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal 
                 if(j < *n)
                 {
                     i__1 = *n - j;
-                    dgemv_("No transpose", n, &i__1, &c_b20, &a[(j + 1) * a_dim1 + 1], lda,
-                           &work[j + 1], &c__1, &c_b22, &a[j * a_dim1 + 1], &c__1);
+                    aocl_blas_dgemv("No transpose", n, &i__1, &c_b20, &a[(j + 1) * a_dim1 + 1], lda,
+                                    &work[j + 1], &c__1, &c_b22, &a[j * a_dim1 + 1], &c__1);
                 }
                 /* L20: */
             }
@@ -309,12 +312,12 @@ void dgetri_(integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal 
                 if(j + jb <= *n)
                 {
                     i__2 = *n - j - jb + 1;
-                    dgemm_("No transpose", "No transpose", n, &jb, &i__2, &c_b20,
-                           &a[(j + jb) * a_dim1 + 1], lda, &work[j + jb], &ldwork, &c_b22,
-                           &a[j * a_dim1 + 1], lda);
+                    aocl_blas_dgemm("No transpose", "No transpose", n, &jb, &i__2, &c_b20,
+                                    &a[(j + jb) * a_dim1 + 1], lda, &work[j + jb], &ldwork, &c_b22,
+                                    &a[j * a_dim1 + 1], lda);
                 }
-                dtrsm_("Right", "Lower", "No transpose", "Unit", n, &jb, &c_b22, &work[j], &ldwork,
-                       &a[j * a_dim1 + 1], lda);
+                aocl_blas_dtrsm("Right", "Lower", "No transpose", "Unit", n, &jb, &c_b22, &work[j],
+                                &ldwork, &a[j * a_dim1 + 1], lda);
                 /* L50: */
             }
         }
@@ -324,7 +327,7 @@ void dgetri_(integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal 
             jp = ipiv[j];
             if(jp != j)
             {
-                dswap_(n, &a[j * a_dim1 + 1], &c__1, &a[jp * a_dim1 + 1], &c__1);
+                aocl_blas_dswap(n, &a[j * a_dim1 + 1], &c__1, &a[jp * a_dim1 + 1], &c__1);
             }
             /* L60: */
         }

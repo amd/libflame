@@ -129,30 +129,42 @@ ILO=1 and IHI=0, if N=0. */
 /* > \ingroup doubleGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doublereal *scale,
-             integer *m, doublereal *v, integer *ldv, integer *info)
+/** Generated wrapper function */
+void dgebak_(char *job, char *side, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi,
+             doublereal *scale, aocl_int_t *m, doublereal *v, aocl_int_t *ldv, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgebak(job, side, n, ilo, ihi, scale, m, v, ldv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgebak(job, side, &n_64, &ilo_64, &ihi_64, scale, &m_64, v, &ldv_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dgebak(char *job, char *side, aocl_int64_t *n, aocl_int64_t *ilo,
+                        aocl_int64_t *ihi, doublereal *scale, aocl_int64_t *m, doublereal *v,
+                        aocl_int64_t *ldv, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgebak inputs: job %c, side %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS
                       ", m %" FLA_IS ", ldv %" FLA_IS "",
                       *job, *side, *n, *ilo, *ihi, *m, *ldv);
     /* System generated locals */
-    integer v_dim1, v_offset, i__1;
+    aocl_int64_t v_dim1, v_offset, i__1;
     /* Local variables */
-    integer i__, k;
+    aocl_int64_t i__, k;
     doublereal s;
-    integer ii;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    aocl_int64_t ii;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical leftv;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical rightv;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -216,7 +228,7 @@ void dgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doub
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGEBAK", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGEBAK", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -249,7 +261,7 @@ void dgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doub
             for(i__ = *ilo; i__ <= i__1; ++i__)
             {
                 s = scale[i__];
-                dscal_(m, &s, &v[i__ + v_dim1], ldv);
+                aocl_blas_dscal(m, &s, &v[i__ + v_dim1], ldv);
                 /* L10: */
             }
         }
@@ -259,7 +271,7 @@ void dgebak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doub
             for(i__ = *ilo; i__ <= i__1; ++i__)
             {
                 s = 1. / scale[i__];
-                dscal_(m, &s, &v[i__ + v_dim1], ldv);
+                aocl_blas_dscal(m, &s, &v[i__ + v_dim1], ldv);
                 /* L20: */
             }
         }
@@ -289,7 +301,7 @@ L30:
                 {
                     goto L40;
                 }
-                dswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
+                aocl_blas_dswap(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
             L40:;
             }
         }
@@ -312,7 +324,7 @@ L30:
                 {
                     goto L50;
                 }
-                dswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
+                aocl_blas_dswap(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
             L50:;
             }
         }

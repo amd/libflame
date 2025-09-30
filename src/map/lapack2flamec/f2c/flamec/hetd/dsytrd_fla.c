@@ -13,16 +13,15 @@
 #define ADAPTIVE_BLOCK_SIZE 64
 #define OPTIMAL_THREADS 8
 
-void dsytrd_fla_parallel(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *d__, doublereal *e,
-                doublereal *tau, doublereal *work, integer *lwork, integer *info);
+void dsytrd_fla_parallel(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                         doublereal *d__, doublereal *e, doublereal *tau, doublereal *work,
+                         aocl_int64_t *lwork, aocl_int64_t *info);
 #endif
 
-
-
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__2 = 2;
 static doublereal c_b22 = -1.;
 static doublereal c_b23 = 1.;
 
@@ -215,27 +214,18 @@ v(i+2:n) is stored on exit in A(i+2:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dsytrd_fla(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *d__, doublereal *e,
-                doublereal *tau, doublereal *work, integer *lwork, integer *info)
+void dsytrd_fla(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *d__,
+                doublereal *e, doublereal *tau, doublereal *work, aocl_int64_t *lwork,
+                aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer i__, j, nb, kk, nx, iws;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer nbmin, iinfo;
+    aocl_int64_t i__, j, nb, kk, nx, iws;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t nbmin, iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        dsytd2_fla(char *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                   doublereal *, integer *),
-        dsyr2k_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *,
-                doublereal *, integer *, doublereal *, doublereal *, integer *),
-        dlatrd_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer ldwork, lwkopt;
+    aocl_int64_t ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -298,14 +288,14 @@ void dsytrd_fla(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
     if(*info == 0)
     {
         /* Determine the block size. */
-        nb = ilaenv_(&c__1, "DSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
+        nb = aocl_lapack_ilaenv(&c__1, "DSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
         lwkopt = *n * nb;
         work[1] = (doublereal)lwkopt;
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSYTRD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DSYTRD", &i__1, (ftnlen)6);
         return;
     }
     else if(lquery)
@@ -326,7 +316,7 @@ void dsytrd_fla(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
         /* (last block is always handled by unblocked code). */
         /* Computing MAX */
         i__1 = nb;
-        i__2 = ilaenv_(&c__3, "DSYTRD", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__3, "DSYTRD", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
         nx = fla_max(i__1, i__2);
         if(nx < *n)
         {
@@ -341,7 +331,7 @@ void dsytrd_fla(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
                 /* Computing MAX */
                 i__1 = *lwork / ldwork;
                 nb = fla_max(i__1, 1);
-                nbmin = ilaenv_(&c__2, "DSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
+                nbmin = aocl_lapack_ilaenv(&c__2, "DSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
                 if(nb < nbmin)
                 {
                     nx = *n;
@@ -370,12 +360,13 @@ void dsytrd_fla(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
             /* matrix W which is needed to update the unreduced part of */
             /* the matrix */
             i__3 = i__ + nb - 1;
-            dlatrd_(uplo, &i__3, &nb, &a[a_offset], lda, &e[1], &tau[1], &work[1], &ldwork);
+            aocl_lapack_dlatrd(uplo, &i__3, &nb, &a[a_offset], lda, &e[1], &tau[1], &work[1],
+                               &ldwork);
             /* Update the unreduced submatrix A(1:i-1,1:i-1), using an */
             /* update of the form: A := A - V*W**T - W*V**T */
             i__3 = i__ - 1;
-            dsyr2k_(uplo, "No transpose", &i__3, &nb, &c_b22, &a[i__ * a_dim1 + 1], lda, &work[1],
-                    &ldwork, &c_b23, &a[a_offset], lda);
+            aocl_blas_dsyr2k(uplo, "No transpose", &i__3, &nb, &c_b22, &a[i__ * a_dim1 + 1], lda,
+                             &work[1], &ldwork, &c_b23, &a[a_offset], lda);
             /* Copy superdiagonal elements back into A, and diagonal */
             /* elements into D */
             i__3 = i__ + nb - 1;
@@ -401,13 +392,14 @@ void dsytrd_fla(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
             /* matrix W which is needed to update the unreduced part of */
             /* the matrix */
             i__3 = *n - i__ + 1;
-            dlatrd_(uplo, &i__3, &nb, &a[i__ + i__ * a_dim1], lda, &e[i__], &tau[i__], &work[1],
-                    &ldwork);
+            aocl_lapack_dlatrd(uplo, &i__3, &nb, &a[i__ + i__ * a_dim1], lda, &e[i__], &tau[i__],
+                               &work[1], &ldwork);
             /* Update the unreduced submatrix A(i+ib:n,i+ib:n), using */
             /* an update of the form: A := A - V*W**T - W*V**T */
             i__3 = *n - i__ - nb + 1;
-            dsyr2k_(uplo, "No transpose", &i__3, &nb, &c_b22, &a[i__ + nb + i__ * a_dim1], lda,
-                    &work[nb + 1], &ldwork, &c_b23, &a[i__ + nb + (i__ + nb) * a_dim1], lda);
+            aocl_blas_dsyr2k(uplo, "No transpose", &i__3, &nb, &c_b22, &a[i__ + nb + i__ * a_dim1],
+                             lda, &work[nb + 1], &ldwork, &c_b23,
+                             &a[i__ + nb + (i__ + nb) * a_dim1], lda);
             /* Copy subdiagonal elements back into A, and diagonal */
             /* elements into D */
             i__3 = i__ + nb - 1;
@@ -429,33 +421,21 @@ void dsytrd_fla(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
 }
 /* dsytrd_ */
 
-
 #ifdef FLA_OPENMP_MULTITHREADING
-void dsytrd_fla_parallel(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *d__, doublereal *e,
-                doublereal *tau, doublereal *work, integer *lwork, integer *info)
+void dsytrd_fla_parallel(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                         doublereal *d__, doublereal *e, doublereal *tau, doublereal *work,
+                         aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7;
     /* Local variables */
-    integer i__, j, nb, kk, nx, iws;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer nbmin, iinfo;
+    aocl_int64_t i__, j, nb, kk, nx, iws;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t nbmin, iinfo;
     logical upper;
-    integer adaptive_block, num_threads, max_available_threads;
-    extern /* Subroutine */
-        void
-        dsytd2_fla(char *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                   doublereal *, integer *),
-        dsyr2k_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *,
-                doublereal *, integer *, doublereal *, doublereal *, integer *),
-        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *),
-        dlatrd_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    aocl_int64_t adaptive_block, num_threads, max_available_threads;
     extern int fla_thread_get_num_threads(void);
-    integer ldwork, lwkopt;
+    aocl_int64_t ldwork, lwkopt;
     logical lquery;
 
     /* Parameter adjustments */
@@ -489,14 +469,14 @@ void dsytrd_fla_parallel(char *uplo, integer *n, doublereal *a, integer *lda, do
     if(*info == 0)
     {
         /* Determine the block size. */
-        nb = ilaenv_(&c__1, "DSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
+        nb = aocl_lapack_ilaenv(&c__1, "DSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
         lwkopt = *n * nb;
         work[1] = (doublereal)lwkopt;
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSYTRD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DSYTRD", &i__1, (ftnlen)6);
         return;
     }
     else if(lquery)
@@ -517,7 +497,7 @@ void dsytrd_fla_parallel(char *uplo, integer *n, doublereal *a, integer *lda, do
         /* (last block is always handled by unblocked code). */
         /* Computing MAX */
         i__1 = nb;
-        i__2 = ilaenv_(&c__3, "DSYTRD", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__3, "DSYTRD", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
         nx = fla_max(i__1, i__2);
         if(nx < *n)
         {
@@ -532,7 +512,7 @@ void dsytrd_fla_parallel(char *uplo, integer *n, doublereal *a, integer *lda, do
                 /* Computing MAX */
                 i__1 = *lwork / ldwork;
                 nb = fla_max(i__1, 1);
-                nbmin = ilaenv_(&c__2, "DSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
+                nbmin = aocl_lapack_ilaenv(&c__2, "DSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
                 if(nb < nbmin)
                 {
                     nx = *n;
@@ -575,7 +555,8 @@ void dsytrd_fla_parallel(char *uplo, integer *n, doublereal *a, integer *lda, do
                     /* matrix W which is needed to update the unreduced part of */
                     /* the matrix */
                     i__3 = i__ + nb - 1;
-                    dlatrd_(uplo, &i__3, &nb, &a[a_offset], lda, &e[1], &tau[1], &work[1], &ldwork);
+                    aocl_lapack_dlatrd(uplo, &i__3, &nb, &a[a_offset], lda, &e[1], &tau[1],
+                                       &work[1], &ldwork);
 
                     /* Update the unreduced submatrix A(1:i-1,1:i-1), using an */
                     /* update of the form: A := A - V*W**T - W*V**T */
@@ -589,9 +570,10 @@ void dsytrd_fla_parallel(char *uplo, integer *n, doublereal *a, integer *lda, do
 
 #pragma omp task firstprivate(i__4, i__5, i__, nb, ldwork)
                             {
-                                dsyr2k_(uplo, "No transpose", &i__5, &nb, &c_b22,
-                                        &a[i__ * a_dim1 + 1 + i__4], lda, &work[1 + i__4], &ldwork,
-                                        &c_b23, &a[i__4 + 1 + (i__4 + 1) * a_dim1], lda);
+                                aocl_blas_dsyr2k(uplo, "No transpose", &i__5, &nb, &c_b22,
+                                                 &a[i__ * a_dim1 + 1 + i__4], lda, &work[1 + i__4],
+                                                 &ldwork, &c_b23,
+                                                 &a[i__4 + 1 + (i__4 + 1) * a_dim1], lda);
                             }
 
                             for(i__6 = i__4 - adaptive_block; i__6 >= 0; i__6 -= adaptive_block)
@@ -600,14 +582,15 @@ void dsytrd_fla_parallel(char *uplo, integer *n, doublereal *a, integer *lda, do
 
 #pragma omp task firstprivate(i__6, i__7, i__4, i__5, i__, nb, ldwork)
                                 {
-                                    dgemm_("N", "T", &i__7, &i__5, &nb, &c_b22,
-                                           &a[i__ * a_dim1 + 1 + i__6], lda, &work[1 + i__4],
-                                           &ldwork, &c_b23, &a[i__6 + 1 + (i__4 + 1) * a_dim1],
-                                           lda);
+                                    aocl_blas_dgemm("N", "T", &i__7, &i__5, &nb, &c_b22,
+                                                    &a[i__ * a_dim1 + 1 + i__6], lda,
+                                                    &work[1 + i__4], &ldwork, &c_b23,
+                                                    &a[i__6 + 1 + (i__4 + 1) * a_dim1], lda);
 
-                                    dgemm_("N", "T", &i__7, &i__5, &nb, &c_b22, &work[1 + i__6],
-                                           &ldwork, &a[i__ * a_dim1 + 1 + i__4], lda, &c_b23,
-                                           &a[i__6 + 1 + (i__4 + 1) * a_dim1], lda);
+                                    aocl_blas_dgemm("N", "T", &i__7, &i__5, &nb, &c_b22,
+                                                    &work[1 + i__6], &ldwork,
+                                                    &a[i__ * a_dim1 + 1 + i__4], lda, &c_b23,
+                                                    &a[i__6 + 1 + (i__4 + 1) * a_dim1], lda);
                                 }
                             }
                         }
@@ -637,8 +620,8 @@ void dsytrd_fla_parallel(char *uplo, integer *n, doublereal *a, integer *lda, do
                     /* matrix W which is needed to update the unreduced part of */
                     /* the matrix */
                     i__3 = *n - i__ + 1;
-                    dlatrd_(uplo, &i__3, &nb, &a[i__ + i__ * a_dim1], lda, &e[i__], &tau[i__],
-                            &work[1], &ldwork);
+                    aocl_lapack_dlatrd(uplo, &i__3, &nb, &a[i__ + i__ * a_dim1], lda, &e[i__],
+                                       &tau[i__], &work[1], &ldwork);
 
                     /* Update the unreduced submatrix A(i+ib:n,i+ib:n), using */
                     /* an update of the form: A := A - V*W**T - W*V**T */
@@ -652,10 +635,11 @@ void dsytrd_fla_parallel(char *uplo, integer *n, doublereal *a, integer *lda, do
 
 #pragma omp task firstprivate(i__4, i__5, i__, nb, ldwork)
                             {
-                                dsyr2k_(uplo, "No transpose", &i__5, &nb, &c_b22,
-                                        &a[i__ + nb + i__4 + i__ * a_dim1], lda,
-                                        &work[nb + i__4 + 1], &ldwork, &c_b23,
-                                        &a[i__ + nb + i__4 + (i__ + i__4 + nb) * a_dim1], lda);
+                                aocl_blas_dsyr2k(uplo, "No transpose", &i__5, &nb, &c_b22,
+                                                 &a[i__ + nb + i__4 + i__ * a_dim1], lda,
+                                                 &work[nb + i__4 + 1], &ldwork, &c_b23,
+                                                 &a[i__ + nb + i__4 + (i__ + i__4 + nb) * a_dim1],
+                                                 lda);
                             }
 
                             for(i__6 = i__4 + adaptive_block; i__6 < i__3; i__6 += adaptive_block)
@@ -664,15 +648,16 @@ void dsytrd_fla_parallel(char *uplo, integer *n, doublereal *a, integer *lda, do
 
 #pragma omp task firstprivate(i__6, i__7, i__4, i__5, i__, nb, ldwork)
                                 {
-                                    dgemm_("N", "T", &i__7, &i__5, &nb, &c_b22,
-                                           &a[i__ + nb + i__6 + i__ * a_dim1], lda,
-                                           &work[nb + i__4 + 1], &ldwork, &c_b23,
-                                           &a[i__ + nb + i__6 + (i__ + nb + i__4) * a_dim1], lda);
+                                    aocl_blas_dgemm(
+                                        "N", "T", &i__7, &i__5, &nb, &c_b22,
+                                        &a[i__ + nb + i__6 + i__ * a_dim1], lda,
+                                        &work[nb + i__4 + 1], &ldwork, &c_b23,
+                                        &a[i__ + nb + i__6 + (i__ + nb + i__4) * a_dim1], lda);
 
-                                    dgemm_("N", "T", &i__7, &i__5, &nb, &c_b22,
-                                           &work[nb + i__6 + 1], &ldwork,
-                                           &a[i__ + nb + i__4 + i__ * a_dim1], lda, &c_b23,
-                                           &a[i__ + nb + i__6 + (i__ + nb + i__4) * a_dim1], lda);
+                                    aocl_blas_dgemm(
+                                        "N", "T", &i__7, &i__5, &nb, &c_b22, &work[nb + i__6 + 1],
+                                        &ldwork, &a[i__ + nb + i__4 + i__ * a_dim1], lda, &c_b23,
+                                        &a[i__ + nb + i__6 + (i__ + nb + i__4) * a_dim1], lda);
                                 }
                             }
                         }
@@ -692,7 +677,6 @@ void dsytrd_fla_parallel(char *uplo, integer *n, doublereal *a, integer *lda, do
                 dsytd2_fla(uplo, &i__1, &a[i__ + i__ * a_dim1], lda, &d__[i__], &e[i__], &tau[i__],
                            &iinfo);
             }
-
         }
     }
 

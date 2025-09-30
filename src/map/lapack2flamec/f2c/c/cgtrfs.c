@@ -4,10 +4,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b18 = -1.f;
 static real c_b19 = 1.f;
-static complex c_b26 = {1.f, 0.f};
+static scomplex c_b26 = {{1.f}, {0.f}};
 /* > \brief \b CGTRFS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -209,10 +209,34 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup complexGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cgtrfs_(char *trans, integer *n, integer *nrhs, complex *dl, complex *d__, complex *du,
-             complex *dlf, complex *df, complex *duf, complex *du2, integer *ipiv, complex *b,
-             integer *ldb, complex *x, integer *ldx, real *ferr, real *berr, complex *work,
-             real *rwork, integer *info)
+/** Generated wrapper function */
+void cgtrfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomplex *d__, scomplex *du,
+             scomplex *dlf, scomplex *df, scomplex *duf, scomplex *du2, aocl_int_t *ipiv, scomplex *b,
+             aocl_int_t *ldb, scomplex *x, aocl_int_t *ldx, real *ferr, real *berr, scomplex *work,
+             real *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgtrfs(trans, n, nrhs, dl, d__, du, dlf, df, duf, du2, ipiv, b, ldb, x, ldx, ferr,
+                       berr, work, rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgtrfs(trans, &n_64, &nrhs_64, dl, d__, du, dlf, df, duf, du2, ipiv, b, &ldb_64, x,
+                       &ldx_64, ferr, berr, work, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgtrfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *dl, scomplex *d__,
+                        scomplex *du, scomplex *dlf, scomplex *df, scomplex *duf, scomplex *du2,
+                        aocl_int_t *ipiv, scomplex *b, aocl_int64_t *ldb, scomplex *x,
+                        aocl_int64_t *ldx, real *ferr, real *berr, scomplex *work, real *rwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -227,42 +251,26 @@ void cgtrfs_(char *trans, integer *n, integer *nrhs, complex *dl, complex *d__, 
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8,
+    aocl_int64_t b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8,
         i__9;
     real r__1, r__2, r__3, r__4, r__5, r__6, r__7, r__8, r__9, r__10, r__11, r__12, r__13, r__14;
-    complex q__1;
+    scomplex q__1;
     /* Builtin functions */
-    double r_imag(complex *);
+    double r_imag(scomplex *);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real s;
-    integer nz;
+    aocl_int64_t nz;
     real eps;
-    integer kase;
+    aocl_int64_t kase;
     real safe1, safe2;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
-    extern /* Subroutine */
-        void
-        ccopy_(integer *, complex *, integer *, complex *, integer *),
-        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
-    integer count;
-    extern /* Subroutine */
-        void
-        clacn2_(integer *, complex *, complex *, real *, integer *, integer *),
-        clagtm_(char *, integer *, integer *, real *, complex *, complex *, complex *, complex *,
-                integer *, real *, complex *, integer *);
+    aocl_int64_t count;
     extern real slamch_(char *);
     real safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     char transn[1];
-    extern /* Subroutine */
-        void
-        cgttrs_(char *, integer *, integer *, complex *, complex *, complex *, complex *, integer *,
-                complex *, integer *, integer *);
     char transt[1];
     real lstres;
     /* -- LAPACK computational routine (version 3.4.2) -- */
@@ -337,7 +345,7 @@ void cgtrfs_(char *trans, integer *n, integer *nrhs, complex *dl, complex *d__, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGTRFS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGTRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -379,9 +387,9 @@ void cgtrfs_(char *trans, integer *n, integer *nrhs, complex *dl, complex *d__, 
     L20: /* Loop until stopping criterion is satisfied. */
         /* Compute residual R = B - op(A) * X, */
         /* where op(A) = A, A**T, or A**H, depending on TRANS. */
-        ccopy_(n, &b[j * b_dim1 + 1], &c__1, &work[1], &c__1);
-        clagtm_(trans, n, &c__1, &c_b18, &dl[1], &d__[1], &du[1], &x[j * x_dim1 + 1], ldx, &c_b19,
-                &work[1], n);
+        aocl_blas_ccopy(n, &b[j * b_dim1 + 1], &c__1, &work[1], &c__1);
+        aocl_lapack_clagtm(trans, n, &c__1, &c_b18, &dl[1], &d__[1], &du[1], &x[j * x_dim1 + 1],
+                           ldx, &c_b19, &work[1], n);
         /* Compute f2c_abs(op(A))*f2c_abs(x) + f2c_abs(b) for use in the backward */
         /* error bound. */
         if(notran)
@@ -567,9 +575,9 @@ void cgtrfs_(char *trans, integer *n, integer *nrhs, complex *dl, complex *d__, 
         if(berr[j] > eps && berr[j] * 2.f <= lstres && count <= 5)
         {
             /* Update solution and try again. */
-            cgttrs_(trans, n, &c__1, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1], &work[1], n,
-                    info);
-            caxpy_(n, &c_b26, &work[1], &c__1, &x[j * x_dim1 + 1], &c__1);
+            aocl_lapack_cgttrs(trans, n, &c__1, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1],
+                               &work[1], n, info);
+            aocl_blas_caxpy(n, &c_b26, &work[1], &c__1, &x[j * x_dim1 + 1], &c__1);
             lstres = berr[j];
             ++count;
             goto L20;
@@ -611,14 +619,14 @@ void cgtrfs_(char *trans, integer *n, integer *nrhs, complex *dl, complex *d__, 
         }
         kase = 0;
     L70:
-        clacn2_(n, &work[*n + 1], &work[1], &ferr[j], &kase, isave);
+        aocl_lapack_clacn2(n, &work[*n + 1], &work[1], &ferr[j], &kase, isave);
         if(kase != 0)
         {
             if(kase == 1)
             {
                 /* Multiply by diag(W)*inv(op(A)**H). */
-                cgttrs_(transt, n, &c__1, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1], &work[1], n,
-                        info);
+                aocl_lapack_cgttrs(transt, n, &c__1, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1],
+                                   &work[1], n, info);
                 i__2 = *n;
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
@@ -647,8 +655,8 @@ void cgtrfs_(char *trans, integer *n, integer *nrhs, complex *dl, complex *d__, 
                     work[i__3].i = q__1.i; // , expr subst
                     /* L90: */
                 }
-                cgttrs_(transn, n, &c__1, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1], &work[1], n,
-                        info);
+                aocl_lapack_cgttrs(transn, n, &c__1, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1],
+                                   &work[1], n, info);
             }
             goto L70;
         }

@@ -96,20 +96,35 @@
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zla_lin_berr_(integer *n, integer *nz, integer *nrhs, doublecomplex *res, doublereal *ayb,
-                   doublereal *berr)
+/** Generated wrapper function */
+void zla_lin_berr_(aocl_int_t *n, aocl_int_t *nz, aocl_int_t *nrhs, dcomplex *res,
+                   doublereal *ayb, doublereal *berr)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zla_lin_berr(n, nz, nrhs, res, ayb, berr);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nz_64 = *nz;
+    aocl_int64_t nrhs_64 = *nrhs;
+
+    aocl_lapack_zla_lin_berr(&n_64, &nz_64, &nrhs_64, res, ayb, berr);
+#endif
+}
+
+void aocl_lapack_zla_lin_berr(aocl_int64_t *n, aocl_int64_t *nz, aocl_int64_t *nrhs,
+                              dcomplex *res, doublereal *ayb, doublereal *berr)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zla_lin_berr inputs: n %" FLA_IS ", nz %" FLA_IS ", nrhs %" FLA_IS "", *n,
                       *nz, *nrhs);
     /* System generated locals */
-    integer ayb_dim1, ayb_offset, res_dim1, res_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t ayb_dim1, ayb_offset, res_dim1, res_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2, d__3;
-    doublecomplex z__1, z__2, z__3;
+    dcomplex z__1, z__2, z__3;
     /* Builtin functions */
-    double d_imag(doublecomplex *);
+    double d_imag(dcomplex *);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal tmp, safe1;
     extern doublereal dlamch_(char *);
     /* -- LAPACK computational routine (version 3.4.2) -- */

@@ -3,7 +3,7 @@
  systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b ZLA_GERPVGRW multiplies a square real matrix by a complex matrix. */
+#include "FLA_f2c.h" /* > \brief \b ZLA_GERPVGRW multiplies a square real matrix by a scomplex matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -93,20 +93,36 @@
 /* > \date September 2012 */
 /* > \ingroup complex16GEcomputational */
 /* ===================================================================== */
-doublereal zla_gerpvgrw_(integer *n, integer *ncols, doublecomplex *a, integer *lda,
-                         doublecomplex *af, integer *ldaf)
+/** Generated wrapper function */
+doublereal zla_gerpvgrw_(aocl_int_t *n, aocl_int_t *ncols, dcomplex *a, aocl_int_t *lda,
+                         dcomplex *af, aocl_int_t *ldaf)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_zla_gerpvgrw(n, ncols, a, lda, af, ldaf);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ncols_64 = *ncols;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldaf_64 = *ldaf;
+
+    return aocl_lapack_zla_gerpvgrw(&n_64, &ncols_64, a, &lda_64, af, &ldaf_64);
+#endif
+}
+
+doublereal aocl_lapack_zla_gerpvgrw(aocl_int64_t *n, aocl_int64_t *ncols, dcomplex *a,
+                                    aocl_int64_t *lda, dcomplex *af, aocl_int64_t *ldaf)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zla_gerpvgrw inputs: n %" FLA_IS ", ncols %" FLA_IS ", lda %" FLA_IS
                       ", ldaf %" FLA_IS "",
                       *n, *ncols, *lda, *ldaf);
     /* System generated locals */
-    integer a_dim1, a_offset, af_dim1, af_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, i__1, i__2, i__3;
     doublereal ret_val, d__1, d__2, d__3;
     /* Builtin functions */
-    double d_imag(doublecomplex *);
+    double d_imag(dcomplex *);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal amax, umax, rpvgrw;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

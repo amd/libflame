@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SLAEIN computes a specified right or left eigenvector of an upper Hessenberg matrix
  * by inverse iteration. */
 /* =========== DOCUMENTATION =========== */
@@ -106,18 +106,18 @@ static integer c__1 = 1;
 /* > a real starting vector for inverse iteration using the real */
 /* > eigenvalue WR;
 if NOINIT = .FALSE. and WI.ne.0.0, VR and VI */
-/* > must contain the real and imaginary parts of a complex */
-/* > starting vector for inverse iteration using the complex */
+/* > must contain the real and imaginary parts of a scomplex */
+/* > starting vector for inverse iteration using the scomplex */
 /* > eigenvalue (WR,WI);
 otherwise VR and VI need not be set. */
 /* > On exit, if WI = 0.0 (real eigenvalue), VR contains the */
 /* > computed real eigenvector;
-if WI.ne.0.0 (complex eigenvalue), */
+if WI.ne.0.0 (scomplex eigenvalue), */
 /* > VR and VI contain the real and imaginary parts of the */
-/* > computed complex eigenvector. The eigenvector is normalized */
+/* > computed scomplex eigenvector. The eigenvector is normalized */
 /* > so that the component of largest magnitude has magnitude 1;
  */
-/* > here the magnitude of a complex number (x,y) is taken to be */
+/* > here the magnitude of a scomplex number (x,y) is taken to be */
 /* > |x| + |y|. */
 /* > VI is not referenced if WI = 0.0. */
 /* > \endverbatim */
@@ -175,46 +175,58 @@ VR is set to the */
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *ldh, real *wr,
-             real *wi, real *vr, real *vi, real *b, integer *ldb, real *work, real *eps3,
-             real *smlnum, real *bignum, integer *info)
+/** Generated wrapper function */
+void slaein_(logical *rightv, logical *noinit, aocl_int_t *n, real *h__, aocl_int_t *ldh, real *wr,
+             real *wi, real *vr, real *vi, real *b, aocl_int_t *ldb, real *work, real *eps3,
+             real *smlnum, real *bignum, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slaein(rightv, noinit, n, h__, ldh, wr, wi, vr, vi, b, ldb, work, eps3, smlnum,
+                       bignum, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldh_64 = *ldh;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slaein(rightv, noinit, &n_64, h__, &ldh_64, wr, wi, vr, vi, b, &ldb_64, work, eps3,
+                       smlnum, bignum, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slaein(logical *rightv, logical *noinit, aocl_int64_t *n, real *h__,
+                        aocl_int64_t *ldh, real *wr, real *wi, real *vr, real *vi, real *b,
+                        aocl_int64_t *ldb, real *work, real *eps3, real *smlnum, real *bignum,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaein inputs: n %" FLA_IS ",ldh %" FLA_IS ",ldb %" FLA_IS "", *n, *ldh,
                       *ldb);
     /* System generated locals */
-    integer b_dim1, b_offset, h_dim1, h_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t b_dim1, b_offset, h_dim1, h_offset, i__1, i__2, i__3, i__4;
     real r__1, r__2, r__3, r__4;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real w, x, y;
-    integer i1, i2, i3;
+    aocl_int64_t i1, i2, i3;
     real w1, ei, ej, xi, xr, rec;
-    integer its, ierr;
+    aocl_int64_t its, ierr;
     real temp, norm, vmax;
-    extern real snrm2_(integer *, real *, integer *);
     real scale;
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
     char trans[1];
     real vcrit;
-    extern real sasum_(integer *, real *, integer *);
     real rootn, vnorm;
     extern real slapy2_(real *, real *);
     real absbii, absbjj;
-    extern integer isamax_(integer *, real *, integer *);
     extern /* Subroutine */
         void
         sladiv_(real *, real *, real *, real *, real *, real *);
     char normin[1];
     real nrmsml;
-    extern /* Subroutine */
-        void
-        slatrs_(char *, char *, char *, char *, integer *, real *, integer *, real *, real *,
-                real *, integer *);
     real growto;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -286,9 +298,9 @@ void slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *l
         else
         {
             /* Scale supplied initial vector. */
-            vnorm = snrm2_(n, &vr[1], &c__1);
+            vnorm = aocl_blas_snrm2(n, &vr[1], &c__1);
             r__1 = *eps3 * rootn / fla_max(vnorm, nrmsml);
-            sscal_(n, &r__1, &vr[1], &c__1);
+            aocl_blas_sscal(n, &r__1, &vr[1], &c__1);
         }
         if(*rightv)
         {
@@ -392,11 +404,11 @@ void slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *l
             /* Solve U*x = scale*v for a right eigenvector */
             /* or U**T*x = scale*v for a left eigenvector, */
             /* overwriting x on v. */
-            slatrs_("Upper", trans, "Nonunit", normin, n, &b[b_offset], ldb, &vr[1], &scale,
-                    &work[1], &ierr);
+            aocl_lapack_slatrs("Upper", trans, "Nonunit", normin, n, &b[b_offset], ldb, &vr[1],
+                               &scale, &work[1], &ierr);
             *(unsigned char *)normin = 'Y';
             /* Test for sufficient growth in the norm of v. */
-            vnorm = sasum_(n, &vr[1], &c__1);
+            vnorm = aocl_blas_sasum(n, &vr[1], &c__1);
             if(vnorm >= growto * scale)
             {
                 goto L120;
@@ -416,9 +428,9 @@ void slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *l
         /* Failure to find eigenvector in N iterations. */
         *info = 1;
     L120: /* Normalize eigenvector. */
-        i__ = isamax_(n, &vr[1], &c__1);
+        i__ = aocl_blas_isamax(n, &vr[1], &c__1);
         r__2 = 1.f / (r__1 = vr[i__], f2c_abs(r__1));
-        sscal_(n, &r__2, &vr[1], &c__1);
+        aocl_blas_sscal(n, &r__2, &vr[1], &c__1);
     }
     else
     {
@@ -437,12 +449,12 @@ void slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *l
         else
         {
             /* Scale supplied initial vector. */
-            r__1 = snrm2_(n, &vr[1], &c__1);
-            r__2 = snrm2_(n, &vi[1], &c__1);
+            r__1 = aocl_blas_snrm2(n, &vr[1], &c__1);
+            r__2 = aocl_blas_snrm2(n, &vi[1], &c__1);
             norm = slapy2_(&r__1, &r__2);
             rec = *eps3 * rootn / fla_max(norm, nrmsml);
-            sscal_(n, &rec, &vr[1], &c__1);
-            sscal_(n, &rec, &vi[1], &c__1);
+            aocl_blas_sscal(n, &rec, &vr[1], &c__1);
+            aocl_blas_sscal(n, &rec, &vi[1], &c__1);
         }
         if(*rightv)
         {
@@ -509,8 +521,8 @@ void slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *l
                 /* Compute 1-norm of offdiagonal elements of i-th row. */
                 i__2 = *n - i__;
                 i__3 = *n - i__;
-                work[i__] = sasum_(&i__2, &b[i__ + (i__ + 1) * b_dim1], ldb)
-                            + sasum_(&i__3, &b[i__ + 2 + i__ * b_dim1], &c__1);
+                work[i__] = aocl_blas_sasum(&i__2, &b[i__ + (i__ + 1) * b_dim1], ldb)
+                            + aocl_blas_sasum(&i__3, &b[i__ + 2 + i__ * b_dim1], &c__1);
                 /* L170: */
             }
             if(b[*n + *n * b_dim1] == 0.f && b[*n + 1 + *n * b_dim1] == 0.f)
@@ -587,8 +599,8 @@ void slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *l
                 /* Compute 1-norm of offdiagonal elements of j-th column. */
                 i__1 = j - 1;
                 i__2 = j - 1;
-                work[j] = sasum_(&i__1, &b[j * b_dim1 + 1], &c__1)
-                          + sasum_(&i__2, &b[j + 1 + b_dim1], ldb);
+                work[j] = aocl_blas_sasum(&i__1, &b[j * b_dim1 + 1], &c__1)
+                          + aocl_blas_sasum(&i__2, &b[j + 1 + b_dim1], ldb);
                 /* L210: */
             }
             if(b[b_dim1 + 1] == 0.f && b[b_dim1 + 2] == 0.f)
@@ -616,8 +628,8 @@ void slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *l
                 if(work[i__] > vcrit)
                 {
                     rec = 1.f / vmax;
-                    sscal_(n, &rec, &vr[1], &c__1);
-                    sscal_(n, &rec, &vi[1], &c__1);
+                    aocl_blas_sscal(n, &rec, &vr[1], &c__1);
+                    aocl_blas_sscal(n, &rec, &vi[1], &c__1);
                     scale *= rec;
                     vmax = 1.f;
                     vcrit = *bignum;
@@ -654,8 +666,8 @@ void slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *l
                         if(w1 > w * *bignum)
                         {
                             rec = 1.f / w1;
-                            sscal_(n, &rec, &vr[1], &c__1);
-                            sscal_(n, &rec, &vi[1], &c__1);
+                            aocl_blas_sscal(n, &rec, &vr[1], &c__1);
+                            aocl_blas_sscal(n, &rec, &vi[1], &c__1);
                             xr = vr[i__];
                             xi = vi[i__];
                             scale *= rec;
@@ -688,7 +700,7 @@ void slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *l
                 /* L250: */
             }
             /* Test for sufficient growth in the norm of (VR,VI). */
-            vnorm = sasum_(n, &vr[1], &c__1) + sasum_(n, &vi[1], &c__1);
+            vnorm = aocl_blas_sasum(n, &vr[1], &c__1) + aocl_blas_sasum(n, &vi[1], &c__1);
             if(vnorm >= growto * scale)
             {
                 goto L280;
@@ -722,9 +734,9 @@ void slaein_(logical *rightv, logical *noinit, integer *n, real *h__, integer *l
             /* L290: */
         }
         r__1 = 1.f / vnorm;
-        sscal_(n, &r__1, &vr[1], &c__1);
+        aocl_blas_sscal(n, &r__1, &vr[1], &c__1);
         r__1 = 1.f / vnorm;
-        sscal_(n, &r__1, &vi[1], &c__1);
+        aocl_blas_sscal(n, &r__1, &vi[1], &c__1);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

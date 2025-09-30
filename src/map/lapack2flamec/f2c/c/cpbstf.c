@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b9 = -1.f;
 /* > \brief \b CPBSTF */
 /* =========== DOCUMENTATION =========== */
@@ -40,7 +40,7 @@ static real c_b9 = -1.f;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CPBSTF computes a split Cholesky factorization of a complex */
+/* > CPBSTF computes a split Cholesky factorization of a scomplex */
 /* > Hermitian positive definite band matrix A. */
 /* > */
 /* > This routine is designed to be used in conjunction with CHBGST. */
@@ -156,7 +156,26 @@ the diagonal elements of S are real. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cpbstf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, integer *info)
+/** Generated wrapper function */
+void cpbstf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, scomplex *ab, aocl_int_t *ldab,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cpbstf(uplo, n, kd, ab, ldab, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cpbstf(uplo, &n_64, &kd_64, ab, &ldab_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cpbstf(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex *ab,
+                        aocl_int64_t *ldab, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -170,24 +189,16 @@ void cpbstf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, in
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1, i__2, i__3;
+    aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3;
     real r__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer j, m, km;
+    aocl_int64_t j, m, km;
     real ajj;
-    integer kld;
-    extern /* Subroutine */
-        void
-        cher_(char *, integer *, real *, complex *, integer *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t kld;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        clacgv_(integer *, complex *, integer *),
-        csscal_(integer *, real *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -235,7 +246,7 @@ void cpbstf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, in
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPBSTF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CPBSTF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -277,9 +288,9 @@ void cpbstf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, in
             /* Compute elements j-km:j-1 of the j-th column and update the */
             /* the leading submatrix within the band. */
             r__1 = 1.f / ajj;
-            csscal_(&km, &r__1, &ab[*kd + 1 - km + j * ab_dim1], &c__1);
-            cher_("Upper", &km, &c_b9, &ab[*kd + 1 - km + j * ab_dim1], &c__1,
-                  &ab[*kd + 1 + (j - km) * ab_dim1], &kld);
+            aocl_blas_csscal(&km, &r__1, &ab[*kd + 1 - km + j * ab_dim1], &c__1);
+            aocl_blas_cher("Upper", &km, &c_b9, &ab[*kd + 1 - km + j * ab_dim1], &c__1,
+                           &ab[*kd + 1 + (j - km) * ab_dim1], &kld);
             /* L10: */
         }
         /* Factorize the updated submatrix A(1:m,1:m) as U**H*U. */
@@ -309,11 +320,11 @@ void cpbstf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, in
             if(km > 0)
             {
                 r__1 = 1.f / ajj;
-                csscal_(&km, &r__1, &ab[*kd + (j + 1) * ab_dim1], &kld);
-                clacgv_(&km, &ab[*kd + (j + 1) * ab_dim1], &kld);
-                cher_("Upper", &km, &c_b9, &ab[*kd + (j + 1) * ab_dim1], &kld,
-                      &ab[*kd + 1 + (j + 1) * ab_dim1], &kld);
-                clacgv_(&km, &ab[*kd + (j + 1) * ab_dim1], &kld);
+                aocl_blas_csscal(&km, &r__1, &ab[*kd + (j + 1) * ab_dim1], &kld);
+                aocl_lapack_clacgv(&km, &ab[*kd + (j + 1) * ab_dim1], &kld);
+                aocl_blas_cher("Upper", &km, &c_b9, &ab[*kd + (j + 1) * ab_dim1], &kld,
+                               &ab[*kd + 1 + (j + 1) * ab_dim1], &kld);
+                aocl_lapack_clacgv(&km, &ab[*kd + (j + 1) * ab_dim1], &kld);
             }
             /* L20: */
         }
@@ -344,11 +355,11 @@ void cpbstf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, in
             /* Compute elements j-km:j-1 of the j-th row and update the */
             /* trailing submatrix within the band. */
             r__1 = 1.f / ajj;
-            csscal_(&km, &r__1, &ab[km + 1 + (j - km) * ab_dim1], &kld);
-            clacgv_(&km, &ab[km + 1 + (j - km) * ab_dim1], &kld);
-            cher_("Lower", &km, &c_b9, &ab[km + 1 + (j - km) * ab_dim1], &kld,
-                  &ab[(j - km) * ab_dim1 + 1], &kld);
-            clacgv_(&km, &ab[km + 1 + (j - km) * ab_dim1], &kld);
+            aocl_blas_csscal(&km, &r__1, &ab[km + 1 + (j - km) * ab_dim1], &kld);
+            aocl_lapack_clacgv(&km, &ab[km + 1 + (j - km) * ab_dim1], &kld);
+            aocl_blas_cher("Lower", &km, &c_b9, &ab[km + 1 + (j - km) * ab_dim1], &kld,
+                           &ab[(j - km) * ab_dim1 + 1], &kld);
+            aocl_lapack_clacgv(&km, &ab[km + 1 + (j - km) * ab_dim1], &kld);
             /* L30: */
         }
         /* Factorize the updated submatrix A(1:m,1:m) as U**H*U. */
@@ -378,9 +389,9 @@ void cpbstf_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, in
             if(km > 0)
             {
                 r__1 = 1.f / ajj;
-                csscal_(&km, &r__1, &ab[j * ab_dim1 + 2], &c__1);
-                cher_("Lower", &km, &c_b9, &ab[j * ab_dim1 + 2], &c__1, &ab[(j + 1) * ab_dim1 + 1],
-                      &kld);
+                aocl_blas_csscal(&km, &r__1, &ab[j * ab_dim1 + 2], &c__1);
+                aocl_blas_cher("Lower", &km, &c_b9, &ab[j * ab_dim1 + 2], &c__1,
+                               &ab[(j + 1) * ab_dim1 + 1], &kld);
             }
             /* L40: */
         }

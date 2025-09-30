@@ -24,18 +24,159 @@
   GEQRF computes a QR factorization of a M-by-N matrix A: A = Q * R.
 */
 
-extern void dgeqrf_fla(integer *m, integer *n, doublereal *a, integer *lda, doublereal *tau,
-                       doublereal *work, integer *lwork, integer *info);
-extern void sgeqrf_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *work,
-                       integer *lwork, integer *info);
-extern void sgeqrfp_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *work,
-                        integer *lwork, integer *info);
-extern void dgeqrfp_fla(integer *m, integer *n, doublereal *a, integer *lda, doublereal *tau,
-                        doublereal *work, integer *lwork, integer *info);
-extern void sgeqr2p_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *work,
-                        integer *info);
-extern void dgeqr2p_fla(integer *m, integer *n, doublereal *a, integer *lda, doublereal *tau,
-                        doublereal *work, integer *info);
+/** Generated wrapper function */
+void sgeqrf_(aocl_int_t *m, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, real *buff_t, real *buff_w, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgeqrf(m, n, buff_A, ldim_A, buff_t, buff_w, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sgeqrf(&m_64, &n_64, buff_A, &ldim_A_64, buff_t, buff_w, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dgeqrf_(aocl_int_t *m, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_t, doublereal *buff_w, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgeqrf(m, n, buff_A, ldim_A, buff_t, buff_w, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgeqrf(&m_64, &n_64, buff_A, &ldim_A_64, buff_t, buff_w, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void sgeqr2_(aocl_int_t *m, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, real *buff_t, real *buff_w, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgeqr2(m, n, buff_A, ldim_A, buff_t, buff_w, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sgeqr2(&m_64, &n_64, buff_A, &ldim_A_64, buff_t, buff_w, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dgeqr2_(aocl_int_t *m, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_t, doublereal *buff_w, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgeqr2(m, n, buff_A, ldim_A, buff_t, buff_w, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgeqr2(&m_64, &n_64, buff_A, &ldim_A_64, buff_t, buff_w, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void sgeqrfp_(aocl_int_t *m, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, real *buff_t, real *buff_w, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgeqrfp(m, n, buff_A, ldim_A, buff_t, buff_w, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sgeqrfp(&m_64, &n_64, buff_A, &ldim_A_64, buff_t, buff_w, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dgeqrfp_(aocl_int_t *m, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_t, doublereal *buff_w, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgeqrfp(m, n, buff_A, ldim_A, buff_t, buff_w, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgeqrfp(&m_64, &n_64, buff_A, &ldim_A_64, buff_t, buff_w, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void sgeqr2p_(aocl_int_t *m, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, real *buff_t, real *buff_w, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgeqr2p(m, n, buff_A, ldim_A, buff_t, buff_w, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sgeqr2p(&m_64, &n_64, buff_A, &ldim_A_64, buff_t, buff_w, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dgeqr2p_(aocl_int_t *m, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_t, doublereal *buff_w, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgeqr2p(m, n, buff_A, ldim_A, buff_t, buff_w, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgeqr2p(&m_64, &n_64, buff_A, &ldim_A_64, buff_t, buff_w, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+
+extern void dgeqrf_fla(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *tau,
+                       doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info);
+extern void sgeqrf_fla(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *tau, real *work,
+                       aocl_int64_t *lwork, aocl_int64_t *info);
+extern void sgeqrfp_fla(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *tau, real *work,
+                        aocl_int64_t *lwork, aocl_int64_t *info);
+extern void dgeqrfp_fla(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *tau,
+                        doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info);
+extern void sgeqr2p_fla(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *tau, real *work,
+                        aocl_int64_t *info);
+extern void dgeqr2p_fla(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *tau,
+                        doublereal *work, aocl_int64_t *info);
 
 extern void DTL_Trace(uint8 ui8LogLevel, uint8 ui8LogType, const int8 *pi8FileName,
                       const int8 *pi8FunctionName, uint32 ui32LineNumber, const int8 *pi8Message);
@@ -44,15 +185,15 @@ extern void DTL_Trace(uint8 ui8LogLevel, uint8 ui8LogType, const int8 *pi8FileNa
 
 // GEQRF and GEQR2
 #define LAPACK_geqrf(prefix)                                                                 \
-    void F77_##prefix##geqrf(integer *m, integer *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-                             integer * ldim_A, PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,       \
-                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * lwork,        \
-                             integer * info)
+    void aocl_lapack_##prefix##geqrf(aocl_int64_t *m, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
+                             aocl_int64_t * ldim_A, PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,       \
+                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * lwork,        \
+                             aocl_int64_t * info)
 
 #define LAPACK_geqrf_body(prefix)                            \
     FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);   \
     FLA_Obj A, t, T;                                         \
-    integer min_m_n = fla_min(*m, *n);                       \
+    aocl_int64_t min_m_n = fla_min(*m, *n);                       \
     FLA_Error init_result;                                   \
                                                              \
     FLA_Init_safe(&init_result);                             \
@@ -186,9 +327,9 @@ LAPACK_geqrf(z)
 #endif
 
 #define LAPACK_geqr2(prefix)                                                                 \
-    void F77_##prefix##geqr2(integer *m, integer *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-                             integer * ldim_A, PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,       \
-                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * info)
+    void aocl_lapack_##prefix##geqr2(aocl_int64_t *m, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
+                             aocl_int64_t * ldim_A, PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,       \
+                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * info)
 
 LAPACK_geqr2(s)
 {
@@ -276,10 +417,10 @@ LAPACK_geqr2(z)
 
 // GEQRFP and GEQR2P
 #define LAPACK_geqrfp(prefix)                                                                 \
-    void F77_##prefix##geqrfp(integer *m, integer *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-                              integer * ldim_A, PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,       \
-                              PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * lwork,        \
-                              integer * info)
+    void aocl_lapack_##prefix##geqrfp(aocl_int64_t *m, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
+                              aocl_int64_t * ldim_A, PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,       \
+                              PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * lwork,        \
+                              aocl_int64_t * info)
 LAPACK_geqrfp(s)
 {
     AOCL_DTL_TRACE_LOG_INIT
@@ -381,9 +522,9 @@ LAPACK_geqrfp(z)
 #endif
 
 #define LAPACK_geqr2p(prefix)                                                                 \
-    void F77_##prefix##geqr2p(integer *m, integer *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-                              integer * ldim_A, PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,       \
-                              PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * info)
+    void aocl_lapack_##prefix##geqr2p(aocl_int64_t *m, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
+                              aocl_int64_t * ldim_A, PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,       \
+                              PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * info)
 
 LAPACK_geqr2p(s)
 {

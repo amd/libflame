@@ -99,7 +99,23 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clapmt_(logical *forwrd, integer *m, integer *n, complex *x, integer *ldx, integer *k)
+/** Generated wrapper function */
+void clapmt_(logical *forwrd, aocl_int_t *m, aocl_int_t *n, scomplex *x, aocl_int_t *ldx,
+             aocl_int_t *k)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clapmt(forwrd, m, n, x, ldx, k);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldx_64 = *ldx;
+
+    aocl_lapack_clapmt(forwrd, &m_64, &n_64, x, &ldx_64, k);
+#endif
+}
+
+void aocl_lapack_clapmt(logical *forwrd, aocl_int64_t *m, aocl_int64_t *n, scomplex *x,
+                        aocl_int64_t *ldx, aocl_int_t *k)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -112,10 +128,10 @@ void clapmt_(logical *forwrd, integer *m, integer *n, complex *x, integer *ldx, 
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer x_dim1, x_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t x_dim1, x_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer i__, j, ii, in;
-    complex temp;
+    aocl_int64_t i__, j, ii, in;
+    scomplex temp;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -183,7 +199,7 @@ void clapmt_(logical *forwrd, integer *m, integer *n, complex *x, integer *ldx, 
             in = k[in];
             goto L20;
         L40: /* L60: */
-             ;
+            ;
         }
     }
     else
@@ -222,7 +238,7 @@ void clapmt_(logical *forwrd, integer *m, integer *n, complex *x, integer *ldx, 
             j = k[j];
             goto L80;
         L100: /* L110: */
-              ;
+            ;
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

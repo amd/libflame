@@ -39,7 +39,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZTGEXC reorders the generalized Schur decomposition of a complex */
+/* > ZTGEXC reorders the generalized Schur decomposition of a scomplex */
 /* > matrix pair (A,B), using an unitary equivalence transformation */
 /* > (A, B) := Q * (A, B) * Z**H, so that the diagonal block of (A, B) with */
 /* > row index IFST is moved to row ILST. */
@@ -200,24 +200,45 @@ Computing Eigenspaces with Specified */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ztgexc_(logical *wantq, logical *wantz, integer *n, doublecomplex *a, integer *lda,
-             doublecomplex *b, integer *ldb, doublecomplex *q, integer *ldq, doublecomplex *z__,
-             integer *ldz, integer *ifst, integer *ilst, integer *info)
+/** Generated wrapper function */
+void ztgexc_(logical *wantq, logical *wantz, aocl_int_t *n, dcomplex *a, aocl_int_t *lda,
+             dcomplex *b, aocl_int_t *ldb, dcomplex *q, aocl_int_t *ldq,
+             dcomplex *z__, aocl_int_t *ldz, aocl_int_t *ifst, aocl_int_t *ilst,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ztgexc(wantq, wantz, n, a, lda, b, ldb, q, ldq, z__, ldz, ifst, ilst, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t ifst_64 = *ifst;
+    aocl_int64_t ilst_64 = *ilst;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ztgexc(wantq, wantz, &n_64, a, &lda_64, b, &ldb_64, q, &ldq_64, z__, &ldz_64,
+                       &ifst_64, &ilst_64, &info_64);
+
+    *ilst = (aocl_int_t)ilst_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ztgexc(logical *wantq, logical *wantz, aocl_int64_t *n, dcomplex *a,
+                        aocl_int64_t *lda, dcomplex *b, aocl_int64_t *ldb, dcomplex *q,
+                        aocl_int64_t *ldq, dcomplex *z__, aocl_int64_t *ldz,
+                        aocl_int64_t *ifst, aocl_int64_t *ilst, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztgexc inputs: n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS
                       ", ldz %" FLA_IS ", ifst %" FLA_IS ", ilst %" FLA_IS "",
                       *n, *lda, *ldb, *ldq, *ldz, *ifst, *ilst);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1;
     /* Local variables */
-    integer here;
-    extern /* Subroutine */
-        void
-        ztgex2_(logical *, logical *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *,
-                integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t here;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -281,7 +302,7 @@ void ztgexc_(logical *wantq, logical *wantz, integer *n, doublecomplex *a, integ
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZTGEXC", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZTGEXC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -300,8 +321,8 @@ void ztgexc_(logical *wantq, logical *wantz, integer *n, doublecomplex *a, integ
     {
         here = *ifst;
     L10: /* Swap with next one below */
-        ztgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
-                &z__[z_offset], ldz, &here, info);
+        aocl_lapack_ztgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
+                           &z__[z_offset], ldz, &here, info);
         if(*info != 0)
         {
             *ilst = here;
@@ -319,8 +340,8 @@ void ztgexc_(logical *wantq, logical *wantz, integer *n, doublecomplex *a, integ
     {
         here = *ifst - 1;
     L20: /* Swap with next one above */
-        ztgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
-                &z__[z_offset], ldz, &here, info);
+        aocl_lapack_ztgex2(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
+                           &z__[z_offset], ldz, &here, info);
         if(*info != 0)
         {
             *ilst = here;

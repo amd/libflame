@@ -78,16 +78,26 @@
 /* > \ingroup rscl */
 /* ===================================================================== */
 /* Subroutine */
-void srscl_(integer *n, real *sa, real *sx, integer *incx)
+/** Generated wrapper function */
+void srscl_(aocl_int_t *n, real *sa, real *sx, aocl_int_t *incx)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_srscl(n, sa, sx, incx);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+
+    aocl_lapack_srscl(&n_64, sa, sx, &incx_64);
+#endif
+}
+
+void aocl_lapack_srscl(aocl_int64_t *n, real *sa, real *sx, aocl_int64_t *incx)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("srscl inputs: n %" FLA_IS ", incx %" FLA_IS " ", *n, *incx);
     real mul, cden;
     logical done;
     real cnum, cden1, cnum1;
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
     extern real slamch_(char *);
     real bignum, smlnum;
     /* -- LAPACK auxiliary routine -- */
@@ -148,7 +158,7 @@ L10:
         done = TRUE_;
     }
     /* Scale the vector X by MUL */
-    sscal_(n, &mul, &sx[1], incx);
+    aocl_blas_sscal(n, &mul, &sx[1], incx);
     if(!done)
     {
         goto L10;

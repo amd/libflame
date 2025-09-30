@@ -4,14 +4,14 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {0., 0.};
-static doublecomplex c_b2 = {1., 0.};
-static integer c__2 = 2;
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static integer c__4 = 4;
+static dcomplex c_b1 = {{0.}, {0.}};
+static dcomplex c_b2 = {{1.}, {0.}};
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__4 = 4;
 static doublereal c_b23 = 1.;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief <b> ZHBEVD_2STAGE computes the eigenvalues and, optionally, the left and/or right
  * eigenvectors for OTHER matrices</b> */
 /* @precisions fortran z -> s d c */
@@ -54,7 +54,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > ZHBEVD_2STAGE computes all the eigenvalues and, optionally, eigenvectors of */
-/* > a complex Hermitian band matrix A using the 2stage technique for */
+/* > a scomplex Hermitian band matrix A using the 2stage technique for */
 /* > the reduction to tridiagonal. If eigenvectors are desired, it */
 /* > uses a divide and conquer algorithm. */
 /* > */
@@ -261,76 +261,72 @@ i */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void zhbevd_2stage_(char *jobz, char *uplo, integer *n, integer *kd, doublecomplex *ab,
-                    integer *ldab, doublereal *w, doublecomplex *z__, integer *ldz,
-                    doublecomplex *work, integer *lwork, doublereal *rwork, integer *lrwork,
-                    integer *iwork, integer *liwork, integer *info)
+/** Generated wrapper function */
+void zhbevd_2stage_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *kd, dcomplex *ab,
+                    aocl_int_t *ldab, doublereal *w, dcomplex *z__, aocl_int_t *ldz,
+                    dcomplex *work, aocl_int_t *lwork, doublereal *rwork, aocl_int_t *lrwork,
+                    aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zhbevd_2stage(jobz, uplo, n, kd, ab, ldab, w, z__, ldz, work, lwork, rwork, lrwork,
+                              iwork, liwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t lrwork_64 = *lrwork;
+    aocl_int64_t liwork_64 = *liwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zhbevd_2stage(jobz, uplo, &n_64, &kd_64, ab, &ldab_64, w, z__, &ldz_64, work,
+                              &lwork_64, rwork, &lrwork_64, iwork, &liwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zhbevd_2stage(char *jobz, char *uplo, aocl_int64_t *n, aocl_int64_t *kd,
+                               dcomplex *ab, aocl_int64_t *ldab, doublereal *w,
+                               dcomplex *z__, aocl_int64_t *ldz, dcomplex *work,
+                               aocl_int64_t *lwork, doublereal *rwork, aocl_int64_t *lrwork,
+                               aocl_int_t *iwork, aocl_int64_t *liwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhbevd_2stage inputs: jobz %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS
                       ", ldab %" FLA_IS ", ldz %" FLA_IS "",
                       *jobz, *uplo, *n, *kd, *ldab, *ldz);
     /* System generated locals */
-    integer ab_dim1, ab_offset, z_dim1, z_offset, i__1, i__2;
+    aocl_int64_t ab_dim1, ab_offset, z_dim1, z_offset, i__1, i__2;
     doublereal d__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer ib;
+    aocl_int64_t ib;
     doublereal eps;
-    integer inde;
-    extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *,
-                                 integer *);
+    aocl_int64_t inde;
     doublereal anrm;
-    integer imax;
-    extern /* Subroutine */
-        void
-        zhetrd_hb2st_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *,
-                      doublereal *, doublereal *, doublecomplex *, integer *, doublecomplex *,
-                      integer *, integer *);
+    aocl_int64_t imax;
     doublereal rmin, rmax;
-    integer llwk2;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
+    aocl_int64_t llwk2;
     doublereal sigma;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo, indwk, lhtrd;
-    extern /* Subroutine */
-        void
-        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
-               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
-    integer lwmin;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo, indwk, lhtrd;
+    aocl_int64_t lwmin;
     logical lower;
-    integer lwtrd, llrwk;
+    aocl_int64_t lwtrd, llrwk;
     logical wantz;
-    integer indwk2;
+    aocl_int64_t indwk2;
     extern doublereal dlamch_(char *);
-    integer iscale;
+    aocl_int64_t iscale;
     doublereal safmin;
-    extern doublereal zlanhb_(char *, char *, integer *, integer *, doublecomplex *, integer *,
-                              doublereal *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
-    extern /* Subroutine */
-        void
-        dsterf_(integer *, doublereal *, doublereal *, integer *),
-        zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublecomplex *, integer *, integer *),
-        zstedc_(char *, integer *, doublereal *, doublereal *, doublecomplex *, integer *,
-                doublecomplex *, integer *, doublereal *, integer *, integer *, integer *,
-                integer *);
-    integer indrwk, liwmin;
-    extern /* Subroutine */
-        void
-        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *);
-    integer lrwmin, llwork;
+    aocl_int64_t indrwk, liwmin;
+    aocl_int64_t lrwmin, llwork;
     doublereal smlnum;
     logical lquery;
-    integer indhous;
+    aocl_int64_t indhous;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -375,9 +371,9 @@ void zhbevd_2stage_(char *jobz, char *uplo, integer *n, integer *kd, doublecompl
     }
     else
     {
-        ib = ilaenv2stage_(&c__2, "ZHETRD_HB2ST", jobz, n, kd, &c_n1, &c_n1);
-        lhtrd = ilaenv2stage_(&c__3, "ZHETRD_HB2ST", jobz, n, kd, &ib, &c_n1);
-        lwtrd = ilaenv2stage_(&c__4, "ZHETRD_HB2ST", jobz, n, kd, &ib, &c_n1);
+        ib = aocl_lapack_ilaenv2stage(&c__2, "ZHETRD_HB2ST", jobz, n, kd, &c_n1, &c_n1);
+        lhtrd = aocl_lapack_ilaenv2stage(&c__3, "ZHETRD_HB2ST", jobz, n, kd, &ib, &c_n1);
+        lwtrd = aocl_lapack_ilaenv2stage(&c__4, "ZHETRD_HB2ST", jobz, n, kd, &ib, &c_n1);
         if(wantz)
         {
             /* Computing 2nd power */
@@ -427,7 +423,7 @@ void zhbevd_2stage_(char *jobz, char *uplo, integer *n, integer *kd, doublecompl
         work[1].r = (doublereal)lwmin;
         work[1].i = 0.; // , expr subst
         rwork[1] = (doublereal)lrwmin;
-        iwork[1] = liwmin;
+        iwork[1] = (aocl_int_t)(liwmin);
         if(*lwork < lwmin && !lquery)
         {
             *info = -11;
@@ -444,7 +440,7 @@ void zhbevd_2stage_(char *jobz, char *uplo, integer *n, integer *kd, doublecompl
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHBEVD_2STAGE", &i__1, (ftnlen)13);
+        aocl_blas_xerbla("ZHBEVD_2STAGE", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -480,7 +476,7 @@ void zhbevd_2stage_(char *jobz, char *uplo, integer *n, integer *kd, doublecompl
     rmin = sqrt(smlnum);
     rmax = sqrt(bignum);
     /* Scale matrix to allowable range, if necessary. */
-    anrm = zlanhb_("M", uplo, n, kd, &ab[ab_offset], ldab, &rwork[1]);
+    anrm = aocl_lapack_zlanhb("M", uplo, n, kd, &ab[ab_offset], ldab, &rwork[1]);
     iscale = 0;
     if(anrm > 0. && anrm < rmin)
     {
@@ -496,11 +492,11 @@ void zhbevd_2stage_(char *jobz, char *uplo, integer *n, integer *kd, doublecompl
     {
         if(lower)
         {
-            zlascl_("B", kd, kd, &c_b23, &sigma, n, n, &ab[ab_offset], ldab, info);
+            aocl_lapack_zlascl("B", kd, kd, &c_b23, &sigma, n, n, &ab[ab_offset], ldab, info);
         }
         else
         {
-            zlascl_("Q", kd, kd, &c_b23, &sigma, n, n, &ab[ab_offset], ldab, info);
+            aocl_lapack_zlascl("Q", kd, kd, &c_b23, &sigma, n, n, &ab[ab_offset], ldab, info);
         }
     }
     /* Call ZHBTRD_HB2ST to reduce Hermitian band matrix to tridiagonal form. */
@@ -512,19 +508,20 @@ void zhbevd_2stage_(char *jobz, char *uplo, integer *n, integer *kd, doublecompl
     llwork = *lwork - indwk + 1;
     indwk2 = indwk + *n * *n;
     llwk2 = *lwork - indwk2 + 1;
-    zhetrd_hb2st_("N", jobz, uplo, n, kd, &ab[ab_offset], ldab, &w[1], &rwork[inde], &work[indhous],
+    aocl_lapack_zhetrd_hb2st("N", jobz, uplo, n, kd, &ab[ab_offset], ldab, &w[1], &rwork[inde], &work[indhous],
                   &lhtrd, &work[indwk], &llwork, &iinfo);
     /* For eigenvalues only, call DSTERF. For eigenvectors, call ZSTEDC. */
     if(!wantz)
     {
-        dsterf_(n, &w[1], &rwork[inde], info);
+        aocl_lapack_dsterf(n, &w[1], &rwork[inde], info);
     }
     else
     {
-        zstedc_("I", n, &w[1], &rwork[inde], &work[1], n, &work[indwk2], &llwk2, &rwork[indrwk],
-                &llrwk, &iwork[1], liwork, info);
-        zgemm_("N", "N", n, n, n, &c_b2, &z__[z_offset], ldz, &work[1], n, &c_b1, &work[indwk2], n);
-        zlacpy_("A", n, n, &work[indwk2], n, &z__[z_offset], ldz);
+        aocl_lapack_zstedc("I", n, &w[1], &rwork[inde], &work[1], n, &work[indwk2], &llwk2,
+                           &rwork[indrwk], &llrwk, &iwork[1], liwork, info);
+        aocl_blas_zgemm("N", "N", n, n, n, &c_b2, &z__[z_offset], ldz, &work[1], n, &c_b1,
+                        &work[indwk2], n);
+        aocl_lapack_zlacpy("A", n, n, &work[indwk2], n, &z__[z_offset], ldz);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
     if(iscale == 1)
@@ -538,12 +535,12 @@ void zhbevd_2stage_(char *jobz, char *uplo, integer *n, integer *kd, doublecompl
             imax = *info - 1;
         }
         d__1 = 1. / sigma;
-        dscal_(&imax, &d__1, &w[1], &c__1);
+        aocl_blas_dscal(&imax, &d__1, &w[1], &c__1);
     }
     work[1].r = (doublereal)lwmin;
     work[1].i = 0.; // , expr subst
     rwork[1] = (doublereal)lrwmin;
-    iwork[1] = liwmin;
+    iwork[1] = (aocl_int_t)(liwmin);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZHBEVD_2STAGE */

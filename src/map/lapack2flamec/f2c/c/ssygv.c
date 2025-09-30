@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 static real c_b16 = 1.f;
 /* > \brief \b SSYGV */
 /* =========== DOCUMENTATION =========== */
@@ -178,43 +178,46 @@ the routine */
 /* > \ingroup hegv */
 /* ===================================================================== */
 /* Subroutine */
-void ssygv_(integer *itype, char *jobz, char *uplo, integer *n, real *a, integer *lda, real *b,
-            integer *ldb, real *w, real *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void ssygv_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda,
+            real *b, aocl_int_t *ldb, real *w, real *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ssygv(itype, jobz, uplo, n, a, lda, b, ldb, w, work, lwork, info);
+#else
+    aocl_int64_t itype_64 = *itype;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ssygv(&itype_64, jobz, uplo, &n_64, a, &lda_64, b, &ldb_64, w, work, &lwork_64,
+                      &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ssygv(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_t *n, real *a,
+                       aocl_int64_t *lda, real *b, aocl_int64_t *ldb, real *w, real *work,
+                       aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF(
-             "ssygv inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS
-             ", ldb %" FLA_IS "",
-             *itype, *jobz, *uplo, *n, *lda, *ldb);
+    AOCL_DTL_SNPRINTF("ssygv inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS
+                      ", lda %" FLA_IS ", ldb %" FLA_IS "",
+                      *itype, *jobz, *uplo, *n, *lda, *ldb);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     /* Local variables */
-    integer nb, neig;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t nb, neig;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     char trans[1];
     logical upper;
-    extern /* Subroutine */
-        void
-        strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
-               real *, integer *);
     logical wantz;
-    extern /* Subroutine */
-        void
-        strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
-               real *, integer *),
-        ssyev_(char *, char *, integer *, real *, integer *, real *, real *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer lwkmin;
-    extern /* Subroutine */
-        void
-        spotrf_(char *, integer *, real *, integer *, integer *);
-    integer lwkopt;
+    aocl_int64_t lwkmin;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern /* Subroutine */
-        void
-        ssygst_(integer *, char *, integer *, real *, integer *, real *, integer *, integer *);
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -279,12 +282,12 @@ void ssygv_(integer *itype, char *jobz, char *uplo, integer *n, real *a, integer
         i__1 = 1;
         i__2 = *n * 3 - 1; // , expr subst
         lwkmin = fla_max(i__1, i__2);
-        nb = ilaenv_(&c__1, "SSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
+        nb = aocl_lapack_ilaenv(&c__1, "SSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
         /* Computing MAX */
         i__1 = lwkmin;
         i__2 = (nb + 2) * *n; // , expr subst
         lwkopt = fla_max(i__1, i__2);
-        work[1] = sroundup_lwork(&lwkopt);
+        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
         if(*lwork < lwkmin && !lquery)
         {
             *info = -11;
@@ -293,7 +296,7 @@ void ssygv_(integer *itype, char *jobz, char *uplo, integer *n, real *a, integer
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSYGV ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SSYGV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -309,7 +312,7 @@ void ssygv_(integer *itype, char *jobz, char *uplo, integer *n, real *a, integer
         return;
     }
     /* Form a Cholesky factorization of B. */
-    spotrf_(uplo, n, &b[b_offset], ldb, info);
+    aocl_lapack_spotrf(uplo, n, &b[b_offset], ldb, info);
     if(*info != 0)
     {
         *info = *n + *info;
@@ -317,8 +320,8 @@ void ssygv_(integer *itype, char *jobz, char *uplo, integer *n, real *a, integer
         return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
-    ssygst_(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
-    ssyev_(jobz, uplo, n, &a[a_offset], lda, &w[1], &work[1], lwork, info);
+    aocl_lapack_ssygst(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
+    aocl_lapack_ssyev(jobz, uplo, n, &a[a_offset], lda, &w[1], &work[1], lwork, info);
     if(wantz)
     {
         /* Backtransform eigenvectors to the original problem. */
@@ -340,8 +343,8 @@ void ssygv_(integer *itype, char *jobz, char *uplo, integer *n, real *a, integer
             {
                 *(unsigned char *)trans = 'T';
             }
-            strsm_("Left", uplo, trans, "Non-unit", n, &neig, &c_b16, &b[b_offset], ldb,
-                   &a[a_offset], lda);
+            aocl_blas_strsm("Left", uplo, trans, "Non-unit", n, &neig, &c_b16, &b[b_offset], ldb,
+                            &a[a_offset], lda);
         }
         else if(*itype == 3)
         {
@@ -356,11 +359,11 @@ void ssygv_(integer *itype, char *jobz, char *uplo, integer *n, real *a, integer
             {
                 *(unsigned char *)trans = 'N';
             }
-            strmm_("Left", uplo, trans, "Non-unit", n, &neig, &c_b16, &b[b_offset], ldb,
-                   &a[a_offset], lda);
+            aocl_blas_strmm("Left", uplo, trans, "Non-unit", n, &neig, &c_b16, &b[b_offset], ldb,
+                            &a[a_offset], lda);
         }
     }
-    work[1] = sroundup_lwork(&lwkopt);
+    work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYGV */

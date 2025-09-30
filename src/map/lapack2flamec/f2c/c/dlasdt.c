@@ -100,19 +100,38 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlasdt_(integer *n, integer *lvl, integer *nd, integer *inode, integer *ndiml, integer *ndimr,
-             integer *msub)
+/** Generated wrapper function */
+void dlasdt_(aocl_int_t *n, aocl_int_t *lvl, aocl_int_t *nd, aocl_int_t *inode, aocl_int_t *ndiml,
+             aocl_int_t *ndimr, aocl_int_t *msub)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlasdt(n, lvl, nd, inode, ndiml, ndimr, msub);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lvl_64 = *lvl;
+    aocl_int64_t nd_64 = *nd;
+    aocl_int64_t msub_64 = *msub;
+
+    aocl_lapack_dlasdt(&n_64, &lvl_64, &nd_64, inode, ndiml, ndimr, &msub_64);
+
+    *lvl = (aocl_int_t)lvl_64;
+    *nd = (aocl_int_t)nd_64;
+#endif
+}
+
+void aocl_lapack_dlasdt(aocl_int64_t *n, aocl_int64_t *lvl, aocl_int64_t *nd, aocl_int_t *inode,
+                        aocl_int_t *ndiml, aocl_int_t *ndimr, aocl_int64_t *msub)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasdt inputs: n %" FLA_IS ", msub %" FLA_IS "", *n, *msub);
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     /* Builtin functions */
     double log(doublereal);
     /* Local variables */
-    integer i__, il, ir, maxn;
+    aocl_int64_t i__, il, ir, maxn;
     doublereal temp;
-    integer nlvl, llst, ncrnt;
+    aocl_int64_t nlvl, llst, ncrnt;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -139,9 +158,9 @@ void dlasdt_(integer *n, integer *lvl, integer *nd, integer *inode, integer *ndi
     temp = log((doublereal)maxn / (doublereal)(*msub + 1)) / log(2.);
     *lvl = (integer)temp + 1;
     i__ = *n / 2;
-    inode[1] = i__ + 1;
-    ndiml[1] = i__;
-    ndimr[1] = *n - i__ - 1;
+    inode[1] = (aocl_int_t)(i__ + 1);
+    ndiml[1] = (aocl_int_t)(i__);
+    ndimr[1] = (aocl_int_t)(*n - i__ - 1);
     il = 0;
     ir = 1;
     llst = 1;

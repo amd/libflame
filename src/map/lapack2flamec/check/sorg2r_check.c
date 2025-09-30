@@ -1,11 +1,11 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int sorg2r_check(integer *m, integer *n, integer *k, float *a, integer *lda, float *tau,
-                 float *work, integer *info)
+int sorg2r_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, float *a, aocl_int64_t *lda, float *tau,
+                 float *work, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, i__1;
 
     /* Parameter adjustments */
     a_dim1 = *lda;
@@ -34,7 +34,7 @@ int sorg2r_check(integer *m, integer *n, integer *k, float *a, integer *lda, flo
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SORG2R", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SORG2R", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

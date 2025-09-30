@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b6 = 0.;
-static integer c__0 = 0;
+static aocl_int64_t c__0 = 0;
 static doublereal c_b11 = 1.;
 /* > \brief \b DLALSD uses the singular value decomposition of A to solve the least squares problem.
  */
@@ -179,75 +179,63 @@ in this case a minimum norm solution is returned. */
 /* > Osni Marques, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-void dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal *d__, doublereal *e,
-             doublereal *b, integer *ldb, doublereal *rcond, integer *rank, doublereal *work,
-             integer *iwork, integer *info)
+/** Generated wrapper function */
+void dlalsd_(char *uplo, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__,
+             doublereal *e, doublereal *b, aocl_int_t *ldb, doublereal *rcond, aocl_int_t *rank,
+             doublereal *work, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlalsd(uplo, smlsiz, n, nrhs, d__, e, b, ldb, rcond, rank, work, iwork, info);
+#else
+    aocl_int64_t smlsiz_64 = *smlsiz;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t rank_64 = *rank;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlalsd(uplo, &smlsiz_64, &n_64, &nrhs_64, d__, e, b, &ldb_64, rcond, &rank_64, work,
+                       iwork, &info_64);
+
+    *rank = (aocl_int_t)rank_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_int64_t *nrhs,
+                        doublereal *d__, doublereal *e, doublereal *b, aocl_int64_t *ldb,
+                        doublereal *rcond, aocl_int64_t *rank, doublereal *work, aocl_int_t *iwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlalsd inputs: uplo %c, smlsiz %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS
                       ", ldb %" FLA_IS ", rank %" FLA_IS "",
                       *uplo, *smlsiz, *n, *nrhs, *ldb, *rank);
     /* System generated locals */
-    integer b_dim1, b_offset, i__1, i__2;
+    aocl_int64_t b_dim1, b_offset, i__1, i__2;
     doublereal d__1;
     /* Builtin functions */
     double log(doublereal), d_sign(doublereal *, doublereal *);
     /* Local variables */
-    integer c__, i__, j, k;
+    aocl_int64_t c__, i__, j, k;
     doublereal r__;
-    integer s, u, z__;
+    aocl_int64_t s, u, z__;
     doublereal cs;
-    integer bx;
+    aocl_int64_t bx;
     doublereal sn;
-    integer st, vt, nm1, st1;
+    aocl_int64_t st, vt, nm1, st1;
     doublereal eps;
-    integer iwk;
+    aocl_int64_t iwk;
     doublereal tol;
-    integer difl, difr;
+    aocl_int64_t difl, difr;
     doublereal rcnd;
-    integer perm, nsub;
-    extern /* Subroutine */
-        void
-        drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-              doublereal *);
-    integer nlvl, sqre, bxst;
-    extern /* Subroutine */
-        void
-        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *),
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
-    integer poles, sizei, nsize, nwork, icmpq1, icmpq2;
+    aocl_int64_t perm, nsub;
+    aocl_int64_t nlvl, sqre, bxst;
+    aocl_int64_t poles, sizei, nsize, nwork, icmpq1, icmpq2;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        dlasda_(integer *, integer *, integer *, integer *, doublereal *, doublereal *,
-                doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                doublereal *, doublereal *, integer *, integer *, integer *, integer *,
-                doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *),
-        dlalsa_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *,
-                integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-                doublereal *, doublereal *, doublereal *, integer *, integer *, integer *,
-                integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *,
-                integer *),
-        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublereal *, integer *, integer *);
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        dlasdq_(char *, integer *, integer *, integer *, integer *, integer *, doublereal *,
-                doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-                integer *, doublereal *, integer *),
-        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
-        dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *),
-        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer givcol;
-    extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
-    extern /* Subroutine */
-        void
-        dlasrt_(char *, integer *, doublereal *, integer *);
+    aocl_int64_t givcol;
     doublereal orgnrm;
-    integer givnum, givptr, smlszp;
+    aocl_int64_t givnum, givptr, smlszp;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -294,7 +282,7 @@ void dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLALSD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DLALSD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -319,12 +307,13 @@ void dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
     {
         if(d__[1] == 0.)
         {
-            dlaset_("A", &c__1, nrhs, &c_b6, &c_b6, &b[b_offset], ldb);
+            aocl_lapack_dlaset("A", &c__1, nrhs, &c_b6, &c_b6, &b[b_offset], ldb);
         }
         else
         {
             *rank = 1;
-            dlascl_("G", &c__0, &c__0, &d__[1], &c_b11, &c__1, nrhs, &b[b_offset], ldb, info);
+            aocl_lapack_dlascl("G", &c__0, &c__0, &d__[1], &c_b11, &c__1, nrhs, &b[b_offset], ldb,
+                               info);
             d__[1] = f2c_dabs(d__[1]);
         }
         AOCL_DTL_TRACE_LOG_EXIT
@@ -342,7 +331,8 @@ void dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
             d__[i__ + 1] = cs * d__[i__ + 1];
             if(*nrhs == 1)
             {
-                drot_(&c__1, &b[i__ + b_dim1], &c__1, &b[i__ + 1 + b_dim1], &c__1, &cs, &sn);
+                aocl_blas_drot(&c__1, &b[i__ + b_dim1], &c__1, &b[i__ + 1 + b_dim1], &c__1, &cs,
+                               &sn);
             }
             else
             {
@@ -361,8 +351,8 @@ void dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
                 {
                     cs = work[(j << 1) - 1];
                     sn = work[j * 2];
-                    drot_(&c__1, &b[j + i__ * b_dim1], &c__1, &b[j + 1 + i__ * b_dim1], &c__1, &cs,
-                          &sn);
+                    aocl_blas_drot(&c__1, &b[j + i__ * b_dim1], &c__1, &b[j + 1 + i__ * b_dim1],
+                                   &c__1, &cs, &sn);
                     /* L20: */
                 }
                 /* L30: */
@@ -371,51 +361,51 @@ void dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
     }
     /* Scale. */
     nm1 = *n - 1;
-    orgnrm = dlanst_("M", n, &d__[1], &e[1]);
+    orgnrm = aocl_lapack_dlanst("M", n, &d__[1], &e[1]);
     if(orgnrm == 0.)
     {
-        dlaset_("A", n, nrhs, &c_b6, &c_b6, &b[b_offset], ldb);
+        aocl_lapack_dlaset("A", n, nrhs, &c_b6, &c_b6, &b[b_offset], ldb);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    dlascl_("G", &c__0, &c__0, &orgnrm, &c_b11, n, &c__1, &d__[1], n, info);
-    dlascl_("G", &c__0, &c__0, &orgnrm, &c_b11, &nm1, &c__1, &e[1], &nm1, info);
+    aocl_lapack_dlascl("G", &c__0, &c__0, &orgnrm, &c_b11, n, &c__1, &d__[1], n, info);
+    aocl_lapack_dlascl("G", &c__0, &c__0, &orgnrm, &c_b11, &nm1, &c__1, &e[1], &nm1, info);
     /* If N is smaller than the minimum divide size SMLSIZ, then solve */
     /* the problem with another solver. */
     if(*n <= *smlsiz)
     {
         nwork = *n * *n + 1;
-        dlaset_("A", n, n, &c_b6, &c_b11, &work[1], n);
-        dlasdq_("U", &c__0, n, n, &c__0, nrhs, &d__[1], &e[1], &work[1], n, &work[1], n,
-                &b[b_offset], ldb, &work[nwork], info);
+        aocl_lapack_dlaset("A", n, n, &c_b6, &c_b11, &work[1], n);
+        aocl_lapack_dlasdq("U", &c__0, n, n, &c__0, nrhs, &d__[1], &e[1], &work[1], n, &work[1], n,
+                           &b[b_offset], ldb, &work[nwork], info);
         if(*info != 0)
         {
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
-        tol = rcnd * (d__1 = d__[idamax_(n, &d__[1], &c__1)], f2c_dabs(d__1));
+        tol = rcnd * (d__1 = d__[aocl_blas_idamax(n, &d__[1], &c__1)], f2c_dabs(d__1));
         i__1 = *n;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             if(d__[i__] <= tol)
             {
-                dlaset_("A", &c__1, nrhs, &c_b6, &c_b6, &b[i__ + b_dim1], ldb);
+                aocl_lapack_dlaset("A", &c__1, nrhs, &c_b6, &c_b6, &b[i__ + b_dim1], ldb);
             }
             else
             {
-                dlascl_("G", &c__0, &c__0, &d__[i__], &c_b11, &c__1, nrhs, &b[i__ + b_dim1], ldb,
-                        info);
+                aocl_lapack_dlascl("G", &c__0, &c__0, &d__[i__], &c_b11, &c__1, nrhs,
+                                   &b[i__ + b_dim1], ldb, info);
                 ++(*rank);
             }
             /* L40: */
         }
-        dgemm_("T", "N", n, nrhs, n, &c_b11, &work[1], n, &b[b_offset], ldb, &c_b6, &work[nwork],
-               n);
-        dlacpy_("A", n, nrhs, &work[nwork], n, &b[b_offset], ldb);
+        aocl_blas_dgemm("T", "N", n, nrhs, n, &c_b11, &work[1], n, &b[b_offset], ldb, &c_b6,
+                        &work[nwork], n);
+        aocl_lapack_dlacpy("A", n, nrhs, &work[nwork], n, &b[b_offset], ldb);
         /* Unscale. */
-        dlascl_("G", &c__0, &c__0, &c_b11, &orgnrm, n, &c__1, &d__[1], n, info);
-        dlasrt_("D", n, &d__[1], info);
-        dlascl_("G", &c__0, &c__0, &orgnrm, &c_b11, n, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &c_b11, &orgnrm, n, &c__1, &d__[1], n, info);
+        aocl_lapack_dlasrt("D", n, &d__[1], info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &orgnrm, &c_b11, n, nrhs, &b[b_offset], ldb, info);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -459,20 +449,20 @@ void dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
         if((d__1 = e[i__], f2c_dabs(d__1)) < eps || i__ == nm1)
         {
             ++nsub;
-            iwork[nsub] = st;
+            iwork[nsub] = (aocl_int_t)(st);
             /* Subproblem found. First determine its size and then */
             /* apply divide and conquer on it. */
             if(i__ < nm1)
             {
                 /* A subproblem with E(I) small for I < NM1. */
                 nsize = i__ - st + 1;
-                iwork[sizei + nsub - 1] = nsize;
+                iwork[sizei + nsub - 1] = (aocl_int_t)(nsize);
             }
             else if((d__1 = e[i__], f2c_dabs(d__1)) >= eps)
             {
                 /* A subproblem with E(NM1) not too small but I = NM1. */
                 nsize = *n - st + 1;
-                iwork[sizei + nsub - 1] = nsize;
+                iwork[sizei + nsub - 1] = (aocl_int_t)(nsize);
             }
             else
             {
@@ -480,52 +470,54 @@ void dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
                 /* 1-by-1 subproblem at D(N), which is not solved */
                 /* explicitly. */
                 nsize = i__ - st + 1;
-                iwork[sizei + nsub - 1] = nsize;
+                iwork[sizei + nsub - 1] = (aocl_int_t)(nsize);
                 ++nsub;
-                iwork[nsub] = *n;
+                iwork[nsub] = (aocl_int_t)(*n);
                 iwork[sizei + nsub - 1] = 1;
-                dcopy_(nrhs, &b[*n + b_dim1], ldb, &work[bx + nm1], n);
+                aocl_blas_dcopy(nrhs, &b[*n + b_dim1], ldb, &work[bx + nm1], n);
             }
             st1 = st - 1;
             if(nsize == 1)
             {
                 /* This is a 1-by-1 subproblem and is not solved */
                 /* explicitly. */
-                dcopy_(nrhs, &b[st + b_dim1], ldb, &work[bx + st1], n);
+                aocl_blas_dcopy(nrhs, &b[st + b_dim1], ldb, &work[bx + st1], n);
             }
             else if(nsize <= *smlsiz)
             {
                 /* This is a small subproblem and is solved by DLASDQ. */
-                dlaset_("A", &nsize, &nsize, &c_b6, &c_b11, &work[vt + st1], n);
-                dlasdq_("U", &c__0, &nsize, &nsize, &c__0, nrhs, &d__[st], &e[st], &work[vt + st1],
-                        n, &work[nwork], n, &b[st + b_dim1], ldb, &work[nwork], info);
+                aocl_lapack_dlaset("A", &nsize, &nsize, &c_b6, &c_b11, &work[vt + st1], n);
+                aocl_lapack_dlasdq("U", &c__0, &nsize, &nsize, &c__0, nrhs, &d__[st], &e[st],
+                                   &work[vt + st1], n, &work[nwork], n, &b[st + b_dim1], ldb,
+                                   &work[nwork], info);
                 if(*info != 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
-                dlacpy_("A", &nsize, nrhs, &b[st + b_dim1], ldb, &work[bx + st1], n);
+                aocl_lapack_dlacpy("A", &nsize, nrhs, &b[st + b_dim1], ldb, &work[bx + st1], n);
             }
             else
             {
                 /* A large problem. Solve it using divide and conquer. */
-                dlasda_(&icmpq1, smlsiz, &nsize, &sqre, &d__[st], &e[st], &work[u + st1], n,
-                        &work[vt + st1], &iwork[k + st1], &work[difl + st1], &work[difr + st1],
-                        &work[z__ + st1], &work[poles + st1], &iwork[givptr + st1],
-                        &iwork[givcol + st1], n, &iwork[perm + st1], &work[givnum + st1],
-                        &work[c__ + st1], &work[s + st1], &work[nwork], &iwork[iwk], info);
+                aocl_lapack_dlasda(&icmpq1, smlsiz, &nsize, &sqre, &d__[st], &e[st], &work[u + st1],
+                                   n, &work[vt + st1], &iwork[k + st1], &work[difl + st1],
+                                   &work[difr + st1], &work[z__ + st1], &work[poles + st1],
+                                   &iwork[givptr + st1], &iwork[givcol + st1], n,
+                                   &iwork[perm + st1], &work[givnum + st1], &work[c__ + st1],
+                                   &work[s + st1], &work[nwork], &iwork[iwk], info);
                 if(*info != 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
                 bxst = bx + st1;
-                dlalsa_(&icmpq2, smlsiz, &nsize, nrhs, &b[st + b_dim1], ldb, &work[bxst], n,
-                        &work[u + st1], n, &work[vt + st1], &iwork[k + st1], &work[difl + st1],
-                        &work[difr + st1], &work[z__ + st1], &work[poles + st1],
-                        &iwork[givptr + st1], &iwork[givcol + st1], n, &iwork[perm + st1],
-                        &work[givnum + st1], &work[c__ + st1], &work[s + st1], &work[nwork],
-                        &iwork[iwk], info);
+                aocl_lapack_dlalsa(&icmpq2, smlsiz, &nsize, nrhs, &b[st + b_dim1], ldb, &work[bxst],
+                                   n, &work[u + st1], n, &work[vt + st1], &iwork[k + st1],
+                                   &work[difl + st1], &work[difr + st1], &work[z__ + st1],
+                                   &work[poles + st1], &iwork[givptr + st1], &iwork[givcol + st1],
+                                   n, &iwork[perm + st1], &work[givnum + st1], &work[c__ + st1],
+                                   &work[s + st1], &work[nwork], &iwork[iwk], info);
                 if(*info != 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
@@ -537,7 +529,7 @@ void dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
         /* L60: */
     }
     /* Apply the singular values and treat the tiny ones as zero. */
-    tol = rcnd * (d__1 = d__[idamax_(n, &d__[1], &c__1)], f2c_dabs(d__1));
+    tol = rcnd * (d__1 = d__[aocl_blas_idamax(n, &d__[1], &c__1)], f2c_dabs(d__1));
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
@@ -545,13 +537,13 @@ void dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
         /* subproblems were not solved explicitly. */
         if((d__1 = d__[i__], f2c_dabs(d__1)) <= tol)
         {
-            dlaset_("A", &c__1, nrhs, &c_b6, &c_b6, &work[bx + i__ - 1], n);
+            aocl_lapack_dlaset("A", &c__1, nrhs, &c_b6, &c_b6, &work[bx + i__ - 1], n);
         }
         else
         {
             ++(*rank);
-            dlascl_("G", &c__0, &c__0, &d__[i__], &c_b11, &c__1, nrhs, &work[bx + i__ - 1], n,
-                    info);
+            aocl_lapack_dlascl("G", &c__0, &c__0, &d__[i__], &c_b11, &c__1, nrhs,
+                               &work[bx + i__ - 1], n, info);
         }
         d__[i__] = (d__1 = d__[i__], f2c_dabs(d__1));
         /* L70: */
@@ -567,20 +559,21 @@ void dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
         bxst = bx + st1;
         if(nsize == 1)
         {
-            dcopy_(nrhs, &work[bxst], n, &b[st + b_dim1], ldb);
+            aocl_blas_dcopy(nrhs, &work[bxst], n, &b[st + b_dim1], ldb);
         }
         else if(nsize <= *smlsiz)
         {
-            dgemm_("T", "N", &nsize, nrhs, &nsize, &c_b11, &work[vt + st1], n, &work[bxst], n,
-                   &c_b6, &b[st + b_dim1], ldb);
+            aocl_blas_dgemm("T", "N", &nsize, nrhs, &nsize, &c_b11, &work[vt + st1], n, &work[bxst],
+                            n, &c_b6, &b[st + b_dim1], ldb);
         }
         else
         {
-            dlalsa_(&icmpq2, smlsiz, &nsize, nrhs, &work[bxst], n, &b[st + b_dim1], ldb,
-                    &work[u + st1], n, &work[vt + st1], &iwork[k + st1], &work[difl + st1],
-                    &work[difr + st1], &work[z__ + st1], &work[poles + st1], &iwork[givptr + st1],
-                    &iwork[givcol + st1], n, &iwork[perm + st1], &work[givnum + st1],
-                    &work[c__ + st1], &work[s + st1], &work[nwork], &iwork[iwk], info);
+            aocl_lapack_dlalsa(&icmpq2, smlsiz, &nsize, nrhs, &work[bxst], n, &b[st + b_dim1], ldb,
+                               &work[u + st1], n, &work[vt + st1], &iwork[k + st1],
+                               &work[difl + st1], &work[difr + st1], &work[z__ + st1],
+                               &work[poles + st1], &iwork[givptr + st1], &iwork[givcol + st1], n,
+                               &iwork[perm + st1], &work[givnum + st1], &work[c__ + st1],
+                               &work[s + st1], &work[nwork], &iwork[iwk], info);
             if(*info != 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT
@@ -590,9 +583,9 @@ void dlalsd_(char *uplo, integer *smlsiz, integer *n, integer *nrhs, doublereal 
         /* L80: */
     }
     /* Unscale and sort the singular values. */
-    dlascl_("G", &c__0, &c__0, &c_b11, &orgnrm, n, &c__1, &d__[1], n, info);
-    dlasrt_("D", n, &d__[1], info);
-    dlascl_("G", &c__0, &c__0, &orgnrm, &c_b11, n, nrhs, &b[b_offset], ldb, info);
+    aocl_lapack_dlascl("G", &c__0, &c__0, &c_b11, &orgnrm, n, &c__1, &d__[1], n, info);
+    aocl_lapack_dlasrt("D", n, &d__[1], info);
+    aocl_lapack_dlascl("G", &c__0, &c__0, &orgnrm, &c_b11, n, nrhs, &b[b_offset], ldb, info);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of DLALSD */

@@ -96,15 +96,15 @@ void dlartgp_(doublereal *f, doublereal *g, doublereal *cs, doublereal *sn, doub
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlartgp inputs : f %lf, g %lf", *f, *g);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     doublereal d__1, d__2;
     /* Builtin functions */
-    double log(doublereal), pow_di(doublereal *, integer *), d_sign(doublereal *, doublereal *),
-        sqrt(doublereal);
+    double log(doublereal), pow_di(doublereal *, aocl_int64_t *),
+        d_sign(doublereal *, doublereal *), sqrt(doublereal);
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     doublereal f1, g1, eps, scale;
-    integer count;
+    aocl_int64_t count;
     doublereal safmn2, safmx2;
     extern doublereal dlamch_(char *);
     doublereal safmin;

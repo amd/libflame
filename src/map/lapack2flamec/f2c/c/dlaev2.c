@@ -126,7 +126,7 @@ void dlaev2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *rt1, dou
     double sqrt(doublereal);
     /* Local variables */
     doublereal ab, df, cs, ct, tb, sm, tn, rt, adf, acs;
-    integer sgn1, sgn2;
+    aocl_int64_t sgn1, sgn2;
     doublereal acmn, acmx;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

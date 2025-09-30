@@ -304,44 +304,55 @@ if EQUED = 'Y', */
 /* > \ingroup realPOsolve */
 /* ===================================================================== */
 /* Subroutine */
-void sposvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *af,
-             integer *ldaf, char *equed, real *s, real *b, integer *ldb, real *x, integer *ldx,
-             real *rcond, real *ferr, real *berr, real *work, integer *iwork, integer *info)
+/** Generated wrapper function */
+void sposvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *lda,
+             real *af, aocl_int_t *ldaf, char *equed, real *s, real *b, aocl_int_t *ldb, real *x,
+             aocl_int_t *ldx, real *rcond, real *ferr, real *berr, real *work, aocl_int_t *iwork,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sposvx(fact, uplo, n, nrhs, a, lda, af, ldaf, equed, s, b, ldb, x, ldx, rcond, ferr,
+                       berr, work, iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldaf_64 = *ldaf;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sposvx(fact, uplo, &n_64, &nrhs_64, a, &lda_64, af, &ldaf_64, equed, s, b, &ldb_64,
+                       x, &ldx_64, rcond, ferr, berr, work, iwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sposvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, real *a,
+                        aocl_int64_t *lda, real *af, aocl_int64_t *ldaf, char *equed, real *s,
+                        real *b, aocl_int64_t *ldb, real *x, aocl_int64_t *ldx, real *rcond,
+                        real *ferr, real *berr, real *work, aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sposvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS
                       ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",
                       *fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
     /* System generated locals */
-    integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
+        i__2;
     real r__1, r__2;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real amax, smin, smax;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real scond, anorm;
     logical equil, rcequ;
     extern real slamch_(char *);
     logical nofact;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
-    integer infequ;
-    extern /* Subroutine */
-        void
-        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
-        spocon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *);
-    extern real slansy_(char *, char *, integer *, real *, integer *, real *);
+    aocl_int64_t infequ;
     real smlnum;
-    extern /* Subroutine */
-        void
-        slaqsy_(char *, integer *, real *, integer *, real *, real *, real *, char *),
-        spoequ_(integer *, real *, integer *, real *, real *, real *, integer *),
-        sporfs_(char *, integer *, integer *, real *, integer *, real *, integer *, real *,
-                integer *, real *, integer *, real *, real *, real *, integer *, integer *),
-        spotrf_(char *, integer *, real *, integer *, integer *),
-        spotrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -473,18 +484,18 @@ void sposvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, integer
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SPOSVX", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SPOSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(equil)
     {
         /* Compute row and column scalings to equilibrate the matrix A. */
-        spoequ_(n, &a[a_offset], lda, &s[1], &scond, &amax, &infequ);
+        aocl_lapack_spoequ(n, &a[a_offset], lda, &s[1], &scond, &amax, &infequ);
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
-            slaqsy_(uplo, n, &a[a_offset], lda, &s[1], &scond, &amax, equed);
+            aocl_lapack_slaqsy(uplo, n, &a[a_offset], lda, &s[1], &scond, &amax, equed);
             rcequ = lsame_(equed, "Y", 1, 1);
         }
     }
@@ -506,8 +517,8 @@ void sposvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, integer
     if(nofact || equil)
     {
         /* Compute the Cholesky factorization A = U**T *U or A = L*L**T. */
-        slacpy_(uplo, n, n, &a[a_offset], lda, &af[af_offset], ldaf);
-        spotrf_(uplo, n, &af[af_offset], ldaf, info);
+        aocl_lapack_slacpy(uplo, n, n, &a[a_offset], lda, &af[af_offset], ldaf);
+        aocl_lapack_spotrf(uplo, n, &af[af_offset], ldaf, info);
         /* Return if INFO is non-zero. */
         if(*info > 0)
         {
@@ -517,16 +528,16 @@ void sposvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, integer
         }
     }
     /* Compute the norm of the matrix A. */
-    anorm = slansy_("1", uplo, n, &a[a_offset], lda, &work[1]);
+    anorm = aocl_lapack_slansy("1", uplo, n, &a[a_offset], lda, &work[1]);
     /* Compute the reciprocal of the condition number of A. */
-    spocon_(uplo, n, &af[af_offset], ldaf, &anorm, rcond, &work[1], &iwork[1], info);
+    aocl_lapack_spocon(uplo, n, &af[af_offset], ldaf, &anorm, rcond, &work[1], &iwork[1], info);
     /* Compute the solution matrix X. */
-    slacpy_("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
-    spotrs_(uplo, n, nrhs, &af[af_offset], ldaf, &x[x_offset], ldx, info);
+    aocl_lapack_slacpy("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
+    aocl_lapack_spotrs(uplo, n, nrhs, &af[af_offset], ldaf, &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    sporfs_(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &b[b_offset], ldb, &x[x_offset],
-            ldx, &ferr[1], &berr[1], &work[1], &iwork[1], info);
+    aocl_lapack_sporfs(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &b[b_offset], ldb,
+                       &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &iwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
     if(rcequ)

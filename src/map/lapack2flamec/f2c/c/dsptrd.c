@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b8 = 0.;
 static doublereal c_b14 = -1.;
 /* > \brief \b DSPTRD */
@@ -154,33 +154,35 @@ v(i+2:n) is stored on exit in AP, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dsptrd_(char *uplo, integer *n, doublereal *ap, doublereal *d__, doublereal *e,
-             doublereal *tau, integer *info)
+/** Generated wrapper function */
+void dsptrd_(char *uplo, aocl_int_t *n, doublereal *ap, doublereal *d__, doublereal *e,
+             doublereal *tau, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dsptrd(uplo, n, ap, d__, e, tau, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dsptrd(uplo, &n_64, ap, d__, e, tau, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dsptrd(char *uplo, aocl_int64_t *n, doublereal *ap, doublereal *d__, doublereal *e,
+                        doublereal *tau, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsptrd inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     /* Local variables */
-    integer i__, i1, ii, i1i1;
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
+    aocl_int64_t i__, i1, ii, i1i1;
     doublereal taui;
-    extern /* Subroutine */
-        void
-        dspr2_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
-               doublereal *);
     doublereal alpha;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *),
-        dspmv_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *,
-               doublereal *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -219,7 +221,7 @@ void dsptrd_(char *uplo, integer *n, doublereal *ap, doublereal *d__, doublereal
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSPTRD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DSPTRD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -238,20 +240,20 @@ void dsptrd_(char *uplo, integer *n, doublereal *ap, doublereal *d__, doublereal
         {
             /* Generate elementary reflector H(i) = I - tau * v * v**T */
             /* to annihilate A(1:i-1,i+1) */
-            dlarfg_(&i__, &ap[i1 + i__ - 1], &ap[i1], &c__1, &taui);
+            aocl_lapack_dlarfg(&i__, &ap[i1 + i__ - 1], &ap[i1], &c__1, &taui);
             e[i__] = ap[i1 + i__ - 1];
             if(taui != 0.)
             {
                 /* Apply H(i) from both sides to A(1:i,1:i) */
                 ap[i1 + i__ - 1] = 1.;
                 /* Compute y := tau * A * v storing y in TAU(1:i) */
-                dspmv_(uplo, &i__, &taui, &ap[1], &ap[i1], &c__1, &c_b8, &tau[1], &c__1);
+                aocl_blas_dspmv(uplo, &i__, &taui, &ap[1], &ap[i1], &c__1, &c_b8, &tau[1], &c__1);
                 /* Compute w := y - 1/2 * tau * (y**T *v) * v */
-                alpha = taui * -.5 * ddot_(&i__, &tau[1], &c__1, &ap[i1], &c__1);
-                daxpy_(&i__, &alpha, &ap[i1], &c__1, &tau[1], &c__1);
+                alpha = taui * -.5 * aocl_blas_ddot(&i__, &tau[1], &c__1, &ap[i1], &c__1);
+                aocl_blas_daxpy(&i__, &alpha, &ap[i1], &c__1, &tau[1], &c__1);
                 /* Apply the transformation as a rank-2 update: */
                 /* A := A - v * w**T - w * v**T */
-                dspr2_(uplo, &i__, &c_b14, &ap[i1], &c__1, &tau[1], &c__1, &ap[1]);
+                aocl_blas_dspr2(uplo, &i__, &c_b14, &ap[i1], &c__1, &tau[1], &c__1, &ap[1]);
                 ap[i1 + i__ - 1] = e[i__];
             }
             d__[i__ + 1] = ap[i1 + i__];
@@ -273,7 +275,7 @@ void dsptrd_(char *uplo, integer *n, doublereal *ap, doublereal *d__, doublereal
             /* Generate elementary reflector H(i) = I - tau * v * v**T */
             /* to annihilate A(i+2:n,i) */
             i__2 = *n - i__;
-            dlarfg_(&i__2, &ap[ii + 1], &ap[ii + 2], &c__1, &taui);
+            aocl_lapack_dlarfg(&i__2, &ap[ii + 1], &ap[ii + 2], &c__1, &taui);
             e[i__] = ap[ii + 1];
             if(taui != 0.)
             {
@@ -281,16 +283,18 @@ void dsptrd_(char *uplo, integer *n, doublereal *ap, doublereal *d__, doublereal
                 ap[ii + 1] = 1.;
                 /* Compute y := tau * A * v storing y in TAU(i:n-1) */
                 i__2 = *n - i__;
-                dspmv_(uplo, &i__2, &taui, &ap[i1i1], &ap[ii + 1], &c__1, &c_b8, &tau[i__], &c__1);
+                aocl_blas_dspmv(uplo, &i__2, &taui, &ap[i1i1], &ap[ii + 1], &c__1, &c_b8, &tau[i__],
+                                &c__1);
                 /* Compute w := y - 1/2 * tau * (y**T *v) * v */
                 i__2 = *n - i__;
-                alpha = taui * -.5 * ddot_(&i__2, &tau[i__], &c__1, &ap[ii + 1], &c__1);
+                alpha = taui * -.5 * aocl_blas_ddot(&i__2, &tau[i__], &c__1, &ap[ii + 1], &c__1);
                 i__2 = *n - i__;
-                daxpy_(&i__2, &alpha, &ap[ii + 1], &c__1, &tau[i__], &c__1);
+                aocl_blas_daxpy(&i__2, &alpha, &ap[ii + 1], &c__1, &tau[i__], &c__1);
                 /* Apply the transformation as a rank-2 update: */
                 /* A := A - v * w**T - w * v**T */
                 i__2 = *n - i__;
-                dspr2_(uplo, &i__2, &c_b14, &ap[ii + 1], &c__1, &tau[i__], &c__1, &ap[i1i1]);
+                aocl_blas_dspr2(uplo, &i__2, &c_b14, &ap[ii + 1], &c__1, &tau[i__], &c__1,
+                                &ap[i1i1]);
                 ap[ii + 1] = e[i__];
             }
             d__[i__] = ap[ii];

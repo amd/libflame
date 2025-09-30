@@ -32,8 +32,8 @@
     type_mm512x(x) vec1, vec2, vec3;                                                      \
     type_mm512x(x) vmax = {0};                                                            \
     type_mm512x(x) vd8_nzero = invoke_mm512_set1_px(x, -0.0f);                            \
-    integer nan_flag = 0;                                                                 \
-    integer i__, lasti, remain;                                                           \
+    aocl_int64_t nan_flag = 0;                                                                 \
+    aocl_int64_t i__, lasti, remain;                                                           \
     realtype max_value;                                                                   \
     max_value = 0.0f;                                                                     \
     lasti = m - (m % stepsize);                                                           \
@@ -132,7 +132,7 @@
     type_mm512x(d) vmax = {0};                                                                    \
     doublereal max_value;                                                                         \
     max_value = 0.0;                                                                              \
-    integer i__, lasti, remainv1, remainv2, nan_flag = 0;                                         \
+    aocl_int64_t i__, lasti, remainv1, remainv2, nan_flag = 0;                                         \
     lasti = m - (m % 16);                                                                         \
     /* Get maximum upto size lasti */                                                             \
     for(i__ = 1; i__ <= lasti; i__ += stepsize)                                                   \
@@ -245,7 +245,7 @@
     type_mm512x(d) vmax = {0}, scale_vec;                                                         \
     fla_get_max_xabs_element_vector_complex_avx512_define_extra_vars(x);                          \
     doublereal max_value;                                                                         \
-    integer i__, lasti, remainv1, remainv2;                                                       \
+    aocl_int64_t i__, lasti, remainv1, remainv2;                                                       \
     max_value = 0.0f;                                                                             \
     lasti = m - (m % stepsize);                                                                   \
     scale_vec = invoke_mm512_set1_px(d, scale_factor);                                            \
@@ -350,21 +350,21 @@
     max_value = invoke_sqrtx(d, max_value);
 
 /* Find maxmimum absoute value of given doublereal vector using avx512 intrinsics*/
-doublereal fla_get_max_dabs_element_vector_avx512(integer m, doublereal *a, integer a_dim)
+doublereal fla_get_max_dabs_element_vector_avx512(aocl_int64_t m, doublereal *a, aocl_int64_t a_dim)
 {
     fla_get_max_xabs_element_real_avx512(d, doublereal, m, a, a_dim, 8, 4, 16);
     return max_value;
 }
 
 /* Find maxmimum absoute value of given real vector using avx512 intrinsics*/
-real fla_get_max_sabs_element_vector_avx512(integer m, real *a, integer a_dim)
+real fla_get_max_sabs_element_vector_avx512(aocl_int64_t m, real *a, aocl_int64_t a_dim)
 {
     fla_get_max_xabs_element_real_avx512(s, real, m, a, a_dim, 16, 8, 32);
     return max_value;
 }
 
-/* Find maxmimum absoute value of given doublecomplex vector using avx512 intrinsics*/
-doublereal fla_get_max_zabs_element_vector_avx512(integer m, doublecomplex *a, integer a_dim)
+/* Find maxmimum absoute value of given dcomplex vector using avx512 intrinsics*/
+doublereal fla_get_max_zabs_element_vector_avx512(aocl_int64_t m, dcomplex *a, aocl_int64_t a_dim)
 {
     /* Threshold amd scaling values taken from dlassq API
        which calculates sum of squares by performaing scaling
@@ -391,8 +391,8 @@ doublereal fla_get_max_zabs_element_vector_avx512(integer m, doublecomplex *a, i
     return max_value;
 }
 
-/* Find maxmimum absoute value of given complex vector using avx512 intrinsics*/
-real fla_get_max_cabs_element_vector_avx512(integer m, complex *a, integer a_dim)
+/* Find maxmimum absoute value of given scomplex vector using avx512 intrinsics*/
+real fla_get_max_cabs_element_vector_avx512(aocl_int64_t m, scomplex *a, aocl_int64_t a_dim)
 {
     /* The real value is upscaled to doublereal during calculation of absolute
        value. Hence underflow/overflow is taken care of. */

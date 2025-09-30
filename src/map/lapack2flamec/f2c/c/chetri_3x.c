@@ -4,8 +4,8 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static complex c_b2 = {0.f, 0.f};
+static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b2 = {{0.f}, {0.f}};
 /* > \brief \b CHETRI_3X */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -40,7 +40,7 @@ static complex c_b2 = {0.f, 0.f};
 /* ============= */
 /* > */
 /* > \verbatim */
-/* > CHETRI_3X computes the inverse of a complex Hermitian indefinite */
+/* > CHETRI_3X computes the inverse of a scomplex Hermitian indefinite */
 /* > matrix A using the factorization computed by CHETRF_RK or CHETRF_BK: */
 /* > */
 /* > A = P*U*D*(U**H)*(P**T) or A = P*L*D*(L**H)*(P**T), */
@@ -161,8 +161,26 @@ the matrix is singular and its */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void chetri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, integer *ipiv,
-                complex *work, integer *nb, integer *info)
+/** Generated wrapper function */
+void chetri_3x_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *e,
+                aocl_int_t *ipiv, scomplex *work, aocl_int_t *nb, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chetri_3x(uplo, n, a, lda, e, ipiv, work, nb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chetri_3x(uplo, &n_64, a, &lda_64, e, ipiv, work, &nb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chetri_3x(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomplex *e,
+                           aocl_int_t *ipiv, scomplex *work, aocl_int64_t *nb, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -176,42 +194,25 @@ void chetri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, work_dim1, work_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    aocl_int64_t a_dim1, a_offset, work_dim1, work_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     real r__1;
-    complex q__1, q__2, q__3;
+    scomplex q__1, q__2, q__3;
     /* Builtin functions */
-    double c_abs(complex *);
-    void c_div(complex *, complex *, complex *), r_cnjg(complex *, complex *);
+    double c_abs(scomplex *);
+    void c_div(scomplex *, scomplex *, scomplex *), r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    extern /* Subroutine */
-        void
-        cheswapr_(char *, integer *, complex *, integer *, integer *, integer *);
-    complex d__;
-    integer i__, j, k;
+    scomplex d__;
+    aocl_int64_t i__, j, k;
     real t, ak;
-    integer u11, ip, nnb, cut;
+    aocl_int64_t u11, ip, nnb, cut;
     real akp1;
-    integer invd;
-    complex akkp1;
-    extern /* Subroutine */
-        void
-        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
-               complex *, integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
-               integer *, complex *, integer *);
+    aocl_int64_t invd;
+    scomplex akkp1;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    complex u01_i_j__, u11_i_j__;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer icount;
-    extern /* Subroutine */
-        void
-        ctrtri_(char *, char *, integer *, complex *, integer *, integer *);
-    complex u01_ip1_j__, u11_ip1_j__;
+    scomplex u01_i_j__, u11_i_j__;
+    aocl_int64_t icount;
+    scomplex u01_ip1_j__, u11_ip1_j__;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -261,7 +262,7 @@ void chetri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHETRI_3X", &i__1, (ftnlen)9);
+        aocl_blas_xerbla("CHETRI_3X", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -321,7 +322,7 @@ void chetri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
     {
         /* Begin Upper */
         /* invA = P * inv(U**H) * inv(D) * inv(U) * P**T. */
-        ctrtri_(uplo, "U", n, &a[a_offset], lda, info);
+        aocl_lapack_ctrtri(uplo, "U", n, &a[a_offset], lda, info);
         /* inv(D) and inv(D) * inv(U) */
         k = 1;
         while(k <= *n)
@@ -575,8 +576,8 @@ void chetri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
             }
             /* U11**H * invD1 * U11 -> U11 */
             i__1 = *n + *nb + 1;
-            ctrmm_("L", "U", "C", "U", &nnb, &nnb, &c_b1, &a[cut + 1 + (cut + 1) * a_dim1], lda,
-                   &work[u11 + 1 + work_dim1], &i__1);
+            aocl_blas_ctrmm("L", "U", "C", "U", &nnb, &nnb, &c_b1, &a[cut + 1 + (cut + 1) * a_dim1],
+                            lda, &work[u11 + 1 + work_dim1], &i__1);
             i__1 = nnb;
             for(i__ = 1; i__ <= i__1; ++i__)
             {
@@ -592,8 +593,8 @@ void chetri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
             /* U01**H * invD * U01 -> A( CUT+I, CUT+J ) */
             i__1 = *n + *nb + 1;
             i__2 = *n + *nb + 1;
-            cgemm_("C", "N", &nnb, &nnb, &cut, &c_b1, &a[(cut + 1) * a_dim1 + 1], lda,
-                   &work[work_offset], &i__1, &c_b2, &work[u11 + 1 + work_dim1], &i__2);
+            aocl_blas_cgemm("C", "N", &nnb, &nnb, &cut, &c_b1, &a[(cut + 1) * a_dim1 + 1], lda,
+                            &work[work_offset], &i__1, &c_b2, &work[u11 + 1 + work_dim1], &i__2);
             /* U11 = U11**H * invD1 * U11 + U01**H * invD * U01 */
             i__1 = nnb;
             for(i__ = 1; i__ <= i__1; ++i__)
@@ -612,8 +613,8 @@ void chetri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
             }
             /* U01 = U00**H * invD0 * U01 */
             i__1 = *n + *nb + 1;
-            ctrmm_("L", uplo, "C", "U", &cut, &nnb, &c_b1, &a[a_offset], lda, &work[work_offset],
-                   &i__1);
+            aocl_blas_ctrmm("L", uplo, "C", "U", &cut, &nnb, &c_b1, &a[a_offset], lda,
+                            &work[work_offset], &i__1);
             /* Update U01 */
             i__1 = cut;
             for(i__ = 1; i__ <= i__1; ++i__)
@@ -646,11 +647,11 @@ void chetri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
             {
                 if(i__ < ip)
                 {
-                    cheswapr_(uplo, n, &a[a_offset], lda, &i__, &ip);
+                    aocl_lapack_cheswapr(uplo, n, &a[a_offset], lda, &i__, &ip);
                 }
                 if(i__ > ip)
                 {
-                    cheswapr_(uplo, n, &a[a_offset], lda, &ip, &i__);
+                    aocl_lapack_cheswapr(uplo, n, &a[a_offset], lda, &ip, &i__);
                 }
             }
         }
@@ -659,7 +660,7 @@ void chetri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
     {
         /* Begin Lower */
         /* inv A = P * inv(L**H) * inv(D) * inv(L) * P**T. */
-        ctrtri_(uplo, "U", n, &a[a_offset], lda, info);
+        aocl_lapack_ctrtri(uplo, "U", n, &a[a_offset], lda, info);
         /* inv(D) and inv(D) * inv(L) */
         k = *n;
         while(k >= 1)
@@ -911,8 +912,9 @@ void chetri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
             }
             /* L11**H * invD1 * L11 -> L11 */
             i__1 = *n + *nb + 1;
-            ctrmm_("L", uplo, "C", "U", &nnb, &nnb, &c_b1, &a[cut + 1 + (cut + 1) * a_dim1], lda,
-                   &work[u11 + 1 + work_dim1], &i__1);
+            aocl_blas_ctrmm("L", uplo, "C", "U", &nnb, &nnb, &c_b1,
+                            &a[cut + 1 + (cut + 1) * a_dim1], lda, &work[u11 + 1 + work_dim1],
+                            &i__1);
             i__1 = nnb;
             for(i__ = 1; i__ <= i__1; ++i__)
             {
@@ -931,8 +933,9 @@ void chetri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
                 i__1 = *n - nnb - cut;
                 i__2 = *n + *nb + 1;
                 i__3 = *n + *nb + 1;
-                cgemm_("C", "N", &nnb, &nnb, &i__1, &c_b1, &a[cut + nnb + 1 + (cut + 1) * a_dim1],
-                       lda, &work[work_offset], &i__2, &c_b2, &work[u11 + 1 + work_dim1], &i__3);
+                aocl_blas_cgemm("C", "N", &nnb, &nnb, &i__1, &c_b1,
+                                &a[cut + nnb + 1 + (cut + 1) * a_dim1], lda, &work[work_offset],
+                                &i__2, &c_b2, &work[u11 + 1 + work_dim1], &i__3);
                 /* L11 = L11**H * invD1 * L11 + U01**H * invD * U01 */
                 i__1 = nnb;
                 for(i__ = 1; i__ <= i__1; ++i__)
@@ -952,9 +955,9 @@ void chetri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
                 /* L01 = L22**H * invD2 * L21 */
                 i__1 = *n - nnb - cut;
                 i__2 = *n + *nb + 1;
-                ctrmm_("L", uplo, "C", "U", &i__1, &nnb, &c_b1,
-                       &a[cut + nnb + 1 + (cut + nnb + 1) * a_dim1], lda, &work[work_offset],
-                       &i__2);
+                aocl_blas_ctrmm("L", uplo, "C", "U", &i__1, &nnb, &c_b1,
+                                &a[cut + nnb + 1 + (cut + nnb + 1) * a_dim1], lda,
+                                &work[work_offset], &i__2);
                 /* Update L21 */
                 i__1 = *n - cut - nnb;
                 for(i__ = 1; i__ <= i__1; ++i__)
@@ -1004,11 +1007,11 @@ void chetri_3x_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
             {
                 if(i__ < ip)
                 {
-                    cheswapr_(uplo, n, &a[a_offset], lda, &i__, &ip);
+                    aocl_lapack_cheswapr(uplo, n, &a[a_offset], lda, &i__, &ip);
                 }
                 if(i__ > ip)
                 {
-                    cheswapr_(uplo, n, &a[a_offset], lda, &ip, &i__);
+                    aocl_lapack_cheswapr(uplo, n, &a[a_offset], lda, &ip, &i__);
                 }
             }
         }

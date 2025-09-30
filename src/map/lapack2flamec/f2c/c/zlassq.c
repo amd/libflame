@@ -116,21 +116,35 @@
 /* > \ingroup lassq */
 /* ===================================================================== */
 /* Subroutine */
-void zlassq_(integer *n, doublecomplex *x, integer *incx, doublereal *scale, doublereal *sumsq)
+/** Generated wrapper function */
+void zlassq_(aocl_int_t *n, dcomplex *x, aocl_int_t *incx, doublereal *scale, doublereal *sumsq)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlassq(n, x, incx, scale, sumsq);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+
+    aocl_lapack_zlassq(&n_64, x, &incx_64, scale, sumsq);
+#endif
+}
+
+void aocl_lapack_zlassq(aocl_int64_t *n, dcomplex *x, aocl_int64_t *incx, doublereal *scale,
+             doublereal *sumsq)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlassq inputs: n %" FLA_IS ", incx %" FLA_IS ", scale %lf, sumsq %lf", *n,
                       *incx, *scale, *sumsq);
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     doublereal r__1, r__2;
     /* Builtin functions */
-    double d_imag(doublecomplex *), sqrt(doublereal);
+    double d_imag(dcomplex *), sqrt(doublereal);
     extern logical disnan_(doublereal *);
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     doublereal ax;
-    integer ix;
+    aocl_int64_t ix;
     doublereal abig, amed, sbig, tbig, asml, ymin, ymax, tsml, ssml;
     logical notbig;
     /* ...Translated by Pacific-Sierra Research vf90 Personal 3.4N3 01:10:50 11/27/24 */

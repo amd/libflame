@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {0.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b1 = {{0.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CLARZT forms the triangular factor T of a block reflector H = I - vtvH. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -40,7 +40,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CLARZT forms the triangular factor T of a complex block reflector */
+/* > CLARZT forms the triangular factor T of a scomplex block reflector */
 /* > H of order > n, which is defined as a product of k elementary */
 /* > reflectors. */
 /* > */
@@ -186,8 +186,24 @@ the corresponding */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void clarzt_(char *direct, char *storev, integer *n, integer *k, complex *v, integer *ldv,
-             complex *tau, complex *t, integer *ldt)
+/** Generated wrapper function */
+void clarzt_(char *direct, char *storev, aocl_int_t *n, aocl_int_t *k, scomplex *v, aocl_int_t *ldv,
+             scomplex *tau, scomplex *t, aocl_int_t *ldt)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clarzt(direct, storev, n, k, v, ldv, tau, t, ldt);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t ldt_64 = *ldt;
+
+    aocl_lapack_clarzt(direct, storev, &n_64, &k_64, v, &ldv_64, tau, t, &ldt_64);
+#endif
+}
+
+void aocl_lapack_clarzt(char *direct, char *storev, aocl_int64_t *n, aocl_int64_t *k, scomplex *v,
+                        aocl_int64_t *ldv, scomplex *tau, scomplex *t, aocl_int64_t *ldt)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -202,20 +218,11 @@ void clarzt_(char *direct, char *storev, integer *n, integer *k, complex *v, int
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer t_dim1, t_offset, v_dim1, v_offset, i__1, i__2;
-    complex q__1;
+    aocl_int64_t t_dim1, t_offset, v_dim1, v_offset, i__1, i__2;
+    scomplex q__1;
     /* Local variables */
-    integer i__, j, info;
-    extern /* Subroutine */
-        void
-        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *),
-        clacgv_(integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, j, info;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -256,7 +263,7 @@ void clarzt_(char *direct, char *storev, integer *n, integer *k, complex *v, int
     if(info != 0)
     {
         i__1 = -info;
-        xerbla_("CLARZT", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CLARZT", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -281,18 +288,19 @@ void clarzt_(char *direct, char *storev, integer *n, integer *k, complex *v, int
             if(i__ < *k)
             {
                 /* T(i+1:k,i) = - tau(i) * V(i+1:k,1:n) * V(i,1:n)**H */
-                clacgv_(n, &v[i__ + v_dim1], ldv);
+                aocl_lapack_clacgv(n, &v[i__ + v_dim1], ldv);
                 i__1 = *k - i__;
                 i__2 = i__;
                 q__1.r = -tau[i__2].r;
                 q__1.i = -tau[i__2].i; // , expr subst
-                cgemv_("No transpose", &i__1, n, &q__1, &v[i__ + 1 + v_dim1], ldv, &v[i__ + v_dim1],
-                       ldv, &c_b1, &t[i__ + 1 + i__ * t_dim1], &c__1);
-                clacgv_(n, &v[i__ + v_dim1], ldv);
+                aocl_blas_cgemv("No transpose", &i__1, n, &q__1, &v[i__ + 1 + v_dim1], ldv,
+                                &v[i__ + v_dim1], ldv, &c_b1, &t[i__ + 1 + i__ * t_dim1], &c__1);
+                aocl_lapack_clacgv(n, &v[i__ + v_dim1], ldv);
                 /* T(i+1:k,i) = T(i+1:k,i+1:k) * T(i+1:k,i) */
                 i__1 = *k - i__;
-                ctrmv_("Lower", "No transpose", "Non-unit", &i__1, &t[i__ + 1 + (i__ + 1) * t_dim1],
-                       ldt, &t[i__ + 1 + i__ * t_dim1], &c__1);
+                aocl_blas_ctrmv("Lower", "No transpose", "Non-unit", &i__1,
+                                &t[i__ + 1 + (i__ + 1) * t_dim1], ldt, &t[i__ + 1 + i__ * t_dim1],
+                                &c__1);
             }
             i__1 = i__ + i__ * t_dim1;
             i__2 = i__;

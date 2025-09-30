@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b ZSYR performs the symmetric rank-1 update of a complex symmetric matrix. */
+#include "FLA_f2c.h" /* > \brief \b ZSYR performs the symmetric rank-1 update of a scomplex symmetric matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -42,7 +42,7 @@
 /* > */
 /* > A := alpha*x*x**H + A, */
 /* > */
-/* > where alpha is a complex scalar, x is an n element vector and A is an */
+/* > where alpha is a scomplex scalar, x is an n element vector and A is an */
 /* > n by n symmetric matrix. */
 /* > \endverbatim */
 /* Arguments: */
@@ -130,23 +130,35 @@
 /* > \ingroup complex16SYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zsyr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx,
-           doublecomplex *a, integer *lda)
+/** Generated wrapper function */
+void zsyr_(char *uplo, aocl_int_t *n, dcomplex *alpha, dcomplex *x, aocl_int_t *incx,
+           dcomplex *a, aocl_int_t *lda)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zsyr(uplo, n, alpha, x, incx, a, lda);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+    aocl_int64_t lda_64 = *lda;
+
+    aocl_lapack_zsyr(uplo, &n_64, alpha, x, &incx_64, a, &lda_64);
+#endif
+}
+
+void aocl_lapack_zsyr(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
+                      aocl_int64_t *incx, dcomplex *a, aocl_int64_t *lda)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsyr inputs: uplo %c, n %" FLA_IS ", incx %" FLA_IS ", lda %" FLA_IS "",
                       *uplo, *n, *incx, *lda);
 
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
-    doublecomplex z__1, z__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    dcomplex z__1, z__2;
     /* Local variables */
-    integer i__, j, ix, jx, kx, info;
-    doublecomplex temp;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, j, ix, jx, kx, info;
+    dcomplex temp;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -194,7 +206,7 @@ void zsyr_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *x, integ
     }
     if(info != 0)
     {
-        xerbla_("ZSYR ", &info, (ftnlen)5);
+        aocl_blas_xerbla("ZSYR ", &info, (ftnlen)5);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

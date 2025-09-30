@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 static real c_b19 = 1.f;
 /* > \brief \b SSYGVX */
 /* =========== DOCUMENTATION =========== */
@@ -300,50 +300,59 @@ the routine */
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-void ssygvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, real *a, integer *lda,
-             real *b, integer *ldb, real *vl, real *vu, integer *il, integer *iu, real *abstol,
-             integer *m, real *w, real *z__, integer *ldz, real *work, integer *lwork,
-             integer *iwork, integer *ifail, integer *info)
+/** Generated wrapper function */
+void ssygvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t *n, real *a,
+             aocl_int_t *lda, real *b, aocl_int_t *ldb, real *vl, real *vu, aocl_int_t *il,
+             aocl_int_t *iu, real *abstol, aocl_int_t *m, real *w, real *z__, aocl_int_t *ldz,
+             real *work, aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *ifail, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ssygvx(itype, jobz, range, uplo, n, a, lda, b, ldb, vl, vu, il, iu, abstol, m, w,
+                       z__, ldz, work, lwork, iwork, ifail, info);
+#else
+    aocl_int64_t itype_64 = *itype;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t il_64 = *il;
+    aocl_int64_t iu_64 = *iu;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ssygvx(&itype_64, jobz, range, uplo, &n_64, a, &lda_64, b, &ldb_64, vl, vu, &il_64,
+                       &iu_64, abstol, &m_64, w, z__, &ldz_64, work, &lwork_64, iwork, ifail,
+                       &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ssygvx(aocl_int64_t *itype, char *jobz, char *range, char *uplo, aocl_int64_t *n,
+                        real *a, aocl_int64_t *lda, real *b, aocl_int64_t *ldb, real *vl, real *vu,
+                        aocl_int64_t *il, aocl_int64_t *iu, real *abstol, aocl_int64_t *m, real *w,
+                        real *z__, aocl_int64_t *ldz, real *work, aocl_int64_t *lwork,
+                        aocl_int_t *iwork, aocl_int_t *ifail, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF(
-             "ssygvx inputs: itype %" FLA_IS ", jobz %c, range %c, uplo %c, n %" FLA_IS
-             ", lda %" FLA_IS ", ldb %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS ", ldz %" FLA_IS "",
-             *itype, *jobz, *range, *uplo, *n, *lda, *ldb, *il, *iu, *ldz);
+    AOCL_DTL_SNPRINTF("ssygvx inputs: itype %" FLA_IS ", jobz %c, range %c, uplo %c, n %" FLA_IS
+                      ", lda %" FLA_IS ", ldb %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS
+                      ", ldz %" FLA_IS "",
+                      *itype, *jobz, *range, *uplo, *n, *lda, *ldb, *il, *iu, *ldz);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, z_dim1, z_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, z_dim1, z_offset, i__1, i__2;
     /* Local variables */
-    integer nb;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t nb;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     char trans[1];
     logical upper;
-    extern /* Subroutine */
-        void
-        strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
-               real *, integer *);
     logical wantz;
-    extern /* Subroutine */
-        void
-        strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
-               real *, integer *);
     logical alleig, indeig, valeig;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer lwkmin;
-    extern /* Subroutine */
-        void
-        spotrf_(char *, integer *, real *, integer *, integer *);
-    integer lwkopt;
+    aocl_int64_t lwkmin;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern /* Subroutine */
-        void
-        ssygst_(integer *, char *, integer *, real *, integer *, real *, integer *, integer *),
-        ssyevx_(char *, char *, char *, integer *, real *, integer *, real *, real *, integer *,
-                integer *, real *, integer *, real *, real *, integer *, real *, integer *,
-                integer *, integer *, integer *);
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -448,12 +457,12 @@ void ssygvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, re
         i__1 = 1;
         i__2 = *n << 3; // , expr subst
         lwkmin = fla_max(i__1, i__2);
-        nb = ilaenv_(&c__1, "SSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
+        nb = aocl_lapack_ilaenv(&c__1, "SSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
         /* Computing MAX */
         i__1 = lwkmin;
         i__2 = (nb + 3) * *n; // , expr subst
         lwkopt = fla_max(i__1, i__2);
-        work[1] = sroundup_lwork(&lwkopt);
+        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
         if(*lwork < lwkmin && !lquery)
         {
             *info = -20;
@@ -462,7 +471,7 @@ void ssygvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, re
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSYGVX", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SSYGVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -479,7 +488,7 @@ void ssygvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, re
         return;
     }
     /* Form a Cholesky factorization of B. */
-    spotrf_(uplo, n, &b[b_offset], ldb, info);
+    aocl_lapack_spotrf(uplo, n, &b[b_offset], ldb, info);
     if(*info != 0)
     {
         *info = *n + *info;
@@ -487,9 +496,9 @@ void ssygvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, re
         return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
-    ssygst_(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
-    ssyevx_(jobz, range, uplo, n, &a[a_offset], lda, vl, vu, il, iu, abstol, m, &w[1],
-            &z__[z_offset], ldz, &work[1], lwork, &iwork[1], &ifail[1], info);
+    aocl_lapack_ssygst(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
+    aocl_lapack_ssyevx(jobz, range, uplo, n, &a[a_offset], lda, vl, vu, il, iu, abstol, m, &w[1],
+                       &z__[z_offset], ldz, &work[1], lwork, &iwork[1], &ifail[1], info);
     if(wantz)
     {
         /* Backtransform eigenvectors to the original problem. */
@@ -510,8 +519,8 @@ void ssygvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, re
             {
                 *(unsigned char *)trans = 'T';
             }
-            strsm_("Left", uplo, trans, "Non-unit", n, m, &c_b19, &b[b_offset], ldb, &z__[z_offset],
-                   ldz);
+            aocl_blas_strsm("Left", uplo, trans, "Non-unit", n, m, &c_b19, &b[b_offset], ldb,
+                            &z__[z_offset], ldz);
         }
         else if(*itype == 3)
         {
@@ -526,12 +535,12 @@ void ssygvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, re
             {
                 *(unsigned char *)trans = 'N';
             }
-            strmm_("Left", uplo, trans, "Non-unit", n, m, &c_b19, &b[b_offset], ldb, &z__[z_offset],
-                   ldz);
+            aocl_blas_strmm("Left", uplo, trans, "Non-unit", n, m, &c_b19, &b[b_offset], ldb,
+                            &z__[z_offset], ldz);
         }
     }
     /* Set WORK(1) to optimal workspace size. */
-    work[1] = sroundup_lwork(&lwkopt);
+    work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYGVX */

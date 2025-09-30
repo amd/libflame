@@ -124,7 +124,7 @@ void slaev2_(real *a, real *b, real *c__, real *rt1, real *rt2, real *cs1, real 
     double sqrt(doublereal);
     /* Local variables */
     real ab, df, cs, ct, tb, sm, tn, rt, adf, acs;
-    integer sgn1, sgn2;
+    aocl_int64_t sgn1, sgn2;
     real acmn, acmx;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static logical c_true = TRUE_;
 static logical c_false = FALSE_;
 /* > \brief \b DTRSNA */
@@ -87,7 +87,7 @@ each */
 /* > condition numbers are required. To select condition numbers */
 /* > for the eigenpair corresponding to a real eigenvalue w(j), */
 /* > SELECT(j) must be set to .TRUE.. To select condition numbers */
-/* > corresponding to a complex conjugate pair of eigenvalues w(j) */
+/* > corresponding to a scomplex conjugate pair of eigenvalues w(j) */
 /* > and w(j+1), either SELECT(j) or SELECT(j+1) or both, must be */
 /* > set to .TRUE.. */
 /* > If HOWMNY = 'A', SELECT is not referenced. */
@@ -154,7 +154,7 @@ and if JOB = 'E' or 'B', LDVR >= N. */
 /* > S is DOUBLE PRECISION array, dimension (MM) */
 /* > If JOB = 'E' or 'B', the reciprocal condition numbers of the */
 /* > selected eigenvalues, stored in consecutive elements of the */
-/* > array. For a complex conjugate pair of eigenvalues two */
+/* > array. For a scomplex conjugate pair of eigenvalues two */
 /* > consecutive elements of S are set to the same value. Thus */
 /* > S(j), SEP(j), and the j-th columns of VL and VR all */
 /* > correspond to the same eigenpair (but not in general the */
@@ -167,7 +167,7 @@ and if JOB = 'E' or 'B', LDVR >= N. */
 /* > SEP is DOUBLE PRECISION array, dimension (MM) */
 /* > If JOB = 'V' or 'B', the estimated reciprocal condition */
 /* > numbers of the selected eigenvectors, stored in consecutive */
-/* > elements of the array. For a complex eigenvector two */
+/* > elements of the array. For a scomplex eigenvector two */
 /* > consecutive elements of SEP are set to the same value. If */
 /* > the eigenvalues cannot be reordered to compute SEP(j), SEP(j) */
 /* > is set to 0;
@@ -270,59 +270,71 @@ v**T denotes the transpose of v, and norm(u) */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t, integer *ldt,
-             doublereal *vl, integer *ldvl, doublereal *vr, integer *ldvr, doublereal *s,
-             doublereal *sep, integer *mm, integer *m, doublereal *work, integer *ldwork,
-             integer *iwork, integer *info)
+/** Generated wrapper function */
+void dtrsna_(char *job, char *howmny, logical *select, aocl_int_t *n, doublereal *t,
+             aocl_int_t *ldt, doublereal *vl, aocl_int_t *ldvl, doublereal *vr, aocl_int_t *ldvr,
+             doublereal *s, doublereal *sep, aocl_int_t *mm, aocl_int_t *m, doublereal *work,
+             aocl_int_t *ldwork, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dtrsna(job, howmny, select, n, t, ldt, vl, ldvl, vr, ldvr, s, sep, mm, m, work,
+                       ldwork, iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t ldvl_64 = *ldvl;
+    aocl_int64_t ldvr_64 = *ldvr;
+    aocl_int64_t mm_64 = *mm;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t ldwork_64 = *ldwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dtrsna(job, howmny, select, &n_64, t, &ldt_64, vl, &ldvl_64, vr, &ldvr_64, s, sep,
+                       &mm_64, &m_64, work, &ldwork_64, iwork, &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dtrsna(char *job, char *howmny, logical *select, aocl_int64_t *n, doublereal *t,
+                        aocl_int64_t *ldt, doublereal *vl, aocl_int64_t *ldvl, doublereal *vr,
+                        aocl_int64_t *ldvr, doublereal *s, doublereal *sep, aocl_int64_t *mm,
+                        aocl_int64_t *m, doublereal *work, aocl_int64_t *ldwork, aocl_int_t *iwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dtrsna inputs: job %c, howmny %c, n %" FLA_IS ", ldt %" FLA_IS
                       ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS ", ldwork %" FLA_IS "",
                       *job, *howmny, *n, *ldt, *ldvl, *ldvr, *mm, *ldwork);
     /* System generated locals */
-    integer t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, work_dim1, work_offset, i__1,
-        i__2;
+    aocl_int64_t t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, work_dim1, work_offset,
+        i__1, i__2;
     doublereal d__1, d__2;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, k, n2;
+    aocl_int64_t i__, j, k, n2;
     doublereal cs;
-    integer nn, ks;
+    aocl_int64_t nn, ks;
     doublereal sn, mu, eps, est;
-    integer kase;
+    aocl_int64_t kase;
     doublereal cond;
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical pair;
-    integer ierr;
+    aocl_int64_t ierr;
     doublereal dumm, prod;
-    integer ifst;
+    aocl_int64_t ifst;
     doublereal lnrm;
-    integer ilst;
+    aocl_int64_t ilst;
     doublereal rnrm;
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
     doublereal prod1, prod2, scale, delta;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     logical wants;
     doublereal dummy[1];
-    extern /* Subroutine */
-        void
-        dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
-                integer *);
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
-    extern /* Subroutine */
-        void
-        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     logical wantbh;
-    extern /* Subroutine */
-        void
-        dlaqtr_(logical *, logical *, integer *, doublereal *, integer *, doublereal *,
-                doublereal *, doublereal *, doublereal *, doublereal *, integer *),
-        dtrexc_(char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *,
-                integer *, doublereal *, integer *);
     logical somcon;
     doublereal smlnum;
     logical wantsp;
@@ -458,7 +470,7 @@ void dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DTRSNA", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DTRSNA", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -538,24 +550,28 @@ void dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t
             if(!pair)
             {
                 /* Real eigenvalue. */
-                prod = ddot_(n, &vr[ks * vr_dim1 + 1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
-                rnrm = dnrm2_(n, &vr[ks * vr_dim1 + 1], &c__1);
-                lnrm = dnrm2_(n, &vl[ks * vl_dim1 + 1], &c__1);
+                prod
+                    = aocl_blas_ddot(n, &vr[ks * vr_dim1 + 1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
+                rnrm = aocl_blas_dnrm2(n, &vr[ks * vr_dim1 + 1], &c__1);
+                lnrm = aocl_blas_dnrm2(n, &vl[ks * vl_dim1 + 1], &c__1);
                 s[ks] = f2c_abs(prod) / (rnrm * lnrm);
             }
             else
             {
                 /* Complex eigenvalue. */
-                prod1 = ddot_(n, &vr[ks * vr_dim1 + 1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
-                prod1 += ddot_(n, &vr[(ks + 1) * vr_dim1 + 1], &c__1, &vl[(ks + 1) * vl_dim1 + 1],
-                               &c__1);
-                prod2 = ddot_(n, &vl[ks * vl_dim1 + 1], &c__1, &vr[(ks + 1) * vr_dim1 + 1], &c__1);
-                prod2 -= ddot_(n, &vl[(ks + 1) * vl_dim1 + 1], &c__1, &vr[ks * vr_dim1 + 1], &c__1);
-                d__1 = dnrm2_(n, &vr[ks * vr_dim1 + 1], &c__1);
-                d__2 = dnrm2_(n, &vr[(ks + 1) * vr_dim1 + 1], &c__1);
+                prod1
+                    = aocl_blas_ddot(n, &vr[ks * vr_dim1 + 1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
+                prod1 += aocl_blas_ddot(n, &vr[(ks + 1) * vr_dim1 + 1], &c__1,
+                                        &vl[(ks + 1) * vl_dim1 + 1], &c__1);
+                prod2 = aocl_blas_ddot(n, &vl[ks * vl_dim1 + 1], &c__1, &vr[(ks + 1) * vr_dim1 + 1],
+                                       &c__1);
+                prod2 -= aocl_blas_ddot(n, &vl[(ks + 1) * vl_dim1 + 1], &c__1,
+                                        &vr[ks * vr_dim1 + 1], &c__1);
+                d__1 = aocl_blas_dnrm2(n, &vr[ks * vr_dim1 + 1], &c__1);
+                d__2 = aocl_blas_dnrm2(n, &vr[(ks + 1) * vr_dim1 + 1], &c__1);
                 rnrm = dlapy2_(&d__1, &d__2);
-                d__1 = dnrm2_(n, &vl[ks * vl_dim1 + 1], &c__1);
-                d__2 = dnrm2_(n, &vl[(ks + 1) * vl_dim1 + 1], &c__1);
+                d__1 = aocl_blas_dnrm2(n, &vl[ks * vl_dim1 + 1], &c__1);
+                d__2 = aocl_blas_dnrm2(n, &vl[(ks + 1) * vl_dim1 + 1], &c__1);
                 lnrm = dlapy2_(&d__1, &d__2);
                 cond = dlapy2_(&prod1, &prod2) / (rnrm * lnrm);
                 s[ks] = cond;
@@ -568,11 +584,11 @@ void dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t
             /* eigenvector. */
             /* Copy the matrix T to the array WORK and swap the diagonal */
             /* block beginning at T(k,k) to the (1,1) position. */
-            dlacpy_("Full", n, n, &t[t_offset], ldt, &work[work_offset], ldwork);
+            aocl_lapack_dlacpy("Full", n, n, &t[t_offset], ldt, &work[work_offset], ldwork);
             ifst = k;
             ilst = 1;
-            dtrexc_("No Q", n, &work[work_offset], ldwork, dummy, &c__1, &ifst, &ilst,
-                    &work[(*n + 1) * work_dim1 + 1], &ierr);
+            aocl_lapack_dtrexc("No Q", n, &work[work_offset], ldwork, dummy, &c__1, &ifst, &ilst,
+                               &work[(*n + 1) * work_dim1 + 1], &ierr);
             if(ierr == 1 || ierr == 2)
             {
                 /* Could not swap because blocks not well separated */
@@ -599,9 +615,9 @@ void dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t
                     /* Triangularize the 2 by 2 block by unitary */
                     /* transformation U = [ cs i*ss ] */
                     /* [ i*ss cs ]. */
-                    /* such that the (1,1) position of WORK is complex */
+                    /* such that the (1,1) position of WORK is scomplex */
                     /* eigenvalue lambda with positive imaginary part. (2,2) */
-                    /* position of WORK is the complex eigenvalue lambda */
+                    /* position of WORK is the scomplex eigenvalue lambda */
                     /* with negative imaginary part. */
                     mu = sqrt((d__1 = work[(work_dim1 << 1) + 1], f2c_abs(d__1)))
                          * sqrt((d__2 = work[work_dim1 + 2], f2c_abs(d__2)));
@@ -639,8 +655,8 @@ void dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t
                 est = 0.;
                 kase = 0;
             L50:
-                dlacn2_(&nn, &work[(*n + 2) * work_dim1 + 1], &work[(*n + 4) * work_dim1 + 1],
-                        &iwork[1], &est, &kase, isave);
+                aocl_lapack_dlacn2(&nn, &work[(*n + 2) * work_dim1 + 1],
+                                   &work[(*n + 4) * work_dim1 + 1], &iwork[1], &est, &kase, isave);
                 if(kase != 0)
                 {
                     if(kase == 1)
@@ -649,19 +665,21 @@ void dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t
                         {
                             /* Real eigenvalue: solve C**T*x = scale*c. */
                             i__2 = *n - 1;
-                            dlaqtr_(&c_true, &c_true, &i__2, &work[(work_dim1 << 1) + 2], ldwork,
-                                    dummy, &dumm, &scale, &work[(*n + 4) * work_dim1 + 1],
-                                    &work[(*n + 6) * work_dim1 + 1], &ierr);
+                            aocl_lapack_dlaqtr(&c_true, &c_true, &i__2, &work[(work_dim1 << 1) + 2],
+                                               ldwork, dummy, &dumm, &scale,
+                                               &work[(*n + 4) * work_dim1 + 1],
+                                               &work[(*n + 6) * work_dim1 + 1], &ierr);
                         }
                         else
                         {
                             /* Complex eigenvalue: solve */
                             /* C**T*(p+iq) = scale*(c+id) in real arithmetic. */
                             i__2 = *n - 1;
-                            dlaqtr_(&c_true, &c_false, &i__2, &work[(work_dim1 << 1) + 2], ldwork,
-                                    &work[(*n + 1) * work_dim1 + 1], &mu, &scale,
-                                    &work[(*n + 4) * work_dim1 + 1],
-                                    &work[(*n + 6) * work_dim1 + 1], &ierr);
+                            aocl_lapack_dlaqtr(&c_true, &c_false, &i__2,
+                                               &work[(work_dim1 << 1) + 2], ldwork,
+                                               &work[(*n + 1) * work_dim1 + 1], &mu, &scale,
+                                               &work[(*n + 4) * work_dim1 + 1],
+                                               &work[(*n + 6) * work_dim1 + 1], &ierr);
                         }
                     }
                     else
@@ -670,19 +688,21 @@ void dtrsna_(char *job, char *howmny, logical *select, integer *n, doublereal *t
                         {
                             /* Real eigenvalue: solve C*x = scale*c. */
                             i__2 = *n - 1;
-                            dlaqtr_(&c_false, &c_true, &i__2, &work[(work_dim1 << 1) + 2], ldwork,
-                                    dummy, &dumm, &scale, &work[(*n + 4) * work_dim1 + 1],
-                                    &work[(*n + 6) * work_dim1 + 1], &ierr);
+                            aocl_lapack_dlaqtr(&c_false, &c_true, &i__2,
+                                               &work[(work_dim1 << 1) + 2], ldwork, dummy, &dumm,
+                                               &scale, &work[(*n + 4) * work_dim1 + 1],
+                                               &work[(*n + 6) * work_dim1 + 1], &ierr);
                         }
                         else
                         {
                             /* Complex eigenvalue: solve */
                             /* C*(p+iq) = scale*(c+id) in real arithmetic. */
                             i__2 = *n - 1;
-                            dlaqtr_(&c_false, &c_false, &i__2, &work[(work_dim1 << 1) + 2], ldwork,
-                                    &work[(*n + 1) * work_dim1 + 1], &mu, &scale,
-                                    &work[(*n + 4) * work_dim1 + 1],
-                                    &work[(*n + 6) * work_dim1 + 1], &ierr);
+                            aocl_lapack_dlaqtr(&c_false, &c_false, &i__2,
+                                               &work[(work_dim1 << 1) + 2], ldwork,
+                                               &work[(*n + 1) * work_dim1 + 1], &mu, &scale,
+                                               &work[(*n + 4) * work_dim1 + 1],
+                                               &work[(*n + 6) * work_dim1 + 1], &ierr);
                         }
                     }
                     goto L50;

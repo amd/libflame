@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SORG2L generates all or part of the orthogonal matrix Q from a QL factorization
  * determined by s geqlf (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
@@ -112,22 +112,36 @@ static integer c__1 = 1;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sorg2l_(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *work,
-             integer *info)
+/** Generated wrapper function */
+void sorg2l_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *a, aocl_int_t *lda, real *tau,
+             real *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sorg2l(m, n, k, a, lda, tau, work, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sorg2l(&m_64, &n_64, &k_64, a, &lda_64, tau, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sorg2l(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, real *a,
+                        aocl_int64_t *lda, real *tau, real *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sorg2l inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",
                       *m, *n, *k, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     real r__1;
     /* Local variables */
-    integer i__, j, l, ii;
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *),
-        slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, j, l, ii;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -174,7 +188,7 @@ void sorg2l_(integer *m, integer *n, integer *k, real *a, integer *lda, real *ta
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SORG2L", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SORG2L", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -205,11 +219,11 @@ void sorg2l_(integer *m, integer *n, integer *k, real *a, integer *lda, real *ta
         a[*m - *n + ii + ii * a_dim1] = 1.f;
         i__2 = *m - *n + ii;
         i__3 = ii - 1;
-        slarf_("Left", &i__2, &i__3, &a[ii * a_dim1 + 1], &c__1, &tau[i__], &a[a_offset], lda,
-               &work[1]);
+        aocl_lapack_slarf("Left", &i__2, &i__3, &a[ii * a_dim1 + 1], &c__1, &tau[i__], &a[a_offset],
+                          lda, &work[1]);
         i__2 = *m - *n + ii - 1;
         r__1 = -tau[i__];
-        sscal_(&i__2, &r__1, &a[ii * a_dim1 + 1], &c__1);
+        aocl_blas_sscal(&i__2, &r__1, &a[ii * a_dim1 + 1], &c__1);
         a[*m - *n + ii + ii * a_dim1] = 1.f - tau[i__];
         /* Set A(m-k+i+1:m,n-k+i) to zero */
         i__2 = *m;

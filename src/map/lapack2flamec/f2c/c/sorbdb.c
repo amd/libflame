@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SORBDB */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -291,10 +291,39 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void sorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, real *x11,
-             integer *ldx11, real *x12, integer *ldx12, real *x21, integer *ldx21, real *x22,
-             integer *ldx22, real *theta, real *phi, real *taup1, real *taup2, real *tauq1,
-             real *tauq2, real *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void sorbdb_(char *trans, char *signs, aocl_int_t *m, aocl_int_t *p, aocl_int_t *q, real *x11,
+             aocl_int_t *ldx11, real *x12, aocl_int_t *ldx12, real *x21, aocl_int_t *ldx21,
+             real *x22, aocl_int_t *ldx22, real *theta, real *phi, real *taup1, real *taup2,
+             real *tauq1, real *tauq2, real *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sorbdb(trans, signs, m, p, q, x11, ldx11, x12, ldx12, x21, ldx21, x22, ldx22, theta,
+                       phi, taup1, taup2, tauq1, tauq2, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t p_64 = *p;
+    aocl_int64_t q_64 = *q;
+    aocl_int64_t ldx11_64 = *ldx11;
+    aocl_int64_t ldx12_64 = *ldx12;
+    aocl_int64_t ldx21_64 = *ldx21;
+    aocl_int64_t ldx22_64 = *ldx22;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sorbdb(trans, signs, &m_64, &p_64, &q_64, x11, &ldx11_64, x12, &ldx12_64, x21,
+                       &ldx21_64, x22, &ldx22_64, theta, phi, taup1, taup2, tauq1, tauq2, work,
+                       &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sorbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *q,
+                        real *x11, aocl_int64_t *ldx11, real *x12, aocl_int64_t *ldx12, real *x21,
+                        aocl_int64_t *ldx21, real *x22, aocl_int64_t *ldx22, real *theta, real *phi,
+                        real *taup1, real *taup2, real *tauq1, real *tauq2, real *work,
+                        aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sorbdb inputs: trans %c, signs %c, m %" FLA_IS ", p %" FLA_IS ", q %" FLA_IS
@@ -302,27 +331,17 @@ void sorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, real 
                       "ldx22 %" FLA_IS "",
                       *trans, *signs, *m, *p, *q, *ldx11, *ldx12, *ldx21, *ldx22);
     /* System generated locals */
-    integer x11_dim1, x11_offset, x12_dim1, x12_offset, x21_dim1, x21_offset, x22_dim1, x22_offset,
-        i__1, i__2, i__3;
+    aocl_int64_t x11_dim1, x11_offset, x12_dim1, x12_offset, x21_dim1, x21_offset, x22_dim1,
+        x22_offset, i__1, i__2, i__3;
     real r__1;
     /* Builtin functions */
     double cos(doublereal), sin(doublereal), atan2(doublereal, doublereal);
     /* Local variables */
     logical colmajor;
-    integer lworkmin, lworkopt, i__;
+    aocl_int64_t lworkmin, lworkopt, i__;
     real z1, z2, z3, z4;
-    extern real snrm2_(integer *, real *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *),
-        slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *),
-        saxpy_(integer *, real *, real *, integer *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lquery;
-    extern /* Subroutine */
-        void
-        slarfgp_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -464,7 +483,7 @@ void sorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, real 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("xORBDB", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("xORBDB", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -483,128 +502,128 @@ void sorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, real 
             if(i__ == 1)
             {
                 i__2 = *p - i__ + 1;
-                sscal_(&i__2, &z1, &x11[i__ + i__ * x11_dim1], &c__1);
+                aocl_blas_sscal(&i__2, &z1, &x11[i__ + i__ * x11_dim1], &c__1);
             }
             else
             {
                 i__2 = *p - i__ + 1;
                 r__1 = z1 * cos(phi[i__ - 1]);
-                sscal_(&i__2, &r__1, &x11[i__ + i__ * x11_dim1], &c__1);
+                aocl_blas_sscal(&i__2, &r__1, &x11[i__ + i__ * x11_dim1], &c__1);
                 i__2 = *p - i__ + 1;
                 r__1 = -z1 * z3 * z4 * sin(phi[i__ - 1]);
-                saxpy_(&i__2, &r__1, &x12[i__ + (i__ - 1) * x12_dim1], &c__1,
-                       &x11[i__ + i__ * x11_dim1], &c__1);
+                aocl_blas_saxpy(&i__2, &r__1, &x12[i__ + (i__ - 1) * x12_dim1], &c__1,
+                                &x11[i__ + i__ * x11_dim1], &c__1);
             }
             if(i__ == 1)
             {
                 i__2 = *m - *p - i__ + 1;
-                sscal_(&i__2, &z2, &x21[i__ + i__ * x21_dim1], &c__1);
+                aocl_blas_sscal(&i__2, &z2, &x21[i__ + i__ * x21_dim1], &c__1);
             }
             else
             {
                 i__2 = *m - *p - i__ + 1;
                 r__1 = z2 * cos(phi[i__ - 1]);
-                sscal_(&i__2, &r__1, &x21[i__ + i__ * x21_dim1], &c__1);
+                aocl_blas_sscal(&i__2, &r__1, &x21[i__ + i__ * x21_dim1], &c__1);
                 i__2 = *m - *p - i__ + 1;
                 r__1 = -z2 * z3 * z4 * sin(phi[i__ - 1]);
-                saxpy_(&i__2, &r__1, &x22[i__ + (i__ - 1) * x22_dim1], &c__1,
-                       &x21[i__ + i__ * x21_dim1], &c__1);
+                aocl_blas_saxpy(&i__2, &r__1, &x22[i__ + (i__ - 1) * x22_dim1], &c__1,
+                                &x21[i__ + i__ * x21_dim1], &c__1);
             }
             i__2 = *m - *p - i__ + 1;
             i__3 = *p - i__ + 1;
-            theta[i__] = atan2(snrm2_(&i__2, &x21[i__ + i__ * x21_dim1], &c__1),
-                               snrm2_(&i__3, &x11[i__ + i__ * x11_dim1], &c__1));
+            theta[i__] = atan2(aocl_blas_snrm2(&i__2, &x21[i__ + i__ * x21_dim1], &c__1),
+                               aocl_blas_snrm2(&i__3, &x11[i__ + i__ * x11_dim1], &c__1));
             if(*p > i__)
             {
                 i__2 = *p - i__ + 1;
-                slarfgp_(&i__2, &x11[i__ + i__ * x11_dim1], &x11[i__ + 1 + i__ * x11_dim1], &c__1,
-                         &taup1[i__]);
+                aocl_lapack_slarfgp(&i__2, &x11[i__ + i__ * x11_dim1],
+                                    &x11[i__ + 1 + i__ * x11_dim1], &c__1, &taup1[i__]);
             }
             else if(*p == i__)
             {
                 i__2 = *p - i__ + 1;
-                slarfgp_(&i__2, &x11[i__ + i__ * x11_dim1], &x11[i__ + i__ * x11_dim1], &c__1,
-                         &taup1[i__]);
+                aocl_lapack_slarfgp(&i__2, &x11[i__ + i__ * x11_dim1], &x11[i__ + i__ * x11_dim1],
+                                    &c__1, &taup1[i__]);
             }
             x11[i__ + i__ * x11_dim1] = 1.f;
             if(*m - *p > i__)
             {
                 i__2 = *m - *p - i__ + 1;
-                slarfgp_(&i__2, &x21[i__ + i__ * x21_dim1], &x21[i__ + 1 + i__ * x21_dim1], &c__1,
-                         &taup2[i__]);
+                aocl_lapack_slarfgp(&i__2, &x21[i__ + i__ * x21_dim1],
+                                    &x21[i__ + 1 + i__ * x21_dim1], &c__1, &taup2[i__]);
             }
             else if(*m - *p == i__)
             {
                 i__2 = *m - *p - i__ + 1;
-                slarfgp_(&i__2, &x21[i__ + i__ * x21_dim1], &x21[i__ + i__ * x21_dim1], &c__1,
-                         &taup2[i__]);
+                aocl_lapack_slarfgp(&i__2, &x21[i__ + i__ * x21_dim1], &x21[i__ + i__ * x21_dim1],
+                                    &c__1, &taup2[i__]);
             }
             x21[i__ + i__ * x21_dim1] = 1.f;
             if(*q > i__)
             {
                 i__2 = *p - i__ + 1;
                 i__3 = *q - i__;
-                slarf_("L", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], &c__1, &taup1[i__],
-                       &x11[i__ + (i__ + 1) * x11_dim1], ldx11, &work[1]);
+                aocl_lapack_slarf("L", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], &c__1, &taup1[i__],
+                                  &x11[i__ + (i__ + 1) * x11_dim1], ldx11, &work[1]);
             }
             if(*m - *q + 1 > i__)
             {
                 i__2 = *p - i__ + 1;
                 i__3 = *m - *q - i__ + 1;
-                slarf_("L", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], &c__1, &taup1[i__],
-                       &x12[i__ + i__ * x12_dim1], ldx12, &work[1]);
+                aocl_lapack_slarf("L", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], &c__1, &taup1[i__],
+                                  &x12[i__ + i__ * x12_dim1], ldx12, &work[1]);
             }
             if(*q > i__)
             {
                 i__2 = *m - *p - i__ + 1;
                 i__3 = *q - i__;
-                slarf_("L", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], &c__1, &taup2[i__],
-                       &x21[i__ + (i__ + 1) * x21_dim1], ldx21, &work[1]);
+                aocl_lapack_slarf("L", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], &c__1, &taup2[i__],
+                                  &x21[i__ + (i__ + 1) * x21_dim1], ldx21, &work[1]);
             }
             if(*m - *q + 1 > i__)
             {
                 i__2 = *m - *p - i__ + 1;
                 i__3 = *m - *q - i__ + 1;
-                slarf_("L", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], &c__1, &taup2[i__],
-                       &x22[i__ + i__ * x22_dim1], ldx22, &work[1]);
+                aocl_lapack_slarf("L", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], &c__1, &taup2[i__],
+                                  &x22[i__ + i__ * x22_dim1], ldx22, &work[1]);
             }
             if(i__ < *q)
             {
                 i__2 = *q - i__;
                 r__1 = -z1 * z3 * sin(theta[i__]);
-                sscal_(&i__2, &r__1, &x11[i__ + (i__ + 1) * x11_dim1], ldx11);
+                aocl_blas_sscal(&i__2, &r__1, &x11[i__ + (i__ + 1) * x11_dim1], ldx11);
                 i__2 = *q - i__;
                 r__1 = z2 * z3 * cos(theta[i__]);
-                saxpy_(&i__2, &r__1, &x21[i__ + (i__ + 1) * x21_dim1], ldx21,
-                       &x11[i__ + (i__ + 1) * x11_dim1], ldx11);
+                aocl_blas_saxpy(&i__2, &r__1, &x21[i__ + (i__ + 1) * x21_dim1], ldx21,
+                                &x11[i__ + (i__ + 1) * x11_dim1], ldx11);
             }
             i__2 = *m - *q - i__ + 1;
             r__1 = -z1 * z4 * sin(theta[i__]);
-            sscal_(&i__2, &r__1, &x12[i__ + i__ * x12_dim1], ldx12);
+            aocl_blas_sscal(&i__2, &r__1, &x12[i__ + i__ * x12_dim1], ldx12);
             i__2 = *m - *q - i__ + 1;
             r__1 = z2 * z4 * cos(theta[i__]);
-            saxpy_(&i__2, &r__1, &x22[i__ + i__ * x22_dim1], ldx22, &x12[i__ + i__ * x12_dim1],
-                   ldx12);
+            aocl_blas_saxpy(&i__2, &r__1, &x22[i__ + i__ * x22_dim1], ldx22,
+                            &x12[i__ + i__ * x12_dim1], ldx12);
             if(i__ < *q)
             {
                 i__2 = *q - i__;
                 i__3 = *m - *q - i__ + 1;
-                phi[i__] = atan2(snrm2_(&i__2, &x11[i__ + (i__ + 1) * x11_dim1], ldx11),
-                                 snrm2_(&i__3, &x12[i__ + i__ * x12_dim1], ldx12));
+                phi[i__] = atan2(aocl_blas_snrm2(&i__2, &x11[i__ + (i__ + 1) * x11_dim1], ldx11),
+                                 aocl_blas_snrm2(&i__3, &x12[i__ + i__ * x12_dim1], ldx12));
             }
             if(i__ < *q)
             {
                 if(*q - i__ == 1)
                 {
                     i__2 = *q - i__;
-                    slarfgp_(&i__2, &x11[i__ + (i__ + 1) * x11_dim1],
-                             &x11[i__ + (i__ + 1) * x11_dim1], ldx11, &tauq1[i__]);
+                    aocl_lapack_slarfgp(&i__2, &x11[i__ + (i__ + 1) * x11_dim1],
+                                        &x11[i__ + (i__ + 1) * x11_dim1], ldx11, &tauq1[i__]);
                 }
                 else
                 {
                     i__2 = *q - i__;
-                    slarfgp_(&i__2, &x11[i__ + (i__ + 1) * x11_dim1],
-                             &x11[i__ + (i__ + 2) * x11_dim1], ldx11, &tauq1[i__]);
+                    aocl_lapack_slarfgp(&i__2, &x11[i__ + (i__ + 1) * x11_dim1],
+                                        &x11[i__ + (i__ + 2) * x11_dim1], ldx11, &tauq1[i__]);
                 }
                 x11[i__ + (i__ + 1) * x11_dim1] = 1.f;
             }
@@ -613,14 +632,14 @@ void sorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, real 
                 if(*m - *q == i__)
                 {
                     i__2 = *m - *q - i__ + 1;
-                    slarfgp_(&i__2, &x12[i__ + i__ * x12_dim1], &x12[i__ + i__ * x12_dim1], ldx12,
-                             &tauq2[i__]);
+                    aocl_lapack_slarfgp(&i__2, &x12[i__ + i__ * x12_dim1],
+                                        &x12[i__ + i__ * x12_dim1], ldx12, &tauq2[i__]);
                 }
                 else
                 {
                     i__2 = *m - *q - i__ + 1;
-                    slarfgp_(&i__2, &x12[i__ + i__ * x12_dim1], &x12[i__ + (i__ + 1) * x12_dim1],
-                             ldx12, &tauq2[i__]);
+                    aocl_lapack_slarfgp(&i__2, &x12[i__ + i__ * x12_dim1],
+                                        &x12[i__ + (i__ + 1) * x12_dim1], ldx12, &tauq2[i__]);
                 }
             }
             x12[i__ + i__ * x12_dim1] = 1.f;
@@ -628,26 +647,28 @@ void sorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, real 
             {
                 i__2 = *p - i__;
                 i__3 = *q - i__;
-                slarf_("R", &i__2, &i__3, &x11[i__ + (i__ + 1) * x11_dim1], ldx11, &tauq1[i__],
-                       &x11[i__ + 1 + (i__ + 1) * x11_dim1], ldx11, &work[1]);
+                aocl_lapack_slarf("R", &i__2, &i__3, &x11[i__ + (i__ + 1) * x11_dim1], ldx11,
+                                  &tauq1[i__], &x11[i__ + 1 + (i__ + 1) * x11_dim1], ldx11,
+                                  &work[1]);
                 i__2 = *m - *p - i__;
                 i__3 = *q - i__;
-                slarf_("R", &i__2, &i__3, &x11[i__ + (i__ + 1) * x11_dim1], ldx11, &tauq1[i__],
-                       &x21[i__ + 1 + (i__ + 1) * x21_dim1], ldx21, &work[1]);
+                aocl_lapack_slarf("R", &i__2, &i__3, &x11[i__ + (i__ + 1) * x11_dim1], ldx11,
+                                  &tauq1[i__], &x21[i__ + 1 + (i__ + 1) * x21_dim1], ldx21,
+                                  &work[1]);
             }
             if(*p > i__)
             {
                 i__2 = *p - i__;
                 i__3 = *m - *q - i__ + 1;
-                slarf_("R", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], ldx12, &tauq2[i__],
-                       &x12[i__ + 1 + i__ * x12_dim1], ldx12, &work[1]);
+                aocl_lapack_slarf("R", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], ldx12, &tauq2[i__],
+                                  &x12[i__ + 1 + i__ * x12_dim1], ldx12, &work[1]);
             }
             if(*m - *p > i__)
             {
                 i__2 = *m - *p - i__;
                 i__3 = *m - *q - i__ + 1;
-                slarf_("R", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], ldx12, &tauq2[i__],
-                       &x22[i__ + 1 + i__ * x22_dim1], ldx22, &work[1]);
+                aocl_lapack_slarf("R", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], ldx12, &tauq2[i__],
+                                  &x22[i__ + 1 + i__ * x22_dim1], ldx22, &work[1]);
             }
         }
         /* Reduce columns Q + 1, ..., P of X12, X22 */
@@ -656,33 +677,33 @@ void sorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, real 
         {
             i__2 = *m - *q - i__ + 1;
             r__1 = -z1 * z4;
-            sscal_(&i__2, &r__1, &x12[i__ + i__ * x12_dim1], ldx12);
+            aocl_blas_sscal(&i__2, &r__1, &x12[i__ + i__ * x12_dim1], ldx12);
             if(i__ >= *m - *q)
             {
                 i__2 = *m - *q - i__ + 1;
-                slarfgp_(&i__2, &x12[i__ + i__ * x12_dim1], &x12[i__ + i__ * x12_dim1], ldx12,
-                         &tauq2[i__]);
+                aocl_lapack_slarfgp(&i__2, &x12[i__ + i__ * x12_dim1], &x12[i__ + i__ * x12_dim1],
+                                    ldx12, &tauq2[i__]);
             }
             else
             {
                 i__2 = *m - *q - i__ + 1;
-                slarfgp_(&i__2, &x12[i__ + i__ * x12_dim1], &x12[i__ + (i__ + 1) * x12_dim1], ldx12,
-                         &tauq2[i__]);
+                aocl_lapack_slarfgp(&i__2, &x12[i__ + i__ * x12_dim1],
+                                    &x12[i__ + (i__ + 1) * x12_dim1], ldx12, &tauq2[i__]);
             }
             x12[i__ + i__ * x12_dim1] = 1.f;
             if(*p > i__)
             {
                 i__2 = *p - i__;
                 i__3 = *m - *q - i__ + 1;
-                slarf_("R", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], ldx12, &tauq2[i__],
-                       &x12[i__ + 1 + i__ * x12_dim1], ldx12, &work[1]);
+                aocl_lapack_slarf("R", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], ldx12, &tauq2[i__],
+                                  &x12[i__ + 1 + i__ * x12_dim1], ldx12, &work[1]);
             }
             if(*m - *p - *q >= 1)
             {
                 i__2 = *m - *p - *q;
                 i__3 = *m - *q - i__ + 1;
-                slarf_("R", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], ldx12, &tauq2[i__],
-                       &x22[*q + 1 + i__ * x22_dim1], ldx22, &work[1]);
+                aocl_lapack_slarf("R", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], ldx12, &tauq2[i__],
+                                  &x22[*q + 1 + i__ * x22_dim1], ldx22, &work[1]);
             }
         }
         /* Reduce columns P + 1, ..., M - Q of X12, X22 */
@@ -691,27 +712,29 @@ void sorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, real 
         {
             i__2 = *m - *p - *q - i__ + 1;
             r__1 = z2 * z4;
-            sscal_(&i__2, &r__1, &x22[*q + i__ + (*p + i__) * x22_dim1], ldx22);
+            aocl_blas_sscal(&i__2, &r__1, &x22[*q + i__ + (*p + i__) * x22_dim1], ldx22);
             if(i__ == *m - *p - *q)
             {
                 i__2 = *m - *p - *q - i__ + 1;
-                slarfgp_(&i__2, &x22[*q + i__ + (*p + i__) * x22_dim1],
-                         &x22[*q + i__ + (*p + i__) * x22_dim1], ldx22, &tauq2[*p + i__]);
+                aocl_lapack_slarfgp(&i__2, &x22[*q + i__ + (*p + i__) * x22_dim1],
+                                    &x22[*q + i__ + (*p + i__) * x22_dim1], ldx22,
+                                    &tauq2[*p + i__]);
             }
             else
             {
                 i__2 = *m - *p - *q - i__ + 1;
-                slarfgp_(&i__2, &x22[*q + i__ + (*p + i__) * x22_dim1],
-                         &x22[*q + i__ + (*p + i__ + 1) * x22_dim1], ldx22, &tauq2[*p + i__]);
+                aocl_lapack_slarfgp(&i__2, &x22[*q + i__ + (*p + i__) * x22_dim1],
+                                    &x22[*q + i__ + (*p + i__ + 1) * x22_dim1], ldx22,
+                                    &tauq2[*p + i__]);
             }
             x22[*q + i__ + (*p + i__) * x22_dim1] = 1.f;
             if(i__ < *m - *p - *q)
             {
                 i__2 = *m - *p - *q - i__;
                 i__3 = *m - *p - *q - i__ + 1;
-                slarf_("R", &i__2, &i__3, &x22[*q + i__ + (*p + i__) * x22_dim1], ldx22,
-                       &tauq2[*p + i__], &x22[*q + i__ + 1 + (*p + i__) * x22_dim1], ldx22,
-                       &work[1]);
+                aocl_lapack_slarf("R", &i__2, &i__3, &x22[*q + i__ + (*p + i__) * x22_dim1], ldx22,
+                                  &tauq2[*p + i__], &x22[*q + i__ + 1 + (*p + i__) * x22_dim1],
+                                  ldx22, &work[1]);
             }
         }
     }
@@ -724,156 +747,158 @@ void sorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, real 
             if(i__ == 1)
             {
                 i__2 = *p - i__ + 1;
-                sscal_(&i__2, &z1, &x11[i__ + i__ * x11_dim1], ldx11);
+                aocl_blas_sscal(&i__2, &z1, &x11[i__ + i__ * x11_dim1], ldx11);
             }
             else
             {
                 i__2 = *p - i__ + 1;
                 r__1 = z1 * cos(phi[i__ - 1]);
-                sscal_(&i__2, &r__1, &x11[i__ + i__ * x11_dim1], ldx11);
+                aocl_blas_sscal(&i__2, &r__1, &x11[i__ + i__ * x11_dim1], ldx11);
                 i__2 = *p - i__ + 1;
                 r__1 = -z1 * z3 * z4 * sin(phi[i__ - 1]);
-                saxpy_(&i__2, &r__1, &x12[i__ - 1 + i__ * x12_dim1], ldx12,
-                       &x11[i__ + i__ * x11_dim1], ldx11);
+                aocl_blas_saxpy(&i__2, &r__1, &x12[i__ - 1 + i__ * x12_dim1], ldx12,
+                                &x11[i__ + i__ * x11_dim1], ldx11);
             }
             if(i__ == 1)
             {
                 i__2 = *m - *p - i__ + 1;
-                sscal_(&i__2, &z2, &x21[i__ + i__ * x21_dim1], ldx21);
+                aocl_blas_sscal(&i__2, &z2, &x21[i__ + i__ * x21_dim1], ldx21);
             }
             else
             {
                 i__2 = *m - *p - i__ + 1;
                 r__1 = z2 * cos(phi[i__ - 1]);
-                sscal_(&i__2, &r__1, &x21[i__ + i__ * x21_dim1], ldx21);
+                aocl_blas_sscal(&i__2, &r__1, &x21[i__ + i__ * x21_dim1], ldx21);
                 i__2 = *m - *p - i__ + 1;
                 r__1 = -z2 * z3 * z4 * sin(phi[i__ - 1]);
-                saxpy_(&i__2, &r__1, &x22[i__ - 1 + i__ * x22_dim1], ldx22,
-                       &x21[i__ + i__ * x21_dim1], ldx21);
+                aocl_blas_saxpy(&i__2, &r__1, &x22[i__ - 1 + i__ * x22_dim1], ldx22,
+                                &x21[i__ + i__ * x21_dim1], ldx21);
             }
             i__2 = *m - *p - i__ + 1;
             i__3 = *p - i__ + 1;
-            theta[i__] = atan2(snrm2_(&i__2, &x21[i__ + i__ * x21_dim1], ldx21),
-                               snrm2_(&i__3, &x11[i__ + i__ * x11_dim1], ldx11));
+            theta[i__] = atan2(aocl_blas_snrm2(&i__2, &x21[i__ + i__ * x21_dim1], ldx21),
+                               aocl_blas_snrm2(&i__3, &x11[i__ + i__ * x11_dim1], ldx11));
             i__2 = *p - i__ + 1;
-            slarfgp_(&i__2, &x11[i__ + i__ * x11_dim1], &x11[i__ + (i__ + 1) * x11_dim1], ldx11,
-                     &taup1[i__]);
+            aocl_lapack_slarfgp(&i__2, &x11[i__ + i__ * x11_dim1], &x11[i__ + (i__ + 1) * x11_dim1],
+                                ldx11, &taup1[i__]);
             x11[i__ + i__ * x11_dim1] = 1.f;
             if(i__ == *m - *p)
             {
                 i__2 = *m - *p - i__ + 1;
-                slarfgp_(&i__2, &x21[i__ + i__ * x21_dim1], &x21[i__ + i__ * x21_dim1], ldx21,
-                         &taup2[i__]);
+                aocl_lapack_slarfgp(&i__2, &x21[i__ + i__ * x21_dim1], &x21[i__ + i__ * x21_dim1],
+                                    ldx21, &taup2[i__]);
             }
             else
             {
                 i__2 = *m - *p - i__ + 1;
-                slarfgp_(&i__2, &x21[i__ + i__ * x21_dim1], &x21[i__ + (i__ + 1) * x21_dim1], ldx21,
-                         &taup2[i__]);
+                aocl_lapack_slarfgp(&i__2, &x21[i__ + i__ * x21_dim1],
+                                    &x21[i__ + (i__ + 1) * x21_dim1], ldx21, &taup2[i__]);
             }
             x21[i__ + i__ * x21_dim1] = 1.f;
             if(*q > i__)
             {
                 i__2 = *q - i__;
                 i__3 = *p - i__ + 1;
-                slarf_("R", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], ldx11, &taup1[i__],
-                       &x11[i__ + 1 + i__ * x11_dim1], ldx11, &work[1]);
+                aocl_lapack_slarf("R", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], ldx11, &taup1[i__],
+                                  &x11[i__ + 1 + i__ * x11_dim1], ldx11, &work[1]);
             }
             if(*m - *q + 1 > i__)
             {
                 i__2 = *m - *q - i__ + 1;
                 i__3 = *p - i__ + 1;
-                slarf_("R", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], ldx11, &taup1[i__],
-                       &x12[i__ + i__ * x12_dim1], ldx12, &work[1]);
+                aocl_lapack_slarf("R", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], ldx11, &taup1[i__],
+                                  &x12[i__ + i__ * x12_dim1], ldx12, &work[1]);
             }
             if(*q > i__)
             {
                 i__2 = *q - i__;
                 i__3 = *m - *p - i__ + 1;
-                slarf_("R", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], ldx21, &taup2[i__],
-                       &x21[i__ + 1 + i__ * x21_dim1], ldx21, &work[1]);
+                aocl_lapack_slarf("R", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], ldx21, &taup2[i__],
+                                  &x21[i__ + 1 + i__ * x21_dim1], ldx21, &work[1]);
             }
             if(*m - *q + 1 > i__)
             {
                 i__2 = *m - *q - i__ + 1;
                 i__3 = *m - *p - i__ + 1;
-                slarf_("R", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], ldx21, &taup2[i__],
-                       &x22[i__ + i__ * x22_dim1], ldx22, &work[1]);
+                aocl_lapack_slarf("R", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], ldx21, &taup2[i__],
+                                  &x22[i__ + i__ * x22_dim1], ldx22, &work[1]);
             }
             if(i__ < *q)
             {
                 i__2 = *q - i__;
                 r__1 = -z1 * z3 * sin(theta[i__]);
-                sscal_(&i__2, &r__1, &x11[i__ + 1 + i__ * x11_dim1], &c__1);
+                aocl_blas_sscal(&i__2, &r__1, &x11[i__ + 1 + i__ * x11_dim1], &c__1);
                 i__2 = *q - i__;
                 r__1 = z2 * z3 * cos(theta[i__]);
-                saxpy_(&i__2, &r__1, &x21[i__ + 1 + i__ * x21_dim1], &c__1,
-                       &x11[i__ + 1 + i__ * x11_dim1], &c__1);
+                aocl_blas_saxpy(&i__2, &r__1, &x21[i__ + 1 + i__ * x21_dim1], &c__1,
+                                &x11[i__ + 1 + i__ * x11_dim1], &c__1);
             }
             i__2 = *m - *q - i__ + 1;
             r__1 = -z1 * z4 * sin(theta[i__]);
-            sscal_(&i__2, &r__1, &x12[i__ + i__ * x12_dim1], &c__1);
+            aocl_blas_sscal(&i__2, &r__1, &x12[i__ + i__ * x12_dim1], &c__1);
             i__2 = *m - *q - i__ + 1;
             r__1 = z2 * z4 * cos(theta[i__]);
-            saxpy_(&i__2, &r__1, &x22[i__ + i__ * x22_dim1], &c__1, &x12[i__ + i__ * x12_dim1],
-                   &c__1);
+            aocl_blas_saxpy(&i__2, &r__1, &x22[i__ + i__ * x22_dim1], &c__1,
+                            &x12[i__ + i__ * x12_dim1], &c__1);
             if(i__ < *q)
             {
                 i__2 = *q - i__;
                 i__3 = *m - *q - i__ + 1;
-                phi[i__] = atan2(snrm2_(&i__2, &x11[i__ + 1 + i__ * x11_dim1], &c__1),
-                                 snrm2_(&i__3, &x12[i__ + i__ * x12_dim1], &c__1));
+                phi[i__] = atan2(aocl_blas_snrm2(&i__2, &x11[i__ + 1 + i__ * x11_dim1], &c__1),
+                                 aocl_blas_snrm2(&i__3, &x12[i__ + i__ * x12_dim1], &c__1));
             }
             if(i__ < *q)
             {
                 if(*q - i__ == 1)
                 {
                     i__2 = *q - i__;
-                    slarfgp_(&i__2, &x11[i__ + 1 + i__ * x11_dim1], &x11[i__ + 1 + i__ * x11_dim1],
-                             &c__1, &tauq1[i__]);
+                    aocl_lapack_slarfgp(&i__2, &x11[i__ + 1 + i__ * x11_dim1],
+                                        &x11[i__ + 1 + i__ * x11_dim1], &c__1, &tauq1[i__]);
                 }
                 else
                 {
                     i__2 = *q - i__;
-                    slarfgp_(&i__2, &x11[i__ + 1 + i__ * x11_dim1], &x11[i__ + 2 + i__ * x11_dim1],
-                             &c__1, &tauq1[i__]);
+                    aocl_lapack_slarfgp(&i__2, &x11[i__ + 1 + i__ * x11_dim1],
+                                        &x11[i__ + 2 + i__ * x11_dim1], &c__1, &tauq1[i__]);
                 }
                 x11[i__ + 1 + i__ * x11_dim1] = 1.f;
             }
             if(*m - *q > i__)
             {
                 i__2 = *m - *q - i__ + 1;
-                slarfgp_(&i__2, &x12[i__ + i__ * x12_dim1], &x12[i__ + 1 + i__ * x12_dim1], &c__1,
-                         &tauq2[i__]);
+                aocl_lapack_slarfgp(&i__2, &x12[i__ + i__ * x12_dim1],
+                                    &x12[i__ + 1 + i__ * x12_dim1], &c__1, &tauq2[i__]);
             }
             else
             {
                 i__2 = *m - *q - i__ + 1;
-                slarfgp_(&i__2, &x12[i__ + i__ * x12_dim1], &x12[i__ + i__ * x12_dim1], &c__1,
-                         &tauq2[i__]);
+                aocl_lapack_slarfgp(&i__2, &x12[i__ + i__ * x12_dim1], &x12[i__ + i__ * x12_dim1],
+                                    &c__1, &tauq2[i__]);
             }
             x12[i__ + i__ * x12_dim1] = 1.f;
             if(i__ < *q)
             {
                 i__2 = *q - i__;
                 i__3 = *p - i__;
-                slarf_("L", &i__2, &i__3, &x11[i__ + 1 + i__ * x11_dim1], &c__1, &tauq1[i__],
-                       &x11[i__ + 1 + (i__ + 1) * x11_dim1], ldx11, &work[1]);
+                aocl_lapack_slarf("L", &i__2, &i__3, &x11[i__ + 1 + i__ * x11_dim1], &c__1,
+                                  &tauq1[i__], &x11[i__ + 1 + (i__ + 1) * x11_dim1], ldx11,
+                                  &work[1]);
                 i__2 = *q - i__;
                 i__3 = *m - *p - i__;
-                slarf_("L", &i__2, &i__3, &x11[i__ + 1 + i__ * x11_dim1], &c__1, &tauq1[i__],
-                       &x21[i__ + 1 + (i__ + 1) * x21_dim1], ldx21, &work[1]);
+                aocl_lapack_slarf("L", &i__2, &i__3, &x11[i__ + 1 + i__ * x11_dim1], &c__1,
+                                  &tauq1[i__], &x21[i__ + 1 + (i__ + 1) * x21_dim1], ldx21,
+                                  &work[1]);
             }
             i__2 = *m - *q - i__ + 1;
             i__3 = *p - i__;
-            slarf_("L", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], &c__1, &tauq2[i__],
-                   &x12[i__ + (i__ + 1) * x12_dim1], ldx12, &work[1]);
+            aocl_lapack_slarf("L", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], &c__1, &tauq2[i__],
+                              &x12[i__ + (i__ + 1) * x12_dim1], ldx12, &work[1]);
             if(*m - *p - i__ > 0)
             {
                 i__2 = *m - *q - i__ + 1;
                 i__3 = *m - *p - i__;
-                slarf_("L", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], &c__1, &tauq2[i__],
-                       &x22[i__ + (i__ + 1) * x22_dim1], ldx22, &work[1]);
+                aocl_lapack_slarf("L", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], &c__1, &tauq2[i__],
+                                  &x22[i__ + (i__ + 1) * x22_dim1], ldx22, &work[1]);
             }
         }
         /* Reduce columns Q + 1, ..., P of X12, X22 */
@@ -882,24 +907,24 @@ void sorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, real 
         {
             i__2 = *m - *q - i__ + 1;
             r__1 = -z1 * z4;
-            sscal_(&i__2, &r__1, &x12[i__ + i__ * x12_dim1], &c__1);
+            aocl_blas_sscal(&i__2, &r__1, &x12[i__ + i__ * x12_dim1], &c__1);
             i__2 = *m - *q - i__ + 1;
-            slarfgp_(&i__2, &x12[i__ + i__ * x12_dim1], &x12[i__ + 1 + i__ * x12_dim1], &c__1,
-                     &tauq2[i__]);
+            aocl_lapack_slarfgp(&i__2, &x12[i__ + i__ * x12_dim1], &x12[i__ + 1 + i__ * x12_dim1],
+                                &c__1, &tauq2[i__]);
             x12[i__ + i__ * x12_dim1] = 1.f;
             if(*p > i__)
             {
                 i__2 = *m - *q - i__ + 1;
                 i__3 = *p - i__;
-                slarf_("L", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], &c__1, &tauq2[i__],
-                       &x12[i__ + (i__ + 1) * x12_dim1], ldx12, &work[1]);
+                aocl_lapack_slarf("L", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], &c__1, &tauq2[i__],
+                                  &x12[i__ + (i__ + 1) * x12_dim1], ldx12, &work[1]);
             }
             if(*m - *p - *q >= 1)
             {
                 i__2 = *m - *q - i__ + 1;
                 i__3 = *m - *p - *q;
-                slarf_("L", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], &c__1, &tauq2[i__],
-                       &x22[i__ + (*q + 1) * x22_dim1], ldx22, &work[1]);
+                aocl_lapack_slarf("L", &i__2, &i__3, &x12[i__ + i__ * x12_dim1], &c__1, &tauq2[i__],
+                                  &x22[i__ + (*q + 1) * x22_dim1], ldx22, &work[1]);
             }
         }
         /* Reduce columns P + 1, ..., M - Q of X12, X22 */
@@ -908,25 +933,27 @@ void sorbdb_(char *trans, char *signs, integer *m, integer *p, integer *q, real 
         {
             i__2 = *m - *p - *q - i__ + 1;
             r__1 = z2 * z4;
-            sscal_(&i__2, &r__1, &x22[*p + i__ + (*q + i__) * x22_dim1], &c__1);
+            aocl_blas_sscal(&i__2, &r__1, &x22[*p + i__ + (*q + i__) * x22_dim1], &c__1);
             if(*m - *p - *q == i__)
             {
                 i__2 = *m - *p - *q - i__ + 1;
-                slarfgp_(&i__2, &x22[*p + i__ + (*q + i__) * x22_dim1],
-                         &x22[*p + i__ + (*q + i__) * x22_dim1], &c__1, &tauq2[*p + i__]);
+                aocl_lapack_slarfgp(&i__2, &x22[*p + i__ + (*q + i__) * x22_dim1],
+                                    &x22[*p + i__ + (*q + i__) * x22_dim1], &c__1,
+                                    &tauq2[*p + i__]);
                 x22[*p + i__ + (*q + i__) * x22_dim1] = 1.f;
             }
             else
             {
                 i__2 = *m - *p - *q - i__ + 1;
-                slarfgp_(&i__2, &x22[*p + i__ + (*q + i__) * x22_dim1],
-                         &x22[*p + i__ + 1 + (*q + i__) * x22_dim1], &c__1, &tauq2[*p + i__]);
+                aocl_lapack_slarfgp(&i__2, &x22[*p + i__ + (*q + i__) * x22_dim1],
+                                    &x22[*p + i__ + 1 + (*q + i__) * x22_dim1], &c__1,
+                                    &tauq2[*p + i__]);
                 x22[*p + i__ + (*q + i__) * x22_dim1] = 1.f;
                 i__2 = *m - *p - *q - i__ + 1;
                 i__3 = *m - *p - *q - i__;
-                slarf_("L", &i__2, &i__3, &x22[*p + i__ + (*q + i__) * x22_dim1], &c__1,
-                       &tauq2[*p + i__], &x22[*p + i__ + (*q + i__ + 1) * x22_dim1], ldx22,
-                       &work[1]);
+                aocl_lapack_slarf("L", &i__2, &i__3, &x22[*p + i__ + (*q + i__) * x22_dim1], &c__1,
+                                  &tauq2[*p + i__], &x22[*p + i__ + (*q + i__ + 1) * x22_dim1],
+                                  ldx22, &work[1]);
             }
         }
     }

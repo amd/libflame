@@ -19,14 +19,14 @@
 
 
 void time_Trinv_un(
-                  integer variant, integer type, integer n_repeats, integer m, integer nb_alg,
+                  aocl_int64_t variant, aocl_int64_t type, aocl_int64_t n_repeats, aocl_int64_t m, aocl_int64_t nb_alg,
                   FLA_Obj A, FLA_Obj b, FLA_Obj b_orig, FLA_Obj norm,
                   double *dtime, double *diff, double *gflops );
 
 
 int main(int argc, char *argv[])
 {
-  integer 
+  aocl_int64_t 
     datatype,
     m_input,
     m,

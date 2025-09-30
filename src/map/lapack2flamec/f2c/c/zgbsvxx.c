@@ -50,7 +50,7 @@
 /* > \verbatim */
 /* > */
 /* > ZGBSVXX uses the LU factorization to compute the solution to a */
-/* > complex*16 system of linear equations A * X = B, where A is an */
+/* > scomplex*16 system of linear equations A * X = B, where A is an */
 /* > N-by-N matrix and X and B are N-by-NRHS matrices. */
 /* > */
 /* > If requested, both normwise and maximum componentwise error bounds */
@@ -566,12 +566,12 @@ defaults */
 /* ===================================================================== */
 /* Subroutine */
 void zgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integer *nrhs,
-              doublecomplex *ab, integer *ldab, doublecomplex *afb, integer *ldafb, integer *ipiv,
-              char *equed, doublereal *r__, doublereal *c__, doublecomplex *b, integer *ldb,
-              doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *rpvgrw,
+              dcomplex *ab, integer *ldab, dcomplex *afb, integer *ldafb, integer *ipiv,
+              char *equed, doublereal *r__, doublereal *c__, dcomplex *b, integer *ldb,
+              dcomplex *x, integer *ldx, doublereal *rcond, doublereal *rpvgrw,
               doublereal *berr, integer *n_err_bnds__, doublereal *err_bnds_norm__,
               doublereal *err_bnds_comp__, integer *nparams, doublereal *params,
-              doublecomplex *work, doublereal *rwork, integer *info)
+              dcomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgbsvxx inputs: fact %c, trans %c, n %" FLA_IS ", kl %" FLA_IS
@@ -588,8 +588,8 @@ void zgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, int
     /* Local variables */
     integer i__, j;
     doublereal amax;
-    extern doublereal zla_gbrpvgrw_(integer *, integer *, integer *, integer *, doublecomplex *,
-                                    integer *, doublecomplex *, integer *);
+    extern doublereal zla_gbrpvgrw_(integer *, integer *, integer *, integer *, dcomplex *,
+                                    integer *, dcomplex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     doublereal rcmin, rcmax;
     logical equil;
@@ -601,7 +601,7 @@ void zgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, int
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern /* Subroutine */
         void
-        zlaqgb_(integer *, integer *, integer *, integer *, doublecomplex *, integer *,
+        zlaqgb_(integer *, integer *, integer *, integer *, dcomplex *, integer *,
                 doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, char *);
     doublereal bignum;
     integer infequ;
@@ -609,28 +609,28 @@ void zgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, int
     doublereal rowcnd;
     extern /* Subroutine */
         void
-        zgbtrf_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *,
+        zgbtrf_(integer *, integer *, integer *, integer *, dcomplex *, integer *, integer *,
                 integer *);
     logical notran;
     extern /* Subroutine */
         void
-        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+        zlacpy_(char *, integer *, integer *, dcomplex *, integer *, dcomplex *,
                 integer *);
     doublereal smlnum;
     extern /* Subroutine */
         void
-        zgbtrs_(char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *,
-                integer *, doublecomplex *, integer *, integer *);
+        zgbtrs_(char *, integer *, integer *, integer *, integer *, dcomplex *, integer *,
+                integer *, dcomplex *, integer *, integer *);
     logical rowequ;
     extern /* Subroutine */
         void
-        zlascl2_(integer *, integer *, doublereal *, doublecomplex *, integer *),
-        zgbequb_(integer *, integer *, integer *, integer *, doublecomplex *, integer *,
+        zlascl2_(integer *, integer *, doublereal *, dcomplex *, integer *),
+        zgbequb_(integer *, integer *, integer *, integer *, dcomplex *, integer *,
                  doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *),
-        zgbrfsx_(char *, char *, integer *, integer *, integer *, integer *, doublecomplex *,
-                 integer *, doublecomplex *, integer *, integer *, doublereal *, doublereal *,
-                 doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
-                 integer *, doublereal *, doublereal *, integer *, doublereal *, doublecomplex *,
+        zgbrfsx_(char *, char *, integer *, integer *, integer *, integer *, dcomplex *,
+                 integer *, dcomplex *, integer *, integer *, doublereal *, doublereal *,
+                 dcomplex *, integer *, dcomplex *, integer *, doublereal *, doublereal *,
+                 integer *, doublereal *, doublereal *, integer *, doublereal *, dcomplex *,
                  doublereal *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

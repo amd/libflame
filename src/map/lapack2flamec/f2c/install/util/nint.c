@@ -12,9 +12,9 @@ shortint fla_h_nint(real *x)
 {
     return (shortint)(*x >= 0 ? floor(*x + .5) : -floor(.5 - *x));
 }
-integer fla_i_nint(real *x)
+aocl_int64_t fla_i_nint(real *x)
 {
-    return (integer)(*x >= 0 ? floor(*x + .5) : -floor(.5 - *x));
+    return (aocl_int64_t)(*x >= 0 ? floor(*x + .5) : -floor(.5 - *x));
 }
 double fla_r_nint(real *x)
 {

@@ -37,7 +37,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZUPGTR generates a complex unitary matrix Q which is defined as the */
+/* > ZUPGTR generates a scomplex unitary matrix Q which is defined as the */
 /* > product of n-1 elementary reflectors H(i) of order n, as returned by */
 /* > ZHPTRD using packed storage: */
 /* > */
@@ -110,25 +110,36 @@
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zupgtr_(char *uplo, integer *n, doublecomplex *ap, doublecomplex *tau, doublecomplex *q,
-             integer *ldq, doublecomplex *work, integer *info)
+/** Generated wrapper function */
+void zupgtr_(char *uplo, aocl_int_t *n, dcomplex *ap, dcomplex *tau, dcomplex *q,
+             aocl_int_t *ldq, dcomplex *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zupgtr(uplo, n, ap, tau, q, ldq, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zupgtr(uplo, &n_64, ap, tau, q, &ldq_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zupgtr(char *uplo, aocl_int64_t *n, dcomplex *ap, dcomplex *tau,
+                        dcomplex *q, aocl_int64_t *ldq, dcomplex *work,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zupgtr inputs: uplo %c, n %" FLA_IS ", ldq %" FLA_IS "", *uplo, *n, *ldq);
     /* System generated locals */
-    integer q_dim1, q_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t q_dim1, q_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer i__, j, ij;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    aocl_int64_t i__, j, ij;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        zung2l_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                doublecomplex *, integer *),
-        zung2r_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -175,7 +186,7 @@ void zupgtr_(char *uplo, integer *n, doublecomplex *ap, doublecomplex *tau, doub
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZUPGTR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZUPGTR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -226,7 +237,7 @@ void zupgtr_(char *uplo, integer *n, doublecomplex *ap, doublecomplex *tau, doub
         i__1 = *n - 1;
         i__2 = *n - 1;
         i__3 = *n - 1;
-        zung2l_(&i__1, &i__2, &i__3, &q[q_offset], ldq, &tau[1], &work[1], &iinfo);
+        aocl_lapack_zung2l(&i__1, &i__2, &i__3, &q[q_offset], ldq, &tau[1], &work[1], &iinfo);
     }
     else
     {
@@ -271,7 +282,8 @@ void zupgtr_(char *uplo, integer *n, doublecomplex *ap, doublecomplex *tau, doub
             i__1 = *n - 1;
             i__2 = *n - 1;
             i__3 = *n - 1;
-            zung2r_(&i__1, &i__2, &i__3, &q[(q_dim1 << 1) + 2], ldq, &tau[1], &work[1], &iinfo);
+            aocl_lapack_zung2r(&i__1, &i__2, &i__3, &q[(q_dim1 << 1) + 2], ldq, &tau[1], &work[1],
+                               &iinfo);
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

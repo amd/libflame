@@ -3,11 +3,12 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
- /******************************************************************************
+/******************************************************************************
  * Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
-#include "FLA_f2c.h" 
-/* > \brief \b ZLAG2C converts a complex double precision matrix to a complex single precision matrix. */
+#include "FLA_f2c.h"
+/* > \brief \b ZLAG2C converts a scomplex double precision matrix to a scomplex single precision
+ * matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -107,19 +108,38 @@ if */
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlag2c_(integer *m, integer *n, dcomplex *a, integer *lda, scomplex *sa, integer *ldsa,
-             integer *info)
+/** Generated wrapper function */
+void zlag2c_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, scomplex *sa,
+             aocl_int_t *ldsa, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlag2c(m, n, a, lda, sa, ldsa, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldsa_64 = *ldsa;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zlag2c(&m_64, &n_64, a, &lda_64, sa, &ldsa_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zlag2c(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                        scomplex *sa, aocl_int64_t *ldsa, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlag2c inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldsa %" FLA_IS
                       "",
                       *m, *n, *lda, *ldsa);
     /* System generated locals */
-    integer sa_dim1, sa_offset, a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t sa_dim1, sa_offset, a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Builtin functions */
     double d_imag(dcomplex *);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal rmax;
     extern real slamch_(char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */

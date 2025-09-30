@@ -16,10 +16,10 @@
 #include "FLA_lapack2flame_return_defs.h"
 #include "FLA_lapack2flame_util_defs.h"
 
-extern void sorglq_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau,
-                       real *work, integer *lwork, integer *info);
-extern void dorglq_fla(integer *m, integer *n, integer *k, doublereal *a, integer *lda,
-                       doublereal *tau, doublereal *work, integer *lwork, integer *info);
+extern void sorglq_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, real *a, aocl_int64_t *lda, real *tau,
+                       real *work, aocl_int64_t *lwork, aocl_int64_t *info);
+extern void dorglq_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal *a, aocl_int64_t *lda,
+                       doublereal *tau, doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info);
 /*
   SORGLQ generates an M-by-N real matrix Q with orthonormal rows,
   which is defined as the first M rows of a product of K elementary
@@ -30,11 +30,85 @@ extern void dorglq_fla(integer *m, integer *n, integer *k, doublereal *a, intege
   as returned by SGELQF.
 */
 
+/** Generated wrapper function */
+void sorglq_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *buff_A, aocl_int_t *ldim_A, real *buff_t, real *buff_w, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sorglq(m, n, k, buff_A, ldim_A, buff_t, buff_w, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sorglq(&m_64, &n_64, &k_64, buff_A, &ldim_A_64, buff_t, buff_w, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dorglq_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_t, doublereal *buff_w, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dorglq(m, n, k, buff_A, ldim_A, buff_t, buff_w, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dorglq(&m_64, &n_64, &k_64, buff_A, &ldim_A_64, buff_t, buff_w, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void sorgl2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *buff_A, aocl_int_t *ldim_A, real *buff_t, real *buff_w, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sorgl2(m, n, k, buff_A, ldim_A, buff_t, buff_w, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sorgl2(&m_64, &n_64, &k_64, buff_A, &ldim_A_64, buff_t, buff_w, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dorgl2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_t, doublereal *buff_w, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dorgl2(m, n, k, buff_A, ldim_A, buff_t, buff_w, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dorgl2(&m_64, &n_64, &k_64, buff_A, &ldim_A_64, buff_t, buff_w, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
 #define LAPACK_orglq(prefix, name)                                                  \
-    void F77_##prefix##name##lq(                                                    \
-        integer *m, integer *n, integer *k, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-        integer * ldim_A, PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,                   \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * lwork, integer * info)
+    void aocl_lapack_##prefix##name##lq(                                                    \
+        aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
+        aocl_int64_t * ldim_A, PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,                   \
+        PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * lwork, aocl_int64_t * info)
 
 #define LAPACK_orglq_body(prefix)                           \
     FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);  \
@@ -173,10 +247,10 @@ LAPACK_orglq(z, ung)
 #endif
 
 #define LAPACK_orgl2(prefix, name)                                                        \
-    void F77_##prefix##name##l2(integer *m, integer *n, integer *k,                       \
-                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, integer * ldim_A, \
+    void aocl_lapack_##prefix##name##l2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,                       \
+                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, aocl_int64_t * ldim_A, \
                                 PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,                   \
-                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * info)
+                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * info)
 
 LAPACK_orgl2(s, org)
 {

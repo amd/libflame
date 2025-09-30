@@ -13,12 +13,12 @@
 FLA_Error FLA_Tevd_v_opt_var3r( FLA_Obj d, FLA_Obj e, FLA_Obj C, FLA_Obj S, FLA_Obj U )
 {
 	FLA_Datatype datatype;
-	integer          m_A, m_U, n_CS;
-	integer          inc_d;
-	integer          inc_e;
-	integer          rs_C, cs_C;
-	integer          rs_S, cs_S;
-	integer          rs_U, cs_U;
+	aocl_int64_t          m_A, m_U, n_CS;
+	aocl_int64_t          inc_d;
+	aocl_int64_t          inc_e;
+	aocl_int64_t          rs_C, cs_C;
+	aocl_int64_t          rs_S, cs_S;
+	aocl_int64_t          rs_U, cs_U;
 
 	datatype = FLA_Obj_datatype( U );
 
@@ -87,36 +87,36 @@ FLA_Error FLA_Tevd_v_opt_var3r( FLA_Obj d, FLA_Obj e, FLA_Obj C, FLA_Obj S, FLA_
 
 
 
-FLA_Error FLA_Tevd_v_ops_var3r( integer       m_A,
-                                integer       m_U,
-                                integer       n_CS,
-                                float*    buff_d, integer inc_d, 
-                                float*    buff_e, integer inc_e,
-                                float*    buff_C, integer rs_C, integer cs_C,
-                                float*    buff_S, integer rs_S, integer cs_S,
-                                float*    buff_U, integer rs_U, integer cs_U )
+FLA_Error FLA_Tevd_v_ops_var3r( aocl_int64_t       m_A,
+                                aocl_int64_t       m_U,
+                                aocl_int64_t       n_CS,
+                                float*    buff_d, aocl_int64_t inc_d, 
+                                float*    buff_e, aocl_int64_t inc_e,
+                                float*    buff_C, aocl_int64_t rs_C, aocl_int64_t cs_C,
+                                float*    buff_S, aocl_int64_t rs_S, aocl_int64_t cs_S,
+                                float*    buff_U, aocl_int64_t rs_U, aocl_int64_t cs_U )
 {
 	return FLA_SUCCESS;
 }
 
 //#define PRINTF
 
-FLA_Error FLA_Tevd_v_opd_var3r( integer       m_A,
-                                integer       m_U,
-                                integer       n_CS,
-                                double*   buff_d, integer inc_d, 
-                                double*   buff_e, integer inc_e,
-                                double*   buff_C, integer rs_C, integer cs_C,
-                                double*   buff_S, integer rs_S, integer cs_S,
-                                double*   buff_G, integer rs_G, integer cs_G )
+FLA_Error FLA_Tevd_v_opd_var3r( aocl_int64_t       m_A,
+                                aocl_int64_t       m_U,
+                                aocl_int64_t       n_CS,
+                                double*   buff_d, aocl_int64_t inc_d, 
+                                double*   buff_e, aocl_int64_t inc_e,
+                                double*   buff_C, aocl_int64_t rs_C, aocl_int64_t cs_C,
+                                double*   buff_S, aocl_int64_t rs_S, aocl_int64_t cs_S,
+                                double*   buff_G, aocl_int64_t rs_G, aocl_int64_t cs_G )
 {
 	FLA_Error r_val;
-	integer       i, k;
+	aocl_int64_t       i, k;
 
 	// Iterate from back to front until all that is left is a 2x2.
 	for ( i = m_A - 1; i > 1; --i )
 	{
-		integer m_ATL = i + 1;
+		aocl_int64_t m_ATL = i + 1;
 
 		/*------------------------------------------------------------*/
 
@@ -163,8 +163,8 @@ FLA_Error FLA_Tevd_v_opd_var3r( integer       m_A,
 			// An eigenvalue converged somewhere within the diagonal (not at
 			// either the end), so we have to recurse with two subproblems.
 			{
-				integer       m_ATL = r_val;
-				integer       m_ABR = m_A - r_val - 1;
+				aocl_int64_t       m_ATL = r_val;
+				aocl_int64_t       m_ABR = m_A - r_val - 1;
 				double*   dTL   = buff_d + (0      )*inc_d;
 				double*   eTL   = buff_e + (0      )*inc_e;
 				double*   CT    = buff_C + (0      )*rs_C;

@@ -91,18 +91,30 @@ f"> */
 /* > \ingroup auxOTHERauxiliary */
 
 /*  ===================================================================== */
-logical lsamen_(integer *n, char *ca, char *cb)
+/** Generated wrapper function */
+logical lsamen_(const aocl_int_t *n, const char *ca, const char *cb)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_lsamen(n, ca, cb);
+#else
+    aocl_int64_t n_64 = *n;
+
+    return aocl_lapack_lsamen(&n_64, ca, cb);
+#endif
+}
+
+logical aocl_lapack_lsamen(const aocl_int64_t *n, const char *ca, const char *cb)
 {
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     logical ret_val;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
+    integer i_len(const char *, ftnlen);
 
     /* Local variables */
-    integer i__;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t i__;
+    extern logical lsame_(const char *, const char *, aocl_int64_t, aocl_int64_t);
 
     ftnlen ca_len, cb_len;
 

@@ -16,14 +16,14 @@
 #include "blis.h"
 #endif
 
-void bl1_sinvscalm( conj1_t conj, integer m, integer n, float* alpha, float* a, integer a_rs, integer a_cs )
+void bl1_sinvscalm( conj1_t conj, fla_dim_t m, fla_dim_t n, float* alpha, float* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	float     alpha_inv;
 	float*    a_begin;
-	integer       lda, inca;
-	integer       n_iter;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;
@@ -68,14 +68,14 @@ void bl1_sinvscalm( conj1_t conj, integer m, integer n, float* alpha, float* a, 
 	}
 }
 
-void bl1_dinvscalm( conj1_t conj, integer m, integer n, double* alpha, double* a, integer a_rs, integer a_cs )
+void bl1_dinvscalm( conj1_t conj, fla_dim_t m, fla_dim_t n, double* alpha, double* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	double    alpha_inv;
 	double*   a_begin;
-	integer       lda, inca;
-	integer       n_iter;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;
@@ -120,14 +120,14 @@ void bl1_dinvscalm( conj1_t conj, integer m, integer n, double* alpha, double* a
 	}
 }
 
-void bl1_csinvscalm( conj1_t conj, integer m, integer n, float* alpha, scomplex* a, integer a_rs, integer a_cs )
+void bl1_csinvscalm( conj1_t conj, fla_dim_t m, fla_dim_t n, float* alpha, scomplex* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	float     alpha_inv;
 	scomplex* a_begin;
-	integer       lda, inca;
-	integer       n_iter;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;
@@ -172,14 +172,14 @@ void bl1_csinvscalm( conj1_t conj, integer m, integer n, float* alpha, scomplex*
 	}
 }
 
-void bl1_cinvscalm( conj1_t conj, integer m, integer n, scomplex* alpha, scomplex* a, integer a_rs, integer a_cs )
+void bl1_cinvscalm( conj1_t conj, fla_dim_t m, fla_dim_t n, scomplex* alpha, scomplex* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	scomplex  alpha_inv;
 	scomplex* a_begin;
-	integer       lda, inca;
-	integer       n_iter;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;
@@ -224,14 +224,14 @@ void bl1_cinvscalm( conj1_t conj, integer m, integer n, scomplex* alpha, scomple
 	}
 }
 
-void bl1_zdinvscalm( conj1_t conj, integer m, integer n, double* alpha, dcomplex* a, integer a_rs, integer a_cs )
+void bl1_zdinvscalm( conj1_t conj, fla_dim_t m, fla_dim_t n, double* alpha, dcomplex* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	double    alpha_inv;
 	dcomplex* a_begin;
-	integer       lda, inca;
-	integer       n_iter;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;
@@ -276,14 +276,14 @@ void bl1_zdinvscalm( conj1_t conj, integer m, integer n, double* alpha, dcomplex
 	}
 }
 
-void bl1_zinvscalm( conj1_t conj, integer m, integer n, dcomplex* alpha, dcomplex* a, integer a_rs, integer a_cs )
+void bl1_zinvscalm( conj1_t conj, fla_dim_t m, fla_dim_t n, dcomplex* alpha, dcomplex* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	dcomplex  alpha_inv;
 	dcomplex* a_begin;
-	integer       lda, inca;
-	integer       n_iter;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;

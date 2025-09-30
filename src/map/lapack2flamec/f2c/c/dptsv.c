@@ -109,23 +109,33 @@
 /* > \ingroup doublePTsolve */
 /* ===================================================================== */
 /* Subroutine */
-void dptsv_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublereal *b, integer *ldb,
-            integer *info)
+/** Generated wrapper function */
+void dptsv_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, doublereal *e, doublereal *b,
+            aocl_int_t *ldb, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dptsv(n, nrhs, d__, e, b, ldb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dptsv(&n_64, &nrhs_64, d__, e, b, &ldb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dptsv(aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *d__, doublereal *e,
+                       doublereal *b, aocl_int64_t *ldb, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dptsv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "", *n, *nrhs,
                       *ldb);
     /* System generated locals */
-    integer b_dim1, b_offset, i__1;
+    aocl_int64_t b_dim1, b_offset, i__1;
     /* Local variables */
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        dpttrf_(integer *, doublereal *, doublereal *, integer *),
-        dpttrs_(integer *, integer *, doublereal *, doublereal *, doublereal *, integer *,
-                integer *);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -164,16 +174,16 @@ void dptsv_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublerea
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DPTSV ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DPTSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute the L*D*L**T (or U**T*D*U) factorization of A. */
-    dpttrf_(n, &d__[1], &e[1], info);
+    aocl_lapack_dpttrf(n, &d__[1], &e[1], info);
     if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */
-        dpttrs_(n, nrhs, &d__[1], &e[1], &b[b_offset], ldb, info);
+        aocl_lapack_dpttrs(n, nrhs, &d__[1], &e[1], &b[b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

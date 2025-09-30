@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b1 = {{1.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CPBRFS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -187,9 +187,36 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, complex *ab, integer *ldab,
-             complex *afb, integer *ldafb, complex *b, integer *ldb, complex *x, integer *ldx,
-             real *ferr, real *berr, complex *work, real *rwork, integer *info)
+/** Generated wrapper function */
+void cpbrfs_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, scomplex *ab,
+             aocl_int_t *ldab, scomplex *afb, aocl_int_t *ldafb, scomplex *b, aocl_int_t *ldb,
+             scomplex *x, aocl_int_t *ldx, real *ferr, real *berr, scomplex *work, real *rwork,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cpbrfs(uplo, n, kd, nrhs, ab, ldab, afb, ldafb, b, ldb, x, ldx, ferr, berr, work,
+                       rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldafb_64 = *ldafb;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cpbrfs(uplo, &n_64, &kd_64, &nrhs_64, ab, &ldab_64, afb, &ldafb_64, b, &ldb_64, x,
+                       &ldx_64, ferr, berr, work, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cpbrfs(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, aocl_int64_t *nrhs,
+                        scomplex *ab, aocl_int64_t *ldab, scomplex *afb, aocl_int64_t *ldafb,
+                        scomplex *b, aocl_int64_t *ldb, scomplex *x, aocl_int64_t *ldx, real *ferr,
+                        real *berr, scomplex *work, real *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -207,43 +234,25 @@ void cpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, complex *ab, in
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
+    aocl_int64_t ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
         i__2, i__3, i__4, i__5;
     real r__1, r__2, r__3, r__4;
-    complex q__1;
+    scomplex q__1;
     /* Builtin functions */
-    double r_imag(complex *);
+    double r_imag(scomplex *);
     /* Local variables */
-    integer i__, j, k, l;
+    aocl_int64_t i__, j, k, l;
     real s, xk;
-    integer nz;
+    aocl_int64_t nz;
     real eps;
-    integer kase;
+    aocl_int64_t kase;
     real safe1, safe2;
-    extern /* Subroutine */
-        void
-        chbmv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
-    extern /* Subroutine */
-        void
-        ccopy_(integer *, complex *, integer *, complex *, integer *),
-        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
-    integer count;
+    aocl_int64_t count;
     logical upper;
-    extern /* Subroutine */
-        void
-        clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
     extern real slamch_(char *);
     real safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        cpbtrs_(char *, integer *, integer *, integer *, complex *, integer *, complex *, integer *,
-                integer *);
     real lstres;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -327,7 +336,7 @@ void cpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, complex *ab, in
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPBRFS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CPBRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -361,11 +370,11 @@ void cpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, complex *ab, in
         lstres = 3.f;
     L20: /* Loop until stopping criterion is satisfied. */
         /* Compute residual R = B - A * X */
-        ccopy_(n, &b[j * b_dim1 + 1], &c__1, &work[1], &c__1);
+        aocl_blas_ccopy(n, &b[j * b_dim1 + 1], &c__1, &work[1], &c__1);
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        chbmv_(uplo, n, kd, &q__1, &ab[ab_offset], ldab, &x[j * x_dim1 + 1], &c__1, &c_b1, &work[1],
-               &c__1);
+        aocl_blas_chbmv(uplo, n, kd, &q__1, &ab[ab_offset], ldab, &x[j * x_dim1 + 1], &c__1, &c_b1,
+                        &work[1], &c__1);
         /* Compute componentwise relative backward error from formula */
         /* fla_max(i) ( f2c_abs(R(i)) / ( f2c_abs(A)*f2c_abs(X) + f2c_abs(B) )(i) ) */
         /* where f2c_abs(Z) is the componentwise absolute value of the matrix */
@@ -483,8 +492,8 @@ void cpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, complex *ab, in
         if(berr[j] > eps && berr[j] * 2.f <= lstres && count <= 5)
         {
             /* Update solution and try again. */
-            cpbtrs_(uplo, n, kd, &c__1, &afb[afb_offset], ldafb, &work[1], n, info);
-            caxpy_(n, &c_b1, &work[1], &c__1, &x[j * x_dim1 + 1], &c__1);
+            aocl_lapack_cpbtrs(uplo, n, kd, &c__1, &afb[afb_offset], ldafb, &work[1], n, info);
+            aocl_blas_caxpy(n, &c_b1, &work[1], &c__1, &x[j * x_dim1 + 1], &c__1);
             lstres = berr[j];
             ++count;
             goto L20;
@@ -526,13 +535,13 @@ void cpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, complex *ab, in
         }
         kase = 0;
     L100:
-        clacn2_(n, &work[*n + 1], &work[1], &ferr[j], &kase, isave);
+        aocl_lapack_clacn2(n, &work[*n + 1], &work[1], &ferr[j], &kase, isave);
         if(kase != 0)
         {
             if(kase == 1)
             {
                 /* Multiply by diag(W)*inv(A**H). */
-                cpbtrs_(uplo, n, kd, &c__1, &afb[afb_offset], ldafb, &work[1], n, info);
+                aocl_lapack_cpbtrs(uplo, n, kd, &c__1, &afb[afb_offset], ldafb, &work[1], n, info);
                 i__2 = *n;
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
@@ -561,7 +570,7 @@ void cpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, complex *ab, in
                     work[i__5].i = q__1.i; // , expr subst
                     /* L120: */
                 }
-                cpbtrs_(uplo, n, kd, &c__1, &afb[afb_offset], ldafb, &work[1], n, info);
+                aocl_lapack_cpbtrs(uplo, n, kd, &c__1, &afb[afb_offset], ldafb, &work[1], n, info);
             }
             goto L100;
         }

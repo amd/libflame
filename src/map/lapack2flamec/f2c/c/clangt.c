@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CLANGT returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest
  * absolute value of any element of a general tridiagonal matrix. */
 /* =========== DOCUMENTATION =========== */
@@ -42,7 +42,7 @@ static integer c__1 = 1;
 /* > */
 /* > CLANGT returns the value of the one norm, or the Frobenius norm, or */
 /* > the infinity norm, or the element of largest absolute value of a */
-/* > complex tridiagonal matrix A. */
+/* > scomplex tridiagonal matrix A. */
 /* > \endverbatim */
 /* > */
 /* > \return CLANGT */
@@ -103,7 +103,19 @@ static integer c__1 = 1;
 /* > \date December 2016 */
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
-real clangt_(char *norm, integer *n, complex *dl, complex *d__, complex *du)
+/** Generated wrapper function */
+real clangt_(char *norm, aocl_int_t *n, scomplex *dl, scomplex *d__, scomplex *du)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_clangt(norm, n, dl, d__, du);
+#else
+    aocl_int64_t n_64 = *n;
+
+    return aocl_lapack_clangt(norm, &n_64, dl, d__, du);
+#endif
+}
+
+real aocl_lapack_clangt(char *norm, aocl_int64_t *n, scomplex *dl, scomplex *d__, scomplex *du)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -116,18 +128,15 @@ real clangt_(char *norm, integer *n, complex *dl, complex *d__, complex *du)
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     real ret_val, r__1;
     /* Builtin functions */
-    double c_abs(complex *), sqrt(doublereal);
+    double c_abs(scomplex *), sqrt(doublereal);
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     real sum, temp, scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real anorm;
-    extern /* Subroutine */
-        void
-        classq_(integer *, complex *, integer *, real *, real *);
     extern logical sisnan_(real *);
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -243,13 +252,13 @@ real clangt_(char *norm, integer *n, complex *dl, complex *d__, complex *du)
         /* Find normF(A). */
         scale = 0.f;
         sum = 1.f;
-        classq_(n, &d__[1], &c__1, &scale, &sum);
+        aocl_lapack_classq(n, &d__[1], &c__1, &scale, &sum);
         if(*n > 1)
         {
             i__1 = *n - 1;
-            classq_(&i__1, &dl[1], &c__1, &scale, &sum);
+            aocl_lapack_classq(&i__1, &dl[1], &c__1, &scale, &sum);
             i__1 = *n - 1;
-            classq_(&i__1, &du[1], &c__1, &scale, &sum);
+            aocl_lapack_classq(&i__1, &du[1], &c__1, &scale, &sum);
         }
         anorm = scale * sqrt(sum);
     }

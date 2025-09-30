@@ -152,29 +152,29 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clags2_(logical *upper, real *a1, complex *a2, real *a3, real *b1, complex *b2, real *b3,
-             real *csu, complex *snu, real *csv, complex *snv, real *csq, complex *snq)
+void clags2_(logical *upper, real *a1, scomplex *a2, real *a3, real *b1, scomplex *b2, real *b3,
+             real *csu, scomplex *snu, real *csv, scomplex *snv, real *csq, scomplex *snq)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* System generated locals */
     real r__1, r__2, r__3, r__4, r__5, r__6, r__7, r__8;
-    complex q__1, q__2, q__3, q__4, q__5;
+    scomplex q__1, q__2, q__3, q__4, q__5;
     /* Builtin functions */
-    double c_abs(complex *), r_imag(complex *);
-    void r_cnjg(complex *, complex *);
+    double c_abs(scomplex *), r_imag(scomplex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
     real a;
-    complex b, c__;
+    scomplex b, c__;
     real d__;
-    complex r__, d1;
+    scomplex r__, d1;
     real s1, s2, fb, fc;
-    complex ua11, ua12, ua21, ua22, vb11, vb12, vb21, vb22;
+    scomplex ua11, ua12, ua21, ua22, vb11, vb12, vb21, vb22;
     real csl, csr, snl, snr, aua11, aua12, aua21, aua22, avb11, avb12, avb21, avb22, ua11r, ua22r,
         vb11r, vb22r;
     extern /* Subroutine */
         void
         slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *),
-        clartg_(complex *, complex *, real *, complex *, complex *);
+        clartg_(scomplex *, scomplex *, real *, scomplex *, scomplex *);
     /* -- LAPACK auxiliary routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -211,7 +211,7 @@ void clags2_(logical *upper, real *a1, complex *a2, real *a3, real *b1, complex 
         b.r = q__1.r;
         b.i = q__1.i; // , expr subst
         fb = c_abs(&b);
-        /* Transform complex 2-by-2 matrix C to real matrix by unitary */
+        /* Transform scomplex 2-by-2 matrix C to real matrix by unitary */
         /* diagonal matrix diag(1,D1). */
         d1.r = 1.f;
         d1.i = 0.f; // , expr subst
@@ -441,7 +441,7 @@ void clags2_(logical *upper, real *a1, complex *a2, real *a3, real *b1, complex 
         c__.r = q__1.r;
         c__.i = q__1.i; // , expr subst
         fc = c_abs(&c__);
-        /* Transform complex 2-by-2 matrix C to real matrix by unitary */
+        /* Transform scomplex 2-by-2 matrix C to real matrix by unitary */
         /* diagonal matrix diag(d1,1). */
         d1.r = 1.f;
         d1.i = 0.f; // , expr subst

@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b36 = .5;
 /* > \brief \b ZLATPS solves a triangular system of equations with the matrix held in packed
  * storage. */
@@ -234,63 +234,58 @@ b(i), i=1,..,n}
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doublecomplex *ap,
-             doublecomplex *x, doublereal *scale, doublereal *cnorm, integer *info)
+/** Generated wrapper function */
+void zlatps_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, dcomplex *ap,
+             dcomplex *x, doublereal *scale, doublereal *cnorm, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlatps(uplo, trans, diag, normin, n, ap, x, scale, cnorm, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zlatps(uplo, trans, diag, normin, &n_64, ap, x, scale, cnorm, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_int64_t *n,
+                        dcomplex *ap, dcomplex *x, doublereal *scale, doublereal *cnorm,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlatps inputs: uplo %c, trans %c, diag %c, normin %c, n %" FLA_IS "", *uplo,
                       *trans, *diag, *normin, *n);
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t i__1, i__2, i__3, i__4, i__5;
     doublereal d__1, d__2, d__3, d__4;
-    doublecomplex z__1, z__2, z__3, z__4;
+    dcomplex z__1, z__2, z__3, z__4;
     /* Builtin functions */
-    double d_imag(doublecomplex *);
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    double d_imag(dcomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__, j, ip;
+    aocl_int64_t i__, j, ip;
     doublereal xj, rec, tjj;
-    integer jinc, jlen;
+    aocl_int64_t jinc, jlen;
     doublereal xbnd;
-    integer imax;
+    aocl_int64_t imax;
     doublereal tmax;
-    doublecomplex tjjs;
+    dcomplex tjjs;
     doublereal xmax, grow;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal tscal;
-    doublecomplex uscal;
-    integer jlast;
-    doublecomplex csumj;
-    extern /* Double Complex */
-        void
-        zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
-                   integer *);
+    dcomplex uscal;
+    aocl_int64_t jlast;
+    dcomplex csumj;
     logical upper;
-    extern /* Double Complex */
-        void
-        zdotu_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
-                   integer *);
-    extern /* Subroutine */
-        void
-        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
-        ztpsv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal bignum;
-    extern integer izamax_(integer *, doublecomplex *, integer *);
     extern /* Double Complex */
         void
-        zladiv_f2c_(doublecomplex *, doublecomplex *, doublecomplex *);
+        zladiv_f2c_(dcomplex *, dcomplex *, dcomplex *);
     logical notran;
-    integer jfirst;
-    extern doublereal dzasum_(integer *, doublecomplex *, integer *);
+    aocl_int64_t jfirst;
     doublereal smlnum;
     logical nounit;
     /* -- LAPACK auxiliary routine -- */
@@ -324,7 +319,7 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
     *info = 0;
     // initializing as {1, 0} because it is
     // used as divisor
-    tjjs = (doublecomplex){.r = 1., .i = 0.};
+    tjjs = (dcomplex){.r = 1., .i = 0.};
     upper = lsame_(uplo, "U", 1, 1);
     notran = lsame_(trans, "N", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
@@ -352,7 +347,7 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZLATPS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZLATPS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -379,7 +374,7 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j - 1;
-                cnorm[j] = dzasum_(&i__2, &ap[ip], &c__1);
+                cnorm[j] = aocl_blas_dzasum(&i__2, &ap[ip], &c__1);
                 ip += j;
                 /* L10: */
             }
@@ -392,7 +387,7 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = *n - j;
-                cnorm[j] = dzasum_(&i__2, &ap[ip + 1], &c__1);
+                cnorm[j] = aocl_blas_dzasum(&i__2, &ap[ip + 1], &c__1);
                 ip = ip + *n - j + 1;
                 /* L20: */
             }
@@ -401,7 +396,7 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
     }
     /* Scale the column norms by TSCAL if the maximum element in CNORM is */
     /* greater than BIGNUM/2. */
-    imax = idamax_(n, &cnorm[1], &c__1);
+    imax = aocl_blas_idamax(n, &cnorm[1], &c__1);
     tmax = cnorm[imax];
     if(tmax <= bignum * .5)
     {
@@ -410,7 +405,7 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
     else
     {
         tscal = .5 / (smlnum * tmax);
-        dscal_(n, &tscal, &cnorm[1], &c__1);
+        aocl_blas_dscal(n, &tscal, &cnorm[1], &c__1);
     }
     /* Compute a bound on the computed solution vector to see if the */
     /* Level 2 BLAS routine ZTPSV can be used. */
@@ -626,7 +621,7 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
     {
         /* Use the Level 2 BLAS solve if the reciprocal of the bound on */
         /* elements of X is not too small. */
-        ztpsv_(uplo, trans, diag, n, &ap[1], &x[1], &c__1);
+        aocl_blas_ztpsv(uplo, trans, diag, n, &ap[1], &x[1], &c__1);
     }
     else
     {
@@ -636,7 +631,7 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
             /* Scale X so that its components are less than or equal to */
             /* BIGNUM in absolute value. */
             *scale = bignum * .5 / xmax;
-            zdscal_(n, scale, &x[1], &c__1);
+            aocl_blas_zdscal(n, scale, &x[1], &c__1);
             xmax = bignum;
         }
         else
@@ -681,7 +676,7 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
                         {
                             /* Scale x by 1/b(j). */
                             rec = 1. / xj;
-                            zdscal_(n, &rec, &x[1], &c__1);
+                            aocl_blas_zdscal(n, &rec, &x[1], &c__1);
                             *scale *= rec;
                             xmax *= rec;
                         }
@@ -707,7 +702,7 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
                             /* multiplying x(j) times column j. */
                             rec /= cnorm[j];
                         }
-                        zdscal_(n, &rec, &x[1], &c__1);
+                        aocl_blas_zdscal(n, &rec, &x[1], &c__1);
                         *scale *= rec;
                         xmax *= rec;
                     }
@@ -746,14 +741,14 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
                     {
                         /* Scale x by 1/(2*f2c_abs(x(j))). */
                         rec *= .5;
-                        zdscal_(n, &rec, &x[1], &c__1);
+                        aocl_blas_zdscal(n, &rec, &x[1], &c__1);
                         *scale *= rec;
                     }
                 }
                 else if(xj * cnorm[j] > bignum - xmax)
                 {
                     /* Scale x by 1/2. */
-                    zdscal_(n, &c_b36, &x[1], &c__1);
+                    aocl_blas_zdscal(n, &c_b36, &x[1], &c__1);
                     *scale *= .5;
                 }
                 if(upper)
@@ -768,9 +763,9 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
                         z__2.i = -x[i__4].i; // , expr subst
                         z__1.r = tscal * z__2.r;
                         z__1.i = tscal * z__2.i; // , expr subst
-                        zaxpy_(&i__3, &z__1, &ap[ip - j + 1], &c__1, &x[1], &c__1);
+                        aocl_blas_zaxpy(&i__3, &z__1, &ap[ip - j + 1], &c__1, &x[1], &c__1);
                         i__3 = j - 1;
-                        i__ = izamax_(&i__3, &x[1], &c__1);
+                        i__ = aocl_blas_izamax(&i__3, &x[1], &c__1);
                         i__3 = i__;
                         xmax = (d__1 = x[i__3].r, f2c_abs(d__1))
                                + (d__2 = d_imag(&x[i__]), f2c_abs(d__2));
@@ -789,9 +784,9 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
                         z__2.i = -x[i__4].i; // , expr subst
                         z__1.r = tscal * z__2.r;
                         z__1.i = tscal * z__2.i; // , expr subst
-                        zaxpy_(&i__3, &z__1, &ap[ip + 1], &c__1, &x[j + 1], &c__1);
+                        aocl_blas_zaxpy(&i__3, &z__1, &ap[ip + 1], &c__1, &x[j + 1], &c__1);
                         i__3 = *n - j;
-                        i__ = j + izamax_(&i__3, &x[j + 1], &c__1);
+                        i__ = j + aocl_blas_izamax(&i__3, &x[j + 1], &c__1);
                         i__3 = i__;
                         xmax = (d__1 = x[i__3].r, f2c_abs(d__1))
                                + (d__2 = d_imag(&x[i__]), f2c_abs(d__2));
@@ -848,7 +843,7 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
                     }
                     if(rec < 1.)
                     {
-                        zdscal_(n, &rec, &x[1], &c__1);
+                        aocl_blas_zdscal(n, &rec, &x[1], &c__1);
                         *scale *= rec;
                         xmax *= rec;
                     }
@@ -862,14 +857,14 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
                     if(upper)
                     {
                         i__3 = j - 1;
-                        zdotu_f2c_(&z__1, &i__3, &ap[ip - j + 1], &c__1, &x[1], &c__1);
+                        aocl_lapack_zdotu_f2c(&z__1, &i__3, &ap[ip - j + 1], &c__1, &x[1], &c__1);
                         csumj.r = z__1.r;
                         csumj.i = z__1.i; // , expr subst
                     }
                     else if(j < *n)
                     {
                         i__3 = *n - j;
-                        zdotu_f2c_(&z__1, &i__3, &ap[ip + 1], &c__1, &x[j + 1], &c__1);
+                        aocl_lapack_zdotu_f2c(&z__1, &i__3, &ap[ip + 1], &c__1, &x[j + 1], &c__1);
                         csumj.r = z__1.r;
                         csumj.i = z__1.i; // , expr subst
                     }
@@ -956,7 +951,7 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
                             {
                                 /* Scale X by 1/f2c_abs(x(j)). */
                                 rec = 1. / xj;
-                                zdscal_(n, &rec, &x[1], &c__1);
+                                aocl_blas_zdscal(n, &rec, &x[1], &c__1);
                                 *scale *= rec;
                                 xmax *= rec;
                             }
@@ -973,7 +968,7 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
                         {
                             /* Scale x by (1/f2c_abs(x(j)))*f2c_abs(A(j,j))*BIGNUM. */
                             rec = tjj * bignum / xj;
-                            zdscal_(n, &rec, &x[1], &c__1);
+                            aocl_blas_zdscal(n, &rec, &x[1], &c__1);
                             *scale *= rec;
                             xmax *= rec;
                         }
@@ -1071,7 +1066,7 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
                     }
                     if(rec < 1.)
                     {
-                        zdscal_(n, &rec, &x[1], &c__1);
+                        aocl_blas_zdscal(n, &rec, &x[1], &c__1);
                         *scale *= rec;
                         xmax *= rec;
                     }
@@ -1085,14 +1080,14 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
                     if(upper)
                     {
                         i__3 = j - 1;
-                        zdotc_f2c_(&z__1, &i__3, &ap[ip - j + 1], &c__1, &x[1], &c__1);
+                        aocl_lapack_zdotc_f2c(&z__1, &i__3, &ap[ip - j + 1], &c__1, &x[1], &c__1);
                         csumj.r = z__1.r;
                         csumj.i = z__1.i; // , expr subst
                     }
                     else if(j < *n)
                     {
                         i__3 = *n - j;
-                        zdotc_f2c_(&z__1, &i__3, &ap[ip + 1], &c__1, &x[j + 1], &c__1);
+                        aocl_lapack_zdotc_f2c(&z__1, &i__3, &ap[ip + 1], &c__1, &x[j + 1], &c__1);
                         csumj.r = z__1.r;
                         csumj.i = z__1.i; // , expr subst
                     }
@@ -1179,7 +1174,7 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
                             {
                                 /* Scale X by 1/f2c_abs(x(j)). */
                                 rec = 1. / xj;
-                                zdscal_(n, &rec, &x[1], &c__1);
+                                aocl_blas_zdscal(n, &rec, &x[1], &c__1);
                                 *scale *= rec;
                                 xmax *= rec;
                             }
@@ -1196,7 +1191,7 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
                         {
                             /* Scale x by (1/f2c_abs(x(j)))*f2c_abs(A(j,j))*BIGNUM. */
                             rec = tjj * bignum / xj;
-                            zdscal_(n, &rec, &x[1], &c__1);
+                            aocl_blas_zdscal(n, &rec, &x[1], &c__1);
                             *scale *= rec;
                             xmax *= rec;
                         }
@@ -1253,7 +1248,7 @@ void zlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
     if(tscal != 1.)
     {
         d__1 = 1. / tscal;
-        dscal_(n, &d__1, &cnorm[1], &c__1);
+        aocl_blas_dscal(n, &d__1, &cnorm[1], &c__1);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

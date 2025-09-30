@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
+static dcomplex c_b1 = {{1.}, {0.}};
 /* > \brief \b ZSYTRS2 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -41,7 +41,7 @@ static doublecomplex c_b1 = {1., 0.};
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZSYTRS2 solves a system of linear equations A*X = B with a complex */
+/* > ZSYTRS2 solves a system of linear equations A*X = B with a scomplex */
 /* > symmetric matrix A using the factorization A = U*D*U**T or */
 /* > A = L*D*L**T computed by ZSYTRF and converted by ZSYCONV. */
 /* > \endverbatim */
@@ -129,38 +129,48 @@ static doublecomplex c_b1 = {1., 0.};
 /* > \ingroup complex16SYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer *ipiv,
-              doublecomplex *b, integer *ldb, doublecomplex *work, integer *info)
+/** Generated wrapper function */
+void zsytrs2_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int_t *lda,
+              aocl_int_t *ipiv, dcomplex *b, aocl_int_t *ldb, dcomplex *work,
+              aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zsytrs2(uplo, n, nrhs, a, lda, ipiv, b, ldb, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zsytrs2(uplo, &n_64, &nrhs_64, a, &lda_64, ipiv, b, &ldb_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zsytrs2(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex *a,
+                         aocl_int64_t *lda, aocl_int_t *ipiv, dcomplex *b, aocl_int64_t *ldb,
+                         dcomplex *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsytrs2 inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
                       ", ldb %" FLA_IS "",
                       *uplo, *n, *nrhs, *lda, *ldb);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
-    doublecomplex z__1, z__2, z__3;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
+    dcomplex z__1, z__2, z__3;
     /* Builtin functions */
-    void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
+    void z_div(dcomplex *, dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__, j, k;
-    doublecomplex ak, bk;
-    integer kp;
-    doublecomplex akm1, bkm1, akm1k;
-    extern logical lsame_(char *, char *, integer, integer);
-    doublecomplex denom;
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
+    aocl_int64_t i__, j, k;
+    dcomplex ak, bk;
+    aocl_int64_t kp;
+    dcomplex akm1, bkm1, akm1k;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    dcomplex denom;
+    aocl_int64_t iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        zsyconv_(char *, char *, integer *, doublecomplex *, integer *, integer *, doublecomplex *,
-                 integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -216,7 +226,7 @@ void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZSYTRS2", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("ZSYTRS2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -227,7 +237,7 @@ void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
         return;
     }
     /* Convert A */
-    zsyconv_(uplo, "C", n, &a[a_offset], lda, &ipiv[1], &work[1], &iinfo);
+    aocl_lapack_zsyconv(uplo, "C", n, &a[a_offset], lda, &ipiv[1], &work[1], &iinfo);
     if(upper)
     {
         /* Solve A*X = B, where A = U*D*U**T. */
@@ -242,7 +252,7 @@ void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
                 kp = ipiv[k];
                 if(kp != k)
                 {
-                    zswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_zswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 --k;
             }
@@ -253,13 +263,13 @@ void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
                 kp = -ipiv[k];
                 if(kp == -ipiv[k - 1])
                 {
-                    zswap_(nrhs, &b[k - 1 + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_zswap(nrhs, &b[k - 1 + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 k += -2;
             }
         }
         /* Compute (U \P**T * B) -> B [ (U \P**T * B) ] */
-        ztrsm_("L", "U", "N", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
+        aocl_blas_ztrsm("L", "U", "N", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
         /* Compute D \ B -> B [ D \ (U \P**T * B) ] */
         i__ = *n;
         while(i__ >= 1)
@@ -267,7 +277,7 @@ void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
             if(ipiv[i__] > 0)
             {
                 z_div(&z__1, &c_b1, &a[i__ + i__ * a_dim1]);
-                zscal_(nrhs, &z__1, &b[i__ + b_dim1], ldb);
+                aocl_blas_zscal(nrhs, &z__1, &b[i__ + b_dim1], ldb);
             }
             else if(i__ > 1)
             {
@@ -321,7 +331,7 @@ void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
             --i__;
         }
         /* Compute (U**T \ B) -> B [ U**T \ (D \ (U \P**T * B) ) ] */
-        ztrsm_("L", "U", "T", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
+        aocl_blas_ztrsm("L", "U", "T", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
         /* P * B [ P * (U**T \ (D \ (U \P**T * B) )) ] */
         k = 1;
         while(k <= *n)
@@ -333,7 +343,7 @@ void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
                 kp = ipiv[k];
                 if(kp != k)
                 {
-                    zswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_zswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 ++k;
             }
@@ -344,7 +354,7 @@ void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
                 kp = -ipiv[k];
                 if(k < *n && kp == -ipiv[k + 1])
                 {
-                    zswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_zswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 k += 2;
             }
@@ -364,7 +374,7 @@ void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
                 kp = ipiv[k];
                 if(kp != k)
                 {
-                    zswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_zswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 ++k;
             }
@@ -375,13 +385,13 @@ void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
                 kp = -ipiv[k + 1];
                 if(kp == -ipiv[k])
                 {
-                    zswap_(nrhs, &b[k + 1 + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_zswap(nrhs, &b[k + 1 + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 k += 2;
             }
         }
         /* Compute (L \P**T * B) -> B [ (L \P**T * B) ] */
-        ztrsm_("L", "L", "N", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
+        aocl_blas_ztrsm("L", "L", "N", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
         /* Compute D \ B -> B [ D \ (L \P**T * B) ] */
         i__ = 1;
         while(i__ <= *n)
@@ -389,7 +399,7 @@ void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
             if(ipiv[i__] > 0)
             {
                 z_div(&z__1, &c_b1, &a[i__ + i__ * a_dim1]);
-                zscal_(nrhs, &z__1, &b[i__ + b_dim1], ldb);
+                aocl_blas_zscal(nrhs, &z__1, &b[i__ + b_dim1], ldb);
             }
             else
             {
@@ -440,7 +450,7 @@ void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
             ++i__;
         }
         /* Compute (L**T \ B) -> B [ L**T \ (D \ (L \P**T * B) ) ] */
-        ztrsm_("L", "L", "T", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
+        aocl_blas_ztrsm("L", "L", "T", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
         /* P * B [ P * (L**T \ (D \ (L \P**T * B) )) ] */
         k = *n;
         while(k >= 1)
@@ -452,7 +462,7 @@ void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
                 kp = ipiv[k];
                 if(kp != k)
                 {
-                    zswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_zswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 --k;
             }
@@ -463,14 +473,14 @@ void zsytrs2_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *
                 kp = -ipiv[k];
                 if(k > 1 && kp == -ipiv[k - 1])
                 {
-                    zswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_zswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 k += -2;
             }
         }
     }
     /* Revert A */
-    zsyconv_(uplo, "R", n, &a[a_offset], lda, &ipiv[1], &work[1], &iinfo);
+    aocl_lapack_zsyconv(uplo, "R", n, &a[a_offset], lda, &ipiv[1], &work[1], &iinfo);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZSYTRS2 */

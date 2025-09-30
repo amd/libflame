@@ -1,17 +1,17 @@
 /* csscal.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int csscal_(integer *n, real *sa, complex *cx, integer *incx)
+int csscal_(integer *n, real *sa, scomplex *cx, integer *incx)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;
     real r__1, r__2;
-    complex q__1;
+    scomplex q__1;
     /* Builtin functions */
-    double r_imag(complex *);
+    double r_imag(scomplex *);
     /* Local variables */
     integer i__, nincx;
-    /* scales a complex vector by a real constant. */
+    /* scales a scomplex vector by a real constant. */
     /* jack dongarra, linpack, 3/11/78. */
     /* modified 3/93 to return if incx .le. 0. */
     /* modified 12/3/93, array(1) declarations changed to array(*) */

@@ -85,14 +85,28 @@
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void slarscl2_(integer *m, integer *n, real *d__, real *x, integer *ldx)
+/** Generated wrapper function */
+void slarscl2_(aocl_int_t *m, aocl_int_t *n, real *d__, real *x, aocl_int_t *ldx)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slarscl2(m, n, d__, x, ldx);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldx_64 = *ldx;
+
+    aocl_lapack_slarscl2(&m_64, &n_64, d__, x, &ldx_64);
+#endif
+}
+
+void aocl_lapack_slarscl2(aocl_int64_t *m, aocl_int64_t *n, real *d__, real *x, aocl_int64_t *ldx)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slarscl2 inputs: m %" FLA_IS ",n %" FLA_IS ",ldx %" FLA_IS "", *m, *n, *ldx);
     /* System generated locals */
-    integer x_dim1, x_offset, i__1, i__2;
+    aocl_int64_t x_dim1, x_offset, i__1, i__2;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

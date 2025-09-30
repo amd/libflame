@@ -4,16 +4,14 @@
 
 #include "FLA_f2c.h"
 
-extern void cspr_(char *, integer *, complex *, complex *, integer *, complex *);
-extern void cscal_(integer *, complex *, complex *, integer *);
-extern void c_div(complex *, complex *, complex *);
+extern void c_div(scomplex *, scomplex *, scomplex *);
 
 /*! @brief Partial LDL' factorization without pivoting
     *
     * @details
     * \b Purpose:
     * \verbatim
-        CSPFFRTX computes the partial factorization of a complex symmetric matrix A
+        CSPFFRTX computes the partial factorization of a scomplex symmetric matrix A
         stored in packed format.
         The factorization has the form
             A = L*D*L**T
@@ -70,13 +68,13 @@ extern void c_div(complex *, complex *, complex *);
     \endverbatim
     *  */
 
-void cspffrtx_fla(complex *ap, integer *n, integer *ncolm, complex *work, complex *work2)
+void cspffrtx_fla(scomplex *ap, aocl_int64_t *n, aocl_int64_t *ncolm, scomplex *work, scomplex *work2)
 {
-    complex z__1;
-    integer i__1, k, kc;
-    complex r1;
-    complex c_b1 = {1., 0.};
-    integer c__1 = 1;
+    scomplex z__1;
+    aocl_int64_t i__1, k, kc;
+    scomplex r1;
+    scomplex c_b1 = {{1.}, {0.}};
+    aocl_int64_t c__1 = 1;
 
     --ap;
     /* Factorize A as L*D*L**T using the lower triangle of A */
@@ -104,8 +102,8 @@ void cspffrtx_fla(complex *ap, integer *n, integer *ncolm, complex *work, comple
         /* Perform a rank-1 update of A(k+1:n,k+1:n) as */
         /* A := A - L(k)*D(k)*L(k)**T = A - W(k)*(1/D(k))*W(k)**T */
         i__1 = *n - k;
-        cspr_("Lower", &i__1, &r1, &ap[kc + 1], &c__1, &ap[kc + *n - k + 1]);
-        cscal_(&i__1, &z__1, &ap[kc + 1], &c__1);
+        aocl_lapack_cspr("Lower", &i__1, &r1, &ap[kc + 1], &c__1, &ap[kc + *n - k + 1]);
+        aocl_blas_cscal(&i__1, &z__1, &ap[kc + 1], &c__1);
 
         kc = kc + *n - k + 1;
     }

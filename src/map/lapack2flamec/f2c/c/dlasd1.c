@@ -4,10 +4,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__0 = 0;
+static aocl_int64_t c__0 = 0;
 static doublereal c_b7 = 1.;
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b DLASD1 computes the SVD of an upper bidiagonal matrix B of the specified size. Used
  * by sbdsdc. */
 /* =========== DOCUMENTATION =========== */
@@ -208,37 +208,45 @@ VT(NL+2:M, NL+2:M)**T contains */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlasd1_(integer *nl, integer *nr, integer *sqre, doublereal *d__, doublereal *alpha,
-             doublereal *beta, doublereal *u, integer *ldu, doublereal *vt, integer *ldvt,
-             integer *idxq, integer *iwork, doublereal *work, integer *info)
+/** Generated wrapper function */
+void dlasd1_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, doublereal *d__, doublereal *alpha,
+             doublereal *beta, doublereal *u, aocl_int_t *ldu, doublereal *vt, aocl_int_t *ldvt,
+             aocl_int_t *idxq, aocl_int_t *iwork, doublereal *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlasd1(nl, nr, sqre, d__, alpha, beta, u, ldu, vt, ldvt, idxq, iwork, work, info);
+#else
+    aocl_int64_t nl_64 = *nl;
+    aocl_int64_t nr_64 = *nr;
+    aocl_int64_t sqre_64 = *sqre;
+    aocl_int64_t ldu_64 = *ldu;
+    aocl_int64_t ldvt_64 = *ldvt;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlasd1(&nl_64, &nr_64, &sqre_64, d__, alpha, beta, u, &ldu_64, vt, &ldvt_64, idxq,
+                       iwork, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlasd1(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, doublereal *d__,
+                        doublereal *alpha, doublereal *beta, doublereal *u, aocl_int64_t *ldu,
+                        doublereal *vt, aocl_int64_t *ldvt, aocl_int_t *idxq, aocl_int_t *iwork,
+                        doublereal *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasd1 inputs: nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS
                       ", ldu %" FLA_IS ", ldvt %" FLA_IS "",
                       *nl, *nr, *sqre, *ldu, *ldvt);
     /* System generated locals */
-    integer u_dim1, u_offset, vt_dim1, vt_offset, i__1;
+    aocl_int64_t u_dim1, u_offset, vt_dim1, vt_offset, i__1;
     doublereal d__1, d__2;
     /* Local variables */
-    integer i__, k, m, n, n1, n2, iq, iz, iu2, ldq, idx, ldu2, ivt2, idxc, idxp, ldvt2;
-    extern /* Subroutine */
-        void
-        dlasd2_(integer *, integer *, integer *, integer *, doublereal *, doublereal *,
-                doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *,
-                doublereal *, doublereal *, integer *, doublereal *, integer *, integer *,
-                integer *, integer *, integer *, integer *, integer *),
-        dlasd3_(integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *,
-                doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-                integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *),
-        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublereal *, integer *, integer *),
-        dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *);
-    integer isigma;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, k, m, n, n1, n2, iq, iz, iu2, ldq, idx, ldu2, ivt2, idxc, idxp, ldvt2;
+    aocl_int64_t isigma;
     doublereal orgnrm;
-    integer coltyp;
+    aocl_int64_t coltyp;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -286,7 +294,7 @@ void dlasd1_(integer *nl, integer *nr, integer *sqre, doublereal *d__, doublerea
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLASD1", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DLASD1", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -321,29 +329,29 @@ void dlasd1_(integer *nl, integer *nr, integer *sqre, doublereal *d__, doublerea
         }
         /* L10: */
     }
-    dlascl_("G", &c__0, &c__0, &orgnrm, &c_b7, &n, &c__1, &d__[1], &n, info);
+    aocl_lapack_dlascl("G", &c__0, &c__0, &orgnrm, &c_b7, &n, &c__1, &d__[1], &n, info);
     *alpha /= orgnrm;
     *beta /= orgnrm;
     /* Deflate singular values. */
-    dlasd2_(nl, nr, sqre, &k, &d__[1], &work[iz], alpha, beta, &u[u_offset], ldu, &vt[vt_offset],
-            ldvt, &work[isigma], &work[iu2], &ldu2, &work[ivt2], &ldvt2, &iwork[idxp], &iwork[idx],
-            &iwork[idxc], &idxq[1], &iwork[coltyp], info);
+    aocl_lapack_dlasd2(nl, nr, sqre, &k, &d__[1], &work[iz], alpha, beta, &u[u_offset], ldu,
+                       &vt[vt_offset], ldvt, &work[isigma], &work[iu2], &ldu2, &work[ivt2], &ldvt2,
+                       &iwork[idxp], &iwork[idx], &iwork[idxc], &idxq[1], &iwork[coltyp], info);
     /* Solve Secular Equation and update singular vectors. */
     ldq = k;
-    dlasd3_(nl, nr, sqre, &k, &d__[1], &work[iq], &ldq, &work[isigma], &u[u_offset], ldu,
-            &work[iu2], &ldu2, &vt[vt_offset], ldvt, &work[ivt2], &ldvt2, &iwork[idxc],
-            &iwork[coltyp], &work[iz], info);
+    aocl_lapack_dlasd3(nl, nr, sqre, &k, &d__[1], &work[iq], &ldq, &work[isigma], &u[u_offset], ldu,
+                       &work[iu2], &ldu2, &vt[vt_offset], ldvt, &work[ivt2], &ldvt2, &iwork[idxc],
+                       &iwork[coltyp], &work[iz], info);
     if(*info != 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Unscale. */
-    dlascl_("G", &c__0, &c__0, &c_b7, &orgnrm, &n, &c__1, &d__[1], &n, info);
+    aocl_lapack_dlascl("G", &c__0, &c__0, &c_b7, &orgnrm, &n, &c__1, &d__[1], &n, info);
     /* Prepare the IDXQ sorting permutation. */
     n1 = k;
     n2 = n - k;
-    dlamrg_(&n1, &n2, &d__[1], &c__1, &c_n1, &idxq[1]);
+    aocl_lapack_dlamrg(&n1, &n2, &d__[1], &c__1, &c_n1, &idxq[1]);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of DLASD1 */

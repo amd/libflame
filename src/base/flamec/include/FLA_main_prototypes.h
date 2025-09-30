@@ -502,3 +502,6 @@ FLA_Error     FLA_Cont_with_3x1_to_2x1_check( FLA_Obj *AT,  FLA_Obj A0,
 FLA_Error     FLA_Cont_with_1x3_to_1x2_check( FLA_Obj *AL,              FLA_Obj *AR,
                                               FLA_Obj  A0, FLA_Obj  A1, FLA_Obj  A2,
                                                                         FLA_Side side );
+
+aocl_int_t* FLA_Intlp_get_array( fla_dim_t *src, fla_dim_t len );
+void FLA_Intlp_free_array( aocl_int_t *lparr, fla_dim_t *src, fla_dim_t len );

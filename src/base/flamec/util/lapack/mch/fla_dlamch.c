@@ -19,13 +19,13 @@ extern "C" {
 #include "stdio.h"
 /* Table of constant values */
 
-//static TLS_CLASS_SPEC integer c__1 = 1;
+//static TLS_CLASS_SPEC fla_dim_t c__1 = 1;
 static doublereal c_b32 = 0.;
 
-double fla_pow_di(doublereal *ap, integer *bp)
+double fla_pow_di(doublereal *ap, fla_dim_t *bp)
 {
 	double        pow, x;
-	integer       n;
+	fla_dim_t       n;
 	unsigned long u;
 
 	pow = 1;
@@ -59,24 +59,24 @@ doublereal fla_dlamch(char *cmach, ftnlen cmach_len)
     static TLS_CLASS_SPEC logical first = TRUE_;
 
     /* System generated locals */
-    integer i__1;
+    fla_dim_t i__1;
     doublereal ret_val;
 
     /* Builtin functions */
-    double fla_pow_di(doublereal *, integer *);
+    double fla_pow_di(doublereal *, fla_dim_t *);
 
     /* Local variables */
     static TLS_CLASS_SPEC doublereal base;
-    static TLS_CLASS_SPEC integer beta;
+    static TLS_CLASS_SPEC fla_dim_t beta;
     static TLS_CLASS_SPEC doublereal emin, prec, emax;
-    static TLS_CLASS_SPEC integer imin, imax;
+    static TLS_CLASS_SPEC fla_dim_t imin, imax;
     static TLS_CLASS_SPEC logical lrnd;
     static TLS_CLASS_SPEC doublereal rmin, rmax, t, rmach;
     extern logical fla_lsame(char *, char *, ftnlen, ftnlen);
     static TLS_CLASS_SPEC doublereal small_val, sfmin;
-    extern /* Subroutine */ integer fla_dlamc2(integer *, integer *, logical *, 
-	    doublereal *, integer *, doublereal *, integer *, doublereal *);
-    static TLS_CLASS_SPEC integer it;
+    extern /* Subroutine */ fla_dim_t fla_dlamc2(fla_dim_t *, fla_dim_t *, logical *, 
+	    doublereal *, fla_dim_t *, doublereal *, fla_dim_t *, doublereal *);
+    static TLS_CLASS_SPEC fla_dim_t it;
     static TLS_CLASS_SPEC doublereal rnd, eps;
 
 
@@ -197,7 +197,7 @@ doublereal fla_dlamch(char *cmach, ftnlen cmach_len)
 
 /* *********************************************************************** */
 
-/* Subroutine */ integer fla_dlamc1(integer *beta, integer *t, logical *rnd, logical 
+/* Subroutine */ fla_dim_t fla_dlamc1(fla_dim_t *beta, fla_dim_t *t, logical *rnd, logical 
 	*ieee1)
 {
     /* Initialized data */
@@ -210,12 +210,12 @@ doublereal fla_dlamch(char *cmach, ftnlen cmach_len)
     /* Local variables */
     static TLS_CLASS_SPEC logical lrnd;
     static TLS_CLASS_SPEC doublereal a, b, c__, f;
-    static TLS_CLASS_SPEC integer lbeta;
+    static TLS_CLASS_SPEC fla_dim_t lbeta;
     static TLS_CLASS_SPEC doublereal savec;
     extern doublereal fla_dlamc3(doublereal *, doublereal *);
     static TLS_CLASS_SPEC logical lieee1;
     static TLS_CLASS_SPEC doublereal t1, t2;
-    static TLS_CLASS_SPEC integer lt;
+    static TLS_CLASS_SPEC fla_dim_t lt;
     static TLS_CLASS_SPEC doublereal one, qtr;
 
 
@@ -286,7 +286,7 @@ doublereal fla_dlamch(char *cmach, ftnlen cmach_len)
 /*        that relevant values are  stored and not held in registers,  or */
 /*        are not affected by optimizers. */
 
-/*        Compute  a = 2.0**m  with the  smallest positive integer m such */
+/*        Compute  a = 2.0**m  with the  smallest positive fla_dim_t m such */
 /*        that */
 
 /*           fl( a + 1.0 ) = a. */
@@ -305,7 +305,7 @@ L10:
 	}
 /* +       END WHILE */
 
-/*        Now compute  b = 2.0**m  with the smallest positive integer m */
+/*        Now compute  b = 2.0**m  with the smallest positive fla_dim_t m */
 /*        such that */
 
 /*           fl( a + b ) .gt. a. */
@@ -331,7 +331,7 @@ L20:
 	savec = c__;
 	d__1 = -a;
 	c__ = fla_dlamc3(&c__, &d__1);
-	lbeta = (integer) (c__ + qtr);
+	lbeta = (fla_dim_t) (c__ + qtr);
 
 
 /*        Now determine whether rounding or chopping occurs,  by adding a */
@@ -367,9 +367,9 @@ L20:
 	t2 = fla_dlamc3(&d__1, &savec);
 	lieee1 = t1 == a && t2 > savec && lrnd;
 
-/*        Now find  the  mantissa, t.  It should  be the  integer part of */
+/*        Now find  the  mantissa, t.  It should  be the  fla_dim_t part of */
 /*        log to the base beta of a,  however it is safer to determine  t */
-/*        by powering.  So we find t as the smallest positive integer for */
+/*        by powering.  So we find t as the smallest positive fla_dim_t for */
 /*        which */
 
 /*           fl( beta**t + 1.0 ) = 1.0. */
@@ -407,8 +407,8 @@ L30:
 
 /* *********************************************************************** */
 
-/* Subroutine */ integer fla_dlamc2(integer *beta, integer *t, logical *rnd, 
-	doublereal *eps, integer *emin, doublereal *rmin, integer *emax, 
+/* Subroutine */ fla_dim_t fla_dlamc2(fla_dim_t *beta, fla_dim_t *t, logical *rnd, 
+	doublereal *eps, fla_dim_t *emin, doublereal *rmin, fla_dim_t *emax, 
 	doublereal *rmax)
 {
     /* Initialized data */
@@ -424,32 +424,32 @@ within the code of routine\002,\002 DLAMC2,\002,/\002 otherwise supply EMIN \
 explicitly.\002,/)";
 
     /* System generated locals */
-    integer i__1;
+    fla_dim_t i__1;
     doublereal d__1, d__2, d__3, d__4, d__5;
 
     /* Builtin functions */
-    double fla_pow_di(doublereal *, integer *);
-    //integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe();
+    double fla_pow_di(doublereal *, fla_dim_t *);
+    //fla_dim_t s_wsfe(cilist *), do_fio(fla_dim_t *, char *, ftnlen), e_wsfe();
 
     /* Local variables */
     static TLS_CLASS_SPEC logical ieee;
     static TLS_CLASS_SPEC doublereal half;
     static TLS_CLASS_SPEC logical lrnd;
     static TLS_CLASS_SPEC doublereal leps, zero, a, b, c__;
-    static TLS_CLASS_SPEC integer i__, lbeta;
+    static TLS_CLASS_SPEC fla_dim_t i__, lbeta;
     static TLS_CLASS_SPEC doublereal rbase;
-    static TLS_CLASS_SPEC integer lemin, lemax, gnmin;
+    static TLS_CLASS_SPEC fla_dim_t lemin, lemax, gnmin;
     static TLS_CLASS_SPEC doublereal small_val;
-    static TLS_CLASS_SPEC integer gpmin;
+    static TLS_CLASS_SPEC fla_dim_t gpmin;
     static TLS_CLASS_SPEC doublereal third, lrmin, lrmax, sixth;
-    extern /* Subroutine */ integer fla_dlamc1(integer *, integer *, logical *, 
+    extern /* Subroutine */ fla_dim_t fla_dlamc1(fla_dim_t *, fla_dim_t *, logical *, 
 	    logical *);
     extern doublereal fla_dlamc3(doublereal *, doublereal *);
     static TLS_CLASS_SPEC logical lieee1;
-    extern /* Subroutine */ integer fla_dlamc4(integer *, doublereal *, integer *), 
-	    fla_dlamc5(integer *, integer *, integer *, logical *, integer *, 
+    extern /* Subroutine */ fla_dim_t fla_dlamc4(fla_dim_t *, doublereal *, fla_dim_t *), 
+	    fla_dlamc5(fla_dim_t *, fla_dim_t *, fla_dim_t *, logical *, fla_dim_t *, 
 	    doublereal *);
-    static TLS_CLASS_SPEC integer lt, ngnmin, ngpmin;
+    static TLS_CLASS_SPEC fla_dim_t lt, ngnmin, ngpmin;
     static TLS_CLASS_SPEC doublereal one, two;
 
     /* Fortran I/O blocks */
@@ -671,7 +671,7 @@ L10:
 	    first = TRUE_;
 /*
 	    s_wsfe(&io___58);
-	    do_fio(&c__1, (char *)&lemin, (ftnlen)sizeof(integer));
+	    do_fio(&c__1, (char *)&lemin, (ftnlen)sizeof(fla_dim_t));
 	    e_wsfe();
 */
 	    printf( "%s", fmt_9999 );
@@ -764,15 +764,15 @@ doublereal fla_dlamc3(doublereal *a, doublereal *b)
 
 /* *********************************************************************** */
 
-/* Subroutine */ integer fla_dlamc4(integer *emin, doublereal *start, integer *base)
+/* Subroutine */ fla_dim_t fla_dlamc4(fla_dim_t *emin, doublereal *start, fla_dim_t *base)
 {
     /* System generated locals */
-    integer i__1;
+    fla_dim_t i__1;
     doublereal d__1;
 
     /* Local variables */
     static TLS_CLASS_SPEC doublereal zero, a;
-    static TLS_CLASS_SPEC integer i__;
+    static TLS_CLASS_SPEC fla_dim_t i__;
     static TLS_CLASS_SPEC doublereal rbase, b1, b2, c1, c2, d1, d2;
     extern doublereal fla_dlamc3(doublereal *, doublereal *);
     static TLS_CLASS_SPEC doublereal one;
@@ -862,22 +862,22 @@ L10:
 
 /* *********************************************************************** */
 
-/* Subroutine */ integer fla_dlamc5(integer *beta, integer *p, integer *emin, 
-	logical *ieee, integer *emax, doublereal *rmax)
+/* Subroutine */ fla_dim_t fla_dlamc5(fla_dim_t *beta, fla_dim_t *p, fla_dim_t *emin, 
+	logical *ieee, fla_dim_t *emax, doublereal *rmax)
 {
     /* System generated locals */
-    integer i__1;
+    fla_dim_t i__1;
     doublereal d__1;
 
     /* Local variables */
-    static TLS_CLASS_SPEC integer lexp;
+    static TLS_CLASS_SPEC fla_dim_t lexp;
     static TLS_CLASS_SPEC doublereal oldy;
-    static TLS_CLASS_SPEC integer uexp, i__;
+    static TLS_CLASS_SPEC fla_dim_t uexp, i__;
     static TLS_CLASS_SPEC doublereal y, z__;
-    static TLS_CLASS_SPEC integer nbits;
+    static TLS_CLASS_SPEC fla_dim_t nbits;
     extern doublereal fla_dlamc3(doublereal *, doublereal *);
     static TLS_CLASS_SPEC doublereal recbas;
-    static TLS_CLASS_SPEC integer exbits, expsum, try__;
+    static TLS_CLASS_SPEC fla_dim_t exbits, expsum, try__;
 
 
 /*  -- LAPACK auxiliary routine (version 3.2) -- */

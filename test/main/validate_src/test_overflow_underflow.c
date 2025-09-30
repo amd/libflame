@@ -894,7 +894,7 @@ void scale_matrix_underflow_overflow_gels(integer datatype, char *trans, integer
             {
                 if(datatype > DOUBLE)
                 {
-                    /* Tuning value for complex types */
+                    /* Tuning value for scomplex types */
                     tuning_val = 4.1;
                 }
                 else
@@ -907,7 +907,7 @@ void scale_matrix_underflow_overflow_gels(integer datatype, char *trans, integer
             {
                 if(datatype > DOUBLE)
                 {
-                    /* Tuning value for complex types */
+                    /* Tuning value for scomplex types */
                     tuning_val = 3.4;
                 }
                 else
@@ -2280,7 +2280,7 @@ void scale_matrix_underflow_overflow_lange(integer datatype, integer m, integer 
                 /* Only one max item is found
                    So directly the max value can be set
                 For real numbers tunung value would be 1
-                For complex numbers set the tuning value to 2 */
+                For scomplex numbers set the tuning value to 2 */
                 if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
                 {
                     tuning_val = 2.0;
@@ -2565,7 +2565,7 @@ void scale_matrix_underflow_overflow_trtri(integer datatype, char diag_type, int
         calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
     }
 
-    /* Adjust scaling factor for complex types to prevent overflow/underflow */
+    /* Adjust scaling factor for scomplex types to prevent overflow/underflow */
     if(datatype == COMPLEX)
     {
         float scale_val = *(float *)scal;

@@ -1,17 +1,17 @@
 /* csrot.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int csrot_(integer *n, complex *cx, integer *incx, complex * cy, integer *incy, real *c__, real *s)
+int csrot_(integer *n, scomplex *cx, integer *incx, scomplex * cy, integer *incy, real *c__, real *s)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;
-    complex q__1, q__2, q__3;
+    scomplex q__1, q__2, q__3;
     /* Local variables */
     integer i__;
-    complex ctemp;
+    scomplex ctemp;
     integer ix, iy;
     /* applies a plane rotation, where the cos and sin (c and s) are real */
-    /* and the vectors cx and cy are complex. */
+    /* and the vectors cx and cy are scomplex. */
     /* jack dongarra, linpack, 3/11/78. */
     /* Parameter adjustments */
     --cy;

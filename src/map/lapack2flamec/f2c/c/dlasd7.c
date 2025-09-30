@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DLASD7 merges the two sets of singular values together into a single sorted set. Then
  * it tries to deflate the size of the problem. Used by sbdsdc. */
 /* =========== DOCUMENTATION =========== */
@@ -278,12 +278,47 @@ and entries in the second half */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d__,
-             doublereal *z__, doublereal *zw, doublereal *vf, doublereal *vfw, doublereal *vl,
-             doublereal *vlw, doublereal *alpha, doublereal *beta, doublereal *dsigma, integer *idx,
-             integer *idxp, integer *idxq, integer *perm, integer *givptr, integer *givcol,
-             integer *ldgcol, doublereal *givnum, integer *ldgnum, doublereal *c__, doublereal *s,
-             integer *info)
+/** Generated wrapper function */
+void dlasd7_(aocl_int_t *icompq, aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, aocl_int_t *k,
+             doublereal *d__, doublereal *z__, doublereal *zw, doublereal *vf, doublereal *vfw,
+             doublereal *vl, doublereal *vlw, doublereal *alpha, doublereal *beta,
+             doublereal *dsigma, aocl_int_t *idx, aocl_int_t *idxp, aocl_int_t *idxq,
+             aocl_int_t *perm, aocl_int_t *givptr, aocl_int_t *givcol, aocl_int_t *ldgcol,
+             doublereal *givnum, aocl_int_t *ldgnum, doublereal *c__, doublereal *s,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlasd7(icompq, nl, nr, sqre, k, d__, z__, zw, vf, vfw, vl, vlw, alpha, beta, dsigma,
+                       idx, idxp, idxq, perm, givptr, givcol, ldgcol, givnum, ldgnum, c__, s, info);
+#else
+    aocl_int64_t icompq_64 = *icompq;
+    aocl_int64_t nl_64 = *nl;
+    aocl_int64_t nr_64 = *nr;
+    aocl_int64_t sqre_64 = *sqre;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t givptr_64 = *givptr;
+    aocl_int64_t ldgcol_64 = *ldgcol;
+    aocl_int64_t ldgnum_64 = *ldgnum;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlasd7(&icompq_64, &nl_64, &nr_64, &sqre_64, &k_64, d__, z__, zw, vf, vfw, vl, vlw,
+                       alpha, beta, dsigma, idx, idxp, idxq, perm, &givptr_64, givcol, &ldgcol_64,
+                       givnum, &ldgnum_64, c__, s, &info_64);
+
+    *k = (aocl_int_t)k_64;
+    *givptr = (aocl_int_t)givptr_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlasd7(aocl_int64_t *icompq, aocl_int64_t *nl, aocl_int64_t *nr,
+                        aocl_int64_t *sqre, aocl_int64_t *k, doublereal *d__, doublereal *z__,
+                        doublereal *zw, doublereal *vf, doublereal *vfw, doublereal *vl,
+                        doublereal *vlw, doublereal *alpha, doublereal *beta, doublereal *dsigma,
+                        aocl_int_t *idx, aocl_int_t *idxp, aocl_int_t *idxq, aocl_int_t *perm,
+                        aocl_int64_t *givptr, aocl_int_t *givcol, aocl_int64_t *ldgcol,
+                        doublereal *givnum, aocl_int64_t *ldgnum, doublereal *c__, doublereal *s,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasd7 inputs: icompq %" FLA_IS ", nl %" FLA_IS ", nr %" FLA_IS
@@ -291,28 +326,17 @@ void dlasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
                       "",
                       *icompq, *nl, *nr, *sqre, *idxq, *ldgcol, *ldgnum);
     /* System generated locals */
-    integer givcol_dim1, givcol_offset, givnum_dim1, givnum_offset, i__1;
+    aocl_int64_t givcol_dim1, givcol_offset, givnum_dim1, givnum_offset, i__1;
     doublereal d__1, d__2;
     /* Local variables */
-    integer i__, j, m, n, k2;
+    aocl_int64_t i__, j, m, n, k2;
     doublereal z1;
-    integer jp;
+    aocl_int64_t jp;
     doublereal eps, tau, tol;
-    integer nlp1, nlp2, idxi, idxj;
-    extern /* Subroutine */
-        void
-        drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-              doublereal *);
-    integer idxjp;
-    extern /* Subroutine */
-        void
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
-    integer jprev;
+    aocl_int64_t nlp1, nlp2, idxi, idxj;
+    aocl_int64_t idxjp;
+    aocl_int64_t jprev;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
-    extern /* Subroutine */
-        void
-        dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal hlftol;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -386,7 +410,7 @@ void dlasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLASD7", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DLASD7", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -423,7 +447,7 @@ void dlasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
     i__1 = n;
     for(i__ = nlp2; i__ <= i__1; ++i__)
     {
-        idxq[i__] += nlp1;
+        idxq[i__] += (aocl_int_t)(nlp1);
         /* L30: */
     }
     /* DSIGMA, IDXC, IDXC, and ZW are used as storage space. */
@@ -436,7 +460,7 @@ void dlasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
         vlw[i__] = vl[idxq[i__]];
         /* L40: */
     }
-    dlamrg_(nl, nr, &dsigma[2], &c__1, &c__1, &idx[2]);
+    aocl_lapack_dlamrg(nl, nr, &dsigma[2], &c__1, &c__1, &idx[2]);
     i__1 = n;
     for(i__ = 2; i__ <= i__1; ++i__)
     {
@@ -480,7 +504,7 @@ void dlasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
         {
             /* Deflate due to small z component. */
             --k2;
-            idxp[k2] = j;
+            idxp[k2] = (aocl_int_t)(j);
             if(j == n)
             {
                 goto L100;
@@ -505,7 +529,7 @@ L80:
     {
         /* Deflate due to small z component. */
         --k2;
-        idxp[k2] = j;
+        idxp[k2] = (aocl_int_t)(j);
     }
     else
     {
@@ -536,15 +560,15 @@ L80:
                 {
                     --idxj;
                 }
-                givcol[*givptr + (givcol_dim1 << 1)] = idxjp;
-                givcol[*givptr + givcol_dim1] = idxj;
+                givcol[*givptr + (givcol_dim1 << 1)] = (aocl_int_t)(idxjp);
+                givcol[*givptr + givcol_dim1] = (aocl_int_t)(idxj);
                 givnum[*givptr + (givnum_dim1 << 1)] = *c__;
                 givnum[*givptr + givnum_dim1] = *s;
             }
-            drot_(&c__1, &vf[jprev], &c__1, &vf[j], &c__1, c__, s);
-            drot_(&c__1, &vl[jprev], &c__1, &vl[j], &c__1, c__, s);
+            aocl_blas_drot(&c__1, &vf[jprev], &c__1, &vf[j], &c__1, c__, s);
+            aocl_blas_drot(&c__1, &vl[jprev], &c__1, &vl[j], &c__1, c__, s);
             --k2;
-            idxp[k2] = jprev;
+            idxp[k2] = (aocl_int_t)(jprev);
             jprev = j;
         }
         else
@@ -552,7 +576,7 @@ L80:
             ++(*k);
             zw[*k] = z__[jprev];
             dsigma[*k] = d__[jprev];
-            idxp[*k] = jprev;
+            idxp[*k] = (aocl_int_t)(jprev);
             jprev = j;
         }
     }
@@ -561,7 +585,7 @@ L90: /* Record the last singular value. */
     ++(*k);
     zw[*k] = z__[jprev];
     dsigma[*k] = d__[jprev];
-    idxp[*k] = jprev;
+    idxp[*k] = (aocl_int_t)(jprev);
 L100: /* Sort the singular values into DSIGMA. The singular values which */
     /* were not deflated go into the first K slots of DSIGMA, except */
     /* that DSIGMA(1) is treated separately. */
@@ -591,7 +615,7 @@ L100: /* Sort the singular values into DSIGMA. The singular values which */
     /* The deflated singular values go back into the last N - K slots of */
     /* D. */
     i__1 = n - *k;
-    dcopy_(&i__1, &dsigma[*k + 1], &c__1, &d__[*k + 1], &c__1);
+    aocl_blas_dcopy(&i__1, &dsigma[*k + 1], &c__1, &d__[*k + 1], &c__1);
     /* Determine DSIGMA(1), DSIGMA(2), Z(1), VF(1), VL(1), VF(M), and */
     /* VL(M). */
     dsigma[1] = 0.;
@@ -614,8 +638,8 @@ L100: /* Sort the singular values into DSIGMA. The singular values which */
             *c__ = z1 / z__[1];
             *s = -z__[m] / z__[1];
         }
-        drot_(&c__1, &vf[m], &c__1, &vf[1], &c__1, c__, s);
-        drot_(&c__1, &vl[m], &c__1, &vl[1], &c__1, c__, s);
+        aocl_blas_drot(&c__1, &vf[m], &c__1, &vf[1], &c__1, c__, s);
+        aocl_blas_drot(&c__1, &vl[m], &c__1, &vl[1], &c__1, c__, s);
     }
     else
     {
@@ -630,11 +654,11 @@ L100: /* Sort the singular values into DSIGMA. The singular values which */
     }
     /* Restore Z, VF, and VL. */
     i__1 = *k - 1;
-    dcopy_(&i__1, &zw[2], &c__1, &z__[2], &c__1);
+    aocl_blas_dcopy(&i__1, &zw[2], &c__1, &z__[2], &c__1);
     i__1 = n - 1;
-    dcopy_(&i__1, &vfw[2], &c__1, &vf[2], &c__1);
+    aocl_blas_dcopy(&i__1, &vfw[2], &c__1, &vf[2], &c__1);
     i__1 = n - 1;
-    dcopy_(&i__1, &vlw[2], &c__1, &vl[2], &c__1);
+    aocl_blas_dcopy(&i__1, &vlw[2], &c__1, &vl[2], &c__1);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of DLASD7 */

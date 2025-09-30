@@ -37,7 +37,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > CGBSV computes the solution to a complex system of linear equations */
+/* > CGBSV computes the solution to a scomplex system of linear equations */
 /* > A * X = B, where A is a band matrix of order N with KL subdiagonals */
 /* > and KU superdiagonals, and X and B are N-by-NRHS matrices. */
 /* > */
@@ -160,8 +160,30 @@ elements marked */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgbsv_(integer *n, integer *kl, integer *ku, integer *nrhs, complex *ab, integer *ldab,
-            integer *ipiv, complex *b, integer *ldb, integer *info)
+/** Generated wrapper function */
+void cgbsv_(aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_int_t *nrhs, scomplex *ab,
+            aocl_int_t *ldab, aocl_int_t *ipiv, scomplex *b, aocl_int_t *ldb, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgbsv(n, kl, ku, nrhs, ab, ldab, ipiv, b, ldb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgbsv(&n_64, &kl_64, &ku_64, &nrhs_64, ab, &ldab_64, ipiv, b, &ldb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgbsv(aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku, aocl_int64_t *nrhs,
+                       scomplex *ab, aocl_int64_t *ldab, aocl_int_t *ipiv, scomplex *b,
+                       aocl_int64_t *ldb, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -176,15 +198,8 @@ void cgbsv_(integer *n, integer *kl, integer *ku, integer *nrhs, complex *ab, in
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer ab_dim1, ab_offset, b_dim1, b_offset, i__1;
+    aocl_int64_t ab_dim1, ab_offset, b_dim1, b_offset, i__1;
     /* Local variables */
-    extern /* Subroutine */
-        void
-        cgbtrf_(integer *, integer *, integer *, integer *, complex *, integer *, integer *,
-                integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        cgbtrs_(char *, integer *, integer *, integer *, integer *, complex *, integer *, integer *,
-                complex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -237,17 +252,17 @@ void cgbsv_(integer *n, integer *kl, integer *ku, integer *nrhs, complex *ab, in
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGBSV ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGBSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* Compute the LU factorization of the band matrix A. */
-    cgbtrf_(n, n, kl, ku, &ab[ab_offset], ldab, &ipiv[1], info);
+    aocl_lapack_cgbtrf(n, n, kl, ku, &ab[ab_offset], ldab, &ipiv[1], info);
     if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */
-        cgbtrs_("No transpose", n, kl, ku, nrhs, &ab[ab_offset], ldab, &ipiv[1], &b[b_offset], ldb,
-                info);
+        aocl_lapack_cgbtrs("No transpose", n, kl, ku, nrhs, &ab[ab_offset], ldab, &ipiv[1],
+                           &b[b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

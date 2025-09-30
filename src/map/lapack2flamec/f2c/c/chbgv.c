@@ -41,7 +41,7 @@
 /* > \verbatim */
 /* > */
 /* > CHBGV computes all the eigenvalues, and optionally, the eigenvectors */
-/* > of a complex generalized Hermitian-definite banded eigenproblem, of */
+/* > of a scomplex generalized Hermitian-definite banded eigenproblem, of */
 /* > the form A*x=(lambda)*B*x. Here A and B are assumed to be Hermitian */
 /* > and banded, and B is also positive definite. */
 /* > \endverbatim */
@@ -182,9 +182,33 @@
 /* > \ingroup complexOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-void chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, complex *ab,
-            integer *ldab, complex *bb, integer *ldbb, real *w, complex *z__, integer *ldz,
-            complex *work, real *rwork, integer *info)
+/** Generated wrapper function */
+void chbgv_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *ka, aocl_int_t *kb, scomplex *ab,
+            aocl_int_t *ldab, scomplex *bb, aocl_int_t *ldbb, real *w, scomplex *z__, aocl_int_t *ldz,
+            scomplex *work, real *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chbgv(jobz, uplo, n, ka, kb, ab, ldab, bb, ldbb, w, z__, ldz, work, rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ka_64 = *ka;
+    aocl_int64_t kb_64 = *kb;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldbb_64 = *ldbb;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chbgv(jobz, uplo, &n_64, &ka_64, &kb_64, ab, &ldab_64, bb, &ldbb_64, w, z__,
+                      &ldz_64, work, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chbgv(char *jobz, char *uplo, aocl_int64_t *n, aocl_int64_t *ka, aocl_int64_t *kb,
+                       scomplex *ab, aocl_int64_t *ldab, scomplex *bb, aocl_int64_t *ldbb, real *w,
+                       scomplex *z__, aocl_int64_t *ldz, scomplex *work, real *rwork,
+                       aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -202,26 +226,14 @@ void chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, comple
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer ab_dim1, ab_offset, bb_dim1, bb_offset, z_dim1, z_offset, i__1;
+    aocl_int64_t ab_dim1, ab_offset, bb_dim1, bb_offset, z_dim1, z_offset, i__1;
     /* Local variables */
-    integer inde;
+    aocl_int64_t inde;
     char vect[1];
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical upper, wantz;
-    extern /* Subroutine */
-        void
-        chbtrd_(char *, char *, integer *, integer *, complex *, integer *, real *, real *,
-                complex *, integer *, complex *, integer *),
-        chbgst_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
-                integer *, complex *, integer *, complex *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        cpbstf_(char *, integer *, integer *, complex *, integer *, integer *);
-    integer indwrk;
-    extern /* Subroutine */
-        void
-        csteqr_(char *, integer *, real *, real *, complex *, integer *, real *, integer *),
-        ssterf_(integer *, real *, real *, integer *);
+    aocl_int64_t indwrk;
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -291,7 +303,7 @@ void chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, comple
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHBGV ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CHBGV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -302,7 +314,7 @@ void chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, comple
         return;
     }
     /* Form a split Cholesky factorization of B. */
-    cpbstf_(uplo, n, kb, &bb[bb_offset], ldbb, info);
+    aocl_lapack_cpbstf(uplo, n, kb, &bb[bb_offset], ldbb, info);
     if(*info != 0)
     {
         *info = *n + *info;
@@ -312,8 +324,8 @@ void chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, comple
     /* Transform problem to standard eigenvalue problem. */
     inde = 1;
     indwrk = inde + *n;
-    chbgst_(jobz, uplo, n, ka, kb, &ab[ab_offset], ldab, &bb[bb_offset], ldbb, &z__[z_offset], ldz,
-            &work[1], &rwork[indwrk], &iinfo);
+    aocl_lapack_chbgst(jobz, uplo, n, ka, kb, &ab[ab_offset], ldab, &bb[bb_offset], ldbb,
+                       &z__[z_offset], ldz, &work[1], &rwork[indwrk], &iinfo);
     /* Reduce to tridiagonal form. */
     if(wantz)
     {
@@ -323,16 +335,16 @@ void chbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, comple
     {
         *(unsigned char *)vect = 'N';
     }
-    chbtrd_(vect, uplo, n, ka, &ab[ab_offset], ldab, &w[1], &rwork[inde], &z__[z_offset], ldz,
-            &work[1], &iinfo);
+    aocl_lapack_chbtrd(vect, uplo, n, ka, &ab[ab_offset], ldab, &w[1], &rwork[inde], &z__[z_offset],
+                       ldz, &work[1], &iinfo);
     /* For eigenvalues only, call SSTERF. For eigenvectors, call CSTEQR. */
     if(!wantz)
     {
-        ssterf_(n, &w[1], &rwork[inde], info);
+        aocl_lapack_ssterf(n, &w[1], &rwork[inde], info);
     }
     else
     {
-        csteqr_(jobz, n, &w[1], &rwork[inde], &z__[z_offset], ldz, &rwork[indwrk], info);
+        aocl_lapack_csteqr(jobz, n, &w[1], &rwork[inde], &z__[z_offset], ldz, &rwork[indwrk], info);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

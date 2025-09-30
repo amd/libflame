@@ -8,7 +8,7 @@
     Copyright (c) 2022 Advanced Micro Devices, Inc.  All rights reserved.
 */
 
-#include "FLA_f2c.h" /* > \brief \b ZROT applies a plane rotation with real cosine and complex sine to a pair of complex vectors. */
+#include "FLA_f2c.h" /* > \brief \b ZROT applies a plane rotation with real cosine and scomplex sine to a pair of scomplex vectors. */
 #ifdef FLA_ENABLE_AMD_OPT
 #include "immintrin.h"
 #endif
@@ -48,7 +48,7 @@
 /* > \verbatim */
 /* > */
 /* > ZROT applies a plane rotation, where the cos (C) is real and the */
-/* > sin (S) is complex, and the vectors CX and CY are complex. */
+/* > sin (S) is scomplex, and the vectors CX and CY are scomplex. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -107,17 +107,34 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zrot_(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy,
-           doublereal *c__, doublecomplex *s)
+/** Generated wrapper function */
+void zrot_(aocl_int_t *n, dcomplex *cx, aocl_int_t *incx, dcomplex *cy, aocl_int_t *incy,
+           doublereal *c__, dcomplex *s)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zrot(n, cx, incx, cy, incy, c__, s);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+    aocl_int64_t incy_64 = *incy;
+
+    aocl_lapack_zrot(&n_64, cx, &incx_64, cy, &incy_64, c__, s);
+#endif
+}
+
+void aocl_lapack_zrot(aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx, dcomplex *cy,
+                      aocl_int64_t *incy, doublereal *c__, dcomplex *s)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zrot inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "", *n, *incx,
                       *incy);
     extern fla_context fla_global_context;
-    extern void fla_zrot(integer * n, doublecomplex * cx, integer * incx, doublecomplex * cy,
-                         integer * incy, doublereal * c__, doublecomplex * s);
-    extern void fla_zrot_native(integer * n, doublecomplex * cx, integer * incx, doublecomplex * cy,
-                                integer * incy, doublereal * c__, doublecomplex * s);
+    extern void fla_zrot(aocl_int64_t * n, dcomplex * cx, aocl_int64_t * incx,
+                         dcomplex * cy, aocl_int64_t * incy, doublereal * c__,
+                         dcomplex * s);
+    extern void fla_zrot_native(aocl_int64_t * n, dcomplex * cx, aocl_int64_t * incx,
+                                dcomplex * cy, aocl_int64_t * incy, doublereal * c__,
+                                dcomplex * s);
 
     /* Initialize global context data */
     aocl_fla_init();
@@ -139,14 +156,14 @@ void zrot_(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, inte
     return;
 }
 
-void fla_zrot_native(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy,
-                     doublereal *c__, doublecomplex *s)
+void fla_zrot_native(aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx, dcomplex *cy,
+                     aocl_int64_t *incy, doublereal *c__, dcomplex *s)
 {
     /* System generated locals */
-    integer i__1;
-    doublecomplex z__1, z__2, z__3;
+    aocl_int64_t i__1;
+    dcomplex z__1, z__2, z__3;
     /* Local variables */
-    integer i__, ix, iy;
+    aocl_int64_t i__, ix, iy;
     doublereal lc, sr, si;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

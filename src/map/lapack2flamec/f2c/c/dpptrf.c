@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b16 = -1.;
 /* > \brief \b DPPTRF */
 /* =========== DOCUMENTATION =========== */
@@ -119,29 +119,35 @@ static doublereal c_b16 = -1.;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dpptrf_(char *uplo, integer *n, doublereal *ap, integer *info)
+/** Generated wrapper function */
+void dpptrf_(char *uplo, aocl_int_t *n, doublereal *ap, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dpptrf(uplo, n, ap, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dpptrf(uplo, &n_64, ap, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dpptrf(char *uplo, aocl_int64_t *n, doublereal *ap, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpptrf inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     doublereal d__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer j, jc, jj;
+    aocl_int64_t j, jc, jj;
     doublereal ajj;
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        dspr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *),
-        dscal_(integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        dtpsv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -179,7 +185,7 @@ void dpptrf_(char *uplo, integer *n, doublereal *ap, integer *info)
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DPPTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DPPTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -202,11 +208,11 @@ void dpptrf_(char *uplo, integer *n, doublereal *ap, integer *info)
             if(j > 1)
             {
                 i__2 = j - 1;
-                dtpsv_("Upper", "Transpose", "Non-unit", &i__2, &ap[1], &ap[jc], &c__1);
+                aocl_blas_dtpsv("Upper", "Transpose", "Non-unit", &i__2, &ap[1], &ap[jc], &c__1);
             }
             /* Compute U(J,J) and test for non-positive-definiteness. */
             i__2 = j - 1;
-            ajj = ap[jj] - ddot_(&i__2, &ap[jc], &c__1, &ap[jc], &c__1);
+            ajj = ap[jj] - aocl_blas_ddot(&i__2, &ap[jc], &c__1, &ap[jc], &c__1);
             if(ajj <= 0.)
             {
                 ap[jj] = ajj;
@@ -238,9 +244,9 @@ void dpptrf_(char *uplo, integer *n, doublereal *ap, integer *info)
             {
                 i__2 = *n - j;
                 d__1 = 1. / ajj;
-                dscal_(&i__2, &d__1, &ap[jj + 1], &c__1);
+                aocl_blas_dscal(&i__2, &d__1, &ap[jj + 1], &c__1);
                 i__2 = *n - j;
-                dspr_("Lower", &i__2, &c_b16, &ap[jj + 1], &c__1, &ap[jj + *n - j + 1]);
+                aocl_blas_dspr("Lower", &i__2, &c_b16, &ap[jj + 1], &c__1, &ap[jj + *n - j + 1]);
                 jj = jj + *n - j + 1;
             }
             /* L20: */

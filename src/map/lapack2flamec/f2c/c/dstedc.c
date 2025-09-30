@@ -4,12 +4,12 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__9 = 9;
-static integer c__0 = 0;
-static integer c__2 = 2;
+static aocl_int64_t c__9 = 9;
+static aocl_int64_t c__0 = 0;
+static aocl_int64_t c__2 = 2;
 static doublereal c_b17 = 0.;
 static doublereal c_b18 = 1.;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DSTEDC */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -191,64 +191,56 @@ the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dstedc_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal *z__, integer *ldz,
-             doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+/** Generated wrapper function */
+void dstedc_(char *compz, aocl_int_t *n, doublereal *d__, doublereal *e, doublereal *z__,
+             aocl_int_t *ldz, doublereal *work, aocl_int_t *lwork, aocl_int_t *iwork,
+             aocl_int_t *liwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dstedc(compz, n, d__, e, z__, ldz, work, lwork, iwork, liwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t liwork_64 = *liwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dstedc(compz, &n_64, d__, e, z__, &ldz_64, work, &lwork_64, iwork, &liwork_64,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dstedc(char *compz, aocl_int64_t *n, doublereal *d__, doublereal *e,
+                        doublereal *z__, aocl_int64_t *ldz, doublereal *work, aocl_int64_t *lwork,
+                        aocl_int_t *iwork, aocl_int64_t *liwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dstedc inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS
                       ", liwork %" FLA_IS "",
                       *compz, *n, *ldz, *lwork, *liwork);
     /* System generated locals */
-    integer z_dim1, z_offset, i__1, i__2;
+    aocl_int64_t z_dim1, z_offset, i__1, i__2;
     doublereal d__1, d__2;
     /* Builtin functions */
     double log(doublereal);
-    integer pow_ii(integer *, integer *);
+    integer pow_ii(aocl_int64_t *, aocl_int64_t *);
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, k, m;
+    aocl_int64_t i__, j, k, m;
     doublereal p;
-    integer ii, lgn;
+    aocl_int64_t ii, lgn;
     doublereal eps, tiny;
-    extern /* Subroutine */
-        void
-        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
-    integer lwmin;
-    extern /* Subroutine */
-        void
-        dlaed0_(integer *, integer *, integer *, doublereal *, doublereal *, doublereal *,
-                integer *, doublereal *, integer *, doublereal *, integer *, integer *);
-    integer start;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t lwmin;
+    aocl_int64_t start;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublereal *, integer *, integer *),
-        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
-        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer finish;
-    extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
-    extern /* Subroutine */
-        void
-        dsterf_(integer *, doublereal *, doublereal *, integer *),
-        dlasrt_(char *, integer *, doublereal *, integer *);
-    integer liwmin, icompz;
-    extern /* Subroutine */
-        void
-        dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *,
-                doublereal *, integer *);
+    aocl_int64_t finish;
+    aocl_int64_t liwmin, icompz;
     doublereal orgnrm;
     logical lquery;
-    integer smlsiz, storez, strtrw;
+    aocl_int64_t smlsiz, storez, strtrw;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -314,7 +306,7 @@ void dstedc_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
     if(*info == 0)
     {
         /* Compute the workspace requirements */
-        smlsiz = ilaenv_(&c__9, "DSTEDC", " ", &c__0, &c__0, &c__0, &c__0);
+        smlsiz = aocl_lapack_ilaenv(&c__9, "DSTEDC", " ", &c__0, &c__0, &c__0, &c__0);
         if(*n <= 1 || icompz == 0)
         {
             liwmin = 1;
@@ -352,7 +344,7 @@ void dstedc_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
             }
         }
         work[1] = (doublereal)lwmin;
-        iwork[1] = liwmin;
+        iwork[1] = (aocl_int_t)(liwmin);
         if(*lwork < lwmin && !lquery)
         {
             *info = -8;
@@ -365,7 +357,7 @@ void dstedc_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSTEDC", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DSTEDC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -400,14 +392,14 @@ void dstedc_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
     /* If COMPZ = 'N', use DSTERF to compute the eigenvalues. */
     if(icompz == 0)
     {
-        dsterf_(n, &d__[1], &e[1], info);
+        aocl_lapack_dsterf(n, &d__[1], &e[1], info);
         goto L50;
     }
     /* If N is smaller than the minimum divide size (SMLSIZ+1), then */
     /* solve the problem with another solver. */
     if(*n <= smlsiz)
     {
-        dsteqr_(compz, n, &d__[1], &e[1], &z__[z_offset], ldz, &work[1], info);
+        aocl_lapack_dsteqr(compz, n, &d__[1], &e[1], &z__[z_offset], ldz, &work[1], info);
     }
     else
     {
@@ -423,10 +415,10 @@ void dstedc_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
         }
         if(icompz == 2)
         {
-            dlaset_("Full", n, n, &c_b17, &c_b18, &z__[z_offset], ldz);
+            aocl_lapack_dlaset("Full", n, n, &c_b17, &c_b18, &z__[z_offset], ldz);
         }
         /* Scale. */
-        orgnrm = dlanst_("M", n, &d__[1], &e[1]);
+        orgnrm = aocl_lapack_dlanst("M", n, &d__[1], &e[1]);
         if(orgnrm == 0.)
         {
             goto L50;
@@ -464,11 +456,13 @@ void dstedc_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
             if(m > smlsiz)
             {
                 /* Scale. */
-                orgnrm = dlanst_("M", &m, &d__[start], &e[start]);
-                dlascl_("G", &c__0, &c__0, &orgnrm, &c_b18, &m, &c__1, &d__[start], &m, info);
+                orgnrm = aocl_lapack_dlanst("M", &m, &d__[start], &e[start]);
+                aocl_lapack_dlascl("G", &c__0, &c__0, &orgnrm, &c_b18, &m, &c__1, &d__[start], &m,
+                                   info);
                 i__1 = m - 1;
                 i__2 = m - 1;
-                dlascl_("G", &c__0, &c__0, &orgnrm, &c_b18, &i__1, &c__1, &e[start], &i__2, info);
+                aocl_lapack_dlascl("G", &c__0, &c__0, &orgnrm, &c_b18, &i__1, &c__1, &e[start],
+                                   &i__2, info);
                 if(icompz == 1)
                 {
                     strtrw = 1;
@@ -477,15 +471,17 @@ void dstedc_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
                 {
                     strtrw = start;
                 }
-                dlaed0_(&icompz, n, &m, &d__[start], &e[start], &z__[strtrw + start * z_dim1], ldz,
-                        &work[1], n, &work[storez], &iwork[1], info);
+                aocl_lapack_dlaed0(&icompz, n, &m, &d__[start], &e[start],
+                                   &z__[strtrw + start * z_dim1], ldz, &work[1], n, &work[storez],
+                                   &iwork[1], info);
                 if(*info != 0)
                 {
                     *info = (*info / (m + 1) + start - 1) * (*n + 1) + *info % (m + 1) + start - 1;
                     goto L50;
                 }
                 /* Scale back. */
-                dlascl_("G", &c__0, &c__0, &c_b18, &orgnrm, &m, &c__1, &d__[start], &m, info);
+                aocl_lapack_dlascl("G", &c__0, &c__0, &c_b18, &orgnrm, &m, &c__1, &d__[start], &m,
+                                   info);
             }
             else
             {
@@ -494,19 +490,20 @@ void dstedc_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
                     /* Since QR won't update a Z matrix which is larger than */
                     /* the length of D, we must solve the sub-problem in a */
                     /* workspace and then multiply back into Z. */
-                    dsteqr_("I", &m, &d__[start], &e[start], &work[1], &m, &work[m * m + 1], info);
-                    dlacpy_("A", n, &m, &z__[start * z_dim1 + 1], ldz, &work[storez], n);
-                    dgemm_("N", "N", n, &m, &m, &c_b18, &work[storez], n, &work[1], &m, &c_b17,
-                           &z__[start * z_dim1 + 1], ldz);
+                    aocl_lapack_dsteqr("I", &m, &d__[start], &e[start], &work[1], &m,
+                                       &work[m * m + 1], info);
+                    aocl_lapack_dlacpy("A", n, &m, &z__[start * z_dim1 + 1], ldz, &work[storez], n);
+                    aocl_blas_dgemm("N", "N", n, &m, &m, &c_b18, &work[storez], n, &work[1], &m,
+                                    &c_b17, &z__[start * z_dim1 + 1], ldz);
                 }
                 else if(icompz == 2)
                 {
-                    dsteqr_("I", &m, &d__[start], &e[start], &z__[start + start * z_dim1], ldz,
-                            &work[1], info);
+                    aocl_lapack_dsteqr("I", &m, &d__[start], &e[start],
+                                       &z__[start + start * z_dim1], ldz, &work[1], info);
                 }
                 else
                 {
-                    dsterf_(&m, &d__[start], &e[start], info);
+                    aocl_lapack_dsterf(&m, &d__[start], &e[start], info);
                 }
                 if(*info != 0)
                 {
@@ -521,7 +518,7 @@ void dstedc_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
         if(icompz == 0)
         {
             /* Use Quick Sort */
-            dlasrt_("I", n, &d__[1], info);
+            aocl_lapack_dlasrt("I", n, &d__[1], info);
         }
         else
         {
@@ -546,7 +543,7 @@ void dstedc_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
                 {
                     d__[k] = d__[i__];
                     d__[i__] = p;
-                    dswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[k * z_dim1 + 1], &c__1);
+                    aocl_blas_dswap(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[k * z_dim1 + 1], &c__1);
                 }
                 /* L40: */
             }
@@ -554,7 +551,7 @@ void dstedc_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
     }
 L50:
     work[1] = (doublereal)lwmin;
-    iwork[1] = liwmin;
+    iwork[1] = (aocl_int_t)(liwmin);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of DSTEDC */

@@ -175,36 +175,47 @@
 /* > \ingroup hbgv */
 /* ===================================================================== */
 /* Subroutine */
-void dsbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, doublereal *ab,
-            integer *ldab, doublereal *bb, integer *ldbb, doublereal *w, doublereal *z__,
-            integer *ldz, doublereal *work, integer *info)
+/** Generated wrapper function */
+void dsbgv_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *ka, aocl_int_t *kb, doublereal *ab,
+            aocl_int_t *ldab, doublereal *bb, aocl_int_t *ldbb, doublereal *w, doublereal *z__,
+            aocl_int_t *ldz, doublereal *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dsbgv(jobz, uplo, n, ka, kb, ab, ldab, bb, ldbb, w, z__, ldz, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ka_64 = *ka;
+    aocl_int64_t kb_64 = *kb;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldbb_64 = *ldbb;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dsbgv(jobz, uplo, &n_64, &ka_64, &kb_64, ab, &ldab_64, bb, &ldbb_64, w, z__,
+                      &ldz_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dsbgv(char *jobz, char *uplo, aocl_int64_t *n, aocl_int64_t *ka, aocl_int64_t *kb,
+                       doublereal *ab, aocl_int64_t *ldab, doublereal *bb, aocl_int64_t *ldbb,
+                       doublereal *w, doublereal *z__, aocl_int64_t *ldz, doublereal *work,
+                       aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsbgv inputs: jobz %c, uplo %c, n %" FLA_IS ", ka %" FLA_IS ", kb %" FLA_IS
                       ", ldab %" FLA_IS ", ldbb %" FLA_IS ", ldz %" FLA_IS "",
                       *jobz, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldz);
     /* System generated locals */
-    integer ab_dim1, ab_offset, bb_dim1, bb_offset, z_dim1, z_offset, i__1;
+    aocl_int64_t ab_dim1, ab_offset, bb_dim1, bb_offset, z_dim1, z_offset, i__1;
     /* Local variables */
-    integer inde;
+    aocl_int64_t inde;
     char vect[1];
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical upper, wantz;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        dpbstf_(char *, integer *, integer *, doublereal *, integer *, integer *),
-        dsbtrd_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *,
-                doublereal *, doublereal *, integer *, doublereal *, integer *),
-        dsbgst_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
-                doublereal *, integer *, doublereal *, integer *, doublereal *, integer *),
-        dsterf_(integer *, doublereal *, doublereal *, integer *);
-    integer indwrk;
-    extern /* Subroutine */
-        void
-        dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *,
-                doublereal *, integer *);
+    aocl_int64_t indwrk;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -272,7 +283,7 @@ void dsbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, double
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSBGV", &i__1, (ftnlen)5);
+        aocl_blas_xerbla("DSBGV", &i__1, (ftnlen)5);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -283,7 +294,7 @@ void dsbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, double
         return;
     }
     /* Form a split Cholesky factorization of B. */
-    dpbstf_(uplo, n, kb, &bb[bb_offset], ldbb, info);
+    aocl_lapack_dpbstf(uplo, n, kb, &bb[bb_offset], ldbb, info);
     if(*info != 0)
     {
         *info = *n + *info;
@@ -293,8 +304,8 @@ void dsbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, double
     /* Transform problem to standard eigenvalue problem. */
     inde = 1;
     indwrk = inde + *n;
-    dsbgst_(jobz, uplo, n, ka, kb, &ab[ab_offset], ldab, &bb[bb_offset], ldbb, &z__[z_offset], ldz,
-            &work[indwrk], &iinfo);
+    aocl_lapack_dsbgst(jobz, uplo, n, ka, kb, &ab[ab_offset], ldab, &bb[bb_offset], ldbb,
+                       &z__[z_offset], ldz, &work[indwrk], &iinfo);
     /* Reduce to tridiagonal form. */
     if(wantz)
     {
@@ -304,16 +315,16 @@ void dsbgv_(char *jobz, char *uplo, integer *n, integer *ka, integer *kb, double
     {
         *(unsigned char *)vect = 'N';
     }
-    dsbtrd_(vect, uplo, n, ka, &ab[ab_offset], ldab, &w[1], &work[inde], &z__[z_offset], ldz,
-            &work[indwrk], &iinfo);
+    aocl_lapack_dsbtrd(vect, uplo, n, ka, &ab[ab_offset], ldab, &w[1], &work[inde], &z__[z_offset],
+                       ldz, &work[indwrk], &iinfo);
     /* For eigenvalues only, call DSTERF. For eigenvectors, call SSTEQR. */
     if(!wantz)
     {
-        dsterf_(n, &w[1], &work[inde], info);
+        aocl_lapack_dsterf(n, &w[1], &work[inde], info);
     }
     else
     {
-        dsteqr_(jobz, n, &w[1], &work[inde], &z__[z_offset], ldz, &work[indwrk], info);
+        aocl_lapack_dsteqr(jobz, n, &w[1], &work[inde], &z__[z_offset], ldz, &work[indwrk], info);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

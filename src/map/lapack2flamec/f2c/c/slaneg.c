@@ -112,18 +112,32 @@
 /* > Jason Riedy, University of California, Berkeley, USA \n */
 /* > */
 /* ===================================================================== */
-integer slaneg_(integer *n, real *d__, real *lld, real *sigma, real *pivmin, integer *r__)
+/** Generated wrapper function */
+aocl_int_t slaneg_(aocl_int_t *n, real *d__, real *lld, real *sigma, real *pivmin, aocl_int_t *r__)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_slaneg(n, d__, lld, sigma, pivmin, r__);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t r___64 = *r__;
+
+    return aocl_lapack_slaneg(&n_64, d__, lld, sigma, pivmin, &r___64);
+#endif
+}
+
+aocl_int64_t aocl_lapack_slaneg(aocl_int64_t *n, real *d__, real *lld, real *sigma, real *pivmin,
+                                aocl_int64_t *r__)
 {
     /* System generated locals */
-    integer ret_val, i__1, i__2, i__3, i__4;
+    aocl_int64_t ret_val, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer j;
+    aocl_int64_t j;
     real p, t;
-    integer bj;
+    aocl_int64_t bj;
     real tmp;
-    integer neg1, neg2;
+    aocl_int64_t neg1, neg2;
     real bsav, gamma, dplus;
-    integer negcnt;
+    aocl_int64_t negcnt;
     logical sawnan;
     extern logical sisnan_(real *);
     real dminus;

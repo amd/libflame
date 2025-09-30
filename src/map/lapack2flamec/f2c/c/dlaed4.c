@@ -138,41 +138,53 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublereal *delta,
-             doublereal *rho, doublereal *dlam, integer *info)
+/** Generated wrapper function */
+void dlaed4_(aocl_int_t *n, aocl_int_t *i__, doublereal *d__, doublereal *z__, doublereal *delta,
+             doublereal *rho, doublereal *dlam, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlaed4(n, i__, d__, z__, delta, rho, dlam, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t i___64 = *i__;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlaed4(&n_64, &i___64, d__, z__, delta, rho, dlam, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlaed4(aocl_int64_t *n, aocl_int64_t *i__, doublereal *d__, doublereal *z__,
+                        doublereal *delta, doublereal *rho, doublereal *dlam, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaed4 inputs: n %" FLA_IS ", i__ %" FLA_IS "", *n, *i__);
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     doublereal d__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     doublereal a, b, c__;
-    integer j;
+    aocl_int64_t j;
     doublereal w;
-    integer ii;
+    aocl_int64_t ii;
     doublereal dw, zz[3];
-    integer ip1;
+    aocl_int64_t ip1;
     doublereal del, eta, phi, tau, psi;
-    integer iim1, iip1;
+    aocl_int64_t iim1, iip1;
     doublereal dphi, dpsi;
-    integer iter;
+    aocl_int64_t iter;
     doublereal temp, prew, temp1, dltlb, dltub, midpt;
-    integer niter;
+    aocl_int64_t niter;
     logical swtch;
-    extern /* Subroutine */
-        void
-        dlaed5_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *),
-        dlaed6_(integer *, logical *, doublereal *, doublereal *, doublereal *, doublereal *,
-                doublereal *, integer *);
     logical swtch3;
     extern doublereal dlamch_(char *);
     logical orgati;
     doublereal erretm, rhoinv;
     static TLS_CLASS_SPEC doublereal eps;
-    static TLS_CLASS_SPEC integer r_once = 1;
+    static TLS_CLASS_SPEC aocl_int64_t r_once = 1;
 
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -214,7 +226,7 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
     }
     if(*n == 2)
     {
-        dlaed5_(i__, &d__[1], &z__[1], &delta[1], rho, dlam);
+        aocl_lapack_dlaed5(i__, &d__[1], &z__[1], &delta[1], rho, dlam);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -513,7 +525,7 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
             delta[j] = d__[j] - d__[*i__] - midpt;
             psi += z__[j] * z__[j] / delta[j];
         }
-        
+
         delta[j] = d__[j] - d__[*i__] - midpt;
         j++;
         delta[j] = d__[j] - d__[*i__] - midpt;
@@ -727,7 +739,7 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
                 zz[2] = z__[iip1] * z__[iip1];
             }
             zz[1] = z__[ii] * z__[ii];
-            dlaed6_(&niter, &orgati, &c__, &delta[iim1], zz, &w, &eta, info);
+            aocl_lapack_dlaed6(&niter, &orgati, &c__, &delta[iim1], zz, &w, &eta, info);
             if(*info != 0)
             {
                 goto L250;
@@ -927,7 +939,7 @@ void dlaed4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
                         zz[2] = z__[iip1] * z__[iip1];
                     }
                 }
-                dlaed6_(&niter, &orgati, &c__, &delta[iim1], zz, &w, &eta, info);
+                aocl_lapack_dlaed6(&niter, &orgati, &c__, &delta[iim1], zz, &w, &eta, info);
                 if(*info != 0)
                 {
                     goto L250;

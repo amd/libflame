@@ -1,17 +1,17 @@
 /* chemm.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int chemm_(char *side, char *uplo, integer *m, integer *n, complex *alpha, complex *a, integer *lda, complex *b, integer *ldb, complex *beta, complex *c__, integer *ldc)
+int chemm_(char *side, char *uplo, integer *m, integer *n, scomplex *alpha, scomplex *a, integer *lda, scomplex *b, integer *ldb, scomplex *beta, scomplex *c__, integer *ldc)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     real r__1;
-    complex q__1, q__2, q__3, q__4, q__5;
+    scomplex q__1, q__2, q__3, q__4, q__5;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
     integer info;
-    complex temp1, temp2;
+    scomplex temp1, temp2;
     integer i__, j, k;
     extern logical lsame_(char *, char *, integer, integer);
     integer nrowa;

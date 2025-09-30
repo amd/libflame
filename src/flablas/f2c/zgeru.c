@@ -1,14 +1,14 @@
 /* zgeru.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int zgeru_(integer *m, integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx, doublecomplex *y, integer *incy, doublecomplex *a, integer *lda)
+int zgeru_(integer *m, integer *n, dcomplex *alpha, dcomplex *x, integer *incx, dcomplex *y, integer *incy, dcomplex *a, integer *lda)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
-    doublecomplex z__1, z__2;
+    dcomplex z__1, z__2;
     /* Local variables */
     integer info;
-    doublecomplex temp;
+    dcomplex temp;
     integer i__, j, ix, jy, kx;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);

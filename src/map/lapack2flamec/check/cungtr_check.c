@@ -1,17 +1,17 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 
-int cungtr_check(char *uplo, integer *n, scomplex *a, integer *lda, scomplex *tau, scomplex *work,
-                 integer *lwork, integer *info)
+int cungtr_check(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomplex *tau, scomplex *work,
+                 aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer nb;
+    aocl_int64_t nb;
     logical upper;
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
 
     /* Parameter adjustments */
@@ -53,14 +53,14 @@ int cungtr_check(char *uplo, integer *n, scomplex *a, integer *lda, scomplex *ta
             i__1 = *n - 1;
             i__2 = *n - 1;
             i__3 = *n - 1;
-            nb = ilaenv_(&c__1, "CUNGQL", " ", &i__1, &i__2, &i__3, &c_n1);
+            nb = aocl_lapack_ilaenv(&c__1, "CUNGQL", " ", &i__1, &i__2, &i__3, &c_n1);
         }
         else
         {
             i__1 = *n - 1;
             i__2 = *n - 1;
             i__3 = *n - 1;
-            nb = ilaenv_(&c__1, "CUNGQR", " ", &i__1, &i__2, &i__3, &c_n1);
+            nb = aocl_lapack_ilaenv(&c__1, "CUNGQR", " ", &i__1, &i__2, &i__3, &c_n1);
         }
         /* Computing MAX */
         i__1 = 1;
@@ -72,7 +72,7 @@ int cungtr_check(char *uplo, integer *n, scomplex *a, integer *lda, scomplex *ta
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CUNGTR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CUNGTR", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     else if(lquery)

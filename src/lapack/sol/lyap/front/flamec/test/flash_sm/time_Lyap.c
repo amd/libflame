@@ -18,17 +18,17 @@
 FLA_Error REF_Lyap( FLA_Trans trans, FLA_Obj isgn, FLA_Obj A, FLA_Obj C, FLA_Obj scale );
 
 void time_Lyap(
-                integer param_combo, integer type, integer nrepeats, integer m,
+                aocl_int64_t param_combo, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m,
                 FLA_Obj isgn, FLA_Obj A, FLA_Obj C, FLA_Obj scale,
                 double *dtime, double *diff, double *gflops );
 
 
 void time_Lyap(
-                integer param_combo, integer type, integer nrepeats, integer m,
+                aocl_int64_t param_combo, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m,
                 FLA_Obj isgn, FLA_Obj A, FLA_Obj C, FLA_Obj scale,
                 double *dtime, double *diff, double *gflops )
 {
-  integer
+  aocl_int64_t
     irep;
 
   double

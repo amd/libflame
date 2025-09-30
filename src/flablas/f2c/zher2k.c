@@ -1,17 +1,17 @@
 /* zher2k.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int zher2k_(char *uplo, char *trans, integer *n, integer *k, doublecomplex *alpha, doublecomplex *a, integer *lda, doublecomplex * b, integer *ldb, doublereal *beta, doublecomplex *c__, integer *ldc)
+int zher2k_(char *uplo, char *trans, integer *n, integer *k, dcomplex *alpha, dcomplex *a, integer *lda, dcomplex * b, integer *ldb, doublereal *beta, dcomplex *c__, integer *ldc)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7;
     doublereal d__1;
-    doublecomplex z__1, z__2, z__3, z__4, z__5, z__6;
+    dcomplex z__1, z__2, z__3, z__4, z__5, z__6;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
     integer info;
-    doublecomplex temp1, temp2;
+    dcomplex temp1, temp2;
     integer i__, j, l;
     extern logical lsame_(char *, char *, integer, integer);
     integer nrowa;

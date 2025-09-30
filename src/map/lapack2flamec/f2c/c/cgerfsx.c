@@ -418,11 +418,11 @@ defaults */
 /* > \ingroup complexGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cgerfsx_(char *trans, char *equed, integer *n, integer *nrhs, complex *a, integer *lda,
-              complex *af, integer *ldaf, integer *ipiv, real *r__, real *c__, complex *b,
-              integer *ldb, complex *x, integer *ldx, real *rcond, real *berr,
+void cgerfsx_(char *trans, char *equed, integer *n, integer *nrhs, scomplex *a, integer *lda,
+              scomplex *af, integer *ldaf, integer *ipiv, real *r__, real *c__, scomplex *b,
+              integer *ldb, scomplex *x, integer *ldx, real *rcond, real *berr,
               integer *n_err_bnds__, real *err_bnds_norm__, real *err_bnds_comp__, integer *nparams,
-              real *params, complex *work, real *rwork, integer *info)
+              real *params, scomplex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -456,23 +456,23 @@ void cgerfsx_(char *trans, char *equed, integer *n, integer *nrhs, complex *a, i
     real cwise_wrong__;
     extern /* Subroutine */
         void
-        cla_gerfsx_extended_(integer *, integer *, integer *, integer *, complex *, integer *,
-                             complex *, integer *, integer *, logical *, real *, complex *,
-                             integer *, complex *, integer *, real *, integer *, real *, real *,
-                             complex *, real *, complex *, real *, real *, integer *, real *,
+        cla_gerfsx_extended_(integer *, integer *, integer *, integer *, scomplex *, integer *,
+                             scomplex *, integer *, integer *, logical *, real *, scomplex *,
+                             integer *, scomplex *, integer *, real *, integer *, real *, real *,
+                             scomplex *, real *, scomplex *, real *, real *, integer *, real *,
                              real *, logical *, integer *);
     char norm[1];
     logical ignore_cwise__;
-    extern real cla_gercond_c_(char *, integer *, complex *, integer *, complex *, integer *,
-                               integer *, real *, logical *, integer *, complex *, real *);
+    extern real cla_gercond_c_(char *, integer *, scomplex *, integer *, scomplex *, integer *,
+                               integer *, real *, logical *, integer *, scomplex *, real *);
     extern logical lsame_(char *, char *, integer, integer);
     real anorm;
-    extern real cla_gercond_x_(char *, integer *, complex *, integer *, complex *, integer *,
-                               integer *, complex *, integer *, complex *, real *),
-        clange_(char *, integer *, integer *, complex *, integer *, real *);
+    extern real cla_gercond_x_(char *, integer *, scomplex *, integer *, scomplex *, integer *,
+                               integer *, scomplex *, integer *, scomplex *, real *),
+        clange_(char *, integer *, integer *, scomplex *, integer *, real *);
     extern /* Subroutine */
         void
-        cgecon_(char *, integer *, complex *, integer *, real *, real *, complex *, real *,
+        cgecon_(char *, integer *, scomplex *, integer *, real *, real *, scomplex *, real *,
                 integer *);
     extern real slamch_(char *);
     extern /* Subroutine */

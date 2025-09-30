@@ -161,25 +161,38 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dpbsv_(char *uplo, integer *n, integer *kd, integer *nrhs, doublereal *ab, integer *ldab,
-            doublereal *b, integer *ldb, integer *info)
+/** Generated wrapper function */
+void dpbsv_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, doublereal *ab,
+            aocl_int_t *ldab, doublereal *b, aocl_int_t *ldb, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dpbsv(uplo, n, kd, nrhs, ab, ldab, b, ldb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dpbsv(uplo, &n_64, &kd_64, &nrhs_64, ab, &ldab_64, b, &ldb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dpbsv(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, aocl_int64_t *nrhs,
+                       doublereal *ab, aocl_int64_t *ldab, doublereal *b, aocl_int64_t *ldb,
+                       aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpbsv inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", nrhs %" FLA_IS
                       ", ldab %" FLA_IS ", ldb %" FLA_IS "",
                       *uplo, *n, *kd, *nrhs, *ldab, *ldb);
     /* System generated locals */
-    integer ab_dim1, ab_offset, b_dim1, b_offset, i__1;
+    aocl_int64_t ab_dim1, ab_offset, b_dim1, b_offset, i__1;
     /* Local variables */
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        dpbtrf_(char *, integer *, integer *, doublereal *, integer *, integer *),
-        dpbtrs_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *,
-                integer *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -233,16 +246,16 @@ void dpbsv_(char *uplo, integer *n, integer *kd, integer *nrhs, doublereal *ab, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DPBSV ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DPBSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute the Cholesky factorization A = U**T*U or A = L*L**T. */
-    dpbtrf_(uplo, n, kd, &ab[ab_offset], ldab, info);
+    aocl_lapack_dpbtrf(uplo, n, kd, &ab[ab_offset], ldab, info);
     if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */
-        dpbtrs_(uplo, n, kd, nrhs, &ab[ab_offset], ldab, &b[b_offset], ldb, info);
+        aocl_lapack_dpbtrs(uplo, n, kd, nrhs, &ab[ab_offset], ldab, &b[b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

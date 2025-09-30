@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief <b> CGBSVX computes the solution to system of linear equations A * X = B for GB
  * matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -47,7 +47,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CGBSVX uses the LU factorization to compute the solution to a complex */
+/* > CGBSVX uses the LU factorization to compute the solution to a scomplex */
 /* > system of linear equations A * X = B, A**T * X = B, or A**H * X = B, */
 /* > where A is a band matrix of order N with KL subdiagonals and KU */
 /* > superdiagonals, and X and B are N-by-NRHS matrices. */
@@ -373,10 +373,41 @@ if EQUED = 'N' or 'R', C */
 /* > \ingroup complexGBsolve */
 /* ===================================================================== */
 /* Subroutine */
-void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, integer *nrhs,
-             complex *ab, integer *ldab, complex *afb, integer *ldafb, integer *ipiv, char *equed,
-             real *r__, real *c__, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond,
-             real *ferr, real *berr, complex *work, real *rwork, integer *info)
+/** Generated wrapper function */
+void cgbsvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku,
+             aocl_int_t *nrhs, scomplex *ab, aocl_int_t *ldab, scomplex *afb, aocl_int_t *ldafb,
+             aocl_int_t *ipiv, char *equed, real *r__, real *c__, scomplex *b, aocl_int_t *ldb,
+             scomplex *x, aocl_int_t *ldx, real *rcond, real *ferr, real *berr, scomplex *work,
+             real *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgbsvx(fact, trans, n, kl, ku, nrhs, ab, ldab, afb, ldafb, ipiv, equed, r__, c__, b,
+                       ldb, x, ldx, rcond, ferr, berr, work, rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldafb_64 = *ldafb;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgbsvx(fact, trans, &n_64, &kl_64, &ku_64, &nrhs_64, ab, &ldab_64, afb, &ldafb_64,
+                       ipiv, equed, r__, c__, b, &ldb_64, x, &ldx_64, rcond, ferr, berr, work,
+                       rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgbsvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *kl,
+                        aocl_int64_t *ku, aocl_int64_t *nrhs, scomplex *ab, aocl_int64_t *ldab,
+                        scomplex *afb, aocl_int64_t *ldafb, aocl_int_t *ipiv, char *equed, real *r__,
+                        real *c__, scomplex *b, aocl_int64_t *ldb, scomplex *x, aocl_int64_t *ldx,
+                        real *rcond, real *ferr, real *berr, scomplex *work, real *rwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -395,54 +426,24 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
+    aocl_int64_t ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
         i__2, i__3, i__4, i__5;
     real r__1, r__2;
-    complex q__1;
+    scomplex q__1;
     /* Builtin functions */
-    double c_abs(complex *);
+    double c_abs(scomplex *);
     /* Local variables */
-    integer i__, j, j1, j2;
+    aocl_int64_t i__, j, j1, j2;
     real amax;
     char norm[1];
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real rcmin, rcmax, anorm;
-    extern /* Subroutine */
-        void
-        ccopy_(integer *, complex *, integer *, complex *, integer *);
     logical equil;
-    extern real clangb_(char *, integer *, integer *, integer *, complex *, integer *, real *);
-    extern /* Subroutine */
-        void
-        claqgb_(integer *, integer *, integer *, integer *, complex *, integer *, real *, real *,
-                real *, real *, real *, char *),
-        cgbcon_(char *, integer *, integer *, integer *, complex *, integer *, integer *, real *,
-                real *, complex *, real *, integer *);
     real colcnd;
-    extern real clantb_(char *, char *, char *, integer *, integer *, complex *, integer *, real *);
-    extern /* Subroutine */
-        void
-        cgbequ_(integer *, integer *, integer *, integer *, complex *, integer *, real *, real *,
-                real *, real *, real *, integer *);
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        cgbrfs_(char *, integer *, integer *, integer *, integer *, complex *, integer *, complex *,
-                integer *, integer *, complex *, integer *, complex *, integer *, real *, real *,
-                complex *, real *, integer *),
-        cgbtrf_(integer *, integer *, integer *, integer *, complex *, integer *, integer *,
-                integer *);
     logical nofact;
-    extern /* Subroutine */
-        void
-        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
-    extern /* Subroutine */
-        void
-        cgbtrs_(char *, integer *, integer *, integer *, integer *, complex *, integer *, integer *,
-                complex *, integer *, integer *);
-    integer infequ;
+    aocl_int64_t infequ;
     logical colequ;
     real rowcnd;
     logical notran;
@@ -626,20 +627,20 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGBSVX", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGBSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     if(equil)
     {
         /* Compute row and column scalings to equilibrate the matrix A. */
-        cgbequ_(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], &rowcnd, &colcnd, &amax,
-                &infequ);
+        aocl_lapack_cgbequ(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], &rowcnd, &colcnd,
+                           &amax, &infequ);
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
-            claqgb_(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], &rowcnd, &colcnd, &amax,
-                    equed);
+            aocl_lapack_claqgb(n, n, kl, ku, &ab[ab_offset], ldab, &r__[1], &c__[1], &rowcnd,
+                               &colcnd, &amax, equed);
             rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
             colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
         }
@@ -701,11 +702,11 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
             i__2 = j + *kl;
             j2 = fla_min(i__2, *n);
             i__2 = j2 - j1 + 1;
-            ccopy_(&i__2, &ab[*ku + 1 - j + j1 + j * ab_dim1], &c__1,
-                   &afb[*kl + *ku + 1 - j + j1 + j * afb_dim1], &c__1);
+            aocl_blas_ccopy(&i__2, &ab[*ku + 1 - j + j1 + j * ab_dim1], &c__1,
+                            &afb[*kl + *ku + 1 - j + j1 + j * afb_dim1], &c__1);
             /* L70: */
         }
-        cgbtrf_(n, n, kl, ku, &afb[afb_offset], ldafb, &ipiv[1], info);
+        aocl_lapack_cgbtrf(n, n, kl, ku, &afb[afb_offset], ldafb, &ipiv[1], info);
         /* Return if INFO is non-zero. */
         if(*info > 0)
         {
@@ -738,8 +739,8 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
             /* Computing MAX */
             i__4 = 1;
             i__5 = *kl + *ku + 2 - *info; // , expr subst
-            rpvgrw = clantb_("M", "U", "N", info, &i__1, &afb[fla_max(i__4, i__5) + afb_dim1],
-                             ldafb, &rwork[1]);
+            rpvgrw = aocl_lapack_clantb("M", "U", "N", info, &i__1,
+                                        &afb[fla_max(i__4, i__5) + afb_dim1], ldafb, &rwork[1]);
             if(rpvgrw == 0.f)
             {
                 rpvgrw = 1.f;
@@ -764,27 +765,29 @@ void cgbsvx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, inte
     {
         *(unsigned char *)norm = 'I';
     }
-    anorm = clangb_(norm, n, kl, ku, &ab[ab_offset], ldab, &rwork[1]);
+    anorm = aocl_lapack_clangb(norm, n, kl, ku, &ab[ab_offset], ldab, &rwork[1]);
     i__1 = *kl + *ku;
-    rpvgrw = clantb_("M", "U", "N", n, &i__1, &afb[afb_offset], ldafb, &rwork[1]);
+    rpvgrw = aocl_lapack_clantb("M", "U", "N", n, &i__1, &afb[afb_offset], ldafb, &rwork[1]);
     if(rpvgrw == 0.f)
     {
         rpvgrw = 1.f;
     }
     else
     {
-        rpvgrw = clangb_("M", n, kl, ku, &ab[ab_offset], ldab, &rwork[1]) / rpvgrw;
+        rpvgrw = aocl_lapack_clangb("M", n, kl, ku, &ab[ab_offset], ldab, &rwork[1]) / rpvgrw;
     }
     /* Compute the reciprocal of the condition number of A. */
-    cgbcon_(norm, n, kl, ku, &afb[afb_offset], ldafb, &ipiv[1], &anorm, rcond, &work[1], &rwork[1],
-            info);
+    aocl_lapack_cgbcon(norm, n, kl, ku, &afb[afb_offset], ldafb, &ipiv[1], &anorm, rcond, &work[1],
+                       &rwork[1], info);
     /* Compute the solution matrix X. */
-    clacpy_("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
-    cgbtrs_(trans, n, kl, ku, nrhs, &afb[afb_offset], ldafb, &ipiv[1], &x[x_offset], ldx, info);
+    aocl_lapack_clacpy("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
+    aocl_lapack_cgbtrs(trans, n, kl, ku, nrhs, &afb[afb_offset], ldafb, &ipiv[1], &x[x_offset], ldx,
+                       info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    cgbrfs_(trans, n, kl, ku, nrhs, &ab[ab_offset], ldab, &afb[afb_offset], ldafb, &ipiv[1],
-            &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
+    aocl_lapack_cgbrfs(trans, n, kl, ku, nrhs, &ab[ab_offset], ldab, &afb[afb_offset], ldafb,
+                       &ipiv[1], &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1],
+                       &rwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
     if(notran)

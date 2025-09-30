@@ -35,7 +35,7 @@ FLA_Error FLA_Fill_with_logarithmic_dist( FLA_Obj alpha, FLA_Obj x )
 
 	// Create a local real scalar alpha2 of the same precision as
 	// alpha. Then copy alpha to alpha2, which will convert the
-	// complex value to real, if necessary (ie: if alpha is complex).
+	// scomplex value to real, if necessary (ie: if alpha is scomplex).
 	FLA_Obj_create( dt_real, 1,   1, 0, 0, &alpha2 );
 	FLA_Copy( alpha, alpha2 );
 

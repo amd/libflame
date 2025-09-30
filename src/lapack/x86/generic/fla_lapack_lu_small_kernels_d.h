@@ -29,7 +29,7 @@
     FLA_LU_PIV_SMALL_GEN_4x4(doublereal, i, n, buff_A, ldim_A, buff_p, info)
 
 #define LAPACK_GETRI_SMALL_D_2x2(n, a, a_dim1, ipiv, work)       \
-    integer jp;                                                  \
+    aocl_int64_t jp;                                                  \
     doublereal t_val, *apiv, t_val11, t_val21, t_val12, t_val22; \
     /* Phase 1: Triangular inversion U^(-1) */                   \
     t_val11 = 1. / a[1 + a_dim1];                                \
@@ -56,7 +56,7 @@
     }
 
 #define LAPACK_GETRI_SMALL_D_3x3(n, a, a_dim1, ipiv, work)                                  \
-    integer jp, a_dim2, a_dim3;                                                             \
+    aocl_int64_t jp, a_dim2, a_dim3;                                                             \
     doublereal t_val, *apiv, t_val11, t_val21, t_val31, t_val12, t_val22, t_val32, t_val13, \
         t_val23, t_val33;                                                                   \
     /* trmv loop 1 */                                                                       \
@@ -216,7 +216,7 @@
  */
 #define LAPACK_GETRI_LOWER_SOLVE_D_4X4(a, a_dim1, work)                                   \
 {                                                                                         \
-    integer j, i;                                                                         \
+    aocl_int64_t j, i;                                                                         \
     /* Process columns from right to left (j = 4 down to 1) */                            \
     for(j = 4; j >= 1; --j)                                                               \
     {                                                                                     \
@@ -259,7 +259,7 @@
  */
 #define LAPACK_GETRI_LOWER_SOLVE_D_5X5(a, a_dim1, work)                                         \
 {                                                                                               \
-    integer j, i;                                                                               \
+    aocl_int64_t j, i;                                                                               \
     /* Process columns from right to left (j = 5 down to 1) */                                  \
     for(j = 5; j >= 1; --j)                                                                     \
     {                                                                                           \
@@ -315,7 +315,7 @@
  */
 #define LAPACK_GETRI_LOWER_SOLVE_D_6X6(a, a_dim1, work)                                          \
 {                                                                                                \
-    integer j, i;                                                                                \
+    aocl_int64_t j, i;                                                                                \
     /* Process columns from right to left (j = 6 down to 1) */                                   \
     for(j = 6; j >= 1; --j)                                                                      \
     {                                                                                            \

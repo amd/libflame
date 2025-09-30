@@ -17,17 +17,17 @@
 FLA_Error REF_Chol( FLA_Trans trans, FLA_Obj A );
 
 void time_Chol(
-                integer param_combo, integer type, integer nrepeats, integer m,
+                aocl_int64_t param_combo, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m,
                 FLA_Obj A, FLA_Obj b, FLA_Obj b_orig, FLA_Obj norm,
                 double *dtime, double *diff, double *gflops );
 
 
 void time_Chol(
-                integer param_combo, integer type, integer nrepeats, integer m,
+                aocl_int64_t param_combo, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m,
                 FLA_Obj A, FLA_Obj b, FLA_Obj b_orig, FLA_Obj norm,
                 double *dtime, double *diff, double *gflops )
 {
-  integer
+  aocl_int64_t
     irep;
 
   double

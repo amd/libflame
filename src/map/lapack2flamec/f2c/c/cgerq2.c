@@ -36,7 +36,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > CGERQ2 computes an RQ factorization of a complex m by n matrix A: */
+/* > CGERQ2 computes an RQ factorization of a scomplex m by n matrix A: */
 /* > A = R * Q. */
 /* > \endverbatim */
 /* Arguments: */
@@ -113,7 +113,7 @@ the remaining */
 /* > */
 /* > H(i) = I - tau * v * v**H */
 /* > */
-/* > where tau is a complex scalar, and v is a complex vector with */
+/* > where tau is a scomplex scalar, and v is a scomplex vector with */
 /* > v(n-k+i+1:n) = 0 and v(n-k+i) = 1;
 conjg(v(1:n-k+i-1)) is stored on */
 /* > exit in A(m-k+i,1:n-k+i-1), and tau in TAU(i). */
@@ -121,8 +121,26 @@ conjg(v(1:n-k+i-1)) is stored on */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgerq2_(integer *m, integer *n, complex *a, integer *lda, complex *tau, complex *work,
-             integer *info)
+/** Generated wrapper function */
+void cgerq2_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *tau, scomplex *work,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgerq2(m, n, a, lda, tau, work, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgerq2(&m_64, &n_64, a, &lda_64, tau, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgerq2(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                        scomplex *tau, scomplex *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -135,17 +153,10 @@ void cgerq2_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
-    integer i__, k;
-    complex alpha;
-    extern /* Subroutine */
-        void
-        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
-               complex *),
-        clarfg_(integer *, complex *, complex *, integer *, complex *),
-        clacgv_(integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, k;
+    scomplex alpha;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -188,7 +199,7 @@ void cgerq2_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGERQ2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGERQ2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -198,25 +209,25 @@ void cgerq2_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
         /* Generate elementary reflector H(i) to annihilate */
         /* A(m-k+i,1:n-k+i-1) */
         i__1 = *n - k + i__;
-        clacgv_(&i__1, &a[*m - k + i__ + a_dim1], lda);
+        aocl_lapack_clacgv(&i__1, &a[*m - k + i__ + a_dim1], lda);
         i__1 = *m - k + i__ + (*n - k + i__) * a_dim1;
         alpha.r = a[i__1].r;
         alpha.i = a[i__1].i; // , expr subst
         i__1 = *n - k + i__;
-        clarfg_(&i__1, &alpha, &a[*m - k + i__ + a_dim1], lda, &tau[i__]);
+        aocl_lapack_clarfg(&i__1, &alpha, &a[*m - k + i__ + a_dim1], lda, &tau[i__]);
         /* Apply H(i) to A(1:m-k+i-1,1:n-k+i) from the right */
         i__1 = *m - k + i__ + (*n - k + i__) * a_dim1;
         a[i__1].r = 1.f;
         a[i__1].i = 0.f; // , expr subst
         i__1 = *m - k + i__ - 1;
         i__2 = *n - k + i__;
-        clarf_("Right", &i__1, &i__2, &a[*m - k + i__ + a_dim1], lda, &tau[i__], &a[a_offset], lda,
-               &work[1]);
+        aocl_lapack_clarf("Right", &i__1, &i__2, &a[*m - k + i__ + a_dim1], lda, &tau[i__],
+                          &a[a_offset], lda, &work[1]);
         i__1 = *m - k + i__ + (*n - k + i__) * a_dim1;
         a[i__1].r = alpha.r;
         a[i__1].i = alpha.i; // , expr subst
         i__1 = *n - k + i__ - 1;
-        clacgv_(&i__1, &a[*m - k + i__ + a_dim1], lda);
+        aocl_lapack_clacgv(&i__1, &a[*m - k + i__ + a_dim1], lda);
         /* L10: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

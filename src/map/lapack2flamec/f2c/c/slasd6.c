@@ -4,10 +4,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__0 = 0;
+static aocl_int64_t c__0 = 0;
 static real c_b7 = 1.f;
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b SLASD6 computes the SVD of an updated upper bidiagonal matrix obtained by merging two
  * smaller o nes by appending a row. Used by sbdsdc. */
 /* =========== DOCUMENTATION =========== */
@@ -314,11 +314,45 @@ and VL(NL+2:M) */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slasd6_(integer *icompq, integer *nl, integer *nr, integer *sqre, real *d__, real *vf,
-             real *vl, real *alpha, real *beta, integer *idxq, integer *perm, integer *givptr,
-             integer *givcol, integer *ldgcol, real *givnum, integer *ldgnum, real *poles,
-             real *difl, real *difr, real *z__, integer *k, real *c__, real *s, real *work,
-             integer *iwork, integer *info)
+/** Generated wrapper function */
+void slasd6_(aocl_int_t *icompq, aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, real *d__,
+             real *vf, real *vl, real *alpha, real *beta, aocl_int_t *idxq, aocl_int_t *perm,
+             aocl_int_t *givptr, aocl_int_t *givcol, aocl_int_t *ldgcol, real *givnum,
+             aocl_int_t *ldgnum, real *poles, real *difl, real *difr, real *z__, aocl_int_t *k,
+             real *c__, real *s, real *work, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slasd6(icompq, nl, nr, sqre, d__, vf, vl, alpha, beta, idxq, perm, givptr, givcol,
+                       ldgcol, givnum, ldgnum, poles, difl, difr, z__, k, c__, s, work, iwork,
+                       info);
+#else
+    aocl_int64_t icompq_64 = *icompq;
+    aocl_int64_t nl_64 = *nl;
+    aocl_int64_t nr_64 = *nr;
+    aocl_int64_t sqre_64 = *sqre;
+    aocl_int64_t givptr_64 = *givptr;
+    aocl_int64_t ldgcol_64 = *ldgcol;
+    aocl_int64_t ldgnum_64 = *ldgnum;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slasd6(&icompq_64, &nl_64, &nr_64, &sqre_64, d__, vf, vl, alpha, beta, idxq, perm,
+                       &givptr_64, givcol, &ldgcol_64, givnum, &ldgnum_64, poles, difl, difr, z__,
+                       &k_64, c__, s, work, iwork, &info_64);
+
+    *givptr = (aocl_int_t)givptr_64;
+    *k = (aocl_int_t)k_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slasd6(aocl_int64_t *icompq, aocl_int64_t *nl, aocl_int64_t *nr,
+                        aocl_int64_t *sqre, real *d__, real *vf, real *vl, real *alpha, real *beta,
+                        aocl_int_t *idxq, aocl_int_t *perm, aocl_int64_t *givptr,
+                        aocl_int_t *givcol, aocl_int64_t *ldgcol, real *givnum,
+                        aocl_int64_t *ldgnum, real *poles, real *difl, real *difr, real *z__,
+                        aocl_int64_t *k, real *c__, real *s, real *work, aocl_int_t *iwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slasd6 inputs: icompq %" FLA_IS ", nl %" FLA_IS ", nr %" FLA_IS
@@ -326,28 +360,12 @@ void slasd6_(integer *icompq, integer *nl, integer *nr, integer *sqre, real *d__
                       "",
                       *icompq, *nl, *nr, *sqre, *idxq, *ldgcol, *ldgnum);
     /* System generated locals */
-    integer givcol_dim1, givcol_offset, givnum_dim1, givnum_offset, poles_dim1, poles_offset, i__1;
+    aocl_int64_t givcol_dim1, givcol_offset, givnum_dim1, givnum_offset, poles_dim1, poles_offset,
+        i__1;
     real r__1, r__2;
     /* Local variables */
-    integer i__, m, n, n1, n2, iw, idx, idxc, idxp, ivfw, ivlw;
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *),
-        slasd7_(integer *, integer *, integer *, integer *, integer *, real *, real *, real *,
-                real *, real *, real *, real *, real *, real *, real *, integer *, integer *,
-                integer *, integer *, integer *, integer *, integer *, real *, integer *, real *,
-                real *, integer *),
-        slasd8_(integer *, integer *, real *, real *, real *, real *, real *, real *, integer *,
-                real *, real *, integer *);
-    integer isigma;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
-                integer *, integer *),
-        slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
+    aocl_int64_t i__, m, n, n1, n2, iw, idx, idxc, idxp, ivfw, ivlw;
+    aocl_int64_t isigma;
     real orgnrm;
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -419,7 +437,7 @@ void slasd6_(integer *icompq, integer *nl, integer *nr, integer *sqre, real *d__
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SLASD6", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SLASD6", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -448,16 +466,17 @@ void slasd6_(integer *icompq, integer *nl, integer *nr, integer *sqre, real *d__
         }
         /* L10: */
     }
-    slascl_("G", &c__0, &c__0, &orgnrm, &c_b7, &n, &c__1, &d__[1], &n, info);
+    aocl_lapack_slascl("G", &c__0, &c__0, &orgnrm, &c_b7, &n, &c__1, &d__[1], &n, info);
     *alpha /= orgnrm;
     *beta /= orgnrm;
     /* Sort and Deflate singular values. */
-    slasd7_(icompq, nl, nr, sqre, k, &d__[1], &z__[1], &work[iw], &vf[1], &work[ivfw], &vl[1],
-            &work[ivlw], alpha, beta, &work[isigma], &iwork[idx], &iwork[idxp], &idxq[1], &perm[1],
-            givptr, &givcol[givcol_offset], ldgcol, &givnum[givnum_offset], ldgnum, c__, s, info);
+    aocl_lapack_slasd7(icompq, nl, nr, sqre, k, &d__[1], &z__[1], &work[iw], &vf[1], &work[ivfw],
+                       &vl[1], &work[ivlw], alpha, beta, &work[isigma], &iwork[idx], &iwork[idxp],
+                       &idxq[1], &perm[1], givptr, &givcol[givcol_offset], ldgcol,
+                       &givnum[givnum_offset], ldgnum, c__, s, info);
     /* Solve Secular Equation, compute DIFL, DIFR, and update VF, VL. */
-    slasd8_(icompq, k, &d__[1], &z__[1], &vf[1], &vl[1], &difl[1], &difr[1], ldgnum, &work[isigma],
-            &work[iw], info);
+    aocl_lapack_slasd8(icompq, k, &d__[1], &z__[1], &vf[1], &vl[1], &difl[1], &difr[1], ldgnum,
+                       &work[isigma], &work[iw], info);
     /* Report the possible convergence failure. */
     if(*info != 0)
     {
@@ -467,15 +486,15 @@ void slasd6_(integer *icompq, integer *nl, integer *nr, integer *sqre, real *d__
     /* Save the poles if ICOMPQ = 1. */
     if(*icompq == 1)
     {
-        scopy_(k, &d__[1], &c__1, &poles[poles_dim1 + 1], &c__1);
-        scopy_(k, &work[isigma], &c__1, &poles[(poles_dim1 << 1) + 1], &c__1);
+        aocl_blas_scopy(k, &d__[1], &c__1, &poles[poles_dim1 + 1], &c__1);
+        aocl_blas_scopy(k, &work[isigma], &c__1, &poles[(poles_dim1 << 1) + 1], &c__1);
     }
     /* Unscale. */
-    slascl_("G", &c__0, &c__0, &c_b7, &orgnrm, &n, &c__1, &d__[1], &n, info);
+    aocl_lapack_slascl("G", &c__0, &c__0, &c_b7, &orgnrm, &n, &c__1, &d__[1], &n, info);
     /* Prepare the IDXQ sorting permutation. */
     n1 = *k;
     n2 = n - *k;
-    slamrg_(&n1, &n2, &d__[1], &c__1, &c_n1, &idxq[1]);
+    aocl_lapack_slamrg(&n1, &n2, &d__[1], &c__1, &c_n1, &idxq[1]);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLASD6 */

@@ -1,15 +1,15 @@
 /* cdotu.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
-complex cdotu_(/*complex * ret_val,*/
-    integer *n, complex *cx, integer *incx, complex *cy, integer *incy)
+scomplex cdotu_(/*scomplex * ret_val,*/
+    integer *n, scomplex *cx, integer *incx, scomplex *cy, integer *incy)
 {
-    complex ret_val;
+    scomplex ret_val;
     /* System generated locals */
     integer i__1, i__2, i__3;
-    complex q__1, q__2;
+    scomplex q__1, q__2;
     /* Local variables */
     integer i__;
-    complex ctemp;
+    scomplex ctemp;
     integer ix, iy;
     /* forms the dot product of two vectors. */
     /* jack dongarra, linpack, 3/11/78. */

@@ -111,7 +111,21 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slasd5_(integer *i__, real *d__, real *z__, real *delta, real *rho, real *dsigma, real *work)
+/** Generated wrapper function */
+void slasd5_(aocl_int_t *i__, real *d__, real *z__, real *delta, real *rho, real *dsigma,
+             real *work)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slasd5(i__, d__, z__, delta, rho, dsigma, work);
+#else
+    aocl_int64_t i___64 = *i__;
+
+    aocl_lapack_slasd5(&i___64, d__, z__, delta, rho, dsigma, work);
+#endif
+}
+
+void aocl_lapack_slasd5(aocl_int64_t *i__, real *d__, real *z__, real *delta, real *rho,
+                        real *dsigma, real *work)
 {
     /* System generated locals */
     real r__1;

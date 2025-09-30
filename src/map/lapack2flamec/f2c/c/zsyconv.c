@@ -110,23 +110,37 @@
 /* > \ingroup complex16SYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda, integer *ipiv,
-              doublecomplex *e, integer *info)
+/** Generated wrapper function */
+void zsyconv_(char *uplo, char *way, aocl_int_t *n, dcomplex *a, aocl_int_t *lda,
+              aocl_int_t *ipiv, dcomplex *e, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zsyconv(uplo, way, n, a, lda, ipiv, e, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zsyconv(uplo, way, &n_64, a, &lda_64, ipiv, e, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zsyconv(char *uplo, char *way, aocl_int64_t *n, dcomplex *a,
+                         aocl_int64_t *lda, aocl_int_t *ipiv, dcomplex *e, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsyconv inputs: uplo %c, way %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo,
                       *way, *n, *lda);
 
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer i__, j, ip;
-    doublecomplex temp;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t i__, j, ip;
+    dcomplex temp;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical convert;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -173,7 +187,7 @@ void zsyconv_(char *uplo, char *way, integer *n, doublecomplex *a, integer *lda,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZSYCONV", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("ZSYCONV", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

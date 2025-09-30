@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b16 = -1.f;
 /* > \brief \b CPPTRF */
 /* =========== DOCUMENTATION =========== */
@@ -40,7 +40,7 @@ static real c_b16 = -1.f;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CPPTRF computes the Cholesky factorization of a complex Hermitian */
+/* > CPPTRF computes the Cholesky factorization of a scomplex Hermitian */
 /* > positive definite matrix A stored in packed format. */
 /* > */
 /* > The factorization has the form */
@@ -119,7 +119,22 @@ static real c_b16 = -1.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cpptrf_(char *uplo, integer *n, complex *ap, integer *info)
+/** Generated wrapper function */
+void cpptrf_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cpptrf(uplo, n, ap, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cpptrf(uplo, &n_64, ap, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cpptrf(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -132,27 +147,16 @@ void cpptrf_(char *uplo, integer *n, complex *ap, integer *info)
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1, i__2, i__3;
+    aocl_int64_t i__1, i__2, i__3;
     real r__1;
-    complex q__1, q__2;
+    scomplex q__1, q__2;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer j, jc, jj;
+    aocl_int64_t j, jc, jj;
     real ajj;
-    extern /* Subroutine */
-        void
-        chpr_(char *, integer *, real *, complex *, integer *, complex *);
-    extern /* Complex */
-        VOID
-        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *),
-        csscal_(integer *, real *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -190,7 +194,7 @@ void cpptrf_(char *uplo, integer *n, complex *ap, integer *info)
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPPTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CPPTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -213,13 +217,14 @@ void cpptrf_(char *uplo, integer *n, complex *ap, integer *info)
             if(j > 1)
             {
                 i__2 = j - 1;
-                ctpsv_("Upper", "Conjugate transpose", "Non-unit", &i__2, &ap[1], &ap[jc], &c__1);
+                aocl_blas_ctpsv("Upper", "Conjugate transpose", "Non-unit", &i__2, &ap[1], &ap[jc],
+                                &c__1);
             }
             /* Compute U(J,J) and test for non-positive-definiteness. */
             i__2 = jj;
             r__1 = ap[i__2].r;
             i__3 = j - 1;
-            cdotc_f2c_(&q__2, &i__3, &ap[jc], &c__1, &ap[jc], &c__1);
+            aocl_lapack_cdotc_f2c(&q__2, &i__3, &ap[jc], &c__1, &ap[jc], &c__1);
             q__1.r = r__1 - q__2.r;
             q__1.i = -q__2.i; // , expr subst
             ajj = q__1.r;
@@ -264,9 +269,9 @@ void cpptrf_(char *uplo, integer *n, complex *ap, integer *info)
             {
                 i__2 = *n - j;
                 r__1 = 1.f / ajj;
-                csscal_(&i__2, &r__1, &ap[jj + 1], &c__1);
+                aocl_blas_csscal(&i__2, &r__1, &ap[jj + 1], &c__1);
                 i__2 = *n - j;
-                chpr_("Lower", &i__2, &c_b16, &ap[jj + 1], &c__1, &ap[jj + *n - j + 1]);
+                aocl_blas_chpr("Lower", &i__2, &c_b16, &ap[jj + 1], &c__1, &ap[jj + *n - j + 1]);
                 jj = jj + *n - j + 1;
             }
             /* L20: */

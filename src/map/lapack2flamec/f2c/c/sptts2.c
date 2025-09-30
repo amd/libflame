@@ -97,19 +97,31 @@
 /* > \ingroup realPTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sptts2_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ldb)
+/** Generated wrapper function */
+void sptts2_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, real *b, aocl_int_t *ldb)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sptts2(n, nrhs, d__, e, b, ldb);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+
+    aocl_lapack_sptts2(&n_64, &nrhs_64, d__, e, b, &ldb_64);
+#endif
+}
+
+void aocl_lapack_sptts2(aocl_int64_t *n, aocl_int64_t *nrhs, real *d__, real *e, real *b,
+                        aocl_int64_t *ldb)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("sptts2 inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "", *n,
-             *nrhs, *ldb);
+    AOCL_DTL_SNPRINTF("sptts2 inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "", *n, *nrhs,
+                      *ldb);
     /* System generated locals */
-    integer b_dim1, b_offset, i__1, i__2;
+    aocl_int64_t b_dim1, b_offset, i__1, i__2;
     real r__1;
     /* Local variables */
-    integer i__, j;
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
+    aocl_int64_t i__, j;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -137,7 +149,7 @@ void sptts2_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ld
         if(*n == 1)
         {
             r__1 = 1.f / d__[1];
-            sscal_(nrhs, &r__1, &b[b_offset], ldb);
+            aocl_blas_sscal(nrhs, &r__1, &b[b_offset], ldb);
         }
         AOCL_DTL_TRACE_LOG_EXIT
         return;

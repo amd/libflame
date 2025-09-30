@@ -30,7 +30,7 @@ int main( int argc, char** argv ) {
     fprintf(stderr, "       \n");
     fprintf(stderr, "Usage: %s m use_abs\n", argv[0]);
     fprintf(stderr, "       m       : test vector length\n");
-    fprintf(stderr, "       use_abs : 0 - norm (realtype), 1 - abs (complex type)\n");
+    fprintf(stderr, "       use_abs : 0 - norm (realtype), 1 - abs (scomplex type)\n");
     fprintf(stderr, "       \n");
     return -1;
   }
@@ -60,7 +60,7 @@ int main( int argc, char** argv ) {
                                &v1,
                            vB, &v2, 1, FLA_BOTTOM );
     // --------------------------------------------
-    if ( use_abs ) { // a and v are complex datatype
+    if ( use_abs ) { // a and v are scomplex datatype
       FLA_Copy( a1, v1 );
       FLA_Absolute_value( v1 );
     } else {         // v is real datatype 

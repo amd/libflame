@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b16 = -1.;
 /* > \brief \b ZPPTRF */
 /* =========== DOCUMENTATION =========== */
@@ -40,7 +40,7 @@ static doublereal c_b16 = -1.;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZPPTRF computes the Cholesky factorization of a complex Hermitian */
+/* > ZPPTRF computes the Cholesky factorization of a scomplex Hermitian */
 /* > positive definite matrix A stored in packed format. */
 /* > */
 /* > The factorization has the form */
@@ -119,34 +119,37 @@ static doublereal c_b16 = -1.;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zpptrf_(char *uplo, integer *n, doublecomplex *ap, integer *info)
+/** Generated wrapper function */
+void zpptrf_(char *uplo, aocl_int_t *n, dcomplex *ap, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zpptrf(uplo, n, ap, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zpptrf(uplo, &n_64, ap, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zpptrf(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpptrf inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
 
     /* System generated locals */
-    integer i__1, i__2, i__3;
+    aocl_int64_t i__1, i__2, i__3;
     doublereal d__1;
-    doublecomplex z__1, z__2;
+    dcomplex z__1, z__2;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer j, jc, jj;
+    aocl_int64_t j, jc, jj;
     doublereal ajj;
-    extern /* Subroutine */
-        void
-        zhpr_(char *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Double Complex */
-        VOID
-        zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
-                   integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        ztpsv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -184,7 +187,7 @@ void zpptrf_(char *uplo, integer *n, doublecomplex *ap, integer *info)
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZPPTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZPPTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -207,13 +210,14 @@ void zpptrf_(char *uplo, integer *n, doublecomplex *ap, integer *info)
             if(j > 1)
             {
                 i__2 = j - 1;
-                ztpsv_("Upper", "Conjugate transpose", "Non-unit", &i__2, &ap[1], &ap[jc], &c__1);
+                aocl_blas_ztpsv("Upper", "Conjugate transpose", "Non-unit", &i__2, &ap[1], &ap[jc],
+                                &c__1);
             }
             /* Compute U(J,J) and test for non-positive-definiteness. */
             i__2 = jj;
             d__1 = ap[i__2].r;
             i__3 = j - 1;
-            zdotc_f2c_(&z__2, &i__3, &ap[jc], &c__1, &ap[jc], &c__1);
+            aocl_lapack_zdotc_f2c(&z__2, &i__3, &ap[jc], &c__1, &ap[jc], &c__1);
             z__1.r = d__1 - z__2.r;
             z__1.i = -z__2.i; // , expr subst
             ajj = z__1.r;
@@ -258,9 +262,9 @@ void zpptrf_(char *uplo, integer *n, doublecomplex *ap, integer *info)
             {
                 i__2 = *n - j;
                 d__1 = 1. / ajj;
-                zdscal_(&i__2, &d__1, &ap[jj + 1], &c__1);
+                aocl_blas_zdscal(&i__2, &d__1, &ap[jj + 1], &c__1);
                 i__2 = *n - j;
-                zhpr_("Lower", &i__2, &c_b16, &ap[jj + 1], &c__1, &ap[jj + *n - j + 1]);
+                aocl_blas_zhpr("Lower", &i__2, &c_b16, &ap[jj + 1], &c__1, &ap[jj + *n - j + 1]);
                 jj = jj + *n - j + 1;
             }
             /* L20: */

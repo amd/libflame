@@ -17,14 +17,14 @@
 
 
 void time_Eig_gest_iu(
-               integer variant, integer type, integer n_repeats, integer n, integer b_alg,
+               aocl_int64_t variant, aocl_int64_t type, aocl_int64_t n_repeats, aocl_int64_t n, aocl_int64_t b_alg,
                FLA_Inv inv, FLA_Uplo uplo, FLA_Obj A, FLA_Obj Y, FLA_Obj B,
                double *dtime, double *diff, double *gflops );
 
 
 int main(int argc, char *argv[])
 {
-  integer 
+  aocl_int64_t 
     m_input,
     m,
     p_first, p_last, p_inc,

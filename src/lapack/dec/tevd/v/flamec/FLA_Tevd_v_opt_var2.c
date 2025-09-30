@@ -14,13 +14,13 @@ FLA_Error FLA_Tevd_v_opt_var2(fla_dim_t n_iter_max, FLA_Obj d, FLA_Obj e, FLA_Ob
 {
 	FLA_Error r_val = FLA_SUCCESS;
 	FLA_Datatype datatype;
-	integer m_A, m_U, n_G;
-	integer inc_d;
-	integer inc_e;
-	integer rs_G, cs_G;
-	integer rs_R, cs_R;
-	integer rs_U, cs_U;
-	integer rs_W, cs_W;
+	fla_dim_t m_A, m_U, n_G;
+	fla_dim_t inc_d;
+	fla_dim_t inc_e;
+	fla_dim_t rs_G, cs_G;
+	fla_dim_t rs_R, cs_R;
+	fla_dim_t rs_U, cs_U;
+	fla_dim_t rs_W, cs_W;
 
 	datatype = FLA_Obj_datatype(U);
 
@@ -145,34 +145,34 @@ FLA_Error FLA_Tevd_v_opt_var2(fla_dim_t n_iter_max, FLA_Obj d, FLA_Obj e, FLA_Ob
 	return r_val;
 }
 
-FLA_Error FLA_Tevd_v_ops_var2(integer m_A,
-							  integer m_U,
-							  integer n_G,
-							  integer n_iter_max,
-							  float *buff_d, integer inc_d,
-							  float *buff_e, integer inc_e,
-							  scomplex *buff_G, integer rs_G, integer cs_G,
-							  float *buff_R, integer rs_R, integer cs_R,
-							  float *buff_W, integer rs_W, integer cs_W,
-							  float *buff_U, integer rs_U, integer cs_U,
-							  integer b_alg)
+FLA_Error FLA_Tevd_v_ops_var2(fla_dim_t m_A,
+							  fla_dim_t m_U,
+							  fla_dim_t n_G,
+							  fla_dim_t n_iter_max,
+							  float *buff_d, fla_dim_t inc_d,
+							  float *buff_e, fla_dim_t inc_e,
+							  scomplex *buff_G, fla_dim_t rs_G, fla_dim_t cs_G,
+							  float *buff_R, fla_dim_t rs_R, fla_dim_t cs_R,
+							  float *buff_W, fla_dim_t rs_W, fla_dim_t cs_W,
+							  float *buff_U, fla_dim_t rs_U, fla_dim_t cs_U,
+							  fla_dim_t b_alg)
 {
 	FLA_Check_error_code(FLA_NOT_YET_IMPLEMENTED);
 
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Tevd_v_opd_var2(integer m_A,
-							  integer m_U,
-							  integer n_G,
-							  integer n_iter_max,
-							  double *buff_d, integer inc_d,
-							  double *buff_e, integer inc_e,
-							  dcomplex *buff_G, integer rs_G, integer cs_G,
-							  double *buff_R, integer rs_R, integer cs_R,
-							  double *buff_W, integer rs_W, integer cs_W,
-							  double *buff_U, integer rs_U, integer cs_U,
-							  integer b_alg)
+FLA_Error FLA_Tevd_v_opd_var2(fla_dim_t m_A,
+							  fla_dim_t m_U,
+							  fla_dim_t n_G,
+							  fla_dim_t n_iter_max,
+							  double *buff_d, fla_dim_t inc_d,
+							  double *buff_e, fla_dim_t inc_e,
+							  dcomplex *buff_G, fla_dim_t rs_G, fla_dim_t cs_G,
+							  double *buff_R, fla_dim_t rs_R, fla_dim_t cs_R,
+							  double *buff_W, fla_dim_t rs_W, fla_dim_t cs_W,
+							  double *buff_U, fla_dim_t rs_U, fla_dim_t cs_U,
+							  fla_dim_t b_alg)
 {
 	dcomplex one = bl1_z1();
 	double rone = bl1_d1();
@@ -181,20 +181,20 @@ FLA_Error FLA_Tevd_v_opd_var2(integer m_A,
 	dcomplex *G;
 	double *d1;
 	double *e1;
-	integer r_val;
-	integer done;
-	integer m_G_sweep_max;
-	integer ij_begin;
-	integer ijTL, ijBR;
-	integer m_A11;
-	integer n_iter_perf;
-	integer n_U_apply;
-	integer n_iter_prev;
-	integer n_iter_perf_sweep_max;
+	fla_dim_t r_val;
+	fla_dim_t done;
+	fla_dim_t m_G_sweep_max;
+	fla_dim_t ij_begin;
+	fla_dim_t ijTL, ijBR;
+	fla_dim_t m_A11;
+	fla_dim_t n_iter_perf;
+	fla_dim_t n_U_apply;
+	fla_dim_t n_iter_prev;
+	fla_dim_t n_iter_perf_sweep_max;
 
 #ifdef PRINTF
-	integer n_deflations;
-	integer total_deflations;
+	fla_dim_t n_deflations;
+	fla_dim_t total_deflations;
 	total_deflations = 0;
 #endif
 	// Initialize our completion flag.
@@ -406,17 +406,17 @@ FLA_Error FLA_Tevd_v_opd_var2(integer m_A,
 	return n_iter_prev;
 }
 
-FLA_Error FLA_Tevd_v_opc_var2(integer m_A,
-							  integer m_U,
-							  integer n_G,
-							  integer n_iter_max,
-							  float *buff_d, integer inc_d,
-							  float *buff_e, integer inc_e,
-							  scomplex *buff_G, integer rs_G, integer cs_G,
-							  float *buff_R, integer rs_R, integer cs_R,
-							  scomplex *buff_W, integer rs_W, integer cs_W,
-							  scomplex *buff_U, integer rs_U, integer cs_U,
-							  integer b_alg)
+FLA_Error FLA_Tevd_v_opc_var2(fla_dim_t m_A,
+							  fla_dim_t m_U,
+							  fla_dim_t n_G,
+							  fla_dim_t n_iter_max,
+							  float *buff_d, fla_dim_t inc_d,
+							  float *buff_e, fla_dim_t inc_e,
+							  scomplex *buff_G, fla_dim_t rs_G, fla_dim_t cs_G,
+							  float *buff_R, fla_dim_t rs_R, fla_dim_t cs_R,
+							  scomplex *buff_W, fla_dim_t rs_W, fla_dim_t cs_W,
+							  scomplex *buff_U, fla_dim_t rs_U, fla_dim_t cs_U,
+							  fla_dim_t b_alg)
 {
 	FLA_Check_error_code(FLA_NOT_YET_IMPLEMENTED);
 
@@ -425,17 +425,17 @@ FLA_Error FLA_Tevd_v_opc_var2(integer m_A,
 
 // #define PRINTF
 
-FLA_Error FLA_Tevd_v_opz_var2(integer m_A,
-							  integer m_U,
-							  integer n_G,
-							  integer n_iter_max,
-							  double *buff_d, integer inc_d,
-							  double *buff_e, integer inc_e,
-							  dcomplex *buff_G, integer rs_G, integer cs_G,
-							  double *buff_R, integer rs_R, integer cs_R,
-							  dcomplex *buff_W, integer rs_W, integer cs_W,
-							  dcomplex *buff_U, integer rs_U, integer cs_U,
-							  integer b_alg)
+FLA_Error FLA_Tevd_v_opz_var2(fla_dim_t m_A,
+							  fla_dim_t m_U,
+							  fla_dim_t n_G,
+							  fla_dim_t n_iter_max,
+							  double *buff_d, fla_dim_t inc_d,
+							  double *buff_e, fla_dim_t inc_e,
+							  dcomplex *buff_G, fla_dim_t rs_G, fla_dim_t cs_G,
+							  double *buff_R, fla_dim_t rs_R, fla_dim_t cs_R,
+							  dcomplex *buff_W, fla_dim_t rs_W, fla_dim_t cs_W,
+							  dcomplex *buff_U, fla_dim_t rs_U, fla_dim_t cs_U,
+							  fla_dim_t b_alg)
 {
 	dcomplex one = bl1_z1();
 	double rone = bl1_d1();
@@ -444,20 +444,20 @@ FLA_Error FLA_Tevd_v_opz_var2(integer m_A,
 	dcomplex *G;
 	double *d1;
 	double *e1;
-	integer r_val;
-	integer done;
-	integer m_G_sweep_max;
-	integer ij_begin;
-	integer ijTL, ijBR;
-	integer m_A11;
-	integer n_iter_perf;
-	integer n_U_apply;
-	integer n_iter_prev;
-	integer n_iter_perf_sweep_max;
+	fla_dim_t r_val;
+	fla_dim_t done;
+	fla_dim_t m_G_sweep_max;
+	fla_dim_t ij_begin;
+	fla_dim_t ijTL, ijBR;
+	fla_dim_t m_A11;
+	fla_dim_t n_iter_perf;
+	fla_dim_t n_U_apply;
+	fla_dim_t n_iter_prev;
+	fla_dim_t n_iter_perf_sweep_max;
 
 #ifdef PRINTF
-	integer n_deflations;
-	integer total_deflations;
+	fla_dim_t n_deflations;
+	fla_dim_t total_deflations;
 	total_deflations = 0;
 #endif
 	// Initialize our completion flag.

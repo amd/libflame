@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SOPMTR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -150,27 +150,40 @@ static integer c__1 = 1;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, real *ap, real *tau,
-             real *c__, integer *ldc, real *work, integer *info)
+/** Generated wrapper function */
+void sopmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, real *ap, real *tau,
+             real *c__, aocl_int_t *ldc, real *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sopmtr(side, uplo, trans, m, n, ap, tau, c__, ldc, work, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sopmtr(side, uplo, trans, &m_64, &n_64, ap, tau, c__, &ldc_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sopmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n,
+                        real *ap, real *tau, real *c__, aocl_int64_t *ldc, real *work,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sopmtr inputs: side %c, uplo %c, trans %c, m %" FLA_IS ", n %" FLA_IS
                       ", ldc %" FLA_IS "",
                       *side, *uplo, *trans, *m, *n, *ldc);
     /* System generated locals */
-    integer c_dim1, c_offset, i__1, i__2;
+    aocl_int64_t c_dim1, c_offset, i__1, i__2;
     /* Local variables */
-    integer i__, i1, i2, i3, ic, jc, ii, mi, ni, nq;
+    aocl_int64_t i__, i1, i2, i3, ic, jc, ii, mi, ni, nq;
     real aii;
     logical left;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, forwrd;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -241,7 +254,7 @@ void sopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, real *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SOPMTR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SOPMTR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -294,8 +307,8 @@ void sopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, real *
             /* Apply H(i) */
             aii = ap[ii];
             ap[ii] = 1.f;
-            slarf_(side, &mi, &ni, &ap[ii - i__ + 1], &c__1, &tau[i__], &c__[c_offset], ldc,
-                   &work[1]);
+            aocl_lapack_slarf(side, &mi, &ni, &ap[ii - i__ + 1], &c__1, &tau[i__], &c__[c_offset],
+                              ldc, &work[1]);
             ap[ii] = aii;
             if(forwrd)
             {
@@ -355,8 +368,8 @@ void sopmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, real *
                 jc = i__ + 1;
             }
             /* Apply H(i) */
-            slarf_(side, &mi, &ni, &ap[ii], &c__1, &tau[i__], &c__[ic + jc * c_dim1], ldc,
-                   &work[1]);
+            aocl_lapack_slarf(side, &mi, &ni, &ap[ii], &c__1, &tau[i__], &c__[ic + jc * c_dim1],
+                              ldc, &work[1]);
             ap[ii] = aii;
             if(forwrd)
             {

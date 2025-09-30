@@ -4,7 +4,7 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CLA_GERCOND_X computes the infinity norm condition number of op(A)*diag(x) for
  * general matrices . */
 /* =========== DOCUMENTATION =========== */
@@ -132,8 +132,30 @@ row i of the matrix was interchanged */
 /* > \date September 2012 */
 /* > \ingroup complexGEcomputational */
 /* ===================================================================== */
-real cla_gercond_x_(char *trans, integer *n, complex *a, integer *lda, complex *af, integer *ldaf,
-                    integer *ipiv, complex *x, integer *info, complex *work, real *rwork)
+/** Generated wrapper function */
+real cla_gercond_x_(char *trans, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *af,
+                    aocl_int_t *ldaf, aocl_int_t *ipiv, scomplex *x, aocl_int_t *info, scomplex *work,
+                    real *rwork)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_cla_gercond_x(trans, n, a, lda, af, ldaf, ipiv, x, info, work, rwork);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldaf_64 = *ldaf;
+    aocl_int64_t info_64 = *info;
+
+    real ret_val = aocl_lapack_cla_gercond_x(trans, &n_64, a, &lda_64, af, &ldaf_64, ipiv, x,
+                                             &info_64, work, rwork);
+
+    *info = (aocl_int_t)info_64;
+    return ret_val;
+#endif
+}
+
+real aocl_lapack_cla_gercond_x(char *trans, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                               scomplex *af, aocl_int64_t *ldaf, aocl_int_t *ipiv, scomplex *x,
+                               aocl_int64_t *info, scomplex *work, real *rwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -148,25 +170,19 @@ real cla_gercond_x_(char *trans, integer *n, complex *a, integer *lda, complex *
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, af_dim1, af_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, i__1, i__2, i__3, i__4;
     real ret_val, r__1, r__2;
-    complex q__1, q__2;
+    scomplex q__1, q__2;
     /* Builtin functions */
-    double r_imag(complex *);
-    void c_div(complex *, complex *, complex *);
+    double r_imag(scomplex *);
+    void c_div(scomplex *, scomplex *, scomplex *);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real tmp;
-    integer kase;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t kase;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     real anorm;
-    extern /* Subroutine */
-        void
-        clacn2_(integer *, complex *, complex *, real *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        cgetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *,
-                integer *);
     real ainvnm;
     logical notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
@@ -227,7 +243,7 @@ real cla_gercond_x_(char *trans, integer *n, complex *a, integer *lda, complex *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CLA_GERCOND_X", &i__1, (ftnlen)13);
+        aocl_blas_xerbla("CLA_GERCOND_X", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return ret_val;
     }
@@ -291,7 +307,7 @@ real cla_gercond_x_(char *trans, integer *n, complex *a, integer *lda, complex *
     ainvnm = 0.f;
     kase = 0;
 L10:
-    clacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+    aocl_lapack_clacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(kase == 2)
@@ -310,13 +326,13 @@ L10:
             }
             if(notrans)
             {
-                cgetrs_("No transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n,
-                        info);
+                aocl_lapack_cgetrs("No transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1],
+                                   &work[1], n, info);
             }
             else
             {
-                cgetrs_("Conjugate transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1],
-                        n, info);
+                aocl_lapack_cgetrs("Conjugate transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1],
+                                   &work[1], n, info);
             }
             /* Multiply by inv(X). */
             i__1 = *n;
@@ -341,13 +357,13 @@ L10:
             }
             if(notrans)
             {
-                cgetrs_("Conjugate transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1],
-                        n, info);
+                aocl_lapack_cgetrs("Conjugate transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1],
+                                   &work[1], n, info);
             }
             else
             {
-                cgetrs_("No transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1], &work[1], n,
-                        info);
+                aocl_lapack_cgetrs("No transpose", n, &c__1, &af[af_offset], ldaf, &ipiv[1],
+                                   &work[1], n, info);
             }
             /* Multiply by R. */
             i__1 = *n;

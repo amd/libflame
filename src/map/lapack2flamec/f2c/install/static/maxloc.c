@@ -13,13 +13,25 @@
 #include "FLA_f2c.h"
 
 /* ********************************************************************************** */
-integer smaxloc_(real *a, integer *dimm)
+/** Generated wrapper function */
+aocl_int_t smaxloc_(real *a, aocl_int_t *dimm)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_smaxloc(a, dimm);
+#else
+    aocl_int64_t dimm_64 = *dimm;
+
+    return aocl_lapack_smaxloc(a, &dimm_64);
+#endif
+}
+
+aocl_int64_t aocl_lapack_smaxloc(real *a, aocl_int64_t *dimm)
 {
     /* System generated locals */
-    integer ret_val, i__1;
+    aocl_int64_t ret_val, i__1;
 
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     real smax;
 
     /* Parameter adjustments */
@@ -42,13 +54,25 @@ integer smaxloc_(real *a, integer *dimm)
 } /* smaxloc_ */
 
 /* ********************************************************************************** */
-integer dmaxloc_(doublereal *a, integer *dimm)
+/** Generated wrapper function */
+aocl_int_t dmaxloc_(doublereal *a, aocl_int_t *dimm)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_dmaxloc(a, dimm);
+#else
+    aocl_int64_t dimm_64 = *dimm;
+
+    return aocl_lapack_dmaxloc(a, &dimm_64);
+#endif
+}
+
+aocl_int64_t aocl_lapack_dmaxloc(doublereal *a, aocl_int64_t *dimm)
 {
     /* System generated locals */
-    integer ret_val, i__1;
+    aocl_int64_t ret_val, i__1;
 
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     doublereal dmax__;
 
     /* Parameter adjustments */

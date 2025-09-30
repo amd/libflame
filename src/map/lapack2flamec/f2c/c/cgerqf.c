@@ -4,10 +4,10 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b CGERQF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -41,7 +41,7 @@ static integer c__2 = 2;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CGERQF computes an RQ factorization of a complex M-by-N matrix A: */
+/* > CGERQF computes an RQ factorization of a scomplex M-by-N matrix A: */
 /* > A = R * Q. */
 /* > \endverbatim */
 /* Arguments: */
@@ -134,7 +134,7 @@ the routine */
 /* > */
 /* > H(i) = I - tau * v * v**H */
 /* > */
-/* > where tau is a complex scalar, and v is a complex vector with */
+/* > where tau is a scomplex scalar, and v is a scomplex vector with */
 /* > v(n-k+i+1:n) = 0 and v(n-k+i) = 1;
 conjg(v(1:n-k+i-1)) is stored on */
 /* > exit in A(m-k+i,1:n-k+i-1), and tau in TAU(i). */
@@ -142,8 +142,27 @@ conjg(v(1:n-k+i-1)) is stored on */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgerqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, complex *work,
-             integer *lwork, integer *info)
+/** Generated wrapper function */
+void cgerqf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *tau, scomplex *work,
+             aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgerqf(m, n, a, lda, tau, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgerqf(&m_64, &n_64, a, &lda_64, tau, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgerqf(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                        scomplex *tau, scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -157,22 +176,12 @@ void cgerqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     real r__1;
     /* Local variables */
-    integer i__, k, ib, nb, ki, kk, mu, nu, nx, iws, nbmin, iinfo;
-    extern /* Subroutine */
-        void
-        cgerq2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *),
-        clarfb_(char *, char *, char *, char *, integer *, integer *, integer *, complex *,
-                integer *, complex *, integer *, complex *, integer *, complex *, integer *),
-        clarft_(char *, char *, integer *, integer *, complex *, integer *, complex *, complex *,
-                integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer ldwork, lwkopt;
+    aocl_int64_t i__, k, ib, nb, ki, kk, mu, nu, nx, iws, nbmin, iinfo;
+    aocl_int64_t ldwork, lwkopt;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -222,10 +231,10 @@ void cgerqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
         }
         else
         {
-            nb = ilaenv_(&c__1, "CGERQF", " ", m, n, &c_n1, &c_n1);
+            nb = aocl_lapack_ilaenv(&c__1, "CGERQF", " ", m, n, &c_n1, &c_n1);
             lwkopt = *m * nb;
         }
-        r__1 = sroundup_lwork(&lwkopt);
+        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
         work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         if(!lquery)
@@ -239,7 +248,7 @@ void cgerqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGERQF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGERQF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -262,7 +271,7 @@ void cgerqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
         /* Determine when to cross over from blocked to unblocked code. */
         /* Computing MAX */
         i__1 = 0;
-        i__2 = ilaenv_(&c__3, "CGERQF", " ", m, n, &c_n1, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__3, "CGERQF", " ", m, n, &c_n1, &c_n1); // , expr subst
         nx = fla_max(i__1, i__2);
         if(nx < k)
         {
@@ -276,7 +285,7 @@ void cgerqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = ilaenv_(&c__2, "CGERQF", " ", m, n, &c_n1, &c_n1); // , expr subst
+                i__2 = aocl_lapack_ilaenv(&c__2, "CGERQF", " ", m, n, &c_n1, &c_n1); // , expr subst
                 nbmin = fla_max(i__1, i__2);
             }
         }
@@ -300,20 +309,21 @@ void cgerqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
             /* Compute the RQ factorization of the current block */
             /* A(m-k+i:m-k+i+ib-1,1:n-k+i+ib-1) */
             i__3 = *n - k + i__ + ib - 1;
-            cgerq2_(&ib, &i__3, &a[*m - k + i__ + a_dim1], lda, &tau[i__], &work[1], &iinfo);
+            aocl_lapack_cgerq2(&ib, &i__3, &a[*m - k + i__ + a_dim1], lda, &tau[i__], &work[1],
+                               &iinfo);
             if(*m - k + i__ > 1)
             {
                 /* Form the triangular factor of the block reflector */
                 /* H = H(i+ib-1) . . . H(i+1) H(i) */
                 i__3 = *n - k + i__ + ib - 1;
-                clarft_("Backward", "Rowwise", &i__3, &ib, &a[*m - k + i__ + a_dim1], lda,
-                        &tau[i__], &work[1], &ldwork);
+                aocl_lapack_clarft("Backward", "Rowwise", &i__3, &ib, &a[*m - k + i__ + a_dim1],
+                                   lda, &tau[i__], &work[1], &ldwork);
                 /* Apply H to A(1:m-k+i-1,1:n-k+i+ib-1) from the right */
                 i__3 = *m - k + i__ - 1;
                 i__4 = *n - k + i__ + ib - 1;
-                clarfb_("Right", "No transpose", "Backward", "Rowwise", &i__3, &i__4, &ib,
-                        &a[*m - k + i__ + a_dim1], lda, &work[1], &ldwork, &a[a_offset], lda,
-                        &work[ib + 1], &ldwork);
+                aocl_lapack_clarfb("Right", "No transpose", "Backward", "Rowwise", &i__3, &i__4,
+                                   &ib, &a[*m - k + i__ + a_dim1], lda, &work[1], &ldwork,
+                                   &a[a_offset], lda, &work[ib + 1], &ldwork);
             }
             /* L10: */
         }
@@ -328,9 +338,9 @@ void cgerqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
     /* Use unblocked code to factor the last or only block */
     if(mu > 0 && nu > 0)
     {
-        cgerq2_(&mu, &nu, &a[a_offset], lda, &tau[1], &work[1], &iinfo);
+        aocl_lapack_cgerq2(&mu, &nu, &a[a_offset], lda, &tau[1], &work[1], &iinfo);
     }
-    r__1 = sroundup_lwork(&iws);
+    r__1 = aocl_lapack_sroundup_lwork(&iws);
     work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

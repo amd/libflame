@@ -4,10 +4,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__9 = 9;
-static integer c__0 = 0;
-static integer c__2 = 2;
-static integer c__1 = 1;
+static aocl_int64_t c__9 = 9;
+static aocl_int64_t c__0 = 0;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLAED0 used by sstedc. Computes all eigenvalues and corresponding eigenvectors of an
  * unreduced symmetric tridiagonal matrix using the divide and conquer method. */
 /* =========== DOCUMENTATION =========== */
@@ -145,50 +145,50 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zlaed0_(integer *qsiz, integer *n, doublereal *d__, doublereal *e, doublecomplex *q,
-             integer *ldq, doublecomplex *qstore, integer *ldqs, doublereal *rwork, integer *iwork,
-             integer *info)
+/** Generated wrapper function */
+void zlaed0_(aocl_int_t *qsiz, aocl_int_t *n, doublereal *d__, doublereal *e, dcomplex *q,
+             aocl_int_t *ldq, dcomplex *qstore, aocl_int_t *ldqs, doublereal *rwork,
+             aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlaed0(qsiz, n, d__, e, q, ldq, qstore, ldqs, rwork, iwork, info);
+#else
+    aocl_int64_t qsiz_64 = *qsiz;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t ldqs_64 = *ldqs;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zlaed0(&qsiz_64, &n_64, d__, e, q, &ldq_64, qstore, &ldqs_64, rwork, iwork,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zlaed0(aocl_int64_t *qsiz, aocl_int64_t *n, doublereal *d__, doublereal *e,
+                        dcomplex *q, aocl_int64_t *ldq, dcomplex *qstore,
+                        aocl_int64_t *ldqs, doublereal *rwork, aocl_int_t *iwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaed0 inputs: qsiz %" FLA_IS ", n %" FLA_IS ", ldq %" FLA_IS
                       ", ldqs %" FLA_IS "",
                       *qsiz, *n, *ldq, *ldqs);
     /* System generated locals */
-    integer q_dim1, q_offset, qstore_dim1, qstore_offset, i__1, i__2;
+    aocl_int64_t q_dim1, q_offset, qstore_dim1, qstore_offset, i__1, i__2;
     doublereal d__1;
     /* Builtin functions */
     double log(doublereal);
-    integer pow_ii(integer *, integer *);
+    integer pow_ii(aocl_int64_t *, aocl_int64_t *);
     /* Local variables */
-    integer i__, j, k, ll, iq, lgn, msd2, smm1, spm1, spm2;
+    aocl_int64_t i__, j, k, ll, iq, lgn, msd2, smm1, spm1, spm2;
     doublereal temp;
-    integer curr, iperm;
-    extern /* Subroutine */
-        void
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
-    integer indxq, iwrem, iqptr, tlvls;
-    extern /* Subroutine */
-        void
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        zlaed7_(integer *, integer *, integer *, integer *, integer *, integer *, doublereal *,
-                doublecomplex *, integer *, doublereal *, integer *, doublereal *, integer *,
-                integer *, integer *, integer *, integer *, doublereal *, doublecomplex *,
-                doublereal *, integer *, integer *);
-    integer igivcl;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        zlacrm_(integer *, integer *, doublecomplex *, integer *, doublereal *, integer *,
-                doublecomplex *, integer *, doublereal *);
-    integer igivnm, submat, curprb, subpbs, igivpt;
-    extern /* Subroutine */
-        void
-        dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *,
-                doublereal *, integer *);
-    integer curlvl, matsiz, iprmpt, smlsiz;
+    aocl_int64_t curr, iperm;
+    aocl_int64_t indxq, iwrem, iqptr, tlvls;
+    aocl_int64_t igivcl;
+    aocl_int64_t igivnm, submat, curprb, subpbs, igivpt;
+    aocl_int64_t curlvl, matsiz, iprmpt, smlsiz;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -247,7 +247,7 @@ void zlaed0_(integer *qsiz, integer *n, doublereal *d__, doublereal *e, doubleco
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZLAED0", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZLAED0", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -257,10 +257,10 @@ void zlaed0_(integer *qsiz, integer *n, doublereal *d__, doublereal *e, doubleco
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    smlsiz = ilaenv_(&c__9, "ZLAED0", " ", &c__0, &c__0, &c__0, &c__0);
+    smlsiz = aocl_lapack_ilaenv(&c__9, "ZLAED0", " ", &c__0, &c__0, &c__0, &c__0);
     /* Determine the size and placement of the submatrices, and save in */
     /* the leading elements of IWORK. */
-    iwork[1] = *n;
+    iwork[1] = (aocl_int_t)(*n);
     subpbs = 1;
     tlvls = 0;
 L10:
@@ -343,12 +343,13 @@ L10:
             matsiz = iwork[i__ + 1] - iwork[i__];
         }
         ll = iq - 1 + iwork[iqptr + curr];
-        dsteqr_("I", &matsiz, &d__[submat], &e[submat], &rwork[ll], &matsiz, &rwork[1], info);
-        zlacrm_(qsiz, &matsiz, &q[submat * q_dim1 + 1], ldq, &rwork[ll], &matsiz,
-                &qstore[submat * qstore_dim1 + 1], ldqs, &rwork[iwrem]);
+        aocl_lapack_dsteqr("I", &matsiz, &d__[submat], &e[submat], &rwork[ll], &matsiz, &rwork[1],
+                           info);
+        aocl_lapack_zlacrm(qsiz, &matsiz, &q[submat * q_dim1 + 1], ldq, &rwork[ll], &matsiz,
+                           &qstore[submat * qstore_dim1 + 1], ldqs, &rwork[iwrem]);
         /* Computing 2nd power */
         i__2 = matsiz;
-        iwork[iqptr + curr + 1] = iwork[iqptr + curr] + i__2 * i__2;
+        iwork[iqptr + curr + 1] = (aocl_int_t)(iwork[iqptr + curr] + i__2 * i__2);
         ++curr;
         if(*info > 0)
         {
@@ -360,7 +361,7 @@ L10:
         i__2 = iwork[i__ + 1];
         for(j = submat; j <= i__2; ++j)
         {
-            iwork[indxq + j] = k;
+            iwork[indxq + j] = (aocl_int_t)(k);
             ++k;
             /* L60: */
         }
@@ -396,11 +397,11 @@ L80:
             /* when the eigenvectors of a full or band Hermitian matrix (which */
             /* was reduced to tridiagonal form) are desired. */
             /* I am free to use Q as a valuable working space until Loop 150. */
-            zlaed7_(&matsiz, &msd2, qsiz, &tlvls, &curlvl, &curprb, &d__[submat],
-                    &qstore[submat * qstore_dim1 + 1], ldqs, &e[submat + msd2 - 1],
-                    &iwork[indxq + submat], &rwork[iq], &iwork[iqptr], &iwork[iprmpt],
-                    &iwork[iperm], &iwork[igivpt], &iwork[igivcl], &rwork[igivnm],
-                    &q[submat * q_dim1 + 1], &rwork[iwrem], &iwork[subpbs + 1], info);
+            aocl_lapack_zlaed7(&matsiz, &msd2, qsiz, &tlvls, &curlvl, &curprb, &d__[submat],
+                               &qstore[submat * qstore_dim1 + 1], ldqs, &e[submat + msd2 - 1],
+                               &iwork[indxq + submat], &rwork[iq], &iwork[iqptr], &iwork[iprmpt],
+                               &iwork[iperm], &iwork[igivpt], &iwork[igivcl], &rwork[igivnm],
+                               &q[submat * q_dim1 + 1], &rwork[iwrem], &iwork[subpbs + 1], info);
             if(*info > 0)
             {
                 *info = submat * (*n + 1) + submat + matsiz - 1;
@@ -422,10 +423,10 @@ L80:
     {
         j = iwork[indxq + i__];
         rwork[i__] = d__[j];
-        zcopy_(qsiz, &qstore[j * qstore_dim1 + 1], &c__1, &q[i__ * q_dim1 + 1], &c__1);
+        aocl_blas_zcopy(qsiz, &qstore[j * qstore_dim1 + 1], &c__1, &q[i__ * q_dim1 + 1], &c__1);
         /* L100: */
     }
-    dcopy_(n, &rwork[1], &c__1, &d__[1], &c__1);
+    aocl_blas_dcopy(n, &rwork[1], &c__1, &d__[1], &c__1);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZLAED0 */

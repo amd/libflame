@@ -94,17 +94,33 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dlamrg_(integer *n1, integer *n2, doublereal *a, integer *dtrd1, integer *dtrd2,
-             integer *index)
+/** Generated wrapper function */
+void dlamrg_(aocl_int_t *n1, aocl_int_t *n2, doublereal *a, aocl_int_t *dtrd1, aocl_int_t *dtrd2,
+             aocl_int_t *index)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlamrg(n1, n2, a, dtrd1, dtrd2, index);
+#else
+    aocl_int64_t n1_64 = *n1;
+    aocl_int64_t n2_64 = *n2;
+    aocl_int64_t dtrd1_64 = *dtrd1;
+    aocl_int64_t dtrd2_64 = *dtrd2;
+
+    aocl_lapack_dlamrg(&n1_64, &n2_64, a, &dtrd1_64, &dtrd2_64, index);
+#endif
+}
+
+void aocl_lapack_dlamrg(aocl_int64_t *n1, aocl_int64_t *n2, doublereal *a, aocl_int64_t *dtrd1,
+                        aocl_int64_t *dtrd2, aocl_int_t *index)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlamrg inputs: n1 %" FLA_IS ", n2 %" FLA_IS ", dtrd1 %" FLA_IS
                       ", dtrd2 %" FLA_IS "",
                       *n1, *n2, *dtrd1, *dtrd2);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     /* Local variables */
-    integer i__, ind1, ind2, n1sv, n2sv;
+    aocl_int64_t i__, ind1, ind2, n1sv, n2sv;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -146,14 +162,14 @@ L10:
     {
         if(a[ind1] <= a[ind2])
         {
-            index[i__] = ind1;
+            index[i__] = (aocl_int_t)(ind1);
             ++i__;
             ind1 += *dtrd1;
             --n1sv;
         }
         else
         {
-            index[i__] = ind2;
+            index[i__] = (aocl_int_t)(ind2);
             ++i__;
             ind2 += *dtrd2;
             --n2sv;
@@ -166,7 +182,7 @@ L10:
         i__1 = n2sv;
         for(n1sv = 1; n1sv <= i__1; ++n1sv)
         {
-            index[i__] = ind2;
+            index[i__] = (aocl_int_t)(ind2);
             ++i__;
             ind2 += *dtrd2;
             /* L20: */
@@ -178,7 +194,7 @@ L10:
         i__1 = n1sv;
         for(n2sv = 1; n2sv <= i__1; ++n2sv)
         {
-            index[i__] = ind1;
+            index[i__] = (aocl_int_t)(ind1);
             ++i__;
             ind1 += *dtrd1;
             /* L30: */

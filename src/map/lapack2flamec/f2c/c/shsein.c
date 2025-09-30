@@ -98,9 +98,9 @@ thus, if */
 /* > SELECT is LOGICAL array, dimension (N) */
 /* > Specifies the eigenvectors to be computed. To select the */
 /* > real eigenvector corresponding to a real eigenvalue WR(j), */
-/* > SELECT(j) must be set to .TRUE.. To select the complex */
-/* > eigenvector corresponding to a complex eigenvalue */
-/* > (WR(j),WI(j)), with complex conjugate (WR(j+1),WI(j+1)), */
+/* > SELECT(j) must be set to .TRUE.. To select the scomplex */
+/* > eigenvector corresponding to a scomplex eigenvalue */
+/* > (WR(j),WI(j)), with scomplex conjugate (WR(j+1),WI(j+1)), */
 /* > either SELECT(j) or SELECT(j+1) or both must be set to */
 /* > .TRUE.;
 then on exit SELECT(j) is .TRUE. and SELECT(j+1) is */
@@ -137,7 +137,7 @@ then on exit SELECT(j) is .TRUE. and SELECT(j+1) is */
 /* > */
 /* > On entry, the real and imaginary parts of the eigenvalues of */
 /* > H;
-a complex conjugate pair of eigenvalues must be stored in */
+a scomplex conjugate pair of eigenvalues must be stored in */
 /* > consecutive elements of WR and WI. */
 /* > On exit, WR may have been altered since close eigenvalues */
 /* > are perturbed slightly in searching for independent */
@@ -156,7 +156,7 @@ the starting vector for each eigenvector */
 /* > On exit, if SIDE = 'L' or 'B', the left eigenvectors */
 /* > specified by SELECT will be stored consecutively in the */
 /* > columns of VL, in the same order as their eigenvalues. A */
-/* > complex eigenvector corresponding to a complex eigenvalue is */
+/* > scomplex eigenvector corresponding to a scomplex eigenvalue is */
 /* > stored in two consecutive columns, the first holding the real */
 /* > part and the second the imaginary part. */
 /* > If SIDE = 'R', VL is not referenced. */
@@ -182,7 +182,7 @@ the starting vector for each eigenvector */
 /* > On exit, if SIDE = 'R' or 'B', the right eigenvectors */
 /* > specified by SELECT will be stored consecutively in the */
 /* > columns of VR, in the same order as their eigenvalues. A */
-/* > complex eigenvector corresponding to a complex eigenvalue is */
+/* > scomplex eigenvector corresponding to a scomplex eigenvalue is */
 /* > stored in two consecutive columns, the first holding the real */
 /* > part and the second the imaginary part. */
 /* > If SIDE = 'L', VR is not referenced. */
@@ -208,7 +208,7 @@ LDVR >= 1 otherwise. */
 /* > The number of columns in the arrays VL and/or VR required to */
 /* > store the eigenvectors;
 each selected real eigenvector */
-/* > occupies one column and each selected complex eigenvector */
+/* > occupies one column and each selected scomplex eigenvector */
 /* > occupies two columns. */
 /* > \endverbatim */
 /* > */
@@ -225,7 +225,7 @@ each selected real eigenvector */
 /* > eigenvalue w(j)) failed to converge;
 IFAILL(i) = 0 if the */
 /* > eigenvector converged satisfactorily. If the i-th and (i+1)th */
-/* > columns of VL hold a complex eigenvector, then IFAILL(i) and */
+/* > columns of VL hold a scomplex eigenvector, then IFAILL(i) and */
 /* > IFAILL(i+1) are set to the same value. */
 /* > If SIDE = 'R', IFAILL is not referenced. */
 /* > \endverbatim */
@@ -238,7 +238,7 @@ IFAILL(i) = 0 if the */
 /* > eigenvalue w(j)) failed to converge;
 IFAILR(i) = 0 if the */
 /* > eigenvector converged satisfactorily. If the i-th and (i+1)th */
-/* > columns of VR hold a complex eigenvector, then IFAILR(i) and */
+/* > columns of VR hold a scomplex eigenvector, then IFAILR(i) and */
 /* > IFAILR(i+1) are set to the same value. */
 /* > If SIDE = 'L', IFAILR is not referenced. */
 /* > \endverbatim */
@@ -268,45 +268,67 @@ see IFAILL and IFAILR for further */
 /* > */
 /* > Each eigenvector is normalized so that the element of largest */
 /* > magnitude has magnitude 1;
-here the magnitude of a complex number */
+here the magnitude of a scomplex number */
 /* > (x,y) is taken to be |x|+|y|. */
 /* > \endverbatim */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void shsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n, real *h__,
-             integer *ldh, real *wr, real *wi, real *vl, integer *ldvl, real *vr, integer *ldvr,
-             integer *mm, integer *m, real *work, integer *ifaill, integer *ifailr, integer *info)
+/** Generated wrapper function */
+void shsein_(char *side, char *eigsrc, char *initv, logical *select, aocl_int_t *n, real *h__,
+             aocl_int_t *ldh, real *wr, real *wi, real *vl, aocl_int_t *ldvl, real *vr,
+             aocl_int_t *ldvr, aocl_int_t *mm, aocl_int_t *m, real *work, aocl_int_t *ifaill,
+             aocl_int_t *ifailr, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_shsein(side, eigsrc, initv, select, n, h__, ldh, wr, wi, vl, ldvl, vr, ldvr, mm, m,
+                       work, ifaill, ifailr, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldh_64 = *ldh;
+    aocl_int64_t ldvl_64 = *ldvl;
+    aocl_int64_t ldvr_64 = *ldvr;
+    aocl_int64_t mm_64 = *mm;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_shsein(side, eigsrc, initv, select, &n_64, h__, &ldh_64, wr, wi, vl, &ldvl_64, vr,
+                       &ldvr_64, &mm_64, &m_64, work, ifaill, ifailr, &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_shsein(char *side, char *eigsrc, char *initv, logical *select, aocl_int64_t *n,
+                        real *h__, aocl_int64_t *ldh, real *wr, real *wi, real *vl,
+                        aocl_int64_t *ldvl, real *vr, aocl_int64_t *ldvr, aocl_int64_t *mm,
+                        aocl_int64_t *m, real *work, aocl_int_t *ifaill, aocl_int_t *ifailr,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("shsein inputs: side %c ,eigsrc %c ,initv %c ,n %" FLA_IS ",ldh %" FLA_IS
                       ",ldvl %" FLA_IS ",ldvr %" FLA_IS ",mm %" FLA_IS ",m %" FLA_IS "",
                       *side, *eigsrc, *initv, *n, *ldh, *ldvl, *ldvr, *mm, *m);
     /* System generated locals */
-    integer h_dim1, h_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2;
+    aocl_int64_t h_dim1, h_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2;
     real r__1, r__2;
     /* Local variables */
-    integer i__, k, kl, kr, kln, ksi;
+    aocl_int64_t i__, k, kl, kr, kln, ksi;
     real wki;
-    integer ksr;
+    aocl_int64_t ksr;
     real ulp, wkr, eps3;
     logical pair;
     real unfl;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical leftv, bothv;
     real hnorm;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        slaein_(logical *, logical *, integer *, real *, integer *, real *, real *, real *, real *,
-                real *, integer *, real *, real *, real *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
-    extern real slanhs_(char *, integer *, real *, integer *, real *);
     extern logical sisnan_(real *);
     logical noinit;
-    integer ldwork;
+    aocl_int64_t ldwork;
     logical rightv, fromqr;
     real smlnum;
     /* -- LAPACK computational routine (version 3.5.0) -- */
@@ -421,7 +443,7 @@ void shsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SHSEIN", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SHSEIN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -496,7 +518,7 @@ void shsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
                 /* Compute infinity-norm of submatrix H(KL:KR,KL:KR) if it */
                 /* has not ben computed before. */
                 i__2 = kr - kl + 1;
-                hnorm = slanhs_("I", &i__2, &h__[kl + kl * h_dim1], ldh, &work[1]);
+                hnorm = aocl_lapack_slanhs("I", &i__2, &h__[kl + kl * h_dim1], ldh, &work[1]);
                 if(sisnan_(&hnorm))
                 {
                     *info = -6;
@@ -544,9 +566,10 @@ void shsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
             {
                 /* Compute left eigenvector. */
                 i__2 = *n - kl + 1;
-                slaein_(&c_false, &noinit, &i__2, &h__[kl + kl * h_dim1], ldh, &wkr, &wki,
-                        &vl[kl + ksr * vl_dim1], &vl[kl + ksi * vl_dim1], &work[1], &ldwork,
-                        &work[*n * *n + *n + 1], &eps3, &smlnum, &bignum, &iinfo);
+                aocl_lapack_slaein(&c_false, &noinit, &i__2, &h__[kl + kl * h_dim1], ldh, &wkr,
+                                   &wki, &vl[kl + ksr * vl_dim1], &vl[kl + ksi * vl_dim1], &work[1],
+                                   &ldwork, &work[*n * *n + *n + 1], &eps3, &smlnum, &bignum,
+                                   &iinfo);
                 if(iinfo > 0)
                 {
                     if(pair)
@@ -557,8 +580,8 @@ void shsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
                     {
                         ++(*info);
                     }
-                    ifaill[ksr] = k;
-                    ifaill[ksi] = k;
+                    ifaill[ksr] = (aocl_int_t)(k);
+                    ifaill[ksi] = (aocl_int_t)(k);
                 }
                 else
                 {
@@ -584,9 +607,10 @@ void shsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
             if(rightv)
             {
                 /* Compute right eigenvector. */
-                slaein_(&c_true, &noinit, &kr, &h__[h_offset], ldh, &wkr, &wki,
-                        &vr[ksr * vr_dim1 + 1], &vr[ksi * vr_dim1 + 1], &work[1], &ldwork,
-                        &work[*n * *n + *n + 1], &eps3, &smlnum, &bignum, &iinfo);
+                aocl_lapack_slaein(&c_true, &noinit, &kr, &h__[h_offset], ldh, &wkr, &wki,
+                                   &vr[ksr * vr_dim1 + 1], &vr[ksi * vr_dim1 + 1], &work[1],
+                                   &ldwork, &work[*n * *n + *n + 1], &eps3, &smlnum, &bignum,
+                                   &iinfo);
                 if(iinfo > 0)
                 {
                     if(pair)
@@ -597,8 +621,8 @@ void shsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
                     {
                         ++(*info);
                     }
-                    ifailr[ksr] = k;
-                    ifailr[ksi] = k;
+                    ifailr[ksr] = (aocl_int_t)(k);
+                    ifailr[ksi] = (aocl_int_t)(k);
                 }
                 else
                 {

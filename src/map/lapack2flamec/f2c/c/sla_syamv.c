@@ -171,27 +171,42 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void sla_syamv_(integer *uplo, integer *n, real *alpha, real *a, integer *lda, real *x,
-                integer *incx, real *beta, real *y, integer *incy)
+/** Generated wrapper function */
+void sla_syamv_(aocl_int_t *uplo, aocl_int_t *n, real *alpha, real *a, aocl_int_t *lda, real *x,
+                aocl_int_t *incx, real *beta, real *y, aocl_int_t *incy)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sla_syamv(uplo, n, alpha, a, lda, x, incx, beta, y, incy);
+#else
+    aocl_int64_t uplo_64 = *uplo;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t incx_64 = *incx;
+    aocl_int64_t incy_64 = *incy;
+
+    aocl_lapack_sla_syamv(&uplo_64, &n_64, alpha, a, &lda_64, x, &incx_64, beta, y, &incy_64);
+#endif
+}
+
+void aocl_lapack_sla_syamv(aocl_int64_t *uplo, aocl_int64_t *n, real *alpha, real *a,
+                           aocl_int64_t *lda, real *x, aocl_int64_t *incx, real *beta, real *y,
+                           aocl_int64_t *incy)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sla_syamv inputs: uplo %" FLA_IS ",n %" FLA_IS ",lda %" FLA_IS
                       ",incx %" FLA_IS ",incy %" FLA_IS "",
                       *uplo, *n, *lda, *incx, *incy);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     real r__1;
     /* Builtin functions */
     double r_sign(real *, real *);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     logical symb_zero__;
-    integer iy, jx, kx, ky, info;
+    aocl_int64_t iy, jx, kx, ky, info;
     real temp, safe1;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern integer ilauplo_(char *);
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -244,7 +259,7 @@ void sla_syamv_(integer *uplo, integer *n, real *alpha, real *a, integer *lda, r
     }
     if(info != 0)
     {
-        xerbla_("SLA_SYAMV", &info, (ftnlen)9);
+        aocl_blas_xerbla("SLA_SYAMV", &info, (ftnlen)9);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

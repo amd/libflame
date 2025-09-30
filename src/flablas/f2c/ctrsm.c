@@ -1,23 +1,23 @@
 /* ctrsm.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Table of constant values */
-static complex c_b1 =
+static scomplex c_b1 =
 {
-    1.f,0.f
+    {1.f}, {0.f}
 }
 ;
 /* Subroutine */
-int ctrsm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer *n, complex *alpha, complex *a, integer *lda, complex *b, integer *ldb)
+int ctrsm_(char *side, char *uplo, char *transa, char *diag, integer *m, integer *n, scomplex *alpha, scomplex *a, integer *lda, scomplex *b, integer *ldb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7;
-    complex q__1, q__2, q__3;
+    scomplex q__1, q__2, q__3;
     /* Builtin functions */
-    void c_div(complex *, complex *, complex *), r_cnjg(complex *, complex *);
+    void c_div(scomplex *, scomplex *, scomplex *), r_cnjg(scomplex *, scomplex *);
     /* Local variables */
     integer info;
-    complex temp;
+    scomplex temp;
     integer i__, j, k;
     extern logical lsame_(char *, char *, integer, integer);
     logical lside;

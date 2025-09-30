@@ -6,8 +6,8 @@
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b7 = 0.;
 static doublereal c_b8 = 1.;
-static integer c__0 = 0;
-static integer c__1 = 1;
+static aocl_int64_t c__0 = 0;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DPTEQR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -147,34 +147,41 @@ static integer c__1 = 1;
 /* > \ingroup doublePTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal *z__, integer *ldz,
-             doublereal *work, integer *info)
+/** Generated wrapper function */
+void dpteqr_(char *compz, aocl_int_t *n, doublereal *d__, doublereal *e, doublereal *z__,
+             aocl_int_t *ldz, doublereal *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dpteqr(compz, n, d__, e, z__, ldz, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dpteqr(compz, &n_64, d__, e, z__, &ldz_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dpteqr(char *compz, aocl_int64_t *n, doublereal *d__, doublereal *e,
+                        doublereal *z__, aocl_int64_t *ldz, doublereal *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "", *compz, *n, *ldz);
     /* System generated locals */
-    integer z_dim1, z_offset, i__1;
+    aocl_int64_t z_dim1, z_offset, i__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     doublereal c__[1] /* was [1][1] */
         ;
-    integer i__;
+    aocl_int64_t i__;
     doublereal vt[1] /* was [1][1] */
         ;
-    integer nru;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        dbdsqr_(char *, integer *, integer *, integer *, integer *, doublereal *, doublereal *,
-                doublereal *, integer *, doublereal *, integer *, doublereal *, integer *,
-                doublereal *, integer *);
-    integer icompz;
-    extern /* Subroutine */
-        void
-        dpttrf_(integer *, doublereal *, doublereal *, integer *);
+    aocl_int64_t nru;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t icompz;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -238,7 +245,7 @@ void dpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DPTEQR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DPTEQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -259,10 +266,10 @@ void dpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
     }
     if(icompz == 2)
     {
-        dlaset_("Full", n, n, &c_b7, &c_b8, &z__[z_offset], ldz);
+        aocl_lapack_dlaset("Full", n, n, &c_b7, &c_b8, &z__[z_offset], ldz);
     }
     /* Call DPTTRF to factor the matrix. */
-    dpttrf_(n, &d__[1], &e[1], info);
+    aocl_lapack_dpttrf(n, &d__[1], &e[1], info);
     if(*info != 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
@@ -290,8 +297,8 @@ void dpteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublereal
     {
         nru = 0;
     }
-    dbdsqr_("Lower", n, &c__0, &nru, &c__0, &d__[1], &e[1], vt, &c__1, &z__[z_offset], ldz, c__,
-            &c__1, &work[1], info);
+    aocl_lapack_dbdsqr("Lower", n, &c__0, &nru, &c__0, &d__[1], &e[1], vt, &c__1, &z__[z_offset],
+                       ldz, c__, &c__1, &work[1], info);
     /* Square the singular values. */
     if(*info == 0)
     {

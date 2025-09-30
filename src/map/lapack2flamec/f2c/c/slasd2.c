@@ -9,7 +9,7 @@
  */
 
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b30 = 0.f;
 /* > \brief \b SLASD2 merges the two sets of singular values together into a single sorted set. Used
  * by sbdsdc . */
@@ -277,46 +277,62 @@ and entries in the second half */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slasd2_(integer *nl, integer *nr, integer *sqre, integer *k, real *d__, real *z__, real *alpha,
-             real *beta, real *u, integer *ldu, real *vt, integer *ldvt, real *dsigma, real *u2,
-             integer *ldu2, real *vt2, integer *ldvt2, integer *idxp, integer *idx, integer *idxc,
-             integer *idxq, integer *coltyp, integer *info)
+/** Generated wrapper function */
+void slasd2_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, aocl_int_t *k, real *d__, real *z__,
+             real *alpha, real *beta, real *u, aocl_int_t *ldu, real *vt, aocl_int_t *ldvt,
+             real *dsigma, real *u2, aocl_int_t *ldu2, real *vt2, aocl_int_t *ldvt2,
+             aocl_int_t *idxp, aocl_int_t *idx, aocl_int_t *idxc, aocl_int_t *idxq,
+             aocl_int_t *coltyp, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slasd2(nl, nr, sqre, k, d__, z__, alpha, beta, u, ldu, vt, ldvt, dsigma, u2, ldu2,
+                       vt2, ldvt2, idxp, idx, idxc, idxq, coltyp, info);
+#else
+    aocl_int64_t nl_64 = *nl;
+    aocl_int64_t nr_64 = *nr;
+    aocl_int64_t sqre_64 = *sqre;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldu_64 = *ldu;
+    aocl_int64_t ldvt_64 = *ldvt;
+    aocl_int64_t ldu2_64 = *ldu2;
+    aocl_int64_t ldvt2_64 = *ldvt2;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slasd2(&nl_64, &nr_64, &sqre_64, &k_64, d__, z__, alpha, beta, u, &ldu_64, vt,
+                       &ldvt_64, dsigma, u2, &ldu2_64, vt2, &ldvt2_64, idxp, idx, idxc, idxq,
+                       coltyp, &info_64);
+
+    *k = (aocl_int_t)k_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slasd2(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, aocl_int64_t *k,
+                        real *d__, real *z__, real *alpha, real *beta, real *u, aocl_int64_t *ldu,
+                        real *vt, aocl_int64_t *ldvt, real *dsigma, real *u2, aocl_int64_t *ldu2,
+                        real *vt2, aocl_int64_t *ldvt2, aocl_int_t *idxp, aocl_int_t *idx,
+                        aocl_int_t *idxc, aocl_int_t *idxq, aocl_int_t *coltyp, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slasd2 inputs: nl %" FLA_IS ",nr %" FLA_IS ",sqre %" FLA_IS ",ldu %" FLA_IS
                       ",ldvt %" FLA_IS ",ldu2 %" FLA_IS ",ldvt2 %" FLA_IS "",
                       *nl, *nr, *sqre, *ldu, *ldvt, *ldu2, *ldvt2);
     /* System generated locals */
-    integer u_dim1, u_offset, u2_dim1, u2_offset, vt_dim1, vt_offset, vt2_dim1, vt2_offset, i__1;
+    aocl_int64_t u_dim1, u_offset, u2_dim1, u2_offset, vt_dim1, vt_offset, vt2_dim1, vt2_offset,
+        i__1;
     real r__1, r__2;
     /* Local variables */
     real c__;
-    integer i__, j, m, n;
+    aocl_int64_t i__, j, m, n;
     real s;
-    integer k2;
+    aocl_int64_t k2;
     real z1;
-    integer ct, jp;
+    aocl_int64_t ct, jp;
     real eps, tau, tol;
-    integer psm[4], nlp1, nlp2, idxi, idxj, ctot[4];
-    extern /* Subroutine */
-        void
-        srot_(integer *, real *, integer *, real *, integer *, real *, real *);
-    integer idxjp, jprev;
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *);
+    aocl_int64_t psm[4], nlp1, nlp2, idxi, idxj, ctot[4];
+    aocl_int64_t idxjp, jprev;
     extern real slapy2_(real *, real *), slamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
     real hlftol;
-    extern /* Subroutine */
-        void
-        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
-        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -399,7 +415,7 @@ void slasd2_(integer *nl, integer *nr, integer *sqre, integer *k, real *d__, rea
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SLASD2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SLASD2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -441,7 +457,7 @@ void slasd2_(integer *nl, integer *nr, integer *sqre, integer *k, real *d__, rea
     i__1 = n;
     for(i__ = nlp2; i__ <= i__1; ++i__)
     {
-        idxq[i__] += nlp1;
+        idxq[i__] += (aocl_int_t)(nlp1);
         /* L50: */
     }
     /* DSIGMA, IDXC, IDXC, and the first column of U2 */
@@ -454,7 +470,7 @@ void slasd2_(integer *nl, integer *nr, integer *sqre, integer *k, real *d__, rea
         idxc[i__] = coltyp[idxq[i__]];
         /* L60: */
     }
-    slamrg_(nl, nr, &dsigma[2], &c__1, &c__1, &idx[2]);
+    aocl_lapack_slamrg(nl, nr, &dsigma[2], &c__1, &c__1, &idx[2]);
     i__1 = n;
     for(i__ = 2; i__ <= i__1; ++i__)
     {
@@ -497,7 +513,7 @@ void slasd2_(integer *nl, integer *nr, integer *sqre, integer *k, real *d__, rea
         {
             /* Deflate due to small z component. */
             --k2;
-            idxp[k2] = j;
+            idxp[k2] = (aocl_int_t)(j);
             coltyp[j] = 4;
             if(j == n)
             {
@@ -523,7 +539,7 @@ L100:
     {
         /* Deflate due to small z component. */
         --k2;
-        idxp[k2] = j;
+        idxp[k2] = (aocl_int_t)(j);
         coltyp[j] = 4;
     }
     else
@@ -553,15 +569,16 @@ L100:
             {
                 --idxj;
             }
-            srot_(&n, &u[idxjp * u_dim1 + 1], &c__1, &u[idxj * u_dim1 + 1], &c__1, &c__, &s);
-            srot_(&m, &vt[idxjp + vt_dim1], ldvt, &vt[idxj + vt_dim1], ldvt, &c__, &s);
+            aocl_blas_srot(&n, &u[idxjp * u_dim1 + 1], &c__1, &u[idxj * u_dim1 + 1], &c__1, &c__,
+                           &s);
+            aocl_blas_srot(&m, &vt[idxjp + vt_dim1], ldvt, &vt[idxj + vt_dim1], ldvt, &c__, &s);
             if(coltyp[j] != coltyp[jprev])
             {
                 coltyp[j] = 3;
             }
             coltyp[jprev] = 4;
             --k2;
-            idxp[k2] = jprev;
+            idxp[k2] = (aocl_int_t)(jprev);
             jprev = j;
         }
         else
@@ -569,7 +586,7 @@ L100:
             ++(*k);
             u2[*k + u2_dim1] = z__[jprev];
             dsigma[*k] = d__[jprev];
-            idxp[*k] = jprev;
+            idxp[*k] = (aocl_int_t)(jprev);
             jprev = j;
         }
     }
@@ -578,7 +595,7 @@ L110: /* Record the last singular value. */
     ++(*k);
     u2[*k + u2_dim1] = z__[jprev];
     dsigma[*k] = d__[jprev];
-    idxp[*k] = jprev;
+    idxp[*k] = (aocl_int_t)(jprev);
 L120: /* Count up the total number of the various types of columns, then */
     /* form a permutation which positions the four column types into */
     /* four groups of uniform structure (although one or more of these */
@@ -609,7 +626,7 @@ L120: /* Count up the total number of the various types of columns, then */
     {
         jp = idxp[j];
         ct = coltyp[jp];
-        idxc[psm[ct - 1]] = j;
+        idxc[psm[ct - 1]] = (aocl_int_t)(j);
         ++psm[ct - 1];
         /* L150: */
     }
@@ -629,8 +646,8 @@ L120: /* Count up the total number of the various types of columns, then */
         {
             --idxj;
         }
-        scopy_(&n, &u[idxj * u_dim1 + 1], &c__1, &u2[j * u2_dim1 + 1], &c__1);
-        scopy_(&m, &vt[idxj + vt_dim1], ldvt, &vt2[j + vt2_dim1], ldvt2);
+        aocl_blas_scopy(&n, &u[idxj * u_dim1 + 1], &c__1, &u2[j * u2_dim1 + 1], &c__1);
+        aocl_blas_scopy(&m, &vt[idxj + vt_dim1], ldvt, &vt2[j + vt2_dim1], ldvt2);
         /* L160: */
     }
     /* Determine DSIGMA(1), DSIGMA(2) and Z(1) */
@@ -668,10 +685,10 @@ L120: /* Count up the total number of the various types of columns, then */
     }
     /* Move the rest of the updating row to Z. */
     i__1 = *k - 1;
-    scopy_(&i__1, &u2[u2_dim1 + 2], &c__1, &z__[2], &c__1);
+    aocl_blas_scopy(&i__1, &u2[u2_dim1 + 2], &c__1, &z__[2], &c__1);
     /* Determine the first column of U2, the first row of VT2 and the */
     /* last row of VT. */
-    slaset_("A", &n, &c__1, &c_b30, &c_b30, &u2[u2_offset], ldu2);
+    aocl_lapack_slaset("A", &n, &c__1, &c_b30, &c_b30, &u2[u2_offset], ldu2);
     u2[nlp1 + u2_dim1] = 1.f;
     if(m > n)
     {
@@ -692,27 +709,29 @@ L120: /* Count up the total number of the various types of columns, then */
     }
     else
     {
-        scopy_(&m, &vt[nlp1 + vt_dim1], ldvt, &vt2[vt2_dim1 + 1], ldvt2);
+        aocl_blas_scopy(&m, &vt[nlp1 + vt_dim1], ldvt, &vt2[vt2_dim1 + 1], ldvt2);
     }
     if(m > n)
     {
-        scopy_(&m, &vt[m + vt_dim1], ldvt, &vt2[m + vt2_dim1], ldvt2);
+        aocl_blas_scopy(&m, &vt[m + vt_dim1], ldvt, &vt2[m + vt2_dim1], ldvt2);
     }
     /* The deflated singular values and their corresponding vectors go */
     /* into the back of D, U, and V respectively. */
     if(n > *k)
     {
         i__1 = n - *k;
-        scopy_(&i__1, &dsigma[*k + 1], &c__1, &d__[*k + 1], &c__1);
+        aocl_blas_scopy(&i__1, &dsigma[*k + 1], &c__1, &d__[*k + 1], &c__1);
         i__1 = n - *k;
-        slacpy_("A", &n, &i__1, &u2[(*k + 1) * u2_dim1 + 1], ldu2, &u[(*k + 1) * u_dim1 + 1], ldu);
+        aocl_lapack_slacpy("A", &n, &i__1, &u2[(*k + 1) * u2_dim1 + 1], ldu2,
+                           &u[(*k + 1) * u_dim1 + 1], ldu);
         i__1 = n - *k;
-        slacpy_("A", &i__1, &m, &vt2[*k + 1 + vt2_dim1], ldvt2, &vt[*k + 1 + vt_dim1], ldvt);
+        aocl_lapack_slacpy("A", &i__1, &m, &vt2[*k + 1 + vt2_dim1], ldvt2, &vt[*k + 1 + vt_dim1],
+                           ldvt);
     }
     /* Copy CTOT into COLTYP for referencing in SLASD3. */
     for(j = 1; j <= 4; ++j)
     {
-        coltyp[j] = ctot[j - 1];
+        coltyp[j] = (aocl_int_t)(ctot[j - 1]);
         /* L190: */
     }
     AOCL_DTL_TRACE_LOG_EXIT

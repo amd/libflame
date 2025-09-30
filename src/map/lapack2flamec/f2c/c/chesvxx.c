@@ -49,7 +49,7 @@
 /* > \verbatim */
 /* > */
 /* > CHESVXX uses the diagonal pivoting factorization to compute the */
-/* > solution to a complex system of linear equations A * X = B, where */
+/* > solution to a scomplex system of linear equations A * X = B, where */
 /* > A is an N-by-N Hermitian matrix and X and B are N-by-NRHS */
 /* > matrices. */
 /* > */
@@ -512,11 +512,11 @@ defaults */
 /* > \ingroup complexHEsolve */
 /* ===================================================================== */
 /* Subroutine */
-void chesvxx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *a, integer *lda,
-              complex *af, integer *ldaf, integer *ipiv, char *equed, real *s, complex *b,
-              integer *ldb, complex *x, integer *ldx, real *rcond, real *rpvgrw, real *berr,
+void chesvxx_(char *fact, char *uplo, integer *n, integer *nrhs, scomplex *a, integer *lda,
+              scomplex *af, integer *ldaf, integer *ipiv, char *equed, real *s, scomplex *b,
+              integer *ldb, scomplex *x, integer *ldx, real *rcond, real *rpvgrw, real *berr,
               integer *n_err_bnds__, real *err_bnds_norm__, real *err_bnds_comp__, integer *nparams,
-              real *params, complex *work, real *rwork, integer *info)
+              real *params, scomplex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -541,37 +541,37 @@ void chesvxx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *a, int
     /* Local variables */
     integer j;
     real amax, smin, smax;
-    extern real cla_herpvgrw_(char *, integer *, integer *, complex *, integer *, complex *,
+    extern real cla_herpvgrw_(char *, integer *, integer *, scomplex *, integer *, scomplex *,
                               integer *, integer *, real *);
     extern logical lsame_(char *, char *, integer, integer);
     real scond;
     logical equil, rcequ;
     extern /* Subroutine */
         void
-        claqhe_(char *, integer *, complex *, integer *, real *, real *, real *, char *);
+        claqhe_(char *, integer *, scomplex *, integer *, real *, real *, real *, char *);
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
         void
-        chetrf_(char *, integer *, complex *, integer *, integer *, complex *, integer *,
+        chetrf_(char *, integer *, scomplex *, integer *, integer *, scomplex *, integer *,
                 integer *),
-        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
+        clacpy_(char *, integer *, integer *, scomplex *, integer *, scomplex *, integer *),
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer infequ;
     extern /* Subroutine */
         void
-        chetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *,
+        chetrs_(char *, integer *, integer *, scomplex *, integer *, integer *, scomplex *, integer *,
                 integer *);
     real smlnum;
     extern /* Subroutine */
         void
-        clascl2_(integer *, integer *, real *, complex *, integer *),
-        cheequb_(char *, integer *, complex *, integer *, real *, real *, real *, complex *,
+        clascl2_(integer *, integer *, real *, scomplex *, integer *),
+        cheequb_(char *, integer *, scomplex *, integer *, real *, real *, real *, scomplex *,
                  integer *),
-        cherfsx_(char *, char *, integer *, integer *, complex *, integer *, complex *, integer *,
-                 integer *, real *, complex *, integer *, complex *, integer *, real *, real *,
-                 integer *, real *, real *, integer *, real *, complex *, real *, integer *);
+        cherfsx_(char *, char *, integer *, integer *, scomplex *, integer *, scomplex *, integer *,
+                 integer *, real *, scomplex *, integer *, scomplex *, integer *, real *, real *,
+                 integer *, real *, real *, integer *, real *, scomplex *, real *, integer *);
     /* -- LAPACK driver routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

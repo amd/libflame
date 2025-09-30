@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CTREXC */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -39,7 +39,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CTREXC reorders the Schur factorization of a complex matrix */
+/* > CTREXC reorders the Schur factorization of a scomplex matrix */
 /* > A = Q*T*Q**H, so that the diagonal element of T with row index IFST */
 /* > is moved to row ILST. */
 /* > */
@@ -125,8 +125,29 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void ctrexc_(char *compq, integer *n, complex *t, integer *ldt, complex *q, integer *ldq,
-             integer *ifst, integer *ilst, integer *info)
+/** Generated wrapper function */
+void ctrexc_(char *compq, aocl_int_t *n, scomplex *t, aocl_int_t *ldt, scomplex *q, aocl_int_t *ldq,
+             aocl_int_t *ifst, aocl_int_t *ilst, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ctrexc(compq, n, t, ldt, q, ldq, ifst, ilst, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t ifst_64 = *ifst;
+    aocl_int64_t ilst_64 = *ilst;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ctrexc(compq, &n_64, t, &ldt_64, q, &ldq_64, &ifst_64, &ilst_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ctrexc(char *compq, aocl_int64_t *n, scomplex *t, aocl_int64_t *ldt, scomplex *q,
+                        aocl_int64_t *ldq, aocl_int64_t *ifst, aocl_int64_t *ilst,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -142,21 +163,14 @@ void ctrexc_(char *compq, integer *n, complex *t, integer *ldt, complex *q, inte
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer q_dim1, q_offset, t_dim1, t_offset, i__1, i__2, i__3;
-    complex q__1;
+    aocl_int64_t q_dim1, q_offset, t_dim1, t_offset, i__1, i__2, i__3;
+    scomplex q__1;
     /* Local variables */
-    integer k, m1, m2, m3;
+    aocl_int64_t k, m1, m2, m3;
     real cs;
-    complex t11, t22, sn, temp;
-    extern /* Subroutine */
-        void
-        crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
-    extern logical lsame_(char *, char *, integer, integer);
+    scomplex t11, t22, sn, temp;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical wantq;
-    extern /* Subroutine */
-        void
-        clartg_(complex *, complex *, real *, complex *, complex *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -213,7 +227,7 @@ void ctrexc_(char *compq, integer *n, complex *t, integer *ldt, complex *q, inte
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CTREXC", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CTREXC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -256,13 +270,14 @@ void ctrexc_(char *compq, integer *n, complex *t, integer *ldt, complex *q, inte
         if(k + 2 <= *n)
         {
             i__3 = *n - k - 1;
-            crot_(&i__3, &t[k + (k + 2) * t_dim1], ldt, &t[k + 1 + (k + 2) * t_dim1], ldt, &cs,
-                  &sn);
+            aocl_lapack_crot(&i__3, &t[k + (k + 2) * t_dim1], ldt, &t[k + 1 + (k + 2) * t_dim1],
+                             ldt, &cs, &sn);
         }
         i__3 = k - 1;
         q__1.r = sn.r;
         q__1.i = -sn.i;
-        crot_(&i__3, &t[k * t_dim1 + 1], &c__1, &t[(k + 1) * t_dim1 + 1], &c__1, &cs, &q__1);
+        aocl_lapack_crot(&i__3, &t[k * t_dim1 + 1], &c__1, &t[(k + 1) * t_dim1 + 1], &c__1, &cs,
+                         &q__1);
         i__3 = k + k * t_dim1;
         t[i__3].r = t22.r;
         t[i__3].i = t22.i; // , expr subst
@@ -272,7 +287,8 @@ void ctrexc_(char *compq, integer *n, complex *t, integer *ldt, complex *q, inte
         if(wantq)
         {
             /* Accumulate transformation in the matrix Q. */
-            crot_(n, &q[k * q_dim1 + 1], &c__1, &q[(k + 1) * q_dim1 + 1], &c__1, &cs, &q__1);
+            aocl_lapack_crot(n, &q[k * q_dim1 + 1], &c__1, &q[(k + 1) * q_dim1 + 1], &c__1, &cs,
+                             &q__1);
         }
         /* L10: */
     }

@@ -35,42 +35,82 @@
   Note that the routine returns V**T, not V.
 */
 
-extern void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-extern int lapack_sgesvd(char *jobu, char *jobvt, integer *m, integer *n, real *a, integer *lda,
-                         real *s, real *u, integer *ldu, real *vt, integer *ldvt, real *work,
-                         integer *lwork, integer *info);
-extern int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n, doublereal *a,
-                         integer *lda, doublereal *s, doublereal *u, integer *ldu, doublereal *vt,
-                         integer *ldvt, doublereal *work, integer *lwork, integer *info);
-extern int sgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, float *a, integer *lda,
-                        float *s, float *u, integer *ldu, float *vt, integer *ldvt, float *work,
-                        integer *lwork, integer *info);
-extern int dgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, double *a, integer *lda,
-                        double *s, double *u, integer *ldu, double *vt, integer *ldvt, double *work,
-                        integer *lwork, integer *info);
-extern int cgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, scomplex *a, integer *lda,
-                        float *s, scomplex *u, integer *ldu, scomplex *vt, integer *ldvt,
-                        scomplex *work, integer *lwork, float *rwork, integer *info);
-extern int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, integer *lda,
-                        double *s, dcomplex *u, integer *ldu, dcomplex *vt, integer *ldvt,
-                        dcomplex *work, integer *lwork, double *rwork, integer *info);
+/** Generated wrapper function */
+void sgesvd_(char *jobu, char *jobv, aocl_int_t *m, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, real *buff_s, real *buff_U, aocl_int_t *ldim_U, real *buff_Vh, aocl_int_t *ldim_Vh, real *buff_w, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgesvd(jobu, jobv, m, n, buff_A, ldim_A, buff_s, buff_U, ldim_U, buff_Vh, ldim_Vh, buff_w, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t ldim_U_64 = *ldim_U;
+    aocl_int64_t ldim_Vh_64 = *ldim_Vh;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sgesvd(jobu, jobv, &m_64, &n_64, buff_A, &ldim_A_64, buff_s, buff_U, &ldim_U_64, buff_Vh, &ldim_Vh_64, buff_w, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dgesvd_(char *jobu, char *jobv, aocl_int_t *m, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_s, doublereal *buff_U, aocl_int_t *ldim_U, doublereal *buff_Vh, aocl_int_t *ldim_Vh, doublereal *buff_w, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgesvd(jobu, jobv, m, n, buff_A, ldim_A, buff_s, buff_U, ldim_U, buff_Vh, ldim_Vh, buff_w, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t ldim_U_64 = *ldim_U;
+    aocl_int64_t ldim_Vh_64 = *ldim_Vh;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgesvd(jobu, jobv, &m_64, &n_64, buff_A, &ldim_A_64, buff_s, buff_U, &ldim_U_64, buff_Vh, &ldim_Vh_64, buff_w, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+
+extern int lapack_sgesvd(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda,
+                         real *s, real *u, aocl_int64_t *ldu, real *vt, aocl_int64_t *ldvt, real *work,
+                         aocl_int64_t *lwork, aocl_int64_t *info);
+extern int lapack_dgesvd(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, doublereal *a,
+                         aocl_int64_t *lda, doublereal *s, doublereal *u, aocl_int64_t *ldu, doublereal *vt,
+                         aocl_int64_t *ldvt, doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info);
+extern int sgesvd_check(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, float *a, aocl_int64_t *lda,
+                        float *s, float *u, aocl_int64_t *ldu, float *vt, aocl_int64_t *ldvt, float *work,
+                        aocl_int64_t *lwork, aocl_int64_t *info);
+extern int dgesvd_check(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, double *a, aocl_int64_t *lda,
+                        double *s, double *u, aocl_int64_t *ldu, double *vt, aocl_int64_t *ldvt, double *work,
+                        aocl_int64_t *lwork, aocl_int64_t *info);
+extern int cgesvd_check(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                        float *s, scomplex *u, aocl_int64_t *ldu, scomplex *vt, aocl_int64_t *ldvt,
+                        scomplex *work, aocl_int64_t *lwork, float *rwork, aocl_int64_t *info);
+extern int zgesvd_check(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                        double *s, dcomplex *u, aocl_int64_t *ldu, dcomplex *vt, aocl_int64_t *ldvt,
+                        dcomplex *work, aocl_int64_t *lwork, double *rwork, aocl_int64_t *info);
 
 #define LAPACK_gesvd_real(prefix)                                                               \
-    void F77_##prefix##gesvd(                                                                   \
-        char *jobu, char *jobv, integer *m, integer *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-        integer * ldim_A, PREFIX2LAPACK_REALDEF(prefix) * buff_s,                               \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_U, integer * ldim_U,                               \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_Vh, integer * ldim_Vh,                             \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * lwork, integer * info)
+    void aocl_lapack_##prefix##gesvd(                                                                   \
+        char *jobu, char *jobv, aocl_int64_t *m, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
+        aocl_int64_t * ldim_A, PREFIX2LAPACK_REALDEF(prefix) * buff_s,                               \
+        PREFIX2LAPACK_TYPEDEF(prefix) * buff_U, aocl_int64_t * ldim_U,                               \
+        PREFIX2LAPACK_TYPEDEF(prefix) * buff_Vh, aocl_int64_t * ldim_Vh,                             \
+        PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * lwork, aocl_int64_t * info)
 
 #define LAPACK_gesvd_complex(prefix)                                                     \
-    void F77_##prefix##gesvd(char *jobu, char *jobv, integer *m, integer *n,             \
-                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, integer * ldim_A,   \
+    void F77_##prefix##gesvd(char *jobu, char *jobv, aocl_int64_t *m, aocl_int64_t *n,             \
+                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, aocl_int64_t * ldim_A,   \
                              PREFIX2LAPACK_REALDEF(prefix) * buff_s,                     \
-                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_U, integer * ldim_U,   \
-                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_Vh, integer * ldim_Vh, \
-                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * lwork,    \
-                             PREFIX2LAPACK_REALDEF(prefix) * buff_r, integer * info)
+                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_U, aocl_int64_t * ldim_U,   \
+                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_Vh, aocl_int64_t * ldim_Vh, \
+                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * lwork,    \
+                             PREFIX2LAPACK_REALDEF(prefix) * buff_r, aocl_int64_t * info)
 
 #define LAPACK_gesvd_body(prefix)                                                              \
     FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);                                     \
@@ -182,7 +222,7 @@ LAPACK_gesvd_real(d)
                       *jobu, *jobv, *m, *n, *ldim_A, *ldim_U, *ldim_Vh);
 #if FLA_ENABLE_AMD_OPT
     {
-        integer i__1;
+        aocl_int64_t i__1;
         /* Initialize global context data */
         aocl_fla_init();
 
@@ -194,7 +234,7 @@ LAPACK_gesvd_real(d)
             /* If the info is set to a negative value, it means that the
              * input parameters are invalid, so return. */
             i__1 = -(*info);
-            xerbla_("DGESVD", &i__1, (ftnlen)6);
+            aocl_blas_xerbla("DGESVD", &i__1, (ftnlen)6);
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

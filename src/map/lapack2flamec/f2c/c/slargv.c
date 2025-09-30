@@ -99,21 +99,38 @@
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void slargv_(integer *n, real *x, integer *incx, real *y, integer *incy, real *c__, integer *incc)
+/** Generated wrapper function */
+void slargv_(aocl_int_t *n, real *x, aocl_int_t *incx, real *y, aocl_int_t *incy, real *c__,
+             aocl_int_t *incc)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slargv(n, x, incx, y, incy, c__, incc);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+    aocl_int64_t incy_64 = *incy;
+    aocl_int64_t incc_64 = *incc;
+
+    aocl_lapack_slargv(&n_64, x, &incx_64, y, &incy_64, c__, &incc_64);
+#endif
+}
+
+void aocl_lapack_slargv(aocl_int64_t *n, real *x, aocl_int64_t *incx, real *y, aocl_int64_t *incy,
+                        real *c__, aocl_int64_t *incc)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slargv inputs: n %" FLA_IS ",incx %" FLA_IS ",incy %" FLA_IS ",incc %" FLA_IS
                       "",
                       *n, *incx, *incy, *incc);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     real f, g;
-    integer i__;
+    aocl_int64_t i__;
     real t;
-    integer ic, ix, iy;
+    aocl_int64_t ic, ix, iy;
     real tt;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

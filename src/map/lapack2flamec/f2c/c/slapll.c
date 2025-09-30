@@ -97,24 +97,34 @@
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void slapll_(integer *n, real *x, integer *incx, real *y, integer *incy, real *ssmin)
+/** Generated wrapper function */
+void slapll_(aocl_int_t *n, real *x, aocl_int_t *incx, real *y, aocl_int_t *incy, real *ssmin)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slapll(n, x, incx, y, incy, ssmin);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+    aocl_int64_t incy_64 = *incy;
+
+    aocl_lapack_slapll(&n_64, x, &incx_64, y, &incy_64, ssmin);
+#endif
+}
+
+void aocl_lapack_slapll(aocl_int64_t *n, real *x, aocl_int64_t *incx, real *y, aocl_int64_t *incy,
+                        real *ssmin)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slapll inputs: n %" FLA_IS ",incx %" FLA_IS ",incy %" FLA_IS "", *n, *incx,
                       *incy);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     /* Local variables */
     real c__, a11, a12, a22, tau;
-    extern real sdot_(integer *, real *, integer *, real *, integer *);
     extern /* Subroutine */
         void
         slas2_(real *, real *, real *, real *, real *);
     real ssmax;
-    extern /* Subroutine */
-        void
-        saxpy_(integer *, real *, real *, integer *, real *, integer *),
-        slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -145,13 +155,13 @@ void slapll_(integer *n, real *x, integer *incx, real *y, integer *incy, real *s
         return;
     }
     /* Compute the QR factorization of the N-by-2 matrix ( X Y ) */
-    slarfg_(n, &x[1], &x[*incx + 1], incx, &tau);
+    aocl_lapack_slarfg(n, &x[1], &x[*incx + 1], incx, &tau);
     a11 = x[1];
     x[1] = 1.f;
-    c__ = -tau * sdot_(n, &x[1], incx, &y[1], incy);
-    saxpy_(n, &c__, &x[1], incx, &y[1], incy);
+    c__ = -tau * aocl_blas_sdot(n, &x[1], incx, &y[1], incy);
+    aocl_blas_saxpy(n, &c__, &x[1], incx, &y[1], incy);
     i__1 = *n - 1;
-    slarfg_(&i__1, &y[*incy + 1], &y[(*incy << 1) + 1], incy, &tau);
+    aocl_lapack_slarfg(&i__1, &y[*incy + 1], &y[(*incy << 1) + 1], incy, &tau);
     a12 = y[1];
     a22 = y[*incy + 1];
     /* Compute the SVD of 2-by-2 Upper triangular matrix. */

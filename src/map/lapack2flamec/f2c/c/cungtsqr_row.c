@@ -4,10 +4,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static complex c_b2 = {0.f, 0.f};
-static integer c__0 = 0;
-static integer c__1 = 1;
+static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b2 = {{0.f}, {0.f}};
+static aocl_int64_t c__0 = 0;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CUNGTSQR_ROW */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -44,9 +44,9 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CUNGTSQR_ROW generates an M-by-N complex matrix Q_out with */
+/* > CUNGTSQR_ROW generates an M-by-N scomplex matrix Q_out with */
 /* > orthonormal columns from the output of CLATSQR. These N orthonormal */
-/* > columns are the first N columns of a product of complex unitary */
+/* > columns are the first N columns of a product of scomplex unitary */
 /* > matrices Q(k)_in of order M, which are returned by CLATSQR in */
 /* > a special format. */
 /* > */
@@ -189,27 +189,45 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cungtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, complex *a, integer *lda,
-                   complex *t, integer *ldt, complex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void cungtsqr_row_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *mb, aocl_int_t *nb, scomplex *a,
+                   aocl_int_t *lda, scomplex *t, aocl_int_t *ldt, scomplex *work, aocl_int_t *lwork,
+                   aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cungtsqr_row(m, n, mb, nb, a, lda, t, ldt, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t mb_64 = *mb;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cungtsqr_row(&m_64, &n_64, &mb_64, &nb_64, a, &lda_64, t, &ldt_64, work, &lwork_64,
+                             &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cungtsqr_row(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb, aocl_int64_t *nb,
+                              scomplex *a, aocl_int64_t *lda, scomplex *t, aocl_int64_t *ldt,
+                              scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4, i__5;
-    complex q__1;
+    aocl_int64_t a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4, i__5;
+    scomplex q__1;
     /* Local variables */
-    integer lworkopt, ib_bottom__, ib, kb, mb1, mb2, m_plus_one__, num_all_row_blocks__, imb, knb;
-    extern /* Subroutine */
-        void
-        clarfb_gett_(char *, integer *, integer *, integer *, complex *, integer *, complex *,
-                     integer *, complex *, integer *, complex *, integer *);
-    integer jb_t__, itmp;
-    complex dummy[1] /* was [1][1] */
+    aocl_int64_t lworkopt, ib_bottom__, ib, kb, mb1, mb2, m_plus_one__, num_all_row_blocks__, imb,
+        knb;
+    aocl_int64_t jb_t__, itmp;
+    scomplex dummy[1] /* was [1][1] */
         ;
-    extern /* Subroutine */
-        void
-        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
-    integer nblocal, kb_last__;
+    aocl_int64_t nblocal, kb_last__;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -288,7 +306,7 @@ void cungtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, complex *a,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CUNGTSQR_ROW", &i__1, (ftnlen)12);
+        aocl_blas_xerbla("CUNGTSQR_ROW", &i__1, (ftnlen)12);
         return;
     }
     else if(lquery)
@@ -310,7 +328,7 @@ void cungtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, complex *a,
     }
     /* (0) Set the upper-triangular part of the matrix A to zero and */
     /* its diagonal elements to one. */
-    claset_("U", m, n, &c_b2, &c_b1, &a[a_offset], lda);
+    aocl_lapack_claset("U", m, n, &c_b2, &c_b1, &a[a_offset], lda);
     /* KB_LAST is the column index of the last column block reflector */
     /* in the matrices T and V. */
     kb_last__ = (*n - 1) / nblocal * nblocal + 1;
@@ -358,8 +376,9 @@ void cungtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, complex *a,
                 i__5 = *n - kb + 1; // , expr subst
                 knb = fla_min(i__4, i__5);
                 i__4 = *n - kb + 1;
-                clarfb_gett_("I", &imb, &i__4, &knb, &t[(jb_t__ + kb - 1) * t_dim1 + 1], ldt,
-                             &a[kb + kb * a_dim1], lda, &a[ib + kb * a_dim1], lda, &work[1], &knb);
+                aocl_lapack_clarfb_gett("I", &imb, &i__4, &knb, &t[(jb_t__ + kb - 1) * t_dim1 + 1],
+                                        ldt, &a[kb + kb * a_dim1], lda, &a[ib + kb * a_dim1], lda,
+                                        &work[1], &knb);
             }
         }
     }
@@ -385,15 +404,16 @@ void cungtsqr_row_(integer *m, integer *n, integer *mb, integer *nb, complex *a,
             /* does not exist, hence we need to pass a dummy array */
             /* reference DUMMY(1,1) to B with LDDUMMY=1. */
             i__1 = *n - kb + 1;
-            clarfb_gett_("N", &c__0, &i__1, &knb, &t[kb * t_dim1 + 1], ldt, &a[kb + kb * a_dim1],
-                         lda, dummy, &c__1, &work[1], &knb);
+            aocl_lapack_clarfb_gett("N", &c__0, &i__1, &knb, &t[kb * t_dim1 + 1], ldt,
+                                    &a[kb + kb * a_dim1], lda, dummy, &c__1, &work[1], &knb);
         }
         else
         {
             i__1 = mb1 - kb - knb + 1;
             i__3 = *n - kb + 1;
-            clarfb_gett_("N", &i__1, &i__3, &knb, &t[kb * t_dim1 + 1], ldt, &a[kb + kb * a_dim1],
-                         lda, &a[kb + knb + kb * a_dim1], lda, &work[1], &knb);
+            aocl_lapack_clarfb_gett("N", &i__1, &i__3, &knb, &t[kb * t_dim1 + 1], ldt,
+                                    &a[kb + kb * a_dim1], lda, &a[kb + knb + kb * a_dim1], lda,
+                                    &work[1], &knb);
         }
     }
     q__1.r = (real)lworkopt;

@@ -37,7 +37,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZPTSV computes the solution to a complex system of linear equations */
+/* > ZPTSV computes the solution to a scomplex system of linear equations */
 /* > A*X = B, where A is an N-by-N Hermitian positive definite tridiagonal */
 /* > matrix, and X and B are N-by-NRHS matrices. */
 /* > */
@@ -110,24 +110,34 @@
 /* > \ingroup complex16PTsolve */
 /* ===================================================================== */
 /* Subroutine */
-void zptsv_(integer *n, integer *nrhs, doublereal *d__, doublecomplex *e, doublecomplex *b,
-            integer *ldb, integer *info)
+/** Generated wrapper function */
+void zptsv_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, dcomplex *e, dcomplex *b,
+            aocl_int_t *ldb, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zptsv(n, nrhs, d__, e, b, ldb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zptsv(&n_64, &nrhs_64, d__, e, b, &ldb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zptsv(aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *d__, dcomplex *e,
+                       dcomplex *b, aocl_int64_t *ldb, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zptsv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "", *n, *nrhs,
                       *ldb);
 
     /* System generated locals */
-    integer b_dim1, b_offset, i__1;
+    aocl_int64_t b_dim1, b_offset, i__1;
     /* Local variables */
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        zpttrf_(integer *, doublereal *, doublecomplex *, integer *),
-        zpttrs_(char *, integer *, integer *, doublereal *, doublecomplex *, doublecomplex *,
-                integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -166,16 +176,16 @@ void zptsv_(integer *n, integer *nrhs, doublereal *d__, doublecomplex *e, double
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZPTSV ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZPTSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute the L*D*L**H (or U**H*D*U) factorization of A. */
-    zpttrf_(n, &d__[1], &e[1], info);
+    aocl_lapack_zpttrf(n, &d__[1], &e[1], info);
     if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */
-        zpttrs_("Lower", n, nrhs, &d__[1], &e[1], &b[b_offset], ldb, info);
+        aocl_lapack_zpttrs("Lower", n, nrhs, &d__[1], &e[1], &b[b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

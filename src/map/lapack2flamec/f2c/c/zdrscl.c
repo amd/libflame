@@ -37,7 +37,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZDRSCL multiplies an n-element complex vector x by the real scalar */
+/* > ZDRSCL multiplies an n-element scomplex vector x by the real scalar */
 /* > 1/a. This is done without overflow or underflow as long as */
 /* > the final result x/a does not overflow or underflow. */
 /* > \endverbatim */
@@ -78,7 +78,20 @@
 /* > \ingroup rscl */
 /* ===================================================================== */
 /* Subroutine */
-void zdrscl_(integer *n, doublereal *sa, doublecomplex *sx, integer *incx)
+/** Generated wrapper function */
+void zdrscl_(aocl_int_t *n, doublereal *sa, dcomplex *sx, aocl_int_t *incx)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zdrscl(n, sa, sx, incx);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+
+    aocl_lapack_zdrscl(&n_64, sa, sx, &incx_64);
+#endif
+}
+
+void aocl_lapack_zdrscl(aocl_int64_t *n, doublereal *sa, dcomplex *sx, aocl_int64_t *incx)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zdrscl inputs: n %" FLA_IS ", incx %" FLA_IS " n", *n, *incx);
@@ -86,9 +99,6 @@ void zdrscl_(integer *n, doublereal *sa, doublecomplex *sx, integer *incx)
     logical done;
     doublereal cnum, cden1, cnum1;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal bignum, smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -148,7 +158,7 @@ L10:
         done = TRUE_;
     }
     /* Scale the vector X by MUL */
-    zdscal_(n, &mul, &sx[1], incx);
+    aocl_blas_zdscal(n, &mul, &sx[1], incx);
     if(!done)
     {
         goto L10;

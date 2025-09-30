@@ -18,27 +18,27 @@
      z   = z - beta  * x;
 */
 
-void bl1_sdotaxmyv2( integer       n,
+void bl1_sdotaxmyv2( fla_dim_t       n,
                      float*    alpha,
                      float*    beta,
-                     float*    x, integer inc_x,
-                     float*    u, integer inc_u,
+                     float*    x, fla_dim_t inc_x,
+                     float*    u, fla_dim_t inc_u,
                      float*    rho,
-                     float*    y, integer inc_y,
-                     float*    z, integer inc_z )
+                     float*    y, fla_dim_t inc_y,
+                     float*    z, fla_dim_t inc_z )
 {
 	bl1_abort();
 }
 
 
-void bl1_ddotaxmyv2( integer       n,
+void bl1_ddotaxmyv2( fla_dim_t       n,
                      double*   alpha,
                      double*   beta,
-                     double*   x, integer inc_x,
-                     double*   u, integer inc_u,
+                     double*   x, fla_dim_t inc_x,
+                     double*   u, fla_dim_t inc_u,
                      double*   rho,
-                     double*   y, integer inc_y,
-                     double*   z, integer inc_z )
+                     double*   y, fla_dim_t inc_y,
+                     double*   z, fla_dim_t inc_z )
 #if BLIS1_VECTOR_INTRINSIC_TYPE == BLIS1_SSE_INTRINSICS
 {
 	double*   restrict chi1;
@@ -46,11 +46,11 @@ void bl1_ddotaxmyv2( integer       n,
 	double*   restrict psi1;
 	double*   restrict zeta1;
 	double    rho_c;
-	integer       i;
+	fla_dim_t       i;
 
-	integer       n_pre;
-	integer       n_run;
-	integer       n_left;
+	fla_dim_t       n_pre;
+	fla_dim_t       n_run;
+	fla_dim_t       n_left;
 
 	v2df_t    a1v, b1v;
 	v2df_t    rho1v;
@@ -157,11 +157,11 @@ void bl1_ddotaxmyv2( integer       n,
 	double    alpha_c;
 	double    beta_c;
 	double    rho_c;
-	integer       i;
+	fla_dim_t       i;
 
-	integer       n_pre;
-	integer       n_run;
-	integer       n_left;
+	fla_dim_t       n_pre;
+	fla_dim_t       n_run;
+	fla_dim_t       n_left;
 
 	if ( inc_x != 1 ||
 	     inc_u != 1 ||
@@ -260,34 +260,34 @@ void bl1_ddotaxmyv2( integer       n,
 #endif
 
 
-void bl1_cdotaxmyv2( integer       n,
+void bl1_cdotaxmyv2( fla_dim_t       n,
                      scomplex* alpha,
                      scomplex* beta,
-                     scomplex* x, integer inc_x,
-                     scomplex* u, integer inc_u,
+                     scomplex* x, fla_dim_t inc_x,
+                     scomplex* u, fla_dim_t inc_u,
                      scomplex* rho,
-                     scomplex* y, integer inc_y,
-                     scomplex* z, integer inc_z )
+                     scomplex* y, fla_dim_t inc_y,
+                     scomplex* z, fla_dim_t inc_z )
 {
 	bl1_abort();
 }
 
 
-void bl1_zdotaxmyv2( integer       n,
+void bl1_zdotaxmyv2( fla_dim_t       n,
                      dcomplex* alpha,
                      dcomplex* beta,
-                     dcomplex* x, integer inc_x,
-                     dcomplex* u, integer inc_u,
+                     dcomplex* x, fla_dim_t inc_x,
+                     dcomplex* u, fla_dim_t inc_u,
                      dcomplex* rho,
-                     dcomplex* y, integer inc_y,
-                     dcomplex* z, integer inc_z )
+                     dcomplex* y, fla_dim_t inc_y,
+                     dcomplex* z, fla_dim_t inc_z )
 #if BLIS1_VECTOR_INTRINSIC_TYPE == BLIS1_SSE_INTRINSICS
 {
 	dcomplex* restrict chi1;
 	dcomplex* restrict upsilon1;
 	dcomplex* restrict psi1;
 	dcomplex* restrict zeta1;
-	integer       i;
+	fla_dim_t       i;
 
 	v2df_t alpha11v, alpha12v;
 	v2df_t beta11v,  beta12v;
@@ -373,7 +373,7 @@ void bl1_zdotaxmyv2( integer       n,
 	dcomplex  alpha_c;
 	dcomplex  beta_c;
 	dcomplex  rho_c;
-	integer       i;
+	fla_dim_t       i;
 
 	if ( inc_x != 1 ||
 	     inc_u != 1 ||

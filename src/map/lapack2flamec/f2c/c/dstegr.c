@@ -252,23 +252,47 @@ the */
 /* > Christof Voemel, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-void dstegr_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e, doublereal *vl,
-             doublereal *vu, integer *il, integer *iu, doublereal *abstol, integer *m,
-             doublereal *w, doublereal *z__, integer *ldz, integer *isuppz, doublereal *work,
-             integer *lwork, integer *iwork, integer *liwork, integer *info)
+/** Generated wrapper function */
+void dstegr_(char *jobz, char *range, aocl_int_t *n, doublereal *d__, doublereal *e, doublereal *vl,
+             doublereal *vu, aocl_int_t *il, aocl_int_t *iu, doublereal *abstol, aocl_int_t *m,
+             doublereal *w, doublereal *z__, aocl_int_t *ldz, aocl_int_t *isuppz, doublereal *work,
+             aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dstegr(jobz, range, n, d__, e, vl, vu, il, iu, abstol, m, w, z__, ldz, isuppz, work,
+                       lwork, iwork, liwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t il_64 = *il;
+    aocl_int64_t iu_64 = *iu;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t liwork_64 = *liwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dstegr(jobz, range, &n_64, d__, e, vl, vu, &il_64, &iu_64, abstol, &m_64, w, z__,
+                       &ldz_64, isuppz, work, &lwork_64, iwork, &liwork_64, &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dstegr(char *jobz, char *range, aocl_int64_t *n, doublereal *d__, doublereal *e,
+                        doublereal *vl, doublereal *vu, aocl_int64_t *il, aocl_int64_t *iu,
+                        doublereal *abstol, aocl_int64_t *m, doublereal *w, doublereal *z__,
+                        aocl_int64_t *ldz, aocl_int_t *isuppz, doublereal *work,
+                        aocl_int64_t *lwork, aocl_int_t *iwork, aocl_int64_t *liwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dstegr inputs: jobz %c, range %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS
                       ", ldz %" FLA_IS ", lwork %" FLA_IS ", liwork %" FLA_IS "",
                       *jobz, *range, *n, *il, *iu, *ldz, *lwork, *liwork);
     /* System generated locals */
-    integer z_dim1, z_offset;
+    aocl_int64_t z_dim1, z_offset;
     /* Local variables */
-    extern /* Subroutine */
-        void
-        dstemr_(char *, char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
-                integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                integer *, logical *, doublereal *, integer *, integer *, integer *, integer *);
     logical tryrac;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -297,8 +321,8 @@ void dstegr_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e
     /* Function Body */
     *info = 0;
     tryrac = FALSE_;
-    dstemr_(jobz, range, n, &d__[1], &e[1], vl, vu, il, iu, m, &w[1], &z__[z_offset], ldz, n,
-            &isuppz[1], &tryrac, &work[1], lwork, &iwork[1], liwork, info);
+    aocl_lapack_dstemr(jobz, range, n, &d__[1], &e[1], vl, vu, il, iu, m, &w[1], &z__[z_offset],
+                       ldz, n, &isuppz[1], &tryrac, &work[1], lwork, &iwork[1], liwork, info);
     /* End of DSTEGR */
     AOCL_DTL_TRACE_LOG_EXIT
     return;

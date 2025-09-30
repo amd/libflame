@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZPTCON */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -41,7 +41,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > ZPTCON computes the reciprocal of the condition number (in the */
-/* > 1-norm) of a complex Hermitian positive definite tridiagonal matrix */
+/* > 1-norm) of a scomplex Hermitian positive definite tridiagonal matrix */
 /* > using the factorization A = L*D*L**H or A = U**H*D*U computed by */
 /* > ZPTTRF. */
 /* > */
@@ -116,23 +116,35 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zptcon_(integer *n, doublereal *d__, doublecomplex *e, doublereal *anorm, doublereal *rcond,
-             doublereal *rwork, integer *info)
+/** Generated wrapper function */
+void zptcon_(aocl_int_t *n, doublereal *d__, dcomplex *e, doublereal *anorm, doublereal *rcond,
+             doublereal *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zptcon(n, d__, e, anorm, rcond, rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zptcon(&n_64, d__, e, anorm, rcond, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zptcon(aocl_int64_t *n, doublereal *d__, dcomplex *e, doublereal *anorm,
+                        doublereal *rcond, doublereal *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zptcon inputs: n %" FLA_IS ", anorm %lf", *n, *anorm);
 
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     doublereal d__1;
     /* Builtin functions */
-    double z_abs(doublecomplex *);
+    double z_abs(dcomplex *);
     /* Local variables */
-    integer i__, ix;
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, ix;
     doublereal ainvnm;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -172,7 +184,7 @@ void zptcon_(integer *n, doublereal *d__, doublecomplex *e, doublereal *anorm, d
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZPTCON", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZPTCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -220,7 +232,7 @@ void zptcon_(integer *n, doublereal *d__, doublecomplex *e, doublereal *anorm, d
         /* L30: */
     }
     /* Compute AINVNM = fla_max(x(i)), 1<=i<=n. */
-    ix = idamax_(n, &rwork[1], &c__1);
+    ix = aocl_blas_idamax(n, &rwork[1], &c__1);
     ainvnm = (d__1 = rwork[ix], f2c_dabs(d__1));
     /* Compute the reciprocal condition number. */
     if(ainvnm != 0.)

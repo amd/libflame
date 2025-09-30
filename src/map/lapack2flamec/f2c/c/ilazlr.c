@@ -72,12 +72,27 @@
 /* > \date September 2012 */
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
-integer ilazlr_(integer *m, integer *n, doublecomplex *a, integer *lda)
+/** Generated wrapper function */
+aocl_int_t ilazlr_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_ilazlr(m, n, a, lda);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+
+    return aocl_lapack_ilazlr(&m_64, &n_64, a, &lda_64);
+#endif
+}
+
+aocl_int64_t aocl_lapack_ilazlr(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a,
+                                aocl_int64_t *lda)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, ret_val, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, ret_val, i__1, i__2;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

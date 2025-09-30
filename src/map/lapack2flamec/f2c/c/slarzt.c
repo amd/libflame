@@ -5,7 +5,7 @@
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b8 = 0.f;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SLARZT forms the triangular factor T of a block reflector H = I - vtvH. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -186,25 +186,35 @@ the corresponding */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slarzt_(char *direct, char *storev, integer *n, integer *k, real *v, integer *ldv, real *tau,
-             real *t, integer *ldt)
+/** Generated wrapper function */
+void slarzt_(char *direct, char *storev, aocl_int_t *n, aocl_int_t *k, real *v, aocl_int_t *ldv,
+             real *tau, real *t, aocl_int_t *ldt)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slarzt(direct, storev, n, k, v, ldv, tau, t, ldt);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t ldt_64 = *ldt;
+
+    aocl_lapack_slarzt(direct, storev, &n_64, &k_64, v, &ldv_64, tau, t, &ldt_64);
+#endif
+}
+
+void aocl_lapack_slarzt(char *direct, char *storev, aocl_int64_t *n, aocl_int64_t *k, real *v,
+                        aocl_int64_t *ldv, real *tau, real *t, aocl_int64_t *ldt)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slarzt inputs: direct %c, storev %c, n %" FLA_IS ", k %" FLA_IS
                       ", ldv %" FLA_IS ", ldt %" FLA_IS "",
                       *direct, *storev, *n, *k, *ldv, *ldt);
     /* System generated locals */
-    integer t_dim1, t_offset, v_dim1, v_offset, i__1;
+    aocl_int64_t t_dim1, t_offset, v_dim1, v_offset, i__1;
     real r__1;
     /* Local variables */
-    integer i__, j, info;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
-               real *, integer *),
-        strmv_(char *, char *, char *, integer *, real *, integer *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, j, info;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -245,7 +255,7 @@ void slarzt_(char *direct, char *storev, integer *n, integer *k, real *v, intege
     if(info != 0)
     {
         i__1 = -info;
-        xerbla_("SLARZT", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SLARZT", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -269,12 +279,13 @@ void slarzt_(char *direct, char *storev, integer *n, integer *k, real *v, intege
                 /* T(i+1:k,i) = - tau(i) * V(i+1:k,1:n) * V(i,1:n)**T */
                 i__1 = *k - i__;
                 r__1 = -tau[i__];
-                sgemv_("No transpose", &i__1, n, &r__1, &v[i__ + 1 + v_dim1], ldv, &v[i__ + v_dim1],
-                       ldv, &c_b8, &t[i__ + 1 + i__ * t_dim1], &c__1);
+                aocl_blas_sgemv("No transpose", &i__1, n, &r__1, &v[i__ + 1 + v_dim1], ldv,
+                                &v[i__ + v_dim1], ldv, &c_b8, &t[i__ + 1 + i__ * t_dim1], &c__1);
                 /* T(i+1:k,i) = T(i+1:k,i+1:k) * T(i+1:k,i) */
                 i__1 = *k - i__;
-                strmv_("Lower", "No transpose", "Non-unit", &i__1, &t[i__ + 1 + (i__ + 1) * t_dim1],
-                       ldt, &t[i__ + 1 + i__ * t_dim1], &c__1);
+                aocl_blas_strmv("Lower", "No transpose", "Non-unit", &i__1,
+                                &t[i__ + 1 + (i__ + 1) * t_dim1], ldt, &t[i__ + 1 + i__ * t_dim1],
+                                &c__1);
             }
             t[i__ + i__ * t_dim1] = tau[i__];
         }

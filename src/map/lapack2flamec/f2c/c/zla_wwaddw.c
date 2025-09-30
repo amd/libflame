@@ -76,16 +76,28 @@
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zla_wwaddw_(integer *n, doublecomplex *x, doublecomplex *y, doublecomplex *w)
+/** Generated wrapper function */
+void zla_wwaddw_(aocl_int_t *n, dcomplex *x, dcomplex *y, dcomplex *w)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zla_wwaddw(n, x, y, w);
+#else
+    aocl_int64_t n_64 = *n;
+
+    aocl_lapack_zla_wwaddw(&n_64, x, y, w);
+#endif
+}
+
+void aocl_lapack_zla_wwaddw(aocl_int64_t *n, dcomplex *x, dcomplex *y, dcomplex *w)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zla_wwaddw inputs: n %" FLA_IS "", *n);
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4, i__5;
-    doublecomplex z__1, z__2, z__3;
+    aocl_int64_t i__1, i__2, i__3, i__4, i__5;
+    dcomplex z__1, z__2, z__3;
     /* Local variables */
-    integer i__;
-    doublecomplex s;
+    aocl_int64_t i__;
+    dcomplex s;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

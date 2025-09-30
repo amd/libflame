@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b14 = 1.f;
 static real c_b25 = -1.f;
 /* > \brief \b SLARFB applies a block reflector or its transpose to a general rectangular matrix. */
@@ -197,9 +197,32 @@ the corresponding */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slarfb_(char *side, char *trans, char *direct, char *storev, integer *m, integer *n,
-             integer *k, real *v, integer *ldv, real *t, integer *ldt, real *c__, integer *ldc,
-             real *work, integer *ldwork)
+/** Generated wrapper function */
+void slarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m, aocl_int_t *n,
+             aocl_int_t *k, real *v, aocl_int_t *ldv, real *t, aocl_int_t *ldt, real *c__,
+             aocl_int_t *ldc, real *work, aocl_int_t *ldwork)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slarfb(side, trans, direct, storev, m, n, k, v, ldv, t, ldt, c__, ldc, work,
+                       ldwork);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t ldwork_64 = *ldwork;
+
+    aocl_lapack_slarfb(side, trans, direct, storev, &m_64, &n_64, &k_64, v, &ldv_64, t, &ldt_64,
+                       c__, &ldc_64, work, &ldwork_64);
+#endif
+}
+
+void aocl_lapack_slarfb(char *side, char *trans, char *direct, char *storev, aocl_int64_t *m,
+                        aocl_int64_t *n, aocl_int64_t *k, real *v, aocl_int64_t *ldv, real *t,
+                        aocl_int64_t *ldt, real *c__, aocl_int64_t *ldc, real *work,
+                        aocl_int64_t *ldwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slarfb inputs: side %c, trans %c, direct %c, storev %c, m %" FLA_IS
@@ -207,18 +230,11 @@ void slarfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                       "ldt %" FLA_IS ", ldc %" FLA_IS "",
                       *side, *trans, *direct, *storev, *m, *n, *k, *ldv, *ldt, *ldc);
     /* System generated locals */
-    integer c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1,
+    aocl_int64_t c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1,
         i__2;
     /* Local variables */
-    integer i__, j;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
-               integer *, real *, real *, integer *),
-        scopy_(integer *, real *, integer *, real *, integer *),
-        strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
-               real *, integer *);
+    aocl_int64_t i__, j;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     char transt[1];
     /* -- LAPACK auxiliary routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -282,33 +298,35 @@ void slarfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
                 {
-                    scopy_(n, &c__[j + c_dim1], ldc, &work[j * work_dim1 + 1], &c__1);
+                    aocl_blas_scopy(n, &c__[j + c_dim1], ldc, &work[j * work_dim1 + 1], &c__1);
                     /* L10: */
                 }
                 /* W := W * V1 */
-                strmm_("Right", "Lower", "No transpose", "Unit", n, k, &c_b14, &v[v_offset], ldv,
-                       &work[work_offset], ldwork);
+                aocl_blas_strmm("Right", "Lower", "No transpose", "Unit", n, k, &c_b14,
+                                &v[v_offset], ldv, &work[work_offset], ldwork);
                 if(*m > *k)
                 {
                     /* W := W + C2**T * V2 */
                     i__1 = *m - *k;
-                    sgemm_("Transpose", "No transpose", n, k, &i__1, &c_b14, &c__[*k + 1 + c_dim1],
-                           ldc, &v[*k + 1 + v_dim1], ldv, &c_b14, &work[work_offset], ldwork);
+                    aocl_blas_sgemm("Transpose", "No transpose", n, k, &i__1, &c_b14,
+                                    &c__[*k + 1 + c_dim1], ldc, &v[*k + 1 + v_dim1], ldv, &c_b14,
+                                    &work[work_offset], ldwork);
                 }
                 /* W := W * T**T or W * T */
-                strmm_("Right", "Upper", transt, "Non-unit", n, k, &c_b14, &t[t_offset], ldt,
-                       &work[work_offset], ldwork);
+                aocl_blas_strmm("Right", "Upper", transt, "Non-unit", n, k, &c_b14, &t[t_offset],
+                                ldt, &work[work_offset], ldwork);
                 /* C := C - V * W**T */
                 if(*m > *k)
                 {
                     /* C2 := C2 - V2 * W**T */
                     i__1 = *m - *k;
-                    sgemm_("No transpose", "Transpose", &i__1, n, k, &c_b25, &v[*k + 1 + v_dim1],
-                           ldv, &work[work_offset], ldwork, &c_b14, &c__[*k + 1 + c_dim1], ldc);
+                    aocl_blas_sgemm("No transpose", "Transpose", &i__1, n, k, &c_b25,
+                                    &v[*k + 1 + v_dim1], ldv, &work[work_offset], ldwork, &c_b14,
+                                    &c__[*k + 1 + c_dim1], ldc);
                 }
                 /* W := W * V1**T */
-                strmm_("Right", "Lower", "Transpose", "Unit", n, k, &c_b14, &v[v_offset], ldv,
-                       &work[work_offset], ldwork);
+                aocl_blas_strmm("Right", "Lower", "Transpose", "Unit", n, k, &c_b14, &v[v_offset],
+                                ldv, &work[work_offset], ldwork);
                 /* C1 := C1 - W**T */
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
@@ -330,35 +348,36 @@ void slarfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
                 {
-                    scopy_(m, &c__[j * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1], &c__1);
+                    aocl_blas_scopy(m, &c__[j * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1],
+                                    &c__1);
                     /* L40: */
                 }
                 /* W := W * V1 */
-                strmm_("Right", "Lower", "No transpose", "Unit", m, k, &c_b14, &v[v_offset], ldv,
-                       &work[work_offset], ldwork);
+                aocl_blas_strmm("Right", "Lower", "No transpose", "Unit", m, k, &c_b14,
+                                &v[v_offset], ldv, &work[work_offset], ldwork);
                 if(*n > *k)
                 {
                     /* W := W + C2 * V2 */
                     i__1 = *n - *k;
-                    sgemm_("No transpose", "No transpose", m, k, &i__1, &c_b14,
-                           &c__[(*k + 1) * c_dim1 + 1], ldc, &v[*k + 1 + v_dim1], ldv, &c_b14,
-                           &work[work_offset], ldwork);
+                    aocl_blas_sgemm("No transpose", "No transpose", m, k, &i__1, &c_b14,
+                                    &c__[(*k + 1) * c_dim1 + 1], ldc, &v[*k + 1 + v_dim1], ldv,
+                                    &c_b14, &work[work_offset], ldwork);
                 }
                 /* W := W * T or W * T**T */
-                strmm_("Right", "Upper", trans, "Non-unit", m, k, &c_b14, &t[t_offset], ldt,
-                       &work[work_offset], ldwork);
+                aocl_blas_strmm("Right", "Upper", trans, "Non-unit", m, k, &c_b14, &t[t_offset],
+                                ldt, &work[work_offset], ldwork);
                 /* C := C - W * V**T */
                 if(*n > *k)
                 {
                     /* C2 := C2 - W * V2**T */
                     i__1 = *n - *k;
-                    sgemm_("No transpose", "Transpose", m, &i__1, k, &c_b25, &work[work_offset],
-                           ldwork, &v[*k + 1 + v_dim1], ldv, &c_b14, &c__[(*k + 1) * c_dim1 + 1],
-                           ldc);
+                    aocl_blas_sgemm("No transpose", "Transpose", m, &i__1, k, &c_b25,
+                                    &work[work_offset], ldwork, &v[*k + 1 + v_dim1], ldv, &c_b14,
+                                    &c__[(*k + 1) * c_dim1 + 1], ldc);
                 }
                 /* W := W * V1**T */
-                strmm_("Right", "Lower", "Transpose", "Unit", m, k, &c_b14, &v[v_offset], ldv,
-                       &work[work_offset], ldwork);
+                aocl_blas_strmm("Right", "Lower", "Transpose", "Unit", m, k, &c_b14, &v[v_offset],
+                                ldv, &work[work_offset], ldwork);
                 /* C1 := C1 - W */
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
@@ -387,33 +406,35 @@ void slarfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
                 {
-                    scopy_(n, &c__[*m - *k + j + c_dim1], ldc, &work[j * work_dim1 + 1], &c__1);
+                    aocl_blas_scopy(n, &c__[*m - *k + j + c_dim1], ldc, &work[j * work_dim1 + 1],
+                                    &c__1);
                     /* L70: */
                 }
                 /* W := W * V2 */
-                strmm_("Right", "Upper", "No transpose", "Unit", n, k, &c_b14,
-                       &v[*m - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
+                aocl_blas_strmm("Right", "Upper", "No transpose", "Unit", n, k, &c_b14,
+                                &v[*m - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
                 if(*m > *k)
                 {
                     /* W := W + C1**T * V1 */
                     i__1 = *m - *k;
-                    sgemm_("Transpose", "No transpose", n, k, &i__1, &c_b14, &c__[c_offset], ldc,
-                           &v[v_offset], ldv, &c_b14, &work[work_offset], ldwork);
+                    aocl_blas_sgemm("Transpose", "No transpose", n, k, &i__1, &c_b14,
+                                    &c__[c_offset], ldc, &v[v_offset], ldv, &c_b14,
+                                    &work[work_offset], ldwork);
                 }
                 /* W := W * T**T or W * T */
-                strmm_("Right", "Lower", transt, "Non-unit", n, k, &c_b14, &t[t_offset], ldt,
-                       &work[work_offset], ldwork);
+                aocl_blas_strmm("Right", "Lower", transt, "Non-unit", n, k, &c_b14, &t[t_offset],
+                                ldt, &work[work_offset], ldwork);
                 /* C := C - V * W**T */
                 if(*m > *k)
                 {
                     /* C1 := C1 - V1 * W**T */
                     i__1 = *m - *k;
-                    sgemm_("No transpose", "Transpose", &i__1, n, k, &c_b25, &v[v_offset], ldv,
-                           &work[work_offset], ldwork, &c_b14, &c__[c_offset], ldc);
+                    aocl_blas_sgemm("No transpose", "Transpose", &i__1, n, k, &c_b25, &v[v_offset],
+                                    ldv, &work[work_offset], ldwork, &c_b14, &c__[c_offset], ldc);
                 }
                 /* W := W * V2**T */
-                strmm_("Right", "Upper", "Transpose", "Unit", n, k, &c_b14,
-                       &v[*m - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
+                aocl_blas_strmm("Right", "Upper", "Transpose", "Unit", n, k, &c_b14,
+                                &v[*m - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
                 /* C2 := C2 - W**T */
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
@@ -435,34 +456,36 @@ void slarfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
                 {
-                    scopy_(m, &c__[(*n - *k + j) * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1],
-                           &c__1);
+                    aocl_blas_scopy(m, &c__[(*n - *k + j) * c_dim1 + 1], &c__1,
+                                    &work[j * work_dim1 + 1], &c__1);
                     /* L100: */
                 }
                 /* W := W * V2 */
-                strmm_("Right", "Upper", "No transpose", "Unit", m, k, &c_b14,
-                       &v[*n - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
+                aocl_blas_strmm("Right", "Upper", "No transpose", "Unit", m, k, &c_b14,
+                                &v[*n - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
                 if(*n > *k)
                 {
                     /* W := W + C1 * V1 */
                     i__1 = *n - *k;
-                    sgemm_("No transpose", "No transpose", m, k, &i__1, &c_b14, &c__[c_offset], ldc,
-                           &v[v_offset], ldv, &c_b14, &work[work_offset], ldwork);
+                    aocl_blas_sgemm("No transpose", "No transpose", m, k, &i__1, &c_b14,
+                                    &c__[c_offset], ldc, &v[v_offset], ldv, &c_b14,
+                                    &work[work_offset], ldwork);
                 }
                 /* W := W * T or W * T**T */
-                strmm_("Right", "Lower", trans, "Non-unit", m, k, &c_b14, &t[t_offset], ldt,
-                       &work[work_offset], ldwork);
+                aocl_blas_strmm("Right", "Lower", trans, "Non-unit", m, k, &c_b14, &t[t_offset],
+                                ldt, &work[work_offset], ldwork);
                 /* C := C - W * V**T */
                 if(*n > *k)
                 {
                     /* C1 := C1 - W * V1**T */
                     i__1 = *n - *k;
-                    sgemm_("No transpose", "Transpose", m, &i__1, k, &c_b25, &work[work_offset],
-                           ldwork, &v[v_offset], ldv, &c_b14, &c__[c_offset], ldc);
+                    aocl_blas_sgemm("No transpose", "Transpose", m, &i__1, k, &c_b25,
+                                    &work[work_offset], ldwork, &v[v_offset], ldv, &c_b14,
+                                    &c__[c_offset], ldc);
                 }
                 /* W := W * V2**T */
-                strmm_("Right", "Upper", "Transpose", "Unit", m, k, &c_b14,
-                       &v[*n - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
+                aocl_blas_strmm("Right", "Upper", "Transpose", "Unit", m, k, &c_b14,
+                                &v[*n - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
                 /* C2 := C2 - W */
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
@@ -493,33 +516,35 @@ void slarfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
                 {
-                    scopy_(n, &c__[j + c_dim1], ldc, &work[j * work_dim1 + 1], &c__1);
+                    aocl_blas_scopy(n, &c__[j + c_dim1], ldc, &work[j * work_dim1 + 1], &c__1);
                     /* L130: */
                 }
                 /* W := W * V1**T */
-                strmm_("Right", "Upper", "Transpose", "Unit", n, k, &c_b14, &v[v_offset], ldv,
-                       &work[work_offset], ldwork);
+                aocl_blas_strmm("Right", "Upper", "Transpose", "Unit", n, k, &c_b14, &v[v_offset],
+                                ldv, &work[work_offset], ldwork);
                 if(*m > *k)
                 {
                     /* W := W + C2**T * V2**T */
                     i__1 = *m - *k;
-                    sgemm_("Transpose", "Transpose", n, k, &i__1, &c_b14, &c__[*k + 1 + c_dim1],
-                           ldc, &v[(*k + 1) * v_dim1 + 1], ldv, &c_b14, &work[work_offset], ldwork);
+                    aocl_blas_sgemm("Transpose", "Transpose", n, k, &i__1, &c_b14,
+                                    &c__[*k + 1 + c_dim1], ldc, &v[(*k + 1) * v_dim1 + 1], ldv,
+                                    &c_b14, &work[work_offset], ldwork);
                 }
                 /* W := W * T**T or W * T */
-                strmm_("Right", "Upper", transt, "Non-unit", n, k, &c_b14, &t[t_offset], ldt,
-                       &work[work_offset], ldwork);
+                aocl_blas_strmm("Right", "Upper", transt, "Non-unit", n, k, &c_b14, &t[t_offset],
+                                ldt, &work[work_offset], ldwork);
                 /* C := C - V**T * W**T */
                 if(*m > *k)
                 {
                     /* C2 := C2 - V2**T * W**T */
                     i__1 = *m - *k;
-                    sgemm_("Transpose", "Transpose", &i__1, n, k, &c_b25, &v[(*k + 1) * v_dim1 + 1],
-                           ldv, &work[work_offset], ldwork, &c_b14, &c__[*k + 1 + c_dim1], ldc);
+                    aocl_blas_sgemm("Transpose", "Transpose", &i__1, n, k, &c_b25,
+                                    &v[(*k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork,
+                                    &c_b14, &c__[*k + 1 + c_dim1], ldc);
                 }
                 /* W := W * V1 */
-                strmm_("Right", "Upper", "No transpose", "Unit", n, k, &c_b14, &v[v_offset], ldv,
-                       &work[work_offset], ldwork);
+                aocl_blas_strmm("Right", "Upper", "No transpose", "Unit", n, k, &c_b14,
+                                &v[v_offset], ldv, &work[work_offset], ldwork);
                 /* C1 := C1 - W**T */
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
@@ -541,35 +566,36 @@ void slarfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
                 {
-                    scopy_(m, &c__[j * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1], &c__1);
+                    aocl_blas_scopy(m, &c__[j * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1],
+                                    &c__1);
                     /* L160: */
                 }
                 /* W := W * V1**T */
-                strmm_("Right", "Upper", "Transpose", "Unit", m, k, &c_b14, &v[v_offset], ldv,
-                       &work[work_offset], ldwork);
+                aocl_blas_strmm("Right", "Upper", "Transpose", "Unit", m, k, &c_b14, &v[v_offset],
+                                ldv, &work[work_offset], ldwork);
                 if(*n > *k)
                 {
                     /* W := W + C2 * V2**T */
                     i__1 = *n - *k;
-                    sgemm_("No transpose", "Transpose", m, k, &i__1, &c_b14,
-                           &c__[(*k + 1) * c_dim1 + 1], ldc, &v[(*k + 1) * v_dim1 + 1], ldv, &c_b14,
-                           &work[work_offset], ldwork);
+                    aocl_blas_sgemm("No transpose", "Transpose", m, k, &i__1, &c_b14,
+                                    &c__[(*k + 1) * c_dim1 + 1], ldc, &v[(*k + 1) * v_dim1 + 1],
+                                    ldv, &c_b14, &work[work_offset], ldwork);
                 }
                 /* W := W * T or W * T**T */
-                strmm_("Right", "Upper", trans, "Non-unit", m, k, &c_b14, &t[t_offset], ldt,
-                       &work[work_offset], ldwork);
+                aocl_blas_strmm("Right", "Upper", trans, "Non-unit", m, k, &c_b14, &t[t_offset],
+                                ldt, &work[work_offset], ldwork);
                 /* C := C - W * V */
                 if(*n > *k)
                 {
                     /* C2 := C2 - W * V2 */
                     i__1 = *n - *k;
-                    sgemm_("No transpose", "No transpose", m, &i__1, k, &c_b25, &work[work_offset],
-                           ldwork, &v[(*k + 1) * v_dim1 + 1], ldv, &c_b14,
-                           &c__[(*k + 1) * c_dim1 + 1], ldc);
+                    aocl_blas_sgemm("No transpose", "No transpose", m, &i__1, k, &c_b25,
+                                    &work[work_offset], ldwork, &v[(*k + 1) * v_dim1 + 1], ldv,
+                                    &c_b14, &c__[(*k + 1) * c_dim1 + 1], ldc);
                 }
                 /* W := W * V1 */
-                strmm_("Right", "Upper", "No transpose", "Unit", m, k, &c_b14, &v[v_offset], ldv,
-                       &work[work_offset], ldwork);
+                aocl_blas_strmm("Right", "Upper", "No transpose", "Unit", m, k, &c_b14,
+                                &v[v_offset], ldv, &work[work_offset], ldwork);
                 /* C1 := C1 - W */
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
@@ -597,33 +623,34 @@ void slarfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
                 {
-                    scopy_(n, &c__[*m - *k + j + c_dim1], ldc, &work[j * work_dim1 + 1], &c__1);
+                    aocl_blas_scopy(n, &c__[*m - *k + j + c_dim1], ldc, &work[j * work_dim1 + 1],
+                                    &c__1);
                     /* L190: */
                 }
                 /* W := W * V2**T */
-                strmm_("Right", "Lower", "Transpose", "Unit", n, k, &c_b14,
-                       &v[(*m - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
+                aocl_blas_strmm("Right", "Lower", "Transpose", "Unit", n, k, &c_b14,
+                                &v[(*m - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
                 if(*m > *k)
                 {
                     /* W := W + C1**T * V1**T */
                     i__1 = *m - *k;
-                    sgemm_("Transpose", "Transpose", n, k, &i__1, &c_b14, &c__[c_offset], ldc,
-                           &v[v_offset], ldv, &c_b14, &work[work_offset], ldwork);
+                    aocl_blas_sgemm("Transpose", "Transpose", n, k, &i__1, &c_b14, &c__[c_offset],
+                                    ldc, &v[v_offset], ldv, &c_b14, &work[work_offset], ldwork);
                 }
                 /* W := W * T**T or W * T */
-                strmm_("Right", "Lower", transt, "Non-unit", n, k, &c_b14, &t[t_offset], ldt,
-                       &work[work_offset], ldwork);
+                aocl_blas_strmm("Right", "Lower", transt, "Non-unit", n, k, &c_b14, &t[t_offset],
+                                ldt, &work[work_offset], ldwork);
                 /* C := C - V**T * W**T */
                 if(*m > *k)
                 {
                     /* C1 := C1 - V1**T * W**T */
                     i__1 = *m - *k;
-                    sgemm_("Transpose", "Transpose", &i__1, n, k, &c_b25, &v[v_offset], ldv,
-                           &work[work_offset], ldwork, &c_b14, &c__[c_offset], ldc);
+                    aocl_blas_sgemm("Transpose", "Transpose", &i__1, n, k, &c_b25, &v[v_offset],
+                                    ldv, &work[work_offset], ldwork, &c_b14, &c__[c_offset], ldc);
                 }
                 /* W := W * V2 */
-                strmm_("Right", "Lower", "No transpose", "Unit", n, k, &c_b14,
-                       &v[(*m - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
+                aocl_blas_strmm("Right", "Lower", "No transpose", "Unit", n, k, &c_b14,
+                                &v[(*m - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
                 /* C2 := C2 - W**T */
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
@@ -645,34 +672,36 @@ void slarfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
                 {
-                    scopy_(m, &c__[(*n - *k + j) * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1],
-                           &c__1);
+                    aocl_blas_scopy(m, &c__[(*n - *k + j) * c_dim1 + 1], &c__1,
+                                    &work[j * work_dim1 + 1], &c__1);
                     /* L220: */
                 }
                 /* W := W * V2**T */
-                strmm_("Right", "Lower", "Transpose", "Unit", m, k, &c_b14,
-                       &v[(*n - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
+                aocl_blas_strmm("Right", "Lower", "Transpose", "Unit", m, k, &c_b14,
+                                &v[(*n - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
                 if(*n > *k)
                 {
                     /* W := W + C1 * V1**T */
                     i__1 = *n - *k;
-                    sgemm_("No transpose", "Transpose", m, k, &i__1, &c_b14, &c__[c_offset], ldc,
-                           &v[v_offset], ldv, &c_b14, &work[work_offset], ldwork);
+                    aocl_blas_sgemm("No transpose", "Transpose", m, k, &i__1, &c_b14,
+                                    &c__[c_offset], ldc, &v[v_offset], ldv, &c_b14,
+                                    &work[work_offset], ldwork);
                 }
                 /* W := W * T or W * T**T */
-                strmm_("Right", "Lower", trans, "Non-unit", m, k, &c_b14, &t[t_offset], ldt,
-                       &work[work_offset], ldwork);
+                aocl_blas_strmm("Right", "Lower", trans, "Non-unit", m, k, &c_b14, &t[t_offset],
+                                ldt, &work[work_offset], ldwork);
                 /* C := C - W * V */
                 if(*n > *k)
                 {
                     /* C1 := C1 - W * V1 */
                     i__1 = *n - *k;
-                    sgemm_("No transpose", "No transpose", m, &i__1, k, &c_b25, &work[work_offset],
-                           ldwork, &v[v_offset], ldv, &c_b14, &c__[c_offset], ldc);
+                    aocl_blas_sgemm("No transpose", "No transpose", m, &i__1, k, &c_b25,
+                                    &work[work_offset], ldwork, &v[v_offset], ldv, &c_b14,
+                                    &c__[c_offset], ldc);
                 }
                 /* W := W * V2 */
-                strmm_("Right", "Lower", "No transpose", "Unit", m, k, &c_b14,
-                       &v[(*n - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
+                aocl_blas_strmm("Right", "Lower", "No transpose", "Unit", m, k, &c_b14,
+                                &v[(*n - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
                 /* C1 := C1 - W */
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)

@@ -1,15 +1,15 @@
 /* zdotu.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
-doublecomplex zdotu_(/*doublecomplex * ret_val,*/
-    integer *n, doublecomplex *zx, integer *incx, doublecomplex *zy, integer *incy)
+dcomplex zdotu_(/*dcomplex * ret_val,*/
+    integer *n, dcomplex *zx, integer *incx, dcomplex *zy, integer *incy)
 {
-    doublecomplex ret_val;
+    dcomplex ret_val;
     /* System generated locals */
     integer i__1, i__2, i__3;
-    doublecomplex z__1, z__2;
+    dcomplex z__1, z__2;
     /* Local variables */
     integer i__;
-    doublecomplex ztemp;
+    dcomplex ztemp;
     integer ix, iy;
     /* forms the dot product of two vectors. */
     /* jack dongarra, 3/11/78. */

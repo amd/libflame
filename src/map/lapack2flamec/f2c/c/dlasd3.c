@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c__0 = 0;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__0 = 0;
 static doublereal c_b12 = 1.;
 static doublereal c_b25 = 0.;
 /* > \brief \b DLASD3 finds all square roots of the roots of the secular equation, as defined by the
@@ -218,10 +218,40 @@ the second */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlasd3_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d__, doublereal *q,
-             integer *ldq, doublereal *dsigma, doublereal *u, integer *ldu, doublereal *u2,
-             integer *ldu2, doublereal *vt, integer *ldvt, doublereal *vt2, integer *ldvt2,
-             integer *idxc, integer *ctot, doublereal *z__, integer *info)
+/** Generated wrapper function */
+void dlasd3_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, aocl_int_t *k, doublereal *d__,
+             doublereal *q, aocl_int_t *ldq, doublereal *dsigma, doublereal *u, aocl_int_t *ldu,
+             doublereal *u2, aocl_int_t *ldu2, doublereal *vt, aocl_int_t *ldvt, doublereal *vt2,
+             aocl_int_t *ldvt2, aocl_int_t *idxc, aocl_int_t *ctot, doublereal *z__,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlasd3(nl, nr, sqre, k, d__, q, ldq, dsigma, u, ldu, u2, ldu2, vt, ldvt, vt2, ldvt2,
+                       idxc, ctot, z__, info);
+#else
+    aocl_int64_t nl_64 = *nl;
+    aocl_int64_t nr_64 = *nr;
+    aocl_int64_t sqre_64 = *sqre;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t ldu_64 = *ldu;
+    aocl_int64_t ldu2_64 = *ldu2;
+    aocl_int64_t ldvt_64 = *ldvt;
+    aocl_int64_t ldvt2_64 = *ldvt2;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlasd3(&nl_64, &nr_64, &sqre_64, &k_64, d__, q, &ldq_64, dsigma, u, &ldu_64, u2,
+                       &ldu2_64, vt, &ldvt_64, vt2, &ldvt2_64, idxc, ctot, z__, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlasd3(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, aocl_int64_t *k,
+                        doublereal *d__, doublereal *q, aocl_int64_t *ldq, doublereal *dsigma,
+                        doublereal *u, aocl_int64_t *ldu, doublereal *u2, aocl_int64_t *ldu2,
+                        doublereal *vt, aocl_int64_t *ldvt, doublereal *vt2, aocl_int64_t *ldvt2,
+                        aocl_int_t *idxc, aocl_int_t *ctot, doublereal *z__, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasd3 inputs: nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS ", k %" FLA_IS
@@ -229,34 +259,19 @@ void dlasd3_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d_
                       ", ldvt2 %" FLA_IS ", idxc %" FLA_IS ", ctot %" FLA_IS "",
                       *nl, *nr, *sqre, *k, *ldq, *ldu, *ldu2, *ldvt, *ldvt2, *idxc, *ctot);
     /* System generated locals */
-    integer q_dim1, q_offset, u_dim1, u_offset, u2_dim1, u2_offset, vt_dim1, vt_offset, vt2_dim1,
-        vt2_offset, i__1, i__2;
+    aocl_int64_t q_dim1, q_offset, u_dim1, u_offset, u2_dim1, u2_offset, vt_dim1, vt_offset,
+        vt2_dim1, vt2_offset, i__1, i__2;
     doublereal d__1, d__2;
     /* Builtin functions */
     double sqrt(doublereal), d_sign(doublereal *, doublereal *);
     /* Local variables */
-    integer i__, j, m, n, jc;
+    aocl_int64_t i__, j, m, n, jc;
     doublereal rho;
-    integer nlp1, nlp2, nrp1;
+    aocl_int64_t nlp1, nlp2, nrp1;
     doublereal temp;
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    integer ctemp;
-    extern /* Subroutine */
-        void
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
-    integer ktemp;
-    extern /* Subroutine */
-        void
-        dlasd4_(integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
-                doublereal *, doublereal *, integer *),
-        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublereal *, integer *, integer *),
-        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t ctemp;
+    aocl_int64_t ktemp;
+    aocl_int64_t ctot_sca;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -343,7 +358,7 @@ void dlasd3_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d_
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLASD3", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DLASD3", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -351,10 +366,10 @@ void dlasd3_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d_
     if(*k == 1)
     {
         d__[1] = f2c_abs(z__[1]);
-        dcopy_(&m, &vt2[vt2_dim1 + 1], ldvt2, &vt[vt_dim1 + 1], ldvt);
+        aocl_blas_dcopy(&m, &vt2[vt2_dim1 + 1], ldvt2, &vt[vt_dim1 + 1], ldvt);
         if(z__[1] > 0.)
         {
-            dcopy_(&n, &u2[u2_dim1 + 1], &c__1, &u[u_dim1 + 1], &c__1);
+            aocl_blas_dcopy(&n, &u2[u2_dim1 + 1], &c__1, &u[u_dim1 + 1], &c__1);
         }
         else
         {
@@ -369,17 +384,17 @@ void dlasd3_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d_
         return;
     }
     /* Keep a copy of Z. */
-    dcopy_(k, &z__[1], &c__1, &q[q_offset], &c__1);
+    aocl_blas_dcopy(k, &z__[1], &c__1, &q[q_offset], &c__1);
     /* Normalize Z. */
-    rho = dnrm2_(k, &z__[1], &c__1);
-    dlascl_("G", &c__0, &c__0, &rho, &c_b12, k, &c__1, &z__[1], k, info);
+    rho = aocl_blas_dnrm2(k, &z__[1], &c__1);
+    aocl_lapack_dlascl("G", &c__0, &c__0, &rho, &c_b12, k, &c__1, &z__[1], k, info);
     rho *= rho;
     /* Find the new singular values. */
     i__1 = *k;
     for(j = 1; j <= i__1; ++j)
     {
-        dlasd4_(k, &j, &dsigma[1], &z__[1], &u[j * u_dim1 + 1], &rho, &d__[j], &vt[j * vt_dim1 + 1],
-                info);
+        aocl_lapack_dlasd4(k, &j, &dsigma[1], &z__[1], &u[j * u_dim1 + 1], &rho, &d__[j],
+                           &vt[j * vt_dim1 + 1], info);
         /* If the zero finder fails, report the convergence failure. */
         if(*info != 0)
         {
@@ -425,7 +440,7 @@ void dlasd3_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d_
             u[j + i__ * u_dim1] = dsigma[j] * vt[j + i__ * vt_dim1];
             /* L70: */
         }
-        temp = dnrm2_(k, &u[i__ * u_dim1 + 1], &c__1);
+        temp = aocl_blas_dnrm2(k, &u[i__ * u_dim1 + 1], &c__1);
         q[i__ * q_dim1 + 1] = u[i__ * u_dim1 + 1] / temp;
         i__2 = *k;
         for(j = 2; j <= i__2; ++j)
@@ -439,42 +454,45 @@ void dlasd3_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d_
     /* Update the left singular vector matrix. */
     if(*k == 2)
     {
-        dgemm_("N", "N", &n, k, k, &c_b12, &u2[u2_offset], ldu2, &q[q_offset], ldq, &c_b25,
-               &u[u_offset], ldu);
+        aocl_blas_dgemm("N", "N", &n, k, k, &c_b12, &u2[u2_offset], ldu2, &q[q_offset], ldq, &c_b25,
+                        &u[u_offset], ldu);
         goto L100;
     }
     if(ctot[1] > 0)
     {
-        dgemm_("N", "N", nl, k, &ctot[1], &c_b12, &u2[(u2_dim1 << 1) + 1], ldu2, &q[q_dim1 + 2],
-               ldq, &c_b25, &u[u_dim1 + 1], ldu);
+        ctot_sca = ctot[1];
+        aocl_blas_dgemm("N", "N", nl, k, &ctot_sca, &c_b12, &u2[(u2_dim1 << 1) + 1], ldu2,
+                        &q[q_dim1 + 2], ldq, &c_b25, &u[u_dim1 + 1], ldu);
         if(ctot[3] > 0)
         {
             ktemp = ctot[1] + 2 + ctot[2];
-            dgemm_("N", "N", nl, k, &ctot[3], &c_b12, &u2[ktemp * u2_dim1 + 1], ldu2,
-                   &q[ktemp + q_dim1], ldq, &c_b12, &u[u_dim1 + 1], ldu);
+            ctot_sca = ctot[3];
+            aocl_blas_dgemm("N", "N", nl, k, &ctot_sca, &c_b12, &u2[ktemp * u2_dim1 + 1], ldu2,
+                            &q[ktemp + q_dim1], ldq, &c_b12, &u[u_dim1 + 1], ldu);
         }
     }
     else if(ctot[3] > 0)
     {
         ktemp = ctot[1] + 2 + ctot[2];
-        dgemm_("N", "N", nl, k, &ctot[3], &c_b12, &u2[ktemp * u2_dim1 + 1], ldu2,
-               &q[ktemp + q_dim1], ldq, &c_b25, &u[u_dim1 + 1], ldu);
+        ctot_sca = ctot[3];
+        aocl_blas_dgemm("N", "N", nl, k, &ctot_sca, &c_b12, &u2[ktemp * u2_dim1 + 1], ldu2,
+                        &q[ktemp + q_dim1], ldq, &c_b25, &u[u_dim1 + 1], ldu);
     }
     else
     {
-        dlacpy_("F", nl, k, &u2[u2_offset], ldu2, &u[u_offset], ldu);
+        aocl_lapack_dlacpy("F", nl, k, &u2[u2_offset], ldu2, &u[u_offset], ldu);
     }
-    dcopy_(k, &q[q_dim1 + 1], ldq, &u[nlp1 + u_dim1], ldu);
+    aocl_blas_dcopy(k, &q[q_dim1 + 1], ldq, &u[nlp1 + u_dim1], ldu);
     ktemp = ctot[1] + 2;
     ctemp = ctot[2] + ctot[3];
-    dgemm_("N", "N", nr, k, &ctemp, &c_b12, &u2[nlp2 + ktemp * u2_dim1], ldu2, &q[ktemp + q_dim1],
-           ldq, &c_b25, &u[nlp2 + u_dim1], ldu);
+    aocl_blas_dgemm("N", "N", nr, k, &ctemp, &c_b12, &u2[nlp2 + ktemp * u2_dim1], ldu2,
+                    &q[ktemp + q_dim1], ldq, &c_b25, &u[nlp2 + u_dim1], ldu);
 /* Generate the right singular vectors. */
 L100:
     i__1 = *k;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        temp = dnrm2_(k, &vt[i__ * vt_dim1 + 1], &c__1);
+        temp = aocl_blas_dnrm2(k, &vt[i__ * vt_dim1 + 1], &c__1);
         q[i__ + q_dim1] = vt[i__ * vt_dim1 + 1] / temp;
         i__2 = *k;
         for(j = 2; j <= i__2; ++j)
@@ -488,19 +506,20 @@ L100:
     /* Update the right singular vector matrix. */
     if(*k == 2)
     {
-        dgemm_("N", "N", k, &m, k, &c_b12, &q[q_offset], ldq, &vt2[vt2_offset], ldvt2, &c_b25,
-               &vt[vt_offset], ldvt);
+        aocl_blas_dgemm("N", "N", k, &m, k, &c_b12, &q[q_offset], ldq, &vt2[vt2_offset], ldvt2,
+                        &c_b25, &vt[vt_offset], ldvt);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     ktemp = ctot[1] + 1;
-    dgemm_("N", "N", k, &nlp1, &ktemp, &c_b12, &q[q_dim1 + 1], ldq, &vt2[vt2_dim1 + 1], ldvt2,
-           &c_b25, &vt[vt_dim1 + 1], ldvt);
+    aocl_blas_dgemm("N", "N", k, &nlp1, &ktemp, &c_b12, &q[q_dim1 + 1], ldq, &vt2[vt2_dim1 + 1],
+                    ldvt2, &c_b25, &vt[vt_dim1 + 1], ldvt);
     ktemp = ctot[1] + 2 + ctot[2];
     if(ktemp <= *ldvt2)
     {
-        dgemm_("N", "N", k, &nlp1, &ctot[3], &c_b12, &q[ktemp * q_dim1 + 1], ldq,
-               &vt2[ktemp + vt2_dim1], ldvt2, &c_b12, &vt[vt_dim1 + 1], ldvt);
+        ctot_sca = ctot[3];
+        aocl_blas_dgemm("N", "N", k, &nlp1, &ctot_sca, &c_b12, &q[ktemp * q_dim1 + 1], ldq,
+                        &vt2[ktemp + vt2_dim1], ldvt2, &c_b12, &vt[vt_dim1 + 1], ldvt);
     }
     ktemp = ctot[1] + 1;
     nrp1 = *nr + *sqre;
@@ -520,8 +539,8 @@ L100:
         }
     }
     ctemp = ctot[2] + 1 + ctot[3];
-    dgemm_("N", "N", k, &nrp1, &ctemp, &c_b12, &q[ktemp * q_dim1 + 1], ldq,
-           &vt2[ktemp + nlp2 * vt2_dim1], ldvt2, &c_b25, &vt[nlp2 * vt_dim1 + 1], ldvt);
+    aocl_blas_dgemm("N", "N", k, &nrp1, &ctemp, &c_b12, &q[ktemp * q_dim1 + 1], ldq,
+                    &vt2[ktemp + nlp2 * vt2_dim1], ldvt2, &c_b25, &vt[nlp2 * vt_dim1 + 1], ldvt);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of DLASD3 */

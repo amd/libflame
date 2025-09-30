@@ -1,17 +1,17 @@
 /* cher.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int cher_(char *uplo, integer *n, real *alpha, complex *x, integer *incx, complex *a, integer *lda)
+int cher_(char *uplo, integer *n, real *alpha, scomplex *x, integer *incx, scomplex *a, integer *lda)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     real r__1;
-    complex q__1, q__2;
+    scomplex q__1, q__2;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
     integer info;
-    complex temp;
+    scomplex temp;
     integer i__, j;
     extern logical lsame_(char *, char *, integer, integer);
     integer ix, jx, kx;

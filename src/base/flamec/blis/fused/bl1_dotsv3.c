@@ -27,11 +27,11 @@
 */
 
 void bl1_sdotsv3( conj1_t    conjxyw,
-                  integer       n,
-                  float*    x, integer inc_x,
-                  float*    y, integer inc_y,
-                  float*    w, integer inc_w,
-                  float*    z, integer inc_z,
+                  fla_dim_t       n,
+                  float*    x, fla_dim_t inc_x,
+                  float*    y, fla_dim_t inc_y,
+                  float*    w, fla_dim_t inc_w,
+                  float*    z, fla_dim_t inc_z,
                   float*    beta,
                   float*    rho_xz,
                   float*    rho_yz,
@@ -42,11 +42,11 @@ void bl1_sdotsv3( conj1_t    conjxyw,
 
 
 void bl1_ddotsv3( conj1_t    conjxyw,
-                  integer       n,
-                  double*   x, integer inc_x,
-                  double*   y, integer inc_y,
-                  double*   w, integer inc_w,
-                  double*   z, integer inc_z,
+                  fla_dim_t       n,
+                  double*   x, fla_dim_t inc_x,
+                  double*   y, fla_dim_t inc_y,
+                  double*   w, fla_dim_t inc_w,
+                  double*   z, fla_dim_t inc_z,
                   double*   beta,
                   double*   rho_xz,
                   double*   rho_yz,
@@ -59,11 +59,11 @@ void bl1_ddotsv3( conj1_t    conjxyw,
 	double*   restrict z1;
 	double             rho1, rho2, rho3;
 	double             x1c, y1c, w1c, z1c;
-	integer                i;
+	fla_dim_t                i;
 
-	integer                n_pre;
-	integer                n_run;
-	integer                n_left;
+	fla_dim_t                n_pre;
+	fla_dim_t                n_run;
+	fla_dim_t                n_left;
 
 	v2df_t             rho1v, rho2v, rho3v;
 	v2df_t             x1v, y1v, w1v, z1v;
@@ -180,11 +180,11 @@ void bl1_ddotsv3( conj1_t    conjxyw,
 	double             rho1, rho2, rho3;
 	double             x1c, y1c, w1c, z1c;
 	double             x2c, y2c, w2c, z2c;
-	integer                i;
+	fla_dim_t                i;
 
-	integer                n_pre;
-	integer                n_run;
-	integer                n_left;
+	fla_dim_t                n_pre;
+	fla_dim_t                n_run;
+	fla_dim_t                n_left;
 	
 	if ( inc_x != 1 ||
 	     inc_y != 1 ||
@@ -279,11 +279,11 @@ void bl1_ddotsv3( conj1_t    conjxyw,
 
 
 void bl1_cdotsv3( conj1_t    conjxyw,
-                  integer       n,
-                  scomplex* x, integer inc_x,
-                  scomplex* y, integer inc_y,
-                  scomplex* w, integer inc_w,
-                  scomplex* z, integer inc_z,
+                  fla_dim_t       n,
+                  scomplex* x, fla_dim_t inc_x,
+                  scomplex* y, fla_dim_t inc_y,
+                  scomplex* w, fla_dim_t inc_w,
+                  scomplex* z, fla_dim_t inc_z,
                   scomplex* beta,
                   scomplex* rho_xz,
                   scomplex* rho_yz,
@@ -294,11 +294,11 @@ void bl1_cdotsv3( conj1_t    conjxyw,
 
 
 void bl1_zdotsv3( conj1_t    conjxyw,
-                  integer       n,
-                  dcomplex* x, integer inc_x,
-                  dcomplex* y, integer inc_y,
-                  dcomplex* w, integer inc_w,
-                  dcomplex* z, integer inc_z,
+                  fla_dim_t       n,
+                  dcomplex* x, fla_dim_t inc_x,
+                  dcomplex* y, fla_dim_t inc_y,
+                  dcomplex* w, fla_dim_t inc_w,
+                  dcomplex* z, fla_dim_t inc_z,
                   dcomplex* beta,
                   dcomplex* rho_xz,
                   dcomplex* rho_yz,
@@ -309,7 +309,7 @@ void bl1_zdotsv3( conj1_t    conjxyw,
 	dcomplex* restrict y1;
 	dcomplex* restrict w1;
 	dcomplex* restrict z1;
-	integer                i;
+	fla_dim_t                i;
 	v2df_t r1v, rho1v;
 	v2df_t r2v, rho2v;
 	v2df_t r3v, rho3v;
@@ -453,7 +453,7 @@ void bl1_zdotsv3( conj1_t    conjxyw,
 	dcomplex* restrict z1;
 	dcomplex           rho1, rho2, rho3;
 	dcomplex           x1c, y1c, w1c, z1c;
-	integer                i;
+	fla_dim_t                i;
 
 	x1 = x;
 	y1 = y;

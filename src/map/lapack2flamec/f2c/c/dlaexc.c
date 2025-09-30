@@ -4,12 +4,12 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c__4 = 4;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__4 = 4;
 static logical c_false = FALSE_;
-static integer c_n1 = -1;
-static integer c__2 = 2;
-static integer c__3 = 3;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__3 = 3;
 /* > \brief \b DLAEXC swaps adjacent diagonal blocks of a real upper quasi-triangular matrix in
  * Schur canonica l form, by an orthogonal similarity transformation. */
 /* =========== DOCUMENTATION =========== */
@@ -144,49 +144,53 @@ the blocks are not swapped and T and Q are */
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlaexc_(logical *wantq, integer *n, doublereal *t, integer *ldt, doublereal *q, integer *ldq,
-             integer *j1, integer *n1, integer *n2, doublereal *work, integer *info)
+/** Generated wrapper function */
+void dlaexc_(logical *wantq, aocl_int_t *n, doublereal *t, aocl_int_t *ldt, doublereal *q,
+             aocl_int_t *ldq, aocl_int_t *j1, aocl_int_t *n1, aocl_int_t *n2, doublereal *work,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlaexc(wantq, n, t, ldt, q, ldq, j1, n1, n2, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t j1_64 = *j1;
+    aocl_int64_t n1_64 = *n1;
+    aocl_int64_t n2_64 = *n2;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlaexc(wantq, &n_64, t, &ldt_64, q, &ldq_64, &j1_64, &n1_64, &n2_64, work,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlaexc(logical *wantq, aocl_int64_t *n, doublereal *t, aocl_int64_t *ldt,
+                        doublereal *q, aocl_int64_t *ldq, aocl_int64_t *j1, aocl_int64_t *n1,
+                        aocl_int64_t *n2, doublereal *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaexc inputs: n %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS ", j1 %" FLA_IS
                       ", n1 %" FLA_IS ", n2 %" FLA_IS "",
                       *n, *ldt, *ldq, *j1, *n1, *n2);
     /* System generated locals */
-    integer q_dim1, q_offset, t_dim1, t_offset, i__1;
+    aocl_int64_t q_dim1, q_offset, t_dim1, t_offset, i__1;
     doublereal d__1, d__2, d__3;
     /* Local variables */
     doublereal d__[16] /* was [4][4] */
         ;
-    integer k;
+    aocl_int64_t k;
     doublereal u[3], x[4] /* was [2][2] */
         ;
-    integer j2, j3, j4;
+    aocl_int64_t j2, j3, j4;
     doublereal u1[3], u2[3];
-    integer nd;
+    aocl_int64_t nd;
     doublereal cs, t11, t22, t33, sn, wi1, wi2, wr1, wr2, eps, tau, tau1, tau2;
-    integer ierr;
+    aocl_int64_t ierr;
     doublereal temp;
-    extern /* Subroutine */
-        void
-        drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-              doublereal *);
     doublereal scale, dnorm, xnorm;
-    extern /* Subroutine */
-        void
-        dlanv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
-                doublereal *, doublereal *, doublereal *, doublereal *),
-        dlasy2_(logical *, logical *, integer *, integer *, integer *, doublereal *, integer *,
-                doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                integer *, doublereal *, integer *);
-    extern doublereal dlamch_(char *),
-        dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
-    extern /* Subroutine */
-        void
-        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *),
-        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
-        dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *),
-        dlarfx_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *,
-                doublereal *);
     doublereal thresh, smlnum;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -246,16 +250,16 @@ void dlaexc_(logical *wantq, integer *n, doublereal *t, integer *ldt, doublereal
         if(j3 <= *n)
         {
             i__1 = *n - *j1 - 1;
-            drot_(&i__1, &t[*j1 + j3 * t_dim1], ldt, &t[j2 + j3 * t_dim1], ldt, &cs, &sn);
+            aocl_blas_drot(&i__1, &t[*j1 + j3 * t_dim1], ldt, &t[j2 + j3 * t_dim1], ldt, &cs, &sn);
         }
         i__1 = *j1 - 1;
-        drot_(&i__1, &t[*j1 * t_dim1 + 1], &c__1, &t[j2 * t_dim1 + 1], &c__1, &cs, &sn);
+        aocl_blas_drot(&i__1, &t[*j1 * t_dim1 + 1], &c__1, &t[j2 * t_dim1 + 1], &c__1, &cs, &sn);
         t[*j1 + *j1 * t_dim1] = t22;
         t[j2 + j2 * t_dim1] = t11;
         if(*wantq)
         {
             /* Accumulate transformation in the matrix Q. */
-            drot_(n, &q[*j1 * q_dim1 + 1], &c__1, &q[j2 * q_dim1 + 1], &c__1, &cs, &sn);
+            aocl_blas_drot(n, &q[*j1 * q_dim1 + 1], &c__1, &q[j2 * q_dim1 + 1], &c__1, &cs, &sn);
         }
     }
     else
@@ -264,8 +268,8 @@ void dlaexc_(logical *wantq, integer *n, doublereal *t, integer *ldt, doublereal
         /* Copy the diagonal block of order N1+N2 to the local array D */
         /* and compute its norm. */
         nd = *n1 + *n2;
-        dlacpy_("Full", &nd, &nd, &t[*j1 + *j1 * t_dim1], ldt, d__, &c__4);
-        dnorm = dlange_("Max", &nd, &nd, d__, &c__4, &work[1]);
+        aocl_lapack_dlacpy("Full", &nd, &nd, &t[*j1 + *j1 * t_dim1], ldt, d__, &c__4);
+        dnorm = aocl_lapack_dlange("Max", &nd, &nd, d__, &c__4, &work[1]);
         /* Compute machine-dependent threshold for test for accepting */
         /* swap. */
         eps = dlamch_("P");
@@ -274,8 +278,9 @@ void dlaexc_(logical *wantq, integer *n, doublereal *t, integer *ldt, doublereal
         d__1 = eps * 10. * dnorm;
         thresh = fla_max(d__1, smlnum);
         /* Solve T11*X - X*T22 = scale*T12 for X. */
-        dlasy2_(&c_false, &c_false, &c_n1, n1, n2, d__, &c__4, &d__[*n1 + 1 + (*n1 + 1 << 2) - 5],
-                &c__4, &d__[(*n1 + 1 << 2) - 4], &c__4, &scale, x, &c__2, &xnorm, &ierr);
+        aocl_lapack_dlasy2(&c_false, &c_false, &c_n1, n1, n2, d__, &c__4,
+                           &d__[*n1 + 1 + (*n1 + 1 << 2) - 5], &c__4, &d__[(*n1 + 1 << 2) - 4],
+                           &c__4, &scale, x, &c__2, &xnorm, &ierr);
         /* Swap the adjacent diagonal blocks. */
         k = *n1 + *n1 + *n2 - 3;
         switch(k)
@@ -292,12 +297,12 @@ void dlaexc_(logical *wantq, integer *n, doublereal *t, integer *ldt, doublereal
         u[0] = scale;
         u[1] = x[0];
         u[2] = x[2];
-        dlarfg_(&c__3, &u[2], u, &c__1, &tau);
+        aocl_lapack_dlarfg(&c__3, &u[2], u, &c__1, &tau);
         u[2] = 1.;
         t11 = t[*j1 + *j1 * t_dim1];
         /* Perform swap provisionally on diagonal block in D. */
-        dlarfx_("L", &c__3, &c__3, u, &tau, d__, &c__4, &work[1]);
-        dlarfx_("R", &c__3, &c__3, u, &tau, d__, &c__4, &work[1]);
+        aocl_lapack_dlarfx("L", &c__3, &c__3, u, &tau, d__, &c__4, &work[1]);
+        aocl_lapack_dlarfx("R", &c__3, &c__3, u, &tau, d__, &c__4, &work[1]);
         /* Test whether to reject swap. */
         /* Computing MAX */
         d__2 = f2c_dabs(d__[2]), d__3 = f2c_dabs(d__[6]);
@@ -309,15 +314,15 @@ void dlaexc_(logical *wantq, integer *n, doublereal *t, integer *ldt, doublereal
         }
         /* Accept swap: apply transformation to the entire matrix T. */
         i__1 = *n - *j1 + 1;
-        dlarfx_("L", &c__3, &i__1, u, &tau, &t[*j1 + *j1 * t_dim1], ldt, &work[1]);
-        dlarfx_("R", &j2, &c__3, u, &tau, &t[*j1 * t_dim1 + 1], ldt, &work[1]);
+        aocl_lapack_dlarfx("L", &c__3, &i__1, u, &tau, &t[*j1 + *j1 * t_dim1], ldt, &work[1]);
+        aocl_lapack_dlarfx("R", &j2, &c__3, u, &tau, &t[*j1 * t_dim1 + 1], ldt, &work[1]);
         t[j3 + *j1 * t_dim1] = 0.;
         t[j3 + j2 * t_dim1] = 0.;
         t[j3 + j3 * t_dim1] = t11;
         if(*wantq)
         {
             /* Accumulate transformation in the matrix Q. */
-            dlarfx_("R", n, &c__3, u, &tau, &q[*j1 * q_dim1 + 1], ldq, &work[1]);
+            aocl_lapack_dlarfx("R", n, &c__3, u, &tau, &q[*j1 * q_dim1 + 1], ldq, &work[1]);
         }
         goto L40;
     L20: /* N1 = 2, N2 = 1: generate elementary reflector H so that: */
@@ -327,12 +332,12 @@ void dlaexc_(logical *wantq, integer *n, doublereal *t, integer *ldt, doublereal
         u[0] = -x[0];
         u[1] = -x[1];
         u[2] = scale;
-        dlarfg_(&c__3, u, &u[1], &c__1, &tau);
+        aocl_lapack_dlarfg(&c__3, u, &u[1], &c__1, &tau);
         u[0] = 1.;
         t33 = t[j3 + j3 * t_dim1];
         /* Perform swap provisionally on diagonal block in D. */
-        dlarfx_("L", &c__3, &c__3, u, &tau, d__, &c__4, &work[1]);
-        dlarfx_("R", &c__3, &c__3, u, &tau, d__, &c__4, &work[1]);
+        aocl_lapack_dlarfx("L", &c__3, &c__3, u, &tau, d__, &c__4, &work[1]);
+        aocl_lapack_dlarfx("R", &c__3, &c__3, u, &tau, d__, &c__4, &work[1]);
         /* Test whether to reject swap. */
         /* Computing MAX */
         d__2 = f2c_dabs(d__[1]), d__3 = f2c_dabs(d__[2]);
@@ -343,16 +348,16 @@ void dlaexc_(logical *wantq, integer *n, doublereal *t, integer *ldt, doublereal
             goto L50;
         }
         /* Accept swap: apply transformation to the entire matrix T. */
-        dlarfx_("R", &j3, &c__3, u, &tau, &t[*j1 * t_dim1 + 1], ldt, &work[1]);
+        aocl_lapack_dlarfx("R", &j3, &c__3, u, &tau, &t[*j1 * t_dim1 + 1], ldt, &work[1]);
         i__1 = *n - *j1;
-        dlarfx_("L", &c__3, &i__1, u, &tau, &t[*j1 + j2 * t_dim1], ldt, &work[1]);
+        aocl_lapack_dlarfx("L", &c__3, &i__1, u, &tau, &t[*j1 + j2 * t_dim1], ldt, &work[1]);
         t[*j1 + *j1 * t_dim1] = t33;
         t[j2 + *j1 * t_dim1] = 0.;
         t[j3 + *j1 * t_dim1] = 0.;
         if(*wantq)
         {
             /* Accumulate transformation in the matrix Q. */
-            dlarfx_("R", n, &c__3, u, &tau, &q[*j1 * q_dim1 + 1], ldq, &work[1]);
+            aocl_lapack_dlarfx("R", n, &c__3, u, &tau, &q[*j1 * q_dim1 + 1], ldq, &work[1]);
         }
         goto L40;
     L30: /* N1 = 2, N2 = 2: generate elementary reflectors H(1) and H(2) so */
@@ -364,19 +369,19 @@ void dlaexc_(logical *wantq, integer *n, doublereal *t, integer *ldt, doublereal
         u1[0] = -x[0];
         u1[1] = -x[1];
         u1[2] = scale;
-        dlarfg_(&c__3, u1, &u1[1], &c__1, &tau1);
+        aocl_lapack_dlarfg(&c__3, u1, &u1[1], &c__1, &tau1);
         u1[0] = 1.;
         temp = -tau1 * (x[2] + u1[1] * x[3]);
         u2[0] = -temp * u1[1] - x[3];
         u2[1] = -temp * u1[2];
         u2[2] = scale;
-        dlarfg_(&c__3, u2, &u2[1], &c__1, &tau2);
+        aocl_lapack_dlarfg(&c__3, u2, &u2[1], &c__1, &tau2);
         u2[0] = 1.;
         /* Perform swap provisionally on diagonal block in D. */
-        dlarfx_("L", &c__3, &c__4, u1, &tau1, d__, &c__4, &work[1]);
-        dlarfx_("R", &c__4, &c__3, u1, &tau1, d__, &c__4, &work[1]);
-        dlarfx_("L", &c__3, &c__4, u2, &tau2, &d__[1], &c__4, &work[1]);
-        dlarfx_("R", &c__4, &c__3, u2, &tau2, &d__[4], &c__4, &work[1]);
+        aocl_lapack_dlarfx("L", &c__3, &c__4, u1, &tau1, d__, &c__4, &work[1]);
+        aocl_lapack_dlarfx("R", &c__4, &c__3, u1, &tau1, d__, &c__4, &work[1]);
+        aocl_lapack_dlarfx("L", &c__3, &c__4, u2, &tau2, &d__[1], &c__4, &work[1]);
+        aocl_lapack_dlarfx("R", &c__4, &c__3, u2, &tau2, &d__[4], &c__4, &work[1]);
         /* Test whether to reject swap. */
         /* Computing MAX */
         d__1 = f2c_dabs(d__[2]), d__2 = f2c_dabs(d__[6]), d__1 = fla_max(d__1, d__2),
@@ -389,11 +394,11 @@ void dlaexc_(logical *wantq, integer *n, doublereal *t, integer *ldt, doublereal
         }
         /* Accept swap: apply transformation to the entire matrix T. */
         i__1 = *n - *j1 + 1;
-        dlarfx_("L", &c__3, &i__1, u1, &tau1, &t[*j1 + *j1 * t_dim1], ldt, &work[1]);
-        dlarfx_("R", &j4, &c__3, u1, &tau1, &t[*j1 * t_dim1 + 1], ldt, &work[1]);
+        aocl_lapack_dlarfx("L", &c__3, &i__1, u1, &tau1, &t[*j1 + *j1 * t_dim1], ldt, &work[1]);
+        aocl_lapack_dlarfx("R", &j4, &c__3, u1, &tau1, &t[*j1 * t_dim1 + 1], ldt, &work[1]);
         i__1 = *n - *j1 + 1;
-        dlarfx_("L", &c__3, &i__1, u2, &tau2, &t[j2 + *j1 * t_dim1], ldt, &work[1]);
-        dlarfx_("R", &j4, &c__3, u2, &tau2, &t[j2 * t_dim1 + 1], ldt, &work[1]);
+        aocl_lapack_dlarfx("L", &c__3, &i__1, u2, &tau2, &t[j2 + *j1 * t_dim1], ldt, &work[1]);
+        aocl_lapack_dlarfx("R", &j4, &c__3, u2, &tau2, &t[j2 * t_dim1 + 1], ldt, &work[1]);
         t[j3 + *j1 * t_dim1] = 0.;
         t[j3 + j2 * t_dim1] = 0.;
         t[j4 + *j1 * t_dim1] = 0.;
@@ -401,8 +406,8 @@ void dlaexc_(logical *wantq, integer *n, doublereal *t, integer *ldt, doublereal
         if(*wantq)
         {
             /* Accumulate transformation in the matrix Q. */
-            dlarfx_("R", n, &c__3, u1, &tau1, &q[*j1 * q_dim1 + 1], ldq, &work[1]);
-            dlarfx_("R", n, &c__3, u2, &tau2, &q[j2 * q_dim1 + 1], ldq, &work[1]);
+            aocl_lapack_dlarfx("R", n, &c__3, u1, &tau1, &q[*j1 * q_dim1 + 1], ldq, &work[1]);
+            aocl_lapack_dlarfx("R", n, &c__3, u2, &tau2, &q[j2 * q_dim1 + 1], ldq, &work[1]);
         }
     L40:
         if(*n2 == 2)
@@ -411,13 +416,15 @@ void dlaexc_(logical *wantq, integer *n, doublereal *t, integer *ldt, doublereal
             dlanv2_(&t[*j1 + *j1 * t_dim1], &t[*j1 + j2 * t_dim1], &t[j2 + *j1 * t_dim1],
                     &t[j2 + j2 * t_dim1], &wr1, &wi1, &wr2, &wi2, &cs, &sn);
             i__1 = *n - *j1 - 1;
-            drot_(&i__1, &t[*j1 + (*j1 + 2) * t_dim1], ldt, &t[j2 + (*j1 + 2) * t_dim1], ldt, &cs,
-                  &sn);
+            aocl_blas_drot(&i__1, &t[*j1 + (*j1 + 2) * t_dim1], ldt, &t[j2 + (*j1 + 2) * t_dim1],
+                           ldt, &cs, &sn);
             i__1 = *j1 - 1;
-            drot_(&i__1, &t[*j1 * t_dim1 + 1], &c__1, &t[j2 * t_dim1 + 1], &c__1, &cs, &sn);
+            aocl_blas_drot(&i__1, &t[*j1 * t_dim1 + 1], &c__1, &t[j2 * t_dim1 + 1], &c__1, &cs,
+                           &sn);
             if(*wantq)
             {
-                drot_(n, &q[*j1 * q_dim1 + 1], &c__1, &q[j2 * q_dim1 + 1], &c__1, &cs, &sn);
+                aocl_blas_drot(n, &q[*j1 * q_dim1 + 1], &c__1, &q[j2 * q_dim1 + 1], &c__1, &cs,
+                               &sn);
             }
         }
         if(*n1 == 2)
@@ -430,14 +437,14 @@ void dlaexc_(logical *wantq, integer *n, doublereal *t, integer *ldt, doublereal
             if(j3 + 2 <= *n)
             {
                 i__1 = *n - j3 - 1;
-                drot_(&i__1, &t[j3 + (j3 + 2) * t_dim1], ldt, &t[j4 + (j3 + 2) * t_dim1], ldt, &cs,
-                      &sn);
+                aocl_blas_drot(&i__1, &t[j3 + (j3 + 2) * t_dim1], ldt, &t[j4 + (j3 + 2) * t_dim1],
+                               ldt, &cs, &sn);
             }
             i__1 = j3 - 1;
-            drot_(&i__1, &t[j3 * t_dim1 + 1], &c__1, &t[j4 * t_dim1 + 1], &c__1, &cs, &sn);
+            aocl_blas_drot(&i__1, &t[j3 * t_dim1 + 1], &c__1, &t[j4 * t_dim1 + 1], &c__1, &cs, &sn);
             if(*wantq)
             {
-                drot_(n, &q[j3 * q_dim1 + 1], &c__1, &q[j4 * q_dim1 + 1], &c__1, &cs, &sn);
+                aocl_blas_drot(n, &q[j3 * q_dim1 + 1], &c__1, &q[j4 * q_dim1 + 1], &c__1, &cs, &sn);
             }
         }
     }
